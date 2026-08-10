@@ -169,6 +169,13 @@
       ],
       "additionalProperties": {}
     },
+    "organization": {
+      "type": "string",
+      "enum": [
+        "ufc",
+        "oktagon"
+      ]
+    },
     "format": {
       "type": "string",
       "enum": [

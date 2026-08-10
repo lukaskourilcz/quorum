@@ -20,7 +20,7 @@ Titty Tuesdays is implemented in a pre-commerce, marketing-first scope. Its publ
 storefront remains unchanged; BoardlessAI produces plans and guarded Tuesday-only
 social assets, not commerce. FightAIQ
 collects UFC and Oktagon records and captured market data; live model analysis remains
-behind its separate switch. MMA Files is the public bilingual magazine and the sole
+behind its separate switch. MMA Files is the public Czech magazine and the sole
 reader-facing home for delivered fighter files, event cards, captured odds and reviewed
 model outputs. Their live schedules remain behind the recorded signatures and
 independent switches. Carousel Studio is the fifth project: an internal, deterministic
@@ -163,7 +163,7 @@ owns source collection, edition and product rooms, guarded production, delivery
 records and governance surfaces. For Titty Tuesdays it owns pre-commerce brand,
 season, audience and marketing planning only. FightAIQ owns sourced fighter/event
 records, captured prices and code-generated analysis without bet placement. MMA Files
-owns the public bilingual articles and the reader-facing FightAIQ data pages. The two
+owns the public Czech articles and the reader-facing FightAIQ data pages. The two
 sites accept only bounded, hash-checked content files through their GitHub repositories;
 BoardlessAI cannot change their application code. Social packs are built inside
 existing production calls and post only after project health gates. Caught Up keeps

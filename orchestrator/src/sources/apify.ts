@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { readText } from "../state.js";
+import { atomicWriteJson, readJson, readText } from "../state.js";
 import { repoRoot } from "../paths.js";
 import { safeFetch } from "../security/url.js";
 
@@ -24,6 +24,228 @@ export const APIFY_MONTHLY_CREDIT_USD = 5.0;
 
 /** One weekly recipe's worst case, reserved up front so a run can never start what it cannot finish. */
 export const APIFY_RUN_RESERVATION_USD = 1.4;
+
+/** FightAIQ's share of the same account-wide Free-plan credit. This is a ceiling, not spend authority. */
+export const MMA_APIFY_MONTHLY_SHARE_USD = 3.0;
+
+/** Four bounded source steps may reserve at most this much before the first actor request. */
+export const MMA_APIFY_RUN_RESERVATION_USD = 0.75;
+
+export const MmaApifyActorConfigSchema = z.object({
+  actorSlug: z.string().regex(/^[a-z0-9_.-]+\/[a-z0-9_.-]+$/i),
+  actorBuildId: z.string().regex(/^[A-Za-z0-9]{17}$/),
+  purpose: z.enum(["ufc-stats", "espn-mma", "oktagon-cards", "roster-profiles"]),
+  targetHosts: z.array(z.string().min(1)).min(1).max(3),
+  pricing: z.object({
+    model: z.enum(["pay-per-result", "platform-usage"]),
+    pricePerResultUsd: z.number().finite().nonnegative().optional(),
+    maxRunUsd: z.number().finite().positive().max(MMA_APIFY_RUN_RESERVATION_USD)
+  }),
+  maxResults: z.number().int().positive().max(100),
+  expectedMonthlyUsd: z.number().finite().nonnegative().max(MMA_APIFY_MONTHLY_SHARE_USD),
+  cadence: z.enum(["weekly", "twice-monthly", "monthly", "owner-only"]),
+  pricingEvidenceUrl: z.string().url(),
+  input: z.record(z.string(), z.unknown())
+}).superRefine((actor, context) => {
+  const projected = (actor.pricing.pricePerResultUsd ?? 0) * actor.maxResults;
+  if (actor.pricing.model === "pay-per-result" && actor.pricing.pricePerResultUsd === undefined) {
+    context.addIssue({ code: "custom", message: "Pay-per-result actors need a result price", path: ["pricing", "pricePerResultUsd"] });
+  }
+  if (projected - actor.pricing.maxRunUsd > 0.000001) {
+    context.addIssue({ code: "custom", message: "Actor result cap exceeds its per-run cost ceiling", path: ["maxResults"] });
+  }
+});
+
+export type MmaApifyActorConfig = z.infer<typeof MmaApifyActorConfigSchema>;
+
+export const MmaApifyQuotaSchema = z.object({
+  schemaVersion: z.literal("mma-apify-quota/1"),
+  month: z.string().regex(/^\d{4}-\d{2}$/),
+  shareCapUsd: z.literal(MMA_APIFY_MONTHLY_SHARE_USD),
+  estimatedUsedUsd: z.number().finite().nonnegative(),
+  sharedAccountUsedUsd: z.number().finite().nonnegative().nullable(),
+  reservedPerRun: z.literal(MMA_APIFY_RUN_RESERVATION_USD),
+  updatedAt: z.string(),
+  perActorCounts: z.record(z.string(), z.object({
+    runs: z.number().int().nonnegative(),
+    items: z.number().int().nonnegative(),
+    estimatedUsd: z.number().finite().nonnegative()
+  }))
+});
+
+export type MmaApifyQuota = z.infer<typeof MmaApifyQuotaSchema>;
+
+export interface MmaApifyApprovals {
+  account: boolean;
+  sources: boolean;
+}
+
+export function parseMmaApifyApprovals(inbox: string): MmaApifyApprovals {
+  const checked = (id: string) => new RegExp(`^- \\[x\\] HUMAN_APPROVAL ${id}\\b`, "imu").test(inbox);
+  return { account: checked("APIFY-ACCOUNT-001"), sources: checked("APIFY-MMA-SOURCES-001") };
+}
+
+export function emptyMmaApifyQuota(month: string, now: Date): MmaApifyQuota {
+  return {
+    schemaVersion: "mma-apify-quota/1",
+    month,
+    shareCapUsd: MMA_APIFY_MONTHLY_SHARE_USD,
+    estimatedUsedUsd: 0,
+    sharedAccountUsedUsd: null,
+    reservedPerRun: MMA_APIFY_RUN_RESERVATION_USD,
+    updatedAt: now.toISOString(),
+    perActorCounts: {}
+  };
+}
+
+export function currentMmaApifyQuota(stored: unknown, month: string, now: Date): MmaApifyQuota {
+  const parsed = MmaApifyQuotaSchema.safeParse(stored);
+  if (!parsed.success || parsed.data.month !== month) return emptyMmaApifyQuota(month, now);
+  return parsed.data;
+}
+
+export function mayRunMmaApify(input: {
+  quota: MmaApifyQuota;
+  approvals: MmaApifyApprovals;
+  token: string | undefined;
+  sharedAccountUsedUsd: number | null;
+}): QuotaVerdict {
+  const pending = [
+    ...(!input.approvals.account ? ["APIFY-ACCOUNT-001"] : []),
+    ...(!input.approvals.sources ? ["APIFY-MMA-SOURCES-001"] : [])
+  ];
+  if (pending.length > 0) {
+    return { allowed: false, reason: `MMA Apify sources are waiting for ${pending.join(" and ")}; no actor ran and nothing was spent.` };
+  }
+  if (!input.token?.trim()) {
+    return { allowed: false, reason: "APIFY_TOKEN is unavailable, so no MMA actor ran and nothing was spent." };
+  }
+  if (input.quota.estimatedUsedUsd + MMA_APIFY_RUN_RESERVATION_USD > MMA_APIFY_MONTHLY_SHARE_USD) {
+    return { allowed: false, reason: "The MMA Apify share is exhausted, so no actor ran and nothing was spent." };
+  }
+  if (input.sharedAccountUsedUsd !== null && input.sharedAccountUsedUsd + MMA_APIFY_RUN_RESERVATION_USD > APIFY_MONTHLY_CREDIT_USD) {
+    return { allowed: false, reason: "The shared Apify Free-plan credit cannot cover the MMA reservation, so no actor ran and nothing was spent." };
+  }
+  return { allowed: true, reason: "The approval, account, shared-credit and MMA-share guards allow this run." };
+}
+
+export function estimateMmaActorUsd(actor: MmaApifyActorConfig, items: number): number {
+  const estimate = actor.pricing.model === "pay-per-result"
+    ? (actor.pricing.pricePerResultUsd ?? 0) * items
+    : actor.pricing.maxRunUsd;
+  return Number(Math.min(estimate, actor.pricing.maxRunUsd).toFixed(6));
+}
+
+export function recordMmaActorUsage(
+  quota: MmaApifyQuota,
+  actorId: string,
+  actor: MmaApifyActorConfig,
+  items: number,
+  now: Date,
+  sharedAccountUsedUsd: number | null
+): MmaApifyQuota {
+  const usd = estimateMmaActorUsd(actor, items);
+  const prior = quota.perActorCounts[actorId] ?? { runs: 0, items: 0, estimatedUsd: 0 };
+  return MmaApifyQuotaSchema.parse({
+    ...quota,
+    estimatedUsedUsd: Number((quota.estimatedUsedUsd + usd).toFixed(6)),
+    sharedAccountUsedUsd,
+    updatedAt: now.toISOString(),
+    perActorCounts: {
+      ...quota.perActorCounts,
+      [actorId]: {
+        runs: prior.runs + 1,
+        items: prior.items + items,
+        estimatedUsd: Number((prior.estimatedUsd + usd).toFixed(6))
+      }
+    }
+  });
+}
+
+export interface MmaApifySourceEntry {
+  id: string;
+  state: "wired" | "proposed" | "disabled" | "blocked";
+  termsVerdict: "allowed-with-account" | "allowed" | "unclear" | "forbidden";
+  apify?: MmaApifyActorConfig;
+}
+
+export interface MmaApifyRunResult {
+  sourceId: string;
+  status: "success" | "skipped" | "failed";
+  reason: string | null;
+  items: ApifyDatasetItem[];
+}
+
+/**
+ * Approval-gated MMA actor sweep.
+ *
+ * The preliminary verdict happens before the platform usage request, so a pending approval or
+ * missing token is a literal $0 path. The provider's account-wide usage then guards the shared
+ * $5 credit, the local ledger guards FightAIQ's $3 share, and every actor request carries its own
+ * max charge. No one layer substitutes for another.
+ */
+export async function runMmaApifySources(input: {
+  root: string;
+  date: string;
+  now: Date;
+  inbox: string;
+  token: string | undefined;
+  sources: readonly MmaApifySourceEntry[];
+  usageFetcher?: (token: string) => Promise<number | null>;
+  actorRunner?: typeof runApifyActor;
+}): Promise<{ results: MmaApifyRunResult[]; artifactPaths: string[] }> {
+  const quotaPath = "mma/source-quota/apify.json";
+  const month = input.date.slice(0, 7);
+  const quota = currentMmaApifyQuota(await readJson<unknown>(input.root, quotaPath, {}), month, input.now);
+  const approvals = parseMmaApifyApprovals(input.inbox);
+  const preliminary = mayRunMmaApify({ quota, approvals, token: input.token, sharedAccountUsedUsd: null });
+  if (!preliminary.allowed) {
+    return { results: [{ sourceId: "apify-mma", status: "skipped", reason: preliminary.reason, items: [] }], artifactPaths: [] };
+  }
+
+  const actors = input.sources.filter((source) =>
+    (source.state === "wired" || source.state === "proposed")
+    && (source.termsVerdict === "allowed" || source.termsVerdict === "allowed-with-account")
+    && source.apify);
+  if (actors.length === 0) {
+    return { results: [{ sourceId: "apify-mma", status: "skipped", reason: "No terms-approved MMA actor is enabled; no actor ran and nothing was spent.", items: [] }], artifactPaths: [] };
+  }
+
+  const goViral = await readJson<{ estimatedUsedUsd?: number }>(input.root, "goviral/source-quota/apify.json", {});
+  const fetchUsage = input.usageFetcher ?? ((token: string) => fetchApifyMonthlyUsageUsd({ token }));
+  const reported = await fetchUsage(input.token as string);
+  const sharedUsed = reported ?? Number(((goViral.estimatedUsedUsd ?? 0) + quota.estimatedUsedUsd).toFixed(6));
+  const verdict = mayRunMmaApify({ quota, approvals, token: input.token, sharedAccountUsedUsd: sharedUsed });
+  if (!verdict.allowed) {
+    return { results: [{ sourceId: "apify-mma", status: "skipped", reason: verdict.reason, items: [] }], artifactPaths: [] };
+  }
+
+  const runner = input.actorRunner ?? runApifyActor;
+  let nextQuota: MmaApifyQuota = { ...quota, sharedAccountUsedUsd: sharedUsed };
+  const results: MmaApifyRunResult[] = [];
+  for (const source of actors) {
+    const actor = source.apify!;
+    try {
+      const items = await runner({
+        actor,
+        token: input.token as string,
+        payload: actor.input,
+        maxTotalChargeUsd: actor.pricing.maxRunUsd
+      });
+      nextQuota = recordMmaActorUsage(nextQuota, source.id, actor, items.length, input.now, sharedUsed);
+      results.push({
+        sourceId: source.id,
+        status: items.length > 0 ? "success" : "skipped",
+        reason: items.length > 0 ? null : "The approved actor returned no rows.",
+        items: items.slice(0, actor.maxResults)
+      });
+    } catch {
+      results.push({ sourceId: source.id, status: "failed", reason: "The approved actor failed before producing a reviewed dataset.", items: [] });
+    }
+  }
+  await atomicWriteJson(input.root, quotaPath, nextQuota);
+  return { results, artifactPaths: [quotaPath] };
+}
 
 export const ApifyQuotaSchema = z.object({
   schemaVersion: z.literal("goviral-apify-quota/1"),
@@ -208,15 +430,20 @@ export interface ApifyDatasetItem {
  * data outcome, never an error.
  */
 export async function runApifyActor(input: {
-  actor: GoViralActor;
+  actor: Pick<GoViralActor, "actorSlug"> & { actorBuildId?: string };
   token: string;
   payload: Record<string, unknown>;
+  maxTotalChargeUsd?: number;
   maxBytes?: number;
   timeoutMs?: number;
   fetchImpl?: typeof fetch;
 }): Promise<ApifyDatasetItem[]> {
-  const path = input.actor.actorSlug.replace("/", "~");
-  const response = await safeFetch(`https://api.apify.com/v2/acts/${path}/run-sync-get-dataset-items`, {
+  const actorPath = input.actor.actorBuildId
+    ? `actor-builds/${input.actor.actorBuildId}`
+    : `acts/${input.actor.actorSlug.replace("/", "~")}`;
+  const endpoint = new URL(`https://api.apify.com/v2/${actorPath}/run-sync-get-dataset-items`);
+  if (input.maxTotalChargeUsd !== undefined) endpoint.searchParams.set("maxTotalChargeUsd", String(input.maxTotalChargeUsd));
+  const response = await safeFetch(endpoint.toString(), {
     allowHosts: [APIFY_HOST],
     method: "POST",
     headers: {

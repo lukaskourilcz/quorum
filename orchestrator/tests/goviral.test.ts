@@ -1,13 +1,24 @@
-import { describe, expect, it } from "vitest";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { describe, expect, it, vi } from "vitest";
 import {
   APIFY_MONTHLY_CREDIT_USD,
   APIFY_RUN_RESERVATION_USD,
+  MMA_APIFY_MONTHLY_SHARE_USD,
+  MMA_APIFY_RUN_RESERVATION_USD,
   currentMonthQuota,
+  currentMmaApifyQuota,
   emptyApifyQuota,
+  emptyMmaApifyQuota,
   estimateActorUsd,
   loadGoViralSourceRegistry,
   mayRunApify,
+  mayRunMmaApify,
+  parseMmaApifyApprovals,
+  recordMmaActorUsage,
   recordActorUsage,
+  runMmaApifySources,
   type GoViralActor
 } from "../src/sources/apify.js";
 import {
@@ -119,6 +130,117 @@ describe("the Apify quota guard", () => {
     expect(thin.length).toBeLessThan(full.length);
     expect(thin.map((entry) => entry.step.step)).toEqual([...thin.map((entry) => entry.step.step)].sort((a, b) => a - b));
     expect(plannedRecipeSteps({ registry, remainingUsd: 0, isFirstScoutOfMonth: false })).toEqual([]);
+  });
+});
+
+describe("the approval-gated MMA Apify share", () => {
+  const approvals = { account: true, sources: true };
+  const actor = {
+    actorSlug: "fixture/mma-source",
+    actorBuildId: "Abcdefghijk123456",
+    purpose: "espn-mma" as const,
+    targetHosts: ["example.test"],
+    pricing: { model: "pay-per-result" as const, pricePerResultUsd: 0.003, maxRunUsd: 0.09 },
+    maxResults: 30,
+    expectedMonthlyUsd: 0.36,
+    cadence: "weekly" as const,
+    pricingEvidenceUrl: "https://apify.com/fixture/mma-source",
+    input: { maxResults: 30 }
+  };
+
+  it("requires both owner approvals and the token before any spend path", () => {
+    const quota = emptyMmaApifyQuota("2026-08", now);
+    const pending = mayRunMmaApify({ quota, approvals: { account: false, sources: false }, token: "token", sharedAccountUsedUsd: 0 });
+    expect(pending).toEqual({
+      allowed: false,
+      reason: "MMA Apify sources are waiting for APIFY-ACCOUNT-001 and APIFY-MMA-SOURCES-001; no actor ran and nothing was spent."
+    });
+    expect(mayRunMmaApify({ quota, approvals, token: undefined, sharedAccountUsedUsd: 0 }).allowed).toBe(false);
+    expect(mayRunMmaApify({ quota, approvals, token: "token", sharedAccountUsedUsd: 0 }).allowed).toBe(true);
+  });
+
+  it("keeps both the $3 MMA share and the shared $5 account ceiling", () => {
+    const quota = emptyMmaApifyQuota("2026-08", now);
+    expect(mayRunMmaApify({
+      quota: { ...quota, estimatedUsedUsd: MMA_APIFY_MONTHLY_SHARE_USD - MMA_APIFY_RUN_RESERVATION_USD + 0.01 },
+      approvals,
+      token: "token",
+      sharedAccountUsedUsd: 0
+    }).allowed).toBe(false);
+    expect(mayRunMmaApify({
+      quota,
+      approvals,
+      token: "token",
+      sharedAccountUsedUsd: APIFY_MONTHLY_CREDIT_USD - MMA_APIFY_RUN_RESERVATION_USD + 0.01
+    }).allowed).toBe(false);
+  });
+
+  it("records bounded actor usage and rolls the MMA ledger monthly", () => {
+    const quota = recordMmaActorUsage(emptyMmaApifyQuota("2026-08", now), "espn-mma", actor, 20, now, 1.2);
+    expect(quota).toMatchObject({ shareCapUsd: 3, estimatedUsedUsd: 0.06, sharedAccountUsedUsd: 1.2 });
+    expect(quota.perActorCounts["espn-mma"]).toEqual({ runs: 1, items: 20, estimatedUsd: 0.06 });
+    expect(currentMmaApifyQuota(quota, "2026-09", new Date("2026-09-01T00:00:00.000Z"))).toMatchObject({ month: "2026-09", estimatedUsedUsd: 0 });
+  });
+
+  it("parses only checked approval lines", () => {
+    expect(parseMmaApifyApprovals("- [x] HUMAN_APPROVAL APIFY-ACCOUNT-001\n- [ ] HUMAN_APPROVAL APIFY-MMA-SOURCES-001")).toEqual({ account: true, sources: false });
+  });
+
+  it("is a one-sentence $0 no-op while approvals are pending", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-apify-pending-"));
+    const runner = vi.fn();
+    try {
+      const result = await runMmaApifySources({
+        root,
+        date: "2026-08-09",
+        now,
+        inbox: "- [ ] HUMAN_APPROVAL APIFY-ACCOUNT-001\n- [ ] HUMAN_APPROVAL APIFY-MMA-SOURCES-001",
+        token: "token-that-must-not-be-used",
+        sources: [{ id: "espn-mma", state: "proposed", termsVerdict: "allowed", apify: actor }],
+        actorRunner: runner
+      });
+      expect(result).toEqual({
+        results: [{
+          sourceId: "apify-mma",
+          status: "skipped",
+          reason: "MMA Apify sources are waiting for APIFY-ACCOUNT-001 and APIFY-MMA-SOURCES-001; no actor ran and nothing was spent.",
+          items: []
+        }],
+        artifactPaths: []
+      });
+      expect(runner).not.toHaveBeenCalled();
+      await expect(readFile(path.join(root, "mma/source-quota/apify.json"))).rejects.toThrow();
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+
+  it("writes the $3 ledger only after approvals, token and shared-credit checks pass", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-apify-approved-"));
+    const runner = vi.fn(async () => [{ id: "row-1" }, { id: "row-2" }]);
+    try {
+      const result = await runMmaApifySources({
+        root,
+        date: "2026-08-09",
+        now,
+        inbox: "- [x] HUMAN_APPROVAL APIFY-ACCOUNT-001\n- [x] HUMAN_APPROVAL APIFY-MMA-SOURCES-001",
+        token: "fixture-token",
+        sources: [{ id: "espn-mma", state: "proposed", termsVerdict: "allowed", apify: actor }],
+        usageFetcher: async () => 1.2,
+        actorRunner: runner
+      });
+      expect(result.artifactPaths).toEqual(["mma/source-quota/apify.json"]);
+      expect(result.results[0]).toMatchObject({ sourceId: "espn-mma", status: "success", items: [{ id: "row-1" }, { id: "row-2" }] });
+      expect(runner).toHaveBeenCalledWith(expect.objectContaining({ maxTotalChargeUsd: 0.09 }));
+      expect(JSON.parse(await readFile(path.join(root, "mma/source-quota/apify.json"), "utf8"))).toMatchObject({
+        schemaVersion: "mma-apify-quota/1",
+        shareCapUsd: 3,
+        sharedAccountUsedUsd: 1.2,
+        estimatedUsedUsd: 0.006
+      });
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 });
 

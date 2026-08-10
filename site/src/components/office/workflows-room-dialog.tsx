@@ -145,7 +145,7 @@ export function WorkflowsRoomDialog({
             </p>
           </div>
 
-          <div className="grid min-w-0 gap-4">
+          <div className={`grid min-w-0 ${room.key === "company" ? "gap-3" : "gap-4"}`}>
             <p className="text-[14.5px] leading-[1.55] text-[#d4d4d8]">{room.purpose}</p>
             <p className="text-[13.5px] leading-[1.55] text-[#94949c]">{room.operates}</p>
             <p className="text-[13.5px] leading-[1.55] text-[#94949c]">{room.connects}</p>

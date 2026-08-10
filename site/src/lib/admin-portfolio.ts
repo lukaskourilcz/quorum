@@ -24,7 +24,7 @@ const venturePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const adminTabs = [
   "ideas", "plans", "visuals",
   "fighters", "bouts", "events", "slates", "sources",
-  "articles", "calendar", "social-lab", "studio", "templates", "inspiration", "hooks",
+  "articles", "predictions", "banners", "calendar", "social-lab", "studio", "templates", "inspiration", "hooks",
   "packages"
 ] as const;
 
@@ -44,6 +44,8 @@ export interface AdminCard {
   contentHash: string;
   media: string[];
   ratings: RatingRecord[];
+  /** The owner-facing next state derived from the latest saved idea rating. */
+  graduation: string | null;
 }
 
 export interface AdminVenture {
@@ -175,6 +177,18 @@ function ratingsFor(ratings: readonly RatingRecord[], objectId: string): RatingR
     .sort((left, right) => right.ratedAt.localeCompare(left.ratedAt) || right.id.localeCompare(left.id));
 }
 
+/**
+ * The site cannot import the orchestrator package at runtime, but the words and branches here
+ * deliberately mirror taste/graduation.ts. The raw ledger status remains available to code;
+ * this is the status an owner needs while deciding whether to request the next board step.
+ */
+function ideaGraduation(rating: RatingRecord | null): string | null {
+  if (!rating) return null;
+  if (rating.rating === "perfect") return "Rated perfect — graduated";
+  if (rating.rating === "good") return "Rated good — awaiting board approval";
+  return "Rated bad — archived";
+}
+
 function parsePlan(
   raw: string,
   ventureId: string,
@@ -250,7 +264,8 @@ function parsePlan(
       updatedAt,
       contentHash: contentHash(raw),
       media: textArray(plan.assets) ?? [],
-      ratings: history
+      ratings: history,
+      graduation: null
     },
     detail: {
       id,
@@ -341,7 +356,9 @@ async function ideaCards(root: string, ventureId: string, ledgerNamespace: strin
     const ideas = parsePublicIdeaLedger(raw, ventureId);
     if (!ideas) return { cards: [], unreadable: [`ideas/${ledgerNamespace}/ledger.jsonl`] };
     return {
-      cards: ideas.map((idea): AdminCard => ({
+      cards: ideas.map((idea): AdminCard => {
+        const history = ratingsFor(ratings, idea.id);
+        return {
         id: idea.id,
         ventureId,
         kind: "idea",
@@ -354,8 +371,10 @@ async function ideaCards(root: string, ventureId: string, ledgerNamespace: strin
         updatedAt: idea.statusHistory.at(-1)?.at ?? null,
         contentHash: contentHash(JSON.stringify(idea)),
         media: [],
-        ratings: ratingsFor(ratings, idea.id)
-      })),
+        ratings: history,
+        graduation: ideaGraduation(currentRating(history, idea.id))
+      };
+      }),
       unreadable: []
     };
   } catch (error) {
@@ -364,18 +383,20 @@ async function ideaCards(root: string, ventureId: string, ledgerNamespace: strin
   }
 }
 
-async function visualCards(root: string, ventureId: string, ratings: readonly RatingRecord[]) {
-  if (ventureId !== "caught-up") return [];
+/** DNESKAi's social archive is the only current implementation of the `visuals` tab. */
+async function caughtUpVisualCards(root: string, ratings: readonly RatingRecord[]) {
   const archive = await readAdminSocialArchive(root);
   return archive.packs.flatMap((pack) =>
-    (["en", "cs"] as const).flatMap((locale) =>
-      (["instagram", "threads"] as const).map((channel): AdminCard => {
-        const item = pack.byLocale[locale][channel];
+    (Object.keys(pack.byLocale) as Array<"en" | "cs">).flatMap((locale) => {
+      const localized = pack.byLocale[locale];
+      if (!localized) return [];
+      return (["instagram", "threads"] as const).map((channel): AdminCard => {
+        const item = localized[channel];
         const queue = pack.queue.find((entry) => entry.locale === locale && entry.channel === channel);
         const id = `caught-up-${pack.date}-${locale}-${channel}`;
         return {
           id,
-          ventureId,
+          ventureId: "caught-up",
           kind: "visual",
           title: `${locale.toUpperCase()} ${channel} package`,
           summary: item.text,
@@ -386,10 +407,11 @@ async function visualCards(root: string, ventureId: string, ratings: readonly Ra
           updatedAt: pack.date,
           contentHash: contentHash(JSON.stringify(item)),
           media: item.frames,
-          ratings: ratingsFor(ratings, id)
+          ratings: ratingsFor(ratings, id),
+          graduation: null
         };
       })
-    )
+    })
   );
 }
 
@@ -434,7 +456,8 @@ async function packageCards(root: string, ventureId: string, ratings: readonly R
         updatedAt: date,
         contentHash: contentHash(JSON.stringify(parsed)),
         media: Array.isArray(render?.summaryPaths) ? render.summaryPaths.filter((entry): entry is string => typeof entry === "string") : [],
-        ratings: ratingsFor(ratings, id)
+        ratings: ratingsFor(ratings, id),
+        graduation: null
       });
     }
   }
@@ -472,17 +495,34 @@ async function ventureConfigs(root: string): Promise<VentureConfig[]> {
   });
 }
 
+/** The ventures whose `visuals` tab has a reader behind it. */
+const VISUALS_READERS = ["caught-up", "titty-tuesdays"];
+
 export async function readAdminPortfolio(root = repositoryRoot): Promise<AdminPortfolio> {
   const [configs, social] = await Promise.all([
     ventureConfigs(root),
     readAdminSocialArchive(root)
   ]);
   const ventures = await Promise.all(configs.map(async (venture): Promise<AdminVenture> => {
+    /*
+     * A `visuals` tab needs somebody to fill it.
+     *
+     * `caughtUpVisualCards` reads DNESKAi's social packs and nothing else, so a third venture
+     * declaring the tab would have rendered an empty grid forever. Titty Tuesdays is the
+     * exception because it brought its own reader: the garment proposals have their own loader
+     * and their own panel, rendered straight from `readTittyTuesdaysProposals` rather than
+     * through the card store. Any other venture still has to bring one before it may declare it.
+     */
+    if (venture.adminTabs.includes("visuals") && !VISUALS_READERS.includes(venture.id)) {
+      throw new Error(`Admin has no visuals reader for venture ${venture.id}.`);
+    }
     const ratingState = await readRatings(root, venture.id);
     const [ideas, plans, visuals, packages] = await Promise.all([
       ideaCards(root, venture.id, venture.ledgerNamespace, ratingState.ratings),
       planRecords(root, venture.id, ratingState.ratings),
-      visualCards(root, venture.id, ratingState.ratings),
+      venture.id === "caught-up" && venture.adminTabs.includes("visuals")
+        ? caughtUpVisualCards(root, ratingState.ratings)
+        : Promise.resolve([]),
       packageCards(root, venture.id, ratingState.ratings)
     ]);
     return {

@@ -1,9 +1,7 @@
 import "server-only";
-import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { getPublicBouts, getPublicEvents, getPublicFighters, type PublicBout, type PublicEvent, type PublicFighter, type SourcedValue } from "./fightaiq-records";
-import { parseRatingLedger, type RatingRecord } from "./rating-model";
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
 
@@ -21,18 +19,6 @@ export interface AdminMmaSource {
   evidenceUrl: string;
 }
 
-export interface AdminMmaSlate {
-  id: string;
-  title: string;
-  eventRefs: string[];
-  generatedAt: string;
-  expectedLossLine: string;
-  legCount: number;
-  ticketCount: number;
-  contentHash: string;
-  ratings: RatingRecord[];
-}
-
 export interface AdminFighter extends PublicFighter {
   discrepancyDetails: Array<{
     field: string;
@@ -46,7 +32,6 @@ export interface AdminFightAiQSnapshot {
   fighters: AdminFighter[];
   events: PublicEvent[];
   bouts: PublicBout[];
-  slates: AdminMmaSlate[];
   sources: AdminMmaSource[];
   unreadable: string[];
 }
@@ -54,7 +39,6 @@ export interface AdminFightAiQSnapshot {
 const object = (value: unknown): Record<string, unknown> | null => typeof value === "object" && value !== null && !Array.isArray(value) ? value as Record<string, unknown> : null;
 const text = (value: unknown, maximum = 1_000): string | null => typeof value === "string" && value.trim().length > 0 && value.length <= maximum ? value.trim() : null;
 const texts = (value: unknown): string[] | null => Array.isArray(value) && value.every((entry) => text(entry, 240)) ? value as string[] : null;
-const hash = (raw: string) => `sha256:${createHash("sha256").update(raw).digest("hex").slice(0, 12)}`;
 
 function sourcedValue(value: unknown): SourcedValue | undefined {
   if (value === null || typeof value === "string" || typeof value === "boolean" || (typeof value === "number" && Number.isFinite(value))) return value;
@@ -96,40 +80,6 @@ async function files(directory: string): Promise<string[]> {
   }
 }
 
-async function ratings(root: string): Promise<{ records: RatingRecord[]; malformed: boolean }> {
-  try {
-    const parsed = parseRatingLedger(await readFile(path.join(root, "state", "ratings", "fightaiq", "ledger.jsonl"), "utf8"));
-    return parsed ? { records: parsed, malformed: false } : { records: [], malformed: true };
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") return { records: [], malformed: false };
-    throw error;
-  }
-}
-
-function parseSlate(raw: string, history: readonly RatingRecord[]): AdminMmaSlate | null {
-  let value: unknown;
-  try { value = JSON.parse(raw); } catch { return null; }
-  const slate = object(value);
-  const eventRefs = texts(slate?.eventRefs);
-  const expectedLossLine = text(slate?.expectedLossLine, 500);
-  const generatedAt = text(slate?.generatedAt, 80);
-  const legs = Array.isArray(slate?.legs) ? slate.legs : null;
-  const tickets = Array.isArray(slate?.tickets) ? slate.tickets : null;
-  if (slate?.schemaVersion !== "slip-of-ten/1" || !eventRefs?.length || !expectedLossLine || !generatedAt || Number.isNaN(Date.parse(generatedAt)) || legs?.length !== 10 || !tickets || tickets.length > 4) return null;
-  const id = `slate-${generatedAt.slice(0, 10)}-${eventRefs[0]!.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`;
-  return {
-    id,
-    title: `Ten-fight slate · ${eventRefs.join(", ")}`,
-    eventRefs,
-    generatedAt,
-    expectedLossLine,
-    legCount: legs.length,
-    ticketCount: tickets.length,
-    contentHash: hash(raw),
-    ratings: history.filter((entry) => entry.objectRef.id === id).sort((left, right) => right.ratedAt.localeCompare(left.ratedAt))
-  };
-}
-
 async function sourceSnapshot(root: string): Promise<AdminMmaSource[]> {
   const raw = JSON.parse(await readFile(path.join(root, "config", "mma-sources.json"), "utf8")) as { sources?: unknown[] };
   if (!Array.isArray(raw.sources)) throw new Error("FightAIQ source registry is invalid");
@@ -154,22 +104,15 @@ async function sourceSnapshot(root: string): Promise<AdminMmaSource[]> {
 }
 
 export async function readAdminFightAiQ(root = repositoryRoot): Promise<AdminFightAiQSnapshot> {
-  const [fighterSnapshot, eventSnapshot, boutSnapshot, sourceRecords, ratingState] = await Promise.all([
-      getPublicFighters(root), getPublicEvents(root), getPublicBouts(root), sourceSnapshot(root), ratings(root)
+  const [fighterSnapshot, eventSnapshot, boutSnapshot, sourceRecords] = await Promise.all([
+      getPublicFighters(root), getPublicEvents(root), getPublicBouts(root), sourceSnapshot(root)
     ]);
     const fighterRoot = path.join(root, "state", "mma", "fighters");
-    const slateRoot = path.join(root, "state", "mma", "slips");
-    const slates: AdminMmaSlate[] = [];
     const unreadable: string[] = [
       ...fighterSnapshot.unreadable.map((file) => `fighters/${file}`),
       ...eventSnapshot.unreadable.map((file) => `events/${file}`),
-      ...boutSnapshot.unreadable.map((file) => `bouts/${file}`),
-      ...(ratingState.malformed ? ["ratings/fightaiq/ledger.jsonl"] : [])
+      ...boutSnapshot.unreadable.map((file) => `bouts/${file}`)
     ];
-    for (const file of await files(slateRoot)) {
-      const parsed = parseSlate(await readFile(file, "utf8"), ratingState.records);
-      if (parsed) slates.push(parsed); else unreadable.push(`slates/${path.relative(slateRoot, file)}`);
-    }
     const detailById = new Map<string, AdminFighter["discrepancyDetails"]>();
     for (const file of await files(fighterRoot)) {
       const parsed = parseDiscrepancyDetails(await readFile(file, "utf8"));
@@ -180,7 +123,6 @@ export async function readAdminFightAiQ(root = repositoryRoot): Promise<AdminFig
     fighters: fighterSnapshot.fighters.map((fighter) => ({ ...fighter, discrepancyDetails: detailById.get(fighter.id) ?? [] })),
     events: eventSnapshot.events,
     bouts: boutSnapshot.bouts,
-    slates,
     sources: sourceRecords,
     unreadable
   };

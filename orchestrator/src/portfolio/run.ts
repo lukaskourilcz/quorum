@@ -17,7 +17,7 @@ import { loadRoutingConfig, routeBoardroom } from "../boardroom/router.js";
 import { AgendaPhaseSchema, type MeetingAgenda } from "../contracts/meeting-agenda.js";
 import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-record.js";
 import { MeetingSkipSchema } from "../contracts/meeting-skip.js";
-import { EditorialSlateSchema, type EditorialSlate } from "../contracts/mma-files.js";
+import { EditorialSlateSchema, mmaOrganizationFromRef, type EditorialSlate } from "../contracts/mma-files.js";
 import { MarketingPlanSchema, type MarketingPlan } from "../contracts/marketing-plan.js";
 import { guardedJsonCall, ModelOutputParseError } from "../llm/call.js";
 import { loadAgentRegistry } from "../org/registry.js";
@@ -1284,7 +1284,7 @@ export async function runPortfolioCycle(input: {
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
       const model = modelFor(agent, profile.provider, modelConfig.roles);
-      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"<=240 chars"},"editorialSlate":null,"marketingPlan":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Keep every field inside its stated character limit; an over-long summary is rejected and your whole contribution is dropped. ${portfolioIdeaInstruction(input.phase, dailyFocus)} The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|gv-brief|mma-intake|mma-analysis|mag-editorial|mag-desk","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. The summary is the first line the target room reads and must name the decision it has to take: write it as "Decide X between A and B" or "Approve or kill Y". A summary that describes work to prepare, supply or review is not a decision and gives that room nothing to settle. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM editorial slot; kill a slot when its source-backed subject is missing or repeated.`;
+      const system = `${roomPrompt}\n\nReturn one JSON object with every key: {"stance":"plan|pass|veto","summary":"<=280 chars","evidenceRefs":[],"task":null|{"summary":"<=240 chars"},"editorialSlate":null,"marketingPlan":null,"inspirationObservations":[],"idea":null,"followUpRequest":null}. Keep every field inside its stated character limit; an over-long summary is rejected and your whole contribution is dropped. ${portfolioIdeaInstruction(input.phase, dailyFocus)} The room chair may request at most one follow-up only when another specialist decision is genuinely needed; everyone else returns followUpRequest:null. When set it must be {"phase":"tt-marketing|gv-brief|mma-intake|mma-analysis|mag-editorial|mag-desk","summary":"<=280 chars","evidenceRefs":[]} with all three keys present; any other phase or a missing evidenceRefs array is dropped. The summary is the first line the target room reads and must name the decision it has to take: write it as "Decide X between A and B" or "Approve or kill Y". A summary that describes work to prepare, supply or review is not a decision and gives that room nothing to settle. Only ANGLE may return one detailed marketingPlan during tt-marketing. Every visual must use the supplied live Carousel Studio template id, version and content payload; never return a freeform image specification. No paid media, commerce, outreach or spend is authorized. Only CANVAS may return editorialSlate, and only during mag-editorial. Use exactly one AM and one PM editorial slot; every assigned slot names organization as ufc or oktagon, and a cross-promotion story uses the organization it leads with. Kill a slot when its source-backed subject is missing or repeated.`;
       const packet = wrapUntrustedData("canonical-portfolio-packet", JSON.stringify({
         phase: input.phase,
         objective: effectiveObjective,
@@ -1581,7 +1581,7 @@ export async function runPortfolioCycle(input: {
           editorialSlate = EditorialSlateSchema.parse({
             ...editorialSlate,
             slots: [
-              { slot: "am", format: "fighter-profile", subjectRefs: [profileSubject.id], rationale: "No card is inside the window, so the desk profiles the best-sourced fighter on file.", assignedWriter: "JAB", status: "assigned" },
+              { slot: "am", organization: profileSubject.org, format: "fighter-profile", subjectRefs: [profileSubject.id], rationale: "No card is inside the window, so the desk profiles the best-sourced fighter on file.", assignedWriter: "JAB", status: "assigned" },
               editorialSlate.slots[1]
             ],
             vaultVerdicts: [
@@ -1594,10 +1594,12 @@ export async function runPortfolioCycle(input: {
 
       const fightWeekSubject = context.evidenceRefs.find((reference) => reference.startsWith("event:"))?.slice("event:".length);
       if (fightWeekSubject && !editorialSlate.slots.some((slot) => slot.status === "assigned" && slot.subjectRefs.includes(fightWeekSubject))) {
+        const fightWeekOrganization = mmaOrganizationFromRef(fightWeekSubject);
+        if (!fightWeekOrganization) throw new Error(`Fight-week subject has no organization prefix: ${fightWeekSubject}`);
         editorialSlate = EditorialSlateSchema.parse({
           ...editorialSlate,
           slots: [
-            { slot: "am", format: "fight-week-preview", subjectRefs: [fightWeekSubject], rationale: "The nearest verified card is inside the three-day window and takes one daily slot.", assignedWriter: "JAB", status: "assigned" },
+            { slot: "am", organization: fightWeekOrganization, format: "fight-week-preview", subjectRefs: [fightWeekSubject], rationale: "The nearest verified card is inside the three-day window and takes one daily slot.", assignedWriter: "JAB", status: "assigned" },
             editorialSlate.slots[1]
           ],
           vaultVerdicts: [

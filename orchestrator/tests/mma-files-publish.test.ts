@@ -1,9 +1,9 @@
-import { mkdtemp, readFile } from "node:fs/promises";
+import { cp, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { atomicWriteJson } from "../src/state.js";
-import { fightAiQDeliveryHash, nextArticleDelivery, nextFightAiQDelivery, recordMmaDelivery } from "../src/mma-files/publish.js";
+import { fightAiQDeliveryHash, nextArticleDelivery, nextBannerDelivery, nextFightAiQDelivery, recordMmaDelivery } from "../src/mma-files/publish.js";
 import { articlePackageHash } from "../src/mma-files/hash.js";
 import { repoRoot } from "../src/paths.js";
 
@@ -48,5 +48,53 @@ describe("MMA Files repository delivery", () => {
     expect(JSON.stringify(feed)).not.toContain('"decimal"');
     await recordMmaDelivery({ kind: "fightaiq", packageHash, packagePath: pending!.packagePath, status: "delivered", root });
     expect(await nextFightAiQDelivery(root, workspace)).toBeNull();
+  });
+
+  it("delivers a staged banner once and marks its contract with the receipt", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-banner-publish-"));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), "mma-banner-package-"));
+    await cp(
+      path.join(repoRoot, "state", "ventures", "mma-files", "banners"),
+      path.join(root, "ventures", "mma-files", "banners"),
+      { recursive: true }
+    );
+    const pending = await nextBannerDelivery(root, workspace);
+    expect(pending).toMatchObject({ kind: "banner" });
+    const receiptPath = await recordMmaDelivery({
+      kind: "banner",
+      packageHash: pending!.packageHash,
+      packagePath: pending!.packagePath,
+      status: "delivered",
+      targetCommit: "abc123",
+      root
+    });
+    expect(receiptPath).toContain("deliveries/banners/");
+    expect(await nextBannerDelivery(root, workspace)).toBeNull();
+    expect(JSON.parse(await readFile(path.join(root, "ventures", "mma-files", "banners", "contract.json"), "utf8")))
+      .toMatchObject({ status: "delivered", receiptRef: receiptPath });
+    const delivered = JSON.parse(await readFile(path.join(root, "ventures", "mma-files", "banners", "delivered.json"), "utf8"));
+    expect(delivered).toMatchObject({ schemaVersion: "mma-ads/1", slots: { "infeed-rectangle": { enabled: false, image: null } } });
+    expect(JSON.stringify(delivered)).not.toContain("bytes_base64");
+  });
+
+  it("refuses a banner package edited after selection", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-banner-receipt-"));
+    const workspace = await mkdtemp(path.join(os.tmpdir(), "mma-banner-receipt-package-"));
+    await cp(
+      path.join(repoRoot, "state", "ventures", "mma-files", "banners"),
+      path.join(root, "ventures", "mma-files", "banners"),
+      { recursive: true }
+    );
+    const pending = await nextBannerDelivery(root, workspace);
+    const changed = JSON.parse(await readFile(pending!.packagePath, "utf8"));
+    changed.updatedAt = "2026-08-09T00:01:00.000Z";
+    await writeFile(pending!.packagePath, `${JSON.stringify(changed, null, 2)}\n`);
+    await expect(recordMmaDelivery({
+      kind: "banner",
+      packageHash: pending!.packageHash,
+      packagePath: pending!.packagePath,
+      status: "delivered",
+      root
+    })).rejects.toThrow(/hash differs/u);
   });
 });

@@ -3,6 +3,7 @@ import { BoutRecordSchema, EventCardSchema, FighterCardSchema, SourcedFieldSchem
 import { readJson, atomicWriteJson } from "../state.js";
 import { loadBoutRecords, loadFighterRecords, saveBoutRecord, saveOddsSnapshot } from "./store.js";
 import { loadMmaModelConfig, modelVersion } from "./engine.js";
+import { normalizeDivision } from "./field-agreement.js";
 import type { ApiBoutOdds, CitoEventSummary, CitoFighterSummary } from "./sources.js";
 import type { z } from "zod";
 
@@ -22,26 +23,7 @@ function slug(value: string): string {
 
 function division(value: string | null): string | null {
   if (!value) return null;
-  const normalized = value
-    .toLowerCase()
-    .replaceAll("women’s", "womens")
-    .replaceAll("women's", "womens")
-    .replace(/^ufc\s+/u, "")
-    .replace(/\s+/gu, "-")
-    .replace(/[^a-z-]/gu, "")
-    .replace(/-+/gu, "-")
-    .replace(/^-+|-+$/gu, "");
-  const aliases: Record<string, string> = {
-    "lightheavyweight": "light-heavyweight",
-    "light-heavyweight": "light-heavyweight",
-    "womensstrawweight": "womens-strawweight",
-    "womens-strawweight": "womens-strawweight",
-    "womensflyweight": "womens-flyweight",
-    "womens-flyweight": "womens-flyweight",
-    "womensbantamweight": "womens-bantamweight",
-    "womens-bantamweight": "womens-bantamweight"
-  };
-  return (aliases[normalized] ?? normalized) || null;
+  return normalizeDivision(value) || null;
 }
 
 function sourced(value: SourcedField["value"], sourceRef: string, retrievedAt: string): SourcedField {

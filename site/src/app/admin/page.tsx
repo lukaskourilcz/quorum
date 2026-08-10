@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import path from "node:path";
 import Link from "next/link";
 import { AdminFileBrowser } from "@/components/admin/admin-file-browser";
 import { AdminShell, type AdminSection, type AdminWorkspace } from "@/components/admin/admin-shell";
+import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
 import { AgentSwitches } from "@/components/admin/agent-switches";
 import { DesignLabWorkspace } from "@/components/admin/design-lab-workspace";
 import { AutonomyPanel } from "@/components/admin/autonomy-panel";
@@ -27,6 +29,8 @@ import {
   CURRENT_MONTHLY_OPERATING_LIMIT_USD
 } from "@/data/operating-policy";
 import { readAdminAgentControls } from "@/lib/admin-agent-controls";
+import { readApprovedUndeliveredPayloads } from "@/lib/admin-owner-attention";
+import { adminWritesEnabled } from "@/lib/admin-write-permission";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
 import { readDesignLab, readDesignLabPresets } from "@/lib/design-lab";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
@@ -78,7 +82,6 @@ function tabLabel(tab: AdminVentureTab): string {
   if (tab === "visuals") return "images";
   if (tab === "studio") return "studio";
   if (tab === "social-lab") return "social drafts";
-  if (tab === "slates") return "fight reports";
   return tab;
 }
 
@@ -146,7 +149,8 @@ export default async function AdminPage({
     ownerAttention,
     monetization,
     renderedDesk,
-    ttProposals
+    ttProposals,
+    approvedUndelivered
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -169,7 +173,8 @@ export default async function AdminPage({
     readOwnerAttention(),
     readMonetizationOptions(),
     readRenderedDesk(),
-    readTittyTuesdaysProposals()
+    readTittyTuesdaysProposals(),
+    readApprovedUndeliveredPayloads(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), ".."))
   ]);
 
   /*
@@ -214,7 +219,7 @@ export default async function AdminPage({
       : ventureId === "carousel-studio"
         ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
         : ventureId === "fightaiq"
-          ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.slates.length + fightaiq.sources.length
+          ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.sources.length
           : fallback;
 
   const files = [
@@ -308,15 +313,27 @@ export default async function AdminPage({
       label: "Approvals waiting",
       value: ownerAttention.approvals.length
     },
+    // Approval is not delivery. A countersigned payload that has not shipped is its own signal,
+    // and folding it into the approvals count made a granted approval look outstanding forever.
+    {
+      label: "Approved deliveries waiting",
+      value: approvedUndelivered.length
+    },
     {
       label: "Only you can do",
       value: ownerAttention.manualTasks.length
+    },
+    // Open and selected both: an item the board has picked up is still awaiting its slot.
+    {
+      label: "Priorities awaiting a board slot",
+      value: autonomy.priorities.filter((item) => item.status === "open" || item.status === "selected").length
     },
     {
       label: "Unreadable files",
       value:
         portfolio.ventures.reduce((sum, venture) => sum + venture.unreadableFiles.length, 0) +
         mmaFiles.unreadable.length +
+        fightaiq.unreadable.length +
         ownerAttention.unreadable
     }
   ];
@@ -327,17 +344,21 @@ export default async function AdminPage({
 
   const ventureUnreadable = selectedVenture?.id === "mma-files"
     ? [...selectedVenture.unreadableFiles, ...mmaFiles.unreadable]
+    : selectedVenture?.id === "fightaiq"
+      ? [...selectedVenture.unreadableFiles, ...fightaiq.unreadable]
     : selectedVenture?.unreadableFiles ?? [];
 
-  const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual">> = {
+  const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual" | "social-variant">> = {
     ideas: "idea",
     plans: "plan",
-    visuals: "visual"
+    visuals: "visual",
+    packages: "social-variant"
   };
   const visibleCards = selectedVenture && selectedTab && cardKindByTab[selectedTab]
     ? selectedVenture.cards.filter((card) => card.kind === cardKindByTab[selectedTab])
     : [];
   const selectedAgentControls = agentControls.find((control) => control.ventureId === selectedVenture?.id);
+  const writesEnabled = adminWritesEnabled();
 
   /**
    * The tab body and the number printed above it, resolved together.
@@ -394,17 +415,24 @@ export default async function AdminPage({
         count: caughtUp.events.length
       };
     }
-    if (id === "fightaiq" && selectedTab && ["fighters", "bouts", "events", "slates", "sources"].includes(selectedTab)) {
-      const tab = selectedTab as "fighters" | "bouts" | "events" | "slates" | "sources";
+    // `slates` is gone: the directory behind it was never written, so the tab could only ever be
+    // empty and the venture no longer declares it.
+    if (id === "fightaiq" && selectedTab && ["fighters", "bouts", "events", "sources"].includes(selectedTab)) {
+      const tab = selectedTab as "fighters" | "bouts" | "events" | "sources";
       return { node: <FightAiQAdminPanel snapshot={fightaiq} tab={tab} />, count: fightaiq[tab].length };
     }
-    if (id === "mma-files" && selectedTab && ["articles", "calendar", "social-lab"].includes(selectedTab)) {
-      const tab = selectedTab as "articles" | "calendar" | "social-lab";
+    if (id === "mma-files" && selectedTab && ["articles", "predictions", "banners", "calendar", "social-lab"].includes(selectedTab)) {
+      const tab = selectedTab as "articles" | "predictions" | "banners" | "calendar" | "social-lab";
       return {
         node: <MmaFilesAdminPanel snapshot={mmaFiles} tab={tab} />,
         count: tab === "articles"
           ? mmaFiles.articles.length
-          : tab === "calendar" ? mmaFiles.calendar.length : mmaFiles.socialPacks.length
+          : tab === "calendar"
+            ? mmaFiles.calendar.length
+            : tab === "social-lab"
+              ? mmaFiles.socialPacks.length
+              // Predictions and banners are one health record each, not a list of items.
+              : 1
       };
     }
     if (visibleCards.length) {
@@ -474,6 +502,8 @@ export default async function AdminPage({
       }
       workspaces={workspaces}
     >
+      <AdminWriteProvider enabled={writesEnabled}>
+      {!writesEnabled ? <Callout tone="warning">Read-only deployment — saving needs the GitHub token, see NEEDED.md. Existing records remain available to review.</Callout> : null}
       {selectedView === "future" ? (
         <div className="grid min-w-0 gap-4">
           <Panel note="Read-only" title="Ways this could earn">
@@ -571,6 +601,9 @@ export default async function AdminPage({
           <div className="flex flex-wrap items-center gap-2">
             {selectedVenture.tabs.map((tab) => {
               const on = selectedTab === tab;
+              const label = selectedVenture.id === "fightaiq" && tab === "fighters"
+                ? `${tabLabel(tab)} · ${fightaiq.fighters.reduce((count, fighter) => count + fighter.discrepancyDetails.filter((item) => item.status === "open").length, 0)} unresolved`
+                : tabLabel(tab);
               return (
                 <Link
                   aria-current={on ? "page" : undefined}
@@ -589,7 +622,7 @@ export default async function AdminPage({
                     color: on ? "#ffffff" : "#a1a1aa"
                   }}
                 >
-                  {tabLabel(tab)}
+                  {label}
                 </Link>
               );
             })}
@@ -623,6 +656,7 @@ export default async function AdminPage({
           ) : null}
         </div>
       )}
+      </AdminWriteProvider>
     </AdminShell>
   );
 }

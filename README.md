@@ -24,10 +24,6 @@ where the work happens, who runs it, what came out, and what the company is.
 | **GoVIRAL** | what is rising this week, once a week |
 | **Titty Tuesdays** | brand and season concepts for a shop that does not exist yet |
 
-Two of those seven publish today. The rest are wired and waiting on something
-the owner has to supply; what each is waiting for is in
-[`docs/NEEDED.md`](docs/NEEDED.md).
-
 ## The stack
 
 A pnpm monorepo of TypeScript. `orchestrator/` runs the council on a schedule
@@ -50,12 +46,3 @@ pnpm cycle -- --phase morning --dry   # one council cycle, no model calls, $0
 
 Node 22 or newer. Nothing above needs a key: a dry cycle runs on fixtures and
 the site reads committed state.
-
-## Where to look next
-
-- [`CLAUDE.md`](CLAUDE.md) — the rules any session works under
-- [`docs/NEEDED.md`](docs/NEEDED.md) — what the owner still has to do
-- [`docs/ECOSYSTEM.md`](docs/ECOSYSTEM.md) — the standing operating model
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`GOVERNANCE.md`](GOVERNANCE.md)
-
-MIT.

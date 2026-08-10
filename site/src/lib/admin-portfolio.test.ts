@@ -74,6 +74,52 @@ describe("admin portfolio projection", () => {
       plans: [{ id: "plan-001", rating: { rating: "perfect" } }]
     });
   });
+
+  it("keeps a saved idea rating visible and projects its graduation state", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-admin-portfolio-"));
+    await Promise.all([
+      mkdir(path.join(root, "config"), { recursive: true }),
+      mkdir(path.join(root, "state", "ideas", "titty-tuesdays"), { recursive: true }),
+      mkdir(path.join(root, "state", "ratings", "titty-tuesdays"), { recursive: true })
+    ]);
+    await writeFile(path.join(root, "config", "ventures.json"), JSON.stringify({
+      schemaVersion: "venture-registry/1",
+      ventures: [{
+        id: "titty-tuesdays", name: "Titty Tuesdays", status: "operating",
+        ledgerNamespace: "titty-tuesdays", adminTabs: ["ideas"]
+      }]
+    }));
+    const idea = {
+      schemaVersion: "idea-ledger/1", id: "idea-2026-08-07-abcd", fingerprint: `sha256:${"a".repeat(64)}`,
+      title: "Rated shirt", summary: "A saved owner rating must survive a reload.",
+      origin: { agent: "PULSE", meetingRef: "meetings/2026-08-07-tt-marketing" }, status: "proposed",
+      statusHistory: [{ status: "proposed", at: "2026-08-07T10:00:00.000Z", meetingRef: "meetings/2026-08-07-tt-marketing", reason: "Novel." }], similarTo: []
+    };
+    const rating = {
+      schemaVersion: "rating/1", id: "r-2026-08-07-abcd", ventureId: "titty-tuesdays", objectKind: "idea",
+      objectRef: { id: idea.id, contentHash: "sha256:abcdef123456" }, rating: "perfect", ratedAt: "2026-08-07T12:00:00.000Z"
+    };
+    await writeFile(path.join(root, "state", "ideas", "titty-tuesdays", "ledger.jsonl"), `${JSON.stringify(idea)}\n`);
+    await writeFile(path.join(root, "state", "ratings", "titty-tuesdays", "ledger.jsonl"), `${JSON.stringify(rating)}\n`);
+
+    await expect(readAdminPortfolio(root)).resolves.toMatchObject({
+      ventures: [{ cards: [{ id: idea.id, ratings: [{ rating: "perfect" }], graduation: "Rated perfect — graduated" }] }]
+    });
+  });
+
+  it("refuses a visuals tab until that venture supplies an explicit reader", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-admin-portfolio-"));
+    await mkdir(path.join(root, "config"), { recursive: true });
+    await writeFile(path.join(root, "config", "ventures.json"), JSON.stringify({
+      schemaVersion: "venture-registry/1",
+      ventures: [{
+        id: "future-venture", name: "Future venture", status: "exploration",
+        ledgerNamespace: "future-venture", adminTabs: ["visuals"]
+      }]
+    }));
+
+    await expect(readAdminPortfolio(root)).rejects.toThrow("Admin has no visuals reader for venture future-venture.");
+  });
 });
 
 describe("launch binder readiness", () => {

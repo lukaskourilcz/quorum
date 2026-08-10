@@ -1,4 +1,4 @@
-import { ArticlePackageSchema, type ArticlePackage, type EditorialSlate } from "../contracts/mma-files.js";
+import { ArticlePackageSchema, articleOrganizationFromRefs, type ArticlePackage, type EditorialSlate } from "../contracts/mma-files.js";
 import { articlePackageHash } from "./hash.js";
 import { effectiveRecipe } from "../social/deck-style.js";
 import { renderSocialVariants } from "./frame.js";
@@ -90,6 +90,12 @@ export async function produceMmaFilesArticle(input: {
   const assignment = input.slate.slots.find((slot) => slot.slot === input.slot);
   if (!assignment) throw new Error(`Editorial slate has no ${input.slot} slot`);
   if (assignment.status === "killed") throw new Error(`Editorial slot ${input.slot} was killed: ${assignment.killedReason}`);
+  const derivedOrganization = articleOrganizationFromRefs(input.evidence);
+  if (assignment.organization && derivedOrganization && assignment.organization !== derivedOrganization) {
+    throw new Error(`Editorial organization ${assignment.organization} contradicts ${input.evidence.eventRef ?? input.evidence.fighterRefs[0]}`);
+  }
+  const organization = assignment.organization ?? derivedOrganization;
+  if (!organization) throw new Error(`Editorial slot ${input.slot} has no organization or promotion-prefixed evidence reference`);
   const stylebook = input.stylebookRaw ?? await loadStylebook();
   const stylebookProblems = validateStylebook(stylebook);
   if (stylebookProblems.length) throw new Error(`STYLEBOOK.md failed validation: ${stylebookProblems.join(", ")}`);
@@ -164,6 +170,7 @@ export async function produceMmaFilesArticle(input: {
     schemaVersion: "article/1" as const,
     slug: input.slug,
     localizations: { cs: csLocalization },
+    organization,
     format: assignment.format,
     sources: input.evidence.sources,
     image: articleImage ?? deterministicArticleImage({

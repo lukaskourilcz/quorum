@@ -33,6 +33,10 @@ function statusLabel(status: string): string {
   return labels[status] ?? status.replaceAll("_", " ");
 }
 
+function renderedFrameUrl(date: string, locale: "en" | "cs", slide: number): string {
+  return `/admin/api/social-frames/${date}/${locale}/instagram/${slide}`;
+}
+
 function SocialCopy({ label, text }: { label: string; text: string }) {
   return (
     <div className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-5">
@@ -47,8 +51,7 @@ function SocialCopy({ label, text }: { label: string; text: string }) {
   );
 }
 
-function SocialLocalePanel({ pack, locale }: { pack: AdminSocialPack; locale: "en" | "cs" }) {
-  const localized = pack.byLocale[locale];
+function SocialLocalePanel({ pack, locale, localized }: { pack: AdminSocialPack; locale: "en" | "cs"; localized: NonNullable<AdminSocialPack["byLocale"]["en"]> }) {
   const queue = pack.queue.filter((item) => item.locale === locale);
   return (
     <section aria-labelledby={`${pack.date}-${locale}`} className="min-w-0">
@@ -71,10 +74,12 @@ function SocialLocalePanel({ pack, locale }: { pack: AdminSocialPack; locale: "e
       </div>
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {localized.instagram.frames.map((frame, index) => (
+        {localized.instagram.frames.map((frame, index) => {
+          const rendered = renderedFrameUrl(pack.date, locale, index + 1);
+          return (
           <a
             className="overflow-hidden rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--secondary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
-            href={frame}
+            href={rendered}
             key={frame}
             rel="noreferrer"
             target="_blank"
@@ -84,11 +89,13 @@ function SocialLocalePanel({ pack, locale }: { pack: AdminSocialPack; locale: "e
               className="h-auto w-full"
               height={1350}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 240px"
-              src={frame}
+              src={rendered}
+              unoptimized
               width={1080}
             />
           </a>
-        ))}
+          );
+        })}
       </div>
 
       <div className="mt-4 grid gap-4 xl:grid-cols-2">
@@ -139,8 +146,10 @@ export function SocialArchive({ packs, unreadableFiles }: { packs: AdminSocialPa
                   </div>
                 </div>
                 <div className="grid gap-10 2xl:grid-cols-2">
-                  <SocialLocalePanel locale="en" pack={pack} />
-                  <SocialLocalePanel locale="cs" pack={pack} />
+                  {(["en", "cs"] as const).flatMap((locale) => {
+                    const localized = pack.byLocale[locale];
+                    return localized ? [<SocialLocalePanel key={locale} locale={locale} localized={localized} pack={pack} />] : [];
+                  })}
                 </div>
               </CardContent>
             </Card>

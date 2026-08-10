@@ -169,7 +169,7 @@ describe("a document written before any of this parses and renders unchanged", (
    * Pinned, not recomputed. A test that renders the fixture twice proves the renderer is a
    * function; only a committed hash proves this release renders what the last deliberate
    * re-baseline did, which is the promise `carousel-template/1` makes to the packs already in
-   * state/social. Re-baselined once, by DL-04, when the fonts and the real metrics landed.
+   * state/social. Re-baselined for the owner-amended MMA Files Anton identity.
    */
   it("renders to the SVG pinned at the last deliberate re-baseline", () => {
     const parsed = CarouselTemplateSchema.parse(stored);
@@ -182,7 +182,7 @@ describe("a document written before any of this parses and renders unchanged", (
       format: "instagram-portrait"
     });
     const combined = createHash("sha256").update(slides.map((slide) => slide.svgHash).join("")).digest("hex");
-    expect(combined).toBe("1664aaea6d118edbaeb5e64507389f5fa5af1f3945623daecf88c328c83840a0");
+    expect(combined).toBe("63a4442bcd8ea66a7382e0fbdc61f0e8df948209e32702a59fcff4601d9edc77");
   });
 });
 

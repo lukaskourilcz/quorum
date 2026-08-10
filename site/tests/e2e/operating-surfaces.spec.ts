@@ -19,7 +19,6 @@ const axeRoutes = [
   "/admin/ventures/titty-tuesdays/binder",
   "/admin?venture=fightaiq&tab=fighters",
   "/admin?venture=fightaiq&tab=events",
-  "/admin?venture=fightaiq&tab=slates",
   "/admin?venture=fightaiq&tab=sources",
   "/admin?venture=mma-files&tab=articles",
   "/admin?venture=mma-files&tab=calendar",
@@ -35,6 +34,7 @@ const axeRoutes = [
 
 const repositoryRoot = path.resolve(process.cwd(), "..");
 const e2ePlanPath = path.join(repositoryRoot, "state", "ventures", "titty-tuesdays", "plans", "e2e-launch-plan.json");
+const e2eMarketingPackagePath = path.join(repositoryRoot, "state", "ventures", "marketingshark", "packages", "2026-08-09", "e2e-fixture", "package.json");
 const ratingLedgerPath = path.join(repositoryRoot, "state", "ratings", "titty-tuesdays", "ledger.jsonl");
 let originalRatingLedger: string | null = null;
 /*
@@ -61,6 +61,7 @@ test.beforeAll(async () => {
   }
   await Promise.all([
     mkdir(path.dirname(e2ePlanPath), { recursive: true }),
+    mkdir(path.dirname(e2eMarketingPackagePath), { recursive: true }),
     mkdir(path.dirname(ratingLedgerPath), { recursive: true })
   ]);
   await writeFile(e2ePlanPath, JSON.stringify({
@@ -79,13 +80,24 @@ test.beforeAll(async () => {
     calendar: [{ week: 1, focus: "Owner review." }],
     audienceRefs: [],
     kpis: ["owner review complete"],
+    assets: ["staged/e2e-launch.json"],
     status: "approved",
     originMeetingRef: "meetings/2026-08-01-tt-marketing"
+  }));
+  await writeFile(e2eMarketingPackagePath, JSON.stringify({
+    status: "draft",
+    question: { id: "e2e-question", category: "proof" },
+    hooks: {
+      a: { patternId: "fact-first", en: "Show the package card." },
+      b: { patternId: "question-led", en: "Ask before publishing." }
+    },
+    render: { summaryPaths: ["staged/e2e-package.json"] }
   }));
 });
 
 test.afterAll(async () => {
   await rm(e2ePlanPath, { force: true });
+  await rm(e2eMarketingPackagePath, { force: true });
   if (originalRatingLedger === null) await rm(ratingLedgerPath, { force: true });
   else await writeFile(ratingLedgerPath, originalRatingLedger);
   await rm(presetsPath, { force: true });
@@ -107,7 +119,9 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   // The five-day board is /calendar's product now. The home page walks past a calendar of its
   // own — a full week, stepped in place — and this test is about the linked, statically
   // generated weeks, which only /calendar has.
-  await page.goto("/calendar", { waitUntil: "networkidle" });
+  // Start with the saved operating week. Its five-day window carries completed and future slots;
+  // the previous generated week carries the missed state this test also verifies.
+  await page.goto("/calendar/2026-08-03", { waitUntil: "networkidle" });
   await expect(page.locator("html")).toHaveAttribute(
     "data-scroll-behavior",
     "smooth"
@@ -129,8 +143,11 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   // was young; there are none now, and requiring one would be requiring the company to keep
   // sample data in a public week.
   await expect(weekBoard.locator('[data-calendar-state="held"]')).not.toHaveCount(0);
-  await expect(weekBoard.locator('[data-calendar-state="missed"]')).not.toHaveCount(0);
   await expect(weekBoard.locator('[data-calendar-state="scheduled"]')).not.toHaveCount(0);
+  const previous = page.getByRole("link", { name: "Previous calendar week" });
+  await expect(previous).toHaveAttribute("href", /\/calendar\/\d{4}-\d{2}-\d{2}/);
+  await previous.click();
+  await expect(weekBoard.locator('[data-calendar-state="missed"]')).not.toHaveCount(0);
   const next = page.getByRole("link", { name: "Next calendar week" });
   await expect(next).toHaveAttribute("href", /\/calendar\/\d{4}-\d{2}-\d{2}/);
   await next.click();
@@ -214,29 +231,92 @@ test("measures role column keeps the table inset", async ({ page }) => {
   expect(Math.abs((headBox?.x ?? 0) - (cellBox?.x ?? 0))).toBeLessThanOrEqual(1);
 });
 
+test("MMA Files article heroes load from the package-backed archive", async ({ page }) => {
+  await page.goto("/admin?venture=mma-files&tab=articles", { waitUntil: "networkidle" });
+  const heroes = page.locator("main figure img");
+  await expect(heroes).toHaveCount(5);
+  for (let index = 0; index < await heroes.count(); index += 1) {
+    await heroes.nth(index).scrollIntoViewIfNeeded();
+    await expect
+      .poll(() => heroes.nth(index).evaluate((node: HTMLImageElement) => node.naturalWidth))
+      .toBeGreaterThan(0);
+  }
+});
+
+test("marketingShark packages tab shows stored package cards", async ({ page }) => {
+  await page.goto("/admin?venture=marketingshark&tab=packages", { waitUntil: "networkidle" });
+  await expect(page.getByRole("heading", { name: "e2e-fixture · 2026-08-09" })).toBeVisible();
+  await expect(page.getByText("staged/e2e-package.json")).toBeVisible();
+});
+
+test("DNESKAi social archive renders its Czech-only packs", async ({ page }) => {
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const archive = page.locator("#social-archive");
+  await expect(archive.getByRole("heading", { name: "CS social posts" })).toHaveCount(2);
+  await expect(archive.getByText("English edition")).toHaveCount(0);
+  await expect(archive.getByText(/social post files cannot be read/)).toHaveCount(0);
+  const frames = archive.locator("img");
+  await expect(frames).toHaveCount(20);
+  for (const index of [0, 10]) {
+    await frames.nth(index).scrollIntoViewIfNeeded();
+    await expect.poll(() => frames.nth(index).evaluate((node: HTMLImageElement) => node.naturalWidth)).toBeGreaterThan(0);
+  }
+});
+
+test("FightAIQ hides reports until an analysis run produces them", async ({ page }) => {
+  await page.goto("/admin?venture=fightaiq", { waitUntil: "networkidle" });
+  await expect(page.getByRole("link", { name: "fight reports" })).toHaveCount(0);
+  await expect(page.getByText("No ten-fight report is stored.")).toHaveCount(0);
+});
+
+test("admin makes its deployment write capability explicit", async ({ page }) => {
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const readOnly = Boolean(process.env.VERCEL) && !process.env.BOARDLESSAI_GITHUB_TOKEN;
+  const warning = page.getByText("Read-only deployment — saving needs the GitHub token, see NEEDED.md.");
+  const addCost = page.getByRole("button", { name: "Add cost" });
+
+  if (readOnly) {
+    await expect(warning).toBeVisible();
+    await expect(addCost).toBeDisabled();
+  } else {
+    await expect(warning).toHaveCount(0);
+    await expect(addCost).toBeEnabled();
+  }
+});
+
+test("admin separates pending approvals from approved deliveries still waiting", async ({ page }) => {
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const attention = page.locator("[data-adm-rail-foot]");
+  await expect(attention).toContainText("Approvals waiting");
+  await expect(attention).toContainText("Approved deliveries waiting");
+  await expect(attention).toContainText("1");
+});
+
 // The rated object used to be a niche proposal, and the assertion after the reload used to be
 // the incubator shortlist. Both left with the venture; what the test is actually for — a rating
 // survives the round trip to the ledger and comes back as history — is unchanged, so it now runs
 // on the plan card the binder assertion below already needs.
 /*
- * The two heaviest admin journeys, and the only two tests in this suite that get a retry.
- *
- * They sit at 117 and 118 of 168 in a single-worker run that lasts twenty minutes, and they are
- * the two that drive a real write and a real session change rather than reading a page. Measured
- * across this programme's runs they fail together and late, and the second reports
- * `Received string: ""` for the page URL — an empty URL is a dead page, not a failed assertion,
- * which is the browser giving out after twenty minutes of continuous use rather than the app
- * doing anything wrong. In isolation the rating journey passes in about 35 seconds.
- *
- * A retry is the honest instrument for that. It hides nothing: a real regression fails both
- * attempts, and these are the only tests in the file that get one.
+ * These journeys run in their own Playwright project. They get a separate browser process from
+ * the long read-only audit, while Playwright's page fixture gives each test a fresh context.
+ * A failed write or cleared cookie cannot leak into the next journey, and no retry masks a fault.
  */
-test.describe("admin journeys that write", () => {
-  test.describe.configure({ retries: 2 });
+test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
+
+  test("admin ideas retain their saved rating and graduation after reload", async ({ page }) => {
+    await page.goto("/admin?venture=titty-tuesdays&tab=ideas", { waitUntil: "networkidle" });
+    const card = page.getByRole("heading", { name: "Night Shift — One Good Day" }).locator("..");
+    await expect(card.getByText("Rated perfect — graduated")).toBeVisible();
+    await expect(card.getByText("Saved rating: perfect")).toBeVisible();
+    await page.reload({ waitUntil: "networkidle" });
+    await expect(card.getByText("Rated perfect — graduated")).toBeVisible();
+    await expect(card.getByText("Saved rating: perfect")).toBeVisible();
+  });
 
   test("admin rating persists and the launch binder renders", async ({ page }) => {
     await page.goto("/admin?venture=titty-tuesdays&tab=plans", { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
+    await expect(page.getByText("staged/e2e-launch.json")).toBeVisible();
     await page.getByLabel("Note (optional)").first().fill("E2E owner note");
     await page.getByRole("button", { name: "Perfect", exact: true }).first().click();
     // The confirmation appears only after `POST /admin/api/ratings` has appended to the ledger on

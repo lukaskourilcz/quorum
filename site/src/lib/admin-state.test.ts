@@ -97,4 +97,35 @@ describe("admin social archive", () => {
       unreadableFiles: ["2026-08-04.json"]
     });
   });
+
+  it("accepts a Czech-only PNG pack and reads only its available queue entries", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-admin-social-"));
+    roots.push(root);
+    const packs = path.join(root, "state", "social", "packs");
+    const queue = path.join(root, "state", "social", "queue");
+    await Promise.all([mkdir(packs, { recursive: true }), mkdir(queue, { recursive: true })]);
+    const cs = localePack("cs");
+    const png = (entry: string) => entry.replace(/\.webp$/u, ".png");
+    await writeFile(path.join(packs, "2026-08-05.json"), JSON.stringify({
+      schemaVersion: "social-pack/1", date: "2026-08-05", editionRef: "b".repeat(64),
+      byLocale: {
+        cs: {
+          ...cs,
+          instagram: { ...cs.instagram, frames: cs.instagram.frames.map(png) },
+          threads: { ...cs.threads, frames: cs.threads.frames.map(png) }
+        }
+      },
+      quoteCard: { frame: "/social/2026-08-05/quote.png", sourceTurnRef: "meetings/2026-08-05-cu-edition#turn-2" }
+    }));
+    for (const channel of ["instagram", "threads"] as const) {
+      await writeFile(path.join(queue, `2026-08-05-cs-${channel}.json`), JSON.stringify({ channel, status: "draft" }));
+    }
+
+    const archive = await readAdminSocialArchive(root);
+    expect(archive).toMatchObject({
+      unreadableFiles: [],
+      packs: [{ date: "2026-08-05", byLocale: { cs: {} }, queue: [{ locale: "cs" }, { locale: "cs" }] }]
+    });
+    expect(archive.packs[0]?.byLocale.cs?.instagram.frames[0]).toBe("/social/2026-08-04/cs/frame-01.png");
+  });
 });

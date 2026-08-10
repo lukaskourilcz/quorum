@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "mma-ads/1",
+  "updatedAt": "2026-08-09T00:00:00.000Z",
+  "slots": {
+    "masthead-billboard": { "enabled": false, "image": null, "alt": "", "href": null },
+    "infeed-rectangle": { "enabled": false, "image": null, "alt": "", "href": null },
+    "article-top": { "enabled": false, "image": null, "alt": "", "href": null },
+    "article-mid": { "enabled": false, "image": null, "alt": "", "href": null },
+    "article-rail": { "enabled": false, "image": null, "alt": "", "href": null },
+    "footer-billboard": { "enabled": false, "image": null, "alt": "", "href": null }
+  }
+}

@@ -5,6 +5,7 @@ import { CircleDollarSign, Plus, Save, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
+import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import {
   fixedCostCategories,
   type FixedCostCategory,
@@ -38,6 +39,7 @@ function categoryLabel(category: FixedCostCategory): string {
 }
 
 export function FixedCostsEditor({ initialCosts }: { initialCosts: FixedCostEntry[] }) {
+  const writesEnabled = useAdminWritesEnabled();
   const [costs, setCosts] = useState<EditableCost[]>(() => initialCosts.map(row));
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
@@ -45,11 +47,13 @@ export function FixedCostsEditor({ initialCosts }: { initialCosts: FixedCostEntr
   const monthlyTotal = costs.reduce((sum, cost) => sum + (Number.isFinite(cost.monthlyUsd) ? cost.monthlyUsd : 0), 0);
 
   function update(rowId: string, change: Partial<FixedCostEntry>) {
+    if (!writesEnabled) return;
     setCosts((current) => current.map((cost) => cost.rowId === rowId ? { ...cost, ...change } : cost));
     setMessage("");
   }
 
   function add() {
+    if (!writesEnabled) return;
     setCosts((current) => [...current, {
       rowId: `new-${Date.now()}`,
       name: "",
@@ -63,6 +67,7 @@ export function FixedCostsEditor({ initialCosts }: { initialCosts: FixedCostEntr
 
   async function save(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!writesEnabled) return;
     setPending(true);
     setMessage("Saving…");
     setError("");
@@ -106,7 +111,7 @@ export function FixedCostsEditor({ initialCosts }: { initialCosts: FixedCostEntr
           <Badge tone={costs.length ? "warning" : "neutral"}>{formatUsd(monthlyTotal)} each month</Badge>
         </div>
 
-        <form className="mt-7" onSubmit={save}>
+        <form className="mt-7" onSubmit={save}><fieldset disabled={!writesEnabled}>
           {costs.length ? (
             <div className="grid gap-4">
               {costs.map((cost, index) => (
@@ -131,7 +136,7 @@ export function FixedCostsEditor({ initialCosts }: { initialCosts: FixedCostEntr
                       <label className="text-sm font-semibold" htmlFor={`fixed-cost-since-${cost.rowId}`}>Paid since</label>
                       <input className="mt-2 min-h-11 w-full rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] px-3" id={`fixed-cost-since-${cost.rowId}`} onChange={(event) => update(cost.rowId, { since: event.target.value })} required type="date" value={cost.since} />
                     </div>
-                    <Button aria-label={`Remove ${cost.name || `cost ${index + 1}`}`} disabled={pending} onClick={() => setCosts((current) => current.filter((entry) => entry.rowId !== cost.rowId))} size="small" type="button" variant="ghost">
+                    <Button aria-label={`Remove ${cost.name || `cost ${index + 1}`}`} disabled={pending || !writesEnabled} onClick={() => setCosts((current) => current.filter((entry) => entry.rowId !== cost.rowId))} size="small" type="button" variant="ghost">
                       <Trash2 aria-hidden="true" className="size-4" />
                       <span className="md:sr-only">Remove</span>
                     </Button>
@@ -144,10 +149,10 @@ export function FixedCostsEditor({ initialCosts }: { initialCosts: FixedCostEntr
           )}
 
           <div className="mt-5 flex flex-wrap gap-3">
-            <Button disabled={pending} onClick={add} type="button" variant="secondary"><Plus aria-hidden="true" className="size-4" />Add cost</Button>
-            <Button disabled={pending} type="submit"><Save aria-hidden="true" className="size-4" />{pending ? "Saving…" : "Save fixed costs"}</Button>
+            <Button disabled={pending || !writesEnabled} onClick={add} type="button" variant="secondary"><Plus aria-hidden="true" className="size-4" />Add cost</Button>
+            <Button disabled={pending || !writesEnabled} type="submit"><Save aria-hidden="true" className="size-4" />{pending ? "Saving…" : "Save fixed costs"}</Button>
           </div>
-        </form>
+        </fieldset></form>
         <div aria-live="polite" className="mt-4 min-h-6 text-sm" role={error ? "alert" : "status"}>{error ? <span className="text-[var(--destructive)]">{error} Reload the page before trying again if another edit was saved.</span> : <span className="text-[var(--fog)]">{message}</span>}</div>
       </div>
     </section>

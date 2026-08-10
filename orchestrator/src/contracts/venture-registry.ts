@@ -68,6 +68,8 @@ const VentureDefinitionSchema = openObject({
     "slates",
     "sources",
     "articles",
+    "predictions",
+    "banners",
     "calendar",
     "social-lab",
     // `studio` builds a carousel for one article; `templates` browses the template library and

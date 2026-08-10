@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  eventSection,
   parseDtsDate,
   projectCurrentRosterNames,
   projectEventBouts,
-  projectScheduledEvents
+  projectScheduledEvents,
+  selectScheduledEvents
 } from "../src/fightaiq/wikipedia-events.js";
 
 /**
@@ -174,6 +176,55 @@ describe("the announced card on an event page", () => {
     });
     // Not five because it is second, but because nothing marks it a title fight.
     expect(bouts[1]).toMatchObject({ red: "Mansur Abdul-Malik", scheduledRounds: 3, title: false });
+  });
+
+  it("scopes an Oktagon year page to one numbered event", () => {
+    const year = `
+== Oktagon 92: Previous ==
+{{MMAevent bout|Lightweight|Wrong Red|vs.|Wrong Blue|||||}}
+== Oktagon 93: Roušal vs. Mågård ==
+===Fight card===
+{{MMAevent bout|Featherweight|Radek Roušal|vs.|Jonas Mågård|||||}}
+{{MMAevent bout|Light Heavyweight|Vojtech Garba|vs.|Robert Lau|||||}}
+== Oktagon 94: Next ==
+{{MMAevent bout|Welterweight|Later Red|vs.|Later Blue|||||}}`;
+    const section = eventSection(year, "Oktagon 93: Roušal vs. Mågård");
+    expect(section).toBeTruthy();
+    expect(projectEventBouts(section ?? "").map((bout) => [bout.red, bout.blue])).toEqual([
+      ["Radek Roušal", "Jonas Mågård"],
+      ["Vojtech Garba", "Robert Lau"]
+    ]);
+  });
+});
+
+describe("the bounded card horizon", () => {
+  it("keeps the nearest card from both promotions before filling by date", () => {
+    const event = (org: "ufc" | "oktagon", name: string, day: string) => ({
+      org,
+      name,
+      startsAtUtc: `${day}T00:00:00.000Z`,
+      venue: null,
+      location: null,
+      sourceTitle: "fixture",
+      pageTitle: null
+    });
+    const selected = selectScheduledEvents({
+      events: [
+        event("ufc", "UFC 1", "2026-08-15"),
+        event("ufc", "UFC 2", "2026-08-22"),
+        event("ufc", "UFC 3", "2026-08-29"),
+        event("ufc", "UFC 4", "2026-09-05"),
+        event("ufc", "UFC 5", "2026-09-12"),
+        event("ufc", "UFC 6", "2026-09-19"),
+        event("oktagon", "Oktagon 93", "2026-09-12")
+      ],
+      now: new Date("2026-08-09T12:00:00.000Z"),
+      withinDays: 42,
+      maxEvents: 6
+    });
+    expect(selected).toHaveLength(6);
+    expect(selected.some((item) => item.org === "oktagon")).toBe(true);
+    expect(selected.map((item) => item.name)).not.toContain("UFC 6");
   });
 });
 

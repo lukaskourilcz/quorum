@@ -25,6 +25,7 @@
     "mma:delivery": "tsx src/mma-files/publish-cli.ts",
     "recall:image": "tsx src/mma-files/recall-image-cli.ts",
     "org:maintain": "tsx src/org/maintenance.ts",
+    "palate": "tsx src/taste/palate-cli.ts",
     "proof:rooms": "tsx src/proof/portfolio-proof.ts",
     "social:publish": "tsx src/social/index.ts",
     "sources:shadow": "tsx src/sources/shadow.ts",

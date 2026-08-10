@@ -12,8 +12,9 @@ const FIXED = ["PULSE", "ANGLE", "AUDIT"] as const;
  * marketing ideas the owner wants to read in /admin.
  *
  * Four seats left. SPARK's mission is DNESKAi growth, which is the wrong venture. PALATE's
- * distilling already runs as the free pre-step on every one of these rooms, and no rating has
- * ever been filed for it to distil. VAULT's room adjudication is deterministic code. FUNNEL's
+ * distilling already runs as the guarded pre-step on every one of these rooms. Filed ratings can
+ * also be distilled through the guarded palate command when the room is not scheduled. VAULT's
+ * room adjudication is deterministic code. FUNNEL's
  * channel and measurement plans are unactionable until about a month before social activation,
  * and it is paused on the roster.
  */

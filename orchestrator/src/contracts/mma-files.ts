@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { DateSchema, DateTimeSchema, HttpsUrlSchema, Sha256Schema, openObject } from "./common.js";
-import { BoutRecordSchema, EventCardSchema, FightAiQStatsEntrySchema, FighterRecordSchema } from "./mma.js";
+import { BoutRecordSchema, EventCardSchema, FightAiQStatsEntrySchema, FighterRecordSchema, MmaOrgSchema } from "./mma.js";
 import { ArticleImageSchema } from "./autonomy.js";
 import { LiveTemplateReferenceSchema } from "./carousel-template.js";
 
@@ -62,6 +62,21 @@ export const ArticleImageCorrectionSchema = openObject({
   correctedAt: DateTimeSchema
 });
 
+export type MmaFilesOrganization = z.infer<typeof MmaOrgSchema>;
+
+export function mmaOrganizationFromRef(reference: string | undefined): MmaFilesOrganization | undefined {
+  const prefix = reference?.split(":", 1)[0];
+  return prefix === "ufc" || prefix === "oktagon" ? prefix : undefined;
+}
+
+/** The consumer uses this same priority: an event leads, otherwise the first fighter does. */
+export function articleOrganizationFromRefs(value: {
+  eventRef?: string;
+  fighterRefs: readonly string[];
+}): MmaFilesOrganization | undefined {
+  return mmaOrganizationFromRef(value.eventRef ?? value.fighterRefs[0]);
+}
+
 export const ArticlePackageSchema = openObject({
   schemaVersion: z.literal("article/1"),
   /**
@@ -75,6 +90,8 @@ export const ArticlePackageSchema = openObject({
   // go on hashing to the value store.ts already holds. A strict object would strip it, the
   // recomputed hash would not match, and MMA delivery selection would throw on every cycle.
   localizations: openObject({ en: LocalizationSchema.optional(), cs: LocalizationSchema }),
+  /** Optional only so sealed packages written before category delivery keep identical hashes. */
+  organization: MmaOrgSchema.optional(),
   format: ArticleFormatSchema,
   sources: z.array(ArticleSourceSchema).min(1),
   image: ArticleImageSchema,
@@ -86,6 +103,15 @@ export const ArticlePackageSchema = openObject({
   slot: z.enum(["am", "pm"]),
   status: z.enum(["draft", "blocked", "published", "killed"]),
   packageHash: Sha256Schema
+}).superRefine((article, context) => {
+  const derived = articleOrganizationFromRefs(article);
+  if (article.organization && derived && article.organization !== derived) {
+    context.addIssue({
+      code: "custom",
+      message: `organization ${article.organization} contradicts ${article.eventRef ?? article.fighterRefs[0]}`,
+      path: ["organization"]
+    });
+  }
 });
 
 const SocialVariantSchema = openObject({
@@ -118,6 +144,8 @@ export const SocialVariantPackSchema = openObject({
 
 const SlateSlotSchema = openObject({
   slot: z.enum(["am", "pm"]),
+  /** New slates set this at assignment; optional so recorded historical slates still parse. */
+  organization: MmaOrgSchema.optional(),
   format: ArticleFormatSchema,
   subjectRefs: z.array(z.string().trim().min(1).max(240)).min(1),
   rationale: z.string().trim().min(1).max(240).refine((value) => value.split(/\s+/u).length <= 30, "Rationale must be 30 words or fewer"),

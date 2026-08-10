@@ -24,6 +24,13 @@
                 "pm"
               ]
             },
+            "organization": {
+              "type": "string",
+              "enum": [
+                "ufc",
+                "oktagon"
+              ]
+            },
             "format": {
               "type": "string",
               "enum": [
@@ -87,6 +94,13 @@
               "enum": [
                 "am",
                 "pm"
+              ]
+            },
+            "organization": {
+              "type": "string",
+              "enum": [
+                "ufc",
+                "oktagon"
               ]
             },
             "format": {

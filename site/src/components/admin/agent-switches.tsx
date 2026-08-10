@@ -4,6 +4,7 @@ import { useState } from "react";
 import { LockKeyhole } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import type { AdminAgentControl } from "@/lib/agent-control-model";
 
 export function AgentSwitches({
@@ -13,12 +14,14 @@ export function AgentSwitches({
   ventureId: string;
   initialAgents: AdminAgentControl[];
 }) {
+  const writesEnabled = useAdminWritesEnabled();
   const [agents, setAgents] = useState(initialAgents);
   const [pending, setPending] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   async function setEnabled(agentId: string, enabled: boolean): Promise<void> {
+    if (!writesEnabled) return;
     setPending(agentId);
     setMessage(`Saving ${agentId}…`);
     setError("");
@@ -73,7 +76,7 @@ export function AgentSwitches({
                 : `${agent.enabled ? "Turn off" : "Turn on"} ${agent.id} for this project`
               }
               className="shrink-0 px-4"
-              disabled={agent.locked || pending !== null}
+              disabled={!writesEnabled || agent.locked || pending !== null}
               onClick={() => setEnabled(agent.id, !agent.enabled)}
               role="switch"
               size="small"

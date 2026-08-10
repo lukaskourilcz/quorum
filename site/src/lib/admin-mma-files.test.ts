@@ -47,6 +47,7 @@ function article(image?: Record<string, unknown>) {
     heroSpec: { template: "type-led", bindings: { headline: "Fixture" } },
     fighterRefs: ["ufc:alex-example"],
     eventRef: "ufc:event:fixture",
+    organization: "ufc",
     publishAt: "2026-08-01T08:00:00.000Z",
     slot: "am",
     status: "published"
@@ -86,10 +87,51 @@ describe("MMA Files admin projection", () => {
     await writeFile(path.join(root, "state/ratings/mma-files/ledger.jsonl"), `${JSON.stringify(rating)}\n`);
     const snapshot = await readAdminMmaFiles(root);
     expect(snapshot.unreadable).toEqual([]);
-    expect(snapshot.articles[0]).toMatchObject({ id: "article:2026-08-01:am:fixture-preview", localizations: { en: { title: "Fixture preview" }, cs: { title: "Zkušební pozvánka" } }, ratings: [{ rating: "good" }] });
+    expect(snapshot.articles[0]).toMatchObject({ id: "article:2026-08-01:am:fixture-preview", organization: "ufc", placements: ["Nejnovější", "UFC"], weekStart: "2026-07-27", localizations: { en: { title: "Fixture preview" }, cs: { title: "Zkušební pozvánka" } }, ratings: [{ rating: "good" }] });
     expect(snapshot.socialPacks[0]?.variants.map((variant) => variant.id)).toEqual(["A", "B"]);
     expect(snapshot.calendar[0]?.slots.map((slot) => slot.articleStatus)).toEqual(["published", null]);
     expect(snapshot.socialPacks[0]?.variants[0].captions.en).toEqual({ instagram: "English A", threads: "English A short" });
+  });
+
+  it("projects source freshness, quotas and independent bout corroboration", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-files-health-"));
+    roots.push(root);
+    const directories = [
+      "config",
+      "state/ventures/fightaiq/source-snapshots",
+      "state/mma/source-quota",
+      "state/mma/events/oktagon",
+      "state/mma/bouts/oktagon"
+    ];
+    await Promise.all(directories.map((directory) => mkdir(path.join(root, directory), { recursive: true })));
+    await writeFile(path.join(root, "config/mma-sources.json"), JSON.stringify({
+      schemaVersion: "mma-sources/1",
+      verifiedAt: "2026-08-09",
+      sources: [
+        { id: "wikimedia", name: "Wikimedia", state: "wired", access: "api" },
+        { id: "apify-tapology-oktagon", name: "Tapology", state: "proposed", access: "apify" }
+      ]
+    }));
+    await writeFile(path.join(root, "state/ventures/fightaiq/source-snapshots/2026-08-09.json"), JSON.stringify({
+      schemaVersion: "fightaiq-source-snapshot/1",
+      retrievedAt: "2026-08-09T10:00:00.000Z",
+      sources: [{ sourceId: "wikimedia", status: "success", items: [] }]
+    }));
+    await writeFile(path.join(root, "state/mma/source-quota/apify.json"), JSON.stringify({ estimatedUsedUsd: 0, shareCapUsd: 3 }));
+    await writeFile(path.join(root, "state/mma/events/oktagon/event.json"), JSON.stringify({ org: "oktagon" }));
+    await writeFile(path.join(root, "state/mma/bouts/oktagon/bout.json"), JSON.stringify({
+      org: "oktagon",
+      status: "confirmed",
+      sourceRefs: ["source:wikipedia:fixture", "source:the-odds-api:fixture"]
+    }));
+    const snapshot = await readAdminMmaFiles(root, new Date("2026-08-09T12:00:00.000Z"));
+    expect(snapshot.predictions.lastSnapshotAgeHours).toBe(2);
+    expect(snapshot.predictions.organizations.oktagon).toMatchObject({ events: 1, bouts: 1, confirmed: 1 });
+    expect(snapshot.predictions.corroboration.multipleProviders).toBe(1);
+    expect(snapshot.predictions.sources).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: "wikimedia", freshnessHours: 2, lastStatus: "success" }),
+      expect.objectContaining({ id: "apify-tapology-oktagon", quota: "$0.00 / $3.00 MMA share" })
+    ]));
   });
 });
 
@@ -106,9 +148,15 @@ describe("an article's hero in the admin projection", () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "mma-files-hero-"));
     roots.push(root);
     await mkdir(path.join(root, "state/ventures/mma-files/articles"), { recursive: true });
+    await mkdir(path.join(root, "state/ventures/mma-files/media/2026-08-01-am-fixture-preview"), { recursive: true });
+    const packageValue = article(image);
+    const heroPath = String((packageValue.image as Record<string, unknown>).hero_path);
+    const extension = /\.(webp|png|svg)$/u.exec(heroPath)?.[1];
+    if (!extension) throw new Error("Fixture hero extension is invalid");
+    await writeFile(path.join(root, `state/ventures/mma-files/media/2026-08-01-am-fixture-preview/hero.${extension}`), "hero");
     await writeFile(
       path.join(root, "state/ventures/mma-files/articles/2026-08-01-am-fixture-preview.json"),
-      JSON.stringify(article(image))
+      JSON.stringify(packageValue)
     );
     return readAdminMmaFiles(root);
   }
@@ -151,6 +199,18 @@ describe("an article's hero in the admin projection", () => {
     });
     // The article still reads; only the unattributable image is withheld.
     expect(snapshot.articles[0]?.slug).toBe("fixture-preview");
+    expect(snapshot.articles[0]?.hero).toBeNull();
+  });
+
+  it("drops a claimed hero whose stored media file is absent", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-files-hero-missing-"));
+    roots.push(root);
+    await mkdir(path.join(root, "state/ventures/mma-files/articles"), { recursive: true });
+    await writeFile(
+      path.join(root, "state/ventures/mma-files/articles/2026-08-01-am-fixture-preview.json"),
+      JSON.stringify(article())
+    );
+    const snapshot = await readAdminMmaFiles(root);
     expect(snapshot.articles[0]?.hero).toBeNull();
   });
 });

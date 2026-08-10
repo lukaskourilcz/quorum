@@ -212,7 +212,7 @@ function cardForEntry(entry: WikimediaRosterEntry, retrievedAt: string, existing
     id,
     slug: entry.slug,
     org: entry.org,
-    canonicalName: existing?.canonicalName ?? entry.name,
+    canonicalName: stripDisambiguator(existing?.canonicalName ?? entry.name),
     aliases: existing?.aliases ?? [],
     identity: {
       ...(existing?.identity ?? { wikidataId: null, externalIds: {} }),

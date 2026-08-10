@@ -123,6 +123,40 @@ items in place. Lack of response never authorizes an action. -->
   If `CRON_SECRET` is never set, the route refuses every request and nothing is
   dispatched — an unset secret costs punctuality, never money.
 
+- [ ] HUMAN_APPROVAL APIFY-MMA-SOURCES-001 — Extend the approved Apify scope to
+  MMA data actors for FightAIQ, so UFC and Oktagon events, cards and results
+  have a second independent source and the site's empty boards can fill.
+  What this approves, exactly:
+  - **The plan:** the same Free-plan account as `APIFY-ACCOUNT-001`, still with
+    no card on file. This item adds no account and no spend authority — it only
+    widens what the existing token may fetch.
+  - **What it costs:** $0 cash, now and on renewal. Estimated usage is
+    $1.50–$3.00 of the $5 monthly platform credit (a Cheerio-class scrape run
+    costs roughly $0.02–$0.05; a paid per-result UFC actor at ~$30 per 1,000
+    calls costs ~$1.80/month at two calls a day). The MMA share is capped at
+    $3.00/month in its own quota ledger beside GoVIRAL's. One warning: the
+    GoVIRAL recipe was sized at ~$4.60/month of the same credit, so both
+    programs cannot run at full planned cadence on one free account — if
+    GoVIRAL goes live, cadences must be rebalanced under the $5, and the quota
+    guard stops runs rather than overspending in the meantime.
+  - **What it fetches:** public fight-card, result and fighter-record pages —
+    candidate sources are UFCStats, ESPN MMA, Tapology (the only candidate
+    with full Oktagon coverage) and Sherdog. Each actor is pinned in
+    `config/mma-sources.json` with its price shape and a recorded
+    `termsVerdict` before its first run, the same discipline that left
+    oktagonmma.com disabled as `unclear`. No logins, no cookies, no personal
+    accounts involved.
+  - **What is done with it:** bout and event corroboration, results and stats
+    flow into the `state/mma/` store with per-source receipts, feeding
+    FightAIQ and the magazine's boards. Nothing is republished beyond checked
+    facts with their provenance.
+  - **Where the token is stored:** the existing `APIFY_TOKEN` Actions secret
+    on `lukaskourilcz/quorum`, read only by `cycle.yml`.
+  Until this is resolved the whole MMA-actor path is a $0 no-op that reports
+  itself in one plain sentence per run. **Never upgrade the plan without a new
+  approval** — Starter is $29/month, which alone would consume the entire $30
+  all-in operating cap from `budget-2026-08e`.
+
 ## Resolved
 
 - [x] HUMAN_APPROVAL DEVSHARK-BANNER-001 — Place the devShark house banner on

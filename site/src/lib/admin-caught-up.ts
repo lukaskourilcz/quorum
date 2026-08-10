@@ -38,8 +38,8 @@ export interface CaughtUpAdminSnapshot {
 }
 
 function stateDir(...parts: string[]): string {
-  const root = process.env.BOARDLESSAI_REPO_ROOT ?? path.join(process.cwd(), "..");
-  return path.join(root, "state", ...parts);
+  const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
+  return path.join(repositoryRoot, "state", ...parts);
 }
 
 function record(value: unknown): Record<string, unknown> | null {

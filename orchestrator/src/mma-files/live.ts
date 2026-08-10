@@ -2,7 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 import { BudgetLedgerEntrySchema, type BudgetLedgerEntry } from "../budget.js";
-import { ArticlePackageSchema, EditorialSlateSchema, type EditorialSlate } from "../contracts/mma-files.js";
+import { ArticlePackageSchema, EditorialSlateSchema, mmaOrganizationFromRef, type EditorialSlate } from "../contracts/mma-files.js";
 import { guardedJsonCall } from "../llm/call.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
 import { wrapUntrustedData } from "../security/content.js";
@@ -551,7 +551,9 @@ export async function deriveEditorialSlate(
   const slotFor = (slot: "am" | "pm", assignedWriter: "JAB" | "QUILL") => {
     const subject = assigned.get(slot);
     if (subject) {
-      return { slot, format: subject.format, subjectRefs: [subject.ref], rationale: subject.rationale, assignedWriter, status: "assigned" };
+      const organization = mmaOrganizationFromRef(subject.ref);
+      if (!organization) throw new Error(`Editorial subject has no organization prefix: ${subject.ref}`);
+      return { slot, organization, format: subject.format, subjectRefs: [subject.ref], rationale: subject.rationale, assignedWriter, status: "assigned" };
     }
     const structural = slot !== filling;
     return {

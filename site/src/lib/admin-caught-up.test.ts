@@ -96,3 +96,34 @@ describe("the events store on a first run", () => {
     expect((await readAdminCaughtUp("2026-08-09")).eventStore).toBe("present");
   });
 });
+
+describe("the configured repository root", () => {
+  it("reads every record from BOARDLESSAI_REPO_ROOT, not from the working directory", async () => {
+    // The loader used to resolve `process.cwd()/..` unconditionally, so a deployment or a test
+    // that pointed the root elsewhere got an empty panel and no error at all.
+    await root({
+      "ventures/caught-up/events/events.json": {
+        schemaVersion: "boardless-events/1",
+        updated: "2026-08-09",
+        events: [{ id: "test-event", scope: "cz", title: "Test event", starts: "2026-09-01", online: false, url: "https://example.test" }]
+      },
+      "edition/deliveries/2026-08-09.json": {
+        date: "2026-08-09",
+        editionStatus: "edition",
+        articleUrl: "https://caughtup-ai.vercel.app/articles/ranni-prehled"
+      },
+      "ventures/caught-up/streams/2026-08-09-events.json": { date: "2026-08-09", stream: "events", added: ["a", "b"] },
+      "ventures/caught-up/datasets/2026-08-09-community.json": { dataset: "community", recordedAt: "2026-08-09T01:00:00.000Z" }
+    });
+
+    await expect(readAdminCaughtUp("2026-08-09")).resolves.toMatchObject({
+      today: "2026-08-09",
+      events: [{ id: "test-event" }],
+      engine: {
+        lastEdition: { date: "2026-08-09", slug: "ranni-prehled" },
+        lastStreamSync: { date: "2026-08-09", stream: "events", added: 2 },
+        lastDatasetAppend: { date: "2026-08-09", dataset: "community" }
+      }
+    });
+  });
+});

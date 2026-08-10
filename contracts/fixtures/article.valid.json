@@ -1,6 +1,7 @@
 {
   "schemaVersion": "article/1",
   "slug": "fixture-fight-preview",
+  "organization": "ufc",
   "localizations": {
     "en": { "title": "A measured look at the fixture fight", "dek": "Both records are sourced and the uncertainty stays visible.", "bodyMDX": "## The matchup\n\n[Alex Example](/fighters/ufc/alex-example) enters with a verified file [^source-1]." },
     "cs": { "title": "Střízlivý pohled na zkušební zápas", "dek": "Obě bilance mají zdroj a nejistota zůstává viditelná.", "bodyMDX": "## Zápas\n\n[Alex Example](/fighters/ufc/alex-example) nastupuje s ověřeným profilem [^source-1]." }

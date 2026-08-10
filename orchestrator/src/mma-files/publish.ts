@@ -8,8 +8,15 @@ import { atomicWriteJson, readJson } from "../state.js";
 import { canonicalJson, sha256 } from "./hash.js";
 import { loadArticlePackages } from "./store.js";
 import { publicBoutMirror, publicEventMirror, publicFighterMirror } from "../fightaiq/store.js";
+import {
+  composeMmaBanner,
+  MMA_BANNER_CONTRACT_PATH,
+  mmaAdsPackageHash,
+  MmaAdsDeliverySchema,
+  MmaFilesBannerContractSchema
+} from "./banners.js";
 
-export type MmaDeliveryKind = "article" | "fightaiq";
+export type MmaDeliveryKind = "article" | "fightaiq" | "banner";
 export type MmaDeliveryStatus = "delivered" | "needs_reconciliation";
 
 export interface PendingMmaDelivery {
@@ -89,7 +96,9 @@ export async function composeFightAiQDelivery(root = stateRoot): Promise<FightAi
 async function delivered(root: string, kind: MmaDeliveryKind, packageHash: string): Promise<boolean> {
   const relative = kind === "article"
     ? `ventures/mma-files/deliveries/articles/${packageHash}.json`
-    : `ventures/fightaiq/deliveries/${packageHash}.json`;
+    : kind === "fightaiq"
+      ? `ventures/fightaiq/deliveries/${packageHash}.json`
+      : `ventures/mma-files/deliveries/banners/${packageHash}.json`;
   const receipt = await readJson<{ status?: unknown } | null>(root, relative, null);
   return receipt?.status === "delivered";
 }
@@ -129,8 +138,27 @@ export async function nextFightAiQDelivery(root = stateRoot, workspaceRoot = rep
   };
 }
 
+export async function nextBannerDelivery(root = stateRoot, workspaceRoot = repoRoot): Promise<PendingMmaDelivery | null> {
+  const contract = MmaFilesBannerContractSchema.parse(await readJson(root, MMA_BANNER_CONTRACT_PATH, null));
+  if (contract.status === "delivered") return null;
+  const composed = await composeMmaBanner(root);
+  if (await delivered(root, "banner", composed.packageHash)) return null;
+  const directory = path.join(workspaceRoot, "tmp", "mma-files-delivery");
+  await mkdir(directory, { recursive: true });
+  const packagePath = path.join(directory, `banner-${composed.packageHash}.json`);
+  await writeFile(packagePath, `${JSON.stringify(composed.delivery, null, 2)}\n`);
+  return {
+    kind: "banner",
+    packagePath,
+    packageHash: composed.packageHash,
+    label: `Banner set ${composed.delivery.updatedAt}`
+  };
+}
+
 export async function nextMmaDelivery(kind: MmaDeliveryKind, root = stateRoot, workspaceRoot = repoRoot): Promise<PendingMmaDelivery | null> {
-  return kind === "article" ? nextArticleDelivery(root) : nextFightAiQDelivery(root, workspaceRoot);
+  if (kind === "article") return nextArticleDelivery(root);
+  if (kind === "fightaiq") return nextFightAiQDelivery(root, workspaceRoot);
+  return nextBannerDelivery(root, workspaceRoot);
 }
 
 /** Where MMA Files serves a delivered article. Both locales are prefixed. */
@@ -150,21 +178,35 @@ export async function recordMmaDelivery(input: {
   const root = input.root ?? stateRoot;
   if (!/^[a-f0-9]{64}$/u.test(input.packageHash)) throw new Error("Invalid MMA Files package hash");
   let articleUrl: string | null = null;
+  let bannerManifest: ReturnType<typeof MmaAdsDeliverySchema.parse> | null = null;
   if (input.kind === "article") {
     const article = JSON.parse(await readFile(input.packagePath, "utf8")) as ArticlePackage;
     if (article.packageHash !== input.packageHash) throw new Error("Article receipt hash differs from package");
     // The receipt named a commit and a hash and nothing a reader could open. The desk knows
     // where the magazine serves the article the moment it delivers it.
     if (input.status === "delivered") articleUrl = `${MMA_FILES_SITE}/cs/articles/${article.slug}`;
-  } else {
+  } else if (input.kind === "fightaiq") {
     const feed = FightAiQDeliverySchema.parse(JSON.parse(await readFile(input.packagePath, "utf8")));
     if (feed.packageHash !== input.packageHash || fightAiQDeliveryHash((({ packageHash: _packageHash, ...content }) => content)(feed)) !== feed.packageHash) {
       throw new Error("FightAIQ receipt hash differs from package");
     }
+  } else {
+    const banner = MmaAdsDeliverySchema.parse(JSON.parse(await readFile(input.packagePath, "utf8")));
+    bannerManifest = banner;
+    const composed = await composeMmaBanner(root);
+    if (
+      mmaAdsPackageHash(banner) !== input.packageHash
+      || composed.packageHash !== input.packageHash
+      || canonicalJson(composed.delivery) !== canonicalJson(banner)
+    ) {
+      throw new Error("MMA banner receipt hash differs from the staged package");
+    }
   }
   const relative = input.kind === "article"
     ? `ventures/mma-files/deliveries/articles/${input.packageHash}.json`
-    : `ventures/fightaiq/deliveries/${input.packageHash}.json`;
+    : input.kind === "fightaiq"
+      ? `ventures/fightaiq/deliveries/${input.packageHash}.json`
+      : `ventures/mma-files/deliveries/banners/${input.packageHash}.json`;
   await atomicWriteJson(root, relative, {
     schemaVersion: "mma-files-delivery-receipt/1",
     kind: input.kind,
@@ -177,5 +219,24 @@ export async function recordMmaDelivery(input: {
     ...(input.detail ? { detail: input.detail.replace(/\s+/gu, " ").trim().slice(0, 500) } : {}),
     recordedAt: (input.now ?? new Date()).toISOString()
   });
+  if (input.kind === "banner" && input.status === "delivered") {
+    const contract = MmaFilesBannerContractSchema.parse(await readJson(root, MMA_BANNER_CONTRACT_PATH, null));
+    await atomicWriteJson(root, MMA_BANNER_CONTRACT_PATH, {
+      ...contract,
+      status: "delivered",
+      receiptRef: relative
+    });
+    await atomicWriteJson(root, "ventures/mma-files/banners/delivered.json", {
+      schemaVersion: bannerManifest!.schemaVersion,
+      updatedAt: bannerManifest!.updatedAt,
+      slots: Object.fromEntries(Object.entries(bannerManifest!.slots).map(([slotId, slot]) => [
+        slotId,
+        {
+          ...slot,
+          image: slot.image ? (({ bytes_base64: _bytes, ...image }) => image)(slot.image) : null
+        }
+      ]))
+    });
+  }
   return relative;
 }

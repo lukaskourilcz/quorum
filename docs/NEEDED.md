@@ -52,7 +52,8 @@ is the single thing standing between a proven path and a working one.
   design switcher. It needs `ADMIN_USER`, `ADMIN_PASSWORD` and a fine-grained
   `BOARDLESSAI_GITHUB_TOKEN` with Contents read/write on this repository, plus
   `BOARDLESSAI_GITHUB_REPOSITORY` and `BOARDLESSAI_GITHUB_BRANCH` if you are not using the
-  defaults. [imp:5] [owner:me] [time:10m] [kind:setup]
+  defaults. Until that token is provisioned, production deliberately stays read-only rather than
+  accepting a save that cannot become canonical. [imp:5] [owner:me] [time:10m] [kind:setup]
 
 - [ ] **Create an Apify account on the Free plan and add `APIFY_TOKEN` to Actions secrets** — the
   single unblock for GoVIRAL's trend scouting. Free plan only: no card, and its $5 of monthly
@@ -65,6 +66,14 @@ is the single thing standing between a proven path and a working one.
   without a new approval** — Starter is $29/month, which alone would consume the entire $30 all-in
   cap. `state/INBOX.md` carries this as `APIFY-ACCOUNT-001`.
   [imp:4] [owner:me] [time:10m] [kind:setup]
+
+- [ ] **Approve the reviewed MMA scope for the same Apify token** — `APIFY-MMA-SOURCES-001` in
+  `state/INBOX.md` authorizes only the terms-reviewed Tapology promotion-page reference step.
+  UFCStats and ESPN remain disabled and Sherdog remains blocked; approval does not turn them on.
+  The current runnable plan is $0 cash and at most $0.20/month of Free-plan credit, beneath a
+  separate $3 hard cap. Without both this approval and `APIFY_TOKEN`, the path is a logged $0
+  no-op. Read the shared-credit warning before approving this alongside GoVIRAL.
+  [imp:4] [owner:me] [time:5m] [kind:decision]
 
 - [ ] **Fill in `state/ventures/goviral/profile.md`** — the writer half of the weekly brief: your
   niches, your voice, your audiences, and what you never write about. Nothing in it is generated
@@ -119,6 +128,13 @@ is the single thing standing between a proven path and a working one.
 ## Yours to decide
 
 Judgement calls. Nothing is blocked on code for any of these.
+
+- [x] **Run the MMA Files relaunch prompt sequence** — completed 2026-08-09 across the tracker’s
+  twelve MMA Files issues and six quorum issues. The site redesign, Czech-only reader contract,
+  FightAIQ repairs, banner delivery and admin surface, release checks, documentation sweep, and
+  production-build rehearsal all landed on `claude/mma-files-redesign-2sacl9`. The remaining
+  Vercel and indexing decisions are tracked under “Verify once, then leave alone.”
+  [imp:4] [owner:me] [time:30m] [kind:decision]
 
 - [ ] **Decide what the carousel lockup says** — the kicker on every deck reads DNESKAi and the
   wordmark under it still reads CAUGHT UP, because `logoText` is the venture's registered mark and
@@ -594,9 +610,9 @@ marketingShark adds about 6c to a day.
   kind with their own allowlist inside the existing daily cycle, so no new job, cron or phase
   appeared and nothing was drawn from the model share. Switched off until
   `CAUGHT_UP_STREAMS_ENABLED` is set.
-- **The Design Lab has real typefaces, and they are in the repository**, 2026-08-09. Thirty static
+- **The Design Lab has real typefaces, and they are in the repository**, 2026-08-09. Thirty-one static
   faces under `studio/fonts/`, every one SIL OFL 1.1 with its `OFL.txt` beside it: Archivo and IBM
-  Plex Sans for DNESKAi, Barlow Condensed and Barlow for MMA Files, Petrona and Karla for Titty
+  Plex Sans for DNESKAi, Anton and Archivo for MMA Files, Petrona and Karla for Titty
   Tuesdays, Figtree and Outfit over Public Sans for the two sharks, IBM Plex Mono everywhere. The
   brands used to name system font stacks and no font file existed, so the render server drew in
   whatever it found. Nothing here needs an account, a licence purchase or a decision from you —
@@ -668,15 +684,10 @@ marketingShark adds about 6c to a day.
 
 ## Branches
 
-Every branch this repository opened is merged and gone.
-`claude/dneskai-magazine-redesign-yw9bv1` carried the engine half of the DNESKAi launch redesign
-and merged into `main` on 2026-08-09. `claude/article-image-selection-61rs70`
-held the countersigned image decision and its build contract; the twelve-issue programme ran on
-it and it merged into `main` on 2026-08-09, taking the contract with it — the decision file
-`state/decisions/2026-08-08-article-image-fit.md` is the permanent record. Before it,
-`claude/si-program` and `claude/website-improvements-brainstorm-sqe3c6` were both fully merged,
-and the stale `.claude/worktrees/workflows-map` worktree held nothing that was not already on
-`main`.
+Session branches in this repository are temporary and are removed after their verified merge.
+The completed DNESKAi redesign, article-image, SI and website-improvement programmes were merged
+and their branches removed. The article-image decision remains at
+`state/decisions/2026-08-08-article-image-fit.md`.
 
 Two branches are open in the consumer repositories and are waiting on you, not on code. Both
 carry a validator this side already produces packages for, and both are in the list above:

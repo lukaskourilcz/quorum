@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
-import { configRoot } from "../paths.js";
+import { configRoot, repoRoot } from "../paths.js";
 import { atomicWriteJson, readJson } from "../state.js";
 import { createDigest } from "../sources/digest.js";
 import { loadSourceRegistry } from "../sources/registry.js";
@@ -26,7 +26,8 @@ import {
   fetchApifyMonthlyUsageUsd,
   loadGoViralSourceRegistry,
   mayRunApify,
-  recordActorUsage
+  recordActorUsage,
+  runMmaApifySources
 } from "../sources/apify.js";
 import { runRecipeStep } from "../sources/goviral-scout.js";
 import {
@@ -99,7 +100,9 @@ function cleanFailure(error: unknown): string {
  * start early enough that a critical field can be corroborated before the card, not on the
  * morning of it.
  */
-const INTAKE_HORIZON_DAYS = 14;
+// Six weeks reaches Oktagon's less frequent calendar while the schedule reader still caps card
+// requests at six. The old fourteen-day window repeatedly contained UFC only.
+export const INTAKE_HORIZON_DAYS = 42;
 
 /**
  * Cito's free tier, as named in the owner checklist: 500 calls a month and 200 a day.
@@ -141,6 +144,15 @@ export async function refreshFightAiQEvidence(input: {
   let citoFighters: CitoFighterSummary[] = [];
   let citoEvents: CitoEventSummary[] = [];
   let wikimediaRoster: WikimediaRosterEntry[] = [];
+  const mmaApify = await runMmaApifySources({
+    root: input.root,
+    date: input.date,
+    now: input.now,
+    inbox: await readFile(path.join(repoRoot, "state", "INBOX.md"), "utf8"),
+    token: process.env.APIFY_TOKEN?.trim(),
+    sources: registry.sources
+  });
+  results.push(...mmaApify.results);
 
   if (!wired.has("the-odds-api")) {
     results.push({ sourceId: "the-odds-api", status: "skipped", reason: "Source is not wired.", items: [] });
@@ -475,7 +487,7 @@ export async function refreshFightAiQEvidence(input: {
   const queue = buildBackfillQueue({ fighters: rebuilt, bouts, now: input.now });
   const rosterStatusPath = await writeRosterStatus({ root: input.root, fighters: rebuilt, bouts, queue, now: input.now });
   return {
-    artifactPaths: [artifactPath, ...(results.some((result) => result.quota) ? [quotaPath] : []), ...(citoQuotaRecorded ? [citoQuotaPath] : []), ...normalizedPaths, ...wikimediaPaths, ...rosterStatusPaths, ...resultPaths, resultsRunPath, ...backfillPaths, backfillRunPath, ...wikidataPaths, ...derivedPaths, ...evaluationPaths, queuePath, rosterStatusPath],
+    artifactPaths: [artifactPath, ...mmaApify.artifactPaths, ...(results.some((result) => result.quota) ? [quotaPath] : []), ...(citoQuotaRecorded ? [citoQuotaPath] : []), ...normalizedPaths, ...wikimediaPaths, ...rosterStatusPaths, ...resultPaths, resultsRunPath, ...backfillPaths, backfillRunPath, ...wikidataPaths, ...derivedPaths, ...evaluationPaths, queuePath, rosterStatusPath],
     evidenceRefs,
     contentHash,
     materialChange: priorContentHash !== contentHash

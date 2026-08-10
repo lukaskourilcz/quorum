@@ -34,6 +34,7 @@ describe("the committed faces", () => {
   });
 
   it("resolves a requested weight to the nearest committed one, never to another family", () => {
+    expect(resolveFace("Anton", 800).weight).toBe(400);
     expect(resolveFace("Barlow Condensed", 800).weight).toBe(800);
     // The design set gives body faces 400 and 700; a template asking for 500 gets body at 400,
     // not a headline face and not a system substitute.
@@ -41,6 +42,14 @@ describe("the committed faces", () => {
     expect(resolveFace("Barlow", 600).weight).toBe(700);
     expect(resolveFace("Barlow", 500).familyName).toContain("Barlow");
     expect(() => resolveFace("Helvetica", 400)).toThrow(/No committed font/u);
+  });
+
+  it("uses the amended MMA Files type system", () => {
+    expect(CAROUSEL_BRANDS["mma-files"].fonts).toEqual({
+      headline: "Anton",
+      body: "Archivo",
+      mono: "IBM Plex Mono"
+    });
   });
 
   it("charges all-caps what all-caps costs", () => {
@@ -209,6 +218,6 @@ describe("the same deck rasterises to the same bytes anywhere", () => {
       format: "instagram-portrait"
     });
     const combined = createHash("sha256").update(slides.map((slide) => slide.pngHash).join("")).digest("hex");
-    expect(combined).toBe("9f603b4501a3e626f13c14da6a00442f76959fb67e729eaf28755cf7677ab815");
+    expect(combined).toBe("51a370159aba7c4614bad7f300791fd971f46c881a5d1dec30b084a45b493a32");
   }, 120_000);
 });

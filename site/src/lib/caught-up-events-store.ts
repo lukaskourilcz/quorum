@@ -163,7 +163,7 @@ export function applyEvent(
 }
 
 function repositoryRoot(): string {
-  return path.resolve(process.cwd(), "..");
+  return process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
 }
 
 function resolveInsideRepo(relative: string): string {

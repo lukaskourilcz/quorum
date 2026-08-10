@@ -165,7 +165,6 @@
         "fighters",
         "bouts",
         "events",
-        "slates",
         "sources"
       ],
       "meetings": [
@@ -291,6 +290,8 @@
       },
       "adminTabs": [
         "articles",
+        "predictions",
+        "banners",
         "calendar",
         "social-lab"
       ],

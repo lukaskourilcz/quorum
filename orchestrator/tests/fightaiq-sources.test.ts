@@ -6,6 +6,18 @@ describe("FightAIQ source controls", () => {
     const registry = await loadMmaSourceRegistry();
     expect(registry.sources.filter((source) => source.state === "wired").map((source) => source.id)).toEqual(["wikimedia", "the-odds-api", "cito-ufc", "owner-reviewed-import"]);
     expect(registry.sources.find((source) => source.id === "official-organization-pages")).toMatchObject({ state: "disabled", termsVerdict: "unclear" });
+    expect(registry.sources.filter((source) => source.access === "apify").map((source) => ({
+      id: source.id,
+      actor: source.apify?.actorSlug,
+      build: source.apify?.actorBuildId,
+      state: source.state,
+      terms: source.termsVerdict
+    }))).toEqual([
+      { id: "apify-ufcstats", actor: "parseforge/ufc-stats-scraper", build: "ZylLcaS4oLYgWYyuE", state: "disabled", terms: "unclear" },
+      { id: "apify-espn-mma", actor: "scrapesage/espn-sports-scraper", build: "pwb8idlTe8EZJjCL4", state: "disabled", terms: "unclear" },
+      { id: "apify-tapology-oktagon", actor: "apify/cheerio-scraper", build: "gTZUgxTMzuh0BBr4b", state: "proposed", terms: "allowed" },
+      { id: "apify-sherdog-profiles", actor: "richard.biros/sherdog-profile-scraper", build: "ApIt4NFasPSVvEhk6", state: "blocked", terms: "forbidden" }
+    ]);
     expect(registry.sources.map((source) => source.id)).not.toContain("oddspapi");
   });
 

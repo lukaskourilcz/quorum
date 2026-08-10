@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { MagazineEvent } from "@/lib/caught-up-events-store";
+import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 
 /**
  * The Akce manager: the one manual content category in DNESKAi.
@@ -59,6 +60,7 @@ function isPast(event: MagazineEvent, today: string): boolean {
 }
 
 export function CaughtUpEventsPanel({ events, today, engine, eventStore = "present" }: EventsPanelProps) {
+  const writesEnabled = useAdminWritesEnabled();
   const [draft, setDraft] = useState<Draft>(EMPTY);
   const [scopeFilter, setScopeFilter] = useState<"all" | "cz" | "global">("all");
   const [status, setStatus] = useState<string | null>(null);
@@ -73,6 +75,7 @@ export function CaughtUpEventsPanel({ events, today, engine, eventStore = "prese
   }, [events, scopeFilter, today]);
 
   const submit = async (options: { archive?: boolean; correction?: boolean } = {}) => {
+    if (!writesEnabled) return;
     setBusy(true);
     setStatus(null);
     try {
@@ -109,6 +112,7 @@ export function CaughtUpEventsPanel({ events, today, engine, eventStore = "prese
       <input
         className="rounded-[7px] border border-[#3f3f46] bg-[#0d0d10] px-2 py-1.5 font-sans text-[13px] normal-case tracking-normal text-[#f4f4f5]"
         onChange={(e) => setDraft({ ...draft, [key]: e.target.value })}
+        disabled={!writesEnabled}
         type={type}
         value={String(draft[key] ?? "")}
       />
@@ -256,6 +260,7 @@ export function CaughtUpEventsPanel({ events, today, engine, eventStore = "prese
             where it counts
             <select
               className="rounded-[7px] border border-[#3f3f46] bg-[#0d0d10] px-2 py-1.5 font-sans text-[13px] normal-case tracking-normal text-[#f4f4f5]"
+              disabled={!writesEnabled}
               onChange={(e) => setDraft({ ...draft, scope: e.target.value as Draft["scope"] })}
               value={draft.scope}
             >
@@ -273,7 +278,7 @@ export function CaughtUpEventsPanel({ events, today, engine, eventStore = "prese
           {field("organizer", "organiser")}
           {field("description", "description", "At most 280 characters.")}
           <label className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">
-            <input checked={draft.online} onChange={(e) => setDraft({ ...draft, online: e.target.checked })} type="checkbox" />
+            <input checked={draft.online} disabled={!writesEnabled} onChange={(e) => setDraft({ ...draft, online: e.target.checked })} type="checkbox" />
             happens online
           </label>
         </div>
@@ -281,7 +286,7 @@ export function CaughtUpEventsPanel({ events, today, engine, eventStore = "prese
         <div className="flex flex-wrap items-center gap-2">
           <button
             className="rounded-[9px] border border-[#3f3f46] bg-[#101013] px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#d4d4d8] disabled:opacity-50"
-            disabled={busy}
+            disabled={busy || !writesEnabled}
             onClick={() => void submit()}
             type="button"
           >
@@ -291,7 +296,7 @@ export function CaughtUpEventsPanel({ events, today, engine, eventStore = "prese
               has to be stated as a correction rather than done silently. */}
           <button
             className="rounded-[9px] border border-[#3f3f46] bg-[#101013] px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#f5a524] disabled:opacity-50"
-            disabled={busy}
+            disabled={busy || !writesEnabled}
             onClick={() => void submit({ correction: true })}
             type="button"
           >
@@ -299,7 +304,7 @@ export function CaughtUpEventsPanel({ events, today, engine, eventStore = "prese
           </button>
           <button
             className="rounded-[9px] border border-[#3f3f46] bg-[#101013] px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#f87171] disabled:opacity-50"
-            disabled={busy}
+            disabled={busy || !writesEnabled}
             onClick={() => void submit({ archive: true })}
             type="button"
           >

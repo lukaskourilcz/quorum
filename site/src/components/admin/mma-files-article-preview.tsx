@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Fragment, type ReactNode, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Fragment, type ReactNode } from "react";
 import type { AdminMmaArticle } from "@/lib/admin-mma-files";
 
 /**
@@ -35,7 +34,7 @@ function inline(value: string): ReactNode[] {
   for (const match of value.matchAll(/\[([^\]]+)\]\((\/fighters\/(?:ufc|oktagon)\/[a-z0-9-]+)\)/gu)) {
     const index = match.index ?? 0;
     if (index > cursor) output.push(value.slice(cursor, index));
-    const href = `https://mma-files.vercel.app/en${match[2]}`;
+    const href = `https://mma-files.vercel.app/cs${match[2]}`;
     output.push(<a className="font-semibold text-[var(--accent)] underline underline-offset-4" href={href} key={`${match[2]}-${index}`} rel="noreferrer" target="_blank">{match[1]}</a>);
     cursor = index + match[0].length;
   }
@@ -54,8 +53,7 @@ function SafeMdx({ body }: { body: string }) {
 }
 
 export function MmaFilesArticlePreview({ article }: { article: AdminMmaArticle }) {
-  const [locale, setLocale] = useState<"en" | "cs">("en");
-  const stored = article.localizations[locale];
+  const stored = article.localizations.cs;
   // Cleaned once, here, so the headline, the standfirst, the body and the hero's alt text all
   // show the same text. Doing it inside SafeMdx alone left a marker in a title free to print.
   const copy = {
@@ -64,16 +62,12 @@ export function MmaFilesArticlePreview({ article }: { article: AdminMmaArticle }
     bodyMDX: stored.bodyMDX
   };
   return <Fragment>
-    <div className="mb-5 flex flex-wrap gap-2" role="group" aria-label="Article language">
-      <Button aria-pressed={locale === "en"} onClick={() => setLocale("en")} type="button" variant={locale === "en" ? "accent" : "secondary"}>English</Button>
-      <Button aria-pressed={locale === "cs"} onClick={() => setLocale("cs")} type="button" variant={locale === "cs" ? "accent" : "secondary"}>Česky</Button>
-    </div>
     {article.hero ? (
       <figure className="m-0">
         {/* The package's own alt text, in the language on screen. The old string described a
             typographic plate no matter what the picture was, which for a photograph of two
             people at a range is not a description of anything. */}
-        <Image alt={withoutSourceMarkers(article.hero.alt[locale])} className="h-auto w-full rounded-[var(--radius-button)] border border-[var(--border)]" height={900} src={article.hero.url} unoptimized width={1600} />
+        <Image alt={withoutSourceMarkers(article.hero.alt.cs)} className="h-auto w-full rounded-[var(--radius-button)] border border-[var(--border)]" height={900} src={article.hero.url} unoptimized width={1600} />
         <figcaption className="mt-2 text-xs text-[var(--fog)]">
           {article.hero.credit}{" · "}
           <a className="underline underline-offset-4 hover:text-[var(--foreground)]" href={article.hero.sourceUrl} rel="noreferrer" target="_blank">zdroj</a>

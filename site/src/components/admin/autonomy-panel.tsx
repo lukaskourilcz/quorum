@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { publicAgentText } from "@/components/agent-language";
+import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import type { AdminAutonomySnapshot, AdminPriorityItem } from "@/lib/admin-autonomy";
 import { formatDateTime } from "@/lib/utils";
 
@@ -34,13 +35,19 @@ function ventureLabel(id: string): string {
   return VENTURE_LABEL[id] ?? id.replaceAll("-", " ");
 }
 
+export function priorityExpired(expires: string, now: string): boolean {
+  return expires < now;
+}
+
 export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySnapshot; ventures: Array<{ id: string; name: string }> }) {
+  const writesEnabled = useAdminWritesEnabled();
   const [priorities, setPriorities] = useState(initial.priorities);
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   async function save(payload: Record<string, unknown>) {
+    if (!writesEnabled) return;
     setPending(true);
     setMessage("Saving…");
     setError("");
@@ -90,6 +97,7 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
   ];
   const socialStatus = (status: string) => status === "enabled" ? "Ready" : status === "paused" ? "Paused" : "Waiting";
   const priorityStatus = (status: string) => status === "selected" ? "Chosen" : status === "why-not" ? "Skipped" : status === "archived" ? "Archived" : "Open";
+  const now = new Date().toISOString();
 
   return (
     <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8" aria-labelledby="autonomy-heading">
@@ -138,7 +146,7 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
       </div>
 
       <div className="mt-8 grid gap-5 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-        <form action={add} className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-5 md:p-6">
+        <form action={add} className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-5 md:p-6"><fieldset disabled={!writesEnabled}>
           <div className="flex items-center gap-3"><Plus aria-hidden="true" className="size-5 text-[var(--accent)]" /><h3 className="text-xl font-semibold">Add a board priority</h3></div>
           <p className="mt-2 text-sm leading-6 text-[var(--fog)]">The board can commission a specialist meeting only from this list. Items expire after seven days.</p>
           <label className="mt-5 block text-sm font-semibold" htmlFor="priority-venture">Project</label>
@@ -149,15 +157,15 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
           <textarea className="mt-2 min-h-24 w-full rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-3" id="priority-decision" maxLength={280} name="decision" required />
           <label className="mt-4 block text-sm font-semibold" htmlFor="priority-evidence">Evidence needed <span className="font-normal text-[var(--fog)]">(one item per line)</span></label>
           <textarea className="mt-2 min-h-20 w-full rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-3" id="priority-evidence" name="evidence" />
-          <Button className="mt-5" disabled={pending} type="submit"><Plus aria-hidden="true" className="size-4" />{pending ? "Saving…" : "Add priority"}</Button>
-        </form>
+          <Button className="mt-5" disabled={pending || !writesEnabled} type="submit"><Plus aria-hidden="true" className="size-4" />{pending ? "Saving…" : "Add priority"}</Button>
+        </fieldset></form>
 
         <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-5 md:p-6">
           <div className="flex items-center gap-3"><ListChecks aria-hidden="true" className="size-5 text-[var(--accent)]" /><h3 className="text-xl font-semibold">Priority history</h3></div>
           <div className="mt-5 grid gap-3">
             {priorities.length ? priorities.map((item) => (
               <article className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-4" key={item.id}>
-                <div className="flex flex-wrap items-center justify-between gap-3"><div className="flex flex-wrap gap-2"><Badge tone={item.status === "selected" ? "success" : item.status === "why-not" ? "warning" : "neutral"}>{priorityStatus(item.status)}</Badge><Badge>{ventureLabel(item.venture)}</Badge></div>{item.status === "open" ? <Button disabled={pending} onClick={() => save({ action: "archive", itemId: item.id })} size="small" type="button" variant="ghost"><Archive aria-hidden="true" className="size-4" />Archive</Button> : null}</div>
+                <div className="flex flex-wrap items-center justify-between gap-3"><div className="flex flex-wrap gap-2"><Badge tone={item.status === "selected" ? "success" : item.status === "why-not" ? "warning" : "neutral"}>{priorityStatus(item.status)}</Badge>{priorityExpired(item.expires, now) ? <Badge tone="danger">Expired</Badge> : null}<Badge>{ventureLabel(item.venture)}</Badge></div>{item.status === "open" ? <Button disabled={pending || !writesEnabled} onClick={() => save({ action: "archive", itemId: item.id })} size="small" type="button" variant="ghost"><Archive aria-hidden="true" className="size-4" />Archive</Button> : null}</div>
                 <h4 className="mt-3 text-base font-semibold">{item.question}</h4>
                 <p className="mt-2 text-sm leading-6"><span className="text-[var(--fog)]">Decision:</span> {item.decisionAtStake}</p>
                 {item.whyNotReason ? <p className="mt-2 text-sm leading-6 text-[var(--fog)]">Why not: {publicAgentText(item.whyNotReason)}</p> : null}

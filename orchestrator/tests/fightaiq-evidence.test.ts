@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   CITO_CALL_RESERVATION,
   CITO_DAILY_CALL_CAP,
+  INTAKE_HORIZON_DAYS,
   CITO_MONTHLY_CALL_CAP,
   refreshFightAiQEvidence,
   withinIntakeHorizon
@@ -16,7 +17,7 @@ import { atomicWriteJson } from "../src/state.js";
 /**
  * FightAIQ's free-tier stops live in this module and nothing else.
  *
- * Cito allows 500 calls a month and 200 a day; the run reserves five up front and refuses to
+ * Cito allows 500 calls a month and 200 a day; the run reserves two up front and refuses to
  * start if the reservation would cross either line. Until now no test imported this file at
  * all — grepping the suite for citoCallReservation, nextFighterPage or materialChange returned
  * nothing — so every one of those bounds was held by the code alone. These tests exist so the
@@ -58,7 +59,7 @@ async function citoResult(root: string, date: string) {
   return { refreshed, cito: raw.sources?.find((entry) => entry.sourceId === "cito-ufc") ?? null };
 }
 
-const KEYS = ["CITO_API_KEY", "THE_ODDS_API_KEY"] as const;
+const KEYS = ["CITO_API_KEY", "THE_ODDS_API_KEY", "APIFY_TOKEN"] as const;
 const saved: Partial<Record<(typeof KEYS)[number], string | undefined>> = {};
 
 beforeEach(() => {
@@ -66,6 +67,7 @@ beforeEach(() => {
   // A key must be present or the guard is never reached: the "unavailable" branch answers first.
   process.env.CITO_API_KEY = "fixture-key";
   delete process.env.THE_ODDS_API_KEY;
+  delete process.env.APIFY_TOKEN;
 });
 
 afterEach(async () => {
@@ -146,8 +148,9 @@ describe("nothing is enriched until a card is scheduled", () => {
   it("counts a card inside the horizon and ignores one outside it or already past", () => {
     const now = new Date("2026-08-03T09:00:00.000Z");
     expect(withinIntakeHorizon("2026-08-09T00:00:00.000Z", now), "six days out").toBe(true);
-    expect(withinIntakeHorizon("2026-08-16T01:00:00.000Z", now), "thirteen days out").toBe(true);
-    expect(withinIntakeHorizon("2026-08-23T00:00:00.000Z", now), "twenty days out").toBe(false);
+    expect(withinIntakeHorizon("2026-09-13T00:00:00.000Z", now), "forty days out").toBe(true);
+    const outside = new Date(now.getTime() + (INTAKE_HORIZON_DAYS + 1) * 86_400_000).toISOString();
+    expect(withinIntakeHorizon(outside, now), "one day beyond the horizon").toBe(false);
     expect(withinIntakeHorizon("2026-08-01T00:00:00.000Z", now), "already held").toBe(false);
   });
 

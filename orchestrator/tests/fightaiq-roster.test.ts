@@ -9,11 +9,12 @@ import { BoutRecordSchema, FighterCardSchema } from "../src/contracts/mma.js";
 import { reconcilePredictionResults } from "../src/fightaiq/analysis.js";
 import { rebuildDerivedFighterData } from "../src/fightaiq/derived.js";
 import { buildBackfillQueue, fighterSlug, materializeWikimediaRoster, projectWikimediaCategory, reconcileRosterStatuses, sanitizeSourceText } from "../src/fightaiq/roster.js";
-import { loadRosterPolicy } from "../src/fightaiq/roster-policy.js";
+import { loadRosterPolicy, rosterPolicyTitles } from "../src/fightaiq/roster-policy.js";
 import { configRoot } from "../src/paths.js";
 import { enrichWikimediaBackfill, parseWikipediaFighterPage } from "../src/fightaiq/wikimedia-backfill.js";
 import { loadBoutRecords, loadFighterRecords, saveBoutRecord, upcomingBoutRecords } from "../src/fightaiq/store.js";
 import { enrichWikidataProfiles } from "../src/fightaiq/wikidata.js";
+import { loadMmaSourceRegistry } from "../src/fightaiq/sources.js";
 import { atomicWriteJson } from "../src/state.js";
 
 describe("FightAIQ roster and history automation", () => {
@@ -28,14 +29,14 @@ describe("FightAIQ roster and history automation", () => {
 
   it("writes the same Wikimedia card once for a repeated source payload", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "mma-roster-"));
-    const entry = { org: "ufc" as const, name: "Alex Example", slug: "alex-example", wikipediaTitle: "Alex Example", wikipediaUrl: "https://en.wikipedia.org/wiki/Alex_Example", pageId: 10 };
+    const entry = { org: "ufc" as const, name: "Alex Example (fighter)", slug: "alex-example", wikipediaTitle: "Alex Example (fighter)", wikipediaUrl: "https://en.wikipedia.org/wiki/Alex_Example_(fighter)", pageId: 10 };
     const now = new Date("2026-08-02T08:00:00.000Z");
     await materializeWikimediaRoster({ root, entries: [entry], retrievedAt: now });
     const target = path.join(root, "mma", "fighters", "ufc:alex-example.json");
     const first = await readFile(target, "utf8");
     await materializeWikimediaRoster({ root, entries: [entry], retrievedAt: now });
     expect(await readFile(target, "utf8")).toBe(first);
-    expect(FighterCardSchema.parse(JSON.parse(first))).toMatchObject({ schemaVersion: "fighter-card/1", quality: { evidenceTier: "secondary" } });
+    expect(FighterCardSchema.parse(JSON.parse(first))).toMatchObject({ schemaVersion: "fighter-card/1", canonicalName: "Alex Example", quality: { evidenceTier: "secondary" } });
   });
 
   it("parses a bounded Wikipedia profile and provisional fight-history row", () => {
@@ -65,7 +66,7 @@ describe("FightAIQ roster and history automation", () => {
 |4:31
 |Prague
 |}`);
-    expect(parsed.fields).toMatchObject({ name: "Alex Example", dateOfBirth: "1994-05-02", heightCm: 180, reachCm: 187.96, division: "Lightweight", stance: "southpaw", record: "12-2-1" });
+    expect(parsed.fields).toMatchObject({ name: "Alex Example", dateOfBirth: "1994-05-02", heightCm: 180, reachCm: 187.96, division: "lightweight", stance: "southpaw", record: "12-2-1" });
     expect(parsed.fights).toEqual([expect.objectContaining({ result: "win", opponent: "Sam Example", event: "UFC Example", round: 2, elapsedSeconds: 571 })]);
   });
 
@@ -299,9 +300,22 @@ describe("FightAIQ roster and history automation", () => {
   });
 
   it("contains no paid-only or retired FightAIQ source entry", async () => {
+    const registry = await loadMmaSourceRegistry();
     const raw = (await readFile(path.join(configRoot, "mma-sources.json"), "utf8")).toLowerCase();
-    expect(raw).not.toMatch(/oddspapi|tapology|sherdog|octagon-api/);
+    expect(raw).not.toMatch(/oddspapi|octagon-api/);
     expect(raw).toContain("free plan");
+
+    const actors = registry.sources.filter((source) => source.access === "apify");
+    expect(actors).toHaveLength(4);
+    expect(actors.every((source) => source.credentialEnv === "APIFY_TOKEN" && source.apify?.actorBuildId)).toBe(true);
+    expect(actors.every((source) => source.freeLimit.startsWith("$0 cash"))).toBe(true);
+    expect(actors.filter((source) => source.state === "wired")).toEqual([]);
+    expect(actors.filter((source) => source.termsVerdict === "allowed").map((source) => source.id)).toEqual(["apify-tapology-oktagon"]);
+    expect(actors.find((source) => source.id === "apify-sherdog-profiles")).toMatchObject({ state: "blocked", termsVerdict: "forbidden" });
+    expect(actors
+      .filter((source) => source.state === "wired" || source.state === "proposed")
+      .reduce((sum, source) => sum + (source.apify?.expectedMonthlyUsd ?? 0), 0))
+      .toBeLessThanOrEqual(3);
   });
 });
 
@@ -330,6 +344,17 @@ describe("the curated roster contains only people", () => {
         .map((fighter) => `${fighter.id} != ${org}:${fighterSlug(fighter.name)}`)
     );
     expect(mismatched).toEqual([]);
+  });
+
+  it("tracks every fighter on the next Oktagon card without inventing profile pages", async () => {
+    const policy = await loadRosterPolicy(configRoot);
+    const nextCard = policy.organizations.oktagon.fighters.filter((fighter) => fighter.eventRef === "oktagon:event:oktagon-93-rousal-vs-magard");
+    expect(policy.organizations.oktagon.cap).toBe(30);
+    expect(policy.organizations.oktagon.fighters).toHaveLength(30);
+    expect(nextCard).toHaveLength(18);
+    expect(nextCard.map((fighter) => fighter.id)).toContain("oktagon:niamh-kinehan");
+    expect(rosterPolicyTitles(policy, "oktagon")).toContain("Niamh Kinehan");
+    expect(rosterPolicyTitles(policy, "oktagon")).not.toContain("Robert Lau");
   });
 });
 

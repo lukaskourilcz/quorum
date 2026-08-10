@@ -6,6 +6,9 @@ Decider: Lukas Kouril, owner
 
 Status: approved
 
+> Superseded in part on 2026-08-09: the publication is Czech-only. The bounded
+> delivery, FightAIQ ownership, and safety decisions below remain in force.
+
 Decision id: `mma-files-public-delivery`
 
 ## Decision
