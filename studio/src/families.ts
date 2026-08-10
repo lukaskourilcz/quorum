@@ -5,11 +5,30 @@ import {
   type CarouselTemplateInput
 } from "./schema.js";
 import { MAX_RESOLVABLE_SLIDES, MIN_SLIDES } from "./slides.js";
-import { ARTICLE_HERO_SLOT, articleSlideSlot, deckFormats } from "./library.js";
+import { articleSlideSlot, deckFormats } from "./library.js";
 import { DECK_FAMILIES, type DeckFamily } from "./designs.js";
+import {
+  BOTTOM,
+  LEFT,
+  MEASURE,
+  RHYTHM,
+  RIGHT,
+  TOP,
+  hero,
+  progress,
+  rule,
+  shape,
+  text,
+  variantsFor,
+  wordmark,
+  type Beat,
+  type Composer,
+  type FamilySpec,
+  type Role
+} from "./family-kit.js";
 
 /**
- * Ten template families, from `docs/design-lab/SPEC.md`.
+ * The template family library, from `docs/design-lab/SPEC.md`.
  *
  * The five deck styles they join are one design wearing five coats: `mesh`, `aurora` and
  * `spotlight` are the same blurred-radial-blob primitive, and on MMA Files' greys — three tones
@@ -38,15 +57,15 @@ import { DECK_FAMILIES, type DeckFamily } from "./designs.js";
  * a real constraint and it shows: a 4:5 deck from these families is more generously margined than
  * one composed for 4:5 alone. What it buys is that every family renders honestly as a story
  * without a second composition to keep in step.
+ *
+ * ## Where a composer lives
+ *
+ * The ten originals are below. The thirteen that joined them in the 2026-08-10 expansion sit in
+ * `families-poster.ts`, `families-print.ts` and `families-system.ts`, grouped by the trend each
+ * draws on, and are assembled into one record here. The split is rule 8's 400-line cap:
+ * twenty-three compositions in one file is a file nobody can hold in their head, and every
+ * primitive they share already lives in `family-kit.ts`.
  */
-
-/** The union of all four safe areas: the story's, which is the widest. */
-const TOP = 0.145;
-const BOTTOM = 0.835;
-const LEFT = 0.075;
-const RIGHT = 0.925;
-const MEASURE = RIGHT - LEFT;
-
 
 /** What a family does with the article's photograph, which is how the Lab groups them. */
 export const FAMILY_SERVES: Readonly<Record<DeckFamily, "photo-forward" | "type-only" | "quiet">> = {
@@ -62,149 +81,10 @@ export const FAMILY_SERVES: Readonly<Record<DeckFamily, "photo-forward" | "type-
   dossier: "quiet"
 };
 
-type Role = "cover" | "body" | "outro";
-
-interface Beat {
-  /** The ground this beat paints. Adjacent beats differ, which is what makes a rhythm. */
-  ground: "background" | "surface" | "surface-strong";
-  /** Which side of the frame the beat leans to, for families that alternate sides. */
-  side: "left" | "right";
-  /** 0, 1 or 2: the step within the family's own three-step pattern. */
-  step: number;
-}
-
-const RHYTHM: readonly Beat[] = [
-  { ground: "background", side: "left", step: 0 },
-  { ground: "surface", side: "right", step: 1 },
-  { ground: "surface-strong", side: "left", step: 2 },
-  { ground: "surface", side: "right", step: 1 }
-];
-
-interface Context {
-  slot: string;
-  index: number;
-  slideCount: number;
-  role: Role;
-  beat: Beat;
-  /** 0 on the cover, 1 on the closing slide, walking evenly between. */
-  phase: number;
-}
-
-const text = (
-  slot: string,
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  options: Partial<Extract<CarouselLayerInput, { type: "text" }>> = {}
-): CarouselLayerInput => ({
-  type: "text",
-  slot,
-  x,
-  y,
-  width,
-  height,
-  colorToken: "foreground",
-  fontToken: "headline",
-  fontWeight: 700,
-  minFontSize: 28,
-  maxFontSize: 60,
-  maxChars: 240,
-  maxLines: 8,
-  align: "start",
-  uppercase: false,
-  ...options
-});
-
-const rule = (
-  x: number,
-  y: number,
-  width: number,
-  options: Partial<Extract<CarouselLayerInput, { type: "rule" }>> = {}
-): CarouselLayerInput => ({
-  type: "rule",
-  x,
-  y,
-  width,
-  height: 0.005,
-  colorToken: "accent",
-  thickness: 8,
-  ...options
-});
-
-const shape = (
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  options: Partial<Extract<CarouselLayerInput, { type: "shape" }>> = {}
-): CarouselLayerInput => ({
-  type: "shape",
-  x,
-  y,
-  width,
-  height,
-  fillToken: "surface",
-  strokeWidth: 0,
-  radius: 0,
-  ...options
-});
-
-const hero = (
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  options: Partial<Extract<CarouselLayerInput, { type: "image" }>> = {}
-): CarouselLayerInput => ({
-  type: "image",
-  slot: ARTICLE_HERO_SLOT,
-  optional: true,
-  fit: "cover",
-  scrim: "bottom",
-  x,
-  y,
-  width,
-  height,
-  ...options
-});
-
-/**
- * The wordmark, always in the same place: bottom-left, inside every canvas's safe area.
- *
- * A constant `y = 0.07` put it squarely under the story's top chrome, which is the one line that
- * kept every deck template out of 9:16. Bottom-left inside the union envelope clears the profile
- * row at the top and the reply bar at the bottom, at every canvas, without a second composition.
- */
-const wordmark = (colorToken = "muted"): CarouselLayerInput => ({
-  type: "logo",
-  x: LEFT,
-  y: BOTTOM - 0.03,
-  width: 0.3,
-  height: 0.028,
-  colorToken,
-  fontToken: "headline"
-});
-
-/** A progress mark that grows with the deck, so a reader knows where they are. */
-const progress = (phase: number): CarouselLayerInput =>
-  shape(RIGHT - 0.16, BOTTOM - 0.018, 0.02 + phase * 0.14, 0.008, { fillToken: "muted", radius: 0.5 });
-
-/**
- * The two renderings every family ships.
- *
- * B is not a relabelling: it swaps the accent for the secondary *and* inverts the ground, so the
- * A/B pair the queue builds is genuinely two designs. Both are checked — the contrast check walks
- * every variant, not only the default — so an inverted beat cannot ship illegible.
- */
-function variantsFor(beat: Beat): Array<{ id: string; backgroundToken?: string; accentToken?: string }> {
-  const inverted = beat.ground === "background" ? "surface-strong" : "background";
-  return [{ id: "A" }, { id: "B", accentToken: "secondary", backgroundToken: inverted }];
-}
-
-type Composer = (context: Context) => CarouselLayerInput[];
-
-const families: Readonly<Record<DeckFamily, { description: string; compose: Composer }>> = {
+/** The ten families of the founding delivery. The expansion's thirteen are assembled below. */
+const ORIGINAL_FAMILIES: Readonly<Record<Extract<DeckFamily,
+  "masthead" | "gutter" | "bevel" | "porthole" | "slab" | "terrace" | "figure" | "pull" | "tower" | "dossier"
+>, FamilySpec>> = {
   /*
    * A front page. The photograph runs full-bleed to a hard accent rule and the headline sits in
    * the type block beneath it, never on the picture — which is also why the wordmark is legible
@@ -536,6 +416,17 @@ const families: Readonly<Record<DeckFamily, { description: string; compose: Comp
   }
 };
 
+/**
+ * Every family the Lab offers, in one record.
+ *
+ * The annotation is the exhaustiveness check: `DeckFamily` is the chip row and the recipe schema,
+ * so a name registered in `designs.ts` with no composer here fails the build rather than throwing
+ * at the first article that draws it.
+ */
+const families: Readonly<Record<DeckFamily, FamilySpec>> = {
+  ...ORIGINAL_FAMILIES
+};
+
 /** The reference a stored recipe or pack names for one family at one length. */
 export function familyTemplateId(family: DeckFamily, slideCount: number): string {
   return `deck-${family}-${slideCount}`;
@@ -603,7 +494,7 @@ export function familyDeckTemplate(family: DeckFamily, slideCount: number, optio
         id: `slide-${family}-${String(index + 1).padStart(2, "0")}`,
         backgroundToken: ground,
         variants: variantsFor({ ...beat, ground }),
-        layers: scaled(specification.compose({ slot, index, slideCount, role, beat, phase }), options)
+        layers: scaled(specification.compose({ slot, index, slideCount, role, beat, ground, phase }), options)
       };
     })
   };
