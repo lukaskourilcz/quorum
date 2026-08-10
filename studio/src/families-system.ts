@@ -13,6 +13,23 @@ import {
   type FamilySpec
 } from "./family-kit.js";
 import type { CarouselLayerInput } from "./schema.js";
+
+/**
+ * The heights the line crosses each slide boundary at.
+ *
+ * Four values, walked by deck position: slide N leaves the frame at the height slide N+1 enters
+ * it, so the line is continuous across the swipe rather than restarted on each slide. That is the
+ * whole mechanic — a seamless carousel is one element that does not stop at the edge — and it is
+ * why these come off the index and not off the rhythm, which rotates.
+ */
+const CROSSINGS = [0.3, 0.42, 0.36, 0.48] as const;
+
+/** The line's dip: constant, so the descent to the passage reads as a dip and not as drift. */
+const DIP = 0.62;
+
+/** A vertical connector between two heights of the line. */
+const connector = (x: number, from: number, to: number): CarouselLayerInput =>
+  shape(x, Math.min(from, to), 0.005, Math.max(0.006, Math.abs(to - from)), { fillToken: "accent" });
 import type { DeckFamily } from "./designs.js";
 
 /**
@@ -42,7 +59,7 @@ const bracket = (x: number, y: number, facing: "left" | "right"): CarouselLayerI
  * and a family that cannot compose without one narrows the pool exactly when the pool is needed.
  */
 
-export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete" | "terminal" | "versus">, FamilySpec>> = {
+export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete" | "terminal" | "versus" | "throughline">, FamilySpec>> = {
   /*
    * Neo-brutalism with the volume down.
    *
@@ -187,6 +204,66 @@ export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete" | "
         // Both sit in the lower field, so both take their colour from whatever it is filled with.
         wordmark(loud ? "muted" : "background"),
         progress(phase, loud ? "muted" : "background")
+      ];
+    }
+  },
+
+  /*
+   * One line, and it does not stop at the edge of the slide.
+   *
+   * It enters at the left at the height the slide before it left off, drops to run under the
+   * passage, and rises to leave at the height the next slide will enter on. The cover starts it
+   * from a block and the closing slide ends it in one, so the deck has a beginning and an end
+   * rather than ten slides that each happen to have a rule.
+   *
+   * Horizontal continuity, which is what separates it from `tower`: that one climbs a chapter bar
+   * up the left edge and the bar is a progress mark, whereas this line is a path. Nothing else is
+   * on the slide, because a path with furniture around it is not a path.
+   */
+  throughline: {
+    description: "A single line that enters, dips under the passage and leaves at the height the next slide begins on.",
+    compose: ({ slot, role, index, beat, phase }) => {
+      const enters = CROSSINGS[index % CROSSINGS.length]!;
+      const leaves = CROSSINGS[(index + 1) % CROSSINGS.length]!;
+      const top = role === "cover" ? TOP + 0.05 : bodyTop(0.14 + beat.step * 0.05);
+      const words = text(slot, LEFT, top, MEASURE, DIP - top - 0.05, {
+        fontWeight: role === "cover" ? 800 : 700,
+        maxFontSize: role === "cover" ? 84 : 58,
+        minFontSize: 26,
+        maxChars: role === "cover" ? 150 : 210,
+        maxLines: role === "cover" ? 5 : 7
+      });
+      if (role === "cover") {
+        return [
+          shape(LEFT, DIP - 0.012, 0.028, 0.03, { fillToken: "accent" }),
+          rule(LEFT + 0.028, DIP, 0.86 - LEFT - 0.028, { thickness: 9 }),
+          connector(0.86, DIP, leaves),
+          rule(0.86, leaves, 0.14, { thickness: 9 }),
+          words,
+          wordmark(),
+          progress(phase)
+        ];
+      }
+      if (role === "outro") {
+        return [
+          rule(0, enters, 0.14, { thickness: 9 }),
+          connector(0.14, enters, DIP),
+          rule(0.14, DIP, RIGHT - 0.14, { thickness: 9 }),
+          shape(RIGHT, DIP - 0.012, 0.03, 0.03, { fillToken: "accent" }),
+          words,
+          wordmark("accent"),
+          progress(phase)
+        ];
+      }
+      return [
+        rule(0, enters, 0.14, { thickness: 9 }),
+        connector(0.14, enters, DIP),
+        rule(0.14, DIP, 0.72, { thickness: 9 }),
+        connector(0.86, DIP, leaves),
+        rule(0.86, leaves, 0.14, { thickness: 9 }),
+        words,
+        wordmark(),
+        progress(phase)
       ];
     }
   }

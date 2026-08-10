@@ -207,7 +207,7 @@ Work in order, one commit per task, phase-commit style. Tick the box in this fil
 - [x] TPL-08 — `versus`
 - [x] TPL-09 — `tally`
 - [x] TPL-10 — `counterweight`
-- [ ] TPL-11 — `throughline`
+- [x] TPL-11 — `throughline`
 - [ ] TPL-12 — `quiet`
 - [ ] TPL-13 — `offset` (or a §2b reserve, with the reason recorded)
 - [ ] TPL-14 — Chip row, recipe-pool posture, README/SPEC/specimen sweep, e2e adjustments

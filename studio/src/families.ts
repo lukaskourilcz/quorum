@@ -91,7 +91,8 @@ export const FAMILY_SERVES: Readonly<Record<DeckFamily, "photo-forward" | "type-
   memo: "type-only",
   versus: "type-only",
   tally: "type-only",
-  counterweight: "type-only"
+  counterweight: "type-only",
+  throughline: "type-only"
 };
 
 /** The ten families of the founding delivery. The expansion's thirteen are assembled below. */
