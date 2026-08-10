@@ -116,18 +116,49 @@ describe("the family library", () => {
     }
   });
 
-  it("gives adjacent body slides different compositions, which is what a rhythm is for", () => {
+  it("gives adjacent body slides different compositions, at every rotation of the rhythm", () => {
     for (const family of DECK_FAMILIES) {
       const hashes = render(familyTemplateId(family, 8), 8, "instagram-portrait");
       // The words differ per slide, so equal hashes would be impossible; the beat is asserted on
-      // the template instead — two consecutive body slides never carry the same layer shape.
-      const template = familyDeckTemplate(family, 8);
-      const shapes = template.slides.slice(1, -1).map((slide) =>
-        JSON.stringify(slide.layers.map((layer) => [layer.type, layer.x, layer.y, layer.width, layer.height])));
-      for (let index = 1; index < shapes.length; index += 1) {
-        expect(shapes[index], `${family} body ${index} repeats its neighbour`).not.toBe(shapes[index - 1]);
+      // the template instead — two consecutive body slides never carry the same layer shape. Every
+      // rotation, because a family may vary on `step` alone and the rotation reorders the steps.
+      for (const phaseSeed of [0, 1, 2, 3]) {
+        const template = familyDeckTemplate(family, 8, { phaseSeed });
+        const shapes = template.slides.slice(1, -1).map((slide) =>
+          JSON.stringify(slide.layers.map((layer) => [layer.type, layer.x, layer.y, layer.width, layer.height])));
+        for (let index = 1; index < shapes.length; index += 1) {
+          expect(shapes[index], `${family}/p${phaseSeed} body ${index} repeats its neighbour`).not.toBe(shapes[index - 1]);
+        }
       }
       expect(hashes).toHaveLength(8);
+    }
+  });
+
+  /*
+   * The third named gap, and the one the expansion opened.
+   *
+   * A family is registered by naming it, and a composer that ignores `typeScale` or reads nothing
+   * off the beat still registers, still passes every check and still renders — it simply renders
+   * one design under five controls. The recipe engine would then deal an axis that does nothing,
+   * and the Lab would offer the owner a chip that changes nothing, and neither would say so.
+   */
+  it("changes what it renders on every axis the recipe can turn", () => {
+    // One short passage, so a difference is the composition rather than the fitter reflowing.
+    const short = { locale: "cs" as const, strings: Object.fromEntries(Array.from({ length: 8 }, (_, index) => [articleSlideSlot(index), "Vyhrál."])) };
+    const bytes = (family: string, options: { typeScale?: number; phaseSeed?: number }) => renderCarouselSvg({
+      template: familyDeckTemplate(family as never, 8, options),
+      payload: short,
+      brand: CAROUSEL_BRANDS["mma-files"],
+      format: "instagram-portrait"
+    }).map((slide) => slide.svgHash).join("");
+    for (const family of DECK_FAMILIES) {
+      const canonical = bytes(family, {});
+      for (const typeScale of [0.9, 1.1]) {
+        expect(bytes(family, { typeScale }), `${family} ignores type scale ${typeScale}`).not.toBe(canonical);
+      }
+      for (const phaseSeed of [1, 2, 3]) {
+        expect(bytes(family, { phaseSeed }), `${family} ignores phase ${phaseSeed}`).not.toBe(canonical);
+      }
     }
   });
 
