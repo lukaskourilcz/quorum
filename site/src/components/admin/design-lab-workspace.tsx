@@ -31,7 +31,7 @@ type FormatId = (typeof FORMATS)[number]["id"];
 const FAMILIES = [
   "masthead", "gutter", "bevel", "porthole", "slab",
   "terrace", "figure", "pull", "tower", "dossier",
-  "billboard", "broadsheet", "zurich", "concrete"
+  "billboard", "broadsheet", "zurich", "concrete", "terminal"
 ] as const;
 
 const TREATMENTS = [

@@ -2,15 +2,34 @@ import {
   BOTTOM,
   LEFT,
   MEASURE,
+  RIGHT,
   TOP,
   bodyTop,
   progress,
+  rule,
   shape,
   text,
   wordmark,
   type FamilySpec
 } from "./family-kit.js";
+import type { CarouselLayerInput } from "./schema.js";
 import type { DeckFamily } from "./designs.js";
+
+/**
+ * A bracket, drawn as three rectangles.
+ *
+ * There is no rotation and no path primitive in `carousel-template/1`, and neither should be added
+ * for an ornament. A stem and two arms is what a bracket is, and at 46 px tall it reads as one at
+ * thumbnail size, which is the size a kicker is read at or not at all.
+ */
+const bracket = (x: number, y: number, facing: "left" | "right"): CarouselLayerInput[] => {
+  const stem = facing === "left" ? x : x + 0.017;
+  return [
+    shape(stem, y, 0.005, 0.034, { fillToken: "accent" }),
+    shape(x, y, 0.022, 0.005, { fillToken: "accent" }),
+    shape(x, y + 0.029, 0.022, 0.005, { fillToken: "accent" })
+  ];
+};
 
 /**
  * Structure as the message.
@@ -23,7 +42,7 @@ import type { DeckFamily } from "./designs.js";
  * and a family that cannot compose without one narrows the pool exactly when the pool is needed.
  */
 
-export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete">, FamilySpec>> = {
+export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete" | "terminal">, FamilySpec>> = {
   /*
    * Neo-brutalism with the volume down.
    *
@@ -75,6 +94,54 @@ export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete">, F
           uppercase: role === "cover"
         }),
         wordmark("muted", "mono"),
+        progress(phase)
+      ];
+    }
+  },
+
+  /*
+   * Rows, brackets and a cursor.
+   *
+   * Mono everywhere — the one face all five ventures share — so the family reads as the same
+   * instrument in every palette and the colour carries the identity. The header is a bracketed
+   * field spanning the measure with the venture's mark set inside it, which is what a bracket
+   * means in this register: a field with something in it. A block cursor opens every passage and
+   * walks down the frame with the beat, and the footer rule is dashed and grows as the deck runs.
+   *
+   * Distinct from `dossier`, which is body-font quiet under two hairlines, and from `memo`, which
+   * is prose on a sheet. Terminal has no prose posture at all: it has rows.
+   */
+  terminal: {
+    description: "Mono from end to end: a bracketed header field, a block cursor opening each passage, dashed rules.",
+    compose: ({ slot, role, beat, phase }) => {
+      const top = role === "cover" ? TOP + 0.09 : bodyTop(0.17 + beat.step * 0.045);
+      return [
+        ...bracket(LEFT, TOP, "left"),
+        ...bracket(RIGHT - 0.022, TOP, "right"),
+        {
+          type: "logo",
+          x: LEFT + 0.034,
+          y: TOP + 0.006,
+          width: 0.3,
+          height: 0.022,
+          colorToken: role === "outro" ? "accent" : "muted",
+          fontToken: "mono"
+        },
+        rule(LEFT, TOP + 0.052, MEASURE, { thickness: 3, dash: true, colorToken: "muted" }),
+        shape(LEFT, top + 0.006, 0.017, 0.026, { fillToken: "accent" }),
+        text(slot, LEFT + 0.028, top, RIGHT - LEFT - 0.028, BOTTOM - 0.1 - top, {
+          fontToken: "mono",
+          fontWeight: role === "cover" ? 700 : 400,
+          maxFontSize: role === "cover" ? 64 : 46,
+          minFontSize: 24,
+          maxChars: role === "cover" ? 140 : 230,
+          maxLines: role === "cover" ? 6 : 9
+        }),
+        rule(LEFT, BOTTOM - 0.075, role === "outro" ? MEASURE : 0.2 + beat.step * 0.16, {
+          thickness: 3,
+          dash: true,
+          colorToken: role === "outro" ? "accent" : "muted"
+        }),
         progress(phase)
       ];
     }

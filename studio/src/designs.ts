@@ -41,7 +41,8 @@ export const DECK_FAMILIES = [
   "billboard",
   "broadsheet",
   "zurich",
-  "concrete"
+  "concrete",
+  "terminal"
 ] as const;
 export type DeckFamily = (typeof DECK_FAMILIES)[number];
 
