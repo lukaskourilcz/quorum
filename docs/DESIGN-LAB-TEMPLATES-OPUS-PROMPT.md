@@ -205,7 +205,7 @@ Work in order, one commit per task, phase-commit style. Tick the box in this fil
 - [x] TPL-06 — `marginalia`
 - [x] TPL-07 — `memo`
 - [x] TPL-08 — `versus`
-- [ ] TPL-09 — `tally`
+- [x] TPL-09 — `tally`
 - [ ] TPL-10 — `counterweight`
 - [ ] TPL-11 — `throughline`
 - [ ] TPL-12 — `quiet`
