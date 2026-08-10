@@ -59,7 +59,7 @@ const bracket = (x: number, y: number, facing: "left" | "right"): CarouselLayerI
  * and a family that cannot compose without one narrows the pool exactly when the pool is needed.
  */
 
-export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete" | "terminal" | "versus" | "throughline">, FamilySpec>> = {
+export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete" | "terminal" | "versus" | "throughline" | "quiet">, FamilySpec>> = {
   /*
    * Neo-brutalism with the volume down.
    *
@@ -264,6 +264,42 @@ export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete" | "
         words,
         wordmark(),
         progress(phase)
+      ];
+    }
+  },
+
+  /*
+   * The discipline is what reads as expensive.
+   *
+   * Pared-back searches were up 54% in Canva's 2026 report and the finding underneath it is that
+   * restraint is legible: a reader can tell the difference between a slide with room and a slide
+   * with nothing to say. So this family gets one text block, a short measure, a mark the width of
+   * a fingernail, and a footer set small in mono. It is the only family in the library with no
+   * progress mark — everything else carries one, and carrying one here would be the eleventh
+   * element on a slide that is arguing for three.
+   *
+   * The block breathes rather than sits: it steps in and down together as the beat runs, so the
+   * void changes shape across the deck without anything being added to it.
+   *
+   * Distinct from `dossier` and `memo`, which are quiet families with furniture — hairlines across
+   * the measure, a sheet, a letterhead. This one has none.
+   */
+  quiet: {
+    description: "One short block of type in a great deal of room, a mark the width of a fingernail, nothing else.",
+    compose: ({ slot, role, beat }) => {
+      const indent = role === "body" ? beat.step * 0.09 : 0;
+      const top = role === "cover" ? TOP + 0.1 : bodyTop(0.16 + beat.step * 0.05);
+      return [
+        rule(LEFT + indent, top - 0.038, role === "outro" ? 0.12 : 0.045, { thickness: 4 }),
+        text(slot, LEFT + indent, top, role === "cover" ? 0.62 : 0.52, BOTTOM - 0.09 - top, {
+          fontToken: "body",
+          fontWeight: 400,
+          maxFontSize: role === "cover" ? 60 : 46,
+          minFontSize: 22,
+          maxChars: role === "cover" ? 160 : 190,
+          maxLines: role === "cover" ? 6 : 7
+        }),
+        wordmark(role === "outro" ? "accent" : "muted", "mono")
       ];
     }
   }
