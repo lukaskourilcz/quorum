@@ -7,6 +7,7 @@ import {
   bodyTop,
   progress,
   rule,
+  shape,
   text,
   wordmark,
   type FamilySpec
@@ -26,7 +27,7 @@ import type { DeckFamily } from "./designs.js";
  * ventures. What is portable is scale, weight, case, tracking and where the block sits.
  */
 
-export const POSTER_FAMILIES: Readonly<Record<Extract<DeckFamily, "billboard">, FamilySpec>> = {
+export const POSTER_FAMILIES: Readonly<Record<Extract<DeckFamily, "billboard" | "zurich">, FamilySpec>> = {
   /*
    * Scale is the composition, and nothing else is.
    *
@@ -85,6 +86,48 @@ export const POSTER_FAMILIES: Readonly<Record<Extract<DeckFamily, "billboard">, 
           tracking: -0.02
         }),
         wordmark("muted", "mono"),
+        progress(phase)
+      ];
+    }
+  },
+
+  /*
+   * The grid, and the void it leaves.
+   *
+   * Twelve columns across the measure, flush left, ragged right, and two of those columns kept
+   * empty on the right at every beat — the emptiness is the composition, not what is left over
+   * from it. The type block steps in one column at a time and the divider under it starts where
+   * the type starts, so the alignment states the grid instead of a drawn one. One accent block,
+   * on a column, moving against the type. That is the whole ornament.
+   *
+   * Distinct from `terrace`, which fills the frame with three stepping bands: here the empty
+   * columns do as much work as the full ones, and the family is at its best when the passage is
+   * short enough to leave them empty.
+   */
+  zurich: {
+    description: "A twelve-column grid worked flush left, where what is left empty does as much as what is set.",
+    compose: ({ slot, role, beat, phase }) => {
+      const column = MEASURE / 12;
+      const indent = role === "body" ? beat.step * 2 * column : 0;
+      const divider = 0.7;
+      const top = role === "cover" ? TOP + 0.07 : bodyTop(0.14 + beat.step * 0.06);
+      return [
+        // The one ornament, on a column, walking against the type block.
+        shape(LEFT + (role === "body" ? 10 - beat.step : 10) * column, TOP, column, 0.05 + beat.step * 0.014, {
+          fillToken: "accent"
+        }),
+        text(slot, LEFT + indent, top, MEASURE - indent - (role === "outro" ? 0 : column), divider - top - 0.03, {
+          fontWeight: role === "cover" ? 800 : 700,
+          maxFontSize: role === "cover" ? 92 : 62,
+          minFontSize: role === "cover" ? 30 : 26,
+          maxChars: role === "cover" ? 150 : 200,
+          maxLines: role === "cover" ? 6 : 8
+        }),
+        rule(LEFT + indent, divider, MEASURE - indent, {
+          thickness: role === "outro" ? 10 : 4,
+          colorToken: role === "outro" ? "accent" : "muted"
+        }),
+        wordmark(),
         progress(phase)
       ];
     }
