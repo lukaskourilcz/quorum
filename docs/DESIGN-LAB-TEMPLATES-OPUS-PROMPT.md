@@ -198,7 +198,7 @@ Work in order, one commit per task, phase-commit style. Tick the box in this fil
 
 - [x] TPL-00 — Read §1; confirm the module split for new composers against the 400-line cap
 - [x] TPL-01 — `billboard`
-- [ ] TPL-02 — `broadsheet`
+- [x] TPL-02 — `broadsheet`
 - [ ] TPL-03 — `zurich`
 - [ ] TPL-04 — `concrete`
 - [ ] TPL-05 — `terminal`
