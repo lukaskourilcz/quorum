@@ -7,11 +7,11 @@
       "date": "2026-08-08",
       "style": "billboard",
       "family": "billboard",
-      "variant": "A",
-      "accentSwap": false,
+      "variant": "B",
+      "accentSwap": true,
       "treatment": "duotone",
       "typeScale": 0.9,
-      "changedAt": "2026-08-10T15:28:43.580Z"
+      "changedAt": "2026-08-10T15:28:47.414Z"
     },
     {
       "venture": "mma-files",
@@ -26,5 +26,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-08-10T15:28:43.580Z"
+  "updatedAt": "2026-08-10T15:28:47.414Z"
 }
