@@ -511,6 +511,18 @@ jobs:
       - name: Pre-cycle release gate
         id: gate
         if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.delivery_only != 'true' && steps.gate-cache.outputs.cache-hit != 'true' }}
+        env:
+          # The gate verifies a tree; it never renders a picture. These two are declared at job
+          # level for the cycle, and job-level env reaches `pnpm test` — so once the owner armed
+          # ARTICLE_ILLUSTRATION_ENABLED on 2026-08-08, a ladder test that reads process.env
+          # walked into the paid illustration rung, billed a real fal.ai render, and failed its
+          # own plate assertion on the extra verdict that render produced. The gate closed and
+          # every meeting from 9 August was skipped, while CI — which exports neither and so
+          # never took that rung — stayed green and reported nothing wrong. A gate that answers a
+          # different question than CI cannot be read as CI's answer, so the two paid switches are
+          # blanked for the length of this step only. The cycle itself still gets both.
+          FAL_KEY: ""
+          ARTICLE_ILLUSTRATION_ENABLED: ""
         run: |
           # Captured, not left to abort the job. An uncaught failure here skipped every
           # remaining step including the skip recorder, so a commit that did not compile showed
@@ -637,6 +649,11 @@ jobs:
         if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' }}
         env:
           GATE_BASE: ${{ github.sha }}
+          # Blanked for the same reason as the pre-cycle gate above: this step runs the same
+          # suite, so it closed on the same billed render. The cycle has already finished paying
+          # for its own images by the time this runs.
+          FAL_KEY: ""
+          ARTICLE_ILLUSTRATION_ENABLED: ""
         run: |
           # Everything the cycle can write, verified. A cycle writes state, docs and social
           # assets; the tests read state, the site build renders it and agents:validate reads

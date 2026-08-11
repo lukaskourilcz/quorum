@@ -233,12 +233,21 @@ if (admin.response.status !== 307) {
   failures.push(`/admin: login redirect expected, received ${admin.response.status}`);
 }
 const adminLocation = admin.response.headers.get("location");
+// Asserted as a path plus the one parameter that carries the meaning, not as a whole URL string.
+// The literal `/admin/login?error=config` went stale the day the login round-trip learned to
+// carry `returnTo`, and because this crawler also runs inside the cycle — after the council has
+// met and before the atomic cycle commit — a stale expectation here does not fail a check, it
+// throws away a meeting that has already been paid for.
+const adminRedirect = adminLocation ? new URL(adminLocation, base) : null;
 if (
-  !adminLocation ||
-  new URL(adminLocation, base).toString() !==
-    new URL("/admin/login?error=config", base).toString()
+  !adminRedirect ||
+  adminRedirect.origin !== base.origin ||
+  adminRedirect.pathname !== "/admin/login" ||
+  adminRedirect.searchParams.get("error") !== "config"
 ) {
-  failures.push("/admin: missing configuration must redirect to the login help state");
+  failures.push(
+    `/admin: missing configuration must redirect to the login help state, received ${adminLocation ?? "no Location header"}`
+  );
 }
 if (!(admin.response.headers.get("x-robots-tag") ?? "").includes("noindex")) {
   failures.push("/admin: missing noindex response header");
