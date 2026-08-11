@@ -445,6 +445,16 @@ Nothing here needs your hands. It is recorded so it is not lost.
   list, and a wrong entry is a route that 500s in production, so each one wants checking against a
   real deployment. [imp:2] [owner:ai] [time:2h] [kind:deploy]
 
+- [ ] **Stop a test from being able to read the cycle's live environment at all** — the council
+  held no meeting between 9 and 11 August because the release gate ran `pnpm test` with the cycle
+  job's own secrets in scope, so a test that reads `process.env` took the paid illustration rung
+  and failed on what that render returned. CI exported neither switch, never took the rung, and
+  reported green the whole time. The two switches are now blanked for both gate steps and the one
+  test injects the rung dark, but the shape survives: any test reading ambient env still behaves
+  differently under the gate than under CI, and the next one to do so closes the gate the same
+  way. A vitest setup file that clears the provider keys for every run would end the class rather
+  than the instance. [imp:3] [owner:ai] [time:30m] [kind:deploy]
+
 ---
 
 ## How to prove a path once its account exists
