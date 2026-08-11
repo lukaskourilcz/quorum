@@ -1,0 +1,580 @@
+{
+  "schemaVersion": "calendar/1",
+  "weekOf": "2026-08-10",
+  "slots": [
+    {
+      "at": "2026-08-10T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-edition",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-intake",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T07:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-editorial",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T08:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "article-am",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T12:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-afternoon",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T15:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-product",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T17:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-analysis",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T18:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-desk",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T20:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-night",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-edition",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-intake",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T07:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-editorial",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T08:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "article-am",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T12:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-afternoon",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T15:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-product",
+      "status": "held",
+      "meetingRef": "meetings/2026-08-11-cu-product",
+      "decisionOneLiner": "Defer. No screened Caught Up idea arrived from the morning meeting."
+    },
+    {
+      "at": "2026-08-11T17:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-analysis",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T18:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-desk",
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T20:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-night",
+      "status": "held",
+      "meetingRef": "standups/2026-08-11-night",
+      "decisionOneLiner": "No externally consequential action was approved."
+    },
+    {
+      "at": "2026-08-12T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-edition",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-12T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-12T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-12T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-intake",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-12T07:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-editorial",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-12T08:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "article-am",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-12T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-12T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-12T12:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-afternoon",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-12T15:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-product",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-12T17:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-analysis",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-12T18:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-12T20:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-night",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-edition",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-intake",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T07:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-editorial",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T08:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "article-am",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T12:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-afternoon",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T15:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-product",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T17:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-analysis",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T18:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T20:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-night",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-edition",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-intake",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T07:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-editorial",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T08:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "article-am",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T12:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-afternoon",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T15:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-product",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T17:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-analysis",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T18:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T20:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-night",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-edition",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-intake",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T07:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-editorial",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T08:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "article-am",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T12:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-afternoon",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T15:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-product",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T17:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-analysis",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T18:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T20:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-night",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-edition",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-intake",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T07:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-editorial",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T08:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "article-am",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T12:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-afternoon",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T15:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-product",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T17:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-analysis",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T18:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mag-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T20:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-night",
+      "status": "scheduled"
+    }
+  ]
+}
