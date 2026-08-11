@@ -58,6 +58,24 @@ function context(overrides: { brief?: VisualBrief | null; subjectQuery?: string 
   };
 }
 
+/**
+ * The ladder under test, with the paid illustration rung held dark.
+ *
+ * `illustrationEnabled` reads the real `process.env`, and the cycle workflow declares FAL_KEY and
+ * ARTICLE_ILLUSTRATION_ENABLED at job level — so under the release gate, and nowhere else, these
+ * cases walked past the search into a live billed render and the extra verdict it pushed failed
+ * the plate assertions below. That is why the suite was green in CI, which exports neither, and
+ * red in the gate that decides whether the council may meet. A rung is dark here because these
+ * cases are about the order the ladder descends in; its own behaviour belongs to
+ * illustration-rung.test.ts, which injects every dependency it touches.
+ */
+function ladder(
+  context: Parameters<typeof selectEditionHero>[0],
+  dependencies: Parameters<typeof selectEditionHero>[1] = {}
+) {
+  return selectEditionHero(context, { illustrationEnabled: () => false, ...dependencies });
+}
+
 describe("which phrases the search runs on", () => {
   it("prefers the desk's own and falls back to the tag-derived query", () => {
     expect(searchPhrasesFor(brief, "courtroom")).toEqual([
@@ -72,7 +90,7 @@ describe("which phrases the search runs on", () => {
 describe("the edition's ladder", () => {
   it("takes a curated scene before it searches at all", async () => {
     let searched = false;
-    const result = await selectEditionHero(context(), {
+    const result = await ladder(context(), {
       scenePhoto: async () => SCENE,
       search: async () => {
         searched = true;
@@ -89,7 +107,7 @@ describe("the edition's ladder", () => {
     // The whole programme in one case. Three candidates came back, a model looked at all three,
     // none of them may run, and the article gets the FRAME cover — which is the honest answer
     // and was never reachable before, because the writer had to name an index from the captions.
-    const result = await selectEditionHero(context(), {
+    const result = await ladder(context(), {
       scenePhoto: async () => null,
       search: async () => ({
         candidates: [candidate("a"), candidate("b"), candidate("c")],
@@ -109,7 +127,7 @@ describe("the edition's ladder", () => {
   it("ships what the gate picked when it picks something", async () => {
     const winner = candidate("b");
     const seen: string[][] = [];
-    const result = await selectEditionHero(context(), {
+    const result = await ladder(context(), {
       scenePhoto: async () => null,
       search: async ({ phrases }) => {
         seen.push([...phrases]);
@@ -140,7 +158,7 @@ describe("the edition's ladder", () => {
 
   it("never calls the gate when the search comes back empty", async () => {
     let gated = false;
-    const result = await selectEditionHero(context({ brief: null, subjectQuery: "" }), {
+    const result = await ladder(context({ brief: null, subjectQuery: "" }), {
       scenePhoto: async () => null,
       search: async () => {
         throw new Error("should not be reached with no phrases");
@@ -157,7 +175,7 @@ describe("the edition's ladder", () => {
   });
 
   it("carries the skipped providers out so the owner document can name them", async () => {
-    const result = await selectEditionHero(context(), {
+    const result = await ladder(context(), {
       scenePhoto: async () => null,
       search: async () => ({
         candidates: [],
@@ -169,7 +187,7 @@ describe("the edition's ladder", () => {
   });
 
   it("costs the photograph and not the edition when the search throws", async () => {
-    const result = await selectEditionHero(context(), {
+    const result = await ladder(context(), {
       scenePhoto: async () => null,
       search: async () => {
         throw new Error("openverse is down");
