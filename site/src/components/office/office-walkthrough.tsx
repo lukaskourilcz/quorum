@@ -459,11 +459,7 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
               </button>
             ))}
           </nav>
-          <div className="flex shrink-0 items-center gap-2 rounded-full border border-[#3f3f46] px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-[#d4d4d8]">
-            <span
-              aria-hidden="true"
-              className="size-1.5 rounded-full bg-[var(--bai-accent)] [animation:bai-pulse_1.8s_ease-in-out_infinite]"
-            />
+          <div className="flex shrink-0 items-center gap-2 font-mono text-[11px] uppercase tracking-[0.1em] text-[#d4d4d8]">
             <span className="hidden sm:inline">Prague</span>
             <span className="tabular-nums text-white" ref={clockRef}>
               --:--
