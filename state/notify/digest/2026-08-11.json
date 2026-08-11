@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "mode": "log",
+  "status": "sent",
+  "subject": "[BoardlessAI] Digest — 2026-08-11",
+  "digest": {
+    "schemaVersion": "daily-digest/1",
+    "date": "2026-08-11",
+    "meetings": [
+      {
+        "ventureId": "caught-up",
+        "kind": "cu-edition",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Caught Up edition room was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "morning",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Venture morning was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "ms-daily",
+        "held": false,
+        "bullets": [
+          {
+            "text": "marketingShark daily carousel room was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "fightaiq",
+        "kind": "mma-intake",
+        "held": false,
+        "bullets": [
+          {
+            "text": "FightAIQ morning data check was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "mag-editorial",
+        "held": false,
+        "bullets": [
+          {
+            "text": "MMA Files morning story meeting was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "article-am",
+        "held": false,
+        "bullets": [
+          {
+            "text": "MMA Files daily article was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "titty-tuesdays",
+        "kind": "tt-marketing",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Titty Tuesdays marketing room was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "gv-brief",
+        "held": false,
+        "bullets": [
+          {
+            "text": "GoVIRAL trend and marketing room was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "afternoon",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Venture afternoon was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "caught-up",
+        "kind": "cu-product",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Caught Up product room was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "fightaiq",
+        "kind": "mma-analysis",
+        "held": false,
+        "bullets": [
+          {
+            "text": "FightAIQ evening model check was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "mag-desk",
+        "held": false,
+        "bullets": [
+          {
+            "text": "MMA Files evening desk review was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "night",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No externally consequential action was approved.",
+            "roomLink": "/standups/20260811200049-night/room"
+          }
+        ],
+        "costUsd": 0
+      }
+    ],
+    "operations": [
+      {
+        "ventureId": "global",
+        "type": "delivery",
+        "status": "none",
+        "text": "No delivery or release proof was recorded today.",
+        "ref": null
+      },
+      {
+        "ventureId": "global",
+        "type": "failure",
+        "status": "none",
+        "text": "No social publishing failure was recorded today.",
+        "ref": null
+      },
+      {
+        "ventureId": "caught-up",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "caught-up social check locked; ready count 2/7.",
+        "ref": "social/activation.json"
+      },
+      {
+        "ventureId": "mma-files",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "mma-files social check locked; ready count 3/10.",
+        "ref": "social/activation.json"
+      },
+      {
+        "ventureId": "titty-tuesdays",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "titty-tuesdays social check locked; ready count 0/4.",
+        "ref": "social/activation.json"
+      }
+    ],
+    "portfolioLine": "Recorded API spend $0.0000 against the $1.00 daily budget.",
+    "bodyWordCount": 194
+  },
+  "bodyWordCount": 252,
+  "compressed": false,
+  "truncated": false,
+  "sentAt": "2026-08-11T20:00:50.819Z"
+}
