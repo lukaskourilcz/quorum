@@ -48,6 +48,7 @@ import {
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminCaughtUp } from "@/lib/admin-caught-up";
 import { readAdminDoorMoney } from "@/lib/admin-door-money";
+import { readAdminTehdejsiSvet } from "@/lib/admin-tehdejsi-svet";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
@@ -164,7 +165,8 @@ export default async function AdminPage({
     renderedDesk,
     ttProposals,
     approvedUndelivered,
-    doorMoney
+    doorMoney,
+    tehdejsiSvet
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -189,8 +191,11 @@ export default async function AdminPage({
     readRenderedDesk(),
     readTittyTuesdaysProposals(),
     readApprovedUndeliveredPayloads(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")),
-    readAdminDoorMoney()
+    readAdminDoorMoney(),
+    readAdminTehdejsiSvet()
   ]);
+  // TS-20b–d consume this already-validated snapshot as their panels land.
+  void tehdejsiSvet;
 
   /*
    * `design-lab` is the name; `carousel-studio` is the id.
