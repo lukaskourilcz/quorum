@@ -121,7 +121,7 @@ post anything.
 - [x] **BH-12b** — `CLAIM_CHECK` escalation and verification-state transitions
 - [x] **BH-13a** — Story-score comparison and recorded selection
 - [x] **BH-13b** — Canonical story brief and independent twin passes
-- [ ] **BH-14** — Production gates for both languages
+- [x] **BH-14** — Production gates for both languages
 - [ ] **BH-15** — Recommendation records with dossier-story evidence
 - [ ] **BH-16a** — Studio brand tokens for `booksofhistory`
 - [ ] **BH-16b** — Per-record locale and two summaries per feature

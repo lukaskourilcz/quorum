@@ -53,6 +53,156 @@ export type BhCanonicalStoryBrief = z.infer<typeof BhCanonicalStoryBriefSchema>;
 export type BhLanguageFeature = z.infer<typeof BhLanguageFeatureSchema>;
 export type BhTwinFeature = z.infer<typeof BhTwinFeatureSchema>;
 
+export type BhProductionGateCode =
+  | "schema"
+  | "unknown-claim"
+  | "rejected-claim"
+  | "unsuitable-claim"
+  | "legend-framing"
+  | "quote-cap"
+  | "quote-attribution"
+  | "living-author-private-life"
+  | "duplicate-feature"
+  | "stop-slop";
+
+export interface BhProductionGateViolation {
+  code: BhProductionGateCode;
+  path: string;
+  message: string;
+}
+
+export interface BhLanguageGateResult {
+  locale: "cs" | "en";
+  status: "accepted" | "dropped";
+  violations: BhProductionGateViolation[];
+  feature: BhLanguageFeature | null;
+}
+
+export interface BhTwinGateResult {
+  lanes: { cs: BhLanguageGateResult; en: BhLanguageGateResult };
+  droppedCount: number;
+  acceptedCount: number;
+}
+
+export const BH_LEGEND_FRAMING = {
+  cs: "Podle neověřené legendy",
+  en: "According to an unverified legend"
+} as const;
+
+const LIVING_AUTHOR_PRIVATE = /\b(?:health|diagnos(?:is|ed)|illness|disease|hospitali[sz]ed|mental health|private life|sexuality|affair|home address|zdrav[íi]|diagn[oó]z[ay]?|nemoc|hospitalizov[aá]n|duševní zdraví|soukrom[ýé] život|sexualit[ay]|milostn[ýá] poměr|adresa bydliště)\b/iu;
+const STOP_SLOP = /\b(?:delve|tapestry|game[ -]?changer|you won't believe|fascinating journey|in today's fast-paced world|neuvěříte|fascinující cesta|v dnešním uspěchaném světě)\b|není jen.{0,80}ale/iu;
+
+function featureText(feature: BhLanguageFeature): string {
+  return [
+    feature.headline,
+    ...feature.slides.flatMap((slide) => [slide.text, ...slide.factualSentences.map(({ text }) => text)]),
+    feature.caption,
+    ...feature.quotes.flatMap(({ text, attribution }) => [text, attribution])
+  ].join("\n");
+}
+
+function normalizedFeatureText(feature: BhLanguageFeature): string {
+  return featureText(feature).normalize("NFKD").replaceAll(/\p{Mark}/gu, "").toLowerCase()
+    .replaceAll(/[^a-z0-9]+/gu, " ").trim();
+}
+
+function quoteViolations(value: unknown): BhProductionGateViolation[] {
+  if (!value || typeof value !== "object" || !("quotes" in value) || !Array.isArray(value.quotes)) return [];
+  return value.quotes.flatMap((quote, index) => {
+    if (!quote || typeof quote !== "object") return [];
+    const candidate = quote as { text?: unknown; attribution?: unknown };
+    const violations: BhProductionGateViolation[] = [];
+    if (typeof candidate.text === "string" && candidate.text.length > 300) {
+      violations.push({ code: "quote-cap", path: `quotes.${index}.text`, message: "Quotes cannot exceed 300 characters." });
+    }
+    if (typeof candidate.attribution !== "string" || candidate.attribution.trim() === "") {
+      violations.push({ code: "quote-attribution", path: `quotes.${index}.attribution`, message: "Every quote requires attribution." });
+    }
+    return violations;
+  });
+}
+
+/** Gate one lane independently; a failed lane is returned as dropped, never thrown into delivery. */
+export function gateBhLanguageFeature(input: {
+  feature: unknown;
+  locale: "cs" | "en";
+  dossier: BhDossier;
+  priorFeatures: readonly BhLanguageFeature[];
+  authorLiving: boolean;
+}): BhLanguageGateResult {
+  const violations = quoteViolations(input.feature);
+  const parsed = BhLanguageFeatureSchema.safeParse(input.feature);
+  if (!parsed.success) {
+    violations.push({ code: "schema", path: "feature", message: parsed.error.issues[0]?.message ?? "Invalid feature shape." });
+    return { locale: input.locale, status: "dropped", violations, feature: null };
+  }
+  const feature = parsed.data;
+  if (feature.locale !== input.locale) {
+    violations.push({ code: "schema", path: "locale", message: `Expected ${input.locale}, received ${feature.locale}.` });
+  }
+  const dossier = BhDossierSchema.parse(input.dossier);
+  const claimById = new Map(dossier.claims.map((claim) => [claim.claimId, claim]));
+  for (const [slideIndex, slide] of feature.slides.entries()) {
+    for (const [sentenceIndex, sentence] of slide.factualSentences.entries()) {
+      for (const claimRef of sentence.claimRefs) {
+        const claim = claimById.get(claimRef);
+        const path = `slides.${slideIndex}.factualSentences.${sentenceIndex}`;
+        if (!claim) {
+          violations.push({ code: "unknown-claim", path, message: `Unknown dossier claim ${claimRef}.` });
+          continue;
+        }
+        if (claim.verificationState === "rejected") {
+          violations.push({ code: "rejected-claim", path, message: `Rejected claim ${claimRef} cannot appear.` });
+        } else if (!claim.publicationSuitable) {
+          violations.push({ code: "unsuitable-claim", path, message: `Claim ${claimRef} is not publication-suitable.` });
+        } else if (claim.verificationState === "legend" && !sentence.text.includes(BH_LEGEND_FRAMING[input.locale])) {
+          violations.push({
+            code: "legend-framing",
+            path,
+            message: `Legend claim ${claimRef} requires the exact framing “${BH_LEGEND_FRAMING[input.locale]}”.`
+          });
+        }
+      }
+    }
+  }
+  const text = featureText(feature);
+  if (input.authorLiving && LIVING_AUTHOR_PRIVATE.test(text)) {
+    violations.push({
+      code: "living-author-private-life",
+      path: "feature",
+      message: "Health and private-life material about living authors is forbidden regardless of sourcing."
+    });
+  }
+  if (STOP_SLOP.test(text)) {
+    violations.push({ code: "stop-slop", path: "feature", message: "Feature contains banned generic or clickbait phrasing." });
+  }
+  const fingerprint = normalizedFeatureText(feature);
+  if (input.priorFeatures.some((prior) => normalizedFeatureText(prior) === fingerprint)) {
+    violations.push({ code: "duplicate-feature", path: "feature", message: "Feature duplicates prior BOOKSOFHISTORY copy." });
+  }
+  return {
+    locale: input.locale,
+    status: violations.length === 0 ? "accepted" : "dropped",
+    violations,
+    feature: violations.length === 0 ? feature : null
+  };
+}
+
+export function gateBhTwinFeature(input: {
+  cs: unknown;
+  en: unknown;
+  dossier: BhDossier;
+  priorFeatures: { cs: readonly BhLanguageFeature[]; en: readonly BhLanguageFeature[] };
+  authorLiving: boolean;
+}): BhTwinGateResult {
+  const lanes = {
+    cs: gateBhLanguageFeature({ feature: input.cs, locale: "cs", dossier: input.dossier, priorFeatures: input.priorFeatures.cs, authorLiving: input.authorLiving }),
+    en: gateBhLanguageFeature({ feature: input.en, locale: "en", dossier: input.dossier, priorFeatures: input.priorFeatures.en, authorLiving: input.authorLiving })
+  };
+  const droppedCount = Object.values(lanes).filter(({ status }) => status === "dropped").length;
+  return { lanes, droppedCount, acceptedCount: 2 - droppedCount };
+}
+
 export type BhStoryBriefCallConfig = Omit<
   GuardedCallInput<BhCanonicalStoryBrief>,
   "input" | "parse"
