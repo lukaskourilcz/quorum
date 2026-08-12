@@ -230,19 +230,23 @@
       "at": "2026-08-12T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "scheduled"
+      "status": "held",
+      "decisionOneLiner": "The desk published this slot's article."
     },
     {
       "at": "2026-08-12T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "scheduled"
+      "status": "late",
+      "decisionOneLiner": "The run for this slot has not arrived yet."
     },
     {
       "at": "2026-08-12T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "gv-brief",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-12-gv-brief",
+      "decisionOneLiner": "This room meets on Mondays. Nothing was spent."
     },
     {
       "at": "2026-08-12T12:00:00.000Z",
