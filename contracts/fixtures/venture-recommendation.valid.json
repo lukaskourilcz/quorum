@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "venture-recommendation/1",
+  "id": "fixture-radio-carousel",
+  "ventureId": "door-money",
+  "date": "2026-08-12",
+  "status": "draft",
+  "hook": "A broken radio can still carry a promise.",
+  "formats": [
+    "carousel"
+  ],
+  "platforms": [
+    "instagram",
+    "threads"
+  ],
+  "copyBlocks": [
+    {
+      "kind": "cover",
+      "ordinal": 1,
+      "text": "The radio was broken. The promise was not."
+    },
+    {
+      "kind": "body",
+      "ordinal": 2,
+      "text": "A fictional courier keeps the smaller promise after the original errand fails."
+    }
+  ],
+  "rationale": "The invented object gives the recommendation a concrete visual spine.",
+  "curiosityBridge": "The larger chapter asks why this neighborhood kept returning broken objects.",
+  "evidence": {
+    "kind": "book-passage",
+    "manuscriptHash": "sha256:4f41e4291ae4f32331a07fb44248b06cc49e48814f1e8de7dff0b20f77524998",
+    "chunkIds": [
+      "ch01-s01-c001"
+    ],
+    "scoresAtSelection": [
+      {
+        "chunkId": "ch01-s01-c001",
+        "scores": {
+          "entertainment": {
+            "score": 4,
+            "justification": "The failed errand turns into a compact reversal."
+          },
+          "emotionalImpact": {
+            "score": 4,
+            "justification": "The returned object carries a believable communal memory."
+          },
+          "shock": {
+            "score": 1,
+            "justification": "The scene relies on recognition rather than surprise."
+          },
+          "humor": {
+            "score": 2,
+            "justification": "The courier's stubborn route adds a dry comic beat."
+          },
+          "relatability": {
+            "score": 4,
+            "justification": "Keeping a small promise is an accessible conflict."
+          },
+          "hipHopRelevance": {
+            "score": 2,
+            "justification": "The portable radio offers a light cultural connection."
+          },
+          "storytellingStrength": {
+            "score": 5,
+            "justification": "The object, obstacle and payoff form a complete arc."
+          },
+          "controversy": {
+            "score": 0,
+            "justification": "The synthetic scene contains no polarizing claim."
+          },
+          "shareability": {
+            "score": 4,
+            "justification": "The promise line works as a concise social hook."
+          },
+          "educationalValue": {
+            "score": 2,
+            "justification": "The scene models resourcefulness without teaching a process."
+          },
+          "quotePotential": {
+            "score": 4,
+            "justification": "One short line stands alone without losing its meaning."
+          },
+          "carouselPotential": {
+            "score": 5,
+            "justification": "The route can unfold cleanly across visual beats."
+          },
+          "shortVideoPotential": {
+            "score": 4,
+            "justification": "The delivery journey gives a script clear movement."
+          },
+          "threadPotential": {
+            "score": 3,
+            "justification": "The setup and reveal support a short sequence."
+          },
+          "bookCuriosityPotential": {
+            "score": 4,
+            "justification": "The unresolved history invites a larger story."
+          }
+        }
+      }
+    ],
+    "excerptChunkId": "ch01-s01-c001",
+    "excerpt": "The radio was broken, but the promise still worked.",
+    "privateStoreLink": "private-book://sha256/4f41e4291ae4f32331a07fb44248b06cc49e48814f1e8de7dff0b20f77524998/chunks/ch01-s01-c001.json"
+  },
+  "gateResults": [
+    {
+      "gate": "voice",
+      "passed": true,
+      "detail": "The synthetic fixture keeps its concrete object and plain landing."
+    }
+  ],
+  "designLab": {
+    "eligible": true,
+    "summaryPath": null,
+    "readyAt": null
+  },
+  "owner": {
+    "editedCopyBlocks": null,
+    "approvalNote": null,
+    "rejectionReason": null,
+    "approvedAt": null,
+    "rejectedAt": null,
+    "postedAt": null,
+    "archivedAt": null,
+    "postedUrl": null,
+    "resultIds": [],
+    "ratingRef": null
+  },
+  "statusHistory": [
+    {
+      "from": null,
+      "to": "draft",
+      "at": "2026-08-12T10:00:00.000Z",
+      "actor": "system",
+      "reason": null
+    }
+  ],
+  "generatedAt": "2026-08-12T10:00:00.000Z",
+  "updatedAt": "2026-08-12T10:00:00.000Z"
+}

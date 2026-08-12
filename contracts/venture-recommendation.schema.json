@@ -1,0 +1,853 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "venture-recommendation/1"
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 160,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "ventureId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "approved",
+        "posted",
+        "archived",
+        "rejected"
+      ]
+    },
+    "hook": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "formats": {
+      "minItems": 1,
+      "maxItems": 3,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "carousel",
+          "single-image",
+          "thread",
+          "caption",
+          "short-video-script"
+        ]
+      }
+    },
+    "platforms": {
+      "minItems": 1,
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "instagram",
+          "tiktok",
+          "x",
+          "threads",
+          "youtube"
+        ]
+      }
+    },
+    "copyBlocks": {
+      "minItems": 1,
+      "maxItems": 40,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "cover",
+              "body",
+              "outro",
+              "thread-post",
+              "caption",
+              "script",
+              "shot-list"
+            ]
+          },
+          "ordinal": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          }
+        },
+        "required": [
+          "kind",
+          "ordinal",
+          "text"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "curiosityBridge": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "evidence": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "book-passage"
+            },
+            "manuscriptHash": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            },
+            "chunkIds": {
+              "minItems": 1,
+              "maxItems": 3,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^ch\\d{2,}-s\\d{2,}-c\\d{3,}$"
+              }
+            },
+            "scoresAtSelection": {
+              "minItems": 1,
+              "maxItems": 3,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "chunkId": {
+                    "type": "string",
+                    "pattern": "^ch\\d{2,}-s\\d{2,}-c\\d{3,}$"
+                  },
+                  "scores": {
+                    "type": "object",
+                    "properties": {
+                      "entertainment": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "emotionalImpact": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "shock": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "humor": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "relatability": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "hipHopRelevance": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "storytellingStrength": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "controversy": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "shareability": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "educationalValue": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "quotePotential": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "carouselPotential": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "shortVideoPotential": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "threadPotential": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "bookCuriosityPotential": {
+                        "type": "object",
+                        "properties": {
+                          "score": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "justification": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 240
+                          }
+                        },
+                        "required": [
+                          "score",
+                          "justification"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "entertainment",
+                      "emotionalImpact",
+                      "shock",
+                      "humor",
+                      "relatability",
+                      "hipHopRelevance",
+                      "storytellingStrength",
+                      "controversy",
+                      "shareability",
+                      "educationalValue",
+                      "quotePotential",
+                      "carouselPotential",
+                      "shortVideoPotential",
+                      "threadPotential",
+                      "bookCuriosityPotential"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "chunkId",
+                  "scores"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "excerptChunkId": {
+              "type": "string",
+              "pattern": "^ch\\d{2,}-s\\d{2,}-c\\d{3,}$"
+            },
+            "excerpt": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "privateStoreLink": {
+              "type": "string",
+              "pattern": "^private-book:\\/\\/sha256\\/[a-f0-9]{64}\\/chunks\\/ch\\d{2,}-s\\d{2,}-c\\d{3,}\\.json$"
+            }
+          },
+          "required": [
+            "kind",
+            "manuscriptHash",
+            "chunkIds",
+            "scoresAtSelection",
+            "excerptChunkId",
+            "excerpt",
+            "privateStoreLink"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "gateResults": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "gate": {
+            "type": "string",
+            "enum": [
+              "voice",
+              "claims",
+              "quotes",
+              "excerpt-cap",
+              "duplicate",
+              "cta-frequency",
+              "living-person"
+            ]
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "gate",
+          "passed",
+          "detail"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "designLab": {
+      "type": "object",
+      "properties": {
+        "eligible": {
+          "type": "boolean"
+        },
+        "summaryPath": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 400,
+              "pattern": "^state\\/[a-zA-Z0-9._/-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "readyAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "eligible",
+        "summaryPath",
+        "readyAt"
+      ],
+      "additionalProperties": false
+    },
+    "owner": {
+      "type": "object",
+      "properties": {
+        "editedCopyBlocks": {
+          "anyOf": [
+            {
+              "minItems": 1,
+              "maxItems": 40,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "cover",
+                      "body",
+                      "outro",
+                      "thread-post",
+                      "caption",
+                      "script",
+                      "shot-list"
+                    ]
+                  },
+                  "ordinal": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4000
+                  }
+                },
+                "required": [
+                  "kind",
+                  "ordinal",
+                  "text"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "approvalNote": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rejectionReason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "approvedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rejectedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "postedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "archivedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "postedUrl": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^https:\\/\\/"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resultIds": {
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          }
+        },
+        "ratingRef": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 400,
+              "pattern": "^state\\/[a-zA-Z0-9._/-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "editedCopyBlocks",
+        "approvalNote",
+        "rejectionReason",
+        "approvedAt",
+        "rejectedAt",
+        "postedAt",
+        "archivedAt",
+        "postedUrl",
+        "resultIds",
+        "ratingRef"
+      ],
+      "additionalProperties": false
+    },
+    "statusHistory": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "draft",
+                  "approved",
+                  "posted",
+                  "archived",
+                  "rejected"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "to": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "approved",
+              "posted",
+              "archived",
+              "rejected"
+            ]
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "actor": {
+            "type": "string",
+            "enum": [
+              "system",
+              "owner"
+            ]
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "at",
+          "actor",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "ventureId",
+    "date",
+    "status",
+    "hook",
+    "formats",
+    "platforms",
+    "copyBlocks",
+    "rationale",
+    "curiosityBridge",
+    "evidence",
+    "gateResults",
+    "designLab",
+    "owner",
+    "statusHistory",
+    "generatedAt",
+    "updatedAt"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/venture-recommendation.schema.json"
+}

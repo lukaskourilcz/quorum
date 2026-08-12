@@ -22,4 +22,5 @@ export * from "./season.js";
 export * from "./social-pack.js";
 export * from "./style-profile.js";
 export * from "./venture-registry.js";
+export * from "./venture-recommendation.js";
 export * from "./visual-weights.js";

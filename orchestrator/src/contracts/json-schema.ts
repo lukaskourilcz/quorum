@@ -39,6 +39,7 @@ import { SeasonFileSchema } from "./season.js";
 import { SocialPackSchema } from "./social-pack.js";
 import { StyleProfileSchema } from "./style-profile.js";
 import { VentureRegistrySchema } from "./venture-registry.js";
+import { VentureRecommendationSchema } from "./venture-recommendation.js";
 import { VisualWeightsSchema } from "./visual-weights.js";
 import {
   ArticleImageSchema,
@@ -92,6 +93,7 @@ export const ContractSchemas = {
   "social-pack": SocialPackSchema,
   "style-profile": StyleProfileSchema,
   "venture-registry": VentureRegistrySchema,
+  "venture-recommendation": VentureRecommendationSchema,
   "visual-weights": VisualWeightsSchema,
   "article-image": ArticleImageSchema,
   "metrics-placeholder": MetricsPlaceholderSchema,

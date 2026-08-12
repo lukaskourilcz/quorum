@@ -160,6 +160,11 @@ costs and no treasury action in this decision.
   split writes raw chunks, annotations and vectors only to an owner-provided local private clone;
   the public state receives contract-validated derivatives and version pointers. No database
   hostname was added to the network allowlist, and no `BOOK_DB_*` credential or table was created.
+- **DM-12's amended issue replaces the specified private-store link with a database key.** The
+  higher-precedence design and build contract require chunk references plus a private-store link,
+  so `book-passage` evidence carries both immutable chunk ids and a credential-free
+  `private-book://` pointer bound to the manuscript hash and excerpt chunk. It is not a public URL,
+  repository link or credential, and the contract rejects links that disagree with the evidence.
 
 ## Delivery ledger
 
@@ -188,7 +193,7 @@ costs and no treasury action in this decision.
 - [x] DM-10b — Budget-ledger kind for embeddings
 - [x] DM-11a — The book:ingest CLI with envelopes
 - [x] DM-11b — Public/private output split and manuscript-hash idempotency
-- [ ] DM-12 — venture-recommendation evidence kind book-passage
+- [x] DM-12 — venture-recommendation evidence kind book-passage
 - [ ] DM-13 — Deterministic passage selection
 - [ ] DM-14a — Packet assembly and the private-store fetcher
 - [ ] DM-14b — Desk runner, GHOST call and honest records
