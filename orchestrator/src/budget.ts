@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  EMBEDDING_PRICES,
   findTextPrice,
   IMAGE_PRICES,
   STAGE_CYCLE_CAPS,
@@ -185,6 +186,33 @@ export interface ImageEstimateInput {
   promptChars: number;
 }
 
+export interface EmbeddingEstimateInput {
+  model: "text-embedding-3-small";
+  inputChars: number;
+  at?: Date;
+}
+
+export function estimateEmbeddingCall(input: EmbeddingEstimateInput): CostEstimate {
+  const at = input.at ?? new Date();
+  const price = EMBEDDING_PRICES.find((candidate) =>
+    candidate.model === input.model &&
+    candidate.effectiveFrom <= at.toISOString().slice(0, 10) &&
+    (candidate.effectiveTo === null || candidate.effectiveTo > at.toISOString().slice(0, 10))
+  );
+  if (!price) {
+    throw new BudgetError("UNKNOWN_PRICE", `No dated embedding price for ${input.model}`);
+  }
+  const estimatedInputTokens = Math.ceil(input.inputChars / 3.5);
+  return {
+    estimatedInputTokens,
+    estimatedOutputTokens: 0,
+    estimatedUsd: Number(((estimatedInputTokens / 1_000_000) * price.inputUsdPerMillion).toFixed(8)),
+    toolUsd: 0,
+    priceVerifiedAt: price.verifiedAt,
+    priceSourceUrl: price.sourceUrl
+  };
+}
+
 export function estimateImageCall(input: ImageEstimateInput): CostEstimate {
   const price = IMAGE_PRICES.find(
     (candidate) =>
@@ -314,6 +342,20 @@ export function assertTextReservation(
     throw new BudgetError(
       "PER_CALL_CAP",
       `Estimated call ${estimate.estimatedUsd} exceeds ${limits.perTextCallUsd}`
+    );
+  }
+  assertSharedReservation(estimate.estimatedUsd, false, context, limits);
+}
+
+export function assertEmbeddingReservation(
+  estimate: CostEstimate,
+  context: ReserveContext
+): void {
+  const limits = context.limits ?? DEFAULT_BUDGET_LIMITS;
+  if (estimate.estimatedUsd > limits.perTextCallUsd) {
+    throw new BudgetError(
+      "PER_CALL_CAP",
+      `Estimated embedding ${estimate.estimatedUsd} exceeds ${limits.perTextCallUsd}`
     );
   }
   assertSharedReservation(estimate.estimatedUsd, false, context, limits);
