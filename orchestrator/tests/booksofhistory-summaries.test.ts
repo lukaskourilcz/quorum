@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -66,6 +66,45 @@ describe("BOOKSOFHISTORY twin Studio summaries", () => {
       })).rejects.toThrow(/owner-approved/u);
     } finally {
       await rm(root, { recursive: true, force: true });
+    }
+  });
+
+  it("keeps every venture-owned visual path behind the Design Lab summary handoff", async () => {
+    async function sourceFiles(directory: string): Promise<string[]> {
+      const entries = await readdir(directory, { withFileTypes: true });
+      return (await Promise.all(entries.map(async (entry) => {
+        const absolute = path.join(directory, entry.name);
+        return entry.isDirectory() ? sourceFiles(absolute) : [absolute];
+      }))).flat().filter((file) => /\.[cm]?[jt]sx?$/u.test(file));
+    }
+
+    const ventureFiles = [
+      ...await sourceFiles(path.join(repoRoot, "orchestrator/src/ventures/booksofhistory")),
+      ...await sourceFiles(path.join(repoRoot, "site/src")).then((files) =>
+        files.filter((file) => path.relative(repoRoot, file).toLowerCase().includes("booksofhistory")))
+    ];
+    const sources = await Promise.all(ventureFiles.map(async (file) => ({
+      file: path.relative(repoRoot, file),
+      source: await readFile(file, "utf8")
+    })));
+    const studioImports = sources
+      .filter(({ source }) => source.includes('from "@boardlessai/carousel-studio"'))
+      .map(({ file }) => file)
+      .sort();
+
+    expect(studioImports).toEqual([
+      "orchestrator/src/ventures/booksofhistory/summaries.ts",
+      "site/src/lib/booksofhistory-features-store.ts"
+    ]);
+    for (const { file, source } of sources) {
+      expect(source, `${file} must not own a private raster or SVG renderer`).not.toMatch(
+        /from ["'](?:@resvg\/resvg-js|sharp|canvas|satori)["']|\b(?:renderCarouselPng|renderCarouselSvg|toRenderablePng)\b/u
+      );
+    }
+    for (const file of studioImports) {
+      const source = sources.find((candidate) => candidate.file === file)!.source;
+      expect(source).toContain("buildBooksofhistoryCarouselSummary");
+      expect(source).toContain("booksofhistoryCarouselSummaryPath");
     }
   });
 });

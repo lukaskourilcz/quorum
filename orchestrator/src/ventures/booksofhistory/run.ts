@@ -12,6 +12,12 @@ import {
   mondayOfWeek,
   writeCalendarFeed
 } from "../../meetings/calendar.js";
+import {
+  MEETING_AGENDA_PATH,
+  consumeMeetingAgenda,
+  dueMeetingAgenda,
+  readMeetingAgendaQueue
+} from "../../meetings/agenda.js";
 import { pragueClockParts } from "../../meetings/clock.js";
 import { configRoot, repoRoot, stateRoot } from "../../paths.js";
 import { loadRuntimeBudgetLimits } from "../../portfolio/limits.js";
@@ -146,6 +152,7 @@ function buildDayRecord(input: {
   monthAllInUsd: number;
   monthCapUsd: number;
   evidenceRefs?: string[];
+  agendaSummary?: string;
 }): MeetingRecord {
   const closedAt = new Date(input.now.getTime() + 1).toISOString();
   const summary = phaseSummary(input.phase, input.completed);
@@ -159,7 +166,9 @@ function buildDayRecord(input: {
     fixture: input.dry,
     status: input.completed ? "PLAN" : "PAUSED",
     stage: input.stage,
-    operatingBrief: `Continue ${input.phase} for BOOKSOFHISTORY cycle ${input.currentCycleId}; a phase advances only when its work completes.`,
+    operatingBrief: input.agendaSummary
+      ? `${input.agendaSummary} Continue ${input.phase} for BOOKSOFHISTORY cycle ${input.currentCycleId}; a phase advances only when its work completes.`
+      : `Continue ${input.phase} for BOOKSOFHISTORY cycle ${input.currentCycleId}; a phase advances only when its work completes.`,
     participantReasons: BOOKSOFHISTORY_CAST.map((agent) => ({
       agent,
       reason: input.dry
@@ -255,6 +264,10 @@ export async function runBooksofHistoryCycle(input: {
     };
   }
 
+  const agendaQueue = input.dry ? null : await readMeetingAgendaQueue(root, input.now);
+  const agenda = agendaQueue ? dueMeetingAgenda(agendaQueue, "bh-desk", date) : null;
+  const agendaRef = agenda ? `${MEETING_AGENDA_PATH}#${agenda.id}` : null;
+
   let cycle = await readBooksofHistoryCycle(root);
   if (cycle === null || booksofHistoryCycleComplete(cycle)) {
     cycle = createBooksofHistoryCycle({ date, now: input.now });
@@ -288,6 +301,11 @@ export async function runBooksofHistoryCycle(input: {
   });
 
   const spent = input.dry ? 0 : await monthSpend(root, date);
+  const evidenceRefs = [
+    BOOKSOFHISTORY_CYCLE_PATH,
+    ...(shortlistPath ? [shortlistPath] : []),
+    ...(agendaRef ? [agendaRef, ...agenda!.evidenceRefs] : [])
+  ];
   const record = buildDayRecord({
     executionCycleId: input.executionCycleId,
     currentCycleId: cycle.currentCycleId,
@@ -299,7 +317,8 @@ export async function runBooksofHistoryCycle(input: {
     dry: input.dry,
     monthAllInUsd: spent,
     monthCapUsd: limits.monthlyOperatingUsd,
-    evidenceRefs: [BOOKSOFHISTORY_CYCLE_PATH, ...(shortlistPath ? [shortlistPath] : [])]
+    evidenceRefs,
+    agendaSummary: agenda?.summary
   });
   const decisionPath = `decisions/${input.executionCycleId}.json`;
   const scorecardPath = `scorecards/${input.executionCycleId}.json`;
@@ -312,7 +331,8 @@ export async function runBooksofHistoryCycle(input: {
     editorialPhase: workedPhase,
     outcome: completed ? "ADVANCE" : "RESUME",
     summary,
-    evidenceRefs: [BOOKSOFHISTORY_CYCLE_PATH],
+    evidenceRefs,
+    ...(agendaRef ? { agendaRef } : {}),
     generatedAt: record.generatedAt
   });
   await atomicWriteJson(root, scorecardPath, {
@@ -324,6 +344,7 @@ export async function runBooksofHistoryCycle(input: {
     estimatedWorstCaseUsd: 0,
     actualUsd: 0,
     participants: [],
+    agendaId: agenda?.id ?? null,
     schedulerOutcome: completed ? "completed" : "paused",
     generatedAt: record.generatedAt
   });
@@ -336,7 +357,23 @@ export async function runBooksofHistoryCycle(input: {
     articleSlots: await loadArticleSlotOutcomes(root),
     now: input.now
   }));
-  const artifacts = [meetingPath, decisionPath, scorecardPath, BOOKSOFHISTORY_CYCLE_PATH, calendarPath, ...(shortlistPath ? [shortlistPath] : [])]
+  if (agenda) {
+    await consumeMeetingAgenda({
+      root,
+      agendaId: agenda.id,
+      cycleId: input.executionCycleId,
+      now: input.now
+    });
+  }
+  const artifacts = [
+    meetingPath,
+    decisionPath,
+    scorecardPath,
+    BOOKSOFHISTORY_CYCLE_PATH,
+    calendarPath,
+    ...(shortlistPath ? [shortlistPath] : []),
+    ...(agenda ? [MEETING_AGENDA_PATH] : [])
+  ]
     .map((relative) => artifactPath(root, relative));
   return {
     cycleId: input.executionCycleId,

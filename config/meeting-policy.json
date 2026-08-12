@@ -31,8 +31,12 @@
     ],
     "gv-brief": [
       "gv-brief",
+      "bh-desk",
       "mag-desk",
       "tt-marketing"
+    ],
+    "bh-desk": [
+      "gv-brief"
     ],
     "mma-intake": [
       "mma-analysis",

@@ -4,6 +4,12 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { runBooksofHistoryCycle } from "../src/ventures/booksofhistory/run.js";
 import {
+  MEETING_AGENDA_PATH,
+  loadMeetingPolicy,
+  readMeetingAgendaQueue,
+  requestMeetingAgenda
+} from "../src/meetings/agenda.js";
+import {
   applyBooksofHistoryCycleDay,
   booksofHistoryCycleComplete,
   createBooksofHistoryCycle,
@@ -154,5 +160,46 @@ describe("BOOKSOFHISTORY dry runner", () => {
     const record = JSON.parse(await readFile(path.join(root, "meetings", "2026-08-12-bh-desk.json"), "utf8"));
     expect(record.ledger.actualCycleUsd).toBe(0);
     expect((await readBooksofHistoryCycle(root))?.phase).toBe("selection");
+  });
+
+  it("reads and consumes the one due gv-brief agenda after recording the desk checkpoint", async () => {
+    const root = await temporaryState();
+    const now = new Date("2026-08-12T10:00:00.000Z");
+    const summary = "Decide whether the recorded anniversary signal changes this cycle's shortlist.";
+    const requested = await requestMeetingAgenda({
+      root,
+      policy: await loadMeetingPolicy(),
+      ventureId: "booksofhistory",
+      phase: "bh-desk",
+      requestedBy: "PULSE",
+      sourcePhase: "gv-brief",
+      sourceMeetingRef: "meetings/2026-08-12-gv-brief",
+      summary,
+      evidenceRefs: ["ventures/goviral/plans/2026-08-12.json"],
+      notBefore: "2026-08-12",
+      now
+    });
+    process.env.MEETING_TRIGGER = "schedule";
+
+    const result = await runBooksofHistoryCycle({
+      executionCycleId: "20260812120000-bh-desk",
+      dry: false,
+      now,
+      root
+    });
+
+    expect(result.artifacts).toContain(path.relative(
+      path.resolve(import.meta.dirname, "../.."),
+      path.join(root, MEETING_AGENDA_PATH)
+    ));
+    const record = JSON.parse(await readFile(path.join(root, "meetings", "2026-08-12-bh-desk.json"), "utf8"));
+    expect(record.operatingBrief).toContain(summary);
+    expect(record.decision.evidenceRefs).toContain(`${MEETING_AGENDA_PATH}#${requested.agenda.id}`);
+    const queue = await readMeetingAgendaQueue(root, now);
+    expect(queue.agendas[0]).toMatchObject({
+      id: requested.agenda.id,
+      status: "consumed",
+      consumedBy: "20260812120000-bh-desk"
+    });
   });
 });
