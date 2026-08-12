@@ -1,8 +1,14 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { BudgetLedgerEntrySchema } from "../../budget.js";
+import {
+  BudgetError,
+  BudgetLedgerEntrySchema,
+  type ReserveContext
+} from "../../budget.js";
+import type { ActionPacket } from "../../contracts/action-packet.js";
 import { MeetingRecordSchema } from "../../contracts/meeting-record.js";
 import type { CycleResult } from "../../cycle/types.js";
+import { ModelOutputParseError } from "../../llm/call.js";
 import {
   buildCalendarFeed,
   loadArticleSlotOutcomes,
@@ -19,6 +25,12 @@ import { isoWeek } from "../../reports/writers.js";
 import { atomicWriteJson } from "../../state.js";
 import type { Stage } from "../../types.js";
 import { getVentureMeetingDefinition, loadVentureRegistry } from "../registry.js";
+import {
+  callDoorMoneyBooker,
+  type BookerCall
+} from "./growth-booker.js";
+
+export type { BookerCall, BookerResponse } from "./growth-booker.js";
 
 export const DOOR_MONEY_GROWTH_TOPICS = [
   { id: "launch-mechanics", title: "Launch mechanics" },
@@ -44,6 +56,7 @@ export interface DoorMoneyGrowthAgenda {
 
 export interface DoorMoneyGrowthCycleResult extends CycleResult {
   agenda: DoorMoneyGrowthAgenda;
+  actionPacket: ActionPacket | null;
 }
 
 const WEEK_MS = 7 * 86_400_000;
@@ -69,9 +82,10 @@ export function isDoorMoneyGrowthDay(date: string): boolean {
   return new Date(`${date}T12:00:00.000Z`).getUTCDay() === 4;
 }
 
-async function ledgerSnapshot(root: string, date: string, now: Date): Promise<{
+async function ledgerSnapshot(root: string, date: string, now: Date, cycleId: string): Promise<{
   monthAllInUsd: number;
   monthCapUsd: number;
+  cycleUsd: number;
 }> {
   let raw: { entries?: unknown[] } = {};
   try {
@@ -84,11 +98,14 @@ async function ledgerSnapshot(root: string, date: string, now: Date): Promise<{
     loadFixedMonthlyUsd(configRoot, now)
   ]);
   const month = date.slice(0, 7);
-  const modelUsd = (raw.entries ?? [])
-    .map((entry) => BudgetLedgerEntrySchema.parse(entry))
+  const entries = (raw.entries ?? []).map((entry) => BudgetLedgerEntrySchema.parse(entry));
+  const modelUsd = entries
     .filter(({ ts }) => ts.slice(0, 7) === month)
     .reduce((sum, entry) => sum + entry.usd, 0);
-  return { monthAllInUsd: fixed + modelUsd, monthCapUsd: limits.monthlyOperatingUsd };
+  const cycleUsd = entries
+    .filter((entry) => entry.cycleId === cycleId && entry.phase === "dm-growth")
+    .reduce((sum, entry) => sum + entry.usd, 0);
+  return { monthAllInUsd: fixed + modelUsd, monthCapUsd: limits.monthlyOperatingUsd, cycleUsd };
 }
 
 export async function runDoorMoneyGrowthCycle(input: {
@@ -97,42 +114,82 @@ export async function runDoorMoneyGrowthCycle(input: {
   dry: boolean;
   root?: string;
   stage?: Stage;
+  call?: BookerCall;
+  budgetContext?: ReserveContext;
 }): Promise<DoorMoneyGrowthCycleResult> {
   const date = pragueClockParts(input.now).date;
   const agenda = doorMoneyGrowthAgenda(date);
   const due = isDoorMoneyGrowthDay(date);
 
-  // DM-19b owns the action contract and BOOKER call. Keep the live Thursday closed until both exist.
-  if (due && !input.dry) {
-    return {
-      cycleId: input.cycleId,
-      phase: "dm-growth",
-      dry: false,
-      status: "paused",
-      decision: "PAUSED",
-      estimatedWorstCaseUsd: 0,
-      selectedAgents: [],
-      skippedAgents: [],
-      artifacts: [],
-      agenda
-    };
-  }
-
   const root = input.root ?? (input.dry ? path.join(repoRoot, "tmp", "dry-run", "state") : path.join(repoRoot, "state"));
-  const [registry, stage, ledger] = await Promise.all([
+  const [registry, stage] = await Promise.all([
     loadVentureRegistry(),
     input.stage ?? readFile(path.join(configRoot, "stages.json"), "utf8")
-      .then((raw) => (JSON.parse(raw) as { current: Stage }).current),
-    ledgerSnapshot(root, date, input.now)
+      .then((raw) => (JSON.parse(raw) as { current: Stage }).current)
   ]);
   const { meeting } = getVentureMeetingDefinition(registry, "dm-growth");
-  const summary = due
+  let actionPacket: ActionPacket | null = null;
+  let actionPacketPath: string | null = null;
+  let spendUsd = 0;
+  let bookerParticipated = false;
+  let roomStatus: "PLAN" | "NO_ACTION" | "PAUSED" | "FAILED" = due ? "NO_ACTION" : input.dry ? "NO_ACTION" : "PAUSED";
+  let summary = due
     ? `No action packet was drafted. The dry room selected ${agenda.topic.title} for ${agenda.isoWeek}; no provider or external system was called.`
     : "$0 — this room meets on Thursdays. Nothing was spent and no action was taken.";
+  if (due && !input.dry) {
+    try {
+      const called = await callDoorMoneyBooker({
+        root,
+        cycleId: input.cycleId,
+        now: input.now,
+        date,
+        stage,
+        agenda,
+        envelopeUsd: meeting.envelopeUsd,
+        call: input.call,
+        budgetContext: input.budgetContext
+      });
+      bookerParticipated = true;
+      spendUsd = called.usd;
+      const nextPacketPath = `ventures/door-money/actions/${date}.json`;
+      await atomicWriteJson(root, nextPacketPath, called.packet);
+      actionPacket = called.packet;
+      actionPacketPath = nextPacketPath;
+      roomStatus = actionPacket.outcome === "ACTIONS" ? "PLAN" : "NO_ACTION";
+      summary = actionPacket.outcome === "ACTIONS"
+        ? `${actionPacket.tasks.length} owner-executable action${actionPacket.tasks.length === 1 ? "" : "s"} prepared for review. Nothing was sent, posted or spent beyond the recorded BOOKER call.`
+        : `Honest NO_ACTION: ${actionPacket.noActionReason} Nothing was sent, posted or invented to fill the packet.`;
+    } catch (error) {
+      bookerParticipated = error instanceof ModelOutputParseError;
+      spendUsd = error instanceof ModelOutputParseError ? error.usd : 0;
+      roomStatus = error instanceof BudgetError ? "PAUSED" : "FAILED";
+      const detail = (error instanceof Error ? error.message : String(error))
+        .replace(/(?:\/[^\s:]+)+/gu, "[private path]")
+        .slice(0, 500);
+      summary = `${error instanceof BudgetError ? "Budget gate paused BOOKER" : "BOOKER failed"}: ${detail} No task was invented, stored, sent or posted.`;
+    }
+  }
+  const { cycleUsd, ...ledger } = await ledgerSnapshot(root, date, input.now, input.cycleId);
+  spendUsd = Math.max(spendUsd, cycleUsd);
   const openedAt = input.now.toISOString();
   const closedAt = new Date(input.now.getTime() + 1_000).toISOString();
-  const chair = meeting.cast[0]!;
+  const chair = bookerParticipated || input.dry ? meeting.cast[0]! : "AUDIT";
   const estimatedCycleUsd = due ? meeting.envelopeUsd : 0;
+  const participantReasons = meeting.cast.map((agent) => {
+    const participated = due && (agent === "BOOKER" ? input.dry || bookerParticipated : true);
+    return {
+      agent,
+      reason: !due
+        ? "registered for the room but not asked anything because the room meets on Thursdays"
+        : agent === "BOOKER"
+          ? participated
+            ? `prepared the bounded ${agenda.topic.title} response without external action`
+            : "the budget or provider boundary closed before BOOKER returned a usable response"
+          : "reviewed the bounded growth-room posture without taking external action",
+      participated
+    };
+  });
+  const decisionOutcome = actionPacket?.outcome === "ACTIONS" ? "PLAN" : "NO_ACTION";
   const record = MeetingRecordSchema.parse({
     schemaVersion: "meeting-record/2",
     cycleId: input.cycleId,
@@ -140,23 +197,25 @@ export async function runDoorMoneyGrowthCycle(input: {
     phase: "dm-growth",
     kind: "dm-growth",
     fixture: input.dry,
-    status: due ? "NO_ACTION" : input.dry ? "NO_ACTION" : "PAUSED",
+    status: roomStatus,
     stage,
     operatingBrief: due
       ? `${agenda.isoWeek} · ${agenda.topic.title}. Prepare owner-executable research without outreach, publishing, account action or spend.`
       : "This room meets on Thursdays. Nothing was spent.",
-    participantReasons: meeting.cast.map((agent) => ({
-      agent,
-      reason: due
-        ? `registered for the dry growth room on ${agenda.topic.title}`
-        : "registered for the room but not asked anything because the room meets on Thursdays",
-      participated: due
+    participantReasons,
+    ledger: { estimatedCycleUsd, actualCycleUsd: spendUsd, ...ledger },
+    decision: { outcome: decisionOutcome, summary, evidenceRefs: actionPacket?.contextRefs ?? [] },
+    proposals: (actionPacket?.tasks ?? []).map((task) => ({
+      agent: "BOOKER",
+      summary: `${task.title}: ${task.why}`.slice(0, 600),
+      evidenceRefs: task.evidenceRefs
     })),
-    ledger: { estimatedCycleUsd, actualCycleUsd: 0, ...ledger },
-    decision: { outcome: "NO_ACTION", summary, evidenceRefs: [] },
-    proposals: [],
     voteMatrix: due
-      ? meeting.cast.map((voter) => ({ voter, firstChoice: "NO_ACTION", veto: false }))
+      ? meeting.cast.filter((voter) => voter !== "BOOKER").map((voter) => ({
+          voter,
+          firstChoice: decisionOutcome === "PLAN" ? "owner-action-packet" : "NO_ACTION",
+          veto: false
+        }))
       : [],
     tasks: [],
     growthPlan: "Nothing was published, posted, scheduled, bought or sent; no account or channel was touched and no spend was authorized.",
@@ -166,7 +225,9 @@ export async function runDoorMoneyGrowthCycle(input: {
       closedAt,
       gavel: chair,
       setting: due
-        ? `Deterministic dry growth room for ${agenda.isoWeek}: ${agenda.topic.title}. No provider or external system was called.`
+        ? input.dry
+          ? `Deterministic dry growth room for ${agenda.isoWeek}: ${agenda.topic.title}. No provider or external system was called.`
+          : `Bounded growth room for ${agenda.isoWeek}: ${agenda.topic.title}. No external action path exists in this runner.`
         : "The Thursday gate closed before any seat was called.",
       turns: [{ agent: chair, mode: "close", sentAt: closedAt, text: summary }]
     },
@@ -187,11 +248,12 @@ export async function runDoorMoneyGrowthCycle(input: {
     atomicWriteJson(root, meetingPath, record),
     atomicWriteJson(root, decisionPath, {
       schemaVersion: 1, fixture: input.dry, cycleId: input.cycleId, phase: "dm-growth",
-      outcome: "NO_ACTION", summary, evidenceRefs: [], generatedAt: closedAt
+      outcome: decisionOutcome, summary, evidenceRefs: actionPacket?.contextRefs ?? [], generatedAt: closedAt
     }),
     atomicWriteJson(root, scorecardPath, {
       schemaVersion: 1, fixture: input.dry, cycleId: input.cycleId, phase: "dm-growth",
-      estimatedWorstCaseUsd: estimatedCycleUsd, actualUsd: 0, participants: due ? [...meeting.cast] : [],
+      estimatedWorstCaseUsd: estimatedCycleUsd, actualUsd: spendUsd,
+      participants: participantReasons.filter(({ participated }) => participated).map(({ agent }) => agent),
       agenda: { isoWeek: agenda.isoWeek, topicId: agenda.topic.id }, generatedAt: closedAt
     }),
     writeCalendarFeed(root, calendar)
@@ -200,13 +262,19 @@ export async function runDoorMoneyGrowthCycle(input: {
     cycleId: input.cycleId,
     phase: "dm-growth",
     dry: input.dry,
-    status: input.dry ? "dry_complete" : "paused",
-    decision: input.dry ? "NO_ACTION" : "PAUSED",
+    status: input.dry
+      ? "dry_complete"
+      : roomStatus === "PLAN" || roomStatus === "NO_ACTION" ? "live_complete" : "paused",
+    decision: roomStatus === "PLAN"
+      ? "PLAN"
+      : roomStatus === "NO_ACTION" ? "NO_ACTION" : "PAUSED",
     estimatedWorstCaseUsd: estimatedCycleUsd,
-    selectedAgents: due ? [...meeting.cast] : [],
-    skippedAgents: due ? [] : [...meeting.cast],
-    artifacts: [meetingPath, decisionPath, scorecardPath, calendarPath]
+    selectedAgents: participantReasons.filter(({ participated }) => participated).map(({ agent }) => agent),
+    skippedAgents: participantReasons.filter(({ participated }) => !participated).map(({ agent }) => agent),
+    artifacts: [meetingPath, decisionPath, scorecardPath, calendarPath, actionPacketPath]
+      .filter((relative): relative is string => relative !== null)
       .map((relative) => path.relative(repoRoot, path.join(root, relative))),
-    agenda
+    agenda,
+    actionPacket
   };
 }

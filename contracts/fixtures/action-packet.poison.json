@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "action-packet/1",
+  "id": "action-packet-2026-08-13-poison",
+  "ventureId": "door-money",
+  "date": "2026-08-13",
+  "weekOf": "2026-08-10",
+  "agenda": {
+    "isoWeek": "2026-W33",
+    "topicId": "launch-mechanics",
+    "title": "Launch mechanics"
+  },
+  "title": "A padded no-action packet",
+  "summary": "This fixture claims no action while still inventing one.",
+  "outcome": "NO_ACTION",
+  "noActionReason": "The synthetic evidence did not support an owner task.",
+  "contextRefs": [],
+  "tasks": [
+    {
+      "id": "invent-an-unsupported-task",
+      "title": "Invent a task anyway",
+      "why": "This deliberately violates the honest no-action boundary.",
+      "steps": ["Pretend the missing evidence exists."],
+      "templates": [
+        {
+          "id": "unsupported-template",
+          "label": "Unsupported draft",
+          "kind": "other",
+          "body": "Synthetic poison text."
+        }
+      ],
+      "effort": "Unknown",
+      "expectedImpact": "An invented result.",
+      "evidenceRefs": ["missing:result"],
+      "completion": null
+    }
+  ],
+  "generatedAt": "2026-08-13T14:00:00.000Z",
+  "updatedAt": "2026-08-13T14:00:00.000Z"
+}
