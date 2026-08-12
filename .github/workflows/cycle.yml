@@ -31,6 +31,7 @@ on:
           - article-am
           - mma-analysis
           - mag-desk
+          - kv-desk
           - night
       trigger:
         # What kind of firing this dispatch is, which decides whether it claims a slot.
@@ -265,7 +266,7 @@ jobs:
             fi
             echo "$skip_reason"
           fi
-          if test "$dry" != "true" && { test "$phase" = "tt-marketing" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "mag-desk"; }; then
+          if test "$dry" != "true" && { test "$phase" = "tt-marketing" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "mag-desk" || test "$phase" = "kv-desk"; }; then
             if test "$PORTFOLIO_LIVE_ENABLED" != "true"; then
               skip=true
               skip_reason="Portfolio meeting crons await explicit owner approval."

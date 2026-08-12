@@ -69,6 +69,12 @@ describe("automation policy", () => {
     expect(cycle).toContain("INPUT_DELIVERY_ONLY");
     expect(cycle).toContain("Delivery-only mode requires a manual dispatch");
     expect(cycle).toContain("PORTFOLIO_LIVE_ENABLED");
+    const kvorumOption = cycle.match(/^ {10}- kv-desk$/gmu) ?? [];
+    expect(kvorumOption, "kv-desk must be one manual dispatch choice").toHaveLength(1);
+    const scheduleGateStart = cycle.indexOf('if test "$dry" != "true" && { test "$phase" = "tt-marketing"');
+    const scheduleGateEnd = cycle.indexOf("schedule_json=", scheduleGateStart);
+    expect(scheduleGateStart, "the countersign-aware portfolio gate is missing").toBeGreaterThan(-1);
+    expect(cycle.slice(scheduleGateStart, scheduleGateEnd)).toContain('test "$phase" = "kv-desk"');
     expect(cycle).toContain("FIGHTAIQ_LIVE_ENABLED");
     expect(cycle).toContain("FIGHTAIQ_ANALYSIS_ENABLED");
     expect(cycle).toContain("MMA_FILES_LIVE_ENABLED");
