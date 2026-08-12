@@ -7,6 +7,7 @@ import {
   StreamSyncReceiptSchema,
 } from "../src/contracts/boardless-stream.js";
 import { BoardlessEventsSchema } from "../src/contracts/boardless-events.js";
+import { KvorumSourceRegistrySchema } from "../src/contracts/kvorum-sources.js";
 import { canonicalUrl, mergeStream, normalizeItem, publishedDate, streamItemId } from "../src/streams/normalize.js";
 import { parseDuration, parseFeed, podcastIndexHeaders, syncStream } from "../src/streams/fetch.js";
 import { loadStreamRegistry, registryHosts, sourcesFor } from "../src/streams/registry.js";
@@ -226,11 +227,17 @@ describe("the curated registry", () => {
     for (const source of disabled) expect(source.note).toBeTruthy();
   });
 
-  it("puts every enabled host in the network allowlist", () => {
+  it("puts every enabled stream and Kvórum feed host in the network allowlist", () => {
     const allow = JSON.parse(
       readFileSync(path.join(repoRoot, "config/network-allowlist.json"), "utf8"),
     ) as { runtimeHosts: string[] };
-    const enabled = registry.sources.filter((s) => s.enabled).map((s) => s.host);
+    const kvorum = KvorumSourceRegistrySchema.parse(
+      JSON.parse(readFileSync(path.join(repoRoot, "config/kvorum-sources.json"), "utf8")),
+    );
+    const enabled = [
+      ...registry.sources.filter((source) => source.enabled).map((source) => source.host),
+      ...kvorum.feeds.filter((feed) => feed.enabled).map((feed) => feed.host),
+    ];
     for (const host of new Set(enabled)) {
       expect(allow.runtimeHosts, `${host} must be allowlisted`).toContain(host);
     }
