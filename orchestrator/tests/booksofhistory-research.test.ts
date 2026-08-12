@@ -3,13 +3,17 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { BhResearchBriefBundle } from "../src/contracts/bh-research-brief.js";
+import type { BhResearchLedgerEntry } from "../src/contracts/bh-dossier.js";
 import type { BhSeedLibrary } from "../src/contracts/bh-seed.js";
 import type { guardedJsonCall } from "../src/llm/call.js";
 import { repoRoot } from "../src/paths.js";
 import type { RawResearch, ResearchProvider } from "../src/research/provider.js";
 import {
   assessBhResearchNeed,
+  appendBhResearchLedger,
+  BH_RESEARCH_LEDGER_PATH,
   bhDossierPath,
+  parseBhResearchLedgerJsonl,
   runBhCandidateResearch,
   type BhSynthCallConfig
 } from "../src/ventures/booksofhistory/research.js";
@@ -86,7 +90,13 @@ function synthCall() {
   const call = vi.fn(async (request: Parameters<typeof guardedJsonCall>[0]) => ({
     value: request.parse(JSON.stringify(synthesis())),
     cached: false,
-    usd: 0.01
+    usd: 0.01,
+    usage: {
+      model: "claude-haiku-4-5-20251001",
+      tokensIn: 300,
+      tokensOut: 150,
+      toolUses: 0
+    }
   }));
   return call as unknown as typeof guardedJsonCall & typeof call;
 }
@@ -118,7 +128,7 @@ function callConfig(): BhSynthCallConfig {
 describe("BOOKSOFHISTORY candidate research", () => {
   it("gathers, synthesizes and writes byte-stable normalized and raw dossier files", async () => {
     const { book, brief } = await fixtureInput();
-    const outputs: Array<{ dossier: string; raw: string }> = [];
+    const outputs: Array<{ dossier: string; raw: string; ledger: string }> = [];
     for (let index = 0; index < 2; index += 1) {
       const root = await mkdtemp(path.join(os.tmpdir(), "quorum-bh-research-"));
       roots.push(root);
@@ -131,6 +141,7 @@ describe("BOOKSOFHISTORY candidate research", () => {
         provider: gather.value,
         gatherEnvelopeUsd: 0.1,
         researchedAt: new Date("2026-08-12T10:10:02.000Z"),
+        requestingMeetingRef: "meetings/2026-08-12-bh-desk.json",
         synthCallConfig: callConfig(),
         synthCall: synth
       });
@@ -149,13 +160,15 @@ describe("BOOKSOFHISTORY candidate research", () => {
       const rawRef = result.status === "researched" ? result.rawRef : "";
       outputs.push({
         dossier: await readFile(path.join(root, bhDossierPath(book.bookId)), "utf8"),
-        raw: await readFile(path.join(root, rawRef), "utf8")
+        raw: await readFile(path.join(root, rawRef), "utf8"),
+        ledger: await readFile(path.join(root, BH_RESEARCH_LEDGER_PATH), "utf8")
       });
     }
 
     expect(outputs[0]).toEqual(outputs[1]);
     const dossier = JSON.parse(outputs[0]!.dossier);
     const raw = JSON.parse(outputs[0]!.raw);
+    const ledger = parseBhResearchLedgerJsonl(outputs[0]!.ledger);
     expect(dossier).toMatchObject({
       schemaVersion: "bh-dossier/1",
       bookId: book.bookId,
@@ -169,6 +182,10 @@ describe("BOOKSOFHISTORY candidate research", () => {
       briefHash: brief.briefHash,
       research: { response: rawResearch().response }
     });
+    expect(ledger).toEqual([
+      expect.objectContaining({ step: "gather", searches: 1, costUsd: 0.02, used: false }),
+      expect.objectContaining({ step: "synth", searches: 0, costUsd: 0.01, tokensIn: 300, used: false })
+    ]);
   });
 
   it("reuses a fresh, trustworthy, answered and sufficient shelf without either call", async () => {
@@ -183,6 +200,7 @@ describe("BOOKSOFHISTORY candidate research", () => {
       provider: firstGather.value,
       gatherEnvelopeUsd: 0.1,
       researchedAt: new Date("2026-08-12T10:10:02.000Z"),
+      requestingMeetingRef: "meetings/2026-08-12-bh-desk.json",
       synthCallConfig: callConfig(),
       synthCall: synthCall()
     });
@@ -195,6 +213,7 @@ describe("BOOKSOFHISTORY candidate research", () => {
       provider: secondGather.value,
       gatherEnvelopeUsd: 0.1,
       researchedAt: new Date("2026-08-13T10:10:02.000Z"),
+      requestingMeetingRef: "meetings/2026-08-12-bh-desk.json",
       synthCallConfig: callConfig(),
       synthCall: secondSynth
     });
@@ -227,5 +246,26 @@ describe("BOOKSOFHISTORY candidate research", () => {
       decision: "research",
       reason: "unanswered-question"
     });
+  });
+
+  it("appends validated research ledger lines without rewriting existing bytes", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "quorum-bh-ledger-"));
+    roots.push(root);
+    const fixture = JSON.parse(await readFile(
+      path.join(repoRoot, "contracts/fixtures/bh-research-ledger.valid.json"),
+      "utf8"
+    )) as BhResearchLedgerEntry;
+    await appendBhResearchLedger(root, [fixture]);
+    const before = await readFile(path.join(root, BH_RESEARCH_LEDGER_PATH), "utf8");
+    await appendBhResearchLedger(root, [{
+      ...fixture,
+      step: "synth",
+      searches: 0,
+      startedAt: fixture.completedAt,
+      costUsd: 0.01
+    }]);
+    const after = await readFile(path.join(root, BH_RESEARCH_LEDGER_PATH), "utf8");
+    expect(after.startsWith(before)).toBe(true);
+    expect(parseBhResearchLedgerJsonl(after)).toHaveLength(2);
   });
 });

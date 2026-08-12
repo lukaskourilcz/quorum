@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "bh-dossier/1"
+    },
+    "bookId": {
+      "type": "string",
+      "maxLength": 120,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "bookRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "author": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "answeredBriefHashes": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      }
+    },
+    "rawRefs": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "supplementRefs": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "researchedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "claims": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claimId": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^claim-[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 1000
+          },
+          "sources": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/"
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "category": {
+                  "type": "string",
+                  "enum": [
+                    "primary",
+                    "archive",
+                    "scholarship",
+                    "journalism",
+                    "reference"
+                  ]
+                }
+              },
+              "required": [
+                "url",
+                "title",
+                "category"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "corroboration": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "verificationState": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "probable",
+              "single-source",
+              "legend",
+              "rejected"
+            ]
+          },
+          "publicationSuitable": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "claimId",
+          "text",
+          "sources",
+          "confidence",
+          "corroboration",
+          "verificationState",
+          "publicationSuitable"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "storyCandidates": {
+      "minItems": 1,
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "storyId": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^story-[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "angle": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 300
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "claimRefs": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 120,
+              "pattern": "^claim-[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          },
+          "used": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "storyId",
+          "angle",
+          "score",
+          "claimRefs",
+          "used"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "quotes": {
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "attribution": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "sourceUrl": {
+            "type": "string",
+            "pattern": "^https:\\/\\/"
+          },
+          "claimRef": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^claim-[a-z0-9]+(?:-[a-z0-9]+)*$"
+          }
+        },
+        "required": [
+          "text",
+          "attribution",
+          "sourceUrl",
+          "claimRef"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "visualNotes": {
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 8,
+        "maxLength": 500
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "bookId",
+    "bookRef",
+    "title",
+    "author",
+    "answeredBriefHashes",
+    "rawRefs",
+    "supplementRefs",
+    "researchedAt",
+    "updatedAt",
+    "claims",
+    "storyCandidates",
+    "quotes",
+    "visualNotes"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/bh-dossier.schema.json"
+}

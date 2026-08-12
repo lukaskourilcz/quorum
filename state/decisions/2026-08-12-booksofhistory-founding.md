@@ -114,7 +114,7 @@ post anything.
 - [x] **BH-09b** — The `anthropic-web-search` adapter over the guarded funnel
 - [x] **BH-10** — Research briefs from the editorial meeting
 - [x] **BH-11a** — Research runs and dossier writes
-- [ ] **BH-11b** — Dossier and research-ledger contracts
+- [x] **BH-11b** — Dossier and research-ledger contracts
 - [ ] **BH-11c** — Research idempotency, in-flight lock and ceilings
 - [ ] **BH-11d** — Supplemental freshness calls
 - [ ] **BH-12a** — Deterministic claim triage

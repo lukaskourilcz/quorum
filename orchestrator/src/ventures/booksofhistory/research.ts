@@ -1,4 +1,14 @@
-import { z } from "zod";
+import { appendFile, mkdir, readFile } from "node:fs/promises";
+import path from "node:path";
+import {
+  BhDossierSchema,
+  BhDossierSynthesisSchema,
+  BhResearchLedgerEntrySchema,
+  BhVerificationStateSchema,
+  type BhDossier,
+  type BhDossierSynthesis,
+  type BhResearchLedgerEntry
+} from "../../contracts/bh-dossier.js";
 import type { BhResearchBriefEntry } from "../../contracts/bh-research-brief.js";
 import type { BhSeedRecord } from "../../contracts/bh-seed.js";
 import { guardedJsonCall, type GuardedCallInput } from "../../llm/call.js";
@@ -7,94 +17,7 @@ import { atomicWriteJson, readJson } from "../../state.js";
 import { BH_SHELF_STORY_THRESHOLD } from "./score.js";
 
 export const BH_DOSSIER_STALE_DAYS = 90;
-
-const VerificationStateSchema = z.enum([
-  "verified",
-  "probable",
-  "single-source",
-  "legend",
-  "rejected"
-]);
-
-const SourceSchema = z.strictObject({
-  url: z.string().url(),
-  title: z.string().trim().min(1).max(300),
-  category: z.enum(["primary", "archive", "scholarship", "journalism", "reference"])
-});
-
-const ClaimSchema = z.strictObject({
-  claimId: z.string().regex(/^claim-[a-z0-9]+(?:-[a-z0-9]+)*$/).max(120),
-  text: z.string().trim().min(8).max(1_000),
-  sources: z.array(SourceSchema).min(1).max(20),
-  confidence: z.number().min(0).max(1),
-  corroboration: z.number().int().min(1).max(20),
-  verificationState: VerificationStateSchema,
-  publicationSuitable: z.boolean()
-}).superRefine((claim, context) => {
-  if (claim.corroboration > claim.sources.length) {
-    context.addIssue({ code: "custom", message: "Corroboration cannot exceed cited sources", path: ["corroboration"] });
-  }
-  if (["legend", "rejected"].includes(claim.verificationState) && claim.publicationSuitable) {
-    context.addIssue({ code: "custom", message: "Legend and rejected claims are not initially publication-suitable", path: ["publicationSuitable"] });
-  }
-});
-
-const StoryCandidateSchema = z.strictObject({
-  storyId: z.string().regex(/^story-[a-z0-9]+(?:-[a-z0-9]+)*$/).max(120),
-  angle: z.string().trim().min(8).max(300),
-  score: z.number().min(0).max(100),
-  claimRefs: z.array(z.string().regex(/^claim-[a-z0-9]+(?:-[a-z0-9]+)*$/)).min(1).max(20),
-  used: z.literal(false)
-});
-
-const QuoteSchema = z.strictObject({
-  text: z.string().trim().min(1).max(300),
-  attribution: z.string().trim().min(1).max(300),
-  sourceUrl: z.string().url(),
-  claimRef: z.string().regex(/^claim-[a-z0-9]+(?:-[a-z0-9]+)*$/)
-});
-
-const VisualNoteSchema = z.string().trim().min(8).max(500).refine(
-  (note) => !/\b(?:book[ -]?)?cover(?:s| art| artwork)?\b/iu.test(note),
-  "Visual notes cannot request or describe cover artwork"
-);
-
-/** Internal normalization boundary; BH-11b publishes the same shape as a repository contract. */
-export const BhDossierSynthesisSchema = z.strictObject({
-  claims: z.array(ClaimSchema).min(1).max(100),
-  storyCandidates: z.array(StoryCandidateSchema).min(1).max(30),
-  quotes: z.array(QuoteSchema).max(30),
-  visualNotes: z.array(VisualNoteSchema).max(30)
-}).superRefine((dossier, context) => {
-  const claimIds = new Set(dossier.claims.map(({ claimId }) => claimId));
-  for (const [storyIndex, story] of dossier.storyCandidates.entries()) {
-    for (const claimRef of story.claimRefs) {
-      if (!claimIds.has(claimRef)) {
-        context.addIssue({ code: "custom", message: "Story references an unknown claim", path: ["storyCandidates", storyIndex, "claimRefs"] });
-      }
-    }
-  }
-  for (const [quoteIndex, quote] of dossier.quotes.entries()) {
-    if (!claimIds.has(quote.claimRef)) {
-      context.addIssue({ code: "custom", message: "Quote references an unknown claim", path: ["quotes", quoteIndex, "claimRef"] });
-    }
-  }
-});
-
-export const BhDossierDraftSchema = BhDossierSynthesisSchema.extend({
-  schemaVersion: z.literal("bh-dossier/1"),
-  bookId: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(120),
-  bookRef: z.string().min(1).max(500),
-  title: z.string().trim().min(1).max(240),
-  author: z.string().trim().min(1).max(160),
-  answeredBriefHashes: z.array(z.string().regex(/^[a-f0-9]{64}$/)).min(1).max(100),
-  rawRefs: z.array(z.string().min(1).max(500)).min(1).max(100),
-  supplementRefs: z.array(z.string().min(1).max(500)).max(100),
-  researchedAt: z.string().datetime(),
-  updatedAt: z.string().datetime()
-});
-
-export type BhDossierDraft = z.infer<typeof BhDossierDraftSchema>;
+export const BH_RESEARCH_LEDGER_PATH = "ventures/booksofhistory/research-ledger.jsonl";
 
 export interface BhResearchPrecheck {
   existingDossier: boolean;
@@ -116,7 +39,7 @@ export function assessBhResearchNeed(input: {
   briefHash: string;
   now: Date;
 }): BhResearchPrecheck {
-  const parsed = BhDossierDraftSchema.safeParse(input.dossier);
+  const parsed = BhDossierSchema.safeParse(input.dossier);
   const dossier = parsed.success ? parsed.data : null;
   const existingDossier = input.dossier !== null;
   const questionAnswered = dossier?.answeredBriefHashes.includes(input.briefHash) ?? false;
@@ -155,8 +78,33 @@ export function bhRawResearchPath(bookId: string, briefHash: string): string {
   return `ventures/booksofhistory/dossiers/${bookId}/raw/${briefHash}.json`;
 }
 
+export function parseBhResearchLedgerJsonl(raw: string): BhResearchLedgerEntry[] {
+  return raw.split(/\r?\n/u).filter(Boolean).map((line) =>
+    BhResearchLedgerEntrySchema.parse(JSON.parse(line))
+  );
+}
+
+/** Validate the complete existing ledger, then append new immutable lines without rewriting it. */
+export async function appendBhResearchLedger(
+  root: string,
+  entries: readonly BhResearchLedgerEntry[]
+): Promise<void> {
+  if (entries.length === 0) return;
+  const file = path.join(root, BH_RESEARCH_LEDGER_PATH);
+  let existing = "";
+  try {
+    existing = await readFile(file, "utf8");
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+  }
+  parseBhResearchLedgerJsonl(existing);
+  const parsed = entries.map((entry) => BhResearchLedgerEntrySchema.parse(entry));
+  await mkdir(path.dirname(file), { recursive: true });
+  await appendFile(file, parsed.map((entry) => `${JSON.stringify(entry)}\n`).join(""), "utf8");
+}
+
 export type BhSynthCallConfig = Omit<
-  GuardedCallInput<z.infer<typeof BhDossierSynthesisSchema>>,
+  GuardedCallInput<BhDossierSynthesis>,
   "input" | "parse"
 >;
 
@@ -187,14 +135,14 @@ function synthPacket(input: {
       quoteMaximumCharacters: 300,
       quoteAttributionRequired: true,
       coverArtworkForbidden: true,
-      acceptedInitialStates: VerificationStateSchema.options
+      acceptedInitialStates: BhVerificationStateSchema.options
     }
   });
 }
 
 export type BhCandidateResearchResult =
-  | { status: "reused"; precheck: BhResearchPrecheck; dossier: BhDossierDraft }
-  | { status: "researched"; precheck: BhResearchPrecheck; dossier: BhDossierDraft; rawRef: string; dossierRef: string };
+  | { status: "reused"; precheck: BhResearchPrecheck; dossier: BhDossier }
+  | { status: "researched"; precheck: BhResearchPrecheck; dossier: BhDossier; rawRef: string; dossierRef: string };
 
 /** The sole writer for normalized BOOKSOFHISTORY dossiers and their retained raw response. */
 export async function runBhCandidateResearch(input: {
@@ -204,6 +152,7 @@ export async function runBhCandidateResearch(input: {
   provider: ResearchProvider;
   gatherEnvelopeUsd: number;
   researchedAt: Date;
+  requestingMeetingRef: string;
   synthCallConfig: BhSynthCallConfig;
   synthCall?: typeof guardedJsonCall;
 }): Promise<BhCandidateResearchResult> {
@@ -215,7 +164,7 @@ export async function runBhCandidateResearch(input: {
     now: input.researchedAt
   });
   if (precheck.decision === "reuse") {
-    return { status: "reused", precheck, dossier: BhDossierDraftSchema.parse(stored) };
+    return { status: "reused", precheck, dossier: BhDossierSchema.parse(stored) };
   }
 
   const raw = await input.provider.researchBook({
@@ -230,8 +179,8 @@ export async function runBhCandidateResearch(input: {
     parse: (text) => BhDossierSynthesisSchema.parse(JSON.parse(text))
   });
   const rawRef = bhRawResearchPath(input.book.bookId, input.brief.briefHash);
-  const previous = BhDossierDraftSchema.safeParse(stored);
-  const dossier = BhDossierDraftSchema.parse({
+  const previous = BhDossierSchema.safeParse(stored);
+  const dossier = BhDossierSchema.parse({
     schemaVersion: "bh-dossier/1",
     bookId: input.book.bookId,
     bookRef: input.brief.bookRef,
@@ -256,5 +205,51 @@ export async function runBhCandidateResearch(input: {
     research: raw
   });
   await atomicWriteJson(input.root, dossierRef, dossier);
+  if (precheck.reason === "shelf-sufficient") {
+    throw new Error("A reused shelf dossier cannot reach the research ledger writer");
+  }
+  const synthUsage = normalized.usage;
+  await appendBhResearchLedger(input.root, [
+    BhResearchLedgerEntrySchema.parse({
+      schemaVersion: "bh-research-ledger/1",
+      step: "gather",
+      provider: raw.providerId,
+      model: raw.model,
+      startedAt: raw.startedAt,
+      completedAt: raw.completedAt,
+      bookId: input.book.bookId,
+      bookRef: input.brief.bookRef,
+      briefHash: input.brief.briefHash,
+      reason: precheck.reason,
+      tokensIn: raw.tokensIn,
+      tokensOut: raw.tokensOut,
+      searches: raw.searchUses,
+      costUsd: raw.usd,
+      requestingMeetingRef: input.requestingMeetingRef,
+      rawRef,
+      dossierRef,
+      used: false
+    }),
+    BhResearchLedgerEntrySchema.parse({
+      schemaVersion: "bh-research-ledger/1",
+      step: "synth",
+      provider: input.synthCallConfig.provider,
+      model: synthUsage?.model ?? input.synthCallConfig.model,
+      startedAt: input.researchedAt.toISOString(),
+      completedAt: input.researchedAt.toISOString(),
+      bookId: input.book.bookId,
+      bookRef: input.brief.bookRef,
+      briefHash: input.brief.briefHash,
+      reason: precheck.reason,
+      tokensIn: synthUsage?.tokensIn ?? 0,
+      tokensOut: synthUsage?.tokensOut ?? 0,
+      searches: 0,
+      costUsd: normalized.usd,
+      requestingMeetingRef: input.requestingMeetingRef,
+      rawRef,
+      dossierRef,
+      used: false
+    })
+  ]);
   return { status: "researched", precheck, dossier, rawRef, dossierRef };
 }

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "bh-research-ledger/1"
+    },
+    "step": {
+      "type": "string",
+      "enum": [
+        "gather",
+        "synth"
+      ]
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "startedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "completedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "bookId": {
+      "type": "string",
+      "maxLength": 120,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "bookRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "briefHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "reason": {
+      "type": "string",
+      "enum": [
+        "missing-dossier",
+        "unanswered-question",
+        "untrustworthy",
+        "stale",
+        "thin-shelf"
+      ]
+    },
+    "tokensIn": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "tokensOut": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "searches": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 8
+    },
+    "costUsd": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 0.1
+    },
+    "requestingMeetingRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "rawRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "dossierRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "used": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "step",
+    "provider",
+    "model",
+    "startedAt",
+    "completedAt",
+    "bookId",
+    "bookRef",
+    "briefHash",
+    "reason",
+    "tokensIn",
+    "tokensOut",
+    "searches",
+    "costUsd",
+    "requestingMeetingRef",
+    "rawRef",
+    "dossierRef",
+    "used"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/bh-research-ledger.schema.json"
+}
