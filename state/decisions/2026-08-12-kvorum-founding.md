@@ -236,6 +236,12 @@ section and a receipt line, and a day with no usable cluster records an honest q
   require the article-only recipe and copy unions. They therefore stay explicitly narrowed to those
   two ventures in this commit instead of falsely accepting an incomplete Kvórum workflow. KV-16
   owns the approval transaction that writes a Kvórum summary and makes it a complete Design Lab input.
+- **Approval edit history and Design Lab scope:** the KV-11 recommendation contract carried edit
+  timestamps but no immutable copy of the desk draft. KV-16 adds one nullable full-draft snapshot,
+  populated only on the first real owner edit, so later review can distinguish desk words from owner
+  words. Approval also widens the existing recipe, copy and site-reader unions because writing a
+  summary alone would not make it renderable in the Design Lab. This creates a review artifact only:
+  it grants no social account, channel or publishing authority and cannot call a publisher.
 
 ## Implementation checklist
 
@@ -270,7 +276,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-14 — Recommendation store with idempotency
 - [x] KV-15a — Studio brand tokens for Kvórum
 - [x] KV-15b — Carousel-summary venture extension, byte-compatible
-- [ ] KV-16 — Admin approval write path
+- [x] KV-16 — Admin approval write path
 - [ ] KV-17a — Server-only admin loader
 - [ ] KV-17b — Recommendations panel
 - [ ] KV-17c — Monitor panel

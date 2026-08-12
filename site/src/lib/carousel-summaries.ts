@@ -9,17 +9,16 @@ import {
 } from "@boardlessai/carousel-studio";
 
 /**
- * Every article that reached DNESKAi or MMA Files, as something the Design Lab can render.
+ * Every article or approved Kvórum recommendation the Design Lab can render.
  *
- * Two sources, in that order. Delivery writes a summary beside the package it sent, and that
- * file is the record: it is what the desk actually handed over. Where no such file exists — every
- * article delivered before summaries were written — the same deterministic builder derives one
- * from the package on disk. Both routes run `buildCarouselSummary`, so a derived summary and a
- * recorded one are byte-identical for the same article; the fallback is a backfill, not a second
- * implementation that could disagree with the first.
+ * Delivery or owner approval writes a summary beside its source record, and that summary is what
+ * the Lab received. Where no summary exists for a historical article, the same deterministic
+ * builder derives one from the package on disk. Both routes run `buildCarouselSummary`, so a
+ * derived summary and a recorded one are byte-identical for the same article; the fallback is a
+ * backfill, not a second implementation that could disagree with the first.
  *
- * Nothing here invents an article. A venture with no delivered articles returns an empty list and
- * the studio says so.
+ * Nothing here invents an artifact. A venture with no delivered article or approved recommendation
+ * returns an empty list and the studio says so.
  */
 
 function repositoryRoot(): string {
@@ -29,7 +28,7 @@ function repositoryRoot(): string {
 export interface StudioArticle {
   /** `<venture>:<slug>:<date>`, which is how the studio addresses one. */
   id: string;
-  venture: "caught-up" | "mma-files";
+  venture: "caught-up" | "mma-files" | "kvorum";
   ventureLabel: string;
   summary: CarouselSummary;
   /** Where the summary came from, so the panel can say whether it is recorded or derived. */
@@ -40,7 +39,8 @@ export interface StudioArticle {
 
 const VENTURE_LABEL: Record<StudioArticle["venture"], string> = {
   "caught-up": "DNESKAi",
-  "mma-files": "MMA Files"
+  "mma-files": "MMA Files",
+  kvorum: "Kvórum"
 };
 
 /**
@@ -92,10 +92,10 @@ async function readJsonFiles(directory: string): Promise<Array<{ name: string; v
   }
 }
 
-/** Summaries delivery wrote. One directory per venture, one file per delivered article. */
+/** Summaries delivery or approval wrote. One directory per venture, one file per artifact. */
 async function recordedSummaries(root: string): Promise<Map<string, CarouselSummary>> {
   const recorded = new Map<string, CarouselSummary>();
-  for (const venture of ["caught-up", "mma-files"] as const) {
+  for (const venture of ["caught-up", "mma-files", "kvorum"] as const) {
     const directory = path.join(root, "state", "ventures", "carousel-studio", "summaries", venture);
     for (const { value } of await readJsonFiles(directory)) {
       const summary = value as Partial<CarouselSummary>;
@@ -197,9 +197,6 @@ export async function readStudioArticles(root = repositoryRoot()): Promise<Studi
   ]);
   const byId = new Map<string, StudioArticle>();
   const add = (summary: CarouselSummary, origin: StudioArticle["origin"]) => {
-    // The shared summary contract now knows Kvórum, but this article-backed rail does not until
-    // its approval route supplies the recipe and copy records that the workspace also requires.
-    if (summary.venture === "kvorum") return;
     // Venture, slug *and* date. Three MMA packages redeliver one event and share a slug, so a
     // slug-keyed map collapsed them into one article and the Lab could only ever show the first.
     const id = `${summary.venture}:${summary.slug}:${summary.date}`;

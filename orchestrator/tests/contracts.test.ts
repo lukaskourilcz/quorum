@@ -10,6 +10,7 @@ import { SeasonFileSchema } from "../src/contracts/season.js";
 import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { isRepoPathEvidenceRef } from "../src/mma-files/slate-evidence.js";
 import { ArticlePackageSchema } from "../src/contracts/mma-files.js";
+import { VentureRecommendationSchema } from "../src/contracts/venture-recommendation.js";
 
 const contractNames = Object.keys(ContractSchemas) as ContractName[];
 
@@ -52,6 +53,49 @@ describe("published contracts", () => {
 });
 
 describe("portfolio contract boundaries", () => {
+  it("preserves one complete original draft whenever the owner edits a recommendation", async () => {
+    const draft = await fixture("venture-recommendation", "valid") as Record<string, unknown>;
+    const edited = structuredClone(draft) as {
+      updatedAt: string;
+      status: string;
+      headline: string;
+      designLab: { status: string; requestedAt: string | null };
+      owner: {
+        approvedAt: string | null;
+        original: Record<string, unknown> | null;
+        editHistory: Array<Record<string, unknown>>;
+      };
+    };
+    const editedAt = "2026-08-12T22:00:00.000Z";
+    edited.updatedAt = editedAt;
+    edited.status = "approved";
+    edited.headline = "Owner-edited headline";
+    edited.designLab = { ...edited.designLab, status: "queued", requestedAt: editedAt };
+    edited.owner.approvedAt = editedAt;
+    edited.owner.original = {
+      capturedAt: editedAt,
+      headline: draft.headline,
+      summary: draft.summary,
+      whyItMatters: draft.whyItMatters,
+      whyThisIsWorthIt: draft.whyThisIsWorthIt,
+      ourAngle: draft.ourAngle,
+      ourAngleDiffers: draft.ourAngleDiffers,
+      platforms: draft.platforms,
+      formats: draft.formats,
+      copyBlocks: draft.copyBlocks
+    };
+    edited.owner.editHistory = [{
+      editedAt,
+      changedBy: "owner",
+      fields: ["headline"],
+      note: "Owner edits preserved before approval."
+    }];
+
+    expect(VentureRecommendationSchema.safeParse(edited).success).toBe(true);
+    edited.owner.original = null;
+    expect(VentureRecommendationSchema.safeParse(edited).success).toBe(false);
+  });
+
   it("enforces the adult audience floor and public interest list", async () => {
     const valid = await fixture("audience-spec", "valid") as Record<string, unknown>;
     expect(AudienceSpecSchema.safeParse(valid).success).toBe(true);

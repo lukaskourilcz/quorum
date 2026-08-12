@@ -214,6 +214,7 @@ function buildRecommendation(input: {
       postedUrl: null,
       resultRefs: [],
       ratingRef: null,
+      original: null,
       editHistory: []
     }
   });

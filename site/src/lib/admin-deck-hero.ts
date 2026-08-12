@@ -21,7 +21,8 @@ const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process
  * loader answered a question ("which article?") that the slug alone cannot answer. The date is
  * the rest of the identity, so it is matched too.
  */
-async function heroBase64(venture: "caught-up" | "mma-files", slug: string, date: string): Promise<string | null> {
+async function heroBase64(venture: "caught-up" | "mma-files" | "kvorum", slug: string, date: string): Promise<string | null> {
+  if (venture === "kvorum") return null;
   const directory = venture === "mma-files"
     ? path.join(repositoryRoot, "state/ventures/mma-files/articles")
     : path.join(repositoryRoot, "state/edition/outbox");
@@ -48,7 +49,7 @@ async function heroBase64(venture: "caught-up" | "mma-files", slug: string, date
 }
 
 export async function readArticleHeroPng(
-  venture: "caught-up" | "mma-files",
+  venture: "caught-up" | "mma-files" | "kvorum",
   slug: string,
   date: string
 ): Promise<Buffer | null> {

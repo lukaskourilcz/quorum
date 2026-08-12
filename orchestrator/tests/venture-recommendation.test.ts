@@ -24,6 +24,18 @@ describe("venture-recommendation/1", () => {
       owner: {
         ...draft.owner,
         approvedAt: "2026-08-12T22:00:00.000Z",
+        original: {
+          capturedAt: "2026-08-12T21:30:00.000Z",
+          headline: draft.headline,
+          summary: draft.summary,
+          whyItMatters: draft.whyItMatters,
+          whyThisIsWorthIt: draft.whyThisIsWorthIt,
+          ourAngle: draft.ourAngle,
+          ourAngleDiffers: draft.ourAngleDiffers,
+          platforms: draft.platforms,
+          formats: draft.formats,
+          copyBlocks: draft.copyBlocks
+        },
         editHistory: [{
           editedAt: "2026-08-12T21:30:00.000Z",
           changedBy: "owner",

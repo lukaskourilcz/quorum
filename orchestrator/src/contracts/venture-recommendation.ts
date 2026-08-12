@@ -133,6 +133,19 @@ const CopyBlockSchema = z.strictObject({
   reason: z.string().trim().min(1).max(800)
 });
 
+const OriginalRecommendationDraftSchema = z.strictObject({
+  capturedAt: DateTimeSchema,
+  headline: z.string().trim().min(1).max(240),
+  summary: z.string().trim().min(1).max(2_000),
+  whyItMatters: z.string().trim().min(1).max(2_000),
+  whyThisIsWorthIt: z.string().trim().min(1).max(1_000),
+  ourAngle: z.string().trim().min(1).max(2_000),
+  ourAngleDiffers: z.string().trim().min(1).max(2_000),
+  platforms: z.array(SlugSchema).min(1).max(10),
+  formats: z.array(SlugSchema).min(1).max(20),
+  copyBlocks: z.array(CopyBlockSchema).min(1).max(40)
+});
+
 const GateResultsSchema = z.strictObject({
   evaluatedAt: DateTimeSchema,
   passed: z.boolean(),
@@ -200,6 +213,7 @@ const OwnerFieldsSchema = z.strictObject({
   postedUrl: HttpsUrlSchema.nullable(),
   resultRefs: z.array(EvidenceRefSchema).max(40),
   ratingRef: EvidenceRefSchema.nullable(),
+  original: OriginalRecommendationDraftSchema.nullable(),
   editHistory: z.array(z.strictObject({
     editedAt: DateTimeSchema,
     changedBy: z.literal("owner"),
@@ -213,7 +227,7 @@ const OwnerFieldsSchema = z.strictObject({
       "platforms",
       "formats",
       "copyBlocks"
-    ])).min(1).max(8),
+    ])).min(1).max(9),
     note: z.string().trim().min(1).max(800)
   })).max(100)
 });
@@ -256,6 +270,7 @@ export const VentureRecommendationSchema = z.strictObject({
     { value: recommendation.owner.postedAt, path: ["owner", "postedAt"] },
     { value: recommendation.owner.archivedAt, path: ["owner", "archivedAt"] },
     { value: recommendation.owner.rejectedAt, path: ["owner", "rejectedAt"] },
+    { value: recommendation.owner.original?.capturedAt ?? null, path: ["owner", "original", "capturedAt"] },
     ...recommendation.owner.editHistory.map((edit, index) => ({
       value: edit.editedAt,
       path: ["owner", "editHistory", index, "editedAt"]
@@ -320,6 +335,9 @@ export const VentureRecommendationSchema = z.strictObject({
     if (new Set(edit.fields).size !== edit.fields.length) {
       context.addIssue({ code: "custom", message: "Edit fields must be unique", path: ["owner", "editHistory", index, "fields"] });
     }
+  }
+  if ((owner.original === null) !== (owner.editHistory.length === 0)) {
+    context.addIssue({ code: "custom", message: "Owner edits require one preserved original draft", path: ["owner", "original"] });
   }
   if (owner.approvedAt && owner.postedAt && Date.parse(owner.postedAt) < Date.parse(owner.approvedAt)) {
     context.addIssue({ code: "custom", message: "Posting cannot precede approval", path: ["owner", "postedAt"] });
