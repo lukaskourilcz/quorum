@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "tehdejsi-shortlist/1"
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "factsHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "entries": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "factId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "score": {
+            "type": "number"
+          },
+          "factors": {
+            "type": "object",
+            "properties": {
+              "askability": {
+                "type": "number"
+              },
+              "anniversary": {
+                "type": "number"
+              },
+              "sourceConfidence": {
+                "type": "number"
+              },
+              "countryBalance": {
+                "type": "number"
+              },
+              "tierCost": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "askability",
+              "anniversary",
+              "sourceConfidence",
+              "countryBalance",
+              "tierCost"
+            ],
+            "additionalProperties": false
+          },
+          "veto": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "tier-2-review-required",
+                  "recently-used"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "rank",
+          "factId",
+          "score",
+          "factors",
+          "veto"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "date",
+    "factsHash",
+    "entries"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/tehdejsi-shortlist.schema.json"
+}

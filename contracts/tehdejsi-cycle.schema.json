@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "tehdejsi-cycle/1"
+    },
+    "startedOn": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "production"
+      ]
+    },
+    "dayStatuses": {
+      "type": "object",
+      "properties": {
+        "planning": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "active",
+            "completed"
+          ]
+        },
+        "production": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "active",
+            "completed"
+          ]
+        }
+      },
+      "required": [
+        "planning",
+        "production"
+      ],
+      "additionalProperties": false
+    },
+    "chosenFactIds": {
+      "maxItems": 2,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "shortlistRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "stretch": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "reason": {
+              "type": "string",
+              "enum": [
+                "budget-pressure",
+                "review-required",
+                "no-candidate"
+              ]
+            },
+            "nextAttemptOn": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          },
+          "required": [
+            "count",
+            "reason",
+            "nextAttemptOn"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "startedOn",
+    "phase",
+    "dayStatuses",
+    "chosenFactIds",
+    "shortlistRef",
+    "stretch",
+    "updatedAt"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/tehdejsi-cycle.schema.json"
+}

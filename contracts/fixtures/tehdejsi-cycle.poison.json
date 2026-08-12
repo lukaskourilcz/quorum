@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "tehdejsi-cycle/1",
+  "startedOn": "2026-08-12",
+  "phase": "production",
+  "dayStatuses": { "planning": "active", "production": "active" },
+  "chosenFactIds": [],
+  "shortlistRef": null,
+  "stretch": null,
+  "updatedAt": "2026-08-12T18:11:00.000Z"
+}

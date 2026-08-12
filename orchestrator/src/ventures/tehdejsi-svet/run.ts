@@ -14,6 +14,15 @@ import { configRoot, repoRoot, stateRoot } from "../../paths.js";
 import { loadRuntimeBudgetLimits } from "../../portfolio/limits.js";
 import { signedOwnerDecision } from "../../portfolio/schedule.js";
 import { atomicWriteJson, readJson } from "../../state.js";
+import { loadTehdejsiFacts } from "./facts.js";
+import { buildShortlist, selectableFactIds } from "./scorer.js";
+import {
+  applyTehdejsiCycleDay,
+  createTehdejsiCycle,
+  readTehdejsiCycle,
+  tehdejsiCycleComplete,
+  writeTehdejsiCycle
+} from "./state.js";
 import type { CycleResult } from "../../cycle/types.js";
 import type { Stage } from "../../types.js";
 
@@ -191,6 +200,12 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
   });
   await atomicWriteJson(root, meetingPath, record);
 
+  // The deterministic half of the desk runs even while the room is paused: reading the facts,
+  // ranking them and advancing the cycle costs nothing and calls nothing. What the pause with-
+  // holds is the writing, which is the only part that would spend. So a paused day still leaves
+  // a reviewable shortlist and an honest cycle position rather than a blank.
+  const shortlistPaths = await advanceDeterministicCycle({ root, date, now: input.now });
+
   const [records, skips, articleSlots] = await Promise.all([
     loadMeetingRecords(root),
     loadMeetingSkips(root),
@@ -213,6 +228,62 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
     estimatedWorstCaseUsd: 0,
     selectedAgents: [],
     skippedAgents: [...TEHDEJSI_SVET_CAST],
-    artifacts: [decisionPath, scorecardPath, meetingPath].map((relative) => artifactPath(root, relative))
+    artifacts: [decisionPath, scorecardPath, meetingPath, ...shortlistPaths]
+      .map((relative) => artifactPath(root, relative))
   };
+}
+
+/**
+ * Read the facts, record today's ranking and move the cycle one sitting.
+ *
+ * Everything here is deterministic and free, so it is deliberately outside the pause: a day the
+ * room could not write is still a day the desk can show its work for. A missing or unreadable
+ * facts file costs the shortlist and nothing else — the checkpoint is already recorded, and a
+ * failure here must never take the daily cycle red.
+ */
+async function advanceDeterministicCycle(input: {
+  root: string;
+  date: string;
+  now: Date;
+}): Promise<string[]> {
+  try {
+    const facts = await loadTehdejsiFacts();
+    const existing = await readTehdejsiCycle(input.root);
+    const cycle = existing === null || tehdejsiCycleComplete(existing)
+      ? createTehdejsiCycle({ date: input.date, now: input.now })
+      : existing;
+
+    const written: string[] = [];
+    if (cycle.phase === "planning") {
+      const shortlist = buildShortlist({
+        facts: facts.facts,
+        factsHash: facts.contentHash,
+        date: input.date
+      });
+      const shortlistPath = `ventures/tehdejsi-svet/shortlists/${input.date}.json`;
+      await atomicWriteJson(input.root, shortlistPath, shortlist);
+      written.push(shortlistPath);
+      written.push(await writeTehdejsiCycle(input.root, applyTehdejsiCycleDay({
+        cycle,
+        date: input.date,
+        now: input.now,
+        outcome: {
+          completed: true,
+          chosenFactIds: selectableFactIds(shortlist, 1),
+          shortlistRef: shortlistPath
+        }
+      })));
+      return written;
+    }
+    // Production is the sitting that would write, and writing is what the pause withholds.
+    written.push(await writeTehdejsiCycle(input.root, applyTehdejsiCycleDay({
+      cycle,
+      date: input.date,
+      now: input.now,
+      outcome: { completed: false, pressure: "review-required" }
+    })));
+    return written;
+  } catch {
+    return [];
+  }
 }

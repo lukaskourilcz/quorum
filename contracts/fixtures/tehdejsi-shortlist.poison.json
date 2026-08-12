@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "tehdejsi-shortlist/1",
+  "date": "2026-08-12",
+  "factsHash": "1808b7c4c9500000000000000000000000000000000000000000000000000000",
+  "entries": [
+    {
+      "rank": 1,
+      "factId": "cs-1970s-vecernicek",
+      "score": 18,
+      "factors": { "askability": 8, "anniversary": 4, "sourceConfidence": 4, "countryBalance": 3, "tierCost": 0 },
+      "veto": null
+    },
+    {
+      "rank": 1,
+      "factId": "ua-1986-chornobyl-spring",
+      "score": 4,
+      "factors": { "askability": 3, "anniversary": 4, "sourceConfidence": 6, "countryBalance": 0, "tierCost": -6 },
+      "veto": null
+    }
+  ]
+}

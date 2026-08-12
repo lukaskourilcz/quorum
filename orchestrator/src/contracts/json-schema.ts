@@ -8,6 +8,8 @@ import { BhCycleSchema } from "./bh-cycle.js";
 import { BhSeedLibrarySchema } from "./bh-seed.js";
 import { BhShortlistSchema } from "./bh-shortlist.js";
 import { TehdejsiFactsFileSchema } from "./tehdejsi-facts.js";
+import { TehdejsiCycleSchema } from "./tehdejsi-cycle.js";
+import { TehdejsiShortlistSchema } from "./tehdejsi-shortlist.js";
 import { BhResearchBriefBundleSchema } from "./bh-research-brief.js";
 import { BhDossierSchema, BhResearchLedgerEntrySchema } from "./bh-dossier.js";
 import { CalendarFeedSchema } from "./calendar.js";
@@ -71,6 +73,8 @@ export const ContractSchemas = {
   "bh-seed": BhSeedLibrarySchema,
   "bh-shortlist": BhShortlistSchema,
   "tehdejsi-facts": TehdejsiFactsFileSchema,
+  "tehdejsi-cycle": TehdejsiCycleSchema,
+  "tehdejsi-shortlist": TehdejsiShortlistSchema,
   "bh-research-brief": BhResearchBriefBundleSchema,
   "bh-dossier": BhDossierSchema,
   "bh-research-ledger": BhResearchLedgerEntrySchema,
