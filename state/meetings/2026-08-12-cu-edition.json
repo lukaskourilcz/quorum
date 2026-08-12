@@ -4,7 +4,7 @@
   "date": "2026-08-12",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "HELD",
+  "status": "NEEDS_RECONCILIATION",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -227,7 +227,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "Gemini překonal miliardu uživatelů za kratší dobu než jakýkoli jiný produkt Googlu, čímž se přímý souboj s ChatGPT stává měřitelným – a tato změna měřítka zasahuje každého, kdo staví na AI API.",
+    "summary": "The finished edition failed its content checks on the way out, so it was not published. The owner has the technical report.",
     "evidenceRefs": [
       "source:tensorfeed",
       "source:github-ai-releases",
