@@ -49,7 +49,7 @@ export interface ArticleDeckInput {
   points?: readonly string[];
   /** An MMA Files body, MDX. Used only when there are no structured points. */
   bodyMdx?: string;
-  /** The closing line. Czech, because that is what both magazines publish. */
+  /** The closing line in the summary record's locale. */
   outro: string;
 }
 
@@ -189,9 +189,11 @@ export interface DeckReview {
 }
 
 /** Check a deck against the rules rather than trusting the builder that made it. */
-export function reviewDeck(slides: readonly Slide[]): DeckReview {
+export function reviewDeck(slides: readonly Slide[], mode: "carousel" | "single-image" = "carousel"): DeckReview {
   const problems: string[] = [];
-  if (slides.length < MIN_SLIDES) {
+  if (mode === "single-image" && slides.length !== 1) {
+    problems.push(`A single-image deck needs exactly one slide; this one has ${slides.length}.`);
+  } else if (mode === "carousel" && slides.length < MIN_SLIDES) {
     problems.push(`A deck needs at least ${MIN_SLIDES} slides; this one has ${slides.length}.`);
   }
   if (slides.length > MAX_SLIDES) {

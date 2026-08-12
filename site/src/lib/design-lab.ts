@@ -137,6 +137,7 @@ const DESIGNS: readonly string[] = [...DECK_FAMILIES, "mesh", "editorial", "spot
 
 function deckFor(article: StudioArticle): string[] {
   const summary = article.summary;
+  if (summary.deckMode === "single-image") return [summary.coverLine ?? summary.headline];
   return buildArticleDeck({
     title: summary.headline,
     ...(summary.coverLine ? { coverLine: summary.coverLine } : {}),
@@ -181,12 +182,18 @@ export async function readDesignLab(limit = 40, venture?: string): Promise<LabAr
     const review = reviewDeck(slides.map((slide, index) => ({
       kind: index === 0 ? "cover" as const : index === slides.length - 1 ? "outro" as const : "body" as const,
       text: slide.text
-    })));
+    })), article.summary.deckMode === "single-image" ? "single-image" : "carousel");
     const forArticle = pinned.filter((entry) => entry.venture === venture && entry.slug === slug);
     const override = (forArticle.find((entry) => entry.date === date)
       ?? forArticle.find((entry) => entry.date === undefined)) as (Record<string, unknown> | undefined);
-    const derived = await recordedRecipe(venture, slug, date)
+    const recorded = await recordedRecipe(venture, slug, date);
+    const derivedBase = recorded
       ?? deriveRecipe({ venture, slug, date, hasHero: article.summary.hasHero }, histories.get(venture) ?? []);
+    // A single image is a poster, not the first frame of a random multi-slide family. The owner
+    // can still pin another family afterward through the ordinary Studio override.
+    const derived = !recorded && article.summary.deckMode === "single-image"
+      ? { ...derivedBase, family: "billboard" as const }
+      : derivedBase;
     const recipe = CarouselRecipeSchema.parse({
       ...derived,
       ...(typeof override?.style === "string" && DESIGNS.includes(override.style) ? { family: override.style } : {}),
