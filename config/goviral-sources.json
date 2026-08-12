@@ -106,6 +106,12 @@
       "label": "MMA Files (fighting)",
       "keywords": ["UFC", "Oktagon MMA", "fight week"],
       "hashtags": ["#MMA", "#UFC", "#oktagonmma"]
+    },
+    "door-money": {
+      "label": "Door Money (book and music stories)",
+      "sourceMode": "free",
+      "keywords": ["BookTok", "author marketing", "hip-hop culture", "music industry stories"],
+      "hashtags": ["#BookTok", "#AuthorMarketing", "#HipHopCulture", "#MusicIndustryStories"]
     }
   }
 }

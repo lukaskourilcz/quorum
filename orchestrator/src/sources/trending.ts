@@ -36,6 +36,8 @@ export interface TrendingSignal {
   value: number;
   /** Only for rank signals: which listing the position is in. */
   scope?: string;
+  /** Configured free-only topic sets this measured signal actually names. */
+  topicSets?: string[];
   ref: string;
 }
 
@@ -257,6 +259,7 @@ export const AI_VOCABULARY = [
 export async function collectTrendingSignals(input: FetchInput & {
   aiQueries: readonly string[];
   mmaQueries: readonly string[];
+  topicQueries?: readonly string[];
   subreddits: readonly string[];
 }): Promise<TrendingProviderResult[]> {
   const results = await Promise.all([
@@ -267,6 +270,8 @@ export async function collectTrendingSignals(input: FetchInput & {
       fetchGoogleNewsVolume({ ...input, query, locale: "en" }),
       fetchGoogleNewsVolume({ ...input, query, locale: "cs" })
     ]),
+    ...(input.topicQueries ?? []).slice(0, 3)
+      .map((query) => fetchGoogleNewsVolume({ ...input, query, locale: "en" })),
     ...input.subreddits.slice(0, 4).map((subreddit) => fetchSubredditRanks({ ...input, subreddit }))
   ]);
   return results;

@@ -27,12 +27,27 @@ export function goViralBriefId(date: string): string {
 /** The trends worth naming, in the order the scout ranked them. */
 function trendCalls(trends: GoViralTrends | null): string[] {
   if (!trends) return [];
-  return trends.signals.topHashtags.slice(0, 5).map((signal) => {
+  const paid = trends.signals.topHashtags.slice(0, 5).map((signal) => {
     const delta = signal.weekOverWeekDelta === null
       ? "no prior week to compare against"
       : `${signal.weekOverWeekDelta >= 0 ? "up" : "down"} ${Math.abs(signal.weekOverWeekDelta).toFixed(1)} on last week`;
     return `${signal.hashtag} (${signal.topicSet}): ${signal.engagementPerHour.toFixed(1)} engagements/hour across ${signal.posts} post${signal.posts === 1 ? "" : "s"}, ${delta}.`;
   });
+  const free = trends.freeSignals.flatMap((result) => result.status === "success"
+    ? result.signals
+      .filter((signal) => signal.topicSets.includes("door-money"))
+      .map((signal) => {
+        const measurement = signal.kind === "rank"
+          ? `rank ${signal.value}${signal.scope ? ` in ${signal.scope}` : ""}`
+          : signal.kind === "velocity"
+            ? `${signal.value.toFixed(1)} measured events/hour`
+            : result.provider === "google-news"
+              ? `${signal.value} article${signal.value === 1 ? "" : "s"} in the keyless news reading`
+              : `${signal.value} in the keyless search-volume reading`;
+        return `${signal.topic} (door-money, free ${result.provider} signal): ${measurement}.`;
+      })
+    : []);
+  return [...paid, ...free.slice(0, 5)];
 }
 
 export function buildGoViralWeeklyBrief(input: {

@@ -27,7 +27,8 @@ import {
   loadGoViralSourceRegistry,
   mayRunApify,
   recordActorUsage,
-  runMmaApifySources
+  runMmaApifySources,
+  type GoViralSourceRegistry
 } from "../sources/apify.js";
 import { runRecipeStep } from "../sources/goviral-scout.js";
 import {
@@ -558,6 +559,7 @@ export async function refreshGoViralTrends(input: {
     root: input.root,
     date: input.date,
     now: input.now,
+    topicSets: registry.topicSets,
     ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
   });
   const freeRefs = [...new Set(
@@ -574,6 +576,7 @@ export async function refreshGoViralTrends(input: {
       topic: signal.topic,
       value: signal.value,
       ...(signal.scope ? { scope: signal.scope } : {}),
+      topicSets: signal.topicSets ?? [],
       ref: signal.ref
     }))
   }));
@@ -698,6 +701,7 @@ export async function collectFreeTrendingSignals(input: {
   root: string;
   date: string;
   now: Date;
+  topicSets: GoViralSourceRegistry["topicSets"];
   fetchImpl?: typeof fetch;
 }): Promise<{ results: TrendingProviderResult[]; ai: TrendingSignal[]; mma: TrendingSignal[] }> {
   const [events, rosterPolicy] = await Promise.all([
@@ -713,13 +717,38 @@ export async function collectFreeTrendingSignals(input: {
     ...focus.map((event) => event.name),
     ...focus.flatMap((event) => event.bouts.flatMap((bout) => [nameFromRef(bout.red), nameFromRef(bout.blue)]))
   ].filter((name) => name.length > 2).slice(0, 6);
-  const results = await collectTrendingSignals({
+  const freeTopicSets = Object.entries(input.topicSets)
+    .filter(([, topicSet]) => topicSet.sourceMode === "free")
+    .sort(([left], [right]) => left.localeCompare(right));
+  const configuredQueries = [...new Set(freeTopicSets.flatMap(([, topicSet]) => topicSet.keywords))];
+  const topicQueries = configuredQueries
+    .map((query) => ({
+      query,
+      order: createHash("sha256").update(`${input.date}:door-money-free:${query}`).digest("hex")
+    }))
+    .sort((left, right) => left.order.localeCompare(right.order) || left.query.localeCompare(right.query))
+    .slice(0, 3)
+    .map(({ query }) => query);
+  const collected = await collectTrendingSignals({
     now: input.now,
     aiQueries: ["artificial intelligence", "OpenAI", "Anthropic"],
     mmaQueries,
+    topicQueries,
     subreddits: ["MMA", "ufc", "artificial", "LocalLLaMA"],
     ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
   });
+  const results = collected.map((result) => ({
+    ...result,
+    signals: result.signals.map((signal) => ({
+      ...signal,
+      topicSets: freeTopicSets
+        .filter(([, topicSet]) => matchDictionary([signal], [
+          ...topicSet.keywords,
+          ...topicSet.hashtags.map((hashtag) => hashtag.replace(/^#/u, ""))
+        ]).length > 0)
+        .map(([id]) => id)
+    }))
+  }));
   const all = results.flatMap((result) => result.signals);
   const mmaDictionary = [
     ...mmaQueries,

@@ -76,10 +76,18 @@ export interface SelectionPerformanceWeights {
   hookStylePriors?: Readonly<Partial<Record<PerformanceHookStyle, number>>>;
 }
 
+export interface SelectionTrendBrief {
+  tactics: ReadonlyArray<{ description: string }>;
+}
+
+/** Trend context is a tiebreaker, never a substitute for the recorded passage score. */
+export const DOOR_MONEY_TREND_MULTIPLIER = 1.05;
+
 export interface PassageFormatScore {
   format: DoorMoneyFormat;
   baseScore: number;
   performanceMultiplier: number;
+  trendMultiplier: number;
   weightedScore: number;
   threshold: number;
 }
@@ -126,6 +134,7 @@ export interface SelectDoorMoneyPassagesInput {
   date: string;
   chunks: readonly BookKbChunk[];
   performanceWeights?: SelectionPerformanceWeights;
+  trendBrief?: SelectionTrendBrief | null;
   formatRules?: DoorMoneyFormatRules;
   maxPassages?: 1 | 2;
 }
@@ -156,6 +165,28 @@ function themePrior(chunk: BookKbChunk, weights: SelectionPerformanceWeights): n
   return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
 
+function comparable(value: string): string {
+  return value.normalize("NFKD").replace(/\p{Diacritic}/gu, "").toLowerCase()
+    .replace(/[^a-z0-9]+/gu, " ").replace(/\s+/gu, " ").trim();
+}
+
+export function doorMoneyTrendingThemes(
+  brief: SelectionTrendBrief | null | undefined,
+  themes: readonly string[]
+): string[] {
+  if (!brief) return [];
+  const haystack = comparable(brief.tactics
+    .filter(({ description }) => description.startsWith("Trend call:"))
+    .map(({ description }) => description.slice("Trend call:".length))
+    .join(" "));
+  return [...new Set(themes)]
+    .filter((theme) => {
+      const needle = comparable(theme);
+      return needle.length >= 3 && ` ${haystack} `.includes(` ${needle} `);
+    })
+    .sort();
+}
+
 /** A passage's prospective hook style is derived only from its recorded selection scores. */
 export function doorMoneyHookStyle(scores: BookKbChunk["scores"]): PerformanceHookStyle {
   const candidates: Array<{ style: PerformanceHookStyle; score: number }> = [
@@ -173,6 +204,7 @@ export function scorePassageForFormat(input: {
   format: DoorMoneyFormat;
   rule?: FormatSelectionRule;
   performanceWeights?: SelectionPerformanceWeights;
+  trendThemes?: ReadonlySet<string>;
 }): PassageFormatScore {
   const rule = input.rule ?? DEFAULT_DOOR_MONEY_FORMAT_RULES[input.format];
   if (!Number.isFinite(rule.threshold) || rule.threshold < 0 || rule.threshold > 5) {
@@ -195,11 +227,15 @@ export function scorePassageForFormat(input: {
     `Hook-style prior ${hookStyle}`
   );
   const performanceMultiplier = Math.min(MAX_SELECTION_PRIOR, Math.max(MIN_SELECTION_PRIOR, combinedMultiplier));
+  const trendMultiplier = input.chunk.themes.some((theme) => input.trendThemes?.has(theme))
+    ? DOOR_MONEY_TREND_MULTIPLIER
+    : 1;
   return {
     format: input.format,
     baseScore,
     performanceMultiplier,
-    weightedScore: baseScore * performanceMultiplier,
+    trendMultiplier,
+    weightedScore: baseScore * performanceMultiplier * trendMultiplier,
     threshold: rule.threshold
   };
 }
@@ -274,6 +310,10 @@ export function selectDoorMoneyPassages(input: SelectDoorMoneyPassagesInput): Pa
   const seed = `${date}:${input.ventureId}`;
   const rules = input.formatRules ?? DEFAULT_DOOR_MONEY_FORMAT_RULES;
   const history = selectionHistory(input.chunks, date);
+  const trendThemes = new Set(doorMoneyTrendingThemes(
+    input.trendBrief,
+    input.chunks.flatMap(({ themes }) => themes)
+  ));
   const diagnostics: SelectionDiagnostics = {
     considered: input.chunks.length,
     eligible: 0,
@@ -286,7 +326,8 @@ export function selectDoorMoneyPassages(input: SelectDoorMoneyPassagesInput): Pa
       chunk,
       format,
       rule: rules[format],
-      performanceWeights: input.performanceWeights
+      performanceWeights: input.performanceWeights,
+      trendThemes
     }))
       .filter(({ baseScore, threshold }) => baseScore >= threshold)
       .sort((left, right) => right.weightedScore - left.weightedScore || left.format.localeCompare(right.format));

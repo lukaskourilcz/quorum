@@ -278,6 +278,8 @@ export const GoViralActorSchema = z.object({
 
 export const GoViralTopicSetSchema = z.object({
   label: z.string().min(1),
+  /** Free-only sets are consumed by keyless sources and are never expanded into actor calls. */
+  sourceMode: z.enum(["apify", "free"]).default("apify"),
   keywords: z.array(z.string().min(1)).max(12),
   hashtags: z.array(z.string().regex(/^#[\p{L}\p{N}_]+$/u)).max(12)
 });

@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -32,7 +33,7 @@ import {
   trendEvidenceRefs,
   type TrendItem
 } from "../src/sources/goviral-trends.js";
-import { mapDatasetRow, stepPayload } from "../src/sources/goviral-scout.js";
+import { mapDatasetRow, stepPayload, stepTopicSets } from "../src/sources/goviral-scout.js";
 import { isScoutDay, renderTrendTiebreaker } from "../src/portfolio/run.js";
 import { buildGoViralWeeklyBrief } from "../src/portfolio/goviral-brief.js";
 import { renderTrendingCandidates } from "../src/edition/curate.js";
@@ -355,6 +356,29 @@ describe("the scraped-row boundary", () => {
     expect(stepPayload({ step, registry, topicSet: "nope" })).toBeNull();
     const accountStep = registry.recipe.find((entry) => entry.inputs === "account")!;
     expect(stepPayload({ step: accountStep, registry, topicSet: null })).toBeNull();
+  });
+
+  it("keeps the Door Money free-only set out of every Apify payload", async () => {
+    const registry = await loadGoViralSourceRegistry();
+    expect(registry.topicSets["door-money"]).toEqual({
+      label: "Door Money (book and music stories)",
+      sourceMode: "free",
+      keywords: ["BookTok", "author marketing", "hip-hop culture", "music industry stories"],
+      hashtags: ["#BookTok", "#AuthorMarketing", "#HipHopCulture", "#MusicIndustryStories"]
+    });
+    for (const step of registry.recipe) {
+      expect(stepTopicSets(step, registry)).not.toContain("door-money");
+      expect(stepPayload({ step, registry, topicSet: "door-money" })).toBeNull();
+    }
+    const raw = JSON.parse(await readFile(path.join(process.cwd(), "../config/goviral-sources.json"), "utf8")) as {
+      actors: unknown;
+      recipe: unknown;
+    };
+    const digest = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
+    expect(digest(raw.actors)).toBe("87e3a34b10ea0ae47c85f759247c386faea8f08c7e7bca0e95e1c5a0108e0354");
+    expect(digest(raw.recipe)).toBe("cef3895290673880c9c27658212a892a9341943feef5526733a01cae365f78f5");
+    expect(APIFY_MONTHLY_CREDIT_USD).toBe(5);
+    expect(APIFY_RUN_RESERVATION_USD).toBe(1.4);
   });
 });
 

@@ -68,6 +68,10 @@ import {
   type SelectionPerformanceWeights
 } from "./select.js";
 import { loadDoorMoneyPerformanceWeights } from "./performance-weights.js";
+import {
+  loadLatestDoorMoneyGoViralBrief,
+  type DoorMoneyGoViralBrief
+} from "./goviral-brief.js";
 
 export type DoorMoneyPhase = "dm-desk" | "dm-growth";
 
@@ -153,6 +157,7 @@ export interface DoorMoneyDeskKnowledge {
   store: DoorMoneyKnowledgeStore;
   recommendationHistory?: VentureRecommendation[];
   performanceWeights?: SelectionPerformanceWeights;
+  trendBrief?: DoorMoneyGoViralBrief | null;
 }
 
 export interface DoorMoneyDeskCycleResult extends CycleResult {
@@ -213,7 +218,7 @@ async function recommendationHistory(root: string): Promise<VentureRecommendatio
     VentureRecommendationSchema.parse(JSON.parse(await readFile(path.join(directory, name), "utf8")))));
 }
 
-async function loadLiveKnowledge(root: string): Promise<DoorMoneyDeskKnowledge | null> {
+async function loadLiveKnowledge(root: string, asOfDate: string): Promise<DoorMoneyDeskKnowledge | null> {
   const currentRaw = await optionalJson(root, "ventures/door-money/knowledge/current.json");
   const privateStore = openLocalCloneDoorMoneyKnowledgeStore({
     privateRoot: process.env.BOOK_PRIVATE_CLONE_PATH,
@@ -221,11 +226,12 @@ async function loadLiveKnowledge(root: string): Promise<DoorMoneyDeskKnowledge |
   });
   if (currentRaw === null || privateStore === null) return null;
   const current = CurrentKnowledgeSchema.parse(currentRaw);
-  const [indexRaw, styleRaw, history, performanceWeights] = await Promise.all([
+  const [indexRaw, styleRaw, history, performanceWeights, goViral] = await Promise.all([
     optionalJson(root, stateRelative(current.bookKbIndexPath)),
     optionalJson(root, stateRelative(current.styleProfilePath)),
     recommendationHistory(root),
-    loadDoorMoneyPerformanceWeights(root)
+    loadDoorMoneyPerformanceWeights(root),
+    loadLatestDoorMoneyGoViralBrief(root, asOfDate)
   ]);
   if (indexRaw === null || styleRaw === null) return null;
   const index = BookKbIndexSchema.parse(indexRaw);
@@ -235,7 +241,8 @@ async function loadLiveKnowledge(root: string): Promise<DoorMoneyDeskKnowledge |
     styleProfile: z.object({ manuscriptHash: z.literal(current.manuscriptHash) }).passthrough().parse(styleRaw) as DoorMoneyDeskKnowledge["styleProfile"],
     store: privateStore,
     recommendationHistory: history,
-    performanceWeights: performanceWeights.weights
+    performanceWeights: performanceWeights.weights,
+    trendBrief: goViral.latest
   };
 }
 
@@ -606,7 +613,7 @@ export async function runDoorMoneyDeskCycle(input: {
   let summary = "No recommendation was drafted.";
 
   try {
-    let knowledge = input.knowledge ?? (input.dry ? await buildDoorMoneyDryKnowledge(input.now) : await loadLiveKnowledge(root));
+    let knowledge = input.knowledge ?? (input.dry ? await buildDoorMoneyDryKnowledge(input.now) : await loadLiveKnowledge(root, date));
     if (!knowledge) {
       fixtureReason = "private knowledge or its owner-provided local clone is unavailable";
       knowledge = await buildDoorMoneyDryKnowledge(input.now);
@@ -615,7 +622,8 @@ export async function runDoorMoneyDeskCycle(input: {
       ventureId: "door-money",
       date,
       chunks: knowledge.index.chunks,
-      performanceWeights: knowledge.performanceWeights
+      performanceWeights: knowledge.performanceWeights,
+      trendBrief: knowledge.trendBrief
     });
     if (selection.kind === "quiet-day") {
       summary = `Honest quiet day: no passage cleared score and repetition rules (${selection.diagnostics.considered} considered). Nothing was spent.`;
@@ -638,7 +646,8 @@ export async function runDoorMoneyDeskCycle(input: {
           ventureId: "door-money",
           date,
           chunks: knowledge.index.chunks,
-          performanceWeights: knowledge.performanceWeights
+          performanceWeights: knowledge.performanceWeights,
+          trendBrief: knowledge.trendBrief
         });
         if (fixtureSelection.kind === "quiet-day") throw new Error("Synthetic desk selection unexpectedly produced a quiet day");
         packetResult = await assembleDoorMoneyDeskPacket({
