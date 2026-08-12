@@ -31,8 +31,8 @@ export const BhDossierClaimSchema = z.strictObject({
   if (claim.corroboration > claim.sources.length) {
     context.addIssue({ code: "custom", message: "Corroboration cannot exceed cited sources", path: ["corroboration"] });
   }
-  if (["legend", "rejected"].includes(claim.verificationState) && claim.publicationSuitable) {
-    context.addIssue({ code: "custom", message: "Legend and rejected claims are not publication-suitable", path: ["publicationSuitable"] });
+  if (claim.verificationState === "rejected" && claim.publicationSuitable) {
+    context.addIssue({ code: "custom", message: "Rejected claims are not publication-suitable", path: ["publicationSuitable"] });
   }
 });
 
@@ -62,6 +62,15 @@ const ContentShape = {
   quotes: z.array(BhDossierQuoteSchema).max(30),
   visualNotes: z.array(BhDossierVisualNoteSchema).max(30)
 };
+export const BhVerificationTransitionSchema = z.strictObject({
+  claimId: ClaimIdSchema,
+  from: BhVerificationStateSchema,
+  to: BhVerificationStateSchema,
+  at: DateTimeSchema,
+  actor: z.literal("QUILL"),
+  reason: z.string().trim().min(8).max(800),
+  sourceUrls: z.array(HttpsUrlSchema).max(10)
+});
 const DossierContentSchema = z.strictObject(ContentShape);
 type DossierContent = z.infer<typeof DossierContentSchema>;
 
@@ -109,6 +118,7 @@ export const BhDossierSchema = z.strictObject({
   supplementRefs: z.array(MeetingRefSchema).max(100),
   researchedAt: DateTimeSchema,
   updatedAt: DateTimeSchema,
+  verificationTransitions: z.array(BhVerificationTransitionSchema).max(1_000),
   ...ContentShape
 }).superRefine((dossier, context) => {
   validateDossierContent(dossier, context);
@@ -156,3 +166,4 @@ export type BhDossier = z.infer<typeof BhDossierSchema>;
 export type BhDossierClaim = z.infer<typeof BhDossierClaimSchema>;
 export type BhDossierSynthesis = z.infer<typeof BhDossierSynthesisSchema>;
 export type BhResearchLedgerEntry = z.infer<typeof BhResearchLedgerEntrySchema>;
+export type BhVerificationTransition = z.infer<typeof BhVerificationTransitionSchema>;

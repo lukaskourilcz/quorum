@@ -409,6 +409,7 @@ export async function runBhCandidateResearch(input: {
       supplementRefs: previous.success ? previous.data.supplementRefs : [],
       researchedAt: previous.success ? previous.data.researchedAt : input.researchedAt.toISOString(),
       updatedAt: input.researchedAt.toISOString(),
+      verificationTransitions: previous.success ? previous.data.verificationTransitions : [],
       ...BhDossierSynthesisSchema.parse(normalized.value)
     });
     await atomicWriteJson(input.root, rawRef, {

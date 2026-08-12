@@ -118,7 +118,7 @@ post anything.
 - [x] **BH-11c** — Research idempotency, in-flight lock and ceilings
 - [x] **BH-11d** — Supplemental freshness calls
 - [x] **BH-12a** — Deterministic claim triage
-- [ ] **BH-12b** — `CLAIM_CHECK` escalation and verification-state transitions
+- [x] **BH-12b** — `CLAIM_CHECK` escalation and verification-state transitions
 - [ ] **BH-13a** — Story-score comparison and recorded selection
 - [ ] **BH-13b** — Canonical story brief and independent twin passes
 - [ ] **BH-14** — Production gates for both languages

@@ -1,4 +1,15 @@
-import type { BhDossier, BhDossierClaim } from "../../contracts/bh-dossier.js";
+import { z } from "zod";
+import {
+  BhDossierSchema,
+  BhVerificationStateSchema,
+  BhVerificationTransitionSchema,
+  type BhDossier,
+  type BhDossierClaim,
+  type BhVerificationTransition
+} from "../../contracts/bh-dossier.js";
+import { guardedJsonCall, type GuardedCallInput } from "../../llm/call.js";
+import { atomicWriteJson } from "../../state.js";
+import { bhDossierPath } from "./research.js";
 
 export type BhClaimStrength = "ordinary" | "heightened" | "sensational";
 export type BhPublicationMode = "plain" | "framed" | "legend-label-required" | "prohibited";
@@ -81,4 +92,95 @@ export function triageBhClaim(claim: BhDossierClaim): BhClaimTriage {
 
 export function triageBhDossier(dossier: BhDossier): BhClaimTriage[] {
   return dossier.claims.map(triageBhClaim);
+}
+
+const ClaimCheckResponseSchema = z.strictObject({
+  claimId: z.string().min(1).max(120),
+  nextState: BhVerificationStateSchema,
+  reason: z.string().trim().min(8).max(800),
+  sourceUrls: z.array(z.string().url()).max(10)
+});
+
+export type BhClaimCheckCallConfig = Omit<
+  GuardedCallInput<z.infer<typeof ClaimCheckResponseSchema>>,
+  "input" | "parse"
+>;
+
+export interface BhVerificationResult {
+  dossier: BhDossier;
+  transitions: BhVerificationTransition[];
+  calls: number;
+}
+
+function stateIsSuitable(state: BhDossierClaim["verificationState"]): boolean {
+  return state !== "rejected";
+}
+
+/** Escalate only deterministic flags, under QUILL and the three-search ceiling. */
+export async function verifyBhDossierClaims(input: {
+  root: string;
+  dossier: BhDossier;
+  checkedAt: Date;
+  callConfig: BhClaimCheckCallConfig;
+  call?: typeof guardedJsonCall;
+}): Promise<BhVerificationResult> {
+  if (input.callConfig.agent !== "QUILL") {
+    throw new Error("BOOKSOFHISTORY claim escalation runs only under QUILL's identity");
+  }
+  if (!input.callConfig.webSearch || input.callConfig.webSearch.maxUses < 1 || input.callConfig.webSearch.maxUses > 3) {
+    throw new Error("BOOKSOFHISTORY claim escalation requires one to three reserved searches");
+  }
+  const original = BhDossierSchema.parse(input.dossier);
+  const claims = structuredClone(original.claims);
+  const transitions: BhVerificationTransition[] = [];
+  const invoke = input.call ?? guardedJsonCall;
+  let calls = 0;
+  for (const [index, claim] of claims.entries()) {
+    const triage = triageBhClaim(claim);
+    if (!triage.escalate) continue;
+    const response = await invoke({
+      ...input.callConfig,
+      input: JSON.stringify({
+        claim: {
+          claimId: claim.claimId,
+          text: claim.text,
+          currentState: claim.verificationState,
+          sources: claim.sources
+        },
+        triage,
+        instruction: "Check only this claim. Return a state, concise reason and consulted source URLs."
+      }),
+      parse: (text) => ClaimCheckResponseSchema.parse(JSON.parse(text))
+    });
+    calls += 1;
+    const checked = ClaimCheckResponseSchema.parse(response.value);
+    if (checked.claimId !== claim.claimId) {
+      throw new Error(`QUILL returned ${checked.claimId} while checking ${claim.claimId}`);
+    }
+    const transition = BhVerificationTransitionSchema.parse({
+      claimId: claim.claimId,
+      from: claim.verificationState,
+      to: checked.nextState,
+      at: input.checkedAt.toISOString(),
+      actor: "QUILL",
+      reason: checked.reason,
+      sourceUrls: checked.sourceUrls
+    });
+    transitions.push(transition);
+    claims[index] = {
+      ...claim,
+      verificationState: checked.nextState,
+      publicationSuitable: stateIsSuitable(checked.nextState)
+    };
+  }
+  const dossier = BhDossierSchema.parse({
+    ...original,
+    claims,
+    updatedAt: transitions.length > 0 ? input.checkedAt.toISOString() : original.updatedAt,
+    verificationTransitions: [...original.verificationTransitions, ...transitions]
+  });
+  if (transitions.length > 0) {
+    await atomicWriteJson(input.root, bhDossierPath(dossier.bookId), dossier);
+  }
+  return { dossier, transitions, calls };
 }
