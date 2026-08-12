@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "carousel-recipe/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-330-makhachev-vs-machado-garry",
+  "date": "2026-08-12",
+  "family": "counterweight",
+  "variant": "A",
+  "accentSwap": false,
+  "treatment": "none",
+  "typeScale": 1,
+  "phaseSeed": 2,
+  "summaryRef": "ventures/carousel-studio/summaries/mma-files/2026-08-12-ufc-event-ufc-330-makhachev-vs-machado-garry.json",
+  "copyRef": "ventures/carousel-studio/social-copy/mma-files/2026-08-12-ufc-event-ufc-330-makhachev-vs-machado-garry.json"
+}

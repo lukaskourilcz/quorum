@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-330-makhachev-vs-machado-garry",
+  "date": "2026-08-12",
+  "locale": "cs",
+  "kicker": "MMA Files · 12. srp",
+  "headline": "UFC 330: Makhachev vs. Machado Garry – přehled karty před sobotní nocí",
+  "coverLine": "Makhachev vs. Machado Garry v sobotu v Xfinity Mobile Areně",
+  "standfirst": "V sobotu 15. srpna se v Xfinity Mobile Areně koná UFC 330. Hlavní zápas velterové váhy na pět kol odehrají Islam Makhachev a Ian Machado Garry.",
+  "passages": [
+    "UFC 330 se koná v sobotu 15. srpna v Xfinity Mobile Areně. Hlavní zápas velterové váhy na pět kol svede Islam Makhacheva s Ianem Machado Garrym.",
+    "Makhachev vstupuje do klece s rekordem 28 výher a 1 porážky. Podle dostupných dat jeho velterová kariéra v UFC zahrnuje pět zápasů, z nichž všechny vyhrál.",
+    "Z těchto pěti vítězství připadají dvě na submisi, dvě na body a jedno na technický knockout. Vedle hlavního zápasu nabídne karta další tři oznášené duely.",
+    "V lehké váze se do klece postaví Edson Barboza a Esteban Ribovics. Oba na tři kola. Střední váhu obstarají Donte Johnson a Eric McConico, rovněž na tři kola.",
+    "Za čtvrtý oznámený zápas se postarají Chidi Njokuani a Joel Álvarez ve velterové váze, opět na tři kola.",
+    "Všechny čtyři zápasy mají ke středě 12. srpna status oznámen a výsledky zatím nejsou k dispozici."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "Photo by BYB BYB on Pexels"
+}

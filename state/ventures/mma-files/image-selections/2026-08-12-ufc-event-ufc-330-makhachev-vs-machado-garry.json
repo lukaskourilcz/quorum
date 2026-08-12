@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-330-makhachev-vs-machado-garry",
+  "date": "2026-08-12",
+  "rung": "search",
+  "selected": "pexels:28560751",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:28560751",
+      "reason": "Clean MMA cage scene with two fighters in action stance, well-lit and sharp, illustrates the sport perfectly without identifying specific individuals.",
+      "candidates": [
+        {
+          "candidateId": "pexels:28560751",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Clean MMA cage scene with two fighters in action stance, well-lit and sharp, illustrates the sport perfectly without identifying specific individuals.",
+          "sceneCs": "dva zápasníci v kleci"
+        },
+        {
+          "candidateId": "pixabay:416062",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Interior bedroom design has nothing to do with mixed martial arts."
+        },
+        {
+          "candidateId": "pexels:28560744",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "MMA cage action but faces are clearly visible and recognisable, which violates the no-recognisable-face rule even if not the specific fighters named in the article."
+        },
+        {
+          "candidateId": "pixabay:7701252",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Classical architectural interior unrelated to MMA."
+        },
+        {
+          "candidateId": "pexels:28560745",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Two fighters in cage combat with gloved strike, well-composed and lit, though referee visible at edge; good illustration of the sport without clear face identification.",
+          "sceneCs": "dva zápasníci v kleci s rozhodčím"
+        },
+        {
+          "candidateId": "pixabay:1835923",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Modern living room interior completely unrelated to MMA."
+        },
+        {
+          "candidateId": "pexels:28560748",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [
+            "dated-aesthetic",
+            "embedded-text"
+          ],
+          "reason": "Fighter entrance with pyrotechnics and logos/watermarks visible on signage, aesthetic looks like mid-2000s event production with dated look."
+        },
+        {
+          "candidateId": "pixabay:3357028",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Empty architectural tunnel or corridor, completely unrelated to MMA."
+        },
+        {
+          "candidateId": "pixabay:1839183",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Residential bedroom interior unrelated to mixed martial arts."
+        },
+        {
+          "candidateId": "pexels:598681",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Action-packed MMA bout with fighters engaging, good lighting and composition, shows the sport dynamically without clearly identifying individuals' faces.",
+          "sceneCs": "dva zápasníci v ringu se zábradlím"
+        },
+        {
+          "candidateId": "pixabay:63032",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Military fighter jet in flight, completely unrelated to MMA."
+        },
+        {
+          "candidateId": "pexels:5485439",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Two fighters in outdoor cage with striking action, spectators visible, well-composed scene illustrating MMA combat without clear face recognition of individuals.",
+          "sceneCs": "dva zápasníci v kleci venku"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.007221
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-12T08:03:37.200Z"
+}
