@@ -181,6 +181,16 @@ Judgement calls. Nothing is blocked on code for any of these.
   kickoff touches the `SWEEP-` prefix, so nothing starts until you paste its kickoff
   into a session. [imp:2] [owner:me] [time:5m] [kind:decision]
 
+- [ ] **Kick off the REV big review once the sweep is closed** — GitHub issues
+  `REV-00`–`REV-13` (#351–#364) hold the post-sweep integration review: one independent
+  check per site surface (home-page rooms, venture cards and pages, calendar, meeting
+  records, agents, money/KPIs, admin workspaces, Design Lab, orchestration wiring,
+  cross-repo connections, the GoVIRAL spine, and a closing full-gate pass). The main
+  goal is that everything missing gets corrected, added or built immediately with
+  frequent commits; only things needing your approval land in
+  `docs/CODEX-BIG-REVIEW-AUDIT-FINDINGS.md`, one plain 1–2 line bullet each. Gated on
+  all `SWEEP-` issues being closed. [imp:2] [owner:me] [time:5m] [kind:decision]
+
 - [ ] **Unblock the Tehdejší svět launch preconditions** — the adoption venture cannot
   launch profiles until the product's production domain lands (that task already sits
   in the product repo's own NEEDED.md at [imp:5]; `dontwannaknow.vercel.app` must
