@@ -9,6 +9,7 @@
   "headline": "Poplatky se vracejí do Sněmovny",
   "summary": "Sněmovna znovu projedná způsob financování médií veřejné služby.",
   "whyItMatters": "Způsob financování ovlivňuje předvídatelnost rozpočtů České televize a Českého rozhlasu.",
+  "whyThisIsWorthIt": "Dva přímé zdroje dovolují oddělit návrh, sněmovní proces a jeho rozpočtový dopad.",
   "ourAngle": "Ukázat přesné body návrhu a kdo o nich rozhoduje.",
   "ourAngleDiffers": "Místo obecné výzvy sledujeme text návrhu, sněmovní krok a dopad na rozpočtovou předvídatelnost.",
   "platforms": ["instagram", "threads"],
@@ -93,6 +94,7 @@
     ],
     "stitAttribution": {
       "internalOnly": true,
+      "summary": "Štít rámoval téma jako spor o televizní poplatky; tento blok zůstává interním kontextem.",
       "posts": [
         {
           "itemRef": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",

@@ -62,6 +62,7 @@ import {
   writeKvorumDeskMeetingRecord,
   writeKvorumDeskSkip
 } from "./record.js";
+import { writeKvorumRecommendationDay } from "./store.js";
 
 export {
   TribunDeskOutputSchema,
@@ -407,6 +408,31 @@ export async function runKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskR
     return result;
   }
 
+  let recommendationArtifacts: string[] = [];
+  if ((result.status === "packages" || result.status === "quiet") && result.receipt) {
+    try {
+      const stored = await writeKvorumRecommendationDay({
+        root,
+        date: input.date,
+        now: input.now,
+        receipt: result.receipt,
+        packages: result.packages,
+        gateEvaluations: result.gateEvaluations
+      });
+      recommendationArtifacts = stored.artifacts;
+    } catch (error) {
+      result = {
+        ...result,
+        status: "failed",
+        reason: `Recommendation store failed: ${error instanceof Error ? error.message : "unknown error"}`.slice(0, 500),
+        packages: [],
+        droppedPackages: 0,
+        gateEvaluations: []
+      };
+    }
+  }
+  if (result.status === "paused") return result;
+
   const recordArtifacts = await writeKvorumDeskMeetingRecord({
     root,
     cycleId: input.cycleId,
@@ -428,6 +454,6 @@ export async function runKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskR
   });
   return {
     ...result,
-    artifacts: [...new Set([...result.artifacts, ...recordArtifacts])]
+    artifacts: [...new Set([...result.artifacts, ...recommendationArtifacts, ...recordArtifacts])]
   };
 }

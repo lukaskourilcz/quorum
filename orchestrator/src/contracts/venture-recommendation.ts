@@ -63,6 +63,7 @@ export const MonitorClusterEvidenceSchema = z.strictObject({
   claims: z.array(VentureClaimSchema).min(1).max(80),
   stitAttribution: z.strictObject({
     internalOnly: z.literal(true),
+    summary: z.string().trim().min(1).max(1_000),
     posts: z.array(StitPostSchema).min(1).max(30)
   }).nullable()
 }).superRefine((evidence, context) => {
@@ -92,12 +93,16 @@ export const MonitorClusterEvidenceSchema = z.strictObject({
       const source = sources.get(ref);
       if (!source) {
         context.addIssue({ code: "custom", message: "Every claim ref must resolve inside the monitor cluster", path: ["claims", claimIndex, "refs", refIndex] });
-      } else if (claim.type !== "commentary" && source.discoveryOnly) {
+      } else if (claim.type !== "commentary" && (
+        source.discoveryOnly || source.sourceId === "stit-demokracie-facebook"
+      )) {
         context.addIssue({ code: "custom", message: "Discovery-only sources cannot support factual claims", path: ["claims", claimIndex, "refs", refIndex] });
       }
     }
   }
-  const discoverySources = evidence.sources.filter((source) => source.discoveryOnly);
+  const discoverySources = evidence.sources.filter((source) =>
+    source.discoveryOnly || source.sourceId === "stit-demokracie-facebook"
+  );
   const posts = evidence.stitAttribution?.posts ?? [];
   if (new Set(posts.map((post) => post.itemRef)).size !== posts.length) {
     context.addIssue({ code: "custom", message: "Štít post item refs must be unique", path: ["stitAttribution", "posts"] });
@@ -202,6 +207,7 @@ const OwnerFieldsSchema = z.strictObject({
       "headline",
       "summary",
       "whyItMatters",
+      "whyThisIsWorthIt",
       "ourAngle",
       "ourAngleDiffers",
       "platforms",
@@ -223,6 +229,7 @@ export const VentureRecommendationSchema = z.strictObject({
   headline: z.string().trim().min(1).max(240),
   summary: z.string().trim().min(1).max(2_000),
   whyItMatters: z.string().trim().min(1).max(2_000),
+  whyThisIsWorthIt: z.string().trim().min(1).max(1_000),
   ourAngle: z.string().trim().min(1).max(2_000),
   ourAngleDiffers: z.string().trim().min(1).max(2_000),
   platforms: z.array(SlugSchema).min(1).max(10),

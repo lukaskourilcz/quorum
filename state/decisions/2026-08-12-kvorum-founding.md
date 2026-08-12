@@ -224,6 +224,13 @@ section and a receipt line, and a day with no usable cluster records an honest q
   and Czech stop-slop checks by reusing the house lint, not by loading a skill or making another model
   call. Separate checks also block vote instructions, endorsements, unsupported crime accusations,
   unlabeled single-source facts and any publishing, account, channel, promotion or fundraising plan.
+- **Recommendation fidelity and queue index:** the shared contract introduced by KV-11 carried the
+  claims, copy and source chain but omitted TRIBUN's why-this-is-worth-it line and the internal Štít
+  summary that the higher-precedence design requires the admin card to show. KV-14 adds both fields
+  instead of discarding them at storage. Dated recommendation files are canonical; the single
+  `recommendations/index.json` file is a replaceable current-day queue projection. A repeated
+  `(date, cluster)` run preserves the existing record byte-for-byte, including any later owner edits,
+  and refreshes only the index and causal meeting artifacts.
 
 ## Implementation checklist
 
@@ -255,7 +262,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-12b — Honest meeting records for the desk
 - [x] KV-13a — Gates: claim resolution and originality
 - [x] KV-13b — Gates: banned content and register lint
-- [ ] KV-14 — Recommendation store with idempotency
+- [x] KV-14 — Recommendation store with idempotency
 - [ ] KV-15a — Studio brand tokens for Kvórum
 - [ ] KV-15b — Carousel-summary venture extension, byte-compatible
 - [ ] KV-16 — Admin approval write path

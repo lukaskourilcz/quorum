@@ -56,6 +56,11 @@
       "minLength": 1,
       "maxLength": 2000
     },
+    "whyThisIsWorthIt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
     "ourAngle": {
       "type": "string",
       "minLength": 1,
@@ -289,6 +294,11 @@
                       "type": "boolean",
                       "const": true
                     },
+                    "summary": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1000
+                    },
                     "posts": {
                       "minItems": 1,
                       "maxItems": 30,
@@ -369,6 +379,7 @@
                   },
                   "required": [
                     "internalOnly",
+                    "summary",
                     "posts"
                   ],
                   "additionalProperties": false
@@ -659,6 +670,7 @@
                     "headline",
                     "summary",
                     "whyItMatters",
+                    "whyThisIsWorthIt",
                     "ourAngle",
                     "ourAngleDiffers",
                     "platforms",
@@ -709,6 +721,7 @@
     "headline",
     "summary",
     "whyItMatters",
+    "whyThisIsWorthIt",
     "ourAngle",
     "ourAngleDiffers",
     "platforms",

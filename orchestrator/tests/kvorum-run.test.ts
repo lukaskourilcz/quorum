@@ -6,6 +6,7 @@ import { DEFAULT_BUDGET_LIMITS, type BudgetLedgerEntry } from "../src/budget.js"
 import { KvorumMonitorReceiptSchema } from "../src/contracts/kvorum-monitor.js";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
 import { MeetingSkipSchema } from "../src/contracts/meeting-skip.js";
+import { VentureRecommendationSchema } from "../src/contracts/venture-recommendation.js";
 import { guardedJsonCall, type GuardedCallInput } from "../src/llm/call.js";
 import { repoRoot } from "../src/paths.js";
 import { recordBudgetStop } from "../src/portfolio/run.js";
@@ -16,15 +17,16 @@ import {
   type TribunDeskOutput
 } from "../src/ventures/kvorum/run.js";
 import type { KvorumMonitorFetchResult } from "../src/ventures/kvorum/monitor.js";
+import { KvorumRecommendationIndexSchema } from "../src/ventures/kvorum/store.js";
 
 const now = new Date("2026-08-12T19:00:00.000Z");
 const date = "2026-08-12";
 const founding = `Status: countersigned\nSignature / explicit approval reference: test-owner-signature\n`;
 const capacity = `Status: countersigned\nSignature / explicit approval reference: test-owner-signature\nFreed worst-day capacity USD: $0.08\n`;
 
-async function dryProof(root: string) {
+async function dryProof(root: string, cycleId = "20260812-kv-desk-dry") {
   return runKvorumDesk({
-    cycleId: "20260812-kv-desk-dry",
+    cycleId,
     dry: true,
     now,
     date,
@@ -103,9 +105,56 @@ describe("Kvórum desk runner", () => {
       expect(meeting.kvorumDesk?.gateEvaluations[0]?.results.every((gate) => gate.verdict === "pass")).toBe(true);
       expect(result.artifacts).toEqual(expect.arrayContaining([
         "ventures/kvorum/monitor/2026-08-12.json",
+        "ventures/kvorum/recommendations/2026-08-12-televizni-poplatky-se-vraceji-do-snemovny.json",
+        "ventures/kvorum/recommendations/index.json",
         "meetings/2026-08-12-kv-desk.json",
         "calendar/2026-08-10.json"
       ]));
+      const recommendationPath = path.join(
+        root,
+        "ventures/kvorum/recommendations/2026-08-12-televizni-poplatky-se-vraceji-do-snemovny.json"
+      );
+      const recommendationBytes = await readFile(recommendationPath, "utf8");
+      const recommendation = VentureRecommendationSchema.parse(JSON.parse(recommendationBytes) as unknown);
+      expect(recommendation).toMatchObject({
+        id: "kv-2026-08-12-televizni-poplatky-se-vraceji-do-snemovny",
+        ventureId: "kvorum",
+        status: "draft",
+        headline: "Televizní poplatky se vracejí do Sněmovny",
+        whyThisIsWorthIt: result.packages[0]?.whyThisIsWorthIt,
+        gateResults: { passed: true },
+        designLab: { status: "not-requested" },
+        owner: { postingMode: "manual-only", approvedAt: null, postedAt: null }
+      });
+      expect(recommendation.evidence).toMatchObject({
+        kind: "monitor-cluster",
+        clusterId: result.packages[0]?.clusterId,
+        stitAttribution: {
+          internalOnly: true,
+          summary: result.packages[0]?.stitAttribution?.summary,
+          posts: [expect.objectContaining({ engagement: { likes: 824, comments: 116, shares: 73 } })]
+        }
+      });
+      expect(recommendation.gateResults.results).toHaveLength(14);
+      const index = KvorumRecommendationIndexSchema.parse(JSON.parse(await readFile(
+        path.join(root, "ventures/kvorum/recommendations/index.json"),
+        "utf8"
+      )) as unknown);
+      expect(index.queue).toEqual([{
+        id: recommendation.id,
+        ref: "state/ventures/kvorum/recommendations/2026-08-12-televizni-poplatky-se-vraceji-do-snemovny.json",
+        clusterId: recommendation.evidence.clusterId,
+        status: "draft",
+        headline: recommendation.headline,
+        createdAt: recommendation.createdAt
+      }]);
+
+      const rerun = await dryProof(root, "20260812-kv-desk-dry-rerun");
+      expect(await readFile(recommendationPath, "utf8")).toBe(recommendationBytes);
+      expect(rerun.artifacts).toContain("ventures/kvorum/recommendations/index.json");
+      expect(rerun.artifacts).not.toContain(
+        "ventures/kvorum/recommendations/2026-08-12-televizni-poplatky-se-vraceji-do-snemovny.json"
+      );
       await expect(access(path.join(root, "budget/ledger.json"))).rejects.toMatchObject({ code: "ENOENT" });
       await expect(access(path.join(root, "llm-cache"))).rejects.toMatchObject({ code: "ENOENT" });
     } finally {

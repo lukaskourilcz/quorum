@@ -140,6 +140,14 @@ function claimResolutionGate(
   const claimIds: string[] = [];
   if (!cluster) failures.push("The candidate cluster does not resolve in the retained digest.");
   const attribution = new Map(cluster?.attributions.map((source) => [source.itemRef, source]) ?? []);
+  const discoveryRefs = (cluster?.attributions ?? [])
+    .filter((source) => source.discoveryOnly || source.sourceId === "stit-demokracie-facebook")
+    .map((source) => source.itemRef)
+    .sort();
+  const candidateDiscoveryRefs = [...(candidate.stitAttribution?.itemRefs ?? [])].sort();
+  if (JSON.stringify(discoveryRefs) !== JSON.stringify(candidateDiscoveryRefs)) {
+    failures.push("The internal Štít attribution block does not match the cluster's discovery-only refs.");
+  }
   const factualBlocks = [
     { label: "summary", refs: candidate.summary.refs },
     { label: "why-it-matters", refs: candidate.whyItMatters.refs }
