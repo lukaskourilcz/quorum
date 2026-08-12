@@ -8,7 +8,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-08-10.
+Updated: 2026-08-12.
 
 ---
 
@@ -149,6 +149,34 @@ is the single thing standing between a proven path and a working one.
 ## Yours to decide
 
 Judgement calls. Nothing is blocked on code for any of these.
+
+- [ ] **Read the two new venture designs and commission the builds** — the designs for the
+  Czech politics venture and the Rapovej deník marketing venture are in
+  `docs/KVORUM-VENTURE-DESIGN.md` and `docs/DOOR-MONEY-VENTURE-DESIGN.md`; the matching
+  implementation prompts are `docs/KVORUM-CODEX-BUILD-PROMPT.md` and
+  `docs/DOOR-MONEY-CODEX-BUILD-PROMPT.md`. Hand each prompt to its own implementation
+  session, Kvórum first — it creates the shared recommendation contract the other build
+  reuses. Each build ends with a founding decision waiting for your countersignature and
+  its approval items in `state/INBOX.md`; nothing runs live before you sign.
+  [imp:4] [owner:me] [time:45m] [kind:decision]
+
+- [ ] **Clear the two venture names** — run the BRAND.md-style checks for "Kvórum" and
+  "Door Money": social handles on IG/FB/Threads/X (and TikTok for Door Money), trademark
+  screen, collision search. Both design documents list fallback names in their closing
+  "Open questions" sections, and both venture ids stay stable if a public name changes.
+  [imp:3] [owner:me] [time:30m] [kind:legal]
+
+- [ ] **Answer the Door Money manuscript questions** — confirm an English manuscript file
+  exists and decide where the private source repository lives; the design's
+  BOOK-SOURCE-001 approval blocks ingestion on this. Also say whether there is an
+  English-edition launch date the weekly growth room should plan backwards from.
+  [imp:3] [owner:me] [time:15m] [kind:decision]
+
+- [ ] **Pick Kvórum's desk hour** — the design defaults to 21:00 Prague (full-day
+  harvest, you review in the evening, posts go out next morning). If same-evening
+  posting matters more than a complete day, the slot is 12:00 instead. One registry
+  field, decided at founding, awkward to move later without a decision.
+  [imp:2] [owner:me] [time:5m] [kind:decision]
 
 - [x] **Run the MMA Files relaunch prompt sequence** — completed 2026-08-09 across the tracker’s
   twelve MMA Files issues and six quorum issues. The site redesign, Czech-only reader contract,
