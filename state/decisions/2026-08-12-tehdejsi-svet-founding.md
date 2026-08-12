@@ -133,7 +133,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-08** — Facts loader with hash verification and cache
 - [x] **TS-09a** — The social opportunity scorer
 - [x] **TS-09b** — Shortlist records
-- [ ] **TS-10a** — Research reuse with venture ledger and ceilings
+- [x] **TS-10a** — Research reuse with venture ledger and ceilings
 - [x] **TS-10b** — The no-product-link guard (inverted from a read-only pin)
 - [x] **TS-11a** — Sensitivity tier classifier and tier effects
 - [x] **TS-11b** — Terminology table and its checks

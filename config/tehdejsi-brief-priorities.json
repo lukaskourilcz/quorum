@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "ts-brief-priorities/1",
+  "_comment": "What the desk would research next if it were researching anything. Ranked data rather than prose in a prompt, so the order is reviewable in a diff and the desk cannot quietly re-rank it. Research is the venture's only paid dependency beyond the model passes: at most $0.30 a brief and $2.00 a month, inside the $4.00 venture target and the standing $30 all-in operating cap. Additions come from a recorded room decision, never from a run.",
+  "priorities": [
+    {
+      "topicKey": "ua-everyday-1970s",
+      "rank": 1,
+      "question": "What did an ordinary week cost and look like in a Ukrainian city between 1970 and 1985 — fares, bread, a cinema ticket, what was on television on a weekday evening?",
+      "language": "uk",
+      "rationale": "The Ukrainian everyday is the thinnest half of the facts file, and everyday detail is what the venture is for."
+    },
+    {
+      "topicKey": "ua-culture-gaps",
+      "rank": 2,
+      "question": "Which Ukrainian television programmes, songs and children's books did a household actually share between 1965 and 1991, and which of them are remembered rather than merely catalogued?",
+      "language": "uk",
+      "rationale": "Culture is the second askable pillar and the Ukrainian side of it is almost absent from the file."
+    },
+    {
+      "topicKey": "cs-ua-names-pre-2010",
+      "rank": 3,
+      "question": "Which given names were most common for children born in Czechia and Ukraine before 2010, by decade and with a citable statistical source for each?",
+      "language": "both",
+      "rationale": "A names dataset carries both countries in one artefact and is the only priority whose output is reusable indefinitely."
+    },
+    {
+      "topicKey": "era-music",
+      "rank": 4,
+      "question": "Which songs were inescapable in Czechoslovakia and Ukraine in a given year between 1960 and 1995, and what does a citable chart or broadcast record say about it?",
+      "language": "both",
+      "rationale": "Music dates a memory more precisely than anything else and gives the Design Lab a caption a reader can hear."
+    }
+  ]
+}
