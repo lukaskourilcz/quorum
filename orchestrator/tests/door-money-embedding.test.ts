@@ -3,9 +3,11 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  budgetLedgerCostCategory,
   BudgetLedgerEntrySchema,
   DEFAULT_BUDGET_LIMITS,
   estimateEmbeddingCall,
+  isMediaBudgetKind,
   type ReserveContext
 } from "../src/budget.js";
 import {
@@ -87,7 +89,8 @@ describe("guarded Door Money embeddings", () => {
         model: "text-embedding-3-small",
         tokensIn: 20,
         tokensOut: 0,
-        usd: 4e-7
+        usd: 4e-7,
+        kind: "embedding"
       });
       expect(ledgerRaw).not.toContain("An invented scene");
       expect(ledgerRaw).not.toContain("0.25");
@@ -120,6 +123,9 @@ describe("guarded Door Money embeddings", () => {
       priceVerifiedAt: "2026-08-12",
       priceSourceUrl: "https://developers.openai.com/api/docs/models/text-embedding-3-small"
     });
+    expect(budgetLedgerCostCategory("embedding")).toBe("model");
+    expect(isMediaBudgetKind("embedding")).toBe(false);
+    expect(budgetLedgerCostCategory("image")).toBe("media");
   });
 
   it("refuses an unreservable or dry call before reaching the provider", async () => {

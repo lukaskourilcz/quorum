@@ -150,8 +150,7 @@ export async function guardedEmbeddingCall(
     tokensOut: 0,
     toolUses: 0,
     usd: actual.estimatedUsd,
-    // DM-10b extends the closed ledger kind immediately after this wrapper lands.
-    kind: "text"
+    kind: "embedding"
   });
   const latest = await readJson<{ entries: BudgetLedgerEntry[] }>(
     input.stateRoot,

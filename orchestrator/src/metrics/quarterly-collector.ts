@@ -1,7 +1,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
-import { BudgetLedgerEntrySchema } from "../budget.js";
+import { BudgetLedgerEntrySchema, isMediaBudgetKind } from "../budget.js";
 import { ReleaseProofSchema } from "../contracts/autonomy.js";
 import { KpiSetSchema, type KpiSet } from "../contracts/kpi-set.js";
 import { IdeaLedgerEntrySchema } from "../contracts/idea-ledger.js";
@@ -292,11 +292,11 @@ export async function collectQuarterlyMeasurements(input: {
     : null;
 
   // Every model call is billed to the ledger with a kind, so image spend is separable from
-  // text spend. Zero here is a measured zero over a ledger that is actively written, not an
+  // text and embedding spend. Zero here is a measured zero over a ledger that is actively written, not an
   // absent counter: an image call charged to caught-up would land in this same file.
   measurements["receipts/caught-up#media_cost_usd"] = budget.success
     ? sum(periodBudget
-        .filter((entry) => entry.kind === "image" && entry.ventureId === "caught-up")
+        .filter((entry) => isMediaBudgetKind(entry.kind) && entry.ventureId === "caught-up")
         .map((entry) => entry.usd))
     : null;
 

@@ -10,6 +10,17 @@ import {
 import type { Stage } from "./types.js";
 import { VentureIdSchema } from "./contracts/common.js";
 
+export const BudgetLedgerKindSchema = z.enum(["text", "image", "embedding"]);
+export type BudgetLedgerKind = z.infer<typeof BudgetLedgerKindSchema>;
+
+export function isMediaBudgetKind(kind: BudgetLedgerKind): boolean {
+  return kind === "image";
+}
+
+export function budgetLedgerCostCategory(kind: BudgetLedgerKind): "model" | "media" {
+  return isMediaBudgetKind(kind) ? "media" : "model";
+}
+
 export const BudgetLedgerEntrySchema = z.object({
   ts: z.string().datetime(),
   cycleId: z.string().min(1),
@@ -28,7 +39,7 @@ export const BudgetLedgerEntrySchema = z.object({
   tokensOut: z.number().int().nonnegative(),
   toolUses: z.number().int().nonnegative().default(0),
   usd: z.number().nonnegative(),
-  kind: z.enum(["text", "image"]),
+  kind: BudgetLedgerKindSchema,
   campaignId: z.string().nullable().optional(),
   experimentId: z.string().nullable().optional(),
   assetId: z.string().nullable().optional()
@@ -399,14 +410,14 @@ export function assertImageReservation(
     const mediaToday = context.ledger
       .filter(
         (entry) =>
-          entry.kind === "image" &&
+          isMediaBudgetKind(entry.kind) &&
           isSameUtcDay(new Date(entry.ts), context.now)
       )
       .reduce((sum, entry) => sum + entry.usd, 0);
     const mediaMonth = context.ledger
       .filter(
         (entry) =>
-          entry.kind === "image" &&
+          isMediaBudgetKind(entry.kind) &&
           isSameUtcMonth(new Date(entry.ts), context.now)
       )
       .reduce((sum, entry) => sum + entry.usd, 0);
