@@ -32,6 +32,7 @@ import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { readApprovedUndeliveredPayloads } from "@/lib/admin-owner-attention";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
+import { readAdminBooksofhistory } from "@/lib/admin-booksofhistory";
 import { readDesignLab, readDesignLabPresets } from "@/lib/design-lab";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminCaughtUp } from "@/lib/admin-caught-up";
@@ -135,6 +136,7 @@ export default async function AdminPage({
     fightaiq,
     caughtUp,
     mmaFiles,
+    booksofhistory,
     carouselStudio,
     hookBrain,
     goviralProfile,
@@ -159,6 +161,7 @@ export default async function AdminPage({
     readAdminFightAiQ(),
     readAdminCaughtUp(),
     readAdminMmaFiles(),
+    readAdminBooksofhistory(),
     readCarouselStudio(),
     readHookBrain(),
     readGoViralProfile(),
@@ -209,15 +212,22 @@ export default async function AdminPage({
   /**
    * How many stored items a workspace holds.
    *
-   * Three ventures keep their work outside the portfolio card store, so counting cards reported 0
+   * Some ventures keep their work outside the portfolio card store, so counting cards reported 0
    * for them — FightAIQ showed nothing on a rail beside a workspace holding twelve hundred fighter
-   * records. Each of those three is counted from the loader that actually reads it.
+   * records. Each such venture is counted from the loader that actually reads it.
    */
   const savedItemCount = (ventureId: string, fallback: number) =>
     ventureId === "mma-files"
       ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
       : ventureId === "carousel-studio"
         ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
+        : ventureId === "booksofhistory"
+          ? (booksofhistory.shortlist ? 1 : 0)
+            + (booksofhistory.brief ? 1 : 0)
+            + (booksofhistory.cycle ? 1 : 0)
+            + booksofhistory.dossiers.length
+            + booksofhistory.ledger.length
+            + booksofhistory.features.length
         : ventureId === "fightaiq"
           ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.sources.length
           : fallback;

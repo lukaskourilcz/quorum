@@ -24,7 +24,7 @@ interface BhLanguageFeature {
   quotes: Array<{ text: string; attribution: string; claimRef: string }>;
 }
 
-interface BhRecommendation {
+export interface BhRecommendation {
   schemaVersion: "venture-recommendation/1";
   recommendationId: string;
   ventureId: "booksofhistory";
@@ -117,7 +117,7 @@ function parseFeature(value: unknown, locale: BhFeatureLocale): BhLanguageFeatur
   return value as unknown as BhLanguageFeature;
 }
 
-function parseRecommendation(value: unknown): BhRecommendation | null {
+export function parseBhRecommendation(value: unknown): BhRecommendation | null {
   if (!isObject(value) || value.schemaVersion !== "venture-recommendation/1" || value.ventureId !== "booksofhistory") return null;
   if (typeof value.recommendationId !== "string" || !ID.test(value.recommendationId)) return null;
   if (typeof value.cycleId !== "string" || !ISO.test(String(value.createdAt)) || !ISO.test(String(value.updatedAt))) return null;
@@ -197,7 +197,7 @@ async function findRecommendation(id: string): Promise<{ relative: string; recom
   const matches: Array<{ relative: string; recommendation: BhRecommendation }> = [];
   for (const name of names) {
     const relative = `${RECOMMENDATIONS_ROOT}/${name}`;
-    const parsed = parseRecommendation(await optionalLocal(relative));
+    const parsed = parseBhRecommendation(await optionalLocal(relative));
     if (!parsed) throw new BhFeaturePersistenceError("CORRUPT", `Recommendation ${name} is malformed.`);
     if (parsed.recommendationId === id) matches.push({ relative, recommendation: parsed });
   }

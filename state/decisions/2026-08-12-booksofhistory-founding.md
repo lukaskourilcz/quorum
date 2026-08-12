@@ -126,7 +126,7 @@ post anything.
 - [x] **BH-16a** — Studio brand tokens for `booksofhistory`
 - [x] **BH-16b** — Per-record locale and two summaries per feature
 - [x] **BH-17** — Admin approval write path
-- [ ] **BH-18a** — Server-only admin loader
+- [x] **BH-18a** — Server-only admin loader
 - [ ] **BH-18b** — Shortlist panel with factor breakdowns
 - [ ] **BH-18c** — Dossiers panel with the research ledger
 - [ ] **BH-18d** — Features panel, tab wiring and e2e
