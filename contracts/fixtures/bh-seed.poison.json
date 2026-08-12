@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "bh-seed/1",
+  "books": [
+    {
+      "bookId": "war-with-the-newts",
+      "title": "Válka s mloky",
+      "author": "Karel Čapek",
+      "year": 1936,
+      "originalLanguage": "cs",
+      "genres": ["science-fiction", "satire"],
+      "czechRelevance": { "kind": "prior", "score": 100 },
+      "internationalRelevance": { "kind": "prior", "score": 82 },
+      "recognition": { "kind": "prior", "score": 87 },
+      "significance": { "kind": "prior", "score": 94 },
+      "storytellingPotential": { "kind": "prior", "score": 91 },
+      "audienceFamiliarity": {
+        "cs": { "kind": "prior", "score": 89 },
+        "en": { "kind": "prior", "score": 58 }
+      },
+      "contentCategories": ["publishing-history"],
+      "provenance": "authored:implementation:2026-08-12",
+      "scoringMetadata": {
+        "version": "bh-seed-score/1",
+        "scale": "0-100",
+        "scoredOn": "2026-08-12",
+        "period": "20th",
+        "geographies": ["czechia"],
+        "angleTypes": ["publication"]
+      },
+      "biography": "An expensive research essay does not belong in a cheap seed record."
+    }
+  ]
+}

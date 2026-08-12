@@ -104,7 +104,7 @@ post anything.
 - [x] **BH-05a** — Cycle state-machine contract
 - [x] **BH-05b** — State machine, runner dispatch and per-day records
 - [x] **BH-05c** — Scaffold, hue, labels, KPI seeds and ladder position
-- [ ] **BH-06a** — `bh-seed` contract and fixtures
+- [x] **BH-06a** — `bh-seed` contract and fixtures
 - [ ] **BH-06b** — The no-cover-art boundary test
 - [ ] **BH-07a** — Author the approximately 200-book seed library
 - [ ] **BH-07b** — The `bh:seed` validating CLI

@@ -13,6 +13,7 @@ import { ArticlePackageSchema } from "../src/contracts/mma-files.js";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
 import { VentureRegistrySchema } from "../src/contracts/venture-registry.js";
 import { BhCycleSchema } from "../src/contracts/bh-cycle.js";
+import { BhSeedLibrarySchema } from "../src/contracts/bh-seed.js";
 
 const contractNames = Object.keys(ContractSchemas) as ContractName[];
 
@@ -55,6 +56,31 @@ describe("published contracts", () => {
 });
 
 describe("portfolio contract boundaries", () => {
+  it("keeps BOOKSOFHISTORY seeds cheap, prior-labelled and admin-only for cover references", async () => {
+    const valid = await fixture("bh-seed", "valid") as {
+      books: Array<Record<string, unknown> & {
+        recognition: Record<string, unknown>;
+        coverRef?: Record<string, unknown>;
+      }>;
+    };
+    expect(BhSeedLibrarySchema.safeParse(valid).success).toBe(true);
+    expect(valid.books[0]?.recognition.kind).toBe("prior");
+    expect(valid.books[0]?.coverRef?.visibility).toBe("admin-only");
+
+    for (const mutate of [
+      (book: Record<string, unknown>) => { book.dossier = { claims: [] }; },
+      (book: Record<string, unknown>) => { book.biography = "researched life story"; },
+      (book: Record<string, unknown>) => { book.recognition = 87; },
+      (book: Record<string, unknown>) => {
+        book.coverRef = { url: "https://example.invalid/cover", visibility: "public" };
+      }
+    ]) {
+      const poison = structuredClone(valid);
+      mutate(poison.books[0]!);
+      expect(BhSeedLibrarySchema.safeParse(poison).success).toBe(false);
+    }
+  });
+
   it("keeps the BOOKSOFHISTORY cycle ordered, unique and free of skipped days", async () => {
     const valid = await fixture("bh-cycle", "valid") as {
       dayStatuses: Record<string, string>;
