@@ -1,0 +1,708 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "book-kb-index/1"
+    },
+    "ventureId": {
+      "type": "string",
+      "const": "door-money"
+    },
+    "ingestionId": {
+      "type": "string",
+      "maxLength": 100,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "manuscriptHash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "manuscriptBytes": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "modelVersions": {
+      "type": "object",
+      "properties": {
+        "annotation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "rollup": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "embedding": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        }
+      },
+      "required": [
+        "annotation",
+        "rollup",
+        "embedding"
+      ],
+      "additionalProperties": false
+    },
+    "ingestionCostUsd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "chunkCount": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "chapters": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ch\\d{2,}$"
+          },
+          "ordinal": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          },
+          "chunkIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^ch\\d{2,}-s\\d{2,}-c\\d{3,}$"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "ordinal",
+          "summary",
+          "chunkIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "entityIndex": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 100,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "person",
+              "venue",
+              "event",
+              "organization",
+              "other"
+            ]
+          },
+          "personSensitive": {
+            "type": "boolean"
+          },
+          "chunkIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^ch\\d{2,}-s\\d{2,}-c\\d{3,}$"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "kind",
+          "personSensitive",
+          "chunkIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "themeIndex": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "theme": {
+            "type": "string",
+            "maxLength": 100,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "chunkIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^ch\\d{2,}-s\\d{2,}-c\\d{3,}$"
+            }
+          }
+        },
+        "required": [
+          "theme",
+          "chunkIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "chunks": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ch\\d{2,}-s\\d{2,}-c\\d{3,}$"
+          },
+          "chapterId": {
+            "type": "string",
+            "pattern": "^ch\\d{2,}$"
+          },
+          "sceneId": {
+            "type": "string",
+            "pattern": "^ch\\d{2,}-s\\d{2,}$"
+          },
+          "ordinal": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "arc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "byteOffsets": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "end": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "start",
+              "end"
+            ],
+            "additionalProperties": false
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          },
+          "entities": {
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "person",
+                    "venue",
+                    "event",
+                    "organization",
+                    "other"
+                  ]
+                },
+                "personSensitive": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "id",
+                "label",
+                "kind",
+                "personSensitive"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "themes": {
+            "maxItems": 24,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 100,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          },
+          "era": {
+            "type": "string",
+            "maxLength": 100,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "storyType": {
+            "type": "string",
+            "enum": [
+              "win",
+              "loss",
+              "absurd",
+              "lesson",
+              "travel"
+            ]
+          },
+          "quotables": {
+            "maxItems": 8,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          "scores": {
+            "type": "object",
+            "properties": {
+              "entertainment": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "emotionalImpact": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "shock": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "humor": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "relatability": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "hipHopRelevance": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "storytellingStrength": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "controversy": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "shareability": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "educationalValue": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "quotePotential": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "carouselPotential": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "shortVideoPotential": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "threadPotential": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              },
+              "bookCuriosityPotential": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 5
+                  },
+                  "justification": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "score",
+                  "justification"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "entertainment",
+              "emotionalImpact",
+              "shock",
+              "humor",
+              "relatability",
+              "hipHopRelevance",
+              "storytellingStrength",
+              "controversy",
+              "shareability",
+              "educationalValue",
+              "quotePotential",
+              "carouselPotential",
+              "shortVideoPotential",
+              "threadPotential",
+              "bookCuriosityPotential"
+            ],
+            "additionalProperties": false
+          },
+          "usageHistory": {
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "recommendationId": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                },
+                "recommendationPath": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300,
+                  "pattern": "^state\\/ventures\\/door-money\\/[a-zA-Z0-9._/-]+$"
+                },
+                "recommendedOn": {
+                  "type": "string",
+                  "format": "date",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                },
+                "format": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                }
+              },
+              "required": [
+                "recommendationId",
+                "recommendationPath",
+                "recommendedOn",
+                "format"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "chapterId",
+          "sceneId",
+          "ordinal",
+          "arc",
+          "byteOffsets",
+          "summary",
+          "entities",
+          "themes",
+          "era",
+          "storyType",
+          "quotables",
+          "scores",
+          "usageHistory"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "ventureId",
+    "ingestionId",
+    "manuscriptHash",
+    "manuscriptBytes",
+    "modelVersions",
+    "ingestionCostUsd",
+    "chunkCount",
+    "chapters",
+    "entityIndex",
+    "themeIndex",
+    "chunks",
+    "generatedAt"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/book-kb-index.schema.json"
+}

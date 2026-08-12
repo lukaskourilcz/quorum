@@ -157,7 +157,7 @@ costs and no treasury action in this decision.
 - [x] DM-05a — Scaffold, gitignore line, hue and labels
 - [x] DM-05b — KPI seeds for the quarter
 - [x] DM-05c — Degradation-ladder position with its test
-- [ ] DM-06a — book-kb-index contract and fixtures
+- [x] DM-06a — book-kb-index contract and fixtures
 - [ ] DM-06b — style-profile contract and fixtures
 - [ ] DM-06c — The excerpt-cap boundary test
 - [ ] DM-07 — Deterministic scene-aware chunker

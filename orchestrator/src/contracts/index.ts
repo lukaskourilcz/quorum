@@ -6,6 +6,7 @@ export * from "./bh-shortlist.js";
 export * from "./bh-research-brief.js";
 export * from "./bh-dossier.js";
 export * from "./bh-feature.js";
+export * from "./book-kb-index.js";
 export * from "./calendar.js";
 export * from "./campaign-brief.js";
 export * from "./carousel-template.js";
