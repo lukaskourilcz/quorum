@@ -1,4 +1,5 @@
 import "server-only";
+import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import {
@@ -17,6 +18,7 @@ import {
   type DoorMoneyRecommendationFormat,
   type DoorMoneyRecommendationStatus
 } from "./door-money-recommendation-model";
+import { parseRatingRecord, type RatingRecord } from "./rating-model";
 
 export type AdminDoorMoneyArtifactState = "missing" | "unreadable" | "present";
 
@@ -44,6 +46,8 @@ export interface AdminDoorMoneyRecommendation {
   statusHistory: DoorMoneyRecommendation["statusHistory"];
   generatedAt: string;
   updatedAt: string;
+  contentHash: string;
+  ratings: RatingRecord[];
 }
 
 export interface AdminDoorMoneyRecommendations {
@@ -85,7 +89,11 @@ async function readJson(absolutePath: string): Promise<JsonRead> {
   }
 }
 
-function projectRecommendation(value: DoorMoneyRecommendation): AdminDoorMoneyRecommendation {
+function projectRecommendation(
+  value: DoorMoneyRecommendation,
+  raw: string,
+  ratings: readonly RatingRecord[]
+): AdminDoorMoneyRecommendation {
   const { ratingRef: ignoredRatingRef, ...owner } = value.owner;
   void ignoredRatingRef;
   return {
@@ -111,12 +119,37 @@ function projectRecommendation(value: DoorMoneyRecommendation): AdminDoorMoneyRe
     owner,
     statusHistory: value.statusHistory,
     generatedAt: value.generatedAt,
-    updatedAt: value.updatedAt
+    updatedAt: value.updatedAt,
+    contentHash: `sha256:${createHash("sha256").update(raw).digest("hex").slice(0, 12)}`,
+    ratings: ratings
+      .filter((rating) => rating.objectKind === "recommendation" && rating.objectRef.id === value.id)
+      .sort((left, right) => right.ratedAt.localeCompare(left.ratedAt) || right.id.localeCompare(left.id))
   };
+}
+
+async function readRatings(root: string): Promise<{ items: RatingRecord[]; unreadable: number }> {
+  let raw: string;
+  try {
+    raw = await readFile(path.join(root, "state", "ratings", "door-money", "ledger.jsonl"), "utf8");
+  } catch (error) {
+    return (error as NodeJS.ErrnoException).code === "ENOENT"
+      ? { items: [], unreadable: 0 }
+      : { items: [], unreadable: 1 };
+  }
+  const items: RatingRecord[] = [];
+  let unreadable = 0;
+  for (const line of raw.split(/\r?\n/u).filter(Boolean)) {
+    let parsed: RatingRecord | null = null;
+    try { parsed = parseRatingRecord(JSON.parse(line) as unknown); } catch { /* Count below. */ }
+    if (!parsed || parsed.ventureId !== "door-money") unreadable += 1;
+    else items.push(parsed);
+  }
+  return { items, unreadable };
 }
 
 async function readRecommendations(root: string): Promise<AdminDoorMoneyRecommendations> {
   const directory = path.join(root, "state", "ventures", "door-money", "recommendations");
+  const ratings = await readRatings(root);
   let names: string[];
   try {
     names = (await readdir(directory, { withFileTypes: true }))
@@ -124,18 +157,21 @@ async function readRecommendations(root: string): Promise<AdminDoorMoneyRecommen
       .map(({ name }) => name)
       .sort();
   } catch (error) {
-    return (error as NodeJS.ErrnoException).code === "ENOENT"
-      ? { state: "missing", items: [], unreadable: 0 }
-      : { state: "unreadable", items: [], unreadable: 1 };
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      return { state: "missing", items: [], unreadable: ratings.unreadable };
+    }
+    return { state: "unreadable", items: [], unreadable: ratings.unreadable + 1 };
   }
 
-  let unreadable = 0;
+  let unreadable = ratings.unreadable;
   const items: AdminDoorMoneyRecommendation[] = [];
   for (const name of names) {
-    const result = await readJson(path.join(directory, name));
-    const parsed = result.state === "present" ? parseDoorMoneyRecommendation(result.value) : null;
+    let raw: string | null = null;
+    try { raw = await readFile(path.join(directory, name), "utf8"); } catch { /* Count below. */ }
+    let parsed: DoorMoneyRecommendation | null = null;
+    try { parsed = raw === null ? null : parseDoorMoneyRecommendation(JSON.parse(raw) as unknown); } catch { /* Count below. */ }
     if (!parsed) unreadable += 1;
-    else items.push(projectRecommendation(parsed));
+    else items.push(projectRecommendation(parsed, raw!, ratings.items));
   }
   items.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt) || right.id.localeCompare(left.id));
   return {

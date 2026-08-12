@@ -1,5 +1,5 @@
 import "server-only";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { buildCarouselSummary, reviewCarouselSummary, type CarouselSummary } from "@boardlessai/carousel-studio";
@@ -45,6 +45,14 @@ export interface DoorMoneyWrite {
 }
 
 export const GITHUB_TOKEN_ENV = "BOARDLESSAI_GITHUB_TOKEN";
+
+function jsonBytes(value: unknown): string {
+  return `${JSON.stringify(value, null, 2)}\n`;
+}
+
+export function doorMoneyRecommendationContentHash(value: DoorMoneyRecommendation): string {
+  return `sha256:${createHash("sha256").update(jsonBytes(value)).digest("hex").slice(0, 12)}`;
+}
 
 function relativeRecommendationPath(id: string): string {
   if (!SLUG.test(id) || id.length > 160) throw new DoorMoneyPersistenceError("CONFLICT", "That recommendation id is invalid.");
@@ -112,7 +120,7 @@ async function writeLocal(relative: string, value: unknown, root = repositoryRoo
   await mkdir(path.dirname(target), { recursive: true });
   const temporary = `${target}.${randomUUID()}.tmp`;
   try {
-    await writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { encoding: "utf8", mode: 0o600 });
+    await writeFile(temporary, jsonBytes(value), { encoding: "utf8", mode: 0o600 });
     await rename(temporary, target);
   } finally {
     await rm(temporary, { force: true });
@@ -138,7 +146,7 @@ async function writeGitHub(relative: string, value: unknown, message: string, to
       headers: { ...headers, "Content-Type": "application/json" },
       body: JSON.stringify({
         message,
-        content: Buffer.from(`${JSON.stringify(value, null, 2)}\n`).toString("base64"),
+        content: Buffer.from(jsonBytes(value)).toString("base64"),
         branch,
         ...(sha ? { sha } : {})
       })

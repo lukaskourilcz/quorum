@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -113,6 +114,36 @@ describe("Door Money admin loader", () => {
     await rm(path.join(root, "state/ventures/door-money/recommendations/valid.json"));
     const allMalformed = await readAdminDoorMoney(root);
     expect(allMalformed.recommendations).toEqual({ state: "unreadable", items: [], unreadable: 1 });
+  });
+
+  it("pins rating history to stored recommendation bytes and counts malformed rating lines", async () => {
+    const root = await temporaryRoot();
+    const stored = await fixture("venture-recommendation.valid.json");
+    const raw = JSON.stringify(stored);
+    const contentHash = `sha256:${createHash("sha256").update(raw).digest("hex").slice(0, 12)}`;
+    await json(root, "state/ventures/door-money/recommendations/fixture-radio-carousel.json", stored);
+    const ledgerPath = path.join(root, "state/ratings/door-money/ledger.jsonl");
+    await mkdir(path.dirname(ledgerPath), { recursive: true });
+    await writeFile(ledgerPath, `${JSON.stringify({
+      schemaVersion: "rating/1",
+      id: "r-2026-08-12-abcd",
+      ventureId: "door-money",
+      objectKind: "recommendation",
+      objectRef: { id: "fixture-radio-carousel", contentHash },
+      rating: "good",
+      ratedAt: "2026-08-12T11:00:00.000Z"
+    })}\n{not-json\n`);
+
+    const snapshot = await readAdminDoorMoney(root);
+    expect(snapshot.recommendations).toMatchObject({
+      state: "present",
+      unreadable: 1,
+      items: [{
+        id: "fixture-radio-carousel",
+        contentHash,
+        ratings: [{ objectKind: "recommendation", rating: "good" }]
+      }]
+    });
   });
 
   it("withholds partial knowledge when the current pointer or a linked artifact is unreadable", async () => {
