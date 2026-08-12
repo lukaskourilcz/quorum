@@ -218,6 +218,12 @@ section and a receipt line, and a day with no usable cluster records an honest q
   number into runtime code. The paid parser validates only the two-package envelope; each candidate
   then receives its own schema, claim, originality, marked-quote and angle result. One poison package
   is dropped and counted without discarding a valid sibling or making a replacement model call.
+- **Public-person and Czech-register boundary:** KV-13b resolves public-person scope against the
+  dated, owner-maintained entity lexicon; an unknown full name or private-relation term fails closed
+  instead of inviting the model to decide who is public. HACEK runs deterministic alarm, voter-respect
+  and Czech stop-slop checks by reusing the house lint, not by loading a skill or making another model
+  call. Separate checks also block vote instructions, endorsements, unsupported crime accusations,
+  unlabeled single-source facts and any publishing, account, channel, promotion or fundraising plan.
 
 ## Implementation checklist
 
@@ -248,7 +254,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-12a — Desk runner dispatch and the TRIBUN call
 - [x] KV-12b — Honest meeting records for the desk
 - [x] KV-13a — Gates: claim resolution and originality
-- [ ] KV-13b — Gates: banned content and register lint
+- [x] KV-13b — Gates: banned content and register lint
 - [ ] KV-14 — Recommendation store with idempotency
 - [ ] KV-15a — Studio brand tokens for Kvórum
 - [ ] KV-15b — Carousel-summary venture extension, byte-compatible

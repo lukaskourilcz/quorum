@@ -1,6 +1,8 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, test } from "vitest";
+import entityLexiconFixture from "../../config/kvorum-entities.json";
+import { KvorumEntityLexiconSchema } from "../src/contracts/kvorum-entities.js";
 import {
   TribunPackageSchema,
   type KvorumGateResult,
@@ -23,6 +25,7 @@ import { buildKvorumMonitorReceipt } from "../src/ventures/kvorum/monitor.js";
 const now = new Date("2026-08-12T20:45:00.000Z");
 const clusterId = "a".repeat(40);
 const unknownRef = "f".repeat(40);
+const entityLexicon = KvorumEntityLexiconSchema.parse(entityLexiconFixture);
 
 const items = [
   {
@@ -134,7 +137,7 @@ function candidate(): TribunPackage {
 }
 
 function evaluate(raw: unknown): { passed: boolean; results: KvorumGateResult[] } {
-  const result = evaluateKvorumPackages({ receipt: receipt(), candidates: [raw], duplicateThreshold: 0.86 });
+  const result = evaluateKvorumPackages({ receipt: receipt(), candidates: [raw], duplicateThreshold: 0.86, entityLexicon });
   return result.evaluations[0]!;
 }
 
@@ -159,7 +162,16 @@ describe("Kvórum package gates", () => {
       ["claim-resolution", "pass"],
       ["originality", "pass"],
       ["quote-verification", "pass"],
-      ["angle-distinction", "pass"]
+      ["angle-distinction", "pass"],
+      ["single-source-label", "pass"],
+      ["vote-recommendation", "pass"],
+      ["party-endorsement", "pass"],
+      ["crime-accusation", "pass"],
+      ["private-individual-scope", "pass"],
+      ["alarm-vocabulary", "pass"],
+      ["voter-respect", "pass"],
+      ["stop-slop", "pass"],
+      ["forbidden-action-proposal", "pass"]
     ]);
   });
 
@@ -191,7 +203,7 @@ describe("Kvórum package gates", () => {
 
     const mislabeled = receipt();
     mislabeled.clusters[0]!.attributions[0]!.discoveryOnly = false;
-    const result = evaluateKvorumPackages({ receipt: mislabeled, candidates: [poison], duplicateThreshold: 0.86 });
+    const result = evaluateKvorumPackages({ receipt: mislabeled, candidates: [poison], duplicateThreshold: 0.86, entityLexicon });
     expect(failed(result.evaluations[0]!, "claim-resolution")).toBe(true);
   });
 
@@ -223,13 +235,91 @@ describe("Kvórum package gates", () => {
     expect(failed(evaluate(poison), "angle-distinction")).toBe(true);
   });
 
+  test("requires an explicit Czech label on every fact-single claim", () => {
+    const poison = candidate();
+    poison.claims[0] = { id: "jeden-zdroj", type: "fact-single", text: "iROZHLAS popisuje další krok.", refs: [irozhlasRef] };
+    expect(failed(evaluate(poison), "single-source-label")).toBe(true);
+
+    poison.claims[0]!.text = "Zatím jediný zdroj, iROZHLAS, popisuje další krok.";
+    expect(failed(evaluate(poison), "single-source-label")).toBe(false);
+  });
+
+  test("blocks voting recommendations as their own gate", () => {
+    const poison = candidate();
+    poison.targets[0]!.copy = "Volte tuto kandidátku v říjnových volbách.";
+    expect(failed(evaluate(poison), "vote-recommendation")).toBe(true);
+  });
+
+  test("blocks party and candidate endorsements as their own gate", () => {
+    const poison = candidate();
+    poison.targets[0]!.copy = "Hnutí ANO je jediná správná volba pro Česko.";
+    expect(failed(evaluate(poison), "party-endorsement")).toBe(true);
+  });
+
+  test("requires typed, visible and on-record support for crime accusations", () => {
+    const poison = candidate();
+    poison.claims[0] = { id: "obvineni", type: "fact-single", text: "Politik je podvodník.", refs: [irozhlasRef] };
+    expect(failed(evaluate(poison), "crime-accusation")).toBe(true);
+
+    const supportedReceipt = receipt();
+    supportedReceipt.rawItems.find((item) => item.source.id === "irozhlas")!.text =
+      "Policie v usnesení uvedla, že politika obvinila z podvodu.";
+    poison.claims[0]!.text = "Zatím jediný zdroj, iROZHLAS, uvádí: policie politika obvinila z podvodu.";
+    const supported = evaluateKvorumPackages({
+      receipt: supportedReceipt,
+      candidates: [poison],
+      duplicateThreshold: 0.86,
+      entityLexicon
+    }).evaluations[0]!;
+    expect(failed(supported, "crime-accusation")).toBe(false);
+  });
+
+  test("blocks unknown full names and private relations while allowing lexicon public figures", () => {
+    const poison = candidate();
+    poison.targets[0]!.copy = "Jan Novák předal redakci soukromou zprávu.";
+    expect(failed(evaluate(poison), "private-individual-scope")).toBe(true);
+
+    const publicFigure = candidate();
+    publicFigure.targets[0]!.copy = "Petr Pavel podepsal zákon a Kancelář prezidenta zveřejnila záznam.";
+    expect(failed(evaluate(publicFigure), "private-individual-scope")).toBe(false);
+
+    const relation = candidate();
+    relation.targets[0]!.copy = "Manželka premiéra se k věci nevyjádřila.";
+    expect(failed(evaluate(relation), "private-individual-scope")).toBe(true);
+  });
+
+  test("blocks alarm vocabulary and exclamation-mark urgency", () => {
+    const poison = candidate();
+    poison.targets[0]!.copy = "Šokující skandál! Země je v ohrožení.";
+    expect(failed(evaluate(poison), "alarm-vocabulary")).toBe(true);
+  });
+
+  test("blocks mockery of voters rather than criticism of documented acts", () => {
+    const poison = candidate();
+    poison.targets[0]!.copy = "Voliči této strany jsou hloupé ovce.";
+    expect(failed(evaluate(poison), "voter-respect")).toBe(true);
+  });
+
+  test("runs the shared Czech stop-slop lint as its own gate", () => {
+    const poison = candidate();
+    poison.targets[0]!.copy = "Pojďme se podívat, co tento průlomový návrh přináší.";
+    expect(failed(evaluate(poison), "stop-slop")).toBe(true);
+  });
+
+  test("blocks publishing, account, channel, promotion and fundraising proposals", () => {
+    const poison = candidate();
+    poison.targets[0]!.copy = "Založme účet a spusťme reklamu na tento příspěvek.";
+    expect(failed(evaluate(poison), "forbidden-action-proposal")).toBe(true);
+  });
+
   test("drops and counts only the failed candidate without asking for a replacement", () => {
     const poison = candidate();
     poison.claims[0]!.refs = [stitRef, irozhlasRef];
     const result = evaluateKvorumPackages({
       receipt: receipt(),
       candidates: [candidate(), poison],
-      duplicateThreshold: 0.86
+      duplicateThreshold: 0.86,
+      entityLexicon
     });
     expect(result).toMatchObject({ accepted: [candidate()], droppedCount: 1 });
     expect(result.evaluations.map((evaluation) => evaluation.passed)).toEqual([true, false]);

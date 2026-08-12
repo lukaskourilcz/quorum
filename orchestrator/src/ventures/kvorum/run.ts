@@ -195,12 +195,14 @@ function rankedReceipt(input: {
 
 async function gateCandidates(
   receipt: KvorumMonitorReceipt,
-  candidates: readonly unknown[]
+  candidates: readonly unknown[],
+  entityLexicon: KvorumEntityLexicon
 ): Promise<Pick<KvorumDeskResult, "status" | "reason" | "packages" | "droppedPackages" | "gateEvaluations">> {
   const gated = evaluateKvorumPackages({
     receipt,
     candidates,
-    duplicateThreshold: await loadKvorumDuplicateThreshold()
+    duplicateThreshold: await loadKvorumDuplicateThreshold(),
+    entityLexicon
   });
   return {
     status: gated.accepted.length > 0 ? "packages" : "quiet",
@@ -270,7 +272,7 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
   if (input.dry) {
     const output = fixtureTribunOutput(receipt);
     const gated = output.outcome === "recommendations"
-      ? await gateCandidates(receipt, output.packages)
+      ? await gateCandidates(receipt, output.packages, source.lexicon)
       : { status: "quiet" as const, reason: output.reason, packages: [], droppedPackages: 0, gateEvaluations: [] };
     return {
       date: input.date,
@@ -325,7 +327,7 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
       parse: (text) => TribunDeskEnvelopeSchema.parse(JSON.parse(text))
     });
     const gated = response.value.outcome === "recommendations"
-      ? await gateCandidates(receipt, response.value.packages)
+      ? await gateCandidates(receipt, response.value.packages, source.lexicon)
       : { status: "quiet" as const, reason: response.value.reason, packages: [], droppedPackages: 0, gateEvaluations: [] };
     return {
       date: input.date,

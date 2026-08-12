@@ -81,7 +81,7 @@ export function fixtureTribunOutput(receipt: KvorumMonitorReceipt): TribunDeskOu
         platform: "instagram",
         format: "carousel",
         reason: "Tři snímky mohou oddělit návrh, proces a dopad.",
-        copy: "Televizní poplatky jsou znovu ve Sněmovně. Tady je návrh, další krok a to, co se skutečně mění.",
+        copy: "Televizní poplatky jsou znovu ve Sněmovně. Tady je návrh, další krok a to, co se mění.",
         altText: "Přehled návrhu a dalšího sněmovního kroku k financování médií veřejné služby."
       }],
       claims: [{

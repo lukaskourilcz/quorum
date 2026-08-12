@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
+import type { KvorumEntityLexicon } from "../../contracts/kvorum-entities.js";
 import {
   KvorumPackageGateEvaluationSchema,
   TribunPackageSchema,
@@ -15,6 +16,7 @@ import type {
 } from "../../contracts/kvorum-monitor.js";
 import { configRoot } from "../../paths.js";
 import { kvorumMonitorItemRef } from "./cluster.js";
+import { evaluateKvorumContentGates } from "./content-gates.js";
 
 const DuplicatePolicySchema = z.object({
   duplicateThreshold: z.number().finite().min(0).max(1)
@@ -259,6 +261,7 @@ export function evaluateKvorumPackages(input: {
   receipt: KvorumMonitorReceipt;
   candidates: readonly unknown[];
   duplicateThreshold: number;
+  entityLexicon: KvorumEntityLexicon;
 }): KvorumGateBatch {
   const threshold = DuplicatePolicySchema.shape.duplicateThreshold.parse(input.duplicateThreshold);
   const accepted: TribunPackage[] = [];
@@ -287,7 +290,8 @@ export function evaluateKvorumPackages(input: {
       claimResolutionGate(candidate, cluster, items),
       originalityGate(candidate, items, threshold),
       quoteGate(candidate, cluster, items),
-      angleGate(candidate, threshold)
+      angleGate(candidate, threshold),
+      ...evaluateKvorumContentGates({ candidate, cluster, items, lexicon: input.entityLexicon })
     ];
     const evaluation = KvorumPackageGateEvaluationSchema.parse({
       candidateIndex,

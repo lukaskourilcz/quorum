@@ -112,6 +112,7 @@ import { findSlotRecord } from "./meetings/slot-record.js";
 import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
 import { runMarketingSharkCycle } from "./ventures/marketingshark/run.js";
 import { runKvorumDesk } from "./ventures/kvorum/run.js";
+import { KVORUM_REGISTER_GATE_IDS } from "./ventures/kvorum/content-gates.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
 import {
   recordClosedArticleSlot,
@@ -358,8 +359,12 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       });
       const planned = result.status === "packages";
       const paused = result.status === "paused";
+      const hacekRan = result.gateEvaluations.some((evaluation) =>
+        evaluation.results.some((gate) => KVORUM_REGISTER_GATE_IDS.has(gate.gate))
+      );
       const selectedAgents = [
         ...(result.tribunRan ? ["TRIBUN"] : []),
+        ...(hacekRan ? ["HACEK"] : []),
         ...(result.gateEvaluations.length > 0 ? ["AUDIT"] : [])
       ];
       return {

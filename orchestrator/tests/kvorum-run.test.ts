@@ -94,7 +94,10 @@ describe("Kvórum desk runner", () => {
           packages: result.packages,
           droppedPackages: 0
         },
-        voteMatrix: [{ voter: "AUDIT", firstChoice: "pass", veto: false }]
+        voteMatrix: [
+          { voter: "HACEK", firstChoice: "pass", veto: false },
+          { voter: "AUDIT", firstChoice: "pass", veto: false }
+        ]
       });
       expect(meeting.kvorumDesk?.gateEvaluations).toHaveLength(1);
       expect(meeting.kvorumDesk?.gateEvaluations[0]?.results.every((gate) => gate.verdict === "pass")).toBe(true);
@@ -117,7 +120,7 @@ describe("Kvórum desk runner", () => {
       const dry = await dryProof(fixtureRoot);
       const fetched = externalFetch(dry.receipt!);
       const poison = structuredClone(dry.packages[0]!);
-      poison.targets[0]!.copy = fetched.items.find((item) => item.source.id === "irozhlas")!.text;
+      poison.targets[0]!.copy = `${fetched.items.find((item) => item.source.id === "irozhlas")!.text} Šok!`;
       let providerCalls = 0;
       const call = async <T>(request: GuardedCallInput<T>) => guardedJsonCall(request, {
         generate: async () => {
@@ -160,13 +163,20 @@ describe("Kvórum desk runner", () => {
         gate: "originality",
         verdict: "fail"
       }));
+      expect(result.gateEvaluations[1]?.results).toContainEqual(expect.objectContaining({
+        gate: "alarm-vocabulary",
+        verdict: "fail"
+      }));
       const meeting = MeetingRecordSchema.parse(JSON.parse(await readFile(
         path.join(root, "meetings/2026-08-12-kv-desk.json"),
         "utf8"
       )) as unknown);
       expect(meeting).toMatchObject({
         status: "PLAN",
-        voteMatrix: [{ voter: "AUDIT", veto: true }],
+        voteMatrix: [
+          { voter: "HACEK", veto: true },
+          { voter: "AUDIT", veto: true }
+        ],
         kvorumDesk: {
           droppedPackages: 1,
           gateEvaluations: [{ passed: true }, { passed: false }],
