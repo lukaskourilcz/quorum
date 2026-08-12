@@ -242,7 +242,7 @@ costs and no treasury action in this decision.
 - [x] DM-20b — Performance weights with floors
 - [x] DM-21a — GoVIRAL spine: topicSet and trend boosts
 - [x] DM-21b — GoVIRAL spine: transitions and the Design-Lab-only test
-- [ ] DM-22a — Documentation truth across the standing docs
+- [x] DM-22a — Documentation truth across the standing docs
 - [ ] DM-22b — INBOX approvals and NEEDED owner items
 - [ ] DM-22c — Honest gaps, checkbox sweep, prompt deletion
 

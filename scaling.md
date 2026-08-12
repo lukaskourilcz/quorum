@@ -27,7 +27,8 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 
 - Placená firemní rada se schází jednou v 06:00. Časy 14:00 a 22:00 jsou kontrolní
   zápisy bez modelu. Odborné porady se otevřou jen s konkrétní agendou; FightAIQ také
-  při skutečné změně zdrojových dat, marketingShark jako jediný běží každý den.
+  při skutečné změně zdrojových dat. marketingShark a návrhový stůl Door Money běží
+  denně, GoVIRAL platí model jen v pondělí a růstová porada Door Money jen ve čtvrtek.
   Nepotřebný čas stojí $0.
 - GitHub Actions běží na **pěti** rozvrzích místo dřívějších desítek překrývajících se
   letních a zimních záznamů: jeden hodinový dispatcher pojmenuje poradu podle spouštěče,
@@ -58,6 +59,9 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
   není možné. Zapsaný recept stojí zhruba $1.03 týdně a $4.60 měsíčně; když měsíc běží
   horko, hlídač ubírá kroky od konce, ne od začátku. Starter za $29/měsíc by sám snědl
   celý třicetidolarový limit, takže nic zde nesmí předpokládat placený plán.
+  Door Money do tohoto receptu nepřidává aktor ani kvótu: jeho čtyři anglické termíny
+  rotují po třech přes bezklíčový Google News sběr a brief smí označit jen skutečně
+  změřený termín.
 - Doručený článek posílá do Carousel Studia jen *summary*, ne celý text, a skládá se
   aritmeticky bez volání modelu. Karusel proto nestojí nic navíc a stejný článek dá vždy
   stejné slidy.
@@ -69,6 +73,13 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
   ale zatím ji nemá kam poslat — žádná porada ji nespouští, takže se nic neúčtuje. Až se
   zapojí, přidá zhruba $0.16 měsíčně. Žádné fixní náklady, žádná hotovost, žádná položka
   v pokladně.
+- Door Money má jednorázovou, majitelem spouštěnou ingestaci s tvrdým stropem **$3.00**
+  celkem, nejvýše $0.80 denně a $0.10 na volání; odhad jejího běžného dokončení je
+  $1.10–1.50. Denní GHOST stojí přibližně $1.80–2.10 měsíčně a čtvrteční BOOKER asi
+  $0.35 měsíčně, tedy provozní odhad přibližně **$2.50 měsíčně** uvnitř společného
+  modelového limitu. Ostatní dny růstová porada zapisuje $0. Soukromé úložiště je
+  stávající Git/GitHub cesta, výběr a váhy jsou deterministické, Design Lab vykresluje
+  za $0 a nový fixní ani placený datový náklad nevzniká.
 - Caught Up dál používá Claude Sonnet pro výběr tématu, anglický článek a českou verzi. Tyto tři kroky přímo určují kvalitu vydání, takže je bez srovnávacího testu nepřepínáme na levnější model.
 - Anglický writer dostává vybrané zdroje a nejvýše 12 dalších položek pro Watchlist. Dříve dostával dlouhý seznam všech URL, i když z něj nemohl čerpat další obsah.
 
