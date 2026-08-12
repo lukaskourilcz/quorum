@@ -121,6 +121,37 @@ describe("Door Money passage selection", () => {
     }).passages[0]).toMatchObject({ hookStyle: "narrative-led" });
   });
 
+  it("applies a modest deterministic boost only to themes in recorded trend-call tactics", () => {
+    const chunks = [
+      chunk({ id: "13", chapter: 1, themes: ["author-marketing"], arc: "author-work" }),
+      chunk({ id: "14", chapter: 2, themes: ["night-work"], arc: "night-work" })
+    ];
+    const trendBrief = { tactics: [{
+      description: "Trend call: author marketing (door-money, free google-news signal): 2 articles."
+    }] };
+    const first = selectDoorMoneyPassages({
+      ventureId: "door-money", date: "2026-09-01", chunks, trendBrief
+    });
+    const rebuilt = selectDoorMoneyPassages({
+      ventureId: "door-money", date: "2026-09-01", chunks: [...chunks].reverse(), trendBrief
+    });
+    expect(rebuilt).toEqual(first);
+    const byTheme = new Map(first.passages.map((passage) => [passage.themes[0], passage]));
+    expect(byTheme.get("author-marketing")?.formatScores.every(({ trendMultiplier }) => trendMultiplier === 1.05)).toBe(true);
+    expect(byTheme.get("night-work")?.formatScores.every(({ trendMultiplier }) => trendMultiplier === 1)).toBe(true);
+    expect(byTheme.get("author-marketing")?.formatScores.every(({ performanceMultiplier }) => performanceMultiplier === 1)).toBe(true);
+  });
+
+  it("does not infer a trend from an ordinary GoVIRAL idea that mentions a theme", () => {
+    const result = selectDoorMoneyPassages({
+      ventureId: "door-money",
+      date: "2026-09-01",
+      chunks: [chunk({ id: "15", themes: ["author-marketing"] })],
+      trendBrief: { tactics: [{ description: "Owner idea: write an author marketing checklist." }] }
+    });
+    expect(result.passages[0]?.formatScores.every(({ trendMultiplier }) => trendMultiplier === 1)).toBe(true);
+  });
+
   it("enforces the 21-day minimum and doubles a longer last-use interval", () => {
     expect(adaptiveCooldownDays([])).toBe(21);
     expect(adaptiveCooldownDays(["2026-06-01", "2026-06-11"])).toBe(21);

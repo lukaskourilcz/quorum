@@ -166,9 +166,9 @@ async function installResultWithSelectionDimensions(root: string): Promise<strin
 describe("Door Money BOOKER call", () => {
   it("selects only the latest dated GoVIRAL weekly brief and drops unrelated plans", async () => {
     const root = await temporaryRoot();
-    await writeJson(root, "ventures/goviral/plans/old.json", goViralBrief("2026-08-03"));
-    await writeJson(root, "ventures/goviral/plans/new.json", goViralBrief("2026-08-10"));
-    await writeJson(root, "ventures/goviral/plans/future.json", goViralBrief("2026-08-17"));
+    await writeJson(root, "ventures/goviral/plans/plan-2026-08-03-weekly-brief.json", goViralBrief("2026-08-03"));
+    await writeJson(root, "ventures/goviral/plans/plan-2026-08-10-weekly-brief.json", goViralBrief("2026-08-10"));
+    await writeJson(root, "ventures/goviral/plans/plan-2026-08-17-weekly-brief.json", goViralBrief("2026-08-17"));
     await writeJson(root, "ventures/goviral/plans/unrelated.json", goViralBrief("2026-08-12", "campaign-plan"));
     await writeJson(root, "ventures/goviral/plans/malformed.json", { schemaVersion: "marketing-plan/1" });
 
@@ -208,7 +208,7 @@ describe("Door Money BOOKER call", () => {
 
   it("uses one guarded OpenAI call and records a supported synthetic action packet", async () => {
     const root = await temporaryRoot();
-    await writeJson(root, "ventures/goviral/plans/brief.json", goViralBrief("2026-08-10"));
+    await writeJson(root, "ventures/goviral/plans/plan-2026-08-10-weekly-brief.json", goViralBrief("2026-08-10"));
     const previousKey = process.env.OPENAI_API_KEY;
     process.env.OPENAI_API_KEY = "synthetic-test-key";
     const reference = "goviral-plan:plan-2026-08-10-weekly-brief";

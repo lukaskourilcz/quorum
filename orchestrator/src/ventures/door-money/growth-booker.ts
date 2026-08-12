@@ -1,4 +1,4 @@
-import { readdir, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 import {
@@ -12,7 +12,6 @@ import {
   ActionPacketTaskSchema,
   type ActionPacket
 } from "../../contracts/action-packet.js";
-import { MarketingPlanSchema } from "../../contracts/marketing-plan.js";
 import {
   PerformanceWeightProposalSchema,
   type PerformanceWeightProposal
@@ -37,6 +36,10 @@ import {
   loadDoorMoneyPerformanceWeights,
   validateDoorMoneyPerformanceEvidence
 } from "./performance-weights.js";
+import {
+  loadLatestDoorMoneyGoViralBrief,
+  type DoorMoneyGoViralBrief
+} from "./goviral-brief.js";
 import type { SelectionPerformanceWeights } from "./select.js";
 
 const BookerRouteSchema = z.object({
@@ -76,21 +79,7 @@ export type BookerCall = (input: GuardedCallInput<BookerResponse>) => Promise<{
   usd: number;
 }>;
 
-export interface BookerGoViralBrief {
-  ref: string;
-  date: string;
-  id: string;
-  title: string;
-  summary: string;
-  objective: string;
-  tactics: Array<{
-    type: string;
-    description: string;
-    platformPolicyNote: string;
-  }>;
-  status: string;
-  originMeetingRef: string;
-}
+export type BookerGoViralBrief = DoorMoneyGoViralBrief;
 
 export interface DoorMoneyBookerContext {
   playbooks: {
@@ -121,29 +110,6 @@ export interface DoorMoneyBookerContext {
   availableLearningRefs: string[];
 }
 
-function projectGoViralBrief(plan: z.infer<typeof MarketingPlanSchema>): BookerGoViralBrief | null {
-  const idMatch = /^plan-(\d{4}-\d{2}-\d{2})-weekly-brief$/u.exec(plan.id);
-  const meetingMatch = /^(\d{4}-\d{2}-\d{2})-gv-brief$/u.exec(plan.originMeetingRef);
-  if (!idMatch || !meetingMatch || idMatch[1] !== meetingMatch[1]) return null;
-  const reference = `goviral-plan:${plan.id}`;
-  if (reference.length > 160) return null;
-  return {
-    ref: reference,
-    date: idMatch[1]!,
-    id: plan.id,
-    title: plan.title,
-    summary: plan.summary,
-    objective: plan.objective,
-    tactics: plan.tactics.slice(0, 24).map((tactic) => ({
-      type: tactic.type,
-      description: tactic.description,
-      platformPolicyNote: tactic.platformPolicyNote
-    })),
-    status: plan.status,
-    originMeetingRef: plan.originMeetingRef
-  };
-}
-
 export function doorMoneyBookerEvidenceRefs(
   memory: DoorMoneyGrowthMemory,
   latestGoViralBrief: BookerGoViralBrief | null
@@ -170,61 +136,19 @@ export async function loadDoorMoneyBookerContext(
   asOfTime = `${asOfDate}T23:59:59.999Z`
 ): Promise<DoorMoneyBookerContext> {
   const throughDate = DateSchema.parse(asOfDate);
-  const directory = path.join(root, "ventures", "goviral", "plans");
-  const [memory, performanceWeights] = await Promise.all([
+  const [memory, performanceWeights, goViral] = await Promise.all([
     loadDoorMoneyGrowthMemory(root, throughDate, asOfTime),
-    loadDoorMoneyPerformanceWeights(root)
+    loadDoorMoneyPerformanceWeights(root),
+    loadLatestDoorMoneyGoViralBrief(root, throughDate)
   ]);
-  let names: string[];
-  try {
-    names = (await readdir(directory, { withFileTypes: true }))
-      .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
-      .map(({ name }) => name)
-      .sort();
-  } catch (error) {
-    const missing = (error as NodeJS.ErrnoException).code === "ENOENT";
-    return {
-      playbooks: { state: memory.playbooks.length ? "present" : "missing", items: memory.playbooks },
-      ownerCompletions: { state: memory.ownerCompletions.length ? "present" : "missing", items: memory.ownerCompletions },
-      ownerResults: { state: memory.ownerResults.length ? "present" : "missing", items: memory.ownerResults },
-      performanceWeights: { state: performanceWeights.state, current: performanceWeights.weights },
-      latestGoViralBrief: null,
-      droppedGoViralBriefs: missing ? 0 : 1,
-      droppedPlaybooks: memory.droppedPlaybooks,
-      droppedActionPackets: memory.droppedActionPackets,
-      droppedOwnerResults: memory.droppedOwnerResults,
-      omittedPlaybooks: memory.omittedPlaybooks,
-      omittedOwnerCompletions: memory.omittedOwnerCompletions,
-      omittedOwnerResults: memory.omittedOwnerResults,
-      allowedEvidenceRefs: doorMoneyBookerEvidenceRefs(memory, null),
-      availableLearningRefs: doorMoneyBookerEvidenceRefs(memory, null)
-        .filter((reference) => reference.startsWith("completion:") || reference.startsWith("result:"))
-    };
-  }
-
-  const briefs: BookerGoViralBrief[] = [];
-  let droppedGoViralBriefs = 0;
-  for (const name of names) {
-    try {
-      const parsed = MarketingPlanSchema.safeParse(JSON.parse(await readFile(path.join(directory, name), "utf8")) as unknown);
-      const projected = parsed.success && parsed.data.ventureId === "goviral"
-        ? projectGoViralBrief(parsed.data)
-        : null;
-      if (projected && projected.date <= throughDate) briefs.push(projected);
-      else droppedGoViralBriefs += 1;
-    } catch {
-      droppedGoViralBriefs += 1;
-    }
-  }
-  briefs.sort((left, right) => right.date.localeCompare(left.date) || right.id.localeCompare(left.id));
-  const latestGoViralBrief = briefs[0] ?? null;
+  const latestGoViralBrief = goViral.latest;
   return {
     playbooks: { state: memory.playbooks.length ? "present" : "missing", items: memory.playbooks },
     ownerCompletions: { state: memory.ownerCompletions.length ? "present" : "missing", items: memory.ownerCompletions },
     ownerResults: { state: memory.ownerResults.length ? "present" : "missing", items: memory.ownerResults },
     performanceWeights: { state: performanceWeights.state, current: performanceWeights.weights },
     latestGoViralBrief,
-    droppedGoViralBriefs,
+    droppedGoViralBriefs: goViral.dropped,
     droppedPlaybooks: memory.droppedPlaybooks,
     droppedActionPackets: memory.droppedActionPackets,
     droppedOwnerResults: memory.droppedOwnerResults,

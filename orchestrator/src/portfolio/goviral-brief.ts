@@ -33,7 +33,7 @@ function trendCalls(trends: GoViralTrends | null): string[] {
       : `${signal.weekOverWeekDelta >= 0 ? "up" : "down"} ${Math.abs(signal.weekOverWeekDelta).toFixed(1)} on last week`;
     return `${signal.hashtag} (${signal.topicSet}): ${signal.engagementPerHour.toFixed(1)} engagements/hour across ${signal.posts} post${signal.posts === 1 ? "" : "s"}, ${delta}.`;
   });
-  const free = trends.freeSignals
+  const scopedFree = trends.freeSignals
     .flatMap((result) => result.status === "success" ? result.signals : [])
     .filter((signal) => signal.scope?.startsWith("topic-set:"))
     .sort((left, right) => right.value - left.value || left.topic.localeCompare(right.topic, "en"))
@@ -42,7 +42,21 @@ function trendCalls(trends: GoViralTrends | null): string[] {
       const [, topicSet = "unknown", locale = "unknown"] = signal.scope!.split(":");
       return `${signal.topic} (${topicSet}, free ${signal.kind}, ${locale}): ${signal.value}.`;
     });
-  return [...paid, ...free];
+  const doorMoneyFree = trends.freeSignals.flatMap((result) => result.status === "success"
+    ? result.signals
+      .filter((signal) => signal.topicSets.includes("door-money"))
+      .map((signal) => {
+        const measurement = signal.kind === "rank"
+          ? `rank ${signal.value}${signal.scope ? ` in ${signal.scope}` : ""}`
+          : signal.kind === "velocity"
+            ? `${signal.value.toFixed(1)} measured events/hour`
+            : result.provider === "google-news"
+              ? `${signal.value} article${signal.value === 1 ? "" : "s"} in the keyless news reading`
+              : `${signal.value} in the keyless search-volume reading`;
+        return `${signal.topic} (door-money, free ${result.provider} signal): ${measurement}.`;
+      })
+    : []);
+  return [...paid, ...scopedFree, ...doorMoneyFree.slice(0, 5)];
 }
 
 export function buildGoViralWeeklyBrief(input: {
