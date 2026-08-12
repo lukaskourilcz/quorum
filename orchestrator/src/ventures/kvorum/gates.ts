@@ -17,6 +17,10 @@ import type {
 import { configRoot } from "../../paths.js";
 import { kvorumMonitorItemRef } from "./cluster.js";
 import { evaluateKvorumContentGates } from "./content-gates.js";
+import {
+  kvorumFormatPerformanceWeight,
+  type KvorumPerformanceWeights
+} from "./performance.js";
 
 const DuplicatePolicySchema = z.object({
   duplicateThreshold: z.number().finite().min(0).max(1)
@@ -265,11 +269,42 @@ function rawClusterId(value: unknown): string | null {
   return typeof clusterId === "string" && Sha1Pattern.test(clusterId) ? clusterId : null;
 }
 
+function formatWeightingGate(
+  candidate: TribunPackage,
+  weights: KvorumPerformanceWeights | undefined
+): KvorumGateResult {
+  const explanation = [...new Set(candidate.targets.map((target) => target.format))]
+    .sort()
+    .map((format) => `${format} ${kvorumFormatPerformanceWeight(weights, format).toFixed(2)}`)
+    .join(", ");
+  return gate(
+    "format-weighting",
+    [],
+    `All requested formats remain eligible; bounded owner-result weights order delivery (${explanation}).`
+  );
+}
+
+function weightCandidateFormats(
+  candidate: TribunPackage,
+  weights: KvorumPerformanceWeights | undefined
+): TribunPackage {
+  const value = structuredClone(candidate);
+  value.targets = value.targets
+    .map((target, index) => ({ target, index }))
+    .sort((left, right) =>
+      kvorumFormatPerformanceWeight(weights, right.target.format)
+      - kvorumFormatPerformanceWeight(weights, left.target.format)
+      || left.index - right.index)
+    .map(({ target }) => target);
+  return value;
+}
+
 export function evaluateKvorumPackages(input: {
   receipt: KvorumMonitorReceipt;
   candidates: readonly unknown[];
   duplicateThreshold: number;
   entityLexicon: KvorumEntityLexicon;
+  performanceWeights?: KvorumPerformanceWeights;
 }): KvorumGateBatch {
   const threshold = DuplicatePolicySchema.shape.duplicateThreshold.parse(input.duplicateThreshold);
   const accepted: TribunPackage[] = [];
@@ -295,6 +330,7 @@ export function evaluateKvorumPackages(input: {
     const items = clusterItems({ receipt: input.receipt, cluster });
     const results: KvorumGateResult[] = [
       gate("schema-validation", [], "Candidate package matches the closed schema."),
+      formatWeightingGate(candidate, input.performanceWeights),
       claimResolutionGate(candidate, cluster, items),
       originalityGate(candidate, items, threshold),
       quoteGate(candidate, cluster, items),
@@ -308,7 +344,7 @@ export function evaluateKvorumPackages(input: {
       results
     });
     evaluations.push(evaluation);
-    if (evaluation.passed) accepted.push(candidate);
+    if (evaluation.passed) accepted.push(weightCandidateFormats(candidate, input.performanceWeights));
   }
   return {
     accepted,

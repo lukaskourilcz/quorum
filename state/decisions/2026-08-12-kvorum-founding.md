@@ -264,6 +264,14 @@ section and a receipt line, and a day with no usable cluster records an honest q
   counters, with at least one real number; the owner-result route supplies only `enteredBy: owner`
   and cannot fetch, publish or touch a channel. The recommendation links the result and the card
   places the typed outcome beside the original intent. `METRICS_INGESTION_ENABLED` stays untouched.
+- **Performance factors stay subordinate to gates:** The committed monitor receipt has a closed
+  factor schema, so KV-19b folds the bounded topic multiplier into its existing explainable
+  `entityWeight` factor instead of inventing an incompatible receipt field. On the gate side,
+  format weights order retained targets and record their values; they never remove a format or turn
+  a failed truth, safety or editorial gate into a pass. No sibling implementation or weekly room
+  existed to reuse, so the first shared writer accepts only one locked ISO-week proposal, verifies
+  at least three cited manual-result receipts per change, caps a weekly move at `0.10`, and enforces
+  the permanent `0.75–1.25` range. Direct edits without that proposal history fail schema parsing.
 
 ## Implementation checklist
 
@@ -305,7 +313,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-17d — Claims panel, tab wiring and e2e coverage
 - [x] KV-18 — Claims ledger and the correction flow
 - [x] KV-19a — Owner results: contract, route and store
-- [ ] KV-19b — Performance weights with floors and recorded proposals
+- [x] KV-19b — Performance weights with floors and recorded proposals
 - [ ] KV-20a — GoVIRAL spine: topic set and brief consumption
 - [ ] KV-20b — GoVIRAL spine: transitions and the Design-Lab-only test
 - [ ] KV-21a — Documentation truth across the standing docs

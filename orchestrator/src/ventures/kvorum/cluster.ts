@@ -8,6 +8,10 @@ import {
 } from "../../contracts/kvorum-monitor.js";
 import type { KvorumEntityLexicon } from "../../contracts/kvorum-entities.js";
 import { canonicalUrl } from "../../streams/normalize.js";
+import {
+  kvorumTopicPerformanceWeight,
+  type KvorumPerformanceWeights
+} from "./performance.js";
 
 export const KVORUM_CLUSTER_JACCARD_THRESHOLD = 0.2;
 export const KVORUM_ENTITY_JACCARD_WEIGHT = 4;
@@ -327,6 +331,7 @@ function rankFactors(input: {
   itemsByRef: ReadonlyMap<string, KvorumMonitorItem>;
   weights: ReadonlyMap<string, number>;
   standingTopics: ReadonlySet<string>;
+  performanceWeights?: KvorumPerformanceWeights;
   novelty: number;
 }): KvorumClusterRank["factors"] {
   const evidenceDomains = new Set(input.cluster.attributions
@@ -335,7 +340,7 @@ function rankFactors(input: {
   const entityWeights = input.cluster.entityIds.map((id) => {
     const weight = input.weights.get(id);
     if (weight === undefined) throw new Error(`Kvórum rank cannot resolve entity weight: ${id}`);
-    return weight;
+    return weight * kvorumTopicPerformanceWeight(input.performanceWeights, id);
   });
   const engagement = input.cluster.itemRefs.reduce((total, ref) => {
     const item = input.itemsByRef.get(ref);
@@ -362,6 +367,7 @@ export function rankKvorumClusters(input: {
   lexicon: KvorumEntityLexicon;
   priorRecommendations: readonly KvorumPriorRecommendation[];
   now: Date;
+  performanceWeights?: KvorumPerformanceWeights;
 }): KvorumRankedClusters {
   const history = recentRecommendations(input.priorRecommendations, input.now);
   const weights = new Map(input.lexicon.entities.map((entity) => [entity.id, entity.weight]));
@@ -380,6 +386,7 @@ export function rankKvorumClusters(input: {
       itemsByRef,
       weights,
       standingTopics,
+      performanceWeights: input.performanceWeights,
       novelty: historyResult.novelty
     });
     return {

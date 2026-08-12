@@ -135,7 +135,7 @@ describe("Kvórum desk runner", () => {
           posts: [expect.objectContaining({ engagement: { likes: 824, comments: 116, shares: 73 } })]
         }
       });
-      expect(recommendation.gateResults.results).toHaveLength(14);
+      expect(recommendation.gateResults.results).toHaveLength(15);
       const index = KvorumRecommendationIndexSchema.parse(JSON.parse(await readFile(
         path.join(root, "ventures/kvorum/recommendations/index.json"),
         "utf8"

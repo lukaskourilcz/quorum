@@ -21,6 +21,8 @@ import {
   loadKvorumDuplicateThreshold
 } from "../src/ventures/kvorum/gates.js";
 import { buildKvorumMonitorReceipt } from "../src/ventures/kvorum/monitor.js";
+import { applyPerformanceWeightProposal } from "../src/performance/weights.js";
+import { KvorumPerformanceWeightsSchema } from "../src/ventures/kvorum/performance.js";
 
 const now = new Date("2026-08-12T20:45:00.000Z");
 const clusterId = "a".repeat(40);
@@ -159,6 +161,7 @@ describe("Kvórum package gates", () => {
     expect(result.passed).toBe(true);
     expect(result.results.map((entry) => [entry.gate, entry.verdict])).toEqual([
       ["schema-validation", "pass"],
+      ["format-weighting", "pass"],
       ["claim-resolution", "pass"],
       ["originality", "pass"],
       ["quote-verification", "pass"],
@@ -173,6 +176,55 @@ describe("Kvórum package gates", () => {
       ["stop-slop", "pass"],
       ["forbidden-action-proposal", "pass"]
     ]);
+  });
+
+  test("orders every retained target by bounded format weight and records the explanation", async () => {
+    const raw = candidate();
+    raw.targets.push({
+      platform: "threads",
+      format: "thread",
+      reason: "A short thread keeps the procedural steps linked.",
+      copy: "Vlákno shrnuje návrh, rozhodovací proces a dohledatelný další krok.",
+      altText: null
+    });
+    const resultIds = ["kv-result-01", "kv-result-02", "kv-result-03"];
+    const state = JSON.parse(await readFile(
+      path.join(repoRoot, "state/ventures/kvorum/performance-weights.json"),
+      "utf8"
+    )) as unknown;
+    const performanceWeights = KvorumPerformanceWeightsSchema.parse(applyPerformanceWeightProposal({
+      state,
+      proposal: {
+        schemaVersion: "performance-weight-proposal/1",
+        id: "kv-format-2026-w33",
+        ventureId: "kvorum",
+        week: "2026-W33",
+        proposedAt: "2026-08-13T09:00:00.000Z",
+        changes: [{
+          axis: "format",
+          key: "thread",
+          weight: 1.1,
+          resultIds,
+          reason: "Three cited owner results support a bounded delivery-order adjustment."
+        }]
+      },
+      evidence: resultIds.map((resultId) => ({
+        resultId,
+        topics: ["public-media-funding"],
+        formats: ["thread"]
+      })),
+      now: new Date("2026-08-13T10:00:00.000Z")
+    }).state);
+    const evaluated = evaluateKvorumPackages({
+      receipt: receipt(),
+      candidates: [raw],
+      duplicateThreshold: 0.86,
+      entityLexicon,
+      performanceWeights
+    });
+    expect(evaluated.accepted[0]?.targets.map((target) => target.format)).toEqual(["thread", "carousel"]);
+    expect(evaluated.evaluations[0]?.results.find((gate) => gate.gate === "format-weighting")?.message)
+      .toContain("thread 1.10");
   });
 
   test("drops a package whose required angle field fails schema validation", () => {

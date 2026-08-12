@@ -16,6 +16,8 @@ import {
 } from "../src/ventures/kvorum/cluster.js";
 import { buildKvorumMonitorReceipt } from "../src/ventures/kvorum/monitor.js";
 import { repoRoot } from "../src/paths.js";
+import { applyPerformanceWeightProposal } from "../src/performance/weights.js";
+import { KvorumPerformanceWeightsSchema } from "../src/ventures/kvorum/performance.js";
 
 const now = new Date("2026-08-12T21:00:00.000Z");
 
@@ -75,6 +77,46 @@ describe("Kvórum deterministic cluster ranking", () => {
     expect(ranked.ranks.map((entry) => entry.position)).toEqual([1, 2, 3, 4]);
     expect(ranked.ranks.at(-1)?.factors.novelty).toBe(0);
     expect(ranked.ranks.at(-1)?.score).toBe(0);
+  });
+
+  test("multiplies the curated topic factor by the recorded performance weight", async () => {
+    const input = await fixtureInput();
+    const state = JSON.parse(await readFile(
+      path.join(repoRoot, "state/ventures/kvorum/performance-weights.json"),
+      "utf8"
+    )) as unknown;
+    const resultIds = ["kv-result-01", "kv-result-02", "kv-result-03"];
+    const performanceWeights = KvorumPerformanceWeightsSchema.parse(applyPerformanceWeightProposal({
+      state,
+      proposal: {
+        schemaVersion: "performance-weight-proposal/1",
+        id: "kv-rank-2026-w33",
+        ventureId: "kvorum",
+        week: "2026-W33",
+        proposedAt: "2026-08-13T09:00:00.000Z",
+        changes: [{
+          axis: "topic",
+          key: "public-media-funding",
+          weight: 0.9,
+          resultIds,
+          reason: "Three cited owner results support a bounded topic adjustment."
+        }]
+      },
+      evidence: resultIds.map((resultId) => ({
+        resultId,
+        topics: ["public-media-funding"],
+        formats: ["carousel"]
+      })),
+      now: new Date("2026-08-13T10:00:00.000Z")
+    }).state);
+    const ranked = rankKvorumClusters({
+      ...input,
+      priorRecommendations: input.history,
+      now,
+      performanceWeights
+    });
+    const media = ranked.clusters.find((cluster) => cluster.itemRefs.length === 3)!;
+    expect(ranked.ranks.find((entry) => entry.clusterId === media.id)?.factors.entityWeight).toBe(4.25);
   });
 
   test("decays the similarity penalty across the 14-day window", async () => {
