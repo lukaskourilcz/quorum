@@ -268,10 +268,19 @@ deterministic outputs; resumability proven by a test that kills the cursor mid-r
   card surfacing, `performance-weights.json` adjusted only by the weekly room's
   recorded proposal with floors, read by `select.ts`. Owner-entered only; no automated
   collection.
+- **DM-21** The GoVIRAL and Design Lab spine (the standing rule for every venture —
+  see `docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` §10): a `door-money` topicSet in
+  `config/goviral-sources.json` (BookTok, author-marketing, hip-hop-culture and
+  music-industry-story terms; free signals only — GoVIRAL's Apify recipe and quota
+  untouched); `dm-growth` already consumes the recorded GoVIRAL plan (DM-19) — extend
+  the same context into `select.ts` as a trend-relevance boost on passage themes;
+  `config/meeting-policy.json` transitions `gv-brief ↔ dm-growth` (one agenda each
+  way, inside the existing caps); and a test pinning that the venture's only rendering
+  path is the Design Lab.
 
 ### Phase F — close out
 
-- **DM-21** Documentation truth (`docs/ECOSYSTEM.md` curated layer, `docs/PORTFOLIO.md`,
+- **DM-22** Documentation truth (`docs/ECOSYSTEM.md` curated layer, `docs/PORTFOLIO.md`,
   `README.md`, `about-project.md`, `scaling.md` cost lines), INBOX items filed (below),
   `docs/NEEDED.md` owner items appended, founding decision's honest-gaps section
   written, every DM checkbox ticked, this prompt deleted in the final commit with the

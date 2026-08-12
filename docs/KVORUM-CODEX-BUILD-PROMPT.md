@@ -269,10 +269,18 @@ run appears in the Design Lab rail and exports PNG/ZIP; the claims ledger render
   and gate-side format weighting; adjusted only by a recorded weekly proposal citing
   result ids, with floors so small samples cannot collapse a format. This is
   owner-entered data; no automated collection of any kind.
+- **KV-20** The GoVIRAL and Design Lab spine (the standing rule for every venture —
+  see `docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` §10): a `kvorum` topicSet in
+  `config/goviral-sources.json` (Czech political and civic-trend terms; free signals
+  only — GoVIRAL's Apify recipe and quota untouched); the desk's cluster ranking
+  consumes the latest recorded GoVIRAL plan as its trend-crossover input;
+  `config/meeting-policy.json` transitions `gv-brief ↔ kv-desk` (one agenda each way,
+  inside the existing caps); and a test pinning that the venture's only rendering path
+  is the Design Lab.
 
 ### Phase F — close out
 
-- **KV-20** Documentation truth: sections in `docs/ECOSYSTEM.md` (curated layer),
+- **KV-21** Documentation truth: sections in `docs/ECOSYSTEM.md` (curated layer),
   `docs/PORTFOLIO.md`, `README.md` project table, `about-project.md`, `scaling.md` cost
   lines; INBOX approval items (below) filed; `docs/NEEDED.md` owner items appended in
   the house marker format; the founding decision's honest-gaps section written; every

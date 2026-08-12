@@ -165,8 +165,12 @@ feeds `dm-growth` when a trend touches books or music.
   data is the house pattern for measurement while `METRICS_INGESTION_ENABLED=false` (manual
   odds capture is the precedent); no automated analytics are collected, and the founding
   decision says so explicitly so the D9 hold is honored rather than skirted.
-- **GoVIRAL bridge** — read-only reuse of the weekly trend brief; no new scraping, no new
-  Apify scope for this venture. Zero paid data sources.
+- **GoVIRAL bridge** — the four-leg spine every venture carries
+  (`docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` §10): GoVIRAL scouts a `door-money` topicSet
+  (BookTok, author-marketing, hip-hop-culture terms), the growth room and the passage
+  selector read the Monday brief, agendas flow both ways, and the Design Lab is the only
+  rendering path. No new scraping, no new Apify scope for this venture. Zero paid data
+  sources.
 - **Design Lab** — rendering, recipes, exports (§10). **Treasury/ledger** — model calls ride
   the budget ledger under `ledgerNamespace: door-money`; there is no cash spend anywhere in
   the design.
