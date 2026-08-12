@@ -32,4 +32,25 @@ describe("zero-model operating signals", () => {
     expect(snapshot.quality.denominators).toEqual({ meetings: 0, proofs: 0, fighterFields: 0 });
     expect(snapshot.quality.verifierPassRate).toBe(0);
   });
+
+  it("keeps recommendation approval null until there is a denominator", async () => {
+    const stateRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-recommendations-"));
+    const empty = await computeAutonomySnapshot({ repoRoot, stateRoot, now: new Date("2026-08-01T04:00:00.000Z") });
+    const emptySignal = empty.growth.find((venture) => venture.venture === "kvorum")?.signals
+      .find((entry) => entry.id === "recommendation-approval");
+    expect(emptySignal?.value).toBeNull();
+
+    await json(path.join(stateRoot, "ventures/kvorum/recommendations/approved.json"), {
+      schemaVersion: "venture-recommendation/1",
+      status: "approved"
+    });
+    await json(path.join(stateRoot, "ventures/kvorum/recommendations/rejected.json"), {
+      schemaVersion: "venture-recommendation/1",
+      status: "rejected"
+    });
+    const measured = await computeAutonomySnapshot({ repoRoot, stateRoot, now: new Date("2026-08-02T04:00:00.000Z") });
+    const measuredSignal = measured.growth.find((venture) => venture.venture === "kvorum")?.signals
+      .find((entry) => entry.id === "recommendation-approval");
+    expect(measuredSignal?.value).toBe(0.5);
+  });
 });

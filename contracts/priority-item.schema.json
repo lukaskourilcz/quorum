@@ -78,7 +78,8 @@
         "MOTIF",
         "PIVOT",
         "MAKO",
-        "CHUM"
+        "CHUM",
+        "TRIBUN"
       ]
     },
     "created": {
@@ -182,7 +183,8 @@
                 "MOTIF",
                 "PIVOT",
                 "MAKO",
-                "CHUM"
+                "CHUM",
+                "TRIBUN"
               ]
             },
             "meeting_ref": {

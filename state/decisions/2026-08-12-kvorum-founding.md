@@ -149,6 +149,12 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - **Prompt inventory:** `architecture.test.ts` inventories only root prompt files even though
   marketingShark already has a prompt subdirectory. Kvórum will add a direct nested-prompt
   assertion rather than pretending nested files belong to the flat root inventory.
+- **Closed-enum sequencing:** the mandated title order registers `kv-desk` before the later
+  phase-schema and Vercel-cron issues teach every schedule consumer about it. KV-02b's contract
+  and KPI tests are green, but the full suite correctly refuses the unknown scheduled phase and
+  the system audit separately refuses to treat its unapproved `$0.10` as payable inside a `$0.02`
+  remainder. The tree is intentionally completed in order through Phase A before its full gate;
+  no compatibility bypass, premature cron entry or relaxed budget assertion hides either blocker.
 - **Documentation drift:** curated ecosystem prose still says six projects, 18 cron
   expressions, 11 templates and five brands in places where generated or live state now says
   seven projects, three GitHub sweeps, 23 families and five current brands. KV-21a must correct
@@ -159,7 +165,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-00 — Phase 0 audit: read the contracts, verify every assumption
 - [x] KV-01 — Write the founding decision record
 - [x] KV-02a — Registry entry in `config/ventures.json`
-- [ ] KV-02b — Venture-registry schema enum extensions and fixtures
+- [x] KV-02b — Venture-registry schema enum extensions and fixtures
 - [ ] KV-03a — Register the `kv-desk` phase in type and record schemas
 - [ ] KV-03b — Meeting policy classification for `kv-desk`
 - [ ] KV-03c — `cycle.yml` dispatch choices and mode gates

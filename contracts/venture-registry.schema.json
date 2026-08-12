@@ -62,7 +62,8 @@
                     "readiness-dossiers",
                     "campaign-inventory",
                     "live-template-library",
-                    "package-cadence"
+                    "package-cadence",
+                    "recommendation-approval"
                   ]
                 }
               }
@@ -102,7 +103,10 @@
                 "templates",
                 "inspiration",
                 "hooks",
-                "packages"
+                "packages",
+                "recommendations",
+                "monitor",
+                "claims"
               ]
             }
           },
@@ -198,7 +202,8 @@
                       "MOTIF",
                       "PIVOT",
                       "MAKO",
-                      "CHUM"
+                      "CHUM",
+                      "TRIBUN"
                     ]
                   }
                 },

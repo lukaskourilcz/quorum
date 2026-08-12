@@ -15,7 +15,7 @@ export const AUTONOMY_SNAPSHOT_PATH = "autonomy/latest.json";
 export interface CapabilitySignal {
   id: string;
   label: string;
-  value: number;
+  value: number | null;
   unit: "count" | "ratio";
   detail: string;
 }
@@ -85,7 +85,7 @@ function ratio(numerator: number, denominator: number): number {
   return denominator === 0 ? 0 : Number((numerator / denominator).toFixed(4));
 }
 
-function signal(id: string, label: string, value: number, unit: CapabilitySignal["unit"], detail: string): CapabilitySignal {
+function signal(id: string, label: string, value: number | null, unit: CapabilitySignal["unit"], detail: string): CapabilitySignal {
   return { id, label, value, unit, detail };
 }
 
@@ -149,6 +149,38 @@ async function marketingSharkPackages(root: string): Promise<number> {
   return complete;
 }
 
+/**
+ * Recommendation approval is a cohort ratio, not an activity counter.
+ *
+ * A record remains one drafted recommendation after it moves out of `draft`; approved, posted and
+ * archived records count in the numerator, while rejected records only count in the denominator.
+ * Until the shared recommendation contract lands, the version and closed status are the smallest
+ * conservative recognition boundary available. Unreadable and unfamiliar records never become a
+ * positive signal. Most importantly, an empty directory is no evidence at all, so it yields null.
+ */
+async function recommendationApproval(directory: string): Promise<{
+  approved: number;
+  drafted: number;
+  value: number | null;
+}> {
+  const statuses = new Set(["draft", "approved", "posted", "archived", "rejected"]);
+  let drafted = 0;
+  let approved = 0;
+  for (const file of await files(directory)) {
+    const record = await readFile(file, "utf8")
+      .then((raw) => JSON.parse(raw) as Record<string, unknown>)
+      .catch(() => null);
+    if (record?.schemaVersion !== "venture-recommendation/1" || !statuses.has(String(record.status))) continue;
+    drafted += 1;
+    if (record.status === "approved" || record.status === "posted" || record.status === "archived") approved += 1;
+  }
+  return {
+    approved,
+    drafted,
+    value: drafted === 0 ? null : ratio(approved, drafted)
+  };
+}
+
 export async function computeAutonomySnapshot(input: {
   repoRoot: string;
   stateRoot: string;
@@ -158,7 +190,7 @@ export async function computeAutonomySnapshot(input: {
   const sourceConfig = JSON.parse(await readFile(path.join(input.repoRoot, "config", "sources.json"), "utf8")) as {
     sources?: Array<{ enabled?: unknown }>;
   };
-  const [editionReceipts, articles, slates, fighters, plans, meetings, proofs, studioTemplates, marketingSharkPackageCount] = await Promise.all([
+  const [editionReceipts, articles, slates, fighters, plans, meetings, proofs, studioTemplates, marketingSharkPackageCount, recommendationApprovalRate] = await Promise.all([
     files(path.join(input.stateRoot, "edition", "deliveries")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "articles"), ArticlePackageSchema),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "slates"), EditorialSlateSchema),
@@ -167,7 +199,8 @@ export async function computeAutonomySnapshot(input: {
     validValues(path.join(input.stateRoot, "meetings"), MeetingRecordSchema),
     files(path.join(input.stateRoot, "release-proofs")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
     studioTemplateFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "templates")),
-    marketingSharkPackages(path.join(input.stateRoot, "ventures", "marketingshark", "packages"))
+    marketingSharkPackages(path.join(input.stateRoot, "ventures", "marketingshark", "packages")),
+    recommendationApproval(path.join(input.stateRoot, "ventures", "kvorum", "recommendations"))
   ]);
 
   const deliveredEditions = editionReceipts.filter((receipt) => receipt.status === "delivered" && receipt.editionStatus === "edition").length;
@@ -195,7 +228,16 @@ export async function computeAutonomySnapshot(input: {
     // accepts it, but nothing implemented it, so the venture resolved to an empty signal
     // list while every other venture reported. Same predicate the quarterly collector uses.
     "live-template-library": [signal("live-template-library", "Live carousel templates", studioTemplates.filter((template) => template.status === "live").length, "count", `${studioTemplates.filter((template) => template.status === "live").length} templates passed every brand and format check.`)],
-    "package-cadence": [signal("package-cadence", "Drafted carousel packages", marketingSharkPackageCount, "count", `${marketingSharkPackageCount} packages carry both carousels and a recorded render.`)]
+    "package-cadence": [signal("package-cadence", "Drafted carousel packages", marketingSharkPackageCount, "count", `${marketingSharkPackageCount} packages carry both carousels and a recorded render.`)],
+    "recommendation-approval": [signal(
+      "recommendation-approval",
+      "Recommendation approval",
+      recommendationApprovalRate.value,
+      "ratio",
+      recommendationApprovalRate.drafted === 0
+        ? "No recommendation has been drafted, so there is no approval denominator."
+        : `${recommendationApprovalRate.approved} of ${recommendationApprovalRate.drafted} drafted recommendations reached approval.`
+    )]
   };
 
   const killedSlotReasons: Record<string, number> = {};

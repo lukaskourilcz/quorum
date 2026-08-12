@@ -2,22 +2,34 @@
   "schemaVersion": "venture-registry/1",
   "ventures": [
     {
-      "id": "caught-up",
-      "name": "Caught Up",
+      "id": "kvorum",
+      "name": "Kvórum",
       "status": "operating",
-      "taste": false,
-      "ledgerNamespace": "shared",
-      "adminTabs": [],
-      "meetings": []
-    },
-    {
-      "id": "caught-up",
-      "name": "Duplicate",
-      "status": "paused",
-      "taste": false,
-      "ledgerNamespace": "shared",
-      "adminTabs": [],
-      "meetings": []
+      "taste": true,
+      "ledgerNamespace": "kvorum",
+      "growth_objective": {
+        "label": "Near misses must not open the closed registry contract",
+        "components": ["recommendationApproval"]
+      },
+      "adminTabs": ["recommendation"],
+      "meetings": [
+        {
+          "kind": "kv-desk",
+          "label": "Kvórum desk",
+          "cadence": "daily@21:00",
+          "cast": ["TRIBUNE"],
+          "envelopeUsd": 0.1,
+          "packet": {
+            "topicType": "social",
+            "decisionNeeded": "PLAN",
+            "preset": "kv-desk-room",
+            "objectives": {
+              "dry": "Reject near-miss registry tokens",
+              "live": "Reject near-miss registry tokens"
+            }
+          }
+        }
+      ]
     }
   ]
 }

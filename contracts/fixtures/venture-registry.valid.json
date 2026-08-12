@@ -2,30 +2,30 @@
   "schemaVersion": "venture-registry/1",
   "ventures": [
     {
-      "id": "caught-up",
-      "name": "Caught Up",
+      "id": "kvorum",
+      "name": "Kvórum",
       "status": "operating",
-      "taste": false,
-      "ledgerNamespace": "caught-up",
+      "taste": true,
+      "ledgerNamespace": "kvorum",
       "growth_objective": {
-        "label": "Publish reliably while widening the healthy source mix",
-        "components": ["edition-cadence", "source-coverage"]
+        "label": "Publish sourced political recommendations and build the receipts ledger",
+        "components": ["package-cadence", "recommendation-approval"]
       },
-      "adminTabs": ["plans", "visuals"],
+      "adminTabs": ["recommendations", "monitor", "claims"],
       "meetings": [
         {
-          "kind": "cu-edition",
-          "label": "Caught Up edition room",
-          "cadence": "daily@05:00",
-          "cast": ["HERALD", "STET", "HACEK", "AUDIT"],
-          "envelopeUsd": 0.08,
+          "kind": "kv-desk",
+          "label": "Kvórum desk",
+          "cadence": "daily@21:00",
+          "cast": ["TRIBUN", "HACEK", "AUDIT"],
+          "envelopeUsd": 0.1,
           "packet": {
-            "topicType": "edition",
-            "decisionNeeded": "EDITION",
-            "preset": "edition-room",
+            "topicType": "social",
+            "decisionNeeded": "PLAN",
+            "preset": "kv-desk-room",
             "objectives": {
-              "dry": "Review the overnight digest and select one story or record NO_EDITION",
-              "live": "Review the live digest and select one story or record NO_EDITION"
+              "dry": "Evaluate fixture monitor clusters and draft an original recommendation or record honest quiet",
+              "live": "Evaluate approved monitor clusters and draft an original recommendation or record honest quiet"
             }
           }
         }
