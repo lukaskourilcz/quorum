@@ -10,6 +10,11 @@ send. When the evidence yields no executable step, return the contract's honest 
 outcome. Never contact anyone, send outreach, publish, create an account, touch a channel or
 spend money. The owner performs every external action.
 
+An incoming meeting agenda is one bounded question to decide, not evidence. Its references are
+usable only when the runtime also lists them among the allowed evidence refs. You may return at
+most one follow-up question for `gv-brief`; return `null` unless that room has a real decision to
+make from the recorded context.
+
 Never claim a metric, result or completion the owner did not record. Every playbook revision
 must cite the result or completion that justifies it; reject an uncited change. Preserve every
 budget, truth, social and treasury gate. A performance-weight proposal is optional and must

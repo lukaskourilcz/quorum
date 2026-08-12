@@ -45,7 +45,11 @@ describe("meeting agenda queue", () => {
     expect(phaseHasStandingAgenda(policy, "dm-desk")).toBe(true);
     expect(phaseHasStandingAgenda(policy, "dm-growth")).toBe(true);
     expect(policy.transitions["dm-desk"]).toBeUndefined();
-    expect(policy.transitions["dm-growth"]).toBeUndefined();
+    expect(policy.transitions["gv-brief"]?.filter((phase) => phase === "dm-growth")).toHaveLength(1);
+    expect(policy.transitions["dm-growth"]).toEqual(["gv-brief"]);
+    expect(mayRequestMeeting(policy, "gv-brief", "dm-growth")).toBe(true);
+    expect(mayRequestMeeting(policy, "dm-growth", "gv-brief")).toBe(true);
+    expect(mayRequestMeeting(policy, "dm-growth", "dm-desk")).toBe(false);
     expect(policy.servicePhases).not.toContain("tt-marketing");
     expect(mayRequestMeeting(policy, "tt-marketing", "mma-analysis")).toBe(false);
     expect(nextAgendaDate({ currentDate: "2026-08-01", currentHour: 6, targetHour: 11 }))

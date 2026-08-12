@@ -34,10 +34,14 @@
     "gv-brief": [
       "gv-brief",
       "bh-desk",
+      "dm-growth",
       "mag-desk",
       "tt-marketing"
     ],
     "bh-desk": [
+      "gv-brief"
+    ],
+    "dm-growth": [
       "gv-brief"
     ],
     "mma-intake": [
