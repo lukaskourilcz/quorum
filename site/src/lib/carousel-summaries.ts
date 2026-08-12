@@ -41,7 +41,8 @@ export interface StudioArticle {
 
 const VENTURE_LABEL: Record<CarouselSummaryVenture, string> = {
   "caught-up": "DNESKAi",
-  "mma-files": "MMA Files"
+  "mma-files": "MMA Files",
+  booksofhistory: "BOOKSOFHISTORY"
 };
 
 /**
@@ -96,12 +97,13 @@ async function readJsonFiles(directory: string): Promise<Array<{ name: string; v
 /** Summaries delivery wrote. One directory per venture, one file per delivered article. */
 async function recordedSummaries(root: string): Promise<Map<string, CarouselSummary>> {
   const recorded = new Map<string, CarouselSummary>();
-  for (const venture of ["caught-up", "mma-files"] as const) {
+  for (const venture of ["caught-up", "mma-files", "booksofhistory"] as const) {
     const directory = path.join(root, "state", "ventures", "carousel-studio", "summaries", venture);
     for (const { value } of await readJsonFiles(directory)) {
       const summary = value as Partial<CarouselSummary>;
       if (summary?.schemaVersion !== "carousel-summary/1") continue;
-      if (typeof summary.slug !== "string" || !Array.isArray(summary.passages)) continue;
+      if (summary.venture !== venture || typeof summary.slug !== "string" || !Array.isArray(summary.passages)) continue;
+      if (summary.locale !== "cs" && summary.locale !== "en") continue;
       recorded.set(`${venture}:${summary.slug}:${summary.date}`, summary as CarouselSummary);
     }
   }

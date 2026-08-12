@@ -28,10 +28,10 @@ export type SocialCopy = z.infer<typeof SocialCopySchema>;
 
 export const SocialCopyPackSchema = z.object({
   schemaVersion: z.literal("social-copy/1"),
-  venture: z.enum(["caught-up", "mma-files"]),
+  venture: z.enum(["caught-up", "mma-files", "booksofhistory"]),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  locale: z.literal("cs"),
+  locale: z.enum(["cs", "en"]),
   copy: SocialCopySchema,
   /** The photograph's credit as plain text, or null when the article carries no photograph. */
   heroCredit: z.string().trim().min(1).nullable(),
@@ -69,9 +69,10 @@ export function renderCaptionFile(pack: SocialCopyPack): string {
   return `${renderCaption(pack.copy.igCaption, pack.heroCredit)}\n\n${tags}\n`;
 }
 
-const HASHTAG_BASE: Readonly<Record<"caught-up" | "mma-files", readonly string[]>> = {
+const HASHTAG_BASE: Readonly<Record<SocialCopyPack["venture"], readonly string[]>> = {
   "caught-up": ["ai", "umelainteligence", "technologie", "aitech", "dneskai"],
-  "mma-files": ["mma", "ufc", "oktagon", "bojovesporty", "mmafiles"]
+  "mma-files": ["mma", "ufc", "oktagon", "bojovesporty", "mmafiles"],
+  booksofhistory: ["booksofhistory", "bookhistory", "literaryhistory", "books", "publishinghistory"]
 };
 
 /** Latin letters and digits only: Instagram matches a diacritic tag as a different tag. */
@@ -84,7 +85,7 @@ export function normalizeHashtag(value: string): string {
 }
 
 /** The venture's base set, filled out from the article's own terms and bounded at ten. */
-export function completeHashtags(venture: "caught-up" | "mma-files", proposed: readonly string[]): string[] {
+export function completeHashtags(venture: SocialCopyPack["venture"], proposed: readonly string[]): string[] {
   const cleaned = proposed.map(normalizeHashtag).filter((tag) => tag.length >= 2 && tag.length <= 30);
   return [...new Set([...cleaned, ...HASHTAG_BASE[venture]])].slice(0, 10);
 }
@@ -97,7 +98,8 @@ export function completeHashtags(venture: "caught-up" | "mma-files", proposed: r
  * able to tell the desk's sentence from the pipeline's.
  */
 export function derivedCopyPack(input: {
-  venture: "caught-up" | "mma-files";
+  venture: SocialCopyPack["venture"];
+  locale?: SocialCopyPack["locale"];
   slug: string;
   date: string;
   headline: string;
@@ -113,7 +115,7 @@ export function derivedCopyPack(input: {
     venture: input.venture,
     slug: input.slug,
     date: input.date,
-    locale: "cs",
+    locale: input.locale ?? "cs",
     copy: {
       igCaption: caption,
       hashtags: completeHashtags(input.venture, input.tags ?? []),
@@ -127,7 +129,8 @@ export function derivedCopyPack(input: {
 
 /** The copy the desk wrote, bounded and normalized into a pack. Throws on anything out of bounds. */
 export function deskCopyPack(input: {
-  venture: "caught-up" | "mma-files";
+  venture: SocialCopyPack["venture"];
+  locale?: SocialCopyPack["locale"];
   slug: string;
   date: string;
   copy: { igCaption: string; hashtags: readonly string[]; threadsText: string; storyLine: string };
@@ -138,7 +141,7 @@ export function deskCopyPack(input: {
     venture: input.venture,
     slug: input.slug,
     date: input.date,
-    locale: "cs",
+    locale: input.locale ?? "cs",
     copy: {
       igCaption: input.copy.igCaption.trim().slice(0, CAPTION_LIMIT),
       hashtags: completeHashtags(input.venture, input.copy.hashtags),

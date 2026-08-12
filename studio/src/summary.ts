@@ -28,7 +28,8 @@ export const MIN_SUMMARY_PASSAGES = 3;
  */
 export const MAX_SUMMARY_PASSAGES = 8;
 
-export type CarouselSummaryVenture = "caught-up" | "mma-files";
+export type CarouselSummaryVenture = "caught-up" | "mma-files" | "booksofhistory";
+export type CarouselSummaryLocale = "cs" | "en";
 
 export interface CarouselSummarySource {
   /** How the desk classified it: primary document, record, or an internal verified file. */
@@ -44,8 +45,8 @@ export interface CarouselSummary {
   slug: string;
   /** Publication date, `YYYY-MM-DD`. */
   date: string;
-  /** Czech, because that is what both magazines publish. */
-  locale: "cs";
+  /** The language of this record; BOOKSOFHISTORY records its Czech and English twins separately. */
+  locale: CarouselSummaryLocale;
   /** The small mono line every template prints above the headline. */
   kicker: string;
   headline: string;
@@ -68,8 +69,7 @@ export interface CarouselSummary {
   heroCredit: string | null;
 }
 
-export interface CarouselSummaryInput {
-  venture: CarouselSummaryVenture;
+interface CarouselSummaryContentInput {
   slug: string;
   date: string;
   title: string;
@@ -85,14 +85,21 @@ export interface CarouselSummaryInput {
   heroCredit?: string | null;
 }
 
+export type CarouselSummaryInput = CarouselSummaryContentInput & (
+  | { venture: "caught-up" | "mma-files"; locale?: "cs" }
+  | { venture: "booksofhistory"; locale: CarouselSummaryLocale }
+);
+
 const KICKER: Record<CarouselSummaryVenture, string> = {
   "caught-up": "DNESKAi",
-  "mma-files": "MMA Files"
+  "mma-files": "MMA Files",
+  booksofhistory: "BOOKSOFHISTORY"
 };
 
-const CLOSING: Record<CarouselSummaryVenture, string> = {
-  "caught-up": "Jedno vydání a máte přehled.",
-  "mma-files": "Celý ozdrojovaný text najdete v MMA Files."
+const CLOSING: Record<CarouselSummaryVenture, Record<CarouselSummaryLocale, string>> = {
+  "caught-up": { cs: "Jedno vydání a máte přehled.", en: "One edition keeps you up to date." },
+  "mma-files": { cs: "Celý ozdrojovaný text najdete v MMA Files.", en: "Read the fully sourced story in MMA Files." },
+  booksofhistory: { cs: "Příběh knihy pokračuje v pramenech.", en: "The book's story continues in the sources." }
 };
 
 const MONTHS_CS = [
@@ -100,12 +107,24 @@ const MONTHS_CS = [
   "čvc", "srp", "zář", "říj", "lis", "pro"
 ];
 
+const MONTHS_EN = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+
 /** `MMA Files · 6. srp` — the kicker every template prints, in the language the magazine publishes. */
-export function summaryKicker(venture: CarouselSummaryVenture, date: string): string {
+export function summaryKicker(
+  venture: CarouselSummaryVenture,
+  date: string,
+  locale: CarouselSummaryLocale = "cs"
+): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/u.exec(date);
   if (!match) return KICKER[venture];
-  const month = MONTHS_CS[Number(match[2]) - 1];
-  return month ? `${KICKER[venture]} · ${Number(match[3])}. ${month}` : KICKER[venture];
+  const month = (locale === "cs" ? MONTHS_CS : MONTHS_EN)[Number(match[2]) - 1];
+  if (!month) return KICKER[venture];
+  return locale === "cs"
+    ? `${KICKER[venture]} · ${Number(match[3])}. ${month}`
+    : `${KICKER[venture]} · ${Number(match[3])} ${month}`;
 }
 
 /** One line, never longer than a slide holds, cut at a sentence boundary rather than mid-clause. */
@@ -141,18 +160,22 @@ function choosePassages(input: CarouselSummaryInput): string[] {
  * caller runs before queueing one.
  */
 export function buildCarouselSummary(input: CarouselSummaryInput): CarouselSummary {
+  if (input.venture === "booksofhistory" && input.locale === undefined) {
+    throw new Error("BOOKSOFHISTORY summaries require an explicit per-record locale");
+  }
+  const locale = input.locale ?? "cs";
   return {
     schemaVersion: "carousel-summary/1",
     venture: input.venture,
     slug: input.slug,
     date: input.date,
-    locale: "cs",
-    kicker: summaryKicker(input.venture, input.date),
+    locale,
+    kicker: summaryKicker(input.venture, input.date, locale),
     headline: oneLine(input.title),
     ...(input.coverLine ? { coverLine: oneLine(input.coverLine) } : {}),
     standfirst: oneLine(input.dek),
     passages: choosePassages(input),
-    closing: CLOSING[input.venture],
+    closing: CLOSING[input.venture][locale],
     sources: [...(input.sources ?? [])],
     hasHero: Boolean(input.hasHero),
     heroCredit: input.heroCredit ?? null

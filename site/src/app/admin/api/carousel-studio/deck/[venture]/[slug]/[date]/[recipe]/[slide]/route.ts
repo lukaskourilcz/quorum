@@ -67,7 +67,7 @@ export async function GET(
     const render = await renderCarouselSlidePng({
       template,
       payload: {
-        locale: "cs",
+        locale: deck.locale,
         strings,
         ...(recipeVariant(recipe) ? { variant: recipeVariant(recipe)! } : {})
       },

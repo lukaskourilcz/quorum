@@ -1,7 +1,7 @@
 import "server-only";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
-import { toRenderablePng } from "@boardlessai/carousel-studio";
+import { toRenderablePng, type CarouselSummaryVenture } from "@boardlessai/carousel-studio";
 
 /**
  * An article's hero, as PNG bytes a slide can embed.
@@ -21,7 +21,9 @@ const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process
  * loader answered a question ("which article?") that the slug alone cannot answer. The date is
  * the rest of the identity, so it is matched too.
  */
-async function heroBase64(venture: "caught-up" | "mma-files", slug: string, date: string): Promise<string | null> {
+async function heroBase64(venture: CarouselSummaryVenture, slug: string, date: string): Promise<string | null> {
+  // BOOKSOFHISTORY is typographic by founding decision; even an admin seed coverRef is ignored.
+  if (venture === "booksofhistory") return null;
   const directory = venture === "mma-files"
     ? path.join(repositoryRoot, "state/ventures/mma-files/articles")
     : path.join(repositoryRoot, "state/edition/outbox");
@@ -48,7 +50,7 @@ async function heroBase64(venture: "caught-up" | "mma-files", slug: string, date
 }
 
 export async function readArticleHeroPng(
-  venture: "caught-up" | "mma-files",
+  venture: CarouselSummaryVenture,
   slug: string,
   date: string
 ): Promise<Buffer | null> {

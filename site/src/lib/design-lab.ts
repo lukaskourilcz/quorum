@@ -14,6 +14,7 @@ import {
   reviewDeck,
   wordCount,
   type CarouselRecipe,
+  type CarouselSummaryVenture,
   type SocialCopyPack
 } from "@boardlessai/carousel-studio";
 import { readStudioArticles, type StudioArticle } from "@/lib/carousel-summaries";
@@ -28,7 +29,7 @@ import type { CarouselPreset } from "@boardlessai/carousel-studio";
 /** A saved design, as the picker shows it. */
 export type LabPreset = Pick<CarouselPreset, "id" | "name" | "family" | "variant" | "accentSwap" | "treatment" | "typeScale" | "status">;
 
-export async function readDesignLabPresets(venture?: "caught-up" | "mma-files"): Promise<LabPreset[]> {
+export async function readDesignLabPresets(venture?: CarouselSummaryVenture): Promise<LabPreset[]> {
   const presets = await readCarouselPresets();
   return presets
     .filter((preset) => !venture || preset.ventureScope.length === 0 || preset.ventureScope.includes(venture))
@@ -60,7 +61,8 @@ export interface LabSlide {
 
 export interface LabArticle {
   id: string;
-  venture: "caught-up" | "mma-files";
+  venture: CarouselSummaryVenture;
+  locale: "cs" | "en";
   ventureLabel: string;
   slug: string;
   date: string;
@@ -122,11 +124,6 @@ async function recipeHistory(venture: string): Promise<Array<{ date: string; fam
 /** Everything a recorded override may name: every family, and the five original styles. */
 const DESIGNS: readonly string[] = [...DECK_FAMILIES, "mesh", "editorial", "spotlight", "contrast", "aurora"];
 
-const CLOSING: Record<"caught-up" | "mma-files", string> = {
-  "caught-up": "Jedno vydání a máte přehled.",
-  "mma-files": "Celý ozdrojovaný text najdete v MMA Files."
-};
-
 function deckFor(article: StudioArticle): string[] {
   const summary = article.summary;
   return buildArticleDeck({
@@ -177,16 +174,18 @@ export async function readDesignLab(limit = 40): Promise<LabArticle[]> {
     });
     const copy = await recordedCopy(venture, slug, date) ?? derivedCopyPack({
       venture,
+      locale: article.summary.locale,
       slug,
       date,
       headline: article.summary.headline,
       standfirst: article.summary.standfirst,
-      closing: CLOSING[venture],
+      closing: article.summary.closing,
       heroCredit: article.summary.heroCredit
     });
     lab.push({
       id: article.id,
       venture,
+      locale: article.summary.locale,
       ventureLabel: article.ventureLabel,
       slug,
       date,
