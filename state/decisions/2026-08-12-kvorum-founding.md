@@ -198,7 +198,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-05c — Degradation-ladder position with its test
 - [x] KV-06a — `kvorum-sources` registry with verified actors and feeds
 - [x] KV-06b — Network allowlist additions and the host-pinning test
-- [ ] KV-07 — Entity lexicon config
+- [x] KV-07 — Entity lexicon config
 - [ ] KV-08a — Venture Apify quota file and share cap
 - [ ] KV-08b — Third-tenant extension of the Apify guard
 - [ ] KV-09a — Monitor fetch, normalize and the fixed-field row mapper

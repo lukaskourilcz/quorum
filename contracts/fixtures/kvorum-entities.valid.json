@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "kvorum-entities/1",
+  "asOf": "2026-08-12",
+  "governance": {
+    "ownerEditable": true,
+    "deskMutation": "proposal-only",
+    "proposalPath": "state/ventures/kvorum/entity-proposals"
+  },
+  "matching": {
+    "locale": "cs-CZ",
+    "caseFold": true,
+    "diacriticFold": true,
+    "wholeWords": true
+  },
+  "entities": [
+    {
+      "id": "andrej-babis",
+      "kind": "person",
+      "canonicalName": "Andrej Babiš",
+      "aliases": ["premiér Babiš"],
+      "weight": 5,
+      "roles": ["government-member", "party-leader"],
+      "note": "Fixture government member and party leader."
+    },
+    {
+      "id": "petr-pavel",
+      "kind": "person",
+      "canonicalName": "Petr Pavel",
+      "aliases": ["prezident Pavel"],
+      "weight": 5,
+      "roles": ["head-of-state"],
+      "note": "Fixture head of state."
+    },
+    {
+      "id": "ano-2011",
+      "kind": "party",
+      "canonicalName": "ANO 2011",
+      "aliases": ["hnutí ANO"],
+      "weight": 5,
+      "roles": [],
+      "note": "Fixture party."
+    },
+    {
+      "id": "vlada-cr",
+      "kind": "institution",
+      "canonicalName": "Vláda České republiky",
+      "aliases": ["Babišova vláda"],
+      "weight": 5,
+      "roles": [],
+      "note": "Fixture institution."
+    },
+    {
+      "id": "public-media-funding",
+      "kind": "topic",
+      "canonicalName": "Financování médií veřejné služby",
+      "aliases": ["koncesionářské poplatky"],
+      "weight": 5,
+      "roles": [],
+      "note": "Required fixture topic."
+    },
+    {
+      "id": "ukraine-aid",
+      "kind": "topic",
+      "canonicalName": "Pomoc Ukrajině",
+      "aliases": ["muniční iniciativa"],
+      "weight": 5,
+      "roles": [],
+      "note": "Required fixture topic."
+    },
+    {
+      "id": "agrofert-conflict",
+      "kind": "topic",
+      "canonicalName": "Agrofert a střet zájmů",
+      "aliases": ["svěřenské fondy"],
+      "weight": 5,
+      "roles": [],
+      "note": "Required fixture topic."
+    },
+    {
+      "id": "municipal-elections-2026",
+      "kind": "topic",
+      "canonicalName": "Komunální volby 2026",
+      "aliases": ["volby do zastupitelstev obcí"],
+      "weight": 5,
+      "roles": [],
+      "note": "Required fixture topic."
+    },
+    {
+      "id": "senate-elections-2026",
+      "kind": "topic",
+      "canonicalName": "Senátní volby 2026",
+      "aliases": ["volby do Senátu"],
+      "weight": 5,
+      "roles": [],
+      "note": "Required fixture topic."
+    }
+  ]
+}

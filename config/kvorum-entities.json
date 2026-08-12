@@ -1,0 +1,440 @@
+{
+  "schemaVersion": "kvorum-entities/1",
+  "asOf": "2026-08-12",
+  "governance": {
+    "ownerEditable": true,
+    "deskMutation": "proposal-only",
+    "proposalPath": "state/ventures/kvorum/entity-proposals"
+  },
+  "matching": {
+    "locale": "cs-CZ",
+    "caseFold": true,
+    "diacriticFold": true,
+    "wholeWords": true
+  },
+  "entities": [
+    {
+      "id": "petr-pavel",
+      "kind": "person",
+      "canonicalName": "Petr Pavel",
+      "aliases": ["prezident Pavel", "prezident republiky"],
+      "weight": 5,
+      "roles": ["head-of-state"],
+      "note": "Prezident České republiky; owner-maintained role snapshot."
+    },
+    {
+      "id": "andrej-babis",
+      "kind": "person",
+      "canonicalName": "Andrej Babiš",
+      "aliases": ["Babiš", "premiér Babiš"],
+      "weight": 5,
+      "roles": ["government-member", "party-leader"],
+      "note": "Předseda vlády a předseda hnutí ANO."
+    },
+    {
+      "id": "karel-havlicek",
+      "kind": "person",
+      "canonicalName": "Karel Havlíček",
+      "aliases": ["Havlíček", "vicepremiér Havlíček"],
+      "weight": 4,
+      "roles": ["government-member"],
+      "note": "První místopředseda vlády a ministr průmyslu a obchodu."
+    },
+    {
+      "id": "petr-macinka",
+      "kind": "person",
+      "canonicalName": "Petr Macinka",
+      "aliases": ["Macinka", "ministr Macinka"],
+      "weight": 4,
+      "roles": ["government-member", "party-leader"],
+      "note": "Místopředseda vlády, ministr zahraničních věcí a předseda Motoristů sobě."
+    },
+    {
+      "id": "alena-schillerova",
+      "kind": "person",
+      "canonicalName": "Alena Schillerová",
+      "aliases": ["Schillerová", "ministryně Schillerová"],
+      "weight": 4,
+      "roles": ["government-member"],
+      "note": "Místopředsedkyně vlády a ministryně financí."
+    },
+    {
+      "id": "jaromir-zuna",
+      "kind": "person",
+      "canonicalName": "Jaromír Zůna",
+      "aliases": ["Zůna", "ministr Zůna"],
+      "weight": 3,
+      "roles": ["government-member"],
+      "note": "Místopředseda vlády a ministr obrany."
+    },
+    {
+      "id": "lubomir-metnar",
+      "kind": "person",
+      "canonicalName": "Lubomír Metnar",
+      "aliases": ["Metnar", "ministr Metnar"],
+      "weight": 3,
+      "roles": ["government-member"],
+      "note": "Ministr vnitra."
+    },
+    {
+      "id": "ales-juchelka",
+      "kind": "person",
+      "canonicalName": "Aleš Juchelka",
+      "aliases": ["Juchelka", "ministr Juchelka"],
+      "weight": 3,
+      "roles": ["government-member"],
+      "note": "Ministr práce a sociálních věcí."
+    },
+    {
+      "id": "zuzana-mrazova",
+      "kind": "person",
+      "canonicalName": "Zuzana Mrázová",
+      "aliases": ["Mrázová", "ministryně Mrázová"],
+      "weight": 3,
+      "roles": ["government-member"],
+      "note": "Ministryně pro místní rozvoj."
+    },
+    {
+      "id": "adam-vojtech",
+      "kind": "person",
+      "canonicalName": "Adam Vojtěch",
+      "aliases": ["Vojtěch", "ministr Vojtěch"],
+      "weight": 3,
+      "roles": ["government-member"],
+      "note": "Ministr zdravotnictví."
+    },
+    {
+      "id": "robert-plaga",
+      "kind": "person",
+      "canonicalName": "Robert Plaga",
+      "aliases": ["Plaga", "ministr Plaga"],
+      "weight": 3,
+      "roles": ["government-member"],
+      "note": "Ministr školství, mládeže a tělovýchovy."
+    },
+    {
+      "id": "jeronym-tejc",
+      "kind": "person",
+      "canonicalName": "Jeroným Tejc",
+      "aliases": ["Tejc", "ministr Tejc"],
+      "weight": 3,
+      "roles": ["government-member"],
+      "note": "Ministr spravedlnosti."
+    },
+    {
+      "id": "ivan-bednarik",
+      "kind": "person",
+      "canonicalName": "Ivan Bednárik",
+      "aliases": ["Bednárik", "ministr Bednárik"],
+      "weight": 3,
+      "roles": ["government-member"],
+      "note": "Ministr dopravy."
+    },
+    {
+      "id": "martin-sebestyan",
+      "kind": "person",
+      "canonicalName": "Martin Šebestyán",
+      "aliases": ["Šebestyán", "ministr Šebestyán"],
+      "weight": 3,
+      "roles": ["government-member"],
+      "note": "Ministr zemědělství."
+    },
+    {
+      "id": "igor-cerveny",
+      "kind": "person",
+      "canonicalName": "Igor Červený",
+      "aliases": ["Červený", "ministr Červený"],
+      "weight": 3,
+      "roles": ["government-member"],
+      "note": "Ministr životního prostředí."
+    },
+    {
+      "id": "oto-klempir",
+      "kind": "person",
+      "canonicalName": "Oto Klempíř",
+      "aliases": ["Klempíř", "ministr Klempíř"],
+      "weight": 3,
+      "roles": ["government-member"],
+      "note": "Ministr kultury."
+    },
+    {
+      "id": "boris-stastny",
+      "kind": "person",
+      "canonicalName": "Boris Šťastný",
+      "aliases": ["Šťastný", "ministr Šťastný"],
+      "weight": 3,
+      "roles": ["government-member"],
+      "note": "Ministr sportu, prevence a zdraví."
+    },
+    {
+      "id": "tomio-okamura",
+      "kind": "person",
+      "canonicalName": "Tomio Okamura",
+      "aliases": ["Okamura", "šéf SPD"],
+      "weight": 4,
+      "roles": ["party-leader"],
+      "note": "Předseda hnutí SPD."
+    },
+    {
+      "id": "martin-kupka",
+      "kind": "person",
+      "canonicalName": "Martin Kupka",
+      "aliases": ["Kupka", "šéf ODS"],
+      "weight": 4,
+      "roles": ["party-leader"],
+      "note": "Předseda ODS."
+    },
+    {
+      "id": "vit-rakusan",
+      "kind": "person",
+      "canonicalName": "Vít Rakušan",
+      "aliases": ["Rakušan", "šéf STAN"],
+      "weight": 4,
+      "roles": ["party-leader"],
+      "note": "Předseda hnutí STAN."
+    },
+    {
+      "id": "zdenek-hrib",
+      "kind": "person",
+      "canonicalName": "Zdeněk Hřib",
+      "aliases": ["Hřib", "šéf Pirátů"],
+      "weight": 4,
+      "roles": ["party-leader"],
+      "note": "Předseda České pirátské strany."
+    },
+    {
+      "id": "marek-vyborny",
+      "kind": "person",
+      "canonicalName": "Marek Výborný",
+      "aliases": ["Výborný", "šéf KDU-ČSL"],
+      "weight": 3,
+      "roles": ["party-leader"],
+      "note": "Předseda KDU-ČSL."
+    },
+    {
+      "id": "matej-ondrej-havel",
+      "kind": "person",
+      "canonicalName": "Matěj Ondřej Havel",
+      "aliases": ["Matěj Havel", "šéf TOP 09"],
+      "weight": 3,
+      "roles": ["party-leader"],
+      "note": "Předseda TOP 09."
+    },
+    {
+      "id": "ano-2011",
+      "kind": "party",
+      "canonicalName": "ANO 2011",
+      "aliases": ["ANO", "hnutí ANO"],
+      "weight": 5,
+      "roles": [],
+      "note": "Vládní politické hnutí."
+    },
+    {
+      "id": "spd",
+      "kind": "party",
+      "canonicalName": "Svoboda a přímá demokracie",
+      "aliases": ["SPD", "hnutí SPD"],
+      "weight": 5,
+      "roles": [],
+      "note": "Vládní koaliční politické hnutí."
+    },
+    {
+      "id": "motoriste-sobe",
+      "kind": "party",
+      "canonicalName": "Motoristé sobě",
+      "aliases": ["Motoristé", "Motoristé sobě strana"],
+      "weight": 5,
+      "roles": [],
+      "note": "Vládní koaliční politická strana."
+    },
+    {
+      "id": "ods",
+      "kind": "party",
+      "canonicalName": "Občanská demokratická strana",
+      "aliases": ["ODS", "občanští demokraté"],
+      "weight": 4,
+      "roles": [],
+      "note": "Opoziční politická strana."
+    },
+    {
+      "id": "stan",
+      "kind": "party",
+      "canonicalName": "Starostové a nezávislí",
+      "aliases": ["STAN", "Starostové"],
+      "weight": 4,
+      "roles": [],
+      "note": "Opoziční politické hnutí."
+    },
+    {
+      "id": "pirati",
+      "kind": "party",
+      "canonicalName": "Česká pirátská strana",
+      "aliases": ["Piráti", "ČPS"],
+      "weight": 4,
+      "roles": [],
+      "note": "Opoziční politická strana."
+    },
+    {
+      "id": "kdu-csl",
+      "kind": "party",
+      "canonicalName": "KDU-ČSL",
+      "aliases": ["lidovci", "křesťanští demokraté"],
+      "weight": 3,
+      "roles": [],
+      "note": "Opoziční politická strana."
+    },
+    {
+      "id": "top-09",
+      "kind": "party",
+      "canonicalName": "TOP 09",
+      "aliases": ["TOPka", "TOP 09 strana"],
+      "weight": 3,
+      "roles": [],
+      "note": "Opoziční politická strana."
+    },
+    {
+      "id": "vlada-cr",
+      "kind": "institution",
+      "canonicalName": "Vláda České republiky",
+      "aliases": ["vláda", "Babišova vláda", "kabinet Andreje Babiše"],
+      "weight": 5,
+      "roles": [],
+      "note": "Vrcholný orgán výkonné moci."
+    },
+    {
+      "id": "poslanecka-snemovna",
+      "kind": "institution",
+      "canonicalName": "Poslanecká sněmovna Parlamentu České republiky",
+      "aliases": ["Sněmovna", "PSP ČR", "dolní komora"],
+      "weight": 5,
+      "roles": [],
+      "note": "Dolní komora Parlamentu České republiky."
+    },
+    {
+      "id": "senat",
+      "kind": "institution",
+      "canonicalName": "Senát Parlamentu České republiky",
+      "aliases": ["Senát", "horní komora"],
+      "weight": 5,
+      "roles": [],
+      "note": "Horní komora Parlamentu České republiky."
+    },
+    {
+      "id": "prazsky-hrad",
+      "kind": "institution",
+      "canonicalName": "Kancelář prezidenta republiky",
+      "aliases": ["Pražský hrad", "Hrad"],
+      "weight": 4,
+      "roles": [],
+      "note": "Institucionální zázemí prezidenta republiky."
+    },
+    {
+      "id": "ceska-televize",
+      "kind": "institution",
+      "canonicalName": "Česká televize",
+      "aliases": ["ČT", "veřejnoprávní televize"],
+      "weight": 4,
+      "roles": [],
+      "note": "České médium veřejné služby."
+    },
+    {
+      "id": "cesky-rozhlas",
+      "kind": "institution",
+      "canonicalName": "Český rozhlas",
+      "aliases": ["ČRo", "veřejnoprávní rozhlas"],
+      "weight": 4,
+      "roles": [],
+      "note": "České médium veřejné služby."
+    },
+    {
+      "id": "evropska-unie",
+      "kind": "institution",
+      "canonicalName": "Evropská unie",
+      "aliases": ["EU", "unie"],
+      "weight": 4,
+      "roles": [],
+      "note": "Nadnárodní politická a hospodářská unie."
+    },
+    {
+      "id": "nato",
+      "kind": "institution",
+      "canonicalName": "Severoatlantická aliance",
+      "aliases": ["NATO", "Aliance"],
+      "weight": 4,
+      "roles": [],
+      "note": "Severoatlantická obranná aliance."
+    },
+    {
+      "id": "public-media-funding",
+      "kind": "topic",
+      "canonicalName": "Financování médií veřejné služby",
+      "aliases": ["koncesionářské poplatky", "televizní poplatky", "rozhlasové poplatky", "veřejnoprávní média"],
+      "weight": 5,
+      "roles": [],
+      "note": "Stálé téma: financování a nezávislost České televize a Českého rozhlasu."
+    },
+    {
+      "id": "ukraine-aid",
+      "kind": "topic",
+      "canonicalName": "Pomoc Ukrajině",
+      "aliases": ["podpora Ukrajiny", "muniční iniciativa", "ukrajinská pomoc"],
+      "weight": 5,
+      "roles": [],
+      "note": "Stálé téma: česká vojenská, humanitární a finanční pomoc Ukrajině."
+    },
+    {
+      "id": "agrofert-conflict",
+      "kind": "topic",
+      "canonicalName": "Agrofert a střet zájmů",
+      "aliases": ["Agrofert", "střet zájmů Andreje Babiše", "svěřenské fondy"],
+      "weight": 5,
+      "roles": [],
+      "note": "Stálé téma: vztah holdingu Agrofert k výkonu veřejné funkce."
+    },
+    {
+      "id": "municipal-elections-2026",
+      "kind": "topic",
+      "canonicalName": "Komunální volby 2026",
+      "aliases": ["volby do zastupitelstev obcí", "říjnové komunální volby", "místní volby 2026"],
+      "weight": 5,
+      "roles": [],
+      "note": "Stálé téma do říjnových voleb do obecních zastupitelstev."
+    },
+    {
+      "id": "senate-elections-2026",
+      "kind": "topic",
+      "canonicalName": "Senátní volby 2026",
+      "aliases": ["volby do Senátu", "říjnové senátní volby", "obměna třetiny Senátu"],
+      "weight": 5,
+      "roles": [],
+      "note": "Stálé téma do říjnových voleb do jedné třetiny Senátu."
+    },
+    {
+      "id": "disinformation",
+      "kind": "topic",
+      "canonicalName": "Dezinformace",
+      "aliases": ["informační manipulace", "hybridní hrozby", "fake news"],
+      "weight": 4,
+      "roles": [],
+      "note": "Stálé téma: informační manipulace a odolnost demokratických institucí."
+    },
+    {
+      "id": "eu-nato-orientation",
+      "kind": "topic",
+      "canonicalName": "Směřování Česka v EU a NATO",
+      "aliases": ["euroatlantické směřování", "ukotvení v EU a NATO", "zahraničněpolitická orientace"],
+      "weight": 4,
+      "roles": [],
+      "note": "Stálé téma: česká evropská a bezpečnostní orientace."
+    },
+    {
+      "id": "cost-of-living",
+      "kind": "topic",
+      "canonicalName": "Životní náklady",
+      "aliases": ["ceny potravin", "drahé bydlení", "kupní síla"],
+      "weight": 4,
+      "roles": [],
+      "note": "Stálé věcné téma: dopad politických rozhodnutí na domácnosti."
+    }
+  ]
+}

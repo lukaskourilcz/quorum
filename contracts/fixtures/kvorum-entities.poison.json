@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "kvorum-entities/1",
+  "asOf": "2026-08-12",
+  "governance": {
+    "ownerEditable": false,
+    "deskMutation": "direct-write",
+    "proposalPath": "config/kvorum-entities.json"
+  },
+  "matching": {
+    "locale": "cs-CZ",
+    "caseFold": true,
+    "diacriticFold": true,
+    "wholeWords": true
+  },
+  "entities": []
+}
