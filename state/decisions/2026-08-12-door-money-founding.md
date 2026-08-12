@@ -184,6 +184,10 @@ costs and no treasury action in this decision.
   not a private-repository URL, and the admin never fetches it. The issue also asks for result
   entry before DM-20's result contract, route and store; this panel shows recorded result IDs but
   does not invent a premature second writer. DM-20 owns result entry as commissioned.
+- **DM-18c precedes the action-packet contract and completion route in title order.** The panel
+  therefore accepts a bounded serializable view model and isolates one minimal completion
+  envelope for the commissioned future endpoint. With no DM-19c route, it fails closed and writes
+  nothing; DM-19b and DM-19c align the projection and install the canonical writer.
 
 ## Delivery ledger
 
@@ -223,7 +227,7 @@ costs and no treasury action in this decision.
 - [x] DM-17 — Admin approval write path
 - [x] DM-18a — Server-only admin loader
 - [x] DM-18b — Recommendations panel
-- [ ] DM-18c — Actions panel
+- [x] DM-18c — Actions panel
 - [ ] DM-18d — Knowledge panel, tab wiring and e2e
 - [ ] DM-19a — Thursday gate and the rotating agenda wheel
 - [ ] DM-19b — Action-packet contract and the BOOKER call
