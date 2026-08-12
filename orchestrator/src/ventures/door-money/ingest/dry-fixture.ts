@@ -17,7 +17,9 @@ function operation(system: string): string {
 
 function scores(): Record<string, { score: number; justification: string }> {
   return Object.fromEntries(BOOK_KB_SCORE_AXES.map((axis, index) => [axis, {
-    score: index % 6,
+    // Keep every fixture passage viable for at least one daily format so the dry desk can prove
+    // selection → packet → package end to end. These are invented fixture scores, never book data.
+    score: 3 + (index % 3),
     justification: `Synthetic dry-run reason for ${axis}.`
   }]));
 }

@@ -171,6 +171,13 @@ costs and no treasury action in this decision.
   cycle. No database host, `BOOK_DB_*` credential or external request was added. Missing or
   inconsistent private knowledge returns the recorded `$0` fixture-required path without
   exposing a local path; the private root is refused if it sits inside this public repository.
+- **DM-14b's packet wording leaves two selected chunks plus four full neighbors competing with
+  the configured 8,000-token GHOST input cap.** The private in-memory packet still fetches and
+  holds each complete selected chunk and both complete neighbors. Its provider view keeps the
+  complete selected text but reduces each neighbor to the adjacent 1,000-character continuity
+  edge, deduplicates overlaps, and omits duplicate score and exemplar payloads. Both selected
+  passages therefore survive without weakening the model cap. Ungated GHOST output is never put
+  in the public response cache; its ledger hash prevents a paid uncached call from being repeated.
 
 ## Delivery ledger
 
@@ -202,7 +209,7 @@ costs and no treasury action in this decision.
 - [x] DM-12 — venture-recommendation evidence kind book-passage
 - [x] DM-13 — Deterministic passage selection
 - [x] DM-14a — Packet assembly and the private-store fetcher
-- [ ] DM-14b — Desk runner, GHOST call and honest records
+- [x] DM-14b — Desk runner, GHOST call and honest records
 - [ ] DM-15a — Voice lint and stop-slop gate
 - [ ] DM-15b — Claim, quote, cap, duplicate and CTA gates
 - [ ] DM-16a — Studio brand tokens for door-money
