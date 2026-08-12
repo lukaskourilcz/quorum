@@ -58,6 +58,8 @@ export interface CarouselSummary {
   date: string;
   /** The language of this record; render and export consumers must carry it unchanged. */
   locale: CarouselSummaryLocale;
+  /** Absent means the normal multi-slide carousel; this opt-in record renders exactly one slide. */
+  deckMode?: "single-image";
   /** The small mono line every template prints above the headline. */
   kicker: string;
   headline: string;
@@ -84,10 +86,14 @@ export interface CarouselSummaryInput {
   venture: CarouselSummaryVenture;
   slug: string;
   date: string;
+  /** A single-image recommendation is still a Studio record, but it is a one-slide poster. */
+  deckMode?: "single-image";
   title: string;
   /** The desk's line for the carousel cover, when it wrote one. */
   coverLine?: string | undefined;
   dek: string;
+  /** A recommendation may already carry its own gated outro; magazines use the venture default. */
+  closing?: string;
   /** A Caught Up edition arrives already structured; those points are the passages. */
   points?: readonly string[];
   /** An MMA Files article arrives as MDX; its middle is cut out of the body. */
@@ -170,12 +176,13 @@ export function buildCarouselSummary(input: CarouselSummaryInput): CarouselSumma
     slug: input.slug,
     date: input.date,
     locale: localeForCarouselVenture(input.venture),
+    ...(input.deckMode ? { deckMode: input.deckMode } : {}),
     kicker: summaryKicker(input.venture, input.date),
     headline: oneLine(input.title),
     ...(input.coverLine ? { coverLine: oneLine(input.coverLine) } : {}),
     standfirst: oneLine(input.dek),
-    passages: choosePassages(input),
-    closing: CLOSING[input.venture],
+    passages: input.deckMode === "single-image" ? [] : choosePassages(input),
+    closing: input.closing ? oneLine(input.closing) : CLOSING[input.venture],
     sources: [...(input.sources ?? [])],
     hasHero: Boolean(input.hasHero),
     heroCredit: input.heroCredit ?? null
@@ -192,7 +199,7 @@ export function reviewCarouselSummary(summary: CarouselSummary): CarouselSummary
   const problems: string[] = [];
   if (summary.headline.trim().length === 0) problems.push("The summary has no headline.");
   if (summary.standfirst.trim().length === 0) problems.push("The summary has no standfirst.");
-  if (summary.passages.length < MIN_SUMMARY_PASSAGES) {
+  if (summary.deckMode !== "single-image" && summary.passages.length < MIN_SUMMARY_PASSAGES) {
     problems.push(`A summary needs at least ${MIN_SUMMARY_PASSAGES} passages; this one has ${summary.passages.length}.`);
   }
   if (summary.passages.length > MAX_SUMMARY_PASSAGES) {

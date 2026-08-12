@@ -214,7 +214,7 @@ costs and no treasury action in this decision.
 - [x] DM-15b — Claim, quote, cap, duplicate and CTA gates
 - [x] DM-16a — Studio brand tokens for door-money
 - [x] DM-16b — English locale in the carousel summary, byte-compatible
-- [ ] DM-17 — Admin approval write path
+- [x] DM-17 — Admin approval write path
 - [ ] DM-18a — Server-only admin loader
 - [ ] DM-18b — Recommendations panel
 - [ ] DM-18c — Actions panel

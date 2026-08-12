@@ -122,6 +122,20 @@ describe("buildCarouselSummary", () => {
     })).toEqual(english);
   });
 
+  it("represents a single-image recommendation as one poster record, not a padded carousel", () => {
+    const poster = buildCarouselSummary({
+      venture: "door-money",
+      slug: "synthetic-poster",
+      date: "2026-08-06",
+      deckMode: "single-image",
+      title: "A synthetic poster line",
+      dek: "An invented note keeps the fixture independent of the book.",
+      points: ["This must not become a hidden second slide."]
+    });
+    expect(poster).toMatchObject({ locale: "en", deckMode: "single-image", passages: [] });
+    expect(reviewCarouselSummary(poster)).toEqual({ renderable: true, problems: [] });
+  });
+
   it("keeps both existing ventures byte-identical", () => {
     const caughtUp = buildCarouselSummary({
       venture: "caught-up",

@@ -94,6 +94,13 @@ describe("a deck built from the one published article", () => {
 });
 
 describe("a deck the article cannot fill", () => {
+  it("accepts exactly one bounded slide only when the record declares single-image mode", () => {
+    const one = [{ kind: "cover" as const, text: "A synthetic poster line." }];
+    expect(reviewDeck(one).publishable).toBe(false);
+    expect(reviewDeck(one, "single-image")).toEqual({ slides: one, publishable: true, problems: [] });
+    expect(reviewDeck([...one, ...one], "single-image").publishable).toBe(false);
+  });
+
   it("comes back short and unpublishable rather than padded", () => {
     // Reaching a slide count by inventing a slide is how a carousel starts saying things the
     // article does not. A thin piece produces a thin deck and the caller decides.
