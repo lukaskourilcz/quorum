@@ -90,7 +90,9 @@
               "MAKO",
               "CHUM",
               "FOLIO",
-              "PLOT"
+              "PLOT",
+              "GHOST",
+              "BOOKER"
             ]
           },
           "created": {
@@ -196,7 +198,9 @@
                       "MAKO",
                       "CHUM",
                       "FOLIO",
-                      "PLOT"
+                      "PLOT",
+                      "GHOST",
+                      "BOOKER"
                     ]
                   },
                   "meeting_ref": {

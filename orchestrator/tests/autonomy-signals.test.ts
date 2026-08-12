@@ -85,6 +85,8 @@ describe("zero-model operating signals", () => {
     expect(signal).toMatchObject({ value: 0.5, unit: "ratio" });
     expect(signal?.detail).toContain("1 of 2 paid dossiers");
     expect(signal?.detail).toContain("1 unreadable ledger line was excluded");
+  });
+
   it("keeps action completion null until an owner action is issued", async () => {
     const stateRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-action-empty-"));
     const snapshot = await computeAutonomySnapshot({ repoRoot, stateRoot, now: new Date("2026-08-12T04:00:00.000Z") });

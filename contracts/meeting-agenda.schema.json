@@ -31,6 +31,8 @@
               "tt-marketing",
               "gv-brief",
               "bh-desk",
+              "dm-desk",
+              "dm-growth",
               "mma-intake",
               "mma-analysis",
               "mag-editorial",
@@ -83,7 +85,9 @@
               "MAKO",
               "CHUM",
               "FOLIO",
-              "PLOT"
+              "PLOT",
+              "GHOST",
+              "BOOKER"
             ]
           },
           "sourcePhase": {

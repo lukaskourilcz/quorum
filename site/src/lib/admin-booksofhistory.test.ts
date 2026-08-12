@@ -82,8 +82,8 @@ describe("BOOKSOFHISTORY admin loader", () => {
       put(root, "state/ventures/booksofhistory/dossiers/war-with-the-newts/dossier.json", await fixture("bh-dossier.valid.json")),
       put(root, "state/ventures/booksofhistory/dossiers/poison/dossier.json", await fixture("bh-dossier.poison.json")),
       put(root, "state/ventures/booksofhistory/research-ledger.jsonl", `${JSON.stringify(JSON.parse(await fixture("bh-research-ledger.valid.json")))}\nnot-json\n`),
-      put(root, "state/ventures/booksofhistory/recommendations/feature.json", await fixture("venture-recommendation.valid.json")),
-      put(root, "state/ventures/booksofhistory/recommendations/poison.json", await fixture("venture-recommendation.poison.json")),
+      put(root, "state/ventures/booksofhistory/recommendations/feature.json", await fixture("booksofhistory-recommendation.valid.json")),
+      put(root, "state/ventures/booksofhistory/recommendations/poison.json", await fixture("booksofhistory-recommendation.poison.json")),
       put(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json")),
       put(root, "state/ventures/booksofhistory/results/poison.json", await fixture("owner-result-entry.poison.json")),
       put(root, "state/ratings/booksofhistory/ledger.jsonl", `${JSON.stringify({ schemaVersion: "rating/1", id: "r-2026-08-14-abcd", ventureId: "booksofhistory", objectKind: "social-variant", objectRef: { id: "rec-aaaaaaaaaaaaaaaaaaaa", contentHash: "sha256:aaaaaaaaaaaa" }, rating: "good", ratedAt: "2026-08-14T12:00:00.000Z" })}\n`)
@@ -158,7 +158,7 @@ describe("BOOKSOFHISTORY admin loader", () => {
 
   it("surfaces only a valid result attached to the matching recommendation lane", async () => {
     const root = await temporaryRoot("bh-admin-results-");
-    const recommendation = JSON.parse(await fixture("venture-recommendation.valid.json"));
+    const recommendation = JSON.parse(await fixture("booksofhistory-recommendation.valid.json"));
     recommendation.status = "approved";
     recommendation.designLab = { status: "ready", summaryRefs: { cs: "summary-cs", en: "summary-en" } };
     recommendation.owner.postedUrls.cs = "https://social.example/booksofhistory-cs";

@@ -61,7 +61,9 @@
         "MAKO",
         "CHUM",
         "FOLIO",
-        "PLOT"
+        "PLOT",
+        "GHOST",
+        "BOOKER"
       ]
     },
     "createdAt": {

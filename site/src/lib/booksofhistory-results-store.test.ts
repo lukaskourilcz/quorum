@@ -27,7 +27,7 @@ const input: BhOwnerResultRequest = {
 };
 
 async function recommendationFixture() {
-  const fixture = JSON.parse(await readFile(path.resolve(process.cwd(), "../contracts/fixtures/venture-recommendation.valid.json"), "utf8")) as Record<string, unknown>;
+  const fixture = JSON.parse(await readFile(path.resolve(process.cwd(), "../contracts/fixtures/booksofhistory-recommendation.valid.json"), "utf8")) as Record<string, unknown>;
   return {
     ...fixture,
     status: "approved",

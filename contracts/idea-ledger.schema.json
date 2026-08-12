@@ -73,7 +73,9 @@
             "MAKO",
             "CHUM",
             "FOLIO",
-            "PLOT"
+            "PLOT",
+            "GHOST",
+            "BOOKER"
           ]
         },
         "meetingRef": {

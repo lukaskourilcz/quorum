@@ -32,6 +32,8 @@
             "gv-brief",
             "ms-daily",
             "bh-desk",
+            "dm-desk",
+            "dm-growth",
             "incubator-scan",
             "incubator-synthesis",
             "mma-intake",
@@ -175,7 +177,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "reason": {
@@ -307,7 +311,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "summary": {
@@ -382,7 +388,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "firstChoice": {
@@ -456,7 +464,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "summary": {
@@ -651,7 +661,9 @@
                 "MAKO",
                 "CHUM",
                 "FOLIO",
-                "PLOT"
+                "PLOT",
+                "GHOST",
+                "BOOKER"
               ]
             },
             "setting": {
@@ -712,7 +724,9 @@
                       "MAKO",
                       "CHUM",
                       "FOLIO",
-                      "PLOT"
+                      "PLOT",
+                      "GHOST",
+                      "BOOKER"
                     ]
                   },
                   "mode": {
@@ -774,7 +788,9 @@
                       "MAKO",
                       "CHUM",
                       "FOLIO",
-                      "PLOT"
+                      "PLOT",
+                      "GHOST",
+                      "BOOKER"
                     ]
                   },
                   "sentAt": {
@@ -869,6 +885,8 @@
             "gv-brief",
             "ms-daily",
             "bh-desk",
+            "dm-desk",
+            "dm-growth",
             "incubator-scan",
             "incubator-synthesis",
             "mma-intake",
@@ -1012,7 +1030,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "reason": {
@@ -1144,7 +1164,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "summary": {
@@ -1219,7 +1241,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "firstChoice": {
@@ -1293,7 +1317,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "summary": {
@@ -1434,6 +1460,8 @@
             "gv-brief",
             "ms-daily",
             "bh-desk",
+            "dm-desk",
+            "dm-growth",
             "incubator-scan",
             "incubator-synthesis",
             "mma-intake",
@@ -1502,7 +1530,9 @@
                 "MAKO",
                 "CHUM",
                 "FOLIO",
-                "PLOT"
+                "PLOT",
+                "GHOST",
+                "BOOKER"
               ]
             },
             "setting": {
@@ -1563,7 +1593,9 @@
                       "MAKO",
                       "CHUM",
                       "FOLIO",
-                      "PLOT"
+                      "PLOT",
+                      "GHOST",
+                      "BOOKER"
                     ]
                   },
                   "mode": {
@@ -1625,7 +1657,9 @@
                       "MAKO",
                       "CHUM",
                       "FOLIO",
-                      "PLOT"
+                      "PLOT",
+                      "GHOST",
+                      "BOOKER"
                     ]
                   },
                   "sentAt": {

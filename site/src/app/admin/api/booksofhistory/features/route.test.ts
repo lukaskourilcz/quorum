@@ -14,7 +14,7 @@ let fixture: Record<string, unknown>;
 
 beforeEach(async () => {
   root = await mkdtemp(path.join(os.tmpdir(), "quorum-bh-feature-route-"));
-  fixture = JSON.parse(await readFile(path.resolve(process.cwd(), "../contracts/fixtures/venture-recommendation.valid.json"), "utf8")) as Record<string, unknown>;
+  fixture = JSON.parse(await readFile(path.resolve(process.cwd(), "../contracts/fixtures/booksofhistory-recommendation.valid.json"), "utf8")) as Record<string, unknown>;
   const directory = path.join(root, "state/ventures/booksofhistory/recommendations");
   await mkdir(directory, { recursive: true });
   await writeFile(path.join(directory, "recommendation.json"), `${JSON.stringify(fixture, null, 2)}\n`);

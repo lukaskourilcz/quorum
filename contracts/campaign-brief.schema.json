@@ -110,7 +110,9 @@
               "MAKO",
               "CHUM",
               "FOLIO",
-              "PLOT"
+              "PLOT",
+              "GHOST",
+              "BOOKER"
             ]
           },
           "artifact": {

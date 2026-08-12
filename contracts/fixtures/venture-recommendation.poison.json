@@ -1,18 +1,69 @@
 {
   "schemaVersion": "venture-recommendation/1",
-  "recommendationId": "rec-broken",
-  "ventureId": "booksofhistory",
-  "cycleId": "bh-20260812-001",
-  "status": "posted",
-  "createdAt": "2026-08-14T10:00:00.000Z",
-  "updatedAt": "2026-08-14T10:00:00.000Z",
-  "evidence": { "kind": "cover-art", "claimRefs": [] },
-  "payloads": {},
-  "gateResults": {},
-  "designLab": { "status": "rendered", "summaryRefs": null },
+  "id": "fixture-radio-poison",
+  "ventureId": "door-money",
+  "date": "2026-08-12",
+  "status": "approved",
+  "hook": "A synthetic invalid recommendation.",
+  "formats": [
+    "carousel"
+  ],
+  "platforms": [
+    "instagram"
+  ],
+  "copyBlocks": [
+    {
+      "kind": "cover",
+      "ordinal": 1,
+      "text": "Synthetic poison copy."
+    }
+  ],
+  "rationale": "This fixture deliberately violates the status and evidence rules.",
+  "curiosityBridge": "No real book text appears here.",
+  "evidence": {
+    "kind": "book-passage",
+    "manuscriptHash": "sha256:4f41e4291ae4f32331a07fb44248b06cc49e48814f1e8de7dff0b20f77524998",
+    "chunkIds": [
+      "ch01-s01-c001"
+    ],
+    "scoresAtSelection": [],
+    "excerptChunkId": "ch01-s01-c001",
+    "excerpt": "A short invented excerpt.",
+    "privateStoreLink": "https://public.example.invalid/ch01-s01-c001"
+  },
+  "gateResults": [
+    {
+      "gate": "claims",
+      "passed": false,
+      "detail": "A failed package cannot be stored."
+    }
+  ],
+  "designLab": {
+    "eligible": true,
+    "summaryPath": null,
+    "readyAt": null
+  },
   "owner": {
-    "postedUrls": { "cs": null, "en": null },
-    "resultRefs": { "cs": [], "en": [] },
-    "editHistory": []
-  }
+    "editedCopyBlocks": null,
+    "approvalNote": null,
+    "rejectionReason": null,
+    "approvedAt": null,
+    "rejectedAt": null,
+    "postedAt": null,
+    "archivedAt": null,
+    "postedUrl": null,
+    "resultIds": [],
+    "ratingRef": null
+  },
+  "statusHistory": [
+    {
+      "from": null,
+      "to": "draft",
+      "at": "2026-08-12T10:00:00.000Z",
+      "actor": "system",
+      "reason": null
+    }
+  ],
+  "generatedAt": "2026-08-12T10:00:00.000Z",
+  "updatedAt": "2026-08-12T10:00:00.000Z"
 }
