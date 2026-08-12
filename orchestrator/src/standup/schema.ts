@@ -112,7 +112,9 @@ export const StandupSchema = z.object({
       signals: z.array(z.object({
         id: z.string().min(1),
         label: z.string().min(1),
-        value: z.number().nonnegative(),
+        // A signal whose source has not produced a measurement is unavailable, not zero.
+        // Quarterly KPI evaluation preserves that distinction and standups must carry it too.
+        value: z.number().nonnegative().nullable(),
         unit: z.enum(["count", "ratio"]),
         detail: z.string().min(1)
       }))

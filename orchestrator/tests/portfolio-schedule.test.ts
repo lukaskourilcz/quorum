@@ -13,7 +13,9 @@ import { parseVentureRegistry,
 } from "../src/ventures/registry.js";
 import {
   budgetDecisionStatus,
-  resolveEffectivePortfolioSchedule
+  resolveDailyEnvelopePlan,
+  resolveEffectivePortfolioSchedule,
+  ROOM_DEGRADATION_ORDER
 } from "../src/portfolio/schedule.js";
 import { repoRoot } from "../src/paths.js";
 import { resolveTittyTuesdaysSlot } from "../src/titty-tuesdays/schedule.js";
@@ -43,7 +45,7 @@ describe("portfolio schedule and budget gate", () => {
     // back: the studio room the venture no longer holds vacated it and GoVIRAL took it, which is
     // why the hour is here and the studio phase is not. 07:00 came back the same way --
     // marketingShark took the hour the incubator vacated.
-    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 13, 14, 17, 19, 20, 22]);
+    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17, 19, 20, 22]);
     const colliding = structuredClone(registry);
     colliding.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!.cadence = "daily@09:00";
     expect(() => parseVentureRegistry(colliding)).toThrow(/60 minutes apart/);
@@ -88,6 +90,16 @@ describe("portfolio schedule and budget gate", () => {
 
   it("extends the monthly-headroom degradation ladder without displacing Caught Up", async () => {
     const registry = await loadVentureRegistry();
+    expect(ROOM_DEGRADATION_ORDER.slice(0, 3)).toEqual(["dm-growth", "dm-desk", "gv-brief"]);
+    const growthDropped = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 2.74 });
+    expect(growthDropped.activePhases).not.toContain("dm-growth");
+    expect(growthDropped.activePhases).toEqual(expect.arrayContaining(["dm-desk", "gv-brief"]));
+    const deskDropped = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 2.49 });
+    expect(deskDropped.activePhases).not.toContain("dm-growth");
+    expect(deskDropped.activePhases).not.toContain("dm-desk");
+    expect(deskDropped.activePhases).toContain("gv-brief");
+    const briefDropped = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 1.99 });
+    expect(briefDropped.activePhases).not.toContain("gv-brief");
     const low = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 1 });
     expect(low.activePhases).not.toContain("incubator-scan");
     expect(low.ttTranscriptMode).toBe("minimal");
@@ -95,6 +107,33 @@ describe("portfolio schedule and budget gate", () => {
     const critical = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 0.4 });
     expect(critical.activePhases).not.toContain("tt-marketing");
     expect(critical.activePhases).toContain("cu-edition");
+  });
+
+  it("fits weekly rooms to the daily ceiling in degradation order", () => {
+    const rooms = [
+      { phase: "gv-brief" as const, envelopeUsd: 0.06 },
+      { phase: "dm-desk" as const, envelopeUsd: 0.08 },
+      { phase: "dm-growth" as const, envelopeUsd: 0.06 }
+    ];
+    const monday = resolveDailyEnvelopePlan({
+      date: "2026-08-03",
+      rooms,
+      nonRoomReservationUsd: 0.92,
+      dailyBudgetUsd: 1
+    });
+    expect(monday.droppedRoomPhases).toEqual(["dm-desk"]);
+    expect(monday.activeRoomPhases).toContain("gv-brief");
+    expect(monday.reservedUsd).toBe(0.98);
+
+    const thursday = resolveDailyEnvelopePlan({
+      date: "2026-08-06",
+      rooms,
+      nonRoomReservationUsd: 0.92,
+      dailyBudgetUsd: 1
+    });
+    expect(thursday.droppedRoomPhases).toEqual(["dm-growth"]);
+    expect(thursday.activeRoomPhases).toContain("dm-desk");
+    expect(thursday.reservedUsd).toBe(1);
   });
 
   it("keeps the magazine dry until 08d is signed, then enables both rooms and article slots", async () => {
@@ -144,7 +183,7 @@ describe("portfolio schedule and budget gate", () => {
     // back as github.event.schedule, so "0 11,12" could not say which hour had fired, and
     // 12:00 UTC is both the 13:00 slot's winter variant and the afternoon meeting's summer one.
     const expressions = scheduledCronExpressions(await loadVentureRegistry());
-    expect(expressions).toHaveLength(18);
+    expect(expressions).toHaveLength(19);
     // Every firing sits on CRON_MINUTE, off the start-of-hour queue GitHub warns about, and the
     // generator emits the same strings the workflow deploys — otherwise the resolver is only
     // ever exercised on expressions github.event.schedule will never send it.

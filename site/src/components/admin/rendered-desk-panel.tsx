@@ -36,13 +36,13 @@ function ShareCard({ article }: { article: RenderedArticle }) {
             src={article.imageHref}
           />
         ) : (
-          <p className="m-0 max-w-[36ch] px-4 text-center font-mono text-[10px] uppercase leading-[1.6] tracking-[0.1em] text-[#71717a]">
+          <p className="m-0 max-w-[36ch] px-4 text-center font-mono text-[10px] uppercase leading-[1.6] tracking-[0.1em] text-[#a1a1aa]">
             {article.imageNote ?? "No picture recorded"}
           </p>
         )}
       </div>
       <div className="grid gap-1 border-t border-[#1e1e22] p-3.5">
-        <span className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#71717a]">
+        <span className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">
           {domainOf(article.url) ?? article.ventureName}
         </span>
         <span className="text-[13.5px] font-semibold leading-[1.4] text-[#f4f4f5]">{article.title}</span>
@@ -59,7 +59,7 @@ function ShareCard({ article }: { article: RenderedArticle }) {
             {article.url}
           </a>
         ) : (
-          <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[#71717a]">
+          <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[#a1a1aa]">
             No published address was recorded
           </span>
         )}
@@ -144,7 +144,7 @@ export function RenderedDeskPanel({ desk }: { desk: RenderedDesk }) {
       ) : null}
 
       {/* No archive and no cleanup: this is a window over records that stay where they are. */}
-      <p className="m-0 font-mono text-[10px] uppercase tracking-[0.1em] text-[#71717a]">
+      <p className="m-0 font-mono text-[10px] uppercase tracking-[0.1em] text-[#a1a1aa]">
         The last three days only · older days stay in the delivery records
         {desk.unreadable > 0 ? ` · ${desk.unreadable} could not be read` : ""}
       </p>

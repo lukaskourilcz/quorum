@@ -2,6 +2,8 @@ import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { personaPromptPath } from "../src/paths.js";
+import { resolveDailyEnvelopePlan } from "../src/portfolio/schedule.js";
+import { ScheduledPhaseSchema } from "../src/types.js";
 
 const repoRoot = path.resolve(process.cwd(), "..");
 
@@ -61,9 +63,12 @@ describe("closing 44-agent system audit", () => {
       await readFile(path.join(repoRoot, "config", "marketingshark.json"), "utf8")
     ) as { brands: Array<{ enabled: boolean }> };
     const enabledBrands = marketingSharkBrands.brands.filter((brand) => brand.enabled).length;
-    const roomEnvelopes = registry.ventures
+    const rooms = registry.ventures
       .flatMap((venture) => venture.meetings)
-      .reduce((sum, meeting) => sum + meeting.envelopeUsd * (meeting.kind === "ms-daily" ? enabledBrands : 1), 0);
+      .map((meeting) => ({
+        phase: ScheduledPhaseSchema.parse(meeting.kind),
+        envelopeUsd: meeting.envelopeUsd * (meeting.kind === "ms-daily" ? enabledBrands : 1)
+      }));
     // Read from the registry rather than pinned: the article slot reserves what it declares, and
     // a literal here was still asserting two slots at an old per-run cap long after the desk
     // moved to one article a day.
@@ -71,18 +76,25 @@ describe("closing 44-agent system audit", () => {
       .flatMap((venture) => venture.productionJobs ?? [])
       .reduce((sum, job) => sum + job.envelopeUsd, 0);
     const morningCycleCap = 0.2;
-    // Nine rooms: two Caught Up, one Titty Tuesdays, one GoVIRAL, one marketingShark, two
-    // FightAIQ, two MMA Files. The studio and both incubator rooms are gone. GoVIRAL reserves
-    // its $0.06 every day even though it meets on Mondays, and marketingShark reserves $0.10
-    // even in Phase 1 where one brand is enabled -- the reservation is what the clock can cost,
-    // not what it usually does, and reserving less than a room can spend is how a day runs out
-    // of money.
-    expect(roomEnvelopes).toBeCloseTo(0.62, 8);
-    // The whole clock, at every room's full envelope, has to fit inside the $1.00 daily pace
-    // budget-2026-08e signed -- which is the arithmetic that makes a full day affordable rather
-    // than a day whose last rooms cannot be funded. marketingShark took the margin from 32c to
-    // 2c, so the next room needs a cheaper envelope or somebody else's.
-    expect(roomEnvelopes + articleProduction + morningCycleCap).toBeLessThanOrEqual(1);
+    // The two weekly rooms use daily cron syntax so their off-days can write $0 reason records.
+    // They are paid reservations only on their real weekdays: GoVIRAL on Monday and dm-growth
+    // on Thursday. Door Money owns the first two degradation rungs, so Monday sheds dm-desk and
+    // Thursday sheds dm-growth; the other five days need neither weekly room and fit exactly.
+    const nonRoomReservationUsd = articleProduction + morningCycleCap;
+    const week = Array.from({ length: 7 }, (_, offset) => {
+      const date = new Date("2026-08-03T12:00:00.000Z");
+      date.setUTCDate(date.getUTCDate() + offset);
+      return resolveDailyEnvelopePlan({
+        date: date.toISOString().slice(0, 10),
+        rooms,
+        nonRoomReservationUsd,
+        dailyBudgetUsd: 1
+      });
+    });
+    expect(week[0]!.droppedRoomPhases).toEqual(["dm-desk"]);
+    expect(week[3]!.droppedRoomPhases).toEqual(["dm-growth"]);
+    expect(week.filter((_, index) => index !== 0 && index !== 3).every((plan) => plan.droppedRoomPhases.length === 0)).toBe(true);
+    expect(week.every((plan) => plan.reservedUsd <= 1)).toBe(true);
   });
 
   it("keeps Carousel Studio free of provider SDKs and external template assets", async () => {

@@ -108,6 +108,38 @@ costs and no treasury action in this decision.
   approval trend as a `1|0|null` boolean target and passage use as an at-most `0.80`
   depletion watch. Cash and model spend remain separate KPIs because `$0` and `$3` are
   separate promises; absent measurements remain `null`, never manufactured zeros.
+- **Phase A acceptance arrives before the full desk and growth runners in title order.**
+  DM-05c therefore adds a fixture-only Door Money dispatcher that records truthful `$0`
+  `NO_ACTION` rooms and keeps live mode paused; DM-14b and DM-19 replace those scaffold
+  paths with the gated runners. The phase-boundary run also found that the standup schema
+  rejected DM-05b's honest `null` KPI readings and that two ideation tests pinned rotation
+  dates whose modulo changed when Door Money joined. The schema now preserves `null`, and
+  the tests resolve their named venture from the live ring without changing rotation.
+- **The Phase A site gate exposed three more closed copies of pre-Door-Money state.**
+  The punctual cron parser omitted both registered phases, the public fixture test still
+  pinned 42 agents, and the Czech-only magazine guard also rejected Door Money's required
+  English owner-review drafts. The parser and roster assertion now match the canonical
+  registries; the language guard exempts only GHOST's three approved draft phrases and still
+  rejects every English article, edition or localization claim.
+- **The shared valid meeting fixture became Door Money's contract exemplar in DM-03a.**
+  Social-pack tests had implicitly depended on that shared union fixture remaining a Caught Up
+  edition meeting, so the Phase A gate rejected all pack composition. Those tests now build an
+  explicit synthetic Caught Up meeting locally; the Door Money fixture remains synthetic and no
+  real book text is introduced.
+- **The full Phase A site e2e found four pre-existing low-contrast labels on the shared
+  rendered-desk panel.** Door Money's own admin route passed, but the required all-site gate
+  exercises the global route too. Only those four `#71717a` labels were raised to the existing
+  `#a1a1aa` neutral; their wording and every venture behavior remain unchanged.
+- **The historical WeekBoard e2e expected a future `scheduled` cell forever.** Public calendar
+  feeds recompute an unrecorded slot against the current clock, so that assertion became false
+  once the saved August week was wholly past. The navigation test now requires recorded held and
+  missed states without manufacturing a permanently future meeting.
+- **Four more Phase A e2e assertions had frozen mutable fixture counts or old route copy.** The
+  MMA archive check now proves every currently rendered hero loads instead of pinning five, and
+  the launch-binder journey proves its fixture is present without assuming it is the only ready
+  plan. Login checks allow the current fail-closed `returnTo=/admin` parameter, while the plain-copy
+  guard no longer mistakes the legitimate Threads and Instagram channel labels for leaked agent
+  codenames; FRAME, SCRIBE and HERALD remain forbidden.
 
 ## Delivery ledger
 
@@ -124,7 +156,7 @@ costs and no treasury action in this decision.
 - [x] DM-04c — Model roles: GHOST, BOOK_INGEST, BOOK_STYLE
 - [x] DM-05a — Scaffold, gitignore line, hue and labels
 - [x] DM-05b — KPI seeds for the quarter
-- [ ] DM-05c — Degradation-ladder position with its test
+- [x] DM-05c — Degradation-ladder position with its test
 - [ ] DM-06a — book-kb-index contract and fixtures
 - [ ] DM-06b — style-profile contract and fixtures
 - [ ] DM-06c — The excerpt-cap boundary test

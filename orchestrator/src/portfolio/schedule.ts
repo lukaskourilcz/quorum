@@ -26,6 +26,67 @@ export interface EffectivePortfolioSchedule {
   envelopeByPhase: Partial<Record<ScheduledPhase, number>>;
 }
 
+/** Lowest-priority room first. A daily plan removes entries only in this order. */
+export const ROOM_DEGRADATION_ORDER = [
+  "dm-growth",
+  "dm-desk",
+  "gv-brief",
+  "tt-marketing"
+] as const satisfies readonly ScheduledPhase[];
+
+export interface DailyEnvelopePlan {
+  activeRoomPhases: ScheduledPhase[];
+  droppedRoomPhases: ScheduledPhase[];
+  reservedUsd: number;
+}
+
+function weekdayRoomIsDue(phase: ScheduledPhase, date: string): boolean {
+  const weekday = new Date(`${date}T12:00:00.000Z`).getUTCDay();
+  if (phase === "gv-brief") return weekday === 1;
+  if (phase === "dm-growth") return weekday === 4;
+  return true;
+}
+
+/**
+ * Fit declared worst-case room envelopes around the day's non-room reservations.
+ *
+ * The registry uses daily cron syntax even for GoVIRAL's Monday room and Door Money's Thursday
+ * room, because their off-day firings write truthful $0 records. Those off-day records are not
+ * paid reservations. If a real weekday still exceeds the signed cap, rooms fall off in the
+ * declared degradation order; the ceiling itself never moves.
+ */
+export function resolveDailyEnvelopePlan(input: {
+  date: string;
+  rooms: ReadonlyArray<{ phase: ScheduledPhase; envelopeUsd: number }>;
+  nonRoomReservationUsd: number;
+  dailyBudgetUsd: number;
+}): DailyEnvelopePlan {
+  if (!/^\d{4}-\d{2}-\d{2}$/u.test(input.date)) throw new Error("Daily envelope date must be YYYY-MM-DD");
+  if (Number.isNaN(new Date(`${input.date}T12:00:00.000Z`).getTime())) throw new Error("Daily envelope date must be valid");
+  if (!Number.isFinite(input.nonRoomReservationUsd) || input.nonRoomReservationUsd < 0 || !Number.isFinite(input.dailyBudgetUsd) || input.dailyBudgetUsd <= 0) {
+    throw new Error("Non-room reservations must be non-negative and the daily budget must be positive");
+  }
+  if (input.rooms.some(({ envelopeUsd }) => !Number.isFinite(envelopeUsd) || envelopeUsd < 0)) {
+    throw new Error("Room envelopes must be non-negative finite numbers");
+  }
+  const active = input.rooms.filter(({ phase }) => weekdayRoomIsDue(phase, input.date));
+  const dropped: ScheduledPhase[] = [];
+  let reservedUsd = active.reduce((sum, room) => sum + room.envelopeUsd, input.nonRoomReservationUsd);
+  for (const phase of ROOM_DEGRADATION_ORDER) {
+    if (reservedUsd <= input.dailyBudgetUsd + Number.EPSILON) break;
+    const index = active.findIndex((room) => room.phase === phase);
+    if (index < 0) continue;
+    const [removed] = active.splice(index, 1);
+    reservedUsd -= removed!.envelopeUsd;
+    dropped.push(phase);
+  }
+  return {
+    activeRoomPhases: active.map(({ phase }) => phase),
+    droppedRoomPhases: dropped,
+    reservedUsd: Number(reservedUsd.toFixed(8))
+  };
+}
+
 export function signedOwnerDecision(raw: string): "countersigned" | "pending" {
   if (!/^Status:\s*countersigned\s*$/mi.test(raw)) return "pending";
   return checkedLine(raw, "Signature / explicit approval reference") ? "countersigned" : "pending";
@@ -99,10 +160,15 @@ export function resolveEffectivePortfolioSchedule(input: {
   // The content gate goes first of everything, because it is the only rung whose loss costs
   // nothing that was promised to anybody: an unscored day still published its article.
   const contentGateAffordable = input.monthlyApiHeadroomUsd >= 3;
-  // GoVIRAL takes the rungs the incubator vacated, and takes them first among the rooms: it is
-  // the newest, it meets once a week, and a missed Monday costs a brief rather than a
-  // publication. Everything below it on this ladder is either a reader-facing promise or the
-  // company's own decision room.
+  // Door Money takes the first two room rungs. Neither room publishes or reaches out, and a
+  // missed sitting costs only an unpromised draft. The weekly growth room falls first, then the
+  // daily desk, both before GoVIRAL's Monday brief.
+  if (input.monthlyApiHeadroomUsd < 2.75) {
+    active.delete("dm-growth");
+  }
+  if (input.monthlyApiHeadroomUsd < 2.5) {
+    active.delete("dm-desk");
+  }
   if (input.monthlyApiHeadroomUsd < 2) {
     active.delete("gv-brief");
   }
