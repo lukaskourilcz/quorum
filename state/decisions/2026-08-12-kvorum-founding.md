@@ -8,9 +8,78 @@ Status: pending countersignature
 
 Decision id: `kvorum-2026-08a`
 
-This file begins as the Phase 0 audit record. KV-01 completes the founding decision.
-Until the owner countersigns that decision and its separate approval items, Kvórum stays
-drafts-only and every gated integration takes its `$0` fixture path.
+Supersedes: nothing. Extends the founding precedent set by goviral-2026-08a and marketingshark-2026-08a.
+
+Signature / explicit approval reference: ____________________
+
+Owner-commissioned on 2026-08-12 through the Kvórum venture program. This decision
+authorizes implementation and dry proof. It does not authorize a live room, an external
+source call, account creation or publishing. Missing signatures select the safer behavior.
+
+## Decision
+
+Build `kvorum`, a drafts-only Czech political commentary venture. Deterministic code reads
+one approved public-page monitor plus verified Czech news and institutional feeds, normalizes
+and clusters the day, and offers the digest to one TRIBUN call. Deterministic gates check
+claim references, originality, attribution, public-figure scope and the editorial constitution.
+The owner approves, edits or rejects each recommendation. The Design Lab supplies the only
+rendering path. No code in this program posts.
+
+The internal id remains `kvorum` if name clearance later changes the public name. The design
+defaults to a 21:00 Prague desk, exactly 60 minutes before the night board. Both the public
+name and hour remain provisional owner choices while their checklist items are open.
+
+## Authority and closed gates
+
+Every ceiling from `budget-2026-08e` remains unchanged: `$30` all-in per month, `$25` for
+model and API use, and a `$1.00` daily pace. Both magazines' truth gates, the social
+triple-lock, `METRICS_INGESTION_ENABLED=false`, the treasury rules and human-only payments
+remain unchanged. Kvórum cannot treat a venture switch, a model result, a countersignature
+on editorial policy or a passing dry run as permission to spend, post, create an account,
+touch a channel, ingest engagement data or execute a payment.
+
+Kvórum starts in fixture-only mode. Four separate owner approvals govern its future source
+and account scope: `KV-APIFY-001`, `KV-SOURCES-002`, `KV-ACCOUNTS-003` and
+`KV-EDITORIAL-004`. `KV-APIFY-001` also depends on the still-pending
+`APIFY-ACCOUNT-001`. Missing any required approval produces a reason record, no provider
+call and `$0` spend.
+
+## Budget capacity hold
+
+The requested `$0.10` desk envelope does not fit the live clock. Existing room envelopes,
+article production and the morning cap reserve `$0.98` of the signed `$1.00` daily pace.
+Registering the room may prove schemas, routing and the dry fixture path, but the live runner
+must remain held while this decision is pending. Before countersignature can reach `main`, the
+owner must record a reallocation that frees at least `$0.08` of worst-day capacity without
+raising any ceiling or silently reducing another venture's authority. The system audit must
+fail if a payable clock exceeds `$1.00`.
+
+If capacity is approved, one TRIBUN call is expected to cost about `$0.05` to `$0.07` a day,
+or about `$2.10` a month. The room reserves before the call and records actual cost after it.
+Apify receives a separate `$2.00` monthly venture share inside the existing Free-plan credit,
+with no cash spend and no plan upgrade. Free feeds, normalization, clustering, gates, storage,
+admin review and rendering cost `$0`.
+
+## Editorial and data posture
+
+- Štít demokracie supplies topic discovery and salience only. Its posts never count as evidence.
+- Factual claims retain typed references. A multi-source fact needs two independent domains;
+  commentary remains labelled commentary.
+- The monitor keeps only fixed public-post fields, rejects commenter and private-individual data,
+  wraps external text as untrusted input and purges raw items after 30 days.
+- The account publishes no voting recommendation, party endorsement, paid promotion or
+  unsupported accusation. Corrections create a new audited record.
+- The owner remains the final approval gate. Approval creates a draft-ready Design Lab package,
+  not a post.
+
+## Apify priority and failure posture
+
+Kvórum may use only the pinned public-page actor named by `KV-APIFY-001`, without login or
+cookies, at one 30-result run a day. The Free plan's `$5` platform credit remains the physical
+stop and must never be upgraded by this program. Once all source approvals and budget capacity
+exist, Kvórum reserves its bounded daily share before GoVIRAL's weekly recipe; GoVIRAL's own
+guard and actor recipe remain unchanged. A failed item costs one item, a failed source costs one
+section and a receipt line, and a day with no usable cluster records an honest quiet outcome.
 
 ## Phase 0 audit
 
@@ -88,7 +157,7 @@ drafts-only and every gated integration takes its `$0` fixture path.
 ## Implementation checklist
 
 - [x] KV-00 — Phase 0 audit: read the contracts, verify every assumption
-- [ ] KV-01 — Write the founding decision record
+- [x] KV-01 — Write the founding decision record
 - [ ] KV-02a — Registry entry in `config/ventures.json`
 - [ ] KV-02b — Venture-registry schema enum extensions and fixtures
 - [ ] KV-03a — Register the `kv-desk` phase in type and record schemas
@@ -131,3 +200,14 @@ drafts-only and every gated integration takes its `$0` fixture path.
 - [ ] KV-21a — Documentation truth across the standing docs
 - [ ] KV-21b — INBOX approvals and NEEDED owner items
 - [ ] KV-21c — Honest gaps, checkbox sweep and prompt deletion
+
+## Honest gaps
+
+## What this does not touch
+
+This decision does not change the `$30`, `$25` or `$1.00` ceilings; the publisher; channel
+registry; social unlock counters; global kill switch; treasury; payments; ads; account or
+credential ownership; GoVIRAL's actor recipe; either magazine's evidence, image or delivery
+gates; the streams path's `apify: false`; BoardlessAI's corporate brand; or the append-only
+history of earlier decisions. Phase 2 promise tracking, Sunday recaps, vote-record cards,
+additional monitored pages and automated publishing remain out of scope.
