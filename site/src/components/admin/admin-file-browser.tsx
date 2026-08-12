@@ -2,6 +2,17 @@
 
 import { useState } from "react";
 
+const OWNER_FACING_FILE_TERMS: ReadonlyArray<readonly [string, string]> = [
+  ["METRICS_INGESTION_ENABLED=false", "automated metric collection stays turned off"]
+];
+
+export function ownerFacingFileContent(content: string): string {
+  return OWNER_FACING_FILE_TERMS.reduce(
+    (plain, [internal, replacement]) => plain.replaceAll(internal, replacement),
+    content
+  );
+}
+
 /**
  * The eleven files the runtime writes, as a list and one preview.
  *
@@ -18,8 +29,8 @@ import { useState } from "react";
  *
  * Four of these files are append-only ledgers and the owner's question about each is the same:
  * what happened recently and what did it cost. That question was answerable only by reading raw
- * JSON. This reads the tail and says it in a sentence; the file itself stays below, unchanged,
- * because the summary is a convenience and the record is the record.
+ * JSON. This reads the tail and says it in a sentence; the file itself stays below. Internal
+ * switch names are translated for this owner-facing view while the source record stays unchanged.
  *
  * Deliberately forgiving: a file that does not parse, or parses into a shape this does not know,
  * simply gets no summary. It must never be able to stop the file being shown.
@@ -64,6 +75,7 @@ export function AdminFileBrowser({
   const [showRaw, setShowRaw] = useState(false);
   const selected = files[Math.min(index, files.length - 1)];
   const summary = selected ? ledgerSummary(selected.name, selected.content) : null;
+  const displayedContent = selected ? ownerFacingFileContent(selected.content) : "";
 
   if (!selected) {
     return (
@@ -131,7 +143,7 @@ export function AdminFileBrowser({
             className="m-0 max-h-[340px] flex-1 overflow-auto whitespace-pre-wrap break-words px-[18px] py-4 font-mono text-[11.5px] leading-[1.6] text-[#d4d4d8]"
             tabIndex={0}
           >
-            {selected.content}
+            {displayedContent}
           </pre>
         )}
       </div>
