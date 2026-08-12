@@ -153,7 +153,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-20a** — Server-only admin loader
 - [x] **TS-20b** — Features panel with bilingual packages
 - [x] **TS-20c** — Library panel with snapshot state
-- [ ] **TS-20d** — Signals panel, tab wiring and e2e
+- [x] **TS-20d** — Signals panel, tab wiring and e2e
 - [ ] **TS-21a** — Community signals: contract and extraction
 - [ ] **TS-21b** — Product-insight queue, seeded with the five audit findings
 - [ ] **TS-22a** — GoVIRAL spine: topic set and timing factor
@@ -212,6 +212,12 @@ snapshot is a committed file and the venture buys no data.
   copy age, recorded scorer factors and an explicit warning that only the owner can
   compare sources before replacing the committed file. No synthetic commit or score is
   substituted.
+- **The signals tab lands before its record writers.** TS-20d wires the three admin
+  tabs and a bounded, serializable signals view, but the ordered checklist assigns the
+  community contract and paste route to TS-21a and the product-insight contract and
+  seed queue to TS-21b. Until those issues land, the live tab renders explicit empty
+  states with no form or endpoint. Synthetic component fixtures prove the eventual
+  digest, recurrence and queue layout without creating a competing state shape.
 
 ## Honest gaps
 

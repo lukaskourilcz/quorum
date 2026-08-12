@@ -29,6 +29,9 @@ const axeRoutes = [
   "/admin?venture=booksofhistory&tab=shortlist",
   "/admin?venture=booksofhistory&tab=dossiers",
   "/admin?venture=booksofhistory&tab=features",
+  "/admin?venture=tehdejsi-svet&tab=features",
+  "/admin?venture=tehdejsi-svet&tab=library",
+  "/admin?venture=tehdejsi-svet&tab=signals",
   "/admin?venture=carousel-studio&tab=studio",
   "/admin?venture=carousel-studio&tab=inspiration",
   "/meetings/2026-08-01-mma-intake",
@@ -179,6 +182,31 @@ test("Door Money renders its three bounded admin tabs", async ({ page }) => {
   await expect(page).toHaveURL(/tab=knowledge/);
   await expect(page.getByText("No Door Money knowledge version exists yet.")).toBeVisible();
   await expect(page.getByRole("button", { name: /ingest/i })).toHaveCount(0);
+});
+
+test("Tehdejsi svet renders its three bounded admin tabs", async ({ page }) => {
+  await page.goto("/admin?venture=tehdejsi-svet&tab=features", { waitUntil: "networkidle" });
+
+  await expect(page.getByRole("heading", { name: "Tehdejší svět" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Tehdejší svět/ })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: "features" })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: "library" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "signals" })).toBeVisible();
+  await expect(page.getByText("No shortlist has been recorded yet.")).toBeVisible();
+  await expect(page.getByText("No feature package is waiting or recorded yet.")).toBeVisible();
+  await expect(page.getByText("0 on this tab")).toBeVisible();
+
+  await page.getByRole("link", { name: "library" }).click();
+  await expect(page).toHaveURL(/tab=library/);
+  await expect(page.getByRole("heading", { name: "Facts-file status" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Facts browser" })).toBeVisible();
+  await expect(page.getByText("5 on this tab")).toBeVisible();
+
+  await page.getByRole("link", { name: "signals" }).click();
+  await expect(page).toHaveURL(/tab=signals/);
+  await expect(page.getByRole("heading", { name: "Community memory" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Product insight queue" })).toBeVisible();
+  await expect(page.getByText("0 on this tab")).toBeVisible();
 });
 
 test("WeekBoard navigates between statically generated weeks", async ({ page }) => {
@@ -386,6 +414,19 @@ test("BOOKSOFHISTORY admin tabs expose recorded evidence without rendering a boo
  */
 test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
 
+  test("Tehdejsi svet keeps future signal writes closed", async ({ page }) => {
+    let futurePosts = 0;
+    page.on("request", (request) => {
+      if (request.method() === "POST" && /\/admin\/api\/tehdejsi-svet\/(?:signals|insights|results)$/u.test(new URL(request.url()).pathname)) futurePosts += 1;
+    });
+    await page.goto("/admin?venture=tehdejsi-svet&tab=signals", { waitUntil: "networkidle" });
+    const panel = page.locator("[data-tehdejsi-signals]");
+    await expect(panel.getByText("No owner-pasted community memory is recorded.")).toBeVisible();
+    await expect(panel.locator("form")).toHaveCount(0);
+    await expect(panel.getByRole("button")).toHaveCount(0);
+    expect(futurePosts).toBe(0);
+  });
+
   test("BOOKSOFHISTORY owner approval records both Design Lab handoffs without posting", async ({ page }) => {
     await page.goto("/admin?venture=booksofhistory&tab=features", { waitUntil: "networkidle" });
     const feature = page.locator('[data-bh-feature="rec-e2e-admin-feature"]');
@@ -516,7 +557,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
   });
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=door-money&tab=recommendations", "/admin?venture=door-money&tab=actions", "/admin?venture=door-money&tab=knowledge", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=booksofhistory&tab=features", "/admin?venture=carousel-studio&tab=studio"];
+const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=door-money&tab=recommendations", "/admin?venture=door-money&tab=actions", "/admin?venture=door-money&tab=knowledge", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=booksofhistory&tab=features", "/admin?venture=tehdejsi-svet&tab=features", "/admin?venture=tehdejsi-svet&tab=library", "/admin?venture=tehdejsi-svet&tab=signals", "/admin?venture=carousel-studio&tab=studio"];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },

@@ -87,6 +87,7 @@ export const CALENDAR_SLOTS: readonly CalendarDefinition[] = [
   { hour: 15, kind: "dm-desk", label: "Door Money recommendation desk" },
   { hour: 16, kind: "dm-growth", label: "Door Money growth room" },
   { hour: 17, kind: "cu-product", label: "Product room" },
+  { hour: 18, kind: "ts-desk", label: "Tehdejší svět editorial desk" },
   { hour: 19, kind: "mma-analysis", label: "FightAIQ evening model check" },
   { hour: 20, kind: "mag-desk", label: "MMA Files evening desk review" },
   { hour: 22, kind: "venture-night", label: "Night shift" }

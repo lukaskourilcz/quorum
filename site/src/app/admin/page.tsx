@@ -19,6 +19,13 @@ import { BooksofhistoryShortlistPanel } from "@/components/admin/booksofhistory-
 import { DoorMoneyActionsPanel } from "@/components/admin/door-money-actions-panel";
 import { DoorMoneyKnowledgePanel } from "@/components/admin/door-money-knowledge-panel";
 import { DoorMoneyRecommendationsPanel } from "@/components/admin/door-money-recommendations-panel";
+import { TehdejsiSvetFeaturesPanel } from "@/components/admin/tehdejsi-svet-features-panel";
+import { TehdejsiSvetLibraryPanel } from "@/components/admin/tehdejsi-svet-library-panel";
+import {
+  EMPTY_TEHDEJSI_SIGNALS,
+  TehdejsiSvetSignalsPanel,
+  tehdejsiSignalsCount
+} from "@/components/admin/tehdejsi-svet-signals-panel";
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { AdminMoneyPanel } from "@/components/admin/money-panel";
@@ -194,9 +201,6 @@ export default async function AdminPage({
     readAdminDoorMoney(),
     readAdminTehdejsiSvet()
   ]);
-  // TS-20b–d consume this already-validated snapshot as their panels land.
-  void tehdejsiSvet;
-
   /*
    * `design-lab` is the name; `carousel-studio` is the id.
    *
@@ -243,6 +247,10 @@ export default async function AdminPage({
     ? doorMoney.knowledge.index.chapters.length + doorMoney.knowledge.index.chunks.length +
       Number(doorMoney.knowledge.styleProfile !== null)
     : 0;
+  const tehdejsiFeaturesCount = tehdejsiSvet.features.length + (tehdejsiSvet.shortlist?.entries.length ?? 0);
+  const tehdejsiLibraryCount = (tehdejsiSvet.facts?.facts.length ?? 0) + tehdejsiSvet.research.length;
+  const tehdejsiSignals = EMPTY_TEHDEJSI_SIGNALS;
+  const tehdejsiSignalsItemCount = tehdejsiSignalsCount(tehdejsiSignals);
 
   /**
    * How many stored items a workspace holds.
@@ -256,6 +264,8 @@ export default async function AdminPage({
       ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
       : ventureId === "door-money"
         ? doorMoney.recommendations.items.length + doorMoneyActionCount + doorMoneyKnowledgeCount
+        : ventureId === "tehdejsi-svet"
+          ? tehdejsiFeaturesCount + tehdejsiLibraryCount + tehdejsiSignalsItemCount
         : ventureId === "carousel-studio"
           ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
           : ventureId === "booksofhistory"
@@ -471,6 +481,18 @@ export default async function AdminPage({
     }
     if (id === "door-money" && selectedTab === "knowledge") {
       return { node: <DoorMoneyKnowledgePanel knowledge={doorMoney.knowledge} />, count: doorMoneyKnowledgeCount };
+    }
+    if (id === "tehdejsi-svet" && selectedTab === "features") {
+      return { node: <TehdejsiSvetFeaturesPanel snapshot={tehdejsiSvet} />, count: tehdejsiFeaturesCount };
+    }
+    if (id === "tehdejsi-svet" && selectedTab === "library") {
+      return {
+        node: <TehdejsiSvetLibraryPanel now={new Date().toISOString()} snapshot={tehdejsiSvet} />,
+        count: tehdejsiLibraryCount
+      };
+    }
+    if (id === "tehdejsi-svet" && selectedTab === "signals") {
+      return { node: <TehdejsiSvetSignalsPanel view={tehdejsiSignals} />, count: tehdejsiSignalsItemCount };
     }
     if (id === "caught-up" && selectedTab === "events") {
       return {
