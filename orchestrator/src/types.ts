@@ -47,7 +47,9 @@ export const FoundingAgentSchema = z.enum([
   "MAKO",
   "CHUM",
   "FOLIO",
-  "PLOT"
+  "PLOT",
+  "LETOPIS",
+  "VERBA"
 ]);
 export type FoundingAgent = z.infer<typeof FoundingAgentSchema>;
 
@@ -79,6 +81,7 @@ export const PhaseSchema = z.enum([
   "gv-brief",
   "ms-daily",
   "bh-desk",
+  "ts-desk",
   "incubator-scan",
   "incubator-synthesis",
   "mma-intake",
@@ -104,6 +107,7 @@ export const RunnablePhaseSchema = z.enum([
   "gv-brief",
   "ms-daily",
   "bh-desk",
+  "ts-desk",
   "mma-intake",
   "mma-analysis",
   "mag-editorial",
@@ -124,6 +128,7 @@ export const ScheduledPhaseSchema = z.enum([
   "gv-brief",
   "ms-daily",
   "bh-desk",
+  "ts-desk",
   "mma-intake",
   "mma-analysis",
   "mag-editorial",

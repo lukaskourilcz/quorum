@@ -80,7 +80,9 @@
         "MAKO",
         "CHUM",
         "FOLIO",
-        "PLOT"
+        "PLOT",
+        "LETOPIS",
+        "VERBA"
       ]
     },
     "created": {
@@ -186,7 +188,9 @@
                 "MAKO",
                 "CHUM",
                 "FOLIO",
-                "PLOT"
+                "PLOT",
+                "LETOPIS",
+                "VERBA"
               ]
             },
             "meeting_ref": {

@@ -117,12 +117,12 @@ snapshot is a committed file and the venture buys no data.
 
 - [x] **TS-00** — Phase 0 audit across both repositories
 - [x] **TS-01** — Write the founding decision record
-- [ ] **TS-02a** — Registry entry in `config/ventures.json`
-- [ ] **TS-02b** — Registry schema enum extensions and fixtures
-- [ ] **TS-03a** — Register the `ts-desk` phase in type and record schemas
-- [ ] **TS-03b** — Meeting policy for `ts-desk`
-- [ ] **TS-03c** — `cycle.yml` dispatch choices and mode gates
-- [ ] **TS-03d** — Vercel cron entries for the 18:00 slot
+- [x] **TS-02a** — Registry entry in `config/ventures.json`
+- [x] **TS-02b** — Registry schema enum extensions and fixtures
+- [x] **TS-03a** — Register the `ts-desk` phase in type and record schemas
+- [x] **TS-03b** — Meeting policy for `ts-desk`
+- [x] **TS-03c** — `cycle.yml` dispatch choices and mode gates
+- [x] **TS-03d** — Vercel cron entries for the 18:00 slot
 - [ ] **TS-04a** — LETOPIS and VERBA in registry, routing, controls and cast schema
 - [ ] **TS-04b** — Prompts for LETOPIS, VERBA and the craft file
 - [ ] **TS-04c** — Model roles for LETOPIS and VERBA

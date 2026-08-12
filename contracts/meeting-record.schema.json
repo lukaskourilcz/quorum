@@ -175,7 +175,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "LETOPIS",
+                  "VERBA"
                 ]
               },
               "reason": {
@@ -307,7 +309,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "LETOPIS",
+                  "VERBA"
                 ]
               },
               "summary": {
@@ -382,7 +386,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "LETOPIS",
+                  "VERBA"
                 ]
               },
               "firstChoice": {
@@ -456,7 +462,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "LETOPIS",
+                  "VERBA"
                 ]
               },
               "summary": {
@@ -651,7 +659,9 @@
                 "MAKO",
                 "CHUM",
                 "FOLIO",
-                "PLOT"
+                "PLOT",
+                "LETOPIS",
+                "VERBA"
               ]
             },
             "setting": {
@@ -712,7 +722,9 @@
                       "MAKO",
                       "CHUM",
                       "FOLIO",
-                      "PLOT"
+                      "PLOT",
+                      "LETOPIS",
+                      "VERBA"
                     ]
                   },
                   "mode": {
@@ -774,7 +786,9 @@
                       "MAKO",
                       "CHUM",
                       "FOLIO",
-                      "PLOT"
+                      "PLOT",
+                      "LETOPIS",
+                      "VERBA"
                     ]
                   },
                   "sentAt": {
@@ -1012,7 +1026,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "LETOPIS",
+                  "VERBA"
                 ]
               },
               "reason": {
@@ -1144,7 +1160,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "LETOPIS",
+                  "VERBA"
                 ]
               },
               "summary": {
@@ -1219,7 +1237,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "LETOPIS",
+                  "VERBA"
                 ]
               },
               "firstChoice": {
@@ -1293,7 +1313,9 @@
                   "MAKO",
                   "CHUM",
                   "FOLIO",
-                  "PLOT"
+                  "PLOT",
+                  "LETOPIS",
+                  "VERBA"
                 ]
               },
               "summary": {
@@ -1502,7 +1524,9 @@
                 "MAKO",
                 "CHUM",
                 "FOLIO",
-                "PLOT"
+                "PLOT",
+                "LETOPIS",
+                "VERBA"
               ]
             },
             "setting": {
@@ -1563,7 +1587,9 @@
                       "MAKO",
                       "CHUM",
                       "FOLIO",
-                      "PLOT"
+                      "PLOT",
+                      "LETOPIS",
+                      "VERBA"
                     ]
                   },
                   "mode": {
@@ -1625,7 +1651,9 @@
                       "MAKO",
                       "CHUM",
                       "FOLIO",
-                      "PLOT"
+                      "PLOT",
+                      "LETOPIS",
+                      "VERBA"
                     ]
                   },
                   "sentAt": {

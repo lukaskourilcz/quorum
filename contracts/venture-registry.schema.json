@@ -107,7 +107,9 @@
                 "packages",
                 "shortlist",
                 "dossiers",
-                "features"
+                "features",
+                "library",
+                "signals"
               ]
             }
           },
@@ -205,7 +207,9 @@
                       "MAKO",
                       "CHUM",
                       "FOLIO",
-                      "PLOT"
+                      "PLOT",
+                      "LETOPIS",
+                      "VERBA"
                     ]
                   }
                 },

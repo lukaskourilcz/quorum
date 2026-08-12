@@ -73,7 +73,9 @@
             "MAKO",
             "CHUM",
             "FOLIO",
-            "PLOT"
+            "PLOT",
+            "LETOPIS",
+            "VERBA"
           ]
         },
         "meetingRef": {

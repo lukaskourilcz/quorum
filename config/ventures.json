@@ -389,6 +389,51 @@
           "envelopeUsd": 0.16
         }
       ]
+    },
+    {
+      "id": "tehdejsi-svet",
+      "name": "Tehdejší svět",
+      "status": "operating",
+      "taste": true,
+      "ledgerNamespace": "tehdejsi-svet",
+      "growth_objective": {
+        "label": "Turn the product's curated past into bilingual family conversations",
+        "components": [
+          "feature-cadence",
+          "research-efficiency"
+        ]
+      },
+      "adminTabs": [
+        "features",
+        "library",
+        "signals"
+      ],
+      "meetings": [
+        {
+          "kind": "ts-desk",
+          "label": "Tehdejší svět editorial desk",
+          "cadence": "daily@18:00",
+          "$cadenceComment": "18:00 sits exactly 60 minutes from cu-product at 17:00 and mma-analysis at 19:00, which is the registry's minimum slot spacing. The evening hour is deliberate: the desk has the whole day's product snapshot and the owner reviews before a morning post.",
+          "cast": [
+            "LETOPIS",
+            "VERBA",
+            "HACEK",
+            "QUILL",
+            "AUDIT"
+          ],
+          "envelopeUsd": 0.25,
+          "$envelopeComment": "Covers the planning call, both language passes and the Sunday insights overlay. A phase may tighten this ceiling and never raise it; the runtime daily pre-flight remains authoritative.",
+          "packet": {
+            "topicType": "social",
+            "decisionNeeded": "PLAN",
+            "preset": "ts-desk-room",
+            "objectives": {
+              "dry": "Walk today's fixture cycle phase and record its outcome without a provider call, research spend, rendering or posting.",
+              "live": "Advance the recorded Tehdejší svět cycle through its current phase within the snapshot, sensitivity, drafts-only and manual-posting gates."
+            }
+          }
+        }
+      ]
     }
   ]
 }
