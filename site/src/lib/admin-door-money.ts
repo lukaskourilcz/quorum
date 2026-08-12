@@ -19,7 +19,13 @@ import {
   type DoorMoneyRecommendationStatus
 } from "./door-money-recommendation-model";
 import { parseRatingRecord, type RatingRecord } from "./rating-model";
-import type { DoorMoneyActionsView } from "@/components/admin/door-money-actions-panel";
+import {
+  parseStoredDoorMoneyActionPacket,
+  parseStoredDoorMoneyPlaybook,
+  projectDoorMoneyActionPacket,
+  projectDoorMoneyPlaybook,
+  type DoorMoneyActionsView
+} from "./door-money-actions-model";
 
 export type AdminDoorMoneyArtifactState = "missing" | "unreadable" | "present";
 
@@ -221,23 +227,52 @@ async function readKnowledge(root: string): Promise<AdminDoorMoneyKnowledge> {
 }
 
 async function readActions(root: string): Promise<DoorMoneyActionsView> {
-  const directories = ["actions", "playbooks"];
-  const results = await Promise.all(directories.map(async (directory) => {
+  const kinds = ["actions", "playbooks"] as const;
+  const results = await Promise.all(kinds.map(async (kind) => {
+    const directory = path.join(root, "state", "ventures", "door-money", kind);
     try {
-      const entries = await readdir(path.join(root, "state", "ventures", "door-money", directory), { withFileTypes: true });
-      return { state: "present" as const, count: entries.filter((entry) => entry.isFile()).length };
+      const names = (await readdir(directory, { withFileTypes: true }))
+        .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
+        .map(({ name }) => name)
+        .sort();
+      const records: unknown[] = [];
+      let unreadable = 0;
+      for (const name of names) {
+        try { records.push(JSON.parse(await readFile(path.join(directory, name), "utf8")) as unknown); }
+        catch { unreadable += 1; }
+      }
+      return { state: "present" as const, kind, records, unreadable };
     } catch (error) {
       return (error as NodeJS.ErrnoException).code === "ENOENT"
-        ? { state: "missing" as const, count: 0 }
-        : { state: "unreadable" as const, count: 1 };
+        ? { state: "missing" as const, kind, records: [], unreadable: 0 }
+        : { state: "unreadable" as const, kind, records: [], unreadable: 1 };
     }
   }));
   if (results.every(({ state }) => state === "missing")) {
     return { state: "missing", packets: [], playbooks: [], unreadable: 0 };
   }
-  const unreadable = results.reduce((sum, result) =>
-    sum + (result.state === "missing" ? 0 : Math.max(1, result.count)), 0);
-  return { state: "unreadable", packets: [], playbooks: [], unreadable };
+  let unreadable = results.reduce((sum, result) => sum + result.unreadable, 0);
+  const actionResult = results.find(({ kind }) => kind === "actions")!;
+  const playbookResult = results.find(({ kind }) => kind === "playbooks")!;
+  const packets = actionResult.records.flatMap((record) => {
+    const parsed = parseStoredDoorMoneyActionPacket(record);
+    if (!parsed) { unreadable += 1; return []; }
+    return [projectDoorMoneyActionPacket(parsed)];
+  }).sort((left, right) => right.date.localeCompare(left.date) || right.id.localeCompare(left.id));
+  const playbooks = playbookResult.records.flatMap((record) => {
+    const parsed = parseStoredDoorMoneyPlaybook(record);
+    if (!parsed) { unreadable += 1; return []; }
+    return [projectDoorMoneyPlaybook(parsed)];
+  }).sort((left, right) => left.channel.localeCompare(right.channel) || left.id.localeCompare(right.id));
+  if (packets.length === 0 && playbooks.length === 0 && unreadable === 0) {
+    return { state: "missing", packets: [], playbooks: [], unreadable: 0 };
+  }
+  return {
+    state: packets.length === 0 && playbooks.length === 0 && unreadable > 0 ? "unreadable" : "present",
+    packets,
+    playbooks,
+    unreadable
+  };
 }
 
 /** Load the owner-facing public derivatives and drop malformed records at their boundary. */

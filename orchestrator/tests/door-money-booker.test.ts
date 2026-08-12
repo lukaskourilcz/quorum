@@ -114,7 +114,8 @@ function actionResponse(reference: string): string {
       expectedImpact: "One owner-recorded judgment about the synthetic premise.",
       evidenceRefs: [reference],
       completion: null
-    }]
+    }],
+    playbookRevisions: []
   });
 }
 
@@ -136,8 +137,8 @@ describe("Door Money BOOKER call", () => {
     });
     expect(context.allowedEvidenceRefs).toEqual(["goviral-plan:plan-2026-08-10-weekly-brief"]);
     expect(context.droppedGoViralBriefs).toBe(3);
-    expect(context.playbooks).toEqual({ state: "deferred-until-dm-19c", items: [] });
-    expect(context.ownerCompletions).toEqual({ state: "deferred-until-dm-19c", items: [] });
+    expect(context.playbooks).toEqual({ state: "missing", items: [] });
+    expect(context.ownerCompletions).toEqual({ state: "missing", items: [] });
     expect(context.ownerResults).toEqual({ state: "deferred-until-dm-20a", items: [] });
   });
 
@@ -200,7 +201,8 @@ describe("Door Money BOOKER call", () => {
         outcome: "NO_ACTION",
         summary: "No recorded context supports an owner-executable step.",
         noActionReason: "Playbooks, owner results and a GoVIRAL weekly brief are unavailable.",
-        tasks: []
+        tasks: [],
+        playbookRevisions: []
       }),
       model: "gpt-5.6-luna",
       tokensIn: 240,

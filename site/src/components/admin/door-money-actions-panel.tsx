@@ -6,59 +6,24 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { Card, CardContent } from "@/components/ui/card";
+import type {
+  DoorMoneyActionsView,
+  DoorMoneyActionStatus,
+  DoorMoneyActionTaskView,
+  DoorMoneyChannelPlaybookView
+} from "@/lib/door-money-actions-model";
+
+export type {
+  DoorMoneyActionPacketView,
+  DoorMoneyActionsView,
+  DoorMoneyActionStatus,
+  DoorMoneyActionTaskView,
+  DoorMoneyChannelPlaybookView,
+  DoorMoneyPreparedTemplateView,
+  DoorMoneyTemplateKind
+} from "@/lib/door-money-actions-model";
 
 export const DOOR_MONEY_ACTIONS_ENDPOINT = "/admin/api/door-money/actions";
-
-export type DoorMoneyActionStatus = "open" | "completed";
-export type DoorMoneyTemplateKind = "pitch-email" | "video-script" | "engagement-guide" | "other";
-
-export interface DoorMoneyPreparedTemplateView {
-  id: string;
-  label: string;
-  kind: DoorMoneyTemplateKind;
-  body: string;
-}
-
-export interface DoorMoneyActionTaskView {
-  id: string;
-  title: string;
-  why: string;
-  steps: string[];
-  templates: DoorMoneyPreparedTemplateView[];
-  effort: string;
-  expectedImpact: string;
-  status: DoorMoneyActionStatus;
-  outcome: string | null;
-  completedAt: string | null;
-}
-
-export interface DoorMoneyActionPacketView {
-  id: string;
-  date: string;
-  agenda: string;
-  title: string;
-  summary: string;
-  tasks: DoorMoneyActionTaskView[];
-}
-
-export interface DoorMoneyChannelPlaybookView {
-  id: string;
-  channel: string;
-  title: string;
-  revision: string;
-  summary: string;
-  steps: string[];
-  updatedAt: string;
-  evidenceRefs: string[];
-}
-
-/** Temporary serializable projection until DM-19b installs the persistent action contract. */
-export interface DoorMoneyActionsView {
-  state: "missing" | "unreadable" | "present";
-  packets: DoorMoneyActionPacketView[];
-  playbooks: DoorMoneyChannelPlaybookView[];
-  unreadable: number;
-}
 
 export interface DoorMoneyActionCompletionRequest {
   packetId: string;
@@ -72,7 +37,7 @@ const fieldClass =
   "w-full rounded-[var(--radius-button)] border border-[var(--steel)] bg-[var(--surface)] px-3 py-2.5 text-base leading-6 text-[var(--foreground)] placeholder:text-[var(--fog)] disabled:opacity-50";
 
 function boundedId(value: string): boolean {
-  return value.length > 0 && value.length <= ID_LIMIT && !/[\u0000-\u001f\u007f]/u.test(value);
+  return value.length > 0 && value.length <= ID_LIMIT && /^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(value);
 }
 
 export function doorMoneyActionCompletionEnvelope(

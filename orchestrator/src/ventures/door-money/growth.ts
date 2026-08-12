@@ -29,6 +29,11 @@ import {
   callDoorMoneyBooker,
   type BookerCall
 } from "./growth-booker.js";
+import {
+  commitDoorMoneyGrowthPlaybookPlan,
+  prepareDoorMoneyGrowthPlaybooks,
+  preserveDoorMoneyActionCompletions
+} from "./growth-playbooks.js";
 
 export type { BookerCall, BookerResponse } from "./growth-booker.js";
 
@@ -130,6 +135,7 @@ export async function runDoorMoneyGrowthCycle(input: {
   const { meeting } = getVentureMeetingDefinition(registry, "dm-growth");
   let actionPacket: ActionPacket | null = null;
   let actionPacketPath: string | null = null;
+  let playbookPaths: string[] = [];
   let spendUsd = 0;
   let bookerParticipated = false;
   let roomStatus: "PLAN" | "NO_ACTION" | "PAUSED" | "FAILED" = due ? "NO_ACTION" : input.dry ? "NO_ACTION" : "PAUSED";
@@ -152,8 +158,18 @@ export async function runDoorMoneyGrowthCycle(input: {
       bookerParticipated = true;
       spendUsd = called.usd;
       const nextPacketPath = `ventures/door-money/actions/${date}.json`;
-      await atomicWriteJson(root, nextPacketPath, called.packet);
-      actionPacket = called.packet;
+      const nextPacket = await preserveDoorMoneyActionCompletions(root, nextPacketPath, called.packet);
+      const playbookPlan = await prepareDoorMoneyGrowthPlaybooks({
+        root,
+        cycleId: input.cycleId,
+        now: input.now,
+        proposals: called.playbookRevisions,
+        availableLearningRefs: new Set(called.context.availableLearningRefs)
+      });
+      await commitDoorMoneyGrowthPlaybookPlan(root, playbookPlan);
+      await atomicWriteJson(root, nextPacketPath, nextPacket);
+      playbookPaths = playbookPlan.paths;
+      actionPacket = nextPacket;
       actionPacketPath = nextPacketPath;
       roomStatus = actionPacket.outcome === "ACTIONS" ? "PLAN" : "NO_ACTION";
       summary = actionPacket.outcome === "ACTIONS"
@@ -271,7 +287,7 @@ export async function runDoorMoneyGrowthCycle(input: {
     estimatedWorstCaseUsd: estimatedCycleUsd,
     selectedAgents: participantReasons.filter(({ participated }) => participated).map(({ agent }) => agent),
     skippedAgents: participantReasons.filter(({ participated }) => !participated).map(({ agent }) => agent),
-    artifacts: [meetingPath, decisionPath, scorecardPath, calendarPath, actionPacketPath]
+    artifacts: [meetingPath, decisionPath, scorecardPath, calendarPath, actionPacketPath, ...playbookPaths]
       .filter((relative): relative is string => relative !== null)
       .map((relative) => path.relative(repoRoot, path.join(root, relative))),
     agenda,

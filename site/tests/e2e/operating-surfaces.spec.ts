@@ -398,17 +398,49 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await expect(feature.getByText("attached results")).toHaveCount(2);
   });
 
-  test("Door Money action writes stay closed until DM-19c", async ({ page }) => {
+  test("Door Money records a synthetic owner completion through the canonical route", async ({ page }) => {
+    const actionPath = path.join(repositoryRoot, "state", "ventures", "door-money", "actions", "2026-08-06.json");
+    const fixturePath = path.join(repositoryRoot, "contracts", "fixtures", "action-packet.valid.json");
+    let original: string | null = null;
+    try { original = await readFile(actionPath, "utf8"); }
+    catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; }
     let actionPosts = 0;
     page.on("request", (request) => {
       if (request.method() === "POST" && request.url().endsWith("/admin/api/door-money/actions")) actionPosts += 1;
     });
-    await page.goto("/admin?venture=door-money&tab=actions", { waitUntil: "networkidle" });
+    try {
+      await mkdir(path.dirname(actionPath), { recursive: true });
+      const fixture = JSON.parse(await readFile(fixturePath, "utf8")) as {
+        id: string;
+        date: string;
+        weekOf: string;
+        agenda: { isoWeek: string };
+        tasks: Array<{ completion: { completedAt: string } | null }>;
+        generatedAt: string;
+        updatedAt: string;
+      };
+      fixture.id = "action-packet-2026-08-06";
+      fixture.date = "2026-08-06";
+      fixture.weekOf = "2026-08-03";
+      fixture.agenda.isoWeek = "2026-W32";
+      fixture.generatedAt = "2026-08-06T14:00:00.000Z";
+      fixture.updatedAt = "2026-08-06T17:00:00.000Z";
+      const completed = fixture.tasks.find(({ completion }) => completion !== null)?.completion;
+      if (completed) completed.completedAt = "2026-08-06T17:00:00.000Z";
+      await writeFile(actionPath, `${JSON.stringify(fixture, null, 2)}\n`);
+      await page.goto("/admin?venture=door-money&tab=actions", { waitUntil: "networkidle" });
 
-    await expect(page.getByText("No Door Money action packets or playbooks exist yet.")).toBeVisible();
-    await expect(page.getByLabel("Outcome (required)")).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "Mark complete" })).toHaveCount(0);
-    expect(actionPosts).toBe(0);
+      const task = page.getByRole("heading", { name: "Review the fictional launch note" }).locator("xpath=ancestor::li[1]");
+      await task.getByLabel("Outcome (required)").fill("The synthetic owner reviewed the fictional note.");
+      await task.getByRole("button", { name: "Mark complete" }).click();
+      await expect(task.getByText("Outcome recorded. The weekly room can now read this completion.")).toBeVisible();
+      expect(actionPosts).toBe(1);
+      await page.reload({ waitUntil: "networkidle" });
+      await expect(page.getByText("Outcome: The synthetic owner reviewed the fictional note.")).toBeVisible();
+    } finally {
+      if (original === null) await rm(actionPath, { force: true });
+      else await writeFile(actionPath, original);
+    }
   });
 
   test("admin ideas retain their saved rating and graduation after reload", async ({ page }) => {
