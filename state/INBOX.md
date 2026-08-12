@@ -157,6 +157,78 @@ items in place. Lack of response never authorizes an action. -->
   approval** — Starter is $29/month, which alone would consume the entire $30
   all-in operating cap from `budget-2026-08e`.
 
+- [ ] HUMAN_APPROVAL KV-APIFY-001 — Extend the existing Apify Free-plan scope
+  to Kvórum's single public-page monitor.
+  What this approves, exactly:
+  - **The dependency:** `APIFY-ACCOUNT-001` must also be resolved. This item
+    creates no account, stores no token and does not countersign either the
+    Kvórum founding record or its budget-capacity decision.
+  - **The only actor and target:** pinned build `laKrch6r0XAnxtAFh` of
+    `apify/facebook-posts-scraper`, reading only the logged-out public page
+    `facebook.com/stitdemokracie`. No Facebook login, cookie, personal account,
+    comments or private-individual data may enter the actor or mapper.
+  - **The cadence and row limit:** at most one attempt a day and at most 30
+    returned posts. The fixed-field mapper retains only the approved public-post
+    fields, and raw rows are purged after 30 days.
+  - **The cost boundary:** a `$2.00` monthly Kvórum share inside the existing `$5`
+    Apify platform credit, with `$0` cash and no card. Current event pricing makes
+    the maximum run reservation `$0.151`, so the share cannot fund every daily
+    slot; the quota guard skips later runs rather than exceeding the share.
+  - **What it is for:** Štít supplies discovery and salience only. Its rows are
+    never factual evidence and nothing from the page is republished.
+  **Never upgrade the plan.** No approval in this repository may turn Free into
+  Starter or widen the page, actor, result cap or retained fields.
+
+- [ ] HUMAN_APPROVAL KV-SOURCES-002 — Approve Kvórum's free corroborating-feed
+  registry and its exact network hosts.
+  What this approves, exactly:
+  - **The registry:** `config/kvorum-sources.json`, limited to the committed RSS
+    endpoints for iROZHLAS, ČT24, Deník N, Seznam Zprávy, Poslanecká sněmovna,
+    Vláda České republiky and the Czech Google News edition.
+  - **The allowlisted hosts:** `www.irozhlas.cz`, `ct24.ceskatelevize.cz`,
+    `denikn.cz`, `www.seznamzpravy.cz`, `www.psp.cz`, `vlada.gov.cz` and
+    `news.google.com`. A new hostname, endpoint or source needs a new review.
+  - **The cost and data boundary:** all seven reads cost `$0`, pass through the
+    shared HTTPS, DNS, redirect, content-type and byte guards, and enter the desk
+    only as untrusted fixed-field rows. They grant no login, scraping, account,
+    channel, publishing or paid-source authority.
+  - **The failure posture:** without this countersignature every feed records an
+    approval-gated result and returns no live rows; the fixture path remains `$0`.
+
+- [ ] HUMAN_APPROVAL KV-ACCOUNTS-003 — Approve the future owner-led creation of
+  Kvórum social accounts and its disclosure text.
+  What this approves, exactly:
+  - **The possible accounts:** Instagram, Facebook, Threads and X, only after the
+    owner clears the public name and handles. Resolving this item creates no
+    account, credential, channel entry or publisher mapping; no agent may perform
+    those actions.
+  - **The bio disclosure:** each opened profile must say, in substance,
+    "Návrhy vznikají s pomocí AI; každý příspěvek před zveřejněním schvaluje
+    člověk." The owner may refine the wording before countersigning, but may not
+    remove the AI-assisted-drafting and human-editorial-approval meaning.
+  - **The closed posture:** until countersigned, Kvórum remains drafts-only and
+    the protected workspace must say so. Even after countersignature, this item
+    does not authorize posting, automation, ads, boosting, metrics ingestion or
+    credentials in Git.
+
+- [ ] HUMAN_APPROVAL KV-EDITORIAL-004 — Countersign the Kvórum editorial
+  constitution implemented by the deterministic gates and runtime craft prompt.
+  What this approves, exactly:
+  - **Evidence and originality:** Štít is discovery only; factual claims keep
+    typed refs, `fact-multi` uses two independent domains, `fact-single` is
+    visibly qualified, exact quotes resolve, and every package adds a distinct
+    angle rather than copying source language or imagery.
+  - **People and political conduct:** public figures only; no vote instruction,
+    party/candidate/coalition endorsement, voter mockery, unsupported crime
+    accusation, alarm register, paid amplification, fundraising or ad proposal.
+    Candidate facts use the higher multi-source bar during election periods.
+  - **Corrections and authority:** contradicted claims retain their trail and get
+    a linked correction or retraction draft. The owner is the final editorial
+    reader; approval remains a draft action and never publishes.
+  - **What stays closed:** this policy changes no source, account, channel,
+    publisher, metric, budget, treasury or payment gate and cannot substitute for
+    any other pending Kvórum approval.
+
 ## Resolved
 
 - [x] HUMAN_APPROVAL DEVSHARK-BANNER-001 — Place the devShark house banner on
