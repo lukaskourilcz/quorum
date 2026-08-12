@@ -150,24 +150,36 @@ is the single thing standing between a proven path and a working one.
 
 Judgement calls. Nothing is blocked on code for any of these.
 
-- [ ] **Read the three new venture designs and commission the builds** — the designs are
+- [ ] **Read the four new venture designs and commission the builds** — the designs are
   `docs/KVORUM-VENTURE-DESIGN.md` (Czech politics), `docs/DOOR-MONEY-VENTURE-DESIGN.md`
-  (Rapovej deník marketing) and `docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` (book-history
-  social engine); the matching implementation prompts sit beside them as
-  `*-CODEX-BUILD-PROMPT.md`. Hand each prompt to its own implementation session; whichever
-  runs first creates the shared recommendation contract and the carousel-summary locale
-  field, and every prompt's Phase 0 checks for the others' artifacts before creating its
-  own. All three carry the standing GoVIRAL + Design Lab spine
-  (`docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` §10). Each build ends with a founding decision
-  waiting for your countersignature and its approval items in `state/INBOX.md`; nothing
-  runs live before you sign. [imp:4] [owner:me] [time:60m] [kind:decision]
+  (Rapovej deník marketing), `docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` (book-history
+  social engine) and `docs/TEHDEJSI-SVET-VENTURE-DESIGN.md` (adoption of the existing
+  Tehdejší svět product); the matching implementation prompts sit beside them
+  (`*-CODEX-BUILD-PROMPT.md`, and `tehdejsi-svet-venture-implementation.md` for the
+  adoption). Hand each prompt to its own implementation session; whichever runs first
+  creates the shared recommendation contract, the research provider and the
+  carousel-summary locale field, and every prompt's Phase 0 checks for the others'
+  artifacts before creating its own. All four carry the standing GoVIRAL + Design Lab
+  spine (`docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` §10). Each build ends with a founding
+  decision waiting for your countersignature and its approval items in
+  `state/INBOX.md`; nothing runs live before you sign.
+  [imp:4] [owner:me] [time:75m] [kind:decision]
 
-- [ ] **Clear the three venture names** — run the BRAND.md-style checks for "Kvórum",
-  "Door Money" and "BOOKSOFHISTORY": social handles on IG/FB/Threads/X (TikTok for Door
-  Money and BOOKSOFHISTORY; for BOOKSOFHISTORY decide whether the Czech lane shares the
-  handle or takes a `.cz` variant), trademark screen, collision search. The design
-  documents list fallbacks in their closing "Open questions" sections, and venture ids
-  stay stable if a public name changes. [imp:3] [owner:me] [time:45m] [kind:legal]
+- [ ] **Clear the four venture names and handles** — run the BRAND.md-style checks for
+  "Kvórum", "Door Money", "BOOKSOFHISTORY" and the @tehdejsisvet handles: social
+  handles on IG/FB/Threads/X (TikTok where relevant; for BOOKSOFHISTORY decide whether
+  the Czech lane shares the handle or takes a `.cz` variant), trademark screen,
+  collision search. The design documents list fallbacks in their closing "Open
+  questions" sections, and venture ids stay stable if a public name changes.
+  [imp:3] [owner:me] [time:45m] [kind:legal]
+
+- [ ] **Unblock the Tehdejší svět launch preconditions** — the adoption venture cannot
+  launch profiles until the product's production domain lands (that task already sits
+  in the product repo's own NEEDED.md at [imp:5]; `dontwannaknow.vercel.app` must
+  never appear in a bio), and two strategy questions need answers: may the 19 licensed
+  city photographs appear in social cards with on-slide attribution, and is the Vercel
+  Hobby → Pro-team question worth resolving now. Both are in the design doc's closing
+  "Open questions". [imp:3] [owner:me] [time:20m] [kind:decision]
 
 - [ ] **Answer the BOOKSOFHISTORY launch questions** — lane priority (both at once, or
   English first with Czech two weeks behind), the starting cycle length (3 days or 4),
