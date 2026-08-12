@@ -36,6 +36,7 @@ import { readDesignLab, readDesignLabPresets } from "@/lib/design-lab";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminCaughtUp } from "@/lib/admin-caught-up";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
+import { readAdminKvorum } from "@/lib/admin-kvorum";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
 import { readAdminSnapshot } from "@/lib/admin-state";
@@ -135,6 +136,7 @@ export default async function AdminPage({
     fightaiq,
     caughtUp,
     mmaFiles,
+    kvorum,
     carouselStudio,
     hookBrain,
     goviralProfile,
@@ -159,6 +161,7 @@ export default async function AdminPage({
     readAdminFightAiQ(),
     readAdminCaughtUp(),
     readAdminMmaFiles(),
+    readAdminKvorum(),
     readCarouselStudio(),
     readHookBrain(),
     readGoViralProfile(),
@@ -209,18 +212,20 @@ export default async function AdminPage({
   /**
    * How many stored items a workspace holds.
    *
-   * Three ventures keep their work outside the portfolio card store, so counting cards reported 0
+   * Four ventures keep their work outside the portfolio card store, so counting cards reported 0
    * for them — FightAIQ showed nothing on a rail beside a workspace holding twelve hundred fighter
-   * records. Each of those three is counted from the loader that actually reads it.
+   * records. Each of those four is counted from the loader that actually reads it.
    */
   const savedItemCount = (ventureId: string, fallback: number) =>
     ventureId === "mma-files"
       ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
-      : ventureId === "carousel-studio"
-        ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
-        : ventureId === "fightaiq"
-          ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.sources.length
-          : fallback;
+      : ventureId === "kvorum"
+        ? kvorum.recommendations.length + kvorum.monitor.length + (kvorum.quota ? 1 : 0)
+        : ventureId === "carousel-studio"
+          ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
+          : ventureId === "fightaiq"
+            ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.sources.length
+            : fallback;
 
   const files = [
     { name: "Things only you can approve", content: state.inbox },
@@ -334,6 +339,7 @@ export default async function AdminPage({
         portfolio.ventures.reduce((sum, venture) => sum + venture.unreadableFiles.length, 0) +
         mmaFiles.unreadable.length +
         fightaiq.unreadable.length +
+        kvorum.unreadable +
         ownerAttention.unreadable
     }
   ];

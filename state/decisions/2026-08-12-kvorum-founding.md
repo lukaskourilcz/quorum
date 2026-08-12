@@ -277,7 +277,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-15a — Studio brand tokens for Kvórum
 - [x] KV-15b — Carousel-summary venture extension, byte-compatible
 - [x] KV-16 — Admin approval write path
-- [ ] KV-17a — Server-only admin loader
+- [x] KV-17a — Server-only admin loader
 - [ ] KV-17b — Recommendations panel
 - [ ] KV-17c — Monitor panel
 - [ ] KV-17d — Claims panel, tab wiring and e2e coverage
