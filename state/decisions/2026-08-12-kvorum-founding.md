@@ -169,7 +169,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-03a — Register the `kv-desk` phase in type and record schemas
 - [x] KV-03b — Meeting policy classification for `kv-desk`
 - [x] KV-03c — `cycle.yml` dispatch choices and mode gates
-- [ ] KV-03d — Vercel cron entries for the 21:00 slot
+- [x] KV-03d — Vercel cron entries for the 21:00 slot
 - [ ] KV-04a — TRIBUN in the agent registry, routing, controls and cast schema
 - [ ] KV-04b — TRIBUN prompts and the expected-prompts list
 - [ ] KV-04c — TRIBUN model role and HACEK venture extension
