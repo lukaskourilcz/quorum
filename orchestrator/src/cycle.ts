@@ -111,6 +111,7 @@ import { ScheduledPhaseSchema, type RunnablePhase, type Stage } from "./types.js
 import { findSlotRecord } from "./meetings/slot-record.js";
 import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
 import { runMarketingSharkCycle } from "./ventures/marketingshark/run.js";
+import { runBooksofHistoryCycle } from "./ventures/booksofhistory/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
 import {
   recordClosedArticleSlot,
@@ -330,6 +331,14 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     return withFileLock(stateRoot, ".lock", quietly(() =>
       runCaughtUpLiveProductCycle(options, cycleId, now)
     ));
+  }
+  if (options.phase === "bh-desk") {
+    const run = () => runBooksofHistoryCycle({
+      executionCycleId: cycleId,
+      dry: options.dry,
+      now
+    });
+    return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
   }
   if (isPortfolioPhase(options.phase)) {
     const phase = options.phase;
