@@ -157,6 +157,82 @@ items in place. Lack of response never authorizes an action. -->
   approval** — Starter is $29/month, which alone would consume the entire $30
   all-in operating cap from `budget-2026-08e`.
 
+- [ ] HUMAN_APPROVAL BOOK-SOURCE-001 — Provide Door Money's private manuscript
+  source and approve the public/private boundary.
+  What this approves, exactly:
+  - **The private source:** an owner-created private Git repository with a local
+    clone outside this public checkout. A fine-grained read-only
+    `BOOK_SOURCE_TOKEN` may be kept in Actions secrets and the local environment
+    for the owner's checkout step; the shipped runtime does not send it to the
+    site, admin or a model. Live ingestion reads the clone passed as
+    `--private-root`; scheduled desk runs read `BOOK_PRIVATE_CLONE_PATH`.
+  - **The local input:** the English manuscript may be passed with
+    `--manuscript` or placed at the gitignored
+    `state/ventures/door-money/manuscript/manuscript.md`. Ignored is not
+    permission to stage it. Never paste the manuscript into an issue, fixture,
+    prompt log or committed state.
+  - **The split:** manuscript text, complete chunks, annotations and embeddings
+    stay in the private clone. This repository receives hashes, counters, scores,
+    labels and contract-validated derivatives only. Every committed excerpt is
+    capped at 600 characters; the style profile allows at most 40 exemplars of
+    280 characters each.
+  - **What it costs:** $0 cash while the private repository uses the owner's
+    existing plan. A hosted database, paid storage tier or network client is not
+    part of the shipped path and would require a new design and approval.
+  Until this item and `BOOK-INGEST-002` are both checked, live ingestion refuses
+  before any paid call. A missing or public-repository clone also refuses.
+
+- [ ] HUMAN_APPROVAL BOOK-INGEST-002 — Allow the one-time, resumable Door Money
+  knowledge ingestion inside its program envelope.
+  What this approves, exactly:
+  - **The ceilings:** at most $3.00 for the whole ingestion program, at most
+    $0.80 on any day and at most $0.10 for any paid call. These are sub-limits;
+    the signed $30 all-in monthly, $25 model/API and $1.00 daily ceilings still
+    win.
+  - **The model work:** `BOOK_INGEST` uses the configured Anthropic Haiku route
+    for bounded annotation, scoring and map work; `BOOK_STYLE` uses the
+    configured Sonnet route for one versioned synthesis; the shared guarded
+    embeddings wrapper uses `text-embedding-3-small`.
+  - **The ledger:** text work remains `kind: "text"`; the vector call records
+    `kind: "embedding"`. Every paid call reserves first, records actual usage
+    after, and is attributed to `door-money` / `book-ingest`.
+  - **What it does not approve:** a database, a public copy of source text, an
+    automatic rerun or a budget raise. The owner starts `pnpm book:ingest` and a
+    saved cursor resumes the same manuscript hash after a stop.
+
+- [ ] HUMAN_APPROVAL DM-ACCOUNTS-003 — Clear the Door Money name and choose any
+  future social accounts.
+  What this approves, exactly:
+  - **The name:** complete the handle, collision and trademark screen for
+    "Door Money" and decide whether the public account instead carries the
+    English book title. A hard conflict comes back to the owner; the system does
+    not auto-rename the venture.
+  - **The accounts:** the owner may choose Instagram, TikTok, X, Threads and/or
+    YouTube and creates each account personally. This item provides no
+    credential and the system cannot create, configure or contact an account.
+  - **The boundary:** Door Money remains drafts-only until this is signed. After
+    signing, manual posting is an owner action. Autopublishing, credentials, a
+    publisher path, ads and paid promotion each remain outside this approval and
+    would need their own decision and every existing social gate.
+  - **What it costs:** $0. A domain, trademark service, ad or account purchase is
+    a separate spend approval; no such spend is inferred here.
+
+- [ ] HUMAN_APPROVAL DM-RESULTS-004 — Allow owner-entered Door Money post
+  results as the venture's only performance evidence inside the D9 hold.
+  What this approves, exactly:
+  - **What the owner enters:** after manually recording a posted HTTPS URL, the
+    owner may type the platform, an outcome note and at least one nonnegative
+    count among views, likes, comments, shares, saves, follows and link taps.
+  - **What the system does:** store `owner-result-entry/1` with
+    `source: "owner-entry"`, show outcome beside intent, and let the Thursday
+    room cite that record in bounded playbook or performance-weight proposals.
+  - **What stays forbidden:** no analytics client, platform fetch, cookie,
+    pixel, follower scrape or inferred metric. `METRICS_INGESTION_ENABLED=false`
+    and D9 remain unchanged; missing data remains unavailable, never zero.
+  Until this item is checked, the result store refuses the write. Approval does
+  not post anything, connect a channel or authorize a model call outside the
+  existing Thursday room envelope.
+
 ## Resolved
 
 - [x] HUMAN_APPROVAL DEVSHARK-BANNER-001 — Place the devShark house banner on

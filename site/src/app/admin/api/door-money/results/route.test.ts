@@ -15,7 +15,7 @@ afterEach(async () => {
   vi.useRealTimers();
 });
 
-async function fixture(): Promise<{ root: string; recommendationId: string }> {
+async function fixture(resultsApproved = true): Promise<{ root: string; recommendationId: string }> {
   const root = await mkdtemp(path.join(os.tmpdir(), "door-money-results-route-"));
   roots.push(root);
   const recommendation = JSON.parse(await readFile(
@@ -23,6 +23,10 @@ async function fixture(): Promise<{ root: string; recommendationId: string }> {
   )) as { id: string };
   const directory = path.join(root, "state/ventures/door-money/recommendations");
   await mkdir(directory, { recursive: true });
+  await writeFile(
+    path.join(root, "state/INBOX.md"),
+    `- [${resultsApproved ? "x" : " "}] HUMAN_APPROVAL DM-RESULTS-004 — synthetic test state.\n`
+  );
   await writeFile(path.join(directory, `${recommendation.id}.json`), `${JSON.stringify(recommendation, null, 2)}\n`);
   const { applyDoorMoneyRecommendationDecision } = await import("@/lib/door-money-recommendations-store");
   await applyDoorMoneyRecommendationDecision({
@@ -114,6 +118,19 @@ describe("Door Money owner-results route", () => {
     const retry = await POST(request(body(recommendationId), cookie));
     expect(retry.status).toBe(200);
     expect(await retry.json()).toMatchObject({ changed: false, result: { id: firstValue.result.id } });
+  });
+
+  it("keeps the result writer closed while DM-RESULTS-004 is pending", async () => {
+    const { root, recommendationId } = await fixture(false);
+    const { POST, cookie } = await routeFor(root);
+    const response = await POST(request(body(recommendationId), cookie));
+    expect(response.status).toBe(409);
+    expect(await response.json()).toMatchObject({
+      cause: "conflict",
+      error: expect.stringContaining("DM-RESULTS-004 is pending")
+    });
+    await expect(readdir(path.join(root, "state/ventures/door-money/results")))
+      .rejects.toMatchObject({ code: "ENOENT" });
   });
 
   it("fails closed in production without persistence credentials", async () => {

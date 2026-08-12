@@ -1,5 +1,6 @@
 import "server-only";
 import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import {
   parseDoorMoneyOwnerResult,
@@ -16,6 +17,7 @@ import {
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
 const resultsDirectory = "state/ventures/door-money/results";
+const RESULTS_APPROVAL_ID = "DM-RESULTS-004";
 
 export interface DoorMoneyOwnerResultWrite {
   result: DoorMoneyOwnerResult;
@@ -29,6 +31,19 @@ function stableBytes(value: unknown): string {
 
 function relativeResultPath(id: string): string {
   return `${resultsDirectory}/${id}.json`;
+}
+
+async function assertOwnerResultApproval(root: string): Promise<void> {
+  const inbox = await readFile(path.join(root, "state", "INBOX.md"), "utf8").catch((error: NodeJS.ErrnoException) => {
+    if (error.code === "ENOENT") return "";
+    throw error;
+  });
+  if (!/^- \[[xX]\] HUMAN_APPROVAL DM-RESULTS-004\b/mu.test(inbox)) {
+    throw new DoorMoneyPersistenceError(
+      "CONFLICT",
+      `${RESULTS_APPROVAL_ID} is pending; owner-entered Door Money results remain disabled.`
+    );
+  }
 }
 
 function semanticallyEqual(result: DoorMoneyOwnerResult, input: DoorMoneyOwnerResultInput, postUrl: string): boolean {
@@ -45,6 +60,7 @@ export async function saveDoorMoneyOwnerResult(
   const input = parseDoorMoneyOwnerResultInput(raw);
   if (!input) throw new DoorMoneyPersistenceError("CONFLICT", "A recommendation, platform, outcome and at least one metric are required.");
   const root = options.root ?? repositoryRoot;
+  await assertOwnerResultApproval(root);
   const recommendation = await readDoorMoneyRecommendation(input.recommendationId, root);
   if (!recommendation.owner.postedUrl || !["posted", "archived"].includes(recommendation.status)) {
     throw new DoorMoneyPersistenceError("CONFLICT", "Results can be recorded only after the owner records a posted URL.");

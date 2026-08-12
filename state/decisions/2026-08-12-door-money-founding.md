@@ -194,6 +194,13 @@ costs and no treasury action in this decision.
   contract-valid GoVIRAL weekly brief at this stage. DM-19c installs the playbook and completion
   readers, and DM-20a installs the owner-result reader; neither future writer or contract is
   implemented early.
+- **DM-22b's amended issue again substitutes a hosted book database for the higher-precedence
+  private store.** The filed `BOOK-SOURCE-001` item follows the founding and design records: an
+  owner-created private Git repository, a clone outside this public checkout, the ignored local
+  manuscript input and the existing `--private-root` / `BOOK_PRIVATE_CLONE_PATH` readers. It
+  creates no database host allowlist entry, `BOOK_DB_*` credential, table or network client. The
+  optional read-only `BOOK_SOURCE_TOKEN` is only authority for the owner's checkout step; the
+  shipped runtime does not consume or transmit it.
 
 ## Delivery ledger
 
@@ -243,7 +250,7 @@ costs and no treasury action in this decision.
 - [x] DM-21a — GoVIRAL spine: topicSet and trend boosts
 - [x] DM-21b — GoVIRAL spine: transitions and the Design-Lab-only test
 - [x] DM-22a — Documentation truth across the standing docs
-- [ ] DM-22b — INBOX approvals and NEEDED owner items
+- [x] DM-22b — INBOX approvals and NEEDED owner items
 - [ ] DM-22c — Honest gaps, checkbox sweep, prompt deletion
 
 ## Honest gaps
