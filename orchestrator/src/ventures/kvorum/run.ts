@@ -1,4 +1,4 @@
-import { readdir, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import {
   BudgetError,
@@ -6,17 +6,14 @@ import {
   type BudgetLimits,
   type BudgetLedgerEntry
 } from "../../budget.js";
-import { KvorumEntityLexiconSchema, type KvorumEntityLexicon } from "../../contracts/kvorum-entities.js";
+import type { KvorumEntityLexicon } from "../../contracts/kvorum-entities.js";
 import {
-  KvorumMonitorItemSchema,
-  KvorumMonitorReceiptSchema,
-  type KvorumMonitorReceipt,
-  type KvorumMonitorSourceResult,
-  type KvorumTrendContext
+  type KvorumMonitorReceipt
 } from "../../contracts/kvorum-monitor.js";
-import { VentureRecommendationSchema } from "../../contracts/venture-recommendation.js";
+import type { MeetingAgenda } from "../../contracts/meeting-agenda.js";
 import {
   TribunDeskEnvelopeSchema,
+  type KvorumFollowUpRequest,
   type KvorumPackageGateEvaluation,
   type TribunDeskEnvelope,
   type TribunPackage
@@ -37,14 +34,8 @@ import {
 import { readJson, readText } from "../../state.js";
 import type { Stage } from "../../types.js";
 import { remainingScheduledCycles } from "../../cycle/ledger.js";
-import {
-  clusterKvorumItems,
-  rankKvorumClusters,
-  type KvorumPriorRecommendation
-} from "./cluster.js";
 import { loadKvorumEntityLexicon } from "./entities.js";
 import {
-  buildKvorumMonitorReceipt,
   fetchKvorumMonitor,
   writeKvorumMonitorReceipt,
   type KvorumMonitorFetchResult
@@ -69,6 +60,15 @@ import {
   type KvorumPerformanceWeights
 } from "./performance.js";
 import { loadLatestKvorumGoViralContext } from "./goviral.js";
+import { applyKvorumAgendaEffects, loadDueKvorumAgenda } from "./agenda.js";
+import {
+  buildRankedKvorumReceipt,
+  loadDryKvorumDeskSource,
+  readKvorumRecommendationHistory,
+  type KvorumDeskSource
+} from "./inputs.js";
+
+export { readKvorumRecommendationHistory } from "./inputs.js";
 
 export {
   TribunDeskOutputSchema,
@@ -96,6 +96,8 @@ export interface KvorumDeskResult {
   receipt: KvorumMonitorReceipt | null;
   droppedPackages: number;
   gateEvaluations: KvorumPackageGateEvaluation[];
+  agenda: MeetingAgenda | null;
+  followUpRequest: KvorumFollowUpRequest | null;
   artifacts: string[];
 }
 
@@ -116,93 +118,6 @@ export interface KvorumDeskInput {
   limits?: BudgetLimits;
   fixedMonthlyUsd?: number;
   scheduleAllows?: (monthApiSpentUsd: number) => Promise<boolean>;
-}
-
-async function dryMonitor(date: string): Promise<{
-  fetched: KvorumMonitorFetchResult;
-  lexicon: KvorumEntityLexicon;
-  history: KvorumPriorRecommendation[];
-}> {
-  const [itemsRaw, historyRaw, lexiconRaw] = await Promise.all([
-    readFile(path.join(repoRoot, "orchestrator/fixtures/kvorum/monitor-day.json"), "utf8"),
-    readFile(path.join(repoRoot, "orchestrator/fixtures/kvorum/prior-recommendations.json"), "utf8"),
-    readFile(path.join(configRoot, "kvorum-entities.json"), "utf8")
-  ]);
-  const items = (JSON.parse(itemsRaw) as unknown[]).map((item) => KvorumMonitorItemSchema.parse(item));
-  const counts = new Map<string, number>();
-  for (const item of items) counts.set(item.source.id, (counts.get(item.source.id) ?? 0) + 1);
-  const sourceResults: KvorumMonitorSourceResult[] = [...counts].sort().map(([sourceId, count]) => ({
-    sourceId,
-    kind: sourceId === "stit-demokracie-facebook" ? "apify" : "feed",
-    attempted: false,
-    status: "fixture",
-    count,
-    reason: `Committed fixture rows for ${date}; no external source was contacted.`
-  }));
-  return {
-    fetched: { items, sourceResults, artifactPaths: [], fixtureOnly: true },
-    lexicon: KvorumEntityLexiconSchema.parse(JSON.parse(lexiconRaw) as unknown),
-    history: JSON.parse(historyRaw) as KvorumPriorRecommendation[]
-  };
-}
-
-export async function readKvorumRecommendationHistory(root: string): Promise<KvorumPriorRecommendation[]> {
-  const directory = path.join(root, "ventures/kvorum/recommendations");
-  const names = await readdir(directory).catch((error: NodeJS.ErrnoException) => {
-    if (error.code === "ENOENT") return [];
-    throw error;
-  });
-  const history: KvorumPriorRecommendation[] = [];
-  for (const name of names.filter((entry) => /^\d{4}-\d{2}-\d{2}-.+\.json$/u.test(entry)).sort()) {
-    const recommendation = VentureRecommendationSchema.parse(JSON.parse(
-      await readFile(path.join(directory, name), "utf8")
-    ) as unknown);
-    if (recommendation.status === "rejected" || recommendation.evidence.kind !== "monitor-cluster") continue;
-    const receipt = KvorumMonitorReceiptSchema.parse(await readJson<unknown>(
-      root,
-      recommendation.evidence.receiptRef.replace(/^state\//u, ""),
-      null
-    ));
-    const cluster = receipt.clusters.find((candidate) => candidate.id === recommendation.evidence.clusterId);
-    if (!cluster) throw new Error(`Recommendation ${recommendation.id} has no retained monitor cluster.`);
-    history.push({
-      recommendationId: recommendation.id,
-      recommendedAt: recommendation.createdAt,
-      entityIds: cluster.entityIds,
-      topicTokens: cluster.topicTokens
-    });
-  }
-  return history;
-}
-
-function rankedReceipt(input: {
-  date: string;
-  now: Date;
-  fetched: KvorumMonitorFetchResult;
-  lexicon: KvorumEntityLexicon;
-  history: KvorumPriorRecommendation[];
-  performanceWeights: KvorumPerformanceWeights;
-  trendContext: KvorumTrendContext;
-}): KvorumMonitorReceipt {
-  const labels = Object.fromEntries(input.lexicon.entities.map((entity) => [entity.id, entity.canonicalName]));
-  const clusters = clusterKvorumItems(input.fetched.items, { entityLabels: labels });
-  const ranked = rankKvorumClusters({
-    clusters,
-    items: input.fetched.items,
-    lexicon: input.lexicon,
-    priorRecommendations: input.history,
-    now: input.now,
-    performanceWeights: input.performanceWeights,
-    trendContext: input.trendContext
-  });
-  return buildKvorumMonitorReceipt({
-    date: input.date,
-    now: input.now,
-    fetched: input.fetched,
-    clusters: ranked.clusters,
-    ranks: ranked.ranks,
-    trendContext: input.trendContext
-  });
 }
 
 async function gateCandidates(
@@ -231,9 +146,10 @@ async function gateCandidates(
 
 async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResult> {
   const root = input.root ?? (input.dry ? path.join(repoRoot, "tmp/dry-run/state") : stateRoot);
-  let source: Awaited<ReturnType<typeof dryMonitor>>;
+  let agenda: MeetingAgenda | null = null;
+  let source: KvorumDeskSource;
   if (input.dry) {
-    source = await dryMonitor(input.date);
+    source = await loadDryKvorumDeskSource(input.date);
   } else {
     const [foundingRaw, capacityRaw, inbox] = await Promise.all([
       input.foundingDecisionRaw ?? readText(root, "decisions/2026-08-12-kvorum-founding.md"),
@@ -246,7 +162,7 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
       ...(kvorumBudgetCapacityDecision(capacityRaw) !== "countersigned" ? ["the Kvórum budget-capacity decision"] : [])
     ];
     if (closed.length > 0) {
-      return { date: input.date, dry: false, status: "paused", reason: `Waiting for ${closed.join(" and ")}.`, packages: [], tribunRan: false, spendUsd: 0, receipt: null, droppedPackages: 0, gateEvaluations: [], artifacts: [] };
+      return { date: input.date, dry: false, status: "paused", reason: `Waiting for ${closed.join(" and ")}.`, packages: [], tribunRan: false, spendUsd: 0, receipt: null, droppedPackages: 0, gateEvaluations: [], agenda: null, followUpRequest: null, artifacts: [] };
     }
     const ledger = (await readJson<{ entries: BudgetLedgerEntry[] }>(root, "budget/ledger.json", { entries: [] }))
       .entries.map((entry) => BudgetLedgerEntrySchema.parse(entry));
@@ -256,8 +172,9 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
       ? await input.scheduleAllows(monthSpend)
       : phaseEnabled(await loadEffectivePortfolioSchedule(monthSpend), KVORUM_DESK_PHASE);
     if (!allows) {
-      return { date: input.date, dry: false, status: "paused", reason: "The effective portfolio schedule does not fund kv-desk.", packages: [], tribunRan: false, spendUsd: 0, receipt: null, droppedPackages: 0, gateEvaluations: [], artifacts: [] };
+      return { date: input.date, dry: false, status: "paused", reason: "The effective portfolio schedule does not fund kv-desk.", packages: [], tribunRan: false, spendUsd: 0, receipt: null, droppedPackages: 0, gateEvaluations: [], agenda: null, followUpRequest: null, artifacts: [] };
     }
+    agenda = await loadDueKvorumAgenda({ root, date: input.date, now: input.now });
     const fetched = await (input.fetchMonitor ?? fetchKvorumMonitor)({
       root,
       date: input.date,
@@ -278,7 +195,7 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
     loadKvorumPerformanceWeights(input.dry ? stateRoot : root),
     loadLatestKvorumGoViralContext({ stateRoot: root, asOfDate: input.date })
   ]);
-  const receipt = rankedReceipt({
+  const receipt = buildRankedKvorumReceipt({
     date: input.date,
     now: input.now,
     performanceWeights,
@@ -291,7 +208,7 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
   ])].sort();
   const eligible = receipt.ranks.filter((rank) => rank.score > 0);
   if (eligible.length === 0) {
-    return { date: input.date, dry: input.dry, status: "quiet", reason: "No non-repeating corroborated cluster was eligible.", packages: [], tribunRan: false, spendUsd: 0, receipt, droppedPackages: 0, gateEvaluations: [], artifacts };
+    return { date: input.date, dry: input.dry, status: "quiet", reason: "No non-repeating corroborated cluster was eligible.", packages: [], tribunRan: false, spendUsd: 0, receipt, droppedPackages: 0, gateEvaluations: [], agenda, followUpRequest: null, artifacts };
   }
   if (input.dry) {
     const output = fixtureTribunOutput(receipt);
@@ -305,6 +222,8 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
       tribunRan: true,
       spendUsd: 0,
       receipt,
+      agenda,
+      followUpRequest: output.followUpRequest,
       artifacts
     };
   }
@@ -335,7 +254,7 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
       provider: tribun.provider,
       model: tribun.model,
       system: `${tribunPrompt}\n\n${craftPrompt}`,
-      input: buildKvorumDeskPacket(receipt),
+      input: buildKvorumDeskPacket(receipt, agenda),
       maxOutputTokens: tribun.maxOutputTokens,
       budgetContext: {
         now: input.now,
@@ -360,6 +279,8 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
       tribunRan: true,
       spendUsd: response.usd,
       receipt,
+      agenda,
+      followUpRequest: response.value.followUpRequest,
       artifacts
     };
   } catch (error) {
@@ -384,6 +305,8 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
       receipt,
       droppedPackages: 0,
       gateEvaluations: [],
+      agenda,
+      followUpRequest: null,
       artifacts
     };
   }
@@ -414,6 +337,8 @@ export async function runKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskR
       receipt: null,
       droppedPackages: 0,
       gateEvaluations: [],
+      agenda: null,
+      followUpRequest: null,
       artifacts: []
     };
   }
@@ -463,6 +388,7 @@ export async function runKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskR
     now: input.now,
     stage: input.stage,
     dry: input.dry,
+    agenda: result.agenda,
     outcome: {
       status: result.status,
       reason: result.reason,
@@ -475,8 +401,22 @@ export async function runKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskR
     },
     ...(input.fixedMonthlyUsd !== undefined ? { fixedMonthlyUsd: input.fixedMonthlyUsd } : {})
   });
+  const agendaArtifacts = input.dry
+    ? []
+    : await applyKvorumAgendaEffects({
+        root,
+        cycleId: input.cycleId,
+        date: input.date,
+        now: input.now,
+        result
+      });
   return {
     ...result,
-    artifacts: [...new Set([...result.artifacts, ...recommendationArtifacts, ...recordArtifacts])]
+    artifacts: [...new Set([
+      ...result.artifacts,
+      ...recommendationArtifacts,
+      ...recordArtifacts,
+      ...agendaArtifacts
+    ])]
   };
 }

@@ -104,4 +104,13 @@ describe("venture registry migration", () => {
       { ventureId: "caught-up", usd: 0.07 }
     ]);
   });
+
+  it("pins Kvórum to the Design Lab with no image-model or freeform rendering path", async () => {
+    const registry = await loadVentureRegistry();
+    expect(registry.ventures.find((venture) => venture.id === "kvorum")?.rendering).toEqual({
+      path: "design-lab",
+      imageGeneration: false,
+      freeformSocialImages: false
+    });
+  });
 });

@@ -364,6 +364,11 @@
         "monitor",
         "claims"
       ],
+      "rendering": {
+        "path": "design-lab",
+        "imageGeneration": false,
+        "freeformSocialImages": false
+      },
       "meetings": [
         {
           "kind": "kv-desk",

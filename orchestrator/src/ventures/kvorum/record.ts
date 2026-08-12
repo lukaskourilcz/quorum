@@ -4,6 +4,7 @@ import {
   type BudgetLedgerEntry
 } from "../../budget.js";
 import { MeetingRecordSchema, type MeetingRecord } from "../../contracts/meeting-record.js";
+import type { MeetingAgenda } from "../../contracts/meeting-agenda.js";
 import { MeetingSkipSchema, type MeetingSkip } from "../../contracts/meeting-skip.js";
 import type {
   KvorumPackageGateEvaluation,
@@ -17,6 +18,7 @@ import {
   mondayOfWeek,
   writeCalendarFeed
 } from "../../meetings/calendar.js";
+import { MEETING_AGENDA_PATH } from "../../meetings/agenda.js";
 import { loadFixedMonthlyUsd } from "../../money/fixed-costs.js";
 import { configRoot } from "../../paths.js";
 import { atomicWriteJson, readJson } from "../../state.js";
@@ -68,6 +70,7 @@ export function buildKvorumDeskMeetingRecord(input: {
   now: Date;
   stage: Stage;
   dry: boolean;
+  agenda?: MeetingAgenda | null;
   outcome: KvorumDeskRecordOutcome;
   monthAllInUsd: number;
 }): MeetingRecord {
@@ -149,6 +152,7 @@ export function buildKvorumDeskMeetingRecord(input: {
     tasks: [],
     growthPlan: "Drafts only. This record authorizes no publishing, scheduling, account or channel action, paid promotion, engagement ingestion, provider-plan change, treasury action or payment. Every passing package remains pending owner review.",
     eveningOutcome: null,
+    ...(input.agenda ? { agendaRef: `${MEETING_AGENDA_PATH}#${input.agenda.id}` } : {}),
     kvorumDesk: {
       monitorRef: input.outcome.hasMonitorReceipt ? monitorRef(input.date) : null,
       runStatus: input.outcome.status,
@@ -208,6 +212,7 @@ export async function writeKvorumDeskMeetingRecord(input: {
   now: Date;
   stage: Stage;
   dry: boolean;
+  agenda?: MeetingAgenda | null;
   outcome: KvorumDeskRecordOutcome;
   fixedMonthlyUsd?: number;
 }): Promise<string[]> {

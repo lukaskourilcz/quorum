@@ -32,6 +32,10 @@ of `fact-multi`, `fact-single` or `commentary`, and every fact carries resolvabl
 `fact-single` must be visibly qualified as single-source; commentary must not disguise a factual
 accusation.
 
+You may return one `followUpRequest` only when GoVIRAL must decide a specific trend question that
+this desk cannot settle. Its phase is always `gv-brief`, its summary names the decision, and every
+evidence ref resolves inside the supplied digest. Otherwise return `followUpRequest: null`.
+
 ## Hard boundaries
 
 Do not recommend how anyone should vote. Do not endorse or oppose a party, candidate or coalition.

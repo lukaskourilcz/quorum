@@ -280,6 +280,13 @@ section and a receipt line, and a day with no usable cluster records an honest q
   valid recorded GoVIRAL plan, counts invalid records, ignores future plans, and gives an approved
   matching `kvorum` trend call a bounded `1.10` ranking tiebreaker. Draft or archived plans are
   recorded as context but remain neutral, and the factor never replaces corroboration or gates.
+- **The agenda bridge is implemented in the dedicated desk runner:** The generic portfolio runner
+  already consumes agendas, but `kv-desk` has its own runner and therefore did not. It now reads
+  one due `gv-brief` agenda into the untrusted packet, records its queue reference, and consumes it
+  only after the meeting record exists. TRIBUN may file at most one `gv-brief` request, only with
+  retained digest refs; queue caps, the effective schedule and the `gv-brief ↔ kv-desk` policy keep
+  their last word. The venture registry also makes `design-lab` the sole rendering path and pins
+  image generation and freeform social images off; approval still writes only a recorded summary.
 
 ## Implementation checklist
 
@@ -323,7 +330,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-19a — Owner results: contract, route and store
 - [x] KV-19b — Performance weights with floors and recorded proposals
 - [x] KV-20a — GoVIRAL spine: topic set and brief consumption
-- [ ] KV-20b — GoVIRAL spine: transitions and the Design-Lab-only test
+- [x] KV-20b — GoVIRAL spine: transitions and the Design-Lab-only test
 - [ ] KV-21a — Documentation truth across the standing docs
 - [ ] KV-21b — INBOX approvals and NEEDED owner items
 - [ ] KV-21c — Honest gaps, checkbox sweep and prompt deletion

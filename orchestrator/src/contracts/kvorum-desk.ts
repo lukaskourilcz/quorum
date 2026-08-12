@@ -12,6 +12,12 @@ const TribunClaimSchema = z.strictObject({
   refs: z.array(Sha1Schema).min(1).max(20)
 });
 
+export const KvorumFollowUpRequestSchema = z.strictObject({
+  phase: z.literal("gv-brief"),
+  summary: z.string().trim().min(1).max(280),
+  evidenceRefs: z.array(Sha1Schema).min(1).max(12)
+});
+
 export const TribunPackageSchema = z.strictObject({
   clusterId: Sha1Schema,
   headline: z.string().trim().min(1).max(240),
@@ -48,12 +54,14 @@ export const TribunPackageSchema = z.strictObject({
 export const TribunDeskOutputSchema = z.discriminatedUnion("outcome", [
   z.strictObject({
     outcome: z.literal("recommendations"),
-    packages: z.array(TribunPackageSchema).min(1).max(2)
+    packages: z.array(TribunPackageSchema).min(1).max(2),
+    followUpRequest: KvorumFollowUpRequestSchema.nullable().default(null)
   }),
   z.strictObject({
     outcome: z.literal("quiet"),
     reason: z.string().trim().min(1).max(1_000),
-    packages: z.tuple([])
+    packages: z.tuple([]),
+    followUpRequest: KvorumFollowUpRequestSchema.nullable().default(null)
   })
 ]);
 
@@ -61,12 +69,14 @@ export const TribunDeskOutputSchema = z.discriminatedUnion("outcome", [
 export const TribunDeskEnvelopeSchema = z.discriminatedUnion("outcome", [
   z.strictObject({
     outcome: z.literal("recommendations"),
-    packages: z.array(z.unknown()).min(1).max(2)
+    packages: z.array(z.unknown()).min(1).max(2),
+    followUpRequest: KvorumFollowUpRequestSchema.nullable().default(null)
   }),
   z.strictObject({
     outcome: z.literal("quiet"),
     reason: z.string().trim().min(1).max(1_000),
-    packages: z.tuple([])
+    packages: z.tuple([]),
+    followUpRequest: KvorumFollowUpRequestSchema.nullable().default(null)
   })
 ]);
 
@@ -102,5 +112,6 @@ export const KvorumPackageGateEvaluationSchema = z.strictObject({
 export type TribunDeskOutput = z.infer<typeof TribunDeskOutputSchema>;
 export type TribunDeskEnvelope = z.infer<typeof TribunDeskEnvelopeSchema>;
 export type TribunPackage = z.infer<typeof TribunPackageSchema>;
+export type KvorumFollowUpRequest = z.infer<typeof KvorumFollowUpRequestSchema>;
 export type KvorumGateResult = z.infer<typeof KvorumGateResultSchema>;
 export type KvorumPackageGateEvaluation = z.infer<typeof KvorumPackageGateEvaluationSchema>;
