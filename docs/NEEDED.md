@@ -196,10 +196,12 @@ Judgement calls. Nothing is blocked on code for any of these.
   [imp:2] [owner:me] [time:15m] [kind:decision]
 
 - [ ] **Answer the Door Money manuscript questions** — confirm an English manuscript file
-  exists and decide where the private source repository lives; the design's
-  BOOK-SOURCE-001 approval blocks ingestion on this. Also say whether there is an
-  English-edition launch date the weekly growth room should plan backwards from.
-  [imp:3] [owner:me] [time:15m] [kind:decision]
+  exists, and create the book database the knowledge base will live in (Supabase free
+  tier recommended — Postgres with an HTTPS REST API, no card; Neon/Turso equivalent);
+  the design's BOOK-SOURCE-001 approval blocks ingestion on this. No private repository
+  is involved anywhere. Also say whether there is an English-edition launch date the
+  weekly growth room should plan backwards from.
+  [imp:3] [owner:me] [time:20m] [kind:decision]
 
 - [ ] **Pick Kvórum's desk hour** — the design defaults to 21:00 Prague (full-day
   harvest, you review in the evening, posts go out next morning). If same-evening

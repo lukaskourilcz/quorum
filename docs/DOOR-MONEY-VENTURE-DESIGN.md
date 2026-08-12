@@ -84,11 +84,12 @@ conveniently matches an afternoon Prague production slot with next-morning owner
 Four loops, three of them daily-capable, one weekly:
 
 1. **Ingestion (one-time, owner-triggered, resumable).** `pnpm book:ingest` reads the
-   manuscript from the private source (§7), chunks it deterministically, annotates and
-   scores every chunk with a budget-capped model pass, builds the style profile and the
-   retrieval index, and writes the split outputs: full text and embeddings to the private
-   store, derived scores/summaries/profile (with capped excerpts) to `state/` here. Re-runs
-   resume from a cursor and are idempotent per manuscript hash.
+   manuscript from the owner's local gitignored file (§7), chunks it deterministically,
+   annotates and scores every chunk with a budget-capped model pass, builds the style
+   profile and the retrieval index, and writes the split outputs: full text and
+   embeddings to the owner-created book database, derived scores/summaries/profile (with
+   capped excerpts) to `state/` here. Re-runs resume from a cursor and are idempotent per
+   manuscript hash.
 2. **Daily content desk (`dm-desk`, 15:00 Prague).** Code selects 1–2 passages by score,
    cooldown and rotation; one GHOST call turns them into recommendation packages in the
    author's voice; deterministic gates check voice, claims, excerpt caps and duplication;
@@ -152,14 +153,17 @@ feeds `dm-growth` when a trend touches books or music.
 
 ## 7. Data sources and integrations
 
-- **The manuscript** — a private GitHub repository (`lukaskourilcz/<book-source>`, owner
-  creates) holding `manuscript/` (source text) and `kb/` (chunks, annotations, embeddings —
-  written by ingestion). Read at runtime through a fine-grained read-only token
-  (`BOOK_SOURCE_TOKEN`), the same bounded-access shape the delivery App uses in the other
-  direction. **This public repository never carries the manuscript or full-text chunks**;
-  it carries scores, summaries, the style profile and excerpts capped at 600 characters.
-  `quorum` is public — that is the load-bearing reason for the split, and a test enforces
-  the cap.
+- **The manuscript and the book database** — the manuscript source stays as the owner's
+  local gitignored file (`state/ventures/door-money/manuscript/`); ingestion writes the
+  knowledge base (chunks, annotations, embeddings) to an **owner-created managed
+  database with an HTTPS API**. Recommended: Supabase free tier (Postgres with a REST
+  API over plain HTTPS — fits `safeFetch` and the host allowlist exactly, no card, 500
+  MB against ~3 MB of need); Neon or Turso equivalent. Credentials (`BOOK_DB_URL`,
+  `BOOK_DB_KEY`) live as Actions secrets and local env; runtime reads go through
+  `safeFetch` with the host allowlisted. **This public repository never carries the
+  manuscript or full-text chunks**; it carries scores, summaries, the style profile and
+  excerpts capped at 600 characters. `quorum` is public — that is the load-bearing
+  reason for the split, and a test enforces the cap.
 - **Owner-entered results** — per-post outcomes typed into admin (views, likes, saves,
   follows, link taps — whatever the platform shows the owner). Owner-entered operational
   data is the house pattern for measurement while `METRICS_INGESTION_ENABLED=false` (manual
@@ -206,8 +210,9 @@ One workspace (`/admin?venture=door-money`), three tabs, all inside the existing
 loaders and write-ladder patterns:
 
 - **`recommendations`** — the daily queue. One card per package: hook, format chips,
-  platform chips, the adapted copy, the *linked source passage* (capped excerpt inline, link
-  to the private file for the full text), GHOST's rationale, gate results. Actions: approve
+  platform chips, the adapted copy, the *source passage* (capped excerpt inline with its
+  database chunk id; the full passage stays in the book database), GHOST's rationale,
+  gate results. Actions: approve
   (→ Design Lab + ready-to-post), edit-then-approve, reject with reason. After posting by
   hand the owner records the post URL and, later, its numbers; the same card then shows
   outcome beside intent. RatingWidget on every card feeds PALATE.
@@ -257,9 +262,11 @@ autopublish through the existing publisher with the venture's own unlock counter
 
 `HUMAN_APPROVAL` items filed at founding, all-or-nothing like the TT visuals set:
 
-1. **BOOK-SOURCE-001** — the private manuscript repository, the `BOOK_SOURCE_TOKEN`
-   fine-grained read-only secret (Actions + local dev), and the rule that full text and
-   embeddings live only there. $0 cash.
+1. **BOOK-SOURCE-001** — the owner-created book database (Supabase free tier
+   recommended), its HTTPS host in the runtime allowlist, the `BOOK_DB_URL` +
+   `BOOK_DB_KEY` secrets (Actions + local dev), the local gitignored manuscript path,
+   and the rule that full text and embeddings live only there. $0 cash on the free
+   tier; any paid tier is a new approval.
 2. **BOOK-INGEST-002** — the one-time ingestion spend envelope (≤ $3.00 total, resumable
    runs ≤ $0.80/day inside the $1.00 pace), the model roles it uses, and the public/private
    output split with the 600-character excerpt cap.
@@ -341,8 +348,9 @@ makes safe.
 
 New code lives in `orchestrator/src/ventures/door-money/` (the marketingShark shape):
 `run.ts` (dispatched from `cycle.ts` for `dm-desk`/`dm-growth`), `select.ts` (deterministic
-passage selection), `kb.ts` (private-store client: manuscript fetch, chunk fetch, embedding
-load — behind `safeFetch` with `api.github.com` in the runtime allowlist), `gates.ts`
+passage selection), `kb.ts` (book-database client: chunk fetch and embedding load over
+the database's HTTPS API — behind `safeFetch` with the database host in the runtime
+allowlist), `gates.ts`
 (voice lint, claim refs, quote substrings, caps, duplicates), `ingest/` (chunker, annotate,
 score, style, embed, cursor), plus `prompts/door-money/{ghost,booker}.md` and
 `prompts/door-money/craft.md` distilling the voice rules — runtime prompts never load skill
@@ -371,8 +379,9 @@ block, owner fields: postedUrl, resultIds, rating link), `action-packet/1` (week
 with templates, effort, expected impact, completion + outcome fields),
 `owner-result-entry/1` (per-post numbers as typed by the owner, platform, capturedAt).
 State layout: `state/ventures/door-money/{recommendations,actions,results,playbooks,
-knowledge}/…` plus `performance-weights.json`; the private repo holds `manuscript/` and
-`kb/{chunks,annotations,embeddings}`.
+knowledge}/…` plus `performance-weights.json`; the book database holds the chunks,
+annotations and embeddings, and the manuscript itself stays as the owner's local
+gitignored file.
 
 ## 19. Background jobs and scheduling requirements
 
@@ -428,7 +437,7 @@ carried as explicit `context` fields rather than duplicated text; stable ids
 `ch07-s02-c041` with byte offsets into the manuscript file. ~160–200 chunks expected.
 
 **Embeddings/retrieval.** One vector per chunk (summary + text), stored in the private
-`kb/embeddings.json` (~1–2 MB); retrieval is in-process cosine over a few hundred vectors —
+the book database and fetched once per cycle (~1–2 MB); retrieval is in-process cosine over a few hundred vectors —
 no vector database, no service, no new infrastructure. Used for exemplar matching, related-
 passage context, novelty checks and admin search; the primary daily selector stays
 score-and-cooldown driven so the day's pick is explainable.
@@ -488,7 +497,8 @@ skill directories — venture craft rules are distilled into `orchestrator/promp
    directly? (Handle availability will likely decide.)
 2. Which platforms first? The design assumes IG + Threads + X drafts from day one, with
    TikTok/Reels scripts as owner-recorded video in phase 2.
-3. Does an English manuscript file exist ready for ingestion, and where should the private
-   repository live? (BOOK-SOURCE-001 blocks on this.)
+3. Does an English manuscript file exist ready for ingestion, and which database
+   provider do you pick? (Supabase free tier is the recommendation; Neon/Turso are
+   equivalents. BOOK-SOURCE-001 blocks on this.)
 4. Release timing: is there an English-edition launch date the weekly room should plan
    backwards from?

@@ -35,12 +35,12 @@ below). Hand Codex exactly this:
 
 **Door Money** (venture id `door-money`): a drafts-only English-language venture that
 markets the owner's book *Rapovej deník* by telling its stories. A one-time, owner-triggered
-ingestion reads the full English manuscript from a **private** source, chunks it
-deterministically, annotates and scores every chunk on fifteen marketing axes with a
-budget-capped Haiku pass, synthesizes a versioned writing-style profile, and builds an
-embedding index — full text and embeddings stay in the private store; only derivatives
-(scores, summaries, the profile, excerpts capped at 600 characters) enter this public
-repository. Then, daily at 15:00 Prague, code selects 1–2 passages by score, cooldown and
+ingestion reads the full English manuscript from the owner's **local gitignored file**,
+chunks it deterministically, annotates and scores every chunk on fifteen marketing axes
+with a budget-capped Haiku pass, synthesizes a versioned writing-style profile, and builds
+an embedding index — full text and embeddings live only in the **owner-created book
+database** (§The book database); only derivatives (scores, summaries, the profile,
+excerpts capped at 600 characters) enter this public repository. Then, daily at 15:00 Prague, code selects 1–2 passages by score, cooldown and
 seeded rotation, and one model call (a new agent, GHOST, writing in the author's recorded
 voice) drafts recommendation packages — format, platform, adapted copy, hook, rationale,
 source-passage link. On Thursdays at 16:00 a growth room (a second new agent, BOOKER)
@@ -74,9 +74,9 @@ Read, at minimum:
    map-reduce), `orchestrator/src/portfolio/schedule.ts` + `limits.ts`,
    `config/models.json` (`DIGEST` is the closest existing role to your ingestion role).
 4. Security and network: `orchestrator/src/security/url.ts` (`safeFetch`),
-   `config/network-allowlist.json` (check whether `api.github.com` is present for
-   runtime; if not, adding it is part of KV/DM source work and is named in the approval),
-   the presentation barrier in `orchestrator/src/security/`.
+   `config/network-allowlist.json` (the book database's HTTPS host is added here as part
+   of this build, named in the approval; study the host-pinning test pattern), the
+   presentation barrier in `orchestrator/src/security/`.
 5. Admin patterns: `site/src/app/admin/page.tsx` (`Promise.all`, `tabView`
    `{node,count}`), `site/src/lib/admin-portfolio.ts`, a `persist()`-ladder store
    (`site/src/lib/caught-up-events-store.ts`), an API route
@@ -105,8 +105,8 @@ yours is `kind: "book-passage"`.
 ## Non-negotiables
 
 - **The manuscript never enters this repository.** `lukaskourilcz/quorum` is public. Full
-  text, full-text chunks and their embeddings live only in the private source (§Private
-  store). Committed derivatives cap every excerpt at 600 characters and the style
+  text, full-text chunks and their embeddings live only in the owner-created book
+  database (§The book database) and the owner's local gitignored manuscript file. Committed derivatives cap every excerpt at 600 characters and the style
   profile's exemplars at 40 × 280 characters; a test enforces both caps against the
   actual state files. If you find yourself about to commit book text beyond a cap, stop —
   that is the one irreversible mistake this program can make.
@@ -127,19 +127,24 @@ yours is `kind: "book-passage"`.
   cap, small commits).
 - Dry runs are $0 end-to-end on fixtures, including a fixture manuscript.
 
-## The private store
+## The book database
 
-A private GitHub repository the owner creates (working name
-`lukaskourilcz/rapovej-denik-source`), holding `manuscript/` (the English source text)
-and `kb/` (`chunks/`, `annotations.jsonl`, `embeddings.json` — written by ingestion).
-Access: a fine-grained read-only token `BOOK_SOURCE_TOKEN` (Actions secret + local env),
-contents-only, that single repository — the same bounded-access shape the delivery App
-uses in the other direction. Local runs may instead read a gitignored path
-(`state/ventures/door-money/manuscript/` added to `.gitignore` in this program) so the
-owner can ingest without pushing the manuscript anywhere. The runtime fetch of selected
-chunks goes through `safeFetch` with the host allowlisted. All of this fails closed until
-**BOOK-SOURCE-001** is countersigned: without the token, the desk runs its fixture path
-and says so.
+The private side of the split is an **owner-created managed database with an HTTPS
+API** — no private repository anywhere in this design. Recommended: **Supabase free
+tier** (Postgres with a REST API over plain HTTPS, no card required; one project, e.g.
+`rapovej-denik-kb`) — the HTTPS-only access fits `safeFetch` and the host allowlist
+exactly, and the free tier's 500 MB dwarfs the ~3 MB of chunks and embeddings. Neon or
+Turso are acceptable equivalents; the client module keeps the provider swappable behind
+one small interface. The owner creates the project and supplies `BOOK_DB_URL` +
+`BOOK_DB_KEY` as GitHub Actions secrets and local env; the ingest CLI's schema step
+creates the tables (`chunks` with text/context/offsets, `embeddings`, annotations as
+needed). The manuscript source file itself stays on the owner's machine at the
+gitignored path `state/ventures/door-money/manuscript/` (added to `.gitignore` in this
+program) — ingestion reads it locally and writes the knowledge base to the database.
+Every runtime read goes through `safeFetch` with the database host in
+`config/network-allowlist.json`. All of this fails closed until **BOOK-SOURCE-001** is
+countersigned: without credentials, the desk runs its fixture path and says so. A paid
+database tier would be a new approval; the free tier keeps this at $0 cash.
 
 ## The build, in phases
 
@@ -177,7 +182,7 @@ Full gate green at each phase end (`pnpm agents:validate && pnpm lint && pnpm ty
   (`claude-haiku-4-5-20251001`, ~12000/3000), `BOOK_STYLE` (`claude-sonnet-5`,
   map-reduce-sized caps).
 - **DM-05** Scaffold + surfaces of record: venture `README.md` (drafts-only posture,
-  private-store pointer), `.gitignore` line for the local manuscript path,
+  book-database pointer), `.gitignore` line for the local manuscript path,
   venture-brand hue, `VENTURE_LABEL`, KPI seeds, degradation-ladder position
   (`dm-growth` drops first of all rooms, `dm-desk` second, both before `gv-brief`) with
   its test.
@@ -215,14 +220,15 @@ Acceptance: both dry rooms hold honest $0 records; architecture tests green.
   switches on `kind`) rather than mislabeling it text; if the audit shows that enum is
   load-bearing beyond reasonable reach, record the fallback (kind `"text"` with the
   embedding model id) as an adapted divergence in the founding decision. Vectors write
-  to the private store, never here.
-- **DM-11** `pnpm book:ingest` CLI: reads manuscript (local path or private repo),
-  runs chunk → annotate/score → rollups → style → embeddings under the $0.80/day
-  sub-envelope and $3.00 program envelope, writes private artifacts to a local clone
-  path the owner provides and public derivatives to `state/ventures/door-money/
-  knowledge/`, prints an honest cost and coverage report, and is idempotent per
-  manuscript hash (a changed manuscript is a new KB version; the old one is superseded,
-  never mutated).
+  to the book database, never here.
+- **DM-11** `pnpm book:ingest` CLI: reads the manuscript from the local gitignored
+  path, runs chunk → annotate/score → rollups → style → embeddings under the $0.80/day
+  sub-envelope and $3.00 program envelope, writes private artifacts (chunk text,
+  context, embeddings, annotations) to the book database through its HTTPS client —
+  with a schema-setup step on first run — and public derivatives to
+  `state/ventures/door-money/knowledge/`, prints an honest cost and coverage report,
+  and is idempotent per manuscript hash (a changed manuscript is a new KB version and
+  zero duplicate rows; the old one is superseded, never mutated).
 
 Acceptance: full ingestion of the fixture manuscript runs in dry/test mode at $0 with
 deterministic outputs; resumability proven by a test that kills the cursor mid-run.
@@ -231,7 +237,7 @@ deterministic outputs; resumability proven by a test that kills the cursor mid-r
 
 - **DM-12** `venture-recommendation/1` — create or extend (see Phase 0): this venture's
   `evidence.kind: "book-passage"` carries chunk refs, scores at selection time, the
-  capped excerpt, and the private-store link. Status flow and owner fields as in the
+  capped excerpt, and the database chunk ids. Status flow and owner fields as in the
   design.
 - **DM-13** `orchestrator/src/ventures/door-money/select.ts`: deterministic selection —
   score threshold per format, per-theme/per-chapter cooldowns (`max(2× last interval,
@@ -239,7 +245,7 @@ deterministic outputs; resumability proven by a test that kills the cursor mid-r
   venture) so a rebuild picks the same passages; quiet-day outcome when nothing is
   eligible.
 - **DM-14** `run.ts` — dispatched from `cycle.ts` for both phases: desk path assembles
-  the packet (selected chunks fetched from the private store via `kb.ts`, ±1 neighbor,
+  the packet (selected chunks fetched from the book database via `kb.ts`, ±1 neighbor,
   style profile, 3–5 embedding-matched exemplars for the target format, 14-day
   recommendation history, weights, format menu), makes one GHOST `guardedJsonCall`,
   parses packages. Fixture path end-to-end in dry mode and whenever the token or KB is
@@ -267,7 +273,7 @@ deterministic outputs; resumability proven by a test that kills the cursor mid-r
   the original, reject needs a reason, posted records the URL.
 - **DM-18** Loaders + panels: `admin-door-money.ts` (server-only, parse-or-drop),
   `door-money-recommendations-panel.tsx` (card: hook, format/platform chips, adapted
-  copy, linked source passage — capped excerpt inline + private-store link — rationale,
+  copy, source passage — capped excerpt inline with its database chunk id — rationale,
   gates, RatingWidget), `door-money-actions-panel.tsx` (action packets with templates,
   checkable with outcome fields, playbooks read-only), `door-money-knowledge-panel.tsx`
   (chapters, score bars, style profile, usage history, ingestion status line;
@@ -309,10 +315,12 @@ deterministic outputs; resumability proven by a test that kills the cursor mid-r
 
 ## Approvals to file in `state/INBOX.md` (house shape)
 
-- **BOOK-SOURCE-001** — the private manuscript repository, the `BOOK_SOURCE_TOKEN`
-  fine-grained read-only secret (Actions + Vercel is *not* needed — admin shows capped
-  excerpts from committed state; only the orchestrator fetches chunks), the local
-  gitignored path, and the public/private split with its caps.
+- **BOOK-SOURCE-001** — the owner-created book database (Supabase free tier
+  recommended; Neon/Turso equivalent): its HTTPS host in the runtime allowlist,
+  `BOOK_DB_URL` + `BOOK_DB_KEY` as Actions secrets and local env (Vercel is *not*
+  needed — admin shows capped excerpts from committed state; only the orchestrator
+  fetches chunks), the local gitignored manuscript path, and the public/private split
+  with its caps. $0 cash on the free tier; any paid tier is a new approval.
 - **BOOK-INGEST-002** — the one-time ingestion spend: ≤ $3.00 program envelope,
   ≤ $0.80/day, the `BOOK_INGEST`/`BOOK_STYLE` roles and the embeddings wrapper, the
   ledger `kind` extension.
@@ -342,5 +350,6 @@ Every DM task ticked; full gate green plus site e2e; `pnpm cycle -- --phase dm-d
 --dry` and `--phase dm-growth --dry` recording honest $0 rooms (growth off-days say so);
 fixture-manuscript ingestion proven resumable and deterministic; the excerpt-cap test
 guarding the public/private boundary; the founding decision awaiting countersignature
-with a handoff note listing the owner's next steps (sign, create the private repo, place
-the manuscript, mint the token, run `pnpm book:ingest`, then the first live desk).
+with a handoff note listing the owner's next steps (sign, create the book database and
+add `BOOK_DB_URL`/`BOOK_DB_KEY` secrets, place the manuscript at the local gitignored
+path, run `pnpm book:ingest`, then the first live desk).
