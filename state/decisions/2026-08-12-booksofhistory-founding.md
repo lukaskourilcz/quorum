@@ -97,7 +97,7 @@ post anything.
 - [x] **BH-03a** — Register the `bh-desk` phase in type and record schemas
 - [x] **BH-03b** — Meeting policy for `bh-desk`
 - [x] **BH-03c** — `cycle.yml` dispatch choices and mode gates
-- [ ] **BH-03d** — Vercel cron entries for the 12:00 slot
+- [x] **BH-03d** — Vercel cron entries for the 12:00 slot
 - [ ] **BH-04a** — FOLIO and PLOT in registry, routing, controls and cast schema
 - [ ] **BH-04b** — Prompts for FOLIO, PLOT and the research/verification calls
 - [ ] **BH-04c** — Model roles for the desk and the research ladder
