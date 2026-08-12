@@ -51,6 +51,7 @@ export interface VentureKpiStatus {
 const VENTURE_LABELS: Record<string, string> = {
   global: "Global board",
   "caught-up": "DNESKAi",
+  "door-money": "Door Money",
   "mma-files": "MMA Files",
   fightaiq: "FightAIQ",
   "titty-tuesdays": "Titty Tuesdays",

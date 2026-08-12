@@ -17,6 +17,7 @@ export const VENTURE_BRAND: Record<string, string> = {
   fightaiq: "#fecaca",
   goviral: "#bbf7d0",
   marketingshark: "#a5d8f3",
+  "door-money": "#c4b5fd",
   "titty-tuesdays": "#fde68a",
   "carousel-studio": "#d4d4d8"
 };

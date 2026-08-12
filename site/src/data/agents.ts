@@ -43,6 +43,8 @@ export type AgentId =
   | "PIVOT"
   | "MAKO"
   | "CHUM"
+  | "GHOST"
+  | "BOOKER"
   | "EASEL"
   | "MOTIF";
 
@@ -118,7 +120,8 @@ type TextModelRole =
   | "ANTHROPIC_SPECIALIST"
   | "DIGEST"
   | "MAKO"
-  | "CHUM";
+  | "CHUM"
+  | "GHOST";
 
 const textModelRoles = modelSource.roles as Record<
   TextModelRole,
@@ -255,6 +258,12 @@ const mmaArticleCall: CallEstimateProfile = {
   basis: "Typical MMA Files article: a 25,000-character evidence packet and up to 1,700 response tokens"
 };
 
+const ghostCall: CallEstimateProfile = {
+  promptChars: 28_000,
+  maxOutputTokens: 2_500,
+  basis: "Configured Door Money draft cap: about 8,000 input tokens and up to 2,500 response tokens"
+};
+
 function apiProvider(provider: "openai" | "anthropic"): AgentApiModel["provider"] {
   return provider === "openai" ? "OpenAI" : "Anthropic";
 }
@@ -347,6 +356,8 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
   // and the wrong price for the venture's only quality-critical call.
   MAKO: [configuredTextModel("MAKO", "marketingShark weekly review")],
   CHUM: [configuredTextModel("CHUM", "marketingShark daily carousel copy")],
+  GHOST: [configuredTextModel("GHOST", "Door Money daily recommendation draft", ghostCall)],
+  BOOKER: [configuredTextModel("OPENAI_SPECIALIST", "Door Money weekly owner action planning")],
   HERALD: [
     configuredEditionModel(editionModels.curation, "DNESKAi daily edition curation", curationCall),
     configuredTextModel("DIGEST", "DNESKAi product room"),
@@ -659,6 +670,18 @@ const profileCopy: Record<
     operatingPrinciple: "Write the Czech, do not translate it.",
     output: "One day's carousel copy, in two languages",
     currentFocus: "devShark quiz carousels",
+    publicTrackRecord: null
+  },
+  GHOST: {
+    operatingPrinciple: "Use only the passage code selected, and carry its reference with every claim.",
+    output: "Evidence-linked English recommendation draft",
+    currentFocus: "Door Money draft recommendations",
+    publicTrackRecord: null
+  },
+  BOOKER: {
+    operatingPrinciple: "Prepare the owner's next step; never take it for them.",
+    output: "Bounded owner action packet or an honest no-action record",
+    currentFocus: "Door Money growth actions",
     publicTrackRecord: null
   }
 };

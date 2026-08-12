@@ -8,6 +8,8 @@ const labels: Record<CalendarKind, string> = {
   "gv-brief": "GoVIRAL trend and marketing meeting",
   "ms-daily": "marketingShark daily carousel meeting",
   "venture-afternoon": "Afternoon company meeting",
+  "dm-desk": "Door Money recommendation meeting",
+  "dm-growth": "Door Money growth meeting",
   "cu-product": "DNESKAi product meeting",
   "incubator-synthesis": "Magazine idea review",
   "venture-night": "Night company meeting",

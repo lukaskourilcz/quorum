@@ -15,6 +15,7 @@ const axeRoutes = [
   "/ventures/carousel-studio",
   "/money",
   "/admin?venture=global",
+  "/admin?venture=door-money",
   "/admin?venture=titty-tuesdays&tab=plans",
   "/admin/ventures/titty-tuesdays/binder",
   "/admin?venture=fightaiq&tab=fighters",
@@ -115,6 +116,17 @@ for (const route of axeRoutes) {
   });
 }
 
+test("Door Money renders as a bounded admin workspace", async ({ page }) => {
+  await page.goto("/admin?venture=door-money", { waitUntil: "networkidle" });
+
+  await expect(page.getByRole("heading", { name: "Door Money" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Door Money/ })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: "recommendations" })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: "actions" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "knowledge" })).toBeVisible();
+  await expect(page.getByText("Nothing is stored under recommendations for Door Money yet.")).toBeVisible();
+});
+
 test("WeekBoard navigates between statically generated weeks", async ({ page }) => {
   // The five-day board is /calendar's product now. The home page walks past a calendar of its
   // own — a full week, stepped in place — and this test is about the linked, statically
@@ -128,16 +140,14 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   );
   const weekBoard = page.getByTestId("week-board");
   await expect(weekBoard).toBeVisible();
-  // One row per calendar slot, and the registry decides how many slots there are — it was
-  // fifteen while the Magazine Incubator ran and is twelve now. Pinning the number meant the
-  // board's own guard broke every time a venture opened or closed; what it is really protecting
-  // is that every slot renders exactly one row and one project icon.
+  // One row per calendar slot, and the registry decides how many slots there are. Pinning the
+  // number made this guard break every time a venture opened or closed; what it protects is that
+  // every registered slot renders exactly one row and one project icon.
   await expect(weekBoard.locator(".contents")).toHaveCount(CALENDAR_SLOTS.length);
   await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(CALENDAR_SLOTS.length);
-  // Eight, not seven. The Design Lab joined `projectDetails` in `3e081c8` on 2 August and this
-  // assertion was never moved, so the guard has been red ever since — on a board that was right.
-  // The venture joined by owner decision; the number was the thing that was stale.
-  await expect(page.locator("[data-project-legend]")).toHaveCount(8);
+  // Nine, not eight. Door Money is a registered operating venture with its own two calendar
+  // slots and hue; the legend follows that recorded schedule rather than hiding the new room.
+  await expect(page.locator("[data-project-legend]")).toHaveCount(9);
   await expect(weekBoard.locator("[data-calendar-slot] time")).toHaveCount(0);
   // No assertion that a fixture is on the board. There were test meetings on it when the archive
   // was young; there are none now, and requiring one would be requiring the company to keep

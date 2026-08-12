@@ -18,6 +18,7 @@ const routes = [
   "/ventures/fightaiq",
   "/ventures/carousel-studio",
   "/admin?venture=global",
+  "/admin?venture=door-money",
   "/admin?venture=titty-tuesdays&tab=plans",
   "/admin/ventures/titty-tuesdays/binder",
   "/admin?venture=fightaiq&tab=fighters",

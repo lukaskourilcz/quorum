@@ -13,9 +13,9 @@ function clone(): typeof valid {
 describe("public MeetingRecord v2 boundary", () => {
   it("accepts and projects the valid contract fixture", () => {
     expect(parsePublicMeetingRecord(valid)).toMatchObject({
-      id: "2026-08-04-cu-edition",
-      kind: "cu-edition",
-      fixture: false
+      id: "2026-08-12-dm-desk",
+      kind: "dm-desk",
+      fixture: true
     });
   });
 
