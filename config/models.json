@@ -51,6 +51,41 @@
       "maxInputTokens": 6000,
       "maxOutputTokens": 3000
     },
+    "_comment_BOOKSOFHISTORY": "FOLIO and PLOT use Sonnet for editorial judgment and native story craft. The three research roles use Haiku. RESEARCH_GATHER permits five searches, below the design's eight-search ceiling: five $0.01 tools plus 4k prompt, 20k search-content and 4k output tokens reserve about $0.094. Reserving all eight with that content window would exceed the immutable $0.10 per-call cap, so the configured call tightens rather than raises the guard.",
+    "FOLIO": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-5",
+      "maxInputTokens": 8000,
+      "maxOutputTokens": 1200
+    },
+    "PLOT": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-5",
+      "maxInputTokens": 8000,
+      "maxOutputTokens": 3000
+    },
+    "RESEARCH_GATHER": {
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "maxInputTokens": 4000,
+      "maxSearchContentTokens": 20000,
+      "maxOutputTokens": 4000,
+      "webSearchUses": 5
+    },
+    "RESEARCH_SYNTH": {
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "maxInputTokens": 12000,
+      "maxOutputTokens": 3000
+    },
+    "CLAIM_CHECK": {
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "maxInputTokens": 6000,
+      "maxSearchContentTokens": 6000,
+      "maxOutputTokens": 1200,
+      "webSearchUses": 3
+    },
     "OPENAI_SPECIALIST": {
       "provider": "openai",
       "model": "gpt-5.6-luna",
