@@ -38,6 +38,8 @@ export interface GuardedCallInput<T> {
   budgetContext: ReserveContext;
   parse: (text: string) => T;
   dry?: boolean;
+  /** Keep a parsed response in state/model-cache. Disable for sensitive output until its gates run. */
+  cacheResponse?: boolean;
 }
 
 /**
@@ -94,15 +96,24 @@ export async function guardedJsonCall<T>(
     // calls either way; only the record of the second one went missing.
     ...(request.attempt && request.attempt > 1 ? { attempt: request.attempt } : {})
   });
-  const cached = await readCachedResponse<T>(
-    request.stateRoot,
-    request.cycleId,
-    request.phase,
-    request.agent,
-    hash
-  );
+  const cached = request.cacheResponse === false
+    ? null
+    : await readCachedResponse<T>(
+      request.stateRoot,
+      request.cycleId,
+      request.phase,
+      request.agent,
+      hash
+    );
   if (cached !== null) {
     return { value: cached, cached: true, usd: 0 };
+  }
+  if (request.cacheResponse === false && hasLedgerEntry(
+    request.budgetContext.ledger,
+    request.cycleId,
+    hash
+  )) {
+    throw new Error(`${request.agent} response was already billed but deliberately not cached`);
   }
   const estimate = estimateTextCall({
     provider: request.provider,
@@ -198,13 +209,15 @@ export async function guardedJsonCall<T>(
   }
 
   // Only a valid value is worth replaying.
-  await writeCachedResponse(
-    request.stateRoot,
-    request.cycleId,
-    request.phase,
-    request.agent,
-    hash,
-    value
-  );
+  if (request.cacheResponse !== false) {
+    await writeCachedResponse(
+      request.stateRoot,
+      request.cycleId,
+      request.phase,
+      request.agent,
+      hash,
+      value
+    );
+  }
   return { value, cached: false, usd: actual.estimatedUsd };
 }

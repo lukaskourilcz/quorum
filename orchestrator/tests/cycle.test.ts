@@ -174,20 +174,30 @@ describe("cycle preflight", () => {
     }
   });
 
-  it("records both Door Money dry rooms with zero spend and no external action", async () => {
+  it("records the Door Money fixture desk and growth scaffold with zero spend and no external action", async () => {
     for (const fixture of [
       { phase: "dm-desk" as const, now: new Date("2026-08-06T13:00:00.000Z"), cast: ["GHOST", "AUDIT"] },
       { phase: "dm-growth" as const, now: new Date("2026-08-06T14:00:00.000Z"), cast: ["BOOKER", "PULSE", "AUDIT"] }
     ]) {
       const result = await runCycle({ ...fixture, dry: true, explainBudget: false, explainRouting: false });
-      expect(result).toMatchObject({ status: "dry_complete", decision: "NO_ACTION", selectedAgents: fixture.cast });
+      expect(result).toMatchObject({
+        status: "dry_complete",
+        decision: fixture.phase === "dm-desk" ? "PLAN" : "NO_ACTION",
+        selectedAgents: fixture.cast
+      });
       expect(result.artifacts.some((artifact) => artifact.includes("notify/") || artifact.includes("social/queue"))).toBe(false);
       const record = MeetingRecordSchema.parse(JSON.parse(await readFile(
         path.join(repoRoot, `tmp/dry-run/state/meetings/2026-08-06-${fixture.phase}.json`),
         "utf8"
       )));
       expect(record).toMatchObject({ kind: fixture.phase, fixture: true, ledger: { actualCycleUsd: 0 } });
-      expect(record.decision.summary).toMatch(/no (?:recommendation|action packet) was drafted/i);
+      if (fixture.phase === "dm-desk") {
+        expect(record).toMatchObject({ status: "PLAN", decision: { outcome: "PLAN" } });
+        expect(record.proposals).toHaveLength(1);
+        expect(record.decision.summary).toMatch(/ungated fixture package/i);
+      } else {
+        expect(record.decision.summary).toMatch(/no action packet was drafted/i);
+      }
       expect(record.growthPlan).toMatch(/nothing was published, posted, scheduled, bought or sent/i);
     }
   });

@@ -113,6 +113,7 @@ import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
 import { runMarketingSharkCycle } from "./ventures/marketingshark/run.js";
 import {
   isDoorMoneyPhase,
+  runDoorMoneyDeskCycle,
   runDoorMoneyDryCycle
 } from "./ventures/door-money/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
@@ -350,11 +351,15 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
   }
   if (isDoorMoneyPhase(options.phase)) {
+    if (options.phase === "dm-desk") {
+      const run = () => runDoorMoneyDeskCycle({ cycleId, now, dry: options.dry });
+      return options.dry ? run() : withFileLock(stateRoot, ".lock", run);
+    }
     if (options.dry) {
       return runDoorMoneyDryCycle({ phase: options.phase, cycleId, now });
     }
-    // The live desk and growth runners arrive in their own issues. Until then, registration is
-    // a closed gate rather than an unsupported phase or a path that could call a provider.
+    // The live growth runner arrives in DM-19. Until then, registration is a closed gate rather
+    // than an unsupported phase or a path that could call a provider.
     return {
       cycleId,
       phase: options.phase,
