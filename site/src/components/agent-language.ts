@@ -42,7 +42,9 @@ const titles: Record<AgentId, string> = {
   MOTIF: "Visual pattern researcher",
   PIVOT: "MMA desk liaison",
   MAKO: "marketingShark director",
-  CHUM: "Carousel copywriter"
+  CHUM: "Carousel copywriter",
+  FOLIO: "Book selection editor",
+  PLOT: "Book story producer"
 };
 
 const mandates: Record<AgentId, string> = {
@@ -87,7 +89,9 @@ const mandates: Record<AgentId, string> = {
   MOTIF: "Studies approved individual links as text-only visual observations without copying or storing external images.",
   PIVOT: "Carries sourced findings between FightAIQ and MMA Files without turning reader interest into a hidden model input.",
   MAKO: "Reviews what the daily carousel room shipped and keeps its hook rotation and its numbers honest.",
-  CHUM: "Writes each day's quiz carousel twice, once for Czech readers and once for English ones."
+  CHUM: "Writes each day's quiz carousel twice, once for Czech readers and once for English ones.",
+  FOLIO: "Selects which recorded book candidate earns bounded research and keeps priors separate from verified facts.",
+  PLOT: "Turns one verified dossier story into separate native social drafts for the cs and en locales without rendering cover art."
 };
 
 const replacements: ReadonlyArray<readonly [RegExp, string]> = [

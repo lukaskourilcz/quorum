@@ -68,6 +68,44 @@ describe("buildCarouselSummary", () => {
     expect(again).toEqual(summary);
   });
 
+  it("keeps the legacy Czech summary bytes unchanged", () => {
+    const legacy = buildCarouselSummary({
+      venture: "caught-up",
+      slug: "stary-zaznam",
+      date: "2026-08-06",
+      title: "Starý titulek",
+      dek: "Starý perex.",
+      points: ["První bod.", "Druhý bod.", "Třetí bod."]
+    });
+    expect(JSON.stringify(legacy)).toBe(
+      '{"schemaVersion":"carousel-summary/1","venture":"caught-up","slug":"stary-zaznam","date":"2026-08-06","locale":"cs","kicker":"DNESKAi · 6. srp","headline":"Starý titulek","standfirst":"Starý perex.","passages":["První bod.","Druhý bod.","Třetí bod."],"closing":"Jedno vydání a máte přehled.","sources":[],"hasHero":false,"heroCredit":null}'
+    );
+  });
+
+  it("records BOOKSOFHISTORY locale on each independent summary", () => {
+    const cs = buildCarouselSummary({
+      venture: "booksofhistory",
+      locale: "cs",
+      slug: "story-cs",
+      date: "2026-08-14",
+      title: "Příběh knihy",
+      dek: "Doložený příběh vydání.",
+      points: ["První karta.", "Druhá karta.", "Třetí karta."]
+    });
+    const en = buildCarouselSummary({
+      venture: "booksofhistory",
+      locale: "en",
+      slug: "story-en",
+      date: "2026-08-14",
+      title: "The book's story",
+      dek: "A sourced publication story.",
+      points: ["First card.", "Second card.", "Third card."]
+    });
+    expect(cs).toMatchObject({ locale: "cs", kicker: "BOOKSOFHISTORY · 14. srp" });
+    expect(en).toMatchObject({ locale: "en", kicker: "BOOKSOFHISTORY · 14 Aug" });
+    expect(JSON.stringify(en)).not.toContain("Příběh knihy");
+  });
+
   it("stays inside the passage ceiling however long the article is", () => {
     const long = buildCarouselSummary({
       venture: "mma-files",

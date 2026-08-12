@@ -270,7 +270,7 @@ export const CarouselTemplateSchema = z.object({
 
 export const BrandTokensSchema = z.object({
   schemaVersion: z.literal("carousel-brand/1"),
-  id: z.enum(["caught-up", "mma-files", "titty-tuesdays", "devshark", "geoshark"]),
+  id: z.enum(["caught-up", "mma-files", "titty-tuesdays", "devshark", "geoshark", "booksofhistory"]),
   name: z.string().trim().min(2).max(80),
   logoText: z.string().trim().min(2).max(40),
   colors: z.record(TokenNameSchema, z.string().regex(/^#[0-9a-f]{6}$/i)),
@@ -281,7 +281,10 @@ export const BrandTokensSchema = z.object({
   })
 });
 
-export const CarouselPayloadSchema = z.object({
+// Strict at the final render boundary: metadata from upstream records must be selected into
+// strings deliberately. In particular, an admin-only BOOKSOFHISTORY coverRef cannot hitch a ride
+// into a payload and become artwork merely because a caller spread a seed record here.
+export const CarouselPayloadSchema = z.strictObject({
   locale: z.enum(["en", "cs"]),
   strings: z.record(SlotNameSchema, z.string().max(2_000)),
   variant: z.string().regex(/^[A-Z][A-Z0-9-]*$/).optional()

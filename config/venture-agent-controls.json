@@ -59,6 +59,17 @@
       ],
       "disabled": []
     },
+    "booksofhistory": {
+      "lockedOn": [
+        "FOLIO",
+        "PLOT",
+        "QUILL",
+        "HACEK",
+        "AUDIT"
+      ],
+      "switchable": [],
+      "disabled": []
+    },
     "fightaiq": {
       "lockedOn": [
         "FORGE"

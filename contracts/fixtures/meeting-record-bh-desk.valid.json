@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "bh-2026-08-12-001",
+  "date": "2026-08-12",
+  "phase": "bh-desk",
+  "kind": "bh-desk",
+  "fixture": true,
+  "status": "PLAN",
+  "stage": "VALIDATION",
+  "operatingBrief": "Choose up to two seed-backed books for a drafts-only research cycle.",
+  "participantReasons": [
+    { "agent": "FOLIO", "reason": "FOLIO chairs the editorial selection.", "participated": true },
+    { "agent": "PLOT", "reason": "PLOT tests whether each candidate can sustain a story.", "participated": true },
+    { "agent": "AUDIT", "reason": "AUDIT retains the truth, scope and budget veto.", "participated": true }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 0,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "select",
+    "summary": "Select the two highest-ranked candidates for tailored research briefs.",
+    "evidenceRefs": ["BH-SEED-001"]
+  },
+  "proposals": [
+    { "agent": "FOLIO", "summary": "Advance two candidates and keep every output in draft.", "evidenceRefs": ["BH-SEED-001"] }
+  ],
+  "voteMatrix": [
+    { "voter": "FOLIO", "firstChoice": "candidate-1", "veto": false },
+    { "voter": "PLOT", "firstChoice": "candidate-1", "veto": false },
+    { "voter": "AUDIT", "firstChoice": "candidate-1", "veto": false }
+  ],
+  "tasks": [
+    { "id": "bh-brief-1", "owner": "PLOT", "summary": "Prepare a bounded research brief.", "status": "planned" }
+  ],
+  "growthPlan": "Complete one verified, bilingual, drafts-only feature in this cycle.",
+  "eveningOutcome": null,
+  "roomTranscript": {
+    "openedAt": "2026-08-12T10:00:00.000Z",
+    "closedAt": "2026-08-12T10:12:00.000Z",
+    "gavel": "FOLIO",
+    "setting": "The desk compares only the recorded seed and shortlist evidence.",
+    "turns": [
+      { "agent": "FOLIO", "mode": "gavel", "text": "Two candidates clear the deterministic shortlist." },
+      { "agent": "AUDIT", "mode": "vote", "text": "Proceed as drafts only; no research has been purchased.", "evidenceRefs": ["BH-SEED-001"] }
+    ]
+  },
+  "generatedAt": "2026-08-12T10:12:01.000Z"
+}

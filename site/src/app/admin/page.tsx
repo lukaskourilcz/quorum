@@ -13,6 +13,9 @@ import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { GoViralProfilePanel } from "@/components/admin/goviral-profile-panel";
 import { OwnerAttentionPanel } from "@/components/admin/owner-attention-panel";
 import { CaughtUpEventsPanel } from "@/components/admin/caught-up-events-panel";
+import { BooksofhistoryDossiersPanel } from "@/components/admin/booksofhistory-dossiers-panel";
+import { BooksofhistoryFeaturesPanel } from "@/components/admin/booksofhistory-features-panel";
+import { BooksofhistoryShortlistPanel } from "@/components/admin/booksofhistory-shortlist-panel";
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { AdminMoneyPanel } from "@/components/admin/money-panel";
@@ -32,6 +35,7 @@ import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { readApprovedUndeliveredPayloads } from "@/lib/admin-owner-attention";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
+import { readAdminBooksofhistory } from "@/lib/admin-booksofhistory";
 import {
   isDesignLabVenture,
   readDesignLabSections,
@@ -140,6 +144,7 @@ export default async function AdminPage({
     fightaiq,
     caughtUp,
     mmaFiles,
+    booksofhistory,
     carouselStudio,
     hookBrain,
     goviralProfile,
@@ -163,6 +168,7 @@ export default async function AdminPage({
     readAdminFightAiQ(),
     readAdminCaughtUp(),
     readAdminMmaFiles(),
+    readAdminBooksofhistory(),
     readCarouselStudio(),
     readHookBrain(),
     readGoViralProfile(),
@@ -224,15 +230,22 @@ export default async function AdminPage({
   /**
    * How many stored items a workspace holds.
    *
-   * Three ventures keep their work outside the portfolio card store, so counting cards reported 0
+   * Some ventures keep their work outside the portfolio card store, so counting cards reported 0
    * for them — FightAIQ showed nothing on a rail beside a workspace holding twelve hundred fighter
-   * records. Each of those three is counted from the loader that actually reads it.
+   * records. Each such venture is counted from the loader that actually reads it.
    */
   const savedItemCount = (ventureId: string, fallback: number) =>
     ventureId === "mma-files"
       ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
       : ventureId === "carousel-studio"
         ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
+        : ventureId === "booksofhistory"
+          ? (booksofhistory.shortlist ? 1 : 0)
+            + (booksofhistory.brief ? 1 : 0)
+            + (booksofhistory.cycle ? 1 : 0)
+            + booksofhistory.dossiers.length
+            + booksofhistory.ledger.length
+            + booksofhistory.features.length
         : ventureId === "fightaiq"
           ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.sources.length
           : fallback;
@@ -349,6 +362,7 @@ export default async function AdminPage({
         portfolio.ventures.reduce((sum, venture) => sum + venture.unreadableFiles.length, 0) +
         mmaFiles.unreadable.length +
         fightaiq.unreadable.length +
+        booksofhistory.unreadable.total +
         ownerAttention.unreadable
     }
   ];
@@ -361,6 +375,8 @@ export default async function AdminPage({
     ? [...selectedVenture.unreadableFiles, ...mmaFiles.unreadable]
     : selectedVenture?.id === "fightaiq"
       ? [...selectedVenture.unreadableFiles, ...fightaiq.unreadable]
+    : selectedVenture?.id === "booksofhistory"
+      ? [...selectedVenture.unreadableFiles, ...Object.entries(booksofhistory.unreadable).flatMap(([store, count]) => store !== "total" && count ? [`${store} (${count})`] : [])]
     : selectedVenture?.unreadableFiles ?? [];
 
   const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual" | "social-variant">> = {
@@ -454,6 +470,18 @@ export default async function AdminPage({
               // Predictions and banners are one health record each, not a list of items.
               : 1
       };
+    }
+    if (id === "booksofhistory" && selectedTab === "shortlist") {
+      return {
+        node: <BooksofhistoryShortlistPanel snapshot={booksofhistory} />,
+        count: booksofhistory.shortlist?.entries.length ?? 0
+      };
+    }
+    if (id === "booksofhistory" && selectedTab === "dossiers") {
+      return { node: <BooksofhistoryDossiersPanel snapshot={booksofhistory} />, count: booksofhistory.dossiers.length };
+    }
+    if (id === "booksofhistory" && selectedTab === "features") {
+      return { node: <BooksofhistoryFeaturesPanel snapshot={booksofhistory} />, count: booksofhistory.features.length };
     }
     if (visibleCards.length) {
       return {

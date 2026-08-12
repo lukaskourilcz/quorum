@@ -31,6 +31,17 @@ describe("meeting agenda queue", () => {
     expect(policy.agendaRequiredPhases).toContain("mag-desk");
     expect(phaseNeedsAgenda(policy, "tt-marketing")).toBe(false);
     expect(phaseHasStandingAgenda(policy, "tt-marketing")).toBe(true);
+    expect(phaseHasStandingAgenda(policy, "bh-desk")).toBe(true);
+    expect((policy.transitions["gv-brief"] ?? []).filter((phase) => phase === "bh-desk")).toHaveLength(1);
+    expect((policy.transitions["bh-desk"] ?? []).filter((phase) => phase === "gv-brief")).toHaveLength(1);
+    expect(mayRequestMeeting(policy, "gv-brief", "bh-desk")).toBe(true);
+    expect(mayRequestMeeting(policy, "bh-desk", "gv-brief")).toBe(true);
+    expect(policy).toMatchObject({
+      maxPending: 24,
+      perVenturePendingCap: 8,
+      maxRequestsPerMeeting: 2,
+      ttlDays: 3
+    });
     expect(policy.servicePhases).not.toContain("tt-marketing");
     expect(mayRequestMeeting(policy, "tt-marketing", "mma-analysis")).toBe(false);
     expect(nextAgendaDate({ currentDate: "2026-08-01", currentHour: 6, targetHour: 11 }))

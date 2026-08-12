@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "performance-weights/1",
+  "ventureId": "booksofhistory",
+  "floor": 0.75,
+  "ceiling": 1.25,
+  "lanes": {
+    "cs": {
+      "categories": {},
+      "eras": {},
+      "geographies": {}
+    },
+    "en": {
+      "categories": {},
+      "eras": {},
+      "geographies": {}
+    }
+  },
+  "appliedProposalIds": [],
+  "updatedAt": "2026-08-12T00:00:00.000Z"
+}

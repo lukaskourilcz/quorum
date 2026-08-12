@@ -3,6 +3,11 @@ import { AudienceSpecSchema } from "./audience-spec.js";
 import { BoardlessDatasetSchema } from "./boardless-dataset.js";
 import { BoardlessStreamSchema, StreamSyncReceiptSchema } from "./boardless-stream.js";
 import { BoardlessEventsSchema } from "./boardless-events.js";
+import { BhCycleSchema } from "./bh-cycle.js";
+import { BhSeedLibrarySchema } from "./bh-seed.js";
+import { BhShortlistSchema } from "./bh-shortlist.js";
+import { BhResearchBriefBundleSchema } from "./bh-research-brief.js";
+import { BhDossierSchema, BhResearchLedgerEntrySchema } from "./bh-dossier.js";
 import { CalendarFeedSchema } from "./calendar.js";
 import { CampaignBriefSchema } from "./campaign-brief.js";
 import { CarouselTemplateSchema } from "./carousel-template.js";
@@ -18,6 +23,8 @@ import { MeetingAgendaQueueSchema } from "./meeting-agenda.js";
 import { MeetingRecordSchema } from "./meeting-record.js";
 import { OpsReportSchema } from "./ops-report.js";
 import { OwnerAttentionSchema } from "./owner-attention.js";
+import { OwnerResultEntrySchema } from "./owner-result-entry.js";
+import { PerformanceWeightProposalSchema, PerformanceWeightsSchema } from "./performance-weights.js";
 import {
   AdjustmentEntrySchema,
   BoutRecordSchema,
@@ -37,6 +44,7 @@ import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
 import { SocialPackSchema } from "./social-pack.js";
 import { VentureRegistrySchema } from "./venture-registry.js";
+import { VentureRecommendationSchema } from "./venture-recommendation.js";
 import { VisualWeightsSchema } from "./visual-weights.js";
 import {
   ArticleImageSchema,
@@ -53,6 +61,12 @@ export const ContractSchemas = {
   "boardless-dataset": BoardlessDatasetSchema,
   "boardless-stream": BoardlessStreamSchema,
   "boardless-events": BoardlessEventsSchema,
+  "bh-cycle": BhCycleSchema,
+  "bh-seed": BhSeedLibrarySchema,
+  "bh-shortlist": BhShortlistSchema,
+  "bh-research-brief": BhResearchBriefBundleSchema,
+  "bh-dossier": BhDossierSchema,
+  "bh-research-ledger": BhResearchLedgerEntrySchema,
   "stream-sync": StreamSyncReceiptSchema,
   "calendar": CalendarFeedSchema,
   "campaign-brief": CampaignBriefSchema,
@@ -69,6 +83,9 @@ export const ContractSchemas = {
   "meeting-record": MeetingRecordSchema,
   "ops-report": OpsReportSchema,
   "owner-attention": OwnerAttentionSchema,
+  "owner-result-entry": OwnerResultEntrySchema,
+  "performance-weights": PerformanceWeightsSchema,
+  "performance-weight-proposal": PerformanceWeightProposalSchema,
   "adjustment-entry": AdjustmentEntrySchema,
   "bet-type-catalog": BetTypeCatalogSchema,
   "bout-record": BoutRecordSchema,
@@ -88,6 +105,7 @@ export const ContractSchemas = {
   "season": SeasonFileSchema,
   "social-pack": SocialPackSchema,
   "venture-registry": VentureRegistrySchema,
+  "venture-recommendation": VentureRecommendationSchema,
   "visual-weights": VisualWeightsSchema,
   "article-image": ArticleImageSchema,
   "metrics-placeholder": MetricsPlaceholderSchema,

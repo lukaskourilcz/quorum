@@ -1,6 +1,6 @@
 # BoardlessAI project model
 
-BoardlessAI is one guarded operating system with seven project workspaces. Shared
+BoardlessAI is one guarded operating system with eight project workspaces. Shared
 infrastructure owns the agent registry, budget, source policy, meeting records,
 specialist agendas, calendar, admin, delivery checks and public explanation. Each
 project keeps a narrow output boundary rather than cloning the orchestrator.
@@ -15,6 +15,7 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 | FightAIQ | Operating, guarded analysis | UFC and Oktagon fighter cards, discovered bouts, historical backfill and deterministic predictions | Two-source bout/card gates; no bet placement, affiliate links or bookmaker automation |
 | Design Lab | Operating internal engine | Original template library and deterministic social-carousel rendering for every brand | No accounts, marketing, analytics, external inspiration bytes or image-model calls |
 | marketingShark | Operating internal agency | Turns one devShark quiz question a day into one Czech and one English five-slide carousel rendered by the Design Lab | No social account, credentials or publisher path; every package is stored as a draft behind the approval queue |
+| BOOKSOFHISTORY | Operating in guarded validation | Turns a deterministic shortlist and reusable source dossiers into independent Czech and English social-story drafts | No public surface, account, channel or posting path; no cover artwork; quotes are attributed and capped at 300 characters |
 | MMA Files | Operating public magazine | One daily Czech article slot and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
 
 `config/ventures.json` stores each project's meetings, participating roles, cost
@@ -25,10 +26,10 @@ contracts retain the word `venture` for compatibility; visitor-facing text says
 ## People and authority
 
 Four decision-makers—VIZE, FORGE, PULSE and AUDIT—hold company-wide authority.
-Twenty-nine specialists do bounded work only when a service path or due agenda needs
-their domain. The registry holds 42 entries: 33 active, 6 paused and 3 retired. A
+Thirty-one specialists do bounded work only when a service path or due agenda needs
+their domain. The registry holds 44 entries: 35 active, 6 paused and 3 retired. A
 stood-down role stays on the record — the router skips it and names it — so the count
-that matters is the thirty-three that work. The 27
+that matters is the thirty-five that work. The 27
 established roles keep their approved photographic portraits. Newer roles use neutral
 name-based placeholders until approved media exists. Public visuals never enter model
 prompts or meeting packets. The public interface uses names and work labels. It does
@@ -59,6 +60,9 @@ Not every clock entry is a meeting:
   assignment and article production retain their fixed reader promise. The 07:00
   marketingShark room is fixed the same way, except that what it owes each day is a
   draft package rather than a published one.
+- **Persistent cycle:** the 12:00 BOOKSOFHISTORY desk resumes one recorded selection,
+  research or production phase. A missed day stretches the cycle instead of skipping
+  work or weakening a gate.
 - **Agenda-gated:** Titty Tuesdays, FightAIQ analysis and the MMA Files desk run only
   when requested.
 - **Change-triggered:** FightAIQ intake runs when its source snapshot materially
@@ -81,6 +85,7 @@ credentials, evidence, cost limits or safety rules.
 | 09:00 | MMA Files story meeting | fixed service |
 | 10:00 | MMA Files daily article | assigned slot and evidence only |
 | 11:00 | Titty Tuesdays campaign room | standing future-eshop marketing ideation; optional focused agenda |
+| 12:00 | BOOKSOFHISTORY editorial desk | persistent daily cycle; resumes its current phase |
 | 13:00 | GoVIRAL trend room | Mondays only; an off-day firing is a `$0` no-op |
 | 14:00 | Board afternoon | `$0` checkpoint |
 | 17:00 | Caught Up product meeting | fixed service |
@@ -105,6 +110,12 @@ The meeting redesign saves cost by avoiding unnecessary calls, not by lowering t
 models that determine publication quality. Static cron wake-ups and `not-needed`
 records cost no model money.
 
+BOOKSOFHISTORY research adds narrower guards inside those portfolio limits: at most
+`$0.10` per call, `$0.50` per cycle and `$5.00` per month, with idempotency by
+`(bookId, briefHash)`. Budget pressure reduces two research candidates to one, then
+stretches the cycle at `$0`, then removes the room. It never raises a cap or repeats
+research merely for the second language.
+
 ## Money and quarterly targets
 
 The owner-approved D10 protocol gives the company and every project a public 90-day
@@ -113,6 +124,11 @@ setup period before linear pace begins. The daily `$0` evaluator reads only
 deterministic receipt, stats and state paths and labels each target `on-track`,
 `at-risk`, `off-track` or `unavailable`. It does not turn a missing Phase 3 measure
 into zero.
+
+BOOKSOFHISTORY measures cycle reliability, monthly feature cadence, paid-dossier reuse,
+verification-state coverage, legend-as-fact violations and model spend. Its research
+ledger marks a paid dossier used only after an owner-marked posted lane references it;
+missing paid-dossier volume remains unavailable rather than becoming zero.
 
 At quarter end, a project below 70% of its targets or missing a critical target gets
 a mandatory `continue / pivot / stop` board item and owner packet. A company miss
@@ -139,7 +155,10 @@ preferences under `config/visual-weights/<project>.json`. Specialist requests li
 approved writes use a repository-scoped GitHub token in production.
 
 The admin includes short summaries with full-record expansion, agent switches,
-Caught Up work, Titty Tuesdays plans, FightAIQ data and MMA Files articles. Perfect, Good and Bad ratings keep their full history. A rating cannot found
+Caught Up work, Titty Tuesdays plans, FightAIQ data, MMA Files articles and
+BOOKSOFHISTORY shortlist, dossier and feature tabs. The latter supports explicit
+owner approval/rejection, Design Lab handoff and owner-entered per-lane results without
+automatic channel ingestion. Perfect, Good and Bad ratings keep their full history. A rating cannot found
 a project or publish an item. The queue and its archive are editable by the owner, but
 owner input is optional.
 
@@ -157,11 +176,14 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 - Titty Tuesdays can read the sanitized public concept feed. BoardlessAI cannot
   change its application or commerce state.
 - BoardlessAI deliberately has no duplicate public fighter or event pages.
+- BOOKSOFHISTORY has no delivery repository or public route. Owner-approved Czech and
+  English decks stop at a recorded Design Lab handoff for manual posting.
 
 ## Live switches
 
 - `CAUGHT_UP_LIVE_ENABLED` — Caught Up edition and product work.
-- `PORTFOLIO_LIVE_ENABLED` — Titty Tuesdays standing ideation.
+- `PORTFOLIO_LIVE_ENABLED` — Titty Tuesdays standing ideation and the separately
+  countersigned BOOKSOFHISTORY persistent cycle.
 - `FIGHTAIQ_LIVE_ENABLED` — FightAIQ source/data work.
 - `FIGHTAIQ_ANALYSIS_ENABLED` — model analysis only after the separate mode decision.
 - `MMA_FILES_LIVE_ENABLED` — source-first newsroom work and content delivery.
@@ -169,12 +191,14 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
   earning-readiness check; absent or false keeps that method waiting.
 - `SOCIAL_KILL_SWITCH=true` — supreme manual posting stop. When false, each project
   still needs its own proof/campaign counter, account credentials and safety gate.
-- `METRICS_INGESTION_ENABLED=false` — keeps all visitor, reader and engagement
-  measurement out of state; SPLIT stays idle. REACH also stays disabled while the MMA
-  social-content phase is locked; both roles already carry current output contracts.
+- `METRICS_INGESTION_ENABLED=false` — keeps automatic visitor, reader and engagement
+  measurement out of state; SPLIT stays idle. Explicit owner-entered BOOKSOFHISTORY
+  lane results are the only exception and do not touch a channel. REACH also stays
+  disabled while the MMA social-content phase is locked; both roles already carry
+  current output contracts.
 
 Missing variables deny the action. The owner checklist and the ordered setup path are
 both in `docs/NEEDED.md`.
 
-The canonical, standalone description of all seven projects, 42 roles, D1–D12 and
+The canonical, standalone description of all eight projects, 44 roles, D1–D14 and
 current generated state is `docs/ECOSYSTEM.md`.

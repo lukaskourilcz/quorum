@@ -4,18 +4,18 @@ import { AgentCard, AgentRow } from "@/components/agent-card";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
-import { agents } from "@/data/agents";
+import { publicAgents } from "@/data/agents";
 
 export const metadata: Metadata = {
-  description: `The ${agents.length} AI roles that research, decide, build, write and check BoardlessAI's work.`,
+  description: `The ${publicAgents.length} AI roles that research, decide, build, write and check BoardlessAI's work.`,
   title: "AI team"
 };
 
 export default function AgentsPage() {
   // Ten roles were stood down when the roster was cut. Counting them among the working team
   // told a reader the company runs forty roles when thirty of them do the work.
-  const working = agents.filter((agent) => agent.status === "active");
-  const standDown = agents.filter((agent) => agent.status !== "active");
+  const working = publicAgents.filter((agent) => agent.status === "active");
+  const standDown = publicAgents.filter((agent) => agent.status !== "active");
   const council = working.filter((agent) => agent.group === "Council");
   const specialists = working.filter((agent) => agent.group !== "Council");
 

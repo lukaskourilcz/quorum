@@ -20,7 +20,7 @@ export type TypeScale = (typeof TYPE_SCALES)[number];
 
 export const CarouselRecipeSchema = z.object({
   schemaVersion: z.literal("carousel-recipe/1"),
-  venture: z.enum(["caught-up", "mma-files"]),
+  venture: z.enum(["caught-up", "mma-files", "booksofhistory"]),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   family: z.enum(DECK_DESIGNS),
@@ -254,8 +254,8 @@ export function recipeLine(recipe: Pick<CarouselRecipe, "family" | "variant" | "
 export const CarouselPresetSchema = z.object({
   id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(60),
   name: z.string().trim().min(2).max(80),
-  /** Which ventures may draw from it. Empty means both. */
-  ventureScope: z.array(z.enum(["caught-up", "mma-files"])).max(2),
+  /** Which ventures may draw from it. Empty means all. */
+  ventureScope: z.array(z.enum(["caught-up", "mma-files", "booksofhistory"])).max(3),
   formats: z.array(z.enum(["instagram-square", "instagram-portrait", "instagram-story", "threads"])).min(1).max(4),
   family: z.enum(DECK_DESIGNS),
   variant: z.enum(["A", "B"]),
@@ -284,7 +284,7 @@ export type CarouselPresetFile = z.infer<typeof CarouselPresetFileSchema>;
  * shipping it would make "draft" mean nothing — the same reason a draft template cannot be
  * referenced by a pack.
  */
-export function livePresetsFor(presets: readonly CarouselPreset[], venture: "caught-up" | "mma-files"): CarouselPreset[] {
+export function livePresetsFor(presets: readonly CarouselPreset[], venture: CarouselRecipe["venture"]): CarouselPreset[] {
   return presets.filter((preset) =>
     preset.status === "live" && (preset.ventureScope.length === 0 || preset.ventureScope.includes(venture)));
 }

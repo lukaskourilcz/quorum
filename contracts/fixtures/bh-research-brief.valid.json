@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "bh-research-brief/1",
+  "date": "2026-08-12",
+  "cycleId": "bh-20260812-001",
+  "shortlistRef": "ventures/booksofhistory/shortlists/2026-08-12.json",
+  "requestingMeetingRef": "meetings/2026-08-12-bh-desk.json",
+  "monthlyResearchHeadroomUsd": 0.3,
+  "thirdCandidateReserveUsd": 0.15,
+  "maximumCandidates": 3,
+  "briefs": [
+    {
+      "bookId": "war-with-the-newts",
+      "bookRef": "ventures/booksofhistory/seed/library.json#war-with-the-newts",
+      "shortlistRank": 1,
+      "selectionReason": "The publishing history offers the strongest unused documented angle.",
+      "objective": "Research Válka s mloky (1936) by Karel Čapek through its publishing and censorship history.",
+      "investigateSpecifically": [
+        "Establish the publication context in 1936 without inventing a precise date.",
+        "Trace documented editorial or censorship interventions across early editions."
+      ],
+      "lookFor": [
+        "Look for attributable evidence in publisher, library and archival records.",
+        "Look for independent scholarship that distinguishes records from later legend."
+      ],
+      "avoid": [
+        "Avoid generic plot summary, cover artwork and unsupported biography.",
+        "Avoid presenting famous anecdotes as fact without corroborating sources."
+      ],
+      "angleHistoryRefs": [],
+      "briefHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "bookId": "rur",
+      "bookRef": "ventures/booksofhistory/seed/library.json#rur",
+      "shortlistRank": 2,
+      "selectionReason": "The documented language history is distinct from the first candidate.",
+      "objective": "Research R.U.R. (1920) by Karel Čapek through the documented origin and spread of robot.",
+      "investigateSpecifically": [
+        "Establish the first performance and publication context from dated records.",
+        "Separate the documented naming exchange from embellished retellings."
+      ],
+      "lookFor": [
+        "Look for attributable correspondence, theatre archives and linguistic histories.",
+        "Look for independent records of early translations and international reception."
+      ],
+      "avoid": [
+        "Avoid generic plot summary, cover artwork and unsupported biography.",
+        "Avoid claiming a single origin story where the records disagree."
+      ],
+      "angleHistoryRefs": ["ventures/booksofhistory/features/2026-07-01-rur.json"],
+      "briefHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  ],
+  "generatedAt": "2026-08-12T10:05:00.000Z"
+}

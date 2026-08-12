@@ -41,7 +41,8 @@ export interface StudioArticle {
 
 const VENTURE_LABEL: Record<CarouselSummaryVenture, string> = {
   "caught-up": "DNESKAi",
-  "mma-files": "MMA Files"
+  "mma-files": "MMA Files",
+  booksofhistory: "BOOKSOFHISTORY"
 };
 
 /**
@@ -96,13 +97,14 @@ async function readJsonFiles(directory: string): Promise<Array<{ name: string; v
 /** Summaries delivery wrote. One directory per venture, one file per delivered article. */
 async function recordedSummaries(root: string): Promise<Map<string, CarouselSummary>> {
   const recorded = new Map<string, CarouselSummary>();
-  for (const venture of ["caught-up", "mma-files"] as const) {
+  for (const venture of ["caught-up", "mma-files", "booksofhistory"] as const) {
     const directory = path.join(root, "state", "ventures", "carousel-studio", "summaries", venture);
     for (const { value } of await readJsonFiles(directory)) {
       const summary = value as Partial<CarouselSummary>;
       if (summary?.schemaVersion !== "carousel-summary/1") continue;
-      if (typeof summary.slug !== "string" || !Array.isArray(summary.passages)) continue;
-      recorded.set(`${venture}:${summary.slug}:${summary.date}`, summary as CarouselSummary);
+      if (summary.venture !== venture || typeof summary.slug !== "string" || !Array.isArray(summary.passages)) continue;
+      if (summary.locale !== "cs" && summary.locale !== "en") continue;
+      recorded.set(`${venture}:${summary.slug}:${summary.date}:${summary.locale}`, summary as CarouselSummary);
     }
   }
   return recorded;
@@ -200,7 +202,8 @@ export async function readStudioArticles(root = repositoryRoot()): Promise<Studi
   const add = (summary: CarouselSummary, origin: StudioArticle["origin"]) => {
     // Venture, slug *and* date. Three MMA packages redeliver one event and share a slug, so a
     // slug-keyed map collapsed them into one article and the Lab could only ever show the first.
-    const id = `${summary.venture}:${summary.slug}:${summary.date}`;
+    const localeIdentity = summary.venture === "booksofhistory" ? `:${summary.locale}` : "";
+    const id = `${summary.venture}:${summary.slug}:${summary.date}${localeIdentity}`;
     if (byId.has(id) && origin === "derived") return;
     byId.set(id, {
       id,

@@ -106,6 +106,12 @@
       "label": "MMA Files (fighting)",
       "keywords": ["UFC", "Oktagon MMA", "fight week"],
       "hashtags": ["#MMA", "#UFC", "#oktagonmma"]
+    },
+    "booksofhistory": {
+      "label": "BOOKSOFHISTORY (book stories)",
+      "signalMode": "free-only",
+      "keywords": ["book history", "dějiny knih", "literary anniversary", "literární výročí", "publishing history", "příběh vydání"],
+      "hashtags": ["#bookhistory", "#dejinyknih", "#literaryanniversary", "#literarnivyroci", "#publishinghistory", "#pribehvydani"]
     }
   }
 }

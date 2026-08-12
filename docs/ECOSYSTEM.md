@@ -1,13 +1,13 @@
 # BoardlessAI ecosystem — standing full-context brief
 
-Updated: 2026-08-02  
-Status: implementation complete; launch-ready after the owner-only setup in `docs/NEEDED.md`  
+Updated: 2026-08-12
+Status: implementation complete; live work remains locked behind the pending BOOKSOFHISTORY countersignature and the owner-only setup in `docs/NEEDED.md`
 Audience: owner, product partners and Fable brainstorming  
-Authority: current code, committed state and countersigned decisions D1–D12
+Authority: current code, committed state, countersigned decisions D1–D13 and the pending D14 founding record
 
 ## What BoardlessAI is
 
-BoardlessAI is a Git-backed operating system for six AI-assisted projects. It is not
+BoardlessAI is a Git-backed operating system for eight AI-assisted projects. It is not
 an always-on group chat and it does not reward agent activity for its own sake. A
 small board chooses bounded work, specialist rooms open only for a concrete agenda or
 service need, deterministic code handles checks wherever judgment is unnecessary,
@@ -21,7 +21,9 @@ The public BoardlessAI site explains the company and its saved outputs. `/admin`
 owner's protected operating view. Caught Up and MMA Files are bounded consumer apps:
 they accept content/data packages and render them, but never orchestrate BoardlessAI.
 Titty Tuesdays remains pre-commerce. FightAIQ never places bets. The Design Lab is
-an internal renderer with a public gallery, not another social brand.
+an internal renderer with a public gallery, not another social brand. BOOKSOFHISTORY
+produces owner-reviewed social drafts only: it has no public site, book pages, SEO
+archive, database, newsletter, storefront, account, channel or posting path.
 
 ## How to maintain this document
 
@@ -38,9 +40,9 @@ Refreshed from committed state: **2026-08-12T12:03:41.590Z**. This block is gene
 
 | Item | Current value |
 | --- | --- |
-| Portfolio | 7 projects; 7 marked operating |
-| Agent roster | 33 active: 19 Anthropic, 14 OpenAI |
-| Scheduled specialist/service rooms | 9; combined maximum room envelopes $0.62 if every room is commissioned |
+| Portfolio | 8 projects; 8 marked operating |
+| Agent roster | 35 active: 21 Anthropic, 14 OpenAI |
+| Scheduled specialist/service rooms | 10; combined maximum room envelopes $1.12 if every room is commissioned |
 | Approved spend boundary | $30.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |
 | Recorded API spend | $3.97 this month; $3.99 cumulative |
 | Entered fixed costs | $0.00 monthly |
@@ -58,6 +60,7 @@ Refreshed from committed state: **2026-08-12T12:03:41.590Z**. This block is gene
 | Caught Up | operating | cu-edition 05:00; cu-product 17:00 | THREADS, INSTAGRAM | locked (2/7) |
 | Titty Tuesdays | operating | tt-marketing 11:00 | QUILL, THREADS, INSTAGRAM | locked (0/4) |
 | GoVIRAL | operating | gv-brief 13:00 | none | not applicable |
+| BOOKSOFHISTORY | operating | bh-desk 12:00 | none | not applicable |
 | FightAIQ | operating | mma-intake 08:00; mma-analysis 19:00 | none | not applicable |
 | Design Lab | operating | deterministic service only | none | not applicable |
 | marketingShark | operating | ms-daily 07:00 | none | not applicable |
@@ -81,7 +84,7 @@ their packet. They do not approve their own release or expand their own scope.
 External pages, articles, APIs and owner notes enter as untrusted data; they never
 become instructions. Numeric and factual claims must retain evidence references.
 
-## The seven projects
+## The eight projects
 
 ### Caught Up
 
@@ -113,6 +116,14 @@ assets. Complete campaign state is preserved even while production roles are off
 Social unlock needs four passing campaigns plus credentials and the safety checker;
 the global kill switch still wins.
 
+### GoVIRAL
+
+Promise: turn a bounded weekly trend snapshot into one owner brief, rated marketing
+plays and at most one allowlisted follow-up agenda. Its 13:00 room runs on Mondays;
+the other six scheduled firings are deterministic `$0` no-ops. Apify remains on its
+Free plan, whose `$5` monthly credit is the hard source ceiling, with no card in the
+system and no authority to upgrade a plan.
+
 ### marketingShark
 
 Promise: one quiz question a day, written up honestly enough that a reader gets value from
@@ -142,6 +153,30 @@ neither the question nor the assigned line. A failure aborts the brand and leave
 Nothing it writes can post. marketingShark owns no social account and no credentials, every
 package is written with `status: "draft"` and every approval check pending, and it is not a
 publishing venture at all — the publisher refuses it by name rather than by an absent switch.
+
+### BOOKSOFHISTORY
+
+Promise: turn cheap candidate intelligence into sourced Czech and English social
+stories about the history behind famous books. FOLIO selects from an authored seed
+library and reusable shelf dossiers; PLOT mines a language-neutral story brief and
+writes two independent native-language packages from the same accepted claims. QUILL,
+HACEK and AUDIT enforce claim state, register and release safety. Every factual
+sentence resolves to dossier claim ids; rejected claims are excluded and legends must
+be labelled as legends.
+
+The `bh-desk` room wakes daily at 12:00 Prague and resumes the recorded selection,
+research or production phase instead of skipping missed work. Paid research is
+idempotent by `(bookId, briefHash)`, costs at most `$0.10` per call, `$0.50` per cycle
+and `$5.00` per month, and is reused across both languages and later features. When
+budget tightens, the cycle drops from two research candidates to one, then stretches
+at `$0`, then removes the room rather than weakening a ceiling.
+
+Nothing is published or posted by the system. Recommendations stay drafts until the
+owner approves each lane, sends it through the Design Lab and posts it manually.
+There is no public BOOKSOFHISTORY route or delivery target. The protected admin shows
+shortlists, dossiers and features and accepts explicit owner-entered per-lane results;
+automatic metrics ingestion remains off. Book-cover references are context only and
+never render. Quotes stop at 300 characters and require attribution.
 
 ### FightAIQ
 
@@ -189,7 +224,8 @@ quiz-code-context. The eleventh was added for marketingShark and justified by a 
 rather than a preference: every other live layout's widest monospace slot holds 100
 characters over two lines, which is a source label and not a program, so a quiz question
 carrying a fenced code block had nowhere legible to put it. Brand token sets now cover
-five brands — devShark and geoShark arrived with marketingShark.
+six brands — devShark and geoShark arrived with marketingShark, and BOOKSOFHISTORY
+added a typographic, cover-free set.
 MOTIF records cited text observations without crawling or downloading imagery. EASEL
 authors original data-only proposals. Schema, contrast, safe-area, token, overflow,
 asset and determinism checks can promote a version automatically. Versions are
@@ -229,7 +265,7 @@ not in a quiz the reader has already opened and started. The apps stay standalon
 no copy from here.
 
 The 13:00 room is agenda-gated and costs `$0` when idle. The protected admin renders
-all slides for all statuses, three brands and three formats, with checks, ratings,
+all slides for all statuses, configured brands and formats, with checks, ratings,
 status controls and an individual-link inspiration box. The English public project
 page shows live fixture previews and, after unlock, receipt-backed real posts. The
 project has no social account, marketing or visitor analytics. Standalone extraction
@@ -251,6 +287,7 @@ collisions and the public calendar uses the same source.
 | 09:00 | MMA Files editorial | fixed assignment service | `$0.05` |
 | 10:00 | MMA Files article | assigned slot and evidence only | production cap `$0.35` |
 | 11:00 | Titty Tuesdays | standing future-eshop marketing ideation; optional focused agenda | `$0.08` |
+| 12:00 | BOOKSOFHISTORY desk | standing daily; resumes the current selection, research or production phase | research `$0.10` per call, `$0.50` per cycle and `$5.00` per month |
 | 13:00 | GoVIRAL trend room | standing weekly; Mondays only, the other six days are `$0` no-ops | `$0.06` |
 | 14:00 | Afternoon board | deterministic checkpoint | `$0` |
 | 17:00 | Caught Up product | fixed service | `$0.08` |
@@ -296,7 +333,7 @@ without a consumed project agenda forces a morning-board commission or saved why
 A manual run bypasses the agenda timing only; it cannot bypass live, evidence, cost,
 credential or safety gates.
 
-## Roster: thirty-three working roles, nine stood down
+## Roster: thirty-five working roles, nine stood down
 
 Model routing is declared in `config/models.json` and `config/agent-routing.json`.
 Council judgment uses Claude Sonnet 5 or GPT-5.6 Luna. Narrow specialists use the
@@ -349,6 +386,8 @@ envelope before any call.
 | PIVOT | evidence bridge between FightAIQ and MMA Files | cannot turn response/context into hidden model input |
 | MAKO | marketingShark direction and KPI honesty; its weekly package review is specified, not yet wired | cannot post, cannot edit the hook library silently, cannot invent a metric |
 | CHUM | one day's carousel copy per brand, Czech and English | cannot choose the question, the hook, the template or the closing line |
+| FOLIO | BOOKSOFHISTORY selection, bounded research briefs and dossier-backed story choice | cannot call research outside a recorded decision, post or override claim state |
+| PLOT | dossier story mining, one canonical brief and independent Czech/English packages | cannot invent claims, change verification state or post |
 
 ## Content, social and the Design Lab's flow
 
@@ -368,6 +407,10 @@ platform receipt, and checks the live post at `$0`. One retry is allowed; a seco
 failure pauses that project. It never follows, likes, comments, messages or downloads
 engagement data.
 
+BOOKSOFHISTORY does not enter that publisher. Its approved lane becomes a Design Lab
+handoff for the owner, never a platform job; an owner may later record the posted URL
+and result in the protected admin, but no crawler or channel integration measures it.
+
 ## KPI and quarter protocol
 
 Q1 is a 90-day quarter beginning 2026-08-03. Content and social pace have a 14-day
@@ -378,6 +421,11 @@ founding/rated proposals and agenda review. Each project has targets appropriate
 its promise. The Design Lab requires ten live templates, six passing new proposals,
 100% engine-rendered published carousels after unlock, green determinism and one cited
 iteration per brand.
+
+BOOKSOFHISTORY targets at least 90% completed-or-honestly-stretched cycles, at least
+eight features in its lowest full month, at least 70% reuse of paid dossiers after a
+30-day ramp, 100% verification-state coverage and zero legends stated as fact. Its
+model-spend KPI is at most `$8` monthly; the stricter research ceiling remains `$5`.
 
 At quarter end, fewer than 70% passing targets or any missed critical target creates a
 mandatory `continue / pivot / stop` reassessment. A company miss also reviews the
@@ -396,6 +444,8 @@ are locked hypotheses with explicit readiness and future legal/account/payment w
 FightAIQ is intentionally unmonetized through Q1/Q2; review begins only after 30
 evaluated events and calibration. The Design Lab is an internal engine; standalone extraction is a locked future possibility. Readiness may
 prepare a proposal but never activate an earning method.
+BOOKSOFHISTORY has no website, newsletter, database, store or other earning surface in
+this program; building one would require a separate owner decision.
 
 ## Safety and launch gates
 
@@ -404,6 +454,10 @@ prepare a proposal but never activate an earning method.
 - Caught Up and MMA Files release only evidence-valid Czech packages and prove the
   deployed result; failure is retried once, then reverted and project-paused.
 - FightAIQ needs source/card/bout gates and D8; no bet or advice path exists.
+- BOOKSOFHISTORY requires its pending founding countersignature and portfolio live
+  switch, stays drafts-only and manual-posted, never renders a book cover, and caps
+  attributed quotes at 300 characters. Its truth and nested research guards deny work
+  independently of the portfolio budget.
 - Template founding cannot create credentials, accounts, commerce, legal or personal-
   data surfaces. Carousel template promotion cannot bypass deterministic checks.
 - `METRICS_INGESTION_ENABLED=false`; no visitor/reader/engagement data crosses into
@@ -413,7 +467,7 @@ prepare a proposal but never activate an earning method.
 - Payments, new spend, budget raises, account creation, legal posture and personal
   data remain human-only regardless of a model vote.
 
-## Decision map D1–D13
+## Decision map D1–D14
 
 | Decision | Current effect |
 | --- | --- |
@@ -430,6 +484,7 @@ prepare a proposal but never activate an earning method.
 | D11 Design Lab | sixth project, monorepo engine, 11 live seed templates, lifecycle, room and public showcase |
 | D12 Original presentation | approved agent photographs and plain interface labels; no workplace-show framing |
 | D13 marketingShark founding | seventh project, `ms-daily` at 07:00, MAKO and CHUM, devShark folded in as a portfolio product, geoShark present and disabled, drafts only |
+| D14 BOOKSOFHISTORY founding | eighth project, `bh-desk` at 12:00, FOLIO and PLOT, reusable dossiers, independent Czech/English drafts, manual posting and no public surface |
 
 Historical records remain append-only under `state/decisions/`; later decisions may
 supersede a setting without rewriting the earlier context.
@@ -449,7 +504,7 @@ outcome, not a reason to rerun paid work.
 
 ## Open questions for Fable
 
-1. Which owner-facing view would make seven projects feel simpler without hiding gates
+1. Which owner-facing view would make eight projects feel simpler without hiding gates
    or unavailable data?
 2. Which repeated board decisions can become deterministic checks, and which still
    require genuine judgment?
@@ -461,7 +516,7 @@ outcome, not a reason to rerun paid work.
    decisions would each metric actually change?
 6. Can Caught Up and MMA Files share more source verification or language QA without
    flattening their distinct editorial voices?
-7. What evidence would justify creating a 41st specialist rather than tightening a
+7. What evidence would justify creating a 45th registry role rather than tightening a
    packet or sharing an existing role?
 8. Which earning hypothesis can be tested without weakening editorial trust or opening
    an account prematurely?

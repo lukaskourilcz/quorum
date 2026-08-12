@@ -278,6 +278,8 @@ export const GoViralActorSchema = z.object({
 
 export const GoViralTopicSetSchema = z.object({
   label: z.string().min(1),
+  /** A free-only set contributes keyless signals but is never expanded into an Apify call. */
+  signalMode: z.enum(["all", "free-only"]).default("all"),
   keywords: z.array(z.string().min(1)).max(12),
   hashtags: z.array(z.string().regex(/^#[\p{L}\p{N}_]+$/u)).max(12)
 });

@@ -1,9 +1,9 @@
 # BOOKSOFHISTORY: the book-history venture — design
 
-Status: proposed, pre-founding. Nothing runs until the owner countersigns
-`state/decisions/<date>-booksofhistory-founding.md` and the §12 items are resolved in
-`state/INBOX.md`. The implementation contract is `docs/BOOKSOFHISTORY-CODEX-BUILD-PROMPT.md`
-— scaffolding, deleted when executed; the decision record and this document outlive it.
+Status: implemented, pending owner countersignature. Nothing runs until the owner
+countersigns `state/decisions/2026-08-12-booksofhistory-founding.md` and the applicable
+§12 items are resolved in `state/INBOX.md`. The one-use implementation prompt was
+deleted after execution; the decision record and this document outlive it.
 
 The shape in one line: **a cheap seed library routes attention, agents spend research money
 only where a story might live, every paid dossier becomes a permanent asset that keeps

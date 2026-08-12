@@ -330,6 +330,23 @@
         "social:carousel"
       ],
       "status": "active"
+    },
+    "FOLIO": {
+      "capabilities": [
+        "editorial:selection",
+        "research:commission",
+        "story:selection"
+      ],
+      "status": "active"
+    },
+    "PLOT": {
+      "capabilities": [
+        "story:mining",
+        "story:brief",
+        "editorial:writing",
+        "claims:bound"
+      ],
+      "status": "active"
     }
   },
   "mandatoryWhen": [
@@ -513,6 +530,16 @@
       "required": [
         "MAKO",
         "CHUM",
+        "AUDIT"
+      ],
+      "optionalByTopic": false
+    },
+    "bh-desk-room": {
+      "required": [
+        "FOLIO",
+        "PLOT",
+        "QUILL",
+        "HACEK",
         "AUDIT"
       ],
       "optionalByTopic": false

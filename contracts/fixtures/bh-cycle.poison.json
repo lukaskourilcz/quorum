@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "bh-cycle/1",
+  "currentCycleId": "bh-2026-08-12-poison",
+  "cycleDays": 3,
+  "phase": "production",
+  "dayStatuses": {
+    "selection": "completed",
+    "research": "pending",
+    "production": "active"
+  },
+  "candidateSet": [
+    {
+      "candidateId": "book-a",
+      "source": "shortlist",
+      "briefRef": "ventures/booksofhistory/briefs/book-a.json",
+      "dossierRef": "ventures/booksofhistory/dossiers/book-a/dossier.json"
+    }
+  ],
+  "chosenStory": null,
+  "stretch": {
+    "count": 0,
+    "reason": null,
+    "nextAttemptOn": null
+  },
+  "startedOn": "2026-08-12",
+  "updatedAt": "2026-08-14T10:05:00.000Z"
+}

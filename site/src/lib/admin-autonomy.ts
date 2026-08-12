@@ -24,7 +24,7 @@ export interface AdminAutonomySnapshot {
   growth: Array<{
     venture: string;
     objective: string;
-    signals: Array<{ id: string; label: string; value: number; unit: "count" | "ratio"; detail: string }>;
+    signals: Array<{ id: string; label: string; value: number | null; unit: "count" | "ratio"; detail: string }>;
   }>;
   quality: {
     killedSlotReasons: Record<string, number>;

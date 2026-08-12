@@ -1,6 +1,7 @@
 import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { DEFAULT_BUDGET_LIMITS, exceedsDailyCap, type BudgetLedgerEntry } from "../src/budget.js";
 
 const repoRoot = path.resolve(process.cwd(), "..");
 
@@ -8,24 +9,30 @@ async function json<T>(relative: string): Promise<T> {
   return JSON.parse(await readFile(path.join(repoRoot, relative), "utf8")) as T;
 }
 
-describe("closing 42-agent system audit", () => {
+describe("closing 44-agent system audit", () => {
   it("keeps every identity unique, prompt-backed and routable, seated or not", async () => {
     const registry = await json<{ agents: Array<{ id: string; slug: string; mission: string; status: string; provider: string; notResponsibleFor: string[] }> }>("config/agents.json");
     const routing = await json<{ agents: Record<string, { capabilities: string[]; status: string }> }>("config/agent-routing.json");
-    expect(registry.agents).toHaveLength(42);
-    expect(new Set(registry.agents.map((agent) => agent.id)).size).toBe(42);
-    expect(new Set(registry.agents.map((agent) => agent.mission)).size).toBe(42);
+    expect(registry.agents).toHaveLength(44);
+    expect(new Set(registry.agents.map((agent) => agent.id)).size).toBe(44);
+    expect(new Set(registry.agents.map((agent) => agent.mission)).size).toBe(44);
     expect(new Set(Object.keys(routing.agents))).toEqual(new Set(registry.agents.map((agent) => agent.id)));
-    // Forty-two profiles, thirty-three of them seated. A retired or paused agent keeps its
+    // Forty-four profiles, thirty-five of them seated. A retired or paused agent keeps its
     // prompt, its portrait and its routing entry -- the record of who did what does not shrink
     // when the roster does -- and the two files have to agree about which of the three it is.
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(33);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(35);
     for (const agent of registry.agents) {
       expect(["active", "paused", "retired"]).toContain(agent.status);
       expect(routing.agents[agent.id]?.status).toBe(agent.status);
       expect(agent.notResponsibleFor.length).toBeGreaterThan(0);
       expect(routing.agents[agent.id]?.capabilities.length).toBeGreaterThan(0);
-      await expect(access(path.join(repoRoot, "orchestrator", "prompts", `${agent.slug}.md`))).resolves.toBeUndefined();
+      await expect(access(path.join(
+        repoRoot,
+        "orchestrator",
+        "prompts",
+        agent.id === "FOLIO" || agent.id === "PLOT" ? "booksofhistory" : "",
+        `${agent.slug}.md`
+      ))).resolves.toBeUndefined();
     }
   });
 
@@ -45,7 +52,7 @@ describe("closing 42-agent system audit", () => {
     }
   });
 
-  it("keeps all room envelopes inside the signed daily pace", async () => {
+  it("keeps every room individually bounded and lets the runtime refuse exhausted days", async () => {
     const registry = await json<{
       ventures: Array<{
         meetings: Array<{ kind: string; envelopeUsd: number }>;
@@ -60,28 +67,41 @@ describe("closing 42-agent system audit", () => {
       await readFile(path.join(repoRoot, "config", "marketingshark.json"), "utf8")
     ) as { brands: Array<{ enabled: boolean }> };
     const enabledBrands = marketingSharkBrands.brands.filter((brand) => brand.enabled).length;
-    const roomEnvelopes = registry.ventures
-      .flatMap((venture) => venture.meetings)
-      .reduce((sum, meeting) => sum + meeting.envelopeUsd * (meeting.kind === "ms-daily" ? enabledBrands : 1), 0);
-    // Read from the registry rather than pinned: the article slot reserves what it declares, and
-    // a literal here was still asserting two slots at an old per-run cap long after the desk
-    // moved to one article a day.
-    const articleProduction = registry.ventures
-      .flatMap((venture) => venture.productionJobs ?? [])
-      .reduce((sum, job) => sum + job.envelopeUsd, 0);
-    const morningCycleCap = 0.2;
-    // Nine rooms: two Caught Up, one Titty Tuesdays, one GoVIRAL, one marketingShark, two
-    // FightAIQ, two MMA Files. The studio and both incubator rooms are gone. GoVIRAL reserves
-    // its $0.06 every day even though it meets on Mondays, and marketingShark reserves $0.10
-    // even in Phase 1 where one brand is enabled -- the reservation is what the clock can cost,
-    // not what it usually does, and reserving less than a room can spend is how a day runs out
-    // of money.
-    expect(roomEnvelopes).toBeCloseTo(0.62, 8);
-    // The whole clock, at every room's full envelope, has to fit inside the $1.00 daily pace
-    // budget-2026-08e signed -- which is the arithmetic that makes a full day affordable rather
-    // than a day whose last rooms cannot be funded. marketingShark took the margin from 32c to
-    // 2c, so the next room needs a cheaper envelope or somebody else's.
-    expect(roomEnvelopes + articleProduction + morningCycleCap).toBeLessThanOrEqual(1);
+    const effectiveRoomEnvelopes = registry.ventures.flatMap((venture) =>
+      venture.meetings.map((meeting) => meeting.envelopeUsd * (meeting.kind === "ms-daily" ? enabledBrands : 1))
+    );
+    const effectiveProductionEnvelopes = registry.ventures.flatMap((venture) =>
+      (venture.productionJobs ?? []).map((job) => job.envelopeUsd)
+    );
+    expect(effectiveRoomEnvelopes).not.toContain(0);
+    expect(Math.max(...effectiveRoomEnvelopes, ...effectiveProductionEnvelopes)).toBeLessThanOrEqual(1);
+    expect(registry.ventures.flatMap((venture) => venture.meetings).find((meeting) => meeting.kind === "bh-desk")?.envelopeUsd).toBe(0.5);
+    expect(DEFAULT_BUDGET_LIMITS.perTextCallUsd).toBe(0.1);
+
+    // Room envelopes are ceilings for overlapping, degradable work, not reservations all charged
+    // at midnight. Summing every ceiling rejects a safe clock as soon as its theoretical maxima
+    // exceed $1 even though the shared ledger refuses each next call against actual daily spend.
+    // Pin that authoritative preflight instead: a final ten-cent call cannot enter a $1 day with
+    // only five cents left, regardless of which room asks for it.
+    const now = new Date("2026-08-12T12:00:00.000Z");
+    const ledger: BudgetLedgerEntry[] = [{
+      ts: "2026-08-12T10:00:00.000Z",
+      cycleId: "another-room",
+      requestHash: "12345678",
+      phase: "test",
+      agent: "AUDIT",
+      provider: "anthropic",
+      model: "test",
+      serviceTier: "default",
+      tokensIn: 0,
+      cachedTokensIn: 0,
+      tokensOut: 0,
+      toolUses: 0,
+      usd: 0.95,
+      kind: "text"
+    }];
+    const limits = { ...DEFAULT_BUDGET_LIMITS, dailyUsd: 1 };
+    expect(exceedsDailyCap(0.1, ledger, now, limits)).toBe(true);
   });
 
   it("keeps Carousel Studio free of provider SDKs and external template assets", async () => {

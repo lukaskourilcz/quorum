@@ -630,6 +630,25 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       secondary: "#67e8f9"
     },
     fonts: { headline: "Outfit", body: "Public Sans", mono: "IBM Plex Mono" }
+  }),
+  booksofhistory: BrandTokensSchema.parse({
+    schemaVersion: "carousel-brand/1",
+    id: "booksofhistory",
+    name: "BOOKSOFHISTORY",
+    logoText: "BOOKSOFHISTORY",
+    colors: {
+      // A first-edition card: cream stock, oxblood type and a restrained foil-gold mark.
+      // These are ink colours rather than effects, so the deterministic renderer needs no image.
+      background: "#f4ecd8",
+      surface: "#eadbbd",
+      "surface-strong": "#dbc396",
+      foreground: "#531b20",
+      muted: "#664139",
+      accent: "#684d08",
+      secondary: "#315146"
+    },
+    // Petrona is the committed OFL serif display; the mono footer reads like a colophon line.
+    fonts: { headline: "Petrona", body: "Karla", mono: "IBM Plex Mono" }
   })
 };
 

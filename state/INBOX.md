@@ -5,6 +5,79 @@ items in place. Lack of response never authorizes an action. -->
 
 ## Pending
 
+- [ ] HUMAN_APPROVAL BH-RESEARCH-001 — Allow BOOKSOFHISTORY to make guarded
+  web-search research calls with the existing Anthropic key.
+  What this approves, exactly:
+  - **The provider and search caps:** the existing `anthropic-web-search` adapter
+    only. A gather call may use at most five searches; a QUILL claim check may
+    reserve one to three. Synthesis has no search tool. Each call remains beneath
+    the portfolio's immutable `$0.10` text-call ceiling.
+  - **The narrower spend guards:** no more than `$0.50` of research per cycle and
+    `$5.00` per month, both inside the signed `$25` model/API share and `$30`
+    all-in ceiling. Every call reserves before it runs and records actual use after.
+  - **The retained evidence:** the research ledger records provider, model, book,
+    reason, requesting meeting, tokens, searches, cost, dossier reference and later
+    whether an owner-posted feature used the dossier.
+  - **The duplication guards:** a reusable shelf story wins before new spend.
+    Completed and in-flight work is deduplicated by `(bookId, briefHash)` with a
+    cycle lock; the Czech and English lanes share one dossier and never trigger
+    duplicate research merely for language.
+  - **What this does not approve:** a new provider, account, credential, plan,
+    ceiling, post, channel action or publication surface. Missing approval must
+    remain the `$0` path.
+
+- [ ] HUMAN_APPROVAL BH-SEED-002 — Accept the authored 200-book
+  BOOKSOFHISTORY seed library and its prior-not-fact and no-cover rules.
+  What this approves, exactly:
+  - **The artifact:** the committed, hand-authored seed records are cheap routing
+    context for deterministic selection. Their initial opportunity scores and notes
+    are editorial priors, not evidence, claims or facts fit for publication.
+  - **The evidence boundary:** a seed entry may nominate a book and research angle;
+    only a source-backed dossier may support feature copy. Seed content cannot be
+    promoted into a factual sentence without that research path.
+  - **The artwork boundary:** `coverRef` may appear only as protected admin context.
+    No book-cover artwork may be downloaded, rendered, delivered or placed in any
+    BOOKSOFHISTORY asset. Design Lab output stays typographic.
+  - **What this does not approve:** scraping cover art, a public book catalogue,
+    book pages, SEO archive, database, newsletter, storefront or publication.
+
+- [ ] HUMAN_APPROVAL BH-ACCOUNTS-003 — Clear the BOOKSOFHISTORY name and
+  handles and authorize the owner to prepare separate Czech and English profile
+  lanes on the platforms the owner records here.
+  What this approves, exactly:
+  - **The lanes:** one `cs` profile and one `en` profile per chosen platform, only
+    after the owner records the cleared platform and handle for each. The venture id
+    remains `booksofhistory` if a public handle changes.
+  - **The bio disclosure:** Czech — „Příběhy za slavnými knihami. Výzkum a text
+    vznikají s pomocí AI; člověk je kontroluje, zveřejňuje a odpovídá.“ English —
+    “Stories behind famous books. Research and copy are AI-assisted; a human
+    reviews, posts and replies.” Any replacement must disclose the same division.
+  - **The operating boundary:** signing allows only the owner to create or prepare
+    those profiles. Draft packages remain owner-reviewed and manually posted; the
+    repository receives no credential, publisher route, scheduler or autopublish
+    counter.
+  - **What this does not approve:** this session or any agent creating an account,
+    touching a channel, posting, replying, following, liking, messaging, buying ads
+    or weakening the global social stop.
+
+- [ ] HUMAN_APPROVAL BH-RESULTS-004 — Allow the owner to enter per-post
+  BOOKSOFHISTORY results for the Czech and English lanes inside the D9 measurement
+  hold.
+  What this approves, exactly:
+  - **The entry:** after the owner has posted a lane manually, the protected admin
+    may record its recommendation id, `cs` or `en` lane, platform, HTTPS post URL,
+    capture time and any available non-negative views, likes, comments, shares,
+    saves, follows or link taps. At least one result number is required.
+  - **The source:** every record says `enteredBy: "owner"`; retries are idempotent.
+    The record may mark the referenced paid dossier used and may support a bounded,
+    floor-protected performance-weight proposal.
+  - **The D9 hold:** automatic metrics ingestion stays disabled. No crawler,
+    platform API, pixel, webhook, credential or automatic audience ingestion is
+    authorized, and missing numbers remain unavailable rather than zero.
+  - **What this does not approve:** account access, posting, editing a live post,
+    fabricated results, raw audience data, automatic optimization or a wider
+    measurement program.
+
 - [ ] HUMAN_APPROVAL APIFY-ACCOUNT-001 — Create an Apify account on the **Free
   plan** and add `APIFY_TOKEN` to the repository's Actions secrets, so GoVIRAL's
   Monday trend room has data to read.

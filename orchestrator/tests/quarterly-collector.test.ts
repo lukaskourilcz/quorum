@@ -61,6 +61,36 @@ async function fixtureRoot() {
 }
 
 describe("quarterly measurement collector", () => {
+  it("reports the distinct paid BOOKSOFHISTORY dossiers that became posts", async () => {
+    const { root, stateRoot } = await fixtureRoot();
+    const first = JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/bh-research-ledger.valid.json"), "utf8"));
+    first.startedAt = "2026-07-31T10:10:00.000Z";
+    first.completedAt = "2026-07-31T10:10:01.000Z";
+    const firstUsed = { ...first, step: "synth", searches: 0, costUsd: 0.02, used: true };
+    const second = {
+      ...first,
+      bookId: "second-book",
+      dossierRef: "ventures/booksofhistory/dossiers/second-book/dossier.json",
+      rawRef: "ventures/booksofhistory/dossiers/second-book/raw/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.json",
+      used: false
+    };
+    const ledger = path.join(stateRoot, "ventures/booksofhistory/research-ledger.jsonl");
+    await mkdir(path.dirname(ledger), { recursive: true });
+    await writeFile(ledger, `${JSON.stringify(first)}\n${JSON.stringify(firstUsed)}\n${JSON.stringify(second)}\nnot-json\n`);
+
+    const result = await collectQuarterlyMeasurements({
+      repoRoot: root,
+      stateRoot,
+      kpiSet,
+      now: new Date("2026-08-21T12:00:00.000Z"),
+      metricsIngestionEnabled: false,
+      mmaFilesIndexingEnabled: false
+    });
+
+    expect(result.measurements["state/ventures/booksofhistory/research-ledger.jsonl#used_paid_dossier_rate"]).toBe(0.5);
+    expect(result.measurements["state/ventures/booksofhistory/research-ledger.jsonl#unreadable_count"]).toBe(1);
+  });
+
   it("counts only valid window outcomes and validated Caught Up deliveries", async () => {
     const { root, stateRoot } = await fixtureRoot();
     await writeJson(path.join(stateRoot, "calendar/2026-08-03.json"), {

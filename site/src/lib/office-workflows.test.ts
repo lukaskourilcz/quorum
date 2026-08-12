@@ -163,7 +163,8 @@ describe("resolving against committed state", () => {
     });
 
     expect(resolved.rooms).toHaveLength(8);
-    expect(resolved.slots).toHaveLength(definitions.length);
+    expect(resolved.slots).toHaveLength(definitions.filter((definition) => definition.kind !== "bh-desk").length);
+    expect(resolved.slots.some((slot) => slot.kind === "bh-desk")).toBe(false);
     // The workshop holds no session, so it hangs no note and appears with no slots at all.
     expect(resolved.rooms.find((room) => room.key === WORKSHOP_ROOM)?.slots).toEqual([]);
     // Every slot lands in a room the plan actually draws.

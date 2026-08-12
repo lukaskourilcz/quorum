@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "bh-seed/1",
+  "books": [
+    {
+      "bookId": "war-with-the-newts",
+      "title": "Válka s mloky",
+      "originalTitle": "Válka s mloky",
+      "author": "Karel Čapek",
+      "authorDates": {
+        "born": "1890-01-09",
+        "died": "1938-12-25"
+      },
+      "year": 1936,
+      "originalLanguage": "cs",
+      "genres": ["science-fiction", "satire"],
+      "czechRelevance": { "kind": "prior", "score": 100 },
+      "internationalRelevance": { "kind": "prior", "score": 82 },
+      "recognition": { "kind": "prior", "score": 87 },
+      "significance": { "kind": "prior", "score": 94 },
+      "storytellingPotential": { "kind": "prior", "score": 91 },
+      "audienceFamiliarity": {
+        "cs": { "kind": "prior", "score": 89 },
+        "en": { "kind": "prior", "score": 58 }
+      },
+      "contentCategories": ["publishing-history", "political-context", "author-process"],
+      "coverRef": {
+        "url": "https://example.invalid/admin-reference/war-with-the-newts",
+        "visibility": "admin-only"
+      },
+      "provenance": "authored:implementation:2026-08-12",
+      "scoringMetadata": {
+        "version": "bh-seed-score/1",
+        "scale": "0-100",
+        "scoredOn": "2026-08-12",
+        "period": "20th",
+        "geographies": ["czechia", "central-europe"],
+        "angleTypes": ["publication", "politics", "author-process"]
+      }
+    }
+  ]
+}

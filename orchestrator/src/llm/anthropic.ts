@@ -6,7 +6,12 @@ export interface AnthropicTextRequest {
   system: string;
   input: string;
   maxOutputTokens: number;
+  /** Server-side web-search calls permitted for this request. Omit to expose no tool. */
+  webSearchUses?: number;
 }
+
+/** Highest search count any one guarded call may expose, before the budget guard tightens it. */
+export const MAX_ANTHROPIC_WEB_SEARCH_USES = 8;
 
 /** One picture handed to a model, already downscaled and encoded by the caller. */
 export interface VisionImageBlock {
@@ -104,6 +109,13 @@ export class AnthropicTextClient {
   }
 
   async generate(request: AnthropicTextRequest): Promise<TextProviderResponse> {
+    if (request.webSearchUses !== undefined && (
+      !Number.isInteger(request.webSearchUses) ||
+      request.webSearchUses < 1 ||
+      request.webSearchUses > MAX_ANTHROPIC_WEB_SEARCH_USES
+    )) {
+      throw new Error(`Anthropic web search uses must be an integer from 1 to ${MAX_ANTHROPIC_WEB_SEARCH_USES}`);
+    }
     // The system prompt is marked cacheable, not merely stable.
     //
     // A room sends the same system text once per seat, and the code that builds it says so:
@@ -118,7 +130,15 @@ export class AnthropicTextClient {
       max_tokens: request.maxOutputTokens,
       messages: [{ role: "user", content: request.input }],
       model: request.model,
-      system: [{ type: "text", text: request.system, cache_control: { type: "ephemeral" } }]
+      system: [{ type: "text", text: request.system, cache_control: { type: "ephemeral" } }],
+      ...(request.webSearchUses === undefined ? {} : {
+        // Verified against @anthropic-ai/sdk@0.113.0's WebSearchTool20260318.
+        tools: [{
+          type: "web_search_20260318" as const,
+          name: "web_search" as const,
+          max_uses: request.webSearchUses
+        }]
+      })
     });
     const result: TextProviderResponse = {
       text: response.content
@@ -129,7 +149,8 @@ export class AnthropicTextClient {
       tokensIn: response.usage.input_tokens ?? 0,
       tokensOut: response.usage.output_tokens ?? 0,
       cachedTokensIn: response.usage.cache_read_input_tokens ?? 0,
-      cacheWriteTokensIn: response.usage.cache_creation_input_tokens ?? 0
+      cacheWriteTokensIn: response.usage.cache_creation_input_tokens ?? 0,
+      toolUses: response.usage.server_tool_use?.web_search_requests ?? 0
     };
     // A cut-off body is not a model mistake, it is our cap being too small, and it must not
     // masquerade as malformed JSON. Reporting it plainly is the difference between "raise the

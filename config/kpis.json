@@ -1041,6 +1041,78 @@
         "kind": "none",
         "reason": "No package exists yet. The measured form is marketingshark.package-completeness in config/kpis/2026-Q1.json."
       }
+    },
+    {
+      "id": "folio.cycle_reliability",
+      "owner": "FOLIO",
+      "metric": "completedOrHonestlyStretchedCycleRate",
+      "target": 0.9,
+      "dir": "up",
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No live BOOKSOFHISTORY cycle has completed, so the cycle denominator does not exist yet."
+      }
+    },
+    {
+      "id": "folio.feature_cadence",
+      "owner": "FOLIO",
+      "metric": "featuresCompletedPerMonth",
+      "target": 8,
+      "dir": "up",
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No owner-approved BOOKSOFHISTORY recommendation has completed a feature cycle yet."
+      }
+    },
+    {
+      "id": "folio.research_efficiency",
+      "owner": "FOLIO",
+      "metric": "usedPaidDossierRate",
+      "target": 0.7,
+      "dir": "up",
+      "warmupCycles": 30,
+      "measurement": {
+        "kind": "none",
+        "reason": "No paid dossier exists, so used dossiers divided by paid dossiers has no denominator."
+      }
+    },
+    {
+      "id": "folio.model_spend",
+      "owner": "FOLIO",
+      "metric": "maximumMonthlyModelSpendUsd",
+      "target": 8,
+      "dir": "down",
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No live BOOKSOFHISTORY model call has entered the shared budget ledger yet."
+      }
+    },
+    {
+      "id": "plot.claim_state_coverage",
+      "owner": "PLOT",
+      "metric": "publishedClaimVerificationStateRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No BOOKSOFHISTORY package has been approved, so no published claim denominator exists."
+      }
+    },
+    {
+      "id": "plot.legend_as_fact_violations",
+      "owner": "PLOT",
+      "metric": "PublishedLegendClaimsStatedAsFact",
+      "target": 0,
+      "dir": "down",
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No BOOKSOFHISTORY package has been approved or published for this gate to count."
+      }
     }
   ]
 }

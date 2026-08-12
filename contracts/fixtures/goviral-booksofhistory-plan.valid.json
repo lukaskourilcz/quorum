@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "marketing-plan/1",
+  "id": "plan-2026-08-10-weekly-brief",
+  "ventureId": "goviral",
+  "title": "Weekly content brief — 2026-08-10",
+  "summary": "Free signals found a documented publishing-history crossover for the book desk.",
+  "objective": "Give the owner sourced social-content opportunities without publishing, scheduling, buying or opening an account.",
+  "tactics": [
+    {
+      "type": "content",
+      "description": "Trend call: publishing history (booksofhistory, free volume, en): 8.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A free trend call, not a publishing instruction. Nothing is posted or scheduled from this line."
+    },
+    {
+      "type": "content",
+      "description": "Trend call: literary anniversary (booksofhistory, free volume, cs): 3.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A free trend call, not a publishing instruction. Nothing is posted or scheduled from this line."
+    }
+  ],
+  "calendar": [{ "week": 1, "focus": "Owner review of the recorded book-history calls." }],
+  "audienceRefs": [],
+  "kpis": ["Free BOOKSOFHISTORY signals recorded with their provider measurement."],
+  "postable_assets": [
+    {
+      "id": "asset-20260810-book-history-brief",
+      "captions": {
+        "instagram": { "A": "A draft book-history call for owner review.", "B": "A sourced publishing-history draft." },
+        "threads": { "A": "A book-history call, held for review.", "B": "A publishing-history signal, not a post." }
+      },
+      "visual": {
+        "template_id": "cover-cta",
+        "version": "1.0.0",
+        "content": {
+          "locale": "en",
+          "strings": {
+            "cover-title": "A PUBLISHING STORY",
+            "cover-dek": "A free signal for owner review.",
+            "cta": "Review the draft",
+            "destination": "owner review"
+          }
+        }
+      }
+    }
+  ],
+  "status": "approved",
+  "originMeetingRef": "2026-08-10-gv-brief"
+}

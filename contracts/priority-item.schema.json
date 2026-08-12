@@ -78,7 +78,9 @@
         "MOTIF",
         "PIVOT",
         "MAKO",
-        "CHUM"
+        "CHUM",
+        "FOLIO",
+        "PLOT"
       ]
     },
     "created": {
@@ -182,7 +184,9 @@
                 "MOTIF",
                 "PIVOT",
                 "MAKO",
-                "CHUM"
+                "CHUM",
+                "FOLIO",
+                "PLOT"
               ]
             },
             "meeting_ref": {

@@ -31,6 +31,7 @@
             "tt-marketing",
             "gv-brief",
             "ms-daily",
+            "bh-desk",
             "incubator-scan",
             "incubator-synthesis",
             "mma-intake",
@@ -172,7 +173,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "FOLIO",
+                  "PLOT"
                 ]
               },
               "reason": {
@@ -302,7 +305,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "FOLIO",
+                  "PLOT"
                 ]
               },
               "summary": {
@@ -375,7 +380,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "FOLIO",
+                  "PLOT"
                 ]
               },
               "firstChoice": {
@@ -447,7 +454,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "FOLIO",
+                  "PLOT"
                 ]
               },
               "summary": {
@@ -640,7 +649,9 @@
                 "MOTIF",
                 "PIVOT",
                 "MAKO",
-                "CHUM"
+                "CHUM",
+                "FOLIO",
+                "PLOT"
               ]
             },
             "setting": {
@@ -699,7 +710,9 @@
                       "MOTIF",
                       "PIVOT",
                       "MAKO",
-                      "CHUM"
+                      "CHUM",
+                      "FOLIO",
+                      "PLOT"
                     ]
                   },
                   "mode": {
@@ -759,7 +772,9 @@
                       "MOTIF",
                       "PIVOT",
                       "MAKO",
-                      "CHUM"
+                      "CHUM",
+                      "FOLIO",
+                      "PLOT"
                     ]
                   },
                   "sentAt": {
@@ -853,6 +868,7 @@
             "tt-marketing",
             "gv-brief",
             "ms-daily",
+            "bh-desk",
             "incubator-scan",
             "incubator-synthesis",
             "mma-intake",
@@ -994,7 +1010,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "FOLIO",
+                  "PLOT"
                 ]
               },
               "reason": {
@@ -1124,7 +1142,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "FOLIO",
+                  "PLOT"
                 ]
               },
               "summary": {
@@ -1197,7 +1217,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "FOLIO",
+                  "PLOT"
                 ]
               },
               "firstChoice": {
@@ -1269,7 +1291,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "FOLIO",
+                  "PLOT"
                 ]
               },
               "summary": {
@@ -1409,6 +1433,7 @@
             "tt-marketing",
             "gv-brief",
             "ms-daily",
+            "bh-desk",
             "incubator-scan",
             "incubator-synthesis",
             "mma-intake",
@@ -1475,7 +1500,9 @@
                 "MOTIF",
                 "PIVOT",
                 "MAKO",
-                "CHUM"
+                "CHUM",
+                "FOLIO",
+                "PLOT"
               ]
             },
             "setting": {
@@ -1534,7 +1561,9 @@
                       "MOTIF",
                       "PIVOT",
                       "MAKO",
-                      "CHUM"
+                      "CHUM",
+                      "FOLIO",
+                      "PLOT"
                     ]
                   },
                   "mode": {
@@ -1594,7 +1623,9 @@
                       "MOTIF",
                       "PIVOT",
                       "MAKO",
-                      "CHUM"
+                      "CHUM",
+                      "FOLIO",
+                      "PLOT"
                     ]
                   },
                   "sentAt": {

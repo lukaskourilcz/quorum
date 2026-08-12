@@ -69,6 +69,14 @@ describe("automation policy", () => {
     expect(cycle).toContain("INPUT_DELIVERY_ONLY");
     expect(cycle).toContain("Delivery-only mode requires a manual dispatch");
     expect(cycle).toContain("PORTFOLIO_LIVE_ENABLED");
+    expect(cycle).toMatch(/options:\n(?:\s+- [a-z-]+\n)*\s+- bh-desk\n/u);
+    const portfolioModeGate = cycle.split("\n").find((line) =>
+      line.includes('test "$PORTFOLIO_LIVE_ENABLED" != "true"')
+    );
+    expect(portfolioModeGate).toBeDefined();
+    const portfolioGateStart = cycle.lastIndexOf("\n", cycle.indexOf(portfolioModeGate!));
+    const portfolioGateContext = cycle.slice(Math.max(0, portfolioGateStart - 500), cycle.indexOf(portfolioModeGate!) + portfolioModeGate!.length);
+    expect(portfolioGateContext).toContain('test "$phase" = "bh-desk"');
     expect(cycle).toContain("FIGHTAIQ_LIVE_ENABLED");
     expect(cycle).toContain("FIGHTAIQ_ANALYSIS_ENABLED");
     expect(cycle).toContain("MMA_FILES_LIVE_ENABLED");

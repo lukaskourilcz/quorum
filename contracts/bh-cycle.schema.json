@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "bh-cycle/1"
+    },
+    "currentCycleId": {
+      "type": "string",
+      "maxLength": 120,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "cycleDays": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 7
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "selection",
+        "research",
+        "production"
+      ]
+    },
+    "dayStatuses": {
+      "type": "object",
+      "properties": {
+        "selection": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "active",
+            "completed",
+            "not-needed"
+          ]
+        },
+        "research": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "active",
+            "completed",
+            "not-needed"
+          ]
+        },
+        "production": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "active",
+            "completed",
+            "not-needed"
+          ]
+        }
+      },
+      "required": [
+        "selection",
+        "research",
+        "production"
+      ],
+      "additionalProperties": {}
+    },
+    "candidateSet": {
+      "maxItems": 3,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "candidateId": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "shortlist",
+              "shelf"
+            ]
+          },
+          "briefRef": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dossierRef": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "candidateId",
+          "source",
+          "briefRef",
+          "dossierRef"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "chosenStory": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "candidateId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "dossierRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "storyRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "required": [
+            "candidateId",
+            "dossierRef",
+            "storyRef"
+          ],
+          "additionalProperties": {}
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "stretch": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 30
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "budget-pressure",
+                "missed-day",
+                "incomplete-phase"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "nextAttemptOn": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "count",
+        "reason",
+        "nextAttemptOn"
+      ],
+      "additionalProperties": {}
+    },
+    "startedOn": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "currentCycleId",
+    "cycleDays",
+    "phase",
+    "dayStatuses",
+    "candidateSet",
+    "chosenStory",
+    "stretch",
+    "startedOn",
+    "updatedAt"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/bh-cycle.schema.json"
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "bh-cycle/1",
+  "currentCycleId": "bh-2026-08-12-001",
+  "cycleDays": 3,
+  "phase": "production",
+  "dayStatuses": {
+    "selection": "completed",
+    "research": "completed",
+    "production": "active"
+  },
+  "candidateSet": [
+    {
+      "candidateId": "book-a",
+      "source": "shortlist",
+      "briefRef": "ventures/booksofhistory/briefs/book-a.json",
+      "dossierRef": "ventures/booksofhistory/dossiers/book-a/dossier.json"
+    },
+    {
+      "candidateId": "book-b",
+      "source": "shortlist",
+      "briefRef": "ventures/booksofhistory/briefs/book-b.json",
+      "dossierRef": "ventures/booksofhistory/dossiers/book-b/dossier.json"
+    }
+  ],
+  "chosenStory": {
+    "candidateId": "book-b",
+    "dossierRef": "ventures/booksofhistory/dossiers/book-b/dossier.json",
+    "storyRef": "ventures/booksofhistory/dossiers/book-b/story-2"
+  },
+  "stretch": {
+    "count": 1,
+    "reason": "missed-day",
+    "nextAttemptOn": "2026-08-15"
+  },
+  "startedOn": "2026-08-12",
+  "updatedAt": "2026-08-14T10:05:00.000Z"
+}

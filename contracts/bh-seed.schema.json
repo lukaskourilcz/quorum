@@ -1,0 +1,334 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "bh-seed/1"
+    },
+    "books": {
+      "minItems": 1,
+      "maxItems": 1000,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "bookId": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "originalTitle": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "author": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "authorDates": {
+            "type": "object",
+            "properties": {
+              "born": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "died": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              }
+            },
+            "additionalProperties": false
+          },
+          "year": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2100
+          },
+          "originalLanguage": {
+            "type": "string",
+            "maxLength": 16,
+            "pattern": "^[a-z]{2,3}(?:-[A-Z]{2})?$"
+          },
+          "genres": {
+            "minItems": 1,
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 120,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          },
+          "czechRelevance": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "prior"
+              },
+              "score": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "kind",
+              "score"
+            ],
+            "additionalProperties": false
+          },
+          "internationalRelevance": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "prior"
+              },
+              "score": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "kind",
+              "score"
+            ],
+            "additionalProperties": false
+          },
+          "recognition": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "prior"
+              },
+              "score": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "kind",
+              "score"
+            ],
+            "additionalProperties": false
+          },
+          "significance": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "prior"
+              },
+              "score": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "kind",
+              "score"
+            ],
+            "additionalProperties": false
+          },
+          "storytellingPotential": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "prior"
+              },
+              "score": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "kind",
+              "score"
+            ],
+            "additionalProperties": false
+          },
+          "audienceFamiliarity": {
+            "type": "object",
+            "properties": {
+              "cs": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "prior"
+                  },
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                  }
+                },
+                "required": [
+                  "kind",
+                  "score"
+                ],
+                "additionalProperties": false
+              },
+              "en": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "prior"
+                  },
+                  "score": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                  }
+                },
+                "required": [
+                  "kind",
+                  "score"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "cs",
+              "en"
+            ],
+            "additionalProperties": false
+          },
+          "contentCategories": {
+            "minItems": 1,
+            "maxItems": 16,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 120,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          },
+          "coverRef": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "pattern": "^https:\\/\\/"
+              },
+              "visibility": {
+                "type": "string",
+                "const": "admin-only"
+              }
+            },
+            "required": [
+              "url",
+              "visibility"
+            ],
+            "additionalProperties": false
+          },
+          "provenance": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^[a-z][a-z0-9-]*:[a-z][a-z0-9-]*:\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "scoringMetadata": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "string",
+                "const": "bh-seed-score/1"
+              },
+              "scale": {
+                "type": "string",
+                "const": "0-100"
+              },
+              "scoredOn": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "period": {
+                "type": "string",
+                "enum": [
+                  "pre-17th",
+                  "17th",
+                  "18th",
+                  "19th",
+                  "20th",
+                  "21st"
+                ]
+              },
+              "geographies": {
+                "minItems": 1,
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 120,
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                }
+              },
+              "angleTypes": {
+                "minItems": 1,
+                "maxItems": 12,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 120,
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                }
+              }
+            },
+            "required": [
+              "version",
+              "scale",
+              "scoredOn",
+              "period",
+              "geographies",
+              "angleTypes"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "bookId",
+          "title",
+          "author",
+          "year",
+          "originalLanguage",
+          "genres",
+          "czechRelevance",
+          "internationalRelevance",
+          "recognition",
+          "significance",
+          "storytellingPotential",
+          "audienceFamiliarity",
+          "contentCategories",
+          "provenance",
+          "scoringMetadata"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "books"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/bh-seed.schema.json"
+}

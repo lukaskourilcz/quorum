@@ -1,0 +1,512 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "bh-shortlist/1"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "cycleId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "seedRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "contextRefs": {
+      "type": "object",
+      "properties": {
+        "trendPlan": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "recentFeatures": {
+          "maxItems": 30,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "lanePerformance": {
+          "maxItems": 30,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "shelfDossiers": {
+          "maxItems": 30,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        }
+      },
+      "required": [
+        "trendPlan",
+        "recentFeatures",
+        "lanePerformance",
+        "shelfDossiers"
+      ],
+      "additionalProperties": false
+    },
+    "entries": {
+      "minItems": 1,
+      "maxItems": 10,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "bookId": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "bookRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "author": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "totalScore": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 400
+          },
+          "culturalMoment": {
+            "type": "boolean"
+          },
+          "factors": {
+            "type": "object",
+            "properties": {
+              "priors": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  "weights": {
+                    "type": "object",
+                    "properties": {
+                      "czechRelevance": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "internationalRelevance": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "recognition": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "significance": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "storytellingPotential": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "audienceFamiliarity": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    },
+                    "required": [
+                      "czechRelevance",
+                      "internationalRelevance",
+                      "recognition",
+                      "significance",
+                      "storytellingPotential",
+                      "audienceFamiliarity"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "czechRelevance": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 100
+                      },
+                      "internationalRelevance": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 100
+                      },
+                      "recognition": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 100
+                      },
+                      "significance": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 100
+                      },
+                      "storytellingPotential": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 100
+                      },
+                      "audienceFamiliarity": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 100
+                      }
+                    },
+                    "required": [
+                      "czechRelevance",
+                      "internationalRelevance",
+                      "recognition",
+                      "significance",
+                      "storytellingPotential",
+                      "audienceFamiliarity"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "score",
+                  "weights",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "anniversary": {
+                "type": "object",
+                "properties": {
+                  "multiplier": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 1.25
+                  },
+                  "strength": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "events": {
+                    "maxItems": 6,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "enum": [
+                            "publication",
+                            "author-born",
+                            "author-died"
+                          ]
+                        },
+                        "milestone": {
+                          "anyOf": [
+                            {
+                              "type": "number",
+                              "const": 25
+                            },
+                            {
+                              "type": "number",
+                              "const": 50
+                            },
+                            {
+                              "type": "number",
+                              "const": 75
+                            },
+                            {
+                              "type": "number",
+                              "const": 100
+                            },
+                            {
+                              "type": "number",
+                              "const": 150
+                            }
+                          ]
+                        },
+                        "daysAway": {
+                          "anyOf": [
+                            {
+                              "type": "integer",
+                              "minimum": 0,
+                              "maximum": 60
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "milestone",
+                        "daysAway"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "multiplier",
+                  "strength",
+                  "events"
+                ],
+                "additionalProperties": false
+              },
+              "trendCrossover": {
+                "type": "object",
+                "properties": {
+                  "multiplier": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 1.2
+                  },
+                  "strength": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "matchedSignalIds": {
+                    "maxItems": 20,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    }
+                  }
+                },
+                "required": [
+                  "multiplier",
+                  "strength",
+                  "matchedSignalIds"
+                ],
+                "additionalProperties": false
+              },
+              "diversityPressure": {
+                "type": "object",
+                "properties": {
+                  "multiplier": {
+                    "type": "number",
+                    "minimum": 0.65,
+                    "maximum": 1
+                  },
+                  "pressure": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "byDimension": {
+                    "type": "object",
+                    "properties": {
+                      "genres": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "geographies": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "period": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "angleTypes": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    },
+                    "required": [
+                      "genres",
+                      "geographies",
+                      "period",
+                      "angleTypes"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "multiplier",
+                  "pressure",
+                  "byDimension"
+                ],
+                "additionalProperties": false
+              },
+              "lanePerformance": {
+                "type": "object",
+                "properties": {
+                  "multiplier": {
+                    "type": "number",
+                    "minimum": 0.75,
+                    "maximum": 1.25
+                  },
+                  "lanes": {
+                    "type": "object",
+                    "properties": {
+                      "cs": {
+                        "type": "number",
+                        "minimum": 0.75,
+                        "maximum": 1.25
+                      },
+                      "en": {
+                        "type": "number",
+                        "minimum": 0.75,
+                        "maximum": 1.25
+                      }
+                    },
+                    "required": [
+                      "cs",
+                      "en"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "multiplier",
+                  "lanes"
+                ],
+                "additionalProperties": false
+              },
+              "shelfBonus": {
+                "type": "object",
+                "properties": {
+                  "multiplier": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "const": 1
+                      },
+                      {
+                        "type": "number",
+                        "const": 1.6
+                      }
+                    ]
+                  },
+                  "eligibleStoryIds": {
+                    "maxItems": 30,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    }
+                  },
+                  "highestScore": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 70,
+                        "maximum": 100
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "multiplier",
+                  "eligibleStoryIds",
+                  "highestScore"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "priors",
+              "anniversary",
+              "trendCrossover",
+              "diversityPressure",
+              "lanePerformance",
+              "shelfBonus"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "rank",
+          "bookId",
+          "bookRef",
+          "title",
+          "author",
+          "totalScore",
+          "culturalMoment",
+          "factors"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "recordedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "date",
+    "cycleId",
+    "asOf",
+    "seedRef",
+    "contextRefs",
+    "entries",
+    "recordedAt"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/bh-shortlist.schema.json"
+}

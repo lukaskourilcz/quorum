@@ -30,6 +30,7 @@
             "enum": [
               "tt-marketing",
               "gv-brief",
+              "bh-desk",
               "mma-intake",
               "mma-analysis",
               "mag-editorial",
@@ -80,7 +81,9 @@
               "MOTIF",
               "PIVOT",
               "MAKO",
-              "CHUM"
+              "CHUM",
+              "FOLIO",
+              "PLOT"
             ]
           },
           "sourcePhase": {

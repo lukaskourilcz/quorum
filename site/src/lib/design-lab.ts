@@ -14,6 +14,7 @@ import {
   reviewDeck,
   wordCount,
   type CarouselRecipe,
+  type CarouselSummaryVenture,
   type SocialCopyPack
 } from "@boardlessai/carousel-studio";
 import { readStudioArticles, type StudioArticle } from "@/lib/carousel-summaries";
@@ -70,7 +71,8 @@ export interface LabSlide {
 
 export interface LabArticle {
   id: string;
-  venture: "caught-up" | "mma-files";
+  venture: CarouselSummaryVenture;
+  locale: "cs" | "en";
   ventureLabel: string;
   slug: string;
   date: string;
@@ -132,11 +134,6 @@ async function recipeHistory(venture: string): Promise<Array<{ date: string; fam
 /** Everything a recorded override may name: every family, and the five original styles. */
 const DESIGNS: readonly string[] = [...DECK_FAMILIES, "mesh", "editorial", "spotlight", "contrast", "aurora"];
 
-const CLOSING: Record<"caught-up" | "mma-files", string> = {
-  "caught-up": "Jedno vydání a máte přehled.",
-  "mma-files": "Celý ozdrojovaný text najdete v MMA Files."
-};
-
 function deckFor(article: StudioArticle): string[] {
   const summary = article.summary;
   return buildArticleDeck({
@@ -166,7 +163,13 @@ export async function readDesignLab(limit = 40, venture?: string): Promise<LabAr
   const lab: LabArticle[] = [];
 
   for (const article of articles.slice(0, limit)) {
-    const { venture, slug, date } = { venture: article.venture, slug: article.summary.slug, date: article.summary.date };
+    const venture = article.venture;
+    const date = article.summary.date;
+    // Summary records share the feature slug by design. The locale-qualified Studio address
+    // keeps recipes, edits, previews and exports from treating the twins as one deck.
+    const slug = venture === "booksofhistory"
+      ? `${article.summary.slug}-${article.summary.locale}`
+      : article.summary.slug;
     if (!histories.has(venture)) histories.set(venture, await recipeHistory(venture));
     const edits = slideTextFor(slideOverrides, venture, slug, date);
     const slides: LabSlide[] = deckFor(article).map((text, index) => {
@@ -192,16 +195,18 @@ export async function readDesignLab(limit = 40, venture?: string): Promise<LabAr
     });
     const copy = await recordedCopy(venture, slug, date) ?? derivedCopyPack({
       venture,
+      locale: article.summary.locale,
       slug,
       date,
       headline: article.summary.headline,
       standfirst: article.summary.standfirst,
-      closing: CLOSING[venture],
+      closing: article.summary.closing,
       heroCredit: article.summary.heroCredit
     });
     lab.push({
       id: article.id,
       venture,
+      locale: article.summary.locale,
       ventureLabel: article.ventureLabel,
       slug,
       date,

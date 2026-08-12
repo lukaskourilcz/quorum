@@ -2,22 +2,34 @@
   "schemaVersion": "venture-registry/1",
   "ventures": [
     {
-      "id": "caught-up",
-      "name": "Caught Up",
+      "id": "booksofhistory",
+      "name": "BOOKSOFHISTORY",
       "status": "operating",
-      "taste": false,
-      "ledgerNamespace": "shared",
-      "adminTabs": [],
-      "meetings": []
-    },
-    {
-      "id": "caught-up",
-      "name": "Duplicate",
-      "status": "paused",
-      "taste": false,
-      "ledgerNamespace": "shared",
-      "adminTabs": [],
-      "meetings": []
+      "taste": true,
+      "ledgerNamespace": "booksofhistory",
+      "growth_objective": {
+        "label": "A storefront is outside the founding scope",
+        "components": ["storefront-conversion"]
+      },
+      "adminTabs": ["storefront"],
+      "meetings": [
+        {
+          "kind": "bh-desk",
+          "label": "Poison room",
+          "cadence": "daily@12:00",
+          "cast": ["COVER_ARTIST"],
+          "envelopeUsd": 0.5,
+          "packet": {
+            "topicType": "edition",
+            "decisionNeeded": "PLAN",
+            "preset": "bh-desk-room",
+            "objectives": {
+              "dry": "This fixture must fail",
+              "live": "This fixture must fail"
+            }
+          }
+        }
+      ]
     }
   ]
 }

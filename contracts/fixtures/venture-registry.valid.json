@@ -30,6 +30,36 @@
           }
         }
       ]
+    },
+    {
+      "id": "booksofhistory",
+      "name": "BOOKSOFHISTORY",
+      "status": "operating",
+      "taste": true,
+      "ledgerNamespace": "booksofhistory",
+      "growth_objective": {
+        "label": "Turn cheap candidate intelligence into researched, verified, twice-told book stories",
+        "components": ["feature-cadence", "research-efficiency"]
+      },
+      "adminTabs": ["shortlist", "dossiers", "features"],
+      "meetings": [
+        {
+          "kind": "bh-desk",
+          "label": "BOOKSOFHISTORY editorial desk",
+          "cadence": "daily@12:00",
+          "cast": ["FOLIO", "PLOT", "QUILL", "HACEK", "AUDIT"],
+          "envelopeUsd": 0.5,
+          "packet": {
+            "topicType": "edition",
+            "decisionNeeded": "PLAN",
+            "preset": "bh-desk-room",
+            "objectives": {
+              "dry": "Select the strongest candidates and prepare research briefs without spending or publishing",
+              "live": "Select the strongest candidates and prepare guarded research briefs; all outputs remain drafts"
+            }
+          }
+        }
+      ]
     }
   ]
 }

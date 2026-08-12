@@ -711,6 +711,78 @@
       "ramp_days": 14,
       "pace": "level",
       "deferred_reason": "No queue item has been reviewed yet, so the ratio has no denominator."
+    },
+    {
+      "id": "booksofhistory.cycle-reliability",
+      "venture": "booksofhistory",
+      "name": "Cycles completed or honestly stretched",
+      "metric_source": "state/ventures/booksofhistory/cycles#completed_or_stretched_rate",
+      "target": 0.9,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "booksofhistory.features-per-month",
+      "venture": "booksofhistory",
+      "name": "Features completed in the lowest full month",
+      "metric_source": "state/ventures/booksofhistory/recommendations#lowest_monthly_feature_count",
+      "target": 8,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "booksofhistory.research-efficiency",
+      "venture": "booksofhistory",
+      "name": "Paid dossiers used in an approved feature",
+      "metric_source": "state/ventures/booksofhistory/research-ledger.jsonl#used_paid_dossier_rate",
+      "target": 0.7,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": false,
+      "ramp_days": 30,
+      "pace": "level"
+    },
+    {
+      "id": "booksofhistory.verification-state-coverage",
+      "venture": "booksofhistory",
+      "name": "Published claims carrying a verification state",
+      "metric_source": "state/ventures/booksofhistory/recommendations#published_claim_state_coverage",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "booksofhistory.legend-as-fact-violations",
+      "venture": "booksofhistory",
+      "name": "Legend claims published as fact",
+      "metric_source": "state/ventures/booksofhistory/recommendations#legend_stated_as_fact_count",
+      "target": 0,
+      "direction": "at-most",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "booksofhistory.model-spend-usd",
+      "venture": "booksofhistory",
+      "name": "Highest monthly BOOKSOFHISTORY model spend",
+      "metric_source": "state/budget/ledger.json#booksofhistory_maximum_monthly_model_usd",
+      "target": 8,
+      "direction": "at-most",
+      "unit": "usd",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
     }
   ]
 }

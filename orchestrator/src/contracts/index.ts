@@ -1,6 +1,11 @@
 export * from "./article-frontmatter.js";
 export * from "./autonomy.js";
 export * from "./audience-spec.js";
+export * from "./bh-seed.js";
+export * from "./bh-shortlist.js";
+export * from "./bh-research-brief.js";
+export * from "./bh-dossier.js";
+export * from "./bh-feature.js";
 export * from "./calendar.js";
 export * from "./campaign-brief.js";
 export * from "./carousel-template.js";
@@ -20,4 +25,5 @@ export * from "./rating.js";
 export * from "./season.js";
 export * from "./social-pack.js";
 export * from "./venture-registry.js";
+export * from "./venture-recommendation.js";
 export * from "./visual-weights.js";

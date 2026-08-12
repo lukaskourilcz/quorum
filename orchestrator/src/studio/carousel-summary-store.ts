@@ -53,6 +53,9 @@ async function storeRecipeAndCopy(
   summary: CarouselSummary,
   copyPack: ReturnType<typeof articleCopyPack>
 ): Promise<{ recipe: CarouselRecipe; recipePath: string; copyPath: string | null }> {
+  if (summary.venture === "booksofhistory") {
+    throw new Error("BOOKSOFHISTORY summaries use the approval-owned twin writer");
+  }
   const recipe = await effectiveRecipe({
     root,
     venture: summary.venture,

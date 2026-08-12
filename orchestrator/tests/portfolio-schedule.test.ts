@@ -12,6 +12,7 @@ import { parseVentureRegistry,
   resolveScheduledClock
 } from "../src/ventures/registry.js";
 import {
+  BOOKSOFHISTORY_LADDER,
   budgetDecisionStatus,
   resolveEffectivePortfolioSchedule
 } from "../src/portfolio/schedule.js";
@@ -43,7 +44,7 @@ describe("portfolio schedule and budget gate", () => {
     // back: the studio room the venture no longer holds vacated it and GoVIRAL took it, which is
     // why the hour is here and the studio phase is not. 07:00 came back the same way --
     // marketingShark took the hour the incubator vacated.
-    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 13, 14, 17, 19, 20, 22]);
+    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 12, 13, 14, 17, 19, 20, 22]);
     const colliding = structuredClone(registry);
     colliding.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!.cadence = "daily@09:00";
     expect(() => parseVentureRegistry(colliding)).toThrow(/60 minutes apart/);
@@ -95,6 +96,36 @@ describe("portfolio schedule and budget gate", () => {
     const critical = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 0.4 });
     expect(critical.activePhases).not.toContain("tt-marketing");
     expect(critical.activePhases).toContain("cu-edition");
+  });
+
+  it("trims and stretches BOOKSOFHISTORY before dropping it ahead of GoVIRAL", async () => {
+    const registry = await loadVentureRegistry();
+    const at = (monthlyApiHeadroomUsd: number) => resolveEffectivePortfolioSchedule({
+      registry,
+      budgetDecisionRaw: shapeA,
+      budgetFiftyRaw: signedDecision,
+      fightAiQFoundingRaw: signedDecision,
+      monthlyApiHeadroomUsd
+    });
+    expect(at(BOOKSOFHISTORY_LADDER.trimToOneBelowUsd)).toMatchObject({
+      booksofHistoryResearchCandidates: 2,
+      booksofHistoryStretch: false
+    });
+    expect(at(BOOKSOFHISTORY_LADDER.trimToOneBelowUsd - 0.01)).toMatchObject({
+      booksofHistoryResearchCandidates: 1,
+      booksofHistoryStretch: false
+    });
+    const stretched = at(BOOKSOFHISTORY_LADDER.stretchBelowUsd - 0.01);
+    expect(stretched).toMatchObject({
+      booksofHistoryResearchCandidates: 0,
+      booksofHistoryStretch: true
+    });
+    expect(stretched.activePhases).toContain("bh-desk");
+
+    const booksDropped = at(BOOKSOFHISTORY_LADDER.dropRoomBelowUsd - 0.01);
+    expect(booksDropped.activePhases).not.toContain("bh-desk");
+    expect(booksDropped.activePhases).toContain("gv-brief");
+    expect(at(BOOKSOFHISTORY_LADDER.dropGoViralBelowUsd - 0.01).activePhases).not.toContain("gv-brief");
   });
 
   it("keeps the magazine dry until 08d is signed, then enables both rooms and article slots", async () => {

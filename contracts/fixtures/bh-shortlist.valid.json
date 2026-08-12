@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "bh-shortlist/1",
+  "date": "2026-08-12",
+  "cycleId": "bh-20260812-001",
+  "asOf": "2026-08-12T10:00:00.000Z",
+  "seedRef": "ventures/booksofhistory/seed/library.json",
+  "contextRefs": {
+    "trendPlan": null,
+    "recentFeatures": [],
+    "lanePerformance": [],
+    "shelfDossiers": []
+  },
+  "entries": [
+    {
+      "rank": 1,
+      "bookId": "war-with-the-newts",
+      "bookRef": "ventures/booksofhistory/seed/library.json#war-with-the-newts",
+      "title": "Válka s mloky",
+      "author": "Karel Čapek",
+      "totalScore": 91.4,
+      "culturalMoment": false,
+      "factors": {
+        "priors": {
+          "score": 91.4,
+          "weights": {
+            "czechRelevance": 0.14,
+            "internationalRelevance": 0.16,
+            "recognition": 0.2,
+            "significance": 0.18,
+            "storytellingPotential": 0.2,
+            "audienceFamiliarity": 0.12
+          },
+          "values": {
+            "czechRelevance": 100,
+            "internationalRelevance": 82,
+            "recognition": 87,
+            "significance": 94,
+            "storytellingPotential": 91,
+            "audienceFamiliarity": 73.5
+          }
+        },
+        "anniversary": { "multiplier": 1, "strength": 0, "events": [] },
+        "trendCrossover": { "multiplier": 1, "strength": 0, "matchedSignalIds": [] },
+        "diversityPressure": {
+          "multiplier": 1,
+          "pressure": 0,
+          "byDimension": { "genres": 0, "geographies": 0, "period": 0, "angleTypes": 0 }
+        },
+        "lanePerformance": { "multiplier": 1, "lanes": { "cs": 1, "en": 1 } },
+        "shelfBonus": { "multiplier": 1, "eligibleStoryIds": [], "highestScore": null }
+      }
+    }
+  ],
+  "recordedAt": "2026-08-12T10:00:00.000Z"
+}

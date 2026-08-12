@@ -27,13 +27,14 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 
 - Placená firemní rada se schází jednou v 06:00. Časy 14:00 a 22:00 jsou kontrolní
   zápisy bez modelu. Odborné porady se otevřou jen s konkrétní agendou; FightAIQ také
-  při skutečné změně zdrojových dat, marketingShark jako jediný běží každý den.
+  při skutečné změně zdrojových dat. marketingShark a BOOKSOFHISTORY mají stálá
+  denní okna; BOOKSOFHISTORY vždy naváže jen na svou rozepsanou fázi.
   Nepotřebný čas stojí $0.
 - GitHub Actions běží na **pěti** rozvrzích místo dřívějších desítek překrývajících se
   letních a zimních záznamů: jeden hodinový dispatcher pojmenuje poradu podle spouštěče,
   který se ozval, takže zpoždění nevadí a nepotřebné běhy nevznikají. Zálohování je
   jedno místo osmnácti.
-- Přepínače agentů v `/admin` vynechají vypnuté volitelné role ještě před API voláním. Sociální texty vznikají uvnitř stávajícího článkového volání, takže kvůli nim nevzniká další volání modelu.
+- Přepínače agentů v `/admin` vynechají vypnuté volitelné role ještě před API voláním. U obou magazínů vznikají sociální texty uvnitř stávajícího článkového volání, takže kvůli nim nevzniká další volání modelu.
 - Sociální obrázky vykresluje jediný engine Design Labu z živé šablony, obsahu a
   barev konkrétní značky; stejný vstup má stejný otisk a nestojí žádné API peníze.
   Celá cesta Design Labu stojí $0: rodiny šablon, dvacet tři rodin místo pěti tapet, se
@@ -69,6 +70,15 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
   ale zatím ji nemá kam poslat — žádná porada ji nespouští, takže se nic neúčtuje. Až se
   zapojí, přidá zhruba $0.16 měsíčně. Žádné fixní náklady, žádná hotovost, žádná položka
   v pokladně.
+- BOOKSOFHISTORY má denní okno ve 12:00, ale jeden cyklus postupuje přes výběr,
+  výzkum a tvorbu a po zmeškaném dni se jen obnoví. Placený výzkum má tvrdý strop
+  **$0.10 za volání, $0.50 za cyklus a $5.00 za měsíc** a je idempotentní podle
+  `(bookId, briefHash)`. Stejný dossier slouží české i anglické verzi a může se použít
+  znovu. Při tlaku na rozpočet se dva kandidáti zmenší na jednoho, pak se cyklus
+  protáhne za $0 a nakonec se okno vypustí; strop se nikdy nezvýší. Plánovaný celkový
+  modelový náklad je přibližně **$6–8 měsíčně** při počáteční kadenci, ale výzkumná
+  část nikdy nesmí překročit $5. Výběr ze seed knihovny, hodnocení, kontrola,
+  vykreslení bez obálky a ruční zápis výsledku stojí $0.
 - Caught Up dál používá Claude Sonnet pro výběr tématu, anglický článek a českou verzi. Tyto tři kroky přímo určují kvalitu vydání, takže je bez srovnávacího testu nepřepínáme na levnější model.
 - Anglický writer dostává vybrané zdroje a nejvýše 12 dalších položek pro Watchlist. Dříve dostával dlouhý seznam všech URL, i když z něj nemohl čerpat další obsah.
 

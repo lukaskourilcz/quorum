@@ -842,7 +842,8 @@
       "provider": "Anthropic",
       "ventures": [
         "caught-up",
-        "mma-files"
+        "mma-files",
+        "booksofhistory"
       ],
       "department": "Czech Editorial",
       "title": "Czech Language Editor",
@@ -2232,6 +2233,120 @@
         "avatar": null,
         "avatarAlt": "Abstract non-human portrait plan for CHUM with five stacked slide edges under a single bite mark",
         "provenanceRef": "AVATAR-CHUM"
+      }
+    },
+    {
+      "id": "FOLIO",
+      "slug": "folio",
+      "kind": "specialist",
+      "provider": "Anthropic",
+      "ventures": [
+        "booksofhistory"
+      ],
+      "department": "BOOKSOFHISTORY",
+      "title": "Editorial Lead",
+      "mission": "Chooses which recorded book candidates merit research, commissions bounded briefs and selects a dossier-backed story without crossing the truth or publication gates.",
+      "responsibilities": [
+        "Rank shortlisted candidates inside the editorial room",
+        "Write specific bounded research briefs from recorded evidence",
+        "Select the strongest verified story candidate"
+      ],
+      "notResponsibleFor": [
+        "Calling the research provider outside a recorded room decision",
+        "Publishing, posting or scheduling content",
+        "Overriding a claim's verification state"
+      ],
+      "decisionRights": [
+        "Select up to the recorded candidate limit for research",
+        "Return a cycle to the shelf when no story clears the evidence floor"
+      ],
+      "ownedKpiIds": [
+        "folio.cycle_reliability",
+        "folio.feature_cadence",
+        "folio.research_efficiency",
+        "folio.model_spend"
+      ],
+      "successChecks": [
+        "Every commissioned brief names a recorded candidate and a concrete question",
+        "Every selected story resolves to a dossier candidate that cleared verification"
+      ],
+      "capabilityTags": [
+        "editorial:selection",
+        "research:commission",
+        "story:selection"
+      ],
+      "status": "active",
+      "activatedAt": "2026-08-12",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:FOLIO:v1",
+      "skillRefs": [
+        ".claude/skills/boardroom-routing/SKILL.md",
+        ".claude/skills/business-validation/SKILL.md"
+      ],
+      "visual": {
+        "motif": "folio leaves + bounded selection tabs",
+        "accentToken": "agent-folio",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for FOLIO with folio leaves and bounded selection tabs",
+        "provenanceRef": "AVATAR-FOLIO"
+      }
+    },
+    {
+      "id": "PLOT",
+      "slug": "plot",
+      "kind": "specialist",
+      "provider": "Anthropic",
+      "ventures": [
+        "booksofhistory"
+      ],
+      "department": "BOOKSOFHISTORY",
+      "title": "Story Editor and Writer",
+      "mission": "Mines dossier-backed story candidates and writes one canonical brief plus separately authored cs and en social packages with every factual sentence tied to accepted claims.",
+      "responsibilities": [
+        "Mine reusable story candidates from normalized dossiers",
+        "Write the canonical language-neutral story brief",
+        "Write independent native social packages for the cs and en locales"
+      ],
+      "notResponsibleFor": [
+        "Inventing a claim or fact absent from dossier evidence",
+        "Changing any claim's verification state",
+        "Publishing, posting or scheduling content"
+      ],
+      "decisionRights": [
+        "Choose narrative structure among claims cleared for publication",
+        "Return a package when the accepted claims cannot sustain it"
+      ],
+      "ownedKpiIds": [
+        "plot.claim_state_coverage",
+        "plot.legend_as_fact_violations"
+      ],
+      "successChecks": [
+        "Every factual sentence carries an accepted dossier claim reference",
+        "The cs and en packages are native compositions from the same canonical brief"
+      ],
+      "capabilityTags": [
+        "story:mining",
+        "story:brief",
+        "editorial:writing",
+        "claims:bound"
+      ],
+      "status": "active",
+      "activatedAt": "2026-08-12",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:PLOT:v1",
+      "skillRefs": [
+        ".claude/skills/copywriting/SKILL.md",
+        ".claude/skills/stop-slop/SKILL.md",
+        ".claude/skills/social/SKILL.md"
+      ],
+      "visual": {
+        "motif": "story arc + paired language columns",
+        "accentToken": "agent-plot",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for PLOT with a story arc and paired language columns",
+        "provenanceRef": "AVATAR-PLOT"
       }
     }
   ]

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "bh-dossier/1",
+  "bookId": "war-with-the-newts",
+  "bookRef": "ventures/booksofhistory/seed/library.json#war-with-the-newts",
+  "title": "Válka s mloky",
+  "author": "Karel Čapek",
+  "answeredBriefHashes": ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"],
+  "rawRefs": ["ventures/booksofhistory/dossiers/war-with-the-newts/raw/a.json"],
+  "supplementRefs": [],
+  "researchedAt": "2026-08-12T10:10:02.000Z",
+  "updatedAt": "2026-08-12T10:10:02.000Z",
+  "claims": [],
+  "storyCandidates": [],
+  "quotes": [{ "text": "Unattributed", "attribution": "", "sourceUrl": "http://example.com", "claimRef": "claim-missing" }],
+  "visualNotes": ["Render the book cover artwork prominently."]
+}

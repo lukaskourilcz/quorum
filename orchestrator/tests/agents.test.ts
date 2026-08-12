@@ -8,18 +8,26 @@ import {
 } from "../src/org/registry.js";
 import { configRoot } from "../src/paths.js";
 
+function personaPromptPath(promptsRoot: string, agent: { id: string; slug: string }): string {
+  return path.join(
+    promptsRoot,
+    agent.id === "FOLIO" || agent.id === "PLOT" ? "booksofhistory" : "",
+    `${agent.slug}.md`
+  );
+}
+
 describe("agent registry and identity assets", () => {
-  it("keeps 33 seated roles of 42 on file, and gated portraits explicit", async () => {
+  it("keeps 35 seated roles of 44 on file, and gated portraits explicit", async () => {
     const registry = await loadAgentRegistry();
 
     // Forty-two profiles, thirty-three of them seated. A retired or paused agent keeps its
     // profile and its portrait -- the record of who did what does not shrink when the roster
     // does -- and the router skips it and says so rather than crashing the room it was required
-    // in. MAKO and CHUM arrived with marketingShark; the nine unseated are unchanged.
+    // in. FOLIO and PLOT arrived with BOOKSOFHISTORY; the nine unseated are unchanged.
     expect(registry.agents.map((agent) => agent.id)).toEqual(FOUNDING_AGENT_IDS);
-    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(42);
+    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(44);
     expect(registry.agents.filter((agent) => agent.kind === "council")).toHaveLength(4);
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(33);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(35);
     expect(registry.agents.filter((agent) => agent.status === "retired").map((agent) => agent.id).sort())
       .toEqual(["EASEL", "MOTIF", "SPLIT"]);
     expect(registry.agents.filter((agent) => agent.status === "paused").map((agent) => agent.id).sort())
@@ -30,12 +38,12 @@ describe("agent registry and identity assets", () => {
     );
     expect(
       registry.agents.filter((agent) => agent.provider === "Anthropic")
-    ).toHaveLength(23);
+    ).toHaveLength(25);
     expect(
       registry.agents.filter((agent) => agent.ventures !== "global").map((agent) => [agent.id, agent.ventures])
     ).toEqual([
       ["HERALD", ["caught-up"]],
-      ["HACEK", ["caught-up", "mma-files"]],
+      ["HACEK", ["caught-up", "mma-files", "booksofhistory"]],
       // SCENE reads scenes and competition evidence, which GoVIRAL's room can use as a guest
       // seat. It is not seated there by default — venture-agent-controls lists it switchable.
       ["SCENE", ["titty-tuesdays", "goviral"]],
@@ -54,7 +62,9 @@ describe("agent registry and identity assets", () => {
       ["MOTIF", ["carousel-studio"]],
       ["PIVOT", ["fightaiq", "mma-files"]],
       ["MAKO", ["marketingshark"]],
-      ["CHUM", ["marketingshark"]]
+      ["CHUM", ["marketingshark"]],
+      ["FOLIO", ["booksofhistory"]],
+      ["PLOT", ["booksofhistory"]]
     ]);
 
     const kpiConfig = JSON.parse(
@@ -73,7 +83,7 @@ describe("agent registry and identity assets", () => {
     expect(avatars).toHaveLength(27);
     expect(registry.agents.filter((agent) => agent.visual.avatar === null).map((agent) => agent.id)).toEqual([
       "CORNER", "SPOTTER", "TAPE", "SIGMA", "VIG", "SONAR",
-      "CANVAS", "JAB", "REACH", "SPLIT", "EASEL", "MOTIF", "PIVOT", "MAKO", "CHUM"
+      "CANVAS", "JAB", "REACH", "SPLIT", "EASEL", "MOTIF", "PIVOT", "MAKO", "CHUM", "FOLIO", "PLOT"
     ]);
     expect(new Set(avatars.map((avatar) => avatar.sha256)).size).toBe(27);
     expect(avatars.every((avatar) => avatar.width === 1024)).toBe(true);
@@ -89,12 +99,12 @@ describe("agent registry and identity assets", () => {
 
     const loaded = await Promise.all(
       registry.agents.map(async (agent) => {
-        const body = await readFile(path.join(promptsRoot, `${agent.slug}.md`), "utf8");
+        const body = await readFile(personaPromptPath(promptsRoot, agent), "utf8");
         return { id: agent.id, body: body.trim() };
       })
     );
 
-    expect(loaded).toHaveLength(42);
+    expect(loaded).toHaveLength(44);
     expect(loaded.filter((entry) => entry.body.length === 0).map((entry) => entry.id)).toEqual([]);
     // Each persona rides on every call in its room; an unbounded file would silently
     // inflate every seat's input cost against a $0.05-$0.16 room envelope.
@@ -116,7 +126,7 @@ describe("agent registry and identity assets", () => {
 
     const drift: string[] = [];
     for (const agent of registry.agents) {
-      const body = await readFile(path.join(promptsRoot, `${agent.slug}.md`), "utf8");
+      const body = await readFile(personaPromptPath(promptsRoot, agent), "utf8");
       // Backticked dotted tokens are how every prompt writes a KPI id.
       const claimed = [
         ...new Set((body.match(/`[a-z][a-z0-9_]*\.[a-z0-9_]+`/gu) ?? []).map((token) => token.slice(1, -1)))

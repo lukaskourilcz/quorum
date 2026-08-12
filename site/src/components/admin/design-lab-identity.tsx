@@ -7,20 +7,31 @@ import type { DesignLabVenture } from "@/lib/design-lab-ventures";
  * them, so what this panel shows is what the next render comes out in. Choosing a design used to
  * mean guessing the palette; the point of putting it above the workspace is that the guess stops.
  *
- * The swatch prints its own hex in the foreground colour the brand pairs with that ground, so the
- * chip demonstrates the pairing rather than asserting it. The type samples are set in the three
- * families themselves for the same reason — a font named in a monospace list tells you nothing
- * about how the headline will sit.
+ * The swatch prints its own hex in whichever neutral has WCAG AA contrast against that colour.
+ * The type samples are set in the three families themselves for the same reason — a font named in
+ * a monospace list tells you nothing about how the headline will sit.
  */
 
 const LABEL = "font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--muted-foreground)]";
 
-function Swatch({ token, value, foreground }: { token: string; value: string; foreground: string }) {
+function swatchText(value: string): string {
+  const match = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(value);
+  if (!match) return "#09090b";
+
+  const linear = (channel: string) => {
+    const srgb = Number.parseInt(channel, 16) / 255;
+    return srgb <= 0.04045 ? srgb / 12.92 : ((srgb + 0.055) / 1.055) ** 2.4;
+  };
+  const luminance = 0.2126 * linear(match[1]!) + 0.7152 * linear(match[2]!) + 0.0722 * linear(match[3]!);
+  return luminance > 0.179 ? "#09090b" : "#f4f4f5";
+}
+
+function Swatch({ token, value }: { token: string; value: string }) {
   return (
     <li className="flex flex-col gap-1">
       <span
         className="flex h-14 items-end rounded-md border border-[var(--border)] px-2 pb-1.5"
-        style={{ backgroundColor: value, color: foreground }}
+        style={{ backgroundColor: value, color: swatchText(value) }}
       >
         <span className="font-mono text-[0.625rem] uppercase tracking-[0.08em]">{value}</span>
       </span>
@@ -30,7 +41,6 @@ function Swatch({ token, value, foreground }: { token: string; value: string; fo
 }
 
 export function DesignLabIdentity({ venture }: { venture: DesignLabVenture }) {
-  const foreground = venture.swatches.find((swatch) => swatch.token === "foreground")?.value ?? "#ffffff";
   const samples = [
     { role: "headline", family: venture.fonts.headline, sample: venture.logoText, className: "text-[length:var(--text-d4)]" },
     { role: "body", family: venture.fonts.body, sample: "Jeden fakt na obrazovku, zdroj nablízku.", className: "text-sm" },
@@ -43,7 +53,7 @@ export function DesignLabIdentity({ venture }: { venture: DesignLabVenture }) {
         <h3 className={LABEL}>Barvy značky</h3>
         <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-7">
           {venture.swatches.map((swatch) => (
-            <Swatch key={swatch.token} token={swatch.token} value={swatch.value} foreground={foreground} />
+            <Swatch key={swatch.token} token={swatch.token} value={swatch.value} />
           ))}
         </ul>
       </div>

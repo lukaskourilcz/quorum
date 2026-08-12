@@ -67,6 +67,8 @@ if (args.includes("--github-output")) {
     `daily_budget_usd=${output.dailyBudgetUsd}`,
     `monthly_operating_usd=${output.monthlyOperatingUsd}`,
     `tt_transcript_mode=${output.ttTranscriptMode}`,
+    `booksofhistory_research_candidates=${output.booksofHistoryResearchCandidates}`,
+    `booksofhistory_stretch=${output.booksofHistoryStretch}`,
     ""
   ].join("\n"));
 } else {

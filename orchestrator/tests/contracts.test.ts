@@ -10,6 +10,11 @@ import { SeasonFileSchema } from "../src/contracts/season.js";
 import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { isRepoPathEvidenceRef } from "../src/mma-files/slate-evidence.js";
 import { ArticlePackageSchema } from "../src/contracts/mma-files.js";
+import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
+import { VentureRegistrySchema } from "../src/contracts/venture-registry.js";
+import { BhCycleSchema } from "../src/contracts/bh-cycle.js";
+import { BhSeedLibrarySchema } from "../src/contracts/bh-seed.js";
+import { BhShortlistSchema } from "../src/contracts/bh-shortlist.js";
 
 const contractNames = Object.keys(ContractSchemas) as ContractName[];
 
@@ -52,6 +57,93 @@ describe("published contracts", () => {
 });
 
 describe("portfolio contract boundaries", () => {
+  it("keeps BOOKSOFHISTORY seeds cheap, prior-labelled and admin-only for cover references", async () => {
+    const valid = await fixture("bh-seed", "valid") as {
+      books: Array<Record<string, unknown> & {
+        recognition: Record<string, unknown>;
+        coverRef?: Record<string, unknown>;
+      }>;
+    };
+    expect(BhSeedLibrarySchema.safeParse(valid).success).toBe(true);
+    expect(valid.books[0]?.recognition.kind).toBe("prior");
+    expect(valid.books[0]?.coverRef?.visibility).toBe("admin-only");
+
+    for (const mutate of [
+      (book: Record<string, unknown>) => { book.dossier = { claims: [] }; },
+      (book: Record<string, unknown>) => { book.biography = "researched life story"; },
+      (book: Record<string, unknown>) => { book.recognition = 87; },
+      (book: Record<string, unknown>) => {
+        book.coverRef = { url: "https://example.invalid/cover", visibility: "public" };
+      }
+    ]) {
+      const poison = structuredClone(valid);
+      mutate(poison.books[0]!);
+      expect(BhSeedLibrarySchema.safeParse(poison).success).toBe(false);
+    }
+  });
+
+  it("keeps shortlist ranks unique, sequential and tied to recorded factor breakdowns", async () => {
+    const valid = await fixture("bh-shortlist", "valid") as { entries: Array<Record<string, unknown>> };
+    expect(BhShortlistSchema.safeParse(valid).success).toBe(true);
+    const duplicated = structuredClone(valid);
+    duplicated.entries.push({ ...duplicated.entries[0], rank: 2 });
+    expect(BhShortlistSchema.safeParse(duplicated).success).toBe(false);
+  });
+
+  it("keeps the BOOKSOFHISTORY cycle ordered, unique and free of skipped days", async () => {
+    const valid = await fixture("bh-cycle", "valid") as {
+      dayStatuses: Record<string, string>;
+      candidateSet: Array<{ candidateId: string }>;
+      chosenStory: { candidateId: string; dossierRef: string; storyRef: string } | null;
+    };
+    expect(BhCycleSchema.safeParse(valid).success).toBe(true);
+
+    const skipped = structuredClone(valid);
+    skipped.dayStatuses.research = "skipped";
+    expect(BhCycleSchema.safeParse(skipped).success).toBe(false);
+
+    const duplicate = structuredClone(valid);
+    duplicate.candidateSet.push(duplicate.candidateSet[0]!);
+    expect(BhCycleSchema.safeParse(duplicate).success).toBe(false);
+
+    const foreignStory = structuredClone(valid);
+    foreignStory.chosenStory = { ...foreignStory.chosenStory!, candidateId: "another-cycle" };
+    expect(BhCycleSchema.safeParse(foreignStory).success).toBe(false);
+  });
+
+  it("accepts a bh-desk record and rejects an unregistered BOOKSOFHISTORY phase", async () => {
+    const readBhFixture = async (kind: "valid" | "poison") => JSON.parse(await readFile(
+      path.join(repoRoot, "contracts", "fixtures", `meeting-record-bh-desk.${kind}.json`),
+      "utf8"
+    )) as unknown;
+    expect(MeetingRecordSchema.safeParse(await readBhFixture("valid")).success).toBe(true);
+    expect(MeetingRecordSchema.safeParse(await readBhFixture("poison")).success).toBe(false);
+  });
+
+  it("accepts the BOOKSOFHISTORY registry vocabulary and keeps every list closed", async () => {
+    const valid = await fixture("venture-registry", "valid") as {
+      ventures: Array<{
+        growth_objective: { components: string[] };
+        adminTabs: string[];
+        meetings: Array<{ cast: string[] }>;
+      }>;
+    };
+    expect(VentureRegistrySchema.safeParse(valid).success).toBe(true);
+
+    const books = valid.ventures.find((venture) => venture.growth_objective.components.includes("feature-cadence"));
+    expect(books).toBeDefined();
+    for (const mutate of [
+      (venture: NonNullable<typeof books>) => { venture.growth_objective.components = ["audience-growth"]; },
+      (venture: NonNullable<typeof books>) => { venture.adminTabs = ["storefront"]; },
+      (venture: NonNullable<typeof books>) => { venture.meetings[0]!.cast = ["COVER_ARTIST"]; }
+    ]) {
+      const poison = structuredClone(valid);
+      const target = poison.ventures.find((venture) => venture.growth_objective.components.includes("feature-cadence"))!;
+      mutate(target);
+      expect(VentureRegistrySchema.safeParse(poison).success).toBe(false);
+    }
+  });
+
   it("enforces the adult audience floor and public interest list", async () => {
     const valid = await fixture("audience-spec", "valid") as Record<string, unknown>;
     expect(AudienceSpecSchema.safeParse(valid).success).toBe(true);
