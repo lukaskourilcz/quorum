@@ -243,4 +243,82 @@ describe("Door Money desk runner", () => {
       await rm(state, { recursive: true, force: true });
     }
   });
+
+  it("drops and counts a billed package whose quote fails the deterministic source gate", async () => {
+    const state = await root();
+    const previousKey = process.env.ANTHROPIC_API_KEY;
+    process.env.ANTHROPIC_API_KEY = "synthetic-test-key";
+    const raw = JSON.parse(responseText()) as {
+      packages: Array<{ sourceRefs: string[]; verbatimQuotes: Array<{ text: string; chunkId: string }> }>;
+    };
+    raw.packages[0]!.verbatimQuotes = [{
+      text: "A fabricated fixture quote that is absent from its synthetic source.",
+      chunkId: raw.packages[0]!.sourceRefs[0]!
+    }];
+    const provider = vi.spyOn(AnthropicTextClient.prototype, "generate").mockResolvedValue({
+      text: JSON.stringify(raw),
+      model: "claude-sonnet-5",
+      tokensIn: 600,
+      tokensOut: 180,
+      cachedTokensIn: 0,
+      cacheWriteTokensIn: 0
+    });
+    try {
+      const result = await runDoorMoneyDeskCycle({
+        cycleId: "fixture-gate-drop",
+        now: NOW,
+        dry: false,
+        root: state,
+        stage: "VALIDATION",
+        knowledge,
+        budgetContext: budget("fixture-gate-drop")
+      });
+      expect(provider).toHaveBeenCalledOnce();
+      expect(result).toMatchObject({
+        decision: "NO_ACTION",
+        status: "live_complete",
+        packages: [],
+        droppedPackages: 1
+      });
+      const meeting = MeetingRecordSchema.parse(JSON.parse(await readFile(
+        path.join(state, `meetings/${DATE}-dm-desk.json`),
+        "utf8"
+      )));
+      expect(meeting).toMatchObject({ status: "NO_ACTION", ledger: { actualCycleUsd: expect.any(Number) } });
+      expect(meeting.decision.summary).toMatch(/failed deterministic gates and were dropped/i);
+      await expect(readdir(path.join(state, "ventures/door-money/recommendations")))
+        .rejects.toMatchObject({ code: "ENOENT" });
+    } finally {
+      provider.mockRestore();
+      if (previousKey === undefined) delete process.env.ANTHROPIC_API_KEY;
+      else process.env.ANTHROPIC_API_KEY = previousKey;
+      await rm(state, { recursive: true, force: true });
+    }
+  });
+
+  it("stores one draft for an identical date and chunk set across two dry runs", async () => {
+    const state = await root();
+    try {
+      const first = await runDoorMoneyDeskCycle({
+        cycleId: "fixture-idempotent-first",
+        now: NOW,
+        dry: true,
+        root: state,
+        stage: "VALIDATION"
+      });
+      const second = await runDoorMoneyDeskCycle({
+        cycleId: "fixture-idempotent-second",
+        now: NOW,
+        dry: true,
+        root: state,
+        stage: "VALIDATION"
+      });
+      const names = await readdir(path.join(state, "ventures/door-money/recommendations"));
+      expect(names.filter((name) => name.endsWith(".json"))).toHaveLength(1);
+      expect(second.packages.map(({ id }) => id)).toEqual(first.packages.map(({ id }) => id));
+      expect(second).toMatchObject({ droppedPackages: 0, decision: "PLAN" });
+    } finally {
+      await rm(state, { recursive: true, force: true });
+    }
+  });
 });

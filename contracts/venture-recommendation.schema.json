@@ -114,6 +114,35 @@
       "minLength": 1,
       "maxLength": 1000
     },
+    "cta": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "soft-curiosity",
+            "explicit-buy-book"
+          ]
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "mode",
+        "text"
+      ],
+      "additionalProperties": false
+    },
     "evidence": {
       "oneOf": [
         {
@@ -840,6 +869,7 @@
     "copyBlocks",
     "rationale",
     "curiosityBridge",
+    "cta",
     "evidence",
     "gateResults",
     "designLab",

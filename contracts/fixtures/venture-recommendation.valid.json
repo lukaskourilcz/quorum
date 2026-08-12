@@ -26,6 +26,10 @@
   ],
   "rationale": "The invented object gives the recommendation a concrete visual spine.",
   "curiosityBridge": "The larger chapter asks why this neighborhood kept returning broken objects.",
+  "cta": {
+    "mode": "soft-curiosity",
+    "text": null
+  },
   "evidence": {
     "kind": "book-passage",
     "manuscriptHash": "sha256:4f41e4291ae4f32331a07fb44248b06cc49e48814f1e8de7dff0b20f77524998",

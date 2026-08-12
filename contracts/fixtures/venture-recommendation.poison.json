@@ -20,6 +20,10 @@
   ],
   "rationale": "This fixture deliberately violates the status and evidence rules.",
   "curiosityBridge": "No real book text appears here.",
+  "cta": {
+    "mode": "soft-curiosity",
+    "text": null
+  },
   "evidence": {
     "kind": "book-passage",
     "manuscriptHash": "sha256:4f41e4291ae4f32331a07fb44248b06cc49e48814f1e8de7dff0b20f77524998",

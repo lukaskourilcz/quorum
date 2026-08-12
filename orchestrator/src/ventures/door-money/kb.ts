@@ -227,6 +227,7 @@ export interface DoorMoneyRecommendationHistoryItem {
   hook: string;
   formats: VentureRecommendation["formats"];
   platforms: VentureRecommendation["platforms"];
+  ctaMode: VentureRecommendation["cta"]["mode"];
   evidenceChunkIds: string[];
 }
 
@@ -347,6 +348,7 @@ function priorHistory(input: {
       hook: item.hook,
       formats: item.formats,
       platforms: item.platforms,
+      ctaMode: item.cta.mode,
       evidenceChunkIds: item.evidence.chunkIds
     }));
 }

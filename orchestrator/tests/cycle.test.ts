@@ -174,7 +174,7 @@ describe("cycle preflight", () => {
     }
   });
 
-  it("records the Door Money fixture desk and growth scaffold with zero spend and no external action", async () => {
+  it("records the gated Door Money fixture desk and growth scaffold with zero spend and no external action", async () => {
     for (const fixture of [
       { phase: "dm-desk" as const, now: new Date("2026-08-06T13:00:00.000Z"), cast: ["GHOST", "AUDIT"] },
       { phase: "dm-growth" as const, now: new Date("2026-08-06T14:00:00.000Z"), cast: ["BOOKER", "PULSE", "AUDIT"] }
@@ -194,7 +194,7 @@ describe("cycle preflight", () => {
       if (fixture.phase === "dm-desk") {
         expect(record).toMatchObject({ status: "PLAN", decision: { outcome: "PLAN" } });
         expect(record.proposals).toHaveLength(1);
-        expect(record.decision.summary).toMatch(/ungated fixture package/i);
+        expect(record.decision.summary).toMatch(/gated fixture draft stored for owner review/i);
       } else {
         expect(record.decision.summary).toMatch(/no action packet was drafted/i);
       }
