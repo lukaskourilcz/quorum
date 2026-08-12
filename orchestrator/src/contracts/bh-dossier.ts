@@ -153,5 +153,6 @@ export const BhResearchLedgerEntrySchema = z.strictObject({
 });
 
 export type BhDossier = z.infer<typeof BhDossierSchema>;
+export type BhDossierClaim = z.infer<typeof BhDossierClaimSchema>;
 export type BhDossierSynthesis = z.infer<typeof BhDossierSynthesisSchema>;
 export type BhResearchLedgerEntry = z.infer<typeof BhResearchLedgerEntrySchema>;

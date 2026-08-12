@@ -117,7 +117,7 @@ post anything.
 - [x] **BH-11b** — Dossier and research-ledger contracts
 - [x] **BH-11c** — Research idempotency, in-flight lock and ceilings
 - [x] **BH-11d** — Supplemental freshness calls
-- [ ] **BH-12a** — Deterministic claim triage
+- [x] **BH-12a** — Deterministic claim triage
 - [ ] **BH-12b** — `CLAIM_CHECK` escalation and verification-state transitions
 - [ ] **BH-13a** — Story-score comparison and recorded selection
 - [ ] **BH-13b** — Canonical story brief and independent twin passes
