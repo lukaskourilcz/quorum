@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAdminWritesEnabled } from "./admin-write-mode";
@@ -25,6 +25,7 @@ const metricName: Record<OwnerResultMetric, string> = {
   follows: "Follows",
   linkTaps: "Link taps"
 };
+const subscribeToHydration = () => () => {};
 
 function statusTone(status: string): "success" | "warning" | "danger" | "neutral" {
   if (status === "approved" || status === "posted") return "success";
@@ -115,7 +116,8 @@ function OwnerResultLane({ feature, locale, writesEnabled }: { feature: AdminBhF
 
 function FeatureReview({ feature, snapshot }: { feature: AdminBhFeature; snapshot: AdminBooksofhistorySnapshot }) {
   const router = useRouter();
-  const writesEnabled = useAdminWritesEnabled();
+  const deploymentWritesEnabled = useAdminWritesEnabled();
+  const hydrated = useSyncExternalStore(subscribeToHydration, () => true, () => false);
   const [drafts, setDrafts] = useState<Drafts>(() => structuredClone(feature.payloads));
   const [editing, setEditing] = useState(false);
   const [reason, setReason] = useState("");
@@ -123,6 +125,7 @@ function FeatureReview({ feature, snapshot }: { feature: AdminBhFeature; snapsho
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const writesEnabled = deploymentWritesEnabled && hydrated;
   const dossier = snapshot.dossiers.find((item) => item.bookId === feature.dossierId);
   const story = dossier?.stories.find((item) => item.storyId === feature.storyId);
   const claims = dossier?.claims.filter((claim) => feature.claimRefs.includes(claim.claimId)) ?? [];

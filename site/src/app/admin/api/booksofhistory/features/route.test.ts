@@ -121,7 +121,12 @@ describe("BOOKSOFHISTORY feature actions", () => {
 
   it("records the owner's posted URL independently for each lane and never posts", async () => {
     await post(action("approve", "approve-one"));
+    await writeFile(
+      path.join(root, "state/ventures/booksofhistory/research-ledger.jsonl"),
+      `${JSON.stringify(JSON.parse(await readFile(path.resolve(process.cwd(), "../contracts/fixtures/bh-research-ledger.valid.json"), "utf8")))}\n`
+    );
     expect((await post(action("posted", "post-cs", { locale: "cs", url: "https://social.example/cs-post" }))).status).toBe(201);
+    expect(JSON.parse((await readFile(path.join(root, "state/ventures/booksofhistory/research-ledger.jsonl"), "utf8")).trim()).used).toBe(true);
     expect((await recordedRecommendation()).status).toBe("approved");
     expect((await post(action("posted", "post-en", { locale: "en", url: "https://social.example/en-post" }))).status).toBe(201);
     const recommendation = await recordedRecommendation();

@@ -6,6 +6,7 @@ import { ArticlePackageSchema, EditorialSlateSchema } from "../contracts/mma-fil
 import { FighterRecordSchema } from "../contracts/mma.js";
 import { CarouselTemplateSchema } from "../contracts/carousel-template.js";
 import { VentureRegistrySchema } from "../contracts/venture-registry.js";
+import { BhResearchLedgerEntrySchema } from "../contracts/bh-dossier.js";
 import { configRoot } from "../paths.js";
 import { atomicWriteJson } from "../state.js";
 import { SEED_TEMPLATES } from "@boardlessai/carousel-studio";
@@ -79,6 +80,27 @@ async function validValues<T>(directory: string, parser: { safeParse(value: unkn
     }
   }
   return values;
+}
+
+async function validJsonLines<T>(
+  file: string,
+  parser: { safeParse(value: unknown): { success: true; data: T } | { success: false } }
+): Promise<{ values: T[]; unreadable: number }> {
+  let raw: string;
+  try { raw = await readFile(file, "utf8"); }
+  catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return { values: [], unreadable: 0 };
+    throw error;
+  }
+  const values: T[] = [];
+  let unreadable = 0;
+  for (const line of raw.split(/\r?\n/u).filter((entry) => entry.trim())) {
+    try {
+      const parsed = parser.safeParse(JSON.parse(line));
+      if (parsed.success) values.push(parsed.data); else unreadable += 1;
+    } catch { unreadable += 1; }
+  }
+  return { values, unreadable };
 }
 
 function ratio(numerator: number, denominator: number): number {
@@ -184,7 +206,7 @@ export async function computeAutonomySnapshot(input: {
   const sourceConfig = JSON.parse(await readFile(path.join(input.repoRoot, "config", "sources.json"), "utf8")) as {
     sources?: Array<{ enabled?: unknown }>;
   };
-  const [editionReceipts, articles, slates, fighters, plans, meetings, proofs, studioTemplates, marketingSharkPackageCount] = await Promise.all([
+  const [editionReceipts, articles, slates, fighters, plans, meetings, proofs, studioTemplates, marketingSharkPackageCount, bhResearchLedger] = await Promise.all([
     files(path.join(input.stateRoot, "edition", "deliveries")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "articles"), ArticlePackageSchema),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "slates"), EditorialSlateSchema),
@@ -193,7 +215,8 @@ export async function computeAutonomySnapshot(input: {
     validValues(path.join(input.stateRoot, "meetings"), MeetingRecordSchema),
     files(path.join(input.stateRoot, "release-proofs")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
     studioTemplateFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "templates")),
-    marketingSharkPackages(path.join(input.stateRoot, "ventures", "marketingshark", "packages"))
+    marketingSharkPackages(path.join(input.stateRoot, "ventures", "marketingshark", "packages")),
+    validJsonLines(path.join(input.stateRoot, "ventures", "booksofhistory", "research-ledger.jsonl"), BhResearchLedgerEntrySchema)
   ]);
 
   const deliveredEditions = editionReceipts.filter((receipt) => receipt.status === "delivered" && receipt.editionStatus === "edition").length;
@@ -207,6 +230,12 @@ export async function computeAutonomySnapshot(input: {
   const allFighterFields = fighters.flatMap((fighter) => Object.values(fighter.fields)).length;
   const dossierCount = (await files(path.join(input.stateRoot, "mma", "readiness-dossiers"))).length;
   const completePlans = plans.filter((plan) => plan.tactics.length > 0 && plan.calendar.length > 0 && plan.audienceRefs.length > 0).length;
+  const paidBhDossiers = new Set(bhResearchLedger.values.filter(({ costUsd }) => costUsd > 0).map(({ dossierRef }) => dossierRef));
+  const usedBhDossiers = new Set(bhResearchLedger.values.filter(({ used, dossierRef }) => used && paidBhDossiers.has(dossierRef)).map(({ dossierRef }) => dossierRef));
+  const researchEfficiency = evaluateResearchEfficiency({ paidDossierIds: [...paidBhDossiers], usedDossierIds: [...usedBhDossiers] });
+  const unreadableBhLedgerDetail = bhResearchLedger.unreadable
+    ? `; ${bhResearchLedger.unreadable} unreadable ledger ${bhResearchLedger.unreadable === 1 ? "line was" : "lines were"} excluded`
+    : "";
 
   const metricByComponent: Record<string, CapabilitySignal[]> = {
     "edition-cadence": [signal("edition-cadence", "Edition cadence", ratio(deliveredEditions, eligibleEditionDays), "ratio", `${deliveredEditions} delivered, ${failedEditions} failed; NO_EDITION is neutral.`)],
@@ -227,7 +256,15 @@ export async function computeAutonomySnapshot(input: {
     // BH-05/BH-20 feed these same exported evaluators from parsed state; no placeholder zero is
     // allowed to masquerade as a measured failure in the meantime.
     "feature-cadence": [signal("feature-cadence", "Features per completed cycle", evaluateFeatureCadence({ completedCycleIds: [], featuredCycleIds: [] }), "ratio", "No completed BOOKSOFHISTORY cycles are recorded yet.")],
-    "research-efficiency": [signal("research-efficiency", "Paid dossiers used", evaluateResearchEfficiency({ paidDossierIds: [], usedDossierIds: [] }), "ratio", "No paid BOOKSOFHISTORY dossiers are recorded yet.")]
+    "research-efficiency": [signal(
+      "research-efficiency",
+      "Paid dossiers used",
+      researchEfficiency,
+      "ratio",
+      paidBhDossiers.size === 0
+        ? `No paid BOOKSOFHISTORY dossiers are recorded yet${unreadableBhLedgerDetail}.`
+        : `${usedBhDossiers.size} of ${paidBhDossiers.size} paid dossiers became owner-posted features${unreadableBhLedgerDetail}.`
+    )]
   };
 
   const killedSlotReasons: Record<string, number> = {};

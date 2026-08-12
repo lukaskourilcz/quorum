@@ -176,6 +176,23 @@ describe("BOOKSOFHISTORY admin loader", () => {
     expect(feature?.results.en).toEqual([]);
   });
 
+  it("keeps research efficiency null until a paid dossier exists", async () => {
+    const root = await temporaryRoot("bh-admin-free-research-");
+    const free = JSON.parse(await fixture("bh-research-ledger.valid.json"));
+    free.costUsd = 0;
+    free.used = true;
+    await put(
+      root,
+      "state/ventures/booksofhistory/research-ledger.jsonl",
+      `${JSON.stringify(free)}\n`
+    );
+
+    const snapshot = await readAdminBooksofhistory(root);
+
+    expect(snapshot.ledger).toHaveLength(1);
+    expect(snapshot.researchEfficiency).toBeNull();
+  });
+
   it("distinguishes an unreadable singleton from a missing one", async () => {
     const root = await temporaryRoot("bh-admin-unreadable-");
     await put(root, "state/ventures/booksofhistory/cycle.json", "{not-json");

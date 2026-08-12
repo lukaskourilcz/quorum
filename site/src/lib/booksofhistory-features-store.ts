@@ -8,6 +8,7 @@ import {
   reviewCarouselSummary
 } from "@boardlessai/carousel-studio";
 import { parseOwnerResultEntry, type OwnerResultEntry } from "./owner-result-entry";
+import { backfillBhResearchLedgerUsage } from "./booksofhistory-research-ledger";
 
 export type BhFeatureLocale = "cs" | "en";
 type BhRecommendationStatus = "draft" | "approved" | "posted" | "archived" | "rejected";
@@ -86,6 +87,7 @@ const ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/u;
 const RESULT_REF = /^ventures\/booksofhistory\/results\/[a-z0-9]+(?:-[a-z0-9]+)*\.json$/u;
 const ACTIONS_ROOT = "state/ventures/booksofhistory/feature-actions";
 const RECOMMENDATIONS_ROOT = "state/ventures/booksofhistory/recommendations";
+const RESEARCH_LEDGER = "state/ventures/booksofhistory/research-ledger.jsonl";
 
 const isObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
@@ -191,6 +193,14 @@ async function optionalLocal(relative: string): Promise<unknown | null> {
   }
 }
 
+async function optionalLocalText(relative: string): Promise<string | null> {
+  try { return await readFile(insideRoot(relative), "utf8"); }
+  catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw error;
+  }
+}
+
 async function findRecommendation(id: string): Promise<{ relative: string; recommendation: BhRecommendation }> {
   let names: string[];
   try { names = (await readdir(insideRoot(RECOMMENDATIONS_ROOT))).filter((name) => name.endsWith(".json")); }
@@ -215,6 +225,11 @@ function receiptPath(action: BhFeatureAction): string {
 }
 
 async function remoteJson(relative: string, token: string): Promise<unknown | null> {
+  const raw = await remoteText(relative, token);
+  return raw === null ? null : JSON.parse(raw) as unknown;
+}
+
+async function remoteText(relative: string, token: string): Promise<string | null> {
   const repository = process.env.BOARDLESSAI_GITHUB_REPOSITORY ?? "lukaskourilcz/quorum";
   const branch = process.env.BOARDLESSAI_GITHUB_BRANCH ?? "main";
   const encoded = relative.split("/").map(encodeURIComponent).join("/");
@@ -226,10 +241,14 @@ async function remoteJson(relative: string, token: string): Promise<unknown | nu
   if (response.status === 401 || response.status === 403) throw new BhFeaturePersistenceError("REFUSED", `GitHub refused the feature read with ${response.status}.`);
   if (!response.ok) throw new BhFeaturePersistenceError("REMOTE", `GitHub feature read failed with ${response.status}.`);
   const body = await response.json() as { content?: string };
-  return body.content ? JSON.parse(Buffer.from(body.content.replaceAll("\n", ""), "base64").toString("utf8")) as unknown : null;
+  return body.content ? Buffer.from(body.content.replaceAll("\n", ""), "base64").toString("utf8") : null;
 }
 
 async function putGitHub(relative: string, value: unknown, message: string, token: string): Promise<void> {
+  await putGitHubText(relative, `${JSON.stringify(value, null, 2)}\n`, message, token);
+}
+
+async function putGitHubText(relative: string, content: string, message: string, token: string): Promise<void> {
   const repository = process.env.BOARDLESSAI_GITHUB_REPOSITORY ?? "lukaskourilcz/quorum";
   const branch = process.env.BOARDLESSAI_GITHUB_BRANCH ?? "main";
   const encoded = relative.split("/").map(encodeURIComponent).join("/");
@@ -241,7 +260,7 @@ async function putGitHub(relative: string, value: unknown, message: string, toke
   const sha = current.ok ? (await current.json() as { sha?: string }).sha : undefined;
   const response = await fetch(endpoint, { method: "PUT", headers, body: JSON.stringify({
     message,
-    content: Buffer.from(`${JSON.stringify(value, null, 2)}\n`).toString("base64"),
+    content: Buffer.from(content).toString("base64"),
     branch,
     ...(sha ? { sha } : {})
   }) });
@@ -250,11 +269,15 @@ async function putGitHub(relative: string, value: unknown, message: string, toke
 }
 
 async function writeLocal(relative: string, value: unknown): Promise<void> {
+  await writeLocalText(relative, `${JSON.stringify(value, null, 2)}\n`);
+}
+
+async function writeLocalText(relative: string, content: string): Promise<void> {
   const target = insideRoot(relative);
   await mkdir(path.dirname(target), { recursive: true });
   const temporary = `${target}.${randomUUID()}.tmp`;
   try {
-    await writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { encoding: "utf8", mode: 0o600 });
+    await writeFile(temporary, content, { encoding: "utf8", mode: 0o600 });
     await rename(temporary, target);
   } finally { await rm(temporary, { force: true }); }
 }
@@ -389,6 +412,16 @@ export async function applyBhFeatureAction(action: BhFeatureAction): Promise<BhF
 
   const located = await findRecommendation(action.recommendationId);
   const applied = await applyAction(located.recommendation, action);
+  let ledgerUpdate: ReturnType<typeof backfillBhResearchLedgerUsage> | null = null;
+  if (action.action === "posted") {
+    const rawLedger = token ? await remoteText(RESEARCH_LEDGER, token) : await optionalLocalText(RESEARCH_LEDGER);
+    if (rawLedger !== null) {
+      try { ledgerUpdate = backfillBhResearchLedgerUsage(rawLedger, located.recommendation.evidence.dossierRef); }
+      catch (error) {
+        throw new BhFeaturePersistenceError("CORRUPT", error instanceof Error ? error.message : "The research ledger is malformed.");
+      }
+    }
+  }
   const result: BhFeatureActionResult = {
     recommendationId: action.recommendationId,
     action: action.action,
@@ -409,10 +442,12 @@ export async function applyBhFeatureAction(action: BhFeatureAction): Promise<BhF
     { relative: receiptRelative, value: { schemaVersion: "bh-feature-action/1", requestHash: hash, action, before: located.recommendation, after: applied.recommendation, result }, message: `admin: record ${action.idempotencyKey}` }
   );
   if (token) {
+    if (ledgerUpdate?.changed) await putGitHubText(RESEARCH_LEDGER, ledgerUpdate.text, `admin: mark ${action.recommendationId} research used`, token);
     for (const file of files) await putGitHub(file.relative, file.value, file.message, token);
     return result;
   }
   if (process.env.NODE_ENV === "production" || process.env.VERCEL) throw new BhFeaturePersistenceError("UNCONFIGURED", "BOOKSOFHISTORY feature storage is not configured for this deployment.");
+  if (ledgerUpdate?.changed) await writeLocalText(RESEARCH_LEDGER, ledgerUpdate.text);
   for (const file of files) await writeLocal(file.relative, file.value);
   return result;
 }

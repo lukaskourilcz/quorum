@@ -134,7 +134,7 @@ post anything.
 - [x] **BH-19b** — GoVIRAL spine: transitions and the Design-Lab-only test
 - [x] **BH-20a** — Owner results per lane
 - [x] **BH-20b** — Category weights with floors
-- [ ] **BH-20c** — Used-flag backfill and the research-efficiency KPI
+- [x] **BH-20c** — Used-flag backfill and the research-efficiency KPI
 - [ ] **BH-21a** — Documentation truth across the standing docs
 - [ ] **BH-21b** — INBOX approvals and NEEDED owner items
 - [ ] **BH-21c** — Honest gaps, checkbox sweep and build-prompt deletion

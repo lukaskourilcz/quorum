@@ -81,6 +81,7 @@ export interface AdminBhLedgerEntry {
   completedAt: string;
   cycleId: string;
   bookId: string;
+  dossierId: string;
   reason: string;
   tokensIn: number;
   tokensOut: number;
@@ -252,9 +253,9 @@ function parseDossier(value: unknown): AdminBhDossier | null {
 }
 
 function parseLedger(value: unknown): AdminBhLedgerEntry | null {
-  const item = object(value); const meeting = label(item?.requestingMeetingRef); const completedAt = instant(item?.completedAt); const bookId = slug(item?.bookId); const cycleId = text(item?.cycleId, 120); const provider = text(item?.provider, 120); const model = text(item?.model, 160); const reason = text(item?.reason, 80); const tokensIn = number(item?.tokensIn); const tokensOut = number(item?.tokensOut); const searches = number(item?.searches, 0, 8); const costUsd = number(item?.costUsd, 0, 0.1);
-  if (item?.schemaVersion !== "bh-research-ledger/1" || !["gather", "synth", "supplement"].includes(String(item.step)) || !meeting || !completedAt || !bookId || !cycleId || !provider || !model || !reason || [tokensIn, tokensOut, searches, costUsd].some((entry) => entry === null)) return null;
-  return { step: item.step as AdminBhLedgerEntry["step"], provider, model, completedAt, cycleId, bookId, reason, tokensIn: tokensIn!, tokensOut: tokensOut!, searches: searches!, costUsd: costUsd!, requestingMeetingId: meeting, used: item.used === true };
+  const item = object(value); const meeting = label(item?.requestingMeetingRef); const completedAt = instant(item?.completedAt); const bookId = slug(item?.bookId); const dossierRef = text(item?.dossierRef, 500); const dossierId = dossierRef ? slug(dossierRef.split("/").at(-2)) : null; const cycleId = text(item?.cycleId, 120); const provider = text(item?.provider, 120); const model = text(item?.model, 160); const reason = text(item?.reason, 80); const tokensIn = number(item?.tokensIn); const tokensOut = number(item?.tokensOut); const searches = number(item?.searches, 0, 8); const costUsd = number(item?.costUsd, 0, 0.1);
+  if (item?.schemaVersion !== "bh-research-ledger/1" || !["gather", "synth", "supplement"].includes(String(item.step)) || !meeting || !completedAt || !bookId || !dossierId || !cycleId || !provider || !model || !reason || typeof item.used !== "boolean" || [tokensIn, tokensOut, searches, costUsd].some((entry) => entry === null)) return null;
+  return { step: item.step as AdminBhLedgerEntry["step"], provider, model, completedAt, cycleId, bookId, dossierId, reason, tokensIn: tokensIn!, tokensOut: tokensOut!, searches: searches!, costUsd: costUsd!, requestingMeetingId: meeting, used: item.used === true };
 }
 
 function publicFeaturePair(recommendation: NonNullable<ReturnType<typeof parseBhRecommendation>>) {
@@ -344,8 +345,8 @@ export async function readAdminBooksofhistory(
   ]);
   const latestShortlist = [...shortlists.items].sort((left, right) => right.asOf.localeCompare(left.asOf))[0] ?? null;
   const latestBrief = [...briefs.items].sort((left, right) => right.date.localeCompare(left.date))[0] ?? null;
-  const paidBooks = new Set(ledger.items.map(({ bookId }) => bookId));
-  const usedBooks = new Set(ledger.items.filter(({ used }) => used).map(({ bookId }) => bookId));
+  const paidDossiers = new Set(ledger.items.filter(({ costUsd }) => costUsd > 0).map(({ dossierId }) => dossierId));
+  const usedDossiers = new Set(ledger.items.filter(({ used, dossierId }) => used && paidDossiers.has(dossierId)).map(({ dossierId }) => dossierId));
   const counts = { seed: seed.unreadable, shortlists: shortlists.unreadable, briefs: briefs.unreadable, cycle: cycle.unreadable, dossiers: dossiers.unreadable, ledger: ledger.unreadable, features: features.unreadable, results: results.unreadable, ratings: ratings.unreadable };
   return {
     stores: { seed: seed.state, shortlists: shortlists.state, briefs: briefs.state, cycle: cycle.state, dossiers: dossiers.state, ledger: ledger.state, features: features.state, results: results.state, ratings: ratings.state },
@@ -356,7 +357,7 @@ export async function readAdminBooksofhistory(
     cycle: cycle.item,
     dossiers: dossiers.items.sort((left, right) => left.title.localeCompare(right.title)),
     ledger: ledger.items.sort((left, right) => right.completedAt.localeCompare(left.completedAt)),
-    researchEfficiency: paidBooks.size ? usedBooks.size / paidBooks.size : null,
+    researchEfficiency: paidDossiers.size ? usedDossiers.size / paidDossiers.size : null,
     features: features.items
       .map(({ resultIds, ...feature }) => ({
         ...feature,

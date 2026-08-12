@@ -2,7 +2,9 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 import { BudgetLedgerEntrySchema } from "../budget.js";
+import { evaluateResearchEfficiency } from "../autonomy/signals.js";
 import { ReleaseProofSchema } from "../contracts/autonomy.js";
+import { BhResearchLedgerEntrySchema } from "../contracts/bh-dossier.js";
 import { KpiSetSchema, type KpiSet } from "../contracts/kpi-set.js";
 import { IdeaLedgerEntrySchema } from "../contracts/idea-ledger.js";
 import { ArticlePackageSchema } from "../contracts/mma-files.js";
@@ -145,6 +147,23 @@ async function jsonLines(file: string): Promise<unknown[]> {
   }
 }
 
+async function jsonLinesCounted(
+  file: string
+): Promise<{ values: unknown[]; unreadable: number }> {
+  try {
+    const values: unknown[] = [];
+    let unreadable = 0;
+    for (const line of (await readFile(file, "utf8")).split(/\r?\n/u).filter((entry) => entry.trim())) {
+      try { values.push(JSON.parse(line) as unknown); }
+      catch { unreadable += 1; }
+    }
+    return { values, unreadable };
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return { values: [], unreadable: 0 };
+    throw error;
+  }
+}
+
 function record(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" && !Array.isArray(value)
     ? value as Record<string, unknown>
@@ -232,7 +251,8 @@ export async function collectQuarterlyMeasurements(input: {
     goViralTrends,
     mmaRunsRaw,
     deckReceiptsRaw,
-    hookChannelsRaw
+    hookChannelsRaw,
+    bhResearchLedgerRaw
   ] = await Promise.all([
     jsonFile(path.join(input.stateRoot, "budget", "ledger.json")),
     jsonFile(path.join(input.repoRoot, "config", "fixed-costs.json")),
@@ -263,11 +283,35 @@ export async function collectQuarterlyMeasurements(input: {
     jsonFiles(path.join(input.stateRoot, "goviral", "trends")),
     jsonFiles(path.join(input.stateRoot, "ventures", "mma-files", "runs")),
     jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "deck-receipts")),
-    jsonFile(path.join(input.stateRoot, "ventures", "carousel-studio", "hook-channels.json"))
+    jsonFile(path.join(input.stateRoot, "ventures", "carousel-studio", "hook-channels.json")),
+    jsonLinesCounted(path.join(input.stateRoot, "ventures", "booksofhistory", "research-ledger.jsonl"))
   ]);
 
   const measurements: Record<string, number | null> = {};
   for (const kpi of input.kpiSet.kpis) measurements[kpi.metric_source] = null;
+
+  // Usage is a property backfilled onto the paid dossier's original lines. There is no separate
+  // posted-at timestamp to quarter-scope honestly, so this cumulative learning-loop KPI reads
+  // every valid ledger line rather than pretending the research completion date is the use date.
+  const bhResearchParses = bhResearchLedgerRaw.values.map((value) => BhResearchLedgerEntrySchema.safeParse(value));
+  const bhResearchLedger = bhResearchParses
+    .filter((result) => result.success)
+    .map((result) => result.data);
+  const paidBhDossiers = new Set(
+    bhResearchLedger.filter(({ costUsd }) => costUsd > 0).map(({ dossierRef }) => dossierRef)
+  );
+  const usedBhDossiers = new Set(
+    bhResearchLedger
+      .filter(({ used, dossierRef }) => used && paidBhDossiers.has(dossierRef))
+      .map(({ dossierRef }) => dossierRef)
+  );
+  measurements["state/ventures/booksofhistory/research-ledger.jsonl#used_paid_dossier_rate"] =
+    evaluateResearchEfficiency({
+      paidDossierIds: [...paidBhDossiers],
+      usedDossierIds: [...usedBhDossiers]
+    });
+  measurements["state/ventures/booksofhistory/research-ledger.jsonl#unreadable_count"] =
+    bhResearchLedgerRaw.unreadable + bhResearchParses.filter((result) => !result.success).length;
 
   const budget = z.object({
     schemaVersion: z.literal(1),
