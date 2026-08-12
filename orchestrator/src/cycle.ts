@@ -114,7 +114,7 @@ import { runMarketingSharkCycle } from "./ventures/marketingshark/run.js";
 import {
   isDoorMoneyPhase,
   runDoorMoneyDeskCycle,
-  runDoorMoneyDryCycle
+  runDoorMoneyGrowthCycle
 } from "./ventures/door-money/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
 import {
@@ -355,22 +355,8 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       const run = () => runDoorMoneyDeskCycle({ cycleId, now, dry: options.dry });
       return options.dry ? run() : withFileLock(stateRoot, ".lock", run);
     }
-    if (options.dry) {
-      return runDoorMoneyDryCycle({ phase: options.phase, cycleId, now });
-    }
-    // The live growth runner arrives in DM-19. Until then, registration is a closed gate rather
-    // than an unsupported phase or a path that could call a provider.
-    return {
-      cycleId,
-      phase: options.phase,
-      dry: false,
-      status: "paused",
-      decision: "PAUSED",
-      estimatedWorstCaseUsd: 0,
-      selectedAgents: [],
-      skippedAgents: [],
-      artifacts: []
-    };
+    const run = () => runDoorMoneyGrowthCycle({ cycleId, now, dry: options.dry });
+    return options.dry ? run() : withFileLock(stateRoot, ".lock", run);
   }
   if (options.phase === "ms-daily") {
     const stages = JSON.parse(await readFile(path.join(configRoot, "stages.json"), "utf8")) as { current: Stage };
