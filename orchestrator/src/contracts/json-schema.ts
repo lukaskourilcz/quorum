@@ -1,5 +1,6 @@
 import { z, type ZodType } from "zod";
 import { AudienceSpecSchema } from "./audience-spec.js";
+import { ActionPacketSchema } from "./action-packet.js";
 import { BoardlessDatasetSchema } from "./boardless-dataset.js";
 import { BoardlessStreamSchema, StreamSyncReceiptSchema } from "./boardless-stream.js";
 import { BoardlessEventsSchema } from "./boardless-events.js";
@@ -59,6 +60,7 @@ import {
 } from "./autonomy.js";
 
 export const ContractSchemas = {
+  "action-packet": ActionPacketSchema,
   "audience-spec": AudienceSpecSchema,
   "boardless-dataset": BoardlessDatasetSchema,
   "boardless-stream": BoardlessStreamSchema,

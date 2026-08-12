@@ -188,6 +188,12 @@ costs and no treasury action in this decision.
   therefore accepts a bounded serializable view model and isolates one minimal completion
   envelope for the commissioned future endpoint. With no DM-19c route, it fails closed and writes
   nothing; DM-19b and DM-19c align the projection and install the canonical writer.
+- **DM-19b precedes both persistent playbooks and the owner-result contract in title order.**
+  BOOKER's bounded context marks playbooks, completions and owner results unavailable and supplies
+  empty arrays rather than guessing their future shapes. It may read only the latest
+  contract-valid GoVIRAL weekly brief at this stage. DM-19c installs the playbook and completion
+  readers, and DM-20a installs the owner-result reader; neither future writer or contract is
+  implemented early.
 
 ## Delivery ledger
 
@@ -230,7 +236,7 @@ costs and no treasury action in this decision.
 - [x] DM-18c — Actions panel
 - [x] DM-18d — Knowledge panel, tab wiring and e2e
 - [x] DM-19a — Thursday gate and the rotating agenda wheel
-- [ ] DM-19b — Action-packet contract and the BOOKER call
+- [x] DM-19b — Action-packet contract and the BOOKER call
 - [ ] DM-19c — Playbook store and the action check-off route
 - [ ] DM-20a — Owner results: contract, route, store
 - [ ] DM-20b — Performance weights with floors
