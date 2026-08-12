@@ -258,6 +258,12 @@ section and a receipt line, and a day with no usable cluster records an honest q
   the existing manual-post action alone advances it to `posted`. Correction controls remain closed
   until that receipt exists. A correction or retraction action creates a new manual-only draft and
   changes the original claim's ledger standing, but never claims that the correction was published.
+- **Owner results remain manual evidence:** No sibling result contract had landed when KV-19a began,
+  so Kvórum provides the first shared `owner-result-entry/1` boundary. Each append-only snapshot
+  names the already recorded manual post, intended platform, owner capture time and six nullable
+  counters, with at least one real number; the owner-result route supplies only `enteredBy: owner`
+  and cannot fetch, publish or touch a channel. The recommendation links the result and the card
+  places the typed outcome beside the original intent. `METRICS_INGESTION_ENABLED` stays untouched.
 
 ## Implementation checklist
 
@@ -298,7 +304,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-17c — Monitor panel
 - [x] KV-17d — Claims panel, tab wiring and e2e coverage
 - [x] KV-18 — Claims ledger and the correction flow
-- [ ] KV-19a — Owner results: contract, route and store
+- [x] KV-19a — Owner results: contract, route and store
 - [ ] KV-19b — Performance weights with floors and recorded proposals
 - [ ] KV-20a — GoVIRAL spine: topic set and brief consumption
 - [ ] KV-20b — GoVIRAL spine: transitions and the Design-Lab-only test

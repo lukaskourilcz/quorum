@@ -40,6 +40,25 @@ export interface AdminKvorumLedgerClaim {
   postedUrl: string | null;
 }
 
+export interface AdminKvorumOwnerResult {
+  id: string;
+  recommendationId: string;
+  platform: string;
+  postUrl: string;
+  postedAt: string;
+  capturedAt: string;
+  enteredAt: string;
+  metrics: {
+    impressions: number | null;
+    reach: number | null;
+    saves: number | null;
+    shares: number | null;
+    comments: number | null;
+    follows: number | null;
+  };
+  note: string | null;
+}
+
 export interface AdminKvorumCopyBlock {
   id: string;
   platform: string;
@@ -72,6 +91,7 @@ export interface AdminKvorumRecommendation extends AdminKvorumDraftText {
   status: "draft" | "approved" | "posted" | "archived" | "rejected";
   contentHash: string;
   ratings: RatingRecord[];
+  results: AdminKvorumOwnerResult[];
   evidence: {
     monitorDate: string;
     continuationOf: string | null;
@@ -178,6 +198,9 @@ export interface AdminKvorumSnapshot {
   claimsState: AdminKvorumStoreState;
   claims: AdminKvorumLedgerClaim[];
   claimsUnreadable: number;
+  resultsState: AdminKvorumStoreState;
+  results: AdminKvorumOwnerResult[];
+  resultsUnreadable: number;
   quotaState: AdminKvorumStoreState;
   quota: AdminKvorumQuota | null;
   entityLabels: Record<string, string>;
@@ -354,6 +377,51 @@ function parseLedgerClaim(value: unknown, filename: string): AdminKvorumLedgerCl
   };
 }
 
+function parseOwnerResult(value: unknown, filename: string): AdminKvorumOwnerResult | null {
+  const entry = object(value);
+  const id = text(entry?.id, 160);
+  const recommendationId = text(entry?.recommendationId, 160);
+  const recommendationRef = text(entry?.recommendationRef, 240);
+  const platform = text(entry?.platform, 80);
+  const postUrl = httpsUrl(entry?.postUrl);
+  const postedAt = dateTime(entry?.postedAt);
+  const capturedAt = dateTime(entry?.capturedAt);
+  const enteredAt = dateTime(entry?.enteredAt);
+  const metrics = object(entry?.metrics);
+  const note = entry?.note === null ? null : text(entry?.note, 800);
+  const stem = filename.replace(/\.json$/u, "");
+  const parsedMetrics = metrics ? {
+    impressions: metrics.impressions === null ? null : nonnegative(metrics.impressions, true),
+    reach: metrics.reach === null ? null : nonnegative(metrics.reach, true),
+    saves: metrics.saves === null ? null : nonnegative(metrics.saves, true),
+    shares: metrics.shares === null ? null : nonnegative(metrics.shares, true),
+    comments: metrics.comments === null ? null : nonnegative(metrics.comments, true),
+    follows: metrics.follows === null ? null : nonnegative(metrics.follows, true)
+  } : null;
+  const metricKeys = ["impressions", "reach", "saves", "shares", "comments", "follows"] as const;
+  if (!entry || entry.schemaVersion !== "owner-result-entry/1" || entry.ventureId !== "kvorum"
+    || !id || id !== `kv-result-${stem}` || !recommendationId || !recommendationRef
+    || !/^state\/ventures\/kvorum\/recommendations\/\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.json$/u.test(recommendationRef)
+    || !platform || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(platform) || !postUrl
+    || !postedAt || !capturedAt || !enteredAt || entry.enteredBy !== "owner" || !parsedMetrics
+    || Object.keys(metrics!).sort().join("|") !== [...metricKeys].sort().join("|")
+    || metricKeys.some((key) => parsedMetrics[key] === null && metrics![key] !== null)
+    || Object.values(parsedMetrics).every((metric) => metric === null)
+    || (entry.note !== null && !note)
+    || Date.parse(capturedAt) < Date.parse(postedAt) || Date.parse(enteredAt) < Date.parse(capturedAt)) return null;
+  return {
+    id,
+    recommendationId,
+    platform,
+    postUrl,
+    postedAt,
+    capturedAt,
+    enteredAt,
+    metrics: parsedMetrics,
+    note
+  };
+}
+
 function parseRecommendation(value: unknown, filename: string): AdminKvorumRecommendation | null {
   const entry = object(value);
   const draft = parseDraft(entry);
@@ -464,6 +532,7 @@ function parseRecommendation(value: unknown, filename: string): AdminKvorumRecom
     status: entry.status,
     contentHash: `sha256:${createHash("sha256").update(JSON.stringify(entry)).digest("hex").slice(0, 12)}`,
     ratings: [],
+    results: [],
     evidence: {
       monitorDate,
       continuationOf,
@@ -749,7 +818,7 @@ async function readEntityLabels(): Promise<{ values: Record<string, string>; unr
  * workspace down. Repository paths and filenames stay on this side of the boundary.
  */
 export async function readAdminKvorum(): Promise<AdminKvorumSnapshot> {
-  const [recommendations, monitor, claims, quota, ratings, entityLabels] = await Promise.all([
+  const [recommendations, monitor, claims, results, quota, ratings, entityLabels] = await Promise.all([
     readDirectory(
       "state/ventures/kvorum/recommendations",
       /^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.json$/u,
@@ -761,6 +830,11 @@ export async function readAdminKvorum(): Promise<AdminKvorumSnapshot> {
       /^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.json$/u,
       parseLedgerClaim
     ),
+    readDirectory(
+      "state/ventures/kvorum/results",
+      /^\d{4}-\d{2}-\d{2}-[a-f0-9]{12}\.json$/u,
+      parseOwnerResult
+    ),
     readQuota(),
     readRatings(),
     readEntityLabels()
@@ -770,7 +844,10 @@ export async function readAdminKvorum(): Promise<AdminKvorumSnapshot> {
       ...recommendation,
       ratings: ratings.values
         .filter((rating) => rating.objectRef.id === recommendation.id)
-        .sort((left, right) => right.ratedAt.localeCompare(left.ratedAt) || right.id.localeCompare(left.id))
+        .sort((left, right) => right.ratedAt.localeCompare(left.ratedAt) || right.id.localeCompare(left.id)),
+      results: results.values
+        .filter((result) => result.recommendationId === recommendation.id)
+        .sort((left, right) => right.capturedAt.localeCompare(left.capturedAt) || left.id.localeCompare(right.id))
     }))
     .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt) || left.id.localeCompare(right.id));
   return {
@@ -781,10 +858,13 @@ export async function readAdminKvorum(): Promise<AdminKvorumSnapshot> {
     claimsState: claims.state,
     claims: claims.values.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt) || left.id.localeCompare(right.id)),
     claimsUnreadable: claims.unreadable,
+    resultsState: results.state,
+    results: results.values.sort((left, right) => right.capturedAt.localeCompare(left.capturedAt) || left.id.localeCompare(right.id)),
+    resultsUnreadable: results.unreadable,
     quotaState: quota.state,
     quota: quota.value,
     entityLabels: entityLabels.values,
-    unreadable: recommendations.unreadable + monitor.unreadable + claims.unreadable + quota.unreadable
+    unreadable: recommendations.unreadable + monitor.unreadable + claims.unreadable + results.unreadable + quota.unreadable
       + ratings.unreadable + entityLabels.unreadable
   };
 }

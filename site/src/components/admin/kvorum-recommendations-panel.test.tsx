@@ -12,16 +12,53 @@ import { readAdminKvorum, type AdminKvorumSnapshot } from "@/lib/admin-kvorum";
 
 let root = "";
 
-async function fixtureRecommendation(): Promise<void> {
+async function fixtureRecommendation(options: { posted?: boolean; result?: boolean } = {}): Promise<void> {
   root = await mkdtemp(path.join(os.tmpdir(), "boardless-kvorum-panel-"));
   const relative = "state/ventures/kvorum/recommendations/2026-08-12-public-media.json";
   const target = path.join(root, relative);
   await mkdir(path.dirname(target), { recursive: true });
+  const recommendation = JSON.parse(await readFile(
+    path.resolve(process.cwd(), "../contracts/fixtures/venture-recommendation.valid.json"),
+    "utf8"
+  )) as Record<string, unknown>;
+  if (options.posted) {
+    recommendation.status = "posted";
+    recommendation.updatedAt = "2026-08-12T22:00:00.000Z";
+    recommendation.designLab = {
+      status: "queued",
+      requestedAt: "2026-08-12T21:30:00.000Z",
+      resolvedAt: null,
+      recipeRef: null,
+      artifactRefs: [],
+      failureReason: null
+    };
+    recommendation.owner = {
+      ...(recommendation.owner as Record<string, unknown>),
+      approvedAt: "2026-08-12T21:30:00.000Z",
+      postedAt: "2026-08-12T22:00:00.000Z",
+      postedUrl: "https://example.com/kvorum/public-media",
+      resultRefs: options.result
+        ? ["state/ventures/kvorum/results/2026-08-12-1a2b3c4d5e6f.json"]
+        : []
+    };
+  }
   await writeFile(
     target,
-    await readFile(path.resolve(process.cwd(), "../contracts/fixtures/venture-recommendation.valid.json"), "utf8"),
+    `${JSON.stringify(recommendation, null, 2)}\n`,
     "utf8"
   );
+  if (options.result) {
+    const resultTarget = path.join(
+      root,
+      "state/ventures/kvorum/results/2026-08-12-1a2b3c4d5e6f.json"
+    );
+    await mkdir(path.dirname(resultTarget), { recursive: true });
+    await writeFile(
+      resultTarget,
+      await readFile(path.resolve(process.cwd(), "../contracts/fixtures/owner-result-entry.valid.json"), "utf8"),
+      "utf8"
+    );
+  }
   vi.stubEnv("BOARDLESSAI_REPO_ROOT", root);
 }
 
@@ -68,6 +105,24 @@ describe("the Kvórum recommendation review card", () => {
     expect(html).toContain("Approve as drafted");
   });
 
+  it("puts owner-entered outcome beside posted intent and exposes only a manual form", async () => {
+    await fixtureRecommendation({ posted: true, result: true });
+    const snapshot = await readAdminKvorum();
+    const html = renderToStaticMarkup(
+      <AdminWriteProvider enabled>
+        <KvorumRecommendationsPanel snapshot={snapshot} />
+      </AdminWriteProvider>
+    );
+    expect(html).toContain("Outcome beside intent");
+    expect(html).toContain("Owner-entered results");
+    expect(html).toContain("Saves");
+    expect(html).toContain("43");
+    expect(html).toContain("Record owner result");
+    expect(html).toContain("No automated collection or fetch runs here.");
+    expect(html).not.toContain("recommendationRef");
+    expect(html).not.toContain("state/ventures/kvorum/results");
+  });
+
   it("states whether an empty queue is missing, unreadable or present", () => {
     const base: Omit<AdminKvorumSnapshot, "recommendationsState"> = {
       recommendations: [],
@@ -76,6 +131,9 @@ describe("the Kvórum recommendation review card", () => {
       claimsState: "missing",
       claims: [],
       claimsUnreadable: 0,
+      resultsState: "missing",
+      results: [],
+      resultsUnreadable: 0,
       quotaState: "missing",
       quota: null,
       entityLabels: {},

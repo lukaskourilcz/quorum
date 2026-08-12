@@ -223,7 +223,7 @@ export default async function AdminPage({
     ventureId === "mma-files"
       ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
       : ventureId === "kvorum"
-        ? kvorum.recommendations.length + kvorum.monitor.length + (kvorum.quota ? 1 : 0)
+        ? kvorum.recommendations.length + kvorum.monitor.length + kvorum.results.length + (kvorum.quota ? 1 : 0)
         : ventureId === "carousel-studio"
           ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
           : ventureId === "fightaiq"

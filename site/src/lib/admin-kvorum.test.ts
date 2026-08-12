@@ -35,11 +35,13 @@ describe("the Kvórum admin sanitising boundary", () => {
     const recommendation = await fixture("venture-recommendation.valid");
     const monitor = await fixture("kvorum-monitor.valid");
     const claim = await fixture("kvorum-claim.valid");
+    const result = await fixture("owner-result-entry.valid");
     const quota = await fixture("kvorum-apify-quota.valid");
     const root = await makeRoot({
       "state/ventures/kvorum/recommendations/2026-08-12-public-media.json": recommendation,
       "state/ventures/kvorum/monitor/2026-08-12.json": monitor,
       "state/ventures/kvorum/claims/2026-08-12-public-media-claim-snemovna.json": claim,
+      "state/ventures/kvorum/results/2026-08-12-1a2b3c4d5e6f.json": result,
       "state/kvorum/source-quota/apify.json": quota,
       "state/ratings/kvorum/ledger.jsonl": `${JSON.stringify({
         schemaVersion: "rating/1",
@@ -59,6 +61,8 @@ describe("the Kvórum admin sanitising boundary", () => {
       monitorState: "present",
       claimsState: "present",
       claimsUnreadable: 0,
+      resultsState: "present",
+      resultsUnreadable: 0,
       quotaState: "present",
       unreadable: 0,
       recommendations: [{
@@ -66,6 +70,7 @@ describe("the Kvórum admin sanitising boundary", () => {
         slug: "public-media",
         headline: "Poplatky se vracejí do Sněmovny",
         ratings: [{ rating: "good", note: "Keep the procedural framing." }],
+        results: [{ platform: "instagram", metrics: { saves: 43, shares: 31 } }],
         evidence: {
           stit: { internalOnly: true, posts: [{ engagement: { likes: 120, comments: 18, shares: 7 } }] }
         },
@@ -89,6 +94,12 @@ describe("the Kvórum admin sanitising boundary", () => {
         status: "standing",
         hasCorrectionDraft: false,
         sources: [{ sourceName: "iROZHLAS" }, { sourceName: "ČT24" }]
+      }],
+      results: [{
+        id: "kv-result-2026-08-12-1a2b3c4d5e6f",
+        recommendationId: "kv-2026-08-12-public-media",
+        platform: "instagram",
+        enteredAt: "2026-08-13T08:05:00.000Z"
       }],
       quota: {
         month: "2026-08",
@@ -121,6 +132,7 @@ describe("the Kvórum admin sanitising boundary", () => {
     expect(serialized).not.toContain("state/");
     expect(serialized).not.toContain("receiptRef");
     expect(serialized).not.toContain("resultRefs");
+    expect(serialized).not.toContain("recommendationRef");
     expect(serialized).not.toContain("ratingRef");
   });
 
@@ -152,6 +164,7 @@ describe("the Kvórum admin sanitising boundary", () => {
       recommendationsState: "missing",
       monitorState: "missing",
       claimsState: "missing",
+      resultsState: "missing",
       quotaState: "missing",
       unreadable: 0
     });
@@ -159,7 +172,8 @@ describe("the Kvórum admin sanitising boundary", () => {
     await Promise.all([
       mkdir(path.join(root, "state/ventures/kvorum/recommendations"), { recursive: true }),
       mkdir(path.join(root, "state/ventures/kvorum/monitor"), { recursive: true }),
-      mkdir(path.join(root, "state/ventures/kvorum/claims"), { recursive: true })
+      mkdir(path.join(root, "state/ventures/kvorum/claims"), { recursive: true }),
+      mkdir(path.join(root, "state/ventures/kvorum/results"), { recursive: true })
     ]);
     await expect(readAdminKvorum()).resolves.toMatchObject({
       recommendationsState: "present",
@@ -168,13 +182,16 @@ describe("the Kvórum admin sanitising boundary", () => {
       monitor: [],
       claimsState: "present",
       claims: [],
+      resultsState: "present",
+      results: [],
       quotaState: "missing"
     });
 
     await Promise.all([
       writeFile(path.join(root, "state/ventures/kvorum/recommendations/2026-08-12-broken.json"), "{}", "utf8"),
       writeFile(path.join(root, "state/ventures/kvorum/monitor/2026-08-12.json"), "{}", "utf8"),
-      writeFile(path.join(root, "state/ventures/kvorum/claims/2026-08-12-broken.json"), "{}", "utf8")
+      writeFile(path.join(root, "state/ventures/kvorum/claims/2026-08-12-broken.json"), "{}", "utf8"),
+      writeFile(path.join(root, "state/ventures/kvorum/results/2026-08-12-aaaaaaaaaaaa.json"), "{}", "utf8")
     ]);
     await expect(readAdminKvorum()).resolves.toMatchObject({
       recommendationsState: "unreadable",
@@ -184,7 +201,10 @@ describe("the Kvórum admin sanitising boundary", () => {
       claimsState: "unreadable",
       claims: [],
       claimsUnreadable: 1,
-      unreadable: 3
+      resultsState: "unreadable",
+      results: [],
+      resultsUnreadable: 1,
+      unreadable: 4
     });
   });
 });

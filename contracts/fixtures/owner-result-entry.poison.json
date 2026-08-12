@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "owner-result-entry/1",
+  "id": "kv-result-2026-08-12-poison",
+  "ventureId": "kvorum",
+  "recommendationId": "kv-2026-08-12-public-media",
+  "recommendationRef": "state/ventures/door-money/recommendations/2026-08-12-public-media.json",
+  "platform": "instagram",
+  "postUrl": "http://example.com/kvorum/public-media",
+  "postedAt": "2026-08-12T22:00:00.000Z",
+  "capturedAt": "2026-08-12T21:00:00.000Z",
+  "enteredAt": "2026-08-12T20:00:00.000Z",
+  "enteredBy": "collector",
+  "metrics": {
+    "impressions": null,
+    "reach": null,
+    "saves": null,
+    "shares": null,
+    "comments": null,
+    "follows": null
+  },
+  "note": null
+}

@@ -6,6 +6,7 @@ import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import type {
   AdminKvorumCopyBlock,
   AdminKvorumDraftText,
+  AdminKvorumOwnerResult,
   AdminKvorumRecommendation,
   AdminKvorumSnapshot
 } from "@/lib/admin-kvorum";
@@ -33,6 +34,24 @@ const buttonClass =
   "rounded-[8px] border border-[#3f3f46] bg-[#101013] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#d4d4d8] disabled:cursor-not-allowed disabled:opacity-40";
 const inputClass =
   "w-full rounded-[8px] border border-[#3f3f46] bg-[#0d0d10] px-3 py-2 text-[13px] leading-[1.55] text-[#f4f4f5] outline-none focus:border-[#f5d90a] disabled:opacity-50";
+
+const RESULT_METRICS = [
+  ["impressions", "Impressions"],
+  ["reach", "Reach"],
+  ["saves", "Saves"],
+  ["shares", "Shares"],
+  ["comments", "Comments"],
+  ["follows", "Follows"]
+] as const;
+type ResultMetric = typeof RESULT_METRICS[number][0];
+
+function resultTime(value: string): string {
+  return new Intl.DateTimeFormat("cs-CZ", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "Europe/Prague"
+  }).format(new Date(value));
+}
 
 export function kvorumRecommendationActionRef(
   recommendation: Pick<AdminKvorumRecommendation, "date" | "slug">
@@ -233,6 +252,18 @@ function RecommendationCard({ recommendation }: { recommendation: AdminKvorumRec
   const [mode, setMode] = useState<"idle" | "edit" | "reject">("idle");
   const [rejectionReason, setRejectionReason] = useState("");
   const [postedUrl, setPostedUrl] = useState(recommendation.owner.postedUrl ?? "");
+  const [results, setResults] = useState(recommendation.results);
+  const [resultPlatform, setResultPlatform] = useState(recommendation.platforms[0] ?? "");
+  const [capturedAt, setCapturedAt] = useState("");
+  const [resultMetrics, setResultMetrics] = useState<Record<ResultMetric, string>>({
+    impressions: "",
+    reach: "",
+    saves: "",
+    shares: "",
+    comments: "",
+    follows: ""
+  });
+  const [resultNote, setResultNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -272,6 +303,53 @@ function RecommendationCard({ recommendation }: { recommendation: AdminKvorumRec
     const edits = withEdits ? approvalEdits(recommendation, draft) : undefined;
     const saved = await save({ action: "approve", ...(edits ? { edits } : {}) }, "approved");
     if (saved && withEdits) setDisplay(draft);
+  }
+
+  async function saveResult(): Promise<void> {
+    if (!writesEnabled || busy || !capturedAt || !resultPlatform) return;
+    let captured: string;
+    try {
+      captured = new Date(capturedAt).toISOString();
+    } catch {
+      setError("Enter a valid result capture time.");
+      return;
+    }
+    const metrics = Object.fromEntries(RESULT_METRICS.map(([key]) => [
+      key,
+      resultMetrics[key] === "" ? null : Number(resultMetrics[key])
+    ])) as AdminKvorumOwnerResult["metrics"];
+    setBusy(true);
+    setMessage("Saving the owner-entered result…");
+    setError("");
+    try {
+      const response = await fetch("/admin/api/kvorum/results", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recommendationRef: kvorumRecommendationActionRef(recommendation),
+          platform: resultPlatform,
+          capturedAt: captured,
+          metrics,
+          note: resultNote.trim() || null
+        })
+      });
+      const payload = await response.json() as { error?: string; result?: AdminKvorumOwnerResult };
+      if (!response.ok || !payload.result) throw new Error(payload.error ?? `Owner result failed with ${response.status}.`);
+      const savedResult = payload.result;
+      setResults((current) => [
+        savedResult,
+        ...current.filter((entry) => entry.id !== savedResult.id)
+      ].sort((left, right) => right.capturedAt.localeCompare(left.capturedAt) || left.id.localeCompare(right.id)));
+      setResultMetrics({ impressions: "", reach: "", saves: "", shares: "", comments: "", follows: "" });
+      setResultNote("");
+      setMessage("Owner-entered result recorded. No metrics were fetched and nothing was published.");
+    } catch (caught) {
+      setMessage("");
+      setError(caught instanceof Error ? caught.message : "The owner-entered result was not saved.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -446,14 +524,106 @@ function RecommendationCard({ recommendation }: { recommendation: AdminKvorumRec
         ) : null}
 
         {status === "posted" ? (
-          <section className="rounded-[9px] border border-[#26262b] bg-[#101013] p-3">
+          <section className="grid gap-4 rounded-[9px] border border-[#26262b] bg-[#101013] p-3">
             <h4 className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#94949c]">Outcome beside intent</h4>
             {postedUrl ? (
-              <a className="mt-2 block break-all text-[12px] text-[#f5d90a] underline" href={postedUrl} rel="noreferrer" target="_blank">{postedUrl}</a>
+              <a className="block break-all text-[12px] text-[#f5d90a] underline" href={postedUrl} rel="noreferrer" target="_blank">{postedUrl}</a>
             ) : null}
-            <p className="mt-2 text-[11.5px] leading-[1.55] text-[#94949c]">
-              No owner-entered result is stored yet. Kvórum never fetches performance automatically.
-            </p>
+            {results.length > 0 ? (
+              <div className="grid gap-2">
+                <p className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">Owner-entered results</p>
+                {results.map((result) => (
+                  <article className="rounded-[8px] border border-[#2f2f34] bg-[#0c0c0f] p-3" key={result.id}>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Chip>{result.platform}</Chip>
+                      <span className="font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#94949c]">
+                        Captured {resultTime(result.capturedAt)}
+                      </span>
+                    </div>
+                    <dl className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                      {RESULT_METRICS.map(([key, label]) => (
+                        <div className="rounded-[7px] border border-[#26262b] p-2" key={key}>
+                          <dt className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#94949c]">{label}</dt>
+                          <dd className="mt-1 text-[14px] text-[#e4e4e7]">{result.metrics[key]?.toLocaleString("cs-CZ") ?? "—"}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                    {result.note ? <p className="mt-3 text-[11.5px] leading-[1.55] text-[#a1a1aa]">{result.note}</p> : null}
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p className="text-[11.5px] leading-[1.55] text-[#94949c]">
+                No owner-entered result is stored yet. Kvórum never fetches performance automatically.
+              </p>
+            )}
+            <div className="grid gap-3 border-t border-[#26262b] pt-4">
+              <div>
+                <h5 className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#d4d4d8]">Record owner result</h5>
+                <p className="mt-1 text-[11.5px] leading-[1.55] text-[#94949c]">
+                  Type numbers you copied from the post. No automated collection or fetch runs here.
+                </p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="grid gap-1.5">
+                  <span className="font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#a1a1aa]">Platform</span>
+                  <select
+                    className={inputClass}
+                    disabled={busy || !writesEnabled}
+                    onChange={(event) => setResultPlatform(event.target.value)}
+                    value={resultPlatform}
+                  >
+                    {recommendation.platforms.map((platform) => <option key={platform} value={platform}>{platform}</option>)}
+                  </select>
+                </label>
+                <label className="grid gap-1.5">
+                  <span className="font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#a1a1aa]">Captured at</span>
+                  <input
+                    className={inputClass}
+                    disabled={busy || !writesEnabled}
+                    onChange={(event) => setCapturedAt(event.target.value)}
+                    type="datetime-local"
+                    value={capturedAt}
+                  />
+                </label>
+              </div>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {RESULT_METRICS.map(([key, label]) => (
+                  <label className="grid gap-1.5" key={key}>
+                    <span className="font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#a1a1aa]">{label}</span>
+                    <input
+                      className={inputClass}
+                      disabled={busy || !writesEnabled}
+                      inputMode="numeric"
+                      min={0}
+                      onChange={(event) => setResultMetrics((current) => ({ ...current, [key]: event.target.value }))}
+                      step={1}
+                      type="number"
+                      value={resultMetrics[key]}
+                    />
+                  </label>
+                ))}
+              </div>
+              <label className="grid gap-1.5">
+                <span className="font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#a1a1aa]">Owner note · optional</span>
+                <textarea
+                  className={`${inputClass} min-h-20`}
+                  disabled={busy || !writesEnabled}
+                  maxLength={800}
+                  onChange={(event) => setResultNote(event.target.value)}
+                  value={resultNote}
+                />
+              </label>
+              <button
+                className={`${buttonClass} justify-self-start border-[#665f16] text-[#f5d90a]`}
+                disabled={busy || !writesEnabled || !capturedAt || !resultPlatform
+                  || RESULT_METRICS.every(([key]) => resultMetrics[key] === "")}
+                onClick={() => void saveResult()}
+                type="button"
+              >
+                Record owner result
+              </button>
+            </div>
           </section>
         ) : null}
 
