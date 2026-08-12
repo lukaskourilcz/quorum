@@ -4,6 +4,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { repoRoot } from "../src/paths.js";
 import { AudienceSpecSchema } from "../src/contracts/audience-spec.js";
+import { BOOK_KB_SCORE_AXES, BookKbIndexSchema } from "../src/contracts/book-kb-index.js";
 import { ContractSchemas, jsonSchemaText, type ContractName } from "../src/contracts/json-schema.js";
 import { MarketingPlanSchema } from "../src/contracts/marketing-plan.js";
 import { SeasonFileSchema } from "../src/contracts/season.js";
@@ -52,6 +53,27 @@ describe("published contracts", () => {
 });
 
 describe("portfolio contract boundaries", () => {
+  it("keeps the public book index derivative-only and scores every required axis", async () => {
+    const valid = await fixture("book-kb-index", "valid") as {
+      chunks: Array<{ scores: Record<string, unknown> }>;
+    };
+    const parsed = BookKbIndexSchema.parse(valid);
+    expect(Object.keys(parsed.chunks[0]!.scores)).toEqual(BOOK_KB_SCORE_AXES);
+
+    expect(BookKbIndexSchema.safeParse({ ...valid, fullText: "synthetic but still forbidden" }).success).toBe(false);
+    const chunkWithText = structuredClone(valid) as {
+      chunks: Array<Record<string, unknown>>;
+    };
+    chunkWithText.chunks[0]!.fullText = "synthetic but still forbidden";
+    expect(BookKbIndexSchema.safeParse(chunkWithText).success).toBe(false);
+
+    const missingAxis = structuredClone(valid) as {
+      chunks: Array<{ scores: Record<string, unknown> }>;
+    };
+    delete missingAxis.chunks[0]!.scores.bookCuriosityPotential;
+    expect(BookKbIndexSchema.safeParse(missingAxis).success).toBe(false);
+  });
+
   it("enforces the adult audience floor and public interest list", async () => {
     const valid = await fixture("audience-spec", "valid") as Record<string, unknown>;
     expect(AudienceSpecSchema.safeParse(valid).success).toBe(true);

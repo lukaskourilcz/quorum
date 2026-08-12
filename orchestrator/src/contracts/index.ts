@@ -1,6 +1,7 @@
 export * from "./article-frontmatter.js";
 export * from "./autonomy.js";
 export * from "./audience-spec.js";
+export * from "./book-kb-index.js";
 export * from "./calendar.js";
 export * from "./campaign-brief.js";
 export * from "./carousel-template.js";
