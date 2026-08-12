@@ -12,6 +12,7 @@ export * from "./idea-ledger.js";
 export * from "./kpi-set.js";
 export * from "./kvorum-apify-quota.js";
 export * from "./kvorum-entities.js";
+export * from "./kvorum-monitor.js";
 export * from "./marketing-plan.js";
 export * from "./meeting-email.js";
 export * from "./meeting-agenda.js";

@@ -14,6 +14,7 @@ import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
 import { KpiSetSchema } from "./kpi-set.js";
 import { KvorumApifyQuotaSchema } from "./kvorum-apify-quota.js";
 import { KvorumEntityLexiconSchema } from "./kvorum-entities.js";
+import { KvorumMonitorReceiptSchema } from "./kvorum-monitor.js";
 import { KvorumSourceRegistrySchema } from "./kvorum-sources.js";
 import { MarketingPlanSchema } from "./marketing-plan.js";
 import { MeetingEmailSchema } from "./meeting-email.js";
@@ -68,6 +69,7 @@ export const ContractSchemas = {
   "kpi-set": KpiSetSchema,
   "kvorum-apify-quota": KvorumApifyQuotaSchema,
   "kvorum-entities": KvorumEntityLexiconSchema,
+  "kvorum-monitor": KvorumMonitorReceiptSchema,
   "kvorum-sources": KvorumSourceRegistrySchema,
   "marketing-plan": MarketingPlanSchema,
   "meeting-email": MeetingEmailSchema,

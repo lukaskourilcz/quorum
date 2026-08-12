@@ -210,7 +210,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-08a — Venture Apify quota file and share cap
 - [x] KV-08b — Third-tenant extension of the Apify guard
 - [x] KV-09a — Monitor fetch, normalize and the fixed-field row mapper
-- [ ] KV-09b — Monitor receipt contract and 30-day raw purge
+- [x] KV-09b — Monitor receipt contract and 30-day raw purge
 - [ ] KV-10a — Deterministic entity/topic clustering
 - [ ] KV-10b — Cluster ranking, novelty and continuation detection
 - [ ] KV-11 — `venture-recommendation` contract with monitor-cluster evidence

@@ -1,12 +1,21 @@
-import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
-import { z } from "zod";
 import type { KvorumEntityLexicon } from "../../contracts/kvorum-entities.js";
 import type {
   KvorumFeed,
   KvorumSourceRegistry
 } from "../../contracts/kvorum-sources.js";
-import { DateTimeSchema, HttpsUrlSchema } from "../../contracts/common.js";
+import {
+  KvorumFeedMonitorItemSchema,
+  KvorumMonitorReceiptSchema,
+  KvorumStitMonitorItemSchema,
+  type KvorumClusterRank,
+  type KvorumMonitorCluster,
+  type KvorumMonitorItem,
+  type KvorumMonitorReceipt,
+  type KvorumMonitorSourceResult
+} from "../../contracts/kvorum-monitor.js";
 import {
   runKvorumApifySource,
   type ApifyDatasetItem,
@@ -16,7 +25,13 @@ import { parseFeed, type FetchDeps } from "../../streams/fetch.js";
 import { canonicalUrl } from "../../streams/normalize.js";
 import { safeFetch, type SafeFetchOptions } from "../../security/url.js";
 import { configRoot } from "../../paths.js";
-import { readText } from "../../state.js";
+import {
+  atomicWriteJson,
+  readJson,
+  readText,
+  resolveStatePath,
+  withFileLock
+} from "../../state.js";
 import {
   kvorumBudgetCapacityDecision,
   signedOwnerDecision
@@ -27,46 +42,6 @@ import { loadKvorumSourceRegistry } from "./sources.js";
 const MAX_ITEM_TEXT = 4_000;
 const MAX_FEED_BYTES = 1_000_000;
 const FETCH_TIMEOUT_MS = 8_000;
-
-const SourceSchema = z.strictObject({
-  id: z.string().min(1).max(80),
-  name: z.string().min(1).max(120),
-  kind: z.enum(["facebook", "rss"]),
-  host: z.string().min(1).max(253)
-});
-
-const BaseMonitorItemShape = {
-  source: SourceSchema,
-  url: HttpsUrlSchema,
-  publishedAt: DateTimeSchema,
-  text: z.string().min(1).max(MAX_ITEM_TEXT),
-  entities: z.array(z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)).max(40)
-};
-
-export const KvorumFeedMonitorItemSchema = z.strictObject(BaseMonitorItemShape);
-export const KvorumStitMonitorItemSchema = z.strictObject({
-  ...BaseMonitorItemShape,
-  stit: z.strictObject({
-    pagePostUrl: HttpsUrlSchema,
-    likes: z.number().int().nonnegative().nullable(),
-    comments: z.number().int().nonnegative().nullable(),
-    shares: z.number().int().nonnegative().nullable()
-  })
-});
-export const KvorumMonitorItemSchema = z.union([
-  KvorumFeedMonitorItemSchema,
-  KvorumStitMonitorItemSchema
-]);
-
-export type KvorumMonitorItem = z.infer<typeof KvorumMonitorItemSchema>;
-
-export interface KvorumMonitorSourceResult {
-  sourceId: string;
-  kind: "apify" | "feed";
-  status: "success" | "skipped" | "failed";
-  count: number;
-  reason: string | null;
-}
 
 export interface KvorumMonitorFetchResult {
   items: KvorumMonitorItem[];
@@ -213,6 +188,7 @@ function sourceResultFromApify(
     return {
       sourceId: source.sourceId,
       kind: "apify",
+      attempted: outcome.artifactPaths.length > 0,
       status: "skipped",
       count: 0,
       reason: "The actor returned rows, but none satisfied the fixed-field monitor boundary."
@@ -221,6 +197,7 @@ function sourceResultFromApify(
   return {
     sourceId: source.sourceId,
     kind: "apify",
+    attempted: outcome.artifactPaths.length > 0,
     status: source.status,
     count: items.length,
     reason: source.reason
@@ -321,6 +298,7 @@ export async function fetchKvorumMonitor(input: {
       sourceResults.push({
         sourceId: feed.id,
         kind: "feed",
+        attempted: false,
         status: "skipped",
         count: 0,
         reason: feedsAllowed.reason
@@ -344,6 +322,7 @@ export async function fetchKvorumMonitor(input: {
       sourceResults.push({
         sourceId: feed.id,
         kind: "feed",
+        attempted: true,
         status: normalized.length > 0 ? "success" : "skipped",
         count: normalized.length,
         reason: normalized.length > 0 ? null : "The feed returned no contract-valid monitor items."
@@ -352,6 +331,7 @@ export async function fetchKvorumMonitor(input: {
       sourceResults.push({
         sourceId: feed.id,
         kind: "feed",
+        attempted: true,
         status: "failed",
         count: 0,
         reason: error instanceof Error ? error.message.slice(0, 200) : "The feed failed."
@@ -363,6 +343,124 @@ export async function fetchKvorumMonitor(input: {
     items: sortItems(items),
     sourceResults,
     artifactPaths: apify.artifactPaths,
-    fixtureOnly: sourceResults.every((result) => result.status === "skipped")
+    fixtureOnly: !sourceResults.some((result) => result.attempted)
   };
+}
+
+export const KVORUM_RAW_RETENTION_DAYS = 30;
+const MONITOR_DIRECTORY = "ventures/kvorum/monitor";
+
+function purgeFingerprint(item: KvorumMonitorItem): string {
+  return createHash("sha256")
+    .update(`${item.source.id}\n${item.url}\n${item.publishedAt}`)
+    .digest("hex");
+}
+
+/** Drop only raw rows. Clusters, their attributions and their rank records are durable evidence. */
+export function purgeKvorumRawItems(
+  receipt: KvorumMonitorReceipt,
+  now: Date
+): KvorumMonitorReceipt {
+  const cutoffPublishedAt = new Date(
+    now.getTime() - KVORUM_RAW_RETENTION_DAYS * 86_400_000
+  ).toISOString();
+  const kept = receipt.rawItems.filter((item) => item.publishedAt >= cutoffPublishedAt);
+  const removed = receipt.rawItems.filter((item) => item.publishedAt < cutoffPublishedAt);
+  const marks = new Map(
+    receipt.purge.purged.map((mark) => [mark.fingerprint, mark])
+  );
+  for (const item of removed) {
+    const fingerprint = purgeFingerprint(item);
+    marks.set(fingerprint, {
+      fingerprint,
+      sourceId: item.source.id,
+      publishedAt: item.publishedAt,
+      purgedAt: now.toISOString()
+    });
+  }
+  return KvorumMonitorReceiptSchema.parse({
+    ...receipt,
+    itemsKept: kept.length,
+    rawItems: kept,
+    purge: {
+      retentionDays: KVORUM_RAW_RETENTION_DAYS,
+      evaluatedAt: now.toISOString(),
+      cutoffPublishedAt,
+      rawItemsBefore: receipt.rawItems.length,
+      rawItemsAfter: kept.length,
+      purged: [...marks.values()].sort((left, right) =>
+        left.publishedAt.localeCompare(right.publishedAt)
+        || left.fingerprint.localeCompare(right.fingerprint))
+    }
+  });
+}
+
+export function buildKvorumMonitorReceipt(input: {
+  date: string;
+  now: Date;
+  fetched: KvorumMonitorFetchResult;
+  clusters?: KvorumMonitorCluster[];
+  ranks?: KvorumClusterRank[];
+}): KvorumMonitorReceipt {
+  const cutoffPublishedAt = new Date(
+    input.now.getTime() - KVORUM_RAW_RETENTION_DAYS * 86_400_000
+  ).toISOString();
+  return purgeKvorumRawItems(KvorumMonitorReceiptSchema.parse({
+    schemaVersion: "kvorum-monitor/1",
+    date: input.date,
+    generatedAt: input.now.toISOString(),
+    fixtureOnly: input.fetched.fixtureOnly,
+    sourceResults: input.fetched.sourceResults,
+    itemsKept: input.fetched.items.length,
+    rawItems: input.fetched.items,
+    clusters: input.clusters ?? [],
+    ranks: input.ranks ?? [],
+    purge: {
+      retentionDays: KVORUM_RAW_RETENTION_DAYS,
+      evaluatedAt: input.now.toISOString(),
+      cutoffPublishedAt,
+      rawItemsBefore: input.fetched.items.length,
+      rawItemsAfter: input.fetched.items.length,
+      purged: []
+    }
+  }), input.now);
+}
+
+/**
+ * The monitor's sole persistence entry point.
+ *
+ * One lock owns the daily atomic write and every older receipt rewrite, so concurrent retries
+ * cannot resurrect raw rows another run just purged.
+ */
+export async function writeKvorumMonitorReceipt(input: {
+  root: string;
+  receipt: KvorumMonitorReceipt;
+  now: Date;
+}): Promise<string[]> {
+  const currentPath = `${MONITOR_DIRECTORY}/${input.receipt.date}.json`;
+  return withFileLock(input.root, `${MONITOR_DIRECTORY}/.lock`, async () => {
+    const directory = resolveStatePath(input.root, MONITOR_DIRECTORY);
+    const filenames = await readdir(directory).catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return [];
+      throw error;
+    });
+    const rewrites: Array<{ path: string; receipt: KvorumMonitorReceipt }> = [];
+    for (const filename of filenames.filter((entry) => /^\d{4}-\d{2}-\d{2}\.json$/u.test(entry))) {
+      const relativePath = `${MONITOR_DIRECTORY}/${filename}`;
+      if (relativePath === currentPath) continue;
+      const stored = KvorumMonitorReceiptSchema.parse(
+        await readJson<unknown>(input.root, relativePath, {})
+      );
+      const purged = purgeKvorumRawItems(stored, input.now);
+      if (JSON.stringify(purged) !== JSON.stringify(stored)) {
+        rewrites.push({ path: relativePath, receipt: purged });
+      }
+    }
+    const current = purgeKvorumRawItems(input.receipt, input.now);
+    await Promise.all([
+      atomicWriteJson(input.root, currentPath, current),
+      ...rewrites.map((entry) => atomicWriteJson(input.root, entry.path, entry.receipt))
+    ]);
+    return [currentPath, ...rewrites.map((entry) => entry.path).sort()];
+  });
 }
