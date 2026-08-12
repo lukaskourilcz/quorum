@@ -119,6 +119,9 @@ const expectedPrompts = [
   "studio.md",
   "stunt.md",
   "tape.md",
+  "tehdejsi-svet/craft.md",
+  "tehdejsi-svet/letopis.md",
+  "tehdejsi-svet/verba.md",
   "threads.md",
   "vault.md",
   "vig.md",
@@ -197,7 +200,10 @@ describe("agent architecture", () => {
       ...(await readdir(promptsRoot)).filter((name) => name.endsWith(".md")),
       ...(await readdir(path.join(promptsRoot, "booksofhistory")))
         .filter((name) => name.endsWith(".md"))
-        .map((name) => `booksofhistory/${name}`)
+        .map((name) => `booksofhistory/${name}`),
+      ...(await readdir(path.join(promptsRoot, "tehdejsi-svet")))
+        .filter((name) => name.endsWith(".md"))
+        .map((name) => `tehdejsi-svet/${name}`)
     ].sort();
 
     expect(promptNames).toEqual(expectedPrompts);

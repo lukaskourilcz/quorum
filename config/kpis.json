@@ -1113,6 +1113,78 @@
         "kind": "none",
         "reason": "No BOOKSOFHISTORY package has been approved or published for this gate to count."
       }
+    },
+    {
+      "id": "letopis.cycle_reliability",
+      "owner": "LETOPIS",
+      "metric": "completedOrHonestlyStretchedCycleRate",
+      "target": 0.9,
+      "dir": "up",
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No live Tehdejsi svet cycle has completed, so the cycle denominator does not exist yet."
+      }
+    },
+    {
+      "id": "letopis.feature_cadence",
+      "owner": "LETOPIS",
+      "metric": "approvedFeaturesPerMonth",
+      "target": 8,
+      "dir": "up",
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No feature has been approved, so the cadence denominator does not exist yet."
+      }
+    },
+    {
+      "id": "letopis.model_spend",
+      "owner": "LETOPIS",
+      "metric": "ventureModelSpendUsdPerMonth",
+      "target": 4,
+      "dir": "down",
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No live Tehdejsi svet room has spent, so the venture's model-spend denominator does not exist yet."
+      }
+    },
+    {
+      "id": "verba.cycle_reliability",
+      "owner": "VERBA",
+      "metric": "completedOrHonestlyStretchedCycleRate",
+      "target": 0.9,
+      "dir": "up",
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No live Tehdejsi svet cycle has completed, so the cycle denominator does not exist yet."
+      }
+    },
+    {
+      "id": "verba.language_parity",
+      "owner": "VERBA",
+      "metric": "ukrainianPackagesPassingAntiMirrorRate",
+      "target": 1,
+      "dir": "up",
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No Ukrainian package has been gated, so the parity denominator does not exist yet."
+      }
+    },
+    {
+      "id": "verba.model_spend",
+      "owner": "VERBA",
+      "metric": "ventureModelSpendUsdPerMonth",
+      "target": 4,
+      "dir": "down",
+      "warmupCycles": 14,
+      "measurement": {
+        "kind": "none",
+        "reason": "No live Tehdejsi svet room has spent, so the venture's model-spend denominator does not exist yet."
+      }
     }
   ]
 }

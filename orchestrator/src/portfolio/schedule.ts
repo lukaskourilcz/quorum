@@ -125,6 +125,12 @@ export function resolveEffectivePortfolioSchedule(input: {
   if (input.monthlyApiHeadroomUsd < BOOKSOFHISTORY_LADDER.dropRoomBelowUsd) {
     active.delete("bh-desk");
   }
+  // Tehdejsi svet drops on the same rung as the BOOKSOFHISTORY room and before GoVIRAL. It is a
+  // daily audience promise rather than a reader-facing publication, so it outranks the weekly
+  // internal brief and never outranks a magazine.
+  if (input.monthlyApiHeadroomUsd < BOOKSOFHISTORY_LADDER.dropRoomBelowUsd) {
+    active.delete("ts-desk");
+  }
   // GoVIRAL takes the rungs the incubator vacated, and takes them first among the rooms: it is
   // the newest, it meets once a week, and a missed Monday costs a brief rather than a
   // publication. Everything below it on this ladder is either a reader-facing promise or the

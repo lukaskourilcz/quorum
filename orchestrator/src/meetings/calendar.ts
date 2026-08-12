@@ -70,7 +70,7 @@ export function pragueSlotInstant(date: string, hour: number): Date {
 }
 
 function recordKind(record: MeetingRecord): CalendarFeed["slots"][number]["kind"] | null {
-  if (record.kind === "cu-edition" || record.kind === "cu-product" || record.kind === "tt-marketing" || record.kind === "gv-brief" || record.kind === "ms-daily" || record.kind === "bh-desk" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" || record.kind === "mma-intake" || record.kind === "mma-analysis" || record.kind === "mag-editorial" || record.kind === "mag-desk" || record.kind === "studio") return record.kind;
+  if (record.kind === "cu-edition" || record.kind === "cu-product" || record.kind === "tt-marketing" || record.kind === "gv-brief" || record.kind === "ms-daily" || record.kind === "bh-desk" || record.kind === "ts-desk" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" || record.kind === "mma-intake" || record.kind === "mma-analysis" || record.kind === "mag-editorial" || record.kind === "mag-desk" || record.kind === "studio") return record.kind;
   if (record.phase === "morning") return "venture-morning";
   if (record.phase === "afternoon") return "venture-afternoon";
   if (record.phase === "night") return "venture-night";
@@ -93,7 +93,7 @@ function recordReference(record: MeetingRecord): string {
   // to leave both files behind. The 1 August morning and afternoon standups were published
   // without their summaries, and the two slots referenced files that were never written.
   if (record.kind === "venture") return `standups/${record.date}-${record.phase}`;
-  if (record.kind === "tt-marketing" || record.kind === "gv-brief" || record.kind === "ms-daily" || record.kind === "bh-desk" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" || record.kind === "mma-intake" || record.kind === "mma-analysis" || record.kind === "mag-editorial" || record.kind === "mag-desk" || record.kind === "studio") {
+  if (record.kind === "tt-marketing" || record.kind === "gv-brief" || record.kind === "ms-daily" || record.kind === "bh-desk" || record.kind === "ts-desk" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" || record.kind === "mma-intake" || record.kind === "mma-analysis" || record.kind === "mag-editorial" || record.kind === "mag-desk" || record.kind === "studio") {
     return `meetings/${record.date}-${record.kind}`;
   }
   return meetingRef(record.date, record.kind);

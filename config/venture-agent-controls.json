@@ -125,6 +125,17 @@
         "FRAME"
       ],
       "disabled": []
+    },
+    "tehdejsi-svet": {
+      "lockedOn": [
+        "LETOPIS",
+        "VERBA",
+        "QUILL",
+        "HACEK",
+        "AUDIT"
+      ],
+      "switchable": [],
+      "disabled": []
     }
   }
 }

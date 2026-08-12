@@ -29,7 +29,8 @@ const VENTURE_LABEL: Readonly<Record<string, string>> = {
   fightaiq: "FightAIQ",
   goviral: "GoVIRAL",
   marketingshark: "marketingShark",
-  booksofhistory: "BOOKSOFHISTORY"
+  booksofhistory: "BOOKSOFHISTORY",
+  "tehdejsi-svet": "Tehdejší svět"
 };
 
 function ventureLabel(id: string): string {

@@ -46,7 +46,9 @@ export type AgentId =
   | "EASEL"
   | "MOTIF"
   | "FOLIO"
-  | "PLOT";
+  | "PLOT"
+  | "LETOPIS"
+  | "VERBA";
 
 type PublicStatus =
   | "active"
@@ -122,7 +124,9 @@ type TextModelRole =
   | "MAKO"
   | "CHUM"
   | "FOLIO"
-  | "PLOT";
+  | "PLOT"
+  | "LETOPIS"
+  | "VERBA";
 
 const textModelRoles = modelSource.roles as Record<
   TextModelRole,
@@ -363,6 +367,8 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
   // and the wrong price for the venture's only quality-critical call.
   MAKO: [configuredTextModel("MAKO", "marketingShark weekly review")],
   CHUM: [configuredTextModel("CHUM", "marketingShark daily carousel copy")],
+  LETOPIS: [configuredTextModel("LETOPIS", "Tehdejsi svet planning and Czech copy")],
+  VERBA: [configuredTextModel("VERBA", "Tehdejsi svet Ukrainian adaptation")],
   FOLIO: [configuredTextModel("FOLIO", "BOOKSOFHISTORY editorial selection", folioCall)],
   PLOT: [configuredTextModel("PLOT", "BOOKSOFHISTORY story production", plotCall)],
   HERALD: [
@@ -689,6 +695,18 @@ const profileCopy: Record<
     operatingPrinciple: "One verified story, written natively twice.",
     output: "Canonical story brief and separate native social drafts per locale",
     currentFocus: "BOOKSOFHISTORY story production",
+    publicTrackRecord: null
+  },
+  LETOPIS: {
+    operatingPrinciple: "Say what the era held, never what the person felt.",
+    output: "Canonical story brief and the Czech feature copy",
+    currentFocus: "Tehdejší svět editorial cycles",
+    publicTrackRecord: null
+  },
+  VERBA: {
+    operatingPrinciple: "Write the Ukrainian, do not mirror the Czech.",
+    output: "Native Ukrainian package and the terminology review",
+    currentFocus: "Tehdejší svět Ukrainian packages",
     publicTrackRecord: null
   }
 };

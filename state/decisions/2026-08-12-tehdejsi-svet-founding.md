@@ -123,9 +123,9 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-03b** — Meeting policy for `ts-desk`
 - [x] **TS-03c** — `cycle.yml` dispatch choices and mode gates
 - [x] **TS-03d** — Vercel cron entries for the 18:00 slot
-- [ ] **TS-04a** — LETOPIS and VERBA in registry, routing, controls and cast schema
-- [ ] **TS-04b** — Prompts for LETOPIS, VERBA and the craft file
-- [ ] **TS-04c** — Model roles for LETOPIS and VERBA
+- [x] **TS-04a** — LETOPIS and VERBA in registry, routing, controls and cast schema
+- [x] **TS-04b** — Prompts for LETOPIS, VERBA and the craft file
+- [x] **TS-04c** — Model roles for LETOPIS and VERBA
 - [ ] **TS-05a** — Cycle state machine and runner dispatch
 - [ ] **TS-05b** — Scaffold, hue, labels, KPI seeds and ladder position
 - [ ] **TS-06a** — `tehdejsi-snapshot` contract

@@ -86,6 +86,19 @@
       "maxOutputTokens": 1200,
       "webSearchUses": 3
     },
+    "_comment_TEHDEJSI_SVET": "LETOPIS and VERBA both use Sonnet. The Czech pass and the Ukrainian pass are the venture's only quality-critical calls: the brand promise is native register in both languages, and a Ukrainian adaptation written at Haiku quality would read as translation, which is exactly what the anti-mirror gate exists to prevent. VERBA's window is smaller because it receives one canonical brief plus the Czech copy as reference, not the whole shortlist. Switching either is PEOPLE's process, not a config edit.",
+    "LETOPIS": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-5",
+      "maxInputTokens": 8000,
+      "maxOutputTokens": 2500
+    },
+    "VERBA": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-5",
+      "maxInputTokens": 6000,
+      "maxOutputTokens": 2000
+    },
     "OPENAI_SPECIALIST": {
       "provider": "openai",
       "model": "gpt-5.6-luna",

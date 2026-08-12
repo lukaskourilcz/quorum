@@ -18,6 +18,7 @@ export const VENTURE_BRAND: Record<string, string> = {
   goviral: "#bbf7d0",
   marketingshark: "#a5d8f3",
   booksofhistory: "#c4b5fd",
+  "tehdejsi-svet": "#d9684f",
   "titty-tuesdays": "#fde68a",
   "carousel-studio": "#d4d4d8"
 };

@@ -53,6 +53,12 @@ export const calendarCostContexts: Partial<
     VAULT: "DNESKAi idea checks",
     AUDIT: "Company and project meetings"
   },
+  "ts-desk": {
+    LETOPIS: "Tehdejsi svet planning and Czech copy",
+    VERBA: "Tehdejsi svet Ukrainian adaptation",
+    HACEK: "Project meetings when selected",
+    AUDIT: "Company and project meetings"
+  },
   "bh-desk": {
     FOLIO: "BOOKSOFHISTORY editorial selection",
     PLOT: "BOOKSOFHISTORY story production",

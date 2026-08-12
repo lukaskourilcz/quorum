@@ -988,6 +988,36 @@
       "updatedAt": "2026-08-07",
       "status": "noindex",
       "informationGain": "low"
+    },
+    {
+      "url": "/agents/letopis",
+      "purpose": "Publish the LETOPIS era-editor role and the line it may not cross between an era and a life.",
+      "searchIntent": "understand who selects and writes the Czech Tehdejsi svet features",
+      "primaryQuery": "LETOPIS Tehdejsi svet editor agent",
+      "audience": "governance readers",
+      "evidenceRefs": [
+        "agent-profile:LETOPIS:v1"
+      ],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-12",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
+      "url": "/agents/verba",
+      "purpose": "Publish the VERBA Ukrainian-editor role and why its packages are written rather than translated.",
+      "searchIntent": "understand who writes the Ukrainian Tehdejsi svet packages",
+      "primaryQuery": "VERBA Tehdejsi svet Ukrainian editor agent",
+      "audience": "governance readers",
+      "evidenceRefs": [
+        "agent-profile:VERBA:v1"
+      ],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-12",
+      "status": "indexable",
+      "informationGain": "material"
     }
   ]
 }

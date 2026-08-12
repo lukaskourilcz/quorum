@@ -347,6 +347,22 @@
         "claims:bound"
       ],
       "status": "active"
+    },
+    "LETOPIS": {
+      "capabilities": [
+        "editorial:selection",
+        "story:brief",
+        "copy:czech"
+      ],
+      "status": "active"
+    },
+    "VERBA": {
+      "capabilities": [
+        "copy:ukrainian",
+        "language:terminology",
+        "sensitivity:review"
+      ],
+      "status": "active"
     }
   },
   "mandatoryWhen": [
@@ -610,6 +626,16 @@
         "FORGE"
       ],
       "optionalByTopic": true
+    },
+    "ts-desk-room": {
+      "required": [
+        "LETOPIS",
+        "VERBA",
+        "QUILL",
+        "HACEK",
+        "AUDIT"
+      ],
+      "optionalByTopic": false
     }
   }
 }

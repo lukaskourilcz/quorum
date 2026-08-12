@@ -25,6 +25,7 @@ export const SCHEDULED_PHASES = [
   "mag-editorial",
   "mag-desk",
   "bh-desk",
+  "ts-desk",
   "article-am",
   "night"
 ] as const;

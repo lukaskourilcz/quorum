@@ -44,7 +44,9 @@ const titles: Record<AgentId, string> = {
   MAKO: "marketingShark director",
   CHUM: "Carousel copywriter",
   FOLIO: "Book selection editor",
-  PLOT: "Book story producer"
+  PLOT: "Book story producer",
+  LETOPIS: "Era editor",
+  VERBA: "Ukrainian editor"
 };
 
 const mandates: Record<AgentId, string> = {
@@ -91,7 +93,9 @@ const mandates: Record<AgentId, string> = {
   MAKO: "Reviews what the daily carousel room shipped and keeps its hook rotation and its numbers honest.",
   CHUM: "Writes each day's quiz carousel twice, once for Czech readers and once for English ones.",
   FOLIO: "Selects which recorded book candidate earns bounded research and keeps priors separate from verified facts.",
-  PLOT: "Turns one verified dossier story into separate native social drafts for the cs and en locales without rendering cover art."
+  PLOT: "Turns one verified dossier story into separate native social drafts for the cs and en locales without rendering cover art.",
+  LETOPIS: "Picks which recorded era candidate is worth a story and writes the Czech feature, describing the world around a person and never that person\u2019s life.",
+  VERBA: "Writes the Ukrainian package as its own composition rather than a translation, and reviews the terminology and cultural framing."
 };
 
 const replacements: ReadonlyArray<readonly [RegExp, string]> = [

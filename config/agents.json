@@ -238,7 +238,7 @@
       "ventures": "global",
       "department": "Growth",
       "title": "Trend Scout",
-      "mission": "Reads the weekly Threads/Instagram scout data and names what is genuinely rising, with the numbers that show it \u2014 never inventing a trend the data cannot support.",
+      "mission": "Reads the weekly Threads/Instagram scout data and names what is genuinely rising, with the numbers that show it — never inventing a trend the data cannot support.",
       "responsibilities": [
         "Read the week's scout snapshot and name what is rising, with its velocity number",
         "Say which signals are rank-only and cannot be called engagement",
@@ -843,7 +843,8 @@
       "ventures": [
         "caught-up",
         "mma-files",
-        "booksofhistory"
+        "booksofhistory",
+        "tehdejsi-svet"
       ],
       "department": "Czech Editorial",
       "title": "Czech Language Editor",
@@ -2347,6 +2348,118 @@
         "avatar": null,
         "avatarAlt": "Abstract non-human portrait plan for PLOT with a story arc and paired language columns",
         "provenanceRef": "AVATAR-PLOT"
+      }
+    },
+    {
+      "id": "LETOPIS",
+      "slug": "letopis",
+      "kind": "specialist",
+      "provider": "Anthropic",
+      "ventures": [
+        "tehdejsi-svet"
+      ],
+      "department": "Tehdejší svět",
+      "title": "Editorial Lead",
+      "mission": "Ranks recorded snapshot candidates, writes the language-neutral story brief and the Czech feature copy without crossing the sensitivity, sourcing or publication gates.",
+      "responsibilities": [
+        "Rank the deterministic shortlist inside the editorial room",
+        "Write the canonical language-neutral story brief",
+        "Write the Czech feature copy and its caption"
+      ],
+      "notResponsibleFor": [
+        "Reading the product outside the committed snapshot",
+        "Bypassing a sensitivity tier or its human-review flag",
+        "Publishing, posting or scheduling content"
+      ],
+      "decisionRights": [
+        "Select up to two features per cycle from the recorded shortlist",
+        "Record an honest quiet day when no candidate clears the send-target filter"
+      ],
+      "ownedKpiIds": [
+        "letopis.cycle_reliability",
+        "letopis.feature_cadence",
+        "letopis.model_spend"
+      ],
+      "successChecks": [
+        "Every feature names a recorded snapshot candidate and an askable question",
+        "Every factual sentence resolves to a snapshot record or dossier claim"
+      ],
+      "capabilityTags": [
+        "editorial:selection",
+        "story:brief",
+        "copy:czech"
+      ],
+      "status": "active",
+      "activatedAt": "2026-08-12",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:LETOPIS:v1",
+      "skillRefs": [
+        ".claude/skills/boardroom-routing/SKILL.md",
+        ".claude/skills/stop-slop/SKILL.md"
+      ],
+      "visual": {
+        "motif": "chronicle margins + a highlighted line",
+        "accentToken": "agent-letopis",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for LETOPIS with chronicle margins and a highlighted line",
+        "provenanceRef": "AVATAR-LETOPIS"
+      }
+    },
+    {
+      "id": "VERBA",
+      "slug": "verba",
+      "kind": "specialist",
+      "provider": "Anthropic",
+      "ventures": [
+        "tehdejsi-svet"
+      ],
+      "department": "Tehdejší svět",
+      "title": "Ukrainian Editor",
+      "mission": "Writes the native Ukrainian adaptation of the canonical story brief and owns the Czech-Ukrainian terminology and cultural-sensitivity review.",
+      "responsibilities": [
+        "Adapt the canonical brief into native Ukrainian editorial copy",
+        "Review Ukrainian terminology, place names and historical framing",
+        "Co-maintain the recorded terminology table"
+      ],
+      "notResponsibleFor": [
+        "Translating the Czech copy sentence by sentence",
+        "Changing a claim, its sources or its verification state",
+        "Publishing, posting or scheduling content"
+      ],
+      "decisionRights": [
+        "Reject a Ukrainian package whose framing or terminology is unsafe",
+        "Propose terminology entries through a recorded meeting decision"
+      ],
+      "ownedKpiIds": [
+        "verba.cycle_reliability",
+        "verba.language_parity",
+        "verba.model_spend"
+      ],
+      "successChecks": [
+        "No Ukrainian package mirrors the Czech copy sentence by sentence",
+        "Every Ukrainian term contradicting the recorded table is corrected before the gate"
+      ],
+      "capabilityTags": [
+        "copy:ukrainian",
+        "language:terminology",
+        "sensitivity:review"
+      ],
+      "status": "active",
+      "activatedAt": "2026-08-12",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:VERBA:v1",
+      "skillRefs": [
+        ".claude/skills/boardroom-routing/SKILL.md",
+        ".claude/skills/stop-slop/SKILL.md"
+      ],
+      "visual": {
+        "motif": "two parallel columns + a soft rule between them",
+        "accentToken": "agent-verba",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for VERBA with two parallel columns and a soft rule between them",
+        "provenanceRef": "AVATAR-VERBA"
       }
     }
   ]

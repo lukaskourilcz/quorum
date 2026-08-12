@@ -9,18 +9,18 @@ async function json<T>(relative: string): Promise<T> {
   return JSON.parse(await readFile(path.join(repoRoot, relative), "utf8")) as T;
 }
 
-describe("closing 44-agent system audit", () => {
+describe("closing 46-agent system audit", () => {
   it("keeps every identity unique, prompt-backed and routable, seated or not", async () => {
     const registry = await json<{ agents: Array<{ id: string; slug: string; mission: string; status: string; provider: string; notResponsibleFor: string[] }> }>("config/agents.json");
     const routing = await json<{ agents: Record<string, { capabilities: string[]; status: string }> }>("config/agent-routing.json");
-    expect(registry.agents).toHaveLength(44);
-    expect(new Set(registry.agents.map((agent) => agent.id)).size).toBe(44);
-    expect(new Set(registry.agents.map((agent) => agent.mission)).size).toBe(44);
+    expect(registry.agents).toHaveLength(46);
+    expect(new Set(registry.agents.map((agent) => agent.id)).size).toBe(46);
+    expect(new Set(registry.agents.map((agent) => agent.mission)).size).toBe(46);
     expect(new Set(Object.keys(routing.agents))).toEqual(new Set(registry.agents.map((agent) => agent.id)));
     // Forty-four profiles, thirty-five of them seated. A retired or paused agent keeps its
     // prompt, its portrait and its routing entry -- the record of who did what does not shrink
     // when the roster does -- and the two files have to agree about which of the three it is.
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(35);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(37);
     for (const agent of registry.agents) {
       expect(["active", "paused", "retired"]).toContain(agent.status);
       expect(routing.agents[agent.id]?.status).toBe(agent.status);
@@ -30,7 +30,11 @@ describe("closing 44-agent system audit", () => {
         repoRoot,
         "orchestrator",
         "prompts",
-        agent.id === "FOLIO" || agent.id === "PLOT" ? "booksofhistory" : "",
+        agent.id === "FOLIO" || agent.id === "PLOT"
+          ? "booksofhistory"
+          : agent.id === "LETOPIS" || agent.id === "VERBA"
+            ? "tehdejsi-svet"
+            : "",
         `${agent.slug}.md`
       ))).resolves.toBeUndefined();
     }

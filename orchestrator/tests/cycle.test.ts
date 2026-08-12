@@ -229,26 +229,28 @@ describe("cycle preflight", () => {
     }
   });
 
-  // 2026-08-09 is a Caught Up day in the ideation rotation, which is what makes the handoff below
+  // 2026-08-10 is a Caught Up day in the ideation rotation, which is what makes the handoff below
   // happen at all. The rotation is a modulo over the date across the active ventures, so a date is
-  // the only thing that decides it and the same date always picks the same venture.
+  // the only thing that decides it and the same date always picks the same venture -- and adding a
+  // venture reshuffles which date lands where, which is why this date moved when Tehdejsi svet
+  // joined the registry.
   it("carries one VAULT-screened dry morning idea into the product-room verdict", async () => {
     const morning = await runCycle({
       phase: "morning",
       dry: true,
       explainBudget: false,
       explainRouting: false,
-      now: new Date("2026-08-09T04:00:00.000Z")
+      now: new Date("2026-08-10T04:00:00.000Z")
     });
     expect(morning.artifacts).toEqual(expect.arrayContaining([
       "tmp/dry-run/state/ideas/caught-up/ledger.jsonl",
       "tmp/dry-run/state/ideas/caught-up/INDEX.md"
     ]));
     const standup = JSON.parse(await readFile(
-      path.join(repoRoot, "tmp/dry-run/state/standups/2026-08-09-morning.json"),
+      path.join(repoRoot, "tmp/dry-run/state/standups/2026-08-10-morning.json"),
       "utf8"
     )) as { caughtUpIdeaRef?: string; morningIdeaNamespace?: string };
-    expect(standup.caughtUpIdeaRef).toMatch(/^idea-2026-08-09-/);
+    expect(standup.caughtUpIdeaRef).toMatch(/^idea-2026-08-10-/);
     expect(standup.morningIdeaNamespace).toBe("caught-up");
 
     const product = await runCycle({
@@ -256,10 +258,10 @@ describe("cycle preflight", () => {
       dry: true,
       explainBudget: false,
       explainRouting: false,
-      now: new Date("2026-08-09T15:00:00.000Z")
+      now: new Date("2026-08-10T15:00:00.000Z")
     });
     const record = MeetingRecordSchema.parse(JSON.parse(await readFile(
-      path.join(repoRoot, "tmp/dry-run/state/meetings/2026-08-09-cu-product.json"),
+      path.join(repoRoot, "tmp/dry-run/state/meetings/2026-08-10-cu-product.json"),
       "utf8"
     )));
     expect(record.caughtUpIdeaRef).toBe(standup.caughtUpIdeaRef);

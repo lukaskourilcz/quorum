@@ -34,7 +34,7 @@ describe("the KPI ownership registry states its own measurement", () => {
     // functioning as an ownership record. Six entries left with SPLIT, EASEL and MOTIF: an
     // outcome nobody owns is not an outcome the company is answering for.
     const registry = await loadKpiRegistry(configRoot);
-    expect(registry.kpis).toHaveLength(92);
+    expect(registry.kpis).toHaveLength(98);
     expect(registry.kpis.filter((kpi) => kpi.measurement === undefined)).toEqual([]);
   });
 

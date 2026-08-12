@@ -11,6 +11,7 @@ export type CalendarKind =
   | "gv-brief"
   | "ms-daily"
   | "bh-desk"
+  | "ts-desk"
   | "incubator-scan"
   | "incubator-synthesis"
   | "mma-intake"

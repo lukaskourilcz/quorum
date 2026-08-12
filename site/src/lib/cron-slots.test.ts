@@ -32,6 +32,7 @@ describe("the slot table the cron route dispatches from", () => {
       "13:gv-brief",
       "14:afternoon",
       "17:cu-product",
+      "18:ts-desk",
       "19:mma-analysis",
       "20:mag-desk",
       "22:night"

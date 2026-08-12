@@ -82,7 +82,9 @@ export function projectForKind(kind: string): OfficeProjectKey {
 
 /** Calendar-only ventures can keep their own hue without acquiring a public project room. */
 export function projectColorForKind(kind: string): string {
-  return kind === "bh-desk" ? VENTURE_BRAND.booksofhistory! : PROJECT_COLOR[projectForKind(kind)];
+  if (kind === "bh-desk") return VENTURE_BRAND.booksofhistory!;
+  if (kind === "ts-desk") return VENTURE_BRAND["tehdejsi-svet"]!;
+  return PROJECT_COLOR[projectForKind(kind)];
 }
 
 /* ------------------------------------------------------------------ calendar */
