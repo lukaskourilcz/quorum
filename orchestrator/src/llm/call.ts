@@ -35,9 +35,26 @@ export interface GuardedCallInput<T> {
   system: string;
   input: string;
   maxOutputTokens: number;
+  webSearch?: {
+    maxUses: number;
+    maxSearchContentTokens: number;
+  };
   budgetContext: ReserveContext;
   parse: (text: string) => T;
   dry?: boolean;
+}
+
+export interface GuardedCallResult<T> {
+  value: T;
+  cached: boolean;
+  usd: number;
+  /** Present on the real guarded path; optional so existing injected test calls stay small. */
+  usage?: {
+    model: string;
+    tokensIn: number;
+    tokensOut: number;
+    toolUses: number;
+  };
 }
 
 /**
@@ -77,7 +94,10 @@ export function unfenceModelJson(text: string): string {
 
 export async function guardedJsonCall<T>(
   request: GuardedCallInput<T>
-): Promise<{ value: T; cached: boolean; usd: number }> {
+): Promise<GuardedCallResult<T>> {
+  if (request.webSearch && request.provider !== "anthropic") {
+    throw new Error("Guarded web search is available only through the registered Anthropic adapter");
+  }
   assertAgentPacketPresentationBarrier({
     input: request.input,
     system: request.system
@@ -88,6 +108,7 @@ export async function guardedJsonCall<T>(
     system: request.system,
     input: request.input,
     maxOutputTokens: request.maxOutputTokens,
+    ...(request.webSearch ? { webSearch: request.webSearch } : {}),
     // A retry of a seat whose reply would not parse sends byte-identical arguments, so without
     // this it hashes to the first attempt, hits the response cache and — worse — never reaches
     // the ledger, because the ledger is deduplicated on the same hash. The provider bills both
@@ -102,13 +123,20 @@ export async function guardedJsonCall<T>(
     hash
   );
   if (cached !== null) {
-    return { value: cached, cached: true, usd: 0 };
+    return {
+      value: cached,
+      cached: true,
+      usd: 0,
+      usage: { model: request.model, tokensIn: 0, tokensOut: 0, toolUses: 0 }
+    };
   }
   const estimate = estimateTextCall({
     provider: request.provider,
     model: request.model,
     promptChars: request.system.length + request.input.length,
-    maxOutputTokens: request.maxOutputTokens
+    maxOutputTokens: request.maxOutputTokens,
+    webSearchUses: request.webSearch?.maxUses,
+    maxSearchContentTokens: request.webSearch?.maxSearchContentTokens
   });
   assertTextReservation(estimate, request.budgetContext);
   if (request.dry) {
@@ -128,7 +156,8 @@ export async function guardedJsonCall<T>(
           model: request.model,
           system: request.system,
           input: request.input,
-          maxOutputTokens: request.maxOutputTokens
+          maxOutputTokens: request.maxOutputTokens,
+          webSearchUses: request.webSearch?.maxUses
         });
   } catch (error) {
     if (!(error instanceof ModelResponseTruncatedError) || !error.response) throw error;
@@ -146,7 +175,9 @@ export async function guardedJsonCall<T>(
     promptChars: promptTokens * 3.5,
     maxOutputTokens: response.tokensOut,
     cachedInputTokens: response.cachedTokensIn,
-    cacheWriteInputTokens: response.cacheWriteTokensIn
+    cacheWriteInputTokens: response.cacheWriteTokensIn,
+    webSearchUses: response.toolUses,
+    maxSearchContentTokens: request.webSearch?.maxSearchContentTokens
   });
   const ledger = await readJson<{ entries: BudgetLedgerEntry[] }>(
     request.stateRoot,
@@ -170,7 +201,7 @@ export async function guardedJsonCall<T>(
       tokensIn: response.tokensIn,
       cachedTokensIn: response.cachedTokensIn,
       tokensOut: response.tokensOut,
-      toolUses: 0,
+      toolUses: response.toolUses,
       usd: actual.estimatedUsd,
       kind: "text"
     });
@@ -206,5 +237,15 @@ export async function guardedJsonCall<T>(
     hash,
     value
   );
-  return { value, cached: false, usd: actual.estimatedUsd };
+  return {
+    value,
+    cached: false,
+    usd: actual.estimatedUsd,
+    usage: {
+      model: response.model,
+      tokensIn: promptTokens,
+      tokensOut: response.tokensOut,
+      toolUses: response.toolUses
+    }
+  };
 }

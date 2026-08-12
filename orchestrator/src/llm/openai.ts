@@ -15,6 +15,8 @@ export interface TextProviderResponse {
   cachedTokensIn: number;
   /** Tokens written to the provider's prompt cache, billed above the input rate. */
   cacheWriteTokensIn: number;
+  /** Paid server-side tool invocations reported by the provider. */
+  toolUses: number;
 }
 
 /**
@@ -67,7 +69,8 @@ export class OpenAiTextClient {
       tokensOut: response.usage?.output_tokens ?? 0,
       cachedTokensIn: response.usage?.input_tokens_details?.cached_tokens ?? 0,
       // OpenAI does not bill a separate cache write.
-      cacheWriteTokensIn: 0
+      cacheWriteTokensIn: 0,
+      toolUses: 0
     };
     if (response.status === "incomplete") {
       const reason = response.incomplete_details?.reason ?? "unknown";

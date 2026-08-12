@@ -111,7 +111,7 @@ post anything.
 - [x] **BH-08a** — The deterministic opportunity scorer
 - [x] **BH-08b** — Shortlist contract and daily records
 - [x] **BH-09a** — The venture-agnostic research-provider interface
-- [ ] **BH-09b** — The `anthropic-web-search` adapter over the guarded funnel
+- [x] **BH-09b** — The `anthropic-web-search` adapter over the guarded funnel
 - [ ] **BH-10** — Research briefs from the editorial meeting
 - [ ] **BH-11a** — Research runs and dossier writes
 - [ ] **BH-11b** — Dossier and research-ledger contracts
