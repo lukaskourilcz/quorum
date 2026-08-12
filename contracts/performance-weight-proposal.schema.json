@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "performance-weight-proposal/1"
+    },
+    "proposalId": {
+      "type": "string",
+      "pattern": "^weights-[a-f0-9]{20}$"
+    },
+    "ventureId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "recordedBy": {
+      "type": "string",
+      "enum": [
+        "VIZE",
+        "FORGE",
+        "PULSE",
+        "AUDIT",
+        "SCOUT",
+        "SCRIBE",
+        "LENS",
+        "QUILL",
+        "RADAR",
+        "KEEPER",
+        "THREADS",
+        "INSTAGRAM",
+        "PEOPLE",
+        "LEDGER",
+        "HERALD",
+        "STET",
+        "HACEK",
+        "SPARK",
+        "VAULT",
+        "FRAME",
+        "RELAY",
+        "ANGLE",
+        "COHORT",
+        "FUNNEL",
+        "PALATE",
+        "SCENE",
+        "STUNT",
+        "CORNER",
+        "SPOTTER",
+        "TAPE",
+        "SIGMA",
+        "VIG",
+        "SONAR",
+        "CANVAS",
+        "JAB",
+        "REACH",
+        "SPLIT",
+        "EASEL",
+        "MOTIF",
+        "PIVOT",
+        "MAKO",
+        "CHUM",
+        "FOLIO",
+        "PLOT"
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "appliedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "adjustments": {
+      "minItems": 1,
+      "maxItems": 50,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "lane": {
+            "type": "string",
+            "maxLength": 100,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "dimension": {
+            "type": "string",
+            "maxLength": 100,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "key": {
+            "type": "string",
+            "maxLength": 100,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "from": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          },
+          "to": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          },
+          "resultIds": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^result-[a-f0-9]{20}$"
+            }
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "lane",
+          "dimension",
+          "key",
+          "from",
+          "to",
+          "resultIds",
+          "rationale"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "proposalId",
+    "ventureId",
+    "recordedBy",
+    "createdAt",
+    "appliedAt",
+    "adjustments"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/performance-weight-proposal.schema.json"
+}

@@ -28,6 +28,7 @@ import type { Stage } from "../../types.js";
 import { readBhSeedLibrary } from "./seed.js";
 import { buildBhShortlist, writeBhShortlist } from "./shortlist.js";
 import { readBhGoViralContext } from "./goviral.js";
+import { readBhLanePerformanceWeights } from "./performance.js";
 import {
   applyBooksofHistoryCycleDay,
   booksofHistoryCycleComplete,
@@ -277,6 +278,9 @@ export async function runBooksofHistoryCycle(input: {
   const goViral = workedPhase === "selection" && completed
     ? await readBhGoViralContext(root, date)
     : { planRef: null, trendSignals: [] };
+  const lanePerformance = workedPhase === "selection" && completed
+    ? await readBhLanePerformanceWeights(root)
+    : {};
   const shortlistPath = workedPhase === "selection" && completed
     ? await writeBhShortlist(root, buildBhShortlist({
         date,
@@ -287,7 +291,7 @@ export async function runBooksofHistoryCycle(input: {
           asOf: input.now,
           trendSignals: goViral.trendSignals,
           recentFeatures: [],
-          lanePerformance: {},
+          lanePerformance,
           shelfStoriesByBookId: {}
         },
         contextRefs: { trendPlan: goViral.planRef }

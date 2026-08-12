@@ -30,7 +30,7 @@ export interface BhRecentFeature {
 
 export interface BhLaneDimensionWeights {
   categories?: Readonly<Record<string, number>>;
-  periods?: Readonly<Record<string, number>>;
+  eras?: Readonly<Record<string, number>>;
   geographies?: Readonly<Record<string, number>>;
 }
 
@@ -215,7 +215,7 @@ function laneFactor(book: BhSeedRecord, weights: BhLaneDimensionWeights | undefi
   if (!weights) return 1;
   const values = [
     ...book.contentCategories.map((key) => weights.categories?.[key] ?? 1),
-    weights.periods?.[book.scoringMetadata.period] ?? 1,
+    weights.eras?.[book.scoringMetadata.period] ?? 1,
     ...book.scoringMetadata.geographies.map((key) => weights.geographies?.[key] ?? 1)
   ].map((value) => clamp(value, 0.75, 1.25));
   return rounded(average(values));

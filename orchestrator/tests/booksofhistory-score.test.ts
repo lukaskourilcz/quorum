@@ -99,7 +99,7 @@ describe("the deterministic BOOKSOFHISTORY opportunity scorer", () => {
     const [book] = await seedSlice();
     const performance = scoreBhOpportunity(book!, context({
       lanePerformance: {
-        cs: { categories: { "genre-invention": 9 }, periods: { "20th": 0.1 } },
+        cs: { categories: { "genre-invention": 9 }, eras: { "20th": 0.1 } },
         en: { geographies: { czechia: 1.2 } }
       }
     })).factors.lanePerformance;
