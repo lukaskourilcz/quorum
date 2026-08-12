@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260812040205-morning",
+  "stage": "VALIDATION",
+  "opportunityGate": {
+    "opportunityId": "NONE",
+    "outcome": "INSUFFICIENT_EVIDENCE",
+    "score": 0,
+    "minimumDimension": 0,
+    "independentEvidenceCount": 0,
+    "directEvidenceCount": 0,
+    "passed": false,
+    "reasons": [
+      "Opportunity gate dormant — no live opportunity on file."
+    ],
+    "evidenceRefs": []
+  },
+  "estimatedWorstCaseUsd": 0.036254,
+  "actualUsd": 0.103144,
+  "socialDecision": "NO_POST",
+  "caughtUpIdeaRef": "idea-2026-08-12-7c62015d",
+  "growthIdeaNovelty": 1,
+  "vaultVerdict": "novel",
+  "meetingAgendaIds": [],
+  "generatedAt": "2026-08-12T04:02:05.931Z"
+}

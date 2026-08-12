@@ -6,6 +6,7 @@
 
 | ID | Title (≤8 words) | Status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-08-12-7c62015d | Complete a Launch-Readiness Inventory | proposed | VAULT novel: Proposes a meta-campaign readiness framework (checklist, dependencies, gaps). Candidates are individual ca… |
 | idea-2026-08-06-b28f263f | One Good Day: Four Concept Chapters | proposed | VAULT novel: Closest prior idea overlaps only 0.52. |
 | idea-2026-08-06-bee458e8 | Season 001 Positioning: Type-First Crop as Editorial Statement | proposed | VAULT novel: Closest prior idea overlaps only 0.39. |
 | idea-2026-08-05-6176bb6c | Receipt: One Good Day, Itemized | proposed | VAULT novel: Closest prior idea overlaps only 0.51. |

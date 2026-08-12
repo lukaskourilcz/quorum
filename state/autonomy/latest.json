@@ -1,6 +1,6 @@
 {
   "schemaVersion": "autonomy-snapshot/1",
-  "generatedAt": "2026-08-08T04:00:37.541Z",
+  "generatedAt": "2026-08-12T04:02:05.931Z",
   "metricsIngestionEnabled": false,
   "growth": [
     {
@@ -128,13 +128,13 @@
       "evidence": 4,
       "other": 1
     },
-    "vetoRate": 0.1154,
+    "vetoRate": 0.1111,
     "firstPassRate": 0,
     "retryRate": 0,
     "sourceAgreementRate": 0.3875,
     "verifierPassRate": 0,
     "denominators": {
-      "meetings": 52,
+      "meetings": 54,
       "proofs": 0,
       "fighterFields": 578
     }
