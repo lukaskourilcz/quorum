@@ -1,6 +1,8 @@
 import "server-only";
+import { createHash } from "node:crypto";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
+import { parseRatingLedger, type RatingRecord } from "./rating-model";
 
 export type AdminKvorumStoreState = "missing" | "unreadable" | "present";
 
@@ -50,6 +52,8 @@ export interface AdminKvorumRecommendation extends AdminKvorumDraftText {
   createdAt: string;
   updatedAt: string;
   status: "draft" | "approved" | "posted" | "archived" | "rejected";
+  contentHash: string;
+  ratings: RatingRecord[];
   evidence: {
     monitorDate: string;
     continuationOf: string | null;
@@ -394,6 +398,8 @@ function parseRecommendation(value: unknown, filename: string): AdminKvorumRecom
     createdAt,
     updatedAt,
     status: entry.status,
+    contentHash: `sha256:${createHash("sha256").update(JSON.stringify(entry)).digest("hex").slice(0, 12)}`,
+    ratings: [],
     evidence: {
       monitorDate,
       continuationOf,
@@ -629,6 +635,23 @@ async function readQuota(): Promise<{ state: AdminKvorumStoreState; value: Admin
   }
 }
 
+async function readRatings(): Promise<{ values: RatingRecord[]; unreadable: number }> {
+  try {
+    const raw = await readFile(path.join(repositoryRoot(), "state/ratings/kvorum/ledger.jsonl"), "utf8");
+    const values = parseRatingLedger(raw);
+    return values
+      ? {
+          values: values.filter((rating) => rating.ventureId === "kvorum" && rating.objectKind === "recommendation"),
+          unreadable: 0
+        }
+      : { values: [], unreadable: 1 };
+  } catch (error) {
+    return (error as NodeJS.ErrnoException).code === "ENOENT"
+      ? { values: [], unreadable: 0 }
+      : { values: [], unreadable: 1 };
+  }
+}
+
 /**
  * The plain-data boundary for the three Kvórum admin tabs.
  *
@@ -637,23 +660,31 @@ async function readQuota(): Promise<{ state: AdminKvorumStoreState; value: Admin
  * workspace down. Repository paths and filenames stay on this side of the boundary.
  */
 export async function readAdminKvorum(): Promise<AdminKvorumSnapshot> {
-  const [recommendations, monitor, quota] = await Promise.all([
+  const [recommendations, monitor, quota, ratings] = await Promise.all([
     readDirectory(
       "state/ventures/kvorum/recommendations",
       /^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.json$/u,
       parseRecommendation
     ),
     readDirectory("state/ventures/kvorum/monitor", /^\d{4}-\d{2}-\d{2}\.json$/u, parseMonitor),
-    readQuota()
+    readQuota(),
+    readRatings()
   ]);
+  const recommendationValues = recommendations.values
+    .map((recommendation) => ({
+      ...recommendation,
+      ratings: ratings.values
+        .filter((rating) => rating.objectRef.id === recommendation.id)
+        .sort((left, right) => right.ratedAt.localeCompare(left.ratedAt) || right.id.localeCompare(left.id))
+    }))
+    .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt) || left.id.localeCompare(right.id));
   return {
     recommendationsState: recommendations.state,
-    recommendations: recommendations.values.sort((left, right) =>
-      right.updatedAt.localeCompare(left.updatedAt) || left.id.localeCompare(right.id)),
+    recommendations: recommendationValues,
     monitorState: monitor.state,
     monitor: monitor.values.sort((left, right) => right.date.localeCompare(left.date)),
     quotaState: quota.state,
     quota: quota.value,
-    unreadable: recommendations.unreadable + monitor.unreadable + quota.unreadable
+    unreadable: recommendations.unreadable + monitor.unreadable + quota.unreadable + ratings.unreadable
   };
 }

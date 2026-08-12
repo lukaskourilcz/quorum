@@ -242,6 +242,11 @@ section and a receipt line, and a day with no usable cluster records an honest q
   words. Approval also widens the existing recipe, copy and site-reader unions because writing a
   summary alone would not make it renderable in the Design Lab. This creates a review artifact only:
   it grants no social account, channel or publishing authority and cannot call a publisher.
+- **Results-control sequencing:** KV-17b's issue asks the recommendation card for results entry,
+  while the higher-precedence build plan assigns the shared result contract, route, one-writer
+  store and card surfacing to KV-19a. The KV-17b card therefore shows the recorded manual post URL
+  and an honest no-result state, but does not invent an untyped result form or second persistence
+  path. The owner-entry control lands with KV-19a; automated metric collection remains absent.
 
 ## Implementation checklist
 
@@ -278,7 +283,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-15b — Carousel-summary venture extension, byte-compatible
 - [x] KV-16 — Admin approval write path
 - [x] KV-17a — Server-only admin loader
-- [ ] KV-17b — Recommendations panel
+- [x] KV-17b — Recommendations panel
 - [ ] KV-17c — Monitor panel
 - [ ] KV-17d — Claims panel, tab wiring and e2e coverage
 - [ ] KV-18 — Claims ledger and the correction flow

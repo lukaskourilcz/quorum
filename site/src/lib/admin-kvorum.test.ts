@@ -38,7 +38,17 @@ describe("the Kvórum admin sanitising boundary", () => {
     const root = await makeRoot({
       "state/ventures/kvorum/recommendations/2026-08-12-public-media.json": recommendation,
       "state/ventures/kvorum/monitor/2026-08-12.json": monitor,
-      "state/kvorum/source-quota/apify.json": quota
+      "state/kvorum/source-quota/apify.json": quota,
+      "state/ratings/kvorum/ledger.jsonl": `${JSON.stringify({
+        schemaVersion: "rating/1",
+        id: "r-2026-08-12-abcd",
+        ventureId: "kvorum",
+        objectKind: "recommendation",
+        objectRef: { id: "kv-2026-08-12-public-media", contentHash: "sha256:abcdef123456" },
+        rating: "good",
+        note: "Keep the procedural framing.",
+        ratedAt: "2026-08-12T22:00:00.000Z"
+      })}\n`
     });
 
     const snapshot = await readAdminKvorum();
@@ -51,6 +61,7 @@ describe("the Kvórum admin sanitising boundary", () => {
         id: "kv-2026-08-12-public-media",
         slug: "public-media",
         headline: "Poplatky se vracejí do Sněmovny",
+        ratings: [{ rating: "good", note: "Keep the procedural framing." }],
         evidence: {
           stit: { internalOnly: true, posts: [{ engagement: { likes: 120, comments: 18, shares: 7 } }] }
         },

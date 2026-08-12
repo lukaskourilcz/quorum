@@ -31,4 +31,13 @@ describe("rating boundary", () => {
     expect(parseRatingRecord({ ...rating(), id: "rating-one" })).toBeNull();
     expect(parseRatingRecord({ ...rating(), note: "bad\u0000note" })).toBeNull();
   });
+
+  it("accepts an owner rating for a Kvórum recommendation", () => {
+    expect(parseRatingRecord({
+      ...rating(),
+      ventureId: "kvorum",
+      objectKind: "recommendation",
+      objectRef: { id: "kv-2026-08-12-public-media", contentHash: "sha256:abcdef123456" }
+    })).toMatchObject({ ventureId: "kvorum", objectKind: "recommendation" });
+  });
 });
