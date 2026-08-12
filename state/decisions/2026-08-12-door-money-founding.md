@@ -104,7 +104,7 @@ costs and no treasury action in this decision.
 - [x] DM-03b — Meeting policy for both rooms (Thursday gate lives in code)
 - [x] DM-03c — cycle.yml dispatch choices and mode gates
 - [x] DM-03d — Vercel cron entries for 15:00 and 16:00
-- [ ] DM-04a — GHOST and BOOKER in registry, routing, controls and cast schema
+- [x] DM-04a — GHOST and BOOKER in registry, routing, controls and cast schema
 - [ ] DM-04b — Prompts for GHOST, BOOKER and the craft file
 - [ ] DM-04c — Model roles: GHOST, BOOK_INGEST, BOOK_STYLE
 - [ ] DM-05a — Scaffold, gitignore line, hue and labels

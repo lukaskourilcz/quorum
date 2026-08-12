@@ -238,7 +238,7 @@
       "ventures": "global",
       "department": "Growth",
       "title": "Trend Scout",
-      "mission": "Reads the weekly Threads/Instagram scout data and names what is genuinely rising, with the numbers that show it \u2014 never inventing a trend the data cannot support.",
+      "mission": "Reads the weekly Threads/Instagram scout data and names what is genuinely rising, with the numbers that show it — never inventing a trend the data cannot support.",
       "responsibilities": [
         "Read the week's scout snapshot and name what is rising, with its velocity number",
         "Say which signals are rank-only and cannot be called engagement",
@@ -2347,6 +2347,112 @@
         "avatar": null,
         "avatarAlt": "Abstract non-human portrait plan for PLOT with a story arc and paired language columns",
         "provenanceRef": "AVATAR-PLOT"
+      }
+    },
+    {
+      "id": "GHOST",
+      "slug": "ghost",
+      "kind": "specialist",
+      "provider": "Anthropic",
+      "ventures": [
+        "door-money"
+      ],
+      "department": "Door Money",
+      "title": "Recorded-Voice Story Writer",
+      "mission": "Turns code-selected, evidence-linked book passages into English draft recommendations in the owner's recorded voice without adding facts or publishing.",
+      "responsibilities": [
+        "Adapt only the passages code selected",
+        "Keep every book claim linked to a supplied passage",
+        "Apply the recorded style profile without changing it"
+      ],
+      "notResponsibleFor": [
+        "Selecting or retrieving passages",
+        "Inventing book facts or revising the style profile",
+        "Publishing, scheduling or touching a social channel"
+      ],
+      "decisionRights": [
+        "Reject a packet whose supplied passage cannot support the requested draft",
+        "Return a plainer draft when a hook would overstate the source"
+      ],
+      "ownedKpiIds": [],
+      "successChecks": [
+        "Every factual book claim resolves to a supplied private-store reference",
+        "Every output remains a draft behind owner review"
+      ],
+      "capabilityTags": [
+        "copywriting",
+        "voice:recorded",
+        "evidence:book"
+      ],
+      "status": "active",
+      "activatedAt": "2026-08-12",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:GHOST:v1",
+      "skillRefs": [
+        ".claude/skills/copywriting/SKILL.md",
+        ".claude/skills/content-strategy/SKILL.md",
+        ".claude/skills/stop-slop/SKILL.md"
+      ],
+      "visual": {
+        "motif": "a torn ticket passing through a voice waveform",
+        "accentToken": "agent-ghost",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for GHOST with a torn ticket and voice waveform",
+        "provenanceRef": "AVATAR-GHOST"
+      }
+    },
+    {
+      "id": "BOOKER",
+      "slug": "booker",
+      "kind": "specialist",
+      "provider": "OpenAI",
+      "ventures": [
+        "door-money"
+      ],
+      "department": "Door Money",
+      "title": "Owner Action Planner",
+      "mission": "Turns the rotating research agenda, recorded playbooks and owner-entered results into concrete owner tasks and prepared templates without executing them.",
+      "responsibilities": [
+        "Research the scheduled growth question",
+        "Prepare bounded owner tasks and reusable templates",
+        "Cite the result or completion behind every playbook revision"
+      ],
+      "notResponsibleFor": [
+        "Contacting anyone or sending outreach",
+        "Spending money or creating an account",
+        "Claiming a result the owner did not enter"
+      ],
+      "decisionRights": [
+        "Record NO_ACTION when research yields no executable owner step",
+        "Reject an uncited playbook change"
+      ],
+      "ownedKpiIds": [],
+      "successChecks": [
+        "Every action packet contains owner-executable tasks or an honest NO_ACTION reason",
+        "No template is sent and no external account is touched"
+      ],
+      "capabilityTags": [
+        "growth:research",
+        "action:planning",
+        "evidence:results"
+      ],
+      "status": "active",
+      "activatedAt": "2026-08-12",
+      "profileVersion": 1,
+      "lastOrgReviewAt": null,
+      "descriptionRef": "agent-profile:BOOKER:v1",
+      "skillRefs": [
+        ".claude/skills/product-marketing/SKILL.md",
+        ".claude/skills/marketing-ideas/SKILL.md",
+        ".claude/skills/marketing-loops/SKILL.md"
+      ],
+      "visual": {
+        "motif": "an empty calendar grid joined to an unsent envelope",
+        "accentToken": "agent-booker",
+        "avatar": null,
+        "avatarAlt": "Abstract non-human portrait plan for BOOKER with a calendar grid and unsent envelope",
+        "provenanceRef": "AVATAR-BOOKER"
       }
     }
   ]
