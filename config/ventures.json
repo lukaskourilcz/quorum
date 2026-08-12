@@ -345,6 +345,67 @@
           "envelopeUsd": 0.16
         }
       ]
+    },
+    {
+      "id": "door-money",
+      "name": "Door Money",
+      "status": "operating",
+      "taste": true,
+      "ledgerNamespace": "door-money",
+      "growth_objective": {
+        "label": "Turn the book into a daily storytelling channel and a weekly owner action plan",
+        "components": [
+          "package-cadence",
+          "action-completion"
+        ]
+      },
+      "adminTabs": [
+        "recommendations",
+        "actions",
+        "knowledge"
+      ],
+      "meetings": [
+        {
+          "kind": "dm-desk",
+          "label": "Door Money daily storytelling desk",
+          "cadence": "daily@15:00",
+          "cast": [
+            "GHOST",
+            "AUDIT"
+          ],
+          "envelopeUsd": 0.08,
+          "packet": {
+            "topicType": "social",
+            "decisionNeeded": "PLAN",
+            "preset": "dm-desk-room",
+            "objectives": {
+              "dry": "Use the synthetic knowledge fixture to record draft recommendations without a provider call, publication, outreach or spend",
+              "live": "Turn the selected private-store passages into evidence-linked English draft recommendations for owner review; never publish"
+            }
+          }
+        },
+        {
+          "kind": "dm-growth",
+          "label": "Door Money Thursday growth room",
+          "cadence": "daily@16:00",
+          "$cadenceComment": "The room works on Thursdays. The day gate lives in code; the other six firings write $0 no-op records.",
+          "cast": [
+            "BOOKER",
+            "PULSE",
+            "AUDIT"
+          ],
+          "envelopeUsd": 0.06,
+          "packet": {
+            "topicType": "growth",
+            "decisionNeeded": "PLAN",
+            "preset": "dm-growth-room",
+            "objectives": {
+              "dry": "Work the fixture agenda into an owner action packet or record NO_ACTION without a provider call, outreach or spend",
+              "live": "Turn the rotating research agenda and recorded results into concrete owner tasks with prepared templates; never send outreach"
+            }
+          }
+        }
+      ]
     }
   ]
 }
