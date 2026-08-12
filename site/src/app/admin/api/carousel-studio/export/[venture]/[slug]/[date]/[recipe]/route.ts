@@ -14,6 +14,7 @@ import {
 import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request-auth";
 import { readDesignLab } from "@/lib/design-lab";
 import { readArticleHeroPng } from "@/lib/admin-deck-hero";
+import { tehdejsiRenderInput } from "@/lib/tehdejsi-render";
 
 export const dynamic = "force-dynamic";
 
@@ -53,38 +54,48 @@ export async function GET(
   );
   if (!deck) return Response.json({ error: "Deck not found." }, { status: 404 });
 
-  const template = recipeTemplate(recipe, deck.slides.length);
-  // The owner's edits, exactly as the preview shows them. An export that disagreed with the
-  // screen would be worse than no export.
-  const strings = Object.fromEntries(deck.slides.map((entry, index) => [articleSlideSlot(index), entry.text]));
   const hero = await readArticleHeroPng(deck.venture, deck.slug, deck.date);
 
   try {
-    const slides = await renderCarouselPng({
-      template,
-      payload: {
-        locale: deck.locale,
-        strings,
-        ...(recipeVariant(recipe) ? { variant: recipeVariant(recipe)! } : {})
-      },
-      brand,
-      format: format.data,
-      ...(hero ? { images: { [ARTICLE_HERO_SLOT]: hero } } : {})
-    });
+    const template = deck.dualLanguage
+      ? tehdejsiRenderInput(deck.dualLanguage, format.data, hero).template
+      : recipeTemplate(recipe, deck.slides.length);
+    // The owner's edits, exactly as the preview shows them. An export that disagreed with the
+    // screen would be worse than no export.
+    const strings = Object.fromEntries(deck.slides.map((entry, index) => [articleSlideSlot(index), entry.text]));
+    const slides = deck.dualLanguage
+      ? await renderCarouselPng(tehdejsiRenderInput(deck.dualLanguage, format.data, hero))
+      : await renderCarouselPng({
+          template,
+          payload: {
+            locale: deck.locale,
+            strings,
+            ...(recipeVariant(recipe) ? { variant: recipeVariant(recipe)! } : {})
+          },
+          brand,
+          format: format.data,
+          ...(hero ? { images: { [ARTICLE_HERO_SLOT]: hero } } : {})
+        });
 
     const encoder = new TextEncoder();
-    const caption = renderCaption(deck.copy.copy.igCaption, deck.copy.heroCredit);
+    const caption = deck.dualLanguage
+      ? `CS\n${deck.dualLanguage.captionCs}\n\nUA\n${deck.dualLanguage.captionUa}`
+      : renderCaption(deck.copy.copy.igCaption, deck.copy.heroCredit);
     const hashtags = deck.copy.copy.hashtags.map((tag) => `#${tag}`).join(" ");
     const entries: Record<string, Uint8Array> = {
       "caption.txt": encoder.encode(`${caption}\n\n${hashtags}\n`),
       "threads.txt": encoder.encode(`${deck.copy.copy.threadsText}\n`),
+      ...(deck.dualLanguage ? {
+        "caption-cs.txt": encoder.encode(`${deck.dualLanguage.captionCs}\n`),
+        "caption-ua.txt": encoder.encode(`${deck.dualLanguage.captionUa}\n`)
+      } : {}),
       "manifest.json": encoder.encode(`${JSON.stringify({
         schemaVersion: "carousel-export/1",
         venture,
         slug,
         date,
         format: format.data,
-        template: { template_id: recipeTemplateId(recipe, deck.slides.length), version: template.version },
+        template: { template_id: deck.dualLanguage ? template.id : recipeTemplateId(recipe, deck.slides.length), version: template.version },
         recipe,
         storyLine: deck.copy.copy.storyLine,
         attribution: deck.heroCredit,
@@ -93,7 +104,9 @@ export async function GET(
           file: `${venture}-${date}-slide-${String(slide.index + 1).padStart(2, "0")}.png`,
           svgHash: slide.svgHash,
           pngHash: slide.pngHash,
-          text: strings[articleSlideSlot(slide.index)] ?? ""
+          text: deck.dualLanguage
+            ? `${deck.dualLanguage.slides[slide.index]?.cs ?? ""}\n${deck.dualLanguage.slides[slide.index]?.ua ?? ""}`.trim()
+            : strings[articleSlideSlot(slide.index)] ?? ""
         }))
       }, null, 2)}\n`)
     };

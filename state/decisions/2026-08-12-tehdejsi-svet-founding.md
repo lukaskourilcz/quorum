@@ -149,7 +149,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-17b** — Photo slide variant with mandatory attribution
 - [x] **TS-17c** — Render module and recorded summaries
 - [x] **TS-18** — Studio bilingual determinism test
-- [ ] **TS-19** — Admin approval write path with the tier-2 review gate
+- [x] **TS-19** — Admin approval write path with the tier-2 review gate
 - [ ] **TS-20a** — Server-only admin loader
 - [ ] **TS-20b** — Features panel with bilingual packages
 - [ ] **TS-20c** — Library panel with snapshot state
@@ -193,6 +193,17 @@ snapshot is a committed file and the venture buys no data.
   path writes a canonical brief and advances to production. Advancing the free ranking had
   put production over a brief that did not exist. A manual invocation of the closed room
   still writes nothing. Neither path reads product data or touches a channel.
+- **Owner results remain in TS-23a.** The TS-19 issue body repeated results entry in
+  the approval ladder, but the founding checklist and implementation design assign the
+  shared `owner-result-entry/1` extension, its per-platform store and the `/results`
+  route to TS-23a. TS-19 therefore records approval, rejection and owner-posted URLs
+  only. This keeps one future result writer behind TS-RESULTS-005 instead of creating an
+  early competing contract.
+- **Licensed approval requires recorded image bytes.** A media reference and credit do
+  not prove the Design Lab can draw the photograph. TS-19 therefore refuses READY until
+  a renderable PNG exists at the deterministic venture-media path for that package. The
+  preview and ZIP routes read the same bytes and never fetch the source URL. Typographic
+  packages need no media file.
 
 ## Honest gaps
 

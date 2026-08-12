@@ -1,7 +1,7 @@
 import {
   CAROUSEL_BRANDS,
   CarouselPayloadSchema,
-  buildCarouselSummary,
+  buildTehdejsiCarouselSummary as buildSharedTehdejsiCarouselSummary,
   renderCarouselSvg,
   reviewCarouselSummary,
   tehdejsiCsSlot,
@@ -13,6 +13,7 @@ import {
   TEHDEJSI_EYEBROW_SLOT,
   TEHDEJSI_MAX_SLIDES,
   TEHDEJSI_MIN_SLIDES,
+  tehdejsiCarouselSummaryPath,
   type CarouselFormat,
   type CarouselPayload,
   type CarouselSummary,
@@ -129,34 +130,20 @@ export function renderTehdejsiDeck(
 }
 
 export function tehdejsiSummaryPath(summary: CarouselSummary): string {
-  if (summary.venture !== "tehdejsi-svet") {
-    throw new Error("The Tehdejsi svet summary writer accepts only its own venture");
-  }
-  return `ventures/carousel-studio/summaries/tehdejsi-svet/${summary.date}-${summary.slug}.json`;
+  return tehdejsiCarouselSummaryPath(summary);
 }
 
 /** The rail reads Czech as primary; both languages stay together in the recommendation pack. */
 export function buildTehdejsiCarouselSummary(recommendation: TehdejsiRecommendation): CarouselSummary {
   const parsed = TehdejsiRecommendationSchema.parse(recommendation);
-  const first = parsed.payload.slides[0];
-  if (!first) throw new Error("A Tehdejsi svet feature has no cover slide");
   const photo = photoFor(parsed);
-  const summary = buildCarouselSummary({
-    venture: "tehdejsi-svet",
-    locale: "cs",
-    slug: parsed.id,
+  const summary = buildSharedTehdejsiCarouselSummary({
+    recommendationId: parsed.id,
     date: parsed.date,
-    title: first.cs,
-    dek: parsed.payload.captionCs,
-    points: parsed.payload.slides.map(({ cs }) => cs),
-    sources: [
-      { kind: "facts", label: "Tehdejší svět verified facts" },
-      ...(parsed.evidence.dossierRefs.length > 0
-        ? [{ kind: "dossier", label: "Tehdejší svět research dossier" }]
-        : [])
-    ],
-    hasHero: photo !== null,
-    heroCredit: photo?.attribution ?? null
+    slides: parsed.payload.slides,
+    captionCs: parsed.payload.captionCs,
+    dossierCount: parsed.evidence.dossierRefs.length,
+    photoAttribution: photo?.attribution ?? null
   });
   const review = reviewCarouselSummary(summary);
   if (!review.renderable) {

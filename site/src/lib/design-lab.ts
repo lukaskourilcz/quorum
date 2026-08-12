@@ -26,6 +26,7 @@ import {
   slideTextFor
 } from "@/lib/carousel-studio-admin-store";
 import type { CarouselPreset } from "@boardlessai/carousel-studio";
+import { readTehdejsiDesignLabPack, type TehdejsiDesignLabPack } from "./tehdejsi-design-lab";
 
 /** A saved design, as the picker shows it. */
 export type LabPreset = Pick<CarouselPreset, "id" | "name" | "family" | "variant" | "accentSwap" | "treatment" | "typeScale" | "status">;
@@ -92,6 +93,8 @@ export interface LabArticle {
   copy: SocialCopyPack;
   /** The caption as it ships: the desk's words with the licence credit appended by code. */
   caption: string;
+  /** The approved two-language package used by the dedicated TS renderer and caption buttons. */
+  dualLanguage: TehdejsiDesignLabPack | null;
 }
 
 async function readJsonFile(relative: string): Promise<unknown | null> {
@@ -173,8 +176,11 @@ export async function readDesignLab(limit = 40, venture?: string): Promise<LabAr
       ? `${article.summary.slug}-${article.summary.locale}`
       : article.summary.slug;
     if (!histories.has(venture)) histories.set(venture, await recipeHistory(venture));
-    const edits = slideTextFor(slideOverrides, venture, slug, date);
-    const slides: LabSlide[] = deckFor(article).map((text, index) => {
+    const dualLanguage = venture === "tehdejsi-svet"
+      ? await readTehdejsiDesignLabPack(article.summary.slug, date)
+      : null;
+    const edits = dualLanguage ? new Map<number, string>() : slideTextFor(slideOverrides, venture, slug, date);
+    const slides: LabSlide[] = (dualLanguage ? dualLanguage.slides.map(({ cs }) => cs) : deckFor(article)).map((text, index) => {
       const edited = edits.get(index);
       const value = edited ?? text;
       return { index, text: value, words: wordCount(value), edited: edited !== undefined };
@@ -232,7 +238,8 @@ export async function readDesignLab(limit = 40, venture?: string): Promise<LabAr
       // The credit is appended here, by the same function the ship path uses, and the workspace
       // shows it as part of a caption it cannot edit out. A carousel reaching a feed without it is
       // a licence breach.
-      caption: renderCaption(copy.copy.igCaption, copy.heroCredit)
+      caption: renderCaption(copy.copy.igCaption, copy.heroCredit),
+      dualLanguage
     });
   }
   return lab;

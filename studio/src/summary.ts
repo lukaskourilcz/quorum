@@ -215,6 +215,45 @@ export function buildCarouselSummary(input: CarouselSummaryInput): CarouselSumma
   };
 }
 
+export interface TehdejsiFeatureSummaryInput {
+  recommendationId: string;
+  date: string;
+  slides: readonly { cs: string }[];
+  captionCs: string;
+  dossierCount: number;
+  photoAttribution: string | null;
+}
+
+/** The canonical Czech-primary rail record for one bilingual Tehdejsi svet package. */
+export function buildTehdejsiCarouselSummary(input: TehdejsiFeatureSummaryInput): CarouselSummary {
+  const first = input.slides[0];
+  if (!first) throw new Error("A Tehdejsi svet feature has no cover slide");
+  return buildCarouselSummary({
+    venture: "tehdejsi-svet",
+    locale: "cs",
+    slug: input.recommendationId,
+    date: input.date,
+    title: first.cs,
+    dek: input.captionCs,
+    points: input.slides.map(({ cs }) => cs),
+    sources: [
+      { kind: "facts", label: "Tehdejší svět verified facts" },
+      ...(input.dossierCount > 0
+        ? [{ kind: "dossier", label: "Tehdejší svět research dossier" }]
+        : [])
+    ],
+    hasHero: input.photoAttribution !== null,
+    heroCredit: input.photoAttribution
+  });
+}
+
+export function tehdejsiCarouselSummaryPath(summary: CarouselSummary): string {
+  if (summary.venture !== "tehdejsi-svet") {
+    throw new Error("The Tehdejsi svet summary path accepts only its own venture");
+  }
+  return `ventures/carousel-studio/summaries/tehdejsi-svet/${summary.date}-${summary.slug}.json`;
+}
+
 export interface BooksofhistoryFeatureSummaryInput {
   recommendationId: string;
   createdAt: string;

@@ -11,6 +11,7 @@ import {
 import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request-auth";
 import { readDesignLab } from "@/lib/design-lab";
 import { readArticleHeroPng } from "@/lib/admin-deck-hero";
+import { tehdejsiRenderInput } from "@/lib/tehdejsi-render";
 
 export const dynamic = "force-dynamic";
 
@@ -53,10 +54,6 @@ export async function GET(
   );
   if (!deck) return Response.json({ error: "Slide not found." }, { status: 404 });
 
-  const template = recipeTemplate(recipe, deck.slides.length);
-  // The owner's edits, read here rather than passed in: preview, export and anything composed
-  // downstream then show one deck rather than three versions of one.
-  const strings = Object.fromEntries(deck.slides.map((entry, index) => [articleSlideSlot(index), entry.text]));
   const hero = await readArticleHeroPng(deck.venture, deck.slug, deck.date);
 
   try {
@@ -64,18 +61,20 @@ export async function GET(
     // slide, so serving ten of them one request at a time rasterised a hundred images and threw
     // ninety away — a page of thumbnails that took ten seconds to fill. Same renderer, same
     // checks, same bytes: the index is all a slide borrows from its neighbours.
-    const render = await renderCarouselSlidePng({
-      template,
-      payload: {
-        locale: deck.locale,
-        strings,
-        ...(recipeVariant(recipe) ? { variant: recipeVariant(recipe)! } : {})
-      },
-      brand,
-      format: format.data,
-      index: slideIndex,
-      ...(hero ? { images: { [ARTICLE_HERO_SLOT]: hero } } : {})
-    });
+    const render = deck.dualLanguage
+      ? await renderCarouselSlidePng({ ...tehdejsiRenderInput(deck.dualLanguage, format.data, hero), index: slideIndex })
+      : await renderCarouselSlidePng({
+          template: recipeTemplate(recipe, deck.slides.length),
+          payload: {
+            locale: deck.locale,
+            strings: Object.fromEntries(deck.slides.map((entry, index) => [articleSlideSlot(index), entry.text])),
+            ...(recipeVariant(recipe) ? { variant: recipeVariant(recipe)! } : {})
+          },
+          brand,
+          format: format.data,
+          index: slideIndex,
+          ...(hero ? { images: { [ARTICLE_HERO_SLOT]: hero } } : {})
+        });
     if (!render) return Response.json({ error: "Slide not found." }, { status: 404 });
     const download = new URL(request.url).searchParams.get("download") === "1";
     return new Response(new Uint8Array(render.png), {

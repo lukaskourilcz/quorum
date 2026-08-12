@@ -25,7 +25,7 @@ async function heroBase64(venture: CarouselSummaryVenture, slug: string, date: s
   // BOOKSOFHISTORY is typographic by founding decision; even an admin seed coverRef is ignored.
   // Door Money records carry no manuscript or private source material into the public repo, and
   // its approval path currently writes text-only summaries. A missing hero is the honest result.
-  if (venture === "booksofhistory" || venture === "door-money") return null;
+  if (venture === "booksofhistory" || venture === "door-money" || venture === "tehdejsi-svet") return null;
   const directory = venture === "mma-files"
     ? path.join(repositoryRoot, "state/ventures/mma-files/articles")
     : path.join(repositoryRoot, "state/edition/outbox");
@@ -56,6 +56,16 @@ export async function readArticleHeroPng(
   slug: string,
   date: string
 ): Promise<Buffer | null> {
+  if (venture === "tehdejsi-svet") {
+    try {
+      return await toRenderablePng(await readFile(path.join(
+        repositoryRoot,
+        `state/ventures/tehdejsi-svet/media/${slug}.png`
+      )));
+    } catch {
+      return null;
+    }
+  }
   const base64 = await heroBase64(venture, slug, date);
   if (!base64) return null;
   // A hero that will not decode is a slide without a photograph, not a failed page.
