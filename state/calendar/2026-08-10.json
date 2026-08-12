@@ -52,6 +52,12 @@
       "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
+      "at": "2026-08-10T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
+      "status": "missed"
+    },
+    {
       "at": "2026-08-10T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "gv-brief",
@@ -143,6 +149,12 @@
       "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
+      "at": "2026-08-11T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
+      "status": "missed"
+    },
+    {
       "at": "2026-08-11T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "gv-brief",
@@ -192,7 +204,7 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-12-cu-edition",
-      "decisionOneLiner": "The finished edition failed its content checks on the way out, so it was not published. The owner has the technical report."
+      "decisionOneLiner": "This edition was delivered on a later run, on 2026-08-12. It was held back at first; the delivery receipt for this date records what the magazine refused and when it accepted it."
     },
     {
       "at": "2026-08-12T04:00:00.000Z",
@@ -237,8 +249,13 @@
       "at": "2026-08-12T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
+    },
+    {
+      "at": "2026-08-12T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
+      "status": "missed"
     },
     {
       "at": "2026-08-12T11:00:00.000Z",
@@ -252,19 +269,24 @@
       "at": "2026-08-12T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-12-afternoon",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-12T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The run behind this meeting failed before it finished."
     },
     {
       "at": "2026-08-12T17:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-analysis",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-12-mma-analysis",
+      "decisionOneLiner": "No model run exists to review yet — waiting for the odds data key."
     },
     {
       "at": "2026-08-12T18:00:00.000Z",
@@ -318,6 +340,12 @@
       "at": "2026-08-13T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
       "status": "scheduled"
     },
     {
@@ -399,6 +427,12 @@
       "status": "scheduled"
     },
     {
+      "at": "2026-08-14T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
+      "status": "scheduled"
+    },
+    {
       "at": "2026-08-14T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "gv-brief",
@@ -477,6 +511,12 @@
       "status": "scheduled"
     },
     {
+      "at": "2026-08-15T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
+      "status": "scheduled"
+    },
+    {
       "at": "2026-08-15T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "gv-brief",
@@ -552,6 +592,12 @@
       "at": "2026-08-16T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
       "status": "scheduled"
     },
     {
