@@ -163,7 +163,7 @@ costs and no treasury action in this decision.
 - [x] DM-07 — Deterministic scene-aware chunker
 - [x] DM-08a — Annotation and fifteen-axis scoring pass
 - [x] DM-08b — Ingestion cursor and resumability
-- [ ] DM-09 — Style profile via map-reduce
+- [x] DM-09 — Style profile via map-reduce
 - [ ] DM-10a — Guarded embeddings wrapper
 - [ ] DM-10b — Budget-ledger kind for embeddings
 - [ ] DM-11a — The book:ingest CLI with envelopes
