@@ -130,7 +130,7 @@ post anything.
 - [x] **BH-18b** — Shortlist panel with factor breakdowns
 - [x] **BH-18c** — Dossiers panel with the research ledger
 - [x] **BH-18d** — Features panel, tab wiring and e2e
-- [ ] **BH-19a** — GoVIRAL spine: topic set and trend factor
+- [x] **BH-19a** — GoVIRAL spine: topic set and trend factor
 - [ ] **BH-19b** — GoVIRAL spine: transitions and the Design-Lab-only test
 - [ ] **BH-20a** — Owner results per lane
 - [ ] **BH-20b** — Category weights with floors

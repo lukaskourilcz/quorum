@@ -27,12 +27,22 @@ export function goViralBriefId(date: string): string {
 /** The trends worth naming, in the order the scout ranked them. */
 function trendCalls(trends: GoViralTrends | null): string[] {
   if (!trends) return [];
-  return trends.signals.topHashtags.slice(0, 5).map((signal) => {
+  const paid = trends.signals.topHashtags.slice(0, 5).map((signal) => {
     const delta = signal.weekOverWeekDelta === null
       ? "no prior week to compare against"
       : `${signal.weekOverWeekDelta >= 0 ? "up" : "down"} ${Math.abs(signal.weekOverWeekDelta).toFixed(1)} on last week`;
     return `${signal.hashtag} (${signal.topicSet}): ${signal.engagementPerHour.toFixed(1)} engagements/hour across ${signal.posts} post${signal.posts === 1 ? "" : "s"}, ${delta}.`;
   });
+  const free = trends.freeSignals
+    .flatMap((result) => result.status === "success" ? result.signals : [])
+    .filter((signal) => signal.scope?.startsWith("topic-set:"))
+    .sort((left, right) => right.value - left.value || left.topic.localeCompare(right.topic, "en"))
+    .slice(0, 6)
+    .map((signal) => {
+      const [, topicSet = "unknown", locale = "unknown"] = signal.scope!.split(":");
+      return `${signal.topic} (${topicSet}, free ${signal.kind}, ${locale}): ${signal.value}.`;
+    });
+  return [...paid, ...free];
 }
 
 export function buildGoViralWeeklyBrief(input: {

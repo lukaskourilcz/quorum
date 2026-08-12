@@ -32,7 +32,7 @@ import {
   trendEvidenceRefs,
   type TrendItem
 } from "../src/sources/goviral-trends.js";
-import { mapDatasetRow, stepPayload } from "../src/sources/goviral-scout.js";
+import { mapDatasetRow, stepPayload, stepTopicSets } from "../src/sources/goviral-scout.js";
 import { isScoutDay, renderTrendTiebreaker } from "../src/portfolio/run.js";
 import { buildGoViralWeeklyBrief } from "../src/portfolio/goviral-brief.js";
 import { renderTrendingCandidates } from "../src/edition/curate.js";
@@ -356,6 +356,17 @@ describe("the scraped-row boundary", () => {
     const accountStep = registry.recipe.find((entry) => entry.inputs === "account")!;
     expect(stepPayload({ step: accountStep, registry, topicSet: null })).toBeNull();
   });
+
+  it("keeps the BOOKSOFHISTORY topic set on free signals and out of every paid recipe step", async () => {
+    const registry = await loadGoViralSourceRegistry();
+    expect(registry.topicSets.booksofhistory).toMatchObject({
+      signalMode: "free-only",
+      keywords: expect.arrayContaining(["book history", "dějiny knih", "literary anniversary", "literární výročí", "publishing history", "příběh vydání"])
+    });
+    for (const step of registry.recipe) {
+      expect(stepTopicSets(step, registry)).not.toContain("booksofhistory");
+    }
+  });
 });
 
 describe("the Monday gate", () => {
@@ -426,6 +437,27 @@ describe("the weekly brief", () => {
       vetoed: false
     });
     expect(JSON.stringify(stale)).toContain("working from the 2026-08-10 snapshot");
+  });
+
+  it("records measured free BOOKSOFHISTORY calls in the weekly plan", () => {
+    const brief = buildGoViralWeeklyBrief({
+      date: "2026-08-10",
+      trends: {
+        schemaVersion: "goviral-trends/1",
+        date: "2026-08-10",
+        generatedAt: "2026-08-10T11:00:00.000Z",
+        sourceResults: [],
+        freeSignals: [{ provider: "google-news", status: "success", reason: null, signals: [{ kind: "volume", topic: "publishing history", value: 8, scope: "topic-set:booksofhistory:en", ref: "source:trending:google-news:2026-08-10" }] }],
+        items: [],
+        signals: { topHashtags: [], topFormats: [], topAudio: [], exploreSections: [], perTopicSet: [] },
+        forMagazines: { ai: [], mma: [] }
+      },
+      contributions,
+      vetoed: false
+    });
+    expect(brief.tactics.map(({ description }) => description)).toContain(
+      "Trend call: publishing history (booksofhistory, free volume, en): 8."
+    );
   });
 });
 

@@ -718,6 +718,9 @@ export async function collectFreeTrendingSignals(input: {
     aiQueries: ["artificial intelligence", "OpenAI", "Anthropic"],
     mmaQueries,
     subreddits: ["MMA", "ufc", "artificial", "LocalLLaMA"],
+    topicQueries: Object.entries((await loadGoViralSourceRegistry()).topicSets)
+      .filter(([, definition]) => definition.signalMode === "free-only")
+      .flatMap(([topicSet, definition]) => definition.keywords.map((query) => ({ topicSet, query }))),
     ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
   });
   const all = results.flatMap((result) => result.signals);

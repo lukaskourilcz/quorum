@@ -132,7 +132,11 @@ export function stepPayload(input: {
 export function stepTopicSets(step: GoViralRecipeStep, registry: GoViralSourceRegistry): Array<string | null> {
   if (step.inputs === "none") return [null];
   if (step.inputs === "account") return [null];
-  return Object.keys(registry.topicSets);
+  // Free-only topic sets are deliberately absent here: adding BOOKSOFHISTORY must not multiply
+  // the paid recipe or consume one cent of the shared Apify credit.
+  return Object.entries(registry.topicSets)
+    .filter(([, definition]) => definition.signalMode !== "free-only")
+    .map(([topicSet]) => topicSet);
 }
 
 export interface StepOutcome {

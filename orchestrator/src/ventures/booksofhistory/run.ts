@@ -21,6 +21,7 @@ import type { CycleResult } from "../../cycle/types.js";
 import type { Stage } from "../../types.js";
 import { readBhSeedLibrary } from "./seed.js";
 import { buildBhShortlist, writeBhShortlist } from "./shortlist.js";
+import { readBhGoViralContext } from "./goviral.js";
 import {
   applyBooksofHistoryCycleDay,
   booksofHistoryCycleComplete,
@@ -260,6 +261,9 @@ export async function runBooksofHistoryCycle(input: {
   }
   const workedPhase = cycle.phase;
   const completed = input.dry;
+  const goViral = workedPhase === "selection" && completed
+    ? await readBhGoViralContext(root, date)
+    : { planRef: null, trendSignals: [] };
   const shortlistPath = workedPhase === "selection" && completed
     ? await writeBhShortlist(root, buildBhShortlist({
         date,
@@ -268,11 +272,12 @@ export async function runBooksofHistoryCycle(input: {
         books: (await readBhSeedLibrary(input.dry ? stateRoot : root)).books,
         context: {
           asOf: input.now,
-          trendSignals: [],
+          trendSignals: goViral.trendSignals,
           recentFeatures: [],
           lanePerformance: {},
           shelfStoriesByBookId: {}
-        }
+        },
+        contextRefs: { trendPlan: goViral.planRef }
       }))
     : null;
   cycle = applyBooksofHistoryCycleDay({

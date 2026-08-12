@@ -258,7 +258,13 @@ export async function collectTrendingSignals(input: FetchInput & {
   aiQueries: readonly string[];
   mmaQueries: readonly string[];
   subreddits: readonly string[];
+  topicQueries?: readonly { topicSet: string; query: string }[];
 }): Promise<TrendingProviderResult[]> {
+  const scopedNews = (topicSet: string, query: string, locale: "cs" | "en") =>
+    fetchGoogleNewsVolume({ ...input, query, locale }).then((result) => ({
+      ...result,
+      signals: result.signals.map((signal) => ({ ...signal, scope: `topic-set:${topicSet}:${locale}` }))
+    }));
   const results = await Promise.all([
     ...input.aiQueries.slice(0, 3).map((query) => fetchHackerNewsVelocity({ ...input, query })),
     fetchGoogleTrends({ ...input, geo: "CZ" }),
@@ -266,6 +272,10 @@ export async function collectTrendingSignals(input: FetchInput & {
     ...input.mmaQueries.slice(0, 6).flatMap((query) => [
       fetchGoogleNewsVolume({ ...input, query, locale: "en" }),
       fetchGoogleNewsVolume({ ...input, query, locale: "cs" })
+    ]),
+    ...(input.topicQueries ?? []).slice(0, 12).flatMap(({ topicSet, query }) => [
+      scopedNews(topicSet, query, "en"),
+      scopedNews(topicSet, query, "cs")
     ]),
     ...input.subreddits.slice(0, 4).map((subreddit) => fetchSubredditRanks({ ...input, subreddit }))
   ]);
