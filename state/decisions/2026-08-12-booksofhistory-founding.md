@@ -108,7 +108,7 @@ post anything.
 - [x] **BH-06b** — The no-cover-art boundary test
 - [x] **BH-07a** — Author the approximately 200-book seed library
 - [x] **BH-07b** — The `bh:seed` validating CLI
-- [ ] **BH-08a** — The deterministic opportunity scorer
+- [x] **BH-08a** — The deterministic opportunity scorer
 - [ ] **BH-08b** — Shortlist contract and daily records
 - [ ] **BH-09a** — The venture-agnostic research-provider interface
 - [ ] **BH-09b** — The `anthropic-web-search` adapter over the guarded funnel
