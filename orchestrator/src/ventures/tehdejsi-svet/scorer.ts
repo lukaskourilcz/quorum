@@ -1,4 +1,5 @@
 import type { TehdejsiFact } from "../../contracts/tehdejsi-facts.js";
+import { classifyTier } from "./gates.js";
 import {
   TehdejsiShortlistSchema,
   type TehdejsiShortlist,
@@ -57,6 +58,9 @@ export interface ShortlistInput {
 
 export function scoreFact(fact: TehdejsiFact, input: ShortlistInput): TehdejsiShortlistEntry {
   const recent = input.recentlyUsedFactIds ?? [];
+  // The tier the gate believes, not the tier the file declared. A fact typed as everyday that is
+  // in fact about 1968 must not become selectable by being typed wrongly.
+  const tier = classifyTier(fact).tier;
   const factors = {
     askability: ASKABILITY[fact.kind],
     anniversary: anniversaryScore(fact, input.date),
@@ -64,10 +68,10 @@ export function scoreFact(fact: TehdejsiFact, input: ShortlistInput): TehdejsiSh
     // Alternating is a nudge, not a rule: a strong Czech fact still beats a weak Ukrainian one.
     countryBalance: input.lastCountry && fact.country !== input.lastCountry ? 3 : 0,
     // Tier 2 is not forbidden here — it is expensive, because it costs a blocking human review.
-    tierCost: fact.sensitivityTier === 2 ? -6 : fact.sensitivityTier === 1 ? -1 : 0
+    tierCost: tier === 2 ? -6 : tier === 1 ? -1 : 0
   };
   const score = Number(Object.values(factors).reduce((sum, value) => sum + value, 0).toFixed(4));
-  const veto = fact.sensitivityTier === 2
+  const veto = tier === 2
     ? "tier-2-review-required" as const
     : recent.includes(fact.id) ? "recently-used" as const : null;
   return { rank: 1, factId: fact.id, score, factors, veto };
