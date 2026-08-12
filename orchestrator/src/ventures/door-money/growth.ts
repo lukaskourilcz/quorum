@@ -7,6 +7,7 @@ import {
 } from "../../budget.js";
 import type { ActionPacket } from "../../contracts/action-packet.js";
 import type { PerformanceWeightProposal } from "../../contracts/performance-weights.js";
+import type { MeetingAgendaQueue } from "../../contracts/meeting-agenda.js";
 import { MeetingRecordSchema } from "../../contracts/meeting-record.js";
 import type { CycleResult } from "../../cycle/types.js";
 import { ModelOutputParseError } from "../../llm/call.js";
@@ -19,13 +20,26 @@ import {
   writeCalendarFeed
 } from "../../meetings/calendar.js";
 import { pragueClockParts } from "../../meetings/clock.js";
+import {
+  MEETING_AGENDA_PATH,
+  dueMeetingAgenda,
+  loadMeetingPolicy,
+  nextAgendaDate,
+  prepareMeetingAgendaConsumption,
+  prepareMeetingAgendaRequest,
+  readMeetingAgendaQueue
+} from "../../meetings/agenda.js";
 import { loadFixedMonthlyUsd } from "../../money/fixed-costs.js";
 import { configRoot, repoRoot } from "../../paths.js";
 import { loadRuntimeBudgetLimits } from "../../portfolio/limits.js";
 import { isoWeek } from "../../reports/writers.js";
 import { atomicWriteJson } from "../../state.js";
 import type { Stage } from "../../types.js";
-import { getVentureMeetingDefinition, loadVentureRegistry } from "../registry.js";
+import {
+  getVentureMeetingDefinition,
+  loadVentureRegistry,
+  parseCadenceHour
+} from "../registry.js";
 import {
   callDoorMoneyBooker,
   type BookerCall
@@ -132,17 +146,26 @@ export async function runDoorMoneyGrowthCycle(input: {
   const due = isDoorMoneyGrowthDay(date);
 
   const root = input.root ?? (input.dry ? path.join(repoRoot, "tmp", "dry-run", "state") : path.join(repoRoot, "state"));
-  const [registry, stage] = await Promise.all([
+  const [registry, stage, meetingPolicy] = await Promise.all([
     loadVentureRegistry(),
     input.stage ?? readFile(path.join(configRoot, "stages.json"), "utf8")
-      .then((raw) => (JSON.parse(raw) as { current: Stage }).current)
+      .then((raw) => (JSON.parse(raw) as { current: Stage }).current),
+    loadMeetingPolicy()
   ]);
   const { meeting } = getVentureMeetingDefinition(registry, "dm-growth");
+  const openingAgendaQueue = due && !input.dry
+    ? await readMeetingAgendaQueue(root, input.now)
+    : null;
+  const incomingAgenda = openingAgendaQueue
+    ? dueMeetingAgenda(openingAgendaQueue, "dm-growth", date)
+    : null;
   let actionPacket: ActionPacket | null = null;
   let actionPacketPath: string | null = null;
   let playbookPaths: string[] = [];
   let performanceWeightPath: string | null = null;
   let performanceWeightProposal: PerformanceWeightProposal | null = null;
+  let followUpRequest: Awaited<ReturnType<typeof callDoorMoneyBooker>>["followUpRequest"] = null;
+  let preparedAgendaQueue: MeetingAgendaQueue | null = null;
   let spendUsd = 0;
   let bookerParticipated = false;
   let roomStatus: "PLAN" | "NO_ACTION" | "PAUSED" | "FAILED" = due ? "NO_ACTION" : input.dry ? "NO_ACTION" : "PAUSED";
@@ -158,12 +181,14 @@ export async function runDoorMoneyGrowthCycle(input: {
         date,
         stage,
         agenda,
+        incomingAgenda,
         envelopeUsd: meeting.envelopeUsd,
         call: input.call,
         budgetContext: input.budgetContext
       });
       bookerParticipated = true;
       spendUsd = called.usd;
+      const candidateFollowUp = called.followUpRequest;
       const nextPacketPath = `ventures/door-money/actions/${date}.json`;
       const nextPacket = await preserveDoorMoneyActionCompletions(root, nextPacketPath, called.packet);
       const playbookPlan = await prepareDoorMoneyGrowthPlaybooks({
@@ -182,12 +207,48 @@ export async function runDoorMoneyGrowthCycle(input: {
             availableResults: called.context.ownerResults.items
           })
         : null;
+      // Review the current queue after the paid call but before any growth artifact is committed.
+      // Consumption and the one optional follow-up are prepared as one queue value, so a cap,
+      // stale incoming item or disallowed transition cannot strand an unrecorded paid result.
+      if (incomingAgenda || candidateFollowUp) {
+        let nextQueue = await readMeetingAgendaQueue(root, input.now);
+        if (incomingAgenda) {
+          nextQueue = prepareMeetingAgendaConsumption({
+            queue: nextQueue,
+            agendaId: incomingAgenda.id,
+            cycleId: input.cycleId,
+            now: input.now
+          });
+        }
+        if (candidateFollowUp) {
+          const target = getVentureMeetingDefinition(registry, candidateFollowUp.phase);
+          nextQueue = prepareMeetingAgendaRequest({
+            queue: nextQueue,
+            policy: meetingPolicy,
+            ventureId: target.ventureId,
+            phase: candidateFollowUp.phase,
+            requestedBy: "BOOKER",
+            sourcePhase: "dm-growth",
+            sourceMeetingRef: `meetings/${date}-dm-growth`,
+            summary: candidateFollowUp.summary,
+            evidenceRefs: candidateFollowUp.evidenceRefs,
+            notBefore: nextAgendaDate({
+              currentDate: date,
+              currentHour: pragueClockParts(input.now).hour,
+              targetHour: parseCadenceHour(target.meeting.cadence)
+            }),
+            now: input.now
+          }).queue;
+        }
+        preparedAgendaQueue = nextQueue;
+      }
       await commitDoorMoneyGrowthPlaybookPlan(root, playbookPlan);
       if (performanceWeightPlan) {
         await commitDoorMoneyPerformanceWeights(root, performanceWeightPlan);
         performanceWeightPath = performanceWeightPlan.relative;
       }
       await atomicWriteJson(root, nextPacketPath, nextPacket);
+      followUpRequest = candidateFollowUp;
       performanceWeightProposal = called.performanceWeightProposal;
       playbookPaths = playbookPlan.paths;
       actionPacket = nextPacket;
@@ -197,8 +258,10 @@ export async function runDoorMoneyGrowthCycle(input: {
         ? `${actionPacket.tasks.length} owner-executable action${actionPacket.tasks.length === 1 ? "" : "s"} prepared for review. Nothing was sent, posted or spent beyond the recorded BOOKER call.`
         : `Honest NO_ACTION: ${actionPacket.noActionReason} Nothing was sent, posted or invented to fill the packet.`;
     } catch (error) {
-      bookerParticipated = error instanceof ModelOutputParseError;
-      spendUsd = error instanceof ModelOutputParseError ? error.usd : 0;
+      preparedAgendaQueue = null;
+      followUpRequest = null;
+      bookerParticipated ||= error instanceof ModelOutputParseError;
+      spendUsd = Math.max(spendUsd, error instanceof ModelOutputParseError ? error.usd : 0);
       roomStatus = error instanceof BudgetError ? "PAUSED" : "FAILED";
       const detail = (error instanceof Error ? error.message : String(error))
         .replace(/(?:\/[^\s:]+)+/gu, "[private path]")
@@ -237,7 +300,9 @@ export async function runDoorMoneyGrowthCycle(input: {
     status: roomStatus,
     stage,
     operatingBrief: due
-      ? `${agenda.isoWeek} · ${agenda.topic.title}. Prepare owner-executable research without outreach, publishing, account action or spend.`
+      ? incomingAgenda
+        ? `Decide today: ${incomingAgenda.summary} Standing growth topic: ${agenda.isoWeek} · ${agenda.topic.title}. No outreach, publishing, account action or spend.`
+        : `${agenda.isoWeek} · ${agenda.topic.title}. Prepare owner-executable research without outreach, publishing, account action or spend.`
       : "This room meets on Thursdays. Nothing was spent.",
     participantReasons,
     ledger: { estimatedCycleUsd, actualCycleUsd: spendUsd, ...ledger },
@@ -250,6 +315,10 @@ export async function runDoorMoneyGrowthCycle(input: {
       agent: "BOOKER" as const,
       summary: `Performance weights: ${performanceWeightProposal.rationale}`.slice(0, 600),
       evidenceRefs: performanceWeightProposal.evidenceResultIds.map((id) => `result:${id}`)
+    }] : []).concat(followUpRequest ? [{
+      agent: "BOOKER" as const,
+      summary: `GoVIRAL follow-up: ${followUpRequest.summary}`.slice(0, 600),
+      evidenceRefs: followUpRequest.evidenceRefs
     }] : []),
     voteMatrix: due
       ? meeting.cast.filter((voter) => voter !== "BOOKER").map((voter) => ({
@@ -261,6 +330,7 @@ export async function runDoorMoneyGrowthCycle(input: {
     tasks: [],
     growthPlan: "Nothing was published, posted, scheduled, bought or sent; no account or channel was touched and no spend was authorized.",
     eveningOutcome: null,
+    ...(incomingAgenda ? { agendaRef: `${MEETING_AGENDA_PATH}#${incomingAgenda.id}` } : {}),
     roomTranscript: {
       openedAt,
       closedAt,
@@ -289,7 +359,9 @@ export async function runDoorMoneyGrowthCycle(input: {
     atomicWriteJson(root, meetingPath, record),
     atomicWriteJson(root, decisionPath, {
       schemaVersion: 1, fixture: input.dry, cycleId: input.cycleId, phase: "dm-growth",
-      outcome: decisionOutcome, summary, evidenceRefs: actionPacket?.contextRefs ?? [], generatedAt: closedAt
+      outcome: decisionOutcome, summary, evidenceRefs: actionPacket?.contextRefs ?? [],
+      ...(incomingAgenda ? { agendaRef: `${MEETING_AGENDA_PATH}#${incomingAgenda.id}` } : {}),
+      generatedAt: closedAt
     }),
     atomicWriteJson(root, scorecardPath, {
       schemaVersion: 1, fixture: input.dry, cycleId: input.cycleId, phase: "dm-growth",
@@ -297,7 +369,8 @@ export async function runDoorMoneyGrowthCycle(input: {
       participants: participantReasons.filter(({ participated }) => participated).map(({ agent }) => agent),
       agenda: { isoWeek: agenda.isoWeek, topicId: agenda.topic.id }, generatedAt: closedAt
     }),
-    writeCalendarFeed(root, calendar)
+    writeCalendarFeed(root, calendar),
+    ...(preparedAgendaQueue ? [atomicWriteJson(root, MEETING_AGENDA_PATH, preparedAgendaQueue)] : [])
   ]);
   return {
     cycleId: input.cycleId,
@@ -312,7 +385,8 @@ export async function runDoorMoneyGrowthCycle(input: {
     estimatedWorstCaseUsd: estimatedCycleUsd,
     selectedAgents: participantReasons.filter(({ participated }) => participated).map(({ agent }) => agent),
     skippedAgents: participantReasons.filter(({ participated }) => !participated).map(({ agent }) => agent),
-    artifacts: [meetingPath, decisionPath, scorecardPath, calendarPath, actionPacketPath, performanceWeightPath, ...playbookPaths]
+    artifacts: [meetingPath, decisionPath, scorecardPath, calendarPath, actionPacketPath, performanceWeightPath,
+      ...(preparedAgendaQueue ? [MEETING_AGENDA_PATH] : []), ...playbookPaths]
       .filter((relative): relative is string => relative !== null)
       .map((relative) => path.relative(repoRoot, path.join(root, relative))),
     agenda,
