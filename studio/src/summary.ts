@@ -182,6 +182,46 @@ export function buildCarouselSummary(input: CarouselSummaryInput): CarouselSumma
   };
 }
 
+export interface BooksofhistoryFeatureSummaryInput {
+  recommendationId: string;
+  createdAt: string;
+  locale: CarouselSummaryLocale;
+  feature: {
+    headline: string;
+    caption: string;
+    slides: readonly { text: string }[];
+  };
+}
+
+/** The single deterministic Design Lab handoff used by both cycle and admin approval writers. */
+export function buildBooksofhistoryCarouselSummary(
+  input: BooksofhistoryFeatureSummaryInput
+): CarouselSummary {
+  const slug = input.recommendationId.replace(/^rec-/u, "");
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(slug)) {
+    throw new Error("BOOKSOFHISTORY recommendation id cannot become a summary slug");
+  }
+  return buildCarouselSummary({
+    venture: "booksofhistory",
+    locale: input.locale,
+    slug,
+    date: input.createdAt.slice(0, 10),
+    title: input.feature.headline,
+    dek: input.feature.caption,
+    points: input.feature.slides.map(({ text }) => text),
+    sources: [{ kind: "dossier", label: "BOOKSOFHISTORY verified dossier" }],
+    hasHero: false,
+    heroCredit: null
+  });
+}
+
+export function booksofhistoryCarouselSummaryPath(summary: CarouselSummary): string {
+  if (summary.venture !== "booksofhistory") {
+    throw new Error("BOOKSOFHISTORY summary storage accepts only its own venture records");
+  }
+  return `ventures/carousel-studio/summaries/booksofhistory/${summary.date}-${summary.slug}-${summary.locale}.json`;
+}
+
 export interface CarouselSummaryReview {
   renderable: boolean;
   problems: string[];

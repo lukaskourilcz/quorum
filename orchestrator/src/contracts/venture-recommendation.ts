@@ -46,23 +46,31 @@ export const VentureRecommendationSchema = z.strictObject({
     summaryRefs: z.strictObject({ cs: MeetingRefSchema, en: MeetingRefSchema }).nullable()
   }),
   owner: z.strictObject({
-    postedUrl: HttpsUrlSchema.nullable(),
-    resultRefs: z.array(MeetingRefSchema).max(100),
+    postedUrls: z.strictObject({ cs: HttpsUrlSchema.nullable(), en: HttpsUrlSchema.nullable() }),
+    resultRefs: z.strictObject({
+      cs: z.array(MeetingRefSchema).max(100),
+      en: z.array(MeetingRefSchema).max(100)
+    }),
     editHistory: z.array(z.strictObject({
       at: DateTimeSchema,
-      action: z.enum(["edit", "approve", "reject", "post", "archive"]),
+      action: z.enum(["edit", "approve", "reject", "post", "result", "archive"]),
+      locale: z.enum(["cs", "en"]).nullable(),
       reason: z.string().trim().min(1).max(500).nullable()
     })).max(500)
   })
 }).superRefine((record, context) => {
-  if (record.status === "posted" && record.owner.postedUrl === null) {
-    context.addIssue({ code: "custom", message: "Posted recommendations require the owner's posted URL", path: ["owner", "postedUrl"] });
+  const posted = Object.values(record.owner.postedUrls);
+  if (record.status === "posted" && posted.some((url) => url === null)) {
+    context.addIssue({ code: "custom", message: "Posted recommendations require both owner-posted lane URLs", path: ["owner", "postedUrls"] });
   }
-  if (record.status !== "posted" && record.owner.postedUrl !== null) {
-    context.addIssue({ code: "custom", message: "Only posted recommendations carry a posted URL", path: ["owner", "postedUrl"] });
+  if ((record.status === "draft" || record.status === "rejected") && posted.some((url) => url !== null)) {
+    context.addIssue({ code: "custom", message: "Unapproved recommendations cannot carry posted URLs", path: ["owner", "postedUrls"] });
   }
   if (record.status === "draft" && (!record.gateResults.cs.passed || !record.gateResults.en.passed)) {
     context.addIssue({ code: "custom", message: "A draft recommendation requires both language gates", path: ["gateResults"] });
+  }
+  if ((record.status === "approved" || record.status === "posted") && record.designLab.status === "pending") {
+    context.addIssue({ code: "custom", message: "Approved recommendations require both Design Lab summary refs", path: ["designLab"] });
   }
 });
 

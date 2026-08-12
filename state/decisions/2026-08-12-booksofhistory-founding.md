@@ -125,7 +125,7 @@ post anything.
 - [x] **BH-15** — Recommendation records with dossier-story evidence
 - [x] **BH-16a** — Studio brand tokens for `booksofhistory`
 - [x] **BH-16b** — Per-record locale and two summaries per feature
-- [ ] **BH-17** — Admin approval write path
+- [x] **BH-17** — Admin approval write path
 - [ ] **BH-18a** — Server-only admin loader
 - [ ] **BH-18b** — Shortlist panel with factor breakdowns
 - [ ] **BH-18c** — Dossiers panel with the research ledger
@@ -185,6 +185,11 @@ post anything.
   `saveEventsFile`, not a function literally named `persist`. BH-17 will reuse its
   authentication, origin, payload, production fail-closed and persistence semantics,
   without creating a second storage abstraction.
+- **BH-17 result handoff stops at the approval boundary.** The issue groups a per-lane
+  results entry into the feature action route, while the design and build prompt assign
+  the shared `owner-result-entry/1` contract and its write endpoint to BH-20a. BH-17 can
+  attach an existing per-lane result reference only after `BH-RESULTS-004` is signed;
+  BH-20a remains the sole owner of creating and validating the actual result entry.
 
 ## What this does not touch
 

@@ -14,9 +14,16 @@ async function approvedRecommendation() {
   return VentureRecommendationSchema.parse({
     ...fixture,
     status: "approved",
+    designLab: {
+      status: "ready",
+      summaryRefs: {
+        cs: "ventures/carousel-studio/summaries/booksofhistory/example-cs.json",
+        en: "ventures/carousel-studio/summaries/booksofhistory/example-en.json"
+      }
+    },
     owner: {
       ...fixture.owner as object,
-      editHistory: [{ at: "2026-08-14T10:05:00.000Z", action: "approve", reason: null }]
+      editHistory: [{ at: "2026-08-14T10:05:00.000Z", action: "approve", locale: null, reason: null }]
     },
     updatedAt: "2026-08-14T10:05:00.000Z"
   });

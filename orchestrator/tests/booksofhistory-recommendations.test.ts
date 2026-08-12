@@ -35,4 +35,34 @@ describe("BOOKSOFHISTORY recommendation store", () => {
       await rm(root, { recursive: true, force: true });
     }
   });
+
+  it("records owner-posted URLs per lane and closes posted status only after both", async () => {
+    const draft = VentureRecommendationSchema.parse(JSON.parse(await readFile(
+      path.join(repoRoot, "contracts/fixtures/venture-recommendation.valid.json"),
+      "utf8"
+    )));
+    const approved = {
+      ...draft,
+      status: "approved" as const,
+      designLab: {
+        status: "ready" as const,
+        summaryRefs: {
+          cs: "ventures/carousel-studio/summaries/booksofhistory/feature-cs.json",
+          en: "ventures/carousel-studio/summaries/booksofhistory/feature-en.json"
+        }
+      },
+      owner: {
+        ...draft.owner,
+        postedUrls: { cs: "https://social.example/cs-post", en: null },
+        editHistory: [{ at: "2026-08-14T10:05:00.000Z", action: "post" as const, locale: "cs" as const, reason: null }]
+      }
+    };
+    expect(VentureRecommendationSchema.safeParse(approved).success).toBe(true);
+    expect(VentureRecommendationSchema.safeParse({ ...approved, status: "posted" }).success).toBe(false);
+    expect(VentureRecommendationSchema.safeParse({
+      ...approved,
+      status: "posted",
+      owner: { ...approved.owner, postedUrls: { ...approved.owner.postedUrls, en: "https://social.example/en-post" } }
+    }).success).toBe(true);
+  });
 });

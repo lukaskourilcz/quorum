@@ -1,5 +1,6 @@
 import {
-  buildCarouselSummary,
+  booksofhistoryCarouselSummaryPath,
+  buildBooksofhistoryCarouselSummary,
   reviewCarouselSummary,
   type CarouselSummary,
   type CarouselSummaryLocale
@@ -20,15 +21,8 @@ export interface StoredBhCarouselSummaries {
   en: StoredBhCarouselSummary;
 }
 
-function summarySlug(recommendationId: string): string {
-  return recommendationId.replace(/^rec-/u, "");
-}
-
 export function bhCarouselSummaryPath(summary: CarouselSummary): string {
-  if (summary.venture !== "booksofhistory") {
-    throw new Error("BOOKSOFHISTORY summary storage accepts only its own venture records");
-  }
-  return `ventures/carousel-studio/summaries/booksofhistory/${summary.date}-${summary.slug}-${summary.locale}.json`;
+  return booksofhistoryCarouselSummaryPath(summary);
 }
 
 function buildOneSummary(
@@ -36,18 +30,11 @@ function buildOneSummary(
   locale: CarouselSummaryLocale
 ): CarouselSummary {
   const feature = recommendation.payloads[locale];
-  const summary = buildCarouselSummary({
-    venture: "booksofhistory",
+  const summary = buildBooksofhistoryCarouselSummary({
+    recommendationId: recommendation.recommendationId,
+    createdAt: recommendation.createdAt,
     locale,
-    slug: summarySlug(recommendation.recommendationId),
-    date: recommendation.createdAt.slice(0, 10),
-    title: feature.headline,
-    dek: feature.caption,
-    points: feature.slides.map(({ text }) => text),
-    sources: [{ kind: "dossier", label: "BOOKSOFHISTORY verified dossier" }],
-    // The venture's first-edition cards are typographic. Seed coverRef never enters this boundary.
-    hasHero: false,
-    heroCredit: null
+    feature
   });
   const review = reviewCarouselSummary(summary);
   if (!review.renderable) {

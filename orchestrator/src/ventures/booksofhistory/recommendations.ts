@@ -45,7 +45,11 @@ export function buildBhRecommendation(input: {
       en: { passed: true, violations: [] }
     },
     designLab: { status: "pending", summaryRefs: null },
-    owner: { postedUrl: null, resultRefs: [], editHistory: [] }
+    owner: {
+      postedUrls: { cs: null, en: null },
+      resultRefs: { cs: [], en: [] },
+      editHistory: []
+    }
   });
 }
 

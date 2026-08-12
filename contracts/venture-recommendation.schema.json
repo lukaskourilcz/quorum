@@ -471,25 +471,65 @@
     "owner": {
       "type": "object",
       "properties": {
-        "postedUrl": {
-          "anyOf": [
-            {
-              "type": "string",
-              "pattern": "^https:\\/\\/"
+        "postedUrls": {
+          "type": "object",
+          "properties": {
+            "cs": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/"
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
-            {
-              "type": "null"
+            "en": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^https:\\/\\/"
+                },
+                {
+                  "type": "null"
+                }
+              ]
             }
-          ]
+          },
+          "required": [
+            "cs",
+            "en"
+          ],
+          "additionalProperties": false
         },
         "resultRefs": {
-          "maxItems": 100,
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 160
-          }
+          "type": "object",
+          "properties": {
+            "cs": {
+              "maxItems": 100,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              }
+            },
+            "en": {
+              "maxItems": 100,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              }
+            }
+          },
+          "required": [
+            "cs",
+            "en"
+          ],
+          "additionalProperties": false
         },
         "editHistory": {
           "maxItems": 500,
@@ -509,7 +549,22 @@
                   "approve",
                   "reject",
                   "post",
+                  "result",
                   "archive"
+                ]
+              },
+              "locale": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "cs",
+                      "en"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
                 ]
               },
               "reason": {
@@ -528,6 +583,7 @@
             "required": [
               "at",
               "action",
+              "locale",
               "reason"
             ],
             "additionalProperties": false
@@ -535,7 +591,7 @@
         }
       },
       "required": [
-        "postedUrl",
+        "postedUrls",
         "resultRefs",
         "editHistory"
       ],
