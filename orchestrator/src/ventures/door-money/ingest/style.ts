@@ -203,7 +203,7 @@ export function selectStyleExemplars(input: {
         id: `style-${annotation.chunkId}`,
         chunkId: annotation.chunkId,
         text,
-        embeddingId: `style-${annotation.chunkId}-embedding`,
+        embeddingId: annotation.chunkId,
         formats: formatLabels(annotation),
         tags: annotation.themes.slice(0, 16)
       };
