@@ -34,6 +34,10 @@ export interface BookIngestEmbedding {
 
 export interface BookIngestPrivateArtifacts {
   manuscriptHash: string;
+  manuscriptBytes: number;
+  annotationModelVersion: string;
+  rollupModelVersion: string;
+  embeddingModelVersion: string;
   chunked: ChunkedManuscript;
   annotations: AnnotatedBookChunk[];
   rollups: BookAnnotationRollups;
@@ -291,6 +295,10 @@ export async function runBookIngest(input: {
     };
     await input.privateStore.writeVersion({
       manuscriptHash,
+      manuscriptBytes: Buffer.byteLength(input.source, "utf8"),
+      annotationModelVersion: annotated.modelVersion,
+      rollupModelVersion: annotated.modelVersion,
+      embeddingModelVersion: style.profile.modelVersions.embedding,
       chunked,
       annotations: annotated.annotations,
       rollups: annotated.rollups,

@@ -155,6 +155,11 @@ costs and no treasury action in this decision.
   of database credentials or tables. Dry ingestion uses an in-memory implementation at `$0`;
   live mode remains refused until DM-11b installs the private-clone writer and the two ingestion
   approvals are countersigned. Local ignored manuscript input remains one supported source path.
+- **DM-11b's amended database client, credentials and host-pinning work are the same
+  lower-precedence substitution.** Following the founding term and build contract, the completed
+  split writes raw chunks, annotations and vectors only to an owner-provided local private clone;
+  the public state receives contract-validated derivatives and version pointers. No database
+  hostname was added to the network allowlist, and no `BOOK_DB_*` credential or table was created.
 
 ## Delivery ledger
 
@@ -182,7 +187,7 @@ costs and no treasury action in this decision.
 - [x] DM-10a — Guarded embeddings wrapper
 - [x] DM-10b — Budget-ledger kind for embeddings
 - [x] DM-11a — The book:ingest CLI with envelopes
-- [ ] DM-11b — Public/private output split and manuscript-hash idempotency
+- [x] DM-11b — Public/private output split and manuscript-hash idempotency
 - [ ] DM-12 — venture-recommendation evidence kind book-passage
 - [ ] DM-13 — Deterministic passage selection
 - [ ] DM-14a — Packet assembly and the private-store fetcher

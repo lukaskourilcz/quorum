@@ -10,6 +10,7 @@ import {
   MemoryBookIngestPrivateStore,
   runBookIngest
 } from "./run.js";
+import { openLocalCloneBookIngestStore } from "./store.js";
 
 function valueAfter(args: string[], flag: string): string | undefined {
   const index = args.indexOf(flag);
@@ -50,11 +51,16 @@ try {
   ]);
   const approved = checkedApproval(inbox, "BOOK-SOURCE-001") &&
     checkedApproval(inbox, "BOOK-INGEST-002");
+  const privateStore = dry
+    ? new MemoryBookIngestPrivateStore()
+    : privateRoot
+      ? await openLocalCloneBookIngestStore({ privateRoot, stateRoot }).catch(() => undefined)
+      : undefined;
   const report = await runBookIngest({
     source,
     stateRoot,
     privateRoot,
-    privateStore: dry ? new MemoryBookIngestPrivateStore() : undefined,
+    privateStore,
     approved,
     dry,
     now,
