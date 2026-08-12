@@ -20,7 +20,7 @@ import {
 } from "@/lib/calendar-feed-model";
 import { readStudioArticles } from "@/lib/carousel-summaries";
 import type { PublicMeetingRecord } from "@/lib/meeting-record-model";
-import { PROJECT_COLOR, projectForKind, type OfficeProjectKey } from "@/lib/office-walkthrough";
+import { PROJECT_COLOR, projectColorForKind, projectForKind, type OfficeProjectKey } from "@/lib/office-walkthrough";
 import {
   doorNoteKind,
   type OfficeWorkflows,
@@ -336,6 +336,10 @@ export async function resolveOfficeWorkflows(
         .map((run) => `article-${run.slot}`)
     );
     shared.definitions.forEach((definition, index) => {
+      // The scope fence permits the operating slot on the company calendar, not a public
+      // BOOKSOFHISTORY room or workflow. It is therefore omitted from this floor-plan model
+      // rather than misattributed to Board HQ by projectForKind's safe fallback.
+      if (definition.kind === "bh-desk") return;
       const slot = dayIndex >= 0 ? feed.slots[dayIndex + index] : undefined;
       const status: CalendarStatus = slot?.status ?? "scheduled";
       const room = projectForKind(definition.kind);
@@ -345,7 +349,7 @@ export async function resolveOfficeWorkflows(
         hour: definition.hour,
         label: publicKindLabel(definition.kind),
         room,
-        color: PROJECT_COLOR[room],
+        color: projectColorForKind(definition.kind),
         status,
         note: doorNoteKind(status, sent),
         reason: readableSlotReason(slot?.decisionOneLiner) ?? null,

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { agents } from "@/data/agents";
+import { publicAgents } from "@/data/agents";
 import { getPublicStandups } from "@/lib/standup-records";
 import { getPublicSiteUrl } from "@/lib/public-site-url";
 import { getPublicMeetingRecords } from "@/lib/meeting-records";
@@ -35,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: route === "" ? ("daily" as const) : ("weekly" as const),
       priority: route === "" ? 1 : 0.7
     })),
-    ...agents.map((agent) => ({
+    ...publicAgents.map((agent) => ({
       url: `${base}/agents/${agent.slug}`,
       lastModified: updated,
       changeFrequency: "monthly" as const,

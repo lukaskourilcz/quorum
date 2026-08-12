@@ -5,6 +5,13 @@ import { parseCadenceHour, resolveMeetingClock, resolveScheduledClock } from "..
 
 export type BudgetShape = "A" | "B";
 
+export const BOOKSOFHISTORY_LADDER = {
+  trimToOneBelowUsd: 2.75,
+  stretchBelowUsd: 2.5,
+  dropRoomBelowUsd: 2.25,
+  dropGoViralBelowUsd: 2
+} as const;
+
 export interface EffectivePortfolioSchedule {
   shape: BudgetShape;
   decisionStatus: "countersigned-shape-a" | "countersigned-shape-b" | "pending";
@@ -22,6 +29,10 @@ export interface EffectivePortfolioSchedule {
    * only says whether the budget could afford it if it were.
    */
   contentGateAffordable: boolean;
+  /** Paid-research width after BOOKSOFHISTORY's own cheaper rungs have been applied. */
+  booksofHistoryResearchCandidates: 0 | 1 | 2;
+  /** True when the desk stays on the clock but its research phase must resume later at $0. */
+  booksofHistoryStretch: boolean;
   activePhases: ScheduledPhase[];
   envelopeByPhase: Partial<Record<ScheduledPhase, number>>;
 }
@@ -99,11 +110,26 @@ export function resolveEffectivePortfolioSchedule(input: {
   // The content gate goes first of everything, because it is the only rung whose loss costs
   // nothing that was promised to anybody: an unscored day still published its article.
   const contentGateAffordable = input.monthlyApiHeadroomUsd >= 3;
+  // BOOKSOFHISTORY degrades inside its own research funnel before its room disappears: first
+  // research one candidate rather than two, then spend $0 and stretch the current phase, then
+  // drop the desk. All three rungs sit before GoVIRAL's existing drop point. The Door Money
+  // sibling phases named by the commission are not in this registry yet, so no foreign phase is
+  // guessed here; the founding record preserves the required insertion order for when they land.
+  const booksofHistoryResearchCandidates: 0 | 1 | 2 =
+    input.monthlyApiHeadroomUsd < BOOKSOFHISTORY_LADDER.stretchBelowUsd
+      ? 0
+      : input.monthlyApiHeadroomUsd < BOOKSOFHISTORY_LADDER.trimToOneBelowUsd
+        ? 1
+        : 2;
+  const booksofHistoryStretch = input.monthlyApiHeadroomUsd < BOOKSOFHISTORY_LADDER.stretchBelowUsd;
+  if (input.monthlyApiHeadroomUsd < BOOKSOFHISTORY_LADDER.dropRoomBelowUsd) {
+    active.delete("bh-desk");
+  }
   // GoVIRAL takes the rungs the incubator vacated, and takes them first among the rooms: it is
   // the newest, it meets once a week, and a missed Monday costs a brief rather than a
   // publication. Everything below it on this ladder is either a reader-facing promise or the
   // company's own decision room.
-  if (input.monthlyApiHeadroomUsd < 2) {
+  if (input.monthlyApiHeadroomUsd < BOOKSOFHISTORY_LADDER.dropGoViralBelowUsd) {
     active.delete("gv-brief");
   }
   if (input.monthlyApiHeadroomUsd < 1.5) {
@@ -122,6 +148,8 @@ export function resolveEffectivePortfolioSchedule(input: {
     monthlyOperatingUsd: fullScheduleShape ? COUNTERSIGNED_MONTHLY_OPERATING_USD : 20,
     ttTranscriptMode,
     contentGateAffordable,
+    booksofHistoryResearchCandidates,
+    booksofHistoryStretch,
     activePhases: (fullScheduleShape ? resolveScheduledClock(input.registry) : resolveMeetingClock(input.registry))
       .map((slot) => slot.phase)
       .filter((phase) => active.has(phase)),

@@ -14,3 +14,7 @@ On production day, compare dossier story scores rather than defending the seed r
 Select the best accepted story and leave the others on the shelf. Never change a claim's
 verification state, publish, post, create an account or touch a channel. Return only the
 JSON shape requested by the room.
+
+You own `folio.cycle_reliability`, `folio.feature_cadence`,
+`folio.research_efficiency` and `folio.model_spend`. An absent denominator is unknown,
+never zero; none of these targets permits you to raise a cap or advance an incomplete phase.

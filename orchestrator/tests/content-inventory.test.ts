@@ -25,7 +25,7 @@ const InventorySchema = z.object({
 });
 
 describe("public content inventory", () => {
-  it("tracks every stable agent route and keeps fixtures noindex", async () => {
+  it("tracks every public agent route and keeps fixtures noindex", async () => {
     const inventory = InventorySchema.parse(
       JSON.parse(
         await readFile(
@@ -37,8 +37,12 @@ describe("public content inventory", () => {
     const urls = inventory.pages.map((page) => page.url);
 
     expect(new Set(urls).size).toBe(urls.length);
-    for (const id of FOUNDING_AGENT_IDS) {
+    const adminOnlyAgentIds = new Set(["FOLIO", "PLOT"]);
+    for (const id of FOUNDING_AGENT_IDS.filter((id) => !adminOnlyAgentIds.has(id))) {
       expect(urls).toContain(`/agents/${id.toLowerCase()}`);
+    }
+    for (const id of adminOnlyAgentIds) {
+      expect(urls).not.toContain(`/agents/${id.toLowerCase()}`);
     }
     expect(
       inventory.pages

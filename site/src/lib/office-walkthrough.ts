@@ -80,6 +80,11 @@ export function projectForKind(kind: string): OfficeProjectKey {
   return "company";
 }
 
+/** Calendar-only ventures can keep their own hue without acquiring a public project room. */
+export function projectColorForKind(kind: string): string {
+  return kind === "bh-desk" ? VENTURE_BRAND.booksofhistory! : PROJECT_COLOR[projectForKind(kind)];
+}
+
 /* ------------------------------------------------------------------ calendar */
 
 export interface OfficeCell {
@@ -546,7 +551,7 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
       kind: definition.kind,
       time: `${String(definition.hour).padStart(2, "0")}:00`,
       label: publicKindLabel(definition.kind),
-      color: PROJECT_COLOR[projectForKind(definition.kind)],
+      color: projectColorForKind(definition.kind),
       cells: days.map((day, dayIndex) => {
         const slot = feed.slots[dayIndex * feed.definitions.length + rowIndex]!;
         const openable = slot.status === "held" || slot.status === "ongoing";

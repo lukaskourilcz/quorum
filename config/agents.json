@@ -2260,7 +2260,12 @@
         "Select up to the recorded candidate limit for research",
         "Return a cycle to the shelf when no story clears the evidence floor"
       ],
-      "ownedKpiIds": [],
+      "ownedKpiIds": [
+        "folio.cycle_reliability",
+        "folio.feature_cadence",
+        "folio.research_efficiency",
+        "folio.model_spend"
+      ],
       "successChecks": [
         "Every commissioned brief names a recorded candidate and a concrete question",
         "Every selected story resolves to a dossier candidate that cleared verification"
@@ -2297,11 +2302,11 @@
       ],
       "department": "BOOKSOFHISTORY",
       "title": "Story Editor and Writer",
-      "mission": "Mines dossier-backed story candidates and writes one canonical brief plus native Czech and English social packages with every factual sentence tied to accepted claims.",
+      "mission": "Mines dossier-backed story candidates and writes one canonical brief plus separately authored cs and en social packages with every factual sentence tied to accepted claims.",
       "responsibilities": [
         "Mine reusable story candidates from normalized dossiers",
         "Write the canonical language-neutral story brief",
-        "Write independent Czech and English social packages"
+        "Write independent native social packages for the cs and en locales"
       ],
       "notResponsibleFor": [
         "Inventing a claim or fact absent from dossier evidence",
@@ -2312,10 +2317,13 @@
         "Choose narrative structure among claims cleared for publication",
         "Return a package when the accepted claims cannot sustain it"
       ],
-      "ownedKpiIds": [],
+      "ownedKpiIds": [
+        "plot.claim_state_coverage",
+        "plot.legend_as_fact_violations"
+      ],
       "successChecks": [
         "Every factual sentence carries an accepted dossier claim reference",
-        "Czech and English packages are native compositions from the same canonical brief"
+        "The cs and en packages are native compositions from the same canonical brief"
       ],
       "capabilityTags": [
         "story:mining",

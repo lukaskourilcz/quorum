@@ -44,7 +44,9 @@ export type AgentId =
   | "MAKO"
   | "CHUM"
   | "EASEL"
-  | "MOTIF";
+  | "MOTIF"
+  | "FOLIO"
+  | "PLOT";
 
 type PublicStatus =
   | "active"
@@ -118,7 +120,9 @@ type TextModelRole =
   | "ANTHROPIC_SPECIALIST"
   | "DIGEST"
   | "MAKO"
-  | "CHUM";
+  | "CHUM"
+  | "FOLIO"
+  | "PLOT";
 
 const textModelRoles = modelSource.roles as Record<
   TextModelRole,
@@ -255,6 +259,18 @@ const mmaArticleCall: CallEstimateProfile = {
   basis: "Typical MMA Files article: a 25,000-character evidence packet and up to 1,700 response tokens"
 };
 
+const folioCall: CallEstimateProfile = {
+  promptChars: 8_000,
+  maxOutputTokens: 1_200,
+  basis: "BOOKSOFHISTORY editorial selection: an 8,000-character packet and up to 1,200 response tokens"
+};
+
+const plotCall: CallEstimateProfile = {
+  promptChars: 8_000,
+  maxOutputTokens: 3_000,
+  basis: "BOOKSOFHISTORY story production: an 8,000-character dossier packet and up to 3,000 response tokens"
+};
+
 function apiProvider(provider: "openai" | "anthropic"): AgentApiModel["provider"] {
   return provider === "openai" ? "OpenAI" : "Anthropic";
 }
@@ -347,6 +363,8 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
   // and the wrong price for the venture's only quality-critical call.
   MAKO: [configuredTextModel("MAKO", "marketingShark weekly review")],
   CHUM: [configuredTextModel("CHUM", "marketingShark daily carousel copy")],
+  FOLIO: [configuredTextModel("FOLIO", "BOOKSOFHISTORY editorial selection", folioCall)],
+  PLOT: [configuredTextModel("PLOT", "BOOKSOFHISTORY story production", plotCall)],
   HERALD: [
     configuredEditionModel(editionModels.curation, "DNESKAi daily edition curation", curationCall),
     configuredTextModel("DIGEST", "DNESKAi product room"),
@@ -660,6 +678,18 @@ const profileCopy: Record<
     output: "One day's carousel copy, in two languages",
     currentFocus: "devShark quiz carousels",
     publicTrackRecord: null
+  },
+  FOLIO: {
+    operatingPrinciple: "Research only the book whose recorded story potential earns it.",
+    output: "Bounded research brief and dossier-backed story selection",
+    currentFocus: "BOOKSOFHISTORY editorial cycles",
+    publicTrackRecord: null
+  },
+  PLOT: {
+    operatingPrinciple: "One verified story, written natively twice.",
+    output: "Canonical story brief and separate native social drafts per locale",
+    currentFocus: "BOOKSOFHISTORY story production",
+    publicTrackRecord: null
   }
 };
 
@@ -687,5 +717,13 @@ export const agents: readonly Agent[] = registryAgents.map((agent) => {
   };
 });
 
+/**
+ * BOOKSOFHISTORY is admin-only under its founding scope fence. Its operating roles remain in the
+ * full registry for controls and recorded rooms, but cannot acquire public profile routes.
+ */
+const adminOnlyAgentIds = new Set<AgentId>(["FOLIO", "PLOT"]);
+export const publicAgents = agents.filter((agent) => !adminOnlyAgentIds.has(agent.id));
+
 export const agentBySlug = new Map(agents.map((agent) => [agent.slug, agent]));
 export const agentById = new Map(agents.map((agent) => [agent.id, agent]));
+export const publicAgentBySlug = new Map(publicAgents.map((agent) => [agent.slug, agent]));

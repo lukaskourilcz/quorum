@@ -229,7 +229,7 @@ describe("cycle preflight", () => {
     }
   });
 
-  // 2026-08-07 is a Caught Up day in the ideation rotation, which is what makes the handoff below
+  // 2026-08-09 is a Caught Up day in the ideation rotation, which is what makes the handoff below
   // happen at all. The rotation is a modulo over the date across the active ventures, so a date is
   // the only thing that decides it and the same date always picks the same venture.
   it("carries one VAULT-screened dry morning idea into the product-room verdict", async () => {
@@ -238,17 +238,17 @@ describe("cycle preflight", () => {
       dry: true,
       explainBudget: false,
       explainRouting: false,
-      now: new Date("2026-08-07T04:00:00.000Z")
+      now: new Date("2026-08-09T04:00:00.000Z")
     });
     expect(morning.artifacts).toEqual(expect.arrayContaining([
       "tmp/dry-run/state/ideas/caught-up/ledger.jsonl",
       "tmp/dry-run/state/ideas/caught-up/INDEX.md"
     ]));
     const standup = JSON.parse(await readFile(
-      path.join(repoRoot, "tmp/dry-run/state/standups/2026-08-07-morning.json"),
+      path.join(repoRoot, "tmp/dry-run/state/standups/2026-08-09-morning.json"),
       "utf8"
     )) as { caughtUpIdeaRef?: string; morningIdeaNamespace?: string };
-    expect(standup.caughtUpIdeaRef).toMatch(/^idea-2026-08-07-/);
+    expect(standup.caughtUpIdeaRef).toMatch(/^idea-2026-08-09-/);
     expect(standup.morningIdeaNamespace).toBe("caught-up");
 
     const product = await runCycle({
@@ -256,10 +256,10 @@ describe("cycle preflight", () => {
       dry: true,
       explainBudget: false,
       explainRouting: false,
-      now: new Date("2026-08-07T15:00:00.000Z")
+      now: new Date("2026-08-09T15:00:00.000Z")
     });
     const record = MeetingRecordSchema.parse(JSON.parse(await readFile(
-      path.join(repoRoot, "tmp/dry-run/state/meetings/2026-08-07-cu-product.json"),
+      path.join(repoRoot, "tmp/dry-run/state/meetings/2026-08-09-cu-product.json"),
       "utf8"
     )));
     expect(record.caughtUpIdeaRef).toBe(standup.caughtUpIdeaRef);
@@ -294,7 +294,7 @@ describe("cycle preflight", () => {
       now: new Date("2026-08-04T04:00:00.000Z")
     });
     expect(morning.artifacts).toEqual(expect.arrayContaining([
-      "tmp/dry-run/state/ideas/mma-files/ledger.jsonl"
+      "tmp/dry-run/state/ideas/marketingshark/ledger.jsonl"
     ]));
     expect(morning.artifacts).not.toContain("tmp/dry-run/state/ideas/caught-up/ledger.jsonl");
 
@@ -302,7 +302,7 @@ describe("cycle preflight", () => {
       path.join(repoRoot, "tmp/dry-run/state/standups/2026-08-04-morning.json"),
       "utf8"
     )) as { morningIdeaNamespace?: string; caughtUpIdeaRef?: string };
-    expect(standup.morningIdeaNamespace).toBe("mma-files");
+    expect(standup.morningIdeaNamespace).toBe("marketingshark");
 
     await runCycle({
       phase: "cu-product",

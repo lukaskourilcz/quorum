@@ -103,7 +103,7 @@ post anything.
 - [x] **BH-04c** — Model roles for the desk and the research ladder
 - [x] **BH-05a** — Cycle state-machine contract
 - [x] **BH-05b** — State machine, runner dispatch and per-day records
-- [ ] **BH-05c** — Scaffold, hue, labels, KPI seeds and ladder position
+- [x] **BH-05c** — Scaffold, hue, labels, KPI seeds and ladder position
 - [ ] **BH-06a** — `bh-seed` contract and fixtures
 - [ ] **BH-06b** — The no-cover-art boundary test
 - [ ] **BH-07a** — Author the approximately 200-book seed library
@@ -151,6 +151,17 @@ post anything.
   but the registry has `ventures: "global"` and design section 5 explicitly keeps QUILL
   global. HACEK gains `booksofhistory`; narrowing QUILL to a venture array would demote
   a shared public-claim control and contradict the higher-precedence design.
+- **Door Money ladder insertion remains pending its sibling build.** BH-05c places the
+  BOOKSOFHISTORY sequence (two research candidates, one, stretch, room drop) immediately
+  before the existing `gv-brief` drop. No Door Money phase exists in the registry or phase
+  schemas on this branch, and the program forbids touching `DM-` work, so this commit does
+  not invent foreign phase ids. When that sibling lands, its rooms belong immediately before
+  these BOOKSOFHISTORY rungs, preserving the issue's requested relative order.
+- **Registered roles do not imply public profiles here.** The existing content-inventory
+  test assumed every registered agent acquired a public `/agents/*` route. That would
+  contradict this decision's no-public-route fence, so FOLIO and PLOT remain available
+  to internal and admin consumers but are excluded from public static generation,
+  navigation, sitemap and inventory.
 - **Sibling coordination.** Neither the Kvórum nor Door Money build has landed. The
   shared recommendation contract, owner-result contract, performance weights and
   per-record carousel-summary locale are absent. BOOKSOFHISTORY will create or extend

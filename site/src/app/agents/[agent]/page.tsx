@@ -22,11 +22,13 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { agentBySlug, agents } from "@/data/agents";
+import { publicAgentBySlug, publicAgents } from "@/data/agents";
 import { formatDate } from "@/lib/utils";
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
-  return agents.map((agent) => ({ agent: agent.slug }));
+  return publicAgents.map((agent) => ({ agent: agent.slug }));
 }
 
 export async function generateMetadata({
@@ -35,7 +37,7 @@ export async function generateMetadata({
   params: Promise<{ agent: string }>;
 }): Promise<Metadata> {
   const { agent: slug } = await params;
-  const agent = agentBySlug.get(slug);
+  const agent = publicAgentBySlug.get(slug);
   return {
     description: agent ? publicAgentMandate(agent) : "A role on the BoardlessAI AI team.",
     title: agent ? publicAgentTitle(agent) : "AI role"
@@ -48,12 +50,12 @@ export default async function AgentDetailPage({
   params: Promise<{ agent: string }>;
 }) {
   const { agent: slug } = await params;
-  const agent = agentBySlug.get(slug);
+  const agent = publicAgentBySlug.get(slug);
   if (!agent) {
     notFound();
   }
-  const index = agents.findIndex((candidate) => candidate.id === agent.id);
-  const next = agents[(index + 1) % agents.length]!;
+  const index = publicAgents.findIndex((candidate) => candidate.id === agent.id);
+  const next = publicAgents[(index + 1) % publicAgents.length]!;
   const isControl = agent.group === "Control" || agent.id === "AUDIT";
 
   return (

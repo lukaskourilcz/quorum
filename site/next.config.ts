@@ -27,6 +27,9 @@ const adminRuntimeFiles = ["../config/**/*", "../state/**/*", ...hookLibraryFile
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: path.join(__dirname, ".."),
+  // Production uses Next's default Turbopack build. Declaring it explicitly keeps that build
+  // compatible with the development-only Webpack watcher hook used by the state-writing e2e run.
+  turbopack: {},
   outputFileTracingIncludes: {
     "/admin": adminRuntimeFiles,
     "/admin/**": adminRuntimeFiles,
@@ -44,6 +47,23 @@ const nextConfig: NextConfig = {
     // an easy thing to break by renaming the segment and never notice, so the cron route's test
     // asserts the match against Next's own matcher rather than trusting that it looks right.
     "/api/cron/[phase]": ["../config/ventures.json"]
+  },
+  webpack(config, { dev }) {
+    if (dev) {
+      const ignored = config.watchOptions?.ignored;
+      const stateRoot = path.join(__dirname, "..", "state");
+      const statePattern = `^${stateRoot.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&")}(?:[/\\\\]|$)`;
+      config.watchOptions = {
+        ...config.watchOptions,
+        // Admin e2e journeys deliberately persist under the repository state root. The server
+        // reads those files per request; rebuilding the app for each persisted receipt resets the
+        // very client interaction the journey is verifying.
+        ignored: ignored instanceof RegExp
+          ? new RegExp(`(?:${ignored.source})|(?:${statePattern})`, ignored.flags)
+          : [...(Array.isArray(ignored) ? ignored : ignored ? [ignored] : []), path.join(stateRoot, "**", "*")]
+      };
+    }
+    return config;
   },
   /**
    * Where the eleven-item navigation went.

@@ -8,7 +8,7 @@ import {
 const adminUser = "e2e-owner";
 const adminPassword = "e2e-password";
 const sessionStartedAt = Date.now();
-const e2ePort = process.env.E2E_PORT ?? "3107";
+const e2ePort = process.env.E2E_PORT ?? "3187";
 const e2eBaseUrl = `http://localhost:${e2ePort}`;
 const desktopChrome = {
   ...devices["Desktop Chrome"],
@@ -75,7 +75,10 @@ export default defineConfig({
     }
   ],
   webServer: {
-    command: `pnpm dev --port ${e2ePort}`,
+    // State-writing journeys touch files outside `site/`. Webpack reads those dynamic files
+    // without Turbopack's broad repository trace restarting the dev server on each expected write.
+    // The dedicated port also keeps concurrent programme worktrees from sharing a test server.
+    command: `pnpm dev --webpack --port ${e2ePort}`,
     env: {
       ADMIN_USER: adminUser,
       ADMIN_PASSWORD: adminPassword,

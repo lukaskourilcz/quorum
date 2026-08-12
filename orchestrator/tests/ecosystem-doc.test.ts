@@ -13,8 +13,8 @@ const repoRoot = path.resolve(process.cwd(), "..");
 describe("living ecosystem document", () => {
   it("generates current counts, modes and gates without a provider call", async () => {
     const block = await buildCurrentOperatingTruth(repoRoot);
-    expect(block).toContain("| Portfolio | 7 projects");
-    expect(block).toContain("| Agent roster | 33 active: 19 Anthropic, 14 OpenAI");
+    expect(block).toContain("| Portfolio | 8 projects");
+    expect(block).toContain("| Agent roster | 35 active: 21 Anthropic, 14 OpenAI");
     // The spend boundary is generated from the resolver, not written into the generator. It
     // carried budget-2026-08d's superseded $50/$42/$2.20 as a literal while the runtime enforced
     // budget-2026-08e -- a generated block stating a cap nothing was applying.

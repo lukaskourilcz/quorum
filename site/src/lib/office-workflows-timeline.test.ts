@@ -35,7 +35,7 @@ describe("buildTimeline", () => {
     expect(timeline.beats).toHaveLength(SLOTS.length);
     const hours = timeline.beats.map((beat) => beat.hour);
     expect(hours).toEqual([...hours].sort((a, b) => a - b));
-    expect(hours).toEqual([5, 6, 7, 8, 9, 10, 11, 13, 14, 17, 19, 20, 22]);
+    expect(hours).toEqual([5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 19, 20, 22]);
   });
 
   it("sorts the day itself, so the caller's order cannot change the story", () => {
