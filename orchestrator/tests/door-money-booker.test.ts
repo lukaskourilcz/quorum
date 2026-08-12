@@ -9,6 +9,8 @@ import {
 } from "../src/budget.js";
 import { ActionPacketSchema } from "../src/contracts/action-packet.js";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
+import { PerformanceWeightsSchema } from "../src/contracts/performance-weights.js";
+import { VentureRecommendationSchema } from "../src/contracts/venture-recommendation.js";
 import { OpenAiTextClient } from "../src/llm/openai.js";
 import { runDoorMoneyGrowthCycle } from "../src/ventures/door-money/run.js";
 import { loadDoorMoneyBookerContext } from "../src/ventures/door-money/growth-booker.js";
@@ -115,8 +117,50 @@ function actionResponse(reference: string): string {
       evidenceRefs: [reference],
       completion: null
     }],
-    playbookRevisions: []
+    playbookRevisions: [],
+    performanceWeightProposal: null
   });
+}
+
+async function installResultWithSelectionDimensions(root: string): Promise<string> {
+  const recommendationRaw = JSON.parse(await readFile(
+    path.resolve(process.cwd(), "../contracts/fixtures/venture-recommendation.valid.json"), "utf8"
+  )) as Record<string, unknown>;
+  const originalHistory = recommendationRaw.statusHistory as unknown[];
+  const recommendation = VentureRecommendationSchema.parse({
+    ...recommendationRaw,
+    status: "posted",
+    designLab: {
+      eligible: true,
+      summaryPath: "state/ventures/carousel-studio/summaries/door-money/2026-08-12-fixture-radio-carousel.json",
+      readyAt: "2026-08-12T11:00:00.000Z"
+    },
+    owner: {
+      ...(recommendationRaw.owner as object), approvedAt: "2026-08-12T11:00:00.000Z",
+      postedAt: "2026-08-12T12:00:00.000Z", postedUrl: "https://example.test/synthetic-post"
+    },
+    statusHistory: [
+      ...originalHistory,
+      { from: "draft", to: "approved", at: "2026-08-12T11:00:00.000Z", actor: "owner", reason: null },
+      { from: "approved", to: "posted", at: "2026-08-12T12:00:00.000Z", actor: "owner", reason: null }
+    ],
+    updatedAt: "2026-08-12T12:00:00.000Z"
+  });
+  const index = JSON.parse(await readFile(
+    path.resolve(process.cwd(), "../contracts/fixtures/book-kb-index.valid.json"), "utf8"
+  )) as { manuscriptHash: string };
+  const resultId = "owner-result-fixture-weight";
+  await Promise.all([
+    writeJson(root, `ventures/door-money/recommendations/${recommendation.id}.json`, recommendation),
+    writeJson(root, `ventures/door-money/knowledge/versions/${index.manuscriptHash.slice("sha256:".length)}/book-kb-index.json`, index),
+    writeJson(root, `ventures/door-money/results/${resultId}.json`, {
+      schemaVersion: "owner-result-entry/1", id: resultId, ventureId: "door-money",
+      recommendationId: recommendation.id, platform: "instagram", postUrl: recommendation.owner.postedUrl,
+      metrics: { views: 21, saves: 3 }, outcome: "The synthetic owner recorded three saves.",
+      source: "owner-entry", capturedAt: "2026-08-13T13:00:00.000Z"
+    })
+  ]);
+  return resultId;
 }
 
 describe("Door Money BOOKER call", () => {
@@ -213,6 +257,58 @@ describe("Door Money BOOKER call", () => {
     }
   });
 
+  it("records a cited weekly weight proposal through the growth room and no other writer", async () => {
+    const root = await temporaryRoot();
+    const resultId = await installResultWithSelectionDimensions(root);
+    const previousKey = process.env.OPENAI_API_KEY;
+    process.env.OPENAI_API_KEY = "synthetic-test-key";
+    const provider = vi.spyOn(OpenAiTextClient.prototype, "generate").mockResolvedValue({
+      text: JSON.stringify({
+        outcome: "NO_ACTION",
+        summary: "No owner task was required, but one cited synthetic weight proposal was recorded.",
+        noActionReason: "The recorded synthetic result supports selection learning, not a new owner task.",
+        tasks: [],
+        playbookRevisions: [],
+        performanceWeightProposal: {
+          rationale: "The synthetic owner result supports a bounded carousel adjustment.",
+          evidenceResultIds: [resultId],
+          changes: {
+            formatPriors: { carousel: 1.1 },
+            themePriors: { "community-memory": 1.05 },
+            hookStylePriors: { "narrative-led": 1.05 }
+          }
+        }
+      }),
+      model: "gpt-5.6-luna", tokensIn: 320, tokensOut: 140, cachedTokensIn: 0, cacheWriteTokensIn: 0, toolUses: 0
+    });
+    try {
+      const result = await runDoorMoneyGrowthCycle({
+        cycleId: "fixture-booker-weights", now: NOW, dry: false, root, stage: "VALIDATION",
+        budgetContext: budget("fixture-booker-weights")
+      });
+      expect(provider).toHaveBeenCalledOnce();
+      expect(provider.mock.calls[0]?.[0].input).toContain('"selectionDimensions":{"formats":["carousel"]');
+      expect(result).toMatchObject({ decision: "NO_ACTION", status: "live_complete" });
+      expect(result.artifacts.some((item) => item.endsWith("ventures/door-money/performance-weights.json"))).toBe(true);
+      const stored = PerformanceWeightsSchema.parse(JSON.parse(await readFile(
+        path.join(root, "ventures/door-money/performance-weights.json"), "utf8"
+      )));
+      expect(stored).toMatchObject({
+        formatPriors: { carousel: 1.1 },
+        themePriors: { "community-memory": 1.05 },
+        hookStylePriors: { "narrative-led": 1.05 },
+        revisions: [{ sourceCycleId: "fixture-booker-weights", evidenceResultIds: [resultId] }]
+      });
+      const meeting = MeetingRecordSchema.parse(JSON.parse(await readFile(
+        path.join(root, "meetings/2026-08-13-dm-growth.json"), "utf8"
+      )));
+      expect(meeting.proposals).toContainEqual(expect.objectContaining({ evidenceRefs: [`result:${resultId}`] }));
+    } finally {
+      if (previousKey === undefined) delete process.env.OPENAI_API_KEY;
+      else process.env.OPENAI_API_KEY = previousKey;
+    }
+  });
+
   it("records BOOKER's honest NO_ACTION without padding the packet with fake tasks", async () => {
     const root = await temporaryRoot();
     const previousKey = process.env.OPENAI_API_KEY;
@@ -223,7 +319,8 @@ describe("Door Money BOOKER call", () => {
         summary: "No recorded context supports an owner-executable step.",
         noActionReason: "Playbooks, owner results and a GoVIRAL weekly brief are unavailable.",
         tasks: [],
-        playbookRevisions: []
+        playbookRevisions: [],
+        performanceWeightProposal: null
       }),
       model: "gpt-5.6-luna",
       tokensIn: 240,

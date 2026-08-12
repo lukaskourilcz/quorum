@@ -67,6 +67,7 @@ import {
   type PassageSelectionOutcome,
   type SelectionPerformanceWeights
 } from "./select.js";
+import { loadDoorMoneyPerformanceWeights } from "./performance-weights.js";
 
 export type DoorMoneyPhase = "dm-desk" | "dm-growth";
 
@@ -220,11 +221,11 @@ async function loadLiveKnowledge(root: string): Promise<DoorMoneyDeskKnowledge |
   });
   if (currentRaw === null || privateStore === null) return null;
   const current = CurrentKnowledgeSchema.parse(currentRaw);
-  const [indexRaw, styleRaw, history, weightsRaw] = await Promise.all([
+  const [indexRaw, styleRaw, history, performanceWeights] = await Promise.all([
     optionalJson(root, stateRelative(current.bookKbIndexPath)),
     optionalJson(root, stateRelative(current.styleProfilePath)),
     recommendationHistory(root),
-    optionalJson(root, "ventures/door-money/performance-weights.json")
+    loadDoorMoneyPerformanceWeights(root)
   ]);
   if (indexRaw === null || styleRaw === null) return null;
   const index = BookKbIndexSchema.parse(indexRaw);
@@ -234,7 +235,7 @@ async function loadLiveKnowledge(root: string): Promise<DoorMoneyDeskKnowledge |
     styleProfile: z.object({ manuscriptHash: z.literal(current.manuscriptHash) }).passthrough().parse(styleRaw) as DoorMoneyDeskKnowledge["styleProfile"],
     store: privateStore,
     recommendationHistory: history,
-    performanceWeights: (weightsRaw ?? {}) as SelectionPerformanceWeights
+    performanceWeights: performanceWeights.weights
   };
 }
 
@@ -374,6 +375,7 @@ export function ghostModelPacket(packet: DoorMoneyDeskPacket): Record<string, un
         sceneId: selection.sceneId,
         arc: selection.arc,
         themes: selection.themes,
+        hookStyle: selection.hookStyle,
         primaryFormat: selection.primaryFormat,
         formatScores: selection.formatScores
       },

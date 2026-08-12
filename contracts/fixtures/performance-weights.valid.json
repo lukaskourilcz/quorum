@@ -1,28 +1,39 @@
 {
   "schemaVersion": "performance-weights/1",
-  "ventureId": "booksofhistory",
-  "floor": 0.75,
-  "ceiling": 1.25,
-  "lanes": {
-    "cs": {
-      "categories": {
-        "publishing-history": 1.08
-      },
-      "eras": {
-        "20th": 1.04
-      },
-      "geographies": {
-        "czechia": 1.1
-      }
-    },
-    "en": {
-      "categories": {},
-      "eras": {},
-      "geographies": {}
-    }
+  "ventureId": "door-money",
+  "floor": 0.5,
+  "ceiling": 1.5,
+  "formatPriors": {
+    "carousel": 1.2,
+    "single-image": 1,
+    "thread": 1,
+    "caption": 1,
+    "short-video-script": 1
   },
-  "appliedProposalIds": [
-    "weights-aaaaaaaaaaaaaaaaaaaa"
+  "themePriors": {
+    "fixture-night-work": 1.1
+  },
+  "hookStylePriors": {
+    "narrative-led": 1,
+    "quote-led": 1.1,
+    "lesson-led": 1,
+    "tension-led": 1,
+    "humor-led": 1
+  },
+  "revisions": [
+    {
+      "rationale": "One synthetic owner result supports a bounded fixture adjustment.",
+      "evidenceResultIds": ["owner-result-fixture-weight"],
+      "changes": {
+        "formatPriors": { "carousel": 1.2 },
+        "themePriors": { "fixture-night-work": 1.1 },
+        "hookStylePriors": { "quote-led": 1.1 }
+      },
+      "revision": 1,
+      "sourceCycleId": "fixture-dm-growth-1",
+      "updatedAt": "2026-08-13T14:00:00.000Z"
+    }
   ],
-  "updatedAt": "2026-08-21T12:05:00.000Z"
+  "generatedAt": "2026-08-12T10:00:00.000Z",
+  "updatedAt": "2026-08-13T14:00:00.000Z"
 }

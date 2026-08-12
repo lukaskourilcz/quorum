@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { BOOK_KB_SCORE_AXES, type BookKbChunk } from "../src/contracts/book-kb-index.js";
 import {
   adaptiveCooldownDays,
+  doorMoneyHookStyle,
   scorePassageForFormat,
   selectDoorMoneyPassages,
   type DoorMoneyFormatRules
@@ -87,6 +88,37 @@ describe("Door Money passage selection", () => {
     expect(boosted.baseScore).toBe(4);
     expect(boosted.performanceMultiplier).toBe(1.5);
     expect(boosted.weightedScore).toBe(6);
+  });
+
+  it("reads deterministic hook-style priors and clamps the combined feedback multiplier", () => {
+    const fixture = chunk({ id: "12", score: 4, themes: ["tour-work"] });
+    expect(doorMoneyHookStyle(fixture.scores)).toBe("narrative-led");
+    const low = scorePassageForFormat({
+      chunk: fixture,
+      format: "carousel",
+      performanceWeights: {
+        formatPriors: { carousel: 0.5 },
+        themePriors: { "tour-work": 0.5 },
+        hookStylePriors: { "narrative-led": 0.5 }
+      }
+    });
+    const high = scorePassageForFormat({
+      chunk: fixture,
+      format: "carousel",
+      performanceWeights: {
+        formatPriors: { carousel: 1.5 },
+        themePriors: { "tour-work": 1.5 },
+        hookStylePriors: { "narrative-led": 1.5 }
+      }
+    });
+    expect(low.performanceMultiplier).toBe(0.5);
+    expect(high.performanceMultiplier).toBe(1.5);
+    expect(selectDoorMoneyPassages({
+      ventureId: "door-money",
+      date: "2026-09-01",
+      chunks: [fixture],
+      performanceWeights: { hookStylePriors: { "narrative-led": 1.2 } }
+    }).passages[0]).toMatchObject({ hookStyle: "narrative-led" });
   });
 
   it("enforces the 21-day minimum and doubles a longer last-use interval", () => {

@@ -1,5 +1,10 @@
 import { createHash } from "node:crypto";
 import { DateSchema } from "../../contracts/common.js";
+import {
+  PERFORMANCE_PRIOR_MAX,
+  PERFORMANCE_PRIOR_MIN,
+  type PerformanceHookStyle
+} from "../../contracts/performance-weights.js";
 import type { BookKbChunk } from "../../contracts/book-kb-index.js";
 import type { VentureRecommendation } from "../../contracts/venture-recommendation.js";
 
@@ -62,12 +67,13 @@ export const DEFAULT_DOOR_MONEY_FORMAT_RULES: DoorMoneyFormatRules = {
 };
 
 /** Selection refuses unbounded feedback even before the DM-20 weight contract is loaded. */
-export const MIN_SELECTION_PRIOR = 0.5;
-export const MAX_SELECTION_PRIOR = 1.5;
+export const MIN_SELECTION_PRIOR = PERFORMANCE_PRIOR_MIN;
+export const MAX_SELECTION_PRIOR = PERFORMANCE_PRIOR_MAX;
 
 export interface SelectionPerformanceWeights {
   formatPriors?: Readonly<Partial<Record<DoorMoneyFormat, number>>>;
   themePriors?: Readonly<Record<string, number>>;
+  hookStylePriors?: Readonly<Partial<Record<PerformanceHookStyle, number>>>;
 }
 
 export interface PassageFormatScore {
@@ -84,6 +90,7 @@ export interface SelectedPassage {
   sceneId: BookKbChunk["sceneId"];
   arc: BookKbChunk["arc"];
   themes: BookKbChunk["themes"];
+  hookStyle: PerformanceHookStyle;
   scoresAtSelection: BookKbChunk["scores"];
   primaryFormat: DoorMoneyFormat;
   formatScores: PassageFormatScore[];
@@ -149,6 +156,18 @@ function themePrior(chunk: BookKbChunk, weights: SelectionPerformanceWeights): n
   return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
 
+/** A passage's prospective hook style is derived only from its recorded selection scores. */
+export function doorMoneyHookStyle(scores: BookKbChunk["scores"]): PerformanceHookStyle {
+  const candidates: Array<{ style: PerformanceHookStyle; score: number }> = [
+    { style: "narrative-led", score: scores.storytellingStrength.score },
+    { style: "quote-led", score: scores.quotePotential.score },
+    { style: "lesson-led", score: scores.educationalValue.score },
+    { style: "tension-led", score: Math.max(scores.emotionalImpact.score, scores.shock.score, scores.controversy.score) },
+    { style: "humor-led", score: scores.humor.score }
+  ];
+  return candidates.reduce((best, candidate) => candidate.score > best.score ? candidate : best).style;
+}
+
 export function scorePassageForFormat(input: {
   chunk: BookKbChunk;
   format: DoorMoneyFormat;
@@ -167,10 +186,15 @@ export function scorePassageForFormat(input: {
   const baseScore = weightedAxes.reduce((sum, [axis, weight]) =>
     sum + input.chunk.scores[axis].score * weight, 0) / weightTotal;
   const performanceWeights = input.performanceWeights ?? {};
-  const performanceMultiplier = prior(
+  const hookStyle = doorMoneyHookStyle(input.chunk.scores);
+  const combinedMultiplier = prior(
     performanceWeights.formatPriors?.[input.format],
     `Format prior ${input.format}`
-  ) * themePrior(input.chunk, performanceWeights);
+  ) * themePrior(input.chunk, performanceWeights) * prior(
+    performanceWeights.hookStylePriors?.[hookStyle],
+    `Hook-style prior ${hookStyle}`
+  );
+  const performanceMultiplier = Math.min(MAX_SELECTION_PRIOR, Math.max(MIN_SELECTION_PRIOR, combinedMultiplier));
   return {
     format: input.format,
     baseScore,
@@ -289,6 +313,7 @@ export function selectDoorMoneyPassages(input: SelectDoorMoneyPassagesInput): Pa
       sceneId: chunk.sceneId,
       arc: chunk.arc,
       themes: [...chunk.themes],
+      hookStyle: doorMoneyHookStyle(chunk.scores),
       scoresAtSelection: chunk.scores,
       primaryFormat: primary.format,
       formatScores,

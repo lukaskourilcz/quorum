@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { BhSeedLibrarySchema } from "../src/contracts/bh-seed.js";
-import { PerformanceWeightProposalSchema } from "../src/contracts/performance-weights.js";
+import { BooksofHistoryPerformanceWeightProposalSchema } from "../src/contracts/performance-weights.js";
 import { repoRoot } from "../src/paths.js";
 import { atomicWriteJson, readJson } from "../src/state.js";
 import {
@@ -29,9 +29,9 @@ async function fixture(name: string): Promise<unknown> {
 }
 
 async function proposal() {
-  const base = PerformanceWeightProposalSchema.parse(await fixture("performance-weight-proposal.valid.json"));
+  const base = BooksofHistoryPerformanceWeightProposalSchema.parse(await fixture("performance-weight-proposal.valid.json"));
   const resultIds = ["result-aaaaaaaaaaaaaaaaaaaa"];
-  return PerformanceWeightProposalSchema.parse({
+  return BooksofHistoryPerformanceWeightProposalSchema.parse({
     ...base,
     adjustments: [
       { lane: "cs", dimension: "categories", key: "publishing-history", from: 1, to: 1.08, resultIds, rationale: "The cited Czech result supports a small category increase." },

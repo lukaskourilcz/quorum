@@ -4,7 +4,7 @@
   "floor": 0.5,
   "ceiling": 1.5,
   "formatPriors": {
-    "carousel": 0.1,
+    "carousel": 1,
     "single-image": 1,
     "thread": 1,
     "caption": 1,

@@ -20,11 +20,12 @@ import { repoRoot } from "../../paths.js";
 import { AnnotatedBookChunkSchema } from "./ingest/annotate.js";
 import type { ManuscriptChunk } from "./ingest/chunker.js";
 import type { BookIngestEmbedding } from "./ingest/run.js";
-import type {
-  DoorMoneyFormat,
-  PassageSelectionOutcome,
-  SelectedPassage,
-  SelectionPerformanceWeights
+import {
+  doorMoneyHookStyle,
+  type DoorMoneyFormat,
+  type PassageSelectionOutcome,
+  type SelectedPassage,
+  type SelectionPerformanceWeights
 } from "./select.js";
 
 const HashSchema = z.string().regex(/^sha256:[a-f0-9]{64}$/);
@@ -267,6 +268,7 @@ function validateSelection(index: BookKbIndex, selected: readonly SelectedPassag
     const chunk = chunks.get(selection.chunkId);
     if (!chunk || selection.chapterId !== chunk.chapterId || selection.sceneId !== chunk.sceneId ||
         selection.arc !== chunk.arc || !sameJson(selection.themes, chunk.themes) ||
+        selection.hookStyle !== doorMoneyHookStyle(chunk.scores) ||
         !sameJson(selection.scoresAtSelection, chunk.scores)) {
       throw new Error(`Passage selection does not match the public index for ${selection.chunkId}`);
     }
