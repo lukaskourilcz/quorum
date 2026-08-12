@@ -42,6 +42,12 @@ import {
   loadVentureRegistry
 } from "../registry.js";
 import {
+  doorMoneyRecommendationId,
+  gateDoorMoneyPackage,
+  loadDoorMoneyDuplicateThreshold,
+  storeDoorMoneyDraft
+} from "./gates.js";
+import {
   assembleDoorMoneyDeskPacket,
   DOOR_MONEY_FORMAT_MENU,
   openLocalCloneDoorMoneyKnowledgeStore,
@@ -263,7 +269,8 @@ export interface DoorMoneyDeskKnowledge {
 }
 
 export interface DoorMoneyDeskCycleResult extends CycleResult {
-  packages: GhostDeskPackage[];
+  packages: VentureRecommendation[];
+  droppedPackages: number;
   fixtureReason: string | null;
 }
 
@@ -616,7 +623,8 @@ function buildDeskMeeting(input: {
   fixture: boolean;
   status: "PLAN" | "NO_ACTION" | "PAUSED" | "FAILED";
   summary: string;
-  packages: readonly GhostDeskPackage[];
+  packages: readonly VentureRecommendation[];
+  ghostParticipated: boolean;
   spendUsd: number;
   envelopeUsd: number;
   monthAllInUsd: number;
@@ -624,8 +632,8 @@ function buildDeskMeeting(input: {
 }) {
   const times = Array.from({ length: 4 }, (_, index) =>
     new Date(input.now.getTime() + index * 1_000).toISOString());
-  const ghostParticipated = input.packages.length > 0 || input.status === "FAILED";
-  const evidenceRefs = [...new Set(input.packages.flatMap(({ sourceRefs }) => sourceRefs))]
+  const ghostParticipated = input.ghostParticipated || input.status === "FAILED";
+  const evidenceRefs = [...new Set(input.packages.flatMap(({ evidence }) => evidence.chunkIds))]
     .map((chunkId) => `door-money:chunk:${chunkId}`);
   return MeetingRecordSchema.parse({
     schemaVersion: "meeting-record/2",
@@ -654,12 +662,12 @@ function buildDeskMeeting(input: {
     },
     proposals: input.packages.map((item) => ({
       agent: "GHOST",
-      summary: `${item.hook} ${item.formatPlans.map(({ format, reason }) => `${format}: ${reason}`).join(" ")}`.slice(0, 600),
-      evidenceRefs: item.sourceRefs.map((chunkId) => `door-money:chunk:${chunkId}`)
+      summary: `${item.hook} ${item.formats.join(", ")}: ${item.rationale}`.slice(0, 600),
+      evidenceRefs: item.evidence.chunkIds.map((chunkId) => `door-money:chunk:${chunkId}`)
     })),
-    voteMatrix: [{ voter: "AUDIT", firstChoice: input.packages.length > 0 ? "gates-pending" : "no-action", veto: false }],
+    voteMatrix: [{ voter: "AUDIT", firstChoice: input.packages.length > 0 ? "owner-review" : "no-action", veto: false }],
     tasks: [],
-    growthPlan: "Drafts only. Nothing was published, posted, scheduled, bought or sent; nothing was queued or used to create an account, and no channel or treasury path was touched. DM-15 gates and owner approval remain mandatory.",
+    growthPlan: "Drafts only. Seven deterministic gates passed before every stored recommendation. Nothing was published, posted, scheduled, bought or sent; nothing was queued or used to create an account, and no channel or treasury path was touched. Owner approval remains mandatory.",
     eveningOutcome: null,
     roomTranscript: {
       openedAt: times[0],
@@ -672,7 +680,7 @@ function buildDeskMeeting(input: {
         ? [
             { agent: "GHOST", mode: "gavel", sentAt: times[0], text: "The code-selected evidence packet is the whole writing boundary." },
             { agent: "GHOST", mode: "statement", sentAt: times[1], text: input.summary },
-            { agent: "AUDIT", mode: "statement", sentAt: times[2], text: "These are ungated packages, not approved drafts. Nothing left the review boundary." },
+            { agent: "AUDIT", mode: "statement", sentAt: times[2], text: "Failed packages were dropped; stored records are drafts, not approvals. Nothing left the review boundary." },
             { agent: "GHOST", mode: "close", sentAt: times[3], text: input.summary }
           ]
         : [
@@ -701,7 +709,10 @@ export async function runDoorMoneyDeskCycle(input: {
   const registry = await loadVentureRegistry();
   const { meeting } = getVentureMeetingDefinition(registry, "dm-desk");
   let fixtureReason: string | null = input.dry ? "dry mode uses only invented diary data" : null;
-  let packages: GhostDeskPackage[] = [];
+  let packages: VentureRecommendation[] = [];
+  let droppedPackages = 0;
+  let ghostParticipated = false;
+  const recommendationPaths: string[] = [];
   let spendUsd = 0;
   let status: "PLAN" | "NO_ACTION" | "PAUSED" | "FAILED" = "NO_ACTION";
   let summary = "No recommendation was drafted.";
@@ -721,6 +732,8 @@ export async function runDoorMoneyDeskCycle(input: {
     if (selection.kind === "quiet-day") {
       summary = `Honest quiet day: no passage cleared score and repetition rules (${selection.diagnostics.considered} considered). Nothing was spent.`;
     } else {
+      let generatedPackages: GhostDeskPackage[] = [];
+      let deskPacket: DoorMoneyDeskPacket | null = null;
       let packetResult = await assembleDoorMoneyDeskPacket({
         date,
         index: knowledge.index,
@@ -750,12 +763,16 @@ export async function runDoorMoneyDeskCycle(input: {
           performanceWeights: {}
         });
         if (packetResult.kind !== "ready") throw new Error(packetResult.reason);
+        deskPacket = packetResult.packet;
         const response = fixtureGhostResponse({ date, selection: fixtureSelection });
-        packages = response.outcome === "packages" ? response.packages : [];
+        ghostParticipated = true;
+        generatedPackages = response.outcome === "packages" ? response.packages : [];
       } else if (packetResult.kind === "ready") {
+        deskPacket = packetResult.packet;
         if (fixtureReason) {
           const response = fixtureGhostResponse({ date, selection });
-          packages = response.outcome === "packages" ? response.packages : [];
+          ghostParticipated = true;
+          generatedPackages = response.outcome === "packages" ? response.packages : [];
         } else {
           const { route, system } = await ghostRouteAndPrompt();
           const packet = wrapUntrustedData("door-money-desk-packet", JSON.stringify({
@@ -803,16 +820,49 @@ export async function runDoorMoneyDeskCycle(input: {
               explicitCtaAllowed: explicitCtaAllowed(date)
             })
           });
+          ghostParticipated = true;
           spendUsd = called.usd;
-          packages = called.value.outcome === "packages" ? called.value.packages : [];
+          generatedPackages = called.value.outcome === "packages" ? called.value.packages : [];
           if (called.value.outcome === "refusal") summary = `GHOST refused the packet: ${called.value.reason}`;
         }
       } else {
         throw new Error(packetResult.reason);
       }
-      if (packages.length > 0) {
-        status = "PLAN";
-        summary = `${packages.length} ungated ${fixtureReason ? "fixture " : ""}${packages.length === 1 ? "package" : "packages"} prepared for DM-15 checks and owner review.`;
+      if (generatedPackages.length > 0 && deskPacket) {
+        const duplicateThreshold = await loadDoorMoneyDuplicateThreshold();
+        const prior = [...(knowledge.recommendationHistory ?? [])];
+        const accepted: VentureRecommendation[] = [];
+        const seenIds = new Set<string>();
+        for (const generated of generatedPackages) {
+          const candidateId = doorMoneyRecommendationId(date, generated.sourceRefs);
+          if (seenIds.has(candidateId)) {
+            droppedPackages += 1;
+            continue;
+          }
+          seenIds.add(candidateId);
+          const gated = gateDoorMoneyPackage({
+            package: generated,
+            packet: deskPacket,
+            priorRecommendations: prior,
+            duplicateThreshold,
+            now: input.now
+          });
+          if (!gated.recommendation) {
+            droppedPackages += 1;
+            continue;
+          }
+          accepted.push(gated.recommendation);
+          prior.push(gated.recommendation);
+        }
+        for (const draft of accepted) {
+          const stored = await storeDoorMoneyDraft(root, draft);
+          packages.push(stored.recommendation);
+          if (!recommendationPaths.includes(stored.relativePath)) recommendationPaths.push(stored.relativePath);
+        }
+        status = packages.length > 0 ? "PLAN" : "NO_ACTION";
+        summary = packages.length > 0
+          ? `${packages.length} gated ${fixtureReason ? "fixture " : ""}${packages.length === 1 ? "draft" : "drafts"} stored for owner review; ${droppedPackages} failed package(s) dropped.`
+          : `${droppedPackages} generated package(s) failed deterministic gates and were dropped. Nothing was stored, published or sent.`;
       }
     }
   } catch (error) {
@@ -845,6 +895,7 @@ export async function runDoorMoneyDeskCycle(input: {
     status,
     summary,
     packages,
+    ghostParticipated,
     spendUsd,
     envelopeUsd: meeting.envelopeUsd,
     ...ledger
@@ -867,10 +918,12 @@ export async function runDoorMoneyDeskCycle(input: {
     status: input.dry ? "dry_complete" : status === "PLAN" || status === "NO_ACTION" ? "live_complete" : "paused",
     decision: status === "PLAN" ? "PLAN" : status === "PAUSED" || status === "FAILED" ? "PAUSED" : "NO_ACTION",
     estimatedWorstCaseUsd: meeting.envelopeUsd,
-    selectedAgents: status === "PLAN" ? [...meeting.cast] : ["AUDIT"],
-    skippedAgents: status === "PLAN" ? [] : ["GHOST"],
-    artifacts: [recordPath, calendarPath].map((relative) => path.relative(repoRoot, path.join(root, relative))),
+    selectedAgents: ghostParticipated ? [...meeting.cast] : ["AUDIT"],
+    skippedAgents: ghostParticipated ? [] : ["GHOST"],
+    artifacts: [recordPath, calendarPath, ...recommendationPaths]
+      .map((relative) => path.relative(repoRoot, path.join(root, relative))),
     packages,
+    droppedPackages,
     fixtureReason
   };
 }

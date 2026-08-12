@@ -50,6 +50,16 @@ describe("venture-recommendation/1", () => {
     expect(VentureRecommendationSchema.safeParse(wrongLink).success).toBe(false);
   });
 
+  it("stores the CTA mode needed by the rolling seven-day gate", () => {
+    const mismatched = structuredClone(fixture) as {
+      cta: { mode: string; text: string | null };
+    };
+    mismatched.cta = { mode: "explicit-buy-book", text: null };
+    expect(VentureRecommendationSchema.safeParse(mismatched).success).toBe(false);
+    mismatched.cta.text = "Buy the synthetic fixture book.";
+    expect(VentureRecommendationSchema.safeParse(mismatched).success).toBe(true);
+  });
+
   it("accepts only the recorded draft-to-approved owner transition and its Design Lab receipt", () => {
     const approved = structuredClone(fixture) as {
       status: string;

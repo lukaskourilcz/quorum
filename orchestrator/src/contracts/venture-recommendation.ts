@@ -168,6 +168,19 @@ const CopyBlockSchema = z.strictObject({
   text: z.string().trim().min(1).max(4_000)
 });
 
+const RecommendationCtaSchema = z.strictObject({
+  mode: z.enum(["soft-curiosity", "explicit-buy-book"]),
+  text: z.string().trim().min(1).max(500).nullable()
+}).superRefine((cta, context) => {
+  if ((cta.mode === "explicit-buy-book") !== (cta.text !== null)) {
+    context.addIssue({
+      code: "custom",
+      path: ["text"],
+      message: "Only an explicit buy-the-book CTA carries separate CTA text"
+    });
+  }
+});
+
 const GateResultSchema = z.strictObject({
   gate: z.enum(["voice", "claims", "quotes", "excerpt-cap", "duplicate", "cta-frequency", "living-person"]),
   passed: z.boolean(),
@@ -222,6 +235,7 @@ export const VentureRecommendationSchema = z.strictObject({
   copyBlocks: z.array(CopyBlockSchema).min(1).max(40),
   rationale: z.string().trim().min(1).max(2_000),
   curiosityBridge: z.string().trim().min(1).max(1_000),
+  cta: RecommendationCtaSchema,
   evidence: RecommendationEvidenceSchema,
   gateResults: z.array(GateResultSchema).min(1).max(20),
   designLab: DesignLabSchema,
