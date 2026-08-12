@@ -162,7 +162,7 @@ costs and no treasury action in this decision.
 - [x] DM-06c — The excerpt-cap boundary test
 - [x] DM-07 — Deterministic scene-aware chunker
 - [x] DM-08a — Annotation and fifteen-axis scoring pass
-- [ ] DM-08b — Ingestion cursor and resumability
+- [x] DM-08b — Ingestion cursor and resumability
 - [ ] DM-09 — Style profile via map-reduce
 - [ ] DM-10a — Guarded embeddings wrapper
 - [ ] DM-10b — Budget-ledger kind for embeddings
