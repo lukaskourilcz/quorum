@@ -1,3 +1,6 @@
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { ImageProgramBudget } from "../src/images/budget.js";
 import { searchPhrasesFor, selectEditionHero } from "../src/images/ladder.js";
@@ -196,5 +199,78 @@ describe("the edition's ladder", () => {
 
     expect(result.rung).toBe("plate");
     expect(result.candidate).toBeNull();
+  });
+});
+
+/**
+ * Two stories, one photograph. The rotation seeded from the slug spreads picks across a pool, and
+ * a pool of one has nothing to spread: on 12 August the day's concept held a single curated scene,
+ * the gate considered exactly one candidate, and DNESKAi published the same server-room picture it
+ * had run on 8 August — byte-identical hero and thumbnail.
+ */
+describe("a picture the venture just used", () => {
+  async function rootWithSelection(selected: string): Promise<string> {
+    const root = await mkdtemp(path.join(os.tmpdir(), "recent-hero-"));
+    const directory = path.join(root, "ventures", "caught-up", "image-selections");
+    await mkdir(directory, { recursive: true });
+    await writeFile(
+      path.join(directory, "2026-08-08-2026-08-08-openai-astra.json"),
+      JSON.stringify({ schemaVersion: "image-selection/1", venture: "caught-up", slug: "2026-08-08-openai-astra", date: "2026-08-08", rung: "curated", selected }),
+      "utf8"
+    );
+    return root;
+  }
+
+  /** A stand-in for the real rung, which walks its rotation and honours every refusal. */
+  function rotation(...offered: LicensedPhotoCandidate[]) {
+    return async ({ accept }: { accept?: (value: LicensedPhotoCandidate) => Promise<boolean> }) => {
+      for (const value of offered) {
+        if (!accept || (await accept(value))) return value;
+      }
+      return null;
+    };
+  }
+
+  it("is refused, and the next file in the rotation runs instead", async () => {
+    const repeat = candidate("scene:6212692", { illustrative: true });
+    const fresh = candidate("scene:9990001", { illustrative: true });
+    const gated: string[] = [];
+
+    const result = await ladder(
+      { ...context(), stateRoot: await rootWithSelection("scene:6212692") },
+      {
+        scenePhoto: rotation(repeat, fresh),
+        gate: async ({ candidates }) => {
+          gated.push(candidates[0]!.id);
+          return { selected: candidates[0]!, verdict: { mode: "curated", considered: 1, selected: candidates[0]!.id, reason: "fits", candidates: [], skipped: [], costUsd: 0.002 } };
+        }
+      }
+    );
+
+    expect(result.candidate?.id).toBe("scene:9990001");
+    // Refused before the gate, so a repeat costs no model call against the article's cap.
+    expect(gated).toEqual(["scene:9990001"]);
+  });
+
+  it("still runs when it is this article's own recorded pick, so a re-run is not a repeat", async () => {
+    const same = candidate("scene:6212692", { illustrative: true });
+    const root = await mkdtemp(path.join(os.tmpdir(), "recent-hero-own-"));
+    const directory = path.join(root, "ventures", "caught-up", "image-selections");
+    await mkdir(directory, { recursive: true });
+    await writeFile(
+      path.join(directory, "2026-08-08-own.json"),
+      JSON.stringify({ slug: "2026-08-08", selected: "scene:6212692" }),
+      "utf8"
+    );
+
+    const result = await ladder(
+      { ...context(), stateRoot: root },
+      {
+        scenePhoto: rotation(same),
+        gate: async ({ candidates }) => ({ selected: candidates[0]!, verdict: { mode: "curated", considered: 1, selected: candidates[0]!.id, reason: "fits", candidates: [], skipped: [], costUsd: 0.002 } })
+      }
+    );
+
+    expect(result.candidate?.id).toBe("scene:6212692");
   });
 });

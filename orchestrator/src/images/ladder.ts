@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { illustrativeScenePhoto } from "./illustrative-scenes.js";
+import { recentHeroIds } from "./recent-heroes.js";
 import { illustrativeSportPhoto } from "./illustrative.js";
 import {
   candidatesNaming,
@@ -186,7 +187,27 @@ function curatedAcceptor(
 ): (candidate: LicensedPhotoCandidate) => Promise<boolean> {
   const gate = dependencies.gate ?? assessCandidates;
   let looked = 0;
+  /*
+   * What the venture's last few articles ran, resolved once and only if a candidate gets this far.
+   *
+   * A rotation seeded from the slug is not a guarantee: it only spreads picks across a pool, and a
+   * pool of one has nothing to spread. On 12 August the day's concept had a single curated scene,
+   * the gate considered exactly one candidate and DNESKAi published the same server-room
+   * photograph as 8 August — two stories, byte-identical hero and thumbnail.
+   *
+   * The check runs before the gate, so a repeat costs no model call. It is a veto like any other
+   * on this ladder: the rung descends, which is the same answer a file that will not fetch already
+   * gets, and the plate at the bottom is always available. So this can cost a photograph and can
+   * never cost a publication.
+   */
+  let recent: Promise<Set<string>> | null = null;
   return async (candidate) => {
+    recent ??= recentHeroIds({
+      venture: context.venture,
+      stateRoot: context.stateRoot,
+      excludeSlug: context.illustrationSlug ?? context.seed
+    });
+    if ((await recent).has(candidate.id)) return false;
     if (looked >= CURATED_GATE_ATTEMPTS) return false;
     looked += 1;
     const outcome = await gate({
