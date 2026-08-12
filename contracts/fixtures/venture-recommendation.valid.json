@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "venture-recommendation/1",
+  "id": "kv-2026-08-12-public-media",
+  "ventureId": "kvorum",
+  "date": "2026-08-12",
+  "createdAt": "2026-08-12T21:03:00.000Z",
+  "updatedAt": "2026-08-12T21:03:00.000Z",
+  "status": "draft",
+  "headline": "Poplatky se vracejí do Sněmovny",
+  "summary": "Sněmovna znovu projedná způsob financování médií veřejné služby.",
+  "whyItMatters": "Způsob financování ovlivňuje předvídatelnost rozpočtů České televize a Českého rozhlasu.",
+  "ourAngle": "Ukázat přesné body návrhu a kdo o nich rozhoduje.",
+  "ourAngleDiffers": "Místo obecné výzvy sledujeme text návrhu, sněmovní krok a dopad na rozpočtovou předvídatelnost.",
+  "platforms": ["instagram", "threads"],
+  "formats": ["carousel", "thread"],
+  "copyBlocks": [
+    {
+      "id": "instagram-carousel-cs",
+      "platform": "instagram",
+      "format": "carousel",
+      "locale": "cs",
+      "text": "Televizní poplatky jsou znovu ve Sněmovně. Tady je návrh, další krok a to, co se skutečně mění.",
+      "altText": "Přehled návrhu změny financování médií veřejné služby.",
+      "reason": "Carousel oddělí návrh, proces a dopad do tří kontrolovatelných kroků."
+    },
+    {
+      "id": "threads-thread-cs",
+      "platform": "threads",
+      "format": "thread",
+      "locale": "cs",
+      "text": "1/3 Co je ve Sněmovně. 2/3 Kdo rozhodne. 3/3 Co to znamená pro rozpočty médií veřejné služby.",
+      "altText": null,
+      "reason": "Krátké vlákno udrží fakta a proces pohromadě bez grafiky."
+    }
+  ],
+  "evidence": {
+    "kind": "monitor-cluster",
+    "monitorDate": "2026-08-12",
+    "receiptRef": "state/ventures/kvorum/monitor/2026-08-12.json",
+    "clusterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "continuationOf": "kv-2026-08-05-public-media",
+    "sources": [
+      {
+        "itemRef": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "sourceId": "stit-demokracie-facebook",
+        "sourceName": "Štít demokracie",
+        "url": "https://facebook.com/stitdemokracie/posts/123",
+        "publishedAt": "2026-08-12T20:30:00.000Z",
+        "excerpt": "Premiér Babiš jednal o televizních poplatcích.",
+        "discoveryOnly": true
+      },
+      {
+        "itemRef": "cccccccccccccccccccccccccccccccccccccccc",
+        "sourceId": "irozhlas",
+        "sourceName": "iROZHLAS",
+        "url": "https://www.irozhlas.cz/zpravy-domov/televizni-poplatky",
+        "publishedAt": "2026-08-12T19:00:00.000Z",
+        "excerpt": "Sněmovna projedná financování médií veřejné služby.",
+        "discoveryOnly": false
+      },
+      {
+        "itemRef": "dddddddddddddddddddddddddddddddddddddddd",
+        "sourceId": "ct24",
+        "sourceName": "ČT24",
+        "url": "https://ct24.ceskatelevize.cz/domaci/televizni-poplatky",
+        "publishedAt": "2026-08-12T18:00:00.000Z",
+        "excerpt": "Návrh se vrací do sněmovního projednávání.",
+        "discoveryOnly": false
+      }
+    ],
+    "claims": [
+      {
+        "id": "claim-snemovna",
+        "type": "fact-multi",
+        "text": "Návrh se vrací do sněmovního projednávání.",
+        "refs": [
+          "cccccccccccccccccccccccccccccccccccccccc",
+          "dddddddddddddddddddddddddddddddddddddddd"
+        ]
+      },
+      {
+        "id": "claim-process",
+        "type": "fact-single",
+        "text": "iROZHLAS popisuje další krok projednávání.",
+        "refs": ["cccccccccccccccccccccccccccccccccccccccc"]
+      },
+      {
+        "id": "claim-angle",
+        "type": "commentary",
+        "text": "Důležitý je dohledatelný proces, ne hlasitost reakce.",
+        "refs": ["bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"]
+      }
+    ],
+    "stitAttribution": {
+      "internalOnly": true,
+      "posts": [
+        {
+          "itemRef": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "postUrl": "https://facebook.com/stitdemokracie/posts/123",
+          "excerpt": "Premiér Babiš jednal o televizních poplatcích.",
+          "engagement": {
+            "likes": 120,
+            "comments": 18,
+            "shares": 7
+          }
+        }
+      ]
+    }
+  },
+  "gateResults": {
+    "evaluatedAt": "2026-08-12T21:03:00.000Z",
+    "passed": true,
+    "results": [
+      {
+        "gate": "claim-resolution",
+        "verdict": "pass",
+        "message": "Every factual claim resolves to eligible cluster evidence.",
+        "claimIds": ["claim-snemovna", "claim-process"]
+      },
+      {
+        "gate": "originality",
+        "verdict": "pass",
+        "message": "Draft copy stays below the configured overlap ceiling.",
+        "claimIds": []
+      }
+    ]
+  },
+  "designLab": {
+    "status": "not-requested",
+    "requestedAt": null,
+    "resolvedAt": null,
+    "recipeRef": null,
+    "artifactRefs": [],
+    "failureReason": null
+  },
+  "owner": {
+    "postingMode": "manual-only",
+    "approvedAt": null,
+    "postedAt": null,
+    "archivedAt": null,
+    "rejectedAt": null,
+    "rejectionReason": null,
+    "postedUrl": null,
+    "resultRefs": [],
+    "ratingRef": null,
+    "editHistory": []
+  }
+}

@@ -223,7 +223,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-09b — Monitor receipt contract and 30-day raw purge
 - [x] KV-10a — Deterministic entity/topic clustering
 - [x] KV-10b — Cluster ranking, novelty and continuation detection
-- [ ] KV-11 — `venture-recommendation` contract with monitor-cluster evidence
+- [x] KV-11 — `venture-recommendation` contract with monitor-cluster evidence
 - [ ] KV-12a — Desk runner dispatch and the TRIBUN call
 - [ ] KV-12b — Honest meeting records for the desk
 - [ ] KV-13a — Gates: claim resolution and originality

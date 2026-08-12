@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "venture-recommendation/1",
+  "id": "kv-2026-08-12-poison",
+  "ventureId": "door-money",
+  "date": "2026-08-12",
+  "createdAt": "2026-08-12T21:03:00.000Z",
+  "updatedAt": "2026-08-12T21:03:00.000Z",
+  "status": "posted",
+  "headline": "Neplatný návrh",
+  "summary": "Neplatný návrh.",
+  "whyItMatters": "Neplatný návrh.",
+  "ourAngle": "Neplatný návrh.",
+  "ourAngleDiffers": "Neplatný návrh.",
+  "platforms": ["instagram"],
+  "formats": ["carousel"],
+  "copyBlocks": [
+    {
+      "id": "instagram-carousel-cs",
+      "platform": "undeclared-channel",
+      "format": "carousel",
+      "locale": "cs",
+      "text": "Neplatný návrh.",
+      "altText": null,
+      "reason": "Neplatný návrh."
+    }
+  ],
+  "evidence": {
+    "kind": "monitor-cluster",
+    "monitorDate": "2026-08-12",
+    "receiptRef": "state/ventures/kvorum/monitor/2026-08-11.json",
+    "clusterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "continuationOf": null,
+    "sources": [
+      {
+        "itemRef": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "sourceId": "stit-demokracie-facebook",
+        "sourceName": "Štít demokracie",
+        "url": "https://facebook.com/stitdemokracie/posts/123",
+        "publishedAt": "2026-08-12T20:30:00.000Z",
+        "excerpt": "Text discovery postu.",
+        "discoveryOnly": true
+      }
+    ],
+    "claims": [
+      {
+        "id": "claim-false-multi",
+        "type": "fact-multi",
+        "text": "Fakt opřený jen o discovery post.",
+        "refs": ["bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"]
+      }
+    ],
+    "stitAttribution": {
+      "internalOnly": false,
+      "posts": [
+        {
+          "itemRef": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "postUrl": "https://facebook.com/stitdemokracie/posts/999",
+          "excerpt": "Jiný text.",
+          "engagement": {
+            "likes": 1,
+            "comments": 0,
+            "shares": 0
+          }
+        }
+      ]
+    }
+  },
+  "gateResults": {
+    "evaluatedAt": "2026-08-12T21:03:00.000Z",
+    "passed": true,
+    "results": [
+      {
+        "gate": "claim-resolution",
+        "verdict": "fail",
+        "message": "The claim does not resolve.",
+        "claimIds": ["missing-claim"]
+      }
+    ]
+  },
+  "designLab": {
+    "status": "rendered",
+    "requestedAt": null,
+    "resolvedAt": null,
+    "recipeRef": null,
+    "artifactRefs": [],
+    "failureReason": "A rendered design cannot also claim failure."
+  },
+  "owner": {
+    "postingMode": "manual-only",
+    "approvedAt": null,
+    "postedAt": null,
+    "archivedAt": null,
+    "rejectedAt": null,
+    "rejectionReason": null,
+    "postedUrl": null,
+    "resultRefs": ["state/ventures/kvorum/results/fake.json"],
+    "ratingRef": null,
+    "editHistory": []
+  }
+}
