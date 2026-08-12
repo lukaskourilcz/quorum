@@ -112,6 +112,7 @@ import { findSlotRecord } from "./meetings/slot-record.js";
 import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
 import { runMarketingSharkCycle } from "./ventures/marketingshark/run.js";
 import { runBooksofHistoryCycle } from "./ventures/booksofhistory/run.js";
+import { runTehdejsiSvetCycle } from "./ventures/tehdejsi-svet/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
 import {
   recordClosedArticleSlot,
@@ -334,6 +335,14 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   }
   if (options.phase === "bh-desk") {
     const run = () => runBooksofHistoryCycle({
+      executionCycleId: cycleId,
+      dry: options.dry,
+      now
+    });
+    return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
+  }
+  if (options.phase === "ts-desk") {
+    const run = () => runTehdejsiSvetCycle({
       executionCycleId: cycleId,
       dry: options.dry,
       now

@@ -120,6 +120,15 @@ describe("portfolio contract boundaries", () => {
     expect(MeetingRecordSchema.safeParse(await readBhFixture("poison")).success).toBe(false);
   });
 
+  it("accepts a ts-desk record and rejects an unregistered Tehdejsi svet phase", async () => {
+    const readTsFixture = async (kind: "valid" | "poison") => JSON.parse(await readFile(
+      path.join(repoRoot, "contracts", "fixtures", `meeting-record-ts-desk.${kind}.json`),
+      "utf8"
+    )) as unknown;
+    expect(MeetingRecordSchema.safeParse(await readTsFixture("valid")).success).toBe(true);
+    expect(MeetingRecordSchema.safeParse(await readTsFixture("poison")).success).toBe(false);
+  });
+
   it("accepts the BOOKSOFHISTORY registry vocabulary and keeps every list closed", async () => {
     const valid = await fixture("venture-registry", "valid") as {
       ventures: Array<{

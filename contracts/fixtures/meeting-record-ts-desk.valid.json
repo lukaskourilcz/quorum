@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "ts-2026-08-12-001",
+  "date": "2026-08-12",
+  "phase": "ts-desk",
+  "kind": "ts-desk",
+  "fixture": true,
+  "status": "PLAN",
+  "stage": "VALIDATION",
+  "operatingBrief": "Choose at most one snapshot-backed feature and write its language-neutral brief.",
+  "participantReasons": [
+    { "agent": "LETOPIS", "reason": "LETOPIS chairs the editorial selection and writes the Czech copy.", "participated": true },
+    { "agent": "VERBA", "reason": "VERBA writes the Ukrainian package and holds the cultural review seat.", "participated": true },
+    { "agent": "AUDIT", "reason": "AUDIT retains the truth, scope and budget veto.", "participated": true }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.18,
+    "actualCycleUsd": 0.11,
+    "monthAllInUsd": 7.4,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "select",
+    "summary": "Advance the Brno 1975 candidate to a bilingual drafts-only package.",
+    "evidenceRefs": ["TS-SNAPSHOT-001"]
+  },
+  "proposals": [
+    { "agent": "LETOPIS", "summary": "One feature, sensitivity tier 0, every claim bound to a snapshot record.", "evidenceRefs": ["TS-SNAPSHOT-001"] }
+  ],
+  "voteMatrix": [
+    { "voter": "LETOPIS", "firstChoice": "candidate-brno-1975", "veto": false },
+    { "voter": "VERBA", "firstChoice": "candidate-brno-1975", "veto": false },
+    { "voter": "AUDIT", "firstChoice": "candidate-brno-1975", "veto": false }
+  ],
+  "tasks": [
+    { "id": "ts-brief-1", "owner": "LETOPIS", "summary": "Write the canonical language-neutral story brief.", "status": "planned" }
+  ],
+  "growthPlan": "One bilingual drafts-only feature per cycle; nothing is posted by the council.",
+  "eveningOutcome": null,
+  "roomTranscript": {
+    "openedAt": "2026-08-12T16:00:00.000Z",
+    "closedAt": "2026-08-12T16:11:00.000Z",
+    "gavel": "LETOPIS",
+    "setting": "The desk reads only the committed snapshot and the recorded shortlist.",
+    "turns": [
+      { "agent": "LETOPIS", "mode": "gavel", "text": "One candidate clears the editorial bar and has someone to send it to." },
+      { "agent": "VERBA", "mode": "vote", "text": "Writable in Ukrainian without a mirrored sentence order.", "evidenceRefs": ["TS-SNAPSHOT-001"] }
+    ]
+  },
+  "generatedAt": "2026-08-12T16:11:01.000Z"
+}

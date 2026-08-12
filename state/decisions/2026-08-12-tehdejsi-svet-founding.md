@@ -176,6 +176,20 @@ snapshot is a committed file and the venture buys no data.
   limit, the day is reproducible offline, and a hand-edited snapshot aborts instead of
   serving records its envelope no longer describes. `api.github.com` therefore gains no
   new runtime use, and TS-08 became the loader rather than a fetcher.
+- **There is no link to the product repository at all.** The owner then narrowed it
+  further: this repository borrows marketingShark's *pattern*, not its plumbing. No
+  workflow, CLI, clone, token or API call reaches `dontwannaknow` from here. What the desk
+  reads is a facts file committed to this repository by hand — the interesting era and
+  history facts, copied across once and carrying their own sources — and the room generates
+  from that and nothing else. So TS-07 is no longer a sync CLI over a clone but the
+  authoring and validation of that committed file, and TS-10b's read-only pin has nothing
+  left to pin and is withdrawn. The hash verification stays: a hand-edited facts file must
+  abort the room rather than quietly change what it claims.
+- **The desk holds its slot before its pipeline exists.** Registering the venture put
+  `ts-desk` on the clock, and a scheduled phase with no dispatch fails the whole daily
+  cycle. The runner therefore landed first as a deterministic $0 checkpoint: it calls no
+  model, reads no product data, touches no channel, and records plainly that the editorial
+  pipeline is not built. A manual invocation of the closed live room writes nothing at all.
 
 ## Honest gaps
 
@@ -193,8 +207,8 @@ snapshot is a committed file and the venture buys no data.
 
 After countersignature the owner: resolves the five approval items; lands the product's
 production domain so a bio can name it; clears the handles and creates the accounts;
-runs `pnpm tehdejsi:sync` against a local clone of the product repository to build the
-first snapshot; approves the first content bank in `/admin`; and posts by hand.
+reviews the committed facts file the desk reads and adds to it when a season runs thin;
+approves the first content bank in `/admin`; and posts by hand.
 
 ## What this does not touch
 
