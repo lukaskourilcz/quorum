@@ -228,7 +228,7 @@ costs and no treasury action in this decision.
 - [x] DM-18a — Server-only admin loader
 - [x] DM-18b — Recommendations panel
 - [x] DM-18c — Actions panel
-- [ ] DM-18d — Knowledge panel, tab wiring and e2e
+- [x] DM-18d — Knowledge panel, tab wiring and e2e
 - [ ] DM-19a — Thursday gate and the rotating agenda wheel
 - [ ] DM-19b — Action-packet contract and the BOOKER call
 - [ ] DM-19c — Playbook store and the action check-off route

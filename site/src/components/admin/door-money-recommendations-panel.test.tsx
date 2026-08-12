@@ -72,6 +72,7 @@ describe("Door Money recommendation review", () => {
     expect(html).toContain("Your rating");
     expect(html).toContain("Record posted URL");
     expect(html).toContain('type="url"');
+    expect(html).toContain('id="door-money-recommendation-fixture-night-bus-carousel"');
   });
 
   it("shows draft review controls but disables every write on a read-only deployment", () => {

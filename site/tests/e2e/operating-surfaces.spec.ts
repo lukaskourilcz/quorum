@@ -15,7 +15,9 @@ const axeRoutes = [
   "/ventures/carousel-studio",
   "/money",
   "/admin?venture=global",
-  "/admin?venture=door-money",
+  "/admin?venture=door-money&tab=recommendations",
+  "/admin?venture=door-money&tab=actions",
+  "/admin?venture=door-money&tab=knowledge",
   "/admin?venture=titty-tuesdays&tab=plans",
   "/admin/ventures/titty-tuesdays/binder",
   "/admin?venture=fightaiq&tab=fighters",
@@ -118,7 +120,7 @@ test.beforeAll(async () => {
     render: { summaryPaths: ["staged/e2e-package.json"] }
   }));
   const fixture = async (name: string) => readFile(path.join(repositoryRoot, "contracts/fixtures", name), "utf8");
-  const recommendation = JSON.parse(await fixture("venture-recommendation.valid.json")) as { recommendationId: string };
+  const recommendation = JSON.parse(await fixture("booksofhistory-recommendation.valid.json")) as { recommendationId: string };
   recommendation.recommendationId = "rec-e2e-admin-feature";
   await Promise.all([
     writeFile(bhPaths.shortlist, await fixture("bh-shortlist.valid.json")),
@@ -157,15 +159,26 @@ for (const route of axeRoutes) {
   });
 }
 
-test("Door Money renders as a bounded admin workspace", async ({ page }) => {
-  await page.goto("/admin?venture=door-money", { waitUntil: "networkidle" });
+test("Door Money renders its three bounded admin tabs", async ({ page }) => {
+  await page.goto("/admin?venture=door-money&tab=recommendations", { waitUntil: "networkidle" });
 
   await expect(page.getByRole("heading", { name: "Door Money" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Door Money/ })).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("link", { name: "recommendations" })).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("link", { name: "actions" })).toBeVisible();
   await expect(page.getByRole("link", { name: "knowledge" })).toBeVisible();
-  await expect(page.getByText("Nothing is stored under recommendations for Door Money yet.")).toBeVisible();
+  await expect(page.getByText("No Door Money recommendation store exists yet.")).toBeVisible();
+  await expect(page.getByText("0 on this tab")).toBeVisible();
+
+  await page.getByRole("link", { name: "actions" }).click();
+  await expect(page).toHaveURL(/tab=actions/);
+  await expect(page.getByText("No Door Money action packets or playbooks exist yet.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Mark complete" })).toHaveCount(0);
+
+  await page.getByRole("link", { name: "knowledge" }).click();
+  await expect(page).toHaveURL(/tab=knowledge/);
+  await expect(page.getByText("No Door Money knowledge version exists yet.")).toBeVisible();
+  await expect(page.getByRole("button", { name: /ingest/i })).toHaveCount(0);
 });
 
 test("WeekBoard navigates between statically generated weeks", async ({ page }) => {
@@ -385,6 +398,19 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await expect(feature.getByText("attached results")).toHaveCount(2);
   });
 
+  test("Door Money action writes stay closed until DM-19c", async ({ page }) => {
+    let actionPosts = 0;
+    page.on("request", (request) => {
+      if (request.method() === "POST" && request.url().endsWith("/admin/api/door-money/actions")) actionPosts += 1;
+    });
+    await page.goto("/admin?venture=door-money&tab=actions", { waitUntil: "networkidle" });
+
+    await expect(page.getByText("No Door Money action packets or playbooks exist yet.")).toBeVisible();
+    await expect(page.getByLabel("Outcome (required)")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Mark complete" })).toHaveCount(0);
+    expect(actionPosts).toBe(0);
+  });
+
   test("admin ideas retain their saved rating and graduation after reload", async ({ page }) => {
     await page.goto("/admin?venture=titty-tuesdays&tab=ideas", { waitUntil: "networkidle" });
     const card = page.getByRole("heading", { name: "Night Shift — One Good Day" }).locator("..");
@@ -458,7 +484,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
   });
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=booksofhistory&tab=features", "/admin?venture=carousel-studio&tab=studio"];
+const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=door-money&tab=recommendations", "/admin?venture=door-money&tab=actions", "/admin?venture=door-money&tab=knowledge", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=booksofhistory&tab=features", "/admin?venture=carousel-studio&tab=studio"];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
