@@ -123,7 +123,7 @@ post anything.
 - [x] **BH-13b** — Canonical story brief and independent twin passes
 - [x] **BH-14** — Production gates for both languages
 - [x] **BH-15** — Recommendation records with dossier-story evidence
-- [ ] **BH-16a** — Studio brand tokens for `booksofhistory`
+- [x] **BH-16a** — Studio brand tokens for `booksofhistory`
 - [ ] **BH-16b** — Per-record locale and two summaries per feature
 - [ ] **BH-17** — Admin approval write path
 - [ ] **BH-18a** — Server-only admin loader

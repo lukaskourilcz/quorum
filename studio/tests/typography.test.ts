@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import {
   CAROUSEL_BRANDS,
   CarouselTemplateSchema,
+  contrastRatio,
   fitText,
   fontFiles,
   measureEm,
@@ -50,6 +51,23 @@ describe("the committed faces", () => {
       body: "Archivo",
       mono: "IBM Plex Mono"
     });
+  });
+
+  it("ships the BOOKSOFHISTORY first-edition card as contrast-checked tokens", () => {
+    const brand = CAROUSEL_BRANDS.booksofhistory;
+    expect(brand.fonts).toEqual({
+      headline: "Petrona",
+      body: "Karla",
+      mono: "IBM Plex Mono"
+    });
+    expect(brand.colors).toMatchObject({
+      background: "#f4ecd8",
+      foreground: "#531b20",
+      accent: "#684d08"
+    });
+    for (const ink of ["foreground", "muted", "accent", "secondary"] as const) {
+      expect(contrastRatio(brand.colors[ink]!, brand.colors.background!)).toBeGreaterThanOrEqual(4.5);
+    }
   });
 
   it("charges all-caps what all-caps costs", () => {
