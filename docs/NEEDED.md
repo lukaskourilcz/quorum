@@ -216,11 +216,38 @@ Judgement calls. Nothing is blocked on code for any of these.
   design's "Open questions".
   [imp:2] [owner:me] [time:15m] [kind:decision]
 
-- [ ] **Answer the Door Money manuscript questions** — confirm an English manuscript file
-  exists and decide where the private source repository lives; the design's
-  BOOK-SOURCE-001 approval blocks ingestion on this. Also say whether there is an
-  English-edition launch date the weekly growth room should plan backwards from.
-  [imp:3] [owner:me] [time:15m] [kind:decision]
+- [ ] **Approve Door Money's private source (`BOOK-SOURCE-001`)** — confirm that the English
+  manuscript exists, create its private Git repository and keep the working clone outside this
+  public checkout. Put the manuscript at the gitignored local path or pass it explicitly to the
+  CLI; set `BOOK_PRIVATE_CLONE_PATH` for a local live desk. The optional fine-grained
+  `BOOK_SOURCE_TOKEN` is only for the owner's read-only checkout step: the shipped runtime does not
+  fetch a hosted database or send the token to the site. Check the matching item in
+  `state/INBOX.md` only after accepting the 600-character excerpt cap, the 40 × 280-character
+  exemplar cap and the rule that full text, chunks and embeddings stay private. Also record any
+  English-edition launch date the growth room should plan backwards from.
+  [imp:5] [owner:me] [time:20m] [kind:setup]
+
+- [ ] **Approve and run the bounded ingestion (`BOOK-INGEST-002`)** — review the exact roles and
+  ceilings in `state/INBOX.md`: $3.00 for the program, $0.80 per day and $0.10 per call, all still
+  under the company caps. After both book approvals are checked, run
+  `pnpm book:ingest -- --manuscript <ignored-path> --private-root <private-clone>` locally. A stop
+  is resumable for the same manuscript hash; do not copy the source or private output into this
+  repository to make a hosted run convenient.
+  [imp:4] [owner:me] [time:20m] [kind:decision]
+
+- [ ] **Clear Door Money and choose future accounts (`DM-ACCOUNTS-003`)** — finish the shared
+  handle/collision/trademark screen for "Door Money", decide whether the account should instead
+  carry the English book title, and choose any of Instagram, TikTok, X, Threads or YouTube. Check
+  the matching item in `state/INBOX.md` before creating an account. You create and configure it;
+  BoardlessAI remains drafts-only and has no credential, publisher or autopublish permission.
+  [imp:3] [owner:me] [time:20m] [kind:legal]
+
+- [ ] **Approve manual Door Money results (`DM-RESULTS-004`)** — decide whether views, likes,
+  comments, shares, saves, follows and link taps typed from the platform's own screen may become
+  `owner-result-entry/1` evidence. Check the matching item in `state/INBOX.md` to open that admin
+  save; until then it fails closed. This remains inside D9: no analytics account, API, cookie,
+  pixel, scrape or automated ingestion, and missing results remain unavailable rather than zero.
+  [imp:3] [owner:me] [time:5m] [kind:decision]
 
 - [ ] **Pick Kvórum's desk hour** — the design defaults to 21:00 Prague (full-day
   harvest, you review in the evening, posts go out next morning). If same-evening

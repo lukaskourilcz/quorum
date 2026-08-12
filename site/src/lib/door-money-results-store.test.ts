@@ -15,7 +15,7 @@ afterEach(async () => {
   await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
 });
 
-async function recommendationRoot(posted: boolean): Promise<{ root: string; id: string }> {
+async function recommendationRoot(posted: boolean, resultsApproved = true): Promise<{ root: string; id: string }> {
   const root = await mkdtemp(path.join(os.tmpdir(), "door-money-results-store-"));
   roots.push(root);
   const recommendation = JSON.parse(await readFile(
@@ -23,6 +23,10 @@ async function recommendationRoot(posted: boolean): Promise<{ root: string; id: 
   )) as { id: string };
   const directory = path.join(root, "state/ventures/door-money/recommendations");
   await mkdir(directory, { recursive: true });
+  await writeFile(
+    path.join(root, "state/INBOX.md"),
+    `- [${resultsApproved ? "x" : " "}] HUMAN_APPROVAL DM-RESULTS-004 — synthetic test state.\n`
+  );
   await writeFile(path.join(directory, `${recommendation.id}.json`), `${JSON.stringify(recommendation, null, 2)}\n`);
   if (posted) {
     await applyDoorMoneyRecommendationDecision({
@@ -38,6 +42,19 @@ async function recommendationRoot(posted: boolean): Promise<{ root: string; id: 
 }
 
 describe("Door Money owner-results store", () => {
+  it("refuses owner results until DM-RESULTS-004 is signed", async () => {
+    const { root, id } = await recommendationRoot(true, false);
+    await expect(saveDoorMoneyOwnerResult({
+      recommendationId: id,
+      platform: "instagram",
+      metrics: { views: 1 },
+      outcome: "Synthetic result that must remain disabled."
+    }, { root })).rejects.toMatchObject({
+      code: "CONFLICT",
+      message: expect.stringContaining("DM-RESULTS-004 is pending")
+    });
+  });
+
   it("derives the recorded post URL and never contacts a platform", async () => {
     const { root, id } = await recommendationRoot(true);
     const fetchSpy = vi.spyOn(globalThis, "fetch");
