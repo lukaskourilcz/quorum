@@ -103,6 +103,11 @@ costs and no treasury action in this decision.
   orchestrator schemas were already extended. The site copies now recognize both Door
   Money rooms and agents, price GHOST through its dedicated role, and render the venture's
   label and hue; this is display plumbing only and does not open either room.
+- **The design names an approval trend and a passage-depletion watch without numeric
+  quarterly bars.** The KPI contract accepts only nonnegative readings, so DM-05b records
+  approval trend as a `1|0|null` boolean target and passage use as an at-most `0.80`
+  depletion watch. Cash and model spend remain separate KPIs because `$0` and `$3` are
+  separate promises; absent measurements remain `null`, never manufactured zeros.
 
 ## Delivery ledger
 
@@ -118,7 +123,7 @@ costs and no treasury action in this decision.
 - [x] DM-04b — Prompts for GHOST, BOOKER and the craft file
 - [x] DM-04c — Model roles: GHOST, BOOK_INGEST, BOOK_STYLE
 - [x] DM-05a — Scaffold, gitignore line, hue and labels
-- [ ] DM-05b — KPI seeds for the quarter
+- [x] DM-05b — KPI seeds for the quarter
 - [ ] DM-05c — Degradation-ladder position with its test
 - [ ] DM-06a — book-kb-index contract and fixtures
 - [ ] DM-06b — style-profile contract and fixtures
