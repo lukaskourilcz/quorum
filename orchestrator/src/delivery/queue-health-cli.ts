@@ -24,6 +24,10 @@ async function main(): Promise<void> {
     const line = `${venture.venture}: ${venture.waiting.length} waiting, ${venture.parked.length} parked`;
     console.log(venture.stalled ? `${line} — NOT DRAINING` : line);
   }
+  for (const entry of report.deploys) {
+    const state = entry.live === null ? "not checked" : entry.live ? "serving" : `NOT BUILT (${entry.status ?? "unreachable"})`;
+    console.log(`${entry.venture}: ${state}${entry.expected ? ` — newest delivered ${entry.expected}` : ""}`);
+  }
   console.log(JSON.stringify({ needsOwner: report.needsOwner, artifacts }));
 }
 

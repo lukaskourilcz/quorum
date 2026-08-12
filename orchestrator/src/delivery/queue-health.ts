@@ -1,6 +1,7 @@
 import { stateRoot } from "../paths.js";
 import { articleQueue } from "../mma-files/publish.js";
 import { atomicWriteJson, atomicWriteText, readText } from "../state.js";
+import { deployIsBehind, readDeployFreshness, type DeployFreshness, type DeployProbe } from "./deploy-freshness.js";
 import { editionQueue } from "./outbox.js";
 
 /**
@@ -42,6 +43,14 @@ export interface QueueHealthReport {
   checkedAt: string;
   date: string;
   ventures: VentureQueueHealth[];
+  /**
+   * Whether each magazine is serving what we last delivered to it.
+   *
+   * The queues above answer "did we send it". This answers "can a reader open it", which is a
+   * different question and the one that went unasked on 12 August: the commit was on main, the
+   * gate was green, the host reported no errors, and no build was ever triggered.
+   */
+  deploys: DeployFreshness[];
   /** True when at least one venture needs a person, which is what the owner item is raised on. */
   needsOwner: boolean;
 }
@@ -116,18 +125,21 @@ export async function buildQueueHealthReport(input: {
   root?: string;
   today: string;
   now?: Date;
+  probe?: DeployProbe;
 }): Promise<QueueHealthReport> {
   const root = input.root ?? stateRoot;
   const ventures = [
     await mmaFilesHealth(root, input.today),
     await caughtUpHealth(root, input.today)
   ];
+  const deploys = await readDeployFreshness({ root, ...(input.probe ? { probe: input.probe } : {}) });
   return {
     schemaVersion: "delivery-queue-health/1",
     checkedAt: (input.now ?? new Date()).toISOString(),
     date: input.today,
     ventures,
-    needsOwner: ventures.some((venture) => venture.stalled)
+    deploys,
+    needsOwner: ventures.some((venture) => venture.stalled) || deploys.some(deployIsBehind)
   };
 }
 
@@ -147,6 +159,42 @@ function inboxItem(venture: VentureQueueHealth): string {
     "  new bytes rather than another run; its own receipt says what the magazine refused and why.",
     "  [imp:5] [owner:me] [time:30m] [kind:deploy]"
   ].join("\n");
+}
+
+/**
+ * The owner item for a magazine whose site is not serving what we delivered.
+ *
+ * Deliberately separate from the queue item: a stalled queue means we have not sent something, and
+ * this means we sent it and nobody built it. The same word for both would send the owner to the
+ * receipts, which in this case all say the delivery worked — and they are right.
+ */
+function deployInboxItem(entry: DeployFreshness): string {
+  return [
+    `- [ ] **DELIVERY-NOT-BUILT-${entry.venture.toUpperCase()}** — delivered but not being served.`,
+    `  ${entry.url} answers ${entry.status ?? "nothing"}, so the host has not rebuilt since ${entry.expected} landed on main.`,
+    "  Nothing is wrong with the package: the commit is on main and its gate was green. This is the",
+    "  build that never ran. An empty commit to the magazine's main triggers one; if that is what it",
+    "  takes twice, the host's git integration is the thing to look at.",
+    "  [imp:5] [owner:me] [time:15m] [kind:deploy]"
+  ].join("\n");
+}
+
+async function reconcileDeployInbox(root: string, entry: DeployFreshness, today: string): Promise<boolean> {
+  const existing = await readText(root, "INBOX.md", "# INBOX\n");
+  const open = `- [ ] **DELIVERY-NOT-BUILT-${entry.venture.toUpperCase()}**`;
+  if (deployIsBehind(entry)) {
+    if (existing.includes(open)) return false;
+    await atomicWriteText(root, "INBOX.md", `${existing.trimEnd()}\n\n${deployInboxItem(entry)}\n`);
+    return true;
+  }
+  // Only a confirmed 200 clears it. An unreachable site leaves the item alone: not knowing is not
+  // the same as being fine, and this is the one check whose whole point is that silence lies.
+  if (entry.live !== true || !existing.includes(open)) return false;
+  await atomicWriteText(root, "INBOX.md", existing.replace(
+    open,
+    `- [x] **DELIVERY-NOT-BUILT-${entry.venture.toUpperCase()}** — Resolved ${today}: the site is serving it again. Original report:`
+  ));
+  return true;
 }
 
 /**
@@ -179,6 +227,7 @@ export async function runQueueHealthCheck(input: {
   root?: string;
   today: string;
   now?: Date;
+  probe?: DeployProbe;
 }): Promise<{ report: QueueHealthReport; artifacts: string[] }> {
   const root = input.root ?? stateRoot;
   const report = await buildQueueHealthReport(input);
@@ -187,6 +236,9 @@ export async function runQueueHealthCheck(input: {
   const artifacts = [recordPath];
   for (const venture of report.ventures) {
     if (await reconcileInbox(root, venture, input.today)) artifacts.push("INBOX.md");
+  }
+  for (const entry of report.deploys) {
+    if (await reconcileDeployInbox(root, entry, input.today)) artifacts.push("INBOX.md");
   }
   return { report, artifacts: [...new Set(artifacts)] };
 }
