@@ -59,6 +59,15 @@ export const calendarCostContexts: Partial<
     HACEK: "Project meetings when selected",
     AUDIT: "Company and project meetings"
   },
+  "dm-desk": {
+    GHOST: "Door Money daily recommendation draft",
+    AUDIT: "Company and project meetings"
+  },
+  "dm-growth": {
+    BOOKER: "Door Money weekly owner action planning",
+    PULSE: "Company and project meetings",
+    AUDIT: "Company and project meetings"
+  },
   "mag-editorial": {
     JAB: "MMA Files editorial rooms"
   },

@@ -98,6 +98,11 @@ costs and no treasury action in this decision.
   inventory now walks prompt directories, registers the two previously hidden
   marketingShark runtime prompts, and persona resolution explicitly maps GHOST and
   BOOKER there. Runtime prompts remain repository files and never load skill files.
+- **The site duplicated the agent, meeting and public-calendar unions outside the
+  shared contracts.** The DM-05a admin render failed at server startup even though the
+  orchestrator schemas were already extended. The site copies now recognize both Door
+  Money rooms and agents, price GHOST through its dedicated role, and render the venture's
+  label and hue; this is display plumbing only and does not open either room.
 
 ## Delivery ledger
 
@@ -112,7 +117,7 @@ costs and no treasury action in this decision.
 - [x] DM-04a — GHOST and BOOKER in registry, routing, controls and cast schema
 - [x] DM-04b — Prompts for GHOST, BOOKER and the craft file
 - [x] DM-04c — Model roles: GHOST, BOOK_INGEST, BOOK_STYLE
-- [ ] DM-05a — Scaffold, gitignore line, hue and labels
+- [x] DM-05a — Scaffold, gitignore line, hue and labels
 - [ ] DM-05b — KPI seeds for the quarter
 - [ ] DM-05c — Degradation-ladder position with its test
 - [ ] DM-06a — book-kb-index contract and fixtures

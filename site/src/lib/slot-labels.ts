@@ -9,6 +9,8 @@ const labels: Record<CalendarKind, string> = {
   "ms-daily": "marketingShark daily carousel meeting",
   "bh-desk": "BOOKSOFHISTORY editorial desk",
   "venture-afternoon": "Afternoon company meeting",
+  "dm-desk": "Door Money recommendation meeting",
+  "dm-growth": "Door Money growth meeting",
   "cu-product": "DNESKAi product meeting",
   "incubator-synthesis": "Magazine idea review",
   "venture-night": "Night company meeting",

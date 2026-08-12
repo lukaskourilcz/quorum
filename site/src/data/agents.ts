@@ -43,6 +43,8 @@ export type AgentId =
   | "PIVOT"
   | "MAKO"
   | "CHUM"
+  | "GHOST"
+  | "BOOKER"
   | "EASEL"
   | "MOTIF"
   | "FOLIO"
@@ -122,7 +124,8 @@ type TextModelRole =
   | "MAKO"
   | "CHUM"
   | "FOLIO"
-  | "PLOT";
+  | "PLOT"
+  | "GHOST";
 
 const textModelRoles = modelSource.roles as Record<
   TextModelRole,
@@ -271,6 +274,12 @@ const plotCall: CallEstimateProfile = {
   basis: "BOOKSOFHISTORY story production: an 8,000-character dossier packet and up to 3,000 response tokens"
 };
 
+const ghostCall: CallEstimateProfile = {
+  promptChars: 28_000,
+  maxOutputTokens: 2_500,
+  basis: "Configured Door Money draft cap: about 8,000 input tokens and up to 2,500 response tokens"
+};
+
 function apiProvider(provider: "openai" | "anthropic"): AgentApiModel["provider"] {
   return provider === "openai" ? "OpenAI" : "Anthropic";
 }
@@ -365,6 +374,8 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
   CHUM: [configuredTextModel("CHUM", "marketingShark daily carousel copy")],
   FOLIO: [configuredTextModel("FOLIO", "BOOKSOFHISTORY editorial selection", folioCall)],
   PLOT: [configuredTextModel("PLOT", "BOOKSOFHISTORY story production", plotCall)],
+  GHOST: [configuredTextModel("GHOST", "Door Money daily recommendation draft", ghostCall)],
+  BOOKER: [configuredTextModel("OPENAI_SPECIALIST", "Door Money weekly owner action planning")],
   HERALD: [
     configuredEditionModel(editionModels.curation, "DNESKAi daily edition curation", curationCall),
     configuredTextModel("DIGEST", "DNESKAi product room"),
@@ -689,6 +700,18 @@ const profileCopy: Record<
     operatingPrinciple: "One verified story, written natively twice.",
     output: "Canonical story brief and separate native social drafts per locale",
     currentFocus: "BOOKSOFHISTORY story production",
+    publicTrackRecord: null
+  },
+  GHOST: {
+    operatingPrinciple: "Use only the passage code selected, and carry its reference with every claim.",
+    output: "Evidence-linked English recommendation draft",
+    currentFocus: "Door Money draft recommendations",
+    publicTrackRecord: null
+  },
+  BOOKER: {
+    operatingPrinciple: "Prepare the owner's next step; never take it for them.",
+    output: "Bounded owner action packet or an honest no-action record",
+    currentFocus: "Door Money growth actions",
     publicTrackRecord: null
   }
 };
