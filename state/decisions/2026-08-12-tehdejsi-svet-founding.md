@@ -152,7 +152,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-19** — Admin approval write path with the tier-2 review gate
 - [x] **TS-20a** — Server-only admin loader
 - [x] **TS-20b** — Features panel with bilingual packages
-- [ ] **TS-20c** — Library panel with snapshot state
+- [x] **TS-20c** — Library panel with snapshot state
 - [ ] **TS-20d** — Signals panel, tab wiring and e2e
 - [ ] **TS-21a** — Community signals: contract and extraction
 - [ ] **TS-21b** — Product-insight queue, seeded with the five audit findings
@@ -205,6 +205,13 @@ snapshot is a committed file and the venture buys no data.
   a renderable PNG exists at the deterministic venture-media path for that package. The
   preview and ZIP routes read the same bytes and never fetch the source URL. Typographic
   packages need no media file.
+- **The library reports copied-facts freshness, not product drift.** TS-20c inherited
+  the superseded snapshot request for a product `sourceCommit`, product `rel` scores and
+  an automatic drift warning. With the founding decision's no-product-link rule, none of
+  those values exists. The panel instead shows the verified facts-envelope hash, exact
+  copy age, recorded scorer factors and an explicit warning that only the owner can
+  compare sources before replacing the committed file. No synthetic commit or score is
+  substituted.
 
 ## Honest gaps
 
