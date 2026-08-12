@@ -194,7 +194,7 @@ costs and no treasury action in this decision.
 - [x] DM-11a — The book:ingest CLI with envelopes
 - [x] DM-11b — Public/private output split and manuscript-hash idempotency
 - [x] DM-12 — venture-recommendation evidence kind book-passage
-- [ ] DM-13 — Deterministic passage selection
+- [x] DM-13 — Deterministic passage selection
 - [ ] DM-14a — Packet assembly and the private-store fetcher
 - [ ] DM-14b — Desk runner, GHOST call and honest records
 - [ ] DM-15a — Voice lint and stop-slop gate
