@@ -2,6 +2,7 @@ import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request
 import {
   DoorMoneyPersistenceError,
   applyDoorMoneyRecommendationDecision,
+  doorMoneyRecommendationContentHash,
   parseDoorMoneyCopyBlocks,
   type DoorMoneyPersistenceCode,
   type DoorMoneyRecommendationAction
@@ -110,6 +111,7 @@ export async function POST(request: Request): Promise<Response> {
       changed: result.changed,
       summaryPath: result.recommendation.designLab.summaryPath,
       postedUrl: result.recommendation.owner.postedUrl,
+      contentHash: doorMoneyRecommendationContentHash(result.recommendation),
       commits: result.commits
     }, result.changed ? 201 : 200);
   } catch (error) {

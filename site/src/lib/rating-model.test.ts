@@ -31,4 +31,13 @@ describe("rating boundary", () => {
     expect(parseRatingRecord({ ...rating(), id: "rating-one" })).toBeNull();
     expect(parseRatingRecord({ ...rating(), note: "bad\u0000note" })).toBeNull();
   });
+
+  it("accepts a version-pinned recommendation rating", () => {
+    expect(parseRatingRecord({
+      ...rating(),
+      ventureId: "door-money",
+      objectKind: "recommendation",
+      objectRef: { id: "fixture-radio-carousel", contentHash: "sha256:123456abcdef" }
+    })).toMatchObject({ ventureId: "door-money", objectKind: "recommendation" });
+  });
 });

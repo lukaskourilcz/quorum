@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -75,7 +76,11 @@ describe("Door Money recommendations route", () => {
     const first = await POST(request({ id, action: "approve", approvalNote: "Synthetic fixture approved." }, cookie));
     expect(first.status).toBe(201);
     expect(first.headers.get("Cache-Control")).toContain("no-store");
-    expect(await first.json()).toMatchObject({ id, status: "approved", changed: true });
+    const firstBody = await first.json() as { contentHash: string };
+    expect(firstBody).toMatchObject({ id, status: "approved", changed: true });
+    expect(firstBody.contentHash).toMatch(/^sha256:[a-f0-9]{12}$/u);
+    const storedBytes = await readFile(path.join(root, `state/ventures/door-money/recommendations/${id}.json`), "utf8");
+    expect(firstBody.contentHash).toBe(`sha256:${createHash("sha256").update(storedBytes).digest("hex").slice(0, 12)}`);
 
     const retry = await POST(request({ id, action: "approve", approvalNote: "Synthetic fixture approved." }, cookie));
     expect(retry.status).toBe(200);

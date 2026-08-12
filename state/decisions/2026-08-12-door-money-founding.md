@@ -178,6 +178,12 @@ costs and no treasury action in this decision.
   edge, deduplicates overlaps, and omits duplicate score and exemplar payloads. Both selected
   passages therefore survive without weakening the model cap. Ungated GHOST output is never put
   in the public response cache; its ledger hash prevents a paid uncached call from being repeated.
+- **DM-18b's amended source wording repeats the lower-precedence database substitution.** The
+  panel follows the private-store contract: it shows the capped excerpt and immutable chunk id,
+  then prints the credential-free `private-book://` pointer as non-clickable text. The pointer is
+  not a private-repository URL, and the admin never fetches it. The issue also asks for result
+  entry before DM-20's result contract, route and store; this panel shows recorded result IDs but
+  does not invent a premature second writer. DM-20 owns result entry as commissioned.
 
 ## Delivery ledger
 
@@ -216,7 +222,7 @@ costs and no treasury action in this decision.
 - [x] DM-16b — English locale in the carousel summary, byte-compatible
 - [x] DM-17 — Admin approval write path
 - [x] DM-18a — Server-only admin loader
-- [ ] DM-18b — Recommendations panel
+- [x] DM-18b — Recommendations panel
 - [ ] DM-18c — Actions panel
 - [ ] DM-18d — Knowledge panel, tab wiring and e2e
 - [ ] DM-19a — Thursday gate and the rotating agenda wheel
