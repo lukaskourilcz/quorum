@@ -19,6 +19,22 @@ export interface PendingDelivery {
   package: EditionPackage;
 }
 
+/**
+ * Failure codes a byte-identical retry can still clear.
+ *
+ * Everything else is a verdict on these exact bytes: the magazine refused them once and will
+ * refuse them the same way again. `unreachable` and `push_rejected` are the two that describe
+ * the road rather than the cargo.
+ */
+const RETRYABLE_FAILURE_CODES: ReadonlySet<string> = new Set<DeliveryFailureCode>([
+  "unreachable",
+  "push_rejected"
+]);
+
+function isRetryableFailure(code: unknown): boolean {
+  return typeof code === "string" && RETRYABLE_FAILURE_CODES.has(code);
+}
+
 async function packageFiles(root: string): Promise<string[]> {
   const directory = resolveStatePath(root, "edition/outbox");
   try {
@@ -44,14 +60,25 @@ export async function oldestPendingDelivery(
   // would ship the stale package and report success while the new edition waited.
   for (const file of await packageFiles(root)) {
     const editionPackage = validateEditionForDelivery(JSON.parse(await readFile(file, "utf8")));
-    const receipt = await readJson<{ status?: unknown; packageHash?: unknown } | null>(
+    const receipt = await readJson<{ status?: unknown; packageHash?: unknown; code?: unknown } | null>(
       root,
       `edition/deliveries/${editionPackage.date}.json`,
       null
     );
-    const alreadyShipped = receipt?.status === "delivered"
-      && receipt.packageHash === editionPackage.idempotencyKey;
+    const sameBytes = receipt?.packageHash === editionPackage.idempotencyKey;
+    const alreadyShipped = receipt?.status === "delivered" && sameBytes;
     if (alreadyShipped) continue;
+    // A package the magazine has already refused for a reason that retrying cannot change is
+    // parked rather than re-sent. Skipping only delivered dates was half the rule: a package
+    // that kept failing had no receipt to skip on, so it stayed at the head of an oldest-first
+    // queue and every edition behind it waited on a verdict that was never going to change.
+    //
+    // Parked is keyed to the exact bytes. A regenerated package for the same date is different
+    // bytes and gets its own attempt, which is how a reconciled edition ships without anybody
+    // having to clear a flag.
+    if (receipt?.status === "needs_reconciliation" && sameBytes && !isRetryableFailure(receipt.code)) {
+      continue;
+    }
     // A "no edition today" notice is only true on its own day. Left in an oldest-first queue
     // that ships one package per run, a stale one holds every real edition behind it and
     // would publish yesterday's notice as though it were today's. Today's still ships.
@@ -243,7 +270,23 @@ export async function recordDelivery(input: {
         summary: `${DELIVERY_FAILURE_SENTENCE[code]} The owner has the technical report.`
       }
     }),
+    // The failure used to leave no receipt at all, so the queue could not tell a package the
+    // magazine had already refused from one it had never seen. `tags: []` and the explicit
+    // status keep it out of every reader that counts published editions — each of those asks
+    // for `delivered` by name.
+    atomicWriteJson(root, receiptPath, {
+      schemaVersion: 1,
+      date: editionPackage.date,
+      packageHash: editionPackage.idempotencyKey,
+      status: "needs_reconciliation",
+      editionStatus: editionPackage.status,
+      targetRepository: "lukaskourilcz/aifirst",
+      code,
+      detail: detail.replace(/\s+/g, " ").trim().slice(0, 500),
+      recordedAt: now.toISOString(),
+      tags: []
+    }),
     raiseInboxOnce(root, editionPackage.date, code, detail)
   ]);
-  return [meetingPath, "INBOX.md"];
+  return [meetingPath, receiptPath, "INBOX.md"];
 }
