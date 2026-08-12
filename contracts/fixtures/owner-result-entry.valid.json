@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "owner-result-entry/1",
+  "id": "owner-result-3bb6503f7da3e8aa84dac627",
+  "ventureId": "door-money",
+  "recommendationId": "fixture-radio-carousel",
+  "platform": "instagram",
+  "postUrl": "https://example.test/posts/fixture-radio-carousel",
+  "metrics": {
+    "views": 120,
+    "likes": 14,
+    "saves": 5,
+    "linkTaps": 2
+  },
+  "outcome": "The fictional carousel earned five saves and two link taps in this synthetic example.",
+  "source": "owner-entry",
+  "capturedAt": "2026-08-12T18:00:00.000Z"
+}

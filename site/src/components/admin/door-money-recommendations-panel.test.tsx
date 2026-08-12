@@ -50,6 +50,18 @@ const recommendation: AdminDoorMoneyRecommendation = {
     objectRef: { id: "fixture-night-bus-carousel", contentHash: "sha256:123456abcdef" },
     rating: "good",
     ratedAt: "2026-08-12T11:10:00.000Z"
+  }],
+  results: [{
+    schemaVersion: "owner-result-entry/1",
+    id: "fixture-owner-result",
+    ventureId: "door-money",
+    recommendationId: "fixture-night-bus-carousel",
+    platform: "instagram",
+    postUrl: "https://example.test/posts/synthetic-night-bus",
+    metrics: { views: 31, saves: 4 },
+    outcome: "The synthetic owner observed four saves.",
+    source: "owner-entry",
+    capturedAt: "2026-08-12T18:00:00.000Z"
   }]
 };
 
@@ -69,6 +81,9 @@ describe("Door Money recommendation review", () => {
     expect(html).not.toContain('href="private-book:');
     expect(html).toContain("Passed · voice");
     expect(html).toContain("fixture-owner-result");
+    expect(html).toContain("Intent");
+    expect(html).toContain("Owner-entered outcome");
+    expect(html).toContain("The synthetic owner observed four saves.");
     expect(html).toContain("Your rating");
     expect(html).toContain("Record posted URL");
     expect(html).toContain('type="url"');

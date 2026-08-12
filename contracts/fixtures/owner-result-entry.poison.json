@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "owner-result-entry/1",
+  "id": "owner-result-automated-fixture",
+  "ventureId": "door-money",
+  "recommendationId": "fixture-radio-carousel",
+  "platform": "instagram",
+  "postUrl": "https://example.test/posts/fixture-radio-carousel",
+  "metrics": {},
+  "outcome": "An automated collector invented this synthetic result.",
+  "source": "automated-analytics",
+  "capturedAt": "2026-08-12T18:00:00.000Z"
+}

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { RatingWidget } from "@/components/admin/rating-widget";
+import { DoorMoneyResultEntry } from "@/components/admin/door-money-result-entry";
 import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import type {
   AdminDoorMoneyRecommendations
 } from "@/lib/admin-door-money";
 import type { DoorMoneyCopyBlock } from "@/lib/door-money-recommendation-model";
+import { isDoorMoneyResultPlatform } from "@/lib/door-money-result-model";
 
 type ReviewMode = "closed" | "edit" | "reject";
 type Decision =
@@ -238,14 +240,9 @@ function RecommendationCard({ initial }: { initial: AdminDoorMoneyRecommendation
           </section>
         ) : null}
 
-        <section className="border-t border-[var(--border)] pt-5">
-          <h4 className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--mist)]">Owner results</h4>
-          {recommendation.owner.resultIds.length ? (
-            <ul className="mt-2 grid gap-1 text-sm text-[var(--fog)]">{recommendation.owner.resultIds.map((id) => <li key={id}>{id}</li>)}</ul>
-          ) : (
-            <p className="mt-2 text-sm leading-6 text-[var(--fog)]">No owner result has been entered for this recommendation.</p>
-          )}
-        </section>
+        <DoorMoneyResultEntry initialResults={recommendation.results} intent={recommendation.rationale}
+          platforms={recommendation.platforms.filter(isDoorMoneyResultPlatform)} postedUrl={recommendation.owner.postedUrl}
+          recommendationId={recommendation.id} />
 
         <div aria-live="polite" className="min-h-6 text-sm" role={error ? "alert" : "status"}>
           {error ? <span className="text-[var(--destructive)]">{error}</span> : <span className="text-[var(--fog)]">{message}</span>}

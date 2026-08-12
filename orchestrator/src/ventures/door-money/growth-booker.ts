@@ -92,15 +92,17 @@ export interface DoorMoneyBookerContext {
     items: DoorMoneyGrowthMemory["ownerCompletions"];
   };
   ownerResults: {
-    state: "deferred-until-dm-20a";
-    items: [];
+    state: "missing" | "present";
+    items: DoorMoneyGrowthMemory["ownerResults"];
   };
   latestGoViralBrief: BookerGoViralBrief | null;
   droppedGoViralBriefs: number;
   droppedPlaybooks: number;
   droppedActionPackets: number;
+  droppedOwnerResults: number;
   omittedPlaybooks: number;
   omittedOwnerCompletions: number;
+  omittedOwnerResults: number;
   allowedEvidenceRefs: string[];
   availableLearningRefs: string[];
 }
@@ -133,7 +135,11 @@ export function doorMoneyBookerEvidenceRefs(
   latestGoViralBrief: BookerGoViralBrief | null
 ): string[] {
   const references = [
-    ...memory.ownerCompletions.map(({ id }) => id),
+    ...[
+      ...memory.ownerCompletions.map(({ id, completedAt }) => ({ ref: id, at: completedAt, kind: "completion" })),
+      ...memory.ownerResults.map(({ ref, capturedAt }) => ({ ref, at: capturedAt, kind: "result" }))
+    ].sort((left, right) => Date.parse(right.at) - Date.parse(left.at) || left.kind.localeCompare(right.kind) || left.ref.localeCompare(right.ref))
+      .map(({ ref }) => ref),
     ...memory.playbooks.map(({ ref }) => ref),
     ...(latestGoViralBrief ? [latestGoViralBrief.ref] : [])
   ];
@@ -143,7 +149,7 @@ export function doorMoneyBookerEvidenceRefs(
   return z.array(EvidenceRefSchema).max(100).parse(references);
 }
 
-/** Read bounded, contract-valid inputs; the future owner-result contract remains fail closed. */
+/** Read bounded, contract-valid manual learning and the latest eligible GoVIRAL brief. */
 export async function loadDoorMoneyBookerContext(
   root: string,
   asOfDate: string,
@@ -163,15 +169,18 @@ export async function loadDoorMoneyBookerContext(
     return {
       playbooks: { state: memory.playbooks.length ? "present" : "missing", items: memory.playbooks },
       ownerCompletions: { state: memory.ownerCompletions.length ? "present" : "missing", items: memory.ownerCompletions },
-      ownerResults: { state: "deferred-until-dm-20a", items: [] },
+      ownerResults: { state: memory.ownerResults.length ? "present" : "missing", items: memory.ownerResults },
       latestGoViralBrief: null,
       droppedGoViralBriefs: missing ? 0 : 1,
       droppedPlaybooks: memory.droppedPlaybooks,
       droppedActionPackets: memory.droppedActionPackets,
+      droppedOwnerResults: memory.droppedOwnerResults,
       omittedPlaybooks: memory.omittedPlaybooks,
       omittedOwnerCompletions: memory.omittedOwnerCompletions,
+      omittedOwnerResults: memory.omittedOwnerResults,
       allowedEvidenceRefs: doorMoneyBookerEvidenceRefs(memory, null),
-      availableLearningRefs: memory.ownerCompletions.map(({ id }) => id)
+      availableLearningRefs: doorMoneyBookerEvidenceRefs(memory, null)
+        .filter((reference) => reference.startsWith("completion:") || reference.startsWith("result:"))
     };
   }
 
@@ -194,15 +203,18 @@ export async function loadDoorMoneyBookerContext(
   return {
     playbooks: { state: memory.playbooks.length ? "present" : "missing", items: memory.playbooks },
     ownerCompletions: { state: memory.ownerCompletions.length ? "present" : "missing", items: memory.ownerCompletions },
-    ownerResults: { state: "deferred-until-dm-20a", items: [] },
+    ownerResults: { state: memory.ownerResults.length ? "present" : "missing", items: memory.ownerResults },
     latestGoViralBrief,
     droppedGoViralBriefs,
     droppedPlaybooks: memory.droppedPlaybooks,
     droppedActionPackets: memory.droppedActionPackets,
+    droppedOwnerResults: memory.droppedOwnerResults,
     omittedPlaybooks: memory.omittedPlaybooks,
     omittedOwnerCompletions: memory.omittedOwnerCompletions,
+    omittedOwnerResults: memory.omittedOwnerResults,
     allowedEvidenceRefs: doorMoneyBookerEvidenceRefs(memory, latestGoViralBrief),
-    availableLearningRefs: memory.ownerCompletions.map(({ id }) => id)
+    availableLearningRefs: doorMoneyBookerEvidenceRefs(memory, null)
+      .filter((reference) => reference.startsWith("completion:") || reference.startsWith("result:"))
   };
 }
 
@@ -279,8 +291,10 @@ export async function callDoorMoneyBooker(input: {
     droppedGoViralBriefs: context.droppedGoViralBriefs,
     droppedPlaybooks: context.droppedPlaybooks,
     droppedActionPackets: context.droppedActionPackets,
+    droppedOwnerResults: context.droppedOwnerResults,
     omittedPlaybooks: context.omittedPlaybooks,
     omittedOwnerCompletions: context.omittedOwnerCompletions,
+    omittedOwnerResults: context.omittedOwnerResults,
     allowedEvidenceRefs: context.allowedEvidenceRefs,
     availableLearningRefs: context.availableLearningRefs,
     constraints: {

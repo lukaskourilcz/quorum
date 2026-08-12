@@ -54,6 +54,7 @@ describe("Door Money growth playbooks", () => {
         outcome: `Synthetic outcome ${index + 1}`,
         completedAt: new Date(Date.UTC(2026, 0, 1, 0, 0, index)).toISOString()
       })),
+      ownerResults: [],
       playbooks: ["zeta", "alpha", "middle"].map((id) => ({
         ref: `playbook:${id}:r1`, id, channel: "Synthetic", title: `Synthetic ${id}`,
         revision: 1, summary: "Synthetic summary.", steps: ["Synthetic step."],
@@ -62,8 +63,10 @@ describe("Door Money growth playbooks", () => {
       })),
       droppedPlaybooks: 0,
       droppedActionPackets: 0,
+      droppedOwnerResults: 0,
       omittedPlaybooks: 0,
-      omittedOwnerCompletions: 0
+      omittedOwnerCompletions: 0,
+      omittedOwnerResults: 0
     };
 
     const completionHeavy = boundDoorMoneyGrowthMemory(memory);
@@ -91,6 +94,44 @@ describe("Door Money growth playbooks", () => {
     expect(withPlaybookRoom.ownerCompletions).toHaveLength(98);
     expect(withPlaybookRoom.playbooks.map(({ id }) => id)).toEqual(["alpha"]);
     expect(withPlaybookRoom).toMatchObject({ omittedOwnerCompletions: 0, omittedPlaybooks: 2 });
+  });
+
+  it("keeps the newest manual results inside the same deterministic 99-ref memory bound", () => {
+    const memory: DoorMoneyGrowthMemory = {
+      ownerCompletions: [],
+      ownerResults: Array.from({ length: 102 }, (_, index) => ({
+        ref: `result:owner-result-fixture-${index + 1}`,
+        id: `owner-result-fixture-${index + 1}`,
+        recommendationId: "fixture-radio-carousel",
+        platform: "instagram",
+        metrics: { views: index + 1 },
+        outcome: `Synthetic manual result ${index + 1}.`,
+        capturedAt: new Date(Date.UTC(2026, 0, 2, 0, 0, index)).toISOString()
+      })),
+      playbooks: ["zeta", "alpha"].map((id) => ({
+        ref: `playbook:${id}:r1`, id, channel: "Synthetic", title: `Synthetic ${id}`,
+        revision: 1, summary: "Synthetic summary.", steps: ["Synthetic step."],
+        evidenceRefs: ["result:owner-result-fixture-1"], updatedAt: "2026-01-01T00:00:00.000Z"
+      })),
+      droppedPlaybooks: 0,
+      droppedActionPackets: 0,
+      droppedOwnerResults: 0,
+      omittedPlaybooks: 0,
+      omittedOwnerCompletions: 0,
+      omittedOwnerResults: 0
+    };
+
+    const bounded = boundDoorMoneyGrowthMemory(memory);
+    expect(bounded.ownerResults).toHaveLength(DOOR_MONEY_MEMORY_REF_LIMIT);
+    expect(bounded.ownerResults[0]?.id).toBe("owner-result-fixture-102");
+    expect(bounded.ownerResults.at(-1)?.id).toBe("owner-result-fixture-4");
+    expect(bounded.playbooks).toEqual([]);
+    expect(bounded).toMatchObject({ omittedOwnerResults: 3, omittedPlaybooks: 2 });
+    expect(doorMoneyBookerEvidenceRefs(bounded, {
+      ref: "goviral-plan:plan-2026-01-01-weekly-brief", date: "2026-01-01",
+      id: "plan-2026-01-01-weekly-brief", title: "Synthetic brief", summary: "Synthetic summary.",
+      objective: "Synthetic objective.", tactics: [], status: "approved", originMeetingRef: "2026-01-01-gv-brief"
+    })).toHaveLength(100);
   });
 
   it("rejects an uncited revision before writing any earlier proposal", async () => {
@@ -164,12 +205,37 @@ describe("Door Money growth playbooks", () => {
     };
     await Promise.all([
       json(root, "ventures/door-money/playbooks/synthetic-community-playbook.json", playbook),
-      json(root, "ventures/door-money/actions/2026-08-13.json", packet)
+      json(root, "ventures/door-money/actions/2026-08-13.json", packet),
+      json(root, "ventures/door-money/results/owner-result-past.json", {
+        schemaVersion: "owner-result-entry/1", id: "owner-result-past", ventureId: "door-money",
+        recommendationId: "fixture-radio-carousel", platform: "instagram", postUrl: "https://example.test/synthetic-post",
+        metrics: { views: 12 }, outcome: "A past synthetic manual result.", source: "owner-entry",
+        capturedAt: "2026-08-13T15:00:00.000+02:00"
+      }),
+      json(root, "ventures/door-money/results/owner-result-future.json", {
+        schemaVersion: "owner-result-entry/1", id: "owner-result-future", ventureId: "door-money",
+        recommendationId: "fixture-radio-carousel", platform: "instagram", postUrl: "https://example.test/synthetic-post",
+        metrics: { views: 13 }, outcome: "A future synthetic manual result.", source: "owner-entry",
+        capturedAt: "2026-08-13T13:30:00.000-04:00"
+      }),
+      json(root, "ventures/door-money/results/not-the-canonical-id.json", {
+        schemaVersion: "owner-result-entry/1", id: "owner-result-wrong-name", ventureId: "door-money",
+        recommendationId: "fixture-radio-carousel", platform: "instagram", postUrl: "https://example.test/synthetic-post",
+        metrics: { views: 14 }, outcome: "A mismatched synthetic manual result.", source: "owner-entry",
+        capturedAt: "2026-08-13T13:00:00.000Z"
+      }),
+      json(root, "ventures/door-money/results/malformed.json", { schemaVersion: "owner-result-entry/1" })
     ]);
 
     const memory = await loadDoorMoneyGrowthMemory(root, "2026-08-13", "2026-08-13T14:00:00.000Z");
     expect(memory.playbooks).toEqual([expect.objectContaining({ revision: 1, summary: "Past learning." })]);
     expect(memory.ownerCompletions).toEqual([]);
+    expect(memory.ownerResults).toEqual([expect.objectContaining({
+      ref: "result:owner-result-past", outcome: "A past synthetic manual result.",
+      capturedAt: "2026-08-13T13:00:00.000Z"
+    })]);
+    expect(memory.droppedOwnerResults).toBe(3);
+    expect(memory.omittedOwnerResults).toBe(0);
   });
 
   it("preserves an owner completion only across an otherwise identical same-day task", async () => {

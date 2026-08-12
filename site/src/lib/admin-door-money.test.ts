@@ -95,6 +95,34 @@ describe("Door Money admin loader", () => {
     expect(snapshot.actions).toEqual({ state: "missing", packets: [], playbooks: [], unreadable: 0 });
   });
 
+  it("joins only canonical manual result records to their recommendation", async () => {
+    const root = await temporaryRoot();
+    const result = await fixture("owner-result-entry.valid.json");
+    await Promise.all([
+      json(root, "state/ventures/door-money/recommendations/fixture-radio-carousel.json",
+        await fixture("venture-recommendation.valid.json")),
+      json(root, `state/ventures/door-money/results/${String(result.id)}.json`, result),
+      json(root, "state/ventures/door-money/results/poison.json",
+        await fixture("owner-result-entry.poison.json"))
+    ]);
+
+    const snapshot = await readAdminDoorMoney(root);
+    expect(snapshot.recommendations).toMatchObject({
+      state: "present",
+      unreadable: 1,
+      items: [{
+        id: "fixture-radio-carousel",
+        owner: { resultIds: [result.id] },
+        results: [{
+          id: result.id,
+          source: "owner-entry",
+          metrics: { views: 120, likes: 14, saves: 5, linkTaps: 2 }
+        }]
+      }]
+    });
+    expect(JSON.stringify(snapshot.recommendations)).not.toContain("automated-analytics");
+  });
+
   it("loads canonical action packets and cited playbooks into bounded owner views", async () => {
     const root = await temporaryRoot();
     await Promise.all([
