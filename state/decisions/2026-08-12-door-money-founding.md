@@ -11,8 +11,9 @@ Decision id: `door-money-2026-08a`
 Supersedes: nothing. Extends the founding precedent set by `goviral-2026-08a` and
 `marketingshark-2026-08a`.
 
-Owner-commissioned on 2026-08-12 through
-`docs/DOOR-MONEY-CODEX-BUILD-PROMPT.md`. Every ceiling from `budget-2026-08e` —
+Owner-commissioned on 2026-08-12 through the now-retired Door Money build brief,
+deleted in the final program commit after its requirements moved into this decision,
+the design record and the closed issue ledger. Every ceiling from `budget-2026-08e` —
 $30 all-in a month, a $25 model share and a $1.00 daily pace — is untouched. So
 are every truth gate, the social triple-lock, the treasury rules and the
 publisher. Door Money may prepare drafts and owner-review packets. It may not
@@ -201,59 +202,108 @@ costs and no treasury action in this decision.
   creates no database host allowlist entry, `BOOK_DB_*` credential, table or network client. The
   optional read-only `BOOK_SOURCE_TOKEN` is only authority for the owner's checkout step; the
   shipped runtime does not consume or transmit it.
+- **DM-22c's amended owner handoff repeats that database substitution.** The final handoff below
+  therefore names the approved private-repository/private-clone path and the shipped local
+  readers, not `BOOK_DB_URL`, `BOOK_DB_KEY` or a database that does not exist. The issue also
+  requires the implementation prompt to be deleted in this final commit. Its durable requirements
+  remain in this founding record, `docs/DOOR-MONEY-VENTURE-DESIGN.md` and the closed `DM-` issues;
+  deleting the completed work order does not delete the manuscript boundary or any gate.
 
 ## Delivery ledger
 
-- [x] DM-00 — Phase 0 audit: read the contracts, verify every assumption
-- [x] DM-01 — Write the founding decision record
-- [x] DM-02a — Registry entry in config/ventures.json
-- [x] DM-02b — Registry schema enums, fixtures and the action-completion evaluator
-- [x] DM-03a — Register dm-desk and dm-growth in type and record schemas
-- [x] DM-03b — Meeting policy for both rooms (Thursday gate lives in code)
-- [x] DM-03c — cycle.yml dispatch choices and mode gates
-- [x] DM-03d — Vercel cron entries for 15:00 and 16:00
-- [x] DM-04a — GHOST and BOOKER in registry, routing, controls and cast schema
-- [x] DM-04b — Prompts for GHOST, BOOKER and the craft file
-- [x] DM-04c — Model roles: GHOST, BOOK_INGEST, BOOK_STYLE
-- [x] DM-05a — Scaffold, gitignore line, hue and labels
-- [x] DM-05b — KPI seeds for the quarter
-- [x] DM-05c — Degradation-ladder position with its test
-- [x] DM-06a — book-kb-index contract and fixtures
-- [x] DM-06b — style-profile contract and fixtures
-- [x] DM-06c — The excerpt-cap boundary test
-- [x] DM-07 — Deterministic scene-aware chunker
-- [x] DM-08a — Annotation and fifteen-axis scoring pass
-- [x] DM-08b — Ingestion cursor and resumability
-- [x] DM-09 — Style profile via map-reduce
-- [x] DM-10a — Guarded embeddings wrapper
-- [x] DM-10b — Budget-ledger kind for embeddings
-- [x] DM-11a — The book:ingest CLI with envelopes
-- [x] DM-11b — Public/private output split and manuscript-hash idempotency
-- [x] DM-12 — venture-recommendation evidence kind book-passage
-- [x] DM-13 — Deterministic passage selection
-- [x] DM-14a — Packet assembly and the private-store fetcher
-- [x] DM-14b — Desk runner, GHOST call and honest records
-- [x] DM-15a — Voice lint and stop-slop gate
-- [x] DM-15b — Claim, quote, cap, duplicate and CTA gates
-- [x] DM-16a — Studio brand tokens for door-money
-- [x] DM-16b — English locale in the carousel summary, byte-compatible
-- [x] DM-17 — Admin approval write path
-- [x] DM-18a — Server-only admin loader
-- [x] DM-18b — Recommendations panel
-- [x] DM-18c — Actions panel
-- [x] DM-18d — Knowledge panel, tab wiring and e2e
-- [x] DM-19a — Thursday gate and the rotating agenda wheel
-- [x] DM-19b — Action-packet contract and the BOOKER call
-- [x] DM-19c — Playbook store and the action check-off route
-- [x] DM-20a — Owner results: contract, route, store
-- [x] DM-20b — Performance weights with floors
-- [x] DM-21a — GoVIRAL spine: topicSet and trend boosts
-- [x] DM-21b — GoVIRAL spine: transitions and the Design-Lab-only test
-- [x] DM-22a — Documentation truth across the standing docs
-- [x] DM-22b — INBOX approvals and NEEDED owner items
-- [ ] DM-22c — Honest gaps, checkbox sweep, prompt deletion
+- [x] DM-00 — Phase 0 audit: read the contracts, verify every assumption — `aaca1d52`
+- [x] DM-01 — Write the founding decision record — `2052d140`
+- [x] DM-02a — Registry entry in config/ventures.json — `73a6fea6`
+- [x] DM-02b — Registry schema enums, fixtures and the action-completion evaluator — `91eb03f1`
+- [x] DM-03a — Register dm-desk and dm-growth in type and record schemas — `a3e6aa93`
+- [x] DM-03b — Meeting policy for both rooms (Thursday gate lives in code) — `758fcbef`
+- [x] DM-03c — cycle.yml dispatch choices and mode gates — `4763ffec`
+- [x] DM-03d — Vercel cron entries for 15:00 and 16:00 — `50611aaf`
+- [x] DM-04a — GHOST and BOOKER in registry, routing, controls and cast schema — `dd225901`
+- [x] DM-04b — Prompts for GHOST, BOOKER and the craft file — `7ea49c81`
+- [x] DM-04c — Model roles: GHOST, BOOK_INGEST, BOOK_STYLE — `d7273e0f`
+- [x] DM-05a — Scaffold, gitignore line, hue and labels — `189a62c7`
+- [x] DM-05b — KPI seeds for the quarter — `e8f27f97`
+- [x] DM-05c — Degradation-ladder position with its test — `4436fb84`
+- [x] DM-06a — book-kb-index contract and fixtures — `f769d475`
+- [x] DM-06b — style-profile contract and fixtures — `478de0b9`
+- [x] DM-06c — The excerpt-cap boundary test — `5bafef10`
+- [x] DM-07 — Deterministic scene-aware chunker — `4ea5623c`
+- [x] DM-08a — Annotation and fifteen-axis scoring pass — `53a66f15`
+- [x] DM-08b — Ingestion cursor and resumability — `fcf34cbb`
+- [x] DM-09 — Style profile via map-reduce — `5aa54aca`
+- [x] DM-10a — Guarded embeddings wrapper — `18b9426b`
+- [x] DM-10b — Budget-ledger kind for embeddings — `deedaa41`
+- [x] DM-11a — The book:ingest CLI with envelopes — `ab3aee9e`
+- [x] DM-11b — Public/private output split and manuscript-hash idempotency — `ba6b5c13`
+- [x] DM-12 — venture-recommendation evidence kind book-passage — `42b3b18c`
+- [x] DM-13 — Deterministic passage selection — `cc520cc5`
+- [x] DM-14a — Packet assembly and the private-store fetcher — `29996489`
+- [x] DM-14b — Desk runner, GHOST call and honest records — `33b68846`
+- [x] DM-15a — Voice lint and stop-slop gate — `7e4396c9`
+- [x] DM-15b — Claim, quote, cap, duplicate and CTA gates — `03b06fd2`
+- [x] DM-16a — Studio brand tokens for door-money — `7f62d1ab`
+- [x] DM-16b — English locale in the carousel summary, byte-compatible — `60e0072d`
+- [x] DM-17 — Admin approval write path — `2597caa1`
+- [x] DM-18a — Server-only admin loader — `e1915624`
+- [x] DM-18b — Recommendations panel — `e57dc2f0`
+- [x] DM-18c — Actions panel — `0b6dd269`
+- [x] DM-18d — Knowledge panel, tab wiring and e2e — `7342bf55`
+- [x] DM-19a — Thursday gate and the rotating agenda wheel — `173c787e`
+- [x] DM-19b — Action-packet contract and the BOOKER call — `fc58a7b5`
+- [x] DM-19c — Playbook store and the action check-off route — `53a3c3f0`
+- [x] DM-20a — Owner results: contract, route, store — `3948f9c0`
+- [x] DM-20b — Performance weights with floors — `bd87c92a`
+- [x] DM-21a — GoVIRAL spine: topicSet and trend boosts — `bdc19a3e`
+- [x] DM-21b — GoVIRAL spine: transitions and the Design-Lab-only test — `c21aaef9`
+- [x] DM-22a — Documentation truth across the standing docs — `e25ab3cd`
+- [x] DM-22b — INBOX approvals and NEEDED owner items — `1cf867e3`
+- [x] DM-22c — Honest gaps, checkbox sweep, prompt deletion — this final commit
 
 ## Honest gaps
+
+- The decision and all four owner approvals remain unsigned. No real manuscript has been
+  ingested, no real GHOST desk has run, and no owner result exists. Fixture proofs are synthetic
+  and are never represented as launch evidence.
+- The shipped private-store client is deliberately local. The owner still has to create the
+  private repository, clone it outside this public checkout and make that clone available through
+  `--private-root` for ingestion and `BOOK_PRIVATE_CLONE_PATH` for a live desk. The runtime does
+  not clone or synchronize the private repository, and the optional `BOOK_SOURCE_TOKEN` is not
+  consumed by a workflow. Scheduled cloud operation needs a separately reviewed private-checkout
+  step; copying source text into public state is never its fallback.
+- Newsletter research is one topic on the weekly agenda, but there is no subscriber store,
+  newsletter assembly, delivery provider or send path. A series planner that turns chapters into
+  a multi-week arc is also deferred; current selection remains one explainable daily choice with
+  cooldown and history.
+- `short-video-script` is a bounded draft format and BOOKER may prepare a synthetic script
+  template, but the phase-2 Reels/TikTok/Shorts workflow is not built: no shot-list assembler,
+  recording, upload, account connection or publishing path exists. The owner performs every
+  external action.
+- Fine-tuning is explicitly rejected, not silently deferred. Voice comes from the versioned style
+  profile, capped exemplars, bounded retrieval and deterministic lint. Reconsidering fine-tuning
+  would require a new cost/privacy design and owner decision.
+- The venture has no cleared public name, social account, credential, publisher, automated
+  analytics, ads or outreach sender. Manual posting after `DM-ACCOUNTS-003` is an owner workflow;
+  automated results remain forbidden by D9, and manual result writes stay closed until
+  `DM-RESULTS-004` is signed.
+
+## Owner handoff
+
+1. Countersign this decision without changing the `$30` / `$25` / `$1.00` ceilings or the
+   manuscript boundary.
+2. Resolve `BOOK-SOURCE-001`: create the private Git repository, clone it outside this checkout,
+   keep the manuscript at the gitignored local input or another explicit private path, and set
+   `BOOK_PRIVATE_CLONE_PATH` only to that outside clone. If `BOOK_SOURCE_TOKEN` is used, keep it
+   fine-grained and read-only; the owner uses it for checkout, not the site.
+3. Resolve `BOOK-INGEST-002`, then run
+   `pnpm book:ingest -- --manuscript <ignored-path> --private-root <private-clone>`. Inspect both
+   sides: complete source/chunks/vectors only in the private clone, and only capped derivatives in
+   public state. Resume the same hash after a budget stop; never restart merely to force output.
+4. Run the first live `dm-desk` locally with the private clone available, inspect the draft and its
+   evidence, and leave it unposted unless the owner separately completes the account decision.
+5. Resolve `DM-ACCOUNTS-003` only after name/handle clearance and create any chosen account
+   manually. Resolve `DM-RESULTS-004` only if manual per-post entry inside D9 is wanted. Neither
+   approval creates an account, sends outreach, connects analytics or opens autopublishing.
 
 ## What this does not touch
 
