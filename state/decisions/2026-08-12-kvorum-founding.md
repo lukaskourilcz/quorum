@@ -197,6 +197,11 @@ section and a receipt line, and a day with no usable cluster records an honest q
   monitor contract also require standing-topic continuity. Ranking therefore records and multiplies
   a neutral `1.0` factor, raised by `0.25` for each of at most two matched standing topics; it never
   overrides the 14-day repeat penalty or turns Štít discovery into corroborating evidence.
+- **Fixture receipt truth:** KV-12a needs the committed monitor day to traverse the same receipt,
+  clustering and ranking path as live data. `kvorum-monitor/1` therefore distinguishes an
+  unattempted `fixture` source result from `success` and `failed`; fixture receipts may retain their
+  committed rows but cannot claim an external attempt. Empty approval-gated receipts remain valid,
+  and a non-fixture receipt refuses fixture source rows.
 
 ## Implementation checklist
 
@@ -224,7 +229,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-10a — Deterministic entity/topic clustering
 - [x] KV-10b — Cluster ranking, novelty and continuation detection
 - [x] KV-11 — `venture-recommendation` contract with monitor-cluster evidence
-- [ ] KV-12a — Desk runner dispatch and the TRIBUN call
+- [x] KV-12a — Desk runner dispatch and the TRIBUN call
 - [ ] KV-12b — Honest meeting records for the desk
 - [ ] KV-13a — Gates: claim resolution and originality
 - [ ] KV-13b — Gates: banned content and register lint

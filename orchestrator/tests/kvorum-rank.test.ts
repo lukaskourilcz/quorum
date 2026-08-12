@@ -26,8 +26,8 @@ async function fixtureInput(): Promise<{
   history: KvorumPriorRecommendation[];
 }> {
   const [itemsRaw, historyRaw, lexiconRaw] = await Promise.all([
-    readFile(path.join(import.meta.dirname, "fixtures/kvorum-cluster-day.json"), "utf8"),
-    readFile(path.join(import.meta.dirname, "fixtures/kvorum-prior-recommendations.json"), "utf8"),
+    readFile(path.join(import.meta.dirname, "../fixtures/kvorum/monitor-day.json"), "utf8"),
+    readFile(path.join(import.meta.dirname, "../fixtures/kvorum/prior-recommendations.json"), "utf8"),
     readFile(path.join(repoRoot, "config/kvorum-entities.json"), "utf8")
   ]);
   const items = (JSON.parse(itemsRaw) as unknown[]).map((item) => KvorumMonitorItemSchema.parse(item));

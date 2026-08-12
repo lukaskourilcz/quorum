@@ -46,7 +46,8 @@
             "enum": [
               "success",
               "skipped",
-              "failed"
+              "failed",
+              "fixture"
             ]
           },
           "count": {

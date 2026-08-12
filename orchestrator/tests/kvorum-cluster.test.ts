@@ -19,7 +19,7 @@ const LABELS = {
 
 async function fixtureDay(): Promise<KvorumMonitorItem[]> {
   const raw = JSON.parse(await readFile(
-    path.join(import.meta.dirname, "fixtures/kvorum-cluster-day.json"),
+    path.join(import.meta.dirname, "../fixtures/kvorum/monitor-day.json"),
     "utf8"
   )) as unknown[];
   return raw.map((item) => KvorumMonitorItemSchema.parse(item));

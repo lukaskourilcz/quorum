@@ -40,6 +40,17 @@ export interface GuardedCallInput<T> {
   dry?: boolean;
 }
 
+export interface GuardedCallDeps {
+  /** Test seam at the provider boundary; reservation, ledger and cache logic still run unchanged. */
+  generate?: (request: {
+    provider: "openai" | "anthropic";
+    model: string;
+    system: string;
+    input: string;
+    maxOutputTokens: number;
+  }) => Promise<TextProviderResponse>;
+}
+
 /**
  * A provider response that was paid for but could not be parsed.
  *
@@ -76,7 +87,8 @@ export function unfenceModelJson(text: string): string {
 }
 
 export async function guardedJsonCall<T>(
-  request: GuardedCallInput<T>
+  request: GuardedCallInput<T>,
+  deps: GuardedCallDeps = {}
 ): Promise<{ value: T; cached: boolean; usd: number }> {
   assertAgentPacketPresentationBarrier({
     input: request.input,
@@ -117,7 +129,15 @@ export async function guardedJsonCall<T>(
   let truncation: ModelResponseTruncatedError | null = null;
   let response: TextProviderResponse;
   try {
-    response = request.provider === "openai"
+    response = deps.generate
+      ? await deps.generate({
+          provider: request.provider,
+          model: request.model,
+          system: request.system,
+          input: request.input,
+          maxOutputTokens: request.maxOutputTokens
+        })
+      : request.provider === "openai"
       ? await new OpenAiTextClient().generate({
           model: request.model,
           system: request.system,
@@ -155,7 +175,7 @@ export async function guardedJsonCall<T>(
   );
   if (!hasLedgerEntry(ledger.entries, request.cycleId, hash)) {
     const entry = BudgetLedgerEntrySchema.parse({
-      ts: new Date().toISOString(),
+      ts: request.budgetContext.now.toISOString(),
       cycleId: request.cycleId,
       requestHash: hash,
       phase: request.phase,

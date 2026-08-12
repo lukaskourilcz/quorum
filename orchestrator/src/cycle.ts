@@ -111,7 +111,7 @@ import { ScheduledPhaseSchema, type RunnablePhase, type Stage } from "./types.js
 import { findSlotRecord } from "./meetings/slot-record.js";
 import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
 import { runMarketingSharkCycle } from "./ventures/marketingshark/run.js";
-import { runKvorumScaffoldDryCycle } from "./ventures/kvorum/scaffold.js";
+import { runKvorumDesk } from "./ventures/kvorum/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
 import {
   recordClosedArticleSlot,
@@ -347,21 +347,33 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
   }
   if (options.phase === "kv-desk") {
-    if (options.dry) return runKvorumScaffoldDryCycle({ cycleId, now });
-    // The schedule gate keeps this path closed while the founding and budget-capacity records
-    // are pending. A manual live invocation is still refused here instead of falling through
-    // to a generic room or a provider call.
-    return {
-      cycleId,
-      phase: options.phase,
-      dry: false,
-      status: "paused",
-      decision: "PAUSED",
-      estimatedWorstCaseUsd: 0,
-      selectedAgents: [],
-      skippedAgents: ["TRIBUN", "HACEK", "AUDIT"],
-      artifacts: []
+    const stages = JSON.parse(await readFile(path.join(configRoot, "stages.json"), "utf8")) as { current: Stage };
+    const run = async (): Promise<CycleResult> => {
+      const result = await runKvorumDesk({
+        cycleId,
+        dry: options.dry,
+        now,
+        date: pragueClockParts(now).date,
+        stage: stages.current
+      });
+      const planned = result.status === "packages";
+      const paused = result.status === "paused";
+      return {
+        cycleId,
+        phase: options.phase,
+        dry: options.dry,
+        status: options.dry ? "dry_complete" : paused ? "paused" : "live_complete",
+        decision: paused ? "PAUSED" : planned ? "PLAN" : "NO_ACTION",
+        estimatedWorstCaseUsd: result.spendUsd,
+        selectedAgents: result.tribunRan ? ["TRIBUN"] : [],
+        skippedAgents: result.tribunRan ? ["HACEK", "AUDIT"] : ["TRIBUN", "HACEK", "AUDIT"],
+        artifacts: result.artifacts.map((artifact) => path.relative(
+          repoRoot,
+          path.join(options.dry ? path.join(repoRoot, "tmp/dry-run/state") : stateRoot, artifact)
+        ))
+      };
     };
+    return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
   }
   if (options.phase === "ms-daily") {
     const stages = JSON.parse(await readFile(path.join(configRoot, "stages.json"), "utf8")) as { current: Stage };

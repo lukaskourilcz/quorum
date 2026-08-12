@@ -43,7 +43,7 @@ export const KvorumMonitorSourceResultSchema = z.strictObject({
   sourceId: z.string().min(1).max(80),
   kind: z.enum(["apify", "feed"]),
   attempted: z.boolean(),
-  status: z.enum(["success", "skipped", "failed"]),
+  status: z.enum(["success", "skipped", "failed", "fixture"]),
   count: z.number().int().nonnegative(),
   reason: z.string().min(1).max(300).nullable()
 }).superRefine((result, context) => {
@@ -54,7 +54,10 @@ export const KvorumMonitorSourceResultSchema = z.strictObject({
     context.addIssue({ code: "custom", message: "A successful source must keep at least one item", path: ["count"] });
   }
   if (result.status !== "success" && !result.reason) {
-    context.addIssue({ code: "custom", message: "Skipped and failed sources require a reason", path: ["reason"] });
+    context.addIssue({ code: "custom", message: "Every non-success source requires a reason", path: ["reason"] });
+  }
+  if (result.status === "fixture" && (result.attempted || result.count === 0)) {
+    context.addIssue({ code: "custom", message: "Fixture sources are unattempted and must provide rows", path: ["status"] });
   }
 });
 
@@ -183,10 +186,13 @@ export const KvorumMonitorReceiptSchema = z.strictObject({
     context.addIssue({ code: "custom", message: "itemsKept must equal rawItems length", path: ["itemsKept"] });
   }
   if (receipt.fixtureOnly && (
-    receipt.rawItems.length > 0
-    || receipt.sourceResults.some((result) => result.attempted)
+    receipt.sourceResults.some((result) => result.attempted)
+    || receipt.sourceResults.some((result) => result.status === "success" || result.status === "failed")
   )) {
-    context.addIssue({ code: "custom", message: "Fixture-only receipts cannot claim external attempts or raw items", path: ["fixtureOnly"] });
+    context.addIssue({ code: "custom", message: "Fixture-only receipts cannot claim external attempts", path: ["fixtureOnly"] });
+  }
+  if (!receipt.fixtureOnly && receipt.sourceResults.some((result) => result.status === "fixture")) {
+    context.addIssue({ code: "custom", message: "External receipts cannot contain fixture source rows", path: ["sourceResults"] });
   }
   const sourceIds = new Set(receipt.sourceResults.map((result) => result.sourceId));
   for (const [index, item] of receipt.rawItems.entries()) {
