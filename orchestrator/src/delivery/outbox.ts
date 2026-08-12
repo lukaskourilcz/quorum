@@ -99,6 +99,43 @@ export async function oldestPendingDelivery(
   return null;
 }
 
+export interface EditionQueueEntry {
+  date: string;
+  packageHash: string;
+  editionStatus: EditionPackage["status"];
+  state: "pending" | "parked";
+  code?: string;
+}
+
+/**
+ * What is sitting in the outbox and why, without touching any of it.
+ *
+ * `oldestPendingDelivery` supersedes stale notices as it walks, which is right for a queue about
+ * to ship but wrong for a health check: reading the queue must not change it.
+ */
+export async function editionQueue(root = stateRoot): Promise<EditionQueueEntry[]> {
+  const entries: EditionQueueEntry[] = [];
+  for (const file of await packageFiles(root)) {
+    const editionPackage = validateEditionForDelivery(JSON.parse(await readFile(file, "utf8")));
+    const receipt = await readJson<{ status?: unknown; packageHash?: unknown; code?: unknown } | null>(
+      root,
+      `edition/deliveries/${editionPackage.date}.json`,
+      null
+    );
+    const sameBytes = receipt?.packageHash === editionPackage.idempotencyKey;
+    if (receipt?.status === "delivered" && sameBytes) continue;
+    const parked = receipt?.status === "needs_reconciliation" && sameBytes && !isRetryableFailure(receipt.code);
+    entries.push({
+      date: editionPackage.date,
+      packageHash: editionPackage.idempotencyKey,
+      editionStatus: editionPackage.status,
+      state: parked ? "parked" : "pending",
+      ...(parked && typeof receipt?.code === "string" ? { code: receipt.code } : {})
+    });
+  }
+  return entries;
+}
+
 /**
  * End a "no edition" notice that is no longer true, in the one place that used to drop it.
  *

@@ -121,21 +121,55 @@ const RETRYABLE_DELIVERY_CODES = new Set(["unreachable", "push_rejected"]);
  */
 export type MmaDeliveryState = "pending" | "delivered" | "parked";
 
-export async function deliveryState(
+async function deliveryReceipt(
   root: string,
   kind: MmaDeliveryKind,
   packageHash: string
-): Promise<MmaDeliveryState> {
-  const receipt = await readJson<{ status?: unknown; code?: unknown } | null>(
-    root,
-    receiptPath(kind, packageHash),
-    null
-  );
+): Promise<{ status?: unknown; code?: unknown } | null> {
+  return readJson<{ status?: unknown; code?: unknown } | null>(root, receiptPath(kind, packageHash), null);
+}
+
+function stateOfReceipt(receipt: { status?: unknown; code?: unknown } | null): MmaDeliveryState {
   if (receipt?.status === "delivered") return "delivered";
   if (receipt?.status !== "needs_reconciliation") return "pending";
   return typeof receipt.code === "string" && RETRYABLE_DELIVERY_CODES.has(receipt.code)
     ? "pending"
     : "parked";
+}
+
+export async function deliveryState(
+  root: string,
+  kind: MmaDeliveryKind,
+  packageHash: string
+): Promise<MmaDeliveryState> {
+  return stateOfReceipt(await deliveryReceipt(root, kind, packageHash));
+}
+
+export interface MmaQueueEntry {
+  packageHash: string;
+  label: string;
+  publishAt: string;
+  state: MmaDeliveryState;
+  code?: string;
+}
+
+/** Every published article package with the delivery state of its exact bytes, oldest first. */
+export async function articleQueue(root = stateRoot): Promise<MmaQueueEntry[]> {
+  const articles = (await loadArticlePackages(root))
+    .filter((article) => article.status === "published")
+    .sort((left, right) => left.publishAt.localeCompare(right.publishAt) || left.slot.localeCompare(right.slot));
+  const entries: MmaQueueEntry[] = [];
+  for (const article of articles) {
+    const receipt = await deliveryReceipt(root, "article", article.packageHash);
+    entries.push({
+      packageHash: article.packageHash,
+      label: `${article.publishAt.slice(0, 10)} ${article.slot.toUpperCase()} ${article.slug}`,
+      publishAt: article.publishAt,
+      state: stateOfReceipt(receipt),
+      ...(typeof receipt?.code === "string" ? { code: receipt.code } : {})
+    });
+  }
+  return entries;
 }
 
 export async function nextArticleDelivery(root = stateRoot): Promise<PendingMmaDelivery | null> {
