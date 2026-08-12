@@ -106,7 +106,8 @@ describe("Door Money growth playbooks", () => {
         platform: "instagram",
         metrics: { views: index + 1 },
         outcome: `Synthetic manual result ${index + 1}.`,
-        capturedAt: new Date(Date.UTC(2026, 0, 2, 0, 0, index)).toISOString()
+        capturedAt: new Date(Date.UTC(2026, 0, 2, 0, 0, index)).toISOString(),
+        selectionDimensions: null
       })),
       playbooks: ["zeta", "alpha"].map((id) => ({
         ref: `playbook:${id}:r1`, id, channel: "Synthetic", title: `Synthetic ${id}`,
@@ -232,7 +233,7 @@ describe("Door Money growth playbooks", () => {
     expect(memory.ownerCompletions).toEqual([]);
     expect(memory.ownerResults).toEqual([expect.objectContaining({
       ref: "result:owner-result-past", outcome: "A past synthetic manual result.",
-      capturedAt: "2026-08-13T13:00:00.000Z"
+      capturedAt: "2026-08-13T13:00:00.000Z", selectionDimensions: null
     })]);
     expect(memory.droppedOwnerResults).toBe(3);
     expect(memory.omittedOwnerResults).toBe(0);

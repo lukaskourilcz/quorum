@@ -13,6 +13,10 @@ import {
   type ActionPacket
 } from "../../contracts/action-packet.js";
 import { MarketingPlanSchema } from "../../contracts/marketing-plan.js";
+import {
+  PerformanceWeightProposalSchema,
+  type PerformanceWeightProposal
+} from "../../contracts/performance-weights.js";
 import { DateSchema, EvidenceRefSchema } from "../../contracts/common.js";
 import { remainingScheduledCycles } from "../../cycle/ledger.js";
 import { guardedJsonCall, type GuardedCallInput } from "../../llm/call.js";
@@ -29,6 +33,11 @@ import {
   type DoorMoneyGrowthMemory,
   type DoorMoneyPlaybookProposal
 } from "./growth-playbooks.js";
+import {
+  loadDoorMoneyPerformanceWeights,
+  validateDoorMoneyPerformanceEvidence
+} from "./performance-weights.js";
+import type { SelectionPerformanceWeights } from "./select.js";
 
 const BookerRouteSchema = z.object({
   provider: z.literal("openai"),
@@ -47,7 +56,8 @@ const BookerResponseSchema = z.strictObject({
   summary: z.string().trim().min(1).max(1_000),
   noActionReason: z.string().trim().min(1).max(1_000).nullable(),
   tasks: z.array(FreshBookerTaskSchema).max(12),
-  playbookRevisions: z.array(DoorMoneyPlaybookProposalSchema).max(24)
+  playbookRevisions: z.array(DoorMoneyPlaybookProposalSchema).max(24),
+  performanceWeightProposal: PerformanceWeightProposalSchema.nullable()
 }).superRefine((response, context) => {
   const actions = response.outcome === "ACTIONS";
   if (actions !== (response.tasks.length > 0) || actions === (response.noActionReason !== null)) {
@@ -94,6 +104,10 @@ export interface DoorMoneyBookerContext {
   ownerResults: {
     state: "missing" | "present";
     items: DoorMoneyGrowthMemory["ownerResults"];
+  };
+  performanceWeights: {
+    state: "missing" | "invalid" | "present";
+    current: SelectionPerformanceWeights;
   };
   latestGoViralBrief: BookerGoViralBrief | null;
   droppedGoViralBriefs: number;
@@ -157,7 +171,10 @@ export async function loadDoorMoneyBookerContext(
 ): Promise<DoorMoneyBookerContext> {
   const throughDate = DateSchema.parse(asOfDate);
   const directory = path.join(root, "ventures", "goviral", "plans");
-  const memory = await loadDoorMoneyGrowthMemory(root, throughDate, asOfTime);
+  const [memory, performanceWeights] = await Promise.all([
+    loadDoorMoneyGrowthMemory(root, throughDate, asOfTime),
+    loadDoorMoneyPerformanceWeights(root)
+  ]);
   let names: string[];
   try {
     names = (await readdir(directory, { withFileTypes: true }))
@@ -170,6 +187,7 @@ export async function loadDoorMoneyBookerContext(
       playbooks: { state: memory.playbooks.length ? "present" : "missing", items: memory.playbooks },
       ownerCompletions: { state: memory.ownerCompletions.length ? "present" : "missing", items: memory.ownerCompletions },
       ownerResults: { state: memory.ownerResults.length ? "present" : "missing", items: memory.ownerResults },
+      performanceWeights: { state: performanceWeights.state, current: performanceWeights.weights },
       latestGoViralBrief: null,
       droppedGoViralBriefs: missing ? 0 : 1,
       droppedPlaybooks: memory.droppedPlaybooks,
@@ -204,6 +222,7 @@ export async function loadDoorMoneyBookerContext(
     playbooks: { state: memory.playbooks.length ? "present" : "missing", items: memory.playbooks },
     ownerCompletions: { state: memory.ownerCompletions.length ? "present" : "missing", items: memory.ownerCompletions },
     ownerResults: { state: memory.ownerResults.length ? "present" : "missing", items: memory.ownerResults },
+    performanceWeights: { state: performanceWeights.state, current: performanceWeights.weights },
     latestGoViralBrief,
     droppedGoViralBriefs,
     droppedPlaybooks: memory.droppedPlaybooks,
@@ -229,7 +248,7 @@ async function routeAndPrompt(): Promise<{
   const models = JSON.parse(modelsRaw) as { roles?: Record<string, unknown> };
   return {
     route: BookerRouteSchema.parse(models.roles?.OPENAI_SPECIALIST),
-    system: `${booker.trim()}\n\nReturn one JSON object with exactly outcome, summary, noActionReason, tasks and playbookRevisions. Every task must match action-packet/1, include at least one prepared template and return completion:null. A task may cite only an allowedEvidenceRef; do not invent a citation. Every playbook revision must cite at least one availableLearningRef, and each such ref must resolve to a recorded completion or owner result in this packet. NO_ACTION must carry a specific reason and an empty tasks array.`
+    system: `${booker.trim()}\n\nReturn one JSON object with exactly outcome, summary, noActionReason, tasks, playbookRevisions and performanceWeightProposal. Every task must match action-packet/1, include at least one prepared template and return completion:null. A task may cite only an allowedEvidenceRef; do not invent a citation. Every playbook revision must cite at least one availableLearningRef, and each such ref must resolve to a recorded completion or owner result in this packet. A performanceWeightProposal is optional, must cite canonical owner result ids from ownerResults, and may change only dimensions recorded on those cited results. NO_ACTION must carry a specific reason and an empty tasks array.`
   };
 }
 
@@ -270,6 +289,7 @@ export async function callDoorMoneyBooker(input: {
 }): Promise<{
   packet: ActionPacket;
   playbookRevisions: DoorMoneyPlaybookProposal[];
+  performanceWeightProposal: PerformanceWeightProposal | null;
   usd: number;
   context: DoorMoneyBookerContext;
 }> {
@@ -287,6 +307,7 @@ export async function callDoorMoneyBooker(input: {
     playbooks: context.playbooks,
     ownerCompletions: context.ownerCompletions,
     ownerResults: context.ownerResults,
+    performanceWeights: context.performanceWeights,
     latestGoViralBrief: context.latestGoViralBrief,
     droppedGoViralBriefs: context.droppedGoViralBriefs,
     droppedPlaybooks: context.droppedPlaybooks,
@@ -342,6 +363,9 @@ export async function callDoorMoneyBooker(input: {
       if (parsed.playbookRevisions.some((revision) => revision.evidenceRefs.some((reference) => !learning.has(reference)))) {
         throw new Error("BOOKER cited a playbook completion or result that was not recorded in its bounded context");
       }
+      if (parsed.performanceWeightProposal) {
+        validateDoorMoneyPerformanceEvidence(parsed.performanceWeightProposal, context.ownerResults.items);
+      }
       return parsed;
     }
   });
@@ -368,6 +392,7 @@ export async function callDoorMoneyBooker(input: {
       updatedAt: generatedAt
     }),
     playbookRevisions: response.value.playbookRevisions,
+    performanceWeightProposal: response.value.performanceWeightProposal,
     usd: response.usd,
     context
   };

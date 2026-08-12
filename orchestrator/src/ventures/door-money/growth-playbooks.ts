@@ -11,6 +11,7 @@ import {
 } from "../../contracts/door-money-playbook.js";
 import { OwnerResultEntrySchema } from "../../contracts/owner-result-entry.js";
 import { atomicWriteJson } from "../../state.js";
+import { loadDoorMoneyResultDimensions, type DoorMoneyResultDimensions } from "./performance-weights.js";
 
 const SlugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(160);
 export const DoorMoneyPlaybookProposalSchema = z.strictObject({
@@ -57,6 +58,7 @@ export interface DoorMoneyGrowthMemory {
     metrics: Record<string, number>;
     outcome: string;
     capturedAt: string;
+    selectionDimensions: DoorMoneyResultDimensions | null;
   }>;
   droppedPlaybooks: number;
   droppedActionPackets: number;
@@ -210,7 +212,8 @@ export async function loadDoorMoneyGrowthMemory(
         platform: result.platform,
         metrics: result.metrics,
         outcome: result.outcome,
-        capturedAt: new Date(result.capturedAt).toISOString()
+        capturedAt: new Date(result.capturedAt).toISOString(),
+        selectionDimensions: await loadDoorMoneyResultDimensions(root, result)
       });
     } catch {
       memory.droppedOwnerResults += 1;

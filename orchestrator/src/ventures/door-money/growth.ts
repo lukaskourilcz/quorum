@@ -6,6 +6,7 @@ import {
   type ReserveContext
 } from "../../budget.js";
 import type { ActionPacket } from "../../contracts/action-packet.js";
+import type { PerformanceWeightProposal } from "../../contracts/performance-weights.js";
 import { MeetingRecordSchema } from "../../contracts/meeting-record.js";
 import type { CycleResult } from "../../cycle/types.js";
 import { ModelOutputParseError } from "../../llm/call.js";
@@ -34,6 +35,10 @@ import {
   prepareDoorMoneyGrowthPlaybooks,
   preserveDoorMoneyActionCompletions
 } from "./growth-playbooks.js";
+import {
+  commitDoorMoneyPerformanceWeights,
+  prepareDoorMoneyPerformanceWeights
+} from "./performance-weights.js";
 
 export type { BookerCall, BookerResponse } from "./growth-booker.js";
 
@@ -136,6 +141,8 @@ export async function runDoorMoneyGrowthCycle(input: {
   let actionPacket: ActionPacket | null = null;
   let actionPacketPath: string | null = null;
   let playbookPaths: string[] = [];
+  let performanceWeightPath: string | null = null;
+  let performanceWeightProposal: PerformanceWeightProposal | null = null;
   let spendUsd = 0;
   let bookerParticipated = false;
   let roomStatus: "PLAN" | "NO_ACTION" | "PAUSED" | "FAILED" = due ? "NO_ACTION" : input.dry ? "NO_ACTION" : "PAUSED";
@@ -166,8 +173,22 @@ export async function runDoorMoneyGrowthCycle(input: {
         proposals: called.playbookRevisions,
         availableLearningRefs: new Set(called.context.availableLearningRefs)
       });
+      const performanceWeightPlan = called.performanceWeightProposal
+        ? await prepareDoorMoneyPerformanceWeights({
+            root,
+            cycleId: input.cycleId,
+            now: input.now,
+            proposal: called.performanceWeightProposal,
+            availableResults: called.context.ownerResults.items
+          })
+        : null;
       await commitDoorMoneyGrowthPlaybookPlan(root, playbookPlan);
+      if (performanceWeightPlan) {
+        await commitDoorMoneyPerformanceWeights(root, performanceWeightPlan);
+        performanceWeightPath = performanceWeightPlan.relative;
+      }
       await atomicWriteJson(root, nextPacketPath, nextPacket);
+      performanceWeightProposal = called.performanceWeightProposal;
       playbookPaths = playbookPlan.paths;
       actionPacket = nextPacket;
       actionPacketPath = nextPacketPath;
@@ -225,7 +246,11 @@ export async function runDoorMoneyGrowthCycle(input: {
       agent: "BOOKER",
       summary: `${task.title}: ${task.why}`.slice(0, 600),
       evidenceRefs: task.evidenceRefs
-    })),
+    })).concat(performanceWeightProposal ? [{
+      agent: "BOOKER" as const,
+      summary: `Performance weights: ${performanceWeightProposal.rationale}`.slice(0, 600),
+      evidenceRefs: performanceWeightProposal.evidenceResultIds.map((id) => `result:${id}`)
+    }] : []),
     voteMatrix: due
       ? meeting.cast.filter((voter) => voter !== "BOOKER").map((voter) => ({
           voter,
@@ -287,7 +312,7 @@ export async function runDoorMoneyGrowthCycle(input: {
     estimatedWorstCaseUsd: estimatedCycleUsd,
     selectedAgents: participantReasons.filter(({ participated }) => participated).map(({ agent }) => agent),
     skippedAgents: participantReasons.filter(({ participated }) => !participated).map(({ agent }) => agent),
-    artifacts: [meetingPath, decisionPath, scorecardPath, calendarPath, actionPacketPath, ...playbookPaths]
+    artifacts: [meetingPath, decisionPath, scorecardPath, calendarPath, actionPacketPath, performanceWeightPath, ...playbookPaths]
       .filter((relative): relative is string => relative !== null)
       .map((relative) => path.relative(repoRoot, path.join(root, relative))),
     agenda,
