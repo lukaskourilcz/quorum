@@ -159,7 +159,7 @@ costs and no treasury action in this decision.
 - [x] DM-05c — Degradation-ladder position with its test
 - [x] DM-06a — book-kb-index contract and fixtures
 - [x] DM-06b — style-profile contract and fixtures
-- [ ] DM-06c — The excerpt-cap boundary test
+- [x] DM-06c — The excerpt-cap boundary test
 - [ ] DM-07 — Deterministic scene-aware chunker
 - [ ] DM-08a — Annotation and fifteen-axis scoring pass
 - [ ] DM-08b — Ingestion cursor and resumability
