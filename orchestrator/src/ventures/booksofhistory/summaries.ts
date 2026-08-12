@@ -20,15 +20,15 @@ export interface StoredBhCarouselSummaries {
   en: StoredBhCarouselSummary;
 }
 
-function summarySlug(recommendationId: string, locale: CarouselSummaryLocale): string {
-  return `${recommendationId.replace(/^rec-/u, "")}-${locale}`;
+function summarySlug(recommendationId: string): string {
+  return recommendationId.replace(/^rec-/u, "");
 }
 
 export function bhCarouselSummaryPath(summary: CarouselSummary): string {
   if (summary.venture !== "booksofhistory") {
     throw new Error("BOOKSOFHISTORY summary storage accepts only its own venture records");
   }
-  return `ventures/carousel-studio/summaries/booksofhistory/${summary.date}-${summary.slug}.json`;
+  return `ventures/carousel-studio/summaries/booksofhistory/${summary.date}-${summary.slug}-${summary.locale}.json`;
 }
 
 function buildOneSummary(
@@ -39,7 +39,7 @@ function buildOneSummary(
   const summary = buildCarouselSummary({
     venture: "booksofhistory",
     locale,
-    slug: summarySlug(recommendation.recommendationId, locale),
+    slug: summarySlug(recommendation.recommendationId),
     date: recommendation.createdAt.slice(0, 10),
     title: feature.headline,
     dek: feature.caption,

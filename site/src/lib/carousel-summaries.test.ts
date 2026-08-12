@@ -22,7 +22,7 @@ describe("the Design Lab summary rail", () => {
     const summaries = (["cs", "en"] as const).map((locale) => buildCarouselSummary({
       venture: "booksofhistory",
       locale,
-      slug: `serial-to-book-${locale}`,
+      slug: "serial-to-book",
       date: "2026-08-14",
       title: locale === "cs" ? "Příběh vydání knihy" : "The book's publication story",
       dek: locale === "cs" ? "Doložený příběh vydání." : "A sourced publication story.",
@@ -34,7 +34,7 @@ describe("the Design Lab summary rail", () => {
     }));
     for (const summary of summaries) {
       await writeFile(
-        path.join(directory, `${summary.date}-${summary.slug}.json`),
+        path.join(directory, `${summary.date}-${summary.slug}-${summary.locale}.json`),
         `${JSON.stringify(summary, null, 2)}\n`
       );
     }
@@ -42,6 +42,7 @@ describe("the Design Lab summary rail", () => {
     const rail = await readStudioArticles(root);
     expect(rail).toHaveLength(2);
     expect(rail.map(({ summary }) => summary.locale).sort()).toEqual(["cs", "en"]);
+    expect(new Set(rail.map(({ summary }) => summary.slug))).toEqual(new Set(["serial-to-book"]));
     expect(new Set(rail.map(({ id }) => id)).size).toBe(2);
     expect(rail.every(({ venture, origin }) => venture === "booksofhistory" && origin === "recorded")).toBe(true);
   });

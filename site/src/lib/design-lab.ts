@@ -148,7 +148,13 @@ export async function readDesignLab(limit = 40): Promise<LabArticle[]> {
   const lab: LabArticle[] = [];
 
   for (const article of articles.slice(0, limit)) {
-    const { venture, slug, date } = { venture: article.venture, slug: article.summary.slug, date: article.summary.date };
+    const venture = article.venture;
+    const date = article.summary.date;
+    // Summary records share the feature slug by design. The locale-qualified Studio address
+    // keeps recipes, edits, previews and exports from treating the twins as one deck.
+    const slug = venture === "booksofhistory"
+      ? `${article.summary.slug}-${article.summary.locale}`
+      : article.summary.slug;
     if (!histories.has(venture)) histories.set(venture, await recipeHistory(venture));
     const edits = slideTextFor(slideOverrides, venture, slug, date);
     const slides: LabSlide[] = deckFor(article).map((text, index) => {

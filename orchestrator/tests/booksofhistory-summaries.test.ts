@@ -36,6 +36,7 @@ describe("BOOKSOFHISTORY twin Studio summaries", () => {
 
       expect(first.cs.path).toMatch(/summaries\/booksofhistory\/.*-cs\.json$/u);
       expect(first.en.path).toMatch(/summaries\/booksofhistory\/.*-en\.json$/u);
+      expect(first.cs.summary.slug).toBe(first.en.summary.slug);
       expect(first.cs.summary).toMatchObject({ venture: "booksofhistory", locale: "cs", hasHero: false });
       expect(first.en.summary).toMatchObject({ venture: "booksofhistory", locale: "en", hasHero: false });
       expect(first.cs.summary.headline).not.toBe(first.en.summary.headline);
