@@ -177,17 +177,18 @@ Judgement calls. Nothing is blocked on code for any of these.
   source: D9 and `METRICS_INGESTION_ENABLED=false` stay in force, no platform is read,
   and absent numbers remain unavailable. [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Read the four new venture designs and commission the builds** — the designs are
-  `docs/KVORUM-VENTURE-DESIGN.md` (Czech politics), `docs/DOOR-MONEY-VENTURE-DESIGN.md`
-  (Rapovej deník marketing), `docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` (book-history
-  social engine) and `docs/TEHDEJSI-SVET-VENTURE-DESIGN.md` (adoption of the existing
-  Tehdejší svět product); the matching implementation prompts sit beside them
-  (`*-CODEX-BUILD-PROMPT.md`, and `tehdejsi-svet-venture-implementation.md` for the
-  adoption). Hand each prompt to its own implementation session; whichever runs first
+- [ ] **Read the three remaining venture designs and commission their builds** — the
+  remaining designs are `docs/KVORUM-VENTURE-DESIGN.md` (Czech politics),
+  `docs/DOOR-MONEY-VENTURE-DESIGN.md` (Rapovej deník marketing) and
+  `docs/TEHDEJSI-SVET-VENTURE-DESIGN.md` (adoption of the existing Tehdejší svět
+  product); their implementation prompts sit beside them. Hand each prompt to its own
+  implementation session; whichever runs first
   creates the shared recommendation contract, the research provider and the
   carousel-summary locale field, and every prompt's Phase 0 checks for the others'
   artifacts before creating its own. All four carry the standing GoVIRAL + Design Lab
-  spine (`docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` §10). Each build ends with a founding
+  spine (`docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` §10). BOOKSOFHISTORY is implemented;
+  its one-use build prompt was deleted and its founding decision now waits for your
+  countersignature and four approvals. Each remaining build ends with a founding
   decision waiting for your countersignature and its approval items in
   `state/INBOX.md`; nothing runs live before you sign.
   [imp:4] [owner:me] [time:75m] [kind:decision]
@@ -210,8 +211,9 @@ Judgement calls. Nothing is blocked on code for any of these.
 
 - [ ] **Answer the BOOKSOFHISTORY launch questions** — lane priority (both at once, or
   English first with Czech two weeks behind), the starting cycle length (3 days or 4),
-  and any must-include books or hard exclusions before the 200-entry seed library is
-  authored. All three are listed in the design's "Open questions".
+  and any must-include books or hard exclusions to append or correct in the authored
+  200-entry seed library before its first live cycle. All three are listed in the
+  design's "Open questions".
   [imp:2] [owner:me] [time:15m] [kind:decision]
 
 - [ ] **Answer the Door Money manuscript questions** — confirm an English manuscript file
@@ -398,7 +400,7 @@ Judgement calls. Nothing is blocked on code for any of these.
   depend on them; replace the files at the same names and nothing else changes.
   [imp:2] [owner:me] [time:2h] [kind:content]
 
-- [ ] **Portraits for the roles that have none** — 27 of 42 registered roles have an approved
+- [ ] **Portraits for the roles that have none** — 27 of 44 registered roles have an approved
   portrait. The rest fall back to an initials tile on the team panel and to the anonymous
   silhouette in the workspace player, which is honest but plain.
   [imp:1] [owner:me] [time:1h] [kind:content]
@@ -466,6 +468,10 @@ Roughly a month out. Nothing here is needed until a channel actually opens, and 
   | DNESKAi | `CAUGHT_UP_THREADS_ACCESS_TOKEN`, `CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN` | `CAUGHT_UP_THREADS_USER_ID`, `CAUGHT_UP_INSTAGRAM_USER_ID` |
   | MMA Files | `MMA_FILES_THREADS_ACCESS_TOKEN`, `MMA_FILES_INSTAGRAM_ACCESS_TOKEN` | `MMA_FILES_THREADS_USER_ID`, `MMA_FILES_INSTAGRAM_USER_ID` |
   | Titty Tuesdays | `TITTY_TUESDAYS_THREADS_ACCESS_TOKEN`, `TITTY_TUESDAYS_INSTAGRAM_ACCESS_TOKEN` | `TITTY_TUESDAYS_THREADS_USER_ID`, `TITTY_TUESDAYS_INSTAGRAM_USER_ID` |
+
+  BOOKSOFHISTORY is intentionally absent from this credential table. Its owner creates
+  any approved Czech and English profiles, reviews the drafts and posts by hand; no
+  BOOKSOFHISTORY platform credential enters this repository.
 
   Decision `social-2026-08a` keeps all of this closed until each magazine has rendered ten articles.
   `state/social/activation.json` reads DNESKAi 2/7, MMA Files 3/10 and Titty Tuesdays 0/4 — the
@@ -711,13 +717,16 @@ confirmed present on 2026-08-02; the two delivery App secrets were already worki
 
 ### The day, and what it costs
 
-Thirteen slots: 05:00 edition production with a 09:00 retry, 06:00 board, 07:00 marketingShark
+Fourteen slots: 05:00 edition production with a 09:00 retry, 06:00 board, 07:00 marketingShark
 carousel room, 08:00 fight data check, 09:00 story meeting, 10:00 article production, 11:00
-marketing, 13:00 GoVIRAL trend room (Mondays only — the other six days cost $0), 14:00 checkpoint,
+marketing, 12:00 BOOKSOFHISTORY desk, 13:00 GoVIRAL trend room (Mondays only — the other six
+days cost $0), 14:00 checkpoint,
 17:00 DNESKAi product room, 19:00 model check, 20:00 desk review, 22:00 checkpoint. No full day
 under this clock has been measured: 6 August came to $0.363 across six slots and 4 August to $0.412
 across seven, both against a $1.00 daily pace and the $30 all-in monthly cap from `budget-2026-08e`.
-marketingShark adds about 6c to a day.
+marketingShark adds about 6c to a day. BOOKSOFHISTORY advances one phase per working
+day; research remains capped at `$0.10` per call, `$0.50` per cycle and `$5.00` per
+month, while a shelf or stretched day may cost `$0`.
 
 ---
 

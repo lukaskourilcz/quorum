@@ -137,9 +137,55 @@ post anything.
 - [x] **BH-20c** — Used-flag backfill and the research-efficiency KPI
 - [x] **BH-21a** — Documentation truth across the standing docs
 - [x] **BH-21b** — INBOX approvals and NEEDED owner items
-- [ ] **BH-21c** — Honest gaps, checkbox sweep and build-prompt deletion
+- [x] **BH-21c** — Honest gaps, checkbox sweep and build-prompt deletion
 
 ## Honest gaps
+
+- **Short-form video is not a hidden output.** TikTok/Reels scripts are deferred.
+  There is no video contract, platform-specific safe-area model, account, credential,
+  publisher or approval counter. Reusing a dossier later would still require a new
+  owner decision and format-specific truth and copyright gates.
+- **The bilingual boundary is real.** Only the `cs` and `en` lanes exist in schemas,
+  prompts, recommendations, Design Lab summaries, admin actions and result records.
+  A third language may reuse a dossier in a future phase, but its native writing and
+  review path is not assumed to be free and has not been built speculatively.
+- **Carousels are the only feature format.** Derivative quote cards, Threads posts and
+  thread-like text packages are deferred. The current writer cannot emit them, and the
+  300-character attributed-quote ceiling does not become permission to add them.
+- **Anniversaries route attention; they do not create campaigns.** The seed scorer and
+  admin radar can surface a dated anniversary and GoVIRAL can contribute a free trend
+  signal. Anniversary seasons, campaign calendars and automatic campaign production
+  are deferred and have no state or scheduler.
+- **There is one concrete research adapter.** The provider contract is reusable, but
+  only Anthropic web search is implemented. No OpenAI search path or automatic provider
+  fallback exists; an unavailable or refused Anthropic path therefore remains no new
+  research rather than silently changing providers or budgets.
+- **Live evidence is intentionally absent.** The founding decision and all four
+  `BH-*` approvals remain pending, no profile lane has been created or touched, no
+  recommendation has been posted, and no real provider call or owner result has been
+  recorded. The dry and fixture proofs establish behavior, not audience performance.
+  Base category, era and geography weights stay unchanged until owner-entered result
+  ids can support a bounded proposal.
+
+## Closeout and owner handoff
+
+The implementation build prompt was executed once and deleted in BH-21c. This founding
+decision and `docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` are the lasting product and
+implementation record; deleting the prompt grants no new authority.
+
+The owner path is deliberately manual and ordered:
+
+1. Review this record and either countersign **Found BOOKSOFHISTORY** or decline it.
+2. Resolve `BH-RESEARCH-001`, `BH-SEED-002`, `BH-ACCOUNTS-003` and
+   `BH-RESULTS-004` in `state/INBOX.md`; an unchecked item never authorizes its path.
+3. If the accounts item is approved, the owner clears and creates the Czech and
+   English lanes and uses the disclosed bios. No credential belongs in this repository.
+4. After the applicable gates are visibly open, trigger the first live `bh-desk`
+   cycle and confirm it reports `dry: false`, preserves the `$0.10 / $0.50 / $5.00`
+   research guards and leaves only recommendation drafts. A gate pause is a correct
+   `$0` outcome; do not rerun paid work to force content.
+5. Approve, render and post any acceptable lane manually. Only after
+   `BH-RESULTS-004` is signed may the owner record its URL and per-lane result.
 
 ## Adapted during implementation
 
@@ -190,6 +236,10 @@ post anything.
   the shared `owner-result-entry/1` contract and its write endpoint to BH-20a. BH-17 can
   attach an existing per-lane result reference only after `BH-RESULTS-004` is signed;
   BH-20a remains the sole owner of creating and validating the actual result entry.
+- **The executed prompt is not standing policy.** BH-21c deletes
+  `docs/BOOKSOFHISTORY-CODEX-BUILD-PROMPT.md` as its own definition of done required.
+  This decision and the design document retain the scope, boundaries, approvals and
+  honest gaps; prompt deletion changes no gate.
 
 ## What this does not touch
 
