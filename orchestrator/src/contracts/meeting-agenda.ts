@@ -26,6 +26,8 @@ import {
 export const AgendaPhaseSchema = z.enum([
   "tt-marketing",
   "gv-brief",
+  "dm-desk",
+  "dm-growth",
   "mma-intake",
   "mma-analysis",
   "mag-editorial",
