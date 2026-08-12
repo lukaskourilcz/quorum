@@ -112,4 +112,5 @@ export const KvorumSourceRegistrySchema = z.object({
 });
 
 export type KvorumActor = z.infer<typeof KvorumActorSchema>;
+export type KvorumFeed = z.infer<typeof KvorumFeedSchema>;
 export type KvorumSourceRegistry = z.infer<typeof KvorumSourceRegistrySchema>;

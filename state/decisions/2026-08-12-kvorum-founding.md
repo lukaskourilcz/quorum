@@ -184,7 +184,9 @@ section and a receipt line, and a day with no usable cluster records an honest q
   INBOX approval. This founding record separately says external calls wait for both the founding
   and capacity-reallocation decisions. The shared guard therefore checks those countersignatures
   first, then applies the four requested layers; the current checkout remains fixture-only even if
-  a token is present or a KV approval line is checked in isolation.
+  a token is present or a KV approval line is checked in isolation. KV-09a applies the same two
+  authority checks plus `KV-SOURCES-002` to every free-feed read; verified and allowlisted is not
+  treated as approved.
 
 ## Implementation checklist
 
@@ -207,7 +209,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-07 — Entity lexicon config
 - [x] KV-08a — Venture Apify quota file and share cap
 - [x] KV-08b — Third-tenant extension of the Apify guard
-- [ ] KV-09a — Monitor fetch, normalize and the fixed-field row mapper
+- [x] KV-09a — Monitor fetch, normalize and the fixed-field row mapper
 - [ ] KV-09b — Monitor receipt contract and 30-day raw purge
 - [ ] KV-10a — Deterministic entity/topic clustering
 - [ ] KV-10b — Cluster ranking, novelty and continuation detection

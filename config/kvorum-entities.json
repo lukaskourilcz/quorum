@@ -332,7 +332,7 @@
       "id": "ceska-televize",
       "kind": "institution",
       "canonicalName": "Česká televize",
-      "aliases": ["ČT", "veřejnoprávní televize"],
+      "aliases": ["ČT", "České televize", "veřejnoprávní televize"],
       "weight": 4,
       "roles": [],
       "note": "České médium veřejné služby."
@@ -377,7 +377,7 @@
       "id": "ukraine-aid",
       "kind": "topic",
       "canonicalName": "Pomoc Ukrajině",
-      "aliases": ["podpora Ukrajiny", "muniční iniciativa", "ukrajinská pomoc"],
+      "aliases": ["podpora Ukrajiny", "pomoci Ukrajině", "muniční iniciativa", "ukrajinská pomoc"],
       "weight": 5,
       "roles": [],
       "note": "Stálé téma: česká vojenská, humanitární a finanční pomoc Ukrajině."
