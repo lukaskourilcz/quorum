@@ -10,6 +10,25 @@ export class DeliveryPackageError extends Error {
   }
 }
 
+/**
+ * Whether the whole body is one MDX expression instead of markdown.
+ *
+ * MDX reads a top-level `{...}` as an expression and renders its value as a single text node, so
+ * a body wrapped in one compiles to no headings, no links and no paragraphs — the markdown is
+ * printed rather than rendered. The desk started emitting `{` + backtick-template + `}` around
+ * whole articles on 8 August; every gate passed it, because it is valid MDX and a valid string,
+ * and the magazine published an unformatted wall of text with its own `##` and link syntax
+ * visible. Four days later a body carried an inline code span, whose backtick closed the template
+ * early, and the same wrapper failed the target build outright.
+ *
+ * Schema validity is not renderability. This is the cheap half of that check: the shape that
+ * swallows an entire article is refused at the boundary, in the producer, where a rejected package
+ * costs one edition instead of a published one nobody can read.
+ */
+export function isJsxExpressionBody(body: string): boolean {
+  return body.trimStart().startsWith("{");
+}
+
 export function validateEditionForDelivery(value: unknown): EditionPackage {
   const parsed = EditionPackageSchema.safeParse(value);
   if (!parsed.success) {
@@ -66,6 +85,11 @@ export function validateEditionForDelivery(value: unknown): EditionPackage {
   }
   if (editionPackage.hero && editionPackage.hero.path !== `public/illustrations/${editionPackage.date}.webp`) {
     errors.push("legacy hero path is outside the authorized date path");
+  }
+  for (const [locale, article] of localized) {
+    if (isJsxExpressionBody(article.body)) {
+      errors.push(`${locale} body is a JSX expression rather than markdown`);
+    }
   }
   try {
     for (const [locale, article] of localized) {

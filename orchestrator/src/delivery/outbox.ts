@@ -4,7 +4,7 @@ import type { EditionPackage } from "../contracts/edition-package.js";
 import { MeetingRecordSchema } from "../contracts/meeting-record.js";
 import { stateRoot } from "../paths.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText, resolveStatePath } from "../state.js";
-import { validateEditionForDelivery } from "./validate.js";
+import { DeliveryPackageError, validateEditionForDelivery } from "./validate.js";
 
 export type DeliveryFailureCode =
   | "schema_invalid"
@@ -17,6 +17,75 @@ export type DeliveryFailureCode =
 export interface PendingDelivery {
   packagePath: string;
   package: EditionPackage;
+}
+
+/**
+ * Failure codes a byte-identical retry can still clear.
+ *
+ * Everything else is a verdict on these exact bytes: the magazine refused them once and will
+ * refuse them the same way again. `unreachable` and `push_rejected` are the two that describe
+ * the road rather than the cargo.
+ */
+const RETRYABLE_FAILURE_CODES: ReadonlySet<string> = new Set<DeliveryFailureCode>([
+  "unreachable",
+  "push_rejected"
+]);
+
+function isRetryableFailure(code: unknown): boolean {
+  return typeof code === "string" && RETRYABLE_FAILURE_CODES.has(code);
+}
+
+/** `<date>-<idempotencyKey>.json`, which is the only handle on a package too broken to parse. */
+function identityFromFilename(file: string): { date: string; packageHash: string } | null {
+  const match = path.basename(file).match(/^(\d{4}-\d{2}-\d{2})-([a-f0-9]{64})\.json$/u);
+  return match ? { date: match[1]!, packageHash: match[2]! } : null;
+}
+
+/**
+ * Read one queued package, or record why it cannot be read and return null.
+ *
+ * `validateEditionForDelivery` throws, and this walk used to let it: one unreadable package made
+ * every later cycle throw while merely selecting, which wedges the queue behind it exactly as a
+ * refused package used to. A malformed item has to cost one item and never the run — so the
+ * package gets the same terminal receipt a refused one gets, the queue moves past it, and the
+ * daily health check counts it as parked.
+ */
+async function parseQueuedPackage(file: string): Promise<EditionPackage | { error: unknown }> {
+  try {
+    return validateEditionForDelivery(JSON.parse(await readFile(file, "utf8")));
+  } catch (error) {
+    return { error };
+  }
+}
+
+async function readQueuedPackage(root: string, file: string, now: Date): Promise<EditionPackage | null> {
+  const parsed = await parseQueuedPackage(file);
+  if (!("error" in parsed)) return parsed;
+  {
+    const error = parsed.error;
+    const identity = identityFromFilename(file);
+    if (!identity) return null;
+    const existing = await readJson<{ status?: unknown } | null>(
+      root,
+      `edition/deliveries/${identity.date}.json`,
+      null
+    );
+    if (!existing) {
+      await atomicWriteJson(root, `edition/deliveries/${identity.date}.json`, {
+        schemaVersion: 1,
+        date: identity.date,
+        packageHash: identity.packageHash,
+        status: "needs_reconciliation",
+        targetRepository: "lukaskourilcz/aifirst",
+        code: error instanceof DeliveryPackageError ? error.code : "schema_invalid",
+        detail: (error instanceof Error ? error.message : "package could not be read")
+          .replace(/\s+/g, " ").trim().slice(0, 500),
+        recordedAt: now.toISOString(),
+        tags: []
+      });
+    }
+    return null;
+  }
 }
 
 async function packageFiles(root: string): Promise<string[]> {
@@ -43,15 +112,27 @@ export async function oldestPendingDelivery(
   // edition behind it queued forever. One failed release jammed the venture: the next run
   // would ship the stale package and report success while the new edition waited.
   for (const file of await packageFiles(root)) {
-    const editionPackage = validateEditionForDelivery(JSON.parse(await readFile(file, "utf8")));
-    const receipt = await readJson<{ status?: unknown; packageHash?: unknown } | null>(
+    const editionPackage = await readQueuedPackage(root, file, new Date());
+    if (!editionPackage) continue;
+    const receipt = await readJson<{ status?: unknown; packageHash?: unknown; code?: unknown } | null>(
       root,
       `edition/deliveries/${editionPackage.date}.json`,
       null
     );
-    const alreadyShipped = receipt?.status === "delivered"
-      && receipt.packageHash === editionPackage.idempotencyKey;
+    const sameBytes = receipt?.packageHash === editionPackage.idempotencyKey;
+    const alreadyShipped = receipt?.status === "delivered" && sameBytes;
     if (alreadyShipped) continue;
+    // A package the magazine has already refused for a reason that retrying cannot change is
+    // parked rather than re-sent. Skipping only delivered dates was half the rule: a package
+    // that kept failing had no receipt to skip on, so it stayed at the head of an oldest-first
+    // queue and every edition behind it waited on a verdict that was never going to change.
+    //
+    // Parked is keyed to the exact bytes. A regenerated package for the same date is different
+    // bytes and gets its own attempt, which is how a reconciled edition ships without anybody
+    // having to clear a flag.
+    if (receipt?.status === "needs_reconciliation" && sameBytes && !isRetryableFailure(receipt.code)) {
+      continue;
+    }
     // A "no edition today" notice is only true on its own day. Left in an oldest-first queue
     // that ships one package per run, a stale one holds every real edition behind it and
     // would publish yesterday's notice as though it were today's. Today's still ships.
@@ -70,6 +151,52 @@ export async function oldestPendingDelivery(
     };
   }
   return null;
+}
+
+export interface EditionQueueEntry {
+  date: string;
+  packageHash: string;
+  editionStatus: EditionPackage["status"];
+  state: "pending" | "parked";
+  code?: string;
+}
+
+/**
+ * What is sitting in the outbox and why, without touching any of it.
+ *
+ * `oldestPendingDelivery` supersedes stale notices and records unreadable ones as it walks, which
+ * is right for a queue about to ship and wrong for a health check: reading the queue must not
+ * change it. So this parses without recording, and counts what it cannot read as parked.
+ */
+export async function editionQueue(root = stateRoot): Promise<EditionQueueEntry[]> {
+  const entries: EditionQueueEntry[] = [];
+  for (const file of await packageFiles(root)) {
+    const parsed = await parseQueuedPackage(file);
+    if ("error" in parsed) {
+      const identity = identityFromFilename(file);
+      if (identity) {
+        entries.push({ ...identity, editionStatus: "edition", state: "parked", code: "schema_invalid" });
+      }
+      continue;
+    }
+    const editionPackage = parsed;
+    const receipt = await readJson<{ status?: unknown; packageHash?: unknown; code?: unknown } | null>(
+      root,
+      `edition/deliveries/${editionPackage.date}.json`,
+      null
+    );
+    const sameBytes = receipt?.packageHash === editionPackage.idempotencyKey;
+    if (receipt?.status === "delivered" && sameBytes) continue;
+    const parked = receipt?.status === "needs_reconciliation" && sameBytes && !isRetryableFailure(receipt.code);
+    entries.push({
+      date: editionPackage.date,
+      packageHash: editionPackage.idempotencyKey,
+      editionStatus: editionPackage.status,
+      state: parked ? "parked" : "pending",
+      ...(parked && typeof receipt?.code === "string" ? { code: receipt.code } : {})
+    });
+  }
+  return entries;
 }
 
 /**
@@ -152,6 +279,39 @@ async function closeInboxItem(root: string, date: string, now: Date): Promise<bo
   return true;
 }
 
+/**
+ * Take the reconciliation flag off a day that went on to publish.
+ *
+ * The failure path marks the meeting NEEDS_RECONCILIATION, and nothing ever took it off: a date
+ * that failed at 03:00 and delivered on a later run stayed flagged for good, so the calendar
+ * showed an unresolved incident for a day the magazine actually published. That is the same
+ * mismatch as a room reporting success over a delivery that never landed, pointing the other way,
+ * and it is read by the same person looking at the same page.
+ *
+ * The original summary is gone — the failure path overwrote it — so this does not pretend to
+ * restore it. It states what is true now and that the day was late, which is the part a reader of
+ * the calendar needs.
+ */
+async function clearMeetingReconciliation(root: string, date: string, now: Date): Promise<boolean> {
+  const meetingPath = `meetings/${date}-cu-edition.json`;
+  const existing = await readJson<{ status?: unknown; decision?: { summary?: unknown } } | null>(
+    root,
+    meetingPath,
+    null
+  );
+  if (!existing || existing.status !== "NEEDS_RECONCILIATION") return false;
+  const meeting = MeetingRecordSchema.parse(existing);
+  await atomicWriteJson(root, meetingPath, {
+    ...meeting,
+    status: "HELD",
+    decision: {
+      ...meeting.decision,
+      summary: `This edition was delivered on a later run, on ${now.toISOString().slice(0, 10)}. It was held back at first; the delivery receipt for this date records what the magazine refused and when it accepted it.`
+    }
+  });
+  return true;
+}
+
 async function raiseInboxOnce(root: string, date: string, code: DeliveryFailureCode, detail: string) {
   const existing = await readText(root, "INBOX.md", "# INBOX\n");
   const marker = `CAUGHT-UP-DELIVERY-${date}`;
@@ -221,11 +381,13 @@ export async function recordDelivery(input: {
     );
     await rm(absolute);
     const closed = await closeInboxItem(root, editionPackage.date, now);
+    const reconciled = await clearMeetingReconciliation(root, editionPackage.date, now);
     return [
       receiptPath,
       `edition/archive/${editionPackage.date}-${editionPackage.idempotencyKey}.json`,
       input.packagePath,
-      ...(closed ? ["INBOX.md"] : [])
+      ...(closed ? ["INBOX.md"] : []),
+      ...(reconciled ? [`meetings/${editionPackage.date}-cu-edition.json`] : [])
     ];
   }
   const code = input.code ?? "push_rejected";
@@ -243,7 +405,23 @@ export async function recordDelivery(input: {
         summary: `${DELIVERY_FAILURE_SENTENCE[code]} The owner has the technical report.`
       }
     }),
+    // The failure used to leave no receipt at all, so the queue could not tell a package the
+    // magazine had already refused from one it had never seen. `tags: []` and the explicit
+    // status keep it out of every reader that counts published editions — each of those asks
+    // for `delivered` by name.
+    atomicWriteJson(root, receiptPath, {
+      schemaVersion: 1,
+      date: editionPackage.date,
+      packageHash: editionPackage.idempotencyKey,
+      status: "needs_reconciliation",
+      editionStatus: editionPackage.status,
+      targetRepository: "lukaskourilcz/aifirst",
+      code,
+      detail: detail.replace(/\s+/g, " ").trim().slice(0, 500),
+      recordedAt: now.toISOString(),
+      tags: []
+    }),
     raiseInboxOnce(root, editionPackage.date, code, detail)
   ]);
-  return [meetingPath, "INBOX.md"];
+  return [meetingPath, receiptPath, "INBOX.md"];
 }

@@ -817,6 +817,7 @@ export function DecisionReplay({
                 <div className="mt-7 grid gap-3">
                   <Button
                     className="w-full"
+                    disabled={!storageReady}
                     onClick={() => startReplay(true)}
                     variant="accent"
                   >
@@ -826,6 +827,7 @@ export function DecisionReplay({
                   {resumeMoment ? (
                     <Button
                       className="w-full border-[var(--iron)] bg-transparent text-[var(--paper)] hover:border-[var(--steel)] hover:bg-[var(--iron)]"
+                      disabled={!storageReady}
                       onClick={continueReplay}
                       variant="ghost"
                     >

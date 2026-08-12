@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-12",
+  "packageHash": "387e85565895f0ef3389fb4619f5a13eebb34c746302b4ce3a2229da861a9e10",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "60e7504b0d1a7587bb5bb0cc07b5d56874211097",
+  "deliveredAt": "2026-08-12T11:29:39.997Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-12-gemini-miliarda-uzivatel-reasoning-traces-openai-sdk",
+  "tags": [
+    "umela-inteligence",
+    "gemini",
+    "openai",
+    "kyberneticka-bezpecnost",
+    "vyvojar",
+    "hollywood"
+  ]
+}

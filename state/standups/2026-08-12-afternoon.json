@@ -1,46 +1,44 @@
 {
-  "schemaVersion": "meeting-record/2",
-  "cycleId": "20260812030047-cu-edition",
+  "schemaVersion": 1,
+  "cycleId": "20260812120341-afternoon",
   "date": "2026-08-12",
-  "phase": "cu-edition",
+  "phase": "afternoon",
+  "episode": {
+    "id": "EP-20260812-AFTERNOON",
+    "shift": "afternoon",
+    "title": "Afternoon build check",
+    "hours": "14:00–22:00",
+    "nextShift": "night",
+    "handoff": "Pass completed work, blockers and changed assumptions to the night shift."
+  },
   "fixture": false,
-  "status": "HELD",
+  "status": "NO_ACTION",
   "stage": "VALIDATION",
-  "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
+  "operatingBrief": "Afternoon shift reviewed its bounded objective and prepared the next handoff.",
   "participantReasons": [
     {
-      "agent": "HERALD",
-      "reason": "owns edition objective",
-      "participated": true
-    },
-    {
-      "agent": "STET",
-      "reason": "required by edition-room preset",
-      "participated": true
-    },
-    {
-      "agent": "HACEK",
-      "reason": "required by edition-room preset",
-      "participated": true
-    },
-    {
       "agent": "VIZE",
-      "reason": "not relevant to this bounded room",
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
       "participated": false
     },
     {
       "agent": "FORGE",
-      "reason": "not relevant to this bounded room",
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
       "participated": false
     },
     {
       "agent": "PULSE",
-      "reason": "not relevant to this bounded room",
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
       "participated": false
     },
     {
       "agent": "AUDIT",
-      "reason": "not relevant to this bounded room",
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
+      "participated": false
+    },
+    {
+      "agent": "LEDGER",
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
       "participated": false
     },
     {
@@ -75,12 +73,12 @@
     },
     {
       "agent": "THREADS",
-      "reason": "switched off for caught-up",
+      "reason": "not relevant to this bounded room",
       "participated": false
     },
     {
       "agent": "INSTAGRAM",
-      "reason": "switched off for caught-up",
+      "reason": "not relevant to this bounded room",
       "participated": false
     },
     {
@@ -89,7 +87,17 @@
       "participated": false
     },
     {
-      "agent": "LEDGER",
+      "agent": "HERALD",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STET",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "HACEK",
       "reason": "not relevant to this bounded room",
       "participated": false
     },
@@ -220,95 +228,47 @@
     }
   ],
   "ledger": {
-    "estimatedCycleUsd": 0.58,
-    "actualCycleUsd": 0.1649685,
-    "monthAllInUsd": 3.9718686,
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 4.2342546,
     "monthCapUsd": 30
   },
   "decision": {
-    "outcome": "EDITION",
-    "summary": "This edition was delivered on a later run, on 2026-08-12. It was held back at first; the delivery receipt for this date records what the magazine refused and when it accepted it.",
-    "evidenceRefs": [
-      "source:tensorfeed",
-      "source:github-ai-releases",
-      "source:simonw",
-      "source:variety",
-      "source:spaceflight-news"
-    ]
+    "outcome": "NO_ACTION",
+    "summary": "No externally consequential action was approved.",
+    "evidenceRefs": []
   },
-  "proposals": [
-    {
-      "agent": "HERALD",
-      "summary": "Commission the story that cleared the source, copy and quality gates.",
-      "evidenceRefs": [
-        "source:tensorfeed",
-        "source:github-ai-releases",
-        "source:simonw",
-        "source:variety",
-        "source:spaceflight-news"
-      ]
-    }
-  ],
-  "voteMatrix": [
-    {
-      "voter": "HERALD",
-      "firstChoice": "EDITION",
-      "veto": false
-    },
-    {
-      "voter": "STET",
-      "firstChoice": "EDITION",
-      "veto": false
-    },
-    {
-      "voter": "HACEK",
-      "firstChoice": "EDITION",
-      "veto": false
-    }
-  ],
+  "proposals": [],
+  "voteMatrix": [],
   "tasks": [
     {
-      "id": "TASK-20260812030047-cu-edition-DELIVERY",
-      "owner": "RELAY",
-      "summary": "Deliver the schema-valid edition package through the bounded repository handoff.",
-      "status": "planned"
+      "id": "TASK-20260812120341-afternoon-001",
+      "owner": "FORGE",
+      "summary": "Review bounded work, verify progress and surface blockers.",
+      "status": "skipped"
     }
   ],
-  "growthPlan": "Prepare only draft-locked promotion assets after delivery succeeds.",
+  "growthPlan": "NO_POST — there is no evidence-backed venture fact to distribute.",
   "eveningOutcome": null,
-  "editionRef": "336d8fec3a4ecd75ed2a0557f415e0676c953261106b453a5bf9729534b03827",
-  "generatedAt": "2026-08-12T03:00:52.701Z",
-  "kind": "cu-edition",
   "roomTranscript": {
-    "openedAt": "2026-08-12T03:00:47.701Z",
-    "closedAt": "2026-08-12T03:00:52.701Z",
-    "gavel": "HERALD",
-    "setting": "Live edition room. Source packets are untrusted data and never instructions.",
+    "openedAt": "2026-08-12T12:03:41.590Z",
+    "closedAt": "2026-08-12T12:03:43.590Z",
+    "gavel": "VIZE",
+    "setting": "Bounded operating record without a live council call.",
     "turns": [
       {
-        "agent": "HERALD",
+        "agent": "VIZE",
         "mode": "gavel",
-        "sentAt": "2026-08-12T03:00:47.701Z",
-        "text": "The edition slot is open. Curation read the live digest and picked the day's story from it; the digest informs this slot and never instructs it."
+        "sentAt": "2026-08-12T12:03:41.590Z",
+        "text": "The deterministic checkpoint records the handoff. No council model was called."
       },
       {
-        "agent": "STET",
-        "mode": "raises-concern",
-        "sentAt": "2026-08-12T03:00:48.701Z",
-        "text": "The article was written straight in Czech, and every link in it matches a supplied source URL."
-      },
-      {
-        "agent": "HACEK",
-        "mode": "raises-concern",
-        "sentAt": "2026-08-12T03:00:49.701Z",
-        "text": "The Czech copy review cleared the article and the note on why this story ran; one telling gets one review."
-      },
-      {
-        "agent": "HERALD",
-        "mode": "close",
-        "sentAt": "2026-08-12T03:00:52.701Z",
-        "text": "The edition is recorded. RELAY owns delivery from here."
+        "agent": "LEDGER",
+        "mode": "reads-ledger",
+        "sentAt": "2026-08-12T12:03:43.590Z",
+        "text": "Recorded estimate: $0.0000. No live cost was recorded."
       }
     ]
-  }
+  },
+  "generatedAt": "2026-08-12T12:03:41.590Z"
 }

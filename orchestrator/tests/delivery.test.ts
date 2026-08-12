@@ -270,4 +270,81 @@ describe("delivery outbox", () => {
     const inbox = await readFile(path.join(root, "INBOX.md"), "utf8");
     expect(inbox.match(/CAUGHT-UP-DELIVERY-2026-08-04/g)).toHaveLength(1);
   });
+
+  /**
+   * Skipping only delivered dates was half the rule. A package that kept failing left no receipt
+   * to skip on, so it stayed at the head of an oldest-first queue and held every edition behind
+   * it — the same jam the MMA article queue was in, reached by a different route.
+   */
+  async function queueConflictedAndFresh(root: string): Promise<string> {
+    const editionPackage = JSON.parse(await readFile(
+      path.join(repoRoot, "orchestrator", "tests", "fixtures", "edition", "golden-package.json"),
+      "utf8"
+    ));
+    validateEditionForDelivery(editionPackage);
+    const packagePath = `edition/outbox/2026-08-04-${editionPackage.idempotencyKey}.json`;
+    await writeJson(path.join(root, packagePath), editionPackage);
+    await writeJson(
+      path.join(root, "meetings", "2026-08-04-cu-edition.json"),
+      JSON.parse(await readFile(path.join(repoRoot, "contracts", "fixtures", "meeting-record.valid.json"), "utf8"))
+    );
+    const today = buildNoEditionPackage({
+      date: "2026-08-06",
+      meetingRef: "meetings/2026-08-06-cu-edition",
+      roomUrl: "https://boardless.example/meetings/2026-08-06-cu-edition",
+      reason: "budget_exhausted",
+      config: await loadEditionQualityConfig()
+    });
+    await writeJson(path.join(root, `edition/outbox/2026-08-06-${today.idempotencyKey}.json`), today);
+    return packagePath;
+  }
+
+  it("parks an edition the magazine will never accept and lets the next one through", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-park-"));
+    const packagePath = await queueConflictedAndFresh(root);
+    expect((await oldestPendingDelivery(root, "2026-08-06"))?.package.date).toBe("2026-08-04");
+
+    const written = await recordDelivery({
+      root,
+      packagePath,
+      status: "needs_reconciliation",
+      code: "content_invalid",
+      detail: "The magazine could not build the delivered edition"
+    });
+    expect(written).toContain("edition/deliveries/2026-08-04.json");
+
+    expect((await oldestPendingDelivery(root, "2026-08-06"))?.package.date).toBe("2026-08-06");
+    const receipt = JSON.parse(await readFile(path.join(root, "edition/deliveries/2026-08-04.json"), "utf8"));
+    expect(receipt).toMatchObject({ status: "needs_reconciliation", code: "content_invalid", tags: [] });
+    expect(await hasDeliveredPublishedEdition("2026-08-04", root)).toBe(false);
+  });
+
+  it("takes the reconciliation flag off a day that went on to publish", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-late-"));
+    const packagePath = await queueConflictedAndFresh(root);
+    const meetingPath = path.join(root, "meetings", "2026-08-04-cu-edition.json");
+
+    await recordDelivery({ root, packagePath, status: "needs_reconciliation", code: "content_invalid", detail: "build failed" });
+    expect(JSON.parse(await readFile(meetingPath, "utf8")).status).toBe("NEEDS_RECONCILIATION");
+
+    // The same bytes, accepted on a later run once the cause was fixed.
+    const written = await recordDelivery({ root, packagePath, status: "delivered", targetCommit: "abc123" });
+    const meeting = JSON.parse(await readFile(meetingPath, "utf8"));
+    expect(meeting.status).toBe("HELD");
+    expect(meeting.decision.summary).toContain("delivered on a later run");
+    expect(written).toContain("meetings/2026-08-04-cu-edition.json");
+  });
+
+  it("keeps an edition the run could not reach at the head of the queue", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-retry-"));
+    const packagePath = await queueConflictedAndFresh(root);
+    await recordDelivery({
+      root,
+      packagePath,
+      status: "needs_reconciliation",
+      code: "unreachable",
+      detail: "GitHub was unreachable after one retry"
+    });
+    expect((await oldestPendingDelivery(root, "2026-08-06"))?.package.date).toBe("2026-08-04");
+  });
 });

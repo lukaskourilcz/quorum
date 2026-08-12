@@ -27,6 +27,7 @@
     "fightaiq:roster-sync": "pnpm --filter @boardlessai/orchestrator fightaiq:roster-sync",
     "ideas:migrate": "pnpm --filter @boardlessai/orchestrator ideas:migrate",
     "mma:delivery": "pnpm --filter @boardlessai/orchestrator mma:delivery",
+    "queue:health": "pnpm --filter @boardlessai/orchestrator queue:health",
     "mma:heroes:backfill": "node scripts/backfill-mma-files-heroes.mjs",
     "mma:heroes:check": "node scripts/backfill-mma-files-heroes.mjs --check",
     "lint": "pnpm -r lint",

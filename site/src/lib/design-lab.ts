@@ -29,10 +29,20 @@ import type { CarouselPreset } from "@boardlessai/carousel-studio";
 /** A saved design, as the picker shows it. */
 export type LabPreset = Pick<CarouselPreset, "id" | "name" | "family" | "variant" | "accentSwap" | "treatment" | "typeScale" | "status">;
 
-export async function readDesignLabPresets(venture?: CarouselSummaryVenture): Promise<LabPreset[]> {
+/**
+ * Presets a venture may use: the ones scoped to it, plus every preset scoped to nobody.
+ *
+ * The parameter is any brand the renderer knows rather than only the two magazines. A venture
+ * that publishes no articles still has a Design Lab section, and the honest answer for it is the
+ * unscoped presets — `ventureScope` can only name a magazine, so `includes` is false for the rest
+ * and they see exactly the designs that are not tied to somebody else's identity.
+ */
+export async function readDesignLabPresets(venture?: string): Promise<LabPreset[]> {
   const presets = await readCarouselPresets();
   return presets
-    .filter((preset) => !venture || preset.ventureScope.length === 0 || preset.ventureScope.includes(venture))
+    .filter((preset) => !venture
+      || preset.ventureScope.length === 0
+      || (preset.ventureScope as readonly string[]).includes(venture))
     .map(({ id, name, family, variant, accentSwap, treatment, typeScale, status }) =>
       ({ id, name, family, variant, accentSwap, treatment, typeScale, status }));
 }
@@ -136,14 +146,19 @@ function deckFor(article: StudioArticle): string[] {
 }
 
 /**
- * Every delivered article, as the workspace sees it. Newest first, both magazines.
+ * Every delivered article, as the workspace sees it. Newest first.
+ *
+ * `venture` narrows to one magazine's articles, which is what a Design Lab section asks for. The
+ * limit then applies per venture rather than across both: filtering after slicing would let a busy
+ * week on one magazine push the other's newest article off the end of its own section.
  */
-export async function readDesignLab(limit = 40): Promise<LabArticle[]> {
-  const [articles, pinned, slideOverrides] = await Promise.all([
+export async function readDesignLab(limit = 40, venture?: string): Promise<LabArticle[]> {
+  const [all, pinned, slideOverrides] = await Promise.all([
     readStudioArticles(),
     readDeckStyleOverrides(),
     readSlideTextOverrides()
   ]);
+  const articles = venture ? all.filter((article) => article.venture === venture) : all;
   const histories = new Map<string, Array<{ date: string; family: string }>>();
   const lab: LabArticle[] = [];
 

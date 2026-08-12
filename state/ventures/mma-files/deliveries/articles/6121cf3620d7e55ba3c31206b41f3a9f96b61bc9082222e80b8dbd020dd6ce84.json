@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "6121cf3620d7e55ba3c31206b41f3a9f96b61bc9082222e80b8dbd020dd6ce84",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "453ba2fd048f043f0b91c46a1e4187e3182ad5a9",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/oktagon-gustavo-lopez",
+  "recordedAt": "2026-08-12T11:32:14.895Z"
+}

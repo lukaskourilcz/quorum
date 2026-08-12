@@ -24,6 +24,7 @@
     "ideas:migrate": "tsx src/ideas/migrate-cli.ts",
     "meetings:reconcile": "tsx src/meetings/reconcile-cli.ts",
     "mma:delivery": "tsx src/mma-files/publish-cli.ts",
+    "queue:health": "tsx src/delivery/queue-health-cli.ts",
     "recall:image": "tsx src/mma-files/recall-image-cli.ts",
     "org:maintain": "tsx src/org/maintenance.ts",
     "palate": "tsx src/taste/palate-cli.ts",

@@ -5,7 +5,7 @@ import { AdminFileBrowser } from "@/components/admin/admin-file-browser";
 import { AdminShell, type AdminSection, type AdminWorkspace } from "@/components/admin/admin-shell";
 import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
 import { AgentSwitches } from "@/components/admin/agent-switches";
-import { DesignLabWorkspace } from "@/components/admin/design-lab-workspace";
+import { DesignLabSectionNav, DesignLabVentureSection } from "@/components/admin/design-lab-section";
 import { AutonomyPanel } from "@/components/admin/autonomy-panel";
 import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-panel";
 import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
@@ -36,7 +36,12 @@ import { readApprovedUndeliveredPayloads } from "@/lib/admin-owner-attention";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
 import { readAdminBooksofhistory } from "@/lib/admin-booksofhistory";
-import { readDesignLab, readDesignLabPresets } from "@/lib/design-lab";
+import {
+  isDesignLabVenture,
+  readDesignLabSections,
+  readDesignLabVenture,
+  type DesignLabVentureId
+} from "@/lib/design-lab-ventures";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminCaughtUp } from "@/lib/admin-caught-up";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
@@ -129,10 +134,10 @@ function tileUsd(value: number): string {
 export default async function AdminPage({
   searchParams
 }: {
-  searchParams: Promise<{ venture?: string; tab?: string; view?: string }>;
+  searchParams: Promise<{ venture?: string; tab?: string; view?: string; brand?: string }>;
 }) {
   const [
-    { venture: requestedVenture, tab: requestedTab, view: requestedView },
+    { venture: requestedVenture, tab: requestedTab, view: requestedView, brand: requestedBrand },
     state,
     portfolio,
     standups,
@@ -144,8 +149,7 @@ export default async function AdminPage({
     hookBrain,
     goviralProfile,
     studioArticles,
-    labArticles,
-    labPresets,
+    labSections,
     agentControls,
     autonomy,
     fixedCosts,
@@ -169,8 +173,7 @@ export default async function AdminPage({
     readHookBrain(),
     readGoViralProfile(),
     readStudioArticles(),
-    readDesignLab(),
-    readDesignLabPresets(),
+    readDesignLabSections(),
     readAdminAgentControls(),
     readAdminAutonomy(),
     readAdminFixedCosts(),
@@ -209,6 +212,18 @@ export default async function AdminPage({
       ? (requestedTab as AdminVentureTab)
       : selectedVenture.tabs[0] ?? null
     : null;
+  /*
+   * Which Design Lab section is open.
+   *
+   * The section list is the renderer's brand registry, so an unknown or missing `brand` falls
+   * through to the first venture the registry declares — the same way an unknown tab falls through
+   * to a venture's first. Only the selected section is resolved in full: reading every venture's
+   * articles and presets to render one of them is work the page would throw away.
+   */
+  const labVentureId: DesignLabVentureId = isDesignLabVenture(requestedBrand)
+    ? requestedBrand
+    : labSections[0]!.id;
+  const labVenture = await readDesignLabVenture(labVentureId);
   const brandId = selectedVenture?.id ?? "global";
   const brand = ventureBrand(brandId);
 
@@ -396,8 +411,13 @@ export default async function AdminPage({
     }
     if (id === "carousel-studio" && selectedTab === "studio") {
       return {
-        node: <DesignLabWorkspace articles={labArticles} presets={labPresets} />,
-        count: labArticles.length
+        node: (
+          <div className="grid min-w-0 gap-4">
+            <DesignLabSectionNav sections={labSections} selected={labVenture.id} />
+            <DesignLabVentureSection venture={labVenture} />
+          </div>
+        ),
+        count: labVenture.publishesArticles ? labVenture.articleCount : labVenture.presetCount
       };
     }
     if (id === "carousel-studio" && selectedTab === "templates") {

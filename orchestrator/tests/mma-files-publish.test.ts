@@ -98,3 +98,96 @@ describe("MMA Files repository delivery", () => {
     })).rejects.toThrow(/hash differs/u);
   });
 });
+
+/**
+ * One rejected article stopped MMA Files publishing for a week. `delivered()` asked a yes/no
+ * question, so a receipt reading `needs_reconciliation` was indistinguishable from no receipt,
+ * the same bytes went back every run, the magazine refused them the same way, and the three
+ * articles written behind it never got a turn.
+ */
+describe("a delivery the magazine will never accept does not hold the queue", () => {
+  async function queueTwoArticles(): Promise<{ root: string; first: string; second: string }> {
+    const root = await mkdtemp(path.join(os.tmpdir(), "mma-article-park-"));
+    const raw = JSON.parse(await readFile(path.join(repoRoot, "contracts", "fixtures", "article.valid.json"), "utf8"));
+    const { packageHash: _fixtureHash, ...rawContent } = raw;
+    const hashes: string[] = [];
+    for (const [publishAt, slug] of [
+      ["2026-08-01T10:00:00.000Z", "first-preview"],
+      ["2026-08-02T10:00:00.000Z", "second-preview"]
+    ] as const) {
+      const content = {
+        ...rawContent,
+        status: "published",
+        publishAt,
+        slug,
+        image: {
+          ...rawContent.image,
+          hero_path: `public/images/articles/${slug}/hero.svg`,
+          thumb_path: `public/images/articles/${slug}/thumb.svg`
+        }
+      };
+      const pkg = { ...content, packageHash: articlePackageHash(content) };
+      hashes.push(pkg.packageHash);
+      await atomicWriteJson(root, `ventures/mma-files/articles/${publishAt.slice(0, 10)}-am-${slug}.json`, pkg);
+    }
+    return { root, first: hashes[0]!, second: hashes[1]! };
+  }
+
+  it("parks a terminally rejected package and ships the one behind it", async () => {
+    const { root, first, second } = await queueTwoArticles();
+    const pending = await nextArticleDelivery(root);
+    expect(pending?.packageHash).toBe(first);
+
+    await recordMmaDelivery({
+      kind: "article",
+      packageHash: first,
+      packagePath: pending!.packagePath,
+      status: "needs_reconciliation",
+      code: "hash_conflict",
+      detail: "2026-08-01:am already contains different immutable bytes",
+      root
+    });
+
+    expect((await nextArticleDelivery(root))?.packageHash).toBe(second);
+  });
+
+  it("keeps a package the run could not reach at the head of the queue", async () => {
+    const { root, first } = await queueTwoArticles();
+    const pending = await nextArticleDelivery(root);
+    await recordMmaDelivery({
+      kind: "article",
+      packageHash: first,
+      packagePath: pending!.packagePath,
+      status: "needs_reconciliation",
+      code: "unreachable",
+      detail: "GitHub was unreachable after one retry.",
+      root
+    });
+
+    expect((await nextArticleDelivery(root))?.packageHash).toBe(first);
+  });
+
+  it("raises one owner item for a failed slot and ticks it when the slot delivers", async () => {
+    const { root, first } = await queueTwoArticles();
+    const pending = await nextArticleDelivery(root);
+    const failure = {
+      kind: "article",
+      packageHash: first,
+      packagePath: pending!.packagePath,
+      status: "needs_reconciliation",
+      code: "hash_conflict",
+      detail: "2026-08-01:am already contains different immutable bytes",
+      root
+    } as const;
+
+    await recordMmaDelivery(failure);
+    await recordMmaDelivery(failure);
+    const raised = await readFile(path.join(root, "INBOX.md"), "utf8");
+    expect(raised.match(/MMA-FILES-DELIVERY-2026-08-01-am/gu)).toHaveLength(1);
+    expect(raised).toContain("[owner:me]");
+    expect(raised).not.toContain("/home/runner");
+
+    await recordMmaDelivery({ ...failure, status: "delivered", targetCommit: "abc123" });
+    expect(await readFile(path.join(root, "INBOX.md"), "utf8")).toContain("- [x] **MMA-FILES-DELIVERY-2026-08-01-am**");
+  });
+});
