@@ -83,7 +83,7 @@ export interface BookAnnotationPassResult {
   actualUsd: number;
 }
 
-interface CallContext {
+export interface BookIngestCallContext {
   stateRoot: string;
   cycleId: string;
   route: BookIngestRoute;
@@ -112,7 +112,7 @@ function assertInputFits(route: BookIngestRoute, system: string, input: string):
 }
 
 async function callBookIngest<T>(input: {
-  context: CallContext;
+  context: BookIngestCallContext;
   operation: "chunk-annotation" | "chapter-map" | "global-reduce";
   payload: unknown;
   schema: z.ZodType<T>;
@@ -153,7 +153,7 @@ async function callBookIngest<T>(input: {
 
 export async function annotateBookChunk(input: {
   chunk: ManuscriptChunk;
-  context: CallContext;
+  context: BookIngestCallContext;
 }): Promise<{ annotation: AnnotatedBookChunk; usd: number }> {
   const result = await callBookIngest({
     context: input.context,
@@ -232,7 +232,7 @@ function assertExactRollup(label: string, actual: unknown, expected: unknown): v
 export async function rollupBookAnnotations(input: {
   chunked: ChunkedManuscript;
   annotations: readonly AnnotatedBookChunk[];
-  context: CallContext;
+  context: BookIngestCallContext;
 }): Promise<{ rollups: BookAnnotationRollups; calls: number; usd: number }> {
   const byChunk = new Map(input.annotations.map((annotation) => [annotation.chunkId, annotation]));
   if (byChunk.size !== input.annotations.length || input.chunked.chunks.some((chunk) => !byChunk.has(chunk.id))) {
@@ -302,7 +302,7 @@ export async function runBookAnnotationPass(input: {
   route?: BookIngestRoute;
   call?: BookIngestCall;
 }): Promise<BookAnnotationPassResult> {
-  const context: CallContext = {
+  const context: BookIngestCallContext = {
     stateRoot: input.stateRoot,
     cycleId: input.cycleId,
     route: input.route ?? await loadBookIngestRoute(),
