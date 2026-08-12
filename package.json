@@ -13,6 +13,7 @@
     "contracts:export": "pnpm --filter @boardlessai/orchestrator exec tsx src/contracts/export-json-schema.ts",
     "build": "pnpm docs:refresh && pnpm -r build",
     "budget:alert": "pnpm --filter @boardlessai/orchestrator budget:alert",
+    "book:ingest": "pnpm --filter @boardlessai/orchestrator book:ingest",
     "cycle": "pnpm --filter @boardlessai/orchestrator cycle",
     "cycle:phase": "pnpm --filter @boardlessai/orchestrator cycle:phase",
     "delivery": "pnpm --filter @boardlessai/orchestrator delivery",
