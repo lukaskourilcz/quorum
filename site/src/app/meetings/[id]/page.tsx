@@ -28,7 +28,8 @@ const meetingCopy: Record<string, { name: string; title: string }> = {
   "mma-intake": { name: "FightAIQ data meeting", title: "Check the fight data" },
   "mma-analysis": { name: "FightAIQ analysis meeting", title: "Review the model without guessing" },
   "mag-editorial": { name: "MMA Files story meeting", title: "Choose or reject both article slots" },
-  "mag-desk": { name: "MMA Files desk meeting", title: "Check today’s articles and social drafts" }
+  "mag-desk": { name: "MMA Files desk meeting", title: "Check today’s articles and social drafts" },
+  "kv-desk": { name: "Kvórum desk", title: "Choose one sourced recommendation or record a quiet day" }
 };
 
 /**

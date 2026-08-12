@@ -12,6 +12,7 @@ import {
   Clock3,
   FileText,
   Hourglass,
+  Landmark,
   Newspaper,
   PanelsTopLeft,
   Radio,
@@ -52,7 +53,7 @@ function isCaughtUp(kind: CalendarKind) {
   return kind === "cu-edition" || kind === "cu-product";
 }
 
-type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "goviral" | "marketingshark" | "fightaiq" | "mma-files" | "carousel-studio";
+type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "goviral" | "marketingshark" | "fightaiq" | "mma-files" | "kvorum" | "carousel-studio";
 type DisplayStatus = CalendarStatus | "test";
 
 const companyCouncil: readonly AgentId[] = ["VIZE", "FORGE", "PULSE", "AUDIT"];
@@ -110,6 +111,7 @@ const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone
   // the admin rail and the carousel canvases agree about what colour marketingShark is.
   marketingshark: { icon: Layers, label: "marketingShark", tone: "text-[var(--info-soft)]", slotColor: "#a5d8f3" },
   fightaiq: { icon: Swords, label: "FightAIQ", tone: "text-[var(--destructive-soft)]", slotColor: "var(--destructive-soft)" },
+  kvorum: { icon: Landmark, label: "Kvórum", tone: "text-[#f6df45]", slotColor: "#f6df45" },
   "mma-files": {
     icon: FileText,
     label: "MMA Files",
@@ -126,6 +128,7 @@ function projectForKind(kind: CalendarKind): ProjectKey {
   if (kind === "ms-daily") return "marketingshark";
   if (kind === "mma-intake" || kind === "mma-analysis") return "fightaiq";
   if (kind === "mag-editorial" || kind === "mag-desk" || kind === "article-am" || kind === "article-pm") return "mma-files";
+  if (kind === "kv-desk") return "kvorum";
   if (kind === "studio") return "carousel-studio";
   return "company";
 }

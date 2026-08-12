@@ -16,6 +16,7 @@ export type CalendarKind =
   | "mma-analysis"
   | "mag-editorial"
   | "mag-desk"
+  | "kv-desk"
   | "article-am"
   | "article-pm"
   | "studio"
@@ -82,6 +83,7 @@ export const CALENDAR_SLOTS: readonly CalendarDefinition[] = [
   { hour: 17, kind: "cu-product", label: "Product room" },
   { hour: 19, kind: "mma-analysis", label: "FightAIQ evening model check" },
   { hour: 20, kind: "mag-desk", label: "MMA Files evening desk review" },
+  { hour: 21, kind: "kv-desk", label: "Kvórum political recommendation desk" },
   { hour: 22, kind: "venture-night", label: "Night shift" }
 ] as const;
 

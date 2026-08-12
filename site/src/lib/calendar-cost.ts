@@ -59,6 +59,11 @@ export const calendarCostContexts: Partial<
   "mag-desk": {
     JAB: "MMA Files editorial rooms"
   },
+  "kv-desk": {
+    TRIBUN: "Kvórum daily political recommendation",
+    HACEK: "Project meetings when selected",
+    AUDIT: "Company and project meetings"
+  },
   "article-am": {
     JAB: "MMA Files Czech articles",
     HACEK: "Project meetings when selected"

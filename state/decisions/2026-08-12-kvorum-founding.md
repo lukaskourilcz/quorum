@@ -177,7 +177,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-04a — TRIBUN in the agent registry, routing, controls and cast schema
 - [x] KV-04b — TRIBUN prompts and the expected-prompts list
 - [x] KV-04c — TRIBUN model role and HACEK venture extension
-- [ ] KV-05a — Venture scaffold, brand hue and labels
+- [x] KV-05a — Venture scaffold, brand hue and labels
 - [ ] KV-05b — KPI seeds for the quarter
 - [ ] KV-05c — Degradation-ladder position with its test
 - [ ] KV-06a — `kvorum-sources` registry with verified actors and feeds

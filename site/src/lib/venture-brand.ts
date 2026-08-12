@@ -16,6 +16,7 @@ export const VENTURE_BRAND: Record<string, string> = {
   "mma-files": "#f7a8ea",
   fightaiq: "#fecaca",
   goviral: "#bbf7d0",
+  kvorum: "#f6df45",
   marketingshark: "#a5d8f3",
   "titty-tuesdays": "#fde68a",
   "carousel-studio": "#d4d4d8"
