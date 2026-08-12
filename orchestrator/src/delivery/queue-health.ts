@@ -131,18 +131,20 @@ export async function buildQueueHealthReport(input: {
   };
 }
 
+/**
+ * The item is raised once and stays until the queue drains, so it must not carry a count.
+ *
+ * The first version embedded "1 refused and 4 waiting", which was true for about an hour and then
+ * described a queue that no longer existed — an owner item that ages into a wrong number is worse
+ * than one that sends you to the live figure.
+ */
 function inboxItem(venture: VentureQueueHealth): string {
-  const waiting = venture.waiting.length;
-  const parked = venture.parked.length;
-  const counted = [
-    parked ? `${parked} package${parked === 1 ? "" : "s"} the magazine refused` : null,
-    waiting ? `${waiting} still waiting` : null
-  ].filter(Boolean).join(" and ");
   const oldest = venture.parked[0] ?? venture.waiting[0];
   return [
-    `- [ ] **DELIVERY-QUEUE-${venture.venture.toUpperCase()}** — the publish queue is not draining: ${counted}.`,
-    `  Oldest is ${oldest?.label ?? "unknown"}${oldest?.code ? ` (${oldest.code})` : ""}. A parked package needs new bytes, not another run;`,
-    "  its receipt under state/ventures or state/edition/deliveries says what the magazine refused.",
+    `- [ ] **DELIVERY-QUEUE-${venture.venture.toUpperCase()}** — the publish queue is not draining.`,
+    `  Oldest held item: ${oldest?.label ?? "unknown"}${oldest?.code ? ` (${oldest.code})` : ""}.`,
+    "  Live counts are in state/delivery/queue-health/, rewritten every day. A parked package needs",
+    "  new bytes rather than another run; its own receipt says what the magazine refused and why.",
     "  [imp:5] [owner:me] [time:30m] [kind:deploy]"
   ].join("\n");
 }

@@ -279,6 +279,39 @@ async function closeInboxItem(root: string, date: string, now: Date): Promise<bo
   return true;
 }
 
+/**
+ * Take the reconciliation flag off a day that went on to publish.
+ *
+ * The failure path marks the meeting NEEDS_RECONCILIATION, and nothing ever took it off: a date
+ * that failed at 03:00 and delivered on a later run stayed flagged for good, so the calendar
+ * showed an unresolved incident for a day the magazine actually published. That is the same
+ * mismatch as a room reporting success over a delivery that never landed, pointing the other way,
+ * and it is read by the same person looking at the same page.
+ *
+ * The original summary is gone — the failure path overwrote it — so this does not pretend to
+ * restore it. It states what is true now and that the day was late, which is the part a reader of
+ * the calendar needs.
+ */
+async function clearMeetingReconciliation(root: string, date: string, now: Date): Promise<boolean> {
+  const meetingPath = `meetings/${date}-cu-edition.json`;
+  const existing = await readJson<{ status?: unknown; decision?: { summary?: unknown } } | null>(
+    root,
+    meetingPath,
+    null
+  );
+  if (!existing || existing.status !== "NEEDS_RECONCILIATION") return false;
+  const meeting = MeetingRecordSchema.parse(existing);
+  await atomicWriteJson(root, meetingPath, {
+    ...meeting,
+    status: "HELD",
+    decision: {
+      ...meeting.decision,
+      summary: `This edition was delivered on a later run, on ${now.toISOString().slice(0, 10)}. It was held back at first; the delivery receipt for this date records what the magazine refused and when it accepted it.`
+    }
+  });
+  return true;
+}
+
 async function raiseInboxOnce(root: string, date: string, code: DeliveryFailureCode, detail: string) {
   const existing = await readText(root, "INBOX.md", "# INBOX\n");
   const marker = `CAUGHT-UP-DELIVERY-${date}`;
@@ -348,11 +381,13 @@ export async function recordDelivery(input: {
     );
     await rm(absolute);
     const closed = await closeInboxItem(root, editionPackage.date, now);
+    const reconciled = await clearMeetingReconciliation(root, editionPackage.date, now);
     return [
       receiptPath,
       `edition/archive/${editionPackage.date}-${editionPackage.idempotencyKey}.json`,
       input.packagePath,
-      ...(closed ? ["INBOX.md"] : [])
+      ...(closed ? ["INBOX.md"] : []),
+      ...(reconciled ? [`meetings/${editionPackage.date}-cu-edition.json`] : [])
     ];
   }
   const code = input.code ?? "push_rejected";

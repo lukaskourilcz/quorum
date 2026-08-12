@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "be1bea6a233ca1ba6bcdd69030866fcef36e3976efc009bf57a482d352f29e4a",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "453ba2fd048f043f0b91c46a1e4187e3182ad5a9",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/ufc-valentina-shevchenko",
+  "recordedAt": "2026-08-12T11:32:13.648Z"
+}

@@ -319,6 +319,22 @@ describe("delivery outbox", () => {
     expect(await hasDeliveredPublishedEdition("2026-08-04", root)).toBe(false);
   });
 
+  it("takes the reconciliation flag off a day that went on to publish", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-late-"));
+    const packagePath = await queueConflictedAndFresh(root);
+    const meetingPath = path.join(root, "meetings", "2026-08-04-cu-edition.json");
+
+    await recordDelivery({ root, packagePath, status: "needs_reconciliation", code: "content_invalid", detail: "build failed" });
+    expect(JSON.parse(await readFile(meetingPath, "utf8")).status).toBe("NEEDS_RECONCILIATION");
+
+    // The same bytes, accepted on a later run once the cause was fixed.
+    const written = await recordDelivery({ root, packagePath, status: "delivered", targetCommit: "abc123" });
+    const meeting = JSON.parse(await readFile(meetingPath, "utf8"));
+    expect(meeting.status).toBe("HELD");
+    expect(meeting.decision.summary).toContain("delivered on a later run");
+    expect(written).toContain("meetings/2026-08-04-cu-edition.json");
+  });
+
   it("keeps an edition the run could not reach at the head of the queue", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "boardless-retry-"));
     const packagePath = await queueConflictedAndFresh(root);

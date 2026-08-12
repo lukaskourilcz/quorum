@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "ded05ff0de52096b73b12be2a5246601cc879d488c09da74094b853a1b648c0e",
+  "status": "needs_reconciliation",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "code": "hash_conflict",
+  "detail": "2026-08-08:am reuses the slug of 2026-08-05:am",
+  "recordedAt": "2026-08-12T11:32:17.275Z"
+}

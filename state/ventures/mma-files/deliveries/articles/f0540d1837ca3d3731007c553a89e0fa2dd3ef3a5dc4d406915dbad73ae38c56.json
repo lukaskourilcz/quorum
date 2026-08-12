@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "f0540d1837ca3d3731007c553a89e0fa2dd3ef3a5dc4d406915dbad73ae38c56",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "453ba2fd048f043f0b91c46a1e4187e3182ad5a9",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/ufc-event-ufc-330-makhachev-vs-machado-garry",
+  "recordedAt": "2026-08-12T11:32:16.106Z"
+}

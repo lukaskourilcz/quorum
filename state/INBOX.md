@@ -217,6 +217,17 @@ items in place. Lack of response never authorizes an action. -->
   RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
 
-- [ ] **CAUGHT-UP-DELIVERY-2026-08-12** — content_invalid: > aifirst@0.1.0 check:content /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/check-content.ts [check] 14 MDX file(s), 8 board context file(s), and configs validated, no issues > aifirst@0.1.0 test /home/runner/work/_temp/aifirst-delivery-1 > vitest run [1m[46m RUN [49m[22m [36mv3.2.6 .
+- [x] **CAUGHT-UP-DELIVERY-2026-08-12** — Resolved 2026-08-12: the edition for this date delivered on a later run. Original report: — content_invalid: > aifirst@0.1.0 check:content /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/check-content.ts [check] 14 MDX file(s), 8 board context file(s), and configs validated, no issues > aifirst@0.1.0 test /home/runner/work/_temp/aifirst-delivery-1 > vitest run [1m[46m RUN [49m[22m [36mv3.2.6 .
   RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+
+- [ ] **MMA-FILES-DELIVERY-2026-08-08-am** — hash_conflict: 2026-08-08:am reuses the slug of 2026-08-05:am.
+  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+- [ ] **DELIVERY-QUEUE-MMA-FILES** — the publish queue is not draining.
+  Oldest held item: 2026-08-06 AM ufc-event-ufc-fight-night-gamrot-vs-salkilld (hash_conflict).
+  Live counts are in state/delivery/queue-health/, rewritten every day. A parked package needs
+  new bytes rather than another run; its own receipt says what the magazine refused and why.
+  [imp:5] [owner:me] [time:30m] [kind:deploy]

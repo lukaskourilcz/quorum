@@ -4,7 +4,7 @@
   "date": "2026-08-12",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "NEEDS_RECONCILIATION",
+  "status": "HELD",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -227,7 +227,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "The finished edition failed its content checks on the way out, so it was not published. The owner has the technical report.",
+    "summary": "This edition was delivered on a later run, on 2026-08-12. It was held back at first; the delivery receipt for this date records what the magazine refused and when it accepted it.",
     "evidenceRefs": [
       "source:tensorfeed",
       "source:github-ai-releases",
