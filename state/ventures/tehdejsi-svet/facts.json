@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "tehdejsi-facts/1",
+  "copiedFrom": "Era and history facts copied by hand for the Tehdejsi svet marketing venture. Nothing in this repository reads the product.",
+  "copiedAt": "2026-08-12T18:00:00.000Z",
+  "contentHash": "1808b7c4c950613f711496634944ea569584563a5bd4e354952c72ffb11e952d",
+  "facts": [
+    {
+      "id": "cs-1989-velvet-november",
+      "kind": "event",
+      "country": "cz",
+      "place": "Praha",
+      "yearFrom": 1989,
+      "yearTo": 1989,
+      "sensitivityTier": 1,
+      "shareSafe": true,
+      "text": "Between 17 November and 29 December 1989 Czechoslovakia changed government without a shot fired, and the squares filled every evening after work.",
+      "sources": [
+        {
+          "title": "Velvet Revolution",
+          "url": "https://en.wikipedia.org/wiki/Velvet_Revolution",
+          "note": null
+        }
+      ],
+      "verified": "2026-08-12"
+    },
+    {
+      "id": "cs-1960s-trabant-wait",
+      "kind": "everyday",
+      "country": "cz",
+      "place": null,
+      "yearFrom": 1960,
+      "yearTo": 1989,
+      "sensitivityTier": 1,
+      "shareSafe": true,
+      "text": "A family car was ordered years before it arrived. The waiting list, not the price, was what decided whether you had one.",
+      "sources": [
+        {
+          "title": "Eastern Bloc consumer goods and waiting lists",
+          "url": "https://en.wikipedia.org/wiki/Eastern_Bloc",
+          "note": "Background on planned-economy consumer shortages."
+        }
+      ],
+      "verified": null
+    },
+    {
+      "id": "cs-1970s-vecernicek",
+      "kind": "media",
+      "country": "cz",
+      "place": null,
+      "yearFrom": 1965,
+      "yearTo": 1995,
+      "sensitivityTier": 0,
+      "shareSafe": true,
+      "text": "Vecernicek ran for a few minutes before bed and its signature tune ended the day for a generation of Czech children.",
+      "sources": [
+        {
+          "title": "Vecernicek",
+          "url": "https://en.wikipedia.org/wiki/Ve%C4%8Dern%C3%AD%C4%8Dek",
+          "note": null
+        }
+      ],
+      "verified": "2026-08-12"
+    },
+    {
+      "id": "ua-1986-chornobyl-spring",
+      "kind": "event",
+      "country": "ua",
+      "place": "Prypiat",
+      "yearFrom": 1986,
+      "yearTo": 1986,
+      "sensitivityTier": 2,
+      "shareSafe": true,
+      "text": "The reactor failed on 26 April 1986 and Prypiat was evacuated the following afternoon, its residents told they would return in three days.",
+      "sources": [
+        {
+          "title": "Chornobyl disaster",
+          "url": "https://en.wikipedia.org/wiki/Chernobyl_disaster",
+          "note": null
+        },
+        {
+          "title": "Prypiat",
+          "url": "https://en.wikipedia.org/wiki/Pripyat",
+          "note": "Evacuation timing and scale."
+        }
+      ],
+      "verified": "2026-08-12"
+    },
+    {
+      "id": "ua-1970s-kyiv-metro-token",
+      "kind": "price",
+      "country": "ua",
+      "place": "Kyiv",
+      "yearFrom": 1970,
+      "yearTo": 1990,
+      "sensitivityTier": 1,
+      "shareSafe": true,
+      "text": "The Kyiv metro ran on five-kopeck fares for two decades, long enough that the coin itself became the word people used for a ride.",
+      "sources": [
+        {
+          "title": "Kyiv Metro",
+          "url": "https://en.wikipedia.org/wiki/Kyiv_Metro",
+          "note": "Soviet-era fare history."
+        }
+      ],
+      "verified": null
+    }
+  ]
+}

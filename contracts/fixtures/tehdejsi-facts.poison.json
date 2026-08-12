@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "tehdejsi-facts/1",
+  "copiedFrom": "A file carrying a record the product marks unsafe to share",
+  "copiedAt": "2026-08-12T18:00:00.000Z",
+  "contentHash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "facts": [
+    {
+      "id": "leader-profile",
+      "kind": "event",
+      "country": "cz",
+      "place": null,
+      "yearFrom": 1975,
+      "yearTo": 1975,
+      "sensitivityTier": 2,
+      "shareSafe": false,
+      "text": "A leader profile the product marks unsafe to share must never load, and a tier-2 fact needs two sources.",
+      "sources": [
+        { "title": "Synthetic contract fixture source", "url": null, "note": "Invented for the contract boundary test." }
+      ],
+      "verified": null
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "tehdejsi-facts/1",
+  "copiedFrom": "Tehdejsi svet public era data, copied by hand for the marketing venture",
+  "copiedAt": "2026-08-12T18:00:00.000Z",
+  "contentHash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "facts": [
+    {
+      "id": "brno-1975-tram-fare",
+      "kind": "price",
+      "country": "cz",
+      "place": "Brno",
+      "yearFrom": 1975,
+      "yearTo": 1975,
+      "sensitivityTier": 0,
+      "shareSafe": true,
+      "text": "A single tram ride in Brno cost one koruna, paid into a box on the platform and cancelled by hand.",
+      "sources": [
+        { "title": "Synthetic contract fixture source", "url": null, "note": "Invented for the contract boundary test." }
+      ],
+      "verified": "2026-08-01"
+    },
+    {
+      "id": "lviv-1975-cinema-evening",
+      "kind": "culture",
+      "country": "ua",
+      "place": "Lviv",
+      "yearFrom": 1974,
+      "yearTo": 1976,
+      "sensitivityTier": 1,
+      "shareSafe": true,
+      "text": "An evening at the cinema was the ordinary weekend outing, and the programme was decided far above the town.",
+      "sources": [
+        { "title": "Synthetic contract fixture source", "url": null, "note": "Invented for the contract boundary test." }
+      ],
+      "verified": null
+    }
+  ]
+}
