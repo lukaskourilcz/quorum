@@ -22,6 +22,8 @@ Branch `agent/tehdejsi-svet`, merged to `main`. Four commits:
 | `18eaa30` | the `ts-desk` dispatch and its $0 checkpoint runner |
 | `b2e27e2` | the Door Money merge — see *Merging with Door Money* below |
 | `91cad97` | TS-06a…TS-08 and TS-10b — the facts file, its loader and the no-link guard |
+| `c03df18` | TS-05a, TS-05b, TS-09a, TS-09b — the two-day cycle, the scorer and recorded shortlists |
+| `ce1490c` | TS-11b, TS-11c — the terminology table and the craft lints |
 
 Issues TS-00 through TS-04c (289–299) are done, and so are TS-06a, TS-06b, TS-07, TS-08
 and TS-10b (302–305, 309). TS-05a is half done: the runner dispatch exists, the cycle
@@ -81,15 +83,16 @@ still holds. The daily room touches no network, the day is reproducible offline,
 
 ## What is left
 
-34 open issues under TS, in the order the founding checklist lists them. Roughly:
+23 open issues under TS, in the order the founding checklist lists them. Roughly:
 
-- **The read layer** — TS-05a and TS-05b remain: the two-day cycle state machine that
-  replaces the checkpoint runner's body, and the KPI seeds and scaffold. The facts file,
-  its contract, its exclusion rules and its loader are done and committed at
-  `state/ventures/tehdejsi-svet/facts.json`, with five seeded, sourced facts.
-- **Selection** — TS-09a…TS-12. Scorer, shortlist records, research reuse with its
-  `$0.30`-per-brief and `$2.00`-per-month ceilings, sensitivity tiers, terminology table,
-  the remembrance and no-flags lints, the `tehdejsi-story` evidence kind.
+- **The read and selection layers are done.** The facts file, its contract, its exclusion
+  rules and its loader are committed at `state/ventures/tehdejsi-svet/facts.json` with five
+  seeded, sourced facts. The two-day cycle, the deterministic scorer and recorded shortlists
+  are wired into the runner and run even while the room is paused, because they cost nothing.
+  The terminology table and the craft lints are in and blocking.
+- **What is left of selection** — TS-10a (research reuse with its `$0.30`-per-brief and
+  `$2.00`-per-month ceilings), TS-11a (the tier classifier's effects on a package) and TS-12
+  (the `tehdejsi-story` evidence kind).
 - **Production** — TS-13…TS-14b. Day A brief, Day B bilingual production, the anti-mirror
   rule, both-language gates.
 - **The Design Lab** — TS-15a…TS-18. Cyrillic-complete committed fonts and their
