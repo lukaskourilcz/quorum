@@ -215,7 +215,7 @@ costs and no treasury action in this decision.
 - [x] DM-16a — Studio brand tokens for door-money
 - [x] DM-16b — English locale in the carousel summary, byte-compatible
 - [x] DM-17 — Admin approval write path
-- [ ] DM-18a — Server-only admin loader
+- [x] DM-18a — Server-only admin loader
 - [ ] DM-18b — Recommendations panel
 - [ ] DM-18c — Actions panel
 - [ ] DM-18d — Knowledge panel, tab wiring and e2e

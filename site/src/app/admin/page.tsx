@@ -44,6 +44,7 @@ import {
 } from "@/lib/design-lab-ventures";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminCaughtUp } from "@/lib/admin-caught-up";
+import { readAdminDoorMoney } from "@/lib/admin-door-money";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
@@ -159,7 +160,8 @@ export default async function AdminPage({
     monetization,
     renderedDesk,
     ttProposals,
-    approvedUndelivered
+    approvedUndelivered,
+    doorMoney
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -183,7 +185,8 @@ export default async function AdminPage({
     readMonetizationOptions(),
     readRenderedDesk(),
     readTittyTuesdaysProposals(),
-    readApprovedUndeliveredPayloads(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), ".."))
+    readApprovedUndeliveredPayloads(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")),
+    readAdminDoorMoney()
   ]);
 
   /*
@@ -237,18 +240,20 @@ export default async function AdminPage({
   const savedItemCount = (ventureId: string, fallback: number) =>
     ventureId === "mma-files"
       ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
-      : ventureId === "carousel-studio"
-        ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
-        : ventureId === "booksofhistory"
-          ? (booksofhistory.shortlist ? 1 : 0)
-            + (booksofhistory.brief ? 1 : 0)
-            + (booksofhistory.cycle ? 1 : 0)
-            + booksofhistory.dossiers.length
-            + booksofhistory.ledger.length
-            + booksofhistory.features.length
-        : ventureId === "fightaiq"
-          ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.sources.length
-          : fallback;
+      : ventureId === "door-money"
+        ? doorMoney.recommendations.items.length
+        : ventureId === "carousel-studio"
+          ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
+          : ventureId === "booksofhistory"
+            ? (booksofhistory.shortlist ? 1 : 0)
+              + (booksofhistory.brief ? 1 : 0)
+              + (booksofhistory.cycle ? 1 : 0)
+              + booksofhistory.dossiers.length
+              + booksofhistory.ledger.length
+              + booksofhistory.features.length
+            : ventureId === "fightaiq"
+              ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.sources.length
+              : fallback;
 
   const files = [
     { name: "Things only you can approve", content: state.inbox },
@@ -363,7 +368,8 @@ export default async function AdminPage({
         mmaFiles.unreadable.length +
         fightaiq.unreadable.length +
         booksofhistory.unreadable.total +
-        ownerAttention.unreadable
+        ownerAttention.unreadable +
+        doorMoney.unreadable
     }
   ];
 
