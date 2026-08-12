@@ -84,8 +84,8 @@ describe("BOOKSOFHISTORY admin loader", () => {
       put(root, "state/ventures/booksofhistory/research-ledger.jsonl", `${JSON.stringify(JSON.parse(await fixture("bh-research-ledger.valid.json")))}\nnot-json\n`),
       put(root, "state/ventures/booksofhistory/recommendations/feature.json", await fixture("booksofhistory-recommendation.valid.json")),
       put(root, "state/ventures/booksofhistory/recommendations/poison.json", await fixture("booksofhistory-recommendation.poison.json")),
-      put(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json")),
-      put(root, "state/ventures/booksofhistory/results/poison.json", await fixture("owner-result-entry.poison.json")),
+      put(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("booksofhistory-owner-result-entry.valid.json")),
+      put(root, "state/ventures/booksofhistory/results/poison.json", await fixture("booksofhistory-owner-result-entry.poison.json")),
       put(root, "state/ratings/booksofhistory/ledger.jsonl", `${JSON.stringify({ schemaVersion: "rating/1", id: "r-2026-08-14-abcd", ventureId: "booksofhistory", objectKind: "social-variant", objectRef: { id: "rec-aaaaaaaaaaaaaaaaaaaa", contentHash: "sha256:aaaaaaaaaaaa" }, rating: "good", ratedAt: "2026-08-14T12:00:00.000Z" })}\n`)
     ]);
 
@@ -165,7 +165,7 @@ describe("BOOKSOFHISTORY admin loader", () => {
     recommendation.owner.resultRefs.cs = ["ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json"];
     await Promise.all([
       put(root, "state/ventures/booksofhistory/recommendations/feature.json", `${JSON.stringify(recommendation)}\n`),
-      put(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json"))
+      put(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("booksofhistory-owner-result-entry.valid.json"))
     ]);
 
     const feature = (await readAdminBooksofhistory(root)).features[0];

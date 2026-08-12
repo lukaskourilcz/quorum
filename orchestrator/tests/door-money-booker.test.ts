@@ -139,7 +139,27 @@ describe("Door Money BOOKER call", () => {
     expect(context.droppedGoViralBriefs).toBe(3);
     expect(context.playbooks).toEqual({ state: "missing", items: [] });
     expect(context.ownerCompletions).toEqual({ state: "missing", items: [] });
-    expect(context.ownerResults).toEqual({ state: "deferred-until-dm-20a", items: [] });
+    expect(context.ownerResults).toEqual({ state: "missing", items: [] });
+  });
+
+  it("makes a canonical owner-entered result available as bounded BOOKER learning", async () => {
+    const root = await temporaryRoot();
+    await writeJson(root, "ventures/door-money/results/owner-result-fixture.json", {
+      schemaVersion: "owner-result-entry/1", id: "owner-result-fixture", ventureId: "door-money",
+      recommendationId: "fixture-radio-carousel", platform: "instagram",
+      postUrl: "https://example.test/synthetic-post", metrics: { views: 21, saves: 3 },
+      outcome: "The synthetic manual entry recorded three saves.", source: "owner-entry",
+      capturedAt: "2026-08-13T13:00:00.000Z"
+    });
+
+    const context = await loadDoorMoneyBookerContext(root, "2026-08-13", "2026-08-13T14:00:00.000Z");
+    expect(context.ownerResults).toEqual({ state: "present", items: [expect.objectContaining({
+      ref: "result:owner-result-fixture", recommendationId: "fixture-radio-carousel",
+      metrics: { views: 21, saves: 3 }
+    })] });
+    expect(context.allowedEvidenceRefs).toEqual(["result:owner-result-fixture"]);
+    expect(context.availableLearningRefs).toEqual(["result:owner-result-fixture"]);
+    expect(context).toMatchObject({ droppedOwnerResults: 0, omittedOwnerResults: 0 });
   });
 
   it("uses one guarded OpenAI call and records a supported synthetic action packet", async () => {
@@ -154,7 +174,8 @@ describe("Door Money BOOKER call", () => {
       tokensIn: 320,
       tokensOut: 140,
       cachedTokensIn: 0,
-      cacheWriteTokensIn: 0
+      cacheWriteTokensIn: 0,
+      toolUses: 0
     });
     try {
       const result = await runDoorMoneyGrowthCycle({
@@ -167,7 +188,7 @@ describe("Door Money BOOKER call", () => {
       });
 
       expect(provider).toHaveBeenCalledOnce();
-      expect(provider.mock.calls[0]?.[0].input).toContain('"state":"deferred-until-dm-20a"');
+      expect(provider.mock.calls[0]?.[0].input).toContain('"ownerResults":{"state":"missing","items":[]}');
       expect(result).toMatchObject({ decision: "PLAN", status: "live_complete" });
       expect(result.actionPacket?.tasks).toHaveLength(1);
       const stored = ActionPacketSchema.parse(JSON.parse(await readFile(
@@ -208,7 +229,8 @@ describe("Door Money BOOKER call", () => {
       tokensIn: 240,
       tokensOut: 60,
       cachedTokensIn: 0,
-      cacheWriteTokensIn: 0
+      cacheWriteTokensIn: 0,
+      toolUses: 0
     });
     try {
       const result = await runDoorMoneyGrowthCycle({

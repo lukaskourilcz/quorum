@@ -9,6 +9,7 @@ import {
   DoorMoneyPlaybookSchema,
   type DoorMoneyPlaybook
 } from "../../contracts/door-money-playbook.js";
+import { OwnerResultEntrySchema } from "../../contracts/owner-result-entry.js";
 import { atomicWriteJson } from "../../state.js";
 
 const SlugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(160);
@@ -48,14 +49,29 @@ export interface DoorMoneyGrowthMemory {
     outcome: string;
     completedAt: string;
   }>;
+  ownerResults: Array<{
+    ref: string;
+    id: string;
+    recommendationId: string;
+    platform: string;
+    metrics: Record<string, number>;
+    outcome: string;
+    capturedAt: string;
+  }>;
   droppedPlaybooks: number;
   droppedActionPackets: number;
+  droppedOwnerResults: number;
   omittedPlaybooks: number;
   omittedOwnerCompletions: number;
+  omittedOwnerResults: number;
 }
 
 export function doorMoneyCompletionRef(packetId: string, taskId: string): string {
   return DoorMoneyLearningRefSchema.parse(`completion:${packetId}:${taskId}`);
+}
+
+export function doorMoneyOwnerResultRef(id: string): string {
+  return DoorMoneyLearningRefSchema.parse(`result:${id}`);
 }
 
 async function jsonNames(directory: string): Promise<{ names: string[]; unreadable: number }> {
@@ -76,10 +92,18 @@ async function jsonNames(directory: string): Promise<{ names: string[]; unreadab
 
 /** Reserves the hundredth action-packet context ref for an optional GoVIRAL brief. */
 export function boundDoorMoneyGrowthMemory(memory: DoorMoneyGrowthMemory): DoorMoneyGrowthMemory {
-  const ownerCompletions = [...memory.ownerCompletions]
-    .sort((left, right) => right.completedAt.localeCompare(left.completedAt) || left.id.localeCompare(right.id))
-    .slice(0, DOOR_MONEY_MEMORY_REF_LIMIT);
-  const remaining = DOOR_MONEY_MEMORY_REF_LIMIT - ownerCompletions.length;
+  const ownerSignals = [
+    ...memory.ownerCompletions.map((item) => ({ kind: "completion" as const, at: item.completedAt, id: item.id })),
+    ...memory.ownerResults.map((item) => ({ kind: "result" as const, at: item.capturedAt, id: item.ref }))
+  ].sort((left, right) => Date.parse(right.at) - Date.parse(left.at) || left.kind.localeCompare(right.kind) || left.id.localeCompare(right.id));
+  const selected = new Set(ownerSignals.slice(0, DOOR_MONEY_MEMORY_REF_LIMIT).map(({ id }) => id));
+  const ownerCompletions = memory.ownerCompletions
+    .filter(({ id }) => selected.has(id))
+    .sort((left, right) => Date.parse(right.completedAt) - Date.parse(left.completedAt) || left.id.localeCompare(right.id));
+  const ownerResults = memory.ownerResults
+    .filter(({ ref }) => selected.has(ref))
+    .sort((left, right) => Date.parse(right.capturedAt) - Date.parse(left.capturedAt) || left.ref.localeCompare(right.ref));
+  const remaining = DOOR_MONEY_MEMORY_REF_LIMIT - ownerCompletions.length - ownerResults.length;
   const playbooks = [...memory.playbooks]
     .sort((left, right) => left.id.localeCompare(right.id))
     .slice(0, remaining);
@@ -87,8 +111,10 @@ export function boundDoorMoneyGrowthMemory(memory: DoorMoneyGrowthMemory): DoorM
     ...memory,
     playbooks,
     ownerCompletions,
+    ownerResults,
     omittedPlaybooks: memory.omittedPlaybooks + memory.playbooks.length - playbooks.length,
-    omittedOwnerCompletions: memory.omittedOwnerCompletions + memory.ownerCompletions.length - ownerCompletions.length
+    omittedOwnerCompletions: memory.omittedOwnerCompletions + memory.ownerCompletions.length - ownerCompletions.length,
+    omittedOwnerResults: memory.omittedOwnerResults + memory.ownerResults.length - ownerResults.length
   };
 }
 
@@ -98,26 +124,33 @@ export async function loadDoorMoneyGrowthMemory(
   asOfDate: string,
   asOfTime = `${asOfDate}T23:59:59.999Z`
 ): Promise<DoorMoneyGrowthMemory> {
+  const asOfMillis = Date.parse(asOfTime);
+  if (!Number.isFinite(asOfMillis)) throw new Error("Door Money growth memory requires a valid as-of timestamp");
   const playbookDirectory = path.join(root, "ventures", "door-money", "playbooks");
   const actionDirectory = path.join(root, "ventures", "door-money", "actions");
-  const [playbookNames, actionNames] = await Promise.all([
+  const resultDirectory = path.join(root, "ventures", "door-money", "results");
+  const [playbookNames, actionNames, resultNames] = await Promise.all([
     jsonNames(playbookDirectory),
-    jsonNames(actionDirectory)
+    jsonNames(actionDirectory),
+    jsonNames(resultDirectory)
   ]);
   const memory: DoorMoneyGrowthMemory = {
     playbooks: [],
     ownerCompletions: [],
+    ownerResults: [],
     droppedPlaybooks: playbookNames.unreadable,
     droppedActionPackets: actionNames.unreadable,
+    droppedOwnerResults: resultNames.unreadable,
     omittedPlaybooks: 0,
-    omittedOwnerCompletions: 0
+    omittedOwnerCompletions: 0,
+    omittedOwnerResults: 0
   };
 
   for (const name of playbookNames.names) {
     try {
       const playbook = DoorMoneyPlaybookSchema.parse(JSON.parse(await readFile(path.join(playbookDirectory, name), "utf8")) as unknown);
       if (name !== `${playbook.id}.json`) throw new Error("Playbook filename does not match its canonical id");
-      const eligible = playbook.revisions.filter(({ updatedAt }) => updatedAt <= asOfTime);
+      const eligible = playbook.revisions.filter(({ updatedAt }) => Date.parse(updatedAt) <= asOfMillis);
       const revision = eligible.at(-1);
       if (!revision) {
         memory.droppedPlaybooks += 1;
@@ -132,7 +165,7 @@ export async function loadDoorMoneyGrowthMemory(
         summary: revision.summary,
         steps: revision.steps,
         evidenceRefs: revision.evidenceRefs,
-        updatedAt: revision.updatedAt
+        updatedAt: new Date(revision.updatedAt).toISOString()
       });
     } catch {
       memory.droppedPlaybooks += 1;
@@ -147,17 +180,40 @@ export async function loadDoorMoneyGrowthMemory(
         continue;
       }
       packet.tasks.forEach((task) => {
-        if (task.completion && task.completion.completedAt <= asOfTime) memory.ownerCompletions.push({
+        if (task.completion && Date.parse(task.completion.completedAt) <= asOfMillis) memory.ownerCompletions.push({
           id: doorMoneyCompletionRef(packet.id, task.id),
           packetId: packet.id,
           taskId: task.id,
           title: task.title,
           outcome: task.completion.outcome,
-          completedAt: task.completion.completedAt
+          completedAt: new Date(task.completion.completedAt).toISOString()
         });
       });
     } catch {
       memory.droppedActionPackets += 1;
+    }
+  }
+  for (const name of resultNames.names) {
+    try {
+      const result = OwnerResultEntrySchema.parse(JSON.parse(await readFile(path.join(resultDirectory, name), "utf8")) as unknown);
+      if (result.ventureId !== "door-money" || name !== `${result.id}.json`) {
+        throw new Error("Owner-result filename or venture does not match its canonical identity");
+      }
+      if (Date.parse(result.capturedAt) > asOfMillis) {
+        memory.droppedOwnerResults += 1;
+        continue;
+      }
+      memory.ownerResults.push({
+        ref: doorMoneyOwnerResultRef(result.id),
+        id: result.id,
+        recommendationId: result.recommendationId,
+        platform: result.platform,
+        metrics: result.metrics,
+        outcome: result.outcome,
+        capturedAt: new Date(result.capturedAt).toISOString()
+      });
+    } catch {
+      memory.droppedOwnerResults += 1;
     }
   }
   return boundDoorMoneyGrowthMemory(memory);

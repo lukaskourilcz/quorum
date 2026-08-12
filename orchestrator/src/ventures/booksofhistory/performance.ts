@@ -4,7 +4,7 @@ import {
   type PerformanceWeightProposal,
   type PerformanceWeights
 } from "../../contracts/performance-weights.js";
-import { OwnerResultEntrySchema } from "../../contracts/owner-result-entry.js";
+import { BooksofHistoryOwnerResultEntrySchema } from "../../contracts/owner-result-entry.js";
 import { atomicWriteJson, readJson, withFileLock } from "../../state.js";
 import type { BhLanePerformanceWeights } from "./score.js";
 
@@ -78,14 +78,14 @@ function proposalPath(proposalId: string): string {
 }
 
 async function verifyCitations(root: string, proposal: PerformanceWeightProposal): Promise<void> {
-  const cached = new Map<string, ReturnType<typeof OwnerResultEntrySchema.parse>>();
+  const cached = new Map<string, ReturnType<typeof BooksofHistoryOwnerResultEntrySchema.parse>>();
   for (const adjustment of proposal.adjustments) {
     for (const resultId of adjustment.resultIds) {
       let result = cached.get(resultId);
       if (!result) {
         const raw = await readJson<unknown | null>(root, `ventures/booksofhistory/results/${resultId}.json`, null);
         if (raw === null) throw new Error(`Performance proposal ${proposal.proposalId} cites missing result ${resultId}`);
-        result = OwnerResultEntrySchema.parse(raw);
+        result = BooksofHistoryOwnerResultEntrySchema.parse(raw);
         cached.set(resultId, result);
       }
       if (result.ventureId !== "booksofhistory" || result.locale !== adjustment.lane) {

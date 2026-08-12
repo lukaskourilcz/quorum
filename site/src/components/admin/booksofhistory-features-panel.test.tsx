@@ -73,7 +73,7 @@ describe("BOOKSOFHISTORY feature panel", () => {
     recommendation.owner.resultRefs.cs = ["ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json"];
     await Promise.all([
       put(root, "state/ventures/booksofhistory/recommendations/feature.json", `${JSON.stringify(recommendation)}\n`),
-      put(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json"))
+      put(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("booksofhistory-owner-result-entry.valid.json"))
     ]);
 
     const html = renderToStaticMarkup(<BooksofhistoryFeaturesPanel snapshot={await readAdminBooksofhistory(root)} />);

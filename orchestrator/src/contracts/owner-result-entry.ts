@@ -1,9 +1,10 @@
 import { z } from "zod";
-import { DateTimeSchema, HttpsUrlSchema, VentureIdSchema } from "./common.js";
+import { DateTimeSchema, HttpsUrlSchema } from "./common.js";
+import { RecommendationPlatformSchema } from "./venture-recommendation.js";
 
 const CountSchema = z.number().int().min(0).max(Number.MAX_SAFE_INTEGER).nullable();
 
-export const OwnerResultMetricsSchema = z.strictObject({
+export const BooksofHistoryOwnerResultMetricsSchema = z.strictObject({
   views: CountSchema,
   likes: CountSchema,
   comments: CountSchema,
@@ -16,10 +17,10 @@ export const OwnerResultMetricsSchema = z.strictObject({
 });
 
 /** Shared, manual-only per-post measurement for venture recommendation lanes. */
-export const OwnerResultEntrySchema = z.strictObject({
+export const BooksofHistoryOwnerResultEntrySchema = z.strictObject({
   schemaVersion: z.literal("owner-result-entry/1"),
   resultId: z.string().regex(/^result-[a-f0-9]{20}$/),
-  ventureId: VentureIdSchema,
+  ventureId: z.literal("booksofhistory"),
   recommendationId: z.string().regex(/^rec-[a-z0-9]+(?:-[a-z0-9]+)*$/).max(160),
   locale: z.enum(["cs", "en"]),
   platform: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(80),
@@ -27,7 +28,7 @@ export const OwnerResultEntrySchema = z.strictObject({
   capturedAt: DateTimeSchema,
   recordedAt: DateTimeSchema,
   enteredBy: z.literal("owner"),
-  metrics: OwnerResultMetricsSchema,
+  metrics: BooksofHistoryOwnerResultMetricsSchema,
   note: z.string().trim().min(1).max(500).nullable()
 }).superRefine((entry, context) => {
   if (Date.parse(entry.capturedAt) > Date.parse(entry.recordedAt)) {
@@ -35,5 +36,42 @@ export const OwnerResultEntrySchema = z.strictObject({
   }
 });
 
-export type OwnerResultMetrics = z.infer<typeof OwnerResultMetricsSchema>;
+export type BooksofHistoryOwnerResultMetrics = z.infer<typeof BooksofHistoryOwnerResultMetricsSchema>;
+export type BooksofHistoryOwnerResultEntry = z.infer<typeof BooksofHistoryOwnerResultEntrySchema>;
+
+const SlugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(160);
+const MetricSchema = z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER);
+
+export const OwnerResultMetricsSchema = z.strictObject({
+  views: MetricSchema.optional(),
+  likes: MetricSchema.optional(),
+  comments: MetricSchema.optional(),
+  shares: MetricSchema.optional(),
+  saves: MetricSchema.optional(),
+  follows: MetricSchema.optional(),
+  linkTaps: MetricSchema.optional()
+}).refine((metrics) => Object.keys(metrics).length > 0, "At least one owner-entered metric is required");
+
+/** Manual operational evidence only. No analytics client may produce this record. */
+export const OwnerResultEntrySchema = z.strictObject({
+  schemaVersion: z.literal("owner-result-entry/1"),
+  id: SlugSchema,
+  ventureId: z.literal("door-money"),
+  recommendationId: SlugSchema,
+  platform: RecommendationPlatformSchema,
+  postUrl: HttpsUrlSchema.max(2_000),
+  metrics: OwnerResultMetricsSchema,
+  outcome: z.string().trim().min(1).max(1_000),
+  source: z.literal("owner-entry"),
+  capturedAt: DateTimeSchema
+});
+
 export type OwnerResultEntry = z.infer<typeof OwnerResultEntrySchema>;
+export type OwnerResultMetrics = z.infer<typeof OwnerResultMetricsSchema>;
+
+/** Published shared boundary; venture code imports its narrower schema above. */
+export const AnyOwnerResultEntrySchema = z.union([
+  BooksofHistoryOwnerResultEntrySchema,
+  OwnerResultEntrySchema
+]);
+export type AnyOwnerResultEntry = z.infer<typeof AnyOwnerResultEntrySchema>;

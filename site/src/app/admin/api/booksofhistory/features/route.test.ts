@@ -148,7 +148,7 @@ describe("BOOKSOFHISTORY feature actions", () => {
     await writeFile(path.join(root, "state/INBOX.md"), "- [x] HUMAN_APPROVAL BH-RESULTS-004 — approved\n");
     const resultPath = path.join(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json");
     await mkdir(path.dirname(resultPath), { recursive: true });
-    const entry = JSON.parse(await readFile(path.resolve(process.cwd(), "../contracts/fixtures/owner-result-entry.valid.json"), "utf8"));
+    const entry = JSON.parse(await readFile(path.resolve(process.cwd(), "../contracts/fixtures/booksofhistory-owner-result-entry.valid.json"), "utf8"));
     entry.capturedAt = "2026-08-14T10:04:00.000Z";
     entry.recordedAt = AT;
     await writeFile(resultPath, `${JSON.stringify(entry)}\n`);

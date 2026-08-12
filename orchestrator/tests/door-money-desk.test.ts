@@ -123,7 +123,8 @@ describe("Door Money desk runner", () => {
       tokensIn: 600,
       tokensOut: 180,
       cachedTokensIn: 0,
-      cacheWriteTokensIn: 0
+      cacheWriteTokensIn: 0,
+      toolUses: 0
     });
     try {
       const result = await runDoorMoneyDeskCycle({
@@ -216,7 +217,8 @@ describe("Door Money desk runner", () => {
       tokensIn: 500,
       tokensOut: 20,
       cachedTokensIn: 0,
-      cacheWriteTokensIn: 0
+      cacheWriteTokensIn: 0,
+      toolUses: 0
     });
     try {
       const result = await runDoorMoneyDeskCycle({
@@ -261,7 +263,8 @@ describe("Door Money desk runner", () => {
       tokensIn: 600,
       tokensOut: 180,
       cachedTokensIn: 0,
-      cacheWriteTokensIn: 0
+      cacheWriteTokensIn: 0,
+      toolUses: 0
     });
     try {
       const result = await runDoorMoneyDeskCycle({

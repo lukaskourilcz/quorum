@@ -26,7 +26,7 @@ import { MeetingAgendaQueueSchema } from "./meeting-agenda.js";
 import { MeetingRecordSchema } from "./meeting-record.js";
 import { OpsReportSchema } from "./ops-report.js";
 import { OwnerAttentionSchema } from "./owner-attention.js";
-import { OwnerResultEntrySchema } from "./owner-result-entry.js";
+import { AnyOwnerResultEntrySchema } from "./owner-result-entry.js";
 import { PerformanceWeightProposalSchema, PerformanceWeightsSchema } from "./performance-weights.js";
 import {
   AdjustmentEntrySchema,
@@ -90,7 +90,7 @@ export const ContractSchemas = {
   "meeting-record": MeetingRecordSchema,
   "ops-report": OpsReportSchema,
   "owner-attention": OwnerAttentionSchema,
-  "owner-result-entry": OwnerResultEntrySchema,
+  "owner-result-entry": AnyOwnerResultEntrySchema,
   "performance-weights": PerformanceWeightsSchema,
   "performance-weight-proposal": PerformanceWeightProposalSchema,
   "adjustment-entry": AdjustmentEntrySchema,

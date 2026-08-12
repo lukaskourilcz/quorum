@@ -48,7 +48,7 @@ afterEach(async () => {
 describe("BOOKSOFHISTORY performance weights", () => {
   it("records a cited proposal before applying bounded category, era and geography weights", async () => {
     const root = await temporaryRoot();
-    await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json"));
+    await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("booksofhistory-owner-result-entry.valid.json"));
     const recordedProposal = await proposal();
 
     const first = await applyBhPerformanceWeightProposal({ root, proposal: recordedProposal });
@@ -80,7 +80,7 @@ describe("BOOKSOFHISTORY performance weights", () => {
 
   it("rejects a proposal below the fixed floor and leaves neutral weights untouched", async () => {
     const root = await temporaryRoot();
-    await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json"));
+    await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("booksofhistory-owner-result-entry.valid.json"));
     const belowFloor = { ...await proposal(), adjustments: [{ ...(await proposal()).adjustments[0]!, to: BH_PERFORMANCE_WEIGHT_FLOOR - 0.01 }] };
 
     await expect(applyBhPerformanceWeightProposal({ root, proposal: belowFloor })).rejects.toThrow("breaches the 0.75-1.25 bounds");
@@ -93,11 +93,11 @@ describe("BOOKSOFHISTORY performance weights", () => {
     const missing = await proposal();
     await expect(applyBhPerformanceWeightProposal({ root, proposal: missing })).rejects.toThrow("cites missing result");
 
-    const futureResult = { ...await fixture("owner-result-entry.valid.json") as object, recordedAt: "2026-08-22T12:05:00.000Z" };
+    const futureResult = { ...await fixture("booksofhistory-owner-result-entry.valid.json") as object, recordedAt: "2026-08-22T12:05:00.000Z" };
     await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", futureResult);
     await expect(applyBhPerformanceWeightProposal({ root, proposal: missing })).rejects.toThrow("cites future result");
 
-    await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json"));
+    await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("booksofhistory-owner-result-entry.valid.json"));
     const wrongLane = { ...missing, adjustments: [{ ...missing.adjustments[0]!, lane: "en" }] };
     await expect(applyBhPerformanceWeightProposal({ root, proposal: wrongLane })).rejects.toThrow("outside adjustment lane en");
     expect(await readJson(root, `${BH_PERFORMANCE_PROPOSALS_ROOT}/${missing.proposalId}.json`, null)).toBeNull();

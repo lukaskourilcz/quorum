@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "owner-result-entry/1",
+  "resultId": "result-aaaaaaaaaaaaaaaaaaaa",
+  "ventureId": "booksofhistory",
+  "recommendationId": "rec-aaaaaaaaaaaaaaaaaaaa",
+  "locale": "cs",
+  "platform": "instagram",
+  "postUrl": "https://social.example/booksofhistory-cs",
+  "capturedAt": "2026-08-20T12:00:00.000Z",
+  "recordedAt": "2026-08-20T12:05:00.000Z",
+  "enteredBy": "owner",
+  "metrics": {
+    "views": 1200,
+    "likes": 84,
+    "comments": 7,
+    "shares": 13,
+    "saves": 31,
+    "follows": 5,
+    "linkTaps": null
+  },
+  "note": "First owner-entered Czech lane result."
+}
