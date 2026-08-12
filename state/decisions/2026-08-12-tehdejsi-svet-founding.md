@@ -141,7 +141,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-12** — `venture-recommendation` evidence kind `tehdejsi-story`
 - [x] **TS-13** — Day A planning call and briefs
 - [x] **TS-14a** — Day B bilingual production with the anti-mirror rule
-- [ ] **TS-14b** — Production gates for both languages
+- [x] **TS-14b** — Production gates for both languages
 - [ ] **TS-15a** — Cyrillic-complete committed fonts
 - [ ] **TS-15b** — Glyph-coverage test for the Ukrainian alphabet
 - [ ] **TS-16** — Brand tokens from the product's export palette

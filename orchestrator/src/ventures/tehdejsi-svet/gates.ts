@@ -39,12 +39,12 @@ interface TierTwoTopic {
 const TIER_TWO_TOPICS: readonly TierTwoTopic[] = [
   {
     id: "occupation-1968",
-    pattern: /(?:srpnov[áa]\s+okupac|okupace\s+v\s+roce\s+1968|invaz[ei]\s+(?:v\s+roce\s+)?1968|pra[žz]sk[éáa]\s+jaro|варшавськ\w*\s+догов\w*\s+1968|празьк\w*\s+весн|вторгненн\w*\s+1968|радянська\s+окупац)/iu,
+    pattern: /(?:srpnov[áa]\s+okupac|okupace\s+v\s+roce\s+1968|invaz[ei]\s+(?:v\s+roce\s+)?1968|pra[žz]sk[éáa]\s+jaro|варшавськ\p{L}*\s+догов\p{L}*\s+1968|празьк\p{L}*\s+весн|вторгненн\p{L}*\s+1968|радянська\s+окупац)/iu,
     years: [1968, 1969]
   },
   {
     id: "second-world-war",
-    pattern: /(?:druh[áéa]\s+sv[ěe]tov[áéa]\s+v[áa]lk|protektor[áa]t|holo[ck]aust|[šs]oa\b|lidice|друг\w*\s+світов\w*\s+війн|голокост|бабин\s+яр)/iu,
+    pattern: /(?:druh[áéa]\s+sv[ěe]tov[áéa]\s+v[áa]lk|protektor[áa]t|holo[ck]aust|[šs]oa\b|lidice|друг\p{L}*\s+світов\p{L}*\s+війн|голокост|бабин\s+яр)/iu,
     years: [1939, 1945]
   },
   {
@@ -54,7 +54,7 @@ const TIER_TWO_TOPICS: readonly TierTwoTopic[] = [
   },
   {
     id: "deportations",
-    pattern: /(?:deportac|odsun\s+n[ěe]mc|vyh[áa]n[ěe]n[íi]|nucen[éea]\s+vyst[ěe]hov|депортац|виселенн|примусов\w*\s+переселенн)/iu
+    pattern: /(?:deportac|odsun\s+n[ěe]mc|vyh[áa]n[ěe]n[íi]|nucen[éea]\s+vyst[ěe]hov|депортац|виселенн|примусов\p{L}*\s+переселенн)/iu
   },
   {
     id: "chornobyl",
@@ -63,11 +63,11 @@ const TIER_TWO_TOPICS: readonly TierTwoTopic[] = [
   },
   {
     id: "collaboration",
-    pattern: /(?:kolaborac|udava[čc]|st[áa]tn[íi]\s+bezpe[čc]nost|\bstb\b|\bkgb\b|колаборац|донос\w*\s+на|стукач)/iu
+    pattern: /(?:kolaborac|udava[čc]|st[áa]tn[íi]\s+bezpe[čc]nost|\bstb\b|\bkgb\b|колаборац|донос\p{L}*\s+на|стукач)/iu
   },
   {
     id: "current-war",
-    pattern: /(?:rusk[áa]\s+invaze|invaze\s+na\s+ukrajinu|plnorozsahl|повномасштабн|російськ\w*\s+вторгненн|велика\s+війна|russian\s+invasion)/iu,
+    pattern: /(?:rusk[áa]\s+invaze|invaze\s+na\s+ukrajinu|plnorozsahl|повномасштабн|російськ\p{L}*\s+вторгненн|велика\s+війна|russian\s+invasion)/iu,
     years: [2022, 2030]
   }
 ];
@@ -92,7 +92,7 @@ const EXCLUDED_CATEGORIES: readonly ExcludedCategory[] = [
   },
   {
     id: "excluded:atrocity-imagery",
-    pattern: /(?:masov[ýyéa]\s+hrob|poprav\w*\s+fotograf|t[ěe]la\s+ob[ěe]t[íi]|масов\w*\s+похованн|тіла\s+загиблих)/iu,
+    pattern: /(?:masov[ýyéa]\s+hrob|poprav\p{L}*\s+fotograf|t[ěe]la\s+ob[ěe]t[íi]|масов\p{L}*\s+похованн|тіла\s+загиблих)/iu,
     detail: "Atrocity imagery and its description are excluded from social entirely."
   },
   {

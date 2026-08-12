@@ -75,6 +75,38 @@ describe("Tehdejsi svet tier classifier", () => {
       expect(classified.raisedBy, topic).toContain(topic);
     }
   });
+
+  it("catches the same subjects written in Ukrainian", () => {
+    // `\w` never matches Cyrillic, so a pattern using it passes every Ukrainian phrase in it
+    // while looking exactly like a pattern that checked them. These are the cases that prove
+    // the Cyrillic alternatives fire at all.
+    const cases: ReadonlyArray<[string, string]> = [
+      ["occupation-1968", "Празька весна закінчилася, і в місто зайшли чужі солдати того літа."],
+      ["second-world-war", "Друга світова війна змінила місто назавжди, і це відчувалося десятиліттями."],
+      ["holodomor", "Голодомор забрав мільйони життів в українських селах у ті роки."],
+      ["deportations", "Примусове переселення родин відбувалося вночі й без жодних пояснень."],
+      ["chornobyl", "Чорнобиль змінив життя цілої області за один весняний тиждень."],
+      ["collaboration", "Стукач міг виявитися сусідом з поверху, і про це знали всі."],
+      ["current-war", "Російське вторгнення змінило місто так, що воно вже ніколи не буде колишнім."]
+    ];
+    for (const [topic, text] of cases) {
+      const classified = classifyTier(fact({ id: topic, country: "ua", text, yearFrom: 1975, yearTo: 1975 }));
+      expect(classified.raisedBy, topic).toContain(topic);
+    }
+  });
+
+  it("catches an excluded category written in Ukrainian", () => {
+    expect(rules(assessFact(fact({
+      id: "ua-atrocity",
+      country: "ua",
+      text: "Масове поховання знайшли значно пізніше, коли вже ніхто не чекав відповідей."
+    })).issues)).toContain("excluded:atrocity-imagery");
+    expect(rules(assessFact(fact({
+      id: "ua-leader",
+      country: "ua",
+      text: "Хрущов виступав по телебаченню, і промову дивилася вся країна того вечора."
+    })).issues)).toContain("excluded:leader-subject");
+  });
 });
 
 describe("Tehdejsi svet tier effects", () => {
