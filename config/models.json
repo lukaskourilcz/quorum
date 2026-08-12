@@ -134,6 +134,25 @@
       "provider": "fal",
       "model": "fal-ai/flux/schnell",
       "size": "1024x1024"
+    },
+    "_comment_DOOR_MONEY": "GHOST is the venture's single quality-critical daily creative call. BOOK_INGEST uses Haiku for per-chunk annotation and map work. BOOK_STYLE performs the one-time Sonnet synthesis; its 12000/4000 caps cost at most $0.096 at the dated post-September Sonnet price, below the immutable $0.10 per-call ceiling. BOOKER deliberately rides OPENAI_SPECIALIST.",
+    "GHOST": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-5",
+      "maxInputTokens": 8000,
+      "maxOutputTokens": 2500
+    },
+    "BOOK_INGEST": {
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "maxInputTokens": 12000,
+      "maxOutputTokens": 3000
+    },
+    "BOOK_STYLE": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-5",
+      "maxInputTokens": 12000,
+      "maxOutputTokens": 4000
     }
   }
 }

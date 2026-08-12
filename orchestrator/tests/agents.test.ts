@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { validateAgentAvatars } from "../src/brand/avatars.js";
+import { estimateTextCall } from "../src/budget.js";
 import {
   FOUNDING_AGENT_IDS,
   loadAgentRegistry
@@ -167,6 +168,51 @@ describe("agent registry and identity assets", () => {
     expect(shared).toContain(`${stated} non-voting specialists`);
     for (const agent of specialists.filter((entry) => entry.status !== "active")) {
       expect(shared, `${agent.id} is off the roster and unnamed in the preamble`).toContain(agent.id);
+    }
+  });
+
+  it("pins Door Money model roles below the per-call ceiling", async () => {
+    type TextRole = {
+      provider: "openai" | "anthropic";
+      model: string;
+      maxInputTokens: number;
+      maxOutputTokens: number;
+    };
+    const models = JSON.parse(
+      await readFile(path.join(configRoot, "models.json"), "utf8")
+    ) as { roles: Record<string, TextRole | string> };
+
+    expect(models.roles.GHOST).toEqual({
+      provider: "anthropic",
+      model: "claude-sonnet-5",
+      maxInputTokens: 8_000,
+      maxOutputTokens: 2_500
+    });
+    expect(models.roles.BOOK_INGEST).toEqual({
+      provider: "anthropic",
+      model: "claude-haiku-4-5-20251001",
+      maxInputTokens: 12_000,
+      maxOutputTokens: 3_000
+    });
+    expect(models.roles.BOOK_STYLE).toEqual({
+      provider: "anthropic",
+      model: "claude-sonnet-5",
+      maxInputTokens: 12_000,
+      maxOutputTokens: 4_000
+    });
+    expect(models.roles.BOOKER).toBeUndefined();
+    expect(models.roles.OPENAI_SPECIALIST).toMatchObject({ provider: "openai" });
+
+    for (const roleName of ["GHOST", "BOOK_INGEST", "BOOK_STYLE"] as const) {
+      const role = models.roles[roleName] as TextRole;
+      const maximum = estimateTextCall({
+        provider: role.provider,
+        model: role.model,
+        promptChars: role.maxInputTokens * 3.5,
+        maxOutputTokens: role.maxOutputTokens,
+        at: new Date("2026-09-02T00:00:00.000Z")
+      });
+      expect(maximum.estimatedUsd, `${roleName} can exceed the $0.10 call cap`).toBeLessThan(0.1);
     }
   });
 });
