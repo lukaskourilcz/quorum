@@ -98,7 +98,7 @@ post anything.
 - [x] **BH-03b** — Meeting policy for `bh-desk`
 - [x] **BH-03c** — `cycle.yml` dispatch choices and mode gates
 - [x] **BH-03d** — Vercel cron entries for the 12:00 slot
-- [ ] **BH-04a** — FOLIO and PLOT in registry, routing, controls and cast schema
+- [x] **BH-04a** — FOLIO and PLOT in registry, routing, controls and cast schema
 - [ ] **BH-04b** — Prompts for FOLIO, PLOT and the research/verification calls
 - [ ] **BH-04c** — Model roles for the desk and the research ladder
 - [ ] **BH-05a** — Cycle state-machine contract
@@ -147,6 +147,10 @@ post anything.
   tracker did not exist until BH-01. The audit therefore completed in the empty commit
   `57d063a`; this first tracker commit marks it complete. This is the only way to keep
   the required title order, the audit's no-change acceptance and one commit per issue.
+- **QUILL remains global.** BH-04a's issue text asks to extend QUILL's venture array,
+  but the registry has `ventures: "global"` and design section 5 explicitly keeps QUILL
+  global. HACEK gains `booksofhistory`; narrowing QUILL to a venture array would demote
+  a shared public-claim control and contradict the higher-precedence design.
 - **Sibling coordination.** Neither the Kvórum nor Door Money build has landed. The
   shared recommendation contract, owner-result contract, performance weights and
   per-record carousel-summary locale are absent. BOOKSOFHISTORY will create or extend

@@ -28,6 +28,34 @@ describe("venture agent controls", () => {
     expect(() => VentureAgentControlsSchema.parse(invalid)).toThrow(/not switchable/);
   });
 
+  it("locks the BOOKSOFHISTORY desk to its bounded five-seat preset", async () => {
+    const [controls, routing] = await Promise.all([
+      loadVentureAgentControls(),
+      loadRoutingConfig(path.join(configRoot, "agent-routing.json"))
+    ]);
+    expect(controls.ventures.booksofhistory).toEqual({
+      lockedOn: ["FOLIO", "PLOT", "QUILL", "HACEK", "AUDIT"],
+      switchable: [],
+      disabled: []
+    });
+    const room = routeBoardroom(routing, {
+      roomId: "BH-DESK-ROUTING",
+      topicType: "edition",
+      objective: "Choose recorded candidates for a drafts-only research cycle",
+      evidenceRefs: ["BH-SHORTLIST-001"],
+      decisionNeeded: "PLAN",
+      riskTags: [],
+      budgetImpactUsd: 0,
+      ventureId: "booksofhistory",
+      owner: "FOLIO",
+      preset: "bh-desk-room",
+      requiredParticipants: controls.ventures.booksofhistory!.lockedOn
+    });
+    expect(room.selectedParticipants.map(({ agent }) => agent)).toEqual([
+      "FOLIO", "PLOT", "QUILL", "HACEK", "AUDIT"
+    ]);
+  });
+
   it("records a switched-off role in the routing explanation", async () => {
     const [controls, routing] = await Promise.all([
       loadVentureAgentControls(),
