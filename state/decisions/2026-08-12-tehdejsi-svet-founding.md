@@ -146,7 +146,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-15b** — Glyph-coverage test for the Ukrainian alphabet
 - [x] **TS-16** — Brand tokens from the product's export palette
 - [x] **TS-17a** — The bilingual family kit: slots and devices
-- [ ] **TS-17b** — Photo slide variant with mandatory attribution
+- [x] **TS-17b** — Photo slide variant with mandatory attribution
 - [ ] **TS-17c** — Render module and recorded summaries
 - [ ] **TS-18** — Studio bilingual determinism test
 - [ ] **TS-19** — Admin approval write path with the tier-2 review gate

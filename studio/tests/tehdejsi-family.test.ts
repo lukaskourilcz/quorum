@@ -10,6 +10,8 @@ import {
   tehdejsiCsSlot,
   tehdejsiDeckTemplate,
   tehdejsiDeckTemplates,
+  tehdejsiPhotoAllowed,
+  tehdejsiPhotoIssues,
   tehdejsiUaSlot
 } from "../src/families-tehdejsi.js";
 import { validateTemplateForBrand } from "../src/validation.js";
@@ -130,5 +132,39 @@ describe("the bilingual family", () => {
 
   it("is byte-stable: the same length builds the same template twice", () => {
     expect(JSON.stringify(tehdejsiDeckTemplate(5))).toBe(JSON.stringify(tehdejsiDeckTemplate(5)));
+  });
+});
+
+describe("the photo slide's attribution", () => {
+  const withAttribution = { attribution: "Photo by J. Novák, CC BY-SA 4.0" };
+
+  it("refuses a licensed photograph credited to nobody", () => {
+    const issues = tehdejsiPhotoIssues({ strings: { attribution: "" }, hasPhoto: true, licence: "cc-by-sa" });
+    expect(issues.map((issue) => issue.rule)).toEqual(["photo:missing-attribution"]);
+    expect(tehdejsiPhotoAllowed(issues)).toBe(false);
+  });
+
+  it("renders a licensed photograph that carries its credit", () => {
+    expect(tehdejsiPhotoAllowed(tehdejsiPhotoIssues({
+      strings: withAttribution, hasPhoto: true, licence: "cc-by-sa"
+    }))).toBe(true);
+  });
+
+  it("asks nothing of the venture's own render", () => {
+    expect(tehdejsiPhotoAllowed(tehdejsiPhotoIssues({
+      strings: { attribution: "" }, hasPhoto: true, licence: "own-render"
+    }))).toBe(true);
+  });
+
+  it("refuses a credit under an empty frame, which is its own false statement", () => {
+    const issues = tehdejsiPhotoIssues({ strings: withAttribution, hasPhoto: false, licence: "cc-by-sa" });
+    expect(issues.map((issue) => issue.rule)).toEqual(["photo:attribution-without-photo"]);
+  });
+
+  it("lets a photoless slide put the source of its fact in the same slot", () => {
+    // No licence means no photograph was ever attached, so the footer is carrying a fact source.
+    expect(tehdejsiPhotoAllowed(tehdejsiPhotoIssues({
+      strings: { attribution: "Zdroj: Český statistický úřad" }, hasPhoto: false, licence: null
+    }))).toBe(true);
   });
 });

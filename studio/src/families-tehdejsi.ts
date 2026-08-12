@@ -279,3 +279,50 @@ export function tehdejsiDeckTemplates(): readonly CarouselTemplate[] {
   );
   return cache;
 }
+
+export interface TehdejsiPhotoIssue {
+  rule: string;
+  detail: string;
+}
+
+/**
+ * A photograph renders with its attribution or it does not render.
+ *
+ * The contract already refuses a media record whose licence needs an attribution string and does
+ * not carry one. This is the other half of the same rule, at the boundary where it can actually
+ * be broken: a record can be perfect and the payload can still reach the renderer with the
+ * attribution slot empty, and what ships then is a licensed photograph credited to nobody.
+ *
+ * The check is deliberately two-sided. An attribution with no photograph is also refused — not
+ * because it is unsafe, but because it means a slide is claiming a source for a picture it does
+ * not have, and a credit under an empty frame is its own kind of false statement.
+ */
+export function tehdejsiPhotoIssues(input: {
+  /** The payload's strings, as they will reach the renderer. */
+  strings: Readonly<Record<string, string>>;
+  /** True when a photograph is bound to the image slot. */
+  hasPhoto: boolean;
+  /** The licence the photograph ships under, or null for the venture's own render. */
+  licence?: string | null;
+}): TehdejsiPhotoIssue[] {
+  const attribution = (input.strings[TEHDEJSI_ATTRIBUTION_SLOT] ?? "").trim();
+  const issues: TehdejsiPhotoIssue[] = [];
+  if (input.hasPhoto && input.licence !== "own-render" && attribution.length === 0) {
+    issues.push({
+      rule: "photo:missing-attribution",
+      detail: "A licensed photograph renders only with its attribution string on the card."
+    });
+  }
+  if (!input.hasPhoto && attribution.length > 0 && input.licence != null) {
+    issues.push({
+      rule: "photo:attribution-without-photo",
+      detail: "The slide credits a photograph it does not carry."
+    });
+  }
+  return issues;
+}
+
+/** Whether a payload may be rendered as a photo slide. */
+export function tehdejsiPhotoAllowed(issues: readonly TehdejsiPhotoIssue[]): boolean {
+  return issues.length === 0;
+}
