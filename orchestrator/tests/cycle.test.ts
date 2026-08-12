@@ -355,7 +355,7 @@ describe("cycle preflight", () => {
       now: new Date(`${date}T04:00:00.000Z`)
     });
     expect(morning.artifacts).toEqual(expect.arrayContaining([
-      "tmp/dry-run/state/ideas/marketingshark/ledger.jsonl"
+      "tmp/dry-run/state/ideas/mma-files/ledger.jsonl"
     ]));
     expect(morning.artifacts).not.toContain("tmp/dry-run/state/ideas/caught-up/ledger.jsonl");
 
@@ -363,7 +363,7 @@ describe("cycle preflight", () => {
       path.join(repoRoot, `tmp/dry-run/state/standups/${date}-morning.json`),
       "utf8"
     )) as { morningIdeaNamespace?: string; caughtUpIdeaRef?: string };
-    expect(standup.morningIdeaNamespace).toBe("marketingshark");
+    expect(standup.morningIdeaNamespace).toBe("mma-files");
 
     await runCycle({
       phase: "cu-product",
