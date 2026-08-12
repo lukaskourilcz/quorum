@@ -424,7 +424,10 @@ export default async function AdminPage({
       };
     }
     if (id === "kvorum" && selectedTab === "claims") {
-      return { node: <KvorumClaimsPanel />, count: 0 };
+      return {
+        node: <KvorumClaimsPanel claims={kvorum.claims} state={kvorum.claimsState} unreadable={kvorum.claimsUnreadable} />,
+        count: kvorum.claims.length
+      };
     }
     if (id === "caught-up" && selectedTab === "events") {
       return {

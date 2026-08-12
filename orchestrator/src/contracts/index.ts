@@ -11,6 +11,7 @@ export * from "./hook-assignment.js";
 export * from "./idea-ledger.js";
 export * from "./kpi-set.js";
 export * from "./kvorum-apify-quota.js";
+export * from "./kvorum-claim.js";
 export * from "./kvorum-entities.js";
 export * from "./kvorum-monitor.js";
 export * from "./marketing-plan.js";

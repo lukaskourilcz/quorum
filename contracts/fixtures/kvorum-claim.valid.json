@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "kvorum-claim/1",
+  "id": "kv-claim-2026-08-12-public-media-claim-snemovna",
+  "ventureId": "kvorum",
+  "recommendationId": "kv-2026-08-12-public-media",
+  "recommendationRef": "state/ventures/kvorum/recommendations/2026-08-12-public-media.json",
+  "recommendationStatus": "posted",
+  "monitorDate": "2026-08-12",
+  "receiptRef": "state/ventures/kvorum/monitor/2026-08-12.json",
+  "clusterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "claimId": "claim-snemovna",
+  "claim": "Návrh se vrací do sněmovního projednávání.",
+  "type": "fact-multi",
+  "refs": [
+    {
+      "itemRef": "cccccccccccccccccccccccccccccccccccccccc",
+      "sourceId": "irozhlas",
+      "sourceName": "iROZHLAS",
+      "url": "https://www.irozhlas.cz/zpravy-domov/televizni-poplatky",
+      "publishedAt": "2026-08-12T19:00:00.000Z",
+      "excerpt": "Sněmovna projedná financování médií veřejné služby.",
+      "discoveryOnly": false,
+      "stitEngagement": null
+    },
+    {
+      "itemRef": "dddddddddddddddddddddddddddddddddddddddd",
+      "sourceId": "ct24",
+      "sourceName": "ČT24",
+      "url": "https://ct24.ceskatelevize.cz/domaci/televizni-poplatky",
+      "publishedAt": "2026-08-12T18:00:00.000Z",
+      "excerpt": "Návrh se vrací do sněmovního projednávání.",
+      "discoveryOnly": false,
+      "stitEngagement": null
+    }
+  ],
+  "status": "standing",
+  "correctionRef": null,
+  "createdAt": "2026-08-12T22:00:00.000Z",
+  "updatedAt": "2026-08-13T07:30:00.000Z",
+  "publishedAt": "2026-08-13T07:30:00.000Z",
+  "postedUrl": "https://example.com/manual-post"
+}

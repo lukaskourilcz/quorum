@@ -252,6 +252,12 @@ section and a receipt line, and a day with no usable cluster records an honest q
   both to KV-18, so KV-17d registers a truthful zero-count tab that does not promote recommendation
   drafts into published claims or offer an untyped correction writer. KV-18 replaces that empty
   state with the typed ledger and owner-controlled correction flow.
+- **Claim capture versus publication:** KV-18 and the build prompt require claim entries to be
+  appended at recommendation approval, while design §9 defines the visible ledger as published
+  claims. The typed entry therefore records `approved-draft` with no post time or URL at approval;
+  the existing manual-post action alone advances it to `posted`. Correction controls remain closed
+  until that receipt exists. A correction or retraction action creates a new manual-only draft and
+  changes the original claim's ledger standing, but never claims that the correction was published.
 
 ## Implementation checklist
 
@@ -291,7 +297,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-17b — Recommendations panel
 - [x] KV-17c — Monitor panel
 - [x] KV-17d — Claims panel, tab wiring and e2e coverage
-- [ ] KV-18 — Claims ledger and the correction flow
+- [x] KV-18 — Claims ledger and the correction flow
 - [ ] KV-19a — Owner results: contract, route and store
 - [ ] KV-19b — Performance weights with floors and recorded proposals
 - [ ] KV-20a — GoVIRAL spine: topic set and brief consumption

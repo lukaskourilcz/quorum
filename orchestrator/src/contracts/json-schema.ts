@@ -13,6 +13,7 @@ import { HookAssignmentSchema } from "./hook-assignment.js";
 import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
 import { KpiSetSchema } from "./kpi-set.js";
 import { KvorumApifyQuotaSchema } from "./kvorum-apify-quota.js";
+import { KvorumClaimSchema } from "./kvorum-claim.js";
 import { KvorumEntityLexiconSchema } from "./kvorum-entities.js";
 import { KvorumMonitorReceiptSchema } from "./kvorum-monitor.js";
 import { KvorumSourceRegistrySchema } from "./kvorum-sources.js";
@@ -69,6 +70,7 @@ export const ContractSchemas = {
   "idea-ledger": IdeaLedgerEntrySchema,
   "kpi-set": KpiSetSchema,
   "kvorum-apify-quota": KvorumApifyQuotaSchema,
+  "kvorum-claim": KvorumClaimSchema,
   "kvorum-entities": KvorumEntityLexiconSchema,
   "kvorum-monitor": KvorumMonitorReceiptSchema,
   "kvorum-sources": KvorumSourceRegistrySchema,

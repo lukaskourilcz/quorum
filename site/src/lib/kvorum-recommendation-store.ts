@@ -1,29 +1,19 @@
 import "server-only";
-import { randomUUID } from "node:crypto";
-import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
-import path from "node:path";
 import {
   buildCarouselSummary,
   type CarouselSummary
 } from "@boardlessai/carousel-studio";
+import {
+  kvorumRepositoryRoot,
+  KvorumRecommendationPersistenceError,
+  persistKvorum,
+  type KvorumPersistenceResult
+} from "./kvorum-admin-persistence";
+import { syncKvorumClaimsForRecommendation } from "./kvorum-claim-store";
 
-const GITHUB_TOKEN_ENV = "BOARDLESSAI_GITHUB_TOKEN";
+export { KvorumRecommendationPersistenceError } from "./kvorum-admin-persistence";
+
 const INDEX_REF = "state/ventures/kvorum/recommendations/index.json";
-const pendingWrites = new Map<string, Promise<unknown>>();
-
-export type KvorumPersistenceCode =
-  | "CONFLICT"
-  | "INVALID"
-  | "CORRUPT"
-  | "UNCONFIGURED"
-  | "REFUSED"
-  | "REMOTE";
-
-export class KvorumRecommendationPersistenceError extends Error {
-  constructor(readonly code: KvorumPersistenceCode, message: string) {
-    super(message);
-  }
-}
 
 interface KvorumCopyBlock {
   id: string;
@@ -48,7 +38,7 @@ interface KvorumOriginalDraft {
   copyBlocks: KvorumCopyBlock[];
 }
 
-interface KvorumRecommendation {
+export interface KvorumRecommendation {
   schemaVersion: "venture-recommendation/1";
   id: string;
   ventureId: "kvorum";
@@ -67,8 +57,35 @@ interface KvorumRecommendation {
   copyBlocks: KvorumCopyBlock[];
   evidence: {
     kind: "monitor-cluster";
-    sources: Array<{ sourceId: string; sourceName: string; discoveryOnly: boolean }>;
-    [key: string]: unknown;
+    monitorDate: string;
+    receiptRef: string;
+    clusterId: string;
+    continuationOf: string | null;
+    sources: Array<{
+      itemRef: string;
+      sourceId: string;
+      sourceName: string;
+      url: string;
+      publishedAt: string;
+      excerpt: string;
+      discoveryOnly: boolean;
+    }>;
+    claims: Array<{
+      id: string;
+      type: "fact-multi" | "fact-single" | "commentary";
+      text: string;
+      refs: string[];
+    }>;
+    stitAttribution: {
+      internalOnly: true;
+      summary: string;
+      posts: Array<{
+        itemRef: string;
+        postUrl: string;
+        excerpt: string;
+        engagement: { likes: number | null; comments: number | null; shares: number | null };
+      }>;
+    } | null;
   };
   gateResults: { passed: boolean; [key: string]: unknown };
   designLab: {
@@ -127,23 +144,13 @@ export type KvorumRecommendationAction =
   | { action: "reject"; ref: string; reason: string }
   | { action: "posted"; ref: string; postedUrl: string };
 
-interface PersistenceResult<T> {
-  value: T;
-  commit: string | null;
-  idempotent: boolean;
-  persistence: "filesystem" | "github";
-}
-
 export interface KvorumRecommendationActionResult {
   recommendation: KvorumRecommendation;
   summary: CarouselSummary | null;
   idempotent: boolean;
   persistence: "filesystem" | "github";
   commits: string[];
-}
-
-function repositoryRoot(): string {
-  return process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
+  claimRefs: string[];
 }
 
 function object(value: unknown): Record<string, unknown> | null {
@@ -174,6 +181,7 @@ function recommendation(value: unknown, ref: string): KvorumRecommendation {
   const designLab = object(entry?.designLab);
   const evidence = object(entry?.evidence);
   const gateResults = object(entry?.gateResults);
+  const stitAttribution = object(evidence?.stitAttribution);
   const filename = ref.split("/").at(-1)?.replace(/\.json$/u, "") ?? "";
   const copyBlocks = entry?.copyBlocks;
   if (!entry
@@ -192,12 +200,25 @@ function recommendation(value: unknown, ref: string): KvorumRecommendation {
     || !Array.isArray(entry.platforms) || !entry.platforms.every((item) => typeof item === "string")
     || !Array.isArray(entry.formats) || !entry.formats.every((item) => typeof item === "string")
     || !Array.isArray(copyBlocks) || !copyBlocks.every(copyBlock)
-    || !evidence || evidence.kind !== "monitor-cluster" || !Array.isArray(evidence.sources)
+    || !evidence || evidence.kind !== "monitor-cluster"
+    || !nonempty(evidence.monitorDate, 10) || !nonempty(evidence.receiptRef, 160)
+    || !nonempty(evidence.clusterId, 40) || !Array.isArray(evidence.sources)
     || !evidence.sources.every((source) => {
       const candidate = object(source);
-      return Boolean(candidate && nonempty(candidate.sourceId, 80)
-        && nonempty(candidate.sourceName, 120) && typeof candidate.discoveryOnly === "boolean");
+      return Boolean(candidate && nonempty(candidate.itemRef, 40) && nonempty(candidate.sourceId, 80)
+        && nonempty(candidate.sourceName, 120) && nonempty(candidate.url, 2_000)
+        && nonempty(candidate.publishedAt, 40) && nonempty(candidate.excerpt, 600)
+        && typeof candidate.discoveryOnly === "boolean");
     })
+    || !Array.isArray(evidence.claims) || !evidence.claims.every((claim) => {
+      const candidate = object(claim);
+      return Boolean(candidate && nonempty(candidate.id, 80)
+        && ["fact-multi", "fact-single", "commentary"].includes(String(candidate.type))
+        && nonempty(candidate.text, 1_000) && Array.isArray(candidate.refs)
+        && candidate.refs.every((ref) => nonempty(ref, 40)));
+    })
+    || (evidence.stitAttribution !== null && (!stitAttribution || stitAttribution.internalOnly !== true
+      || !Array.isArray(stitAttribution.posts)))
     || !gateResults || typeof gateResults.passed !== "boolean"
     || !designLab || !["not-requested", "queued", "rendered", "failed"].includes(String(designLab.status))
     || !owner || owner.postingMode !== "manual-only" || !Array.isArray(owner.editHistory)
@@ -283,148 +304,6 @@ export function parseKvorumRecommendationAction(value: unknown): KvorumRecommend
     }
   }
   return null;
-}
-
-function jsonText(value: unknown): string {
-  return `${JSON.stringify(value, null, 2)}\n`;
-}
-
-function parseJson(raw: string, label: string): unknown {
-  try {
-    return JSON.parse(raw) as unknown;
-  } catch {
-    throw new KvorumRecommendationPersistenceError("CORRUPT", `${label} is not valid JSON.`);
-  }
-}
-
-async function serialized<T>(key: string, operation: () => Promise<T>): Promise<T> {
-  const previous = pendingWrites.get(key) ?? Promise.resolve();
-  const next = previous.catch(() => undefined).then(operation);
-  pendingWrites.set(key, next);
-  try {
-    return await next;
-  } finally {
-    if (pendingWrites.get(key) === next) pendingWrites.delete(key);
-  }
-}
-
-function resolvedLocalPath(root: string, relative: string): string {
-  const target = path.resolve(root, relative);
-  const boundary = path.relative(root, target);
-  if (boundary.startsWith("..") || path.isAbsolute(boundary)) {
-    throw new KvorumRecommendationPersistenceError("INVALID", "Kvórum state path escaped the repository.");
-  }
-  return target;
-}
-
-async function writeLocal<T>(
-  relative: string,
-  mutate: (current: unknown | null) => { value: T; idempotent: boolean },
-  root: string
-): Promise<PersistenceResult<T>> {
-  const target = resolvedLocalPath(root, relative);
-  return serialized(target, async () => {
-    let current: unknown | null = null;
-    try {
-      current = parseJson(await readFile(target, "utf8"), relative);
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
-    }
-    const changed = mutate(current);
-    if (!changed.idempotent) {
-      await mkdir(path.dirname(target), { recursive: true });
-      const temporary = `${target}.${randomUUID()}.tmp`;
-      try {
-        await writeFile(temporary, jsonText(changed.value), { encoding: "utf8", mode: 0o600 });
-        await rename(temporary, target);
-      } finally {
-        await rm(temporary, { force: true });
-      }
-    }
-    return { ...changed, commit: null, persistence: "filesystem" as const };
-  });
-}
-
-function githubFailure(status: number, what: string): KvorumRecommendationPersistenceError {
-  if (status === 401 || status === 403) {
-    return new KvorumRecommendationPersistenceError(
-      "REFUSED",
-      `GitHub refused the Kvórum ${what} with ${status}. ${GITHUB_TOKEN_ENV} is expired or lacks Contents read and write.`
-    );
-  }
-  return new KvorumRecommendationPersistenceError("REMOTE", `GitHub Kvórum ${what} failed with ${status}.`);
-}
-
-async function writeGitHub<T>(
-  relative: string,
-  mutate: (current: unknown | null) => { value: T; idempotent: boolean },
-  message: string,
-  token: string,
-  fetcher: typeof fetch = fetch
-): Promise<PersistenceResult<T>> {
-  const repository = process.env.BOARDLESSAI_GITHUB_REPOSITORY ?? "lukaskourilcz/quorum";
-  const branch = process.env.BOARDLESSAI_GITHUB_BRANCH ?? "main";
-  const endpoint = `https://api.github.com/repos/${repository}/contents/${relative.split("/").map(encodeURIComponent).join("/")}`;
-  const headers = {
-    Accept: "application/vnd.github+json",
-    Authorization: `Bearer ${token}`,
-    "X-GitHub-Api-Version": "2026-03-10"
-  };
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    const response = await fetcher(`${endpoint}?ref=${encodeURIComponent(branch)}`, { headers, cache: "no-store" });
-    let current: unknown | null = null;
-    let sha: string | undefined;
-    if (response.status !== 404) {
-      if (!response.ok) throw githubFailure(response.status, "read");
-      const body = await response.json() as { content?: unknown; encoding?: unknown; sha?: unknown };
-      if (body.encoding !== "base64" || typeof body.content !== "string" || typeof body.sha !== "string") {
-        throw new KvorumRecommendationPersistenceError("REMOTE", "GitHub returned an invalid Kvórum file.");
-      }
-      current = parseJson(Buffer.from(body.content.replaceAll("\n", ""), "base64").toString("utf8"), relative);
-      sha = body.sha;
-    }
-    const changed = mutate(current);
-    if (changed.idempotent) return { ...changed, commit: null, persistence: "github" };
-    const update = await fetcher(endpoint, {
-      method: "PUT",
-      headers: { ...headers, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message,
-        content: Buffer.from(jsonText(changed.value), "utf8").toString("base64"),
-        branch,
-        ...(sha ? { sha } : {})
-      })
-    });
-    if (update.ok) {
-      const body = await update.json().catch(() => ({})) as { commit?: { sha?: unknown } };
-      return {
-        ...changed,
-        commit: typeof body.commit?.sha === "string" ? body.commit.sha.slice(0, 7) : null,
-        persistence: "github"
-      };
-    }
-    if (update.status !== 409 && !(update.status === 422 && sha === undefined)) {
-      throw githubFailure(update.status, "write");
-    }
-  }
-  throw new KvorumRecommendationPersistenceError("CONFLICT", "Kvórum state changed during every save attempt.");
-}
-
-async function persist<T>(
-  relative: string,
-  mutate: (current: unknown | null) => { value: T; idempotent: boolean },
-  message: string,
-  root = repositoryRoot()
-): Promise<PersistenceResult<T>> {
-  const token = process.env[GITHUB_TOKEN_ENV];
-  if (token) return writeGitHub(relative, mutate, message, token);
-  if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
-    throw new KvorumRecommendationPersistenceError(
-      "UNCONFIGURED",
-      `${GITHUB_TOKEN_ENV} is not set on this deployment, so the Kvórum owner action was not recorded.`
-    );
-  }
-  return writeLocal(relative, mutate, root);
 }
 
 function originalDraft(entry: KvorumRecommendation, capturedAt: string): KvorumOriginalDraft {
@@ -583,8 +462,8 @@ async function syncIndexStatus(
   entry: KvorumRecommendation,
   now: Date,
   root: string
-): Promise<PersistenceResult<unknown>> {
-  return persist(INDEX_REF, (current) => {
+): Promise<KvorumPersistenceResult<unknown>> {
+  return persistKvorum(INDEX_REF, (current) => {
     if (current === null) return { value: null, idempotent: true };
     const index = object(current);
     if (!index || !Array.isArray(index.queue) || typeof index.date !== "string") {
@@ -609,20 +488,20 @@ export async function applyKvorumRecommendationAction(
   input: KvorumRecommendationAction,
   options: { root?: string; now?: Date } = {}
 ): Promise<KvorumRecommendationActionResult> {
-  const root = options.root ?? repositoryRoot();
+  const root = options.root ?? kvorumRepositoryRoot();
   const now = options.now ?? new Date();
-  const changed = await persist(
+  const changed = await persistKvorum(
     input.ref,
     (current) => transition(current, input, now),
     `admin: ${input.action} Kvórum recommendation`,
     root
   );
   const index = await syncIndexStatus(input.ref, changed.value, now, root);
-  let summary: PersistenceResult<CarouselSummary> | null = null;
+  let summary: KvorumPersistenceResult<CarouselSummary> | null = null;
   if (input.action === "approve") {
     const value = designLabSummary(changed.value);
     const relative = `state/ventures/carousel-studio/summaries/kvorum/${value.date}-${value.slug}.json`;
-    summary = await persist(relative, (current) => {
+    summary = await persistKvorum(relative, (current) => {
       if (current === null) return { value, idempotent: false };
       if (JSON.stringify(current) !== JSON.stringify(value)) {
         throw new KvorumRecommendationPersistenceError("CONFLICT", "A different Design Lab summary already exists for this recommendation.");
@@ -630,13 +509,17 @@ export async function applyKvorumRecommendationAction(
       return { value, idempotent: true };
     }, `admin: queue Kvórum summary ${value.slug}`, root);
   }
-  const commits = [changed.commit, index.commit, summary?.commit]
+  const claims = input.action === "approve" || input.action === "posted"
+    ? await syncKvorumClaimsForRecommendation(changed.value, input.ref, { root, now })
+    : { refs: [], commits: [], idempotent: true };
+  const commits = [changed.commit, index.commit, summary?.commit, ...claims.commits]
     .filter((commit): commit is string => typeof commit === "string");
   return {
     recommendation: changed.value,
     summary: summary?.value ?? null,
-    idempotent: changed.idempotent && index.idempotent && (summary?.idempotent ?? true),
+    idempotent: changed.idempotent && index.idempotent && (summary?.idempotent ?? true) && claims.idempotent,
     persistence: changed.persistence,
-    commits: [...new Set(commits)]
+    commits: [...new Set(commits)],
+    claimRefs: claims.refs
   };
 }

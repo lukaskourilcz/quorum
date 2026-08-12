@@ -67,6 +67,9 @@ describe("the read-only Kvórum monitor panel", () => {
     const base: Omit<AdminKvorumSnapshot, "monitorState"> = {
       recommendationsState: "missing",
       recommendations: [],
+      claimsState: "missing",
+      claims: [],
+      claimsUnreadable: 0,
       monitor: [],
       quotaState: "missing",
       quota: null,

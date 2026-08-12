@@ -9,6 +9,11 @@ const ORIGIN = "https://boardless.example";
 const ref = "state/ventures/kvorum/recommendations/2026-08-12-public-media.json";
 const summaryRef = "state/ventures/carousel-studio/summaries/kvorum/2026-08-12-public-media.json";
 const indexRef = "state/ventures/kvorum/recommendations/index.json";
+const claimRefs = [
+  "state/ventures/kvorum/claims/2026-08-12-public-media-claim-snemovna.json",
+  "state/ventures/kvorum/claims/2026-08-12-public-media-claim-process.json",
+  "state/ventures/kvorum/claims/2026-08-12-public-media-claim-angle.json"
+] as const;
 const now = new Date("2026-08-12T22:00:00.000Z");
 let root = "";
 
@@ -140,6 +145,17 @@ describe("the Kvórum recommendation admin route", () => {
     });
     expect(JSON.stringify(summary)).not.toContain("Štít demokracie");
     expect(await readJson(indexRef)).toMatchObject({ queue: [{ status: "approved" }] });
+    for (const claimRef of claimRefs) {
+      expect(await readJson(claimRef)).toMatchObject({
+        schemaVersion: "kvorum-claim/1",
+        recommendationId: "kv-2026-08-12-public-media",
+        recommendationStatus: "approved-draft",
+        status: "standing",
+        correctionRef: null,
+        publishedAt: null,
+        postedUrl: null
+      });
+    }
     const { readDesignLab } = await import("@/lib/design-lab");
     const rail = await readDesignLab();
     expect(rail).toContainEqual(expect.objectContaining({
@@ -150,12 +166,12 @@ describe("the Kvórum recommendation admin route", () => {
       renderable: true
     }));
 
-    const bytes = await Promise.all([ref, summaryRef, indexRef].map((relative) =>
+    const bytes = await Promise.all([ref, summaryRef, indexRef, ...claimRefs].map((relative) =>
       readFile(path.join(root, relative), "utf8")));
     const replay = await POST(request(action));
     expect(replay.status).toBe(200);
     expect(await replay.json()).toMatchObject({ idempotent: true, status: "approved" });
-    expect(await Promise.all([ref, summaryRef, indexRef].map((relative) =>
+    expect(await Promise.all([ref, summaryRef, indexRef, ...claimRefs].map((relative) =>
       readFile(path.join(root, relative), "utf8")))).toEqual(bytes);
     await expect(readFile(path.join(root, "state/social/channels.json"), "utf8"))
       .rejects.toMatchObject({ code: "ENOENT" });
@@ -184,6 +200,14 @@ describe("the Kvórum recommendation admin route", () => {
       status: "posted",
       owner: { postedAt: now.toISOString(), postedUrl: "https://example.com/manual-post" }
     });
+    for (const claimRef of claimRefs) {
+      expect(await readJson(claimRef)).toMatchObject({
+        recommendationStatus: "posted",
+        status: "standing",
+        publishedAt: now.toISOString(),
+        postedUrl: "https://example.com/manual-post"
+      });
+    }
   });
 
   it("maps conflict, invalid state and corrupt state to their typed statuses", async () => {

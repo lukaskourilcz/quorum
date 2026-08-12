@@ -22,6 +22,24 @@ export interface AdminKvorumClaim {
   sources: AdminKvorumSource[];
 }
 
+export interface AdminKvorumLedgerClaim {
+  id: string;
+  date: string;
+  slug: string;
+  recommendationId: string;
+  recommendationStatus: "approved-draft" | "posted";
+  claimId: string;
+  claim: string;
+  type: "fact-multi" | "fact-single" | "commentary";
+  sources: AdminKvorumSource[];
+  status: "standing" | "corrected" | "retracted";
+  hasCorrectionDraft: boolean;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string | null;
+  postedUrl: string | null;
+}
+
 export interface AdminKvorumCopyBlock {
   id: string;
   platform: string;
@@ -157,6 +175,9 @@ export interface AdminKvorumSnapshot {
   recommendations: AdminKvorumRecommendation[];
   monitorState: AdminKvorumStoreState;
   monitor: AdminKvorumMonitorDay[];
+  claimsState: AdminKvorumStoreState;
+  claims: AdminKvorumLedgerClaim[];
+  claimsUnreadable: number;
   quotaState: AdminKvorumStoreState;
   quota: AdminKvorumQuota | null;
   entityLabels: Record<string, string>;
@@ -288,6 +309,48 @@ function parseSource(value: unknown): ParsedSource | null {
   return {
     itemRef,
     source: { sourceId, sourceName, url, publishedAt, excerpt, discoveryOnly: entry.discoveryOnly }
+  };
+}
+
+function parseLedgerClaim(value: unknown, filename: string): AdminKvorumLedgerClaim | null {
+  const entry = object(value);
+  const id = text(entry?.id, 120);
+  const recommendationId = text(entry?.recommendationId, 120);
+  const claimId = text(entry?.claimId, 120);
+  const claim = text(entry?.claim, 1_000);
+  const createdAt = dateTime(entry?.createdAt);
+  const updatedAt = dateTime(entry?.updatedAt);
+  const publishedAt = entry?.publishedAt === null ? null : dateTime(entry?.publishedAt);
+  const postedUrl = entry?.postedUrl === null ? null : httpsUrl(entry?.postedUrl);
+  const match = /^(\d{4}-\d{2}-\d{2})-([a-z0-9]+(?:-[a-z0-9]+)*)\.json$/u.exec(filename);
+  const parsedSources = Array.isArray(entry?.refs) ? entry.refs.map(parseSource) : [];
+  if (!entry || entry.schemaVersion !== "kvorum-claim/1" || entry.ventureId !== "kvorum"
+    || !id || !recommendationId || !claimId || !claim || !createdAt || !updatedAt || !match
+    || id !== `kv-claim-${match[1]}-${match[2]}`
+    || (entry.recommendationStatus !== "approved-draft" && entry.recommendationStatus !== "posted")
+    || (entry.type !== "fact-multi" && entry.type !== "fact-single" && entry.type !== "commentary")
+    || parsedSources.length === 0 || parsedSources.some((source) => source === null)
+    || (entry.status !== "standing" && entry.status !== "corrected" && entry.status !== "retracted")
+    || (entry.correctionRef !== null && !/^state\/ventures\/kvorum\/recommendations\/\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.json$/u.test(String(entry.correctionRef)))
+    || (entry.publishedAt !== null && !publishedAt) || (entry.postedUrl !== null && !postedUrl)
+    || (entry.status === "standing") !== (entry.correctionRef === null)
+    || (entry.recommendationStatus === "approved-draft") !== (publishedAt === null && postedUrl === null)) return null;
+  return {
+    id,
+    date: match[1]!,
+    slug: match[2]!,
+    recommendationId,
+    recommendationStatus: entry.recommendationStatus,
+    claimId,
+    claim,
+    type: entry.type,
+    sources: (parsedSources as ParsedSource[]).map((source) => source.source),
+    status: entry.status,
+    hasCorrectionDraft: entry.correctionRef !== null,
+    createdAt,
+    updatedAt,
+    publishedAt,
+    postedUrl
   };
 }
 
@@ -686,13 +749,18 @@ async function readEntityLabels(): Promise<{ values: Record<string, string>; unr
  * workspace down. Repository paths and filenames stay on this side of the boundary.
  */
 export async function readAdminKvorum(): Promise<AdminKvorumSnapshot> {
-  const [recommendations, monitor, quota, ratings, entityLabels] = await Promise.all([
+  const [recommendations, monitor, claims, quota, ratings, entityLabels] = await Promise.all([
     readDirectory(
       "state/ventures/kvorum/recommendations",
       /^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.json$/u,
       parseRecommendation
     ),
     readDirectory("state/ventures/kvorum/monitor", /^\d{4}-\d{2}-\d{2}\.json$/u, parseMonitor),
+    readDirectory(
+      "state/ventures/kvorum/claims",
+      /^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.json$/u,
+      parseLedgerClaim
+    ),
     readQuota(),
     readRatings(),
     readEntityLabels()
@@ -710,10 +778,13 @@ export async function readAdminKvorum(): Promise<AdminKvorumSnapshot> {
     recommendations: recommendationValues,
     monitorState: monitor.state,
     monitor: monitor.values.sort((left, right) => right.date.localeCompare(left.date)),
+    claimsState: claims.state,
+    claims: claims.values.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt) || left.id.localeCompare(right.id)),
+    claimsUnreadable: claims.unreadable,
     quotaState: quota.state,
     quota: quota.value,
     entityLabels: entityLabels.values,
-    unreadable: recommendations.unreadable + monitor.unreadable + quota.unreadable
+    unreadable: recommendations.unreadable + monitor.unreadable + claims.unreadable + quota.unreadable
       + ratings.unreadable + entityLabels.unreadable
   };
 }

@@ -34,10 +34,12 @@ describe("the Kvórum admin sanitising boundary", () => {
   it("loads fixture records as plain panel data without leaking repository addresses", async () => {
     const recommendation = await fixture("venture-recommendation.valid");
     const monitor = await fixture("kvorum-monitor.valid");
+    const claim = await fixture("kvorum-claim.valid");
     const quota = await fixture("kvorum-apify-quota.valid");
     const root = await makeRoot({
       "state/ventures/kvorum/recommendations/2026-08-12-public-media.json": recommendation,
       "state/ventures/kvorum/monitor/2026-08-12.json": monitor,
+      "state/ventures/kvorum/claims/2026-08-12-public-media-claim-snemovna.json": claim,
       "state/kvorum/source-quota/apify.json": quota,
       "state/ratings/kvorum/ledger.jsonl": `${JSON.stringify({
         schemaVersion: "rating/1",
@@ -55,6 +57,8 @@ describe("the Kvórum admin sanitising boundary", () => {
     expect(snapshot).toMatchObject({
       recommendationsState: "present",
       monitorState: "present",
+      claimsState: "present",
+      claimsUnreadable: 0,
       quotaState: "present",
       unreadable: 0,
       recommendations: [{
@@ -77,6 +81,14 @@ describe("the Kvórum admin sanitising boundary", () => {
           rank: { position: 1, score: 8.4 }
         }],
         purge: { retentionDays: 30, rawItemsBefore: 2, rawItemsAfter: 2, purgedCount: 0 }
+      }],
+      claims: [{
+        id: "kv-claim-2026-08-12-public-media-claim-snemovna",
+        recommendationStatus: "posted",
+        type: "fact-multi",
+        status: "standing",
+        hasCorrectionDraft: false,
+        sources: [{ sourceName: "iROZHLAS" }, { sourceName: "ČT24" }]
       }],
       quota: {
         month: "2026-08",
@@ -139,32 +151,40 @@ describe("the Kvórum admin sanitising boundary", () => {
     await expect(readAdminKvorum()).resolves.toMatchObject({
       recommendationsState: "missing",
       monitorState: "missing",
+      claimsState: "missing",
       quotaState: "missing",
       unreadable: 0
     });
 
     await Promise.all([
       mkdir(path.join(root, "state/ventures/kvorum/recommendations"), { recursive: true }),
-      mkdir(path.join(root, "state/ventures/kvorum/monitor"), { recursive: true })
+      mkdir(path.join(root, "state/ventures/kvorum/monitor"), { recursive: true }),
+      mkdir(path.join(root, "state/ventures/kvorum/claims"), { recursive: true })
     ]);
     await expect(readAdminKvorum()).resolves.toMatchObject({
       recommendationsState: "present",
       recommendations: [],
       monitorState: "present",
       monitor: [],
+      claimsState: "present",
+      claims: [],
       quotaState: "missing"
     });
 
     await Promise.all([
       writeFile(path.join(root, "state/ventures/kvorum/recommendations/2026-08-12-broken.json"), "{}", "utf8"),
-      writeFile(path.join(root, "state/ventures/kvorum/monitor/2026-08-12.json"), "{}", "utf8")
+      writeFile(path.join(root, "state/ventures/kvorum/monitor/2026-08-12.json"), "{}", "utf8"),
+      writeFile(path.join(root, "state/ventures/kvorum/claims/2026-08-12-broken.json"), "{}", "utf8")
     ]);
     await expect(readAdminKvorum()).resolves.toMatchObject({
       recommendationsState: "unreadable",
       recommendations: [],
       monitorState: "unreadable",
       monitor: [],
-      unreadable: 2
+      claimsState: "unreadable",
+      claims: [],
+      claimsUnreadable: 1,
+      unreadable: 3
     });
   });
 });

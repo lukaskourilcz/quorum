@@ -1,4 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
+import { createHash } from "node:crypto";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { expect, test } from "@playwright/test";
@@ -54,11 +55,23 @@ const kvorumRecommendationPath = path.join(repositoryRoot, "state/ventures/kvoru
 const kvorumRecommendationIndexPath = path.join(repositoryRoot, "state/ventures/kvorum/recommendations/index.json");
 const kvorumMonitorPath = path.join(repositoryRoot, "state/ventures/kvorum/monitor/2026-08-12.json");
 const kvorumSummaryPath = path.join(repositoryRoot, "state/ventures/carousel-studio/summaries/kvorum/2026-08-12-public-media.json");
+const kvorumClaimIds = ["claim-snemovna", "claim-process", "claim-angle"] as const;
+const kvorumClaimPaths = kvorumClaimIds.map((claimId) =>
+  path.join(repositoryRoot, `state/ventures/kvorum/claims/2026-08-12-public-media-${claimId}.json`));
+const correctionClaimId = "kv-claim-2026-08-12-public-media-claim-snemovna";
+const correctionDigest = createHash("sha256").update(correctionClaimId).digest("hex").slice(0, 10);
+const correctionDate = new Date().toISOString().slice(0, 10);
+const kvorumCorrectionPath = path.join(
+  repositoryRoot,
+  `state/ventures/kvorum/recommendations/${correctionDate}-correction-claim-snemovna-${correctionDigest}.json`
+);
 const kvorumFixturePaths = [
   kvorumRecommendationPath,
   kvorumRecommendationIndexPath,
   kvorumMonitorPath,
-  kvorumSummaryPath
+  kvorumSummaryPath,
+  ...kvorumClaimPaths,
+  kvorumCorrectionPath
 ] as const;
 const originalKvorumState = new Map<string, string | null>();
 
@@ -87,6 +100,7 @@ test.beforeAll(async () => {
     mkdir(path.dirname(ratingLedgerPath), { recursive: true }),
     mkdir(path.dirname(kvorumRecommendationPath), { recursive: true }),
     mkdir(path.dirname(kvorumMonitorPath), { recursive: true }),
+    mkdir(path.dirname(kvorumClaimPaths[0]!), { recursive: true }),
     mkdir(path.dirname(kvorumSummaryPath), { recursive: true })
   ]);
   await writeFile(e2ePlanPath, JSON.stringify({
@@ -144,7 +158,9 @@ test.beforeAll(async () => {
       path.join(repositoryRoot, "contracts/fixtures/kvorum-monitor.valid.json"),
       "utf8"
     )),
-    rm(kvorumSummaryPath, { force: true })
+    rm(kvorumSummaryPath, { force: true }),
+    ...kvorumClaimPaths.map((filename) => rm(filename, { force: true })),
+    rm(kvorumCorrectionPath, { force: true })
   ]);
 });
 
@@ -365,7 +381,7 @@ test("Kvórum exposes three truthful owner-workspace tabs", async ({ page }) => 
 
   await page.getByRole("link", { name: "claims", exact: true }).click();
   await expect(page).toHaveURL(/venture=kvorum&tab=claims/);
-  await expect(page.getByText("No published-claim ledger is stored yet.", { exact: false })).toBeVisible();
+  await expect(page.getByText("The claims store exists and contains no record.", { exact: true })).toBeVisible();
   await expect(page.getByText("0 on this tab", { exact: true })).toBeVisible();
 });
 
@@ -438,6 +454,24 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     expect(deck.ok()).toBe(true);
     expect(deck.headers()["content-type"]).toBe("application/zip");
     expect((await deck.body()).byteLength).toBeGreaterThan(1_000);
+
+    await page.goto("/admin?venture=kvorum&tab=recommendations", { waitUntil: "networkidle" });
+    await page.getByLabel("Manually posted HTTPS URL").fill("https://example.com/manual-kvorum-post");
+    await page.getByRole("button", { name: "Record posted URL" }).click();
+    await expect(page.getByText("The manual post URL is recorded. No metrics were fetched.")).toBeVisible({ timeout: 60_000 });
+
+    await page.goto("/admin?venture=kvorum&tab=claims", { waitUntil: "networkidle" });
+    await expect(page.getByText("3 on this tab", { exact: true })).toBeVisible();
+    const publishedClaim = page.locator("article")
+      .filter({ hasText: "Návrh se vrací do sněmovního projednávání." })
+      .first();
+    await expect(publishedClaim.getByText("manual post recorded", { exact: true })).toBeVisible();
+    await publishedClaim.getByRole("button", { name: "Draft correction" }).click();
+    await expect(publishedClaim.getByText("A new correction recommendation is waiting for owner review. Nothing was published."))
+      .toBeVisible({ timeout: 60_000 });
+
+    await page.goto("/admin?venture=kvorum&tab=recommendations", { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: /Oprava: Návrh se vrací do sněmovního projednávání/ })).toBeVisible();
   });
 
   test("admin login explains errors, starts a session and signs out", async ({ page }) => {
