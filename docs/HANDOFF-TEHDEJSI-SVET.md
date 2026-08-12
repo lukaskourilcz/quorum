@@ -60,8 +60,10 @@ The consequences for the open issues:
 - **TS-08** is the loader for that file: read, verify the content hash, cache, and abort
   on mismatch. A hand-edited facts file must stop the room rather than quietly change what
   it claims.
-- **TS-10b** — the product-repo read-only pin — has nothing left to pin. Close it as
-  withdrawn, and note the withdrawal on the issue so the reason survives.
+- **TS-10b** is inverted rather than withdrawn. A read-only pin assumed a connection to
+  keep read-only; there is none. The guard worth having is stronger: a test that fails if
+  any module, workflow, script or config here references `dontwannaknow` or its host at
+  all.
 - **TS-06a/TS-06b** keep their shape. The build rules (`shareSafe: false` omitted,
   excluded media omitted) now describe what a human must honour when copying facts across,
   and the tests still prove the loader refuses a file that breaks them.
