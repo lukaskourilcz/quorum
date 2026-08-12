@@ -284,7 +284,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-16 — Admin approval write path
 - [x] KV-17a — Server-only admin loader
 - [x] KV-17b — Recommendations panel
-- [ ] KV-17c — Monitor panel
+- [x] KV-17c — Monitor panel
 - [ ] KV-17d — Claims panel, tab wiring and e2e coverage
 - [ ] KV-18 — Claims ledger and the correction flow
 - [ ] KV-19a — Owner results: contract, route and store

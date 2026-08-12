@@ -75,6 +75,7 @@ describe("the Kvórum recommendation review card", () => {
       monitor: [],
       quotaState: "missing",
       quota: null,
+      entityLabels: {},
       unreadable: 0
     };
     const missing = renderToStaticMarkup(<KvorumRecommendationsPanel snapshot={{ ...base, recommendationsState: "missing" }} />);

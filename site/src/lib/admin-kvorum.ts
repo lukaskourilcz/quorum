@@ -159,6 +159,7 @@ export interface AdminKvorumSnapshot {
   monitor: AdminKvorumMonitorDay[];
   quotaState: AdminKvorumStoreState;
   quota: AdminKvorumQuota | null;
+  entityLabels: Record<string, string>;
   /** Count only: repository filenames do not cross the server-to-client boundary. */
   unreadable: number;
 }
@@ -652,6 +653,31 @@ async function readRatings(): Promise<{ values: RatingRecord[]; unreadable: numb
   }
 }
 
+async function readEntityLabels(): Promise<{ values: Record<string, string>; unreadable: number }> {
+  try {
+    const raw = JSON.parse(await readFile(path.join(repositoryRoot(), "config/kvorum-entities.json"), "utf8")) as unknown;
+    const lexicon = object(raw);
+    if (!lexicon || lexicon.schemaVersion !== "kvorum-entities/1" || !Array.isArray(lexicon.entities)) {
+      return { values: {}, unreadable: 1 };
+    }
+    const values: Record<string, string> = {};
+    for (const value of lexicon.entities) {
+      const entity = object(value);
+      const id = text(entity?.id, 80);
+      const canonicalName = text(entity?.canonicalName, 160);
+      if (!id || !canonicalName || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(id) || values[id]) {
+        return { values: {}, unreadable: 1 };
+      }
+      values[id] = canonicalName;
+    }
+    return { values, unreadable: 0 };
+  } catch (error) {
+    return (error as NodeJS.ErrnoException).code === "ENOENT"
+      ? { values: {}, unreadable: 0 }
+      : { values: {}, unreadable: 1 };
+  }
+}
+
 /**
  * The plain-data boundary for the three Kvórum admin tabs.
  *
@@ -660,7 +686,7 @@ async function readRatings(): Promise<{ values: RatingRecord[]; unreadable: numb
  * workspace down. Repository paths and filenames stay on this side of the boundary.
  */
 export async function readAdminKvorum(): Promise<AdminKvorumSnapshot> {
-  const [recommendations, monitor, quota, ratings] = await Promise.all([
+  const [recommendations, monitor, quota, ratings, entityLabels] = await Promise.all([
     readDirectory(
       "state/ventures/kvorum/recommendations",
       /^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.json$/u,
@@ -668,7 +694,8 @@ export async function readAdminKvorum(): Promise<AdminKvorumSnapshot> {
     ),
     readDirectory("state/ventures/kvorum/monitor", /^\d{4}-\d{2}-\d{2}\.json$/u, parseMonitor),
     readQuota(),
-    readRatings()
+    readRatings(),
+    readEntityLabels()
   ]);
   const recommendationValues = recommendations.values
     .map((recommendation) => ({
@@ -685,6 +712,8 @@ export async function readAdminKvorum(): Promise<AdminKvorumSnapshot> {
     monitor: monitor.values.sort((left, right) => right.date.localeCompare(left.date)),
     quotaState: quota.state,
     quota: quota.value,
-    unreadable: recommendations.unreadable + monitor.unreadable + quota.unreadable + ratings.unreadable
+    entityLabels: entityLabels.values,
+    unreadable: recommendations.unreadable + monitor.unreadable + quota.unreadable
+      + ratings.unreadable + entityLabels.unreadable
   };
 }
