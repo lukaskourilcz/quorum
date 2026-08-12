@@ -33,7 +33,8 @@
               "mma-intake",
               "mma-analysis",
               "mag-editorial",
-              "mag-desk"
+              "mag-desk",
+              "kv-desk"
             ]
           },
           "requestedBy": {
