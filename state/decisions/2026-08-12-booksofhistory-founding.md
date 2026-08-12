@@ -136,7 +136,7 @@ post anything.
 - [x] **BH-20b** — Category weights with floors
 - [x] **BH-20c** — Used-flag backfill and the research-efficiency KPI
 - [x] **BH-21a** — Documentation truth across the standing docs
-- [ ] **BH-21b** — INBOX approvals and NEEDED owner items
+- [x] **BH-21b** — INBOX approvals and NEEDED owner items
 - [ ] **BH-21c** — Honest gaps, checkbox sweep and build-prompt deletion
 
 ## Honest gaps

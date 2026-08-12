@@ -150,6 +150,33 @@ is the single thing standing between a proven path and a working one.
 
 Judgement calls. Nothing is blocked on code for any of these.
 
+- [ ] **Sign or decline `BH-RESEARCH-001`** — decide whether BOOKSOFHISTORY may use
+  web search on the existing Anthropic key. The item in `state/INBOX.md` fixes gather
+  calls at five searches, QUILL checks at one to three, research at no more than
+  `$0.10` per call, `$0.50` per cycle and `$5.00` per month, and requires the ledger,
+  shelf-first reuse and `(bookId, briefHash)` idempotency. It creates no account or
+  credential. Until signed, live research must remain `$0`.
+  [imp:4] [owner:me] [time:10m] [kind:decision]
+
+- [ ] **Review and sign or decline `BH-SEED-002`** — inspect the authored 200-book
+  seed library and accept only if its scores and notes read as editorial priors, never
+  facts. The same item keeps every `coverRef` in protected admin context: no cover
+  artwork may be downloaded, rendered or delivered, and only dossier claims may enter
+  feature copy. [imp:3] [owner:me] [time:30m] [kind:content]
+
+- [ ] **Clear the two lanes and sign or decline `BH-ACCOUNTS-003`** — record the
+  chosen platforms and cleared handles for separate Czech and English profiles, then
+  approve the Czech and English AI-disclosure bio lines in `state/INBOX.md`. Signing
+  lets only you create or prepare those profiles; agents still cannot create an
+  account, touch a channel or post, and every package remains a draft for manual
+  posting. [imp:3] [owner:me] [time:30m] [kind:legal]
+
+- [ ] **Sign or decline `BH-RESULTS-004`** — decide whether the protected admin may
+  accept your manual per-lane post URL and any available views, likes, comments,
+  shares, saves, follows or link taps. This is the only BOOKSOFHISTORY measurement
+  source: D9 and `METRICS_INGESTION_ENABLED=false` stay in force, no platform is read,
+  and absent numbers remain unavailable. [imp:2] [owner:me] [time:5m] [kind:decision]
+
 - [ ] **Read the four new venture designs and commission the builds** — the designs are
   `docs/KVORUM-VENTURE-DESIGN.md` (Czech politics), `docs/DOOR-MONEY-VENTURE-DESIGN.md`
   (Rapovej deník marketing), `docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` (book-history
