@@ -4,7 +4,7 @@ import type { z } from "zod";
 import { BoutRecordSchema, EventCardSchema, FightAiQStatsEntrySchema, FighterRecordSchema } from "../contracts/mma.js";
 import { FightAiQDeliverySchema, type ArticlePackage, type FightAiQDelivery } from "../contracts/mma-files.js";
 import { repoRoot, stateRoot } from "../paths.js";
-import { atomicWriteJson, readJson } from "../state.js";
+import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { canonicalJson, sha256 } from "./hash.js";
 import { loadArticlePackages } from "./store.js";
 import { publicBoutMirror, publicEventMirror, publicFighterMirror } from "../fightaiq/store.js";
@@ -93,14 +93,49 @@ export async function composeFightAiQDelivery(root = stateRoot): Promise<FightAi
   return FightAiQDeliverySchema.parse({ ...content, packageHash: fightAiQDeliveryHash(content) });
 }
 
-async function delivered(root: string, kind: MmaDeliveryKind, packageHash: string): Promise<boolean> {
-  const relative = kind === "article"
+function receiptPath(kind: MmaDeliveryKind, packageHash: string): string {
+  return kind === "article"
     ? `ventures/mma-files/deliveries/articles/${packageHash}.json`
     : kind === "fightaiq"
       ? `ventures/fightaiq/deliveries/${packageHash}.json`
       : `ventures/mma-files/deliveries/banners/${packageHash}.json`;
-  const receipt = await readJson<{ status?: unknown } | null>(root, relative, null);
-  return receipt?.status === "delivered";
+}
+
+/**
+ * Failure codes a byte-identical retry can still clear.
+ *
+ * Everything else is a verdict on these exact bytes: the magazine refused them once and will
+ * refuse them again for the same reason. Sending them back costs a run and, in an oldest-first
+ * queue that ships one package per run, holds every later article behind them.
+ */
+const RETRYABLE_DELIVERY_CODES = new Set(["unreachable", "push_rejected"]);
+
+/**
+ * `parked` is the state this queue used to have no word for.
+ *
+ * `delivered()` answered a yes/no question, so a receipt that said `needs_reconciliation` read
+ * exactly like no receipt at all and the package stayed at the head of the queue. One rejected
+ * article stopped MMA Files publishing for a week: every run re-sent the same bytes, the magazine
+ * refused them the same way, and the three articles written since never got a turn. A parked
+ * package is not lost — its receipt says what happened and the queue health report counts it.
+ */
+export type MmaDeliveryState = "pending" | "delivered" | "parked";
+
+export async function deliveryState(
+  root: string,
+  kind: MmaDeliveryKind,
+  packageHash: string
+): Promise<MmaDeliveryState> {
+  const receipt = await readJson<{ status?: unknown; code?: unknown } | null>(
+    root,
+    receiptPath(kind, packageHash),
+    null
+  );
+  if (receipt?.status === "delivered") return "delivered";
+  if (receipt?.status !== "needs_reconciliation") return "pending";
+  return typeof receipt.code === "string" && RETRYABLE_DELIVERY_CODES.has(receipt.code)
+    ? "pending"
+    : "parked";
 }
 
 export async function nextArticleDelivery(root = stateRoot): Promise<PendingMmaDelivery | null> {
@@ -108,7 +143,7 @@ export async function nextArticleDelivery(root = stateRoot): Promise<PendingMmaD
     .filter((article) => article.status === "published")
     .sort((left, right) => left.publishAt.localeCompare(right.publishAt) || left.slot.localeCompare(right.slot));
   for (const article of articles) {
-    if (await delivered(root, "article", article.packageHash)) continue;
+    if (await deliveryState(root, "article", article.packageHash) !== "pending") continue;
     const filename = `${article.publishAt.slice(0, 10)}-${article.slot}-${article.slug}.json`;
     return {
       kind: "article",
@@ -125,7 +160,7 @@ export async function nextArticleDelivery(root = stateRoot): Promise<PendingMmaD
 
 export async function nextFightAiQDelivery(root = stateRoot, workspaceRoot = repoRoot): Promise<PendingMmaDelivery | null> {
   const feed = await composeFightAiQDelivery(root);
-  if (!feed || await delivered(root, "fightaiq", feed.packageHash)) return null;
+  if (!feed || await deliveryState(root, "fightaiq", feed.packageHash) !== "pending") return null;
   const directory = path.join(workspaceRoot, "tmp", "mma-files-delivery");
   await mkdir(directory, { recursive: true });
   const packagePath = path.join(directory, `fightaiq-${feed.packageHash}.json`);
@@ -142,7 +177,7 @@ export async function nextBannerDelivery(root = stateRoot, workspaceRoot = repoR
   const contract = MmaFilesBannerContractSchema.parse(await readJson(root, MMA_BANNER_CONTRACT_PATH, null));
   if (contract.status === "delivered") return null;
   const composed = await composeMmaBanner(root);
-  if (await delivered(root, "banner", composed.packageHash)) return null;
+  if (await deliveryState(root, "banner", composed.packageHash) !== "pending") return null;
   const directory = path.join(workspaceRoot, "tmp", "mma-files-delivery");
   await mkdir(directory, { recursive: true });
   const packagePath = path.join(directory, `banner-${composed.packageHash}.json`);
@@ -164,6 +199,60 @@ export async function nextMmaDelivery(kind: MmaDeliveryKind, root = stateRoot, w
 /** Where MMA Files serves a delivered article. Both locales are prefixed. */
 const MMA_FILES_SITE = "https://mma-files.vercel.app";
 
+/**
+ * What the owner reads when a delivery does not complete.
+ *
+ * The failure code and the runner's log belong in the INBOX item and nowhere else — the edition
+ * path learned that after a public decision summary published a CI path and a command line.
+ */
+const MMA_DELIVERY_FAILURE_SENTENCE: Record<string, string> = {
+  schema_invalid: "The finished article did not match the delivery format the magazine accepts, so it was not published.",
+  content_invalid: "The finished article failed its content checks on the way out, so it was not published.",
+  push_rejected: "The magazine repository refused the delivery, so the article is not published yet.",
+  target_gate_failed: "The magazine could not build the delivered article, so it is not published yet.",
+  hash_conflict: "A different article already holds this date and slot in the magazine, so this one was held back.",
+  post_deploy_verification: "The delivered article did not verify on the live site, so it was rolled back.",
+  unreachable: "The magazine could not be reached, so the article is waiting to be delivered."
+};
+
+/**
+ * Raise the owner item a failed MMA delivery never raised.
+ *
+ * The edition path has done this since 5 August; this one wrote a receipt and stopped. So a
+ * delivery could fail every run for a week with the room reading as a success, no item on the
+ * owner's list, and nothing anywhere that said the magazine had stopped publishing.
+ */
+async function raiseMmaInboxOnce(
+  root: string,
+  label: string,
+  code: string,
+  detail: string
+): Promise<boolean> {
+  const existing = await readText(root, "INBOX.md", "# INBOX\n");
+  const marker = `MMA-FILES-DELIVERY-${label}`;
+  if (existing.includes(marker)) return false;
+  const sentence = MMA_DELIVERY_FAILURE_SENTENCE[code] ?? "The delivery stopped before the magazine accepted it.";
+  const item = [
+    `- [ ] **${marker}** — ${code}: ${detail.replace(/\s+/gu, " ").trim().slice(0, 300)}.`,
+    `  ${sentence} RELAY marked the delivery \`needs_reconciliation\`; same-slot content must not be overwritten automatically.`,
+    "  [imp:5] [owner:me] [time:20m] [kind:deploy]"
+  ].join("\n");
+  await atomicWriteText(root, "INBOX.md", `${existing.trimEnd()}\n\n${item}\n`);
+  return true;
+}
+
+/** Tick the item for a slot the moment that slot actually delivers, so the list does not grow forever. */
+async function closeMmaInboxItem(root: string, label: string, now: Date): Promise<boolean> {
+  const existing = await readText(root, "INBOX.md", "# INBOX\n");
+  const open = `- [ ] **MMA-FILES-DELIVERY-${label}**`;
+  if (!existing.includes(open)) return false;
+  await atomicWriteText(root, "INBOX.md", existing.replace(
+    open,
+    `- [x] **MMA-FILES-DELIVERY-${label}** — Resolved ${now.toISOString().slice(0, 10)}: this slot delivered on a later run. Original report:`
+  ));
+  return true;
+}
+
 export async function recordMmaDelivery(input: {
   kind: MmaDeliveryKind;
   packageHash: string;
@@ -178,10 +267,12 @@ export async function recordMmaDelivery(input: {
   const root = input.root ?? stateRoot;
   if (!/^[a-f0-9]{64}$/u.test(input.packageHash)) throw new Error("Invalid MMA Files package hash");
   let articleUrl: string | null = null;
+  let articleLabel: string | null = null;
   let bannerManifest: ReturnType<typeof MmaAdsDeliverySchema.parse> | null = null;
   if (input.kind === "article") {
     const article = JSON.parse(await readFile(input.packagePath, "utf8")) as ArticlePackage;
     if (article.packageHash !== input.packageHash) throw new Error("Article receipt hash differs from package");
+    articleLabel = `${article.publishAt.slice(0, 10)}-${article.slot}`;
     // The receipt named a commit and a hash and nothing a reader could open. The desk knows
     // where the magazine serves the article the moment it delivers it.
     if (input.status === "delivered") articleUrl = `${MMA_FILES_SITE}/cs/articles/${article.slug}`;
@@ -219,6 +310,11 @@ export async function recordMmaDelivery(input: {
     ...(input.detail ? { detail: input.detail.replace(/\s+/gu, " ").trim().slice(0, 500) } : {}),
     recordedAt: (input.now ?? new Date()).toISOString()
   });
+  if (articleLabel) {
+    const now = input.now ?? new Date();
+    if (input.status === "delivered") await closeMmaInboxItem(root, articleLabel, now);
+    else await raiseMmaInboxOnce(root, articleLabel, input.code ?? "push_rejected", input.detail ?? "Delivery stopped without a reconciled target commit");
+  }
   if (input.kind === "banner" && input.status === "delivered") {
     const contract = MmaFilesBannerContractSchema.parse(await readJson(root, MMA_BANNER_CONTRACT_PATH, null));
     await atomicWriteJson(root, MMA_BANNER_CONTRACT_PATH, {
