@@ -186,10 +186,13 @@ snapshot is a committed file and the venture buys no data.
   left to pin and is withdrawn. The hash verification stays: a hand-edited facts file must
   abort the room rather than quietly change what it claims.
 - **The desk holds its slot before its pipeline exists.** Registering the venture put
-  `ts-desk` on the clock, and a scheduled phase with no dispatch fails the whole daily
-  cycle. The runner therefore landed first as a deterministic $0 checkpoint: it calls no
-  model, reads no product data, touches no channel, and records plainly that the editorial
-  pipeline is not built. A manual invocation of the closed live room writes nothing at all.
+  `ts-desk` on the clock while the dispatcher still had no branch for it. The workflow's
+  portfolio live gate hides that today, but that gate is open whenever `bh-desk` and
+  `tt-marketing` are allowed to run, and behind it the phase would have thrown and taken
+  the daily cycle red. The runner therefore landed first as a deterministic $0 checkpoint:
+  it calls no model, reads no product data, touches no channel, and records plainly that
+  the editorial pipeline is not built. A manual invocation of the closed live room writes
+  nothing at all.
 
 ## Honest gaps
 
