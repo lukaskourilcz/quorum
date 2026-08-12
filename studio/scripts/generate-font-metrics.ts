@@ -126,13 +126,26 @@ function characterMap(data: Buffer, offset: number): Map<number, number> {
   return map;
 }
 
-/** Every character the two magazines and the three other brands can set. */
+/**
+ * Every character the brands can set.
+ *
+ * The Cyrillic block is here for the venture that publishes in Ukrainian. Coverage in the font
+ * file is not enough on its own: a character absent from this set gets no entry in the width
+ * table, so the fitter charges it the fallback average and a whole alphabet measures at one flat
+ * width. That is a card that fits in the arithmetic and overflows on the page.
+ *
+ * Widening the set costs the Latin-only families nothing. A code their cmap does not carry
+ * produces no entry, and the `average` below is taken over the Latin alphabet either way, so
+ * their committed tables come back byte for byte identical.
+ */
 function characterSet(): number[] {
   const codes = new Set<number>();
   for (let code = 0x20; code <= 0x7e; code += 1) codes.add(code);
   for (let code = 0xa0; code <= 0xff; code += 1) codes.add(code);
   for (let code = 0x100; code <= 0x17f; code += 1) codes.add(code);
-  for (const extra of ["–", "—", "‘", "’", "“", "”", "…", "·", "×", "€", "→"]) {
+  for (let code = 0x400; code <= 0x4ff; code += 1) codes.add(code);
+  // Ukrainian sets its apostrophe as a modifier letter; the typographic one is already below.
+  for (const extra of ["–", "—", "‘", "’", "“", "”", "…", "·", "×", "€", "→", "ʼ", "«", "»", "„"]) {
     codes.add(extra.codePointAt(0)!);
   }
   return [...codes].sort((left, right) => left - right);

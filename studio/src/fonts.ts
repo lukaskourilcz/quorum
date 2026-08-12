@@ -38,7 +38,12 @@ const familySlugs: Readonly<Record<string, string>> = {
   Outfit: "outfit",
   "Public Sans": "public-sans",
   "IBM Plex Sans": "ibm-plex-sans",
-  "IBM Plex Mono": "ibm-plex-mono"
+  "IBM Plex Mono": "ibm-plex-mono",
+  // Cyrillic-complete cuts, added for a venture that publishes in Ukrainian. Every other family
+  // here is Latin-only in practice, and a missing glyph does not fail — it draws a box, which is
+  // the one rendering failure that looks deliberate.
+  Literata: "literata",
+  Inter: "inter"
 };
 
 /** The families a brand may name. Anything else is a typo, and the schema will not catch it. */
