@@ -107,7 +107,7 @@ post anything.
 - [x] **BH-06a** — `bh-seed` contract and fixtures
 - [x] **BH-06b** — The no-cover-art boundary test
 - [x] **BH-07a** — Author the approximately 200-book seed library
-- [ ] **BH-07b** — The `bh:seed` validating CLI
+- [x] **BH-07b** — The `bh:seed` validating CLI
 - [ ] **BH-08a** — The deterministic opportunity scorer
 - [ ] **BH-08b** — Shortlist contract and daily records
 - [ ] **BH-09a** — The venture-agnostic research-provider interface

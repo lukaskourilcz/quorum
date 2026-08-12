@@ -8,6 +8,7 @@
   },
   "scripts": {
     "agents:validate": "tsx src/validate-agents.ts",
+    "bh:seed": "tsx src/ventures/booksofhistory/seed-cli.ts",
     "build": "tsc -p tsconfig.build.json",
     "budget:alert": "tsx src/finance/budget-alert-cli.ts",
     "cycle": "tsx src/index.ts",

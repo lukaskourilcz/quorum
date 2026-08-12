@@ -10,6 +10,7 @@
   },
   "scripts": {
     "agents:validate": "pnpm --filter @boardlessai/orchestrator agents:validate",
+    "bh:seed": "pnpm --filter @boardlessai/orchestrator bh:seed",
     "contracts:export": "pnpm --filter @boardlessai/orchestrator exec tsx src/contracts/export-json-schema.ts",
     "build": "pnpm docs:refresh && pnpm -r build",
     "budget:alert": "pnpm --filter @boardlessai/orchestrator budget:alert",
