@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-08-12T12:41:14.655Z",
+  "checkedAt": "2026-08-12T15:03:55.921Z",
   "date": "2026-08-12",
   "ventures": [
     {
@@ -31,6 +31,22 @@
       "oldestWaitingDate": null,
       "stalledDays": null,
       "stalled": false
+    }
+  ],
+  "deploys": [
+    {
+      "venture": "caught-up",
+      "url": "https://caughtup-ai.vercel.app/data/board/2026-08-12.json",
+      "expected": "2026-08-12",
+      "status": 200,
+      "live": true
+    },
+    {
+      "venture": "mma-files",
+      "url": "https://mma-files.vercel.app/cs/articles/ufc-event-ufc-330-makhachev-vs-machado-garry",
+      "expected": "ufc-event-ufc-330-makhachev-vs-machado-garry",
+      "status": 200,
+      "live": true
     }
   ],
   "needsOwner": true
