@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "tehdejsi-terminology/1",
+  "_comment": "Terminology is not a style choice. Each entry names a wording that must not ship and the wording that replaces it, with the reason a reviewer can check. VERBA proposes additions through a recorded room decision and never invents one silently. Patterns are matched case-insensitively against the package copy before any gate passes.",
+  "entries": [
+    {
+      "id": "great-patriotic-war",
+      "language": "uk",
+      "forbidden": ["велика вітчизняна війна", "великая отечественная война"],
+      "replacement": "Друга світова війна",
+      "reason": "The Great-Patriotic framing is the occupier's periodisation and erases 1939-1941."
+    },
+    {
+      "id": "1968-liberation",
+      "language": "cs",
+      "forbidden": ["bratrská pomoc", "internacionální pomoc"],
+      "replacement": "okupace",
+      "reason": "The 1968 invasion was called fraternal help by the regime that carried it out."
+    },
+    {
+      "id": "1968-uk",
+      "language": "uk",
+      "forbidden": ["введення військ", "братерська допомога"],
+      "replacement": "радянська окупація",
+      "reason": "The founding decision fixes the Ukrainian framing for 1968 as occupation."
+    },
+    {
+      "id": "kyiv-transliteration",
+      "language": "uk",
+      "forbidden": ["киев", "kiev"],
+      "replacement": "Київ",
+      "reason": "Ukrainian place names take their current standard forms."
+    },
+    {
+      "id": "lviv-transliteration",
+      "language": "uk",
+      "forbidden": ["львов", "lvov"],
+      "replacement": "Львів",
+      "reason": "Ukrainian place names take their current standard forms."
+    },
+    {
+      "id": "holodomor-famine",
+      "language": "uk",
+      "forbidden": ["голод 1932", "неврожай"],
+      "replacement": "Голодомор",
+      "reason": "Calling it a harvest failure repeats the denial the event is remembered against."
+    },
+    {
+      "id": "chornobyl-spelling",
+      "language": "uk",
+      "forbidden": ["чернобыль"],
+      "replacement": "Чорнобиль",
+      "reason": "The Ukrainian form, not the Russian one."
+    }
+  ]
+}

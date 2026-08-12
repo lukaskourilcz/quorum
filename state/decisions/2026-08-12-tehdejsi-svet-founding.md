@@ -136,8 +136,8 @@ snapshot is a committed file and the venture buys no data.
 - [ ] **TS-10a** — Research reuse with venture ledger and ceilings
 - [x] **TS-10b** — The no-product-link guard (inverted from a read-only pin)
 - [ ] **TS-11a** — Sensitivity tier classifier and tier effects
-- [ ] **TS-11b** — Terminology table and its checks
-- [ ] **TS-11c** — Wartime-remembrance, no-flags and no-AI-imagery lints
+- [x] **TS-11b** — Terminology table and its checks
+- [x] **TS-11c** — Wartime-remembrance, no-flags and no-AI-imagery lints
 - [ ] **TS-12** — `venture-recommendation` evidence kind `tehdejsi-story`
 - [ ] **TS-13** — Day A planning call and briefs
 - [ ] **TS-14a** — Day B bilingual production with the anti-mirror rule
