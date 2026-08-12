@@ -3,87 +3,27 @@ import { randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { buildCarouselSummary, reviewCarouselSummary, type CarouselSummary } from "@boardlessai/carousel-studio";
+import {
+  parseDoorMoneyRecommendation,
+  type DoorMoneyCopyBlock,
+  type DoorMoneyRecommendation
+} from "./door-money-recommendation-model";
+
+export {
+  parseDoorMoneyCopyBlocks,
+  parseDoorMoneyRecommendation,
+  type DoorMoneyCopyBlock,
+  type DoorMoneyRecommendation
+} from "./door-money-recommendation-model";
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
 const recommendationDirectory = "state/ventures/door-money/recommendations";
 const summaryDirectory = "state/ventures/carousel-studio/summaries/door-money";
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
-const DATE = /^\d{4}-\d{2}-\d{2}$/u;
-const DATE_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/u;
 
-const FORMATS = ["carousel", "single-image", "thread", "caption", "short-video-script"] as const;
-const COPY_KINDS = ["cover", "body", "outro", "thread-post", "caption", "script", "shot-list"] as const;
-const STATUSES = ["draft", "approved", "posted", "archived", "rejected"] as const;
-const PLATFORMS = ["instagram", "tiktok", "x", "threads", "youtube"] as const;
-const GATES = ["voice", "claims", "quotes", "excerpt-cap", "duplicate", "cta-frequency", "living-person"] as const;
-const SCORE_AXES = [
-  "entertainment", "emotionalImpact", "shock", "humor", "relatability", "hipHopRelevance",
-  "storytellingStrength", "controversy", "shareability", "educationalValue", "quotePotential",
-  "carouselPotential", "shortVideoPotential", "threadPotential", "bookCuriosityPotential"
-] as const;
-const CHUNK_ID = /^ch\d{2,}-s\d{2,}-c\d{3,}$/u;
-const MANUSCRIPT_HASH = /^sha256:[a-f0-9]{64}$/u;
-const STATE_PATH = /^state\/[a-zA-Z0-9._/-]+$/u;
-
-export type DoorMoneyRecommendationFormat = (typeof FORMATS)[number];
-export type DoorMoneyRecommendationStatus = (typeof STATUSES)[number];
-export type DoorMoneyCopyBlockKind = (typeof COPY_KINDS)[number];
-
-export interface DoorMoneyCopyBlock {
-  kind: DoorMoneyCopyBlockKind;
-  ordinal: number;
-  text: string;
-}
-
-interface DoorMoneyOwnerFields {
-  editedCopyBlocks: DoorMoneyCopyBlock[] | null;
-  approvalNote: string | null;
-  rejectionReason: string | null;
-  approvedAt: string | null;
-  rejectedAt: string | null;
-  postedAt: string | null;
-  archivedAt: string | null;
-  postedUrl: string | null;
-  resultIds: string[];
-  ratingRef: string | null;
-}
-
-interface DoorMoneyStatusEntry {
-  from: DoorMoneyRecommendationStatus | null;
-  to: DoorMoneyRecommendationStatus;
-  at: string;
-  actor: "system" | "owner";
-  reason: string | null;
-}
-
-/** The fields the owner route changes, plus the gated record it must preserve byte-for-byte. */
-export interface DoorMoneyRecommendation {
-  schemaVersion: "venture-recommendation/1";
-  id: string;
-  ventureId: "door-money";
-  date: string;
-  status: DoorMoneyRecommendationStatus;
-  hook: string;
-  formats: DoorMoneyRecommendationFormat[];
-  platforms: string[];
-  copyBlocks: DoorMoneyCopyBlock[];
-  rationale: string;
-  curiosityBridge: string;
-  cta: { mode: "soft-curiosity" | "explicit-buy-book"; text: string | null };
-  evidence: {
-    kind: "book-passage";
-    excerpt: string;
-    privateStoreLink: string;
-    chunkIds: string[];
-    [key: string]: unknown;
-  };
-  gateResults: Array<{ gate: string; passed: true; detail: string }>;
-  designLab: { eligible: boolean; summaryPath: string | null; readyAt: string | null };
-  owner: DoorMoneyOwnerFields;
-  statusHistory: DoorMoneyStatusEntry[];
-  generatedAt: string;
-  updatedAt: string;
-  [key: string]: unknown;
+function httpsUrl(value: string): boolean {
+  if (value.length > 2_000) return false;
+  try { return new URL(value).protocol === "https:"; } catch { return false; }
 }
 
 export type DoorMoneyPersistenceCode =
@@ -105,168 +45,6 @@ export interface DoorMoneyWrite {
 }
 
 export const GITHUB_TOKEN_ENV = "BOARDLESSAI_GITHUB_TOKEN";
-
-function object(value: unknown): value is Record<string, unknown> {
-  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
-}
-
-function strictKeys(value: Record<string, unknown>, allowed: readonly string[]): boolean {
-  const keys = Object.keys(value);
-  return keys.length === allowed.length && keys.every((key) => allowed.includes(key));
-}
-
-function string(value: unknown, max: number): value is string {
-  return typeof value === "string" && value.trim().length > 0 && value.length <= max;
-}
-
-function nullableString(value: unknown, max: number): value is string | null {
-  return value === null || string(value, max);
-}
-
-function nullableDateTime(value: unknown): value is string | null {
-  return value === null || (typeof value === "string" && DATE_TIME.test(value));
-}
-
-function httpsUrl(value: unknown): value is string {
-  if (typeof value !== "string" || value.length > 2_000) return false;
-  try {
-    return new URL(value).protocol === "https:";
-  } catch {
-    return false;
-  }
-}
-
-/** Owner-edited public copy, contract-bounded and normalized without touching the original. */
-export function parseDoorMoneyCopyBlocks(value: unknown): DoorMoneyCopyBlock[] | null {
-  if (!Array.isArray(value) || value.length < 1 || value.length > 40) return null;
-  const parsed: DoorMoneyCopyBlock[] = [];
-  for (const entry of value) {
-    if (!object(entry) || Object.keys(entry).some((key) => !["kind", "ordinal", "text"].includes(key))) return null;
-    if (typeof entry.kind !== "string" || !(COPY_KINDS as readonly string[]).includes(entry.kind)) return null;
-    if (!Number.isInteger(entry.ordinal) || (entry.ordinal as number) < 1) return null;
-    if (!string(entry.text, 4_000)) return null;
-    parsed.push({
-      kind: entry.kind as DoorMoneyCopyBlockKind,
-      ordinal: entry.ordinal as number,
-      text: entry.text.trim()
-    });
-  }
-  return parsed;
-}
-
-/**
- * Parse a public recommendation without importing the private orchestrator into the Next app.
- *
- * The owner route accepts only an id and a bounded decision, never a replacement recommendation.
- * This boundary still rechecks the fields it relies on and the irreversible public constraints:
- * a gated Door Money record, a capped excerpt, no raw-text/vector fields and contiguous history.
- */
-export function parseDoorMoneyRecommendation(value: unknown): DoorMoneyRecommendation | null {
-  if (!object(value) || value.schemaVersion !== "venture-recommendation/1" || value.ventureId !== "door-money") return null;
-  if (!strictKeys(value, [
-    "schemaVersion", "id", "ventureId", "date", "status", "hook", "formats", "platforms",
-    "copyBlocks", "rationale", "curiosityBridge", "cta", "evidence", "gateResults", "designLab",
-    "owner", "statusHistory", "generatedAt", "updatedAt"
-  ])) return null;
-  if (!string(value.id, 160) || !SLUG.test(value.id) || typeof value.date !== "string" || !DATE.test(value.date)) return null;
-  if (typeof value.status !== "string" || !(STATUSES as readonly string[]).includes(value.status)) return null;
-  if (!string(value.hook, 500) || !string(value.rationale, 2_000) || !string(value.curiosityBridge, 1_000)) return null;
-  if (!Array.isArray(value.formats) || value.formats.length < 1 || value.formats.length > 3 ||
-      value.formats.some((format) => typeof format !== "string" || !(FORMATS as readonly string[]).includes(format))) return null;
-  if (!Array.isArray(value.platforms) || value.platforms.length < 1 || value.platforms.length > 5 ||
-      value.platforms.some((platform) => typeof platform !== "string" || !(PLATFORMS as readonly string[]).includes(platform)) ||
-      new Set(value.platforms).size !== value.platforms.length) return null;
-  if (new Set(value.formats).size !== value.formats.length) return null;
-  const originalCopy = parseDoorMoneyCopyBlocks(value.copyBlocks);
-  if (!originalCopy) return null;
-  if (!object(value.cta) || !strictKeys(value.cta, ["mode", "text"]) ||
-      (value.cta.mode !== "soft-curiosity" && value.cta.mode !== "explicit-buy-book") ||
-      !(value.cta.text === null || string(value.cta.text, 500))) return null;
-  if ((value.cta.mode === "explicit-buy-book") !== (value.cta.text !== null)) return null;
-
-  if (!object(value.evidence) || !strictKeys(value.evidence, [
-    "kind", "manuscriptHash", "chunkIds", "scoresAtSelection", "excerptChunkId", "excerpt", "privateStoreLink"
-  ]) || value.evidence.kind !== "book-passage" || typeof value.evidence.manuscriptHash !== "string" ||
-      !MANUSCRIPT_HASH.test(value.evidence.manuscriptHash) || typeof value.evidence.excerptChunkId !== "string" ||
-      !CHUNK_ID.test(value.evidence.excerptChunkId) || !string(value.evidence.excerpt, 600) ||
-      !string(value.evidence.privateStoreLink, 500) || !Array.isArray(value.evidence.chunkIds) ||
-      value.evidence.chunkIds.length < 1 || value.evidence.chunkIds.length > 3 ||
-      value.evidence.chunkIds.some((id) => typeof id !== "string" || !CHUNK_ID.test(id)) ||
-      new Set(value.evidence.chunkIds).size !== value.evidence.chunkIds.length ||
-      !value.evidence.chunkIds.includes(value.evidence.excerptChunkId)) return null;
-  const expectedPrivateLink = `private-book://sha256/${value.evidence.manuscriptHash.slice("sha256:".length)}/chunks/${value.evidence.excerptChunkId}.json`;
-  if (value.evidence.privateStoreLink !== expectedPrivateLink || !Array.isArray(value.evidence.scoresAtSelection) ||
-      value.evidence.scoresAtSelection.length !== value.evidence.chunkIds.length) return null;
-  const scoredIds: string[] = [];
-  for (const selection of value.evidence.scoresAtSelection) {
-    if (!object(selection) || !strictKeys(selection, ["chunkId", "scores"]) || typeof selection.chunkId !== "string" ||
-        !CHUNK_ID.test(selection.chunkId) || !object(selection.scores) || !strictKeys(selection.scores, SCORE_AXES)) return null;
-    scoredIds.push(selection.chunkId);
-    for (const axis of SCORE_AXES) {
-      const score = selection.scores[axis];
-      if (!object(score) || !strictKeys(score, ["score", "justification"]) ||
-          !Number.isInteger(score.score) || (score.score as number) < 0 || (score.score as number) > 5 ||
-          !string(score.justification, 240)) return null;
-    }
-  }
-  if ([...scoredIds].sort().join("\n") !== [...value.evidence.chunkIds].sort().join("\n")) return null;
-
-  if (!Array.isArray(value.gateResults) || value.gateResults.length < 1 || value.gateResults.length > 20 ||
-      value.gateResults.some((gate) => !object(gate) || !strictKeys(gate, ["gate", "passed", "detail"]) ||
-        typeof gate.gate !== "string" || !(GATES as readonly string[]).includes(gate.gate) ||
-        gate.passed !== true || !string(gate.detail, 500))) return null;
-  const gateNames = value.gateResults.map((gate) => (gate as Record<string, unknown>).gate);
-  if (new Set(gateNames).size !== gateNames.length) return null;
-  if (!object(value.designLab) || !strictKeys(value.designLab, ["eligible", "summaryPath", "readyAt"]) ||
-      typeof value.designLab.eligible !== "boolean" ||
-      !(value.designLab.summaryPath === null || (string(value.designLab.summaryPath, 400) &&
-        STATE_PATH.test(value.designLab.summaryPath) && !value.designLab.summaryPath.includes(".."))) ||
-      !nullableDateTime(value.designLab.readyAt)) return null;
-  const visual = (value.formats as string[]).some((format) => format === "carousel" || format === "single-image");
-  if (value.designLab.eligible !== visual) return null;
-
-  if (!object(value.owner) || !strictKeys(value.owner, [
-    "editedCopyBlocks", "approvalNote", "rejectionReason", "approvedAt", "rejectedAt", "postedAt",
-    "archivedAt", "postedUrl", "resultIds", "ratingRef"
-  ]) || !(value.owner.editedCopyBlocks === null || parseDoorMoneyCopyBlocks(value.owner.editedCopyBlocks)) ||
-      !nullableString(value.owner.approvalNote, 1_000) || !nullableString(value.owner.rejectionReason, 1_000) ||
-      !nullableDateTime(value.owner.approvedAt) || !nullableDateTime(value.owner.rejectedAt) ||
-      !nullableDateTime(value.owner.postedAt) || !nullableDateTime(value.owner.archivedAt) ||
-      !(value.owner.postedUrl === null || httpsUrl(value.owner.postedUrl)) || !Array.isArray(value.owner.resultIds) ||
-      value.owner.resultIds.length > 100 || value.owner.resultIds.some((id) => typeof id !== "string" || !SLUG.test(id)) ||
-      new Set(value.owner.resultIds).size !== value.owner.resultIds.length ||
-      !(value.owner.ratingRef === null || (string(value.owner.ratingRef, 400) &&
-        STATE_PATH.test(value.owner.ratingRef) && !value.owner.ratingRef.includes("..")))) return null;
-
-  if (!Array.isArray(value.statusHistory) || value.statusHistory.length < 1 || value.statusHistory.length > 20) return null;
-  let previous: DoorMoneyRecommendationStatus | null = null;
-  for (const [index, entry] of value.statusHistory.entries()) {
-    if (!object(entry) || !strictKeys(entry, ["from", "to", "at", "actor", "reason"]) ||
-        !(entry.from === null || (typeof entry.from === "string" && (STATUSES as readonly string[]).includes(entry.from))) ||
-        typeof entry.to !== "string" || !(STATUSES as readonly string[]).includes(entry.to) || !DATE_TIME.test(String(entry.at)) ||
-        (entry.actor !== "system" && entry.actor !== "owner") || !nullableString(entry.reason, 500)) return null;
-    if (index === 0 && (entry.from !== null || entry.to !== "draft" || entry.actor !== "system")) return null;
-    if (index > 0 && entry.from !== previous) return null;
-    if (!["null>draft", "draft>approved", "draft>rejected", "approved>posted", "posted>archived"]
-      .includes(`${entry.from ?? "null"}>${entry.to}`)) return null;
-    previous = entry.to as DoorMoneyRecommendationStatus;
-  }
-  if (previous !== value.status || typeof value.generatedAt !== "string" || !DATE_TIME.test(value.generatedAt) ||
-      typeof value.updatedAt !== "string" || !DATE_TIME.test(value.updatedAt) ||
-      Date.parse(value.updatedAt) < Date.parse(value.generatedAt)) return null;
-
-  const owner = value.owner as unknown as DoorMoneyOwnerFields;
-  if (value.status === "draft" && [owner.approvedAt, owner.rejectedAt, owner.postedAt, owner.archivedAt, owner.postedUrl].some(Boolean)) return null;
-  if (value.status === "rejected" && (!owner.rejectedAt || !owner.rejectionReason || owner.approvedAt)) return null;
-  if (["approved", "posted", "archived"].includes(value.status) && !owner.approvedAt) return null;
-  if (["posted", "archived"].includes(value.status) && (!owner.postedAt || !owner.postedUrl)) return null;
-  if (value.status === "archived" && !owner.archivedAt) return null;
-  if (visual && ["approved", "posted", "archived"].includes(value.status) &&
-      (!value.designLab.summaryPath || !value.designLab.readyAt)) return null;
-  if (!visual && (value.designLab.summaryPath !== null || value.designLab.readyAt !== null)) return null;
-
-  return value as unknown as DoorMoneyRecommendation;
-}
 
 function relativeRecommendationPath(id: string): string {
   if (!SLUG.test(id) || id.length > 160) throw new DoorMoneyPersistenceError("CONFLICT", "That recommendation id is invalid.");

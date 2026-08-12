@@ -35,6 +35,7 @@ import { readAdminAutonomy } from "@/lib/admin-autonomy";
 import { readDesignLab, readDesignLabPresets } from "@/lib/design-lab";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminCaughtUp } from "@/lib/admin-caught-up";
+import { readAdminDoorMoney } from "@/lib/admin-door-money";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
@@ -150,7 +151,8 @@ export default async function AdminPage({
     monetization,
     renderedDesk,
     ttProposals,
-    approvedUndelivered
+    approvedUndelivered,
+    doorMoney
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -174,7 +176,8 @@ export default async function AdminPage({
     readMonetizationOptions(),
     readRenderedDesk(),
     readTittyTuesdaysProposals(),
-    readApprovedUndeliveredPayloads(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), ".."))
+    readApprovedUndeliveredPayloads(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")),
+    readAdminDoorMoney()
   ]);
 
   /*
@@ -209,18 +212,20 @@ export default async function AdminPage({
   /**
    * How many stored items a workspace holds.
    *
-   * Three ventures keep their work outside the portfolio card store, so counting cards reported 0
+   * Four ventures keep their work outside the portfolio card store, so counting cards reported 0
    * for them — FightAIQ showed nothing on a rail beside a workspace holding twelve hundred fighter
-   * records. Each of those three is counted from the loader that actually reads it.
+   * records. Each of those four is counted from the loader that actually reads it.
    */
   const savedItemCount = (ventureId: string, fallback: number) =>
     ventureId === "mma-files"
       ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
-      : ventureId === "carousel-studio"
-        ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
-        : ventureId === "fightaiq"
-          ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.sources.length
-          : fallback;
+      : ventureId === "door-money"
+        ? doorMoney.recommendations.items.length
+        : ventureId === "carousel-studio"
+          ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
+          : ventureId === "fightaiq"
+            ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.sources.length
+            : fallback;
 
   const files = [
     { name: "Things only you can approve", content: state.inbox },
@@ -334,7 +339,8 @@ export default async function AdminPage({
         portfolio.ventures.reduce((sum, venture) => sum + venture.unreadableFiles.length, 0) +
         mmaFiles.unreadable.length +
         fightaiq.unreadable.length +
-        ownerAttention.unreadable
+        ownerAttention.unreadable +
+        doorMoney.unreadable
     }
   ];
 
