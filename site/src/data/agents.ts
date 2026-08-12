@@ -119,7 +119,8 @@ type TextModelRole =
   | "ANTHROPIC_SPECIALIST"
   | "DIGEST"
   | "MAKO"
-  | "CHUM";
+  | "CHUM"
+  | "TRIBUN";
 
 const textModelRoles = modelSource.roles as Record<
   TextModelRole,
@@ -348,6 +349,7 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
   // and the wrong price for the venture's only quality-critical call.
   MAKO: [configuredTextModel("MAKO", "marketingShark weekly review")],
   CHUM: [configuredTextModel("CHUM", "marketingShark daily carousel copy")],
+  TRIBUN: [configuredTextModel("TRIBUN", "Kvórum daily political recommendation")],
   HERALD: [
     configuredEditionModel(editionModels.curation, "DNESKAi daily edition curation", curationCall),
     configuredTextModel("DIGEST", "DNESKAi product room"),

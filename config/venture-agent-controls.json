@@ -106,6 +106,7 @@
     "kvorum": {
       "lockedOn": [
         "TRIBUN",
+        "HACEK",
         "AUDIT"
       ],
       "switchable": [

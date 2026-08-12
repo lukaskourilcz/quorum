@@ -155,10 +155,10 @@ section and a receipt line, and a day with no usable cluster records an honest q
   the system audit separately refuses to treat its unapproved `$0.10` as payable inside a `$0.02`
   remainder. The tree is intentionally completed in order through Phase A before its full gate;
   no compatibility bypass, premature cron entry or relaxed budget assertion hides either blocker.
-- **Agent assignment sequencing:** KV-04a installs the full TRIBUN/HACEK/AUDIT desk preset, but
-  its validator-clean venture control record locks only TRIBUN and AUDIT until KV-04c extends
-  HACEK's declared venture assignment. KV-04c must add HACEK to that locked control list in the
-  same commit; no runtime phase boundary occurs between the two issues.
+- **Agent assignment sequencing:** KV-04a installed the full TRIBUN/HACEK/AUDIT desk preset, but
+  its validator-clean venture control record locked only TRIBUN and AUDIT until KV-04c extended
+  HACEK's declared venture assignment and added that locked control seat in the same commit. No
+  runtime phase boundary occurred between the two issues.
 - **Documentation drift:** curated ecosystem prose still says six projects, 18 cron
   expressions, 11 templates and five brands in places where generated or live state now says
   seven projects, three GitHub sweeps, 23 families and five current brands. KV-21a must correct
@@ -176,7 +176,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-03d — Vercel cron entries for the 21:00 slot
 - [x] KV-04a — TRIBUN in the agent registry, routing, controls and cast schema
 - [x] KV-04b — TRIBUN prompts and the expected-prompts list
-- [ ] KV-04c — TRIBUN model role and HACEK venture extension
+- [x] KV-04c — TRIBUN model role and HACEK venture extension
 - [ ] KV-05a — Venture scaffold, brand hue and labels
 - [ ] KV-05b — KPI seeds for the quarter
 - [ ] KV-05c — Degradation-ladder position with its test

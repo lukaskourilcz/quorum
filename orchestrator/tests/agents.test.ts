@@ -15,6 +15,18 @@ function personaPath(promptsRoot: string, agent: { id: string; slug: string }): 
 }
 
 describe("agent registry and identity assets", () => {
+  it("routes TRIBUN through the bounded quality-tier role", async () => {
+    const models = JSON.parse(
+      await readFile(path.join(configRoot, "models.json"), "utf8")
+    ) as { roles: Record<string, unknown> };
+    expect(models.roles.TRIBUN).toEqual({
+      provider: "anthropic",
+      model: "claude-sonnet-5",
+      maxInputTokens: 8000,
+      maxOutputTokens: 2500
+    });
+  });
+
   it("keeps 34 seated roles of 43 on file, and gated portraits explicit", async () => {
     const registry = await loadAgentRegistry();
 
@@ -41,7 +53,7 @@ describe("agent registry and identity assets", () => {
       registry.agents.filter((agent) => agent.ventures !== "global").map((agent) => [agent.id, agent.ventures])
     ).toEqual([
       ["HERALD", ["caught-up"]],
-      ["HACEK", ["caught-up", "mma-files"]],
+      ["HACEK", ["caught-up", "mma-files", "kvorum"]],
       // SCENE reads scenes and competition evidence, which GoVIRAL's room can use as a guest
       // seat. It is not seated there by default — venture-agent-controls lists it switchable.
       ["SCENE", ["titty-tuesdays", "goviral"]],

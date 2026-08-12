@@ -842,11 +842,12 @@
       "provider": "Anthropic",
       "ventures": [
         "caught-up",
-        "mma-files"
+        "mma-files",
+        "kvorum"
       ],
       "department": "Czech Editorial",
       "title": "Czech Language Editor",
-      "mission": "Own the Czech register and copy floor that Caught Up and MMA Files are written to, without changing any article's facts, sources, uncertainty or intent.",
+      "mission": "Own the Czech register and copy floor for DNESKAi, MMA Files and Kvórum without changing a draft's facts, sources, uncertainty or intent.",
       "responsibilities": [
         "Maintain the venture-specific Czech register the desks write to",
         "Strip empty Czech emphasis words before the copy gate reads the text",
@@ -867,9 +868,9 @@
         "localization.reader_complaints"
       ],
       "successChecks": [
-        "Every Czech article clears the register rules with no calque or bureaucratic filler",
+        "Every Czech article or recommendation clears the register rules with no calque or bureaucratic filler",
         "No register repair changes a number, source URL or uncertainty marker",
-        "Any Czech social caption reuses copy that already cleared the article gate"
+        "Any Czech social caption reuses copy that already cleared its venture gate"
       ],
       "capabilityTags": [
         "editorial:czech",

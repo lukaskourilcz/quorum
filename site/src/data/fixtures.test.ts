@@ -7,6 +7,10 @@ describe("public fixture truthfulness", () => {
     expect(agents).toHaveLength(43);
     expect(new Set(agents.map((agent) => agent.id)).size).toBe(43);
     expect(new Set(agents.map((agent) => agent.slug)).size).toBe(43);
+    expect(agents.find((agent) => agent.id === "TRIBUN")?.apiModels[0]).toMatchObject({
+      provider: "Anthropic",
+      model: "claude-sonnet-5"
+    });
   });
 
   it("never presents a fixture opportunity as selected", () => {
