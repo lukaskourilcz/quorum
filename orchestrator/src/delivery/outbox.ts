@@ -4,7 +4,7 @@ import type { EditionPackage } from "../contracts/edition-package.js";
 import { MeetingRecordSchema } from "../contracts/meeting-record.js";
 import { stateRoot } from "../paths.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText, resolveStatePath } from "../state.js";
-import { validateEditionForDelivery } from "./validate.js";
+import { DeliveryPackageError, validateEditionForDelivery } from "./validate.js";
 
 export type DeliveryFailureCode =
   | "schema_invalid"
@@ -35,6 +35,59 @@ function isRetryableFailure(code: unknown): boolean {
   return typeof code === "string" && RETRYABLE_FAILURE_CODES.has(code);
 }
 
+/** `<date>-<idempotencyKey>.json`, which is the only handle on a package too broken to parse. */
+function identityFromFilename(file: string): { date: string; packageHash: string } | null {
+  const match = path.basename(file).match(/^(\d{4}-\d{2}-\d{2})-([a-f0-9]{64})\.json$/u);
+  return match ? { date: match[1]!, packageHash: match[2]! } : null;
+}
+
+/**
+ * Read one queued package, or record why it cannot be read and return null.
+ *
+ * `validateEditionForDelivery` throws, and this walk used to let it: one unreadable package made
+ * every later cycle throw while merely selecting, which wedges the queue behind it exactly as a
+ * refused package used to. A malformed item has to cost one item and never the run — so the
+ * package gets the same terminal receipt a refused one gets, the queue moves past it, and the
+ * daily health check counts it as parked.
+ */
+async function parseQueuedPackage(file: string): Promise<EditionPackage | { error: unknown }> {
+  try {
+    return validateEditionForDelivery(JSON.parse(await readFile(file, "utf8")));
+  } catch (error) {
+    return { error };
+  }
+}
+
+async function readQueuedPackage(root: string, file: string, now: Date): Promise<EditionPackage | null> {
+  const parsed = await parseQueuedPackage(file);
+  if (!("error" in parsed)) return parsed;
+  {
+    const error = parsed.error;
+    const identity = identityFromFilename(file);
+    if (!identity) return null;
+    const existing = await readJson<{ status?: unknown } | null>(
+      root,
+      `edition/deliveries/${identity.date}.json`,
+      null
+    );
+    if (!existing) {
+      await atomicWriteJson(root, `edition/deliveries/${identity.date}.json`, {
+        schemaVersion: 1,
+        date: identity.date,
+        packageHash: identity.packageHash,
+        status: "needs_reconciliation",
+        targetRepository: "lukaskourilcz/aifirst",
+        code: error instanceof DeliveryPackageError ? error.code : "schema_invalid",
+        detail: (error instanceof Error ? error.message : "package could not be read")
+          .replace(/\s+/g, " ").trim().slice(0, 500),
+        recordedAt: now.toISOString(),
+        tags: []
+      });
+    }
+    return null;
+  }
+}
+
 async function packageFiles(root: string): Promise<string[]> {
   const directory = resolveStatePath(root, "edition/outbox");
   try {
@@ -59,7 +112,8 @@ export async function oldestPendingDelivery(
   // edition behind it queued forever. One failed release jammed the venture: the next run
   // would ship the stale package and report success while the new edition waited.
   for (const file of await packageFiles(root)) {
-    const editionPackage = validateEditionForDelivery(JSON.parse(await readFile(file, "utf8")));
+    const editionPackage = await readQueuedPackage(root, file, new Date());
+    if (!editionPackage) continue;
     const receipt = await readJson<{ status?: unknown; packageHash?: unknown; code?: unknown } | null>(
       root,
       `edition/deliveries/${editionPackage.date}.json`,
@@ -110,13 +164,22 @@ export interface EditionQueueEntry {
 /**
  * What is sitting in the outbox and why, without touching any of it.
  *
- * `oldestPendingDelivery` supersedes stale notices as it walks, which is right for a queue about
- * to ship but wrong for a health check: reading the queue must not change it.
+ * `oldestPendingDelivery` supersedes stale notices and records unreadable ones as it walks, which
+ * is right for a queue about to ship and wrong for a health check: reading the queue must not
+ * change it. So this parses without recording, and counts what it cannot read as parked.
  */
 export async function editionQueue(root = stateRoot): Promise<EditionQueueEntry[]> {
   const entries: EditionQueueEntry[] = [];
   for (const file of await packageFiles(root)) {
-    const editionPackage = validateEditionForDelivery(JSON.parse(await readFile(file, "utf8")));
+    const parsed = await parseQueuedPackage(file);
+    if ("error" in parsed) {
+      const identity = identityFromFilename(file);
+      if (identity) {
+        entries.push({ ...identity, editionStatus: "edition", state: "parked", code: "schema_invalid" });
+      }
+      continue;
+    }
+    const editionPackage = parsed;
     const receipt = await readJson<{ status?: unknown; packageHash?: unknown; code?: unknown } | null>(
       root,
       `edition/deliveries/${editionPackage.date}.json`,

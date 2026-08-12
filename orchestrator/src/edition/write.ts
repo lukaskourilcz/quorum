@@ -559,6 +559,28 @@ function recordRepairs(usage: EditionUsage, repairs: readonly ContractRepair[]):
   (usage as RepairedEditionUsage).contractRepairs = [...repairs];
 }
 
+/**
+ * Undo a whole-article MDX expression wrapper.
+ *
+ * The desk began returning `{` + a template literal + `}` around entire bodies on 8 August. MDX
+ * reads a top-level expression and renders its value as one text node, so the article published as
+ * a wall of text with its own `##` and link syntax showing rather than rendered — valid MDX, valid
+ * string, every gate green, and nothing a reader could use. Four days later a body carried an
+ * inline code span whose backtick closed the template early, and the same wrapper failed the
+ * magazine's build outright.
+ *
+ * The words are right and only the wrapper is wrong, so it is removed here rather than costing an
+ * edition, next to the adverb cleanup that is already this layer's job. It is deliberately narrow:
+ * it unwraps the exact shape and leaves anything else alone, and `validateEditionForDelivery`
+ * refuses a body that is still an expression, so a variant this misses fails loudly instead of
+ * publishing unread.
+ */
+export function unwrapJsxExpressionBody(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed.startsWith("{`") || !trimmed.endsWith("`}")) return value;
+  return trimmed.slice(2, -2).replace(/\\`/gu, "`").replace(/\\\$\{/gu, "${").trim();
+}
+
 export function localized(value: z.infer<typeof LocalizedOutputSchema>): LocalizedContent {
   return {
     title: removeEmptyCzechAdverbs(value.title),
@@ -576,7 +598,7 @@ export function localized(value: z.infer<typeof LocalizedOutputSchema>): Localiz
           }
         }
       : {}),
-    bodyMdx: removeEmptyCzechAdverbs(value.body_mdx),
+    bodyMdx: removeEmptyCzechAdverbs(unwrapJsxExpressionBody(value.body_mdx)),
     illustrationAlt: removeEmptyCzechAdverbs(value.illustration_alt),
     whyItMatters: value.why_it_matters.map(removeEmptyCzechAdverbs),
     whatChanged: value.what_changed.map(removeEmptyCzechAdverbs),
