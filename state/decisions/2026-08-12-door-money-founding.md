@@ -212,7 +212,7 @@ costs and no treasury action in this decision.
 - [x] DM-14b — Desk runner, GHOST call and honest records
 - [x] DM-15a — Voice lint and stop-slop gate
 - [x] DM-15b — Claim, quote, cap, duplicate and CTA gates
-- [ ] DM-16a — Studio brand tokens for door-money
+- [x] DM-16a — Studio brand tokens for door-money
 - [ ] DM-16b — English locale in the carousel summary, byte-compatible
 - [ ] DM-17 — Admin approval write path
 - [ ] DM-18a — Server-only admin loader
