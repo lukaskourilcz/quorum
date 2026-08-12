@@ -130,6 +130,7 @@ export const BhResearchLedgerEntrySchema = z.strictObject({
   model: z.string().trim().min(1).max(160),
   startedAt: DateTimeSchema,
   completedAt: DateTimeSchema,
+  cycleId: z.string().min(1).max(120),
   bookId: BookIdSchema,
   bookRef: MeetingRefSchema,
   briefHash: z.string().regex(/^[a-f0-9]{64}$/),

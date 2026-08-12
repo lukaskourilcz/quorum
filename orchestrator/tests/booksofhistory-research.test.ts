@@ -11,9 +11,12 @@ import type { RawResearch, ResearchProvider } from "../src/research/provider.js"
 import {
   assessBhResearchNeed,
   appendBhResearchLedger,
+  assertBhResearchReservation,
   BH_RESEARCH_LEDGER_PATH,
   bhDossierPath,
+  BhResearchBudgetError,
   parseBhResearchLedgerJsonl,
+  planBhResearchBatch,
   runBhCandidateResearch,
   type BhSynthCallConfig
 } from "../src/ventures/booksofhistory/research.js";
@@ -125,6 +128,16 @@ function callConfig(): BhSynthCallConfig {
   };
 }
 
+function researchBudget(candidateCount = 1) {
+  return {
+    candidateCount,
+    synthEnvelopeUsd: 0.05,
+    cycleEnvelopeUsd: 0.5,
+    monthlyCeilingUsd: 5,
+    recordedMonthlyHeadroomUsd: 1
+  };
+}
+
 describe("BOOKSOFHISTORY candidate research", () => {
   it("gathers, synthesizes and writes byte-stable normalized and raw dossier files", async () => {
     const { book, brief } = await fixtureInput();
@@ -142,10 +155,12 @@ describe("BOOKSOFHISTORY candidate research", () => {
         gatherEnvelopeUsd: 0.1,
         researchedAt: new Date("2026-08-12T10:10:02.000Z"),
         requestingMeetingRef: "meetings/2026-08-12-bh-desk.json",
+        researchBudget: researchBudget(),
         synthCallConfig: callConfig(),
         synthCall: synth
       });
       expect(result.status).toBe("researched");
+      if (result.status !== "researched") throw new Error("fixture research must complete");
       expect(result.precheck).toEqual({
         existingDossier: false,
         questionAnswered: false,
@@ -157,7 +172,7 @@ describe("BOOKSOFHISTORY candidate research", () => {
       });
       expect(gather.researchBook).toHaveBeenCalledOnce();
       expect(synth).toHaveBeenCalledOnce();
-      const rawRef = result.status === "researched" ? result.rawRef : "";
+      const rawRef = result.rawRef;
       outputs.push({
         dossier: await readFile(path.join(root, bhDossierPath(book.bookId)), "utf8"),
         raw: await readFile(path.join(root, rawRef), "utf8"),
@@ -201,6 +216,7 @@ describe("BOOKSOFHISTORY candidate research", () => {
       gatherEnvelopeUsd: 0.1,
       researchedAt: new Date("2026-08-12T10:10:02.000Z"),
       requestingMeetingRef: "meetings/2026-08-12-bh-desk.json",
+      researchBudget: researchBudget(),
       synthCallConfig: callConfig(),
       synthCall: synthCall()
     });
@@ -214,20 +230,14 @@ describe("BOOKSOFHISTORY candidate research", () => {
       gatherEnvelopeUsd: 0.1,
       researchedAt: new Date("2026-08-13T10:10:02.000Z"),
       requestingMeetingRef: "meetings/2026-08-12-bh-desk.json",
+      researchBudget: researchBudget(),
       synthCallConfig: callConfig(),
       synthCall: secondSynth
     });
 
-    expect(reused.status).toBe("reused");
-    expect(reused.precheck).toMatchObject({
-      existingDossier: true,
-      questionAnswered: true,
-      trustworthy: true,
-      stale: false,
-      shelfSufficient: true,
-      decision: "reuse",
-      reason: "shelf-sufficient"
-    });
+    expect(reused.status).toBe("already-researched");
+    if (reused.status !== "already-researched") throw new Error("fixture must hit idempotency");
+    expect(reused.message).toContain("zero provider calls made");
     expect(secondGather.researchBook).not.toHaveBeenCalled();
     expect(secondSynth).not.toHaveBeenCalled();
   });
@@ -267,5 +277,139 @@ describe("BOOKSOFHISTORY candidate research", () => {
     const after = await readFile(path.join(root, BH_RESEARCH_LEDGER_PATH), "utf8");
     expect(after.startsWith(before)).toBe(true);
     expect(parseBhResearchLedgerJsonl(after)).toHaveLength(2);
+  });
+
+  it("keeps two candidates by default and admits a third only when all three are reserved", async () => {
+    const bundle = JSON.parse(await readFile(
+      path.join(repoRoot, "contracts/fixtures/bh-research-brief.valid.json"),
+      "utf8"
+    )) as BhResearchBriefBundle;
+    const third = {
+      ...bundle.briefs[1]!,
+      bookId: "third-book",
+      bookRef: "ventures/booksofhistory/seed/library.json#third-book",
+      shortlistRank: 3,
+      briefHash: "c".repeat(64)
+    };
+    const common = {
+      bundle: { ...bundle, maximumCandidates: 3 as const, briefs: [...bundle.briefs, third] },
+      budget: {
+        cycleId: bundle.cycleId,
+        now: new Date("2026-08-12T10:00:00.000Z"),
+        gatherEnvelopeUsd: 0.1,
+        synthEnvelopeUsd: 0.05,
+        cycleEnvelopeUsd: 0.5,
+        monthlyCeilingUsd: 5
+      },
+      ledger: []
+    };
+
+    expect(planBhResearchBatch({
+      ...common,
+      bundle: { ...common.bundle, monthlyResearchHeadroomUsd: 0.44 }
+    }).briefs).toHaveLength(2);
+    const three = planBhResearchBatch({
+      ...common,
+      bundle: { ...common.bundle, monthlyResearchHeadroomUsd: 0.45 }
+    });
+    expect(three.briefs).toHaveLength(3);
+    expect(three.reservation.reservedUsd).toBe(0.45);
+  });
+
+  it("refuses cycle spend before the first provider call and never accepts raised hard ceilings", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "quorum-bh-cap-"));
+    roots.push(root);
+    const { book, brief } = await fixtureInput();
+    const fixture = JSON.parse(await readFile(
+      path.join(repoRoot, "contracts/fixtures/bh-research-ledger.valid.json"),
+      "utf8"
+    )) as BhResearchLedgerEntry;
+    await appendBhResearchLedger(root, Array.from({ length: 4 }, () => ({
+      ...fixture,
+      cycleId: "bh-20260812-001",
+      costUsd: 0.1
+    })));
+    const gather = provider();
+    const synth = synthCall();
+
+    await expect(runBhCandidateResearch({
+      root,
+      book,
+      brief,
+      provider: gather.value,
+      gatherEnvelopeUsd: 0.1,
+      researchedAt: new Date("2026-08-12T10:10:02.000Z"),
+      requestingMeetingRef: "meetings/2026-08-12-bh-desk.json",
+      researchBudget: researchBudget(),
+      synthCallConfig: callConfig(),
+      synthCall: synth
+    })).rejects.toMatchObject({ code: "CYCLE_CAP" });
+    expect(gather.researchBook).not.toHaveBeenCalled();
+    expect(synth).not.toHaveBeenCalled();
+
+    expect(() => assertBhResearchReservation({
+      cycleId: "bh-raised",
+      now: new Date("2026-08-12T10:00:00.000Z"),
+      candidateCount: 1,
+      gatherEnvelopeUsd: 0.1,
+      synthEnvelopeUsd: 0.05,
+      cycleEnvelopeUsd: 0.51,
+      monthlyCeilingUsd: 5.01,
+      recordedMonthlyHeadroomUsd: 5
+    }, [])).toThrowError(BhResearchBudgetError);
+
+    const month = Array.from({ length: 49 }, (_, index) => ({
+      ...fixture,
+      cycleId: `prior-${index}`,
+      costUsd: 0.1
+    }));
+    expect(() => assertBhResearchReservation({
+      cycleId: "bh-new-cycle",
+      now: new Date("2026-08-12T10:00:00.000Z"),
+      candidateCount: 1,
+      gatherEnvelopeUsd: 0.1,
+      synthEnvelopeUsd: 0.05,
+      cycleEnvelopeUsd: 0.5,
+      monthlyCeilingUsd: 5,
+      recordedMonthlyHeadroomUsd: 0.1
+    }, month)).toThrowError(expect.objectContaining({ code: "MONTHLY_CAP" }));
+  });
+
+  it("returns an explicit in-flight result while the same cycle is spending", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "quorum-bh-concurrent-"));
+    roots.push(root);
+    const { book, brief } = await fixtureInput();
+    let releaseProvider!: () => void;
+    let reportStarted!: () => void;
+    const providerGate = new Promise<void>((resolve) => { releaseProvider = resolve; });
+    const providerStarted = new Promise<void>((resolve) => { reportStarted = resolve; });
+    const researchBook = vi.fn(async () => {
+      reportStarted();
+      await providerGate;
+      return rawResearch();
+    });
+    const sharedProvider = { researchBook } satisfies ResearchProvider;
+    const args = {
+      root,
+      book,
+      brief,
+      provider: sharedProvider,
+      gatherEnvelopeUsd: 0.1,
+      researchedAt: new Date("2026-08-12T10:10:02.000Z"),
+      requestingMeetingRef: "meetings/2026-08-12-bh-desk.json",
+      researchBudget: researchBudget(),
+      synthCallConfig: callConfig(),
+      synthCall: synthCall()
+    };
+
+    const first = runBhCandidateResearch(args);
+    await providerStarted;
+    const concurrent = await runBhCandidateResearch(args);
+    expect(concurrent).toMatchObject({ status: "in-flight", lock: "cycle-budget" });
+    if (concurrent.status !== "in-flight") throw new Error("fixture must see the in-flight lock");
+    expect(concurrent.message).toContain("zero provider calls made");
+    expect(researchBook).toHaveBeenCalledOnce();
+    releaseProvider();
+    await expect(first).resolves.toMatchObject({ status: "researched" });
   });
 });

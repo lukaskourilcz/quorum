@@ -5,6 +5,7 @@
   "model": "claude-haiku-4-5-20251001",
   "startedAt": "2026-08-12T10:10:00.000Z",
   "completedAt": "2026-08-12T10:10:01.000Z",
+  "cycleId": "bh-20260812-001",
   "bookId": "war-with-the-newts",
   "bookRef": "ventures/booksofhistory/seed/library.json#war-with-the-newts",
   "briefHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",

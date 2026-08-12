@@ -115,7 +115,7 @@ post anything.
 - [x] **BH-10** — Research briefs from the editorial meeting
 - [x] **BH-11a** — Research runs and dossier writes
 - [x] **BH-11b** — Dossier and research-ledger contracts
-- [ ] **BH-11c** — Research idempotency, in-flight lock and ceilings
+- [x] **BH-11c** — Research idempotency, in-flight lock and ceilings
 - [ ] **BH-11d** — Supplemental freshness calls
 - [ ] **BH-12a** — Deterministic claim triage
 - [ ] **BH-12b** — `CLAIM_CHECK` escalation and verification-state transitions
