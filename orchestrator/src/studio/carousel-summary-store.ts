@@ -53,6 +53,11 @@ async function storeRecipeAndCopy(
   summary: CarouselSummary,
   copyPack: ReturnType<typeof articleCopyPack>
 ): Promise<{ recipe: CarouselRecipe; recipePath: string; copyPath: string | null }> {
+  // This delivery helper remains article-only. Kvórum approval gets its own transactional
+  // summary/recipe boundary; widening this call would pretend the article copy contract supports it.
+  if (summary.venture === "kvorum") {
+    throw new Error("The article carousel store cannot write a Kvórum recipe or copy pack.");
+  }
   const recipe = await effectiveRecipe({
     root,
     venture: summary.venture,

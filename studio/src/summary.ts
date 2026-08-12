@@ -1,9 +1,9 @@
 /**
- * The carousel summary: what an article sends to the Design Lab.
+ * The carousel summary: what a source package sends to the Design Lab.
  *
- * A delivered article is 1,000–1,200 Czech words. A carousel is a handful of frames. Sending the
- * whole article to the studio would mean the renderer decides what the piece is about, which is a
- * decision the desk already made and wrote down. So delivery hands over a *summary* — the
+ * A carousel is a handful of frames. Sending a full article or an unshaped recommendation to the
+ * studio would mean the renderer decides what the piece is about, which is a decision the desk
+ * already made and wrote down. So delivery hands over a *summary* — the
  * headline, the standfirst, a small ordered set of passages and the sources — and the templates
  * parse that into slides.
  *
@@ -28,7 +28,7 @@ export const MIN_SUMMARY_PASSAGES = 3;
  */
 export const MAX_SUMMARY_PASSAGES = 8;
 
-export type CarouselSummaryVenture = "caught-up" | "mma-files";
+export type CarouselSummaryVenture = "caught-up" | "mma-files" | "kvorum";
 
 export interface CarouselSummarySource {
   /** How the desk classified it: primary document, record, or an internal verified file. */
@@ -40,11 +40,11 @@ export interface CarouselSummarySource {
 export interface CarouselSummary {
   schemaVersion: "carousel-summary/1";
   venture: CarouselSummaryVenture;
-  /** The article's own slug, which is also how the studio addresses it. */
+  /** The source package's slug, which is also how the studio addresses it. */
   slug: string;
   /** Publication date, `YYYY-MM-DD`. */
   date: string;
-  /** Czech, because that is what both magazines publish. */
+  /** Czech, because that is what every supported venture publishes. */
   locale: "cs";
   /** The small mono line every template prints above the headline. */
   kicker: string;
@@ -76,7 +76,7 @@ export interface CarouselSummaryInput {
   /** The desk's line for the carousel cover, when it wrote one. */
   coverLine?: string | undefined;
   dek: string;
-  /** A Caught Up edition arrives already structured; those points are the passages. */
+  /** A structured edition or recommendation supplies its passages directly. */
   points?: readonly string[];
   /** An MMA Files article arrives as MDX; its middle is cut out of the body. */
   bodyMdx?: string;
@@ -87,12 +87,14 @@ export interface CarouselSummaryInput {
 
 const KICKER: Record<CarouselSummaryVenture, string> = {
   "caught-up": "DNESKAi",
-  "mma-files": "MMA Files"
+  "mma-files": "MMA Files",
+  kvorum: "KVÓRUM"
 };
 
 const CLOSING: Record<CarouselSummaryVenture, string> = {
   "caught-up": "Jedno vydání a máte přehled.",
-  "mma-files": "Celý ozdrojovaný text najdete v MMA Files."
+  "mma-files": "Celý ozdrojovaný text najdete v MMA Files.",
+  kvorum: "Celý kontext a zdroje najdete v Kvóru."
 };
 
 const MONTHS_CS = [
@@ -133,7 +135,7 @@ function choosePassages(input: CarouselSummaryInput): string[] {
 }
 
 /**
- * Build the summary an article sends to the Design Lab.
+ * Build the summary a source package sends to the Design Lab.
  *
  * A short article yields few passages and the summary says so rather than padding: a template
  * that needs four passage slides and is given two renders two, because inventing a third is how a

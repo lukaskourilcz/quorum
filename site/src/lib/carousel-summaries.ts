@@ -5,8 +5,7 @@ import {
   buildCarouselSummary,
   reviewCarouselSummary,
   type CarouselSummary,
-  type CarouselSummarySource,
-  type CarouselSummaryVenture
+  type CarouselSummarySource
 } from "@boardlessai/carousel-studio";
 
 /**
@@ -30,7 +29,7 @@ function repositoryRoot(): string {
 export interface StudioArticle {
   /** `<venture>:<slug>:<date>`, which is how the studio addresses one. */
   id: string;
-  venture: CarouselSummaryVenture;
+  venture: "caught-up" | "mma-files";
   ventureLabel: string;
   summary: CarouselSummary;
   /** Where the summary came from, so the panel can say whether it is recorded or derived. */
@@ -39,7 +38,7 @@ export interface StudioArticle {
   problems: string[];
 }
 
-const VENTURE_LABEL: Record<CarouselSummaryVenture, string> = {
+const VENTURE_LABEL: Record<StudioArticle["venture"], string> = {
   "caught-up": "DNESKAi",
   "mma-files": "MMA Files"
 };
@@ -198,6 +197,9 @@ export async function readStudioArticles(root = repositoryRoot()): Promise<Studi
   ]);
   const byId = new Map<string, StudioArticle>();
   const add = (summary: CarouselSummary, origin: StudioArticle["origin"]) => {
+    // The shared summary contract now knows Kvórum, but this article-backed rail does not until
+    // its approval route supplies the recipe and copy records that the workspace also requires.
+    if (summary.venture === "kvorum") return;
     // Venture, slug *and* date. Three MMA packages redeliver one event and share a slug, so a
     // slug-keyed map collapsed them into one article and the Lab could only ever show the first.
     const id = `${summary.venture}:${summary.slug}:${summary.date}`;

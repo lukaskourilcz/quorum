@@ -231,6 +231,11 @@ section and a receipt line, and a day with no usable cluster records an honest q
   `recommendations/index.json` file is a replaceable current-day queue projection. A repeated
   `(date, cluster)` run preserves the existing record byte-for-byte, including any later owner edits,
   and refreshes only the index and causal meeting artifacts.
+- **Carousel-summary consumer sequencing:** KV-15b expands the shared Studio summary type and pins
+  the existing DNESKAi and MMA Files summary bytes, but the live site rail and delivery helper still
+  require the article-only recipe and copy unions. They therefore stay explicitly narrowed to those
+  two ventures in this commit instead of falsely accepting an incomplete Kvórum workflow. KV-16
+  owns the approval transaction that writes a Kvórum summary and makes it a complete Design Lab input.
 
 ## Implementation checklist
 
@@ -264,7 +269,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-13b — Gates: banned content and register lint
 - [x] KV-14 — Recommendation store with idempotency
 - [x] KV-15a — Studio brand tokens for Kvórum
-- [ ] KV-15b — Carousel-summary venture extension, byte-compatible
+- [x] KV-15b — Carousel-summary venture extension, byte-compatible
 - [ ] KV-16 — Admin approval write path
 - [ ] KV-17a — Server-only admin loader
 - [ ] KV-17b — Recommendations panel

@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import {
   MAX_SLIDE_WORDS,
@@ -18,6 +19,10 @@ const BODY = [
   "Zbývá jedna otevřená otázka: druhý zdroj pro jeden z výsledků zatím chybí."
 ].join(" ");
 
+function summaryHash(value: unknown): string {
+  return createHash("sha256").update(JSON.stringify(value)).digest("hex");
+}
+
 describe("buildCarouselSummary", () => {
   const summary = buildCarouselSummary({
     venture: "mma-files",
@@ -29,6 +34,21 @@ describe("buildCarouselSummary", () => {
     sources: [{ kind: "internal", label: "BoardlessAI verified record" }],
     hasHero: true,
     heroCredit: "Photo: Oktagon MMA"
+  });
+  const caughtUpSummary = buildCarouselSummary({
+    venture: "caught-up",
+    slug: "sněmovna-v-kostce",
+    date: "2026-08-06",
+    title: "Co se dnes změnilo ve Sněmovně",
+    dek: "Tři doložené body a jedna otevřená otázka.",
+    points: [
+      "Sněmovna schválila program schůze.",
+      "Návrh prošel prvním čtením.",
+      "Další jednání je naplánované na pátek."
+    ],
+    sources: [{ kind: "primary", label: "Poslanecká sněmovna" }],
+    hasHero: false,
+    heroCredit: null
   });
 
   it("carries the desk's own words and adds none of its own", () => {
@@ -68,6 +88,11 @@ describe("buildCarouselSummary", () => {
     expect(again).toEqual(summary);
   });
 
+  it("keeps the existing ventures byte-identical while the venture union grows", () => {
+    expect(summaryHash(summary)).toBe("ebe877a9018a306e92427b84864a2992fe634cc111eb9af65aeb18884c074e8c");
+    expect(summaryHash(caughtUpSummary)).toBe("70c0736fcdc3f07a8f85defce0d09f957586212cec910722f7d83c7628c0d640");
+  });
+
   it("stays inside the passage ceiling however long the article is", () => {
     const long = buildCarouselSummary({
       venture: "mma-files",
@@ -88,6 +113,28 @@ describe("buildCarouselSummary", () => {
   it("prints the kicker in the language the magazine publishes", () => {
     expect(summaryKicker("mma-files", "2026-08-06")).toBe("MMA Files · 6. srp");
     expect(summaryKicker("caught-up", "2026-01-31")).toBe("DNESKAi · 31. led");
+    expect(summaryKicker("kvorum", "2026-08-12")).toBe("KVÓRUM · 12. srp");
+  });
+
+  it("builds a Czech Kvórum summary with its own fixed closing", () => {
+    const kvorum = buildCarouselSummary({
+      venture: "kvorum",
+      slug: "televizni-poplatky",
+      date: "2026-08-12",
+      title: "Televizní poplatky se vracejí do Sněmovny",
+      dek: "Co se stalo, kdo rozhoduje a co bude následovat.",
+      points: [
+        "Návrh se vrací do sněmovního projednávání.",
+        "O dalším kroku rozhodnou poslanci.",
+        "Dopad se týká financování médií veřejné služby."
+      ]
+    });
+    expect(kvorum).toMatchObject({
+      venture: "kvorum",
+      locale: "cs",
+      kicker: "KVÓRUM · 12. srp",
+      closing: "Celý kontext a zdroje najdete v Kvóru."
+    });
   });
 });
 
