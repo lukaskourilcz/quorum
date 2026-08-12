@@ -68,6 +68,12 @@ const expectedPrompts = [
   "_shared.md",
   "angle.md",
   "audit.md",
+  "booksofhistory/claim-check.md",
+  "booksofhistory/craft.md",
+  "booksofhistory/folio.md",
+  "booksofhistory/plot.md",
+  "booksofhistory/research-gather.md",
+  "booksofhistory/research-synth.md",
   "canvas.md",
   "channel-agent-template.md",
   "chum.md",
@@ -186,14 +192,18 @@ describe("agent architecture", () => {
   });
 
   it("ships every council and specialist prompt", async () => {
-    const promptNames = (await readdir(path.join(repoRoot, "orchestrator", "prompts")))
-      .filter((name) => name.endsWith(".md"))
-      .sort();
+    const promptsRoot = path.join(repoRoot, "orchestrator", "prompts");
+    const promptNames = [
+      ...(await readdir(promptsRoot)).filter((name) => name.endsWith(".md")),
+      ...(await readdir(path.join(promptsRoot, "booksofhistory")))
+        .filter((name) => name.endsWith(".md"))
+        .map((name) => `booksofhistory/${name}`)
+    ].sort();
 
     expect(promptNames).toEqual(expectedPrompts);
     for (const name of promptNames) {
       const prompt = await readFile(
-        path.join(repoRoot, "orchestrator", "prompts", name),
+        path.join(promptsRoot, name),
         "utf8"
       );
       expect(prompt.trim().length, `${name} is empty`).toBeGreaterThan(80);

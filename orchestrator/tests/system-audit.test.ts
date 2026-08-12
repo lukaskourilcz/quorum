@@ -26,7 +26,13 @@ describe("closing 44-agent system audit", () => {
       expect(routing.agents[agent.id]?.status).toBe(agent.status);
       expect(agent.notResponsibleFor.length).toBeGreaterThan(0);
       expect(routing.agents[agent.id]?.capabilities.length).toBeGreaterThan(0);
-      await expect(access(path.join(repoRoot, "orchestrator", "prompts", `${agent.slug}.md`))).resolves.toBeUndefined();
+      await expect(access(path.join(
+        repoRoot,
+        "orchestrator",
+        "prompts",
+        agent.id === "FOLIO" || agent.id === "PLOT" ? "booksofhistory" : "",
+        `${agent.slug}.md`
+      ))).resolves.toBeUndefined();
     }
   });
 
