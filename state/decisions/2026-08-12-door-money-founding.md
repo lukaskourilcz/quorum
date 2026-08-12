@@ -1,0 +1,154 @@
+# Door Money founding
+
+Date: 2026-08-12
+
+Decider: Lukas Kouril, owner
+
+Status: pending countersignature
+
+Decision id: `door-money-2026-08a`
+
+Supersedes: nothing. Extends the founding precedent set by `goviral-2026-08a` and
+`marketingshark-2026-08a`.
+
+Owner-commissioned on 2026-08-12 through
+`docs/DOOR-MONEY-CODEX-BUILD-PROMPT.md`. Every ceiling from `budget-2026-08e` —
+$30 all-in a month, a $25 model share and a $1.00 daily pace — is untouched. So
+are every truth gate, the social triple-lock, the treasury rules and the
+publisher. Door Money may prepare drafts and owner-review packets. It may not
+post, create an account, touch a channel, send outreach or pay for anything.
+
+## Door Money is founded
+
+Door Money is an English-language book-storytelling venture. It turns privately
+held source material into evidence-linked draft recommendations, then turns an
+approved recommendation into a draft carousel or action packet. The venture is
+drafts-only: owner approval records a decision, but never causes publication or
+outreach.
+
+- Registry: `id: door-money`, `status: operating`, `taste: false`, ledger
+  namespace `door-money`, admin tabs `recommendations`, `actions` and
+  `knowledge`.
+- `dm-desk` opens daily at **15:00 Prague**. GHOST drafts; AUDIT vetoes. Its
+  meeting envelope is `$0.08`.
+- `dm-growth` fires daily at **16:00 Prague**, but code permits paid work only on
+  Thursdays. BOOKER drafts; PULSE reads performance; AUDIT vetoes. Its meeting
+  envelope is `$0.06`.
+
+The Thursday rule is a deterministic gate in the runner, following GoVIRAL's
+Monday precedent. Off-day firings write an honest `$0` record and make no model
+call.
+
+## The manuscript boundary is a founding term
+
+**This public repository never carries the manuscript, full-text chunks or
+their embeddings.** Private source text and vectors remain in the configured
+private store. Public, committed derivatives are schemas, hashes, counters,
+scores, labels and bounded excerpts only. A committed excerpt is capped at 600
+characters. Style exemplars are capped at 40 entries of 280 characters each.
+Fixtures use synthetic prose and never real book text.
+
+Crossing those caps is the program's one irreversible mistake. The limits are
+enforced at contract, writer and test boundaries; a private-store or approval
+failure must stop the workflow rather than invite a public fallback.
+
+## Approval and spend remain owner decisions
+
+The program may add exactly the review items described in its work order:
+`BOOK-SOURCE-001`, `BOOK-INGEST-002`, `DM-ACCOUNTS-003` and `DM-RESULTS-004`.
+They remain pending until the owner resolves them. None is permission to infer a
+credential, open an account, publish a draft or contact a person.
+
+The ingestion allowance is a ceiling, not a target: `$0.80` per day, `$3.00`
+total and `$0.10` per paid call. Every paid operation reserves before the call
+and records after it through the existing budget ledger. There are no new fixed
+costs and no treasury action in this decision.
+
+## Adapted during implementation
+
+- **DM-00 sequencing.** The audit issue required no file changes while the
+  program required a commit for every issue and a checked item in this record.
+  DM-00 therefore completed in the empty commit `aaca1d5`; its checkbox first
+  appears checked in DM-01, when this record begins to exist.
+- **The default branch already held both Door Money design documents.** The
+  conditional docs-only branch merge was not needed.
+- **The live baseline is seven projects, 42 registered agents and 33 active
+  agents.** Door Money therefore targets 44 registered and 35 active agents,
+  rather than assuming an unlanded sibling-program roster.
+- **The proposed shared recommendation, owner-result and performance-weight
+  artifacts were not present on the audited default branch.** Door Money owns
+  their initial shared implementations; no sibling implementation is guessed.
+- **`api.github.com` was already in the runtime network allowlist.** The program
+  will use the existing entry and will not add a duplicate.
+- **The audited Vercel schedule had 28 cron entries and the repository's pinned
+  production limit is 100.** Adding the two Door Money hours in both DST forms
+  takes the count to 32; the design note's 40-entry premise is not the live
+  contract.
+- **The existing conservative daily-envelope test has only `$0.02` of arithmetic
+  headroom.** Door Money's `$0.14` cannot be added to that all-rooms-at-once sum.
+  DM-05c must model the real weekday gates and degradation order while preserving
+  the signed `$1.00` ceiling; it may not relax the ceiling to make the test pass.
+
+## Delivery ledger
+
+- [x] DM-00 — Phase 0 audit: read the contracts, verify every assumption
+- [x] DM-01 — Write the founding decision record
+- [ ] DM-02a — Registry entry in config/ventures.json
+- [ ] DM-02b — Registry schema enums, fixtures and the action-completion evaluator
+- [ ] DM-03a — Register dm-desk and dm-growth in type and record schemas
+- [ ] DM-03b — Meeting policy for both rooms (Thursday gate lives in code)
+- [ ] DM-03c — cycle.yml dispatch choices and mode gates
+- [ ] DM-03d — Vercel cron entries for 15:00 and 16:00
+- [ ] DM-04a — GHOST and BOOKER in registry, routing, controls and cast schema
+- [ ] DM-04b — Prompts for GHOST, BOOKER and the craft file
+- [ ] DM-04c — Model roles: GHOST, BOOK_INGEST, BOOK_STYLE
+- [ ] DM-05a — Scaffold, gitignore line, hue and labels
+- [ ] DM-05b — KPI seeds for the quarter
+- [ ] DM-05c — Degradation-ladder position with its test
+- [ ] DM-06a — book-kb-index contract and fixtures
+- [ ] DM-06b — style-profile contract and fixtures
+- [ ] DM-06c — The excerpt-cap boundary test
+- [ ] DM-07 — Deterministic scene-aware chunker
+- [ ] DM-08a — Annotation and fifteen-axis scoring pass
+- [ ] DM-08b — Ingestion cursor and resumability
+- [ ] DM-09 — Style profile via map-reduce
+- [ ] DM-10a — Guarded embeddings wrapper
+- [ ] DM-10b — Budget-ledger kind for embeddings
+- [ ] DM-11a — The book:ingest CLI with envelopes
+- [ ] DM-11b — Public/private output split and manuscript-hash idempotency
+- [ ] DM-12 — venture-recommendation evidence kind book-passage
+- [ ] DM-13 — Deterministic passage selection
+- [ ] DM-14a — Packet assembly and the private-store fetcher
+- [ ] DM-14b — Desk runner, GHOST call and honest records
+- [ ] DM-15a — Voice lint and stop-slop gate
+- [ ] DM-15b — Claim, quote, cap, duplicate and CTA gates
+- [ ] DM-16a — Studio brand tokens for door-money
+- [ ] DM-16b — English locale in the carousel summary, byte-compatible
+- [ ] DM-17 — Admin approval write path
+- [ ] DM-18a — Server-only admin loader
+- [ ] DM-18b — Recommendations panel
+- [ ] DM-18c — Actions panel
+- [ ] DM-18d — Knowledge panel, tab wiring and e2e
+- [ ] DM-19a — Thursday gate and the rotating agenda wheel
+- [ ] DM-19b — Action-packet contract and the BOOKER call
+- [ ] DM-19c — Playbook store and the action check-off route
+- [ ] DM-20a — Owner results: contract, route, store
+- [ ] DM-20b — Performance weights with floors
+- [ ] DM-21a — GoVIRAL spine: topicSet and trend boosts
+- [ ] DM-21b — GoVIRAL spine: transitions and the Design-Lab-only test
+- [ ] DM-22a — Documentation truth across the standing docs
+- [ ] DM-22b — INBOX approvals and NEEDED owner items
+- [ ] DM-22c — Honest gaps, checkbox sweep, prompt deletion
+
+## Honest gaps
+
+## What this does not touch
+
+The `$30` all-in monthly ceiling, `$25` model ceiling, `$1.00` daily pace,
+reserve-before-call discipline or treasury rule that only the owner pays and
+only the owner resolves a SPEND item. Any sourcing, evidence, truth, quote,
+claim, privacy, quality or cost gate elsewhere in the company. The social
+triple-lock and `SOCIAL_KILL_SWITCH`: nothing here posts, schedules, creates an
+account, touches a channel or sends outreach. Existing magazine publication,
+the Czech single-call article design, repository visibility, billing and plans,
+append-only decisions, or another venture program's files and issues.
