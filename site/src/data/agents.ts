@@ -43,6 +43,7 @@ export type AgentId =
   | "PIVOT"
   | "MAKO"
   | "CHUM"
+  | "TRIBUN"
   | "EASEL"
   | "MOTIF";
 
@@ -659,6 +660,12 @@ const profileCopy: Record<
     operatingPrinciple: "Write the Czech, do not translate it.",
     output: "One day's carousel copy, in two languages",
     currentFocus: "devShark quiz carousels",
+    publicTrackRecord: null
+  },
+  TRIBUN: {
+    operatingPrinciple: "A political claim travels only with the source that can carry it.",
+    output: "One cited recommendation draft or an honest quiet record",
+    currentFocus: "Kvórum political recommendation desk",
     publicTrackRecord: null
   }
 };

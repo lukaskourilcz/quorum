@@ -330,6 +330,15 @@
         "social:carousel"
       ],
       "status": "active"
+    },
+    "TRIBUN": {
+      "capabilities": [
+        "politics:editorial",
+        "editorial:czech",
+        "claims:typed",
+        "recommendation:package"
+      ],
+      "status": "active"
     }
   },
   "mandatoryWhen": [
@@ -550,6 +559,14 @@
       "required": [
         "CANVAS",
         "PIVOT",
+        "AUDIT"
+      ],
+      "optionalByTopic": false
+    },
+    "kv-desk-room": {
+      "required": [
+        "TRIBUN",
+        "HACEK",
         "AUDIT"
       ],
       "optionalByTopic": false

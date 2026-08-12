@@ -103,6 +103,17 @@
       "switchable": [],
       "disabled": []
     },
+    "kvorum": {
+      "lockedOn": [
+        "TRIBUN",
+        "AUDIT"
+      ],
+      "switchable": [
+        "PALATE",
+        "KEEPER"
+      ],
+      "disabled": []
+    },
     "carousel-studio": {
       "lockedOn": [
         "KEEPER",
