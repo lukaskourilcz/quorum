@@ -20,6 +20,7 @@ Branch `agent/tehdejsi-svet`, merged to `main`. Four commits:
 | `7ecced5` | TS-02a…TS-03d — registry, schemas, meeting policy, cron and workflow |
 | `52807d4` | TS-04a…TS-04c — LETOPIS and VERBA seated end to end |
 | `18eaa30` | the `ts-desk` dispatch and its $0 checkpoint runner |
+| `b2e27e2` | the Door Money merge — see *Merging with Door Money* below |
 
 Issues TS-00 through TS-04c (289–299) are done. TS-05a is half done: the runner dispatch
 exists, the cycle state machine does not.
@@ -103,9 +104,10 @@ Then the other programmes, untouched: SWEEP (338–350) and REV (351–364).
   calendar enums and their `||` chains, the agenda phases, the site's `SCHEDULED_PHASES`,
   the cost table, the workflow exclusions, the brand hue, the slot label, the admin tabs
   and the degradation ladder all knew about it.
-- **Roster and count assertions are everywhere.** 44→46 agents, 35→37 active, 25→27
-  Anthropic, 92→98 KPIs, 8→9 projects. A ninth venture also shifts the ideation rotation,
-  which moves the date a test has to pin.
+- **Roster and count assertions are everywhere.** The branch alone moved 44→46 agents,
+  35→37 active and 8→9 projects; after the Door Money merge the committed numbers are 48
+  profiles, 39 seated, 24 Anthropic and 15 OpenAI active, 10 projects and 13 scheduled
+  rooms. A new venture also shifts the ideation rotation, which moves the date a test pins.
 - **`docs/ECOSYSTEM.md` is generated.** `pnpm run docs:check` fails after any count moves;
   `pnpm run docs:refresh` is the fix.
 - **"bilingual" is a banned word** in an agent's public description —
@@ -115,10 +117,29 @@ Then the other programmes, untouched: SWEEP (338–350) and REV (351–364).
 - **Run the gate from inside a package.** `--root orchestrator` from the repo root makes
   `repoRoot` resolve to the parent directory and invents four ENOENT failures.
 
+## Merging with Door Money
+
+Door Money landed on `main` while this branch was open, and both ventures registered a
+room, two agents and a set of admin tabs against the same closed enums. Every shared list
+conflicted; all of it resolved as additive. Two resolutions were judgement rather than
+concatenation, and both are recorded in the merge commit:
+
+- `ROOM_DEGRADATION_ORDER` gained `ts-desk` between `dm-desk` and `bh-desk`. The monthly
+  rung is unchanged — `ts-desk` and `bh-desk` still yield at the same headroom — but when
+  only one of the two must go, the daily desk goes first: it costs one feature, while a
+  dropped BOOKSOFHISTORY day stalls a three-day cycle that has already paid for research.
+- `paths.ts` now owns the persona directory map. Main replaced the branch's inline
+  prompt-path branching with one `nestedPersonaDirectories` table; that is the better
+  shape and is now the only place a venture's prompt folder is named.
+
+Expect the same shape from the Kvórum branch, which is still unmerged and additionally
+collides on the `venture-recommendation` contract.
+
 ## Gate at handoff
 
-Green: orchestrator 1423, site 475, studio 130, both typechecks, lint,
-`pnpm run docs:check`.
+Green: orchestrator 1580, site 520, studio 135, both typechecks, lint,
+`pnpm run docs:check`. `--phase ts-desk --dry` records a $0 paused checkpoint;
+`bh-desk` and `dm-desk` still run clean beside it.
 
 ## Nothing was opened
 
