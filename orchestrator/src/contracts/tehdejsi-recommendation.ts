@@ -109,6 +109,7 @@ export const TehdejsiMediaRefSchema = z.strictObject({
     });
   }
 });
+export type TehdejsiMediaRef = z.infer<typeof TehdejsiMediaRefSchema>;
 
 /** One slide, in both languages. Word caps are the gate's job; length caps are the shape's. */
 export const TehdejsiSlideSchema = z.strictObject({

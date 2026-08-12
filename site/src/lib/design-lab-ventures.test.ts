@@ -19,7 +19,7 @@ describe("the Design Lab's venture sections", () => {
   it("covers every venture the owner named, whether or not it publishes articles", () => {
     // devShark, geoShark and Titty Tuesdays deliver no articles. They still have a palette and
     // three typefaces, which is exactly what their section is for.
-    for (const id of ["caught-up", "mma-files", "devshark", "geoshark", "titty-tuesdays"]) {
+    for (const id of ["caught-up", "mma-files", "devshark", "geoshark", "titty-tuesdays", "tehdejsi-svet"]) {
       expect(designLabVentureIds()).toContain(id);
     }
   });

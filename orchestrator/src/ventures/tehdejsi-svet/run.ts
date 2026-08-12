@@ -15,7 +15,8 @@ import { loadRuntimeBudgetLimits } from "../../portfolio/limits.js";
 import { signedOwnerDecision } from "../../portfolio/schedule.js";
 import { atomicWriteJson, readJson } from "../../state.js";
 import { loadTehdejsiFacts } from "./facts.js";
-import { buildShortlist, selectableFactIds } from "./scorer.js";
+import { runTehdejsiPipelineDay, type TehdejsiPipelineOutcome } from "./pipeline.js";
+import { buildShortlist } from "./scorer.js";
 import {
   applyTehdejsiCycleDay,
   createTehdejsiCycle,
@@ -53,13 +54,12 @@ async function monthSpend(root: string, date: string): Promise<number> {
 }
 
 /**
- * The room's honest checkpoint while its editorial pipeline is still being built.
+ * The room's honest checkpoint while owner authority is absent.
  *
- * The venture is registered, so the clock dispatches this phase every evening. Until the desk
- * itself exists there is nothing to advance, and the one thing this must never do is fail: a
- * scheduled phase that throws takes the whole daily cycle red, which is how the council lost
- * three days in August. It records a $0 checkpoint that says plainly what has not been built,
- * and it calls no model, reads no product data and touches no channel.
+ * The venture is registered, so the clock dispatches this phase every evening. A missing
+ * countersignature keeps every paid editorial action closed. The desk may rank the committed
+ * facts for review, but it cannot advance planning without the canonical brief that LETOPIS
+ * writes. This checkpoint records that hold and costs $0.
  */
 function buildCheckpointRecord(input: {
   executionCycleId: string;
@@ -72,8 +72,8 @@ function buildCheckpointRecord(input: {
 }): MeetingRecord {
   const closedAt = new Date(input.now.getTime() + 1).toISOString();
   const summary =
-    "The Tehdejsi svet desk is registered and its editorial pipeline is not built yet. "
-    + "Nothing was selected, written or rendered, and nothing was spent.";
+    "The Tehdejsi svet desk remains behind its owner countersignature. "
+    + "The free shortlist may be recorded, but no brief, copy, render or publication was created and nothing was spent.";
   const evidenceRefs = [FOUNDING_DECISION_PATH];
   return MeetingRecordSchema.parse({
     schemaVersion: "meeting-record/2",
@@ -85,11 +85,11 @@ function buildCheckpointRecord(input: {
     status: "PAUSED",
     stage: input.stage,
     operatingBrief:
-      "Hold the Tehdejsi svet slot open without pretending a desk ran. The founding decision is "
-      + "pending countersignature and the editorial pipeline is still being implemented.",
+      "Hold the Tehdejsi svet slot without pretending paid editorial work ran. The founding "
+      + "decision is pending countersignature.",
     participantReasons: TEHDEJSI_SVET_CAST.map((agent) => ({
       agent,
-      reason: "Registered for the desk but not called; the room has no pipeline to run yet and costs $0.",
+      reason: "Registered for the desk but not called while the owner countersignature is absent; the slot costs $0.",
       participated: false
     })),
     ledger: {
@@ -104,7 +104,7 @@ function buildCheckpointRecord(input: {
     tasks: [{
       id: `TASK-${input.executionCycleId}-PIPELINE`,
       owner: "LETOPIS",
-      summary: "Build the Tehdejsi svet editorial pipeline before this room can advance anything.",
+      summary: "Resume the current Tehdejsi svet phase after the owner countersigns the founding decision.",
       status: "blocked"
     }],
     growthPlan: "No public action is authorized. Tehdejsi svet remains drafts-only and owner-posted.",
@@ -119,6 +119,76 @@ function buildCheckpointRecord(input: {
     },
     generatedAt: closedAt
   });
+}
+
+function buildActiveRecord(input: {
+  executionCycleId: string;
+  date: string;
+  now: Date;
+  stage: Stage;
+  outcome: TehdejsiPipelineOutcome | null;
+  failure: string | null;
+  failurePhase: "planning" | "production" | null;
+  actualCycleUsd: number;
+  monthAllInUsd: number;
+  monthCapUsd: number;
+}): MeetingRecord {
+  const closedAt = new Date(input.now.getTime() + 1).toISOString();
+  const phase = input.outcome?.phase ?? input.failurePhase ?? "planning";
+  const status = input.outcome?.status ?? "PAUSED";
+  const completed = input.outcome?.completed ?? false;
+  const summary = input.outcome?.summary
+    ?? `The ${phase} phase stopped and will resume. ${input.failure ?? "No draft was stored."}`;
+  const evidenceRefs = [FOUNDING_DECISION_PATH, ...(input.outcome?.artifacts ?? [])];
+  const participants = new Set(input.outcome?.participants ?? []);
+  return MeetingRecordSchema.parse({
+    schemaVersion: "meeting-record/2",
+    cycleId: input.executionCycleId,
+    date: input.date,
+    phase: "ts-desk",
+    kind: "ts-desk",
+    fixture: false,
+    status,
+    stage: input.stage,
+    operatingBrief: `Run the recorded ${phase} phase. A phase advances only after its artifacts are durable.`,
+    participantReasons: TEHDEJSI_SVET_CAST.map((agent) => ({
+      agent,
+      reason: participants.has(agent as "LETOPIS" | "VERBA")
+        ? `Contributed to the ${phase} phase through the guarded editorial call.`
+        : `Held the ${phase} seat; no separate call was required.`,
+      participated: participants.has(agent as "LETOPIS" | "VERBA")
+    })),
+    ledger: {
+      estimatedCycleUsd: 0.25,
+      actualCycleUsd: input.actualCycleUsd,
+      monthAllInUsd: input.monthAllInUsd,
+      monthCapUsd: input.monthCapUsd
+    },
+    decision: { outcome: completed ? "ADVANCE" : "RESUME", summary, evidenceRefs },
+    proposals: [{ agent: "LETOPIS", summary, evidenceRefs }],
+    voteMatrix: [{ voter: "AUDIT", firstChoice: completed ? "ADVANCE" : "RESUME", veto: false }],
+    tasks: [{
+      id: `TASK-${input.executionCycleId}-${phase.toUpperCase()}`,
+      owner: phase === "production" ? "VERBA" : "LETOPIS",
+      summary: completed ? `Record completion of the ${phase} phase.` : `Resume the ${phase} phase at the next sitting.`,
+      status: completed ? "done" : "blocked"
+    }],
+    growthPlan: "No public action is authorized. Every feature remains a draft for owner review and manual posting.",
+    eveningOutcome: null,
+    roomTranscript: {
+      openedAt: input.now.toISOString(),
+      closedAt,
+      gavel: "LETOPIS",
+      setting: "The guarded Tehdejsi svet editorial desk. It has no channel, account or posting capability.",
+      turns: [{ agent: "LETOPIS", mode: "close", sentAt: closedAt, text: summary }]
+    },
+    generatedAt: closedAt
+  });
+}
+
+function failureMessage(error: unknown): string {
+  const text = error instanceof Error ? error.message : String(error);
+  return text.replace(/(?:\/[A-Za-z0-9._-]+){2,}/gu, "[private path]").slice(0, 500);
 }
 
 export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promise<CycleResult> {
@@ -147,10 +217,11 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
       .then((raw) => (JSON.parse(raw) as { current: Stage }).current),
     loadRuntimeBudgetLimits()
   ]);
-  const liveAllowed = input.dry || (
+  const ownerAllowed = !input.dry && (
     process.env.PORTFOLIO_LIVE_ENABLED === "true" &&
     signedOwnerDecision(await readFile(path.join(stateRoot, FOUNDING_DECISION_PATH), "utf8")) === "countersigned"
   );
+  const liveAllowed = input.dry || ownerAllowed;
   // A manual invocation of a closed live room claims no calendar slot and writes no fictional meeting.
   if (!liveAllowed && process.env.MEETING_TRIGGER !== "schedule") {
     return {
@@ -166,16 +237,62 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
     };
   }
 
-  const spent = input.dry ? 0 : await monthSpend(root, date);
-  const record = buildCheckpointRecord({
-    executionCycleId: input.executionCycleId,
-    date,
-    now: input.now,
-    stage,
-    dry: input.dry,
-    monthAllInUsd: spent,
-    monthCapUsd: limits.monthlyOperatingUsd
-  });
+  const spentBefore = input.dry ? 0 : await monthSpend(root, date);
+  let outcome: TehdejsiPipelineOutcome | null = null;
+  let failure: string | null = null;
+  let failurePhase: "planning" | "production" | null = null;
+  let phaseArtifacts: string[] = [];
+  if (ownerAllowed) {
+    const current = await readTehdejsiCycle(root);
+    failurePhase = current?.phase ?? "planning";
+    try {
+      outcome = await runTehdejsiPipelineDay({
+        root,
+        executionCycleId: input.executionCycleId,
+        date,
+        now: input.now,
+        stage
+      });
+      phaseArtifacts = outcome.artifacts;
+    } catch (error) {
+      failure = failureMessage(error);
+      const cycle = await readTehdejsiCycle(root);
+      if (cycle && !tehdejsiCycleComplete(cycle)) {
+        phaseArtifacts.push(await writeTehdejsiCycle(root, applyTehdejsiCycleDay({
+          cycle,
+          date,
+          now: input.now,
+          outcome: { completed: false, pressure: "review-required" }
+        })));
+      }
+    }
+  } else {
+    phaseArtifacts = await holdPausedCycle({ root, date, now: input.now });
+  }
+  const spentAfter = input.dry ? 0 : await monthSpend(root, date);
+  const actualCycleUsd = Number(Math.max(0, spentAfter - spentBefore).toFixed(8));
+  const record = ownerAllowed
+    ? buildActiveRecord({
+        executionCycleId: input.executionCycleId,
+        date,
+        now: input.now,
+        stage,
+        outcome,
+        failure,
+        failurePhase,
+        actualCycleUsd,
+        monthAllInUsd: spentAfter,
+        monthCapUsd: limits.monthlyOperatingUsd
+      })
+    : buildCheckpointRecord({
+        executionCycleId: input.executionCycleId,
+        date,
+        now: input.now,
+        stage,
+        dry: input.dry,
+        monthAllInUsd: spentAfter,
+        monthCapUsd: limits.monthlyOperatingUsd
+      });
 
   const decisionPath = `decisions/${input.executionCycleId}.json`;
   const scorecardPath = `scorecards/${input.executionCycleId}.json`;
@@ -184,7 +301,7 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
     fixture: input.dry,
     cycleId: input.executionCycleId,
     phase: "ts-desk",
-    outcome: "RESUME",
+    outcome: record.decision.outcome,
     summary: record.decision.summary,
     evidenceRefs: record.decision.evidenceRefs,
     generatedAt: record.generatedAt
@@ -194,17 +311,11 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
     fixture: input.dry,
     cycleId: input.executionCycleId,
     phase: "ts-desk",
-    estimatedCycleUsd: 0,
-    actualCycleUsd: 0,
+    estimatedCycleUsd: record.ledger.estimatedCycleUsd,
+    actualCycleUsd: record.ledger.actualCycleUsd,
     generatedAt: record.generatedAt
   });
   await atomicWriteJson(root, meetingPath, record);
-
-  // The deterministic half of the desk runs even while the room is paused: reading the facts,
-  // ranking them and advancing the cycle costs nothing and calls nothing. What the pause with-
-  // holds is the writing, which is the only part that would spend. So a paused day still leaves
-  // a reviewable shortlist and an honest cycle position rather than a blank.
-  const shortlistPaths = await advanceDeterministicCycle({ root, date, now: input.now });
 
   const [records, skips, articleSlots] = await Promise.all([
     loadMeetingRecords(root),
@@ -223,25 +334,23 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
     cycleId: input.executionCycleId,
     phase: "ts-desk",
     dry: input.dry,
-    status: "paused",
-    decision: "PAUSED",
-    estimatedWorstCaseUsd: 0,
-    selectedAgents: [],
-    skippedAgents: [...TEHDEJSI_SVET_CAST],
-    artifacts: [decisionPath, scorecardPath, meetingPath, ...shortlistPaths]
+    status: ownerAllowed ? (outcome?.completed ? "live_complete" : "paused") : "paused",
+    decision: ownerAllowed ? (outcome?.status ?? "PAUSED") : "PAUSED",
+    estimatedWorstCaseUsd: ownerAllowed ? 0.25 : 0,
+    selectedAgents: outcome?.participants ?? [],
+    skippedAgents: TEHDEJSI_SVET_CAST.filter((agent) => !(outcome?.participants ?? []).includes(agent as "LETOPIS" | "VERBA")),
+    artifacts: [decisionPath, scorecardPath, meetingPath, ...phaseArtifacts]
       .map((relative) => artifactPath(root, relative))
   };
 }
 
 /**
- * Read the facts, record today's ranking and move the cycle one sitting.
+ * Read the facts and record today's free ranking while paid work is closed.
  *
- * Everything here is deterministic and free, so it is deliberately outside the pause: a day the
- * room could not write is still a day the desk can show its work for. A missing or unreadable
- * facts file costs the shortlist and nothing else — the checkpoint is already recorded, and a
- * failure here must never take the daily cycle red.
+ * Planning stays active. Advancing it would claim a canonical brief exists when LETOPIS was never
+ * called. A missing or unreadable facts file costs the shortlist and nothing else.
  */
-async function advanceDeterministicCycle(input: {
+async function holdPausedCycle(input: {
   root: string;
   date: string;
   now: Date;
@@ -267,11 +376,7 @@ async function advanceDeterministicCycle(input: {
         cycle,
         date: input.date,
         now: input.now,
-        outcome: {
-          completed: true,
-          chosenFactIds: selectableFactIds(shortlist, 1),
-          shortlistRef: shortlistPath
-        }
+        outcome: { completed: false, pressure: "review-required" }
       })));
       return written;
     }

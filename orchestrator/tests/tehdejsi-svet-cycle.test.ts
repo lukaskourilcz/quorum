@@ -4,6 +4,7 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
 import { runTehdejsiSvetCycle } from "../src/ventures/tehdejsi-svet/run.js";
+import { readTehdejsiCycle } from "../src/ventures/tehdejsi-svet/state.js";
 
 const temporaryRoots: string[] = [];
 
@@ -36,9 +37,17 @@ describe("Tehdejsi svet desk", () => {
     const record = JSON.parse(await readFile(path.join(root, "meetings", "2026-08-12-ts-desk.json"), "utf8"));
     expect(MeetingRecordSchema.safeParse(record).success).toBe(true);
     expect(record.ledger).toMatchObject({ estimatedCycleUsd: 0, actualCycleUsd: 0 });
-    // The room says what has not been built rather than reporting a meeting that never happened.
+    // The room records the closed paid path rather than reporting a meeting that never happened.
     expect(record.participantReasons.every((entry: { participated: boolean }) => !entry.participated)).toBe(true);
     expect(record.decision.evidenceRefs).toContain("decisions/2026-08-12-tehdejsi-svet-founding.md");
+    const cycle = await readTehdejsiCycle(root);
+    expect(cycle).toMatchObject({
+      phase: "planning",
+      dayStatuses: { planning: "active", production: "pending" },
+      chosenFactIds: [],
+      stretch: { count: 1, reason: "review-required", nextAttemptOn: "2026-08-13" }
+    });
+    expect(result.artifacts.some((entry) => entry.includes("shortlists/2026-08-12.json"))).toBe(true);
   });
 
   it("writes nothing when a closed live room is invoked by hand", async () => {

@@ -147,7 +147,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-16** — Brand tokens from the product's export palette
 - [x] **TS-17a** — The bilingual family kit: slots and devices
 - [x] **TS-17b** — Photo slide variant with mandatory attribution
-- [ ] **TS-17c** — Render module and recorded summaries
+- [x] **TS-17c** — Render module and recorded summaries
 - [ ] **TS-18** — Studio bilingual determinism test
 - [ ] **TS-19** — Admin approval write path with the tier-2 review gate
 - [ ] **TS-20a** — Server-only admin loader
@@ -184,14 +184,15 @@ snapshot is a committed file and the venture buys no data.
   authoring and validation of that committed file, and TS-10b's read-only pin has nothing
   left to pin and is withdrawn. The hash verification stays: a hand-edited facts file must
   abort the room rather than quietly change what it claims.
-- **The desk holds its slot before its pipeline exists.** Registering the venture put
-  `ts-desk` on the clock while the dispatcher still had no branch for it. The workflow's
-  portfolio live gate hides that today, but that gate is open whenever `bh-desk` and
-  `tt-marketing` are allowed to run, and behind it the phase would have thrown and taken
-  the daily cycle red. The runner therefore landed first as a deterministic $0 checkpoint:
-  it calls no model, reads no product data, touches no channel, and records plainly that
-  the editorial pipeline is not built. A manual invocation of the closed live room writes
-  nothing at all.
+- **The registered desk held a `$0` slot before its pipeline landed.** Registering the
+  venture put `ts-desk` on the clock while the dispatcher still had no editorial branch.
+  The first runner therefore recorded a deterministic checkpoint instead of taking the
+  daily cycle red. TS-17c joined the existing planning and production modules to that
+  runner. While the decision remains pending, a scheduled checkpoint may record the free
+  shortlist but leaves planning active with no chosen facts; only the countersigned live
+  path writes a canonical brief and advances to production. Advancing the free ranking had
+  put production over a brief that did not exist. A manual invocation of the closed room
+  still writes nothing. Neither path reads product data or touches a channel.
 
 ## Honest gaps
 

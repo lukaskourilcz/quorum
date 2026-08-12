@@ -46,4 +46,40 @@ describe("the Design Lab summary rail", () => {
     expect(new Set(rail.map(({ id }) => id)).size).toBe(2);
     expect(rail.every(({ venture, origin }) => venture === "booksofhistory" && origin === "recorded")).toBe(true);
   });
+
+  it("shows a recorded Tehdejsi svet feature once, with Czech as the primary rail locale", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "quorum-summary-rail-"));
+    roots.push(root);
+    const directory = path.join(root, "state/ventures/carousel-studio/summaries/tehdejsi-svet");
+    await mkdir(directory, { recursive: true });
+    const summary = buildCarouselSummary({
+      venture: "tehdejsi-svet",
+      locale: "cs",
+      slug: "ts-2026-08-14-synthetic-memory",
+      date: "2026-08-14",
+      title: "Krátká znělka uzavírala den.",
+      dek: "Syntetický popis ověřuje pouze cestu do studia.",
+      points: [
+        "První smyšlená karta.",
+        "Druhá smyšlená karta.",
+        "Třetí smyšlená karta."
+      ],
+      hasHero: false,
+      heroCredit: null
+    });
+    await writeFile(
+      path.join(directory, `${summary.date}-${summary.slug}.json`),
+      `${JSON.stringify(summary, null, 2)}\n`
+    );
+
+    const rail = await readStudioArticles(root);
+    expect(rail).toHaveLength(1);
+    expect(rail[0]).toMatchObject({
+      id: `tehdejsi-svet:${summary.slug}:${summary.date}`,
+      venture: "tehdejsi-svet",
+      ventureLabel: "Tehdejší svět",
+      origin: "recorded",
+      summary: { locale: "cs" }
+    });
+  });
 });

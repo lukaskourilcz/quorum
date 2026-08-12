@@ -110,6 +110,7 @@ export type CarouselSummaryInput = CarouselSummaryContentInput & (
   | { venture: "caught-up" | "mma-files"; locale?: "cs" }
   | { venture: "booksofhistory"; locale: CarouselSummaryLocale }
   | { venture: "door-money"; locale?: "en" }
+  | { venture: "tehdejsi-svet"; locale?: "cs" }
 );
 
 const KICKER: Record<CarouselSummaryVenture, string> = {

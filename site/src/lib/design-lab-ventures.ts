@@ -21,11 +21,11 @@ import { readDesignLab, readDesignLabPresets, type LabArticle, type LabPreset } 
 export type DesignLabVentureId = BrandTokens["id"];
 
 /**
- * The two magazines deliver articles; the rest do not, and pretending otherwise would fill three
- * sections with an empty list and no explanation. A section says which kind it is so the content
- * area can be honest about why it is empty.
+ * The two magazines deliver articles and Tehdejší svět delivers recorded features. The other
+ * brands have identity-only sections. A section says which kind it is so the content area can
+ * explain an empty workspace.
  */
-const PUBLISHES_ARTICLES: ReadonlySet<string> = new Set(["caught-up", "mma-files"]);
+const PUBLISHES_ARTICLES: ReadonlySet<string> = new Set(["caught-up", "mma-files", "tehdejsi-svet"]);
 
 /** The name the owner uses. The id addresses state and never changes; the surface speaks. */
 const DISPLAY_NAME: Readonly<Record<string, string>> = {
