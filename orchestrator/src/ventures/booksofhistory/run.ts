@@ -1,6 +1,9 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { MeetingRecordSchema, type MeetingRecord } from "../../contracts/meeting-record.js";
+import { z } from "zod";
+import { BhDossierSchema, type BhDossier } from "../../contracts/bh-dossier.js";
+import type { BhShortlist } from "../../contracts/bh-shortlist.js";
 import {
   buildCalendarFeed,
   loadArticleSlotOutcomes,
@@ -29,6 +32,94 @@ import {
 
 const FOUNDING_DECISION_PATH = "decisions/2026-08-12-booksofhistory-founding.md";
 const BOOKSOFHISTORY_CAST = ["FOLIO", "PLOT", "QUILL", "HACEK", "AUDIT"] as const;
+
+export const BhStorySelectionSchema = z.strictObject({
+  schemaVersion: z.literal("bh-story-selection/1"),
+  cycleId: z.string().min(1).max(120),
+  selectedAt: z.string().datetime(),
+  selectedBy: z.literal("FOLIO"),
+  candidates: z.array(z.strictObject({
+    bookId: z.string().min(1).max(120),
+    dossierRef: z.string().min(1).max(500),
+    seedRank: z.number().int().min(1).max(10),
+    seedScore: z.number().min(0),
+    storyId: z.string().min(1).max(120),
+    storyScore: z.number().min(0).max(100),
+    storyUsed: z.boolean()
+  })).min(1).max(3),
+  chosen: z.strictObject({
+    bookId: z.string().min(1).max(120),
+    dossierRef: z.string().min(1).max(500),
+    storyId: z.string().min(1).max(120),
+    seedRank: z.number().int().min(1).max(10),
+    seedScore: z.number().min(0),
+    storyScore: z.number().min(0).max(100)
+  }),
+  seedRankingReversed: z.boolean(),
+  reason: z.string().min(8).max(500)
+});
+
+export type BhStorySelection = z.infer<typeof BhStorySelectionSchema>;
+
+export function bhStorySelectionPath(cycleId: string): string {
+  return `ventures/booksofhistory/selections/${cycleId}.json`;
+}
+
+/** Day C compares the best unused dossier story; seed score remains visible but cannot decide. */
+export function selectBhStory(input: {
+  cycleId: string;
+  shortlist: BhShortlist;
+  dossiers: ReadonlyArray<{ dossierRef: string; dossier: BhDossier }>;
+  selectedAt: Date;
+}): BhStorySelection {
+  const shortlistByBook = new Map(input.shortlist.entries.map((entry) => [entry.bookId, entry]));
+  const candidates = input.dossiers.map(({ dossierRef, dossier: value }) => {
+    const dossier = BhDossierSchema.parse(value);
+    const seed = shortlistByBook.get(dossier.bookId);
+    if (!seed) throw new Error(`Dossier ${dossier.bookId} is absent from the recorded shortlist`);
+    const story = dossier.storyCandidates
+      .filter(({ used }) => !used)
+      .sort((left, right) => right.score - left.score || left.storyId.localeCompare(right.storyId))[0];
+    if (!story) throw new Error(`Dossier ${dossier.bookId} has no unused story candidate`);
+    return {
+      bookId: dossier.bookId,
+      dossierRef,
+      seedRank: seed.rank,
+      seedScore: seed.totalScore,
+      storyId: story.storyId,
+      storyScore: story.score,
+      storyUsed: story.used
+    };
+  }).sort((left, right) =>
+    right.storyScore - left.storyScore || left.seedRank - right.seedRank || left.bookId.localeCompare(right.bookId)
+  );
+  const winner = candidates[0];
+  if (!winner) throw new Error("Day C requires at least one dossier candidate");
+  const bestSeedRank = Math.min(...candidates.map(({ seedRank }) => seedRank));
+  return BhStorySelectionSchema.parse({
+    schemaVersion: "bh-story-selection/1",
+    cycleId: input.cycleId,
+    selectedAt: input.selectedAt.toISOString(),
+    selectedBy: "FOLIO",
+    candidates,
+    chosen: {
+      bookId: winner.bookId,
+      dossierRef: winner.dossierRef,
+      storyId: winner.storyId,
+      seedRank: winner.seedRank,
+      seedScore: winner.seedScore,
+      storyScore: winner.storyScore
+    },
+    seedRankingReversed: winner.seedRank !== bestSeedRank,
+    reason: `FOLIO selected story ${winner.storyId} at ${winner.storyScore}; seed rank ${winner.seedRank} and score ${winner.seedScore} are recorded context, not the Day C decision.`
+  });
+}
+
+export async function writeBhStorySelection(root: string, selection: BhStorySelection): Promise<string> {
+  const relative = bhStorySelectionPath(selection.cycleId);
+  await atomicWriteJson(root, relative, BhStorySelectionSchema.parse(selection));
+  return relative;
+}
 
 function artifactPath(root: string, relative: string): string {
   return path.relative(repoRoot, path.join(root, relative));
