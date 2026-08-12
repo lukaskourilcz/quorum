@@ -10,7 +10,8 @@
       "type": "string",
       "enum": [
         "gather",
-        "synth"
+        "synth",
+        "supplement"
       ]
     },
     "provider": {
@@ -59,7 +60,8 @@
         "unanswered-question",
         "untrustworthy",
         "stale",
-        "thin-shelf"
+        "thin-shelf",
+        "supplemental-freshness"
       ]
     },
     "tokensIn": {

@@ -62,7 +62,7 @@ export function assertBhResearchReservation(
 ): BhResearchReservation {
   if (!Number.isInteger(budget.candidateCount) || budget.candidateCount < 1 || budget.candidateCount > 3 ||
       !Number.isFinite(budget.gatherEnvelopeUsd) || budget.gatherEnvelopeUsd <= 0 || budget.gatherEnvelopeUsd > 0.1 ||
-      !Number.isFinite(budget.synthEnvelopeUsd) || budget.synthEnvelopeUsd <= 0 || budget.synthEnvelopeUsd > 0.1 ||
+      !Number.isFinite(budget.synthEnvelopeUsd) || budget.synthEnvelopeUsd < 0 || budget.synthEnvelopeUsd > 0.1 ||
       !Number.isFinite(budget.cycleEnvelopeUsd) || budget.cycleEnvelopeUsd <= 0 || budget.cycleEnvelopeUsd > BH_RESEARCH_CYCLE_CEILING_USD ||
       !Number.isFinite(budget.monthlyCeilingUsd) || budget.monthlyCeilingUsd <= 0 || budget.monthlyCeilingUsd > BH_RESEARCH_MONTHLY_CEILING_USD ||
       !Number.isFinite(budget.recordedMonthlyHeadroomUsd) || budget.recordedMonthlyHeadroomUsd < 0 ||
@@ -216,14 +216,14 @@ export async function readBhResearchLedger(root: string): Promise<BhResearchLedg
   }
 }
 
-type ReleaseResearchLock = () => Promise<void>;
+export type ReleaseBhResearchLock = () => Promise<void>;
 
-async function acquireResearchLock(
+export async function acquireBhResearchLock(
   root: string,
-  kind: "cycle" | "book-brief",
+  kind: "cycle" | "book-brief" | "supplement",
   key: string,
   now: Date
-): Promise<ReleaseResearchLock | null> {
+): Promise<ReleaseBhResearchLock | null> {
   const digest = createHash("sha256").update(key).digest("hex");
   const file = path.join(root, "ventures/booksofhistory/locks", `${kind}-${digest}.lock`);
   await mkdir(path.dirname(file), { recursive: true });
@@ -328,7 +328,7 @@ export async function runBhCandidateResearch(input: {
     };
   }
 
-  const releaseCycle = await acquireResearchLock(
+  const releaseCycle = await acquireBhResearchLock(
     input.root,
     "cycle",
     input.synthCallConfig.cycleId,
@@ -341,9 +341,9 @@ export async function runBhCandidateResearch(input: {
       message: `Research cycle ${input.synthCallConfig.cycleId} is already in flight; zero provider calls made.`
     };
   }
-  let releaseBookBrief: ReleaseResearchLock | null = null;
+  let releaseBookBrief: ReleaseBhResearchLock | null = null;
   try {
-    releaseBookBrief = await acquireResearchLock(
+    releaseBookBrief = await acquireBhResearchLock(
       input.root,
       "book-brief",
       `${input.book.bookId}\n${input.brief.briefHash}`,

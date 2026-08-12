@@ -125,7 +125,7 @@ export const BhDossierSchema = z.strictObject({
 
 export const BhResearchLedgerEntrySchema = z.strictObject({
   schemaVersion: z.literal("bh-research-ledger/1"),
-  step: z.enum(["gather", "synth"]),
+  step: z.enum(["gather", "synth", "supplement"]),
   provider: z.string().trim().min(1).max(120),
   model: z.string().trim().min(1).max(160),
   startedAt: DateTimeSchema,
@@ -134,7 +134,7 @@ export const BhResearchLedgerEntrySchema = z.strictObject({
   bookId: BookIdSchema,
   bookRef: MeetingRefSchema,
   briefHash: z.string().regex(/^[a-f0-9]{64}$/),
-  reason: z.enum(["missing-dossier", "unanswered-question", "untrustworthy", "stale", "thin-shelf"]),
+  reason: z.enum(["missing-dossier", "unanswered-question", "untrustworthy", "stale", "thin-shelf", "supplemental-freshness"]),
   tokensIn: z.number().int().nonnegative(),
   tokensOut: z.number().int().nonnegative(),
   searches: z.number().int().min(0).max(8),
