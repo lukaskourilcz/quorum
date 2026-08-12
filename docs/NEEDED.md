@@ -173,6 +173,14 @@ Judgement calls. Nothing is blocked on code for any of these.
   questions" sections, and venture ids stay stable if a public name changes.
   [imp:3] [owner:me] [time:45m] [kind:legal]
 
+- [ ] **Kick off the SWEEP program once every venture issue is closed** — GitHub issues
+  `SWEEP-00`–`SWEEP-12` (#338–#350) hold the post-implementation repo cleanup: served
+  one-shot docs removed, every surviving `.md` (including the README) rewritten to
+  reflect all eleven ventures, orphans and dead links cleared, NEEDED groomed. The
+  program is gated on all `KV-`/`DM-`/`BH-`/`TS-` issues being closed and no venture
+  kickoff touches the `SWEEP-` prefix, so nothing starts until you paste its kickoff
+  into a session. [imp:2] [owner:me] [time:5m] [kind:decision]
+
 - [ ] **Unblock the Tehdejší svět launch preconditions** — the adoption venture cannot
   launch profiles until the product's production domain lands (that task already sits
   in the product repo's own NEEDED.md at [imp:5]; `dontwannaknow.vercel.app` must
