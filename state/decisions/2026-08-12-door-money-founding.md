@@ -165,6 +165,12 @@ costs and no treasury action in this decision.
   so `book-passage` evidence carries both immutable chunk ids and a credential-free
   `private-book://` pointer bound to the manuscript hash and excerpt chunk. It is not a public URL,
   repository link or credential, and the contract rejects links that disagree with the evidence.
+- **DM-14a's amendment again substitutes a book database for the private store fixed above.**
+  Packet assembly therefore reads the immutable DM-11b local-clone layout through a narrow
+  private-store interface, validates its version, and caches chunk and embedding reads for the
+  cycle. No database host, `BOOK_DB_*` credential or external request was added. Missing or
+  inconsistent private knowledge returns the recorded `$0` fixture-required path without
+  exposing a local path; the private root is refused if it sits inside this public repository.
 
 ## Delivery ledger
 
@@ -195,7 +201,7 @@ costs and no treasury action in this decision.
 - [x] DM-11b — Public/private output split and manuscript-hash idempotency
 - [x] DM-12 — venture-recommendation evidence kind book-passage
 - [x] DM-13 — Deterministic passage selection
-- [ ] DM-14a — Packet assembly and the private-store fetcher
+- [x] DM-14a — Packet assembly and the private-store fetcher
 - [ ] DM-14b — Desk runner, GHOST call and honest records
 - [ ] DM-15a — Voice lint and stop-slop gate
 - [ ] DM-15b — Claim, quote, cap, duplicate and CTA gates
