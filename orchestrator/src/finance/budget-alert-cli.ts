@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { BudgetLedgerEntrySchema } from "../budget.js";
+import { budgetLedgerCostCategory, BudgetLedgerEntrySchema } from "../budget.js";
 import { configRoot, stateRoot } from "../paths.js";
 import { signedOwnerDecision } from "../portfolio/schedule.js";
 import { readJson, readText } from "../state.js";
@@ -18,7 +18,7 @@ const [budgetDecision, ledgerRaw, nonModelRaw, exhaustionDates, allowlist] = awa
 ]);
 const modelCosts: AllInCostEntry[] = (ledgerRaw.entries ?? []).map((value) => {
   const entry = BudgetLedgerEntrySchema.parse(value);
-  return { at: entry.ts, ventureId: entry.ventureId ?? "global", category: entry.kind === "image" ? "media" : "model", usd: entry.usd, ref: entry.requestHash };
+  return { at: entry.ts, ventureId: entry.ventureId ?? "global", category: budgetLedgerCostCategory(entry.kind), usd: entry.usd, ref: entry.requestHash };
 });
 const nonModelCosts = nonModelRaw.split(/\r?\n/u).filter(Boolean).map((line) => JSON.parse(line) as AllInCostEntry);
 const status = allInBudgetStatus([...modelCosts, ...nonModelCosts], month, signedOwnerDecision(budgetDecision) === "countersigned" ? 50 : 20);
