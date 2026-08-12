@@ -2,6 +2,20 @@ import { z } from "zod";
 import { atomicWriteJson, readJson, readText } from "../state.js";
 import { repoRoot } from "../paths.js";
 import { safeFetch } from "../security/url.js";
+import {
+  KVORUM_APIFY_MONTHLY_SHARE_USD,
+  KVORUM_APIFY_RUN_RESERVATION_USD,
+  KvorumApifyQuotaSchema,
+  type KvorumApifyQuota
+} from "../contracts/kvorum-apify-quota.js";
+import type {
+  KvorumActor,
+  KvorumSourceRegistry
+} from "../contracts/kvorum-sources.js";
+import {
+  kvorumBudgetCapacityDecision,
+  signedOwnerDecision
+} from "../portfolio/schedule.js";
 
 /**
  * The Apify side of GoVIRAL's trend scouting.
@@ -80,6 +94,44 @@ export interface MmaApifyApprovals {
   sources: boolean;
 }
 
+type TenantQuotaBlock = "token" | "share" | "shared-credit" | null;
+
+/**
+ * The arithmetic shared by every venture-specific Apify wrapper.
+ *
+ * Approval wording stays in each wrapper because its ids and audit sentence are part of that
+ * venture's public boundary. Token, local-share and account-credit arithmetic do not vary.
+ */
+function tenantQuotaBlock(input: {
+  token: string | undefined;
+  estimatedUsedUsd: number;
+  shareCapUsd: number;
+  reservationUsd: number;
+  sharedAccountUsedUsd: number | null;
+}): TenantQuotaBlock {
+  if (!input.token?.trim()) return "token";
+  if (input.estimatedUsedUsd + input.reservationUsd > input.shareCapUsd) return "share";
+  if (
+    input.sharedAccountUsedUsd !== null
+    && input.sharedAccountUsedUsd + input.reservationUsd > APIFY_MONTHLY_CREDIT_USD
+  ) return "shared-credit";
+  return null;
+}
+
+async function localTenantUsage(root: string, relativePath: string): Promise<number> {
+  try {
+    const stored = await readJson<{ estimatedUsedUsd?: unknown }>(root, relativePath, {});
+    const value = stored.estimatedUsedUsd;
+    // A malformed sibling counter is not permission to assume it spent zero. Treat the shared
+    // credit as exhausted until provider usage can give the authoritative figure.
+    return typeof value === "number" && Number.isFinite(value) && value >= 0
+      ? value
+      : Object.keys(stored).length === 0 ? 0 : APIFY_MONTHLY_CREDIT_USD;
+  } catch {
+    return APIFY_MONTHLY_CREDIT_USD;
+  }
+}
+
 export function parseMmaApifyApprovals(inbox: string): MmaApifyApprovals {
   const checked = (id: string) => new RegExp(`^- \\[x\\] HUMAN_APPROVAL ${id}\\b`, "imu").test(inbox);
   return { account: checked("APIFY-ACCOUNT-001"), sources: checked("APIFY-MMA-SOURCES-001") };
@@ -117,13 +169,20 @@ export function mayRunMmaApify(input: {
   if (pending.length > 0) {
     return { allowed: false, reason: `MMA Apify sources are waiting for ${pending.join(" and ")}; no actor ran and nothing was spent.` };
   }
-  if (!input.token?.trim()) {
+  const block = tenantQuotaBlock({
+    token: input.token,
+    estimatedUsedUsd: input.quota.estimatedUsedUsd,
+    shareCapUsd: MMA_APIFY_MONTHLY_SHARE_USD,
+    reservationUsd: MMA_APIFY_RUN_RESERVATION_USD,
+    sharedAccountUsedUsd: input.sharedAccountUsedUsd
+  });
+  if (block === "token") {
     return { allowed: false, reason: "APIFY_TOKEN is unavailable, so no MMA actor ran and nothing was spent." };
   }
-  if (input.quota.estimatedUsedUsd + MMA_APIFY_RUN_RESERVATION_USD > MMA_APIFY_MONTHLY_SHARE_USD) {
+  if (block === "share") {
     return { allowed: false, reason: "The MMA Apify share is exhausted, so no actor ran and nothing was spent." };
   }
-  if (input.sharedAccountUsedUsd !== null && input.sharedAccountUsedUsd + MMA_APIFY_RUN_RESERVATION_USD > APIFY_MONTHLY_CREDIT_USD) {
+  if (block === "shared-credit") {
     return { allowed: false, reason: "The shared Apify Free-plan credit cannot cover the MMA reservation, so no actor ran and nothing was spent." };
   }
   return { allowed: true, reason: "The approval, account, shared-credit and MMA-share guards allow this run." };
@@ -211,10 +270,13 @@ export async function runMmaApifySources(input: {
     return { results: [{ sourceId: "apify-mma", status: "skipped", reason: "No terms-approved MMA actor is enabled; no actor ran and nothing was spent.", items: [] }], artifactPaths: [] };
   }
 
-  const goViral = await readJson<{ estimatedUsedUsd?: number }>(input.root, "goviral/source-quota/apify.json", {});
   const fetchUsage = input.usageFetcher ?? ((token: string) => fetchApifyMonthlyUsageUsd({ token }));
   const reported = await fetchUsage(input.token as string);
-  const sharedUsed = reported ?? Number(((goViral.estimatedUsedUsd ?? 0) + quota.estimatedUsedUsd).toFixed(6));
+  const sharedUsed = reported ?? Number((
+    await localTenantUsage(input.root, "goviral/source-quota/apify.json")
+    + quota.estimatedUsedUsd
+    + await localTenantUsage(input.root, "kvorum/source-quota/apify.json")
+  ).toFixed(6));
   const verdict = mayRunMmaApify({ quota, approvals, token: input.token, sharedAccountUsedUsd: sharedUsed });
   if (!verdict.allowed) {
     return { results: [{ sourceId: "apify-mma", status: "skipped", reason: verdict.reason, items: [] }], artifactPaths: [] };
@@ -245,6 +307,292 @@ export async function runMmaApifySources(input: {
   }
   await atomicWriteJson(input.root, quotaPath, nextQuota);
   return { results, artifactPaths: [quotaPath] };
+}
+
+export interface KvorumApifyApprovals {
+  account: boolean;
+  scope: boolean;
+}
+
+export function parseKvorumApifyApprovals(inbox: string): KvorumApifyApprovals {
+  const checked = (id: string) => new RegExp(`^- \\[[xX]\\] HUMAN_APPROVAL ${id}\\b`, "mu").test(inbox);
+  return { account: checked("APIFY-ACCOUNT-001"), scope: checked("KV-APIFY-001") };
+}
+
+export function emptyKvorumApifyQuota(month: string, now: Date): KvorumApifyQuota {
+  return {
+    schemaVersion: "kvorum-apify-quota/1",
+    month,
+    shareCapUsd: KVORUM_APIFY_MONTHLY_SHARE_USD,
+    estimatedUsedUsd: 0,
+    sharedAccountUsedUsd: null,
+    reservedPerRun: KVORUM_APIFY_RUN_RESERVATION_USD,
+    updatedAt: now.toISOString(),
+    perActorCounts: {}
+  };
+}
+
+export function currentKvorumApifyQuota(
+  stored: unknown,
+  month: string,
+  now: Date
+): KvorumApifyQuota {
+  if (
+    stored !== null
+    && typeof stored === "object"
+    && !Array.isArray(stored)
+    && Object.keys(stored).length === 0
+  ) return emptyKvorumApifyQuota(month, now);
+  const parsed = KvorumApifyQuotaSchema.safeParse(stored);
+  if (!parsed.success) throw new Error("Kvórum Apify quota state is invalid; no actor may run.");
+  if (parsed.data.month !== month) return emptyKvorumApifyQuota(month, now);
+  return parsed.data;
+}
+
+export function mayRunKvorumApify(input: {
+  quota: KvorumApifyQuota;
+  approvals: KvorumApifyApprovals;
+  authority: { founding: boolean; budgetCapacity: boolean };
+  token: string | undefined;
+  sharedAccountUsedUsd: number | null;
+}): QuotaVerdict {
+  const authorityPending = [
+    ...(!input.authority.founding ? ["the Kvórum founding decision"] : []),
+    ...(!input.authority.budgetCapacity ? ["the Kvórum budget-capacity decision"] : [])
+  ];
+  if (authorityPending.length > 0) {
+    return {
+      allowed: false,
+      reason: `Kvórum Apify is waiting for ${authorityPending.join(" and ")} to be countersigned; no actor ran and nothing was spent.`
+    };
+  }
+  const pending = [
+    ...(!input.approvals.account ? ["APIFY-ACCOUNT-001"] : []),
+    ...(!input.approvals.scope ? ["KV-APIFY-001"] : [])
+  ];
+  if (pending.length > 0) {
+    return {
+      allowed: false,
+      reason: `Kvórum Apify is waiting for ${pending.join(" and ")}; no actor ran and nothing was spent.`
+    };
+  }
+  const block = tenantQuotaBlock({
+    token: input.token,
+    estimatedUsedUsd: input.quota.estimatedUsedUsd,
+    shareCapUsd: input.quota.shareCapUsd,
+    reservationUsd: input.quota.reservedPerRun,
+    sharedAccountUsedUsd: input.sharedAccountUsedUsd
+  });
+  if (block === "token") {
+    return { allowed: false, reason: "APIFY_TOKEN is unavailable, so no Kvórum actor ran and nothing was spent." };
+  }
+  if (block === "share") {
+    return { allowed: false, reason: "The Kvórum Apify share is exhausted, so no actor ran and nothing was spent." };
+  }
+  if (block === "shared-credit") {
+    return { allowed: false, reason: "The shared Apify Free-plan credit cannot cover the Kvórum reservation, so no actor ran and nothing was spent." };
+  }
+  return { allowed: true, reason: "The authority, approval, account, shared-credit and Kvórum-share guards allow this run." };
+}
+
+export function estimateKvorumActorUsd(actor: KvorumActor, items: number): number {
+  const boundedItems = Math.min(Math.max(Math.floor(items), 0), actor.input.resultsLimit);
+  return Number(Math.min(
+    actor.pricing.actorStartUsd + actor.pricing.pricePerResultUsd * boundedItems,
+    actor.pricing.maxRunUsd
+  ).toFixed(6));
+}
+
+export function recordKvorumActorUsage(input: {
+  quota: KvorumApifyQuota;
+  actor: KvorumActor;
+  items: number;
+  now: Date;
+  sharedAccountUsedUsd: number;
+  conservativeFailure?: boolean;
+}): KvorumApifyQuota {
+  const usd = input.conservativeFailure
+    ? input.quota.reservedPerRun
+    : estimateKvorumActorUsd(input.actor, input.items);
+  const prior = input.quota.perActorCounts[input.actor.id] ?? { runs: 0, items: 0, estimatedUsd: 0 };
+  return KvorumApifyQuotaSchema.parse({
+    ...input.quota,
+    estimatedUsedUsd: Number((input.quota.estimatedUsedUsd + usd).toFixed(6)),
+    sharedAccountUsedUsd: input.sharedAccountUsedUsd,
+    updatedAt: input.now.toISOString(),
+    perActorCounts: {
+      ...input.quota.perActorCounts,
+      [input.actor.id]: {
+        runs: prior.runs + 1,
+        items: prior.items + Math.min(Math.max(Math.floor(input.items), 0), input.actor.input.resultsLimit),
+        estimatedUsd: Number((prior.estimatedUsd + usd).toFixed(6))
+      }
+    }
+  });
+}
+
+export interface KvorumApifyRunResult {
+  sourceId: string;
+  status: "success" | "skipped" | "failed";
+  reason: string | null;
+  items: ApifyDatasetItem[];
+}
+
+export interface KvorumApifyRunOutcome {
+  results: KvorumApifyRunResult[];
+  artifactPaths: string[];
+  sharedUsageSource: "provider" | "local-estimate" | null;
+}
+
+/**
+ * The one approved Kvórum public-page actor behind every authority and quota gate.
+ *
+ * Its payload is reconstructed field by field so no login, cookie or unreviewed actor option can
+ * flow from configuration. A failed request records the full reservation conservatively: once
+ * the provider call starts, a network failure is not evidence that it charged zero.
+ */
+export async function runKvorumApifySource(input: {
+  root: string;
+  date: string;
+  now: Date;
+  inbox: string;
+  token: string | undefined;
+  registry: KvorumSourceRegistry;
+  foundingDecisionRaw?: string;
+  budgetCapacityDecisionRaw?: string;
+  usageFetcher?: (token: string) => Promise<number | null>;
+  actorRunner?: typeof runApifyActor;
+}): Promise<KvorumApifyRunOutcome> {
+  const quotaPath = "kvorum/source-quota/apify.json";
+  const actor = input.registry.actors[0]!;
+  const [foundingRaw, capacityRaw] = await Promise.all([
+    input.foundingDecisionRaw !== undefined
+      ? Promise.resolve(input.foundingDecisionRaw)
+      : readText(input.root, "decisions/2026-08-12-kvorum-founding.md"),
+    input.budgetCapacityDecisionRaw !== undefined
+      ? Promise.resolve(input.budgetCapacityDecisionRaw)
+      : readText(input.root, "decisions/2026-08-12-kvorum-budget-capacity.md")
+  ]);
+  const authority = {
+    founding: signedOwnerDecision(foundingRaw) === "countersigned",
+    budgetCapacity: kvorumBudgetCapacityDecision(capacityRaw) === "countersigned"
+  };
+  const approvals = parseKvorumApifyApprovals(input.inbox);
+  let quota: KvorumApifyQuota;
+  try {
+    quota = currentKvorumApifyQuota(
+      await readJson<unknown>(input.root, quotaPath, {}),
+      input.date.slice(0, 7),
+      input.now
+    );
+  } catch (error) {
+    return {
+      results: [{
+        sourceId: actor.id,
+        status: "skipped",
+        reason: error instanceof Error ? error.message : "Kvórum Apify quota state is invalid; no actor may run.",
+        items: []
+      }],
+      artifactPaths: [],
+      sharedUsageSource: null
+    };
+  }
+  const preliminary = mayRunKvorumApify({
+    quota,
+    approvals,
+    authority,
+    token: input.token,
+    sharedAccountUsedUsd: null
+  });
+  if (!preliminary.allowed) {
+    return {
+      results: [{ sourceId: actor.id, status: "skipped", reason: preliminary.reason, items: [] }],
+      artifactPaths: [],
+      sharedUsageSource: null
+    };
+  }
+  if (!actor.scheduled || actor.termsVerdict !== "allowed") {
+    return {
+      results: [{
+        sourceId: actor.id,
+        status: "skipped",
+        reason: "The pinned Kvórum actor is not terms-approved and scheduled; no actor ran and nothing was spent.",
+        items: []
+      }],
+      artifactPaths: [],
+      sharedUsageSource: null
+    };
+  }
+
+  const fetchUsage = input.usageFetcher ?? ((token: string) => fetchApifyMonthlyUsageUsd({ token }));
+  const reported = await fetchUsage(input.token as string);
+  const sharedUsageSource = reported === null ? "local-estimate" : "provider";
+  const sharedUsed = reported ?? Number((
+    await localTenantUsage(input.root, "goviral/source-quota/apify.json")
+    + await localTenantUsage(input.root, "mma/source-quota/apify.json")
+    + quota.estimatedUsedUsd
+  ).toFixed(6));
+  const verdict = mayRunKvorumApify({
+    quota,
+    approvals,
+    authority,
+    token: input.token,
+    sharedAccountUsedUsd: sharedUsed
+  });
+  if (!verdict.allowed) {
+    return {
+      results: [{ sourceId: actor.id, status: "skipped", reason: verdict.reason, items: [] }],
+      artifactPaths: [],
+      sharedUsageSource
+    };
+  }
+
+  const runner = input.actorRunner ?? runApifyActor;
+  const payload = {
+    startUrls: actor.input.startUrls.map((entry) => ({ url: entry.url })),
+    resultsLimit: actor.input.resultsLimit
+  };
+  let nextQuota: KvorumApifyQuota;
+  let result: KvorumApifyRunResult;
+  try {
+    const rows = await runner({
+      actor: { actorSlug: actor.actorSlug, actorBuildId: actor.actorBuildId },
+      token: input.token as string,
+      payload,
+      maxTotalChargeUsd: actor.pricing.maxRunUsd
+    });
+    const items = rows.slice(0, actor.input.resultsLimit);
+    nextQuota = recordKvorumActorUsage({
+      quota,
+      actor,
+      items: items.length,
+      now: input.now,
+      sharedAccountUsedUsd: sharedUsed
+    });
+    result = {
+      sourceId: actor.id,
+      status: items.length > 0 ? "success" : "skipped",
+      reason: items.length > 0 ? null : "The approved Kvórum actor returned no rows.",
+      items
+    };
+  } catch {
+    nextQuota = recordKvorumActorUsage({
+      quota,
+      actor,
+      items: 0,
+      now: input.now,
+      sharedAccountUsedUsd: sharedUsed,
+      conservativeFailure: true
+    });
+    result = {
+      sourceId: actor.id,
+      status: "failed",
+      reason: "The approved Kvórum actor failed after launch; the full reservation was recorded conservatively.",
+      items: []
+    };
+  }
+  await atomicWriteJson(input.root, quotaPath, nextQuota);
+  return { results: [result], artifactPaths: [quotaPath], sharedUsageSource };
 }
 
 export const ApifyQuotaSchema = z.object({
