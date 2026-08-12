@@ -10,6 +10,27 @@ prompt. This commission authorizes edits outside the `AGENTS.md` standing write 
 for the files this program names — that allowlist governs unattended sessions, not
 owner-issued builds.
 
+## Kickoff prompt for Codex
+
+The program is cut into GitHub issues **`KV-00` – `KV-21c`** on `lukaskourilcz/quorum`
+(#149–#192), one issue per deliverable. The issue list refines this document's task
+list into smaller pieces (lettered sub-issues split a task; the founding decision
+carries **one checkbox per issue**, which supersedes the per-task checkbox phrasing
+below). Hand Codex exactly this:
+
+> Work the Kvórum venture program in `lukaskourilcz/quorum`. First read
+> `docs/KVORUM-CODEX-BUILD-PROMPT.md` and `docs/KVORUM-VENTURE-DESIGN.md` in full.
+> Then work ONLY the GitHub issues whose titles start with `KV-`, **one issue at a
+> time, in title order**, starting with `KV-00` (the audit). Never touch another
+> program's issues (`DM-`, `BH-`, `TS-`). Commit frequently: **at least one commit
+> per issue, never more than one issue per commit**; tick the issue's checkbox in
+> the founding decision in the commit that completes it; close each issue with a
+> one-line comment naming the commit(s); keep the full gate green at every phase
+> boundary (`pnpm agents:validate && pnpm lint && pnpm typecheck && pnpm test &&
+> pnpm build`, site e2e where touched). Where an issue and the documents disagree:
+> founding decision > design doc > build prompt > issue. Record every divergence
+> in the founding decision's adapted-during-implementation section.
+
 ## What you are building, in one paragraph
 
 **Kvórum** (venture id `kvorum`): a drafts-only Czech political commentary venture. Once a

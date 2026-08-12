@@ -10,6 +10,30 @@ document, then this file. This commission authorizes edits outside the `AGENTS.m
 standing write allowlist for the files this program names — that allowlist governs
 unattended sessions, not owner-issued builds.
 
+## Kickoff prompt for Codex
+
+The program is cut into GitHub issues **`TS-00` – `TS-24c`** on `lukaskourilcz/quorum`
+(#289–#337), one issue per deliverable. The issue list refines this document's task
+list into smaller pieces (lettered sub-issues split a task; the founding decision
+carries **one checkbox per issue**, superseding the per-task checkbox phrasing
+below). Hand Codex exactly this:
+
+> Work the Tehdejší svět venture program in `lukaskourilcz/quorum`. First read
+> `docs/tehdejsi-svet-venture-implementation.md` and
+> `docs/TEHDEJSI-SVET-VENTURE-DESIGN.md` in full, and audit both repositories —
+> `quorum` and a read-only clone of `lukaskourilcz/dontwannaknow`. Then work ONLY
+> the GitHub issues whose titles start with `TS-`, **one issue at a time, in
+> title order**, starting with `TS-00` (the audit). Never touch another program's
+> issues (`KV-`, `DM-`, `BH-`). Commit frequently: **at least one commit per
+> issue, never more than one issue per commit**; tick the issue's checkbox in the
+> founding decision in the commit that completes it; close each issue with a
+> one-line comment naming the commit(s); keep the full gate green at every phase
+> boundary. Two standing terms: nothing you build writes to the `dontwannaknow`
+> repository, and the product's `shareSafe`/`excluded` flags are honored at
+> snapshot build time, structurally. Where an issue and the documents disagree:
+> founding decision > strategy doc > implementation spec > issue. Record every
+> divergence in the founding decision's adapted-during-implementation section.
+
 ## What you are building, in one paragraph
 
 **Tehdejší svět** (venture id `tehdejsi-svet`): BoardlessAI adopts the owner's existing
