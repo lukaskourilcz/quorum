@@ -40,9 +40,9 @@ Refreshed from committed state: **2026-08-12T12:03:41.590Z**. This block is gene
 
 | Item | Current value |
 | --- | --- |
-| Portfolio | 8 projects; 8 marked operating |
-| Agent roster | 35 active: 21 Anthropic, 14 OpenAI |
-| Scheduled specialist/service rooms | 10; combined maximum room envelopes $1.12 if every room is commissioned |
+| Portfolio | 9 projects; 9 marked operating |
+| Agent roster | 37 active: 23 Anthropic, 14 OpenAI |
+| Scheduled specialist/service rooms | 11; combined maximum room envelopes $1.37 if every room is commissioned |
 | Approved spend boundary | $30.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |
 | Recorded API spend | $3.97 this month; $3.99 cumulative |
 | Entered fixed costs | $0.00 monthly |
@@ -65,6 +65,7 @@ Refreshed from committed state: **2026-08-12T12:03:41.590Z**. This block is gene
 | Design Lab | operating | deterministic service only | none | not applicable |
 | marketingShark | operating | ms-daily 07:00 | none | not applicable |
 | MMA Files | operating | mag-editorial 09:00; mag-desk 20:00 | REACH | locked (3/10) |
+| Tehdejší svět | operating | ts-desk 18:00 | none | not applicable |
 
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:END -->
 
