@@ -9,6 +9,9 @@ import { DesignLabWorkspace } from "@/components/admin/design-lab-workspace";
 import { AutonomyPanel } from "@/components/admin/autonomy-panel";
 import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-panel";
 import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
+import { KvorumClaimsPanel } from "@/components/admin/kvorum-claims-panel";
+import { KvorumMonitorPanel } from "@/components/admin/kvorum-monitor-panel";
+import { KvorumRecommendationsPanel } from "@/components/admin/kvorum-recommendations-panel";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { GoViralProfilePanel } from "@/components/admin/goviral-profile-panel";
 import { OwnerAttentionPanel } from "@/components/admin/owner-attention-panel";
@@ -407,6 +410,21 @@ export default async function AdminPage({
         node: <TittyTuesdaysProposalsPanel snapshot={ttProposals} />,
         count: ttProposals.days.reduce((sum, day) => sum + day.variants.length, 0)
       };
+    }
+    if (id === "kvorum" && selectedTab === "recommendations") {
+      return {
+        node: <KvorumRecommendationsPanel snapshot={kvorum} />,
+        count: kvorum.recommendations.length
+      };
+    }
+    if (id === "kvorum" && selectedTab === "monitor") {
+      return {
+        node: <KvorumMonitorPanel snapshot={kvorum} />,
+        count: kvorum.monitor[0]?.clusters.length ?? 0
+      };
+    }
+    if (id === "kvorum" && selectedTab === "claims") {
+      return { node: <KvorumClaimsPanel />, count: 0 };
     }
     if (id === "caught-up" && selectedTab === "events") {
       return {

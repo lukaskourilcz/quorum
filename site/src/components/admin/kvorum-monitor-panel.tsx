@@ -58,9 +58,9 @@ function Quota({ snapshot }: { snapshot: AdminKvorumSnapshot }) {
         <span className="block h-full bg-[#f5d90a]" style={{ width: `${percent.toFixed(2)}%` }} />
       </div>
       <dl className="mt-3 grid gap-2 text-[11.5px] text-[#a1a1aa] sm:grid-cols-3">
-        <div><dt className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#71717a]">Reserved per run</dt><dd className="mt-1 tabular-nums">{usd(quota.reservedPerRun)}</dd></div>
-        <div><dt className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#71717a]">Shared account used</dt><dd className="mt-1 tabular-nums">{quota.sharedAccountUsedUsd === null ? "not recorded" : usd(quota.sharedAccountUsedUsd)}</dd></div>
-        <div><dt className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#71717a]">Last recorded</dt><dd className="mt-1 tabular-nums">{quota.updatedAt}</dd></div>
+        <div><dt className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#94949c]">Reserved per run</dt><dd className="mt-1 tabular-nums">{usd(quota.reservedPerRun)}</dd></div>
+        <div><dt className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#94949c]">Shared account used</dt><dd className="mt-1 tabular-nums">{quota.sharedAccountUsedUsd === null ? "not recorded" : usd(quota.sharedAccountUsedUsd)}</dd></div>
+        <div><dt className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#94949c]">Last recorded</dt><dd className="mt-1 tabular-nums">{quota.updatedAt}</dd></div>
       </dl>
       {quota.perActorCounts.length ? (
         <div className="mt-3 overflow-x-auto" data-horizontal-scroll>
@@ -73,9 +73,9 @@ function Quota({ snapshot }: { snapshot: AdminKvorumSnapshot }) {
           </div>
         </div>
       ) : (
-        <p className="mt-3 text-[11.5px] text-[#71717a]">No actor run is recorded in this month.</p>
+        <p className="mt-3 text-[11.5px] text-[#94949c]">No actor run is recorded in this month.</p>
       )}
-      <p className="mt-3 text-[11px] leading-[1.5] text-[#71717a]">
+      <p className="mt-3 text-[11px] leading-[1.5] text-[#94949c]">
         This bar is a record, not permission to run. Source and account approvals still gate every external call.
       </p>
     </section>
@@ -98,7 +98,7 @@ function SourceHealth({ day }: { day: AdminKvorumMonitorDay }) {
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-mono text-[9.5px] uppercase tracking-[0.1em]" style={{ color: colour }}>{source.status}</span>
-                  <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#71717a]">{source.kind}</span>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#94949c]">{source.kind}</span>
                 </div>
                 <p className="mt-2 text-[12.5px] font-semibold text-[#e4e4e7]">{source.sourceId}</p>
                 <p className="mt-1 font-mono text-[10px] tabular-nums text-[#a1a1aa]">
@@ -150,7 +150,7 @@ function ClusterDigest({ day }: { day: AdminKvorumMonitorDay }) {
                   {source.discoveryOnly ? <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#f5a524]">context only</span> : null}
                 </div>
                 <p className="mt-2 text-[12px] leading-[1.55] text-[#d4d4d8]">{source.excerpt}</p>
-                <p className="mt-2 font-mono text-[9px] tabular-nums text-[#71717a]">{source.publishedAt}</p>
+                <p className="mt-2 font-mono text-[9px] tabular-nums text-[#94949c]">{source.publishedAt}</p>
                 {source.engagement ? (
                   <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.08em] text-[#a1a1aa]">
                     {source.engagement.likes ?? "—"} likes · {source.engagement.comments ?? "—"} comments · {source.engagement.shares ?? "—"} shares
@@ -182,7 +182,7 @@ function EntityHeatmap({ snapshot }: { snapshot: AdminKvorumSnapshot }) {
             </div>
           ))}
         </div>
-      ) : <p className="mt-2 text-[12px] text-[#71717a]">No retained cluster contains an entity in this window.</p>}
+      ) : <p className="mt-2 text-[12px] text-[#94949c]">No retained cluster contains an entity in this window.</p>}
     </section>
   );
 }
@@ -233,7 +233,7 @@ export function KvorumMonitorPanel({ snapshot }: { snapshot: AdminKvorumSnapshot
           <div className="grid gap-4 xl:grid-cols-2"><EntityHeatmap snapshot={snapshot} /><PurgeClock day={day} /></div>
         </>
       )}
-      <p className="text-[11px] leading-[1.5] text-[#71717a]">
+      <p className="text-[11px] leading-[1.5] text-[#94949c]">
         Read-only. Source enablement lives in reviewed configuration; this panel cannot fetch, spend or change it.
       </p>
     </div>

@@ -25,6 +25,9 @@ const axeRoutes = [
   "/admin?venture=mma-files&tab=social-lab",
   "/admin?venture=carousel-studio&tab=studio",
   "/admin?venture=carousel-studio&tab=inspiration",
+  "/admin?venture=kvorum&tab=recommendations",
+  "/admin?venture=kvorum&tab=monitor",
+  "/admin?venture=kvorum&tab=claims",
   "/meetings/2026-08-01-mma-intake",
   "/meetings/2026-08-01-mma-analysis",
   "/meetings/2026-08-01-mag-editorial",
@@ -47,6 +50,17 @@ let originalRatingLedger: string | null = null;
 const deckOverridesPath = path.join(repositoryRoot, "state", "ventures", "carousel-studio", "deck-style-overrides.json");
 const presetsPath = path.join(repositoryRoot, "state", "ventures", "carousel-studio", "presets.json");
 let originalDeckOverrides: string | null = null;
+const kvorumRecommendationPath = path.join(repositoryRoot, "state/ventures/kvorum/recommendations/2026-08-12-public-media.json");
+const kvorumRecommendationIndexPath = path.join(repositoryRoot, "state/ventures/kvorum/recommendations/index.json");
+const kvorumMonitorPath = path.join(repositoryRoot, "state/ventures/kvorum/monitor/2026-08-12.json");
+const kvorumSummaryPath = path.join(repositoryRoot, "state/ventures/carousel-studio/summaries/kvorum/2026-08-12-public-media.json");
+const kvorumFixturePaths = [
+  kvorumRecommendationPath,
+  kvorumRecommendationIndexPath,
+  kvorumMonitorPath,
+  kvorumSummaryPath
+] as const;
+const originalKvorumState = new Map<string, string | null>();
 
 test.beforeAll(async () => {
   try {
@@ -59,10 +73,21 @@ test.beforeAll(async () => {
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
   }
+  for (const filename of kvorumFixturePaths) {
+    try {
+      originalKvorumState.set(filename, await readFile(filename, "utf8"));
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      originalKvorumState.set(filename, null);
+    }
+  }
   await Promise.all([
     mkdir(path.dirname(e2ePlanPath), { recursive: true }),
     mkdir(path.dirname(e2eMarketingPackagePath), { recursive: true }),
-    mkdir(path.dirname(ratingLedgerPath), { recursive: true })
+    mkdir(path.dirname(ratingLedgerPath), { recursive: true }),
+    mkdir(path.dirname(kvorumRecommendationPath), { recursive: true }),
+    mkdir(path.dirname(kvorumMonitorPath), { recursive: true }),
+    mkdir(path.dirname(kvorumSummaryPath), { recursive: true })
   ]);
   await writeFile(e2ePlanPath, JSON.stringify({
     schemaVersion: "marketing-plan/1",
@@ -93,6 +118,34 @@ test.beforeAll(async () => {
     },
     render: { summaryPaths: ["staged/e2e-package.json"] }
   }));
+  const recommendation = JSON.parse(await readFile(
+    path.join(repositoryRoot, "contracts/fixtures/venture-recommendation.valid.json"),
+    "utf8"
+  )) as Record<string, unknown> & { gateResults: { evaluatedAt: string } };
+  recommendation.createdAt = "2026-08-12T10:00:00.000Z";
+  recommendation.updatedAt = "2026-08-12T10:00:00.000Z";
+  recommendation.gateResults.evaluatedAt = "2026-08-12T10:00:00.000Z";
+  await Promise.all([
+    writeFile(kvorumRecommendationPath, `${JSON.stringify(recommendation, null, 2)}\n`),
+    writeFile(kvorumRecommendationIndexPath, `${JSON.stringify({
+      schemaVersion: "kvorum-recommendation-index/1",
+      date: "2026-08-12",
+      generatedAt: "2026-08-12T10:00:00.000Z",
+      queue: [{
+        id: recommendation.id,
+        ref: "state/ventures/kvorum/recommendations/2026-08-12-public-media.json",
+        clusterId: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        status: "draft",
+        headline: recommendation.headline,
+        createdAt: recommendation.createdAt
+      }]
+    }, null, 2)}\n`),
+    writeFile(kvorumMonitorPath, await readFile(
+      path.join(repositoryRoot, "contracts/fixtures/kvorum-monitor.valid.json"),
+      "utf8"
+    )),
+    rm(kvorumSummaryPath, { force: true })
+  ]);
 });
 
 test.afterAll(async () => {
@@ -103,6 +156,11 @@ test.afterAll(async () => {
   await rm(presetsPath, { force: true });
   if (originalDeckOverrides === null) await rm(deckOverridesPath, { force: true });
   else await writeFile(deckOverridesPath, originalDeckOverrides);
+  for (const filename of kvorumFixturePaths) {
+    const original = originalKvorumState.get(filename) ?? null;
+    if (original === null) await rm(filename, { force: true });
+    else await writeFile(filename, original, "utf8");
+  }
 });
 
 for (const route of axeRoutes) {
@@ -292,6 +350,25 @@ test("admin separates pending approvals from approved deliveries still waiting",
   await expect(attention).toContainText("1");
 });
 
+test("Kvórum exposes three truthful owner-workspace tabs", async ({ page }) => {
+  await page.goto("/admin?venture=kvorum&tab=recommendations", { waitUntil: "networkidle" });
+  await expect(page.getByRole("link", { name: "recommendations", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: "monitor", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "claims", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Poplatky se vracejí do Sněmovny" })).toBeVisible();
+  await expect(page.getByText("1 on this tab", { exact: true })).toBeVisible();
+
+  await page.getByRole("link", { name: "monitor", exact: true }).click();
+  await expect(page).toHaveURL(/venture=kvorum&tab=monitor/);
+  await expect(page.getByText("Source health · recorded response", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Financování médií veřejné služby" })).toBeVisible();
+
+  await page.getByRole("link", { name: "claims", exact: true }).click();
+  await expect(page).toHaveURL(/venture=kvorum&tab=claims/);
+  await expect(page.getByText("No published-claim ledger is stored yet.", { exact: false })).toBeVisible();
+  await expect(page.getByText("0 on this tab", { exact: true })).toBeVisible();
+});
+
 // The rated object used to be a niche proposal, and the assertion after the reload used to be
 // the incubator shortlist. Both left with the venture; what the test is actually for — a rating
 // survives the round trip to the ledger and comes back as history — is unchanged, so it now runs
@@ -331,6 +408,36 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await expect(page.getByRole("heading", { name: "Titty Tuesdays" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
     await expect(page.getByText(/^\d+ ready plans$/)).toBeVisible();
+  });
+
+  test("Kvórum approval queues a renderable Design Lab deck without publishing", async ({ page, request }) => {
+    await page.goto("/admin?venture=kvorum&tab=recommendations", { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: "Poplatky se vracejí do Sněmovny" })).toBeVisible();
+    await page.getByRole("button", { name: "Approve as drafted" }).click();
+    await expect(page.getByText("Approved and queued in the Design Lab. Nothing was published.")).toBeVisible({ timeout: 60_000 });
+
+    await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
+    const railCard = page.locator("[data-article-rail] button")
+      .filter({ hasText: "Kvórum" })
+      .filter({ hasText: "Poplatky se vracejí do Sněmovny" })
+      .first();
+    await expect(railCard).toBeVisible();
+    await railCard.click();
+    await expect(railCard).toHaveAttribute("aria-pressed", "true");
+
+    const slideHref = await page.getByRole("link", { name: "Stáhnout slide" }).getAttribute("href");
+    expect(slideHref).toBeTruthy();
+    const slide = await request.get(new URL(slideHref!, page.url()).toString());
+    expect(slide.ok()).toBe(true);
+    expect(slide.headers()["content-type"]).toBe("image/png");
+    expect((await slide.body()).byteLength).toBeGreaterThan(1_000);
+
+    const deckHref = await page.getByRole("link", { name: "Stáhnout celý deck" }).getAttribute("href");
+    expect(deckHref).toBeTruthy();
+    const deck = await request.get(new URL(deckHref!, page.url()).toString());
+    expect(deck.ok()).toBe(true);
+    expect(deck.headers()["content-type"]).toBe("application/zip");
+    expect((await deck.body()).byteLength).toBeGreaterThan(1_000);
   });
 
   test("admin login explains errors, starts a session and signs out", async ({ page }) => {
@@ -386,7 +493,24 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
   });
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=carousel-studio&tab=studio"];
+const responsiveRoutes = [
+  "/",
+  "/agents",
+  "/agents/hacek",
+  "/calendar/2026-07-27",
+  "/ventures/titty-tuesdays",
+  "/ventures/fightaiq",
+  "/ventures/carousel-studio",
+  "/money",
+  "/admin?venture=global",
+  "/admin?venture=titty-tuesdays&tab=plans",
+  "/admin?venture=fightaiq&tab=events",
+  "/admin?venture=mma-files&tab=social-lab",
+  "/admin?venture=carousel-studio&tab=studio",
+  "/admin?venture=kvorum&tab=recommendations",
+  "/admin?venture=kvorum&tab=monitor",
+  "/admin?venture=kvorum&tab=claims"
+];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },

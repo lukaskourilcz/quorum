@@ -247,6 +247,11 @@ section and a receipt line, and a day with no usable cluster records an honest q
   store and card surfacing to KV-19a. The KV-17b card therefore shows the recorded manual post URL
   and an honest no-result state, but does not invent an untyped result form or second persistence
   path. The owner-entry control lands with KV-19a; automated metric collection remains absent.
+- **Claims-ledger sequencing:** KV-17d asks its claims tab to show a running ledger before KV-18
+  defines the canonical claim records and correction flow. The higher-precedence build plan assigns
+  both to KV-18, so KV-17d registers a truthful zero-count tab that does not promote recommendation
+  drafts into published claims or offer an untyped correction writer. KV-18 replaces that empty
+  state with the typed ledger and owner-controlled correction flow.
 
 ## Implementation checklist
 
@@ -285,7 +290,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-17a — Server-only admin loader
 - [x] KV-17b — Recommendations panel
 - [x] KV-17c — Monitor panel
-- [ ] KV-17d — Claims panel, tab wiring and e2e coverage
+- [x] KV-17d — Claims panel, tab wiring and e2e coverage
 - [ ] KV-18 — Claims ledger and the correction flow
 - [ ] KV-19a — Owner results: contract, route and store
 - [ ] KV-19b — Performance weights with floors and recorded proposals

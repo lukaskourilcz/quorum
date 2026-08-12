@@ -96,7 +96,7 @@ function CopyRail({ blocks }: { blocks: AdminKvorumCopyBlock[] }) {
             <div className="flex flex-wrap items-center gap-2">
               <Chip>{block.platform}</Chip>
               <Chip>{block.format}</Chip>
-              <span className="font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#71717a]">{block.locale}</span>
+              <span className="font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#94949c]">{block.locale}</span>
             </div>
             <p className="mt-3 whitespace-pre-wrap text-[13px] leading-[1.65] text-[#e4e4e7]">{block.text}</p>
             {block.altText ? (
@@ -104,7 +104,7 @@ function CopyRail({ blocks }: { blocks: AdminKvorumCopyBlock[] }) {
                 <strong className="text-[#d4d4d8]">Alt:</strong> {block.altText}
               </p>
             ) : null}
-            <p className="mt-2 text-[11.5px] leading-[1.55] text-[#71717a]">{block.reason}</p>
+            <p className="mt-2 text-[11.5px] leading-[1.55] text-[#94949c]">{block.reason}</p>
           </article>
         ))}
       </div>
@@ -116,7 +116,7 @@ function ClaimsTable({ recommendation }: { recommendation: AdminKvorumRecommenda
   return (
     <div className="overflow-x-auto" data-horizontal-scroll>
       <table className="w-full min-w-[760px] border-collapse text-left text-[12px]">
-        <thead className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#71717a]">
+        <thead className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#94949c]">
           <tr>
             <th className="border-b border-[#26262b] px-2 py-2 font-medium">Type</th>
             <th className="border-b border-[#26262b] px-2 py-2 font-medium">Claim</th>
@@ -280,7 +280,7 @@ function RecommendationCard({ recommendation }: { recommendation: AdminKvorumRec
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-[#f5d90a]">Kvórum recommendation</span>
-            <span className="font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#71717a]">{recommendation.date}</span>
+            <span className="font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#94949c]">{recommendation.date}</span>
           </div>
           <h3 className="mt-2 text-[24px] font-semibold leading-[1.15] tracking-[-0.025em] text-[#f4f4f5]">{display.headline}</h3>
           <p className="mt-3 max-w-3xl text-[13px] leading-[1.65] text-[#a1a1aa]">{display.summary}</p>
@@ -307,7 +307,7 @@ function RecommendationCard({ recommendation }: { recommendation: AdminKvorumRec
             <h4 className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#94949c]" id={`${recommendation.id}-claims`}>
               What happened · typed claims
             </h4>
-            <p className="mt-1 text-[11.5px] text-[#71717a]">Every source link comes from the retained monitor cluster.</p>
+            <p className="mt-1 text-[11.5px] text-[#94949c]">Every source link comes from the retained monitor cluster.</p>
           </div>
           <ClaimsTable recommendation={recommendation} />
         </section>
@@ -422,7 +422,7 @@ function RecommendationCard({ recommendation }: { recommendation: AdminKvorumRec
         {status === "approved" ? (
           <section className="grid gap-2 border-t border-[#26262b] pt-4">
             <h4 className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#94949c]">Manual post record</h4>
-            <p className="text-[11.5px] leading-[1.5] text-[#71717a]">This records a URL only. It cannot publish, create an account or touch a channel.</p>
+            <p className="text-[11.5px] leading-[1.5] text-[#94949c]">This records a URL only. It cannot publish, create an account or touch a channel.</p>
             <div className="flex flex-col gap-2 sm:flex-row">
               <input
                 aria-label="Manually posted HTTPS URL"
@@ -451,7 +451,7 @@ function RecommendationCard({ recommendation }: { recommendation: AdminKvorumRec
             {postedUrl ? (
               <a className="mt-2 block break-all text-[12px] text-[#f5d90a] underline" href={postedUrl} rel="noreferrer" target="_blank">{postedUrl}</a>
             ) : null}
-            <p className="mt-2 text-[11.5px] leading-[1.55] text-[#71717a]">
+            <p className="mt-2 text-[11.5px] leading-[1.55] text-[#94949c]">
               No owner-entered result is stored yet. Kvórum never fetches performance automatically.
             </p>
           </section>
