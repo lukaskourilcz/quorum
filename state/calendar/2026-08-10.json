@@ -222,7 +222,9 @@
       "at": "2026-08-12T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-12-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Zabít jediný článek: chybí ověřený FightAIQ modelový běh a dostupné předměty jsou buď opakované, nebo bez zdrojového souboru."
     },
     {
       "at": "2026-08-12T08:00:00.000Z",

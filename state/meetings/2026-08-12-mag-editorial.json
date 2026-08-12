@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260812070156-mag-editorial",
+  "date": "2026-08-12",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.024094,
+    "monthAllInUsd": 4.1581226,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "VETO",
+    "summary": "AUDIT vetoed the room output: Zabít jediný článek: chybí ověřený FightAIQ modelový běh a dostupné předměty jsou buď opakované, nebo bez zdrojového souboru.",
+    "evidenceRefs": [
+      "meeting:2026-08-08-mma-analysis",
+      "meeting:2026-08-08-mag-desk",
+      "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "JAB",
+      "summary": "Zabít článek: nový, neopakovaný předmět chybí. UFC 330 je jen oznámená karta bez FightAIQ modelu, výsledku nebo nového ověřeného úhlu.",
+      "evidenceRefs": [
+        "meeting:2026-08-08-mma-analysis",
+        "meeting:2026-08-08-mag-desk",
+        "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Zabít jediný článek: chybí ověřený FightAIQ modelový běh a dostupné předměty jsou buď opakované, nebo bez zdrojového souboru.",
+      "evidenceRefs": [
+        "meeting:2026-08-08-mma-analysis",
+        "meeting:2026-08-08-mag-desk"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "JAB",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "veto",
+      "veto": true
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-12.json",
+  "generatedAt": "2026-08-12T07:04:56.412Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-12T07:01:56.412Z",
+    "closedAt": "2026-08-12T07:04:56.412Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-12T07:01:56.412Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "JAB",
+        "mode": "veto",
+        "sentAt": "2026-08-12T07:02:56.412Z",
+        "text": "Zabít článek: nový, neopakovaný předmět chybí. UFC 330 je jen oznámená karta bez FightAIQ modelu, výsledku nebo nového ověřeného úhlu.",
+        "evidenceRefs": [
+          "meeting:2026-08-08-mma-analysis",
+          "meeting:2026-08-08-mag-desk",
+          "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "veto",
+        "sentAt": "2026-08-12T07:03:56.412Z",
+        "text": "Zabít jediný článek: chybí ověřený FightAIQ modelový běh a dostupné předměty jsou buď opakované, nebo bez zdrojového souboru.",
+        "evidenceRefs": [
+          "meeting:2026-08-08-mma-analysis",
+          "meeting:2026-08-08-mag-desk"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-12T07:04:56.412Z",
+        "text": "AUDIT vetoed the room output: Zabít jediný článek: chybí ověřený FightAIQ modelový běh a dostupné předměty jsou buď opakované, nebo bez zdrojového souboru."
+      }
+    ]
+  }
+}

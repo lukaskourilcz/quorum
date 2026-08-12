@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260812070156-mag-editorial",
+  "phase": "mag-editorial",
+  "outcome": "VETO",
+  "summary": "AUDIT vetoed the room output: Zabít jediný článek: chybí ověřený FightAIQ modelový běh a dostupné předměty jsou buď opakované, nebo bez zdrojového souboru.",
+  "evidenceRefs": [
+    "meeting:2026-08-08-mma-analysis",
+    "meeting:2026-08-08-mag-desk",
+    "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+  ],
+  "generatedAt": "2026-08-12T07:04:56.412Z"
+}
