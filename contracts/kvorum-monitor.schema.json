@@ -298,7 +298,6 @@
             "maxLength": 240
           },
           "entityIds": {
-            "minItems": 1,
             "maxItems": 40,
             "type": "array",
             "items": {

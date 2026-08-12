@@ -71,13 +71,28 @@ export const KvorumClusterAttributionSchema = z.strictObject({
 export const KvorumMonitorClusterSchema = z.strictObject({
   id: Sha1Schema,
   title: z.string().min(1).max(240),
-  entityIds: z.array(EntityIdSchema).min(1).max(40),
+  entityIds: z.array(EntityIdSchema).max(40),
   topicTokens: z.array(z.string().min(2).max(80)).max(40),
   itemRefs: z.array(Sha1Schema).min(1).max(80),
   attributions: z.array(KvorumClusterAttributionSchema).min(1).max(80),
   continuationOf: z.string().min(1).max(160).nullable()
 }).superRefine((cluster, context) => {
+  if (cluster.entityIds.length === 0 && cluster.topicTokens.length === 0) {
+    context.addIssue({
+      code: "custom",
+      message: "A cluster requires at least one shared entity or topic token",
+      path: ["entityIds"]
+    });
+  }
   const refs = new Set(cluster.itemRefs);
+  if (refs.size !== cluster.itemRefs.length) {
+    context.addIssue({
+      code: "custom",
+      message: "Cluster itemRefs must be unique",
+      path: ["itemRefs"]
+    });
+  }
+  const attributedRefs = new Set<string>();
   for (const [index, attribution] of cluster.attributions.entries()) {
     if (!refs.has(attribution.itemRef)) {
       context.addIssue({
@@ -86,6 +101,21 @@ export const KvorumMonitorClusterSchema = z.strictObject({
         path: ["attributions", index, "itemRef"]
       });
     }
+    if (attributedRefs.has(attribution.itemRef)) {
+      context.addIssue({
+        code: "custom",
+        message: "Each cluster item may have one attribution",
+        path: ["attributions", index, "itemRef"]
+      });
+    }
+    attributedRefs.add(attribution.itemRef);
+  }
+  if (attributedRefs.size !== refs.size) {
+    context.addIssue({
+      code: "custom",
+      message: "Every cluster itemRef requires one attribution",
+      path: ["attributions"]
+    });
   }
 });
 

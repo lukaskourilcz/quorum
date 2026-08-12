@@ -187,6 +187,11 @@ section and a receipt line, and a day with no usable cluster records an honest q
   a token is present or a KV approval line is checked in isolation. KV-09a applies the same two
   authority checks plus `KV-SOURCES-002` to every free-feed read; verified and allowlisted is not
   treated as approved.
+- **Cluster title boundary:** KV-10a asks for title-token overlap, while the fixed-field monitor
+  contract deliberately retains one `text` field rather than a separate feed title. Clustering
+  derives tokens only from the first sentence or the text before the feed mapper's em dash. Its
+  weighted Jaccard threshold is `0.20`, with curated entities weighted four-to-one against a title
+  token; complete-link merges retain at least one shared entity or topic across the whole cluster.
 
 ## Implementation checklist
 
@@ -211,7 +216,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-08b — Third-tenant extension of the Apify guard
 - [x] KV-09a — Monitor fetch, normalize and the fixed-field row mapper
 - [x] KV-09b — Monitor receipt contract and 30-day raw purge
-- [ ] KV-10a — Deterministic entity/topic clustering
+- [x] KV-10a — Deterministic entity/topic clustering
 - [ ] KV-10b — Cluster ranking, novelty and continuation detection
 - [ ] KV-11 — `venture-recommendation` contract with monitor-cluster evidence
 - [ ] KV-12a — Desk runner dispatch and the TRIBUN call
