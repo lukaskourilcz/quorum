@@ -109,9 +109,15 @@
     },
     "booksofhistory": {
       "label": "BOOKSOFHISTORY (book stories)",
-      "signalMode": "free-only",
+      "sourceMode": "free",
       "keywords": ["book history", "dějiny knih", "literary anniversary", "literární výročí", "publishing history", "příběh vydání"],
       "hashtags": ["#bookhistory", "#dejinyknih", "#literaryanniversary", "#literarnivyroci", "#publishinghistory", "#pribehvydani"]
+    },
+    "door-money": {
+      "label": "Door Money (book and music stories)",
+      "sourceMode": "free",
+      "keywords": ["BookTok", "author marketing", "hip-hop culture", "music industry stories"],
+      "hashtags": ["#BookTok", "#AuthorMarketing", "#HipHopCulture", "#MusicIndustryStories"]
     }
   }
 }

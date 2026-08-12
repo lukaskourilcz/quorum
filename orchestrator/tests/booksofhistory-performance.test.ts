@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { BhSeedLibrarySchema } from "../src/contracts/bh-seed.js";
-import { PerformanceWeightProposalSchema } from "../src/contracts/performance-weights.js";
+import { BooksofHistoryPerformanceWeightProposalSchema } from "../src/contracts/performance-weights.js";
 import { repoRoot } from "../src/paths.js";
 import { atomicWriteJson, readJson } from "../src/state.js";
 import {
@@ -29,9 +29,9 @@ async function fixture(name: string): Promise<unknown> {
 }
 
 async function proposal() {
-  const base = PerformanceWeightProposalSchema.parse(await fixture("performance-weight-proposal.valid.json"));
+  const base = BooksofHistoryPerformanceWeightProposalSchema.parse(await fixture("performance-weight-proposal.valid.json"));
   const resultIds = ["result-aaaaaaaaaaaaaaaaaaaa"];
-  return PerformanceWeightProposalSchema.parse({
+  return BooksofHistoryPerformanceWeightProposalSchema.parse({
     ...base,
     adjustments: [
       { lane: "cs", dimension: "categories", key: "publishing-history", from: 1, to: 1.08, resultIds, rationale: "The cited Czech result supports a small category increase." },
@@ -48,7 +48,7 @@ afterEach(async () => {
 describe("BOOKSOFHISTORY performance weights", () => {
   it("records a cited proposal before applying bounded category, era and geography weights", async () => {
     const root = await temporaryRoot();
-    await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json"));
+    await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("booksofhistory-owner-result-entry.valid.json"));
     const recordedProposal = await proposal();
 
     const first = await applyBhPerformanceWeightProposal({ root, proposal: recordedProposal });
@@ -80,7 +80,7 @@ describe("BOOKSOFHISTORY performance weights", () => {
 
   it("rejects a proposal below the fixed floor and leaves neutral weights untouched", async () => {
     const root = await temporaryRoot();
-    await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json"));
+    await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("booksofhistory-owner-result-entry.valid.json"));
     const belowFloor = { ...await proposal(), adjustments: [{ ...(await proposal()).adjustments[0]!, to: BH_PERFORMANCE_WEIGHT_FLOOR - 0.01 }] };
 
     await expect(applyBhPerformanceWeightProposal({ root, proposal: belowFloor })).rejects.toThrow("breaches the 0.75-1.25 bounds");
@@ -93,11 +93,11 @@ describe("BOOKSOFHISTORY performance weights", () => {
     const missing = await proposal();
     await expect(applyBhPerformanceWeightProposal({ root, proposal: missing })).rejects.toThrow("cites missing result");
 
-    const futureResult = { ...await fixture("owner-result-entry.valid.json") as object, recordedAt: "2026-08-22T12:05:00.000Z" };
+    const futureResult = { ...await fixture("booksofhistory-owner-result-entry.valid.json") as object, recordedAt: "2026-08-22T12:05:00.000Z" };
     await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", futureResult);
     await expect(applyBhPerformanceWeightProposal({ root, proposal: missing })).rejects.toThrow("cites future result");
 
-    await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json"));
+    await atomicWriteJson(root, "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("booksofhistory-owner-result-entry.valid.json"));
     const wrongLane = { ...missing, adjustments: [{ ...missing.adjustments[0]!, lane: "en" }] };
     await expect(applyBhPerformanceWeightProposal({ root, proposal: wrongLane })).rejects.toThrow("outside adjustment lane en");
     expect(await readJson(root, `${BH_PERFORMANCE_PROPOSALS_ROOT}/${missing.proposalId}.json`, null)).toBeNull();

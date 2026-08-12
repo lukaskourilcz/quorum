@@ -137,6 +137,49 @@ function signal(id: string, label: string, value: number | null, unit: Capabilit
   return { id, label, value, unit, detail };
 }
 
+function record(value: unknown): Record<string, unknown> | null {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : null;
+}
+
+async function doorMoneyActionCounts(root: string): Promise<{ completed: number; issued: number }> {
+  let completed = 0;
+  let issued = 0;
+  for (const file of await files(root)) {
+    const packet = await readFile(file, "utf8")
+      .then((raw) => record(JSON.parse(raw)))
+      .catch(() => null);
+    if (packet?.schemaVersion !== "action-packet/1" || packet.ventureId !== "door-money" || !Array.isArray(packet.tasks)) {
+      continue;
+    }
+    const tasks = packet.tasks.map(record);
+    if (tasks.some((task) => !task || typeof task.id !== "string" || task.id.length === 0)) continue;
+    issued += tasks.length;
+    for (const task of tasks) {
+      const completion = record(task?.completion);
+      if (typeof completion?.completedAt === "string" && completion.completedAt.length > 0) completed += 1;
+    }
+  }
+  return { completed, issued };
+}
+
+async function doorMoneyRecommendationCount(root: string): Promise<number> {
+  let complete = 0;
+  for (const file of await files(root)) {
+    const recommendation = await readFile(file, "utf8")
+      .then((raw) => record(JSON.parse(raw)))
+      .catch(() => null);
+    if (
+      recommendation?.schemaVersion === "venture-recommendation/1" &&
+      recommendation.ventureId === "door-money" &&
+      typeof recommendation.id === "string" &&
+      recommendation.id.length > 0
+    ) complete += 1;
+  }
+  return complete;
+}
+
 function killedCategory(reason: string): string {
   const value = reason.toLowerCase();
   if (/source|evidence|file|complete/u.test(value)) return "evidence";
@@ -206,7 +249,7 @@ export async function computeAutonomySnapshot(input: {
   const sourceConfig = JSON.parse(await readFile(path.join(input.repoRoot, "config", "sources.json"), "utf8")) as {
     sources?: Array<{ enabled?: unknown }>;
   };
-  const [editionReceipts, articles, slates, fighters, plans, meetings, proofs, studioTemplates, marketingSharkPackageCount, bhResearchLedger] = await Promise.all([
+  const [editionReceipts, articles, slates, fighters, plans, meetings, proofs, studioTemplates, marketingSharkPackageCount, bhResearchLedger, doorMoneyActions, doorMoneyRecommendationPackages] = await Promise.all([
     files(path.join(input.stateRoot, "edition", "deliveries")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "articles"), ArticlePackageSchema),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "slates"), EditorialSlateSchema),
@@ -216,7 +259,9 @@ export async function computeAutonomySnapshot(input: {
     files(path.join(input.stateRoot, "release-proofs")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
     studioTemplateFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "templates")),
     marketingSharkPackages(path.join(input.stateRoot, "ventures", "marketingshark", "packages")),
-    validJsonLines(path.join(input.stateRoot, "ventures", "booksofhistory", "research-ledger.jsonl"), BhResearchLedgerEntrySchema)
+    validJsonLines(path.join(input.stateRoot, "ventures", "booksofhistory", "research-ledger.jsonl"), BhResearchLedgerEntrySchema),
+    doorMoneyActionCounts(path.join(input.stateRoot, "ventures", "door-money", "actions")),
+    doorMoneyRecommendationCount(path.join(input.stateRoot, "ventures", "door-money", "recommendations"))
   ]);
 
   const deliveredEditions = editionReceipts.filter((receipt) => receipt.status === "delivered" && receipt.editionStatus === "edition").length;
@@ -264,7 +309,28 @@ export async function computeAutonomySnapshot(input: {
       paidBhDossiers.size === 0
         ? `No paid BOOKSOFHISTORY dossiers are recorded yet${unreadableBhLedgerDetail}.`
         : `${usedBhDossiers.size} of ${paidBhDossiers.size} paid dossiers became owner-posted features${unreadableBhLedgerDetail}.`
+    )],
+    "action-completion": [signal(
+      "action-completion",
+      "Owner action completion",
+      doorMoneyActions.issued === 0 ? null : Number((doorMoneyActions.completed / doorMoneyActions.issued).toFixed(4)),
+      "ratio",
+      doorMoneyActions.issued === 0
+        ? "No owner actions have been issued; completion is not measured."
+        : `${doorMoneyActions.completed} of ${doorMoneyActions.issued} issued owner actions are recorded complete.`
     )]
+  };
+  const metricsFor = (ventureId: string, component: string): CapabilitySignal[] => {
+    if (ventureId === "door-money" && component === "package-cadence") {
+      return [signal(
+        "package-cadence",
+        "Draft recommendation packages",
+        doorMoneyRecommendationPackages,
+        "count",
+        `${doorMoneyRecommendationPackages} complete evidence-linked recommendation packages were recorded.`
+      )];
+    }
+    return metricByComponent[component] ?? [];
   };
 
   const killedSlotReasons: Record<string, number> = {};
@@ -283,7 +349,7 @@ export async function computeAutonomySnapshot(input: {
     growth: registry.ventures.map((venture) => ({
       venture: venture.id,
       objective: venture.growth_objective.label,
-      signals: venture.growth_objective.components.flatMap((component) => metricByComponent[component] ?? [])
+      signals: venture.growth_objective.components.flatMap((component) => metricsFor(venture.id, component))
     })),
     quality: {
       killedSlotReasons,

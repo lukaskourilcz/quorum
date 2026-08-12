@@ -45,6 +45,8 @@ const titles: Record<AgentId, string> = {
   CHUM: "Carousel copywriter",
   FOLIO: "Book selection editor",
   PLOT: "Book story producer",
+  GHOST: "Door Money story writer",
+  BOOKER: "Owner action planner",
   LETOPIS: "Era editor",
   VERBA: "Ukrainian editor"
 };
@@ -94,6 +96,8 @@ const mandates: Record<AgentId, string> = {
   CHUM: "Writes each day's quiz carousel twice, once for Czech readers and once for English ones.",
   FOLIO: "Selects which recorded book candidate earns bounded research and keeps priors separate from verified facts.",
   PLOT: "Turns one verified dossier story into separate native social drafts for the cs and en locales without rendering cover art.",
+  GHOST: "Turns only code-selected, evidence-linked passages into English drafts in the owner's recorded voice.",
+  BOOKER: "Prepares bounded growth tasks and templates for the owner without contacting anyone or taking action.",
   LETOPIS: "Picks which recorded era candidate is worth a story and writes the Czech feature, describing the world around a person and never that person\u2019s life.",
   VERBA: "Writes the Ukrainian package as its own composition rather than a translation, and reviews the terminology and cultural framing."
 };

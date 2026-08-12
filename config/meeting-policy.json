@@ -11,6 +11,8 @@
     "tt-marketing",
     "gv-brief",
     "bh-desk",
+    "dm-desk",
+    "dm-growth",
     "ts-desk"
   ],
   "servicePhases": [
@@ -33,10 +35,14 @@
     "gv-brief": [
       "gv-brief",
       "bh-desk",
+      "dm-growth",
       "mag-desk",
       "tt-marketing"
     ],
     "bh-desk": [
+      "gv-brief"
+    ],
+    "dm-growth": [
       "gv-brief"
     ],
     "mma-intake": [

@@ -6,8 +6,8 @@ import {
   type CarouselSummaryLocale
 } from "@boardlessai/carousel-studio";
 import {
-  VentureRecommendationSchema,
-  type VentureRecommendation
+  BooksofHistoryRecommendationSchema,
+  type BooksofHistoryRecommendation
 } from "../../contracts/venture-recommendation.js";
 import { atomicWriteJson } from "../../state.js";
 
@@ -26,7 +26,7 @@ export function bhCarouselSummaryPath(summary: CarouselSummary): string {
 }
 
 function buildOneSummary(
-  recommendation: VentureRecommendation,
+  recommendation: BooksofHistoryRecommendation,
   locale: CarouselSummaryLocale
 ): CarouselSummary {
   const feature = recommendation.payloads[locale];
@@ -45,9 +45,9 @@ function buildOneSummary(
 
 /** Build both independently authored lanes without translating or crossing their payloads. */
 export function buildBhCarouselSummaries(
-  recommendation: VentureRecommendation
+  recommendation: BooksofHistoryRecommendation
 ): Pick<StoredBhCarouselSummaries, "cs" | "en"> {
-  const parsed = VentureRecommendationSchema.parse(recommendation);
+  const parsed = BooksofHistoryRecommendationSchema.parse(recommendation);
   if (parsed.ventureId !== "booksofhistory" || parsed.evidence.kind !== "dossier-story") {
     throw new Error("Only dossier-story BOOKSOFHISTORY recommendations have twin summaries");
   }
@@ -62,9 +62,9 @@ export function buildBhCarouselSummaries(
 /** Called by approval: one recorded Studio summary per lane, and no render or post side effect. */
 export async function storeApprovedBhCarouselSummaries(
   root: string,
-  recommendation: VentureRecommendation
+  recommendation: BooksofHistoryRecommendation
 ): Promise<StoredBhCarouselSummaries> {
-  const parsed = VentureRecommendationSchema.parse(recommendation);
+  const parsed = BooksofHistoryRecommendationSchema.parse(recommendation);
   if (parsed.status !== "approved") {
     throw new Error("Only an owner-approved BOOKSOFHISTORY recommendation enters the Design Lab");
   }

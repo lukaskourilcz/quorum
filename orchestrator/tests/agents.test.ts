@@ -2,48 +2,38 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { validateAgentAvatars } from "../src/brand/avatars.js";
+import { estimateTextCall } from "../src/budget.js";
 import {
   FOUNDING_AGENT_IDS,
   loadAgentRegistry
 } from "../src/org/registry.js";
-import { configRoot } from "../src/paths.js";
-
-function personaPromptPath(promptsRoot: string, agent: { id: string; slug: string }): string {
-  return path.join(
-    promptsRoot,
-    agent.id === "FOLIO" || agent.id === "PLOT"
-      ? "booksofhistory"
-      : agent.id === "LETOPIS" || agent.id === "VERBA"
-        ? "tehdejsi-svet"
-        : "",
-    `${agent.slug}.md`
-  );
-}
+import { configRoot, personaPromptPath } from "../src/paths.js";
 
 describe("agent registry and identity assets", () => {
-  it("keeps 37 seated roles of 46 on file, and gated portraits explicit", async () => {
+  it("keeps 39 seated roles of 48 on file, and gated portraits explicit", async () => {
     const registry = await loadAgentRegistry();
 
-    // Forty-six profiles, thirty-seven of them seated. A retired or paused agent keeps its
+    // Forty-eight profiles, thirty-nine of them seated. A retired or paused agent keeps its
     // profile and its portrait -- the record of who did what does not shrink when the roster
     // does -- and the router skips it and says so rather than crashing the room it was required
-    // in. FOLIO and PLOT arrived with BOOKSOFHISTORY and LETOPIS and VERBA with Tehdejsi svet;
+    // in. FOLIO and PLOT arrived with BOOKSOFHISTORY, GHOST and BOOKER with Door Money, and
+    // LETOPIS and VERBA with Tehdejsi svet;
     // the nine unseated are unchanged.
     expect(registry.agents.map((agent) => agent.id)).toEqual(FOUNDING_AGENT_IDS);
-    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(46);
+    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(48);
     expect(registry.agents.filter((agent) => agent.kind === "council")).toHaveLength(4);
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(37);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(39);
     expect(registry.agents.filter((agent) => agent.status === "retired").map((agent) => agent.id).sort())
       .toEqual(["EASEL", "MOTIF", "SPLIT"]);
     expect(registry.agents.filter((agent) => agent.status === "paused").map((agent) => agent.id).sort())
       .toEqual(["FUNNEL", "INSTAGRAM", "LENS", "RADAR", "SCRIBE", "THREADS"]);
     expect(registry.agents.filter((agent) => agent.status === "proposed")).toHaveLength(0);
     expect(registry.agents.filter((agent) => agent.provider === "OpenAI")).toHaveLength(
-      19
+      20
     );
     expect(
       registry.agents.filter((agent) => agent.provider === "Anthropic")
-    ).toHaveLength(27);
+    ).toHaveLength(28);
     expect(
       registry.agents.filter((agent) => agent.ventures !== "global").map((agent) => [agent.id, agent.ventures])
     ).toEqual([
@@ -70,6 +60,8 @@ describe("agent registry and identity assets", () => {
       ["CHUM", ["marketingshark"]],
       ["FOLIO", ["booksofhistory"]],
       ["PLOT", ["booksofhistory"]],
+      ["GHOST", ["door-money"]],
+      ["BOOKER", ["door-money"]],
       ["LETOPIS", ["tehdejsi-svet"]],
       ["VERBA", ["tehdejsi-svet"]]
     ]);
@@ -90,8 +82,8 @@ describe("agent registry and identity assets", () => {
     expect(avatars).toHaveLength(27);
     expect(registry.agents.filter((agent) => agent.visual.avatar === null).map((agent) => agent.id)).toEqual([
       "CORNER", "SPOTTER", "TAPE", "SIGMA", "VIG", "SONAR",
-      "CANVAS", "JAB", "REACH", "SPLIT", "EASEL", "MOTIF", "PIVOT", "MAKO", "CHUM", "FOLIO", "PLOT",
-      "LETOPIS", "VERBA"
+      "CANVAS", "JAB", "REACH", "SPLIT", "EASEL", "MOTIF", "PIVOT", "MAKO", "CHUM",
+      "FOLIO", "PLOT", "GHOST", "BOOKER", "LETOPIS", "VERBA"
     ]);
     expect(new Set(avatars.map((avatar) => avatar.sha256)).size).toBe(27);
     expect(avatars.every((avatar) => avatar.width === 1024)).toBe(true);
@@ -99,20 +91,19 @@ describe("agent registry and identity assets", () => {
   });
 
   it("gives every agent a loadable persona prompt, because a live room now reads it", async () => {
-    // portfolio/run.ts loads `orchestrator/prompts/<slug>.md` for each selected seat and
+    // portfolio/run.ts resolves the registered persona path for each selected seat and
     // appends it after the packet. A missing or empty file would throw mid-room, after the
     // budget reservation and part-way through a paid call graph, so pin the coupling here.
     const registry = await loadAgentRegistry();
-    const promptsRoot = path.join(configRoot, "..", "orchestrator", "prompts");
 
     const loaded = await Promise.all(
       registry.agents.map(async (agent) => {
-        const body = await readFile(personaPromptPath(promptsRoot, agent), "utf8");
+        const body = await readFile(personaPromptPath(agent.slug), "utf8");
         return { id: agent.id, body: body.trim() };
       })
     );
 
-    expect(loaded).toHaveLength(46);
+    expect(loaded).toHaveLength(48);
     expect(loaded.filter((entry) => entry.body.length === 0).map((entry) => entry.id)).toEqual([]);
     // Each persona rides on every call in its room; an unbounded file would silently
     // inflate every seat's input cost against a $0.05-$0.16 room envelope.
@@ -126,7 +117,6 @@ describe("agent registry and identity assets", () => {
     // does own, and why forge.md and pulse.md drifted the same way. Now that run.ts loads
     // every persona into live rooms, a wrong id here is a claim the model acts on.
     const registry = await loadAgentRegistry();
-    const promptsRoot = path.join(configRoot, "..", "orchestrator", "prompts");
     const kpiConfig = JSON.parse(
       await readFile(path.join(configRoot, "kpis.json"), "utf8")
     ) as { kpis: Array<{ id: string }> };
@@ -134,7 +124,7 @@ describe("agent registry and identity assets", () => {
 
     const drift: string[] = [];
     for (const agent of registry.agents) {
-      const body = await readFile(personaPromptPath(promptsRoot, agent), "utf8");
+      const body = await readFile(personaPromptPath(agent.slug), "utf8");
       // Backticked dotted tokens are how every prompt writes a KPI id.
       const claimed = [
         ...new Set((body.match(/`[a-z][a-z0-9_]*\.[a-z0-9_]+`/gu) ?? []).map((token) => token.slice(1, -1)))
@@ -181,6 +171,51 @@ describe("agent registry and identity assets", () => {
     expect(shared).toContain(`${stated} non-voting specialists`);
     for (const agent of specialists.filter((entry) => entry.status !== "active")) {
       expect(shared, `${agent.id} is off the roster and unnamed in the preamble`).toContain(agent.id);
+    }
+  });
+
+  it("pins Door Money model roles below the per-call ceiling", async () => {
+    type TextRole = {
+      provider: "openai" | "anthropic";
+      model: string;
+      maxInputTokens: number;
+      maxOutputTokens: number;
+    };
+    const models = JSON.parse(
+      await readFile(path.join(configRoot, "models.json"), "utf8")
+    ) as { roles: Record<string, TextRole | string> };
+
+    expect(models.roles.GHOST).toEqual({
+      provider: "anthropic",
+      model: "claude-sonnet-5",
+      maxInputTokens: 8_000,
+      maxOutputTokens: 2_500
+    });
+    expect(models.roles.BOOK_INGEST).toEqual({
+      provider: "anthropic",
+      model: "claude-haiku-4-5-20251001",
+      maxInputTokens: 12_000,
+      maxOutputTokens: 3_000
+    });
+    expect(models.roles.BOOK_STYLE).toEqual({
+      provider: "anthropic",
+      model: "claude-sonnet-5",
+      maxInputTokens: 12_000,
+      maxOutputTokens: 4_000
+    });
+    expect(models.roles.BOOKER).toBeUndefined();
+    expect(models.roles.OPENAI_SPECIALIST).toMatchObject({ provider: "openai" });
+
+    for (const roleName of ["GHOST", "BOOK_INGEST", "BOOK_STYLE"] as const) {
+      const role = models.roles[roleName] as TextRole;
+      const maximum = estimateTextCall({
+        provider: role.provider,
+        model: role.model,
+        promptChars: role.maxInputTokens * 3.5,
+        maxOutputTokens: role.maxOutputTokens,
+        at: new Date("2026-09-02T00:00:00.000Z")
+      });
+      expect(maximum.estimatedUsd, `${roleName} can exceed the $0.10 call cap`).toBeLessThan(0.1);
     }
   });
 });

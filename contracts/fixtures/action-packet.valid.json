@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "action-packet/1",
+  "id": "action-packet-2026-08-13",
+  "ventureId": "door-money",
+  "date": "2026-08-13",
+  "weekOf": "2026-08-10",
+  "agenda": {
+    "isoWeek": "2026-W33",
+    "topicId": "launch-mechanics",
+    "title": "Launch mechanics"
+  },
+  "title": "Door Money actions: Launch mechanics",
+  "summary": "Two bounded owner exercises use only the recorded synthetic brief.",
+  "outcome": "ACTIONS",
+  "noActionReason": null,
+  "contextRefs": [
+    "goviral-plan:plan-2026-08-10-weekly-brief"
+  ],
+  "tasks": [
+    {
+      "id": "review-fixture-launch-note",
+      "title": "Review the fictional launch note",
+      "why": "The synthetic brief identifies one manual message worth testing.",
+      "steps": [
+        "Read the invented recipient profile.",
+        "Personalize the prepared draft outside the system."
+      ],
+      "templates": [
+        {
+          "id": "fixture-launch-email",
+          "label": "Fictional launch email",
+          "kind": "pitch-email",
+          "body": "Hello, I am testing an invented neighborhood reading series. Would a short sample suit your fictional program?"
+        }
+      ],
+      "effort": "20 minutes",
+      "expectedImpact": "One owner-recorded signal about the synthetic premise.",
+      "evidenceRefs": [
+        "goviral-plan:plan-2026-08-10-weekly-brief"
+      ],
+      "completion": null
+    },
+    {
+      "id": "read-fixture-script",
+      "title": "Read the sample script aloud",
+      "why": "The invented script needs a manual clarity check.",
+      "steps": [
+        "Read the prepared script once.",
+        "Record whether its first sentence was clear."
+      ],
+      "templates": [
+        {
+          "id": "fixture-video-script",
+          "label": "Synthetic short-video script",
+          "kind": "video-script",
+          "body": "A fictional venue opened with one lamp, three chairs, and a promise nobody had tested."
+        }
+      ],
+      "effort": "10 minutes",
+      "expectedImpact": "A recorded owner judgment about the opening line.",
+      "evidenceRefs": [
+        "goviral-plan:plan-2026-08-10-weekly-brief"
+      ],
+      "completion": {
+        "completedAt": "2026-08-13T17:00:00.000Z",
+        "outcome": "The owner marked the synthetic opening clear after one reading."
+      }
+    }
+  ],
+  "generatedAt": "2026-08-13T14:00:00.000Z",
+  "updatedAt": "2026-08-13T17:00:00.000Z"
+}

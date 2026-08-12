@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { BudgetLedgerEntrySchema } from "../budget.js";
+import { budgetLedgerCostCategory, BudgetLedgerEntrySchema } from "../budget.js";
 import { loadArticleSlotOutcomes, loadMeetingRecords, mondayOfWeek } from "../meetings/calendar.js";
 import { pragueClockParts } from "../meetings/clock.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
@@ -55,7 +55,7 @@ const effective = resolveEffectivePortfolioSchedule({
 });
 const schedule = resolveScheduledClock(registry).filter((slot) => effective.activePhases.includes(slot.phase));
 const allInEntries: AllInCostEntry[] = [
-  ...entries.map((entry) => ({ at: entry.ts, ventureId: entry.ventureId ?? "global", category: entry.kind === "image" ? "media" as const : "model" as const, usd: entry.usd, ref: entry.requestHash })),
+  ...entries.map((entry) => ({ at: entry.ts, ventureId: entry.ventureId ?? "global", category: budgetLedgerCostCategory(entry.kind), usd: entry.usd, ref: entry.requestHash })),
   ...nonModelRaw.split(/\r?\n/u).filter(Boolean).map((line) => JSON.parse(line) as AllInCostEntry)
 ];
 const allIn = allInBudgetStatus(allInEntries, month, effective.monthlyOperatingUsd);

@@ -12,6 +12,7 @@ import {
 } from "../src/metrics/collect.js";
 import { targetWasLoosened, type KpiDefinition } from "../src/metrics/kpi.js";
 import { collectQuarterlyMeasurements } from "../src/metrics/quarterly-collector.js";
+import { evaluateQuarterlyKpis } from "../src/metrics/quarterly.js";
 import { repoRoot } from "../src/paths.js";
 
 const configRoot = path.join(repoRoot, "config");
@@ -140,6 +141,39 @@ describe("a wired KPI is wired to something that actually runs", () => {
       }
     }
     expect(loosened).toEqual([]);
+  });
+});
+
+describe("Door Money quarterly seeds", () => {
+  it("keeps the agreed bars and preserves unavailable measurements as null", async () => {
+    const set = await quarterlySet();
+    const doorMoney = set.kpis.filter((kpi) => kpi.venture === "door-money");
+
+    expect(doorMoney.map(({ id, target, direction, unit, ramp_days }) => ({
+      id,
+      target,
+      direction,
+      unit,
+      ramp_days
+    }))).toEqual([
+      { id: "door-money.desk-reliability", target: 0.9, direction: "at-least", unit: "ratio", ramp_days: 0 },
+      { id: "door-money.approved-packages-weekly", target: 5, direction: "at-least", unit: "count", ramp_days: 14 },
+      { id: "door-money.approval-rate-trending-up", target: 1, direction: "at-least", unit: "boolean", ramp_days: 14 },
+      { id: "door-money.owner-actions-weekly", target: 3, direction: "at-least", unit: "count", ramp_days: 0 },
+      { id: "door-money.passage-depletion-watch", target: 0.8, direction: "at-most", unit: "ratio", ramp_days: 0 },
+      { id: "door-money.cash-spend", target: 0, direction: "at-most", unit: "usd", ramp_days: 0 },
+      { id: "door-money.monthly-model-spend", target: 3, direction: "at-most", unit: "usd", ramp_days: 0 }
+    ]);
+    expect(doorMoney.some((kpi) => /followers|sales/iu.test(`${kpi.id} ${kpi.name}`))).toBe(false);
+
+    const snapshot = evaluateQuarterlyKpis({
+      kpiSet: set,
+      measurements: Object.fromEntries(doorMoney.map((kpi) => [kpi.metric_source, null])),
+      now: new Date("2026-08-12T12:00:00.000Z")
+    });
+    const statuses = snapshot.statuses.filter((status) => status.venture === "door-money");
+    expect(statuses).toHaveLength(7);
+    expect(statuses.every((status) => status.actual === null && status.status === "unavailable")).toBe(true);
   });
 });
 

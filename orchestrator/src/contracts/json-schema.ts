@@ -1,5 +1,6 @@
 import { z, type ZodType } from "zod";
 import { AudienceSpecSchema } from "./audience-spec.js";
+import { ActionPacketSchema } from "./action-packet.js";
 import { BoardlessDatasetSchema } from "./boardless-dataset.js";
 import { BoardlessStreamSchema, StreamSyncReceiptSchema } from "./boardless-stream.js";
 import { BoardlessEventsSchema } from "./boardless-events.js";
@@ -9,10 +10,12 @@ import { BhShortlistSchema } from "./bh-shortlist.js";
 import { BhResearchBriefBundleSchema } from "./bh-research-brief.js";
 import { BhDossierSchema, BhResearchLedgerEntrySchema } from "./bh-dossier.js";
 import { CalendarFeedSchema } from "./calendar.js";
+import { BookKbIndexSchema } from "./book-kb-index.js";
 import { CampaignBriefSchema } from "./campaign-brief.js";
 import { CarouselTemplateSchema } from "./carousel-template.js";
 import { DailyDigestSchema } from "./daily-digest.js";
 import { DesignProposalSchema } from "./design-proposal.js";
+import { DoorMoneyPlaybookSchema } from "./door-money-playbook.js";
 import { EditionPackageSchema } from "./edition-package.js";
 import { HookAssignmentSchema } from "./hook-assignment.js";
 import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
@@ -23,8 +26,8 @@ import { MeetingAgendaQueueSchema } from "./meeting-agenda.js";
 import { MeetingRecordSchema } from "./meeting-record.js";
 import { OpsReportSchema } from "./ops-report.js";
 import { OwnerAttentionSchema } from "./owner-attention.js";
-import { OwnerResultEntrySchema } from "./owner-result-entry.js";
-import { PerformanceWeightProposalSchema, PerformanceWeightsSchema } from "./performance-weights.js";
+import { AnyOwnerResultEntrySchema } from "./owner-result-entry.js";
+import { AnyPerformanceWeightsSchema, BooksofHistoryPerformanceWeightProposalSchema } from "./performance-weights.js";
 import {
   AdjustmentEntrySchema,
   BoutRecordSchema,
@@ -43,8 +46,9 @@ import { ArticlePackageSchema, EditorialSlateSchema, SocialVariantPackSchema } f
 import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
 import { SocialPackSchema } from "./social-pack.js";
+import { StyleProfileSchema } from "./style-profile.js";
 import { VentureRegistrySchema } from "./venture-registry.js";
-import { VentureRecommendationSchema } from "./venture-recommendation.js";
+import { AnyVentureRecommendationSchema } from "./venture-recommendation.js";
 import { VisualWeightsSchema } from "./visual-weights.js";
 import {
   ArticleImageSchema,
@@ -57,6 +61,7 @@ import {
 } from "./autonomy.js";
 
 export const ContractSchemas = {
+  "action-packet": ActionPacketSchema,
   "audience-spec": AudienceSpecSchema,
   "boardless-dataset": BoardlessDatasetSchema,
   "boardless-stream": BoardlessStreamSchema,
@@ -67,12 +72,14 @@ export const ContractSchemas = {
   "bh-research-brief": BhResearchBriefBundleSchema,
   "bh-dossier": BhDossierSchema,
   "bh-research-ledger": BhResearchLedgerEntrySchema,
+  "book-kb-index": BookKbIndexSchema,
   "stream-sync": StreamSyncReceiptSchema,
   "calendar": CalendarFeedSchema,
   "campaign-brief": CampaignBriefSchema,
   "carousel-template": CarouselTemplateSchema,
   "daily-digest": DailyDigestSchema,
   "design-proposal": DesignProposalSchema,
+  "door-money-playbook": DoorMoneyPlaybookSchema,
   "edition-package": EditionPackageSchema,
   "hook-assignment": HookAssignmentSchema,
   "idea-ledger": IdeaLedgerEntrySchema,
@@ -83,9 +90,9 @@ export const ContractSchemas = {
   "meeting-record": MeetingRecordSchema,
   "ops-report": OpsReportSchema,
   "owner-attention": OwnerAttentionSchema,
-  "owner-result-entry": OwnerResultEntrySchema,
-  "performance-weights": PerformanceWeightsSchema,
-  "performance-weight-proposal": PerformanceWeightProposalSchema,
+  "owner-result-entry": AnyOwnerResultEntrySchema,
+  "performance-weights": AnyPerformanceWeightsSchema,
+  "performance-weight-proposal": BooksofHistoryPerformanceWeightProposalSchema,
   "adjustment-entry": AdjustmentEntrySchema,
   "bet-type-catalog": BetTypeCatalogSchema,
   "bout-record": BoutRecordSchema,
@@ -104,8 +111,9 @@ export const ContractSchemas = {
   "rating": RatingRecordSchema,
   "season": SeasonFileSchema,
   "social-pack": SocialPackSchema,
+  "style-profile": StyleProfileSchema,
   "venture-registry": VentureRegistrySchema,
-  "venture-recommendation": VentureRecommendationSchema,
+  "venture-recommendation": AnyVentureRecommendationSchema,
   "visual-weights": VisualWeightsSchema,
   "article-image": ArticleImageSchema,
   "metrics-placeholder": MetricsPlaceholderSchema,

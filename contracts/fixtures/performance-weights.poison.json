@@ -1,18 +1,24 @@
 {
   "schemaVersion": "performance-weights/1",
-  "ventureId": "booksofhistory",
-  "floor": 0.75,
-  "ceiling": 1.25,
-  "lanes": {
-    "cs": {
-      "categories": {
-        "publishing-history": 0.2
-      }
-    }
+  "ventureId": "door-money",
+  "floor": 0.5,
+  "ceiling": 1.5,
+  "formatPriors": {
+    "carousel": 0.1,
+    "single-image": 1,
+    "thread": 1,
+    "caption": 1,
+    "short-video-script": 1
   },
-  "appliedProposalIds": [
-    "weights-bbbbbbbbbbbbbbbbbbbb",
-    "weights-bbbbbbbbbbbbbbbbbbbb"
-  ],
-  "updatedAt": "2026-08-21T12:05:00.000Z"
+  "themePriors": {},
+  "hookStylePriors": {
+    "narrative-led": 1,
+    "quote-led": 1,
+    "lesson-led": 1,
+    "tension-led": 1,
+    "humor-led": 1
+  },
+  "revisions": [],
+  "generatedAt": "2026-08-12T10:00:00.000Z",
+  "updatedAt": "2026-08-12T10:00:00.000Z"
 }

@@ -32,6 +32,8 @@
             "gv-brief",
             "ms-daily",
             "bh-desk",
+            "dm-desk",
+            "dm-growth",
             "ts-desk",
             "incubator-scan",
             "incubator-synthesis",
@@ -177,6 +179,8 @@
                   "CHUM",
                   "FOLIO",
                   "PLOT",
+                  "GHOST",
+                  "BOOKER",
                   "LETOPIS",
                   "VERBA"
                 ]
@@ -311,6 +315,8 @@
                   "CHUM",
                   "FOLIO",
                   "PLOT",
+                  "GHOST",
+                  "BOOKER",
                   "LETOPIS",
                   "VERBA"
                 ]
@@ -388,6 +394,8 @@
                   "CHUM",
                   "FOLIO",
                   "PLOT",
+                  "GHOST",
+                  "BOOKER",
                   "LETOPIS",
                   "VERBA"
                 ]
@@ -464,6 +472,8 @@
                   "CHUM",
                   "FOLIO",
                   "PLOT",
+                  "GHOST",
+                  "BOOKER",
                   "LETOPIS",
                   "VERBA"
                 ]
@@ -661,6 +671,8 @@
                 "CHUM",
                 "FOLIO",
                 "PLOT",
+                "GHOST",
+                "BOOKER",
                 "LETOPIS",
                 "VERBA"
               ]
@@ -724,6 +736,8 @@
                       "CHUM",
                       "FOLIO",
                       "PLOT",
+                      "GHOST",
+                      "BOOKER",
                       "LETOPIS",
                       "VERBA"
                     ]
@@ -788,6 +802,8 @@
                       "CHUM",
                       "FOLIO",
                       "PLOT",
+                      "GHOST",
+                      "BOOKER",
                       "LETOPIS",
                       "VERBA"
                     ]
@@ -884,6 +900,8 @@
             "gv-brief",
             "ms-daily",
             "bh-desk",
+            "dm-desk",
+            "dm-growth",
             "ts-desk",
             "incubator-scan",
             "incubator-synthesis",
@@ -1029,6 +1047,8 @@
                   "CHUM",
                   "FOLIO",
                   "PLOT",
+                  "GHOST",
+                  "BOOKER",
                   "LETOPIS",
                   "VERBA"
                 ]
@@ -1163,6 +1183,8 @@
                   "CHUM",
                   "FOLIO",
                   "PLOT",
+                  "GHOST",
+                  "BOOKER",
                   "LETOPIS",
                   "VERBA"
                 ]
@@ -1240,6 +1262,8 @@
                   "CHUM",
                   "FOLIO",
                   "PLOT",
+                  "GHOST",
+                  "BOOKER",
                   "LETOPIS",
                   "VERBA"
                 ]
@@ -1316,6 +1340,8 @@
                   "CHUM",
                   "FOLIO",
                   "PLOT",
+                  "GHOST",
+                  "BOOKER",
                   "LETOPIS",
                   "VERBA"
                 ]
@@ -1458,6 +1484,8 @@
             "gv-brief",
             "ms-daily",
             "bh-desk",
+            "dm-desk",
+            "dm-growth",
             "ts-desk",
             "incubator-scan",
             "incubator-synthesis",
@@ -1528,6 +1556,8 @@
                 "CHUM",
                 "FOLIO",
                 "PLOT",
+                "GHOST",
+                "BOOKER",
                 "LETOPIS",
                 "VERBA"
               ]
@@ -1591,6 +1621,8 @@
                       "CHUM",
                       "FOLIO",
                       "PLOT",
+                      "GHOST",
+                      "BOOKER",
                       "LETOPIS",
                       "VERBA"
                     ]
@@ -1655,6 +1687,8 @@
                       "CHUM",
                       "FOLIO",
                       "PLOT",
+                      "GHOST",
+                      "BOOKER",
                       "LETOPIS",
                       "VERBA"
                     ]

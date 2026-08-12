@@ -3,6 +3,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import {
   buildCarouselSummary,
+  localeForCarouselVenture,
   reviewCarouselSummary,
   type CarouselSummary,
   type CarouselSummarySource,
@@ -10,9 +11,9 @@ import {
 } from "@boardlessai/carousel-studio";
 
 /**
- * Every article that reached DNESKAi or MMA Files, as something the Design Lab can render.
+ * Every recorded DNESKAi, MMA Files or Door Money item the Design Lab can render.
  *
- * Two sources, in that order. Delivery writes a summary beside the package it sent, and that
+ * Recorded and derived sources, in that order. Delivery writes a summary beside the package it sent, and that
  * file is the record: it is what the desk actually handed over. Where no such file exists — every
  * article delivered before summaries were written — the same deterministic builder derives one
  * from the package on disk. Both routes run `buildCarouselSummary`, so a derived summary and a
@@ -42,7 +43,8 @@ export interface StudioArticle {
 const VENTURE_LABEL: Record<CarouselSummaryVenture, string> = {
   "caught-up": "DNESKAi",
   "mma-files": "MMA Files",
-  booksofhistory: "BOOKSOFHISTORY"
+  booksofhistory: "BOOKSOFHISTORY",
+  "door-money": "Door Money"
 };
 
 /**
@@ -97,14 +99,16 @@ async function readJsonFiles(directory: string): Promise<Array<{ name: string; v
 /** Summaries delivery wrote. One directory per venture, one file per delivered article. */
 async function recordedSummaries(root: string): Promise<Map<string, CarouselSummary>> {
   const recorded = new Map<string, CarouselSummary>();
-  for (const venture of ["caught-up", "mma-files", "booksofhistory"] as const) {
+  for (const venture of ["caught-up", "mma-files", "booksofhistory", "door-money"] as const) {
     const directory = path.join(root, "state", "ventures", "carousel-studio", "summaries", venture);
     for (const { value } of await readJsonFiles(directory)) {
       const summary = value as Partial<CarouselSummary>;
       if (summary?.schemaVersion !== "carousel-summary/1") continue;
       if (summary.venture !== venture || typeof summary.slug !== "string" || !Array.isArray(summary.passages)) continue;
       if (summary.locale !== "cs" && summary.locale !== "en") continue;
-      recorded.set(`${venture}:${summary.slug}:${summary.date}:${summary.locale}`, summary as CarouselSummary);
+      if (venture !== "booksofhistory" && summary.locale !== localeForCarouselVenture(venture)) continue;
+      const localeIdentity = venture === "booksofhistory" ? `:${summary.locale}` : "";
+      recorded.set(`${venture}:${summary.slug}:${summary.date}${localeIdentity}`, summary as CarouselSummary);
     }
   }
   return recorded;

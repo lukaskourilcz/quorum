@@ -649,6 +649,22 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
     },
     // Petrona is the committed OFL serif display; the mono footer reads like a colophon line.
     fonts: { headline: "Petrona", body: "Karla", mono: "IBM Plex Mono" }
+  }),
+  "door-money": BrandTokensSchema.parse({
+    schemaVersion: "carousel-brand/1",
+    id: "door-money",
+    name: "Door Money",
+    logoText: "DOOR MONEY",
+    colors: {
+      background: "#08090b",
+      surface: "#141114",
+      "surface-strong": "#24191c",
+      foreground: "#f8f2e8",
+      muted: "#cfc5b8",
+      accent: "#ff4d3d",
+      secondary: "#d7c5a6"
+    },
+    fonts: { headline: "Barlow Condensed", body: "Barlow", mono: "IBM Plex Mono" }
   })
 };
 

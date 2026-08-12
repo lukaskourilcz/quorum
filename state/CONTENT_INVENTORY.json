@@ -912,6 +912,36 @@
       "informationGain": "material"
     },
     {
+      "url": "/agents/ghost",
+      "purpose": "Publish the GHOST recorded-voice writing role and its evidence and draft-only boundaries.",
+      "searchIntent": "understand who writes Door Money story drafts",
+      "primaryQuery": "GHOST Door Money writer agent",
+      "audience": "governance readers",
+      "evidenceRefs": [
+        "agent-profile:GHOST:v1"
+      ],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-12",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
+      "url": "/agents/booker",
+      "purpose": "Publish the BOOKER owner-action planning role and its no-contact, no-spend boundary.",
+      "searchIntent": "understand who prepares Door Money owner actions",
+      "primaryQuery": "BOOKER Door Money growth agent",
+      "audience": "governance readers",
+      "evidenceRefs": [
+        "agent-profile:BOOKER:v1"
+      ],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-12",
+      "status": "indexable",
+      "informationGain": "material"
+    },
+    {
       "url": "/agents/easel",
       "purpose": "Explain EASEL's original template-design role and deterministic release checks.",
       "searchIntent": "understand the Carousel Studio template designer",

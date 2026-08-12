@@ -56,7 +56,8 @@ const VentureDefinitionSchema = openObject({
       "live-template-library",
       "package-cadence",
       "feature-cadence",
-      "research-efficiency"
+      "research-efficiency",
+      "action-completion"
     ])).min(1).max(4)
   }),
   mode: z.enum(["data-only", "live-analysis"]).optional(),
@@ -85,6 +86,9 @@ const VentureDefinitionSchema = openObject({
     "shortlist",
     "dossiers",
     "features",
+    "recommendations",
+    "actions",
+    "knowledge",
     "library",
     "signals"
   ])),

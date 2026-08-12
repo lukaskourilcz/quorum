@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import {
-  VentureRecommendationSchema,
-  type VentureRecommendation
+  BooksofHistoryRecommendationSchema,
+  type BooksofHistoryRecommendation
 } from "../../contracts/venture-recommendation.js";
 import { atomicWriteJson, readJson } from "../../state.js";
 import type { BhTwinFeature, BhTwinGateResult } from "./produce.js";
@@ -19,13 +19,13 @@ export function buildBhRecommendation(input: {
   feature: BhTwinFeature;
   gates: BhTwinGateResult;
   createdAt: Date;
-}): VentureRecommendation {
+}): BooksofHistoryRecommendation {
   if (input.gates.droppedCount > 0 ||
       input.gates.lanes.cs.feature === null || input.gates.lanes.en.feature === null) {
     throw new Error("Dropped language packages cannot become recommendation drafts");
   }
   const identity = createHash("sha256").update(`${input.cycleId}\n${input.storyId}`).digest("hex").slice(0, 20);
-  return VentureRecommendationSchema.parse({
+  return BooksofHistoryRecommendationSchema.parse({
     schemaVersion: "venture-recommendation/1",
     recommendationId: `rec-${identity}`,
     ventureId: "booksofhistory",
@@ -54,15 +54,15 @@ export function buildBhRecommendation(input: {
 }
 
 export type StoreBhRecommendationResult =
-  | { status: "created"; path: string; recommendation: VentureRecommendation }
-  | { status: "already-recorded"; path: string; recommendation: VentureRecommendation };
+  | { status: "created"; path: string; recommendation: BooksofHistoryRecommendation }
+  | { status: "already-recorded"; path: string; recommendation: BooksofHistoryRecommendation };
 
 /** The only BOOKSOFHISTORY recommendation writer, idempotent on (cycle, story). */
 export async function storeBhRecommendation(
   root: string,
-  recommendation: VentureRecommendation
+  recommendation: BooksofHistoryRecommendation
 ): Promise<StoreBhRecommendationResult> {
-  const parsed = VentureRecommendationSchema.parse(recommendation);
+  const parsed = BooksofHistoryRecommendationSchema.parse(recommendation);
   if (parsed.ventureId !== "booksofhistory" || parsed.evidence.kind !== "dossier-story") {
     throw new Error("BOOKSOFHISTORY writer accepts only dossier-story recommendations");
   }
@@ -71,7 +71,7 @@ export async function storeBhRecommendation(
   const relative = bhRecommendationPath(parsed.cycleId, storyId);
   const existing = await readJson<unknown | null>(root, relative, null);
   if (existing !== null) {
-    const stored = VentureRecommendationSchema.parse(existing);
+    const stored = BooksofHistoryRecommendationSchema.parse(existing);
     if (stored.recommendationId !== parsed.recommendationId ||
         stored.cycleId !== parsed.cycleId || stored.evidence.storyRef !== parsed.evidence.storyRef) {
       throw new Error(`Recommendation identity conflict at ${relative}`);

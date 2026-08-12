@@ -24,6 +24,7 @@ function percent(value: number): string {
 const VENTURE_LABEL: Readonly<Record<string, string>> = {
   "caught-up": "DNESKAi",
   "carousel-studio": "Design Lab",
+  "door-money": "Door Money",
   "mma-files": "MMA Files",
   "titty-tuesdays": "Titty Tuesdays",
   fightaiq: "FightAIQ",

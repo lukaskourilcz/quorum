@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "door-money-playbook/1",
+  "id": "fixture-uncited-playbook",
+  "ventureId": "door-money",
+  "channel": "Synthetic community",
+  "title": "Uncited synthetic playbook",
+  "revisions": [
+    {
+      "revision": 1,
+      "sourceCycleId": "fixture-cycle-1",
+      "summary": "This revision invents learning without a completion or result.",
+      "steps": ["Do not accept this revision."],
+      "evidenceRefs": [],
+      "updatedAt": "2026-08-13T15:00:00.000Z"
+    }
+  ]
+}

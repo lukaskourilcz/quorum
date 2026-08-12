@@ -32,7 +32,7 @@ describe("BOOKSOFHISTORY feature panel", () => {
     roots.push(root);
     await Promise.all([
       put(root, "state/ventures/booksofhistory/dossiers/war-with-the-newts/dossier.json", await fixture("bh-dossier.valid.json")),
-      put(root, "state/ventures/booksofhistory/recommendations/feature.json", await fixture("venture-recommendation.valid.json"))
+      put(root, "state/ventures/booksofhistory/recommendations/feature.json", await fixture("booksofhistory-recommendation.valid.json"))
     ]);
 
     const html = renderToStaticMarkup(<BooksofhistoryFeaturesPanel snapshot={await readAdminBooksofhistory(root)} />);
@@ -66,14 +66,14 @@ describe("BOOKSOFHISTORY feature panel", () => {
   it("surfaces attached owner-entered lane results beside the feature intent", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "bh-features-panel-results-"));
     roots.push(root);
-    const recommendation = JSON.parse(await fixture("venture-recommendation.valid.json"));
+    const recommendation = JSON.parse(await fixture("booksofhistory-recommendation.valid.json"));
     recommendation.status = "approved";
     recommendation.designLab = { status: "ready", summaryRefs: { cs: "summary-cs", en: "summary-en" } };
     recommendation.owner.postedUrls.cs = "https://social.example/booksofhistory-cs";
     recommendation.owner.resultRefs.cs = ["ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json"];
     await Promise.all([
       put(root, "state/ventures/booksofhistory/recommendations/feature.json", `${JSON.stringify(recommendation)}\n`),
-      put(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json"))
+      put(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("booksofhistory-owner-result-entry.valid.json"))
     ]);
 
     const html = renderToStaticMarkup(<BooksofhistoryFeaturesPanel snapshot={await readAdminBooksofhistory(root)} />);

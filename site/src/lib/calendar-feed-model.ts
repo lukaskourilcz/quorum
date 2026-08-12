@@ -11,6 +11,8 @@ export type CalendarKind =
   | "gv-brief"
   | "ms-daily"
   | "bh-desk"
+  | "dm-desk"
+  | "dm-growth"
   | "ts-desk"
   | "incubator-scan"
   | "incubator-synthesis"
@@ -82,6 +84,8 @@ export const CALENDAR_SLOTS: readonly CalendarDefinition[] = [
   { hour: 12, kind: "bh-desk", label: "BOOKSOFHISTORY editorial desk" },
   { hour: 13, kind: "gv-brief", label: "GoVIRAL trend and marketing room" },
   { hour: 14, kind: "venture-afternoon", label: "Afternoon shift" },
+  { hour: 15, kind: "dm-desk", label: "Door Money recommendation desk" },
+  { hour: 16, kind: "dm-growth", label: "Door Money growth room" },
   { hour: 17, kind: "cu-product", label: "Product room" },
   { hour: 19, kind: "mma-analysis", label: "FightAIQ evening model check" },
   { hour: 20, kind: "mag-desk", label: "MMA Files evening desk review" },

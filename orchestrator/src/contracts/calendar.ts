@@ -7,7 +7,7 @@ export const CalendarFeedSchema = openObject({
   slots: z.array(openObject({
     at: DateTimeSchema,
     tz: z.literal("Europe/Prague"),
-    kind: z.enum(["venture-morning", "venture-afternoon", "venture-night", "cu-edition", "cu-product", "tt-marketing", "gv-brief", "ms-daily", "bh-desk", "ts-desk", "incubator-scan", "incubator-synthesis", "mma-intake", "mma-analysis", "mag-editorial", "mag-desk", "article-am", "article-pm", "studio"]),
+    kind: z.enum(["venture-morning", "venture-afternoon", "venture-night", "cu-edition", "cu-product", "tt-marketing", "gv-brief", "ms-daily", "bh-desk", "dm-desk", "dm-growth", "ts-desk", "incubator-scan", "incubator-synthesis", "mma-intake", "mma-analysis", "mag-editorial", "mag-desk", "article-am", "article-pm", "studio"]),
     // "late" is the window between a slot's Prague instant and the moment its run can no longer
     // be delivered. It is not "missed": until that window closes the meeting can still happen,
     // and on 4 August every one of the day's runs arrived inside it.

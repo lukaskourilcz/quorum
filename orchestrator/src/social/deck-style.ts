@@ -9,6 +9,7 @@ import {
   isDeckStyle,
   livePresetsFor,
   type CarouselRecipe,
+  type CarouselSummaryVenture,
   type PresetDraw,
   type DeckStyle,
   type RecipeHistoryEntry
@@ -25,7 +26,7 @@ const RECEIPTS_PATH = "ventures/carousel-studio/deck-receipts";
  * which is what makes a replay of last Tuesday land on last Tuesday's family instead of on
  * today's.
  */
-export async function readRecipeHistory(root: string, venture: "caught-up" | "mma-files"): Promise<RecipeHistoryEntry[]> {
+export async function readRecipeHistory(root: string, venture: CarouselSummaryVenture): Promise<RecipeHistoryEntry[]> {
   let names: string[];
   try {
     names = await readdir(path.join(root, RECEIPTS_PATH));
@@ -51,7 +52,7 @@ export async function readRecipeHistory(root: string, venture: "caught-up" | "mm
 
 /** Whatever the owner pinned for one article: any subset of the recipe's fields. */
 export interface RecipeOverride {
-  venture: "caught-up" | "mma-files";
+  venture: CarouselSummaryVenture;
   slug: string;
   date?: string;
   family?: string;
@@ -71,7 +72,7 @@ export interface RecipeOverride {
  */
 export function matchRecipeOverride(
   overrides: readonly unknown[],
-  venture: "caught-up" | "mma-files",
+  venture: CarouselSummaryVenture,
   slug: string,
   date: string
 ): RecipeOverride | undefined {
@@ -121,7 +122,7 @@ async function readRecordedRecipe(root: string, venture: string, slug: string, d
  * Live only, and read from disk rather than derived: a draft is a design the owner is still
  * looking at, and an engine that quietly started shipping drafts would make the word mean nothing.
  */
-async function readLivePresets(root: string, venture: "caught-up" | "mma-files"): Promise<PresetDraw[]> {
+async function readLivePresets(root: string, venture: CarouselSummaryVenture): Promise<PresetDraw[]> {
   try {
     const raw = JSON.parse(await readFile(path.join(root, "ventures/carousel-studio/presets.json"), "utf8"));
     const parsed = CarouselPresetFileSchema.safeParse(raw);
@@ -156,7 +157,7 @@ async function readOverrides(root: string): Promise<unknown[]> {
  */
 export async function effectiveRecipe(input: {
   root: string;
-  venture: "caught-up" | "mma-files";
+  venture: CarouselSummaryVenture;
   slug: string;
   date: string;
   hasHero?: boolean;
@@ -199,7 +200,7 @@ export async function effectiveRecipe(input: {
  */
 export async function effectiveDeckStyle(input: {
   root: string;
-  venture: "caught-up" | "mma-files";
+  venture: CarouselSummaryVenture;
   slug: string;
   date: string;
 }): Promise<DeckStyle | string> {

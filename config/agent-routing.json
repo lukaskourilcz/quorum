@@ -348,6 +348,22 @@
       ],
       "status": "active"
     },
+    "GHOST": {
+      "capabilities": [
+        "copywriting",
+        "voice:recorded",
+        "evidence:book"
+      ],
+      "status": "active"
+    },
+    "BOOKER": {
+      "capabilities": [
+        "growth:research",
+        "action:planning",
+        "evidence:results"
+      ],
+      "status": "active"
+    },
     "LETOPIS": {
       "capabilities": [
         "editorial:selection",
@@ -626,6 +642,21 @@
         "FORGE"
       ],
       "optionalByTopic": true
+    },
+    "dm-desk-room": {
+      "required": [
+        "GHOST",
+        "AUDIT"
+      ],
+      "optionalByTopic": false
+    },
+    "dm-growth-room": {
+      "required": [
+        "BOOKER",
+        "PULSE",
+        "AUDIT"
+      ],
+      "optionalByTopic": false
     },
     "ts-desk-room": {
       "required": [

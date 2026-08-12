@@ -70,6 +70,20 @@ describe("the committed faces", () => {
     }
   });
 
+  it("gives Door Money a committed grotesque family and contrast-safe poster red", () => {
+    const brand = CAROUSEL_BRANDS["door-money"];
+    expect(brand.fonts).toEqual({
+      headline: "Barlow Condensed",
+      body: "Barlow",
+      mono: "IBM Plex Mono"
+    });
+    expect(brand.colors).toMatchObject({
+      background: "#08090b",
+      accent: "#ff4d3d"
+    });
+    expect(contrastRatio(brand.colors.accent!, brand.colors["surface-strong"]!)).toBeGreaterThan(4.5);
+  });
+
   it("charges all-caps what all-caps costs", () => {
     const face = resolveFace("Archivo", 800);
     // The old flat estimate charged these the same. They are not the same.

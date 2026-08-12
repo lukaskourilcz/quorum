@@ -97,6 +97,7 @@ export const FreeSignalResultSchema = z.object({
     topic: z.string().max(160),
     value: z.number().finite(),
     scope: z.string().max(80).optional(),
+    topicSets: z.array(z.string().min(1).max(80)).max(8).default([]),
     ref: z.string().max(160)
   })).max(40)
 });

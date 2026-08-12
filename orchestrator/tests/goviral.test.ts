@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -357,15 +358,34 @@ describe("the scraped-row boundary", () => {
     expect(stepPayload({ step: accountStep, registry, topicSet: null })).toBeNull();
   });
 
-  it("keeps the BOOKSOFHISTORY topic set on free signals and out of every paid recipe step", async () => {
+  it("keeps the venture free-only sets out of every paid recipe step", async () => {
     const registry = await loadGoViralSourceRegistry();
     expect(registry.topicSets.booksofhistory).toMatchObject({
-      signalMode: "free-only",
+      sourceMode: "free",
       keywords: expect.arrayContaining(["book history", "dějiny knih", "literary anniversary", "literární výročí", "publishing history", "příběh vydání"])
     });
     for (const step of registry.recipe) {
       expect(stepTopicSets(step, registry)).not.toContain("booksofhistory");
     }
+    expect(registry.topicSets["door-money"]).toEqual({
+      label: "Door Money (book and music stories)",
+      sourceMode: "free",
+      keywords: ["BookTok", "author marketing", "hip-hop culture", "music industry stories"],
+      hashtags: ["#BookTok", "#AuthorMarketing", "#HipHopCulture", "#MusicIndustryStories"]
+    });
+    for (const step of registry.recipe) {
+      expect(stepTopicSets(step, registry)).not.toContain("door-money");
+      expect(stepPayload({ step, registry, topicSet: "door-money" })).toBeNull();
+    }
+    const raw = JSON.parse(await readFile(path.join(process.cwd(), "../config/goviral-sources.json"), "utf8")) as {
+      actors: unknown;
+      recipe: unknown;
+    };
+    const digest = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
+    expect(digest(raw.actors)).toBe("87e3a34b10ea0ae47c85f759247c386faea8f08c7e7bca0e95e1c5a0108e0354");
+    expect(digest(raw.recipe)).toBe("cef3895290673880c9c27658212a892a9341943feef5526733a01cae365f78f5");
+    expect(APIFY_MONTHLY_CREDIT_USD).toBe(5);
+    expect(APIFY_RUN_RESERVATION_USD).toBe(1.4);
   });
 });
 
@@ -447,7 +467,7 @@ describe("the weekly brief", () => {
         date: "2026-08-10",
         generatedAt: "2026-08-10T11:00:00.000Z",
         sourceResults: [],
-        freeSignals: [{ provider: "google-news", status: "success", reason: null, signals: [{ kind: "volume", topic: "publishing history", value: 8, scope: "topic-set:booksofhistory:en", ref: "source:trending:google-news:2026-08-10" }] }],
+        freeSignals: [{ provider: "google-news", status: "success", reason: null, signals: [{ kind: "volume", topic: "publishing history", value: 8, scope: "topic-set:booksofhistory:en", topicSets: [], ref: "source:trending:google-news:2026-08-10" }] }],
         items: [],
         signals: { topHashtags: [], topFormats: [], topAudio: [], exploreSections: [], perTopicSet: [] },
         forMagazines: { ai: [], mma: [] }

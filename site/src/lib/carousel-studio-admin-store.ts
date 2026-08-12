@@ -243,7 +243,7 @@ export async function readDeckStyleOverrides(root = repositoryRoot): Promise<Dec
 function isDeckStyleOverride(value: unknown): value is DeckStyleOverride {
   if (!value || typeof value !== "object") return false;
   const entry = value as Partial<DeckStyleOverride>;
-  return (entry.venture === "caught-up" || entry.venture === "mma-files" || entry.venture === "booksofhistory")
+  return (entry.venture === "caught-up" || entry.venture === "mma-files" || entry.venture === "booksofhistory" || entry.venture === "door-money")
     && typeof entry.slug === "string"
     && (entry.date === undefined || typeof entry.date === "string")
     && typeof entry.style === "string"
@@ -311,7 +311,7 @@ export interface SlideTextOverride {
 function isSlideOverride(value: unknown): value is SlideTextOverride {
   if (!value || typeof value !== "object") return false;
   const entry = value as Partial<SlideTextOverride>;
-  return (entry.venture === "caught-up" || entry.venture === "mma-files" || entry.venture === "booksofhistory")
+  return (entry.venture === "caught-up" || entry.venture === "mma-files" || entry.venture === "booksofhistory" || entry.venture === "door-money")
     && typeof entry.slug === "string"
     && typeof entry.date === "string"
     && typeof entry.slide === "number"

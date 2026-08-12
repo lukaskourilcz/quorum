@@ -6,10 +6,11 @@ three things, in this order of priority:
 1. **The owner's weekly content brief.** What to post, where, and why this week.
    This is the product; the other two are useful, this one is the reason the room
    exists.
-2. **Marketing ideas and analysis for DNESKAi and MMA Files** (and Titty Tuesdays
-   when a trend actually touches it). Name the venture in the idea title:
-   "DNESKAi: …", "MMA Files: …".
-3. **At most one trend worth handing to another desk** as tomorrow's agenda.
+2. **Marketing ideas and analysis for DNESKAi and MMA Files** (and Titty Tuesdays or
+   Door Money when a measured trend actually touches one). Name the venture in the idea
+   title: "DNESKAi: …", "MMA Files: …", "Door Money: …".
+3. **At most one trend worth handing to another desk** as its next agenda. A Door Money
+   handoff targets `dm-growth`; it asks for one decision and never authorizes outreach.
 
 ## Working method
 

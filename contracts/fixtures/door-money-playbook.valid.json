@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "door-money-playbook/1",
+  "id": "fixture-community-playbook",
+  "ventureId": "door-money",
+  "channel": "Synthetic community",
+  "title": "Synthetic owner-led introduction",
+  "revisions": [
+    {
+      "revision": 1,
+      "sourceCycleId": "fixture-cycle-1",
+      "summary": "A fictional completion showed that a shorter owner-written introduction was easier to review.",
+      "steps": ["Review the prepared copy.", "Choose whether to contact the fictional channel yourself."],
+      "evidenceRefs": ["completion:action-packet-2026-08-13:fixture-introduction"],
+      "updatedAt": "2026-08-13T15:00:00.000Z"
+    }
+  ]
+}

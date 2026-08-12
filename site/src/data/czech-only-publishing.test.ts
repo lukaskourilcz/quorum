@@ -32,6 +32,18 @@ function assertCzechOnly(source: string, where: string): void {
 }
 
 /**
+ * Door Money markets an English-language book, so its owner-review recommendations are English
+ * drafts by contract. Remove only those three approved phrases; English article, edition or
+ * localization claims still fail this Czech-magazine guard even when they appear on GHOST.
+ */
+function withoutDoorMoneyDraftPhrases(source: string): string {
+  return source
+    .replaceAll("English draft recommendations", "draft recommendations")
+    .replaceAll("English recommendation draft", "recommendation draft")
+    .replaceAll("English drafts", "drafts");
+}
+
+/**
  * Comments are allowed to name the English edition — explaining why it is gone is the point of
  * them. Only shipped strings are checked, so both comment forms come out first. The line-comment
  * pattern refuses a `//` preceded by a colon, or it would swallow the rest of every `https://`
@@ -101,7 +113,10 @@ describe("Czech-only publishing", () => {
         ...agent.successChecks,
         ...agent.capabilityTags
       ].join(" | ");
-      assertCzechOnly(description, `agent ${agent.id}`);
+      assertCzechOnly(
+        agent.id === "GHOST" ? withoutDoorMoneyDraftPhrases(description) : description,
+        `agent ${agent.id}`
+      );
     }
   });
 
@@ -109,7 +124,14 @@ describe("Czech-only publishing", () => {
     const files = readerFacingFiles();
     expect(files.length).toBeGreaterThan(20);
     for (const file of files) {
-      assertCzechOnly(shippedSource(file), path.relative(sourceRoot, file));
+      const relative = path.relative(sourceRoot, file);
+      const source = shippedSource(file);
+      assertCzechOnly(
+        relative === path.join("components", "agent-language.ts")
+          ? withoutDoorMoneyDraftPhrases(source)
+          : source,
+        relative
+      );
     }
   });
 

@@ -15,6 +15,9 @@ const axeRoutes = [
   "/ventures/carousel-studio",
   "/money",
   "/admin?venture=global",
+  "/admin?venture=door-money&tab=recommendations",
+  "/admin?venture=door-money&tab=actions",
+  "/admin?venture=door-money&tab=knowledge",
   "/admin?venture=titty-tuesdays&tab=plans",
   "/admin/ventures/titty-tuesdays/binder",
   "/admin?venture=fightaiq&tab=fighters",
@@ -117,7 +120,7 @@ test.beforeAll(async () => {
     render: { summaryPaths: ["staged/e2e-package.json"] }
   }));
   const fixture = async (name: string) => readFile(path.join(repositoryRoot, "contracts/fixtures", name), "utf8");
-  const recommendation = JSON.parse(await fixture("venture-recommendation.valid.json")) as { recommendationId: string };
+  const recommendation = JSON.parse(await fixture("booksofhistory-recommendation.valid.json")) as { recommendationId: string };
   recommendation.recommendationId = "rec-e2e-admin-feature";
   await Promise.all([
     writeFile(bhPaths.shortlist, await fixture("bh-shortlist.valid.json")),
@@ -156,13 +159,35 @@ for (const route of axeRoutes) {
   });
 }
 
+test("Door Money renders its three bounded admin tabs", async ({ page }) => {
+  await page.goto("/admin?venture=door-money&tab=recommendations", { waitUntil: "networkidle" });
+
+  await expect(page.getByRole("heading", { name: "Door Money" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Door Money/ })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: "recommendations" })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: "actions" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "knowledge" })).toBeVisible();
+  await expect(page.getByText("No Door Money recommendation store exists yet.")).toBeVisible();
+  await expect(page.getByText("0 on this tab")).toBeVisible();
+
+  await page.getByRole("link", { name: "actions" }).click();
+  await expect(page).toHaveURL(/tab=actions/);
+  await expect(page.getByText("No Door Money action packets or playbooks exist yet.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Mark complete" })).toHaveCount(0);
+
+  await page.getByRole("link", { name: "knowledge" }).click();
+  await expect(page).toHaveURL(/tab=knowledge/);
+  await expect(page.getByText("No Door Money knowledge version exists yet.")).toBeVisible();
+  await expect(page.getByRole("button", { name: /ingest/i })).toHaveCount(0);
+});
+
 test("WeekBoard navigates between statically generated weeks", async ({ page }) => {
   // The five-day board is /calendar's product now. The home page walks past a calendar of its
   // own — a full week, stepped in place — and this test is about the linked, statically
   // generated weeks, which only /calendar has.
-  // Start with the saved operating week. Its five-day window carries completed slots; the
-  // previous generated week carries the missed state this test also verifies. Whether any cell
-  // is still scheduled depends on the wall clock and is not part of navigation.
+  // Start with the saved operating week. Historical windows are rebuilt against the current
+  // clock, so a slot that was future when the feed was committed is now truthfully held, skipped
+  // or missed. The previous generated week carries the missed state this test also verifies.
   await page.goto("/calendar/2026-08-03", { waitUntil: "networkidle" });
   await expect(page.locator("html")).toHaveAttribute(
     "data-scroll-behavior",
@@ -170,15 +195,13 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   );
   const weekBoard = page.getByTestId("week-board");
   await expect(weekBoard).toBeVisible();
-  // One row per calendar slot, and the registry decides how many slots there are — it was
-  // fifteen while the Magazine Incubator ran and follows the live clock now. Pinning the number meant the
-  // board's own guard broke every time a venture opened or closed; what it is really protecting
-  // is that every slot renders exactly one row and one project icon.
+  // One row per calendar slot, and the registry decides how many slots there are. Pinning the
+  // number made this guard break every time a venture opened or closed; what it protects is that
+  // every registered slot renders exactly one row and one project icon.
   await expect(weekBoard.locator(".contents")).toHaveCount(CALENDAR_SLOTS.length);
   await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(CALENDAR_SLOTS.length);
-  // The company legend names operating calendar projects; BOOKSOFHISTORY adds the ninth hue
-  // without acquiring a venture page, book page or floor-plan room.
-  await expect(page.locator("[data-project-legend]")).toHaveCount(9);
+  // Both ventures add a distinct project hue to the eight-project base schedule.
+  await expect(page.locator("[data-project-legend]")).toHaveCount(10);
   await expect(weekBoard.locator("[data-calendar-slot] time")).toHaveCount(0);
   // No assertion that a fixture is on the board. There were test meetings on it when the archive
   // was young; there are none now, and requiring one would be requiring the company to keep
@@ -375,6 +398,51 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await expect(feature.getByText("attached results")).toHaveCount(2);
   });
 
+  test("Door Money records a synthetic owner completion through the canonical route", async ({ page }) => {
+    const actionPath = path.join(repositoryRoot, "state", "ventures", "door-money", "actions", "2026-08-06.json");
+    const fixturePath = path.join(repositoryRoot, "contracts", "fixtures", "action-packet.valid.json");
+    let original: string | null = null;
+    try { original = await readFile(actionPath, "utf8"); }
+    catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; }
+    let actionPosts = 0;
+    page.on("request", (request) => {
+      if (request.method() === "POST" && request.url().endsWith("/admin/api/door-money/actions")) actionPosts += 1;
+    });
+    try {
+      await mkdir(path.dirname(actionPath), { recursive: true });
+      const fixture = JSON.parse(await readFile(fixturePath, "utf8")) as {
+        id: string;
+        date: string;
+        weekOf: string;
+        agenda: { isoWeek: string };
+        tasks: Array<{ completion: { completedAt: string } | null }>;
+        generatedAt: string;
+        updatedAt: string;
+      };
+      fixture.id = "action-packet-2026-08-06";
+      fixture.date = "2026-08-06";
+      fixture.weekOf = "2026-08-03";
+      fixture.agenda.isoWeek = "2026-W32";
+      fixture.generatedAt = "2026-08-06T14:00:00.000Z";
+      fixture.updatedAt = "2026-08-06T17:00:00.000Z";
+      const completed = fixture.tasks.find(({ completion }) => completion !== null)?.completion;
+      if (completed) completed.completedAt = "2026-08-06T17:00:00.000Z";
+      await writeFile(actionPath, `${JSON.stringify(fixture, null, 2)}\n`);
+      await page.goto("/admin?venture=door-money&tab=actions", { waitUntil: "networkidle" });
+
+      const task = page.getByRole("heading", { name: "Review the fictional launch note" }).locator("xpath=ancestor::li[1]");
+      await task.getByLabel("Outcome (required)").fill("The synthetic owner reviewed the fictional note.");
+      await task.getByRole("button", { name: "Mark complete" }).click();
+      await expect(task.getByText("Outcome recorded. The weekly room can now read this completion.")).toBeVisible();
+      expect(actionPosts).toBe(1);
+      await page.reload({ waitUntil: "networkidle" });
+      await expect(page.getByText("Outcome: The synthetic owner reviewed the fictional note.")).toBeVisible();
+    } finally {
+      if (original === null) await rm(actionPath, { force: true });
+      else await writeFile(actionPath, original);
+    }
+  });
+
   test("admin ideas retain their saved rating and graduation after reload", async ({ page }) => {
     await page.goto("/admin?venture=titty-tuesdays&tab=ideas", { waitUntil: "networkidle" });
     const card = page.getByRole("heading", { name: "Night Shift — One Good Day" }).locator("..");
@@ -403,7 +471,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await page.goto("/admin/ventures/titty-tuesdays/binder", { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: "Titty Tuesdays" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
-    await expect(page.getByText(/\d+ ready plans/)).toBeVisible();
+    await expect(page.getByText(/^\d+ ready plans$/)).toBeVisible();
   });
 
   test("admin login explains errors, starts a session and signs out", async ({ page }) => {
@@ -448,7 +516,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
   });
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=booksofhistory&tab=features", "/admin?venture=carousel-studio&tab=studio"];
+const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=door-money&tab=recommendations", "/admin?venture=door-money&tab=actions", "/admin?venture=door-money&tab=knowledge", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=booksofhistory&tab=features", "/admin?venture=carousel-studio&tab=studio"];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
@@ -576,8 +644,10 @@ test("Company files speaks plainly", async ({ page }) => {
     expect(body, `Company files still says "${phrase}"`).not.toContain(phrase);
   }
 
-  // Agent codenames are how the runtime addresses itself, not how a person reads a page.
-  for (const codename of ["THREADS", "INSTAGRAM", "FRAME", "SCRIBE", "HERALD"]) {
+  // Agent codenames are how the runtime addresses itself, not how a person reads a page. Threads
+  // and Instagram are also legitimate channel names in the social archive, so they are not
+  // evidence that the matching internal agents leaked into owner-facing copy.
+  for (const codename of ["FRAME", "SCRIBE", "HERALD"]) {
     expect(body, `Company files still shows the codename ${codename}`).not.toContain(codename);
   }
 

@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { runCycle } from "../src/cycle.js";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
 import { EditorialSlateSchema } from "../src/contracts/mma-files.js";
+import { resolveRotationTarget } from "../src/operations/rotation.js";
 import { repoRoot } from "../src/paths.js";
 import {
   PhaseSchema,
@@ -20,6 +21,19 @@ const shifts: Array<{
   { phase: "afternoon", now: new Date("2026-07-23T12:00:00.000Z") },
   { phase: "night", now: new Date("2026-07-23T20:00:00.000Z") }
 ];
+
+async function dateForRotationTarget(ventureId: string): Promise<string> {
+  for (let offset = 0; offset < 30; offset += 1) {
+    const at = new Date("2026-08-01T04:00:00.000Z");
+    at.setUTCDate(at.getUTCDate() + offset);
+    const target = await resolveRotationTarget({
+      stateRoot: path.join(repoRoot, "tmp", "dry-run", "state"),
+      now: at
+    });
+    if (target?.ventureId === ventureId) return at.toISOString().slice(0, 10);
+  }
+  throw new Error(`No rotation date found for ${ventureId}`);
+}
 
 describe("cycle preflight", () => {
   it("runs one decision room and two zero-model checkpoints inside the daily budget", async () => {
@@ -167,6 +181,52 @@ describe("cycle preflight", () => {
     }
   });
 
+  it("records the gated Door Money fixture desk and growth scaffold with zero spend and no external action", async () => {
+    for (const fixture of [
+      { phase: "dm-desk" as const, now: new Date("2026-08-06T13:00:00.000Z"), cast: ["GHOST", "AUDIT"] },
+      { phase: "dm-growth" as const, now: new Date("2026-08-06T14:00:00.000Z"), cast: ["BOOKER", "PULSE", "AUDIT"] }
+    ]) {
+      const result = await runCycle({ ...fixture, dry: true, explainBudget: false, explainRouting: false });
+      expect(result).toMatchObject({
+        status: "dry_complete",
+        decision: fixture.phase === "dm-desk" ? "PLAN" : "NO_ACTION",
+        selectedAgents: fixture.cast
+      });
+      expect(result.artifacts.some((artifact) => artifact.includes("notify/") || artifact.includes("social/queue"))).toBe(false);
+      const record = MeetingRecordSchema.parse(JSON.parse(await readFile(
+        path.join(repoRoot, `tmp/dry-run/state/meetings/2026-08-06-${fixture.phase}.json`),
+        "utf8"
+      )));
+      expect(record).toMatchObject({ kind: fixture.phase, fixture: true, ledger: { actualCycleUsd: 0 } });
+      if (fixture.phase === "dm-desk") {
+        expect(record).toMatchObject({ status: "PLAN", decision: { outcome: "PLAN" } });
+        expect(record.proposals).toHaveLength(1);
+        expect(record.decision.summary).toMatch(/gated fixture draft stored for owner review/i);
+      } else {
+        expect(record.decision.summary).toMatch(/no action packet was drafted/i);
+      }
+      expect(record.growthPlan).toMatch(/nothing was published, posted, scheduled, bought or sent/i);
+    }
+  });
+
+  it("records the Door Money growth off-day as a zero-dollar no-op", async () => {
+    const result = await runCycle({
+      phase: "dm-growth",
+      dry: true,
+      explainBudget: false,
+      explainRouting: false,
+      now: new Date("2026-08-05T14:00:00.000Z")
+    });
+    expect(result).toMatchObject({ status: "dry_complete", decision: "NO_ACTION", selectedAgents: [] });
+    const record = MeetingRecordSchema.parse(JSON.parse(await readFile(
+      path.join(repoRoot, "tmp/dry-run/state/meetings/2026-08-05-dm-growth.json"),
+      "utf8"
+    )));
+    expect(record.ledger.actualCycleUsd).toBe(0);
+    expect(record.decision.summary).toContain("$0 — this room meets on Thursdays");
+    expect(record.participantReasons.every(({ participated }) => !participated)).toBe(true);
+  });
+
   it("keeps every new portfolio phase paused in live mode until the owner gate is explicit", async () => {
     const previous = process.env.PORTFOLIO_LIVE_ENABLED;
     delete process.env.PORTFOLIO_LIVE_ENABLED;
@@ -229,28 +289,26 @@ describe("cycle preflight", () => {
     }
   });
 
-  // 2026-08-10 is a Caught Up day in the ideation rotation, which is what makes the handoff below
-  // happen at all. The rotation is a modulo over the date across the active ventures, so a date is
-  // the only thing that decides it and the same date always picks the same venture -- and adding a
-  // venture reshuffles which date lands where, which is why this date moved when Tehdejsi svet
-  // joined the registry.
   it("carries one VAULT-screened dry morning idea into the product-room verdict", async () => {
+    // Resolve the date from the live ring. Registering a venture changes the modulo denominator;
+    // pinning a historical date made this test silently ask the wrong venture for an idea.
+    const date = await dateForRotationTarget("caught-up");
     const morning = await runCycle({
       phase: "morning",
       dry: true,
       explainBudget: false,
       explainRouting: false,
-      now: new Date("2026-08-10T04:00:00.000Z")
+      now: new Date(`${date}T04:00:00.000Z`)
     });
     expect(morning.artifacts).toEqual(expect.arrayContaining([
       "tmp/dry-run/state/ideas/caught-up/ledger.jsonl",
       "tmp/dry-run/state/ideas/caught-up/INDEX.md"
     ]));
     const standup = JSON.parse(await readFile(
-      path.join(repoRoot, "tmp/dry-run/state/standups/2026-08-10-morning.json"),
+      path.join(repoRoot, `tmp/dry-run/state/standups/${date}-morning.json`),
       "utf8"
     )) as { caughtUpIdeaRef?: string; morningIdeaNamespace?: string };
-    expect(standup.caughtUpIdeaRef).toMatch(/^idea-2026-08-10-/);
+    expect(standup.caughtUpIdeaRef).toMatch(new RegExp(`^idea-${date}-`));
     expect(standup.morningIdeaNamespace).toBe("caught-up");
 
     const product = await runCycle({
@@ -258,10 +316,10 @@ describe("cycle preflight", () => {
       dry: true,
       explainBudget: false,
       explainRouting: false,
-      now: new Date("2026-08-10T15:00:00.000Z")
+      now: new Date(`${date}T15:00:00.000Z`)
     });
     const record = MeetingRecordSchema.parse(JSON.parse(await readFile(
-      path.join(repoRoot, "tmp/dry-run/state/meetings/2026-08-10-cu-product.json"),
+      path.join(repoRoot, `tmp/dry-run/state/meetings/${date}-cu-product.json`),
       "utf8"
     )));
     expect(record.caughtUpIdeaRef).toBe(standup.caughtUpIdeaRef);
@@ -288,33 +346,34 @@ describe("cycle preflight", () => {
     // Caught Up used to receive every morning idea because the namespace was a constant at the
     // call site. On a day the rotation names another venture, the idea lands in that venture's
     // ledger and the Caught Up product room has nothing to adopt — a normal day, not a gap.
+    const date = await dateForRotationTarget("mma-files");
     const morning = await runCycle({
       phase: "morning",
       dry: true,
       explainBudget: false,
       explainRouting: false,
-      now: new Date("2026-08-04T04:00:00.000Z")
+      now: new Date(`${date}T04:00:00.000Z`)
     });
     expect(morning.artifacts).toEqual(expect.arrayContaining([
-      "tmp/dry-run/state/ideas/marketingshark/ledger.jsonl"
+      "tmp/dry-run/state/ideas/mma-files/ledger.jsonl"
     ]));
     expect(morning.artifacts).not.toContain("tmp/dry-run/state/ideas/caught-up/ledger.jsonl");
 
     const standup = JSON.parse(await readFile(
-      path.join(repoRoot, "tmp/dry-run/state/standups/2026-08-04-morning.json"),
+      path.join(repoRoot, `tmp/dry-run/state/standups/${date}-morning.json`),
       "utf8"
     )) as { morningIdeaNamespace?: string; caughtUpIdeaRef?: string };
-    expect(standup.morningIdeaNamespace).toBe("marketingshark");
+    expect(standup.morningIdeaNamespace).toBe("mma-files");
 
     await runCycle({
       phase: "cu-product",
       dry: true,
       explainBudget: false,
       explainRouting: false,
-      now: new Date("2026-08-04T15:00:00.000Z")
+      now: new Date(`${date}T15:00:00.000Z`)
     });
     const record = MeetingRecordSchema.parse(JSON.parse(await readFile(
-      path.join(repoRoot, "tmp/dry-run/state/meetings/2026-08-04-cu-product.json"),
+      path.join(repoRoot, `tmp/dry-run/state/meetings/${date}-cu-product.json`),
       "utf8"
     )));
     // The room still records its own dry placeholder; what it must not do is adopt the idea

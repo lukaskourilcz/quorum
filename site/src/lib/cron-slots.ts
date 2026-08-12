@@ -20,6 +20,8 @@ export const SCHEDULED_PHASES = [
   "tt-marketing",
   "gv-brief",
   "ms-daily",
+  "dm-desk",
+  "dm-growth",
   "mma-intake",
   "mma-analysis",
   "mag-editorial",

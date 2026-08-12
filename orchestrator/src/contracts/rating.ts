@@ -5,7 +5,8 @@ export const RatingValueSchema = z.enum(["perfect", "good", "bad"]);
 /**
  * `niche-proposal` left with the Magazine Incubator: its only producer was
  * `applyNicheProposalRating`, deleted with the venture, and no committed rating ever carried the
- * kind. `template` stays — Carousel Studio rates its deck templates through it.
+ * kind. `template` serves Carousel Studio deck templates; `recommendation` serves Door Money's
+ * version-pinned owner review.
  */
 export const RatingObjectKindSchema = z.enum([
   "idea",
@@ -14,7 +15,8 @@ export const RatingObjectKindSchema = z.enum([
   "slate",
   "article",
   "social-variant",
-  "template"
+  "template",
+  "recommendation"
 ]);
 
 export const RatingRecordSchema = openObject({

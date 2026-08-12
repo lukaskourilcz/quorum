@@ -48,6 +48,8 @@ export const FOUNDING_AGENT_IDS = [
   "CHUM",
   "FOLIO",
   "PLOT",
+  "GHOST",
+  "BOOKER",
   "LETOPIS",
   "VERBA"
 ] as const;

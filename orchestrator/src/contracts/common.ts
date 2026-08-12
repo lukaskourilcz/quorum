@@ -45,6 +45,8 @@ export const ContractAgentIdSchema = z.enum([
   "CHUM",
   "FOLIO",
   "PLOT",
+  "GHOST",
+  "BOOKER",
   "LETOPIS",
   "VERBA"
 ]);

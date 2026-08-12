@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "performance-weights/1",
+  "ventureId": "booksofhistory",
+  "floor": 0.75,
+  "ceiling": 1.25,
+  "lanes": {
+    "cs": {
+      "categories": { "publishing-history": 1.08 },
+      "eras": { "20th": 1.04 },
+      "geographies": { "czechia": 1.1 }
+    },
+    "en": { "categories": {}, "eras": {}, "geographies": {} }
+  },
+  "appliedProposalIds": ["weights-aaaaaaaaaaaaaaaaaaaa"],
+  "updatedAt": "2026-08-21T12:05:00.000Z"
+}

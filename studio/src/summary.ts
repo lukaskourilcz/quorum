@@ -28,8 +28,20 @@ export const MIN_SUMMARY_PASSAGES = 3;
  */
 export const MAX_SUMMARY_PASSAGES = 8;
 
-export type CarouselSummaryVenture = "caught-up" | "mma-files" | "booksofhistory";
+export type CarouselSummaryVenture = "caught-up" | "mma-files" | "booksofhistory" | "door-money";
 export type CarouselSummaryLocale = "cs" | "en";
+
+const VENTURE_LOCALE: Readonly<Record<CarouselSummaryVenture, CarouselSummaryLocale>> = {
+  "caught-up": "cs",
+  "mma-files": "cs",
+  booksofhistory: "cs",
+  "door-money": "en"
+};
+
+/** The language a venture publishes in. The locale is then recorded on every summary. */
+export function localeForCarouselVenture(venture: CarouselSummaryVenture): CarouselSummaryLocale {
+  return VENTURE_LOCALE[venture];
+}
 
 export interface CarouselSummarySource {
   /** How the desk classified it: primary document, record, or an internal verified file. */
@@ -47,6 +59,8 @@ export interface CarouselSummary {
   date: string;
   /** The language of this record; BOOKSOFHISTORY records its Czech and English twins separately. */
   locale: CarouselSummaryLocale;
+  /** Absent means the normal multi-slide carousel; this opt-in record renders exactly one slide. */
+  deckMode?: "single-image";
   /** The small mono line every template prints above the headline. */
   kicker: string;
   headline: string;
@@ -72,10 +86,14 @@ export interface CarouselSummary {
 interface CarouselSummaryContentInput {
   slug: string;
   date: string;
+  /** A single-image recommendation is still a Studio record, but it is a one-slide poster. */
+  deckMode?: "single-image";
   title: string;
   /** The desk's line for the carousel cover, when it wrote one. */
   coverLine?: string | undefined;
   dek: string;
+  /** A recommendation may already carry its own gated outro; magazines use the venture default. */
+  closing?: string;
   /** A Caught Up edition arrives already structured; those points are the passages. */
   points?: readonly string[];
   /** An MMA Files article arrives as MDX; its middle is cut out of the body. */
@@ -88,18 +106,21 @@ interface CarouselSummaryContentInput {
 export type CarouselSummaryInput = CarouselSummaryContentInput & (
   | { venture: "caught-up" | "mma-files"; locale?: "cs" }
   | { venture: "booksofhistory"; locale: CarouselSummaryLocale }
+  | { venture: "door-money"; locale?: "en" }
 );
 
 const KICKER: Record<CarouselSummaryVenture, string> = {
   "caught-up": "DNESKAi",
   "mma-files": "MMA Files",
-  booksofhistory: "BOOKSOFHISTORY"
+  booksofhistory: "BOOKSOFHISTORY",
+  "door-money": "Door Money"
 };
 
 const CLOSING: Record<CarouselSummaryVenture, Record<CarouselSummaryLocale, string>> = {
   "caught-up": { cs: "Jedno vydání a máte přehled.", en: "One edition keeps you up to date." },
   "mma-files": { cs: "Celý ozdrojovaný text najdete v MMA Files.", en: "Read the fully sourced story in MMA Files." },
-  booksofhistory: { cs: "Příběh knihy pokračuje v pramenech.", en: "The book's story continues in the sources." }
+  booksofhistory: { cs: "Příběh knihy pokračuje v pramenech.", en: "The book's story continues in the sources." },
+  "door-money": { cs: "Zbytek příběhu žije v Door Money.", en: "The rest of the story lives in Door Money." }
 };
 
 const MONTHS_CS = [
@@ -116,15 +137,20 @@ const MONTHS_EN = [
 export function summaryKicker(
   venture: CarouselSummaryVenture,
   date: string,
-  locale: CarouselSummaryLocale = "cs"
+  locale?: CarouselSummaryLocale
 ): string {
+  const resolvedLocale = locale ?? localeForCarouselVenture(venture);
   const match = /^(\d{4})-(\d{2})-(\d{2})$/u.exec(date);
   if (!match) return KICKER[venture];
-  const month = (locale === "cs" ? MONTHS_CS : MONTHS_EN)[Number(match[2]) - 1];
-  if (!month) return KICKER[venture];
-  return locale === "cs"
-    ? `${KICKER[venture]} · ${Number(match[3])}. ${month}`
-    : `${KICKER[venture]} · ${Number(match[3])} ${month}`;
+  if (resolvedLocale === "en") {
+    const month = MONTHS_EN[Number(match[2]) - 1];
+    if (!month) return KICKER[venture];
+    return venture === "door-money"
+      ? `${KICKER[venture]} · ${month} ${Number(match[3])}`
+      : `${KICKER[venture]} · ${Number(match[3])} ${month}`;
+  }
+  const month = MONTHS_CS[Number(match[2]) - 1];
+  return month ? `${KICKER[venture]} · ${Number(match[3])}. ${month}` : KICKER[venture];
 }
 
 /** One line, never longer than a slide holds, cut at a sentence boundary rather than mid-clause. */
@@ -163,19 +189,20 @@ export function buildCarouselSummary(input: CarouselSummaryInput): CarouselSumma
   if (input.venture === "booksofhistory" && input.locale === undefined) {
     throw new Error("BOOKSOFHISTORY summaries require an explicit per-record locale");
   }
-  const locale = input.locale ?? "cs";
+  const locale = input.locale ?? localeForCarouselVenture(input.venture);
   return {
     schemaVersion: "carousel-summary/1",
     venture: input.venture,
     slug: input.slug,
     date: input.date,
     locale,
+    ...(input.deckMode ? { deckMode: input.deckMode } : {}),
     kicker: summaryKicker(input.venture, input.date, locale),
     headline: oneLine(input.title),
     ...(input.coverLine ? { coverLine: oneLine(input.coverLine) } : {}),
     standfirst: oneLine(input.dek),
-    passages: choosePassages(input),
-    closing: CLOSING[input.venture][locale],
+    passages: input.deckMode === "single-image" ? [] : choosePassages(input),
+    closing: input.closing ? oneLine(input.closing) : CLOSING[input.venture][locale],
     sources: [...(input.sources ?? [])],
     hasHero: Boolean(input.hasHero),
     heroCredit: input.heroCredit ?? null
@@ -232,7 +259,7 @@ export function reviewCarouselSummary(summary: CarouselSummary): CarouselSummary
   const problems: string[] = [];
   if (summary.headline.trim().length === 0) problems.push("The summary has no headline.");
   if (summary.standfirst.trim().length === 0) problems.push("The summary has no standfirst.");
-  if (summary.passages.length < MIN_SUMMARY_PASSAGES) {
+  if (summary.deckMode !== "single-image" && summary.passages.length < MIN_SUMMARY_PASSAGES) {
     problems.push(`A summary needs at least ${MIN_SUMMARY_PASSAGES} passages; this one has ${summary.passages.length}.`);
   }
   if (summary.passages.length > MAX_SUMMARY_PASSAGES) {

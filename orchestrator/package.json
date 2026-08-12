@@ -11,6 +11,7 @@
     "bh:seed": "tsx src/ventures/booksofhistory/seed-cli.ts",
     "build": "tsc -p tsconfig.build.json",
     "budget:alert": "tsx src/finance/budget-alert-cli.ts",
+    "book:ingest": "tsx src/ventures/door-money/ingest/cli.ts",
     "cycle": "tsx src/index.ts",
     "cycle:phase": "tsx src/meetings/clock-cli.ts",
     "delivery": "tsx src/delivery/cli.ts",

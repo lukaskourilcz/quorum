@@ -4,14 +4,14 @@
     {
       "schemaVersion": "meeting-agenda/1",
       "id": "agenda-0123456789abcdef",
-      "ventureId": "titty-tuesdays",
-      "phase": "tt-marketing",
+      "ventureId": "door-money",
+      "phase": "dm-desk",
       "requestedBy": "PULSE",
       "sourcePhase": "morning",
       "sourceMeetingRef": "standups/2026-08-01-morning",
-      "summary": "Compare one bounded campaign question against the current season and taste record.",
+      "summary": "Compare one synthetic passage against the recorded Door Money style profile.",
       "evidenceRefs": [
-        "state/ventures/titty-tuesdays/season-001.md"
+        "fixture:door-money:passage-1"
       ],
       "requestedAt": "2026-08-01T04:00:00.000Z",
       "notBefore": "2026-08-01",

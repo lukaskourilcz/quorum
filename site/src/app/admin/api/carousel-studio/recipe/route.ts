@@ -61,7 +61,7 @@ export async function POST(request: Request): Promise<Response> {
   };
   if (
     !value || typeof value !== "object"
-    || (body.venture !== "caught-up" && body.venture !== "mma-files" && body.venture !== "booksofhistory")
+    || (body.venture !== "caught-up" && body.venture !== "mma-files" && body.venture !== "booksofhistory" && body.venture !== "door-money")
     || typeof body.slug !== "string"
     || typeof body.date !== "string"
   ) {

@@ -14,7 +14,7 @@ let fixture: Record<string, unknown>;
 
 beforeEach(async () => {
   root = await mkdtemp(path.join(os.tmpdir(), "quorum-bh-feature-route-"));
-  fixture = JSON.parse(await readFile(path.resolve(process.cwd(), "../contracts/fixtures/venture-recommendation.valid.json"), "utf8")) as Record<string, unknown>;
+  fixture = JSON.parse(await readFile(path.resolve(process.cwd(), "../contracts/fixtures/booksofhistory-recommendation.valid.json"), "utf8")) as Record<string, unknown>;
   const directory = path.join(root, "state/ventures/booksofhistory/recommendations");
   await mkdir(directory, { recursive: true });
   await writeFile(path.join(directory, "recommendation.json"), `${JSON.stringify(fixture, null, 2)}\n`);
@@ -148,7 +148,7 @@ describe("BOOKSOFHISTORY feature actions", () => {
     await writeFile(path.join(root, "state/INBOX.md"), "- [x] HUMAN_APPROVAL BH-RESULTS-004 — approved\n");
     const resultPath = path.join(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json");
     await mkdir(path.dirname(resultPath), { recursive: true });
-    const entry = JSON.parse(await readFile(path.resolve(process.cwd(), "../contracts/fixtures/owner-result-entry.valid.json"), "utf8"));
+    const entry = JSON.parse(await readFile(path.resolve(process.cwd(), "../contracts/fixtures/booksofhistory-owner-result-entry.valid.json"), "utf8"));
     entry.capturedAt = "2026-08-14T10:04:00.000Z";
     entry.recordedAt = AT;
     await writeFile(resultPath, `${JSON.stringify(entry)}\n`);

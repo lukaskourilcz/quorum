@@ -136,6 +136,19 @@ describe("free trending signals", () => {
     );
   });
 
+  it("keeps the worst-case free sweep inside the existing 24-result contract cap", async () => {
+    const results = await collectTrendingSignals({
+      now,
+      aiQueries: ["ai one", "ai two", "ai three"],
+      mmaQueries: ["mma one", "mma two", "mma three", "mma four", "mma five", "mma six"],
+      topicQueries: ["book one", "book two", "book three", "book four"],
+      subreddits: ["one", "two", "three", "four", "five"],
+      fetchImpl: failing
+    });
+    expect(results).toHaveLength(24);
+    expect(results.every((result) => result.status === "failed")).toBe(true);
+  });
+
   it("parses feed values without leaving markup or entities behind", () => {
     expect(rssValues("<title><![CDATA[Fight <b>week</b> &amp; more]]></title>", "title"))
       .toEqual(["Fight week & more"]);

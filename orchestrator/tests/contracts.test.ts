@@ -2,11 +2,14 @@ import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { buildCarouselSummary } from "@boardlessai/carousel-studio";
 import { repoRoot } from "../src/paths.js";
 import { AudienceSpecSchema } from "../src/contracts/audience-spec.js";
+import { BOOK_KB_SCORE_AXES, BookKbIndexSchema } from "../src/contracts/book-kb-index.js";
 import { ContractSchemas, jsonSchemaText, type ContractName } from "../src/contracts/json-schema.js";
 import { MarketingPlanSchema } from "../src/contracts/marketing-plan.js";
 import { SeasonFileSchema } from "../src/contracts/season.js";
+import { StyleProfileSchema } from "../src/contracts/style-profile.js";
 import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { isRepoPathEvidenceRef } from "../src/mma-files/slate-evidence.js";
 import { ArticlePackageSchema } from "../src/contracts/mma-files.js";
@@ -153,6 +156,58 @@ describe("portfolio contract boundaries", () => {
     }
   });
 
+  it("keeps the public book index derivative-only and scores every required axis", async () => {
+    const valid = await fixture("book-kb-index", "valid") as {
+      chunks: Array<{ scores: Record<string, unknown> }>;
+    };
+    const parsed = BookKbIndexSchema.parse(valid);
+    expect(Object.keys(parsed.chunks[0]!.scores)).toEqual(BOOK_KB_SCORE_AXES);
+
+    expect(BookKbIndexSchema.safeParse({ ...valid, fullText: "synthetic but still forbidden" }).success).toBe(false);
+    const chunkWithText = structuredClone(valid) as {
+      chunks: Array<Record<string, unknown>>;
+    };
+    chunkWithText.chunks[0]!.fullText = "synthetic but still forbidden";
+    expect(BookKbIndexSchema.safeParse(chunkWithText).success).toBe(false);
+
+    const missingAxis = structuredClone(valid) as {
+      chunks: Array<{ scores: Record<string, unknown> }>;
+    };
+    delete missingAxis.chunks[0]!.scores.bookCuriosityPotential;
+    expect(BookKbIndexSchema.safeParse(missingAxis).success).toBe(false);
+  });
+
+  it("caps public style exemplars and stores only private embedding references", async () => {
+    const valid = await fixture("style-profile", "valid") as {
+      exemplarBank: Array<Record<string, unknown>>;
+    };
+    const exemplar = valid.exemplarBank[0]!;
+    const atLimit = structuredClone(valid);
+    atLimit.exemplarBank = Array.from({ length: 40 }, (_, index) => ({
+      ...exemplar,
+      id: `fixture-exemplar-${index + 1}`,
+      text: "x".repeat(280),
+      embeddingId: `fixture-embedding-${index + 1}`
+    }));
+    expect(StyleProfileSchema.safeParse(atLimit).success).toBe(true);
+
+    const tooMany = structuredClone(atLimit);
+    tooMany.exemplarBank.push({
+      ...exemplar,
+      id: "fixture-exemplar-41",
+      embeddingId: "fixture-embedding-41"
+    });
+    expect(StyleProfileSchema.safeParse(tooMany).success).toBe(false);
+
+    const tooLong = structuredClone(valid);
+    tooLong.exemplarBank[0]!.text = "x".repeat(281);
+    expect(StyleProfileSchema.safeParse(tooLong).success).toBe(false);
+
+    const leakedVector = structuredClone(valid);
+    leakedVector.exemplarBank[0]!.embedding = [0.1, 0.2, 0.3];
+    expect(StyleProfileSchema.safeParse(leakedVector).success).toBe(false);
+  });
+
   it("enforces the adult audience floor and public interest list", async () => {
     const valid = await fixture("audience-spec", "valid") as Record<string, unknown>;
     expect(AudienceSpecSchema.safeParse(valid).success).toBe(true);
@@ -185,6 +240,32 @@ describe("portfolio contract boundaries", () => {
 });
 
 describe("Czech is the required locale and English is optional", () => {
+  it("records Door Money summaries in English without weakening the Czech article contract", async () => {
+    const summary = buildCarouselSummary({
+      venture: "door-money",
+      slug: "synthetic-tour-note",
+      date: "2026-08-06",
+      title: "A synthetic tour note",
+      dek: "An invented standfirst for a contract boundary test.",
+      points: [
+        "The fictional crew checked a made-up room before doors.",
+        "A synthetic checklist kept the example self-contained.",
+        "No real person, venue, book passage, or event appears here."
+      ]
+    });
+    expect(summary.locale).toBe("en");
+
+    const valid = await fixture("article", "valid") as { localizations: Record<string, unknown> };
+    const englishOnly = {
+      ...valid,
+      localizations: { en: valid.localizations.en ?? valid.localizations.cs }
+    };
+    const result = ArticlePackageSchema.safeParse(englishOnly);
+    expect(result.success).toBe(false);
+    expect(result.success ? [] : result.error.issues.map((issue) => issue.path.join(".")))
+      .toEqual(["localizations.cs"]);
+  });
+
   it("keeps the three sealed packages byte-for-byte shaped and hash-valid", async () => {
     // The worst failure mode available here: if making en optional had switched these to a
     // stripping object, loading the one live article would drop its English half, the

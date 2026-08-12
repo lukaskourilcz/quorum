@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  EMBEDDING_PRICES,
   findTextPrice,
   IMAGE_PRICES,
   STAGE_CYCLE_CAPS,
@@ -8,6 +9,17 @@ import {
 } from "./llm/prices.js";
 import type { Stage } from "./types.js";
 import { VentureIdSchema } from "./contracts/common.js";
+
+export const BudgetLedgerKindSchema = z.enum(["text", "image", "embedding"]);
+export type BudgetLedgerKind = z.infer<typeof BudgetLedgerKindSchema>;
+
+export function isMediaBudgetKind(kind: BudgetLedgerKind): boolean {
+  return kind === "image";
+}
+
+export function budgetLedgerCostCategory(kind: BudgetLedgerKind): "model" | "media" {
+  return isMediaBudgetKind(kind) ? "media" : "model";
+}
 
 export const BudgetLedgerEntrySchema = z.object({
   ts: z.string().datetime(),
@@ -27,7 +39,7 @@ export const BudgetLedgerEntrySchema = z.object({
   tokensOut: z.number().int().nonnegative(),
   toolUses: z.number().int().nonnegative().default(0),
   usd: z.number().nonnegative(),
-  kind: z.enum(["text", "image"]),
+  kind: BudgetLedgerKindSchema,
   campaignId: z.string().nullable().optional(),
   experimentId: z.string().nullable().optional(),
   assetId: z.string().nullable().optional()
@@ -185,6 +197,33 @@ export interface ImageEstimateInput {
   promptChars: number;
 }
 
+export interface EmbeddingEstimateInput {
+  model: "text-embedding-3-small";
+  inputChars: number;
+  at?: Date;
+}
+
+export function estimateEmbeddingCall(input: EmbeddingEstimateInput): CostEstimate {
+  const at = input.at ?? new Date();
+  const price = EMBEDDING_PRICES.find((candidate) =>
+    candidate.model === input.model &&
+    candidate.effectiveFrom <= at.toISOString().slice(0, 10) &&
+    (candidate.effectiveTo === null || candidate.effectiveTo > at.toISOString().slice(0, 10))
+  );
+  if (!price) {
+    throw new BudgetError("UNKNOWN_PRICE", `No dated embedding price for ${input.model}`);
+  }
+  const estimatedInputTokens = Math.ceil(input.inputChars / 3.5);
+  return {
+    estimatedInputTokens,
+    estimatedOutputTokens: 0,
+    estimatedUsd: Number(((estimatedInputTokens / 1_000_000) * price.inputUsdPerMillion).toFixed(8)),
+    toolUsd: 0,
+    priceVerifiedAt: price.verifiedAt,
+    priceSourceUrl: price.sourceUrl
+  };
+}
+
 export function estimateImageCall(input: ImageEstimateInput): CostEstimate {
   const price = IMAGE_PRICES.find(
     (candidate) =>
@@ -319,6 +358,20 @@ export function assertTextReservation(
   assertSharedReservation(estimate.estimatedUsd, false, context, limits);
 }
 
+export function assertEmbeddingReservation(
+  estimate: CostEstimate,
+  context: ReserveContext
+): void {
+  const limits = context.limits ?? DEFAULT_BUDGET_LIMITS;
+  if (estimate.estimatedUsd > limits.perTextCallUsd) {
+    throw new BudgetError(
+      "PER_CALL_CAP",
+      `Estimated embedding ${estimate.estimatedUsd} exceeds ${limits.perTextCallUsd}`
+    );
+  }
+  assertSharedReservation(estimate.estimatedUsd, false, context, limits);
+}
+
 export function assertImageReservation(
   estimate: CostEstimate,
   context: ReserveContext,
@@ -357,14 +410,14 @@ export function assertImageReservation(
     const mediaToday = context.ledger
       .filter(
         (entry) =>
-          entry.kind === "image" &&
+          isMediaBudgetKind(entry.kind) &&
           isSameUtcDay(new Date(entry.ts), context.now)
       )
       .reduce((sum, entry) => sum + entry.usd, 0);
     const mediaMonth = context.ledger
       .filter(
         (entry) =>
-          entry.kind === "image" &&
+          isMediaBudgetKind(entry.kind) &&
           isSameUtcMonth(new Date(entry.ts), context.now)
       )
       .reduce((sum, entry) => sum + entry.usd, 0);

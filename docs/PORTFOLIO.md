@@ -1,6 +1,6 @@
 # BoardlessAI project model
 
-BoardlessAI is one guarded operating system with eight project workspaces. Shared
+BoardlessAI is one guarded operating system with nine project workspaces. Shared
 infrastructure owns the agent registry, budget, source policy, meeting records,
 specialist agendas, calendar, admin, delivery checks and public explanation. Each
 project keeps a narrow output boundary rather than cloning the orchestrator.
@@ -11,12 +11,13 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 | --- | --- | --- | --- |
 | Caught Up | Operating in validation | Daily Czech AI briefing, product decisions and an article hero | Delivery is automatically checked after deploy; social posting unlocks after seven consecutive passed proofs |
 | Titty Tuesdays | Operating, pre-commerce | Brand seasons, audience work and future campaign planning | No shop, stock, payments, ads, people imagery, posting or purchase claims |
-| GoVIRAL | Operating, Mondays only | Weekly trend brief for the owner and rated marketing plays for every other project | Reads only the Apify Free plan, whose `$5` monthly credit is the guard; hands over at most one agenda |
+| GoVIRAL | Operating, Mondays only | Weekly trend brief for the owner and rated marketing plays for every other project | Existing sets use the `$5`-guarded Apify Free recipe; Door Money terms use keyless Google News; hands over at most one agenda |
 | FightAIQ | Operating, guarded analysis | UFC and Oktagon fighter cards, discovered bouts, historical backfill and deterministic predictions | Two-source bout/card gates; no bet placement, affiliate links or bookmaker automation |
 | Design Lab | Operating internal engine | Original template library and deterministic social-carousel rendering for every brand | No accounts, marketing, analytics, external inspiration bytes or image-model calls |
 | marketingShark | Operating internal agency | Turns one devShark quiz question a day into one Czech and one English five-slide carousel rendered by the Design Lab | No social account, credentials or publisher path; every package is stored as a draft behind the approval queue |
 | BOOKSOFHISTORY | Operating in guarded validation | Turns a deterministic shortlist and reusable source dossiers into independent Czech and English social-story drafts | No public surface, account, channel or posting path; no cover artwork; quotes are attributed and capped at 300 characters |
 | MMA Files | Operating public magazine | One daily Czech article slot and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
+| Door Money | Operating, drafts only | Evidence-linked English book-storytelling recommendations and a Thursday owner action packet | Manuscript/full chunks/embeddings stay private; no posting, account, channel or outreach; results are owner-entered only |
 
 `config/ventures.json` stores each project's meetings, participating roles, cost
 envelope and admin tabs. `config/venture-agent-controls.json` stores optional agent switches. Internal
@@ -26,7 +27,7 @@ contracts retain the word `venture` for compatibility; visitor-facing text says
 ## People and authority
 
 Four decision-makers—VIZE, FORGE, PULSE and AUDIT—hold company-wide authority.
-Thirty-one specialists do bounded work only when a service path or due agenda needs
+Thirty-three active specialists do bounded work only when a service path or due agenda needs
 their domain. The registry holds 44 entries: 35 active, 6 paused and 3 retired. A
 stood-down role stays on the record — the router skips it and names it — so the count
 that matters is the thirty-five that work. The 27
@@ -36,8 +37,9 @@ prompts or meeting packets. The public interface uses names and work labels. It 
 not present quarters as seasons, days as episodes or agents as entertainment
 characters.
 
-PULSE chairs project rooms and AUDIT keeps its rule-based veto. Owner ratings teach
-format and taste; they are not commands. Agents cannot approve their own spending,
+PULSE chairs generic project rooms and reads performance in Door Money growth; GHOST and
+BOOKER own the two Door Money drafting packets while AUDIT keeps its rule-based veto.
+Owner ratings teach format and taste; they are not commands. Agents cannot approve their own spending,
 credentials, account access, stage changes or governing prompts. Content release and
 pre-scoped social posting are agent-owned only inside the recorded contracts and
 health gates.
@@ -63,8 +65,10 @@ Not every clock entry is a meeting:
 - **Persistent cycle:** the 12:00 BOOKSOFHISTORY desk resumes one recorded selection,
   research or production phase. A missed day stretches the cycle instead of skipping
   work or weakening a gate.
-- **Agenda-gated:** Titty Tuesdays, FightAIQ analysis and the MMA Files desk run only
-  when requested.
+- **Standing:** Titty Tuesdays runs daily, GoVIRAL does paid work on Mondays, Door Money's
+  desk runs daily and its growth room does paid work on Thursdays. The weekly rooms write
+  honest `$0` no-op records on their other six scheduled firings.
+- **Agenda-gated:** FightAIQ analysis and the MMA Files desk run only when requested.
 - **Change-triggered:** FightAIQ intake runs when its source snapshot materially
   changes or an agenda requests it.
 - **Checkpoint:** 14:00 and 22:00 update the operating trail deterministically and
@@ -88,6 +92,8 @@ credentials, evidence, cost limits or safety rules.
 | 12:00 | BOOKSOFHISTORY editorial desk | persistent daily cycle; resumes its current phase |
 | 13:00 | GoVIRAL trend room | Mondays only; an off-day firing is a `$0` no-op |
 | 14:00 | Board afternoon | `$0` checkpoint |
+| 15:00 | Door Money recommendation desk | daily drafts; private-knowledge and budget gates |
+| 16:00 | Door Money growth room | Thursdays only; other days are `$0` no-ops |
 | 17:00 | Caught Up product meeting | fixed service |
 | 19:00 | FightAIQ model check | due agenda; D8 analysis and evidence gates apply |
 | 20:00 | MMA Files desk review | due agenda only |
@@ -158,7 +164,8 @@ The admin includes short summaries with full-record expansion, agent switches,
 Caught Up work, Titty Tuesdays plans, FightAIQ data, MMA Files articles and
 BOOKSOFHISTORY shortlist, dossier and feature tabs. The latter supports explicit
 owner approval/rejection, Design Lab handoff and owner-entered per-lane results without
-automatic channel ingestion. Perfect, Good and Bad ratings keep their full history. A rating cannot found
+automatic channel ingestion. Door Money adds recommendations, owner actions and private-knowledge
+status. Perfect, Good and Bad ratings keep their full history. A rating cannot found
 a project or publish an item. The queue and its archive are editable by the owner, but
 owner input is optional.
 
@@ -200,5 +207,5 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 Missing variables deny the action. The owner checklist and the ordered setup path are
 both in `docs/NEEDED.md`.
 
-The canonical, standalone description of all eight projects, 44 roles, D1–D14 and
+The canonical, standalone description of all nine projects, 46 roles, D1–D14 and
 current generated state is `docs/ECOSYSTEM.md`.

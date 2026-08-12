@@ -265,6 +265,7 @@ describe("presets", () => {
     expect(livePresetsFor([preset], "mma-files")).toHaveLength(1);
     expect(livePresetsFor([preset], "caught-up")).toHaveLength(0);
     expect(livePresetsFor([{ ...preset, ventureScope: [] }], "caught-up")).toHaveLength(1);
+    expect(livePresetsFor([{ ...preset, ventureScope: ["door-money"] }], "door-money")).toHaveLength(1);
   });
 
   it("never offers a draft, because a draft is a design nobody has approved", () => {

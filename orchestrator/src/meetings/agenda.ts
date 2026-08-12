@@ -161,17 +161,35 @@ export async function requestMeetingAgenda(input: {
   notBefore: string;
   now: Date;
 }): Promise<{ agenda: MeetingAgenda; created: boolean }> {
+  const queue = await readMeetingAgendaQueue(input.root, input.now);
+  const prepared = prepareMeetingAgendaRequest({ ...input, queue });
+  if (prepared.created) await atomicWriteJson(input.root, MEETING_AGENDA_PATH, prepared.queue);
+  return { agenda: prepared.agenda, created: prepared.created };
+}
+
+export function prepareMeetingAgendaRequest(input: {
+  queue: MeetingAgendaQueue;
+  policy: MeetingPolicy;
+  ventureId: string;
+  phase: AgendaPhase;
+  requestedBy: string;
+  sourcePhase: string;
+  sourceMeetingRef: string;
+  summary: string;
+  evidenceRefs?: string[];
+  notBefore: string;
+  now: Date;
+}): { agenda: MeetingAgenda; created: boolean; queue: MeetingAgendaQueue } {
   if (!mayRequestMeeting(input.policy, input.sourcePhase, input.phase)) {
     throw new Error(`${input.sourcePhase} may not schedule ${input.phase}`);
   }
-  const queue = await readMeetingAgendaQueue(input.root, input.now);
-  const existing = queue.agendas.find((agenda) =>
+  const existing = input.queue.agendas.find((agenda) =>
     agenda.status === "pending" &&
     agenda.phase === input.phase &&
     agenda.notBefore === input.notBefore
   );
-  if (existing) return { agenda: existing, created: false };
-  const pending = queue.agendas.filter((agenda) => agenda.status === "pending");
+  if (existing) return { agenda: existing, created: false, queue: input.queue };
+  const pending = input.queue.agendas.filter((agenda) => agenda.status === "pending");
   if (pending.length >= input.policy.maxPending) {
     throw new Error(`Meeting agenda queue reached its ${input.policy.maxPending}-item pending limit`);
   }
@@ -199,12 +217,12 @@ export async function requestMeetingAgenda(input: {
     expiresAt: `${addDays(input.notBefore, input.policy.ttlDays)}T23:59:59.000Z`,
     status: "pending"
   });
-  await atomicWriteJson(input.root, MEETING_AGENDA_PATH, MeetingAgendaQueueSchema.parse({
+  const queue = MeetingAgendaQueueSchema.parse({
     schemaVersion: "meeting-agenda-queue/1",
-    agendas: [...queue.agendas, agenda],
+    agendas: [...input.queue.agendas, agenda],
     updatedAt: requestedAt
-  }));
-  return { agenda, created: true };
+  });
+  return { agenda, created: true, queue };
 }
 
 export interface StarvationEntry {
@@ -245,8 +263,22 @@ export async function consumeMeetingAgenda(input: {
   now: Date;
 }): Promise<void> {
   const queue = await readMeetingAgendaQueue(input.root, input.now);
+  await atomicWriteJson(input.root, MEETING_AGENDA_PATH, prepareMeetingAgendaConsumption({
+    queue,
+    agendaId: input.agendaId,
+    cycleId: input.cycleId,
+    now: input.now
+  }));
+}
+
+export function prepareMeetingAgendaConsumption(input: {
+  queue: MeetingAgendaQueue;
+  agendaId: string;
+  cycleId: string;
+  now: Date;
+}): MeetingAgendaQueue {
   let found = false;
-  const agendas = queue.agendas.map((agenda) => {
+  const agendas = input.queue.agendas.map((agenda) => {
     if (agenda.id !== input.agendaId) return agenda;
     found = true;
     if (agenda.status === "consumed" && agenda.consumedBy === input.cycleId) return agenda;
@@ -261,9 +293,9 @@ export async function consumeMeetingAgenda(input: {
     });
   });
   if (!found) throw new Error(`Unknown meeting agenda ${input.agendaId}`);
-  await atomicWriteJson(input.root, MEETING_AGENDA_PATH, MeetingAgendaQueueSchema.parse({
+  return MeetingAgendaQueueSchema.parse({
     schemaVersion: "meeting-agenda-queue/1",
     agendas,
     updatedAt: input.now.toISOString()
-  }));
+  });
 }

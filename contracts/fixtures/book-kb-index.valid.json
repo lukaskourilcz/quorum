@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "book-kb-index/1",
+  "ventureId": "door-money",
+  "ingestionId": "fixture-ingestion-2026-08-12",
+  "manuscriptHash": "sha256:4f41e4291ae4f32331a07fb44248b06cc49e48814f1e8de7dff0b20f77524998",
+  "manuscriptBytes": 1200,
+  "modelVersions": {
+    "annotation": "fixture-annotator-v1",
+    "rollup": "fixture-rollup-v1",
+    "embedding": "fixture-embedding-v1"
+  },
+  "ingestionCostUsd": 0,
+  "chunkCount": 1,
+  "chapters": [
+    {
+      "id": "ch01",
+      "ordinal": 1,
+      "summary": "A fictional courier takes a broken radio across town and learns why the neighborhood kept it.",
+      "chunkIds": [
+        "ch01-s01-c001"
+      ]
+    }
+  ],
+  "entityIndex": [
+    {
+      "id": "mara-vale",
+      "label": "Mara Vale",
+      "kind": "person",
+      "personSensitive": true,
+      "chunkIds": [
+        "ch01-s01-c001"
+      ]
+    },
+    {
+      "id": "night-bus",
+      "label": "Night Bus",
+      "kind": "venue",
+      "personSensitive": false,
+      "chunkIds": [
+        "ch01-s01-c001"
+      ]
+    }
+  ],
+  "themeIndex": [
+    {
+      "theme": "community-memory",
+      "chunkIds": [
+        "ch01-s01-c001"
+      ]
+    },
+    {
+      "theme": "resourcefulness",
+      "chunkIds": [
+        "ch01-s01-c001"
+      ]
+    }
+  ],
+  "chunks": [
+    {
+      "id": "ch01-s01-c001",
+      "chapterId": "ch01",
+      "sceneId": "ch01-s01",
+      "ordinal": 1,
+      "arc": "broken-radio",
+      "byteOffsets": {
+        "start": 0,
+        "end": 1080
+      },
+      "summary": "A courier returns a fictional radio to a night bus and turns a failed delivery into a small community ritual.",
+      "entities": [
+        {
+          "id": "mara-vale",
+          "label": "Mara Vale",
+          "kind": "person",
+          "personSensitive": true
+        },
+        {
+          "id": "night-bus",
+          "label": "Night Bus",
+          "kind": "venue",
+          "personSensitive": false
+        }
+      ],
+      "themes": [
+        "community-memory",
+        "resourcefulness"
+      ],
+      "era": "early-touring-years",
+      "storyType": "lesson",
+      "quotables": [
+        "The radio was broken, but the promise still worked."
+      ],
+      "scores": {
+        "entertainment": {
+          "score": 4,
+          "justification": "The failed errand turns into a compact reversal."
+        },
+        "emotionalImpact": {
+          "score": 4,
+          "justification": "The returned object carries a believable communal memory."
+        },
+        "shock": {
+          "score": 1,
+          "justification": "The scene relies on recognition rather than surprise."
+        },
+        "humor": {
+          "score": 2,
+          "justification": "The courier's stubborn route adds a dry comic beat."
+        },
+        "relatability": {
+          "score": 4,
+          "justification": "Keeping a small promise is an accessible conflict."
+        },
+        "hipHopRelevance": {
+          "score": 2,
+          "justification": "The portable radio offers a light cultural connection."
+        },
+        "storytellingStrength": {
+          "score": 5,
+          "justification": "The object, obstacle and payoff form a complete arc."
+        },
+        "controversy": {
+          "score": 0,
+          "justification": "The synthetic scene contains no polarizing claim."
+        },
+        "shareability": {
+          "score": 4,
+          "justification": "The promise line works as a concise social hook."
+        },
+        "educationalValue": {
+          "score": 2,
+          "justification": "The scene models resourcefulness without teaching a process."
+        },
+        "quotePotential": {
+          "score": 4,
+          "justification": "One short line stands alone without losing its meaning."
+        },
+        "carouselPotential": {
+          "score": 5,
+          "justification": "The route can unfold cleanly across several visual beats."
+        },
+        "shortVideoPotential": {
+          "score": 4,
+          "justification": "The delivery journey gives a script clear movement."
+        },
+        "threadPotential": {
+          "score": 3,
+          "justification": "The setup and reveal can support a short sequence."
+        },
+        "bookCuriosityPotential": {
+          "score": 4,
+          "justification": "The unresolved history of the bus invites a larger story."
+        }
+      },
+      "usageHistory": [
+        {
+          "recommendationId": "fixture-radio-carousel",
+          "recommendationPath": "state/ventures/door-money/recommendations/fixture-radio-carousel.json",
+          "recommendedOn": "2026-08-11",
+          "format": "carousel"
+        }
+      ]
+    }
+  ],
+  "generatedAt": "2026-08-12T10:00:00.000Z"
+}

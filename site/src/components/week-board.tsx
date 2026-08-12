@@ -5,6 +5,7 @@ import {
   ArrowRight,
   Beaker,
   BookOpen,
+  BookOpenText,
   Building2,
   CheckCircle2,
   CircleDollarSign,
@@ -55,7 +56,7 @@ function isCaughtUp(kind: CalendarKind) {
   return kind === "cu-edition" || kind === "cu-product";
 }
 
-type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "goviral" | "marketingshark" | "booksofhistory" | "fightaiq" | "mma-files" | "carousel-studio";
+type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "goviral" | "marketingshark" | "booksofhistory" | "door-money" | "fightaiq" | "mma-files" | "carousel-studio";
 type DisplayStatus = CalendarStatus | "test";
 
 const companyCouncil: readonly AgentId[] = ["VIZE", "FORGE", "PULSE", "AUDIT"];
@@ -113,6 +114,7 @@ const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone
   // the admin rail and the carousel canvases agree about what colour marketingShark is.
   marketingshark: { icon: Layers, label: "marketingShark", tone: "text-[var(--info-soft)]", slotColor: "#a5d8f3" },
   booksofhistory: { icon: BookOpen, label: "BOOKSOFHISTORY", tone: "text-[#c4b5fd]", slotColor: "#c4b5fd" },
+  "door-money": { icon: BookOpenText, label: "Door Money", tone: "text-[#c4b5fd]", slotColor: "#c4b5fd" },
   fightaiq: { icon: Swords, label: "FightAIQ", tone: "text-[var(--destructive-soft)]", slotColor: "var(--destructive-soft)" },
   "mma-files": {
     icon: FileText,
@@ -129,6 +131,7 @@ function projectForKind(kind: CalendarKind): ProjectKey {
   if (kind === "gv-brief") return "goviral";
   if (kind === "ms-daily") return "marketingshark";
   if (kind === "bh-desk") return "booksofhistory";
+  if (kind === "dm-desk" || kind === "dm-growth") return "door-money";
   if (kind === "mma-intake" || kind === "mma-analysis") return "fightaiq";
   if (kind === "mag-editorial" || kind === "mag-desk" || kind === "article-am" || kind === "article-pm") return "mma-files";
   if (kind === "studio") return "carousel-studio";

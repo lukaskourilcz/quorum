@@ -23,7 +23,9 @@ const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process
  */
 async function heroBase64(venture: CarouselSummaryVenture, slug: string, date: string): Promise<string | null> {
   // BOOKSOFHISTORY is typographic by founding decision; even an admin seed coverRef is ignored.
-  if (venture === "booksofhistory") return null;
+  // Door Money records carry no manuscript or private source material into the public repo, and
+  // its approval path currently writes text-only summaries. A missing hero is the honest result.
+  if (venture === "booksofhistory" || venture === "door-money") return null;
   const directory = venture === "mma-files"
     ? path.join(repositoryRoot, "state/ventures/mma-files/articles")
     : path.join(repositoryRoot, "state/edition/outbox");

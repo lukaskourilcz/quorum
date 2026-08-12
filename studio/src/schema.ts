@@ -270,7 +270,7 @@ export const CarouselTemplateSchema = z.object({
 
 export const BrandTokensSchema = z.object({
   schemaVersion: z.literal("carousel-brand/1"),
-  id: z.enum(["caught-up", "mma-files", "titty-tuesdays", "devshark", "geoshark", "booksofhistory"]),
+  id: z.enum(["caught-up", "mma-files", "titty-tuesdays", "devshark", "geoshark", "booksofhistory", "door-money"]),
   name: z.string().trim().min(2).max(80),
   logoText: z.string().trim().min(2).max(40),
   colors: z.record(TokenNameSchema, z.string().regex(/^#[0-9a-f]{6}$/i)),

@@ -2,6 +2,9 @@ import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { DEFAULT_BUDGET_LIMITS, exceedsDailyCap, type BudgetLedgerEntry } from "../src/budget.js";
+import { personaPromptPath } from "../src/paths.js";
+import { resolveDailyEnvelopePlan } from "../src/portfolio/schedule.js";
+import { ScheduledPhaseSchema } from "../src/types.js";
 
 const repoRoot = path.resolve(process.cwd(), "..");
 
@@ -9,34 +12,24 @@ async function json<T>(relative: string): Promise<T> {
   return JSON.parse(await readFile(path.join(repoRoot, relative), "utf8")) as T;
 }
 
-describe("closing 46-agent system audit", () => {
+describe("closing 48-agent system audit", () => {
   it("keeps every identity unique, prompt-backed and routable, seated or not", async () => {
     const registry = await json<{ agents: Array<{ id: string; slug: string; mission: string; status: string; provider: string; notResponsibleFor: string[] }> }>("config/agents.json");
     const routing = await json<{ agents: Record<string, { capabilities: string[]; status: string }> }>("config/agent-routing.json");
-    expect(registry.agents).toHaveLength(46);
-    expect(new Set(registry.agents.map((agent) => agent.id)).size).toBe(46);
-    expect(new Set(registry.agents.map((agent) => agent.mission)).size).toBe(46);
+    expect(registry.agents).toHaveLength(48);
+    expect(new Set(registry.agents.map((agent) => agent.id)).size).toBe(48);
+    expect(new Set(registry.agents.map((agent) => agent.mission)).size).toBe(48);
     expect(new Set(Object.keys(routing.agents))).toEqual(new Set(registry.agents.map((agent) => agent.id)));
-    // Forty-four profiles, thirty-five of them seated. A retired or paused agent keeps its
+    // Forty-eight profiles, thirty-nine of them seated. A retired or paused agent keeps its
     // prompt, its portrait and its routing entry -- the record of who did what does not shrink
     // when the roster does -- and the two files have to agree about which of the three it is.
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(37);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(39);
     for (const agent of registry.agents) {
       expect(["active", "paused", "retired"]).toContain(agent.status);
       expect(routing.agents[agent.id]?.status).toBe(agent.status);
       expect(agent.notResponsibleFor.length).toBeGreaterThan(0);
       expect(routing.agents[agent.id]?.capabilities.length).toBeGreaterThan(0);
-      await expect(access(path.join(
-        repoRoot,
-        "orchestrator",
-        "prompts",
-        agent.id === "FOLIO" || agent.id === "PLOT"
-          ? "booksofhistory"
-          : agent.id === "LETOPIS" || agent.id === "VERBA"
-            ? "tehdejsi-svet"
-            : "",
-        `${agent.slug}.md`
-      ))).resolves.toBeUndefined();
+      await expect(access(personaPromptPath(agent.slug))).resolves.toBeUndefined();
     }
   });
 
@@ -106,6 +99,41 @@ describe("closing 46-agent system audit", () => {
     }];
     const limits = { ...DEFAULT_BUDGET_LIMITS, dailyUsd: 1 };
     expect(exceedsDailyCap(0.1, ledger, now, limits)).toBe(true);
+
+    const rooms = registry.ventures
+      .flatMap((venture) => venture.meetings)
+      .map((meeting) => ({
+        phase: ScheduledPhaseSchema.parse(meeting.kind),
+        envelopeUsd: meeting.envelopeUsd * (meeting.kind === "ms-daily" ? enabledBrands : 1)
+      }));
+    // Read from the registry rather than pinned: the article slot reserves what it declares, and
+    // a literal here was still asserting two slots at an old per-run cap long after the desk
+    // moved to one article a day.
+    const articleProduction = registry.ventures
+      .flatMap((venture) => venture.productionJobs ?? [])
+      .reduce((sum, job) => sum + job.envelopeUsd, 0);
+    const morningCycleCap = 0.2;
+    // The two weekly rooms use daily cron syntax so their off-days can write $0 reason records.
+    // They are paid reservations only on their real weekdays: GoVIRAL on Monday and dm-growth
+    // on Thursday. Door Money owns the first two degradation rungs, then Tehdejsi svet, then
+    // BOOKSOFHISTORY, all before GoVIRAL; the $1 ceiling itself never moves.
+    const nonRoomReservationUsd = articleProduction + morningCycleCap;
+    const week = Array.from({ length: 7 }, (_, offset) => {
+      const date = new Date("2026-08-03T12:00:00.000Z");
+      date.setUTCDate(date.getUTCDate() + offset);
+      return resolveDailyEnvelopePlan({
+        date: date.toISOString().slice(0, 10),
+        rooms,
+        nonRoomReservationUsd,
+        dailyBudgetUsd: 1
+      });
+    });
+    expect(week[0]!.droppedRoomPhases).toEqual(["dm-desk", "ts-desk", "bh-desk"]);
+    expect(week[3]!.droppedRoomPhases).toEqual(["dm-growth", "dm-desk", "ts-desk", "bh-desk"]);
+    expect(week.filter((_, index) => index !== 3).every((plan) =>
+      plan.droppedRoomPhases.join(",") === "dm-desk,ts-desk,bh-desk"
+    )).toBe(true);
+    expect(week.every((plan) => plan.reservedUsd <= 1)).toBe(true);
   });
 
   it("keeps Carousel Studio free of provider SDKs and external template assets", async () => {

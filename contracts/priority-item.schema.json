@@ -81,6 +81,8 @@
         "CHUM",
         "FOLIO",
         "PLOT",
+        "GHOST",
+        "BOOKER",
         "LETOPIS",
         "VERBA"
       ]
@@ -189,6 +191,8 @@
                 "CHUM",
                 "FOLIO",
                 "PLOT",
+                "GHOST",
+                "BOOKER",
                 "LETOPIS",
                 "VERBA"
               ]

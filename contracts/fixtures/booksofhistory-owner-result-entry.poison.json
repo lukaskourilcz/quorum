@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "owner-result-entry/1",
+  "resultId": "result-bbbbbbbbbbbbbbbbbbbb",
+  "ventureId": "booksofhistory",
+  "recommendationId": "rec-aaaaaaaaaaaaaaaaaaaa",
+  "locale": "cs",
+  "platform": "instagram",
+  "postUrl": "https://social.example/booksofhistory-cs",
+  "capturedAt": "2026-08-20T12:00:00.000Z",
+  "recordedAt": "2026-08-20T12:05:00.000Z",
+  "enteredBy": "automated-ingestion",
+  "metrics": {
+    "views": null,
+    "likes": null,
+    "comments": null,
+    "shares": null,
+    "saves": null,
+    "follows": null,
+    "linkTaps": null
+  },
+  "note": null
+}

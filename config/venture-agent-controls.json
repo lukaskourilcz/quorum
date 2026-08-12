@@ -114,6 +114,18 @@
       "switchable": [],
       "disabled": []
     },
+    "door-money": {
+      "lockedOn": [
+        "GHOST",
+        "BOOKER",
+        "PULSE",
+        "AUDIT"
+      ],
+      "switchable": [
+        "PALATE"
+      ],
+      "disabled": []
+    },
     "carousel-studio": {
       "lockedOn": [
         "KEEPER",

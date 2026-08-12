@@ -64,7 +64,8 @@
                     "live-template-library",
                     "package-cadence",
                     "feature-cadence",
-                    "research-efficiency"
+                    "research-efficiency",
+                    "action-completion"
                   ]
                 }
               }
@@ -108,6 +109,9 @@
                 "shortlist",
                 "dossiers",
                 "features",
+                "recommendations",
+                "actions",
+                "knowledge",
                 "library",
                 "signals"
               ]
@@ -208,6 +212,8 @@
                       "CHUM",
                       "FOLIO",
                       "PLOT",
+                      "GHOST",
+                      "BOOKER",
                       "LETOPIS",
                       "VERBA"
                     ]

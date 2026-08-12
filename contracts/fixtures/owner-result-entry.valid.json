@@ -1,22 +1,17 @@
 {
   "schemaVersion": "owner-result-entry/1",
-  "resultId": "result-aaaaaaaaaaaaaaaaaaaa",
-  "ventureId": "booksofhistory",
-  "recommendationId": "rec-aaaaaaaaaaaaaaaaaaaa",
-  "locale": "cs",
+  "id": "owner-result-3bb6503f7da3e8aa84dac627",
+  "ventureId": "door-money",
+  "recommendationId": "fixture-radio-carousel",
   "platform": "instagram",
-  "postUrl": "https://social.example/booksofhistory-cs",
-  "capturedAt": "2026-08-20T12:00:00.000Z",
-  "recordedAt": "2026-08-20T12:05:00.000Z",
-  "enteredBy": "owner",
+  "postUrl": "https://example.test/posts/fixture-radio-carousel",
   "metrics": {
-    "views": 1200,
-    "likes": 84,
-    "comments": 7,
-    "shares": 13,
-    "saves": 31,
-    "follows": 5,
-    "linkTaps": null
+    "views": 120,
+    "likes": 14,
+    "saves": 5,
+    "linkTaps": 2
   },
-  "note": "First owner-entered Czech lane result."
+  "outcome": "The fictional carousel earned five saves and two link taps in this synthetic example.",
+  "source": "owner-entry",
+  "capturedAt": "2026-08-12T18:00:00.000Z"
 }

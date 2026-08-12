@@ -2,16 +2,16 @@ import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { VentureRecommendationSchema } from "../src/contracts/venture-recommendation.js";
+import { BooksofHistoryRecommendationSchema } from "../src/contracts/venture-recommendation.js";
 import { repoRoot } from "../src/paths.js";
 import { storeApprovedBhCarouselSummaries } from "../src/ventures/booksofhistory/summaries.js";
 
 async function approvedRecommendation() {
   const fixture = JSON.parse(await readFile(
-    path.join(repoRoot, "contracts/fixtures/venture-recommendation.valid.json"),
+    path.join(repoRoot, "contracts/fixtures/booksofhistory-recommendation.valid.json"),
     "utf8"
   )) as Record<string, unknown>;
-  return VentureRecommendationSchema.parse({
+  return BooksofHistoryRecommendationSchema.parse({
     ...fixture,
     status: "approved",
     designLab: {

@@ -16,6 +16,9 @@ import { CaughtUpEventsPanel } from "@/components/admin/caught-up-events-panel";
 import { BooksofhistoryDossiersPanel } from "@/components/admin/booksofhistory-dossiers-panel";
 import { BooksofhistoryFeaturesPanel } from "@/components/admin/booksofhistory-features-panel";
 import { BooksofhistoryShortlistPanel } from "@/components/admin/booksofhistory-shortlist-panel";
+import { DoorMoneyActionsPanel } from "@/components/admin/door-money-actions-panel";
+import { DoorMoneyKnowledgePanel } from "@/components/admin/door-money-knowledge-panel";
+import { DoorMoneyRecommendationsPanel } from "@/components/admin/door-money-recommendations-panel";
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { AdminMoneyPanel } from "@/components/admin/money-panel";
@@ -44,6 +47,7 @@ import {
 } from "@/lib/design-lab-ventures";
 import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminCaughtUp } from "@/lib/admin-caught-up";
+import { readAdminDoorMoney } from "@/lib/admin-door-money";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
@@ -159,7 +163,8 @@ export default async function AdminPage({
     monetization,
     renderedDesk,
     ttProposals,
-    approvedUndelivered
+    approvedUndelivered,
+    doorMoney
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -183,7 +188,8 @@ export default async function AdminPage({
     readMonetizationOptions(),
     readRenderedDesk(),
     readTittyTuesdaysProposals(),
-    readApprovedUndeliveredPayloads(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), ".."))
+    readApprovedUndeliveredPayloads(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")),
+    readAdminDoorMoney()
   ]);
 
   /*
@@ -226,6 +232,12 @@ export default async function AdminPage({
   const labVenture = await readDesignLabVenture(labVentureId);
   const brandId = selectedVenture?.id ?? "global";
   const brand = ventureBrand(brandId);
+  const doorMoneyActionCount = doorMoney.actions.packets.reduce((sum, packet) => sum + packet.tasks.length, 0) +
+    doorMoney.actions.playbooks.length;
+  const doorMoneyKnowledgeCount = doorMoney.knowledge.index
+    ? doorMoney.knowledge.index.chapters.length + doorMoney.knowledge.index.chunks.length +
+      Number(doorMoney.knowledge.styleProfile !== null)
+    : 0;
 
   /**
    * How many stored items a workspace holds.
@@ -237,18 +249,20 @@ export default async function AdminPage({
   const savedItemCount = (ventureId: string, fallback: number) =>
     ventureId === "mma-files"
       ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
-      : ventureId === "carousel-studio"
-        ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
-        : ventureId === "booksofhistory"
-          ? (booksofhistory.shortlist ? 1 : 0)
-            + (booksofhistory.brief ? 1 : 0)
-            + (booksofhistory.cycle ? 1 : 0)
-            + booksofhistory.dossiers.length
-            + booksofhistory.ledger.length
-            + booksofhistory.features.length
-        : ventureId === "fightaiq"
-          ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.sources.length
-          : fallback;
+      : ventureId === "door-money"
+        ? doorMoney.recommendations.items.length + doorMoneyActionCount + doorMoneyKnowledgeCount
+        : ventureId === "carousel-studio"
+          ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
+          : ventureId === "booksofhistory"
+            ? (booksofhistory.shortlist ? 1 : 0)
+              + (booksofhistory.brief ? 1 : 0)
+              + (booksofhistory.cycle ? 1 : 0)
+              + booksofhistory.dossiers.length
+              + booksofhistory.ledger.length
+              + booksofhistory.features.length
+            : ventureId === "fightaiq"
+              ? fightaiq.fighters.length + fightaiq.events.length + fightaiq.bouts.length + fightaiq.sources.length
+              : fallback;
 
   const files = [
     { name: "Things only you can approve", content: state.inbox },
@@ -363,7 +377,8 @@ export default async function AdminPage({
         mmaFiles.unreadable.length +
         fightaiq.unreadable.length +
         booksofhistory.unreadable.total +
-        ownerAttention.unreadable
+        ownerAttention.unreadable +
+        doorMoney.unreadable
     }
   ];
 
@@ -377,7 +392,9 @@ export default async function AdminPage({
       ? [...selectedVenture.unreadableFiles, ...fightaiq.unreadable]
     : selectedVenture?.id === "booksofhistory"
       ? [...selectedVenture.unreadableFiles, ...Object.entries(booksofhistory.unreadable).flatMap(([store, count]) => store !== "total" && count ? [`${store} (${count})`] : [])]
-    : selectedVenture?.unreadableFiles ?? [];
+      : selectedVenture?.id === "door-money" && doorMoney.unreadable > 0
+        ? [...selectedVenture.unreadableFiles, `Door Money stores (${doorMoney.unreadable})`]
+        : selectedVenture?.unreadableFiles ?? [];
 
   const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual" | "social-variant">> = {
     ideas: "idea",
@@ -437,6 +454,18 @@ export default async function AdminPage({
         node: <TittyTuesdaysProposalsPanel snapshot={ttProposals} />,
         count: ttProposals.days.reduce((sum, day) => sum + day.variants.length, 0)
       };
+    }
+    if (id === "door-money" && selectedTab === "recommendations") {
+      return {
+        node: <DoorMoneyRecommendationsPanel recommendations={doorMoney.recommendations} />,
+        count: doorMoney.recommendations.items.length
+      };
+    }
+    if (id === "door-money" && selectedTab === "actions") {
+      return { node: <DoorMoneyActionsPanel snapshot={doorMoney.actions} />, count: doorMoneyActionCount };
+    }
+    if (id === "door-money" && selectedTab === "knowledge") {
+      return { node: <DoorMoneyKnowledgePanel knowledge={doorMoney.knowledge} />, count: doorMoneyKnowledgeCount };
     }
     if (id === "caught-up" && selectedTab === "events") {
       return {

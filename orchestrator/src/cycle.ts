@@ -112,6 +112,11 @@ import { findSlotRecord } from "./meetings/slot-record.js";
 import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
 import { runMarketingSharkCycle } from "./ventures/marketingshark/run.js";
 import { runBooksofHistoryCycle } from "./ventures/booksofhistory/run.js";
+import {
+  isDoorMoneyPhase,
+  runDoorMoneyDeskCycle,
+  runDoorMoneyGrowthCycle
+} from "./ventures/door-money/run.js";
 import { runTehdejsiSvetCycle } from "./ventures/tehdejsi-svet/run.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
 import {
@@ -362,6 +367,14 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     // runPortfolioCycle handles its own cap stops and returns a skip rather than throwing; the
     // wrapper is the backstop for a refusal on a path inside it that this change did not reach.
     return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
+  }
+  if (isDoorMoneyPhase(options.phase)) {
+    if (options.phase === "dm-desk") {
+      const run = () => runDoorMoneyDeskCycle({ cycleId, now, dry: options.dry });
+      return options.dry ? run() : withFileLock(stateRoot, ".lock", run);
+    }
+    const run = () => runDoorMoneyGrowthCycle({ cycleId, now, dry: options.dry });
+    return options.dry ? run() : withFileLock(stateRoot, ".lock", run);
   }
   if (options.phase === "ms-daily") {
     const stages = JSON.parse(await readFile(path.join(configRoot, "stages.json"), "utf8")) as { current: Stage };
