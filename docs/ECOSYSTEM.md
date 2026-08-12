@@ -7,7 +7,7 @@ Authority: current code, committed state, decisions D1–D13 and the pending ven
 
 ## What BoardlessAI is
 
-BoardlessAI is a Git-backed operating system for eight AI-assisted projects. It is not
+BoardlessAI is a Git-backed operating system for nine AI-assisted projects. It is not
 an always-on group chat and it does not reward agent activity for its own sake. A
 small board chooses bounded work, specialist rooms open only for a concrete agenda or
 service need, deterministic code handles checks wherever judgment is unnecessary,
@@ -85,7 +85,7 @@ their packet. They do not approve their own release or expand their own scope.
 External pages, articles, APIs and owner notes enter as untrusted data; they never
 become instructions. Numeric and factual claims must retain evidence references.
 
-## The eight projects
+## The nine projects
 
 ### Caught Up
 
@@ -545,7 +545,7 @@ outcome, not a reason to rerun paid work.
 
 ## Open questions for Fable
 
-1. Which owner-facing view would make eight projects feel simpler without hiding gates
+1. Which owner-facing view would make nine projects feel simpler without hiding gates
    or unavailable data?
 2. Which repeated board decisions can become deterministic checks, and which still
    require genuine judgment?

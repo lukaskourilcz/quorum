@@ -1,6 +1,6 @@
 # BoardlessAI project model
 
-BoardlessAI is one guarded operating system with eight project workspaces. Shared
+BoardlessAI is one guarded operating system with nine project workspaces. Shared
 infrastructure owns the agent registry, budget, source policy, meeting records,
 specialist agendas, calendar, admin, delivery checks and public explanation. Each
 project keeps a narrow output boundary rather than cloning the orchestrator.
@@ -27,7 +27,7 @@ contracts retain the word `venture` for compatibility; visitor-facing text says
 ## People and authority
 
 Four decision-makers—VIZE, FORGE, PULSE and AUDIT—hold company-wide authority.
-Thirty-one active specialists do bounded work only when a service path or due agenda needs
+Thirty-three active specialists do bounded work only when a service path or due agenda needs
 their domain. The registry holds 44 entries: 35 active, 6 paused and 3 retired. A
 stood-down role stays on the record — the router skips it and names it — so the count
 that matters is the thirty-five that work. The 27

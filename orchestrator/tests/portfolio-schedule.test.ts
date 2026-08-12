@@ -91,7 +91,7 @@ describe("portfolio schedule and budget gate", () => {
 
   it("extends the monthly-headroom degradation ladder without displacing Caught Up", async () => {
     const registry = await loadVentureRegistry();
-    expect(ROOM_DEGRADATION_ORDER.slice(0, 3)).toEqual(["dm-growth", "dm-desk", "gv-brief"]);
+    expect(ROOM_DEGRADATION_ORDER).toEqual(["dm-growth", "dm-desk", "bh-desk", "gv-brief", "tt-marketing"]);
     const growthDropped = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 2.74 });
     expect(growthDropped.activePhases).not.toContain("dm-growth");
     expect(growthDropped.activePhases).toEqual(expect.arrayContaining(["dm-desk", "gv-brief"]));

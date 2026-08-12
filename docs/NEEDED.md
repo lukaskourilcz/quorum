@@ -427,7 +427,7 @@ Judgement calls. Nothing is blocked on code for any of these.
   depend on them; replace the files at the same names and nothing else changes.
   [imp:2] [owner:me] [time:2h] [kind:content]
 
-- [ ] **Portraits for the roles that have none** — 27 of 44 registered roles have an approved
+- [ ] **Portraits for the roles that have none** — 27 of 46 registered roles have an approved
   portrait. The rest fall back to an initials tile on the team panel and to the anonymous
   silhouette in the workspace player, which is honest but plain.
   [imp:1] [owner:me] [time:1h] [kind:content]

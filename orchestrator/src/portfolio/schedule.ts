@@ -41,6 +41,7 @@ export interface EffectivePortfolioSchedule {
 export const ROOM_DEGRADATION_ORDER = [
   "dm-growth",
   "dm-desk",
+  "bh-desk",
   "gv-brief",
   "tt-marketing"
 ] as const satisfies readonly ScheduledPhase[];

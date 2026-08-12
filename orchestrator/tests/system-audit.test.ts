@@ -115,8 +115,8 @@ describe("closing 46-agent system audit", () => {
     const morningCycleCap = 0.2;
     // The two weekly rooms use daily cron syntax so their off-days can write $0 reason records.
     // They are paid reservations only on their real weekdays: GoVIRAL on Monday and dm-growth
-    // on Thursday. Door Money owns the first two degradation rungs, so Monday sheds dm-desk and
-    // Thursday sheds dm-growth; the other five days need neither weekly room and fit exactly.
+    // on Thursday. Door Money owns the first two degradation rungs, then BOOKSOFHISTORY yields
+    // before GoVIRAL; the $1 ceiling itself never moves.
     const nonRoomReservationUsd = articleProduction + morningCycleCap;
     const week = Array.from({ length: 7 }, (_, offset) => {
       const date = new Date("2026-08-03T12:00:00.000Z");
@@ -128,9 +128,11 @@ describe("closing 46-agent system audit", () => {
         dailyBudgetUsd: 1
       });
     });
-    expect(week[0]!.droppedRoomPhases).toEqual(["dm-desk"]);
-    expect(week[3]!.droppedRoomPhases).toEqual(["dm-growth"]);
-    expect(week.filter((_, index) => index !== 0 && index !== 3).every((plan) => plan.droppedRoomPhases.length === 0)).toBe(true);
+    expect(week[0]!.droppedRoomPhases).toEqual(["dm-desk", "bh-desk"]);
+    expect(week[3]!.droppedRoomPhases).toEqual(["dm-growth", "dm-desk", "bh-desk"]);
+    expect(week.filter((_, index) => index !== 3).every((plan) =>
+      plan.droppedRoomPhases.join(",") === "dm-desk,bh-desk"
+    )).toBe(true);
     expect(week.every((plan) => plan.reservedUsd <= 1)).toBe(true);
   });
 
