@@ -25,6 +25,15 @@ export interface ImagePrice {
   verifiedAt: string;
 }
 
+export interface EmbeddingPrice {
+  model: "text-embedding-3-small";
+  effectiveFrom: string;
+  effectiveTo: string | null;
+  inputUsdPerMillion: number;
+  sourceUrl: string;
+  verifiedAt: string;
+}
+
 const OPENAI_PRICING = "https://developers.openai.com/api/docs/pricing";
 const ANTHROPIC_PRICING =
   "https://platform.claude.com/docs/en/about-claude/pricing";
@@ -137,6 +146,17 @@ export const TEXT_PRICES: readonly TextPrice[] = [
     outputUsdPerMillion: 5,
     sourceUrl: ANTHROPIC_PRICING,
     verifiedAt: "2026-07-23"
+  }
+] as const;
+
+export const EMBEDDING_PRICES: readonly EmbeddingPrice[] = [
+  {
+    model: "text-embedding-3-small",
+    effectiveFrom: "2024-01-25",
+    effectiveTo: null,
+    inputUsdPerMillion: 0.02,
+    sourceUrl: "https://developers.openai.com/api/docs/models/text-embedding-3-small",
+    verifiedAt: "2026-08-12"
   }
 ] as const;
 

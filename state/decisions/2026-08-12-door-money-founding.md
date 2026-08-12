@@ -140,6 +140,11 @@ costs and no treasury action in this decision.
   plan. Login checks allow the current fail-closed `returnTo=/admin` parameter, while the plain-copy
   guard no longer mistakes the legitimate Threads and Instagram channel labels for leaked agent
   codenames; FRAME, SCRIBE and HERALD remain forbidden.
+- **DM-10a's amended issue names an owner-created book database, while all three
+  higher-precedence program records require the configured private store.** The design explicitly
+  rules out a vector database, and the build prompt assigns private-store persistence to DM-11.
+  The guarded wrapper therefore performs no persistence: it returns vectors in memory for the
+  later DM-11 client, and no vector or source text is written to this public repository.
 
 ## Delivery ledger
 
@@ -164,7 +169,7 @@ costs and no treasury action in this decision.
 - [x] DM-08a — Annotation and fifteen-axis scoring pass
 - [x] DM-08b — Ingestion cursor and resumability
 - [x] DM-09 — Style profile via map-reduce
-- [ ] DM-10a — Guarded embeddings wrapper
+- [x] DM-10a — Guarded embeddings wrapper
 - [ ] DM-10b — Budget-ledger kind for embeddings
 - [ ] DM-11a — The book:ingest CLI with envelopes
 - [ ] DM-11b — Public/private output split and manuscript-hash idempotency
