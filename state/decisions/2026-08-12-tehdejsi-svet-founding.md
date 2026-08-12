@@ -44,16 +44,16 @@ it to and no askable question fails, however interesting.
 
 ## Adoption terms
 
-- **The product repository is read-only to this venture.** No module here writes to,
-  pushes to or opens a pull request against `lukaskourilcz/dontwannaknow`. A test pins
-  it. Product changes travel only as product-insight queue entries the owner acts on.
+- **The product repository is not reachable from this venture at all.** Nothing here
+  reads, writes, clones or names it; a test fails if any module, prompt, config or
+  workflow does. Product changes travel only as product-insight queue entries the owner
+  acts on. See *Adapted during implementation*.
 - **The product's own flags are honoured structurally.** Records marked
   `shareSafe: false` — every leader profile among them — and city images marked
   `excluded` are omitted when the snapshot is built, not filtered later at use.
-- **The snapshot is committed, not fetched.** The venture reads a committed,
-  hash-verified snapshot of the product's public data, the way marketingShark reads its
-  question bank. The daily room never touches the network. See *Adapted during
-  implementation*.
+- **The facts file is committed by hand, not fetched.** The venture reads one
+  hash-verified file of era and history facts, copied here by a human, and the daily room
+  never touches the network. See *Adapted during implementation*.
 - **Marketing research never becomes product data.** Dossiers written here are venture
   assets. When research produces something the product should have, it becomes a
   product-insight queue item; only the owner carries it through the product's own
@@ -95,10 +95,9 @@ snapshot is a committed file and the venture buys no data.
 
 ## Human approval gates
 
-1. **TS-SNAPSHOT-001** — the committed snapshot read layer: an owner-run CLI over a
-   local clone of the product repository, the build-time exclusion rules, the
-   hash-verified loader, and the standing term that nothing writes to the product
-   repository. `$0`.
+1. **TS-SNAPSHOT-001** — the committed facts file: what a human may copy across, the
+   structural exclusion rules, the hash-verified loader, and the standing term that
+   nothing here reaches the product repository at all. `$0`.
 2. **TS-MEDIA-002** — the deliberate divergence from the product's internal rule: the
    nineteen licensed city photographs may appear in social cards with on-slide
    attribution and licence-respecting captions, exclusions honoured. The product's own
@@ -128,14 +127,14 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-04c** — Model roles for LETOPIS and VERBA
 - [ ] **TS-05a** — Cycle state machine and runner dispatch
 - [ ] **TS-05b** — Scaffold, hue, labels, KPI seeds and ladder position
-- [ ] **TS-06a** — `tehdejsi-snapshot` contract
-- [ ] **TS-06b** — Build-rule exclusion tests (`shareSafe`, excluded media)
-- [ ] **TS-07** — The `tehdejsi:sync` CLI
-- [ ] **TS-08** — Snapshot loader with hash verification and cache
+- [x] **TS-06a** — `tehdejsi-facts` contract
+- [x] **TS-06b** — Build-rule exclusion tests (`shareSafe`, excluded media)
+- [x] **TS-07** — The committed facts file and its contract
+- [x] **TS-08** — Facts loader with hash verification and cache
 - [ ] **TS-09a** — The social opportunity scorer
 - [ ] **TS-09b** — Shortlist records
 - [ ] **TS-10a** — Research reuse with venture ledger and ceilings
-- [ ] **TS-10b** — The product-repo read-only pin
+- [x] **TS-10b** — The no-product-link guard (inverted from a read-only pin)
 - [ ] **TS-11a** — Sensitivity tier classifier and tier effects
 - [ ] **TS-11b** — Terminology table and its checks
 - [ ] **TS-11c** — Wartime-remembrance, no-flags and no-AI-imagery lints

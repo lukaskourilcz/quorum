@@ -21,9 +21,16 @@ Branch `agent/tehdejsi-svet`, merged to `main`. Four commits:
 | `52807d4` | TS-04a…TS-04c — LETOPIS and VERBA seated end to end |
 | `18eaa30` | the `ts-desk` dispatch and its $0 checkpoint runner |
 | `b2e27e2` | the Door Money merge — see *Merging with Door Money* below |
+| `91cad97` | TS-06a…TS-08 and TS-10b — the facts file, its loader and the no-link guard |
 
-Issues TS-00 through TS-04c (289–299) are done. TS-05a is half done: the runner dispatch
-exists, the cycle state machine does not.
+Issues TS-00 through TS-04c (289–299) are done, and so are TS-06a, TS-06b, TS-07, TS-08
+and TS-10b (302–305, 309). TS-05a is half done: the runner dispatch exists, the cycle
+state machine does not.
+
+Every scheduled venture phase was dry-run end to end after the merge — `ts-desk`,
+`dm-desk`, `dm-growth`, `bh-desk`, `ms-daily`, `gv-brief`, `tt-marketing`, `cu-product`,
+`mag-editorial`, `mag-desk`, `mma-intake`, `mma-analysis` — and all twelve dispatch and
+complete. No phase reaches the "Unsupported venture phase" branch.
 
 ## What actually runs today
 
@@ -74,11 +81,12 @@ still holds. The daily room touches no network, the day is reproducible offline,
 
 ## What is left
 
-39 open issues, TS-05a through TS-24c (300–337), in the order the founding checklist
-lists them. Roughly:
+34 open issues under TS, in the order the founding checklist lists them. Roughly:
 
-- **The read layer** — TS-05a…TS-08. Cycle state machine, scaffold, facts-file contract,
-  exclusion tests, authoring, loader.
+- **The read layer** — TS-05a and TS-05b remain: the two-day cycle state machine that
+  replaces the checkpoint runner's body, and the KPI seeds and scaffold. The facts file,
+  its contract, its exclusion rules and its loader are done and committed at
+  `state/ventures/tehdejsi-svet/facts.json`, with five seeded, sourced facts.
 - **Selection** — TS-09a…TS-12. Scorer, shortlist records, research reuse with its
   `$0.30`-per-brief and `$2.00`-per-month ceilings, sensitivity tiers, terminology table,
   the remembrance and no-flags lints, the `tehdejsi-story` evidence kind.
