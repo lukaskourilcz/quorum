@@ -1,13 +1,18 @@
 import { createHash } from "node:crypto";
 import {
   KvorumMonitorClusterSchema,
+  KvorumClusterRankSchema,
+  type KvorumClusterRank,
   type KvorumMonitorCluster,
   type KvorumMonitorItem
 } from "../../contracts/kvorum-monitor.js";
+import type { KvorumEntityLexicon } from "../../contracts/kvorum-entities.js";
 import { canonicalUrl } from "../../streams/normalize.js";
 
 export const KVORUM_CLUSTER_JACCARD_THRESHOLD = 0.2;
 export const KVORUM_ENTITY_JACCARD_WEIGHT = 4;
+export const KVORUM_NOVELTY_WINDOW_DAYS = 14;
+export const KVORUM_CONTINUATION_JACCARD_THRESHOLD = 0.5;
 
 const MAX_TOPIC_TOKENS = 10;
 const CZECH_STOPWORDS = new Set([
@@ -36,6 +41,18 @@ interface WorkingCluster {
 export interface KvorumClusterOptions {
   jaccardThreshold?: number;
   entityLabels?: Readonly<Record<string, string>>;
+}
+
+export interface KvorumPriorRecommendation {
+  recommendationId: string;
+  recommendedAt: string;
+  entityIds: string[];
+  topicTokens: string[];
+}
+
+export interface KvorumRankedClusters {
+  clusters: KvorumMonitorCluster[];
+  ranks: KvorumClusterRank[];
 }
 
 function sortedUnique(values: Iterable<string>): string[] {
@@ -237,4 +254,154 @@ export function clusterKvorumItems(
   return clusters
     .map((cluster) => materializeCluster(cluster, options.entityLabels ?? {}))
     .sort((left, right) => left.id.localeCompare(right.id));
+}
+
+interface RecentRecommendation extends KvorumSignature {
+  recommendationId: string;
+  recommendedAt: string;
+  ageDays: number;
+}
+
+function round6(value: number): number {
+  return Math.round(value * 1_000_000) / 1_000_000;
+}
+
+function recentRecommendations(
+  history: readonly KvorumPriorRecommendation[],
+  now: Date
+): RecentRecommendation[] {
+  if (Number.isNaN(now.getTime())) throw new Error("Kvórum ranking requires a valid now timestamp.");
+  const seen = new Set<string>();
+  return history.flatMap((entry) => {
+    if (!entry.recommendationId || entry.recommendationId.length > 160 || seen.has(entry.recommendationId)) {
+      throw new Error("Kvórum recommendation history requires unique ids of at most 160 characters.");
+    }
+    seen.add(entry.recommendationId);
+    const timestamp = Date.parse(entry.recommendedAt);
+    if (!Number.isFinite(timestamp) || timestamp > now.getTime()) {
+      throw new Error("Kvórum recommendation history contains an invalid or future timestamp.");
+    }
+    const ageDays = (now.getTime() - timestamp) / 86_400_000;
+    if (ageDays > KVORUM_NOVELTY_WINDOW_DAYS) return [];
+    return [{
+      recommendationId: entry.recommendationId,
+      recommendedAt: new Date(timestamp).toISOString(),
+      ageDays,
+      entityIds: sortedUnique(entry.entityIds),
+      topicTokens: sortedUnique(entry.topicTokens)
+    }];
+  });
+}
+
+function noveltyAndContinuation(
+  cluster: KvorumMonitorCluster,
+  history: readonly RecentRecommendation[]
+): { novelty: number; continuationOf: string | null } {
+  const matches = history.map((prior) => ({
+    prior,
+    similarity: kvorumJaccard(cluster, prior)
+  })).sort((left, right) =>
+    right.similarity - left.similarity
+    || right.prior.recommendedAt.localeCompare(left.prior.recommendedAt)
+    || left.prior.recommendationId.localeCompare(right.prior.recommendationId));
+  const strongest = matches[0];
+  if (!strongest) return { novelty: 1, continuationOf: null };
+
+  const priorEntities = new Set(strongest.prior.entityIds);
+  const priorTopics = new Set(strongest.prior.topicTokens);
+  const hasDevelopment = cluster.entityIds.some((id) => !priorEntities.has(id))
+    || cluster.topicTokens.some((token) => !priorTopics.has(token));
+  const sameStory = strongest.similarity >= KVORUM_CONTINUATION_JACCARD_THRESHOLD;
+  if (sameStory && !hasDevelopment) return { novelty: 0, continuationOf: null };
+
+  const repeatPenalty = Math.max(...matches.map(({ prior, similarity }) =>
+    similarity * (1 - prior.ageDays / KVORUM_NOVELTY_WINDOW_DAYS)));
+  return {
+    novelty: round6(Math.max(0, Math.min(1, 1 - repeatPenalty))),
+    continuationOf: sameStory ? strongest.prior.recommendationId : null
+  };
+}
+
+function rankFactors(input: {
+  cluster: KvorumMonitorCluster;
+  itemsByRef: ReadonlyMap<string, KvorumMonitorItem>;
+  weights: ReadonlyMap<string, number>;
+  standingTopics: ReadonlySet<string>;
+  novelty: number;
+}): KvorumClusterRank["factors"] {
+  const evidenceDomains = new Set(input.cluster.attributions
+    .filter((item) => !item.discoveryOnly)
+    .map((item) => new URL(item.url).hostname.replace(/^www\./u, "")));
+  const entityWeights = input.cluster.entityIds.map((id) => {
+    const weight = input.weights.get(id);
+    if (weight === undefined) throw new Error(`Kvórum rank cannot resolve entity weight: ${id}`);
+    return weight;
+  });
+  const engagement = input.cluster.itemRefs.reduce((total, ref) => {
+    const item = input.itemsByRef.get(ref);
+    return total + (item && "stit" in item
+      ? (item.stit.likes ?? 0) + 2 * (item.stit.comments ?? 0) + 3 * (item.stit.shares ?? 0)
+      : 0);
+  }, 0);
+  const standingCount = input.cluster.entityIds.filter((id) => input.standingTopics.has(id)).length;
+  return {
+    corroboration: evidenceDomains.size,
+    entityWeight: entityWeights.length > 0
+      ? round6(entityWeights.reduce((sum, weight) => sum + weight, 0) / entityWeights.length)
+      : 1,
+    engagementSalience: round6(1 + Math.log10(1 + engagement)),
+    novelty: input.novelty,
+    standingTopicContinuity: 1 + Math.min(2, standingCount) * 0.25
+  };
+}
+
+/** Pure ranking: all factors and continuation decisions are reconstructable from its inputs. */
+export function rankKvorumClusters(input: {
+  clusters: readonly KvorumMonitorCluster[];
+  items: readonly KvorumMonitorItem[];
+  lexicon: KvorumEntityLexicon;
+  priorRecommendations: readonly KvorumPriorRecommendation[];
+  now: Date;
+}): KvorumRankedClusters {
+  const history = recentRecommendations(input.priorRecommendations, input.now);
+  const weights = new Map(input.lexicon.entities.map((entity) => [entity.id, entity.weight]));
+  const standingTopics = new Set(input.lexicon.entities
+    .filter((entity) => entity.kind === "topic")
+    .map((entity) => entity.id));
+  const itemsByRef = new Map(input.items.map((item) => [kvorumMonitorItemRef(item), item]));
+  const evaluated = input.clusters.map((cluster) => {
+    const historyResult = noveltyAndContinuation(cluster, history);
+    const retained = KvorumMonitorClusterSchema.parse({
+      ...cluster,
+      continuationOf: historyResult.continuationOf
+    });
+    const factors = rankFactors({
+      cluster: retained,
+      itemsByRef,
+      weights,
+      standingTopics,
+      novelty: historyResult.novelty
+    });
+    return {
+      cluster: retained,
+      score: round6(
+        factors.corroboration
+        * factors.entityWeight
+        * factors.engagementSalience
+        * factors.novelty
+        * factors.standingTopicContinuity
+      ),
+      factors
+    };
+  });
+  evaluated.sort((left, right) => right.score - left.score || left.cluster.id.localeCompare(right.cluster.id));
+  return {
+    clusters: evaluated.map((entry) => entry.cluster).sort((left, right) => left.id.localeCompare(right.id)),
+    ranks: evaluated.map((entry, index) => KvorumClusterRankSchema.parse({
+      clusterId: entry.cluster.id,
+      position: index + 1,
+      score: entry.score,
+      factors: entry.factors
+    }))
+  };
 }

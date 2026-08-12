@@ -85,6 +85,12 @@ export const KvorumMonitorClusterSchema = z.strictObject({
     });
   }
   const refs = new Set(cluster.itemRefs);
+  if (new Set(cluster.entityIds).size !== cluster.entityIds.length) {
+    context.addIssue({ code: "custom", message: "Cluster entityIds must be unique", path: ["entityIds"] });
+  }
+  if (new Set(cluster.topicTokens).size !== cluster.topicTokens.length) {
+    context.addIssue({ code: "custom", message: "Cluster topicTokens must be unique", path: ["topicTokens"] });
+  }
   if (refs.size !== cluster.itemRefs.length) {
     context.addIssue({
       code: "custom",
@@ -130,6 +136,21 @@ export const KvorumClusterRankSchema = z.strictObject({
     novelty: z.number().finite().min(0).max(1),
     standingTopicContinuity: z.number().finite().nonnegative()
   })
+}).superRefine((rank, context) => {
+  const expected = Math.round((
+    rank.factors.corroboration
+    * rank.factors.entityWeight
+    * rank.factors.engagementSalience
+    * rank.factors.novelty
+    * rank.factors.standingTopicContinuity
+  ) * 1_000_000) / 1_000_000;
+  if (Math.abs(rank.score - expected) > 0.000001) {
+    context.addIssue({
+      code: "custom",
+      message: "Rank score must equal the recorded factor product",
+      path: ["score"]
+    });
+  }
 });
 
 export const KvorumPurgeMarkSchema = z.strictObject({
@@ -175,9 +196,15 @@ export const KvorumMonitorReceiptSchema = z.strictObject({
   }
 
   const clusters = new Map(receipt.clusters.map((cluster) => [cluster.id, cluster]));
+  if (clusters.size !== receipt.clusters.length) {
+    context.addIssue({ code: "custom", message: "Cluster ids must be unique", path: ["clusters"] });
+  }
   const rankIds = new Set<string>();
   const positions = new Set<number>();
   for (const [index, rank] of receipt.ranks.entries()) {
+    if (rank.position !== index + 1) {
+      context.addIssue({ code: "custom", message: "Ranks must be stored in position order", path: ["ranks", index, "position"] });
+    }
     if (!clusters.has(rank.clusterId)) {
       context.addIssue({ code: "custom", message: "Rank must reference a retained cluster", path: ["ranks", index, "clusterId"] });
     }

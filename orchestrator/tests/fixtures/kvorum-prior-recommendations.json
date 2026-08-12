@@ -1,0 +1,20 @@
+[
+  {
+    "recommendationId": "kv-rec-public-media-2026-08-05",
+    "recommendedAt": "2026-08-05T21:00:00.000Z",
+    "entityIds": ["public-media-funding"],
+    "topicTokens": ["poplatky", "televizni"]
+  },
+  {
+    "recommendationId": "kv-rec-ukraine-2026-08-11",
+    "recommendedAt": "2026-08-11T21:00:00.000Z",
+    "entityIds": ["ukraine-aid", "vlada-cr"],
+    "topicTokens": ["pomoc", "ukrajine", "vlada"]
+  },
+  {
+    "recommendationId": "kv-rec-senate-2026-07-28",
+    "recommendedAt": "2026-07-28T21:00:00.000Z",
+    "entityIds": ["poslanecka-snemovna", "senate-elections-2026"],
+    "topicTokens": ["senatni", "volby"]
+  }
+]

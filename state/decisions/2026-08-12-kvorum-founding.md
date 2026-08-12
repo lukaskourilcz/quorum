@@ -192,6 +192,11 @@ section and a receipt line, and a day with no usable cluster records an honest q
   derives tokens only from the first sentence or the text before the feed mapper's em dash. Its
   weighted Jaccard threshold is `0.20`, with curated entities weighted four-to-one against a title
   token; complete-link merges retain at least one shared entity or topic across the whole cluster.
+- **Standing-topic rank factor:** KV-10b's issue abbreviates the rank formula to corroboration,
+  entity weight, engagement salience and novelty. The higher-precedence design and the committed
+  monitor contract also require standing-topic continuity. Ranking therefore records and multiplies
+  a neutral `1.0` factor, raised by `0.25` for each of at most two matched standing topics; it never
+  overrides the 14-day repeat penalty or turns Štít discovery into corroborating evidence.
 
 ## Implementation checklist
 
@@ -217,7 +222,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-09a — Monitor fetch, normalize and the fixed-field row mapper
 - [x] KV-09b — Monitor receipt contract and 30-day raw purge
 - [x] KV-10a — Deterministic entity/topic clustering
-- [ ] KV-10b — Cluster ranking, novelty and continuation detection
+- [x] KV-10b — Cluster ranking, novelty and continuation detection
 - [ ] KV-11 — `venture-recommendation` contract with monitor-cluster evidence
 - [ ] KV-12a — Desk runner dispatch and the TRIBUN call
 - [ ] KV-12b — Honest meeting records for the desk
