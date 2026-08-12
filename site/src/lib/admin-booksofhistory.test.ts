@@ -42,7 +42,8 @@ describe("BOOKSOFHISTORY admin loader", () => {
       cycle: "missing",
       dossiers: "missing",
       ledger: "missing",
-      features: "missing"
+      features: "missing",
+      ratings: "missing"
     });
     expect(snapshot.unreadable).toEqual({
       seed: 0,
@@ -52,6 +53,7 @@ describe("BOOKSOFHISTORY admin loader", () => {
       dossiers: 0,
       ledger: 0,
       features: 0,
+      ratings: 0,
       total: 0
     });
     expect(snapshot).toMatchObject({
@@ -79,7 +81,8 @@ describe("BOOKSOFHISTORY admin loader", () => {
       put(root, "state/ventures/booksofhistory/dossiers/poison/dossier.json", await fixture("bh-dossier.poison.json")),
       put(root, "state/ventures/booksofhistory/research-ledger.jsonl", `${JSON.stringify(JSON.parse(await fixture("bh-research-ledger.valid.json")))}\nnot-json\n`),
       put(root, "state/ventures/booksofhistory/recommendations/feature.json", await fixture("venture-recommendation.valid.json")),
-      put(root, "state/ventures/booksofhistory/recommendations/poison.json", await fixture("venture-recommendation.poison.json"))
+      put(root, "state/ventures/booksofhistory/recommendations/poison.json", await fixture("venture-recommendation.poison.json")),
+      put(root, "state/ratings/booksofhistory/ledger.jsonl", `${JSON.stringify({ schemaVersion: "rating/1", id: "r-2026-08-14-abcd", ventureId: "booksofhistory", objectKind: "social-variant", objectRef: { id: "rec-aaaaaaaaaaaaaaaaaaaa", contentHash: "sha256:aaaaaaaaaaaa" }, rating: "good", ratedAt: "2026-08-14T12:00:00.000Z" })}\n`)
     ]);
 
     const snapshot = await readAdminBooksofhistory(root);
@@ -91,7 +94,8 @@ describe("BOOKSOFHISTORY admin loader", () => {
       cycle: "present",
       dossiers: "present",
       ledger: "present",
-      features: "present"
+      features: "present",
+      ratings: "present"
     });
     expect(snapshot.unreadable).toEqual({
       seed: 0,
@@ -101,6 +105,7 @@ describe("BOOKSOFHISTORY admin loader", () => {
       dossiers: 1,
       ledger: 1,
       features: 1,
+      ratings: 0,
       total: 5
     });
     expect(snapshot.seedBooks).toBe(1);
@@ -135,7 +140,8 @@ describe("BOOKSOFHISTORY admin loader", () => {
       dossierId: "war-with-the-newts",
       storyId: "story-serial-to-book",
       postedUrls: { cs: null, en: null },
-      resultCounts: { cs: 0, en: 0 }
+      resultCounts: { cs: 0, en: 0 },
+      ratings: [{ rating: "good" }]
     });
     const publicProjection = JSON.stringify(snapshot);
     expect(publicProjection).not.toContain("state/");

@@ -1,7 +1,9 @@
 import "server-only";
+import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { parseBhRecommendation } from "./booksofhistory-features-store";
+import { parseRatingLedger, type RatingRecord } from "./rating-model";
 
 export type BhRecordState = "missing" | "unreadable" | "present";
 type Locale = "cs" | "en";
@@ -97,15 +99,17 @@ export interface AdminBhFeature {
   storyId: string;
   claimRefs: string[];
   payloads: ReturnType<typeof publicFeaturePair>;
-  gates: { cs: { passed: boolean; violations: number }; en: { passed: boolean; violations: number } };
+  gates: Record<Locale, { passed: boolean; violations: Array<{ code: string; message: string }> }>;
   designLabStatus: string;
   postedUrls: Record<Locale, string | null>;
   resultCounts: Record<Locale, number>;
+  contentHash: string;
+  ratings: RatingRecord[];
 }
 
 export interface AdminBooksofhistorySnapshot {
-  stores: Record<"seed" | "shortlists" | "briefs" | "cycle" | "dossiers" | "ledger" | "features", BhRecordState>;
-  unreadable: Record<"seed" | "shortlists" | "briefs" | "cycle" | "dossiers" | "ledger" | "features" | "total", number>;
+  stores: Record<"seed" | "shortlists" | "briefs" | "cycle" | "dossiers" | "ledger" | "features" | "ratings", BhRecordState>;
+  unreadable: Record<"seed" | "shortlists" | "briefs" | "cycle" | "dossiers" | "ledger" | "features" | "ratings" | "total", number>;
   seedBooks: number | null;
   shortlist: AdminBhShortlist | null;
   brief: AdminBhBriefDecision | null;
@@ -248,7 +252,15 @@ function parseFeature(value: unknown): AdminBhFeature | null {
   if (!item) return null;
   const dossierSegments = item.evidence.dossierRef.split("/");
   const dossierId = slug(dossierSegments.at(-2)) ?? label(item.evidence.dossierRef) ?? "unknown";
-  return { recommendationId: item.recommendationId, cycleId: item.cycleId, status: item.status, createdAt: item.createdAt, updatedAt: item.updatedAt, dossierId, storyId: label(item.evidence.storyRef) ?? "unknown", claimRefs: item.evidence.claimRefs, payloads: publicFeaturePair(item), gates: { cs: { passed: item.gateResults.cs.passed, violations: item.gateResults.cs.violations.length }, en: { passed: item.gateResults.en.passed, violations: item.gateResults.en.violations.length } }, designLabStatus: item.designLab.status, postedUrls: item.owner.postedUrls, resultCounts: { cs: item.owner.resultRefs.cs.length, en: item.owner.resultRefs.en.length } };
+  const violations = (locale: Locale) => item.gateResults[locale].violations.flatMap((raw) => {
+    const violation = object(raw); const code = text(violation?.code, 100); const message = text(violation?.message, 500);
+    return code && message ? [{ code, message }] : [];
+  });
+  const csViolations = violations("cs"); const enViolations = violations("en");
+  if (csViolations.length !== item.gateResults.cs.violations.length || enViolations.length !== item.gateResults.en.violations.length) return null;
+  const payloads = publicFeaturePair(item);
+  const contentHash = `sha256:${createHash("sha256").update(JSON.stringify(payloads)).digest("hex").slice(0, 12)}`;
+  return { recommendationId: item.recommendationId, cycleId: item.cycleId, status: item.status, createdAt: item.createdAt, updatedAt: item.updatedAt, dossierId, storyId: label(item.evidence.storyRef) ?? "unknown", claimRefs: item.evidence.claimRefs, payloads, gates: { cs: { passed: item.gateResults.cs.passed, violations: csViolations }, en: { passed: item.gateResults.en.passed, violations: enViolations } }, designLabStatus: item.designLab.status, postedUrls: item.owner.postedUrls, resultCounts: { cs: item.owner.resultRefs.cs.length, en: item.owner.resultRefs.en.length }, contentHash, ratings: [] };
 }
 
 async function dossierFiles(directory: string): Promise<{ state: BhRecordState; files: string[] }> {
@@ -273,26 +285,38 @@ async function readLedger(file: string) {
   } catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") return { state: "missing" as const, items: [], unreadable: 0 }; throw error; }
 }
 
+async function readRatings(file: string): Promise<{ state: BhRecordState; items: RatingRecord[]; unreadable: number }> {
+  try {
+    const parsed = parseRatingLedger(await readFile(file, "utf8"));
+    return parsed ? { state: "present", items: parsed, unreadable: 0 } : { state: "unreadable", items: [], unreadable: 1 };
+  } catch (error) {
+    return (error as NodeJS.ErrnoException).code === "ENOENT"
+      ? { state: "missing", items: [], unreadable: 0 }
+      : { state: "unreadable", items: [], unreadable: 1 };
+  }
+}
+
 export async function readAdminBooksofhistory(
   root = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")
 ): Promise<AdminBooksofhistorySnapshot> {
   const base = path.join(root, "state/ventures/booksofhistory");
-  const [seed, shortlists, briefs, cycle, dossiers, ledger, features] = await Promise.all([
+  const [seed, shortlists, briefs, cycle, dossiers, ledger, features, ratings] = await Promise.all([
     singleton(path.join(base, "seed/library.json"), parseSeed),
     collection(path.join(base, "shortlists"), parseShortlist),
     collection(path.join(base, "briefs"), parseBrief),
     singleton(path.join(base, "cycle.json"), parseCycle),
     readDossiers(path.join(base, "dossiers")),
     readLedger(path.join(base, "research-ledger.jsonl")),
-    collection(path.join(base, "recommendations"), parseFeature)
+    collection(path.join(base, "recommendations"), parseFeature),
+    readRatings(path.join(root, "state/ratings/booksofhistory/ledger.jsonl"))
   ]);
   const latestShortlist = [...shortlists.items].sort((left, right) => right.asOf.localeCompare(left.asOf))[0] ?? null;
   const latestBrief = [...briefs.items].sort((left, right) => right.date.localeCompare(left.date))[0] ?? null;
   const paidBooks = new Set(ledger.items.map(({ bookId }) => bookId));
   const usedBooks = new Set(ledger.items.filter(({ used }) => used).map(({ bookId }) => bookId));
-  const counts = { seed: seed.unreadable, shortlists: shortlists.unreadable, briefs: briefs.unreadable, cycle: cycle.unreadable, dossiers: dossiers.unreadable, ledger: ledger.unreadable, features: features.unreadable };
+  const counts = { seed: seed.unreadable, shortlists: shortlists.unreadable, briefs: briefs.unreadable, cycle: cycle.unreadable, dossiers: dossiers.unreadable, ledger: ledger.unreadable, features: features.unreadable, ratings: ratings.unreadable };
   return {
-    stores: { seed: seed.state, shortlists: shortlists.state, briefs: briefs.state, cycle: cycle.state, dossiers: dossiers.state, ledger: ledger.state, features: features.state },
+    stores: { seed: seed.state, shortlists: shortlists.state, briefs: briefs.state, cycle: cycle.state, dossiers: dossiers.state, ledger: ledger.state, features: features.state, ratings: ratings.state },
     unreadable: { ...counts, total: Object.values(counts).reduce((sum, value) => sum + value, 0) },
     seedBooks: seed.item,
     shortlist: latestShortlist,
@@ -301,6 +325,8 @@ export async function readAdminBooksofhistory(
     dossiers: dossiers.items.sort((left, right) => left.title.localeCompare(right.title)),
     ledger: ledger.items.sort((left, right) => right.completedAt.localeCompare(left.completedAt)),
     researchEfficiency: paidBooks.size ? usedBooks.size / paidBooks.size : null,
-    features: features.items.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
+    features: features.items
+      .map((feature) => ({ ...feature, ratings: ratings.items.filter((rating) => rating.objectKind === "social-variant" && rating.objectRef.id === feature.recommendationId).sort((left, right) => right.ratedAt.localeCompare(left.ratedAt)) }))
+      .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
   };
 }

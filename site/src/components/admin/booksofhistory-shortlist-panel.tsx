@@ -90,17 +90,15 @@ function RankedCandidate({ entry }: { entry: AdminBhShortlistEntry }) {
         </div>
       </div>
       {entry.culturalMoment ? <Badge className="mt-3" tone="warning">Cultural moment</Badge> : null}
-      <dl className="mt-4 grid gap-px overflow-hidden rounded-[8px] border border-[#26262b] bg-[#26262b] md:grid-cols-2">
+      <div className="mt-4 grid gap-px overflow-hidden rounded-[8px] border border-[#26262b] bg-[#26262b] md:grid-cols-2">
         {factorRows(entry).map((factor) => (
-          <div className="bg-[#0c0c0f] p-3" key={factor.label}>
-            <div className="flex items-baseline justify-between gap-3">
-              <dt className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#94949c]">{factor.label}</dt>
-              <dd className="font-mono text-xs font-semibold tabular-nums text-[#f4ecd8]">{factor.value}</dd>
-            </div>
-            <dd className="mt-2 text-xs leading-5 text-[#a1a1aa]">{factor.note}</dd>
-          </div>
+          <dl className="grid grid-cols-[1fr_auto] items-baseline gap-x-3 bg-[#0c0c0f] p-3" key={factor.label}>
+            <dt className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#94949c]">{factor.label}</dt>
+            <dd className="font-mono text-xs font-semibold tabular-nums text-[#f4ecd8]">{factor.value}</dd>
+            <dd className="col-span-2 mt-2 text-xs leading-5 text-[#a1a1aa]">{factor.note}</dd>
+          </dl>
         ))}
-      </dl>
+      </div>
     </article>
   );
 }

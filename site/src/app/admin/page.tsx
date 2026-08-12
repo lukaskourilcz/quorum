@@ -13,6 +13,9 @@ import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { GoViralProfilePanel } from "@/components/admin/goviral-profile-panel";
 import { OwnerAttentionPanel } from "@/components/admin/owner-attention-panel";
 import { CaughtUpEventsPanel } from "@/components/admin/caught-up-events-panel";
+import { BooksofhistoryDossiersPanel } from "@/components/admin/booksofhistory-dossiers-panel";
+import { BooksofhistoryFeaturesPanel } from "@/components/admin/booksofhistory-features-panel";
+import { BooksofhistoryShortlistPanel } from "@/components/admin/booksofhistory-shortlist-panel";
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { AdminMoneyPanel } from "@/components/admin/money-panel";
@@ -344,6 +347,7 @@ export default async function AdminPage({
         portfolio.ventures.reduce((sum, venture) => sum + venture.unreadableFiles.length, 0) +
         mmaFiles.unreadable.length +
         fightaiq.unreadable.length +
+        booksofhistory.unreadable.total +
         ownerAttention.unreadable
     }
   ];
@@ -356,6 +360,8 @@ export default async function AdminPage({
     ? [...selectedVenture.unreadableFiles, ...mmaFiles.unreadable]
     : selectedVenture?.id === "fightaiq"
       ? [...selectedVenture.unreadableFiles, ...fightaiq.unreadable]
+    : selectedVenture?.id === "booksofhistory"
+      ? [...selectedVenture.unreadableFiles, ...Object.entries(booksofhistory.unreadable).flatMap(([store, count]) => store !== "total" && count ? [`${store} (${count})`] : [])]
     : selectedVenture?.unreadableFiles ?? [];
 
   const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual" | "social-variant">> = {
@@ -444,6 +450,18 @@ export default async function AdminPage({
               // Predictions and banners are one health record each, not a list of items.
               : 1
       };
+    }
+    if (id === "booksofhistory" && selectedTab === "shortlist") {
+      return {
+        node: <BooksofhistoryShortlistPanel snapshot={booksofhistory} />,
+        count: booksofhistory.shortlist?.entries.length ?? 0
+      };
+    }
+    if (id === "booksofhistory" && selectedTab === "dossiers") {
+      return { node: <BooksofhistoryDossiersPanel snapshot={booksofhistory} />, count: booksofhistory.dossiers.length };
+    }
+    if (id === "booksofhistory" && selectedTab === "features") {
+      return { node: <BooksofhistoryFeaturesPanel snapshot={booksofhistory} />, count: booksofhistory.features.length };
     }
     if (visibleCards.length) {
       return {

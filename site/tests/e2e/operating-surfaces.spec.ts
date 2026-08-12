@@ -23,6 +23,9 @@ const axeRoutes = [
   "/admin?venture=mma-files&tab=articles",
   "/admin?venture=mma-files&tab=calendar",
   "/admin?venture=mma-files&tab=social-lab",
+  "/admin?venture=booksofhistory&tab=shortlist",
+  "/admin?venture=booksofhistory&tab=dossiers",
+  "/admin?venture=booksofhistory&tab=features",
   "/admin?venture=carousel-studio&tab=studio",
   "/admin?venture=carousel-studio&tab=inspiration",
   "/meetings/2026-08-01-mma-intake",
@@ -47,6 +50,18 @@ let originalRatingLedger: string | null = null;
 const deckOverridesPath = path.join(repositoryRoot, "state", "ventures", "carousel-studio", "deck-style-overrides.json");
 const presetsPath = path.join(repositoryRoot, "state", "ventures", "carousel-studio", "presets.json");
 let originalDeckOverrides: string | null = null;
+const bhPaths = {
+  shortlist: path.join(repositoryRoot, "state/ventures/booksofhistory/shortlists/e2e.json"),
+  brief: path.join(repositoryRoot, "state/ventures/booksofhistory/briefs/e2e.json"),
+  cycle: path.join(repositoryRoot, "state/ventures/booksofhistory/cycle.json"),
+  dossier: path.join(repositoryRoot, "state/ventures/booksofhistory/dossiers/war-with-the-newts/dossier.json"),
+  ledger: path.join(repositoryRoot, "state/ventures/booksofhistory/research-ledger.jsonl"),
+  recommendation: path.join(repositoryRoot, "state/ventures/booksofhistory/recommendations/e2e-feature.json"),
+  ratings: path.join(repositoryRoot, "state/ratings/booksofhistory/ledger.jsonl")
+};
+const originalBhFiles = new Map<string, string | null>();
+const bhActionDirectory = path.join(repositoryRoot, "state/ventures/booksofhistory/feature-actions/rec-e2e-admin-feature");
+const bhSummaryPaths = ["cs", "en"].map((locale) => path.join(repositoryRoot, `state/ventures/carousel-studio/summaries/booksofhistory/2026-08-14-e2e-admin-feature-${locale}.json`));
 
 test.beforeAll(async () => {
   try {
@@ -59,10 +74,18 @@ test.beforeAll(async () => {
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
   }
+  for (const target of Object.values(bhPaths)) {
+    try { originalBhFiles.set(target, await readFile(target, "utf8")); }
+    catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      originalBhFiles.set(target, null);
+    }
+  }
   await Promise.all([
     mkdir(path.dirname(e2ePlanPath), { recursive: true }),
     mkdir(path.dirname(e2eMarketingPackagePath), { recursive: true }),
-    mkdir(path.dirname(ratingLedgerPath), { recursive: true })
+    mkdir(path.dirname(ratingLedgerPath), { recursive: true }),
+    ...Object.values(bhPaths).map((target) => mkdir(path.dirname(target), { recursive: true }))
   ]);
   await writeFile(e2ePlanPath, JSON.stringify({
     schemaVersion: "marketing-plan/1",
@@ -93,6 +116,18 @@ test.beforeAll(async () => {
     },
     render: { summaryPaths: ["staged/e2e-package.json"] }
   }));
+  const fixture = async (name: string) => readFile(path.join(repositoryRoot, "contracts/fixtures", name), "utf8");
+  const recommendation = JSON.parse(await fixture("venture-recommendation.valid.json")) as { recommendationId: string };
+  recommendation.recommendationId = "rec-e2e-admin-feature";
+  await Promise.all([
+    writeFile(bhPaths.shortlist, await fixture("bh-shortlist.valid.json")),
+    writeFile(bhPaths.brief, await fixture("bh-research-brief.valid.json")),
+    writeFile(bhPaths.cycle, await fixture("bh-cycle.valid.json")),
+    writeFile(bhPaths.dossier, await fixture("bh-dossier.valid.json")),
+    writeFile(bhPaths.ledger, `${JSON.stringify(JSON.parse(await fixture("bh-research-ledger.valid.json")))}\n`),
+    writeFile(bhPaths.recommendation, `${JSON.stringify(recommendation, null, 2)}\n`),
+    writeFile(bhPaths.ratings, "")
+  ]);
 });
 
 test.afterAll(async () => {
@@ -103,6 +138,12 @@ test.afterAll(async () => {
   await rm(presetsPath, { force: true });
   if (originalDeckOverrides === null) await rm(deckOverridesPath, { force: true });
   else await writeFile(deckOverridesPath, originalDeckOverrides);
+  for (const [target, original] of originalBhFiles) {
+    if (original === null) await rm(target, { force: true });
+    else await writeFile(target, original);
+  }
+  await rm(bhActionDirectory, { recursive: true, force: true });
+  await Promise.all(bhSummaryPaths.map((target) => rm(target, { force: true })));
 });
 
 for (const route of axeRoutes) {
@@ -291,6 +332,26 @@ test("admin separates pending approvals from approved deliveries still waiting",
   await expect(attention).toContainText("1");
 });
 
+test("BOOKSOFHISTORY admin tabs expose recorded evidence without rendering a book cover", async ({ page }) => {
+  await page.goto("/admin?venture=booksofhistory&tab=shortlist", { waitUntil: "networkidle" });
+  await expect(page.getByText("Today’s shortlist", { exact: true })).toBeVisible();
+  await expect(page.getByText("Válka s mloky").first()).toBeVisible();
+  await expect(page.getByText("Editorial priors")).toBeVisible();
+
+  await page.goto("/admin?venture=booksofhistory&tab=dossiers", { waitUntil: "networkidle" });
+  await expect(page.getByText("Knowledge shelf", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Archive catalogue", exact: true })).toBeVisible();
+  await expect(page.getByText("Research ledger", { exact: true })).toBeVisible();
+
+  await page.goto("/admin?venture=booksofhistory&tab=features", { waitUntil: "networkidle" });
+  const feature = page.locator('[data-bh-feature="rec-e2e-admin-feature"]');
+  await expect(feature.getByRole("heading", { name: "Czech package" })).toBeVisible();
+  await expect(feature.getByRole("heading", { name: "English package" })).toBeVisible();
+  await expect(feature.getByText("CS passed")).toBeVisible();
+  await expect(feature.getByText("Your rating")).toBeVisible();
+  await expect(feature.locator("img")).toHaveCount(0);
+});
+
 // The rated object used to be a niche proposal, and the assertion after the reload used to be
 // the incubator shortlist. Both left with the venture; what the test is actually for — a rating
 // survives the round trip to the ledger and comes back as history — is unchanged, so it now runs
@@ -301,6 +362,18 @@ test("admin separates pending approvals from approved deliveries still waiting",
  * A failed write or cleared cookie cannot leak into the next journey, and no retry masks a fault.
  */
 test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
+
+  test("BOOKSOFHISTORY owner approval records both Design Lab handoffs without posting", async ({ page }) => {
+    await page.goto("/admin?venture=booksofhistory&tab=features", { waitUntil: "networkidle" });
+    const feature = page.locator('[data-bh-feature="rec-e2e-admin-feature"]');
+    const response = page.waitForResponse((candidate) => candidate.url().endsWith("/admin/api/booksofhistory/features") && candidate.request().method() === "POST");
+    await feature.getByRole("button", { name: "Approve both languages" }).click();
+    expect((await response).status()).toBe(201);
+    await expect(feature.getByText("approved", { exact: true })).toBeVisible({ timeout: 30_000 });
+    await expect(feature.getByRole("link", { name: "Open both locale records in Design Lab →" })).toBeVisible();
+    await expect(feature.getByRole("button", { name: "Record owner-posted URL" })).toHaveCount(2);
+    await expect(feature.getByText("attached results")).toHaveCount(2);
+  });
 
   test("admin ideas retain their saved rating and graduation after reload", async ({ page }) => {
     await page.goto("/admin?venture=titty-tuesdays&tab=ideas", { waitUntil: "networkidle" });
@@ -375,7 +448,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
   });
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=carousel-studio&tab=studio"];
+const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=booksofhistory&tab=features", "/admin?venture=carousel-studio&tab=studio"];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
