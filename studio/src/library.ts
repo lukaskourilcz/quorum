@@ -630,6 +630,22 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       secondary: "#67e8f9"
     },
     fonts: { headline: "Outfit", body: "Public Sans", mono: "IBM Plex Mono" }
+  }),
+  "door-money": BrandTokensSchema.parse({
+    schemaVersion: "carousel-brand/1",
+    id: "door-money",
+    name: "Door Money",
+    logoText: "DOOR MONEY",
+    colors: {
+      background: "#08090b",
+      surface: "#141114",
+      "surface-strong": "#24191c",
+      foreground: "#f8f2e8",
+      muted: "#cfc5b8",
+      accent: "#ff4d3d",
+      secondary: "#d7c5a6"
+    },
+    fonts: { headline: "Barlow Condensed", body: "Barlow", mono: "IBM Plex Mono" }
   })
 };
 
