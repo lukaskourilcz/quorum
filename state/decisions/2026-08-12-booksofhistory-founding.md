@@ -92,7 +92,7 @@ post anything.
 
 - [x] **BH-00** — Phase 0 audit incl. sibling-build coordination
 - [x] **BH-01** — Write the founding decision record
-- [ ] **BH-02a** — Registry entry in `config/ventures.json`
+- [x] **BH-02a** — Registry entry in `config/ventures.json`
 - [ ] **BH-02b** — Registry schema enums, fixtures and the two new KPI evaluators
 - [ ] **BH-03a** — Register the `bh-desk` phase in type and record schemas
 - [ ] **BH-03b** — Meeting policy for `bh-desk`

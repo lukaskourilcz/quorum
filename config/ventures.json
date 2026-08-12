@@ -147,6 +147,50 @@
       ]
     },
     {
+      "id": "booksofhistory",
+      "name": "BOOKSOFHISTORY",
+      "status": "operating",
+      "taste": true,
+      "ledgerNamespace": "booksofhistory",
+      "growth_objective": {
+        "label": "Turn cheap candidate intelligence into researched, verified, twice-told book stories",
+        "components": [
+          "feature-cadence",
+          "research-efficiency"
+        ]
+      },
+      "adminTabs": [
+        "shortlist",
+        "dossiers",
+        "features"
+      ],
+      "meetings": [
+        {
+          "kind": "bh-desk",
+          "label": "BOOKSOFHISTORY editorial desk",
+          "cadence": "daily@12:00",
+          "cast": [
+            "FOLIO",
+            "PLOT",
+            "QUILL",
+            "HACEK",
+            "AUDIT"
+          ],
+          "envelopeUsd": 0.5,
+          "$envelopeComment": "A phase may tighten this per-cycle ceiling and never raise it. The runtime daily pre-flight remains authoritative.",
+          "packet": {
+            "topicType": "edition",
+            "decisionNeeded": "PLAN",
+            "preset": "bh-desk-room",
+            "objectives": {
+              "dry": "Walk today's fixture phase and record its outcome without a provider call, research spend, rendering or posting.",
+              "live": "Advance the recorded BOOKSOFHISTORY cycle through its current phase within the research, truth, drafts-only and manual-posting gates."
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "fightaiq",
       "name": "FightAIQ",
       "status": "operating",
