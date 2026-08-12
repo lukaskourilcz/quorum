@@ -158,7 +158,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 
 - [x] KV-00 — Phase 0 audit: read the contracts, verify every assumption
 - [x] KV-01 — Write the founding decision record
-- [ ] KV-02a — Registry entry in `config/ventures.json`
+- [x] KV-02a — Registry entry in `config/ventures.json`
 - [ ] KV-02b — Venture-registry schema enum extensions and fixtures
 - [ ] KV-03a — Register the `kv-desk` phase in type and record schemas
 - [ ] KV-03b — Meeting policy classification for `kv-desk`
