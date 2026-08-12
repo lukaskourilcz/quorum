@@ -125,14 +125,14 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-04a** — LETOPIS and VERBA in registry, routing, controls and cast schema
 - [x] **TS-04b** — Prompts for LETOPIS, VERBA and the craft file
 - [x] **TS-04c** — Model roles for LETOPIS and VERBA
-- [ ] **TS-05a** — Cycle state machine and runner dispatch
-- [ ] **TS-05b** — Scaffold, hue, labels, KPI seeds and ladder position
+- [x] **TS-05a** — Cycle state machine and runner dispatch
+- [x] **TS-05b** — Scaffold, hue, labels, KPI seeds and ladder position
 - [x] **TS-06a** — `tehdejsi-facts` contract
 - [x] **TS-06b** — Build-rule exclusion tests (`shareSafe`, excluded media)
 - [x] **TS-07** — The committed facts file and its contract
 - [x] **TS-08** — Facts loader with hash verification and cache
-- [ ] **TS-09a** — The social opportunity scorer
-- [ ] **TS-09b** — Shortlist records
+- [x] **TS-09a** — The social opportunity scorer
+- [x] **TS-09b** — Shortlist records
 - [ ] **TS-10a** — Research reuse with venture ledger and ceilings
 - [x] **TS-10b** — The no-product-link guard (inverted from a read-only pin)
 - [ ] **TS-11a** — Sensitivity tier classifier and tier effects
