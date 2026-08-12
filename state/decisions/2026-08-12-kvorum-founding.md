@@ -287,6 +287,11 @@ section and a receipt line, and a day with no usable cluster records an honest q
   retained digest refs; queue caps, the effective schedule and the `gv-brief ↔ kv-desk` policy keep
   their last word. The venture registry also makes `design-lab` the sole rendering path and pins
   image generation and freeform social images off; approval still writes only a recorded summary.
+- **The temporary build prompt is removed at closeout:**
+  `docs/KVORUM-CODEX-BUILD-PROMPT.md` existed only to commission and sequence KV-00 through
+  KV-21c. The final issue deletes it after its requirements are represented in this decision,
+  the standing docs, contracts and tests. `docs/KVORUM-VENTURE-DESIGN.md` remains the retained
+  product-design context; deleting the work order grants no new authority.
 
 ## Implementation checklist
 
@@ -333,9 +338,64 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-20b — GoVIRAL spine: transitions and the Design-Lab-only test
 - [x] KV-21a — Documentation truth across the standing docs
 - [x] KV-21b — INBOX approvals and NEEDED owner items
-- [ ] KV-21c — Honest gaps, checkbox sweep and prompt deletion
+- [x] KV-21c — Honest gaps, checkbox sweep and prompt deletion
 
-## Honest gaps
+## Honest gaps — things the work order asked for that are not built
+
+Recorded rather than quietly dropped, following the same shape as the GoVIRAL and
+marketingShark founding records.
+
+**There is no live Kvórum desk yet.** The repository contains the room, schedule, fixture monitor,
+TRIBUN call boundary, gates, stores, admin and rendering path, but the founding record is still
+pending and no countersigned capacity-reallocation record frees the required `$0.08`. Existing
+worst-day authority remains `$0.98`; including Kvórum's `$0.10` envelope would be `$1.08` against
+the signed `$1.00` pace. Scheduled and manual live attempts therefore stop before source or model
+work and cost `$0`.
+
+**The external monitor has no authority.** `APIFY-ACCOUNT-001`, `KV-APIFY-001` and
+`KV-SOURCES-002` are pending. The actor and seven feed adapters are implemented and tested, but
+only the committed fixture has run. Current actor event pricing reserves `$0.151` for a capped run,
+so a `$2.00` monthly share funds at most thirteen such reservations rather than the requested daily
+cadence. The quota guard skips work; the program did not raise the share, borrow another tenant's
+credit or upgrade the Free plan.
+
+**No public identity or channel exists.** The public name and 21:00 hour remain provisional owner
+choices, name/handle clearance is unfinished and `KV-ACCOUNTS-003` is pending. The code creates no
+account, credential, channel or publisher mapping. It also cannot post: approval creates a Design
+Lab deck, after which only the owner can publish manually and record the receipt.
+
+**Editorial policy is implemented but not countersigned.** The craft prompt and deterministic
+gates enforce the proposed constitution, while `KV-EDITORIAL-004` remains pending. That means the
+code can prove the rejection paths but cannot present the policy as owner-adopted. A model result,
+dry proof or recommendation approval cannot substitute for that signature.
+
+**There is no live-market evidence.** All program evidence is fixture or test evidence. No real
+desk day, owner-approved live recommendation, manual political post, audience result, published
+claim or correction exists, and no experiment was activated. The company remains in `VALIDATION`,
+pre-revenue; implementation completion is not venture validation.
+
+**Later product phases remain unbuilt.** The promise tracker, Sunday recap, vote-record cards,
+additional monitored pages, wider source scope, newsletter/community intake and automated
+publishing were explicitly outside this program. Engagement ingestion also remains off; results
+are owner-entered records only. Any one of those outward or data-collection surfaces needs its own
+decision and may not inherit authority from this build.
+
+### Owner handoff
+
+1. Decide whether the public name is Kvórum, clear the handles and confirm 21:00 or record a
+   different desk hour.
+2. Record a separate countersigned reallocation freeing at least `$0.08` of worst-day capacity
+   without raising the `$1.00` pace or silently reducing another venture, then countersign this
+   founding record.
+3. Review the four pending `KV-*` approvals in `state/INBOX.md`. External reads also require the
+   still-pending `APIFY-ACCOUNT-001`; leave every unchecked item fail-closed if its scope is not
+   accepted.
+4. Reconcile the requested Apify cadence with the current `$0.151` reservation and `$2.00` share.
+   Skipping days is the implemented safe result; any different source, cadence or share is a new
+   decision, never a plan upgrade by the runtime.
+5. Only after every live gate passes, run one `kv-desk` cycle, inspect its source receipt, ledger
+   entry, gate results and owner workspace, and treat that as first operational evidence—not as
+   permission to create an account or publish.
 
 ## What this does not touch
 
