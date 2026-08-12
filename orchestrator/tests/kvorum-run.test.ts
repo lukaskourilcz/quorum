@@ -4,8 +4,11 @@ import path from "node:path";
 import { describe, expect, test } from "vitest";
 import { DEFAULT_BUDGET_LIMITS, type BudgetLedgerEntry } from "../src/budget.js";
 import { KvorumMonitorReceiptSchema } from "../src/contracts/kvorum-monitor.js";
+import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
+import { MeetingSkipSchema } from "../src/contracts/meeting-skip.js";
 import { guardedJsonCall, type GuardedCallInput } from "../src/llm/call.js";
 import { repoRoot } from "../src/paths.js";
+import { recordBudgetStop } from "../src/portfolio/run.js";
 import { atomicWriteJson } from "../src/state.js";
 import {
   readKvorumRecommendationHistory,
@@ -74,6 +77,28 @@ describe("Kvórum desk runner", () => {
         "utf8"
       )) as unknown);
       expect(JSON.stringify(stored)).toBe(JSON.stringify(result.receipt));
+      const meeting = MeetingRecordSchema.parse(JSON.parse(await readFile(
+        path.join(root, "meetings/2026-08-12-kv-desk.json"),
+        "utf8"
+      )) as unknown);
+      expect(meeting).toMatchObject({
+        kind: "kv-desk",
+        fixture: true,
+        status: "PLAN",
+        ledger: { estimatedCycleUsd: 0.1, actualCycleUsd: 0, monthCapUsd: 30 },
+        decision: { outcome: "PLAN" },
+        kvorumDesk: {
+          monitorRef: "state/ventures/kvorum/monitor/2026-08-12.json",
+          runStatus: "packages",
+          providerCallMade: false,
+          packages: result.packages
+        }
+      });
+      expect(result.artifacts).toEqual(expect.arrayContaining([
+        "ventures/kvorum/monitor/2026-08-12.json",
+        "meetings/2026-08-12-kv-desk.json",
+        "calendar/2026-08-10.json"
+      ]));
       await expect(access(path.join(root, "budget/ledger.json"))).rejects.toMatchObject({ code: "ENOENT" });
       await expect(access(path.join(root, "llm-cache"))).rejects.toMatchObject({ code: "ENOENT" });
     } finally {
@@ -93,15 +118,24 @@ describe("Kvórum desk runner", () => {
         date,
         stage: "VALIDATION",
         root,
-        env: { PORTFOLIO_LIVE_ENABLED: "true" },
+        env: { PORTFOLIO_LIVE_ENABLED: "true", MEETING_TRIGGER: "schedule" },
         foundingDecisionRaw: "Status: pending countersignature",
         budgetCapacityDecisionRaw: "",
         fetchMonitor: (async () => { fetched += 1; throw new Error("unreachable"); }) as never,
         call: (async () => { called += 1; throw new Error("unreachable"); }) as never
       });
-      expect(result).toMatchObject({ status: "paused", spendUsd: 0, receipt: null, artifacts: [] });
+      expect(result).toMatchObject({ status: "paused", spendUsd: 0, receipt: null });
       expect(result.reason).toMatch(/founding decision.*budget-capacity decision/iu);
       expect({ fetched, called }).toEqual({ fetched: 0, called: 0 });
+      const skip = MeetingSkipSchema.parse(JSON.parse(await readFile(
+        path.join(root, "meetings/skips/2026-08-12-kv-desk.json"),
+        "utf8"
+      )) as unknown);
+      expect(skip.reason).toMatch(/^kv-desk did not open: Waiting for/);
+      expect(result.artifacts).toEqual([
+        "meetings/skips/2026-08-12-kv-desk.json",
+        "calendar/2026-08-10.json"
+      ]);
     } finally {
       await rm(root, { recursive: true, force: true });
     }
@@ -212,11 +246,172 @@ describe("Kvórum desk runner", () => {
         kind: "text",
         usd: result.spendUsd
       });
+      const meeting = MeetingRecordSchema.parse(JSON.parse(await readFile(
+        path.join(root, "meetings/2026-08-12-kv-desk.json"),
+        "utf8"
+      )) as unknown);
+      expect(meeting).toMatchObject({
+        status: "PLAN",
+        fixture: false,
+        ledger: { actualCycleUsd: result.spendUsd, monthAllInUsd: result.spendUsd, monthCapUsd: 30 },
+        kvorumDesk: { runStatus: "packages", providerCallMade: true, packages: result.packages }
+      });
     } finally {
       await Promise.all([
         rm(fixtureRoot, { recursive: true, force: true }),
         rm(root, { recursive: true, force: true })
       ]);
+    }
+  });
+
+  test("records a quiet day with its retained digest and no provider call", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-kvorum-run-quiet-"));
+    let called = 0;
+    try {
+      const result = await runKvorumDesk({
+        cycleId: "20260812-kv-desk-quiet",
+        dry: false,
+        now,
+        date,
+        stage: "VALIDATION",
+        root,
+        env: { PORTFOLIO_LIVE_ENABLED: "true" },
+        foundingDecisionRaw: founding,
+        budgetCapacityDecisionRaw: capacity,
+        inbox: "",
+        fetchMonitor: async () => ({
+          items: [],
+          sourceResults: [{
+            sourceId: "quiet-fixture",
+            kind: "feed",
+            attempted: false,
+            status: "skipped",
+            count: 0,
+            reason: "The fixture represents a day with no retained source rows."
+          }],
+          artifactPaths: [],
+          fixtureOnly: true
+        }),
+        call: (async () => { called += 1; throw new Error("unreachable"); }) as never,
+        fixedMonthlyUsd: 0,
+        scheduleAllows: async () => true
+      });
+      expect(result).toMatchObject({ status: "quiet", tribunRan: false, spendUsd: 0, packages: [] });
+      expect(called).toBe(0);
+      const meeting = MeetingRecordSchema.parse(JSON.parse(await readFile(
+        path.join(root, "meetings/2026-08-12-kv-desk.json"),
+        "utf8"
+      )) as unknown);
+      expect(meeting).toMatchObject({
+        status: "NO_ACTION",
+        decision: { outcome: "NO_ACTION" },
+        kvorumDesk: {
+          runStatus: "quiet",
+          monitorRef: "state/ventures/kvorum/monitor/2026-08-12.json",
+          providerCallMade: false,
+          packages: []
+        }
+      });
+      expect(meeting.kvorumDesk?.reason).toMatch(/No non-repeating corroborated cluster/);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+
+  test("records model and pre-monitor failures without inventing packages or spend", async () => {
+    const fixtureRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-kvorum-run-failure-fixture-"));
+    const modelRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-kvorum-run-model-failure-"));
+    const monitorRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-kvorum-run-monitor-failure-"));
+    try {
+      const dry = await dryProof(fixtureRoot);
+      const modelResult = await runKvorumDesk({
+        cycleId: "20260812-kv-desk-model-failure",
+        dry: false,
+        now,
+        date,
+        stage: "VALIDATION",
+        root: modelRoot,
+        env: { PORTFOLIO_LIVE_ENABLED: "true" },
+        foundingDecisionRaw: founding,
+        budgetCapacityDecisionRaw: capacity,
+        inbox: "",
+        fetchMonitor: async () => externalFetch(dry.receipt!),
+        call: async () => { throw new Error("provider timeout"); },
+        fixedMonthlyUsd: 0,
+        scheduleAllows: async () => true
+      });
+      expect(modelResult).toMatchObject({ status: "model-failed", tribunRan: true, spendUsd: 0, packages: [] });
+      const modelRecord = MeetingRecordSchema.parse(JSON.parse(await readFile(
+        path.join(modelRoot, "meetings/2026-08-12-kv-desk.json"),
+        "utf8"
+      )) as unknown);
+      expect(modelRecord).toMatchObject({
+        status: "FAILED",
+        decision: { outcome: "FAILED" },
+        kvorumDesk: { runStatus: "model-failed", providerCallMade: true, packages: [] }
+      });
+      expect(modelRecord.kvorumDesk?.reason).toBe("provider timeout");
+
+      const monitorResult = await runKvorumDesk({
+        cycleId: "20260812-kv-desk-monitor-failure",
+        dry: false,
+        now,
+        date,
+        stage: "VALIDATION",
+        root: monitorRoot,
+        env: { PORTFOLIO_LIVE_ENABLED: "true" },
+        foundingDecisionRaw: founding,
+        budgetCapacityDecisionRaw: capacity,
+        inbox: "",
+        fetchMonitor: async () => { throw new Error("monitor unavailable"); },
+        fixedMonthlyUsd: 0,
+        scheduleAllows: async () => true
+      });
+      expect(monitorResult).toMatchObject({ status: "failed", receipt: null, tribunRan: false, spendUsd: 0 });
+      const monitorRecord = MeetingRecordSchema.parse(JSON.parse(await readFile(
+        path.join(monitorRoot, "meetings/2026-08-12-kv-desk.json"),
+        "utf8"
+      )) as unknown);
+      expect(monitorRecord).toMatchObject({
+        status: "FAILED",
+        decision: { outcome: "FAILED" },
+        kvorumDesk: { runStatus: "failed", monitorRef: null, providerCallMade: false, packages: [] }
+      });
+      expect(monitorRecord.kvorumDesk?.reason).toBe("monitor unavailable");
+    } finally {
+      await Promise.all([
+        rm(fixtureRoot, { recursive: true, force: true }),
+        rm(modelRoot, { recursive: true, force: true }),
+        rm(monitorRoot, { recursive: true, force: true })
+      ]);
+    }
+  });
+
+  test("uses the shared budget-stop posture for a refused kv-desk reservation", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-kvorum-run-budget-stop-"));
+    try {
+      const artifacts = await recordBudgetStop({
+        phase: "kv-desk",
+        date,
+        now,
+        root,
+        reason: "kv-desk did not open because the signed daily cap had no remaining room.",
+        dailyCapReached: true
+      });
+      const skip = MeetingSkipSchema.parse(JSON.parse(await readFile(
+        path.join(root, "meetings/skips/2026-08-12-kv-desk.json"),
+        "utf8"
+      )) as unknown);
+      expect(skip.reason).toMatch(/signed daily cap/);
+      expect(artifacts).toEqual([
+        "meetings/skips/2026-08-12-kv-desk.json",
+        "budget/exhaustions.json",
+        "calendar/2026-08-10.json"
+      ]);
+      expect(JSON.parse(await readFile(path.join(root, "budget/exhaustions.json"), "utf8")))
+        .toMatchObject({ dates: [date] });
+    } finally {
+      await rm(root, { recursive: true, force: true });
     }
   });
 

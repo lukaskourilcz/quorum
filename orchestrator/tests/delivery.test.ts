@@ -251,7 +251,7 @@ describe("delivery outbox", () => {
     await writeJson(path.join(root, packagePath), editionPackage);
     await writeJson(
       path.join(root, "meetings", "2026-08-04-cu-edition.json"),
-      JSON.parse(await readFile(path.join(repoRoot, "contracts", "fixtures", "meeting-record.valid.json"), "utf8"))
+      JSON.parse(await readFile(path.join(repoRoot, "state", "meetings", "2026-08-04-cu-edition.json"), "utf8"))
     );
     for (let attempt = 0; attempt < 2; attempt += 1) {
       await recordDelivery({

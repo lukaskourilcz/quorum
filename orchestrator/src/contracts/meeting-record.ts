@@ -7,6 +7,39 @@ import {
   MeetingRefSchema,
   openObject
 } from "./common.js";
+import { TribunPackageSchema } from "./kvorum-desk.js";
+
+export const KvorumDeskMeetingPayloadSchema = z.strictObject({
+  monitorRef: z.string()
+    .regex(/^state\/ventures\/kvorum\/monitor\/\d{4}-\d{2}-\d{2}\.json$/u)
+    .nullable(),
+  runStatus: z.enum(["packages", "quiet", "model-failed", "failed"]),
+  reason: z.string().trim().min(1).max(1_000).nullable(),
+  providerCallMade: z.boolean(),
+  packages: z.array(TribunPackageSchema).max(2)
+}).superRefine((payload, context) => {
+  if (payload.runStatus === "packages") {
+    if (payload.packages.length === 0) {
+      context.addIssue({ code: "custom", message: "A productive desk record requires a package", path: ["packages"] });
+    }
+    if (payload.reason !== null) {
+      context.addIssue({ code: "custom", message: "A productive desk record cannot carry a failure reason", path: ["reason"] });
+    }
+    if (payload.monitorRef === null) {
+      context.addIssue({ code: "custom", message: "A productive desk record requires its retained monitor digest", path: ["monitorRef"] });
+    }
+    return;
+  }
+  if (payload.packages.length > 0) {
+    context.addIssue({ code: "custom", message: "A non-productive desk record cannot carry packages", path: ["packages"] });
+  }
+  if (payload.reason === null) {
+    context.addIssue({ code: "custom", message: "Every non-productive desk record requires a reason", path: ["reason"] });
+  }
+  if (payload.runStatus === "quiet" && payload.monitorRef === null) {
+    context.addIssue({ code: "custom", message: "A quiet desk record requires its retained monitor digest", path: ["monitorRef"] });
+  }
+});
 
 const TranscriptModeSchema = z.enum([
   "gavel",
@@ -113,6 +146,7 @@ const CommonFields = {
     ideaRef: z.string().trim().min(1).max(160).optional(),
     evidenceRefs: z.array(EvidenceRefSchema)
   }).optional(),
+  kvorumDesk: KvorumDeskMeetingPayloadSchema.optional(),
   generatedAt: DateTimeSchema
 };
 
@@ -165,6 +199,31 @@ export const MeetingRecordSchema = z.union([VentureMeetingSchema, NamedVentureMe
   }
   if (record.kind === "mag-desk" && turnCount > 12) {
     context.addIssue({ code: "custom", message: "Desk review is bounded to 12 turns", path: ["transcript"] });
+  }
+  if (record.kind === "kv-desk") {
+    if (!record.kvorumDesk) {
+      context.addIssue({ code: "custom", message: "Kvórum desk records require their typed outcome payload", path: ["kvorumDesk"] });
+      return;
+    }
+    const expectedStatus = record.kvorumDesk.runStatus === "packages"
+      ? "PLAN"
+      : record.kvorumDesk.runStatus === "quiet"
+        ? "NO_ACTION"
+        : "FAILED";
+    if (record.status !== expectedStatus) {
+      context.addIssue({ code: "custom", message: `Kvórum ${record.kvorumDesk.runStatus} records require status ${expectedStatus}`, path: ["status"] });
+    }
+    if (record.decision.outcome !== expectedStatus) {
+      context.addIssue({ code: "custom", message: `Kvórum ${record.kvorumDesk.runStatus} records require decision ${expectedStatus}`, path: ["decision", "outcome"] });
+    }
+    if (record.fixture && record.kvorumDesk.providerCallMade) {
+      context.addIssue({ code: "custom", message: "A fixture record cannot claim a provider call", path: ["kvorumDesk", "providerCallMade"] });
+    }
+    if (record.kvorumDesk.monitorRef && !record.kvorumDesk.monitorRef.includes(`/${record.date}.json`)) {
+      context.addIssue({ code: "custom", message: "The Kvórum monitor digest must match the meeting date", path: ["kvorumDesk", "monitorRef"] });
+    }
+  } else if (record.kvorumDesk) {
+    context.addIssue({ code: "custom", message: "Only kv-desk records may carry a Kvórum desk payload", path: ["kvorumDesk"] });
   }
 });
 

@@ -49,6 +49,10 @@ import {
   type TribunDeskOutput,
   type TribunPackage
 } from "./desk-output.js";
+import {
+  writeKvorumDeskMeetingRecord,
+  writeKvorumDeskSkip
+} from "./record.js";
 
 export {
   TribunDeskOutputSchema,
@@ -68,13 +72,32 @@ type KvorumGuardedCall = <T>(request: GuardedCallInput<T>) => Promise<{
 export interface KvorumDeskResult {
   date: string;
   dry: boolean;
-  status: "packages" | "quiet" | "paused" | "model-failed";
+  status: "packages" | "quiet" | "paused" | "model-failed" | "failed";
   reason: string | null;
   packages: TribunPackage[];
   tribunRan: boolean;
   spendUsd: number;
   receipt: KvorumMonitorReceipt | null;
   artifacts: string[];
+}
+
+export interface KvorumDeskInput {
+  cycleId: string;
+  dry: boolean;
+  now: Date;
+  date: string;
+  stage: Stage;
+  root?: string;
+  env?: NodeJS.ProcessEnv;
+  foundingDecisionRaw?: string;
+  budgetCapacityDecisionRaw?: string;
+  inbox?: string;
+  token?: string;
+  fetchMonitor?: typeof fetchKvorumMonitor;
+  call?: KvorumGuardedCall;
+  limits?: BudgetLimits;
+  fixedMonthlyUsd?: number;
+  scheduleAllows?: (monthApiSpentUsd: number) => Promise<boolean>;
 }
 
 async function dryMonitor(date: string): Promise<{
@@ -159,24 +182,7 @@ function rankedReceipt(input: {
   });
 }
 
-export async function runKvorumDesk(input: {
-  cycleId: string;
-  dry: boolean;
-  now: Date;
-  date: string;
-  stage: Stage;
-  root?: string;
-  env?: NodeJS.ProcessEnv;
-  foundingDecisionRaw?: string;
-  budgetCapacityDecisionRaw?: string;
-  inbox?: string;
-  token?: string;
-  fetchMonitor?: typeof fetchKvorumMonitor;
-  call?: KvorumGuardedCall;
-  limits?: BudgetLimits;
-  fixedMonthlyUsd?: number;
-  scheduleAllows?: (monthApiSpentUsd: number) => Promise<boolean>;
-}): Promise<KvorumDeskResult> {
+async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResult> {
   const root = input.root ?? (input.dry ? path.join(repoRoot, "tmp/dry-run/state") : stateRoot);
   let source: Awaited<ReturnType<typeof dryMonitor>>;
   if (input.dry) {
@@ -320,4 +326,67 @@ export async function runKvorumDesk(input: {
       artifacts
     };
   }
+}
+
+/**
+ * Run the room and always leave the kind of record the room actually earned.
+ *
+ * A gate that closes before a scheduled room opens writes meeting-skip/1. Once the source step
+ * starts, every productive, quiet or failed run writes meeting-record/2. Budget refusals are
+ * deliberately rethrown: cycle.ts owns the shared budget-stop reason and exhaustion record.
+ */
+export async function runKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResult> {
+  const root = input.root ?? (input.dry ? path.join(repoRoot, "tmp/dry-run/state") : stateRoot);
+  let result: KvorumDeskResult;
+  try {
+    result = await executeKvorumDesk(input);
+  } catch (error) {
+    if (error instanceof BudgetError) throw error;
+    result = {
+      date: input.date,
+      dry: input.dry,
+      status: "failed",
+      reason: error instanceof Error ? error.message.slice(0, 500) : "The desk failed after opening.",
+      packages: [],
+      tribunRan: false,
+      spendUsd: 0,
+      receipt: null,
+      artifacts: []
+    };
+  }
+
+  if (result.status === "paused") {
+    if (!input.dry && (input.env ?? process.env).MEETING_TRIGGER === "schedule") {
+      const recorded = await writeKvorumDeskSkip({
+        root,
+        date: input.date,
+        now: input.now,
+        reason: `kv-desk did not open: ${result.reason ?? "a required gate was closed"}`
+      });
+      return { ...result, artifacts: recorded.artifacts };
+    }
+    return result;
+  }
+
+  const recordArtifacts = await writeKvorumDeskMeetingRecord({
+    root,
+    cycleId: input.cycleId,
+    date: input.date,
+    now: input.now,
+    stage: input.stage,
+    dry: input.dry,
+    outcome: {
+      status: result.status,
+      reason: result.reason,
+      packages: result.packages,
+      tribunRan: result.tribunRan,
+      spendUsd: result.spendUsd,
+      hasMonitorReceipt: result.receipt !== null
+    },
+    ...(input.fixedMonthlyUsd !== undefined ? { fixedMonthlyUsd: input.fixedMonthlyUsd } : {})
+  });
+  return {
+    ...result,
+    artifacts: [...new Set([...result.artifacts, ...recordArtifacts])]
+  };
 }

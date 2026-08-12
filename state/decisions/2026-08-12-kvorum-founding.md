@@ -202,6 +202,16 @@ section and a receipt line, and a day with no usable cluster records an honest q
   unattempted `fixture` source result from `success` and `failed`; fixture receipts may retain their
   committed rows but cannot claim an external attempt. Empty approval-gated receipts remain valid,
   and a non-fixture receipt refuses fixture source rows.
+- **Desk record boundary:** KV-12b asks for budget-stop and failure records under the house posture.
+  A scheduled authority, schedule or budget stop happens before the room opens and therefore keeps
+  the shared `meeting-skip/1` record; a manual closed-gate check does not fabricate a calendar event.
+  Once source work begins, productive, quiet and failed outcomes use `meeting-record/2`, attach the
+  retained digest when one exists and state explicitly whether a provider call occurred.
+- **Vote-record sequencing:** the public meeting parser previously required a non-empty vote matrix
+  from every named room. KV-12b precedes the KV-13 HACEK and AUDIT gates, so inventing their votes
+  would make the record look more complete than the run. Only typed `kv-desk` records may currently
+  carry an empty matrix; their public projection retains the digest, outcome, provider-call truth and
+  package count. KV-13 remains responsible for the first real gate results and veto record.
 
 ## Implementation checklist
 
@@ -230,7 +240,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-10b — Cluster ranking, novelty and continuation detection
 - [x] KV-11 — `venture-recommendation` contract with monitor-cluster evidence
 - [x] KV-12a — Desk runner dispatch and the TRIBUN call
-- [ ] KV-12b — Honest meeting records for the desk
+- [x] KV-12b — Honest meeting records for the desk
 - [ ] KV-13a — Gates: claim resolution and originality
 - [ ] KV-13b — Gates: banned content and register lint
 - [ ] KV-14 — Recommendation store with idempotency

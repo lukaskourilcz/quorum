@@ -1,54 +1,16 @@
-import { z } from "zod";
 import type { KvorumMonitorReceipt } from "../../contracts/kvorum-monitor.js";
+import {
+  TribunDeskOutputSchema,
+  type TribunDeskOutput
+} from "../../contracts/kvorum-desk.js";
 import { sanitizeExternalContent, wrapUntrustedData } from "../../security/content.js";
 
-const Sha1Schema = z.string().regex(/^[a-f0-9]{40}$/);
-const RefTextSchema = z.strictObject({
-  text: z.string().trim().min(1).max(2_000),
-  refs: z.array(Sha1Schema).min(1).max(20)
-});
-const TribunClaimSchema = z.strictObject({
-  id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(80),
-  type: z.enum(["fact-multi", "fact-single", "commentary"]),
-  text: z.string().trim().min(1).max(1_000),
-  refs: z.array(Sha1Schema).min(1).max(20)
-});
-const TribunPackageSchema = z.strictObject({
-  clusterId: Sha1Schema,
-  headline: z.string().trim().min(1).max(240),
-  summary: RefTextSchema,
-  whyItMatters: RefTextSchema,
-  whyThisIsWorthIt: z.string().trim().min(1).max(1_000),
-  ourAngle: z.string().trim().min(1).max(2_000),
-  ourAngleDiffers: z.string().trim().min(1).max(2_000),
-  stitAttribution: z.strictObject({
-    summary: z.string().trim().min(1).max(1_000),
-    itemRefs: z.array(Sha1Schema).min(1).max(30)
-  }).nullable(),
-  targets: z.array(z.strictObject({
-    platform: z.enum(["instagram", "facebook", "threads", "x"]),
-    format: z.enum(["carousel", "single-image", "thread", "caption"]),
-    reason: z.string().trim().min(1).max(800),
-    copy: z.string().trim().min(1).max(12_000),
-    altText: z.string().trim().min(1).max(2_000).nullable()
-  })).min(1).max(8),
-  claims: z.array(TribunClaimSchema).min(1).max(80)
-});
-
-export const TribunDeskOutputSchema = z.discriminatedUnion("outcome", [
-  z.strictObject({
-    outcome: z.literal("recommendations"),
-    packages: z.array(TribunPackageSchema).min(1).max(2)
-  }),
-  z.strictObject({
-    outcome: z.literal("quiet"),
-    reason: z.string().trim().min(1).max(1_000),
-    packages: z.tuple([])
-  })
-]);
-
-export type TribunDeskOutput = z.infer<typeof TribunDeskOutputSchema>;
-export type TribunPackage = z.infer<typeof TribunPackageSchema>;
+export {
+  TribunDeskOutputSchema,
+  TribunPackageSchema,
+  type TribunDeskOutput,
+  type TribunPackage
+} from "../../contracts/kvorum-desk.js";
 
 const OUTPUT_SHAPE = `{"outcome":"recommendations","packages":[{"clusterId":"40-char ref","headline":"string","summary":{"text":"string","refs":["itemRef"]},"whyItMatters":{"text":"string","refs":["itemRef"]},"whyThisIsWorthIt":"string","ourAngle":"string","ourAngleDiffers":"string","stitAttribution":{"summary":"internal context only","itemRefs":["discovery-only itemRef"]}|null,"targets":[{"platform":"instagram|facebook|threads|x","format":"carousel|single-image|thread|caption","reason":"string","copy":"Czech draft","altText":"string|null"}],"claims":[{"id":"slug","type":"fact-multi|fact-single|commentary","text":"string","refs":["itemRef"]}]}]} OR {"outcome":"quiet","reason":"string","packages":[]}. Return one or two packages, never more.`;
 

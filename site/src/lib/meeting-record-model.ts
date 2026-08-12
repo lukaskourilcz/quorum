@@ -49,6 +49,13 @@ export interface PublicMeetingRecord {
   editionRef?: string;
   agendaRef?: string;
   sharperData?: { outcome: "proposal" | "nothing-new"; summary: string; ideaRef?: string; evidenceRefs: string[] };
+  kvorumDesk?: {
+    monitorRef: string | null;
+    runStatus: "packages" | "quiet" | "model-failed" | "failed";
+    reason: string | null;
+    providerCallMade: boolean;
+    packageCount: number;
+  };
   roomTranscript: RoomTranscript;
   generatedAt: string;
 }
@@ -247,7 +254,7 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
   }, 8);
   const growthPlan = prose(record.growthPlan);
   const eveningOutcome = record.eveningOutcome === null ? null : prose(record.eveningOutcome);
-  if (!participants || participants.length === 0 || !proposals || !voteMatrix || voteMatrix.length === 0 || !tasks || !ideaVerdicts || !growthPlan || (record.eveningOutcome !== null && !eveningOutcome)) return null;
+  if (!participants || participants.length === 0 || !proposals || !voteMatrix || (voteMatrix.length === 0 && kind !== "kv-desk") || !tasks || !ideaVerdicts || !growthPlan || (record.eveningOutcome !== null && !eveningOutcome)) return null;
 
   const caughtUpIdeaRef = record.caughtUpIdeaRef === undefined ? undefined : text(record.caughtUpIdeaRef, 160);
   const editionRef = record.editionRef === undefined ? undefined : text(record.editionRef, 160);
@@ -259,6 +266,40 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
   const sharperIdeaRef = sharper?.ideaRef === undefined ? undefined : text(sharper.ideaRef, 160);
   const mmaKind = kind === "mma-intake" || kind === "mma-analysis";
   if ((record.caughtUpIdeaRef !== undefined && !caughtUpIdeaRef) || (record.editionRef !== undefined && !editionRef) || (record.agendaRef !== undefined && !agendaRef) || (mmaKind && (!sharper || !sharperOutcome || !sharperSummary || !sharperEvidence)) || (sharper?.ideaRef !== undefined && !sharperIdeaRef)) return null;
+
+  const kvorum = record.kvorumDesk === undefined ? null : object(record.kvorumDesk);
+  const kvorumStatus = kvorum && ["packages", "quiet", "model-failed", "failed"].includes(String(kvorum.runStatus))
+    ? kvorum.runStatus as NonNullable<PublicMeetingRecord["kvorumDesk"]>["runStatus"]
+    : null;
+  const kvorumMonitorRef = kvorum?.monitorRef === null ? null : text(kvorum?.monitorRef, 160);
+  const kvorumReason = kvorum?.reason === null ? null : prose(kvorum?.reason, 1_000);
+  const kvorumPackages = Array.isArray(kvorum?.packages) && kvorum.packages.length <= 2
+    ? kvorum.packages
+    : null;
+  const expectedKvorumStatus = kvorumStatus === "packages"
+    ? "PLAN"
+    : kvorumStatus === "quiet"
+      ? "NO_ACTION"
+      : kvorumStatus
+        ? "FAILED"
+        : null;
+  if (kind === "kv-desk") {
+    if (
+      !kvorum ||
+      !kvorumStatus ||
+      kvorumPackages === null ||
+      typeof kvorum.providerCallMade !== "boolean" ||
+      expectedKvorumStatus !== status ||
+      (record.fixture && kvorum.providerCallMade) ||
+      (kvorum.monitorRef !== null && (!kvorumMonitorRef || kvorumMonitorRef !== `state/ventures/kvorum/monitor/${meetingDate}.json`)) ||
+      (kvorum.reason !== null && !kvorumReason) ||
+      (kvorumStatus === "packages" && (kvorumPackages.length === 0 || kvorumReason !== null || !kvorumMonitorRef)) ||
+      (kvorumStatus !== "packages" && (kvorumPackages.length > 0 || !kvorumReason)) ||
+      (kvorumStatus === "quiet" && !kvorumMonitorRef)
+    ) return null;
+  } else if (record.kvorumDesk !== undefined) {
+    return null;
+  }
 
   return {
     id: `${meetingDate}-${kind}`,
@@ -282,6 +323,17 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
     ...(editionRef ? { editionRef } : {}),
     ...(agendaRef ? { agendaRef } : {}),
     ...(sharperOutcome && sharperSummary && sharperEvidence ? { sharperData: { outcome: sharperOutcome, summary: sharperSummary, ...(sharperIdeaRef ? { ideaRef: sharperIdeaRef } : {}), evidenceRefs: sharperEvidence } } : {}),
+    ...(kind === "kv-desk" && kvorum && kvorumStatus && kvorumPackages
+      ? {
+          kvorumDesk: {
+            monitorRef: kvorumMonitorRef,
+            runStatus: kvorumStatus,
+            reason: kvorumReason,
+            providerCallMade: kvorum.providerCallMade as boolean,
+            packageCount: kvorumPackages.length
+          }
+        }
+      : {}),
     roomTranscript: { openedAt, closedAt, gavel, setting, turns },
     generatedAt
   };

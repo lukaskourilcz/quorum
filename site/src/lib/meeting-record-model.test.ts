@@ -15,8 +15,21 @@ describe("public MeetingRecord v2 boundary", () => {
     expect(parsePublicMeetingRecord(valid)).toMatchObject({
       id: "2026-08-04-kv-desk",
       kind: "kv-desk",
-      fixture: false
+      fixture: false,
+      status: "NO_ACTION",
+      kvorumDesk: {
+        monitorRef: "state/ventures/kvorum/monitor/2026-08-04.json",
+        runStatus: "quiet",
+        providerCallMade: false,
+        packageCount: 0
+      }
     });
+  });
+
+  it("rejects a Kvórum status that contradicts its typed desk outcome", () => {
+    const record = clone();
+    record.status = "PLAN";
+    expect(parsePublicMeetingRecord(record)).toBeNull();
   });
 
   it("rejects an unknown agent", () => {

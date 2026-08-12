@@ -579,6 +579,281 @@
           ],
           "additionalProperties": {}
         },
+        "kvorumDesk": {
+          "type": "object",
+          "properties": {
+            "monitorRef": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^state\\/ventures\\/kvorum\\/monitor\\/\\d{4}-\\d{2}-\\d{2}\\.json$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "runStatus": {
+              "type": "string",
+              "enum": [
+                "packages",
+                "quiet",
+                "model-failed",
+                "failed"
+              ]
+            },
+            "reason": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "providerCallMade": {
+              "type": "boolean"
+            },
+            "packages": {
+              "maxItems": 2,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "clusterId": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{40}$"
+                  },
+                  "headline": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  },
+                  "summary": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 2000
+                      },
+                      "refs": {
+                        "minItems": 1,
+                        "maxItems": 20,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[a-f0-9]{40}$"
+                        }
+                      }
+                    },
+                    "required": [
+                      "text",
+                      "refs"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "whyItMatters": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 2000
+                      },
+                      "refs": {
+                        "minItems": 1,
+                        "maxItems": 20,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[a-f0-9]{40}$"
+                        }
+                      }
+                    },
+                    "required": [
+                      "text",
+                      "refs"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "whyThisIsWorthIt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000
+                  },
+                  "ourAngle": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2000
+                  },
+                  "ourAngleDiffers": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2000
+                  },
+                  "stitAttribution": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "summary": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 1000
+                          },
+                          "itemRefs": {
+                            "minItems": 1,
+                            "maxItems": 30,
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "pattern": "^[a-f0-9]{40}$"
+                            }
+                          }
+                        },
+                        "required": [
+                          "summary",
+                          "itemRefs"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "targets": {
+                    "minItems": 1,
+                    "maxItems": 8,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "platform": {
+                          "type": "string",
+                          "enum": [
+                            "instagram",
+                            "facebook",
+                            "threads",
+                            "x"
+                          ]
+                        },
+                        "format": {
+                          "type": "string",
+                          "enum": [
+                            "carousel",
+                            "single-image",
+                            "thread",
+                            "caption"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 800
+                        },
+                        "copy": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 12000
+                        },
+                        "altText": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 2000
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "platform",
+                        "format",
+                        "reason",
+                        "copy",
+                        "altText"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "claims": {
+                    "minItems": 1,
+                    "maxItems": 80,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "maxLength": 80,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "fact-multi",
+                            "fact-single",
+                            "commentary"
+                          ]
+                        },
+                        "text": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 1000
+                        },
+                        "refs": {
+                          "minItems": 1,
+                          "maxItems": 20,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[a-f0-9]{40}$"
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "text",
+                        "refs"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "clusterId",
+                  "headline",
+                  "summary",
+                  "whyItMatters",
+                  "whyThisIsWorthIt",
+                  "ourAngle",
+                  "ourAngleDiffers",
+                  "stitAttribution",
+                  "targets",
+                  "claims"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "monitorRef",
+            "runStatus",
+            "reason",
+            "providerCallMade",
+            "packages"
+          ],
+          "additionalProperties": false
+        },
         "generatedAt": {
           "type": "string",
           "format": "date-time",
@@ -1408,6 +1683,281 @@
             "evidenceRefs"
           ],
           "additionalProperties": {}
+        },
+        "kvorumDesk": {
+          "type": "object",
+          "properties": {
+            "monitorRef": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^state\\/ventures\\/kvorum\\/monitor\\/\\d{4}-\\d{2}-\\d{2}\\.json$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "runStatus": {
+              "type": "string",
+              "enum": [
+                "packages",
+                "quiet",
+                "model-failed",
+                "failed"
+              ]
+            },
+            "reason": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "providerCallMade": {
+              "type": "boolean"
+            },
+            "packages": {
+              "maxItems": 2,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "clusterId": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{40}$"
+                  },
+                  "headline": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  },
+                  "summary": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 2000
+                      },
+                      "refs": {
+                        "minItems": 1,
+                        "maxItems": 20,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[a-f0-9]{40}$"
+                        }
+                      }
+                    },
+                    "required": [
+                      "text",
+                      "refs"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "whyItMatters": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 2000
+                      },
+                      "refs": {
+                        "minItems": 1,
+                        "maxItems": 20,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[a-f0-9]{40}$"
+                        }
+                      }
+                    },
+                    "required": [
+                      "text",
+                      "refs"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "whyThisIsWorthIt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000
+                  },
+                  "ourAngle": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2000
+                  },
+                  "ourAngleDiffers": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2000
+                  },
+                  "stitAttribution": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "summary": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 1000
+                          },
+                          "itemRefs": {
+                            "minItems": 1,
+                            "maxItems": 30,
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "pattern": "^[a-f0-9]{40}$"
+                            }
+                          }
+                        },
+                        "required": [
+                          "summary",
+                          "itemRefs"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "targets": {
+                    "minItems": 1,
+                    "maxItems": 8,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "platform": {
+                          "type": "string",
+                          "enum": [
+                            "instagram",
+                            "facebook",
+                            "threads",
+                            "x"
+                          ]
+                        },
+                        "format": {
+                          "type": "string",
+                          "enum": [
+                            "carousel",
+                            "single-image",
+                            "thread",
+                            "caption"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 800
+                        },
+                        "copy": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 12000
+                        },
+                        "altText": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 2000
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "platform",
+                        "format",
+                        "reason",
+                        "copy",
+                        "altText"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "claims": {
+                    "minItems": 1,
+                    "maxItems": 80,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "maxLength": 80,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "fact-multi",
+                            "fact-single",
+                            "commentary"
+                          ]
+                        },
+                        "text": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 1000
+                        },
+                        "refs": {
+                          "minItems": 1,
+                          "maxItems": 20,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[a-f0-9]{40}$"
+                          }
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "text",
+                        "refs"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "clusterId",
+                  "headline",
+                  "summary",
+                  "whyItMatters",
+                  "whyThisIsWorthIt",
+                  "ourAngle",
+                  "ourAngleDiffers",
+                  "stitAttribution",
+                  "targets",
+                  "claims"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "monitorRef",
+            "runStatus",
+            "reason",
+            "providerCallMade",
+            "packages"
+          ],
+          "additionalProperties": false
         },
         "generatedAt": {
           "type": "string",
