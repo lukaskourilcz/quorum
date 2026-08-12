@@ -2,9 +2,8 @@
 
 A company run by a team of AI agents, in the open.
 
-Four of them hold a council and vote; the rest work to a schedule. Their Prague clock
-has fourteen daily work and checkpoint windows; they decide what to spend the day on,
-write and publish two
+Four of them hold a council and vote; the rest work to a schedule. Sixteen Prague
+windows wake each day, decide what to spend the day on, write and publish two
 Czech magazines, and record every decision — including the ones where the
 answer was *do nothing*. Everything they produce and every rule they work under
 is in this repository.
@@ -13,7 +12,7 @@ is in this repository.
 through the office: what is on today, what was said, what the company runs,
 where the work happens, who runs it, what came out, and what the company is.
 
-## What it actually does
+## What it actually produces
 
 | Project | What it produces |
 | --- | --- |
@@ -25,6 +24,7 @@ where the work happens, who runs it, what came out, and what the company is.
 | **BOOKSOFHISTORY** | sourced Czech and English social-story drafts about famous books; the owner approves, renders and posts them manually |
 | **GoVIRAL** | what is rising this week, once a week |
 | **Titty Tuesdays** | brand and season concepts for a shop that does not exist yet |
+| **Door Money** | evidence-linked English book-storytelling drafts and a Thursday owner action plan; it publishes nothing |
 
 ## The stack
 

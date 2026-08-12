@@ -1,9 +1,9 @@
 # BoardlessAI ecosystem — standing full-context brief
 
 Updated: 2026-08-12
-Status: implementation complete; live work remains locked behind the pending BOOKSOFHISTORY countersignature and the owner-only setup in `docs/NEEDED.md`
+Status: implementation complete; live work remains locked behind pending venture countersignatures and the owner-only setup in `docs/NEEDED.md`
 Audience: owner, product partners and Fable brainstorming  
-Authority: current code, committed state, countersigned decisions D1–D13 and the pending D14 founding record
+Authority: current code, committed state, decisions D1–D13 and the pending venture founding records
 
 ## What BoardlessAI is
 
@@ -40,9 +40,9 @@ Refreshed from committed state: **2026-08-12T12:03:41.590Z**. This block is gene
 
 | Item | Current value |
 | --- | --- |
-| Portfolio | 8 projects; 8 marked operating |
-| Agent roster | 35 active: 21 Anthropic, 14 OpenAI |
-| Scheduled specialist/service rooms | 10; combined maximum room envelopes $1.12 if every room is commissioned |
+| Portfolio | 9 projects; 9 marked operating |
+| Agent roster | 37 active: 22 Anthropic, 15 OpenAI |
+| Scheduled specialist/service rooms | 12; combined maximum room envelopes $1.26 if every room is commissioned |
 | Approved spend boundary | $30.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |
 | Recorded API spend | $3.97 this month; $3.99 cumulative |
 | Entered fixed costs | $0.00 monthly |
@@ -65,6 +65,7 @@ Refreshed from committed state: **2026-08-12T12:03:41.590Z**. This block is gene
 | Design Lab | operating | deterministic service only | none | not applicable |
 | marketingShark | operating | ms-daily 07:00 | none | not applicable |
 | MMA Files | operating | mag-editorial 09:00; mag-desk 20:00 | REACH | locked (3/10) |
+| Door Money | operating | dm-desk 15:00; dm-growth 16:00 | none | not applicable |
 
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:END -->
 
@@ -123,6 +124,31 @@ plays and at most one allowlisted follow-up agenda. Its 13:00 room runs on Monda
 the other six scheduled firings are deterministic `$0` no-ops. Apify remains on its
 Free plan, whose `$5` monthly credit is the hard source ceiling, with no card in the
 system and no authority to upgrade a plan.
+
+Door Money's English book and music-business terms
+use a separate keyless Google News path, so they do not add an actor, quota or paid data
+source. A tactic can call a trend only when that exact term was measured.
+
+The room works on Mondays; the other six scheduled firings are honest `$0` no-ops unless
+a due agenda commissions the room. It can exchange one bounded decision agenda with Door
+Money's Thursday growth room. It never posts, opens an account or turns a trend into
+permission for outreach.
+
+### Door Money
+
+Promise: turn privately held English book material into evidence-linked storytelling
+drafts and a weekly owner action plan. The public repository keeps only hashes, scores,
+labels, counters and bounded derivatives: excerpts stop at 600 characters and style
+exemplars at 40 entries of 280 characters. Manuscript text, full chunks and embeddings
+remain in the configured private store, and fixtures use invented prose only.
+
+At 15:00 GHOST receives one bounded private-evidence packet and prepares drafts behind
+owner review; AUDIT keeps the veto. At 16:00 BOOKER works only on Thursdays, turning the
+rotating research agenda and owner-entered outcomes into cited tasks and templates; the
+other six firings cost `$0`. Approval hands a summary to the shared Design Lab, which is
+the venture's only rendering path. Nothing can post, create an account, touch a channel,
+send outreach or authorize spend. The protected admin exposes recommendations, actions
+and knowledge, and records owner review decisions, manual completions and manual results.
 
 ### marketingShark
 
@@ -224,8 +250,8 @@ quiz-code-context. The eleventh was added for marketingShark and justified by a 
 rather than a preference: every other live layout's widest monospace slot holds 100
 characters over two lines, which is a source label and not a program, so a quiz question
 carrying a fenced code block had nowhere legible to put it. Brand token sets now cover
-six brands — devShark and geoShark arrived with marketingShark, and BOOKSOFHISTORY
-added a typographic, cover-free set.
+six brands — devShark and geoShark arrived with marketingShark, BOOKSOFHISTORY added a
+typographic, cover-free set and Door Money adds the English book-storytelling set.
 MOTIF records cited text observations without crawling or downloading imagery. EASEL
 authors original data-only proposals. Schema, contrast, safe-area, token, overflow,
 asset and determinism checks can promote a version automatically. Versions are
@@ -273,8 +299,8 @@ is only a locked future earning possibility.
 
 ## Prague operating clock
 
-Every row is a wake-up, not a promise to spend. The schedule resolves to 18 unique UTC
-cron expressions covering Prague winter and summer time. Runtime DST resolution accepts
+Every row is a wake-up, not a promise to spend. The schedule has 32 Vercel entries across
+19 unique UTC cron expressions covering Prague winter and summer time. Runtime DST resolution accepts
 only the entry matching the intended local hour. Calendar validation rejects
 collisions and the public calendar uses the same source.
 
@@ -290,6 +316,8 @@ collisions and the public calendar uses the same source.
 | 12:00 | BOOKSOFHISTORY desk | standing daily; resumes the current selection, research or production phase | research `$0.10` per call, `$0.50` per cycle and `$5.00` per month |
 | 13:00 | GoVIRAL trend room | standing weekly; Mondays only, the other six days are `$0` no-ops | `$0.06` |
 | 14:00 | Afternoon board | deterministic checkpoint | `$0` |
+| 15:00 | Door Money desk | standing daily; private knowledge, evidence and budget gates | `$0.08` |
+| 16:00 | Door Money growth | standing weekly; Thursdays only, the other six days are `$0` no-ops | `$0.06` |
 | 17:00 | Caught Up product | fixed service | `$0.08` |
 | 19:00 | FightAIQ analysis | due agenda + D8/evidence gates | `$0.06` |
 | 20:00 | MMA Files desk | due agenda only | `$0.05` |
@@ -325,8 +353,9 @@ change. The morning board may choose one. `state/meeting-agendas/queue.json` sto
 the specialist request under `meeting-agenda/1`: target project/phase, requester,
 source meeting, one short problem, evidence refs, earliest run, expiry and status.
 
-Requests are allowlisted: morning can request TT, FightAIQ intake or MMA
-editorial/desk; each other project room can request only its defined next step. One meeting creates at most one request, queues
+Requests are allowlisted: morning can request TT, GoVIRAL, FightAIQ intake or MMA
+editorial/desk; each other project room can request only its defined next step. GoVIRAL
+and Door Money growth can hand one bounded decision agenda to each other. One meeting creates at most one request, queues
 are capped at 24 and eight per project, duplicate phase/date requests collapse, due
 agendas are consumed once, and pending requests expire after three days. Seven days
 without a consumed project agenda forces a morning-board commission or saved why-not.
@@ -388,6 +417,8 @@ envelope before any call.
 | CHUM | one day's carousel copy per brand, Czech and English | cannot choose the question, the hook, the template or the closing line |
 | FOLIO | BOOKSOFHISTORY selection, bounded research briefs and dossier-backed story choice | cannot call research outside a recorded decision, post or override claim state |
 | PLOT | dossier story mining, one canonical brief and independent Czech/English packages | cannot invent claims, change verification state or post |
+| GHOST | evidence-linked English Door Money storytelling drafts | cannot select passages, alter the private knowledge profile or publish |
+| BOOKER | cited Door Money owner tasks and reusable templates | cannot contact anyone, spend or claim an unrecorded result |
 
 ## Content, social and the Design Lab's flow
 
@@ -395,6 +426,11 @@ Caught Up and MMA Files spend on article language work only after source gates p
 Both publish in Czech only; both use one licensed hero/fallback; both are delivered
 through a repository-scoped App and verified after deployment. Social payload
 generation is separately gated, so locked social projects make no caption/model calls.
+
+Door Money never enters that publisher. Owner approval writes only a bounded English
+summary and copy package for the Design Lab; the owner must perform any external post.
+The shared renderer remains deterministic and `$0`, and no raw manuscript or embedding
+crosses into its state.
 
 When enabled, every social producer returns a live `template_id`, semantic `version`
 and bounded `content` payload. FRAME resolves the version through the Design Lab,
@@ -446,6 +482,8 @@ evaluated events and calibration. The Design Lab is an internal engine; standalo
 prepare a proposal but never activate an earning method.
 BOOKSOFHISTORY has no website, newsletter, database, store or other earning surface in
 this program; building one would require a separate owner decision.
+Door Money is likewise drafts-only: it has no earning activation, publisher, channel or
+account, and its owner action packets cannot send the outreach they describe.
 
 ## Safety and launch gates
 
@@ -464,6 +502,8 @@ this program; building one would require a separate owner decision.
   state or prompts. Public pages expose defensive projections only.
 - Credentials never enter Git, prompts, meetings, public output or logs. External URLs
   are allowlisted and external content is untrusted.
+- Door Money manuscript text, full chunks and embeddings never enter this public
+  repository; committed excerpts and exemplars are contract-capped and test-enforced.
 - Payments, new spend, budget raises, account creation, legal posture and personal
   data remain human-only regardless of a model vote.
 
@@ -485,6 +525,7 @@ this program; building one would require a separate owner decision.
 | D12 Original presentation | approved agent photographs and plain interface labels; no workplace-show framing |
 | D13 marketingShark founding | seventh project, `ms-daily` at 07:00, MAKO and CHUM, devShark folded in as a portfolio product, geoShark present and disabled, drafts only |
 | D14 BOOKSOFHISTORY founding | eighth project, `bh-desk` at 12:00, FOLIO and PLOT, reusable dossiers, independent Czech/English drafts, manual posting and no public surface |
+| Door Money founding | ninth project, `dm-desk` at 15:00 and Thursday-only `dm-growth` at 16:00, private manuscript boundary, Design Lab-only rendering and drafts/actions only |
 
 Historical records remain append-only under `state/decisions/`; later decisions may
 supersede a setting without rewriting the earlier context.
@@ -516,7 +557,7 @@ outcome, not a reason to rerun paid work.
    decisions would each metric actually change?
 6. Can Caught Up and MMA Files share more source verification or language QA without
    flattening their distinct editorial voices?
-7. What evidence would justify creating a 45th registry role rather than tightening a
+7. What evidence would justify creating a 47th registered role rather than tightening a
    packet or sharing an existing role?
 8. Which earning hypothesis can be tested without weakening editorial trust or opening
    an account prematurely?
