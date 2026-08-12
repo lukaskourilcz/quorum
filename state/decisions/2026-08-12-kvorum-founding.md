@@ -147,8 +147,8 @@ section and a receipt line, and a day with no usable cluster records an honest q
   a manual dispatch choice and mode gates to `cycle.yml`, plus the two punctual Vercel entries.
   It will not restore per-room GitHub schedules.
 - **Prompt inventory:** `architecture.test.ts` inventories only root prompt files even though
-  marketingShark already has a prompt subdirectory. Kvórum will add a direct nested-prompt
-  assertion rather than pretending nested files belong to the flat root inventory.
+  marketingShark already has a prompt subdirectory. Kvórum converts it to an explicit recursive
+  relative-path inventory so both ventures' nested runtime prompts are checked without aliases.
 - **Closed-enum sequencing:** the mandated title order registers `kv-desk` before the later
   phase-schema and Vercel-cron issues teach every schedule consumer about it. KV-02b's contract
   and KPI tests are green, but the full suite correctly refuses the unknown scheduled phase and
@@ -175,7 +175,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-03c — `cycle.yml` dispatch choices and mode gates
 - [x] KV-03d — Vercel cron entries for the 21:00 slot
 - [x] KV-04a — TRIBUN in the agent registry, routing, controls and cast schema
-- [ ] KV-04b — TRIBUN prompts and the expected-prompts list
+- [x] KV-04b — TRIBUN prompts and the expected-prompts list
 - [ ] KV-04c — TRIBUN model role and HACEK venture extension
 - [ ] KV-05a — Venture scaffold, brand hue and labels
 - [ ] KV-05b — KPI seeds for the quarter

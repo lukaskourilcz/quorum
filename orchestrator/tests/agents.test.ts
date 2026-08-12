@@ -8,6 +8,12 @@ import {
 } from "../src/org/registry.js";
 import { configRoot } from "../src/paths.js";
 
+function personaPath(promptsRoot: string, agent: { id: string; slug: string }): string {
+  return agent.id === "TRIBUN"
+    ? path.join(promptsRoot, "kvorum", "tribun.md")
+    : path.join(promptsRoot, `${agent.slug}.md`);
+}
+
 describe("agent registry and identity assets", () => {
   it("keeps 34 seated roles of 43 on file, and gated portraits explicit", async () => {
     const registry = await loadAgentRegistry();
@@ -90,7 +96,7 @@ describe("agent registry and identity assets", () => {
 
     const loaded = await Promise.all(
       registry.agents.map(async (agent) => {
-        const body = await readFile(path.join(promptsRoot, `${agent.slug}.md`), "utf8");
+        const body = await readFile(personaPath(promptsRoot, agent), "utf8");
         return { id: agent.id, body: body.trim() };
       })
     );
@@ -117,7 +123,7 @@ describe("agent registry and identity assets", () => {
 
     const drift: string[] = [];
     for (const agent of registry.agents) {
-      const body = await readFile(path.join(promptsRoot, `${agent.slug}.md`), "utf8");
+      const body = await readFile(personaPath(promptsRoot, agent), "utf8");
       // Backticked dotted tokens are how every prompt writes a KPI id.
       const claimed = [
         ...new Set((body.match(/`[a-z][a-z0-9_]*\.[a-z0-9_]+`/gu) ?? []).map((token) => token.slice(1, -1)))

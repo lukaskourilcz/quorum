@@ -85,10 +85,14 @@ const expectedPrompts = [
   "instagram.md",
   "jab.md",
   "keeper.md",
+  "kvorum/craft.md",
+  "kvorum/tribun.md",
   "ledger.md",
   "lens.md",
   "magazine.md",
   "mako.md",
+  "marketingshark/craft.md",
+  "marketingshark/strategy.md",
   "mma.md",
   "motif.md",
   "operations.md",
@@ -186,16 +190,15 @@ describe("agent architecture", () => {
   });
 
   it("ships every council and specialist prompt", async () => {
-    const promptNames = (await readdir(path.join(repoRoot, "orchestrator", "prompts")))
-      .filter((name) => name.endsWith(".md"))
+    const promptRoot = path.join(repoRoot, "orchestrator", "prompts");
+    const promptNames = (await readdir(promptRoot, { recursive: true, withFileTypes: true }))
+      .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+      .map((entry) => path.relative(promptRoot, path.join(entry.parentPath, entry.name)))
       .sort();
 
     expect(promptNames).toEqual(expectedPrompts);
     for (const name of promptNames) {
-      const prompt = await readFile(
-        path.join(repoRoot, "orchestrator", "prompts", name),
-        "utf8"
-      );
+      const prompt = await readFile(path.join(promptRoot, name), "utf8");
       expect(prompt.trim().length, `${name} is empty`).toBeGreaterThan(80);
     }
   });
