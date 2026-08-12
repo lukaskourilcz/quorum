@@ -128,7 +128,7 @@ post anything.
 - [x] **BH-17** — Admin approval write path
 - [x] **BH-18a** — Server-only admin loader
 - [x] **BH-18b** — Shortlist panel with factor breakdowns
-- [ ] **BH-18c** — Dossiers panel with the research ledger
+- [x] **BH-18c** — Dossiers panel with the research ledger
 - [ ] **BH-18d** — Features panel, tab wiring and e2e
 - [ ] **BH-19a** — GoVIRAL spine: topic set and trend factor
 - [ ] **BH-19b** — GoVIRAL spine: transitions and the Design-Lab-only test
