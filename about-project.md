@@ -5,8 +5,9 @@ ukládá výsledky tak, aby šlo zpětně dohledat, proč něco navrhla. Pevná 
 důkazy, náklady, bezpečnost a to, co smí udělat jen majitel.
 
 Aktuální stav: **v provozu, bez příjmů, ve fázi ověřování**. Web běží na Vercel Pro:
-<https://boardless-ai.vercel.app>. Systém má sedm pracovních projektů: Caught Up (veřejně
-DNESKAi), Titty Tuesdays, GoVIRAL, marketingShark, FightAIQ, Design Lab a MMA Files.
+<https://boardless-ai.vercel.app>. Systém má osm pracovních projektů: Caught Up (veřejně
+DNESKAi), Titty Tuesdays, GoVIRAL, marketingShark, BOOKSOFHISTORY, FightAIQ, Design
+Lab a MMA Files.
 Magazine Incubator byl uzavřen — nové magazíny se už nevymýšlejí.
 
 **Co už publikuje (k 7. srpnu 2026):** publikují dva projekty — DNESKAi denní vydání a
@@ -14,7 +15,9 @@ MMA Files jeden článkový slot denně. Oba posílají hotový článek zárove
 Studia jako *summary* (titulek, perex a vybrané pasáže), ze kterého se skládají sociální
 karusely. Ostatní projekty zatím nepublikují; na co každý čeká, je v
 `docs/NEEDED.md`. marketingShark nepublikuje vůbec: jeho karusely vznikají rovnou
-jako koncepty ve frontě ke schválení a rozhoduje o nich majitel.
+jako koncepty ve frontě ke schválení a rozhoduje o nich majitel. BOOKSOFHISTORY také
+jen připravuje koncepty; majitel každou jazykovou verzi schválí, vykreslí v Design
+Labu a zveřejní ručně.
 
 ## Jak je systém poskládaný
 
@@ -25,7 +28,7 @@ GitHub Actions / příkazová řádka
      TypeScript řízení porad
      ├─ rozpis, agendy a výběr rolí
      ├─ limity nákladů a kontrola zdrojů
-     ├─ porady všech sedmi projektů
+     ├─ porady všech osmi projektů
      └─ jeden denní souhrn
               │
               ▼
@@ -40,9 +43,9 @@ GitHub Actions / příkazová řádka
      └─ chráněná správa projektů (rail podle projektů)
 ```
 
-V rejstříku je 42 rolí, z toho **33 aktivních**: čtyři hlasující členové rady a 29
+V rejstříku je 44 rolí, z toho **35 aktivních**: čtyři hlasující členové rady a 31
 odborných rolí. Devět rolí bylo při zeštíhlení soupisky odstaveno a veřejný web počítá
-jen ty pracující. Devatenáct aktivních rolí používá Anthropic a 14 OpenAI. Dvacet sedm
+jen ty pracující. Dvacet jedna aktivních rolí používá Anthropic a 14 OpenAI. Dvacet sedm
 rolí má na veřejném webu svou schválenou fotografii. Novější role používají neutrální zástupný obrázek se jménem,
 dokud pro ně nevznikne schválený portrét. Web používá jména a pracovní popisy bez
 seriálového vzhledu a bez označení sezon nebo epizod. Tyto vizuální prvky se neposílají
@@ -79,8 +82,14 @@ modelům ani do podkladů porad.
   (masthead, gutter, bevel, porthole, slab, terrace, figure, pull, tower, dossier)
   nahradilo pět tapet, které byly ve třech případech tentýž rozmazaný gradient. Písma
   jsou od 9. srpna 2026 v repozitáři: třicet statických řezů pod licencí SIL OFL, takže
-  stejný deck vykreslí stejné bajty na jakémkoli stroji. Barevné sady drží pro pět
-  značek, devShark a geoShark přibyly s marketingSharkem. Nemá vlastní sociální účet,
+  stejný deck vykreslí stejné bajty na jakémkoli stroji. Barevné sady drží pro šest
+  značek; devShark a geoShark přibyly s marketingSharkem a BOOKSOFHISTORY doplnilo
+  typografickou sadu bez obálek. Design Lab nemá vlastní sociální účet.
+- **BOOKSOFHISTORY** každý den ve 12:00 naváže na rozepsanou fázi výběru, výzkumu
+  nebo tvorby. Z jednoho zdrojovaného dossieru vznikne společný příběhový brief a dva
+  samostatně napsané české a anglické sociální koncepty. Nemá veřejný web, stránky
+  knih, SEO archiv, databázi, newsletter, obchod, účet ani cestu ke zveřejnění. Obálky
+  knih se nikdy nevykreslují; citace mají nejvýše 300 znaků a uvedený zdroj.
 - **MMA Files** je veřejný anglicko-český magazín. BoardlessAI do jeho repozitáře posílá jen ověřené články a data z FightAIQ;
   rozepsané texty a interní poznámky zůstávají v chráněné administraci. Když FightAIQ
   nemá žádný nadcházející turnaj, redakce místo náhledu zápasu napíše profil nejlépe
@@ -88,8 +97,8 @@ modelům ani do podkladů porad.
 
 ## Denní rozpis a peníze
 
-Společný pražský rozpis má 13 kontrolních časů: 05:00, 06:00, 07:00, 08:00, 09:00, 10:00,
-11:00, 13:00, 14:00, 17:00, 19:00, 20:00 a 22:00. Sloty 18:00 a 21:00 zmizely se zrušením
+Společný pražský rozpis má 14 kontrolních časů: 05:00, 06:00, 07:00, 08:00, 09:00, 10:00,
+11:00, 12:00, 13:00, 14:00, 17:00, 19:00, 20:00 a 22:00. Sloty 18:00 a 21:00 zmizely se zrušením
 večerního článkového slotu. Sedmá hodina zůstala po uzavření inkubátoru prázdná a od
 7. srpna 2026 v ní sedí denní porada marketingSharku. Letní a zimní čas má každý
 slot vlastní spouštění a program přijme jen tu variantu, která platí pro Prahu dnes.
@@ -103,7 +112,8 @@ zpoždění už nevadí.
 V 06:00 rozhodne hlavní rada, které odborné porady jsou opravdu potřeba. Odpoledne a večer
 se už jen bez placených modelů zapíše stav. Porady Titty Tuesdays, GoVIRAL, Carousel
 Studia, večerní analýzy FightAIQ a redakční kontrola MMA Files se spustí jen s platnou
-agendou.
+agendou. BOOKSOFHISTORY má stálé denní okno, ale pokračuje jen v aktuální fázi;
+zmeškanou práci nepřeskočí a při nedostatku rozpočtu cyklus protáhne za `$0`.
 
 Když nějaká brána poradu vypne, zapíše se do `state/meetings/skips/` důvod a kalendář slot
 označí jako **Skipped** s vysvětlením v popisku. Prázdný den tak řekne, kterou bránu
@@ -114,6 +124,11 @@ z toho 25 dolarů pro modely a API a denní tempo 1,00 dolaru. Nahrazuje starš�
 `budget-2026-08d` (50 / 42 / 2,20). Jeden resolver drží tyto částky pro celý běh; každá
 fáze si limit smí jen utáhnout, nikdy povolit. Systém si limit nesmí zvýšit sám a platby
 vždy provádí člověk.
+
+BOOKSOFHISTORY má uvnitř těchto společných limitů ještě nižší stropy na výzkum:
+nejvýše 0,10 dolaru za volání, 0,50 dolaru za cyklus a 5 dolarů za měsíc. Stejný
+výzkum se pro druhý jazyk neopakuje a zámek `(bookId, briefHash)` brání dvojímu
+účtování.
 
 ### Jak se vybírá obrázek k článku
 
@@ -139,8 +154,10 @@ jsou viditelně označená a nepočítají se jako skutečný výsledek.
 V produkci se hodnocení, ručně zadané kurzy a opravy sporů zapisují přes
 GitHub token omezený jen na tento repozitář. Bez něj zápis bezpečně selže.
 
-Web nesbírá návštěvnost, čtenost ani výsledky příspěvků. Přepínač
-`METRICS_INGESTION_ENABLED` zůstává vypnutý a role SPLIT nepracuje. REACH je také
+Web automaticky nesbírá návštěvnost, čtenost ani výsledky příspěvků. Přepínač
+`METRICS_INGESTION_ENABLED` zůstává vypnutý a role SPLIT nepracuje. U
+BOOKSOFHISTORY může majitel v chráněné správě ručně zapsat výsledek konkrétní
+jazykové verze; systém kvůli tomu neotevře kanál ani nespustí sběr. REACH je také
 vypnutý, dokud je tvorba sociálního obsahu pro MMA Files zamčená.
 
 ## Vývoj a ověření
