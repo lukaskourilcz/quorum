@@ -330,6 +330,22 @@
         "social:carousel"
       ],
       "status": "active"
+    },
+    "GHOST": {
+      "capabilities": [
+        "copywriting",
+        "voice:recorded",
+        "evidence:book"
+      ],
+      "status": "active"
+    },
+    "BOOKER": {
+      "capabilities": [
+        "growth:research",
+        "action:planning",
+        "evidence:results"
+      ],
+      "status": "active"
     }
   },
   "mandatoryWhen": [
@@ -513,6 +529,21 @@
       "required": [
         "MAKO",
         "CHUM",
+        "AUDIT"
+      ],
+      "optionalByTopic": false
+    },
+    "dm-desk-room": {
+      "required": [
+        "GHOST",
+        "AUDIT"
+      ],
+      "optionalByTopic": false
+    },
+    "dm-growth-room": {
+      "required": [
+        "BOOKER",
+        "PULSE",
         "AUDIT"
       ],
       "optionalByTopic": false
