@@ -8,7 +8,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-08-10.
+Updated: 2026-08-12.
 
 ---
 
@@ -149,6 +149,55 @@ is the single thing standing between a proven path and a working one.
 ## Yours to decide
 
 Judgement calls. Nothing is blocked on code for any of these.
+
+- [ ] **Read the four new venture designs and commission the builds** — the designs are
+  `docs/KVORUM-VENTURE-DESIGN.md` (Czech politics), `docs/DOOR-MONEY-VENTURE-DESIGN.md`
+  (Rapovej deník marketing), `docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` (book-history
+  social engine) and `docs/TEHDEJSI-SVET-VENTURE-DESIGN.md` (adoption of the existing
+  Tehdejší svět product); the matching implementation prompts sit beside them
+  (`*-CODEX-BUILD-PROMPT.md`, and `tehdejsi-svet-venture-implementation.md` for the
+  adoption). Hand each prompt to its own implementation session; whichever runs first
+  creates the shared recommendation contract, the research provider and the
+  carousel-summary locale field, and every prompt's Phase 0 checks for the others'
+  artifacts before creating its own. All four carry the standing GoVIRAL + Design Lab
+  spine (`docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` §10). Each build ends with a founding
+  decision waiting for your countersignature and its approval items in
+  `state/INBOX.md`; nothing runs live before you sign.
+  [imp:4] [owner:me] [time:75m] [kind:decision]
+
+- [ ] **Clear the four venture names and handles** — run the BRAND.md-style checks for
+  "Kvórum", "Door Money", "BOOKSOFHISTORY" and the @tehdejsisvet handles: social
+  handles on IG/FB/Threads/X (TikTok where relevant; for BOOKSOFHISTORY decide whether
+  the Czech lane shares the handle or takes a `.cz` variant), trademark screen,
+  collision search. The design documents list fallbacks in their closing "Open
+  questions" sections, and venture ids stay stable if a public name changes.
+  [imp:3] [owner:me] [time:45m] [kind:legal]
+
+- [ ] **Unblock the Tehdejší svět launch preconditions** — the adoption venture cannot
+  launch profiles until the product's production domain lands (that task already sits
+  in the product repo's own NEEDED.md at [imp:5]; `dontwannaknow.vercel.app` must
+  never appear in a bio), and two strategy questions need answers: may the 19 licensed
+  city photographs appear in social cards with on-slide attribution, and is the Vercel
+  Hobby → Pro-team question worth resolving now. Both are in the design doc's closing
+  "Open questions". [imp:3] [owner:me] [time:20m] [kind:decision]
+
+- [ ] **Answer the BOOKSOFHISTORY launch questions** — lane priority (both at once, or
+  English first with Czech two weeks behind), the starting cycle length (3 days or 4),
+  and any must-include books or hard exclusions before the 200-entry seed library is
+  authored. All three are listed in the design's "Open questions".
+  [imp:2] [owner:me] [time:15m] [kind:decision]
+
+- [ ] **Answer the Door Money manuscript questions** — confirm an English manuscript file
+  exists and decide where the private source repository lives; the design's
+  BOOK-SOURCE-001 approval blocks ingestion on this. Also say whether there is an
+  English-edition launch date the weekly growth room should plan backwards from.
+  [imp:3] [owner:me] [time:15m] [kind:decision]
+
+- [ ] **Pick Kvórum's desk hour** — the design defaults to 21:00 Prague (full-day
+  harvest, you review in the evening, posts go out next morning). If same-evening
+  posting matters more than a complete day, the slot is 12:00 instead. One registry
+  field, decided at founding, awkward to move later without a decision.
+  [imp:2] [owner:me] [time:5m] [kind:decision]
 
 - [x] **Run the MMA Files relaunch prompt sequence** — completed 2026-08-09 across the tracker’s
   twelve MMA Files issues and six quorum issues. The site redesign, Czech-only reader contract,
