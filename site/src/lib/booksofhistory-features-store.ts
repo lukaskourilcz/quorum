@@ -7,6 +7,7 @@ import {
   buildBooksofhistoryCarouselSummary,
   reviewCarouselSummary
 } from "@boardlessai/carousel-studio";
+import { parseOwnerResultEntry, type OwnerResultEntry } from "./owner-result-entry";
 
 export type BhFeatureLocale = "cs" | "en";
 type BhRecommendationStatus = "draft" | "approved" | "posted" | "archived" | "rejected";
@@ -265,9 +266,18 @@ async function resultEntryApproved(): Promise<boolean> {
   } catch { return false; }
 }
 
-async function stateRecordExists(relative: string): Promise<boolean> {
-  const token = process.env.BOARDLESSAI_GITHUB_TOKEN;
-  return (token ? await remoteJson(relative, token) : await optionalLocal(relative)) !== null;
+export async function assertBhOwnerResultTarget(entry: OwnerResultEntry): Promise<void> {
+  const located = await findRecommendation(entry.recommendationId);
+  const recommendation = located.recommendation;
+  if (entry.ventureId !== "booksofhistory") {
+    throw new BhFeaturePersistenceError("CONFLICT", "The owner result belongs to another venture.");
+  }
+  if (recommendation.status !== "approved" && recommendation.status !== "posted") {
+    throw new BhFeaturePersistenceError("CONFLICT", `A ${recommendation.status} recommendation cannot accept owner results.`);
+  }
+  if (recommendation.owner.postedUrls[entry.locale] !== entry.postUrl) {
+    throw new BhFeaturePersistenceError("CONFLICT", "The owner result URL does not match the recorded lane URL.");
+  }
 }
 
 function assertClaimRefs(recommendation: BhRecommendation, payloads: { cs: BhLanguageFeature; en: BhLanguageFeature }): void {
@@ -338,7 +348,19 @@ async function applyAction(current: BhRecommendation, action: BhFeatureAction): 
     };
   }
   if (!(await resultEntryApproved())) throw new BhFeaturePersistenceError("CONFLICT", "BH-RESULTS-004 is not approved; owner results remain disabled.");
-  if (!(await stateRecordExists(`state/${action.resultRef}`))) throw new BhFeaturePersistenceError("CONFLICT", "The referenced owner result entry does not exist.");
+  const rawResult = await (async () => {
+    const relative = `state/${action.resultRef}`;
+    const token = process.env.BOARDLESSAI_GITHUB_TOKEN;
+    return token ? remoteJson(relative, token) : optionalLocal(relative);
+  })();
+  const resultEntry = parseOwnerResultEntry(rawResult);
+  if (!resultEntry) throw new BhFeaturePersistenceError("CONFLICT", "The referenced owner result entry is missing or malformed.");
+  if (resultEntry.ventureId !== "booksofhistory" || resultEntry.recommendationId !== current.recommendationId
+    || resultEntry.locale !== action.locale || current.owner.postedUrls[action.locale] !== resultEntry.postUrl
+    || action.at !== resultEntry.recordedAt
+    || action.resultRef !== `ventures/booksofhistory/results/${resultEntry.resultId}.json`) {
+    throw new BhFeaturePersistenceError("CONFLICT", "The owner result does not match this recommendation lane and posted URL.");
+  }
   const existing = current.owner.resultRefs[action.locale];
   const repeated = existing.includes(action.resultRef);
   return {

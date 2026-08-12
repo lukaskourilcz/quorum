@@ -62,4 +62,29 @@ describe("BOOKSOFHISTORY feature panel", () => {
     const html = renderToStaticMarkup(<BooksofhistoryFeaturesPanel snapshot={await readAdminBooksofhistory(root)} />);
     expect(html).toContain("No feature recommendations are waiting or recorded yet.");
   });
+
+  it("surfaces attached owner-entered lane results beside the feature intent", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "bh-features-panel-results-"));
+    roots.push(root);
+    const recommendation = JSON.parse(await fixture("venture-recommendation.valid.json"));
+    recommendation.status = "approved";
+    recommendation.designLab = { status: "ready", summaryRefs: { cs: "summary-cs", en: "summary-en" } };
+    recommendation.owner.postedUrls.cs = "https://social.example/booksofhistory-cs";
+    recommendation.owner.resultRefs.cs = ["ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json"];
+    await Promise.all([
+      put(root, "state/ventures/booksofhistory/recommendations/feature.json", `${JSON.stringify(recommendation)}\n`),
+      put(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json"))
+    ]);
+
+    const html = renderToStaticMarkup(<BooksofhistoryFeaturesPanel snapshot={await readAdminBooksofhistory(root)} />);
+
+    expect(html).toContain("Manual entry only");
+    expect(html).toContain("Record owner-entered result");
+    expect(html).toContain("instagram");
+    expect(html).toContain("Views");
+    expect(html).toContain("1200");
+    expect(html).toContain("First owner-entered Czech lane result.");
+    expect(html).not.toContain("owner-result-entry/1");
+    expect(html).not.toContain("ventures/booksofhistory/results");
+  });
 });

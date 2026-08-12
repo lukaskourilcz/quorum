@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { parseBhRecommendation } from "./booksofhistory-features-store";
+import { parseOwnerResultEntry, type OwnerResultEntry, type OwnerResultMetrics } from "./owner-result-entry";
 import { parseRatingLedger, type RatingRecord } from "./rating-model";
 
 export type BhRecordState = "missing" | "unreadable" | "present";
@@ -103,13 +104,27 @@ export interface AdminBhFeature {
   designLabStatus: string;
   postedUrls: Record<Locale, string | null>;
   resultCounts: Record<Locale, number>;
+  results: Record<Locale, AdminBhOwnerResult[]>;
   contentHash: string;
   ratings: RatingRecord[];
 }
 
+export interface AdminBhOwnerResult {
+  resultId: string;
+  locale: Locale;
+  platform: string;
+  postUrl: string;
+  capturedAt: string;
+  recordedAt: string;
+  metrics: OwnerResultMetrics;
+  note: string | null;
+}
+
+type ParsedBhFeature = AdminBhFeature & { resultIds: Record<Locale, string[]> };
+
 export interface AdminBooksofhistorySnapshot {
-  stores: Record<"seed" | "shortlists" | "briefs" | "cycle" | "dossiers" | "ledger" | "features" | "ratings", BhRecordState>;
-  unreadable: Record<"seed" | "shortlists" | "briefs" | "cycle" | "dossiers" | "ledger" | "features" | "ratings" | "total", number>;
+  stores: Record<"seed" | "shortlists" | "briefs" | "cycle" | "dossiers" | "ledger" | "features" | "results" | "ratings", BhRecordState>;
+  unreadable: Record<"seed" | "shortlists" | "briefs" | "cycle" | "dossiers" | "ledger" | "features" | "results" | "ratings" | "total", number>;
   seedBooks: number | null;
   shortlist: AdminBhShortlist | null;
   brief: AdminBhBriefDecision | null;
@@ -247,7 +262,7 @@ function publicFeaturePair(recommendation: NonNullable<ReturnType<typeof parseBh
   return { cs: one("cs"), en: one("en") };
 }
 
-function parseFeature(value: unknown): AdminBhFeature | null {
+function parseFeature(value: unknown): ParsedBhFeature | null {
   const item = parseBhRecommendation(value);
   if (!item) return null;
   const dossierSegments = item.evidence.dossierRef.split("/");
@@ -260,7 +275,20 @@ function parseFeature(value: unknown): AdminBhFeature | null {
   if (csViolations.length !== item.gateResults.cs.violations.length || enViolations.length !== item.gateResults.en.violations.length) return null;
   const payloads = publicFeaturePair(item);
   const contentHash = `sha256:${createHash("sha256").update(JSON.stringify(payloads)).digest("hex").slice(0, 12)}`;
-  return { recommendationId: item.recommendationId, cycleId: item.cycleId, status: item.status, createdAt: item.createdAt, updatedAt: item.updatedAt, dossierId, storyId: label(item.evidence.storyRef) ?? "unknown", claimRefs: item.evidence.claimRefs, payloads, gates: { cs: { passed: item.gateResults.cs.passed, violations: csViolations }, en: { passed: item.gateResults.en.passed, violations: enViolations } }, designLabStatus: item.designLab.status, postedUrls: item.owner.postedUrls, resultCounts: { cs: item.owner.resultRefs.cs.length, en: item.owner.resultRefs.en.length }, contentHash, ratings: [] };
+  return { recommendationId: item.recommendationId, cycleId: item.cycleId, status: item.status, createdAt: item.createdAt, updatedAt: item.updatedAt, dossierId, storyId: label(item.evidence.storyRef) ?? "unknown", claimRefs: item.evidence.claimRefs, payloads, gates: { cs: { passed: item.gateResults.cs.passed, violations: csViolations }, en: { passed: item.gateResults.en.passed, violations: enViolations } }, designLabStatus: item.designLab.status, postedUrls: item.owner.postedUrls, resultCounts: { cs: item.owner.resultRefs.cs.length, en: item.owner.resultRefs.en.length }, results: { cs: [], en: [] }, resultIds: { cs: item.owner.resultRefs.cs.map(label).filter((id): id is string => id !== null), en: item.owner.resultRefs.en.map(label).filter((id): id is string => id !== null) }, contentHash, ratings: [] };
+}
+
+function publicResult(entry: OwnerResultEntry): AdminBhOwnerResult {
+  return {
+    resultId: entry.resultId,
+    locale: entry.locale,
+    platform: entry.platform,
+    postUrl: entry.postUrl,
+    capturedAt: entry.capturedAt,
+    recordedAt: entry.recordedAt,
+    metrics: entry.metrics,
+    note: entry.note
+  };
 }
 
 async function dossierFiles(directory: string): Promise<{ state: BhRecordState; files: string[] }> {
@@ -300,7 +328,7 @@ export async function readAdminBooksofhistory(
   root = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")
 ): Promise<AdminBooksofhistorySnapshot> {
   const base = path.join(root, "state/ventures/booksofhistory");
-  const [seed, shortlists, briefs, cycle, dossiers, ledger, features, ratings] = await Promise.all([
+  const [seed, shortlists, briefs, cycle, dossiers, ledger, features, results, ratings] = await Promise.all([
     singleton(path.join(base, "seed/library.json"), parseSeed),
     collection(path.join(base, "shortlists"), parseShortlist),
     collection(path.join(base, "briefs"), parseBrief),
@@ -308,15 +336,19 @@ export async function readAdminBooksofhistory(
     readDossiers(path.join(base, "dossiers")),
     readLedger(path.join(base, "research-ledger.jsonl")),
     collection(path.join(base, "recommendations"), parseFeature),
+    collection(path.join(base, "results"), (value) => {
+      const result = parseOwnerResultEntry(value);
+      return result?.ventureId === "booksofhistory" ? result : null;
+    }),
     readRatings(path.join(root, "state/ratings/booksofhistory/ledger.jsonl"))
   ]);
   const latestShortlist = [...shortlists.items].sort((left, right) => right.asOf.localeCompare(left.asOf))[0] ?? null;
   const latestBrief = [...briefs.items].sort((left, right) => right.date.localeCompare(left.date))[0] ?? null;
   const paidBooks = new Set(ledger.items.map(({ bookId }) => bookId));
   const usedBooks = new Set(ledger.items.filter(({ used }) => used).map(({ bookId }) => bookId));
-  const counts = { seed: seed.unreadable, shortlists: shortlists.unreadable, briefs: briefs.unreadable, cycle: cycle.unreadable, dossiers: dossiers.unreadable, ledger: ledger.unreadable, features: features.unreadable, ratings: ratings.unreadable };
+  const counts = { seed: seed.unreadable, shortlists: shortlists.unreadable, briefs: briefs.unreadable, cycle: cycle.unreadable, dossiers: dossiers.unreadable, ledger: ledger.unreadable, features: features.unreadable, results: results.unreadable, ratings: ratings.unreadable };
   return {
-    stores: { seed: seed.state, shortlists: shortlists.state, briefs: briefs.state, cycle: cycle.state, dossiers: dossiers.state, ledger: ledger.state, features: features.state, ratings: ratings.state },
+    stores: { seed: seed.state, shortlists: shortlists.state, briefs: briefs.state, cycle: cycle.state, dossiers: dossiers.state, ledger: ledger.state, features: features.state, results: results.state, ratings: ratings.state },
     unreadable: { ...counts, total: Object.values(counts).reduce((sum, value) => sum + value, 0) },
     seedBooks: seed.item,
     shortlist: latestShortlist,
@@ -326,7 +358,14 @@ export async function readAdminBooksofhistory(
     ledger: ledger.items.sort((left, right) => right.completedAt.localeCompare(left.completedAt)),
     researchEfficiency: paidBooks.size ? usedBooks.size / paidBooks.size : null,
     features: features.items
-      .map((feature) => ({ ...feature, ratings: ratings.items.filter((rating) => rating.objectKind === "social-variant" && rating.objectRef.id === feature.recommendationId).sort((left, right) => right.ratedAt.localeCompare(left.ratedAt)) }))
+      .map(({ resultIds, ...feature }) => ({
+        ...feature,
+        results: {
+          cs: results.items.filter((result) => result.recommendationId === feature.recommendationId && result.locale === "cs" && result.postUrl === feature.postedUrls.cs && resultIds.cs.includes(result.resultId)).map(publicResult).sort((left, right) => right.capturedAt.localeCompare(left.capturedAt)),
+          en: results.items.filter((result) => result.recommendationId === feature.recommendationId && result.locale === "en" && result.postUrl === feature.postedUrls.en && resultIds.en.includes(result.resultId)).map(publicResult).sort((left, right) => right.capturedAt.localeCompare(left.capturedAt))
+        },
+        ratings: ratings.items.filter((rating) => rating.objectKind === "social-variant" && rating.objectRef.id === feature.recommendationId).sort((left, right) => right.ratedAt.localeCompare(left.ratedAt))
+      }))
       .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
   };
 }

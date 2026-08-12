@@ -132,7 +132,7 @@ post anything.
 - [x] **BH-18d** — Features panel, tab wiring and e2e
 - [x] **BH-19a** — GoVIRAL spine: topic set and trend factor
 - [x] **BH-19b** — GoVIRAL spine: transitions and the Design-Lab-only test
-- [ ] **BH-20a** — Owner results per lane
+- [x] **BH-20a** — Owner results per lane
 - [ ] **BH-20b** — Category weights with floors
 - [ ] **BH-20c** — Used-flag backfill and the research-efficiency KPI
 - [ ] **BH-21a** — Documentation truth across the standing docs

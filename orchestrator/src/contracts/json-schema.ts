@@ -23,6 +23,7 @@ import { MeetingAgendaQueueSchema } from "./meeting-agenda.js";
 import { MeetingRecordSchema } from "./meeting-record.js";
 import { OpsReportSchema } from "./ops-report.js";
 import { OwnerAttentionSchema } from "./owner-attention.js";
+import { OwnerResultEntrySchema } from "./owner-result-entry.js";
 import {
   AdjustmentEntrySchema,
   BoutRecordSchema,
@@ -81,6 +82,7 @@ export const ContractSchemas = {
   "meeting-record": MeetingRecordSchema,
   "ops-report": OpsReportSchema,
   "owner-attention": OwnerAttentionSchema,
+  "owner-result-entry": OwnerResultEntrySchema,
   "adjustment-entry": AdjustmentEntrySchema,
   "bet-type-catalog": BetTypeCatalogSchema,
   "bout-record": BoutRecordSchema,

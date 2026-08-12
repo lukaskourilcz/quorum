@@ -43,6 +43,7 @@ describe("BOOKSOFHISTORY admin loader", () => {
       dossiers: "missing",
       ledger: "missing",
       features: "missing",
+      results: "missing",
       ratings: "missing"
     });
     expect(snapshot.unreadable).toEqual({
@@ -53,6 +54,7 @@ describe("BOOKSOFHISTORY admin loader", () => {
       dossiers: 0,
       ledger: 0,
       features: 0,
+      results: 0,
       ratings: 0,
       total: 0
     });
@@ -82,6 +84,8 @@ describe("BOOKSOFHISTORY admin loader", () => {
       put(root, "state/ventures/booksofhistory/research-ledger.jsonl", `${JSON.stringify(JSON.parse(await fixture("bh-research-ledger.valid.json")))}\nnot-json\n`),
       put(root, "state/ventures/booksofhistory/recommendations/feature.json", await fixture("venture-recommendation.valid.json")),
       put(root, "state/ventures/booksofhistory/recommendations/poison.json", await fixture("venture-recommendation.poison.json")),
+      put(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json")),
+      put(root, "state/ventures/booksofhistory/results/poison.json", await fixture("owner-result-entry.poison.json")),
       put(root, "state/ratings/booksofhistory/ledger.jsonl", `${JSON.stringify({ schemaVersion: "rating/1", id: "r-2026-08-14-abcd", ventureId: "booksofhistory", objectKind: "social-variant", objectRef: { id: "rec-aaaaaaaaaaaaaaaaaaaa", contentHash: "sha256:aaaaaaaaaaaa" }, rating: "good", ratedAt: "2026-08-14T12:00:00.000Z" })}\n`)
     ]);
 
@@ -95,6 +99,7 @@ describe("BOOKSOFHISTORY admin loader", () => {
       dossiers: "present",
       ledger: "present",
       features: "present",
+      results: "present",
       ratings: "present"
     });
     expect(snapshot.unreadable).toEqual({
@@ -105,8 +110,9 @@ describe("BOOKSOFHISTORY admin loader", () => {
       dossiers: 1,
       ledger: 1,
       features: 1,
+      results: 1,
       ratings: 0,
-      total: 5
+      total: 6
     });
     expect(snapshot.seedBooks).toBe(1);
     expect(snapshot.shortlist?.entries[0]).toMatchObject({
@@ -141,12 +147,33 @@ describe("BOOKSOFHISTORY admin loader", () => {
       storyId: "story-serial-to-book",
       postedUrls: { cs: null, en: null },
       resultCounts: { cs: 0, en: 0 },
+      results: { cs: [], en: [] },
       ratings: [{ rating: "good" }]
     });
     const publicProjection = JSON.stringify(snapshot);
     expect(publicProjection).not.toContain("state/");
     expect(publicProjection).not.toContain("ventures/booksofhistory/");
     expect(publicProjection).not.toContain(".json");
+  });
+
+  it("surfaces only a valid result attached to the matching recommendation lane", async () => {
+    const root = await temporaryRoot("bh-admin-results-");
+    const recommendation = JSON.parse(await fixture("venture-recommendation.valid.json"));
+    recommendation.status = "approved";
+    recommendation.designLab = { status: "ready", summaryRefs: { cs: "summary-cs", en: "summary-en" } };
+    recommendation.owner.postedUrls.cs = "https://social.example/booksofhistory-cs";
+    recommendation.owner.resultRefs.cs = ["ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json"];
+    await Promise.all([
+      put(root, "state/ventures/booksofhistory/recommendations/feature.json", `${JSON.stringify(recommendation)}\n`),
+      put(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json", await fixture("owner-result-entry.valid.json"))
+    ]);
+
+    const feature = (await readAdminBooksofhistory(root)).features[0];
+
+    expect(feature?.results.cs).toEqual([
+      expect.objectContaining({ platform: "instagram", metrics: expect.objectContaining({ views: 1200, saves: 31 }) })
+    ]);
+    expect(feature?.results.en).toEqual([]);
   });
 
   it("distinguishes an unreadable singleton from a missing one", async () => {

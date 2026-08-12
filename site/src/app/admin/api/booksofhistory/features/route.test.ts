@@ -134,18 +134,22 @@ describe("BOOKSOFHISTORY feature actions", () => {
 
   it("keeps result references disabled until BH-RESULTS-004 is signed", async () => {
     await post(action("approve", "approve-one"));
+    await post(action("posted", "post-cs", { locale: "cs", url: "https://social.example/booksofhistory-cs" }));
     const result = action("result", "result-cs", {
       locale: "cs",
-      resultRef: "ventures/booksofhistory/results/result-cs.json"
+      resultRef: "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json"
     });
     expect((await post(result)).status).toBe(409);
     await writeFile(path.join(root, "state/INBOX.md"), "- [x] HUMAN_APPROVAL BH-RESULTS-004 — approved\n");
-    const resultPath = path.join(root, "state/ventures/booksofhistory/results/result-cs.json");
+    const resultPath = path.join(root, "state/ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json");
     await mkdir(path.dirname(resultPath), { recursive: true });
-    await writeFile(resultPath, '{"schemaVersion":"owner-result-entry/1"}\n');
+    const entry = JSON.parse(await readFile(path.resolve(process.cwd(), "../contracts/fixtures/owner-result-entry.valid.json"), "utf8"));
+    entry.capturedAt = "2026-08-14T10:04:00.000Z";
+    entry.recordedAt = AT;
+    await writeFile(resultPath, `${JSON.stringify(entry)}\n`);
     expect((await post(result)).status).toBe(201);
     expect((await recordedRecommendation()).owner.resultRefs.cs).toEqual([
-      "ventures/booksofhistory/results/result-cs.json"
+      "ventures/booksofhistory/results/result-aaaaaaaaaaaaaaaaaaaa.json"
     ]);
   });
 });
