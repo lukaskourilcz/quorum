@@ -129,18 +129,18 @@ export const BookKbChunkSchema = z.strictObject({
   }
 });
 
-const ChapterRollupSchema = z.strictObject({
+export const BookChapterRollupSchema = z.strictObject({
   id: ChapterIdSchema,
   ordinal: z.number().int().positive(),
   summary: SummarySchema,
   chunkIds: z.array(BookChunkIdSchema).min(1)
 });
 
-const EntityRollupSchema = BookEntityReferenceSchema.safeExtend({
+export const BookEntityRollupSchema = BookEntityReferenceSchema.safeExtend({
   chunkIds: z.array(BookChunkIdSchema).min(1)
 });
 
-const ThemeRollupSchema = z.strictObject({
+export const BookThemeRollupSchema = z.strictObject({
   theme: SlugSchema,
   chunkIds: z.array(BookChunkIdSchema).min(1)
 });
@@ -158,9 +158,9 @@ export const BookKbIndexSchema = z.strictObject({
   }),
   ingestionCostUsd: z.number().finite().nonnegative(),
   chunkCount: z.number().int().positive(),
-  chapters: z.array(ChapterRollupSchema).min(1),
-  entityIndex: z.array(EntityRollupSchema),
-  themeIndex: z.array(ThemeRollupSchema),
+  chapters: z.array(BookChapterRollupSchema).min(1),
+  entityIndex: z.array(BookEntityRollupSchema),
+  themeIndex: z.array(BookThemeRollupSchema),
   chunks: z.array(BookKbChunkSchema).min(1),
   generatedAt: z.string().datetime()
 }).superRefine((index, context) => {
