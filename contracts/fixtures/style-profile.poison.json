@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "style-profile/1",
+  "ventureId": "door-money",
+  "profileVersion": 1,
+  "manuscriptHash": "sha256:4f41e4291ae4f32331a07fb44248b06cc49e48814f1e8de7dff0b20f77524998",
+  "fingerprintHash": "sha256:cb8d7f5a8d7f747e03671c9aba35bcb5f0705211be4a460c5d28d2c6f1a5fc8c",
+  "modelVersions": {
+    "chapterMap": "fixture-style-map-v1",
+    "synthesis": "fixture-style-synthesis-v1",
+    "embedding": "fixture-embedding-v1"
+  },
+  "chapterNoteCount": 3,
+  "sentenceRhythm": {
+    "sampledSentences": 84,
+    "meanWordsPerSentence": 12.4,
+    "p10WordsPerSentence": 4,
+    "medianWordsPerSentence": 11,
+    "p90WordsPerSentence": 24,
+    "fragmentRatio": 0.08,
+    "oneSentenceParagraphRatio": 0.21,
+    "notes": [
+      "Short declarative lines often land a scene after one longer setup."
+    ]
+  },
+  "vocabularySignature": {
+    "recurringWords": [
+      {
+        "value": "route",
+        "occurrences": 11,
+        "note": "Used for both streets and personal choices."
+      }
+    ],
+    "recurringPhrases": [
+      {
+        "value": "keep the receipt",
+        "occurrences": 3,
+        "note": "Returns as a practical refrain after a mistake."
+      }
+    ],
+    "profanityRegister": {
+      "level": "rare",
+      "terms": [
+        {
+          "value": "damn",
+          "occurrences": 2,
+          "usage": "Appears only in frustrated dialogue, never as decoration."
+        }
+      ],
+      "note": "The synthetic source uses mild profanity sparingly and in character."
+    }
+  },
+  "humorMechanics": [
+    {
+      "name": "practical-understatement",
+      "description": "A character answers a large problem with an overly practical observation.",
+      "signals": [
+        "plain final clause",
+        "concrete object"
+      ]
+    }
+  ],
+  "storytellingPatterns": {
+    "openings": [
+      {
+        "name": "object-in-motion",
+        "description": "A concrete object begins moving before its history is explained."
+      }
+    ],
+    "turns": [
+      {
+        "name": "errand-reframed",
+        "description": "A failed task reveals a different promise worth keeping."
+      }
+    ],
+    "landings": [
+      {
+        "name": "quiet-object-return",
+        "description": "The scene closes on the ordinary object carrying new meaning."
+      }
+    ],
+    "firstPersonHabits": [
+      "The narrator admits what was misunderstood before explaining anyone else's motive."
+    ],
+    "tenseUsage": [
+      {
+        "tense": "past",
+        "ratio": 0.9,
+        "note": "Past tense carries the scene and its action."
+      },
+      {
+        "tense": "present",
+        "ratio": 0.1,
+        "note": "Present tense appears in brief reflective conclusions."
+      }
+    ]
+  },
+  "negativeSpace": [
+    "Never turns an uncertain memory into a universal lesson.",
+    "Never stacks rhetorical questions to manufacture suspense."
+  ],
+  "formatAdaptations": [
+    {
+      "format": "carousel",
+      "preserve": [
+        "Keep the concrete object and the final understated turn."
+      ],
+      "adapt": [
+        "Break the route into one visible decision per slide."
+      ],
+      "avoid": [
+        "Do not turn the final line into a motivational slogan."
+      ]
+    },
+    {
+      "format": "thread",
+      "preserve": [
+        "Keep the narrator's early admission of error."
+      ],
+      "adapt": [
+        "Let each post advance the errand rather than summarize it."
+      ],
+      "avoid": [
+        "Do not add a numbered life-lesson list."
+      ]
+    }
+  ],
+  "exemplarBank": [
+    {
+      "id": "fixture-broken-radio-line",
+      "chunkId": "ch01-s01-c001",
+      "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "embeddingId": "fixture-broken-radio-embedding",
+      "formats": [
+        "carousel",
+        "thread"
+      ],
+      "tags": [
+        "understatement",
+        "object-landing"
+      ]
+    }
+  ],
+  "generatedAt": "2026-08-12T10:15:00.000Z"
+}

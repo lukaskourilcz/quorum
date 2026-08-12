@@ -8,6 +8,7 @@ import { BOOK_KB_SCORE_AXES, BookKbIndexSchema } from "../src/contracts/book-kb-
 import { ContractSchemas, jsonSchemaText, type ContractName } from "../src/contracts/json-schema.js";
 import { MarketingPlanSchema } from "../src/contracts/marketing-plan.js";
 import { SeasonFileSchema } from "../src/contracts/season.js";
+import { StyleProfileSchema } from "../src/contracts/style-profile.js";
 import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { isRepoPathEvidenceRef } from "../src/mma-files/slate-evidence.js";
 import { ArticlePackageSchema } from "../src/contracts/mma-files.js";
@@ -72,6 +73,37 @@ describe("portfolio contract boundaries", () => {
     };
     delete missingAxis.chunks[0]!.scores.bookCuriosityPotential;
     expect(BookKbIndexSchema.safeParse(missingAxis).success).toBe(false);
+  });
+
+  it("caps public style exemplars and stores only private embedding references", async () => {
+    const valid = await fixture("style-profile", "valid") as {
+      exemplarBank: Array<Record<string, unknown>>;
+    };
+    const exemplar = valid.exemplarBank[0]!;
+    const atLimit = structuredClone(valid);
+    atLimit.exemplarBank = Array.from({ length: 40 }, (_, index) => ({
+      ...exemplar,
+      id: `fixture-exemplar-${index + 1}`,
+      text: "x".repeat(280),
+      embeddingId: `fixture-embedding-${index + 1}`
+    }));
+    expect(StyleProfileSchema.safeParse(atLimit).success).toBe(true);
+
+    const tooMany = structuredClone(atLimit);
+    tooMany.exemplarBank.push({
+      ...exemplar,
+      id: "fixture-exemplar-41",
+      embeddingId: "fixture-embedding-41"
+    });
+    expect(StyleProfileSchema.safeParse(tooMany).success).toBe(false);
+
+    const tooLong = structuredClone(valid);
+    tooLong.exemplarBank[0]!.text = "x".repeat(281);
+    expect(StyleProfileSchema.safeParse(tooLong).success).toBe(false);
+
+    const leakedVector = structuredClone(valid);
+    leakedVector.exemplarBank[0]!.embedding = [0.1, 0.2, 0.3];
+    expect(StyleProfileSchema.safeParse(leakedVector).success).toBe(false);
   });
 
   it("enforces the adult audience floor and public interest list", async () => {
