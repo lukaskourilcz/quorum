@@ -15,7 +15,7 @@ export const AUTONOMY_SNAPSHOT_PATH = "autonomy/latest.json";
 export interface CapabilitySignal {
   id: string;
   label: string;
-  value: number;
+  value: number | null;
   unit: "count" | "ratio";
   detail: string;
 }
@@ -85,7 +85,33 @@ function ratio(numerator: number, denominator: number): number {
   return denominator === 0 ? 0 : Number((numerator / denominator).toFixed(4));
 }
 
-function signal(id: string, label: string, value: number, unit: CapabilitySignal["unit"], detail: string): CapabilitySignal {
+function ratioOrNull(numerator: number, denominator: number): number | null {
+  return denominator === 0 ? null : Number((numerator / denominator).toFixed(4));
+}
+
+/** One completed feature at most per completed cycle; retries cannot inflate cadence. */
+export function evaluateFeatureCadence(input: {
+  completedCycleIds: readonly string[];
+  featuredCycleIds: readonly string[];
+}): number | null {
+  const completed = new Set(input.completedCycleIds);
+  if (completed.size === 0) return null;
+  const featured = new Set(input.featuredCycleIds.filter((cycleId) => completed.has(cycleId)));
+  return ratioOrNull(featured.size, completed.size);
+}
+
+/** Paid dossiers that became features divided by paid dossiers, deduplicated by dossier id. */
+export function evaluateResearchEfficiency(input: {
+  paidDossierIds: readonly string[];
+  usedDossierIds: readonly string[];
+}): number | null {
+  const paid = new Set(input.paidDossierIds);
+  if (paid.size === 0) return null;
+  const used = new Set(input.usedDossierIds.filter((dossierId) => paid.has(dossierId)));
+  return ratioOrNull(used.size, paid.size);
+}
+
+function signal(id: string, label: string, value: number | null, unit: CapabilitySignal["unit"], detail: string): CapabilitySignal {
   return { id, label, value, unit, detail };
 }
 
@@ -195,7 +221,13 @@ export async function computeAutonomySnapshot(input: {
     // accepts it, but nothing implemented it, so the venture resolved to an empty signal
     // list while every other venture reported. Same predicate the quarterly collector uses.
     "live-template-library": [signal("live-template-library", "Live carousel templates", studioTemplates.filter((template) => template.status === "live").length, "count", `${studioTemplates.filter((template) => template.status === "live").length} templates passed every brand and format check.`)],
-    "package-cadence": [signal("package-cadence", "Drafted carousel packages", marketingSharkPackageCount, "count", `${marketingSharkPackageCount} packages carry both carousels and a recorded render.`)]
+    "package-cadence": [signal("package-cadence", "Drafted carousel packages", marketingSharkPackageCount, "count", `${marketingSharkPackageCount} packages carry both carousels and a recorded render.`)],
+    // The cycle and dossier contracts arrive later in the founding sequence. Until their files
+    // exist there is no denominator to infer, so the registry-visible signal is explicitly null.
+    // BH-05/BH-20 feed these same exported evaluators from parsed state; no placeholder zero is
+    // allowed to masquerade as a measured failure in the meantime.
+    "feature-cadence": [signal("feature-cadence", "Features per completed cycle", evaluateFeatureCadence({ completedCycleIds: [], featuredCycleIds: [] }), "ratio", "No completed BOOKSOFHISTORY cycles are recorded yet.")],
+    "research-efficiency": [signal("research-efficiency", "Paid dossiers used", evaluateResearchEfficiency({ paidDossierIds: [], usedDossierIds: [] }), "ratio", "No paid BOOKSOFHISTORY dossiers are recorded yet.")]
   };
 
   const killedSlotReasons: Record<string, number> = {};

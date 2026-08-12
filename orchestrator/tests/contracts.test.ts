@@ -10,6 +10,7 @@ import { SeasonFileSchema } from "../src/contracts/season.js";
 import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { isRepoPathEvidenceRef } from "../src/mma-files/slate-evidence.js";
 import { ArticlePackageSchema } from "../src/contracts/mma-files.js";
+import { VentureRegistrySchema } from "../src/contracts/venture-registry.js";
 
 const contractNames = Object.keys(ContractSchemas) as ContractName[];
 
@@ -52,6 +53,30 @@ describe("published contracts", () => {
 });
 
 describe("portfolio contract boundaries", () => {
+  it("accepts the BOOKSOFHISTORY registry vocabulary and keeps every list closed", async () => {
+    const valid = await fixture("venture-registry", "valid") as {
+      ventures: Array<{
+        growth_objective: { components: string[] };
+        adminTabs: string[];
+        meetings: Array<{ cast: string[] }>;
+      }>;
+    };
+    expect(VentureRegistrySchema.safeParse(valid).success).toBe(true);
+
+    const books = valid.ventures.find((venture) => venture.growth_objective.components.includes("feature-cadence"));
+    expect(books).toBeDefined();
+    for (const mutate of [
+      (venture: NonNullable<typeof books>) => { venture.growth_objective.components = ["audience-growth"]; },
+      (venture: NonNullable<typeof books>) => { venture.adminTabs = ["storefront"]; },
+      (venture: NonNullable<typeof books>) => { venture.meetings[0]!.cast = ["COVER_ARTIST"]; }
+    ]) {
+      const poison = structuredClone(valid);
+      const target = poison.ventures.find((venture) => venture.growth_objective.components.includes("feature-cadence"))!;
+      mutate(target);
+      expect(VentureRegistrySchema.safeParse(poison).success).toBe(false);
+    }
+  });
+
   it("enforces the adult audience floor and public interest list", async () => {
     const valid = await fixture("audience-spec", "valid") as Record<string, unknown>;
     expect(AudienceSpecSchema.safeParse(valid).success).toBe(true);
