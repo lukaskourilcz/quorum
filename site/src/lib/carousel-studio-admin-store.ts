@@ -8,6 +8,7 @@ import {
   MAX_SLIDE_WORDS,
   TemplateLifecycleOverrideSchema,
   type CarouselPreset,
+  type CarouselSummaryVenture,
   type CarouselTemplate
 } from "@boardlessai/carousel-studio";
 import { readCarouselStudio, type CarouselInspirationLink } from "./carousel-studio";
@@ -194,7 +195,7 @@ export async function setCarouselTemplateStatus(input: { templateId: string; ver
 const deckStyleOverridesPath = "state/ventures/carousel-studio/deck-style-overrides.json";
 
 export interface DeckStyleOverride {
-  venture: "caught-up" | "mma-files";
+  venture: CarouselSummaryVenture;
   slug: string;
   /**
    * The article's publication date, which is the other half of its identity.
@@ -242,7 +243,7 @@ export async function readDeckStyleOverrides(root = repositoryRoot): Promise<Dec
 function isDeckStyleOverride(value: unknown): value is DeckStyleOverride {
   if (!value || typeof value !== "object") return false;
   const entry = value as Partial<DeckStyleOverride>;
-  return (entry.venture === "caught-up" || entry.venture === "mma-files")
+  return (entry.venture === "caught-up" || entry.venture === "mma-files" || entry.venture === "door-money")
     && typeof entry.slug === "string"
     && (entry.date === undefined || typeof entry.date === "string")
     && typeof entry.style === "string"
@@ -299,7 +300,7 @@ const slideOverridesPath = "state/ventures/carousel-studio/slide-overrides.json"
  * the preview, the export and anything the pipeline later composes all show the edited deck.
  */
 export interface SlideTextOverride {
-  venture: "caught-up" | "mma-files";
+  venture: CarouselSummaryVenture;
   slug: string;
   date: string;
   slide: number;
@@ -310,7 +311,7 @@ export interface SlideTextOverride {
 function isSlideOverride(value: unknown): value is SlideTextOverride {
   if (!value || typeof value !== "object") return false;
   const entry = value as Partial<SlideTextOverride>;
-  return (entry.venture === "caught-up" || entry.venture === "mma-files")
+  return (entry.venture === "caught-up" || entry.venture === "mma-files" || entry.venture === "door-money")
     && typeof entry.slug === "string"
     && typeof entry.date === "string"
     && typeof entry.slide === "number"
@@ -457,7 +458,7 @@ export async function saveCarouselPreset(
   input: {
     id?: string;
     name: string;
-    ventureScope: Array<"caught-up" | "mma-files">;
+    ventureScope: CarouselSummaryVenture[];
     formats: CarouselPreset["formats"];
     family: string;
     variant: "A" | "B";

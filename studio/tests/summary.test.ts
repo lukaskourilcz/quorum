@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import {
   MAX_SLIDE_WORDS,
@@ -88,6 +89,59 @@ describe("buildCarouselSummary", () => {
   it("prints the kicker in the language the magazine publishes", () => {
     expect(summaryKicker("mma-files", "2026-08-06")).toBe("MMA Files · 6. srp");
     expect(summaryKicker("caught-up", "2026-01-31")).toBe("DNESKAi · 31. led");
+    expect(summaryKicker("door-money", "2026-08-06")).toBe("Door Money · Aug 6");
+  });
+
+  it("records Door Money in English without adding or translating source copy", () => {
+    const english = buildCarouselSummary({
+      venture: "door-money",
+      slug: "synthetic-road-note",
+      date: "2026-08-06",
+      title: "A synthetic road note about a difficult load-in",
+      dek: "Three invented details show how the carousel contract carries English copy.",
+      points: [
+        "The fictional crew reached the venue before sunrise.",
+        "A made-up loading plan kept every case in order.",
+        "The synthetic example ends without describing any real person or event."
+      ]
+    });
+    expect(english.locale).toBe("en");
+    expect(english.kicker).toBe("Door Money · Aug 6");
+    expect(english.closing).toBe("The rest of the story lives in Door Money.");
+    expect(buildCarouselSummary({
+      venture: "door-money",
+      slug: "synthetic-road-note",
+      date: "2026-08-06",
+      title: "A synthetic road note about a difficult load-in",
+      dek: "Three invented details show how the carousel contract carries English copy.",
+      points: [
+        "The fictional crew reached the venue before sunrise.",
+        "A made-up loading plan kept every case in order.",
+        "The synthetic example ends without describing any real person or event."
+      ]
+    })).toEqual(english);
+  });
+
+  it("keeps both existing ventures byte-identical", () => {
+    const caughtUp = buildCarouselSummary({
+      venture: "caught-up",
+      slug: "synteticky-prehled",
+      date: "2026-01-31",
+      title: "Syntetický přehled dne",
+      dek: "Tři ověřené body v krátkém souhrnu.",
+      points: [
+        "První syntetický bod zůstává přesně u zdroje.",
+        "Druhý syntetický bod přidává kontext bez domněnky.",
+        "Třetí syntetický bod uzavírá ověřený přehled."
+      ],
+      hasHero: false
+    });
+    const encoded = [summary, caughtUp].map((value) => JSON.stringify(value));
+    expect(encoded.map((value) => Buffer.byteLength(value))).toEqual([925, 523]);
+    expect(encoded.map((value) => createHash("sha256").update(value).digest("hex"))).toEqual([
+      "ebe877a9018a306e92427b84864a2992fe634cc111eb9af65aeb18884c074e8c",
+      "def292d80c07d454f1b54fb4588d93ddcb24a421337ff3d1c44345d91b309a24"
+    ]);
   });
 });
 

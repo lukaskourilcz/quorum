@@ -28,7 +28,19 @@ export const MIN_SUMMARY_PASSAGES = 3;
  */
 export const MAX_SUMMARY_PASSAGES = 8;
 
-export type CarouselSummaryVenture = "caught-up" | "mma-files";
+export type CarouselSummaryVenture = "caught-up" | "mma-files" | "door-money";
+export type CarouselSummaryLocale = "cs" | "en";
+
+const VENTURE_LOCALE: Readonly<Record<CarouselSummaryVenture, CarouselSummaryLocale>> = {
+  "caught-up": "cs",
+  "mma-files": "cs",
+  "door-money": "en"
+};
+
+/** The language a venture publishes in. The locale is then recorded on every summary. */
+export function localeForCarouselVenture(venture: CarouselSummaryVenture): CarouselSummaryLocale {
+  return VENTURE_LOCALE[venture];
+}
 
 export interface CarouselSummarySource {
   /** How the desk classified it: primary document, record, or an internal verified file. */
@@ -44,8 +56,8 @@ export interface CarouselSummary {
   slug: string;
   /** Publication date, `YYYY-MM-DD`. */
   date: string;
-  /** Czech, because that is what both magazines publish. */
-  locale: "cs";
+  /** The language of this record; render and export consumers must carry it unchanged. */
+  locale: CarouselSummaryLocale;
   /** The small mono line every template prints above the headline. */
   kicker: string;
   headline: string;
@@ -87,12 +99,14 @@ export interface CarouselSummaryInput {
 
 const KICKER: Record<CarouselSummaryVenture, string> = {
   "caught-up": "DNESKAi",
-  "mma-files": "MMA Files"
+  "mma-files": "MMA Files",
+  "door-money": "Door Money"
 };
 
 const CLOSING: Record<CarouselSummaryVenture, string> = {
   "caught-up": "Jedno vydání a máte přehled.",
-  "mma-files": "Celý ozdrojovaný text najdete v MMA Files."
+  "mma-files": "Celý ozdrojovaný text najdete v MMA Files.",
+  "door-money": "The rest of the story lives in Door Money."
 };
 
 const MONTHS_CS = [
@@ -100,10 +114,19 @@ const MONTHS_CS = [
   "čvc", "srp", "zář", "říj", "lis", "pro"
 ];
 
+const MONTHS_EN = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+
 /** `MMA Files · 6. srp` — the kicker every template prints, in the language the magazine publishes. */
 export function summaryKicker(venture: CarouselSummaryVenture, date: string): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/u.exec(date);
   if (!match) return KICKER[venture];
+  if (localeForCarouselVenture(venture) === "en") {
+    const month = MONTHS_EN[Number(match[2]) - 1];
+    return month ? `${KICKER[venture]} · ${month} ${Number(match[3])}` : KICKER[venture];
+  }
   const month = MONTHS_CS[Number(match[2]) - 1];
   return month ? `${KICKER[venture]} · ${Number(match[3])}. ${month}` : KICKER[venture];
 }
@@ -146,7 +169,7 @@ export function buildCarouselSummary(input: CarouselSummaryInput): CarouselSumma
     venture: input.venture,
     slug: input.slug,
     date: input.date,
-    locale: "cs",
+    locale: localeForCarouselVenture(input.venture),
     kicker: summaryKicker(input.venture, input.date),
     headline: oneLine(input.title),
     ...(input.coverLine ? { coverLine: oneLine(input.coverLine) } : {}),
