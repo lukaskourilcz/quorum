@@ -28,14 +28,17 @@ export const MIN_SUMMARY_PASSAGES = 3;
  */
 export const MAX_SUMMARY_PASSAGES = 8;
 
-export type CarouselSummaryVenture = "caught-up" | "mma-files" | "booksofhistory" | "door-money";
+export type CarouselSummaryVenture = "caught-up" | "mma-files" | "booksofhistory" | "door-money" | "tehdejsi-svet";
 export type CarouselSummaryLocale = "cs" | "en";
 
 const VENTURE_LOCALE: Readonly<Record<CarouselSummaryVenture, CarouselSummaryLocale>> = {
   "caught-up": "cs",
   "mma-files": "cs",
   booksofhistory: "cs",
-  "door-money": "en"
+  "door-money": "en",
+  // Czech is the primary record; the Ukrainian half travels in the package beside it rather than
+  // as a second summary, because one feature published twice is not two features.
+  "tehdejsi-svet": "cs"
 };
 
 /** The language a venture publishes in. The locale is then recorded on every summary. */
@@ -113,14 +116,16 @@ const KICKER: Record<CarouselSummaryVenture, string> = {
   "caught-up": "DNESKAi",
   "mma-files": "MMA Files",
   booksofhistory: "BOOKSOFHISTORY",
-  "door-money": "Door Money"
+  "door-money": "Door Money",
+  "tehdejsi-svet": "Tehdejší svět"
 };
 
 const CLOSING: Record<CarouselSummaryVenture, Record<CarouselSummaryLocale, string>> = {
   "caught-up": { cs: "Jedno vydání a máte přehled.", en: "One edition keeps you up to date." },
   "mma-files": { cs: "Celý ozdrojovaný text najdete v MMA Files.", en: "Read the fully sourced story in MMA Files." },
   booksofhistory: { cs: "Příběh knihy pokračuje v pramenech.", en: "The book's story continues in the sources." },
-  "door-money": { cs: "Zbytek příběhu žije v Door Money.", en: "The rest of the story lives in Door Money." }
+  "door-money": { cs: "Zbytek příběhu žije v Door Money.", en: "The rest of the story lives in Door Money." },
+  "tehdejsi-svet": { cs: "Zeptejte se někoho, kdo to zažil.", en: "Ask someone who was there." }
 };
 
 const MONTHS_CS = [

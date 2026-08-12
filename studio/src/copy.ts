@@ -29,7 +29,7 @@ export type SocialCopy = z.infer<typeof SocialCopySchema>;
 
 export const SocialCopyPackSchema = z.object({
   schemaVersion: z.literal("social-copy/1"),
-  venture: z.enum(["caught-up", "mma-files", "booksofhistory", "door-money"]),
+  venture: z.enum(["caught-up", "mma-files", "booksofhistory", "door-money", "tehdejsi-svet"]),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   locale: z.enum(["cs", "en"]),
@@ -82,7 +82,10 @@ const HASHTAG_BASE: Readonly<Record<CarouselSummaryVenture, readonly string[]>> 
   "caught-up": ["ai", "umelainteligence", "technologie", "aitech", "dneskai"],
   "mma-files": ["mma", "ufc", "oktagon", "bojovesporty", "mmafiles"],
   booksofhistory: ["booksofhistory", "bookhistory", "literaryhistory", "books", "publishinghistory"],
-  "door-money": ["hiphop", "musicbusiness", "tourstories", "behindthescenes", "doormoney"]
+  "door-money": ["hiphop", "musicbusiness", "tourstories", "behindthescenes", "doormoney"],
+  // Latin-only by the rule below, which is why the Ukrainian side contributes none of its own:
+  // a transliterated Cyrillic tag is a tag nobody follows.
+  "tehdejsi-svet": ["tehdejsisvet", "retro", "nostalgie", "historie", "ceskoslovensko"]
 };
 
 /** Latin letters and digits only: Instagram matches a diacritic tag as a different tag. */

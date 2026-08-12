@@ -665,6 +665,50 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       secondary: "#d7c5a6"
     },
     fonts: { headline: "Barlow Condensed", body: "Barlow", mono: "IBM Plex Mono" }
+  }),
+  /**
+   * The second light brand, and the only one that has to set Cyrillic.
+   *
+   * Paper with ink on it, from the product's own export palette, so a card and the thing it
+   * markets look like the same object.
+   *
+   * Inverting the ground inverts the ladder, which is the one thing worth knowing here.
+   * `background`, `surface` and `surface-strong` are three grounds a family may put the same
+   * text over, so on the six dark brands they run near-black *upward* and on a light one they
+   * run paper *downward* — paper, a tint of it, then the rule tone. Reaching for the deep green
+   * as the strong surface is the intuitive move and it is wrong: it makes the darkest ground
+   * darker than the text tokens, and every family setting muted type on a panel fails at once.
+   * BOOKSOFHISTORY solved this first and this follows its shape.
+   *
+   * Two colours are nudged from the export palette so text clears 4.5:1 against the deepest of
+   * those three grounds, which is what the product's own `coral-dark` does for the same reason.
+   * The coral moves furthest — `#d9684f` reaches 3.1:1 on paper, fine for a two-pixel rule and
+   * not for a sentence, and families here use `accent` for both. The green is untouched at
+   * 10.3:1 and carries the identity where a large field of colour is wanted.
+   *
+   * The fonts are the venture's two identity faces plus the one the slot structurally requires,
+   * which is a deviation from the founding brief's Literata/Literata/Inter and worth recording.
+   * `mono` is a monospace slot rather than a third brand face: every shared template's chip is
+   * calibrated to a 600-unit advance and every other brand binds IBM Plex Mono there, so Inter
+   * at 625 cannot fit the timeline's time chip. And Literata is the widest face in the set at
+   * 659, which overflows `comparison`'s body slots — so it takes the headline, where its measure
+   * is generous, and Inter takes the body. Both identity faces ship and both are reachable.
+   */
+  "tehdejsi-svet": BrandTokensSchema.parse({
+    schemaVersion: "carousel-brand/1",
+    id: "tehdejsi-svet",
+    name: "Tehdejší svět",
+    logoText: "Tehdejší svět",
+    colors: {
+      background: "#f7f2e8",
+      surface: "#e8e1d6",
+      "surface-strong": "#d5cdbf",
+      foreground: "#18201d",
+      muted: "#4a5b55",
+      accent: "#8b4333",
+      secondary: "#1e3f39"
+    },
+    fonts: { headline: "Literata", body: "Inter", mono: "IBM Plex Mono" }
   })
 };
 

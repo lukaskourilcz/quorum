@@ -10,7 +10,8 @@ describe("Carousel Studio gallery and showcase", () => {
     expect(snapshot.templates).toHaveLength(12);
     expect(snapshot.templates.every((entry) => entry.template.status === "live" && entry.allChecksPass)).toBe(true);
     expect(snapshot.brands.map((brand) => brand.id)).toEqual([
-      "caught-up", "mma-files", "titty-tuesdays", "devshark", "geoshark", "booksofhistory", "door-money"
+      "caught-up", "mma-files", "titty-tuesdays", "devshark", "geoshark", "booksofhistory", "door-money",
+      "tehdejsi-svet"
     ]);
     // The gallery's picker is every canvas the studio renders. Which of them a template is
     // offered is per-template: only a layout composed for 9:16 is offered the story.
