@@ -137,7 +137,7 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
         {initial.growth.map((venture) => (
           <article className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-5 md:p-6" key={venture.venture}>
             <div className="flex items-start justify-between gap-3"><div><p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">{ventureLabel(venture.venture)}</p><h3 className="mt-2 text-xl font-semibold">{publicAgentText(venture.objective)}</h3></div><ShieldCheck aria-hidden="true" className="size-5 text-[var(--accent)]" /></div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">{venture.signals.map((signal) => <div className="rounded-[var(--radius-button)] bg-[var(--surface)] p-4" key={signal.id}><p className="text-sm font-semibold">{signal.label}: {signal.unit === "ratio" ? percent(signal.value) : signal.value}</p>{/* The growth signals are written by the runtime and carry its own tokens — a card read
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">{venture.signals.map((signal) => <div className="rounded-[var(--radius-button)] bg-[var(--surface)] p-4" key={signal.id}><p className="text-sm font-semibold">{signal.label}: {signal.value === null ? "—" : signal.unit === "ratio" ? percent(signal.value) : signal.value}</p>{/* The growth signals are written by the runtime and carry its own tokens — a card read
                     "4 delivered, 0 failed; NO_EDITION is neutral." The same dictionary the public
                     pages use turns those into words. */}
                     <p className="mt-1 text-xs leading-5 text-[var(--fog)]">{publicAgentText(signal.detail)}</p></div>)}</div>

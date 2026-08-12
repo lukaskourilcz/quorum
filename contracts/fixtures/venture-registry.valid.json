@@ -30,6 +30,52 @@
           }
         }
       ]
+    },
+    {
+      "id": "door-money",
+      "name": "Door Money",
+      "status": "operating",
+      "taste": true,
+      "ledgerNamespace": "door-money",
+      "growth_objective": {
+        "label": "Turn the book into a daily storytelling channel and a weekly owner action plan",
+        "components": ["package-cadence", "action-completion"]
+      },
+      "adminTabs": ["recommendations", "actions", "knowledge"],
+      "meetings": [
+        {
+          "kind": "dm-desk",
+          "label": "Door Money daily storytelling desk",
+          "cadence": "daily@15:00",
+          "cast": ["GHOST", "AUDIT"],
+          "envelopeUsd": 0.08,
+          "packet": {
+            "topicType": "social",
+            "decisionNeeded": "PLAN",
+            "preset": "dm-desk-room",
+            "objectives": {
+              "dry": "Draft from synthetic fixtures only",
+              "live": "Draft evidence-linked recommendations for owner review"
+            }
+          }
+        },
+        {
+          "kind": "dm-growth",
+          "label": "Door Money Thursday growth room",
+          "cadence": "daily@16:00",
+          "cast": ["BOOKER", "PULSE", "AUDIT"],
+          "envelopeUsd": 0.06,
+          "packet": {
+            "topicType": "growth",
+            "decisionNeeded": "PLAN",
+            "preset": "dm-growth-room",
+            "objectives": {
+              "dry": "Prepare a fixture owner action packet",
+              "live": "Prepare owner tasks and templates without sending outreach"
+            }
+          }
+        }
+      ]
     }
   ]
 }

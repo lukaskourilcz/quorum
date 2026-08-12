@@ -54,7 +54,8 @@ const VentureDefinitionSchema = openObject({
       "readiness-dossiers",
       "campaign-inventory",
       "live-template-library",
-      "package-cadence"
+      "package-cadence",
+      "action-completion"
     ])).min(1).max(4)
   }),
   mode: z.enum(["data-only", "live-analysis"]).optional(),
@@ -79,7 +80,10 @@ const VentureDefinitionSchema = openObject({
     "templates",
     "inspiration",
     "hooks",
-    "packages"
+    "packages",
+    "recommendations",
+    "actions",
+    "knowledge"
   ])),
   productionJobs: z.array(openObject({
     kind: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),

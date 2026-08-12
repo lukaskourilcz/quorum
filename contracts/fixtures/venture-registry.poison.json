@@ -2,22 +2,34 @@
   "schemaVersion": "venture-registry/1",
   "ventures": [
     {
-      "id": "caught-up",
-      "name": "Caught Up",
+      "id": "door-money",
+      "name": "Door Money",
       "status": "operating",
-      "taste": false,
-      "ledgerNamespace": "shared",
-      "adminTabs": [],
-      "meetings": []
-    },
-    {
-      "id": "caught-up",
-      "name": "Duplicate",
-      "status": "paused",
-      "taste": false,
-      "ledgerNamespace": "shared",
-      "adminTabs": [],
-      "meetings": []
+      "taste": true,
+      "ledgerNamespace": "door-money",
+      "growth_objective": {
+        "label": "Automate sales",
+        "components": ["automatic-sales"]
+      },
+      "adminTabs": ["manuscript"],
+      "meetings": [
+        {
+          "kind": "dm-desk",
+          "label": "Unsafe publishing room",
+          "cadence": "daily@15:00",
+          "cast": ["POSTER"],
+          "envelopeUsd": 0.08,
+          "packet": {
+            "topicType": "social",
+            "decisionNeeded": "PLAN",
+            "preset": "dm-desk-room",
+            "objectives": {
+              "dry": "Publish the fixture",
+              "live": "Publish the manuscript"
+            }
+          }
+        }
+      ]
     }
   ]
 }

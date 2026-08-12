@@ -93,3 +93,31 @@ describe("quality rates with nothing behind them", () => {
     expect(Object.values(quality).filter((value) => typeof value === "number")).toEqual([]);
   });
 });
+
+describe("growth rates with nothing behind them", () => {
+  it("preserves an unmeasured action-completion rate as null", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "admin-autonomy-growth-"));
+    await mkdir(path.join(root, "state", "autonomy"), { recursive: true });
+    await writeFile(
+      path.join(root, "state", "autonomy", "latest.json"),
+      JSON.stringify({
+        schemaVersion: "autonomy-snapshot/1",
+        generatedAt: "2026-08-12T04:00:00.000Z",
+        growth: [{
+          venture: "door-money",
+          objective: "Prepare owner actions",
+          signals: [{
+            id: "action-completion",
+            label: "Owner action completion",
+            value: null,
+            unit: "ratio",
+            detail: "No owner actions have been issued; completion is not measured."
+          }]
+        }],
+        quality: { killedSlotReasons: {}, denominators: { meetings: 0, proofs: 0, fighterFields: 0 } }
+      })
+    );
+    const snapshot = await readAdminAutonomy(root);
+    expect(snapshot.growth[0]?.signals[0]?.value).toBeNull();
+  });
+});

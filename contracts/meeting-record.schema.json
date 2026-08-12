@@ -172,7 +172,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "reason": {
@@ -302,7 +304,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "summary": {
@@ -375,7 +379,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "firstChoice": {
@@ -447,7 +453,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "summary": {
@@ -640,7 +648,9 @@
                 "MOTIF",
                 "PIVOT",
                 "MAKO",
-                "CHUM"
+                "CHUM",
+                "GHOST",
+                "BOOKER"
               ]
             },
             "setting": {
@@ -699,7 +709,9 @@
                       "MOTIF",
                       "PIVOT",
                       "MAKO",
-                      "CHUM"
+                      "CHUM",
+                      "GHOST",
+                      "BOOKER"
                     ]
                   },
                   "mode": {
@@ -759,7 +771,9 @@
                       "MOTIF",
                       "PIVOT",
                       "MAKO",
-                      "CHUM"
+                      "CHUM",
+                      "GHOST",
+                      "BOOKER"
                     ]
                   },
                   "sentAt": {
@@ -994,7 +1008,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "reason": {
@@ -1124,7 +1140,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "summary": {
@@ -1197,7 +1215,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "firstChoice": {
@@ -1269,7 +1289,9 @@
                   "MOTIF",
                   "PIVOT",
                   "MAKO",
-                  "CHUM"
+                  "CHUM",
+                  "GHOST",
+                  "BOOKER"
                 ]
               },
               "summary": {
@@ -1475,7 +1497,9 @@
                 "MOTIF",
                 "PIVOT",
                 "MAKO",
-                "CHUM"
+                "CHUM",
+                "GHOST",
+                "BOOKER"
               ]
             },
             "setting": {
@@ -1534,7 +1558,9 @@
                       "MOTIF",
                       "PIVOT",
                       "MAKO",
-                      "CHUM"
+                      "CHUM",
+                      "GHOST",
+                      "BOOKER"
                     ]
                   },
                   "mode": {
@@ -1594,7 +1620,9 @@
                       "MOTIF",
                       "PIVOT",
                       "MAKO",
-                      "CHUM"
+                      "CHUM",
+                      "GHOST",
+                      "BOOKER"
                     ]
                   },
                   "sentAt": {

@@ -32,4 +32,60 @@ describe("zero-model operating signals", () => {
     expect(snapshot.quality.denominators).toEqual({ meetings: 0, proofs: 0, fighterFields: 0 });
     expect(snapshot.quality.verifierPassRate).toBe(0);
   });
+
+  it("keeps action completion null until an owner action is issued", async () => {
+    const stateRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-action-empty-"));
+    const snapshot = await computeAutonomySnapshot({ repoRoot, stateRoot, now: new Date("2026-08-12T04:00:00.000Z") });
+    const signal = snapshot.growth
+      .find((venture) => venture.venture === "door-money")
+      ?.signals.find((entry) => entry.id === "action-completion");
+    expect(signal).toMatchObject({ value: null, unit: "ratio" });
+    expect(signal?.detail).toMatch(/not measured/i);
+  });
+
+  it("divides owner-recorded completions by issued actions", async () => {
+    const stateRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-action-rate-"));
+    await json(path.join(stateRoot, "ventures/door-money/actions/2026-08-13.json"), {
+      schemaVersion: "action-packet/1",
+      ventureId: "door-money",
+      tasks: [
+        { id: "dm-action-1", completion: { completedAt: "2026-08-14T12:00:00.000Z", outcome: "Sent by the owner." } },
+        { id: "dm-action-2", completion: null },
+        { id: "dm-action-3", completion: { completedAt: "2026-08-15T12:00:00.000Z", outcome: "Recorded by the owner." } }
+      ]
+    });
+    const snapshot = await computeAutonomySnapshot({ repoRoot, stateRoot, now: new Date("2026-08-16T04:00:00.000Z") });
+    const signal = snapshot.growth
+      .find((venture) => venture.venture === "door-money")
+      ?.signals.find((entry) => entry.id === "action-completion");
+    expect(signal).toMatchObject({ value: 0.6667, unit: "ratio" });
+    expect(signal?.detail).toContain("2 of 3");
+  });
+
+  it("does not report marketingShark packages as Door Money cadence", async () => {
+    const stateRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-package-cadence-"));
+    await json(path.join(stateRoot, "ventures/marketingshark/packages/2026-08-12/devshark/package.json"), {
+      carousels: { cs: {}, en: {} },
+      render: { summaryPaths: ["one.json"] }
+    });
+    await json(path.join(stateRoot, "ventures/door-money/recommendations/one.json"), {
+      schemaVersion: "venture-recommendation/1",
+      id: "dm-rec-1",
+      ventureId: "door-money"
+    });
+    const snapshot = await computeAutonomySnapshot({ repoRoot, stateRoot, now: new Date("2026-08-12T04:00:00.000Z") });
+    const packageCadence = (ventureId: string) => snapshot.growth
+      .find((venture) => venture.venture === ventureId)
+      ?.signals.find((entry) => entry.id === "package-cadence")?.value;
+    expect(packageCadence("marketingshark")).toBe(1);
+    expect(packageCadence("door-money")).toBe(1);
+
+    await json(path.join(stateRoot, "ventures/marketingshark/packages/2026-08-13/devshark/package.json"), {
+      carousels: { cs: {}, en: {} },
+      render: { summaryPaths: ["two.json"] }
+    });
+    const updated = await computeAutonomySnapshot({ repoRoot, stateRoot, now: new Date("2026-08-13T04:00:00.000Z") });
+    expect(updated.growth.find((venture) => venture.venture === "marketingshark")?.signals.find((entry) => entry.id === "package-cadence")?.value).toBe(2);
+    expect(updated.growth.find((venture) => venture.venture === "door-money")?.signals.find((entry) => entry.id === "package-cadence")?.value).toBe(1);
+  });
 });

@@ -62,7 +62,8 @@
                     "readiness-dossiers",
                     "campaign-inventory",
                     "live-template-library",
-                    "package-cadence"
+                    "package-cadence",
+                    "action-completion"
                   ]
                 }
               }
@@ -102,7 +103,10 @@
                 "templates",
                 "inspiration",
                 "hooks",
-                "packages"
+                "packages",
+                "recommendations",
+                "actions",
+                "knowledge"
               ]
             }
           },
@@ -198,7 +202,9 @@
                       "MOTIF",
                       "PIVOT",
                       "MAKO",
-                      "CHUM"
+                      "CHUM",
+                      "GHOST",
+                      "BOOKER"
                     ]
                   }
                 },

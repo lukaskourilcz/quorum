@@ -88,7 +88,9 @@
               "MOTIF",
               "PIVOT",
               "MAKO",
-              "CHUM"
+              "CHUM",
+              "GHOST",
+              "BOOKER"
             ]
           },
           "created": {
@@ -192,7 +194,9 @@
                       "MOTIF",
                       "PIVOT",
                       "MAKO",
-                      "CHUM"
+                      "CHUM",
+                      "GHOST",
+                      "BOOKER"
                     ]
                   },
                   "meeting_ref": {
