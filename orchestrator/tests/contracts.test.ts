@@ -14,6 +14,7 @@ import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
 import { VentureRegistrySchema } from "../src/contracts/venture-registry.js";
 import { BhCycleSchema } from "../src/contracts/bh-cycle.js";
 import { BhSeedLibrarySchema } from "../src/contracts/bh-seed.js";
+import { BhShortlistSchema } from "../src/contracts/bh-shortlist.js";
 
 const contractNames = Object.keys(ContractSchemas) as ContractName[];
 
@@ -79,6 +80,14 @@ describe("portfolio contract boundaries", () => {
       mutate(poison.books[0]!);
       expect(BhSeedLibrarySchema.safeParse(poison).success).toBe(false);
     }
+  });
+
+  it("keeps shortlist ranks unique, sequential and tied to recorded factor breakdowns", async () => {
+    const valid = await fixture("bh-shortlist", "valid") as { entries: Array<Record<string, unknown>> };
+    expect(BhShortlistSchema.safeParse(valid).success).toBe(true);
+    const duplicated = structuredClone(valid);
+    duplicated.entries.push({ ...duplicated.entries[0], rank: 2 });
+    expect(BhShortlistSchema.safeParse(duplicated).success).toBe(false);
   });
 
   it("keeps the BOOKSOFHISTORY cycle ordered, unique and free of skipped days", async () => {

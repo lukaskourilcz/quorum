@@ -16,6 +16,8 @@ import { signedOwnerDecision } from "../../portfolio/schedule.js";
 import { atomicWriteJson, readJson } from "../../state.js";
 import type { CycleResult } from "../../cycle/types.js";
 import type { Stage } from "../../types.js";
+import { readBhSeedLibrary } from "./seed.js";
+import { buildBhShortlist, writeBhShortlist } from "./shortlist.js";
 import {
   applyBooksofHistoryCycleDay,
   booksofHistoryCycleComplete,
@@ -51,10 +53,11 @@ function buildDayRecord(input: {
   dry: boolean;
   monthAllInUsd: number;
   monthCapUsd: number;
+  evidenceRefs?: string[];
 }): MeetingRecord {
   const closedAt = new Date(input.now.getTime() + 1).toISOString();
   const summary = phaseSummary(input.phase, input.completed);
-  const cycleRef = BOOKSOFHISTORY_CYCLE_PATH;
+  const evidenceRefs = input.evidenceRefs ?? [BOOKSOFHISTORY_CYCLE_PATH];
   return MeetingRecordSchema.parse({
     schemaVersion: "meeting-record/2",
     cycleId: input.executionCycleId,
@@ -78,8 +81,8 @@ function buildDayRecord(input: {
       monthAllInUsd: input.monthAllInUsd,
       monthCapUsd: input.monthCapUsd
     },
-    decision: { outcome: input.completed ? "ADVANCE" : "RESUME", summary, evidenceRefs: [cycleRef] },
-    proposals: [{ agent: "FOLIO", summary, evidenceRefs: [cycleRef] }],
+    decision: { outcome: input.completed ? "ADVANCE" : "RESUME", summary, evidenceRefs },
+    proposals: [{ agent: "FOLIO", summary, evidenceRefs }],
     voteMatrix: [{ voter: "AUDIT", firstChoice: input.completed ? "ADVANCE" : "RESUME", veto: false }],
     tasks: [{
       id: `TASK-${input.executionCycleId}-STATE`,
@@ -166,6 +169,21 @@ export async function runBooksofHistoryCycle(input: {
   }
   const workedPhase = cycle.phase;
   const completed = input.dry;
+  const shortlistPath = workedPhase === "selection" && completed
+    ? await writeBhShortlist(root, buildBhShortlist({
+        date,
+        cycleId: cycle.currentCycleId,
+        asOf: input.now,
+        books: (await readBhSeedLibrary(input.dry ? stateRoot : root)).books,
+        context: {
+          asOf: input.now,
+          trendSignals: [],
+          recentFeatures: [],
+          lanePerformance: {},
+          shelfStoriesByBookId: {}
+        }
+      }))
+    : null;
   cycle = applyBooksofHistoryCycleDay({
     cycle,
     date,
@@ -184,7 +202,8 @@ export async function runBooksofHistoryCycle(input: {
     completed,
     dry: input.dry,
     monthAllInUsd: spent,
-    monthCapUsd: limits.monthlyOperatingUsd
+    monthCapUsd: limits.monthlyOperatingUsd,
+    evidenceRefs: [BOOKSOFHISTORY_CYCLE_PATH, ...(shortlistPath ? [shortlistPath] : [])]
   });
   const decisionPath = `decisions/${input.executionCycleId}.json`;
   const scorecardPath = `scorecards/${input.executionCycleId}.json`;
@@ -221,7 +240,7 @@ export async function runBooksofHistoryCycle(input: {
     articleSlots: await loadArticleSlotOutcomes(root),
     now: input.now
   }));
-  const artifacts = [meetingPath, decisionPath, scorecardPath, BOOKSOFHISTORY_CYCLE_PATH, calendarPath]
+  const artifacts = [meetingPath, decisionPath, scorecardPath, BOOKSOFHISTORY_CYCLE_PATH, calendarPath, ...(shortlistPath ? [shortlistPath] : [])]
     .map((relative) => artifactPath(root, relative));
   return {
     cycleId: input.executionCycleId,

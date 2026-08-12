@@ -116,6 +116,17 @@ describe("BOOKSOFHISTORY dry runner", () => {
       expect.stringContaining("research"),
       expect.stringContaining("production")
     ]);
+    const shortlist = JSON.parse(await readFile(
+      path.join(root, "ventures", "booksofhistory", "shortlists", "2026-08-12.json"),
+      "utf8"
+    ));
+    expect(shortlist).toMatchObject({ schemaVersion: "bh-shortlist/1", date: "2026-08-12" });
+    expect(shortlist.entries).toHaveLength(10);
+    expect(records[0].decision.evidenceRefs).toContain("ventures/booksofhistory/shortlists/2026-08-12.json");
+    await expect(readFile(
+      path.join(root, "ventures", "booksofhistory", "shortlists", "2026-08-13.json"),
+      "utf8"
+    )).rejects.toMatchObject({ code: "ENOENT" });
     const cycle = await readBooksofHistoryCycle(root);
     expect(cycle).not.toBeNull();
     expect(booksofHistoryCycleComplete(cycle!)).toBe(true);

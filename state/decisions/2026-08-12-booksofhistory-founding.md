@@ -109,7 +109,7 @@ post anything.
 - [x] **BH-07a** — Author the approximately 200-book seed library
 - [x] **BH-07b** — The `bh:seed` validating CLI
 - [x] **BH-08a** — The deterministic opportunity scorer
-- [ ] **BH-08b** — Shortlist contract and daily records
+- [x] **BH-08b** — Shortlist contract and daily records
 - [ ] **BH-09a** — The venture-agnostic research-provider interface
 - [ ] **BH-09b** — The `anthropic-web-search` adapter over the guarded funnel
 - [ ] **BH-10** — Research briefs from the editorial meeting
