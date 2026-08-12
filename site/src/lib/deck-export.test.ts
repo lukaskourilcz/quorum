@@ -127,6 +127,8 @@ describe("the whole-deck export", () => {
     expect(manifest.template.template_id).toBe(`deck-tower-${deck!.slides.length}`);
     expect(manifest.attribution).toBe(CREDIT);
     expect(manifest.slides.map((slide) => slide.pngHash)).toEqual(rendered.map((slide) => slide.pngHash));
+    expect(manifest).not.toHaveProperty("coverRef");
+    expect(JSON.stringify(manifest)).not.toContain("coverRef");
   }, 180_000);
 
   it("names the file on a per-slide download and answers 404 for a design that does not exist", async () => {
