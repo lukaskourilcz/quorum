@@ -10,6 +10,7 @@ import { SeasonFileSchema } from "../src/contracts/season.js";
 import { hasValidArticlePackageHash } from "../src/mma-files/hash.js";
 import { isRepoPathEvidenceRef } from "../src/mma-files/slate-evidence.js";
 import { ArticlePackageSchema } from "../src/contracts/mma-files.js";
+import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
 import { VentureRegistrySchema } from "../src/contracts/venture-registry.js";
 
 const contractNames = Object.keys(ContractSchemas) as ContractName[];
@@ -53,6 +54,15 @@ describe("published contracts", () => {
 });
 
 describe("portfolio contract boundaries", () => {
+  it("accepts a bh-desk record and rejects an unregistered BOOKSOFHISTORY phase", async () => {
+    const readBhFixture = async (kind: "valid" | "poison") => JSON.parse(await readFile(
+      path.join(repoRoot, "contracts", "fixtures", `meeting-record-bh-desk.${kind}.json`),
+      "utf8"
+    )) as unknown;
+    expect(MeetingRecordSchema.safeParse(await readBhFixture("valid")).success).toBe(true);
+    expect(MeetingRecordSchema.safeParse(await readBhFixture("poison")).success).toBe(false);
+  });
+
   it("accepts the BOOKSOFHISTORY registry vocabulary and keeps every list closed", async () => {
     const valid = await fixture("venture-registry", "valid") as {
       ventures: Array<{

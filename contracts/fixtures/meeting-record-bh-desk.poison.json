@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "bh-2026-08-12-poison",
+  "date": "2026-08-12",
+  "phase": "bh-storefront",
+  "kind": "bh-desk",
+  "fixture": true,
+  "status": "PLAN",
+  "stage": "VALIDATION",
+  "operatingBrief": "An out-of-scope storefront phase must never become valid.",
+  "participantReasons": [
+    { "agent": "AUDIT", "reason": "AUDIT rejects the phase.", "participated": true }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 0,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "reject",
+    "summary": "Reject the unregistered phase.",
+    "evidenceRefs": []
+  },
+  "proposals": [],
+  "voteMatrix": [
+    { "voter": "AUDIT", "firstChoice": "reject", "veto": true }
+  ],
+  "tasks": [],
+  "growthPlan": "No action.",
+  "eveningOutcome": null,
+  "roomTranscript": {
+    "openedAt": "2026-08-12T10:00:00.000Z",
+    "closedAt": "2026-08-12T10:01:00.000Z",
+    "gavel": "AUDIT",
+    "setting": "The phase is outside the founding decision.",
+    "turns": [
+      { "agent": "AUDIT", "mode": "veto", "text": "The storefront phase is not registered." }
+    ]
+  },
+  "generatedAt": "2026-08-12T10:01:01.000Z"
+}

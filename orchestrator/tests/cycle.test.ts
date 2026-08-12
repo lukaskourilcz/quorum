@@ -8,6 +8,7 @@ import { repoRoot } from "../src/paths.js";
 import {
   PhaseSchema,
   RunnablePhaseSchema,
+  ScheduledPhaseSchema,
   type ShiftPhase
 } from "../src/types.js";
 
@@ -102,6 +103,12 @@ describe("cycle preflight", () => {
     expect(PhaseSchema.parse("pm")).toBe("pm");
     expect(() => RunnablePhaseSchema.parse("am")).toThrow();
     expect(() => RunnablePhaseSchema.parse("pm")).toThrow();
+  });
+
+  it("registers bh-desk as a recorded, runnable and scheduled phase", () => {
+    expect(PhaseSchema.parse("bh-desk")).toBe("bh-desk");
+    expect(RunnablePhaseSchema.parse("bh-desk")).toBe("bh-desk");
+    expect(ScheduledPhaseSchema.parse("bh-desk")).toBe("bh-desk");
   });
 
   it("runs both Caught Up phases through fixture-only meeting and calendar steps", async () => {

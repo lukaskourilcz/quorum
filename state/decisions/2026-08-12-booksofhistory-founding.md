@@ -94,7 +94,7 @@ post anything.
 - [x] **BH-01** — Write the founding decision record
 - [x] **BH-02a** — Registry entry in `config/ventures.json`
 - [x] **BH-02b** — Registry schema enums, fixtures and the two new KPI evaluators
-- [ ] **BH-03a** — Register the `bh-desk` phase in type and record schemas
+- [x] **BH-03a** — Register the `bh-desk` phase in type and record schemas
 - [ ] **BH-03b** — Meeting policy for `bh-desk`
 - [ ] **BH-03c** — `cycle.yml` dispatch choices and mode gates
 - [ ] **BH-03d** — Vercel cron entries for the 12:00 slot
