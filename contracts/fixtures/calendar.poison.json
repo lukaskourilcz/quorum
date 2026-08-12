@@ -3,9 +3,9 @@
   "weekOf": "2026-08-03",
   "slots": [
     {
-      "at": "2026-08-04T05:00:00+02:00",
-      "tz": "UTC",
-      "kind": "cu-edition",
+      "at": "2026-08-04T21:00:00+02:00",
+      "tz": "Europe/Prague",
+      "kind": "kvDesk",
       "status": "held"
     }
   ]

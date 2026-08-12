@@ -1,16 +1,16 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260804-cu-edition",
+  "cycleId": "20260804-kv-desk",
   "date": "2026-08-04",
-  "phase": "cu-edition",
-  "kind": "cu-edition",
+  "phase": "kv-desk",
+  "kind": "kv-desk",
   "fixture": false,
   "status": "PLAN",
   "stage": "VALIDATION",
-  "operatingBrief": "Choose one sourced story for today's Caught Up edition.",
+  "operatingBrief": "Choose one sourced political recommendation or record an honest quiet day.",
   "participantReasons": [
-    { "agent": "HERALD", "reason": "HERALD chairs the edition room.", "participated": true },
-    { "agent": "STET", "reason": "STET holds the copy-quality block.", "participated": true },
+    { "agent": "TRIBUN", "reason": "TRIBUN chairs the political recommendation desk.", "participated": true },
+    { "agent": "HACEK", "reason": "HACEK holds the Czech register block.", "participated": true },
     { "agent": "AUDIT", "reason": "AUDIT retains the veto.", "participated": true }
   ],
   "ledger": {
@@ -21,30 +21,29 @@
   },
   "decision": {
     "outcome": "select",
-    "summary": "Select the verified model price change.",
+    "summary": "Select the verified institutional change for a draft recommendation.",
     "evidenceRefs": ["SOURCE-1"]
   },
   "proposals": [
-    { "agent": "HERALD", "summary": "Lead with the verified price change.", "evidenceRefs": ["SOURCE-1"] }
+    { "agent": "TRIBUN", "summary": "Lead with the verified institutional change.", "evidenceRefs": ["SOURCE-1"] }
   ],
   "voteMatrix": [
-    { "voter": "HERALD", "firstChoice": "price-change", "veto": false },
-    { "voter": "STET", "firstChoice": "price-change", "veto": false },
+    { "voter": "TRIBUN", "firstChoice": "institutional-change", "veto": false },
+    { "voter": "HACEK", "firstChoice": "institutional-change", "veto": false },
     { "voter": "AUDIT", "firstChoice": "price-change", "veto": false }
   ],
   "tasks": [],
-  "growthPlan": "SPARK will carry the room link into the product review.",
+  "growthPlan": "Store the recommendation as a draft; no publisher or channel action is authorized.",
   "eveningOutcome": null,
-  "editionRef": "edition/2026-08-04",
   "roomTranscript": {
-    "openedAt": "2026-08-04T03:00:00.000Z",
-    "closedAt": "2026-08-04T03:18:00.000Z",
-    "gavel": "HERALD",
-    "setting": "The edition room reviews a source digest marked as untrusted data.",
+    "openedAt": "2026-08-04T19:00:00.000Z",
+    "closedAt": "2026-08-04T19:18:00.000Z",
+    "gavel": "TRIBUN",
+    "setting": "The desk reviews a fixture monitor digest marked as untrusted data.",
     "turns": [
-      { "agent": "HERALD", "mode": "gavel", "text": "Three candidates. One has a primary source." },
+      { "agent": "TRIBUN", "mode": "gavel", "text": "Three candidates. One has a primary source." },
       { "agent": "AUDIT", "mode": "vote", "text": "Approve. The price matches SOURCE-1.", "evidenceRefs": ["SOURCE-1"] }
     ]
   },
-  "generatedAt": "2026-08-04T03:18:01.000Z"
+  "generatedAt": "2026-08-04T19:18:01.000Z"
 }
