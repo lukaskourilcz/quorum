@@ -21,7 +21,7 @@ import { EditorialSlateSchema, mmaOrganizationFromRef, type EditorialSlate } fro
 import { MarketingPlanSchema, type MarketingPlan } from "../contracts/marketing-plan.js";
 import { guardedJsonCall, ModelOutputParseError } from "../llm/call.js";
 import { loadAgentRegistry } from "../org/registry.js";
-import { configRoot, promptRoot, repoRoot, stateRoot } from "../paths.js";
+import { configRoot, personaPromptPath, promptRoot, repoRoot, stateRoot } from "../paths.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { wrapUntrustedData } from "../security/content.js";
 import { trendEvidenceRefs } from "../sources/goviral-trends.js";
@@ -1279,7 +1279,7 @@ export async function runPortfolioCycle(input: {
     const personas = new Map<string, string>();
     for (const agent of selected) {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;
-      personas.set(agent, (await readFile(path.join(promptRoot, `${profile.slug}.md`), "utf8")).trim());
+      personas.set(agent, (await readFile(personaPromptPath(profile.slug), "utf8")).trim());
     }
     const calls = selected.map((agent) => {
       const profile = agents.agents.find((candidate) => candidate.id === agent)!;

@@ -93,6 +93,11 @@ costs and no treasury action in this decision.
   enums. GHOST and BOOKER remain absent from agent configuration and routing until
   DM-04a. The full gate is restored at the Phase A boundary; no intermediate issue
   is represented as validated when its dependency has not landed.
+- **The architecture inventory and persona loader assumed every prompt was a
+  root-level Markdown file.** DM-04b requires a Door Money prompt directory, so the
+  inventory now walks prompt directories, registers the two previously hidden
+  marketingShark runtime prompts, and persona resolution explicitly maps GHOST and
+  BOOKER there. Runtime prompts remain repository files and never load skill files.
 
 ## Delivery ledger
 
@@ -105,7 +110,7 @@ costs and no treasury action in this decision.
 - [x] DM-03c — cycle.yml dispatch choices and mode gates
 - [x] DM-03d — Vercel cron entries for 15:00 and 16:00
 - [x] DM-04a — GHOST and BOOKER in registry, routing, controls and cast schema
-- [ ] DM-04b — Prompts for GHOST, BOOKER and the craft file
+- [x] DM-04b — Prompts for GHOST, BOOKER and the craft file
 - [ ] DM-04c — Model roles: GHOST, BOOK_INGEST, BOOK_STYLE
 - [ ] DM-05a — Scaffold, gitignore line, hue and labels
 - [ ] DM-05b — KPI seeds for the quarter
