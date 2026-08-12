@@ -4,7 +4,7 @@ import path from "node:path";
 import sharp from "sharp";
 import { afterEach, describe, expect, it } from "vitest";
 import editionFixture from "../../../contracts/fixtures/edition-package.valid.json" with { type: "json" };
-import meetingFixture from "../../../contracts/fixtures/meeting-record.valid.json" with { type: "json" };
+import caughtUpMeeting from "../../../state/meetings/2026-08-01-cu-edition.json" with { type: "json" };
 import { EditionPackageSchema } from "../contracts/edition-package.js";
 import { MeetingRecordSchema } from "../contracts/meeting-record.js";
 import { SocialPackSchema } from "../contracts/social-pack.js";
@@ -20,6 +20,11 @@ import { composeEditionSocialPack } from "./pack.js";
  * config-level testTimeout did not apply to it; a per-test value does.
  */
 const RENDER_TIMEOUT_MS = 90_000;
+
+// The contract's one canonical valid meeting fixture now belongs to Kvórum. This composer needs
+// a Caught Up record, so its fixture comes from the real Caught Up meeting family instead of
+// weakening the production guard to accept an unrelated desk.
+const meetingFixture = { ...caughtUpMeeting, cycleId: "20260804-cu-edition", date: "2026-08-04" };
 
 const roots: string[] = [];
 

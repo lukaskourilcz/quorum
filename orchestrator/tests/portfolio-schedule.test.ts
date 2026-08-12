@@ -35,15 +35,16 @@ Signature / explicit approval reference: owner-approval-2026-08-01`;
 
 const signedDecision = `Status: countersigned
 Signature / explicit approval reference: owner-approval-2026-08-04`;
+const signedKvorumCapacityDecision = `${signedDecision}
+Freed worst-day capacity USD: $0.08`;
 
 describe("portfolio schedule and budget gate", () => {
   it("keeps all venture meetings at collision-free Prague slots", async () => {
     const registry = await loadVentureRegistry();
-    // 21:00 left with the closed incubator and 18:00 with the evening article slot. 13:00 came
-    // back: the studio room the venture no longer holds vacated it and GoVIRAL took it, which is
-    // why the hour is here and the studio phase is not. 07:00 came back the same way --
-    // marketingShark took the hour the incubator vacated.
-    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 13, 14, 17, 19, 20, 22]);
+    // 18:00 left with the evening article slot. 13:00 came back when the studio room closed and
+    // GoVIRAL took it; 07:00 came back the same way for marketingShark. Kvórum now occupies the
+    // free 21:00 hour, exactly sixty minutes before the night board.
+    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 13, 14, 17, 19, 20, 21, 22]);
     const colliding = structuredClone(registry);
     colliding.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!.cadence = "daily@09:00";
     expect(() => parseVentureRegistry(colliding)).toThrow(/60 minutes apart/);
@@ -95,6 +96,38 @@ describe("portfolio schedule and budget gate", () => {
     const critical = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 0.4 });
     expect(critical.activePhases).not.toContain("tt-marketing");
     expect(critical.activePhases).toContain("cu-edition");
+  });
+
+  it("holds Kvórum for its two owner records and drops it between GoVIRAL and the magazines", async () => {
+    const registry = await loadVentureRegistry();
+    const base = {
+      registry,
+      budgetDecisionRaw: shapeA,
+      budgetFiftyRaw: signedDecision,
+      fightAiQFoundingRaw: signedDecision,
+      kvorumFoundingRaw: signedDecision,
+      kvorumBudgetCapacityRaw: signedKvorumCapacityDecision
+    };
+    const pendingCapacity = resolveEffectivePortfolioSchedule({
+      ...base,
+      // A signature without the founding decision's quantified reallocation stays fail-closed.
+      kvorumBudgetCapacityRaw: signedDecision,
+      monthlyApiHeadroomUsd: 25
+    });
+    expect(pendingCapacity.activePhases).not.toContain("kv-desk");
+    expect(pendingCapacity.envelopeByPhase["kv-desk"]).toBe(0.1);
+
+    const afterGoViral = resolveEffectivePortfolioSchedule({ ...base, monthlyApiHeadroomUsd: 1.75 });
+    expect(afterGoViral.activePhases).not.toContain("gv-brief");
+    expect(afterGoViral.activePhases).toEqual(expect.arrayContaining(["kv-desk", "mag-editorial", "article-am", "mag-desk"]));
+
+    const afterKvorum = resolveEffectivePortfolioSchedule({ ...base, monthlyApiHeadroomUsd: 1.25 });
+    expect(afterKvorum.activePhases).not.toContain("kv-desk");
+    expect(afterKvorum.activePhases).toEqual(expect.arrayContaining(["mag-editorial", "article-am", "mag-desk"]));
+
+    const afterMagazines = resolveEffectivePortfolioSchedule({ ...base, monthlyApiHeadroomUsd: 0.75 });
+    expect(afterMagazines.activePhases).not.toEqual(expect.arrayContaining(["mag-editorial", "article-am", "mag-desk"]));
+    expect(afterMagazines.activePhases).toContain("cu-edition");
   });
 
   it("keeps the magazine dry until 08d is signed, then enables both rooms and article slots", async () => {

@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { kvorumBudgetCapacityDecision, signedOwnerDecision } from "../portfolio/schedule.js";
 import { loadVentureRegistry } from "../ventures/registry.js";
 
 /**
@@ -33,8 +34,25 @@ export async function resolveRotationTarget(input: {
   now: Date;
 }): Promise<RotationTarget | null> {
   const registry = await loadVentureRegistry();
+  const decision = async (name: string) => {
+    try {
+      return await readFile(path.join(input.stateRoot, "decisions", name), "utf8");
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") return "";
+      throw error;
+    }
+  };
+  const [kvorumFoundingRaw, kvorumBudgetCapacityRaw] = await Promise.all([
+    decision("2026-08-12-kvorum-founding.md"),
+    decision("2026-08-12-kvorum-budget-capacity.md")
+  ]);
+  const kvorumMayAct = signedOwnerDecision(kvorumFoundingRaw) === "countersigned"
+    && kvorumBudgetCapacityDecision(kvorumBudgetCapacityRaw) === "countersigned";
   const active = registry.ventures
-    .filter((venture) => venture.status !== "paused")
+    // A morning idea is work the target should be able to act on. Kvórum's registry status
+    // describes the commissioned implementation, while these two owner records decide whether
+    // its live room can act; until both exist, adding it must not perturb sibling rotations.
+    .filter((venture) => venture.status !== "paused" && (venture.id !== "kvorum" || kvorumMayAct))
     .sort((left, right) => left.id.localeCompare(right.id));
   if (active.length === 0) return null;
 

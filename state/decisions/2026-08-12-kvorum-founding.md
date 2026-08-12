@@ -52,7 +52,8 @@ Registering the room may prove schemas, routing and the dry fixture path, but th
 must remain held while this decision is pending. Before countersignature can reach `main`, the
 owner must record a reallocation that frees at least `$0.08` of worst-day capacity without
 raising any ceiling or silently reducing another venture's authority. The system audit must
-fail if a payable clock exceeds `$1.00`.
+fail if a payable clock exceeds `$1.00`. The runtime recognizes that separate record only when
+it is countersigned and contains `Freed worst-day capacity USD: $0.08` (or a larger amount).
 
 If capacity is approved, one TRIBUN call is expected to cost about `$0.05` to `$0.07` a day,
 or about `$2.10` a month. The room reserves before the call and records actual cost after it.
@@ -166,6 +167,11 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - **Approval-trend KPI:** the quarterly KPI contract has bounded numeric directions but no trend
   operator. KV-05b records week-over-week approval trend as a boolean observation: `1` means the
   measured rate rose, `0` means it did not, and a missing comparison window remains `null`.
+- **Payable-clock audit:** KV-05c counts the full declared room envelope as `$0.72` and proves that
+  it would take the whole clock to `$1.08`. The runtime includes `kv-desk` only after both this
+  founding record and a separate capacity-reallocation record are countersigned; neither exists
+  in an authorizing state, so the current payable room total remains `$0.62` and the full payable
+  clock remains `$0.98`. This is a hold, not a reduced Kvórum envelope or a higher daily cap.
 
 ## Implementation checklist
 
@@ -182,7 +188,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-04c — TRIBUN model role and HACEK venture extension
 - [x] KV-05a — Venture scaffold, brand hue and labels
 - [x] KV-05b — KPI seeds for the quarter
-- [ ] KV-05c — Degradation-ladder position with its test
+- [x] KV-05c — Degradation-ladder position with its test
 - [ ] KV-06a — `kvorum-sources` registry with verified actors and feeds
 - [ ] KV-06b — Network allowlist additions and the host-pinning test
 - [ ] KV-07 — Entity lexicon config

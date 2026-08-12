@@ -111,6 +111,7 @@ import { ScheduledPhaseSchema, type RunnablePhase, type Stage } from "./types.js
 import { findSlotRecord } from "./meetings/slot-record.js";
 import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
 import { runMarketingSharkCycle } from "./ventures/marketingshark/run.js";
+import { runKvorumScaffoldDryCycle } from "./ventures/kvorum/scaffold.js";
 import { runDryArticleProduction } from "./mma-files/dry-run.js";
 import {
   recordClosedArticleSlot,
@@ -344,6 +345,23 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     // runPortfolioCycle handles its own cap stops and returns a skip rather than throwing; the
     // wrapper is the backstop for a refusal on a path inside it that this change did not reach.
     return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
+  }
+  if (options.phase === "kv-desk") {
+    if (options.dry) return runKvorumScaffoldDryCycle({ cycleId, now });
+    // The schedule gate keeps this path closed while the founding and budget-capacity records
+    // are pending. A manual live invocation is still refused here instead of falling through
+    // to a generic room or a provider call.
+    return {
+      cycleId,
+      phase: options.phase,
+      dry: false,
+      status: "paused",
+      decision: "PAUSED",
+      estimatedWorstCaseUsd: 0,
+      selectedAgents: [],
+      skippedAgents: ["TRIBUN", "HACEK", "AUDIT"],
+      artifacts: []
+    };
   }
   if (options.phase === "ms-daily") {
     const stages = JSON.parse(await readFile(path.join(configRoot, "stages.json"), "utf8")) as { current: Stage };

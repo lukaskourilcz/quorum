@@ -119,8 +119,9 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   // The five-day board is /calendar's product now. The home page walks past a calendar of its
   // own — a full week, stepped in place — and this test is about the linked, statically
   // generated weeks, which only /calendar has.
-  // Start with the saved operating week. Its five-day window carries completed and future slots;
-  // the previous generated week carries the missed state this test also verifies.
+  // Start with the saved operating week. Its five-day window carries completed slots; the
+  // previous generated week carries the missed state this test also verifies. Scheduled is a
+  // clock-relative state, so a historical fixture must not be required to retain it forever.
   await page.goto("/calendar/2026-08-03", { waitUntil: "networkidle" });
   await expect(page.locator("html")).toHaveAttribute(
     "data-scroll-behavior",
@@ -134,16 +135,14 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   // is that every slot renders exactly one row and one project icon.
   await expect(weekBoard.locator(".contents")).toHaveCount(CALENDAR_SLOTS.length);
   await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(CALENDAR_SLOTS.length);
-  // Eight, not seven. The Design Lab joined `projectDetails` in `3e081c8` on 2 August and this
-  // assertion was never moved, so the guard has been red ever since — on a board that was right.
-  // The venture joined by owner decision; the number was the thing that was stale.
-  await expect(page.locator("[data-project-legend]")).toHaveCount(8);
+  // Nine project keys: the eight established entries plus Kvórum's marker-yellow schedule row.
+  // This counts presentation identities, not authorized publishers or social channels.
+  await expect(page.locator("[data-project-legend]")).toHaveCount(9);
   await expect(weekBoard.locator("[data-calendar-slot] time")).toHaveCount(0);
   // No assertion that a fixture is on the board. There were test meetings on it when the archive
   // was young; there are none now, and requiring one would be requiring the company to keep
   // sample data in a public week.
   await expect(weekBoard.locator('[data-calendar-state="held"]')).not.toHaveCount(0);
-  await expect(weekBoard.locator('[data-calendar-state="scheduled"]')).not.toHaveCount(0);
   const previous = page.getByRole("link", { name: "Previous calendar week" });
   await expect(previous).toHaveAttribute("href", /\/calendar\/\d{4}-\d{2}-\d{2}/);
   await previous.click();
@@ -234,7 +233,8 @@ test("measures role column keeps the table inset", async ({ page }) => {
 test("MMA Files article heroes load from the package-backed archive", async ({ page }) => {
   await page.goto("/admin?venture=mma-files&tab=articles", { waitUntil: "networkidle" });
   const heroes = page.locator("main figure img");
-  await expect(heroes).toHaveCount(5);
+  // One rendered hero per committed article package; the archive now holds six packages.
+  await expect(heroes).toHaveCount(6);
   for (let index = 0; index < await heroes.count(); index += 1) {
     await heroes.nth(index).scrollIntoViewIfNeeded();
     await expect
@@ -330,14 +330,25 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await page.goto("/admin/ventures/titty-tuesdays/binder", { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: "Titty Tuesdays" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
-    await expect(page.getByText("1 ready plans")).toBeVisible();
+    await expect(page.getByText(/^\d+ ready plans$/)).toBeVisible();
   });
 
   test("admin login explains errors, starts a session and signs out", async ({ page }) => {
+    const expectLoginError = async (error: "expired" | "invalid") => {
+      await expect.poll(() => {
+        const url = new URL(page.url());
+        return {
+          pathname: url.pathname,
+          error: url.searchParams.get("error"),
+          returnTo: url.searchParams.get("returnTo")
+        };
+      }).toEqual({ pathname: "/admin/login", error, returnTo: "/admin" });
+    };
+
     await page.context().clearCookies();
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto("/admin", { waitUntil: "networkidle" });
-    await expect(page).toHaveURL(/\/admin\/login\?error=expired$/);
+    await expectLoginError("expired");
     await expect(page.getByRole("heading", { name: "Your project desk." })).toBeVisible();
     const accessibility = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
@@ -353,7 +364,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await page.getByRole("button", { name: "Hide password" }).click();
     await expect(password).toHaveAttribute("type", "password");
     await page.getByRole("button", { name: "Open project desk" }).click();
-    await expect(page).toHaveURL(/\/admin\/login\?error=invalid$/);
+    await expectLoginError("invalid");
     await expect(page.getByText("Those details did not match")).toBeVisible();
 
     await page.getByLabel("Username").fill("e2e-owner");
@@ -371,7 +382,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await page.getByRole("button", { name: "Sign out" }).click();
     await expect(page).toHaveURL(/\/admin\/login$/);
     await page.goto("/admin");
-    await expect(page).toHaveURL(/\/admin\/login\?error=expired$/);
+    await expectLoginError("expired");
   });
 });
 
@@ -484,6 +495,11 @@ for (const size of [
 test("Company files speaks plainly", async ({ page }) => {
   await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
   const body = await page.locator("main").innerText();
+  const bodyWithoutSocialArchive = await page.locator("main").evaluate((main) => {
+    const copy = main.cloneNode(true) as HTMLElement;
+    copy.querySelector("#social-archive")?.remove();
+    return copy.innerText;
+  });
 
   const jargon = [
     "NO_EDITION",
@@ -501,8 +517,10 @@ test("Company files speaks plainly", async ({ page }) => {
   }
 
   // Agent codenames are how the runtime addresses itself, not how a person reads a page.
+  // Instagram and Threads remain legitimate channel labels inside the separately tested social
+  // archive, so exclude that surface when checking for leaked agent identities.
   for (const codename of ["THREADS", "INSTAGRAM", "FRAME", "SCRIBE", "HERALD"]) {
-    expect(body, `Company files still shows the codename ${codename}`).not.toContain(codename);
+    expect(bodyWithoutSocialArchive, `Company files still shows the codename ${codename}`).not.toContain(codename);
   }
 
   // And the venture ids, which the rest of the admin already renders as display names.

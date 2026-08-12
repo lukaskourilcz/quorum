@@ -1,6 +1,8 @@
 import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { parseVentureRegistry } from "../src/ventures/registry.js";
+import { resolveEffectivePortfolioSchedule } from "../src/portfolio/schedule.js";
 
 const repoRoot = path.resolve(process.cwd(), "..");
 
@@ -49,12 +51,13 @@ describe("closing 43-agent system audit", () => {
   });
 
   it("keeps all room envelopes inside the signed daily pace", async () => {
-    const registry = await json<{
+    const registryRaw = await json<{
       ventures: Array<{
         meetings: Array<{ kind: string; envelopeUsd: number }>;
         productionJobs?: Array<{ envelopeUsd: number }>;
       }>;
     }>("config/ventures.json");
+    const registry = parseVentureRegistry(registryRaw);
     // ms-daily's envelope is per ENABLED BRAND, which its own registry comment says and run.ts
     // computes as `0.1 * brands.length`. Summing it as a flat scalar made the guard model a
     // cheaper clock than the one that can actually run: on the Phase-2 flag flip the real total
@@ -73,18 +76,41 @@ describe("closing 43-agent system audit", () => {
       .flatMap((venture) => venture.productionJobs ?? [])
       .reduce((sum, job) => sum + job.envelopeUsd, 0);
     const morningCycleCap = 0.2;
-    // Nine rooms: two Caught Up, one Titty Tuesdays, one GoVIRAL, one marketingShark, two
-    // FightAIQ, two MMA Files. The studio and both incubator rooms are gone. GoVIRAL reserves
-    // its $0.06 every day even though it meets on Mondays, and marketingShark reserves $0.10
-    // even in Phase 1 where one brand is enabled -- the reservation is what the clock can cost,
-    // not what it usually does, and reserving less than a room can spend is how a day runs out
-    // of money.
-    expect(roomEnvelopes).toBeCloseTo(0.62, 8);
-    // The whole clock, at every room's full envelope, has to fit inside the $1.00 daily pace
-    // budget-2026-08e signed -- which is the arithmetic that makes a full day affordable rather
-    // than a day whose last rooms cannot be funded. marketingShark took the margin from 32c to
-    // 2c, so the next room needs a cheaper envelope or somebody else's.
-    expect(roomEnvelopes + articleProduction + morningCycleCap).toBeLessThanOrEqual(1);
+    // Ten declared rooms now total $0.72. Hiding Kvórum from this sum would make the registry
+    // look cheaper than it is; registration and live authority are separate facts.
+    expect(roomEnvelopes).toBeCloseTo(0.72, 8);
+    expect(registry.ventures.flatMap((venture) => venture.meetings)
+      .find((meeting) => meeting.kind === "kv-desk")?.envelopeUsd).toBe(0.1);
+    expect(roomEnvelopes + articleProduction + morningCycleCap).toBeGreaterThan(1);
+
+    const decision = (name: string) => readFile(path.join(repoRoot, "state", "decisions", name), "utf8");
+    const [budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw] = await Promise.all([
+      decision("2026-08-01-budget-raise.md"),
+      decision("2026-08-02-budget-mma.md"),
+      decision("2026-08-04-budget-fifty.md"),
+      decision("2026-08-02-fightaiq-founding.md"),
+      decision("2026-08-12-kvorum-founding.md")
+    ]);
+    const schedule = resolveEffectivePortfolioSchedule({
+      registry,
+      budgetDecisionRaw,
+      budgetMmaRaw,
+      budgetFiftyRaw,
+      fightAiQFoundingRaw,
+      kvorumFoundingRaw,
+      // No owner capacity-reallocation record exists. Missing authority is the safer branch.
+      kvorumBudgetCapacityRaw: "",
+      monthlyApiHeadroomUsd: 25
+    });
+    const payable = new Set(schedule.activePhases);
+    const payableRoomEnvelopes = registry.ventures
+      .flatMap((venture) => venture.meetings)
+      .filter((meeting) => payable.has(meeting.kind as never))
+      .reduce((sum, meeting) => sum + meeting.envelopeUsd * (meeting.kind === "ms-daily" ? enabledBrands : 1), 0);
+    expect(schedule.activePhases).not.toContain("kv-desk");
+    expect(payableRoomEnvelopes).toBeCloseTo(0.62, 8);
+    // The payable clock, not merely a handpicked subset, remains inside the exact signed cap.
+    expect(payableRoomEnvelopes + articleProduction + morningCycleCap).toBeLessThanOrEqual(1);
   });
 
   it("keeps Carousel Studio free of provider SDKs and external template assets", async () => {
