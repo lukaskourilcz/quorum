@@ -10,6 +10,7 @@ export * from "./edition-package.js";
 export * from "./hook-assignment.js";
 export * from "./idea-ledger.js";
 export * from "./kpi-set.js";
+export * from "./kvorum-apify-quota.js";
 export * from "./kvorum-entities.js";
 export * from "./marketing-plan.js";
 export * from "./meeting-email.js";

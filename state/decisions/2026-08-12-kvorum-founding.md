@@ -178,7 +178,8 @@ section and a receipt line, and a day with no usable cluster records an honest q
   `$4.53` per 30 days and `$4.681` in a 31-day month. KV-06a records those current figures and the
   pinned latest build `laKrch6r0XAnxtAFh`; it does not raise the `$2.00` venture share. Full daily
   cadence cannot fit that share, so the pending approval and later quota guard must stop runs
-  rather than imply the design's `$1.80` month is still available.
+  rather than imply the design's `$1.80` month is still available. KV-08a therefore reserves
+  `$0.151` per run, not the issue's stale `~$0.06`; it leaves the share and Free-plan stop unchanged.
 
 ## Implementation checklist
 
@@ -199,7 +200,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-06a — `kvorum-sources` registry with verified actors and feeds
 - [x] KV-06b — Network allowlist additions and the host-pinning test
 - [x] KV-07 — Entity lexicon config
-- [ ] KV-08a — Venture Apify quota file and share cap
+- [x] KV-08a — Venture Apify quota file and share cap
 - [ ] KV-08b — Third-tenant extension of the Apify guard
 - [ ] KV-09a — Monitor fetch, normalize and the fixed-field row mapper
 - [ ] KV-09b — Monitor receipt contract and 30-day raw purge

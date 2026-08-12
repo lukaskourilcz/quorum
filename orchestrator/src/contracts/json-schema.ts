@@ -12,6 +12,7 @@ import { EditionPackageSchema } from "./edition-package.js";
 import { HookAssignmentSchema } from "./hook-assignment.js";
 import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
 import { KpiSetSchema } from "./kpi-set.js";
+import { KvorumApifyQuotaSchema } from "./kvorum-apify-quota.js";
 import { KvorumEntityLexiconSchema } from "./kvorum-entities.js";
 import { KvorumSourceRegistrySchema } from "./kvorum-sources.js";
 import { MarketingPlanSchema } from "./marketing-plan.js";
@@ -65,6 +66,7 @@ export const ContractSchemas = {
   "hook-assignment": HookAssignmentSchema,
   "idea-ledger": IdeaLedgerEntrySchema,
   "kpi-set": KpiSetSchema,
+  "kvorum-apify-quota": KvorumApifyQuotaSchema,
   "kvorum-entities": KvorumEntityLexiconSchema,
   "kvorum-sources": KvorumSourceRegistrySchema,
   "marketing-plan": MarketingPlanSchema,

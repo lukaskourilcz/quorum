@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "kvorum-apify-quota/1",
+  "month": "2026-08",
+  "shareCapUsd": 2,
+  "estimatedUsedUsd": 0.06,
+  "sharedAccountUsedUsd": null,
+  "reservedPerRun": 0.06,
+  "updatedAt": "2026-08-12T21:00:00.000Z",
+  "perActorCounts": {}
+}
