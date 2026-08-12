@@ -26,7 +26,7 @@ approved recommendation into a draft carousel or action packet. The venture is
 drafts-only: owner approval records a decision, but never causes publication or
 outreach.
 
-- Registry: `id: door-money`, `status: operating`, `taste: false`, ledger
+- Registry: `id: door-money`, `status: operating`, `taste: true`, ledger
   namespace `door-money`, admin tabs `recommendations`, `actions` and
   `knowledge`.
 - `dm-desk` opens daily at **15:00 Prague**. GHOST drafts; AUDIT vetoes. Its
@@ -88,12 +88,17 @@ costs and no treasury action in this decision.
   headroom.** Door Money's `$0.14` cannot be added to that all-rooms-at-once sum.
   DM-05c must model the real weekday gates and degradation order while preserving
   the signed `$1.00` ceiling; it may not relax the ceiling to make the test pass.
+- **Title order exposes a temporary Phase A schema gap.** DM-02a introduces the
+  registry values before DM-02b extends the closed component and tab enums, and
+  its casts remain unrecognized until DM-04a adds GHOST and BOOKER to the shared
+  agent enum. The full gate is restored at the Phase A boundary; no intermediate
+  issue is represented as validated when its dependency has not landed.
 
 ## Delivery ledger
 
 - [x] DM-00 — Phase 0 audit: read the contracts, verify every assumption
 - [x] DM-01 — Write the founding decision record
-- [ ] DM-02a — Registry entry in config/ventures.json
+- [x] DM-02a — Registry entry in config/ventures.json
 - [ ] DM-02b — Registry schema enums, fixtures and the action-completion evaluator
 - [ ] DM-03a — Register dm-desk and dm-growth in type and record schemas
 - [ ] DM-03b — Meeting policy for both rooms (Thursday gate lives in code)
