@@ -331,7 +331,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-19b — Performance weights with floors and recorded proposals
 - [x] KV-20a — GoVIRAL spine: topic set and brief consumption
 - [x] KV-20b — GoVIRAL spine: transitions and the Design-Lab-only test
-- [ ] KV-21a — Documentation truth across the standing docs
+- [x] KV-21a — Documentation truth across the standing docs
 - [ ] KV-21b — INBOX approvals and NEEDED owner items
 - [ ] KV-21c — Honest gaps, checkbox sweep and prompt deletion
 

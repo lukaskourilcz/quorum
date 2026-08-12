@@ -1,6 +1,6 @@
 # BoardlessAI project model
 
-BoardlessAI is one guarded operating system with seven project workspaces. Shared
+BoardlessAI is one guarded operating system with eight project workspaces. Shared
 infrastructure owns the agent registry, budget, source policy, meeting records,
 specialist agendas, calendar, admin, delivery checks and public explanation. Each
 project keeps a narrow output boundary rather than cloning the orchestrator.
@@ -16,6 +16,7 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 | Design Lab | Operating internal engine | Original template library and deterministic social-carousel rendering for every brand | No accounts, marketing, analytics, external inspiration bytes or image-model calls |
 | marketingShark | Operating internal agency | Turns one devShark quiz question a day into one Czech and one English five-slide carousel rendered by the Design Lab | No social account, credentials or publisher path; every package is stored as a draft behind the approval queue |
 | MMA Files | Operating public magazine | One daily Czech article slot and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
+| Kvórum | Implemented, live-held validation project | One or two cited Czech political-commentary recommendations for owner review; approved drafts render through the Design Lab | Fixture-only and `$0` until founding, capacity, source and editorial approvals pass; no account, publisher, channel, paid promotion or automated metrics |
 
 `config/ventures.json` stores each project's meetings, participating roles, cost
 envelope and admin tabs. `config/venture-agent-controls.json` stores optional agent switches. Internal
@@ -25,10 +26,10 @@ contracts retain the word `venture` for compatibility; visitor-facing text says
 ## People and authority
 
 Four decision-makers—VIZE, FORGE, PULSE and AUDIT—hold company-wide authority.
-Twenty-nine specialists do bounded work only when a service path or due agenda needs
-their domain. The registry holds 42 entries: 33 active, 6 paused and 3 retired. A
+Thirty specialists do bounded work only when a service path or due agenda needs
+their domain. The registry holds 43 entries: 34 active, 6 paused and 3 retired. A
 stood-down role stays on the record — the router skips it and names it — so the count
-that matters is the thirty-three that work. The 27
+that matters is the thirty-four that work. The 27
 established roles keep their approved photographic portraits. Newer roles use neutral
 name-based placeholders until approved media exists. Public visuals never enter model
 prompts or meeting packets. The public interface uses names and work labels. It does
@@ -66,6 +67,11 @@ Not every clock entry is a meeting:
 - **Checkpoint:** 14:00 and 22:00 update the operating trail deterministically and
   make no model call.
 
+Kvórum's 21:00 desk is registered but not payable: its founding record and separate
+capacity reallocation are pending. Even after those pass, external monitoring still
+requires the source approvals. A scheduled wake-up therefore fails closed before a
+provider call rather than consuming the remaining daily budget.
+
 An unused scheduled window records `not-needed` at `$0`. A manual workflow run is an
 explicit operator request, so it bypasses only the agenda check—not live switches,
 credentials, evidence, cost limits or safety rules.
@@ -86,6 +92,7 @@ credentials, evidence, cost limits or safety rules.
 | 17:00 | Caught Up product meeting | fixed service |
 | 19:00 | FightAIQ model check | due agenda; D8 analysis and evidence gates apply |
 | 20:00 | MMA Files desk review | due agenda only |
+| 21:00 | Kvórum political desk | registered daily; live work held by authority and budget-capacity gates |
 | 22:00 | Board night | `$0` checkpoint and daily summary |
 
 A Vercel cron dispatches each window on its own Prague hour and does the work; three
@@ -104,6 +111,12 @@ next month or raise its own limit. Payments remain human-only.
 The meeting redesign saves cost by avoiding unnecessary calls, not by lowering the
 models that determine publication quality. Static cron wake-ups and `not-needed`
 records cost no model money.
+
+The payable clock currently reserves `$0.98` of the `$1.00` daily pace. Kvórum declares
+a `$0.10` envelope and an expected `$0.05–0.07` call, but neither may become payable
+until a countersigned reallocation frees at least `$0.08`; the `$1.00` ceiling is not
+raised. Its separate Apify share is `$2.00` inside the existing Free-plan credit and
+can stop runs but can never upgrade the plan.
 
 ## Money and quarterly targets
 
@@ -139,7 +152,8 @@ preferences under `config/visual-weights/<project>.json`. Specialist requests li
 approved writes use a repository-scoped GitHub token in production.
 
 The admin includes short summaries with full-record expansion, agent switches,
-Caught Up work, Titty Tuesdays plans, FightAIQ data and MMA Files articles. Perfect, Good and Bad ratings keep their full history. A rating cannot found
+Caught Up work, Titty Tuesdays plans, FightAIQ data, MMA Files articles and Kvórum's
+recommendations, monitor receipts and claims ledger. Perfect, Good and Bad ratings keep their full history. A rating cannot found
 a project or publish an item. The queue and its archive are editable by the owner, but
 owner input is optional.
 
@@ -167,6 +181,8 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 - `MMA_FILES_LIVE_ENABLED` — source-first newsroom work and content delivery.
 - `MMA_FILES_INDEXING_ENABLED` — owner-controlled evidence for the future MMA Files
   earning-readiness check; absent or false keeps that method waiting.
+- Kvórum has no shortcut switch: the pending founding/capacity records and the four
+  `KV-*` approvals independently fail closed before live source or model work.
 - `SOCIAL_KILL_SWITCH=true` — supreme manual posting stop. When false, each project
   still needs its own proof/campaign counter, account credentials and safety gate.
 - `METRICS_INGESTION_ENABLED=false` — keeps all visitor, reader and engagement
@@ -176,5 +192,5 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 Missing variables deny the action. The owner checklist and the ordered setup path are
 both in `docs/NEEDED.md`.
 
-The canonical, standalone description of all seven projects, 42 roles, D1–D12 and
+The canonical, standalone description of all eight projects, 43 roles, D1–D13 and
 current generated state is `docs/ECOSYSTEM.md`.

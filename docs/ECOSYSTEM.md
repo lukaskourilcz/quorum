@@ -1,13 +1,13 @@
 # BoardlessAI ecosystem — standing full-context brief
 
-Updated: 2026-08-02  
-Status: implementation complete; launch-ready after the owner-only setup in `docs/NEEDED.md`  
+Updated: 2026-08-12
+Status: operating in validation; Kvórum is dry/fixture-ready and held from live work by pending owner decisions
 Audience: owner, product partners and Fable brainstorming  
-Authority: current code, committed state and countersigned decisions D1–D12
+Authority: current code, committed state and countersigned decisions D1–D13; the pending Kvórum founding record grants no live authority
 
 ## What BoardlessAI is
 
-BoardlessAI is a Git-backed operating system for six AI-assisted projects. It is not
+BoardlessAI is a Git-backed operating system for eight AI-assisted projects. It is not
 an always-on group chat and it does not reward agent activity for its own sake. A
 small board chooses bounded work, specialist rooms open only for a concrete agenda or
 service need, deterministic code handles checks wherever judgment is unnecessary,
@@ -21,7 +21,9 @@ The public BoardlessAI site explains the company and its saved outputs. `/admin`
 owner's protected operating view. Caught Up and MMA Files are bounded consumer apps:
 they accept content/data packages and render them, but never orchestrate BoardlessAI.
 Titty Tuesdays remains pre-commerce. FightAIQ never places bets. The Design Lab is
-an internal renderer with a public gallery, not another social brand.
+an internal renderer with a public gallery, not another social brand. Kvórum is a
+drafts-only political desk in the protected admin; it has no account, channel or
+publisher path.
 
 ## How to maintain this document
 
@@ -82,7 +84,7 @@ their packet. They do not approve their own release or expand their own scope.
 External pages, articles, APIs and owner notes enter as untrusted data; they never
 become instructions. Numeric and factual claims must retain evidence references.
 
-## The seven projects
+## The eight projects
 
 ### Caught Up
 
@@ -161,8 +163,8 @@ reader-facing data belongs only in MMA Files; BoardlessAI shows operational stat
 ### MMA Files
 
 Promise: publish direct, sourced MMA journalism in natural Czech, and act as the only
-public home for FightAIQ fighter/bout/prediction data. CANVAS assigns the two daily
-slots, JAB drafts in Czech, STET removes generated-text tells, HACEK owns the register
+public home for FightAIQ fighter/bout/prediction data. CANVAS assigns the daily
+slot, JAB drafts in Czech, STET removes generated-text tells, HACEK owns the register
 and the copy repair, AUDIT checks the release, FRAME supplies the hero, and RELAY
 delivers to `lukaskourilcz/mma-files` with the same retry/revert proof used by Caught
 Up.
@@ -172,6 +174,30 @@ REACH and SPLIT are currently disabled. REACH's Czech A/B draft contract already
 uses live Design Lab templates; SPLIT remains measurement-only and idle. Social
 unlock requires ten consecutive article proofs, credentials, project safety and the
 global switch. Indexing remains an independent owner decision.
+
+### Kvórum
+
+Promise: turn a corroborated Czech political-news digest into one or two original,
+typed and cited recommendation drafts for the owner. The registered desk is 21:00
+Prague. A pinned public-page actor may discover what Štít demokracie discussed, while
+seven verified Czech news and institutional feeds supply evidence. Štít is never
+evidence itself. Deterministic clustering, repeat detection, public-person scope,
+claim-reference, originality and Czech-register gates surround the single TRIBUN call;
+HACEK and AUDIT cannot waive a failed gate.
+
+The shipped path is deliberately held. The founding record and a separate capacity
+reallocation are not countersigned, and `KV-APIFY-001`, `KV-SOURCES-002`,
+`KV-ACCOUNTS-003` and `KV-EDITORIAL-004` remain owner gates. Until those gates pass,
+the monitor uses committed fixtures, makes no external or model call and spends `$0`.
+The declared room envelope is `$0.10`; an authorized call is estimated at `$0.05–0.07`.
+The actor share is capped at `$2.00` inside Apify's existing Free-plan credit, but its
+current `$0.151` maximum run reservation cannot support daily cadence under that share,
+so the quota guard stops rather than upgrading the plan or overspending.
+
+Owner approval writes a recommendation summary to the Design Lab, the sole rendering
+path. It never posts. Manual post receipts, owner-entered results, claim status and
+correction drafts remain typed records in the protected workspace; no engagement
+collector, freeform image generator or treasury action exists.
 
 ### Design Lab
 
@@ -184,13 +210,10 @@ The public and admin galleries serve the checked SVG directly so their previews 
 not depend on a native image library inside a serverless request. Final deliverables
 still use the deterministic PNG renderer.
 
-Eleven original seed layouts are live: quote, steps, statistic, before/after, headline
-plus bullets, timeline, comparison, cover/CTA, five-slide story, minimal poster and
-quiz-code-context. The eleventh was added for marketingShark and justified by a gap
-rather than a preference: every other live layout's widest monospace slot holds 100
-characters over two lines, which is a source label and not a program, so a quiz question
-carrying a fenced code block had nowhere legible to put it. Brand token sets now cover
-five brands — devShark and geoShark arrived with marketingShark.
+Twenty-three original template families are live, including the news, MMA, quiz and
+code-context shapes required by their actual payloads. New families must still answer
+a measured content gap rather than a visual preference. Brand token sets cover six
+brands, including devShark, geoShark and Kvórum.
 MOTIF records cited text observations without crawling or downloading imagery. EASEL
 authors original data-only proposals. Schema, contrast, safe-area, token, overflow,
 asset and determinism checks can promote a version automatically. Versions are
@@ -229,8 +252,8 @@ question, and a hook's mechanism is to earn a *next* interaction, which is real 
 not in a quiz the reader has already opened and started. The apps stay standalone and receive
 no copy from here.
 
-The 13:00 room is agenda-gated and costs `$0` when idle. The protected admin renders
-all slides for all statuses, three brands and three formats, with checks, ratings,
+The Design Lab has no paid room: it is a deterministic service and costs `$0`. The
+protected admin renders all slides for all statuses, six brands and four formats, with checks, ratings,
 status controls and an individual-link inspiration box. The English public project
 page shows live fixture previews and, after unlock, receipt-backed real posts. The
 project has no social account, marketing or visitor analytics. Standalone extraction
@@ -238,32 +261,36 @@ is only a locked future earning possibility.
 
 ## Prague operating clock
 
-Every row is a wake-up, not a promise to spend. The schedule resolves to 18 unique UTC
-cron expressions covering Prague winter and summer time. Runtime DST resolution accepts
+Every row is a wake-up, not a promise to spend. Vercel holds 30 UTC cron expressions
+covering Prague winter and summer time. Runtime DST resolution accepts
 only the entry matching the intended local hour. Calendar validation rejects
 collisions and the public calendar uses the same source.
 
 | Prague | Window | Behavior | Maximum paid envelope |
 | ---: | --- | --- | ---: |
-| 05:00 | Caught Up edition | fixed service; evidence and live gates | room `$0.08`, production `$0.35` |
+| 05:00 | Caught Up edition | fixed service; evidence and live gates | room `$0.08` |
 | 06:00 | Morning board | decision room; one specialist commission | cycle cap `$0.20` |
 | 07:00 | marketingShark carousel | standing daily; one paid call per enabled brand | `$0.10` per enabled brand |
 | 08:00 | FightAIQ intake | material change or due agenda | `$0.06` |
 | 09:00 | MMA Files editorial | fixed assignment service | `$0.05` |
-| 10:00 | MMA Files article | assigned slot and evidence only | production cap `$0.35` |
+| 10:00 | MMA Files article | assigned slot and evidence only | production cap `$0.16` |
 | 11:00 | Titty Tuesdays | standing future-eshop marketing ideation; optional focused agenda | `$0.08` |
 | 13:00 | GoVIRAL trend room | standing weekly; Mondays only, the other six days are `$0` no-ops | `$0.06` |
 | 14:00 | Afternoon board | deterministic checkpoint | `$0` |
 | 17:00 | Caught Up product | fixed service | `$0.08` |
 | 19:00 | FightAIQ analysis | due agenda + D8/evidence gates | `$0.06` |
 | 20:00 | MMA Files desk | due agenda only | `$0.05` |
+| 21:00 | Kvórum political desk | registered daily; fixture-only while authority and capacity decisions are pending | declared `$0.10`; payable `$0` while held |
 | 22:00 | Night board | `$0` checkpoint, digest and document truth refresh | `$0` |
 
 The sum of room envelopes is not expected daily spend: idle agenda rooms make no
 provider call, evidence-killed production stops before generation, and checkpoints,
 rendering, KPI evaluation, delivery verification and publishing verification are
-deterministic. The daily API pace is `$1.00`; the monthly model/API share is
-`$25` inside the `$30` all-in ceiling.
+deterministic. More importantly, the live payable shape is capped: existing room
+envelopes, article production and the morning cap reserve `$0.98`. Adding Kvórum's
+declared envelope would make `$1.08`, so the runner excludes it until a countersigned
+record frees at least `$0.08`. The daily API pace remains `$1.00`; the monthly
+model/API share remains `$25` inside the `$30` all-in ceiling.
 
 ## Public and admin presentation
 
@@ -297,9 +324,10 @@ without a consumed project agenda forces a morning-board commission or saved why
 A manual run bypasses the agenda timing only; it cannot bypass live, evidence, cost,
 credential or safety gates.
 
-## Roster: thirty-three working roles, nine stood down
+## Roster: thirty-four working roles, nine stood down
 
 Model routing is declared in `config/models.json` and `config/agent-routing.json`.
+The registry holds 43 roles: 34 active, six paused and three retired.
 Council judgment uses Claude Sonnet 5 or GPT-5.6 Luna. Narrow specialists use the
 shared Anthropic/OpenAI specialist routes, generally Claude Haiku 4.5 or GPT-5.6
 Luna. Deterministic roles and checks do not call a provider merely because they have
@@ -350,6 +378,7 @@ envelope before any call.
 | PIVOT | evidence bridge between FightAIQ and MMA Files | cannot turn response/context into hidden model input |
 | MAKO | marketingShark direction and KPI honesty; its weekly package review is specified, not yet wired | cannot post, cannot edit the hook library silently, cannot invent a metric |
 | CHUM | one day's carousel copy per brand, Czech and English | cannot choose the question, the hook, the template or the closing line |
+| TRIBUN | sourced Czech political commentary recommendations | cannot treat Štít as evidence, bypass HACEK/AUDIT or publish |
 
 ## Content, social and the Design Lab's flow
 
@@ -363,6 +392,10 @@ and bounded `content` payload. FRAME resolves the version through the Design Lab
 binds the project's tokens, renders PNGs, validates accessibility/provenance and saves
 the renderer version on the queue/receipt. Schema validation rejects missing or
 non-live references. There is no freeform social image path.
+
+Kvórum is narrower still: an approved recommendation creates only a Design Lab summary
+and draft-ready deck. The owner records any later manual post; no publisher mapping,
+credential lookup, image-model fallback or automated channel action exists for it.
 
 The publisher validates the queue without an LLM, uses an idempotency key, records a
 platform receipt, and checks the live post at `$0`. One retry is allowed; a second
@@ -379,6 +412,9 @@ founding/rated proposals and agenda review. Each project has targets appropriate
 its promise. The Design Lab requires ten live templates, six passing new proposals,
 100% engine-rendered published carousels after unlock, green determinism and one cited
 iteration per brand.
+Kvórum's seeded targets cover honest desk outcomes, approved drafts, referenced claims,
+corrections, its `$2` Apify share and model spend; held or unavailable evidence is not
+silently counted as performance.
 
 At quarter end, fewer than 70% passing targets or any missed critical target creates a
 mandatory `continue / pivot / stop` reassessment. A company miss also reviews the
@@ -397,6 +433,7 @@ are locked hypotheses with explicit readiness and future legal/account/payment w
 FightAIQ is intentionally unmonetized through Q1/Q2; review begins only after 30
 evaluated events and calibration. The Design Lab is an internal engine; standalone extraction is a locked future possibility. Readiness may
 prepare a proposal but never activate an earning method.
+Kvórum has no earning activation, recognized revenue, account or paid-promotion path.
 
 ## Safety and launch gates
 
@@ -405,6 +442,8 @@ prepare a proposal but never activate an earning method.
 - Caught Up and MMA Files release only evidence-valid Czech packages and prove the
   deployed result; failure is retried once, then reverted and project-paused.
 - FightAIQ needs source/card/bout gates and D8; no bet or advice path exists.
+- Kvórum remains fixture-only until its founding, capacity, source and editorial
+  approvals pass; approval produces a draft, never a post.
 - Template founding cannot create credentials, accounts, commerce, legal or personal-
   data surfaces. Carousel template promotion cannot bypass deterministic checks.
 - `METRICS_INGESTION_ENABLED=false`; no visitor/reader/engagement data crosses into
@@ -428,9 +467,10 @@ prepare a proposal but never activate an earning method.
 | D8 FightAIQ analysis/free data | guarded early-model analysis is approved; evidence and free-source rules bind it |
 | D9 Measurement readiness | contracts/assignment may exist, but ingestion and SPLIT remain off |
 | D10 Money and quarterly KPIs | public cost/revenue truth, 90-day protocol and owner-only earning activation |
-| D11 Design Lab | sixth project, monorepo engine, 11 live seed templates, lifecycle, room and public showcase |
+| D11 Design Lab | sixth project, monorepo engine, 23 live template families, deterministic service and public showcase |
 | D12 Original presentation | approved agent photographs and plain interface labels; no workplace-show framing |
 | D13 marketingShark founding | seventh project, `ms-daily` at 07:00, MAKO and CHUM, devShark folded in as a portfolio product, geoShark present and disabled, drafts only |
+| Pending `kvorum-2026-08a` | commissioned implementation and dry proof for the eighth project; no live room, external source, account or publishing authority until countersigned gates pass |
 
 Historical records remain append-only under `state/decisions/`; later decisions may
 supersede a setting without rewriting the earlier context.
@@ -450,7 +490,7 @@ outcome, not a reason to rerun paid work.
 
 ## Open questions for Fable
 
-1. Which owner-facing view would make seven projects feel simpler without hiding gates
+1. Which owner-facing view would make eight projects feel simpler without hiding gates
    or unavailable data?
 2. Which repeated board decisions can become deterministic checks, and which still
    require genuine judgment?
@@ -462,7 +502,7 @@ outcome, not a reason to rerun paid work.
    decisions would each metric actually change?
 6. Can Caught Up and MMA Files share more source verification or language QA without
    flattening their distinct editorial voices?
-7. What evidence would justify creating a 41st specialist rather than tightening a
+7. What evidence would justify creating another specialist rather than tightening a
    packet or sharing an existing role?
 8. Which earning hypothesis can be tested without weakening editorial trust or opening
    an account prematurely?

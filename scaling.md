@@ -6,7 +6,7 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 
 ## Peníze teď
 
-- Zaznamenané náklady se počítají z uložené historie API volání. Podepsané rozhodnutí `budget-2026-08e` nastavuje společný limit **$30 / měsíc**, z toho $25 pro modely a $1.00 denně. Při 80 % systém varuje; při 100 % nebo po třech vyčerpaných dnech další náklady zastaví.
+- Zaznamenané náklady se počítají z uložené historie API volání. Podepsané rozhodnutí `budget-2026-08e` nastavuje společný limit **$30 / měsíc**, z toho $25 pro modely a $1.00 denně. Při 80 % systém varuje; při 100 % nebo po třech vyčerpaných dnech další náklady zastaví. Soubor fixních nákladů nyní uvádí $0, ale předplacený kredit fal.ai ještě není smířený, takže nejde o úplně odsouhlasený all-in účet.
 - Každý externí výdaj schvaluje člověk (položka `HUMAN_APPROVAL` / `SPEND`); agent nedrží platební údaje.
 - Obrázky vytvářené přímo v kódu mají plánovaný náklad $0. Denní souhrn se nikam
   neposílá e-mailem — čte se na webu v sekci **Results**, takže nevyžaduje žádného
@@ -27,12 +27,14 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 
 - Placená firemní rada se schází jednou v 06:00. Časy 14:00 a 22:00 jsou kontrolní
   zápisy bez modelu. Odborné porady se otevřou jen s konkrétní agendou; FightAIQ také
-  při skutečné změně zdrojových dat, marketingShark jako jediný běží každý den.
+  při skutečné změně zdrojových dat, GoVIRAL má stálý pondělní běh a marketingShark
+  běží každý den. Kvórum má denní slot, ale do podepsání autority a rozpočtové kapacity
+  končí za `$0` před zdrojem i modelem.
   Nepotřebný čas stojí $0.
-- GitHub Actions běží na **pěti** rozvrzích místo dřívějších desítek překrývajících se
+- GitHub Actions běží na **třech** záložních sweep rozvrzích místo dřívějších desítek překrývajících se
   letních a zimních záznamů: jeden hodinový dispatcher pojmenuje poradu podle spouštěče,
-  který se ozval, takže zpoždění nevadí a nepotřebné běhy nevznikají. Zálohování je
-  jedno místo osmnácti.
+  který se ozval, takže zpoždění nevadí a nepotřebné běhy nevznikají. Zálohování tak
+  zůstává ve třech přehledných sweepech.
 - Přepínače agentů v `/admin` vynechají vypnuté volitelné role ještě před API voláním. Sociální texty vznikají uvnitř stávajícího článkového volání, takže kvůli nim nevzniká další volání modelu.
 - Sociální obrázky vykresluje jediný engine Design Labu z živé šablony, obsahu a
   barev konkrétní značky; stejný vstup má stejný otisk a nestojí žádné API peníze.
@@ -58,6 +60,12 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
   není možné. Zapsaný recept stojí zhruba $1.03 týdně a $4.60 měsíčně; když měsíc běží
   horko, hlídač ubírá kroky od konce, ne od začátku. Starter za $29/měsíc by sám snědl
   celý třicetidolarový limit, takže nic zde nesmí předpokládat placený plán.
+- Kvórum má deklarovanou obálku `$0.10` a jeden povolený TRIBUN běh se odhaduje na
+  `$0.05–0.07`. Živý payable rozpis by ale s touto obálkou dosáhl `$1.08` proti
+  podepsanému dennímu stropu `$1.00`; proto běh čeká na samostatné podepsané uvolnění
+  nejméně `$0.08`, nikdy na zvýšení limitu. Jeho Apify podíl je nejvýše `$2.00` uvnitř
+  stejného Free kreditu. Aktuální rezervace `$0.151` za běh se do denní kadence pod tímto
+  podílem nevejde, takže hlídač běhy vynechá. Žádný kód nesmí tarif upgradovat.
 - Doručený článek posílá do Carousel Studia jen *summary*, ne celý text, a skládá se
   aritmeticky bez volání modelu. Karusel proto nestojí nic navíc a stejný článek dá vždy
   stejné slidy.

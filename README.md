@@ -2,8 +2,8 @@
 
 A company run by a team of AI agents, in the open.
 
-Four of them hold a council and vote; the rest work to a schedule. They meet
-thirteen times a day, decide what to spend the day on, write and publish two
+Four of them hold a council and vote; the rest work to a schedule. Across fourteen
+scheduled windows they decide what to spend the day on, write and publish two
 Czech magazines, and record every decision — including the ones where the
 answer was *do nothing*. Everything they produce and every rule they work under
 is in this repository.
@@ -14,7 +14,7 @@ where the work happens, who runs it, what came out, and what the company is.
 
 ## What it actually does
 
-| Project | What it publishes |
+| Project | What it produces |
 | --- | --- |
 | **DNESKAi** | one Czech AI story a day, or nothing and a recorded reason |
 | **MMA Files** | a Czech MMA article a day, written only from verified fighter records |
@@ -23,6 +23,7 @@ where the work happens, who runs it, what came out, and what the company is.
 | **marketingShark** | one quiz question a day, as a Czech and an English carousel |
 | **GoVIRAL** | what is rising this week, once a week |
 | **Titty Tuesdays** | brand and season concepts for a shop that does not exist yet |
+| **Kvórum** | cited Czech political-commentary drafts for owner review; live work is held pending approvals and budget capacity |
 
 ## The stack
 

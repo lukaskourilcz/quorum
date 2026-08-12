@@ -5,8 +5,8 @@ ukládá výsledky tak, aby šlo zpětně dohledat, proč něco navrhla. Pevná 
 důkazy, náklady, bezpečnost a to, co smí udělat jen majitel.
 
 Aktuální stav: **v provozu, bez příjmů, ve fázi ověřování**. Web běží na Vercel Pro:
-<https://boardless-ai.vercel.app>. Systém má sedm pracovních projektů: Caught Up (veřejně
-DNESKAi), Titty Tuesdays, GoVIRAL, marketingShark, FightAIQ, Design Lab a MMA Files.
+<https://boardless-ai.vercel.app>. Systém má osm pracovních projektů: Caught Up (veřejně
+DNESKAi), Titty Tuesdays, GoVIRAL, marketingShark, FightAIQ, Design Lab, MMA Files a Kvórum.
 Magazine Incubator byl uzavřen — nové magazíny se už nevymýšlejí.
 
 **Co už publikuje (k 7. srpnu 2026):** publikují dva projekty — DNESKAi denní vydání a
@@ -14,7 +14,9 @@ MMA Files jeden článkový slot denně. Oba posílají hotový článek zárove
 Studia jako *summary* (titulek, perex a vybrané pasáže), ze kterého se skládají sociální
 karusely. Ostatní projekty zatím nepublikují; na co každý čeká, je v
 `docs/NEEDED.md`. marketingShark nepublikuje vůbec: jeho karusely vznikají rovnou
-jako koncepty ve frontě ke schválení a rozhoduje o nich majitel.
+jako koncepty ve frontě ke schválení a rozhoduje o nich majitel. Kvórum je také jen
+návrhová cesta: nemá účet, kanál ani publisher a jeho živý běh čeká na schválení a
+uvolnění kapacity v denním rozpočtu.
 
 ## Jak je systém poskládaný
 
@@ -25,7 +27,7 @@ GitHub Actions / příkazová řádka
      TypeScript řízení porad
      ├─ rozpis, agendy a výběr rolí
      ├─ limity nákladů a kontrola zdrojů
-     ├─ porady všech sedmi projektů
+     ├─ porady všech osmi projektů
      └─ jeden denní souhrn
               │
               ▼
@@ -40,9 +42,9 @@ GitHub Actions / příkazová řádka
      └─ chráněná správa projektů (rail podle projektů)
 ```
 
-V rejstříku je 42 rolí, z toho **33 aktivních**: čtyři hlasující členové rady a 29
+V rejstříku je 43 rolí, z toho **34 aktivních**: čtyři hlasující členové rady a 30
 odborných rolí. Devět rolí bylo při zeštíhlení soupisky odstaveno a veřejný web počítá
-jen ty pracující. Devatenáct aktivních rolí používá Anthropic a 14 OpenAI. Dvacet sedm
+jen ty pracující. Dvacet aktivních rolí používá Anthropic a 14 OpenAI. Dvacet sedm
 rolí má na veřejném webu svou schválenou fotografii. Novější role používají neutrální zástupný obrázek se jménem,
 dokud pro ně nevznikne schválený portrét. Web používá jména a pracovní popisy bez
 seriálového vzhledu a bez označení sezon nebo epizod. Tyto vizuální prvky se neposílají
@@ -75,22 +77,28 @@ modelům ani do podkladů porad.
   záložka `studio` v administraci ukazuje každý doručený článek obou magazínů, vykreslí
   jeho karusel skutečným enginem ve všech čtyřech formátech a nechá majitele přepnout
   rodinu, variantu, úpravu fotky, velikost písma a fázi rytmu — a to všechno je jeden
-  zapsaný recept, který si pipeline sama odvodí při doručení. Deset rodin šablon
-  (masthead, gutter, bevel, porthole, slab, terrace, figure, pull, tower, dossier)
+  zapsaný recept, který si pipeline sama odvodí při doručení. Dvacet tři rodin šablon
   nahradilo pět tapet, které byly ve třech případech tentýž rozmazaný gradient. Písma
   jsou od 9. srpna 2026 v repozitáři: třicet statických řezů pod licencí SIL OFL, takže
-  stejný deck vykreslí stejné bajty na jakémkoli stroji. Barevné sady drží pro pět
-  značek, devShark a geoShark přibyly s marketingSharkem. Nemá vlastní sociální účet,
-- **MMA Files** je veřejný anglicko-český magazín. BoardlessAI do jeho repozitáře posílá jen ověřené články a data z FightAIQ;
+  stejný deck vykreslí stejné bajty na jakémkoli stroji. Barevné sady drží pro šest
+  značek včetně Kvóra. Nemá vlastní sociální účet.
+- **MMA Files** je veřejný český magazín. BoardlessAI do jeho repozitáře posílá jen ověřené články a data z FightAIQ;
   rozepsané texty a interní poznámky zůstávají v chráněné administraci. Když FightAIQ
   nemá žádný nadcházející turnaj, redakce místo náhledu zápasu napíše profil nejlépe
   podloženého bojovníka — oba projekty na sobě nezávisí.
+- **Kvórum** má v 21:00 připravit jeden až dva původní české politické návrhy z
+  typovaných a odkazovaných tvrzení. Štít demokracie slouží jen k objevování témat;
+  fakta musí potvrdit povolené zpravodajské nebo institucionální zdroje. HACEK a AUDIT
+  hlídají jazyk, veřejné osoby, originalitu a bezpečnost. Schválení majitele vytvoří
+  pouze balíček pro Design Lab. Teď běží jen fixture důkaz za `$0`: zakládací rozhodnutí,
+  zvláštní uvolnění rozpočtové kapacity a čtyři schválení `KV-*` ještě nejsou podepsaná.
 
 ## Denní rozpis a peníze
 
-Společný pražský rozpis má 13 kontrolních časů: 05:00, 06:00, 07:00, 08:00, 09:00, 10:00,
-11:00, 13:00, 14:00, 17:00, 19:00, 20:00 a 22:00. Sloty 18:00 a 21:00 zmizely se zrušením
-večerního článkového slotu. Sedmá hodina zůstala po uzavření inkubátoru prázdná a od
+Společný pražský rozpis má 14 kontrolních časů: 05:00, 06:00, 07:00, 08:00, 09:00, 10:00,
+11:00, 13:00, 14:00, 17:00, 19:00, 20:00, 21:00 a 22:00. Slot 18:00 zmizel se zrušením
+večerního článkového slotu; v 21:00 je nyní registrovaný, ale živě zadržený stůl Kvóra.
+Sedmá hodina zůstala po uzavření inkubátoru prázdná a od
 7. srpna 2026 v ní sedí denní porada marketingSharku. Letní a zimní čas má každý
 slot vlastní spouštění a program přijme jen tu variantu, která platí pro Prahu dnes.
 
@@ -101,9 +109,10 @@ nekonalo a jedna se spustila jako sousední porada. Spouštěč poradu pojmenuje
 zpoždění už nevadí.
 
 V 06:00 rozhodne hlavní rada, které odborné porady jsou opravdu potřeba. Odpoledne a večer
-se už jen bez placených modelů zapíše stav. Porady Titty Tuesdays, GoVIRAL, Carousel
-Studia, večerní analýzy FightAIQ a redakční kontrola MMA Files se spustí jen s platnou
-agendou.
+se už jen bez placených modelů zapíše stav. Porady Titty Tuesdays, večerní analýzy
+FightAIQ a redakční kontrola MMA Files se spustí jen s platnou agendou. GoVIRAL má
+stálý pondělní brief; Design Lab nemá placenou poradu. Kvórum se probudí podle rozpisu,
+ale bez podepsané autority a rozpočtové kapacity skončí před externím zdrojem i modelem.
 
 Když nějaká brána poradu vypne, zapíše se do `state/meetings/skips/` důvod a kalendář slot
 označí jako **Skipped** s vysvětlením v popisku. Prázdný den tak řekne, kterou bránu
@@ -114,6 +123,12 @@ z toho 25 dolarů pro modely a API a denní tempo 1,00 dolaru. Nahrazuje starš�
 `budget-2026-08d` (50 / 42 / 2,20). Jeden resolver drží tyto částky pro celý běh; každá
 fáze si limit smí jen utáhnout, nikdy povolit. Systém si limit nesmí zvýšit sám a platby
 vždy provádí člověk.
+
+Stávající nejhorší den rezervuje 0,98 dolaru. Deklarovaná obálka Kvóra 0,10 dolaru by
+součet zvedla na 1,08, proto není živě splatná, dokud samostatné podepsané rozhodnutí
+neuvolní nejméně 0,08 dolaru bez zvýšení limitu. Jeden povolený běh TRIBUNu se odhaduje
+na 0,05–0,07 dolaru. Apify má zvláštní podíl nejvýše 2 dolary v existujícím Free kreditu;
+hlídač smí běh zastavit, ale nesmí změnit tarif.
 
 ### Jak se vybírá obrázek k článku
 
