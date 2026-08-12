@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Charles_Oliveira",
       "publisher": "Wikipedia",
       "title": "Charles Oliveira",
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -68,7 +68,7 @@
         "source:wikipedia:27167974",
         "source:wikipedia:43536705"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -392,19 +392,19 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 1.233607,
-        "layoffDays": 154
+        "layoffDays": 158
       },
-      "updatedAt": "2026-08-08T06:01:41.482Z"
+      "updatedAt": "2026-08-12T06:01:46.400Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1829.31922888,
-    "deviation": 132.11523354,
-    "volatility": 0.06000832,
+    "rating": 1842.69261254,
+    "deviation": 133.66508838,
+    "volatility": 0.06001026,
     "boutCount": 14,
     "asOfBoutRef": "ufc:bout:history-c6fc64313b7df511bca8",
-    "updatedAt": "2026-08-08T06:01:41.482Z"
+    "updatedAt": "2026-08-12T06:01:46.400Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2493,11 +2493,28 @@
         "source:wikipedia:43536705"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:27167974",
+        "source:wikipedia:44264537",
+        "source:wikipedia:43536705"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.75,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

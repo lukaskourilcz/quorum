@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-217771be5eceafef52ef",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-tsarukyan-vs-hooker",
+    "name": "UFC Fight Night: Tsarukyan vs. Hooker",
+    "startsAtUtc": "2025-11-22T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alex-perez",
+    "blue": "ufc:asu-almabayev"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2025-11-22T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:58085526"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-12T06:01:46.400Z",
+    "lastSeenAt": "2026-08-12T06:01:46.400Z",
+    "sourceRefs": [
+      "source:wikipedia:58085526"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:58085526"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Submission (guillotine choke)",
+    "round": 3,
+    "elapsedSeconds": 622,
+    "sourceRefs": [
+      "source:wikipedia:58085526"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:58085526"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-12T06:01:46.400Z"
+}

@@ -3,18 +3,30 @@
   "status": "success",
   "processed": 12,
   "artifacts": [
-    "mma/fighters/oktagon:losene-keita.json",
-    "mma/fighters/oktagon:lucia-szabova.json",
-    "mma/fighters/oktagon:will-fleury.json",
+    "mma/bouts/ufc/history-09c80cfe04f52a332ec8.json",
+    "mma/bouts/ufc/history-217771be5eceafef52ef.json",
+    "mma/bouts/ufc/history-2db32e338c232d0f42a5.json",
+    "mma/bouts/ufc/history-2f758f2cb4c60700681d.json",
+    "mma/bouts/ufc/history-3685f0417ff380f97a0f.json",
+    "mma/bouts/ufc/history-491f5a23325580503928.json",
+    "mma/bouts/ufc/history-58a318e18d2d1942068b.json",
+    "mma/bouts/ufc/history-6730cadbdb6bdaac73ab.json",
+    "mma/bouts/ufc/history-7e4ae36c3b2285849e9b.json",
+    "mma/bouts/ufc/history-8d40ed3080b08a1cbf3e.json",
+    "mma/bouts/ufc/history-a9a4467cd60cff09e5db.json",
+    "mma/bouts/ufc/history-e024d94249da03aa942c.json",
+    "mma/fighters/oktagon:niamh-kinehan.json",
     "mma/fighters/ufc:ailin-perez.json",
     "mma/fighters/ufc:alateng-heili.json",
+    "mma/fighters/ufc:alex-perez.json",
+    "mma/fighters/ufc:alexa-grasso.json",
     "mma/fighters/ufc:andre-lima.json",
     "mma/fighters/ufc:andre-petroski.json",
-    "mma/fighters/ufc:anshul-jubli.json",
     "mma/fighters/ufc:anthony-hernandez.json",
-    "mma/fighters/ufc:azamat-murzakanov.json",
+    "mma/fighters/ufc:aori-qileng.json",
     "mma/fighters/ufc:brando-pericic.json",
-    "mma/fighters/ufc:conor-mcgregor.json"
+    "mma/fighters/ufc:brandon-moreno.json",
+    "mma/fighters/ufc:yair-rodriguez.json"
   ],
-  "generatedAt": "2026-08-08T06:01:41.482Z"
+  "generatedAt": "2026-08-12T06:01:46.400Z"
 }

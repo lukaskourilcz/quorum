@@ -14,7 +14,7 @@
   },
   "division": "womens-flyweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-03:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-12T06:01:46.400Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
+      ],
+      "note": "Result read from the UFC Fight Night: Gamrot vs. Salkilld article after the event."
     }
   ],
   "discovery": {
@@ -39,9 +47,18 @@
     "source:wikipedia:2026-08-03:List of UFC events",
     "source:wikipedia:2026-08-04:List of UFC events",
     "source:wikipedia:2026-08-05:List of UFC events",
-    "source:wikipedia:2026-08-06:List of UFC events"
+    "source:wikipedia:2026-08-06:List of UFC events",
+    "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "Submission (rear-naked choke)",
+    "round": 2,
+    "elapsedSeconds": 398,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -56,7 +73,19 @@
         "source:wikipedia:2026-08-03:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
+      ],
+      "note": "Juliana Miller def. Ravena Oliveira by Submission (rear-naked choke)."
     }
   ],
-  "updatedAt": "2026-08-03T18:21:31.449Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

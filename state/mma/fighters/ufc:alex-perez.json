@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alex_Perez_(fighter)",
       "publisher": "Wikipedia",
       "title": "Alex Perez (fighter)",
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -78,36 +78,39 @@
         "source:wikipedia:58085526",
         "source:wikipedia:77593874"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "verified",
       "corroborated": true
     },
     "dateOfBirth": {
       "value": "1992-03-21",
       "sourceRefs": [
-        "source:wikidata:Q48471390"
+        "source:wikidata:Q48471390",
+        "source:wikipedia:58085526"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 168,
       "sourceRefs": [
-        "source:wikidata:Q48471390"
+        "source:wikidata:Q48471390",
+        "source:wikipedia:58085526"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "status": "verified",
+      "corroborated": true
     },
     "division": {
       "value": "flyweight",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-04:fighter:08563cfe-baae-43d3-9984-e0dcb0d7f606"
+        "source:cito-ufc:2026-08-04:fighter:08563cfe-baae-43d3-9984-e0dcb0d7f606",
+        "source:wikipedia:58085526"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "status": "verified",
+      "corroborated": true
     },
     "record": {
       "value": "26-10-0",
@@ -126,6 +129,24 @@
       "retrievedAt": "2026-08-04T07:29:35.203Z",
       "status": "provisional",
       "corroborated": false
+    },
+    "reachCm": {
+      "value": 165.1,
+      "sourceRefs": [
+        "source:wikipedia:58085526"
+      ],
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Team Oyama",
+      "sourceRefs": [
+        "source:wikipedia:58085526"
+      ],
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "status": "provisional",
+      "corroborated": false
     }
   },
   "criticalFields": [
@@ -133,8 +154,38 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
+  "discrepancies": [
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "26-10-0",
+          "sourceRef": "source:cito-ufc:2026-08-04:fighter:08563cfe-baae-43d3-9984-e0dcb0d7f606"
+        },
+        {
+          "value": "26-10-0 (1 NC)",
+          "sourceRef": "source:wikipedia:58085526"
+        }
+      ],
+      "status": "open"
+    }
+  ],
   "history": [
+    {
+      "boutRef": "ufc:bout:history-09c80cfe04f52a332ec8",
+      "eventRef": "ufc:event:history-ufc-255",
+      "happenedAt": "2020-11-21T00:00:00.000Z",
+      "opponentRef": "ufc:deiveson-figueiredo",
+      "result": "loss",
+      "method": "Submission (guillotine choke)",
+      "round": 1,
+      "elapsedSeconds": 117,
+      "sourceRefs": [
+        "source:wikipedia:58085526"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
     {
       "boutRef": "ufc:bout:history-db14bc8a572a985ca6da",
       "eventRef": "ufc:event:history-ufc-277",
@@ -179,6 +230,21 @@
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-217771be5eceafef52ef",
+      "eventRef": "ufc:event:history-ufc-fight-night-tsarukyan-vs-hooker",
+      "happenedAt": "2025-11-22T00:00:00.000Z",
+      "opponentRef": "ufc:asu-almabayev",
+      "result": "loss",
+      "method": "Submission (guillotine choke)",
+      "round": 3,
+      "elapsedSeconds": 622,
+      "sourceRefs": [
+        "source:wikipedia:58085526"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
     }
   ],
   "statsProfiles": [
@@ -188,11 +254,11 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:alex-perez:history",
-      "bouts": 3,
+      "bouts": 5,
       "values": {
-        "bouts": 3,
+        "bouts": 5,
         "wins": 0,
-        "losses": 3,
+        "losses": 5,
         "draws": 0,
         "noContests": 0,
         "finishRate": null,
@@ -202,32 +268,30 @@
         "koTkoWinShare": null,
         "submissionWinShare": null,
         "decisionWinShare": null,
-        "averageElapsedSeconds": 268,
+        "averageElapsedSeconds": 308.6,
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
-        "fightsPerYear": 0.603208,
-        "layoffDays": 259
+        "fightsPerYear": 0.799655,
+        "layoffDays": 263
       },
-      "updatedAt": "2026-08-08T06:01:41.482Z"
+      "updatedAt": "2026-08-12T06:01:46.400Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1327.03359751,
-    "deviation": 235.10251092,
-    "volatility": 0.05999764,
-    "boutCount": 3,
-    "asOfBoutRef": "ufc:bout:history-0ccdd49e0d34e5150f0a",
-    "updatedAt": "2026-08-08T06:01:41.482Z"
+    "rating": 1287.51857424,
+    "deviation": 217.91608069,
+    "volatility": 0.05999658,
+    "boutCount": 5,
+    "asOfBoutRef": "ufc:bout:history-217771be5eceafef52ef",
+    "updatedAt": "2026-08-12T06:01:46.400Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "reachCm",
-      "team",
       "record-history-incomplete"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-08-12T06:01:46.400Z"
   },
   "changeLog": [
     {
@@ -1547,11 +1611,46 @@
         "source:wikipedia:77593874"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:58085526"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 37 historical fight rows."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:58085526",
+        "source:wikipedia:54180928",
+        "source:wikipedia:77593874"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.75,
-  "corroboration": 0.125,
+  "completeness": 1,
+  "corroboration": 0.5,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

@@ -192,25 +192,31 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-12-cu-edition",
-      "decisionOneLiner": "Gemini překonal miliardu uživatelů za kratší dobu než jakýkoli jiný produkt Googlu, čímž se přímý souboj s ChatGPT stává měřitelným – a tato změna měřítka zasahuje každého, kdo sta"
+      "decisionOneLiner": "The finished edition failed its content checks on the way out, so it was not published. The owner has the technical report."
     },
     {
       "at": "2026-08-12T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-12-morning",
+      "decisionOneLiner": "The council held the internal work item. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-08-12T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ms-daily",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-12-ms-daily",
+      "decisionOneLiner": "No package was drafted. devshark: model-output-invalid."
     },
     {
       "at": "2026-08-12T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-intake",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-12-mma-intake",
+      "decisionOneLiner": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
     },
     {
       "at": "2026-08-12T07:00:00.000Z",

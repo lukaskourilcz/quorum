@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Deiveson_Figueiredo",
       "publisher": "Wikipedia",
       "title": "Deiveson Figueiredo",
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q48122905",
         "source:wikipedia:56637932"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "verified",
       "corroborated": true
     },
@@ -120,6 +120,81 @@
       "status": "provisional"
     },
     {
+      "boutRef": "ufc:bout:history-09c80cfe04f52a332ec8",
+      "eventRef": "ufc:event:history-ufc-255",
+      "happenedAt": "2020-11-21T00:00:00.000Z",
+      "opponentRef": "ufc:alex-perez",
+      "result": "win",
+      "method": "Submission (guillotine choke)",
+      "round": 1,
+      "elapsedSeconds": 117,
+      "sourceRefs": [
+        "source:wikipedia:58085526"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3685f0417ff380f97a0f",
+      "eventRef": "ufc:event:history-ufc-256",
+      "happenedAt": "2020-12-12T00:00:00.000Z",
+      "opponentRef": "ufc:brandon-moreno",
+      "result": "draw",
+      "method": "Draw (majority)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-2db32e338c232d0f42a5",
+      "eventRef": "ufc:event:history-ufc-263",
+      "happenedAt": "2021-06-12T00:00:00.000Z",
+      "opponentRef": "ufc:brandon-moreno",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": 3,
+      "elapsedSeconds": 746,
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-7e4ae36c3b2285849e9b",
+      "eventRef": "ufc:event:history-ufc-270",
+      "happenedAt": "2022-01-22T00:00:00.000Z",
+      "opponentRef": "ufc:brandon-moreno",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-e024d94249da03aa942c",
+      "eventRef": "ufc:event:history-ufc-283",
+      "happenedAt": "2023-01-21T00:00:00.000Z",
+      "opponentRef": "ufc:brandon-moreno",
+      "result": "loss",
+      "method": "TKO (doctor stoppage)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "ufc:bout:history-1e1b3b9c5233c57e1e28",
       "eventRef": "ufc:event:history-ufc-300",
       "happenedAt": "2024-04-13T00:00:00.000Z",
@@ -172,37 +247,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:deiveson-figueiredo:history",
-      "bouts": 5,
+      "bouts": 10,
       "values": {
-        "bouts": 5,
-        "wins": 4,
-        "losses": 1,
-        "draws": 0,
+        "bouts": 10,
+        "wins": 6,
+        "losses": 3,
+        "draws": 1,
         "noContests": 0,
         "finishRate": 0.5,
         "koTkoWins": 0,
-        "submissionWins": 2,
-        "decisionWins": 2,
+        "submissionWins": 3,
+        "decisionWins": 3,
         "koTkoWinShare": 0,
         "submissionWinShare": 0.5,
         "decisionWinShare": 0.5,
-        "averageElapsedSeconds": 876.8,
+        "averageElapsedSeconds": 914.7,
         "recentThreeWinRate": 0.666667,
-        "recentFiveWinRate": 0.8,
-        "fightsPerYear": 0.750755,
-        "layoffDays": 623
+        "recentFiveWinRate": 0.6,
+        "fightsPerYear": 1.6892,
+        "layoffDays": 627
       },
-      "updatedAt": "2026-08-08T06:01:41.482Z"
+      "updatedAt": "2026-08-12T06:01:46.400Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1725.16599333,
-    "deviation": 219.03493755,
-    "volatility": 0.06000827,
-    "boutCount": 5,
+    "rating": 1579.25949009,
+    "deviation": 165.8036507,
+    "volatility": 0.06001491,
+    "boutCount": 9,
     "asOfBoutRef": "ufc:bout:history-1a491f49349fa4b20a30",
-    "updatedAt": "2026-08-08T06:01:41.482Z"
+    "updatedAt": "2026-08-12T06:01:46.400Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1566,11 +1641,28 @@
         "source:wikipedia:57503647"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:58085526",
+        "source:wikipedia:52475971",
+        "source:wikipedia:47163936",
+        "source:wikipedia:57503647"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

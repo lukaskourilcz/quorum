@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Conor_McGregor",
       "publisher": "Wikipedia",
       "title": "Conor McGregor",
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q5162259",
         "source:wikipedia:38738224"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "verified",
       "corroborated": true
     },

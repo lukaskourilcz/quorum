@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-2db32e338c232d0f42a5",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-263",
+    "name": "UFC 263",
+    "startsAtUtc": "2021-06-12T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:brandon-moreno",
+    "blue": "ufc:deiveson-figueiredo"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2021-06-12T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-12T06:01:46.400Z",
+    "lastSeenAt": "2026-08-12T06:01:46.400Z",
+    "sourceRefs": [
+      "source:wikipedia:52475971"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:52475971"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (rear-naked choke)",
+    "round": 3,
+    "elapsedSeconds": 746,
+    "sourceRefs": [
+      "source:wikipedia:52475971"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-12T06:01:46.400Z"
+}

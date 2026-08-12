@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Bogdan_Guskov",
       "publisher": "Wikipedia",
       "title": "Bogdan Guskov",
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q85859462",
         "source:wikipedia:76773370"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "verified",
       "corroborated": true
     },
@@ -221,9 +221,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.5,
         "fightsPerYear": 3.40288,
-        "layoffDays": 245
+        "layoffDays": 249
       },
-      "updatedAt": "2026-08-08T06:01:41.482Z"
+      "updatedAt": "2026-08-12T06:01:46.400Z"
     }
   ],
   "rating": {
@@ -233,7 +233,7 @@
     "volatility": 0.05999893,
     "boutCount": 2,
     "asOfBoutRef": "ufc:bout:history-ad11fa27831b22661f51",
-    "updatedAt": "2026-08-08T06:01:41.482Z"
+    "updatedAt": "2026-08-12T06:01:46.400Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1645,11 +1645,27 @@
         "source:wikipedia:82830749"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:76773370",
+        "source:wikipedia:82830749"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

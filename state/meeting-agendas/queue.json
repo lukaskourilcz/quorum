@@ -91,7 +91,25 @@
       "status": "consumed",
       "consumedBy": "20260808180102-mag-desk",
       "consumedAt": "2026-08-08T18:01:02.163Z"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-1fcf46150d8978db",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-12-mma-intake",
+      "summary": "Decide: unblock model run by confirming odds data key structure from the-odds-api capture, or delay UFC 330 probability output until critical fighter fields (height, reach, stance) reach two-source agreement on 50 named gaps.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-12",
+        "source:cito-ufc:2026-08-12"
+      ],
+      "requestedAt": "2026-08-12T06:01:46.400Z",
+      "notBefore": "2026-08-12",
+      "expiresAt": "2026-08-15T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-08T18:01:02.163Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

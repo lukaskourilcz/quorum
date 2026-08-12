@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-rei-tsuruya-vs-kevin-borjas-8",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:ufc-fight-night-nurmagomedov-vs-song",
+    "name": "UFC Fight Night: Nurmagomedov vs. Song",
+    "startsAtUtc": "2026-08-29T00:00:00.000Z",
+    "venue": "SPD Bank Oriental Sports Center"
+  },
+  "fighters": {
+    "red": "ufc:rei-tsuruya",
+    "blue": "ufc:kevin-borjas"
+  },
+  "division": "flyweight",
+  "scheduledRounds": 3,
+  "status": "announced",
+  "statusHistory": [
+    {
+      "status": "announced",
+      "at": "2026-08-12T06:01:46.400Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-12:List of UFC events"
+      ],
+      "note": "Status imported from the Cito event listing."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-12T06:01:46.400Z",
+    "lastSeenAt": "2026-08-12T06:01:46.400Z",
+    "sourceRefs": [
+      "source:wikipedia:2026-08-12:List of UFC events"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:2026-08-12:List of UFC events"
+  ],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "created",
+      "fields": [
+        "event",
+        "fighters",
+        "status"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-12:List of UFC events"
+      ],
+      "note": "Discovered on the approved Cito free-tier intake."
+    }
+  ],
+  "updatedAt": "2026-08-12T06:01:46.400Z"
+}

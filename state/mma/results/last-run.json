@@ -4,17 +4,63 @@
   "windowDays": 10,
   "cards": [
     {
-      "name": "Oktagon 92: Szabová vs. Pudilová",
-      "startsAtUtc": "2026-08-01T00:00:00.000Z",
-      "results": 117
-    },
-    {
-      "name": "UFC Fight Night: Medić vs. Rodriguez",
-      "startsAtUtc": "2026-08-01T00:00:00.000Z",
-      "results": 14
+      "name": "UFC Fight Night: Gamrot vs. Salkilld",
+      "startsAtUtc": "2026-08-08T00:00:00.000Z",
+      "results": 12
     }
   ],
-  "applied": [],
-  "untracked": 131,
-  "generatedAt": "2026-08-08T06:01:41.482Z"
+  "applied": [
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-mateusz-gamrot-vs-quillan-salkilld-1",
+      "winner": "blue",
+      "method": "Submission (rear-naked choke)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-carlos-diego-ferreira-vs-billy-quarantillo-2",
+      "winner": "red",
+      "method": "Decision (unanimous)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-darren-elkins-vs-yadier-del-valle-3",
+      "winner": "blue",
+      "method": "TKO (punch)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-amanda-lemos-vs-alexia-thainara-9",
+      "winner": "blue",
+      "method": "Decision (unanimous)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-ty-miller-vs-billy-ray-goff-6",
+      "winner": "red",
+      "method": "TKO (punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-steven-asplund-vs-guilherme-pat-8",
+      "winner": "red",
+      "method": "Decision (unanimous)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-diyar-nurgozhay-vs-bruno-lopes-7",
+      "winner": "red",
+      "method": "TKO (punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-manoel-sousa-vs-richie-miranda-9",
+      "winner": "red",
+      "method": "Decision (unanimous)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-juliana-miller-vs-ravena-oliveira-11",
+      "winner": "red",
+      "method": "Submission (rear-naked choke)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-giovanna-canuto-vs-carol-foro-12",
+      "winner": "blue",
+      "method": "Decision (unanimous)"
+    }
+  ],
+  "untracked": 2,
+  "generatedAt": "2026-08-12T06:01:46.400Z"
 }

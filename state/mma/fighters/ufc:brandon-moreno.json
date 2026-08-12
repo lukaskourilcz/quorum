@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Brandon_Moreno",
       "publisher": "Wikipedia",
       "title": "Brandon Moreno",
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -69,25 +69,54 @@
         "source:wikipedia:52475971",
         "source:wikipedia:64585580"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "verified",
       "corroborated": true
     },
     "dateOfBirth": {
       "value": "1993-12-07",
       "sourceRefs": [
-        "source:wikidata:Q27957350"
+        "source:wikidata:Q27957350",
+        "source:wikipedia:52475971"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 170,
       "sourceRefs": [
-        "source:wikidata:Q27957350"
+        "source:wikidata:Q27957350",
+        "source:wikipedia:52475971"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "division": {
+      "value": "flyweight",
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Entram Gym (2006–2022) Bang Muay Thai Team Elevation",
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "23-10-2",
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -160,6 +189,81 @@
       "status": "provisional"
     },
     {
+      "boutRef": "ufc:bout:history-491f5a23325580503928",
+      "eventRef": "ufc:event:history-ufc-255",
+      "happenedAt": "2020-11-21T00:00:00.000Z",
+      "opponentRef": "ufc:brandon-royval",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 1,
+      "elapsedSeconds": 299,
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3685f0417ff380f97a0f",
+      "eventRef": "ufc:event:history-ufc-256",
+      "happenedAt": "2020-12-12T00:00:00.000Z",
+      "opponentRef": "ufc:deiveson-figueiredo",
+      "result": "draw",
+      "method": "Draw (majority)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-2db32e338c232d0f42a5",
+      "eventRef": "ufc:event:history-ufc-263",
+      "happenedAt": "2021-06-12T00:00:00.000Z",
+      "opponentRef": "ufc:deiveson-figueiredo",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": 3,
+      "elapsedSeconds": 746,
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-7e4ae36c3b2285849e9b",
+      "eventRef": "ufc:event:history-ufc-270",
+      "happenedAt": "2022-01-22T00:00:00.000Z",
+      "opponentRef": "ufc:deiveson-figueiredo",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-e024d94249da03aa942c",
+      "eventRef": "ufc:event:history-ufc-283",
+      "happenedAt": "2023-01-21T00:00:00.000Z",
+      "opponentRef": "ufc:deiveson-figueiredo",
+      "result": "win",
+      "method": "TKO (doctor stoppage)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "ufc:bout:history-377248a648d05553a52b",
       "eventRef": "ufc:event:history-ufc-290",
       "happenedAt": "2023-07-08T00:00:00.000Z",
@@ -185,6 +289,21 @@
       "elapsedSeconds": 1500,
       "sourceRefs": [
         "source:wikipedia:54180928"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-2f758f2cb4c60700681d",
+      "eventRef": "ufc:event:history-ufc-fight-night-moreno-vs-royval-2",
+      "happenedAt": "2024-02-24T00:00:00.000Z",
+      "opponentRef": "ufc:brandon-royval",
+      "result": "loss",
+      "method": "Decision (split)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:52475971"
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
@@ -227,48 +346,46 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:brandon-moreno:history",
-      "bouts": 8,
+      "bouts": 14,
       "values": {
-        "bouts": 8,
-        "wins": 2,
-        "losses": 6,
-        "draws": 0,
+        "bouts": 14,
+        "wins": 5,
+        "losses": 8,
+        "draws": 1,
         "noContests": 0,
-        "finishRate": 0,
-        "koTkoWins": 0,
-        "submissionWins": 0,
+        "finishRate": 0.6,
+        "koTkoWins": 2,
+        "submissionWins": 1,
         "decisionWins": 2,
-        "koTkoWinShare": 0,
-        "submissionWinShare": 0,
-        "decisionWinShare": 1,
-        "averageElapsedSeconds": 1300,
+        "koTkoWinShare": 0.4,
+        "submissionWinShare": 0.2,
+        "decisionWinShare": 0.4,
+        "averageElapsedSeconds": 1187.083333,
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.4,
-        "fightsPerYear": 0.294719,
-        "layoffDays": 644
+        "fightsPerYear": 0.547335,
+        "layoffDays": 648
       },
-      "updatedAt": "2026-08-08T06:01:41.482Z"
+      "updatedAt": "2026-08-12T06:01:46.400Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1629.76325534,
-    "deviation": 204.76951554,
-    "volatility": 0.06001414,
-    "boutCount": 8,
+    "rating": 1639.35378097,
+    "deviation": 143.12870944,
+    "volatility": 0.06002573,
+    "boutCount": 13,
     "asOfBoutRef": "ufc:bout:history-e5ac17f2c927ab8a95da",
-    "updatedAt": "2026-08-08T06:01:41.482Z"
+    "updatedAt": "2026-08-12T06:01:46.400Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
       "stance",
       "reachCm",
-      "team"
+      "record-history-incomplete"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-08-12T06:01:46.400Z"
   },
   "changeLog": [
     {
@@ -1566,11 +1683,45 @@
         "source:wikipedia:64585580"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:52475971"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 35 historical fight rows."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:52475971",
+        "source:wikipedia:64585580"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.375,
-  "corroboration": 0.125,
+  "completeness": 0.75,
+  "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

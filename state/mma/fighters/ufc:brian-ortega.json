@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Brian_Ortega",
       "publisher": "Wikipedia",
       "title": "Brian Ortega",
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q4964959",
         "source:wikipedia:32815938"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "verified",
       "corroborated": true
     },
@@ -105,6 +105,36 @@
       "status": "provisional"
     },
     {
+      "boutRef": "ufc:bout:history-a9a4467cd60cff09e5db",
+      "eventRef": "ufc:event:history-ufc-on-abc-ortega-vs-rodriguez",
+      "happenedAt": "2022-07-16T00:00:00.000Z",
+      "opponentRef": "ufc:yair-rodriguez",
+      "result": "loss",
+      "method": "TKO (shoulder injury)",
+      "round": 1,
+      "elapsedSeconds": 251,
+      "sourceRefs": [
+        "source:wikipedia:45514815"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-58a318e18d2d1942068b",
+      "eventRef": "ufc:event:history-ufc-fight-night-moreno-vs-royval-2",
+      "happenedAt": "2024-02-24T00:00:00.000Z",
+      "opponentRef": "ufc:yair-rodriguez",
+      "result": "win",
+      "method": "Submission (arm-triangle choke)",
+      "round": 3,
+      "elapsedSeconds": 658,
+      "sourceRefs": [
+        "source:wikipedia:45514815"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "ufc:bout:history-95faa601524261cb2b4c",
       "eventRef": "ufc:event:history-ufc-fight-night-walker-vs-zhang",
       "happenedAt": "2025-08-23T00:00:00.000Z",
@@ -142,37 +172,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:brian-ortega:history",
-      "bouts": 3,
+      "bouts": 5,
       "values": {
-        "bouts": 3,
-        "wins": 0,
-        "losses": 3,
+        "bouts": 5,
+        "wins": 1,
+        "losses": 4,
         "draws": 0,
         "noContests": 0,
-        "finishRate": null,
+        "finishRate": 1,
         "koTkoWins": 0,
-        "submissionWins": 0,
+        "submissionWins": 1,
         "decisionWins": 0,
-        "koTkoWinShare": null,
-        "submissionWinShare": null,
-        "decisionWinShare": null,
-        "averageElapsedSeconds": 1500,
-        "recentThreeWinRate": 0,
-        "recentFiveWinRate": 0,
-        "fightsPerYear": 0.511544,
-        "layoffDays": 350
+        "koTkoWinShare": 0,
+        "submissionWinShare": 1,
+        "decisionWinShare": 0,
+        "averageElapsedSeconds": 1081.8,
+        "recentThreeWinRate": 0.333333,
+        "recentFiveWinRate": 0.2,
+        "fightsPerYear": 1.023088,
+        "layoffDays": 354
       },
-      "updatedAt": "2026-08-08T06:01:41.482Z"
+      "updatedAt": "2026-08-12T06:01:46.400Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1300.42983488,
-    "deviation": 231.97031716,
-    "volatility": 0.05999774,
-    "boutCount": 3,
+    "rating": 1492.61864379,
+    "deviation": 197.69690516,
+    "volatility": 0.0600031,
+    "boutCount": 5,
     "asOfBoutRef": "ufc:bout:history-9e76bacdf60736d621e7",
-    "updatedAt": "2026-08-08T06:01:41.482Z"
+    "updatedAt": "2026-08-12T06:01:46.400Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1464,11 +1494,26 @@
         "source:wikipedia:43320208"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54197580",
+        "source:wikipedia:45514815",
+        "source:wikipedia:43320208"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

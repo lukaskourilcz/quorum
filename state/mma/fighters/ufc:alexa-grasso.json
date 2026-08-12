@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexa_Grasso",
       "publisher": "Wikipedia",
       "title": "Alexa Grasso",
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q19560601",
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "verified",
       "corroborated": true
     },
@@ -78,7 +78,7 @@
         "source:wikidata:Q19560601",
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "verified",
       "corroborated": true
     },
@@ -87,7 +87,7 @@
       "sourceRefs": [
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -96,7 +96,7 @@
       "sourceRefs": [
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -105,7 +105,7 @@
       "sourceRefs": [
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -115,7 +115,7 @@
         "source:cito-ufc:2026-08-04:fighter:e8caf0f5-561e-4362-bf77-17481b3b4360",
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "verified",
       "corroborated": true
     },
@@ -124,7 +124,7 @@
       "sourceRefs": [
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -575,9 +575,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.2,
         "fightsPerYear": 1.808504,
-        "layoffDays": 133
+        "layoffDays": 137
       },
-      "updatedAt": "2026-08-08T06:01:41.482Z"
+      "updatedAt": "2026-08-12T06:01:46.400Z"
     }
   ],
   "rating": {
@@ -587,14 +587,14 @@
     "volatility": 0.06000634,
     "boutCount": 23,
     "asOfBoutRef": "ufc:bout:history-003f7730458fdcb19f97",
-    "updatedAt": "2026-08-08T06:01:41.482Z"
+    "updatedAt": "2026-08-12T06:01:46.400Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "record-history-mismatch"
     ],
-    "lastReviewedAt": "2026-08-03T18:14:46.640Z"
+    "lastReviewedAt": "2026-08-12T06:01:46.400Z"
   },
   "changeLog": [
     {
@@ -2016,11 +2016,44 @@
         "source:wikipedia:45441761"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 22 historical fight rows."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:45441761"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

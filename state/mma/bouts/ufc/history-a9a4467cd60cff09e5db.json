@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-a9a4467cd60cff09e5db",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-on-abc-ortega-vs-rodriguez",
+    "name": "UFC on ABC: Ortega vs. Rodríguez",
+    "startsAtUtc": "2022-07-16T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:yair-rodriguez",
+    "blue": "ufc:brian-ortega"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2022-07-16T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:45514815"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-12T06:01:46.400Z",
+    "lastSeenAt": "2026-08-12T06:01:46.400Z",
+    "sourceRefs": [
+      "source:wikipedia:45514815"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:45514815"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "TKO (shoulder injury)",
+    "round": 1,
+    "elapsedSeconds": 251,
+    "sourceRefs": [
+      "source:wikipedia:45514815"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:45514815"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-12T06:01:46.400Z"
+}

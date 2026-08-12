@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Amanda_Lemos",
       "publisher": "Wikipedia",
       "title": "Amanda Lemos",
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q98684485",
         "source:wikipedia:64535234"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "verified",
       "corroborated": true
     },
@@ -548,6 +548,21 @@
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-amanda-lemos-vs-alexia-thainara-9",
+      "eventRef": "ufc:event:ufc-fight-night-gamrot-vs-salkilld",
+      "happenedAt": "2026-08-08T00:00:00.000Z",
+      "opponentRef": "ufc:alexia-thainara",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
     }
   ],
   "statsProfiles": [
@@ -557,11 +572,11 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:amanda-lemos:history",
-      "bouts": 25,
+      "bouts": 26,
       "values": {
-        "bouts": 25,
+        "bouts": 26,
         "wins": 16,
-        "losses": 8,
+        "losses": 9,
         "draws": 1,
         "noContests": 0,
         "finishRate": 0.6875,
@@ -571,23 +586,23 @@
         "koTkoWinShare": 0.5,
         "submissionWinShare": 0.1875,
         "decisionWinShare": 0.3125,
-        "averageElapsedSeconds": 594.8,
-        "recentThreeWinRate": 0.333333,
-        "recentFiveWinRate": 0.4,
-        "fightsPerYear": 2.058671,
-        "layoffDays": 147
+        "averageElapsedSeconds": 606.538462,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0.2,
+        "fightsPerYear": 2.072886,
+        "layoffDays": 4
       },
-      "updatedAt": "2026-08-08T06:01:41.482Z"
+      "updatedAt": "2026-08-12T06:01:46.400Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1693.61382775,
-    "deviation": 110.58024534,
-    "volatility": 0.06000375,
-    "boutCount": 24,
-    "asOfBoutRef": "ufc:bout:history-f3f8254560f471a33a23",
-    "updatedAt": "2026-08-08T06:01:41.482Z"
+    "rating": 1662.62527819,
+    "deviation": 108.91690144,
+    "volatility": 0.06000505,
+    "boutCount": 25,
+    "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-amanda-lemos-vs-alexia-thainara-9",
+    "updatedAt": "2026-08-12T06:01:46.400Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2058,11 +2073,27 @@
         "source:wikipedia:64535234"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64535234",
+        "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

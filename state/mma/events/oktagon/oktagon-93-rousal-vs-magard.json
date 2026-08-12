@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "event-card/1",
+  "id": "oktagon:event:oktagon-93-rousal-vs-magard",
+  "org": "oktagon",
+  "name": "Oktagon 93: Roušal vs. Mågård",
+  "venue": "Winning Group Arena",
+  "startsAtLocal": "2026-09-12T00:00:00.000Z",
+  "timeZone": "UTC",
+  "startsAtUtc": "2026-09-12T00:00:00.000Z",
+  "sourceRefs": [
+    "source:wikipedia:2026-08-12:2026 in Oktagon MMA"
+  ],
+  "bouts": [
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:radek-rousal-vs-jonas-magard-1",
+      "red": "oktagon:radek-rousal",
+      "blue": "oktagon:jonas-magard",
+      "division": "featherweight",
+      "scheduledRounds": 5,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:andrej-kalasnik-vs-kennedy-rayomba-2",
+      "red": "oktagon:andrej-kalasnik",
+      "blue": "oktagon:kennedy-rayomba",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:vladimir-lengal-vs-maurice-adorf-3",
+      "red": "oktagon:vladimir-lengal",
+      "blue": "oktagon:maurice-adorf",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:josef-hala-vs-radovan-uskrt-4",
+      "red": "oktagon:josef-hala",
+      "blue": "oktagon:radovan-uskrt",
+      "division": "catchweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:jakub-dohnal-vs-vojto-barborik-5",
+      "red": "oktagon:jakub-dohnal",
+      "blue": "oktagon:vojto-barborik",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:tomas-ciganik-vs-murat-tuysuz-6",
+      "red": "oktagon:tomas-ciganik",
+      "blue": "oktagon:murat-tuysuz",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:niamh-kinehan-vs-alana-cook-7",
+      "red": "oktagon:niamh-kinehan",
+      "blue": "oktagon:alana-cook",
+      "division": "womens-bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:simon-bruknar-vs-nathan-haywood-8",
+      "red": "oktagon:simon-bruknar",
+      "blue": "oktagon:nathan-haywood",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:vojtech-garba-vs-robert-lau-9",
+      "red": "oktagon:vojtech-garba",
+      "blue": "oktagon:robert-lau",
+      "division": "light-heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    }
+  ],
+  "updatedAt": "2026-08-12T06:01:46.400Z"
+}

@@ -56,7 +56,7 @@
       "url": "https://en.wikipedia.org/wiki/Max_Holloway",
       "publisher": "Wikipedia",
       "title": "Max Holloway",
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -69,7 +69,7 @@
         "source:wikipedia:33543499",
         "source:wikipedia:34427783"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "verified",
       "corroborated": true
     },
@@ -205,6 +205,21 @@
       "status": "provisional"
     },
     {
+      "boutRef": "ufc:bout:history-6730cadbdb6bdaac73ab",
+      "eventRef": "ufc:event:history-ufc-fight-night-holloway-vs-rodriguez",
+      "happenedAt": "2021-11-13T00:00:00.000Z",
+      "opponentRef": "ufc:yair-rodriguez",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:45514815"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "ufc:bout:history-9dbab9567bef49fb3546",
       "eventRef": "ufc:event:history-ufc-276",
       "happenedAt": "2022-07-02T00:00:00.000Z",
@@ -332,37 +347,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:max-holloway:history",
-      "bouts": 15,
+      "bouts": 16,
       "values": {
-        "bouts": 15,
-        "wins": 8,
+        "bouts": 16,
+        "wins": 9,
         "losses": 7,
         "draws": 0,
         "noContests": 0,
-        "finishRate": 0.75,
+        "finishRate": 0.666667,
         "koTkoWins": 4,
         "submissionWins": 2,
-        "decisionWins": 2,
-        "koTkoWinShare": 0.5,
-        "submissionWinShare": 0.25,
-        "decisionWinShare": 0.25,
-        "averageElapsedSeconds": 1027.6,
+        "decisionWins": 3,
+        "koTkoWinShare": 0.444444,
+        "submissionWinShare": 0.222222,
+        "decisionWinShare": 0.333333,
+        "averageElapsedSeconds": 1057.125,
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0.2,
-        "fightsPerYear": 1.180105,
-        "layoffDays": 154
+        "fightsPerYear": 1.264398,
+        "layoffDays": 158
       },
-      "updatedAt": "2026-08-08T06:01:41.482Z"
+      "updatedAt": "2026-08-12T06:01:46.400Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1851.1152714,
-    "deviation": 126.76391053,
-    "volatility": 0.06001201,
-    "boutCount": 15,
+    "rating": 1899.30233814,
+    "deviation": 121.94298637,
+    "volatility": 0.06001233,
+    "boutCount": 16,
     "asOfBoutRef": "ufc:bout:history-c6fc64313b7df511bca8",
-    "updatedAt": "2026-08-08T06:01:41.482Z"
+    "updatedAt": "2026-08-12T06:01:46.400Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1915,11 +1930,31 @@
         "source:wikipedia:66838633"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40814604",
+        "source:wikipedia:33543499",
+        "source:wikipedia:27167974",
+        "source:wikipedia:54197580",
+        "source:wikipedia:45514815",
+        "source:wikipedia:49598119",
+        "source:wikipedia:49172283",
+        "source:wikipedia:66838633"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

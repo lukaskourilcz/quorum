@@ -14,7 +14,7 @@
   },
   "division": "womens-strawweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-03:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-12T06:01:46.400Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
+      ],
+      "note": "Result read from the UFC Fight Night: Gamrot vs. Salkilld article after the event."
     }
   ],
   "discovery": {
@@ -35,9 +43,18 @@
   },
   "sourceRefs": [
     "source:wikipedia:2026-08-03:List of UFC events",
-    "source:wikipedia:2026-08-04:List of UFC events"
+    "source:wikipedia:2026-08-04:List of UFC events",
+    "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
   ],
-  "result": null,
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -52,7 +69,19 @@
         "source:wikipedia:2026-08-03:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
+      ],
+      "note": "Alexia Thainara def. Amanda Lemos by Decision (unanimous)."
     }
   ],
-  "updatedAt": "2026-08-03T18:21:31.449Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

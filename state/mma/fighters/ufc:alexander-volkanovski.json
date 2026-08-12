@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexander_Volkanovski",
       "publisher": "Wikipedia",
       "title": "Alexander Volkanovski",
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q30123133",
         "source:wikipedia:54197580"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-12T06:01:46.400Z",
       "status": "verified",
       "corroborated": true
     },
@@ -218,6 +218,21 @@
       "status": "provisional"
     },
     {
+      "boutRef": "ufc:bout:history-8d40ed3080b08a1cbf3e",
+      "eventRef": "ufc:event:history-ufc-290",
+      "happenedAt": "2023-07-08T00:00:00.000Z",
+      "opponentRef": "ufc:yair-rodriguez",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 3,
+      "elapsedSeconds": 859,
+      "sourceRefs": [
+        "source:wikipedia:45514815"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "ufc:bout:history-2568fab77094492ed878",
       "eventRef": "ufc:event:history-ufc-294",
       "happenedAt": "2023-10-21T00:00:00.000Z",
@@ -270,37 +285,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:alexander-volkanovski:history",
-      "bouts": 9,
+      "bouts": 10,
       "values": {
-        "bouts": 9,
-        "wins": 5,
+        "bouts": 10,
+        "wins": 6,
         "losses": 4,
         "draws": 0,
         "noContests": 0,
-        "finishRate": 0.2,
-        "koTkoWins": 1,
+        "finishRate": 0.333333,
+        "koTkoWins": 2,
         "submissionWins": 0,
         "decisionWins": 4,
-        "koTkoWinShare": 0.2,
+        "koTkoWinShare": 0.333333,
         "submissionWinShare": 0,
-        "decisionWinShare": 0.8,
-        "averageElapsedSeconds": 1063.222222,
+        "decisionWinShare": 0.666667,
+        "averageElapsedSeconds": 1042.8,
         "recentThreeWinRate": 0,
-        "recentFiveWinRate": 0.2,
-        "fightsPerYear": 1.914771,
-        "layoffDays": 903
+        "recentFiveWinRate": 0.4,
+        "fightsPerYear": 2.154117,
+        "layoffDays": 907
       },
-      "updatedAt": "2026-08-08T06:01:41.482Z"
+      "updatedAt": "2026-08-12T06:01:46.400Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1884.75227388,
-    "deviation": 160.99329413,
-    "volatility": 0.06001188,
-    "boutCount": 9,
+    "rating": 1934.97251809,
+    "deviation": 153.12742004,
+    "volatility": 0.0600114,
+    "boutCount": 10,
     "asOfBoutRef": "ufc:bout:history-5b53427c761832ec518c",
-    "updatedAt": "2026-08-08T06:01:41.482Z"
+    "updatedAt": "2026-08-12T06:01:46.400Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1740,11 +1755,29 @@
         "source:wikipedia:66838633"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-12T06:01:46.400Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54197580",
+        "source:wikipedia:44264537",
+        "source:wikipedia:45514815",
+        "source:wikipedia:66838633"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.375,
   "modelEligible": true,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-12T06:01:46.400Z"
 }

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260812060146-mma-intake",
+  "phase": "mma-intake",
+  "outcome": "PLAN",
+  "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+  "evidenceRefs": [
+    "event:ufc:event:ufc-330-makhachev-vs-machado-garry",
+    "source:the-odds-api:2026-08-12",
+    "source:cito-ufc:2026-08-12",
+    "meeting:2026-08-08-mma-analysis",
+    "meeting:2026-08-08-mag-desk",
+    "source:wikimedia:2026-08-12",
+    "source:wikipedia-schedule:2026-08-12"
+  ],
+  "generatedAt": "2026-08-12T06:06:46.400Z"
+}
