@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260812030047-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Gemini překonal miliardu uživatelů za kratší dobu než jakýkoli jiný produkt Googlu, čímž se přímý souboj s ChatGPT stává měřitelným – a tato změna měřítka zasahuje každého, kdo staví na AI API.",
+  "evidenceRefs": [
+    "source:tensorfeed",
+    "source:github-ai-releases",
+    "source:simonw",
+    "source:variety",
+    "source:spaceflight-news"
+  ],
+  "editionRef": "336d8fec3a4ecd75ed2a0557f415e0676c953261106b453a5bf9729534b03827",
+  "generatedAt": "2026-08-12T03:00:52.701Z"
+}

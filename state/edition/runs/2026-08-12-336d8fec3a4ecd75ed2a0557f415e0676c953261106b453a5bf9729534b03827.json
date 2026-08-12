@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "runId": "95c920c0-adb6-4abb-83be-bbd0d4ec7306",
+  "date": "2026-08-12",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-08-12T03:01:04.489Z",
+  "completedAt": "2026-08-12T03:03:38.819Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-12T03:01:04.494Z",
+      "completedAt": "2026-08-12T03:01:21.289Z",
+      "durationMs": 16795
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-08-12T03:01:21.289Z",
+      "completedAt": "2026-08-12T03:03:34.968Z",
+      "durationMs": 133679
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-08-12T03:03:34.969Z",
+      "completedAt": "2026-08-12T03:03:34.974Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-08-12T03:03:34.975Z",
+      "completedAt": "2026-08-12T03:03:34.975Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-08-12T03:03:34.975Z",
+      "completedAt": "2026-08-12T03:03:38.815Z",
+      "durationMs": 3840
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 1,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 10451,
+      "outputTokens": 684,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.041613
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 13836,
+      "outputTokens": 4845,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1233555
+    }
+  ],
+  "measuredCostUsd": 0.1649685,
+  "quality": {
+    "metrics": {
+      "successfulSources": 32,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 86,
+      "maximumSingleSourceShare": 0.42857142857142855,
+      "sourceDiversity": 0.7346938775510204,
+      "duplicateStorySimilarity": 0.07407407407407407,
+      "repeatedTopicFrequency": 0,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1649685
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": false,
+    "score": 45,
+    "violations": [
+      {
+        "code": "bureaucratic_filler",
+        "locale": "cs",
+        "message": "Použij přímé sloveso místo úřednické konstrukce."
+      }
+    ]
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/bureaucratic_filler"
+    ]
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "curated",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 1,
+        "selected": "scene:6212692",
+        "reason": "Server room clearly relates to AI infrastructure and encryption security topics, though it's generic enough not to be dated; a solid illustration of scale and computational systems relevant to the article.",
+        "candidates": [
+          {
+            "candidateId": "scene:6212692",
+            "provider": "wikimedia",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Server room clearly relates to AI infrastructure and encryption security topics, though it's generic enough not to be dated; a solid illustration of scale and computational systems relevant to the article.",
+            "sceneCs": "datové centrum se servery"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002222
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "repeated_topic_warmup:2/3",
+    "stet:bureaucratic_filler",
+    "shipped_with_unresolved_review:stet:cs/bureaucratic_filler",
+    "image_rung:curated",
+    "image_gate:curated:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 32,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

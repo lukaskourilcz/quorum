@@ -190,7 +190,9 @@
       "at": "2026-08-12T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-12-cu-edition",
+      "decisionOneLiner": "Gemini překonal miliardu uživatelů za kratší dobu než jakýkoli jiný produkt Googlu, čímž se přímý souboj s ChatGPT stává měřitelným – a tato změna měřítka zasahuje každého, kdo sta"
     },
     {
       "at": "2026-08-12T04:00:00.000Z",

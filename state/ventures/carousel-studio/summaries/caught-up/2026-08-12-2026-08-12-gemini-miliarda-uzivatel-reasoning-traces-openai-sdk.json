@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-12-gemini-miliarda-uzivatel-reasoning-traces-openai-sdk",
+  "date": "2026-08-12",
+  "locale": "cs",
+  "kicker": "DNESKAi · 12. srp",
+  "headline": "Gemini má miliardu uživatelů. A hned nato přišlo varování, že šifrování jeho uvažování nestačilo",
+  "coverLine": "Šifrování chain-of-thought selhalo u tří největších poskytovatelů najednou",
+  "standfirst": "Google dosáhl nového milníku rychleji než s jakýmkoli předchozím produktem.",
+  "passages": [
+    "Google potvrdil, že Gemini dosáhl miliardy měsíčních uživatelů – rychleji než jakýkoli předchozí produkt firmy.",
+    "Výzkumníci zveřejnili a poskytovatelé záplatovali chybu, která umožňovala přehrát šifrované chain-of-thought bloky přes slabší modely a získat uvažování silnějšího modelu v čitelné podobě.",
+    "OpenAI vydala Python SDK verze 3.0.0 s HTTPX2 jako výchozím HTTP klientem; `httpx` se již neinstaluje automaticky.",
+    "NVIDIA oznámila financovací partnerství s Apollo, BlackRock, Blackstone, Brookfield, Goldman Sachs a KKR s cílem mobilizovat přes 500 miliard dolarů na AI infrastrukturu.",
+    "Chyba v šifrování chain-of-thought odhalila, že ochrana uvažování modelů nestála na izolovaných klíčích – každý, kdo měl přístup k API, mohl za určitých podmínek přečíst myšlenkový pochod silnějšího modelu.",
+    "I po záplatě jde o strukturální poučení pro celý obor.",
+    "Miliardy uživatelů na obou předních chatbotech znamenají, že AI přestává být okrajovým nástrojem pro nadšence a stává se každodenní infrastrukturou se vším, co to obnáší z pohledu bezpečnosti,",
+    "regulace i závislosti na dodavateli."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Florian Hirzinger - www.fh-ap.com · CC BY-SA · Wikimedia Commons"
+}

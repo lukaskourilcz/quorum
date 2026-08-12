@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-08-12-gemini-miliarda-uzivatel-reasoning-traces-openai-sdk",
+  "date": "2026-08-12",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Gemini má miliardu uživatelů – Google to potvrdil jako svůj nejrychleji rostoucí produkt. Jenže stejný týden přišla zpráva, že šifrování myšlenkových pochodů modelů od Googlu, OpenAI i Anthropicu nestálo na izolovaných klíčích. Útočník mohl přečíst uvažování silnějšího modelu přes slabšího sourozence. Záplata je venku, ale strukturální poučení zůstává.",
+    "hashtags": [
+      "gemini",
+      "chatgpt",
+      "openai",
+      "artificialintelligence",
+      "llm",
+      "cybersecurity",
+      "chainofthought",
+      "nvidia",
+      "developer",
+      "hollywood"
+    ],
+    "threadsText": "Gemini dosáhl miliardy měsíčních uživatelů, Google to potvrdil. ChatGPT byl o pár týdnů dříve. Zároveň výzkumníci ukázali, že šifrované bloky „uvažování\" u tří největších poskytovatelů sdílely rodinné klíče – stačilo přehrát blok přes slabší model a myšlenkový pochod silnějšího modelu byl čitelný. Záplatováno, ale varování trvá.",
+    "storyLine": "Gemini: miliarda uživatelů, jedno bezpečnostní selhání"
+  },
+  "heroCredit": "Florian Hirzinger - www.fh-ap.com · CC BY-SA · Wikimedia Commons",
+  "origin": "desk"
+}

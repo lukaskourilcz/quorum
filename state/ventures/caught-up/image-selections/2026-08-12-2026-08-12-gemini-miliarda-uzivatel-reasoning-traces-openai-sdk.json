@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-12-gemini-miliarda-uzivatel-reasoning-traces-openai-sdk",
+  "date": "2026-08-12",
+  "rung": "curated",
+  "selected": "scene:6212692",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": "scene:6212692",
+      "reason": "Server room clearly relates to AI infrastructure and encryption security topics, though it's generic enough not to be dated; a solid illustration of scale and computational systems relevant to the article.",
+      "candidates": [
+        {
+          "candidateId": "scene:6212692",
+          "provider": "wikimedia",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Server room clearly relates to AI infrastructure and encryption security topics, though it's generic enough not to be dated; a solid illustration of scale and computational systems relevant to the article.",
+          "sceneCs": "datové centrum se servery"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002222
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-12T03:00:47.701Z"
+}
