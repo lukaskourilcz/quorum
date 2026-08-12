@@ -116,7 +116,7 @@ Everything from the facts file to the finished card, minus the wiring that joins
 
 ## What is left
 
-Ten open issues, in checklist order.
+Sixteen open issues (322–337), in checklist order.
 
 - **TS-17c, TS-18** — the venture's render module
   (`orchestrator/src/ventures/tehdejsi-svet/render.ts`, marketingShark shape) building deck
