@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { buildCarouselSummary } from "@boardlessai/carousel-studio";
 import { repoRoot } from "../src/paths.js";
 import { AudienceSpecSchema } from "../src/contracts/audience-spec.js";
 import { BOOK_KB_SCORE_AXES, BookKbIndexSchema } from "../src/contracts/book-kb-index.js";
@@ -230,6 +231,32 @@ describe("portfolio contract boundaries", () => {
 });
 
 describe("Czech is the required locale and English is optional", () => {
+  it("records Door Money summaries in English without weakening the Czech article contract", async () => {
+    const summary = buildCarouselSummary({
+      venture: "door-money",
+      slug: "synthetic-tour-note",
+      date: "2026-08-06",
+      title: "A synthetic tour note",
+      dek: "An invented standfirst for a contract boundary test.",
+      points: [
+        "The fictional crew checked a made-up room before doors.",
+        "A synthetic checklist kept the example self-contained.",
+        "No real person, venue, book passage, or event appears here."
+      ]
+    });
+    expect(summary.locale).toBe("en");
+
+    const valid = await fixture("article", "valid") as { localizations: Record<string, unknown> };
+    const englishOnly = {
+      ...valid,
+      localizations: { en: valid.localizations.en ?? valid.localizations.cs }
+    };
+    const result = ArticlePackageSchema.safeParse(englishOnly);
+    expect(result.success).toBe(false);
+    expect(result.success ? [] : result.error.issues.map((issue) => issue.path.join(".")))
+      .toEqual(["localizations.cs"]);
+  });
+
   it("keeps the three sealed packages byte-for-byte shaped and hash-valid", async () => {
     // The worst failure mode available here: if making en optional had switched these to a
     // stripping object, loading the one live article would drop its English half, the

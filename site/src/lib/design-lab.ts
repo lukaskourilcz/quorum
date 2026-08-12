@@ -14,6 +14,7 @@ import {
   reviewDeck,
   wordCount,
   type CarouselRecipe,
+  type CarouselSummaryLocale,
   type CarouselSummaryVenture,
   type SocialCopyPack
 } from "@boardlessai/carousel-studio";
@@ -72,7 +73,7 @@ export interface LabSlide {
 export interface LabArticle {
   id: string;
   venture: CarouselSummaryVenture;
-  locale: "cs" | "en";
+  locale: CarouselSummaryLocale;
   ventureLabel: string;
   slug: string;
   date: string;
@@ -145,7 +146,7 @@ function deckFor(article: StudioArticle): string[] {
   }).map((slide) => slide.text);
 }
 
-/**
+  /**
  * Every delivered article, as the workspace sees it. Newest first.
  *
  * `venture` narrows to one magazine's articles, which is what a Design Lab section asks for. The

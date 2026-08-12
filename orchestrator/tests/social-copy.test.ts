@@ -134,6 +134,21 @@ describe("bounds", () => {
       origin: "desk"
     }).success).toBe(false);
   });
+
+  it("keeps Door Money copy English and refuses a mismatched locale", () => {
+    const pack = derivedCopyPack({
+      venture: "door-money",
+      slug: "synthetic-road-note",
+      date: "2026-08-06",
+      headline: "A synthetic road note",
+      standfirst: "An invented example with no real book or event text.",
+      closing: "The rest of the story lives in Door Money.",
+      heroCredit: null
+    });
+    expect(pack.locale).toBe("en");
+    expect(pack.copy.hashtags).toContain("doormoney");
+    expect(SocialCopyPackSchema.safeParse({ ...pack, locale: "cs" }).success).toBe(false);
+  });
 });
 
 describe("an article's copy pack", () => {
