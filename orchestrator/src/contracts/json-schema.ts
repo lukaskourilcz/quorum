@@ -44,6 +44,7 @@ import { ArticlePackageSchema, EditorialSlateSchema, SocialVariantPackSchema } f
 import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
 import { SocialPackSchema } from "./social-pack.js";
+import { StyleProfileSchema } from "./style-profile.js";
 import { VentureRegistrySchema } from "./venture-registry.js";
 import { VentureRecommendationSchema } from "./venture-recommendation.js";
 import { VisualWeightsSchema } from "./visual-weights.js";
@@ -106,6 +107,7 @@ export const ContractSchemas = {
   "rating": RatingRecordSchema,
   "season": SeasonFileSchema,
   "social-pack": SocialPackSchema,
+  "style-profile": StyleProfileSchema,
   "venture-registry": VentureRegistrySchema,
   "venture-recommendation": VentureRecommendationSchema,
   "visual-weights": VisualWeightsSchema,
