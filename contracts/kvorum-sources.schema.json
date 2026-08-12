@@ -1,0 +1,338 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "kvorum-sources/1"
+    },
+    "verifiedAt": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "approvals": {
+      "type": "object",
+      "properties": {
+        "actor": {
+          "type": "string",
+          "const": "KV-APIFY-001"
+        },
+        "feeds": {
+          "type": "string",
+          "const": "KV-SOURCES-002"
+        },
+        "requiredBeforeLive": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": [
+        "actor",
+        "feeds",
+        "requiredBeforeLive"
+      ],
+      "additionalProperties": false
+    },
+    "actors": {
+      "minItems": 1,
+      "maxItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "actorSlug": {
+            "type": "string",
+            "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+$"
+          },
+          "actorBuildId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9]{17}$"
+          },
+          "credentialEnv": {
+            "type": "string",
+            "const": "APIFY_TOKEN"
+          },
+          "freeLimit": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "termsVerdict": {
+            "type": "string",
+            "enum": [
+              "allowed",
+              "review-required",
+              "refused"
+            ]
+          },
+          "termsNote": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          },
+          "evidenceUrl": {
+            "type": "string",
+            "pattern": "^https:\\/\\/"
+          },
+          "buildEvidenceUrl": {
+            "type": "string",
+            "pattern": "^https:\\/\\/"
+          },
+          "pricingEvidenceUrl": {
+            "type": "string",
+            "pattern": "^https:\\/\\/"
+          },
+          "scheduled": {
+            "type": "boolean"
+          },
+          "pricing": {
+            "type": "object",
+            "properties": {
+              "model": {
+                "type": "string",
+                "const": "pay-per-event"
+              },
+              "actorStartUsd": {
+                "type": "number",
+                "minimum": 0
+              },
+              "pricePerResultUsd": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "maxRunUsd": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "estimatedThirtyDayUsd": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "worstCalendarMonthUsd": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "monthlyShareCapUsd": {
+                "type": "number",
+                "const": 2
+              }
+            },
+            "required": [
+              "model",
+              "actorStartUsd",
+              "pricePerResultUsd",
+              "maxRunUsd",
+              "estimatedThirtyDayUsd",
+              "worstCalendarMonthUsd",
+              "monthlyShareCapUsd"
+            ],
+            "additionalProperties": false
+          },
+          "input": {
+            "type": "object",
+            "properties": {
+              "startUrls": {
+                "minItems": 1,
+                "maxItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "pattern": "^https:\\/\\/"
+                    }
+                  },
+                  "required": [
+                    "url"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "resultsLimit": {
+                "type": "number",
+                "const": 30
+              }
+            },
+            "required": [
+              "startUrls",
+              "resultsLimit"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "actorSlug",
+          "actorBuildId",
+          "credentialEnv",
+          "freeLimit",
+          "termsVerdict",
+          "termsNote",
+          "evidenceUrl",
+          "buildEvidenceUrl",
+          "pricingEvidenceUrl",
+          "scheduled",
+          "pricing",
+          "input"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "recipe": {
+      "minItems": 1,
+      "maxItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step": {
+            "type": "number",
+            "const": 1
+          },
+          "actorId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mode": {
+            "type": "string",
+            "const": "public-page-monitor"
+          },
+          "targetPage": {
+            "type": "string",
+            "pattern": "^https:\\/\\/"
+          },
+          "maxResults": {
+            "type": "number",
+            "const": 30
+          },
+          "runsPerDay": {
+            "type": "number",
+            "const": 1
+          },
+          "cadence": {
+            "type": "string",
+            "const": "daily"
+          },
+          "maxTotalChargeUsd": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": [
+          "step",
+          "actorId",
+          "mode",
+          "targetPage",
+          "maxResults",
+          "runsPerDay",
+          "cadence",
+          "maxTotalChargeUsd"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "feeds": {
+      "minItems": 7,
+      "maxItems": 7,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "kind": {
+            "type": "string",
+            "const": "rss"
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/"
+          },
+          "host": {
+            "type": "string",
+            "pattern": "^[a-z0-9.-]+$"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "approvalId": {
+            "type": "string",
+            "const": "KV-SOURCES-002"
+          },
+          "sourceClass": {
+            "type": "string",
+            "enum": [
+              "news",
+              "institutional",
+              "discovery"
+            ]
+          },
+          "maxItems": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 30
+          },
+          "costUsd": {
+            "type": "number",
+            "const": 0
+          },
+          "geo": {
+            "type": "string",
+            "const": "CZ"
+          },
+          "queryMode": {
+            "type": "string",
+            "const": "entity-lexicon"
+          },
+          "verificationEvidenceUrl": {
+            "type": "string",
+            "pattern": "^https:\\/\\/"
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "url",
+          "host",
+          "enabled",
+          "approvalId",
+          "sourceClass",
+          "maxItems",
+          "costUsd",
+          "verificationEvidenceUrl",
+          "note"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "verifiedAt",
+    "approvals",
+    "actors",
+    "recipe",
+    "feeds"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/kvorum-sources.schema.json"
+}

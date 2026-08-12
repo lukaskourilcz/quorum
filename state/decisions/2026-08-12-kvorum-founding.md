@@ -172,6 +172,13 @@ section and a receipt line, and a day with no usable cluster records an honest q
   founding record and a separate capacity-reallocation record are countersigned; neither exists
   in an authorizing state, so the current payable room total remains `$0.62` and the full payable
   clock remains `$0.98`. This is a hold, not a reduced Kvórum envelope or a higher daily cap.
+- **Facebook actor price drift:** the build prompt and design recorded `$2.00/1,000` posts. The
+  actor's public API on 2026-08-12 instead reports Free-tier event pricing of `$0.005` per post
+  plus `$0.001` per run. The required 30-result ceiling therefore costs at most `$0.151` per run,
+  `$4.53` per 30 days and `$4.681` in a 31-day month. KV-06a records those current figures and the
+  pinned latest build `laKrch6r0XAnxtAFh`; it does not raise the `$2.00` venture share. Full daily
+  cadence cannot fit that share, so the pending approval and later quota guard must stop runs
+  rather than imply the design's `$1.80` month is still available.
 
 ## Implementation checklist
 
@@ -189,7 +196,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-05a — Venture scaffold, brand hue and labels
 - [x] KV-05b — KPI seeds for the quarter
 - [x] KV-05c — Degradation-ladder position with its test
-- [ ] KV-06a — `kvorum-sources` registry with verified actors and feeds
+- [x] KV-06a — `kvorum-sources` registry with verified actors and feeds
 - [ ] KV-06b — Network allowlist additions and the host-pinning test
 - [ ] KV-07 — Entity lexicon config
 - [ ] KV-08a — Venture Apify quota file and share cap
