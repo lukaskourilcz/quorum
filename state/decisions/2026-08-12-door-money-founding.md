@@ -100,7 +100,7 @@ costs and no treasury action in this decision.
 - [x] DM-01 — Write the founding decision record
 - [x] DM-02a — Registry entry in config/ventures.json
 - [x] DM-02b — Registry schema enums, fixtures and the action-completion evaluator
-- [ ] DM-03a — Register dm-desk and dm-growth in type and record schemas
+- [x] DM-03a — Register dm-desk and dm-growth in type and record schemas
 - [ ] DM-03b — Meeting policy for both rooms (Thursday gate lives in code)
 - [ ] DM-03c — cycle.yml dispatch choices and mode gates
 - [ ] DM-03d — Vercel cron entries for 15:00 and 16:00

@@ -1,16 +1,15 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260804-cu-edition",
-  "date": "2026-08-04",
-  "phase": "cu-edition",
-  "kind": "cu-edition",
-  "fixture": false,
+  "cycleId": "20260812-dm-desk",
+  "date": "2026-08-12",
+  "phase": "dm-desk",
+  "kind": "dm-desk",
+  "fixture": true,
   "status": "PLAN",
   "stage": "VALIDATION",
-  "operatingBrief": "Choose one sourced story for today's Caught Up edition.",
+  "operatingBrief": "Draft from the synthetic Door Money knowledge fixture.",
   "participantReasons": [
-    { "agent": "HERALD", "reason": "HERALD chairs the edition room.", "participated": true },
-    { "agent": "STET", "reason": "STET holds the copy-quality block.", "participated": true },
+    { "agent": "GHOST", "reason": "GHOST writes from the selected synthetic passage.", "participated": true },
     { "agent": "AUDIT", "reason": "AUDIT retains the veto.", "participated": true }
   ],
   "ledger": {
@@ -21,30 +20,28 @@
   },
   "decision": {
     "outcome": "select",
-    "summary": "Select the verified model price change.",
-    "evidenceRefs": ["SOURCE-1"]
+    "summary": "Keep one synthetic, evidence-linked recommendation as a draft.",
+    "evidenceRefs": ["fixture:door-money:passage-1"]
   },
   "proposals": [
-    { "agent": "HERALD", "summary": "Lead with the verified price change.", "evidenceRefs": ["SOURCE-1"] }
+    { "agent": "GHOST", "summary": "Lead with the synthetic promoter-cost lesson.", "evidenceRefs": ["fixture:door-money:passage-1"] }
   ],
   "voteMatrix": [
-    { "voter": "HERALD", "firstChoice": "price-change", "veto": false },
-    { "voter": "STET", "firstChoice": "price-change", "veto": false },
-    { "voter": "AUDIT", "firstChoice": "price-change", "veto": false }
+    { "voter": "GHOST", "firstChoice": "synthetic-cost-lesson", "veto": false },
+    { "voter": "AUDIT", "firstChoice": "synthetic-cost-lesson", "veto": false }
   ],
   "tasks": [],
-  "growthPlan": "SPARK will carry the room link into the product review.",
+  "growthPlan": "The synthetic recommendation waits for owner review and cannot publish.",
   "eveningOutcome": null,
-  "editionRef": "edition/2026-08-04",
   "roomTranscript": {
-    "openedAt": "2026-08-04T03:00:00.000Z",
-    "closedAt": "2026-08-04T03:18:00.000Z",
-    "gavel": "HERALD",
-    "setting": "The edition room reviews a source digest marked as untrusted data.",
+    "openedAt": "2026-08-12T13:00:00.000Z",
+    "closedAt": "2026-08-12T13:18:00.000Z",
+    "gavel": "GHOST",
+    "setting": "The desk reads a synthetic fixture packet with no manuscript text.",
     "turns": [
-      { "agent": "HERALD", "mode": "gavel", "text": "Three candidates. One has a primary source." },
-      { "agent": "AUDIT", "mode": "vote", "text": "Approve. The price matches SOURCE-1.", "evidenceRefs": ["SOURCE-1"] }
+      { "agent": "GHOST", "mode": "gavel", "text": "One synthetic passage cleared deterministic selection." },
+      { "agent": "AUDIT", "mode": "vote", "text": "Keep it as a draft. Its claim points to the fixture.", "evidenceRefs": ["fixture:door-money:passage-1"] }
     ]
   },
-  "generatedAt": "2026-08-04T03:18:01.000Z"
+  "generatedAt": "2026-08-12T13:18:01.000Z"
 }
