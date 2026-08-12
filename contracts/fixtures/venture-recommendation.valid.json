@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "venture-recommendation/1",
+  "recommendationId": "rec-aaaaaaaaaaaaaaaaaaaa",
+  "ventureId": "booksofhistory",
+  "cycleId": "bh-20260812-001",
+  "status": "draft",
+  "createdAt": "2026-08-14T10:00:00.000Z",
+  "updatedAt": "2026-08-14T10:00:00.000Z",
+  "evidence": {
+    "kind": "dossier-story",
+    "dossierRef": "ventures/booksofhistory/dossiers/war-with-the-newts/dossier.json",
+    "storyRef": "ventures/booksofhistory/dossiers/war-with-the-newts/dossier.json#story-serial-to-book",
+    "claimRefs": ["claim-publication-context"]
+  },
+  "payloads": {
+    "cs": {
+      "schemaVersion": "bh-language-feature/1",
+      "locale": "cs",
+      "headline": "Příběh jedné cesty k vydání",
+      "slides": [
+        { "role": "hook", "text": "Kniha začala jinak, než se zdá.", "factualSentences": [] },
+        { "role": "context", "text": "Archiv zachycuje její cestu.", "factualSentences": [{ "text": "Knižní vydání vyšlo roku 1936.", "claimRefs": ["claim-publication-context"] }] },
+        { "role": "ending", "text": "Historie vydání mění pohled na dílo.", "factualSentences": [] }
+      ],
+      "caption": "Doložený příběh vydání knihy.",
+      "quotes": []
+    },
+    "en": {
+      "schemaVersion": "bh-language-feature/1",
+      "locale": "en",
+      "headline": "A story about the route to publication",
+      "slides": [
+        { "role": "hook", "text": "The book began differently than it seems.", "factualSentences": [] },
+        { "role": "context", "text": "The archive records its route.", "factualSentences": [{ "text": "The book edition appeared in 1936.", "claimRefs": ["claim-publication-context"] }] },
+        { "role": "ending", "text": "Its publishing history changes the view of the work.", "factualSentences": [] }
+      ],
+      "caption": "A sourced story about the book's publication.",
+      "quotes": []
+    }
+  },
+  "gateResults": {
+    "cs": { "passed": true, "violations": [] },
+    "en": { "passed": true, "violations": [] }
+  },
+  "designLab": { "status": "pending", "summaryRefs": null },
+  "owner": { "postedUrl": null, "resultRefs": [], "editHistory": [] }
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "venture-recommendation/1",
+  "recommendationId": "rec-broken",
+  "ventureId": "booksofhistory",
+  "cycleId": "bh-20260812-001",
+  "status": "posted",
+  "createdAt": "2026-08-14T10:00:00.000Z",
+  "updatedAt": "2026-08-14T10:00:00.000Z",
+  "evidence": { "kind": "cover-art", "claimRefs": [] },
+  "payloads": {},
+  "gateResults": {},
+  "designLab": { "status": "rendered", "summaryRefs": null },
+  "owner": { "postedUrl": null, "resultRefs": [], "editHistory": [] }
+}

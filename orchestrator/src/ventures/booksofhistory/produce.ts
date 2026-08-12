@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { BhDossierSchema, type BhDossier } from "../../contracts/bh-dossier.js";
+import { BhLanguageFeatureSchema, type BhLanguageFeature } from "../../contracts/bh-feature.js";
 import { guardedJsonCall, type GuardedCallInput } from "../../llm/call.js";
 
 const ClaimRefSchema = z.string().regex(/^claim-[a-z0-9]+(?:-[a-z0-9]+)*$/).max(120);
@@ -20,28 +21,6 @@ export const BhCanonicalStoryBriefSchema = z.strictObject({
   endingClaimRefs: z.array(ClaimRefSchema).min(1).max(10)
 });
 
-const FeatureLocaleSchema = z.enum(["cs", "en"]);
-
-export const BhLanguageFeatureSchema = z.strictObject({
-  schemaVersion: z.literal("bh-language-feature/1"),
-  locale: FeatureLocaleSchema,
-  headline: z.string().trim().min(8).max(180),
-  slides: z.array(z.strictObject({
-    role: z.enum(["hook", "context", "turn", "ending"]),
-    text: z.string().trim().min(8).max(800),
-    factualSentences: z.array(z.strictObject({
-      text: z.string().trim().min(5).max(500),
-      claimRefs: z.array(ClaimRefSchema).min(1).max(10)
-    })).max(10)
-  })).min(3).max(10),
-  caption: z.string().trim().min(8).max(2_200),
-  quotes: z.array(z.strictObject({
-    text: z.string().trim().min(1).max(300),
-    attribution: z.string().trim().min(1).max(300),
-    claimRef: ClaimRefSchema
-  })).max(5)
-});
-
 export const BhTwinFeatureSchema = z.strictObject({
   schemaVersion: z.literal("bh-twin-feature/1"),
   canonicalBrief: BhCanonicalStoryBriefSchema,
@@ -50,7 +29,7 @@ export const BhTwinFeatureSchema = z.strictObject({
 });
 
 export type BhCanonicalStoryBrief = z.infer<typeof BhCanonicalStoryBriefSchema>;
-export type BhLanguageFeature = z.infer<typeof BhLanguageFeatureSchema>;
+export type { BhLanguageFeature } from "../../contracts/bh-feature.js";
 export type BhTwinFeature = z.infer<typeof BhTwinFeatureSchema>;
 
 export type BhProductionGateCode =
