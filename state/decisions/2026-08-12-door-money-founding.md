@@ -149,6 +149,12 @@ costs and no treasury action in this decision.
   permitted fallback.** Image daily/monthly caps and the quarterly media KPI intentionally select
   only `image`; budget alerts and the daily digest classify `text` and `embedding` together as
   model cost. All four now use the shared kind helpers, and the wrapper records `embedding`.
+- **DM-11a's amendment repeats the lower-precedence database substitution and adds a
+  schema migration, but the build contract requires a private clone and explicitly rejects a
+  vector database.** The CLI therefore introduces a fail-closed private-store interface instead
+  of database credentials or tables. Dry ingestion uses an in-memory implementation at `$0`;
+  live mode remains refused until DM-11b installs the private-clone writer and the two ingestion
+  approvals are countersigned. Local ignored manuscript input remains one supported source path.
 
 ## Delivery ledger
 
@@ -175,7 +181,7 @@ costs and no treasury action in this decision.
 - [x] DM-09 — Style profile via map-reduce
 - [x] DM-10a — Guarded embeddings wrapper
 - [x] DM-10b — Budget-ledger kind for embeddings
-- [ ] DM-11a — The book:ingest CLI with envelopes
+- [x] DM-11a — The book:ingest CLI with envelopes
 - [ ] DM-11b — Public/private output split and manuscript-hash idempotency
 - [ ] DM-12 — venture-recommendation evidence kind book-passage
 - [ ] DM-13 — Deterministic passage selection
