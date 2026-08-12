@@ -163,6 +163,9 @@ section and a receipt line, and a day with no usable cluster records an honest q
   expressions, 11 templates and five brands in places where generated or live state now says
   seven projects, three GitHub sweeps, 23 families and five current brands. KV-21a must correct
   those statements without hand-editing the generated block.
+- **Approval-trend KPI:** the quarterly KPI contract has bounded numeric directions but no trend
+  operator. KV-05b records week-over-week approval trend as a boolean observation: `1` means the
+  measured rate rose, `0` means it did not, and a missing comparison window remains `null`.
 
 ## Implementation checklist
 
@@ -178,7 +181,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-04b — TRIBUN prompts and the expected-prompts list
 - [x] KV-04c — TRIBUN model role and HACEK venture extension
 - [x] KV-05a — Venture scaffold, brand hue and labels
-- [ ] KV-05b — KPI seeds for the quarter
+- [x] KV-05b — KPI seeds for the quarter
 - [ ] KV-05c — Degradation-ladder position with its test
 - [ ] KV-06a — `kvorum-sources` registry with verified actors and feeds
 - [ ] KV-06b — Network allowlist additions and the host-pinning test

@@ -112,7 +112,9 @@ export const StandupSchema = z.object({
       signals: z.array(z.object({
         id: z.string().min(1),
         label: z.string().min(1),
-        value: z.number().nonnegative(),
+        // A cohort rate with no denominator is unavailable, not zero. The public/admin
+        // projections preserve that distinction, so the saved standup must preserve it too.
+        value: z.number().nonnegative().nullable(),
         unit: z.enum(["count", "ratio"]),
         detail: z.string().min(1)
       }))
