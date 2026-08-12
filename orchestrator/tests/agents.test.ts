@@ -6,15 +6,7 @@ import {
   FOUNDING_AGENT_IDS,
   loadAgentRegistry
 } from "../src/org/registry.js";
-import { configRoot } from "../src/paths.js";
-
-function personaPromptPath(promptsRoot: string, agent: { id: string; slug: string }): string {
-  return path.join(
-    promptsRoot,
-    agent.id === "FOLIO" || agent.id === "PLOT" ? "booksofhistory" : "",
-    `${agent.slug}.md`
-  );
-}
+import { configRoot, personaPromptPath } from "../src/paths.js";
 
 describe("agent registry and identity assets", () => {
   it("keeps 37 seated roles of 46 on file, and gated portraits explicit", async () => {
@@ -95,15 +87,14 @@ describe("agent registry and identity assets", () => {
   });
 
   it("gives every agent a loadable persona prompt, because a live room now reads it", async () => {
-    // portfolio/run.ts loads `orchestrator/prompts/<slug>.md` for each selected seat and
+    // portfolio/run.ts resolves the registered persona path for each selected seat and
     // appends it after the packet. A missing or empty file would throw mid-room, after the
     // budget reservation and part-way through a paid call graph, so pin the coupling here.
     const registry = await loadAgentRegistry();
-    const promptsRoot = path.join(configRoot, "..", "orchestrator", "prompts");
 
     const loaded = await Promise.all(
       registry.agents.map(async (agent) => {
-        const body = await readFile(personaPromptPath(promptsRoot, agent), "utf8");
+        const body = await readFile(personaPromptPath(agent.slug), "utf8");
         return { id: agent.id, body: body.trim() };
       })
     );
@@ -122,7 +113,6 @@ describe("agent registry and identity assets", () => {
     // does own, and why forge.md and pulse.md drifted the same way. Now that run.ts loads
     // every persona into live rooms, a wrong id here is a claim the model acts on.
     const registry = await loadAgentRegistry();
-    const promptsRoot = path.join(configRoot, "..", "orchestrator", "prompts");
     const kpiConfig = JSON.parse(
       await readFile(path.join(configRoot, "kpis.json"), "utf8")
     ) as { kpis: Array<{ id: string }> };
@@ -130,7 +120,7 @@ describe("agent registry and identity assets", () => {
 
     const drift: string[] = [];
     for (const agent of registry.agents) {
-      const body = await readFile(personaPromptPath(promptsRoot, agent), "utf8");
+      const body = await readFile(personaPromptPath(agent.slug), "utf8");
       // Backticked dotted tokens are how every prompt writes a KPI id.
       const claimed = [
         ...new Set((body.match(/`[a-z][a-z0-9_]*\.[a-z0-9_]+`/gu) ?? []).map((token) => token.slice(1, -1)))

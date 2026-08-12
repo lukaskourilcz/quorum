@@ -6,6 +6,7 @@ SPARK product growth, VAULT memory, FRAME media, RELAY delivery, ANGLE
 positioning, COHORT audiences and PALATE taste. GoVIRAL: SCOUT trend reading.
 marketingShark: MAKO direction and CHUM bilingual carousel copy.
 BOOKSOFHISTORY: FOLIO editorial selection and PLOT dossier-backed storytelling.
+Door Money: GHOST recorded-voice drafts and BOOKER owner action planning.
 DNESKAi: HERALD daily editing, STET copy quality and HACEK Czech register.
 Titty Tuesdays: SCENE research and STUNT guerrilla concepts. FightAIQ: CORNER UFC scouting, SPOTTER Oktagon
 scouting, TAPE tape analysis, SIGMA model calibration, VIG odds and market,

@@ -2,6 +2,7 @@ import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { DEFAULT_BUDGET_LIMITS, exceedsDailyCap, type BudgetLedgerEntry } from "../src/budget.js";
+import { personaPromptPath } from "../src/paths.js";
 
 const repoRoot = path.resolve(process.cwd(), "..");
 
@@ -26,13 +27,7 @@ describe("closing 44-agent system audit", () => {
       expect(routing.agents[agent.id]?.status).toBe(agent.status);
       expect(agent.notResponsibleFor.length).toBeGreaterThan(0);
       expect(routing.agents[agent.id]?.capabilities.length).toBeGreaterThan(0);
-      await expect(access(path.join(
-        repoRoot,
-        "orchestrator",
-        "prompts",
-        agent.id === "FOLIO" || agent.id === "PLOT" ? "booksofhistory" : "",
-        `${agent.slug}.md`
-      ))).resolves.toBeUndefined();
+      await expect(access(personaPromptPath(agent.slug))).resolves.toBeUndefined();
     }
   });
 
