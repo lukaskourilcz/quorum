@@ -10,7 +10,9 @@
   "standingAgendaPhases": [
     "tt-marketing",
     "gv-brief",
-    "bh-desk"
+    "bh-desk",
+    "dm-desk",
+    "dm-growth"
   ],
   "servicePhases": [
     "cu-edition",
