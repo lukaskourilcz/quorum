@@ -27,6 +27,8 @@ on:
           - gv-brief
           - ms-daily
           - bh-desk
+          - dm-desk
+          - dm-growth
           - mma-intake
           - mag-editorial
           - article-am
@@ -266,7 +268,7 @@ jobs:
             fi
             echo "$skip_reason"
           fi
-          if test "$dry" != "true" && { test "$phase" = "tt-marketing" || test "$phase" = "bh-desk" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "mag-desk"; }; then
+          if test "$dry" != "true" && { test "$phase" = "tt-marketing" || test "$phase" = "bh-desk" || test "$phase" = "dm-desk" || test "$phase" = "dm-growth" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "mag-desk"; }; then
             if test "$PORTFOLIO_LIVE_ENABLED" != "true"; then
               skip=true
               skip_reason="Portfolio meeting crons await explicit owner approval."

@@ -77,6 +77,19 @@ describe("automation policy", () => {
     const portfolioGateStart = cycle.lastIndexOf("\n", cycle.indexOf(portfolioModeGate!));
     const portfolioGateContext = cycle.slice(Math.max(0, portfolioGateStart - 500), cycle.indexOf(portfolioModeGate!) + portfolioModeGate!.length);
     expect(portfolioGateContext).toContain('test "$phase" = "bh-desk"');
+    const dispatchOptions = cycle.slice(
+      cycle.indexOf("        options:\n"),
+      cycle.indexOf("      trigger:\n")
+    );
+    for (const phase of ["dm-desk", "dm-growth"]) {
+      expect(dispatchOptions.match(new RegExp(`^ {10}- ${phase}$`, "gmu"))).toHaveLength(1);
+      expect(cycle).toContain(`test "$phase" = "${phase}"`);
+    }
+    const deliveryOnlyGate = cycle.slice(
+      cycle.indexOf('          if test "$delivery_only" = "true"; then'),
+      cycle.indexOf("          # The double-fire guard")
+    );
+    expect(deliveryOnlyGate).not.toMatch(/dm-(?:desk|growth)/u);
     expect(cycle).toContain("FIGHTAIQ_LIVE_ENABLED");
     expect(cycle).toContain("FIGHTAIQ_ANALYSIS_ENABLED");
     expect(cycle).toContain("MMA_FILES_LIVE_ENABLED");
