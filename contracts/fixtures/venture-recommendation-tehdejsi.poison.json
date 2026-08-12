@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "venture-recommendation/1",
+  "id": "ts-2026-08-16-chornobyl",
+  "ventureId": "tehdejsi-svet",
+  "date": "2026-08-16",
+  "cycleId": "cycle-2026-08-15-ts",
+  "status": "approved",
+  "evidence": {
+    "kind": "tehdejsi-story",
+    "factsHash": "1808b7c4c950613f9a7f0d6b4a2e5c8d1f3b6e9a0c2d4f7b8e1a3c5d7f9b0e2a",
+    "factIds": ["ua-1986-chornobyl-spring"],
+    "shortlistRef": "state/ventures/tehdejsi-svet/shortlists/2026-08-15.json",
+    "dossierRefs": [],
+    "sensitivityTier": 2,
+    "tierRaisedBy": ["chornobyl"],
+    "terminologyCheck": {
+      "tableVersion": "tehdejsi-terminology/1",
+      "checkedAt": "2026-08-16T17:05:00.000Z",
+      "findings": [
+        {
+          "rule": "terminology:chornobyl-spelling",
+          "language": "uk",
+          "detail": "\"чернобыль\" must be \"Чорнобиль\" — the Ukrainian form, not the Russian one."
+        }
+      ]
+    }
+  },
+  "payload": {
+    "slides": [
+      {
+        "ordinal": 1,
+        "cs": "26. dubna 1986.",
+        "ua": "26 квітня 1986 року."
+      },
+      {
+        "ordinal": 2,
+        "cs": "Prypjať byla evakuována následující den.",
+        "ua": "Прип'ять евакуювали наступного дня."
+      }
+    ],
+    "captionCs": "Označte někoho, kdo si to pamatuje.",
+    "captionUa": "Позначте когось, хто це пам'ятає.",
+    "ctaKind": "tag-a-friend"
+  },
+  "media": [
+    {
+      "slideOrdinal": 2,
+      "source": "Wikimedia Commons",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Example2.jpg",
+      "licence": "cc-by-sa",
+      "attribution": ""
+    }
+  ],
+  "humanReviewRequired": false,
+  "humanReviewedAt": null,
+  "designLab": {
+    "summaryPath": "state/ventures/tehdejsi-svet/design-lab/2026-08-16-chornobyl.json",
+    "readyAt": "2026-08-16T17:20:00.000Z"
+  },
+  "owner": {
+    "postedUrls": { "cs": null, "ua": null },
+    "rejectionReason": null
+  },
+  "generatedAt": "2026-08-16T17:00:00.000Z",
+  "updatedAt": "2026-08-16T17:20:00.000Z"
+}

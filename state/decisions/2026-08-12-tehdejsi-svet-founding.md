@@ -138,7 +138,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-11a** — Sensitivity tier classifier and tier effects
 - [x] **TS-11b** — Terminology table and its checks
 - [x] **TS-11c** — Wartime-remembrance, no-flags and no-AI-imagery lints
-- [ ] **TS-12** — `venture-recommendation` evidence kind `tehdejsi-story`
+- [x] **TS-12** — `venture-recommendation` evidence kind `tehdejsi-story`
 - [ ] **TS-13** — Day A planning call and briefs
 - [ ] **TS-14a** — Day B bilingual production with the anti-mirror rule
 - [ ] **TS-14b** — Production gates for both languages

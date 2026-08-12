@@ -1494,6 +1494,418 @@
         "updatedAt"
       ],
       "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "venture-recommendation/1"
+        },
+        "id": {
+          "type": "string",
+          "maxLength": 160,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "ventureId": {
+          "type": "string",
+          "const": "tehdejsi-svet"
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "cycleId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "approved",
+            "posted",
+            "archived",
+            "rejected"
+          ]
+        },
+        "evidence": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "tehdejsi-story"
+            },
+            "factsHash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "factIds": {
+              "minItems": 1,
+              "maxItems": 4,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 160,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              }
+            },
+            "shortlistRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 400,
+              "pattern": "^state\\/[a-zA-Z0-9._/-]+$"
+            },
+            "dossierRefs": {
+              "maxItems": 6,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 400,
+                "pattern": "^state\\/[a-zA-Z0-9._/-]+$"
+              }
+            },
+            "sensitivityTier": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "const": 0
+                },
+                {
+                  "type": "number",
+                  "const": 1
+                },
+                {
+                  "type": "number",
+                  "const": 2
+                }
+              ]
+            },
+            "tierRaisedBy": {
+              "maxItems": 8,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 160,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              }
+            },
+            "terminologyCheck": {
+              "type": "object",
+              "properties": {
+                "tableVersion": {
+                  "type": "string",
+                  "const": "tehdejsi-terminology/1"
+                },
+                "checkedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                },
+                "findings": {
+                  "maxItems": 50,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "rule": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 120
+                      },
+                      "language": {
+                        "type": "string",
+                        "enum": [
+                          "cs",
+                          "uk"
+                        ]
+                      },
+                      "detail": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 500
+                      }
+                    },
+                    "required": [
+                      "rule",
+                      "language",
+                      "detail"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "tableVersion",
+                "checkedAt",
+                "findings"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "kind",
+            "factsHash",
+            "factIds",
+            "shortlistRef",
+            "dossierRefs",
+            "sensitivityTier",
+            "tierRaisedBy",
+            "terminologyCheck"
+          ],
+          "additionalProperties": false
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "slides": {
+              "minItems": 2,
+              "maxItems": 10,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "ordinal": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10
+                  },
+                  "cs": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 400
+                  },
+                  "ua": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 400
+                  }
+                },
+                "required": [
+                  "ordinal",
+                  "cs",
+                  "ua"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "captionCs": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2200
+            },
+            "captionUa": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2200
+            },
+            "ctaKind": {
+              "type": "string",
+              "enum": [
+                "none",
+                "ask-your-parents",
+                "tag-a-friend",
+                "share-your-photo",
+                "read-more",
+                "product-link"
+              ]
+            }
+          },
+          "required": [
+            "slides",
+            "captionCs",
+            "captionUa",
+            "ctaKind"
+          ],
+          "additionalProperties": false
+        },
+        "media": {
+          "maxItems": 10,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "slideOrdinal": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10
+              },
+              "source": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "sourceUrl": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^https:\\/\\/"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "licence": {
+                "type": "string",
+                "enum": [
+                  "cc-by",
+                  "cc-by-sa",
+                  "public-domain",
+                  "own-render"
+                ]
+              },
+              "attribution": {
+                "type": "string",
+                "maxLength": 300
+              }
+            },
+            "required": [
+              "slideOrdinal",
+              "source",
+              "sourceUrl",
+              "licence",
+              "attribution"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "humanReviewRequired": {
+          "type": "boolean"
+        },
+        "humanReviewedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "designLab": {
+          "type": "object",
+          "properties": {
+            "summaryPath": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 400,
+                  "pattern": "^state\\/[a-zA-Z0-9._/-]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "readyAt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "summaryPath",
+            "readyAt"
+          ],
+          "additionalProperties": false
+        },
+        "owner": {
+          "type": "object",
+          "properties": {
+            "postedUrls": {
+              "type": "object",
+              "properties": {
+                "cs": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^https:\\/\\/"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "ua": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^https:\\/\\/"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "cs",
+                "ua"
+              ],
+              "additionalProperties": false
+            },
+            "rejectionReason": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "postedUrls",
+            "rejectionReason"
+          ],
+          "additionalProperties": false
+        },
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "id",
+        "ventureId",
+        "date",
+        "cycleId",
+        "status",
+        "evidence",
+        "payload",
+        "media",
+        "humanReviewRequired",
+        "humanReviewedAt",
+        "designLab",
+        "owner",
+        "generatedAt",
+        "updatedAt"
+      ],
+      "additionalProperties": false
     }
   ],
   "$id": "https://boardless.ai/contracts/venture-recommendation.schema.json"

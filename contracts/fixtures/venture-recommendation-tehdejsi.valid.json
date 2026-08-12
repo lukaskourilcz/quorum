@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "venture-recommendation/1",
+  "id": "ts-2026-08-14-vecernicek",
+  "ventureId": "tehdejsi-svet",
+  "date": "2026-08-14",
+  "cycleId": "cycle-2026-08-13-ts",
+  "status": "approved",
+  "evidence": {
+    "kind": "tehdejsi-story",
+    "factsHash": "1808b7c4c950613f9a7f0d6b4a2e5c8d1f3b6e9a0c2d4f7b8e1a3c5d7f9b0e2a",
+    "factIds": ["cs-1970s-vecernicek"],
+    "shortlistRef": "state/ventures/tehdejsi-svet/shortlists/2026-08-13.json",
+    "dossierRefs": [],
+    "sensitivityTier": 0,
+    "tierRaisedBy": [],
+    "terminologyCheck": {
+      "tableVersion": "tehdejsi-terminology/1",
+      "checkedAt": "2026-08-14T17:05:00.000Z",
+      "findings": []
+    }
+  },
+  "payload": {
+    "slides": [
+      {
+        "ordinal": 1,
+        "cs": "Pár minut před spaním. Znělka, která končila den.",
+        "ua": "Кілька хвилин перед сном. Мелодія, що завершувала день."
+      },
+      {
+        "ordinal": 2,
+        "cs": "Vysílal se od roku 1965 a rodiny podle něj poznaly, kolik je hodin.",
+        "ua": "Виходив із 1965 року, і родини звіряли за ним час."
+      },
+      {
+        "ordinal": 3,
+        "cs": "Kdo vám ho pouštěl a co jste u něj měli k večeři?",
+        "ua": "Хто вмикав його вам і що було на вечерю?"
+      }
+    ],
+    "captionCs": "Večerníček běžel pár minut a stačil rozdělit den na před a po. Na co si vzpomínáte vy?",
+    "captionUa": "Вечірня казка тривала кілька хвилин і ділила день на до і після. Що пам'ятаєте ви?",
+    "ctaKind": "ask-your-parents"
+  },
+  "media": [
+    {
+      "slideOrdinal": 1,
+      "source": "Tehdejší svět render",
+      "sourceUrl": null,
+      "licence": "own-render",
+      "attribution": ""
+    },
+    {
+      "slideOrdinal": 2,
+      "source": "Wikimedia Commons",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Example.jpg",
+      "licence": "cc-by-sa",
+      "attribution": "Photo by J. Novák, CC BY-SA 4.0"
+    }
+  ],
+  "humanReviewRequired": false,
+  "humanReviewedAt": null,
+  "designLab": {
+    "summaryPath": "state/ventures/tehdejsi-svet/design-lab/2026-08-14-vecernicek.json",
+    "readyAt": "2026-08-14T17:20:00.000Z"
+  },
+  "owner": {
+    "postedUrls": { "cs": null, "ua": null },
+    "rejectionReason": null
+  },
+  "generatedAt": "2026-08-14T17:00:00.000Z",
+  "updatedAt": "2026-08-14T17:20:00.000Z"
+}

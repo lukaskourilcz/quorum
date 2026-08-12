@@ -10,6 +10,7 @@ import {
   HttpsUrlSchema,
   MeetingRefSchema
 } from "./common.js";
+import { TehdejsiRecommendationSchema } from "./tehdejsi-recommendation.js";
 
 const ClaimRefSchema = z.string().regex(/^claim-[a-z0-9]+(?:-[a-z0-9]+)*$/).max(120);
 
@@ -321,6 +322,7 @@ export type BookPassageEvidence = z.infer<typeof BookPassageEvidenceSchema>;
 /** Published shared boundary; venture code imports its narrower schema above. */
 export const AnyVentureRecommendationSchema = z.union([
   BooksofHistoryRecommendationSchema,
-  VentureRecommendationSchema
+  VentureRecommendationSchema,
+  TehdejsiRecommendationSchema
 ]);
 export type AnyVentureRecommendation = z.infer<typeof AnyVentureRecommendationSchema>;
