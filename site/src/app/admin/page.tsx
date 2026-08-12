@@ -13,6 +13,9 @@ import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { GoViralProfilePanel } from "@/components/admin/goviral-profile-panel";
 import { OwnerAttentionPanel } from "@/components/admin/owner-attention-panel";
 import { CaughtUpEventsPanel } from "@/components/admin/caught-up-events-panel";
+import { DoorMoneyActionsPanel } from "@/components/admin/door-money-actions-panel";
+import { DoorMoneyKnowledgePanel } from "@/components/admin/door-money-knowledge-panel";
+import { DoorMoneyRecommendationsPanel } from "@/components/admin/door-money-recommendations-panel";
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { AdminMoneyPanel } from "@/components/admin/money-panel";
@@ -208,6 +211,12 @@ export default async function AdminPage({
     : null;
   const brandId = selectedVenture?.id ?? "global";
   const brand = ventureBrand(brandId);
+  const doorMoneyActionCount = doorMoney.actions.packets.reduce((sum, packet) => sum + packet.tasks.length, 0) +
+    doorMoney.actions.playbooks.length;
+  const doorMoneyKnowledgeCount = doorMoney.knowledge.index
+    ? doorMoney.knowledge.index.chapters.length + doorMoney.knowledge.index.chunks.length +
+      Number(doorMoney.knowledge.styleProfile !== null)
+    : 0;
 
   /**
    * How many stored items a workspace holds.
@@ -220,7 +229,7 @@ export default async function AdminPage({
     ventureId === "mma-files"
       ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
       : ventureId === "door-money"
-        ? doorMoney.recommendations.items.length
+        ? doorMoney.recommendations.items.length + doorMoneyActionCount + doorMoneyKnowledgeCount
         : ventureId === "carousel-studio"
           ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
           : ventureId === "fightaiq"
@@ -407,6 +416,18 @@ export default async function AdminPage({
         node: <TittyTuesdaysProposalsPanel snapshot={ttProposals} />,
         count: ttProposals.days.reduce((sum, day) => sum + day.variants.length, 0)
       };
+    }
+    if (id === "door-money" && selectedTab === "recommendations") {
+      return {
+        node: <DoorMoneyRecommendationsPanel recommendations={doorMoney.recommendations} />,
+        count: doorMoney.recommendations.items.length
+      };
+    }
+    if (id === "door-money" && selectedTab === "actions") {
+      return { node: <DoorMoneyActionsPanel snapshot={doorMoney.actions} />, count: doorMoneyActionCount };
+    }
+    if (id === "door-money" && selectedTab === "knowledge") {
+      return { node: <DoorMoneyKnowledgePanel knowledge={doorMoney.knowledge} />, count: doorMoneyKnowledgeCount };
     }
     if (id === "caught-up" && selectedTab === "events") {
       return {

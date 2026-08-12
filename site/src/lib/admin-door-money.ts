@@ -19,6 +19,7 @@ import {
   type DoorMoneyRecommendationStatus
 } from "./door-money-recommendation-model";
 import { parseRatingRecord, type RatingRecord } from "./rating-model";
+import type { DoorMoneyActionsView } from "@/components/admin/door-money-actions-panel";
 
 export type AdminDoorMoneyArtifactState = "missing" | "unreadable" | "present";
 
@@ -65,6 +66,7 @@ export interface AdminDoorMoneyKnowledge {
 
 export interface AdminDoorMoneySnapshot {
   recommendations: AdminDoorMoneyRecommendations;
+  actions: DoorMoneyActionsView;
   knowledge: AdminDoorMoneyKnowledge;
   unreadable: number;
 }
@@ -218,12 +220,38 @@ async function readKnowledge(root: string): Promise<AdminDoorMoneyKnowledge> {
   return { state: "present", index: index!, styleProfile: styleProfile!, unreadable: 0 };
 }
 
+async function readActions(root: string): Promise<DoorMoneyActionsView> {
+  const directories = ["actions", "playbooks"];
+  const results = await Promise.all(directories.map(async (directory) => {
+    try {
+      const entries = await readdir(path.join(root, "state", "ventures", "door-money", directory), { withFileTypes: true });
+      return { state: "present" as const, count: entries.filter((entry) => entry.isFile()).length };
+    } catch (error) {
+      return (error as NodeJS.ErrnoException).code === "ENOENT"
+        ? { state: "missing" as const, count: 0 }
+        : { state: "unreadable" as const, count: 1 };
+    }
+  }));
+  if (results.every(({ state }) => state === "missing")) {
+    return { state: "missing", packets: [], playbooks: [], unreadable: 0 };
+  }
+  const unreadable = results.reduce((sum, result) =>
+    sum + (result.state === "missing" ? 0 : Math.max(1, result.count)), 0);
+  return { state: "unreadable", packets: [], playbooks: [], unreadable };
+}
+
 /** Load the owner-facing public derivatives and drop malformed records at their boundary. */
 export async function readAdminDoorMoney(explicitRoot?: string): Promise<AdminDoorMoneySnapshot> {
   const root = rootAtCallTime(explicitRoot);
-  const [recommendations, knowledge] = await Promise.all([
+  const [recommendations, actions, knowledge] = await Promise.all([
     readRecommendations(root),
+    readActions(root),
     readKnowledge(root)
   ]);
-  return { recommendations, knowledge, unreadable: recommendations.unreadable + knowledge.unreadable };
+  return {
+    recommendations,
+    actions,
+    knowledge,
+    unreadable: recommendations.unreadable + actions.unreadable + knowledge.unreadable
+  };
 }

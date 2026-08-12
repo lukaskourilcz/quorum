@@ -56,6 +56,7 @@ describe("Door Money admin loader", () => {
     const root = await temporaryRoot();
     await expect(readAdminDoorMoney(root)).resolves.toEqual({
       recommendations: { state: "missing", items: [], unreadable: 0 },
+      actions: { state: "missing", packets: [], playbooks: [], unreadable: 0 },
       knowledge: { state: "missing", index: null, styleProfile: null, unreadable: 0 },
       unreadable: 0
     });
@@ -91,6 +92,17 @@ describe("Door Money admin loader", () => {
     ]) expect(publicJson).not.toContain(privateField);
     expect(snapshot.recommendations.items[0]?.evidence.excerpt.length).toBeLessThanOrEqual(600);
     expect(snapshot.knowledge.styleProfile?.exemplars.every(({ text }) => text.length <= 280)).toBe(true);
+    expect(snapshot.actions).toEqual({ state: "missing", packets: [], playbooks: [], unreadable: 0 });
+  });
+
+  it("fails closed when pre-contract action or playbook files appear", async () => {
+    const root = await temporaryRoot();
+    await json(root, "state/ventures/door-money/actions/uncommissioned.json", { fixture: true });
+
+    const snapshot = await readAdminDoorMoney(root);
+    expect(snapshot.actions).toEqual({ state: "unreadable", packets: [], playbooks: [], unreadable: 1 });
+    expect(snapshot.unreadable).toBe(1);
+    expect(JSON.stringify(snapshot.actions)).not.toContain("state/ventures");
   });
 
   it("drops malformed recommendations independently and counts each dropped file", async () => {

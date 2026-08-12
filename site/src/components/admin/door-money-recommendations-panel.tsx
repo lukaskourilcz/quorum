@@ -101,7 +101,7 @@ function RecommendationCard({ initial }: { initial: AdminDoorMoneyRecommendation
 
   const shownCopy = effectiveCopy(recommendation);
   return (
-    <Card>
+    <Card className="scroll-mt-6" id={`door-money-recommendation-${recommendation.id}`}>
       <CardContent className="grid gap-6">
         <header>
           <div className="flex flex-wrap items-center justify-between gap-3">
