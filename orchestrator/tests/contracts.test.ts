@@ -12,6 +12,7 @@ import { isRepoPathEvidenceRef } from "../src/mma-files/slate-evidence.js";
 import { ArticlePackageSchema } from "../src/contracts/mma-files.js";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
 import { VentureRegistrySchema } from "../src/contracts/venture-registry.js";
+import { BhCycleSchema } from "../src/contracts/bh-cycle.js";
 
 const contractNames = Object.keys(ContractSchemas) as ContractName[];
 
@@ -54,6 +55,27 @@ describe("published contracts", () => {
 });
 
 describe("portfolio contract boundaries", () => {
+  it("keeps the BOOKSOFHISTORY cycle ordered, unique and free of skipped days", async () => {
+    const valid = await fixture("bh-cycle", "valid") as {
+      dayStatuses: Record<string, string>;
+      candidateSet: Array<{ candidateId: string }>;
+      chosenStory: { candidateId: string; dossierRef: string; storyRef: string } | null;
+    };
+    expect(BhCycleSchema.safeParse(valid).success).toBe(true);
+
+    const skipped = structuredClone(valid);
+    skipped.dayStatuses.research = "skipped";
+    expect(BhCycleSchema.safeParse(skipped).success).toBe(false);
+
+    const duplicate = structuredClone(valid);
+    duplicate.candidateSet.push(duplicate.candidateSet[0]!);
+    expect(BhCycleSchema.safeParse(duplicate).success).toBe(false);
+
+    const foreignStory = structuredClone(valid);
+    foreignStory.chosenStory = { ...foreignStory.chosenStory!, candidateId: "another-cycle" };
+    expect(BhCycleSchema.safeParse(foreignStory).success).toBe(false);
+  });
+
   it("accepts a bh-desk record and rejects an unregistered BOOKSOFHISTORY phase", async () => {
     const readBhFixture = async (kind: "valid" | "poison") => JSON.parse(await readFile(
       path.join(repoRoot, "contracts", "fixtures", `meeting-record-bh-desk.${kind}.json`),

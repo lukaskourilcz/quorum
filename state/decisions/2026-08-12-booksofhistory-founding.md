@@ -101,7 +101,7 @@ post anything.
 - [x] **BH-04a** — FOLIO and PLOT in registry, routing, controls and cast schema
 - [x] **BH-04b** — Prompts for FOLIO, PLOT and the research/verification calls
 - [x] **BH-04c** — Model roles for the desk and the research ladder
-- [ ] **BH-05a** — Cycle state-machine contract
+- [x] **BH-05a** — Cycle state-machine contract
 - [ ] **BH-05b** — State machine, runner dispatch and per-day records
 - [ ] **BH-05c** — Scaffold, hue, labels, KPI seeds and ladder position
 - [ ] **BH-06a** — `bh-seed` contract and fixtures
