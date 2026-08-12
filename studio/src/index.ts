@@ -8,6 +8,7 @@ export * from "./lifecycle.js";
 export * from "./designs.js";
 export * from "./library.js";
 export * from "./families.js";
+export * from "./families-tehdejsi.js";
 export * from "./recipe.js";
 export * from "./slides.js";
 export * from "./copy.js";
