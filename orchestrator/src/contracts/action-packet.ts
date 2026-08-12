@@ -25,7 +25,8 @@ export const ActionCompletionSchema = z.strictObject({
 });
 
 export const ActionPacketTaskSchema = z.strictObject({
-  id: SlugSchema,
+  /** Leaves room for completion:<packet-id>:<task-id> inside EvidenceRefSchema's 160 characters. */
+  id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(100),
   title: z.string().trim().min(1).max(200),
   why: ShortTextSchema,
   steps: z.array(z.string().trim().min(1).max(500)).min(1).max(12),
@@ -65,6 +66,9 @@ export const ActionPacketSchema = z.strictObject({
   generatedAt: DateTimeSchema,
   updatedAt: DateTimeSchema
 }).superRefine((packet, context) => {
+  if (packet.id !== `action-packet-${packet.date}`) {
+    context.addIssue({ code: "custom", path: ["id"], message: "Action packet id must match its packet date" });
+  }
   const actionOutcome = packet.outcome === "ACTIONS";
   if (actionOutcome !== (packet.tasks.length > 0) || actionOutcome === (packet.noActionReason !== null)) {
     context.addIssue({
@@ -87,6 +91,14 @@ export const ActionPacketSchema = z.strictObject({
         code: "custom",
         path: ["tasks", index, "evidenceRefs"],
         message: "Every task must cite only context supplied to BOOKER"
+      });
+    }
+    if (task.completion && (Date.parse(task.completion.completedAt) < Date.parse(packet.generatedAt) ||
+        Date.parse(task.completion.completedAt) > Date.parse(packet.updatedAt))) {
+      context.addIssue({
+        code: "custom",
+        path: ["tasks", index, "completion", "completedAt"],
+        message: "Owner completion must fall within the packet lifetime"
       });
     }
   });

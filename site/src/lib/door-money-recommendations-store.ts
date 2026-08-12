@@ -87,7 +87,7 @@ function githubFailure(status: number, what: string): DoorMoneyPersistenceError 
   return new DoorMoneyPersistenceError("REMOTE", `GitHub Door Money ${what} failed with ${status}.`);
 }
 
-async function readJson(relative: string, root = repositoryRoot): Promise<unknown> {
+export async function readDoorMoneyStateJson(relative: string, root = repositoryRoot): Promise<unknown> {
   const token = process.env[GITHUB_TOKEN_ENV];
   if (token) {
     const branch = process.env.BOARDLESSAI_GITHUB_BRANCH ?? "main";
@@ -160,7 +160,7 @@ async function writeGitHub(relative: string, value: unknown, message: string, to
   throw new DoorMoneyPersistenceError("CONFLICT", "Door Money state changed during every save attempt.");
 }
 
-async function persist(relative: string, value: unknown, message: string, root = repositoryRoot): Promise<DoorMoneyWrite> {
+export async function persistDoorMoneyState(relative: string, value: unknown, message: string, root = repositoryRoot): Promise<DoorMoneyWrite> {
   const token = process.env[GITHUB_TOKEN_ENV];
   if (token) return writeGitHub(relative, value, message, token);
   if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
@@ -174,7 +174,7 @@ async function persist(relative: string, value: unknown, message: string, root =
 
 export async function readDoorMoneyRecommendation(id: string, root = repositoryRoot): Promise<DoorMoneyRecommendation> {
   const relative = relativeRecommendationPath(id);
-  const parsed = parseDoorMoneyRecommendation(await readJson(relative, root));
+  const parsed = parseDoorMoneyRecommendation(await readDoorMoneyStateJson(relative, root));
   if (!parsed) throw new DoorMoneyPersistenceError("CORRUPT", `${relative} is not a valid gated Door Money recommendation.`);
   return parsed;
 }
@@ -324,14 +324,14 @@ export async function applyDoorMoneyRecommendationDecision(
 
   const writes: DoorMoneyWrite[] = [];
   if (summary && checked.designLab.summaryPath) {
-    writes.push(await persist(
+    writes.push(await persistDoorMoneyState(
       checked.designLab.summaryPath,
       summary,
       `admin: approve Door Money Studio summary ${checked.id}`,
       root
     ));
   }
-  writes.push(await persist(
+  writes.push(await persistDoorMoneyState(
     relativeRecommendationPath(checked.id),
     checked,
     `admin: ${input.decision.action} Door Money recommendation ${checked.id}`,

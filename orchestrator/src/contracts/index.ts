@@ -8,6 +8,7 @@ export * from "./campaign-brief.js";
 export * from "./carousel-template.js";
 export * from "./common.js";
 export * from "./daily-digest.js";
+export * from "./door-money-playbook.js";
 export * from "./edition-package.js";
 export * from "./hook-assignment.js";
 export * from "./idea-ledger.js";

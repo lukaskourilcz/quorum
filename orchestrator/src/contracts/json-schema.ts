@@ -10,6 +10,7 @@ import { CampaignBriefSchema } from "./campaign-brief.js";
 import { CarouselTemplateSchema } from "./carousel-template.js";
 import { DailyDigestSchema } from "./daily-digest.js";
 import { DesignProposalSchema } from "./design-proposal.js";
+import { DoorMoneyPlaybookSchema } from "./door-money-playbook.js";
 import { EditionPackageSchema } from "./edition-package.js";
 import { HookAssignmentSchema } from "./hook-assignment.js";
 import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
@@ -65,6 +66,7 @@ export const ContractSchemas = {
   "carousel-template": CarouselTemplateSchema,
   "daily-digest": DailyDigestSchema,
   "design-proposal": DesignProposalSchema,
+  "door-money-playbook": DoorMoneyPlaybookSchema,
   "edition-package": EditionPackageSchema,
   "hook-assignment": HookAssignmentSchema,
   "idea-ledger": IdeaLedgerEntrySchema,

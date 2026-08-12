@@ -13,7 +13,7 @@ import {
   type ActionPacket
 } from "../../contracts/action-packet.js";
 import { MarketingPlanSchema } from "../../contracts/marketing-plan.js";
-import { DateSchema } from "../../contracts/common.js";
+import { DateSchema, EvidenceRefSchema } from "../../contracts/common.js";
 import { remainingScheduledCycles } from "../../cycle/ledger.js";
 import { guardedJsonCall, type GuardedCallInput } from "../../llm/call.js";
 import { loadFixedMonthlyUsd } from "../../money/fixed-costs.js";
@@ -23,6 +23,12 @@ import { wrapUntrustedData } from "../../security/content.js";
 import { readJson } from "../../state.js";
 import type { Stage } from "../../types.js";
 import type { DoorMoneyGrowthAgenda } from "./growth.js";
+import {
+  DoorMoneyPlaybookProposalSchema,
+  loadDoorMoneyGrowthMemory,
+  type DoorMoneyGrowthMemory,
+  type DoorMoneyPlaybookProposal
+} from "./growth-playbooks.js";
 
 const BookerRouteSchema = z.object({
   provider: z.literal("openai"),
@@ -32,15 +38,16 @@ const BookerRouteSchema = z.object({
 });
 
 const FreshBookerTaskSchema = ActionPacketTaskSchema.refine(
-  ({ completion }) => completion === null,
-  "BOOKER cannot record owner completion or outcome fields"
+  ({ completion, id }) => completion === null && id.length <= 100,
+  "BOOKER cannot record owner completion fields and task ids must preserve bounded completion references"
 );
 
 const BookerResponseSchema = z.strictObject({
   outcome: z.enum(["ACTIONS", "NO_ACTION"]),
   summary: z.string().trim().min(1).max(1_000),
   noActionReason: z.string().trim().min(1).max(1_000).nullable(),
-  tasks: z.array(FreshBookerTaskSchema).max(12)
+  tasks: z.array(FreshBookerTaskSchema).max(12),
+  playbookRevisions: z.array(DoorMoneyPlaybookProposalSchema).max(24)
 }).superRefine((response, context) => {
   const actions = response.outcome === "ACTIONS";
   if (actions !== (response.tasks.length > 0) || actions === (response.noActionReason !== null)) {
@@ -77,12 +84,12 @@ export interface BookerGoViralBrief {
 
 export interface DoorMoneyBookerContext {
   playbooks: {
-    state: "deferred-until-dm-19c";
-    items: [];
+    state: "missing" | "present";
+    items: DoorMoneyGrowthMemory["playbooks"];
   };
   ownerCompletions: {
-    state: "deferred-until-dm-19c";
-    items: [];
+    state: "missing" | "present";
+    items: DoorMoneyGrowthMemory["ownerCompletions"];
   };
   ownerResults: {
     state: "deferred-until-dm-20a";
@@ -90,7 +97,12 @@ export interface DoorMoneyBookerContext {
   };
   latestGoViralBrief: BookerGoViralBrief | null;
   droppedGoViralBriefs: number;
+  droppedPlaybooks: number;
+  droppedActionPackets: number;
+  omittedPlaybooks: number;
+  omittedOwnerCompletions: number;
   allowedEvidenceRefs: string[];
+  availableLearningRefs: string[];
 }
 
 function projectGoViralBrief(plan: z.infer<typeof MarketingPlanSchema>): BookerGoViralBrief | null {
@@ -116,10 +128,30 @@ function projectGoViralBrief(plan: z.infer<typeof MarketingPlanSchema>): BookerG
   };
 }
 
-/** Read only the existing marketing-plan contract; future playbook and result contracts fail closed. */
-export async function loadDoorMoneyBookerContext(root: string, asOfDate: string): Promise<DoorMoneyBookerContext> {
+export function doorMoneyBookerEvidenceRefs(
+  memory: DoorMoneyGrowthMemory,
+  latestGoViralBrief: BookerGoViralBrief | null
+): string[] {
+  const references = [
+    ...memory.ownerCompletions.map(({ id }) => id),
+    ...memory.playbooks.map(({ ref }) => ref),
+    ...(latestGoViralBrief ? [latestGoViralBrief.ref] : [])
+  ];
+  if (new Set(references).size !== references.length) {
+    throw new Error("Door Money growth context contains duplicate evidence references");
+  }
+  return z.array(EvidenceRefSchema).max(100).parse(references);
+}
+
+/** Read bounded, contract-valid inputs; the future owner-result contract remains fail closed. */
+export async function loadDoorMoneyBookerContext(
+  root: string,
+  asOfDate: string,
+  asOfTime = `${asOfDate}T23:59:59.999Z`
+): Promise<DoorMoneyBookerContext> {
   const throughDate = DateSchema.parse(asOfDate);
   const directory = path.join(root, "ventures", "goviral", "plans");
+  const memory = await loadDoorMoneyGrowthMemory(root, throughDate, asOfTime);
   let names: string[];
   try {
     names = (await readdir(directory, { withFileTypes: true }))
@@ -129,12 +161,17 @@ export async function loadDoorMoneyBookerContext(root: string, asOfDate: string)
   } catch (error) {
     const missing = (error as NodeJS.ErrnoException).code === "ENOENT";
     return {
-      playbooks: { state: "deferred-until-dm-19c", items: [] },
-      ownerCompletions: { state: "deferred-until-dm-19c", items: [] },
+      playbooks: { state: memory.playbooks.length ? "present" : "missing", items: memory.playbooks },
+      ownerCompletions: { state: memory.ownerCompletions.length ? "present" : "missing", items: memory.ownerCompletions },
       ownerResults: { state: "deferred-until-dm-20a", items: [] },
       latestGoViralBrief: null,
       droppedGoViralBriefs: missing ? 0 : 1,
-      allowedEvidenceRefs: []
+      droppedPlaybooks: memory.droppedPlaybooks,
+      droppedActionPackets: memory.droppedActionPackets,
+      omittedPlaybooks: memory.omittedPlaybooks,
+      omittedOwnerCompletions: memory.omittedOwnerCompletions,
+      allowedEvidenceRefs: doorMoneyBookerEvidenceRefs(memory, null),
+      availableLearningRefs: memory.ownerCompletions.map(({ id }) => id)
     };
   }
 
@@ -155,12 +192,17 @@ export async function loadDoorMoneyBookerContext(root: string, asOfDate: string)
   briefs.sort((left, right) => right.date.localeCompare(left.date) || right.id.localeCompare(left.id));
   const latestGoViralBrief = briefs[0] ?? null;
   return {
-    playbooks: { state: "deferred-until-dm-19c", items: [] },
-    ownerCompletions: { state: "deferred-until-dm-19c", items: [] },
+    playbooks: { state: memory.playbooks.length ? "present" : "missing", items: memory.playbooks },
+    ownerCompletions: { state: memory.ownerCompletions.length ? "present" : "missing", items: memory.ownerCompletions },
     ownerResults: { state: "deferred-until-dm-20a", items: [] },
     latestGoViralBrief,
     droppedGoViralBriefs,
-    allowedEvidenceRefs: latestGoViralBrief ? [latestGoViralBrief.ref] : []
+    droppedPlaybooks: memory.droppedPlaybooks,
+    droppedActionPackets: memory.droppedActionPackets,
+    omittedPlaybooks: memory.omittedPlaybooks,
+    omittedOwnerCompletions: memory.omittedOwnerCompletions,
+    allowedEvidenceRefs: doorMoneyBookerEvidenceRefs(memory, latestGoViralBrief),
+    availableLearningRefs: memory.ownerCompletions.map(({ id }) => id)
   };
 }
 
@@ -175,7 +217,7 @@ async function routeAndPrompt(): Promise<{
   const models = JSON.parse(modelsRaw) as { roles?: Record<string, unknown> };
   return {
     route: BookerRouteSchema.parse(models.roles?.OPENAI_SPECIALIST),
-    system: `${booker.trim()}\n\nReturn one JSON object with exactly outcome, summary, noActionReason and tasks. Every task must match action-packet/1, include at least one prepared template and return completion:null. A task may cite only an allowedEvidenceRef; do not invent a citation. NO_ACTION must carry a specific reason and an empty tasks array.`
+    system: `${booker.trim()}\n\nReturn one JSON object with exactly outcome, summary, noActionReason, tasks and playbookRevisions. Every task must match action-packet/1, include at least one prepared template and return completion:null. A task may cite only an allowedEvidenceRef; do not invent a citation. Every playbook revision must cite at least one availableLearningRef, and each such ref must resolve to a recorded completion or owner result in this packet. NO_ACTION must carry a specific reason and an empty tasks array.`
   };
 }
 
@@ -213,9 +255,14 @@ export async function callDoorMoneyBooker(input: {
   envelopeUsd: number;
   call?: BookerCall;
   budgetContext?: ReserveContext;
-}): Promise<{ packet: ActionPacket; usd: number; context: DoorMoneyBookerContext }> {
+}): Promise<{
+  packet: ActionPacket;
+  playbookRevisions: DoorMoneyPlaybookProposal[];
+  usd: number;
+  context: DoorMoneyBookerContext;
+}> {
   const [context, routePrompt] = await Promise.all([
-    loadDoorMoneyBookerContext(input.root, input.date),
+    loadDoorMoneyBookerContext(input.root, input.date, input.now.toISOString()),
     routeAndPrompt()
   ]);
   const packetInput = wrapUntrustedData("door-money-growth-context", JSON.stringify({
@@ -230,7 +277,12 @@ export async function callDoorMoneyBooker(input: {
     ownerResults: context.ownerResults,
     latestGoViralBrief: context.latestGoViralBrief,
     droppedGoViralBriefs: context.droppedGoViralBriefs,
+    droppedPlaybooks: context.droppedPlaybooks,
+    droppedActionPackets: context.droppedActionPackets,
+    omittedPlaybooks: context.omittedPlaybooks,
+    omittedOwnerCompletions: context.omittedOwnerCompletions,
     allowedEvidenceRefs: context.allowedEvidenceRefs,
+    availableLearningRefs: context.availableLearningRefs,
     constraints: {
       ownerExecutesEveryTask: true,
       sendOrPostOrCreateAccountOrTouchChannelOrSpend: false,
@@ -272,6 +324,10 @@ export async function callDoorMoneyBooker(input: {
       if (parsed.tasks.some((task) => task.evidenceRefs.some((reference) => !allowed.has(reference)))) {
         throw new Error("BOOKER cited evidence that was not supplied in its bounded context");
       }
+      const learning = new Set(context.availableLearningRefs);
+      if (parsed.playbookRevisions.some((revision) => revision.evidenceRefs.some((reference) => !learning.has(reference)))) {
+        throw new Error("BOOKER cited a playbook completion or result that was not recorded in its bounded context");
+      }
       return parsed;
     }
   });
@@ -297,6 +353,7 @@ export async function callDoorMoneyBooker(input: {
       generatedAt,
       updatedAt: generatedAt
     }),
+    playbookRevisions: response.value.playbookRevisions,
     usd: response.usd,
     context
   };

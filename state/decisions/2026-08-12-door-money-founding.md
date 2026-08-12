@@ -237,7 +237,7 @@ costs and no treasury action in this decision.
 - [x] DM-18d — Knowledge panel, tab wiring and e2e
 - [x] DM-19a — Thursday gate and the rotating agenda wheel
 - [x] DM-19b — Action-packet contract and the BOOKER call
-- [ ] DM-19c — Playbook store and the action check-off route
+- [x] DM-19c — Playbook store and the action check-off route
 - [ ] DM-20a — Owner results: contract, route, store
 - [ ] DM-20b — Performance weights with floors
 - [ ] DM-21a — GoVIRAL spine: topicSet and trend boosts

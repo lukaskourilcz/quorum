@@ -95,7 +95,28 @@ describe("Door Money admin loader", () => {
     expect(snapshot.actions).toEqual({ state: "missing", packets: [], playbooks: [], unreadable: 0 });
   });
 
-  it("fails closed when pre-contract action or playbook files appear", async () => {
+  it("loads canonical action packets and cited playbooks into bounded owner views", async () => {
+    const root = await temporaryRoot();
+    await Promise.all([
+      json(root, "state/ventures/door-money/actions/2026-08-13.json", await fixture("action-packet.valid.json")),
+      json(root, "state/ventures/door-money/playbooks/fixture-community-playbook.json", await fixture("door-money-playbook.valid.json"))
+    ]);
+
+    const snapshot = await readAdminDoorMoney(root);
+    expect(snapshot.actions).toMatchObject({
+      state: "present",
+      unreadable: 0,
+      packets: [{
+        id: "action-packet-2026-08-13",
+        agenda: "2026-W33 · Launch mechanics",
+        tasks: [{ id: "review-fixture-launch-note", status: "open" }, { id: "read-fixture-script", status: "completed" }]
+      }],
+      playbooks: [{ id: "fixture-community-playbook", revision: "Revision 1" }]
+    });
+    expect(JSON.stringify(snapshot.actions)).not.toContain("state/ventures");
+  });
+
+  it("fails closed when malformed action or playbook files appear", async () => {
     const root = await temporaryRoot();
     await json(root, "state/ventures/door-money/actions/uncommissioned.json", { fixture: true });
 
