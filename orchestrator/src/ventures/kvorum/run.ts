@@ -15,6 +15,12 @@ import {
 } from "../../contracts/kvorum-monitor.js";
 import { VentureRecommendationSchema } from "../../contracts/venture-recommendation.js";
 import {
+  TribunDeskEnvelopeSchema,
+  type KvorumPackageGateEvaluation,
+  type TribunDeskEnvelope,
+  type TribunPackage
+} from "../../contracts/kvorum-desk.js";
+import {
   guardedJsonCall,
   ModelOutputParseError,
   type GuardedCallInput
@@ -46,9 +52,12 @@ import {
   TribunDeskOutputSchema,
   buildKvorumDeskPacket,
   fixtureTribunOutput,
-  type TribunDeskOutput,
-  type TribunPackage
+  type TribunDeskOutput
 } from "./desk-output.js";
+import {
+  evaluateKvorumPackages,
+  loadKvorumDuplicateThreshold
+} from "./gates.js";
 import {
   writeKvorumDeskMeetingRecord,
   writeKvorumDeskSkip
@@ -78,6 +87,8 @@ export interface KvorumDeskResult {
   tribunRan: boolean;
   spendUsd: number;
   receipt: KvorumMonitorReceipt | null;
+  droppedPackages: number;
+  gateEvaluations: KvorumPackageGateEvaluation[];
   artifacts: string[];
 }
 
@@ -182,6 +193,26 @@ function rankedReceipt(input: {
   });
 }
 
+async function gateCandidates(
+  receipt: KvorumMonitorReceipt,
+  candidates: readonly unknown[]
+): Promise<Pick<KvorumDeskResult, "status" | "reason" | "packages" | "droppedPackages" | "gateEvaluations">> {
+  const gated = evaluateKvorumPackages({
+    receipt,
+    candidates,
+    duplicateThreshold: await loadKvorumDuplicateThreshold()
+  });
+  return {
+    status: gated.accepted.length > 0 ? "packages" : "quiet",
+    reason: gated.accepted.length > 0
+      ? null
+      : `All ${gated.droppedCount} candidate ${gated.droppedCount === 1 ? "package was" : "packages were"} dropped by deterministic gates.`,
+    packages: gated.accepted,
+    droppedPackages: gated.droppedCount,
+    gateEvaluations: gated.evaluations
+  };
+}
+
 async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResult> {
   const root = input.root ?? (input.dry ? path.join(repoRoot, "tmp/dry-run/state") : stateRoot);
   let source: Awaited<ReturnType<typeof dryMonitor>>;
@@ -199,7 +230,7 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
       ...(kvorumBudgetCapacityDecision(capacityRaw) !== "countersigned" ? ["the Kvórum budget-capacity decision"] : [])
     ];
     if (closed.length > 0) {
-      return { date: input.date, dry: false, status: "paused", reason: `Waiting for ${closed.join(" and ")}.`, packages: [], tribunRan: false, spendUsd: 0, receipt: null, artifacts: [] };
+      return { date: input.date, dry: false, status: "paused", reason: `Waiting for ${closed.join(" and ")}.`, packages: [], tribunRan: false, spendUsd: 0, receipt: null, droppedPackages: 0, gateEvaluations: [], artifacts: [] };
     }
     const ledger = (await readJson<{ entries: BudgetLedgerEntry[] }>(root, "budget/ledger.json", { entries: [] }))
       .entries.map((entry) => BudgetLedgerEntrySchema.parse(entry));
@@ -209,7 +240,7 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
       ? await input.scheduleAllows(monthSpend)
       : phaseEnabled(await loadEffectivePortfolioSchedule(monthSpend), KVORUM_DESK_PHASE);
     if (!allows) {
-      return { date: input.date, dry: false, status: "paused", reason: "The effective portfolio schedule does not fund kv-desk.", packages: [], tribunRan: false, spendUsd: 0, receipt: null, artifacts: [] };
+      return { date: input.date, dry: false, status: "paused", reason: "The effective portfolio schedule does not fund kv-desk.", packages: [], tribunRan: false, spendUsd: 0, receipt: null, droppedPackages: 0, gateEvaluations: [], artifacts: [] };
     }
     const fetched = await (input.fetchMonitor ?? fetchKvorumMonitor)({
       root,
@@ -234,16 +265,17 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
   ])].sort();
   const eligible = receipt.ranks.filter((rank) => rank.score > 0);
   if (eligible.length === 0) {
-    return { date: input.date, dry: input.dry, status: "quiet", reason: "No non-repeating corroborated cluster was eligible.", packages: [], tribunRan: false, spendUsd: 0, receipt, artifacts };
+    return { date: input.date, dry: input.dry, status: "quiet", reason: "No non-repeating corroborated cluster was eligible.", packages: [], tribunRan: false, spendUsd: 0, receipt, droppedPackages: 0, gateEvaluations: [], artifacts };
   }
   if (input.dry) {
     const output = fixtureTribunOutput(receipt);
+    const gated = output.outcome === "recommendations"
+      ? await gateCandidates(receipt, output.packages)
+      : { status: "quiet" as const, reason: output.reason, packages: [], droppedPackages: 0, gateEvaluations: [] };
     return {
       date: input.date,
       dry: true,
-      status: output.outcome === "quiet" ? "quiet" : "packages",
-      reason: output.outcome === "quiet" ? output.reason : null,
-      packages: output.packages,
+      ...gated,
       tribunRan: true,
       spendUsd: 0,
       receipt,
@@ -268,7 +300,7 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
   const ledger = (await readJson<{ entries: BudgetLedgerEntry[] }>(root, "budget/ledger.json", { entries: [] }))
     .entries.map((entry) => BudgetLedgerEntrySchema.parse(entry));
   try {
-    const response = await (input.call ?? guardedJsonCall)<TribunDeskOutput>({
+    const response = await (input.call ?? guardedJsonCall)<TribunDeskEnvelope>({
       stateRoot: root,
       cycleId: input.cycleId,
       phase: KVORUM_DESK_PHASE,
@@ -290,14 +322,15 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
         remainingScheduledCycles: remainingScheduledCycles(input.now),
         limits
       },
-      parse: (text) => TribunDeskOutputSchema.parse(JSON.parse(text))
+      parse: (text) => TribunDeskEnvelopeSchema.parse(JSON.parse(text))
     });
+    const gated = response.value.outcome === "recommendations"
+      ? await gateCandidates(receipt, response.value.packages)
+      : { status: "quiet" as const, reason: response.value.reason, packages: [], droppedPackages: 0, gateEvaluations: [] };
     return {
       date: input.date,
       dry: false,
-      status: response.value.outcome === "quiet" ? "quiet" : "packages",
-      reason: response.value.outcome === "quiet" ? response.value.reason : null,
-      packages: response.value.packages,
+      ...gated,
       tribunRan: true,
       spendUsd: response.usd,
       receipt,
@@ -323,6 +356,8 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
         cycleSpendAfter - cycleSpendBefore
       ).toFixed(8)),
       receipt,
+      droppedPackages: 0,
+      gateEvaluations: [],
       artifacts
     };
   }
@@ -351,6 +386,8 @@ export async function runKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskR
       tribunRan: false,
       spendUsd: 0,
       receipt: null,
+      droppedPackages: 0,
+      gateEvaluations: [],
       artifacts: []
     };
   }
@@ -381,7 +418,9 @@ export async function runKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskR
       packages: result.packages,
       tribunRan: result.tribunRan,
       spendUsd: result.spendUsd,
-      hasMonitorReceipt: result.receipt !== null
+      hasMonitorReceipt: result.receipt !== null,
+      droppedPackages: result.droppedPackages,
+      gateEvaluations: result.gateEvaluations
     },
     ...(input.fixedMonthlyUsd !== undefined ? { fixedMonthlyUsd: input.fixedMonthlyUsd } : {})
   });

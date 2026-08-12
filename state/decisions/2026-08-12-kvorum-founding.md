@@ -212,6 +212,12 @@ section and a receipt line, and a day with no usable cluster records an honest q
   would make the record look more complete than the run. Only typed `kv-desk` records may currently
   carry an empty matrix; their public projection retains the digest, outcome, provider-call truth and
   package count. KV-13 remains responsible for the first real gate results and veto record.
+- **Originality scope and package isolation:** design §8 names Štít text for the overlap check, while
+  design §16 and the build contract require every source text in the cluster. KV-13a applies the
+  broader rule and loads its `0.86` ceiling from `config/social-policy.json` rather than copying the
+  number into runtime code. The paid parser validates only the two-package envelope; each candidate
+  then receives its own schema, claim, originality, marked-quote and angle result. One poison package
+  is dropped and counted without discarding a valid sibling or making a replacement model call.
 
 ## Implementation checklist
 
@@ -241,7 +247,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-11 — `venture-recommendation` contract with monitor-cluster evidence
 - [x] KV-12a — Desk runner dispatch and the TRIBUN call
 - [x] KV-12b — Honest meeting records for the desk
-- [ ] KV-13a — Gates: claim resolution and originality
+- [x] KV-13a — Gates: claim resolution and originality
 - [ ] KV-13b — Gates: banned content and register lint
 - [ ] KV-14 — Recommendation store with idempotency
 - [ ] KV-15a — Studio brand tokens for Kvórum

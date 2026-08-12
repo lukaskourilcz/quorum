@@ -843,6 +843,89 @@
                 ],
                 "additionalProperties": false
               }
+            },
+            "droppedPackages": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "gateEvaluations": {
+              "maxItems": 2,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "candidateIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "clusterId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-f0-9]{40}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "passed": {
+                    "type": "boolean"
+                  },
+                  "results": {
+                    "minItems": 1,
+                    "maxItems": 20,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "gate": {
+                          "type": "string",
+                          "maxLength": 80,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                        },
+                        "verdict": {
+                          "type": "string",
+                          "enum": [
+                            "pass",
+                            "fail"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 800
+                        },
+                        "claimIds": {
+                          "maxItems": 80,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "maxLength": 80,
+                            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                          }
+                        }
+                      },
+                      "required": [
+                        "gate",
+                        "verdict",
+                        "message",
+                        "claimIds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "candidateIndex",
+                  "clusterId",
+                  "passed",
+                  "results"
+                ],
+                "additionalProperties": false
+              }
             }
           },
           "required": [
@@ -850,7 +933,9 @@
             "runStatus",
             "reason",
             "providerCallMade",
-            "packages"
+            "packages",
+            "droppedPackages",
+            "gateEvaluations"
           ],
           "additionalProperties": false
         },
@@ -1948,6 +2033,89 @@
                 ],
                 "additionalProperties": false
               }
+            },
+            "droppedPackages": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "gateEvaluations": {
+              "maxItems": 2,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "candidateIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "clusterId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[a-f0-9]{40}$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "passed": {
+                    "type": "boolean"
+                  },
+                  "results": {
+                    "minItems": 1,
+                    "maxItems": 20,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "gate": {
+                          "type": "string",
+                          "maxLength": 80,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                        },
+                        "verdict": {
+                          "type": "string",
+                          "enum": [
+                            "pass",
+                            "fail"
+                          ]
+                        },
+                        "message": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 800
+                        },
+                        "claimIds": {
+                          "maxItems": 80,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "maxLength": 80,
+                            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                          }
+                        }
+                      },
+                      "required": [
+                        "gate",
+                        "verdict",
+                        "message",
+                        "claimIds"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "candidateIndex",
+                  "clusterId",
+                  "passed",
+                  "results"
+                ],
+                "additionalProperties": false
+              }
             }
           },
           "required": [
@@ -1955,7 +2123,9 @@
             "runStatus",
             "reason",
             "providerCallMade",
-            "packages"
+            "packages",
+            "droppedPackages",
+            "gateEvaluations"
           ],
           "additionalProperties": false
         },

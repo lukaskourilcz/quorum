@@ -21,7 +21,9 @@ describe("public MeetingRecord v2 boundary", () => {
         monitorRef: "state/ventures/kvorum/monitor/2026-08-04.json",
         runStatus: "quiet",
         providerCallMade: false,
-        packageCount: 0
+        packageCount: 0,
+        droppedPackages: 0,
+        gateEvaluationCount: 0
       }
     });
   });

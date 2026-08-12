@@ -7,7 +7,10 @@ import {
   MeetingRefSchema,
   openObject
 } from "./common.js";
-import { TribunPackageSchema } from "./kvorum-desk.js";
+import {
+  KvorumPackageGateEvaluationSchema,
+  TribunPackageSchema
+} from "./kvorum-desk.js";
 
 export const KvorumDeskMeetingPayloadSchema = z.strictObject({
   monitorRef: z.string()
@@ -16,8 +19,31 @@ export const KvorumDeskMeetingPayloadSchema = z.strictObject({
   runStatus: z.enum(["packages", "quiet", "model-failed", "failed"]),
   reason: z.string().trim().min(1).max(1_000).nullable(),
   providerCallMade: z.boolean(),
-  packages: z.array(TribunPackageSchema).max(2)
+  packages: z.array(TribunPackageSchema).max(2),
+  droppedPackages: z.number().int().min(0).max(2),
+  gateEvaluations: z.array(KvorumPackageGateEvaluationSchema).max(2)
 }).superRefine((payload, context) => {
+  const failed = payload.gateEvaluations.filter((evaluation) => !evaluation.passed).length;
+  const passedClusters = payload.gateEvaluations
+    .filter((evaluation) => evaluation.passed)
+    .map((evaluation) => evaluation.clusterId)
+    .sort();
+  const packageClusters = payload.packages.map((candidate) => candidate.clusterId).sort();
+  if (payload.droppedPackages !== failed) {
+    context.addIssue({ code: "custom", message: "droppedPackages must equal failed gate evaluations", path: ["droppedPackages"] });
+  }
+  if (payload.packages.length + payload.droppedPackages !== payload.gateEvaluations.length && payload.gateEvaluations.length > 0) {
+    context.addIssue({ code: "custom", message: "Gate evaluations must account for every accepted and dropped package", path: ["gateEvaluations"] });
+  }
+  if (new Set(payload.gateEvaluations.map((evaluation) => evaluation.candidateIndex)).size !== payload.gateEvaluations.length) {
+    context.addIssue({ code: "custom", message: "Candidate gate indexes must be unique", path: ["gateEvaluations"] });
+  }
+  if (JSON.stringify(passedClusters) !== JSON.stringify(packageClusters)) {
+    context.addIssue({ code: "custom", message: "Passed gate evaluations must identify the retained packages", path: ["gateEvaluations"] });
+  }
+  if ((payload.runStatus === "model-failed" || payload.runStatus === "failed") && payload.gateEvaluations.length > 0) {
+    context.addIssue({ code: "custom", message: "A failed desk run cannot claim completed package gates", path: ["gateEvaluations"] });
+  }
   if (payload.runStatus === "packages") {
     if (payload.packages.length === 0) {
       context.addIssue({ code: "custom", message: "A productive desk record requires a package", path: ["packages"] });

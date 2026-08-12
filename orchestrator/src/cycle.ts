@@ -358,6 +358,10 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       });
       const planned = result.status === "packages";
       const paused = result.status === "paused";
+      const selectedAgents = [
+        ...(result.tribunRan ? ["TRIBUN"] : []),
+        ...(result.gateEvaluations.length > 0 ? ["AUDIT"] : [])
+      ];
       return {
         cycleId,
         phase: options.phase,
@@ -365,8 +369,8 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         status: options.dry ? "dry_complete" : paused ? "paused" : "live_complete",
         decision: paused ? "PAUSED" : planned ? "PLAN" : "NO_ACTION",
         estimatedWorstCaseUsd: result.spendUsd,
-        selectedAgents: result.tribunRan ? ["TRIBUN"] : [],
-        skippedAgents: result.tribunRan ? ["HACEK", "AUDIT"] : ["TRIBUN", "HACEK", "AUDIT"],
+        selectedAgents,
+        skippedAgents: ["TRIBUN", "HACEK", "AUDIT"].filter((agent) => !selectedAgents.includes(agent)),
         artifacts: result.artifacts.map((artifact) => path.relative(
           repoRoot,
           path.join(options.dry ? path.join(repoRoot, "tmp/dry-run/state") : stateRoot, artifact)

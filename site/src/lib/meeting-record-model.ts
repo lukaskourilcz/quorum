@@ -55,6 +55,8 @@ export interface PublicMeetingRecord {
     reason: string | null;
     providerCallMade: boolean;
     packageCount: number;
+    droppedPackages: number;
+    gateEvaluationCount: number;
   };
   roomTranscript: RoomTranscript;
   generatedAt: string;
@@ -276,6 +278,16 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
   const kvorumPackages = Array.isArray(kvorum?.packages) && kvorum.packages.length <= 2
     ? kvorum.packages
     : null;
+  const kvorumDropped = typeof kvorum?.droppedPackages === "number"
+    && Number.isInteger(kvorum.droppedPackages)
+    && kvorum.droppedPackages >= 0
+    && kvorum.droppedPackages <= 2
+    ? kvorum.droppedPackages
+    : null;
+  const kvorumEvaluations = Array.isArray(kvorum?.gateEvaluations) && kvorum.gateEvaluations.length <= 2
+    ? kvorum.gateEvaluations.map(object)
+    : null;
+  const failedKvorumEvaluations = kvorumEvaluations?.filter((evaluation) => evaluation?.passed === false).length ?? null;
   const expectedKvorumStatus = kvorumStatus === "packages"
     ? "PLAN"
     : kvorumStatus === "quiet"
@@ -288,6 +300,11 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
       !kvorum ||
       !kvorumStatus ||
       kvorumPackages === null ||
+      kvorumDropped === null ||
+      !kvorumEvaluations ||
+      kvorumEvaluations.some((evaluation) => !evaluation || typeof evaluation.passed !== "boolean") ||
+      failedKvorumEvaluations !== kvorumDropped ||
+      (kvorumEvaluations.length > 0 && kvorumPackages.length + kvorumDropped !== kvorumEvaluations.length) ||
       typeof kvorum.providerCallMade !== "boolean" ||
       expectedKvorumStatus !== status ||
       (record.fixture && kvorum.providerCallMade) ||
@@ -330,7 +347,9 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
             runStatus: kvorumStatus,
             reason: kvorumReason,
             providerCallMade: kvorum.providerCallMade as boolean,
-            packageCount: kvorumPackages.length
+            packageCount: kvorumPackages.length,
+            droppedPackages: kvorumDropped!,
+            gateEvaluationCount: kvorumEvaluations!.length
           }
         }
       : {}),

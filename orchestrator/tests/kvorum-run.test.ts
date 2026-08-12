@@ -91,9 +91,13 @@ describe("Kvórum desk runner", () => {
           monitorRef: "state/ventures/kvorum/monitor/2026-08-12.json",
           runStatus: "packages",
           providerCallMade: false,
-          packages: result.packages
-        }
+          packages: result.packages,
+          droppedPackages: 0
+        },
+        voteMatrix: [{ voter: "AUDIT", firstChoice: "pass", veto: false }]
       });
+      expect(meeting.kvorumDesk?.gateEvaluations).toHaveLength(1);
+      expect(meeting.kvorumDesk?.gateEvaluations[0]?.results.every((gate) => gate.verdict === "pass")).toBe(true);
       expect(result.artifacts).toEqual(expect.arrayContaining([
         "ventures/kvorum/monitor/2026-08-12.json",
         "meetings/2026-08-12-kv-desk.json",
@@ -103,6 +107,77 @@ describe("Kvórum desk runner", () => {
       await expect(access(path.join(root, "llm-cache"))).rejects.toMatchObject({ code: "ENOENT" });
     } finally {
       await rm(root, { recursive: true, force: true });
+    }
+  });
+
+  test("drops and counts one poisoned package without a second provider call", async () => {
+    const fixtureRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-kvorum-run-gate-fixture-"));
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-kvorum-run-gate-live-"));
+    try {
+      const dry = await dryProof(fixtureRoot);
+      const fetched = externalFetch(dry.receipt!);
+      const poison = structuredClone(dry.packages[0]!);
+      poison.targets[0]!.copy = fetched.items.find((item) => item.source.id === "irozhlas")!.text;
+      let providerCalls = 0;
+      const call = async <T>(request: GuardedCallInput<T>) => guardedJsonCall(request, {
+        generate: async () => {
+          providerCalls += 1;
+          return {
+            text: JSON.stringify({ outcome: "recommendations", packages: [dry.packages[0], poison] }),
+            model: "claude-sonnet-5",
+            tokensIn: 700,
+            cachedTokensIn: 0,
+            cacheWriteTokensIn: 0,
+            tokensOut: 500
+          };
+        }
+      });
+      const result = await runKvorumDesk({
+        cycleId: "20260812-kv-desk-gate-drop",
+        dry: false,
+        now,
+        date,
+        stage: "VALIDATION",
+        root,
+        env: { PORTFOLIO_LIVE_ENABLED: "true" },
+        foundingDecisionRaw: founding,
+        budgetCapacityDecisionRaw: capacity,
+        inbox: "",
+        fetchMonitor: async () => fetched,
+        call,
+        limits: DEFAULT_BUDGET_LIMITS,
+        fixedMonthlyUsd: 0,
+        scheduleAllows: async () => true
+      });
+      expect(providerCalls).toBe(1);
+      expect(result).toMatchObject({
+        status: "packages",
+        packages: [dry.packages[0]],
+        droppedPackages: 1
+      });
+      expect(result.gateEvaluations.map((evaluation) => evaluation.passed)).toEqual([true, false]);
+      expect(result.gateEvaluations[1]?.results).toContainEqual(expect.objectContaining({
+        gate: "originality",
+        verdict: "fail"
+      }));
+      const meeting = MeetingRecordSchema.parse(JSON.parse(await readFile(
+        path.join(root, "meetings/2026-08-12-kv-desk.json"),
+        "utf8"
+      )) as unknown);
+      expect(meeting).toMatchObject({
+        status: "PLAN",
+        voteMatrix: [{ voter: "AUDIT", veto: true }],
+        kvorumDesk: {
+          droppedPackages: 1,
+          gateEvaluations: [{ passed: true }, { passed: false }],
+          packages: [dry.packages[0]]
+        }
+      });
+    } finally {
+      await Promise.all([
+        rm(fixtureRoot, { recursive: true, force: true }),
+        rm(root, { recursive: true, force: true })
+      ]);
     }
   });
 

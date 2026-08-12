@@ -34,7 +34,9 @@
     "runStatus": "quiet",
     "reason": "No corroborated, non-repeating cluster was worth covering.",
     "providerCallMade": false,
-    "packages": []
+    "packages": [],
+    "droppedPackages": 0,
+    "gateEvaluations": []
   },
   "roomTranscript": {
     "openedAt": "2026-08-04T19:00:00.000Z",
