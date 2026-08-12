@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "bh-research-brief/1"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "cycleId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "shortlistRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "requestingMeetingRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "monthlyResearchHeadroomUsd": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "thirdCandidateReserveUsd": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 0.5
+    },
+    "maximumCandidates": {
+      "anyOf": [
+        {
+          "type": "number",
+          "const": 2
+        },
+        {
+          "type": "number",
+          "const": 3
+        }
+      ]
+    },
+    "briefs": {
+      "minItems": 2,
+      "maxItems": 3,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "bookId": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "bookRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "shortlistRank": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "selectionReason": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 500
+          },
+          "objective": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 800
+          },
+          "investigateSpecifically": {
+            "minItems": 2,
+            "maxItems": 8,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 500
+            }
+          },
+          "lookFor": {
+            "minItems": 2,
+            "maxItems": 8,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 500
+            }
+          },
+          "avoid": {
+            "minItems": 2,
+            "maxItems": 8,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 500
+            }
+          },
+          "angleHistoryRefs": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "briefHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "bookId",
+          "bookRef",
+          "shortlistRank",
+          "selectionReason",
+          "objective",
+          "investigateSpecifically",
+          "lookFor",
+          "avoid",
+          "angleHistoryRefs",
+          "briefHash"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "date",
+    "cycleId",
+    "shortlistRef",
+    "requestingMeetingRef",
+    "monthlyResearchHeadroomUsd",
+    "thirdCandidateReserveUsd",
+    "maximumCandidates",
+    "briefs",
+    "generatedAt"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/bh-research-brief.schema.json"
+}

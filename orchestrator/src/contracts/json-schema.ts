@@ -6,6 +6,7 @@ import { BoardlessEventsSchema } from "./boardless-events.js";
 import { BhCycleSchema } from "./bh-cycle.js";
 import { BhSeedLibrarySchema } from "./bh-seed.js";
 import { BhShortlistSchema } from "./bh-shortlist.js";
+import { BhResearchBriefBundleSchema } from "./bh-research-brief.js";
 import { CalendarFeedSchema } from "./calendar.js";
 import { CampaignBriefSchema } from "./campaign-brief.js";
 import { CarouselTemplateSchema } from "./carousel-template.js";
@@ -59,6 +60,7 @@ export const ContractSchemas = {
   "bh-cycle": BhCycleSchema,
   "bh-seed": BhSeedLibrarySchema,
   "bh-shortlist": BhShortlistSchema,
+  "bh-research-brief": BhResearchBriefBundleSchema,
   "stream-sync": StreamSyncReceiptSchema,
   "calendar": CalendarFeedSchema,
   "campaign-brief": CampaignBriefSchema,

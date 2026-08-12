@@ -3,6 +3,7 @@ export * from "./autonomy.js";
 export * from "./audience-spec.js";
 export * from "./bh-seed.js";
 export * from "./bh-shortlist.js";
+export * from "./bh-research-brief.js";
 export * from "./calendar.js";
 export * from "./campaign-brief.js";
 export * from "./carousel-template.js";
