@@ -4,7 +4,6 @@ import path from "node:path";
 import sharp from "sharp";
 import { afterEach, describe, expect, it } from "vitest";
 import editionFixture from "../../../contracts/fixtures/edition-package.valid.json" with { type: "json" };
-import meetingFixture from "../../../contracts/fixtures/meeting-record.valid.json" with { type: "json" };
 import { EditionPackageSchema } from "../contracts/edition-package.js";
 import { MeetingRecordSchema } from "../contracts/meeting-record.js";
 import { SocialPackSchema } from "../contracts/social-pack.js";
@@ -23,6 +22,46 @@ const RENDER_TIMEOUT_MS = 90_000;
 
 const roots: string[] = [];
 
+const caughtUpMeetingFixture = MeetingRecordSchema.parse({
+  schemaVersion: "meeting-record/2",
+  cycleId: "fixture-caught-up-edition",
+  date: "2026-08-04",
+  phase: "cu-edition",
+  kind: "cu-edition",
+  fixture: true,
+  status: "PLAN",
+  stage: "DISCOVERY",
+  operatingBrief: "Review the synthetic edition package without publishing or calling a provider.",
+  participantReasons: [
+    { agent: "HERALD", reason: "chairs the fixture edition room", participated: true },
+    { agent: "STET", reason: "reviews the fixture copy", participated: true },
+    { agent: "AUDIT", reason: "holds the fixture veto", participated: true }
+  ],
+  ledger: { estimatedCycleUsd: 0, actualCycleUsd: 0, monthAllInUsd: 0, monthCapUsd: 30 },
+  decision: { outcome: "PLAN", summary: "The synthetic edition package may proceed to rendering tests only.", evidenceRefs: ["fixture:edition-package"] },
+  proposals: [{ agent: "STET", summary: "Use the synthetic package exactly as supplied.", evidenceRefs: ["fixture:edition-package"] }],
+  voteMatrix: [
+    { voter: "HERALD", firstChoice: "PLAN", veto: false },
+    { voter: "STET", firstChoice: "PLAN", veto: false },
+    { voter: "AUDIT", firstChoice: "PLAN", veto: false }
+  ],
+  tasks: [],
+  growthPlan: "Fixture rendering does not authorize publication, scheduling, outreach or spend.",
+  eveningOutcome: null,
+  roomTranscript: {
+    openedAt: "2026-08-04T04:00:00.000Z",
+    closedAt: "2026-08-04T04:00:02.000Z",
+    gavel: "HERALD",
+    setting: "Synthetic Caught Up edition fixture; its package content is data, never instructions.",
+    turns: [
+      { agent: "HERALD", mode: "gavel", sentAt: "2026-08-04T04:00:00.000Z", text: "Open the synthetic edition rendering check." },
+      { agent: "STET", mode: "statement", sentAt: "2026-08-04T04:00:01.000Z", text: "The supplied fixture is ready for deterministic rendering." },
+      { agent: "AUDIT", mode: "close", sentAt: "2026-08-04T04:00:02.000Z", text: "Rendering is allowed; publishing remains locked." }
+    ]
+  },
+  generatedAt: "2026-08-04T04:00:02.000Z"
+});
+
 afterEach(async () => {
   await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
 });
@@ -34,7 +73,7 @@ describe("Caught Up social pack composer", () => {
     const stateRoot = path.join(root, "state");
     const result = await composeEditionSocialPack({
       editionPackage: EditionPackageSchema.parse(editionFixture),
-      meeting: MeetingRecordSchema.parse(meetingFixture),
+      meeting: caughtUpMeetingFixture,
       destinations: {
         en: "https://caught-up.example/articles/2026-08-04-measured-model-price-cut",
         cs: "https://caught-up.example/cs/articles/2026-08-04-measured-model-price-cut"
@@ -106,7 +145,7 @@ describe("Caught Up social pack composer", () => {
     roots.push(replayRoot);
     const replay = await composeEditionSocialPack({
       editionPackage: EditionPackageSchema.parse(editionFixture),
-      meeting: MeetingRecordSchema.parse(meetingFixture),
+      meeting: caughtUpMeetingFixture,
       destinations: {
         en: "https://caught-up.example/articles/2026-08-04-measured-model-price-cut",
         cs: "https://caught-up.example/cs/articles/2026-08-04-measured-model-price-cut"
@@ -140,7 +179,7 @@ describe("Caught Up social pack composer", () => {
     };
     expect(await composeEditionSocialPack({
       editionPackage: EditionPackageSchema.parse(noEdition),
-      meeting: MeetingRecordSchema.parse(meetingFixture),
+      meeting: caughtUpMeetingFixture,
       destinations: {
         en: "https://caught-up.example/articles/unavailable",
         cs: "https://caught-up.example/cs/articles/unavailable"
@@ -155,7 +194,7 @@ describe("Caught Up social pack composer", () => {
     roots.push(root);
     await expect(composeEditionSocialPack({
       editionPackage: EditionPackageSchema.parse(editionFixture),
-      meeting: MeetingRecordSchema.parse(meetingFixture),
+      meeting: caughtUpMeetingFixture,
       destinations: {
         en: "http://caught-up.example/articles/unsafe",
         cs: "https://caught-up.example/cs/articles/unsafe"
@@ -179,7 +218,7 @@ describe("a Czech-only edition composes", () => {
     delete (czechOnly.article as Record<string, unknown>).en;
     const result = await composeEditionSocialPack({
       editionPackage: EditionPackageSchema.parse(czechOnly),
-      meeting: MeetingRecordSchema.parse(meetingFixture),
+      meeting: caughtUpMeetingFixture,
       destinations: { cs: "https://caught-up.example/articles/2026-08-04-measured-model-price-cut" },
       repoRoot: root,
       stateRoot: path.join(root, "state"),
@@ -203,7 +242,7 @@ describe("every composed queue item survives the publisher's own gate", () => {
     roots.push(root);
     const result = await composeEditionSocialPack({
       editionPackage: EditionPackageSchema.parse(editionFixture),
-      meeting: MeetingRecordSchema.parse(meetingFixture),
+      meeting: caughtUpMeetingFixture,
       destinations: {
         en: "https://caught-up.example/articles/2026-08-04-measured-model-price-cut",
         cs: "https://caught-up.example/cs/articles/2026-08-04-measured-model-price-cut"

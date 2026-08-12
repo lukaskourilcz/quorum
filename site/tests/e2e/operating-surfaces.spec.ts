@@ -172,9 +172,9 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   // The five-day board is /calendar's product now. The home page walks past a calendar of its
   // own — a full week, stepped in place — and this test is about the linked, statically
   // generated weeks, which only /calendar has.
-  // Start with the saved operating week. Its five-day window carries completed slots; the
-  // previous generated week carries the missed state this test also verifies. Whether any cell
-  // is still scheduled depends on the wall clock and is not part of navigation.
+  // Start with the saved operating week. Historical windows are rebuilt against the current
+  // clock, so a slot that was future when the feed was committed is now truthfully held, skipped
+  // or missed. The previous generated week carries the missed state this test also verifies.
   await page.goto("/calendar/2026-08-03", { waitUntil: "networkidle" });
   await expect(page.locator("html")).toHaveAttribute(
     "data-scroll-behavior",
@@ -413,7 +413,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await page.goto("/admin/ventures/titty-tuesdays/binder", { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: "Titty Tuesdays" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "E2E launch binder plan" })).toBeVisible();
-    await expect(page.getByText(/\d+ ready plans/)).toBeVisible();
+    await expect(page.getByText(/^\d+ ready plans$/)).toBeVisible();
   });
 
   test("admin login explains errors, starts a session and signs out", async ({ page }) => {
@@ -586,8 +586,10 @@ test("Company files speaks plainly", async ({ page }) => {
     expect(body, `Company files still says "${phrase}"`).not.toContain(phrase);
   }
 
-  // Agent codenames are how the runtime addresses itself, not how a person reads a page.
-  for (const codename of ["THREADS", "INSTAGRAM", "FRAME", "SCRIBE", "HERALD"]) {
+  // Agent codenames are how the runtime addresses itself, not how a person reads a page. Threads
+  // and Instagram are also legitimate channel names in the social archive, so they are not
+  // evidence that the matching internal agents leaked into owner-facing copy.
+  for (const codename of ["FRAME", "SCRIBE", "HERALD"]) {
     expect(body, `Company files still shows the codename ${codename}`).not.toContain(codename);
   }
 

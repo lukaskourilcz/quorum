@@ -273,7 +273,7 @@ export const BACKSTOP_SWEEP_HOURS = [3, 11, 19] as const;
 /**
  * What cycle.yml actually deploys as `on.schedule`.
  *
- * The eighteen per-slot crons were the backup path being billed like a primary. Measured over
+ * The per-slot crons were the backup path being billed like a primary. Measured over
  * 5-6 August: a Vercel dispatch arrives on the slot's own hour and does 5.8 minutes of real
  * work, a GitHub cron arrives hours late and spends 0.9 minutes exiting a guard — about 600
  * billable minutes a month to duplicate a path that had already run. Three sweeps replace them,
