@@ -97,10 +97,21 @@
         "entityWeight": 5,
         "engagementSalience": 1.2,
         "novelty": 0.7,
-        "standingTopicContinuity": 1
+        "standingTopicContinuity": 1,
+        "trendCrossover": 1
       }
     }
   ],
+  "trendContext": {
+    "topicSet": "kvorum",
+    "planId": null,
+    "planRef": null,
+    "originMeetingRef": null,
+    "status": null,
+    "matchedTactics": 0,
+    "terms": [],
+    "droppedRecords": 0
+  },
   "purge": {
     "retentionDays": 30,
     "evaluatedAt": "2026-08-12T21:00:00.000Z",

@@ -627,7 +627,9 @@ export const GoViralActorSchema = z.object({
 export const GoViralTopicSetSchema = z.object({
   label: z.string().min(1),
   keywords: z.array(z.string().min(1)).max(12),
-  hashtags: z.array(z.string().regex(/^#[\p{L}\p{N}_]+$/u)).max(12)
+  hashtags: z.array(z.string().regex(/^#[\p{L}\p{N}_]+$/u)).max(12),
+  /** False keeps a venture on the keyless signal path and out of every paid actor payload. */
+  apify: z.boolean().default(true)
 });
 
 export const GoViralRecipeStepSchema = z.object({

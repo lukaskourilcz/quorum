@@ -272,6 +272,14 @@ section and a receipt line, and a day with no usable cluster records an honest q
   existed to reuse, so the first shared writer accepts only one locked ISO-week proposal, verifies
   at least three cited manual-result receipts per change, caps a weekly move at `0.10`, and enforces
   the permanent `0.75–1.25` range. Direct edits without that proposal history fail schema parsing.
+- **The Kvórum GoVIRAL set is explicitly free-only:** The live scout sends every ordinary topic
+  set through each applicable Apify recipe step, so merely appending the issue's requested set
+  would have created paid actor inputs despite the “free signals only” instruction. The shared
+  topic-set contract therefore defaults existing sets to their current Apify path but pins Kvórum
+  to `apify: false`; the recipe, actors and quota are unchanged. The desk reads only the newest
+  valid recorded GoVIRAL plan, counts invalid records, ignores future plans, and gives an approved
+  matching `kvorum` trend call a bounded `1.10` ranking tiebreaker. Draft or archived plans are
+  recorded as context but remain neutral, and the factor never replaces corroboration or gates.
 
 ## Implementation checklist
 
@@ -314,7 +322,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-18 — Claims ledger and the correction flow
 - [x] KV-19a — Owner results: contract, route and store
 - [x] KV-19b — Performance weights with floors and recorded proposals
-- [ ] KV-20a — GoVIRAL spine: topic set and brief consumption
+- [x] KV-20a — GoVIRAL spine: topic set and brief consumption
 - [ ] KV-20b — GoVIRAL spine: transitions and the Design-Lab-only test
 - [ ] KV-21a — Documentation truth across the standing docs
 - [ ] KV-21b — INBOX approvals and NEEDED owner items

@@ -3,6 +3,7 @@ import {
   DateSchema,
   DateTimeSchema,
   HttpsUrlSchema,
+  MeetingRefSchema,
   Sha256Schema
 } from "./common.js";
 
@@ -137,7 +138,9 @@ export const KvorumClusterRankSchema = z.strictObject({
     entityWeight: z.number().finite().nonnegative(),
     engagementSalience: z.number().finite().nonnegative(),
     novelty: z.number().finite().min(0).max(1),
-    standingTopicContinuity: z.number().finite().nonnegative()
+    standingTopicContinuity: z.number().finite().nonnegative(),
+    /** A recorded GoVIRAL crossover is a small tiebreaker, never a substitute for evidence. */
+    trendCrossover: z.number().finite().min(1).max(1.1).default(1)
   })
 }).superRefine((rank, context) => {
   const expected = Math.round((
@@ -146,6 +149,7 @@ export const KvorumClusterRankSchema = z.strictObject({
     * rank.factors.engagementSalience
     * rank.factors.novelty
     * rank.factors.standingTopicContinuity
+    * rank.factors.trendCrossover
   ) * 1_000_000) / 1_000_000;
   if (Math.abs(rank.score - expected) > 0.000001) {
     context.addIssue({
@@ -163,6 +167,40 @@ export const KvorumPurgeMarkSchema = z.strictObject({
   purgedAt: DateTimeSchema
 });
 
+const EmptyKvorumTrendContext = {
+  topicSet: "kvorum" as const,
+  planId: null,
+  planRef: null,
+  originMeetingRef: null,
+  status: null,
+  matchedTactics: 0,
+  terms: [] as string[],
+  droppedRecords: 0
+};
+
+export const KvorumTrendContextSchema = z.strictObject({
+  topicSet: z.literal("kvorum"),
+  planId: z.string().regex(/^plan-[a-z0-9]+(?:-[a-z0-9]+)*$/).nullable(),
+  planRef: z.string().regex(/^state\/ventures\/goviral\/plans\/[a-z0-9.-]+\.json$/).nullable(),
+  originMeetingRef: MeetingRefSchema.nullable(),
+  status: z.enum(["draft", "owner_rated", "approved", "archived"]).nullable(),
+  matchedTactics: z.number().int().nonnegative().max(100),
+  terms: z.array(z.string().regex(/^[a-z0-9]+$/).max(80)).max(120),
+  droppedRecords: z.number().int().nonnegative()
+}).superRefine((context, refinement) => {
+  const planFields = [context.planId, context.planRef, context.originMeetingRef, context.status];
+  const hasPlan = planFields.every((value) => value !== null);
+  if (!hasPlan && planFields.some((value) => value !== null)) {
+    refinement.addIssue({ code: "custom", message: "GoVIRAL plan identity must be all present or all null", path: ["planId"] });
+  }
+  if (!hasPlan && (context.matchedTactics !== 0 || context.terms.length !== 0)) {
+    refinement.addIssue({ code: "custom", message: "An empty GoVIRAL context cannot claim matches", path: ["matchedTactics"] });
+  }
+  if (new Set(context.terms).size !== context.terms.length || [...context.terms].sort().some((term, index) => term !== context.terms[index])) {
+    refinement.addIssue({ code: "custom", message: "GoVIRAL context terms must be unique and sorted", path: ["terms"] });
+  }
+});
+
 export const KvorumMonitorReceiptSchema = z.strictObject({
   schemaVersion: z.literal("kvorum-monitor/1"),
   date: DateSchema,
@@ -173,6 +211,7 @@ export const KvorumMonitorReceiptSchema = z.strictObject({
   rawItems: z.array(KvorumMonitorItemSchema).max(5_000),
   clusters: z.array(KvorumMonitorClusterSchema).max(100),
   ranks: z.array(KvorumClusterRankSchema).max(100),
+  trendContext: KvorumTrendContextSchema.default(EmptyKvorumTrendContext),
   purge: z.strictObject({
     retentionDays: z.literal(30),
     evaluatedAt: DateTimeSchema,
@@ -238,4 +277,5 @@ export type KvorumMonitorItem = z.infer<typeof KvorumMonitorItemSchema>;
 export type KvorumMonitorSourceResult = z.infer<typeof KvorumMonitorSourceResultSchema>;
 export type KvorumMonitorCluster = z.infer<typeof KvorumMonitorClusterSchema>;
 export type KvorumClusterRank = z.infer<typeof KvorumClusterRankSchema>;
+export type KvorumTrendContext = z.infer<typeof KvorumTrendContextSchema>;
 export type KvorumMonitorReceipt = z.infer<typeof KvorumMonitorReceiptSchema>;

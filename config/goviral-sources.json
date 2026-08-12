@@ -106,6 +106,28 @@
       "label": "MMA Files (fighting)",
       "keywords": ["UFC", "Oktagon MMA", "fight week"],
       "hashtags": ["#MMA", "#UFC", "#oktagonmma"]
+    },
+    "kvorum": {
+      "label": "Kvórum (česká politika a občanské dění)",
+      "keywords": [
+        "česká politika",
+        "Poslanecká sněmovna",
+        "vláda ČR",
+        "veřejnoprávní média",
+        "životní náklady",
+        "občanská společnost",
+        "dezinformace",
+        "EU a NATO"
+      ],
+      "hashtags": [
+        "#ceskapolitika",
+        "#snemovna",
+        "#vlada",
+        "#verejnopravnimedia",
+        "#demokracie",
+        "#dezinformace"
+      ],
+      "apify": false
     }
   }
 }

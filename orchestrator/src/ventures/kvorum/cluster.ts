@@ -4,7 +4,8 @@ import {
   KvorumClusterRankSchema,
   type KvorumClusterRank,
   type KvorumMonitorCluster,
-  type KvorumMonitorItem
+  type KvorumMonitorItem,
+  type KvorumTrendContext
 } from "../../contracts/kvorum-monitor.js";
 import type { KvorumEntityLexicon } from "../../contracts/kvorum-entities.js";
 import { canonicalUrl } from "../../streams/normalize.js";
@@ -332,6 +333,7 @@ function rankFactors(input: {
   weights: ReadonlyMap<string, number>;
   standingTopics: ReadonlySet<string>;
   performanceWeights?: KvorumPerformanceWeights;
+  trendContext?: KvorumTrendContext;
   novelty: number;
 }): KvorumClusterRank["factors"] {
   const evidenceDomains = new Set(input.cluster.attributions
@@ -349,6 +351,12 @@ function rankFactors(input: {
       : 0);
   }, 0);
   const standingCount = input.cluster.entityIds.filter((id) => input.standingTopics.has(id)).length;
+  const crossoverTerms = new Set(input.trendContext?.terms ?? []);
+  const crossoverCandidates = [
+    ...input.cluster.topicTokens,
+    ...input.cluster.entityIds.flatMap((id) => id.split("-"))
+  ];
+  const trendCrossover = crossoverCandidates.some((term) => crossoverTerms.has(term)) ? 1.1 : 1;
   return {
     corroboration: evidenceDomains.size,
     entityWeight: entityWeights.length > 0
@@ -356,7 +364,8 @@ function rankFactors(input: {
       : 1,
     engagementSalience: round6(1 + Math.log10(1 + engagement)),
     novelty: input.novelty,
-    standingTopicContinuity: 1 + Math.min(2, standingCount) * 0.25
+    standingTopicContinuity: 1 + Math.min(2, standingCount) * 0.25,
+    trendCrossover
   };
 }
 
@@ -368,6 +377,7 @@ export function rankKvorumClusters(input: {
   priorRecommendations: readonly KvorumPriorRecommendation[];
   now: Date;
   performanceWeights?: KvorumPerformanceWeights;
+  trendContext?: KvorumTrendContext;
 }): KvorumRankedClusters {
   const history = recentRecommendations(input.priorRecommendations, input.now);
   const weights = new Map(input.lexicon.entities.map((entity) => [entity.id, entity.weight]));
@@ -387,6 +397,7 @@ export function rankKvorumClusters(input: {
       weights,
       standingTopics,
       performanceWeights: input.performanceWeights,
+      trendContext: input.trendContext,
       novelty: historyResult.novelty
     });
     return {
@@ -397,6 +408,7 @@ export function rankKvorumClusters(input: {
         * factors.engagementSalience
         * factors.novelty
         * factors.standingTopicContinuity
+        * factors.trendCrossover
       ),
       factors
     };

@@ -32,7 +32,7 @@ import {
   trendEvidenceRefs,
   type TrendItem
 } from "../src/sources/goviral-trends.js";
-import { mapDatasetRow, stepPayload } from "../src/sources/goviral-scout.js";
+import { mapDatasetRow, stepPayload, stepTopicSets } from "../src/sources/goviral-scout.js";
 import { isScoutDay, renderTrendTiebreaker } from "../src/portfolio/run.js";
 import { buildGoViralWeeklyBrief } from "../src/portfolio/goviral-brief.js";
 import { renderTrendingCandidates } from "../src/edition/curate.js";
@@ -355,6 +355,22 @@ describe("the scraped-row boundary", () => {
     expect(stepPayload({ step, registry, topicSet: "nope" })).toBeNull();
     const accountStep = registry.recipe.find((entry) => entry.inputs === "account")!;
     expect(stepPayload({ step: accountStep, registry, topicSet: null })).toBeNull();
+  });
+
+  it("keeps Kvórum's Czech civic topic set on free signals and out of Apify payloads", async () => {
+    const registry = await loadGoViralSourceRegistry();
+    expect(registry.topicSets.kvorum).toMatchObject({
+      label: "Kvórum (česká politika a občanské dění)",
+      apify: false
+    });
+    expect(registry.topicSets.kvorum?.keywords).toEqual(expect.arrayContaining([
+      "česká politika",
+      "Poslanecká sněmovna",
+      "občanská společnost"
+    ]));
+    for (const step of registry.recipe) {
+      expect(stepTopicSets(step, registry)).not.toContain("kvorum");
+    }
   });
 });
 

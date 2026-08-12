@@ -14,7 +14,8 @@ import {
   type KvorumMonitorCluster,
   type KvorumMonitorItem,
   type KvorumMonitorReceipt,
-  type KvorumMonitorSourceResult
+  type KvorumMonitorSourceResult,
+  type KvorumTrendContext
 } from "../../contracts/kvorum-monitor.js";
 import {
   runKvorumApifySource,
@@ -401,6 +402,7 @@ export function buildKvorumMonitorReceipt(input: {
   fetched: KvorumMonitorFetchResult;
   clusters?: KvorumMonitorCluster[];
   ranks?: KvorumClusterRank[];
+  trendContext?: KvorumTrendContext;
 }): KvorumMonitorReceipt {
   const cutoffPublishedAt = new Date(
     input.now.getTime() - KVORUM_RAW_RETENTION_DAYS * 86_400_000
@@ -415,6 +417,7 @@ export function buildKvorumMonitorReceipt(input: {
     rawItems: input.fetched.items,
     clusters: input.clusters ?? [],
     ranks: input.ranks ?? [],
+    ...(input.trendContext ? { trendContext: input.trendContext } : {}),
     purge: {
       retentionDays: KVORUM_RAW_RETENTION_DAYS,
       evaluatedAt: input.now.toISOString(),

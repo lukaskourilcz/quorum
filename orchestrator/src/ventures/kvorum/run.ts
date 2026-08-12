@@ -11,7 +11,8 @@ import {
   KvorumMonitorItemSchema,
   KvorumMonitorReceiptSchema,
   type KvorumMonitorReceipt,
-  type KvorumMonitorSourceResult
+  type KvorumMonitorSourceResult,
+  type KvorumTrendContext
 } from "../../contracts/kvorum-monitor.js";
 import { VentureRecommendationSchema } from "../../contracts/venture-recommendation.js";
 import {
@@ -67,6 +68,7 @@ import {
   loadKvorumPerformanceWeights,
   type KvorumPerformanceWeights
 } from "./performance.js";
+import { loadLatestKvorumGoViralContext } from "./goviral.js";
 
 export {
   TribunDeskOutputSchema,
@@ -180,6 +182,7 @@ function rankedReceipt(input: {
   lexicon: KvorumEntityLexicon;
   history: KvorumPriorRecommendation[];
   performanceWeights: KvorumPerformanceWeights;
+  trendContext: KvorumTrendContext;
 }): KvorumMonitorReceipt {
   const labels = Object.fromEntries(input.lexicon.entities.map((entity) => [entity.id, entity.canonicalName]));
   const clusters = clusterKvorumItems(input.fetched.items, { entityLabels: labels });
@@ -189,14 +192,16 @@ function rankedReceipt(input: {
     lexicon: input.lexicon,
     priorRecommendations: input.history,
     now: input.now,
-    performanceWeights: input.performanceWeights
+    performanceWeights: input.performanceWeights,
+    trendContext: input.trendContext
   });
   return buildKvorumMonitorReceipt({
     date: input.date,
     now: input.now,
     fetched: input.fetched,
     clusters: ranked.clusters,
-    ranks: ranked.ranks
+    ranks: ranked.ranks,
+    trendContext: input.trendContext
   });
 }
 
@@ -269,8 +274,17 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
     };
   }
 
-  const performanceWeights = await loadKvorumPerformanceWeights(input.dry ? stateRoot : root);
-  const receipt = rankedReceipt({ date: input.date, now: input.now, performanceWeights, ...source });
+  const [performanceWeights, trendContext] = await Promise.all([
+    loadKvorumPerformanceWeights(input.dry ? stateRoot : root),
+    loadLatestKvorumGoViralContext({ stateRoot: root, asOfDate: input.date })
+  ]);
+  const receipt = rankedReceipt({
+    date: input.date,
+    now: input.now,
+    performanceWeights,
+    trendContext,
+    ...source
+  });
   const artifacts = [...new Set([
     ...source.fetched.artifactPaths,
     ...await writeKvorumMonitorReceipt({ root, receipt, now: input.now })

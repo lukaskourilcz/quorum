@@ -1,4 +1,5 @@
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { describe, expect, test } from "vitest";
 import { KvorumEntityLexiconSchema, type KvorumEntityLexicon } from "../src/contracts/kvorum-entities.js";
@@ -18,6 +19,8 @@ import { buildKvorumMonitorReceipt } from "../src/ventures/kvorum/monitor.js";
 import { repoRoot } from "../src/paths.js";
 import { applyPerformanceWeightProposal } from "../src/performance/weights.js";
 import { KvorumPerformanceWeightsSchema } from "../src/ventures/kvorum/performance.js";
+import { loadLatestKvorumGoViralContext } from "../src/ventures/kvorum/goviral.js";
+import { atomicWriteJson, atomicWriteText } from "../src/state.js";
 
 const now = new Date("2026-08-12T21:00:00.000Z");
 
@@ -71,7 +74,8 @@ describe("Kvórum deterministic cluster ranking", () => {
       entityWeight: 4.5,
       engagementSalience: 4.105851,
       novelty: 0.7,
-      standingTopicContinuity: 1.25
+      standingTopicContinuity: 1.25,
+      trendCrossover: 1
     });
     expect(rank.score).toBe(32.333577);
     expect(ranked.ranks.map((entry) => entry.position)).toEqual([1, 2, 3, 4]);
@@ -117,6 +121,86 @@ describe("Kvórum deterministic cluster ranking", () => {
     });
     const media = ranked.clusters.find((cluster) => cluster.itemRefs.length === 3)!;
     expect(ranked.ranks.find((entry) => entry.clusterId === media.id)?.factors.entityWeight).toBe(4.25);
+  });
+
+  test("reads the latest recorded GoVIRAL fixture and applies only its Kvórum crossover", async () => {
+    const stateRoot = await mkdtemp(path.join(os.tmpdir(), "kvorum-goviral-"));
+    try {
+      const fixture = JSON.parse(await readFile(
+        path.join(import.meta.dirname, "../fixtures/kvorum/goviral-plan.json"),
+        "utf8"
+      )) as Record<string, unknown>;
+      await atomicWriteJson(
+        stateRoot,
+        "ventures/goviral/plans/plan-2026-08-10-weekly-brief.json",
+        fixture
+      );
+      await atomicWriteJson(stateRoot, "ventures/goviral/plans/plan-future.json", {
+        ...fixture,
+        id: "plan-2026-08-13-weekly-brief",
+        originMeetingRef: "2026-08-13-gv-brief"
+      });
+      await atomicWriteText(
+        stateRoot,
+        "ventures/goviral/plans/plan-corrupt.json",
+        "{not-json}\n"
+      );
+      const trendContext = await loadLatestKvorumGoViralContext({
+        stateRoot,
+        asOfDate: "2026-08-12"
+      });
+      expect(trendContext).toMatchObject({
+        planId: "plan-2026-08-10-weekly-brief",
+        planRef: "state/ventures/goviral/plans/plan-2026-08-10-weekly-brief.json",
+        matchedTactics: 1,
+        terms: ["poplatky"],
+        droppedRecords: 1
+      });
+
+      const input = await fixtureInput();
+      const ranked = rankKvorumClusters({
+        ...input,
+        priorRecommendations: input.history,
+        now,
+        trendContext
+      });
+      const media = ranked.clusters.find((cluster) => cluster.itemRefs.length === 3)!;
+      const mediaRank = ranked.ranks.find((candidate) => candidate.clusterId === media.id)!;
+      expect(mediaRank.factors.trendCrossover).toBe(1.1);
+      expect(mediaRank.score).toBe(35.566934);
+      expect(ranked.ranks.filter((rank) => rank.factors.trendCrossover === 1.1)).toHaveLength(1);
+    } finally {
+      await rm(stateRoot, { recursive: true, force: true });
+    }
+  });
+
+  test("consumes a newer vetoed GoVIRAL draft without turning it into a boost", async () => {
+    const stateRoot = await mkdtemp(path.join(os.tmpdir(), "kvorum-goviral-veto-"));
+    try {
+      const fixture = JSON.parse(await readFile(
+        path.join(import.meta.dirname, "../fixtures/kvorum/goviral-plan.json"),
+        "utf8"
+      )) as Record<string, unknown>;
+      await atomicWriteJson(stateRoot, "ventures/goviral/plans/plan-approved.json", fixture);
+      await atomicWriteJson(stateRoot, "ventures/goviral/plans/plan-draft.json", {
+        ...fixture,
+        id: "plan-2026-08-11-weekly-brief",
+        status: "draft",
+        originMeetingRef: "2026-08-11-gv-brief"
+      });
+      const context = await loadLatestKvorumGoViralContext({
+        stateRoot,
+        asOfDate: "2026-08-12"
+      });
+      expect(context).toMatchObject({
+        planId: "plan-2026-08-11-weekly-brief",
+        status: "draft",
+        matchedTactics: 0,
+        terms: []
+      });
+    } finally {
+      await rm(stateRoot, { recursive: true, force: true });
+    }
   });
 
   test("decays the similarity penalty across the 14-day window", async () => {

@@ -101,7 +101,14 @@ function receipt(): KvorumMonitorReceipt {
       clusterId,
       position: 1,
       score: 1,
-      factors: { corroboration: 1, entityWeight: 1, engagementSalience: 1, novelty: 1, standingTopicContinuity: 1 }
+      factors: {
+        corroboration: 1,
+        entityWeight: 1,
+        engagementSalience: 1,
+        novelty: 1,
+        standingTopicContinuity: 1,
+        trendCrossover: 1
+      }
     }]
   });
 }

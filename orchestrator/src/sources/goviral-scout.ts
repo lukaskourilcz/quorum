@@ -132,7 +132,9 @@ export function stepPayload(input: {
 export function stepTopicSets(step: GoViralRecipeStep, registry: GoViralSourceRegistry): Array<string | null> {
   if (step.inputs === "none") return [null];
   if (step.inputs === "account") return [null];
-  return Object.keys(registry.topicSets);
+  return Object.entries(registry.topicSets)
+    .filter(([, topicSet]) => topicSet.apify)
+    .map(([id]) => id);
 }
 
 export interface StepOutcome {
