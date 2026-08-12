@@ -263,7 +263,7 @@ section and a receipt line, and a day with no usable cluster records an honest q
 - [x] KV-13a — Gates: claim resolution and originality
 - [x] KV-13b — Gates: banned content and register lint
 - [x] KV-14 — Recommendation store with idempotency
-- [ ] KV-15a — Studio brand tokens for Kvórum
+- [x] KV-15a — Studio brand tokens for Kvórum
 - [ ] KV-15b — Carousel-summary venture extension, byte-compatible
 - [ ] KV-16 — Admin approval write path
 - [ ] KV-17a — Server-only admin loader

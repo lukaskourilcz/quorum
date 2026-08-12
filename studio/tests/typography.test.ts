@@ -52,6 +52,17 @@ describe("the committed faces", () => {
     });
   });
 
+  it("uses only committed OFL faces for Kvórum's record-and-highlighter system", () => {
+    expect(CAROUSEL_BRANDS.kvorum.fonts).toEqual({
+      headline: "Barlow Condensed",
+      body: "IBM Plex Sans",
+      mono: "IBM Plex Mono"
+    });
+    for (const family of Object.values(CAROUSEL_BRANDS.kvorum.fonts)) {
+      expect(resolveFace(family, 400).familyName).toContain(family);
+    }
+  });
+
   it("charges all-caps what all-caps costs", () => {
     const face = resolveFace("Archivo", 800);
     // The old flat estimate charged these the same. They are not the same.
