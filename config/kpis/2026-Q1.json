@@ -711,6 +711,90 @@
       "ramp_days": 14,
       "pace": "level",
       "deferred_reason": "No queue item has been reviewed yet, so the ratio has no denominator."
+    },
+    {
+      "id": "door-money.desk-reliability",
+      "venture": "door-money",
+      "name": "Days the recommendation desk held or honestly skipped",
+      "metric_source": "state/meetings#door_money_desk_valid_result_rate",
+      "target": 0.9,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": true,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "door-money.approved-packages-weekly",
+      "venture": "door-money",
+      "name": "Approved recommendation packages per week after week two",
+      "metric_source": "state/ventures/door-money/recommendations#approved_packages_per_week",
+      "target": 5,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "door-money.approval-rate-trending-up",
+      "venture": "door-money",
+      "name": "Approval rate is trending up week over week",
+      "metric_source": "state/ventures/door-money/recommendations#approval_rate_trending_up",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "boolean",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "door-money.owner-actions-weekly",
+      "venture": "door-money",
+      "name": "Owner actions completed per week",
+      "metric_source": "state/ventures/door-money/actions#completed_per_week",
+      "target": 3,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "door-money.passage-depletion-watch",
+      "venture": "door-money",
+      "name": "High-scoring passages used at least once before depletion",
+      "metric_source": "state/ventures/door-money/knowledge#high_scoring_passage_coverage",
+      "target": 0.8,
+      "direction": "at-most",
+      "unit": "ratio",
+      "critical": false,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "door-money.cash-spend",
+      "venture": "door-money",
+      "name": "Door Money cash spend",
+      "metric_source": "state/finance/ledger.json#door_money_cash_spend_usd",
+      "target": 0,
+      "direction": "at-most",
+      "unit": "usd",
+      "critical": true,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "door-money.monthly-model-spend",
+      "venture": "door-money",
+      "name": "Highest monthly Door Money model spend",
+      "metric_source": "state/budget/ledger.json#door_money_maximum_monthly_model_usd",
+      "target": 3,
+      "direction": "at-most",
+      "unit": "usd",
+      "critical": true,
+      "ramp_days": 0,
+      "pace": "level"
     }
   ]
 }
