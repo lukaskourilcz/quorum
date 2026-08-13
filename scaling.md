@@ -1,6 +1,6 @@
 # BoardlessAI — financování a růst
 
-Operating (pre-revenue) režim platí od 2026-08-01 (viz `state/BUSINESS.md`).
+Provozní režim bez příjmů platí od 2026-08-01 (viz `state/BUSINESS.md`).
 Technický přehled je v `about-project.md`; účetnictví je v `state/finance/` a
 `state/treasury/`.
 
@@ -22,6 +22,26 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 - **Databáze** — až při reálné zátěži, ne podle počtu uživatelů.
 - **Fronta / workers** — až při souběžném zpracování nad rámec jednoho writeru.
 - **Assets / traffic** — až při potvrzeném objemu.
+
+## Náklady podle projektu
+
+Všechny řádky níže jsou podřízené společnému limitu `$30` měsíčně, modelovému a API
+podílu `$25` a tempu `$1.00` denně. Obálka je nejvyšší povolená částka, ne očekávaná
+útrata. Pozastavená, prázdná nebo důkazy zablokovaná cesta stojí `$0`.
+
+| Projekt | Aktuální nákladová hranice |
+| --- | --- |
+| **DNESKAi / Caught Up** | Rejstřík vyhrazuje `$0.08` pro vydání v 05:00 a `$0.08` pro produktovou kontrolu v 17:00. Kvalitativní kroky používají stávající modely a společný ledger. |
+| **MMA Files** | Redakce má `$0.05`, jeden denní článek `$0.16` a desk s povinnou agendou `$0.05`. Chybějící důkazy článek ukončí před voláním. |
+| **FightAIQ** | Intake i analýza mají po `$0.06`; predikce samotná je deterministický kód. Zdrojová vrstva má `$3` podíl na společném Apify Free kreditu, ale povolené keyless a free-tier zdroje nesmějí vytvořit hotovostní náklad. |
+| **Design Lab** | Šablony, písma, SVG, PNG, recepty a exporty běží lokálně za `$0`; není tu modelový, výzkumný ani hostingový příplatek. |
+| **marketingShark** | Jedno volání za zapnutou značku má obálku `$0.10`; jedna aktivní značka vychází přibližně na `$1.50` měsíčně. |
+| **GoVIRAL** | Pondělní modelová porada má `$0.06`, ostatní dny `$0`. Apify recept je odhadnutý na `$4.60` měsíčně, ale tvrdě jej zastaví sdílený `$5` Free kredit; Door Money a Tehdejší svět používají bezklíčové měření za `$0`. |
+| **Titty Tuesdays** | Denní pre-commerce porada má `$0.08`. Volitelná úterní vizuální cesta je vypnutá bez šesti podpisů, obou klíčů a přepínače; po otevření má vlastní strop `$2.00` měsíčně. |
+| **BOOKSOFHISTORY** | Desk smí utratit nejvýše `$0.50` za cyklus; výzkum `$0.10` za volání a `$5.00` měsíčně. Celkový modelový plán je `$6–8` měsíčně, ale živá cesta čeká na zakládající podpis a do té doby stojí `$0`. |
+| **Door Money** | Jednorázová ingestace má strop `$3.00` celkem. Denní desk má `$0.08`, čtvrteční BOOKER `$0.06`; běžný modelový odhad je přibližně `$2.50` měsíčně. GoVIRAL termíny používají bezklíčový zdroj za `$0`. |
+| **Tehdejší svět** | Běh sdílí obálku `$0.25`; výzkum má `$0.30` za brief a `$2.00` měsíčně, modelový cíl nejvýše `$4.00` měsíčně. Zakládající rozhodnutí je nepodepsané, takže live náklad je zatím `$0`. |
+| **Kvórum** | Deklarovaná denní obálka je `$0.10`, modelový KPI strop `$3.00` měsíčně a Apify podíl `$2.00` uvnitř stejného `$5` Free kreditu. Zakládající i kapacitní rozhodnutí chybí, takže externí a modelová cesta stojí `$0`. |
 
 ## Kontrola nákladů
 
@@ -98,6 +118,12 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
   i ruční výsledky jsou kód za $0. Soubor potvrzených faktů spravuje majitel v tomto
   repozitáři. Existující produkt zůstává v samostatném repozitáři bez runtime spojení,
   takže nevzniká nový hosting, databáze, analytika ani placený kanál.
+- Kvórum má deklarovanou obálku **$0.10 na den**, modelový KPI strop **$3.00 měsíčně**
+  a vlastní **$2.00 měsíční podíl** uvnitř stejného Apify Free kreditu. Odhadovaný
+  modelový běh je přibližně $2.20 měsíčně. Zakládající rozhodnutí i oddělený přesun
+  nejméně $0.08 denní kapacity jsou nepodepsané, takže monitor zůstává fixture-only,
+  nevolá Apify ani model a stojí $0. Kvórum nesmí samo upgradovat tarif ani přesunout
+  rozpočet.
 - Caught Up dál používá Claude Sonnet pro výběr tématu, anglický článek a českou verzi. Tyto tři kroky přímo určují kvalitu vydání, takže je bez srovnávacího testu nepřepínáme na levnější model.
 - Anglický writer dostává vybrané zdroje a nejvýše 12 dalších položek pro Watchlist. Dříve dostával dlouhý seznam všech URL, i když z něj nemohl čerpat další obsah.
 

@@ -5,9 +5,9 @@ ukládá výsledky tak, aby šlo zpětně dohledat, proč něco navrhla. Pevná 
 důkazy, náklady, bezpečnost a to, co smí udělat jen majitel.
 
 Aktuální stav: **v provozu, bez příjmů, ve fázi ověřování**. Web běží na Vercel Pro:
-<https://boardless-ai.vercel.app>. Systém má deset pracovních projektů: Caught Up (veřejně
-DNESKAi), Titty Tuesdays, GoVIRAL, marketingShark, BOOKSOFHISTORY, FightAIQ, Design
-Lab, MMA Files, Door Money a Tehdejší svět.
+<https://boardless-ai.vercel.app>. Systém má jedenáct pracovních projektů: Caught Up
+(veřejně DNESKAi), Titty Tuesdays, GoVIRAL, marketingShark, BOOKSOFHISTORY,
+FightAIQ, Design Lab, MMA Files, Door Money, Tehdejší svět a Kvórum.
 Magazine Incubator byl uzavřen — nové magazíny se už nevymýšlejí.
 
 **Co už publikuje (k 12. srpnu 2026):** publikují dva projekty — DNESKAi denní vydání a
@@ -19,7 +19,9 @@ jako koncepty ve frontě ke schválení a rozhoduje o nich majitel. BOOKSOFHISTO
 jen připravuje koncepty; majitel každou jazykovou verzi schválí, vykreslí v Design
 Labu a zveřejní ručně. Tehdejší svět také připravuje jen návrhy: česko-ukrajinské
 rodinné příběhy vznikají z jednoho ručně spravovaného souboru faktů a majitel je
-zveřejňuje ručně. Existující produkt zůstává ve vlastním repozitáři.
+zveřejňuje ručně. Kvórum má hotovou cestu pro zdrojované české politické návrhy, ale
+jeho placený běh čeká na podpis zakládajícího a kapacitního rozhodnutí. Ani jeden z
+těchto projektů neumí publikovat sám.
 
 ## Jak je systém poskládaný
 
@@ -30,7 +32,7 @@ GitHub Actions / příkazová řádka
      TypeScript řízení porad
      ├─ rozpis, agendy a výběr rolí
      ├─ limity nákladů a kontrola zdrojů
-     ├─ porady všech deseti projektů
+     ├─ porady všech jedenácti projektů
      └─ jeden denní souhrn
               │
               ▼
@@ -45,9 +47,9 @@ GitHub Actions / příkazová řádka
      └─ chráněná správa projektů (rail podle projektů)
 ```
 
-V rejstříku je 48 rolí, z toho **39 aktivních**: čtyři hlasující členové rady a 35
+V rejstříku je 49 rolí, z toho **40 aktivních**: čtyři hlasující členové rady a 36
 odborných rolí. Šest rolí je pozastavených a tři vyřazené; veřejný web počítá
-jen ty pracující. Dvacet čtyři aktivních rolí používá Anthropic a 15 OpenAI. Dvacet sedm
+jen ty pracující. Dvacet pět aktivních rolí používá Anthropic a 15 OpenAI. Dvacet sedm
 rolí má na veřejném webu svou schválenou fotografii. Novější role používají neutrální zástupný obrázek se jménem,
 dokud pro ně nevznikne schválený portrét. Web používá jména a pracovní popisy bez
 seriálového vzhledu a bez označení sezon nebo epizod. Tyto vizuální prvky se neposílají
@@ -80,23 +82,23 @@ modelům ani do podkladů porad.
   účty ani slibovat výhru.
 - **Design Lab** je pracovní nástroj na sociální obsah, ne galerie šablon. Jedna
   záložka `studio` v administraci ukazuje každý doručený článek obou magazínů i schválené
-  summary Door Money, vykreslí jeho karusel skutečným enginem ve všech čtyřech formátech a nechá majitele přepnout
+  summary podporovaných projektů, vykreslí jejich karusely skutečným enginem ve všech
+  čtyřech formátech a nechá majitele přepnout
   rodinu, variantu, úpravu fotky, velikost písma a fázi rytmu — a to všechno je jeden
   zapsaný recept, který si pipeline sama odvodí při doručení. Deset rodin šablon
   (masthead, gutter, bevel, porthole, slab, terrace, figure, pull, tower, dossier)
   založilo knihovnu, kterou dalších třináct rozšířilo na 23 odlišných rodin. Ty nahradily
   pět tapet, které byly ve třech případech tentýž rozmazaný gradient. Písma
   jsou od 9. srpna 2026 v repozitáři: třicet statických řezů pod licencí SIL OFL, takže
-  stejný deck vykreslí stejné bajty na jakémkoli stroji. Barevné sady drží pro sedm
-  značek; devShark a geoShark přibyly s marketingSharkem, BOOKSOFHISTORY doplnilo
-  typografickou sadu bez obálek, Door Money anglickou sadu a Tehdejší svět sedmou sadu
-  s českou i ukrajinskou cyrilicí. Design Lab nemá vlastní sociální účet.
+  stejný deck vykreslí stejné bajty na jakémkoli stroji. Knihovna drží devět barevných
+  sad: DNESKAi, MMA Files, Titty Tuesdays, devShark, geoShark, BOOKSOFHISTORY, Door
+  Money, Tehdejší svět a Kvórum. Design Lab nemá vlastní sociální účet.
 - **BOOKSOFHISTORY** každý den ve 12:00 naváže na rozepsanou fázi výběru, výzkumu
   nebo tvorby. Z jednoho zdrojovaného dossieru vznikne společný příběhový brief a dva
   samostatně napsané české a anglické sociální koncepty. Nemá veřejný web, stránky
   knih, SEO archiv, databázi, newsletter, obchod, účet ani cestu ke zveřejnění. Obálky
   knih se nikdy nevykreslují; citace mají nejvýše 300 znaků a uvedený zdroj.
-- **MMA Files** je veřejný anglicko-český magazín. BoardlessAI do jeho repozitáře posílá jen ověřené články a data z FightAIQ;
+- **MMA Files** je veřejný český magazín. BoardlessAI do jeho repozitáře posílá jen ověřené články a data z FightAIQ;
   rozepsané texty a interní poznámky zůstávají v chráněné administraci. Když FightAIQ
   nemá žádný nadcházející turnaj, redakce místo náhledu zápasu napíše profil nejlépe
   podloženého bojovníka — oba projekty na sobě nezávisí.
@@ -112,16 +114,44 @@ modelům ani do podkladů porad.
   napsat český návrh a VERBA samostatný ukrajinský návrh. Obě verze smějí čerpat jen z
   jednoho ručně potvrzeného a otiskem chráněného souboru faktů; HACEK, QUILL a AUDIT
   hlídají vstup, citlivost, kvalitu a stop bránu. Výstup je jen návrh a výsledky zadává
-  majitel ručně. Existující produkt zůstává ve vlastním repozitáři: BoardlessAI se k
-  němu nepřipojuje a připravuje pouze marketingové podklady.
+  majitel ručně. BoardlessAI se k existujícímu produktu nepřipojuje a připravuje pouze
+  marketingové podklady.
+- **Kvórum** má v 21:00 připravovat jeden nebo dva původní české politické návrhy z
+  potvrzeného denního digestu. Jeden TRIBUN call obklopují deterministické kontroly
+  zdrojů, typů tvrzení, opakování, veřejných osob a českého rejstříku. Design Lab je
+  jediná cesta k obrázku a zveřejnění zůstává ruční. Dokud majitel nepodepíše zakládající
+  rozhodnutí a zvláštní přesun denní rozpočtové kapacity, běží jen fixture monitor za
+  `$0`; nevznikne externí ani modelové volání.
 
 ## Denní rozpis a peníze
 
-Společný pražský rozpis má 17 kontrolních časů: 05:00, 06:00, 07:00, 08:00, 09:00, 10:00,
-11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00, 18:00, 19:00, 20:00 a 22:00. Slot 21:00 zmizel se zrušením
-večerního článkového slotu; 18:00 se znovu používá pro Tehdejší svět. Sedmá hodina zůstala po uzavření inkubátoru prázdná a od
-7. srpna 2026 v ní sedí denní porada marketingSharku. Letní a zimní čas má každý
-slot vlastní spouštění a program přijme jen tu variantu, která platí pro Prahu dnes.
+Společný pražský rozpis má osmnáct denních oken, jedno každou hodinu od 05:00 do
+22:00:
+
+| Praha | Okno | Kdy skutečně pracuje |
+| ---: | --- | --- |
+| 05:00 | DNESKAi vydání | pevná služba; jen s důkazy a otevřenými live branami |
+| 06:00 | ranní rada | rozhodovací porada; nejvýše jedna odborná zakázka |
+| 07:00 | marketingShark | jeden koncept pro každou zapnutou značku |
+| 08:00 | FightAIQ intake | jen při změně zdrojů nebo platné agendě |
+| 09:00 | MMA Files redakce | přidělí nebo zruší jeden denní článkový slot |
+| 10:00 | MMA Files článek | jen přidělený slot s úplnými důkazy |
+| 11:00 | Titty Tuesdays | stálé pre-commerce marketingové okno |
+| 12:00 | BOOKSOFHISTORY | pokračuje v rozepsaném výběru, výzkumu nebo tvorbě |
+| 13:00 | GoVIRAL | placený brief jen v pondělí; jinak `$0` |
+| 14:00 | odpolední rada | deterministický kontrolní zápis za `$0` |
+| 15:00 | Door Money návrhy | denní stůl za soukromou znalostní a rozpočtovou branou |
+| 16:00 | Door Money růst | placený balíček jen ve čtvrtek; jinak `$0` |
+| 17:00 | DNESKAi produkt | pevná produktová kontrola |
+| 18:00 | Tehdejší svět | jedna plánovací nebo dvojjazyčná produkční fáze; live běh je zatím zamčený |
+| 19:00 | FightAIQ analýza | jen s agendou a splněnými důkazními branami |
+| 20:00 | MMA Files desk | jen s platnou agendou |
+| 21:00 | Kvórum | registrovaný fixture-only stůl, dokud chybí dva podpisy |
+| 22:00 | noční rada | kontrolní zápis a digest za `$0` |
+
+Vercel drží dvě UTC varianty každého okna kvůli letnímu a zimnímu času; DNESKAi má
+navíc dvě retry varianty. Z 38 cron záznamů proto vzniká 18 cest a 19 unikátních UTC
+výrazů. Program přijme jen variantu, která odpovídá dnešnímu času v Praze.
 
 Kterou poradu spustit, určuje **spouštěč, který se ozval**, ne hodiny v okamžiku startu.
 GitHub úlohy podle rozpisu často odloží — 2. srpna o 13 až 54 minut — a dřívější odvození
@@ -185,8 +215,9 @@ zápis bezpečně selže.
 Web automaticky nesbírá návštěvnost, čtenost ani výsledky příspěvků. Majitel může v
 chráněné správě ručně zapsat výsledek konkrétní jazykové verze BOOKSOFHISTORY i
 výsledek Door Money vedle původního záměru; systém se nepřipojuje k analytice ani sociální
-síti. Totéž platí pro výsledky Tehdejšího světa: majitel je vkládá jako komentář k
-uloženému návrhu a systém nečte produkt ani jeho analytiku. Přepínač
+síti. Totéž platí pro výsledky Tehdejšího světa a Kvóra: majitel je váže ke konkrétnímu
+uloženému návrhu nebo ručnímu potvrzení zveřejnění a systém nečte produkt, platformu ani
+jejich analytiku. Přepínač
 `METRICS_INGESTION_ENABLED` zůstává vypnutý a role SPLIT nepracuje. REACH je také
 vypnutý, dokud je tvorba sociálního obsahu pro MMA Files zamčená.
 

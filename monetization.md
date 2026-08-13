@@ -1,14 +1,15 @@
 # BoardlessAI — monetizace
 
-The catalog now lives in `config/monetization-options.json` and is rendered in the admin under
-**Future → Ways this could earn** — seventeen options across ads, affiliate, commerce,
-subscription, products, services, licensing and support, each with a plain description, what it
-would cost to start, which projects it fits and what is standing in its way.
+Katalog je v `config/monetization-options.json` a administrace ho zobrazuje v části
+**Future → Ways this could earn**. Obsahuje sedmnáct možností v kategoriích reklama,
+affiliate, obchod, předplatné, produkty, služby, licence a podpora. U každé uvádí prostý
+popis, náklad na spuštění, vhodné projekty a překážky.
 
-That file is the single copy. This page used to hold a second table of the same options, which is
-exactly the drift `docs/ENGINEERING.md` rule 4 exists to stop: two lists of the same facts, one of
-them quietly wrong.
+Tento soubor je jediný zdroj. Dříve zde byla druhá tabulka stejných možností. Právě
+takovému rozcházení dvou seznamů brání pravidlo 4 v `docs/ENGINEERING.md`.
 
-Nothing in the catalog is switched on, and nothing in it spends anything. Every option that would
-cost money, create an account or enable a channel goes through `state/INBOX.md` as a
-`HUMAN_APPROVAL` first, inside the $30 all-in operating cap from `budget-2026-08e`.
+Nic v katalogu není zapnuté a nic neutratí peníze. Každá možnost, která by něco stála,
+založila účet nebo otevřela kanál, nejprve potřebuje `HUMAN_APPROVAL` ve
+`state/INBOX.md` a musí se vejít do společného limitu `$30` z rozhodnutí
+`budget-2026-08e`. Přidání jedenáctého projektu žádnou možnost nezapnulo ani
+nezdvojilo; výdělečné cesty se stále definují jen v katalogu.
