@@ -90,6 +90,8 @@ API key. The site reads committed state.
   [the MMA bridge](state/mma/BRIDGE.md).
 
 Contributors read [CLAUDE.md](CLAUDE.md), [AGENTS.md](AGENTS.md) and
-[CONTRIBUTING.md](CONTRIBUTING.md). Runtime prompts, decision records, state indexes and mirrored
-skills are reached by their registries and directory conventions; they are operational inputs,
-not standalone documentation pages.
+[CONTRIBUTING.md](CONTRIBUTING.md). Runtime prompts, `.claude/agents`, `.claude/commands`,
+`.agents/product-marketing-*`, decision records, state indexes and mirrored skills are reached by
+their registries and directory conventions; they are operational inputs, not standalone
+documentation pages. `.agents/ENGINEERING.md` is the byte-tested mirror of the linked engineering
+contract above.

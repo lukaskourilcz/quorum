@@ -20,6 +20,7 @@ const brand = CAROUSEL_BRANDS["tehdejsi-svet"];
 const formats = Object.keys(deckFormats) as Array<keyof typeof deckFormats>;
 
 type TextLayer = Extract<ReturnType<typeof tehdejsiDeckTemplate>["slides"][number]["layers"][number], { type: "text" }>;
+type RuleLayer = Extract<ReturnType<typeof tehdejsiDeckTemplate>["slides"][number]["layers"][number], { type: "rule" }>;
 
 function textLayers(template: ReturnType<typeof tehdejsiDeckTemplate>, slideIndex: number): TextLayer[] {
   return template.slides[slideIndex]!.layers.filter((layer): layer is TextLayer => layer.type === "text");
@@ -59,7 +60,9 @@ describe("the bilingual family", () => {
     const ua = layers.find((layer) => layer.type === "text" && layer.slot === tehdejsiUaSlot(2))!;
     // By position, not by type: the crosshair arm is also a rule and comes first in the layer
     // array, so `find(type === "rule")` measures the wrong thing and passes for the wrong reason.
-    const hairlines = layers.filter((layer) => layer.type === "rule" && layer.y > cs.y && layer.y < ua.y);
+    const hairlines = layers.filter(
+      (layer): layer is RuleLayer => layer.type === "rule" && layer.y > cs.y && layer.y < ua.y
+    );
     expect(hairlines).toHaveLength(1);
     // Between them, not beside them: two languages stacked with no mark read as one paragraph in
     // a language nobody speaks.

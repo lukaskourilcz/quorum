@@ -752,6 +752,18 @@ month, while a shelf or stretched day may cost `$0`.
 
 ## Recently finished
 
+- **The repository-wide Markdown sweep completed**, 2026-08-13. It began with 345 tracked
+  Markdown files and ends with 352: five served documents were deleted, four durable Kvórum files
+  arrived with its completed programme, and eight mirrored tool-boundary notes were added so
+  vendored skills keep their pinned bytes without linking to an uninstalled upstream catalog.
+  Deleted one by one: `docs/HANDOFF-147-DECOMPOSITION.md` after its remaining decomposition work
+  moved here; `docs/KVORUM-CODEX-BUILD-PROMPT.md` after execution; the served
+  `docs/SECRETS-AUDIT-2026-08-06.md`; `docs/WORKFLOWS-MAP-DESIGN-SPEC.md` after its live invariants
+  moved to component tests and docs; and the served `docs/fightaiq-review.md`. The root entry,
+  owner guides, session contracts, ecosystem/portfolio maps, seven venture designs, Design Lab,
+  hook knowledge, owner list and living state were reconciled. All 352 survivors are protected
+  records, runtime inputs, convention-required owner docs or have an internal reader link. No
+  temporary inventory file was created; the 345-file classification remains on SWEEP-00.
 - **Four venture programmes are implemented but still fixture-only**, 2026-08-13. Kvórum,
   BOOKSOFHISTORY, Door Money and Tehdejší svět now have bounded desks, contracts, admin surfaces
   and tests. Their founding countersignatures, named approvals and owner-created accounts remain
