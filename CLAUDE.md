@@ -9,6 +9,9 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   EXPERIMENTS, FINANCE, CONTENT_INVENTORY, CLAIMS, BRAND, ROADMAP, INBOX and
   decisions.
 - `orchestrator/` — cycle engine + council prompts. `site/` — Next.js app.
+- `config/ventures.json` — the canonical venture set: Caught Up (DNESKAi), Titty
+  Tuesdays, GoVIRAL, BOOKSOFHISTORY, FightAIQ, Design Lab, marketingShark, MMA Files,
+  Door Money, Tehdejší svět and Kvórum. It also owns each venture room and envelope.
 - `studio/` — `@boardlessai/carousel-studio`, the deterministic render package. It is
   consumed as built output (`dist/`, gitignored). `pnpm install` builds it through the
   studio's `prepare`, and the gates rebuild it through `pre*` scripts in `site` and
@@ -18,7 +21,7 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   other `tsx` entry points read `dist` and will otherwise use the last build.
 - `config/models.json` — model IDs per role. `.env.example` — required env.
 
-## Three things a session will trip over
+## Things a session will trip over
 
 - **The home page is one client component.** `site/src/components/office/` holds the
   office walkthrough; `site/src/lib/office-walkthrough.ts` resolves everything it renders
@@ -48,6 +51,31 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   delivery cannot happen without a summary beside it. The site rebuilds the same summary
   from the package for anything published before that existed, using the same function —
   a recorded summary always wins over a derived one, because it is what was actually sent.
+- **The four new admin workspaces already have one read boundary each.**
+  `site/src/lib/admin-{booksofhistory,door-money,tehdejsi-svet,kvorum}.ts` are the
+  server-only snapshots. Their bounded view models are what client panels receive. Extend the
+  owning snapshot instead of scanning state from a component or creating a competing loader;
+  missing and malformed records must remain visible as unavailable or dropped counts.
+- **Book research has one provider boundary.** `orchestrator/src/research/provider.ts`
+  owns provider selection and the sole concrete `anthropic-web-search` adapter. BOOKSOFHISTORY
+  and Tehdejší svět reuse it through venture-owned briefs, dossiers and ledgers. A provider may
+  gather bounded evidence; it cannot publish, pick a second implementation silently or escape
+  the caller's tighter research envelope.
+- **The studio's fonts are build inputs.** Font files live in `studio/fonts/`; measurements live
+  in generated `studio/src/font-metrics.generated.ts`. Run `pnpm -C studio fonts:metrics` after a
+  font-file change and commit both. Literata and Inter are the Cyrillic-complete Tehdejší svět
+  faces, and the Ukrainian alphabet coverage test is a release gate, not a visual nicety.
+- **Tehdejší svět never reads the product at runtime.** Its only source snapshot is the
+  hand-committed, hash-verified `state/ventures/tehdejsi-svet/facts.json`. `shareSafe` and excluded
+  media are enforced while that file is prepared. A hash mismatch aborts; no fetcher, repository
+  client or fallback may be added to make the desk continue.
+- **Door Money's public boundary is irreversible.** This repository may contain hashes, scores,
+  excerpts capped at 600 characters and at most 40 style exemplars capped at 280 characters each.
+  It may never contain the manuscript, full-text chunks or embeddings, and fixtures never use
+  real book text.
+- **Kvórum is built but held.** Its 21:00 fixture monitor costs `$0`. No external source or TRIBUN
+  call may run until both the founding record and a separate capacity-reallocation record are
+  countersigned; a venture switch is not a substitute for either decision.
 
 ## Golden rules
 
@@ -71,16 +99,15 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
    ($25 model/API share, $1.00 daily pace); council purchases run through
    `state/treasury/ledger.json`, only the human executes payments and resolves
    SPEND items — never mark them yourself.
-6. Small commits. Initial implementation uses phase commits; runtime council
-   work uses one atomic `cycle(NNN)` commit after all gates.
-7. Site must pass the full release gate. No thin/uncited content, fake claims,
+6. Site must pass the full release gate. No thin/uncited content, fake claims,
    vanity KPI optimization or forced work when NO_ACTION is better.
 
 ## Commands
 
-`pnpm install` · `pnpm test` ·
-`pnpm cycle -- --phase morning|afternoon|night|founding [--dry]`
-`pnpm -C site dev|build|typecheck` ·
+`pnpm install` · `pnpm agents:validate` · `pnpm lint` · `pnpm typecheck` ·
+`pnpm test` · `pnpm build` · `pnpm docs:check` ·
+`pnpm cycle -- --phase <registered-phase> [--dry]` ·
+`pnpm -C site dev|build|typecheck|test:e2e` ·
 `pnpm datasets:append -- --dataset <name> --current <file> --entries <file>`
 
 ## Magazine datasets
@@ -146,8 +173,9 @@ the reader has no memory of the previous copy. Sharing one contract would make
 
 ## When asked to "do the tasks"
 
-Use the `builder` subagent on unchecked tasks in the newest decision file, one
-task per commit, tick checkboxes, update `state/ROADMAP.md`.
+Read the owning issue and decision first. Work only its unchecked task, keep it in one
+issue-scoped commit, and tick the decision checkbox in the commit that completes it. The issue
+program's stated order wins over opportunistic work elsewhere.
 
 
 ## Engineering rules
@@ -159,15 +187,14 @@ rules here — a rule written in two places is two rules that will disagree.
 
 ## Shared skills
 
-Four skills in `.claude/skills/` are vendored verbatim from upstream and kept
-identical across every repository. Each carries an `UPSTREAM.md` with its
+Twelve skills in `.claude/skills/` are vendored verbatim from upstream. Each carries an `UPSTREAM.md` with its
 source, pinned commit, and license — re-vendor rather than hand-editing them.
 
 Nineteen skills are mirrored byte-for-byte into `.agents/skills/` for Codex CLI
-sessions. Eleven are this repository's own: agent-identity, boardroom-routing,
+sessions. Ten are this repository's own: agent-identity, boardroom-routing,
 brand-identity, business-validation, financial-operations,
 organization-operations, page-publishing, safe-release, social-operations,
-stop-slop and titty-tuesdays-brandbook. Eight are vendored verbatim from
+and titty-tuesdays-brandbook. Nine are vendored: stop-slop plus eight from
 `coreyhaines31/marketingskills` at `7868cb9` (MIT): ai-seo, content-strategy,
 copywriting, marketing-ideas, marketing-loops, marketing-psychology,
 product-marketing and social. Edit both copies in the same commit;
@@ -177,7 +204,7 @@ review and interactive sessions. Runtime prompts do not load skill files —
 GoVIRAL's craft rules are distilled into `orchestrator/prompts/goviral.md`
 instead.
 
-The vendored eight are generic advice. **This repository's contracts always
+The vendored marketing skills are generic advice. **This repository's contracts always
 win**: the $30 all-in operating cap, the social triple-lock, the truth gates and
 the treasury rules are not negotiable by a skill file. Each carries an
 `UPSTREAM.md` recording where it diverges — most importantly `social`, whose

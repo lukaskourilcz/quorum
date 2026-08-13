@@ -6,10 +6,8 @@ easy to get wrong because they cross a repository boundary.
 
 ## The engineering contract
 
-`docs/ENGINEERING.md` holds the architecture, module and process rules — schema-first boundaries,
-recorded-not-re-derived, one writer per state path, one resolver per config concern, and the rest.
-It is shared across repositories and mirrored at `.agents/ENGINEERING.md`; a drift test fails if
-the two disagree. Everything below is this repository's own, and does not repeat it.
+Read `docs/ENGINEERING.md` directly. Its Codex mirror is `.agents/ENGINEERING.md`; a drift test
+fails if the two disagree. This file contains only repository-specific contribution guidance.
 
 ## Hook and viral-copy knowledge lives here, and only here
 
@@ -57,15 +55,7 @@ If a lint rule fails on a shipped string, **report it — do not rewrite the lin
 final and length-budgeted, and a rule that disagrees with a deliberate exception is a rule to
 discuss, not a string to quietly edit.
 
-## Contracts
-
-A new bounded contract needs its zod schema in `orchestrator/src/contracts/`, an entry in
-`ContractSchemas`, a `valid` and a `poison` fixture under `contracts/fixtures/`, and a run of
-`pnpm contracts:export`. The poison fixture should encode the failure the contract exists to
-prevent, not an arbitrary type error.
-
 ## Shared skills
 
-Four skills in `.claude/skills/` are vendored verbatim from upstream; nineteen are mirrored
-byte-for-byte into `.agents/skills/`. Edit both copies in the same commit —
-`orchestrator/tests/architecture.test.ts` fails on any drift, file by file.
+Skill provenance, the canonical inventory and mirror rules live in the **Shared skills** section
+of `CLAUDE.md`. Do not keep a second inventory here.
