@@ -1,20 +1,18 @@
 # The Hook Brain — the Design Lab as assignment authority
 
-The the Design Lab is the single brain behind all social content: it renders the images,
+The Design Lab is the single brain behind all social content: it renders the images,
 renders the texts, and **assigns the hooks** from the central library. This doc defines how
 that works and where the seams are.
 
 ## Where things live
 
-Everything canonical sits in the quorum monorepo next to the Design Lab's engine:
-the hook libraries (`quiz`, `news`, `mma`), the research files, these docs, the lint, and
-the predicate evaluator. Consumer apps never orchestrate and never own hook copy — they
-receive bounded, hash-receipted data through the standard delivery channel, same as
-articles.
+Everything canonical sits in the quorum monorepo: libraries and their adjacent research JSON in
+`studio/hooks/`, docs here, and the lint/evaluator in `studio/src/hooks/`. Consumer apps do not
+orchestrate, receive or own hook copy.
 
-## Two consumption modes
+## Active consumption mode
 
-### 1. Social packs (studio, pack-build time)
+### Social packs (studio, pack-build time)
 When a social pack is built for any venture:
 
 1. The item payload arrives with its metadata (for quiz content: option count, difficulty,
@@ -35,11 +33,11 @@ When a social pack is built for any venture:
 6. The assignment is recorded in the pack (`hook-assignment/1`: hookId, surface, language,
    eligible-set hash, cooldown snapshot) and the studio renders the hook into the
    template's slide-1 text slot.
-7. **Fallback:** empty eligible set, or an unwritten library (news/MMA today) → the
+7. **Fallback:** an empty library or exhausted eligible/cooldown/variety set → the
    template's default headline renders instead, logged as `no-hook`. A missing hook never
    blocks a pack.
 
-### 2. In-app — designed, built, and deliberately not shipped
+## Historical in-app design — deliberately not shipped
 This described a second consumption mode: the quiz apps rendering a hook per user per
 question at request time, receiving the library as a bounded `hook-library/1` delivery and
 implementing their own selector (gate filter → per-user per-hook cooldown → session-memory
@@ -64,22 +62,19 @@ here. If a swipe-card surface is ever built, the design above is the one to buil
 and the selector, evaluator and conformance vectors it needs are recoverable from the closed
 PR (`lukaskourilcz/react-express-app#104`).
 
-## Cooldown scopes (do not mix these up)
+## Cooldown and variety scopes
 
 | Scope | Where enforced | Rule |
 |---|---|---|
-| In-app | app runtime, per user per hook | `cooldownDays` as shipped |
 | Social channel | studio, per channel per hook | `max(2 × cooldownDays, 14)` — every follower sees every post, so there is no per-user dilution; wear-out hits the whole audience at once |
 | Social variety | studio, per channel | no same archetype on consecutive posts |
 
-## Drift control (six predicates, two implementations)
+## Drift control (one implementation, golden vectors)
 
-Predicate semantics are specified once (`04-schema-and-gates.md`) but implemented twice:
-in the studio evaluator and in each app's selector. To pin them together, the studio
-generates **conformance vectors** — `hooks.predicates.spec.json`, a fixture of
-(item metadata, library slice) → expected eligible ids — and ships them with every library
-delivery. Studio CI and app CI both assert against the same vectors. If the vectors and an
-implementation disagree, the implementation is wrong.
+Predicate semantics are implemented once in the studio evaluator. The committed
+`hooks.predicates.spec.json` vectors pin boundary cases as (item metadata, library slice) →
+expected eligible ids, and studio CI asserts the implementation against them. They are regression
+fixtures for the canonical engine, not an app-delivery contract.
 
 ## Boundaries, restated
 
@@ -90,5 +85,4 @@ implementation disagree, the implementation is wrong.
   `falsifiedIf`), submitted through the lint.
 - **Ventures**: content payloads with honest metadata. A wrong `difficulty` in a payload
   silently makes a hook dishonest — payload accuracy is a venture responsibility.
-- **Apps**: selection mechanics and per-user state. Never copy edits; problems with strings
-  go upstream.
+- **Apps**: no hook responsibility; the withdrawn design remains historical context only.

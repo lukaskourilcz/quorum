@@ -1,12 +1,12 @@
 # Hook & Viral Copy Knowledge Base
 
 Distilled, evidence-tagged knowledge for any agent writing or editing **hooks and short-form
-viral copy** in this repo family: devShark / geoShark in-app quiz hooks, marketingShark
-carousel slide-1 hooks, and social post copy generally.
+viral copy** in this repo family: quiz, news and MMA carousel slide-1 hooks, and social post
+copy generally. Hooks are not shipped into the quiz apps; `06-hook-brain.md` records why.
 
-Produced during the August 2026 hook-library rebuild (16 → 49 Tier A hooks + Tier B spec).
-The live libraries (`quiz`, `news`, `mma`) sit beside these docs in the studio; these docs
-are the *why* and *how* behind them.
+Produced during the August 2026 hook-library rebuild. The three live studio libraries contain
+50 quiz hooks, 12 news hooks and 16 MMA hooks. The JSON lives in `studio/hooks/`; these docs are
+the *why* and *how* behind it.
 
 ## Files
 
@@ -16,22 +16,21 @@ are the *why* and *how* behind them.
 | `02-hook-craft-rules.md` | You're writing copy — voice, hard limits, honesty rules, Czech rules, anti-patterns, pre-ship checklist |
 | `03-metrics-and-testing.md` | You're evaluating hooks — metrics, cooldowns, wear-out, A/B design, kill rules |
 | `04-schema-and-gates.md` | You're touching the hook system itself — schema, predicate semantics, known bug classes, Tier B build specs |
-| `05-surfaces.md` | You're writing hooks for a venture other than the quiz apps — why strings don't port, per-surface predicate vocabularies, extra honesty rules for news and MMA |
-| `06-hook-brain.md` | You're touching assignment or delivery — how the Carousel Studio evaluates gates, cooldown scopes (per-channel vs per-user), agent override limits, conformance vectors |
+| `05-surfaces.md` | You're writing for a different content surface — why strings don't port, per-surface predicate vocabularies, extra honesty rules for news and MMA |
+| `06-hook-brain.md` | You're touching assignment — how the Carousel Studio evaluates gates, enforces channel cooldowns, bounds agent overrides and pins evaluator semantics with vectors |
 
-These docs are **canonical and live in one place**: the quorum monorepo, next to the
-Carousel Studio engine — the studio is the assignment brain for all social content (see
-`06-hook-brain.md`). Consuming repos (devShark/geoShark apps, DNESKAi, MMA Files) reference
-these docs from their own `CLAUDE.md` and receive libraries as bounded deliveries — never a
-copy; a forked playbook drifts within weeks.
+These docs are **canonical and live in one place**: the quorum monorepo. The Carousel Studio is
+the assignment brain for social content (see `06-hook-brain.md`); libraries live in
+`studio/hooks/` (including the adjacent `*.research.json` records), and the shared engine in
+`studio/src/hooks/`. The quiz apps remain standalone and receive none of this copy.
 
-Each venture ships its own hook library against the shared schema and lint. See
-`05-surfaces.md` before writing hooks for any surface other than the quiz apps: the engine
-ports everywhere, the strings do not.
+Each content surface ships its own hook library against the shared schema and lint. See
+`05-surfaces.md` before moving a mechanism between surfaces: the engine ports, the strings do
+not.
 
 ## Evidence confidence tags
 
-Every citation in these docs and in `hookResearch` carries a tag. **Never upgrade a tag to
+Every citation in these docs and in the surface's `*.research.json` file carries a tag. **Never upgrade a tag to
 sound more authoritative, and never invent a citation.**
 
 - **[verified]** — checked against the actual source during the Aug 2026 research session.
@@ -57,6 +56,6 @@ sound more authoritative, and never invent a citation.**
 ## Update protocol
 
 After each A/B readout: append the result to `03-metrics-and-testing.md` (Results log),
-update the hook's entry in `hookResearch` (tag → `[measured]`), and prune or promote per the
+update the hook's entry in its research JSON (tag → `[measured]`), and prune or promote per the
 kill rules. These files are living documents — an agent that learns something about what
 works here is expected to write it down here.

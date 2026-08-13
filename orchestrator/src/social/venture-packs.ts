@@ -76,11 +76,9 @@ export async function composeMmaFilesSocialQueue(input: {
   const heroBytes = await toRenderablePng(Buffer.from(input.article.image.hero_bytes_base64, "base64"));
   const paths: string[] = [];
 
-  // MMA Files' hook library is not written yet, so every article takes the `no-hook` fallback and
-  // the deck's own cover headline renders. It runs through the brain from day one so the fallback
-  // is logged and countable rather than absent. Its authoring issue carries the two constraints
-  // that are not negotiable here: no teasing beyond what the article delivers, and no betting
-  // claims in a hook, ever. See docs/hooks/05-surfaces.md.
+  // The MMA library is data, not a second code path. If no truth-gated line survives, the logged
+  // `no-hook` fallback renders the deck headline. No teasing beyond what the article delivers and
+  // no betting claims are permitted. See docs/hooks/05-surfaces.md.
   const hookDecision = await assignPackHook({
     stateRoot: input.stateRoot,
     surface: "mma",

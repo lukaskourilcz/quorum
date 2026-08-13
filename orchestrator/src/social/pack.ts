@@ -388,11 +388,8 @@ export async function composeEditionSocialPack(input: {
     }));
   });
   const csVisual = visualRefs.cs ?? visualRefs.en!;
-  // DNESKAi's hook library is not written yet, so every edition takes the `no-hook` fallback and
-  // the deck's own cover headline renders. Running it through the brain from day one rather than
-  // wiring it later is the point: the fallback is logged and countable now, so the KPI can read a
-  // real number instead of an absence, and authoring news.hooks.json changes a data file rather
-  // than this code path. See docs/hooks/05-surfaces.md.
+  // The news library is data, not a second code path. Every edition runs through the same brain;
+  // if no truth-gated line survives, the logged `no-hook` fallback renders the deck headline.
   const newsFrontmatter = (editionPackage.article?.cs ?? editionPackage.article?.en)!.frontmatter;
   const hookDecision = await assignPackHook({
     stateRoot: input.stateRoot,

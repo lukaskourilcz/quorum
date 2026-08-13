@@ -1,31 +1,28 @@
 # Hook Metrics, Cooldowns & Testing
 
-## Metrics
+## Metrics by active surface
 
-- **Primary: swipe-through rate (STR)** — swipe from the hook+question card to the
-  answer/explanation card.
-- **Guardrails (must not degrade):**
-  - **Question-completion rate** — catches hooks that drive swiping past the question
-    instead of through it (over-promising the reveal).
-  - **Next-day return rate** — catches hooks that win the swipe but sour the habit
-    (anxiety-inducing loss frames are the usual suspect).
+- Quiz carousels: slide-1 → slide-2 advance; guardrail = completion to the reveal slide.
+- News: item open rate; guardrails = time-on-item and next-day return.
+- MMA: article open rate; guardrails = scroll depth and next-day return.
 
-A hook that lifts STR while denting a guardrail is a **net-negative hook**. The guardrails
+A hook that lifts its surface's primary metric while denting a guardrail is a **net-negative
+hook**. The guardrails
 are not tie-breakers; they're veto players.
 
 ## Falsifiability lifecycle
 
 Every hook ships with a prediction + `falsifiedIf`. Lifecycle:
 1. **Ship** with cooldown and gate.
-2. **Watch** — no directional reads before ~2,000 impressions per hook per vertical.
+2. **Watch** — no directional reads before ~2,000 impressions per hook per surface slice.
 3. **Judge** — kill rules below.
-4. **Log** — write the outcome into `hookResearch` (tag → `[measured]`) and into the
+4. **Log** — write the outcome into the surface's research JSON (tag → `[measured]`) and into the
    Results log at the bottom of this file.
 
 **Kill rules** (vs matched control):
 - Completion −2pp → stop/cut (over-promising).
 - Next-day return −1pp → stop/cut (habit damage).
-- STR ≤ control after full sample → retire or rewrite.
+- Primary metric ≤ control after full sample → retire or rewrite.
 
 ## Cooldowns & wear-out
 
@@ -39,25 +36,26 @@ Repeated messages decay; humor, personification and loss-frames decay fastest
 | Jokes, personification ("written with love", "follows you to lunch") | 12–14 d |
 | Loss-frames, streak lines, precision stats | 12–20 d |
 
-Monitor **STR by nth exposure** per hook. Visible decay → lengthen cooldown or retire.
-Cooldowns are per-user per-hook.
+Monitor the surface metric by nth channel exposure. Visible decay → lengthen cooldown or
+retire. The active selector enforces a per-channel cooldown of
+`max(2 × cooldownDays, 14)` and rejects the previous post's archetype.
 
-## Pool arithmetic (why the library is 49 hooks, not 16)
+## Pool arithmetic and fallback
 
-- Servable pool per question = always-pool + all hooks whose gates the question satisfies.
-- Coverage needed ≈ questions/day × cooldown days. A daily 5-question user over a 10-day
-  cooldown window needs ~50 servable hook impressions; a 5-hook always pool collapses.
-- Keep **≥5 hooks on every gate you rely on**; the always pool must survive a run of
-  gateless questions on its own.
-- **Fallback policy**: when every eligible hook is cooling, serve the least-recently-shown
-  eligible hook (LRU). Never error, never repeat within a session, never show no hook.
+- Servable pool per pack = always-pool + all hooks whose gates the item satisfies.
+- The committed libraries currently contain 50 quiz, 12 news and 16 MMA hooks.
+- Keep enough hooks on each relied-on gate that the channel cooldown and consecutive-archetype
+  rule leave a real choice. The always pool must survive a run of minimally described items.
+- **Fallback policy:** if the library is empty, no gate holds, or cooldown/variety filters exhaust
+  the eligible set, record `no-hook` and render the template's own headline. The selector never
+  relaxes a truth gate or cooldown and has no LRU escape hatch.
 
 ## A/B methodology
 
 - **One variable per pair.** If two arms differ in two ways, the result is unreadable.
-- **Control** = rotating always-pool average STR on matched questions.
-- **Stratify** by difficulty × vertical × language. Never pool CS + EN — effects are
-  per-language.
+- **Control** = rotating always-pool average on matched items.
+- **Stratify** by the surface metadata that gates the hook and by language. Never pool CS + EN —
+  effects are per-language.
 - **Sample size**: ~5–8k impressions per arm detects a 2pp STR lift at a 75–85 % baseline
   (α = .05, power .8). No peeking before ~2k.
 - **Guardrail stop rules run continuously** (after a 500-impression burn-in): completion
@@ -76,11 +74,11 @@ Cooldowns are per-user per-hook.
 
 ## Cut-down principle
 
-If the library must shrink (e.g. to 12), preserve **gate coverage and archetype variety**
-over individual favorites, shorten always-pool cooldowns (~5 d), and keep the LRU fallback
-on — at 12 hooks, gated pools collapse to 1–2 per gate and the always pool carries the load.
+If a library must shrink, preserve **gate coverage and archetype variety** over individual
+favorites. Do not compensate by weakening the channel cooldown or replacing `no-hook` with a
+repeat; a plain truthful headline is the safer fallback.
 
 ## Results log
 
-*(append dated A/B readouts here — pair, verticals, impressions, STR delta, guardrail
+*(append dated A/B readouts here — pair, surface slice, impressions, primary-metric delta, guardrail
 deltas, decision)*

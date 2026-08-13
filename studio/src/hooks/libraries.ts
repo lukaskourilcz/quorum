@@ -21,11 +21,10 @@ export interface LibraryFiles {
 }
 
 /**
- * Where each surface's files live, whether or not they exist yet.
+ * Where each surface's committed hook and research files live.
  *
- * news and MMA are listed with the names their authoring issues will create. A surface with no
- * files loads as an empty library — "not written yet" is a valid state and must not look like a
- * broken one.
+ * The absent-file behavior remains deliberate for forward-compatible new surfaces and fixtures:
+ * absence loads as an empty library, while malformed or mismatched files fail loudly.
  */
 export const LIBRARY_FILES: Readonly<Record<Surface, LibraryFiles>> = {
   quiz: { hooks: "quiz.hooks.json", research: "quiz.research.json" },
@@ -70,7 +69,7 @@ export async function readLibrary(surface: Surface, root = HOOKS_ROOT): Promise<
   return loadLibrary({ surface, hooks, research });
 }
 
-/** The library file's bytes as written, for delivery and hashing. */
+/** The library file's bytes as written, for stable hashing and inspection. */
 export async function readLibrarySource(surface: Surface, root = HOOKS_ROOT): Promise<string> {
   return readFile(libraryPath(root, LIBRARY_FILES[surface].hooks), "utf8");
 }

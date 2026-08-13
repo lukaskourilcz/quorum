@@ -69,9 +69,9 @@ export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete" | "
    * falls to flips with the beat, so the friction moves as the reader swipes rather than sitting
    * in one corner for ten slides.
    *
-   * The stroke is doing structural work, not decorative. Three of the five palettes put their
-   * three greys within 3% of each other's luminance, so a panel that relied on its fill to be seen
-   * would be invisible on two ventures and obvious on three; an edge is legible on all five.
+   * The stroke is doing structural work, not decorative. Several palettes put their three grounds
+   * close in luminance, so a panel that relied on its fill to be seen would disappear on those
+   * ventures; an edge remains legible on every current skin.
    *
    * Distinct from `pull`, whose panel is soft-cornered, hugs its text and centres it, and from
    * `memo`, whose sheet is a hairline around reading-weight body type.
@@ -119,7 +119,7 @@ export const SYSTEM_FAMILIES: Readonly<Record<Extract<DeckFamily, "concrete" | "
   /*
    * Rows, brackets and a cursor.
    *
-   * Mono everywhere — the one face all five ventures share — so the family reads as the same
+   * Mono everywhere — the one face all nine brand skins share — so the family reads as the same
    * instrument in every palette and the colour carries the identity. The header is a bracketed
    * field spanning the measure with the venture's mark set inside it, which is what a bracket
    * means in this register: a field with something in it. A block cursor opens every passage and

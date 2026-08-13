@@ -49,8 +49,8 @@ export interface HookBrainResult {
  * assignment together with the package and the channel record, because a channel entry without a
  * package would cool a hook that never posted.
  *
- * The `no-hook` path is ordinary. DNESKAi and MMA Files take it on every pack today — their
- * libraries are not written — and a missing hook never blocks a pack.
+ * The `no-hook` path is ordinary: an empty or fully filtered pool uses the template headline and
+ * never blocks a pack or weakens a gate.
  */
 export async function assignPackHook(input: HookBrainInput): Promise<HookBrainResult> {
   const library = await readLibrary(input.surface);

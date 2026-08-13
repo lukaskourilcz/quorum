@@ -25,40 +25,40 @@ rather than silently left standing:
   and no new check; they are compositions in the language this file defines, which is the strongest
   statement available that the language was enough.
 
-Two engine gaps this file writes against as unfixed are fixed. **E1**: `contrastCheck` now walks
+The engine gaps this file originally wrote against are fixed. **E1**: `contrastCheck` now walks
 the layer list and measures a text layer against the topmost opaque `shape`, gradient or duotone
 image whose frame contains it, so an inverted panel is a legible design rather than a refused one
 — half the expansion's families depend on it. **E4**: the fitter measures against committed
-per-face advance widths and refuses a size at which the longest word would be chopped. The size
-tables below were stated against both fixes and hold.
+per-face advance widths and refuses a size at which the longest word would be chopped. **E2**
+counts distinct image slots so a photograph may reprise later in the deck. **E3** renders
+tracking, clipping and linear gradients. The size tables below were stated against the corrected
+fitter and remain historical fixtures; the generated specimens are the current receipt.
 
 ## How the founding ten were specified to ship
 
-`carousel-template/1` holds **one** `slides` array and applies it to all four canvases. A family
-composed for the story's 14%/16% bands cannot be the same layer list as one composed for 4:5, so
-each family ships as **four template documents** — `<family>-portrait`, `-square`, `-story`,
-`-threads` — each carrying the full `formats` block the schema requires and the slides composed
-for its own canvas. No schema change is needed for this; it validates against the shipped
-validator today. A v2 `formatOverrides` key would collapse the four into one document and is
-worth doing, but nothing here waits on it.
+`carousel-template/1` holds one `slides` array and one complete four-format canvas block. The
+current composers deliberately place meaningful layers inside the union of the four safe areas,
+so one generated family template is valid on square, portrait, story and Threads. A resolvable
+template is named `deck-<family>-<slideCount>`; non-canonical type scale and phase axes are encoded
+in the id and rebuilt on lookup rather than expanding the eager library into a lookup table.
 
-Each document below carries **four slides**: cover, one slide per rhythm beat, and outro. A real
-deck is 5–8 slides, and the packer builds it by cloning the beats in order — beat A, beat B, beat
-A… — renaming `passage-a`/`passage-b` to `passage-1`…`passage-6` and listing them all in
-`requiredSlots`. Everything else about a cloned beat is unchanged, including `maxChars`. Slide ids
-follow: `slide-body-open` becomes `slide-body-open-1`, `-2`.
+The JSON documents below are the founding delivery's per-format design notation, not the objects
+the current composer emits. Real decks contain 5–8 selected passages (older stored references up
+to 10 still resolve), and `familyDeckTemplate` builds the cover, alternating/rotated body rhythm,
+and outro for that exact count.
 
 ## Checks
 
-All twenty-three families pass, in all four formats and all five palettes, at every type scale and
-every phase seed:
+All twenty-three families pass, at every resolvable deck length, in all four formats and all nine
+brand skins. Separate regression assertions prove that A/B, type scale 0.9/1/1.1 and phase seeds
+0–3 materially change the rendering:
 
 - **safe area** — every `text` and `logo` frame inside the format's safe box (`fitsSafeArea`)
-- **overflow** — `floor(width × 1080 ÷ (minFontSize × 0.56)) × maxLines ≥ maxChars` for every slot
-- **contrast** — every text and logo colour ≥ 4.5:1 on its ground; the worst pair in the set is
-  `accent` on `surface` at 5.49:1 (MMA Files). Full receipts in `TOKENS.md`.
-- **frames** — every layer inside the canvas, no slide over 24 layers, one `image` layer per
-  template except where marked
+- **overflow** — the resolved face's committed average advance plus tracking proves the declared
+  character limit can fit at minimum size
+- **contrast** — every text and logo colour ≥ 4.5:1 on every ground the rendering can place under it
+- **frames** — every layer stays inside the canvas, no slide exceeds 24 layers, and there is at
+  most one distinct optional image slot
 
 Contrast reads what is actually behind the words: the slide's ground, any mesh over it, and the
 topmost opaque `shape`, gradient or duotone image whose frame contains the text. Containment is
@@ -71,19 +71,17 @@ One limit is real and stated rather than papered over: an untreated photograph c
 because its pixels are the article's and not the template's. A slide carrying one relies on the
 scrim its image layer draws.
 
-## v2 fields used
+## Additive fields now shipped
 
 | Field | Layer | What it does | Families |
 |---|---|---|---|
 | `tracking` (em) | `text` | Letter-spacing. The engine draws mono micro-labels untracked, and uppercase Czech mono at 20 px needs 0.10–0.14 em to survive thumbnail size. | all ten |
 | `clip` | `image` | `"circle"`, or a polygon in frame fractions. | bevel, porthole, pull |
 | `linear-gradient` | layer | Two token stops and an angle. Both stops at the same offset give a hard diagonal edge, which is how Bevel cuts a slope without a bitmap. | bevel |
-| `reprise` | `image` | Marks a second `image` layer bound to the same slot on a later slide. Needs "at most one image slot" to count slots rather than layers. | masthead |
+| `reprise` | `image` | Marks a later `image` layer bound to the same single slot; validation counts slots rather than appearances. | masthead |
 
-Anything marked `"v2": true` in the JSON is one of these. Four families need no v2 field beyond
-`tracking`, and `tracking` degrades safely: drop it and the type sets untracked rather than
-failing. **Slab, Terrace, Figure, Gutter, Tower and Dossier** build against the shipped schema
-unchanged.
+Anything marked `"v2": true` in the founding JSON is one of these additions. The current schema
+accepts them directly with backward-compatible defaults where applicable.
 
 ## When there is no photograph
 
@@ -824,7 +822,7 @@ sentences joined (208 characters) and exists to be survived, not read.
 
 **Without a photograph.** The cut stays: the photo band is filled by the same hard-edge gradient in surface-strong → background at the cover's own angle, with an accent mesh blob under the slope's high corner.
 
-**Serves.** photo-forward · **needs v2 fields**
+**Serves.** photo-forward · uses shipped clipping/gradient fields
 
 **Variant axes.** accent↔secondary · backdrop phase (cut depth 0.74 / 0.82 / 0.90) · photo treatment none/mono/duotone · type-scale 0.9/1/1.1
 
@@ -1174,7 +1172,7 @@ sentences joined (208 characters) and exists to be survived, not read.
 
 **Without a photograph.** The porthole is drawn as a filled surface-strong disc inside the accent ring that is already there. Empty and deliberate rather than a missing-image hole.
 
-**Serves.** photo-forward · quote-capable · **needs v2 fields**
+**Serves.** photo-forward · quote-capable · uses shipped clipping fields
 
 **Variant axes.** accent↔secondary · backdrop phase (ring walk 3 positions) · photo treatment none/mono/duotone · type-scale 0.9/1/1.1
 
@@ -2477,7 +2475,7 @@ sentences joined (208 characters) and exists to be survived, not read.
 
 **Without a photograph.** The circle becomes a filled surface-strong disc inside the accent ring. No face, no stock image, and the attribution line still names who spoke.
 
-**Serves.** quote-capable · photo-forward · **needs v2 fields**
+**Serves.** quote-capable · photo-forward · uses shipped text/shape fields
 
 **Variant axes.** accent↔secondary · backdrop phase (bar length 0.06 / 0.10 / 0.14) · photo treatment none/mono/duotone · type-scale 0.9/1/1.1
 

@@ -166,7 +166,7 @@ function page(family: DeckFamily): string {
     + `</section>`
   ).join("");
 
-  const palettes = `<section class="fmt"><h2>Five palettes, one composition</h2>`
+  const palettes = `<section class="fmt"><h2>${brands.length} palettes, one composition</h2>`
     + `<p class="mono">4:5 · body beat 1 · every brand the engine serves</p>`
     + `<div class="row">${brands.map((brand) =>
       figure({ ...slidesOf(family, "instagram-portrait", brand, [1])[0]!, caption: brand.id }, 220)).join("")}</div>`
@@ -221,7 +221,7 @@ whose checks fail cannot be rendered at all, so a page existing is itself part o
 ${formats}
 ${palettes}
 ${axes}
-<section class="fmt"><h2>Checks</h2><p class="mono">five brands × every offered canvas</p>
+<section class="fmt"><h2>Checks</h2><p class="mono">${brands.length} brands × every offered canvas</p>
 <table><thead><tr><th>Brand</th><th>Canvas</th><th>Verdict</th></tr></thead><tbody>${checkRows}</tbody></table></section>
 <section class="fmt"><h2>Measured type</h2><p class="mono">4:5 · MMA Files · the size the fitter actually chose</p>
 <table><thead><tr><th>Slide</th><th>Largest set size</th></tr></thead><tbody>${sizes}</tbody></table>

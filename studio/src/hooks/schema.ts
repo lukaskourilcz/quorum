@@ -21,10 +21,10 @@ export type Language = (typeof LANGUAGES)[number];
 /**
  * A parsed predicate.
  *
- * `truthRequires` is written in the libraries as strings (`"difficultyAtLeast:3"`) because the same
- * JSON ships to the apps, which parse it themselves. In here it is a discriminated union: the
- * `:N`/`:X` suffix is parsed once at load time, so an evaluator branches on `kind` and reads a
- * number that is already a number. Nothing downstream re-splits a string.
+ * `truthRequires` is written in the human-auditable libraries as compact strings
+ * (`"difficultyAtLeast:3"`). In the engine it is a discriminated union: the `:N`/`:X` suffix is
+ * parsed once at load time, so an evaluator branches on `kind` and reads a number that is already
+ * a number. Nothing downstream re-splits a string.
  */
 export type QuizPredicate =
   | { readonly kind: "always" }
@@ -167,8 +167,8 @@ export const RawLibrarySchema = z.array(RawHookSchema);
  * The per-hook research record: the shipping bar from `docs/hooks/02-hook-craft-rules.md`, as
  * fields a check can read.
  *
- * It is a parallel file rather than fields on the hook because the hook file is delivered to the
- * apps and the research is not — an app renders copy and never needs to know what would falsify it.
+ * It is a parallel file rather than fields on the hook because assignment needs compact copy while
+ * authoring and lint need the full evidence/falsifiability record.
  */
 export const CITATION_CONFIDENCES = ["verified", "recalled", "practitioner", "mechanism-only", "measured"] as const;
 
@@ -195,7 +195,7 @@ export interface Hook {
   readonly cooldownDays: number;
   readonly surface: Surface;
   readonly truthRequires: readonly Predicate[];
-  /** The strings exactly as written in the library, for delivery and for the lint's char budget. */
+  /** The strings exactly as written in the library, for hashing and the lint's character budget. */
   readonly rawRequires: readonly string[];
   readonly variants: Partial<Record<Vertical, { readonly en: string; readonly cs: string }>>;
   readonly research: HookResearch;

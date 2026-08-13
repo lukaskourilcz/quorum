@@ -19,8 +19,8 @@
   gates guarantee.
 - `{topic}` is the only render token in Tier A. Values are nominative; CS frames must be
   declension-safe (subject slot or after a colon).
-- Cooldowns are per-user per-hook; fallback when the pool is exhausted = LRU
-  (least-recently-shown eligible hook).
+- `cooldownDays` is authored intensity metadata. Social assignment enforces it per channel as
+  `max(2 × cooldownDays, 14)`; exhaustion records `no-hook` rather than relaxing the rule.
 
 ## Tier A predicate semantics
 
@@ -28,6 +28,7 @@
 |---|---|---|
 | `always` | no condition | payoff promises, {topic}, streak-concept lines |
 | `optionsAtLeast:N` | question has ≥N options | "blind guessing tops out at 25 %" (N=4), lineup/elimination imagery |
+| `optionsExactly:N` | question has exactly N options | counted imagery ("Four branches. One merges.") |
 | `difficultyAtLeast:N` | difficulty ≥N (1–5 scale) | trap talk (N=2), half-knowledge (N=3), streak-ender talk (N=4) |
 | `categoryIn:X` | question category is X (core, commonUse, interview) | "load-bearing", IoED everyday lines, "interview favorite" |
 | `questionStartsWith:X` | question text starts with X | "this asks why" |
@@ -62,7 +63,6 @@
 | `streakAtLeast:N` | reader's current streak ≥N; exposes `{streak}` token to the renderer |
 | `missedTopicBefore` | this reader previously answered a question with the same topic incorrectly; requires a per-user topic-answer log |
 | `timerEnabled` | an actual countdown is active on this card — the only honest license for time-pressure copy |
-| `optionsExactly:N` | exact option count; licenses counted imagery ("Four branches. One merges.") |
 
 **Rollout priority** (value ÷ build cost):
 1. `missedTopicBefore` → the *rematch* hook — highest expected lift in the system
@@ -71,7 +71,6 @@
    the strongest carousel slide-1 line with real numbers.
 3. `streakAtLeast` + `{streak}` → personal streak stakes/armor (cooldown 20 d, d4-gated).
 4. `timerEnabled` → resurrects speed-run honestly.
-5. `optionsExactly` → nice-to-have counted imagery.
 
 ## Stats honesty rules
 

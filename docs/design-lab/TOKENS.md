@@ -1,61 +1,58 @@
-# TOKENS — type, spacing, and what the engine still needs
+# TOKENS — type, spacing, colour and validation
 
 ## Type
 
-One headline face and one body face per brand; mono is shared, as the brief allows. Every family
-is openly licensed (SIL OFL 1.1) and carries Latin Extended-A, so ř, ě, ů, ň, ť and ď are real
-glyphs and not composed accents.
+The engine serves nine brand skins. Every named face is committed as a static SIL OFL 1.1
+`.ttf`; `studio/src/fonts.ts` resolves a requested weight to the nearest committed face in the
+same family, and `studio/src/font-metrics.generated.ts` supplies its measured advances. Rendering
+does not depend on a system-font fallback.
 
-| Brand | Headline | Weights | Body | Weights | Mono | Weights |
-|---|---|---|---|---|---|---|
-| **DNESKAi** `caught-up` | Archivo | 600 · 700 · 800 · 900 | IBM Plex Sans | 400 | IBM Plex Mono | 400 |
-| **MMA Files** `mma-files` | Anton | 400 | Archivo | 600 · 700 · 800 · 900 | IBM Plex Mono | 400 |
-| **Titty Tuesdays** `titty-tuesdays` | Petrona | 600 · 700 · 800 · 900 | Karla | 400 | IBM Plex Mono | 400 |
-| **devShark** `devshark` | Figtree | 600 · 700 · 800 · 900 | Public Sans | 400 | IBM Plex Mono | 400 |
-| **geoShark** `geoshark` | Outfit | 600 · 700 · 800 · 900 | Public Sans | 400 | IBM Plex Mono | 400 |
+| Brand | Headline | Body | Mono |
+|---|---|---|---|
+| **Caught Up** `caught-up` | Archivo 600/700/800/900 | IBM Plex Sans 400/700 | IBM Plex Mono 400/700 |
+| **MMA Files** `mma-files` | Anton 400 | Archivo 600/700/800/900 | IBM Plex Mono 400/700 |
+| **Titty Tuesdays** `titty-tuesdays` | Petrona 600/700/800/900 | Karla 400/700 | IBM Plex Mono 400/700 |
+| **devShark** `devshark` | Figtree 600/700/800/900 | Public Sans 400/700 | IBM Plex Mono 400/700 |
+| **geoShark** `geoshark` | Outfit 600/700/800/900 | Public Sans 400/700 | IBM Plex Mono 400/700 |
+| **Kvórum** `kvorum` | Barlow Condensed 600/700/800/900 | IBM Plex Sans 400/700 | IBM Plex Mono 400/700 |
+| **BOOKSOFHISTORY** `booksofhistory` | Petrona 600/700/800/900 | Karla 400/700 | IBM Plex Mono 400/700 |
+| **Door Money** `door-money` | Barlow Condensed 600/700/800/900 | Barlow 400/700 | IBM Plex Mono 400/700 |
+| **Tehdejší svět** `tehdejsi-svet` | Literata 400/600/700 | Inter 400/600/700 | IBM Plex Mono 400/700 |
 
-**DNESKAi — Archivo + IBM Plex Sans.** A grotesque with a wide, flat-sided lowercase that holds up at 44 px and at 160 px. Czech diacritics sit tight to the x-height rather than floating, which matters on a five-line headline.
+Archivo is Caught Up's wide grotesque. Anton preserves MMA Files' compact poster register and
+has one real weight, so every requested headline weight resolves to its committed 400 face.
+Petrona/Karla gives Titty Tuesdays warmth and BOOKSOFHISTORY its first-edition-card voice.
+Figtree and Outfit distinguish the two shark verticals while sharing a Public Sans body.
+Barlow Condensed gives Kvórum and Door Money dense display type; their body faces and palettes
+keep the brands separate.
 
-**MMA Files — Anton + Archivo.** The owner amendment keeps the same compact poster face as the public magazine. Anton has one real weight; hierarchy comes from scale, and requested heavier weights resolve to the committed 400 face without synthetic bold.
+Tehdejší svět is the Cyrillic case. Literata and Inter each ship at three weights and the glyph
+suite reads their font cmap tables to prove full Ukrainian coverage, including `Ї ї Є є Ґ ґ І і`,
+as well as Czech diacritics. Its shared mono slot remains IBM Plex Mono because shared families
+calibrate compact labels to a monospace measure. The venture also has a dedicated Ukrainian/Czech
+family kit in `studio/src/families-tehdejsi.ts`.
 
-**Titty Tuesdays — Petrona + Karla.** Warmth without prettiness: a text serif with a slight flare, set against a grotesque body. Petrona carries a full Czech set including ů and ř at every weight.
+### Committed font inventory
 
-**devShark — Figtree + Public Sans.** Geometric clarity that still has a 900. Space Grotesk was the obvious pick and was rejected: it stops at 700, and Figure and Slab both set 800–900.
+There are **37 static faces** across 13 families:
 
-**geoShark — Outfit + Public Sans.** The same geometric register as devShark, distinguished by a rounder, more circular o — the two sharks share a body face and part company at the headline.
+- Anton 1; Archivo 4; Barlow Condensed 4; Barlow 2
+- Figtree 4; Outfit 4; Petrona 4
+- IBM Plex Mono 2; IBM Plex Sans 2; Inter 3
+- Karla 2; Literata 3; Public Sans 2
 
-### Weights this set actually uses
+Static instances are deliberate. The renderer hands explicit files to the rasteriser and the
+fitter measures the same committed face. `pnpm -C studio fonts:metrics` regenerates the width
+table when a face changes; generated metrics are never edited by hand.
 
-Across the set, templates request **headline 600, 700, 800, 900**, **body 400**, and **mono
-400**. Anton is the deliberate exception: it ships only at 400 and the resolver maps every MMA
-Files headline request to that real face. The `logo` layer still asks for 800, but the font map
-prevents synthetic weight from entering the deterministic render.
-
-### Files the repository has to carry
-
-Thirty-one static font files:
-
-- Anton regular for MMA Files — 1 file
-- Archivo, Petrona, Figtree and Outfit headline families — 16 files
-- The retained generic Barlow family fixtures — 6 files
-- IBM Plex Sans, Karla and Public Sans body faces — 6 files
-- IBM Plex Mono regular and bold — 2 files
-
-**Static instances, not variable fonts.** The renderer hands `font-family` and a numeric
-`font-weight` to librsvg through sharp, and librsvg resolves faces through fontconfig. Fontconfig
-matches a static `Archivo-Bold.ttf` at weight 700 reliably; it interpolates a variable axis
-inconsistently across versions, and the failure is silent — the wrong weight renders and the hash
-still validates. Ship `.ttf` static instances, install them into the render image's font path, and
-name them exactly as the `fonts` block in each brand's `carousel-brand/1` document does.
-
-Until the files land, every brand renders in Arial and every specimen in this folder is a lie
-about the type. The compositions are not: frames, sizes and line counts come from `fitText`,
-which measures at a fixed 0.56 em advance and does not know what face it is measuring.
+Templates may request weights from 300 to 900. The resolver chooses the closest committed
+weight within the named family, preferring the heavier face on a tie. It never crosses into a
+different family and throws when a family has no committed font.
 
 ## Spacing
 
 Frames are fractions of the canvas, so the scale is a set of steps rather than pixels. Vertical
-positions inside the safe box use these and nothing else:
+positions inside the safe box use these ranges:
 
 | Step | Value | Used for |
 |---|---|---|
@@ -63,103 +60,62 @@ positions inside the safe box use these and nothing else:
 | tight | 0.020–0.030 | mono label to its rule; chip padding |
 | gap | 0.045 | rule to the text it introduces |
 | block | 0.070–0.090 | one text block to the next |
-| band | 0.11–0.16 | major zone change (photo band to type block) |
+| band | 0.11–0.16 | major zone change |
 
-Fixed frame heights, so the same element is the same size in every family:
+Common frame heights keep the same role at the same visual scale:
 
 | Element | Height | Notes |
 |---|---|---|
-| kicker | 0.028 | one line, mono, uppercase, `tracking` 0.14 |
-| logo lockup | 0.026–0.030 × 0.22–0.26 wide | bottom-left at `B − 0.030` |
+| kicker | 0.028 | one line, mono, uppercase, normally tracked |
+| logo lockup | 0.026–0.030 × 0.22–0.26 wide | bottom-left inside the union safe area |
 | credit | 0.058 | two lines, mono, `muted` |
 | sources | 0.036 | one line, mono, `muted` |
-| accent rule | `thickness` 6–10 | 4 on hairlines, 2 on Dossier's |
+| accent rule | `thickness` 6–10 | hairlines may use 2–4 |
 
-**Body passages start 0.14–0.26 of the safe height in, never at the top.** The engine top-anchors
-text and has no vertical centring, so a 24-character passage in a frame sized for 240 characters
-leaves the bottom two-thirds empty. Starting the frame lower puts a short passage near the optical
-centre and lets a long one grow down into space that exists. This is the single most load-bearing
-rule in the set; ignore it and every body slide reads as a mistake.
+Body passages start roughly 0.14–0.26 of the safe height in rather than being pinned to the top.
+The fitter top-anchors text, so the lower start keeps a short passage optically centred while a
+long one can grow into already reserved space.
 
 ## Colour
 
-No new colour tokens. The seven per brand are enough, and adding an eighth would mean five more
-values to keep honest for two brands that do not publish yet.
+Every brand supplies the same seven semantic tokens: `background`, `surface`,
+`surface-strong`, `foreground`, `muted`, `accent`, and `secondary`. A template composes against
+those names and never invents a brand colour. Variant B may swap `accent` for `secondary`, so the
+validator checks every declared rendering, not only variant A.
 
-### Contrast receipts
+BOOKSOFHISTORY and Tehdejší svět are the two light skins. Their surface ladder moves from paper
+toward darker stock while leaving every text token above the 4.5:1 floor. The other seven skins
+use dark grounds.
 
-Every text and logo pair used anywhere in the library, at its worst across the five palettes. The
-engine refuses below 4.5:1, and it refuses on the *rendering*, not the token pair: a variant may
-swap the accent for the secondary and invert the ground, so a pair that clears the floor in A and
-not in B is a template that fails.
+### Validation receipt
 
-| Foreground | Ground | Worst | In | Best |
-|---|---|---|---|---|
-| `accent` | `background` | 6.17:1 | mma-files | 8.21:1 |
-| `foreground` | `background` | 15.86:1 | devshark | 18.36:1 |
-| `muted` | `background` | 8.50:1 | devshark | 13.58:1 |
-| `foreground` | `surface` | 14.77:1 | devshark | 16.61:1 |
-| `muted` | `surface` | 7.92:1 | devshark | 12.29:1 |
-| `background` | `accent` | 6.17:1 | mma-files | 8.21:1 |
-| `accent` | `surface` | 5.49:1 | mma-files | 7.65:1 |
-| `accent` | `surface-strong` | 4.73:1 | mma-files | 7.01:1 |
-| `secondary` | `background` | 6.36:1 | caught-up | 12.82:1 |
-| `secondary` | `surface` | 5.66:1 | caught-up | 11.94:1 |
-| `secondary` | `surface-strong` | 4.76:1 | caught-up | 10.94:1 |
-| `background` | `secondary` | 6.36:1 | caught-up | 12.82:1 |
-| `foreground` | `surface-strong` | 12.83:1 | mma-files | 14.02:1 |
-| `muted` | `surface-strong` | 7.25:1 | devshark | 10.37:1 |
+The canonical receipt is executable rather than a hand-maintained ratio table:
 
-The four rows below `accent` on `surface` were added by the 2026-08-10 expansion, and the reason
-they were needed is the reason to read this table as renderings rather than pairs. Variant B swaps
-`accent` for `secondary`, so every accent pair has a secondary twin that ships just as often; and a
-family that sets words on its own field — `versus`, `marginalia`, `concrete` — puts a ground token
-behind the type that the founding ten never did.
+- `studio/tests/families.test.ts` pins **23** families and validates every deck length the
+  splitter can resolve, all **9** brands and all **4** formats.
+- `validateTemplateForBrand` checks schema, safe area, contrast, brand-token binding, overflow
+  and originality; `renderCarouselSvg` refuses a failing template.
+- Contrast walks the actual layer order. It measures text/logo colour against the slide ground
+  and the topmost containing shape, gradient or duotone image, plus composited mesh colours.
+- Untreated photographs are the honest limit: their article pixels are not known at template
+  validation time, so photo-bearing designs rely on the declared scrim.
+- Overflow uses the resolved face's committed average advance and the layer's tracking. Runtime
+  fitting measures every glyph, shrinks until whole words fit, and reports unavoidable breaking
+  or contract clipping instead of hiding it.
 
-## What the engine still needs
+## Shipped additive capabilities
 
-**E1 — the contrast check cannot see shapes.** `contrastCheck` measures a text layer against the
-slide's `backgroundToken` plus any mesh over it. An opaque `shape` drawn beneath the text is
-invisible to it, so `background`-coloured type on an `accent` panel — legible at 6.17:1 — is
-refused as 1.00:1. Fix: walk the layer list, take the topmost `shape` whose frame contains the
-text frame, and measure against its `fillToken`. Twelve lines. Until it lands, an inverted beat
-has to invert the whole slide (as Slab does) rather than a panel.
+The capabilities once described as future work are present in `carousel-template/1` with defaults
+that preserve older stored documents:
 
-**E2 — one image *slot*, not one image layer.** The schema counts `image` layers and rejects a
-second. A photo reprise — the same photograph returning small on the outro — is one slot used
-twice and is currently impossible. Fix: count distinct `layer.slot` values on image layers.
-Masthead is the only family here that wants it, and it is marked `"reprise": true, "v2": true`.
+- opaque `shape`, `linear-gradient` and duotone-image grounds participate in contrast checks;
+- repeated image layers may reuse the single canonical `image` slot (`reprise` marks the later
+  appearance), while a second distinct image slot is rejected;
+- text `tracking`, image `clip`, and `linear-gradient` render deterministically;
+- shapes may hug fitted text with `padText`; rules may be dashed;
+- the fitter uses committed per-face metrics, respects tracking, keeps Czech and Ukrainian
+  graphemes intact, and surfaces clipped/broken output.
 
-**E3 — `tracking`, `clip`, `linear-gradient`.** The three v2 fields this set uses; each is
-specified in `SPEC.md`. `tracking` is the one that changes everything: uppercase Czech mono at
-20 px with no letter-spacing is a smear at thumbnail size, and it is on every family's kicker.
-
-**E4 — the text fitter measures every string as if it were lowercase, and chops words silently.**
-Two bugs in one function, and the second is the one the brief names. `fitText` computes characters
-per line as `widthPx ÷ (fontSize × 0.56)`. That constant is about right for Czech sentence case
-and about 22% short for all-caps, so an uppercase headline is measured as fitting and then drawn
-wider than the canvas — SVG text does not wrap, so it simply runs off the edge. Then
-`breakLongWord` chops any word longer than the line into fixed-size fragments, with no hyphen and
-no signal, and the fitter treats a chopped word as a successful fit and stops stepping down. Put
-together: `NEJNEOBHOSPODAŘOVÁVATELNĚJŠÍ` renders at full size as `NEJNEOBHOSPODAŘ` and
-`ÁVATELNĚJŠÍ`, both overflowing.
-
-Fix, in `studio/src/text.ts`:
-
-1. Derive the advance from the string — `0.56 + 0.16 × (share of the letters that are uppercase)`.
-   A per-face metrics table would be better still, but this needs no font loading and is right
-   within a few percent for every face in the table above.
-2. Compute the longest word once, and accept a candidate size only when `longestWord ≤ maximum`.
-   Fall through to `minFontSize` as today, and return the chop as a flag so the review surfaces
-   it the way truncation already is.
-
-Nine lines. Every size in `SPEC.md` is measured against the fixed behaviour, and the brief's
-requirement — that the stress word survive as a single word — is only satisfiable with it. Some
-frames still cannot hold that word whole: Gutter's column caps the measure near 24 characters and
-says so in its own spec. The difference is that after E4 it shrinks to its minimum and reports,
-instead of chopping and staying silent.
-
-**Not used, deliberately.** `glow` (reserved, as the brief says — it cannot read neutral, and
-nothing here is a result or a final), `textPanel`, dashed rules, `backdropPhase` as a stored
-number. Phase is expressed as a variant axis per family instead, so the packer walks a seed
-without the schema growing a field.
+`glow` exists in the schema and renderer but is reserved by design; the current family set does
+not need it to pass. Recipe rhythm is recorded as `phaseSeed` in `carousel-recipe/1`, not as a
+template-level backdrop field.

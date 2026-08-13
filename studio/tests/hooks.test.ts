@@ -115,8 +115,8 @@ describe("the shipped quiz library", () => {
     const news = await readLibrary("news");
     const mma = await readLibrary("mma");
     expect(quiz.hooks.length).toBe(50);
-    expect(news.hooks.length).toBeGreaterThanOrEqual(12);
-    expect(mma.hooks.length).toBeGreaterThanOrEqual(12);
+    expect(news.hooks.length).toBe(12);
+    expect(mma.hooks.length).toBe(16);
 
     // The magazines have one vertical, so their hooks carry a dev line and no geo line. An
     // exhaustive variants record would have forced an invented geo line for a magazine with no

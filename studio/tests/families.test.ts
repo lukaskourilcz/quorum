@@ -25,7 +25,7 @@ import {
 } from "../src/index.js";
 
 /**
- * Ten families, and the two things the suite could never previously say.
+ * The family set, and the two things the suite could never previously say.
  *
  * It checked that the engine was deterministic and that a template's colours cleared the floor.
  * It never checked that two designs *are* two designs, or that variant B differs from variant A —

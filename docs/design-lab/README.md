@@ -52,6 +52,18 @@ type scale 0.9/1/1.1, the phase seed 0–3, and per-slide text.
 | 22 | [`quiet`](families/quiet.html) | quiet | One short block of type in a great deal of room, a mark the width of a fingernail, nothing else. |
 | 23 | [`offset`](families/offset.html) | type-only | The passage printed twice, the accent plate a few thousandths out of true under the foreground one. |
 
+These are the **23 shared article families** named by `DECK_FAMILIES`. Tehdejší svět also has a
+dedicated bilingual template kit in `studio/src/families-tehdejsi.ts`: Czech and Ukrainian are
+separate required slots on each slide, with Literata/Inter faces whose committed cmap coverage is
+tested. It is deliberately not a 24th shared family because the shared family contract has one
+passage slot per slide and the bilingual kit must fail if either language is missing.
+
+The current engine inventory is nine brand skins (the original five plus Kvórum,
+BOOKSOFHISTORY, Door Money and Tehdejší svět), four canvases (square, portrait, story and
+Threads), and one recorded `carousel-recipe/1` per social set. A recipe chooses a family, A/B,
+accent swap, photo treatment, type scale and phase seed deterministically, while excluding the
+venture's two most recently used families when the pool allows it.
+
 Coverage the brief asked for: photo-forward — masthead, gutter, bevel, porthole, pull.
 Type-only, which is to say families that never need a photograph — slab, terrace, figure.
 Number-led — figure. Quote-capable — pull, porthole. Hardest in 9:16 — tower. Quiet and

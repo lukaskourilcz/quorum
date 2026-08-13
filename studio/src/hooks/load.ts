@@ -80,9 +80,8 @@ export interface LoadLibraryInput {
 /**
  * Parse one surface's library and its research file into hooks whose gates are already predicates.
  *
- * An empty library is a valid state, and is the state news and MMA are in today: their hooks have
- * not been written, so their packs take the `no-hook` fallback. An empty library must still parse,
- * because "not written yet" and "broken" have to look different.
+ * An empty library is a valid state for a future surface or a fixture and takes the `no-hook`
+ * fallback. It must still parse because "absent" and "broken" have to look different.
  */
 export function loadLibrary(input: LoadLibraryInput): Library {
   const raw = RawLibrarySchema.parse(input.hooks);
@@ -126,7 +125,7 @@ export function loadLibrary(input: LoadLibraryInput): Library {
   return { surface: input.surface, hooks };
 }
 
-/** The library file's raw records, for delivery: the app receives what was written, not what was parsed. */
+/** The library file's raw records, for hashing/export without parsed-predicate decoration. */
 export function rawLibrary(value: unknown): RawHook[] {
   return RawLibrarySchema.parse(value);
 }

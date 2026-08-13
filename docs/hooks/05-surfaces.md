@@ -8,11 +8,9 @@ against the content it sits on, and different ventures have different content.
 
 | Surface | Library | Content shape | Gate vocabulary |
 |---|---|---|---|
-| devShark app | `quiz.hooks.json` | hook + question card, swipe to answer | options, difficulty, category, hasCode |
-| geoShark app | `quiz.hooks.json` (geo variants) | same | same |
-| devShark/geoShark carousels | `quiz.hooks.json` | slide 1 hook, slide 2 question, 3–4 reveal | same — the question is picked from the stack, so all metadata is known at render |
-| DNESKAi / Caught Up | `news.hooks.json` *(to write)* | daily AI briefing item | recency, source count, topic, numbers present |
-| MMA Files | `mma.hooks.json` *(to write)* | sourced Czech magazine article | format, fighter count, event reference, source count |
+| devShark/geoShark carousels | `quiz.hooks.json` (50 hooks) | slide 1 hook, slide 2 question, 3–4 reveal | options, difficulty, category, hasCode, canonical English opening |
+| DNESKAi / Caught Up | `news.hooks.json` (12 hooks) | daily AI briefing item | source count, primary-source count, signal strength, topic, numbers present |
+| MMA Files | `mma.hooks.json` (16 hooks) | sourced Czech magazine article | format, fighter count, event reference, source count |
 
 Every library uses the same schema, the same craft rules (`02`), the same honesty
 discipline, the same lint. Only `truthRequires` vocabulary and the strings differ.
@@ -97,8 +95,8 @@ These sit **on top of** the rules in `02`, they don't replace them.
 - **News: never tease what the item doesn't deliver.** The briefing's value is that it can
   be trusted at a glance. A hook that dramatises a minor item is a withdrawal from the only
   account the product has.
-- **News: no false novelty.** "First" and "breaking" require `isFirstReport`. Freshness
-  claims require `articleAgeHours`.
+- **News: no false novelty.** "First", "breaking" and item-age claims are forbidden because the
+  recorded item has no predicate that can license them.
 - **News: attribute uncertainty.** If the underlying item is a rumour or single-sourced,
   the hook may not state it as fact. Gate on `sourceCount`.
 - **MMA: no betting claims in hooks, ever.** FightAIQ's analysis may inform an article's
@@ -108,9 +106,8 @@ These sit **on top of** the rules in `02`, they don't replace them.
 - **MMA: real people.** Hooks reference fighters as competitors, never with invented
   quotes, invented motives or disparagement. Records and rankings must come from the data,
   not from the copy agent's memory.
-- **Both: the result-known tense trap.** A preview hook and a recap hook make opposite
-  promises. Gate them apart (`resultKnown`) or you will eventually tease a fight that
-  already happened.
+- **MMA: the result-known tense trap.** A preview hook and a recap hook make opposite promises.
+  Gate them apart with `formatIs:fight-week-preview` and `formatIs:post-event-recap`.
 
 ## Cross-surface measurement
 

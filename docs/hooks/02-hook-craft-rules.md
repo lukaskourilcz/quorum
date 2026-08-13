@@ -1,7 +1,8 @@
 # Hook Craft Rules — the Writing Playbook
 
-These rules produced the current 49-hook library. They are binding for in-app hooks and,
-with the adaptations at the bottom, for carousel slide-1 hooks and social copy.
+These rules produced the current 50-hook quiz library and its 12-hook news and 16-hook MMA
+siblings. They are binding for carousel slide-1 hooks and social copy. The in-app design was
+withdrawn; see `06-hook-brain.md`.
 
 ## Voice
 
@@ -14,8 +15,8 @@ Clipped, dry, confident. The hook is a person who knows the answer and isn't sho
 
 - EN ≤ **58** chars, CS ≤ **66** chars. Aim < 45. One line, always.
 - CS length ≤ ~**1.25×** its EN sibling (parity of punch, not word-for-word).
-- ≤ **2** byte-identical dev/geo pairs per library, and only for app-level concepts
-  (streaks) where the imagery genuinely doesn't split.
+- ≤ **2** byte-identical dev/geo pairs in the quiz library, and only where the imagery
+  genuinely does not split.
 - Archetype cap: no archetype > **20 %** of the library. Tag every hook.
 
 ## Structural patterns that work
@@ -65,7 +66,7 @@ or arithmetic.
   declension-safe slots — subject position ("{topic} je na každé mapě…") or after a colon
   ("Rychlý audit: {topic}."). Never inside a case-demanding frame ("s {topic}" breaks).
 - Watch gendered past-tense forms (*viděls, otevřel*). Masculine generic is current app
-  convention; prefer gender-neutral phrasing when it's equally strong ("Splést se tady
+  convention in the source material; prefer gender-neutral phrasing when it's equally strong ("Splést se tady
   není ostuda" beats a gendered alternative).
 - Typo vigilance: diacritics are part of correctness (*nezrezivíš*, not *nezreziviš*).
 
@@ -92,11 +93,11 @@ A hook does not ship without:
 - [ ] Prediction + falsifiedIf written?
 - [ ] No emoji, no exclamation marks, no hype?
 
-## Adaptation: carousel slide-1 hooks & social posts (marketingShark)
+## Carousel slide-1 hooks & social posts
 
 The same rules apply with these deltas:
-- **No gates exist in-feed.** The only licensed claims are ones true of the carousel's own
-  content ("One detail flips it") or of the world. Reader-state and difficulty claims are out.
+- Gates are evaluated from the pack's recorded content metadata before a line is selected. The
+  only licensed claims are those the surface vocabulary proves. Reader-state claims remain out.
 - **Stats must be real.** The classic "9 out of 10 developers get this wrong" template is
   banned until we have recorded per-question accuracy — then it becomes our strongest
   slide-1 line (precision effect, 01 §8), written with the exact number.
