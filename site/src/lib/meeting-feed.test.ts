@@ -85,11 +85,16 @@ function messagesIn(channels: ReturnType<typeof buildMeetingFeed>, id: string): 
 
 describe("the workspace channel map", () => {
   it("routes every room a reader can open, and nothing else", () => {
-    expect(WORKSPACE_CHANNELS).toHaveLength(8);
+    expect(WORKSPACE_CHANNELS).toHaveLength(12);
     expect(channelForKind("cu-edition")).toBe("vydani-dneskai");
     expect(channelForKind("gv-brief")).toBe("goviral-trend-room");
     expect(channelForKind("tt-marketing")).toBe("titty-tuesdays-marketing");
     expect(channelForKind("mag-desk")).toBe("vecerni-redakce");
+    expect(channelForKind("bh-desk")).toBe("booksofhistory-editorial-desk");
+    expect(channelForKind("dm-desk")).toBe("door-money-story-room");
+    expect(channelForKind("dm-growth")).toBe("door-money-story-room");
+    expect(channelForKind("ts-desk")).toBe("tehdejsi-svet-editorial-desk");
+    expect(channelForKind("kv-desk")).toBe("kvorum-political-desk");
     // The three board shifts are one conversation, and the two fight-data rooms are one check.
     expect(new Set(["morning", "afternoon", "night"].map(channelForKind))).toEqual(new Set(["ranni-porada"]));
     expect(new Set(["mma-intake", "mma-analysis"].map(channelForKind))).toEqual(new Set(["kontrola-mma-dat"]));
@@ -103,7 +108,7 @@ describe("the workspace channel map", () => {
     expect(channelForKind("")).toBeNull();
   });
 
-  it("returns all seven channels even when nothing has happened in them", () => {
+  it("returns every channel even when nothing has happened in them", () => {
     const feed = buildMeetingFeed(empty);
     expect(feed.map((channel) => channel.id)).toEqual(WORKSPACE_CHANNELS.map((channel) => channel.id));
     expect(feed.every((channel) => channel.days.length === 0)).toBe(true);

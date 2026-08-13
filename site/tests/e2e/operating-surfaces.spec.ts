@@ -349,8 +349,9 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   // every registered slot renders exactly one row and one project icon.
   await expect(weekBoard.locator(".contents")).toHaveCount(CALENDAR_SLOTS.length);
   await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(CALENDAR_SLOTS.length);
-  // Both ventures add a distinct project hue to the eight-project base schedule.
-  await expect(page.locator("[data-project-legend]")).toHaveCount(10);
+  // The legend owns one entry per colour currently represented by the calendar model. Keep the
+  // count aligned with that model as ventures join instead of preserving the old ten-entry pin.
+  await expect(page.locator("[data-project-legend]")).toHaveCount(11);
   await expect(weekBoard.locator("[data-calendar-slot] time")).toHaveCount(0);
   // No assertion that a fixture is on the board. There were test meetings on it when the archive
   // was young; there are none now, and requiring one would be requiring the company to keep
@@ -1013,8 +1014,38 @@ const OPENABLE_ROOMS = [
   "carousel-studio",
   "marketingshark",
   "goviral",
-  "titty-tuesdays"
+  "titty-tuesdays",
+  "booksofhistory",
+  "door-money",
+  "tehdejsi-svet",
+  "kvorum"
 ] as const;
+
+test("the home walkthrough carries all eleven ventures at mobile width", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const ventures = [
+    "DNESKAi",
+    "Titty Tuesdays",
+    "GoVIRAL",
+    "BOOKSOFHISTORY",
+    "FightAIQ",
+    "Design Lab",
+    "marketingShark",
+    "MMA Files",
+    "Door Money",
+    "Tehdejší svět",
+    "Kvórum"
+  ];
+  await expect(page.locator("[data-proj-card]")).toHaveCount(11);
+  for (const venture of ventures) {
+    await expect(page.locator("[data-proj-card]", { hasText: venture })).toHaveCount(1);
+  }
+  await expect(page.locator("[data-chat-list] button")).toHaveCount(12);
+  await expect(page.locator('[data-wf-place]:not([data-wf-place="dock"])')).toHaveCount(12);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(1);
+});
 
 for (const size of [
   { name: "1280x800", width: 1280, height: 800 },

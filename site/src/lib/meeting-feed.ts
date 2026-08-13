@@ -6,7 +6,7 @@ import { publicAgentText } from "@/components/agent-language";
 import { publicKindLabel } from "@/lib/slot-labels";
 
 /**
- * The meeting archive as a chat feed: seven channels, day dividers, message-by-message replay.
+ * The meeting archive as a chat feed: one channel per public room, day dividers and replay.
  *
  * This is the data layer for the approved workspace viewer and nothing else. It renders no
  * markup, picks no colours and makes no language decision — the recorded text is stored as-is and
@@ -24,7 +24,11 @@ export const WORKSPACE_CHANNELS = [
   { id: "vecerni-redakce", label: "MMA Files evening desk" },
   { id: "titty-tuesdays-marketing", label: "Titty Tuesdays marketing" },
   { id: "goviral-trend-room", label: "GoVIRAL trend room" },
-  { id: "marketingshark-carousel-room", label: "marketingShark carousel room" }
+  { id: "marketingshark-carousel-room", label: "marketingShark carousel room" },
+  { id: "booksofhistory-editorial-desk", label: "BOOKSOFHISTORY editorial desk" },
+  { id: "door-money-story-room", label: "Door Money storytelling desk" },
+  { id: "tehdejsi-svet-editorial-desk", label: "Tehdejší svět editorial desk" },
+  { id: "kvorum-political-desk", label: "Kvórum political desk" }
 ] as const;
 
 export type WorkspaceChannelId = (typeof WORKSPACE_CHANNELS)[number]["id"];
@@ -32,7 +36,7 @@ export type WorkspaceChannelId = (typeof WORKSPACE_CHANNELS)[number]["id"];
 /**
  * Which channel a room's records belong to.
  *
- * Seven channels for eleven slots, because a reader thinks in rooms rather than in cron entries:
+ * Channels are grouped by room rather than by cron entry:
  * the three board shifts are one conversation across a day, and the two fight-data rooms are one
  * running check. `article-am`/`article-pm` are not meetings at all — they are what the story desk
  * decided, so they land in that desk's channel as delivery or system lines.
@@ -50,7 +54,12 @@ const CHANNEL_BY_KIND: Record<string, WorkspaceChannelId> = {
   "mag-desk": "vecerni-redakce",
   "tt-marketing": "titty-tuesdays-marketing",
   "gv-brief": "goviral-trend-room",
-  "ms-daily": "marketingshark-carousel-room"
+  "ms-daily": "marketingshark-carousel-room",
+  "bh-desk": "booksofhistory-editorial-desk",
+  "dm-desk": "door-money-story-room",
+  "dm-growth": "door-money-story-room",
+  "ts-desk": "tehdejsi-svet-editorial-desk",
+  "kv-desk": "kvorum-political-desk"
 };
 
 export function channelForKind(kind: string): WorkspaceChannelId | null {

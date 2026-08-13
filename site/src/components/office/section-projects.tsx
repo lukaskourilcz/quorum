@@ -4,7 +4,7 @@ import type { OfficeProject } from "@/lib/office-walkthrough";
 import { WALKTHROUGH_PANEL_ZOOM } from "@/components/office/panel-zoom";
 
 /**
- * Five frames on the meeting-room wall.
+ * One frame for every operating venture on the meeting-room wall.
  *
  * A card with no live URL renders nothing in that slot — no "coming soon", no disabled link, no
  * placeholder. Three of the five have no public address yet, and a card that says so twice is a
@@ -17,8 +17,7 @@ export function SectionProjects({ projects }: { projects: OfficeProject[] }) {
         {projects.length} projects on the wall. Each has its own room and its own rules.
       </p>
       <div
-        // Four across, so seven cards land 4 + 3 rather than 5 + 2 and the second row does not
-        // read as an afterthought.
+        // Four across keeps eleven cards legible without turning the last row into tiny scraps.
         className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-4"
         data-proj-grid
       >

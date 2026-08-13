@@ -166,7 +166,7 @@ export function SectionWorkflows({
 
   /*
    * Below 1024px the page is an ordinary document: nothing is intercepted, the plan is a static
-   * picture scaled to the viewport, and the four panels are stacked blocks rather than overlays.
+   * picture scaled to the viewport, and the detail panels are stacked blocks rather than overlays.
    */
   useEffect(() => {
     const query = window.matchMedia("(max-width: 1023px)");
@@ -595,10 +595,10 @@ export function SectionWorkflows({
               );
             })}
             {[
-              ["9", "DNESKAi magazine", "courier exit"],
-              ["10", "MMA Files magazine", "courier exit"],
-              ["11", "The storefront", "dock bay · it collects its own feed"],
-              ["12", "The question bank", "corridor · imported once, nothing goes back"]
+              ["13", "DNESKAi magazine", "courier exit"],
+              ["14", "MMA Files magazine", "courier exit"],
+              ["15", "The storefront", "dock bay · it collects its own feed"],
+              ["16", "The question bank", "corridor · imported once, nothing goes back"]
             ].map(([numeral, name, edge]) => (
               <div key={numeral} style={{ display: "flex", alignItems: "baseline", gap: "10px" }}>
                 <span style={{ ...chip, color: "#94949c", width: "18px", flex: "0 0 auto" }}>{numeral}</span>

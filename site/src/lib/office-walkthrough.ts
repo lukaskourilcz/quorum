@@ -62,6 +62,10 @@ export type OfficeProjectKey =
   | "mma-files"
   | "fightaiq"
   | "goviral"
+  | "booksofhistory"
+  | "door-money"
+  | "tehdejsi-svet"
+  | "kvorum"
   | "marketingshark"
   | "titty-tuesdays"
   | "carousel-studio";
@@ -73,6 +77,10 @@ export function projectForKind(kind: string): OfficeProjectKey {
   if (kind === "cu-edition" || kind === "cu-product") return "caught-up";
   if (kind === "tt-marketing") return "titty-tuesdays";
   if (kind === "gv-brief") return "goviral";
+  if (kind === "bh-desk") return "booksofhistory";
+  if (kind === "dm-desk" || kind === "dm-growth") return "door-money";
+  if (kind === "ts-desk") return "tehdejsi-svet";
+  if (kind === "kv-desk") return "kvorum";
   if (kind === "ms-daily") return "marketingshark";
   if (kind === "mma-intake" || kind === "mma-analysis") return "fightaiq";
   if (kind === "mag-editorial" || kind === "mag-desk" || kind === "article-am" || kind === "article-pm") return "mma-files";
@@ -82,8 +90,6 @@ export function projectForKind(kind: string): OfficeProjectKey {
 
 /** Calendar-only ventures can keep their own hue without acquiring a public project room. */
 export function projectColorForKind(kind: string): string {
-  if (kind === "bh-desk") return VENTURE_BRAND.booksofhistory!;
-  if (kind === "ts-desk") return VENTURE_BRAND["tehdejsi-svet"]!;
   return PROJECT_COLOR[projectForKind(kind)];
 }
 
@@ -272,6 +278,34 @@ const CHANNEL_COPY: Record<WorkspaceChannelId, {
     time: "13:00 · Mondays",
     topic: "What is rising this week, and at most one trend handed to another desk.",
     project: "goviral"
+  },
+  "booksofhistory-editorial-desk": {
+    handle: "booksofhistory-desk",
+    room: "BOOKSOFHISTORY editorial desk",
+    time: "12:00",
+    topic: "Candidate books, verified claims and the next bounded research step.",
+    project: "booksofhistory"
+  },
+  "door-money-story-room": {
+    handle: "door-money-story-room",
+    room: "Door Money storytelling desk",
+    time: "15:00 · 16:00 Thursdays",
+    topic: "Story recommendations every day, with the bounded growth review on Thursdays.",
+    project: "door-money"
+  },
+  "tehdejsi-svet-editorial-desk": {
+    handle: "tehdejsi-svet-desk",
+    room: "Tehdejší svět editorial desk",
+    time: "18:00",
+    topic: "One evidence-backed historical story recommendation, kept as a draft.",
+    project: "tehdejsi-svet"
+  },
+  "kvorum-political-desk": {
+    handle: "kvorum-political-desk",
+    room: "Kvórum political desk",
+    time: "21:00",
+    topic: "A source-backed recommendation from the recorded Czech political monitor.",
+    project: "kvorum"
   }
 };
 
@@ -354,6 +388,30 @@ const PROJECT_COPY: Record<string, { status: string; description: string; url: s
     url: null,
     daily: false
   },
+  booksofhistory: {
+    status: "Research desk",
+    description: "Book history told from verified claims, with cheap candidate research separated from paid deep research.",
+    url: null,
+    daily: false
+  },
+  "door-money": {
+    status: "Story recommendations",
+    description: "Practical money lessons shaped into owner-reviewed stories, with results entered by hand and no automated posting.",
+    url: null,
+    daily: false
+  },
+  "tehdejsi-svet": {
+    status: "Drafts only",
+    description: "Czech and Ukrainian historical explainers built from a hand-verified facts file and kept for owner review.",
+    url: null,
+    daily: false
+  },
+  kvorum: {
+    status: "Political monitor",
+    description: "Czech political claims checked against recorded sources before one owner-facing recommendation is made.",
+    url: null,
+    daily: false
+  },
   "titty-tuesdays": {
     status: "Before commerce",
     description: "Brand and season concepts. So far only an inventory of ideas: no prices, no stock, no availability.",
@@ -374,9 +432,7 @@ const PROJECT_COPY: Record<string, { status: string; description: string; url: s
   }
 };
 
-const PROJECT_ORDER = [
-  "caught-up", "mma-files", "fightaiq", "goviral", "titty-tuesdays", "marketingshark", "carousel-studio"
-];
+const PROJECT_ORDER = ventureRegistry.ventures.map((venture) => venture.id);
 
 /* ------------------------------------------------------------------ team */
 
