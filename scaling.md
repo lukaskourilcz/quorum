@@ -30,7 +30,8 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
   při skutečné změně zdrojových dat. marketingShark a návrhový stůl Door Money běží
   denně, GoVIRAL platí model jen v pondělí a růstová porada Door Money jen ve čtvrtek.
   BOOKSOFHISTORY má stálé denní okno a vždy naváže jen na svou rozepsanou fázi.
-  Nepotřebný čas stojí $0.
+  Tehdejší svět má denní dvoufázové okno v 18:00; jeho aktuální nedělní učení je
+  deterministické a stojí $0. Nepotřebný čas stojí $0.
 - GitHub Actions běží na **pěti** rozvrzích místo dřívějších desítek překrývajících se
   letních a zimních záznamů: jeden hodinový dispatcher pojmenuje poradu podle spouštěče,
   který se ozval, takže zpoždění nevadí a nepotřebné běhy nevznikají. Zálohování je
@@ -90,6 +91,13 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
   modelového limitu. Ostatní dny růstová porada zapisuje $0. Soukromé úložiště je
   stávající Git/GitHub cesta, výběr a váhy jsou deterministické, Design Lab vykresluje
   za $0 a nový fixní ani placený datový náklad nevzniká.
+- Tehdejší svět má společnou obálku **$0.25 na běh**, výzkumný strop **$0.30 za
+  brief** a **$2.00 za měsíc** a modelový cíl nejvýše **$4.00 měsíčně**. Dvoudenní
+  cyklus používá placený krok při plánování a při nezávislém českém a ukrajinském
+  psaní; faktická a citlivostní kontrola, skórování, aktuální nedělní váhy, vykreslení
+  i ruční výsledky jsou kód za $0. Soubor potvrzených faktů spravuje majitel v tomto
+  repozitáři. Existující produkt zůstává v samostatném repozitáři bez runtime spojení,
+  takže nevzniká nový hosting, databáze, analytika ani placený kanál.
 - Caught Up dál používá Claude Sonnet pro výběr tématu, anglický článek a českou verzi. Tyto tři kroky přímo určují kvalitu vydání, takže je bez srovnávacího testu nepřepínáme na levnější model.
 - Anglický writer dostává vybrané zdroje a nejvýše 12 dalších položek pro Watchlist. Dříve dostával dlouhý seznam všech URL, i když z něj nemohl čerpat další obsah.
 

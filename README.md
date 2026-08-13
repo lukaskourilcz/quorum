@@ -25,6 +25,7 @@ where the work happens, who runs it, what came out, and what the company is.
 | **GoVIRAL** | what is rising this week, once a week |
 | **Titty Tuesdays** | brand and season concepts for a shop that does not exist yet |
 | **Door Money** | evidence-linked English book-storytelling drafts and a Thursday owner action plan; it publishes nothing |
+| **Tehdejší svět** | bilingual Czech-Ukrainian family-history drafts from one hand-committed facts file; the existing product stays in its own repository and the owner posts by hand |
 
 ## The stack
 

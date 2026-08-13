@@ -160,7 +160,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-22b** — GoVIRAL spine: transitions and the Design-Lab-only test
 - [x] **TS-23a** — Owner results per platform
 - [x] **TS-23b** — Weights, used-flags and the experiment ladder
-- [ ] **TS-24a** — Documentation truth across the standing docs
+- [x] **TS-24a** — Documentation truth across the standing docs
 - [ ] **TS-24b** — INBOX approvals and NEEDED owner items
 - [ ] **TS-24c** — Honest gaps, checkbox sweep and spec deletion
 
@@ -225,6 +225,11 @@ snapshot is a committed file and the venture buys no data.
   line. The same issue records the zero-cost experiment ladder in the shared hypothesis
   fields, while its venture guard keeps `maxCostUsd` and `maxLossUsd` at zero rather than
   using the sibling activation helper that requires spend authority.
+- **The Sunday learning overlay is deterministic today.** The founding cost declaration
+  allowed about `$0.06` for a weekly insights call. The shipped TS-23b implementation
+  extracts signals and proposes replay-verified weight revisions in code, so the current
+  overlay makes no provider call and spends `$0`. The `$0.25` room envelope, `$4.00`
+  monthly model target and research ceilings remain unchanged.
 
 ## Honest gaps
 

@@ -5,9 +5,9 @@ ukládá výsledky tak, aby šlo zpětně dohledat, proč něco navrhla. Pevná 
 důkazy, náklady, bezpečnost a to, co smí udělat jen majitel.
 
 Aktuální stav: **v provozu, bez příjmů, ve fázi ověřování**. Web běží na Vercel Pro:
-<https://boardless-ai.vercel.app>. Systém má osm pracovních projektů: Caught Up (veřejně
+<https://boardless-ai.vercel.app>. Systém má deset pracovních projektů: Caught Up (veřejně
 DNESKAi), Titty Tuesdays, GoVIRAL, marketingShark, BOOKSOFHISTORY, FightAIQ, Design
-Lab, MMA Files a Door Money.
+Lab, MMA Files, Door Money a Tehdejší svět.
 Magazine Incubator byl uzavřen — nové magazíny se už nevymýšlejí.
 
 **Co už publikuje (k 12. srpnu 2026):** publikují dva projekty — DNESKAi denní vydání a
@@ -17,7 +17,9 @@ karusely. Ostatní projekty zatím nepublikují; na co každý čeká, je v
 `docs/NEEDED.md`. marketingShark nepublikuje vůbec: jeho karusely vznikají rovnou
 jako koncepty ve frontě ke schválení a rozhoduje o nich majitel. BOOKSOFHISTORY také
 jen připravuje koncepty; majitel každou jazykovou verzi schválí, vykreslí v Design
-Labu a zveřejní ručně.
+Labu a zveřejní ručně. Tehdejší svět také připravuje jen návrhy: česko-ukrajinské
+rodinné příběhy vznikají z jednoho ručně spravovaného souboru faktů a majitel je
+zveřejňuje ručně. Existující produkt zůstává ve vlastním repozitáři.
 
 ## Jak je systém poskládaný
 
@@ -28,7 +30,7 @@ GitHub Actions / příkazová řádka
      TypeScript řízení porad
      ├─ rozpis, agendy a výběr rolí
      ├─ limity nákladů a kontrola zdrojů
-     ├─ porady všech osmi projektů
+     ├─ porady všech deseti projektů
      └─ jeden denní souhrn
               │
               ▼
@@ -43,9 +45,9 @@ GitHub Actions / příkazová řádka
      └─ chráněná správa projektů (rail podle projektů)
 ```
 
-V rejstříku je 44 rolí, z toho **35 aktivních**: čtyři hlasující členové rady a 31
-odborných rolí. Devět rolí bylo při zeštíhlení soupisky odstaveno a veřejný web počítá
-jen ty pracující. Dvacet dva aktivních rolí používá Anthropic a 15 OpenAI. Dvacet sedm
+V rejstříku je 48 rolí, z toho **39 aktivních**: čtyři hlasující členové rady a 35
+odborných rolí. Šest rolí je pozastavených a tři vyřazené; veřejný web počítá
+jen ty pracující. Dvacet čtyři aktivních rolí používá Anthropic a 15 OpenAI. Dvacet sedm
 rolí má na veřejném webu svou schválenou fotografii. Novější role používají neutrální zástupný obrázek se jménem,
 dokud pro ně nevznikne schválený portrét. Web používá jména a pracovní popisy bez
 seriálového vzhledu a bez označení sezon nebo epizod. Tyto vizuální prvky se neposílají
@@ -85,9 +87,10 @@ modelům ani do podkladů porad.
   založilo knihovnu, kterou dalších třináct rozšířilo na 23 odlišných rodin. Ty nahradily
   pět tapet, které byly ve třech případech tentýž rozmazaný gradient. Písma
   jsou od 9. srpna 2026 v repozitáři: třicet statických řezů pod licencí SIL OFL, takže
-  stejný deck vykreslí stejné bajty na jakémkoli stroji. Barevné sady drží pro šest
+  stejný deck vykreslí stejné bajty na jakémkoli stroji. Barevné sady drží pro sedm
   značek; devShark a geoShark přibyly s marketingSharkem, BOOKSOFHISTORY doplnilo
-  typografickou sadu bez obálek a Door Money anglickou sadu. Design Lab nemá vlastní sociální účet.
+  typografickou sadu bez obálek, Door Money anglickou sadu a Tehdejší svět sedmou sadu
+  s českou i ukrajinskou cyrilicí. Design Lab nemá vlastní sociální účet.
 - **BOOKSOFHISTORY** každý den ve 12:00 naváže na rozepsanou fázi výběru, výzkumu
   nebo tvorby. Z jednoho zdrojovaného dossieru vznikne společný příběhový brief a dva
   samostatně napsané české a anglické sociální koncepty. Nemá veřejný web, stránky
@@ -104,12 +107,19 @@ modelům ani do podkladů porad.
   majitel, schválení zapíše jen summary pro Design Lab a zveřejnění je ruční. Čtvrteční
   porada v 16:00 připraví citované úkoly a šablony, ale nic neodešle, nezaloží účet,
   nedotkne se kanálu a neutratí peníze.
+- **Tehdejší svět** připravuje dvoudenní česko-ukrajinský rodinně-historický balíček.
+  Denní stůl v 18:00 nejprve naplánuje jeden příběh a při dalším běhu nechá LETOPIS
+  napsat český návrh a VERBA samostatný ukrajinský návrh. Obě verze smějí čerpat jen z
+  jednoho ručně potvrzeného a otiskem chráněného souboru faktů; HACEK, QUILL a AUDIT
+  hlídají vstup, citlivost, kvalitu a stop bránu. Výstup je jen návrh a výsledky zadává
+  majitel ručně. Existující produkt zůstává ve vlastním repozitáři: BoardlessAI se k
+  němu nepřipojuje a připravuje pouze marketingové podklady.
 
 ## Denní rozpis a peníze
 
-Společný pražský rozpis má 16 kontrolních časů: 05:00, 06:00, 07:00, 08:00, 09:00, 10:00,
-11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00, 19:00, 20:00 a 22:00. Sloty 18:00 a 21:00 zmizely se zrušením
-večerního článkového slotu. Sedmá hodina zůstala po uzavření inkubátoru prázdná a od
+Společný pražský rozpis má 17 kontrolních časů: 05:00, 06:00, 07:00, 08:00, 09:00, 10:00,
+11:00, 12:00, 13:00, 14:00, 15:00, 16:00, 17:00, 18:00, 19:00, 20:00 a 22:00. Slot 21:00 zmizel se zrušením
+večerního článkového slotu; 18:00 se znovu používá pro Tehdejší svět. Sedmá hodina zůstala po uzavření inkubátoru prázdná a od
 7. srpna 2026 v ní sedí denní porada marketingSharku. Letní a zimní čas má každý
 slot vlastní spouštění a program přijme jen tu variantu, která platí pro Prahu dnes.
 
@@ -124,7 +134,8 @@ se už jen bez placených modelů zapíše stav. GoVIRAL platí model jen v pond
 má denní návrhový stůl v 15:00 a růstová porada platí model jen ve čtvrtek. Večerní
 analýzy FightAIQ a redakční kontrola MMA Files vyžadují platnou agendu. BOOKSOFHISTORY
 má stálé denní okno, ale pokračuje jen v aktuální fázi; zmeškanou práci nepřeskočí a při
-nedostatku rozpočtu cyklus protáhne za `$0`.
+nedostatku rozpočtu cyklus protáhne za `$0`. Tehdejší svět v 18:00 střídá plánování a
+produkci; nedělní učení je v aktuálním kódu deterministické a stojí `$0`.
 
 Když nějaká brána poradu vypne, zapíše se do `state/meetings/skips/` důvod a kalendář slot
 označí jako **Skipped** s vysvětlením v popisku. Prázdný den tak řekne, kterou bránu
@@ -140,6 +151,11 @@ BOOKSOFHISTORY má uvnitř těchto společných limitů ještě nižší stropy 
 nejvýše 0,10 dolaru za volání, 0,50 dolaru za cyklus a 5 dolarů za měsíc. Stejný
 výzkum se pro druhý jazyk neopakuje a zámek `(bookId, briefHash)` brání dvojímu
 účtování.
+
+Tehdejší svět má strop výzkumu 0,30 dolaru za brief a 2 dolary za měsíc. Plánování a
+dvě nezávislé jazykové verze mají společnou obálku 0,25 dolaru na běh a modelový cíl
+nejvýše 4 dolary měsíčně; kontrola faktů, skórování, nedělní váhy, vykreslení a ruční
+zápis výsledků jsou deterministické a stojí `$0`.
 
 ### Jak se vybírá obrázek k článku
 
@@ -169,7 +185,9 @@ zápis bezpečně selže.
 Web automaticky nesbírá návštěvnost, čtenost ani výsledky příspěvků. Majitel může v
 chráněné správě ručně zapsat výsledek konkrétní jazykové verze BOOKSOFHISTORY i
 výsledek Door Money vedle původního záměru; systém se nepřipojuje k analytice ani sociální
-síti. Přepínač `METRICS_INGESTION_ENABLED` zůstává vypnutý a role SPLIT nepracuje. REACH je také
+síti. Totéž platí pro výsledky Tehdejšího světa: majitel je vkládá jako komentář k
+uloženému návrhu a systém nečte produkt ani jeho analytiku. Přepínač
+`METRICS_INGESTION_ENABLED` zůstává vypnutý a role SPLIT nepracuje. REACH je také
 vypnutý, dokud je tvorba sociálního obsahu pro MMA Files zamčená.
 
 ## Vývoj a ověření

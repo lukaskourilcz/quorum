@@ -1,6 +1,6 @@
 # BoardlessAI project model
 
-BoardlessAI is one guarded operating system with nine project workspaces. Shared
+BoardlessAI is one guarded operating system with ten project workspaces. Shared
 infrastructure owns the agent registry, budget, source policy, meeting records,
 specialist agendas, calendar, admin, delivery checks and public explanation. Each
 project keeps a narrow output boundary rather than cloning the orchestrator.
@@ -18,6 +18,7 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 | BOOKSOFHISTORY | Operating in guarded validation | Turns a deterministic shortlist and reusable source dossiers into independent Czech and English social-story drafts | No public surface, account, channel or posting path; no cover artwork; quotes are attributed and capped at 300 characters |
 | MMA Files | Operating public magazine | One daily Czech article slot and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
 | Door Money | Operating, drafts only | Evidence-linked English book-storytelling recommendations and a Thursday owner action packet | Manuscript/full chunks/embeddings stay private; no posting, account, channel or outreach; results are owner-entered only |
+| Tehdejší svět | Operating, pending countersignature | Ranks a hand-committed facts file and produces independent Czech and Ukrainian family-history drafts through a two-day cycle | The existing product and its repository stay separate; no runtime connection, tracking, account, channel or posting path; tier-two review blocks release |
 
 `config/ventures.json` stores each project's meetings, participating roles, cost
 envelope and admin tabs. `config/venture-agent-controls.json` stores optional agent switches. Internal
@@ -27,10 +28,10 @@ contracts retain the word `venture` for compatibility; visitor-facing text says
 ## People and authority
 
 Four decision-makers—VIZE, FORGE, PULSE and AUDIT—hold company-wide authority.
-Thirty-three active specialists do bounded work only when a service path or due agenda needs
-their domain. The registry holds 44 entries: 35 active, 6 paused and 3 retired. A
+Thirty-five active specialists do bounded work only when a service path or due agenda needs
+their domain. The registry holds 48 entries: 39 active, 6 paused and 3 retired. A
 stood-down role stays on the record — the router skips it and names it — so the count
-that matters is the thirty-five that work. The 27
+that matters is the thirty-nine that work. The 27
 established roles keep their approved photographic portraits. Newer roles use neutral
 name-based placeholders until approved media exists. Public visuals never enter model
 prompts or meeting packets. The public interface uses names and work labels. It does
@@ -38,7 +39,8 @@ not present quarters as seasons, days as episodes or agents as entertainment
 characters.
 
 PULSE chairs generic project rooms and reads performance in Door Money growth; GHOST and
-BOOKER own the two Door Money drafting packets while AUDIT keeps its rule-based veto.
+BOOKER own the two Door Money drafting packets. LETOPIS and VERBA own Tehdejší svět's
+Czech planning/writing and independent Ukrainian pass while AUDIT keeps its rule-based veto.
 Owner ratings teach format and taste; they are not commands. Agents cannot approve their own spending,
 credentials, account access, stage changes or governing prompts. Content release and
 pre-scoped social posting are agent-owned only inside the recorded contracts and
@@ -63,8 +65,9 @@ Not every clock entry is a meeting:
   marketingShark room is fixed the same way, except that what it owes each day is a
   draft package rather than a published one.
 - **Persistent cycle:** the 12:00 BOOKSOFHISTORY desk resumes one recorded selection,
-  research or production phase. A missed day stretches the cycle instead of skipping
-  work or weakening a gate.
+  research or production phase, and the 18:00 Tehdejší svět desk resumes planning or
+  bilingual production. A missed day stretches either cycle instead of skipping work
+  or weakening a gate.
 - **Standing:** Titty Tuesdays runs daily, GoVIRAL does paid work on Mondays, Door Money's
   desk runs daily and its growth room does paid work on Thursdays. The weekly rooms write
   honest `$0` no-op records on their other six scheduled firings.
@@ -95,6 +98,7 @@ credentials, evidence, cost limits or safety rules.
 | 15:00 | Door Money recommendation desk | daily drafts; private-knowledge and budget gates |
 | 16:00 | Door Money growth room | Thursdays only; other days are `$0` no-ops |
 | 17:00 | Caught Up product meeting | fixed service |
+| 18:00 | Tehdejší svět editorial desk | persistent two-day bilingual cycle; drafts only and pending countersignature |
 | 19:00 | FightAIQ model check | due agenda; D8 analysis and evidence gates apply |
 | 20:00 | MMA Files desk review | due agenda only |
 | 22:00 | Board night | `$0` checkpoint and daily summary |
@@ -121,6 +125,11 @@ BOOKSOFHISTORY research adds narrower guards inside those portfolio limits: at m
 `(bookId, briefHash)`. Budget pressure reduces two research candidates to one, then
 stretches the cycle at `$0`, then removes the room. It never raises a cap or repeats
 research merely for the second language.
+
+Tehdejší svět adds a `$0.30` per-brief and `$2.00` monthly research ceiling inside
+the same portfolio limits. Its room envelope is `$0.25`; the two language passes share
+one canonical brief, and its current Sunday signal and performance overlays are
+deterministic `$0` work. The model-spend target remains at most `$4.00` monthly.
 
 ## Money and quarterly targets
 
@@ -165,7 +174,9 @@ Caught Up work, Titty Tuesdays plans, FightAIQ data, MMA Files articles and
 BOOKSOFHISTORY shortlist, dossier and feature tabs. The latter supports explicit
 owner approval/rejection, Design Lab handoff and owner-entered per-lane results without
 automatic channel ingestion. Door Money adds recommendations, owner actions and private-knowledge
-status. Perfect, Good and Bad ratings keep their full history. A rating cannot found
+status. Tehdejší svět adds feature, copied-facts library and owner-pasted signals tabs,
+with explicit bilingual approval, manual posted URLs and owner-entered platform results.
+Perfect, Good and Bad ratings keep their full history. A rating cannot found
 a project or publish an item. The queue and its archive are editable by the owner, but
 owner input is optional.
 
@@ -185,12 +196,15 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 - BoardlessAI deliberately has no duplicate public fighter or event pages.
 - BOOKSOFHISTORY has no delivery repository or public route. Owner-approved Czech and
   English decks stop at a recorded Design Lab handoff for manual posting.
+- Tehdejší svět is an adoption, not a delivery integration. Its existing product stays
+  in its own repository; this repository runs only the marketing cycle from one
+  hand-committed, hash-verified facts file and never reads or writes the product at runtime.
 
 ## Live switches
 
 - `CAUGHT_UP_LIVE_ENABLED` — Caught Up edition and product work.
 - `PORTFOLIO_LIVE_ENABLED` — Titty Tuesdays standing ideation and the separately
-  countersigned BOOKSOFHISTORY persistent cycle.
+  countersigned BOOKSOFHISTORY and Tehdejší svět persistent cycles.
 - `FIGHTAIQ_LIVE_ENABLED` — FightAIQ source/data work.
 - `FIGHTAIQ_ANALYSIS_ENABLED` — model analysis only after the separate mode decision.
 - `MMA_FILES_LIVE_ENABLED` — source-first newsroom work and content delivery.
@@ -199,13 +213,14 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 - `SOCIAL_KILL_SWITCH=true` — supreme manual posting stop. When false, each project
   still needs its own proof/campaign counter, account credentials and safety gate.
 - `METRICS_INGESTION_ENABLED=false` — keeps automatic visitor, reader and engagement
-  measurement out of state; SPLIT stays idle. Explicit owner-entered BOOKSOFHISTORY
-  lane results are the only exception and do not touch a channel. REACH also stays
+  measurement out of state; SPLIT stays idle. Explicit owner-entered BOOKSOFHISTORY,
+  Door Money and Tehdejší svět results are the only exceptions and do not touch a channel.
+  REACH also stays
   disabled while the MMA social-content phase is locked; both roles already carry
   current output contracts.
 
 Missing variables deny the action. The owner checklist and the ordered setup path are
 both in `docs/NEEDED.md`.
 
-The canonical, standalone description of all nine projects, 46 roles, D1–D14 and
+The canonical, standalone description of all ten projects, 48 roles, D1–D14 and
 current generated state is `docs/ECOSYSTEM.md`.

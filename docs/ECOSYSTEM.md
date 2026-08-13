@@ -3,11 +3,11 @@
 Updated: 2026-08-12
 Status: implementation complete; live work remains locked behind pending venture countersignatures and the owner-only setup in `docs/NEEDED.md`
 Audience: owner, product partners and Fable brainstorming  
-Authority: current code, committed state, decisions D1–D13 and the pending venture founding records
+Authority: current code, committed state, decisions D1–D14 and the pending venture founding records
 
 ## What BoardlessAI is
 
-BoardlessAI is a Git-backed operating system for nine AI-assisted projects. It is not
+BoardlessAI is a Git-backed operating system for ten AI-assisted projects. It is not
 an always-on group chat and it does not reward agent activity for its own sake. A
 small board chooses bounded work, specialist rooms open only for a concrete agenda or
 service need, deterministic code handles checks wherever judgment is unnecessary,
@@ -24,6 +24,9 @@ Titty Tuesdays remains pre-commerce. FightAIQ never places bets. The Design Lab 
 an internal renderer with a public gallery, not another social brand. BOOKSOFHISTORY
 produces owner-reviewed social drafts only: it has no public site, book pages, SEO
 archive, database, newsletter, storefront, account, channel or posting path.
+Door Money and Tehdejší svět are also drafts-only. Tehdejší svět adopts marketing for
+an existing product without connecting to its separate repository: this repository
+reads one hand-committed, hash-verified facts file and never reads or writes the product.
 
 ## How to maintain this document
 
@@ -86,7 +89,7 @@ their packet. They do not approve their own release or expand their own scope.
 External pages, articles, APIs and owner notes enter as untrusted data; they never
 become instructions. Numeric and factual claims must retain evidence references.
 
-## The nine projects
+## The ten projects
 
 ### Caught Up
 
@@ -150,6 +153,27 @@ other six firings cost `$0`. Approval hands a summary to the shared Design Lab, 
 the venture's only rendering path. Nothing can post, create an account, touch a channel,
 send outreach or authorize spend. The protected admin exposes recommendations, actions
 and knowledge, and records owner review decisions, manual completions and manual results.
+
+### Tehdejší svět
+
+Promise: turn curated Czech and Ukrainian history facts into bilingual family
+conversation drafts without changing or connecting to the existing product. The
+product remains in its own repository. This venture reads one owner-committed,
+hash-verified facts file; its daily room has no product-network path and marketing
+research never becomes product data.
+
+At 18:00 `ts-desk` advances one step of a two-day cycle. LETOPIS plans the canonical
+brief and writes the Czech feature; VERBA independently adapts that brief for native
+Ukrainian readers rather than mirroring the Czech sentences. HACEK, QUILL and AUDIT
+enforce fact, register, sensitivity, licence and stop gates. Tier-2 subjects require
+human review and two independent sources. The Design Lab is the only renderer, and
+licensed photographs render only from recorded local bytes with on-slide attribution.
+
+Every feature remains a draft until the owner approves it and later records any posted
+URL and result manually. The venture cannot post, create an account, read analytics,
+touch a channel or spend outside its nested limits. Its current Sunday performance
+overlay is deterministic and costs `$0`; owner-entered results may change bounded
+selection priors but cannot weaken the factual or sensitivity gates.
 
 ### marketingShark
 
@@ -251,8 +275,9 @@ quiz-code-context. The eleventh was added for marketingShark and justified by a 
 rather than a preference: every other live layout's widest monospace slot holds 100
 characters over two lines, which is a source label and not a program, so a quiz question
 carrying a fenced code block had nowhere legible to put it. Brand token sets now cover
-six brands — devShark and geoShark arrived with marketingShark, BOOKSOFHISTORY added a
-typographic, cover-free set and Door Money adds the English book-storytelling set.
+seven brands — devShark and geoShark arrived with marketingShark, BOOKSOFHISTORY added a
+typographic, cover-free set, Door Money adds the English book-storytelling set and
+Tehdejší svět adds the bilingual set with Ukrainian Cyrillic coverage.
 MOTIF records cited text observations without crawling or downloading imagery. EASEL
 authors original data-only proposals. Schema, contrast, safe-area, token, overflow,
 asset and determinism checks can promote a version automatically. Versions are
@@ -300,7 +325,7 @@ is only a locked future earning possibility.
 
 ## Prague operating clock
 
-Every row is a wake-up, not a promise to spend. The schedule has 32 Vercel entries across
+Every row is a wake-up, not a promise to spend. The schedule has 34 Vercel entries across
 19 unique UTC cron expressions covering Prague winter and summer time. Runtime DST resolution accepts
 only the entry matching the intended local hour. Calendar validation rejects
 collisions and the public calendar uses the same source.
@@ -320,6 +345,7 @@ collisions and the public calendar uses the same source.
 | 15:00 | Door Money desk | standing daily; private knowledge, evidence and budget gates | `$0.08` |
 | 16:00 | Door Money growth | standing weekly; Thursdays only, the other six days are `$0` no-ops | `$0.06` |
 | 17:00 | Caught Up product | fixed service | `$0.08` |
+| 18:00 | Tehdejší svět desk | standing daily; one planning or bilingual-production step, pending founding/live gates | room `$0.25`, nested research `$0.30` per brief |
 | 19:00 | FightAIQ analysis | due agenda + D8/evidence gates | `$0.06` |
 | 20:00 | MMA Files desk | due agenda only | `$0.05` |
 | 22:00 | Night board | `$0` checkpoint, digest and document truth refresh | `$0` |
@@ -363,7 +389,7 @@ without a consumed project agenda forces a morning-board commission or saved why
 A manual run bypasses the agenda timing only; it cannot bypass live, evidence, cost,
 credential or safety gates.
 
-## Roster: thirty-five working roles, nine stood down
+## Roster: thirty-nine working roles, nine stood down
 
 Model routing is declared in `config/models.json` and `config/agent-routing.json`.
 Council judgment uses Claude Sonnet 5 or GPT-5.6 Luna. Narrow specialists use the
@@ -420,6 +446,8 @@ envelope before any call.
 | PLOT | dossier story mining, one canonical brief and independent Czech/English packages | cannot invent claims, change verification state or post |
 | GHOST | evidence-linked English Door Money storytelling drafts | cannot select passages, alter the private knowledge profile or publish |
 | BOOKER | cited Door Money owner tasks and reusable templates | cannot contact anyone, spend or claim an unrecorded result |
+| LETOPIS | canonical Tehdejší svět brief and Czech family-history feature | cannot use facts outside the verified snapshot or dossier, or publish |
+| VERBA | independent native Ukrainian adaptation of the canonical brief | cannot mirror Czech sentences, omit required context or publish |
 
 ## Content, social and the Design Lab's flow
 
@@ -448,6 +476,11 @@ BOOKSOFHISTORY does not enter that publisher. Its approved lane becomes a Design
 handoff for the owner, never a platform job; an owner may later record the posted URL
 and result in the protected admin, but no crawler or channel integration measures it.
 
+Tehdejší svět also stops at an owner-ready Design Lab package. Approval records the
+owner's decision and later posted URLs; manual per-platform results and pasted comments
+are its only signals. No code reaches the adopted product repository, social accounts,
+platform analytics or a publishing API.
+
 ## KPI and quarter protocol
 
 Q1 is a 90-day quarter beginning 2026-08-03. Content and social pace have a 14-day
@@ -463,6 +496,11 @@ BOOKSOFHISTORY targets at least 90% completed-or-honestly-stretched cycles, at l
 eight features in its lowest full month, at least 70% reuse of paid dossiers after a
 30-day ramp, 100% verification-state coverage and zero legends stated as fact. Its
 model-spend KPI is at most `$8` monthly; the stricter research ceiling remains `$5`.
+
+Tehdejší svět targets completed-or-honestly-paused two-day cycles, evidence coverage in
+both languages, zero sensitivity/licence escapes and owner-entered results only. Its
+model-spend target is at most `$4` monthly; research remains separately capped at
+`$0.30` per brief and `$2` monthly.
 
 At quarter end, fewer than 70% passing targets or any missed critical target creates a
 mandatory `continue / pivot / stop` reassessment. A company miss also reviews the
@@ -485,6 +523,9 @@ BOOKSOFHISTORY has no website, newsletter, database, store or other earning surf
 this program; building one would require a separate owner decision.
 Door Money is likewise drafts-only: it has no earning activation, publisher, channel or
 account, and its owner action packets cannot send the outreach they describe.
+Tehdejší svět is an adoption-marketing workspace, not a product or earning integration.
+It has no account, channel, publisher, analytics reader or authority to alter the
+existing product.
 
 ## Safety and launch gates
 
@@ -505,6 +546,9 @@ account, and its owner action packets cannot send the outreach they describe.
   are allowlisted and external content is untrusted.
 - Door Money manuscript text, full chunks and embeddings never enter this public
   repository; committed excerpts and exemplars are contract-capped and test-enforced.
+- Tehdejší svět reads only its hand-committed, hash-verified facts file. It never reads
+  or writes the product repository; tier-2, licence, bilingual and owner-review gates
+  fail closed, and every external post remains manual.
 - Payments, new spend, budget raises, account creation, legal posture and personal
   data remain human-only regardless of a model vote.
 
@@ -527,6 +571,7 @@ account, and its owner action packets cannot send the outreach they describe.
 | D13 marketingShark founding | seventh project, `ms-daily` at 07:00, MAKO and CHUM, devShark folded in as a portfolio product, geoShark present and disabled, drafts only |
 | D14 BOOKSOFHISTORY founding | eighth project, `bh-desk` at 12:00, FOLIO and PLOT, reusable dossiers, independent Czech/English drafts, manual posting and no public surface |
 | Door Money founding | ninth project, `dm-desk` at 15:00 and Thursday-only `dm-growth` at 16:00, private manuscript boundary, Design Lab-only rendering and drafts/actions only |
+| Tehdejší svět founding | tenth project and first adoption, `ts-desk` at 18:00, hand-committed facts, independent Czech/Ukrainian drafts, no product-repository link, Design Lab-only rendering and manual posting/results |
 
 Historical records remain append-only under `state/decisions/`; later decisions may
 supersede a setting without rewriting the earlier context.
@@ -546,7 +591,7 @@ outcome, not a reason to rerun paid work.
 
 ## Open questions for Fable
 
-1. Which owner-facing view would make nine projects feel simpler without hiding gates
+1. Which owner-facing view would make ten projects feel simpler without hiding gates
    or unavailable data?
 2. Which repeated board decisions can become deterministic checks, and which still
    require genuine judgment?
@@ -558,7 +603,7 @@ outcome, not a reason to rerun paid work.
    decisions would each metric actually change?
 6. Can Caught Up and MMA Files share more source verification or language QA without
    flattening their distinct editorial voices?
-7. What evidence would justify creating a 47th registered role rather than tightening a
+7. What evidence would justify creating a 49th registered role rather than tightening a
    packet or sharing an existing role?
 8. Which earning hypothesis can be tested without weakening editorial trust or opening
    an account prematurely?
