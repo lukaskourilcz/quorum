@@ -71,16 +71,24 @@ describe("GoVIRAL agenda consumption", () => {
     vi.unstubAllEnvs();
   });
 
-  it("opens an off-Monday commissioned room, leads with its agenda and consumes it", async () => {
+  it.each([
+    { sourcePhase: "bh-desk", requestedBy: "FOLIO" },
+    { sourcePhase: "dm-growth", requestedBy: "BOOKER" },
+    { sourcePhase: "ts-desk", requestedBy: "LETOPIS" },
+    { sourcePhase: "kv-desk", requestedBy: "TRIBUN" }
+  ])("opens an off-Monday room commissioned by $sourcePhase and consumes its agenda", async ({
+    sourcePhase,
+    requestedBy
+  }) => {
     const requested = await requestMeetingAgenda({
       root,
       policy: await loadMeetingPolicy(),
       ventureId: "goviral",
       phase: "gv-brief",
-      requestedBy: "BOOKER",
-      sourcePhase: "dm-growth",
-      sourceMeetingRef: "meetings/2026-08-13-dm-growth",
-      summary: "Decide whether the fictional reading signal needs one free scout check.",
+      requestedBy,
+      sourcePhase,
+      sourceMeetingRef: `meetings/2026-08-13-${sourcePhase}`,
+      summary: `Decide whether the synthetic ${sourcePhase} signal needs one free scout check.`,
       evidenceRefs: [],
       notBefore: "2026-08-14",
       now: new Date("2026-08-13T14:05:00.000Z")
@@ -89,7 +97,7 @@ describe("GoVIRAL agenda consumption", () => {
 
     const result = await runPortfolioCycle({
       phase: "gv-brief",
-      cycleId: "fixture-goviral-agenda-consumer",
+      cycleId: `fixture-goviral-agenda-consumer-${sourcePhase}`,
       dry: false,
       explainBudget: false,
       explainRouting: false,
@@ -101,7 +109,7 @@ describe("GoVIRAL agenda consumption", () => {
     expect(queue.agendas).toEqual([expect.objectContaining({
       id: requested.agenda.id,
       status: "consumed",
-      consumedBy: "fixture-goviral-agenda-consumer"
+      consumedBy: `fixture-goviral-agenda-consumer-${sourcePhase}`
     })]);
     const record = MeetingRecordSchema.parse(JSON.parse(await readFile(
       path.join(root, "meetings/2026-08-14-gv-brief.json"), "utf8"
