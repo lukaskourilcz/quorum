@@ -1,5 +1,15 @@
 # FightAIQ
 
+> **What actually shipped, 2026-08-13.** FightAIQ is implemented for UFC and Oktagon with a
+> canonical evidence store, bounded intake, deterministic ratings and model runs, private owner
+> review, and guarded delivery to MMA Files. The original data-only analysis hold was superseded by
+> D8: analysis may run, but only independently confirmed future bouts whose two fighter cards pass
+> the evidence gate can produce an `early-model` prediction. An empty analysis run is therefore a
+> correct shipped result, not a missing fallback. Wikimedia, the optional quota-guarded Odds and
+> Cito adapters, and owner-reviewed imports are the live source shapes. Pinned Apify candidates are
+> proposed, disabled or blocked exactly as `config/mma-sources.json` records; none bypasses its
+> approval, terms or shared-credit gate. No path bets, opens an account or publishes advice.
+
 FightAIQ is BoardlessAI’s sourced UFC and Oktagon data and analysis project. Decision
 D8 turns guarded analysis on. It never places bets, signs into a bookmaker, publishes
 affiliate links or presents a forecast as advice or income.
@@ -22,9 +32,10 @@ affiliate links or presents a forecast as advice or income.
    Repeating the run does not duplicate a card or bout.
 7. Completed bouts rebuild career totals and separate UFC/Oktagon Glicko-2 ratings.
 
-The canonical files are `state/mma/fighters/<fighter_id>.json` and
-`state/mma/bouts/<org>/`. `state/mma/README.md` explains every stored directory and
-the current coverage gap.
+The canonical files are `state/mma/fighters/<fighter_id>.json`,
+`state/mma/events/<org>/`, `state/mma/bouts/<org>/`, and the optional guarded stores under
+`state/mma/model-runs/` and `state/mma/stats/`. Missing optional directories mean no qualifying
+record has been produced; they are not populated with placeholders.
 
 ## Fighter cards and evidence
 
@@ -68,7 +79,7 @@ bouts and reader-facing predictions are delivered to MMA Files with
   User-Agent, `maxlag`, small batches and cached state.
 - The Odds API free plan is optional. Its response headers feed a hard stored stop at
   zero remaining credits. Predictions do not need odds.
-- Cito’s free plan is optional. The runtime reserves no more than five calls per run
+- Cito’s free plan is optional. The runtime reserves no more than two calls per run
   and stops before its 500/month or 200/day limits.
 - Owner-reviewed local imports fill cited gaps without a network service.
 - Official organization pages remain disabled until a written access-terms review
