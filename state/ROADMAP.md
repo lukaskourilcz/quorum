@@ -22,8 +22,8 @@ the founding gate remains unpassed and live founding cycles stay disabled.
   operating history remains clear across the day.
 - [x] Add a bounded specialist-agenda queue, allowlisted follow-up requests,
   three-day expiry and visible `$0` `not-needed` calendar records.
-- [x] Deduplicate the Prague schedule to 17 UTC wake-ups while preserving all
-  14 local windows across summer and winter time.
+- [x] Deduplicate the Prague schedule into paired UTC wake-ups that preserve all
+  18 local hourly duties and the edition retry across summer and winter time.
 Earlier spectator-season and Three.js preview ideas are archived, not active
 work. They require a fresh owner scope before implementation.
 
@@ -31,9 +31,10 @@ work. They require a fresh owner scope before implementation.
 
 - [x] Publish shared contracts, JSON Schemas and valid/poison fixtures.
 - [x] Record owner adoption, operating mode, authority rings and approval gates.
-- [x] Expand the shared roster to 42 agents across seven projects, retain the 27
+- [x] Expand the shared roster to 49 agents across eleven projects, retain the 27
   approved agent photographs and use neutral name-based placeholders for newer roles.
-- [x] Add Carousel Studio, ten checked live layouts and the one deterministic social-visual path used by every project.
+- [x] Add Design Lab, 23 checked template families, four formats and the one
+  deterministic social-visual path used by every project.
 - [x] Port source collection and edition production into BoardlessAI.
 - [x] Run the two Caught Up rooms in guarded dry mode.
 - [x] Add Caught Up consumer rendering and the missed-day sentinel.
@@ -57,14 +58,14 @@ work. They require a fresh owner scope before implementation.
 - [x] Retire the duplicate BoardlessAI fighter/event pages so MMA Files is the single public owner.
 - [x] Keep Titty Tuesdays pre-commerce, store detailed campaign plans and prepare
   Tuesday-only typographic social assets behind its health and safety gates.
-- [x] Expand the shared Prague clock to 15 collision-free windows and preserve
-  fixture-labeled proof for all 13 room kinds.
+- [x] Expand the shared Prague clock to 18 collision-free hourly duties and preserve
+  fixture-labeled proof for every room kind.
 - [x] Add the project priority queue, starvation guard, internal quality signals,
   growth objectives and pre-signed content-project template founding.
 - [x] Build per-project social unlock counters, Meta adapters, receipts and `$0` post
   verification while keeping visitor/engagement measurement disabled.
-- [x] Found Carousel Studio with ten live templates, one deterministic renderer,
-  lifecycle checks, a 13:00 agenda room, admin previews and a public showcase.
+- [x] Found Design Lab with 23 live template families, one deterministic renderer,
+  lifecycle checks, admin previews and a public showcase.
 - [x] Close the Magazine Incubator. It sat six times without producing a proposal the
   owner acted on, and the direction is that no new magazine is ideated again — a future
   venture is founded by a direct registry entry, the way GoVIRAL was. Its state moved to
@@ -87,8 +88,8 @@ work. They require a fresh owner scope before implementation.
   package so a run report says why a picture was chosen. Every failure descends a rung rather
   than blocking a publication. The two heroes that showed the wrong thing are corrected through
   a schema-versioned image-only correction that both ends check independently.
-- [x] Turn the Design Lab into the working social design tool. Ten template families replace
-  five wallpapers that were three copies of one blurred gradient; thirty committed SIL OFL
+- [x] Turn the Design Lab into the working social design tool. Twenty-three template families
+  replace five wallpapers that were three copies of one blurred gradient; thirty-seven committed SIL OFL
   faces and an explicit rasteriser make the same deck the same bytes on any machine; one
   recorded recipe — family, variant, treatment, type scale, rhythm — is derived from the
   article's identity and the venture's own receipts, so a week of decks varies without a clock
@@ -109,4 +110,17 @@ work. They require a fresh owner scope before implementation.
   registry names and the allowlist permits, and treats a dead feed as a line in a receipt rather
   than a failed run. Both deliveries are their own kind with their own allowlist inside the
   existing daily cycle: no new job, no new cron, no new phase, nothing drawn from the model share.
+- [x] Build BOOKSOFHISTORY as a countersignature-gated Czech-and-English social desk: a
+  200-book authored seed, deterministic selection, bounded cited research, independent language
+  packages, owner edits and results, and replayable learning weights. It remains drafts-only.
+- [x] Build Door Money without putting the manuscript, full-text chunks or embeddings in this
+  public repository: bounded ingestion pointers, derivative knowledge, daily packages, Thursday
+  growth actions, owner completions/results and cited performance learning. Committed excerpts
+  remain capped at 600 characters and exemplars at 40 × 280 characters.
+- [x] Build Kvórum as a Czech politics drafting desk with approved-source gates, typed claims,
+  receipts, correction history, owner results and deterministic learning. It remains fixture-only
+  until its founding, source, Apify, editorial and capacity gates are countersigned.
+- [x] Build Tehdejší svět as a repository-isolated bilingual feature desk over a human-copied,
+  hash-verified facts snapshot, with licensed media attribution, bounded research, manual results,
+  signals and owner-controlled product insights. It never connects to the product repository.
 - [ ] Complete only the owner plumbing listed in `docs/NEEDED.md`.

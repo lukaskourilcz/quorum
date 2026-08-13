@@ -16,16 +16,14 @@ new pre-signed content-project template now permits tightly fenced founding:
 - Recognized revenue is measured at $0 until a real revenue event is accepted.
 - Only the human owner may accept money or execute a payment.
 
-Titty Tuesdays is implemented in a pre-commerce, marketing-first scope. Its public
-storefront remains unchanged; BoardlessAI produces plans and guarded Tuesday-only
-social assets, not commerce. FightAIQ
-collects UFC and Oktagon records and captured market data; live model analysis remains
-behind its separate switch. MMA Files is the public Czech magazine and the sole
-reader-facing home for delivered fighter files, event cards, captured odds and reviewed
-model outputs. Their live schedules remain behind the recorded signatures and
-independent switches. Carousel Studio is the fifth project: an internal, deterministic
-social-rendering engine with no accounts, marketing, analytics or current earning
-method.
+The registry now holds eleven projects. Caught Up and MMA Files are the two public Czech
+magazines. Titty Tuesdays remains pre-commerce. FightAIQ is a sourced UFC and Oktagon
+analysis desk with no betting action. GoVIRAL and marketingShark produce bounded internal
+briefs and draft packages. Design Lab is the deterministic shared renderer. BOOKSOFHISTORY,
+Door Money, Kvórum and Tehdejší svět are implemented venture programmes whose live work
+still waits behind their own founding countersignatures and named approvals. None of the
+four may create an account, publish, contact a channel or infer authority from its
+`operating` registry status.
 
 ## Owner and roles
 
@@ -46,13 +44,14 @@ Effective countersigned all-in hard cap: $30 USD.
 - Media monthly cap: $2, with deterministic media costing $0 by default
 
 The owner countersigned `budget-2026-08e` on 2026-08-02. It sets one $30 limit,
-a $25 model share and a $1.00 daily pace for all seven projects. Project-specific
+a $25 model share and a $1.00 daily pace across the portfolio. Project-specific
 live switches and evidence gates still decide whether a meeting may run.
 
-Fixed subscriptions are unavailable until the owner enters the real names, amounts,
-categories and start dates in the protected admin. An empty fixed-cost list is not a
-claim that hosting, domains or software are free. API cost remains sourced only from
-the budget ledger.
+`config/fixed-costs.json` currently records `confirmedNoFixedCosts: true` and an empty
+list, so fixed subscriptions evaluate to `$0` rather than unavailable. The owner must
+remove that flag and enter any real subscription. The fal.ai prepayment is known to
+exist but its amount has not yet been entered in treasury state, so the recorded all-in
+total is incomplete. API cost remains sourced only from the budget ledger.
 
 ## Stage and decision
 
@@ -77,7 +76,7 @@ approve a stage change after reading that evidence.
 
 ## Thesis
 
-Caught Up pairs a bilingual daily AI briefing with BoardlessAI's public decision
+Caught Up pairs a Czech daily AI briefing with BoardlessAI's public decision
 record. The verifiable chain from promise to decision to edition to outcome is
 the product thesis under validation.
 
@@ -122,13 +121,13 @@ Refunds: unavailable
 
 Payment fees: unavailable
 
-API cost: $0.52
+API cost: $4.26
 
 Treasury cost: $0.00
 
 Other cost: $0.00
 
-Gross profit: -$0.52 from recorded API usage through 2026-08-01 13:33 UTC
+Gross profit: -$4.26 from recorded August API usage through 2026-08-12 12:39 UTC
 
 Zero revenue is a measured operating fact. Unconnected fee or refund data stays
 unavailable.
@@ -167,7 +166,9 @@ owns the public Czech articles and the reader-facing FightAIQ data pages. The tw
 sites accept only bounded, hash-checked content files through their GitHub repositories;
 BoardlessAI cannot change their application code. Social packs are built inside
 existing production calls and post only after project health gates. Caught Up keeps
-a static reader path with Git and MDX as canon.
+a static reader path with Git and MDX as canon. BOOKSOFHISTORY, Door Money, Kvórum and
+Tehdejší svět add draft-only state, research and owner-review workflows; their source,
+results, account and spend permissions remain individually gated.
 
 ## Constraints
 

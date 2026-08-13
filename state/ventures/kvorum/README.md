@@ -13,3 +13,9 @@ External sourcing remains fixture-only and costs `$0` while `KV-APIFY-001`,
 and a countersigned daily-budget reallocation are missing. A dry result is evidence
 that the implementation works, not permission to fetch, spend, publish or claim that
 the venture has launched.
+
+When those gates are satisfied, the one-writer desk records bounded monitor receipts under
+`monitor/`, typed cited facts under `claims/`, owner-review drafts and their index under
+`recommendations/`, owner-entered outcomes under `results/`, and replayable learning in
+`performance-weights.json`. Missing, malformed or future-dated evidence is dropped or closes the
+desk; Štít remains discovery rather than evidence. No record grants account or posting authority.

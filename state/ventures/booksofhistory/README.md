@@ -30,7 +30,9 @@ with an unused qualifying story records research as `not-needed`, never as skipp
 - The social, truth, treasury and owner-approval gates remain stronger than any room
   decision. `METRICS_INGESTION_ENABLED=false` means results are owner-entered only.
 
-Canonical paths are append-preferring: `cycle.json`, `seed/`, `shortlists/`, `briefs/`,
-`dossiers/<bookId>/`, `research-ledger.jsonl`, `recommendations/`, `results/` and
-`playbooks/`. Their contracts and one-writer rules land only in the BH issue that owns
-each artifact; this scaffold does not pre-create speculative records.
+Canonical paths are append-preferring: `cycle.json`, the authored `seed/library.json`,
+`shortlists/`, `briefs/`, `dossiers/<bookId>/`, `research-ledger.jsonl`, `recommendations/`,
+`feature-actions/`, `results/`, `result-actions/` and `performance-weights.json`. Each artifact
+has a strict contract and one writer. The seed and neutral performance state are committed;
+cycle output is created lazily only after the founding and applicable research/seed approvals.
+The protected admin parses or drops malformed records and never treats a missing metric as zero.
