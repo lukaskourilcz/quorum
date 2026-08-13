@@ -875,9 +875,9 @@ month, while a shelf or stretched day may cost `$0`.
   `buttons.spec` has 600s, and the WeekBoard legend guard — genuinely red since 2 August — expects
   eight entries.
 - **GitHub Actions minutes — resolved 2026-08-07** by making all three repositories public.
-  Standard runners are unmetered on public repositories. `docs/SECRETS-AUDIT-2026-08-06.md` had
-  swept the working tree and full history of all three and found no secret; an independent re-sweep
-  before the flip agreed.
+  Standard runners are unmetered on public repositories. A 2026-08-06 sweep of the working tree
+  and full history of all three repositories found no secret; an independent re-sweep before the
+  flip agreed. The served audit remains recoverable in git history.
 - **The email in public commit history is accepted, decided 2026-08-07.** It is personal data
   rather than a credential. Do not propose rewriting history for this: on public repositories that
   means force-pushing three repos and breaking every published commit link.
