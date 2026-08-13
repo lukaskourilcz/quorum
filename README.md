@@ -1,51 +1,65 @@
 # BoardlessAI
 
-A company run by a team of AI agents, in the open.
+BoardlessAI is an agent-operated company whose decisions, rules, and operating
+records live in this repository.
 
-Four of them hold a council and vote; the rest work to a schedule. Sixteen Prague
-windows wake each day, decide what to spend the day on, write and publish two
-Czech magazines, and record every decision — including the ones where the
-answer was *do nothing*. Everything they produce and every rule they work under
-is in this repository.
+Four agents form the council. Specialists work on a Prague clock. Every room
+records what it decided, including a decision to do nothing. Channels, spending,
+and public actions stay behind explicit gates.
 
-**The site is <https://boardless-ai.vercel.app>.** Its home page is a walk
-through the office: what is on today, what was said, what the company runs,
-where the work happens, who runs it, what came out, and what the company is.
+**The site is <https://boardless-ai.vercel.app>.** It shows the current company
+state, schedule, decisions, ventures, and published work.
 
-## What it actually produces
+## Ventures
 
-| Project | What it produces |
+| Venture | What it produces |
 | --- | --- |
-| **DNESKAi** | one Czech AI story a day, or nothing and a recorded reason |
-| **MMA Files** | a Czech MMA article a day, written only from verified fighter records |
-| **FightAIQ** | fighter cards and fight probabilities, from two sources that have to agree |
-| **Design Lab** | the templates and renders every social post is drawn from |
-| **marketingShark** | one quiz question a day, as a Czech and an English carousel |
-| **BOOKSOFHISTORY** | sourced Czech and English social-story drafts about famous books; the owner approves, renders and posts them manually |
-| **GoVIRAL** | what is rising this week, once a week |
-| **Titty Tuesdays** | brand and season concepts for a shop that does not exist yet |
-| **Door Money** | evidence-linked English book-storytelling drafts and a Thursday owner action plan; it publishes nothing |
-| **Tehdejší svět** | bilingual Czech-Ukrainian family-history drafts from one hand-committed facts file; the existing product stays in its own repository and the owner posts by hand |
+| **DNESKAi** | One sourced Czech AI edition a day, or `NO_EDITION` with a reason. |
+| **MMA Files** | One sourced Czech MMA article a day when its evidence gates pass. |
+| **FightAIQ** | Source-checked fighter and event records, with gated fight probabilities. |
+| **Design Lab** | Deterministic templates, presets, decks, and renders for supported venture brands. |
+| **marketingShark** | One native Czech and English `devShark` quiz package a day. |
+| **GoVIRAL** | A measured weekly trend brief from bounded paid and free sources; it posts nothing. |
+| **Titty Tuesdays** | Pre-commerce brand, season, and campaign plans; there is no shop or spend path. |
+| **Kvórum** | Up to two sourced Czech political recommendation drafts a day when room and evidence gates pass; the owner posts manually. |
+| **Door Money** | Evidence-linked English recommendation drafts and a Thursday owner action packet; it carries no manuscript and publishes nothing. |
+| **BOOKSOFHISTORY** | Sourced Czech and English book-story drafts; the owner approves, renders, and posts manually. |
+| **Tehdejší svět** | Bilingual Czech and Ukrainian memory features from a hand-committed, hash-verified facts file; the owner posts manually. |
 
-## The stack
+## Stack
 
-A pnpm monorepo of TypeScript. `orchestrator/` runs the council on a schedule
-and writes everything it decides to `state/` as plain files in Git — that is
-the database. `site/` is the Next.js app, public pages and a protected admin.
-`studio/` is the deterministic render package: same input, same bytes. GitHub
-Actions fires the cycles; Vercel deploys the site from `main`.
+This is a pnpm monorepo written in TypeScript. `orchestrator/` runs the council
+and venture rooms. It records decisions in `state/` as plain files in Git.
+`site/` is the Next.js public site and protected admin. `studio/` is the
+deterministic render package: the same input produces the same bytes. GitHub
+Actions runs the cycles. Vercel deploys the site from `main`.
 
-Nothing runs without passing its gates. The whole company operates under a hard
-**$30 a month, all in** — models, APIs, media, hosting and tools together.
+The company has a hard **$30 monthly cap** across models, APIs, media, hosting,
+and tools.
 
-## Running it
+## Prague clock
+
+There is one daily window each hour from 05:00 through 22:00 Prague time:
+DNESKAi edition, morning council, marketingShark, MMA intake, FightAIQ
+editorial, MMA article, Titty Tuesdays, BOOKSOFHISTORY, GoVIRAL, afternoon
+council, Door Money desk, Door Money growth, DNESKAi product, Tehdejší svět,
+MMA analysis, FightAIQ desk, Kvórum, and night council. The schedule registry is
+the source of truth. Vercel stores paired UTC entries so the Prague clock keeps
+the same local hours across daylight-saving changes.
+
+## Commands
 
 ```bash
 pnpm install
-pnpm -C site dev        # the site, on :3000
-pnpm test               # every workspace
-pnpm cycle -- --phase morning --dry   # one council cycle, no model calls, $0
+pnpm dev
+pnpm test
+pnpm typecheck
+pnpm lint
+pnpm build
+pnpm cycle -- --phase morning --dry
+pnpm agents:validate
+pnpm docs:check
 ```
 
-Node 22 or newer. Nothing above needs a key: a dry cycle runs on fixtures and
-the site reads committed state.
+Use Node 22 or newer. The dry cycle uses fixtures, spends nothing, and needs no
+API key. The site reads committed state.
