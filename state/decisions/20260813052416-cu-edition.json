@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260813052416-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Útok na zásobovací řetězec přes AI nástroj zasáhl 2 500 uživatelů a ukázal, že bezpečnostní týmy nestíhají tempo adopce AI nástrojů – to se týká každé firmy, která v posledních dvou letech nasadila nový AI balíček.",
+  "evidenceRefs": [
+    "source:ars-technica",
+    "source:social-media-today",
+    "source:the-register",
+    "source:techcrunch-ai",
+    "source:simonw"
+  ],
+  "editionRef": "97015f04cb42279c97f7ed8ec8862a80c561c71e9dd95bb45f126d7501996835",
+  "generatedAt": "2026-08-13T05:24:21.881Z"
+}
