@@ -1,10 +1,20 @@
 # Door Money: the Rapovej deník marketing venture — design
 
-Status: proposed, pre-founding. Nothing in this document runs until the owner countersigns
-`state/decisions/<date>-door-money-founding.md` and the items in §12 are resolved in
-`state/INBOX.md`. The implementation contract is `docs/DOOR-MONEY-CODEX-BUILD-PROMPT.md`,
-which per house convention is scaffolding deleted when executed; the decision record and
-this document are what outlive it.
+> **What actually shipped, 2026-08-13.** Door Money is implemented end to end against synthetic
+> fixtures: the two guarded rooms, scene-aware ingestion and resumability, annotation/scoring and
+> style synthesis, embeddings ledger kind, local private-store split, deterministic selection,
+> bounded GHOST and BOOKER calls, voice/truth/privacy gates, owner approval/actions/results,
+> performance learning, GoVIRAL exchange, and Design Lab-only rendering. The one-use build prompt
+> was executed and deleted. The founding decision and `BOOK-SOURCE-001`, `BOOK-INGEST-002`,
+> `DM-ACCOUNTS-003`, and `DM-RESULTS-004` remain unsigned: no real manuscript, full-text chunk or
+> embedding has entered this public repository; no real GHOST desk, owner result, account, channel,
+> post or outreach exists. The shipped private client reads an owner-provided local clone outside
+> this checkout. It does not clone or sync a private repository, consume `BOOK_SOURCE_TOKEN`, use a
+> hosted database, or provide a cloud checkout step. Public derivatives remain capped at 600
+> characters and voice exemplars at 40 × 280. Newsletter delivery, a series planner, full short-
+> video production and every automatic external action remain unbuilt. Where the standing design
+> below describes runtime repository access or later phases differently,
+> `state/decisions/2026-08-12-door-money-founding.md` and this block are authoritative.
 
 The shape in one line: **a private knowledge base reads the whole book once, code picks the
 passage, one model call writes in the author's recorded voice, and the owner is the gate.**
