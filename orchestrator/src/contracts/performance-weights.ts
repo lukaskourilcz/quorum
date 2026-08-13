@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ContractAgentIdSchema, DateTimeSchema, VentureIdSchema } from "./common.js";
+import { ContractAgentIdSchema, DateSchema, DateTimeSchema, VentureIdSchema } from "./common.js";
 import { RecommendationFormatSchema } from "./venture-recommendation.js";
 
 const BhSlugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(100);
@@ -69,6 +69,77 @@ export const BooksofHistoryPerformanceWeightProposalSchema = z.strictObject({
 
 export type BooksofHistoryPerformanceWeights = z.infer<typeof BooksofHistoryPerformanceWeightsSchema>;
 export type BooksofHistoryPerformanceWeightProposal = z.infer<typeof BooksofHistoryPerformanceWeightProposalSchema>;
+
+export const TEHDEJSI_PERFORMANCE_WEIGHT_FLOOR = 0.75;
+export const TEHDEJSI_PERFORMANCE_WEIGHT_CEILING = 1.25;
+
+const TehdejsiWeightSchema = z.number()
+  .finite()
+  .min(TEHDEJSI_PERFORMANCE_WEIGHT_FLOOR)
+  .max(TEHDEJSI_PERFORMANCE_WEIGHT_CEILING);
+const TehdejsiResultIdSchema = z.string().regex(/^result-[a-f0-9]{20}$/);
+const TehdejsiDimensionSchema = z.enum(["pillars", "cohorts", "countries"]);
+
+export const TehdejsiPerformanceWeightsSchema = z.strictObject({
+  schemaVersion: z.literal("performance-weights/1"),
+  ventureId: z.literal("tehdejsi-svet"),
+  floor: z.literal(TEHDEJSI_PERFORMANCE_WEIGHT_FLOOR),
+  ceiling: z.literal(TEHDEJSI_PERFORMANCE_WEIGHT_CEILING),
+  dimensions: z.strictObject({
+    pillars: z.record(BhSlugSchema, TehdejsiWeightSchema),
+    cohorts: z.record(BhSlugSchema, TehdejsiWeightSchema),
+    countries: z.partialRecord(z.enum(["cz", "ua"]), TehdejsiWeightSchema)
+  }),
+  appliedProposalIds: z.array(BhProposalIdSchema).max(500),
+  appliedResultIds: z.array(TehdejsiResultIdSchema).max(2_000),
+  updatedAt: DateTimeSchema
+}).superRefine((weights, context) => {
+  for (const [path, values] of [
+    ["appliedProposalIds", weights.appliedProposalIds],
+    ["appliedResultIds", weights.appliedResultIds]
+  ] as const) {
+    if (new Set(values).size !== values.length) {
+      context.addIssue({ code: "custom", path: [path], message: `${path} must be unique` });
+    }
+  }
+});
+
+export const TehdejsiPerformanceWeightProposalSchema = z.strictObject({
+  schemaVersion: z.literal("performance-weight-proposal/1"),
+  proposalId: BhProposalIdSchema,
+  ventureId: z.literal("tehdejsi-svet"),
+  recordedBy: z.literal("LETOPIS"),
+  sourceDate: DateSchema,
+  createdAt: DateTimeSchema,
+  appliedAt: DateTimeSchema,
+  adjustments: z.array(z.strictObject({
+    dimension: TehdejsiDimensionSchema,
+    key: BhSlugSchema,
+    from: TehdejsiWeightSchema,
+    to: TehdejsiWeightSchema,
+    resultIds: z.array(TehdejsiResultIdSchema).min(1).max(20),
+    rationale: z.string().trim().min(8).max(500)
+  })).min(1).max(50)
+}).superRefine((proposal, context) => {
+  if (Date.parse(proposal.createdAt) > Date.parse(proposal.appliedAt)) {
+    context.addIssue({ code: "custom", path: ["appliedAt"], message: "A proposal cannot be applied before it was created" });
+  }
+  const targets = proposal.adjustments.map(({ dimension, key }) => `${dimension}\0${key}`);
+  if (new Set(targets).size !== targets.length) {
+    context.addIssue({ code: "custom", path: ["adjustments"], message: "A proposal may adjust each dimension key once" });
+  }
+  proposal.adjustments.forEach((adjustment, index) => {
+    if (adjustment.from === adjustment.to) {
+      context.addIssue({ code: "custom", path: ["adjustments", index, "to"], message: "A recorded adjustment must change its weight" });
+    }
+    if (new Set(adjustment.resultIds).size !== adjustment.resultIds.length) {
+      context.addIssue({ code: "custom", path: ["adjustments", index, "resultIds"], message: "Result citations must be unique" });
+    }
+  });
+});
+
+export type TehdejsiPerformanceWeights = z.infer<typeof TehdejsiPerformanceWeightsSchema>;
+export type TehdejsiPerformanceWeightProposal = z.infer<typeof TehdejsiPerformanceWeightProposalSchema>;
 
 export const PERFORMANCE_PRIOR_MIN = 0.5;
 export const PERFORMANCE_PRIOR_MAX = 1.5;
@@ -190,7 +261,13 @@ export const PerformanceWeightsSchema = z.strictObject({
 
 export const AnyPerformanceWeightsSchema = z.union([
   BooksofHistoryPerformanceWeightsSchema,
-  PerformanceWeightsSchema
+  PerformanceWeightsSchema,
+  TehdejsiPerformanceWeightsSchema
+]);
+
+export const AnyPerformanceWeightProposalSchema = z.union([
+  BooksofHistoryPerformanceWeightProposalSchema,
+  TehdejsiPerformanceWeightProposalSchema
 ]);
 
 export type PerformanceHookStyle = z.infer<typeof PerformanceHookStyleSchema>;

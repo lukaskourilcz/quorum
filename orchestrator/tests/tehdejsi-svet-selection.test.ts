@@ -60,6 +60,24 @@ describe("Tehdejsi svet selection", () => {
     expect(first.entries.map((entry) => entry.rank)).toEqual([1, 2, 3]);
   });
 
+  it("reads the bounded pillar, cohort and country product into the recorded score", () => {
+    const shortlist = buildShortlist({
+      facts: [
+        fact({ id: "czech-neutral", country: "cz", yearFrom: 1975, yearTo: 1975 }),
+        fact({ id: "ua-weighted", country: "ua", yearFrom: 1985, yearTo: 1985 })
+      ],
+      factsHash: HASH,
+      date: "2026-08-12",
+      performanceWeights: {
+        pillars: { everyday: 1 },
+        cohorts: { "1970s": 0.9, "1980s": 1.1 },
+        countries: { cz: 0.9, ua: 1.1 }
+      }
+    });
+    expect(shortlist.entries.map(({ factId }) => factId)).toEqual(["ua-weighted", "czech-neutral"]);
+    expect(shortlist.entries.map(({ factors }) => factors.performanceMultiplier)).toEqual([1.21, 0.81]);
+  });
+
   it("vetoes a tier-2 fact and a recently used one however well they score", () => {
     const shortlist = buildShortlist({
       facts: [

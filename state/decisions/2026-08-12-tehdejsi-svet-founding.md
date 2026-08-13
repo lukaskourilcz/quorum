@@ -159,7 +159,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-22a** — GoVIRAL spine: topic set and timing factor
 - [x] **TS-22b** — GoVIRAL spine: transitions and the Design-Lab-only test
 - [x] **TS-23a** — Owner results per platform
-- [ ] **TS-23b** — Weights, used-flags and the experiment ladder
+- [x] **TS-23b** — Weights, used-flags and the experiment ladder
 - [ ] **TS-24a** — Documentation truth across the standing docs
 - [ ] **TS-24b** — INBOX approvals and NEEDED owner items
 - [ ] **TS-24c** — Honest gaps, checkbox sweep and spec deletion
@@ -218,6 +218,13 @@ snapshot is a committed file and the venture buys no data.
   seed queue to TS-21b. Until those issues land, the live tab renders explicit empty
   states with no form or endpoint. Synthetic component fixtures prove the eventual
   digest, recurrence and queue layout without creating a competing state shape.
+- **Research use is appended, not flipped.** TS-23b calls for used-flags to be
+  backfilled at posting, but the existing `ts-research-ledger/1` contract is an
+  append-only purchase-and-use ledger. The owner-posted action therefore appends one
+  idempotent use receipt for each cited purchase instead of rewriting the purchase
+  line. The same issue records the zero-cost experiment ladder in the shared hypothesis
+  fields, while its venture guard keeps `maxCostUsd` and `maxLossUsd` at zero rather than
+  using the sibling activation helper that requires spend authority.
 
 ## Honest gaps
 

@@ -228,6 +228,43 @@ describe("Tehdejsi svet feature actions", () => {
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
+  it("appends a cited research use once when the owner records posting", async () => {
+    const dossierRef = "state/ventures/tehdejsi-svet/dossiers/synthetic-posting.json";
+    draft = {
+      ...draft,
+      evidence: { ...(draft.evidence as object), dossierRefs: [dossierRef] }
+    };
+    await writeFile(
+      path.join(root, "state/ventures/tehdejsi-svet/drafts/recommendation.json"),
+      `${JSON.stringify(draft, null, 2)}\n`
+    );
+    const ledgerPath = path.join(root, "state/ventures/tehdejsi-svet/research-ledger.jsonl");
+    await writeFile(ledgerPath, `${JSON.stringify({
+      schemaVersion: "ts-research-ledger/1",
+      kind: "purchase",
+      topicKey: "synthetic-posting",
+      briefHash: "a".repeat(64),
+      cycleId: "synthetic-cycle",
+      provider: "fixture-provider",
+      model: "fixture-model",
+      startedAt: "2026-08-14T10:00:00.000Z",
+      completedAt: "2026-08-14T10:01:00.000Z",
+      tokensIn: 100,
+      tokensOut: 80,
+      searches: 1,
+      costUsd: 0.1,
+      dossierRef
+    })}\n`);
+
+    await post(action("approve", "approve-researched"));
+    expect((await post(action("posted", "post-researched-cs", { locale: "cs", url: "https://social.example/synthetic-research-cs" }))).status).toBe(201);
+    expect((await post(action("posted", "post-researched-ua", { locale: "ua", url: "https://social.example/synthetic-research-ua" }))).status).toBe(201);
+    const lines = (await readFile(ledgerPath, "utf8")).split("\n").filter(Boolean).map((line) => JSON.parse(line));
+    expect(lines.filter((entry) => entry.kind === "use")).toEqual([
+      expect.objectContaining({ recommendationId: draft.id, topicKey: "synthetic-posting", at: AT })
+    ]);
+  });
+
   it("makes the approved bilingual pack available through the existing PNG and ZIP routes", async () => {
     expect((await post(action("approve", "approve-export"))).status).toBe(201);
     const cookie = `${ADMIN_SESSION_COOKIE}=${createAdminSessionToken("owner", "correct-password")}`;

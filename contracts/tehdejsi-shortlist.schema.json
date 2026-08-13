@@ -66,6 +66,12 @@
               },
               "tierCost": {
                 "type": "number"
+              },
+              "performanceMultiplier": {
+                "default": 1,
+                "type": "number",
+                "minimum": 0.75,
+                "maximum": 1.25
               }
             },
             "required": [
@@ -75,7 +81,8 @@
               "wartimeAwareness",
               "sourceConfidence",
               "countryBalance",
-              "tierCost"
+              "tierCost",
+              "performanceMultiplier"
             ],
             "additionalProperties": false
           },

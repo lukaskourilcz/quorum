@@ -6,6 +6,7 @@ import {
   type TehdejsiShortlistEntry
 } from "../../contracts/tehdejsi-shortlist.js";
 import type { TehdejsiTimingSignal } from "./goviral.js";
+import { tehdejsiPerformanceMultiplier, type TehdejsiScoringWeights } from "./performance.js";
 
 /**
  * Rank facts by one question: would a reader send this to someone, and what would they ask?
@@ -59,6 +60,8 @@ export interface ShortlistInput {
     planRef: string | null;
     signals: readonly TehdejsiTimingSignal[];
   };
+  /** Recorded Sunday proposals only; missing weights are neutral. */
+  performanceWeights?: TehdejsiScoringWeights;
 }
 
 function normalizedTokens(values: readonly string[]): Set<string> {
@@ -92,6 +95,7 @@ export function scoreFact(fact: TehdejsiFact, input: ShortlistInput): TehdejsiSh
   // in fact about 1968 must not become selectable by being typed wrongly.
   const tier = classifyTier(fact).tier;
   const timing = timingFactors(fact, input.goViral?.signals ?? []);
+  const performanceMultiplier = tehdejsiPerformanceMultiplier(fact, input.performanceWeights);
   const factors = {
     askability: ASKABILITY[fact.kind],
     anniversary: anniversaryScore(fact, input.date),
@@ -100,9 +104,12 @@ export function scoreFact(fact: TehdejsiFact, input: ShortlistInput): TehdejsiSh
     // Alternating is a nudge, not a rule: a strong Czech fact still beats a weak Ukrainian one.
     countryBalance: input.lastCountry && fact.country !== input.lastCountry ? 3 : 0,
     // Tier 2 is not forbidden here — it is expensive, because it costs a blocking human review.
-    tierCost: tier === 2 ? -6 : tier === 1 ? -1 : 0
+    tierCost: tier === 2 ? -6 : tier === 1 ? -1 : 0,
+    performanceMultiplier
   };
-  const score = Number(Object.values(factors).reduce((sum, value) => sum + value, 0).toFixed(4));
+  const additive = factors.askability + factors.anniversary + factors.culturalMoment
+    + factors.wartimeAwareness + factors.sourceConfidence + factors.countryBalance + factors.tierCost;
+  const score = Number((additive * performanceMultiplier).toFixed(4));
   const veto = tier === 2
     ? "tier-2-review-required" as const
     : recent.includes(fact.id) ? "recently-used" as const : null;

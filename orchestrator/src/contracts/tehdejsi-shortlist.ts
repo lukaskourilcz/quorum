@@ -18,7 +18,9 @@ export const TehdejsiFactorBreakdownSchema = z.object({
   wartimeAwareness: z.number().finite(),
   sourceConfidence: z.number().finite(),
   countryBalance: z.number().finite(),
-  tierCost: z.number().finite()
+  tierCost: z.number().finite(),
+  /** Pillar × cohort × country, bounded so sparse owner evidence cannot dominate selection. */
+  performanceMultiplier: z.number().finite().min(0.75).max(1.25).default(1)
 }).strict();
 
 export const TehdejsiShortlistEntrySchema = z.object({

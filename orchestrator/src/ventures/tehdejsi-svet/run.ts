@@ -19,6 +19,7 @@ import { runTehdejsiPipelineDay, type TehdejsiPipelineOutcome } from "./pipeline
 import { buildShortlist } from "./scorer.js";
 import { readTehdejsiGoViralContext } from "./goviral.js";
 import { runSundaySignalOverlay } from "./signals.js";
+import { readTehdejsiPerformanceWeights, runSundayPerformanceOverlay } from "./performance.js";
 import {
   applyTehdejsiCycleDay,
   createTehdejsiCycle,
@@ -275,12 +276,11 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
         })));
       }
     }
-    overlayArtifacts = await runSundaySignalOverlay({
-      root,
-      date,
-      now: input.now,
-      approvalGranted: await signalsApprovalGranted(root)
-    });
+    const approvalGranted = await signalsApprovalGranted(root);
+    overlayArtifacts = [
+      ...await runSundaySignalOverlay({ root, date, now: input.now, approvalGranted }),
+      ...await runSundayPerformanceOverlay({ root, date, now: input.now, approvalGranted })
+    ];
     phaseArtifacts.push(...overlayArtifacts);
   } else {
     phaseArtifacts = await holdPausedCycle({ root, date, now: input.now });
@@ -374,9 +374,10 @@ async function holdPausedCycle(input: {
 }): Promise<string[]> {
   try {
     const facts = await loadTehdejsiFacts();
-    const [existing, goViral] = await Promise.all([
+    const [existing, goViral, performance] = await Promise.all([
       readTehdejsiCycle(input.root),
-      readTehdejsiGoViralContext(input.root, input.date)
+      readTehdejsiGoViralContext(input.root, input.date),
+      readTehdejsiPerformanceWeights(input.root)
     ]);
     const cycle = existing === null || tehdejsiCycleComplete(existing)
       ? createTehdejsiCycle({ date: input.date, now: input.now })
@@ -388,7 +389,8 @@ async function holdPausedCycle(input: {
         facts: facts.facts,
         factsHash: facts.contentHash,
         date: input.date,
-        goViral
+        goViral,
+        performanceWeights: performance.dimensions
       });
       const shortlistPath = `ventures/tehdejsi-svet/shortlists/${input.date}.json`;
       await atomicWriteJson(input.root, shortlistPath, shortlist);

@@ -28,6 +28,7 @@ import {
   type TehdejsiFeatureStatus
 } from "./tehdejsi-feature-model";
 import { tehdejsiPhotoStatePath } from "./tehdejsi-design-lab";
+import { backfillTehdejsiResearchUsage } from "./tehdejsi-research-ledger";
 
 export type TehdejsiFeatureAction =
   | { action: "approve"; recommendationId: string; idempotencyKey: string; at: string; humanReviewCompleted?: true }
@@ -135,6 +136,14 @@ async function optionalLocal(relative: string): Promise<unknown | null> {
   }
 }
 
+async function optionalLocalText(relative: string): Promise<string | null> {
+  try { return await readFile(insideRoot(relative), "utf8"); }
+  catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw error;
+  }
+}
+
 async function findRecommendation(id: string): Promise<{ relative: string; recommendation: TehdejsiFeatureRecommendation }> {
   let names: string[];
   try { names = (await readdir(insideRoot(RECOMMENDATIONS_ROOT))).filter((name) => name.endsWith(".json")).sort(); }
@@ -182,6 +191,22 @@ async function remoteJson(relative: string, token: string): Promise<unknown | nu
   return JSON.parse(Buffer.from(body.content.replaceAll("\n", ""), "base64").toString("utf8")) as unknown;
 }
 
+async function remoteText(relative: string, token: string): Promise<string | null> {
+  const repository = process.env.BOARDLESSAI_GITHUB_REPOSITORY ?? "lukaskourilcz/quorum";
+  const branch = process.env.BOARDLESSAI_GITHUB_BRANCH ?? "main";
+  const encoded = relative.split("/").map(encodeURIComponent).join("/");
+  const response = await fetch(`https://api.github.com/repos/${repository}/contents/${encoded}?ref=${encodeURIComponent(branch)}`, {
+    headers: { Accept: "application/vnd.github+json", Authorization: `Bearer ${token}`, "X-GitHub-Api-Version": "2026-03-10" },
+    cache: "no-store"
+  });
+  if (response.status === 404) return null;
+  if (response.status === 401 || response.status === 403) throw new TehdejsiFeaturePersistenceError("REFUSED", `GitHub refused the research ledger read with ${response.status}.`);
+  if (!response.ok) throw new TehdejsiFeaturePersistenceError("REMOTE", `GitHub research ledger read failed with ${response.status}.`);
+  const body = await response.json() as { content?: unknown };
+  if (typeof body.content !== "string") throw new TehdejsiFeaturePersistenceError("REMOTE", "GitHub returned an invalid research ledger.");
+  return Buffer.from(body.content.replaceAll("\n", ""), "base64").toString("utf8");
+}
+
 async function putGitHub(relative: string, value: unknown, message: string, token: string): Promise<void> {
   const repository = process.env.BOARDLESSAI_GITHUB_REPOSITORY ?? "lukaskourilcz/quorum";
   const branch = process.env.BOARDLESSAI_GITHUB_BRANCH ?? "main";
@@ -212,12 +237,53 @@ async function putGitHub(relative: string, value: unknown, message: string, toke
   throw new TehdejsiFeaturePersistenceError("CONFLICT", "Feature state changed during every save attempt.");
 }
 
+async function putGitHubText(relative: string, content: string, expectedCurrent: string, message: string, token: string): Promise<void> {
+  const repository = process.env.BOARDLESSAI_GITHUB_REPOSITORY ?? "lukaskourilcz/quorum";
+  const branch = process.env.BOARDLESSAI_GITHUB_BRANCH ?? "main";
+  const encoded = relative.split("/").map(encodeURIComponent).join("/");
+  const endpoint = `https://api.github.com/repos/${repository}/contents/${encoded}`;
+  const headers = { Accept: "application/vnd.github+json", Authorization: `Bearer ${token}`, "X-GitHub-Api-Version": "2026-03-10" };
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const current = await fetch(`${endpoint}?ref=${encodeURIComponent(branch)}`, { headers, cache: "no-store" });
+    if (current.status === 401 || current.status === 403) throw new TehdejsiFeaturePersistenceError("REFUSED", `GitHub refused the research ledger read with ${current.status}.`);
+    if (!current.ok && current.status !== 404) throw new TehdejsiFeaturePersistenceError("REMOTE", `GitHub research ledger read failed with ${current.status}.`);
+    if (!current.ok) throw new TehdejsiFeaturePersistenceError("CONFLICT", "The research ledger disappeared before its use receipt was appended.");
+    const currentBody = await current.json() as { sha?: string; content?: unknown };
+    if (typeof currentBody.content !== "string"
+        || Buffer.from(currentBody.content.replaceAll("\n", ""), "base64").toString("utf8") !== expectedCurrent) {
+      throw new TehdejsiFeaturePersistenceError("CONFLICT", "The research ledger changed before its use receipt was appended.");
+    }
+    const sha = currentBody.sha;
+    const response = await fetch(endpoint, {
+      method: "PUT",
+      headers: { ...headers, "Content-Type": "application/json" },
+      body: JSON.stringify({ message, content: Buffer.from(content).toString("base64"), branch, ...(sha ? { sha } : {}) })
+    });
+    if (response.ok) return;
+    if (response.status !== 409 && !(response.status === 422 && !sha)) {
+      if (response.status === 401 || response.status === 403) throw new TehdejsiFeaturePersistenceError("REFUSED", `GitHub refused the research ledger write with ${response.status}.`);
+      throw new TehdejsiFeaturePersistenceError("REMOTE", `GitHub research ledger write failed with ${response.status}.`);
+    }
+  }
+  throw new TehdejsiFeaturePersistenceError("CONFLICT", "Research ledger state changed during every save attempt.");
+}
+
 async function writeLocal(relative: string, value: unknown): Promise<void> {
   const target = insideRoot(relative);
   await mkdir(path.dirname(target), { recursive: true });
   const temporary = `${target}.${randomUUID()}.tmp`;
   try {
     await writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { encoding: "utf8", mode: 0o600 });
+    await rename(temporary, target);
+  } finally { await rm(temporary, { force: true }); }
+}
+
+async function writeLocalText(relative: string, content: string): Promise<void> {
+  const target = insideRoot(relative);
+  await mkdir(path.dirname(target), { recursive: true });
+  const temporary = `${target}.${randomUUID()}.tmp`;
+  try {
+    await writeFile(temporary, content, { encoding: "utf8", mode: 0o600 });
     await rename(temporary, target);
   } finally { await rm(temporary, { force: true }); }
 }
@@ -359,6 +425,27 @@ export async function applyTehdejsiFeatureAction(action: TehdejsiFeatureAction):
 
   const located = await findRecommendation(action.recommendationId);
   const applied = await appliedAction(located.recommendation, action);
+  const researchLedger = "state/ventures/tehdejsi-svet/research-ledger.jsonl";
+  let ledgerUpdate: ReturnType<typeof backfillTehdejsiResearchUsage> | null = null;
+  let ledgerBefore: string | null = null;
+  if (action.action === "posted" && located.recommendation.evidence.dossierRefs.length > 0) {
+    const raw = token ? await remoteText(researchLedger, token) : await optionalLocalText(researchLedger);
+    if (raw === null) throw new TehdejsiFeaturePersistenceError("CORRUPT", "A cited research dossier has no purchase ledger.");
+    ledgerBefore = raw;
+    try {
+      ledgerUpdate = backfillTehdejsiResearchUsage({
+        raw,
+        dossierRefs: located.recommendation.evidence.dossierRefs,
+        recommendationId: action.recommendationId,
+        at: action.at
+      });
+    } catch (error) {
+      throw new TehdejsiFeaturePersistenceError("CORRUPT", error instanceof Error ? error.message : "The research ledger is malformed.");
+    }
+    if (ledgerUpdate.unmatchedDossierRefs.length > 0) {
+      throw new TehdejsiFeaturePersistenceError("CORRUPT", `No research purchase supports ${ledgerUpdate.unmatchedDossierRefs.join(", ")}.`);
+    }
+  }
   const result: TehdejsiFeatureActionResult = {
     recommendationId: action.recommendationId,
     action: action.action,
@@ -404,12 +491,16 @@ export async function applyTehdejsiFeatureAction(action: TehdejsiFeatureAction):
     }
   );
   if (token) {
+    if (ledgerUpdate?.changed && ledgerBefore !== null) {
+      await putGitHubText(researchLedger, ledgerUpdate.text, ledgerBefore, `admin: mark ${action.recommendationId} research used`, token);
+    }
     for (const file of files) await putGitHub(file.relative, file.value, file.message, token);
     return result;
   }
   if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
     throw new TehdejsiFeaturePersistenceError("UNCONFIGURED", "Tehdejsi svet feature storage is not configured for this deployment.");
   }
+  if (ledgerUpdate?.changed) await writeLocalText(researchLedger, ledgerUpdate.text);
   for (const file of files) await writeLocal(file.relative, file.value);
   return result;
 }

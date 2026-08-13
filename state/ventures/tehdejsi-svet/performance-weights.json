@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "performance-weights/1",
+  "ventureId": "tehdejsi-svet",
+  "floor": 0.75,
+  "ceiling": 1.25,
+  "dimensions": {
+    "pillars": {},
+    "cohorts": {},
+    "countries": {}
+  },
+  "appliedProposalIds": [],
+  "appliedResultIds": [],
+  "updatedAt": "2026-08-12T00:00:00.000Z"
+}
