@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-13",
+  "packageHash": "97015f04cb42279c97f7ed8ec8862a80c561c71e9dd95bb45f126d7501996835",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "7d863909fd3225d83b72512757dd1c4633679fdf",
+  "deliveredAt": "2026-08-13T05:31:45.615Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-13-supply-chain-utok-ai-balicek-uniky-prihlasovaci-udaje",
+  "tags": [
+    "kyberneticka-bezpecnost",
+    "supply-chain",
+    "umela-inteligence",
+    "tencent",
+    "deepseek",
+    "openai"
+  ]
+}

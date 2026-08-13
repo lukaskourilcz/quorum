@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-99107342e4ac1545",
+  "venture": "caught-up",
+  "packageHash": "97015f04cb42279c97f7ed8ec8862a80c561c71e9dd95bb45f126d7501996835",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "7d863909fd3225d83b72512757dd1c4633679fdf",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 7d863909fd3225d83b72512757dd1c4633679fdf is readable",
+      "checkedAt": "2026-08-13T05:31:43.920Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-13T05:31:43.920Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-13T05:31:43.920Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-13-supply-chain-utok-ai-balicek-uniky-prihlasovaci-udaje?boardless_verify=97015f04cb42-1786599103920",
+      "checkedAt": "2026-08-13T05:31:43.920Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-13-supply-chain-utok-ai-balicek-uniky-prihlasovaci-udaje match",
+      "checkedAt": "2026-08-13T05:31:43.920Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 97015f04cb42279c97f7ed8ec8862a80c561c71e9dd95bb45f126d7501996835",
+      "checkedAt": "2026-08-13T05:31:43.920Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-13-supply-chain-utok-ai-balicek-uniky-prihlasovaci-udaje/hero.webp?boardless_verify=97015f04cb42-1786599103920",
+      "checkedAt": "2026-08-13T05:31:43.920Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-13T05:31:43.920Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Florian Hirzinger - www.fh-ap.com · CC BY-SA",
+      "checkedAt": "2026-08-13T05:31:43.920Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-13T05:30:42.398Z",
+  "completedAt": "2026-08-13T05:31:44.578Z"
+}
