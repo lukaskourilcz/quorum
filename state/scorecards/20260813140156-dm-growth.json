@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260813140156-dm-growth",
+  "phase": "dm-growth",
+  "estimatedWorstCaseUsd": 0.06,
+  "actualUsd": 0.001356,
+  "participants": [
+    "BOOKER",
+    "PULSE",
+    "AUDIT"
+  ],
+  "agenda": {
+    "isoWeek": "2026-W33",
+    "topicId": "launch-mechanics"
+  },
+  "generatedAt": "2026-08-13T14:01:57.001Z"
+}

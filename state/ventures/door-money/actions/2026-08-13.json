@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "action-packet/1",
+  "id": "action-packet-2026-08-13",
+  "ventureId": "door-money",
+  "date": "2026-08-13",
+  "weekOf": "2026-08-10",
+  "agenda": {
+    "isoWeek": "2026-W33",
+    "topicId": "launch-mechanics",
+    "title": "Launch mechanics"
+  },
+  "title": "Door Money actions: Launch mechanics",
+  "summary": "No executable launch-mechanics action is supported by the supplied evidence.",
+  "outcome": "NO_ACTION",
+  "noActionReason": "The packet contains no allowed evidence references, playbooks, owner completions, owner results, or GoVIRAL brief. The scheduled topic alone is not evidence for a concrete task or playbook revision.",
+  "contextRefs": [],
+  "tasks": [],
+  "generatedAt": "2026-08-13T14:01:56.001Z",
+  "updatedAt": "2026-08-13T14:01:56.001Z"
+}
