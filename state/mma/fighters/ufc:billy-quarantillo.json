@@ -9,7 +9,8 @@
     "wikidataId": "Q99317271",
     "wikipediaTitle": "Billy Quarantillo",
     "externalIds": {
-      "wikipediaPageId": "64857899"
+      "wikipediaPageId": "64857899",
+      "cito": "43bc3de7-663e-450b-a8c5-a1c9d3d7bb3a"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-13:fighter:43bc3de7-663e-450b-a8c5-a1c9d3d7bb3a",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Billy Quarantillo",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q99317271",
       "url": "https://www.wikidata.org/wiki/Q99317271",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Billy_Quarantillo",
       "publisher": "Wikipedia",
       "title": "Billy Quarantillo",
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -56,10 +64,11 @@
     "name": {
       "value": "Billy Quarantillo",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:43bc3de7-663e-450b-a8c5-a1c9d3d7bb3a",
         "source:wikidata:Q99317271",
         "source:wikipedia:64857899"
       ],
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "status": "verified",
       "corroborated": true
     },
@@ -124,7 +133,36 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
+  "discrepancies": [
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "Lightweight",
+          "sourceRef": "source:wikipedia:64857899"
+        },
+        {
+          "value": "lightweight",
+          "sourceRef": "source:cito-ufc:2026-08-13:fighter:43bc3de7-663e-450b-a8c5-a1c9d3d7bb3a"
+        }
+      ],
+      "status": "resolved"
+    },
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "18-7-0",
+          "sourceRef": "source:wikipedia:64857899"
+        },
+        {
+          "value": "18-8-0",
+          "sourceRef": "source:cito-ufc:2026-08-13:fighter:43bc3de7-663e-450b-a8c5-a1c9d3d7bb3a"
+        }
+      ],
+      "status": "open"
+    }
+  ],
   "history": [
     {
       "boutRef": "ufc:bout:history-6347fef4041cc7ef4558",
@@ -197,9 +235,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.666667,
         "fightsPerYear": 0.546361,
-        "layoffDays": 4
+        "layoffDays": 5
       },
-      "updatedAt": "2026-08-12T06:01:46.400Z"
+      "updatedAt": "2026-08-13T06:01:42.251Z"
     }
   ],
   "rating": {
@@ -209,7 +247,7 @@
     "volatility": 0.06000896,
     "boutCount": 3,
     "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-carlos-diego-ferreira-vs-billy-quarantillo-2",
-    "updatedAt": "2026-08-12T06:01:46.400Z"
+    "updatedAt": "2026-08-13T06:01:42.251Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1673,11 +1711,38 @@
         "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-13T06:01:42.251Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:43bc3de7-663e-450b-a8c5-a1c9d3d7bb3a"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-13T06:01:42.251Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64857899",
+        "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-12T06:01:46.400Z"
+  "updatedAt": "2026-08-13T06:01:42.251Z"
 }

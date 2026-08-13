@@ -14,7 +14,7 @@
   },
   "division": "heavyweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-05:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-13T06:01:42.251Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-13:UFC Fight Night: Gamrot vs. Salkilld"
+      ],
+      "note": "Result read from the UFC Fight Night: Gamrot vs. Salkilld article after the event."
     }
   ],
   "discovery": {
@@ -35,9 +43,18 @@
   },
   "sourceRefs": [
     "source:wikipedia:2026-08-05:List of UFC events",
-    "source:wikipedia:2026-08-06:List of UFC events"
+    "source:wikipedia:2026-08-06:List of UFC events",
+    "source:wikipedia:2026-08-13:UFC Fight Night: Gamrot vs. Salkilld"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-13:UFC Fight Night: Gamrot vs. Salkilld"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -52,7 +69,19 @@
         "source:wikipedia:2026-08-05:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-13T06:01:42.251Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-13:UFC Fight Night: Gamrot vs. Salkilld"
+      ],
+      "note": "Steven Asplund def. Guilherme Pat by Decision (unanimous)."
     }
   ],
-  "updatedAt": "2026-08-05T06:05:51.752Z"
+  "updatedAt": "2026-08-13T06:01:42.251Z"
 }

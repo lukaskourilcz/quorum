@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Amir_Albazi",
       "publisher": "Wikipedia",
       "title": "Amir Albazi",
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q78095043",
         "source:wikipedia:64585580"
       ],
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "status": "verified",
       "corroborated": true
     },
@@ -501,9 +501,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 1.154101,
-        "layoffDays": 186
+        "layoffDays": 187
       },
-      "updatedAt": "2026-08-12T06:01:46.400Z"
+      "updatedAt": "2026-08-13T06:01:42.251Z"
     }
   ],
   "rating": {
@@ -513,7 +513,7 @@
     "volatility": 0.06001047,
     "boutCount": 20,
     "asOfBoutRef": "ufc:bout:history-af78c4dc026e1d5b1e8e",
-    "updatedAt": "2026-08-12T06:01:46.400Z"
+    "updatedAt": "2026-08-13T06:01:42.251Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1963,11 +1963,26 @@
         "source:wikipedia:64585580"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-13T06:01:42.251Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64585580"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-12T06:01:46.400Z"
+  "updatedAt": "2026-08-13T06:01:42.251Z"
 }
