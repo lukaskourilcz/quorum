@@ -66,6 +66,11 @@ const bhPaths = {
   ratings: path.join(repositoryRoot, "state/ratings/booksofhistory/ledger.jsonl")
 };
 const originalBhFiles = new Map<string, string | null>();
+const tsPaths = {
+  recommendation: path.join(repositoryRoot, "state/ventures/tehdejsi-svet/drafts/e2e-feature.json"),
+  result: path.join(repositoryRoot, "state/ventures/tehdejsi-svet/results/result-1234567890abcdef1234.json")
+};
+const originalTsFiles = new Map<string, string | null>();
 const bhActionDirectory = path.join(repositoryRoot, "state/ventures/booksofhistory/feature-actions/rec-e2e-admin-feature");
 const bhSummaryPaths = ["cs", "en"].map((locale) => path.join(repositoryRoot, `state/ventures/carousel-studio/summaries/booksofhistory/2026-08-14-e2e-admin-feature-${locale}.json`));
 
@@ -87,11 +92,19 @@ test.beforeAll(async () => {
       originalBhFiles.set(target, null);
     }
   }
+  for (const target of Object.values(tsPaths)) {
+    try { originalTsFiles.set(target, await readFile(target, "utf8")); }
+    catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      originalTsFiles.set(target, null);
+    }
+  }
   await Promise.all([
     mkdir(path.dirname(e2ePlanPath), { recursive: true }),
     mkdir(path.dirname(e2eMarketingPackagePath), { recursive: true }),
     mkdir(path.dirname(ratingLedgerPath), { recursive: true }),
-    ...Object.values(bhPaths).map((target) => mkdir(path.dirname(target), { recursive: true }))
+    ...Object.values(bhPaths).map((target) => mkdir(path.dirname(target), { recursive: true })),
+    ...Object.values(tsPaths).map((target) => mkdir(path.dirname(target), { recursive: true }))
   ]);
   await writeFile(e2ePlanPath, JSON.stringify({
     schemaVersion: "marketing-plan/1",
@@ -125,6 +138,19 @@ test.beforeAll(async () => {
   const fixture = async (name: string) => readFile(path.join(repositoryRoot, "contracts/fixtures", name), "utf8");
   const recommendation = JSON.parse(await fixture("booksofhistory-recommendation.valid.json")) as { recommendationId: string };
   recommendation.recommendationId = "rec-e2e-admin-feature";
+  const tsRecommendation = JSON.parse(await fixture("venture-recommendation-tehdejsi.valid.json")) as Record<string, unknown>;
+  tsRecommendation.status = "posted";
+  tsRecommendation.owner = {
+    postedUrls: {
+      cs: "https://www.instagram.com/p/synthetic-e2e-cs/",
+      ua: "https://www.instagram.com/p/synthetic-e2e-ua/"
+    },
+    rejectionReason: null
+  };
+  tsRecommendation.updatedAt = "2026-08-20T12:05:00.000Z";
+  const tsResult = JSON.parse(await fixture("tehdejsi-owner-result-entry.valid.json")) as Record<string, unknown>;
+  tsResult.recommendationId = tsRecommendation.id;
+  tsResult.postUrl = (tsRecommendation.owner as { postedUrls: { cs: string } }).postedUrls.cs;
   await Promise.all([
     writeFile(bhPaths.shortlist, await fixture("bh-shortlist.valid.json")),
     writeFile(bhPaths.brief, await fixture("bh-research-brief.valid.json")),
@@ -132,7 +158,9 @@ test.beforeAll(async () => {
     writeFile(bhPaths.dossier, await fixture("bh-dossier.valid.json")),
     writeFile(bhPaths.ledger, `${JSON.stringify(JSON.parse(await fixture("bh-research-ledger.valid.json")))}\n`),
     writeFile(bhPaths.recommendation, `${JSON.stringify(recommendation, null, 2)}\n`),
-    writeFile(bhPaths.ratings, "")
+    writeFile(bhPaths.ratings, ""),
+    writeFile(tsPaths.recommendation, `${JSON.stringify(tsRecommendation, null, 2)}\n`),
+    writeFile(tsPaths.result, `${JSON.stringify(tsResult, null, 2)}\n`)
   ]);
 });
 
@@ -145,6 +173,10 @@ test.afterAll(async () => {
   if (originalDeckOverrides === null) await rm(deckOverridesPath, { force: true });
   else await writeFile(deckOverridesPath, originalDeckOverrides);
   for (const [target, original] of originalBhFiles) {
+    if (original === null) await rm(target, { force: true });
+    else await writeFile(target, original);
+  }
+  for (const [target, original] of originalTsFiles) {
     if (original === null) await rm(target, { force: true });
     else await writeFile(target, original);
   }
@@ -193,8 +225,11 @@ test("Tehdejsi svet renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.getByRole("link", { name: "library" })).toBeVisible();
   await expect(page.getByRole("link", { name: "signals" })).toBeVisible();
   await expect(page.getByText("No shortlist has been recorded yet.")).toBeVisible();
-  await expect(page.getByText("No feature package is waiting or recorded yet.")).toBeVisible();
-  await expect(page.getByText("0 on this tab")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Czech performance" })).toBeVisible();
+  await expect(page.getByText("Sends (primary)").first()).toBeVisible();
+  await expect(page.getByText("Saves (primary)").first()).toBeVisible();
+  await expect(page.locator('[data-tehdejsi-results="cs"]')).toContainText("17");
+  await expect(page.locator('[data-tehdejsi-results="cs"]')).toContainText("23");
 
   await page.getByRole("link", { name: "library" }).click();
   await expect(page).toHaveURL(/tab=library/);
@@ -413,6 +448,24 @@ test("BOOKSOFHISTORY admin tabs expose recorded evidence without rendering a boo
  * A failed write or cleared cookie cannot leak into the next journey, and no retry masks a fault.
  */
 test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
+
+  test("Tehdejsi svet result entry stays manual and approval-gated", async ({ page }) => {
+    let resultPosts = 0;
+    page.on("request", (request) => {
+      if (request.method() === "POST" && new URL(request.url()).pathname === "/admin/api/tehdejsi-svet/results") resultPosts += 1;
+    });
+    await page.goto("/admin?venture=tehdejsi-svet&tab=features", { waitUntil: "networkidle" });
+    const lane = page.locator('[data-tehdejsi-results="cs"]');
+    await lane.getByLabel("Metrics captured at").fill("2026-08-12T13:00");
+    await lane.getByLabel("Sends (primary)").fill("18");
+    const response = page.waitForResponse((candidate) =>
+      candidate.request().method() === "POST" && new URL(candidate.url()).pathname === "/admin/api/tehdejsi-svet/results"
+    );
+    await lane.getByRole("button", { name: "Record manual result" }).click();
+    expect((await response).status()).toBe(409);
+    await expect(lane.getByRole("alert")).toContainText("TS-RESULTS-005 is pending");
+    expect(resultPosts).toBe(1);
+  });
 
   test("Tehdejsi svet keeps owner paste-in behind its approval", async ({ page }) => {
     let futurePosts = 0;

@@ -50,8 +50,8 @@ describe("Tehdejsi svet admin loader", () => {
   it("reports absent stores without inventing state or an efficiency denominator", async () => {
     const snapshot = await readAdminTehdejsiSvet(await temporaryRoot());
 
-    expect(snapshot.stores).toEqual({ facts: "missing", shortlists: "missing", cycle: "missing", ledger: "missing", features: "missing", ratings: "missing", signals: "missing", insights: "missing" });
-    expect(snapshot.unreadable).toEqual({ facts: 0, shortlists: 0, cycle: 0, ledger: 0, features: 0, ratings: 0, signals: 0, insights: 0, total: 0 });
+    expect(snapshot.stores).toEqual({ facts: "missing", shortlists: "missing", cycle: "missing", ledger: "missing", features: "missing", ratings: "missing", results: "missing", signals: "missing", insights: "missing" });
+    expect(snapshot.unreadable).toEqual({ facts: 0, shortlists: 0, cycle: 0, ledger: 0, features: 0, ratings: 0, results: 0, signals: 0, insights: 0, total: 0 });
     expect(snapshot).toMatchObject({ facts: null, shortlist: null, cycle: null, research: [], researchEfficiency: null, features: [], signalHarvests: [], signalDigests: [], productInsights: [] });
   });
 
@@ -73,6 +73,8 @@ describe("Tehdejsi svet admin loader", () => {
       objectRef: { id: "ts-2026-08-14-vecernicek", contentHash: "sha256:aaaaaaaaaaaa" },
       rating: "good", ratedAt: "2026-08-14T19:00:00.000Z"
     };
+    const result = JSON.parse(await fixture("tehdejsi-owner-result-entry.valid.json")) as Record<string, unknown>;
+    result.recommendationId = "ts-2026-08-14-vecernicek";
     await Promise.all([
       put(root, "state/ventures/tehdejsi-svet/facts.json", await factsFixture()),
       put(root, "state/ventures/tehdejsi-svet/shortlists/2026-08-12.json", await fixture("tehdejsi-shortlist.valid.json")),
@@ -82,6 +84,8 @@ describe("Tehdejsi svet admin loader", () => {
       put(root, "state/ventures/tehdejsi-svet/drafts/feature.json", await fixture("venture-recommendation-tehdejsi.valid.json")),
       put(root, "state/ventures/tehdejsi-svet/drafts/poison.json", await fixture("venture-recommendation-tehdejsi.poison.json")),
       put(root, "state/ratings/tehdejsi-svet/ledger.jsonl", `${JSON.stringify(rating)}\n`),
+      put(root, `state/ventures/tehdejsi-svet/results/${result.resultId}.json`, `${JSON.stringify(result)}\n`),
+      put(root, "state/ventures/tehdejsi-svet/results/poison.json", await fixture("tehdejsi-owner-result-entry.poison.json")),
       put(root, "state/ventures/tehdejsi-svet/signals/digests/ts-signal-digest-2026-08-16-a1b2c3d4e5f6.json", await fixture("tehdejsi-signal.valid.json")),
       put(root, "state/ventures/tehdejsi-svet/signals/digests/poison.json", await fixture("tehdejsi-signal.poison.json")),
       put(root, "state/ventures/tehdejsi-svet/product-insights/ts-insight-synthetic-gap.json", await fixture("tehdejsi-product-insight.valid.json")),
@@ -90,8 +94,8 @@ describe("Tehdejsi svet admin loader", () => {
 
     const snapshot = await readAdminTehdejsiSvet(root);
 
-    expect(snapshot.stores).toEqual({ facts: "present", shortlists: "present", cycle: "present", ledger: "present", features: "present", ratings: "present", signals: "present", insights: "present" });
-    expect(snapshot.unreadable).toEqual({ facts: 0, shortlists: 1, cycle: 0, ledger: 1, features: 1, ratings: 0, signals: 1, insights: 1, total: 5 });
+    expect(snapshot.stores).toEqual({ facts: "present", shortlists: "present", cycle: "present", ledger: "present", features: "present", ratings: "present", results: "present", signals: "present", insights: "present" });
+    expect(snapshot.unreadable).toEqual({ facts: 0, shortlists: 1, cycle: 0, ledger: 1, features: 1, ratings: 0, results: 1, signals: 1, insights: 1, total: 6 });
     expect(snapshot.facts?.copiedAt).toBe("2026-08-12T18:00:00.000Z");
     expect(snapshot.facts?.facts[0]).toMatchObject({ id: "brno-1975-tram-fare" });
     expect(snapshot.shortlist?.entries[0]).toMatchObject({ rank: 1, factId: "cs-1970s-vecernicek", factors: { askability: 8 } });
@@ -100,7 +104,7 @@ describe("Tehdejsi svet admin loader", () => {
     expect(snapshot.researchEfficiency).toBe(1);
     expect(snapshot.features[0]).toMatchObject({
       id: "ts-2026-08-14-vecernicek", status: "approved", sensitivityTier: 0, designLab: { ready: true },
-      ratings: [{ rating: "good" }]
+      ratings: [{ rating: "good" }], results: [{ enteredBy: "owner", metrics: { sends: 17, saves: 23 } }]
     });
     expect(snapshot.signalDigests[0]).toMatchObject({ kind: "sunday-digest", recollections: [{ classification: "recollection-not-fact" }] });
     expect(snapshot.productInsights[0]).toMatchObject({ id: "ts-insight-synthetic-gap", status: "proposed" });

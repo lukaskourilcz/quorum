@@ -35,10 +35,24 @@ async function fixtureSnapshot() {
     objectRef: { id: "ts-2026-08-14-vecernicek", contentHash: "sha256:aaaaaaaaaaaa" },
     rating: "good", ratedAt: "2026-08-14T19:00:00.000Z"
   };
+  const feature = JSON.parse(await fixture("venture-recommendation-tehdejsi.valid.json")) as Record<string, unknown>;
+  feature.status = "posted";
+  feature.owner = {
+    postedUrls: {
+      cs: "https://www.instagram.com/p/synthetic-panel-cs/",
+      ua: "https://www.instagram.com/p/synthetic-panel-ua/"
+    },
+    rejectionReason: null
+  };
+  feature.updatedAt = "2026-08-20T12:05:00.000Z";
+  const result = JSON.parse(await fixture("tehdejsi-owner-result-entry.valid.json")) as Record<string, unknown>;
+  result.recommendationId = feature.id;
+  result.postUrl = (feature.owner as { postedUrls: { cs: string } }).postedUrls.cs;
   await Promise.all([
     put(root, "state/ventures/tehdejsi-svet/shortlists/2026-08-12.json", await fixture("tehdejsi-shortlist.valid.json")),
-    put(root, "state/ventures/tehdejsi-svet/drafts/feature.json", await fixture("venture-recommendation-tehdejsi.valid.json")),
-    put(root, "state/ratings/tehdejsi-svet/ledger.jsonl", `${JSON.stringify(rating)}\n`)
+    put(root, "state/ventures/tehdejsi-svet/drafts/feature.json", `${JSON.stringify(feature)}\n`),
+    put(root, "state/ratings/tehdejsi-svet/ledger.jsonl", `${JSON.stringify(rating)}\n`),
+    put(root, `state/ventures/tehdejsi-svet/results/${result.resultId}.json`, `${JSON.stringify(result)}\n`)
   ]);
   return readAdminTehdejsiSvet(root);
 }
@@ -64,10 +78,14 @@ describe("Tehdejsi svet feature panel", () => {
     expect(html).toContain("PNG and ZIP export");
     expect(html).toContain("Your rating");
     expect(html).toContain("Good");
+    expect(html).toContain("Sends (primary)");
+    expect(html).toContain("Saves (primary)");
+    expect(html).toContain(">17<");
+    expect(html).toContain(">23<");
+    expect(html).toContain("Manual entry only");
     expect(html).not.toContain("state/ventures");
     expect(html).not.toContain("shortlistRef");
     expect(html).not.toContain("summaryPath");
-    expect(html).not.toContain("/results");
   });
 
   it("separates a tier-2 package into the owner queue and keeps read-only decisions disabled", async () => {

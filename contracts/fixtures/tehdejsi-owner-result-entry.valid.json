@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "owner-result-entry/1",
+  "resultId": "result-1234567890abcdef1234",
+  "ventureId": "tehdejsi-svet",
+  "recommendationId": "ts-synthetic-memory",
+  "locale": "cs",
+  "platform": "instagram",
+  "postUrl": "https://www.instagram.com/p/synthetic-result/",
+  "capturedAt": "2026-08-20T12:00:00.000Z",
+  "recordedAt": "2026-08-20T12:05:00.000Z",
+  "enteredBy": "owner",
+  "metrics": {
+    "sends": 17,
+    "saves": 23,
+    "views": 900,
+    "likes": 60,
+    "comments": 4,
+    "shares": 8,
+    "follows": 3,
+    "linkTaps": null
+  },
+  "note": "Synthetic owner-entered result for contract testing."
+}

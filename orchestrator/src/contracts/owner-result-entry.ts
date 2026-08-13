@@ -69,9 +69,46 @@ export const OwnerResultEntrySchema = z.strictObject({
 export type OwnerResultEntry = z.infer<typeof OwnerResultEntrySchema>;
 export type OwnerResultMetrics = z.infer<typeof OwnerResultMetricsSchema>;
 
+export const TehdejsiOwnerResultMetricsSchema = z.strictObject({
+  sends: CountSchema,
+  saves: CountSchema,
+  views: CountSchema,
+  likes: CountSchema,
+  comments: CountSchema,
+  shares: CountSchema,
+  follows: CountSchema,
+  linkTaps: CountSchema
+}).refine((metrics) => Object.values(metrics).some((value) => value !== null), {
+  message: "A Tehdejsi svet result requires at least one owner-entered metric"
+});
+
+/** Manual per-platform result for the bilingual Tehdejsi svet lane. */
+export const TehdejsiOwnerResultEntrySchema = z.strictObject({
+  schemaVersion: z.literal("owner-result-entry/1"),
+  resultId: z.string().regex(/^result-[a-f0-9]{20}$/),
+  ventureId: z.literal("tehdejsi-svet"),
+  recommendationId: SlugSchema,
+  locale: z.enum(["cs", "ua"]),
+  platform: z.enum(["instagram", "facebook", "threads"]),
+  postUrl: HttpsUrlSchema.max(2_000),
+  capturedAt: DateTimeSchema,
+  recordedAt: DateTimeSchema,
+  enteredBy: z.literal("owner"),
+  metrics: TehdejsiOwnerResultMetricsSchema,
+  note: z.string().trim().min(1).max(500).nullable()
+}).superRefine((entry, context) => {
+  if (Date.parse(entry.capturedAt) > Date.parse(entry.recordedAt)) {
+    context.addIssue({ code: "custom", message: "A result cannot be recorded before capture", path: ["capturedAt"] });
+  }
+});
+
+export type TehdejsiOwnerResultEntry = z.infer<typeof TehdejsiOwnerResultEntrySchema>;
+export type TehdejsiOwnerResultMetrics = z.infer<typeof TehdejsiOwnerResultMetricsSchema>;
+
 /** Published shared boundary; venture code imports its narrower schema above. */
 export const AnyOwnerResultEntrySchema = z.union([
   BooksofHistoryOwnerResultEntrySchema,
-  OwnerResultEntrySchema
+  OwnerResultEntrySchema,
+  TehdejsiOwnerResultEntrySchema
 ]);
 export type AnyOwnerResultEntry = z.infer<typeof AnyOwnerResultEntrySchema>;

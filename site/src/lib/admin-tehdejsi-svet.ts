@@ -16,6 +16,7 @@ import {
   type TehdejsiSignalHarvest
 } from "./tehdejsi-signal-model";
 import { parseTehdejsiProductInsight, type TehdejsiProductInsight } from "./tehdejsi-product-insight-model";
+import { parseTehdejsiOwnerResult, type TehdejsiOwnerResult } from "./tehdejsi-result-model";
 
 export type AdminTehdejsiState = "missing" | "unreadable" | "present";
 
@@ -110,9 +111,10 @@ export interface AdminTehdejsiFeature {
   updatedAt: string;
   contentHash: string;
   ratings: RatingRecord[];
+  results: TehdejsiOwnerResult[];
 }
 
-type StoreName = "facts" | "shortlists" | "cycle" | "ledger" | "features" | "ratings" | "signals" | "insights";
+type StoreName = "facts" | "shortlists" | "cycle" | "ledger" | "features" | "ratings" | "results" | "signals" | "insights";
 
 export interface AdminTehdejsiSnapshot {
   stores: Record<StoreName, AdminTehdejsiState>;
@@ -328,7 +330,12 @@ function parseResearch(value: unknown): ResearchPurchase | ResearchUse | null {
   };
 }
 
-function projectFeature(value: TehdejsiFeatureRecommendation, raw: string, ratings: readonly RatingRecord[]): AdminTehdejsiFeature {
+function projectFeature(
+  value: TehdejsiFeatureRecommendation,
+  raw: string,
+  ratings: readonly RatingRecord[],
+  results: readonly TehdejsiOwnerResult[]
+): AdminTehdejsiFeature {
   return {
     id: value.id,
     date: value.date,
@@ -350,7 +357,10 @@ function projectFeature(value: TehdejsiFeatureRecommendation, raw: string, ratin
     contentHash: `sha256:${createHash("sha256").update(raw).digest("hex").slice(0, 12)}`,
     ratings: ratings
       .filter((rating) => rating.ventureId === "tehdejsi-svet" && rating.objectKind === "recommendation" && rating.objectRef.id === value.id)
-      .sort((left, right) => right.ratedAt.localeCompare(left.ratedAt) || right.id.localeCompare(left.id))
+      .sort((left, right) => right.ratedAt.localeCompare(left.ratedAt) || right.id.localeCompare(left.id)),
+    results: results
+      .filter((result) => result.recommendationId === value.id)
+      .sort((left, right) => right.capturedAt.localeCompare(left.capturedAt) || right.resultId.localeCompare(left.resultId))
   };
 }
 
@@ -444,7 +454,7 @@ export async function readAdminTehdejsiSvet(
   root = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")
 ): Promise<AdminTehdejsiSnapshot> {
   const base = path.join(root, "state", "ventures", "tehdejsi-svet");
-  const [facts, shortlists, cycle, research, featureRecords, ratings, signalHarvests, signalDigests, productInsights] = await Promise.all([
+  const [facts, shortlists, cycle, research, featureRecords, ratings, results, signalHarvests, signalDigests, productInsights] = await Promise.all([
     singleton(path.join(base, "facts.json"), parseFacts),
     collection(path.join(base, "shortlists"), (value) => parseShortlist(value)),
     singleton(path.join(base, "cycle.json"), parseCycle),
@@ -454,6 +464,10 @@ export async function readAdminTehdejsiSvet(
       return parsed ? { parsed, raw } : null;
     }),
     ratingsLedger(path.join(root, "state", "ratings", "tehdejsi-svet", "ledger.jsonl")),
+    collection(path.join(base, "results"), (value, _raw, name) => {
+      const parsed = parseTehdejsiOwnerResult(value);
+      return parsed && name === `${parsed.resultId}.json` ? parsed : null;
+    }),
     collection(path.join(base, "signals", "harvests"), (value, _raw, name) => {
       const parsed = parseTehdejsiSignalHarvest(value);
       return parsed && name === `${parsed.id}.json` ? parsed : null;
@@ -470,7 +484,7 @@ export async function readAdminTehdejsiSvet(
   const features: ReadResult<AdminTehdejsiFeature> = {
     state: featureRecords.state,
     unreadable: featureRecords.unreadable,
-    items: featureRecords.items.map(({ parsed, raw }) => projectFeature(parsed, raw, ratings.items))
+    items: featureRecords.items.map(({ parsed, raw }) => projectFeature(parsed, raw, ratings.items, results.items))
   };
   const latestShortlist = [...shortlists.items].sort((left, right) => right.date.localeCompare(left.date))[0] ?? null;
   const paidResearch = research.items.filter(({ costUsd }) => costUsd > 0);
@@ -482,6 +496,7 @@ export async function readAdminTehdejsiSvet(
     ledger: research.unreadable,
     features: features.unreadable,
     ratings: ratings.unreadable,
+    results: results.unreadable,
     signals: signalHarvests.unreadable + signalDigests.unreadable,
     insights: productInsights.unreadable
   };
@@ -493,6 +508,7 @@ export async function readAdminTehdejsiSvet(
       ledger: research.state,
       features: features.state,
       ratings: ratings.state,
+      results: results.state,
       signals: signalDigests.items.length || signalHarvests.items.length ? "present" : counts.signals ? "unreadable" : "missing",
       insights: productInsights.state
     },

@@ -21,6 +21,24 @@ function target(relative: string, root: string): string {
 }
 
 export async function readTehdejsiStateJson(relative: string, root = DEFAULT_ROOT): Promise<unknown> {
+  target(relative, root);
+  const token = process.env.BOARDLESSAI_GITHUB_TOKEN;
+  if (token) {
+    const repository = process.env.BOARDLESSAI_GITHUB_REPOSITORY ?? "lukaskourilcz/quorum";
+    const branch = process.env.BOARDLESSAI_GITHUB_BRANCH ?? "main";
+    const encoded = relative.split("/").map(encodeURIComponent).join("/");
+    const response = await fetch(`https://api.github.com/repos/${repository}/contents/${encoded}?ref=${encodeURIComponent(branch)}`, {
+      headers: { Accept: "application/vnd.github+json", Authorization: `Bearer ${token}`, "X-GitHub-Api-Version": "2026-03-10" },
+      cache: "no-store"
+    });
+    if (response.status === 404) throw new TehdejsiStateError("UNAVAILABLE", `${relative} is missing.`);
+    if (response.status === 401 || response.status === 403) throw new TehdejsiStateError("REFUSED", `GitHub refused the state read with ${response.status}.`);
+    if (!response.ok) throw new TehdejsiStateError("REMOTE", `GitHub state read failed with ${response.status}.`);
+    const body = await response.json() as { content?: unknown };
+    if (typeof body.content !== "string") throw new TehdejsiStateError("CORRUPT", `${relative} has no readable content.`);
+    try { return JSON.parse(Buffer.from(body.content.replaceAll("\n", ""), "base64").toString("utf8")) as unknown; }
+    catch { throw new TehdejsiStateError("CORRUPT", `${relative} is not valid JSON.`); }
+  }
   try { return JSON.parse(await readFile(target(relative, root), "utf8")) as unknown; }
   catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") throw new TehdejsiStateError("UNAVAILABLE", `${relative} is missing.`);

@@ -17,12 +17,28 @@ import type {
   AdminTehdejsiSnapshot
 } from "@/lib/admin-tehdejsi-svet";
 import type { TehdejsiFeaturePayload } from "@/lib/tehdejsi-feature-model";
+import {
+  TEHDEJSI_RESULT_METRICS,
+  TEHDEJSI_RESULT_PLATFORMS,
+  type TehdejsiResultMetric,
+  type TehdejsiResultPlatform
+} from "@/lib/tehdejsi-result-model";
 import { formatDateTime } from "@/lib/utils";
 
 type ReviewMode = "closed" | "edit" | "reject";
 type Locale = "cs" | "ua";
 
 const localeName: Record<Locale, string> = { cs: "Czech", ua: "Ukrainian" };
+const metricName: Record<TehdejsiResultMetric, string> = {
+  sends: "Sends (primary)",
+  saves: "Saves (primary)",
+  views: "Views",
+  likes: "Likes",
+  comments: "Comments",
+  shares: "Shares",
+  follows: "Follows",
+  linkTaps: "Link taps"
+};
 const fieldClass =
   "w-full rounded-[var(--radius-button)] border border-[var(--steel)] bg-[var(--surface)] px-3 py-2.5 text-base leading-6 text-[var(--foreground)] placeholder:text-[var(--fog)] disabled:opacity-50";
 
@@ -185,6 +201,130 @@ function GateSummary({ feature }: { feature: AdminTehdejsiFeature }) {
   );
 }
 
+function OwnerResultLane({ feature, locale, writesEnabled }: {
+  feature: AdminTehdejsiFeature;
+  locale: Locale;
+  writesEnabled: boolean;
+}) {
+  const router = useRouter();
+  const [platform, setPlatform] = useState<TehdejsiResultPlatform>("instagram");
+  const [capturedAt, setCapturedAt] = useState("");
+  const [note, setNote] = useState("");
+  const [metrics, setMetrics] = useState<Record<TehdejsiResultMetric, string>>(() =>
+    Object.fromEntries(TEHDEJSI_RESULT_METRICS.map((metric) => [metric, ""])) as Record<TehdejsiResultMetric, string>
+  );
+  const [pending, setPending] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const postUrl = feature.owner.postedUrls[locale];
+  const results = feature.results.filter((result) => result.locale === locale);
+  const hasMetric = TEHDEJSI_RESULT_METRICS.some((metric) => metrics[metric].trim() !== "");
+
+  async function recordResult(): Promise<void> {
+    if (!writesEnabled || pending || !postUrl || !capturedAt || !hasMetric) return;
+    setPending(true);
+    setMessage("Saving owner-entered result…");
+    setError("");
+    try {
+      const response = await fetch("/admin/api/tehdejsi-svet/results", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recommendationId: feature.id,
+          locale,
+          platform,
+          capturedAt: new Date(capturedAt).toISOString(),
+          recordedAt: new Date().toISOString(),
+          metrics: Object.fromEntries(TEHDEJSI_RESULT_METRICS.map((metric) => [
+            metric,
+            metrics[metric].trim() === "" ? null : Number(metrics[metric])
+          ])),
+          note: note.trim() || null
+        })
+      });
+      const result = await response.json() as { error?: string };
+      if (!response.ok) throw new Error(result.error ?? `Owner result failed with ${response.status}.`);
+      setMetrics(Object.fromEntries(TEHDEJSI_RESULT_METRICS.map((metric) => [metric, ""])) as Record<TehdejsiResultMetric, string>);
+      setNote("");
+      setMessage("Manual result recorded. No platform or analytics service was contacted.");
+      router.refresh();
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "Owner result failed before it was saved.");
+    } finally {
+      setPending(false);
+    }
+  }
+
+  return (
+    <section className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-4" data-tehdejsi-results={locale}>
+      <h5 className="font-semibold">{localeName[locale]} performance</h5>
+      <p className="mt-1 text-xs leading-5 text-[var(--fog)]">
+        Manual entry only. Sends and saves are the primary positioning signal; missing remains unknown, never zero.
+      </p>
+      {postUrl ? (
+        <>
+          <p className="mt-3 break-all text-xs text-[var(--fog)]">Recorded post: {postUrl}</p>
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <label className="text-xs text-[var(--fog)]" htmlFor={`${feature.id}-${locale}-result-platform`}>
+              Platform
+              <select className={`${fieldClass} mt-2`} disabled={pending || !writesEnabled} id={`${feature.id}-${locale}-result-platform`}
+                onChange={(event) => setPlatform(event.target.value as TehdejsiResultPlatform)} value={platform}>
+                {TEHDEJSI_RESULT_PLATFORMS.map((entry) => <option key={entry} value={entry}>{entry}</option>)}
+              </select>
+            </label>
+            <label className="text-xs text-[var(--fog)]" htmlFor={`${feature.id}-${locale}-captured-at`}>
+              Metrics captured at
+              <input className={`${fieldClass} mt-2`} disabled={pending || !writesEnabled} id={`${feature.id}-${locale}-captured-at`}
+                onChange={(event) => setCapturedAt(event.target.value)} type="datetime-local" value={capturedAt} />
+            </label>
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {TEHDEJSI_RESULT_METRICS.map((metric) => (
+              <label className="text-xs text-[var(--fog)]" key={metric}>
+                {metricName[metric]}
+                <input className={`${fieldClass} mt-2 tabular-nums`} disabled={pending || !writesEnabled} inputMode="numeric" min={0}
+                  onChange={(event) => setMetrics((current) => ({ ...current, [metric]: event.target.value }))}
+                  step={1} type="number" value={metrics[metric]} />
+              </label>
+            ))}
+          </div>
+          <label className="mt-3 block text-xs text-[var(--fog)]">
+            Optional owner note
+            <textarea className={`${fieldClass} mt-2 min-h-20`} disabled={pending || !writesEnabled} maxLength={500}
+              onChange={(event) => setNote(event.target.value)} value={note} />
+          </label>
+          <Button className="mt-3" disabled={pending || !writesEnabled || !capturedAt || !hasMetric}
+            onClick={() => void recordResult()} type="button" variant="secondary">
+            Record manual result
+          </Button>
+        </>
+      ) : <Callout className="mt-3">Record this locale&apos;s owner-posted URL before entering results.</Callout>}
+      {results.length ? (
+        <div className="mt-4 grid gap-3">
+          {results.map((result) => (
+            <article className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-3" key={result.resultId}>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <Badge>{result.platform}</Badge>
+                <time className="font-mono text-[0.625rem] text-[var(--fog)]" dateTime={result.capturedAt}>{formatDateTime(result.capturedAt)}</time>
+              </div>
+              <dl className="mt-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+                {TEHDEJSI_RESULT_METRICS.filter((metric) => result.metrics[metric] !== null).map((metric) => (
+                  <div key={metric}><dt className="text-[var(--fog)]">{metricName[metric]}</dt><dd className="mt-1 tabular-nums">{result.metrics[metric]}</dd></div>
+                ))}
+              </dl>
+              {result.note ? <p className="mt-3 text-xs leading-5 text-[var(--fog)]">{result.note}</p> : null}
+            </article>
+          ))}
+        </div>
+      ) : <p className="mt-3 text-xs text-[var(--fog)]">No owner-entered result for this locale.</p>}
+      <div aria-live="polite" className="mt-2 min-h-5 text-sm" role={error ? "alert" : "status"}>
+        {error ? <span className="text-[var(--destructive)]">{error}</span> : <span className="text-[var(--fog)]">{message}</span>}
+      </div>
+    </section>
+  );
+}
+
 function FeatureReview({ initial }: { initial: AdminTehdejsiFeature }) {
   const router = useRouter();
   const writesEnabled = useAdminWritesEnabled();
@@ -335,9 +475,11 @@ function FeatureReview({ initial }: { initial: AdminTehdejsiFeature }) {
           </div>
         ) : null}
 
-        {(feature.owner.postedUrls.cs || feature.owner.postedUrls.ua) ? (
-          <Callout className="mt-4">Performance results are not stored yet. This panel will accept owner-entered metrics when the recorded result ledger lands.</Callout>
-        ) : null}
+        <div className="mt-4 grid gap-4 xl:grid-cols-2">
+          {(["cs", "ua"] as const).map((locale) => (
+            <OwnerResultLane feature={feature} key={locale} locale={locale} writesEnabled={writesEnabled} />
+          ))}
+        </div>
         <div aria-live="polite" className="mt-3 min-h-5 text-sm" role={error ? "alert" : "status"}>
           {error ? <span className="text-[var(--destructive)]">{error}</span> : <span className="text-[var(--fog)]">{message}</span>}
         </div>
