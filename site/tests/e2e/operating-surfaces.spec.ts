@@ -4,6 +4,7 @@ import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { expect, test } from "@playwright/test";
 import { CALENDAR_SLOTS } from "../../src/lib/calendar-feed-model";
+import { PUBLIC_VENTURE_SLUGS } from "../../src/data/public-venture-slugs";
 
 const axeRoutes = [
   "/",
@@ -12,6 +13,8 @@ const axeRoutes = [
   "/ideas",
   "/ventures/caught-up",
   "/ventures/titty-tuesdays",
+  "/ventures/goviral",
+  "/ventures/marketingshark",
   "/ventures/fightaiq",
   "/ventures/carousel-studio",
   "/ventures/booksofhistory",
@@ -601,7 +604,9 @@ test("DNESKAi social archive renders its Czech-only packs", async ({ page }) => 
   await expect(frames).toHaveCount(20);
   for (const index of [0, 10]) {
     await frames.nth(index).scrollIntoViewIfNeeded();
-    await expect.poll(() => frames.nth(index).evaluate((node: HTMLImageElement) => node.naturalWidth)).toBeGreaterThan(0);
+    await expect
+      .poll(() => frames.nth(index).evaluate((node: HTMLImageElement) => node.naturalWidth), { timeout: 30_000 })
+      .toBeGreaterThan(0);
   }
 });
 
@@ -941,7 +946,26 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
   });
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/ventures/booksofhistory", "/ventures/door-money", "/ventures/kvorum", "/ventures/tehdejsi-svet", "/money", "/admin?venture=global", "/admin?venture=door-money&tab=recommendations", "/admin?venture=door-money&tab=actions", "/admin?venture=door-money&tab=knowledge", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=booksofhistory&tab=features", "/admin?venture=tehdejsi-svet&tab=features", "/admin?venture=tehdejsi-svet&tab=library", "/admin?venture=tehdejsi-svet&tab=signals", "/admin?venture=carousel-studio&tab=studio"];
+const responsiveRoutes = [
+  "/",
+  "/agents",
+  "/agents/hacek",
+  "/calendar/2026-07-27",
+  ...PUBLIC_VENTURE_SLUGS.map((slug) => `/ventures/${slug}`),
+  "/money",
+  "/admin?venture=global",
+  "/admin?venture=door-money&tab=recommendations",
+  "/admin?venture=door-money&tab=actions",
+  "/admin?venture=door-money&tab=knowledge",
+  "/admin?venture=titty-tuesdays&tab=plans",
+  "/admin?venture=fightaiq&tab=events",
+  "/admin?venture=mma-files&tab=social-lab",
+  "/admin?venture=booksofhistory&tab=features",
+  "/admin?venture=tehdejsi-svet&tab=features",
+  "/admin?venture=tehdejsi-svet&tab=library",
+  "/admin?venture=tehdejsi-svet&tab=signals",
+  "/admin?venture=carousel-studio&tab=studio"
+];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
@@ -1352,7 +1376,9 @@ test.describe("the Design Lab workspace", () => {
     const canvas = page.locator("[data-slide-canvas]").first();
     const portrait = await canvas.evaluate((node) => getComputedStyle(node).aspectRatio);
     await page.getByRole("button", { name: "9:16", exact: true }).first().click();
-    await expect.poll(async () => canvas.evaluate((node) => getComputedStyle(node).aspectRatio)).not.toBe(portrait);
+    await expect
+      .poll(async () => canvas.evaluate((node) => getComputedStyle(node).aspectRatio), { timeout: 30_000 })
+      .not.toBe(portrait);
     // The safe-area overlay is offered only where a platform actually covers the canvas.
     await page.getByRole("button", { name: "bezpečná zóna" }).first().click();
     await expect(page.locator("[data-safe-area]").first()).toBeAttached();
@@ -1797,11 +1823,35 @@ test.describe("footer links open dialogs", () => {
     }
   });
 
-  test("the feeds stay files", async ({ page, request }) => {
+  test("the feeds, sitemap and crawler rules stay current", async ({ page, request }) => {
     await page.goto("/company", { waitUntil: "networkidle" });
-    for (const feed of ["/feed.xml", "/decisions.xml", "/feed.json"]) {
+    for (const [feed, contentType] of [
+      ["/feed.xml", "application/rss+xml"],
+      ["/decisions.xml", "application/rss+xml"],
+      ["/feed.json", "application/feed+json"]
+    ] as const) {
       await expect(page.locator(`footer a[href="${feed}"]`)).toHaveCount(1);
-      expect((await request.get(feed)).status(), feed).toBe(200);
+      const response = await request.get(feed);
+      expect(response.status(), feed).toBe(200);
+      expect(response.headers()["content-type"], feed).toContain(contentType);
+    }
+
+    const sitemap = await request.get("/sitemap.xml");
+    expect(sitemap.status()).toBe(200);
+    const sitemapBody = await sitemap.text();
+    for (const slug of PUBLIC_VENTURE_SLUGS) {
+      expect(sitemapBody, slug).toContain(`/ventures/${slug}`);
+    }
+
+    const robots = await request.get("/robots.txt");
+    expect(robots.status()).toBe(200);
+    const robotsBody = await robots.text();
+    expect(robotsBody).toContain("Disallow: /admin");
+    expect(robotsBody).toContain("Disallow: /api");
+    expect(robotsBody).toContain("Sitemap:");
+    expect(robotsBody).toContain("/sitemap.xml");
+    for (const slug of PUBLIC_VENTURE_SLUGS) {
+      expect(robotsBody, slug).not.toContain(`Disallow: /ventures/${slug}`);
     }
   });
 

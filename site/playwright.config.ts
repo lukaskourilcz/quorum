@@ -78,7 +78,11 @@ export default defineConfig({
     // State-writing journeys touch files outside `site/`. Webpack reads those dynamic files
     // without Turbopack's broad repository trace restarting the dev server on each expected write.
     // The dedicated port also keeps concurrent programme worktrees from sharing a test server.
-    command: `pnpm dev --webpack --port ${e2ePort}`,
+    // The read-only project visits every public/admin surface in one server lifetime. Next
+    // otherwise caps its child at half of an 8 GB machine and can restart before that audit ends,
+    // invalidating in-flight hydration. The explicit, bounded heap lets that project finish; the
+    // package runner then starts a fresh server for the state-writing project.
+    command: `pnpm dev:e2e --webpack --port ${e2ePort}`,
     env: {
       ADMIN_USER: adminUser,
       ADMIN_PASSWORD: adminPassword,

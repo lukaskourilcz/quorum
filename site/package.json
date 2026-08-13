@@ -5,15 +5,17 @@
   "scripts": {
     "prebuild": "pnpm --filter @boardlessai/carousel-studio build",
     "predev": "pnpm --filter @boardlessai/carousel-studio build",
+    "predev:e2e": "pnpm --filter @boardlessai/carousel-studio build",
     "pretest": "pnpm --filter @boardlessai/carousel-studio build",
     "pretest:e2e": "pnpm --filter @boardlessai/carousel-studio build",
     "pretypecheck": "pnpm --filter @boardlessai/carousel-studio build",
     "build": "next build",
     "dev": "next dev",
+    "dev:e2e": "node --max-old-space-size=5120 node_modules/next/dist/bin/next dev",
     "lint": "eslint .",
     "start": "next start",
     "test": "vitest run --passWithNoTests",
-    "test:e2e": "playwright test",
+    "test:e2e": "node ../scripts/run-site-e2e.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

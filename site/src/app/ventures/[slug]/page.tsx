@@ -27,12 +27,13 @@ import {
   opportunities,
   opportunityDimensions
 } from "@/data/fixtures";
+import { PUBLIC_VENTURE_SLUGS } from "@/data/public-venture-slugs";
 
 export function generateStaticParams() {
   // The founding test rejected three sample business ideas, and each of them had a page here
   // that read like a project the company runs. The ideas stay on the record where they were
   // rejected; they stop being routes.
-  return ["caught-up", "titty-tuesdays", "goviral", "marketingshark", "fightaiq", "carousel-studio", "booksofhistory", "door-money", "tehdejsi-svet", "kvorum"].map((slug) => ({ slug }));
+  return PUBLIC_VENTURE_SLUGS.map((slug) => ({ slug }));
 }
 
 const reviewedMetadata: Record<ReviewedVentureSlug, Metadata> = {

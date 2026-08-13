@@ -79,13 +79,13 @@ export async function MarketingSharkVenturePage() {
             All projects
           </Link>
           <div className="mt-10 grid gap-10 md:grid-cols-12 md:items-end">
-            <div className="md:col-span-8">
+            <div className="min-w-0 md:col-span-8">
               <div className="flex flex-wrap gap-2">
                 <Badge>Project 008</Badge>
                 <Badge>Drafts only</Badge>
               </div>
               <h1 className="mt-7 text-[clamp(3.5rem,9vw,8rem)] font-semibold leading-[0.84] tracking-[-0.075em]">
-                marketingShark<span className="text-[var(--accent)]">.</span>
+                marketing<span className="sm:inline"><br className="sm:hidden" />Shark</span><span className="text-[var(--accent)]">.</span>
               </h1>
             </div>
             <div className="md:col-span-4">
