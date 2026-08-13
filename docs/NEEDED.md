@@ -576,11 +576,13 @@ Roughly a month out. Nothing here is needed until a channel actually opens, and 
 
 Nothing here needs your hands. It is recorded so it is not lost.
 
-- [ ] **Finish the decomposition started in issue 47** — `orchestrator/src/cycle.ts` came down from
-  2,194 lines to 1,234 as pure moves; what is left is `runCycle` itself, which cannot be split
-  without deciding on a context object, and `orchestrator/src/portfolio/run.ts` at 1,722 lines,
-  which was not started. `docs/HANDOFF-147-DECOMPOSITION.md` names every seam and says why each was
-  left. [imp:2] [owner:ai] [time:3h] [kind:deploy]
+- [ ] **Finish the decomposition started in issue 147** — `orchestrator/src/cycle.ts` is now about
+  1,300 lines. Its remaining seams are the double-fire guards, morning shift, operations review,
+  artifact writers and night tail; extracting them requires one explicit context object rather
+  than another purportedly mechanical move. `orchestrator/src/portfolio/run.ts` is about 1,730
+  lines and still separates naturally into room lifecycle, room content and the
+  `RoomStayedShut` family. Keep the work behavior-neutral and one extracted module per commit.
+  [imp:2] [owner:ai] [time:3h] [kind:deploy]
 
 - [ ] **Two admin journeys retry, and it would be better if they did not** — `admin rating
   persists` and `admin login explains errors` sit at 117 and 118 of 168 in a single-worker run, and
