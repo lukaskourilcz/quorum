@@ -142,4 +142,25 @@ describe("zero-model operating signals", () => {
     expect(updated.growth.find((venture) => venture.venture === "marketingshark")?.signals.find((entry) => entry.id === "package-cadence")?.value).toBe(2);
     expect(updated.growth.find((venture) => venture.venture === "door-money")?.signals.find((entry) => entry.id === "package-cadence")?.value).toBe(1);
   });
+
+  it("keeps Tehdejsi research and Kvorum approval on their own evidence", async () => {
+    const stateRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-new-venture-signals-"));
+    const research = path.join(stateRoot, "ventures/tehdejsi-svet/research-ledger.jsonl");
+    await mkdir(path.dirname(research), { recursive: true });
+    const hash = "a".repeat(64);
+    await writeFile(research, [
+      JSON.stringify({ schemaVersion: "ts-research-ledger/1", kind: "purchase", topicKey: "synthetic-topic", briefHash: hash, cycleId: "ts-cycle-1", provider: "fixture", model: "fixture", startedAt: "2026-08-13T10:00:00.000Z", completedAt: "2026-08-13T10:01:00.000Z", tokensIn: 1, tokensOut: 1, searches: 1, costUsd: 0.1, dossierRef: "state/ventures/tehdejsi-svet/dossiers/synthetic.json" }),
+      JSON.stringify({ schemaVersion: "ts-research-ledger/1", kind: "use", topicKey: "synthetic-topic", briefHash: hash, at: "2026-08-13T11:00:00.000Z", recommendationId: "synthetic-recommendation" })
+    ].join("\n") + "\n");
+    await json(path.join(stateRoot, "ventures/kvorum/recommendations/approved.json"), { schemaVersion: "venture-recommendation/1", ventureId: "kvorum", status: "approved" });
+    await json(path.join(stateRoot, "ventures/kvorum/recommendations/rejected.json"), { schemaVersion: "venture-recommendation/1", ventureId: "kvorum", status: "rejected" });
+    await json(path.join(stateRoot, "ventures/kvorum/recommendations/wrong-venture.json"), { schemaVersion: "venture-recommendation/1", ventureId: "door-money", status: "approved" });
+    const snapshot = await computeAutonomySnapshot({ repoRoot, stateRoot, now: new Date("2026-08-13T12:00:00.000Z") });
+    expect(snapshot.growth.find((venture) => venture.venture === "tehdejsi-svet")?.signals).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: "research-efficiency", value: 1 })
+    ]));
+    expect(snapshot.growth.find((venture) => venture.venture === "kvorum")?.signals).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: "recommendation-approval", value: 0.5 })
+    ]));
+  });
 });

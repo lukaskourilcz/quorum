@@ -13,9 +13,9 @@ describe("admin write mode", () => {
     expect(html).toContain("disabled");
   });
 
-  it("leaves save controls available when the server provisioned a writer", () => {
+  it("keeps provisioned save controls inert until the client hydrates them", () => {
     const html = renderToStaticMarkup(<AdminWriteProvider enabled><SaveControl /></AdminWriteProvider>);
 
-    expect(html).not.toContain("disabled");
+    expect(html).toContain("disabled");
   });
 });

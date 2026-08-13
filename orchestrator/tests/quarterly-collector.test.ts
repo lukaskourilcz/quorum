@@ -61,6 +61,73 @@ async function fixtureRoot() {
 }
 
 describe("quarterly measurement collector", () => {
+  it("measures the four new ventures without converting missing evidence to zero", async () => {
+    const { root, stateRoot } = await fixtureRoot();
+    await writeJson(path.join(root, "config/ventures.json"), JSON.parse(await readFile(path.join(repoRoot, "config/ventures.json"), "utf8")));
+    await writeJson(path.join(stateRoot, "budget/ledger.json"), {
+      schemaVersion: 1,
+      entries: [
+        { ...ledgerEntry("2026-08-13T10:00:00.000Z", "bh-desk", 0.11), ventureId: "booksofhistory" },
+        { ...ledgerEntry("2026-08-13T11:00:00.000Z", "dm-growth", 0.12), ventureId: "door-money" },
+        { ...ledgerEntry("2026-08-13T12:00:00.000Z", "ts-desk", 0.13), ventureId: "tehdejsi-svet" },
+        { ...ledgerEntry("2026-08-13T13:00:00.000Z", "kv-desk", 0.14), ventureId: "kvorum" }
+      ]
+    });
+    await writeJson(path.join(stateRoot, "calendar/2026-08-10.json"), {
+      schemaVersion: "calendar/1",
+      weekOf: "2026-08-10",
+      slots: ["bh-desk", "dm-desk", "ts-desk", "kv-desk"].map((kind, index) => ({
+        at: `2026-08-13T${String(10 + index).padStart(2, "0")}:00:00.000Z`,
+        tz: "Europe/Prague",
+        kind,
+        status: "held"
+      }))
+    });
+    await writeJson(path.join(stateRoot, "ventures/tehdejsi-svet/recommendations/approved.json"), JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/venture-recommendation-tehdejsi.valid.json"), "utf8")));
+    await writeJson(path.join(stateRoot, "ventures/door-money/actions/2026-08-13.json"), JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/action-packet.valid.json"), "utf8")));
+    await writeJson(path.join(stateRoot, "ventures/kvorum/recommendations/draft.json"), JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/kvorum-venture-recommendation.valid.json"), "utf8")));
+    const research = path.join(stateRoot, "ventures/tehdejsi-svet/research-ledger.jsonl");
+    await mkdir(path.dirname(research), { recursive: true });
+    const briefHash = "b".repeat(64);
+    await writeFile(research, [
+      JSON.stringify({ schemaVersion: "ts-research-ledger/1", kind: "purchase", topicKey: "synthetic-topic", briefHash, cycleId: "ts-cycle", provider: "fixture", model: "fixture", startedAt: "2026-08-13T09:00:00.000Z", completedAt: "2026-08-13T09:01:00.000Z", tokensIn: 1, tokensOut: 1, searches: 1, costUsd: 0.1, dossierRef: "state/ventures/tehdejsi-svet/dossiers/synthetic.json" }),
+      JSON.stringify({ schemaVersion: "ts-research-ledger/1", kind: "use", topicKey: "synthetic-topic", briefHash, at: "2026-08-14T09:00:00.000Z", recommendationId: "synthetic-recommendation" })
+    ].join("\n") + "\n");
+    await writeJson(path.join(stateRoot, "kvorum/source-quota/apify.json"), {
+      schemaVersion: "kvorum-apify-quota/1",
+      month: "2026-08",
+      shareCapUsd: 2,
+      estimatedUsedUsd: 0,
+      sharedAccountUsedUsd: null,
+      reservedPerRun: 0.151
+    });
+
+    const result = await collectQuarterlyMeasurements({
+      repoRoot: root,
+      stateRoot,
+      kpiSet,
+      now: new Date("2026-08-21T12:00:00.000Z"),
+      metricsIngestionEnabled: false,
+      mmaFilesIndexingEnabled: false
+    });
+    expect(result.measurements).toMatchObject({
+      "state/meetings#door_money_desk_valid_result_rate": 1,
+      "state/meetings#kvorum_desk_reliability_rate": 1,
+      "state/ventures/tehdejsi-svet/cycles#completed_or_stretched_rate": 1,
+      "state/ventures/tehdejsi-svet/recommendations#language_parity_rate": 1,
+      "state/ventures/tehdejsi-svet/research-ledger.jsonl#used_paid_brief_rate": 1,
+      "state/ventures/tehdejsi-svet/research-ledger.jsonl#maximum_monthly_spend_usd": 0.1,
+      "state/budget/ledger.json#booksofhistory_maximum_monthly_model_usd": 0.11,
+      "state/budget/ledger.json#door_money_maximum_monthly_model_usd": 0.12,
+      "state/budget/ledger.json#tehdejsi_svet_maximum_monthly_model_usd": 0.13,
+      "state/budget/ledger.json#kvorum_model_spend_usd": 0.14,
+      "state/kvorum/source-quota/apify.json#monthly_spend_usd": 0
+    });
+    expect(result.measurements["state/ventures/door-money/actions#completed_per_week"]).toBeGreaterThan(0);
+    expect(result.measurements["state/ventures/tehdejsi-svet/recommendations#lowest_monthly_feature_count"]).toBeNull();
+    expect(result.measurements["state/ventures/booksofhistory/research-ledger.jsonl#used_paid_dossier_rate"]).toBeNull();
+  });
+
   it("reports the distinct paid BOOKSOFHISTORY dossiers that became posts", async () => {
     const { root, stateRoot } = await fixtureRoot();
     const first = JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/bh-research-ledger.valid.json"), "utf8"));

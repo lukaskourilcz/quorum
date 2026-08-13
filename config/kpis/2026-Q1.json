@@ -869,6 +869,78 @@
       "pace": "level"
     },
     {
+      "id": "tehdejsi-svet.cycle-reliability",
+      "venture": "tehdejsi-svet",
+      "name": "Two-day cycles completed or honestly stretched",
+      "metric_source": "state/ventures/tehdejsi-svet/cycles#completed_or_stretched_rate",
+      "target": 0.9,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": true,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "tehdejsi-svet.features-per-month",
+      "venture": "tehdejsi-svet",
+      "name": "Lowest completed-month approved feature count",
+      "metric_source": "state/ventures/tehdejsi-svet/recommendations#lowest_monthly_feature_count",
+      "target": 8,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "tehdejsi-svet.research-efficiency",
+      "venture": "tehdejsi-svet",
+      "name": "Paid briefs used in a recommendation",
+      "metric_source": "state/ventures/tehdejsi-svet/research-ledger.jsonl#used_paid_brief_rate",
+      "target": 0.7,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": false,
+      "ramp_days": 30,
+      "pace": "level"
+    },
+    {
+      "id": "tehdejsi-svet.language-parity",
+      "venture": "tehdejsi-svet",
+      "name": "Approved packages with both Czech and Ukrainian copy",
+      "metric_source": "state/ventures/tehdejsi-svet/recommendations#language_parity_rate",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": true,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "tehdejsi-svet.research-spend-usd",
+      "venture": "tehdejsi-svet",
+      "name": "Tehdejsi svet monthly research spend",
+      "metric_source": "state/ventures/tehdejsi-svet/research-ledger.jsonl#maximum_monthly_spend_usd",
+      "target": 2,
+      "direction": "at-most",
+      "unit": "usd",
+      "critical": true,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "tehdejsi-svet.model-spend-usd",
+      "venture": "tehdejsi-svet",
+      "name": "Highest monthly Tehdejsi svet model spend",
+      "metric_source": "state/budget/ledger.json#tehdejsi_svet_maximum_monthly_model_usd",
+      "target": 4,
+      "direction": "at-most",
+      "unit": "usd",
+      "critical": true,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
       "id": "kvorum.desk-reliability",
       "venture": "kvorum",
       "name": "Days the desk held or recorded an honest quiet outcome",

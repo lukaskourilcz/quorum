@@ -43,6 +43,14 @@ function validSnapshot() {
       currency: "USD",
       api: { month: "2026-08", monthlyUsd: 0, cumulativeUsd: 0, receiptDetail: "private" },
       fixed: { monthlyUsd: 0, cumulativeUsd: 0, byCategory: [], invoices: ["private"] },
+      byVenture: [{
+        ventureId: "tehdejsi-svet",
+        modelUsd: 0,
+        researchUsd: null,
+        sourceUsd: null,
+        sourceNote: null,
+        privateReceipt: "private"
+      }],
       totalMonthlyBurnUsd: 0,
       cumulativeSpendUsd: 0
     },
@@ -59,6 +67,13 @@ describe("public Money snapshot", () => {
     expect(serialized).not.toContain("private");
     expect(serialized).not.toContain("credentials");
     expect(serialized).not.toContain("privateMetricSource");
+    expect(parsed?.costs.byVenture).toEqual([{
+      ventureId: "tehdejsi-svet",
+      modelUsd: 0,
+      researchUsd: null,
+      sourceUsd: null,
+      sourceNote: null
+    }]);
   });
 
   it("rejects malformed and negative money values", () => {

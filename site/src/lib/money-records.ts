@@ -52,6 +52,13 @@ export interface PublicMoneySnapshot {
       cumulativeUsd: number;
       byCategory: Array<{ category: string; monthlyUsd: number; cumulativeUsd: number }>;
     };
+    byVenture: Array<{
+      ventureId: string;
+      modelUsd: number;
+      researchUsd: number | null;
+      sourceUsd: number | null;
+      sourceNote: string | null;
+    }>;
     totalMonthlyBurnUsd: number;
     cumulativeSpendUsd: number;
   };
@@ -139,6 +146,18 @@ function parseCategory(value: unknown): PublicMoneySnapshot["costs"]["fixed"]["b
   return category && monthlyUsd !== null && cumulativeUsd !== null ? { category, monthlyUsd, cumulativeUsd } : null;
 }
 
+function parseVentureCost(value: unknown): PublicMoneySnapshot["costs"]["byVenture"][number] | null {
+  const entry = record(value);
+  if (!entry) return null;
+  const ventureId = text(entry.ventureId);
+  const modelUsd = amount(entry.modelUsd);
+  const researchUsd = nullableAmount(entry.researchUsd);
+  const sourceUsd = nullableAmount(entry.sourceUsd);
+  const sourceNote = entry.sourceNote === null ? null : text(entry.sourceNote);
+  if (!ventureId || modelUsd === null || researchUsd === undefined || sourceUsd === undefined || sourceNote === null && entry.sourceNote !== null) return null;
+  return { ventureId, modelUsd, researchUsd, sourceUsd, sourceNote };
+}
+
 export function parsePublicMoneySnapshot(value: unknown): PublicMoneySnapshot | null {
   const snapshot = record(value);
   const quarter = record(snapshot?.quarter);
@@ -152,11 +171,12 @@ export function parsePublicMoneySnapshot(value: unknown): PublicMoneySnapshot | 
   const start = isoDate(quarter.start);
   const end = isoDate(quarter.end);
   const daysRemaining = amount(quarter.daysRemaining);
-  if (!generatedAt || Number.isNaN(new Date(generatedAt).getTime()) || !quarterId || !/^\d{4}-Q[1-4]$/.test(quarterId) || !start || !end || start > end || daysRemaining === null || !Number.isInteger(daysRemaining) || daysRemaining > 90 || !Array.isArray(quarter.statuses) || !Array.isArray(snapshot.monetization) || !Array.isArray(fixed.byCategory)) return null;
+  if (!generatedAt || Number.isNaN(new Date(generatedAt).getTime()) || !quarterId || !/^\d{4}-Q[1-4]$/.test(quarterId) || !start || !end || start > end || daysRemaining === null || !Number.isInteger(daysRemaining) || daysRemaining > 90 || !Array.isArray(quarter.statuses) || !Array.isArray(snapshot.monetization) || !Array.isArray(fixed.byCategory) || !Array.isArray(costs.byVenture)) return null;
   const statuses = quarter.statuses.map(parseKpi);
   const monetization = snapshot.monetization.map(parseMonetization);
   const byCategory = fixed.byCategory.map(parseCategory);
-  if (statuses.some((entry) => !entry) || monetization.some((entry) => !entry) || byCategory.some((entry) => !entry)) return null;
+  const byVenture = costs.byVenture.map(parseVentureCost);
+  if (statuses.some((entry) => !entry) || monetization.some((entry) => !entry) || byCategory.some((entry) => !entry) || byVenture.some((entry) => !entry)) return null;
   const month = text(api.month);
   const monthlyApiUsd = amount(api.monthlyUsd);
   const cumulativeApiUsd = amount(api.cumulativeUsd);
@@ -175,6 +195,7 @@ export function parsePublicMoneySnapshot(value: unknown): PublicMoneySnapshot | 
       currency: "USD",
       api: { month, monthlyUsd: monthlyApiUsd!, cumulativeUsd: cumulativeApiUsd! },
       fixed: { monthlyUsd: fixedMonthlyUsd!, cumulativeUsd: fixedCumulativeUsd!, byCategory: byCategory as PublicMoneySnapshot["costs"]["fixed"]["byCategory"] },
+      byVenture: byVenture as PublicMoneySnapshot["costs"]["byVenture"],
       totalMonthlyBurnUsd: totalMonthlyBurnUsd!,
       cumulativeSpendUsd: cumulativeSpendUsd!
     },

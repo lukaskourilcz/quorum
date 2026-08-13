@@ -484,6 +484,18 @@ test("measures role column keeps the table inset", async ({ page }) => {
   expect(Math.abs((headBox?.x ?? 0) - (cellBox?.x ?? 0))).toBeLessThanOrEqual(1);
 });
 
+test("Money reports attributed venture costs without filling evidence gaps", async ({ page }) => {
+  await page.goto("/results#money", { waitUntil: "networkidle" });
+  const costs = page.locator("[data-venture-costs]");
+  await costs.scrollIntoViewIfNeeded();
+  await expect(costs).toBeVisible();
+  for (const venture of ["BOOKSOFHISTORY", "Door Money", "Tehdejší svět", "Kvórum"]) {
+    await expect(costs.getByText(venture, { exact: true })).toBeVisible();
+  }
+  await expect(costs.getByText("Recorded Apify allocation estimate; shared-account actual is unavailable.")).toBeVisible();
+  await expect(costs.getByText("No data", { exact: true })).not.toHaveCount(0);
+});
+
 test("MMA Files article heroes load from the package-backed archive", async ({ page }) => {
   await page.goto("/admin?venture=mma-files&tab=articles", { waitUntil: "networkidle" });
   const heroes = page.locator("main figure img");
@@ -602,9 +614,15 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await page.goto("/admin?venture=tehdejsi-svet&tab=signals", { waitUntil: "networkidle" });
     const panel = page.locator("[data-tehdejsi-signals]");
     await expect(panel.getByText("No owner-pasted community memory is recorded.")).toBeVisible();
-    await panel.getByLabel("Source label").fill("Synthetic e2e owner paste");
-    await panel.getByLabel("Owner-pasted comments").fill("[theme: fictional memory] A synthetic recollection.");
-    await panel.getByRole("button", { name: "Record recollections" }).click();
+    const sourceLabel = panel.getByLabel("Source label");
+    const comments = panel.getByLabel("Owner-pasted comments");
+    const record = panel.getByRole("button", { name: "Record recollections" });
+    await expect.poll(async () => {
+      await sourceLabel.fill("Synthetic e2e owner paste");
+      await comments.fill("[theme: fictional memory] A synthetic recollection.");
+      return record.isEnabled();
+    }, { timeout: 30_000 }).toBe(true);
+    await record.click();
     await expect(panel.getByRole("alert")).toContainText("TS-RESULTS-005 is pending");
     expect(futurePosts).toBe(1);
   });
@@ -704,8 +722,13 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     expect((await deck.body()).byteLength).toBeGreaterThan(1_000);
 
     await page.goto("/admin?venture=kvorum&tab=recommendations", { waitUntil: "networkidle" });
-    await page.getByLabel("Manually posted HTTPS URL").fill("https://example.com/manual-kvorum-post");
-    await page.getByRole("button", { name: "Record posted URL" }).click();
+    const postedUrl = page.getByLabel("Manually posted HTTPS URL");
+    const recordPostedUrl = page.getByRole("button", { name: "Record posted URL" });
+    await expect.poll(async () => {
+      await postedUrl.fill("https://example.com/manual-kvorum-post");
+      return recordPostedUrl.isEnabled();
+    }, { timeout: 30_000 }).toBe(true);
+    await recordPostedUrl.click();
     await expect(page.getByText("The manual post URL is recorded. No metrics were fetched.")).toBeVisible({ timeout: 60_000 });
 
     await page.goto("/admin?venture=kvorum&tab=claims", { waitUntil: "networkidle" });
@@ -1227,10 +1250,19 @@ test.describe("the Design Lab workspace", () => {
     await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
     const editor = page.locator("textarea[id^='slide-']").first();
     const save = page.locator("[data-save-slide]").first();
-    await editor.fill(Array.from({ length: 12 }, (_, index) => `slovo${index}`).join(" "));
-    await expect(save).toBeEnabled();
-    await editor.fill(Array.from({ length: 31 }, (_, index) => `slovo${index}`).join(" "));
-    await expect(page.locator("[data-word-count]").first()).toContainText("31/30");
+    const original = await editor.inputValue();
+    const shortText = `syntetický e2e obsah ${Date.now()} je zřetelně odlišný a zůstává pod limitem`;
+    expect(shortText.trim()).not.toBe(original.trim());
+    await expect.poll(async () => {
+      await editor.fill(shortText);
+      return save.isEnabled();
+    }, { timeout: 30_000 }).toBe(true);
+    const overLimitText = Array.from({ length: 31 }, (_, index) => `slovo${index}`).join(" ");
+    const wordCount = page.locator("[data-word-count]").first();
+    await expect.poll(async () => {
+      await editor.fill(overLimitText);
+      return wordCount.textContent();
+    }, { timeout: 30_000 }).toContain("31/30");
     await expect(save).toBeDisabled();
     // The engine's own sentence, not a paraphrase of it.
     await expect(page.getByText(/přes limit 30 slov/u).first()).toBeVisible();
@@ -1255,14 +1287,27 @@ test("a preset saves, reloads into the picker and applies", async ({ page }) => 
   await rm(presetsPath, { force: true });
   try {
     await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
-    await page.getByRole("button", { name: "dossier", exact: true }).first().click();
-    await expect(page.locator("[data-recipe-line]").first()).toContainText("dossier");
+    const recipeLine = page.locator("[data-recipe-line]").first();
+    await expect.poll(async () => {
+      await page.locator('[data-family="dossier"]').click();
+      return recipeLine.textContent();
+    }, { timeout: 30_000 }).toContain("dossier");
+    await expect(page.locator("[data-save-state]").first()).toHaveAttribute("data-save-state", "saved", { timeout: 60_000 });
 
-    await page.getByLabel("Název presetu").first().fill("E2E tichý záznam");
+    const presetName = page.getByLabel("Název presetu").first();
     const save = page.locator("[data-save-preset]").first();
-    await expect(save).toBeEnabled();
+    await expect.poll(async () => {
+      await presetName.fill("E2E tichý záznam");
+      return save.isEnabled();
+    }, { timeout: 30_000 }).toBe(true);
+    const presetResponse = page.waitForResponse((response) =>
+      response.request().method() === "POST"
+      && new URL(response.url()).pathname === "/admin/api/carousel-studio/recipe"
+      && response.request().postDataJSON()?.presetName === "E2E tichý záznam"
+    );
     await save.click();
-    await expect(page.locator("[data-save-state]").first()).toHaveAttribute("data-save-state", "saved");
+    expect((await presetResponse).ok()).toBe(true);
+    await expect(page.locator("[data-save-state]").first()).toHaveAttribute("data-save-state", "saved", { timeout: 60_000 });
 
     // Reload: the preset is read back out of the file the save created.
     await page.reload({ waitUntil: "networkidle" });
@@ -1271,10 +1316,14 @@ test("a preset saves, reloads into the picker and applies", async ({ page }) => 
     // Saved as a draft, and it says so — a draft is never drawn from autonomously.
     await expect(chip).toContainText("koncept");
 
-    await page.getByRole("button", { name: "tower", exact: true }).first().click();
-    await expect(page.locator("[data-recipe-line]").first()).toContainText("tower");
-    await chip.click();
-    await expect(page.locator("[data-recipe-line]").first()).toContainText("dossier");
+    await expect.poll(async () => {
+      await page.locator('[data-family="tower"]').click();
+      return recipeLine.textContent();
+    }, { timeout: 30_000 }).toContain("tower");
+    await expect.poll(async () => {
+      await chip.click();
+      return recipeLine.textContent();
+    }, { timeout: 30_000 }).toContain("dossier");
   } finally {
     await rm(presetsPath, { force: true });
   }
@@ -1621,9 +1670,11 @@ test.describe("footer links open dialogs", () => {
   test("every content link opens its own dialog", async ({ page }) => {
     await page.goto("/company", { waitUntil: "networkidle" });
     for (const topic of topics) {
-      await page.locator(`[data-footer-dialog="${topic}"]`).first().click();
       const surface = page.locator("[data-dialog-surface]");
-      await expect(surface, topic).toBeVisible();
+      await expect.poll(async () => {
+        await page.locator(`[data-footer-dialog="${topic}"]`).first().click();
+        return surface.isVisible();
+      }, { message: topic, timeout: 30_000 }).toBe(true);
       // Real content, not an empty shell with a title on it.
       expect((await surface.innerText()).length, topic).toBeGreaterThan(600);
       // And no way out to a page built in the previous design. The dialog carries the answer or

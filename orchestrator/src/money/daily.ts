@@ -2,6 +2,9 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 import { BudgetLedgerEntrySchema } from "../budget.js";
+import { BhResearchLedgerEntrySchema } from "../contracts/bh-dossier.js";
+import { TsResearchLedgerEntrySchema } from "../contracts/ts-research.js";
+import { VentureRegistrySchema } from "../contracts/venture-registry.js";
 import {
   evaluateQuarterlyKpis,
   runQuarterEndProtocol,
@@ -23,6 +26,40 @@ import {
 import { buildPublicMoneySnapshot, writePublicMoneySnapshot } from "./public.js";
 
 const DAY_MS = 86_400_000;
+
+async function monthlyResearchUsd(input: {
+  file: string;
+  month: string;
+  kind: "booksofhistory" | "tehdejsi-svet";
+}): Promise<number | null> {
+  let raw: string;
+  try {
+    raw = await readFile(input.file, "utf8");
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw error;
+  }
+  const lines = raw.split(/\r?\n/u).filter((line) => line.trim());
+  if (lines.length === 0) return 0;
+  let total = 0;
+  let valid = 0;
+  for (const line of lines) {
+    let value: unknown;
+    try { value = JSON.parse(line); } catch { continue; }
+    if (input.kind === "booksofhistory") {
+      const parsed = BhResearchLedgerEntrySchema.safeParse(value);
+      if (!parsed.success) continue;
+      valid += 1;
+      if (parsed.data.completedAt.startsWith(input.month)) total += parsed.data.costUsd;
+    } else {
+      const parsed = TsResearchLedgerEntrySchema.safeParse(value);
+      if (!parsed.success) continue;
+      valid += 1;
+      if (parsed.data.kind === "purchase" && parsed.data.completedAt.startsWith(input.month)) total += parsed.data.costUsd;
+    }
+  }
+  return valid === 0 ? null : Number(total.toFixed(8));
+}
 
 export interface QuarterlyKpiPacketSummary {
   snapshotRef: "state/kpis/latest.json";
@@ -166,10 +203,15 @@ export async function runDailyMoneyAndKpis(input: {
     await persistMonetizationStates({ root: input.stateRoot, methods: monetization, previous: previousStates, now: input.now })
   );
 
-  const [fixedCosts, budgetLedger, financeLedger] = await Promise.all([
+  const month = input.now.toISOString().slice(0, 7);
+  const [fixedCosts, budgetLedger, financeLedger, ventureRegistry, bhResearchUsd, tsResearchUsd, kvorumQuota] = await Promise.all([
     readFile(path.join(input.repoRoot, "config", "fixed-costs.json"), "utf8").then((raw) => FixedCostRegistrySchema.parse(JSON.parse(raw))),
     readJson<unknown>(input.stateRoot, "budget/ledger.json", { schemaVersion: 1, entries: [] }),
-    readJson<unknown>(input.stateRoot, "finance/ledger.json", { schemaVersion: 1, currency: "USD", entries: [] })
+    readJson<unknown>(input.stateRoot, "finance/ledger.json", { schemaVersion: 1, currency: "USD", entries: [] }),
+    readFile(path.join(input.repoRoot, "config", "ventures.json"), "utf8").then((raw) => VentureRegistrySchema.parse(JSON.parse(raw))),
+    monthlyResearchUsd({ file: path.join(input.stateRoot, "ventures", "booksofhistory", "research-ledger.jsonl"), month, kind: "booksofhistory" }),
+    monthlyResearchUsd({ file: path.join(input.stateRoot, "ventures", "tehdejsi-svet", "research-ledger.jsonl"), month, kind: "tehdejsi-svet" }),
+    readJson<unknown>(input.stateRoot, "kvorum/source-quota/apify.json", null)
   ]);
   const entries = z.object({ schemaVersion: z.literal(1), entries: z.array(BudgetLedgerEntrySchema) }).parse(budgetLedger).entries;
   const publicSnapshot = buildPublicMoneySnapshot({
@@ -178,7 +220,24 @@ export async function runDailyMoneyAndKpis(input: {
     monetization,
     fixedCosts,
     budgetEntries: entries,
-    financeLedger
+    financeLedger,
+    ventureRegistry,
+    ventureEvidenceCosts: {
+      booksofhistory: { researchUsd: bhResearchUsd },
+      "tehdejsi-svet": { researchUsd: tsResearchUsd },
+      kvorum: (() => {
+        const parsed = z.object({
+          schemaVersion: z.literal("kvorum-apify-quota/1"),
+          month: z.string(),
+          estimatedUsedUsd: z.number().nonnegative(),
+          sharedAccountUsedUsd: z.number().nonnegative().nullable()
+        }).passthrough().safeParse(kvorumQuota);
+        if (!parsed.success || parsed.data.month !== month) return { sourceUsd: null, sourceNote: null };
+        return parsed.data.sharedAccountUsedUsd === null
+          ? { sourceUsd: parsed.data.estimatedUsedUsd, sourceNote: "Recorded Apify allocation estimate; shared-account actual is unavailable." }
+          : { sourceUsd: parsed.data.sharedAccountUsedUsd, sourceNote: "Recorded shared-account Apify spend." };
+      })()
+    }
   });
   artifacts.push(await writePublicMoneySnapshot(input.stateRoot, publicSnapshot));
   if (input.writeOwnerNotices === true && await addReadyProposalNotices({ repoRoot: input.repoRoot, methods: monetization })) {

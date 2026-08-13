@@ -139,6 +139,11 @@ describe("public Money snapshot", () => {
         }]
       },
       budgetEntries,
+      ventureRegistry: JSON.parse(await readFile(path.join(repoRoot, "config/ventures.json"), "utf8")),
+      ventureEvidenceCosts: {
+        booksofhistory: { researchUsd: 0.25 },
+        kvorum: { sourceUsd: 0.4, sourceNote: "Recorded source allocation." }
+      },
       financeLedger: {
         schemaVersion: 1,
         currency: "USD",
@@ -161,6 +166,10 @@ describe("public Money snapshot", () => {
       totalMonthlyBurnUsd: 21,
       cumulativeSpendUsd: 41
     });
+    expect(snapshot.costs.byVenture.find((entry) => entry.ventureId === "booksofhistory"))
+      .toMatchObject({ modelUsd: 0, researchUsd: 0.25, sourceUsd: null });
+    expect(snapshot.costs.byVenture.find((entry) => entry.ventureId === "kvorum"))
+      .toMatchObject({ modelUsd: 0, sourceUsd: 0.4 });
     const serialized = JSON.stringify(snapshot);
     expect(serialized).not.toContain("PRIVATE SERVICE NAME");
     expect(serialized).not.toContain("invoice/private-customer");

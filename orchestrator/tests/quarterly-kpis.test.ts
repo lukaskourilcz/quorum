@@ -36,6 +36,16 @@ function set(kpis: QuarterlyKpi[]): KpiSet {
 }
 
 describe("quarterly KPI evaluator", () => {
+  it("registers Tehdejsi svet targets and keeps absent measurements unavailable", async () => {
+    const parsed = KpiSetSchema.parse(JSON.parse(await readFile(path.join(repoRoot, "config/kpis/2026-Q1.json"), "utf8")));
+    const tehdejsi = parsed.kpis.filter((kpi) => kpi.venture === "tehdejsi-svet");
+    expect(tehdejsi).toHaveLength(6);
+    expect(tehdejsi.find((kpi) => kpi.id === "tehdejsi-svet.features-per-month")?.target).toBe(8);
+    const statuses = evaluateQuarterlyKpis({ kpiSet: parsed, measurements: {}, now: new Date("2026-08-18T12:00:00.000Z") })
+      .statuses.filter((status) => status.venture === "tehdejsi-svet");
+    expect(statuses.every((status) => status.actual === null && status.status === "unavailable")).toBe(true);
+  });
+
   it("evaluates the Kvórum seeds without turning missing denominators into zero", async () => {
     const configured = JSON.parse(
       await readFile(path.join(repoRoot, "config/kpis/2026-Q1.json"), "utf8")

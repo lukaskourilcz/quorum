@@ -23,7 +23,13 @@ const ventureLabels: Record<string, string> = {
   fightaiq: "FightAIQ",
   "titty-tuesdays": "Titty Tuesdays",
   goviral: "GoVIRAL",
-  board: "Board"
+  board: "Board",
+  booksofhistory: "BOOKSOFHISTORY",
+  "door-money": "Door Money",
+  "tehdejsi-svet": "Tehdejší svět",
+  kvorum: "Kvórum",
+  "carousel-studio": "Carousel Studio",
+  marketingshark: "marketingShark"
 };
 
 const statusLabels: Record<KpiStatus, string> = {
@@ -202,6 +208,27 @@ export async function MoneySection() {
               <Card><CardContent><p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">API use · {snapshot.costs.api.month}</p><p className="mt-4 text-4xl font-semibold tracking-[-0.05em] tabular-nums">{formatUsd(snapshot.costs.api.monthlyUsd)}</p><p className="mt-3 text-sm text-[var(--fog)]">Cumulative API spend: {formatUsd(snapshot.costs.api.cumulativeUsd)}</p></CardContent></Card>
               <Card><CardContent><p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">Fixed monthly costs</p><p className="mt-4 text-4xl font-semibold tracking-[-0.05em] tabular-nums">{formatUsd(snapshot.costs.fixed.monthlyUsd)}</p>{snapshot.costs.fixed.byCategory.length ? <ul className="mt-4 space-y-2 text-sm text-[var(--fog)]">{snapshot.costs.fixed.byCategory.map((category) => <li className="flex justify-between gap-4" key={category.category}><span className="capitalize">{category.category}</span><span className="tabular-nums">{formatUsd(category.monthlyUsd)}</span></li>)}</ul> : <p className="mt-3 text-sm leading-6 text-[var(--fog)]">No fixed costs have been entered. $0 here is not an estimate.</p>}</CardContent></Card>
             </div>
+            <Card className="mt-5" data-venture-costs>
+              <CardContent className="p-0 md:p-0">
+                <div className="border-b border-[var(--border)] px-5 py-5 md:px-7">
+                  <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">Venture cost evidence · {snapshot.costs.api.month}</p>
+                  <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--fog)]">Model receipts are attributed by venture. Research ledgers and source-account shares stay separate here, so they are visible without being added to burn twice. Missing evidence says No data.</p>
+                </div>
+                <Table>
+                  <thead><tr><TableHead className="first:pl-5 md:first:pl-7">Venture</TableHead><TableHead>Model</TableHead><TableHead>Research</TableHead><TableHead className="last:pr-5 md:last:pr-7">Source share</TableHead></tr></thead>
+                  <tbody>
+                    {snapshot.costs.byVenture.map((cost) => (
+                      <tr key={cost.ventureId}>
+                        <TableCell className="font-semibold first:pl-5 md:first:pl-7">{ventureLabels[cost.ventureId] ?? cost.ventureId}</TableCell>
+                        <TableCell className="tabular-nums">{formatUsd(cost.modelUsd)}</TableCell>
+                        <TableCell className="tabular-nums">{cost.researchUsd === null ? "No data" : formatUsd(cost.researchUsd)}</TableCell>
+                        <TableCell className="last:pr-5 md:last:pr-7"><span className="tabular-nums">{cost.sourceUsd === null ? "No data" : formatUsd(cost.sourceUsd)}</span>{cost.sourceNote ? <p className="mt-1 max-w-sm text-xs leading-5 text-[var(--fog)]">{cost.sourceNote}</p> : null}</TableCell>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </CardContent>
+            </Card>
             <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-5">
               <p className="max-w-2xl text-sm leading-6 text-[var(--fog)]">Results explains the delivery and quality measurements behind several quarterly targets.</p>
               <Link className={buttonVariants({ variant: "secondary" })} href="/results#measures">See Results <ArrowRight aria-hidden="true" className="size-4" /></Link>

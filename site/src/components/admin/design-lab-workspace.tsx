@@ -295,7 +295,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
             <div className="w-full overflow-x-auto" data-horizontal-scroll>
               <div className="flex flex-wrap gap-2">
                 {FAMILIES.map((family) => (
-                  <button aria-pressed={recipe.family === family} className={chipClass(recipe.family === family)} key={family} onClick={() => change({ family })} type="button">
+                  <button aria-pressed={recipe.family === family} className={chipClass(recipe.family === family)} data-family={family} key={family} onClick={() => change({ family })} type="button">
                     {family}
                   </button>
                 ))}
