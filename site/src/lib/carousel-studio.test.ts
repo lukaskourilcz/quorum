@@ -1,8 +1,14 @@
-import { describe, expect, it, vi } from "vitest";
-import { CAROUSEL_BRANDS, renderCarouselPng } from "@boardlessai/carousel-studio";
-import { readCarouselStudio, previewPayload } from "./carousel-studio";
+import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { CAROUSEL_BRANDS, SEED_TEMPLATES, renderCarouselPng } from "@boardlessai/carousel-studio";
+import { readCarouselStudio, readPublicCarouselStudio, previewPayload } from "./carousel-studio";
 
 vi.mock("server-only", () => ({}));
+
+const temporaryRoots: string[] = [];
+afterEach(async () => Promise.all(temporaryRoots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
 
 describe("Carousel Studio gallery and showcase", () => {
   it("exposes twelve checked live seed templates across all brands and formats", async () => {
@@ -33,5 +39,25 @@ describe("Carousel Studio gallery and showcase", () => {
     });
     expect(renders).toHaveLength(2);
     expect(renders.every((render) => render.png.byteLength > 1_000 && /^[a-f0-9]{64}$/.test(render.pngHash))).toBe(true);
+  });
+
+  it("keeps public previews on compiled fixtures when admin has unpublished state", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "carousel-public-boundary-"));
+    temporaryRoots.push(root);
+    const proposal = { ...SEED_TEMPLATES[0]!, id: "unpublished-review-template", status: "draft" as const };
+    await mkdir(path.join(root, "state/ventures/carousel-studio/templates/unpublished-review-template"), { recursive: true });
+    await writeFile(
+      path.join(root, "state/ventures/carousel-studio/templates/unpublished-review-template/1.0.0.json"),
+      JSON.stringify(proposal),
+      "utf8"
+    );
+
+    const admin = await readCarouselStudio(root);
+    const publicSnapshot = readPublicCarouselStudio();
+    expect(admin.templates.some((entry) => entry.source === "proposal")).toBe(true);
+    expect(publicSnapshot.templates).toHaveLength(SEED_TEMPLATES.length);
+    expect(publicSnapshot.templates.every((entry) => entry.source === "seed" && entry.ratings.length === 0)).toBe(true);
+    expect(publicSnapshot.inspirationLinks).toEqual([]);
+    expect(publicSnapshot.templates.some((entry) => entry.template.id === proposal.id)).toBe(false);
   });
 });

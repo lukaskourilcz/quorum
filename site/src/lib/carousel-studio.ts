@@ -153,6 +153,44 @@ export async function previewPayloadForBrand(
   return { ...base, strings: { ...base.strings, [slot]: resolved.line[locale] } };
 }
 
+/**
+ * The public gallery is a closed, filesystem-free projection of committed seed templates.
+ *
+ * Admin may inspect draft proposals, owner lifecycle choices, ratings and inspiration links. None
+ * of those records belongs on a public route before the owner publishes it, even when the preview
+ * copy itself is synthetic. Keeping this function synchronous makes accidental state reads hard
+ * to reintroduce: its only inputs are the compiled template and brand registries.
+ */
+export function readPublicCarouselStudio(): CarouselStudioSnapshot {
+  const templates = SEED_TEMPLATES.map((template): CarouselStudioTemplate => {
+    const checks = Object.values(CAROUSEL_BRANDS).flatMap((brand) => previewFormats(template).map((format) => {
+      const details = validateTemplateForBrand(template, brand, format);
+      return { brand: brand.id, format, passed: details.every((check) => check.status === "pass"), details };
+    }));
+    return {
+      template,
+      source: "seed",
+      contentHash: hash(template),
+      checks,
+      allChecksPass: checks.every((entry) => entry.passed),
+      ratings: []
+    };
+  }).sort((left, right) => left.template.id.localeCompare(right.template.id) || right.template.version.localeCompare(left.template.version));
+  return {
+    templates,
+    brands: Object.values(CAROUSEL_BRANDS).map((brand) => ({ id: brand.id, name: brand.name })),
+    formats: previewFormats(),
+    inspirationLinks: []
+  };
+}
+
+/** A public preview can address only a committed seed, never an unpublished proposal record. */
+export function findPublicCarouselTemplate(id: string, version: string): CarouselTemplate | null {
+  return readPublicCarouselStudio().templates.find(
+    (entry) => entry.template.id === id && entry.template.version === version
+  )?.template ?? null;
+}
+
 export async function readCarouselStudio(root = repositoryRoot): Promise<CarouselStudioSnapshot> {
   const [proposals, overrideValue, inspirationValue, ratings] = await Promise.all([
     proposalTemplates(root),

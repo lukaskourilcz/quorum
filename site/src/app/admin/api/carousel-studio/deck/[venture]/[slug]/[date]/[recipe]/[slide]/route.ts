@@ -12,6 +12,7 @@ import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request
 import { readDesignLab } from "@/lib/design-lab";
 import { readArticleHeroPng } from "@/lib/admin-deck-hero";
 import { tehdejsiRenderInput } from "@/lib/tehdejsi-render";
+import { TehdejsiRenderRefusal } from "@/lib/tehdejsi-render";
 
 export const dynamic = "force-dynamic";
 
@@ -53,6 +54,7 @@ export async function GET(
     (entry) => entry.venture === venture && entry.slug === slug && entry.date === date
   );
   if (!deck) return Response.json({ error: "Slide not found." }, { status: 404 });
+  if (!deck.renderable) return Response.json({ error: "Deck is incomplete and cannot be rendered." }, { status: 422 });
 
   const hero = await readArticleHeroPng(deck.venture, deck.slug, deck.date);
 
@@ -90,6 +92,9 @@ export async function GET(
       }
     });
   } catch (error) {
+    if (error instanceof TehdejsiRenderRefusal) {
+      return Response.json({ error: error.message }, { status: 422 });
+    }
     // Said out loud, because the silent version of this line is why a deployed renderer that
     // could not load its image library went unexplained: every slide answered 500 and the only
     // record anywhere was the status code.

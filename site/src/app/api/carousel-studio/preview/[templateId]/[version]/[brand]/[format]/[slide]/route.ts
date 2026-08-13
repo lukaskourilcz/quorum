@@ -3,7 +3,7 @@ import {
   CarouselFormatSchema,
   renderCarouselSvg
 } from "@boardlessai/carousel-studio";
-import { findCarouselTemplate, previewPayloadForBrand } from "@/lib/carousel-studio";
+import { findPublicCarouselTemplate, previewPayloadForBrand } from "@/lib/carousel-studio";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +12,7 @@ export async function GET(
   { params }: { params: Promise<{ templateId: string; version: string; brand: string; format: string; slide: string }> }
 ): Promise<Response> {
   const { templateId, version, brand, format, slide } = await params;
-  const template = await findCarouselTemplate(templateId, version);
+  const template = findPublicCarouselTemplate(templateId, version);
   const brandTokens = CAROUSEL_BRANDS[brand as keyof typeof CAROUSEL_BRANDS];
   const parsedFormat = CarouselFormatSchema.safeParse(format);
   const slideIndex = Number(slide) - 1;

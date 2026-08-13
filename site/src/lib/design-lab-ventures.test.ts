@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CAROUSEL_BRANDS } from "@boardlessai/carousel-studio";
-import { designLabVentureIds, isDesignLabVenture } from "@/lib/design-lab-ventures";
+import { designLabVentureIds, isDesignLabVenture, readDesignLabVenture } from "@/lib/design-lab-ventures";
 
 /**
  * The Design Lab's sections are the renderer's brand registry, and that is the whole point.
@@ -21,6 +21,12 @@ describe("the Design Lab's venture sections", () => {
     // three typefaces, which is exactly what their section is for.
     for (const id of ["caught-up", "mma-files", "devshark", "geoshark", "titty-tuesdays", "tehdejsi-svet"]) {
       expect(designLabVentureIds()).toContain(id);
+    }
+  });
+
+  it("opens article rails for every summary-producing venture", async () => {
+    for (const id of ["caught-up", "mma-files", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet"] as const) {
+      expect((await readDesignLabVenture(id)).publishesArticles, id).toBe(true);
     }
   });
 
