@@ -8,7 +8,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-08-12.
+Updated: 2026-08-13.
 
 ---
 
@@ -57,16 +57,6 @@ is the single thing standing between a proven path and a working one.
   the Czech AI shows you pick. Approve, edit or fill; every entry must carry its exact hostname,
   and a test fails if an enabled host is missing from `config/network-allowlist.json`.
   [imp:3] [owner:me] [time:30m] [kind:decision]
-
-- [ ] **Add `THE_ODDS_API_KEY` to Actions secrets** (and optionally `CITO_API_KEY`) — the odds key
-  supplies an optional price and calibration input; it never bypasses the independent-source,
-  confirmed-bout or fighter-eligibility gates, so an empty analysis run can remain the truthful
-  result. `THE_ODDS_API_KEY` stops at the provider's zero quota by design. `CITO_API_KEY` is bounded
-  below 500 calls/month and 200/day, and one run reserves two calls — `CITO_MONTHLY_CALL_CAP`,
-  `CITO_DAILY_CALL_CAP` and `CITO_CALL_RESERVATION` in
-  `orchestrator/src/portfolio/evidence.ts`. Do not add GNews, Guardian, NYTimes or any paid data
-  API; Wikimedia and reviewed imports are the $0 baseline.
-  [imp:5] [owner:me] [time:10m] [kind:setup]
 
 - [ ] **Set the `/admin` credentials in Vercel production** — several items on this list run
   through a door that will not currently open: the idea ratings, the fixed-cost registry, the deck
@@ -133,34 +123,10 @@ is the single thing standing between a proven path and a working one.
   them. Rating them is the whole of what starts the loop.
   [imp:4] [owner:me] [time:20m] [kind:decision]
 
-- [ ] **Fire marketingShark's first live `ms-daily` run** — marketingShark has never made a real
-  model call. The implementation session had no API key reachable from it, so everything was proved
-  against a labelled fixture: `pnpm cycle -- --phase ms-daily --dry` produced a complete package,
-  both carousels rendered to checked SVG, four draft queue items, the ledger entry and the meeting
-  record. What has not happened is CHUM actually writing a word. Run the `cycle.yml` workflow
-  manually with phase `ms-daily`, or run it locally with a key in `.env`. It costs about $0.05. If
-  the output is poor that is a prompt problem and the truth gates will catch the dishonest parts —
-  but you have to look. [imp:4] [owner:me] [time:5m] [kind:deploy]
-
-- [x] **Create a fal.ai account and arm the illustration rung** — done 2026-08-08: the owner
-  created the account, added `FAL_KEY`, prepaid the minimum credit and set
-  `ARTICLE_ILLUSTRATION_ENABLED=true`, all before the build ran. The rung therefore goes live
-  the moment IMG-10's code and `cycle.yml` mapping reach `main`, which they did on 2026-08-09 —
-  there is no separate arming step left. `cycle.yml` reads the flag from a secret or a repository
-  variable, whichever holds it. First proof is the first scheduled cycle after the merge: its run
-  report must show the rung armed; if it still reads dark, neither name matches where the values
-  were put. [imp:3] [owner:me] [time:10m] [kind:setup]
-
 - [ ] **Record the fal.ai prepaid credit in the finance state** — the prepayment on 2026-08-08
   is real operating spend under the $30 all-in cap, and only the owner records payments: add the
   amount and date where LEDGER reconciles (`state/treasury/` / `state/FINANCE.md`) so the monthly
   numbers include it. [imp:3] [owner:me] [time:5m] [kind:decision]
-
-- [x] **Optionally add `PEXELS_API_KEY` and `PIXABAY_API_KEY`** — done: the owner added both
-  Actions secrets on 2026-08-08, and `cycle.yml` already maps them into the run, so the wider
-  licensed photo pool is live for the article-image programme
-  (`state/decisions/2026-08-08-article-image-fit.md`).
-  [imp:4] [owner:me] [time:5m] [kind:setup]
 
 - [ ] **Finish the Vercel half of the aifirst credential audit** — the retired `ANTHROPIC_API_KEY`
   Actions secret is deleted; old source, image, promotion, heartbeat and generation-report
@@ -200,20 +166,14 @@ Judgement calls. Nothing is blocked on code for any of these.
   source: D9 and `METRICS_INGESTION_ENABLED=false` stay in force, no platform is read,
   and absent numbers remain unavailable. [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Review and sign or decline the Kvórum founding decision** — the implemented
-  fixture-only venture is described in `docs/KVORUM-VENTURE-DESIGN.md` (Czech politics).
-  Its transient build prompt is gone. Kvórum, BOOKSOFHISTORY, Door Money and Tehdejší svět all
-  wait behind their own founding countersignatures and approvals; nothing runs live before you
-  sign the applicable gates.
+- [ ] **Review and countersign or decline the four 12 August founding decisions** — read
+  `state/decisions/2026-08-12-kvorum-founding.md`,
+  `state/decisions/2026-08-12-booksofhistory-founding.md`,
+  `state/decisions/2026-08-12-door-money-founding.md` and
+  `state/decisions/2026-08-12-tehdejsi-svet-founding.md`. Each implemented venture remains
+  fixture-only until its own countersignature and approvals are complete. Kvórum additionally
+  needs a countersigned capacity reallocation that frees at least `$0.08` before a live desk.
   [imp:4] [owner:me] [time:75m] [kind:decision]
-
-- [ ] **Clear the three remaining venture names and handles** — run the BRAND.md-style checks for
-  "Kvórum", "Door Money" and "BOOKSOFHISTORY": social
-  handles on IG/FB/Threads/X (TikTok where relevant; for BOOKSOFHISTORY decide whether
-  the Czech lane shares the handle or takes a `.cz` variant), trademark screen,
-  collision search. The design documents list fallbacks in their closing "Open
-  questions" sections, and venture ids stay stable if a public name changes.
-  [imp:3] [owner:me] [time:45m] [kind:legal]
 
 - [ ] **Review the facts file and sign or decline `TS-SNAPSHOT-001`** — confirm that
   `state/ventures/tehdejsi-svet/facts.json` contains only facts copied by a
@@ -305,13 +265,6 @@ Judgement calls. Nothing is blocked on code for any of these.
   field, decided at founding, awkward to move later without a decision.
   [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [x] **Run the MMA Files relaunch prompt sequence** — completed 2026-08-09 across the tracker’s
-  twelve MMA Files issues and six quorum issues. The site redesign, Czech-only reader contract,
-  FightAIQ repairs, banner delivery and admin surface, release checks, documentation sweep, and
-  production-build rehearsal all landed on `claude/mma-files-redesign-2sacl9`. The remaining
-  Vercel and indexing decisions are tracked under “Verify once, then leave alone.”
-  [imp:4] [owner:me] [time:30m] [kind:decision]
-
 - [ ] **Walk the thirteen new template families and say which ones you want in rotation** — open
   `/admin?venture=design-lab&tab=studio`, pick a delivered article and click through the chips.
   Thirteen of the twenty-three are new: billboard, broadsheet, zurich, concrete, terminal,
@@ -330,13 +283,6 @@ Judgement calls. Nothing is blocked on code for any of these.
   still say. It is a naming call, not an engineering one, which is why nothing here decided it.
   [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [x] **Confirm one deck design save in production** — done 2026-08-09, and by the owner rather
-  than by a check: `admin: set the caught-up deck design for 2026-08-08 …` on main at 08:03 UTC
-  carries a full recipe — family `masthead`, duotone, 0.9× — written from the deployed admin
-  through the rebuilt persistence path. That commit is the proof for all of it: the write reached
-  GitHub, the article's date is part of what was recorded, and the recipe controls saved what they
-  showed. [imp:3] [owner:me] [time:5m] [kind:setup]
-
 - [ ] **Rename the DNESKAi Vercel project and decide on a domain** — DNESKAi is the wordmark in the
   navigation, the footer and print; the page title, the social cards, the structured data and the
   Atom feed still say "Caught Up", which was your call and is not a bug. The deployment is still at
@@ -353,16 +299,6 @@ Judgement calls. Nothing is blocked on code for any of these.
   feeds the non-API half of the all-in total measured against the $30 cap (`allInNonApiSpentUsd` in
   `orchestrator/src/budget.ts`), so a wrong answer makes the company look cheaper than it is. Do
   not enter example prices. [imp:3] [owner:me] [time:15m] [kind:setup]
-
-- [ ] **Merge `claude/article-image-selection-61rs70` in the aifirst repository** — DNESKAi's
-  validator accepts only `photo` and `svg` as an image origin, so the first edition whose ladder
-  reaches the generated illustration would be refused at delivery with `schema_invalid`. The
-  branch adds the third value and its licence to the contract schema and the TypeScript
-  validator, and extends the byte check to cover it: an illustration that arrived as SVG is
-  still refused, and the plate arriving as WebP still is. Its own `vitest lib/delivery` is green
-  at 14, including a real WebP illustration reaching `written`. The illustration rung is armed
-  in Actions, so this is worth doing before the next edition that needs it.
-  [imp:3] [owner:me] [time:5m] [kind:deploy]
 
 - [ ] **Merge `claude/article-image-selection-61rs70` in the mma-files repository** — the two
   wrong heroes are corrected on this side and cannot reach the magazine until that branch is on
@@ -398,12 +334,6 @@ Judgement calls. Nothing is blocked on code for any of these.
   material. The warning appears in the room's own daily brief as the date approaches.
   [imp:2] [owner:me] [time:60m] [kind:content]
 
-- [ ] **Sign or decline the six visual-loop approvals** — the Titty Tuesdays image pipeline in
-  `docs/TITTY-TUESDAYS-VISUAL-LOOP.md` ends with six `HUMAN_APPROVAL` items: first image spend at a
-  $2.00 monthly ceiling, the model role, public addressability of proposal bytes, the doctrine
-  checklist, the batch shape, the contract. Nothing generates an image until all six are signed.
-  [imp:3] [owner:me] [time:20m] [kind:decision]
-
 - [ ] **Decide the two efficiency-review calls.** Both were measured against the ledger and both
   are product decisions rather than engineering ones:
   1. *May the DNESKAi edition arrive at 09:00?* Every delivered edition except 6 August needed the
@@ -418,9 +348,9 @@ Judgement calls. Nothing is blocked on code for any of these.
   2. *Do the three backstop sweeps shrink to one?* A Vercel dispatch lands on the hour and does the
      work; a GitHub `schedule` firing lands 13 minutes to 3 hours 20 late and exits a guard. Each
      sweep can only rescue a slot still inside its 6-hour window, and the three fixed times
-     (`55 3`, `55 11`, `55 19` UTC in `cycle.yml`) already leave the 06:00, 07:00, 14:00 and 22:00
-     slots effectively uncovered. Appending the sweep's "any unopened slot still in window?" check
-     as a $0 post-step of every punctual run gives thirteen checks a day instead of three, with
+     (`55 3`, `55 11`, `55 19` UTC in `cycle.yml`) still leave edge slots effectively uncovered.
+     Appending the sweep's "any unopened slot still in window?" check
+     as a $0 post-step of every punctual run gives eighteen checks a day instead of three, with
      coverage that tracks the schedule automatically, and leaves a single midday dead-man's entry.
   [imp:3] [owner:me] [time:15m] [kind:decision]
 
@@ -430,7 +360,7 @@ Judgement calls. Nothing is blocked on code for any of these.
   said the asymmetry more plainly. The day performance does not depend on the bay either way.
   [imp:2] [owner:me] [time:10m] [kind:decision]
 
-- [ ] **Decide Board HQ's roster length** — the opened room lists all 17 roles scoped `global`,
+- [ ] **Decide Board HQ's roster length** — the opened room lists all 23 roles scoped `global`,
   correct by the registry but a long column beside rooms showing two or three. Restricting it to
   the council is a one-line change. [imp:2] [owner:me] [time:5m] [kind:decision]
 
@@ -477,8 +407,8 @@ Judgement calls. Nothing is blocked on code for any of these.
   depend on them; replace the files at the same names and nothing else changes.
   [imp:2] [owner:me] [time:2h] [kind:content]
 
-- [ ] **Portraits for the roles that have none** — 27 of 46 registered roles have an approved
-  portrait. The rest fall back to an initials tile on the team panel and to the anonymous
+- [ ] **Portraits for the roles that have none** — 27 of 49 registered roles have an approved
+  portrait; 22 still fall back to an initials tile on the team panel and to the anonymous
   silhouette in the workspace player, which is honest but plain.
   [imp:1] [owner:me] [time:1h] [kind:content]
 
@@ -554,9 +484,10 @@ Roughly a month out. Nothing here is needed until a channel actually opens, and 
   | MMA Files | `MMA_FILES_THREADS_ACCESS_TOKEN`, `MMA_FILES_INSTAGRAM_ACCESS_TOKEN` | `MMA_FILES_THREADS_USER_ID`, `MMA_FILES_INSTAGRAM_USER_ID` |
   | Titty Tuesdays | `TITTY_TUESDAYS_THREADS_ACCESS_TOKEN`, `TITTY_TUESDAYS_INSTAGRAM_ACCESS_TOKEN` | `TITTY_TUESDAYS_THREADS_USER_ID`, `TITTY_TUESDAYS_INSTAGRAM_USER_ID` |
 
-  BOOKSOFHISTORY is intentionally absent from this credential table. Its owner creates
-  any approved Czech and English profiles, reviews the drafts and posts by hand; no
-  BOOKSOFHISTORY platform credential enters this repository.
+  BOOKSOFHISTORY, Door Money, Kvórum and Tehdejší svět are intentionally absent from this
+  credential table. Their owner may create only separately approved profiles, reviews every draft
+  and posts by hand; none of those ventures has a platform credential, publisher or autopublish
+  path in this repository.
 
   Decision `social-2026-08a` keeps all of this closed until each magazine has rendered ten articles.
   `state/social/activation.json` reads DNESKAi 2/7, MMA Files 3/10 and Titty Tuesdays 0/4 — the
@@ -584,15 +515,12 @@ Nothing here needs your hands. It is recorded so it is not lost.
   `RoomStayedShut` family. Keep the work behavior-neutral and one extracted module per commit.
   [imp:2] [owner:ai] [time:3h] [kind:deploy]
 
-- [ ] **Two admin journeys retry, and it would be better if they did not** — `admin rating
-  persists` and `admin login explains errors` sit at 117 and 118 of 168 in a single-worker run, and
-  they are the only two that drive a real write and a real session change. They fail together and
-  late, and the login one reports `Received string: ""` for the page URL — an empty URL is a dead
-  page, not a failed assertion, so this is the browser giving out rather than the app misbehaving.
-  In isolation the rating journey passes in about 35 seconds. They carry `retries: 2` and nothing
-  else in the suite does; a real regression still fails every attempt. The proper fix is a fresh
-  browser context for the heavy admin journeys, or sharding the suite.
-  [imp:2] [owner:ai] [time:45m] [kind:deploy]
+- [ ] **Repair marketingShark's live response contract** — paid `ms-daily` calls on 8 and 12 August
+  both reached Anthropic and then closed `NO_ACTION` with `model-output-invalid`; the ledger records
+  `$0.035138` and `$0.035142`. Reproduce the returned shape without logging provider prose, align
+  CHUM's schema and prompt, and keep the fail-closed draft-only posture. Prove one synthetic valid
+  package and one malformed response; do not rerun the paid room merely to force output.
+  [imp:3] [owner:ai] [time:45m] [kind:deploy]
 
 - [ ] **Root `pnpm test` flakes under its own concurrency** — it runs three workspaces at once,
   under which `orchestrator/tests/studio-lifecycle.test.ts` and `src/social/pack.test.ts` exceed
@@ -747,9 +675,11 @@ secrets, read by `.github/workflows/cycle.yml`. A missing variable is not an err
 records a skip or drops to a fixture-only dry pass, and costs $0 either way — which is why a
 misconfigured repository looks healthy and produces nothing. Which kind you get:
 `CAUGHT_UP_LIVE_ENABLED` forces the dry pass; `PORTFOLIO_LIVE_ENABLED`, `MMA_FILES_LIVE_ENABLED`,
-`FIGHTAIQ_LIVE_ENABLED` and `FIGHTAIQ_ANALYSIS_ENABLED` set `skip`. `AUTONOMY_KILL_SWITCH` works the
-other way — it is a job-level `if`, so only setting it to `true` stops anything, and GitHub skips
-the job before any record is written. Since 2 August a skipped slot is written to
+`FIGHTAIQ_LIVE_ENABLED` and `FIGHTAIQ_ANALYSIS_ENABLED` set `skip`. The four newer venture rooms
+share `PORTFOLIO_LIVE_ENABLED`; their founding and approval gates still fail closed, so there is no
+separate live variable for BOOKSOFHISTORY, Door Money, Kvórum or Tehdejší svět.
+`AUTONOMY_KILL_SWITCH` works the other way — it is a job-level `if`, so only setting it to `true`
+stops anything, and GitHub skips the job before any record is written. Since 2 August a skipped slot is written to
 `state/meetings/skips/` and shown on the calendar as **Skipped** with its reason.
 
 | Variable | Set to | Unlocks |
@@ -767,6 +697,7 @@ skips. Leave `SOCIAL_KILL_SWITCH` as it is — it beats every per-channel unlock
 Secrets for any model call: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`. Publishing additionally needs
 `DELIVERY_APP_ID` and `DELIVERY_APP_PRIVATE_KEY`. The six variables above and both model keys were
 confirmed present on 2026-08-02; the two delivery App secrets were already working before that.
+`THE_ODDS_API_KEY` and the optional `CITO_API_KEY` were also confirmed present on 2026-08-02.
 
 ### Diagnosing an empty day
 
@@ -804,11 +735,13 @@ confirmed present on 2026-08-02; the two delivery App secrets were already worki
 
 ### The day, and what it costs
 
-Fourteen slots: 05:00 edition production with a 09:00 retry, 06:00 board, 07:00 marketingShark
-carousel room, 08:00 fight data check, 09:00 story meeting, 10:00 article production, 11:00
-marketing, 12:00 BOOKSOFHISTORY desk, 13:00 GoVIRAL trend room (Mondays only — the other six
-days cost $0), 14:00 checkpoint,
-17:00 DNESKAi product room, 19:00 model check, 20:00 desk review, 22:00 checkpoint. No full day
+Eighteen primary hourly duties, plus an edition retry at 09:00: 05:00 edition production, 06:00 board, 07:00
+marketingShark carousel room, 08:00 fight data check, 09:00 story meeting, 10:00 article
+production, 11:00 Titty Tuesdays marketing, 12:00 BOOKSOFHISTORY desk, 13:00 GoVIRAL trend room
+(Mondays only — the other six days cost $0), 14:00 checkpoint, 15:00 Door Money desk, 16:00 Door
+Money growth room (Thursdays only), 17:00 DNESKAi product room, 18:00 Tehdejší svět desk, 19:00
+model check, 20:00 desk review, 21:00 Kvórum desk and 22:00 checkpoint. Vercel carries paired UTC
+cron entries for Prague daylight-saving time; `cycle.yml` keeps three backstop sweeps. No full day
 under this clock has been measured: 6 August came to $0.363 across six slots and 4 August to $0.412
 across seven, both against a $1.00 daily pace and the $30 all-in monthly cap from `budget-2026-08e`.
 marketingShark adds about 6c to a day. BOOKSOFHISTORY advances one phase per working
@@ -818,6 +751,29 @@ month, while a shelf or stretched day may cost `$0`.
 ---
 
 ## Recently finished
+
+- **Four venture programmes are implemented but still fixture-only**, 2026-08-13. Kvórum,
+  BOOKSOFHISTORY, Door Money and Tehdejší svět now have bounded desks, contracts, admin surfaces
+  and tests. Their founding countersignatures, named approvals and owner-created accounts remain
+  open above; implementation granted no live, publishing, source, treasury or channel authority.
+- **The completed setup checks left the live list**, 2026-08-13. GitHub confirms
+  `THE_ODDS_API_KEY`, `CITO_API_KEY`, `FAL_KEY`, `PEXELS_API_KEY` and `PIXABAY_API_KEY` are present;
+  the fal.ai illustration variable is enabled. Its prepaid amount still needs entering in finance
+  state and remains open above.
+- **marketingShark made its first live model call**, 2026-08-08. It spent `$0.035138` and failed
+  closed as `model-output-invalid`; a second call on 2026-08-12 did the same at `$0.035142`. The
+  completed owner action is retired and the response-contract repair is now an agent task.
+- **The MMA Files relaunch programme completed**, 2026-08-09. Its twelve consumer issues and six
+  quorum issues landed; production settings and indexing remain separately owner-gated.
+- **The first production deck recipe save reached GitHub**, 2026-08-09. The deployed admin saved
+  the `masthead` family, duotone phase and `0.9×` scale for the 2026-08-08 DNESKAi deck.
+- **The aifirst illustration-origin branch merged**, 2026-08-09. Commit `4bc270c8` on its `main`
+  accepts the bounded raster illustration origin and re-checks its bytes and licence.
+- **The two heavy admin journeys no longer hide behind retries**, 2026-08-13. Playwright now uses
+  `retries: 0`; failures are reported on their first attempt.
+- **The Actions image keys and illustration rung were armed**, 2026-08-08. The fal.ai account,
+  prepaid credit and illustration switch were supplied along with the Pexels and Pixabay keys; the
+  article-image implementation reached `main` on 2026-08-09.
 
 - **The engine grew the DNESKAi launch redesign**, 2026-08-09. The writing desk can file an
   edition under a section under a rule strict enough that uncategorised stays the common case,
@@ -841,10 +797,9 @@ month, while a shelf or stretched day may cost `$0`.
   company's decks can look like is the kind of thing an owner should read off a list rather than
   off a diff. Cost: $0. The renderer cannot call a model, by decision D11.
 
-- **The Design Lab has real typefaces, and they are in the repository**, 2026-08-09. Thirty-one static
-  faces under `studio/fonts/`, every one SIL OFL 1.1 with its `OFL.txt` beside it: Archivo and IBM
-  Plex Sans for DNESKAi, Anton and Archivo for MMA Files, Petrona and Karla for Titty
-  Tuesdays, Figtree and Outfit over Public Sans for the two sharks, IBM Plex Mono everywhere. The
+- **The Design Lab has real typefaces, and they are in the repository**, 2026-08-09. Thirty-seven
+  static faces under `studio/fonts/`, every one SIL OFL 1.1 with its `OFL.txt` beside it, serving
+  all nine registered brand skins including the Czech and Cyrillic additions. The
   brands used to name system font stacks and no font file existed, so the render server drew in
   whatever it found. Nothing here needs an account, a licence purchase or a decision from you —
   it is recorded because the choice of typeface is the kind of thing an owner should be able to
@@ -891,9 +846,9 @@ month, while a shelf or stretched day may cost `$0`.
   account, and costs about $0.05 of model spend a week.
 - **The Magazine Incubator is closed.** It sat six times and produced no proposal worth acting on.
   No new magazine will be ideated again — a future venture is founded by a direct registry entry.
-- **Hook copy became one library with one brain.** 49 hooks replace the 16 that lived inline in
-  `config/marketingshark.json`; `docs/hooks/` is the canonical knowledge base and `lint:hooks` runs
-  in CI.
+- **Hook copy became one library with one brain.** The canonical knowledge base now holds 50 quiz,
+  12 news and 16 MMA hooks; `docs/hooks/` documents their surface-specific truth gates and
+  `lint:hooks` runs in CI.
 - **Both magazines are Czech-only**, one writing call each instead of writing English and paying to
   translate it. Nothing indexed broke.
 - **Both magazines publish.** MMA Files delivered its first council-produced article on 2 August,
@@ -920,9 +875,7 @@ The completed DNESKAi redesign, article-image, SI and website-improvement progra
 and their branches removed. The article-image decision remains at
 `state/decisions/2026-08-08-article-image-fit.md`.
 
-Two branches are open in the consumer repositories and are waiting on you, not on code. Both
-carry a validator this side already produces packages for, and both are in the list above:
-`lukaskourilcz/mma-files` `claude/article-image-selection-61rs70` (the image correction, plus the
-new origin value) and `lukaskourilcz/aifirst` `claude/article-image-selection-61rs70` (the new
-origin value). Merging the mma-files one is what lets the two corrected MMA heroes reach the
-magazine.
+One branch is open in a consumer repository and is waiting on you, not on code:
+`lukaskourilcz/mma-files` `claude/article-image-selection-61rs70`. Merging it is what lets the two
+corrected MMA heroes reach the magazine. The matching aifirst branch was merged into its `main` as
+`4bc270c8` on 2026-08-09 and then removed.
