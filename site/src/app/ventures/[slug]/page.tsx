@@ -22,6 +22,7 @@ import { FightAiQVenturePage } from "@/components/fightaiq-venture-page";
 import { CarouselStudioVenturePage } from "@/components/carousel-studio-venture-page";
 import { GoViralVenturePage } from "@/components/goviral-venture-page";
 import { MarketingSharkVenturePage } from "@/components/marketingshark-venture-page";
+import { ReviewedVenturePage, type ReviewedVentureSlug } from "@/components/reviewed-venture-page";
 import {
   opportunities,
   opportunityDimensions
@@ -31,8 +32,15 @@ export function generateStaticParams() {
   // The founding test rejected three sample business ideas, and each of them had a page here
   // that read like a project the company runs. The ideas stay on the record where they were
   // rejected; they stop being routes.
-  return [{ slug: "caught-up" }, { slug: "titty-tuesdays" }, { slug: "goviral" }, { slug: "marketingshark" }, { slug: "fightaiq" }, { slug: "carousel-studio" }];
+  return ["caught-up", "titty-tuesdays", "goviral", "marketingshark", "fightaiq", "carousel-studio", "booksofhistory", "door-money", "tehdejsi-svet", "kvorum"].map((slug) => ({ slug }));
 }
+
+const reviewedMetadata: Record<ReviewedVentureSlug, Metadata> = {
+  booksofhistory: { title: "BOOKSOFHISTORY", description: "Verified stories about books, authors and the history around them, prepared as owner-reviewed drafts." },
+  "door-money": { title: "Door Money", description: "Practical money lessons shaped into bounded, owner-reviewed recommendations and action packets." },
+  kvorum: { title: "Kvórum", description: "Czech political recommendations whose factual claims resolve to recorded evidence." },
+  "tehdejsi-svet": { title: "Tehdejší svět", description: "Czech and Ukrainian historical feature drafts grounded in a verified facts file and released only by their owner." }
+};
 
 export async function generateMetadata({
   params
@@ -57,6 +65,7 @@ export async function generateMetadata({
   if (slug === "marketingshark") return { title: "marketingShark", description: "The daily room that turns one devShark quiz question into a Czech and an English carousel." };
   if (slug === "fightaiq") return { title: "FightAIQ", description: "The UFC and Oktagon data layer that delivers checked fight files to MMA Files." };
   if (slug === "carousel-studio") return { title: "Design Lab", description: "BoardlessAI's deterministic template engine and live layout gallery." };
+  if (slug in reviewedMetadata) return reviewedMetadata[slug as ReviewedVentureSlug];
   const opportunity = opportunities.find((item) => item.slug === slug);
   return {
     description: opportunity?.reason ?? "BoardlessAI test idea.",
@@ -77,6 +86,7 @@ export default async function VentureDetailPage({
   if (slug === "marketingshark") return <MarketingSharkVenturePage />;
   if (slug === "fightaiq") return <FightAiQVenturePage />;
   if (slug === "carousel-studio") return <CarouselStudioVenturePage />;
+  if (slug in reviewedMetadata) return <ReviewedVenturePage slug={slug as ReviewedVentureSlug} />;
   const opportunity = opportunities.find((item) => item.slug === slug);
   if (!opportunity) {
     notFound();

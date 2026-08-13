@@ -14,6 +14,10 @@ const axeRoutes = [
   "/ventures/titty-tuesdays",
   "/ventures/fightaiq",
   "/ventures/carousel-studio",
+  "/ventures/booksofhistory",
+  "/ventures/door-money",
+  "/ventures/kvorum",
+  "/ventures/tehdejsi-svet",
   "/money",
   "/admin?venture=global",
   "/admin?venture=door-money&tab=recommendations",
@@ -766,7 +770,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
   });
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=door-money&tab=recommendations", "/admin?venture=door-money&tab=actions", "/admin?venture=door-money&tab=knowledge", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=booksofhistory&tab=features", "/admin?venture=tehdejsi-svet&tab=features", "/admin?venture=tehdejsi-svet&tab=library", "/admin?venture=tehdejsi-svet&tab=signals", "/admin?venture=carousel-studio&tab=studio"];
+const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/ventures/booksofhistory", "/ventures/door-money", "/ventures/kvorum", "/ventures/tehdejsi-svet", "/money", "/admin?venture=global", "/admin?venture=door-money&tab=recommendations", "/admin?venture=door-money&tab=actions", "/admin?venture=door-money&tab=knowledge", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=booksofhistory&tab=features", "/admin?venture=tehdejsi-svet&tab=features", "/admin?venture=tehdejsi-svet&tab=library", "/admin?venture=tehdejsi-svet&tab=signals", "/admin?venture=carousel-studio&tab=studio"];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },

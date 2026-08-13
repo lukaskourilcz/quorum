@@ -56,7 +56,7 @@ const COPY: Record<string, CardCopy> = {
     group: "Publications and editorial desks",
     color: "#c4b5fd",
     metric: { kind: "files", directory: "state/ventures/booksofhistory/dossiers", label: "research dossiers", recursive: true },
-    href: null
+    href: "/ventures/booksofhistory"
   },
   "door-money": {
     promise: "Practical money lessons shaped into owner-reviewed story recommendations.",
@@ -64,7 +64,7 @@ const COPY: Record<string, CardCopy> = {
     group: "Publications and editorial desks",
     color: "#c4b5fd",
     metric: { kind: "files", directory: "state/ventures/door-money/recommendations", label: "recommendations" },
-    href: null
+    href: "/ventures/door-money"
   },
   "tehdejsi-svet": {
     promise: "Czech and Ukrainian historical explainers grounded in a verified facts file.",
@@ -72,7 +72,7 @@ const COPY: Record<string, CardCopy> = {
     group: "Publications and editorial desks",
     color: "#d9684f",
     metric: { kind: "files", directory: "state/ventures/tehdejsi-svet/drafts", label: "draft recommendations" },
-    href: null
+    href: "/ventures/tehdejsi-svet"
   },
   kvorum: {
     promise: "Czech political claims checked before one recommendation is recorded.",
@@ -80,7 +80,7 @@ const COPY: Record<string, CardCopy> = {
     group: "Publications and editorial desks",
     color: "#f6df45",
     metric: { kind: "files", directory: "state/ventures/kvorum/recommendations", label: "recommendations" },
-    href: null
+    href: "/ventures/kvorum"
   },
   fightaiq: {
     promise: "Sourced fighter files and probabilities whose model version stays visible.",
