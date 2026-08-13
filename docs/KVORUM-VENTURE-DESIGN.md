@@ -1,10 +1,20 @@
 # Kvórum: the Czech politics venture — design
 
-Status: proposed, pre-founding. Nothing in this document runs until the owner countersigns
-`state/decisions/<date>-kvorum-founding.md` and the items in §12 are resolved in
-`state/INBOX.md`. The implementation contract is `docs/KVORUM-CODEX-BUILD-PROMPT.md`, which
-per house convention is scaffolding deleted when executed; the decision record and this
-document outlive it.
+> **What actually shipped, 2026-08-13.** The complete fixture-only Kvórum system exists: registry
+> and 21:00 schedule, TRIBUN/HACEK/AUDIT room, source registries and fixed-field monitor, receipts,
+> clustering and ranking, recommendation and claims stores, deterministic editorial gates, owner
+> approval/correction/result paths, bounded performance learning, GoVIRAL agenda exchange, and the
+> Design Lab-only rendering route. The one-use build prompt was executed and deleted. The founding
+> decision remains uncountersigned and no capacity-reallocation record frees the required `$0.08`;
+> adding the `$0.10` room would take the worst payable day from `$0.98` to `$1.08` against the
+> signed `$1.00` pace. Live source and model work therefore stops at `$0`. `APIFY-ACCOUNT-001`,
+> `KV-APIFY-001`, `KV-SOURCES-002`, `KV-ACCOUNTS-003`, and `KV-EDITORIAL-004` remain pending, so no
+> public identity, account, channel, external monitor or post is claimed. The actor price also
+> changed during implementation: a capped run reserves `$0.151`, so the unchanged `$2.00` share
+> funds at most thirteen reservations, not the daily `$1.80/month` plan below. Promise tracking,
+> Sunday recaps, vote cards, broader monitoring and automated publishing remain unbuilt. Where the
+> standing design below differs, `state/decisions/2026-08-12-kvorum-founding.md` and this block are
+> authoritative.
 
 The shape in one line: **Apify reads one competitor's day, free feeds corroborate it, code
 clusters it, one model call picks 1–2 topics and drafts original takes with cited claims,
