@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-08-13T05:06:49.531Z",
+  "checkedAt": "2026-08-13T05:31:48.211Z",
   "date": "2026-08-13",
   "ventures": [
     {
@@ -36,8 +36,8 @@
   "deploys": [
     {
       "venture": "caught-up",
-      "url": "https://caughtup-ai.vercel.app/data/board/2026-08-12.json",
-      "expected": "2026-08-12",
+      "url": "https://caughtup-ai.vercel.app/data/board/2026-08-13.json",
+      "expected": "2026-08-13",
       "status": 200,
       "live": true
     },
