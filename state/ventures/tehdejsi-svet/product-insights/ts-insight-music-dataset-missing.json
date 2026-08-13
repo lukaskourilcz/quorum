@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "ts-product-insight/1",
+  "id": "ts-insight-music-dataset-missing",
+  "ventureId": "tehdejsi-svet",
+  "title": "No usable music dataset",
+  "finding": "The only song file is an unused, United-States-centred archive. It cannot support Czech or Ukrainian cohort claims and is not an active public runtime source.",
+  "evidence": [
+    {
+      "filePath": "src/data/songs.json",
+      "detail": "Archive-only song records are not suitable for the product's Czech and Ukrainian cohorts."
+    },
+    {
+      "filePath": "src/data/dataSources.json",
+      "detail": "No active public runtime music dataset is registered."
+    }
+  ],
+  "proposedAction": "Treat community memories only as research questions; if the owner commissions a music dataset, verify Czech and Ukrainian era coverage before product adoption.",
+  "status": "proposed",
+  "ownerNote": null,
+  "createdAt": "2026-08-12T12:00:00.000Z",
+  "updatedAt": "2026-08-12T12:00:00.000Z"
+}

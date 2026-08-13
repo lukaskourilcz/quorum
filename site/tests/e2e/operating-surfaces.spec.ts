@@ -206,7 +206,7 @@ test("Tehdejsi svet renders its three bounded admin tabs", async ({ page }) => {
   await expect(page).toHaveURL(/tab=signals/);
   await expect(page.getByRole("heading", { name: "Community memory" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Product insight queue" })).toBeVisible();
-  await expect(page.getByText("0 on this tab")).toBeVisible();
+  await expect(page.getByText("5 on this tab")).toBeVisible();
 });
 
 test("WeekBoard navigates between statically generated weeks", async ({ page }) => {

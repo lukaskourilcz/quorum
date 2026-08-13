@@ -14,9 +14,12 @@ const view: AdminTehdejsiSignalsView = {
   insights: [{
     id: "insight-fixture-map-gap",
     title: "Synthetic map gap",
+    finding: "A fictional map fixture omits a made-up district.",
     status: "proposed",
     proposedAction: "Ask the owner to review a fictional missing district before any product change.",
-    evidenceCount: 2
+    evidence: [{ filePath: "src/data/public/synthetic.json", detail: "Synthetic path evidence." }],
+    ownerNote: null,
+    updatedAt: "2026-08-16T10:00:00.000Z"
   }],
   unreadable: 1,
   pendingHarvests: 2
@@ -35,6 +38,8 @@ describe("Tehdejsi svet signals panel", () => {
     expect(html).toContain("Repeated 4");
     expect(html).toContain("Product insight queue");
     expect(html).toContain("Synthetic map gap");
+    expect(html).toContain("src/data/public/synthetic.json");
+    expect(html).toContain("Accept recommendation");
     expect(html).toContain("1 malformed signal record");
     expect(html).toContain("2 awaiting Sunday");
   });

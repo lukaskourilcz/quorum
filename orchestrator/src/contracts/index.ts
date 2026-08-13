@@ -34,3 +34,4 @@ export * from "./venture-registry.js";
 export * from "./venture-recommendation.js";
 export * from "./visual-weights.js";
 export * from "./tehdejsi-signal.js";
+export * from "./tehdejsi-product-insight.js";

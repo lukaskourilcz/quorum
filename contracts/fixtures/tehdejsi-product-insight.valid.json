@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "ts-product-insight/1",
+  "id": "ts-insight-synthetic-gap",
+  "ventureId": "tehdejsi-svet",
+  "title": "Synthetic coverage gap",
+  "finding": "A fictional fixture dataset has fewer entries in one bounded branch.",
+  "evidence": [
+    {
+      "filePath": "src/data/public/synthetic.json",
+      "detail": "Synthetic path-level evidence for the contract fixture."
+    }
+  ],
+  "proposedAction": "Ask the owner to verify the fictional gap before making a product change.",
+  "status": "proposed",
+  "ownerNote": null,
+  "createdAt": "2026-08-12T12:00:00.000Z",
+  "updatedAt": "2026-08-12T12:00:00.000Z"
+}

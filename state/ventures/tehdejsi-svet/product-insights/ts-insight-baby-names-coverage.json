@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "ts-product-insight/1",
+  "id": "ts-insight-baby-names-coverage",
+  "ventureId": "tehdejsi-svet",
+  "title": "Baby-name coverage misses core cohorts",
+  "finding": "The public baby-name data covers Czechia only and spans 2010–2023, so it cannot support names features for the older Czech and Ukrainian cohorts central to the product.",
+  "evidence": [
+    {
+      "filePath": "src/data/public/babyNames.cz.json",
+      "detail": "The committed public records begin in 2010 and end in 2023."
+    },
+    {
+      "filePath": "src/data/babyNames.ts",
+      "detail": "The loader has no Ukrainian public dataset counterpart."
+    }
+  ],
+  "proposedAction": "Owner may commission a sourced pre-2010 Czech and Ukrainian names dataset; until then, the venture treats names as a research-dependent gap.",
+  "status": "proposed",
+  "ownerNote": null,
+  "createdAt": "2026-08-12T12:00:00.000Z",
+  "updatedAt": "2026-08-12T12:00:00.000Z"
+}

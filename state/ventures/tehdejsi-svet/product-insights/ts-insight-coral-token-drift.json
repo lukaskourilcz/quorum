@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "ts-product-insight/1",
+  "id": "ts-insight-coral-token-drift",
+  "ventureId": "tehdejsi-svet",
+  "title": "Coral token drift",
+  "finding": "The web stylesheet uses #b0492f while the export brand layer uses #d9684f. The social venture follows the export palette but does not resolve the product mismatch.",
+  "evidence": [
+    {
+      "filePath": "src/styles.css",
+      "detail": "The web --coral custom property is #b0492f."
+    },
+    {
+      "filePath": "src/lib/brand.ts",
+      "detail": "The export brand coral is #d9684f."
+    }
+  ],
+  "proposedAction": "Owner selects one canonical coral in the product repository and updates its own web/export surfaces together after visual review.",
+  "status": "proposed",
+  "ownerNote": null,
+  "createdAt": "2026-08-12T12:00:00.000Z",
+  "updatedAt": "2026-08-12T12:00:00.000Z"
+}

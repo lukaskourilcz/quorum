@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "ts-product-insight/1",
+  "id": "ts-insight-product-writer",
+  "ventureId": "tehdejsi-svet",
+  "title": "Forbidden product mutation",
+  "finding": "A poison fixture attempts to grant runtime product access.",
+  "evidence": [
+    {
+      "filePath": "../dontwannaknow/.env",
+      "detail": "Traversal is forbidden."
+    }
+  ],
+  "proposedAction": "Write directly to the product repository.",
+  "status": "implemented-by-agent",
+  "ownerNote": null,
+  "createdAt": "2026-08-12T12:00:00.000Z",
+  "updatedAt": "2026-08-12T11:00:00.000Z",
+  "productToken": "forbidden"
+}

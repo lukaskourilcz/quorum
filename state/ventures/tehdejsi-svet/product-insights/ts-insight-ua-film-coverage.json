@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "ts-product-insight/1",
+  "id": "ts-insight-ua-film-coverage",
+  "ventureId": "tehdejsi-svet",
+  "title": "Ukrainian film-premiere coverage is thin",
+  "finding": "The audited public film-premiere files contain 36 Ukrainian records versus 744 Czech records. That imbalance makes Ukrainian culture stories research-dependent.",
+  "evidence": [
+    {
+      "filePath": "src/data/public/filmPremieres.ua.json",
+      "detail": "The audit counted 36 Ukrainian premiere records."
+    },
+    {
+      "filePath": "src/data/public/filmPremieres.cz.json",
+      "detail": "The comparison file contains 744 Czech premiere records."
+    }
+  ],
+  "proposedAction": "Owner may commission sourced Ukrainian film-premiere coverage before the product relies on this pillar; the venture must not infer missing premieres.",
+  "status": "proposed",
+  "ownerNote": null,
+  "createdAt": "2026-08-12T12:00:00.000Z",
+  "updatedAt": "2026-08-12T12:00:00.000Z"
+}

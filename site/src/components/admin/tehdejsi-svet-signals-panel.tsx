@@ -32,9 +32,12 @@ export interface AdminTehdejsiAudienceRequest {
 export interface AdminTehdejsiProductInsight {
   id: string;
   title: string;
+  finding: string;
   status: "proposed" | "accepted" | "rejected" | "done";
   proposedAction: string;
-  evidenceCount: number;
+  evidence: Array<{ filePath: string; detail: string }>;
+  ownerNote: string | null;
+  updatedAt: string;
 }
 
 export interface AdminTehdejsiSignalsView {
@@ -153,19 +156,47 @@ function ThemesAndRequests({ view }: { view: AdminTehdejsiSignalsView }) {
 }
 
 function InsightQueue({ view }: { view: AdminTehdejsiSignalsView }) {
+  const writesEnabled = useAdminWritesEnabled();
+  const [insights, setInsights] = useState(view.insights);
+  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [notes, setNotes] = useState<Record<string, string>>(() => Object.fromEntries(view.insights.map(({ id, ownerNote }) => [id, ownerNote ?? ""])));
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  async function update(id: string, status: AdminTehdejsiProductInsight["status"]): Promise<void> {
+    if (!writesEnabled || pendingId) return;
+    setPendingId(id); setMessage("Saving owner decision…"); setError("");
+    try {
+      const response = await fetch("/admin/api/tehdejsi-svet/insights", {
+        method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status, ownerNote: notes[id]?.trim() || null })
+      });
+      const payload = await response.json().catch(() => ({})) as { insight?: AdminTehdejsiProductInsight; error?: string };
+      if (!response.ok || !payload.insight) throw new Error(payload.error ?? `Insight update failed with ${response.status}.`);
+      setInsights((current) => current.map((item) => item.id === id ? payload.insight! : item));
+      setMessage("Product-insight status recorded. The product repository was not contacted or changed.");
+    } catch (caught) { setMessage(""); setError(caught instanceof Error ? caught.message : "The insight decision was not saved."); }
+    finally { setPendingId(null); }
+  }
   return (
     <section aria-labelledby="tehdejsi-insights-heading">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div><p className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">Owner-controlled product recommendations</p><h3 className="mt-1 text-2xl font-semibold" id="tehdejsi-insights-heading">Product insight queue</h3></div>
-        <Badge>{view.insights.length} insight{view.insights.length === 1 ? "" : "s"}</Badge>
+        <Badge>{insights.length} insight{insights.length === 1 ? "" : "s"}</Badge>
       </div>
-      {view.insights.length ? <div className="mt-4 grid gap-3">{view.insights.map((insight) => (
+      {insights.length ? <div className="mt-4 grid gap-3">{insights.map((insight) => (
         <Card key={insight.id}><CardContent>
           <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">{insight.id}</p><h4 className="mt-1 text-lg font-semibold">{insight.title}</h4></div><Badge tone={insight.status === "done" ? "success" : insight.status === "rejected" ? "danger" : "warning"}>{insight.status}</Badge></div>
-          <p className="mt-3 text-sm leading-6 text-[var(--foreground)]">{insight.proposedAction}</p>
-          <p className="mt-2 text-xs text-[var(--fog)]">{insight.evidenceCount} recorded evidence item{insight.evidenceCount === 1 ? "" : "s"}</p>
+          <p className="mt-3 text-sm leading-6 text-[var(--fog)]">{insight.finding}</p>
+          <p className="mt-3 text-sm leading-6 text-[var(--foreground)]"><strong>Proposed owner action:</strong> {insight.proposedAction}</p>
+          <ul className="mt-4 grid gap-2">{insight.evidence.map((item) => <li className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-3 text-xs leading-5" key={item.filePath}><code className="break-all text-[var(--foreground)]">{item.filePath}</code><p className="mt-1 text-[var(--fog)]">{item.detail}</p></li>)}</ul>
+          <label className="mt-4 block" htmlFor={`${insight.id}-note`}><span className="text-sm font-semibold">Owner note (optional)</span><textarea className="mt-2 min-h-20 w-full rounded-[var(--radius-button)] border border-[var(--steel)] bg-[var(--surface)] px-3 py-2.5" disabled={!writesEnabled || pendingId !== null || insight.status === "done" || insight.status === "rejected"} id={`${insight.id}-note`} maxLength={500} onChange={(event) => setNotes((current) => ({ ...current, [insight.id]: event.target.value }))} value={notes[insight.id] ?? ""} /></label>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {insight.status === "proposed" ? <><Button disabled={!writesEnabled || pendingId !== null} onClick={() => void update(insight.id, "accepted")} type="button">Accept recommendation</Button><Button disabled={!writesEnabled || pendingId !== null} onClick={() => void update(insight.id, "rejected")} type="button" variant="secondary">Reject recommendation</Button></> : null}
+            {insight.status === "accepted" ? <><Button disabled={!writesEnabled || pendingId !== null} onClick={() => void update(insight.id, "done")} type="button">Mark owner-completed</Button><Button disabled={!writesEnabled || pendingId !== null} onClick={() => void update(insight.id, "rejected")} type="button" variant="secondary">Reject recommendation</Button></> : null}
+          </div>
         </CardContent></Card>
       ))}</div> : <Callout className="mt-4">No product insight is recorded. This panel cannot change the product.</Callout>}
+      <div aria-live="polite" className="mt-3 min-h-5 text-sm" role={error ? "alert" : "status"}>{error ? <span className="text-[var(--destructive)]">{error}</span> : <span className="text-[var(--fog)]">{message}</span>}</div>
     </section>
   );
 }

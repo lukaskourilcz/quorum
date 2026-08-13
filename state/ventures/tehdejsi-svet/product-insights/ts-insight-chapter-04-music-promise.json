@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "ts-product-insight/1",
+  "id": "ts-insight-chapter-04-music-promise",
+  "ventureId": "tehdejsi-svet",
+  "title": "Chapter 04 promises music the runtime cannot supply",
+  "finding": "The teenage-years introduction promises music, while the active public data layer has no music source. This is a copy-versus-data defect, not evidence that song data exists.",
+  "evidence": [
+    {
+      "filePath": "src/lib/report.ts",
+      "detail": "The chapter 04 introduction includes music among the experiences it promises."
+    },
+    {
+      "filePath": "src/data/dataSources.json",
+      "detail": "The active source registry contains no public runtime music dataset."
+    }
+  ],
+  "proposedAction": "Owner chooses whether to narrow the chapter introduction now or add verified, cohort-relevant music data through the product's own process later.",
+  "status": "proposed",
+  "ownerNote": null,
+  "createdAt": "2026-08-12T12:00:00.000Z",
+  "updatedAt": "2026-08-12T12:00:00.000Z"
+}

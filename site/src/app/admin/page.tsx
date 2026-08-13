@@ -283,8 +283,17 @@ export default async function AdminPage({
     })),
     themes: [...combinedThemes.values()].sort((left, right) => right.recurrence - left.recurrence || left.label.localeCompare(right.label)),
     requests: [...combinedRequests.values()].sort((left, right) => right.recurrence - left.recurrence || left.value.localeCompare(right.value)),
-    insights: [],
-    unreadable: tehdejsiSvet.unreadable.signals,
+    insights: tehdejsiSvet.productInsights.map((insight) => ({
+      id: insight.id,
+      title: insight.title,
+      finding: insight.finding,
+      status: insight.status,
+      proposedAction: insight.proposedAction,
+      evidence: insight.evidence,
+      ownerNote: insight.ownerNote,
+      updatedAt: insight.updatedAt
+    })),
+    unreadable: tehdejsiSvet.unreadable.signals + tehdejsiSvet.unreadable.insights,
     pendingHarvests: tehdejsiSvet.signalHarvests.filter(({ id }) => !consumedHarvests.has(id)).length
   };
   const tehdejsiSignalsItemCount = tehdejsiSignals.digests.length + tehdejsiSignals.themes.length +

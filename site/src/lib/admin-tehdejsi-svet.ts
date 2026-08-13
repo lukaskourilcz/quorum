@@ -15,6 +15,7 @@ import {
   type TehdejsiSignalDigest,
   type TehdejsiSignalHarvest
 } from "./tehdejsi-signal-model";
+import { parseTehdejsiProductInsight, type TehdejsiProductInsight } from "./tehdejsi-product-insight-model";
 
 export type AdminTehdejsiState = "missing" | "unreadable" | "present";
 
@@ -108,7 +109,7 @@ export interface AdminTehdejsiFeature {
   ratings: RatingRecord[];
 }
 
-type StoreName = "facts" | "shortlists" | "cycle" | "ledger" | "features" | "ratings" | "signals";
+type StoreName = "facts" | "shortlists" | "cycle" | "ledger" | "features" | "ratings" | "signals" | "insights";
 
 export interface AdminTehdejsiSnapshot {
   stores: Record<StoreName, AdminTehdejsiState>;
@@ -121,6 +122,7 @@ export interface AdminTehdejsiSnapshot {
   features: AdminTehdejsiFeature[];
   signalHarvests: TehdejsiSignalHarvest[];
   signalDigests: TehdejsiSignalDigest[];
+  productInsights: TehdejsiProductInsight[];
 }
 
 type ReadResult<T> = { state: AdminTehdejsiState; items: T[]; unreadable: number };
@@ -437,7 +439,7 @@ export async function readAdminTehdejsiSvet(
   root = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")
 ): Promise<AdminTehdejsiSnapshot> {
   const base = path.join(root, "state", "ventures", "tehdejsi-svet");
-  const [facts, shortlists, cycle, research, featureRecords, ratings, signalHarvests, signalDigests] = await Promise.all([
+  const [facts, shortlists, cycle, research, featureRecords, ratings, signalHarvests, signalDigests, productInsights] = await Promise.all([
     singleton(path.join(base, "facts.json"), parseFacts),
     collection(path.join(base, "shortlists"), (value) => parseShortlist(value)),
     singleton(path.join(base, "cycle.json"), parseCycle),
@@ -453,6 +455,10 @@ export async function readAdminTehdejsiSvet(
     }),
     collection(path.join(base, "signals", "digests"), (value, _raw, name) => {
       const parsed = parseTehdejsiSignalDigest(value);
+      return parsed && name === `${parsed.id}.json` ? parsed : null;
+    }),
+    collection(path.join(base, "product-insights"), (value, _raw, name) => {
+      const parsed = parseTehdejsiProductInsight(value);
       return parsed && name === `${parsed.id}.json` ? parsed : null;
     })
   ]);
@@ -471,7 +477,8 @@ export async function readAdminTehdejsiSvet(
     ledger: research.unreadable,
     features: features.unreadable,
     ratings: ratings.unreadable,
-    signals: signalHarvests.unreadable + signalDigests.unreadable
+    signals: signalHarvests.unreadable + signalDigests.unreadable,
+    insights: productInsights.unreadable
   };
   return {
     stores: {
@@ -481,7 +488,8 @@ export async function readAdminTehdejsiSvet(
       ledger: research.state,
       features: features.state,
       ratings: ratings.state,
-      signals: signalDigests.items.length || signalHarvests.items.length ? "present" : counts.signals ? "unreadable" : "missing"
+      signals: signalDigests.items.length || signalHarvests.items.length ? "present" : counts.signals ? "unreadable" : "missing",
+      insights: productInsights.state
     },
     unreadable: { ...counts, total: Object.values(counts).reduce((sum, count) => sum + count, 0) },
     facts: facts.item,
@@ -491,6 +499,7 @@ export async function readAdminTehdejsiSvet(
     researchEfficiency: paidResearch.length ? usedResearch.length / paidResearch.length : null,
     features: features.items.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt) || right.id.localeCompare(left.id)),
     signalHarvests: signalHarvests.items.sort((left, right) => right.pastedAt.localeCompare(left.pastedAt) || right.id.localeCompare(left.id)),
-    signalDigests: signalDigests.items.sort((left, right) => right.extractedAt.localeCompare(left.extractedAt) || right.id.localeCompare(left.id))
+    signalDigests: signalDigests.items.sort((left, right) => right.extractedAt.localeCompare(left.extractedAt) || right.id.localeCompare(left.id)),
+    productInsights: productInsights.items.sort((left, right) => left.createdAt.localeCompare(right.createdAt) || left.id.localeCompare(right.id))
   };
 }

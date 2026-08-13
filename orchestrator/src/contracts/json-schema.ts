@@ -11,6 +11,7 @@ import { TehdejsiFactsFileSchema } from "./tehdejsi-facts.js";
 import { TehdejsiCycleSchema } from "./tehdejsi-cycle.js";
 import { TehdejsiShortlistSchema } from "./tehdejsi-shortlist.js";
 import { TehdejsiSignalSchema } from "./tehdejsi-signal.js";
+import { TehdejsiProductInsightSchema } from "./tehdejsi-product-insight.js";
 import { BhResearchBriefBundleSchema } from "./bh-research-brief.js";
 import { BhDossierSchema, BhResearchLedgerEntrySchema } from "./bh-dossier.js";
 import { CalendarFeedSchema } from "./calendar.js";
@@ -77,6 +78,7 @@ export const ContractSchemas = {
   "tehdejsi-cycle": TehdejsiCycleSchema,
   "tehdejsi-shortlist": TehdejsiShortlistSchema,
   "tehdejsi-signal": TehdejsiSignalSchema,
+  "tehdejsi-product-insight": TehdejsiProductInsightSchema,
   "bh-research-brief": BhResearchBriefBundleSchema,
   "bh-dossier": BhDossierSchema,
   "bh-research-ledger": BhResearchLedgerEntrySchema,
