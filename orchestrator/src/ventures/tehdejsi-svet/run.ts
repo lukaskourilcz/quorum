@@ -14,6 +14,7 @@ import { configRoot, repoRoot, stateRoot } from "../../paths.js";
 import { loadRuntimeBudgetLimits } from "../../portfolio/limits.js";
 import { signedOwnerDecision } from "../../portfolio/schedule.js";
 import { atomicWriteJson, readJson } from "../../state.js";
+import type { guardedJsonCall } from "../../llm/call.js";
 import { loadTehdejsiFacts } from "./facts.js";
 import { runTehdejsiPipelineDay, type TehdejsiPipelineOutcome } from "./pipeline.js";
 import { buildShortlist } from "./scorer.js";
@@ -38,6 +39,8 @@ export interface TehdejsiSvetCycleInput {
   dry: boolean;
   now: Date;
   root?: string;
+  /** A labelled fixture seam. Dry runs may exercise the full pipeline only through this call. */
+  call?: typeof guardedJsonCall;
 }
 
 function artifactPath(root: string, relative: string): string {
@@ -136,6 +139,7 @@ function buildActiveRecord(input: {
   monthAllInUsd: number;
   monthCapUsd: number;
   overlayArtifacts: string[];
+  dry: boolean;
 }): MeetingRecord {
   const closedAt = new Date(input.now.getTime() + 1).toISOString();
   const phase = input.outcome?.phase ?? input.failurePhase ?? "planning";
@@ -151,14 +155,16 @@ function buildActiveRecord(input: {
     date: input.date,
     phase: "ts-desk",
     kind: "ts-desk",
-    fixture: false,
+    fixture: input.dry,
     status,
     stage: input.stage,
     operatingBrief: `Run the recorded ${phase} phase. A phase advances only after its artifacts are durable.`,
     participantReasons: TEHDEJSI_SVET_CAST.map((agent) => ({
       agent,
       reason: participants.has(agent as "LETOPIS" | "VERBA")
-        ? `Contributed to the ${phase} phase through the guarded editorial call.`
+        ? input.dry
+          ? `Contributed to the ${phase} phase through a labelled deterministic fixture response.`
+          : `Contributed to the ${phase} phase through the guarded editorial call.`
         : `Held the ${phase} seat; no separate call was required.`,
       participated: participants.has(agent as "LETOPIS" | "VERBA")
     })),
@@ -230,6 +236,9 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
     process.env.PORTFOLIO_LIVE_ENABLED === "true" &&
     signedOwnerDecision(await readFile(path.join(stateRoot, FOUNDING_DECISION_PATH), "utf8")) === "countersigned"
   );
+  // A dry proof may walk the real join only when the caller supplies a labelled fixture call.
+  // This keeps the ordinary CLI dry path and every closed live path incapable of a paid call.
+  const pipelineAllowed = ownerAllowed || (input.dry && input.call !== undefined);
   const liveAllowed = input.dry || ownerAllowed;
   // A manual invocation of a closed live room claims no calendar slot and writes no fictional meeting.
   if (!liveAllowed && process.env.MEETING_TRIGGER !== "schedule") {
@@ -252,7 +261,7 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
   let failurePhase: "planning" | "production" | null = null;
   let phaseArtifacts: string[] = [];
   let overlayArtifacts: string[] = [];
-  if (ownerAllowed) {
+  if (pipelineAllowed) {
     const current = await readTehdejsiCycle(root);
     failurePhase = current?.phase ?? "planning";
     try {
@@ -261,7 +270,8 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
         executionCycleId: input.executionCycleId,
         date,
         now: input.now,
-        stage
+        stage,
+        ...(input.call ? { call: input.call } : {})
       });
       phaseArtifacts = outcome.artifacts;
     } catch (error) {
@@ -299,7 +309,8 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
         actualCycleUsd,
         monthAllInUsd: spentAfter,
         monthCapUsd: limits.monthlyOperatingUsd,
-        overlayArtifacts
+        overlayArtifacts,
+        dry: input.dry
       })
     : buildCheckpointRecord({
         executionCycleId: input.executionCycleId,
@@ -351,9 +362,13 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
     cycleId: input.executionCycleId,
     phase: "ts-desk",
     dry: input.dry,
-    status: ownerAllowed ? (outcome?.completed ? "live_complete" : "paused") : "paused",
-    decision: ownerAllowed ? (outcome?.status ?? "PAUSED") : "PAUSED",
-    estimatedWorstCaseUsd: ownerAllowed ? 0.25 : 0,
+    status: pipelineAllowed
+      ? input.dry
+        ? outcome?.completed ? "dry_complete" : "paused"
+        : outcome?.completed ? "live_complete" : "paused"
+      : "paused",
+    decision: pipelineAllowed ? (outcome?.status ?? "PAUSED") : "PAUSED",
+    estimatedWorstCaseUsd: pipelineAllowed ? 0.25 : 0,
     selectedAgents: outcome?.participants ?? [],
     skippedAgents: TEHDEJSI_SVET_CAST.filter((agent) => !(outcome?.participants ?? []).includes(agent as "LETOPIS" | "VERBA")),
     artifacts: [decisionPath, scorecardPath, meetingPath, ...phaseArtifacts]

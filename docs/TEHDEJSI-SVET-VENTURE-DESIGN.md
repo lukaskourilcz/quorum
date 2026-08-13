@@ -1,11 +1,13 @@
 # Tehdejší svět: the adoption venture — strategy and design
 
-Status: proposed, pre-founding. This is the master plan for BoardlessAI adopting the
+Status: implemented, pending founding countersignature. This is the master plan for BoardlessAI adopting the
 existing product **Tehdejší svět** (`lukaskourilcz/dontwannaknow`, live at
 dontwannaknow.vercel.app) as a marketed social venture. Nothing runs until the owner
-countersigns `state/decisions/<date>-tehdejsi-svet-founding.md`. The implementation
-contract is `docs/tehdejsi-svet-venture-implementation.md`; the product's own repository
-is **never modified by this venture** — BoardlessAI adopts the marketing, not the code.
+countersigns `state/decisions/2026-08-12-tehdejsi-svet-founding.md`. The one-use
+implementation contract was deleted at programme closeout; the founding decision,
+this design and the shipped contracts are the durable authorities. The product's own
+repository is **never reached or modified by this venture** — BoardlessAI adopts the
+marketing, not the code.
 
 The shape in one line: **the product already knows its moment of value — "a concrete,
 honestly framed fact the user wants to ask a loved one about" — and the social venture

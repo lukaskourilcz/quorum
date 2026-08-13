@@ -3,8 +3,9 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
+import type { guardedJsonCall } from "../src/llm/call.js";
 import { runTehdejsiSvetCycle } from "../src/ventures/tehdejsi-svet/run.js";
-import { readTehdejsiCycle } from "../src/ventures/tehdejsi-svet/state.js";
+import { readTehdejsiCycle, tehdejsiCycleComplete } from "../src/ventures/tehdejsi-svet/state.js";
 
 const temporaryRoots: string[] = [];
 
@@ -14,6 +15,51 @@ async function temporaryState(): Promise<string> {
   return root;
 }
 
+function completeCycleFixtureCall(): typeof guardedJsonCall {
+  const replies = [
+    {
+      briefs: [{
+        factId: "cs-1970s-vecernicek",
+        angle: "A small recorded evening ritual that invites one family question.",
+        slideBeats: [
+          { beat: "Open on the tune as an evening marker.", claimIds: ["evening-slot"] },
+          { beat: "Place the programme in the recorded household routine.", claimIds: ["evening-slot"] },
+          { beat: "Ask who switched it on at home.", claimIds: [] }
+        ],
+        claims: [{
+          claimId: "evening-slot",
+          statement: "The short programme occupied a regular evening slot before bedtime.",
+          factIds: ["cs-1970s-vecernicek"]
+        }],
+        ctaKind: "ask-your-parents"
+      }]
+    },
+    {
+      slides: [
+        { ordinal: 1, text: "Večer měl krátkou znělku. Domácnost věděla, že den končí." },
+        { ordinal: 2, text: "Krátký pořad patřil do pravidelného času před spaním." },
+        { ordinal: 3, text: "Kdo ho u vás doma zapínal?" }
+      ],
+      caption: "Krátký večerní zvuk označoval rodinný rytmus. Koho se zeptáte?",
+      contextLine: null
+    },
+    {
+      slides: [
+        { ordinal: 1, text: "Вечір мав коротку мелодію, і родина знала, що день завершується." },
+        { ordinal: 2, text: "Коротка програма мала постійне місце перед сном." },
+        { ordinal: 3, text: "Хто вмикав її у вашій родині?" }
+      ],
+      caption: "Короткий вечірній звук позначав ритм родини. Кого ви запитаєте?"
+    }
+  ];
+  let index = 0;
+  return (async (request: { parse: (text: string) => unknown }) => ({
+    value: request.parse(JSON.stringify(replies[index++])),
+    cached: false,
+    usd: 0
+  })) as unknown as typeof guardedJsonCall;
+}
+
 afterEach(async () => {
   await Promise.all(temporaryRoots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
   delete process.env.MEETING_TRIGGER;
@@ -21,6 +67,40 @@ afterEach(async () => {
 });
 
 describe("Tehdejsi svet desk", () => {
+  it("walks the complete two-day pipeline through labelled dry fixture calls", async () => {
+    const root = await temporaryState();
+    const call = completeCycleFixtureCall();
+
+    const planning = await runTehdejsiSvetCycle({
+      executionCycleId: "20260813160000-ts-desk",
+      dry: true,
+      now: new Date("2026-08-13T16:00:00.000Z"),
+      root,
+      call
+    });
+    expect(planning).toMatchObject({ status: "dry_complete", decision: "PLAN", selectedAgents: ["LETOPIS"] });
+
+    const production = await runTehdejsiSvetCycle({
+      executionCycleId: "20260814160000-ts-desk",
+      dry: true,
+      now: new Date("2026-08-14T16:00:00.000Z"),
+      root,
+      call
+    });
+    expect(production).toMatchObject({
+      status: "dry_complete",
+      decision: "PLAN",
+      selectedAgents: ["LETOPIS", "VERBA"]
+    });
+    expect(production.artifacts.some((entry) => entry.includes("/drafts/"))).toBe(true);
+    expect(tehdejsiCycleComplete(await readTehdejsiCycle(root))).toBe(true);
+
+    const record = MeetingRecordSchema.parse(JSON.parse(
+      await readFile(path.join(root, "meetings", "2026-08-14-ts-desk.json"), "utf8")
+    ));
+    expect(record).toMatchObject({ fixture: true, ledger: { actualCycleUsd: 0 } });
+  });
+
   it("keeps a scheduled live phase paused behind the pending founding decision at $0", async () => {
     const root = await temporaryState();
     process.env.MEETING_TRIGGER = "schedule";

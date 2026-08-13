@@ -527,8 +527,16 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
       await page.goto("/admin?venture=door-money&tab=actions", { waitUntil: "networkidle" });
 
       const task = page.getByRole("heading", { name: "Review the fictional launch note" }).locator("xpath=ancestor::li[1]");
-      await task.getByLabel("Outcome (required)").fill("The synthetic owner reviewed the fictional note.");
-      await task.getByRole("button", { name: "Mark complete" }).click();
+      const outcome = task.getByLabel("Outcome (required)");
+      const complete = task.getByRole("button", { name: "Mark complete" });
+      // A warm Next dev server can paint this controlled field just before hydration attaches its
+      // change handler. Refill until the app's own validation enables submit; this waits on user-
+      // visible state instead of sleeping or clicking a disabled server-rendered button.
+      await expect.poll(async () => {
+        await outcome.fill("The synthetic owner reviewed the fictional note.");
+        return complete.isEnabled();
+      }, { timeout: 30_000 }).toBe(true);
+      await complete.click();
       await expect(task.getByText("Outcome recorded. The weekly room can now read this completion.")).toBeVisible();
       expect(actionPosts).toBe(1);
       await page.reload({ waitUntil: "networkidle" });

@@ -162,7 +162,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-23b** — Weights, used-flags and the experiment ladder
 - [x] **TS-24a** — Documentation truth across the standing docs
 - [x] **TS-24b** — INBOX approvals and NEEDED owner items
-- [ ] **TS-24c** — Honest gaps, checkbox sweep and spec deletion
+- [x] **TS-24c** — Honest gaps, checkbox sweep and spec deletion
 
 ## Adapted during implementation
 
@@ -247,10 +247,25 @@ snapshot is a committed file and the venture buys no data.
 
 ## Closeout and owner handoff
 
+The one-use implementation specification and its temporary mid-programme handoff were
+deleted when TS-24c closed. This decision, the standing venture design and the shipped
+contracts are now the durable authorities. Every TS checklist item above is complete;
+the issue history and its one-issue commits preserve the implementation trail.
+
+The closeout proof walks the real `ts-desk` join from planning through production over
+two dates using labelled deterministic fixture responses. Both meeting records remain
+fixtures with `$0` actual spend. The no-product-link guard, structural `shareSafe` and
+excluded-media refusals, and byte-stable Ukrainian/Czech raster proof run alongside the
+full repository gate. A normal dry invocation without an injected fixture response still
+cannot call a provider.
+
 After countersignature the owner: resolves the five approval items; lands the product's
 production domain so a bio can name it; clears the handles and creates the accounts;
 reviews the committed facts file the desk reads and adds to it when a season runs thin;
-approves the first content bank in `/admin`; and posts by hand.
+approves the first content bank in `/admin`; and posts by hand. There is no
+`tehdejsi:sync` command: replacing the facts file is a deliberate human edit in this
+repository, followed by validation and a matching content hash, never a product-repository
+fetch.
 
 ## What this does not touch
 
