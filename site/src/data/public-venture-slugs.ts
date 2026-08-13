@@ -11,4 +11,3 @@ export const PUBLIC_VENTURE_SLUGS = [
   "tehdejsi-svet",
   "kvorum"
 ] as const;
-
