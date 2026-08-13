@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260813050408-ms-daily",
+  "date": "2026-08-13",
+  "phase": "ms-daily",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Turn one selected question into one Czech and one English five-slide carousel per enabled brand, as a draft behind the approval queue.",
+  "participantReasons": [
+    {
+      "agent": "MAKO",
+      "reason": "directs the venture and chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CHUM",
+      "reason": "writes the day's bilingual copy",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.1,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 4.2584666,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "No package was drafted. devshark: model-output-invalid.",
+    "evidenceRefs": []
+  },
+  "proposals": [],
+  "voteMatrix": [
+    {
+      "voter": "MAKO",
+      "firstChoice": "abstain",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "approve",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Drafts only. Nothing here posts, schedules, buys or opens an account: SOCIAL_KILL_SWITCH is the supreme stop, marketingShark owns no channel or credentials, and every queue item is written as a draft with all approval checks pending.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-13T05:07:08.461Z",
+  "kind": "ms-daily",
+  "roomTranscript": {
+    "openedAt": "2026-08-13T05:04:08.461Z",
+    "closedAt": "2026-08-13T05:07:08.461Z",
+    "gavel": "MAKO",
+    "setting": "Live bounded room. One model call per enabled brand, and the question, hooks, templates and slide-5 line were all decided in code before it.",
+    "turns": [
+      {
+        "agent": "MAKO",
+        "mode": "gavel",
+        "sentAt": "2026-08-13T05:04:08.461Z",
+        "text": "One question, one Czech and one English carousel per enabled brand."
+      },
+      {
+        "agent": "CHUM",
+        "mode": "statement",
+        "sentAt": "2026-08-13T05:05:08.461Z",
+        "text": "No package was drafted. devshark: model-output-invalid."
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-13T05:06:08.461Z",
+        "text": "Truth gates ran on every returned draft. Nothing was published, queued or scheduled."
+      },
+      {
+        "agent": "MAKO",
+        "mode": "close",
+        "sentAt": "2026-08-13T05:07:08.461Z",
+        "text": "No package was drafted. devshark: model-output-invalid."
+      }
+    ]
+  }
+}
