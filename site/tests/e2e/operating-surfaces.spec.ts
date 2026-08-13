@@ -1047,6 +1047,32 @@ test("the home walkthrough carries all eleven ventures at mobile width", async (
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(1);
 });
 
+test("the ventures index has eleven real cards and keeps sample scores separate", async ({ page }) => {
+  await page.goto("/ventures", { waitUntil: "networkidle" });
+  const ids = [
+    "caught-up",
+    "titty-tuesdays",
+    "goviral",
+    "booksofhistory",
+    "fightaiq",
+    "carousel-studio",
+    "marketingshark",
+    "mma-files",
+    "door-money",
+    "tehdejsi-svet",
+    "kvorum"
+  ];
+  const cards = page.locator("[data-venture-card]");
+  await expect(cards).toHaveCount(ids.length);
+  for (const id of ids) await expect(page.locator(`[data-venture-card="${id}"]`)).toHaveCount(1);
+
+  const cardText = await cards.allInnerTexts();
+  expect(cardText.join("\n")).not.toContain("Needs 35");
+  expect(cardText.join("\n")).not.toContain("Test example");
+  await expect(page.locator("[data-sample-idea]")).not.toHaveCount(0);
+  await expect(page.getByText("Earlier software test · not current projects", { exact: true })).toBeVisible();
+});
+
 for (const size of [
   { name: "1280x800", width: 1280, height: 800 },
   { name: "1440x900", width: 1440, height: 900 }
