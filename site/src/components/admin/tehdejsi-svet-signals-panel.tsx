@@ -1,4 +1,9 @@
+"use client";
+
+import { useState } from "react";
+import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDateTime } from "@/lib/utils";
@@ -8,6 +13,7 @@ export interface AdminTehdejsiSignalDigest {
   recordedAt: string;
   sourceLabel: string;
   recollections: string[];
+  correctionClaims?: string[];
 }
 
 export interface AdminTehdejsiSignalTheme {
@@ -37,6 +43,7 @@ export interface AdminTehdejsiSignalsView {
   requests: AdminTehdejsiAudienceRequest[];
   insights: AdminTehdejsiProductInsight[];
   unreadable: number;
+  pendingHarvests: number;
 }
 
 export const EMPTY_TEHDEJSI_SIGNALS: AdminTehdejsiSignalsView = {
@@ -44,12 +51,9 @@ export const EMPTY_TEHDEJSI_SIGNALS: AdminTehdejsiSignalsView = {
   themes: [],
   requests: [],
   insights: [],
-  unreadable: 0
+  unreadable: 0,
+  pendingHarvests: 0
 };
-
-export function tehdejsiSignalsCount(view: AdminTehdejsiSignalsView): number {
-  return view.digests.length + view.themes.length + view.requests.length + view.insights.length;
-}
 
 function CommunityMemory({ view }: { view: AdminTehdejsiSignalsView }) {
   return (
@@ -58,9 +62,7 @@ function CommunityMemory({ view }: { view: AdminTehdejsiSignalsView }) {
         <div><p className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">Owner-pasted only</p><h3 className="mt-1 text-2xl font-semibold" id="tehdejsi-community-heading">Community memory</h3></div>
         <Badge>{view.digests.length} digest{view.digests.length === 1 ? "" : "s"}</Badge>
       </div>
-      <Callout className="mt-4">
-        This view never scrapes comments or calls a platform API. Paste-in controls appear only after a canonical signal writer exists.
-      </Callout>
+      <Callout className="mt-4">This view never scrapes comments or calls a platform API. Every line is an owner-pasted recollection, never a fact.</Callout>
       {view.digests.length ? (
         <div className="mt-4 grid gap-3">
           {view.digests.map((digest) => (
@@ -77,12 +79,50 @@ function CommunityMemory({ view }: { view: AdminTehdejsiSignalsView }) {
                   </li>
                 ))}
               </ul>
+              {digest.correctionClaims?.length ? <div className="mt-4"><p className="font-semibold">Correction claims awaiting research</p><ul className="mt-2 grid gap-2">{digest.correctionClaims.map((claim) => <li className="text-sm leading-6 text-[var(--fog)]" key={claim}>Recollection · not a fact — {claim}</li>)}</ul></div> : null}
             </CardContent></Card>
           ))}
         </div>
       ) : <Callout className="mt-4">No owner-pasted community memory is recorded.</Callout>}
     </section>
   );
+}
+
+function SignalPasteForm({ pendingHarvests }: { pendingHarvests: number }) {
+  const writesEnabled = useAdminWritesEnabled();
+  const [sourceLabel, setSourceLabel] = useState("");
+  const [comments, setComments] = useState("");
+  const [pending, setPending] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const lines = comments.split(/\r?\n/u).map((line) => line.trim()).filter(Boolean);
+  const valid = sourceLabel.trim().length > 0 && sourceLabel.length <= 120 && lines.length >= 1 && lines.length <= 50 &&
+    lines.every((line) => line.length <= 600) && new Set(lines.map((line) => line.toLocaleLowerCase("und"))).size === lines.length;
+  async function save(): Promise<void> {
+    if (!writesEnabled || pending || !valid) return;
+    setPending(true); setMessage("Saving owner-pasted recollections…"); setError("");
+    try {
+      const response = await fetch("/admin/api/tehdejsi-svet/signals", {
+        method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sourceLabel: sourceLabel.trim(), comments: lines })
+      });
+      const payload = await response.json().catch(() => ({})) as { error?: string };
+      if (!response.ok) throw new Error(payload.error ?? `Signal save failed with ${response.status}.`);
+      setSourceLabel(""); setComments("");
+      setMessage("Comment harvest recorded for the Sunday overlay. Nothing was scraped or posted.");
+    } catch (caught) { setMessage(""); setError(caught instanceof Error ? caught.message : "The comment harvest was not saved."); }
+    finally { setPending(false); }
+  }
+  return <section aria-labelledby="tehdejsi-paste-heading" className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--secondary)] p-5">
+    <div className="flex flex-wrap items-center justify-between gap-3"><h3 className="text-xl font-semibold" id="tehdejsi-paste-heading">Paste comment harvest</h3><Badge tone="dark">{pendingHarvests} awaiting Sunday</Badge></div>
+    <p className="mt-2 text-sm leading-6 text-[var(--fog)]">Paste one comment per line. Optional labels: [theme: …], [city: …], [year: 1989], [correction: …]. These are research prompts, never facts.</p>
+    <form className="mt-4 grid gap-4" onSubmit={(event) => { event.preventDefault(); void save(); }}>
+      <label><span className="font-semibold">Source label</span><input className="mt-2 w-full rounded-[var(--radius-button)] border border-[var(--steel)] bg-[var(--surface)] px-3 py-2.5" disabled={pending || !writesEnabled} maxLength={120} onChange={(event) => setSourceLabel(event.target.value)} value={sourceLabel} /></label>
+      <label><span className="font-semibold">Owner-pasted comments</span><textarea className="mt-2 min-h-36 w-full rounded-[var(--radius-button)] border border-[var(--steel)] bg-[var(--surface)] px-3 py-2.5" disabled={pending || !writesEnabled} maxLength={30_000} onChange={(event) => setComments(event.target.value)} value={comments} /></label>
+      <Button className="justify-self-start" disabled={pending || !writesEnabled || !valid} type="submit">{pending ? "Saving…" : "Record recollections"}</Button>
+    </form>
+    <div aria-live="polite" className="mt-3 min-h-5 text-sm" role={error ? "alert" : "status"}>{error ? <span className="text-[var(--destructive)]">{error}</span> : <span className="text-[var(--fog)]">{message}</span>}</div>
+  </section>;
 }
 
 function ThemesAndRequests({ view }: { view: AdminTehdejsiSignalsView }) {
@@ -134,6 +174,7 @@ export function TehdejsiSvetSignalsPanel({ view = EMPTY_TEHDEJSI_SIGNALS }: { vi
   return (
     <div className="grid gap-10" data-tehdejsi-signals>
       {view.unreadable > 0 ? <Callout tone="warning">{view.unreadable} malformed signal record{view.unreadable === 1 ? "" : "s"} was omitted.</Callout> : null}
+      <SignalPasteForm pendingHarvests={view.pendingHarvests} />
       <CommunityMemory view={view} />
       <ThemesAndRequests view={view} />
       <InsightQueue view={view} />

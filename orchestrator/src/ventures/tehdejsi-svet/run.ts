@@ -17,6 +17,7 @@ import { atomicWriteJson, readJson } from "../../state.js";
 import { loadTehdejsiFacts } from "./facts.js";
 import { runTehdejsiPipelineDay, type TehdejsiPipelineOutcome } from "./pipeline.js";
 import { buildShortlist } from "./scorer.js";
+import { runSundaySignalOverlay } from "./signals.js";
 import {
   applyTehdejsiCycleDay,
   createTehdejsiCycle,
@@ -132,6 +133,7 @@ function buildActiveRecord(input: {
   actualCycleUsd: number;
   monthAllInUsd: number;
   monthCapUsd: number;
+  overlayArtifacts: string[];
 }): MeetingRecord {
   const closedAt = new Date(input.now.getTime() + 1).toISOString();
   const phase = input.outcome?.phase ?? input.failurePhase ?? "planning";
@@ -139,7 +141,7 @@ function buildActiveRecord(input: {
   const completed = input.outcome?.completed ?? false;
   const summary = input.outcome?.summary
     ?? `The ${phase} phase stopped and will resume. ${input.failure ?? "No draft was stored."}`;
-  const evidenceRefs = [FOUNDING_DECISION_PATH, ...(input.outcome?.artifacts ?? [])];
+  const evidenceRefs = [FOUNDING_DECISION_PATH, ...(input.outcome?.artifacts ?? []), ...input.overlayArtifacts];
   const participants = new Set(input.outcome?.participants ?? []);
   return MeetingRecordSchema.parse({
     schemaVersion: "meeting-record/2",
@@ -189,6 +191,11 @@ function buildActiveRecord(input: {
 function failureMessage(error: unknown): string {
   const text = error instanceof Error ? error.message : String(error);
   return text.replace(/(?:\/[A-Za-z0-9._-]+){2,}/gu, "[private path]").slice(0, 500);
+}
+
+async function signalsApprovalGranted(root: string): Promise<boolean> {
+  const inbox = await readFile(path.join(root, "INBOX.md"), "utf8").catch(() => "");
+  return /^- \[[xX]\] HUMAN_APPROVAL TS-RESULTS-005\b/mu.test(inbox);
 }
 
 export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promise<CycleResult> {
@@ -242,6 +249,7 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
   let failure: string | null = null;
   let failurePhase: "planning" | "production" | null = null;
   let phaseArtifacts: string[] = [];
+  let overlayArtifacts: string[] = [];
   if (ownerAllowed) {
     const current = await readTehdejsiCycle(root);
     failurePhase = current?.phase ?? "planning";
@@ -266,6 +274,13 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
         })));
       }
     }
+    overlayArtifacts = await runSundaySignalOverlay({
+      root,
+      date,
+      now: input.now,
+      approvalGranted: await signalsApprovalGranted(root)
+    });
+    phaseArtifacts.push(...overlayArtifacts);
   } else {
     phaseArtifacts = await holdPausedCycle({ root, date, now: input.now });
   }
@@ -282,7 +297,8 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
         failurePhase,
         actualCycleUsd,
         monthAllInUsd: spentAfter,
-        monthCapUsd: limits.monthlyOperatingUsd
+        monthCapUsd: limits.monthlyOperatingUsd,
+        overlayArtifacts
       })
     : buildCheckpointRecord({
         executionCycleId: input.executionCycleId,

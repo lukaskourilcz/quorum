@@ -9,6 +9,12 @@ import {
   type TehdejsiFeatureStatus
 } from "./tehdejsi-feature-model";
 import { parseRatingRecord, type RatingRecord } from "./rating-model";
+import {
+  parseTehdejsiSignalDigest,
+  parseTehdejsiSignalHarvest,
+  type TehdejsiSignalDigest,
+  type TehdejsiSignalHarvest
+} from "./tehdejsi-signal-model";
 
 export type AdminTehdejsiState = "missing" | "unreadable" | "present";
 
@@ -102,7 +108,7 @@ export interface AdminTehdejsiFeature {
   ratings: RatingRecord[];
 }
 
-type StoreName = "facts" | "shortlists" | "cycle" | "ledger" | "features" | "ratings";
+type StoreName = "facts" | "shortlists" | "cycle" | "ledger" | "features" | "ratings" | "signals";
 
 export interface AdminTehdejsiSnapshot {
   stores: Record<StoreName, AdminTehdejsiState>;
@@ -113,6 +119,8 @@ export interface AdminTehdejsiSnapshot {
   research: AdminTehdejsiResearch[];
   researchEfficiency: number | null;
   features: AdminTehdejsiFeature[];
+  signalHarvests: TehdejsiSignalHarvest[];
+  signalDigests: TehdejsiSignalDigest[];
 }
 
 type ReadResult<T> = { state: AdminTehdejsiState; items: T[]; unreadable: number };
@@ -350,7 +358,7 @@ async function singleton<T>(file: string, parse: (value: unknown) => T | null): 
   }
 }
 
-async function collection<T>(directory: string, parse: (value: unknown, raw: string) => T | null): Promise<ReadResult<T>> {
+async function collection<T>(directory: string, parse: (value: unknown, raw: string, name: string) => T | null): Promise<ReadResult<T>> {
   let names: string[];
   try {
     names = (await readdir(directory, { withFileTypes: true }))
@@ -367,7 +375,7 @@ async function collection<T>(directory: string, parse: (value: unknown, raw: str
   for (const name of names) {
     try {
       const raw = await readFile(path.join(directory, name), "utf8");
-      const item = parse(JSON.parse(raw) as unknown, raw);
+      const item = parse(JSON.parse(raw) as unknown, raw, name);
       if (item) items.push(item); else unreadable += 1;
     } catch { unreadable += 1; }
   }
@@ -429,7 +437,7 @@ export async function readAdminTehdejsiSvet(
   root = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")
 ): Promise<AdminTehdejsiSnapshot> {
   const base = path.join(root, "state", "ventures", "tehdejsi-svet");
-  const [facts, shortlists, cycle, research, featureRecords, ratings] = await Promise.all([
+  const [facts, shortlists, cycle, research, featureRecords, ratings, signalHarvests, signalDigests] = await Promise.all([
     singleton(path.join(base, "facts.json"), parseFacts),
     collection(path.join(base, "shortlists"), (value) => parseShortlist(value)),
     singleton(path.join(base, "cycle.json"), parseCycle),
@@ -438,7 +446,15 @@ export async function readAdminTehdejsiSvet(
       const parsed = parseTehdejsiFeatureRecommendation(value);
       return parsed ? { parsed, raw } : null;
     }),
-    ratingsLedger(path.join(root, "state", "ratings", "tehdejsi-svet", "ledger.jsonl"))
+    ratingsLedger(path.join(root, "state", "ratings", "tehdejsi-svet", "ledger.jsonl")),
+    collection(path.join(base, "signals", "harvests"), (value, _raw, name) => {
+      const parsed = parseTehdejsiSignalHarvest(value);
+      return parsed && name === `${parsed.id}.json` ? parsed : null;
+    }),
+    collection(path.join(base, "signals", "digests"), (value, _raw, name) => {
+      const parsed = parseTehdejsiSignalDigest(value);
+      return parsed && name === `${parsed.id}.json` ? parsed : null;
+    })
   ]);
   const features: ReadResult<AdminTehdejsiFeature> = {
     state: featureRecords.state,
@@ -454,7 +470,8 @@ export async function readAdminTehdejsiSvet(
     cycle: cycle.unreadable,
     ledger: research.unreadable,
     features: features.unreadable,
-    ratings: ratings.unreadable
+    ratings: ratings.unreadable,
+    signals: signalHarvests.unreadable + signalDigests.unreadable
   };
   return {
     stores: {
@@ -463,7 +480,8 @@ export async function readAdminTehdejsiSvet(
       cycle: cycle.state,
       ledger: research.state,
       features: features.state,
-      ratings: ratings.state
+      ratings: ratings.state,
+      signals: signalDigests.items.length || signalHarvests.items.length ? "present" : counts.signals ? "unreadable" : "missing"
     },
     unreadable: { ...counts, total: Object.values(counts).reduce((sum, count) => sum + count, 0) },
     facts: facts.item,
@@ -471,6 +489,8 @@ export async function readAdminTehdejsiSvet(
     cycle: cycle.item,
     research: research.items.sort((left, right) => right.completedAt.localeCompare(left.completedAt) || left.topicKey.localeCompare(right.topicKey)),
     researchEfficiency: paidResearch.length ? usedResearch.length / paidResearch.length : null,
-    features: features.items.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt) || right.id.localeCompare(left.id))
+    features: features.items.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt) || right.id.localeCompare(left.id)),
+    signalHarvests: signalHarvests.items.sort((left, right) => right.pastedAt.localeCompare(left.pastedAt) || right.id.localeCompare(left.id)),
+    signalDigests: signalDigests.items.sort((left, right) => right.extractedAt.localeCompare(left.extractedAt) || right.id.localeCompare(left.id))
   };
 }

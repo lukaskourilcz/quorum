@@ -414,7 +414,7 @@ test("BOOKSOFHISTORY admin tabs expose recorded evidence without rendering a boo
  */
 test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
 
-  test("Tehdejsi svet keeps future signal writes closed", async ({ page }) => {
+  test("Tehdejsi svet keeps owner paste-in behind its approval", async ({ page }) => {
     let futurePosts = 0;
     page.on("request", (request) => {
       if (request.method() === "POST" && /\/admin\/api\/tehdejsi-svet\/(?:signals|insights|results)$/u.test(new URL(request.url()).pathname)) futurePosts += 1;
@@ -422,9 +422,11 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await page.goto("/admin?venture=tehdejsi-svet&tab=signals", { waitUntil: "networkidle" });
     const panel = page.locator("[data-tehdejsi-signals]");
     await expect(panel.getByText("No owner-pasted community memory is recorded.")).toBeVisible();
-    await expect(panel.locator("form")).toHaveCount(0);
-    await expect(panel.getByRole("button")).toHaveCount(0);
-    expect(futurePosts).toBe(0);
+    await panel.getByLabel("Source label").fill("Synthetic e2e owner paste");
+    await panel.getByLabel("Owner-pasted comments").fill("[theme: fictional memory] A synthetic recollection.");
+    await panel.getByRole("button", { name: "Record recollections" }).click();
+    await expect(panel.getByRole("alert")).toContainText("TS-RESULTS-005 is pending");
+    expect(futurePosts).toBe(1);
   });
 
   test("BOOKSOFHISTORY owner approval records both Design Lab handoffs without posting", async ({ page }) => {

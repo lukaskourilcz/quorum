@@ -22,9 +22,9 @@ import { DoorMoneyRecommendationsPanel } from "@/components/admin/door-money-rec
 import { TehdejsiSvetFeaturesPanel } from "@/components/admin/tehdejsi-svet-features-panel";
 import { TehdejsiSvetLibraryPanel } from "@/components/admin/tehdejsi-svet-library-panel";
 import {
-  EMPTY_TEHDEJSI_SIGNALS,
   TehdejsiSvetSignalsPanel,
-  tehdejsiSignalsCount
+  type AdminTehdejsiAudienceRequest,
+  type AdminTehdejsiSignalTheme
 } from "@/components/admin/tehdejsi-svet-signals-panel";
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
@@ -249,8 +249,46 @@ export default async function AdminPage({
     : 0;
   const tehdejsiFeaturesCount = tehdejsiSvet.features.length + (tehdejsiSvet.shortlist?.entries.length ?? 0);
   const tehdejsiLibraryCount = (tehdejsiSvet.facts?.facts.length ?? 0) + tehdejsiSvet.research.length;
-  const tehdejsiSignals = EMPTY_TEHDEJSI_SIGNALS;
-  const tehdejsiSignalsItemCount = tehdejsiSignalsCount(tehdejsiSignals);
+  const consumedHarvests = new Set(tehdejsiSvet.signalDigests.flatMap(({ sourceHarvestIds }) => sourceHarvestIds));
+  const combinedThemes = new Map<string, AdminTehdejsiSignalTheme>();
+  const combinedRequests = new Map<string, AdminTehdejsiAudienceRequest>();
+  for (const digest of tehdejsiSvet.signalDigests) {
+    for (const theme of digest.themes) {
+      const key = theme.label.toLocaleLowerCase("und");
+      const current = combinedThemes.get(key);
+      combinedThemes.set(key, current ? {
+        label: current.label,
+        recurrence: current.recurrence + theme.recurrence,
+        lastSeenAt: current.lastSeenAt > theme.lastSeenAt ? current.lastSeenAt : theme.lastSeenAt
+      } : theme);
+    }
+    for (const request of digest.requests) {
+      const key = `${request.kind}:${request.value.toLocaleLowerCase("und")}`;
+      const current = combinedRequests.get(key);
+      combinedRequests.set(key, current ? {
+        kind: current.kind,
+        value: current.value,
+        recurrence: current.recurrence + request.recurrence,
+        lastSeenAt: current.lastSeenAt > request.lastSeenAt ? current.lastSeenAt : request.lastSeenAt
+      } : request);
+    }
+  }
+  const tehdejsiSignals = {
+    digests: tehdejsiSvet.signalDigests.map((digest) => ({
+      id: digest.id,
+      recordedAt: digest.extractedAt,
+      sourceLabel: `Sunday overlay · ${digest.sourceHarvestIds.length} harvest${digest.sourceHarvestIds.length === 1 ? "" : "s"}`,
+      recollections: digest.recollections.map(({ text }) => text),
+      correctionClaims: digest.correctionClaims.map(({ text }) => text)
+    })),
+    themes: [...combinedThemes.values()].sort((left, right) => right.recurrence - left.recurrence || left.label.localeCompare(right.label)),
+    requests: [...combinedRequests.values()].sort((left, right) => right.recurrence - left.recurrence || left.value.localeCompare(right.value)),
+    insights: [],
+    unreadable: tehdejsiSvet.unreadable.signals,
+    pendingHarvests: tehdejsiSvet.signalHarvests.filter(({ id }) => !consumedHarvests.has(id)).length
+  };
+  const tehdejsiSignalsItemCount = tehdejsiSignals.digests.length + tehdejsiSignals.themes.length +
+    tehdejsiSignals.requests.length + tehdejsiSignals.insights.length + tehdejsiSignals.pendingHarvests;
 
   /**
    * How many stored items a workspace holds.

@@ -18,7 +18,8 @@ const view: AdminTehdejsiSignalsView = {
     proposedAction: "Ask the owner to review a fictional missing district before any product change.",
     evidenceCount: 2
   }],
-  unreadable: 1
+  unreadable: 1,
+  pendingHarvests: 2
 };
 
 describe("Tehdejsi svet signals panel", () => {
@@ -35,9 +36,10 @@ describe("Tehdejsi svet signals panel", () => {
     expect(html).toContain("Product insight queue");
     expect(html).toContain("Synthetic map gap");
     expect(html).toContain("1 malformed signal record");
+    expect(html).toContain("2 awaiting Sunday");
   });
 
-  it("renders honest missing states without a future writer or external collector", () => {
+  it("renders honest missing states with only the owner-paste writer", () => {
     const html = renderToStaticMarkup(<TehdejsiSvetSignalsPanel />);
 
     expect(html).toContain("No owner-pasted community memory is recorded.");
@@ -45,8 +47,9 @@ describe("Tehdejsi svet signals panel", () => {
     expect(html).toContain("No recurring city, year or correction request is recorded.");
     expect(html).toContain("No product insight is recorded.");
     expect(html).toContain("never scrapes comments or calls a platform API");
-    expect(html).not.toContain("<form");
-    expect(html).not.toContain("<button");
+    expect(html).toContain("Paste comment harvest");
+    expect(html).toContain("Record recollections");
+    expect(html).toContain("research prompts, never facts");
     expect(html).not.toContain("/admin/api/tehdejsi-svet/signals");
   });
 });

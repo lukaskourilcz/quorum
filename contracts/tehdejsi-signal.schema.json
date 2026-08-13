@@ -1,0 +1,291 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "ts-signal/1"
+        },
+        "kind": {
+          "type": "string",
+          "const": "harvest"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^ts-signal-harvest-[a-f0-9]{20}$"
+        },
+        "ventureId": {
+          "type": "string",
+          "const": "tehdejsi-svet"
+        },
+        "source": {
+          "type": "string",
+          "const": "owner-paste"
+        },
+        "sourceLabel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "pastedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        "comments": {
+          "minItems": 1,
+          "maxItems": 50,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 600
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "kind",
+        "id",
+        "ventureId",
+        "source",
+        "sourceLabel",
+        "pastedAt",
+        "comments"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "ts-signal/1"
+        },
+        "kind": {
+          "type": "string",
+          "const": "sunday-digest"
+        },
+        "id": {
+          "type": "string",
+          "maxLength": 160,
+          "pattern": "^ts-signal-[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "ventureId": {
+          "type": "string",
+          "const": "tehdejsi-svet"
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "extractedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        "sourceHarvestIds": {
+          "minItems": 1,
+          "maxItems": 200,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^ts-signal-harvest-[a-f0-9]{20}$"
+          }
+        },
+        "recollections": {
+          "minItems": 1,
+          "maxItems": 2000,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 600
+              },
+              "classification": {
+                "type": "string",
+                "const": "recollection-not-fact"
+              },
+              "allowedUses": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "string",
+                    "const": "research-question"
+                  },
+                  {
+                    "type": "string",
+                    "const": "prompt-seed"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "text",
+              "classification",
+              "allowedUses"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "themes": {
+          "maxItems": 200,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "recurrence": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000
+              },
+              "lastSeenAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              }
+            },
+            "required": [
+              "label",
+              "recurrence",
+              "lastSeenAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "requests": {
+          "maxItems": 200,
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "city"
+                  },
+                  "value": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "recurrence": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000
+                  },
+                  "lastSeenAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "value",
+                  "recurrence",
+                  "lastSeenAt"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "const": "year"
+                  },
+                  "value": {
+                    "type": "string",
+                    "pattern": "^(?:19|20)\\d{2}$"
+                  },
+                  "recurrence": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000
+                  },
+                  "lastSeenAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "value",
+                  "recurrence",
+                  "lastSeenAt"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "correctionClaims": {
+          "maxItems": 200,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 600
+              },
+              "classification": {
+                "type": "string",
+                "const": "recollection-not-fact"
+              },
+              "allowedUses": {
+                "type": "array",
+                "prefixItems": [
+                  {
+                    "type": "string",
+                    "const": "research-question"
+                  },
+                  {
+                    "type": "string",
+                    "const": "prompt-seed"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "text",
+              "classification",
+              "allowedUses"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "kind",
+        "id",
+        "ventureId",
+        "date",
+        "extractedAt",
+        "sourceHarvestIds",
+        "recollections",
+        "themes",
+        "requests",
+        "correctionClaims"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$id": "https://boardless.ai/contracts/tehdejsi-signal.schema.json"
+}
