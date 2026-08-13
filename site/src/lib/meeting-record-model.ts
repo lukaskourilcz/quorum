@@ -2,7 +2,7 @@ import { agentById, type AgentId } from "../data/agents";
 import type { RoomTranscript, RoomTurnMode } from "../data/fixtures";
 import { readsAsMachineText } from "./public-prose";
 
-export type PublicMeetingKind = "cu-edition" | "cu-product" | "tt-marketing" | "gv-brief" | "ms-daily" | "dm-desk" | "dm-growth" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk" | "kv-desk" | "studio";
+export type PublicMeetingKind = "cu-edition" | "cu-product" | "tt-marketing" | "gv-brief" | "ms-daily" | "bh-desk" | "dm-desk" | "dm-growth" | "ts-desk" | "incubator-scan" | "incubator-synthesis" | "mma-intake" | "mma-analysis" | "mag-editorial" | "mag-desk" | "kv-desk" | "studio";
 export type PublicMeetingStatus =
   | "INSUFFICIENT_EVIDENCE"
   | "NO_ACTION"
@@ -183,7 +183,7 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
   if (!record || record.schemaVersion !== "meeting-record/2") return null;
   const cycleId = text(record.cycleId, 160);
   const meetingDate = date(record.date);
-  const kind = record.kind === "cu-edition" || record.kind === "cu-product" || record.kind === "tt-marketing" || record.kind === "gv-brief" || record.kind === "ms-daily" || record.kind === "dm-desk" || record.kind === "dm-growth" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" || record.kind === "mma-intake" || record.kind === "mma-analysis" || record.kind === "mag-editorial" || record.kind === "mag-desk" || record.kind === "kv-desk" || record.kind === "studio" ? record.kind : null;
+  const kind = record.kind === "cu-edition" || record.kind === "cu-product" || record.kind === "tt-marketing" || record.kind === "gv-brief" || record.kind === "ms-daily" || record.kind === "bh-desk" || record.kind === "dm-desk" || record.kind === "dm-growth" || record.kind === "ts-desk" || record.kind === "incubator-scan" || record.kind === "incubator-synthesis" || record.kind === "mma-intake" || record.kind === "mma-analysis" || record.kind === "mag-editorial" || record.kind === "mag-desk" || record.kind === "kv-desk" || record.kind === "studio" ? record.kind : null;
   const phase = record.phase === kind ? kind : null;
   const status = text(record.status, 40) as PublicMeetingStatus | null;
   const stage = text(record.stage, 40);
@@ -256,7 +256,7 @@ export function parsePublicMeetingRecord(value: unknown): PublicMeetingRecord | 
   }, 8);
   const growthPlan = prose(record.growthPlan);
   const eveningOutcome = record.eveningOutcome === null ? null : prose(record.eveningOutcome);
-  if (!participants || participants.length === 0 || !proposals || !voteMatrix || (voteMatrix.length === 0 && kind !== "kv-desk") || !tasks || !ideaVerdicts || !growthPlan || (record.eveningOutcome !== null && !eveningOutcome)) return null;
+  if (!participants || participants.length === 0 || !proposals || !voteMatrix || (voteMatrix.length === 0 && kind !== "kv-desk" && status !== "PAUSED") || !tasks || !ideaVerdicts || !growthPlan || (record.eveningOutcome !== null && !eveningOutcome)) return null;
 
   const caughtUpIdeaRef = record.caughtUpIdeaRef === undefined ? undefined : text(record.caughtUpIdeaRef, 160);
   const editionRef = record.editionRef === undefined ? undefined : text(record.editionRef, 160);

@@ -30,12 +30,47 @@ function kvorumClone(): Record<string, unknown> {
   return record;
 }
 
+function currentDeskClone(kind: "bh-desk" | "ts-desk"): Record<string, unknown> {
+  const record = structuredClone(valid) as unknown as Record<string, unknown>;
+  record.id = `2026-08-12-${kind}`;
+  record.cycleId = `20260812-${kind}`;
+  record.kind = kind;
+  record.phase = kind;
+  return record;
+}
+
 describe("public MeetingRecord v2 boundary", () => {
   it("accepts and projects the valid contract fixture", () => {
     expect(parsePublicMeetingRecord(valid)).toMatchObject({
       id: "2026-08-12-dm-desk",
       kind: "dm-desk",
       fixture: true
+    });
+  });
+
+  it.each(["bh-desk", "ts-desk"] as const)("accepts the current %s room so its calendar slot can link", (kind) => {
+    expect(parsePublicMeetingRecord(currentDeskClone(kind))).toMatchObject({
+      id: `2026-08-12-${kind}`,
+      kind
+    });
+  });
+
+  it("accepts a zero-dollar Door Money growth off-day that never called a vote", () => {
+    const record = structuredClone(valid) as unknown as Record<string, unknown>;
+    record.id = "2026-08-12-dm-growth";
+    record.cycleId = "20260812-dm-growth";
+    record.kind = "dm-growth";
+    record.phase = "dm-growth";
+    record.status = "PAUSED";
+    record.voteMatrix = [];
+    record.proposals = [];
+    const decision = record.decision as Record<string, unknown>;
+    decision.outcome = "NO_ACTION";
+    decision.summary = "$0 — this room meets on Thursdays. Nothing was spent and no action was taken.";
+    expect(parsePublicMeetingRecord(record)).toMatchObject({
+      kind: "dm-growth",
+      status: "PAUSED",
+      decision: { summary: expect.stringContaining("Thursdays") }
     });
   });
 

@@ -355,7 +355,18 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(CALENDAR_SLOTS.length);
   // The legend owns one entry per colour currently represented by the calendar model. Keep the
   // count aligned with that model as ventures join instead of preserving the old ten-entry pin.
-  await expect(page.locator("[data-project-legend]")).toHaveCount(11);
+  await expect(page.locator("[data-project-legend]")).toHaveCount(12);
+  for (const [kind, hour, project] of [
+    ["bh-desk", "12", "booksofhistory"],
+    ["dm-desk", "15", "door-money"],
+    ["dm-growth", "16", "door-money"],
+    ["ts-desk", "18", "tehdejsi-svet"],
+    ["kv-desk", "21", "kvorum"]
+  ] as const) {
+    const row = weekBoard.locator(`[data-calendar-kind="${kind}"][data-calendar-hour="${hour}"]`);
+    await expect(row).toHaveCount(1);
+    await expect(row.locator(`[data-calendar-slot][data-project="${project}"]`)).toHaveCount(5);
+  }
   await expect(weekBoard.locator("[data-calendar-slot] time")).toHaveCount(0);
   // No assertion that a fixture is on the board. There were test meetings on it when the archive
   // was young; there are none now, and requiring one would be requiring the company to keep

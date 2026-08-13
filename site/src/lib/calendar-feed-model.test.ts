@@ -47,8 +47,10 @@ describe("public CalendarFeed build model", () => {
   });
 
   it("keeps Prague wall times stable across seasonal offsets", () => {
-    expect(pragueSlotInstant("2026-07-31", 5).toISOString()).toBe("2026-07-31T03:00:00.000Z");
-    expect(pragueSlotInstant("2026-12-31", 5).toISOString()).toBe("2026-12-31T04:00:00.000Z");
+    for (const hour of [12, 15, 16, 18, 21]) {
+      expect(pragueSlotInstant("2026-07-31", hour).toISOString()).toBe(`2026-07-31T${String(hour - 2).padStart(2, "0")}:00:00.000Z`);
+      expect(pragueSlotInstant("2026-12-31", hour).toISOString()).toBe(`2026-12-31T${String(hour - 1).padStart(2, "0")}:00:00.000Z`);
+    }
   });
 
   it("exposes bounded static weeks including the coming week", () => {
@@ -77,6 +79,53 @@ describe("public CalendarFeed build model", () => {
     // The room never convened, so there is nothing to open: the cell is the whole answer.
     expect(slot?.meetingHref).toBeUndefined();
     expect(slot?.decisionOneLiner).toBe("No agenda was due for this room today.");
+  });
+
+  it("shows the Door Money off-day's Thursday gate reason without a meeting link", () => {
+    const parsed = parsePublicMeetingRecord(meetingFixtures[1]);
+    expect(parsed).not.toBeNull();
+    const meeting = {
+      ...parsed!,
+      id: "2026-08-12-dm-growth",
+      date: "2026-08-12",
+      kind: "dm-growth" as const,
+      status: "PAUSED" as const,
+      decision: {
+        ...parsed!.decision,
+        summary: "$0 — this room meets on Thursdays. Nothing was spent and no action was taken."
+      }
+    };
+    const feed = buildPublicCalendarFeed({
+      weekOf: meeting.date,
+      now: new Date("2026-08-12T20:00:00.000Z"),
+      standups: [],
+      meetings: [meeting]
+    });
+    const slot = feed.slots.find((entry) => entry.kind === "dm-growth" && entry.at.startsWith(meeting.date));
+    expect(slot).toMatchObject({ status: "not-needed", decisionOneLiner: expect.stringContaining("Thursdays") });
+    expect(slot?.meetingHref).toBeUndefined();
+  });
+
+  it("links held BOOKSOFHISTORY and Tehdejší svět slots to their saved records", () => {
+    const parsed = parsePublicMeetingRecord(meetingFixtures[1]);
+    expect(parsed).not.toBeNull();
+    const meetings = (["bh-desk", "ts-desk"] as const).map((kind) => ({
+      ...parsed!,
+      id: `2026-08-12-${kind}`,
+      date: "2026-08-12",
+      kind,
+      fixture: false
+    }));
+    const feed = buildPublicCalendarFeed({
+      weekOf: "2026-08-12",
+      now: new Date("2026-08-12T22:00:00.000Z"),
+      standups: [],
+      meetings
+    });
+    for (const kind of ["bh-desk", "ts-desk"] as const) {
+      expect(feed.slots.find((slot) => slot.kind === kind && slot.at.startsWith("2026-08-12")))
+        .toMatchObject({ status: "held", meetingHref: `/meetings/2026-08-12-${kind}` });
+    }
   });
 });
 
