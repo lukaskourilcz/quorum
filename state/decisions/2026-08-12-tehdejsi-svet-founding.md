@@ -161,7 +161,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-23a** — Owner results per platform
 - [x] **TS-23b** — Weights, used-flags and the experiment ladder
 - [x] **TS-24a** — Documentation truth across the standing docs
-- [ ] **TS-24b** — INBOX approvals and NEEDED owner items
+- [x] **TS-24b** — INBOX approvals and NEEDED owner items
 - [ ] **TS-24c** — Honest gaps, checkbox sweep and spec deletion
 
 ## Adapted during implementation
@@ -183,7 +183,9 @@ snapshot is a committed file and the venture buys no data.
   from that and nothing else. So TS-07 is no longer a sync CLI over a clone but the
   authoring and validation of that committed file, and TS-10b's read-only pin has nothing
   left to pin and is withdrawn. The hash verification stays: a hand-edited facts file must
-  abort the room rather than quietly change what it claims.
+  abort the room rather than quietly change what it claims. TS-SNAPSHOT-001 therefore
+  follows this shipped boundary; the issue's older pinned-commit-fetch wording is
+  superseded and grants no product-repository access.
 - **The registered desk held a `$0` slot before its pipeline landed.** Registering the
   venture put `ts-desk` on the clock while the dispatcher still had no editorial branch.
   The first runner therefore recorded a deterministic checkpoint instead of taking the

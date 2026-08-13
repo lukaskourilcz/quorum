@@ -306,6 +306,87 @@ items in place. Lack of response never authorizes an action. -->
   not post anything, connect a channel or authorize a model call outside the
   existing Thursday room envelope.
 
+- [ ] HUMAN_APPROVAL TS-SNAPSHOT-001 — Accept Tehdejší svět's hand-committed
+  facts file and its no-product-link boundary.
+  What this approves, exactly:
+  - **The read layer:** the owner may copy eligible public facts into the single
+    `tehdejsi-facts/1` file in this repository. The desk verifies the recorded
+    content hash before every read and aborts on any mismatch. There is no sync,
+    pinned-commit fetch, clone, API call or runtime connection to the product.
+  - **The exclusions:** records marked unsafe to share and excluded city media
+    must be absent structurally before the file is committed. Leader profiles
+    remain context only and cannot become feature subjects.
+  - **The cost:** copying, hashing, validation and daily reads cost `$0`; this
+    approval adds no account, credential, provider or data purchase.
+  - **What this does not approve:** any read from or write to the product
+    repository, automatic import, product-data edit, publication or weakening of
+    source, sensitivity, licence or owner-review gates.
+
+- [ ] HUMAN_APPROVAL TS-MEDIA-002 — Allow the nineteen eligible licensed city
+  photographs in Tehdejší svět social drafts with attribution.
+  What this approves, exactly:
+  - **The deliberate divergence:** eligible Wikimedia/CC BY-SA city photographs
+    may appear in social cards even though the product's own share-image rule is
+    narrower. The product and its assets remain unchanged.
+  - **The licence path:** every photo must be present as recorded local bytes and
+    carry its creator/source/licence attribution on the rendered card and in its
+    licence-respecting caption. An excluded image or incomplete credit fails the
+    package before owner review.
+  - **What stays forbidden:** AI-generated historical imagery, national flags as
+    brand elements, remote image fetches during rendering, destruction-comparison
+    imagery for cities under attack or occupation, and any automatic post.
+
+- [ ] HUMAN_APPROVAL TS-ACCOUNTS-003 — Clear the Tehdejší svět handles and
+  authorize the owner to prepare one bilingual profile on Instagram, Facebook and
+  Threads.
+  What this approves, exactly:
+  - **The launch preconditions:** the product's production domain and absolute OG
+    URLs must land first; `dontwannaknow.vercel.app` must never appear in a bio.
+    The owner records the collision/trademark check and clearance for
+    `@tehdejsisvet` (or the chosen fallback) before creating an account.
+  - **The bilingual bio:** “Svět, ve kterém vyrůstali lidé, na kterých vám záleží.
+    Світ, у якому виростали ваші близькі. CZ · UA · zdroje u každého příběhu.”
+    Facebook may add the owner-approved methodology sentence. No flag emoji or
+    unsupported product claim may be added.
+  - **The operating boundary:** signing authorizes only the owner to create and
+    configure the profiles. Every package remains owner-reviewed and manually
+    posted; the repository receives no credential, publisher or scheduler.
+  - **What this does not approve:** this session or any agent creating an account,
+    touching a channel, posting, replying, joining groups, messaging, buying ads or
+    weakening the social triple-lock.
+
+- [ ] HUMAN_APPROVAL TS-RESEARCH-004 — Allow bounded Tehdejší svět marketing
+  research through the existing shared provider.
+  What this approves, exactly:
+  - **The ceilings:** at most `$0.30` per brief and `$2.00` per month, inside the
+    immutable `$0.10` per-call, `$1.00` daily, `$25` model/API and `$30` all-in
+    portfolio limits. Every call reserves first and records actual use after.
+  - **The priorities:** Ukrainian coverage gaps first, then names and music. A
+    reusable cited dossier wins before new spend; one canonical dossier supports
+    both language passes.
+  - **The product boundary:** research is venture marketing data only. A useful
+    product finding becomes a cited product-insight queue entry for the owner; it
+    is never written, synced or promoted into the product automatically.
+  - **What this does not approve:** a new provider, account, credential, product
+    data source, uncited claim, higher ceiling, post, outreach or paid distribution.
+    Missing approval keeps research on the `$0` path.
+
+- [ ] HUMAN_APPROVAL TS-RESULTS-005 — Allow owner-entered Tehdejší svět results
+  and owner-pasted comment harvests as its only measurement.
+  What this approves, exactly:
+  - **The result entry:** after the owner records a manually posted HTTPS URL, the
+    protected admin may save available non-negative platform counts and an outcome
+    note. Missing values remain unavailable, never zero; retries are idempotent.
+  - **The memory entry:** the owner may paste selected comments. Extraction may
+    group themes, requests and corrections, but every recollection stays labelled
+    as a recollection and cannot become a historical fact or override a source.
+  - **The D9 hold:** `METRICS_INGESTION_ENABLED=false` remains in force. No product
+    analytics, social API, crawler, pixel, webhook, cookie, scrape, audience profile
+    or automatic comment collection is authorized.
+  - **What this does not approve:** account access, posting, replying, fabricated
+    results, personal-data enrichment, automatic optimisation, outreach or a wider
+    measurement programme.
+
 ## Resolved
 
 - [x] HUMAN_APPROVAL DEVSHARK-BANNER-001 — Place the devShark house banner on

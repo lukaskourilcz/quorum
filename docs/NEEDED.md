@@ -177,37 +177,64 @@ Judgement calls. Nothing is blocked on code for any of these.
   source: D9 and `METRICS_INGESTION_ENABLED=false` stay in force, no platform is read,
   and absent numbers remain unavailable. [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Read the three remaining venture designs and commission their builds** — the
-  remaining designs are `docs/KVORUM-VENTURE-DESIGN.md` (Czech politics),
-  `docs/DOOR-MONEY-VENTURE-DESIGN.md` (Rapovej deník marketing) and
-  `docs/TEHDEJSI-SVET-VENTURE-DESIGN.md` (adoption of the existing Tehdejší svět
-  product); their implementation prompts sit beside them. Hand each prompt to its own
-  implementation session; whichever runs first
-  creates the shared recommendation contract, the research provider and the
-  carousel-summary locale field, and every prompt's Phase 0 checks for the others'
-  artifacts before creating its own. All four carry the standing GoVIRAL + Design Lab
-  spine (`docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` §10). BOOKSOFHISTORY is implemented;
-  its one-use build prompt was deleted and its founding decision now waits for your
-  countersignature and four approvals. Each remaining build ends with a founding
-  decision waiting for your countersignature and its approval items in
-  `state/INBOX.md`; nothing runs live before you sign.
+- [ ] **Read the remaining Kvórum venture design and commission its build** — the
+  remaining design is `docs/KVORUM-VENTURE-DESIGN.md` (Czech politics), with its
+  implementation prompt beside it. BOOKSOFHISTORY, Door Money and Tehdejší svět are
+  implemented and wait behind their own founding countersignatures and approvals;
+  nothing runs live before you sign.
   [imp:4] [owner:me] [time:75m] [kind:decision]
 
-- [ ] **Clear the four venture names and handles** — run the BRAND.md-style checks for
-  "Kvórum", "Door Money", "BOOKSOFHISTORY" and the @tehdejsisvet handles: social
+- [ ] **Clear the three remaining venture names and handles** — run the BRAND.md-style checks for
+  "Kvórum", "Door Money" and "BOOKSOFHISTORY": social
   handles on IG/FB/Threads/X (TikTok where relevant; for BOOKSOFHISTORY decide whether
   the Czech lane shares the handle or takes a `.cz` variant), trademark screen,
   collision search. The design documents list fallbacks in their closing "Open
   questions" sections, and venture ids stay stable if a public name changes.
   [imp:3] [owner:me] [time:45m] [kind:legal]
 
-- [ ] **Unblock the Tehdejší svět launch preconditions** — the adoption venture cannot
-  launch profiles until the product's production domain lands (that task already sits
-  in the product repo's own NEEDED.md at [imp:5]; `dontwannaknow.vercel.app` must
-  never appear in a bio), and two strategy questions need answers: may the 19 licensed
-  city photographs appear in social cards with on-slide attribution, and is the Vercel
-  Hobby → Pro-team question worth resolving now. Both are in the design doc's closing
-  "Open questions". [imp:3] [owner:me] [time:20m] [kind:decision]
+- [ ] **Review the facts file and sign or decline `TS-SNAPSHOT-001`** — confirm that
+  `state/ventures/tehdejsi-svet/facts.json` contains only facts copied by a
+  human, structurally omits unsafe records and excluded media, and is the only daily
+  read layer. Signing does not authorize a fetch, clone, sync or any connection to the
+  product repository; a hash mismatch keeps the desk closed at `$0`.
+  [imp:5] [owner:me] [time:20m] [kind:content]
+
+- [ ] **Sign or decline `TS-MEDIA-002`** — decide whether the nineteen eligible
+  Wikimedia/CC BY-SA city photographs may appear in Tehdejší svět social cards with
+  creator/source/licence attribution on the card and in the caption. Excluded media,
+  incomplete credits, AI-generated historical imagery and destruction comparisons
+  remain blocked. [imp:4] [owner:me] [time:15m] [kind:legal]
+
+- [ ] **Land the production domain, clear the handle and sign or decline
+  `TS-ACCOUNTS-003`** — finish the product's existing `[imp:5]` domain task and
+  absolute OG URLs, then clear `@tehdejsisvet` (or record a fallback), approve the
+  no-flags bilingual bio in `state/INBOX.md`, and personally create the Instagram,
+  Facebook and Threads profiles if approved. `dontwannaknow.vercel.app` must never
+  appear in a bio; no agent receives a credential or channel.
+  [imp:5] [owner:me] [time:40m] [kind:setup]
+
+- [ ] **Sign or decline `TS-RESEARCH-004`** — decide whether the existing shared
+  provider may research the Ukrainian coverage gap, names and music at no more than
+  `$0.30` per brief and `$2.00` per month. Research stays venture-side marketing data;
+  product-worthy findings stop in the owner-controlled insight queue.
+  [imp:3] [owner:me] [time:10m] [kind:decision]
+
+- [ ] **Sign or decline `TS-RESULTS-005`** — decide whether the protected admin may
+  accept owner-entered post results and owner-pasted comments as the venture's only
+  measurement. D9 stays in force: no product analytics, platform API, scrape, pixel,
+  cookie or automatic comment collection; recollections never become facts.
+  [imp:3] [owner:me] [time:10m] [kind:decision]
+
+- [ ] **Approve Tehdejší svět's first 12-feature content bank** — review both language
+  packages, their source coverage, tier labels, licences, send-target questions and
+  Design Lab previews before day 1. Approval of an individual feature still does not
+  create an account or post it; the owner performs every external post by hand.
+  [imp:4] [owner:me] [time:60m] [kind:content]
+
+- [ ] **Decide whether the product should move from Vercel Hobby to the existing Pro
+  team** — this is likely `$0` marginal but remains a product-side owner decision.
+  Tehdejší svět does not move the product, change its plan or infer permission from the
+  BoardlessAI Pro subscription. [imp:2] [owner:me] [time:10m] [kind:decision]
 
 - [ ] **Answer the BOOKSOFHISTORY launch questions** — lane priority (both at once, or
   English first with Czech two weeks behind), the starting cycle length (3 days or 4),
