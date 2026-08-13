@@ -48,6 +48,8 @@ function ShortlistRow({ entry, fact }: { entry: AdminTehdejsiShortlistEntry; fac
   const factors = [
     ["Askability", entry.factors.askability],
     ["Anniversary", entry.factors.anniversary],
+    ["Cultural moment", entry.factors.culturalMoment],
+    ["Wartime awareness", entry.factors.wartimeAwareness],
     ["Source confidence", entry.factors.sourceConfidence],
     ["Country balance", entry.factors.countryBalance],
     ["Tier cost", entry.factors.tierCost]

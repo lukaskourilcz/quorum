@@ -5,6 +5,7 @@ import {
   type TehdejsiShortlist,
   type TehdejsiShortlistEntry
 } from "../../contracts/tehdejsi-shortlist.js";
+import type { TehdejsiTimingSignal } from "./goviral.js";
 
 /**
  * Rank facts by one question: would a reader send this to someone, and what would they ask?
@@ -54,6 +55,35 @@ export interface ShortlistInput {
   recentlyUsedFactIds?: readonly string[];
   /** The country of the last published feature, so the feed alternates rather than drifts. */
   lastCountry?: TehdejsiFact["country"] | null;
+  goViral?: {
+    planRef: string | null;
+    signals: readonly TehdejsiTimingSignal[];
+  };
+}
+
+function normalizedTokens(values: readonly string[]): Set<string> {
+  return new Set(values.flatMap((value) => value
+    .normalize("NFKD")
+    .replaceAll(/\p{Mark}/gu, "")
+    .toLocaleLowerCase("en")
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter((token) => token.length > 2)));
+}
+
+function timingFactors(fact: TehdejsiFact, signals: readonly TehdejsiTimingSignal[]): {
+  culturalMoment: number;
+  wartimeAwareness: number;
+} {
+  const vocabulary = normalizedTokens([fact.id, fact.place ?? "", fact.text]);
+  const matches = signals.filter((signal) => {
+    const topic = normalizedTokens([signal.topic]);
+    return topic.size > 0 && [...topic].every((token) => vocabulary.has(token));
+  });
+  const wartimeAwareness = fact.country === "ua" && fact.kind === "city" && fact.sensitivityTier === 2
+    && signals.some(({ wartimeNewsCycle }) => wartimeNewsCycle) ? -4 : 0;
+  // Wartime city features are remembrance, not an opportunity to optimize engagement.
+  const culturalMoment = wartimeAwareness < 0 ? 0 : matches.length > 0 ? 2 : 0;
+  return { culturalMoment, wartimeAwareness };
 }
 
 export function scoreFact(fact: TehdejsiFact, input: ShortlistInput): TehdejsiShortlistEntry {
@@ -61,9 +91,11 @@ export function scoreFact(fact: TehdejsiFact, input: ShortlistInput): TehdejsiSh
   // The tier the gate believes, not the tier the file declared. A fact typed as everyday that is
   // in fact about 1968 must not become selectable by being typed wrongly.
   const tier = classifyTier(fact).tier;
+  const timing = timingFactors(fact, input.goViral?.signals ?? []);
   const factors = {
     askability: ASKABILITY[fact.kind],
     anniversary: anniversaryScore(fact, input.date),
+    ...timing,
     sourceConfidence: sourceConfidence(fact),
     // Alternating is a nudge, not a rule: a strong Czech fact still beats a weak Ukrainian one.
     countryBalance: input.lastCountry && fact.country !== input.lastCountry ? 3 : 0,
@@ -86,6 +118,7 @@ export function buildShortlist(input: ShortlistInput): TehdejsiShortlist {
     schemaVersion: "tehdejsi-shortlist/1",
     date: input.date,
     factsHash: input.factsHash,
+    goViralPlanRef: input.goViral?.planRef ?? null,
     entries: scored.map((entry, index) => ({ ...entry, rank: index + 1 }))
   });
 }

@@ -17,6 +17,7 @@ import { atomicWriteJson, readJson } from "../../state.js";
 import { loadTehdejsiFacts } from "./facts.js";
 import { runTehdejsiPipelineDay, type TehdejsiPipelineOutcome } from "./pipeline.js";
 import { buildShortlist } from "./scorer.js";
+import { readTehdejsiGoViralContext } from "./goviral.js";
 import { runSundaySignalOverlay } from "./signals.js";
 import {
   applyTehdejsiCycleDay,
@@ -373,7 +374,10 @@ async function holdPausedCycle(input: {
 }): Promise<string[]> {
   try {
     const facts = await loadTehdejsiFacts();
-    const existing = await readTehdejsiCycle(input.root);
+    const [existing, goViral] = await Promise.all([
+      readTehdejsiCycle(input.root),
+      readTehdejsiGoViralContext(input.root, input.date)
+    ]);
     const cycle = existing === null || tehdejsiCycleComplete(existing)
       ? createTehdejsiCycle({ date: input.date, now: input.now })
       : existing;
@@ -383,7 +387,8 @@ async function holdPausedCycle(input: {
       const shortlist = buildShortlist({
         facts: facts.facts,
         factsHash: facts.contentHash,
-        date: input.date
+        date: input.date,
+        goViral
       });
       const shortlistPath = `ventures/tehdejsi-svet/shortlists/${input.date}.json`;
       await atomicWriteJson(input.root, shortlistPath, shortlist);

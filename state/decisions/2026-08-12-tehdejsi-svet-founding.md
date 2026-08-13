@@ -156,7 +156,7 @@ snapshot is a committed file and the venture buys no data.
 - [x] **TS-20d** — Signals panel, tab wiring and e2e
 - [x] **TS-21a** — Community signals: contract and extraction
 - [x] **TS-21b** — Product-insight queue, seeded with the five audit findings
-- [ ] **TS-22a** — GoVIRAL spine: topic set and timing factor
+- [x] **TS-22a** — GoVIRAL spine: topic set and timing factor
 - [ ] **TS-22b** — GoVIRAL spine: transitions and the Design-Lab-only test
 - [ ] **TS-23a** — Owner results per platform
 - [ ] **TS-23b** — Weights, used-flags and the experiment ladder

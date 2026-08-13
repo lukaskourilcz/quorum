@@ -118,6 +118,12 @@
       "sourceMode": "free",
       "keywords": ["BookTok", "author marketing", "hip-hop culture", "music industry stories"],
       "hashtags": ["#BookTok", "#AuthorMarketing", "#HipHopCulture", "#MusicIndustryStories"]
+    },
+    "tehdejsi-svet": {
+      "label": "Tehdejsi svet (Czech and Ukrainian lived memory)",
+      "sourceMode": "free",
+      "keywords": ["česká nostalgie", "українська ностальгія", "rodinná historie", "сімейна історія", "paměť města", "пам'ять міста"],
+      "hashtags": ["#ČeskáNostalgie", "#УкраїнськаНостальгія", "#RodinnáHistorie", "#СімейнаІсторія", "#PaměťMěsta", "#ПамятьМіста"]
     }
   }
 }

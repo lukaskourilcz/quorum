@@ -14,6 +14,8 @@ import { z } from "zod";
 export const TehdejsiFactorBreakdownSchema = z.object({
   askability: z.number().finite(),
   anniversary: z.number().finite(),
+  culturalMoment: z.number().finite(),
+  wartimeAwareness: z.number().finite(),
   sourceConfidence: z.number().finite(),
   countryBalance: z.number().finite(),
   tierCost: z.number().finite()
@@ -33,6 +35,8 @@ export const TehdejsiShortlistSchema = z.object({
   schemaVersion: z.literal("tehdejsi-shortlist/1"),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   factsHash: z.string().regex(/^[a-f0-9]{64}$/),
+  /** The exact recorded plan whose measured calls affected timing, or null for a neutral run. */
+  goViralPlanRef: z.string().regex(/^ventures\/goviral\/plans\/plan-\d{4}-\d{2}-\d{2}-weekly-brief\.json$/).nullable(),
   entries: z.array(TehdejsiShortlistEntrySchema).min(1)
 }).strict().superRefine((shortlist, context) => {
   const ranks = shortlist.entries.map((entry) => entry.rank);

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "marketing-plan/1",
+  "id": "plan-2026-08-10-weekly-brief",
+  "ventureId": "goviral",
+  "title": "Synthetic Tehdejsi svet timing brief",
+  "summary": "Invented free-signal readings for deterministic scorer tests only.",
+  "objective": "Give the owner bounded synthetic timing context without publishing or contacting anyone.",
+  "tactics": [
+    {
+      "type": "content",
+      "description": "Trend call: česká nostalgie (tehdejsi-svet, free volume, cs): 4.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "Synthetic timing evidence only; nothing is posted or scheduled."
+    },
+    {
+      "type": "content",
+      "description": "Trend call: пам'ять міста (tehdejsi-svet, free volume, en): 7.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "Synthetic wartime-awareness input only; never an engagement instruction."
+    }
+  ],
+  "calendar": [{ "week": 1, "focus": "Owner review of synthetic timing evidence." }],
+  "audienceRefs": [],
+  "kpis": ["Synthetic timing calls remain inspectable and owner-reviewed."],
+  "postable_assets": [
+    {
+      "id": "asset-20260810-tehdejsi-timing",
+      "captions": {
+        "instagram": { "A": "Synthetic timing draft A.", "B": "Synthetic timing draft B." },
+        "threads": { "A": "Synthetic timing note A.", "B": "Synthetic timing note B." }
+      },
+      "visual": {
+        "template_id": "cover-cta",
+        "version": "1.0.0",
+        "content": {
+          "locale": "en",
+          "strings": {
+            "cover-title": "SYNTHETIC MEMORY SIGNAL",
+            "cover-dek": "Invented evidence for a deterministic test.",
+            "cta": "Review the fixture",
+            "destination": "owner review"
+          }
+        }
+      }
+    }
+  ],
+  "status": "approved",
+  "originMeetingRef": "2026-08-10-gv-brief"
+}

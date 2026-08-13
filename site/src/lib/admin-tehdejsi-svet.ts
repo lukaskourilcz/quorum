@@ -46,6 +46,8 @@ export interface AdminTehdejsiShortlistEntry {
   factors: {
     askability: number;
     anniversary: number;
+    culturalMoment: number;
+    wartimeAwareness: number;
     sourceConfidence: number;
     countryBalance: number;
     tierCost: number;
@@ -56,6 +58,7 @@ export interface AdminTehdejsiShortlistEntry {
 export interface AdminTehdejsiShortlist {
   date: string;
   factsHash: string;
+  goViralPlanRef: string | null;
   entries: AdminTehdejsiShortlistEntry[];
 }
 
@@ -229,14 +232,16 @@ function parseFacts(value: unknown): AdminTehdejsiFacts | null {
 
 function parseShortlist(value: unknown): AdminTehdejsiShortlist | null {
   const file = object(value);
-  if (!file || !exact(file, ["schemaVersion", "date", "factsHash", "entries"]) || file.schemaVersion !== "tehdejsi-shortlist/1" ||
+  if (!file || !exact(file, ["schemaVersion", "date", "factsHash", "goViralPlanRef", "entries"]) || file.schemaVersion !== "tehdejsi-shortlist/1" ||
       typeof file.date !== "string" || !DATE.test(file.date) || typeof file.factsHash !== "string" || !HASH.test(file.factsHash) ||
+      (file.goViralPlanRef !== null && (typeof file.goViralPlanRef !== "string" ||
+        !/^ventures\/goviral\/plans\/plan-\d{4}-\d{2}-\d{2}-weekly-brief\.json$/u.test(file.goViralPlanRef))) ||
       !Array.isArray(file.entries) || file.entries.length < 1) return null;
   const entries: AdminTehdejsiShortlistEntry[] = [];
   for (const raw of file.entries) {
     const entry = object(raw); const factors = object(entry?.factors);
     if (!entry || !exact(entry, ["rank", "factId", "score", "factors", "veto"]) || !factors ||
-        !exact(factors, ["askability", "anniversary", "sourceConfidence", "countryBalance", "tierCost"])) return null;
+        !exact(factors, ["askability", "anniversary", "culturalMoment", "wartimeAwareness", "sourceConfidence", "countryBalance", "tierCost"])) return null;
     if (!integer(entry.rank, 1) || typeof entry.factId !== "string" || !entry.factId || !finite(entry.score) ||
         !["tier-2-review-required", "recently-used", null].includes(entry.veto as string | null)) return null;
     if (Object.values(factors).some((factor) => !finite(factor))) return null;
@@ -251,7 +256,7 @@ function parseShortlist(value: unknown): AdminTehdejsiShortlist | null {
   const expectedRanks = entries.map((_, index) => index + 1);
   if (JSON.stringify(entries.map(({ rank }) => rank).sort((a, b) => a - b)) !== JSON.stringify(expectedRanks)) return null;
   if (new Set(entries.map(({ factId }) => factId)).size !== entries.length) return null;
-  return { date: file.date, factsHash: file.factsHash, entries };
+  return { date: file.date, factsHash: file.factsHash, goViralPlanRef: file.goViralPlanRef as string | null, entries };
 }
 
 function parseCycle(value: unknown): AdminTehdejsiCycle | null {

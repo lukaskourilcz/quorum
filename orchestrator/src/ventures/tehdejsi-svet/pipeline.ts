@@ -25,6 +25,7 @@ import {
 import { produceBilingualDraft } from "./produce.js";
 import { buildTehdejsiDeckPack } from "./render.js";
 import { buildShortlist } from "./scorer.js";
+import { readTehdejsiGoViralContext } from "./goviral.js";
 import {
   applyTehdejsiCycleDay,
   createTehdejsiCycle,
@@ -252,11 +253,15 @@ async function planningDay(
   input: TehdejsiPipelineInput,
   cycle: NonNullable<Awaited<ReturnType<typeof readTehdejsiCycle>>>
 ): Promise<TehdejsiPipelineOutcome> {
-  const facts = await loadTehdejsiFacts();
+  const [facts, goViral] = await Promise.all([
+    loadTehdejsiFacts(),
+    readTehdejsiGoViralContext(input.root, input.date)
+  ]);
   const shortlist = TehdejsiShortlistSchema.parse(buildShortlist({
     facts: facts.facts,
     factsHash: facts.contentHash,
-    date: input.date
+    date: input.date,
+    goViral
   }));
   const shortlistPath = `ventures/tehdejsi-svet/shortlists/${input.date}.json`;
   await atomicWriteJson(input.root, shortlistPath, shortlist);

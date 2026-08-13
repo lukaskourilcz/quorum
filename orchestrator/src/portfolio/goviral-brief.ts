@@ -37,7 +37,7 @@ function trendCalls(trends: GoViralTrends | null): string[] {
     .flatMap((result) => result.status === "success" ? result.signals : [])
     .filter((signal) => signal.scope?.startsWith("topic-set:"))
     .sort((left, right) => right.value - left.value || left.topic.localeCompare(right.topic, "en"))
-    .slice(0, 6)
+    .slice(0, 12)
     .map((signal) => {
       const [, topicSet = "unknown", locale = "unknown"] = signal.scope!.split(":");
       return `${signal.topic} (${topicSet}, free ${signal.kind}, ${locale}): ${signal.value}.`;

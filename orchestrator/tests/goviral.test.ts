@@ -377,6 +377,16 @@ describe("the scraped-row boundary", () => {
       expect(stepTopicSets(step, registry)).not.toContain("door-money");
       expect(stepPayload({ step, registry, topicSet: "door-money" })).toBeNull();
     }
+    expect(registry.topicSets["tehdejsi-svet"]).toEqual({
+      label: "Tehdejsi svet (Czech and Ukrainian lived memory)",
+      sourceMode: "free",
+      keywords: ["česká nostalgie", "українська ностальгія", "rodinná historie", "сімейна історія", "paměť města", "пам'ять міста"],
+      hashtags: ["#ČeskáNostalgie", "#УкраїнськаНостальгія", "#RodinnáHistorie", "#СімейнаІсторія", "#PaměťMěsta", "#ПамятьМіста"]
+    });
+    for (const step of registry.recipe) {
+      expect(stepTopicSets(step, registry)).not.toContain("tehdejsi-svet");
+      expect(stepPayload({ step, registry, topicSet: "tehdejsi-svet" })).toBeNull();
+    }
     const raw = JSON.parse(await readFile(path.join(process.cwd(), "../config/goviral-sources.json"), "utf8")) as {
       actors: unknown;
       recipe: unknown;

@@ -739,7 +739,15 @@ export async function collectFreeTrendingSignals(input: {
     subreddits: ["MMA", "ufc", "artificial", "LocalLLaMA"],
     scopedTopicQueries: Object.entries(input.topicSets)
       .filter(([id, definition]) => id !== "door-money" && definition.sourceMode === "free")
-      .flatMap(([topicSet, definition]) => definition.keywords.map((query) => ({ topicSet, query }))),
+      .flatMap(([topicSet, definition]) => definition.keywords
+        .map((query) => ({
+          topicSet,
+          query,
+          order: createHash("sha256").update(`${input.date}:${topicSet}-free:${query}`).digest("hex")
+        }))
+        .sort((left, right) => left.order.localeCompare(right.order) || left.query.localeCompare(right.query))
+        .slice(0, 3)
+        .map(({ query }) => ({ topicSet, query }))),
     ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
   });
   const results = collected.map((result) => ({
