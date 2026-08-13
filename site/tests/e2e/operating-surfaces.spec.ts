@@ -1375,7 +1375,13 @@ test.describe("the Design Lab workspace", () => {
     await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
     const canvas = page.locator("[data-slide-canvas]").first();
     const portrait = await canvas.evaluate((node) => getComputedStyle(node).aspectRatio);
-    await page.getByRole("button", { name: "9:16", exact: true }).first().click();
+    const story = page.getByRole("button", { name: "9:16", exact: true }).first();
+    // A warm development server can paint this client component before hydration attaches the
+    // format handler. Retry the visible action until the control itself confirms the transition.
+    await expect.poll(async () => {
+      await story.click();
+      return story.getAttribute("aria-pressed");
+    }, { timeout: 30_000 }).toBe("true");
     await expect
       .poll(async () => canvas.evaluate((node) => getComputedStyle(node).aspectRatio), { timeout: 30_000 })
       .not.toBe(portrait);
