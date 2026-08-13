@@ -1,13 +1,19 @@
 # Tehdejší svět: the adoption venture — strategy and design
 
-Status: implemented, pending founding countersignature. This is the master plan for BoardlessAI adopting the
-existing product **Tehdejší svět** (`lukaskourilcz/dontwannaknow`, live at
-dontwannaknow.vercel.app) as a marketed social venture. Nothing runs until the owner
-countersigns `state/decisions/2026-08-12-tehdejsi-svet-founding.md`. The one-use
-implementation contract was deleted at programme closeout; the founding decision,
-this design and the shipped contracts are the durable authorities. The product's own
-repository is **never reached or modified by this venture** — BoardlessAI adopts the
-marketing, not the code.
+> **What actually shipped, 2026-08-13.** The complete fixture-proved adoption system exists: the
+> two-day desk cycle, a hand-committed hash-verified facts envelope, deterministic opportunity
+> scoring, guarded optional research, three sensitivity tiers, independent Czech/Ukrainian passes,
+> no-flags/no-AI-history/remembrance gates, Cyrillic-complete Design Lab rendering, owner approval,
+> community signals, product insights, GoVIRAL exchange, results and replay-verified learning. The
+> one-use specification and handoff were deleted. The founding decision and all five `TS-*`
+> approvals remain unsigned, so there is no live provider call, account, channel, post, result or
+> launch evidence. The product repository is not reachable from any module, prompt, config or
+> workflow: there is no clone, token, API call, runtime body fetch or sync command. The owner copies
+> reviewed facts into this repository and updates their matching hash. The Sunday learning overlay
+> is deterministic and costs `$0`. Short-form video, automated comment collection, product-side
+> names/music data and Ukrainian website localisation remain unbuilt. Where the historical analysis
+> or standing strategy below differs, `state/decisions/2026-08-12-tehdejsi-svet-founding.md` and
+> this block are authoritative. BoardlessAI adopts the marketing, never the product code.
 
 The shape in one line: **the product already knows its moment of value — "a concrete,
 honestly framed fact the user wants to ask a loved one about" — and the social venture
@@ -315,19 +321,17 @@ AI-generated historical imagery, ever (§26, §48).
 
 ### 22. Existing-data mining strategy
 
-A read-only **snapshot index** of the product's public runtime data, pinned to a source
-commit (the devShark snapshot precedent): per record — dataset, id, country, city,
-year/decade, category, chapter, tone, sensitivity, `shareSafe`, the six `rel` scores,
-licence, source presence, text hash. Bodies are fetched at need from the pinned commit;
-nothing is duplicated wholesale, nothing ever diverges silently (index carries the
-source commit; refresh is an explicit owner-triggered sync). Mining rules inherited
-from the product: `shareSafe:false` records never enter the candidate pool (leaders
-included); `difficult` records enter only as context for tier-2 features; the six
-relevance axes seed the social score (§30) so 4,316 records arrive pre-ranked.
+The venture reads one committed **facts envelope** authored by a human from reviewed public facts.
+Each record carries its own source and the dimensions required by the scorer; a matching content
+hash makes an unreviewed edit fail closed. No source commit, product-relative path or runtime body
+fetch exists, and replacement is an explicit reviewed repository change rather than a sync. The
+build rules structurally omit `shareSafe:false` material and excluded media before the envelope can
+be used. `difficult` records enter only as context for tier-2 features. The daily desk reads this
+bounded local file with no network, token or product-repository access.
 
 ### 23. Selective deep-research strategy
 
-Product data first; research only when it materially improves a chosen story. The
+Committed facts first; research only when it materially improves a chosen story. The
 venture reuses the BOOKSOFHISTORY research provider module and dossier/ledger
 contracts wholesale — same brief discipline, same idempotency, same used-flag
 economics. Standing research priorities (from the gap analysis, in order):
@@ -415,9 +419,9 @@ stock, no generated "historical" imagery.
 
 Two new agents; everything else reused:
 
-- **LETOPIS** — venture lead and story editor. Mines the index, ranks candidates,
-  writes canonical story briefs and the Czech feature copy. Cannot fetch beyond the
-  read layer, cannot bypass sensitivity tiers, cannot post. Sonnet.
+- **LETOPIS** — venture lead and story editor. Reads the committed facts envelope, ranks
+  candidates, writes canonical story briefs and the Czech feature copy. Cannot fetch another
+  source, bypass sensitivity tiers or post. Sonnet.
 - **VERBA** — Ukrainian editor. Native UA adaptation of every feature (editorial
   adaptation, not translation), UA terminology and source review, UA cultural
   sensitivity seat, co-owner of the terminology table. Sonnet — the venture's UA
@@ -441,8 +445,8 @@ state machine (the BOOKSOFHISTORY pattern):
 - **Day B — production**: canonical story brief → CS copy (LETOPIS) → UA adaptation
   (VERBA) → gates → recommendation drafts → Design Lab.
 - **Sunday overlay — insights**: the week's owner-entered results, community signals
-  from the comment digest, product-insight queue grooming, weight proposals. $0.06
-  extra call within the envelope.
+  from the owner-pasted comment digest, product-insight queue grooming and replay-verified weight
+  proposals. It is deterministic, makes no provider call and costs `$0`.
 
 Agendas flow both ways with `gv-brief` (the four-leg GoVIRAL spine every venture
 carries); a Czech-book or history crossover can hand one agenda to DNESKAi's or
@@ -453,20 +457,19 @@ BOOKSOFHISTORY's room and receive one back.
 Deterministic, explainable, recorded per shortlist entry:
 
 ```
-social score = product relevance composite (the six paid axes, reweighted:
-               livedProximity and recognition up)
-             × send-target clarity (is there a person to send this to?)
-             × participation potential (askable question quality)
-             × imagery availability (licensed photo? art fallback? typographic)
-             × bilingual fit (does it carry in both languages, or one — one is
-               allowed, the mix is monitored)
-             × audience balance pressure (CS/UA, city, decade, pillar diversity
-               vs the last 21 days)
-             × timing (anniversaries; GoVIRAL cultural-moment flag)
-             × performance weights (owner-entered results by pillar × cohort ×
-               country)
-             − sensitivity friction (tier 2 costs score; excluded kills)
+base = askability by fact kind
+     + five/ten/twenty-five/fifty-year anniversary timing
+     + a bounded GoVIRAL cultural-moment signal
+     + wartime-awareness reduction for sensitive Ukrainian city stories
+     + source confidence from verification and independent references
+     + a modest country-alternation nudge
+     − sensitivity-tier cost
+
+social score = base × the replay-verified performance multiplier
 ```
+
+Every factor is stored. Tier 2 requires owner review and recently used facts are vetoed after
+scoring; neither a trend nor a performance weight can turn either veto into a pass.
 
 ### 31. Editorial workflow (content states)
 
@@ -500,9 +503,10 @@ questions directly:
   breakdowns), what is ready (bilingual packages side by side with gate results and
   sensitivity tier), what's waiting on the owner (tier-2 reviews, approvals), posted
   URL + results entry, RatingWidget.
-- **`library`** — the snapshot index browser (by city/decade/pillar, with the
-  product's scores and shareSafe/sensitivity badges), dossier shelf, research ledger
-  and efficiency figure, snapshot sync status (source commit, drift warning).
+- **`library`** — the committed-facts browser (by city/decade/pillar, with scorer factors and
+  sensitivity badges), dossier shelf, research ledger and efficiency figure, plus the verified
+  facts-envelope hash, copy age and a warning that only the owner can compare sources before a
+  replacement.
 - **`signals`** — community-memory digest (owner-pasted comment harvests, extracted
   themes), audience requests ranked by recurrence, and the **product-insight queue**
   (music gap, chapter-04 copy bug, token drift, names dataset, UA film gap — seeded
@@ -670,9 +674,9 @@ insight); brand dilution into generic history (the send-target filter is the gat
 
 ### 49. Safeguards
 
-Everything in §26 plus: the product repo is read-only to this venture (test-pinned:
-the venture's modules never import from or write to a dontwannaknow checkout beyond
-the snapshot builder's explicit read); `shareSafe` and exclusions honored at index
+Everything in §26 plus: the product repo is unreachable from this venture (test-pinned:
+modules, prompts, config and workflows may not name a product checkout, API route or sync path);
+`shareSafe` and exclusions honored at envelope
 build so banned records structurally cannot surface; sensational-claim triage; the
 tier-2 human gate; stop-slop lint on both languages; the standing no-AI-imagery rule;
 the triple-lock untouched.
