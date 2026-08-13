@@ -166,6 +166,14 @@ snapshot is a committed file and the venture buys no data.
 
 ## Adapted during implementation
 
+- **The public portfolio page waits for the production domain.** REV-03 asked the
+  Tehdejší svět portfolio page to point at the product site. The production-domain
+  prerequisite above is still open, and the no-product-link rule forbids naming the
+  product repository or its preview host in executable code. The page therefore reads
+  only an owner-supplied final HTTPS domain, rejects preview-deployment hosts and names
+  the missing prerequisite until that value exists. It neither imports nor duplicates
+  product code.
+
 - **The snapshot is a committed file, not a runtime fetch.** The implementation spec
   described a snapshot index plus a runtime fetcher that read record bodies from the
   product repository at a pinned commit through the GitHub Contents API. The owner

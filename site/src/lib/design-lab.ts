@@ -6,6 +6,8 @@ import {
   DECK_FAMILIES,
   MAX_SLIDE_WORDS,
   SocialCopyPackSchema,
+  TEHDEJSI_MAX_SLIDES,
+  TEHDEJSI_MIN_SLIDES,
   buildArticleDeck,
   derivedCopyPack,
   deriveRecipe,
@@ -179,16 +181,29 @@ export async function readDesignLab(limit = 40, venture?: string): Promise<LabAr
     const dualLanguage = venture === "tehdejsi-svet"
       ? await readTehdejsiDesignLabPack(article.summary.slug, date)
       : null;
+    const packageProblems = venture === "tehdejsi-svet" && !dualLanguage
+      ? ["The approved paired-language Tehdejší svět package is unavailable or incomplete."]
+      : [];
     const edits = dualLanguage ? new Map<number, string>() : slideTextFor(slideOverrides, venture, slug, date);
     const slides: LabSlide[] = (dualLanguage ? dualLanguage.slides.map(({ cs }) => cs) : deckFor(article)).map((text, index) => {
       const edited = edits.get(index);
       const value = edited ?? text;
       return { index, text: value, words: wordCount(value), edited: edited !== undefined };
     });
-    const review = reviewDeck(slides.map((slide, index) => ({
-      kind: index === 0 ? "cover" as const : index === slides.length - 1 ? "outro" as const : "body" as const,
-      text: slide.text
-    })), article.summary.deckMode === "single-image" ? "single-image" : "carousel");
+    // The dedicated bilingual family deliberately supports 3–8 paired cards. Running its three
+    // approved cards through the generic article-deck minimum of five makes an approved package
+    // disappear from the rail even though the dedicated renderer accepts it.
+    const review = dualLanguage
+      ? {
+          publishable: dualLanguage.slides.length >= TEHDEJSI_MIN_SLIDES && dualLanguage.slides.length <= TEHDEJSI_MAX_SLIDES,
+          problems: dualLanguage.slides.length >= TEHDEJSI_MIN_SLIDES && dualLanguage.slides.length <= TEHDEJSI_MAX_SLIDES
+            ? []
+            : [`The paired-language family needs ${TEHDEJSI_MIN_SLIDES}–${TEHDEJSI_MAX_SLIDES} slides.`]
+        }
+      : reviewDeck(slides.map((slide, index) => ({
+          kind: index === 0 ? "cover" as const : index === slides.length - 1 ? "outro" as const : "body" as const,
+          text: slide.text
+        })), article.summary.deckMode === "single-image" ? "single-image" : "carousel");
     const forArticle = pinned.filter((entry) => entry.venture === venture && entry.slug === slug);
     const override = (forArticle.find((entry) => entry.date === date)
       ?? forArticle.find((entry) => entry.date === undefined)) as (Record<string, unknown> | undefined);
@@ -230,8 +245,8 @@ export async function readDesignLab(limit = 40, venture?: string): Promise<LabAr
       slides,
       hasHero: article.summary.hasHero,
       heroCredit: article.summary.heroCredit,
-      problems: [...article.problems, ...review.problems],
-      renderable: review.publishable && article.problems.length === 0,
+      problems: [...article.problems, ...review.problems, ...packageProblems],
+      renderable: review.publishable && article.problems.length === 0 && packageProblems.length === 0,
       recipe,
       recipePinned: Boolean(override),
       copy,

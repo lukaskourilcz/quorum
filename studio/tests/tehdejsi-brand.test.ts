@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CAROUSEL_BRANDS } from "../src/library.js";
 import { contrastRatio } from "../src/validation.js";
-import { measureEm, resolveFace } from "../src/fonts.js";
+import { measureEm, missingCommittedGlyphs, resolveFace } from "../src/fonts.js";
 
 const brand = CAROUSEL_BRANDS["tehdejsi-svet"];
 
@@ -53,9 +53,10 @@ describe("Tehdejsi svet brand tokens", () => {
   it("binds only faces that can set Ukrainian", () => {
     // Literata and Inter were added for this venture; IBM Plex Mono already covered Cyrillic.
     expect(brand.fonts).toEqual({ headline: "Literata", body: "Inter", mono: "IBM Plex Mono" });
+    const ukrainian = "АаБбВвГгҐґДдЕеЄєЖжЗзИиІіЇїЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЬьЮюЯя’";
     for (const family of Object.values(brand.fonts)) {
       const face = resolveFace(family, 400);
-      expect(measureEm(face, "Ї"), `${family} measures Ї`).toBeGreaterThan(0);
+      expect(missingCommittedGlyphs(face, ukrainian), `${family} has every Ukrainian glyph`).toEqual([]);
     }
     // Proportional faces only: a monospace face setting every glyph at one width is correct, and
     // asserting variation there would fail IBM Plex Mono for doing its job.

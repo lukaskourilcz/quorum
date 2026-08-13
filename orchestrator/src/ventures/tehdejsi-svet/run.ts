@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { MeetingRecordSchema, type MeetingRecord } from "../../contracts/meeting-record.js";
+import type { MeetingAgenda } from "../../contracts/meeting-agenda.js";
 import {
   buildCalendarFeed,
   loadArticleSlotOutcomes,
@@ -9,6 +10,12 @@ import {
   mondayOfWeek,
   writeCalendarFeed
 } from "../../meetings/calendar.js";
+import {
+  MEETING_AGENDA_PATH,
+  consumeMeetingAgenda,
+  dueMeetingAgenda,
+  readMeetingAgendaQueue
+} from "../../meetings/agenda.js";
 import { pragueClockParts } from "../../meetings/clock.js";
 import { configRoot, repoRoot, stateRoot } from "../../paths.js";
 import { loadRuntimeBudgetLimits } from "../../portfolio/limits.js";
@@ -75,12 +82,17 @@ function buildCheckpointRecord(input: {
   dry: boolean;
   monthAllInUsd: number;
   monthCapUsd: number;
+  agenda: MeetingAgenda | null;
+  agendaRef: string | null;
 }): MeetingRecord {
   const closedAt = new Date(input.now.getTime() + 1).toISOString();
   const summary =
     "The Tehdejsi svet desk remains behind its owner countersignature. "
     + "The free shortlist may be recorded, but no brief, copy, render or publication was created and nothing was spent.";
-  const evidenceRefs = [FOUNDING_DECISION_PATH];
+  const evidenceRefs = [
+    FOUNDING_DECISION_PATH,
+    ...(input.agendaRef ? [input.agendaRef, ...input.agenda!.evidenceRefs] : [])
+  ];
   return MeetingRecordSchema.parse({
     schemaVersion: "meeting-record/2",
     cycleId: input.executionCycleId,
@@ -90,9 +102,9 @@ function buildCheckpointRecord(input: {
     fixture: input.dry,
     status: "PAUSED",
     stage: input.stage,
-    operatingBrief:
-      "Hold the Tehdejsi svet slot without pretending paid editorial work ran. The founding "
-      + "decision is pending countersignature.",
+    operatingBrief: input.agenda
+      ? `${input.agenda.summary} Hold the Tehdejsi svet slot without pretending paid editorial work ran. The founding decision is pending countersignature.`
+      : "Hold the Tehdejsi svet slot without pretending paid editorial work ran. The founding decision is pending countersignature.",
     participantReasons: TEHDEJSI_SVET_CAST.map((agent) => ({
       agent,
       reason: "Registered for the desk but not called while the owner countersignature is absent; the slot costs $0.",
@@ -115,6 +127,7 @@ function buildCheckpointRecord(input: {
     }],
     growthPlan: "No public action is authorized. Tehdejsi svet remains drafts-only and owner-posted.",
     eveningOutcome: null,
+    ...(input.agendaRef ? { agendaRef: input.agendaRef } : {}),
     roomTranscript: {
       openedAt: input.now.toISOString(),
       closedAt,
@@ -140,6 +153,8 @@ function buildActiveRecord(input: {
   monthCapUsd: number;
   overlayArtifacts: string[];
   dry: boolean;
+  agenda: MeetingAgenda | null;
+  agendaRef: string | null;
 }): MeetingRecord {
   const closedAt = new Date(input.now.getTime() + 1).toISOString();
   const phase = input.outcome?.phase ?? input.failurePhase ?? "planning";
@@ -147,7 +162,12 @@ function buildActiveRecord(input: {
   const completed = input.outcome?.completed ?? false;
   const summary = input.outcome?.summary
     ?? `The ${phase} phase stopped and will resume. ${input.failure ?? "No draft was stored."}`;
-  const evidenceRefs = [FOUNDING_DECISION_PATH, ...(input.outcome?.artifacts ?? []), ...input.overlayArtifacts];
+  const evidenceRefs = [
+    FOUNDING_DECISION_PATH,
+    ...(input.outcome?.artifacts ?? []),
+    ...input.overlayArtifacts,
+    ...(input.agendaRef ? [input.agendaRef, ...input.agenda!.evidenceRefs] : [])
+  ];
   const participants = new Set(input.outcome?.participants ?? []);
   return MeetingRecordSchema.parse({
     schemaVersion: "meeting-record/2",
@@ -158,7 +178,9 @@ function buildActiveRecord(input: {
     fixture: input.dry,
     status,
     stage: input.stage,
-    operatingBrief: `Run the recorded ${phase} phase. A phase advances only after its artifacts are durable.`,
+    operatingBrief: input.agenda
+      ? `${input.agenda.summary} Run the recorded ${phase} phase. A phase advances only after its artifacts are durable.`
+      : `Run the recorded ${phase} phase. A phase advances only after its artifacts are durable.`,
     participantReasons: TEHDEJSI_SVET_CAST.map((agent) => ({
       agent,
       reason: participants.has(agent as "LETOPIS" | "VERBA")
@@ -185,6 +207,7 @@ function buildActiveRecord(input: {
     }],
     growthPlan: "No public action is authorized. Every feature remains a draft for owner review and manual posting.",
     eveningOutcome: null,
+    ...(input.agendaRef ? { agendaRef: input.agendaRef } : {}),
     roomTranscript: {
       openedAt: input.now.toISOString(),
       closedAt,
@@ -255,6 +278,11 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
     };
   }
 
+  const agenda = input.dry
+    ? null
+    : dueMeetingAgenda(await readMeetingAgendaQueue(root, input.now), "ts-desk", date);
+  const agendaRef = agenda ? `${MEETING_AGENDA_PATH}#${agenda.id}` : null;
+
   const spentBefore = input.dry ? 0 : await monthSpend(root, date);
   let outcome: TehdejsiPipelineOutcome | null = null;
   let failure: string | null = null;
@@ -310,7 +338,9 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
         monthAllInUsd: spentAfter,
         monthCapUsd: limits.monthlyOperatingUsd,
         overlayArtifacts,
-        dry: input.dry
+        dry: input.dry,
+        agenda,
+        agendaRef
       })
     : buildCheckpointRecord({
         executionCycleId: input.executionCycleId,
@@ -319,7 +349,9 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
         stage,
         dry: input.dry,
         monthAllInUsd: spentAfter,
-        monthCapUsd: limits.monthlyOperatingUsd
+        monthCapUsd: limits.monthlyOperatingUsd,
+        agenda,
+        agendaRef
       });
 
   const decisionPath = `decisions/${input.executionCycleId}.json`;
@@ -332,6 +364,7 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
     outcome: record.decision.outcome,
     summary: record.decision.summary,
     evidenceRefs: record.decision.evidenceRefs,
+    ...(agendaRef ? { agendaRef } : {}),
     generatedAt: record.generatedAt
   });
   await atomicWriteJson(root, scorecardPath, {
@@ -341,6 +374,7 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
     phase: "ts-desk",
     estimatedCycleUsd: record.ledger.estimatedCycleUsd,
     actualCycleUsd: record.ledger.actualCycleUsd,
+    agendaId: agenda?.id ?? null,
     generatedAt: record.generatedAt
   });
   await atomicWriteJson(root, meetingPath, record);
@@ -350,13 +384,21 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
     loadMeetingSkips(root),
     loadArticleSlotOutcomes(root)
   ]);
-  await writeCalendarFeed(root, buildCalendarFeed({
+  const calendarPath = await writeCalendarFeed(root, buildCalendarFeed({
     weekOf: mondayOfWeek(date),
     records,
     skips,
     articleSlots,
     now: input.now
   }));
+  if (agenda) {
+    await consumeMeetingAgenda({
+      root,
+      agendaId: agenda.id,
+      cycleId: input.executionCycleId,
+      now: input.now
+    });
+  }
 
   return {
     cycleId: input.executionCycleId,
@@ -371,7 +413,14 @@ export async function runTehdejsiSvetCycle(input: TehdejsiSvetCycleInput): Promi
     estimatedWorstCaseUsd: pipelineAllowed ? 0.25 : 0,
     selectedAgents: outcome?.participants ?? [],
     skippedAgents: TEHDEJSI_SVET_CAST.filter((agent) => !(outcome?.participants ?? []).includes(agent as "LETOPIS" | "VERBA")),
-    artifacts: [decisionPath, scorecardPath, meetingPath, ...phaseArtifacts]
+    artifacts: [
+      decisionPath,
+      scorecardPath,
+      meetingPath,
+      calendarPath,
+      ...phaseArtifacts,
+      ...(agenda ? [MEETING_AGENDA_PATH] : [])
+    ]
       .map((relative) => artifactPath(root, relative))
   };
 }

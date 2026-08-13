@@ -3,9 +3,10 @@ import { publicAgentText, publicDecisionLabel } from "@/components/agent-languag
 import { publicKindLabel } from "@/lib/slot-labels";
 import { getPublicMeetingRecords } from "@/lib/meeting-records";
 import { getPublicStandups } from "@/lib/standup-records";
+import type { PublicStandup } from "@/data/fixtures";
+import type { PublicMeetingRecord } from "@/lib/meeting-record-model";
 
-export async function getPublicDecisions() {
-  const [standups, meetings] = await Promise.all([getPublicStandups(), getPublicMeetingRecords()]);
+export function buildPublicDecisions(standups: readonly PublicStandup[], meetings: readonly PublicMeetingRecord[]) {
   return [
     ...standups.filter((record) => !record.fixture).map((record) => ({
       id: `standup:${record.id}`,
@@ -30,4 +31,9 @@ export async function getPublicDecisions() {
       costUsd: record.ledger.actual
     }))
   ].sort((left, right) => Date.parse(right.at) - Date.parse(left.at));
+}
+
+export async function getPublicDecisions() {
+  const [standups, meetings] = await Promise.all([getPublicStandups(), getPublicMeetingRecords()]);
+  return buildPublicDecisions(standups, meetings);
 }

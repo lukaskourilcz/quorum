@@ -1,4 +1,4 @@
-import { DECK_DESIGNS, type CarouselSummaryVenture } from "@boardlessai/carousel-studio";
+import { DECK_DESIGNS, isCarouselSummaryVenture } from "@boardlessai/carousel-studio";
 import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request-auth";
 import {
   CarouselStudioPersistenceError,
@@ -61,13 +61,16 @@ export async function POST(request: Request): Promise<Response> {
   };
   if (
     !value || typeof value !== "object"
-    || (body.venture !== "caught-up" && body.venture !== "mma-files" && body.venture !== "booksofhistory" && body.venture !== "door-money")
+    || !isCarouselSummaryVenture(body.venture)
     || typeof body.slug !== "string"
     || typeof body.date !== "string"
   ) {
     return Response.json({ error: "Design Lab request is incomplete.", cause: "rejected" }, { status: 422 });
   }
-  const article = { venture: body.venture as CarouselSummaryVenture, slug: body.slug, date: body.date };
+  if (body.venture === "tehdejsi-svet") {
+    return Response.json({ error: "The bilingual Tehdejší svět family is fixed at the venture desk.", cause: "rejected" }, { status: 422 });
+  }
+  const article = { venture: body.venture, slug: body.slug, date: body.date };
 
   // A slide edit names a slide; a recipe change names a family. Nothing sends both.
   if (typeof body.slide === "number") {

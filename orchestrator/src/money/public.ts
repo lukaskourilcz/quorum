@@ -8,6 +8,8 @@ import {
   type QuarterlyKpiSnapshot
 } from "../metrics/quarterly.js";
 import { atomicWriteJson } from "../state.js";
+import { VentureRegistrySchema } from "../contracts/venture-registry.js";
+import { summarizeVentureSpend } from "../ventures/accounting.js";
 import { fixedCostTotals } from "./fixed-costs.js";
 import {
   MONETIZATION_METHODS,
@@ -48,6 +50,13 @@ export const PublicMoneySnapshotSchema = openObject({
         cumulativeUsd: MoneyAmountSchema
       })).max(6)
     }),
+    byVenture: z.array(openObject({
+      ventureId: z.string().min(1).max(80),
+      modelUsd: MoneyAmountSchema,
+      researchUsd: MoneyAmountSchema.nullable(),
+      sourceUsd: MoneyAmountSchema.nullable(),
+      sourceNote: z.string().trim().min(1).max(240).nullable()
+    })).max(50),
     totalMonthlyBurnUsd: MoneyAmountSchema,
     cumulativeSpendUsd: MoneyAmountSchema
   }),
@@ -69,12 +78,19 @@ export function buildPublicMoneySnapshot(input: {
   fixedCosts: unknown;
   budgetEntries: readonly BudgetLedgerEntry[];
   financeLedger: unknown;
+  ventureRegistry: unknown;
+  ventureEvidenceCosts?: Readonly<Record<string, {
+    researchUsd?: number | null;
+    sourceUsd?: number | null;
+    sourceNote?: string | null;
+  }>>;
 }): PublicMoneySnapshot {
   if (Number.isNaN(input.generatedAt.getTime())) throw new Error("Money snapshot date is invalid");
   const kpis = QuarterlyKpiSnapshotSchema.parse(input.kpiSnapshot);
   const monetization = input.monetization.map((method) => PublicMonetizationMethodSchema.parse(method));
   const budgetEntries = z.array(BudgetLedgerEntrySchema).parse(input.budgetEntries);
   const finance = normalizeFinanceLedger(input.financeLedger);
+  const ventureRegistry = VentureRegistrySchema.parse(input.ventureRegistry);
   const fixed = fixedCostTotals(input.fixedCosts, input.generatedAt);
   const month = input.generatedAt.toISOString().slice(0, 7);
   const monthlyApiUsd = sumUsd(
@@ -86,6 +102,18 @@ export function buildPublicMoneySnapshot(input: {
       .filter((entry) => entry.type === "revenue" && entry.verified)
       .map((entry) => entry.amountUsd)
   );
+  const modelSpend = new Map(summarizeVentureSpend(budgetEntries, ventureRegistry, month)
+    .map((line) => [line.ventureId, line.usd]));
+  const byVenture = ventureRegistry.ventures.map((venture) => {
+    const evidence = input.ventureEvidenceCosts?.[venture.id];
+    return {
+      ventureId: venture.id,
+      modelUsd: modelSpend.get(venture.id) ?? 0,
+      researchUsd: evidence?.researchUsd ?? null,
+      sourceUsd: evidence?.sourceUsd ?? null,
+      sourceNote: evidence?.sourceNote ?? null
+    };
+  });
   return PublicMoneySnapshotSchema.parse({
     schemaVersion: "money-public/1",
     generatedAt: input.generatedAt.toISOString(),
@@ -105,6 +133,7 @@ export function buildPublicMoneySnapshot(input: {
         cumulativeUsd: cumulativeApiUsd
       },
       fixed,
+      byVenture,
       totalMonthlyBurnUsd: Number((monthlyApiUsd + fixed.monthlyUsd).toFixed(8)),
       cumulativeSpendUsd: Number((cumulativeApiUsd + fixed.cumulativeUsd).toFixed(8))
     },

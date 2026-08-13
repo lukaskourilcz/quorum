@@ -28,8 +28,22 @@ export const MIN_SUMMARY_PASSAGES = 3;
  */
 export const MAX_SUMMARY_PASSAGES = 8;
 
-export type CarouselSummaryVenture = "caught-up" | "mma-files" | "kvorum" | "booksofhistory" | "door-money" | "tehdejsi-svet";
+export const CAROUSEL_SUMMARY_VENTURES = [
+  "caught-up",
+  "mma-files",
+  "kvorum",
+  "booksofhistory",
+  "door-money",
+  "tehdejsi-svet"
+] as const;
+
+export type CarouselSummaryVenture = (typeof CAROUSEL_SUMMARY_VENTURES)[number];
 export type CarouselSummaryLocale = "cs" | "en";
+
+/** One runtime source of truth for every venture that can deliver a Studio summary. */
+export function isCarouselSummaryVenture(value: unknown): value is CarouselSummaryVenture {
+  return typeof value === "string" && (CAROUSEL_SUMMARY_VENTURES as readonly string[]).includes(value);
+}
 
 const VENTURE_LOCALE: Readonly<Record<CarouselSummaryVenture, CarouselSummaryLocale>> = {
   "caught-up": "cs",

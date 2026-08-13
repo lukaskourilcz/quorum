@@ -3,6 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { runDailyMoneyAndKpis } from "../src/money/daily.js";
+import { repoRoot as sourceRepoRoot } from "../src/paths.js";
 
 async function writeJson(file: string, value: unknown): Promise<void> {
   await mkdir(path.dirname(file), { recursive: true });
@@ -39,6 +40,7 @@ describe("daily Money and KPI materialization", () => {
       costs: []
     });
     await writeJson(path.join(repoRoot, "config/sources.json"), { sources: [] });
+    await writeJson(path.join(repoRoot, "config/ventures.json"), JSON.parse(await readFile(path.join(sourceRepoRoot, "config/ventures.json"), "utf8")));
     await writeJson(path.join(stateRoot, "budget/ledger.json"), { schemaVersion: 1, entries: [] });
     await writeJson(path.join(stateRoot, "finance/ledger.json"), { schemaVersion: 1, currency: "USD", entries: [] });
     await writeJson(path.join(stateRoot, "metrics/quarterly.json"), {

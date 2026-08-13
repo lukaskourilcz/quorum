@@ -387,6 +387,54 @@ items in place. Lack of response never authorizes an action. -->
     results, personal-data enrichment, automatic optimisation, outreach or a wider
     measurement programme.
 
+- [ ] HUMAN_APPROVAL KV-APIFY-001 — Extend the existing Free-plan Apify scope to
+  Kvórum's single reviewed public Facebook page monitor.
+  What this approves, exactly:
+  - **The source:** only the pinned Facebook Posts Scraper build reading logged-out
+    public posts from `facebook.com/stitdemokracie`, at most once a day and thirty
+    rows, through the fixed-field mapper. No login, cookie, comment or private-person
+    data is allowed.
+  - **The spend and retention:** a `$2.00` monthly Kvórum share inside the existing
+    Free-plan credit, with current `$0.151` reservations and a 30-day raw purge.
+    `APIFY-ACCOUNT-001` remains a separate prerequisite; a spent share skips work.
+  - **What this does not approve:** another page or actor, a plan upgrade, a card,
+    account creation, posting, outreach, paid amplification or a higher budget.
+
+- [ ] HUMAN_APPROVAL KV-SOURCES-002 — Allow Kvórum to read the seven exact free
+  feed endpoints recorded in `config/kvorum-sources.json`.
+  What this approves, exactly:
+  - **The hosts:** the recorded iROZHLAS, ČT24, Deník N, Seznam Zprávy,
+    Poslanecká sněmovna, Vláda ČR and Czech Google News endpoints, each with
+    its current network-allowlist entry and authority checks.
+  - **The boundary:** a missing approval keeps every live feed read closed and the
+    committed fixture remains the `$0` source. A new host, endpoint or adapter needs
+    another review.
+  - **What this does not approve:** scraping beyond those endpoints, a credential,
+    model call, post, account, outreach, payment or budget change.
+
+- [ ] HUMAN_APPROVAL KV-ACCOUNTS-003 — Clear the Kvórum name and handles and allow
+  the owner to prepare any chosen Instagram, Facebook, Threads or X profiles.
+  What this approves, exactly:
+  - **The owner action:** after the collision and trademark check, the owner may
+    create the selected profiles and use a bio that states AI assists drafts and a
+    human approves every post.
+  - **The operating boundary:** Kvórum remains drafts-only. Signing creates nothing,
+    supplies no credential and grants no publisher, scheduler or autopublish path.
+  - **What this does not approve:** this session or an agent creating an account,
+    touching a channel, posting, replying, messaging, buying ads or weakening the
+    social, treasury or budget gates.
+
+- [ ] HUMAN_APPROVAL KV-EDITORIAL-004 — Countersign Kvórum's political editorial
+  constitution as the owner policy already enforced by its gates.
+  What this approves, exactly:
+  - **The rules:** Štít remains discovery rather than evidence; factual claims stay
+    typed and referenced; public figures only; election claims use the higher source
+    bar; corrections remain linked and the owner reads every final draft.
+  - **The prohibitions:** no vote call, endorsement, unsupported crime accusation,
+    voter mockery, alarm register, paid amplification or concealed AI assistance.
+  - **What this does not approve:** a source, account, publication, channel action,
+    outreach, model call, payment, treasury movement or budget change.
+
 ## Resolved
 
 - [x] HUMAN_APPROVAL DEVSHARK-BANNER-001 — Place the devShark house banner on

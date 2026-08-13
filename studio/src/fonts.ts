@@ -107,3 +107,13 @@ export function measureEm(face: FaceMetrics, value: string): number {
   for (const character of value) total += advances.get(character) ?? fallback;
   return total;
 }
+
+/** True only when the committed face contains the glyph; the fitter's width fallback does not count. */
+export function hasCommittedGlyph(face: FaceMetrics, character: string): boolean {
+  return [...character].length === 1 && advancesOf(face).has(character);
+}
+
+/** Stable, de-duplicated list of characters that would otherwise fall back during rasterisation. */
+export function missingCommittedGlyphs(face: FaceMetrics, value: string): string[] {
+  return [...new Set([...value].filter((character) => !hasCommittedGlyph(face, character)))];
+}

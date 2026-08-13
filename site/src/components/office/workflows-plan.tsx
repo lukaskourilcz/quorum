@@ -12,7 +12,7 @@ import type { TravelLeg, TravelStation } from "@/lib/office-workflows-timeline";
 /**
  * The floor plan: one office from above, drawn as a single inline SVG.
  *
- * Every coordinate here is a plan unit inside a 1760 × 940 viewBox and is transcribed from the
+ * Every coordinate here is a plan unit inside a 2520 × 940 viewBox and is transcribed from the
  * design specification rather than derived. The drawing carries the argument on its own, because
  * there is no legend anywhere on the board to look a mark up in: every room has exactly one door,
  * every door opens onto the same spine, the spine runs east into the roller door and the dock,
@@ -24,7 +24,7 @@ import type { TravelLeg, TravelStation } from "@/lib/office-workflows-timeline";
  * it is never dark, because its machinery is always available.
  */
 
-export const PLAN_WIDTH = 1760;
+export const PLAN_WIDTH = 2520;
 export const PLAN_HEIGHT = 940;
 export const PLAN_FLOOR_MARGIN = 80;
 
@@ -35,7 +35,8 @@ export const PLAN_FLOOR_MARGIN = 80;
  * width they touched its border and read as clipped. This is margin in plan units rather than
  * padding on the card, which keeps the geometry below transcribable exactly as specified.
  */
-const PLAN_MARGIN = PLAN_FLOOR_MARGIN;
+const PLAN_LEFT = -680;
+const PLAN_RIGHT = PLAN_LEFT + PLAN_WIDTH;
 
 /**
  * How much of the frame the open room claims on whichever of its axes binds first.
@@ -61,13 +62,17 @@ export interface RoomGeometry {
   /** Where the room's name sits, clear of its furniture. */
   labelY: number;
   /** The door's span on the spine, and which rank the room is in. */
-  door: { from: number; to: number; rank: "top" | "bottom" } | null;
+  door: { from: number; to: number; rank: "top" | "bottom" } | { from: number; to: number; rank: "side"; x: number } | null;
   /** The numeral the sub-1024px key indexes this room by. */
   numeral: number;
 }
 
 /** Plan order: the top rank west to east, then the bottom rank west to east. */
 export const ROOMS: readonly RoomGeometry[] = [
+  { key: "booksofhistory", x: -520, y: 100, width: 640, height: 190, labelY: 146, door: { from: 165, to: 225, rank: "side", x: 120 }, numeral: 9 },
+  { key: "door-money", x: -520, y: 290, width: 640, height: 190, labelY: 336, door: { from: 355, to: 415, rank: "side", x: 120 }, numeral: 10 },
+  { key: "tehdejsi-svet", x: -520, y: 480, width: 640, height: 190, labelY: 526, door: { from: 545, to: 605, rank: "side", x: 120 }, numeral: 11 },
+  { key: "kvorum", x: -520, y: 670, width: 640, height: 190, labelY: 716, door: { from: 735, to: 795, rank: "side", x: 120 }, numeral: 12 },
   { key: "company", x: 200, y: 100, width: 360, height: 354, labelY: 146, door: { from: 440, to: 500, rank: "top" }, numeral: 1 },
   { key: "caught-up", x: 560, y: 100, width: 270, height: 354, labelY: 146, door: { from: 665, to: 725, rank: "top" }, numeral: 2 },
   { key: "mma-files", x: 830, y: 100, width: 260, height: 354, labelY: 146, door: { from: 930, to: 990, rank: "top" }, numeral: 3 },
@@ -98,7 +103,11 @@ const NOTE_ANCHORS: Record<string, { xs: number[]; y: number; stem: "down" | "up
   fightaiq: { xs: [1017, 1055], y: 206, stem: "side" },
   marketingshark: { xs: [370], y: 500, stem: "up" },
   goviral: { xs: [685], y: 500, stem: "up" },
-  "titty-tuesdays": { xs: [965], y: 500, stem: "up" }
+  "titty-tuesdays": { xs: [965], y: 500, stem: "up" },
+  booksofhistory: { xs: [150], y: 185, stem: "side" },
+  "door-money": { xs: [150, 190], y: 375, stem: "side" },
+  "tehdejsi-svet": { xs: [150], y: 565, stem: "side" },
+  kvorum: { xs: [150], y: 755, stem: "side" }
 };
 
 /** The venture hue at 14% over the room floor, given opaque so it can be measured. */
@@ -110,6 +119,10 @@ const LIT_FILL: Record<OfficeProjectKey, string> = {
   goviral: "#262f2d",
   marketingshark: "#232a32",
   "titty-tuesdays": "#2f2c23",
+  booksofhistory: "#292832",
+  "door-money": "#292832",
+  "tehdejsi-svet": "#2c211f",
+  kvorum: "#302f20",
   "carousel-studio": "#2a2a2e"
 };
 
@@ -133,6 +146,10 @@ const ACTIVE_FILL: Record<OfficeProjectKey, string> = {
   goviral: "#3e4f47",
   marketingshark: "#384751",
   "titty-tuesdays": "#514a34",
+  booksofhistory: "#464154",
+  "door-money": "#464154",
+  "tehdejsi-svet": "#4b3029",
+  kvorum: "#504c24",
   "carousel-studio": "#454549"
 };
 
@@ -280,7 +297,11 @@ const ROOM_ANCHOR: Record<OfficeProjectKey, { door: [number, number]; centre: [n
   "carousel-studio": { door: [1420, 489], centre: [1400, 300] },
   marketingshark: { door: [370, 489], centre: [370, 692] },
   goviral: { door: [685, 489], centre: [685, 692] },
-  "titty-tuesdays": { door: [965, 489], centre: [965, 692] }
+  "titty-tuesdays": { door: [965, 489], centre: [965, 692] },
+  booksofhistory: { door: [120, 195], centre: [-200, 195] },
+  "door-money": { door: [120, 385], centre: [-200, 385] },
+  "tehdejsi-svet": { door: [120, 575], centre: [-200, 575] },
+  kvorum: { door: [120, 765], centre: [-200, 765] }
 };
 
 /** The bay and the courier arrow each magazine's package uses. Nothing else has one. */
@@ -518,7 +539,7 @@ export function WorkflowsPlan({
       style={fill
         ? { display: "block", width: "100%", height: "100%" }
         : { display: "block", width: "100%", height: "auto" }}
-      viewBox={viewBox ?? `${-PLAN_MARGIN} 0 ${PLAN_WIDTH + PLAN_MARGIN * 2} ${PLAN_HEIGHT}`}
+      viewBox={viewBox ?? `${PLAN_LEFT} 0 ${PLAN_WIDTH} ${PLAN_HEIGHT}`}
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
@@ -581,6 +602,7 @@ export function WorkflowsPlan({
           );
         })}
         <path d="M200 454 H1560 V524 H200 Z" fill={FLOOR_CORRIDOR} />
+        <rect fill={FLOOR_CORRIDOR} height={760} width={80} x={120} y={100} />
         <rect fill="url(#wf-apron)" height={336} width={460} x={1100} y={524} />
       </g>
 
@@ -647,6 +669,9 @@ export function WorkflowsPlan({
             }
             if (!geometry.door) return null;
             const { from, to, rank } = geometry.door;
+            if (rank === "side") {
+              return <path d={`M${geometry.door.x} ${from} L${geometry.door.x} ${to} L200 ${to + 22} L200 ${from - 22} Z`} fill={room.color} fillOpacity={0.12} />;
+            }
             const path = rank === "top"
               ? `M${from} 454 L${to} 454 L${to + 22} 524 L${from - 22} 524 Z`
               : `M${from} 524 L${to} 524 L${to + 22} 454 L${from - 22} 454 Z`;
@@ -669,7 +694,10 @@ export function WorkflowsPlan({
           question bank came in through, which is the one opening that no longer carries anything.
         */}
         <path
-          d="M200 100 H1560 M200 100 V662 M200 722 V860 M1560 100 V630 M1560 690 V730 M1560 790 V860 M200 860 H655 M715 860 H1560"
+          d="M-520 100 H120 M-520 100 V860 M-520 860 H120
+             M120 100 V165 M120 225 V355 M120 415 V545 M120 605 V735 M120 795 V860
+             M200 100 H1560 M200 100 V454 M200 524 V662 M200 722 V860
+             M1560 100 V630 M1560 690 V730 M1560 790 V860 M200 860 H655 M715 860 H1560"
           pathLength={1}
           strokeDasharray={1}
         />
@@ -684,6 +712,7 @@ export function WorkflowsPlan({
       >
         <path
           d="M560 100 V454 M830 100 V454 M1240 100 V454 M1090 100 V240 M1090 300 V454
+             M-520 290 H120 M-520 480 H120 M-520 670 H120
              M200 454 H440 M500 454 H665 M725 454 H930 M990 454 H1330 M1510 454 H1560
              M540 524 V860 M830 524 V860 M1100 524 V860
              M200 524 H340 M400 524 H655 M715 524 H935 M995 524 H1100"
@@ -842,6 +871,18 @@ export function WorkflowsPlan({
           <path d={`M600 ${y} H770`} key={y} />
         ))}
 
+        {/* The four review-era rooms form the west annex. Each uses one bounded desk shape; the
+            room's own roles and slots carry the operational differences in its dialog. */}
+        {[195, 385, 575, 765].map((y) => (
+          <g key={y}>
+            <rect height={54} rx={9} width={250} x={-325} y={y - 27} />
+            <rect height={14} width={26} x={-292} y={y - 49} />
+            <rect height={14} width={26} x={-108} y={y - 49} />
+            <rect height={14} width={26} x={-292} y={y + 35} />
+            <rect height={14} width={26} x={-108} y={y + 35} />
+          </g>
+        ))}
+
         <rect height={62} rx={10} width={170} x={880} y={659} />
         {[900, 1006].map((x) => (
           <g key={x}>
@@ -889,8 +930,7 @@ export function WorkflowsPlan({
       {/*
         ---- the dock ----------------------------------------------------------
         Drawn here, in painting order, and pressed further down: the dock's hit target lives
-        inside the room sequence so that tabbing reaches the four openable places in the order
-        the plan reads them — DNESKAi, the workshop, the dock, Titty Tuesdays — rather than in
+        inside the room sequence so that tabbing reaches the dock after the workshop rather than in
         the order their glyphs happen to be painted.
       */}
 
@@ -1103,8 +1143,8 @@ export function WorkflowsPlan({
                */
               const width = beat.tag.length * 11.6 + 22;
               const centre = Math.min(
-                Math.max(geometry.x + geometry.width / 2, -PLAN_MARGIN + width / 2 + 8),
-                PLAN_WIDTH + PLAN_MARGIN - width / 2 - 8
+                Math.max(geometry.x + geometry.width / 2, PLAN_LEFT + width / 2 + 8),
+                PLAN_RIGHT - width / 2 - 8
               );
               const y = geometry.labelY + 16;
               return (

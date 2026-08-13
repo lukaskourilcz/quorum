@@ -75,23 +75,23 @@ export interface PublicCalendarFeed {
  * records from those rooms still have to render.
  */
 export const CALENDAR_SLOTS: readonly CalendarDefinition[] = [
-  { hour: 5, kind: "cu-edition", label: "Edition production" },
+  { hour: 5, kind: "cu-edition", label: "Caught Up edition room" },
   { hour: 6, kind: "venture-morning", label: "Morning shift" },
   { hour: 7, kind: "ms-daily", label: "marketingShark daily carousel room" },
   { hour: 8, kind: "mma-intake", label: "FightAIQ morning data check" },
   { hour: 9, kind: "mag-editorial", label: "MMA Files morning story meeting" },
   { hour: 10, kind: "article-am", label: "MMA Files daily article" },
-  { hour: 11, kind: "tt-marketing", label: "Titty Tuesdays marketing" },
+  { hour: 11, kind: "tt-marketing", label: "Titty Tuesdays marketing room" },
   { hour: 12, kind: "bh-desk", label: "BOOKSOFHISTORY editorial desk" },
   { hour: 13, kind: "gv-brief", label: "GoVIRAL trend and marketing room" },
   { hour: 14, kind: "venture-afternoon", label: "Afternoon shift" },
-  { hour: 15, kind: "dm-desk", label: "Door Money recommendation desk" },
-  { hour: 16, kind: "dm-growth", label: "Door Money growth room" },
-  { hour: 17, kind: "cu-product", label: "Product room" },
+  { hour: 15, kind: "dm-desk", label: "Door Money daily storytelling desk" },
+  { hour: 16, kind: "dm-growth", label: "Door Money Thursday growth room" },
+  { hour: 17, kind: "cu-product", label: "Caught Up product room" },
   { hour: 18, kind: "ts-desk", label: "Tehdejší svět editorial desk" },
   { hour: 19, kind: "mma-analysis", label: "FightAIQ evening model check" },
   { hour: 20, kind: "mag-desk", label: "MMA Files evening desk review" },
-  { hour: 21, kind: "kv-desk", label: "Kvórum political recommendation desk" },
+  { hour: 21, kind: "kv-desk", label: "Kvórum daily political desk" },
   { hour: 22, kind: "venture-night", label: "Night shift" }
 ] as const;
 

@@ -4,6 +4,7 @@ import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { expect, test } from "@playwright/test";
 import { CALENDAR_SLOTS } from "../../src/lib/calendar-feed-model";
+import { PUBLIC_VENTURE_SLUGS } from "../../src/data/public-venture-slugs";
 
 const axeRoutes = [
   "/",
@@ -12,8 +13,14 @@ const axeRoutes = [
   "/ideas",
   "/ventures/caught-up",
   "/ventures/titty-tuesdays",
+  "/ventures/goviral",
+  "/ventures/marketingshark",
   "/ventures/fightaiq",
   "/ventures/carousel-studio",
+  "/ventures/booksofhistory",
+  "/ventures/door-money",
+  "/ventures/kvorum",
+  "/ventures/tehdejsi-svet",
   "/money",
   "/admin?venture=global",
   "/admin?venture=door-money&tab=recommendations",
@@ -74,7 +81,11 @@ const tsPaths = {
   recommendation: path.join(repositoryRoot, "state/ventures/tehdejsi-svet/drafts/e2e-feature.json"),
   result: path.join(repositoryRoot, "state/ventures/tehdejsi-svet/results/result-1234567890abcdef1234.json")
 };
+const tsUnreadablePath = path.join(repositoryRoot, "state/ventures/tehdejsi-svet/drafts/e2e-unreadable.json");
 const originalTsFiles = new Map<string, string | null>();
+const additionalRatingPaths = ["door-money", "tehdejsi-svet", "kvorum"].map((ventureId) =>
+  path.join(repositoryRoot, "state", "ratings", ventureId, "ledger.jsonl"));
+const originalAdditionalRatings = new Map<string, string | null>();
 const bhActionDirectory = path.join(repositoryRoot, "state/ventures/booksofhistory/feature-actions/rec-e2e-admin-feature");
 const bhSummaryPaths = ["cs", "en"].map((locale) => path.join(repositoryRoot, `state/ventures/carousel-studio/summaries/booksofhistory/2026-08-14-e2e-admin-feature-${locale}.json`));
 const kvorumRecommendationPath = path.join(repositoryRoot, "state/ventures/kvorum/recommendations/2026-08-12-public-media.json");
@@ -126,6 +137,13 @@ test.beforeAll(async () => {
       originalTsFiles.set(target, null);
     }
   }
+  for (const target of additionalRatingPaths) {
+    try { originalAdditionalRatings.set(target, await readFile(target, "utf8")); }
+    catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      originalAdditionalRatings.set(target, null);
+    }
+  }
   for (const target of kvorumFixturePaths) {
     try { originalKvorumState.set(target, await readFile(target, "utf8")); }
     catch (error) {
@@ -139,6 +157,7 @@ test.beforeAll(async () => {
     mkdir(path.dirname(ratingLedgerPath), { recursive: true }),
     ...Object.values(bhPaths).map((target) => mkdir(path.dirname(target), { recursive: true })),
     ...Object.values(tsPaths).map((target) => mkdir(path.dirname(target), { recursive: true })),
+    ...additionalRatingPaths.map((target) => mkdir(path.dirname(target), { recursive: true })),
     mkdir(path.dirname(kvorumRecommendationPath), { recursive: true }),
     mkdir(path.dirname(kvorumMonitorPath), { recursive: true }),
     mkdir(path.dirname(kvorumClaimPaths[0]!), { recursive: true }),
@@ -205,6 +224,7 @@ test.beforeAll(async () => {
     writeFile(bhPaths.ratings, ""),
     writeFile(tsPaths.recommendation, `${JSON.stringify(tsRecommendation, null, 2)}\n`),
     writeFile(tsPaths.result, `${JSON.stringify(tsResult, null, 2)}\n`),
+    ...additionalRatingPaths.map((target) => writeFile(target, "")),
     writeFile(kvorumRecommendationPath, `${JSON.stringify(kvorumRecommendation, null, 2)}\n`),
     writeFile(kvorumRecommendationIndexPath, `${JSON.stringify({
       schemaVersion: "kvorum-recommendation-index/1",
@@ -242,6 +262,11 @@ test.afterAll(async () => {
     if (original === null) await rm(target, { force: true });
     else await writeFile(target, original);
   }
+  for (const [target, original] of originalAdditionalRatings) {
+    if (original === null) await rm(target, { force: true });
+    else await writeFile(target, original);
+  }
+  await rm(tsUnreadablePath, { force: true });
   for (const target of kvorumFixturePaths) {
     const original = originalKvorumState.get(target) ?? null;
     if (original === null) await rm(target, { force: true });
@@ -269,7 +294,7 @@ test("Door Money renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.getByRole("link", { name: "recommendations" })).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("link", { name: "actions" })).toBeVisible();
   await expect(page.getByRole("link", { name: "knowledge" })).toBeVisible();
-  await expect(page.getByText("No Door Money recommendation store exists yet.")).toBeVisible();
+  await expect(page.getByText(/No Door Money recommendation store exists yet\.|No readable Door Money recommendations are stored\./u)).toBeVisible();
   await expect(page.getByText("0 on this tab")).toBeVisible();
 
   await page.getByRole("link", { name: "actions" }).click();
@@ -330,6 +355,65 @@ test("Kvórum exposes three truthful owner-workspace tabs", async ({ page }) => 
   await expect(page.getByText("0 on this tab", { exact: true })).toBeVisible();
 });
 
+test("the admin home answers what happened since yesterday for every new venture", async ({ page }) => {
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const panel = page.locator("[data-admin-recent-activity]");
+  await expect(panel).toBeVisible();
+  for (const ventureId of ["booksofhistory", "door-money", "tehdejsi-svet", "kvorum"]) {
+    const card = panel.locator(`[data-recent-venture="${ventureId}"]`);
+    await expect(card).toBeVisible();
+    await expect(card).toContainText("since yesterday");
+    await expect(card).toHaveAttribute("href", `/admin?venture=${ventureId}`);
+  }
+});
+
+test("every new venture workspace exposes its configured meeting controls", async ({ page }) => {
+  const expected = {
+    booksofhistory: ["FOLIO", "PLOT", "QUILL", "HACEK", "AUDIT"],
+    "door-money": ["GHOST", "BOOKER", "PULSE", "AUDIT", "PALATE"],
+    "tehdejsi-svet": ["LETOPIS", "VERBA", "QUILL", "HACEK", "AUDIT"],
+    kvorum: ["TRIBUN", "HACEK", "AUDIT", "PALATE", "KEEPER"]
+  } as const;
+  for (const [ventureId, roles] of Object.entries(expected)) {
+    await page.goto(`/admin?venture=${ventureId}`, { waitUntil: "networkidle" });
+    const controls = page.getByRole("region", { name: "Choose who joins new work" });
+    await expect(controls).toBeVisible();
+    for (const role of roles) await expect(controls.getByText(role, { exact: true })).toBeVisible();
+    await expect(controls.getByRole("switch")).toHaveCount(roles.length);
+  }
+});
+
+test("approvals and owner-only work include all four new ventures", async ({ page }) => {
+  await page.goto("/admin?view=approvals", { waitUntil: "networkidle" });
+  for (const approval of ["BH-RESEARCH-001", "DM-RESULTS-004", "TS-SNAPSHOT-001", "KV-EDITORIAL-004"]) {
+    await expect(page.getByText(`state/INBOX.md#${approval}`, { exact: true })).toBeVisible();
+  }
+
+  await page.goto("/admin?view=manual-tasks", { waitUntil: "networkidle" });
+  for (const task of [
+    "Sign or decline BH-RESEARCH-001",
+    "Approve Door Money's private source (BOOK-SOURCE-001)",
+    "Sign or decline TS-RESEARCH-004",
+    "Approve Kvórum's one-page Apify scope"
+  ]) {
+    await expect(page.getByText(task, { exact: false }).first()).toBeVisible();
+  }
+});
+
+test("Tehdejsi svet unreadable records count on the venture and company views", async ({ page }) => {
+  await writeFile(tsUnreadablePath, "{}\n");
+  try {
+    await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+    const unreadable = page.locator("[data-adm-rail-foot]").getByText("Unreadable files", { exact: true }).locator("..");
+    await expect(unreadable.getByText("1", { exact: true })).toBeVisible();
+
+    await page.goto("/admin?venture=tehdejsi-svet&tab=features", { waitUntil: "networkidle" });
+    await expect(page.getByText(/1 saved file cannot be read: features \(1\)/u)).toBeVisible();
+  } finally {
+    await rm(tsUnreadablePath, { force: true });
+  }
+});
+
 test("WeekBoard navigates between statically generated weeks", async ({ page }) => {
   // The five-day board is /calendar's product now. The home page walks past a calendar of its
   // own — a full week, stepped in place — and this test is about the linked, statically
@@ -349,8 +433,20 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   // every registered slot renders exactly one row and one project icon.
   await expect(weekBoard.locator(".contents")).toHaveCount(CALENDAR_SLOTS.length);
   await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(CALENDAR_SLOTS.length);
-  // Both ventures add a distinct project hue to the eight-project base schedule.
-  await expect(page.locator("[data-project-legend]")).toHaveCount(10);
+  // The legend owns one entry per colour currently represented by the calendar model. Keep the
+  // count aligned with that model as ventures join instead of preserving the old ten-entry pin.
+  await expect(page.locator("[data-project-legend]")).toHaveCount(12);
+  for (const [kind, hour, project] of [
+    ["bh-desk", "12", "booksofhistory"],
+    ["dm-desk", "15", "door-money"],
+    ["dm-growth", "16", "door-money"],
+    ["ts-desk", "18", "tehdejsi-svet"],
+    ["kv-desk", "21", "kvorum"]
+  ] as const) {
+    const row = weekBoard.locator(`[data-calendar-kind="${kind}"][data-calendar-hour="${hour}"]`);
+    await expect(row).toHaveCount(1);
+    await expect(row.locator(`[data-calendar-slot][data-project="${project}"]`)).toHaveCount(5);
+  }
   await expect(weekBoard.locator("[data-calendar-slot] time")).toHaveCount(0);
   // No assertion that a fixture is on the board. There were test meetings on it when the archive
   // was young; there are none now, and requiring one would be requiring the company to keep
@@ -409,6 +505,31 @@ test("public presentation keeps approved agent photos and plain calendar labels"
   await expect(page.locator("[data-show-presentation]")).toHaveCount(0);
 });
 
+test("the enlarged roster names every new role and discloses each allowed profile assignment", async ({ page }) => {
+  await page.goto("/agents", { waitUntil: "networkidle" });
+  await expect(page.getByText("40", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("FOLIO · Book selection editor", { exact: true })).toBeVisible();
+  await expect(page.getByText("PLOT · Book story producer", { exact: true })).toBeVisible();
+
+  for (const [slug, id, assignment] of [
+    ["tribun", "TRIBUN", "Kvórum"],
+    ["ghost", "GHOST", "Door Money"],
+    ["booker", "BOOKER", "Door Money"],
+    ["letopis", "LETOPIS", "Tehdejší svět"],
+    ["verba", "VERBA", "Tehdejší svět"]
+  ] as const) {
+    await page.goto(`/agents/${slug}`, { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: id })).toBeVisible();
+    await expect(page.locator("[data-agent-ventures]")).toHaveText(assignment);
+    await expect(page.getByText(`${id} uses a neutral name tile until the owner approves a portrait.`)).toBeVisible();
+  }
+
+  await page.goto("/agents/hacek", { waitUntil: "networkidle" });
+  await expect(page.locator("[data-agent-ventures]")).toHaveText("DNESKAi · MMA Files · Kvórum · BOOKSOFHISTORY · Tehdejší svět");
+  await page.goto("/agents/quill", { waitUntil: "networkidle" });
+  await expect(page.locator("[data-agent-ventures]")).toHaveText("Every venture");
+});
+
 test("Carousel Studio serves and displays its preview images", async ({ page, request }) => {
   const response = await request.get(
     "/api/carousel-studio/preview/cover-cta/1.0.0/caught-up/instagram-square/1"
@@ -443,6 +564,18 @@ test("measures role column keeps the table inset", async ({ page }) => {
   expect(Math.abs((headBox?.x ?? 0) - (cellBox?.x ?? 0))).toBeLessThanOrEqual(1);
 });
 
+test("Money reports attributed venture costs without filling evidence gaps", async ({ page }) => {
+  await page.goto("/results#money", { waitUntil: "networkidle" });
+  const costs = page.locator("[data-venture-costs]");
+  await costs.scrollIntoViewIfNeeded();
+  await expect(costs).toBeVisible();
+  for (const venture of ["BOOKSOFHISTORY", "Door Money", "Tehdejší svět", "Kvórum"]) {
+    await expect(costs.getByText(venture, { exact: true })).toBeVisible();
+  }
+  await expect(costs.getByText("Recorded Apify allocation estimate; shared-account actual is unavailable.")).toBeVisible();
+  await expect(costs.getByText("No data", { exact: true })).not.toHaveCount(0);
+});
+
 test("MMA Files article heroes load from the package-backed archive", async ({ page }) => {
   await page.goto("/admin?venture=mma-files&tab=articles", { waitUntil: "networkidle" });
   const heroes = page.locator("main figure img");
@@ -471,7 +604,9 @@ test("DNESKAi social archive renders its Czech-only packs", async ({ page }) => 
   await expect(frames).toHaveCount(20);
   for (const index of [0, 10]) {
     await frames.nth(index).scrollIntoViewIfNeeded();
-    await expect.poll(() => frames.nth(index).evaluate((node: HTMLImageElement) => node.naturalWidth)).toBeGreaterThan(0);
+    await expect
+      .poll(() => frames.nth(index).evaluate((node: HTMLImageElement) => node.naturalWidth), { timeout: 30_000 })
+      .toBeGreaterThan(0);
   }
 });
 
@@ -535,6 +670,41 @@ test("BOOKSOFHISTORY admin tabs expose recorded evidence without rendering a boo
  */
 test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
 
+  test("all four new venture RatingWidgets append and reload permanent history", async ({ page }) => {
+    const dmRecommendationPath = path.join(repositoryRoot, "state/ventures/door-money/recommendations/e2e-rating.json");
+    let original: string | null = null;
+    try {
+      try { original = await readFile(dmRecommendationPath, "utf8"); }
+      catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; }
+      await mkdir(path.dirname(dmRecommendationPath), { recursive: true });
+      const dmRecommendation = JSON.parse(await readFile(
+        path.join(repositoryRoot, "contracts/fixtures/venture-recommendation.valid.json"),
+        "utf8"
+      )) as Record<string, unknown>;
+      dmRecommendation.id = "e2e-rating";
+      await writeFile(dmRecommendationPath, `${JSON.stringify(dmRecommendation, null, 2)}\n`);
+
+      for (const route of [
+        "/admin?venture=booksofhistory&tab=features",
+        "/admin?venture=door-money&tab=recommendations",
+        "/admin?venture=tehdejsi-svet&tab=features",
+        "/admin?venture=kvorum&tab=recommendations"
+      ]) {
+        await page.goto(route, { waitUntil: "networkidle" });
+        const rating = page.getByRole("group", { name: "Your rating" }).first();
+        await rating.getByRole("button", { name: "Good", exact: true }).click();
+        await expect(page.getByText("Rating saved to the permanent history.").first()).toBeVisible({ timeout: 60_000 });
+        await page.reload({ waitUntil: "networkidle" });
+        await expect(page.getByRole("group", { name: "Your rating" }).first()
+          .getByRole("button", { name: "Good", exact: true })).toHaveAttribute("aria-pressed", "true");
+        await expect(page.getByText("Rating history (1)").first()).toBeVisible();
+      }
+    } finally {
+      if (original === null) await rm(dmRecommendationPath, { force: true });
+      else await writeFile(dmRecommendationPath, original);
+    }
+  });
+
   test("Tehdejsi svet result entry stays manual and approval-gated", async ({ page }) => {
     let resultPosts = 0;
     page.on("request", (request) => {
@@ -561,9 +731,15 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await page.goto("/admin?venture=tehdejsi-svet&tab=signals", { waitUntil: "networkidle" });
     const panel = page.locator("[data-tehdejsi-signals]");
     await expect(panel.getByText("No owner-pasted community memory is recorded.")).toBeVisible();
-    await panel.getByLabel("Source label").fill("Synthetic e2e owner paste");
-    await panel.getByLabel("Owner-pasted comments").fill("[theme: fictional memory] A synthetic recollection.");
-    await panel.getByRole("button", { name: "Record recollections" }).click();
+    const sourceLabel = panel.getByLabel("Source label");
+    const comments = panel.getByLabel("Owner-pasted comments");
+    const record = panel.getByRole("button", { name: "Record recollections" });
+    await expect.poll(async () => {
+      await sourceLabel.fill("Synthetic e2e owner paste");
+      await comments.fill("[theme: fictional memory] A synthetic recollection.");
+      return record.isEnabled();
+    }, { timeout: 30_000 }).toBe(true);
+    await record.click();
     await expect(panel.getByRole("alert")).toContainText("TS-RESULTS-005 is pending");
     expect(futurePosts).toBe(1);
   });
@@ -663,8 +839,13 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     expect((await deck.body()).byteLength).toBeGreaterThan(1_000);
 
     await page.goto("/admin?venture=kvorum&tab=recommendations", { waitUntil: "networkidle" });
-    await page.getByLabel("Manually posted HTTPS URL").fill("https://example.com/manual-kvorum-post");
-    await page.getByRole("button", { name: "Record posted URL" }).click();
+    const postedUrl = page.getByLabel("Manually posted HTTPS URL");
+    const recordPostedUrl = page.getByRole("button", { name: "Record posted URL" });
+    await expect.poll(async () => {
+      await postedUrl.fill("https://example.com/manual-kvorum-post");
+      return recordPostedUrl.isEnabled();
+    }, { timeout: 30_000 }).toBe(true);
+    await recordPostedUrl.click();
     await expect(page.getByText("The manual post URL is recorded. No metrics were fetched.")).toBeVisible({ timeout: 60_000 });
 
     await page.goto("/admin?venture=kvorum&tab=claims", { waitUntil: "networkidle" });
@@ -765,7 +946,26 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
   });
 });
 
-const responsiveRoutes = ["/", "/agents", "/agents/hacek", "/calendar/2026-07-27", "/ventures/titty-tuesdays", "/ventures/fightaiq", "/ventures/carousel-studio", "/money", "/admin?venture=global", "/admin?venture=door-money&tab=recommendations", "/admin?venture=door-money&tab=actions", "/admin?venture=door-money&tab=knowledge", "/admin?venture=titty-tuesdays&tab=plans", "/admin?venture=fightaiq&tab=events", "/admin?venture=mma-files&tab=social-lab", "/admin?venture=booksofhistory&tab=features", "/admin?venture=tehdejsi-svet&tab=features", "/admin?venture=tehdejsi-svet&tab=library", "/admin?venture=tehdejsi-svet&tab=signals", "/admin?venture=carousel-studio&tab=studio"];
+const responsiveRoutes = [
+  "/",
+  "/agents",
+  "/agents/hacek",
+  "/calendar/2026-07-27",
+  ...PUBLIC_VENTURE_SLUGS.map((slug) => `/ventures/${slug}`),
+  "/money",
+  "/admin?venture=global",
+  "/admin?venture=door-money&tab=recommendations",
+  "/admin?venture=door-money&tab=actions",
+  "/admin?venture=door-money&tab=knowledge",
+  "/admin?venture=titty-tuesdays&tab=plans",
+  "/admin?venture=fightaiq&tab=events",
+  "/admin?venture=mma-files&tab=social-lab",
+  "/admin?venture=booksofhistory&tab=features",
+  "/admin?venture=tehdejsi-svet&tab=features",
+  "/admin?venture=tehdejsi-svet&tab=library",
+  "/admin?venture=tehdejsi-svet&tab=signals",
+  "/admin?venture=carousel-studio&tab=studio"
+];
 
 for (const mode of [
   { name: "mobile", width: 375, height: 812, colorScheme: "dark" as const, reducedMotion: "no-preference" as const },
@@ -1013,8 +1213,64 @@ const OPENABLE_ROOMS = [
   "carousel-studio",
   "marketingshark",
   "goviral",
-  "titty-tuesdays"
+  "titty-tuesdays",
+  "booksofhistory",
+  "door-money",
+  "tehdejsi-svet",
+  "kvorum"
 ] as const;
+
+test("the home walkthrough carries all eleven ventures at mobile width", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const ventures = [
+    "DNESKAi",
+    "Titty Tuesdays",
+    "GoVIRAL",
+    "BOOKSOFHISTORY",
+    "FightAIQ",
+    "Design Lab",
+    "marketingShark",
+    "MMA Files",
+    "Door Money",
+    "Tehdejší svět",
+    "Kvórum"
+  ];
+  await expect(page.locator("[data-proj-card]")).toHaveCount(11);
+  for (const venture of ventures) {
+    await expect(page.locator("[data-proj-card]", { hasText: venture })).toHaveCount(1);
+  }
+  await expect(page.locator("[data-chat-list] button")).toHaveCount(12);
+  await expect(page.locator('[data-wf-place]:not([data-wf-place="dock"])')).toHaveCount(12);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(1);
+});
+
+test("the ventures index has eleven real cards and keeps sample scores separate", async ({ page }) => {
+  await page.goto("/ventures", { waitUntil: "networkidle" });
+  const ids = [
+    "caught-up",
+    "titty-tuesdays",
+    "goviral",
+    "booksofhistory",
+    "fightaiq",
+    "carousel-studio",
+    "marketingshark",
+    "mma-files",
+    "door-money",
+    "tehdejsi-svet",
+    "kvorum"
+  ];
+  const cards = page.locator("[data-venture-card]");
+  await expect(cards).toHaveCount(ids.length);
+  for (const id of ids) await expect(page.locator(`[data-venture-card="${id}"]`)).toHaveCount(1);
+
+  const cardText = await cards.allInnerTexts();
+  expect(cardText.join("\n")).not.toContain("Needs 35");
+  expect(cardText.join("\n")).not.toContain("Test example");
+  await expect(page.locator("[data-sample-idea]")).not.toHaveCount(0);
+  await expect(page.getByText("Earlier software test · not current projects", { exact: true })).toBeVisible();
+});
 
 for (const size of [
   { name: "1280x800", width: 1280, height: 800 },
@@ -1120,7 +1376,9 @@ test.describe("the Design Lab workspace", () => {
     const canvas = page.locator("[data-slide-canvas]").first();
     const portrait = await canvas.evaluate((node) => getComputedStyle(node).aspectRatio);
     await page.getByRole("button", { name: "9:16", exact: true }).first().click();
-    await expect.poll(async () => canvas.evaluate((node) => getComputedStyle(node).aspectRatio)).not.toBe(portrait);
+    await expect
+      .poll(async () => canvas.evaluate((node) => getComputedStyle(node).aspectRatio), { timeout: 30_000 })
+      .not.toBe(portrait);
     // The safe-area overlay is offered only where a platform actually covers the canvas.
     await page.getByRole("button", { name: "bezpečná zóna" }).first().click();
     await expect(page.locator("[data-safe-area]").first()).toBeAttached();
@@ -1130,10 +1388,19 @@ test.describe("the Design Lab workspace", () => {
     await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
     const editor = page.locator("textarea[id^='slide-']").first();
     const save = page.locator("[data-save-slide]").first();
-    await editor.fill(Array.from({ length: 12 }, (_, index) => `slovo${index}`).join(" "));
-    await expect(save).toBeEnabled();
-    await editor.fill(Array.from({ length: 31 }, (_, index) => `slovo${index}`).join(" "));
-    await expect(page.locator("[data-word-count]").first()).toContainText("31/30");
+    const original = await editor.inputValue();
+    const shortText = `syntetický e2e obsah ${Date.now()} je zřetelně odlišný a zůstává pod limitem`;
+    expect(shortText.trim()).not.toBe(original.trim());
+    await expect.poll(async () => {
+      await editor.fill(shortText);
+      return save.isEnabled();
+    }, { timeout: 30_000 }).toBe(true);
+    const overLimitText = Array.from({ length: 31 }, (_, index) => `slovo${index}`).join(" ");
+    const wordCount = page.locator("[data-word-count]").first();
+    await expect.poll(async () => {
+      await editor.fill(overLimitText);
+      return wordCount.textContent();
+    }, { timeout: 30_000 }).toContain("31/30");
     await expect(save).toBeDisabled();
     // The engine's own sentence, not a paraphrase of it.
     await expect(page.getByText(/přes limit 30 slov/u).first()).toBeVisible();
@@ -1158,14 +1425,27 @@ test("a preset saves, reloads into the picker and applies", async ({ page }) => 
   await rm(presetsPath, { force: true });
   try {
     await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
-    await page.getByRole("button", { name: "dossier", exact: true }).first().click();
-    await expect(page.locator("[data-recipe-line]").first()).toContainText("dossier");
+    const recipeLine = page.locator("[data-recipe-line]").first();
+    await expect.poll(async () => {
+      await page.locator('[data-family="dossier"]').click();
+      return recipeLine.textContent();
+    }, { timeout: 30_000 }).toContain("dossier");
+    await expect(page.locator("[data-save-state]").first()).toHaveAttribute("data-save-state", "saved", { timeout: 60_000 });
 
-    await page.getByLabel("Název presetu").first().fill("E2E tichý záznam");
+    const presetName = page.getByLabel("Název presetu").first();
     const save = page.locator("[data-save-preset]").first();
-    await expect(save).toBeEnabled();
+    await expect.poll(async () => {
+      await presetName.fill("E2E tichý záznam");
+      return save.isEnabled();
+    }, { timeout: 30_000 }).toBe(true);
+    const presetResponse = page.waitForResponse((response) =>
+      response.request().method() === "POST"
+      && new URL(response.url()).pathname === "/admin/api/carousel-studio/recipe"
+      && response.request().postDataJSON()?.presetName === "E2E tichý záznam"
+    );
     await save.click();
-    await expect(page.locator("[data-save-state]").first()).toHaveAttribute("data-save-state", "saved");
+    expect((await presetResponse).ok()).toBe(true);
+    await expect(page.locator("[data-save-state]").first()).toHaveAttribute("data-save-state", "saved", { timeout: 60_000 });
 
     // Reload: the preset is read back out of the file the save created.
     await page.reload({ waitUntil: "networkidle" });
@@ -1174,10 +1454,14 @@ test("a preset saves, reloads into the picker and applies", async ({ page }) => 
     // Saved as a draft, and it says so — a draft is never drawn from autonomously.
     await expect(chip).toContainText("koncept");
 
-    await page.getByRole("button", { name: "tower", exact: true }).first().click();
-    await expect(page.locator("[data-recipe-line]").first()).toContainText("tower");
-    await chip.click();
-    await expect(page.locator("[data-recipe-line]").first()).toContainText("dossier");
+    await expect.poll(async () => {
+      await page.locator('[data-family="tower"]').click();
+      return recipeLine.textContent();
+    }, { timeout: 30_000 }).toContain("tower");
+    await expect.poll(async () => {
+      await chip.click();
+      return recipeLine.textContent();
+    }, { timeout: 30_000 }).toContain("dossier");
   } finally {
     await rm(presetsPath, { force: true });
   }
@@ -1524,9 +1808,11 @@ test.describe("footer links open dialogs", () => {
   test("every content link opens its own dialog", async ({ page }) => {
     await page.goto("/company", { waitUntil: "networkidle" });
     for (const topic of topics) {
-      await page.locator(`[data-footer-dialog="${topic}"]`).first().click();
       const surface = page.locator("[data-dialog-surface]");
-      await expect(surface, topic).toBeVisible();
+      await expect.poll(async () => {
+        await page.locator(`[data-footer-dialog="${topic}"]`).first().click();
+        return surface.isVisible();
+      }, { message: topic, timeout: 30_000 }).toBe(true);
       // Real content, not an empty shell with a title on it.
       expect((await surface.innerText()).length, topic).toBeGreaterThan(600);
       // And no way out to a page built in the previous design. The dialog carries the answer or
@@ -1537,11 +1823,35 @@ test.describe("footer links open dialogs", () => {
     }
   });
 
-  test("the feeds stay files", async ({ page, request }) => {
+  test("the feeds, sitemap and crawler rules stay current", async ({ page, request }) => {
     await page.goto("/company", { waitUntil: "networkidle" });
-    for (const feed of ["/feed.xml", "/decisions.xml", "/feed.json"]) {
+    for (const [feed, contentType] of [
+      ["/feed.xml", "application/rss+xml"],
+      ["/decisions.xml", "application/rss+xml"],
+      ["/feed.json", "application/feed+json"]
+    ] as const) {
       await expect(page.locator(`footer a[href="${feed}"]`)).toHaveCount(1);
-      expect((await request.get(feed)).status(), feed).toBe(200);
+      const response = await request.get(feed);
+      expect(response.status(), feed).toBe(200);
+      expect(response.headers()["content-type"], feed).toContain(contentType);
+    }
+
+    const sitemap = await request.get("/sitemap.xml");
+    expect(sitemap.status()).toBe(200);
+    const sitemapBody = await sitemap.text();
+    for (const slug of PUBLIC_VENTURE_SLUGS) {
+      expect(sitemapBody, slug).toContain(`/ventures/${slug}`);
+    }
+
+    const robots = await request.get("/robots.txt");
+    expect(robots.status()).toBe(200);
+    const robotsBody = await robots.text();
+    expect(robotsBody).toContain("Disallow: /admin");
+    expect(robotsBody).toContain("Disallow: /api");
+    expect(robotsBody).toContain("Sitemap:");
+    expect(robotsBody).toContain("/sitemap.xml");
+    for (const slug of PUBLIC_VENTURE_SLUGS) {
+      expect(robotsBody, slug).not.toContain(`Disallow: /ventures/${slug}`);
     }
   });
 

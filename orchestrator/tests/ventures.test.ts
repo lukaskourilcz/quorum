@@ -9,7 +9,8 @@ import {
   composeMeetingRouteDefinition,
   cronPayloads,
   loadVentureRegistry,
-  resolveMeetingClock
+  resolveMeetingClock,
+  ventureIdForPhase
 } from "../src/ventures/registry.js";
 
 describe("venture registry migration", () => {
@@ -102,6 +103,39 @@ describe("venture registry migration", () => {
     ] satisfies BudgetLedgerEntry[];
     expect(summarizeVentureSpend(entries, registry, "2026-08")).toEqual([
       { ventureId: "caught-up", usd: 0.07 }
+    ]);
+  });
+
+  it("attributes every new paid room to its venture", async () => {
+    const registry = await loadVentureRegistry();
+    expect(["bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk"].map((phase) => [phase, ventureIdForPhase(registry, phase)])).toEqual([
+      ["bh-desk", "booksofhistory"],
+      ["dm-desk", "door-money"],
+      ["dm-growth", "door-money"],
+      ["ts-desk", "tehdejsi-svet"],
+      ["kv-desk", "kvorum"]
+    ]);
+    const entries = ["bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk"].map((phase, index) => ({
+      ts: "2026-08-13T12:00:00.000Z",
+      cycleId: `cycle-${phase}`,
+      requestHash: `${phase}-request`,
+      phase,
+      agent: "FIXTURE",
+      provider: "openai",
+      model: "fixture",
+      serviceTier: "default" as const,
+      tokensIn: 1,
+      cachedTokensIn: 0,
+      tokensOut: 1,
+      toolUses: 0,
+      usd: (index + 1) / 100,
+      kind: "text" as const
+    })) satisfies BudgetLedgerEntry[];
+    expect(summarizeVentureSpend(entries, registry, "2026-08")).toEqual([
+      { ventureId: "booksofhistory", usd: 0.01 },
+      { ventureId: "door-money", usd: 0.05 },
+      { ventureId: "kvorum", usd: 0.05 },
+      { ventureId: "tehdejsi-svet", usd: 0.04 }
     ]);
   });
 

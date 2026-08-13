@@ -7,6 +7,7 @@ import { FighterRecordSchema } from "../contracts/mma.js";
 import { CarouselTemplateSchema } from "../contracts/carousel-template.js";
 import { VentureRegistrySchema } from "../contracts/venture-registry.js";
 import { BhResearchLedgerEntrySchema } from "../contracts/bh-dossier.js";
+import { TsResearchLedgerEntrySchema } from "../contracts/ts-research.js";
 import { configRoot } from "../paths.js";
 import { atomicWriteJson } from "../state.js";
 import { SEED_TEMPLATES } from "@boardlessai/carousel-studio";
@@ -249,7 +250,7 @@ async function marketingSharkPackages(root: string): Promise<number> {
  * conservative recognition boundary available. Unreadable and unfamiliar records never become a
  * positive signal. Most importantly, an empty directory is no evidence at all, so it yields null.
  */
-async function recommendationApproval(directory: string): Promise<{
+async function recommendationApproval(directory: string, ventureId: string): Promise<{
   approved: number;
   drafted: number;
   value: number | null;
@@ -261,7 +262,7 @@ async function recommendationApproval(directory: string): Promise<{
     const record = await readFile(file, "utf8")
       .then((raw) => JSON.parse(raw) as Record<string, unknown>)
       .catch(() => null);
-    if (record?.schemaVersion !== "venture-recommendation/1" || !statuses.has(String(record.status))) continue;
+    if (record?.schemaVersion !== "venture-recommendation/1" || record.ventureId !== ventureId || !statuses.has(String(record.status))) continue;
     drafted += 1;
     if (record.status === "approved" || record.status === "posted" || record.status === "archived") approved += 1;
   }
@@ -281,7 +282,7 @@ export async function computeAutonomySnapshot(input: {
   const sourceConfig = JSON.parse(await readFile(path.join(input.repoRoot, "config", "sources.json"), "utf8")) as {
     sources?: Array<{ enabled?: unknown }>;
   };
-  const [editionReceipts, articles, slates, fighters, plans, meetings, proofs, studioTemplates, marketingSharkPackageCount, bhResearchLedger, doorMoneyActions, doorMoneyRecommendationPackages] = await Promise.all([
+  const [editionReceipts, articles, slates, fighters, plans, meetings, proofs, studioTemplates, marketingSharkPackageCount, bhResearchLedger, tsResearchLedger, doorMoneyActions, doorMoneyRecommendationPackages, kvorumApproval] = await Promise.all([
     files(path.join(input.stateRoot, "edition", "deliveries")).then(async (names) => Promise.all(names.map(async (file) => JSON.parse(await readFile(file, "utf8")) as Record<string, unknown>))),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "articles"), ArticlePackageSchema),
     validValues(path.join(input.stateRoot, "ventures", "mma-files", "slates"), EditorialSlateSchema),
@@ -292,8 +293,10 @@ export async function computeAutonomySnapshot(input: {
     studioTemplateFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "templates")),
     marketingSharkPackages(path.join(input.stateRoot, "ventures", "marketingshark", "packages")),
     validJsonLines(path.join(input.stateRoot, "ventures", "booksofhistory", "research-ledger.jsonl"), BhResearchLedgerEntrySchema),
+    validJsonLines(path.join(input.stateRoot, "ventures", "tehdejsi-svet", "research-ledger.jsonl"), TsResearchLedgerEntrySchema),
     doorMoneyActionCounts(path.join(input.stateRoot, "ventures", "door-money", "actions")),
-    doorMoneyRecommendationCount(path.join(input.stateRoot, "ventures", "door-money", "recommendations"))
+    doorMoneyRecommendationCount(path.join(input.stateRoot, "ventures", "door-money", "recommendations")),
+    recommendationApproval(path.join(input.stateRoot, "ventures", "kvorum", "recommendations"), "kvorum")
   ]);
 
   const deliveredEditions = editionReceipts.filter((receipt) => receipt.status === "delivered" && receipt.editionStatus === "edition").length;
@@ -313,6 +316,17 @@ export async function computeAutonomySnapshot(input: {
   const unreadableBhLedgerDetail = bhResearchLedger.unreadable
     ? `; ${bhResearchLedger.unreadable} unreadable ledger ${bhResearchLedger.unreadable === 1 ? "line was" : "lines were"} excluded`
     : "";
+  const paidTsResearch = new Set(tsResearchLedger.values
+    .filter((entry) => entry.kind === "purchase" && entry.costUsd > 0)
+    .map((entry) => `${entry.topicKey}:${entry.briefHash}`));
+  const usedTsResearch = new Set(tsResearchLedger.values
+    .filter((entry) => entry.kind === "use")
+    .map((entry) => `${entry.topicKey}:${entry.briefHash}`)
+    .filter((key) => paidTsResearch.has(key)));
+  const tsResearchEfficiency = evaluateResearchEfficiency({
+    paidDossierIds: [...paidTsResearch],
+    usedDossierIds: [...usedTsResearch]
+  });
 
   const metricByComponent: Record<string, CapabilitySignal[]> = {
     "edition-cadence": [signal("edition-cadence", "Edition cadence", ratio(deliveredEditions, eligibleEditionDays), "ratio", `${deliveredEditions} delivered, ${failedEditions} failed; NO_EDITION is neutral.`)],
@@ -360,6 +374,34 @@ export async function computeAutonomySnapshot(input: {
         doorMoneyRecommendationPackages,
         "count",
         `${doorMoneyRecommendationPackages} complete evidence-linked recommendation packages were recorded.`
+      )];
+    }
+    if (ventureId === "tehdejsi-svet" && component === "feature-cadence") {
+      return [signal("feature-cadence", "Features per completed cycle", null, "ratio", "No completed Tehdejsi svet cycles are recorded yet.")];
+    }
+    if (ventureId === "tehdejsi-svet" && component === "research-efficiency") {
+      const unreadable = tsResearchLedger.unreadable
+        ? `; ${tsResearchLedger.unreadable} unreadable ledger ${tsResearchLedger.unreadable === 1 ? "line was" : "lines were"} excluded`
+        : "";
+      return [signal(
+        "research-efficiency",
+        "Paid briefs used",
+        tsResearchEfficiency,
+        "ratio",
+        paidTsResearch.size === 0
+          ? `No paid Tehdejsi svet briefs are recorded yet${unreadable}.`
+          : `${usedTsResearch.size} of ${paidTsResearch.size} paid briefs supported recorded recommendations${unreadable}.`
+      )];
+    }
+    if (ventureId === "kvorum" && component === "recommendation-approval") {
+      return [signal(
+        "recommendation-approval",
+        "Recommendation approval",
+        kvorumApproval.value,
+        "ratio",
+        kvorumApproval.drafted === 0
+          ? "No Kvórum recommendations are recorded; approval is not measured."
+          : `${kvorumApproval.approved} of ${kvorumApproval.drafted} recorded recommendations were owner-approved.`
       )];
     }
     return metricByComponent[component] ?? [];

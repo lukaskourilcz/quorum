@@ -13,6 +13,9 @@ import {
 } from "@boardlessai/carousel-studio";
 import type { TehdejsiDesignLabPack } from "./tehdejsi-design-lab";
 
+/** Expected policy refusal: the package cannot render without its recorded licensed-media facts. */
+export class TehdejsiRenderRefusal extends Error {}
+
 /** The approved TS pack turned into the dedicated family input used by preview and export. */
 export function tehdejsiRenderInput(
   pack: TehdejsiDesignLabPack,
@@ -33,8 +36,8 @@ export function tehdejsiRenderInput(
     hasPhoto: photoPng !== null,
     licence: pack.photo?.licence ?? null
   });
-  if (photoPng && !pack.photo) throw new Error("A TS photo has no recorded media reference.");
-  if (issues.length > 0) throw new Error(issues.map(({ detail }) => detail).join(" "));
+  if (photoPng && !pack.photo) throw new TehdejsiRenderRefusal("A TS photo has no recorded media reference.");
+  if (issues.length > 0) throw new TehdejsiRenderRefusal(issues.map(({ detail }) => detail).join(" "));
   return {
     template: tehdejsiDeckTemplate(pack.slides.length),
     payload: CarouselPayloadSchema.parse({ locale: "cs", strings }),

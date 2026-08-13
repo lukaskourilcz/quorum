@@ -14,6 +14,7 @@ import {
   Clock3,
   FileText,
   Hourglass,
+  History,
   Landmark,
   Newspaper,
   PanelsTopLeft,
@@ -57,7 +58,7 @@ function isCaughtUp(kind: CalendarKind) {
   return kind === "cu-edition" || kind === "cu-product";
 }
 
-type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "goviral" | "marketingshark" | "booksofhistory" | "door-money" | "fightaiq" | "mma-files" | "kvorum" | "carousel-studio";
+type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "goviral" | "marketingshark" | "booksofhistory" | "door-money" | "tehdejsi-svet" | "fightaiq" | "mma-files" | "kvorum" | "carousel-studio";
 type DisplayStatus = CalendarStatus | "test";
 
 const companyCouncil: readonly AgentId[] = ["VIZE", "FORGE", "PULSE", "AUDIT"];
@@ -116,6 +117,7 @@ const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone
   marketingshark: { icon: Layers, label: "marketingShark", tone: "text-[var(--info-soft)]", slotColor: "#a5d8f3" },
   booksofhistory: { icon: BookOpen, label: "BOOKSOFHISTORY", tone: "text-[#c4b5fd]", slotColor: "#c4b5fd" },
   "door-money": { icon: BookOpenText, label: "Door Money", tone: "text-[#c4b5fd]", slotColor: "#c4b5fd" },
+  "tehdejsi-svet": { icon: History, label: "Tehdejší svět", tone: "text-[#d9684f]", slotColor: "#d9684f" },
   fightaiq: { icon: Swords, label: "FightAIQ", tone: "text-[var(--destructive-soft)]", slotColor: "var(--destructive-soft)" },
   kvorum: { icon: Landmark, label: "Kvórum", tone: "text-[#f6df45]", slotColor: "#f6df45" },
   "mma-files": {
@@ -134,6 +136,7 @@ function projectForKind(kind: CalendarKind): ProjectKey {
   if (kind === "ms-daily") return "marketingshark";
   if (kind === "bh-desk") return "booksofhistory";
   if (kind === "dm-desk" || kind === "dm-growth") return "door-money";
+  if (kind === "ts-desk") return "tehdejsi-svet";
   if (kind === "mma-intake" || kind === "mma-analysis") return "fightaiq";
   if (kind === "mag-editorial" || kind === "mag-desk" || kind === "article-am" || kind === "article-pm") return "mma-files";
   if (kind === "kv-desk") return "kvorum";
@@ -346,7 +349,7 @@ export function WeekBoard({
             </div>
           ))}
           {feed.definitions.map((definition) => (
-            <div className="contents" key={definition.kind}>
+            <div className="contents" data-calendar-hour={definition.hour} data-calendar-kind={definition.kind} key={definition.kind}>
               <div className="flex items-start gap-3 border-b border-r border-[var(--line-strong)] bg-[color-mix(in_srgb,var(--surface-raised)_48%,var(--surface))] px-4 py-3 last:border-b-0">
                 {(() => {
                   const ProjectIcon = projectDetails[projectForKind(definition.kind)].icon;

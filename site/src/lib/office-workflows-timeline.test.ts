@@ -59,7 +59,7 @@ describe("buildTimeline", () => {
 
   it("tags every beat with the registry's own hour and label, unreformatted", () => {
     const edition = timeline.beats.find((beat) => beat.kind === "cu-edition");
-    expect(edition?.tag).toBe("05:00 · Edition production");
+    expect(edition?.tag).toBe("05:00 · Caught Up edition room");
     const board = timeline.beats.find((beat) => beat.kind === "venture-morning");
     expect(board?.tag).toBe("06:00 · Morning shift");
     // Every tag is exactly its slot's own two fields, and nothing else.

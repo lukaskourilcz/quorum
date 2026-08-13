@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { CopySocialText } from "@/components/admin/copy-social-text";
 import { DeckSaveBadge, warningFor, type SaveState } from "@/components/admin/deck-save-badge";
+import { DesignLabBilingualSlide } from "@/components/admin/design-lab-bilingual-slide";
 import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import type { LabArticle, LabPreset } from "@/lib/design-lab";
 
@@ -139,6 +140,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
   const current = texts[slide] ?? "";
   const overLimit = words(current) > MAX_WORDS;
   const changed = current.trim() !== (article.slides[slide]?.text ?? "").trim();
+  const dedicatedBilingual = article.venture === "tehdejsi-svet";
 
   async function post(body: Record<string, unknown>, label: string): Promise<void> {
     if (!writesEnabled) return;
@@ -244,6 +246,9 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
             </ol>
           </div>
 
+          {dedicatedBilingual ? (
+            <DesignLabBilingualSlide pack={article.dualLanguage} slide={slide} />
+          ) : <>
           <div className="grid min-w-0 gap-2">
             <label className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]" htmlFor={`slide-${article.id}`}>
               Text slidu {slide + 1}
@@ -295,7 +300,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
             <div className="w-full overflow-x-auto" data-horizontal-scroll>
               <div className="flex flex-wrap gap-2">
                 {FAMILIES.map((family) => (
-                  <button aria-pressed={recipe.family === family} className={chipClass(recipe.family === family)} key={family} onClick={() => change({ family })} type="button">
+                  <button aria-pressed={recipe.family === family} className={chipClass(recipe.family === family)} data-family={family} key={family} onClick={() => change({ family })} type="button">
                     {family}
                   </button>
                 ))}
@@ -357,6 +362,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
               </Button>
             </div>
           </div>
+          </>}
         </div>
       </div>
 

@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { publicAgentBySlug, publicAgents } from "@/data/agents";
+import { publicAgentAssignment } from "@/lib/agent-assignments";
 import { formatDate } from "@/lib/utils";
 
 export const dynamicParams = false;
@@ -231,14 +232,18 @@ export default async function AgentDetailPage({
               <Card>
                 <CardContent>
                   <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
-                    How the portrait was designed
+                    {agent.visual.avatar ? "How the portrait was designed" : "Portrait status"}
                   </p>
-                  <p className="mt-5 text-lg leading-8">{publicAgentText(agent.visual.motif)}</p>
+                  <p className="mt-5 text-lg leading-8">
+                    {agent.visual.avatar
+                      ? publicAgentText(agent.visual.motif)
+                      : `${agent.name} uses a neutral name tile until the owner approves a portrait.`}
+                  </p>
                   <Separator className="my-7" />
                   <CardDescription>
-                    The portrait represents a software responsibility. It uses
-                    a black-and-white paper and photo collage with one warm
-                    orange detail. It is not meant to look like a real person.
+                    {agent.visual.avatar
+                      ? "The portrait represents a software responsibility. It uses a black-and-white paper and photo collage with one warm orange detail. It is not meant to look like a real person."
+                      : "No likeness has been generated or implied. The placeholder identifies the software role by name."}
                   </CardDescription>
                 </CardContent>
               </Card>
@@ -255,7 +260,13 @@ export default async function AgentDetailPage({
                 Work history stays n/a until a real public record exists.
               </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-6 md:grid-cols-3">
+            <CardContent className="grid gap-6 md:grid-cols-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  Assigned work
+                </p>
+                <p className="mt-2" data-agent-ventures>{publicAgentAssignment(agent)}</p>
+              </div>
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
                   Current work

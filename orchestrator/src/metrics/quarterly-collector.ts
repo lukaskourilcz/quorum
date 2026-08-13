@@ -5,6 +5,12 @@ import { BudgetLedgerEntrySchema, isMediaBudgetKind } from "../budget.js";
 import { evaluateResearchEfficiency } from "../autonomy/signals.js";
 import { ReleaseProofSchema } from "../contracts/autonomy.js";
 import { BhResearchLedgerEntrySchema } from "../contracts/bh-dossier.js";
+import { ActionPacketSchema } from "../contracts/action-packet.js";
+import { TsResearchLedgerEntrySchema } from "../contracts/ts-research.js";
+import { AnyVentureRecommendationSchema, type AnyVentureRecommendation } from "../contracts/venture-recommendation.js";
+import { TehdejsiRecommendationSchema } from "../contracts/tehdejsi-recommendation.js";
+import { KvorumRecommendationSchema } from "../contracts/kvorum-recommendation.js";
+import { VentureRegistrySchema } from "../contracts/venture-registry.js";
 import { KpiSetSchema, type KpiSet } from "../contracts/kpi-set.js";
 import { IdeaLedgerEntrySchema } from "../contracts/idea-ledger.js";
 import { ArticlePackageSchema } from "../contracts/mma-files.js";
@@ -14,6 +20,7 @@ import { IMAGE_PROGRAM_PHASES } from "../images/budget.js";
 import { FixedCostRegistrySchema } from "../money/fixed-costs.js";
 import type { MonetizationMeasurements } from "../money/monetization.js";
 import type { KpiMeasurements } from "./quarterly.js";
+import { resolveLedgerVentureId } from "../ventures/accounting.js";
 import {
   CAROUSEL_BRANDS,
   CarouselTemplateSchema,
@@ -149,7 +156,7 @@ async function jsonLines(file: string): Promise<unknown[]> {
 
 async function jsonLinesCounted(
   file: string
-): Promise<{ values: unknown[]; unreadable: number }> {
+): Promise<{ values: unknown[]; unreadable: number; present: boolean }> {
   try {
     const values: unknown[] = [];
     let unreadable = 0;
@@ -157,11 +164,58 @@ async function jsonLinesCounted(
       try { values.push(JSON.parse(line) as unknown); }
       catch { unreadable += 1; }
     }
-    return { values, unreadable };
+    return { values, unreadable, present: true };
   } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") return { values: [], unreadable: 0 };
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return { values: [], unreadable: 0, present: false };
     throw error;
   }
+}
+
+function recommendationDate(value: AnyVentureRecommendation): string {
+  return "date" in value ? value.date : value.createdAt.slice(0, 10);
+}
+
+function approvedRecommendation(value: AnyVentureRecommendation): boolean {
+  return value.status === "approved" || value.status === "posted" || value.status === "archived";
+}
+
+function approvedPerWeek(values: readonly AnyVentureRecommendation[], start: string, end: string): number | null {
+  const inPeriod = values.filter((value) => dateInPeriod(recommendationDate(value), start, end));
+  if (inPeriod.length === 0) return null;
+  const days = Math.max(1, Math.floor((Date.parse(`${end}T00:00:00.000Z`) - Date.parse(`${start}T00:00:00.000Z`)) / DAY_MS) + 1);
+  return Number((inPeriod.filter(approvedRecommendation).length / Math.max(1, days / 7)).toFixed(8));
+}
+
+function approvalTrend(values: readonly AnyVentureRecommendation[], start: string, end: string): number | null {
+  const weeks = new Map<number, { approved: number; total: number }>();
+  for (const value of values.filter((entry) => dateInPeriod(recommendationDate(entry), start, end))) {
+    const offset = Math.floor((Date.parse(`${recommendationDate(value)}T00:00:00.000Z`) - Date.parse(`${start}T00:00:00.000Z`)) / (7 * DAY_MS));
+    const week = weeks.get(offset) ?? { approved: 0, total: 0 };
+    week.total += 1;
+    if (approvedRecommendation(value)) week.approved += 1;
+    weeks.set(offset, week);
+  }
+  const populated = [...weeks.entries()].sort(([left], [right]) => left - right).map(([, week]) => week);
+  if (populated.length < 2) return null;
+  const previous = populated.at(-2)!;
+  const current = populated.at(-1)!;
+  return current.approved / current.total > previous.approved / previous.total ? 1 : 0;
+}
+
+function lowestCompletedMonthCount(values: readonly AnyVentureRecommendation[], start: string, now: Date): number | null {
+  const completedMonths: string[] = [];
+  const cursor = new Date(`${start.slice(0, 7)}-01T00:00:00.000Z`);
+  while (cursor.getTime() < now.getTime()) {
+    const month = cursor.toISOString().slice(0, 7);
+    const monthStart = `${month}-01`;
+    cursor.setUTCMonth(cursor.getUTCMonth() + 1);
+    const monthEnd = new Date(cursor.getTime() - DAY_MS).toISOString().slice(0, 10);
+    if (monthStart >= start && cursor.getTime() <= now.getTime()) completedMonths.push(month);
+    if (monthEnd >= now.toISOString().slice(0, 10)) break;
+  }
+  if (completedMonths.length === 0) return null;
+  return Math.min(...completedMonths.map((month) => values.filter((value) =>
+    approvedRecommendation(value) && recommendationDate(value).startsWith(month)).length));
 }
 
 function record(value: unknown): Record<string, unknown> | null {
@@ -252,7 +306,15 @@ export async function collectQuarterlyMeasurements(input: {
     mmaRunsRaw,
     deckReceiptsRaw,
     hookChannelsRaw,
-    bhResearchLedgerRaw
+    bhResearchLedgerRaw,
+    bhRecommendationsRaw,
+    doorMoneyRecommendationsRaw,
+    doorMoneyActionsRaw,
+    tehdejsiRecommendationsRaw,
+    tehdejsiResearchLedgerRaw,
+    kvorumRecommendationsRaw,
+    kvorumQuotaRaw,
+    ventureRegistryRaw
   ] = await Promise.all([
     jsonFile(path.join(input.stateRoot, "budget", "ledger.json")),
     jsonFile(path.join(input.repoRoot, "config", "fixed-costs.json")),
@@ -284,7 +346,15 @@ export async function collectQuarterlyMeasurements(input: {
     jsonFiles(path.join(input.stateRoot, "ventures", "mma-files", "runs")),
     jsonFiles(path.join(input.stateRoot, "ventures", "carousel-studio", "deck-receipts")),
     jsonFile(path.join(input.stateRoot, "ventures", "carousel-studio", "hook-channels.json")),
-    jsonLinesCounted(path.join(input.stateRoot, "ventures", "booksofhistory", "research-ledger.jsonl"))
+    jsonLinesCounted(path.join(input.stateRoot, "ventures", "booksofhistory", "research-ledger.jsonl")),
+    jsonFiles(path.join(input.stateRoot, "ventures", "booksofhistory", "recommendations")),
+    jsonFiles(path.join(input.stateRoot, "ventures", "door-money", "recommendations")),
+    jsonFiles(path.join(input.stateRoot, "ventures", "door-money", "actions")),
+    jsonFiles(path.join(input.stateRoot, "ventures", "tehdejsi-svet", "recommendations")),
+    jsonLinesCounted(path.join(input.stateRoot, "ventures", "tehdejsi-svet", "research-ledger.jsonl")),
+    jsonFiles(path.join(input.stateRoot, "ventures", "kvorum", "recommendations")),
+    jsonFile(path.join(input.stateRoot, "kvorum", "source-quota", "apify.json")),
+    jsonFile(path.join(input.repoRoot, "config", "ventures.json"))
   ]);
 
   const measurements: Record<string, number | null> = {};
@@ -320,6 +390,7 @@ export async function collectQuarterlyMeasurements(input: {
   const periodBudget = budget.success
     ? budget.data.entries.filter((entry) => dateInPeriod(entry.ts, periodStart, periodEnd))
     : [];
+  const ventureRegistry = VentureRegistrySchema.safeParse(ventureRegistryRaw);
   const apiByMonth = new Map<string, number>();
   for (const entry of periodBudget) {
     const month = entry.ts.slice(0, 7);
@@ -344,6 +415,22 @@ export async function collectQuarterlyMeasurements(input: {
         .map((entry) => entry.usd))
     : null;
 
+  const maximumMonthlyVentureSpend = (ventureId: string): number | null => {
+    if (!budget.success || !ventureRegistry.success) return null;
+    const byMonth = new Map<string, number>();
+    for (const entry of budget.data.entries) {
+      if (!dateInPeriod(entry.ts, periodStart, periodEnd)) continue;
+      if (resolveLedgerVentureId(entry, ventureRegistry.data) !== ventureId) continue;
+      const month = entry.ts.slice(0, 7);
+      byMonth.set(month, (byMonth.get(month) ?? 0) + entry.usd);
+    }
+    return byMonth.size === 0 ? 0 : Number(Math.max(...byMonth.values()).toFixed(8));
+  };
+  measurements["state/budget/ledger.json#booksofhistory_maximum_monthly_model_usd"] = maximumMonthlyVentureSpend("booksofhistory");
+  measurements["state/budget/ledger.json#door_money_maximum_monthly_model_usd"] = maximumMonthlyVentureSpend("door-money");
+  measurements["state/budget/ledger.json#tehdejsi_svet_maximum_monthly_model_usd"] = maximumMonthlyVentureSpend("tehdejsi-svet");
+  measurements["state/budget/ledger.json#kvorum_model_spend_usd"] = maximumMonthlyVentureSpend("kvorum");
+
   const dueSlots = calendars.flatMap((calendar) => {
     const value = record(calendar);
     return Array.isArray(value?.slots) ? value.slots.map(record).filter(Boolean) : [];
@@ -352,6 +439,97 @@ export async function collectQuarterlyMeasurements(input: {
     dueSlots.filter((slot) => ["held", "not-needed"].includes(String(slot?.status))).length,
     dueSlots.length
   );
+
+  const deskReliability = (kind: string): number | null => {
+    const slots = dueSlots.filter((slot) => slot?.kind === kind);
+    return ratio(slots.filter((slot) => ["held", "not-needed"].includes(String(slot?.status))).length, slots.length);
+  };
+  measurements["state/ventures/booksofhistory/cycles#completed_or_stretched_rate"] = deskReliability("bh-desk");
+  measurements["state/meetings#door_money_desk_valid_result_rate"] = deskReliability("dm-desk");
+  measurements["state/ventures/tehdejsi-svet/cycles#completed_or_stretched_rate"] = deskReliability("ts-desk");
+  measurements["state/meetings#kvorum_desk_reliability_rate"] = deskReliability("kv-desk");
+
+  const parsedRecommendations = (values: readonly unknown[], ventureId: string): AnyVentureRecommendation[] => values
+    .flatMap((value) => {
+      const parsed = AnyVentureRecommendationSchema.safeParse(value);
+      return parsed.success && parsed.data.ventureId === ventureId ? [parsed.data] : [];
+    });
+  const bhRecommendations = parsedRecommendations(bhRecommendationsRaw, "booksofhistory");
+  const doorMoneyRecommendations = parsedRecommendations(doorMoneyRecommendationsRaw, "door-money");
+  const tehdejsiRecommendations = tehdejsiRecommendationsRaw.flatMap((value) => {
+    const parsed = TehdejsiRecommendationSchema.safeParse(value);
+    return parsed.success ? [parsed.data] : [];
+  });
+  const kvorumRecommendations = kvorumRecommendationsRaw.flatMap((value) => {
+    const parsed = KvorumRecommendationSchema.safeParse(value);
+    return parsed.success && parsed.data.ventureId === "kvorum" ? [parsed.data] : [];
+  });
+
+  measurements["state/ventures/booksofhistory/recommendations#lowest_monthly_feature_count"] =
+    lowestCompletedMonthCount(bhRecommendations, periodStart, input.now);
+  measurements["state/ventures/door-money/recommendations#approved_packages_per_week"] =
+    approvedPerWeek(doorMoneyRecommendations, periodStart, periodEnd);
+  measurements["state/ventures/door-money/recommendations#approval_rate_trending_up"] =
+    approvalTrend(doorMoneyRecommendations, periodStart, periodEnd);
+  measurements["state/ventures/tehdejsi-svet/recommendations#lowest_monthly_feature_count"] =
+    lowestCompletedMonthCount(tehdejsiRecommendations, periodStart, input.now);
+  const approvedTehdejsi = tehdejsiRecommendations.filter(approvedRecommendation);
+  measurements["state/ventures/tehdejsi-svet/recommendations#language_parity_rate"] = approvedTehdejsi.length === 0
+    ? null
+    : ratio(approvedTehdejsi.filter((recommendation) => recommendation.ventureId === "tehdejsi-svet"
+      && recommendation.payload.slides.every((slide) => Boolean(slide.cs.trim()) && Boolean(slide.ua.trim()))
+      && Boolean(recommendation.payload.captionCs.trim()) && Boolean(recommendation.payload.captionUa.trim())).length, approvedTehdejsi.length);
+  measurements["state/ventures/kvorum/recommendations#approved_packages_per_week"] =
+    approvedPerWeek(kvorumRecommendations, periodStart, periodEnd);
+  measurements["state/ventures/kvorum/recommendations#approval_rate_trending_up"] =
+    approvalTrend(kvorumRecommendations, periodStart, periodEnd);
+  const publishedKvorum = kvorumRecommendations.filter((recommendation) =>
+    recommendation.ventureId === "kvorum" && (recommendation.status === "posted" || recommendation.status === "archived"));
+  measurements["state/ventures/kvorum/claims#published_typed_reference_rate"] = publishedKvorum.length === 0
+    ? null
+    : ratio(publishedKvorum.flatMap((recommendation) => recommendation.evidence.claims)
+      .filter((claim) => claim.refs.length > 0).length,
+    publishedKvorum.flatMap((recommendation) => recommendation.evidence.claims).length);
+
+  const validActionPackets = doorMoneyActionsRaw
+    .map((value) => ActionPacketSchema.safeParse(value))
+    .filter((result) => result.success)
+    .map((result) => result.data)
+    .filter((packet) => dateInPeriod(packet.date, periodStart, periodEnd));
+  const completedActions = validActionPackets.flatMap((packet) => packet.tasks)
+    .filter((task) => task.completion && dateInPeriod(task.completion.completedAt, periodStart, periodEnd)).length;
+  const elapsedWeeks = Math.max(1, (Math.floor((Date.parse(`${periodEnd}T00:00:00.000Z`) - Date.parse(`${periodStart}T00:00:00.000Z`)) / DAY_MS) + 1) / 7);
+  measurements["state/ventures/door-money/actions#completed_per_week"] = validActionPackets.length === 0
+    ? null
+    : Number((completedActions / elapsedWeeks).toFixed(8));
+
+  const tsResearchParses = tehdejsiResearchLedgerRaw.values.map((value) => TsResearchLedgerEntrySchema.safeParse(value));
+  const tsResearch = tsResearchParses.filter((result) => result.success).map((result) => result.data);
+  const paidTsBriefs = new Set(tsResearch.filter((entry) => entry.kind === "purchase" && entry.costUsd > 0)
+    .map((entry) => `${entry.topicKey}:${entry.briefHash}`));
+  const usedTsBriefs = new Set(tsResearch.filter((entry) => entry.kind === "use")
+    .map((entry) => `${entry.topicKey}:${entry.briefHash}`).filter((key) => paidTsBriefs.has(key)));
+  measurements["state/ventures/tehdejsi-svet/research-ledger.jsonl#used_paid_brief_rate"] =
+    evaluateResearchEfficiency({ paidDossierIds: [...paidTsBriefs], usedDossierIds: [...usedTsBriefs] });
+  const tsResearchByMonth = new Map<string, number>();
+  for (const entry of tsResearch.filter((value) => value.kind === "purchase")) {
+    const month = entry.completedAt.slice(0, 7);
+    tsResearchByMonth.set(month, (tsResearchByMonth.get(month) ?? 0) + entry.costUsd);
+  }
+  measurements["state/ventures/tehdejsi-svet/research-ledger.jsonl#maximum_monthly_spend_usd"] = !tehdejsiResearchLedgerRaw.present
+    || (tsResearch.length === 0 && (tehdejsiResearchLedgerRaw.unreadable > 0 || tsResearchParses.some((result) => !result.success)))
+    ? null
+    : Number((tsResearchByMonth.size ? Math.max(...tsResearchByMonth.values()) : 0).toFixed(8));
+
+  const kvorumQuota = z.object({
+    schemaVersion: z.literal("kvorum-apify-quota/1"),
+    month: z.string().regex(/^\d{4}-\d{2}$/u),
+    estimatedUsedUsd: z.number().finite().nonnegative(),
+    sharedAccountUsedUsd: z.number().finite().nonnegative().nullable()
+  }).passthrough().safeParse(kvorumQuotaRaw);
+  measurements["state/kvorum/source-quota/apify.json#monthly_spend_usd"] = kvorumQuota.success && kvorumQuota.data.month === periodEnd.slice(0, 7)
+    ? kvorumQuota.data.sharedAccountUsedUsd ?? kvorumQuota.data.estimatedUsedUsd
+    : null;
 
   const editions = editionDeliveries.map(record).filter((value): value is Record<string, unknown> => Boolean(value))
     .filter((value) => dateInPeriod(value.date ?? value.deliveredAt, periodStart, periodEnd));

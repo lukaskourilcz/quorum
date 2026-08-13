@@ -170,7 +170,7 @@ export interface OfficeWorkflows {
   today: string;
   /** Plan order: the top rank west to east, then the bottom rank west to east. */
   rooms: WorkflowsRoom[];
-  /** All thirteen slots, in hour order. */
+  /** Every configured slot, in hour order. */
   slots: WorkflowsSlot[];
   hooks: WorkflowsHookRack;
   gates: WorkflowsGates;

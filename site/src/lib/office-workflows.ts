@@ -37,7 +37,7 @@ import { publicKindLabel, readableSlotReason } from "@/lib/slot-labels";
 /**
  * The floor plan's data, resolved on the server.
  *
- * The plan draws one office floor from above: eight rooms, one spine, a loading dock and the
+ * The plan draws one office floor from above: the company room, every venture, one spine, a loading dock and the
  * edges that leave the building. Everything on it is a fact this file resolved from committed
  * state, and the boundary below is the sanitising boundary — the same one `office-walkthrough.ts`
  * holds. Nothing that crosses carries a filesystem path, a repository name, or a package hash
@@ -74,7 +74,7 @@ export interface WorkflowsCalendarInput {
 }
 
 /**
- * The eight rooms, in the order the plan draws them.
+ * The company room and every registered venture, in the order the plan draws them.
  *
  * The workshop is on this list and holds no slots: `config/ventures.json` gives `carousel-studio`
  * `"meetings": []`, so it never deliberates and has nothing to record. It is drawn as machinery
@@ -146,6 +146,34 @@ const ROOM_ORDER: ReadonlyArray<{
     purpose: "Brand and season concepts for a shop that does not exist yet.",
     connects: "It publishes nothing. A shop that does not exist yet would collect its own feed from the dock.",
     operates: "Ideas only: no prices, no stock, no availability. Nothing is delivered to it — it pulls, and fails closed when it cannot reach the feed."
+  },
+  {
+    key: "booksofhistory",
+    name: "BOOKSOFHISTORY",
+    purpose: "Verified stories about books, authors and the history around them.",
+    connects: "Its candidate scan and research ledger stay inside the room; only owner-reviewed drafts leave it.",
+    operates: "Cheap candidate research comes first. Paid research is bounded, cited and stopped when the evidence is not good enough."
+  },
+  {
+    key: "door-money",
+    name: "Door Money",
+    purpose: "Practical money lessons turned into owner-reviewed story recommendations.",
+    connects: "It reads its bounded knowledge base and the owner's manually entered results. It does not contact a platform.",
+    operates: "The story desk sits daily. A separate growth review sits only on Thursdays; off-days cost nothing."
+  },
+  {
+    key: "tehdejsi-svet",
+    name: "Tehdejší svět",
+    purpose: "Czech and Ukrainian historical explainers grounded in a hand-verified facts file.",
+    connects: "Draft summaries can go to the Design Lab. Nothing publishes and nothing connects to a product repository.",
+    operates: "The desk advances a two-day cycle without skipping, and every language and evidence gate can stop it."
+  },
+  {
+    key: "kvorum",
+    name: "Kvórum",
+    purpose: "Czech political claims checked before one owner-facing recommendation is recorded.",
+    connects: "It reads the bounded political monitor and records evidence. It never posts or reaches out.",
+    operates: "Every recommendation keeps its cited claims and correction history; unsupported claims fail closed."
   }
 ];
 
@@ -336,10 +364,6 @@ export async function resolveOfficeWorkflows(
         .map((run) => `article-${run.slot}`)
     );
     shared.definitions.forEach((definition, index) => {
-      // The scope fence permits the operating slot on the company calendar, not a public
-      // BOOKSOFHISTORY room or workflow. It is therefore omitted from this floor-plan model
-      // rather than misattributed to Board HQ by projectForKind's safe fallback.
-      if (definition.kind === "bh-desk" || definition.kind === "ts-desk" || definition.kind === "kv-desk") return;
       const slot = dayIndex >= 0 ? feed.slots[dayIndex + index] : undefined;
       const status: CalendarStatus = slot?.status ?? "scheduled";
       const room = projectForKind(definition.kind);

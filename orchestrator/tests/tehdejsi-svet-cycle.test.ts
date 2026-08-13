@@ -4,6 +4,12 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { MeetingRecordSchema } from "../src/contracts/meeting-record.js";
 import type { guardedJsonCall } from "../src/llm/call.js";
+import {
+  MEETING_AGENDA_PATH,
+  loadMeetingPolicy,
+  readMeetingAgendaQueue,
+  requestMeetingAgenda
+} from "../src/meetings/agenda.js";
 import { runTehdejsiSvetCycle } from "../src/ventures/tehdejsi-svet/run.js";
 import { readTehdejsiCycle, tehdejsiCycleComplete } from "../src/ventures/tehdejsi-svet/state.js";
 
@@ -128,6 +134,50 @@ describe("Tehdejsi svet desk", () => {
       stretch: { count: 1, reason: "review-required", nextAttemptOn: "2026-08-13" }
     });
     expect(result.artifacts.some((entry) => entry.includes("shortlists/2026-08-12.json"))).toBe(true);
+  });
+
+  it("leads with and consumes the one due GoVIRAL agenda after the desk checkpoint is durable", async () => {
+    const root = await temporaryState();
+    const now = new Date("2026-08-12T16:00:00.000Z");
+    const summary = "Decide whether the recorded family-memory signal changes today's timing priority.";
+    const requested = await requestMeetingAgenda({
+      root,
+      policy: await loadMeetingPolicy(),
+      ventureId: "tehdejsi-svet",
+      phase: "ts-desk",
+      requestedBy: "PULSE",
+      sourcePhase: "gv-brief",
+      sourceMeetingRef: "meetings/2026-08-12-gv-brief",
+      summary,
+      evidenceRefs: ["ventures/goviral/plans/2026-08-12.json"],
+      notBefore: "2026-08-12",
+      now
+    });
+    process.env.MEETING_TRIGGER = "schedule";
+
+    const result = await runTehdejsiSvetCycle({
+      executionCycleId: "20260812160000-ts-desk-agenda",
+      dry: false,
+      now,
+      root
+    });
+
+    expect(result.artifacts).toContain(path.relative(
+      path.resolve(import.meta.dirname, "../.."),
+      path.join(root, MEETING_AGENDA_PATH)
+    ));
+    const record = MeetingRecordSchema.parse(JSON.parse(
+      await readFile(path.join(root, "meetings", "2026-08-12-ts-desk.json"), "utf8")
+    ));
+    expect(record.operatingBrief).toContain(summary);
+    expect(record.agendaRef).toBe(`${MEETING_AGENDA_PATH}#${requested.agenda.id}`);
+    expect(record.decision.evidenceRefs).toContain("ventures/goviral/plans/2026-08-12.json");
+    const queue = await readMeetingAgendaQueue(root, now);
+    expect(queue.agendas[0]).toMatchObject({
+      id: requested.agenda.id,
+      status: "consumed",
+      consumedBy: "20260812160000-ts-desk-agenda"
+    });
   });
 
   it("writes nothing when a closed live room is invoked by hand", async () => {

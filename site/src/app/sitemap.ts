@@ -4,6 +4,7 @@ import { getPublicStandups } from "@/lib/standup-records";
 import { getPublicSiteUrl } from "@/lib/public-site-url";
 import { getPublicMeetingRecords } from "@/lib/meeting-records";
 import { calendarStaticWeeks } from "@/lib/calendar-feed-model";
+import { PUBLIC_VENTURE_SLUGS } from "@/data/public-venture-slugs";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getPublicSiteUrl();
@@ -17,10 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/standups",
     "/agents",
     "/ventures",
-    "/ventures/caught-up",
-    "/ventures/carousel-studio",
-    "/ventures/fightaiq",
-    "/ventures/titty-tuesdays",
+    ...PUBLIC_VENTURE_SLUGS.map((slug) => `/ventures/${slug}`),
     "/ideas",
     "/results",
     "/log",

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "owner-attention/1",
-  "generatedAt": "2026-08-10T04:00:00.000Z",
+  "generatedAt": "2026-08-13T04:00:00.000Z",
   "approvals": [
     {
       "id": "APIFY-ACCOUNT-001",
@@ -14,6 +14,139 @@
       "urgency": "blocking"
     },
     {
+      "id": "BH-RESEARCH-001",
+      "title": "Allow BOOKSOFHISTORY to make guarded web-search research calls with the existing Anthropic key.",
+      "plain": "BOOKSOFHISTORY research stays on its $0 path until you allow the existing guarded search adapter, capped at $0.50 per cycle and $5.00 per month.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#BH-RESEARCH-001"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "BOOK-INGEST-002",
+      "title": "Allow the one-time, resumable Door Money knowledge ingestion inside its program envelope.",
+      "plain": "Door Money's one-time private ingestion stays off until you approve its $3.00 program cap, $0.80 daily cap and existing per-call ceiling.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#BOOK-INGEST-002"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "BOOK-SOURCE-001",
+      "title": "Provide Door Money's private manuscript source and approve the public/private boundary.",
+      "plain": "Door Money cannot read the private source until you record its local path outside the public repository; the public checkout will retain only bounded derivatives.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#BOOK-SOURCE-001"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "KV-APIFY-001",
+      "title": "Extend the existing Free-plan Apify scope to Kvórum's single reviewed public Facebook page monitor.",
+      "plain": "Kvórum's public-page monitor stays at $0 until you approve one pinned logged-out actor, one page, thirty rows, a 30-day purge and the existing $2.00 monthly share.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#KV-APIFY-001"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "KV-EDITORIAL-004",
+      "title": "Countersign Kvórum's political editorial constitution as the owner policy already enforced by its gates.",
+      "plain": "Kvórum's political drafts cannot claim an owner-adopted editorial policy until you countersign the already enforced nonpartisan, sourced and correction-first rules.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#KV-EDITORIAL-004"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "KV-SOURCES-002",
+      "title": "Allow Kvórum to read the seven exact free feed endpoints recorded in `config/kvorum-sources.json`.",
+      "plain": "Kvórum's seven free news and official feeds stay closed until you approve every exact host; no unlisted endpoint inherits that approval.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#KV-SOURCES-002"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "TS-RESEARCH-004",
+      "title": "Allow bounded Tehdejší svět marketing research through the existing shared provider.",
+      "plain": "Tehdejší svět paid research stays off until you approve the existing guarded provider at $0.30 per brief and $2.00 per month.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#TS-RESEARCH-004"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "TS-SNAPSHOT-001",
+      "title": "Accept Tehdejší svět's hand-committed facts file and its no-product-link boundary.",
+      "plain": "Tehdejší svět cannot accept its hand-copied facts snapshot until you confirm the hash, exclusions and permanent no-product-connection boundary.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#TS-SNAPSHOT-001"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "APIFY-MMA-SOURCES-001",
+      "title": "Extend the approved Apify scope to MMA data actors for FightAIQ, so UFC and Oktagon events, cards and results have a second independent source and the site's empty boards can fill.",
+      "plain": "Extend the approved Apify scope to MMA data actors for FightAIQ, so UFC and Oktagon events, cards and results have a second independent source and the site's empty boards can fill.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#APIFY-MMA-SOURCES-001"
+      },
+      "since": null,
+      "urgency": "soon",
+      "needsPlainCopy": true
+    },
+    {
+      "id": "BH-ACCOUNTS-003",
+      "title": "Clear the BOOKSOFHISTORY name and handles and authorize the owner to prepare separate Czech and English profile lanes on the platforms the owner records here.",
+      "plain": "BOOKSOFHISTORY has no public profile until you clear its Czech and English handles and create any chosen accounts yourself.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#BH-ACCOUNTS-003"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "BH-RESULTS-004",
+      "title": "Allow the owner to enter per-post BOOKSOFHISTORY results for the Czech and English lanes inside the D9 measurement hold.",
+      "plain": "BOOKSOFHISTORY result entry stays disabled until you allow manual per-post numbers; no platform or analytics fetch is part of the approval.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#BH-RESULTS-004"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "BH-SEED-002",
+      "title": "Accept the authored 200-book BOOKSOFHISTORY seed library and its prior-not-fact and no-cover rules.",
+      "plain": "The authored 200-book shortlist seed cannot become accepted routing context until you confirm that its scores are priors, never publication evidence or cover-art authority.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#BH-SEED-002"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
       "id": "DISPATCH-TOKEN-001",
       "title": "Store a GitHub dispatch token and a cron secret on the `quorum-site` Vercel project, so the council's meetings start on their own hour instead of whenever GitHub's queue gets to them.",
       "plain": "The council's meetings start whenever GitHub's queue gets to them until a dispatch token exists.",
@@ -23,21 +156,147 @@
       },
       "since": null,
       "urgency": "soon"
+    },
+    {
+      "id": "DM-ACCOUNTS-003",
+      "title": "Clear the Door Money name and choose any future social accounts.",
+      "plain": "Door Money has no public account until you clear its name and choose and create any channels yourself; signing grants no posting automation.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#DM-ACCOUNTS-003"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "DM-RESULTS-004",
+      "title": "Allow owner-entered Door Money post results as the venture's only performance evidence inside the D9 hold.",
+      "plain": "Door Money result entry stays disabled until you allow owner-entered numbers after a manual post; automated analytics remains forbidden.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#DM-RESULTS-004"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "KV-ACCOUNTS-003",
+      "title": "Clear the Kvórum name and handles and allow the owner to prepare any chosen Instagram, Facebook, Threads or X profiles.",
+      "plain": "Kvórum has no public identity or account until you clear the name and handles and create any chosen profiles yourself with the AI-assistance disclosure.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#KV-ACCOUNTS-003"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "TS-ACCOUNTS-003",
+      "title": "Clear the Tehdejší svět handles and authorize the owner to prepare one bilingual profile on Instagram, Facebook and Threads.",
+      "plain": "Tehdejší svět has no public profile until you clear its handles and create any bilingual accounts yourself after the production-domain prerequisite.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#TS-ACCOUNTS-003"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "TS-MEDIA-002",
+      "title": "Allow the nineteen eligible licensed city photographs in Tehdejší svět social drafts with attribution.",
+      "plain": "Tehdejší svět city photographs stay out of social cards until you approve the nineteen recorded licensed files and their required attributions.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#TS-MEDIA-002"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "TS-RESULTS-005",
+      "title": "Allow owner-entered Tehdejší svět results and owner-pasted comment harvests as its only measurement.",
+      "plain": "Tehdejší svět results and selected comment recollections stay disabled until you approve owner-only entry; no automatic collection is allowed.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#TS-RESULTS-005"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "TT-VISUALS-BATCH-005",
+      "title": "Approve the batch shape: one concept a day, two images, one per provider, re-encoded to WebP.",
+      "plain": "Approve the batch shape: one concept a day, two images, one per provider, re-encoded to WebP.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#TT-VISUALS-BATCH-005"
+      },
+      "since": null,
+      "urgency": "soon",
+      "needsPlainCopy": true
+    },
+    {
+      "id": "TT-VISUALS-CONTRACT-006",
+      "title": "Approve the `design-proposal/1` contract itself.",
+      "plain": "Approve the `design-proposal/1` contract itself.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#TT-VISUALS-CONTRACT-006"
+      },
+      "since": null,
+      "urgency": "soon",
+      "needsPlainCopy": true
+    },
+    {
+      "id": "TT-VISUALS-DOCTRINE-004",
+      "title": "Approve the doctrine checklist wording and the two kinds of no.",
+      "plain": "Approve the doctrine checklist wording and the two kinds of no.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#TT-VISUALS-DOCTRINE-004"
+      },
+      "since": null,
+      "urgency": "soon",
+      "needsPlainCopy": true
+    },
+    {
+      "id": "TT-VISUALS-ROLE-002",
+      "title": "Add `TT_VISUAL_IMAGE` and `TT_VISUAL_IMAGE_FAL` to `config/models.json`, and rewrite `_comment_IMAGE` to name four sanctioned image call sites instead of two.",
+      "plain": "Add `TT_VISUAL_IMAGE` and `TT_VISUAL_IMAGE_FAL` to `config/models.json`, and rewrite `_comment_IMAGE` to name four sanctioned image call sites instead of two.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#TT-VISUALS-ROLE-002"
+      },
+      "since": null,
+      "urgency": "soon",
+      "needsPlainCopy": true
+    },
+    {
+      "id": "TT-VISUALS-SPEND-001",
+      "title": "Allow the first routine image spend: two Titty Tuesdays garment renders a day, one per provider, inside the existing $25 model share.",
+      "plain": "Allow the first routine image spend: two Titty Tuesdays garment renders a day, one per provider, inside the existing $25 model share.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#TT-VISUALS-SPEND-001"
+      },
+      "since": null,
+      "urgency": "soon",
+      "needsPlainCopy": true
+    },
+    {
+      "id": "TT-VISUALS-STORAGE-003",
+      "title": "Keep proposal images under `state/ventures/titty-tuesdays/design-proposals/media/`, served through the authenticated admin route, rather than under `site/public/`.",
+      "plain": "Keep proposal images under `state/ventures/titty-tuesdays/design-proposals/media/`, served through the authenticated admin route, rather than under `site/public/`.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#TT-VISUALS-STORAGE-003"
+      },
+      "since": null,
+      "urgency": "soon",
+      "needsPlainCopy": true
     }
   ],
   "manualTasks": [
-    {
-      "id": "add-the-odds-api-key-to-actions-secrets",
-      "title": "Add THE_ODDS_API_KEY to Actions secrets",
-      "plain": "the single unblock for every FightAIQ output. Without a price source the evening model check has nothing to compare a model estimate against, so it records no calibration and the readiness dossiers stay empty. THE_ODDS_API_KEY stops at the provider's zero quota by design. CITO_API_KEY is bounded below 500 calls/month and 200/day, and one run reserves two calls — CITO_MONTHLY_CALL_CAP, CITO_DAILY_C",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "blocking"
-    },
     {
       "id": "ADMIN_USER",
       "title": "Admin username is not set in production",
@@ -71,6 +330,18 @@
       "urgency": "blocking"
     },
     {
+      "id": "approve-door-money-s-private-source-book-source-001",
+      "title": "Approve Door Money's private source (BOOK-SOURCE-001)",
+      "plain": "confirm that the English manuscript exists, create its private Git repository and keep the working clone outside this public checkout. Put the manuscript at the gitignored local path or pass it explicitly to the CLI; set BOOK_PRIVATE_CLONE_PATH for a local live desk. The optional fine-grained BOOK_SOURCE_TOKEN is only for the owner's read-only checkout step: the shipped runtime does not fetch a ho",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
       "id": "BOARDLESSAI_GITHUB_TOKEN",
       "title": "The admin cannot write back to the repository",
       "plain": "Nothing you save in the admin can be written back to the repository without this token.",
@@ -86,9 +357,45 @@
       "urgency": "blocking"
     },
     {
+      "id": "countersign-kv-rum-s-editorial-constitution",
+      "title": "Countersign Kvórum's editorial constitution",
+      "plain": "KV-EDITORIAL-004 in state/INBOX.md records the policy already enforced by the gates: Štít is discovery rather than evidence; factual claims are typed and referenced; public figures only; no vote call, endorsement, unsupported crime accusation, voter mockery, paid amplification or alarm register; election claims use the higher source bar; corrections remain linked and the owner reads every final dr",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "land-the-production-domain-clear-the-handle-and-sign-or-decline-ts-accounts-003",
+      "title": "Land the production domain, clear the handle and sign or decline TS-ACCOUNTS-003",
+      "plain": "finish the product's existing",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "review-the-facts-file-and-sign-or-decline-ts-snapshot-001",
+      "title": "Review the facts file and sign or decline TS-SNAPSHOT-001",
+      "plain": "confirm that state/ventures/tehdejsi-svet/facts.json contains only facts copied by a human, structurally omits unsafe records and excluded media, and is the only daily read layer. Signing does not authorize a fetch, clone, sync or any connection to the product repository; a hash mismatch keeps the desk closed at $0.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
       "id": "set-the-admin-credentials-in-vercel-production",
       "title": "Set the /admin credentials in Vercel production",
-      "plain": "several items on this list run through a door that will not currently open: the idea ratings, the fixed-cost registry, the deck design switcher. It needs ADMIN_USER, ADMIN_PASSWORD and a fine-grained BOARDLESSAI_GITHUB_TOKEN with Contents read/write on this repository, plus BOARDLESSAI_GITHUB_REPOSITORY and BOARDLESSAI_GITHUB_BRANCH if you are not using the defaults.",
+      "plain": "several items on this list run through a door that will not currently open: the idea ratings, the fixed-cost registry, the deck design switcher. It needs ADMIN_USER, ADMIN_PASSWORD and a fine-grained BOARDLESSAI_GITHUB_TOKEN with Contents read/write on this repository, plus BOARDLESSAI_GITHUB_REPOSITORY and BOARDLESSAI_GITHUB_BRANCH if you are not using the defaults. Until that token is provisione",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -100,7 +407,91 @@
     {
       "id": "add-the-first-opportunity-record-to-state-opportunities-json",
       "title": "Add the first opportunity record to state/OPPORTUNITIES.json",
-      "plain": "the file still holds only fixtures, so the opportunity gate scores every shift INSUFFICIENT_EVIDENCE. The task allowlist deliberately does not let any agent write this file; the narrow write scope is a guard, so do not widen it. Needs a score ≥35/50, no dimension below 2, and ≥3 independent non-fixture evidence refs in state/EVIDENCE.jsonl. This is not what holds the stage: config/stages.json read",
+      "plain": "the file still holds only fixtures, so the opportunity gate stays dormant and publishes one line rather than a daily rejection. The task allowlist deliberately does not let any agent write this file; the narrow write scope is a guard, so do not widen it. Needs a score ≥35/50, no dimension below 2, and ≥3 independent non-fixture evidence refs in state/EVIDENCE.jsonl. This is not what holds the stag",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "approve-and-run-the-bounded-ingestion-book-ingest-002",
+      "title": "Approve and run the bounded ingestion (BOOK-INGEST-002)",
+      "plain": "review the exact roles and ceilings in state/INBOX.md: $3.00 for the program, $0.80 per day and $0.10 per call, all still under the company caps. After both book approvals are checked, run pnpm book:ingest -- --manuscript <ignored-path> --private-root <private-clone> locally. A stop is resumable for the same manuscript hash; do not copy the source or private output into this repository to make a h",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "approve-kv-rum-s-future-accounts-and-ai-disclosure-bio",
+      "title": "Approve Kvórum's future accounts and AI-disclosure bio",
+      "plain": "KV-ACCOUNTS-003 in state/INBOX.md covers an owner-led Instagram, Facebook, Threads or X setup only after the name and handles are cleared, with a bio that says AI assists the drafts and a human approves every post. Countersigning creates nothing and grants no posting automation: until then the workspace stays explicitly drafts-only, and afterward accounts, credentials and channels still require hu",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "approve-kv-rum-s-one-page-apify-scope",
+      "title": "Approve Kvórum's one-page Apify scope",
+      "plain": "read and countersign KV-APIFY-001 in state/INBOX.md. It covers only the pinned Facebook Posts Scraper build on the logged-out public page facebook.com/stitdemokracie, at most once a day and 30 rows, with a fixed-field mapper and 30-day raw purge. The $2.00 monthly venture share sits inside the existing Free-plan credit and still depends on APIFY-ACCOUNT-001; current $0.151 run reservations mean th",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "approve-kv-rum-s-seven-free-feed-hosts",
+      "title": "Approve Kvórum's seven free feed hosts",
+      "plain": "KV-SOURCES-002 in state/INBOX.md names the exact iROZHLAS, ČT24, Deník N, Seznam Zprávy, Poslanecká sněmovna, Vláda ČR and Czech Google News endpoints and allowlist hosts. Check those URLs and countersign the registry, or leave it pending; without approval every live feed read fails closed and the committed fixture remains the $0 source. A new host or endpoint is a new review.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "approve-manual-door-money-results-dm-results-004",
+      "title": "Approve manual Door Money results (DM-RESULTS-004)",
+      "plain": "decide whether views, likes, comments, shares, saves, follows and link taps typed from the platform's own screen may become owner-result-entry/1 evidence. Check the matching item in state/INBOX.md to open that admin save; until then it fails closed. This remains inside D9: no analytics account, API, cookie, pixel, scrape or automated ingestion, and missing results remain unavailable rather than ze",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "approve-tehdej-sv-t-s-first-12-feature-content-bank",
+      "title": "Approve Tehdejší svět's first 12-feature content bank",
+      "plain": "review both language packages, their source coverage, tier labels, licences, send-target questions and Design Lab previews before day 1. Approval of an individual feature still does not create an account or post it; the owner performs every external post by hand.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "approve-the-reviewed-mma-scope-for-the-same-apify-token",
+      "title": "Approve the reviewed MMA scope for the same Apify token",
+      "plain": "APIFY-MMA-SOURCES-001 in state/INBOX.md authorizes only the terms-reviewed Tapology promotion-page reference step. UFCStats and ESPN remain disabled and Sherdog remains blocked; approval does not turn them on. The current runnable plan is $0 cash and at most $0.20/month of Free-plan credit, beneath a separate $3 hard cap. Without both this approval and APIFY_TOKEN, the path is a logged $0 no-op. R",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -119,6 +510,30 @@
       "source": {
         "kind": "runtime",
         "ref": "CAUGHT_UP_STREAMS_ENABLED"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "clear-door-money-and-choose-future-accounts-dm-accounts-003",
+      "title": "Clear Door Money and choose future accounts (DM-ACCOUNTS-003)",
+      "plain": "finish the shared handle/collision/trademark screen for \"Door Money\", decide whether the account should instead carry the English book title, and choose any of Instagram, TikTok, X, Threads or YouTube. Check the matching item in state/INBOX.md before creating an account. You create and configure it; BoardlessAI remains drafts-only and has no credential, publisher or autopublish permission.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "clear-the-two-lanes-and-sign-or-decline-bh-accounts-003",
+      "title": "Clear the two lanes and sign or decline BH-ACCOUNTS-003",
+      "plain": "record the chosen platforms and cleared handles for separate Czech and English profiles, then approve the Czech and English AI-disclosure bio lines in state/INBOX.md. Signing lets only you create or prepare those profiles; agents still cannot create an account, touch a channel or post, and every package remains a draft for manual posting.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
       },
       "since": null,
       "urgency": "soon"
@@ -196,30 +611,6 @@
       "urgency": "soon"
     },
     {
-      "id": "fire-marketingshark-s-first-live-ms-daily-run",
-      "title": "Fire marketingShark's first live ms-daily run",
-      "plain": "marketingShark has never made a real model call. The implementation session had no API key reachable from it, so everything was proved against a labelled fixture: pnpm cycle -- --phase ms-daily --dry produced a complete package, both carousels rendered to checked SVG, four draft queue items, the ledger entry and the meeting record. What has not happened is CHUM actually writing a word. Run the cyc",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
-      "id": "merge-claude-article-image-selection-61rs70-in-the-aifirst-repository",
-      "title": "Merge claude/article-image-selection-61rs70 in the aifirst repository",
-      "plain": "DNESKAi's validator accepts only photo and svg as an image origin, so the first edition whose ladder reaches the generated illustration would be refused at delivery with schema_invalid. The branch adds the third value and its licence to the contract schema and the TypeScript validator, and extends the byte check to cover it: an illustration that arrived as SVG is still refused, and the plate arriv",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
       "id": "merge-claude-article-image-selection-61rs70-in-the-mma-files-repository",
       "title": "Merge claude/article-image-selection-61rs70 in the mma-files repository",
       "plain": "the two wrong heroes are corrected on this side and cannot reach the magazine until that branch is on its main. A delivered article is immutable there by date and slot, which is what stops a published piece being swapped; the branch adds the one narrow exception, an article-image-correction/1 block whose claim the consumer re-checks itself, and refuses anything where more than the picture differs.",
@@ -281,9 +672,81 @@
       "urgency": "soon"
     },
     {
-      "id": "sign-or-decline-the-six-visual-loop-approvals",
-      "title": "Sign or decline the six visual-loop approvals",
-      "plain": "the Titty Tuesdays image pipeline in docs/TITTY-TUESDAYS-VISUAL-LOOP.md ends with six HUMAN_APPROVAL items: first image spend at a $2.00 monthly ceiling, the model role, public addressability of proposal bytes, the doctrine checklist, the batch shape, the contract. Nothing generates an image until all six are signed.",
+      "id": "review-and-countersign-or-decline-the-four-12-august-founding-decisions",
+      "title": "Review and countersign or decline the four 12 August founding decisions",
+      "plain": "read state/decisions/2026-08-12-kvorum-founding.md, state/decisions/2026-08-12-booksofhistory-founding.md, state/decisions/2026-08-12-door-money-founding.md and state/decisions/2026-08-12-tehdejsi-svet-founding.md. Each implemented venture remains fixture-only until its own countersignature and approvals are complete. Kvórum additionally needs a countersigned capacity reallocation that frees at le",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "review-and-sign-or-decline-bh-seed-002",
+      "title": "Review and sign or decline BH-SEED-002",
+      "plain": "inspect the authored 200-book seed library and accept only if its scores and notes read as editorial priors, never facts. The same item keeps every coverRef in protected admin context: no cover artwork may be downloaded, rendered or delivered, and only dossier claims may enter feature copy.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "sign-or-decline-bh-research-001",
+      "title": "Sign or decline BH-RESEARCH-001",
+      "plain": "decide whether BOOKSOFHISTORY may use web search on the existing Anthropic key. The item in state/INBOX.md fixes gather calls at five searches, QUILL checks at one to three, research at no more than $0.10 per call, $0.50 per cycle and $5.00 per month, and requires the ledger, shelf-first reuse and (bookId, briefHash) idempotency. It creates no account or credential. Until signed, live research mus",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "sign-or-decline-ts-media-002",
+      "title": "Sign or decline TS-MEDIA-002",
+      "plain": "decide whether the nineteen eligible Wikimedia/CC BY-SA city photographs may appear in Tehdejší svět social cards with creator/source/licence attribution on the card and in the caption. Excluded media, incomplete credits, AI-generated historical imagery and destruction comparisons remain blocked.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "sign-or-decline-ts-research-004",
+      "title": "Sign or decline TS-RESEARCH-004",
+      "plain": "decide whether the existing shared provider may research the Ukrainian coverage gap, names and music at no more than $0.30 per brief and $2.00 per month. Research stays venture-side marketing data; product-worthy findings stop in the owner-controlled insight queue.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "sign-or-decline-ts-results-005",
+      "title": "Sign or decline TS-RESULTS-005",
+      "plain": "decide whether the protected admin may accept owner-entered post results and owner-pasted comments as the venture's only measurement. D9 stays in force: no product analytics, platform API, scrape, pixel, cookie or automatic comment collection; recollections never become facts.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "sign-the-six-titty-tuesdays-image-approvals-or-decide-not-to",
+      "title": "Sign the six Titty Tuesdays image approvals, or decide not to",
+      "plain": "TT-VISUALS-SPEND-001 through TT-VISUALS-CONTRACT-006 in state/INBOX.md, all-or-nothing. They cover about $0.057 a day (roughly $1.70 a month, ceiling $2.00), the two renderer routes, keeping the images inside state/ rather than the public site, the doctrine checklist and the delete-on-doctrine rule, the daily two-image shape, and the design-proposal/1 contract. Nothing renders until all six are ti",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -332,9 +795,33 @@
       "urgency": "soon"
     },
     {
+      "id": "walk-the-thirteen-new-template-families-and-say-which-ones-you-want-in-rotation",
+      "title": "Walk the thirteen new template families and say which ones you want in rotation",
+      "plain": "open /admin?venture=design-lab&tab=studio, pick a delivered article and click through the chips. Thirteen of the twenty-three are new: billboard, broadsheet, zurich, concrete, terminal, marginalia, memo, versus, tally, counterweight, throughline, quiet, offset. All of them are in the pool already, because the engine deals from every registered family — so if one of them is not something you want g",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
       "id": "analytics-deliberately-deferred",
       "title": "Analytics — deliberately deferred.",
       "plain": "Name the exact decisions the data would change, then approve the provider, legal posture and data minimisation before setting METRICS_INGESTION_ENABLED=true. Until then follower and engagement KPIs stay honestly unavailable, SPLIT stays off, the quarterly evaluator reports missing audience data as unavailable, and no analytics credential is required.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "whenever"
+    },
+    {
+      "id": "answer-the-booksofhistory-launch-questions",
+      "title": "Answer the BOOKSOFHISTORY launch questions",
+      "plain": "lane priority (both at once, or English first with Czech two weeks behind), the starting cycle length (3 days or 4), and any must-include books or hard exclusions to append or correct in the authored 200-entry seed library before its first live cycle. All three are listed in the design's \"Open questions\".",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -382,7 +869,31 @@
     {
       "id": "decide-board-hq-s-roster-length",
       "title": "Decide Board HQ's roster length",
-      "plain": "the opened room lists all 17 roles scoped global, correct by the registry but a long column beside rooms showing two or three. Restricting it to the council is a one-line change.",
+      "plain": "the opened room lists all 23 roles scoped global, correct by the registry but a long column beside rooms showing two or three. Restricting it to the council is a one-line change.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "whenever"
+    },
+    {
+      "id": "decide-on-the-monday-retro-meeting",
+      "title": "Decide on the Monday retro meeting",
+      "plain": "set WEEKLY_RETRO_ENABLED=true to have two seats read the weekly report the night writes and add a short summary plus up to three fix tasks. Capped at $0.05 a week. With it off, the weekly report still gets written and simply carries no written summary, which is a complete report rather than a gap.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "whenever"
+    },
+    {
+      "id": "decide-on-the-nightly-content-scoring",
+      "title": "Decide on the nightly content scoring",
+      "plain": "set the Actions variable CONTENT_GATE_ENABLED=true to have one comparative model call score each day's published articles and dataset appends, recorded to state/ventures/<venture>/content-scores/. It is capped at $0.05 a call and is the first rung the budget ladder drops, so a tight month loses the scoring before it loses a room. Off is the default and off writes nothing.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -419,6 +930,18 @@
       "id": "decide-whether-python-enters-the-toolchain",
       "title": "Decide whether Python enters the toolchain",
       "plain": "three offline niches were named: the FightAIQ calibration lab, a wikitext parser and article extraction, each behind a JSON-contract boundary. Nothing in the runtime moves either way.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "whenever"
+    },
+    {
+      "id": "decide-whether-the-product-should-move-from-vercel-hobby-to-the-existing-pro-team",
+      "title": "Decide whether the product should move from Vercel Hobby to the existing Pro team",
+      "plain": "this is likely $0 marginal but remains a product-side owner decision. Tehdejší svět does not move the product, change its plan or infer permission from the BoardlessAI Pro subscription.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -467,6 +990,18 @@
       "urgency": "whenever"
     },
     {
+      "id": "pick-kv-rum-s-desk-hour",
+      "title": "Pick Kvórum's desk hour",
+      "plain": "the design defaults to 21:00 Prague (full-day harvest, you review in the evening, posts go out next morning). If same-evening posting matters more than a complete day, the slot is 12:00 instead. One registry field, decided at founding, awkward to move later without a decision.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "whenever"
+    },
+    {
       "id": "PODCASTINDEX_API_KEY",
       "title": "Podcast Index key pair is missing",
       "plain": "A few podcast shows cannot be resolved without this free key pair; the rest of the stream works without it.",
@@ -484,7 +1019,7 @@
     {
       "id": "portraits-for-the-roles-that-have-none",
       "title": "Portraits for the roles that have none",
-      "plain": "27 of 42 registered roles have an approved portrait. The rest fall back to an initials tile on the team panel and to the anonymous silhouette in the workspace player, which is honest but plain.",
+      "plain": "27 of 49 registered roles have an approved portrait; 22 still fall back to an initials tile on the team panel and to the anonymous silhouette in the workspace player, which is honest but plain.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -569,6 +1104,18 @@
       "id": "review-the-q1-target-seeds",
       "title": "Review the Q1 target seeds",
       "plain": "confirm the 2026-08-03 quarter_start and the target values, or save your own, before using the quarter for decisions. Q1 lasts 90 days and content/social pace excludes the first 14. No code writes that file, so a target can only move if you move it.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "whenever"
+    },
+    {
+      "id": "sign-or-decline-bh-results-004",
+      "title": "Sign or decline BH-RESULTS-004",
+      "plain": "decide whether the protected admin may accept your manual per-lane post URL and any available views, likes, comments, shares, saves, follows or link taps. This is the only BOOKSOFHISTORY measurement source: D9 and METRICS_INGESTION_ENABLED=false stay in force, no platform is read, and absent numbers remain unavailable.",
       "steps": [],
       "source": {
         "kind": "needed",

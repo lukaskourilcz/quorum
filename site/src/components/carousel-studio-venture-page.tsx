@@ -5,14 +5,14 @@ import { PageShell } from "@/components/page-shell";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
-import { readCarouselStudio } from "@/lib/carousel-studio";
+import { readPublicCarouselStudio } from "@/lib/carousel-studio";
 
 function preview(templateId: string, version: string, brand: string, format: string, slide = 1): string {
   return `/api/carousel-studio/preview/${templateId}/${version}/${brand}/${format}/${slide}`;
 }
 
 export async function CarouselStudioVenturePage() {
-  const snapshot = await readCarouselStudio();
+  const snapshot = readPublicCarouselStudio();
   const live = snapshot.templates.filter((entry) => entry.template.status === "live");
   const showcase = live.find((entry) => entry.template.id === "cover-cta") ?? live[0];
   return (
