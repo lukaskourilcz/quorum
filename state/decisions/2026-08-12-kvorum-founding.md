@@ -287,11 +287,10 @@ section and a receipt line, and a day with no usable cluster records an honest q
   retained digest refs; queue caps, the effective schedule and the `gv-brief ↔ kv-desk` policy keep
   their last word. The venture registry also makes `design-lab` the sole rendering path and pins
   image generation and freeform social images off; approval still writes only a recorded summary.
-- **The temporary build prompt is removed at closeout:**
-  `docs/KVORUM-CODEX-BUILD-PROMPT.md` existed only to commission and sequence KV-00 through
-  KV-21c. The final issue deletes it after its requirements are represented in this decision,
-  the standing docs, contracts and tests. `docs/KVORUM-VENTURE-DESIGN.md` remains the retained
-  product-design context; deleting the work order grants no new authority.
+- **The temporary build prompt is removed at closeout.** It existed only to commission and
+  sequence KV-00 through KV-21c. The final issue deleted it after its requirements were represented
+  in this decision, the standing docs, contracts and tests. `docs/KVORUM-VENTURE-DESIGN.md` remains
+  the retained product-design context; deleting the work order grants no new authority.
 
 ## Implementation checklist
 

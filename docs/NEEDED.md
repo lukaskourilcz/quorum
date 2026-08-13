@@ -200,11 +200,11 @@ Judgement calls. Nothing is blocked on code for any of these.
   source: D9 and `METRICS_INGESTION_ENABLED=false` stay in force, no platform is read,
   and absent numbers remain unavailable. [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Read the remaining Kvórum venture design and commission its build** — the
-  remaining design is `docs/KVORUM-VENTURE-DESIGN.md` (Czech politics), with its
-  implementation prompt beside it. BOOKSOFHISTORY, Door Money and Tehdejší svět are
-  implemented and wait behind their own founding countersignatures and approvals;
-  nothing runs live before you sign.
+- [ ] **Review and sign or decline the Kvórum founding decision** — the implemented
+  fixture-only venture is described in `docs/KVORUM-VENTURE-DESIGN.md` (Czech politics).
+  Its transient build prompt is gone. Kvórum, BOOKSOFHISTORY, Door Money and Tehdejší svět all
+  wait behind their own founding countersignatures and approvals; nothing runs live before you
+  sign the applicable gates.
   [imp:4] [owner:me] [time:75m] [kind:decision]
 
 - [ ] **Clear the three remaining venture names and handles** — run the BRAND.md-style checks for

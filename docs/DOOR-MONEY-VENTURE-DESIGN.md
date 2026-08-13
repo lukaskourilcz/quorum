@@ -162,11 +162,12 @@ feeds `dm-growth` when a trend touches books or music.
 
 ## 7. Data sources and integrations
 
-- **The manuscript** — a private GitHub repository (`lukaskourilcz/<book-source>`, owner
-  creates) holding `manuscript/` (source text) and `kb/` (chunks, annotations, embeddings —
-  written by ingestion). Read at runtime through a fine-grained read-only token
-  (`BOOK_SOURCE_TOKEN`), the same bounded-access shape the delivery App uses in the other
-  direction. **This public repository never carries the manuscript or full-text chunks**;
+- **The manuscript** — an owner-created private Git repository holding `manuscript/` (source text)
+  and `kb/` (chunks, annotations, embeddings — written by ingestion), cloned by the owner outside
+  this public checkout. Ingestion receives that path through `--private-root`; a live desk reads it
+  through `BOOK_PRIVATE_CLONE_PATH`. The optional fine-grained read-only `BOOK_SOURCE_TOKEN` is for
+  the owner's checkout step only and is never consumed by the shipped runtime. **This public
+  repository never carries the manuscript or full-text chunks**;
   it carries scores, summaries, the style profile and excerpts capped at 600 characters.
   `quorum` is public — that is the load-bearing reason for the split, and a test enforces
   the cap.
@@ -216,8 +217,9 @@ One workspace (`/admin?venture=door-money`), three tabs, all inside the existing
 loaders and write-ladder patterns:
 
 - **`recommendations`** — the daily queue. One card per package: hook, format chips,
-  platform chips, the adapted copy, the *linked source passage* (capped excerpt inline, link
-  to the private file for the full text), GHOST's rationale, gate results. Actions: approve
+  platform chips, the adapted copy, the source passage's capped excerpt and immutable chunk id,
+  plus its credential-free `private-book://` pointer as non-clickable text; GHOST's rationale and
+  gate results. Actions: approve
   (→ Design Lab + ready-to-post), edit-then-approve, reject with reason. After posting by
   hand the owner records the post URL and, later, its numbers; the same card then shows
   outcome beside intent. RatingWidget on every card feeds PALATE.
@@ -351,8 +353,7 @@ makes safe.
 
 New code lives in `orchestrator/src/ventures/door-money/` (the marketingShark shape):
 `run.ts` (dispatched from `cycle.ts` for `dm-desk`/`dm-growth`), `select.ts` (deterministic
-passage selection), `kb.ts` (private-store client: manuscript fetch, chunk fetch, embedding
-load — behind `safeFetch` with `api.github.com` in the runtime allowlist), `gates.ts`
+passage selection), `kb.ts` (cycle-cached reads from the owner-provided local private clone), `gates.ts`
 (voice lint, claim refs, quote substrings, caps, duplicates), `ingest/` (chunker, annotate,
 score, style, embed, cursor), plus `prompts/door-money/{ghost,booker}.md` and
 `prompts/door-money/craft.md` distilling the voice rules — runtime prompts never load skill
@@ -366,8 +367,7 @@ out), `BOOK_INGEST` (`claude-haiku-4-5`, ~12000 / 3000), `BOOK_STYLE` (`claude-s
 map-reduce so every call stays under the $0.10 per-call cap); BOOKER rides
 `OPENAI_SPECIALIST`. Embeddings: `text-embedding-3-small` on the existing OpenAI key
 through a small guarded wrapper that reserves and records like every other paid call
-(ledger `kind` extended or recorded under the embedding model id — the build prompt states
-the choice to make and the recommendation).
+under the dedicated ledger `kind: "embedding"`.
 
 ## 18. Database / data-model implications
 

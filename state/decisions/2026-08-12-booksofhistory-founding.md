@@ -236,8 +236,8 @@ The owner path is deliberately manual and ordered:
   the shared `owner-result-entry/1` contract and its write endpoint to BH-20a. BH-17 can
   attach an existing per-lane result reference only after `BH-RESULTS-004` is signed;
   BH-20a remains the sole owner of creating and validating the actual result entry.
-- **The executed prompt is not standing policy.** BH-21c deletes
-  `docs/BOOKSOFHISTORY-CODEX-BUILD-PROMPT.md` as its own definition of done required.
+- **The executed prompt is not standing policy.** BH-21c deleted the temporary work order as its
+  own definition of done required.
   This decision and the design document retain the scope, boundaries, approvals and
   honest gaps; prompt deletion changes no gate.
 
