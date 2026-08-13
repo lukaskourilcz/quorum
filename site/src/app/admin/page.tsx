@@ -45,6 +45,7 @@ import {
   CURRENT_MONTHLY_OPERATING_LIMIT_USD
 } from "@/data/operating-policy";
 import { readAdminAgentControls } from "@/lib/admin-agent-controls";
+import { buildAdminRecentActivity } from "@/lib/admin-recent-activity";
 import { readApprovedUndeliveredPayloads } from "@/lib/admin-owner-attention";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
 import { readAdminAutonomy } from "@/lib/admin-autonomy";
@@ -145,6 +146,10 @@ function tileUsd(value: number): string {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }).format(value);
+}
+
+function recordedDay(day: string): string {
+  return `${day}T12:00:00.000Z`;
 }
 
 export default async function AdminPage({
@@ -368,6 +373,79 @@ export default async function AdminPage({
     }))
   ];
 
+  const recentActivity = buildAdminRecentActivity([
+    {
+      ventureId: "booksofhistory",
+      ventureName: "BOOKSOFHISTORY",
+      href: "/admin?venture=booksofhistory",
+      events: [
+        ...(booksofhistory.shortlist ? [{ at: booksofhistory.shortlist.asOf, singular: "shortlist", plural: "shortlists" }] : []),
+        ...(booksofhistory.brief ? [{ at: recordedDay(booksofhistory.brief.date), singular: "research brief", plural: "research briefs" }] : []),
+        ...(booksofhistory.cycle ? [{ at: booksofhistory.cycle.updatedAt, singular: "cycle update", plural: "cycle updates" }] : []),
+        ...booksofhistory.dossiers.map(({ updatedAt }) => ({ at: updatedAt, singular: "dossier update", plural: "dossier updates" })),
+        ...booksofhistory.ledger.map(({ completedAt }) => ({ at: completedAt, singular: "research entry", plural: "research entries" })),
+        ...booksofhistory.features.flatMap((feature) => [
+          { at: feature.updatedAt, singular: "feature update", plural: "feature updates" },
+          ...feature.ratings.map(({ ratedAt }) => ({ at: ratedAt, singular: "owner rating", plural: "owner ratings" })),
+          ...Object.values(feature.results).flat().map(({ capturedAt }) => ({ at: capturedAt, singular: "owner result", plural: "owner results" }))
+        ])
+      ]
+    },
+    {
+      ventureId: "door-money",
+      ventureName: "Door Money",
+      href: "/admin?venture=door-money",
+      events: [
+        ...doorMoney.recommendations.items.flatMap((recommendation) => [
+          { at: recommendation.updatedAt, singular: "recommendation update", plural: "recommendation updates" },
+          ...recommendation.ratings.map(({ ratedAt }) => ({ at: ratedAt, singular: "owner rating", plural: "owner ratings" })),
+          ...recommendation.results.map(({ capturedAt }) => ({ at: capturedAt, singular: "owner result", plural: "owner results" }))
+        ]),
+        ...doorMoney.actions.packets.flatMap((packet) => [
+          { at: recordedDay(packet.date), singular: "action packet", plural: "action packets" },
+          ...packet.tasks.flatMap(({ completedAt }) => completedAt
+            ? [{ at: completedAt, singular: "completed action", plural: "completed actions" }]
+            : [])
+        ]),
+        ...doorMoney.actions.playbooks.map(({ updatedAt }) => ({ at: updatedAt, singular: "playbook update", plural: "playbook updates" }))
+      ]
+    },
+    {
+      ventureId: "tehdejsi-svet",
+      ventureName: "Tehdejší svět",
+      href: "/admin?venture=tehdejsi-svet",
+      events: [
+        ...(tehdejsiSvet.facts ? [{ at: tehdejsiSvet.facts.copiedAt, singular: "facts snapshot", plural: "facts snapshots" }] : []),
+        ...(tehdejsiSvet.shortlist ? [{ at: recordedDay(tehdejsiSvet.shortlist.date), singular: "shortlist", plural: "shortlists" }] : []),
+        ...(tehdejsiSvet.cycle ? [{ at: tehdejsiSvet.cycle.updatedAt, singular: "cycle update", plural: "cycle updates" }] : []),
+        ...tehdejsiSvet.research.map(({ completedAt }) => ({ at: completedAt, singular: "research entry", plural: "research entries" })),
+        ...tehdejsiSvet.features.flatMap((feature) => [
+          { at: feature.updatedAt, singular: "feature update", plural: "feature updates" },
+          ...feature.ratings.map(({ ratedAt }) => ({ at: ratedAt, singular: "owner rating", plural: "owner ratings" })),
+          ...feature.results.map(({ capturedAt }) => ({ at: capturedAt, singular: "owner result", plural: "owner results" }))
+        ]),
+        ...tehdejsiSvet.signalHarvests.map(({ pastedAt }) => ({ at: pastedAt, singular: "owner recollection", plural: "owner recollections" })),
+        ...tehdejsiSvet.signalDigests.map(({ extractedAt }) => ({ at: extractedAt, singular: "signal digest", plural: "signal digests" })),
+        ...tehdejsiSvet.productInsights.map(({ updatedAt }) => ({ at: updatedAt, singular: "product insight", plural: "product insights" }))
+      ]
+    },
+    {
+      ventureId: "kvorum",
+      ventureName: "Kvórum",
+      href: "/admin?venture=kvorum",
+      events: [
+        ...kvorum.recommendations.flatMap((recommendation) => [
+          { at: recommendation.updatedAt, singular: "recommendation update", plural: "recommendation updates" },
+          ...recommendation.ratings.map(({ ratedAt }) => ({ at: ratedAt, singular: "owner rating", plural: "owner ratings" }))
+        ]),
+        ...kvorum.monitor.map(({ generatedAt }) => ({ at: generatedAt, singular: "monitor run", plural: "monitor runs" })),
+        ...kvorum.claims.map(({ updatedAt }) => ({ at: updatedAt, singular: "claim update", plural: "claim updates" })),
+        ...kvorum.results.map(({ capturedAt }) => ({ at: capturedAt, singular: "owner result", plural: "owner results" })),
+        ...(kvorum.quota ? [{ at: kvorum.quota.updatedAt, singular: "quota receipt", plural: "quota receipts" }] : [])
+      ]
+    }
+  ], new Date());
+
   const sections: AdminSection[] = [
     {
       id: "approvals",
@@ -449,6 +527,7 @@ export default async function AdminPage({
         booksofhistory.unreadable.total +
         ownerAttention.unreadable +
         doorMoney.unreadable +
+        tehdejsiSvet.unreadable.total +
         kvorum.unreadable
     }
   ];
@@ -465,6 +544,8 @@ export default async function AdminPage({
       ? [...selectedVenture.unreadableFiles, ...Object.entries(booksofhistory.unreadable).flatMap(([store, count]) => store !== "total" && count ? [`${store} (${count})`] : [])]
       : selectedVenture?.id === "door-money" && doorMoney.unreadable > 0
         ? [...selectedVenture.unreadableFiles, `Door Money stores (${doorMoney.unreadable})`]
+        : selectedVenture?.id === "tehdejsi-svet"
+          ? [...selectedVenture.unreadableFiles, ...Object.entries(tehdejsiSvet.unreadable).flatMap(([store, count]) => store !== "total" && count ? [`${store} (${count})`] : [])]
         : selectedVenture?.id === "kvorum" && kvorum.unreadable > 0
           ? [...selectedVenture.unreadableFiles, `Kvórum stores (${kvorum.unreadable})`]
         : selectedVenture?.unreadableFiles ?? [];
@@ -734,6 +815,30 @@ export default async function AdminPage({
               value={String(dailyResults.length)}
             />
           </div>
+
+          <Panel note="The four newest ventures" title="What happened since yesterday">
+            <div className="grid gap-3 md:grid-cols-2" data-admin-recent-activity>
+              {recentActivity.map((row) => (
+                <Link
+                  className="grid min-w-0 gap-2 rounded-[10px] border border-[#26262b] bg-[#101013] p-4 transition-colors hover:border-[#52525b]"
+                  data-recent-venture={row.ventureId}
+                  href={row.href}
+                  key={row.ventureId}
+                >
+                  <div className="flex items-baseline justify-between gap-3">
+                    <h3 className="text-[14px] font-semibold text-[#f4f4f5]">{row.ventureName}</h3>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#94949c]">{row.count} recent</span>
+                  </div>
+                  <p className="m-0 text-[13px] leading-[1.55] text-[#d4d4d8]">{row.summary}</p>
+                  <p className="m-0 font-mono text-[10px] uppercase tracking-[0.1em] text-[#94949c]">
+                    {row.latestAt && row.latestLabel
+                      ? `Latest: ${row.latestLabel} · ${row.latestAt.slice(0, 10)}`
+                      : "No readable record exists yet"}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </Panel>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr_5fr]" data-adm-cols>
             <Panel note="You are the only one who can change these" title="Fixed costs">

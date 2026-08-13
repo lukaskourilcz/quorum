@@ -11,6 +11,12 @@ import {
 } from "../src/org/owner-attention.js";
 
 const NOW = new Date("2026-08-10T04:00:00.000Z");
+const NEW_VENTURE_APPROVALS = [
+  "BH-RESEARCH-001", "BH-SEED-002", "BH-ACCOUNTS-003", "BH-RESULTS-004",
+  "BOOK-SOURCE-001", "BOOK-INGEST-002", "DM-ACCOUNTS-003", "DM-RESULTS-004",
+  "TS-SNAPSHOT-001", "TS-MEDIA-002", "TS-ACCOUNTS-003", "TS-RESEARCH-004", "TS-RESULTS-005",
+  "KV-APIFY-001", "KV-SOURCES-002", "KV-ACCOUNTS-003", "KV-EDITORIAL-004"
+] as const;
 
 const INBOX = `# Things only you can approve
 
@@ -59,6 +65,17 @@ describe("reading the inbox", () => {
     // An item nobody has written a sentence for says so, rather than showing its raw title as
     // though somebody had.
     expect(approvals[1]?.needsPlainCopy).toBe(true);
+  });
+
+  it("keeps every new venture approval in the canonical inbox with owner-ready copy", async () => {
+    const inbox = await readFile(path.resolve(process.cwd(), "../state/INBOX.md"), "utf8");
+    const approvals = parseInboxApprovals(inbox);
+    const byId = new Map(approvals.map((approval) => [approval.id, approval]));
+
+    for (const id of NEW_VENTURE_APPROVALS) {
+      expect(byId.get(id)?.id, id).toBe(id);
+      expect(byId.get(id)?.needsPlainCopy, id).toBeUndefined();
+    }
   });
 });
 

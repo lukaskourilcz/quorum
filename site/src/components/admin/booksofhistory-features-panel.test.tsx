@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }) }));
 import { readAdminBooksofhistory } from "@/lib/admin-booksofhistory";
+import { AdminWriteProvider } from "./admin-write-mode";
 import { BooksofhistoryFeaturesPanel } from "./booksofhistory-features-panel";
 
 const roots: string[] = [];
@@ -61,6 +62,22 @@ describe("BOOKSOFHISTORY feature panel", () => {
     roots.push(root);
     const html = renderToStaticMarkup(<BooksofhistoryFeaturesPanel snapshot={await readAdminBooksofhistory(root)} />);
     expect(html).toContain("No feature recommendations are waiting or recorded yet.");
+  });
+
+  it("keeps every owner decision and rating inert in read-only mode", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "bh-features-panel-read-only-"));
+    roots.push(root);
+    await put(root, "state/ventures/booksofhistory/recommendations/feature.json", await fixture("booksofhistory-recommendation.valid.json"));
+
+    const html = renderToStaticMarkup(
+      <AdminWriteProvider enabled={false}>
+        <BooksofhistoryFeaturesPanel snapshot={await readAdminBooksofhistory(root)} />
+      </AdminWriteProvider>
+    );
+
+    expect(html).toContain("Approve both languages");
+    expect(html).toContain("Your rating");
+    expect((html.match(/disabled/g) ?? []).length).toBeGreaterThanOrEqual(8);
   });
 
   it("surfaces attached owner-entered lane results beside the feature intent", async () => {

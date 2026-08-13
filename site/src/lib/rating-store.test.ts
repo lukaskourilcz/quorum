@@ -43,4 +43,27 @@ describe("rating persistence", () => {
     await expect(appendRatingToFilesystem({ ...base, id: "r-2026-08-04-deadbeef", rating: "bad" }, root))
       .rejects.toMatchObject({ code: "CONFLICT" } satisfies Partial<RatingPersistenceError>);
   });
+
+  it("appends separate permanent histories for all four new venture workspaces", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-new-venture-ratings-"));
+    const ventures = [
+      { ventureId: "booksofhistory", objectKind: "social-variant" },
+      { ventureId: "door-money", objectKind: "recommendation" },
+      { ventureId: "tehdejsi-svet", objectKind: "social-variant" },
+      { ventureId: "kvorum", objectKind: "recommendation" }
+    ] as const;
+
+    for (const [index, venture] of ventures.entries()) {
+      await expect(appendRatingToFilesystem({
+        ...base,
+        id: `r-2026-08-13-a1b2c3d${index}`,
+        ventureId: venture.ventureId,
+        objectKind: venture.objectKind,
+        objectRef: { id: `synthetic-${venture.ventureId}`, contentHash: `sha256:abcdef12345${index}` },
+        ratedAt: `2026-08-13T0${index}:00:00.000Z`
+      }, root)).resolves.toMatchObject({ idempotent: false, persistence: "filesystem" });
+      const raw = await readFile(path.join(root, "state", "ratings", venture.ventureId, "ledger.jsonl"), "utf8");
+      expect(raw.trim().split("\n"), venture.ventureId).toHaveLength(1);
+    }
+  });
 });

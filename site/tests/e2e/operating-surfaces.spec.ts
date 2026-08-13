@@ -78,7 +78,11 @@ const tsPaths = {
   recommendation: path.join(repositoryRoot, "state/ventures/tehdejsi-svet/drafts/e2e-feature.json"),
   result: path.join(repositoryRoot, "state/ventures/tehdejsi-svet/results/result-1234567890abcdef1234.json")
 };
+const tsUnreadablePath = path.join(repositoryRoot, "state/ventures/tehdejsi-svet/drafts/e2e-unreadable.json");
 const originalTsFiles = new Map<string, string | null>();
+const additionalRatingPaths = ["door-money", "tehdejsi-svet", "kvorum"].map((ventureId) =>
+  path.join(repositoryRoot, "state", "ratings", ventureId, "ledger.jsonl"));
+const originalAdditionalRatings = new Map<string, string | null>();
 const bhActionDirectory = path.join(repositoryRoot, "state/ventures/booksofhistory/feature-actions/rec-e2e-admin-feature");
 const bhSummaryPaths = ["cs", "en"].map((locale) => path.join(repositoryRoot, `state/ventures/carousel-studio/summaries/booksofhistory/2026-08-14-e2e-admin-feature-${locale}.json`));
 const kvorumRecommendationPath = path.join(repositoryRoot, "state/ventures/kvorum/recommendations/2026-08-12-public-media.json");
@@ -130,6 +134,13 @@ test.beforeAll(async () => {
       originalTsFiles.set(target, null);
     }
   }
+  for (const target of additionalRatingPaths) {
+    try { originalAdditionalRatings.set(target, await readFile(target, "utf8")); }
+    catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      originalAdditionalRatings.set(target, null);
+    }
+  }
   for (const target of kvorumFixturePaths) {
     try { originalKvorumState.set(target, await readFile(target, "utf8")); }
     catch (error) {
@@ -143,6 +154,7 @@ test.beforeAll(async () => {
     mkdir(path.dirname(ratingLedgerPath), { recursive: true }),
     ...Object.values(bhPaths).map((target) => mkdir(path.dirname(target), { recursive: true })),
     ...Object.values(tsPaths).map((target) => mkdir(path.dirname(target), { recursive: true })),
+    ...additionalRatingPaths.map((target) => mkdir(path.dirname(target), { recursive: true })),
     mkdir(path.dirname(kvorumRecommendationPath), { recursive: true }),
     mkdir(path.dirname(kvorumMonitorPath), { recursive: true }),
     mkdir(path.dirname(kvorumClaimPaths[0]!), { recursive: true }),
@@ -209,6 +221,7 @@ test.beforeAll(async () => {
     writeFile(bhPaths.ratings, ""),
     writeFile(tsPaths.recommendation, `${JSON.stringify(tsRecommendation, null, 2)}\n`),
     writeFile(tsPaths.result, `${JSON.stringify(tsResult, null, 2)}\n`),
+    ...additionalRatingPaths.map((target) => writeFile(target, "")),
     writeFile(kvorumRecommendationPath, `${JSON.stringify(kvorumRecommendation, null, 2)}\n`),
     writeFile(kvorumRecommendationIndexPath, `${JSON.stringify({
       schemaVersion: "kvorum-recommendation-index/1",
@@ -246,6 +259,11 @@ test.afterAll(async () => {
     if (original === null) await rm(target, { force: true });
     else await writeFile(target, original);
   }
+  for (const [target, original] of originalAdditionalRatings) {
+    if (original === null) await rm(target, { force: true });
+    else await writeFile(target, original);
+  }
+  await rm(tsUnreadablePath, { force: true });
   for (const target of kvorumFixturePaths) {
     const original = originalKvorumState.get(target) ?? null;
     if (original === null) await rm(target, { force: true });
@@ -273,7 +291,7 @@ test("Door Money renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.getByRole("link", { name: "recommendations" })).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("link", { name: "actions" })).toBeVisible();
   await expect(page.getByRole("link", { name: "knowledge" })).toBeVisible();
-  await expect(page.getByText("No Door Money recommendation store exists yet.")).toBeVisible();
+  await expect(page.getByText(/No Door Money recommendation store exists yet\.|No readable Door Money recommendations are stored\./u)).toBeVisible();
   await expect(page.getByText("0 on this tab")).toBeVisible();
 
   await page.getByRole("link", { name: "actions" }).click();
@@ -332,6 +350,65 @@ test("Kvórum exposes three truthful owner-workspace tabs", async ({ page }) => 
   await expect(page).toHaveURL(/venture=kvorum&tab=claims/u);
   await expect(page.getByText("The claims store exists and contains no record.", { exact: true })).toBeVisible();
   await expect(page.getByText("0 on this tab", { exact: true })).toBeVisible();
+});
+
+test("the admin home answers what happened since yesterday for every new venture", async ({ page }) => {
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const panel = page.locator("[data-admin-recent-activity]");
+  await expect(panel).toBeVisible();
+  for (const ventureId of ["booksofhistory", "door-money", "tehdejsi-svet", "kvorum"]) {
+    const card = panel.locator(`[data-recent-venture="${ventureId}"]`);
+    await expect(card).toBeVisible();
+    await expect(card).toContainText("since yesterday");
+    await expect(card).toHaveAttribute("href", `/admin?venture=${ventureId}`);
+  }
+});
+
+test("every new venture workspace exposes its configured meeting controls", async ({ page }) => {
+  const expected = {
+    booksofhistory: ["FOLIO", "PLOT", "QUILL", "HACEK", "AUDIT"],
+    "door-money": ["GHOST", "BOOKER", "PULSE", "AUDIT", "PALATE"],
+    "tehdejsi-svet": ["LETOPIS", "VERBA", "QUILL", "HACEK", "AUDIT"],
+    kvorum: ["TRIBUN", "HACEK", "AUDIT", "PALATE", "KEEPER"]
+  } as const;
+  for (const [ventureId, roles] of Object.entries(expected)) {
+    await page.goto(`/admin?venture=${ventureId}`, { waitUntil: "networkidle" });
+    const controls = page.getByRole("region", { name: "Choose who joins new work" });
+    await expect(controls).toBeVisible();
+    for (const role of roles) await expect(controls.getByText(role, { exact: true })).toBeVisible();
+    await expect(controls.getByRole("switch")).toHaveCount(roles.length);
+  }
+});
+
+test("approvals and owner-only work include all four new ventures", async ({ page }) => {
+  await page.goto("/admin?view=approvals", { waitUntil: "networkidle" });
+  for (const approval of ["BH-RESEARCH-001", "DM-RESULTS-004", "TS-SNAPSHOT-001", "KV-EDITORIAL-004"]) {
+    await expect(page.getByText(`state/INBOX.md#${approval}`, { exact: true })).toBeVisible();
+  }
+
+  await page.goto("/admin?view=manual-tasks", { waitUntil: "networkidle" });
+  for (const task of [
+    "Sign or decline BH-RESEARCH-001",
+    "Approve Door Money's private source (BOOK-SOURCE-001)",
+    "Sign or decline TS-RESEARCH-004",
+    "Approve Kvórum's one-page Apify scope"
+  ]) {
+    await expect(page.getByText(task, { exact: false }).first()).toBeVisible();
+  }
+});
+
+test("Tehdejsi svet unreadable records count on the venture and company views", async ({ page }) => {
+  await writeFile(tsUnreadablePath, "{}\n");
+  try {
+    await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+    const unreadable = page.locator("[data-adm-rail-foot]").getByText("Unreadable files", { exact: true }).locator("..");
+    await expect(unreadable.getByText("1", { exact: true })).toBeVisible();
+
+    await page.goto("/admin?venture=tehdejsi-svet&tab=features", { waitUntil: "networkidle" });
+    await expect(page.getByText(/1 saved file cannot be read: features \(1\)/u)).toBeVisible();
+  } finally {
+    await rm(tsUnreadablePath, { force: true });
+  }
 });
 
 test("WeekBoard navigates between statically generated weeks", async ({ page }) => {
@@ -587,6 +664,41 @@ test("BOOKSOFHISTORY admin tabs expose recorded evidence without rendering a boo
  * A failed write or cleared cookie cannot leak into the next journey, and no retry masks a fault.
  */
 test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
+
+  test("all four new venture RatingWidgets append and reload permanent history", async ({ page }) => {
+    const dmRecommendationPath = path.join(repositoryRoot, "state/ventures/door-money/recommendations/e2e-rating.json");
+    let original: string | null = null;
+    try {
+      try { original = await readFile(dmRecommendationPath, "utf8"); }
+      catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; }
+      await mkdir(path.dirname(dmRecommendationPath), { recursive: true });
+      const dmRecommendation = JSON.parse(await readFile(
+        path.join(repositoryRoot, "contracts/fixtures/venture-recommendation.valid.json"),
+        "utf8"
+      )) as Record<string, unknown>;
+      dmRecommendation.id = "e2e-rating";
+      await writeFile(dmRecommendationPath, `${JSON.stringify(dmRecommendation, null, 2)}\n`);
+
+      for (const route of [
+        "/admin?venture=booksofhistory&tab=features",
+        "/admin?venture=door-money&tab=recommendations",
+        "/admin?venture=tehdejsi-svet&tab=features",
+        "/admin?venture=kvorum&tab=recommendations"
+      ]) {
+        await page.goto(route, { waitUntil: "networkidle" });
+        const rating = page.getByRole("group", { name: "Your rating" }).first();
+        await rating.getByRole("button", { name: "Good", exact: true }).click();
+        await expect(page.getByText("Rating saved to the permanent history.").first()).toBeVisible({ timeout: 60_000 });
+        await page.reload({ waitUntil: "networkidle" });
+        await expect(page.getByRole("group", { name: "Your rating" }).first()
+          .getByRole("button", { name: "Good", exact: true })).toHaveAttribute("aria-pressed", "true");
+        await expect(page.getByText("Rating history (1)").first()).toBeVisible();
+      }
+    } finally {
+      if (original === null) await rm(dmRecommendationPath, { force: true });
+      else await writeFile(dmRecommendationPath, original);
+    }
+  });
 
   test("Tehdejsi svet result entry stays manual and approval-gated", async ({ page }) => {
     let resultPosts = 0;

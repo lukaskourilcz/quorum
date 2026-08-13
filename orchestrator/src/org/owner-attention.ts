@@ -42,6 +42,91 @@ const PLAIN_COPY: Readonly<Record<string, { plain: string; steps?: string[]; urg
     steps: ["Create a fine-grained token for this repository with Actions read/write", "Add it and a cron secret to the quorum-site Vercel project"],
     urgency: "soon"
   },
+  "BH-RESEARCH-001": {
+    plain: "BOOKSOFHISTORY research stays on its $0 path until you allow the existing guarded search adapter, capped at $0.50 per cycle and $5.00 per month.",
+    steps: ["Review the named provider, search and evidence limits", "Countersign BH-RESEARCH-001 in state/INBOX.md"],
+    urgency: "blocking"
+  },
+  "BH-SEED-002": {
+    plain: "The authored 200-book shortlist seed cannot become accepted routing context until you confirm that its scores are priors, never publication evidence or cover-art authority.",
+    steps: ["Review the seed's prior-not-fact and no-cover rules", "Countersign BH-SEED-002 in state/INBOX.md"],
+    urgency: "soon"
+  },
+  "BH-ACCOUNTS-003": {
+    plain: "BOOKSOFHISTORY has no public profile until you clear its Czech and English handles and create any chosen accounts yourself.",
+    steps: ["Clear the name and handles", "Record the chosen Czech and English lanes", "Countersign BH-ACCOUNTS-003 before creating anything"],
+    urgency: "soon"
+  },
+  "BH-RESULTS-004": {
+    plain: "BOOKSOFHISTORY result entry stays disabled until you allow manual per-post numbers; no platform or analytics fetch is part of the approval.",
+    steps: ["Review the manual-only D9 measurement boundary", "Countersign BH-RESULTS-004 in state/INBOX.md"],
+    urgency: "soon"
+  },
+  "BOOK-SOURCE-001": {
+    plain: "Door Money cannot read the private source until you record its local path outside the public repository; the public checkout will retain only bounded derivatives.",
+    steps: ["Place the source in the approved private location", "Record the path without committing source text", "Countersign BOOK-SOURCE-001"],
+    urgency: "blocking"
+  },
+  "BOOK-INGEST-002": {
+    plain: "Door Money's one-time private ingestion stays off until you approve its $3.00 program cap, $0.80 daily cap and existing per-call ceiling.",
+    steps: ["Review the private-storage and budget boundaries", "Countersign BOOK-INGEST-002", "Start ingestion manually only when the private source is ready"],
+    urgency: "blocking"
+  },
+  "DM-ACCOUNTS-003": {
+    plain: "Door Money has no public account until you clear its name and choose and create any channels yourself; signing grants no posting automation.",
+    steps: ["Complete the handle and collision check", "Choose any future channels", "Countersign DM-ACCOUNTS-003 before creating anything"],
+    urgency: "soon"
+  },
+  "DM-RESULTS-004": {
+    plain: "Door Money result entry stays disabled until you allow owner-entered numbers after a manual post; automated analytics remains forbidden.",
+    steps: ["Review the manual-only D9 measurement boundary", "Countersign DM-RESULTS-004 in state/INBOX.md"],
+    urgency: "soon"
+  },
+  "TS-SNAPSHOT-001": {
+    plain: "Tehdejší svět cannot accept its hand-copied facts snapshot until you confirm the hash, exclusions and permanent no-product-connection boundary.",
+    steps: ["Review the committed facts snapshot and exclusions", "Countersign TS-SNAPSHOT-001 in state/INBOX.md"],
+    urgency: "blocking"
+  },
+  "TS-MEDIA-002": {
+    plain: "Tehdejší svět city photographs stay out of social cards until you approve the nineteen recorded licensed files and their required attributions.",
+    steps: ["Review the eligible file and licence list", "Countersign TS-MEDIA-002 in state/INBOX.md"],
+    urgency: "soon"
+  },
+  "TS-ACCOUNTS-003": {
+    plain: "Tehdejší svět has no public profile until you clear its handles and create any bilingual accounts yourself after the production-domain prerequisite.",
+    steps: ["Confirm the production domain and clear the handle", "Review the bilingual bio", "Countersign TS-ACCOUNTS-003 before creating anything"],
+    urgency: "soon"
+  },
+  "TS-RESEARCH-004": {
+    plain: "Tehdejší svět paid research stays off until you approve the existing guarded provider at $0.30 per brief and $2.00 per month.",
+    steps: ["Review the research priorities and evidence boundary", "Countersign TS-RESEARCH-004 in state/INBOX.md"],
+    urgency: "blocking"
+  },
+  "TS-RESULTS-005": {
+    plain: "Tehdejší svět results and selected comment recollections stay disabled until you approve owner-only entry; no automatic collection is allowed.",
+    steps: ["Review the manual-only D9 measurement boundary", "Countersign TS-RESULTS-005 in state/INBOX.md"],
+    urgency: "soon"
+  },
+  "KV-APIFY-001": {
+    plain: "Kvórum's public-page monitor stays at $0 until you approve one pinned logged-out actor, one page, thirty rows, a 30-day purge and the existing $2.00 monthly share.",
+    steps: ["Review the pinned actor and single-page scope", "Confirm APIFY-ACCOUNT-001 remains a separate prerequisite", "Countersign KV-APIFY-001"],
+    urgency: "blocking"
+  },
+  "KV-SOURCES-002": {
+    plain: "Kvórum's seven free news and official feeds stay closed until you approve every exact host; no unlisted endpoint inherits that approval.",
+    steps: ["Review config/kvorum-sources.json and the allowlist", "Countersign KV-SOURCES-002 in state/INBOX.md"],
+    urgency: "blocking"
+  },
+  "KV-ACCOUNTS-003": {
+    plain: "Kvórum has no public identity or account until you clear the name and handles and create any chosen profiles yourself with the AI-assistance disclosure.",
+    steps: ["Clear the name and handles", "Review the disclosure bio", "Countersign KV-ACCOUNTS-003 before creating anything"],
+    urgency: "soon"
+  },
+  "KV-EDITORIAL-004": {
+    plain: "Kvórum's political drafts cannot claim an owner-adopted editorial policy until you countersign the already enforced nonpartisan, sourced and correction-first rules.",
+    steps: ["Review the editorial constitution in state/INBOX.md", "Countersign KV-EDITORIAL-004; this grants no source, account or publishing authority"],
+    urgency: "blocking"
+  },
   ADMIN_USER: {
     plain: "The admin door will not open in production until a username and password are set.",
     steps: ["Open the quorum-site project in Vercel", "Add ADMIN_USER and ADMIN_PASSWORD to Production", "Redeploy"],
