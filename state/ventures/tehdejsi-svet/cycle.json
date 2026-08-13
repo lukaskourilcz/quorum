@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "tehdejsi-cycle/1",
+  "startedOn": "2026-08-13",
+  "phase": "planning",
+  "dayStatuses": {
+    "planning": "active",
+    "production": "pending"
+  },
+  "chosenFactIds": [],
+  "shortlistRef": null,
+  "stretch": {
+    "count": 1,
+    "reason": "review-required",
+    "nextAttemptOn": "2026-08-14"
+  },
+  "updatedAt": "2026-08-13T16:01:39.001Z"
+}
