@@ -52,6 +52,10 @@ card projections. Each public `fightaiq-stats/1` descriptor carries the
 `early-model` label. MMA Files shows “Model output, not betting advice” beside it.
 Cancelled and postponed bouts remain in history but disappear from upcoming pages.
 
+Repeated pages from one provider still count as one source. A run with no independently
+confirmed eligible bout is an honest successful run with no prediction; neither odds nor the
+reader surface invents a fallback probability.
+
 BoardlessAI exposes only the Stats descriptor in its Results page. Fighter cards,
 bouts and reader-facing predictions are delivered to MMA Files with
 `fightaiq-delivery/2`.

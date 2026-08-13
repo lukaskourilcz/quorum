@@ -58,10 +58,10 @@ is the single thing standing between a proven path and a working one.
   and a test fails if an enabled host is missing from `config/network-allowlist.json`.
   [imp:3] [owner:me] [time:30m] [kind:decision]
 
-- [ ] **Add `THE_ODDS_API_KEY` to Actions secrets** (and optionally `CITO_API_KEY`) — the single
-  unblock for every FightAIQ output. Without a price source the evening model check has nothing to
-  compare a model estimate against, so it records no calibration and the readiness dossiers stay
-  empty. `THE_ODDS_API_KEY` stops at the provider's zero quota by design. `CITO_API_KEY` is bounded
+- [ ] **Add `THE_ODDS_API_KEY` to Actions secrets** (and optionally `CITO_API_KEY`) — the odds key
+  supplies an optional price and calibration input; it never bypasses the independent-source,
+  confirmed-bout or fighter-eligibility gates, so an empty analysis run can remain the truthful
+  result. `THE_ODDS_API_KEY` stops at the provider's zero quota by design. `CITO_API_KEY` is bounded
   below 500 calls/month and 200/day, and one run reserves two calls — `CITO_MONTHLY_CALL_CAP`,
   `CITO_DAILY_CALL_CAP` and `CITO_CALL_RESERVATION` in
   `orchestrator/src/portfolio/evidence.ts`. Do not add GNews, Guardian, NYTimes or any paid data
