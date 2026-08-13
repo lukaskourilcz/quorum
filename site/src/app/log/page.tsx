@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageIntro } from "@/components/page-intro";
-import { publicAgentText, publicDecisionLabel } from "@/components/agent-language";
+import { publicAgentText } from "@/components/agent-language";
 import { PageShell } from "@/components/page-shell";
-import { logEntries } from "@/data/fixtures";
-import { getPublicStandups } from "@/lib/standup-records";
+import { getPublicLogEntries } from "@/lib/public-log";
 import { formatClock, formatDate, formatUsd } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -13,20 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function LogPage() {
-  const standups = await getPublicStandups();
-  const liveEntries = standups
-    .filter((standup) => !standup.fixture)
-    .map((standup) => ({
-      at: standup.generatedAt ?? standup.roomTranscript.closedAt,
-      cost: standup.ledger.actual,
-      detail: standup.decision.summary,
-      title: `${standup.phase} meeting · ${publicDecisionLabel(standup.decision.outcome)}`,
-      type: "Meeting record"
-    }));
-  const entries = [...liveEntries, ...logEntries].sort(
-    (left, right) => new Date(right.at).getTime() - new Date(left.at).getTime()
-  );
-  const totalActual = entries.reduce((total, entry) => total + entry.cost, 0);
+  const entries = await getPublicLogEntries();
+  const totalActual = entries.reduce((total, entry) => total + (entry.cost ?? 0), 0);
   return (
     <PageShell>
       <PageIntro
@@ -56,7 +44,7 @@ export default async function LogPage() {
             return (
               <article
                 className="grid gap-5 border-b border-[var(--border)] px-6 py-6 transition-colors hover:bg-[var(--surface-raised)] md:grid-cols-12 md:gap-6 md:px-8"
-                key={entry.at}
+                key={entry.id}
               >
                 <div className="md:col-span-2">
                   <p className="font-mono text-[0.71875rem] tracking-[0.06em]">
@@ -78,9 +66,13 @@ export default async function LogPage() {
                   </span>
                 </div>
                 <div className="min-w-0 md:col-span-6">
-                  <h3 className="break-words text-[1.1875rem] font-semibold tracking-[-0.03em]">
-                    {publicAgentText(entry.title)}
-                  </h3>
+                  {entry.href ? (
+                    <h3 className="break-words text-[1.1875rem] font-semibold tracking-[-0.03em]">
+                      <Link className="underline-offset-4 hover:underline" href={entry.href}>{publicAgentText(entry.title)}</Link>
+                    </h3>
+                  ) : (
+                    <h3 className="break-words text-[1.1875rem] font-semibold tracking-[-0.03em]">{publicAgentText(entry.title)}</h3>
+                  )}
                   <p className="mt-2 break-words text-sm leading-6 text-[var(--fog)]">
                     {publicAgentText(entry.detail)}
                   </p>
@@ -90,7 +82,7 @@ export default async function LogPage() {
                     Actual cost
                   </p>
                   <p className="mt-2 text-lg font-semibold tabular-nums">
-                    {formatUsd(entry.cost)}
+                    {entry.cost === null ? "Not recorded" : formatUsd(entry.cost)}
                   </p>
                 </div>
               </article>

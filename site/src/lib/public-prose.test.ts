@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { readsAsMachineText } from "./public-prose";
 import { parsePublicMeetingRecord } from "./meeting-record-model";
 import { meetingFixtures } from "../data/meeting-fixtures";
+import booksofhistoryMeeting from "../../../contracts/fixtures/meeting-record-bh-desk.valid.json";
+import tehdejsiMeeting from "../../../contracts/fixtures/meeting-record-ts-desk.valid.json";
 
 /**
  * The second of three layers. The first is the writer that makes the record, which now composes
@@ -45,7 +47,7 @@ describe("machine text never reaches a reader", () => {
   });
 
   it("keeps every committed fixture readable", () => {
-    for (const fixture of meetingFixtures) {
+    for (const fixture of [...meetingFixtures, booksofhistoryMeeting, tehdejsiMeeting]) {
       expect(parsePublicMeetingRecord(fixture)).not.toBeNull();
     }
   });

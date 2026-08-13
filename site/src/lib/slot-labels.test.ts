@@ -13,6 +13,11 @@ describe("a slot is called the same thing everywhere", () => {
     ["mma-intake", "Fight data check"],
     ["mma-analysis", "Fight analysis review"],
     ["cu-edition", "DNESKAi edition production"],
+    ["kv-desk", "Kvórum political recommendation desk"],
+    ["dm-desk", "Door Money recommendation meeting"],
+    ["dm-growth", "Door Money growth meeting"],
+    ["bh-desk", "BOOKSOFHISTORY editorial desk"],
+    ["ts-desk", "Tehdejší svět editorial desk"],
     ["article-am", "Morning MMA Files article"]
   ])("names %s", (kind, label) => {
     expect(publicKindLabel(kind)).toBe(label);
