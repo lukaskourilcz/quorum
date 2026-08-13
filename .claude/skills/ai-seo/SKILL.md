@@ -460,7 +460,8 @@ For tactical guidance on SaaS product pages, blog content, comparison/alternativ
 
 ## Tool Integrations
 
-For implementation, see the [tools registry](../../tools/REGISTRY.md).
+This vendored skill does not include upstream's tool registry. Use only integrations available in
+the active environment and keep this repository's approval and budget gates in force.
 
 | Tool | Use For |
 |------|---------|

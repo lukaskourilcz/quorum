@@ -3,7 +3,7 @@
 ## Audiences
 
 - People evaluating agent governance and practical AI operations.
-- Caught Up readers reviewing bilingual AI news and its decision trail.
+- DNESKAi readers reviewing Czech AI news and its decision trail.
 - Adults evaluating Titty Tuesdays concept work; no audience under 18.
 - Developers who want one real question a day, through devShark's carousels; geography
   readers later, if and when geoShark is enabled.
@@ -23,7 +23,7 @@
 ## Channel roles
 
 Threads is text-native. Instagram is visual-native. Copy is adapted, never
-duplicated unchanged. Every social visual uses a live Carousel Studio template id,
+duplicated unchanged. Every social visual uses a live Design Lab template id,
 semantic version and bounded content payload. Freeform image briefs and alternate
 social renderers are invalid.
 
@@ -57,3 +57,9 @@ fetch or store views, clicks, reactions, comments, follows or messages. Accounts
 OAuth and new scopes remain human-owned; posting inside the pre-signed channel scopes
 unlocks automatically only after the project health gate. Paid media still requires a
 new owner decision.
+
+## Stored artifact guides
+
+The [asset](social/assets/README.md), [pack](social/packs/README.md),
+[queue](social/queue/README.md) and [post](social/posts/README.md) guides define the four social
+state boundaries. They describe records and receipts, not permission to connect a channel.

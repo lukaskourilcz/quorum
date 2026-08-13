@@ -31,7 +31,7 @@ can test the desk without a queued agenda, but still obey all other gates.
 
 ## Language and human review
 
-`state/ventures/mma-files/STYLEBOOK.md` records observed patterns from ten Czech
+[The newsroom stylebook](../state/ventures/mma-files/STYLEBOOK.md) records observed patterns from ten Czech
 Fights.cz articles. It describes pacing, sentence shape, attribution and phrases to
 avoid without copying their prose. JAB drafts the article straight in Czech from the
 evidence packet; there is no English draft to adapt. HACEK owns the Czech register
@@ -77,4 +77,8 @@ exact-ratio cropping and staged delivery. The public routes belong only to MMA F
 The code, content bridge and automated proof are complete. The owner still needs to
 confirm MMA Files is in the delivery App installation, keep the public demo noindex,
 add social account credentials when wanted, choose the corrections inbox and clear
-the name/operator/privacy details before enabling indexing. See `docs/NEEDED.md`.
+the name/operator/privacy details before enabling indexing. See the
+[owner action list](NEEDED.md). The venture-local [article index](../state/ventures/mma-files/articles/INDEX.md),
+[scene proposals](../state/ventures/mma-files/media/scene-proposals.md) and
+[social assignment](../state/ventures/mma-files/social/ASSIGNMENT.md) are the human-readable
+indexes for those state paths.

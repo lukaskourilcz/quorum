@@ -63,3 +63,33 @@ pnpm docs:check
 
 Use Node 22 or newer. The dry cycle uses fixtures, spends nothing, and needs no
 API key. The site reads committed state.
+
+## Documentation map
+
+- Start with the [operating model](docs/ECOSYSTEM.md), [portfolio map](docs/PORTFOLIO.md),
+  [governance](GOVERNANCE.md) and [engineering contract](docs/ENGINEERING.md).
+- Owner-facing context lives in [about-project](about-project.md), [scaling](scaling.md),
+  [monetization](monetization.md) and the single [owner action list](docs/NEEDED.md).
+- Venture designs: [BOOKSOFHISTORY](docs/BOOKSOFHISTORY-VENTURE-DESIGN.md),
+  [Door Money](docs/DOOR-MONEY-VENTURE-DESIGN.md), [FightAIQ](docs/FIGHTAIQ.md),
+  [Kvórum](docs/KVORUM-VENTURE-DESIGN.md), [MMA Files](docs/MMA-FILES.md),
+  [Tehdejší svět](docs/TEHDEJSI-SVET-VENTURE-DESIGN.md) and
+  [Titty Tuesdays visuals](docs/TITTY-TUESDAYS-VISUAL-LOOP.md).
+- Shared creative systems: [Design Lab](docs/design-lab/README.md),
+  [hook knowledge](docs/hooks/README.md) and
+  [workspace fixtures](docs/design/workspace-fixtures/README.md).
+- Living state: [business](state/BUSINESS.md), [roadmap](state/ROADMAP.md),
+  [brand](state/BRAND.md), [experiments](state/EXPERIMENTS.md),
+  [finance](state/FINANCE.md), [approvals](state/INBOX.md),
+  [opportunities](state/OPPORTUNITIES.md) and [social policy](state/SOCIAL_STRATEGY.md).
+- Venture-local state guides: [BOOKSOFHISTORY](state/ventures/booksofhistory/README.md),
+  [Door Money](state/ventures/door-money/README.md),
+  [FightAIQ](state/ventures/fightaiq/README.md), [GoVIRAL profile](state/ventures/goviral/profile.md),
+  [Kvórum](state/ventures/kvorum/README.md),
+  [Tehdejší svět](state/ventures/tehdejsi-svet/README.md) and
+  [the MMA bridge](state/mma/BRIDGE.md).
+
+Contributors read [CLAUDE.md](CLAUDE.md), [AGENTS.md](AGENTS.md) and
+[CONTRIBUTING.md](CONTRIBUTING.md). Runtime prompts, decision records, state indexes and mirrored
+skills are reached by their registries and directory conventions; they are operational inputs,
+not standalone documentation pages.

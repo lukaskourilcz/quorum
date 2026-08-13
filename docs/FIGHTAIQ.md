@@ -103,3 +103,8 @@ Useful commands:
   source calls.
 - `pnpm cycle -- --phase mma-analysis --dry` — prediction-path proof without a live
   model call.
+
+The operational state guides are the [FightAIQ README](../state/ventures/fightaiq/README.md),
+[doctrine](../state/ventures/fightaiq/DOCTRINE.md),
+[backtest](../state/ventures/fightaiq/BACKTEST.md) and shared
+[MMA bridge](../state/mma/BRIDGE.md).

@@ -2,7 +2,8 @@
 
 Distilled, evidence-tagged knowledge for any agent writing or editing **hooks and short-form
 viral copy** in this repo family: quiz, news and MMA carousel slide-1 hooks, and social post
-copy generally. Hooks are not shipped into the quiz apps; `06-hook-brain.md` records why.
+copy generally. Hooks are not shipped into the quiz apps; [the hook-brain contract](06-hook-brain.md)
+records why.
 
 Produced during the August 2026 hook-library rebuild. The three live studio libraries contain
 50 quiz hooks, 12 news hooks and 16 MMA hooks. The JSON lives in `studio/hooks/`; these docs are
@@ -12,20 +13,20 @@ the *why* and *how* behind it.
 
 | File | Read it when… |
 |---|---|
-| `01-hook-psychology.md` | You're writing or judging a hook and need the mechanism catalog + what the evidence actually supports |
-| `02-hook-craft-rules.md` | You're writing copy — voice, hard limits, honesty rules, Czech rules, anti-patterns, pre-ship checklist |
-| `03-metrics-and-testing.md` | You're evaluating hooks — metrics, cooldowns, wear-out, A/B design, kill rules |
-| `04-schema-and-gates.md` | You're touching the hook system itself — schema, predicate semantics, known bug classes, Tier B build specs |
-| `05-surfaces.md` | You're writing for a different content surface — why strings don't port, per-surface predicate vocabularies, extra honesty rules for news and MMA |
-| `06-hook-brain.md` | You're touching assignment — how the Carousel Studio evaluates gates, enforces channel cooldowns, bounds agent overrides and pins evaluator semantics with vectors |
+| [Hook psychology](01-hook-psychology.md) | You're writing or judging a hook and need the mechanism catalog + what the evidence actually supports |
+| [Craft rules](02-hook-craft-rules.md) | You're writing copy — voice, hard limits, honesty rules, Czech rules, anti-patterns, pre-ship checklist |
+| [Metrics and testing](03-metrics-and-testing.md) | You're evaluating hooks — metrics, cooldowns, wear-out, A/B design, kill rules |
+| [Schema and gates](04-schema-and-gates.md) | You're touching the hook system itself — schema, predicate semantics, known bug classes, Tier B build specs |
+| [Surfaces](05-surfaces.md) | You're writing for a different content surface — why strings don't port, per-surface predicate vocabularies, extra honesty rules for news and MMA |
+| [Hook brain](06-hook-brain.md) | You're touching assignment — how Design Lab evaluates gates, enforces channel cooldowns, bounds agent overrides and pins evaluator semantics with vectors |
 
 These docs are **canonical and live in one place**: the quorum monorepo. The Carousel Studio is
-the assignment brain for social content (see `06-hook-brain.md`); libraries live in
+the assignment brain for social content (see [the assignment contract](06-hook-brain.md)); libraries live in
 `studio/hooks/` (including the adjacent `*.research.json` records), and the shared engine in
 `studio/src/hooks/`. The quiz apps remain standalone and receive none of this copy.
 
 Each content surface ships its own hook library against the shared schema and lint. See
-`05-surfaces.md` before moving a mechanism between surfaces: the engine ports, the strings do
+[the surfaces guide](05-surfaces.md) before moving a mechanism between surfaces: the engine ports, the strings do
 not.
 
 ## Evidence confidence tags

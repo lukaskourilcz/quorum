@@ -23,7 +23,8 @@
 > of no, and the six approvals remain binding. The approvals are filed in `state/INBOX.md` as
 > `TT-VISUALS-*`; all are still pending, so no live proposal is claimed.
 
-Design for the capability in `docs/WORKFLOWS-FABLE-BRIEF.md` Part 14.3. The room
+This is the durable design rationale for the visual capability summarized in the shipped-truth
+block above. The room
 invents a garment concept, code rewrites it into an image prompt, the OpenAI image
 API returns raster variants, a deterministic checker takes what it can, and the
 owner rates the rest in `/admin`. The rating half already exists and sits idle;
@@ -282,3 +283,8 @@ Six `HUMAN_APPROVAL` items for `state/INBOX.md`, all-or-nothing:
 
 Until all six are signed, the room keeps producing plans and nothing generates
 an image.
+
+Operational context lives in the [brand record](../state/ventures/titty-tuesdays/BRAND.md),
+[platform-risk register](../state/ventures/titty-tuesdays/PLATFORM_RISK.md) and current
+[season](../state/ventures/titty-tuesdays/season-001.md). Those files constrain every proposal;
+this design does not replace them.

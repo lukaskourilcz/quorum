@@ -34,8 +34,8 @@ Tehdejší svět is a client-only React SPA: no backend, no runtime AI, strict s
 CSP, share state in a URL fragment that never reaches a server, names opt-in. Its report
 composes eight chapters (birth → early childhood → everyday day → teenage years → then
 vs now → changing world → generation context → life in numbers) through age gates,
-sensitivity floors and a six-axis editorial relevance score. Its stated audience (from
-`docs/experience-overhaul.md`) is people who want to better understand parents,
+sensitivity floors and a six-axis editorial relevance score. Its stated audience (from the
+product repository's `docs/experience-overhaul.md` at the inspected commit) is people who want to better understand parents,
 grandparents, partners, friends or their own childhood — with Czech-Ukrainian families
 named as especially important. Its stated moment of value is the sentence this whole
 venture stands on:

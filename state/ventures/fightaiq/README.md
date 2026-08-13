@@ -12,3 +12,7 @@ honest empty public view; they never produce sample fighters presented as real.
 The guarded import and meeting jobs may still write signed project reports here. Odds
 entered by the owner are append-only in `state/mma/odds/` for each bout, capture phase
 and source.
+
+The [doctrine](DOCTRINE.md) defines the analysis boundary and the [backtest](BACKTEST.md) records
+the calibration method. The cross-venture [MMA bridge](../../mma/BRIDGE.md) explains which records
+MMA Files may render.
