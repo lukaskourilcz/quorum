@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexandre_Pantoja",
       "publisher": "Wikipedia",
       "title": "Alexandre Pantoja",
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q27999203",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "status": "verified",
       "corroborated": true
     },
@@ -419,9 +419,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 0.60377,
-        "layoffDays": 249
+        "layoffDays": 250
       },
-      "updatedAt": "2026-08-12T06:01:46.400Z"
+      "updatedAt": "2026-08-13T06:01:42.251Z"
     }
   ],
   "rating": {
@@ -431,7 +431,7 @@
     "volatility": 0.05999309,
     "boutCount": 16,
     "asOfBoutRef": "ufc:bout:history-7d2dc31751ccb0197a31",
-    "updatedAt": "2026-08-12T06:01:46.400Z"
+    "updatedAt": "2026-08-13T06:01:42.251Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1941,11 +1941,27 @@
         "source:wikipedia:78781693"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-13T06:01:42.251Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:78781693"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.625,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-12T06:01:46.400Z"
+  "updatedAt": "2026-08-13T06:01:42.251Z"
 }

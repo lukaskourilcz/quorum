@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260813070053-mag-editorial",
+  "date": "2026-08-13",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.029802000000000002,
+    "monthAllInUsd": 4.533326099999998,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "VETO",
+    "summary": "AUDIT vetoed the room output: Zabijte dnešní slot: jediný ověřený event byl publikován 12. srpna a žádný nový modelový běh ani zdrojový fighter file není k dispozici.",
+    "evidenceRefs": [
+      "meeting:2026-08-12-mag-desk",
+      "event:ufc:event:ufc-330-makhachev-vs-machado-garry",
+      "meeting:2026-08-12-mma-analysis"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "CANVAS",
+      "summary": "UFC 330 card preview already published 2026-08-12 AM. Event is 2026-08-15. No fresh angle, fighter development, injury update, contract news or training report supports a second preview slot. Kill PM.",
+      "evidenceRefs": [
+        "meeting:2026-08-12-mag-desk",
+        "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+      ]
+    },
+    {
+      "agent": "JAB",
+      "summary": "Slot zabít: nový ověřený námět chybí. UFC 330 už má publikovaný náhled a modelový běh ani další zdrojová data nejsou k dispozici.",
+      "evidenceRefs": [
+        "meeting:2026-08-12-mma-analysis",
+        "meeting:2026-08-12-mag-desk",
+        "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+      ]
+    },
+    {
+      "agent": "QUILL",
+      "summary": "Kill AM slot. UFC 330 preview published 2026-08-12; event is 2026-08-15. No fresh angle, no model output, no Czech source. Deck reports no meeting occurred to queue content.",
+      "evidenceRefs": [
+        "meeting:2026-08-12-mma-analysis",
+        "meeting:2026-08-12-mag-desk",
+        "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Zabijte dnešní slot: jediný ověřený event byl publikován 12. srpna a žádný nový modelový běh ani zdrojový fighter file není k dispozici.",
+      "evidenceRefs": [
+        "meeting:2026-08-12-mma-analysis",
+        "meeting:2026-08-12-mag-desk",
+        "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "CANVAS",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "veto",
+      "veto": true
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-13.json",
+  "generatedAt": "2026-08-13T07:05:53.748Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-13T07:00:53.748Z",
+    "closedAt": "2026-08-13T07:05:53.748Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-13T07:00:53.748Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "veto",
+        "sentAt": "2026-08-13T07:01:53.748Z",
+        "text": "UFC 330 card preview already published 2026-08-12 AM. Event is 2026-08-15. No fresh angle, fighter development, injury update, contract news or training report supports a second preview slot. Kill PM.",
+        "evidenceRefs": [
+          "meeting:2026-08-12-mag-desk",
+          "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+        ]
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-13T07:02:53.748Z",
+        "text": "Slot zabít: nový ověřený námět chybí. UFC 330 už má publikovaný náhled a modelový běh ani další zdrojová data nejsou k dispozici.",
+        "evidenceRefs": [
+          "meeting:2026-08-12-mma-analysis",
+          "meeting:2026-08-12-mag-desk",
+          "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+        ]
+      },
+      {
+        "agent": "QUILL",
+        "mode": "veto",
+        "sentAt": "2026-08-13T07:03:53.748Z",
+        "text": "Kill AM slot. UFC 330 preview published 2026-08-12; event is 2026-08-15. No fresh angle, no model output, no Czech source. Deck reports no meeting occurred to queue content.",
+        "evidenceRefs": [
+          "meeting:2026-08-12-mma-analysis",
+          "meeting:2026-08-12-mag-desk",
+          "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "veto",
+        "sentAt": "2026-08-13T07:04:53.748Z",
+        "text": "Zabijte dnešní slot: jediný ověřený event byl publikován 12. srpna a žádný nový modelový běh ani zdrojový fighter file není k dispozici.",
+        "evidenceRefs": [
+          "meeting:2026-08-12-mma-analysis",
+          "meeting:2026-08-12-mag-desk",
+          "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-13T07:05:53.748Z",
+        "text": "AUDIT vetoed the room output: Zabijte dnešní slot: jediný ověřený event byl publikován 12. srpna a žádný nový modelový běh ani zdrojový fighter file není k dispozici."
+      }
+    ]
+  }
+}

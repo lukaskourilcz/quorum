@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-13-supply-chain-utok-ai-balicek-uniky-prihlasovaci-udaje",
+  "date": "2026-08-13",
+  "locale": "cs",
+  "kicker": "DNESKAi · 13. srp",
+  "headline": "Otrava zásobovacího řetězce: jeden infikovaný AI balíček vykradl přihlašovací údaje 2 500 uživatelů",
+  "coverLine": "Kompromitovaný AI balíček odtekl terabyty přihlašovacích dat od tisíců uživatelů",
+  "standfirst": "Zatímco Anthropic zavádí vodoznaky a DeepSeek tiše vydal nový model bez tiskové zprávy, největší bezpečnostní zpráva dne přišla z místa, kde se o ní méně mluví: z kompromitovaného AI nástroje,",
+  "passages": [
+    "Kompromitovaný AI balíček způsobil únik terabajtů přihlašovacích dat od 2 500 uživatelů – první zdokumentovaný případ takto rozsáhlého úniku skrze AI nástroj jako vektor.",
+    "Anthropic zavedl neviditelné vodoznaky do výstupů Clauda v souladu s Kodexem transparentnosti EU AI Actu.",
+    "DeepSeek vydal model V4 Pro 0813 přes API bez oficiálního oznámení; benchmarky se šíří přes WeChat, Reddit a Hacker News.",
+    "Výzkumníci z Helmholtz Center for Information Security zveřejnili zranitelnost LoongLeak v procesorech Loongson, exploitovatelnou i z virtuálního stroje.",
+    "Útok přes AI balíček ukazuje, že tempo adopce AI nástrojů předbíhá bezpečnostní kontroly: infikovaný zásobovací řetězec zasáhl 2 500 uživatelů a exfiltroval terabyty dat,",
+    "aniž by byl typ vektoru v bezpečnostních modelech většiny firem standardně pokryt.",
+    "Tencent veřejně vysvětlil, proč odmítl okamžitý zisk z GPU rentalu a sází místo toho na prodej tokenů – tato volba mapuje, kde velké čínské technologické firmy vidí dlouhodobou AI marži.",
+    "Vodoznaky Anthropicu v kombinaci s EU AI Actem mění rovnici odpovědnosti: zaměstnavatelé, školy a právní týmy nyní mají detekční nástroj, který dříve neexistoval."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Florian Hirzinger - www.fh-ap.com · CC BY-SA · Wikimedia Commons"
+}

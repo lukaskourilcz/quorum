@@ -9,7 +9,8 @@
     "wikidataId": "Q27957350",
     "wikipediaTitle": "Brandon Moreno",
     "externalIds": {
-      "wikipediaPageId": "52475971"
+      "wikipediaPageId": "52475971",
+      "cito": "787ec82a-e4c7-470c-9a6d-a4924d748757"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-13:fighter:787ec82a-e4c7-470c-9a6d-a4924d748757",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Brandon Moreno",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q27957350",
       "url": "https://www.wikidata.org/wiki/Q27957350",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Brandon_Moreno",
       "publisher": "Wikipedia",
       "title": "Brandon Moreno",
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -65,11 +73,12 @@
     "name": {
       "value": "Brandon Moreno",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:787ec82a-e4c7-470c-9a6d-a4924d748757",
         "source:wikidata:Q27957350",
         "source:wikipedia:52475971",
         "source:wikipedia:64585580"
       ],
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "status": "verified",
       "corroborated": true
     },
@@ -96,11 +105,12 @@
     "division": {
       "value": "flyweight",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:787ec82a-e4c7-470c-9a6d-a4924d748757",
         "source:wikipedia:52475971"
       ],
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "status": "verified",
+      "corroborated": true
     },
     "team": {
       "value": "Entram Gym (2006–2022) Bang Muay Thai Team Elevation",
@@ -114,9 +124,19 @@
     "record": {
       "value": "23-10-2",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:787ec82a-e4c7-470c-9a6d-a4924d748757",
         "source:wikipedia:52475971"
       ],
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "stance": {
+      "value": "orthodox",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:787ec82a-e4c7-470c-9a6d-a4924d748757"
+      ],
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -364,9 +384,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 0.547335,
-        "layoffDays": 648
+        "layoffDays": 649
       },
-      "updatedAt": "2026-08-12T06:01:46.400Z"
+      "updatedAt": "2026-08-13T06:01:42.251Z"
     }
   ],
   "rating": {
@@ -376,12 +396,11 @@
     "volatility": 0.06002573,
     "boutCount": 13,
     "asOfBoutRef": "ufc:bout:history-e5ac17f2c927ab8a95da",
-    "updatedAt": "2026-08-12T06:01:46.400Z"
+    "updatedAt": "2026-08-13T06:01:42.251Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "stance",
       "reachCm",
       "record-history-incomplete"
     ],
@@ -1717,11 +1736,42 @@
         "source:wikipedia:64585580"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-13T06:01:42.251Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "division",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:787ec82a-e4c7-470c-9a6d-a4924d748757"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-13T06:01:42.251Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:52475971",
+        "source:wikipedia:64585580"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.75,
-  "corroboration": 0.375,
-  "modelEligible": false,
+  "completeness": 0.875,
+  "corroboration": 0.625,
+  "modelEligible": true,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-12T06:01:46.400Z"
+  "updatedAt": "2026-08-13T06:01:42.251Z"
 }

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-08-13-supply-chain-utok-ai-balicek-uniky-prihlasovaci-udaje",
+  "date": "2026-08-13",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Jeden infikovaný AI balíček, terabyty ukradených přihlašovacích dat a 2 500 zasažených uživatelů. To je dnes největší bezpečnostní zpráva. Vedle toho: Tencent odmítl okamžitý zisk z GPU rentalu a sází na tokeny, Anthropic zavedl vodoznaky do výstupů Clauda, a výzkumníci popsali zranitelnost čínských procesorů Loongson exploitovatelnou přímo z virtuálního stroje.",
+    "hashtags": [
+      "supplychainattack",
+      "cybersecurity",
+      "artificialintelligence",
+      "tencent",
+      "deepseek",
+      "anthropic",
+      "loongson",
+      "dataleaks",
+      "aibezpecnost",
+      "openai"
+    ],
+    "threadsText": "Jeden infikovaný AI balíček odtekl terabyty přihlašovacích dat od 2 500 uživatelů. Bezpečnostní týmy nestíhají tempo adopce AI nástrojů – a tento případ to konkrétně dokládá. Vedle toho Tencent odmítl GPU rental za 53 mld. USD a sází na prodej tokenů, Anthropic zavedl EU-mandated vodoznaky do Clauda, a čínské procesory Loongson mají zranitelnost exploitovatelnou z VM.",
+    "storyLine": "AI balíček jako vstupní brána: terabyty dat od 2 500 uživatelů"
+  },
+  "heroCredit": "Florian Hirzinger - www.fh-ap.com · CC BY-SA · Wikimedia Commons",
+  "origin": "desk"
+}

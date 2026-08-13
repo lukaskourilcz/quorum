@@ -72,11 +72,29 @@
       "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
+      "at": "2026-08-10T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-desk",
+      "status": "missed"
+    },
+    {
+      "at": "2026-08-10T14:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-growth",
+      "status": "missed"
+    },
+    {
       "at": "2026-08-10T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
       "status": "skipped",
       "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
+      "status": "missed"
     },
     {
       "at": "2026-08-10T17:00:00.000Z",
@@ -91,6 +109,12 @@
       "kind": "mag-desk",
       "status": "skipped",
       "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-10T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
+      "status": "missed"
     },
     {
       "at": "2026-08-10T20:00:00.000Z",
@@ -169,12 +193,30 @@
       "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
+      "at": "2026-08-11T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-desk",
+      "status": "missed"
+    },
+    {
+      "at": "2026-08-11T14:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-growth",
+      "status": "missed"
+    },
+    {
       "at": "2026-08-11T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
       "status": "held",
       "meetingRef": "meetings/2026-08-11-cu-product",
       "decisionOneLiner": "Defer. No screened Caught Up idea arrived from the morning meeting."
+    },
+    {
+      "at": "2026-08-11T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
+      "status": "missed"
     },
     {
       "at": "2026-08-11T17:00:00.000Z",
@@ -189,6 +231,12 @@
       "kind": "mag-desk",
       "status": "skipped",
       "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+    },
+    {
+      "at": "2026-08-11T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
+      "status": "missed"
     },
     {
       "at": "2026-08-11T20:00:00.000Z",
@@ -274,11 +322,29 @@
       "decisionOneLiner": "No externally consequential action was approved."
     },
     {
+      "at": "2026-08-12T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-desk",
+      "status": "missed"
+    },
+    {
+      "at": "2026-08-12T14:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-growth",
+      "status": "missed"
+    },
+    {
       "at": "2026-08-12T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
       "status": "skipped",
       "decisionOneLiner": "The run behind this meeting failed before it finished."
+    },
+    {
+      "at": "2026-08-12T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
+      "status": "missed"
     },
     {
       "at": "2026-08-12T17:00:00.000Z",
@@ -297,40 +363,57 @@
       "decisionOneLiner": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent."
     },
     {
+      "at": "2026-08-12T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
+      "status": "missed"
+    },
+    {
       "at": "2026-08-12T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-12-night",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-13T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-13-cu-edition",
+      "decisionOneLiner": "Útok na zásobovací řetězec přes AI nástroj zasáhl 2 500 uživatelů a ukázal, že bezpečnostní týmy nestíhají tempo adopce AI nástrojů – to se týká každé firmy, která v posledních dvo"
     },
     {
       "at": "2026-08-13T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-13T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ms-daily",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-13-ms-daily",
+      "decisionOneLiner": "No package was drafted. devshark: model-output-invalid."
     },
     {
       "at": "2026-08-13T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-intake",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-13-mma-intake",
+      "decisionOneLiner": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
     },
     {
       "at": "2026-08-13T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-13-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Zabijte dnešní slot: jediný ověřený event byl publikován 12. srpna a žádný nový modelový běh ani zdrojový fighter file není k dispozici."
     },
     {
       "at": "2026-08-13T08:00:00.000Z",
@@ -363,9 +446,27 @@
       "status": "scheduled"
     },
     {
+      "at": "2026-08-13T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T14:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-growth",
+      "status": "scheduled"
+    },
+    {
       "at": "2026-08-13T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
       "status": "scheduled"
     },
     {
@@ -378,6 +479,12 @@
       "at": "2026-08-13T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-13T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
       "status": "scheduled"
     },
     {
@@ -447,9 +554,27 @@
       "status": "scheduled"
     },
     {
+      "at": "2026-08-14T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T14:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-growth",
+      "status": "scheduled"
+    },
+    {
       "at": "2026-08-14T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
       "status": "scheduled"
     },
     {
@@ -462,6 +587,12 @@
       "at": "2026-08-14T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-14T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
       "status": "scheduled"
     },
     {
@@ -531,9 +662,27 @@
       "status": "scheduled"
     },
     {
+      "at": "2026-08-15T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T14:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-growth",
+      "status": "scheduled"
+    },
+    {
       "at": "2026-08-15T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
       "status": "scheduled"
     },
     {
@@ -546,6 +695,12 @@
       "at": "2026-08-15T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-15T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
       "status": "scheduled"
     },
     {
@@ -615,9 +770,27 @@
       "status": "scheduled"
     },
     {
+      "at": "2026-08-16T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T14:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-growth",
+      "status": "scheduled"
+    },
+    {
       "at": "2026-08-16T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
       "status": "scheduled"
     },
     {
@@ -630,6 +803,12 @@
       "at": "2026-08-16T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-08-16T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
       "status": "scheduled"
     },
     {

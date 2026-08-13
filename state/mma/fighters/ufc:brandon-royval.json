@@ -9,7 +9,8 @@
     "wikidataId": "Q102225197",
     "wikipediaTitle": "Brandon Royval",
     "externalIds": {
-      "wikipediaPageId": "64578559"
+      "wikipediaPageId": "64578559",
+      "cito": "589fde3d-3a1a-4b62-b5eb-f8a98533eba5"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-13:fighter:589fde3d-3a1a-4b62-b5eb-f8a98533eba5",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Brandon Royval",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q102225197",
       "url": "https://www.wikidata.org/wiki/Q102225197",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Brandon_Royval",
       "publisher": "Wikipedia",
       "title": "Brandon Royval",
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -56,10 +64,11 @@
     "name": {
       "value": "Brandon Royval",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:589fde3d-3a1a-4b62-b5eb-f8a98533eba5",
         "source:wikidata:Q102225197",
         "source:wikipedia:64578559"
       ],
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "status": "verified",
       "corroborated": true
     },
@@ -69,6 +78,33 @@
         "source:wikidata:Q102225197"
       ],
       "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "flyweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:589fde3d-3a1a-4b62-b5eb-f8a98533eba5"
+      ],
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "18-9-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:589fde3d-3a1a-4b62-b5eb-f8a98533eba5"
+      ],
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "southpaw",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:589fde3d-3a1a-4b62-b5eb-f8a98533eba5"
+      ],
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -211,9 +247,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.2,
         "fightsPerYear": 1.304438,
-        "layoffDays": 410
+        "layoffDays": 411
       },
-      "updatedAt": "2026-08-12T06:01:46.400Z"
+      "updatedAt": "2026-08-13T06:01:42.251Z"
     }
   ],
   "rating": {
@@ -223,17 +259,15 @@
     "volatility": 0.06000482,
     "boutCount": 7,
     "asOfBoutRef": "ufc:bout:history-9d4c3d3779706c981aa7",
-    "updatedAt": "2026-08-12T06:01:46.400Z"
+    "updatedAt": "2026-08-13T06:01:42.251Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
-      "stance",
       "heightCm",
       "reachCm",
-      "team"
+      "team",
+      "record-history-incomplete"
     ],
     "lastReviewedAt": null
   },
@@ -1490,11 +1524,42 @@
         "source:wikipedia:78781693"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-13T06:01:42.251Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "division",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:589fde3d-3a1a-4b62-b5eb-f8a98533eba5"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-13T06:01:42.251Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:52475971",
+        "source:wikipedia:54180928",
+        "source:wikipedia:78781693"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.25,
+  "completeness": 0.625,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-12T06:01:46.400Z"
+  "updatedAt": "2026-08-13T06:01:42.251Z"
 }

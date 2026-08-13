@@ -9,7 +9,8 @@
     "wikidataId": "Q85859462",
     "wikipediaTitle": "Bogdan Guskov",
     "externalIds": {
-      "wikipediaPageId": "76773370"
+      "wikipediaPageId": "76773370",
+      "cito": "aa147cc4-3266-4faf-b80a-1c25ba52f73c"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-13:fighter:aa147cc4-3266-4faf-b80a-1c25ba52f73c",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Bogdan Guskov",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q85859462",
       "url": "https://www.wikidata.org/wiki/Q85859462",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Bogdan_Guskov",
       "publisher": "Wikipedia",
       "title": "Bogdan Guskov",
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -56,10 +64,11 @@
     "name": {
       "value": "Bogdan Guskov",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:aa147cc4-3266-4faf-b80a-1c25ba52f73c",
         "source:wikidata:Q85859462",
         "source:wikipedia:76773370"
       ],
-      "retrievedAt": "2026-08-12T06:01:46.400Z",
+      "retrievedAt": "2026-08-13T06:01:42.251Z",
       "status": "verified",
       "corroborated": true
     },
@@ -133,7 +142,36 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
+  "discrepancies": [
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "Light Heavyweight",
+          "sourceRef": "source:wikipedia:76773370"
+        },
+        {
+          "value": "light-heavyweight",
+          "sourceRef": "source:cito-ufc:2026-08-13:fighter:aa147cc4-3266-4faf-b80a-1c25ba52f73c"
+        }
+      ],
+      "status": "resolved"
+    },
+    {
+      "field": "record",
+      "values": [
+        {
+          "value": "18-4-1",
+          "sourceRef": "source:wikipedia:76773370"
+        },
+        {
+          "value": "18-3-0",
+          "sourceRef": "source:cito-ufc:2026-08-13:fighter:aa147cc4-3266-4faf-b80a-1c25ba52f73c"
+        }
+      ],
+      "status": "open"
+    }
+  ],
   "history": [
     {
       "boutRef": "ufc:bout:history-28eb838fcdd99ca8565e",
@@ -221,9 +259,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.5,
         "fightsPerYear": 3.40288,
-        "layoffDays": 249
+        "layoffDays": 250
       },
-      "updatedAt": "2026-08-12T06:01:46.400Z"
+      "updatedAt": "2026-08-13T06:01:42.251Z"
     }
   ],
   "rating": {
@@ -233,7 +271,7 @@
     "volatility": 0.05999893,
     "boutCount": 2,
     "asOfBoutRef": "ufc:bout:history-ad11fa27831b22661f51",
-    "updatedAt": "2026-08-12T06:01:46.400Z"
+    "updatedAt": "2026-08-13T06:01:42.251Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1661,11 +1699,38 @@
         "source:wikipedia:82830749"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-13T06:01:42.251Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-13:fighter:aa147cc4-3266-4faf-b80a-1c25ba52f73c"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-13T06:01:42.251Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:76773370",
+        "source:wikipedia:82830749"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-12T06:01:46.400Z"
+  "updatedAt": "2026-08-13T06:01:42.251Z"
 }

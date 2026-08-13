@@ -11,56 +11,26 @@
   ],
   "applied": [
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-mateusz-gamrot-vs-quillan-salkilld-1",
-      "winner": "blue",
-      "method": "Submission (rear-naked choke)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-carlos-diego-ferreira-vs-billy-quarantillo-2",
-      "winner": "red",
-      "method": "Decision (unanimous)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-darren-elkins-vs-yadier-del-valle-3",
-      "winner": "blue",
-      "method": "TKO (punch)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-amanda-lemos-vs-alexia-thainara-9",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-amanda-lemos-vs-alexia-thainara-4",
       "winner": "blue",
       "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-ty-miller-vs-billy-ray-goff-6",
-      "winner": "red",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-billy-ray-goff-vs-ty-miller-5",
+      "winner": "blue",
       "method": "TKO (punches)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-steven-asplund-vs-guilherme-pat-8",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-steven-asplund-vs-guilherme-pat-6",
       "winner": "red",
       "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-diyar-nurgozhay-vs-bruno-lopes-7",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-manoel-sousa-vs-richie-miranda-10",
       "winner": "red",
-      "method": "TKO (punches)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-manoel-sousa-vs-richie-miranda-9",
-      "winner": "red",
-      "method": "Decision (unanimous)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-juliana-miller-vs-ravena-oliveira-11",
-      "winner": "red",
-      "method": "Submission (rear-naked choke)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-giovanna-canuto-vs-carol-foro-12",
-      "winner": "blue",
       "method": "Decision (unanimous)"
     }
   ],
-  "untracked": 2,
-  "generatedAt": "2026-08-12T06:01:46.400Z"
+  "untracked": 8,
+  "generatedAt": "2026-08-13T06:01:42.251Z"
 }

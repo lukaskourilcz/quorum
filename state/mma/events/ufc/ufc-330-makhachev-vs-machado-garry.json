@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-08-15T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-12:List of UFC events"
+    "source:wikipedia:2026-08-13:List of UFC events"
   ],
   "bouts": [
     {
@@ -28,31 +28,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:mansur-abdul-malik-vs-dustin-stoltzfus-3",
-      "red": "ufc:mansur-abdul-malik",
-      "blue": "ufc:dustin-stoltzfus",
-      "division": "middleweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:edson-barboza-vs-esteban-ribovics-4",
-      "red": "ufc:edson-barboza",
-      "blue": "ufc:esteban-ribovics",
-      "division": "lightweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:chidi-njokuani-vs-joel-alvarez-5",
-      "red": "ufc:chidi-njokuani",
-      "blue": "ufc:joel-alvarez",
-      "division": "welterweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:jalin-turner-vs-kaue-fernandes-6",
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:jalin-turner-vs-kaue-fernandes-3",
       "red": "ufc:jalin-turner",
       "blue": "ufc:kaue-fernandes",
       "division": "lightweight",
@@ -60,7 +36,39 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:donte-johnson-vs-eric-mcconico-7",
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:mansur-abdul-malik-vs-dustin-stoltzfus-4",
+      "red": "ufc:mansur-abdul-malik",
+      "blue": "ufc:dustin-stoltzfus",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:edson-barboza-vs-esteban-ribovics-5",
+      "red": "ufc:edson-barboza",
+      "blue": "ufc:esteban-ribovics",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:chidi-njokuani-vs-joel-alvarez-6",
+      "red": "ufc:chidi-njokuani",
+      "blue": "ufc:joel-alvarez",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:charles-johnson-vs-eduardo-henrique-7",
+      "red": "ufc:charles-johnson",
+      "blue": "ufc:eduardo-henrique",
+      "division": "catchweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:donte-johnson-vs-eric-mcconico-8",
       "red": "ufc:donte-johnson",
       "blue": "ufc:eric-mcconico",
       "division": "middleweight",
@@ -68,7 +76,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:vicente-luque-vs-tresean-gore-8",
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:vicente-luque-vs-tresean-gore-9",
       "red": "ufc:vicente-luque",
       "blue": "ufc:tresean-gore",
       "division": "middleweight",
@@ -76,7 +84,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:rafael-tobias-vs-lucas-fernando-9",
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:rafael-tobias-vs-lucas-fernando-10",
       "red": "ufc:rafael-tobias",
       "blue": "ufc:lucas-fernando",
       "division": "light-heavyweight",
@@ -84,7 +92,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:neil-magny-vs-ramiz-brahimaj-10",
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:neil-magny-vs-ramiz-brahimaj-11",
       "red": "ufc:neil-magny",
       "blue": "ufc:ramiz-brahimaj",
       "division": "welterweight",
@@ -92,7 +100,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:jeremiah-wells-vs-myktybek-orolbai-11",
+      "id": "ufc:ufc-330-makhachev-vs-machado-garry:bout:jeremiah-wells-vs-myktybek-orolbai-12",
       "red": "ufc:jeremiah-wells",
       "blue": "ufc:myktybek-orolbai",
       "division": "welterweight",
@@ -100,5 +108,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-12T06:01:46.400Z"
+  "updatedAt": "2026-08-13T06:01:42.251Z"
 }

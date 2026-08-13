@@ -109,7 +109,26 @@
       "notBefore": "2026-08-12",
       "expiresAt": "2026-08-15T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-3072eac56c5bc770",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-13-mma-intake",
+      "summary": "Decide: approve UFC 330 odds data for model run, or halt pending fighter field completion. 12 bouts confirmed; 50 fighters incomplete.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-13",
+        "source:cito-ufc:2026-08-13",
+        "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+      ],
+      "requestedAt": "2026-08-13T06:01:42.251Z",
+      "notBefore": "2026-08-13",
+      "expiresAt": "2026-08-16T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-12T06:01:46.400Z"
+  "updatedAt": "2026-08-13T06:01:42.251Z"
 }
