@@ -411,7 +411,9 @@
       "at": "2026-08-13T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-13-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Zabijte dnešní slot: jediný ověřený event byl publikován 12. srpna a žádný nový modelový běh ani zdrojový fighter file není k dispozici."
     },
     {
       "at": "2026-08-13T08:00:00.000Z",
