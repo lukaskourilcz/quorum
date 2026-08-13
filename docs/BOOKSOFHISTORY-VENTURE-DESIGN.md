@@ -1,9 +1,18 @@
 # BOOKSOFHISTORY: the book-history venture — design
 
-Status: implemented, pending owner countersignature. Nothing runs until the owner
-countersigns `state/decisions/2026-08-12-booksofhistory-founding.md` and the applicable
-§12 items are resolved in `state/INBOX.md`. The one-use implementation prompt was
-deleted after execution; the decision record and this document outlive it.
+> **What actually shipped, 2026-08-13.** The complete fixture-proved BOOKSOFHISTORY system exists:
+> daily persistent cycle, authored seed shelf and deterministic shortlist, recorded research
+> briefs, a vendor-neutral provider boundary with one concrete Anthropic web-search adapter,
+> guarded dossiers and research ledger, claim triage and escalation, story selection, independent
+> Czech and English carousel packages, owner approval/results, bounded learning, GoVIRAL exchange,
+> and Design Lab-only rendering. The one-use build prompt was executed and deleted. The founding
+> decision and `BH-RESEARCH-001`, `BH-SEED-002`, `BH-ACCOUNTS-003`, and `BH-RESULTS-004` remain
+> unsigned, so no live provider call, profile lane, post or owner result is claimed and base weights
+> remain neutral. Only `cs` and `en` carousel features are implemented. Short-form video, third
+> languages, quote/thread derivatives, anniversary campaigns, an alternate research provider,
+> public book pages, databases, newsletters and storefronts remain unbuilt. Where later-phase
+> possibilities below read as current capability, the honest gaps in
+> `state/decisions/2026-08-12-booksofhistory-founding.md` and this block are authoritative.
 
 The shape in one line: **a cheap seed library routes attention, agents spend research money
 only where a story might live, every paid dossier becomes a permanent asset that keeps
