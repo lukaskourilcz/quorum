@@ -11,6 +11,8 @@ const routes = [
   "/agents/vize",
   "/agents/audit",
   "/agents/ledger",
+  "/agents/ghost",
+  "/agents/tribun",
   "/ventures",
   "/ventures/small-team-incident-brief",
   "/ventures/caught-up",

@@ -425,6 +425,31 @@ test("public presentation keeps approved agent photos and plain calendar labels"
   await expect(page.locator("[data-show-presentation]")).toHaveCount(0);
 });
 
+test("the enlarged roster names every new role and discloses each allowed profile assignment", async ({ page }) => {
+  await page.goto("/agents", { waitUntil: "networkidle" });
+  await expect(page.getByText("40", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("FOLIO · Book selection editor", { exact: true })).toBeVisible();
+  await expect(page.getByText("PLOT · Book story producer", { exact: true })).toBeVisible();
+
+  for (const [slug, id, assignment] of [
+    ["tribun", "TRIBUN", "Kvórum"],
+    ["ghost", "GHOST", "Door Money"],
+    ["booker", "BOOKER", "Door Money"],
+    ["letopis", "LETOPIS", "Tehdejší svět"],
+    ["verba", "VERBA", "Tehdejší svět"]
+  ] as const) {
+    await page.goto(`/agents/${slug}`, { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: id })).toBeVisible();
+    await expect(page.locator("[data-agent-ventures]")).toHaveText(assignment);
+    await expect(page.getByText(`${id} uses a neutral name tile until the owner approves a portrait.`)).toBeVisible();
+  }
+
+  await page.goto("/agents/hacek", { waitUntil: "networkidle" });
+  await expect(page.locator("[data-agent-ventures]")).toHaveText("DNESKAi · MMA Files · Kvórum · BOOKSOFHISTORY · Tehdejší svět");
+  await page.goto("/agents/quill", { waitUntil: "networkidle" });
+  await expect(page.locator("[data-agent-ventures]")).toHaveText("Every venture");
+});
+
 test("Carousel Studio serves and displays its preview images", async ({ page, request }) => {
   const response = await request.get(
     "/api/carousel-studio/preview/cover-cta/1.0.0/caught-up/instagram-square/1"

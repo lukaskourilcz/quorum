@@ -5,3 +5,5 @@ Everything that was simply missing or broken has already been fixed — those
 fixes are in the commit history, not here.
 
 - Tehdejší svět needs its final production URL recorded as `NEXT_PUBLIC_TEHDEJSI_PRODUCT_URL`; until then its public venture page names the missing owner prerequisite instead of promoting the preview deployment.
+- BOOKSOFHISTORY's founding decision keeps FOLIO and PLOT profiles inside the owner workspace, while REV-06 asks for public pages. Their names, missions and assignments now appear on the roster; public routes need an owner amendment.
+- The seven newest roles have no approved portraits and use neutral name tiles. Creating portraits is an owner taste decision; no generated likeness was added during review.

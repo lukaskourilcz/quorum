@@ -1,23 +1,27 @@
 import type { Metadata } from "next";
-import { publicAgentStatus, publicAgentTitle } from "@/components/agent-language";
+import { publicAgentMandate, publicAgentStatus, publicAgentTitle } from "@/components/agent-language";
 import { AgentCard, AgentRow } from "@/components/agent-card";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { SectionHeading } from "@/components/section-heading";
-import { publicAgents } from "@/data/agents";
+import { agents, publicAgents } from "@/data/agents";
+import { publicAgentAssignment } from "@/lib/agent-assignments";
 
 export const metadata: Metadata = {
-  description: `The ${publicAgents.length} AI roles that research, decide, build, write and check BoardlessAI's work.`,
+  description: `The ${agents.length} AI roles that research, decide, build, write and check BoardlessAI's work.`,
   title: "AI team"
 };
 
 export default function AgentsPage() {
   // Ten roles were stood down when the roster was cut. Counting them among the working team
   // told a reader the company runs forty roles when thirty of them do the work.
-  const working = publicAgents.filter((agent) => agent.status === "active");
-  const standDown = publicAgents.filter((agent) => agent.status !== "active");
-  const council = working.filter((agent) => agent.group === "Council");
-  const specialists = working.filter((agent) => agent.group !== "Council");
+  const working = agents.filter((agent) => agent.status === "active");
+  const publicWorking = publicAgents.filter((agent) => agent.status === "active");
+  const publicIds = new Set(publicAgents.map(({ id }) => id));
+  const internalOnly = working.filter(({ id }) => !publicIds.has(id));
+  const standDown = agents.filter((agent) => agent.status !== "active");
+  const council = publicWorking.filter((agent) => agent.group === "Council");
+  const specialists = publicWorking.filter((agent) => agent.group !== "Council");
 
   return (
     <PageShell>
@@ -75,6 +79,25 @@ export default function AgentsPage() {
             <span>Current work shown on each profile</span>
           </div>
         </div>
+
+        {internalOnly.length ? (
+          <div className="mt-10 rounded-[1.125rem] border border-[var(--border)] bg-[var(--surface)] p-6 md:p-8">
+            <p className="mono-label text-[0.65625rem] text-[var(--fog)]">Internal-only profiles</p>
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--fog)]">
+              These active roles are part of the recorded team, but their founding permission keeps
+              their detailed profiles inside the owner workspace.
+            </p>
+            <ul className="mt-6 grid gap-4 md:grid-cols-2">
+              {internalOnly.map((agent) => (
+                <li className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-5" key={agent.id}>
+                  <p className="text-lg font-semibold tracking-[-0.03em]">{agent.name} · {publicAgentTitle(agent)}</p>
+                  <p className="mt-2 text-sm leading-6 text-[var(--fog)]">{publicAgentMandate(agent)}</p>
+                  <p className="mt-4 font-mono text-[0.6875rem] text-[var(--fog)]">Assigned work · {publicAgentAssignment(agent)}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
 
         {standDown.length ? (
           <div className="mt-10 rounded-[1.125rem] border border-[var(--border)] bg-[var(--surface)] p-6 md:p-8">

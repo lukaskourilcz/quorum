@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { agents } from "./agents";
+import { agents, publicAgents } from "./agents";
 
 /**
  * The roster cut stood ten roles down and the public pages kept counting them, so the team page
@@ -17,5 +17,10 @@ describe("the public roster counts what works", () => {
     // its "N - 4 other roles" both depend on it.
     expect(working.filter((agent) => agent.group === "Council")).toHaveLength(4);
     expect(standDown.every((agent) => agent.group !== "Council")).toBe(true);
+  });
+
+  it("keeps every new role in the roster while preserving the BOOKSOFHISTORY profile fence", () => {
+    expect(agents.filter(({ id }) => ["TRIBUN", "GHOST", "BOOKER", "FOLIO", "PLOT", "LETOPIS", "VERBA"].includes(id))).toHaveLength(7);
+    expect(agents.filter(({ id }) => !publicAgents.some((candidate) => candidate.id === id)).map(({ id }) => id)).toEqual(["FOLIO", "PLOT"]);
   });
 });

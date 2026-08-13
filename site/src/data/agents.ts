@@ -546,7 +546,7 @@ const profileCopy: Record<
   HACEK: {
     operatingPrinciple: "Nepřekládá se. Text musí být přesná čeština hned napoprvé.",
     output: "Czech style rules the copy check applies",
-    currentFocus: "DNESKAi and MMA Files Czech editions",
+    currentFocus: "Czech register across DNESKAi, MMA Files, BOOKSOFHISTORY, Tehdejší svět and Kvórum",
     publicTrackRecord: null
   },
   SPARK: {
