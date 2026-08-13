@@ -36,6 +36,7 @@
       "gv-brief",
       "bh-desk",
       "dm-growth",
+      "ts-desk",
       "mag-desk",
       "tt-marketing"
     ],
@@ -43,6 +44,9 @@
       "gv-brief"
     ],
     "dm-growth": [
+      "gv-brief"
+    ],
+    "ts-desk": [
       "gv-brief"
     ],
     "mma-intake": [
