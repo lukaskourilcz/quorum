@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "kvorum-sources/1",
+  "verifiedAt": "2026-08-12",
+  "approvals": {
+    "actor": "KV-APIFY-001",
+    "feeds": "KV-SOURCES-002",
+    "requiredBeforeLive": true
+  },
+  "actors": [
+    {
+      "id": "stit-demokracie-facebook",
+      "actorSlug": "apify/facebook-posts-scraper",
+      "actorBuildId": "laKrch6r0XAnxtAFh",
+      "credentialEnv": "APIFY_TOKEN",
+      "freeLimit": "$5 Apify platform credit per month, shared account-wide; no plan upgrade",
+      "termsVerdict": "allowed",
+      "termsNote": "Public Facebook Page posts only, without a supplied Facebook login or cookie. The fixed-field mapper must reject comments and private-individual data. KV-APIFY-001 and the parent APIFY-ACCOUNT-001 remain required before any run.",
+      "evidenceUrl": "https://apify.com/apify/facebook-posts-scraper",
+      "buildEvidenceUrl": "https://api.apify.com/v2/acts/apify~facebook-posts-scraper",
+      "pricingEvidenceUrl": "https://api.apify.com/v2/acts/apify~facebook-posts-scraper",
+      "scheduled": true,
+      "pricing": {
+        "model": "pay-per-event",
+        "actorStartUsd": 0.001,
+        "pricePerResultUsd": 0.005,
+        "maxRunUsd": 0.151,
+        "estimatedThirtyDayUsd": 4.53,
+        "worstCalendarMonthUsd": 4.681,
+        "monthlyShareCapUsd": 2
+      },
+      "input": {
+        "startUrls": [
+          { "url": "https://www.facebook.com/stitdemokracie" }
+        ],
+        "resultsLimit": 30
+      }
+    }
+  ],
+  "recipe": [
+    {
+      "step": 1,
+      "actorId": "stit-demokracie-facebook",
+      "mode": "public-page-monitor",
+      "targetPage": "https://www.facebook.com/stitdemokracie",
+      "maxResults": 30,
+      "runsPerDay": 1,
+      "cadence": "daily",
+      "maxTotalChargeUsd": 0.151
+    }
+  ],
+  "feeds": [
+    {
+      "id": "irozhlas",
+      "name": "iROZHLAS",
+      "kind": "rss",
+      "url": "https://www.irozhlas.cz/rss/irozhlas",
+      "host": "www.irozhlas.cz",
+      "enabled": true,
+      "approvalId": "KV-SOURCES-002",
+      "sourceClass": "news",
+      "maxItems": 30,
+      "costUsd": 0,
+      "verificationEvidenceUrl": "https://www.irozhlas.cz/rss",
+      "note": "The publisher's RSS directory names this exact all-news feed; it returned RSS 2.0 on 2026-08-12. Live reads remain approval-gated."
+    },
+    {
+      "id": "ct24",
+      "name": "ČT24",
+      "kind": "rss",
+      "url": "https://ct24.ceskatelevize.cz/rss",
+      "host": "ct24.ceskatelevize.cz",
+      "enabled": true,
+      "approvalId": "KV-SOURCES-002",
+      "sourceClass": "news",
+      "maxItems": 30,
+      "costUsd": 0,
+      "verificationEvidenceUrl": "https://ct24.ceskatelevize.cz/rss",
+      "note": "The publisher endpoint returned RSS 2.0 as text/xml on 2026-08-12. Live reads remain approval-gated."
+    },
+    {
+      "id": "denik-n",
+      "name": "Deník N",
+      "kind": "rss",
+      "url": "https://denikn.cz/feed/",
+      "host": "denikn.cz",
+      "enabled": true,
+      "approvalId": "KV-SOURCES-002",
+      "sourceClass": "news",
+      "maxItems": 30,
+      "costUsd": 0,
+      "verificationEvidenceUrl": "https://denikn.cz/feed/",
+      "note": "The publisher endpoint returned application/rss+xml with current entries on 2026-08-12. Live reads remain approval-gated."
+    },
+    {
+      "id": "seznam-zpravy",
+      "name": "Seznam Zprávy",
+      "kind": "rss",
+      "url": "https://www.seznamzpravy.cz/rss",
+      "host": "www.seznamzpravy.cz",
+      "enabled": true,
+      "approvalId": "KV-SOURCES-002",
+      "sourceClass": "news",
+      "maxItems": 30,
+      "costUsd": 0,
+      "verificationEvidenceUrl": "https://www.seznamzpravy.cz/rss",
+      "note": "The publisher endpoint returned application/rss+xml with current entries on 2026-08-12. Live reads remain approval-gated."
+    },
+    {
+      "id": "psp-tisky",
+      "name": "Poslanecká sněmovna — nové tisky",
+      "kind": "rss",
+      "url": "https://www.psp.cz/rss/tisky.rss",
+      "host": "www.psp.cz",
+      "enabled": true,
+      "approvalId": "KV-SOURCES-002",
+      "sourceClass": "institutional",
+      "maxItems": 30,
+      "costUsd": 0,
+      "verificationEvidenceUrl": "https://www.psp.cz/sqw/hp.sqw?k=151",
+      "note": "The Chamber's own RSS directory identifies the new parliamentary-prints feed; its HTTPS endpoint returned RSS 2.0 on 2026-08-12. Live reads remain approval-gated."
+    },
+    {
+      "id": "vlada",
+      "name": "Vláda České republiky",
+      "kind": "rss",
+      "url": "https://vlada.gov.cz/cs/urad/RSS/rss.xml",
+      "host": "vlada.gov.cz",
+      "enabled": true,
+      "approvalId": "KV-SOURCES-002",
+      "sourceClass": "institutional",
+      "maxItems": 30,
+      "costUsd": 0,
+      "verificationEvidenceUrl": "https://vlada.gov.cz/cz/urad-vlady/rss/rss-21080/",
+      "note": "The Government Office's RSS page identifies this exact feed; it returned RSS 2.0 as application/xml on 2026-08-12. Live reads remain approval-gated."
+    },
+    {
+      "id": "google-news-cz",
+      "name": "Google News Czech edition",
+      "kind": "rss",
+      "url": "https://news.google.com/rss?hl=cs&gl=CZ&ceid=CZ:cs",
+      "host": "news.google.com",
+      "enabled": true,
+      "approvalId": "KV-SOURCES-002",
+      "sourceClass": "discovery",
+      "maxItems": 30,
+      "costUsd": 0,
+      "geo": "CZ",
+      "queryMode": "entity-lexicon",
+      "verificationEvidenceUrl": "https://news.google.com/rss?hl=cs&gl=CZ&ceid=CZ:cs",
+      "note": "The Czech-edition endpoint returned RSS 2.0 with hl=cs, gl=CZ and ceid=CZ:cs on 2026-08-12. Entity queries are added by the monitor, not stored as guessed URLs. Live reads remain approval-gated."
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 /**
- * The carousel summary: what an article sends to the Design Lab.
+ * The carousel summary: what a source package sends to the Design Lab.
  *
- * A delivered article is 1,000–1,200 Czech words. A carousel is a handful of frames. Sending the
- * whole article to the studio would mean the renderer decides what the piece is about, which is a
- * decision the desk already made and wrote down. So delivery hands over a *summary* — the
+ * A carousel is a handful of frames. Sending a full article or an unshaped recommendation to the
+ * studio would mean the renderer decides what the piece is about, which is a decision the desk
+ * already made and wrote down. So delivery hands over a *summary* — the
  * headline, the standfirst, a small ordered set of passages and the sources — and the templates
  * parse that into slides.
  *
@@ -28,12 +28,13 @@ export const MIN_SUMMARY_PASSAGES = 3;
  */
 export const MAX_SUMMARY_PASSAGES = 8;
 
-export type CarouselSummaryVenture = "caught-up" | "mma-files" | "booksofhistory" | "door-money" | "tehdejsi-svet";
+export type CarouselSummaryVenture = "caught-up" | "mma-files" | "kvorum" | "booksofhistory" | "door-money" | "tehdejsi-svet";
 export type CarouselSummaryLocale = "cs" | "en";
 
 const VENTURE_LOCALE: Readonly<Record<CarouselSummaryVenture, CarouselSummaryLocale>> = {
   "caught-up": "cs",
   "mma-files": "cs",
+  kvorum: "cs",
   booksofhistory: "cs",
   "door-money": "en",
   // Czech is the primary record; the Ukrainian half travels in the package beside it rather than
@@ -56,7 +57,7 @@ export interface CarouselSummarySource {
 export interface CarouselSummary {
   schemaVersion: "carousel-summary/1";
   venture: CarouselSummaryVenture;
-  /** The article's own slug, which is also how the studio addresses it. */
+  /** The source package's slug, which is also how the studio addresses it. */
   slug: string;
   /** Publication date, `YYYY-MM-DD`. */
   date: string;
@@ -107,7 +108,7 @@ interface CarouselSummaryContentInput {
 }
 
 export type CarouselSummaryInput = CarouselSummaryContentInput & (
-  | { venture: "caught-up" | "mma-files"; locale?: "cs" }
+  | { venture: "caught-up" | "mma-files" | "kvorum"; locale?: "cs" }
   | { venture: "booksofhistory"; locale: CarouselSummaryLocale }
   | { venture: "door-money"; locale?: "en" }
   | { venture: "tehdejsi-svet"; locale?: "cs" }
@@ -116,6 +117,7 @@ export type CarouselSummaryInput = CarouselSummaryContentInput & (
 const KICKER: Record<CarouselSummaryVenture, string> = {
   "caught-up": "DNESKAi",
   "mma-files": "MMA Files",
+  kvorum: "KVÓRUM",
   booksofhistory: "BOOKSOFHISTORY",
   "door-money": "Door Money",
   "tehdejsi-svet": "Tehdejší svět"
@@ -124,6 +126,7 @@ const KICKER: Record<CarouselSummaryVenture, string> = {
 const CLOSING: Record<CarouselSummaryVenture, Record<CarouselSummaryLocale, string>> = {
   "caught-up": { cs: "Jedno vydání a máte přehled.", en: "One edition keeps you up to date." },
   "mma-files": { cs: "Celý ozdrojovaný text najdete v MMA Files.", en: "Read the fully sourced story in MMA Files." },
+  kvorum: { cs: "Celý kontext a zdroje najdete v Kvóru.", en: "Read the full context and sources in Kvórum." },
   booksofhistory: { cs: "Příběh knihy pokračuje v pramenech.", en: "The book's story continues in the sources." },
   "door-money": { cs: "Zbytek příběhu žije v Door Money.", en: "The rest of the story lives in Door Money." },
   "tehdejsi-svet": { cs: "Zeptejte se někoho, kdo to zažil.", en: "Ask someone who was there." }
@@ -184,7 +187,7 @@ function choosePassages(input: CarouselSummaryInput): string[] {
 }
 
 /**
- * Build the summary an article sends to the Design Lab.
+ * Build the summary a source package sends to the Design Lab.
  *
  * A short article yields few passages and the summary says so rather than padding: a template
  * that needs four passage slides and is given two renders two, because inventing a third is how a

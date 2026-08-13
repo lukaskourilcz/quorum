@@ -77,6 +77,11 @@ Not every clock entry is a meeting:
 - **Checkpoint:** 14:00 and 22:00 update the operating trail deterministically and
   make no model call.
 
+Kvórum's 21:00 desk is registered but not payable: its founding record and separate
+capacity reallocation are pending. Even after those pass, external monitoring still
+requires the source approvals. A scheduled wake-up therefore fails closed before a
+provider call rather than consuming the remaining daily budget.
+
 An unused scheduled window records `not-needed` at `$0`. A manual workflow run is an
 explicit operator request, so it bypasses only the agenda check—not live switches,
 credentials, evidence, cost limits or safety rules.
@@ -101,6 +106,7 @@ credentials, evidence, cost limits or safety rules.
 | 18:00 | Tehdejší svět editorial desk | persistent two-day bilingual cycle; drafts only and pending countersignature |
 | 19:00 | FightAIQ model check | due agenda; D8 analysis and evidence gates apply |
 | 20:00 | MMA Files desk review | due agenda only |
+| 21:00 | Kvórum political desk | registered daily; live work held by authority and budget-capacity gates |
 | 22:00 | Board night | `$0` checkpoint and daily summary |
 
 A Vercel cron dispatches each window on its own Prague hour and does the work; three
@@ -210,6 +216,8 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 - `MMA_FILES_LIVE_ENABLED` — source-first newsroom work and content delivery.
 - `MMA_FILES_INDEXING_ENABLED` — owner-controlled evidence for the future MMA Files
   earning-readiness check; absent or false keeps that method waiting.
+- Kvórum has no shortcut switch: the pending founding/capacity records and the four
+  `KV-*` approvals independently fail closed before live source or model work.
 - `SOCIAL_KILL_SWITCH=true` — supreme manual posting stop. When false, each project
   still needs its own proof/campaign counter, account credentials and safety gate.
 - `METRICS_INGESTION_ENABLED=false` — keeps automatic visitor, reader and engagement

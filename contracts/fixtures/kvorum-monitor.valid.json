@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "kvorum-monitor/1",
+  "date": "2026-08-12",
+  "generatedAt": "2026-08-12T21:00:00.000Z",
+  "fixtureOnly": false,
+  "sourceResults": [
+    {
+      "sourceId": "stit-demokracie-facebook",
+      "kind": "apify",
+      "attempted": true,
+      "status": "success",
+      "count": 1,
+      "reason": null
+    },
+    {
+      "sourceId": "irozhlas",
+      "kind": "feed",
+      "attempted": true,
+      "status": "success",
+      "count": 1,
+      "reason": null
+    }
+  ],
+  "itemsKept": 2,
+  "rawItems": [
+    {
+      "source": {
+        "id": "stit-demokracie-facebook",
+        "name": "Štít demokracie",
+        "kind": "facebook",
+        "host": "www.facebook.com"
+      },
+      "url": "https://facebook.com/stitdemokracie/posts/123",
+      "publishedAt": "2026-08-12T20:30:00.000Z",
+      "text": "Premiér Babiš jednal o televizních poplatcích.",
+      "entities": ["andrej-babis", "public-media-funding"],
+      "stit": {
+        "pagePostUrl": "https://facebook.com/stitdemokracie/posts/123",
+        "likes": 120,
+        "comments": 18,
+        "shares": 7
+      }
+    },
+    {
+      "source": {
+        "id": "irozhlas",
+        "name": "iROZHLAS",
+        "kind": "rss",
+        "host": "www.irozhlas.cz"
+      },
+      "url": "https://www.irozhlas.cz/zpravy-domov/priklad",
+      "publishedAt": "2026-08-12T19:00:00.000Z",
+      "text": "Sněmovna projedná financování médií veřejné služby.",
+      "entities": ["poslanecka-snemovna", "public-media-funding"]
+    }
+  ],
+  "clusters": [
+    {
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "title": "Financování médií veřejné služby",
+      "entityIds": ["andrej-babis", "public-media-funding"],
+      "topicTokens": ["financovani", "media", "poplatky"],
+      "itemRefs": [
+        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "cccccccccccccccccccccccccccccccccccccccc"
+      ],
+      "attributions": [
+        {
+          "itemRef": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "sourceId": "stit-demokracie-facebook",
+          "sourceName": "Štít demokracie",
+          "url": "https://facebook.com/stitdemokracie/posts/123",
+          "publishedAt": "2026-08-12T20:30:00.000Z",
+          "excerpt": "Premiér Babiš jednal o televizních poplatcích.",
+          "discoveryOnly": true
+        },
+        {
+          "itemRef": "cccccccccccccccccccccccccccccccccccccccc",
+          "sourceId": "irozhlas",
+          "sourceName": "iROZHLAS",
+          "url": "https://www.irozhlas.cz/zpravy-domov/priklad",
+          "publishedAt": "2026-08-12T19:00:00.000Z",
+          "excerpt": "Sněmovna projedná financování médií veřejné služby.",
+          "discoveryOnly": false
+        }
+      ],
+      "continuationOf": null
+    }
+  ],
+  "ranks": [
+    {
+      "clusterId": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "position": 1,
+      "score": 8.4,
+      "factors": {
+        "corroboration": 2,
+        "entityWeight": 5,
+        "engagementSalience": 1.2,
+        "novelty": 0.7,
+        "standingTopicContinuity": 1,
+        "trendCrossover": 1
+      }
+    }
+  ],
+  "trendContext": {
+    "topicSet": "kvorum",
+    "planId": null,
+    "planRef": null,
+    "originMeetingRef": null,
+    "status": null,
+    "matchedTactics": 0,
+    "terms": [],
+    "droppedRecords": 0
+  },
+  "purge": {
+    "retentionDays": 30,
+    "evaluatedAt": "2026-08-12T21:00:00.000Z",
+    "cutoffPublishedAt": "2026-07-13T21:00:00.000Z",
+    "rawItemsBefore": 2,
+    "rawItemsAfter": 2,
+    "purged": []
+  }
+}

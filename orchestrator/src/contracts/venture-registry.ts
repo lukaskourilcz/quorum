@@ -36,6 +36,12 @@ const VentureMeetingDefinitionSchema = openObject({
   })
 });
 
+const VentureRenderingSchema = z.strictObject({
+  path: z.literal("design-lab"),
+  imageGeneration: z.literal(false),
+  freeformSocialImages: z.literal(false)
+});
+
 const VentureDefinitionSchema = openObject({
   id: VentureIdSchema,
   name: z.string().trim().min(1).max(100),
@@ -55,6 +61,7 @@ const VentureDefinitionSchema = openObject({
       "campaign-inventory",
       "live-template-library",
       "package-cadence",
+      "recommendation-approval",
       "feature-cadence",
       "research-efficiency",
       "action-completion"
@@ -89,9 +96,12 @@ const VentureDefinitionSchema = openObject({
     "recommendations",
     "actions",
     "knowledge",
+    "monitor",
+    "claims",
     "library",
     "signals"
   ])),
+  rendering: VentureRenderingSchema.optional(),
   productionJobs: z.array(openObject({
     kind: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
     cadence: z.string().regex(/^(?:2x-daily@\d{2}:00,\d{2}:00|daily@(?:0[5-9]|1\d|2[0-3]):00)$/),
@@ -113,6 +123,14 @@ export const VentureRegistrySchema = openObject({
         path: ["ventures"]
       });
     }
+  }
+  const kvorum = ventures.find((venture) => venture.id === "kvorum");
+  if (kvorum && !kvorum.rendering) {
+    context.addIssue({
+      code: "custom",
+      message: "Kvórum must declare the Design Lab as its sole rendering path",
+      path: ["ventures", ventures.indexOf(kvorum), "rendering"]
+    });
   }
   const kinds = ventures.flatMap((venture) => venture.meetings.map(({ kind }) => kind));
   if (new Set(kinds).size !== kinds.length) {

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { DateTimeSchema, HttpsUrlSchema } from "./common.js";
 import { RecommendationPlatformSchema } from "./venture-recommendation.js";
+import { KvorumOwnerResultEntrySchema } from "./kvorum-owner-result-entry.js";
 
 const CountSchema = z.number().int().min(0).max(Number.MAX_SAFE_INTEGER).nullable();
 
@@ -109,6 +110,7 @@ export type TehdejsiOwnerResultMetrics = z.infer<typeof TehdejsiOwnerResultMetri
 export const AnyOwnerResultEntrySchema = z.union([
   BooksofHistoryOwnerResultEntrySchema,
   OwnerResultEntrySchema,
-  TehdejsiOwnerResultEntrySchema
+  TehdejsiOwnerResultEntrySchema,
+  KvorumOwnerResultEntrySchema
 ]);
 export type AnyOwnerResultEntry = z.infer<typeof AnyOwnerResultEntrySchema>;

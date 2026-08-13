@@ -9,15 +9,26 @@
       "ledgerNamespace": "caught-up",
       "growth_objective": {
         "label": "Publish reliably while widening the healthy source mix",
-        "components": ["edition-cadence", "source-coverage"]
+        "components": [
+          "edition-cadence",
+          "source-coverage"
+        ]
       },
-      "adminTabs": ["plans", "visuals"],
+      "adminTabs": [
+        "plans",
+        "visuals"
+      ],
       "meetings": [
         {
           "kind": "cu-edition",
           "label": "Caught Up edition room",
           "cadence": "daily@05:00",
-          "cast": ["HERALD", "STET", "HACEK", "AUDIT"],
+          "cast": [
+            "HERALD",
+            "STET",
+            "HACEK",
+            "AUDIT"
+          ],
           "envelopeUsd": 0.08,
           "packet": {
             "topicType": "edition",
@@ -32,6 +43,52 @@
       ]
     },
     {
+      "id": "kvorum",
+      "name": "Kvórum",
+      "status": "operating",
+      "taste": true,
+      "ledgerNamespace": "kvorum",
+      "growth_objective": {
+        "label": "Publish sourced political recommendations and build the receipts ledger",
+        "components": [
+          "package-cadence",
+          "recommendation-approval"
+        ]
+      },
+      "adminTabs": [
+        "recommendations",
+        "monitor",
+        "claims"
+      ],
+      "rendering": {
+        "path": "design-lab",
+        "imageGeneration": false,
+        "freeformSocialImages": false
+      },
+      "meetings": [
+        {
+          "kind": "kv-desk",
+          "label": "Kvórum desk",
+          "cadence": "daily@21:00",
+          "cast": [
+            "TRIBUN",
+            "HACEK",
+            "AUDIT"
+          ],
+          "envelopeUsd": 0.1,
+          "packet": {
+            "topicType": "social",
+            "decisionNeeded": "PLAN",
+            "preset": "kv-desk-room",
+            "objectives": {
+              "dry": "Evaluate fixture monitor clusters and draft an original recommendation or record honest quiet",
+              "live": "Evaluate approved monitor clusters and draft an original recommendation or record honest quiet"
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "booksofhistory",
       "name": "BOOKSOFHISTORY",
       "status": "operating",
@@ -39,15 +96,28 @@
       "ledgerNamespace": "booksofhistory",
       "growth_objective": {
         "label": "Turn cheap candidate intelligence into researched, verified, twice-told book stories",
-        "components": ["feature-cadence", "research-efficiency"]
+        "components": [
+          "feature-cadence",
+          "research-efficiency"
+        ]
       },
-      "adminTabs": ["shortlist", "dossiers", "features"],
+      "adminTabs": [
+        "shortlist",
+        "dossiers",
+        "features"
+      ],
       "meetings": [
         {
           "kind": "bh-desk",
           "label": "BOOKSOFHISTORY editorial desk",
           "cadence": "daily@12:00",
-          "cast": ["FOLIO", "PLOT", "QUILL", "HACEK", "AUDIT"],
+          "cast": [
+            "FOLIO",
+            "PLOT",
+            "QUILL",
+            "HACEK",
+            "AUDIT"
+          ],
           "envelopeUsd": 0.5,
           "packet": {
             "topicType": "edition",

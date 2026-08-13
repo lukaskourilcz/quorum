@@ -43,6 +43,7 @@ export type AgentId =
   | "PIVOT"
   | "MAKO"
   | "CHUM"
+  | "TRIBUN"
   | "GHOST"
   | "BOOKER"
   | "EASEL"
@@ -125,6 +126,7 @@ type TextModelRole =
   | "DIGEST"
   | "MAKO"
   | "CHUM"
+  | "TRIBUN"
   | "FOLIO"
   | "PLOT"
   | "GHOST"
@@ -376,6 +378,7 @@ const dedicatedApiModels: Partial<Record<AgentId, readonly AgentApiModel[]>> = {
   // and the wrong price for the venture's only quality-critical call.
   MAKO: [configuredTextModel("MAKO", "marketingShark weekly review")],
   CHUM: [configuredTextModel("CHUM", "marketingShark daily carousel copy")],
+  TRIBUN: [configuredTextModel("TRIBUN", "Kvórum daily political recommendation")],
   LETOPIS: [configuredTextModel("LETOPIS", "Tehdejsi svet planning and Czech copy")],
   VERBA: [configuredTextModel("VERBA", "Tehdejsi svet Ukrainian adaptation")],
   FOLIO: [configuredTextModel("FOLIO", "BOOKSOFHISTORY editorial selection", folioCall)],
@@ -694,6 +697,12 @@ const profileCopy: Record<
     operatingPrinciple: "Write the Czech, do not translate it.",
     output: "One day's carousel copy, in two languages",
     currentFocus: "devShark quiz carousels",
+    publicTrackRecord: null
+  },
+  TRIBUN: {
+    operatingPrinciple: "A political claim travels only with the source that can carry it.",
+    output: "One cited recommendation draft or an honest quiet record",
+    currentFocus: "Kvórum political recommendation desk",
     publicTrackRecord: null
   },
   FOLIO: {

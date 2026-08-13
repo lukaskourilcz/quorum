@@ -7,6 +7,65 @@ import {
   MeetingRefSchema,
   openObject
 } from "./common.js";
+import {
+  KvorumPackageGateEvaluationSchema,
+  TribunPackageSchema
+} from "./kvorum-desk.js";
+
+export const KvorumDeskMeetingPayloadSchema = z.strictObject({
+  monitorRef: z.string()
+    .regex(/^state\/ventures\/kvorum\/monitor\/\d{4}-\d{2}-\d{2}\.json$/u)
+    .nullable(),
+  runStatus: z.enum(["packages", "quiet", "model-failed", "failed"]),
+  reason: z.string().trim().min(1).max(1_000).nullable(),
+  providerCallMade: z.boolean(),
+  packages: z.array(TribunPackageSchema).max(2),
+  droppedPackages: z.number().int().min(0).max(2),
+  gateEvaluations: z.array(KvorumPackageGateEvaluationSchema).max(2)
+}).superRefine((payload, context) => {
+  const failed = payload.gateEvaluations.filter((evaluation) => !evaluation.passed).length;
+  const passedClusters = payload.gateEvaluations
+    .filter((evaluation) => evaluation.passed)
+    .map((evaluation) => evaluation.clusterId)
+    .sort();
+  const packageClusters = payload.packages.map((candidate) => candidate.clusterId).sort();
+  if (payload.droppedPackages !== failed) {
+    context.addIssue({ code: "custom", message: "droppedPackages must equal failed gate evaluations", path: ["droppedPackages"] });
+  }
+  if (payload.packages.length + payload.droppedPackages !== payload.gateEvaluations.length && payload.gateEvaluations.length > 0) {
+    context.addIssue({ code: "custom", message: "Gate evaluations must account for every accepted and dropped package", path: ["gateEvaluations"] });
+  }
+  if (new Set(payload.gateEvaluations.map((evaluation) => evaluation.candidateIndex)).size !== payload.gateEvaluations.length) {
+    context.addIssue({ code: "custom", message: "Candidate gate indexes must be unique", path: ["gateEvaluations"] });
+  }
+  if (JSON.stringify(passedClusters) !== JSON.stringify(packageClusters)) {
+    context.addIssue({ code: "custom", message: "Passed gate evaluations must identify the retained packages", path: ["gateEvaluations"] });
+  }
+  if ((payload.runStatus === "model-failed" || payload.runStatus === "failed") && payload.gateEvaluations.length > 0) {
+    context.addIssue({ code: "custom", message: "A failed desk run cannot claim completed package gates", path: ["gateEvaluations"] });
+  }
+  if (payload.runStatus === "packages") {
+    if (payload.packages.length === 0) {
+      context.addIssue({ code: "custom", message: "A productive desk record requires a package", path: ["packages"] });
+    }
+    if (payload.reason !== null) {
+      context.addIssue({ code: "custom", message: "A productive desk record cannot carry a failure reason", path: ["reason"] });
+    }
+    if (payload.monitorRef === null) {
+      context.addIssue({ code: "custom", message: "A productive desk record requires its retained monitor digest", path: ["monitorRef"] });
+    }
+    return;
+  }
+  if (payload.packages.length > 0) {
+    context.addIssue({ code: "custom", message: "A non-productive desk record cannot carry packages", path: ["packages"] });
+  }
+  if (payload.reason === null) {
+    context.addIssue({ code: "custom", message: "Every non-productive desk record requires a reason", path: ["reason"] });
+  }
+  if (payload.runStatus === "quiet" && payload.monitorRef === null) {
+    context.addIssue({ code: "custom", message: "A quiet desk record requires its retained monitor digest", path: ["monitorRef"] });
+  }
+});
 
 const TranscriptModeSchema = z.enum([
   "gavel",
@@ -42,7 +101,7 @@ const CommonFields = {
   schemaVersion: z.literal("meeting-record/2"),
   cycleId: z.string().trim().min(1),
   date: DateSchema,
-  phase: z.enum(["founding", "am", "pm", "morning", "afternoon", "night", "cu-edition", "cu-product", "tt-marketing", "gv-brief", "ms-daily", "bh-desk", "dm-desk", "dm-growth", "ts-desk", "incubator-scan", "incubator-synthesis", "mma-intake", "mma-analysis", "mag-editorial", "mag-desk", "studio"]),
+  phase: z.enum(["founding", "am", "pm", "morning", "afternoon", "night", "cu-edition", "cu-product", "tt-marketing", "gv-brief", "ms-daily", "bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk", "incubator-scan", "incubator-synthesis", "mma-intake", "mma-analysis", "mag-editorial", "mag-desk", "studio"]),
   episode: openObject({
     id: z.string().trim().min(1),
     shift: z.enum(["morning", "afternoon", "night"]),
@@ -113,6 +172,7 @@ const CommonFields = {
     ideaRef: z.string().trim().min(1).max(160).optional(),
     evidenceRefs: z.array(EvidenceRefSchema)
   }).optional(),
+  kvorumDesk: KvorumDeskMeetingPayloadSchema.optional(),
   generatedAt: DateTimeSchema
 };
 
@@ -124,7 +184,7 @@ const VentureMeetingSchema = openObject({
 
 const NamedVentureMeetingSchema = openObject({
   ...CommonFields,
-  kind: z.enum(["cu-edition", "cu-product", "tt-marketing", "gv-brief", "ms-daily", "bh-desk", "dm-desk", "dm-growth", "ts-desk", "incubator-scan", "incubator-synthesis", "mma-intake", "mma-analysis", "mag-editorial", "mag-desk", "studio"]),
+  kind: z.enum(["cu-edition", "cu-product", "tt-marketing", "gv-brief", "ms-daily", "bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk", "incubator-scan", "incubator-synthesis", "mma-intake", "mma-analysis", "mag-editorial", "mag-desk", "studio"]),
   roomTranscript: RoomTranscriptSchema(36)
 });
 
@@ -165,6 +225,31 @@ export const MeetingRecordSchema = z.union([VentureMeetingSchema, NamedVentureMe
   }
   if (record.kind === "mag-desk" && turnCount > 12) {
     context.addIssue({ code: "custom", message: "Desk review is bounded to 12 turns", path: ["transcript"] });
+  }
+  if (record.kind === "kv-desk") {
+    if (!record.kvorumDesk) {
+      context.addIssue({ code: "custom", message: "Kvórum desk records require their typed outcome payload", path: ["kvorumDesk"] });
+      return;
+    }
+    const expectedStatus = record.kvorumDesk.runStatus === "packages"
+      ? "PLAN"
+      : record.kvorumDesk.runStatus === "quiet"
+        ? "NO_ACTION"
+        : "FAILED";
+    if (record.status !== expectedStatus) {
+      context.addIssue({ code: "custom", message: `Kvórum ${record.kvorumDesk.runStatus} records require status ${expectedStatus}`, path: ["status"] });
+    }
+    if (record.decision.outcome !== expectedStatus) {
+      context.addIssue({ code: "custom", message: `Kvórum ${record.kvorumDesk.runStatus} records require decision ${expectedStatus}`, path: ["decision", "outcome"] });
+    }
+    if (record.fixture && record.kvorumDesk.providerCallMade) {
+      context.addIssue({ code: "custom", message: "A fixture record cannot claim a provider call", path: ["kvorumDesk", "providerCallMade"] });
+    }
+    if (record.kvorumDesk.monitorRef && !record.kvorumDesk.monitorRef.includes(`/${record.date}.json`)) {
+      context.addIssue({ code: "custom", message: "The Kvórum monitor digest must match the meeting date", path: ["kvorumDesk", "monitorRef"] });
+    }
+  } else if (record.kvorumDesk) {
+    context.addIssue({ code: "custom", message: "Only kv-desk records may carry a Kvórum desk payload", path: ["kvorumDesk"] });
   }
 });
 

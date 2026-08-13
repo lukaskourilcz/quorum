@@ -1,0 +1,407 @@
+# Kvórum founding decision
+
+Date: 2026-08-12
+
+Decider: Lukas Kouril, owner
+
+Status: pending countersignature
+
+Decision id: `kvorum-2026-08a`
+
+Supersedes: nothing. Extends the founding precedent set by goviral-2026-08a and marketingshark-2026-08a.
+
+Signature / explicit approval reference: ____________________
+
+Owner-commissioned on 2026-08-12 through the Kvórum venture program. This decision
+authorizes implementation and dry proof. It does not authorize a live room, an external
+source call, account creation or publishing. Missing signatures select the safer behavior.
+
+## Decision
+
+Build `kvorum`, a drafts-only Czech political commentary venture. Deterministic code reads
+one approved public-page monitor plus verified Czech news and institutional feeds, normalizes
+and clusters the day, and offers the digest to one TRIBUN call. Deterministic gates check
+claim references, originality, attribution, public-figure scope and the editorial constitution.
+The owner approves, edits or rejects each recommendation. The Design Lab supplies the only
+rendering path. No code in this program posts.
+
+The internal id remains `kvorum` if name clearance later changes the public name. The design
+defaults to a 21:00 Prague desk, exactly 60 minutes before the night board. Both the public
+name and hour remain provisional owner choices while their checklist items are open.
+
+## Authority and closed gates
+
+Every ceiling from `budget-2026-08e` remains unchanged: `$30` all-in per month, `$25` for
+model and API use, and a `$1.00` daily pace. Both magazines' truth gates, the social
+triple-lock, `METRICS_INGESTION_ENABLED=false`, the treasury rules and human-only payments
+remain unchanged. Kvórum cannot treat a venture switch, a model result, a countersignature
+on editorial policy or a passing dry run as permission to spend, post, create an account,
+touch a channel, ingest engagement data or execute a payment.
+
+Kvórum starts in fixture-only mode. Four separate owner approvals govern its future source
+and account scope: `KV-APIFY-001`, `KV-SOURCES-002`, `KV-ACCOUNTS-003` and
+`KV-EDITORIAL-004`. `KV-APIFY-001` also depends on the still-pending
+`APIFY-ACCOUNT-001`. Missing any required approval produces a reason record, no provider
+call and `$0` spend.
+
+## Budget capacity hold
+
+The requested `$0.10` desk envelope does not fit the live clock. Existing room envelopes,
+article production and the morning cap reserve `$0.98` of the signed `$1.00` daily pace.
+Registering the room may prove schemas, routing and the dry fixture path, but the live runner
+must remain held while this decision is pending. Before countersignature can reach `main`, the
+owner must record a reallocation that frees at least `$0.08` of worst-day capacity without
+raising any ceiling or silently reducing another venture's authority. The system audit must
+fail if a payable clock exceeds `$1.00`. The runtime recognizes that separate record only when
+it is countersigned and contains `Freed worst-day capacity USD: $0.08` (or a larger amount).
+
+If capacity is approved, one TRIBUN call is expected to cost about `$0.05` to `$0.07` a day,
+or about `$2.10` a month. The room reserves before the call and records actual cost after it.
+Apify receives a separate `$2.00` monthly venture share inside the existing Free-plan credit,
+with no cash spend and no plan upgrade. Free feeds, normalization, clustering, gates, storage,
+admin review and rendering cost `$0`.
+
+## Editorial and data posture
+
+- Štít demokracie supplies topic discovery and salience only. Its posts never count as evidence.
+- Factual claims retain typed references. A multi-source fact needs two independent domains;
+  commentary remains labelled commentary.
+- The monitor keeps only fixed public-post fields, rejects commenter and private-individual data,
+  wraps external text as untrusted input and purges raw items after 30 days.
+- The account publishes no voting recommendation, party endorsement, paid promotion or
+  unsupported accusation. Corrections create a new audited record.
+- The owner remains the final approval gate. Approval creates a draft-ready Design Lab package,
+  not a post.
+
+## Apify priority and failure posture
+
+Kvórum may use only the pinned public-page actor named by `KV-APIFY-001`, without login or
+cookies, at one 30-result run a day. The Free plan's `$5` platform credit remains the physical
+stop and must never be upgraded by this program. Once all source approvals and budget capacity
+exist, Kvórum reserves its bounded daily share before GoVIRAL's weekly recipe; GoVIRAL's own
+guard and actor recipe remain unchanged. A failed item costs one item, a failed source costs one
+section and a receipt line, and a day with no usable cluster records an honest quiet outcome.
+
+## Phase 0 audit
+
+### Governing state
+
+- The company is operating, pre-revenue and in `VALIDATION`. No experiment is active and
+  no experiment stop condition applies to this program. The owner commissioned this build
+  directly; fixture evidence does not validate the venture or support performance claims.
+- `budget-2026-08e` still sets the binding limits: `$30` all-in per month, `$25` for
+  model and API use, and a `$1.00` daily pace. The August API ledger held `$4.2099446`
+  when this audit ran. The treasury remains owner-operated.
+- The finance and ecosystem generated totals lag the canonical ledger, and the owner's
+  fal.ai prepayment still awaits reconciliation. Kvórum must not present those partial totals
+  as a reconciled all-in cost.
+- `METRICS_INGESTION_ENABLED=false`, both social channels remain in draft mode, and the
+  global social kill switch remains on. Kvórum has no account, credential, channel or
+  publisher path.
+- `APIFY-ACCOUNT-001` and `APIFY-MMA-SOURCES-001` remain pending. Kvórum must add its
+  own approval and share guard without treating either pending item as permission.
+- The newest operations decision reports failed scheduled gates on 11 August. The current
+  checkout passed `pnpm agents:validate`, lint, typecheck, 1,859 tests and the production
+  build under Node 22.23.1 and pnpm 10.30.0. Existing Turbopack filesystem-tracing
+  warnings remain warnings, not failed gates.
+
+### Live-tree assumptions
+
+- No sibling program has landed a shared `venture-recommendation`, research-provider,
+  `owner-result-entry` or performance-weights implementation. The current carousel summary
+  still accepts only `caught-up` and `mma-files` and fixes its locale to Czech. Kvórum must
+  create the shared boundary once and leave it ready for later evidence kinds.
+- The registry has seven ventures, nine venture rooms and one `$0.16` production job.
+  The registered room envelopes total `$0.62`; with article production and the `$0.20`
+  morning cap, the full clock already reserves `$0.98` of the `$1.00` daily pace.
+- The 21:00 Prague slot is free and remains exactly 60 minutes before the 22:00 board.
+  Vercel owns the two punctual daylight-saving entries per slot. GitHub Actions now runs
+  three backstop sweeps rather than one scheduled cron per room.
+- The Apify module already serves GoVIRAL and FightAIQ through two different quota shapes.
+  A third tenant should parameterize shared account-credit checks without changing either
+  existing tenant's approvals, estimates or failure posture. Kvórum's actor contract must
+  keep the stricter pinned-build requirement; GoVIRAL's older actor entries do not have one.
+- The runtime allowlist contains `news.google.com` but none of the proposed Czech feed hosts.
+  Each later source entry must remain disabled until its real URL and exact hostname are
+  verified.
+- The Design Lab now carries 23 template families and five brand token sets. Its summary
+  builder remains article-shaped, so a recommendation summary needs an explicit shared
+  extension instead of an article-shaped workaround.
+- The admin shell already enforces the `{ node, count }` tab invariant and has a tested
+  GitHub-or-local persistence ladder. New Kvórum files must keep server reads outside client
+  components and use that ladder without introducing a second writer.
+
+## Adapted during implementation
+
+- **KV-00 record timing:** issue #149 requested no file change, while the owner commission
+  requires each completing commit to tick its checkbox in this decision. KV-00 therefore
+  creates this audit-only scaffold and ticks its own box. KV-01 remains responsible for the
+  founding terms.
+- **Daily budget arithmetic:** the build prompt assumed a new `$0.10` room fit the signed
+  pace. The live clock leaves only `$0.02`. No implementation may add `kv-desk` until the
+  founding terms define a schedule or degradation rule that keeps the worst payable day at
+  or below `$1.00`; tests must prove the arithmetic.
+- **Desk hour and public name:** 21:00 and Kvórum remain the design defaults, but the owner
+  checklist still marks both the hour and name/handle clearance as pending. The internal id
+  stays `kvorum`; no implementation may create a public account or claim name clearance.
+- **Cron architecture:** the prompt predates the three-sweep GitHub backstop. Kvórum will add
+  a manual dispatch choice and mode gates to `cycle.yml`, plus the two punctual Vercel entries.
+  It will not restore per-room GitHub schedules.
+- **Prompt inventory:** `architecture.test.ts` inventories only root prompt files even though
+  marketingShark already has a prompt subdirectory. Kvórum converts it to an explicit recursive
+  relative-path inventory so both ventures' nested runtime prompts are checked without aliases.
+- **Closed-enum sequencing:** the mandated title order registers `kv-desk` before the later
+  phase-schema and Vercel-cron issues teach every schedule consumer about it. KV-02b's contract
+  and KPI tests are green, but the full suite correctly refuses the unknown scheduled phase and
+  the system audit separately refuses to treat its unapproved `$0.10` as payable inside a `$0.02`
+  remainder. The tree is intentionally completed in order through Phase A before its full gate;
+  no compatibility bypass, premature cron entry or relaxed budget assertion hides either blocker.
+- **Agent assignment sequencing:** KV-04a installed the full TRIBUN/HACEK/AUDIT desk preset, but
+  its validator-clean venture control record locked only TRIBUN and AUDIT until KV-04c extended
+  HACEK's declared venture assignment and added that locked control seat in the same commit. No
+  runtime phase boundary occurred between the two issues.
+- **Documentation drift:** curated ecosystem prose still says six projects, 18 cron
+  expressions, 11 templates and five brands in places where generated or live state now says
+  seven projects, three GitHub sweeps, 23 families and five current brands. KV-21a must correct
+  those statements without hand-editing the generated block.
+- **Approval-trend KPI:** the quarterly KPI contract has bounded numeric directions but no trend
+  operator. KV-05b records week-over-week approval trend as a boolean observation: `1` means the
+  measured rate rose, `0` means it did not, and a missing comparison window remains `null`.
+- **Payable-clock audit:** KV-05c counts the full declared room envelope as `$0.72` and proves that
+  it would take the whole clock to `$1.08`. The runtime includes `kv-desk` only after both this
+  founding record and a separate capacity-reallocation record are countersigned; neither exists
+  in an authorizing state, so the current payable room total remains `$0.62` and the full payable
+  clock remains `$0.98`. This is a hold, not a reduced Kvórum envelope or a higher daily cap.
+- **Facebook actor price drift:** the build prompt and design recorded `$2.00/1,000` posts. The
+  actor's public API on 2026-08-12 instead reports Free-tier event pricing of `$0.005` per post
+  plus `$0.001` per run. The required 30-result ceiling therefore costs at most `$0.151` per run,
+  `$4.53` per 30 days and `$4.681` in a 31-day month. KV-06a records those current figures and the
+  pinned latest build `laKrch6r0XAnxtAFh`; it does not raise the `$2.00` venture share. Full daily
+  cadence cannot fit that share, so the pending approval and later quota guard must stop runs
+  rather than imply the design's `$1.80` month is still available. KV-08a therefore reserves
+  `$0.151` per run, not the issue's stale `~$0.06`; it leaves the share and Free-plan stop unchanged.
+- **External-source authority:** KV-08b's issue lists the four Apify spend guards beginning with
+  INBOX approval. This founding record separately says external calls wait for both the founding
+  and capacity-reallocation decisions. The shared guard therefore checks those countersignatures
+  first, then applies the four requested layers; the current checkout remains fixture-only even if
+  a token is present or a KV approval line is checked in isolation. KV-09a applies the same two
+  authority checks plus `KV-SOURCES-002` to every free-feed read; verified and allowlisted is not
+  treated as approved.
+- **Cluster title boundary:** KV-10a asks for title-token overlap, while the fixed-field monitor
+  contract deliberately retains one `text` field rather than a separate feed title. Clustering
+  derives tokens only from the first sentence or the text before the feed mapper's em dash. Its
+  weighted Jaccard threshold is `0.20`, with curated entities weighted four-to-one against a title
+  token; complete-link merges retain at least one shared entity or topic across the whole cluster.
+- **Standing-topic rank factor:** KV-10b's issue abbreviates the rank formula to corroboration,
+  entity weight, engagement salience and novelty. The higher-precedence design and the committed
+  monitor contract also require standing-topic continuity. Ranking therefore records and multiplies
+  a neutral `1.0` factor, raised by `0.25` for each of at most two matched standing topics; it never
+  overrides the 14-day repeat penalty or turns Štít discovery into corroborating evidence.
+- **Fixture receipt truth:** KV-12a needs the committed monitor day to traverse the same receipt,
+  clustering and ranking path as live data. `kvorum-monitor/1` therefore distinguishes an
+  unattempted `fixture` source result from `success` and `failed`; fixture receipts may retain their
+  committed rows but cannot claim an external attempt. Empty approval-gated receipts remain valid,
+  and a non-fixture receipt refuses fixture source rows.
+- **Desk record boundary:** KV-12b asks for budget-stop and failure records under the house posture.
+  A scheduled authority, schedule or budget stop happens before the room opens and therefore keeps
+  the shared `meeting-skip/1` record; a manual closed-gate check does not fabricate a calendar event.
+  Once source work begins, productive, quiet and failed outcomes use `meeting-record/2`, attach the
+  retained digest when one exists and state explicitly whether a provider call occurred.
+- **Vote-record sequencing:** the public meeting parser previously required a non-empty vote matrix
+  from every named room. KV-12b precedes the KV-13 HACEK and AUDIT gates, so inventing their votes
+  would make the record look more complete than the run. Only typed `kv-desk` records may currently
+  carry an empty matrix; their public projection retains the digest, outcome, provider-call truth and
+  package count. KV-13 remains responsible for the first real gate results and veto record.
+- **Originality scope and package isolation:** design §8 names Štít text for the overlap check, while
+  design §16 and the build contract require every source text in the cluster. KV-13a applies the
+  broader rule and loads its `0.86` ceiling from `config/social-policy.json` rather than copying the
+  number into runtime code. The paid parser validates only the two-package envelope; each candidate
+  then receives its own schema, claim, originality, marked-quote and angle result. One poison package
+  is dropped and counted without discarding a valid sibling or making a replacement model call.
+- **Public-person and Czech-register boundary:** KV-13b resolves public-person scope against the
+  dated, owner-maintained entity lexicon; an unknown full name or private-relation term fails closed
+  instead of inviting the model to decide who is public. HACEK runs deterministic alarm, voter-respect
+  and Czech stop-slop checks by reusing the house lint, not by loading a skill or making another model
+  call. Separate checks also block vote instructions, endorsements, unsupported crime accusations,
+  unlabeled single-source facts and any publishing, account, channel, promotion or fundraising plan.
+- **Recommendation fidelity and queue index:** the shared contract introduced by KV-11 carried the
+  claims, copy and source chain but omitted TRIBUN's why-this-is-worth-it line and the internal Štít
+  summary that the higher-precedence design requires the admin card to show. KV-14 adds both fields
+  instead of discarding them at storage. Dated recommendation files are canonical; the single
+  `recommendations/index.json` file is a replaceable current-day queue projection. A repeated
+  `(date, cluster)` run preserves the existing record byte-for-byte, including any later owner edits,
+  and refreshes only the index and causal meeting artifacts.
+- **Carousel-summary consumer sequencing:** KV-15b expands the shared Studio summary type and pins
+  the existing DNESKAi and MMA Files summary bytes, but the live site rail and delivery helper still
+  require the article-only recipe and copy unions. They therefore stay explicitly narrowed to those
+  two ventures in this commit instead of falsely accepting an incomplete Kvórum workflow. KV-16
+  owns the approval transaction that writes a Kvórum summary and makes it a complete Design Lab input.
+- **Approval edit history and Design Lab scope:** the KV-11 recommendation contract carried edit
+  timestamps but no immutable copy of the desk draft. KV-16 adds one nullable full-draft snapshot,
+  populated only on the first real owner edit, so later review can distinguish desk words from owner
+  words. Approval also widens the existing recipe, copy and site-reader unions because writing a
+  summary alone would not make it renderable in the Design Lab. This creates a review artifact only:
+  it grants no social account, channel or publishing authority and cannot call a publisher.
+- **Results-control sequencing:** KV-17b's issue asks the recommendation card for results entry,
+  while the higher-precedence build plan assigns the shared result contract, route, one-writer
+  store and card surfacing to KV-19a. The KV-17b card therefore shows the recorded manual post URL
+  and an honest no-result state, but does not invent an untyped result form or second persistence
+  path. The owner-entry control lands with KV-19a; automated metric collection remains absent.
+- **Claims-ledger sequencing:** KV-17d asks its claims tab to show a running ledger before KV-18
+  defines the canonical claim records and correction flow. The higher-precedence build plan assigns
+  both to KV-18, so KV-17d registers a truthful zero-count tab that does not promote recommendation
+  drafts into published claims or offer an untyped correction writer. KV-18 replaces that empty
+  state with the typed ledger and owner-controlled correction flow.
+- **Claim capture versus publication:** KV-18 and the build prompt require claim entries to be
+  appended at recommendation approval, while design §9 defines the visible ledger as published
+  claims. The typed entry therefore records `approved-draft` with no post time or URL at approval;
+  the existing manual-post action alone advances it to `posted`. Correction controls remain closed
+  until that receipt exists. A correction or retraction action creates a new manual-only draft and
+  changes the original claim's ledger standing, but never claims that the correction was published.
+- **Owner results remain manual evidence:** No sibling result contract had landed when KV-19a began,
+  so Kvórum provides the first shared `owner-result-entry/1` boundary. Each append-only snapshot
+  names the already recorded manual post, intended platform, owner capture time and six nullable
+  counters, with at least one real number; the owner-result route supplies only `enteredBy: owner`
+  and cannot fetch, publish or touch a channel. The recommendation links the result and the card
+  places the typed outcome beside the original intent. `METRICS_INGESTION_ENABLED` stays untouched.
+- **Performance factors stay subordinate to gates:** The committed monitor receipt has a closed
+  factor schema, so KV-19b folds the bounded topic multiplier into its existing explainable
+  `entityWeight` factor instead of inventing an incompatible receipt field. On the gate side,
+  format weights order retained targets and record their values; they never remove a format or turn
+  a failed truth, safety or editorial gate into a pass. No sibling implementation or weekly room
+  existed to reuse, so the first shared writer accepts only one locked ISO-week proposal, verifies
+  at least three cited manual-result receipts per change, caps a weekly move at `0.10`, and enforces
+  the permanent `0.75–1.25` range. Direct edits without that proposal history fail schema parsing.
+- **The Kvórum GoVIRAL set is explicitly free-only:** The live scout sends every ordinary topic
+  set through each applicable Apify recipe step, so merely appending the issue's requested set
+  would have created paid actor inputs despite the “free signals only” instruction. The shared
+  topic-set contract therefore defaults existing sets to their current Apify path but pins Kvórum
+  to `apify: false`; the recipe, actors and quota are unchanged. The desk reads only the newest
+  valid recorded GoVIRAL plan, counts invalid records, ignores future plans, and gives an approved
+  matching `kvorum` trend call a bounded `1.10` ranking tiebreaker. Draft or archived plans are
+  recorded as context but remain neutral, and the factor never replaces corroboration or gates.
+- **The agenda bridge is implemented in the dedicated desk runner:** The generic portfolio runner
+  already consumes agendas, but `kv-desk` has its own runner and therefore did not. It now reads
+  one due `gv-brief` agenda into the untrusted packet, records its queue reference, and consumes it
+  only after the meeting record exists. TRIBUN may file at most one `gv-brief` request, only with
+  retained digest refs; queue caps, the effective schedule and the `gv-brief ↔ kv-desk` policy keep
+  their last word. The venture registry also makes `design-lab` the sole rendering path and pins
+  image generation and freeform social images off; approval still writes only a recorded summary.
+- **The temporary build prompt is removed at closeout:**
+  `docs/KVORUM-CODEX-BUILD-PROMPT.md` existed only to commission and sequence KV-00 through
+  KV-21c. The final issue deletes it after its requirements are represented in this decision,
+  the standing docs, contracts and tests. `docs/KVORUM-VENTURE-DESIGN.md` remains the retained
+  product-design context; deleting the work order grants no new authority.
+
+## Implementation checklist
+
+- [x] KV-00 — Phase 0 audit: read the contracts, verify every assumption
+- [x] KV-01 — Write the founding decision record
+- [x] KV-02a — Registry entry in `config/ventures.json`
+- [x] KV-02b — Venture-registry schema enum extensions and fixtures
+- [x] KV-03a — Register the `kv-desk` phase in type and record schemas
+- [x] KV-03b — Meeting policy classification for `kv-desk`
+- [x] KV-03c — `cycle.yml` dispatch choices and mode gates
+- [x] KV-03d — Vercel cron entries for the 21:00 slot
+- [x] KV-04a — TRIBUN in the agent registry, routing, controls and cast schema
+- [x] KV-04b — TRIBUN prompts and the expected-prompts list
+- [x] KV-04c — TRIBUN model role and HACEK venture extension
+- [x] KV-05a — Venture scaffold, brand hue and labels
+- [x] KV-05b — KPI seeds for the quarter
+- [x] KV-05c — Degradation-ladder position with its test
+- [x] KV-06a — `kvorum-sources` registry with verified actors and feeds
+- [x] KV-06b — Network allowlist additions and the host-pinning test
+- [x] KV-07 — Entity lexicon config
+- [x] KV-08a — Venture Apify quota file and share cap
+- [x] KV-08b — Third-tenant extension of the Apify guard
+- [x] KV-09a — Monitor fetch, normalize and the fixed-field row mapper
+- [x] KV-09b — Monitor receipt contract and 30-day raw purge
+- [x] KV-10a — Deterministic entity/topic clustering
+- [x] KV-10b — Cluster ranking, novelty and continuation detection
+- [x] KV-11 — `venture-recommendation` contract with monitor-cluster evidence
+- [x] KV-12a — Desk runner dispatch and the TRIBUN call
+- [x] KV-12b — Honest meeting records for the desk
+- [x] KV-13a — Gates: claim resolution and originality
+- [x] KV-13b — Gates: banned content and register lint
+- [x] KV-14 — Recommendation store with idempotency
+- [x] KV-15a — Studio brand tokens for Kvórum
+- [x] KV-15b — Carousel-summary venture extension, byte-compatible
+- [x] KV-16 — Admin approval write path
+- [x] KV-17a — Server-only admin loader
+- [x] KV-17b — Recommendations panel
+- [x] KV-17c — Monitor panel
+- [x] KV-17d — Claims panel, tab wiring and e2e coverage
+- [x] KV-18 — Claims ledger and the correction flow
+- [x] KV-19a — Owner results: contract, route and store
+- [x] KV-19b — Performance weights with floors and recorded proposals
+- [x] KV-20a — GoVIRAL spine: topic set and brief consumption
+- [x] KV-20b — GoVIRAL spine: transitions and the Design-Lab-only test
+- [x] KV-21a — Documentation truth across the standing docs
+- [x] KV-21b — INBOX approvals and NEEDED owner items
+- [x] KV-21c — Honest gaps, checkbox sweep and prompt deletion
+
+## Honest gaps — things the work order asked for that are not built
+
+Recorded rather than quietly dropped, following the same shape as the GoVIRAL and
+marketingShark founding records.
+
+**There is no live Kvórum desk yet.** The repository contains the room, schedule, fixture monitor,
+TRIBUN call boundary, gates, stores, admin and rendering path, but the founding record is still
+pending and no countersigned capacity-reallocation record frees the required `$0.08`. Existing
+worst-day authority remains `$0.98`; including Kvórum's `$0.10` envelope would be `$1.08` against
+the signed `$1.00` pace. Scheduled and manual live attempts therefore stop before source or model
+work and cost `$0`.
+
+**The external monitor has no authority.** `APIFY-ACCOUNT-001`, `KV-APIFY-001` and
+`KV-SOURCES-002` are pending. The actor and seven feed adapters are implemented and tested, but
+only the committed fixture has run. Current actor event pricing reserves `$0.151` for a capped run,
+so a `$2.00` monthly share funds at most thirteen such reservations rather than the requested daily
+cadence. The quota guard skips work; the program did not raise the share, borrow another tenant's
+credit or upgrade the Free plan.
+
+**No public identity or channel exists.** The public name and 21:00 hour remain provisional owner
+choices, name/handle clearance is unfinished and `KV-ACCOUNTS-003` is pending. The code creates no
+account, credential, channel or publisher mapping. It also cannot post: approval creates a Design
+Lab deck, after which only the owner can publish manually and record the receipt.
+
+**Editorial policy is implemented but not countersigned.** The craft prompt and deterministic
+gates enforce the proposed constitution, while `KV-EDITORIAL-004` remains pending. That means the
+code can prove the rejection paths but cannot present the policy as owner-adopted. A model result,
+dry proof or recommendation approval cannot substitute for that signature.
+
+**There is no live-market evidence.** All program evidence is fixture or test evidence. No real
+desk day, owner-approved live recommendation, manual political post, audience result, published
+claim or correction exists, and no experiment was activated. The company remains in `VALIDATION`,
+pre-revenue; implementation completion is not venture validation.
+
+**Later product phases remain unbuilt.** The promise tracker, Sunday recap, vote-record cards,
+additional monitored pages, wider source scope, newsletter/community intake and automated
+publishing were explicitly outside this program. Engagement ingestion also remains off; results
+are owner-entered records only. Any one of those outward or data-collection surfaces needs its own
+decision and may not inherit authority from this build.
+
+### Owner handoff
+
+1. Decide whether the public name is Kvórum, clear the handles and confirm 21:00 or record a
+   different desk hour.
+2. Record a separate countersigned reallocation freeing at least `$0.08` of worst-day capacity
+   without raising the `$1.00` pace or silently reducing another venture, then countersign this
+   founding record.
+3. Review the four pending `KV-*` approvals in `state/INBOX.md`. External reads also require the
+   still-pending `APIFY-ACCOUNT-001`; leave every unchecked item fail-closed if its scope is not
+   accepted.
+4. Reconcile the requested Apify cadence with the current `$0.151` reservation and `$2.00` share.
+   Skipping days is the implemented safe result; any different source, cadence or share is a new
+   decision, never a plan upgrade by the runtime.
+5. Only after every live gate passes, run one `kv-desk` cycle, inspect its source receipt, ledger
+   entry, gate results and owner workspace, and treat that as first operational evidence—not as
+   permission to create an account or publish.
+
+## What this does not touch
+
+This decision does not change the `$30`, `$25` or `$1.00` ceilings; the publisher; channel
+registry; social unlock counters; global kill switch; treasury; payments; ads; account or
+credential ownership; GoVIRAL's actor recipe; either magazine's evidence, image or delivery
+gates; the streams path's `apify: false`; BoardlessAI's corporate brand; or the append-only
+history of earlier decisions. Phase 2 promise tracking, Sunday recaps, vote-record cards,
+additional monitored pages and automated publishing remain out of scope.

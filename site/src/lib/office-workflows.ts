@@ -339,7 +339,7 @@ export async function resolveOfficeWorkflows(
       // The scope fence permits the operating slot on the company calendar, not a public
       // BOOKSOFHISTORY room or workflow. It is therefore omitted from this floor-plan model
       // rather than misattributed to Board HQ by projectForKind's safe fallback.
-      if (definition.kind === "bh-desk" || definition.kind === "ts-desk") return;
+      if (definition.kind === "bh-desk" || definition.kind === "ts-desk" || definition.kind === "kv-desk") return;
       const slot = dayIndex >= 0 ? feed.slots[dayIndex + index] : undefined;
       const status: CalendarStatus = slot?.status ?? "scheduled";
       const room = projectForKind(definition.kind);

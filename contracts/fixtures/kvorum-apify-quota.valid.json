@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "kvorum-apify-quota/1",
+  "month": "2026-08",
+  "shareCapUsd": 2,
+  "estimatedUsedUsd": 0.151,
+  "sharedAccountUsedUsd": 1.25,
+  "reservedPerRun": 0.151,
+  "updatedAt": "2026-08-12T21:00:00.000Z",
+  "perActorCounts": {
+    "stit-demokracie-facebook": {
+      "runs": 1,
+      "items": 30,
+      "estimatedUsd": 0.151
+    }
+  }
+}

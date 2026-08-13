@@ -10,19 +10,19 @@ import {
 import { configRoot, personaPromptPath } from "../src/paths.js";
 
 describe("agent registry and identity assets", () => {
-  it("keeps 39 seated roles of 48 on file, and gated portraits explicit", async () => {
+  it("keeps 40 seated roles of 49 on file, and gated portraits explicit", async () => {
     const registry = await loadAgentRegistry();
 
-    // Forty-eight profiles, thirty-nine of them seated. A retired or paused agent keeps its
+    // Forty-nine profiles, forty of them seated. A retired or paused agent keeps its
     // profile and its portrait -- the record of who did what does not shrink when the roster
     // does -- and the router skips it and says so rather than crashing the room it was required
     // in. FOLIO and PLOT arrived with BOOKSOFHISTORY, GHOST and BOOKER with Door Money, and
-    // LETOPIS and VERBA with Tehdejsi svet;
+    // LETOPIS and VERBA with Tehdejsi svet, and TRIBUN with Kvórum;
     // the nine unseated are unchanged.
     expect(registry.agents.map((agent) => agent.id)).toEqual(FOUNDING_AGENT_IDS);
-    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(48);
+    expect(new Set(registry.agents.map((agent) => agent.slug)).size).toBe(49);
     expect(registry.agents.filter((agent) => agent.kind === "council")).toHaveLength(4);
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(39);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(40);
     expect(registry.agents.filter((agent) => agent.status === "retired").map((agent) => agent.id).sort())
       .toEqual(["EASEL", "MOTIF", "SPLIT"]);
     expect(registry.agents.filter((agent) => agent.status === "paused").map((agent) => agent.id).sort())
@@ -33,12 +33,12 @@ describe("agent registry and identity assets", () => {
     );
     expect(
       registry.agents.filter((agent) => agent.provider === "Anthropic")
-    ).toHaveLength(28);
+    ).toHaveLength(29);
     expect(
       registry.agents.filter((agent) => agent.ventures !== "global").map((agent) => [agent.id, agent.ventures])
     ).toEqual([
       ["HERALD", ["caught-up"]],
-      ["HACEK", ["caught-up", "mma-files", "booksofhistory", "tehdejsi-svet"]],
+      ["HACEK", ["caught-up", "mma-files", "kvorum", "booksofhistory", "tehdejsi-svet"]],
       // SCENE reads scenes and competition evidence, which GoVIRAL's room can use as a guest
       // seat. It is not seated there by default — venture-agent-controls lists it switchable.
       ["SCENE", ["titty-tuesdays", "goviral"]],
@@ -63,7 +63,8 @@ describe("agent registry and identity assets", () => {
       ["GHOST", ["door-money"]],
       ["BOOKER", ["door-money"]],
       ["LETOPIS", ["tehdejsi-svet"]],
-      ["VERBA", ["tehdejsi-svet"]]
+      ["VERBA", ["tehdejsi-svet"]],
+      ["TRIBUN", ["kvorum"]]
     ]);
 
     const kpiConfig = JSON.parse(
@@ -83,7 +84,7 @@ describe("agent registry and identity assets", () => {
     expect(registry.agents.filter((agent) => agent.visual.avatar === null).map((agent) => agent.id)).toEqual([
       "CORNER", "SPOTTER", "TAPE", "SIGMA", "VIG", "SONAR",
       "CANVAS", "JAB", "REACH", "SPLIT", "EASEL", "MOTIF", "PIVOT", "MAKO", "CHUM",
-      "FOLIO", "PLOT", "GHOST", "BOOKER", "LETOPIS", "VERBA"
+      "FOLIO", "PLOT", "GHOST", "BOOKER", "LETOPIS", "VERBA", "TRIBUN"
     ]);
     expect(new Set(avatars.map((avatar) => avatar.sha256)).size).toBe(27);
     expect(avatars.every((avatar) => avatar.width === 1024)).toBe(true);
@@ -95,7 +96,6 @@ describe("agent registry and identity assets", () => {
     // appends it after the packet. A missing or empty file would throw mid-room, after the
     // budget reservation and part-way through a paid call graph, so pin the coupling here.
     const registry = await loadAgentRegistry();
-
     const loaded = await Promise.all(
       registry.agents.map(async (agent) => {
         const body = await readFile(personaPromptPath(agent.slug), "utf8");
@@ -103,7 +103,7 @@ describe("agent registry and identity assets", () => {
       })
     );
 
-    expect(loaded).toHaveLength(48);
+    expect(loaded).toHaveLength(49);
     expect(loaded.filter((entry) => entry.body.length === 0).map((entry) => entry.id)).toEqual([]);
     // Each persona rides on every call in its room; an unbounded file would silently
     // inflate every seat's input cost against a $0.05-$0.16 room envelope.

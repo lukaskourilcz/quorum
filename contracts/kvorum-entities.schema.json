@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "kvorum-entities/1"
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "governance": {
+      "type": "object",
+      "properties": {
+        "ownerEditable": {
+          "type": "boolean",
+          "const": true
+        },
+        "deskMutation": {
+          "type": "string",
+          "const": "proposal-only"
+        },
+        "proposalPath": {
+          "type": "string",
+          "const": "state/ventures/kvorum/entity-proposals"
+        }
+      },
+      "required": [
+        "ownerEditable",
+        "deskMutation",
+        "proposalPath"
+      ],
+      "additionalProperties": false
+    },
+    "matching": {
+      "type": "object",
+      "properties": {
+        "locale": {
+          "type": "string",
+          "const": "cs-CZ"
+        },
+        "caseFold": {
+          "type": "boolean",
+          "const": true
+        },
+        "diacriticFold": {
+          "type": "boolean",
+          "const": true
+        },
+        "wholeWords": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": [
+        "locale",
+        "caseFold",
+        "diacriticFold",
+        "wholeWords"
+      ],
+      "additionalProperties": false
+    },
+    "entities": {
+      "minItems": 9,
+      "maxItems": 160,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "person",
+              "party",
+              "institution",
+              "topic"
+            ]
+          },
+          "canonicalName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 160
+          },
+          "aliases": {
+            "minItems": 1,
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 120
+            }
+          },
+          "weight": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "roles": {
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "government-member",
+                "party-leader",
+                "head-of-state"
+              ]
+            }
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "canonicalName",
+          "aliases",
+          "weight",
+          "roles",
+          "note"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "asOf",
+    "governance",
+    "matching",
+    "entities"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/kvorum-entities.schema.json"
+}

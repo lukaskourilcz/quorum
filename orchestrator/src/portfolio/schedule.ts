@@ -40,6 +40,9 @@ export interface EffectivePortfolioSchedule {
 /** Lowest-priority room first. A daily plan removes entries only in this order. */
 export const ROOM_DEGRADATION_ORDER = [
   "dm-growth",
+  // Kvórum is registered but its live room remains contingent on the separate capacity
+  // countersignature, so it yields before every already-funded daily room.
+  "kv-desk",
   "dm-desk",
   // Tehdejsi svet yields before BOOKSOFHISTORY even though both drop at the same monthly rung:
   // its desk is daily, so a dropped day costs one feature, while a dropped BOOKSOFHISTORY day
@@ -108,6 +111,13 @@ export function signedOwnerDecision(raw: string): "countersigned" | "pending" {
   return checkedLine(raw, "Signature / explicit approval reference") ? "countersigned" : "pending";
 }
 
+export function kvorumBudgetCapacityDecision(raw: string): "countersigned" | "pending" {
+  if (signedOwnerDecision(raw) !== "countersigned") return "pending";
+  const match = /^Freed worst-day capacity USD:\s*\$?([0-9]+(?:\.[0-9]+)?)\s*$/mi.exec(raw);
+  const freedUsd = Number(match?.[1]);
+  return Number.isFinite(freedUsd) && freedUsd >= 0.08 ? "countersigned" : "pending";
+}
+
 function checkedLine(raw: string, label: string): string | null {
   const match = new RegExp(`^${label}:\\s*(.+)$`, "mi").exec(raw)?.[1]?.trim();
   if (!match || /^_+$/.test(match)) return null;
@@ -129,6 +139,8 @@ export function resolveEffectivePortfolioSchedule(input: {
   budgetMmaRaw?: string;
   budgetFiftyRaw?: string;
   fightAiQFoundingRaw?: string;
+  kvorumFoundingRaw?: string;
+  kvorumBudgetCapacityRaw?: string;
   monthlyApiHeadroomUsd: number;
 }): EffectivePortfolioSchedule {
   if (!Number.isFinite(input.monthlyApiHeadroomUsd) || input.monthlyApiHeadroomUsd < 0) {
@@ -138,6 +150,8 @@ export function resolveEffectivePortfolioSchedule(input: {
   const fiftyDecisionStatus = signedOwnerDecision(input.budgetFiftyRaw ?? "");
   const mmaDecisionStatus = signedOwnerDecision(input.budgetMmaRaw ?? "");
   const fightAiQFoundingStatus = signedOwnerDecision(input.fightAiQFoundingRaw ?? "");
+  const kvorumFoundingStatus = signedOwnerDecision(input.kvorumFoundingRaw ?? "");
+  const kvorumBudgetCapacityStatus = kvorumBudgetCapacityDecision(input.kvorumBudgetCapacityRaw ?? "");
   const shape: BudgetShape = decisionStatus === "countersigned-shape-a" ? "A" : "B";
   // budget-2026-08d unlocks the full scheduled clock and is still the signal the runtime
   // reads. budget-2026-08e supersedes it on amounts only: $30 all-in, $25 model share, $1.00
@@ -171,6 +185,12 @@ export function resolveEffectivePortfolioSchedule(input: {
   } else if (!fullScheduleShape && mmaDecisionStatus !== "countersigned") {
     active.delete("mma-analysis");
     envelopeByPhase["mma-intake"] = 0.05;
+  }
+  // Registration proves the room shape; it does not make the room payable. The live clock is
+  // already reserved to $0.98 of its signed $1.00 pace, so Kvórum needs both the founding
+  // countersignature and a separate owner record that identifies at least $0.08 of capacity.
+  if (kvorumFoundingStatus !== "countersigned" || kvorumBudgetCapacityStatus !== "countersigned") {
+    active.delete("kv-desk");
   }
   let ttTranscriptMode: EffectivePortfolioSchedule["ttTranscriptMode"] = "full";
   // The content gate goes first of everything, because it is the only rung whose loss costs
@@ -212,8 +232,17 @@ export function resolveEffectivePortfolioSchedule(input: {
   if (input.monthlyApiHeadroomUsd < BOOKSOFHISTORY_LADDER.dropGoViralBelowUsd) {
     active.delete("gv-brief");
   }
+  // Kvórum is a daily audience promise, so it survives GoVIRAL's weekly internal brief. It
+  // still drops before the reader-facing magazine rooms and their article slot.
   if (input.monthlyApiHeadroomUsd < 1.5) {
+    active.delete("kv-desk");
     ttTranscriptMode = "minimal";
+  }
+  if (input.monthlyApiHeadroomUsd < 1) {
+    active.delete("mag-editorial");
+    active.delete("mag-desk");
+    active.delete("article-am");
+    active.delete("article-pm");
   }
   if (input.monthlyApiHeadroomUsd < 0.5) {
     active.delete("tt-marketing");

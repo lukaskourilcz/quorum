@@ -27,7 +27,7 @@ const adminTabs = [
   "articles", "predictions", "banners", "calendar", "social-lab", "studio", "templates", "inspiration", "hooks",
   "packages",
   "shortlist", "dossiers", "features", "recommendations", "actions", "knowledge",
-  "library", "signals"
+  "library", "signals", "monitor", "claims"
 ] as const;
 
 export type AdminVentureTab = (typeof adminTabs)[number];

@@ -974,6 +974,22 @@
       "informationGain": "material"
     },
     {
+      "url": "/agents/tribun",
+      "purpose": "Explain TRIBUN's bounded Czech political-commentary role and its evidence gates.",
+      "searchIntent": "understand the Kvórum commentary agent",
+      "primaryQuery": "TRIBUN political commentary agent",
+      "audience": "governance and editorial-systems readers",
+      "evidenceRefs": [
+        "agent-profile:TRIBUN:v1",
+        "kvorum-2026-08a"
+      ],
+      "author": "SCRIBE",
+      "reviewer": "PEOPLE",
+      "updatedAt": "2026-08-12",
+      "status": "noindex",
+      "informationGain": "material"
+    },
+    {
       "url": "/ventures/carousel-studio",
       "purpose": "Show the live original template library across the Caught Up, MMA Files and Titty Tuesdays brand skins.",
       "searchIntent": "inspect the Carousel Studio template engine",

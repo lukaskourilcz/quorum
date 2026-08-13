@@ -35,6 +35,7 @@ on:
           - article-am
           - mma-analysis
           - mag-desk
+          - kv-desk
           - night
       trigger:
         # What kind of firing this dispatch is, which decides whether it claims a slot.

@@ -48,7 +48,8 @@ export const ContractAgentIdSchema = z.enum([
   "GHOST",
   "BOOKER",
   "LETOPIS",
-  "VERBA"
+  "VERBA",
+  "TRIBUN"
 ]);
 
 export const DateSchema = z.iso.date();

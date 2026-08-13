@@ -166,6 +166,13 @@
       "model": "claude-sonnet-5",
       "maxInputTokens": 12000,
       "maxOutputTokens": 4000
+    },
+    "_comment_KVORUM": "TRIBUN is Kvórum's single quality-critical daily call: native-register Czech political judgment over an already clustered digest. It uses the same Sonnet tier as CHUM, remains inside the $0.10 room envelope, and has no authority to fetch, post or unlock a channel.",
+    "TRIBUN": {
+      "provider": "anthropic",
+      "model": "claude-sonnet-5",
+      "maxInputTokens": 8000,
+      "maxOutputTokens": 2500
     }
   }
 }

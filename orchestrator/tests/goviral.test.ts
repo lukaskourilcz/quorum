@@ -387,6 +387,15 @@ describe("the scraped-row boundary", () => {
       expect(stepTopicSets(step, registry)).not.toContain("tehdejsi-svet");
       expect(stepPayload({ step, registry, topicSet: "tehdejsi-svet" })).toBeNull();
     }
+    expect(registry.topicSets.kvorum).toMatchObject({
+      label: "Kvórum (česká politika a občanské dění)",
+      sourceMode: "apify",
+      apify: false
+    });
+    for (const step of registry.recipe) {
+      expect(stepTopicSets(step, registry)).not.toContain("kvorum");
+      expect(stepPayload({ step, registry, topicSet: "kvorum" })).toBeNull();
+    }
     const raw = JSON.parse(await readFile(path.join(process.cwd(), "../config/goviral-sources.json"), "utf8")) as {
       actors: unknown;
       recipe: unknown;

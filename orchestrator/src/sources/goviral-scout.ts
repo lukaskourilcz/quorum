@@ -94,7 +94,7 @@ export function stepPayload(input: {
 }): Record<string, unknown> | null {
   const { step, registry } = input;
   const set = input.topicSet ? registry.topicSets[input.topicSet] : null;
-  if (set?.sourceMode === "free") return null;
+  if (set?.sourceMode === "free" || set?.apify === false) return null;
   switch (step.inputs) {
     case "keyword": {
       if (!set || set.keywords.length === 0) return null;
@@ -134,7 +134,7 @@ export function stepTopicSets(step: GoViralRecipeStep, registry: GoViralSourceRe
   if (step.inputs === "none") return [null];
   if (step.inputs === "account") return [null];
   return Object.entries(registry.topicSets)
-    .filter(([, topicSet]) => topicSet.sourceMode === "apify")
+    .filter(([, topicSet]) => topicSet.sourceMode === "apify" && topicSet.apify !== false)
     .map(([id]) => id);
 }
 

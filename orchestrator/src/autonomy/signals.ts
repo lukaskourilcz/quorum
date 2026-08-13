@@ -240,6 +240,38 @@ async function marketingSharkPackages(root: string): Promise<number> {
   return complete;
 }
 
+/**
+ * Recommendation approval is a cohort ratio, not an activity counter.
+ *
+ * A record remains one drafted recommendation after it moves out of `draft`; approved, posted and
+ * archived records count in the numerator, while rejected records only count in the denominator.
+ * Until the shared recommendation contract lands, the version and closed status are the smallest
+ * conservative recognition boundary available. Unreadable and unfamiliar records never become a
+ * positive signal. Most importantly, an empty directory is no evidence at all, so it yields null.
+ */
+async function recommendationApproval(directory: string): Promise<{
+  approved: number;
+  drafted: number;
+  value: number | null;
+}> {
+  const statuses = new Set(["draft", "approved", "posted", "archived", "rejected"]);
+  let drafted = 0;
+  let approved = 0;
+  for (const file of await files(directory)) {
+    const record = await readFile(file, "utf8")
+      .then((raw) => JSON.parse(raw) as Record<string, unknown>)
+      .catch(() => null);
+    if (record?.schemaVersion !== "venture-recommendation/1" || !statuses.has(String(record.status))) continue;
+    drafted += 1;
+    if (record.status === "approved" || record.status === "posted" || record.status === "archived") approved += 1;
+  }
+  return {
+    approved,
+    drafted,
+    value: drafted === 0 ? null : ratio(approved, drafted)
+  };
+}
+
 export async function computeAutonomySnapshot(input: {
   repoRoot: string;
   stateRoot: string;

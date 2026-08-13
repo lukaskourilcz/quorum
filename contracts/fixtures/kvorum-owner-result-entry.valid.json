@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "owner-result-entry/1",
+  "id": "kv-result-2026-08-12-1a2b3c4d5e6f",
+  "ventureId": "kvorum",
+  "recommendationId": "kv-2026-08-12-public-media",
+  "recommendationRef": "state/ventures/kvorum/recommendations/2026-08-12-public-media.json",
+  "platform": "instagram",
+  "postUrl": "https://example.com/kvorum/public-media",
+  "postedAt": "2026-08-12T22:00:00.000Z",
+  "capturedAt": "2026-08-13T08:00:00.000Z",
+  "enteredAt": "2026-08-13T08:05:00.000Z",
+  "enteredBy": "owner",
+  "metrics": {
+    "impressions": 1840,
+    "reach": 1512,
+    "saves": 43,
+    "shares": 31,
+    "comments": 18,
+    "follows": 7
+  },
+  "note": "Numbers copied by the owner from the post insights screen."
+}
+

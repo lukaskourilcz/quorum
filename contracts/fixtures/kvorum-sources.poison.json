@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "kvorum-sources/1",
+  "verifiedAt": "2026-08-12",
+  "approvals": {
+    "actor": "KV-APIFY-001",
+    "feeds": "KV-SOURCES-002",
+    "requiredBeforeLive": true
+  },
+  "actors": [
+    {
+      "id": "stit-demokracie-facebook",
+      "actorSlug": "apify/facebook-posts-scraper",
+      "actorBuildId": "latest",
+      "credentialEnv": "APIFY_TOKEN",
+      "freeLimit": "$5 shared Free-plan credit",
+      "termsVerdict": "allowed",
+      "termsNote": "Public Page posts only.",
+      "evidenceUrl": "https://apify.com/apify/facebook-posts-scraper",
+      "buildEvidenceUrl": "https://api.apify.com/v2/acts/apify~facebook-posts-scraper",
+      "pricingEvidenceUrl": "https://api.apify.com/v2/acts/apify~facebook-posts-scraper",
+      "scheduled": true,
+      "pricing": {
+        "model": "pay-per-event",
+        "actorStartUsd": 0.001,
+        "pricePerResultUsd": 0.005,
+        "maxRunUsd": 0.06,
+        "estimatedThirtyDayUsd": 1.8,
+        "worstCalendarMonthUsd": 1.86,
+        "monthlyShareCapUsd": 2
+      },
+      "input": {
+        "startUrls": [{ "url": "https://www.facebook.com/stitdemokracie" }],
+        "resultsLimit": 30
+      }
+    }
+  ],
+  "recipe": [
+    {
+      "step": 1,
+      "actorId": "stit-demokracie-facebook",
+      "mode": "public-page-monitor",
+      "targetPage": "https://www.facebook.com/stitdemokracie",
+      "maxResults": 30,
+      "runsPerDay": 1,
+      "cadence": "daily",
+      "maxTotalChargeUsd": 0.06
+    }
+  ],
+  "feeds": []
+}

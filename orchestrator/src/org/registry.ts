@@ -51,7 +51,8 @@ export const FOUNDING_AGENT_IDS = [
   "GHOST",
   "BOOKER",
   "LETOPIS",
-  "VERBA"
+  "VERBA",
+  "TRIBUN"
 ] as const;
 
 const FoundingAgentIdSchema = z.enum(FOUNDING_AGENT_IDS);

@@ -164,12 +164,13 @@ describe("resolving against committed state", () => {
 
     expect(resolved.rooms).toHaveLength(8);
     expect(resolved.slots).toHaveLength(
-      definitions.filter((definition) => definition.kind !== "bh-desk" && definition.kind !== "ts-desk").length
+      definitions.filter((definition) => definition.kind !== "bh-desk" && definition.kind !== "ts-desk" && definition.kind !== "kv-desk").length
     );
     expect(resolved.slots.some((slot) => slot.kind === "bh-desk")).toBe(false);
     // Tehdejsi svet keeps the operating slot on the company calendar and, like BOOKSOFHISTORY,
     // has no drawn room yet; REV-01 designs the facilities room that will hold it.
     expect(resolved.slots.some((slot) => slot.kind === "ts-desk")).toBe(false);
+    expect(resolved.slots.some((slot) => slot.kind === "kv-desk")).toBe(false);
     // The workshop holds no session, so it hangs no note and appears with no slots at all.
     expect(resolved.rooms.find((room) => room.key === WORKSHOP_ROOM)?.slots).toEqual([]);
     // Every slot lands in a room the plan actually draws.

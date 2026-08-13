@@ -19,6 +19,7 @@ const labels: Record<CalendarKind, string> = {
   "mma-analysis": "Fight analysis review",
   "mag-editorial": "MMA Files story meeting",
   "mag-desk": "MMA Files desk review",
+  "kv-desk": "Kvórum political recommendation desk",
   "article-am": "Morning MMA Files article",
   "article-pm": "Evening MMA Files article",
   "studio": "Design Lab template review"

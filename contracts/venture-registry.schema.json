@@ -63,6 +63,7 @@
                     "campaign-inventory",
                     "live-template-library",
                     "package-cadence",
+                    "recommendation-approval",
                     "feature-cadence",
                     "research-efficiency",
                     "action-completion"
@@ -112,10 +113,35 @@
                 "recommendations",
                 "actions",
                 "knowledge",
+                "monitor",
+                "claims",
                 "library",
                 "signals"
               ]
             }
+          },
+          "rendering": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "const": "design-lab"
+              },
+              "imageGeneration": {
+                "type": "boolean",
+                "const": false
+              },
+              "freeformSocialImages": {
+                "type": "boolean",
+                "const": false
+              }
+            },
+            "required": [
+              "path",
+              "imageGeneration",
+              "freeformSocialImages"
+            ],
+            "additionalProperties": false
           },
           "productionJobs": {
             "type": "array",
@@ -215,7 +241,8 @@
                       "GHOST",
                       "BOOKER",
                       "LETOPIS",
-                      "VERBA"
+                      "VERBA",
+                      "TRIBUN"
                     ]
                   }
                 },

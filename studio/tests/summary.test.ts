@@ -19,6 +19,10 @@ const BODY = [
   "Zbývá jedna otevřená otázka: druhý zdroj pro jeden z výsledků zatím chybí."
 ].join(" ");
 
+function summaryHash(value: unknown): string {
+  return createHash("sha256").update(JSON.stringify(value)).digest("hex");
+}
+
 describe("buildCarouselSummary", () => {
   const summary = buildCarouselSummary({
     venture: "mma-files",
@@ -30,6 +34,21 @@ describe("buildCarouselSummary", () => {
     sources: [{ kind: "internal", label: "BoardlessAI verified record" }],
     hasHero: true,
     heroCredit: "Photo: Oktagon MMA"
+  });
+  const caughtUpSummary = buildCarouselSummary({
+    venture: "caught-up",
+    slug: "sněmovna-v-kostce",
+    date: "2026-08-06",
+    title: "Co se dnes změnilo ve Sněmovně",
+    dek: "Tři doložené body a jedna otevřená otázka.",
+    points: [
+      "Sněmovna schválila program schůze.",
+      "Návrh prošel prvním čtením.",
+      "Další jednání je naplánované na pátek."
+    ],
+    sources: [{ kind: "primary", label: "Poslanecká sněmovna" }],
+    hasHero: false,
+    heroCredit: null
   });
 
   it("carries the desk's own words and adds none of its own", () => {

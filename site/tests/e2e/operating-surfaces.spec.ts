@@ -1,4 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
+import { createHash } from "node:crypto";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { expect, test } from "@playwright/test";
@@ -34,6 +35,9 @@ const axeRoutes = [
   "/admin?venture=tehdejsi-svet&tab=signals",
   "/admin?venture=carousel-studio&tab=studio",
   "/admin?venture=carousel-studio&tab=inspiration",
+  "/admin?venture=kvorum&tab=recommendations",
+  "/admin?venture=kvorum&tab=monitor",
+  "/admin?venture=kvorum&tab=claims",
   "/meetings/2026-08-01-mma-intake",
   "/meetings/2026-08-01-mma-analysis",
   "/meetings/2026-08-01-mag-editorial",
@@ -73,6 +77,29 @@ const tsPaths = {
 const originalTsFiles = new Map<string, string | null>();
 const bhActionDirectory = path.join(repositoryRoot, "state/ventures/booksofhistory/feature-actions/rec-e2e-admin-feature");
 const bhSummaryPaths = ["cs", "en"].map((locale) => path.join(repositoryRoot, `state/ventures/carousel-studio/summaries/booksofhistory/2026-08-14-e2e-admin-feature-${locale}.json`));
+const kvorumRecommendationPath = path.join(repositoryRoot, "state/ventures/kvorum/recommendations/2026-08-12-public-media.json");
+const kvorumRecommendationIndexPath = path.join(repositoryRoot, "state/ventures/kvorum/recommendations/index.json");
+const kvorumMonitorPath = path.join(repositoryRoot, "state/ventures/kvorum/monitor/2026-08-12.json");
+const kvorumSummaryPath = path.join(repositoryRoot, "state/ventures/carousel-studio/summaries/kvorum/2026-08-12-public-media.json");
+const kvorumClaimIds = ["claim-snemovna", "claim-process", "claim-angle"] as const;
+const kvorumClaimPaths = kvorumClaimIds.map((claimId) =>
+  path.join(repositoryRoot, `state/ventures/kvorum/claims/2026-08-12-public-media-${claimId}.json`));
+const correctionClaimId = "kv-claim-2026-08-12-public-media-claim-snemovna";
+const correctionDigest = createHash("sha256").update(correctionClaimId).digest("hex").slice(0, 10);
+const correctionDate = new Date().toISOString().slice(0, 10);
+const kvorumCorrectionPath = path.join(
+  repositoryRoot,
+  `state/ventures/kvorum/recommendations/${correctionDate}-correction-claim-snemovna-${correctionDigest}.json`
+);
+const kvorumFixturePaths = [
+  kvorumRecommendationPath,
+  kvorumRecommendationIndexPath,
+  kvorumMonitorPath,
+  kvorumSummaryPath,
+  ...kvorumClaimPaths,
+  kvorumCorrectionPath
+] as const;
+const originalKvorumState = new Map<string, string | null>();
 
 test.beforeAll(async () => {
   try {
@@ -99,12 +126,23 @@ test.beforeAll(async () => {
       originalTsFiles.set(target, null);
     }
   }
+  for (const target of kvorumFixturePaths) {
+    try { originalKvorumState.set(target, await readFile(target, "utf8")); }
+    catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      originalKvorumState.set(target, null);
+    }
+  }
   await Promise.all([
     mkdir(path.dirname(e2ePlanPath), { recursive: true }),
     mkdir(path.dirname(e2eMarketingPackagePath), { recursive: true }),
     mkdir(path.dirname(ratingLedgerPath), { recursive: true }),
     ...Object.values(bhPaths).map((target) => mkdir(path.dirname(target), { recursive: true })),
-    ...Object.values(tsPaths).map((target) => mkdir(path.dirname(target), { recursive: true }))
+    ...Object.values(tsPaths).map((target) => mkdir(path.dirname(target), { recursive: true })),
+    mkdir(path.dirname(kvorumRecommendationPath), { recursive: true }),
+    mkdir(path.dirname(kvorumMonitorPath), { recursive: true }),
+    mkdir(path.dirname(kvorumClaimPaths[0]!), { recursive: true }),
+    mkdir(path.dirname(kvorumSummaryPath), { recursive: true })
   ]);
   await writeFile(e2ePlanPath, JSON.stringify({
     schemaVersion: "marketing-plan/1",
@@ -151,6 +189,12 @@ test.beforeAll(async () => {
   const tsResult = JSON.parse(await fixture("tehdejsi-owner-result-entry.valid.json")) as Record<string, unknown>;
   tsResult.recommendationId = tsRecommendation.id;
   tsResult.postUrl = (tsRecommendation.owner as { postedUrls: { cs: string } }).postedUrls.cs;
+  const kvorumRecommendation = JSON.parse(await fixture("kvorum-venture-recommendation.valid.json")) as Record<string, unknown> & {
+    gateResults: { evaluatedAt: string };
+  };
+  kvorumRecommendation.createdAt = "2026-08-12T10:00:00.000Z";
+  kvorumRecommendation.updatedAt = "2026-08-12T10:00:00.000Z";
+  kvorumRecommendation.gateResults.evaluatedAt = "2026-08-12T10:00:00.000Z";
   await Promise.all([
     writeFile(bhPaths.shortlist, await fixture("bh-shortlist.valid.json")),
     writeFile(bhPaths.brief, await fixture("bh-research-brief.valid.json")),
@@ -160,7 +204,25 @@ test.beforeAll(async () => {
     writeFile(bhPaths.recommendation, `${JSON.stringify(recommendation, null, 2)}\n`),
     writeFile(bhPaths.ratings, ""),
     writeFile(tsPaths.recommendation, `${JSON.stringify(tsRecommendation, null, 2)}\n`),
-    writeFile(tsPaths.result, `${JSON.stringify(tsResult, null, 2)}\n`)
+    writeFile(tsPaths.result, `${JSON.stringify(tsResult, null, 2)}\n`),
+    writeFile(kvorumRecommendationPath, `${JSON.stringify(kvorumRecommendation, null, 2)}\n`),
+    writeFile(kvorumRecommendationIndexPath, `${JSON.stringify({
+      schemaVersion: "kvorum-recommendation-index/1",
+      date: "2026-08-12",
+      generatedAt: "2026-08-12T10:00:00.000Z",
+      queue: [{
+        id: kvorumRecommendation.id,
+        ref: "state/ventures/kvorum/recommendations/2026-08-12-public-media.json",
+        clusterId: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        status: "draft",
+        headline: kvorumRecommendation.headline,
+        createdAt: kvorumRecommendation.createdAt
+      }]
+    }, null, 2)}\n`),
+    writeFile(kvorumMonitorPath, await fixture("kvorum-monitor.valid.json")),
+    rm(kvorumSummaryPath, { force: true }),
+    ...kvorumClaimPaths.map((target) => rm(target, { force: true })),
+    rm(kvorumCorrectionPath, { force: true })
   ]);
 });
 
@@ -177,6 +239,11 @@ test.afterAll(async () => {
     else await writeFile(target, original);
   }
   for (const [target, original] of originalTsFiles) {
+    if (original === null) await rm(target, { force: true });
+    else await writeFile(target, original);
+  }
+  for (const target of kvorumFixturePaths) {
+    const original = originalKvorumState.get(target) ?? null;
     if (original === null) await rm(target, { force: true });
     else await writeFile(target, original);
   }
@@ -242,6 +309,25 @@ test("Tehdejsi svet renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Community memory" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Product insight queue" })).toBeVisible();
   await expect(page.getByText("5 on this tab")).toBeVisible();
+});
+
+test("Kvórum exposes three truthful owner-workspace tabs", async ({ page }) => {
+  await page.goto("/admin?venture=kvorum&tab=recommendations", { waitUntil: "networkidle" });
+  await expect(page.getByRole("link", { name: "recommendations", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: "monitor", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "claims", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Poplatky se vracejí do Sněmovny" })).toBeVisible();
+  await expect(page.getByText("1 on this tab", { exact: true })).toBeVisible();
+
+  await page.getByRole("link", { name: "monitor", exact: true }).click();
+  await expect(page).toHaveURL(/venture=kvorum&tab=monitor/u);
+  await expect(page.getByText("Source health · recorded response", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Financování médií veřejné služby" })).toBeVisible();
+
+  await page.getByRole("link", { name: "claims", exact: true }).click();
+  await expect(page).toHaveURL(/venture=kvorum&tab=claims/u);
+  await expect(page.getByText("The claims store exists and contains no record.", { exact: true })).toBeVisible();
+  await expect(page.getByText("0 on this tab", { exact: true })).toBeVisible();
 });
 
 test("WeekBoard navigates between statically generated weeks", async ({ page }) => {
@@ -547,6 +633,54 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     }
   });
 
+  test("Kvórum approval queues a renderable Design Lab deck without publishing", async ({ page, request }) => {
+    await page.goto("/admin?venture=kvorum&tab=recommendations", { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: "Poplatky se vracejí do Sněmovny" })).toBeVisible();
+    await page.getByRole("button", { name: "Approve as drafted" }).click();
+    await expect(page.getByText("Approved and queued in the Design Lab. Nothing was published.")).toBeVisible({ timeout: 60_000 });
+
+    await page.goto("/admin?venture=carousel-studio&tab=studio&brand=kvorum", { waitUntil: "networkidle" });
+    const railCard = page.locator("[data-article-rail] button")
+      .filter({ hasText: "Kvórum" })
+      .filter({ hasText: "Poplatky se vracejí do Sněmovny" })
+      .first();
+    await expect(railCard).toBeVisible();
+    await railCard.click();
+    await expect(railCard).toHaveAttribute("aria-pressed", "true");
+
+    const slideHref = await page.getByRole("link", { name: "Stáhnout slide" }).getAttribute("href");
+    expect(slideHref).toBeTruthy();
+    const slide = await request.get(new URL(slideHref!, page.url()).toString());
+    expect(slide.ok()).toBe(true);
+    expect(slide.headers()["content-type"]).toBe("image/png");
+    expect((await slide.body()).byteLength).toBeGreaterThan(1_000);
+
+    const deckHref = await page.getByRole("link", { name: "Stáhnout celý deck" }).getAttribute("href");
+    expect(deckHref).toBeTruthy();
+    const deck = await request.get(new URL(deckHref!, page.url()).toString());
+    expect(deck.ok()).toBe(true);
+    expect(deck.headers()["content-type"]).toBe("application/zip");
+    expect((await deck.body()).byteLength).toBeGreaterThan(1_000);
+
+    await page.goto("/admin?venture=kvorum&tab=recommendations", { waitUntil: "networkidle" });
+    await page.getByLabel("Manually posted HTTPS URL").fill("https://example.com/manual-kvorum-post");
+    await page.getByRole("button", { name: "Record posted URL" }).click();
+    await expect(page.getByText("The manual post URL is recorded. No metrics were fetched.")).toBeVisible({ timeout: 60_000 });
+
+    await page.goto("/admin?venture=kvorum&tab=claims", { waitUntil: "networkidle" });
+    await expect(page.getByText("3 on this tab", { exact: true })).toBeVisible();
+    const publishedClaim = page.locator("article")
+      .filter({ hasText: "Návrh se vrací do sněmovního projednávání." })
+      .first();
+    await expect(publishedClaim.getByText("manual post recorded", { exact: true })).toBeVisible();
+    await publishedClaim.getByRole("button", { name: "Draft correction" }).click();
+    await expect(publishedClaim.getByText("A new correction recommendation is waiting for owner review. Nothing was published."))
+      .toBeVisible({ timeout: 60_000 });
+
+    await page.goto("/admin?venture=kvorum&tab=recommendations", { waitUntil: "networkidle" });
+    await expect(page.getByRole("heading", { name: /Oprava: Návrh se vrací do sněmovního projednávání/u })).toBeVisible();
+  });
+
   test("admin ideas retain their saved rating and graduation after reload", async ({ page }) => {
     await page.goto("/admin?venture=titty-tuesdays&tab=ideas", { waitUntil: "networkidle" });
     const card = page.getByRole("heading", { name: "Night Shift — One Good Day" }).locator("..");
@@ -579,10 +713,21 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
   });
 
   test("admin login explains errors, starts a session and signs out", async ({ page }) => {
+    const expectLoginError = async (error: "expired" | "invalid") => {
+      await expect.poll(() => {
+        const url = new URL(page.url());
+        return {
+          pathname: url.pathname,
+          error: url.searchParams.get("error"),
+          returnTo: url.searchParams.get("returnTo")
+        };
+      }).toEqual({ pathname: "/admin/login", error, returnTo: "/admin" });
+    };
+
     await page.context().clearCookies();
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto("/admin", { waitUntil: "networkidle" });
-    await expect(page).toHaveURL(/\/admin\/login\?error=expired(?:&returnTo=%2Fadmin)?$/);
+    await expectLoginError("expired");
     await expect(page.getByRole("heading", { name: "Your project desk." })).toBeVisible();
     const accessibility = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
@@ -598,7 +743,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await page.getByRole("button", { name: "Hide password" }).click();
     await expect(password).toHaveAttribute("type", "password");
     await page.getByRole("button", { name: "Open project desk" }).click();
-    await expect(page).toHaveURL(/\/admin\/login\?error=invalid(?:&returnTo=%2Fadmin)?$/);
+    await expectLoginError("invalid");
     await expect(page.getByText("Those details did not match")).toBeVisible();
 
     await page.getByLabel("Username").fill("e2e-owner");

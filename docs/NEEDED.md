@@ -96,6 +96,29 @@ is the single thing standing between a proven path and a working one.
   no-op. Read the shared-credit warning before approving this alongside GoVIRAL.
   [imp:4] [owner:me] [time:5m] [kind:decision]
 
+- [ ] **Approve Kvórum's one-page Apify scope** — read and countersign `KV-APIFY-001` in
+  `state/INBOX.md`. It covers only the pinned Facebook Posts Scraper build on the logged-out public
+  page `facebook.com/stitdemokracie`, at most once a day and 30 rows, with a fixed-field mapper and
+  30-day raw purge. The `$2.00` monthly venture share sits inside the existing Free-plan credit and
+  still depends on `APIFY-ACCOUNT-001`; current `$0.151` run reservations mean the guard will skip
+  days rather than fund a full month. No login, cookie, second page or plan upgrade is approved.
+  [imp:4] [owner:me] [time:10m] [kind:decision]
+
+- [ ] **Approve Kvórum's seven free feed hosts** — `KV-SOURCES-002` in `state/INBOX.md` names the
+  exact iROZHLAS, ČT24, Deník N, Seznam Zprávy, Poslanecká sněmovna, Vláda ČR and Czech Google News
+  endpoints and allowlist hosts. Check those URLs and countersign the registry, or leave it pending;
+  without approval every live feed read fails closed and the committed fixture remains the `$0`
+  source. A new host or endpoint is a new review.
+  [imp:4] [owner:me] [time:15m] [kind:decision]
+
+- [ ] **Countersign Kvórum's editorial constitution** — `KV-EDITORIAL-004` in `state/INBOX.md`
+  records the policy already enforced by the gates: Štít is discovery rather than evidence;
+  factual claims are typed and referenced; public figures only; no vote call, endorsement,
+  unsupported crime accusation, voter mockery, paid amplification or alarm register; election
+  claims use the higher source bar; corrections remain linked and the owner reads every final
+  draft. This approval grants no source, account, publishing, budget or treasury authority.
+  [imp:5] [owner:me] [time:15m] [kind:decision]
+
 - [ ] **Fill in `state/ventures/goviral/profile.md`** — the writer half of the weekly brief: your
   niches, your voice, your audiences, and what you never write about. Nothing in it is generated
   and nothing should be; until you fill it in the room leans on the two magazine niches and says so
@@ -514,6 +537,14 @@ Judgement calls. Nothing is blocked on code for any of these.
 
 Roughly a month out. Nothing here is needed until a channel actually opens, and opening one is a
 `HUMAN_APPROVAL` in `state/INBOX.md`, not a switch a session may flip.
+
+- [ ] **Approve Kvórum's future accounts and AI-disclosure bio** — `KV-ACCOUNTS-003` in
+  `state/INBOX.md` covers an owner-led Instagram, Facebook, Threads or X setup only after the name
+  and handles are cleared, with a bio that says AI assists the drafts and a human approves every
+  post. Countersigning creates nothing and grants no posting automation: until then the workspace
+  stays explicitly drafts-only, and afterward accounts, credentials and channels still require
+  human setup outside Git.
+  [imp:3] [owner:me] [time:15m] [kind:setup]
 
 - [ ] **Connect Instagram and Threads per brand.** The Design Lab has no accounts and needs none.
 

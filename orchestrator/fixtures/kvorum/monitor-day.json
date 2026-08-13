@@ -1,0 +1,104 @@
+[
+  {
+    "source": {
+      "id": "stit-demokracie-facebook",
+      "name": "Štít demokracie",
+      "kind": "facebook",
+      "host": "www.facebook.com"
+    },
+    "url": "https://www.facebook.com/stitdemokracie/posts/1001?fbclid=tracking",
+    "publishedAt": "2026-08-12T18:45:00.000Z",
+    "text": "Televizní poplatky znovu míří do Sněmovny. Andrej Babiš chce změnu financování České televize.",
+    "entities": ["andrej-babis", "ceska-televize", "public-media-funding"],
+    "stit": {
+      "pagePostUrl": "https://www.facebook.com/stitdemokracie/posts/1001?fbclid=tracking",
+      "likes": 824,
+      "comments": 116,
+      "shares": 73
+    }
+  },
+  {
+    "source": {
+      "id": "irozhlas",
+      "name": "iROZHLAS",
+      "kind": "rss",
+      "host": "www.irozhlas.cz"
+    },
+    "url": "https://www.irozhlas.cz/zpravy-domov/televizni-poplatky-snemovna",
+    "publishedAt": "2026-08-12T17:20:00.000Z",
+    "text": "Televizní poplatky projedná Sněmovna — Návrh mění financování médií veřejné služby.",
+    "entities": ["ceska-televize", "poslanecka-snemovna", "public-media-funding"]
+  },
+  {
+    "source": {
+      "id": "ct24",
+      "name": "ČT24",
+      "kind": "rss",
+      "host": "ct24.ceskatelevize.cz"
+    },
+    "url": "https://ct24.ceskatelevize.cz/domaci/televizni-poplatky-vybor",
+    "publishedAt": "2026-08-12T16:10:00.000Z",
+    "text": "Televizní poplatky posoudil sněmovní výbor — Financování České televize se vrací do debaty.",
+    "entities": ["ceska-televize", "poslanecka-snemovna", "public-media-funding"]
+  },
+  {
+    "source": {
+      "id": "vlada",
+      "name": "Vláda České republiky",
+      "kind": "rss",
+      "host": "vlada.gov.cz"
+    },
+    "url": "https://vlada.gov.cz/cz/media-centrum/pomoc-ukrajine-12-srpna",
+    "publishedAt": "2026-08-12T15:30:00.000Z",
+    "text": "Pomoc Ukrajině schválila vláda — Kabinet zveřejnil částku a harmonogram.",
+    "entities": ["ukraine-aid", "vlada-cr"]
+  },
+  {
+    "source": {
+      "id": "seznam-zpravy",
+      "name": "Seznam Zprávy",
+      "kind": "rss",
+      "host": "www.seznamzpravy.cz"
+    },
+    "url": "https://www.seznamzpravy.cz/clanek/domaci-pomoc-ukrajine-vlada",
+    "publishedAt": "2026-08-12T14:05:00.000Z",
+    "text": "Pomoc Ukrajině vláda upraví — Rozhodnutí obsahuje nový finanční rámec.",
+    "entities": ["ukraine-aid", "vlada-cr"]
+  },
+  {
+    "source": {
+      "id": "denik-n",
+      "name": "Deník N",
+      "kind": "rss",
+      "host": "denikn.cz"
+    },
+    "url": "https://denikn.cz/rozpocet-obci-kraje",
+    "publishedAt": "2026-08-12T12:15:00.000Z",
+    "text": "Rozpočet obcí čeká změna — Kraje žádají předvídatelnější dělení daní.",
+    "entities": []
+  },
+  {
+    "source": {
+      "id": "google-news-cz",
+      "name": "Google News Czech edition",
+      "kind": "rss",
+      "host": "news.google.com"
+    },
+    "url": "https://news.google.com/rss/articles/rozpocet-obci",
+    "publishedAt": "2026-08-12T11:50:00.000Z",
+    "text": "Rozpočet obcí čeká změna — Přehled návrhu rozpočtového určení daní.",
+    "entities": []
+  },
+  {
+    "source": {
+      "id": "psp-tisky",
+      "name": "Poslanecká sněmovna — nové tisky",
+      "kind": "rss",
+      "host": "www.psp.cz"
+    },
+    "url": "https://www.psp.cz/sqw/text/tiskt.sqw?O=10&CT=42&utm_source=rss",
+    "publishedAt": "2026-08-12T09:00:00.000Z",
+    "text": "Senátní volby 2026 mají nový volební tisk — Sněmovna jej zařadila do systému.",
+    "entities": ["senate-elections-2026", "poslanecka-snemovna"]
+  }
+]

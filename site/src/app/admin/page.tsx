@@ -9,6 +9,9 @@ import { DesignLabSectionNav, DesignLabVentureSection } from "@/components/admin
 import { AutonomyPanel } from "@/components/admin/autonomy-panel";
 import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-panel";
 import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
+import { KvorumClaimsPanel } from "@/components/admin/kvorum-claims-panel";
+import { KvorumMonitorPanel } from "@/components/admin/kvorum-monitor-panel";
+import { KvorumRecommendationsPanel } from "@/components/admin/kvorum-recommendations-panel";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { GoViralProfilePanel } from "@/components/admin/goviral-profile-panel";
 import { OwnerAttentionPanel } from "@/components/admin/owner-attention-panel";
@@ -57,6 +60,7 @@ import { readAdminCaughtUp } from "@/lib/admin-caught-up";
 import { readAdminDoorMoney } from "@/lib/admin-door-money";
 import { readAdminTehdejsiSvet } from "@/lib/admin-tehdejsi-svet";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
+import { readAdminKvorum } from "@/lib/admin-kvorum";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
 import { readAdminSnapshot } from "@/lib/admin-state";
@@ -173,7 +177,8 @@ export default async function AdminPage({
     ttProposals,
     approvedUndelivered,
     doorMoney,
-    tehdejsiSvet
+    tehdejsiSvet,
+    kvorum
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -199,7 +204,8 @@ export default async function AdminPage({
     readTittyTuesdaysProposals(),
     readApprovedUndeliveredPayloads(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")),
     readAdminDoorMoney(),
-    readAdminTehdejsiSvet()
+    readAdminTehdejsiSvet(),
+    readAdminKvorum()
   ]);
   /*
    * `design-lab` is the name; `carousel-studio` is the id.
@@ -313,6 +319,8 @@ export default async function AdminPage({
         ? doorMoney.recommendations.items.length + doorMoneyActionCount + doorMoneyKnowledgeCount
         : ventureId === "tehdejsi-svet"
           ? tehdejsiFeaturesCount + tehdejsiLibraryCount + tehdejsiSignalsItemCount
+        : ventureId === "kvorum"
+          ? kvorum.recommendations.length + kvorum.monitor.length + kvorum.claims.length + kvorum.results.length
         : ventureId === "carousel-studio"
           ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
           : ventureId === "booksofhistory"
@@ -440,7 +448,8 @@ export default async function AdminPage({
         fightaiq.unreadable.length +
         booksofhistory.unreadable.total +
         ownerAttention.unreadable +
-        doorMoney.unreadable
+        doorMoney.unreadable +
+        kvorum.unreadable
     }
   ];
 
@@ -456,6 +465,8 @@ export default async function AdminPage({
       ? [...selectedVenture.unreadableFiles, ...Object.entries(booksofhistory.unreadable).flatMap(([store, count]) => store !== "total" && count ? [`${store} (${count})`] : [])]
       : selectedVenture?.id === "door-money" && doorMoney.unreadable > 0
         ? [...selectedVenture.unreadableFiles, `Door Money stores (${doorMoney.unreadable})`]
+        : selectedVenture?.id === "kvorum" && kvorum.unreadable > 0
+          ? [...selectedVenture.unreadableFiles, `Kvórum stores (${kvorum.unreadable})`]
         : selectedVenture?.unreadableFiles ?? [];
 
   const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual" | "social-variant">> = {
@@ -528,6 +539,18 @@ export default async function AdminPage({
     }
     if (id === "door-money" && selectedTab === "knowledge") {
       return { node: <DoorMoneyKnowledgePanel knowledge={doorMoney.knowledge} />, count: doorMoneyKnowledgeCount };
+    }
+    if (id === "kvorum" && selectedTab === "recommendations") {
+      return { node: <KvorumRecommendationsPanel snapshot={kvorum} />, count: kvorum.recommendations.length };
+    }
+    if (id === "kvorum" && selectedTab === "monitor") {
+      return { node: <KvorumMonitorPanel snapshot={kvorum} />, count: kvorum.monitor.length };
+    }
+    if (id === "kvorum" && selectedTab === "claims") {
+      return {
+        node: <KvorumClaimsPanel claims={kvorum.claims} state={kvorum.claimsState} unreadable={kvorum.claimsUnreadable} />,
+        count: kvorum.claims.length
+      };
     }
     if (id === "tehdejsi-svet" && selectedTab === "features") {
       return { node: <TehdejsiSvetFeaturesPanel snapshot={tehdejsiSvet} />, count: tehdejsiFeaturesCount };

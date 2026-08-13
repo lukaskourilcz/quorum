@@ -11,6 +11,7 @@ import {
   MeetingRefSchema
 } from "./common.js";
 import { TehdejsiRecommendationSchema } from "./tehdejsi-recommendation.js";
+import { KvorumRecommendationSchema } from "./kvorum-recommendation.js";
 
 const ClaimRefSchema = z.string().regex(/^claim-[a-z0-9]+(?:-[a-z0-9]+)*$/).max(120);
 
@@ -323,6 +324,7 @@ export type BookPassageEvidence = z.infer<typeof BookPassageEvidenceSchema>;
 export const AnyVentureRecommendationSchema = z.union([
   BooksofHistoryRecommendationSchema,
   VentureRecommendationSchema,
-  TehdejsiRecommendationSchema
+  TehdejsiRecommendationSchema,
+  KvorumRecommendationSchema
 ]);
 export type AnyVentureRecommendation = z.infer<typeof AnyVentureRecommendationSchema>;

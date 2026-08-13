@@ -3,10 +3,14 @@ import { agents } from "./agents";
 import { opportunities, standups } from "./fixtures";
 
 describe("public fixture truthfulness", () => {
-  it("exposes exactly forty-eight unique role profiles", () => {
-    expect(agents).toHaveLength(48);
-    expect(new Set(agents.map((agent) => agent.id)).size).toBe(48);
-    expect(new Set(agents.map((agent) => agent.slug)).size).toBe(48);
+  it("exposes exactly forty-nine unique role profiles", () => {
+    expect(agents).toHaveLength(49);
+    expect(new Set(agents.map((agent) => agent.id)).size).toBe(49);
+    expect(new Set(agents.map((agent) => agent.slug)).size).toBe(49);
+    expect(agents.find((agent) => agent.id === "TRIBUN")?.apiModels[0]).toMatchObject({
+      provider: "Anthropic",
+      model: "claude-sonnet-5"
+    });
   });
 
   it("never presents a fixture opportunity as selected", () => {

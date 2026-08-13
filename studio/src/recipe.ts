@@ -21,7 +21,7 @@ export type TypeScale = (typeof TYPE_SCALES)[number];
 
 export const CarouselRecipeSchema = z.object({
   schemaVersion: z.literal("carousel-recipe/1"),
-  venture: z.enum(["caught-up", "mma-files", "booksofhistory", "door-money", "tehdejsi-svet"]),
+  venture: z.enum(["caught-up", "mma-files", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet"]),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   family: z.enum(DECK_DESIGNS),
@@ -256,7 +256,7 @@ export const CarouselPresetSchema = z.object({
   id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(60),
   name: z.string().trim().min(2).max(80),
   /** Which ventures may draw from it. Empty means every venture. */
-  ventureScope: z.array(z.enum(["caught-up", "mma-files", "booksofhistory", "door-money", "tehdejsi-svet"])).max(5),
+  ventureScope: z.array(z.enum(["caught-up", "mma-files", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet"])).max(6),
   formats: z.array(z.enum(["instagram-square", "instagram-portrait", "instagram-story", "threads"])).min(1).max(4),
   family: z.enum(DECK_DESIGNS),
   variant: z.enum(["A", "B"]),

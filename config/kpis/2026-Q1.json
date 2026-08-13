@@ -867,6 +867,90 @@
       "critical": true,
       "ramp_days": 0,
       "pace": "level"
+    },
+    {
+      "id": "kvorum.desk-reliability",
+      "venture": "kvorum",
+      "name": "Days the desk held or recorded an honest quiet outcome",
+      "metric_source": "state/meetings#kvorum_desk_reliability_rate",
+      "target": 0.95,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": true,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "kvorum.approved-packages-per-week",
+      "venture": "kvorum",
+      "name": "Owner-approved recommendation packages per week",
+      "metric_source": "state/ventures/kvorum/recommendations#approved_packages_per_week",
+      "target": 8,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "kvorum.approval-rate-trending-up",
+      "venture": "kvorum",
+      "name": "Approval rate is trending up",
+      "metric_source": "state/ventures/kvorum/recommendations#approval_rate_trending_up",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "boolean",
+      "critical": false,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "kvorum.published-claim-reference-rate",
+      "venture": "kvorum",
+      "name": "Published claims carrying a type and resolvable references",
+      "metric_source": "state/ventures/kvorum/claims#published_typed_reference_rate",
+      "target": 1,
+      "direction": "at-least",
+      "unit": "ratio",
+      "critical": true,
+      "ramp_days": 14,
+      "pace": "level"
+    },
+    {
+      "id": "kvorum.corrections-within-24h",
+      "venture": "kvorum",
+      "name": "Corrections recorded within 24 hours of a contradicted claim",
+      "metric_source": "state/ventures/kvorum/claims#corrections_within_24h_count",
+      "target": 0,
+      "direction": "at-least",
+      "unit": "count",
+      "critical": false,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "kvorum.apify-monthly-usd",
+      "venture": "kvorum",
+      "name": "Kvórum monthly Apify share used",
+      "metric_source": "state/kvorum/source-quota/apify.json#monthly_spend_usd",
+      "target": 2,
+      "direction": "at-most",
+      "unit": "usd",
+      "critical": true,
+      "ramp_days": 0,
+      "pace": "level"
+    },
+    {
+      "id": "kvorum.model-monthly-usd",
+      "venture": "kvorum",
+      "name": "Kvórum monthly model spend",
+      "metric_source": "state/budget/ledger.json#kvorum_model_spend_usd",
+      "target": 3,
+      "direction": "at-most",
+      "unit": "usd",
+      "critical": true,
+      "ramp_days": 0,
+      "pace": "level"
     }
   ]
 }

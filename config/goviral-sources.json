@@ -29,7 +29,7 @@
       "id": "threads-primary",
       "actorSlug": "themineworks/threads-scraper",
       "credentialEnv": "APIFY_TOKEN",
-      "pricePer1000Usd": 1.0,
+      "pricePer1000Usd": 1,
       "freeLimit": "$5 Apify platform credit per month, shared account-wide",
       "termsVerdict": "allowed",
       "termsNote": "Logged-out public Threads posts, top or recent sorting, no start fee. Rebuilt 2026-07-25 and young — re-verify its 30-day success rate quarterly and fail over to threads-fallback below ~95%.",
@@ -73,57 +73,202 @@
   ],
   "$recipeComment": "The weekly scout, priced against the $5 credit with margin. maxResults is a hard cap, not a target — the guard drops steps in reverse order when the month is running hot, so the last step listed is the first to go. Weekly is about $1.03 and a month about $4.60.",
   "recipe": [
-    { "step": 1, "actorId": "instagram-popular-reels", "mode": "reels", "inputs": "keyword", "perInput": 64, "maxResults": 192, "cadence": "weekly" },
-    { "step": 2, "actorId": "instagram-hashtags", "mode": "hashtag", "inputs": "hashtag", "perInput": 25, "maxResults": 300, "cadence": "weekly" },
-    { "step": 3, "actorId": "threads-primary", "mode": "search-top", "inputs": "keyword", "perInput": 30, "maxResults": 240, "cadence": "weekly" },
-    { "step": 4, "actorId": "threads-primary", "mode": "profile-monitor", "inputs": "account", "perInput": 15, "maxResults": 225, "cadence": "weekly" },
-    { "step": 5, "actorId": "instagram-explore", "mode": "explore", "inputs": "none", "perInput": 120, "maxResults": 120, "cadence": "monthly" }
+    {
+      "step": 1,
+      "actorId": "instagram-popular-reels",
+      "mode": "reels",
+      "inputs": "keyword",
+      "perInput": 64,
+      "maxResults": 192,
+      "cadence": "weekly"
+    },
+    {
+      "step": 2,
+      "actorId": "instagram-hashtags",
+      "mode": "hashtag",
+      "inputs": "hashtag",
+      "perInput": 25,
+      "maxResults": 300,
+      "cadence": "weekly"
+    },
+    {
+      "step": 3,
+      "actorId": "threads-primary",
+      "mode": "search-top",
+      "inputs": "keyword",
+      "perInput": 30,
+      "maxResults": 240,
+      "cadence": "weekly"
+    },
+    {
+      "step": 4,
+      "actorId": "threads-primary",
+      "mode": "profile-monitor",
+      "inputs": "account",
+      "perInput": 15,
+      "maxResults": 225,
+      "cadence": "weekly"
+    },
+    {
+      "step": 5,
+      "actorId": "instagram-explore",
+      "mode": "explore",
+      "inputs": "none",
+      "perInput": 120,
+      "maxResults": 120,
+      "cadence": "monthly"
+    }
   ],
   "$accountComment": "Public accounts whose posts step 4 watches for deltas. Owner-editable. Empty is a legitimate state — step 4 simply does not run, and the week's scout is smaller rather than failed.",
   "trackedAccounts": [],
   "$rejectedComment": "Decided and closed. Re-opening any of these needs a new decision record, not a code change.",
   "rejected": [
-    { "what": "X/Twitter scraping, in any form", "why": "Every usable Apify actor needs the $29 Starter plan, which alone busts the $30 all-in cap." },
-    { "what": "The Apify Google News rental actor", "why": "$20/mo to wrap an RSS feed that is free and already read directly." },
-    { "what": "Apify Google Trends actors", "why": "emastra rates 3.22 stars and resounding_diplomacy reports 0% success; the free Trends RSS covers the need." },
-    { "what": "pytrends and its forks", "why": "Archived 2025-04 and unmaintained." },
-    { "what": "Reddit's free OAuth tier as a dependency", "why": "Non-commercial use only, which is ToS-grey for a magazine that intends to earn. RSS is read instead, and treated as closable at any time." },
-    { "what": "trudax/reddit-scraper-lite as the Reddit fallback", "why": "$3.40/1k would take most of GoVIRAL's monthly credit. Left documented as a future owner decision, deliberately not pre-built." }
+    {
+      "what": "X/Twitter scraping, in any form",
+      "why": "Every usable Apify actor needs the $29 Starter plan, which alone busts the $30 all-in cap."
+    },
+    {
+      "what": "The Apify Google News rental actor",
+      "why": "$20/mo to wrap an RSS feed that is free and already read directly."
+    },
+    {
+      "what": "Apify Google Trends actors",
+      "why": "emastra rates 3.22 stars and resounding_diplomacy reports 0% success; the free Trends RSS covers the need."
+    },
+    {
+      "what": "pytrends and its forks",
+      "why": "Archived 2025-04 and unmaintained."
+    },
+    {
+      "what": "Reddit's free OAuth tier as a dependency",
+      "why": "Non-commercial use only, which is ToS-grey for a magazine that intends to earn. RSS is read instead, and treated as closable at any time."
+    },
+    {
+      "what": "trudax/reddit-scraper-lite as the Reddit fallback",
+      "why": "$3.40/1k would take most of GoVIRAL's monthly credit. Left documented as a future owner decision, deliberately not pre-built."
+    }
   ],
   "$topicComment": "Owner-editable, deliberately JSON rather than prompt text. `writer` is seeded from state/ventures/goviral/profile.md and should be rewritten once the owner fills that file in.",
   "topicSets": {
     "writer": {
       "label": "The owner's own writing",
-      "keywords": ["building in public", "AI tools", "solo founder"],
-      "hashtags": ["#buildinpublic", "#indiehackers", "#AItools"]
+      "keywords": [
+        "building in public",
+        "AI tools",
+        "solo founder"
+      ],
+      "hashtags": [
+        "#buildinpublic",
+        "#indiehackers",
+        "#AItools"
+      ]
     },
     "dneskai": {
       "label": "DNESKAi (AI and technology)",
-      "keywords": ["artificial intelligence", "OpenAI", "Anthropic", "Claude", "GPT"],
-      "hashtags": ["#AI", "#umelainteligence", "#technologie", "#LLM"]
+      "keywords": [
+        "artificial intelligence",
+        "OpenAI",
+        "Anthropic",
+        "Claude",
+        "GPT"
+      ],
+      "hashtags": [
+        "#AI",
+        "#umelainteligence",
+        "#technologie",
+        "#LLM"
+      ]
     },
     "mma": {
       "label": "MMA Files (fighting)",
-      "keywords": ["UFC", "Oktagon MMA", "fight week"],
-      "hashtags": ["#MMA", "#UFC", "#oktagonmma"]
+      "keywords": [
+        "UFC",
+        "Oktagon MMA",
+        "fight week"
+      ],
+      "hashtags": [
+        "#MMA",
+        "#UFC",
+        "#oktagonmma"
+      ]
     },
     "booksofhistory": {
       "label": "BOOKSOFHISTORY (book stories)",
       "sourceMode": "free",
-      "keywords": ["book history", "dějiny knih", "literary anniversary", "literární výročí", "publishing history", "příběh vydání"],
-      "hashtags": ["#bookhistory", "#dejinyknih", "#literaryanniversary", "#literarnivyroci", "#publishinghistory", "#pribehvydani"]
+      "keywords": [
+        "book history",
+        "dějiny knih",
+        "literary anniversary",
+        "literární výročí",
+        "publishing history",
+        "příběh vydání"
+      ],
+      "hashtags": [
+        "#bookhistory",
+        "#dejinyknih",
+        "#literaryanniversary",
+        "#literarnivyroci",
+        "#publishinghistory",
+        "#pribehvydani"
+      ]
     },
     "door-money": {
       "label": "Door Money (book and music stories)",
       "sourceMode": "free",
-      "keywords": ["BookTok", "author marketing", "hip-hop culture", "music industry stories"],
-      "hashtags": ["#BookTok", "#AuthorMarketing", "#HipHopCulture", "#MusicIndustryStories"]
+      "keywords": [
+        "BookTok",
+        "author marketing",
+        "hip-hop culture",
+        "music industry stories"
+      ],
+      "hashtags": [
+        "#BookTok",
+        "#AuthorMarketing",
+        "#HipHopCulture",
+        "#MusicIndustryStories"
+      ]
     },
     "tehdejsi-svet": {
       "label": "Tehdejsi svet (Czech and Ukrainian lived memory)",
       "sourceMode": "free",
-      "keywords": ["česká nostalgie", "українська ностальгія", "rodinná historie", "сімейна історія", "paměť města", "пам'ять міста"],
-      "hashtags": ["#ČeskáNostalgie", "#УкраїнськаНостальгія", "#RodinnáHistorie", "#СімейнаІсторія", "#PaměťMěsta", "#ПамятьМіста"]
+      "keywords": [
+        "česká nostalgie",
+        "українська ностальгія",
+        "rodinná historie",
+        "сімейна історія",
+        "paměť města",
+        "пам'ять міста"
+      ],
+      "hashtags": [
+        "#ČeskáNostalgie",
+        "#УкраїнськаНостальгія",
+        "#RodinnáHistorie",
+        "#СімейнаІсторія",
+        "#PaměťMěsta",
+        "#ПамятьМіста"
+      ]
+    },
+    "kvorum": {
+      "label": "Kvórum (česká politika a občanské dění)",
+      "keywords": [
+        "česká politika",
+        "Poslanecká sněmovna",
+        "vláda ČR",
+        "veřejnoprávní média",
+        "životní náklady",
+        "občanská společnost",
+        "dezinformace",
+        "EU a NATO"
+      ],
+      "hashtags": [
+        "#ceskapolitika",
+        "#snemovna",
+        "#vlada",
+        "#verejnopravnimedia",
+        "#demokracie",
+        "#dezinformace"
+      ],
+      "apify": false
     }
   }
 }

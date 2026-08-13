@@ -37,7 +37,8 @@
               "mma-intake",
               "mma-analysis",
               "mag-editorial",
-              "mag-desk"
+              "mag-desk",
+              "kv-desk"
             ]
           },
           "requestedBy": {
@@ -90,7 +91,8 @@
               "GHOST",
               "BOOKER",
               "LETOPIS",
-              "VERBA"
+              "VERBA",
+              "TRIBUN"
             ]
           },
           "sourcePhase": {

@@ -42,7 +42,7 @@ describe("Door Money's Design Lab boundary", () => {
     expect(handoff).toContain("reviewCarouselSummary(summary)");
 
     const designLabReader = await readFile(path.join(repoRoot, "site", "src", "lib", "carousel-summaries.ts"), "utf8");
-    expect(designLabReader).toContain('["caught-up", "mma-files", "booksofhistory", "door-money", "tehdejsi-svet"]');
+    expect(designLabReader).toContain('["caught-up", "mma-files", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet"]');
     expect(designLabReader).toContain('path.join(root, "state", "ventures", "carousel-studio", "summaries", venture)');
   });
 

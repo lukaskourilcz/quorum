@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "kvorum-monitor/1",
+  "date": "2026-08-12",
+  "generatedAt": "2026-08-12T21:00:00.000Z",
+  "fixtureOnly": true,
+  "sourceResults": [
+    {
+      "sourceId": "stit-demokracie-facebook",
+      "kind": "apify",
+      "attempted": true,
+      "status": "success",
+      "count": 1,
+      "reason": null
+    }
+  ],
+  "itemsKept": 99,
+  "rawItems": [],
+  "clusters": [],
+  "ranks": [],
+  "purge": {
+    "retentionDays": 31,
+    "evaluatedAt": "2026-08-12T21:00:00.000Z",
+    "cutoffPublishedAt": "2026-07-12T21:00:00.000Z",
+    "rawItemsBefore": 0,
+    "rawItemsAfter": 0,
+    "purged": []
+  }
+}

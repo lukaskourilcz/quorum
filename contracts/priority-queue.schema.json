@@ -94,7 +94,8 @@
               "GHOST",
               "BOOKER",
               "LETOPIS",
-              "VERBA"
+              "VERBA",
+              "TRIBUN"
             ]
           },
           "created": {
@@ -204,7 +205,8 @@
                       "GHOST",
                       "BOOKER",
                       "LETOPIS",
-                      "VERBA"
+                      "VERBA",
+                      "TRIBUN"
                     ]
                   },
                   "meeting_ref": {

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "performance-weights/1",
+  "ventureId": "kvorum",
+  "revision": 0,
+  "updatedAt": "2026-08-12T00:00:00.000Z",
+  "policy": {
+    "minimumSamples": 3,
+    "weightFloor": 0.75,
+    "weightCeiling": 1.25,
+    "maxWeeklyDelta": 0.1
+  },
+  "topics": {
+    "agrofert-conflict": {
+      "weight": 1,
+      "sampleSize": 0,
+      "updatedAt": null,
+      "proposalId": null
+    },
+    "cost-of-living": {
+      "weight": 1,
+      "sampleSize": 0,
+      "updatedAt": null,
+      "proposalId": null
+    },
+    "disinformation": {
+      "weight": 1,
+      "sampleSize": 0,
+      "updatedAt": null,
+      "proposalId": null
+    },
+    "eu-nato-orientation": {
+      "weight": 1,
+      "sampleSize": 0,
+      "updatedAt": null,
+      "proposalId": null
+    },
+    "municipal-elections-2026": {
+      "weight": 1,
+      "sampleSize": 0,
+      "updatedAt": null,
+      "proposalId": null
+    },
+    "public-media-funding": {
+      "weight": 1,
+      "sampleSize": 0,
+      "updatedAt": null,
+      "proposalId": null
+    },
+    "senate-elections-2026": {
+      "weight": 1,
+      "sampleSize": 0,
+      "updatedAt": null,
+      "proposalId": null
+    },
+    "ukraine-aid": {
+      "weight": 1,
+      "sampleSize": 0,
+      "updatedAt": null,
+      "proposalId": null
+    }
+  },
+  "formats": {
+    "caption": {
+      "weight": 1,
+      "sampleSize": 0,
+      "updatedAt": null,
+      "proposalId": null
+    },
+    "carousel": {
+      "weight": 1,
+      "sampleSize": 0,
+      "updatedAt": null,
+      "proposalId": null
+    },
+    "single-image": {
+      "weight": 1,
+      "sampleSize": 0,
+      "updatedAt": null,
+      "proposalId": null
+    },
+    "thread": {
+      "weight": 1,
+      "sampleSize": 0,
+      "updatedAt": null,
+      "proposalId": null
+    }
+  },
+  "proposals": []
+}

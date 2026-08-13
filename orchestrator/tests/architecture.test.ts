@@ -94,6 +94,8 @@ const expectedPrompts = [
   "instagram.md",
   "jab.md",
   "keeper.md",
+  "kvorum/craft.md",
+  "kvorum/tribun.md",
   "ledger.md",
   "lens.md",
   "magazine.md",

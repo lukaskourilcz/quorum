@@ -631,6 +631,24 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
     },
     fonts: { headline: "Outfit", body: "Public Sans", mono: "IBM Plex Mono" }
   }),
+  // Both colour tokens stay on one highlighter-yellow axis: `secondary` is the paler
+  // alternate required by existing A/B recipes, not a second political-brand hue.
+  kvorum: BrandTokensSchema.parse({
+    schemaVersion: "carousel-brand/1",
+    id: "kvorum",
+    name: "Kvórum",
+    logoText: "KVÓRUM",
+    colors: {
+      background: "#11110d",
+      surface: "#1f1e17",
+      "surface-strong": "#2d2b20",
+      foreground: "#fbf8ea",
+      muted: "#d8d2b6",
+      accent: "#a2cc20",
+      secondary: "#c1ca3a"
+    },
+    fonts: { headline: "Barlow Condensed", body: "IBM Plex Sans", mono: "IBM Plex Mono" }
+  }),
   booksofhistory: BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
     id: "booksofhistory",

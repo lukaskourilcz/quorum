@@ -26,6 +26,30 @@ import {
   validateTemplateForBrand
 } from "../src/index.js";
 
+function rgbDistance(left: string, right: string): number {
+  const channels = (hex: string) => [1, 3, 5].map((offset) => Number.parseInt(hex.slice(offset, offset + 2), 16));
+  return Math.hypot(...channels(left).map((channel, index) => channel - channels(right)[index]!));
+}
+
+describe("the Kvórum brand", () => {
+  it("keeps its marker yellow away from the Czech party primaries reviewed in the design", () => {
+    const marker = CAROUSEL_BRANDS.kvorum.colors.accent!;
+    const partyPrimaries = {
+      "ANO cyan": "#00a9e0",
+      "ODS blue": "#034ea2",
+      "SPD blue": "#004b93",
+      "SPD red": "#e30613",
+      "Pirates black": "#000000",
+      "STAN pink": "#e5007d",
+      "TOP 09 magenta": "#a60f69",
+      "KDU gold": "#fdb913"
+    };
+    for (const [party, primary] of Object.entries(partyPrimaries)) {
+      expect(rgbDistance(marker, primary), party).toBeGreaterThan(80);
+    }
+  });
+});
+
 describe("carousel-template/1", () => {
   it("ships twelve live, original seed layouts", () => {
     // The eleventh is quiz-code-context, added for marketingShark and justified by a gap rather
@@ -117,8 +141,8 @@ describe("carousel-template/1", () => {
   });
 
   // Every template a reference can resolve to, not only the ten authored seeds. The deck
-  // generators were outside this loop, which is how thirty of them went unchecked against four
-  // of the five brands for as long as they existed.
+  // generators were outside this loop, which is how thirty of them went unchecked against most
+  // brands for as long as they existed.
   it("checks safe areas, contrast, token bindings and overflow for every brand and format", () => {
     for (const template of liveTemplates()) {
       for (const brand of Object.values(CAROUSEL_BRANDS)) {

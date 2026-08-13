@@ -12,18 +12,18 @@ async function json<T>(relative: string): Promise<T> {
   return JSON.parse(await readFile(path.join(repoRoot, relative), "utf8")) as T;
 }
 
-describe("closing 48-agent system audit", () => {
+describe("closing 49-agent system audit", () => {
   it("keeps every identity unique, prompt-backed and routable, seated or not", async () => {
     const registry = await json<{ agents: Array<{ id: string; slug: string; mission: string; status: string; provider: string; notResponsibleFor: string[] }> }>("config/agents.json");
     const routing = await json<{ agents: Record<string, { capabilities: string[]; status: string }> }>("config/agent-routing.json");
-    expect(registry.agents).toHaveLength(48);
-    expect(new Set(registry.agents.map((agent) => agent.id)).size).toBe(48);
-    expect(new Set(registry.agents.map((agent) => agent.mission)).size).toBe(48);
+    expect(registry.agents).toHaveLength(49);
+    expect(new Set(registry.agents.map((agent) => agent.id)).size).toBe(49);
+    expect(new Set(registry.agents.map((agent) => agent.mission)).size).toBe(49);
     expect(new Set(Object.keys(routing.agents))).toEqual(new Set(registry.agents.map((agent) => agent.id)));
-    // Forty-eight profiles, thirty-nine of them seated. A retired or paused agent keeps its
+    // Forty-nine profiles, forty of them seated. A retired or paused agent keeps its
     // prompt, its portrait and its routing entry -- the record of who did what does not shrink
     // when the roster does -- and the two files have to agree about which of the three it is.
-    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(39);
+    expect(registry.agents.filter((agent) => agent.status === "active")).toHaveLength(40);
     for (const agent of registry.agents) {
       expect(["active", "paused", "retired"]).toContain(agent.status);
       expect(routing.agents[agent.id]?.status).toBe(agent.status);
@@ -116,7 +116,8 @@ describe("closing 48-agent system audit", () => {
     // The two weekly rooms use daily cron syntax so their off-days can write $0 reason records.
     // They are paid reservations only on their real weekdays: GoVIRAL on Monday and dm-growth
     // on Thursday. Door Money owns the first two degradation rungs, then Tehdejsi svet, then
-    // BOOKSOFHISTORY, all before GoVIRAL; the $1 ceiling itself never moves.
+    // BOOKSOFHISTORY, all before GoVIRAL; registered-but-unfunded Kvórum yields before them.
+    // The $1 ceiling itself never moves.
     const nonRoomReservationUsd = articleProduction + morningCycleCap;
     const week = Array.from({ length: 7 }, (_, offset) => {
       const date = new Date("2026-08-03T12:00:00.000Z");
@@ -128,10 +129,10 @@ describe("closing 48-agent system audit", () => {
         dailyBudgetUsd: 1
       });
     });
-    expect(week[0]!.droppedRoomPhases).toEqual(["dm-desk", "ts-desk", "bh-desk"]);
-    expect(week[3]!.droppedRoomPhases).toEqual(["dm-growth", "dm-desk", "ts-desk", "bh-desk"]);
+    expect(week[0]!.droppedRoomPhases).toEqual(["kv-desk", "dm-desk", "ts-desk", "bh-desk"]);
+    expect(week[3]!.droppedRoomPhases).toEqual(["dm-growth", "kv-desk", "dm-desk", "ts-desk", "bh-desk"]);
     expect(week.filter((_, index) => index !== 3).every((plan) =>
-      plan.droppedRoomPhases.join(",") === "dm-desk,ts-desk,bh-desk"
+      plan.droppedRoomPhases.join(",") === "kv-desk,dm-desk,ts-desk,bh-desk"
     )).toBe(true);
     expect(week.every((plan) => plan.reservedUsd <= 1)).toBe(true);
   });

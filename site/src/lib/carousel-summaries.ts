@@ -6,8 +6,7 @@ import {
   localeForCarouselVenture,
   reviewCarouselSummary,
   type CarouselSummary,
-  type CarouselSummarySource,
-  type CarouselSummaryVenture
+  type CarouselSummarySource
 } from "@boardlessai/carousel-studio";
 
 /**
@@ -20,8 +19,8 @@ import {
  * recorded one are byte-identical for the same article; the fallback is a backfill, not a second
  * implementation that could disagree with the first.
  *
- * Nothing here invents an article. A venture with no delivered articles returns an empty list and
- * the studio says so.
+ * Nothing here invents an artifact. A venture with no delivered article or approved recommendation
+ * returns an empty list and the studio says so.
  */
 
 function repositoryRoot(): string {
@@ -31,7 +30,7 @@ function repositoryRoot(): string {
 export interface StudioArticle {
   /** `<venture>:<slug>:<date>`, which is how the studio addresses one. */
   id: string;
-  venture: CarouselSummaryVenture;
+  venture: CarouselSummary["venture"];
   ventureLabel: string;
   summary: CarouselSummary;
   /** Where the summary came from, so the panel can say whether it is recorded or derived. */
@@ -40,9 +39,10 @@ export interface StudioArticle {
   problems: string[];
 }
 
-const VENTURE_LABEL: Record<CarouselSummaryVenture, string> = {
+const VENTURE_LABEL: Record<StudioArticle["venture"], string> = {
   "caught-up": "DNESKAi",
   "mma-files": "MMA Files",
+  kvorum: "Kvórum",
   booksofhistory: "BOOKSOFHISTORY",
   "door-money": "Door Money",
   "tehdejsi-svet": "Tehdejší svět"
@@ -97,10 +97,10 @@ async function readJsonFiles(directory: string): Promise<Array<{ name: string; v
   }
 }
 
-/** Summaries delivery wrote. One directory per venture, one file per delivered article. */
+/** Summaries delivery or approval wrote. One directory per venture, one file per artifact. */
 async function recordedSummaries(root: string): Promise<Map<string, CarouselSummary>> {
   const recorded = new Map<string, CarouselSummary>();
-  for (const venture of ["caught-up", "mma-files", "booksofhistory", "door-money", "tehdejsi-svet"] as const) {
+  for (const venture of ["caught-up", "mma-files", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet"] as const) {
     const directory = path.join(root, "state", "ventures", "carousel-studio", "summaries", venture);
     for (const { value } of await readJsonFiles(directory)) {
       const summary = value as Partial<CarouselSummary>;

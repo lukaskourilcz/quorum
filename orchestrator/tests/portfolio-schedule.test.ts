@@ -38,6 +38,8 @@ Signature / explicit approval reference: owner-approval-2026-08-01`;
 
 const signedDecision = `Status: countersigned
 Signature / explicit approval reference: owner-approval-2026-08-04`;
+const signedKvorumCapacityDecision = `${signedDecision}
+Freed worst-day capacity USD: $0.08`;
 
 describe("portfolio schedule and budget gate", () => {
   it("keeps all venture meetings at collision-free Prague slots", async () => {
@@ -47,8 +49,9 @@ describe("portfolio schedule and budget gate", () => {
     // phase is not. 07:00 came back the same way -- marketingShark took the hour the incubator
     // vacated. 15:00 and 16:00 came with Door Money. 18:00 came back with Tehdejsi svet, which
     // took the hour the evening article slot left; it sits exactly 60 minutes from mma-analysis
-    // on one side and the night shift's neighbour on the other.
-    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22]);
+    // on one side and the night shift's neighbour on the other. Kvórum uses the former
+    // incubator hour at 21:00.
+    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]);
     const colliding = structuredClone(registry);
     colliding.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!.cadence = "daily@09:00";
     expect(() => parseVentureRegistry(colliding)).toThrow(/60 minutes apart/);
@@ -93,7 +96,7 @@ describe("portfolio schedule and budget gate", () => {
 
   it("extends the monthly-headroom degradation ladder without displacing Caught Up", async () => {
     const registry = await loadVentureRegistry();
-    expect(ROOM_DEGRADATION_ORDER).toEqual(["dm-growth", "dm-desk", "ts-desk", "bh-desk", "gv-brief", "tt-marketing"]);
+    expect(ROOM_DEGRADATION_ORDER).toEqual(["dm-growth", "kv-desk", "dm-desk", "ts-desk", "bh-desk", "gv-brief", "tt-marketing"]);
     const growthDropped = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 2.74 });
     expect(growthDropped.activePhases).not.toContain("dm-growth");
     expect(growthDropped.activePhases).toEqual(expect.arrayContaining(["dm-desk", "gv-brief"]));

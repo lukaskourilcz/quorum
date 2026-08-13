@@ -14,6 +14,7 @@ import {
   Clock3,
   FileText,
   Hourglass,
+  Landmark,
   Newspaper,
   PanelsTopLeft,
   Radio,
@@ -56,7 +57,7 @@ function isCaughtUp(kind: CalendarKind) {
   return kind === "cu-edition" || kind === "cu-product";
 }
 
-type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "goviral" | "marketingshark" | "booksofhistory" | "door-money" | "fightaiq" | "mma-files" | "carousel-studio";
+type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "goviral" | "marketingshark" | "booksofhistory" | "door-money" | "fightaiq" | "mma-files" | "kvorum" | "carousel-studio";
 type DisplayStatus = CalendarStatus | "test";
 
 const companyCouncil: readonly AgentId[] = ["VIZE", "FORGE", "PULSE", "AUDIT"];
@@ -116,6 +117,7 @@ const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone
   booksofhistory: { icon: BookOpen, label: "BOOKSOFHISTORY", tone: "text-[#c4b5fd]", slotColor: "#c4b5fd" },
   "door-money": { icon: BookOpenText, label: "Door Money", tone: "text-[#c4b5fd]", slotColor: "#c4b5fd" },
   fightaiq: { icon: Swords, label: "FightAIQ", tone: "text-[var(--destructive-soft)]", slotColor: "var(--destructive-soft)" },
+  kvorum: { icon: Landmark, label: "Kvórum", tone: "text-[#f6df45]", slotColor: "#f6df45" },
   "mma-files": {
     icon: FileText,
     label: "MMA Files",
@@ -134,6 +136,7 @@ function projectForKind(kind: CalendarKind): ProjectKey {
   if (kind === "dm-desk" || kind === "dm-growth") return "door-money";
   if (kind === "mma-intake" || kind === "mma-analysis") return "fightaiq";
   if (kind === "mag-editorial" || kind === "mag-desk" || kind === "article-am" || kind === "article-pm") return "mma-files";
+  if (kind === "kv-desk") return "kvorum";
   if (kind === "studio") return "carousel-studio";
   return "company";
 }

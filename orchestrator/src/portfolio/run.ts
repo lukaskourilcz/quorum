@@ -919,12 +919,20 @@ export async function runPortfolioCycle(input: {
   now: Date;
 }): Promise<PortfolioCycleResult> {
   const fixedMonthlyUsd = await loadFixedMonthlyUsd(configRoot, input.now);
-  const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, budgetLedger, stages, routing, agents, modelConfig, agentControls, meetingPolicy] = await Promise.all([
+  const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, budgetLedger, stages, routing, agents, modelConfig, agentControls, meetingPolicy] = await Promise.all([
     loadVentureRegistry(),
     readFile(path.join(stateRoot, "decisions", "2026-08-01-budget-raise.md"), "utf8"),
     readFile(path.join(stateRoot, "decisions", "2026-08-02-budget-mma.md"), "utf8"),
     readFile(path.join(stateRoot, "decisions", "2026-08-04-budget-fifty.md"), "utf8"),
     readFile(path.join(stateRoot, "decisions", "2026-08-02-fightaiq-founding.md"), "utf8"),
+    readFile(path.join(stateRoot, "decisions", "2026-08-12-kvorum-founding.md"), "utf8").catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return "";
+      throw error;
+    }),
+    readFile(path.join(stateRoot, "decisions", "2026-08-12-kvorum-budget-capacity.md"), "utf8").catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return "";
+      throw error;
+    }),
     readJson<{ entries: BudgetLedgerEntry[] }>(stateRoot, "budget/ledger.json", { entries: [] }),
     readFile(path.join(configRoot, "stages.json"), "utf8").then((raw) => JSON.parse(raw) as { current: Stage }),
     loadRoutingConfig(path.join(configRoot, "agent-routing.json")),
@@ -936,12 +944,12 @@ export async function runPortfolioCycle(input: {
   const entries = budgetLedger.entries.map((entry) => BudgetLedgerEntrySchema.parse(entry));
   const month = pragueClockParts(input.now).date.slice(0, 7);
   const spent = entries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
-  // Feed the degradation ladder the cap that is actually enforced. Its rungs are $3, $1.50
-  // and $0.50 of remaining model-API budget, and it was fed a provisional $42 from the
+  // Feed the degradation ladder the cap that is actually enforced. Its rungs are $3, $2,
+  // $1.50, $1 and $0.50 of remaining model-API budget, and it was fed a provisional $42 from the
   // superseded budget-2026-08d while enforcement held at $25, so computed headroom could
   // never fall below $17 and not one rung was reachable. A schedule's amounts depend only on
   // its shape flags, so the first pass can read the cap at any headroom.
-  const shapeInput = { registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw };
+  const shapeInput = { registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw };
   const enforcedMonthlyApiUsd = environmentBudgetLimits(
     resolveEffectivePortfolioSchedule({ ...shapeInput, monthlyApiHeadroomUsd: 0 })
   ).monthlyApiUsd;

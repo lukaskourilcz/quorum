@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "marketing-plan/1",
+  "id": "plan-2026-08-10-weekly-brief",
+  "ventureId": "goviral",
+  "title": "Weekly content brief — 2026-08-10",
+  "summary": "The free Czech reading found one civic crossover worth carrying into Kvórum's desk.",
+  "objective": "Give venture desks recorded trend context without publishing, scheduling, buying or opening an account.",
+  "tactics": [
+    {
+      "type": "content",
+      "description": "Trend call: #poplatky (kvorum): Czech search volume rose in the free signal reading.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A trend call, not a publishing instruction. Nothing is posted or scheduled from this line."
+    },
+    {
+      "type": "content",
+      "description": "Trend call: #ufc (mma): fight-week interest rose in the free signal reading.",
+      "assetsNeeded": [],
+      "platformPolicyNote": "A trend call, not a publishing instruction. Nothing is posted or scheduled from this line."
+    }
+  ],
+  "calendar": [
+    {
+      "week": 1,
+      "focus": "Use the recorded calls only as tiebreakers between independently sourced candidates."
+    }
+  ],
+  "audienceRefs": [],
+  "kpis": [
+    "One recorded free-signal crossover was available to the Kvórum desk."
+  ],
+  "postable_assets": [
+    {
+      "id": "asset-20260810-weekly-brief",
+      "captions": {
+        "instagram": {
+          "A": "A recorded trend brief for owner review.",
+          "B": "A trend is context, not evidence."
+        },
+        "threads": {
+          "A": "A recorded trend brief for owner review.",
+          "B": "A trend is context, not evidence."
+        }
+      },
+      "visual": {
+        "template_id": "cover-cta",
+        "version": "1.0.0",
+        "content": {
+          "locale": "en",
+          "strings": {
+            "cover-title": "WHAT IS RISING",
+            "cover-dek": "Recorded context, not a publishing instruction.",
+            "cta": "Review the brief",
+            "destination": "boardless-ai.vercel.app"
+          }
+        }
+      }
+    }
+  ],
+  "status": "approved",
+  "originMeetingRef": "2026-08-10-gv-brief"
+}

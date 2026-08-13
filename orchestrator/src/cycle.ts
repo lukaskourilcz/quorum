@@ -111,6 +111,8 @@ import { ScheduledPhaseSchema, type RunnablePhase, type Stage } from "./types.js
 import { findSlotRecord } from "./meetings/slot-record.js";
 import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
 import { runMarketingSharkCycle } from "./ventures/marketingshark/run.js";
+import { runKvorumDesk } from "./ventures/kvorum/run.js";
+import { KVORUM_REGISTER_GATE_IDS } from "./ventures/kvorum/content-gates.js";
 import { runBooksofHistoryCycle } from "./ventures/booksofhistory/run.js";
 import {
   isDoorMoneyPhase,
@@ -366,6 +368,43 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     });
     // runPortfolioCycle handles its own cap stops and returns a skip rather than throwing; the
     // wrapper is the backstop for a refusal on a path inside it that this change did not reach.
+    return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
+  }
+  if (options.phase === "kv-desk") {
+    const stages = JSON.parse(await readFile(path.join(configRoot, "stages.json"), "utf8")) as { current: Stage };
+    const run = async (): Promise<CycleResult> => {
+      const result = await runKvorumDesk({
+        cycleId,
+        dry: options.dry,
+        now,
+        date: pragueClockParts(now).date,
+        stage: stages.current
+      });
+      const planned = result.status === "packages";
+      const paused = result.status === "paused";
+      const hacekRan = result.gateEvaluations.some((evaluation) =>
+        evaluation.results.some((gate) => KVORUM_REGISTER_GATE_IDS.has(gate.gate))
+      );
+      const selectedAgents = [
+        ...(result.tribunRan ? ["TRIBUN"] : []),
+        ...(hacekRan ? ["HACEK"] : []),
+        ...(result.gateEvaluations.length > 0 ? ["AUDIT"] : [])
+      ];
+      return {
+        cycleId,
+        phase: options.phase,
+        dry: options.dry,
+        status: options.dry ? "dry_complete" : paused ? "paused" : "live_complete",
+        decision: paused ? "PAUSED" : planned ? "PLAN" : "NO_ACTION",
+        estimatedWorstCaseUsd: result.spendUsd,
+        selectedAgents,
+        skippedAgents: ["TRIBUN", "HACEK", "AUDIT"].filter((agent) => !selectedAgents.includes(agent)),
+        artifacts: result.artifacts.map((artifact) => path.relative(
+          repoRoot,
+          path.join(options.dry ? path.join(repoRoot, "tmp/dry-run/state") : stateRoot, artifact)
+        ))
+      };
+    };
     return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
   }
   if (isDoorMoneyPhase(options.phase)) {

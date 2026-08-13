@@ -15,7 +15,8 @@ const nestedPersonaDirectories: Readonly<Record<string, string>> = {
   booker: "door-money",
   ghost: "door-money",
   letopis: "tehdejsi-svet",
-  verba: "tehdejsi-svet"
+  verba: "tehdejsi-svet",
+  tribun: "kvorum"
 };
 
 export function personaPromptRelativePath(slug: string): string {

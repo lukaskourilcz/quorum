@@ -120,6 +120,24 @@ describe("admin portfolio projection", () => {
 
     await expect(readAdminPortfolio(root)).rejects.toThrow("Admin has no visuals reader for venture future-venture.");
   });
+
+  it("keeps all three registered Kvórum workspace tabs", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-admin-portfolio-"));
+    await mkdir(path.join(root, "config"), { recursive: true });
+    await writeFile(path.join(root, "config", "ventures.json"), JSON.stringify({
+      schemaVersion: "venture-registry/1",
+      ventures: [{
+        id: "kvorum",
+        name: "Kvórum",
+        status: "operating",
+        ledgerNamespace: "kvorum",
+        adminTabs: ["recommendations", "monitor", "claims"]
+      }]
+    }));
+    await expect(readAdminPortfolio(root)).resolves.toMatchObject({
+      ventures: [{ id: "kvorum", tabs: ["recommendations", "monitor", "claims"] }]
+    });
+  });
 });
 
 describe("launch binder readiness", () => {

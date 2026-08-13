@@ -25,7 +25,7 @@ export type DesignLabVentureId = BrandTokens["id"];
  * brands have identity-only sections. A section says which kind it is so the content area can
  * explain an empty workspace.
  */
-const PUBLISHES_ARTICLES: ReadonlySet<string> = new Set(["caught-up", "mma-files", "tehdejsi-svet"]);
+const PUBLISHES_ARTICLES: ReadonlySet<string> = new Set(["caught-up", "mma-files", "kvorum", "tehdejsi-svet"]);
 
 /** The name the owner uses. The id addresses state and never changes; the surface speaks. */
 const DISPLAY_NAME: Readonly<Record<string, string>> = {

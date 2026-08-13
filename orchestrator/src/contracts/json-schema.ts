@@ -25,6 +25,11 @@ import { EditionPackageSchema } from "./edition-package.js";
 import { HookAssignmentSchema } from "./hook-assignment.js";
 import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
 import { KpiSetSchema } from "./kpi-set.js";
+import { KvorumApifyQuotaSchema } from "./kvorum-apify-quota.js";
+import { KvorumClaimSchema } from "./kvorum-claim.js";
+import { KvorumEntityLexiconSchema } from "./kvorum-entities.js";
+import { KvorumMonitorReceiptSchema } from "./kvorum-monitor.js";
+import { KvorumSourceRegistrySchema } from "./kvorum-sources.js";
 import { MarketingPlanSchema } from "./marketing-plan.js";
 import { MeetingEmailSchema } from "./meeting-email.js";
 import { MeetingAgendaQueueSchema } from "./meeting-agenda.js";
@@ -55,6 +60,7 @@ import { StyleProfileSchema } from "./style-profile.js";
 import { VentureRegistrySchema } from "./venture-registry.js";
 import { AnyVentureRecommendationSchema } from "./venture-recommendation.js";
 import { VisualWeightsSchema } from "./visual-weights.js";
+import { VentureRecommendationSchema } from "./venture-recommendation.js";
 import {
   ArticleImageSchema,
   MetricsPlaceholderSchema,
@@ -94,6 +100,11 @@ export const ContractSchemas = {
   "hook-assignment": HookAssignmentSchema,
   "idea-ledger": IdeaLedgerEntrySchema,
   "kpi-set": KpiSetSchema,
+  "kvorum-apify-quota": KvorumApifyQuotaSchema,
+  "kvorum-claim": KvorumClaimSchema,
+  "kvorum-entities": KvorumEntityLexiconSchema,
+  "kvorum-monitor": KvorumMonitorReceiptSchema,
+  "kvorum-sources": KvorumSourceRegistrySchema,
   "marketing-plan": MarketingPlanSchema,
   "meeting-email": MeetingEmailSchema,
   "meeting-agenda": MeetingAgendaQueueSchema,

@@ -2,12 +2,13 @@ import { mkdtemp, readFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import type { KpiSet, QuarterlyKpi } from "../src/contracts/kpi-set.js";
+import { KpiSetSchema, type KpiSet, type QuarterlyKpi } from "../src/contracts/kpi-set.js";
 import {
   evaluateQuarterlyKpis,
   runQuarterEndProtocol,
   writeQuarterlyKpiSnapshot
 } from "../src/metrics/quarterly.js";
+import { repoRoot } from "../src/paths.js";
 
 function definition(overrides: Partial<QuarterlyKpi> = {}): QuarterlyKpi {
   return {
@@ -35,6 +36,36 @@ function set(kpis: QuarterlyKpi[]): KpiSet {
 }
 
 describe("quarterly KPI evaluator", () => {
+  it("evaluates the Kvórum seeds without turning missing denominators into zero", async () => {
+    const configured = JSON.parse(
+      await readFile(path.join(repoRoot, "config/kpis/2026-Q1.json"), "utf8")
+    ) as unknown;
+    const parsed = KpiSetSchema.parse(configured);
+    const kvorum = parsed.kpis.filter((kpi) => kpi.venture === "kvorum");
+    expect(kvorum).toHaveLength(7);
+    expect(kvorum.some((kpi) => /followers|reach/iu.test(`${kpi.id} ${kpi.name} ${kpi.metric_source}`))).toBe(false);
+
+    const measurements: Record<string, number | null> = {
+      "state/meetings#kvorum_desk_reliability_rate": 0.95,
+      "state/ventures/kvorum/recommendations#approved_packages_per_week": 8,
+      "state/ventures/kvorum/recommendations#approval_rate_trending_up": 1,
+      "state/ventures/kvorum/claims#published_typed_reference_rate": 1,
+      "state/ventures/kvorum/claims#corrections_within_24h_count": null,
+      "state/kvorum/source-quota/apify.json#monthly_spend_usd": 2,
+      "state/budget/ledger.json#kvorum_model_spend_usd": 3
+    };
+    const statuses = evaluateQuarterlyKpis({
+      kpiSet: parsed,
+      measurements,
+      now: new Date("2026-08-18T12:00:00.000Z")
+    }).statuses.filter((status) => status.venture === "kvorum");
+
+    expect(statuses.filter((status) => status.id !== "kvorum.corrections-within-24h")
+      .every((status) => status.status === "on-track")).toBe(true);
+    expect(statuses.find((status) => status.id === "kvorum.corrections-within-24h"))
+      .toMatchObject({ actual: null, status: "unavailable" });
+  });
+
   it("excludes the Q1 spin-up window from content pace", () => {
     const kpi = definition();
     const ramp = evaluateQuarterlyKpis({

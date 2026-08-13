@@ -10,6 +10,26 @@ function clone(): typeof valid {
   return structuredClone(valid);
 }
 
+function kvorumClone(): Record<string, unknown> {
+  const record = structuredClone(valid) as unknown as Record<string, unknown>;
+  record.id = "2026-08-12-kv-desk";
+  record.cycleId = "20260812-kv-desk";
+  record.kind = "kv-desk";
+  record.phase = "kv-desk";
+  record.status = "NO_ACTION";
+  record.voteMatrix = [];
+  record.kvorumDesk = {
+    monitorRef: "state/ventures/kvorum/monitor/2026-08-12.json",
+    runStatus: "quiet",
+    reason: "The synthetic monitor found no corroborated cluster worth drafting.",
+    providerCallMade: false,
+    packages: [],
+    droppedPackages: 0,
+    gateEvaluations: []
+  };
+  return record;
+}
+
 describe("public MeetingRecord v2 boundary", () => {
   it("accepts and projects the valid contract fixture", () => {
     expect(parsePublicMeetingRecord(valid)).toMatchObject({
@@ -17,6 +37,12 @@ describe("public MeetingRecord v2 boundary", () => {
       kind: "dm-desk",
       fixture: true
     });
+  });
+
+  it("rejects a Kvórum status that contradicts its typed desk outcome", () => {
+    const record = kvorumClone();
+    record.status = "PLAN";
+    expect(parsePublicMeetingRecord(record)).toBeNull();
   });
 
   it("rejects an unknown agent", () => {

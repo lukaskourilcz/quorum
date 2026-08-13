@@ -16,7 +16,7 @@
     "estimatedCycleUsd": 0.06,
     "actualCycleUsd": 0.03,
     "monthAllInUsd": 4.2,
-    "monthCapUsd": 20
+    "monthCapUsd": 30
   },
   "decision": {
     "outcome": "select",
