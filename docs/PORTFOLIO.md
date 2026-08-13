@@ -1,6 +1,6 @@
 # BoardlessAI project model
 
-BoardlessAI is one guarded operating system with ten project workspaces. Shared
+BoardlessAI is one guarded operating system with eleven project workspaces. Shared
 infrastructure owns the agent registry, budget, source policy, meeting records,
 specialist agendas, calendar, admin, delivery checks and public explanation. Each
 project keeps a narrow output boundary rather than cloning the orchestrator.
@@ -11,14 +11,15 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 | --- | --- | --- | --- |
 | Caught Up | Operating in validation | Daily Czech AI briefing, product decisions and an article hero | Delivery is automatically checked after deploy; social posting unlocks after seven consecutive passed proofs |
 | Titty Tuesdays | Operating, pre-commerce | Brand seasons, audience work and future campaign planning | No shop, stock, payments, ads, people imagery, posting or purchase claims |
-| GoVIRAL | Operating, Mondays only | Weekly trend brief for the owner and rated marketing plays for every other project | Existing sets use the `$5`-guarded Apify Free recipe; Door Money terms use keyless Google News; hands over at most one agenda |
+| GoVIRAL | Operating, Mondays only | Weekly trend brief for the owner and rated plays for configured project topic sets | Existing sets use the `$5`-guarded Apify Free recipe; Door Money and Tehdejší svět terms use keyless Google News; each current room emits at most one agenda |
 | FightAIQ | Operating, guarded analysis | UFC and Oktagon fighter cards, discovered bouts, historical backfill and deterministic predictions | Two-source bout/card gates; no bet placement, affiliate links or bookmaker automation |
 | Design Lab | Operating internal engine | Original template library and deterministic social-carousel rendering for every brand | No accounts, marketing, analytics, external inspiration bytes or image-model calls |
 | marketingShark | Operating internal agency | Turns one devShark quiz question a day into one Czech and one English five-slide carousel rendered by the Design Lab | No social account, credentials or publisher path; every package is stored as a draft behind the approval queue |
-| BOOKSOFHISTORY | Operating in guarded validation | Turns a deterministic shortlist and reusable source dossiers into independent Czech and English social-story drafts | No public surface, account, channel or posting path; no cover artwork; quotes are attributed and capped at 300 characters |
+| BOOKSOFHISTORY | Implementation complete, pending countersignature | Turns a deterministic shortlist and reusable source dossiers into independent Czech and English social-story drafts | No public surface, account, channel or posting path; no cover artwork; quotes are attributed and capped at 300 characters |
 | MMA Files | Operating public magazine | One daily Czech article slot and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
-| Door Money | Operating, drafts only | Evidence-linked English book-storytelling recommendations and a Thursday owner action packet | Manuscript/full chunks/embeddings stay private; no posting, account, channel or outreach; results are owner-entered only |
-| Tehdejší svět | Operating, pending countersignature | Ranks a hand-committed facts file and produces independent Czech and Ukrainian family-history drafts through a two-day cycle | The existing product and its repository stay separate; no runtime connection, tracking, account, channel or posting path; tier-two review blocks release |
+| Door Money | Implementation complete, pending countersignature | Evidence-linked English book-storytelling recommendations and a Thursday owner action packet | Manuscript/full chunks/embeddings stay private; no posting, account, channel or outreach; results are owner-entered only |
+| Tehdejší svět | Implementation complete, pending countersignature | Ranks a hand-committed facts file and produces independent Czech and Ukrainian family-history drafts through a two-day cycle | The existing product and its repository stay separate; no runtime connection, tracking, account, channel or posting path; tier-two review blocks release |
+| Kvórum | Implementation complete, held live | Turns corroborated Czech political clusters into one or two typed, cited recommendation drafts | Founding and capacity signatures plus four owner approvals fail closed independently; no party endorsement, automated post, account, analytics or treasury path |
 
 `config/ventures.json` stores each project's meetings, participating roles, cost
 envelope and admin tabs. `config/venture-agent-controls.json` stores optional agent switches. Internal
@@ -28,19 +29,22 @@ contracts retain the word `venture` for compatibility; visitor-facing text says
 ## People and authority
 
 Four decision-makers—VIZE, FORGE, PULSE and AUDIT—hold company-wide authority.
-Thirty-five active specialists do bounded work only when a service path or due agenda needs
-their domain. The registry holds 48 entries: 39 active, 6 paused and 3 retired. A
+Thirty-six active specialists do bounded work only when a service path or due agenda needs
+their domain. The registry holds 49 entries: 40 active, 6 paused and 3 retired. A
 stood-down role stays on the record — the router skips it and names it — so the count
-that matters is the thirty-nine that work. The 27
+that matters is the forty that work. The 27
 established roles keep their approved photographic portraits. Newer roles use neutral
 name-based placeholders until approved media exists. Public visuals never enter model
 prompts or meeting packets. The public interface uses names and work labels. It does
 not present quarters as seasons, days as episodes or agents as entertainment
 characters.
 
-PULSE chairs generic project rooms and reads performance in Door Money growth; GHOST and
-BOOKER own the two Door Money drafting packets. LETOPIS and VERBA own Tehdejší svět's
-Czech planning/writing and independent Ukrainian pass while AUDIT keeps its rule-based veto.
+PULSE chairs generic project rooms and reads performance in Door Money growth. FOLIO and
+PLOT own BOOKSOFHISTORY selection/research and its independent Czech/English packages;
+GHOST and BOOKER own the two Door Money packets; LETOPIS and VERBA own Tehdejší svět's
+Czech planning/writing and independent Ukrainian pass; TRIBUN owns Kvórum's Czech political
+drafts. HACEK carries the Czech register across the magazines, BOOKSOFHISTORY and Kvórum,
+while AUDIT keeps its rule-based veto.
 Owner ratings teach format and taste; they are not commands. Agents cannot approve their own spending,
 credentials, account access, stage changes or governing prompts. Content release and
 pre-scoped social posting are agent-owned only inside the recorded contracts and
@@ -49,9 +53,10 @@ health gates.
 ## Decision room, service paths and specialist agendas
 
 The 06:00 morning board is the paid company decision room. It chooses only from the
-open priority queue and may issue one bounded, allowlisted specialist agenda. A
-specialist room may request one follow-up room; the
-request goes back into the queue and still has to satisfy its live, evidence and
+open priority queue and may issue one bounded, allowlisted specialist agenda. Policy
+caps any meeting at two follow-ups; current specialist response contracts expose at
+most one. A specialist request to an allowlisted next room goes back into the queue
+and still has to satisfy its live, evidence and
 budget gates. Pending agendas expire after three days, the queue is bounded to 24 and
 each project can hold at most eight pending items. Any project without a consumed
 agenda for seven days becomes a mandatory board item with either a commission or a
@@ -109,8 +114,10 @@ credentials, evidence, cost limits or safety rules.
 | 21:00 | Kvórum political desk | registered daily; live work held by authority and budget-capacity gates |
 | 22:00 | Board night | `$0` checkpoint and daily summary |
 
-A Vercel cron dispatches each window on its own Prague hour and does the work; three
-GitHub backstop sweeps a day rescue anything that path missed. Schedule validation
+A Vercel cron dispatches each window on its own Prague hour and does the work. The 38
+entries are paired winter/summer variants for 18 paths plus two DNESKAi retries, across
+19 unique UTC expressions. Three GitHub backstop sweeps a day rescue anything that
+path missed. Schedule validation
 still rejects collisions under 60 minutes. The public five-day calendar reads the same
 resolved table.
 
@@ -136,6 +143,23 @@ Tehdejší svět adds a `$0.30` per-brief and `$2.00` monthly research ceiling i
 the same portfolio limits. Its room envelope is `$0.25`; the two language passes share
 one canonical brief, and its current Sunday signal and performance overlays are
 deterministic `$0` work. The model-spend target remains at most `$4.00` monthly.
+
+Door Money has a one-time ingestion ceiling of `$3.00`, a `$0.08` daily desk and a
+`$0.06` Thursday growth room. Its routine model estimate is about `$2.50` monthly;
+off-day growth records, selection, weights and keyless GoVIRAL collection cost `$0`.
+Kvórum declares a `$0.10` room, a `$3.00` monthly model KPI ceiling and a `$2.00`
+share inside the existing Apify Free credit. Its founding and capacity records are
+unsigned, so its payable total remains `$0`.
+
+Monthly headroom degrades in code, not by discretion: optional content scoring below
+`$3`; one BOOKSOFHISTORY research candidate plus no Door Money growth below `$2.75`;
+BOOKSOFHISTORY stretch and no Door Money desk below `$2.50`; no BOOKSOFHISTORY or
+Tehdejší svět room below `$2.25`; no GoVIRAL below `$2`; no Kvórum and a minimal Titty
+Tuesdays transcript below `$1.50`; no MMA Files editorial, desk or article below `$1`;
+and no Titty Tuesdays below `$0.50`. A date whose due room envelopes still exceed the
+`$1.00` daily pace drops rooms in this order: Door Money growth, Kvórum, Door Money
+desk, Tehdejší svět, BOOKSOFHISTORY, GoVIRAL, Titty Tuesdays. Neither ladder raises a
+ceiling or overrides an authority gate.
 
 ## Money and quarterly targets
 
@@ -182,6 +206,8 @@ owner approval/rejection, Design Lab handoff and owner-entered per-lane results 
 automatic channel ingestion. Door Money adds recommendations, owner actions and private-knowledge
 status. Tehdejší svět adds feature, copied-facts library and owner-pasted signals tabs,
 with explicit bilingual approval, manual posted URLs and owner-entered platform results.
+Kvórum adds recommendation, monitor and claims tabs with owner approval, manual post
+receipts, owner-entered results, claim status and correction drafts; none is a channel client.
 Perfect, Good and Bad ratings keep their full history. A rating cannot found
 a project or publish an item. The queue and its archive are editable by the owner, but
 owner input is optional.
@@ -202,15 +228,19 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 - BoardlessAI deliberately has no duplicate public fighter or event pages.
 - BOOKSOFHISTORY has no delivery repository or public route. Owner-approved Czech and
   English decks stop at a recorded Design Lab handoff for manual posting.
+- Door Money has no public delivery target. Approval writes a bounded English summary to
+  the Design Lab; the manuscript, full chunks and embeddings never enter this repository.
 - Tehdejší svět is an adoption, not a delivery integration. Its existing product stays
   in its own repository; this repository runs only the marketing cycle from one
   hand-committed, hash-verified facts file and never reads or writes the product at runtime.
+- Kvórum has no publisher mapping. An approved recommendation may create only a Design
+  Lab summary; the owner performs and records any post manually.
 
 ## Live switches
 
 - `CAUGHT_UP_LIVE_ENABLED` — Caught Up edition and product work.
-- `PORTFOLIO_LIVE_ENABLED` — Titty Tuesdays standing ideation and the separately
-  countersigned BOOKSOFHISTORY and Tehdejší svět persistent cycles.
+- `PORTFOLIO_LIVE_ENABLED` — the shared portfolio-room gate. It does not replace the
+  separate BOOKSOFHISTORY, Door Money, Tehdejší svět or Kvórum founding/authority gates.
 - `FIGHTAIQ_LIVE_ENABLED` — FightAIQ source/data work.
 - `FIGHTAIQ_ANALYSIS_ENABLED` — model analysis only after the separate mode decision.
 - `MMA_FILES_LIVE_ENABLED` — source-first newsroom work and content delivery.
@@ -222,7 +252,7 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
   still needs its own proof/campaign counter, account credentials and safety gate.
 - `METRICS_INGESTION_ENABLED=false` — keeps automatic visitor, reader and engagement
   measurement out of state; SPLIT stays idle. Explicit owner-entered BOOKSOFHISTORY,
-  Door Money and Tehdejší svět results are the only exceptions and do not touch a channel.
+  Door Money, Tehdejší svět and Kvórum results are the only exceptions and do not touch a channel.
   REACH also stays
   disabled while the MMA social-content phase is locked; both roles already carry
   current output contracts.
@@ -230,5 +260,5 @@ then refreshes the generated truth block in `docs/ECOSYSTEM.md` at `$0`.
 Missing variables deny the action. The owner checklist and the ordered setup path are
 both in `docs/NEEDED.md`.
 
-The canonical, standalone description of all ten projects, 48 roles, D1–D14 and
+The canonical, standalone description of all eleven projects, 49 roles, D1–D14 and
 current generated state is `docs/ECOSYSTEM.md`.

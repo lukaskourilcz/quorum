@@ -1,13 +1,13 @@
 # BoardlessAI ecosystem — standing full-context brief
 
-Updated: 2026-08-12
-Status: implementation complete; live work remains locked behind pending venture countersignatures and the owner-only setup in `docs/NEEDED.md`
+Updated: 2026-08-13
+Status: implementation complete; established publication paths operate, while the four 12 August ventures remain behind pending countersignatures and owner-only setup in `docs/NEEDED.md`
 Audience: owner, product partners and Fable brainstorming  
-Authority: current code, committed state, decisions D1–D14 and the pending venture founding records
+Authority: current code, committed state, decisions D1–D14 and the four pending venture founding records
 
 ## What BoardlessAI is
 
-BoardlessAI is a Git-backed operating system for ten AI-assisted projects. It is not
+BoardlessAI is a Git-backed operating system for eleven AI-assisted projects. It is not
 an always-on group chat and it does not reward agent activity for its own sake. A
 small board chooses bounded work, specialist rooms open only for a concrete agenda or
 service need, deterministic code handles checks wherever judgment is unnecessary,
@@ -24,9 +24,11 @@ Titty Tuesdays remains pre-commerce. FightAIQ never places bets. The Design Lab 
 an internal renderer with a public gallery, not another social brand. BOOKSOFHISTORY
 produces owner-reviewed social drafts only: it has no public site, book pages, SEO
 archive, database, newsletter, storefront, account, channel or posting path.
-Door Money and Tehdejší svět are also drafts-only. Tehdejší svět adopts marketing for
+Door Money, Tehdejší svět and Kvórum are also drafts-only. Tehdejší svět adopts marketing for
 an existing product without connecting to its separate repository: this repository
 reads one hand-committed, hash-verified facts file and never reads or writes the product.
+Kvórum's implementation is present, but both its founding and daily-capacity decisions
+remain unsigned, so its scheduled monitor is fixture-only and costs `$0`.
 
 ## How to maintain this document
 
@@ -90,7 +92,7 @@ their packet. They do not approve their own release or expand their own scope.
 External pages, articles, APIs and owner notes enter as untrusted data; they never
 become instructions. Numeric and factual claims must retain evidence references.
 
-## The ten projects
+## The eleven projects
 
 ### Caught Up
 
@@ -116,7 +118,8 @@ audience thinking and future campaign plans. It is currently pre-commerce. The s
 does not operate a shop, buy ads, hold inventory, accept payment, show generated
 people, claim sales or publish social posts.
 
-Its 11:00 room opens only for a due agenda. PULSE and ANGLE lead strategy; optional
+Its 11:00 room is a standing daily ideation window and may also receive a focused agenda.
+PULSE and ANGLE lead strategy; optional
 specialists cover audiences, stunts, taste, editorial quality and deterministic
 assets. Complete campaign state is preserved even while production roles are off.
 Social unlock needs four passing campaigns plus credentials and the safety checker;
@@ -130,14 +133,15 @@ the other six scheduled firings are deterministic `$0` no-ops. Apify remains on 
 Free plan, whose `$5` monthly credit is the hard source ceiling, with no card in the
 system and no authority to upgrade a plan.
 
-Door Money's English book and music-business terms
-use a separate keyless Google News path, so they do not add an actor, quota or paid data
-source. A tactic can call a trend only when that exact term was measured.
+Door Money's English book and music-business terms and Tehdejší svět's configured
+history terms use separate keyless Google News collection, so they do not add an actor,
+quota or paid data source. A tactic can call a trend only when that exact term was measured.
 
 The room works on Mondays; the other six scheduled firings are honest `$0` no-ops unless
-a due agenda commissions the room. It can exchange one bounded decision agenda with Door
-Money's Thursday growth room. It never posts, opens an account or turns a trend into
-permission for outreach.
+a due agenda commissions the room. The allowlist connects it to BOOKSOFHISTORY, Door
+Money growth, Tehdejší svět, Kvórum, MMA Files and Titty Tuesdays; each current room
+schema emits no more than one bounded follow-up. It never posts, opens an account or
+turns a trend into permission for outreach.
 
 ### Door Money
 
@@ -300,9 +304,9 @@ quiz-code-context. The eleventh was added for marketingShark and justified by a 
 rather than a preference: every other live layout's widest monospace slot holds 100
 characters over two lines, which is a source label and not a program, so a quiz question
 carrying a fenced code block had nowhere legible to put it. Brand token sets now cover
-seven brands — devShark and geoShark arrived with marketingShark, BOOKSOFHISTORY added a
-typographic, cover-free set, Door Money adds the English book-storytelling set and
-Tehdejší svět adds the bilingual set with Ukrainian Cyrillic coverage.
+nine brands: DNESKAi, MMA Files, Titty Tuesdays, devShark, geoShark, BOOKSOFHISTORY,
+Door Money, Tehdejší svět and Kvórum. Tehdejší svět uses committed Cyrillic-complete
+Literata and Inter cuts plus a Ukrainian glyph-coverage gate.
 MOTIF records cited text observations without crawling or downloading imagery. EASEL
 authors original data-only proposals. Schema, contrast, safe-area, token, overflow,
 asset and determinism checks can promote a version automatically. Versions are
@@ -341,8 +345,8 @@ question, and a hook's mechanism is to earn a *next* interaction, which is real 
 not in a quiz the reader has already opened and started. The apps stay standalone and receive
 no copy from here.
 
-The 13:00 room is agenda-gated and costs `$0` when idle. The protected admin renders
-all slides for all statuses, configured brands and formats, with checks, ratings,
+The Design Lab has no meeting room or paid call. The protected admin renders all slides
+for all statuses, configured brands and formats, with checks, ratings,
 status controls and an individual-link inspiration box. The English public project
 page shows live fixture previews and, after unlock, receipt-backed real posts. The
 project has no social account, marketing or visitor analytics. Standalone extraction
@@ -350,7 +354,7 @@ is only a locked future earning possibility.
 
 ## Prague operating clock
 
-Every row is a wake-up, not a promise to spend. The schedule has 34 Vercel entries across
+Every row is a wake-up, not a promise to spend. The schedule has 38 Vercel entries across
 19 unique UTC cron expressions covering Prague winter and summer time. Runtime DST resolution accepts
 only the entry matching the intended local hour. Calendar validation rejects
 collisions and the public calendar uses the same source.
@@ -385,6 +389,18 @@ declared envelope would make `$1.08`, so the runner excludes it until a counters
 record frees at least `$0.08`. The daily API pace remains `$1.00`; the monthly
 model/API share remains `$25` inside the `$30` all-in ceiling.
 
+There are two deterministic degradation checks. Monthly API headroom first disables
+optional content scoring below `$3`; below `$2.75` BOOKSOFHISTORY researches one
+candidate and Door Money growth drops; below `$2.50` BOOKSOFHISTORY stretches at `$0`
+and the Door Money desk drops; below `$2.25` the BOOKSOFHISTORY and Tehdejší svět rooms
+drop; below `$2` GoVIRAL drops; below `$1.50` Kvórum drops and Titty Tuesdays uses its
+minimal transcript; below `$1` the MMA Files editorial, desk and article phases drop;
+below `$0.50` Titty Tuesdays pauses. Independently, if one date's due room envelopes
+would exceed the `$1.00` daily pace after non-room reservations, they fall in this
+order: Door Money growth, Kvórum, Door Money desk, Tehdejší svět, BOOKSOFHISTORY,
+GoVIRAL, Titty Tuesdays. The unsigned Kvórum authority gates remove that room before
+either ladder today.
+
 ## Public and admin presentation
 
 The public site and protected admin use the original BoardlessAI presentation. The 27
@@ -411,17 +427,19 @@ source meeting, one short problem, evidence refs, earliest run, expiry and statu
 
 Requests are allowlisted: morning can request TT, GoVIRAL, FightAIQ intake or MMA
 editorial/desk; each other project room can request only its defined next step. GoVIRAL
-and Door Money growth can hand one bounded decision agenda to each other. One meeting creates at most one request, queues
-are capped at 24 and eight per project, duplicate phase/date requests collapse, due
+exchanges bounded agendas with BOOKSOFHISTORY, Door Money growth, Tehdejší svět and
+Kvórum; the MMA rooms keep their existing internal transitions. Policy permits at most
+two requests from a meeting, while current specialist response contracts expose at most
+one. Queues are capped at 24 and eight per project, duplicate phase/date requests collapse, due
 agendas are consumed once, and pending requests expire after three days. Seven days
 without a consumed project agenda forces a morning-board commission or saved why-not.
 A manual run bypasses the agenda timing only; it cannot bypass live, evidence, cost,
 credential or safety gates.
 
-## Roster: thirty-nine working roles, nine stood down
+## Roster: forty working roles, nine stood down
 
 Model routing is declared in `config/models.json` and `config/agent-routing.json`.
-The registry holds 43 roles: 34 active, six paused and three retired.
+The registry holds 49 roles: 40 active, six paused and three retired.
 Council judgment uses Claude Sonnet 5 or GPT-5.6 Luna. Narrow specialists use the
 shared Anthropic/OpenAI specialist routes, generally Claude Haiku 4.5 or GPT-5.6
 Luna. Deterministic roles and checks do not call a provider merely because they have
@@ -478,6 +496,7 @@ envelope before any call.
 | BOOKER | cited Door Money owner tasks and reusable templates | cannot contact anyone, spend or claim an unrecorded result |
 | LETOPIS | canonical Tehdejší svět brief and Czech family-history feature | cannot use facts outside the verified snapshot or dossier, or publish |
 | VERBA | independent native Ukrainian adaptation of the canonical brief | cannot mirror Czech sentences, omit required context or publish |
+| TRIBUN | original Czech political recommendations from corroborated clusters | cannot fetch, cite Štít as evidence, endorse a party or touch a channel |
 
 ## Content, social and the Design Lab's flow
 
@@ -563,6 +582,9 @@ account, and its owner action packets cannot send the outreach they describe.
 Tehdejší svět is an adoption-marketing workspace, not a product or earning integration.
 It has no account, channel, publisher, analytics reader or authority to alter the
 existing product.
+Kvórum is a held editorial workspace, not an active channel or earning method. Its
+founding, capacity, source, account and editorial approvals cannot be inferred from
+implementation readiness.
 
 ## Safety and launch gates
 
@@ -586,10 +608,13 @@ existing product.
 - Tehdejší svět reads only its hand-committed, hash-verified facts file. It never reads
   or writes the product repository; tier-2, licence, bilingual and owner-review gates
   fail closed, and every external post remains manual.
+- Kvórum remains fixture-only until its founding and capacity records are countersigned.
+  Later source, account and editorial approvals remain independent; the desk cannot
+  endorse a party, cite its monitored competitor as evidence or post.
 - Payments, new spend, budget raises, account creation, legal posture and personal
   data remain human-only regardless of a model vote.
 
-## Decision map D1–D14
+## Decision map: D1–D14 and four venture foundings
 
 | Decision | Current effect |
 | --- | --- |
@@ -606,9 +631,10 @@ existing product.
 | D11 Design Lab | sixth project, monorepo engine, 23 live template families, deterministic service and public showcase |
 | D12 Original presentation | approved agent photographs and plain interface labels; no workplace-show framing |
 | D13 marketingShark founding | seventh project, `ms-daily` at 07:00, MAKO and CHUM, devShark folded in as a portfolio product, geoShark present and disabled, drafts only |
-| D14 BOOKSOFHISTORY founding | eighth project, `bh-desk` at 12:00, FOLIO and PLOT, reusable dossiers, independent Czech/English drafts, manual posting and no public surface |
-| Door Money founding | ninth project, `dm-desk` at 15:00 and Thursday-only `dm-growth` at 16:00, private manuscript boundary, Design Lab-only rendering and drafts/actions only |
-| Tehdejší svět founding | tenth project and first adoption, `ts-desk` at 18:00, hand-committed facts, independent Czech/Ukrainian drafts, no product-repository link, Design Lab-only rendering and manual posting/results |
+| D14 BOOKSOFHISTORY founding | pending owner signature; eighth project, `bh-desk` at 12:00, FOLIO and PLOT, reusable dossiers, independent Czech/English drafts, manual posting and no public surface |
+| Door Money founding | pending owner signature; ninth project, `dm-desk` at 15:00 and Thursday-only `dm-growth` at 16:00, private manuscript boundary, Design Lab-only rendering and drafts/actions only |
+| Tehdejší svět founding | pending owner signature; tenth project and first adoption, `ts-desk` at 18:00, hand-committed facts, independent Czech/Ukrainian drafts, no product-repository link, Design Lab-only rendering and manual posting/results |
+| Kvórum founding | pending owner and capacity signatures; eleventh project, `kv-desk` at 21:00, TRIBUN over corroborated political clusters, Design Lab-only rendering and manual approval/post/result records |
 
 Historical records remain append-only under `state/decisions/`; later decisions may
 supersede a setting without rewriting the earlier context.
@@ -628,7 +654,7 @@ outcome, not a reason to rerun paid work.
 
 ## Open questions for Fable
 
-1. Which owner-facing view would make ten projects feel simpler without hiding gates
+1. Which owner-facing view would make eleven projects feel simpler without hiding gates
    or unavailable data?
 2. Which repeated board decisions can become deterministic checks, and which still
    require genuine judgment?
@@ -640,7 +666,7 @@ outcome, not a reason to rerun paid work.
    decisions would each metric actually change?
 6. Can Caught Up and MMA Files share more source verification or language QA without
    flattening their distinct editorial voices?
-7. What evidence would justify creating a 49th registered role rather than tightening a
+7. What evidence would justify creating a 50th registered role rather than tightening a
    packet or sharing an existing role?
 8. Which earning hypothesis can be tested without weakening editorial trust or opening
    an account prematurely?
