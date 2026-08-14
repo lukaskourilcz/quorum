@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "delivery-queue-health/1",
+  "checkedAt": "2026-08-14T03:08:51.448Z",
+  "date": "2026-08-14",
+  "ventures": [
+    {
+      "venture": "mma-files",
+      "waiting": [],
+      "parked": [
+        {
+          "label": "2026-08-06 AM ufc-event-ufc-fight-night-gamrot-vs-salkilld",
+          "packageHash": "c62cca93898a6afbc578ac47525ea4501d5d2b627f26413164ba660d93063081",
+          "date": "2026-08-06",
+          "code": "hash_conflict"
+        },
+        {
+          "label": "2026-08-08 AM ufc-event-ufc-fight-night-gamrot-vs-salkilld",
+          "packageHash": "ded05ff0de52096b73b12be2a5246601cc879d488c09da74094b853a1b648c0e",
+          "date": "2026-08-08",
+          "code": "hash_conflict"
+        }
+      ],
+      "oldestWaitingDate": null,
+      "stalledDays": null,
+      "stalled": true
+    },
+    {
+      "venture": "caught-up",
+      "waiting": [],
+      "parked": [],
+      "oldestWaitingDate": null,
+      "stalledDays": null,
+      "stalled": false
+    }
+  ],
+  "deploys": [
+    {
+      "venture": "caught-up",
+      "url": "https://caughtup-ai.vercel.app/data/board/2026-08-14.json",
+      "expected": "2026-08-14",
+      "status": 200,
+      "live": true
+    },
+    {
+      "venture": "mma-files",
+      "url": "https://mma-files.vercel.app/cs/articles/ufc-event-ufc-330-makhachev-vs-machado-garry",
+      "expected": "ufc-event-ufc-330-makhachev-vs-machado-garry",
+      "status": 200,
+      "live": true
+    }
+  ],
+  "needsOwner": true
+}
