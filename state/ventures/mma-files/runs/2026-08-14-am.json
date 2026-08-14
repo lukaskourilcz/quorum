@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "cycleId": "20260814080057-article-am",
+  "date": "2026-08-14",
+  "slot": "am",
+  "status": "published",
+  "articleRef": "b830c1fcfc937aa4a880d3b1f8e5bcdf702d4d0877994a41f9824dcf56e81401",
+  "slateSource": "derived",
+  "subjectRefs": [
+    "oktagon:viktor-pesta"
+  ],
+  "spentUsd": null,
+  "generatedAt": "2026-08-14T08:00:57.136Z"
+}

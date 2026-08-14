@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "oktagon-viktor-pesta",
+  "date": "2026-08-14",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:39226871",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "logo-or-watermark",
+            "embedded-text"
+          ],
+          "reason": "The image shows a fighting event stage setup with prominent GMC and DMC sponsorship logos, branded barriers with embedded text, and sponsor boards—all elements explicitly forbidden by the rules.",
+          "sceneCs": "oktagona stage s trussem a reklamami"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002263
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:37512294",
+          "provider": "wikimedia",
+          "fit": 7,
+          "vetoes": [
+            "logo-or-watermark"
+          ],
+          "reason": "The image captures an authentic MMA competition scene in a proper venue, which illustrates the article's topic about a fighter's career, but the visible sponsor logos and signage on the banners are disqualifying elements that violate the no-watermark rule.",
+          "sceneCs": "klec s bojovníky a diváky v hale"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002371
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:12627322",
+          "provider": "wikimedia",
+          "fit": 0,
+          "vetoes": [
+            "logo-or-watermark"
+          ],
+          "reason": "The SHOWTIME Sports watermark and logo are prominently burned into the frame, making this unsuitable as a lead image according to the rules against logos and watermarks.",
+          "sceneCs": "oktagón se zápasníky a diváky"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002191
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-14T08:00:57.136Z"
+}

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "oktagon-viktor-pesta",
+  "date": "2026-08-14",
+  "locale": "cs",
+  "kicker": "MMA Files · 14. srp",
+  "headline": "Viktor Pešta: 28 zápasů, 19 výher a kariéra, která nešla po rovné čáře",
+  "coverLine": "Pešta: 19 výher a kariéra plná zvratů",
+  "standfirst": "Polotěžká váha, tým Kill Cliff FC Penta Gym Prague a bilance 19-9. Tohle je příběh českého bojovníka, který prošel UFC i PFL.",
+  "passages": [
+    "Viktor Pešta vstoupil do profesionálního MMA v prosinci 2010 a od té doby odboxoval 28 zápasů. Bilance 19-9 říká hodně, ale čísla sama o sobě nevyprávějí celý příběh.",
+    "Pešta závodí v polotěžké váze a trénuje v týmu Kill Cliff FC Penta Gym Prague. Narodil se 15. července 1990, dosah má podle dostupných údajů přes 195 centimetrů.",
+    "Finišer s vysokou mírou ukončení Z 19 výher jich 15 přišlo před konečným gongem. To odpovídá míře ukončení přibližně 79 procent. Osm výher získal knockoutem nebo technickým knockoutem, sedm submisí.",
+    "Nejčastější submisní technikou bylo škrcení zezadu, které použil celkem čtyřikrát. Na body vyhrál čtyři zápasy. UFC a PFL Pešta se probojoval na největší scény.",
+    "V UFC debutoval v květnu 2014 na turnaji UFC Fight Night Munoz vs. Mousasi, kde prohrál na body s Ruslanem Magomedovem. O rok později na UFC on Fox Gustafsson vs.",
+    "Johnson porazil Konstantina Erokhina na body. V říjnu 2015 na UFC 192 podlehl Derricku Lewisovi technickým knockoutem ve třetím kole.",
+    "V srpnu 2016 prohrál knockoutem kopem na hlavě s Marcinem Tyburou. V lednu 2017 jej Aleksej Oleinik zaškrtil Ezekielovou technikou v prvním kole.",
+    "Po návratu na evropskou scénu sebral dvě výhry na Fight Nights Global a v roce 2022 zkusil PFL."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "Artwork by BoardlessAI FRAME"
+}
