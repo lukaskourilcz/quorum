@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-14",
+  "packageHash": "461a94663c9192654ce61f6f62875c3ba19dc9f723d98a843dece5dbfb2148b1",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "a4a078b325914bc4a21acecaba778c47f36af3a5",
+  "deliveredAt": "2026-08-14T03:08:49.127Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-14-openai-odchody-bezpecnostni-kultura",
+  "tags": [
+    "openai",
+    "umela-inteligence",
+    "kyberneticka-bezpecnost",
+    "soukromi",
+    "antitrustove-pravo",
+    "technologicke-firmy"
+  ]
+}

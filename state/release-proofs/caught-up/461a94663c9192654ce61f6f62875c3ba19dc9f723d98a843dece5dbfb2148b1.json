@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-e3c3d021a420c276",
+  "venture": "caught-up",
+  "packageHash": "461a94663c9192654ce61f6f62875c3ba19dc9f723d98a843dece5dbfb2148b1",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "a4a078b325914bc4a21acecaba778c47f36af3a5",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit a4a078b325914bc4a21acecaba778c47f36af3a5 is readable",
+      "checkedAt": "2026-08-14T03:08:47.832Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-14T03:08:47.832Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-14T03:08:47.832Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-14-openai-odchody-bezpecnostni-kultura?boardless_verify=461a94663c91-1786676927832",
+      "checkedAt": "2026-08-14T03:08:47.832Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-14-openai-odchody-bezpecnostni-kultura match",
+      "checkedAt": "2026-08-14T03:08:47.832Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 461a94663c9192654ce61f6f62875c3ba19dc9f723d98a843dece5dbfb2148b1",
+      "checkedAt": "2026-08-14T03:08:47.832Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-14-openai-odchody-bezpecnostni-kultura/hero.svg?boardless_verify=461a94663c91-1786676927832",
+      "checkedAt": "2026-08-14T03:08:47.832Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-14T03:08:47.832Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "FRAME fallback needs no external photo credit",
+      "checkedAt": "2026-08-14T03:08:47.832Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-14T03:07:45.739Z",
+  "completedAt": "2026-08-14T03:08:48.444Z"
+}
