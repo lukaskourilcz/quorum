@@ -24,6 +24,6 @@ Collapsed superseded entries: 0.
 
 | ID | Title (≤8 words) | Current status | Last reason |
 | --- | --- | --- | --- |
-| — | No ideas recorded | — | — |
+| idea-2026-08-14-d9da6300 | Add a Launch-Readiness Status Matrix | vetoed | VAULT hard stop: Both propose a single bounded matrix/checklist tracking owner, assets, dependencies, approval state, a… |
 
 Omitted older kill-list entries: 0.

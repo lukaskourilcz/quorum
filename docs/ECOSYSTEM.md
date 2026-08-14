@@ -41,7 +41,7 @@ builds and after a real 22:00 checkpoint. Never hand-edit the generated block.
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
 
-Refreshed from committed state: **2026-08-13T20:01:39.839Z**. This block is generated deterministically; edit the source state, not these lines.
+Refreshed from committed state: **2026-08-14T04:01:17.637Z**. This block is generated deterministically; edit the source state, not these lines.
 
 | Item | Current value |
 | --- | --- |
@@ -49,10 +49,10 @@ Refreshed from committed state: **2026-08-13T20:01:39.839Z**. This block is gene
 | Agent roster | 40 active: 25 Anthropic, 15 OpenAI |
 | Scheduled specialist/service rooms | 14; combined maximum room envelopes $1.61 if every room is commissioned |
 | Approved spend boundary | $30.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |
-| Recorded API spend | $4.26 this month; $4.27 cumulative |
+| Recorded API spend | $4.91 this month; $4.93 cumulative |
 | Entered fixed costs | $0.00 monthly |
 | Recognized revenue | $0.00 |
-| KPI quarter | 2026-Q1; open; 38 on track, 2 at risk, 12 off track, 27 unavailable |
+| KPI quarter | 2026-Q1; open; 39 on track, 2 at risk, 16 off track, 22 unavailable |
 | Critical KPI gaps | company.monthly-api-usd, marketingshark.package-completeness, marketingshark.truth-gate-violations, door-money.desk-reliability, door-money.cash-spend, tehdejsi-svet.cycle-reliability, tehdejsi-svet.language-parity, tehdejsi-svet.research-spend-usd, kvorum.desk-reliability, kvorum.published-claim-reference-rate |
 | FightAIQ analysis | approved by D8; production still requires `FIGHTAIQ_ANALYSIS_ENABLED=true` plus live and evidence gates |
 | Visitor/engagement measurement | disabled (`METRICS_INGESTION_ENABLED=false`) |
