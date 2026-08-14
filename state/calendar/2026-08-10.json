@@ -508,19 +508,24 @@
       "at": "2026-08-13T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
       "at": "2026-08-13T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-13-night",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-14T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-14-cu-edition",
+      "decisionOneLiner": "OpenAI je pro technologický průmysl referenčním bodem; souběh personálních odchodů, bezpečnostních otázek a nového produktu s dopadem na soukromí se dotýká každého, kdo AI nasazuje"
     },
     {
       "at": "2026-08-14T04:00:00.000Z",

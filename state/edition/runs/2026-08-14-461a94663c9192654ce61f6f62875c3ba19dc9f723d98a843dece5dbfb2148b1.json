@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "runId": "bcbff59a-1688-4302-9ec9-a340cc70c07e",
+  "date": "2026-08-14",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-08-14T03:00:37.855Z",
+  "completedAt": "2026-08-14T03:05:13.412Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-14T03:00:37.859Z",
+      "completedAt": "2026-08-14T03:01:00.141Z",
+      "durationMs": 22282
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-08-14T03:01:00.141Z",
+      "completedAt": "2026-08-14T03:03:00.059Z",
+      "durationMs": 119918,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-08-14T03:03:00.059Z",
+      "completedAt": "2026-08-14T03:04:52.481Z",
+      "durationMs": 112422
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-08-14T03:04:52.482Z",
+      "completedAt": "2026-08-14T03:04:52.486Z",
+      "durationMs": 4
+    },
+    {
+      "name": "quality_1",
+      "status": "success",
+      "startedAt": "2026-08-14T03:04:52.486Z",
+      "completedAt": "2026-08-14T03:04:52.486Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-08-14T03:04:52.486Z",
+      "completedAt": "2026-08-14T03:05:13.411Z",
+      "durationMs": 20925
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 13205,
+      "outputTokens": 938,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.053685
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 13558,
+      "outputTokens": 4817,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1221015
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 13558,
+      "outputTokens": 4288,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2588,
+      "costUsd": 0.114699
+    }
+  ],
+  "measuredCostUsd": 0.2904855,
+  "quality": {
+    "metrics": {
+      "successfulSources": 31,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 85,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.84375,
+      "duplicateStorySimilarity": 0.15384615384615385,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.2904855
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "plate",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 1,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "scene:20348454",
+            "provider": "wikimedia",
+            "fit": 3,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "The image shows server hardware in a data center, which is a generic illustration of tech infrastructure, but the saturated colors, dramatic lighting, and shallow depth-of-field create a dated mid-2000s aesthetic that feels overused in technology coverage and doesn't specifically connect to OpenAI's internal governance crisis.",
+            "sceneCs": "serverová zařízení v datovém centru"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002413
+      },
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": null,
+        "reason": "unparsable:[\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"verdicts\"\n    ],\n    \"message\": \"Invalid input: expected array, received undefined\"\n  }\n]",
+        "candidates": [],
+        "skipped": [],
+        "costUsd": 0.009598
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]",
+    "image_rung:plate",
+    "image_gate:curated:all-candidates-rejected",
+    "image_gate:search:unparsable:[\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"verdicts\"\n    ],\n    \"message\": \"Invalid input: expected array, received undefined\"\n  }\n]"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

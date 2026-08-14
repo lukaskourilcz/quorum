@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-14-openai-odchody-bezpecnostni-kultura",
+  "date": "2026-08-14",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "scene:20348454",
+          "provider": "wikimedia",
+          "fit": 3,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "The image shows server hardware in a data center, which is a generic illustration of tech infrastructure, but the saturated colors, dramatic lighting, and shallow depth-of-field create a dated mid-2000s aesthetic that feels overused in technology coverage and doesn't specifically connect to OpenAI's internal governance crisis.",
+          "sceneCs": "serverová zařízení v datovém centru"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002413
+    },
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": null,
+      "reason": "unparsable:[\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"verdicts\"\n    ],\n    \"message\": \"Invalid input: expected array, received undefined\"\n  }\n]",
+      "candidates": [],
+      "skipped": [],
+      "costUsd": 0.009598
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-14T03:00:32.246Z"
+}

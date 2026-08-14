@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-14-openai-odchody-bezpecnostni-kultura",
+  "date": "2026-08-14",
+  "locale": "cs",
+  "kicker": "DNESKAi · 14. srp",
+  "headline": "OpenAI ztrácí vedoucí pracovníky a svádí boj o bezpečnostní kulturu",
+  "coverLine": "Odchody, klávesové záznamy a matematik s obavami z AI: co se děje uvnitř OpenAI",
+  "standfirst": "Dva odchody z vrcholového vedení za jeden týden, vyšetřování Wired o incidentu s autonomním agentem a nový produkt, který zaznamenává stisky kláves –",
+  "passages": [
+    "Denise Dresserová opouští post CRO OpenAI, druhý odchod z vedení za týden po Bradu Lightcapovi.",
+    "OpenAI spustil Computer History, funkci zaznamenávající stisky kláves a kliknutí místo snímků obrazovky.",
+    "Jacob Tsimerman, držitel Fieldsovy medaile, nastupuje do OpenAI navzdory veřejně deklarovaným obavám z AI.",
+    "Bílý dům vydal memorandum povolující soukromým bezpečnostním firmám ofenzivní kybernetické operace v zahraničí.",
+    "OpenAI je firma, jejíž produkty denně používají stovky milionů lidí – personální nestabilita a otázky kolem bezpečnostní kultury mají přímý dopad na to,",
+    "jak rychle a jak bezpečně se tyto nástroje vyvíjejí.",
+    "Funkce Computer History mění debatu o soukromí: nepřetržitý záznam vstupních událostí zasahuje uživatele ChatGPT bez ohledu na to, zda se o AI jinak zajímají.",
+    "Soudní spory Apple vs. Epic a případ Googlu nastavují ekonomická pravidla aplikačního trhu pro celou dekádu."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Artwork by BoardlessAI FRAME"
+}

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260814030032-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "OpenAI je pro technologický průmysl referenčním bodem; souběh personálních odchodů, bezpečnostních otázek a nového produktu s dopadem na soukromí se dotýká každého, kdo AI nasazuje nebo hodnotí.",
+  "evidenceRefs": [
+    "source:ars-technica",
+    "source:wired-ai",
+    "source:the-register",
+    "source:tensorfeed",
+    "source:the-verge",
+    "source:variety",
+    "source:simonw"
+  ],
+  "editionRef": "461a94663c9192654ce61f6f62875c3ba19dc9f723d98a843dece5dbfb2148b1",
+  "generatedAt": "2026-08-14T03:00:37.246Z"
+}

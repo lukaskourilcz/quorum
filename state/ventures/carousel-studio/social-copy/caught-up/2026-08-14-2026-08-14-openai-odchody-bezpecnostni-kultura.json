@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-08-14-openai-odchody-bezpecnostni-kultura",
+  "date": "2026-08-14",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "OpenAI ztrácí druhého vrcholového manažera za týden. Nová funkce Computer History zaznamenává stisky kláves a ukládá je nešifrovaně. Matematik s Fieldsovou medailí, který se AI bojí, do firmy nastupuje. A Bílý dům poprvé povolil soukromým firmám útočné kybernetické operace v zahraničí.",
+    "hashtags": [
+      "openai",
+      "umelajinteligence",
+      "kybernetickabezpecnost",
+      "soukromi",
+      "keylogging",
+      "antitrustovyspor",
+      "appleepic",
+      "fieldsmedal",
+      "copilot",
+      "techpolitika"
+    ],
+    "threadsText": "OpenAI přišel za týden o dva lidi z vrcholového vedení. Zároveň spustil funkci, která zaznamenává každý stisk klávesy a kliknutí – soubory nejsou šifrovány. A matematik s Fieldsovou medailí, který z AI má obavy, nastupuje do bezpečnostního týmu. Hodně věcí najednou pro jednu firmu.",
+    "storyLine": "OpenAI: odchody, keylogging a matematik s obavami z AI"
+  },
+  "heroCredit": "Artwork by BoardlessAI FRAME",
+  "origin": "desk"
+}
