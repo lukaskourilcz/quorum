@@ -2,6 +2,18 @@
   "schemaVersion": "carousel-deck-style-overrides/1",
   "overrides": [
     {
+      "venture": "mma-files",
+      "slug": "oktagon-viktor-pesta",
+      "date": "2026-08-14",
+      "style": "broadsheet",
+      "family": "broadsheet",
+      "variant": "A",
+      "accentSwap": true,
+      "treatment": "none",
+      "typeScale": 1.1,
+      "changedAt": "2026-08-14T12:47:54.910Z"
+    },
+    {
       "venture": "caught-up",
       "slug": "2026-08-08-openai-astra-pozastaveni-kyberneticky-prach",
       "date": "2026-08-08",
@@ -26,5 +38,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-08-10T20:02:01.457Z"
+  "updatedAt": "2026-08-14T12:47:54.910Z"
 }
