@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-08-14T07:01:38.641Z",
+  "checkedAt": "2026-08-14T08:06:15.257Z",
   "date": "2026-08-14",
   "ventures": [
     {
@@ -43,8 +43,8 @@
     },
     {
       "venture": "mma-files",
-      "url": "https://mma-files.vercel.app/cs/articles/ufc-event-ufc-330-makhachev-vs-machado-garry",
-      "expected": "ufc-event-ufc-330-makhachev-vs-machado-garry",
+      "url": "https://mma-files.vercel.app/cs/articles/oktagon-viktor-pesta",
+      "expected": "oktagon-viktor-pesta",
       "status": 200,
       "live": true
     }
