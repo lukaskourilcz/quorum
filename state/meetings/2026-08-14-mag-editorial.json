@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260814123608-mag-editorial",
+  "date": "2026-08-14",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.023656,
+    "monthAllInUsd": 5.218130999999999,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "AM: assigned; PM: killed",
+    "evidenceRefs": [
+      "meeting:2026-08-13-mma-analysis",
+      "meeting:2026-08-13-mag-desk",
+      "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "JAB",
+      "summary": "Slot zabít: chybí nový zdrojový subjekt i aktuální modelový výstup; UFC 330 už má čerstvý preview článek a opakování není přípustné.",
+      "evidenceRefs": [
+        "meeting:2026-08-13-mma-analysis",
+        "meeting:2026-08-13-mag-desk",
+        "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Slot can run as a UFC event preview, but the same event was published on 12 August. Kill it unless a fresh, source-backed angle is supplied.",
+      "evidenceRefs": [
+        "meeting:2026-08-13-mma-analysis",
+        "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-14.json",
+  "generatedAt": "2026-08-14T12:39:08.855Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-14T12:36:08.855Z",
+    "closedAt": "2026-08-14T12:39:08.855Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-14T12:36:08.855Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-14T12:37:08.855Z",
+        "text": "Slot zabít: chybí nový zdrojový subjekt i aktuální modelový výstup; UFC 330 už má čerstvý preview článek a opakování není přípustné.",
+        "evidenceRefs": [
+          "meeting:2026-08-13-mma-analysis",
+          "meeting:2026-08-13-mag-desk",
+          "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-14T12:38:08.855Z",
+        "text": "Slot can run as a UFC event preview, but the same event was published on 12 August. Kill it unless a fresh, source-backed angle is supplied.",
+        "evidenceRefs": [
+          "meeting:2026-08-13-mma-analysis",
+          "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-14T12:39:08.855Z",
+        "text": "AM: assigned; PM: killed"
+      }
+    ]
+  }
+}

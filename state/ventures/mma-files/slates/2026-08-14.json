@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "editorial-slate/1",
+  "date": "2026-08-14",
+  "slots": [
+    {
+      "slot": "am",
+      "organization": "ufc",
+      "format": "fight-week-preview",
+      "subjectRefs": [
+        "ufc:event:ufc-330-makhachev-vs-machado-garry"
+      ],
+      "rationale": "The nearest verified card is inside the three-day window and takes one daily slot.",
+      "assignedWriter": "JAB",
+      "status": "assigned"
+    },
+    {
+      "slot": "pm",
+      "format": "desk-notes",
+      "subjectRefs": [
+        "missing:2026-08-14:pm"
+      ],
+      "rationale": "The desk publishes one article a day; this slot is not scheduled.",
+      "assignedWriter": "QUILL",
+      "status": "killed",
+      "killedReason": "single-slot cadence"
+    }
+  ],
+  "vaultVerdicts": [
+    {
+      "subjectRef": "missing:2026-08-14:pm",
+      "verdict": "repeat",
+      "evidenceRef": "meeting:2026-08-14-mag-editorial"
+    },
+    {
+      "subjectRef": "ufc:event:ufc-330-makhachev-vs-machado-garry",
+      "verdict": "fresh",
+      "evidenceRef": "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+    }
+  ]
+}
