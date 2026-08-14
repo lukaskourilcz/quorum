@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Anshul_Jubli",
       "publisher": "Wikipedia",
       "title": "Anshul Jubli",
-      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "retrievedAt": "2026-08-14T06:02:00.810Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q116741335",
         "source:wikipedia:72989309"
       ],
-      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "retrievedAt": "2026-08-14T06:02:00.810Z",
       "status": "verified",
       "corroborated": true
     },
@@ -77,7 +77,7 @@
       "sourceRefs": [
         "source:wikipedia:72989309"
       ],
-      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "retrievedAt": "2026-08-14T06:02:00.810Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -86,7 +86,7 @@
       "sourceRefs": [
         "source:wikipedia:72989309"
       ],
-      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "retrievedAt": "2026-08-14T06:02:00.810Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -95,7 +95,7 @@
       "sourceRefs": [
         "source:wikipedia:72989309"
       ],
-      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "retrievedAt": "2026-08-14T06:02:00.810Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -104,7 +104,7 @@
       "sourceRefs": [
         "source:wikipedia:72989309"
       ],
-      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "retrievedAt": "2026-08-14T06:02:00.810Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -114,7 +114,7 @@
         "source:cito-ufc:2026-08-06:fighter:5c4e80fd-9ed2-488c-aabc-262b9514a178",
         "source:wikipedia:72989309"
       ],
-      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "retrievedAt": "2026-08-14T06:02:00.810Z",
       "status": "verified",
       "corroborated": true
     },
@@ -132,7 +132,7 @@
       "sourceRefs": [
         "source:wikipedia:72989309"
       ],
-      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "retrievedAt": "2026-08-14T06:02:00.810Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -186,7 +186,7 @@
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [],
-    "lastReviewedAt": "2026-08-13T06:01:42.251Z"
+    "lastReviewedAt": "2026-08-14T06:02:00.810Z"
   },
   "changeLog": [
     {
@@ -2176,11 +2176,28 @@
         "source:wikipedia:72989309"
       ],
       "note": "Reviewed the Wikipedia profile and found 0 historical fight rows."
+    },
+    {
+      "at": "2026-08-14T06:02:00.810Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "heightCm",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:72989309"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 0 historical fight rows."
     }
   ],
   "completeness": 1,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-13T06:01:42.251Z"
+  "updatedAt": "2026-08-14T06:02:00.810Z"
 }

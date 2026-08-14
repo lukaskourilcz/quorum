@@ -1,0 +1,209 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260814060200-mma-intake",
+  "date": "2026-08-14",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SONAR",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.026694,
+    "monthAllInUsd": 5.088937999999999,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-14",
+      "source:cito-ufc:2026-08-14",
+      "source:wikimedia:2026-08-14",
+      "source:wikipedia-schedule:2026-08-14",
+      "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "UFC 330 card confirmed, 12 bouts announced. 50 fighters recorded; 0 complete on critical fields. 50 missing height/reach/stance across roster. No build task assigned; mma-intake reports only. Next: resolve two-source gaps for main-card fighters before model run.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-14",
+        "source:cito-ufc:2026-08-14",
+        "source:wikimedia:2026-08-14",
+        "source:wikipedia-schedule:2026-08-14"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon is listed but no card, fighter, weigh-in or result evidence is supplied; UFC sources are active, yet no critical fighter record is complete. Do not import or model Oktagon data.",
+      "evidenceRefs": [
+        "source:cito-ufc:2026-08-14",
+        "source:wikimedia:2026-08-14",
+        "source:wikipedia-schedule:2026-08-14"
+      ]
+    },
+    {
+      "agent": "TAPE",
+      "summary": "UFC 330 card confirmed across two independent sources. Fighter file gaps prevent model use: 50 records seen, zero complete on critical fields. Height, reach and stance missing across 38+ fighters on this card alone.",
+      "evidenceRefs": [
+        "source:wikipedia-schedule:2026-08-14",
+        "source:cito-ufc:2026-08-14",
+        "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+      ]
+    },
+    {
+      "agent": "SONAR",
+      "summary": "UFC 330 card confirmed across two sources (Wikipedia, CITO). All 12 bouts announced, no discrepancies. Fighter roster 50 records, 0 complete on critical fields. 50 names missing height, reach or stance. No new source gaps identified today.",
+      "evidenceRefs": [
+        "source:wikipedia-schedule:2026-08-14",
+        "source:cito-ufc:2026-08-14",
+        "source:the-odds-api:2026-08-14"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SONAR",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260814060200-MMA-INTAKE-02",
+      "owner": "SPOTTER",
+      "summary": "Obtain two independent Oktagon sources for the nearest card and each critical fighter field before intake.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260814060200-MMA-INTAKE-03",
+      "owner": "TAPE",
+      "summary": "Prioritize height, reach and stance for UFC 330 card fighters via manual lookup or secondary roster pages before weigh-ins tomorrow. Block model probability output until critical fields agree across two sources per doctrine.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Data only. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-14",
+      "source:cito-ufc:2026-08-14",
+      "source:wikimedia:2026-08-14",
+      "source:wikipedia-schedule:2026-08-14",
+      "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+    ]
+  },
+  "generatedAt": "2026-08-14T06:07:00.810Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-14T06:02:00.810Z",
+    "closedAt": "2026-08-14T06:07:00.810Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-14T06:02:00.810Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-14T06:03:00.810Z",
+        "text": "UFC 330 card confirmed, 12 bouts announced. 50 fighters recorded; 0 complete on critical fields. 50 missing height/reach/stance across roster. No build task assigned; mma-intake reports only. Next: resolve two-source gaps for main-card fighters before model run.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-14",
+          "source:cito-ufc:2026-08-14",
+          "source:wikimedia:2026-08-14",
+          "source:wikipedia-schedule:2026-08-14"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-14T06:04:00.810Z",
+        "text": "Oktagon is listed but no card, fighter, weigh-in or result evidence is supplied; UFC sources are active, yet no critical fighter record is complete. Do not import or model Oktagon data.",
+        "evidenceRefs": [
+          "source:cito-ufc:2026-08-14",
+          "source:wikimedia:2026-08-14",
+          "source:wikipedia-schedule:2026-08-14"
+        ]
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-14T06:05:00.810Z",
+        "text": "UFC 330 card confirmed across two independent sources. Fighter file gaps prevent model use: 50 records seen, zero complete on critical fields. Height, reach and stance missing across 38+ fighters on this card alone.",
+        "evidenceRefs": [
+          "source:wikipedia-schedule:2026-08-14",
+          "source:cito-ufc:2026-08-14",
+          "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+        ]
+      },
+      {
+        "agent": "SONAR",
+        "mode": "statement",
+        "sentAt": "2026-08-14T06:06:00.810Z",
+        "text": "UFC 330 card confirmed across two sources (Wikipedia, CITO). All 12 bouts announced, no discrepancies. Fighter roster 50 records, 0 complete on critical fields. 50 names missing height, reach or stance. No new source gaps identified today.",
+        "evidenceRefs": [
+          "source:wikipedia-schedule:2026-08-14",
+          "source:cito-ufc:2026-08-14",
+          "source:the-odds-api:2026-08-14"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-14T06:07:00.810Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

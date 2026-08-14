@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-12T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-13:List of UFC events"
+    "source:wikipedia:2026-08-14:List of UFC events"
   ],
   "bouts": [
     {
@@ -76,15 +76,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-rodriguez-vs-silva:bout:kelvin-gastelum-vs-yousri-belgaroui-9",
-      "red": "ufc:kelvin-gastelum",
-      "blue": "ufc:yousri-belgaroui",
-      "division": "middleweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-fight-night-rodriguez-vs-silva:bout:jj-aldrich-vs-regina-tarin-10",
+      "id": "ufc:ufc-fight-night-rodriguez-vs-silva:bout:jj-aldrich-vs-regina-tarin-9",
       "red": "ufc:jj-aldrich",
       "blue": "ufc:regina-tarin",
       "division": "womens-flyweight",
@@ -92,5 +84,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-13T06:01:42.251Z"
+  "updatedAt": "2026-08-14T06:02:00.810Z"
 }

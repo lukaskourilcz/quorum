@@ -64,7 +64,7 @@
       "url": "https://en.wikipedia.org/wiki/Beno%C3%AEt_Saint_Denis",
       "publisher": "Wikipedia",
       "title": "Benoît Saint Denis",
-      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "retrievedAt": "2026-08-14T06:02:00.810Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -77,7 +77,7 @@
         "source:wikipedia:43536705",
         "source:wikipedia:71431355"
       ],
-      "retrievedAt": "2026-08-13T06:01:42.251Z",
+      "retrievedAt": "2026-08-14T06:02:00.810Z",
       "status": "verified",
       "corroborated": true
     },
@@ -181,9 +181,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 365.25,
-        "layoffDays": 271
+        "layoffDays": 272
       },
-      "updatedAt": "2026-08-13T06:01:42.251Z"
+      "updatedAt": "2026-08-14T06:02:00.810Z"
     }
   ],
   "rating": {
@@ -193,7 +193,7 @@
     "volatility": 0.05999981,
     "boutCount": 2,
     "asOfBoutRef": "ufc:bout:history-a775e4f676b95106dbba",
-    "updatedAt": "2026-08-13T06:01:42.251Z"
+    "updatedAt": "2026-08-14T06:02:00.810Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1451,11 +1451,26 @@
         "source:wikipedia:43536705"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-14T06:02:00.810Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43536705"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.625,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-13T06:01:42.251Z"
+  "updatedAt": "2026-08-14T06:02:00.810Z"
 }

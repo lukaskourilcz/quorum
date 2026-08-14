@@ -128,7 +128,25 @@
       "notBefore": "2026-08-13",
       "expiresAt": "2026-08-16T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-5e3d98ba014d8a12",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-14-mma-intake",
+      "summary": "Decide: run probability model on UFC 330 main card (Makhachev–Machado Garry + Dern–Robertson) now with one-source height/reach, or wait for two-source critical fields on all 5 main slots.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-14",
+        "source:cito-ufc:2026-08-14"
+      ],
+      "requestedAt": "2026-08-14T06:02:00.810Z",
+      "notBefore": "2026-08-14",
+      "expiresAt": "2026-08-17T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-13T06:01:42.251Z"
+  "updatedAt": "2026-08-14T06:02:00.810Z"
 }

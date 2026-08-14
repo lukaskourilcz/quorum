@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-05T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-13:List of UFC events"
+    "source:wikipedia:2026-08-14:List of UFC events"
   ],
   "bouts": [
     {
@@ -20,7 +20,15 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:michael-page-vs-nursulton-ruziboev-2",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:fares-ziam-vs-axel-sola-2",
+      "red": "ufc:fares-ziam",
+      "blue": "ufc:axel-sola",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:michael-page-vs-nursulton-ruziboev-3",
       "red": "ufc:michael-page",
       "blue": "ufc:nursulton-ruziboev",
       "division": "middleweight",
@@ -28,7 +36,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:morgan-charriere-vs-felipe-lima-3",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:morgan-charriere-vs-felipe-lima-4",
       "red": "ufc:morgan-charriere",
       "blue": "ufc:felipe-lima",
       "division": "featherweight",
@@ -36,7 +44,15 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:mario-pinto-vs-ryan-spann-4",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:losene-keita-vs-muhammad-naimov-5",
+      "red": "ufc:losene-keita",
+      "blue": "ufc:muhammad-naimov",
+      "division": "featherweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:mario-pinto-vs-ryan-spann-6",
       "red": "ufc:mario-pinto",
       "blue": "ufc:ryan-spann",
       "division": "heavyweight",
@@ -44,7 +60,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:kurtis-campbell-vs-trevor-peek-5",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:kurtis-campbell-vs-trevor-peek-7",
       "red": "ufc:kurtis-campbell",
       "blue": "ufc:trevor-peek",
       "division": "featherweight",
@@ -52,7 +68,15 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:nathaniel-wood-vs-mairon-santos-6",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:oumar-sy-vs-modestas-bukauskas-8",
+      "red": "ufc:oumar-sy",
+      "blue": "ufc:modestas-bukauskas",
+      "division": "light-heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:nathaniel-wood-vs-mairon-santos-9",
       "red": "ufc:nathaniel-wood",
       "blue": "ufc:mairon-santos",
       "division": "featherweight",
@@ -60,7 +84,15 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:matthieu-letho-duclos-vs-luis-felipe-dias-7",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:nora-cornolle-vs-klaudia-sygu-a-10",
+      "red": "ufc:nora-cornolle",
+      "blue": "ufc:klaudia-sygu-a",
+      "division": "womens-bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:matthieu-letho-duclos-vs-luis-felipe-dias-11",
       "red": "ufc:matthieu-letho-duclos",
       "blue": "ufc:luis-felipe-dias",
       "division": "middleweight",
@@ -68,5 +100,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-13T06:01:42.251Z"
+  "updatedAt": "2026-08-14T06:02:00.810Z"
 }

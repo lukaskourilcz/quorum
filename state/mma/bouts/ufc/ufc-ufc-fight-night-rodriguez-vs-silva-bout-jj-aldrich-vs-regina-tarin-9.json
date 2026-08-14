@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:ufc-ufc-fight-night-rodriguez-vs-silva-bout-jj-aldrich-vs-regina-tarin-9",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:ufc-fight-night-rodriguez-vs-silva",
+    "name": "UFC Fight Night: Rodríguez vs. Silva",
+    "startsAtUtc": "2026-09-12T00:00:00.000Z",
+    "venue": "Desert Diamond Arena"
+  },
+  "fighters": {
+    "red": "ufc:jj-aldrich",
+    "blue": "ufc:regina-tarin"
+  },
+  "division": "womens-flyweight",
+  "scheduledRounds": 3,
+  "status": "announced",
+  "statusHistory": [
+    {
+      "status": "announced",
+      "at": "2026-08-14T06:02:00.810Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-14:List of UFC events"
+      ],
+      "note": "Status imported from the Cito event listing."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-14T06:02:00.810Z",
+    "lastSeenAt": "2026-08-14T06:02:00.810Z",
+    "sourceRefs": [
+      "source:wikipedia:2026-08-14:List of UFC events"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:2026-08-14:List of UFC events"
+  ],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-14T06:02:00.810Z",
+      "kind": "created",
+      "fields": [
+        "event",
+        "fighters",
+        "status"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-14:List of UFC events"
+      ],
+      "note": "Discovered on the approved Cito free-tier intake."
+    }
+  ],
+  "updatedAt": "2026-08-14T06:02:00.810Z"
+}

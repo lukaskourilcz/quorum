@@ -1,6 +1,6 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-08-13T06:01:42.251Z",
+  "generatedAt": "2026-08-14T06:02:00.810Z",
   "items": [
     {
       "fighterRef": "oktagon:niamh-kinehan",
@@ -31,7 +31,7 @@
         "stance",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-13T06:01:42.251Z",
+      "reviewedAt": "2026-08-14T06:02:00.810Z",
       "uncorroborated": [
         "division",
         "record"
@@ -53,7 +53,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-13T06:01:42.251Z",
+      "reviewedAt": "2026-08-14T06:02:00.810Z",
       "uncorroborated": [
         "record"
       ]
@@ -65,7 +65,7 @@
       "gaps": [
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-08-13T06:01:42.251Z",
+      "reviewedAt": "2026-08-14T06:02:00.810Z",
       "uncorroborated": [
         "division"
       ]
@@ -77,7 +77,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-13T06:01:42.251Z",
+      "reviewedAt": "2026-08-14T06:02:00.810Z",
       "uncorroborated": [
         "division",
         "record"
@@ -90,7 +90,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-13T06:01:42.251Z",
+      "reviewedAt": "2026-08-14T06:02:00.810Z",
       "uncorroborated": [
         "division",
         "record"
@@ -101,7 +101,7 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-08-13T06:01:42.251Z",
+      "reviewedAt": "2026-08-14T06:02:00.810Z",
       "uncorroborated": [
         "division"
       ]
@@ -132,7 +132,7 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-08-13T06:01:42.251Z",
+      "reviewedAt": "2026-08-14T06:02:00.810Z",
       "uncorroborated": [
         "name",
         "division",
@@ -146,7 +146,7 @@
       "gaps": [
         "team"
       ],
-      "reviewedAt": "2026-08-13T06:01:42.251Z",
+      "reviewedAt": "2026-08-14T06:02:00.810Z",
       "uncorroborated": [
         "division"
       ]
@@ -156,7 +156,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-13T06:01:42.251Z",
+      "reviewedAt": "2026-08-14T06:02:00.810Z",
       "uncorroborated": [
         "division"
       ]
@@ -166,7 +166,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-13T06:01:42.251Z",
+      "reviewedAt": "2026-08-14T06:02:00.810Z",
       "uncorroborated": [
         "division"
       ]
@@ -176,7 +176,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-13T06:01:42.251Z",
+      "reviewedAt": "2026-08-14T06:02:00.810Z",
       "uncorroborated": [
         "division"
       ]
@@ -186,7 +186,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-08-13T06:01:42.251Z",
+      "reviewedAt": "2026-08-14T06:02:00.810Z",
       "uncorroborated": [
         "division",
         "record"
@@ -273,6 +273,36 @@
     },
     {
       "fighterRef": "ufc:arman-tsarukyan",
+      "priority": 480,
+      "reason": "uncorroborated",
+      "gaps": [
+        "reachCm",
+        "team",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:brendan-allen",
+      "priority": 480,
+      "reason": "uncorroborated",
+      "gaps": [
+        "reachCm",
+        "team",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:brian-ortega",
       "priority": 480,
       "reason": "uncorroborated",
       "gaps": [
@@ -853,32 +883,6 @@
         "division",
         "record"
       ]
-    },
-    {
-      "fighterRef": "ufc:brendan-allen",
-      "priority": 350,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "reachCm",
-        "team"
-      ],
-      "reviewedAt": ""
-    },
-    {
-      "fighterRef": "ufc:brian-ortega",
-      "priority": 350,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "reachCm",
-        "team"
-      ],
-      "reviewedAt": ""
     },
     {
       "fighterRef": "ufc:ciryl-gane",

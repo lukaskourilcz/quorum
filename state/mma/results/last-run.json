@@ -9,28 +9,7 @@
       "results": 12
     }
   ],
-  "applied": [
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-amanda-lemos-vs-alexia-thainara-4",
-      "winner": "blue",
-      "method": "Decision (unanimous)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-billy-ray-goff-vs-ty-miller-5",
-      "winner": "blue",
-      "method": "TKO (punches)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-steven-asplund-vs-guilherme-pat-6",
-      "winner": "red",
-      "method": "Decision (unanimous)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-manoel-sousa-vs-richie-miranda-10",
-      "winner": "red",
-      "method": "Decision (unanimous)"
-    }
-  ],
-  "untracked": 8,
-  "generatedAt": "2026-08-13T06:01:42.251Z"
+  "applied": [],
+  "untracked": 12,
+  "generatedAt": "2026-08-14T06:02:00.810Z"
 }

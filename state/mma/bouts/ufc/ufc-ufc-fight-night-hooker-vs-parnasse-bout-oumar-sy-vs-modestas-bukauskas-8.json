@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-oumar-sy-vs-modestas-bukauskas-8",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:ufc-fight-night-hooker-vs-parnasse",
+    "name": "UFC Fight Night: Hooker vs. Parnasse",
+    "startsAtUtc": "2026-09-05T00:00:00.000Z",
+    "venue": "Accor Arena"
+  },
+  "fighters": {
+    "red": "ufc:oumar-sy",
+    "blue": "ufc:modestas-bukauskas"
+  },
+  "division": "light-heavyweight",
+  "scheduledRounds": 3,
+  "status": "announced",
+  "statusHistory": [
+    {
+      "status": "announced",
+      "at": "2026-08-14T06:02:00.810Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-14:List of UFC events"
+      ],
+      "note": "Status imported from the Cito event listing."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-14T06:02:00.810Z",
+    "lastSeenAt": "2026-08-14T06:02:00.810Z",
+    "sourceRefs": [
+      "source:wikipedia:2026-08-14:List of UFC events"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:2026-08-14:List of UFC events"
+  ],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-14T06:02:00.810Z",
+      "kind": "created",
+      "fields": [
+        "event",
+        "fighters",
+        "status"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-14:List of UFC events"
+      ],
+      "note": "Discovered on the approved Cito free-tier intake."
+    }
+  ],
+  "updatedAt": "2026-08-14T06:02:00.810Z"
+}
