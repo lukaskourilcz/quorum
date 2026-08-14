@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260814140118-dm-growth",
+  "phase": "dm-growth",
+  "estimatedWorstCaseUsd": 0,
+  "actualUsd": 0,
+  "participants": [],
+  "agenda": {
+    "isoWeek": "2026-W33",
+    "topicId": "launch-mechanics"
+  },
+  "generatedAt": "2026-08-14T14:01:19.183Z"
+}
