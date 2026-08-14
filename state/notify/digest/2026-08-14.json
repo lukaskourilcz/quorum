@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "mode": "log",
+  "status": "sent",
+  "subject": "[BoardlessAI] Digest — 2026-08-14",
+  "digest": {
+    "schemaVersion": "daily-digest/1",
+    "date": "2026-08-14",
+    "meetings": [
+      {
+        "ventureId": "caught-up",
+        "kind": "cu-edition",
+        "held": true,
+        "bullets": [
+          {
+            "text": "OpenAI je pro technologický průmysl referenčním bodem; souběh personálních odchodů, bezpečnostních otázek a nového produktu s dopadem na soukromí…",
+            "roomLink": "/meetings/2026-08-14-cu-edition"
+          }
+        ],
+        "costUsd": 0.2904855
+      },
+      {
+        "ventureId": "global",
+        "kind": "morning",
+        "held": true,
+        "bullets": [
+          {
+            "text": "The council held the internal work item. No external action, business claim or stage change was approved.",
+            "roomLink": "/standups/20260814040029-morning/room"
+          }
+        ],
+        "costUsd": 0.1127214
+      },
+      {
+        "ventureId": "global",
+        "kind": "ms-daily",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No package was drafted. devshark: model-output-invalid.",
+            "roomLink": "/meetings/2026-08-14-ms-daily"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "fightaiq",
+        "kind": "mma-intake",
+        "held": true,
+        "bullets": [
+          {
+            "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+            "roomLink": "/meetings/2026-08-14-mma-intake"
+          }
+        ],
+        "costUsd": 0.026694
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "mag-editorial",
+        "held": true,
+        "bullets": [
+          {
+            "text": "AM: assigned; PM: killed",
+            "roomLink": "/meetings/2026-08-14-mag-editorial"
+          }
+        ],
+        "costUsd": 0.023656
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "article-am",
+        "held": true,
+        "bullets": [
+          {
+            "text": "The desk published this slot's article.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "titty-tuesdays",
+        "kind": "tt-marketing",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Titty Tuesdays marketing room was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "bh-desk",
+        "held": false,
+        "bullets": [
+          {
+            "text": "The selection phase remains current. No provider was called, nothing was published and this day cost $0.",
+            "roomLink": "/meetings/2026-08-14-bh-desk"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "gv-brief",
+        "held": false,
+        "bullets": [
+          {
+            "text": "This room meets on Mondays. Nothing was spent.",
+            "roomLink": "/meetings/2026-08-14-gv-brief"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "afternoon",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No externally consequential action was approved.",
+            "roomLink": "/standups/20260814120339-afternoon/room"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "dm-desk",
+        "held": true,
+        "bullets": [
+          {
+            "text": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped.",
+            "roomLink": "/meetings/2026-08-14-dm-desk"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "dm-growth",
+        "held": false,
+        "bullets": [
+          {
+            "text": "$0 — this room meets on Thursdays. Nothing was spent and no action was taken.",
+            "roomLink": "/meetings/2026-08-14-dm-growth"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "caught-up",
+        "kind": "cu-product",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Caught Up product room was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-10"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "ts-desk",
+        "held": false,
+        "bullets": [
+          {
+            "text": "The Tehdejsi svet desk remains behind its owner countersignature. The free shortlist may be recorded, but no brief, copy,…",
+            "roomLink": "/meetings/2026-08-14-ts-desk"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "fightaiq",
+        "kind": "mma-analysis",
+        "held": false,
+        "bullets": [
+          {
+            "text": "No model run exists to review yet — waiting for the odds data key.",
+            "roomLink": "/meetings/2026-08-14-mma-analysis"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "mag-desk",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent.",
+            "roomLink": "/meetings/2026-08-14-mag-desk"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "night",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No externally consequential action was approved.",
+            "roomLink": "/standups/20260814200114-night/room"
+          }
+        ],
+        "costUsd": 0
+      }
+    ],
+    "operations": [
+      {
+        "ventureId": "caught-up",
+        "type": "release-proof",
+        "status": "passed",
+        "text": "caught-up release proof passed; the public result was checked after delivery.",
+        "ref": "release-proofs/caught-up/461a94663c9192654ce61f6f62875c3ba19dc9f723d98a843dece5dbfb2148b1.json"
+      },
+      {
+        "ventureId": "mma-files",
+        "type": "release-proof",
+        "status": "passed",
+        "text": "mma-files release proof passed; the public result was checked after delivery.",
+        "ref": "release-proofs/mma-files/b830c1fcfc937aa4a880d3b1f8e5bcdf702d4d0877994a41f9824dcf56e81401.json"
+      },
+      {
+        "ventureId": "caught-up",
+        "type": "delivery",
+        "status": "delivered",
+        "text": "caught-up delivery delivered; a saved receipt identifies the exact package.",
+        "ref": "edition/deliveries/2026-08-14.json"
+      },
+      {
+        "ventureId": "global",
+        "type": "failure",
+        "status": "none",
+        "text": "No social publishing failure was recorded today.",
+        "ref": null
+      },
+      {
+        "ventureId": "caught-up",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "caught-up social check locked; ready count 2/7.",
+        "ref": "social/activation.json"
+      },
+      {
+        "ventureId": "mma-files",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "mma-files social check locked; ready count 3/10.",
+        "ref": "social/activation.json"
+      },
+      {
+        "ventureId": "titty-tuesdays",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "titty-tuesdays social check locked; ready count 0/4.",
+        "ref": "social/activation.json"
+      }
+    ],
+    "portfolioLine": "Recorded API spend $0.6062 against the $1.00 daily budget.",
+    "bodyWordCount": 275
+  },
+  "bodyWordCount": 352,
+  "compressed": false,
+  "truncated": false,
+  "sentAt": "2026-08-14T20:01:15.964Z"
+}

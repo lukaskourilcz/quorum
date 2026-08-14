@@ -1,0 +1,309 @@
+{
+  "schemaVersion": 1,
+  "cycleId": "20260814200114-night",
+  "date": "2026-08-14",
+  "phase": "night",
+  "episode": {
+    "id": "EP-20260814-NIGHT",
+    "shift": "night",
+    "title": "Night handoff",
+    "hours": "22:00–06:00",
+    "nextShift": "morning",
+    "handoff": "Reconcile the day and leave a concise opening brief for the morning shift."
+  },
+  "fixture": false,
+  "status": "NO_ACTION",
+  "stage": "VALIDATION",
+  "operatingBrief": "Night shift reviewed its bounded objective and prepared the next handoff.",
+  "participantReasons": [
+    {
+      "agent": "VIZE",
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
+      "participated": false
+    },
+    {
+      "agent": "FORGE",
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
+      "participated": false
+    },
+    {
+      "agent": "PULSE",
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
+      "participated": false
+    },
+    {
+      "agent": "LEDGER",
+      "reason": "registered for the checkpoint but not called because this shift is deterministic",
+      "participated": false
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCRIBE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "LENS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "QUILL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RADAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "KEEPER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "THREADS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "INSTAGRAM",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PEOPLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "HERALD",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STET",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "HACEK",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPARK",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VAULT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FRAME",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RELAY",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "COHORT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FUNNEL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PALATE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCENE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STUNT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CORNER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "TAPE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VIG",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SONAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CANVAS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "JAB",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "REACH",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPLIT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "EASEL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "MOTIF",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "MAKO",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CHUM",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FOLIO",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PLOT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "GHOST",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "BOOKER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "LETOPIS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VERBA",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "TRIBUN",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 5.218131,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "No externally consequential action was approved.",
+    "evidenceRefs": []
+  },
+  "proposals": [],
+  "voteMatrix": [],
+  "tasks": [
+    {
+      "id": "TASK-20260814200114-night-001",
+      "owner": "SCRIBE",
+      "summary": "Reconcile the shift record and preserve every open question.",
+      "status": "skipped"
+    }
+  ],
+  "growthPlan": "NO_POST — there is no evidence-backed venture fact to distribute.",
+  "eveningOutcome": "Night shift reconciled the record; remain in DISCOVERY.",
+  "roomTranscript": {
+    "openedAt": "2026-08-14T20:01:14.816Z",
+    "closedAt": "2026-08-14T20:01:16.816Z",
+    "gavel": "VIZE",
+    "setting": "Bounded operating record without a live council call.",
+    "turns": [
+      {
+        "agent": "VIZE",
+        "mode": "gavel",
+        "sentAt": "2026-08-14T20:01:14.816Z",
+        "text": "The deterministic checkpoint records the handoff. No council model was called."
+      },
+      {
+        "agent": "LEDGER",
+        "mode": "reads-ledger",
+        "sentAt": "2026-08-14T20:01:16.816Z",
+        "text": "Recorded estimate: $0.0000. No live cost was recorded."
+      }
+    ]
+  },
+  "generatedAt": "2026-08-14T20:01:14.816Z"
+}
