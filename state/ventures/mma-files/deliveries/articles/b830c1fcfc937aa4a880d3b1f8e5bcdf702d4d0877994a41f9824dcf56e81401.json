@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "b830c1fcfc937aa4a880d3b1f8e5bcdf702d4d0877994a41f9824dcf56e81401",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "b1b92cc8702c16a0e2d77a6c9f463b7dbb765e32",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/oktagon-viktor-pesta",
+  "recordedAt": "2026-08-14T08:06:12.826Z"
+}

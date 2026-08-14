@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-63366f2f40398b22",
+  "venture": "mma-files",
+  "packageHash": "b830c1fcfc937aa4a880d3b1f8e5bcdf702d4d0877994a41f9824dcf56e81401",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "b1b92cc8702c16a0e2d77a6c9f463b7dbb765e32",
+  "deploymentUrl": "https://mma-files.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit b1b92cc8702c16a0e2d77a6c9f463b7dbb765e32 is readable",
+      "checkedAt": "2026-08-14T08:06:11.228Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-14T08:06:11.228Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-14T08:06:11.228Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/cs/articles/oktagon-viktor-pesta?boardless_verify=b830c1fcfc93-1786694771228",
+      "checkedAt": "2026-08-14T08:06:11.228Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and oktagon-viktor-pesta match",
+      "checkedAt": "2026-08-14T08:06:11.228Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose b830c1fcfc937aa4a880d3b1f8e5bcdf702d4d0877994a41f9824dcf56e81401",
+      "checkedAt": "2026-08-14T08:06:11.228Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/images/articles/oktagon-viktor-pesta/hero.svg?boardless_verify=b830c1fcfc93-1786694771228",
+      "checkedAt": "2026-08-14T08:06:11.228Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-14T08:06:11.228Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "FRAME fallback needs no external photo credit",
+      "checkedAt": "2026-08-14T08:06:11.228Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-14T08:05:08.772Z",
+  "completedAt": "2026-08-14T08:06:11.771Z"
+}
