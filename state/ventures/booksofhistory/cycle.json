@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "bh-cycle/1",
+  "currentCycleId": "bh-20260814-001",
+  "cycleDays": 3,
+  "phase": "selection",
+  "dayStatuses": {
+    "selection": "active",
+    "research": "pending",
+    "production": "pending"
+  },
+  "candidateSet": [],
+  "chosenStory": null,
+  "stretch": {
+    "count": 1,
+    "reason": "incomplete-phase",
+    "nextAttemptOn": "2026-08-17"
+  },
+  "startedOn": "2026-08-14",
+  "updatedAt": "2026-08-14T10:00:54.033Z"
+}

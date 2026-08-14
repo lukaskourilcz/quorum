@@ -432,13 +432,15 @@
       "at": "2026-08-13T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-13T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-13T11:00:00.000Z",
@@ -555,25 +557,30 @@
       "at": "2026-08-14T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "late",
+      "decisionOneLiner": "The run for this slot has not arrived yet."
     },
     {
       "at": "2026-08-14T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "scheduled"
+      "status": "held",
+      "decisionOneLiner": "The desk published this slot's article."
     },
     {
       "at": "2026-08-14T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "scheduled"
+      "status": "late",
+      "decisionOneLiner": "The run for this slot has not arrived yet."
     },
     {
       "at": "2026-08-14T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-14-bh-desk",
+      "decisionOneLiner": "The selection phase remains current. No provider was called, nothing was published and this day cost $0."
     },
     {
       "at": "2026-08-14T11:00:00.000Z",
