@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "cycleId": "20260815080036-article-am",
+  "date": "2026-08-15",
+  "slot": "am",
+  "status": "killed",
+  "reason": "article_production_failed",
+  "detail": "JAB returned unparsable output (billed $0.038589): Unexpected token 'I', \"I need to \"... is not valid JSON",
+  "spentUsd": null,
+  "generatedAt": "2026-08-15T08:00:36.085Z"
+}
