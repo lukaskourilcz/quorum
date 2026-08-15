@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-15",
+  "packageHash": "ec452955b7aee42cbf72a4148b0d0960c6e8342eb65f62fcd92c8d0bd585bf3a",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "dd362be11cf22d950bd3b25e983c6b4a4a4b61e0",
+  "deliveredAt": "2026-08-15T03:09:27.869Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza",
+  "tags": [
+    "umela-inteligence",
+    "anthropic",
+    "vodoznak",
+    "klima",
+    "deepseek",
+    "matematika"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-026618d8acca311d",
+  "venture": "caught-up",
+  "packageHash": "ec452955b7aee42cbf72a4148b0d0960c6e8342eb65f62fcd92c8d0bd585bf3a",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "dd362be11cf22d950bd3b25e983c6b4a4a4b61e0",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit dd362be11cf22d950bd3b25e983c6b4a4a4b61e0 is readable",
+      "checkedAt": "2026-08-15T03:09:26.283Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-15T03:09:26.283Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-15T03:09:26.283Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza?boardless_verify=ec452955b7ae-1786763366283",
+      "checkedAt": "2026-08-15T03:09:26.283Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza match",
+      "checkedAt": "2026-08-15T03:09:26.283Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose ec452955b7aee42cbf72a4148b0d0960c6e8342eb65f62fcd92c8d0bd585bf3a",
+      "checkedAt": "2026-08-15T03:09:26.283Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza/hero.svg?boardless_verify=ec452955b7ae-1786763366283",
+      "checkedAt": "2026-08-15T03:09:26.283Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-15T03:09:26.283Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "FRAME fallback needs no external photo credit",
+      "checkedAt": "2026-08-15T03:09:26.283Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-15T03:08:24.268Z",
+  "completedAt": "2026-08-15T03:09:26.941Z"
+}
