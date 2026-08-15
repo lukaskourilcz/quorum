@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Islam_Makhachev",
       "publisher": "Wikipedia",
       "title": "Islam Makhachev",
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q18637676",
         "source:wikipedia:44264537"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "verified",
       "corroborated": true
     },
@@ -153,6 +153,21 @@
   ],
   "history": [
     {
+      "boutRef": "ufc:bout:history-b69951d4fae399fc345e",
+      "eventRef": "ufc:event:history-ufc-fight-night-overeem-vs-oleinik",
+      "happenedAt": "2019-04-20T00:00:00.000Z",
+      "opponentRef": "ufc:arman-tsarukyan",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:60889979"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "ufc:bout:history-bc264e68c3bf3052bbd4",
       "eventRef": "ufc:event:history-ufc-fight-night-overeem-vs-oleinik",
       "happenedAt": "2019-04-20T00:00:00.000Z",
@@ -235,37 +250,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:islam-makhachev:history",
-      "bouts": 5,
+      "bouts": 6,
       "values": {
-        "bouts": 5,
-        "wins": 5,
+        "bouts": 6,
+        "wins": 6,
         "losses": 0,
         "draws": 0,
         "noContests": 0,
-        "finishRate": 0.6,
+        "finishRate": 0.5,
         "koTkoWins": 1,
         "submissionWins": 2,
-        "decisionWins": 2,
-        "koTkoWinShare": 0.2,
-        "submissionWinShare": 0.4,
-        "decisionWinShare": 0.4,
-        "averageElapsedSeconds": 715.6,
+        "decisionWins": 3,
+        "koTkoWinShare": 0.166667,
+        "submissionWinShare": 0.333333,
+        "decisionWinShare": 0.5,
+        "averageElapsedSeconds": 746.333333,
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
-        "fightsPerYear": 0.888128,
-        "layoffDays": 1028
+        "fightsPerYear": 1.11016,
+        "layoffDays": 1029
       },
-      "updatedAt": "2026-08-14T06:02:00.810Z"
+      "updatedAt": "2026-08-15T06:01:47.325Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 2135.49487526,
-    "deviation": 184.24896099,
-    "volatility": 0.06000368,
-    "boutCount": 5,
+    "rating": 2129.16383609,
+    "deviation": 176.98559728,
+    "volatility": 0.06000319,
+    "boutCount": 6,
     "asOfBoutRef": "ufc:bout:history-2568fab77094492ed878",
-    "updatedAt": "2026-08-14T06:02:00.810Z"
+    "updatedAt": "2026-08-15T06:01:47.325Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1720,11 +1735,28 @@
         "source:wikipedia:27167974"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:60889979",
+        "source:wikipedia:44264537",
+        "source:wikipedia:27167974"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": true,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-08-15T06:01:47.325Z"
 }

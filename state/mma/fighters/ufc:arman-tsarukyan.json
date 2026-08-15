@@ -64,7 +64,7 @@
       "url": "https://en.wikipedia.org/wiki/Arman_Tsarukyan",
       "publisher": "Wikipedia",
       "title": "Arman Tsarukyan",
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -78,52 +78,66 @@
         "source:wikipedia:43536705",
         "source:wikipedia:60889979"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "verified",
       "corroborated": true
     },
     "dateOfBirth": {
       "value": "1996-10-11",
       "sourceRefs": [
-        "source:wikidata:Q61996306"
+        "source:wikidata:Q61996306",
+        "source:wikipedia:60889979"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 170,
       "sourceRefs": [
-        "source:wikidata:Q61996306"
+        "source:wikidata:Q61996306",
+        "source:wikipedia:60889979"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
+      "status": "verified",
+      "corroborated": true
     },
     "division": {
       "value": "lightweight",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-08:fighter:8c0a0026-ce54-4651-8b9f-4034e7d1b9af"
+        "source:cito-ufc:2026-08-08:fighter:8c0a0026-ce54-4651-8b9f-4034e7d1b9af",
+        "source:wikipedia:60889979"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
+      "status": "verified",
+      "corroborated": true
     },
     "record": {
       "value": "23-3-0",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-08:fighter:8c0a0026-ce54-4651-8b9f-4034e7d1b9af"
+        "source:cito-ufc:2026-08-08:fighter:8c0a0026-ce54-4651-8b9f-4034e7d1b9af",
+        "source:wikipedia:60889979"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
+      "status": "verified",
+      "corroborated": true
     },
     "stance": {
       "value": "orthodox",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-08:fighter:8c0a0026-ce54-4651-8b9f-4034e7d1b9af"
+        "source:cito-ufc:2026-08-08:fighter:8c0a0026-ce54-4651-8b9f-4034e7d1b9af",
+        "source:wikipedia:60889979"
       ],
-      "retrievedAt": "2026-08-08T06:01:41.482Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "team": {
+      "value": "Lion Heart American Top Team (2019–present)",
+      "sourceRefs": [
+        "source:wikipedia:60889979"
+      ],
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -135,6 +149,21 @@
   ],
   "discrepancies": [],
   "history": [
+    {
+      "boutRef": "ufc:bout:history-b69951d4fae399fc345e",
+      "eventRef": "ufc:event:history-ufc-fight-night-overeem-vs-oleinik",
+      "happenedAt": "2019-04-20T00:00:00.000Z",
+      "opponentRef": "ufc:islam-makhachev",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:60889979"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
     {
       "boutRef": "ufc:bout:history-bc264e68c3bf3052bbd4",
       "eventRef": "ufc:event:history-ufc-fight-night-overeem-vs-oleinik",
@@ -218,11 +247,11 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:arman-tsarukyan:history",
-      "bouts": 5,
+      "bouts": 6,
       "values": {
-        "bouts": 5,
+        "bouts": 6,
         "wins": 4,
-        "losses": 1,
+        "losses": 2,
         "draws": 0,
         "noContests": 0,
         "finishRate": 0.5,
@@ -232,32 +261,31 @@
         "koTkoWinShare": 0.5,
         "submissionWinShare": 0,
         "decisionWinShare": 0.5,
-        "averageElapsedSeconds": 565.6,
+        "averageElapsedSeconds": 621.333333,
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 0.8,
-        "fightsPerYear": 0.802731,
-        "layoffDays": 853
+        "fightsPerYear": 1.003413,
+        "layoffDays": 854
       },
-      "updatedAt": "2026-08-14T06:02:00.810Z"
+      "updatedAt": "2026-08-15T06:01:47.325Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1942.94055695,
-    "deviation": 173.09345823,
-    "volatility": 0.06000316,
-    "boutCount": 5,
+    "rating": 1885.99575637,
+    "deviation": 167.75986324,
+    "volatility": 0.060006,
+    "boutCount": 6,
     "asOfBoutRef": "ufc:bout:history-e4fdafd9bc167ff332e6",
-    "updatedAt": "2026-08-14T06:02:00.810Z"
+    "updatedAt": "2026-08-15T06:01:47.325Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "reachCm",
-      "team",
       "record-history-incomplete"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-08-15T06:01:47.325Z"
   },
   "changeLog": [
     {
@@ -1668,11 +1696,47 @@
         "source:wikipedia:27167974"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:60889979"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 26 historical fight rows."
+    },
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:60889979",
+        "source:wikipedia:44264537",
+        "source:wikipedia:43536705",
+        "source:wikipedia:27167974"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.75,
-  "corroboration": 0.125,
-  "modelEligible": false,
+  "completeness": 0.875,
+  "corroboration": 0.75,
+  "modelEligible": true,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-08-15T06:01:47.325Z"
 }

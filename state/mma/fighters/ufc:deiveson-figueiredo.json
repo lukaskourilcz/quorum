@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Deiveson_Figueiredo",
       "publisher": "Wikipedia",
       "title": "Deiveson Figueiredo",
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q48122905",
         "source:wikipedia:56637932"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "verified",
       "corroborated": true
     },
@@ -265,19 +265,19 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 1.6892,
-        "layoffDays": 629
+        "layoffDays": 630
       },
-      "updatedAt": "2026-08-14T06:02:00.810Z"
+      "updatedAt": "2026-08-15T06:01:47.325Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1579.25949009,
-    "deviation": 165.8036507,
-    "volatility": 0.06001491,
+    "rating": 1573.14302145,
+    "deviation": 167.37608257,
+    "volatility": 0.06001601,
     "boutCount": 9,
     "asOfBoutRef": "ufc:bout:history-1a491f49349fa4b20a30",
-    "updatedAt": "2026-08-14T06:02:00.810Z"
+    "updatedAt": "2026-08-15T06:01:47.325Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1692,11 +1692,28 @@
         "source:wikipedia:57503647"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:58085526",
+        "source:wikipedia:52475971",
+        "source:wikipedia:47163936",
+        "source:wikipedia:57503647"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-08-15T06:01:47.325Z"
 }

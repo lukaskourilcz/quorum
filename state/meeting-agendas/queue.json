@@ -146,7 +146,26 @@
       "notBefore": "2026-08-14",
       "expiresAt": "2026-08-17T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-86428f9864822f90",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-15-mma-intake",
+      "summary": "Decide: ship UFC 330 model run or hold. Current state: card confirmed, odds live, 0/50 fighters meet critical-field threshold. Specify minimum acceptable completion rate and sourcing strategy for height/reach/stance.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-15",
+        "source:cito-ufc:2026-08-15",
+        "source:wikimedia:2026-08-15"
+      ],
+      "requestedAt": "2026-08-15T06:01:47.325Z",
+      "notBefore": "2026-08-15",
+      "expiresAt": "2026-08-18T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-08-15T06:01:47.325Z"
 }

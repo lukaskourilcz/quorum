@@ -1,0 +1,177 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260815060147-mma-intake",
+  "date": "2026-08-15",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.021472,
+    "monthAllInUsd": 5.666585299999997,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-330-makhachev-vs-machado-garry",
+      "source:the-odds-api:2026-08-15",
+      "source:cito-ufc:2026-08-15",
+      "source:wikipedia-schedule:2026-08-15",
+      "source:wikimedia:2026-08-15"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "UFC 330 card confirmed across two sources; 12 bouts ready. 50 fighters on file, 0 complete on critical fields. Immediate blocker: 50 fighters missing height/reach/stance. Cannot model until two independent sources agree on each gap.",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-330-makhachev-vs-machado-garry",
+        "source:the-odds-api:2026-08-15",
+        "source:cito-ufc:2026-08-15",
+        "source:wikipedia-schedule:2026-08-15"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon 93 is listed, but no Oktagon bout, fighter, weigh-in, or result evidence is supplied; 13 roster pages alone do not clear critical fields. Check official Oktagon and independent regional reports next.",
+      "evidenceRefs": [
+        "source:wikimedia:2026-08-15",
+        "source:wikipedia-schedule:2026-08-15"
+      ]
+    },
+    {
+      "agent": "TAPE",
+      "summary": "UFC 330 card announced but fighter files incomplete across 50 records. Zero fighters meet critical-field threshold (height, reach, stance). Odds data present. Cannot propose adjustments without two-source agreement on matchup fundamentals.",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-330-makhachev-vs-machado-garry",
+        "source:the-odds-api:2026-08-15",
+        "source:cito-ufc:2026-08-15"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260815060147-MMA-INTAKE-01",
+      "owner": "FORGE",
+      "summary": "Audit fighter-file gaps: cross cito-ufc and wikimedia for heightCm, reachCm, stance on 50 UFC 330 roster entries. Flag open discrepancies. No model run until two independent sources agree.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260815060147-MMA-INTAKE-03",
+      "owner": "TAPE",
+      "summary": "Resolve height/reach for Islam Makhachev and Ian Machado Garry (main event) from two independent sources before TAPE proposes adjustment.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Data only. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-330-makhachev-vs-machado-garry",
+      "source:the-odds-api:2026-08-15",
+      "source:cito-ufc:2026-08-15",
+      "source:wikipedia-schedule:2026-08-15",
+      "source:wikimedia:2026-08-15"
+    ]
+  },
+  "generatedAt": "2026-08-15T06:05:47.325Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-15T06:01:47.325Z",
+    "closedAt": "2026-08-15T06:05:47.325Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-15T06:01:47.325Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-15T06:02:47.325Z",
+        "text": "UFC 330 card confirmed across two sources; 12 bouts ready. 50 fighters on file, 0 complete on critical fields. Immediate blocker: 50 fighters missing height/reach/stance. Cannot model until two independent sources agree on each gap.",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-330-makhachev-vs-machado-garry",
+          "source:the-odds-api:2026-08-15",
+          "source:cito-ufc:2026-08-15",
+          "source:wikipedia-schedule:2026-08-15"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-15T06:03:47.325Z",
+        "text": "Oktagon 93 is listed, but no Oktagon bout, fighter, weigh-in, or result evidence is supplied; 13 roster pages alone do not clear critical fields. Check official Oktagon and independent regional reports next.",
+        "evidenceRefs": [
+          "source:wikimedia:2026-08-15",
+          "source:wikipedia-schedule:2026-08-15"
+        ]
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-15T06:04:47.325Z",
+        "text": "UFC 330 card announced but fighter files incomplete across 50 records. Zero fighters meet critical-field threshold (height, reach, stance). Odds data present. Cannot propose adjustments without two-source agreement on matchup fundamentals.",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-330-makhachev-vs-machado-garry",
+          "source:the-odds-api:2026-08-15",
+          "source:cito-ufc:2026-08-15"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-15T06:05:47.325Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

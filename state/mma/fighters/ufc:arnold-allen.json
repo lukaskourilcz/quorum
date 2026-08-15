@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Arnold_Allen",
       "publisher": "Wikipedia",
       "title": "Arnold Allen",
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q23007609",
         "source:wikipedia:49598119"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "verified",
       "corroborated": true
     },
@@ -603,19 +603,19 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 1.772334,
-        "layoffDays": 90
+        "layoffDays": 91
       },
-      "updatedAt": "2026-08-14T06:02:00.810Z"
+      "updatedAt": "2026-08-15T06:01:47.325Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1898.62229374,
-    "deviation": 114.51479894,
-    "volatility": 0.05999599,
+    "rating": 1900.88612786,
+    "deviation": 114.46850627,
+    "volatility": 0.0599957,
     "boutCount": 26,
     "asOfBoutRef": "ufc:bout:history-c173a3a0fd2b19f87a68",
-    "updatedAt": "2026-08-14T06:02:00.810Z"
+    "updatedAt": "2026-08-15T06:01:47.325Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2008,11 +2008,26 @@
         "source:wikipedia:49598119"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49598119"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-08-15T06:01:47.325Z"
 }

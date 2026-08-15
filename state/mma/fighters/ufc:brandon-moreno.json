@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Brandon_Moreno",
       "publisher": "Wikipedia",
       "title": "Brandon Moreno",
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -78,7 +78,7 @@
         "source:wikipedia:52475971",
         "source:wikipedia:64585580"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "verified",
       "corroborated": true
     },
@@ -165,6 +165,21 @@
     },
     {
       "boutRef": "ufc:bout:history-336346f83b4dfb9ca8b9",
+      "eventRef": "ufc:event:history-dts-2016-august-31",
+      "happenedAt": "2001-02-01T00:00:00.000Z",
+      "opponentRef": "ufc:alexandre-pantoja",
+      "result": "loss",
+      "method": "Submission (rear-naked choke)",
+      "round": null,
+      "elapsedSeconds": null,
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-4d2eff4f7dc806daabeb",
       "eventRef": "ufc:event:history-dts-2016-august-31",
       "happenedAt": "2001-02-01T00:00:00.000Z",
       "opponentRef": "ufc:alexandre-pantoja",
@@ -366,11 +381,11 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:brandon-moreno:history",
-      "bouts": 14,
+      "bouts": 15,
       "values": {
-        "bouts": 14,
+        "bouts": 15,
         "wins": 5,
-        "losses": 8,
+        "losses": 9,
         "draws": 1,
         "noContests": 0,
         "finishRate": 0.6,
@@ -383,20 +398,20 @@
         "averageElapsedSeconds": 1187.083333,
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.4,
-        "fightsPerYear": 0.547335,
-        "layoffDays": 650
+        "fightsPerYear": 0.589438,
+        "layoffDays": 651
       },
-      "updatedAt": "2026-08-14T06:02:00.810Z"
+      "updatedAt": "2026-08-15T06:01:47.325Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1639.35378097,
-    "deviation": 143.12870944,
-    "volatility": 0.06002573,
-    "boutCount": 13,
+    "rating": 1629.45755715,
+    "deviation": 143.36302522,
+    "volatility": 0.06002601,
+    "boutCount": 14,
     "asOfBoutRef": "ufc:bout:history-e5ac17f2c927ab8a95da",
-    "updatedAt": "2026-08-14T06:02:00.810Z"
+    "updatedAt": "2026-08-15T06:01:47.325Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1784,11 +1799,28 @@
         "source:wikipedia:64585580"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:52475971",
+        "source:wikipedia:64585580"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.625,
   "modelEligible": true,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-08-15T06:01:47.325Z"
 }

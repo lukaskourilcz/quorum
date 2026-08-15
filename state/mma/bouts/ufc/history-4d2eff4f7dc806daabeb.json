@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-4d2eff4f7dc806daabeb",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-dts-2016-august-31",
+    "name": "{{dts|2016|August|31}}",
+    "startsAtUtc": "2001-02-01T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:alexandre-pantoja",
+    "blue": "ufc:brandon-moreno"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2001-02-01T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-15T06:01:47.325Z",
+    "lastSeenAt": "2026-08-15T06:01:47.325Z",
+    "sourceRefs": [
+      "source:wikipedia:54180928"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:54180928"
+  ],
+  "result": {
+    "winner": "red",
+    "method": "Submission (rear-naked choke)",
+    "round": null,
+    "elapsedSeconds": null,
+    "sourceRefs": [
+      "source:wikipedia:54180928"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-15T06:01:47.325Z"
+}

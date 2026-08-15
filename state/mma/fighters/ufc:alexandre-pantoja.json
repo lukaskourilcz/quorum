@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexandre_Pantoja",
       "publisher": "Wikipedia",
       "title": "Alexandre Pantoja",
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q27999203",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "verified",
       "corroborated": true
     },
@@ -78,7 +78,7 @@
         "source:wikidata:Q27999203",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "verified",
       "corroborated": true
     },
@@ -87,7 +87,7 @@
       "sourceRefs": [
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -97,7 +97,7 @@
         "source:cito-ufc:2026-08-04:fighter:6a2a082e-2118-4e07-a641-bbf0e5de5974",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "verified",
       "corroborated": true
     },
@@ -106,7 +106,7 @@
       "sourceRefs": [
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -116,7 +116,7 @@
         "source:cito-ufc:2026-08-04:fighter:6a2a082e-2118-4e07-a641-bbf0e5de5974",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "verified",
       "corroborated": true
     },
@@ -126,7 +126,7 @@
         "source:wikidata:Q27999203",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "verified",
       "corroborated": true
     }
@@ -170,6 +170,21 @@
     },
     {
       "boutRef": "ufc:bout:history-336346f83b4dfb9ca8b9",
+      "eventRef": "ufc:event:history-dts-2016-august-31",
+      "happenedAt": "2001-02-01T00:00:00.000Z",
+      "opponentRef": "ufc:brandon-moreno",
+      "result": "win",
+      "method": "Submission (rear-naked choke)",
+      "round": null,
+      "elapsedSeconds": null,
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-4d2eff4f7dc806daabeb",
       "eventRef": "ufc:event:history-dts-2016-august-31",
       "happenedAt": "2001-02-01T00:00:00.000Z",
       "opponentRef": "ufc:brandon-moreno",
@@ -401,37 +416,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:alexandre-pantoja:history",
-      "bouts": 16,
+      "bouts": 17,
       "values": {
-        "bouts": 16,
-        "wins": 12,
+        "bouts": 17,
+        "wins": 13,
         "losses": 4,
         "draws": 0,
         "noContests": 0,
-        "finishRate": 0.5,
+        "finishRate": 0.538462,
         "koTkoWins": 0,
-        "submissionWins": 6,
+        "submissionWins": 7,
         "decisionWins": 6,
         "koTkoWinShare": 0,
-        "submissionWinShare": 0.5,
-        "decisionWinShare": 0.5,
+        "submissionWinShare": 0.538462,
+        "decisionWinShare": 0.461538,
         "averageElapsedSeconds": 760.428571,
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
-        "fightsPerYear": 0.60377,
-        "layoffDays": 251
+        "fightsPerYear": 0.644022,
+        "layoffDays": 252
       },
-      "updatedAt": "2026-08-14T06:02:00.810Z"
+      "updatedAt": "2026-08-15T06:01:47.325Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1692.51242854,
-    "deviation": 132.07180723,
-    "volatility": 0.05999309,
-    "boutCount": 16,
+    "rating": 1697.66678155,
+    "deviation": 131.99869078,
+    "volatility": 0.05999277,
+    "boutCount": 17,
     "asOfBoutRef": "ufc:bout:history-7d2dc31751ccb0197a31",
-    "updatedAt": "2026-08-14T06:02:00.810Z"
+    "updatedAt": "2026-08-15T06:01:47.325Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -439,7 +454,7 @@
       "reachCm",
       "record-history-incomplete"
     ],
-    "lastReviewedAt": "2026-08-03T18:14:46.640Z"
+    "lastReviewedAt": "2026-08-15T06:01:47.325Z"
   },
   "changeLog": [
     {
@@ -1973,11 +1988,45 @@
         "source:wikipedia:78781693"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 39 historical fight rows."
+    },
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:78781693"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.625,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-08-15T06:01:47.325Z"
 }

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:ufc-ufc-331-van-vs-pantoja-2-bout-ryan-gandra-vs-osman-diaz-12",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:ufc-331-van-vs-pantoja-2",
+    "name": "UFC 331: Van vs. Pantoja 2",
+    "startsAtUtc": "2026-09-19T00:00:00.000Z",
+    "venue": "Crypto.com Arena"
+  },
+  "fighters": {
+    "red": "ufc:ryan-gandra",
+    "blue": "ufc:osman-diaz"
+  },
+  "division": "middleweight",
+  "scheduledRounds": 3,
+  "status": "announced",
+  "statusHistory": [
+    {
+      "status": "announced",
+      "at": "2026-08-15T06:01:47.325Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-15:List of UFC events"
+      ],
+      "note": "Status imported from the Cito event listing."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-15T06:01:47.325Z",
+    "lastSeenAt": "2026-08-15T06:01:47.325Z",
+    "sourceRefs": [
+      "source:wikipedia:2026-08-15:List of UFC events"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:2026-08-15:List of UFC events"
+  ],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "created",
+      "fields": [
+        "event",
+        "fighters",
+        "status"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-15:List of UFC events"
+      ],
+      "note": "Discovered on the approved Cito free-tier intake."
+    }
+  ],
+  "updatedAt": "2026-08-15T06:01:47.325Z"
+}

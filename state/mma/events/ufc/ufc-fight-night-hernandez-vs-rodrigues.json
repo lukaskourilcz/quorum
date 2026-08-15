@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-08-22T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-14:List of UFC events"
+    "source:wikipedia:2026-08-15:List of UFC events"
   ],
   "bouts": [
     {
@@ -60,15 +60,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:kody-steele-vs-gauge-young-7",
-      "red": "ufc:kody-steele",
-      "blue": "ufc:gauge-young",
-      "division": "lightweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:shanelle-dyer-vs-elise-reed-8",
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:shanelle-dyer-vs-elise-reed-7",
       "red": "ufc:shanelle-dyer",
       "blue": "ufc:elise-reed",
       "division": "womens-strawweight",
@@ -76,5 +68,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-08-15T06:01:47.325Z"
 }

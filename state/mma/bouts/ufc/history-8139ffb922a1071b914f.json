@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-8139ffb922a1071b914f",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-231",
+    "name": "UFC 231",
+    "startsAtUtc": "2018-12-08T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:brian-ortega",
+    "blue": "ufc:max-holloway"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2018-12-08T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:32815938"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-15T06:01:47.325Z",
+    "lastSeenAt": "2026-08-15T06:01:47.325Z",
+    "sourceRefs": [
+      "source:wikipedia:32815938"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:32815938"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "TKO (doctor stoppage)",
+    "round": 4,
+    "elapsedSeconds": 1200,
+    "sourceRefs": [
+      "source:wikipedia:32815938"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:32815938"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-08-15T06:01:47.325Z"
+}

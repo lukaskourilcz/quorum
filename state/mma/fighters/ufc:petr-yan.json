@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Petr_Yan",
       "publisher": "Wikipedia",
       "title": "Petr Yan",
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q54218657",
         "source:wikipedia:57503647"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "verified",
       "corroborated": true
     },
@@ -313,19 +313,19 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 1.893538,
-        "layoffDays": 251
+        "layoffDays": 252
       },
-      "updatedAt": "2026-08-14T06:02:00.810Z"
+      "updatedAt": "2026-08-15T06:01:47.325Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1611.39955596,
-    "deviation": 180.06944462,
-    "volatility": 0.06001741,
+    "rating": 1610.55395881,
+    "deviation": 180.03944628,
+    "volatility": 0.06001735,
     "boutCount": 10,
     "asOfBoutRef": "ufc:bout:history-3cc5b009f859a0ec0f48",
-    "updatedAt": "2026-08-14T06:02:00.810Z"
+    "updatedAt": "2026-08-15T06:01:47.325Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1821,11 +1821,28 @@
         "source:wikipedia:56012380"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43320208",
+        "source:wikipedia:57503647",
+        "source:wikipedia:56012380"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": true,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-08-15T06:01:47.325Z"
 }

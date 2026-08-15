@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Aiemann_Zahabi",
       "publisher": "Wikipedia",
       "title": "Aiemann Zahabi",
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -78,7 +78,7 @@
         "source:wikipedia:54051600",
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-15T06:01:47.325Z",
       "status": "verified",
       "corroborated": true
     },
@@ -210,9 +210,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.666667,
         "fightsPerYear": 0.664077,
-        "layoffDays": 61
+        "layoffDays": 62
       },
-      "updatedAt": "2026-08-14T06:02:00.810Z"
+      "updatedAt": "2026-08-15T06:01:47.325Z"
     }
   ],
   "rating": {
@@ -222,7 +222,7 @@
     "volatility": 0.06000181,
     "boutCount": 3,
     "asOfBoutRef": "ufc:bout:history-6c9fb24a1bbe162ffa48",
-    "updatedAt": "2026-08-14T06:02:00.810Z"
+    "updatedAt": "2026-08-15T06:01:47.325Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1645,11 +1645,27 @@
         "source:wikipedia:70178359"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-15T06:01:47.325Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54051600",
+        "source:wikipedia:70178359"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.75,
   "corroboration": 0.625,
   "modelEligible": true,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-08-15T06:01:47.325Z"
 }
