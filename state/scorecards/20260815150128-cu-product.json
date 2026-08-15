@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260815150128-cu-product",
+  "phase": "cu-product",
+  "estimatedWorstCaseUsd": 0.03,
+  "actualUsd": 0,
+  "participants": [
+    "HERALD",
+    "SPARK",
+    "VAULT",
+    "AUDIT"
+  ],
+  "ideaId": null,
+  "vaultScreening": "missing_morning_handoff",
+  "growthIdeaNovelty": null,
+  "yesterdayOutcome": "Yesterday's edition has a reconciled delivery receipt; no sentinel flag is recorded in Quorum state.",
+  "generatedAt": "2026-08-15T15:01:32.633Z"
+}
