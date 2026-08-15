@@ -695,7 +695,9 @@
       "at": "2026-08-15T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-15-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Zabít slot: chybí aktuální modelový běh i zdrojový fighter file a UFC 330 už má čerstvý preview. Nový článek by nesplnil důkazní ani publikační bránu."
     },
     {
       "at": "2026-08-15T08:00:00.000Z",

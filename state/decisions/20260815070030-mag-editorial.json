@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260815070030-mag-editorial",
+  "phase": "mag-editorial",
+  "outcome": "VETO",
+  "summary": "AUDIT vetoed the room output: Zabít slot: chybí aktuální modelový běh i zdrojový fighter file a UFC 330 už má čerstvý preview. Nový článek by nesplnil důkazní ani publikační bránu.",
+  "evidenceRefs": [
+    "meeting:2026-08-14-mma-analysis",
+    "meeting:2026-08-14-mag-desk",
+    "event:ufc:event:ufc-330-makhachev-vs-machado-garry"
+  ],
+  "generatedAt": "2026-08-15T07:04:30.996Z"
+}
