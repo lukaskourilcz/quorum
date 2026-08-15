@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza",
+  "date": "2026-08-15",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Anthropic začal ukrývat vodoznaky do textu svých modelů – signály schované ve výběru „vedlejších\" slov, neviditelné pro čtenáře, čitelné pro detekční nástroje. Zároveň studie v Nature ukázala, že AI produktivita čisté emise CO₂ zvyšuje. Dva příběhy, jeden den.",
+    "hashtags": [
+      "umelainteligence",
+      "anthropic",
+      "claude",
+      "vodoznak",
+      "klima",
+      "emise",
+      "deepseek",
+      "matematika",
+      "aiact",
+      "openai"
+    ],
+    "threadsText": "Anthropic začal vkládat vodoznaky do textu Claude – signál ukrytý ve volbě „vedlejších\" slov, člověku neviditelný. Ostatní velké laboratoře mají následovat. Zároveň studie v Nature zjistila, že AI produktivita čisté emise CO₂ zvyšuje, protože fosilní sektor z AI těží stejně jako obnovitelné zdroje.",
+    "storyLine": "Vodoznak v textu a emise z produktivity: AI střízlivě"
+  },
+  "heroCredit": "Artwork by BoardlessAI FRAME",
+  "origin": "desk"
+}

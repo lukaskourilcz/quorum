@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza",
+  "date": "2026-08-15",
+  "locale": "cs",
+  "kicker": "DNESKAi · 15. srp",
+  "headline": "Anthropic začal vkládat vodoznaky do textu. Jiné firmy ho mají následovat",
+  "coverLine": "Produktivita AI čisté emise CO₂ zvyšuje, ne snižuje, říká studie v Nature",
+  "standfirst": "Systém ukrývá signály ve „vedlejších\" slovech, aby šlo AI text identifikovat. Zároveň studie v Nature ukázala, že produktivita poháněná umělou inteligencí čisté emise CO₂ zvyšuje, nikoli snižuje.",
+  "passages": [
+    "Anthropic zavedl systém textových vodoznaků pro modely Claude, ostatní velké laboratoře mají následovat.",
+    "Recenzovaná studie v Nature kvantifikuje čistý dopad AI na CO₂ emise jako záporný – AI produktivita emise zvyšuje.",
+    "DeepSeek vydal ranou open-source verzi svého modulárního harnessu Cordis.",
+    "OpenAI vydalo pythonovou knihovnu ve verzi 3.1.0 s podporou Ultrafast tier a deprecated Sora video API.",
+    "Textové vodoznaky mění podmínky pro identifikaci AI výstupu a jejich zavedení velkými laboratořemi ovlivní jak tvůrce obsahu, tak regulátory v EU.",
+    "Studie v Nature zpochybňuje předpoklad, že AI automaticky pomáhá klimatu – a upozorňuje, že bez politických nástrojů může být efekt opačný.",
+    "Architektonické volby čínských laboratoří jako DeepSeek ukazují jiný směr vývoje softwarového ekosystému kolem AI než ten, který prosazují americké firmy.",
+    "Odolnost Anthropicova vodoznakového systému vůči přepisu nebo překladu textu není veřejně doložena."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Artwork by BoardlessAI FRAME"
+}

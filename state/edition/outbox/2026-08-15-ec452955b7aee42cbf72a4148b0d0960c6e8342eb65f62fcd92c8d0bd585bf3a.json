@@ -1,0 +1,264 @@
+{
+  "schemaVersion": "edition-package/1",
+  "date": "2026-08-15",
+  "idempotencyKey": "ec452955b7aee42cbf72a4148b0d0960c6e8342eb65f62fcd92c8d0bd585bf3a",
+  "generation": {
+    "models": {
+      "curation": "claude-sonnet-4-6",
+      "writing": "claude-sonnet-4-6"
+    },
+    "costUsd": 0.1580475
+  },
+  "reason": "cu-edition decision meetings/2026-08-15-cu-edition",
+  "status": "edition",
+  "article": {
+    "cs": {
+      "frontmatter": {
+        "schema_version": 2,
+        "title": "Anthropic začal vkládat vodoznaky do textu. Jiné firmy ho mají následovat",
+        "slug": "2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza",
+        "date": "2026-08-15",
+        "lang": "cs",
+        "dek": "Systém ukrývá signály ve „vedlejších\" slovech, aby šlo AI text identifikovat. Zároveň studie v Nature ukázala, že produktivita poháněná umělou inteligencí čisté emise CO₂ zvyšuje, nikoli snižuje.",
+        "alternative_headlines": [
+          "Produktivita AI čisté emise CO₂ zvyšuje, ne snižuje, říká studie v Nature",
+          "Vodoznaky v textu a Riemannova hypotéza: dva různé pohledy na to, co AI umí"
+        ],
+        "social_copy": {
+          "igCaption": "Anthropic začal ukrývat vodoznaky do textu svých modelů – signály schované ve výběru „vedlejších\" slov, neviditelné pro čtenáře, čitelné pro detekční nástroje. Zároveň studie v Nature ukázala, že AI produktivita čisté emise CO₂ zvyšuje. Dva příběhy, jeden den.",
+          "hashtags": [
+            "umela-inteligence",
+            "anthropic",
+            "claude",
+            "vodoznak",
+            "klima",
+            "emise",
+            "deepseek",
+            "matematika",
+            "aiact",
+            "openai"
+          ],
+          "threadsText": "Anthropic začal vkládat vodoznaky do textu Claude – signál ukrytý ve volbě „vedlejších\" slov, člověku neviditelný. Ostatní velké laboratoře mají následovat. Zároveň studie v Nature zjistila, že AI produktivita čisté emise CO₂ zvyšuje, protože fosilní sektor z AI těží stejně jako obnovitelné zdroje.",
+          "storyLine": "Vodoznak v textu a emise z produktivity: AI střízlivě"
+        },
+        "tags": [
+          "umela-inteligence",
+          "anthropic",
+          "vodoznak",
+          "klima",
+          "deepseek",
+          "matematika"
+        ],
+        "sources": [
+          {
+            "id": "https://www.theverge.com/?p=979807",
+            "url": "https://www.theverge.com/transportation/979807/lamborghini-revuelto-sv-specs-performance",
+            "title": "Lamborghini’s flagship Revuelto levels up with SV trim",
+            "source_id": "the-verge",
+            "classification": "secondary",
+            "published_at": "2026-08-14T18:00:00.000Z",
+            "supports": [
+              "A remote, password-free login bug giving attackers full control of Macs is being actively exploited in the wild — every Mac user and IT admin should patch immediately."
+            ]
+          },
+          {
+            "id": "https://www.theregister.com/a/5288156",
+            "url": "https://www.theregister.com/ai-and-ml/2026/08/15/anthropic-says-text-watermarking-scheme-relies-on-inconsequential-words/5288156",
+            "title": "Anthropic says text watermarking scheme relies on inconsequential words",
+            "source_id": "the-register",
+            "classification": "secondary",
+            "published_at": "2026-08-15T00:44:41.000Z",
+            "supports": [
+              "The Register reports Anthropic is now using a watermarking system that embeds signals in 'inconsequential' words, and other major model makers are expected to follow — a meaningful shift in AI-output traceability."
+            ]
+          },
+          {
+            "id": "https://www.wsj.com/tech/ai/ai-math-riemann-hypothesis-anthropic-openai-22f98a87",
+            "url": "https://www.wsj.com/tech/ai/ai-math-riemann-hypothesis-anthropic-openai-22f98a87",
+            "title": "An Infamous Math Problem Closer to Being Solved by Encouraging AI",
+            "source_id": "tensorfeed",
+            "classification": "secondary",
+            "published_at": "2026-08-15T02:06:56.000Z",
+            "supports": [
+              "The WSJ reports AI tools from Anthropic and OpenAI are nudging one of mathematics' most famous unsolved problems closer to resolution — a bellwether for AI's role in pure research."
+            ]
+          },
+          {
+            "id": "https://www.nature.com/articles/s44168-026-00411-0",
+            "url": "https://www.nature.com/articles/s44168-026-00411-0",
+            "title": "AI productivity gains drive net CO₂ increase in global energy–economy model",
+            "source_id": "tensorfeed",
+            "classification": "secondary",
+            "published_at": "2026-08-15T01:42:40.000Z",
+            "supports": [
+              "A peer-reviewed global energy-economy model finds that efficiency gains from AI are outweighed by the energy demand they generate, complicating the industry's green claims."
+            ]
+          },
+          {
+            "id": "https://www.theregister.com/a/5288095",
+            "url": "https://www.theregister.com/ai-and-ml/2026/08/14/deepseeks-innovative-harness-treats-everything-as-a-plug-in/5288095",
+            "title": "DeepSeek's innovative harness treats everything as a plug-in",
+            "source_id": "the-register",
+            "classification": "secondary",
+            "published_at": "2026-08-14T20:25:56.000Z",
+            "supports": [
+              "The Register's analysis of DeepSeek's modular harness argues Chinese labs are innovating in system design while US labs focus on safety guardrails — a structural competitive observation worth watching."
+            ]
+          },
+          {
+            "id": "370874375",
+            "url": "https://github.com/openai/openai-python/releases/tag/v3.1.0",
+            "title": "openai/openai-python v3.1.0",
+            "source_id": "github-ai-releases",
+            "classification": "secondary",
+            "published_at": "2026-08-14T23:48:55.000Z",
+            "supports": [
+              "Jared Isaacman's public commitment to a 2027 crewed lunar landing attempt is the strongest official signal yet that the repeatedly delayed program has a firm schedule."
+            ]
+          },
+          {
+            "id": "https://www.theverge.com/?p=979925",
+            "url": "https://www.theverge.com/entertainment/979925/the-x-files-chris-carter-vrach-frankenshteyn-interview-hulu",
+            "title": "The X-Files creator Chris Carter wanted to make a more horrific movie",
+            "source_id": "the-verge",
+            "classification": "secondary",
+            "published_at": "2026-08-14T18:00:00.000Z",
+            "supports": [
+              "An airline-backed hybrid-electric aviation venture completed its first test flight, marking a concrete milestone in what could reshape short-haul commercial aviation economics."
+            ]
+          }
+        ],
+        "illustration": {
+          "path": "/images/editions/2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza/hero.svg",
+          "thumbnail_path": "/images/editions/2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza/thumb.svg",
+          "alt": "Obálka DNESKAi k 2026-08-15, témata Umela Inteligence, Anthropic, Vodoznak. Generovaný panel barevných sloupců, bez fotografie.",
+          "width": 1600,
+          "height": 900,
+          "origin": "svg",
+          "attribution": {
+            "license": "BoardlessAI deterministic",
+            "author": "BoardlessAI FRAME",
+            "source_url": "https://boardless-ai.vercel.app/",
+            "text": "Artwork by BoardlessAI FRAME"
+          }
+        },
+        "signal_strength": 80,
+        "why_it_matters": [
+          "Textové vodoznaky mění podmínky pro identifikaci AI výstupu a jejich zavedení velkými laboratořemi ovlivní jak tvůrce obsahu, tak regulátory v EU.",
+          "Studie v Nature zpochybňuje předpoklad, že AI automaticky pomáhá klimatu – a upozorňuje, že bez politických nástrojů může být efekt opačný.",
+          "Architektonické volby čínských laboratoří jako DeepSeek ukazují jiný směr vývoje softwarového ekosystému kolem AI než ten, který prosazují americké firmy."
+        ],
+        "what_changed": [
+          "Anthropic zavedl systém textových vodoznaků pro modely Claude, ostatní velké laboratoře mají následovat.",
+          "Recenzovaná studie v Nature kvantifikuje čistý dopad AI na CO₂ emise jako záporný – AI produktivita emise zvyšuje.",
+          "DeepSeek vydal ranou open-source verzi svého modulárního harnessu Cordis.",
+          "OpenAI vydalo pythonovou knihovnu ve verzi 3.1.0 s podporou Ultrafast tier a deprecated Sora video API."
+        ],
+        "uncertainty": [
+          "Odolnost Anthropicova vodoznakového systému vůči přepisu nebo překladu textu není veřejně doložena.",
+          "Míra skutečného přínosu AI nástrojů k pokroku na Riemannově hypotéze nelze z dostupných zdrojů ověřit.",
+          "Modelový scénář studie v Nature pracuje s předpoklady o tempu zavádění AI, které se v praxi mohou výrazně lišit."
+        ],
+        "generation": {
+          "generated_at": "2026-08-15T03:02:09.800Z",
+          "human_reviewed": false,
+          "models": {
+            "curation": "claude-sonnet-4-6",
+            "writing": "claude-sonnet-4-6"
+          },
+          "source_candidates": 80,
+          "cited_sources": 7,
+          "image_provider": "BoardlessAI FRAME",
+          "cost": {
+            "amount": 0.1580475,
+            "currency": "USD"
+          },
+          "package_hash": "ec452955b7aee42cbf72a4148b0d0960c6e8342eb65f62fcd92c8d0bd585bf3a"
+        },
+        "translation_of": "2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza",
+        "dispatches": [
+          {
+            "title": "Coco 2 ukáže dospívajícího Miguela, premiéra v roce 2029",
+            "body": "Pixar zveřejnil první záběry ze snímku Coco 2, kde je Miguel o několik let starší než v původním filmu. Studio oznámilo datum uvedení na listopad 2029.",
+            "source_url": "https://variety.com/2026/film/news/coco-2-disney-first-look-teen-miguel-release-date-1236834203/",
+            "topic": "film"
+          },
+          {
+            "title": "Zemětřesení 7,7 u Indonésie",
+            "body": "Americká geologická služba USGS zaznamenala zemětřesení o magnitudu 7,7 přibližně 68 km severoseverozápadně od indonéského města Ende. Detaily o škodách nejsou ze zdroje dostupné.",
+            "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000tkt2/executive",
+            "topic": "příroda"
+          },
+          {
+            "title": "Netflix odmítá žalobu Tyry Banks za pomluvu",
+            "body": "Netflix se brání žalobě, kterou podala Tyra Banks v souvislosti s reality pořadem Reality Check. Platforma žádá soud o zamítnutí žaloby.",
+            "source_url": "https://variety.com/2026/tv/news/netflix-dismiss-tyra-banks-reality-check-defamation-suit-1236834978/",
+            "topic": "média"
+          },
+          {
+            "title": "Incredibles 3 ukázal první konceptuální kresby",
+            "body": "Pixar zveřejnil první konceptuální umělecká díla k Incredibles 3 před plánovaným letním uvedením v roce 2028.",
+            "source_url": "https://variety.com/2026/film/news/incredibles-3-first-look-concept-art-1236825985/",
+            "topic": "film"
+          }
+        ],
+        "wire": [
+          {
+            "title": "Show HN: WMTrace – See how LLM text watermarks work",
+            "url": "https://github.com/gtesei/llm-watermark",
+            "source": "GitHub"
+          },
+          {
+            "title": "Coco 2′ First Look: Miguel Becomes a Teenager in Pixar Sequel Set for November 2029",
+            "url": "https://variety.com/2026/film/news/coco-2-disney-first-look-teen-miguel-release-date-1236834203/",
+            "source": "variety"
+          },
+          {
+            "title": "‘Incredibles 3’ Drops First Look Concept Art Ahead of Summer 2028 Release Date",
+            "url": "https://variety.com/2026/film/news/incredibles-3-first-look-concept-art-1236825985/",
+            "source": "variety"
+          },
+          {
+            "title": "‘KPop Demon Hunters’ Reveals New Cover Art for Criterion Blu-ray Release",
+            "url": "https://variety.com/2026/shopping/news/kpop-demon-criterion-blu-ray-buy-online-1236759288/",
+            "source": "variety"
+          },
+          {
+            "title": "Thank you to the people building these AI tools",
+            "url": "https://news.ycombinator.com/item?id=49306820",
+            "source": "tensorfeed"
+          },
+          {
+            "title": "Yester World Asking for Help from Google De-Monitization and AI [video]",
+            "url": "https://www.youtube.com/watch?v=z9QiBMdvgRE",
+            "source": "tensorfeed"
+          }
+        ],
+        "type": "daily"
+      },
+      "body": "Anthropic v pátek oznámil, že jeho model Claude bude nově produkovat text nesoucí skrytý identifikátor. Systém pracuje s volbou tzv. vedlejších slov – tedy míst ve větě, kde model mohl zvolit více různých výrazů, aniž by se změnil smysl sdělení. Právě v těchto volbách se ukrývá signál čitelný pro detekční nástroje, lidskému čtenáři přitom neviditelný.\n\nTechnika vychází z práce Google DeepMind popsané v článku SynthID-Text. Anthropic ji přijal mimo jiné proto, aby splnil požadavky nařízení EU o umělé inteligenci. The Register uvádí, že podobný krok se očekává i od dalších velkých provozovatelů jazykových modelů.\n\nJak přesně systém funguje v praxi, firma podrobně nezveřejnila. Otevřenou otázkou zůstává také jeho odolnost vůči přepisu: stačí-li text přeformulovat nebo přeložit, aby se vodoznak ztratil, jeho ochranná hodnota je omezená. Vývojářská komunita na GitHubu mezitím zveřejnila projekt [llm-watermark](https://github.com/gtesei/llm-watermark), který ukazuje, jak taková schémata fungují a kde jsou jejich slabiny.\n\n## Produktivita a emise jdou stejným směrem\n\nSouběžně s tím přineslo vědecké datum 15. srpna jiný, méně příjemný poznatek o AI. Studie publikovaná v časopise *npj Climate Action* modelovala dopad umělé inteligence na globální energetiku a emise. Závěr, ke kterému dospěli Will Alpine, Nathan Geldner, Holly Alpine a Maksym G. Chepeliev, je přímočarý: při srovnatelném tempu zavádění AI v odvětví obnovitelné energie i v odvětví fosilních paliv čisté roční emise CO₂ rostou o 0,47 až 1,8 gigatuny, tedy o 1,2 až 4,8 % tehdejších globálních energetických emisí.\n\nMechanismus je prostý: AI sice pomáhá optimalizovat výrobu elektřiny z obnovitelných zdrojů, ale stejně zefektivňuje těžbu a distribuci ropy a plynu. Protože fosilní sektor je větší a má jiné výchozí podmínky, úspory v obnovitelné energetice zisky z fosilního sektoru nepřebijí. Podle modelu by musel přínos AI pro obnovitelné zdroje čtyřikrát až pětinásobně překonat přínos pro fosilní paliva, aby čisté emise klesaly. Bez politického zásahu, konstatují autoři, AI emise zvyšuje.\n\nStudie je recenzovanou prací s otevřeným přístupem, publikovanou 4. srpna 2026. Nelze ji považovat za definitivní slovo – jde o modelový scénář, nikoli empirické měření skutečného dopadu. Přesto jde o dosud nejpropracovanější pokus kvantifikovat oba směry vlivu AI na energetiku najednou.\n\n## DeepSeek staví na zásuvných modulech\n\nNa jiném konci spektra stojí čínská laboratoř DeepSeek, jejíž přístup k architektuře softwarového prostředí – tzv. harness – popisuje The Register jako strukturálně odlišný od toho, co volí americké firmy. DeepSeek svůj harness pojal tak, že vše – modely, nástroje, smyčky agentů, rozhraní, sandboxing – funguje jako zásuvný modul, který lze vyměnit nebo rozšířit nezávisle na zbytku systému. Firma to popsala jako důsledek architektury Cordis meta-framework.\n\nAnalýza The Register argumentuje, že čínské laboratoře věnují energii inovacím v systémovém designu, zatímco americké se soustředí na bezpečnostní zábrany a regulatorní shodu. Jde o interpretaci, nikoli o změřený fakt. DeepSeek zatím vydal jen ranou verzi harnessu jako open-source projekt.\n\n## AI a Riemannova hypotéza\n\nWall Street Journal přinesl zprávu o tom, že nástroje Anthropicu a OpenAI pomáhají matematikům přibližovat se k důkazu Riemannovy hypotézy – jednoho z dosud nevyřešených problémů Hilbertova seznamu a zároveň jednoho ze sedmi tzv. Millennium Prize Problems, za jehož vyřešení Clay Mathematics Institute nabízí milion dolarů. WSJ popisuje situaci jako postupné přibližování, nikoli jako hotový důkaz.\n\nJak přesně modely do práce přispívají – zda generují nové dílčí výsledky, nebo spíše asistují při ověřování existujících kroků – z dostupného materiálu nevyplývá. Riemannova hypotéza se týká rozložení nulových bodů Riemannovy zeta funkce a nemá přímé praktické uplatnění, ale její důkaz by otevřel cestu k hlubšímu porozumění teorii čísel. Tvrzení, že AI posunuje řešení „blíže\", je bez přístupu k samotné práci obtížné posoudit.\n\n## OpenAI Python SDK ve verzi 3.1.0\n\nOpenAI vydalo verzi 3.1.0 své pythonové knihovny. Mezi novinkami jsou identifikátory proudů WebSocket, podpora workload identity přístupového tokenu a nový stupeň Ultrafast tier. Zároveň byly označeny za zastaralé (deprecated) video API Sora. Vydání je dostupné na GitHubu.\n\n## Kontext dne\n\nTři příběhy dohromady naznačují, kde se AI v létě 2026 nachází: firmy budují nástroje pro identifikaci a sledování výstupu (vodoznaky), výzkumníci modelují vedlejší dopady škálování (emise), a matematici testují, kde jsou meze toho, co modely zvládnou tam, kde selhávaly jiné přístupy. Všechny tři roviny jsou zatím otevřené."
+    }
+  },
+  "image": {
+    "hero_path": "public/images/editions/2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza/hero.svg",
+    "thumb_path": "public/images/editions/2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza/thumb.svg",
+    "width": 1600,
+    "height": 900,
+    "alt_en": "DNESKAi cover for 2026-08-15, marked Umela Inteligence, Anthropic, Vodoznak. A generated panel of coloured bars, carrying no photograph.",
+    "alt_cs": "Obálka DNESKAi k 2026-08-15, témata Umela Inteligence, Anthropic, Vodoznak. Generovaný panel barevných sloupců, bez fotografie.",
+    "license": {
+      "name": "BoardlessAI deterministic",
+      "author": "BoardlessAI FRAME",
+      "source_url": "https://boardless-ai.vercel.app/",
+      "attribution_html": "Artwork by BoardlessAI FRAME"
+    },
+    "origin": "svg",
+    "hero_bytes_base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+PHRpdGxlIGlkPSJ0aXRsZSI+RE5FU0tBaSBjb3ZlcjwvdGl0bGU+PGRlc2MgaWQ9ImRlc2MiPkEgZ2VuZXJhdGVkIERORVNLQWkgY292ZXI7IHRoZSBhcnRpY2xlJ3Mgb3duIHdvcmRzIGFyZSBub3QgcmVwZWF0ZWQgaGVyZS48L2Rlc2M+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzEwMTExNiIvPjxyZWN0IHg9IjYwIiB5PSI2MCIgd2lkdGg9IjE0ODAiIGhlaWdodD0iNzgwIiByeD0iMzUiIGZpbGw9IiMxODFhMjAiIHN0cm9rZT0iIzc5ZjJjMCIgc3Ryb2tlLXdpZHRoPSI0LjUiLz48cmVjdCB4PSIxMDAuMCIgeT0iNjQwLjQiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjEwOS42IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjI2Ii8+PHJlY3QgeD0iMTg3LjUiIHk9IjYyNS4zIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxMjQuNyIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC41NSIvPjxyZWN0IHg9IjI3NS4wIiB5PSI2MjUuMyIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTI0LjciIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNTUiLz48cmVjdCB4PSIzNjIuNSIgeT0iNjcwLjQiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9Ijc5LjYiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNDciLz48cmVjdCB4PSI0NTAuMCIgeT0iNjEwLjMiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjEzOS43IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjc2Ii8+PHJlY3QgeD0iNTM3LjUiIHk9IjUzNS4xIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIyMTQuOSIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC41MSIvPjxyZWN0IHg9IjYyNS4wIiB5PSI1OTUuMyIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTU0LjciIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuMzAiLz48cmVjdCB4PSI3MTIuNSIgeT0iNjcwLjQiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9Ijc5LjYiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNDciLz48cmVjdCB4PSI4MDAuMCIgeT0iNTY1LjIiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjE4NC44IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjM1Ii8+PHJlY3QgeD0iODg3LjUiIHk9IjU2NS4yIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxODQuOCIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4zNSIvPjxyZWN0IHg9Ijk3NS4wIiB5PSI1OTUuMyIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTU0LjciIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuMzkiLz48cmVjdCB4PSIxMDYyLjUiIHk9IjQ5MC4wIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIyNjAuMCIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4zOSIvPjxyZWN0IHg9IjExNTAuMCIgeT0iNTgwLjIiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjE2OS44IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjI2Ii8+PHJlY3QgeD0iMTIzNy41IiB5PSI2NTUuNCIgd2lkdGg9IjU1LjAiIGhlaWdodD0iOTQuNiIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC40MyIvPjxyZWN0IHg9IjEzMjUuMCIgeT0iNTk1LjMiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjE1NC43IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjYzIi8+PHJlY3QgeD0iMTQxMi41IiB5PSI2NDAuNCIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTA5LjYiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNDciLz48dGV4dCB4PSIxMDAiIHk9IjIwMCIgZmlsbD0iIzc5ZjJjMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjM1IiBmb250LXdlaWdodD0iNzAwIiBsZXR0ZXItc3BhY2luZz0iNS42Ij5ETkVTS0FpPC90ZXh0Pjx0ZXh0IHg9IjEwMCIgeT0iMzAwIiBmaWxsPSIjZjdmNGVjIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjM3Ij4yMDI2LTA4LTE1PC90ZXh0Pjx0ZXh0IHg9IjEwMCIgeT0iMzg1IiBmaWxsPSIjOWRhMWFhIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjI5IiBsZXR0ZXItc3BhY2luZz0iMy41Ij5VbWVsYSBJbnRlbGlnZW5jZSDCtyBBbnRocm9waWMgwrcgVm9kb3puYWs8L3RleHQ+PC9zdmc+",
+    "thumb_bytes_base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iMzYwIiB2aWV3Qm94PSIwIDAgNjQwIDM2MCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIGRlc2MiPjx0aXRsZSBpZD0idGl0bGUiPkRORVNLQWkgY292ZXI8L3RpdGxlPjxkZXNjIGlkPSJkZXNjIj5BIGdlbmVyYXRlZCBETkVTS0FpIGNvdmVyOyB0aGUgYXJ0aWNsZSdzIG93biB3b3JkcyBhcmUgbm90IHJlcGVhdGVkIGhlcmUuPC9kZXNjPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxMDExMTYiLz48cmVjdCB4PSIyNCIgeT0iMjQiIHdpZHRoPSI1OTIiIGhlaWdodD0iMzEyIiByeD0iMTQiIGZpbGw9IiMxODFhMjAiIHN0cm9rZT0iIzc5ZjJjMCIgc3Ryb2tlLXdpZHRoPSIyLjAiLz48cmVjdCB4PSI0MC4wIiB5PSIyNTYuMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNDMuOSIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4yNiIvPjxyZWN0IHg9Ijc1LjAiIHk9IjI1MC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI0OS45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjU1Ii8+PHJlY3QgeD0iMTEwLjAiIHk9IjI1MC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI0OS45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjU1Ii8+PHJlY3QgeD0iMTQ1LjAiIHk9IjI2OC4yIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIzMS44IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjQ3Ii8+PHJlY3QgeD0iMTgwLjAiIHk9IjI0NC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI1NS45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjc2Ii8+PHJlY3QgeD0iMjE1LjAiIHk9IjIxNC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI4NS45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjUxIi8+PHJlY3QgeD0iMjUwLjAiIHk9IjIzOC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI2MS45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjMwIi8+PHJlY3QgeD0iMjg1LjAiIHk9IjI2OC4yIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIzMS44IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjQ3Ii8+PHJlY3QgeD0iMzIwLjAiIHk9IjIyNi4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI3My45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjM1Ii8+PHJlY3QgeD0iMzU1LjAiIHk9IjIyNi4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI3My45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjM1Ii8+PHJlY3QgeD0iMzkwLjAiIHk9IjIzOC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI2MS45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjM5Ii8+PHJlY3QgeD0iNDI1LjAiIHk9IjE5Ni4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIxMDQuMCIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4zOSIvPjxyZWN0IHg9IjQ2MC4wIiB5PSIyMzIuMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNjcuOSIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4yNiIvPjxyZWN0IHg9IjQ5NS4wIiB5PSIyNjIuMiIgd2lkdGg9IjIyLjAiIGhlaWdodD0iMzcuOCIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC40MyIvPjxyZWN0IHg9IjUzMC4wIiB5PSIyMzguMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNjEuOSIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC42MyIvPjxyZWN0IHg9IjU2NS4wIiB5PSIyNTYuMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNDMuOSIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC40NyIvPjx0ZXh0IHg9IjQwIiB5PSI4MCIgZmlsbD0iIzc5ZjJjMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNzAwIiBsZXR0ZXItc3BhY2luZz0iMi4yIj5ETkVTS0FpPC90ZXh0Pjx0ZXh0IHg9IjQwIiB5PSIxMjAiIGZpbGw9IiNmN2Y0ZWMiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTUiPjIwMjYtMDgtMTU8L3RleHQ+PHRleHQgeD0iNDAiIHk9IjE1NCIgZmlsbD0iIzlkYTFhYSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIxMSIgbGV0dGVyLXNwYWNpbmc9IjEuNCI+VW1lbGEgSW50ZWxpZ2VuY2UgwrcgQW50aHJvcGljIMK3IFZvZG96bmFrPC90ZXh0Pjwvc3ZnPg=="
+  },
+  "board": {
+    "meetingRef": "meetings/2026-08-15-cu-edition",
+    "roomUrl": "https://boardless-ai.vercel.app/meetings/2026-08-15-cu-edition",
+    "whyThisStory": "Rozhodnutí Anthropicu zavést textové vodoznaky mění způsob, jakým bude možné AI výstup identifikovat a regulovat – a přichází ve chvíli, kdy jiná studie zpochybňuje klimatické argumenty celého odvětví."
+  }
+}

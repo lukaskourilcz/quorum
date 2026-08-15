@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-15-anthropic-vodoznak-ai-text-riemannova-hypoteza",
+  "date": "2026-08-15",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "scene:20348454",
+          "provider": "wikimedia",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "The image of server racks tangentially relates to AI infrastructure and data processing mentioned in the article, but it's a generic stock-photo aesthetic that doesn't specifically illustrate watermarking systems or the article's main points about AI-generated text identification or CO₂ emissions.",
+          "sceneCs": "servery v datovém centru"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002325
+    },
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 2,
+          "vetoes": [
+            "off-brief"
+          ],
+          "reason": "Museum or exhibition display of circuit boards—interesting hardware but unrelated to Anthropic's AI watermarking system and AI carbon emissions research.",
+          "sceneCs": "expozice elektronických komponent v muzeu"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Obvious stock illustration of a circuit-board brain with blue glow—precisely the clichéd, AI-generated-looking image the rules forbid.",
+          "sceneCs": "stylizovaný mozek ze součástek"
+        },
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [
+            "off-brief"
+          ],
+          "reason": "Hand soldering or assembling a motherboard—shows hardware work but has no connection to watermarking, text analysis, or AI emissions.",
+          "sceneCs": "ruční páje na základní desku"
+        },
+        {
+          "candidateId": "pixabay:2528363",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Two red holographic or glowing faces overlaid on a circuit board—a dated, synthetically rendered image typical of mid-2000s AI imagery.",
+          "sceneCs": "abstraktní tváře se zářením na pozadí součástek"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "off-brief"
+          ],
+          "reason": "Close-up of a yellow heatsink and RAM on a motherboard—hardware photography but unrelated to AI watermarking or emissions topics.",
+          "sceneCs": "hliníkový chladič a paměť na desce"
+        },
+        {
+          "candidateId": "pixabay:3963945",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Glowing brain or neural-network visualization with lens flares—precisely the kind of dated AI-clip-art aesthetic the rules exclude.",
+          "sceneCs": "zářící mozek s geometrickou sítí"
+        },
+        {
+          "candidateId": "pexels:9242892",
+          "provider": "pexels",
+          "fit": 4,
+          "vetoes": [],
+          "reason": "Hands holding a soldering iron or tool on a green PCB—genuine hardware work that suggests technology and engineering, though tangentially related to the topics.",
+          "sceneCs": "ruce s nástrojem na zelené desce plošných spojů"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Neon-pink-and-blue rendered chip or microprocessor—a dated, synthetically generated image incompatible with honest illustration.",
+          "sceneCs": "abstraktní 3D čip se zářením"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "recognisable-face"
+          ],
+          "reason": "A suit-clad figure (partial face visible) releasing digital particles—dated stock imagery with recognizable human features.",
+          "sceneCs": "osoba s digitálními částicemi vycházejícími z ruky"
+        },
+        {
+          "candidateId": "pexels:9242891",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Hands assembling or handling cables and connectors on a working motherboard—authentic hardware work suggesting practical AI/computing infrastructure without dated styling.",
+          "sceneCs": "ruce pracující s kabely na základní desce"
+        },
+        {
+          "candidateId": "pixabay:3382521",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Glowing blue neural network or circuit diagram with grid overlays—a stereotypical, synthetically rendered AI visualization.",
+          "sceneCs": "zářící modrá síť spojů na tmavém pozadí"
+        },
+        {
+          "candidateId": "pexels:9242928",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Hands installing or adjusting a component on a real motherboard—authentic, well-lit hardware work that suggests technical expertise and relates broadly to computing infrastructure.",
+          "sceneCs": "ruce pracující na zelené základní desce"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.009356
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-15T03:02:09.800Z"
+}

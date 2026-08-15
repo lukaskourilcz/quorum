@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260815030209-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Rozhodnutí Anthropicu zavést textové vodoznaky mění způsob, jakým bude možné AI výstup identifikovat a regulovat – a přichází ve chvíli, kdy jiná studie zpochybňuje klimatické argumenty celého odvětví.",
+  "evidenceRefs": [
+    "source:the-verge",
+    "source:the-register",
+    "source:tensorfeed",
+    "source:github-ai-releases"
+  ],
+  "editionRef": "ec452955b7aee42cbf72a4148b0d0960c6e8342eb65f62fcd92c8d0bd585bf3a",
+  "generatedAt": "2026-08-15T03:02:14.800Z"
+}
