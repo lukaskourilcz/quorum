@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Carlos_Ulberg",
       "publisher": "Wikipedia",
       "title": "Carlos Ulberg",
-      "retrievedAt": "2026-08-15T06:01:47.325Z",
+      "retrievedAt": "2026-08-16T06:00:53.643Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q105361122",
         "source:wikipedia:66657574"
       ],
-      "retrievedAt": "2026-08-15T06:01:47.325Z",
+      "retrievedAt": "2026-08-16T06:00:53.643Z",
       "status": "verified",
       "corroborated": true
     },
@@ -281,9 +281,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 2.608875,
-        "layoffDays": 126
+        "layoffDays": 127
       },
-      "updatedAt": "2026-08-15T06:01:47.325Z"
+      "updatedAt": "2026-08-16T06:00:53.643Z"
     }
   ],
   "rating": {
@@ -293,7 +293,7 @@
     "volatility": 0.05999522,
     "boutCount": 6,
     "asOfBoutRef": "ufc:bout:history-ff1e9562a8c587783fb4",
-    "updatedAt": "2026-08-15T06:01:47.325Z"
+    "updatedAt": "2026-08-16T06:00:53.643Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1717,11 +1717,26 @@
         "source:wikipedia:66657574"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-16T06:00:53.643Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:66657574"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-15T06:01:47.325Z"
+  "updatedAt": "2026-08-16T06:00:53.643Z"
 }

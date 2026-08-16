@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Kamaru_Usman",
       "publisher": "Wikipedia",
       "title": "Kamaru Usman",
-      "retrievedAt": "2026-08-15T06:01:47.325Z",
+      "retrievedAt": "2026-08-16T06:00:53.643Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q21290332",
         "source:wikipedia:49620123"
       ],
-      "retrievedAt": "2026-08-15T06:01:47.325Z",
+      "retrievedAt": "2026-08-16T06:00:53.643Z",
       "status": "verified",
       "corroborated": true
     },
@@ -342,9 +342,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 1.039769,
-        "layoffDays": 28
+        "layoffDays": 29
       },
-      "updatedAt": "2026-08-15T06:01:47.325Z"
+      "updatedAt": "2026-08-16T06:00:53.643Z"
     }
   ],
   "rating": {
@@ -354,7 +354,7 @@
     "volatility": 0.05999777,
     "boutCount": 12,
     "asOfBoutRef": "ufc:bout:history-de7ea506536dccdb23ea",
-    "updatedAt": "2026-08-15T06:01:47.325Z"
+    "updatedAt": "2026-08-16T06:00:53.643Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1924,11 +1924,28 @@
         "source:wikipedia:62595898"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-16T06:00:53.643Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49620123",
+        "source:wikipedia:46384799",
+        "source:wikipedia:62595898"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-15T06:01:47.325Z"
+  "updatedAt": "2026-08-16T06:00:53.643Z"
 }

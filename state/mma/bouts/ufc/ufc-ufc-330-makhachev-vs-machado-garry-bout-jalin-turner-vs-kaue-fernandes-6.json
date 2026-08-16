@@ -14,7 +14,7 @@
   },
   "division": "lightweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-08:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-16T06:00:53.643Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-16:UFC 330: Makhachev vs. Machado Garry"
+      ],
+      "note": "Result read from the UFC 330: Makhachev vs. Machado Garry article after the event."
     }
   ],
   "discovery": {
@@ -35,9 +43,18 @@
   },
   "sourceRefs": [
     "source:wikipedia:2026-08-08:List of UFC events",
-    "source:wikipedia:2026-08-12:List of UFC events"
+    "source:wikipedia:2026-08-12:List of UFC events",
+    "source:wikipedia:2026-08-16:UFC 330: Makhachev vs. Machado Garry"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "KO (punches)",
+    "round": 1,
+    "elapsedSeconds": 39,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-16:UFC 330: Makhachev vs. Machado Garry"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -52,7 +69,19 @@
         "source:wikipedia:2026-08-08:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-16T06:00:53.643Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-16:UFC 330: Makhachev vs. Machado Garry"
+      ],
+      "note": "Jalin Turner def. Kauê Fernandes by KO (punches)."
     }
   ],
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-16T06:00:53.643Z"
 }

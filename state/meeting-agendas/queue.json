@@ -108,7 +108,7 @@
       "requestedAt": "2026-08-12T06:01:46.400Z",
       "notBefore": "2026-08-12",
       "expiresAt": "2026-08-15T23:59:59.000Z",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "schemaVersion": "meeting-agenda/1",
@@ -165,7 +165,25 @@
       "notBefore": "2026-08-15",
       "expiresAt": "2026-08-18T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-2482fa630765ce2b",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-16-mma-intake",
+      "summary": "Decide: prioritize which 6–8 fighters from nearest card (Hernandez vs. Rodrigues, day 6) to source stance/height/reach from secondary providers (Sherdog, Tapology, fighter social), or wait for Apify actor.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-16",
+        "source:cito-ufc:2026-08-16"
+      ],
+      "requestedAt": "2026-08-16T06:00:53.643Z",
+      "notBefore": "2026-08-16",
+      "expiresAt": "2026-08-19T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-15T06:01:47.325Z"
+  "updatedAt": "2026-08-16T06:00:53.643Z"
 }

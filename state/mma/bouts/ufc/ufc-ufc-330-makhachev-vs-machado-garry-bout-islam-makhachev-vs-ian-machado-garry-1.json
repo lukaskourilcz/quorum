@@ -14,7 +14,7 @@
   },
   "division": "welterweight",
   "scheduledRounds": 5,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-03:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-16T06:00:53.643Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-16:UFC 330: Makhachev vs. Machado Garry"
+      ],
+      "note": "Result read from the UFC 330: Makhachev vs. Machado Garry article after the event."
     }
   ],
   "discovery": {
@@ -47,9 +55,18 @@
     "source:wikipedia:2026-08-08:List of UFC events",
     "source:wikipedia:2026-08-12:List of UFC events",
     "source:wikipedia:2026-08-13:List of UFC events",
-    "source:wikipedia:2026-08-14:List of UFC events"
+    "source:wikipedia:2026-08-14:List of UFC events",
+    "source:wikipedia:2026-08-16:UFC 330: Makhachev vs. Machado Garry"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-16:UFC 330: Makhachev vs. Machado Garry"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -64,7 +81,19 @@
         "source:wikipedia:2026-08-03:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-16T06:00:53.643Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-16:UFC 330: Makhachev vs. Machado Garry"
+      ],
+      "note": "Islam Makhachev def. Ian Machado Garry by Decision (unanimous)."
     }
   ],
-  "updatedAt": "2026-08-03T18:21:31.449Z"
+  "updatedAt": "2026-08-16T06:00:53.643Z"
 }

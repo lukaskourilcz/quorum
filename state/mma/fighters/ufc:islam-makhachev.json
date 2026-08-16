@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Islam_Makhachev",
       "publisher": "Wikipedia",
       "title": "Islam Makhachev",
-      "retrievedAt": "2026-08-15T06:01:47.325Z",
+      "retrievedAt": "2026-08-16T06:00:53.643Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q18637676",
         "source:wikipedia:44264537"
       ],
-      "retrievedAt": "2026-08-15T06:01:47.325Z",
+      "retrievedAt": "2026-08-16T06:00:53.643Z",
       "status": "verified",
       "corroborated": true
     },
@@ -241,6 +241,21 @@
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-islam-makhachev-vs-ian-machado-garry-1",
+      "eventRef": "ufc:event:ufc-330-makhachev-vs-machado-garry",
+      "happenedAt": "2026-08-15T00:00:00.000Z",
+      "opponentRef": "ufc:ian-machado-garry",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:2026-08-16:UFC 330: Makhachev vs. Machado Garry"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
     }
   ],
   "statsProfiles": [
@@ -250,37 +265,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:islam-makhachev:history",
-      "bouts": 6,
+      "bouts": 7,
       "values": {
-        "bouts": 6,
-        "wins": 6,
+        "bouts": 7,
+        "wins": 7,
         "losses": 0,
         "draws": 0,
         "noContests": 0,
-        "finishRate": 0.5,
+        "finishRate": 0.428571,
         "koTkoWins": 1,
         "submissionWins": 2,
-        "decisionWins": 3,
-        "koTkoWinShare": 0.166667,
-        "submissionWinShare": 0.333333,
-        "decisionWinShare": 0.5,
-        "averageElapsedSeconds": 746.333333,
+        "decisionWins": 4,
+        "koTkoWinShare": 0.142857,
+        "submissionWinShare": 0.285714,
+        "decisionWinShare": 0.571429,
+        "averageElapsedSeconds": 854,
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
-        "fightsPerYear": 1.11016,
-        "layoffDays": 1029
+        "fightsPerYear": 0.819542,
+        "layoffDays": 1
       },
-      "updatedAt": "2026-08-15T06:01:47.325Z"
+      "updatedAt": "2026-08-16T06:00:53.643Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 2129.16383609,
-    "deviation": 176.98559728,
-    "volatility": 0.06000319,
-    "boutCount": 6,
-    "asOfBoutRef": "ufc:bout:history-2568fab77094492ed878",
-    "updatedAt": "2026-08-15T06:01:47.325Z"
+    "rating": 2138.68852974,
+    "deviation": 174.27954731,
+    "volatility": 0.06000279,
+    "boutCount": 7,
+    "asOfBoutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-islam-makhachev-vs-ian-machado-garry-1",
+    "updatedAt": "2026-08-16T06:00:53.643Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1752,11 +1767,29 @@
         "source:wikipedia:27167974"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-16T06:00:53.643Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:60889979",
+        "source:wikipedia:44264537",
+        "source:wikipedia:27167974",
+        "source:wikipedia:2026-08-16:UFC 330: Makhachev vs. Machado Garry"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": true,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-15T06:01:47.325Z"
+  "updatedAt": "2026-08-16T06:00:53.643Z"
 }
