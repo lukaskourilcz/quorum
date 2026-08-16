@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "526c472a54107044d2919bb73fe9f2f6744d2eca10fb328c7296edfa30a65e2c",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "1e1676041d6b3631b3048b31cbac85862657613b",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/oktagon-zhalgas-zhumagulov",
+  "recordedAt": "2026-08-16T08:06:03.046Z"
+}
