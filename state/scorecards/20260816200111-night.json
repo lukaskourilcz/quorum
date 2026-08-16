@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260816200111-night",
+  "stage": "VALIDATION",
+  "opportunityGate": {
+    "opportunityId": "NONE",
+    "outcome": "INSUFFICIENT_EVIDENCE",
+    "score": 0,
+    "minimumDimension": 0,
+    "independentEvidenceCount": 0,
+    "directEvidenceCount": 0,
+    "passed": false,
+    "reasons": [
+      "Opportunity gate dormant — no live opportunity on file."
+    ],
+    "evidenceRefs": []
+  },
+  "estimatedWorstCaseUsd": 0,
+  "actualUsd": 0,
+  "socialDecision": "NO_POST",
+  "meetingAgendaIds": [],
+  "generatedAt": "2026-08-16T20:01:11.881Z"
+}
