@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 1,
+  "runId": "70cce3b0-1886-4bb1-9c3d-65567824715b",
+  "date": "2026-08-16",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-08-16T03:02:08.701Z",
+  "completedAt": "2026-08-16T03:04:37.598Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-16T03:02:08.706Z",
+      "completedAt": "2026-08-16T03:02:27.075Z",
+      "durationMs": 18369
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-08-16T03:02:27.076Z",
+      "completedAt": "2026-08-16T03:04:22.546Z",
+      "durationMs": 115470
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-08-16T03:04:22.547Z",
+      "completedAt": "2026-08-16T03:04:22.552Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-08-16T03:04:22.553Z",
+      "completedAt": "2026-08-16T03:04:22.553Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-08-16T03:04:22.553Z",
+      "completedAt": "2026-08-16T03:04:37.594Z",
+      "durationMs": 15041
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 1,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12216,
+      "outputTokens": 784,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.048408
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 13815,
+      "outputTokens": 4272,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1146975
+    }
+  ],
+  "measuredCostUsd": 0.1631055,
+  "quality": {
+    "metrics": {
+      "successfulSources": 32,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 85,
+      "maximumSingleSourceShare": 0.42857142857142855,
+      "sourceDiversity": 0.7346938775510204,
+      "duplicateStorySimilarity": 0.11764705882352941,
+      "repeatedTopicFrequency": 0.16666666666666666,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1631055
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": false,
+    "score": 45,
+    "violations": [
+      {
+        "code": "bureaucratic_filler",
+        "locale": "cs",
+        "message": "Použij přímé sloveso místo úřednické konstrukce."
+      }
+    ]
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/bureaucratic_filler"
+    ]
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 1,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "scene:20348454",
+            "provider": "wikimedia",
+            "fit": 6,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Server rack hardware adequately illustrates AI infrastructure and computing at scale, but the blue-lit LED styling reads as dated tech imagery typical of 2010s stock photography, which slightly undermines freshness for a current technology briefing.",
+            "sceneCs": "serverový rack v datovém centru"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002236
+      },
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": "pexels:9242892",
+        "reason": "Hands handling electronic chip on green PCB—authentic technical work photo, well-composed, clearly relevant to hardware/AI development.",
+        "candidates": [
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 3,
+            "vetoes": [
+              "wrong-subject"
+            ],
+            "reason": "Shows museum/educational exhibit with people, not relevant to AI/software topic of the article.",
+            "sceneCs": "návštěvníci v muzejní expozici"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Clearly AI-generated brain-circuit visualization with glowing blue aesthetic—textbook example of forbidden clichéd imagery.",
+            "sceneCs": "mozek tvořený elektrickými obvody"
+          },
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Shows hands working on circuit board—generic technical work relevant to AI/hardware, decent quality and composition.",
+            "sceneCs": "ruce pracující s destičkou plošného spoje"
+          },
+          {
+            "candidateId": "pixabay:2528363",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "recognisable-face"
+            ],
+            "reason": "Appears AI-generated with face-like forms overlaid on circuit board—violates both AI-generated-look and recognisable-face vetoes.",
+            "sceneCs": "obličejové tvary na elektronických součástkách"
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Clear, well-lit shot of computer motherboard with heat sinks—authentic technical hardware relevant to AI infrastructure.",
+            "sceneCs": "část počítačové základní desky s chladičem"
+          },
+          {
+            "candidateId": "pixabay:3963944",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Stylized visualization with glowing figures and digital effects—has dated synthetic look typical of mid-2000s data visualization.",
+            "sceneCs": "stylizovaná digitální grafika s figurami"
+          },
+          {
+            "candidateId": "pexels:9242892",
+            "provider": "pexels",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Hands handling electronic chip on green PCB—authentic technical work photo, well-composed, clearly relevant to hardware/AI development.",
+            "sceneCs": "ruce instalují součástku na desku plošného spoje"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Stylized thermal-looking chip visualization with pink-blue neon gradient—clearly rendered synthetic image with dated aesthetic.",
+            "sceneCs": "stylizovaný počítačový čip v neonovém osvětlení"
+          },
+          {
+            "candidateId": "pixabay:3435575",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look",
+              "recognisable-face"
+            ],
+            "reason": "Shows recognisable face/partial person with digital effects—violates recognisable-face rule and has AI-generated appearance.",
+            "sceneCs": "osoba s digitálními efekty"
+          },
+          {
+            "candidateId": "pexels:9242891",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands working on green circuit board with components—authentic technical work, relevant to hardware, good lighting and quality.",
+            "sceneCs": "ruce manipulují s komponenty na základní desce"
+          },
+          {
+            "candidateId": "pixabay:3382521",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Abstract glowing circuit/brain pattern on blue background—synthetic rendered look typical of forbidden stock AI imagery.",
+            "sceneCs": "abstraktní svítící síť na modrém pozadí"
+          },
+          {
+            "candidateId": "pexels:9242928",
+            "provider": "pexels",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Hands assembling green motherboard components in bright daylight—clear, authentic technical work directly relevant to hardware/AI infrastructure.",
+            "sceneCs": "ruce montují součástky základní desky"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.009012
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "stet:bureaucratic_filler",
+    "shipped_with_unresolved_review:stet:cs/bureaucratic_filler",
+    "image_rung:search",
+    "image_gate:curated:all-candidates-rejected",
+    "image_gate:search:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 32,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

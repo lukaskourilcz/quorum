@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-16-alibaba-modely-3-miliardy-stazeni-marvel-x-men-llama-kimi",
+  "date": "2026-08-16",
+  "rung": "search",
+  "selected": "pexels:9242892",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "scene:20348454",
+          "provider": "wikimedia",
+          "fit": 6,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Server rack hardware adequately illustrates AI infrastructure and computing at scale, but the blue-lit LED styling reads as dated tech imagery typical of 2010s stock photography, which slightly undermines freshness for a current technology briefing.",
+          "sceneCs": "serverový rack v datovém centru"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002236
+    },
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:9242892",
+      "reason": "Hands handling electronic chip on green PCB—authentic technical work photo, well-composed, clearly relevant to hardware/AI development.",
+      "candidates": [
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 3,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Shows museum/educational exhibit with people, not relevant to AI/software topic of the article.",
+          "sceneCs": "návštěvníci v muzejní expozici"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Clearly AI-generated brain-circuit visualization with glowing blue aesthetic—textbook example of forbidden clichéd imagery.",
+          "sceneCs": "mozek tvořený elektrickými obvody"
+        },
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Shows hands working on circuit board—generic technical work relevant to AI/hardware, decent quality and composition.",
+          "sceneCs": "ruce pracující s destičkou plošného spoje"
+        },
+        {
+          "candidateId": "pixabay:2528363",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "recognisable-face"
+          ],
+          "reason": "Appears AI-generated with face-like forms overlaid on circuit board—violates both AI-generated-look and recognisable-face vetoes.",
+          "sceneCs": "obličejové tvary na elektronických součástkách"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Clear, well-lit shot of computer motherboard with heat sinks—authentic technical hardware relevant to AI infrastructure.",
+          "sceneCs": "část počítačové základní desky s chladičem"
+        },
+        {
+          "candidateId": "pixabay:3963944",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Stylized visualization with glowing figures and digital effects—has dated synthetic look typical of mid-2000s data visualization.",
+          "sceneCs": "stylizovaná digitální grafika s figurami"
+        },
+        {
+          "candidateId": "pexels:9242892",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Hands handling electronic chip on green PCB—authentic technical work photo, well-composed, clearly relevant to hardware/AI development.",
+          "sceneCs": "ruce instalují součástku na desku plošného spoje"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Stylized thermal-looking chip visualization with pink-blue neon gradient—clearly rendered synthetic image with dated aesthetic.",
+          "sceneCs": "stylizovaný počítačový čip v neonovém osvětlení"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "recognisable-face"
+          ],
+          "reason": "Shows recognisable face/partial person with digital effects—violates recognisable-face rule and has AI-generated appearance.",
+          "sceneCs": "osoba s digitálními efekty"
+        },
+        {
+          "candidateId": "pexels:9242891",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Hands working on green circuit board with components—authentic technical work, relevant to hardware, good lighting and quality.",
+          "sceneCs": "ruce manipulují s komponenty na základní desce"
+        },
+        {
+          "candidateId": "pixabay:3382521",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Abstract glowing circuit/brain pattern on blue background—synthetic rendered look typical of forbidden stock AI imagery.",
+          "sceneCs": "abstraktní svítící síť na modrém pozadí"
+        },
+        {
+          "candidateId": "pexels:9242928",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Hands assembling green motherboard components in bright daylight—clear, authentic technical work directly relevant to hardware/AI infrastructure.",
+          "sceneCs": "ruce montují součástky základní desky"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.009012
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-16T03:01:58.991Z"
+}

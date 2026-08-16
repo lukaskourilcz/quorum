@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-16-alibaba-modely-3-miliardy-stazeni-marvel-x-men-llama-kimi",
+  "date": "2026-08-16",
+  "locale": "cs",
+  "kicker": "DNESKAi · 16. srp",
+  "headline": "Alibaba překonal Meta v počtu stažení, Marvel oznámil X-Meny a llama.cpp podporuje Kimi-K3",
+  "coverLine": "Qwen má 3 miliardy stažení – čínské AI modely vedou distribuci otevřených vah",
+  "standfirst": "Čínské modely Qwen překročily 3 miliardy stažení a předehnaly Meta i Google.",
+  "passages": [
+    "Alibaba uvádí, že modely Qwen překročily 3 miliardy stažení a předstihly Meta i Google – jde o firemní tvrzení bez nezávislého ověření.",
+    "Llama.cpp b10448 přidává nativní podporu architektury Kimi-K3 včetně bezztrátového přeskládání MXFP4 vah bez bf16 mezikroku.",
+    "Marvel na D23 zveřejnil plné obsazení X-Men MCU s premiérou 5. května 2028.",
+    "Továrna Progress v Samaře, kde se vyrábějí rakety Sojuz, zasažena ukrajinskými střelami Flamingo; rozsah škod není znám.",
+    "Alibaba's Qwen rodina překonala 3 miliardy stažení, což znamená, že čínské otevřené modely jsou nyní hluboce zabudovány do globální AI infrastruktury – výzkumné i komerční.",
+    "Llama.cpp b10448 ukazuje, jak rychle open-source ekosystém adoptuje nové čínské architektury: lokální spuštění Kimi-K3 je dostupné prakticky od prvního dne.",
+    "Zásah továrny Progress v Samaře přináší přímé riziko pro ruské kosmické starty – včetně nosičů Sojuz,",
+    "které jsou i po odchodu ze spolupráce se Západem klíčové pro ruský přístup na oběžnou dráhu."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Photo by Mikhail Nilov on Pexels"
+}

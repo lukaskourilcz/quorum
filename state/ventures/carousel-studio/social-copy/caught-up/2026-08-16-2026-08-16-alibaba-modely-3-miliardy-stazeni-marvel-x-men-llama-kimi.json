@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-08-16-alibaba-modely-3-miliardy-stazeni-marvel-x-men-llama-kimi",
+  "date": "2026-08-16",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Alibaba tvrdí, že modely Qwen překročily 3 miliardy stažení a předehnaly Meta i Google. Souběžně llama.cpp b10448 přidal podporu architektury Kimi-K3 od Moonshot AI – lokálně, bezztrátově. Marvel na D23 oznámil obsazení X-Menů: Kit Connor, Christopher Abbott, Samara Weaving, premiéra v květnu 2028. A továrna Sojuzů v Samaře hoří.",
+    "hashtags": [
+      "alibaba",
+      "qwen",
+      "llamacpp",
+      "openweightai",
+      "marvel",
+      "xmen",
+      "disney",
+      "d23",
+      "kimik3",
+      "opensource"
+    ],
+    "threadsText": "Alibaba uvádí 3 miliardy stažení modelů Qwen – přes Meta i Google. Číslo je firemní, metodika neověřená, ale rozsah nasazení je reálný. Llama.cpp mezitím přidal podporu Kimi-K3 s bezztrátovým přeskládáním MXFP4 vah. Marvel odhalil na D23 obsazení X-Menů: Kit Connor, Christopher Abbott, Samara Weaving, Adam Driver – premiéra 5. 5. 2028.",
+    "storyLine": "Qwen překonal 3 miliardy stažení, Marvel odhalil X-Meny"
+  },
+  "heroCredit": "Photo by Mikhail Nilov on Pexels",
+  "origin": "desk"
+}

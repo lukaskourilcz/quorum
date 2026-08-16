@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260816030158-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Alibaba's Qwen překonal 3 miliardy stažení – to je distribuční milník, který mění váhu čínských otevřených modelů v globální AI infrastruktuře pro výzkumníky i firmy.",
+  "evidenceRefs": [
+    "source:the-verge",
+    "source:tensorfeed",
+    "source:ars-technica",
+    "source:variety",
+    "source:github-ai-releases"
+  ],
+  "editionRef": "871ebd0651e8420b4baf6e71c506c2f431cedaf162d55bfda177d7acbe50b05e",
+  "generatedAt": "2026-08-16T03:02:03.991Z"
+}
