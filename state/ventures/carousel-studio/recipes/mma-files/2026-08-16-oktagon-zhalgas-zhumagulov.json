@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "carousel-recipe/1",
+  "venture": "mma-files",
+  "slug": "oktagon-zhalgas-zhumagulov",
+  "date": "2026-08-16",
+  "family": "broadsheet",
+  "variant": "A",
+  "accentSwap": false,
+  "treatment": "duotone",
+  "typeScale": 0.9,
+  "phaseSeed": 2,
+  "summaryRef": "ventures/carousel-studio/summaries/mma-files/2026-08-16-oktagon-zhalgas-zhumagulov.json",
+  "copyRef": "ventures/carousel-studio/social-copy/mma-files/2026-08-16-oktagon-zhalgas-zhumagulov.json"
+}

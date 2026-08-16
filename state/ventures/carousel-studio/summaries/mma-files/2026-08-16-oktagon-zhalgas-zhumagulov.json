@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "oktagon-zhalgas-zhumagulov",
+  "date": "2026-08-16",
+  "locale": "cs",
+  "kicker": "MMA Files · 16. srp",
+  "headline": "Zhalgas Zhumagulov: muší váha, která se vrací",
+  "coverLine": "Zhumagulov: pět výher, pak no-contest",
+  "standfirst": "Kazašský bojovník nasbíral v Oktagonu tři výhry za sebou, než jeho zápas na Oktagonu 89 skončil bez výsledku. Bilance 19-9-0 (1 NC) mluví za vše.",
+  "passages": [
+    "Zhalgas Zhumagulov vstoupil na Oktagon 89 v červnu 2026 s rozjetou sérií a skončil bez výsledku.",
+    "Ve druhém kole přišel náhodný úder do rozkroku a rozhodčí zápas s Igorem Severinem prohlásili za no-contest.",
+    "Nebylo to první přerušení kariéry z nečekaného důvodu, ale šlo o první no-contest v jeho záznamu. Celková bilance kazašského bojovníka muší váhy stojí na 19-9-0 se jedním NC.",
+    "Tři výhry před přerušením Zhumagulov přišel na Oktagon 89 po třech po sobě jdoucích výhrách pod různými organizacemi.",
+    "V prosinci 2023 na Naiza FC 55 ukončil Masata Nakamuru technickým knockoutem v prvním kole po pouhých 102 sekundách.",
+    "O dva měsíce později, na Naiza FC 57 v únoru 2024, přidal výhru na body nad Clevelandem McLeanem. Pak přišel Oktagon.",
+    "V listopadu 2024 na Oktagonu 63 porazil Aarona Abyho jednomyslným rozhodnutím.",
+    "O rok později, 28. prosince 2025 na Oktagonu 81, přemohl Davida Dvořáka technickým knockoutem, když zápas zastavil doktor ve třetím kole."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "Zhadra Mukhambetovna · CC BY-SA · Wikimedia Commons"
+}

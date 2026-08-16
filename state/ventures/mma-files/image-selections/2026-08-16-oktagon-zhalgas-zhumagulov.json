@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "oktagon-zhalgas-zhumagulov",
+  "date": "2026-08-16",
+  "rung": "entity-linked",
+  "selected": "wikidata:Q107485020",
+  "verdicts": [
+    {
+      "mode": "identity-advisory",
+      "considered": 1,
+      "selected": null,
+      "reason": "advisory-only",
+      "candidates": [
+        {
+          "candidateId": "wikidata:Q107485020",
+          "provider": "wikimedia",
+          "fit": 3,
+          "vetoes": [
+            "logo-or-watermark",
+            "dated-aesthetic"
+          ],
+          "reason": "The person is identifiable and the setting is mundane and off-brand, but the prominent OZAO logo on the shirt and the overall casual photo shoot aesthetic feels dated and commercial rather than illustrative of MMA combat.",
+          "sceneCs": "muž v černém tričku v squat pozici"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002254
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-16T08:01:38.569Z"
+}
