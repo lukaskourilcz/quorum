@@ -834,7 +834,9 @@
       "at": "2026-08-16T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-16-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Zabít jediný slot: packet neobsahuje ověřený nový subjekt, aktuální modelový běh ani eventovou prioritu. Publikace by porušila pravidlo zdrojového pod"
     },
     {
       "at": "2026-08-16T08:00:00.000Z",

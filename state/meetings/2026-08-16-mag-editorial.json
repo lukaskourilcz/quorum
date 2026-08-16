@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260816070504-mag-editorial",
+  "date": "2026-08-16",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.018775,
+    "monthAllInUsd": 6.2380875999999965,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "VETO",
+    "summary": "AUDIT vetoed the room output: Zabít jediný slot: packet neobsahuje ověřený nový subjekt, aktuální modelový běh ani eventovou prioritu. Publikace by porušila pravidlo zdrojového podkladu a opakovala by existující témata.",
+    "evidenceRefs": [
+      "meeting:2026-08-15-mma-analysis",
+      "meeting:2026-08-15-mag-desk"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "JAB",
+      "summary": "Slot zabít: packet neobsahuje nový ověřený subjekt ani licenci k článku. Modelový běh i FightAIQ data chybí a dostupné subjekty jsou už publikované.",
+      "evidenceRefs": [
+        "meeting:2026-08-15-mma-analysis",
+        "meeting:2026-08-15-mag-desk"
+      ]
+    },
+    {
+      "agent": "QUILL",
+      "summary": "No article slot assigned. Fight-week queue is empty; no model run exists yet; both meetings confirm no fresh subject is ready. Kill the slot.",
+      "evidenceRefs": [
+        "meeting:2026-08-15-mma-analysis",
+        "meeting:2026-08-15-mag-desk"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Zabít jediný slot: packet neobsahuje ověřený nový subjekt, aktuální modelový běh ani eventovou prioritu. Publikace by porušila pravidlo zdrojového podkladu a opakovala by existující témata.",
+      "evidenceRefs": [
+        "meeting:2026-08-15-mma-analysis",
+        "meeting:2026-08-15-mag-desk"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "JAB",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "veto",
+      "veto": true
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-16.json",
+  "generatedAt": "2026-08-16T07:09:04.101Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-16T07:05:04.101Z",
+    "closedAt": "2026-08-16T07:09:04.101Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-16T07:05:04.101Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "JAB",
+        "mode": "veto",
+        "sentAt": "2026-08-16T07:06:04.101Z",
+        "text": "Slot zabít: packet neobsahuje nový ověřený subjekt ani licenci k článku. Modelový běh i FightAIQ data chybí a dostupné subjekty jsou už publikované.",
+        "evidenceRefs": [
+          "meeting:2026-08-15-mma-analysis",
+          "meeting:2026-08-15-mag-desk"
+        ]
+      },
+      {
+        "agent": "QUILL",
+        "mode": "statement",
+        "sentAt": "2026-08-16T07:07:04.101Z",
+        "text": "No article slot assigned. Fight-week queue is empty; no model run exists yet; both meetings confirm no fresh subject is ready. Kill the slot.",
+        "evidenceRefs": [
+          "meeting:2026-08-15-mma-analysis",
+          "meeting:2026-08-15-mag-desk"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "veto",
+        "sentAt": "2026-08-16T07:08:04.101Z",
+        "text": "Zabít jediný slot: packet neobsahuje ověřený nový subjekt, aktuální modelový běh ani eventovou prioritu. Publikace by porušila pravidlo zdrojového podkladu a opakovala by existující témata.",
+        "evidenceRefs": [
+          "meeting:2026-08-15-mma-analysis",
+          "meeting:2026-08-15-mag-desk"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-16T07:09:04.101Z",
+        "text": "AUDIT vetoed the room output: Zabít jediný slot: packet neobsahuje ověřený nový subjekt, aktuální modelový běh ani eventovou prioritu. Publikace by porušila pravidlo zdrojového podkladu a opakovala by existující témata."
+      }
+    ]
+  }
+}
