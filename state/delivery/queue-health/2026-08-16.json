@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-08-16T07:08:10.773Z",
+  "checkedAt": "2026-08-16T08:06:05.125Z",
   "date": "2026-08-16",
   "ventures": [
     {
@@ -43,8 +43,8 @@
     },
     {
       "venture": "mma-files",
-      "url": "https://mma-files.vercel.app/cs/articles/oktagon-viktor-pesta",
-      "expected": "oktagon-viktor-pesta",
+      "url": "https://mma-files.vercel.app/cs/articles/oktagon-zhalgas-zhumagulov",
+      "expected": "oktagon-zhalgas-zhumagulov",
       "status": 200,
       "live": true
     }
