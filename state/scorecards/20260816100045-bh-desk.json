@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260816100045-bh-desk",
+  "phase": "bh-desk",
+  "editorialPhase": "selection",
+  "estimatedWorstCaseUsd": 0,
+  "actualUsd": 0,
+  "participants": [],
+  "agendaId": null,
+  "schedulerOutcome": "paused",
+  "generatedAt": "2026-08-16T10:00:45.057Z"
+}
