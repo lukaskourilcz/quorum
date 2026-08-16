@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-359ac5fe262fcb92",
+  "venture": "caught-up",
+  "packageHash": "871ebd0651e8420b4baf6e71c506c2f431cedaf162d55bfda177d7acbe50b05e",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "99890c9075bc14f4dc477aa5ad983c4b0b4e109d",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 99890c9075bc14f4dc477aa5ad983c4b0b4e109d is readable",
+      "checkedAt": "2026-08-16T03:09:26.740Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-16T03:09:26.740Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-16T03:09:26.740Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-16-alibaba-modely-3-miliardy-stazeni-marvel-x-men-llama-kimi?boardless_verify=871ebd0651e8-1786849766740",
+      "checkedAt": "2026-08-16T03:09:26.740Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-16-alibaba-modely-3-miliardy-stazeni-marvel-x-men-llama-kimi match",
+      "checkedAt": "2026-08-16T03:09:26.740Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 871ebd0651e8420b4baf6e71c506c2f431cedaf162d55bfda177d7acbe50b05e",
+      "checkedAt": "2026-08-16T03:09:26.740Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-16-alibaba-modely-3-miliardy-stazeni-marvel-x-men-llama-kimi/hero.webp?boardless_verify=871ebd0651e8-1786849766740",
+      "checkedAt": "2026-08-16T03:09:26.740Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-16T03:09:26.740Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Mikhail Nilov · Pexels License",
+      "checkedAt": "2026-08-16T03:09:26.740Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-16T03:08:25.043Z",
+  "completedAt": "2026-08-16T03:09:27.261Z"
+}

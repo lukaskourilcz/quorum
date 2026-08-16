@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-16",
+  "packageHash": "871ebd0651e8420b4baf6e71c506c2f431cedaf162d55bfda177d7acbe50b05e",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "99890c9075bc14f4dc477aa5ad983c4b0b4e109d",
+  "deliveredAt": "2026-08-16T03:09:28.267Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-16-alibaba-modely-3-miliardy-stazeni-marvel-x-men-llama-kimi",
+  "tags": [
+    "umela-inteligence",
+    "alibaba",
+    "marvel",
+    "disney",
+    "open-source",
+    "vesmir"
+  ]
+}
