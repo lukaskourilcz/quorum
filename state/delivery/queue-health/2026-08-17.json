@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-08-17T07:04:22.137Z",
+  "checkedAt": "2026-08-17T08:07:13.148Z",
   "date": "2026-08-17",
   "ventures": [
     {
@@ -50,8 +50,8 @@
     },
     {
       "venture": "mma-files",
-      "url": "https://mma-files.vercel.app/cs/articles/oktagon-zhalgas-zhumagulov",
-      "expected": "oktagon-zhalgas-zhumagulov",
+      "url": "https://mma-files.vercel.app/cs/articles/ufc-aleksandar-rakic",
+      "expected": "ufc-aleksandar-rakic",
       "status": 200,
       "live": true
     }
