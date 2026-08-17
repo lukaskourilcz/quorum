@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260817140203-dm-growth",
+  "phase": "dm-growth",
+  "estimatedWorstCaseUsd": 0,
+  "actualUsd": 0,
+  "participants": [],
+  "agenda": {
+    "isoWeek": "2026-W34",
+    "topicId": "booktok-bookstagram"
+  },
+  "generatedAt": "2026-08-17T14:02:04.620Z"
+}
