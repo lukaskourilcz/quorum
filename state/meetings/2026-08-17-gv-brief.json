@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260817110127-gv-brief",
+  "date": "2026-08-17",
+  "phase": "gv-brief",
+  "fixture": false,
+  "status": "PAUSED",
+  "stage": "VALIDATION",
+  "operatingBrief": "Trend scouting produced no data this week, so the meeting was not held.",
+  "participantReasons": [
+    {
+      "agent": "PULSE",
+      "reason": "registered for this meeting but not asked anything, because there was no trend data to read",
+      "participated": false
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "registered for this meeting but not asked anything, because there was no trend data to read",
+      "participated": false
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "registered for this meeting but not asked anything, because there was no trend data to read",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "registered for this meeting but not asked anything, because there was no trend data to read",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 7.005695899999997,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "Trend scouting produced no data this week, so the meeting was not held.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "PULSE",
+      "summary": "Trend scouting produced no data this week, so the meeting was not held.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "PULSE",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Nothing was decided and nothing was authorized: a room with no data produces no work, spend, publishing or outreach.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-17T11:01:27.005Z",
+  "kind": "gv-brief",
+  "roomTranscript": {
+    "openedAt": "2026-08-17T11:01:27.004Z",
+    "closedAt": "2026-08-17T11:01:27.005Z",
+    "gavel": "PULSE",
+    "setting": "The trend scout returned nothing and no recent snapshot was available, so there was nothing to put in front of anyone and the meeting did not open.",
+    "turns": [
+      {
+        "agent": "PULSE",
+        "mode": "close",
+        "sentAt": "2026-08-17T11:01:27.005Z",
+        "text": "Trend scouting produced no data this week, so the meeting was not held."
+      }
+    ]
+  }
+}

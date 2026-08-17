@@ -68,7 +68,9 @@
       "at": "2026-08-17T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "gv-brief",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-17-gv-brief",
+      "decisionOneLiner": "Trend scouting produced no data this week, so the meeting was not held."
     },
     {
       "at": "2026-08-17T12:00:00.000Z",
