@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260817070114-mag-editorial",
+  "phase": "mag-editorial",
+  "outcome": "VETO",
+  "summary": "AUDIT vetoed the room output: Zabijte dnešní slot: v balíčku není ověřený FightAIQ modelový běh ani nový zdrojový subjekt a index uvádí poslední publikovaný slot 16. srpna.",
+  "evidenceRefs": [
+    "meeting:2026-08-16-mma-analysis",
+    "meeting:2026-08-16-mag-desk"
+  ],
+  "generatedAt": "2026-08-17T07:05:14.071Z"
+}

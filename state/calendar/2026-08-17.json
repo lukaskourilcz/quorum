@@ -38,7 +38,9 @@
       "at": "2026-08-17T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-17-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Zabijte dnešní slot: v balíčku není ověřený FightAIQ modelový běh ani nový zdrojový subjekt a index uvádí poslední publikovaný slot 16. srpna."
     },
     {
       "at": "2026-08-17T08:00:00.000Z",
