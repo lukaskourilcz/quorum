@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "runId": "991c3801-b84c-4da0-bdac-ce3ba01b2c07",
+  "date": "2026-08-17",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-08-17T03:01:58.170Z",
+  "completedAt": "2026-08-17T03:05:53.704Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-17T03:01:58.175Z",
+      "completedAt": "2026-08-17T03:02:23.914Z",
+      "durationMs": 25739
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-08-17T03:02:23.914Z",
+      "completedAt": "2026-08-17T03:04:14.002Z",
+      "durationMs": 110088,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"tags\"\n    ],\n    \"message\": \"Too big: expected array to have <=6 items\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-08-17T03:04:14.002Z",
+      "completedAt": "2026-08-17T03:05:51.495Z",
+      "durationMs": 97493
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-08-17T03:05:51.496Z",
+      "completedAt": "2026-08-17T03:05:51.501Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_1",
+      "status": "success",
+      "startedAt": "2026-08-17T03:05:51.502Z",
+      "completedAt": "2026-08-17T03:05:51.502Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-08-17T03:05:51.502Z",
+      "completedAt": "2026-08-17T03:05:53.703Z",
+      "durationMs": 2201
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12247,
+      "outputTokens": 1077,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.052896
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 16698,
+      "outputTokens": 4367,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1247715
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 17576,
+      "outputTokens": 4360,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2548,
+      "costUsd": 0.127683
+    }
+  ],
+  "measuredCostUsd": 0.3053505,
+  "quality": {
+    "metrics": {
+      "successfulSources": 30,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 83,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.84375,
+      "duplicateStorySimilarity": 0.11764705882352941,
+      "repeatedTopicFrequency": 0.16666666666666666,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.3053505
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "curated",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 1,
+        "selected": "scene:20348454",
+        "reason": "Server racks aptly illustrate AI infrastructure and computational backbone of the technology industry, with clear, well-lit detail that suits a professional tech briefing.",
+        "candidates": [
+          {
+            "candidateId": "scene:20348454",
+            "provider": "wikimedia",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Server racks aptly illustrate AI infrastructure and computational backbone of the technology industry, with clear, well-lit detail that suits a professional tech briefing.",
+            "sceneCs": "serverové racky v datovém centru"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002146
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"tags\"\n    ],\n    \"message\": \"Too big: expected array to have <=6 items\"\n  }\n]",
+    "image_rung:curated",
+    "image_gate:curated:selected",
+    "licensed_image_fallback:Declared response is too large"
+  ],
+  "sourceSummary": {
+    "successfulSources": 30,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}

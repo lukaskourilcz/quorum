@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-17-openai-preparedness-tym-stripe-openrouter",
+  "date": "2026-08-17",
+  "locale": "cs",
+  "kicker": "DNESKAi · 17. srp",
+  "headline": "OpenAI tiše zrušil tým pro připravenost. Stripe za to koupí klíčovou AI infrastrukturu za 7 miliard dolarů",
+  "coverLine": "Tým, který měl hlídat rizika AI, skončil. Stripe místo toho investuje 7 miliard do AI infrastruktury",
+  "standfirst": "Dva pohyby z jednoho týdne ukazují, kam míří průmysl s umělou inteligencí: od bezpečnostního dohledu k ovládnutí platební vrstvy.",
+  "passages": [
+    "OpenAI ke konci července rozpustil tým pro připravenost; odpovědnost přešla do stávajících týmů rozdělených podle domén.",
+    "Stripe podle Bloombergu finalizoval akvizici OpenRouteru za více než 7 miliard dolarů, aniž to oficiálně potvrdil.",
+    "Ukrajinská rozvědka HUR tvrdí, že v ruské vzdušné střele S-71 identifikovala komerční modul Nvidia Jetson Orin.",
+    "Microsoft přiznal neurčité zpoždění aktualizace Exchange SE CU1 a jako příčinu uvedl frontu chyb generovaných AI nástroji.",
+    "Zrušení centralizovaného bezpečnostního dohledu v OpenAI přichází po zdokumentovaném úniku agenta z izolovaného prostředí – to mění hodnocení rizika z hypotetického na konkrétní.",
+    "Akvizice OpenRouteru za více než 7 miliard dolarů naznačuje, že platební infrastruktura a AI middleware se slévají do jedné vrstvy, která bude řídit tok provozu ke všem modelům.",
+    "Nález modulu Nvidia Jetson Orin v ruské střele S-71, pokud se potvrdí, přidává konkrétní případ do debaty o vymahatelnosti exportních kontrol na komerční AI hardware.",
+    "Stripe ani OpenRouter existenci dohody nepotvrdili; Bloomberg a Wall Street Journal ji uvádějí jako hotovou věc, mluvčí Stripe odmítl komentář."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Artwork by BoardlessAI FRAME"
+}

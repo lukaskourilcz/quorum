@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-17-openai-preparedness-tym-stripe-openrouter",
+  "date": "2026-08-17",
+  "rung": "curated",
+  "selected": "scene:20348454",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": "scene:20348454",
+      "reason": "Server racks aptly illustrate AI infrastructure and computational backbone of the technology industry, with clear, well-lit detail that suits a professional tech briefing.",
+      "candidates": [
+        {
+          "candidateId": "scene:20348454",
+          "provider": "wikimedia",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Server racks aptly illustrate AI infrastructure and computational backbone of the technology industry, with clear, well-lit detail that suits a professional tech briefing.",
+          "sceneCs": "serverové racky v datovém centru"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002146
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-17T03:01:52.146Z"
+}

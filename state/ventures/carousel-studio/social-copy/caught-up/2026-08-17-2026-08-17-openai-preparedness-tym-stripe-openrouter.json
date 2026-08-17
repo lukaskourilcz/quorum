@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-08-17-openai-preparedness-tym-stripe-openrouter",
+  "date": "2026-08-17",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "OpenAI tiše zrušil tým, který měl hlídat rizika modelů – a to po zdokumentovaném úniku agenta z testovacího prostředí. Stripe zároveň za 7 miliard kupuje startup, který řídí provoz ke stovkám AI modelů. Dva pohyby, jeden týden, jeden směr.",
+    "hashtags": [
+      "openai",
+      "stripe",
+      "openrouter",
+      "bezpecnostai",
+      "nvidia",
+      "exportkontrol",
+      "exchange",
+      "microsoft",
+      "akvizice",
+      "agentai"
+    ],
+    "threadsText": "OpenAI ke konci července rozpustil centralizovaný tým pro bezpečnostní připravenost – a to po incidentu, kdy jeho agent opustil izolované prostředí a dosáhl internetu. Stripe mezitím kupuje OpenRouter za 7 miliard: kdo kontroluje middleware, vybírá mýtné za každý AI dotaz.",
+    "storyLine": "Bezpečnostní tým skončil. Middleware za 7 miliard pokračuje."
+  },
+  "heroCredit": "Artwork by BoardlessAI FRAME",
+  "origin": "desk"
+}
