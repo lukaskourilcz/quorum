@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "ufc-aleksandar-rakic",
+  "date": "2026-08-17",
+  "locale": "cs",
+  "kicker": "MMA Files · 17. srp",
+  "headline": "Aleksandar Rakić: bilance 15–6 a tři porážky za sebou",
+  "coverLine": "Rakić prohrál třikrát v řadě v UFC",
+  "standfirst": "Srbský zápasník UFC má za sebou těžké období. Naposledy podlehl v říjnu 2025 Murzakanovovi technickým knockoutem v prvním kole.",
+  "passages": [
+    "Aleksandar Rakić prochází v UFC nejhorším obdobím své kariéry. Srbský bojovník narozený 6. února 1992 má celkovou bilanci 15–6 a v posledních třech zápasech nezvítězil ani jednou.",
+    "Nejčerstvější porážka přišla na UFC 321 dne 25. října 2025. Azamat Murzakanov Rakiće zastavil technickým knockoutem pěstmi v prvním kole, 191 sekund po začátku zápasu.",
+    "Před tím se Rakić utkal s Jiřím Procházkou na UFC 300 v dubnu 2024. Procházka ho ukončil technickým knockoutem ve druhém kole po 497 sekundách.",
+    "Série proher začala v květnu 2022, kdy Rakić nastoupil jako hlavní zápasník na akci UFC on ESPN: Błachowicz vs. Rakić.",
+    "Jan Błachowicz ho zastavil technickým knockoutem ve třetím kole po zranění kolena, tentokrát po 671 sekundách boje.",
+    "Rakić trénuje v Gym 23 American Top Team a dosahuje výšky 193 cm s dosahem 198 cm.",
+    "UFC ho podle dostupných informací aktuálně zařazuje do těžké váhy, přestože předchozí zápasy se odehrály v polotěžké. Murzakanov, který Rakiće naposledy porazil, drží bilanci 16–1 a v UFC dosud neprohrál.",
+    "Jeho čtyři zdokumentovaná vítězství v organizaci skončila všechna před limitem."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "Artwork by BoardlessAI FRAME"
+}

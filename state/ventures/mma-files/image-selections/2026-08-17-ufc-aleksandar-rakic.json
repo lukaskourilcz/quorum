@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-aleksandar-rakic",
+  "date": "2026-08-17",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:112399571",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "dated-aesthetic",
+            "logo-or-watermark"
+          ],
+          "reason": "Image shows generic arena spectacle with heavy theatrical lighting and lens flares that date it to mid-2000s aesthetics, plus visible branding/signage; fails to illustrate a fighter's record or performance in meaningful way.",
+          "sceneCs": "velká sportovní aréna s davem a osvětlením"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002306
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:37544651",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "This is a concert or entertainment stage setup, completely unrelated to mixed martial arts or the UFC fighter discussed in the article.",
+          "sceneCs": "osvětlená koncertní stage s konstrukcí"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002144
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:40369860",
+          "provider": "wikimedia",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "The octagon and venue authentically represent MMA competition, but the image shows a full event scene rather than focused action, and the specific faces/identities are difficult to distinguish, which reduces its clear connection to the named athlete.",
+          "sceneCs": "osvětlená oktagonu v plné hale"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002278
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-17T08:02:00.352Z"
+}

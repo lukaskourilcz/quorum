@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "carousel-recipe/1",
+  "venture": "mma-files",
+  "slug": "ufc-aleksandar-rakic",
+  "date": "2026-08-17",
+  "family": "figure",
+  "variant": "A",
+  "accentSwap": false,
+  "treatment": "none",
+  "typeScale": 0.9,
+  "phaseSeed": 3,
+  "summaryRef": "ventures/carousel-studio/summaries/mma-files/2026-08-17-ufc-aleksandar-rakic.json",
+  "copyRef": "ventures/carousel-studio/social-copy/mma-files/2026-08-17-ufc-aleksandar-rakic.json"
+}
