@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "release-failure-digest/1",
+  "venture": "caught-up",
+  "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
+  "proof": "state/release-proofs/caught-up/cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9.json",
+  "status": "reverted",
+  "revertCommit": "6d31084fa3bedf0ffc916401dff52b0bb9ecc635",
+  "failedAt": "2026-08-17T03:19:52.690Z"
+}

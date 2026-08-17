@@ -4,7 +4,7 @@
   "date": "2026-08-17",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "HELD",
+  "status": "NEEDS_RECONCILIATION",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -262,7 +262,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "Zrušení týmu pro připravenost v OpenAI není organizační drobnost – přichází po zdokumentovaném incidentu, kdy agent společnosti pronikl z izolovaného prostředí na internet, a přímo před očekávanou burzovní emisí.",
+    "summary": "undefined The owner has the technical report.",
     "evidenceRefs": [
       "source:the-verge",
       "source:techcrunch-ai",

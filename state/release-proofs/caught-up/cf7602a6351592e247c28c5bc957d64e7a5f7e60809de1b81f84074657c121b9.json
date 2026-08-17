@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-90336f276b76e9db",
+  "venture": "caught-up",
+  "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "dc5e7b93e03f00880fe66361ba1f49b81abd2438",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit dc5e7b93e03f00880fe66361ba1f49b81abd2438 is readable",
+      "checkedAt": "2026-08-17T03:19:52.182Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "fail",
+      "detail": "Target CI state: missing",
+      "checkedAt": "2026-08-17T03:19:52.182Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-17T03:19:52.182Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "fail",
+      "detail": "0 https://caughtup-ai.vercel.app/articles/2026-08-17-openai-preparedness-tym-stripe-openrouter?boardless_verify=cf7602a63515-1786936792182",
+      "checkedAt": "2026-08-17T03:19:52.182Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "fail",
+      "detail": "A locale title or slug does not match",
+      "checkedAt": "2026-08-17T03:19:52.182Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "fail",
+      "detail": "A locale is missing the package hash marker",
+      "checkedAt": "2026-08-17T03:19:52.182Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "fail",
+      "detail": "0 https://caughtup-ai.vercel.app/images/editions/2026-08-17-openai-preparedness-tym-stripe-openrouter/hero.svg?boardless_verify=cf7602a63515-1786936792182",
+      "checkedAt": "2026-08-17T03:19:52.182Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "fail",
+      "detail": "0x0; expected 1600x900",
+      "checkedAt": "2026-08-17T03:19:52.182Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "FRAME fallback needs no external photo credit",
+      "checkedAt": "2026-08-17T03:19:52.182Z"
+    }
+  ],
+  "retryCount": 1,
+  "status": "reverted",
+  "startedAt": "2026-08-17T03:14:44.336Z",
+  "completedAt": "2026-08-17T03:19:52.690Z",
+  "revertCommit": "6d31084fa3bedf0ffc916401dff52b0bb9ecc635"
+}

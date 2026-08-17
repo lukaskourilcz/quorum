@@ -509,3 +509,8 @@ items in place. Lack of response never authorizes an action. -->
   Live counts are in state/delivery/queue-health/, rewritten every day. A parked package needs
   new bytes rather than another run; its own receipt says what the magazine refused and why.
   [imp:5] [owner:me] [time:30m] [kind:deploy]
+- [ ] **caught-up release reverted** — package `cf7602a63515` failed post-deploy verification and was reverted in `6d31084fa3be`. Proof: `state/release-proofs/caught-up/cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9.json`. [owner:me]
+
+- [ ] **CAUGHT-UP-DELIVERY-2026-08-17** — post_deploy_verification: Delivery stopped without a reconciled target commit.
+  RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]

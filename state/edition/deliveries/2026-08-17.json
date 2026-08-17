@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-17",
+  "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
+  "status": "needs_reconciliation",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "code": "post_deploy_verification",
+  "detail": "Delivery stopped without a reconciled target commit",
+  "recordedAt": "2026-08-17T03:19:56.848Z",
+  "tags": []
+}
