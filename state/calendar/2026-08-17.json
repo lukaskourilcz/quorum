@@ -46,19 +46,23 @@
       "at": "2026-08-17T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "scheduled"
+      "status": "held",
+      "decisionOneLiner": "The desk published this slot's article."
     },
     {
       "at": "2026-08-17T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "scheduled"
+      "status": "late",
+      "decisionOneLiner": "The run for this slot has not arrived yet."
     },
     {
       "at": "2026-08-17T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-17-bh-desk",
+      "decisionOneLiner": "The selection phase remains current. No provider was called, nothing was published and this day cost $0."
     },
     {
       "at": "2026-08-17T11:00:00.000Z",
