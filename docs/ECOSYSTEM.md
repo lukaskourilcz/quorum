@@ -41,7 +41,7 @@ builds and after a real 22:00 checkpoint. Never hand-edit the generated block.
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
 
-Refreshed from committed state: **2026-08-16T20:01:11.881Z**. This block is generated deterministically; edit the source state, not these lines.
+Refreshed from committed state: **2026-08-17T04:28:41.856Z**. This block is generated deterministically; edit the source state, not these lines.
 
 | Item | Current value |
 | --- | --- |
@@ -49,11 +49,11 @@ Refreshed from committed state: **2026-08-16T20:01:11.881Z**. This block is gene
 | Agent roster | 40 active: 25 Anthropic, 15 OpenAI |
 | Scheduled specialist/service rooms | 14; combined maximum room envelopes $1.61 if every room is commissioned |
 | Approved spend boundary | $30.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |
-| Recorded API spend | $4.91 this month; $4.93 cumulative |
+| Recorded API spend | $6.75 this month; $6.77 cumulative |
 | Entered fixed costs | $0.00 monthly |
 | Recognized revenue | $0.00 |
-| KPI quarter | 2026-Q1; open; 39 on track, 2 at risk, 16 off track, 22 unavailable |
-| Critical KPI gaps | company.monthly-api-usd, marketingshark.package-completeness, marketingshark.truth-gate-violations, door-money.desk-reliability, door-money.cash-spend, tehdejsi-svet.cycle-reliability, tehdejsi-svet.language-parity, tehdejsi-svet.research-spend-usd, kvorum.desk-reliability, kvorum.published-claim-reference-rate |
+| KPI quarter | 2026-Q1; open; 32 on track, 4 at risk, 21 off track, 22 unavailable |
+| Critical KPI gaps | company.monthly-all-in-usd, company.monthly-api-usd, marketingshark.package-completeness, marketingshark.truth-gate-violations, door-money.desk-reliability, door-money.cash-spend, tehdejsi-svet.cycle-reliability, tehdejsi-svet.language-parity, tehdejsi-svet.research-spend-usd, kvorum.desk-reliability, kvorum.published-claim-reference-rate |
 | FightAIQ analysis | approved by D8; production still requires `FIGHTAIQ_ANALYSIS_ENABLED=true` plus live and evidence gates |
 | Visitor/engagement measurement | disabled (`METRICS_INGESTION_ENABLED=false`) |
 | Global social posting | stopped while `SOCIAL_KILL_SWITCH=true`; project counters and credentials remain separate gates |
