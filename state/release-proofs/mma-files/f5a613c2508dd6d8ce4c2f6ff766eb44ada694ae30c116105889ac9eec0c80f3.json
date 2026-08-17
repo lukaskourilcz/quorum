@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-c0e613a27f8505ec",
+  "venture": "mma-files",
+  "packageHash": "f5a613c2508dd6d8ce4c2f6ff766eb44ada694ae30c116105889ac9eec0c80f3",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "b0a8b12cd56f267e343953b73a5c8bce8152d54c",
+  "deploymentUrl": "https://mma-files.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit b0a8b12cd56f267e343953b73a5c8bce8152d54c is readable",
+      "checkedAt": "2026-08-17T08:07:09.105Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-17T08:07:09.105Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-17T08:07:09.105Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/cs/articles/ufc-aleksandar-rakic?boardless_verify=f5a613c2508d-1786954029105",
+      "checkedAt": "2026-08-17T08:07:09.105Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and ufc-aleksandar-rakic match",
+      "checkedAt": "2026-08-17T08:07:09.105Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose f5a613c2508dd6d8ce4c2f6ff766eb44ada694ae30c116105889ac9eec0c80f3",
+      "checkedAt": "2026-08-17T08:07:09.105Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/images/articles/ufc-aleksandar-rakic/hero.svg?boardless_verify=f5a613c2508d-1786954029105",
+      "checkedAt": "2026-08-17T08:07:09.105Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-17T08:07:09.105Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "FRAME fallback needs no external photo credit",
+      "checkedAt": "2026-08-17T08:07:09.105Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-17T08:06:06.635Z",
+  "completedAt": "2026-08-17T08:07:09.632Z"
+}

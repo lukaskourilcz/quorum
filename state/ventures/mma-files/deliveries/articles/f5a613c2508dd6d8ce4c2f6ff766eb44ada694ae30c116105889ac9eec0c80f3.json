@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "f5a613c2508dd6d8ce4c2f6ff766eb44ada694ae30c116105889ac9eec0c80f3",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "b0a8b12cd56f267e343953b73a5c8bce8152d54c",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/ufc-aleksandar-rakic",
+  "recordedAt": "2026-08-17T08:07:10.694Z"
+}
