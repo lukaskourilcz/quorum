@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260817060159-mma-intake",
+  "date": "2026-08-17",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "PAUSED",
+  "stage": "VALIDATION",
+  "operatingBrief": "Nothing new arrived since the last check, so this meeting was not needed.",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "registered for this meeting but not asked anything, because nothing new had arrived",
+      "participated": false
+    },
+    {
+      "agent": "CORNER",
+      "reason": "registered for this meeting but not asked anything, because nothing new had arrived",
+      "participated": false
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "registered for this meeting but not asked anything, because nothing new had arrived",
+      "participated": false
+    },
+    {
+      "agent": "TAPE",
+      "reason": "registered for this meeting but not asked anything, because nothing new had arrived",
+      "participated": false
+    },
+    {
+      "agent": "SONAR",
+      "reason": "registered for this meeting but not asked anything, because nothing new had arrived",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 6.900104899999996,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "Nothing new arrived since the last check, so this meeting was not needed.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "Nothing new arrived since the last check, so this meeting was not needed.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Nothing was decided and nothing was authorized: a meeting on unchanged sources produces no work, spend, publishing or outreach.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "Nothing new arrived since the last check, so this meeting was not needed.",
+    "evidenceRefs": []
+  },
+  "generatedAt": "2026-08-17T06:01:59.529Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-17T06:01:59.528Z",
+    "closedAt": "2026-08-17T06:01:59.529Z",
+    "gavel": "FORGE",
+    "setting": "The sources were checked and nothing had changed since the last check, so the meeting was not needed and nobody was asked anything.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-17T06:01:59.529Z",
+        "text": "Nothing new arrived since the last check, so this meeting was not needed."
+      }
+    ]
+  }
+}

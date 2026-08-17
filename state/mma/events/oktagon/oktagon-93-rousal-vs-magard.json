@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-12T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-16:2026 in Oktagon MMA"
+    "source:wikipedia:2026-08-17:2026 in Oktagon MMA"
   ],
   "bouts": [
     {
@@ -84,5 +84,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-16T06:00:53.643Z"
+  "updatedAt": "2026-08-17T06:01:59.528Z"
 }

@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Angela_Hill",
       "publisher": "Wikipedia",
       "title": "Angela Hill",
-      "retrievedAt": "2026-08-16T06:00:53.643Z",
+      "retrievedAt": "2026-08-17T06:01:59.528Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q20979276",
         "source:wikipedia:47691727"
       ],
-      "retrievedAt": "2026-08-16T06:00:53.643Z",
+      "retrievedAt": "2026-08-17T06:01:59.528Z",
       "status": "verified",
       "corroborated": true
     },
@@ -789,9 +789,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 3.142227,
-        "layoffDays": 78
+        "layoffDays": 79
       },
-      "updatedAt": "2026-08-16T06:00:53.643Z"
+      "updatedAt": "2026-08-17T06:01:59.528Z"
     }
   ],
   "rating": {
@@ -801,7 +801,7 @@
     "volatility": 0.05999927,
     "boutCount": 39,
     "asOfBoutRef": "ufc:bout:history-3fdf2017b89dcb87235a",
-    "updatedAt": "2026-08-16T06:00:53.643Z"
+    "updatedAt": "2026-08-17T06:01:59.528Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2449,11 +2449,29 @@
         "source:wikipedia:64535234"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-17T06:01:59.528Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47691727",
+        "source:wikipedia:40078160",
+        "source:wikipedia:68442521",
+        "source:wikipedia:64535234"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-16T06:00:53.643Z"
+  "updatedAt": "2026-08-17T06:01:59.528Z"
 }

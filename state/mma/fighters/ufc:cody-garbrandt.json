@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Cody_Garbrandt",
       "publisher": "Wikipedia",
       "title": "Cody Garbrandt",
-      "retrievedAt": "2026-08-16T06:00:53.643Z",
+      "retrievedAt": "2026-08-17T06:01:59.528Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q20669352",
         "source:wikipedia:47163936"
       ],
-      "retrievedAt": "2026-08-16T06:00:53.643Z",
+      "retrievedAt": "2026-08-17T06:01:59.528Z",
       "status": "verified",
       "corroborated": true
     },
@@ -204,9 +204,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 1.337885,
-        "layoffDays": 36
+        "layoffDays": 37
       },
-      "updatedAt": "2026-08-16T06:00:53.643Z"
+      "updatedAt": "2026-08-17T06:01:59.528Z"
     }
   ],
   "rating": {
@@ -216,7 +216,7 @@
     "volatility": 0.05999665,
     "boutCount": 4,
     "asOfBoutRef": "ufc:bout:history-a1fe45c21699c6fce4eb",
-    "updatedAt": "2026-08-16T06:00:53.643Z"
+    "updatedAt": "2026-08-17T06:01:59.528Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1757,11 +1757,26 @@
         "source:wikipedia:47163936"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-17T06:01:59.528Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47163936"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.75,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-16T06:00:53.643Z"
+  "updatedAt": "2026-08-17T06:01:59.528Z"
 }

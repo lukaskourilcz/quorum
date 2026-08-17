@@ -8,25 +8,31 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-17-cu-edition",
-      "decisionOneLiner": "Zrušení týmu pro připravenost v OpenAI není organizační drobnost – přichází po zdokumentovaném incidentu, kdy agent společnosti pronikl z izolovaného prostředí na internet, a přímo"
+      "decisionOneLiner": "undefined The owner has the technical report."
     },
     {
       "at": "2026-08-17T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-17-morning",
+      "decisionOneLiner": "The council held the internal work item. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-08-17T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ms-daily",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-17-ms-daily",
+      "decisionOneLiner": "No package was drafted. devshark: model-output-invalid."
     },
     {
       "at": "2026-08-17T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-intake",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-17-mma-intake",
+      "decisionOneLiner": "Nothing new arrived since the last check, so this meeting was not needed."
     },
     {
       "at": "2026-08-17T07:00:00.000Z",

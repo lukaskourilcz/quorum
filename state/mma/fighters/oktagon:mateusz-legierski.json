@@ -38,7 +38,7 @@
       "url": "https://en.wikipedia.org/wiki/Mateusz_Legierski",
       "publisher": "Wikipedia",
       "title": "Mateusz Legierski",
-      "retrievedAt": "2026-08-16T06:00:53.643Z",
+      "retrievedAt": "2026-08-17T06:01:59.528Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +50,7 @@
         "source:wikidata:Q85865805",
         "source:wikipedia:81719858"
       ],
-      "retrievedAt": "2026-08-16T06:00:53.643Z",
+      "retrievedAt": "2026-08-17T06:01:59.528Z",
       "status": "verified",
       "corroborated": true
     },
@@ -413,9 +413,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 1.936342,
-        "layoffDays": 57
+        "layoffDays": 58
       },
-      "updatedAt": "2026-08-16T06:00:53.643Z"
+      "updatedAt": "2026-08-17T06:01:59.528Z"
     }
   ],
   "rating": {
@@ -425,7 +425,7 @@
     "volatility": 0.05999204,
     "boutCount": 17,
     "asOfBoutRef": "oktagon:bout:history-babbdced370b25f03622",
-    "updatedAt": "2026-08-16T06:00:53.643Z"
+    "updatedAt": "2026-08-17T06:01:59.528Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1950,11 +1950,27 @@
         "source:wikipedia:78757319"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-17T06:01:59.528Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:81719858",
+        "source:wikipedia:78757319"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-16T06:00:53.643Z"
+  "updatedAt": "2026-08-17T06:01:59.528Z"
 }

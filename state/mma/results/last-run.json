@@ -16,61 +16,46 @@
   ],
   "applied": [
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-islam-makhachev-vs-ian-machado-garry-1",
-      "winner": "red",
-      "method": "Decision (unanimous)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-mackenzie-dern-vs-gillian-robertson-2",
-      "winner": "red",
-      "method": "Decision (unanimous)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-jalin-turner-vs-kaue-fernandes-6",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-jalin-turner-vs-kaue-fernandes-5",
       "winner": "red",
       "method": "KO (punches)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-mansur-abdul-malik-vs-dustin-stoltzfus-4",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-mansur-abdul-malik-vs-dustin-stoltzfus-3",
       "winner": "blue",
       "method": "Submission (rear-naked choke)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-edson-barboza-vs-esteban-ribovics-9",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-edson-barboza-vs-esteban-ribovics-5",
       "winner": "blue",
       "method": "TKO (punches)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-chidi-njokuani-vs-joel-alvarez-6",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-chidi-njokuani-vs-joel-alvarez-5",
       "winner": "red",
       "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-charles-johnson-vs-eduardo-henrique-7",
-      "winner": "red",
-      "method": "Submission (twister)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-vicente-luque-vs-tresean-gore-9",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-vicente-luque-vs-tresean-gore-8",
       "winner": "blue",
       "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-rafael-tobias-vs-lucas-fernando-9",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-rafael-tobias-vs-lucas-fernando-10",
       "winner": "blue",
       "method": "TKO (knee to the body and elbows)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-neil-magny-vs-ramiz-brahimaj-8",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-neil-magny-vs-ramiz-brahimaj-6",
       "winner": "red",
       "method": "TKO (punches)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-jeremiah-wells-vs-myktybek-orolbai-9",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-jeremiah-wells-vs-myktybek-orolbai-4",
       "winner": "red",
       "method": "Technical Submission (ninja choke)"
     }
   ],
-  "untracked": 13,
-  "generatedAt": "2026-08-16T06:00:53.643Z"
+  "untracked": 16,
+  "generatedAt": "2026-08-17T06:01:59.528Z"
 }
