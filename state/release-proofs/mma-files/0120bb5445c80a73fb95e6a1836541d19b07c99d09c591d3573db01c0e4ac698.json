@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-ce05dc7f3450b983",
+  "venture": "mma-files",
+  "packageHash": "0120bb5445c80a73fb95e6a1836541d19b07c99d09c591d3573db01c0e4ac698",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "ddac1568e302de09d4b294b7fea4218e73e672b2",
+  "deploymentUrl": "https://mma-files.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit ddac1568e302de09d4b294b7fea4218e73e672b2 is readable",
+      "checkedAt": "2026-08-18T08:08:28.239Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-18T08:08:28.239Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-18T08:08:28.239Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/cs/articles/ufc-alex-perez?boardless_verify=0120bb5445c8-1787040508239",
+      "checkedAt": "2026-08-18T08:08:28.239Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and ufc-alex-perez match",
+      "checkedAt": "2026-08-18T08:08:28.239Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 0120bb5445c80a73fb95e6a1836541d19b07c99d09c591d3573db01c0e4ac698",
+      "checkedAt": "2026-08-18T08:08:28.239Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/images/articles/ufc-alex-perez/hero.webp?boardless_verify=0120bb5445c8-1787040508239",
+      "checkedAt": "2026-08-18T08:08:28.239Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-18T08:08:28.239Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Coach Lewis · CC BY",
+      "checkedAt": "2026-08-18T08:08:28.239Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-18T08:07:46.289Z",
+  "completedAt": "2026-08-18T08:08:28.725Z"
+}

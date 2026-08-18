@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "0120bb5445c80a73fb95e6a1836541d19b07c99d09c591d3573db01c0e4ac698",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "ddac1568e302de09d4b294b7fea4218e73e672b2",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/ufc-alex-perez",
+  "recordedAt": "2026-08-18T08:08:29.804Z"
+}
