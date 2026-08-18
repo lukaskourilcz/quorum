@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-18",
+  "packageHash": "78a805e6617b94eef9b82d1687ac6b37cafd301d8bc77d864012855d50eacc6e",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "0d8a8ebf80547dd7f50ac22ecce8e10aa562c6c8",
+  "deliveredAt": "2026-08-18T03:08:31.518Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-18-anthropic-65-miliard-qwen-meta-naklady",
+  "tags": [
+    "umela-inteligence",
+    "byznys",
+    "financovani",
+    "otevrene-modely",
+    "meta",
+    "platebni-systemy"
+  ]
+}

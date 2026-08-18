@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-1d73033c54bd662c",
+  "venture": "caught-up",
+  "packageHash": "78a805e6617b94eef9b82d1687ac6b37cafd301d8bc77d864012855d50eacc6e",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "0d8a8ebf80547dd7f50ac22ecce8e10aa562c6c8",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 0d8a8ebf80547dd7f50ac22ecce8e10aa562c6c8 is readable",
+      "checkedAt": "2026-08-18T03:08:29.952Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-18T03:08:29.952Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-18T03:08:29.952Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-18-anthropic-65-miliard-qwen-meta-naklady?boardless_verify=78a805e6617b-1787022509952",
+      "checkedAt": "2026-08-18T03:08:29.952Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-18-anthropic-65-miliard-qwen-meta-naklady match",
+      "checkedAt": "2026-08-18T03:08:29.952Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 78a805e6617b94eef9b82d1687ac6b37cafd301d8bc77d864012855d50eacc6e",
+      "checkedAt": "2026-08-18T03:08:29.952Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-18-anthropic-65-miliard-qwen-meta-naklady/hero.svg?boardless_verify=78a805e6617b-1787022509952",
+      "checkedAt": "2026-08-18T03:08:29.952Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-18T03:08:29.952Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "FRAME fallback needs no external photo credit",
+      "checkedAt": "2026-08-18T03:08:29.952Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-18T03:07:27.569Z",
+  "completedAt": "2026-08-18T03:08:30.724Z"
+}
