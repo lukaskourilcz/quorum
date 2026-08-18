@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260818070454-mag-editorial",
+  "phase": "mag-editorial",
+  "outcome": "VETO",
+  "summary": "AUDIT vetoed the room output: Chybí ověřený předmět i modelový běh, takže dnešní článek nelze přidělit. Slot zabijte, dokud analýza nedodá zdrojovaný námět; již použité subjekty se nesmí opakovat.",
+  "evidenceRefs": [
+    "meeting:2026-08-17-mma-analysis",
+    "meeting:2026-08-17-mag-desk"
+  ],
+  "generatedAt": "2026-08-18T07:08:54.629Z"
+}

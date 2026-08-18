@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "editorial-slate/1",
+  "date": "2026-08-18",
+  "slots": [
+    {
+      "slot": "am",
+      "organization": "ufc",
+      "format": "fighter-profile",
+      "subjectRefs": [
+        "ufc:alex-perez"
+      ],
+      "rationale": "No card is inside the window, so the desk profiles the best-sourced fighter on file.",
+      "assignedWriter": "JAB",
+      "status": "assigned"
+    },
+    {
+      "slot": "pm",
+      "format": "desk-notes",
+      "subjectRefs": [
+        "missing:2026-08-18:pm"
+      ],
+      "rationale": "The desk publishes one article a day; this slot is not scheduled.",
+      "assignedWriter": "QUILL",
+      "status": "killed",
+      "killedReason": "single-slot cadence"
+    }
+  ],
+  "vaultVerdicts": [
+    {
+      "subjectRef": "missing:2026-08-18:pm",
+      "verdict": "repeat",
+      "evidenceRef": "meeting:2026-08-18-mag-editorial"
+    },
+    {
+      "subjectRef": "ufc:alex-perez",
+      "verdict": "fresh",
+      "evidenceRef": "meeting:2026-08-18-mag-editorial"
+    }
+  ]
+}

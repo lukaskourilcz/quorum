@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260818070454-mag-editorial",
+  "date": "2026-08-18",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.019112999999999998,
+    "monthAllInUsd": 7.460942199999996,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "VETO",
+    "summary": "AUDIT vetoed the room output: Chybí ověřený předmět i modelový běh, takže dnešní článek nelze přidělit. Slot zabijte, dokud analýza nedodá zdrojovaný námět; již použité subjekty se nesmí opakovat.",
+    "evidenceRefs": [
+      "meeting:2026-08-17-mma-analysis",
+      "meeting:2026-08-17-mag-desk"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "JAB",
+      "summary": "Slot nemá ověřený nový subjekt ani modelová data. Portfolio uvádí čekání na odds data a index ukazuje dnešní publikovaný profil Rakiće. Bez zdroje nelze článek napsat.",
+      "evidenceRefs": [
+        "meeting:2026-08-17-mma-analysis",
+        "meeting:2026-08-17-mag-desk"
+      ]
+    },
+    {
+      "agent": "QUILL",
+      "summary": "No article slot assigned. MMA bridge reports: no model run queued for review, FightAIQ odds data key still pending, no fight-week event priority listed. Desk cannot fill AM or PM slot without sourced subject.",
+      "evidenceRefs": [
+        "meeting:2026-08-17-mma-analysis",
+        "meeting:2026-08-17-mag-desk"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Chybí ověřený předmět i modelový běh, takže dnešní článek nelze přidělit. Slot zabijte, dokud analýza nedodá zdrojovaný námět; již použité subjekty se nesmí opakovat.",
+      "evidenceRefs": [
+        "meeting:2026-08-17-mma-analysis",
+        "meeting:2026-08-17-mag-desk"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "veto",
+      "veto": true
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260818070454-MAG-EDITORIAL-02",
+      "owner": "QUILL",
+      "summary": "Decide: queue a sourced fighter profile, event preview or fight report for next slot, or hold until FightAIQ model data arrives.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-18.json",
+  "generatedAt": "2026-08-18T07:08:54.629Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-18T07:04:54.629Z",
+    "closedAt": "2026-08-18T07:08:54.629Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-18T07:04:54.629Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-18T07:05:54.629Z",
+        "text": "Slot nemá ověřený nový subjekt ani modelová data. Portfolio uvádí čekání na odds data a index ukazuje dnešní publikovaný profil Rakiće. Bez zdroje nelze článek napsat.",
+        "evidenceRefs": [
+          "meeting:2026-08-17-mma-analysis",
+          "meeting:2026-08-17-mag-desk"
+        ]
+      },
+      {
+        "agent": "QUILL",
+        "mode": "statement",
+        "sentAt": "2026-08-18T07:06:54.629Z",
+        "text": "No article slot assigned. MMA bridge reports: no model run queued for review, FightAIQ odds data key still pending, no fight-week event priority listed. Desk cannot fill AM or PM slot without sourced subject.",
+        "evidenceRefs": [
+          "meeting:2026-08-17-mma-analysis",
+          "meeting:2026-08-17-mag-desk"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "veto",
+        "sentAt": "2026-08-18T07:07:54.629Z",
+        "text": "Chybí ověřený předmět i modelový běh, takže dnešní článek nelze přidělit. Slot zabijte, dokud analýza nedodá zdrojovaný námět; již použité subjekty se nesmí opakovat.",
+        "evidenceRefs": [
+          "meeting:2026-08-17-mma-analysis",
+          "meeting:2026-08-17-mag-desk"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-18T07:08:54.629Z",
+        "text": "AUDIT vetoed the room output: Chybí ověřený předmět i modelový běh, takže dnešní článek nelze přidělit. Slot zabijte, dokud analýza nedodá zdrojovaný námět; již použité subjekty se nesmí opakovat."
+      }
+    ]
+  }
+}

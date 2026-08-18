@@ -176,7 +176,9 @@
       "at": "2026-08-18T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-18-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Chybí ověřený předmět i modelový běh, takže dnešní článek nelze přidělit. Slot zabijte, dokud analýza nedodá zdrojovaný námět; již použité subjekty se"
     },
     {
       "at": "2026-08-18T08:00:00.000Z",
