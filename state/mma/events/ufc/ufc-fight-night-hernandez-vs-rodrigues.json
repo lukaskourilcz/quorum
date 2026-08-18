@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-08-22T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-17:List of UFC events"
+    "source:wikipedia:2026-08-18:List of UFC events"
   ],
   "bouts": [
     {
@@ -52,23 +52,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:terrance-chatman-vs-anthony-wint-6",
-      "red": "ufc:terrance-chatman",
-      "blue": "ufc:anthony-wint",
-      "division": "heavyweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:jamall-emmers-vs-lerryan-douglas-7",
-      "red": "ufc:jamall-emmers",
-      "blue": "ufc:lerryan-douglas",
-      "division": "featherweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:kennedy-nzechukwu-vs-shamil-gaziev-8",
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:kennedy-nzechukwu-vs-shamil-gaziev-6",
       "red": "ufc:kennedy-nzechukwu",
       "blue": "ufc:shamil-gaziev",
       "division": "heavyweight",
@@ -76,31 +60,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:chris-padilla-vs-nasrat-haqparast-9",
-      "red": "ufc:chris-padilla",
-      "blue": "ufc:nasrat-haqparast",
-      "division": "lightweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:marcio-barbosa-vs-ryan-kuse-10",
-      "red": "ufc:marcio-barbosa",
-      "blue": "ufc:ryan-kuse",
-      "division": "featherweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:gauge-young-vs-stanley-dorsainvil-11",
-      "red": "ufc:gauge-young",
-      "blue": "ufc:stanley-dorsainvil",
-      "division": "lightweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:wesley-schultz-vs-jackson-mcvey-12",
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:wesley-schultz-vs-jackson-mcvey-7",
       "red": "ufc:wesley-schultz",
       "blue": "ufc:jackson-mcvey",
       "division": "middleweight",
@@ -108,13 +68,53 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:shanelle-dyer-vs-elise-reed-13",
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:chris-padilla-vs-nasrat-haqparast-8",
+      "red": "ufc:chris-padilla",
+      "blue": "ufc:nasrat-haqparast",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:gauge-young-vs-stanley-dorsainvil-9",
+      "red": "ufc:gauge-young",
+      "blue": "ufc:stanley-dorsainvil",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:jamall-emmers-vs-lerryan-douglas-10",
+      "red": "ufc:jamall-emmers",
+      "blue": "ufc:lerryan-douglas",
+      "division": "featherweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:shanelle-dyer-vs-elise-reed-11",
       "red": "ufc:shanelle-dyer",
       "blue": "ufc:elise-reed",
       "division": "womens-strawweight",
       "scheduledRounds": 3,
       "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:marcio-barbosa-vs-ryan-kuse-12",
+      "red": "ufc:marcio-barbosa",
+      "blue": "ufc:ryan-kuse",
+      "division": "featherweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hernandez-vs-rodrigues:bout:terrance-chatman-vs-anthony-wint-13",
+      "red": "ufc:terrance-chatman",
+      "blue": "ufc:anthony-wint",
+      "division": "heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-17T06:01:59.528Z"
+  "updatedAt": "2026-08-18T06:01:20.935Z"
 }

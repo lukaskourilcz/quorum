@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Raquel_Pennington",
       "publisher": "Wikipedia",
       "title": "Raquel Pennington",
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q15987788",
         "source:wikipedia:41274218"
       ],
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "status": "verified",
       "corroborated": true
     },
@@ -205,9 +205,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 1.202247,
-        "layoffDays": 3019
+        "layoffDays": 3020
       },
-      "updatedAt": "2026-08-17T06:01:59.528Z"
+      "updatedAt": "2026-08-18T06:01:20.935Z"
     }
   ],
   "rating": {
@@ -217,7 +217,7 @@
     "volatility": 0.06000033,
     "boutCount": 6,
     "asOfBoutRef": "ufc:bout:history-a5eac4d223237552dbbe",
-    "updatedAt": "2026-08-17T06:01:59.528Z"
+    "updatedAt": "2026-08-18T06:01:20.935Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1594,11 +1594,25 @@
         "source:wikipedia:30387040"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-18T06:01:20.935Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40078160",
+        "source:wikipedia:30387040"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-17T06:01:59.528Z"
+  "updatedAt": "2026-08-18T06:01:20.935Z"
 }

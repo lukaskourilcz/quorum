@@ -7,55 +7,35 @@
       "name": "UFC 330: Makhachev vs. Machado Garry",
       "startsAtUtc": "2026-08-15T00:00:00.000Z",
       "results": 12
-    },
-    {
-      "name": "UFC Fight Night: Gamrot vs. Salkilld",
-      "startsAtUtc": "2026-08-08T00:00:00.000Z",
-      "results": 12
     }
   ],
   "applied": [
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-jalin-turner-vs-kaue-fernandes-5",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-jalin-turner-vs-kaue-fernandes-3",
       "winner": "red",
       "method": "KO (punches)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-mansur-abdul-malik-vs-dustin-stoltzfus-3",
-      "winner": "blue",
-      "method": "Submission (rear-naked choke)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-edson-barboza-vs-esteban-ribovics-5",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-edson-barboza-vs-esteban-ribovics-4",
       "winner": "blue",
       "method": "TKO (punches)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-chidi-njokuani-vs-joel-alvarez-5",
-      "winner": "red",
-      "method": "Decision (unanimous)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-vicente-luque-vs-tresean-gore-8",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-vicente-luque-vs-tresean-gore-7",
       "winner": "blue",
       "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-rafael-tobias-vs-lucas-fernando-10",
-      "winner": "blue",
-      "method": "TKO (knee to the body and elbows)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-neil-magny-vs-ramiz-brahimaj-6",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-neil-magny-vs-ramiz-brahimaj-11",
       "winner": "red",
       "method": "TKO (punches)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-jeremiah-wells-vs-myktybek-orolbai-4",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-jeremiah-wells-vs-myktybek-orolbai-12",
       "winner": "red",
       "method": "Technical Submission (ninja choke)"
     }
   ],
-  "untracked": 16,
-  "generatedAt": "2026-08-17T06:01:59.528Z"
+  "untracked": 7,
+  "generatedAt": "2026-08-18T06:01:20.935Z"
 }

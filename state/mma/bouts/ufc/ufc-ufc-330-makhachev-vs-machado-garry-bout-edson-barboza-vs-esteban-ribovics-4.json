@@ -14,7 +14,7 @@
   },
   "division": "lightweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-05:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-18T06:01:20.935Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-18:UFC 330: Makhachev vs. Machado Garry"
+      ],
+      "note": "Result read from the UFC 330: Makhachev vs. Machado Garry article after the event."
     }
   ],
   "discovery": {
@@ -39,9 +47,18 @@
     "source:wikipedia:2026-08-05:List of UFC events",
     "source:wikipedia:2026-08-06:List of UFC events",
     "source:wikipedia:2026-08-08:List of UFC events",
-    "source:wikipedia:2026-08-12:List of UFC events"
+    "source:wikipedia:2026-08-12:List of UFC events",
+    "source:wikipedia:2026-08-18:UFC 330: Makhachev vs. Machado Garry"
   ],
-  "result": null,
+  "result": {
+    "winner": "blue",
+    "method": "TKO (punches)",
+    "round": 2,
+    "elapsedSeconds": 392,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-18:UFC 330: Makhachev vs. Machado Garry"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -56,7 +73,19 @@
         "source:wikipedia:2026-08-05:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-18T06:01:20.935Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-18:UFC 330: Makhachev vs. Machado Garry"
+      ],
+      "note": "Esteban Ribovics def. Edson Barboza by TKO (punches)."
     }
   ],
-  "updatedAt": "2026-08-05T06:05:51.752Z"
+  "updatedAt": "2026-08-18T06:01:20.935Z"
 }

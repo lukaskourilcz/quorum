@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Brandon_Royval",
       "publisher": "Wikipedia",
       "title": "Brandon Royval",
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q102225197",
         "source:wikipedia:64578559"
       ],
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "status": "verified",
       "corroborated": true
     },
@@ -247,9 +247,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.2,
         "fightsPerYear": 1.304438,
-        "layoffDays": 415
+        "layoffDays": 416
       },
-      "updatedAt": "2026-08-17T06:01:59.528Z"
+      "updatedAt": "2026-08-18T06:01:20.935Z"
     }
   ],
   "rating": {
@@ -259,7 +259,7 @@
     "volatility": 0.06000504,
     "boutCount": 7,
     "asOfBoutRef": "ufc:bout:history-9d4c3d3779706c981aa7",
-    "updatedAt": "2026-08-17T06:01:59.528Z"
+    "updatedAt": "2026-08-18T06:01:20.935Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1623,11 +1623,28 @@
         "source:wikipedia:78781693"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-18T06:01:20.935Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:52475971",
+        "source:wikipedia:54180928",
+        "source:wikipedia:78781693"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.625,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-17T06:01:59.528Z"
+  "updatedAt": "2026-08-18T06:01:20.935Z"
 }

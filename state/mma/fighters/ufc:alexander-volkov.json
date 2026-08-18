@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexander_Volkov_(fighter)",
       "publisher": "Wikipedia",
       "title": "Alexander Volkov (fighter)",
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -67,7 +67,7 @@
         "source:wikidata:Q4123254",
         "source:wikipedia:28754266"
       ],
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "status": "verified",
       "corroborated": true
     },
@@ -294,9 +294,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 1.449375,
-        "layoffDays": 618
+        "layoffDays": 619
       },
-      "updatedAt": "2026-08-17T06:01:59.528Z"
+      "updatedAt": "2026-08-18T06:01:20.935Z"
     }
   ],
   "rating": {
@@ -306,7 +306,7 @@
     "volatility": 0.05999665,
     "boutCount": 6,
     "asOfBoutRef": "ufc:bout:history-6dbedda89286821eeb49",
-    "updatedAt": "2026-08-17T06:01:59.528Z"
+    "updatedAt": "2026-08-18T06:01:20.935Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2383,11 +2383,26 @@
         "source:wikipedia:28754266"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-18T06:01:20.935Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:28754266"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-17T06:01:59.528Z"
+  "updatedAt": "2026-08-18T06:01:20.935Z"
 }

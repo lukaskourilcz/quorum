@@ -9,7 +9,8 @@
     "wikidataId": "Q20669352",
     "wikipediaTitle": "Cody Garbrandt",
     "externalIds": {
-      "wikipediaPageId": "47163936"
+      "wikipediaPageId": "47163936",
+      "cito": "ab57354c-08a2-4a88-ae0d-8f3935e62acb"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-18:fighter:ab57354c-08a2-4a88-ae0d-8f3935e62acb",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Cody Garbrandt",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q20669352",
       "url": "https://www.wikidata.org/wiki/Q20669352",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Cody_Garbrandt",
       "publisher": "Wikipedia",
       "title": "Cody Garbrandt",
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -56,10 +64,11 @@
     "name": {
       "value": "Cody Garbrandt",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-18:fighter:ab57354c-08a2-4a88-ae0d-8f3935e62acb",
         "source:wikidata:Q20669352",
         "source:wikipedia:47163936"
       ],
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "status": "verified",
       "corroborated": true
     },
@@ -94,11 +103,12 @@
     "record": {
       "value": "15-8-0",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-18:fighter:ab57354c-08a2-4a88-ae0d-8f3935e62acb",
         "source:wikipedia:47163936"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 170,
@@ -116,7 +126,22 @@
     "division",
     "record"
   ],
-  "discrepancies": [],
+  "discrepancies": [
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "Bantamweight",
+          "sourceRef": "source:wikipedia:47163936"
+        },
+        {
+          "value": "bantamweight",
+          "sourceRef": "source:cito-ufc:2026-08-18:fighter:ab57354c-08a2-4a88-ae0d-8f3935e62acb"
+        }
+      ],
+      "status": "resolved"
+    }
+  ],
   "history": [
     {
       "boutRef": "ufc:bout:history-1e1b3b9c5233c57e1e28",
@@ -204,9 +229,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 1.337885,
-        "layoffDays": 37
+        "layoffDays": 38
       },
-      "updatedAt": "2026-08-17T06:01:59.528Z"
+      "updatedAt": "2026-08-18T06:01:20.935Z"
     }
   ],
   "rating": {
@@ -216,7 +241,7 @@
     "volatility": 0.05999665,
     "boutCount": 4,
     "asOfBoutRef": "ufc:bout:history-a1fe45c21699c6fce4eb",
-    "updatedAt": "2026-08-17T06:01:59.528Z"
+    "updatedAt": "2026-08-18T06:01:20.935Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1772,11 +1797,38 @@
         "source:wikipedia:47163936"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-18T06:01:20.935Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "record"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-18:fighter:ab57354c-08a2-4a88-ae0d-8f3935e62acb"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-18T06:01:20.935Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47163936"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.75,
-  "corroboration": 0.375,
+  "corroboration": 0.5,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-17T06:01:59.528Z"
+  "updatedAt": "2026-08-18T06:01:20.935Z"
 }

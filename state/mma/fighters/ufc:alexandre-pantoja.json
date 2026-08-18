@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexandre_Pantoja",
       "publisher": "Wikipedia",
       "title": "Alexandre Pantoja",
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q27999203",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "status": "verified",
       "corroborated": true
     },
@@ -78,7 +78,7 @@
         "source:wikidata:Q27999203",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "status": "verified",
       "corroborated": true
     },
@@ -87,7 +87,7 @@
       "sourceRefs": [
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -97,7 +97,7 @@
         "source:cito-ufc:2026-08-04:fighter:6a2a082e-2118-4e07-a641-bbf0e5de5974",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "status": "verified",
       "corroborated": true
     },
@@ -106,7 +106,7 @@
       "sourceRefs": [
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -116,7 +116,7 @@
         "source:cito-ufc:2026-08-04:fighter:6a2a082e-2118-4e07-a641-bbf0e5de5974",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "status": "verified",
       "corroborated": true
     },
@@ -126,7 +126,7 @@
         "source:wikidata:Q27999203",
         "source:wikipedia:54180928"
       ],
-      "retrievedAt": "2026-08-17T06:01:59.528Z",
+      "retrievedAt": "2026-08-18T06:01:20.935Z",
       "status": "verified",
       "corroborated": true
     }
@@ -434,9 +434,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 0.644022,
-        "layoffDays": 254
+        "layoffDays": 255
       },
-      "updatedAt": "2026-08-17T06:01:59.528Z"
+      "updatedAt": "2026-08-18T06:01:20.935Z"
     }
   ],
   "rating": {
@@ -446,7 +446,7 @@
     "volatility": 0.05999277,
     "boutCount": 17,
     "asOfBoutRef": "ufc:bout:history-7d2dc31751ccb0197a31",
-    "updatedAt": "2026-08-17T06:01:59.528Z"
+    "updatedAt": "2026-08-18T06:01:20.935Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -454,7 +454,7 @@
       "reachCm",
       "record-history-incomplete"
     ],
-    "lastReviewedAt": "2026-08-17T06:01:59.528Z"
+    "lastReviewedAt": "2026-08-18T06:01:20.935Z"
   },
   "changeLog": [
     {
@@ -2090,11 +2090,45 @@
         "source:wikipedia:78781693"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-18T06:01:20.935Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 39 historical fight rows."
+    },
+    {
+      "at": "2026-08-18T06:01:20.935Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:78781693"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.625,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-17T06:01:59.528Z"
+  "updatedAt": "2026-08-18T06:01:20.935Z"
 }

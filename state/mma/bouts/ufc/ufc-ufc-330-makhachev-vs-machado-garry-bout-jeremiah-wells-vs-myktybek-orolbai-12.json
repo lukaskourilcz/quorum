@@ -14,7 +14,7 @@
   },
   "division": "welterweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-13:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-18T06:01:20.935Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-18:UFC 330: Makhachev vs. Machado Garry"
+      ],
+      "note": "Result read from the UFC 330: Makhachev vs. Machado Garry article after the event."
     }
   ],
   "discovery": {
@@ -35,9 +43,18 @@
   },
   "sourceRefs": [
     "source:wikipedia:2026-08-13:List of UFC events",
-    "source:wikipedia:2026-08-14:List of UFC events"
+    "source:wikipedia:2026-08-14:List of UFC events",
+    "source:wikipedia:2026-08-18:UFC 330: Makhachev vs. Machado Garry"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "Technical Submission (ninja choke)",
+    "round": 3,
+    "elapsedSeconds": 684,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-18:UFC 330: Makhachev vs. Machado Garry"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -52,7 +69,19 @@
         "source:wikipedia:2026-08-13:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-18T06:01:20.935Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-18:UFC 330: Makhachev vs. Machado Garry"
+      ],
+      "note": "Jeremiah Wells def. Myktybek Orolbai by Technical Submission (ninja choke)."
     }
   ],
-  "updatedAt": "2026-08-13T06:01:42.251Z"
+  "updatedAt": "2026-08-18T06:01:20.935Z"
 }
