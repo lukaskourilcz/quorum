@@ -1,0 +1,275 @@
+{
+  "schemaVersion": "edition-package/1",
+  "date": "2026-08-18",
+  "idempotencyKey": "78a805e6617b94eef9b82d1687ac6b37cafd301d8bc77d864012855d50eacc6e",
+  "generation": {
+    "models": {
+      "curation": "claude-sonnet-4-6",
+      "writing": "claude-sonnet-4-6"
+    },
+    "costUsd": 0.1653615
+  },
+  "reason": "cu-edition decision meetings/2026-08-18-cu-edition",
+  "status": "edition",
+  "article": {
+    "cs": {
+      "frontmatter": {
+        "schema_version": 2,
+        "title": "Anthropic roste rychleji než OpenAI, Qwen v 27 miliardách parametrů dohání modely mnohonásobně větší",
+        "slug": "2026-08-18-anthropic-65-miliard-qwen-meta-naklady",
+        "date": "2026-08-18",
+        "lang": "cs",
+        "dek": "Tři události z uplynulých čtyřiadvaceti hodin ukazují, odkud přichází tlak na frontové laboratoře: ze stran příjmů, nákladů i schopností malých modelů.",
+        "alternative_headlines": [
+          "Čínský model za zlomek ceny vyrovnává GPT-5.6 Luna, Anthropic hlásí anualizovaný obrat 65 miliard dolarů",
+          "Meta skrývá závazky za skoro 700 miliard dolarů, Anthropic míří na burzu s valuací přes dva biliony"
+        ],
+        "social_copy": {
+          "igCaption": "Anthropic hlásí anualizovaný obrat 65 miliard dolarů – o 18 miliard víc než před dvěma měsíci. Ve stejný den otevřený čínský model Qwen 3.8 27B dosáhl stejného skóre jako GPT-5.6 Luna, přestože je řádově menší. A Meta prý skrývá závazky za skoro 700 miliard dolarů mimo svou rozvahu.",
+          "hashtags": [
+            "anthropic",
+            "umelainteligence",
+            "qwen",
+            "meta",
+            "stripe",
+            "openrouter",
+            "llm",
+            "ipo",
+            "aibyznys",
+            "datovecentrum"
+          ],
+          "threadsText": "Anthropic přidal za dva měsíce 18 miliard dolarů anualizovaného obratu a míří na IPO s valuací přes 2 biliony. Ve stejný den 27miliardový otevřený model Qwen 3.8 vyrovnal výsledky modelů mnohonásobně větších. Meta mezitím prý drží mimo rozvahu závazky za skoro 700 miliard. Tři různé zprávy, jeden obraz: závod o AI se přepisuje z více směrů najednou.",
+          "storyLine": "Anthropic: 65 mld. $ obratu, Qwen drtí větší modely"
+        },
+        "tags": [
+          "umela-inteligence",
+          "byznys",
+          "financovani",
+          "otevrene-modely",
+          "meta",
+          "platebni-systemy"
+        ],
+        "sources": [
+          {
+            "id": "https://techcrunch.com/?p=3153733",
+            "url": "https://techcrunch.com/2026/08/17/anthropics-annualized-revenue-surges-to-65b/",
+            "title": "Anthropic’s annualized revenue surges to $65B",
+            "source_id": "techcrunch-ai",
+            "classification": "secondary",
+            "published_at": "2026-08-17T23:56:26.000Z",
+            "supports": [
+              "Adding $18B in annualized revenue in just two months is a pace that reframes the entire AI monetization debate — and puts pressure on every competitor's fundraising narrative."
+            ]
+          },
+          {
+            "id": "https://simonwillison.net/2026/Aug/17/qwen-38-27b-scores-52/",
+            "url": "https://simonwillison.net/2026/Aug/17/qwen-38-27b-scores-52/",
+            "title": "Qwen 3.8 27B scores 52 on the Artificial Analysis Intelligence Index",
+            "source_id": "simonw",
+            "classification": "secondary",
+            "published_at": "2026-08-17T23:58:14.000Z",
+            "supports": [
+              "A 27-billion-parameter open-weight model tying models presumed to be orders of magnitude larger is the clearest signal yet that parameter count is decoupling from capability, with major implications for on-device and cost-sensitive deployments."
+            ]
+          },
+          {
+            "id": "https://www.socialmediatoday.com/news/metas-true-ai-costs-exceed-previous-accounts/828097/",
+            "url": "https://www.socialmediatoday.com/news/metas-true-ai-costs-exceed-previous-accounts/828097/",
+            "title": "Meta’s true AI costs exceed previous accounts",
+            "source_id": "social-media-today",
+            "classification": "secondary",
+            "published_at": "2026-08-17T22:54:01.000Z",
+            "supports": [
+              "If the WSJ figures hold, Meta's off-balance-sheet AI commitments dwarf what investors have been pricing in — a material disclosure risk for the broader market."
+            ]
+          },
+          {
+            "id": "https://techcrunch.com/?p=3153653",
+            "url": "https://techcrunch.com/2026/08/17/ai-automation-startup-relay-shuts-down-staff-joins-googles-chrome-team/",
+            "title": "AI automation startup Relay shuts down, staff joins Google’s Chrome team",
+            "source_id": "techcrunch-ai",
+            "classification": "secondary",
+            "published_at": "2026-08-17T21:27:05.000Z",
+            "supports": [
+              "An acqui-hire into Chrome signals Google is embedding agentic AI directly into the browser layer — a structural shift in where AI workflows will live for hundreds of millions of users."
+            ]
+          },
+          {
+            "id": "https://www.theregister.com/a/5288743",
+            "url": "https://www.theregister.com/ai-and-ml/2026/08/17/payments-giant-stripe-is-about-to-drop-over-7-billion-to-become-a-gateway-to-ai-token-sales/5288743",
+            "title": "Payments giant Stripe is about to drop over $7 billion to become a gateway to AI token sales",
+            "source_id": "the-register",
+            "classification": "secondary",
+            "published_at": "2026-08-17T20:10:00.000Z",
+            "supports": [
+              "Whoever controls billing infrastructure for AI inference controls a critical chokepoint. Stripe moving aggressively here mirrors its earlier bet on SaaS — with AI model orchestration as the new cloud."
+            ]
+          },
+          {
+            "id": "6a8372f214bab50001f027bb",
+            "url": "https://www.404media.co/pornhubs-parent-company-to-pay-120-million-to-settle-child-sexual-abuse-lawsuits/",
+            "title": "Pornhub's Parent Company to Pay $120 Million to Settle Child Sexual Abuse Lawsuits",
+            "source_id": "404-media",
+            "classification": "secondary",
+            "published_at": "2026-08-17T21:04:53.000Z",
+            "supports": [
+              "The largest financial settlement of its kind against a major platform for hosting child sexual abuse material sets a precedent that could reshape content-liability exposure across the adult and UGC industry."
+            ]
+          },
+          {
+            "id": "https://www.theregister.com/a/5288914",
+            "url": "https://www.theregister.com/virtualization/2026/08/18/xen-project-gets-serious-about-safety-in-push-to-possibly-partition-robot-brains/5288914",
+            "title": "Xen Project gets serious about safety in push to possibly partition robot brains",
+            "source_id": "the-register",
+            "classification": "secondary",
+            "published_at": "2026-08-18T01:59:37.000Z",
+            "supports": [
+              "A safety-grade open-source hypervisor backed by Boeing, AMD, and Renesas could become the default isolation layer for robotics and autonomous vehicles — a quiet but consequential standards moment."
+            ]
+          },
+          {
+            "id": "https://arstechnica.com/health/2026/08/us-vaccination-rates-fall-again-as-exemptions-continue-to-rise-cdc-data-shows/",
+            "url": "https://arstechnica.com/health/2026/08/us-vaccination-rates-fall-again-as-exemptions-continue-to-rise-cdc-data-shows/",
+            "title": "US vaccination rates fall again as exemptions continue to rise, CDC data shows",
+            "source_id": "ars-technica",
+            "classification": "secondary",
+            "published_at": "2026-08-17T22:08:47.000Z",
+            "supports": [
+              "The CDC published the numbers without a full report for the second year running — a transparency gap that compounds the public-health signal that herd immunity thresholds are eroding."
+            ]
+          }
+        ],
+        "illustration": {
+          "path": "/images/editions/2026-08-18-anthropic-65-miliard-qwen-meta-naklady/hero.svg",
+          "thumbnail_path": "/images/editions/2026-08-18-anthropic-65-miliard-qwen-meta-naklady/thumb.svg",
+          "alt": "Obálka DNESKAi k 2026-08-18, témata Umela Inteligence, Byznys, Financovani. Generovaný panel barevných sloupců, bez fotografie.",
+          "width": 1600,
+          "height": 900,
+          "origin": "svg",
+          "attribution": {
+            "license": "BoardlessAI deterministic",
+            "author": "BoardlessAI FRAME",
+            "source_url": "https://boardless-ai.vercel.app/",
+            "text": "Artwork by BoardlessAI FRAME"
+          }
+        },
+        "signal_strength": 85,
+        "why_it_matters": [
+          "Anthropic roste tempem, které mění celou debatu o valuacích AI firem před jejich vstupem na burzu – a přímé srovnání s OpenAI nyní ukazuje, kdo má vítr v zádech.",
+          "Qwen 3.8 27B dokazuje, že výkonné modely se přestávají rovnat drahé infrastruktuře, což přepisuje kalkulaci pro každou firmu zvažující nasazení AI na vlastním hardwaru.",
+          "Metiny mimorozvahové závazky ve výši téměř 700 miliard dolarů jsou číslo, které dosud nebylo ceně akcií."
+        ],
+        "what_changed": [
+          "Anualizovaný obrat Anthropicu vzrostl z 47 miliard dolarů v květnu na 65 miliard na konci července, tedy o 18 miliard za dva měsíce.",
+          "Otevřený model Qwen 3.8 27B dosáhl skóre 52 na Artificial Analysis Intelligence Index, čímž se vyrovnal modelům s řádově větším počtem parametrů.",
+          "WSJ odhadl Metiny mimorozvahové závazky spojené s AI na přibližně 693 miliard dolarů, nad rámec vykázaných 145 miliard za rok 2026.",
+          "Stripe podle Bloomberg finalizoval koupi OpenRouteru za nejméně 7 miliard dolarů."
+        ],
+        "uncertainty": [
+          "Čísla o příjmech Anthropicu jsou tvrzeními firmy zprostředkovanými přes Bloomberg; Anthropic je nepotvrdil přímo.",
+          "WSJ analýza mimorozvahových závazků Meta je novinářský odhad, nikoli auditorský nález; metodika výpočtu 693 miliard dolarů není plně zveřejněna.",
+          "Stripe ani OpenRouter transakci dosud nepotvrdili; citované zdroje jsou Bloomberg a WSJ bez oficiálního vyjádření stran."
+        ],
+        "generation": {
+          "generated_at": "2026-08-18T03:01:50.274Z",
+          "human_reviewed": false,
+          "models": {
+            "curation": "claude-sonnet-4-6",
+            "writing": "claude-sonnet-4-6"
+          },
+          "source_candidates": 80,
+          "cited_sources": 8,
+          "image_provider": "BoardlessAI FRAME",
+          "cost": {
+            "amount": 0.1653615,
+            "currency": "USD"
+          },
+          "package_hash": "78a805e6617b94eef9b82d1687ac6b37cafd301d8bc77d864012855d50eacc6e"
+        },
+        "translation_of": "2026-08-18-anthropic-65-miliard-qwen-meta-naklady",
+        "dispatches": [
+          {
+            "title": "Reddit mění příspěvky na podcasty a krátká videa",
+            "body": "Reddit testuje funkci, která pomocí AI převádí textové příspěvky na audio a krátká videa. Jde o experimentální formát, jehož cílem je přiblížit obsah uživatelům preferujícím video.",
+            "source_url": "https://www.theverge.com/tech/981289/reddit-ai-text-video-posts",
+            "topic": "sociální sítě"
+          },
+          {
+            "title": "Xen Project přijímá Boeing a míří k bezpečnostní certifikaci",
+            "body": "K projektu otevřeného hypervizoru Xen se tiše přidal Boeing; AMD, EPAM a Renesas vedou nový výbor pro bezpečnost. Cílem je dosáhnout souladu s normou IEC-61508, která upravuje software v zařízeních schopných ohrozit lidský život. Projekt vidí uplatnění především v robotice a autonomních vozidlech.",
+            "source_url": "https://www.theregister.com/virtualization/2026/08/18/xen-project-gets-serious-about-safety-in-push-to-possibly-partition-robot-brains/5288914",
+            "topic": "infrastruktura"
+          },
+          {
+            "title": "Míra očkování v USA klesá, výjimky rostou",
+            "body": "Data CDC zveřejněná bez plné zprávy – druhý rok po sobě – ukazují pokles proočkovanosti dětí a nárůst výjimek. Bez úplného reportu je těžší posoudit, v kterých regionech a skupinách je situace nejzávažnější.",
+            "source_url": "https://arstechnica.com/health/2026/08/us-vaccination-rates-fall-again-as-exemptions-continue-to-rise-cdc-data-shows/",
+            "topic": "veřejné zdraví"
+          },
+          {
+            "title": "Bluesky kreslí logo přímo do snímků obrazovky",
+            "body": "Technický popis ukazuje, jak Bluesky vkládá své logo do snímků pořízených přímo v aplikaci – mechanismus, který má pomoci identifikovat zdroj obsahu šířeného mimo platformu.",
+            "source_url": "https://timmarinin.net/2026/bluesky-screenshots/",
+            "topic": "sociální sítě"
+          }
+        ],
+        "wire": [
+          {
+            "title": "langchain-ai/langchain langchain-openai==1.5.2a1",
+            "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-openai%3D%3D1.5.2a1",
+            "source": "github-ai-releases"
+          },
+          {
+            "title": "David F. Sandberg to Direct Horror Movie ‘Mommy’s Home’ For Lionsgate",
+            "url": "https://variety.com/2026/film/news/david-f-sandberg-direct-mommys-home-lionsgate-1236836858/",
+            "source": "variety"
+          },
+          {
+            "title": "LISTEN: How Chris Carter Got a Second Shot at ‘The X-Files: I Want to Believe’ Film",
+            "url": "https://variety.com/2026/tv/news/chris-carter-x-files-i-want-to-believe-directors-cut-1236836849/",
+            "source": "variety"
+          },
+          {
+            "title": "‘Furious’ Star Steve Way on the Beauty of ‘Disabled Love’ and the Difficulty of Navigating Hollywood Without a Team: ‘I Want an Agency to Whore Me Out’",
+            "url": "https://variety.com/2026/tv/news/furious-steve-way-disability-hollywood-serial-killer-romance-1236836217/",
+            "source": "variety"
+          },
+          {
+            "title": "Reddit’s AI is turning posts into podcasts and short videos",
+            "url": "https://www.theverge.com/tech/981289/reddit-ai-text-video-posts",
+            "source": "the-verge"
+          },
+          {
+            "title": "Repair Cafe – Fix Your Broken Items",
+            "url": "https://www.repaircafe.org/",
+            "source": "hn-frontpage"
+          }
+        ],
+        "type": "daily"
+      },
+      "body": "Anualizovaný obrat Anthropicu přesáhl na konci července 65 miliard dolarů. V květnu to bylo 47 miliard, na konci loňského roku pouhých 9 miliard. Jde o tvrzení samotné společnosti, které Bloomberg citoval v pondělí; Anthropic na žádost o komentář od TechCrunch neodpověděl.\n\nInvestoři firmy podle Financial Times počítají s tím, že celý rok 2026 skončí někde mezi 100 a 120 miliardami. Pro srovnání: OpenAI zdvojnásobil příjmy na 40 miliard, jak Bloomberg uvedl o týden dříve. Obě čísla se mohou řídit odlišnou metodikou, ale tempo Anthropicu přitahuje investory víc.\n\nAnthropic i OpenAI podaly důvěrné dokumenty k IPO. Anthropic chce vstoupit na burzu dříve, snad ještě letos na podzim, a usiluje o valuaci přes 2 biliony dolarů, což by byl největší burzovní debut v historii. Naposledy byla firma oceněna na 965 miliard dolarů při únorovém kole 65 miliard dolarů.\n\n---\n\nZatímco se diskutuje o penězích, z Číny přišel signál, který komplikuje celý příběh o tom, co velký model vlastně potřebuje.\n\nQwen 3.8 27B – otevřený model s 27 miliardami parametrů – dosáhl skóre 52 na Artificial Analysis Intelligence Index. To je stejný výsledek jako GPT-5.6 Luna (max) a jen o bod méně než GLM-5.2 (max) s 753 miliardami parametrů a DeepSeek V4 Pro 0813 (max) s 1,6 biliony parametrů. Velikost Luny není zveřejněna, ale lze předpokládat, že je podstatně větší než 27 miliard parametrů.\n\nZávěr, který z toho [Simon Willison vyvozuje](https://simonwillison.net/2026/Aug/17/qwen-38-27b-scores-52/), je přímý: počet parametrů se odpojuje od schopností. Malý model, který se vejde na spotřebitelský hardware, dnes dosahuje výkonnosti, na niž jsme dřív potřebovali infrastrukturu za desítky milionů dolarů. To má přímý dopad na nasazení v zařízeních, v citlivých prostředích bez cloudu a v aplikacích, kde hrají roli náklady na inference.\n\n---\n\nNa straně nákladů přinesl Wall Street Journal analýzu, kterou [shrnuje Social Media Today](https://www.socialmediatoday.com/news/metas-true-ai-costs-exceed-previous-accounts/828097/): Meta prý má zhruba 693 miliard dolarů v závazcích, které se neobjevují v jejích čtvrtletních zprávách. Jde zejména o budoucí leasingové závazky datových center, jež vzniknou teprve po jejich dokončení.\n\nPříklad: Metino datové centrum Hyperion v Louisianě o rozloze zhruba 1 700 fotbalových hřišť bylo pronajato na čtyřleté období od roku 2029 s opcí prodloužení na dvacet let. Meta ručí za to, že bondholdeři dostanou peníze, pokud celou dobu nevydrží. Protože splátky zatím nepovažuje za pravděpodobné, žádný závazek do účetnictví nezapisuje.\n\nV Q2 2026 Meta vykázala investice do AI infrastruktury s horním stropem 145 miliard dolarů. Těchto 693 miliard je nad rámec tohoto čísla. WSJ analýza není závazné účetní zjištění; jde o odhad rozsahu angažovanosti, nikoli o prokázané zatajení. Přesto je to číslo, které investoři dosud neměli v ceně – a pokud čísla WSJ obstojí, jde o materiální riziko zveřejnění pro celý trh.\n\n---\n\nSouběžně s tím se přeskupuje infrastruktura AI jinak: na úrovni plateb a na úrovni prohlížeče.\n\nStripe podle Bloomberg finalizoval dohodu o koupi OpenRouteru za nejméně 7 miliard dolarů. OpenRouter je v současnosti podle dat firmy Ramp nejpopulárnější ze služeb, které podnikům umožňují integrovat více AI modelů najednou. Stripe se koupí stane prostředníkem prodeje AI tokenů – tedy tím, kdo vidí nejen kam tečou peníze, ale i kam tečou tokeny. Stripe odmítl komentář s odkazem na politiku nekomentovat spekulace. The Register analýzu [popisuje podrobněji](https://www.theregister.com/ai-and-ml/2026/08/17/payments-giant-stripe-is-about-to-drop-over-7-billion-to-become-a-gateway-to-ai-token-sales/5288743); ocenění OpenRouteru 7 miliardami jen tři měsíce po vstupu investorů při valuaci 1,3 miliardy dolarů nicméně překvapilo i lidi z oboru.\n\nParalelně s tím zavřel svůj produkt startup Relay a jeho zakladatel Jacob Bank nastoupí jako viceprezident pro produkt do týmu Google Chrome. Bank v příspěvku na síti X napsal, že Chrome je „ideální místo pro spolupráci s agenty\" a že brzy sdělí více. Relay sloužilo podnikům k automatizaci opakujících se pracovních postupů; jeho absorpce do Chromu naznačuje, že Google chce agentní AI zabudovat přímo do vrstvy prohlížeče, kde ji budou používat stovky milionů lidí.\n\n---\n\nMimo svět AI: firma Aylo, dřívější Mindgeek a mateřská společnost Pornhubu, zaplatí 120 milionů dolarů na vyrovnání hromadných žalob. Ty z roku 2021 tvrdily, že platformy firmy hostovaly videa zobrazující sexuální zneužívání dětí a z jejich šíření profitovaly. Aylo nepřiznává zavinění; dohoda musí projít schválením soudu. Firma zaplatí úvodních 25 milionů letos a zbývajících 95 milionů ve šesti ročních splátkách. Součástí dohody jsou také nové povinnosti v oblasti moderování obsahu, včetně ověřování věku vystupujících osob. Jde o [největší finanční narovnání tohoto druhu vůči velké platformě](https://www.404media.co/pornhubs-parent-company-to-pay-120-million-to-settle-child-sexual-abuse-lawsuits/) za hostování materiálů zobrazujících sexuální zneužívání dětí a vytváří precedens pro odpovědnost platforem za obsah."
+    }
+  },
+  "image": {
+    "hero_path": "public/images/editions/2026-08-18-anthropic-65-miliard-qwen-meta-naklady/hero.svg",
+    "thumb_path": "public/images/editions/2026-08-18-anthropic-65-miliard-qwen-meta-naklady/thumb.svg",
+    "width": 1600,
+    "height": 900,
+    "alt_en": "DNESKAi cover for 2026-08-18, marked Umela Inteligence, Byznys, Financovani. A generated panel of coloured bars, carrying no photograph.",
+    "alt_cs": "Obálka DNESKAi k 2026-08-18, témata Umela Inteligence, Byznys, Financovani. Generovaný panel barevných sloupců, bez fotografie.",
+    "license": {
+      "name": "BoardlessAI deterministic",
+      "author": "BoardlessAI FRAME",
+      "source_url": "https://boardless-ai.vercel.app/",
+      "attribution_html": "Artwork by BoardlessAI FRAME"
+    },
+    "origin": "svg",
+    "hero_bytes_base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+PHRpdGxlIGlkPSJ0aXRsZSI+RE5FU0tBaSBjb3ZlcjwvdGl0bGU+PGRlc2MgaWQ9ImRlc2MiPkEgZ2VuZXJhdGVkIERORVNLQWkgY292ZXI7IHRoZSBhcnRpY2xlJ3Mgb3duIHdvcmRzIGFyZSBub3QgcmVwZWF0ZWQgaGVyZS48L2Rlc2M+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzEwMTExNiIvPjxyZWN0IHg9IjYwIiB5PSI2MCIgd2lkdGg9IjE0ODAiIGhlaWdodD0iNzgwIiByeD0iMzUiIGZpbGw9IiMxODFhMjAiIHN0cm9rZT0iIzc5ZjJjMCIgc3Ryb2tlLXdpZHRoPSI0LjUiLz48cmVjdCB4PSIxMDAuMCIgeT0iNTgwLjIiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjE2OS44IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjUxIi8+PHJlY3QgeD0iMTg3LjUiIHk9IjUwNS4xIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIyNDQuOSIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC42MyIvPjxyZWN0IHg9IjI3NS4wIiB5PSI2MTAuMyIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTM5LjciIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuMzkiLz48cmVjdCB4PSIzNjIuNSIgeT0iNTA1LjEiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjI0NC45IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjY4Ii8+PHJlY3QgeD0iNDUwLjAiIHk9IjY1NS40IiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSI5NC42IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjM5Ii8+PHJlY3QgeD0iNTM3LjUiIHk9IjUwNS4xIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIyNDQuOSIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC41NSIvPjxyZWN0IHg9IjYyNS4wIiB5PSI3MDAuNSIgd2lkdGg9IjU1LjAiIGhlaWdodD0iNDkuNSIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC41NSIvPjxyZWN0IHg9IjcxMi41IiB5PSI1ODAuMiIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTY5LjgiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNjgiLz48cmVjdCB4PSI4MDAuMCIgeT0iNTM1LjEiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjIxNC45IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjY4Ii8+PHJlY3QgeD0iODg3LjUiIHk9IjYyNS4zIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxMjQuNyIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC41MSIvPjxyZWN0IHg9Ijk3NS4wIiB5PSI1MjAuMSIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMjI5LjkiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNzIiLz48cmVjdCB4PSIxMDYyLjUiIHk9IjYyNS4zIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxMjQuNyIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC40MyIvPjxyZWN0IHg9IjExNTAuMCIgeT0iNTY1LjIiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjE4NC44IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjcyIi8+PHJlY3QgeD0iMTIzNy41IiB5PSI1NjUuMiIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTg0LjgiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuMzAiLz48cmVjdCB4PSIxMzI1LjAiIHk9IjUyMC4xIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIyMjkuOSIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC43MiIvPjxyZWN0IHg9IjE0MTIuNSIgeT0iNTIwLjEiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjIyOS45IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjE4Ii8+PHRleHQgeD0iMTAwIiB5PSIyMDAiIGZpbGw9IiM3OWYyYzAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzNSIgZm9udC13ZWlnaHQ9IjcwMCIgbGV0dGVyLXNwYWNpbmc9IjUuNiI+RE5FU0tBaTwvdGV4dD48dGV4dCB4PSIxMDAiIHk9IjMwMCIgZmlsbD0iI2Y3ZjRlYyIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIzNyI+MjAyNi0wOC0xODwvdGV4dD48dGV4dCB4PSIxMDAiIHk9IjM4NSIgZmlsbD0iIzlkYTFhYSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIyOSIgbGV0dGVyLXNwYWNpbmc9IjMuNSI+VW1lbGEgSW50ZWxpZ2VuY2UgwrcgQnl6bnlzIMK3IEZpbmFuY292YW5pPC90ZXh0Pjwvc3ZnPg==",
+    "thumb_bytes_base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iMzYwIiB2aWV3Qm94PSIwIDAgNjQwIDM2MCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIGRlc2MiPjx0aXRsZSBpZD0idGl0bGUiPkRORVNLQWkgY292ZXI8L3RpdGxlPjxkZXNjIGlkPSJkZXNjIj5BIGdlbmVyYXRlZCBETkVTS0FpIGNvdmVyOyB0aGUgYXJ0aWNsZSdzIG93biB3b3JkcyBhcmUgbm90IHJlcGVhdGVkIGhlcmUuPC9kZXNjPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxMDExMTYiLz48cmVjdCB4PSIyNCIgeT0iMjQiIHdpZHRoPSI1OTIiIGhlaWdodD0iMzEyIiByeD0iMTQiIGZpbGw9IiMxODFhMjAiIHN0cm9rZT0iIzc5ZjJjMCIgc3Ryb2tlLXdpZHRoPSIyLjAiLz48cmVjdCB4PSI0MC4wIiB5PSIyMzIuMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNjcuOSIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC41MSIvPjxyZWN0IHg9Ijc1LjAiIHk9IjIwMi4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI5OC4wIiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjYzIi8+PHJlY3QgeD0iMTEwLjAiIHk9IjI0NC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI1NS45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjM5Ii8+PHJlY3QgeD0iMTQ1LjAiIHk9IjIwMi4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI5OC4wIiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjY4Ii8+PHJlY3QgeD0iMTgwLjAiIHk9IjI2Mi4yIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIzNy44IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjM5Ii8+PHJlY3QgeD0iMjE1LjAiIHk9IjIwMi4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI5OC4wIiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjU1Ii8+PHJlY3QgeD0iMjUwLjAiIHk9IjI4MC4yIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIxOS44IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjU1Ii8+PHJlY3QgeD0iMjg1LjAiIHk9IjIzMi4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI2Ny45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjY4Ii8+PHJlY3QgeD0iMzIwLjAiIHk9IjIxNC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI4NS45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjY4Ii8+PHJlY3QgeD0iMzU1LjAiIHk9IjI1MC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI0OS45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjUxIi8+PHJlY3QgeD0iMzkwLjAiIHk9IjIwOC4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI5Mi4wIiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjcyIi8+PHJlY3QgeD0iNDI1LjAiIHk9IjI1MC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI0OS45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjQzIi8+PHJlY3QgeD0iNDYwLjAiIHk9IjIyNi4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI3My45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjcyIi8+PHJlY3QgeD0iNDk1LjAiIHk9IjIyNi4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI3My45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjMwIi8+PHJlY3QgeD0iNTMwLjAiIHk9IjIwOC4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI5Mi4wIiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjcyIi8+PHJlY3QgeD0iNTY1LjAiIHk9IjIwOC4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI5Mi4wIiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjE4Ii8+PHRleHQgeD0iNDAiIHk9IjgwIiBmaWxsPSIjNzlmMmMwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSIyLjIiPkRORVNLQWk8L3RleHQ+PHRleHQgeD0iNDAiIHk9IjEyMCIgZmlsbD0iI2Y3ZjRlYyIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIxNSI+MjAyNi0wOC0xODwvdGV4dD48dGV4dCB4PSI0MCIgeT0iMTU0IiBmaWxsPSIjOWRhMWFhIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjExIiBsZXR0ZXItc3BhY2luZz0iMS40Ij5VbWVsYSBJbnRlbGlnZW5jZSDCtyBCeXpueXMgwrcgRmluYW5jb3Zhbmk8L3RleHQ+PC9zdmc+"
+  },
+  "board": {
+    "meetingRef": "meetings/2026-08-18-cu-edition",
+    "roomUrl": "https://boardless-ai.vercel.app/meetings/2026-08-18-cu-edition",
+    "whyThisStory": "Anthropic za dva měsíce přidal 18 miliard dolarů anualizovaného obratu, což mění podmínky každého dalšího kola fundraisingu i připravovaného IPO – a výsledky Qwenu 3.8 27B ve stejný den ukazují, že tento závod není jen o penězích, ale i o tom, kdo potřebuje jak velký model."
+  }
+}

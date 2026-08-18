@@ -130,19 +130,24 @@
       "at": "2026-08-17T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
       "at": "2026-08-17T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-17-night",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-18T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-18-cu-edition",
+      "decisionOneLiner": "Anthropic za dva měsíce přidal 18 miliard dolarů anualizovaného obratu, což mění podmínky každého dalšího kola fundraisingu i připravovaného IPO – a výsledky Qwenu 3.8 27B ve stejn"
     },
     {
       "at": "2026-08-18T04:00:00.000Z",

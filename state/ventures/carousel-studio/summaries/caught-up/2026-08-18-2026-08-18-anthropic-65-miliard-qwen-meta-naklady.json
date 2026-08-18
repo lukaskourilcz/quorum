@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-18-anthropic-65-miliard-qwen-meta-naklady",
+  "date": "2026-08-18",
+  "locale": "cs",
+  "kicker": "DNESKAi · 18. srp",
+  "headline": "Anthropic roste rychleji než OpenAI, Qwen v 27 miliardách parametrů dohání modely mnohonásobně větší",
+  "coverLine": "Čínský model za zlomek ceny vyrovnává GPT-5.6 Luna, Anthropic hlásí anualizovaný obrat 65 miliard dolarů",
+  "standfirst": "Tři události z uplynulých čtyřiadvaceti hodin ukazují, odkud přichází tlak na frontové laboratoře: ze stran příjmů, nákladů i schopností malých modelů.",
+  "passages": [
+    "Anualizovaný obrat Anthropicu vzrostl z 47 miliard dolarů v květnu na 65 miliard na konci července, tedy o 18 miliard za dva měsíce.",
+    "Otevřený model Qwen 3.8 27B dosáhl skóre 52 na Artificial Analysis Intelligence Index, čímž se vyrovnal modelům s řádově větším počtem parametrů.",
+    "WSJ odhadl Metiny mimorozvahové závazky spojené s AI na přibližně 693 miliard dolarů, nad rámec vykázaných 145 miliard za rok 2026.",
+    "Stripe podle Bloomberg finalizoval koupi OpenRouteru za nejméně 7 miliard dolarů.",
+    "Anthropic roste tempem, které mění celou debatu o valuacích AI firem před jejich vstupem na burzu – a přímé srovnání s OpenAI nyní ukazuje, kdo má vítr v zádech.",
+    "Qwen 3.8 27B dokazuje, že výkonné modely se přestávají rovnat drahé infrastruktuře, což přepisuje kalkulaci pro každou firmu zvažující nasazení AI na vlastním hardwaru.",
+    "Metiny mimorozvahové závazky ve výši téměř 700 miliard dolarů jsou číslo, které dosud nebylo ceně akcií.",
+    "Čísla o příjmech Anthropicu jsou tvrzeními firmy zprostředkovanými přes Bloomberg; Anthropic je nepotvrdil přímo."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Artwork by BoardlessAI FRAME"
+}

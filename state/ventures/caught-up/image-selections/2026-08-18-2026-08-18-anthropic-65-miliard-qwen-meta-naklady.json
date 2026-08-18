@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-18-anthropic-65-miliard-qwen-meta-naklady",
+  "date": "2026-08-18",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": null,
+      "reason": "unparsable:[\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"verdicts\"\n    ],\n    \"message\": \"Invalid input: expected array, received undefined\"\n  }\n]",
+      "candidates": [],
+      "skipped": [],
+      "costUsd": 0.009586
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-18T03:01:50.274Z"
+}

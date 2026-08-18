@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "runId": "73fe8117-b5b3-45b6-a80c-7aa3c3300b20",
+  "date": "2026-08-18",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-08-18T03:01:55.122Z",
+  "completedAt": "2026-08-18T03:04:22.373Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-18T03:01:55.126Z",
+      "completedAt": "2026-08-18T03:02:16.592Z",
+      "durationMs": 21466
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-08-18T03:02:16.592Z",
+      "completedAt": "2026-08-18T03:04:06.197Z",
+      "durationMs": 109605
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-08-18T03:04:06.198Z",
+      "completedAt": "2026-08-18T03:04:06.202Z",
+      "durationMs": 4
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-08-18T03:04:06.203Z",
+      "completedAt": "2026-08-18T03:04:06.203Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-08-18T03:04:06.203Z",
+      "completedAt": "2026-08-18T03:04:22.372Z",
+      "durationMs": 16169
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 9963,
+      "outputTokens": 910,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.043539
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14525,
+      "outputTokens": 4605,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1218225
+    }
+  ],
+  "measuredCostUsd": 0.1653615,
+  "quality": {
+    "metrics": {
+      "successfulSources": 31,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 85,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.8125,
+      "duplicateStorySimilarity": 0.047619047619047616,
+      "repeatedTopicFrequency": 0.16666666666666666,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1653615
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "plate",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": null,
+        "reason": "unparsable:[\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"verdicts\"\n    ],\n    \"message\": \"Invalid input: expected array, received undefined\"\n  }\n]",
+        "candidates": [],
+        "skipped": [],
+        "costUsd": 0.009586
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "image_rung:plate",
+    "image_gate:search:unparsable:[\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"verdicts\"\n    ],\n    \"message\": \"Invalid input: expected array, received undefined\"\n  }\n]"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

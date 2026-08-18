@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260818030150-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Anthropic za dva měsíce přidal 18 miliard dolarů anualizovaného obratu, což mění podmínky každého dalšího kola fundraisingu i připravovaného IPO – a výsledky Qwenu 3.8 27B ve stejný den ukazují, že tento závod není jen o penězích, ale i o tom, kdo potřebuje jak velký model.",
+  "evidenceRefs": [
+    "source:techcrunch-ai",
+    "source:simonw",
+    "source:social-media-today",
+    "source:the-register",
+    "source:404-media",
+    "source:ars-technica"
+  ],
+  "editionRef": "78a805e6617b94eef9b82d1687ac6b37cafd301d8bc77d864012855d50eacc6e",
+  "generatedAt": "2026-08-18T03:01:55.274Z"
+}
