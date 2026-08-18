@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "venture-recommendation/1",
+  "id": "dm-2026-08-18-672ae78867f70d6d",
+  "ventureId": "door-money",
+  "date": "2026-08-18",
+  "status": "draft",
+  "hook": "A missed handoff became the only part of the invented route worth keeping.",
+  "formats": [
+    "carousel"
+  ],
+  "platforms": [
+    "instagram"
+  ],
+  "copyBlocks": [
+    {
+      "kind": "cover",
+      "ordinal": 1,
+      "text": "The route failed before the promise did."
+    },
+    {
+      "kind": "body",
+      "ordinal": 2,
+      "text": "This is synthetic fixture copy for owner-review wiring only."
+    },
+    {
+      "kind": "outro",
+      "ordinal": 3,
+      "text": "The next invented scene begins where the timetable stops."
+    }
+  ],
+  "rationale": "The synthetic scene supplies a concrete object, a practical reversal and a restrained finish.",
+  "curiosityBridge": "The fixture leaves the next stop unresolved without claiming a real event.",
+  "cta": {
+    "mode": "soft-curiosity",
+    "text": null
+  },
+  "evidence": {
+    "kind": "book-passage",
+    "manuscriptHash": "sha256:f9ee5cfc0a591ad9c9bb4c9e13bc3747c26cf4fda7be77bb184c7539b38add6c",
+    "chunkIds": [
+      "ch02-s02-c008"
+    ],
+    "scoresAtSelection": [
+      {
+        "chunkId": "ch02-s02-c008",
+        "scores": {
+          "entertainment": {
+            "score": 3,
+            "justification": "Synthetic dry-run reason for entertainment."
+          },
+          "emotionalImpact": {
+            "score": 4,
+            "justification": "Synthetic dry-run reason for emotionalImpact."
+          },
+          "shock": {
+            "score": 5,
+            "justification": "Synthetic dry-run reason for shock."
+          },
+          "humor": {
+            "score": 3,
+            "justification": "Synthetic dry-run reason for humor."
+          },
+          "relatability": {
+            "score": 4,
+            "justification": "Synthetic dry-run reason for relatability."
+          },
+          "hipHopRelevance": {
+            "score": 5,
+            "justification": "Synthetic dry-run reason for hipHopRelevance."
+          },
+          "storytellingStrength": {
+            "score": 3,
+            "justification": "Synthetic dry-run reason for storytellingStrength."
+          },
+          "controversy": {
+            "score": 4,
+            "justification": "Synthetic dry-run reason for controversy."
+          },
+          "shareability": {
+            "score": 5,
+            "justification": "Synthetic dry-run reason for shareability."
+          },
+          "educationalValue": {
+            "score": 3,
+            "justification": "Synthetic dry-run reason for educationalValue."
+          },
+          "quotePotential": {
+            "score": 4,
+            "justification": "Synthetic dry-run reason for quotePotential."
+          },
+          "carouselPotential": {
+            "score": 5,
+            "justification": "Synthetic dry-run reason for carouselPotential."
+          },
+          "shortVideoPotential": {
+            "score": 3,
+            "justification": "Synthetic dry-run reason for shortVideoPotential."
+          },
+          "threadPotential": {
+            "score": 4,
+            "justification": "Synthetic dry-run reason for threadPotential."
+          },
+          "bookCuriosityPotential": {
+            "score": 5,
+            "justification": "Synthetic dry-run reason for bookCuriosityPotential."
+          }
+        }
+      }
+    ],
+    "excerptChunkId": "ch02-s02-c008",
+    "excerpt": "By late afternoon the mistake had become ordinary enough to examine, and we agreed that repair begins with describing what failed instead of defending who carried it. I closed the entry with the time, the place, and the name of the person holding the key, because memory is generous but a handover should be exact.\n\nDay 29 began with the canvas receipt pouch on the wrong side of the desk at Copper Street theatre, which was how I knew the plan had already changed. Nella Reed arrived carrying a paper cup and a list of three jobs, while Jon Bell stood by the door counting cables that belonged to no",
+    "privateStoreLink": "private-book://sha256/f9ee5cfc0a591ad9c9bb4c9e13bc3747c26cf4fda7be77bb184c7539b38add6c/chunks/ch02-s02-c008.json"
+  },
+  "gateResults": [
+    {
+      "gate": "voice",
+      "passed": true,
+      "detail": "Profile v1 (sha256:6a5d6ecd3e3ffe31b680cba957f5e2a5dd5360de6b9f75d7c8458f5531dc3461) passed deterministic voice lint."
+    },
+    {
+      "gate": "claims",
+      "passed": true,
+      "detail": "1 declared book claim(s) resolve only to selected chunk refs."
+    },
+    {
+      "gate": "quotes",
+      "passed": true,
+      "detail": "0 declared quote(s) are exact selected-chunk substrings."
+    },
+    {
+      "gate": "excerpt-cap",
+      "passed": true,
+      "detail": "No generated surface copies more than the 600-character source ceiling."
+    },
+    {
+      "gate": "duplicate",
+      "passed": true,
+      "detail": "No prior package exists; threshold 0.86."
+    },
+    {
+      "gate": "cta-frequency",
+      "passed": true,
+      "detail": "The rolling seven-day history permits this CTA mode."
+    },
+    {
+      "gate": "living-person",
+      "passed": true,
+      "detail": "Named-person copy adds no factual sentence absent from the selected manuscript chunks."
+    }
+  ],
+  "designLab": {
+    "eligible": true,
+    "summaryPath": null,
+    "readyAt": null
+  },
+  "owner": {
+    "editedCopyBlocks": null,
+    "approvalNote": null,
+    "rejectionReason": null,
+    "approvedAt": null,
+    "rejectedAt": null,
+    "postedAt": null,
+    "archivedAt": null,
+    "postedUrl": null,
+    "resultIds": [],
+    "ratingRef": null
+  },
+  "statusHistory": [
+    {
+      "from": null,
+      "to": "draft",
+      "at": "2026-08-18T13:01:30.092Z",
+      "actor": "system",
+      "reason": null
+    }
+  ],
+  "generatedAt": "2026-08-18T13:01:30.092Z",
+  "updatedAt": "2026-08-18T13:01:30.092Z"
+}
