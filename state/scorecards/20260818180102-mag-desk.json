@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260818180102-mag-desk",
+  "phase": "mag-desk",
+  "estimatedWorstCaseUsd": 0,
+  "actualUsd": 0,
+  "participants": [],
+  "schedulerOutcome": "not-needed",
+  "generatedAt": "2026-08-18T18:01:02.247Z"
+}
