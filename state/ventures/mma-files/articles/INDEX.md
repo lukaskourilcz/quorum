@@ -4,6 +4,7 @@
 
 | Published | Slot | Status | Format | Czech title | Subjects covered |
 | --- | --- | --- | --- | --- | --- |
+| 2026-08-18 | am | published | fighter-profile | Alex Perez míří do Šanghaje: muší váha UFC dostane další test | ufc:alex-perez ufc:alexandre-pantoja ufc:asu-almabayev ufc:deiveson-figueiredo |
 | 2026-08-17 | am | published | fighter-profile | Aleksandar Rakić: bilance 15–6 a tři porážky za sebou | ufc:aleksandar-rakic ufc:azamat-murzakanov ufc:jan-b-achowicz ufc:jiri-prochazka |
 | 2026-08-16 | am | published | fighter-profile | Zhalgas Zhumagulov: muší váha, která se vrací | oktagon:zhalgas-zhumagulov |
 | 2026-08-14 | am | published | fighter-profile | Viktor Pešta: 28 zápasů, 19 výher a kariéra, která nešla po rovné čáře | oktagon:viktor-pesta |
@@ -14,4 +15,4 @@
 | 2026-08-04 | am | published | fighter-profile | Gustavo Lopez: bantamová váha mezi UFC a evropskými promotéry | oktagon:gustavo-lopez |
 | 2026-08-02 | am | published | fighter-profile | Valentina Shevchenko: tři zápasy s Grasso tvoří závěrečnou kapitolu k… | ufc:alexa-grasso ufc:valentina-shevchenko |
 
-Articles on file: 9. Rows shown: 9.
+Articles on file: 10. Rows shown: 10.

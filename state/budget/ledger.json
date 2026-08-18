@@ -7693,6 +7693,57 @@
       "toolUses": 0,
       "usd": 0.003972,
       "kind": "text"
+    },
+    {
+      "ts": "2026-08-18T08:03:29.838Z",
+      "cycleId": "20260818080329-article-am",
+      "requestHash": "20fa154b3bd43519ec483a19d05f50962041fe354f61d1b939041fdc75bdc4db",
+      "phase": "article-production",
+      "ventureId": "mma-files",
+      "agent": "JAB",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "serviceTier": "default",
+      "tokensIn": 13774,
+      "cachedTokensIn": 0,
+      "tokensOut": 1042,
+      "toolUses": 0,
+      "usd": 0.056952,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-08-18T08:04:00.852Z",
+      "cycleId": "20260818080329-article-am",
+      "requestHash": "62cd14c38720e80e5a30435384003bcf8924a9d113ddb969c23c748729eeb117",
+      "phase": "image_gate",
+      "ventureId": "mma-files",
+      "agent": "IMAGE_GATE",
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "serviceTier": "default",
+      "tokensIn": 1584,
+      "cachedTokensIn": 0,
+      "tokensOut": 107,
+      "toolUses": 1,
+      "usd": 0.002119,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-08-18T08:04:03.649Z",
+      "cycleId": "20260818080329-article-am",
+      "requestHash": "ed24f20754e8b977d3821561fb42ab6093f73845367958b0da1ebce2b9196725",
+      "phase": "image_gate",
+      "ventureId": "mma-files",
+      "agent": "IMAGE_GATE",
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "serviceTier": "default",
+      "tokensIn": 1603,
+      "cachedTokensIn": 0,
+      "tokensOut": 108,
+      "toolUses": 1,
+      "usd": 0.002143,
+      "kind": "text"
     }
   ]
 }

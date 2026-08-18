@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "ufc-alex-perez",
+  "date": "2026-08-18",
+  "locale": "cs",
+  "kicker": "MMA Files · 18. srp",
+  "headline": "Alex Perez míří do Šanghaje: muší váha UFC dostane další test",
+  "coverLine": "Perez nastoupí 29. srpna v Šanghaji",
+  "standfirst": "Bojovník s bilancí 26-10 nastoupí 29. srpna na UFC Fight Night proti Su Mudaerjimu. V muší váze patří k nejzkušenějším jménům, přesto ho poslední dvě porážky vrátily na křižovatku.",
+  "passages": [
+    "Alex Perez nastoupí 29. srpna na turnaji UFC Fight Night: Nurmagomedov vs. Song v Šanghaji, kde ho v muší váze čeká Su Mudaerji.",
+    "Akce se odehraje v SPD Bank Oriental Sports Center. Perezova bilance aktuálně činí 26 výher a 10 proher.",
+    "Rodák narozený 21. března 1992 měří 168 centimetrů a trénuje v Team Oyama. Nejvýraznějším zápisem v jeho novější historii je souboj z listopadu 2025.",
+    "Na turnaji UFC Fight Night: Tsarukyan vs. Hooker podlehl Asu Almabayevovi submisí, konkrétně guillotine choke, ve třetím kole po 622 sekundách.",
+    "Dřív v kariéře čelil dvěma z nejlepších borců muší váhy. Na UFC 255 v listopadu 2020 prohrál s Deivesonem Figueiredo submisí, guillotine choke, hned v prvním kole po 117 sekundách.",
+    "Na UFC 277 v červenci 2022 ho zastavil Alexandre Pantoja, který ho zpracoval pákou na krk rovněž v prvním kole, tentokrát po 91 sekundách.",
+    "Almabayev, který Pereze loni porazil, vstupuje do roku 2026 s bilancí 24-3. Kazachstánský bojovník trénující pod DAR Pro Team dokončuje zápasy submisí v téměř polovině svých výher.",
+    "Šanghajský zápas Perezovi dává příležitost přerušit sérii proher. Výsledek rozhodne, zda se muší váha UFC dočká jeho dalšího postupu žebříčkem."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "Coach Lewis · CC BY · Wikimedia Commons"
+}

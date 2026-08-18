@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-alex-perez",
+  "date": "2026-08-18",
+  "rung": "curated",
+  "selected": "illustrative:40369860",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:37544651",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "The image shows a concert or music stage with dramatic lighting and smoke effects, bearing no relation to mixed martial arts or combat sports.",
+          "sceneCs": "osvětlená koncertní jeviště s kouřem"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002119
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": "illustrative:40369860",
+      "reason": "An octagon full of spectators in an arena setting perfectly illustrates the topic of professional MMA competition, though it is not specific to the article's event.",
+      "candidates": [
+        {
+          "candidateId": "illustrative:40369860",
+          "provider": "wikimedia",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "An octagon full of spectators in an arena setting perfectly illustrates the topic of professional MMA competition, though it is not specific to the article's event.",
+          "sceneCs": "oktagón v hale plné diváků"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002143
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-18T08:03:29.838Z"
+}
