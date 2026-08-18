@@ -11,10 +11,10 @@
   "candidateSet": [],
   "chosenStory": null,
   "stretch": {
-    "count": 4,
+    "count": 5,
     "reason": "incomplete-phase",
-    "nextAttemptOn": "2026-08-18"
+    "nextAttemptOn": "2026-08-19"
   },
   "startedOn": "2026-08-14",
-  "updatedAt": "2026-08-17T10:02:15.481Z"
+  "updatedAt": "2026-08-18T10:02:06.553Z"
 }

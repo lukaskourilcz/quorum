@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260818100206-bh-desk",
+  "date": "2026-08-18",
+  "phase": "bh-desk",
+  "fixture": false,
+  "status": "PAUSED",
+  "stage": "VALIDATION",
+  "operatingBrief": "Continue selection for BOOKSOFHISTORY cycle bh-20260814-001; a phase advances only when its work completes.",
+  "participantReasons": [
+    {
+      "agent": "FOLIO",
+      "reason": "Registered for the desk but not called while the implementation or owner gate keeps this phase paused.",
+      "participated": false
+    },
+    {
+      "agent": "PLOT",
+      "reason": "Registered for the desk but not called while the implementation or owner gate keeps this phase paused.",
+      "participated": false
+    },
+    {
+      "agent": "QUILL",
+      "reason": "Registered for the desk but not called while the implementation or owner gate keeps this phase paused.",
+      "participated": false
+    },
+    {
+      "agent": "HACEK",
+      "reason": "Registered for the desk but not called while the implementation or owner gate keeps this phase paused.",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "Registered for the desk but not called while the implementation or owner gate keeps this phase paused.",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 7.5430062,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "RESUME",
+    "summary": "The selection phase remains current. No provider was called, nothing was published and this day cost $0.",
+    "evidenceRefs": [
+      "ventures/booksofhistory/cycle.json"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FOLIO",
+      "summary": "The selection phase remains current. No provider was called, nothing was published and this day cost $0.",
+      "evidenceRefs": [
+        "ventures/booksofhistory/cycle.json"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "AUDIT",
+      "firstChoice": "RESUME",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260818100206-bh-desk-STATE",
+      "owner": "FOLIO",
+      "summary": "Resume the selection phase on the next working day.",
+      "status": "blocked"
+    }
+  ],
+  "growthPlan": "No public action is authorized. BOOKSOFHISTORY remains drafts-only and owner-posted.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-18T10:02:06.554Z",
+  "kind": "bh-desk",
+  "roomTranscript": {
+    "openedAt": "2026-08-18T10:02:06.553Z",
+    "closedAt": "2026-08-18T10:02:06.554Z",
+    "gavel": "FOLIO",
+    "setting": "A deterministic cycle checkpoint. No model, research provider, account or social channel was touched.",
+    "turns": [
+      {
+        "agent": "FOLIO",
+        "mode": "close",
+        "sentAt": "2026-08-18T10:02:06.554Z",
+        "text": "The selection phase remains current. No provider was called, nothing was published and this day cost $0."
+      }
+    ]
+  }
+}

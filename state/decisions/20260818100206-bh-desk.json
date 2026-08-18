@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260818100206-bh-desk",
+  "phase": "bh-desk",
+  "editorialPhase": "selection",
+  "outcome": "RESUME",
+  "summary": "The selection phase remains current. No provider was called, nothing was published and this day cost $0.",
+  "evidenceRefs": [
+    "ventures/booksofhistory/cycle.json"
+  ],
+  "generatedAt": "2026-08-18T10:02:06.554Z"
+}
