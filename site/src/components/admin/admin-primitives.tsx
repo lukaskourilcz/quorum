@@ -331,6 +331,7 @@ export function AdminTableRegion({
     <div
       aria-label={label}
       className={cn("admin-focus-ring max-w-full overflow-x-auto rounded-[var(--admin-radius)] border border-[var(--admin-border)]", className)}
+      data-horizontal-scroll
       role="region"
       tabIndex={0}
     >
