@@ -56,7 +56,7 @@ export default async function AdminLoginPage({
       <div className="mx-auto grid w-full max-w-5xl gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <section aria-labelledby="login-heading" className="max-w-2xl">
           <div className="flex items-center gap-3">
-            <Mark />
+            <Mark className="bg-[var(--admin-primary)] text-[var(--admin-primary-foreground)]" />
             <span className="font-semibold">BoardlessAI</span>
             <AdminStatusBadge tone="warning">Private</AdminStatusBadge>
           </div>

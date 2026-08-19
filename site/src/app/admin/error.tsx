@@ -28,7 +28,7 @@ export default function AdminError({
       <AdminCard className="mx-auto w-full max-w-2xl">
         <AdminCardContent className="p-7 sm:p-10">
           <div className="flex items-center gap-3">
-            <Mark />
+            <Mark className="bg-[var(--admin-primary)] text-[var(--admin-primary-foreground)]" />
             <span className="font-semibold">BoardlessAI Admin</span>
           </div>
           <AdminStateMessage

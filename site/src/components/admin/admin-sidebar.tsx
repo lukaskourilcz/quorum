@@ -137,7 +137,7 @@ export function AdminSidebar({
       </div>
 
       <div className={`flex min-h-11 shrink-0 items-center gap-2.5 px-3 ${collapsed ? "justify-center" : ""}`}>
-        <Mark className="size-7 shrink-0" />
+        <Mark className="size-7 shrink-0 bg-[var(--admin-primary)] text-[var(--admin-primary-foreground)]" />
         {!collapsed ? (
           <div className="min-w-0">
             <p className="truncate text-[length:var(--admin-type-section)] font-semibold tracking-[var(--admin-tracking-tight)]">BoardlessAI</p>

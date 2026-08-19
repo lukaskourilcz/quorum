@@ -28,6 +28,10 @@ const patterns = {
   type: /\b(?:text-(?:xs|sm|base|lg|xl|[2-9]xl|\[[^\]]+\])|font-(?:sans|serif|mono|thin|extralight|light|normal|medium|semibold|bold|extrabold|black)|tracking-(?:tighter|tight|normal|wide|wider|widest|\[[^\]]+\])|leading-(?:none|tight|snug|normal|relaxed|loose|\[[^\]]+\]))/g,
   spacing:
     /(?:^|[\s"'`])(?:-)?(?:m[trblxy]?|p[trblxy]?|gap[xy]?|space-[xy])-(?:[0-9.]+|px|auto|\[[^\]]+\])/gm,
+  legacyToken:
+    /var\(--(?:background|foreground|card|card-foreground|primary|primary-foreground|secondary|secondary-foreground|muted|muted-foreground|accent|accent-hover|accent-soft|accent-foreground|border|ring|surface|surface-raised|line-strong|iron|steel|fog|ash|mist|radius-card|radius-button)\b/g,
+  publicUiImport: /from\s+["']@\/components\/ui\//g,
+  unwrap: /\bUNWRAP\b/g,
 };
 
 async function walk(directory) {
@@ -51,8 +55,14 @@ function count(pattern, source) {
 
 async function inspect(file) {
   const source = await readFile(file, "utf8");
+  const relativeFile = path.relative(sourceRoot, file).split(path.sep).join("/");
+  // The Admin overlay adapters deliberately reuse the behavior-complete public dialog and
+  // tooltip, then replace every visual slot and copy the scoped theme into their portals.
+  const publicUiImport = relativeFile === "components/admin/admin-overlays.tsx"
+    ? 0
+    : count(patterns.publicUiImport, source);
   return {
-    file: path.relative(sourceRoot, file).split(path.sep).join("/"),
+    file: relativeFile,
     rawColour:
       count(patterns.rawHex, source) +
       count(patterns.functionalColour, source) +
@@ -60,6 +70,9 @@ async function inspect(file) {
     radius: count(patterns.radius, source),
     type: count(patterns.type, source),
     spacing: count(patterns.spacing, source),
+    legacyToken: count(patterns.legacyToken, source),
+    publicUiImport,
+    unwrap: count(patterns.unwrap, source),
   };
 }
 
@@ -71,11 +84,14 @@ const totals = rows.reduce(
     radius: result.radius + row.radius,
     type: result.type + row.type,
     spacing: result.spacing + row.spacing,
+    legacyToken: result.legacyToken + row.legacyToken,
+    publicUiImport: result.publicUiImport + row.publicUiImport,
+    unwrap: result.unwrap + row.unwrap,
   }),
-  { rawColour: 0, radius: 0, type: 0, spacing: 0 },
+  { rawColour: 0, radius: 0, type: 0, spacing: 0, legacyToken: 0, publicUiImport: 0, unwrap: 0 },
 );
 const emptyFiles = rows
-  .filter((row) => row.rawColour + row.radius + row.type + row.spacing === 0)
+  .filter((row) => row.rawColour + row.radius + row.type + row.spacing + row.legacyToken + row.publicUiImport + row.unwrap === 0)
   .map((row) => row.file);
 
 const result = {
@@ -93,15 +109,20 @@ if (process.argv.includes("--json")) {
     [
       `Audited ${result.files} production Admin source files.`,
       `Totals: ${totals.rawColour} raw-colour, ${totals.radius} radius, ${totals.type} typography, ${totals.spacing} spacing occurrences.`,
+      `Migration violations: ${totals.legacyToken} legacy-token, ${totals.publicUiImport} public-UI import, ${totals.unwrap} UNWRAP occurrences.`,
       `Files with no visual rules: ${emptyFiles.length}.`,
       "",
-      "| File | Raw colour | Radius | Typography | Spacing |",
-      "| --- | ---: | ---: | ---: | ---: |",
+      "| File | Raw colour | Radius | Typography | Spacing | Legacy token | Public UI | UNWRAP |",
+      "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
       ...rows.map(
         (row) =>
-          `| \`${row.file}\` | ${row.rawColour} | ${row.radius} | ${row.type} | ${row.spacing} |`,
+          `| \`${row.file}\` | ${row.rawColour} | ${row.radius} | ${row.type} | ${row.spacing} | ${row.legacyToken} | ${row.publicUiImport} | ${row.unwrap} |`,
       ),
       "",
     ].join("\n"),
   );
+}
+
+if (totals.rawColour + totals.legacyToken + totals.publicUiImport + totals.unwrap > 0) {
+  process.exitCode = 1;
 }

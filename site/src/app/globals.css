@@ -209,35 +209,6 @@ img {
   --admin-shadow-elevated: 0 18px 48px -16px rgba(0, 0, 0, 0.34);
   --admin-shadow-window: 0 30px 80px -20px rgba(0, 0, 0, 0.52), 0 0 0 1px rgba(0, 0, 0, 0.16);
 
-  /* Compatibility aliases let existing token-backed Admin panels migrate
-     without inheriting a second palette. Literal-hex panels move in #368. */
-  --background: var(--admin-background);
-  --foreground: var(--admin-foreground);
-  --card: var(--admin-surface);
-  --card-foreground: var(--admin-foreground);
-  --primary: var(--admin-primary);
-  --primary-foreground: var(--admin-primary-foreground);
-  --secondary: var(--admin-surface-secondary);
-  --secondary-foreground: var(--admin-foreground);
-  --muted: var(--admin-surface-muted);
-  --muted-foreground: var(--admin-foreground-muted);
-  --accent: var(--admin-brand);
-  --accent-hover: var(--admin-primary-hover);
-  --accent-soft: var(--admin-brand-soft);
-  --accent-foreground: var(--admin-primary-foreground);
-  --border: var(--admin-border);
-  --ring: var(--admin-brand);
-  --surface: var(--admin-surface);
-  --surface-raised: var(--admin-surface-elevated);
-  --line-strong: var(--admin-border-strong);
-  --iron: var(--admin-border-strong);
-  --steel: var(--admin-border-strong);
-  --fog: var(--admin-foreground-subtle);
-  --ash: var(--admin-foreground-muted);
-  --mist: var(--admin-foreground);
-  --radius-card: var(--admin-radius-lg);
-  --radius-button: var(--admin-radius);
-
   background: var(--admin-background);
   color: var(--admin-foreground);
   font-family: -apple-system, BlinkMacSystemFont, var(--font-dm-sans), "Segoe UI", sans-serif;
