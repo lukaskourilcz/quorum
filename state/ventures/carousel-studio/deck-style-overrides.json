@@ -7,11 +7,11 @@
       "date": "2026-08-19",
       "style": "figure",
       "family": "figure",
-      "variant": "A",
-      "accentSwap": false,
+      "variant": "B",
+      "accentSwap": true,
       "treatment": "mono",
       "typeScale": 1.1,
-      "changedAt": "2026-08-19T16:27:15.090Z"
+      "changedAt": "2026-08-19T16:27:19.104Z"
     },
     {
       "venture": "caught-up",
@@ -62,5 +62,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-08-19T16:27:15.090Z"
+  "updatedAt": "2026-08-19T16:27:19.104Z"
 }
