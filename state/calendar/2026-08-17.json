@@ -286,7 +286,7 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-19-cu-edition",
-      "decisionOneLiner": "Today's candidate stories did not meet the source rules, so nothing was written."
+      "decisionOneLiner": "ChatGPT se od příštího týdne stává reklamním médiem pro 31 evropských trhů – pro inzerenty, vydavatele i regulátory to znamená nutnost zacházet s chatbotem jinak než dosud."
     },
     {
       "at": "2026-08-19T04:00:00.000Z",
@@ -315,7 +315,8 @@
       "at": "2026-08-19T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "late",
+      "decisionOneLiner": "The run for this slot has not arrived yet."
     },
     {
       "at": "2026-08-19T08:00:00.000Z",

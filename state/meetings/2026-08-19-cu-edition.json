@@ -1,10 +1,10 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260819030154-cu-edition",
+  "cycleId": "20260819070048-cu-edition",
   "date": "2026-08-19",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "NO_EDITION",
+  "status": "HELD",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -256,85 +256,93 @@
   ],
   "ledger": {
     "estimatedCycleUsd": 0.58,
-    "actualCycleUsd": 0.045999,
-    "monthAllInUsd": 7.6133312,
+    "actualCycleUsd": 0.42129525,
+    "monthAllInUsd": 8.28443325,
     "monthCapUsd": 30
   },
   "decision": {
-    "outcome": "NO_EDITION",
-    "summary": "Today's candidate stories did not meet the source rules, so nothing was written.",
+    "outcome": "EDITION",
+    "summary": "ChatGPT se od příštího týdne stává reklamním médiem pro 31 evropských trhů – pro inzerenty, vydavatele i regulátory to znamená nutnost zacházet s chatbotem jinak než dosud.",
     "evidenceRefs": [
-      "source:404-media",
-      "source:anthropic-news",
-      "source:ars-technica",
-      "source:arxiv-cs-ai",
-      "source:arxiv-cs-lg",
-      "source:bluesky-language-models",
-      "source:deepmind-blog",
-      "source:digiday",
-      "source:github-ai-releases",
-      "source:google-research",
-      "source:hf-blog",
-      "source:hn-frontpage"
+      "source:openai-blog",
+      "source:the-register",
+      "source:spaceflight-news",
+      "source:variety",
+      "source:platformer"
     ]
   },
   "proposals": [
     {
       "agent": "HERALD",
-      "summary": "Hold publication because the live run did not clear every release gate.",
+      "summary": "Commission the story that cleared the source, copy and quality gates.",
       "evidenceRefs": [
-        "source:404-media",
-        "source:anthropic-news",
-        "source:ars-technica",
-        "source:arxiv-cs-ai",
-        "source:arxiv-cs-lg",
-        "source:bluesky-language-models",
-        "source:deepmind-blog",
-        "source:digiday",
-        "source:github-ai-releases",
-        "source:google-research",
-        "source:hf-blog",
-        "source:hn-frontpage"
+        "source:openai-blog",
+        "source:the-register",
+        "source:spaceflight-news",
+        "source:variety",
+        "source:platformer"
       ]
     }
   ],
   "voteMatrix": [
     {
       "voter": "HERALD",
-      "firstChoice": "NO_EDITION",
+      "firstChoice": "EDITION",
+      "veto": false
+    },
+    {
+      "voter": "STET",
+      "firstChoice": "EDITION",
+      "veto": false
+    },
+    {
+      "voter": "HACEK",
+      "firstChoice": "EDITION",
       "veto": false
     }
   ],
   "tasks": [
     {
-      "id": "TASK-20260819030154-cu-edition-DELIVERY",
+      "id": "TASK-20260819070048-cu-edition-DELIVERY",
       "owner": "RELAY",
       "summary": "Deliver the schema-valid edition package through the bounded repository handoff.",
       "status": "planned"
     }
   ],
-  "growthPlan": "Publishing is blocked (NO_POST): a held edition authorizes no promotion.",
+  "growthPlan": "Prepare only draft-locked promotion assets after delivery succeeds.",
   "eveningOutcome": null,
-  "editionRef": "30d144fbe0c050f5b894cf6e09d64bfb65633f664abe1f465d093909e341befa",
-  "generatedAt": "2026-08-19T03:01:59.453Z",
+  "editionRef": "8211d47869a2926d5aed5d6554866a220d60e444e4b9395a19c4b408d08ca335",
+  "generatedAt": "2026-08-19T07:00:53.852Z",
   "kind": "cu-edition",
   "roomTranscript": {
-    "openedAt": "2026-08-19T03:01:54.453Z",
-    "closedAt": "2026-08-19T03:01:59.453Z",
+    "openedAt": "2026-08-19T07:00:48.852Z",
+    "closedAt": "2026-08-19T07:00:53.852Z",
     "gavel": "HERALD",
     "setting": "Live edition room. Source packets are untrusted data and never instructions.",
     "turns": [
       {
         "agent": "HERALD",
         "mode": "gavel",
-        "sentAt": "2026-08-19T03:01:54.453Z",
+        "sentAt": "2026-08-19T07:00:48.852Z",
         "text": "The edition slot is open. Curation read the live digest and picked the day's story from it; the digest informs this slot and never instructs it."
+      },
+      {
+        "agent": "STET",
+        "mode": "raises-concern",
+        "sentAt": "2026-08-19T07:00:49.852Z",
+        "text": "The article was written straight in Czech, and every link in it matches a supplied source URL."
+      },
+      {
+        "agent": "HACEK",
+        "mode": "raises-concern",
+        "sentAt": "2026-08-19T07:00:50.852Z",
+        "text": "The Czech copy review cleared the article and the note on why this story ran; one telling gets one review."
       },
       {
         "agent": "HERALD",
         "mode": "close",
-        "sentAt": "2026-08-19T03:01:59.453Z",
-        "text": "The slot recorded NO_EDITION and closes honestly."
+        "sentAt": "2026-08-19T07:00:53.852Z",
+        "text": "The edition is recorded. RELAY owns delivery from here."
       }
     ]
   }

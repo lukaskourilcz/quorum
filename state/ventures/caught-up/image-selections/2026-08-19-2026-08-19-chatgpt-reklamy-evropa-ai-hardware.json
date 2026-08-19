@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-19-chatgpt-reklamy-evropa-ai-hardware",
+  "date": "2026-08-19",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 8,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 4,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "This museum or exhibition display of physical models and diagrams is too specific and tangential to the article's focus on AI commercialization, security costs, and chip infrastructure.",
+          "sceneCs": "muzejní expozice s fyzickými modely a obrazovkou"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "The glowing circuit-board brain is a clichéd stock-art trope that violates the dated-aesthetic rule and looks artificially rendered; it does not honestly illustrate modern AI infrastructure.",
+          "sceneCs": "modrný mozek složený z elektronických součástek"
+        },
+        {
+          "candidateId": "pixabay:2528363",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "recognisable-face",
+            "ai-generated-look"
+          ],
+          "reason": "The image shows recognisable human faces composited with circuit patterns, which violates the face rule; it also carries an artificial digital aesthetic.",
+          "sceneCs": "tváře se vzorem plošných spojů"
+        },
+        {
+          "candidateId": "pixabay:3963944",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "This looks like generic CGI of figures and graphs in a wireframe/digital space—too artificial and generic for an article about real business and infrastructure.",
+          "sceneCs": "abstraktní digitální scéna s figurami a grafy"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "A partially visible recognisable human face overlaid with digital particles violates the core rule against faces, even if partially obscured.",
+          "sceneCs": "část obličeje s digitálními částicemi"
+        },
+        {
+          "candidateId": "pixabay:3382521",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Abstract glowing circuit patterns in blue are a tired stock-art cliché suggesting AI; the aesthetic is derivative and overstated rather than honest illustration.",
+          "sceneCs": "abstraktní svítící elektrické obvody"
+        },
+        {
+          "candidateId": "pixabay:3389888",
+          "provider": "pixabay",
+          "fit": 3,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Two hands holding or interacting with a glowing green sphere overlaid with digital patterns; while on-topic for collaboration and AI, the rendering looks artificial and clichéd.",
+          "sceneCs": "dvě ruce drží zelenou svítící kouli"
+        },
+        {
+          "candidateId": "pixabay:7772914",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "A stylised purple circuit-board pattern with a central microchip looks like mid-2000s stock imagery and does not honestly represent modern chip infrastructure or AI systems.",
+          "sceneCs": "abstraktní elektrický obvod s centrálním čipem"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.006284
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-19T07:00:48.852Z"
+}

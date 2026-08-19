@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-19-chatgpt-reklamy-evropa-ai-hardware",
+  "date": "2026-08-19",
+  "locale": "cs",
+  "kicker": "DNESKAi · 19. srp",
+  "headline": "ChatGPT přivede reklamy do 31 evropských zemí. Infrastruktura za tím zdraží",
+  "coverLine": "OpenAI spouští reklamy v Evropě a přiznává, že bezpečnější modely stojí víc výkonu",
+  "standfirst": "OpenAI spouští reklamní platformu v Evropě šest měsíců po americkém pilotu. Zároveň vychází najevo, že zabezpečení velkých modelů prodraží část výpočtů o 20 %.",
+  "passages": [
+    "OpenAI spouští ChatGPT Ads ve 31 evropských zemích od 24. srpna 2026.",
+    "OpenAI přiznal 20% výpočetní overhead u části zátěže v důsledku vícestupňového bezpečnostního monitoringu modelů.",
+    "Cerebras představil WSE-3T s dvojnásobným výkonem a rack systémy CS-4 s trojnásobnou hustotou čipů.",
+    "Landspace přistál s prvním stupněm Zhuque-3 na druhém orbitálním letu.",
+    "ChatGPT se stává reklamním médiem pro inzerenty ve 31 evropských zemích – vydavatelé, zadavatelé reklamy i regulátoři musí přehodnotit, čím chatbot je.",
+    "Dvacetiprocentní nárůst výpočetního overheadu u zabezpečených frontierových modelů naznačuje, že bezpečnost inference má měřitelnou cenu, která se časem promítne do trhu.",
+    "Baidu otevřeně potvrzuje příklon čínského trhu k domácím AI čipům, což oslabuje argumenty pro uvolnění amerických exportních kontrol vůči Nvidii.",
+    "OpenAI neupřesnil, jaký podíl celkové inference podléhá novému bezpečnostnímu monitoringu ani zda a kdy se 20% overhead promítne do cen pro zákazníky."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Artwork by BoardlessAI FRAME"
+}
