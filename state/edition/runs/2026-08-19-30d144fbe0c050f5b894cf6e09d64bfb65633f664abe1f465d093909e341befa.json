@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "runId": "e8651d41-2632-4755-9caf-35d9fec389b2",
+  "date": "2026-08-19",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-08-19T03:02:00.246Z",
+  "completedAt": "2026-08-19T03:02:22.338Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "failed",
+      "startedAt": "2026-08-19T03:02:00.251Z",
+      "completedAt": "2026-08-19T03:02:22.337Z",
+      "durationMs": 22086,
+      "errorCode": "CurationGateError",
+      "errorMessage": "curation gate: primary_source_required"
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 10643,
+      "outputTokens": 938,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.045999
+    }
+  ],
+  "measuredCostUsd": 0.045999,
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "verdicts": []
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "quality:primary_source_required",
+    "curation_gate_failed_before_write:primary_source_required"
+  ],
+  "sourceSummary": {
+    "successfulSources": 30,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "edition-package/1",
+  "date": "2026-08-19",
+  "idempotencyKey": "30d144fbe0c050f5b894cf6e09d64bfb65633f664abe1f465d093909e341befa",
+  "generation": {
+    "models": {
+      "curation": "claude-sonnet-4-6",
+      "writing": "claude-sonnet-4-6"
+    },
+    "costUsd": 0.045999
+  },
+  "reason": "cu-edition decision meetings/2026-08-19-cu-edition",
+  "status": "no_edition",
+  "board": {
+    "meetingRef": "meetings/2026-08-19-cu-edition",
+    "roomUrl": "https://boardless-ai.vercel.app/meetings/2026-08-19-cu-edition",
+    "noEditionReason": "Today's candidate stories did not meet the source rules, so nothing was written."
+  }
+}
