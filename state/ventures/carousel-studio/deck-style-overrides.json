@@ -3,6 +3,18 @@
   "overrides": [
     {
       "venture": "caught-up",
+      "slug": "2026-08-19-chatgpt-reklamy-evropa-ai-hardware",
+      "date": "2026-08-19",
+      "style": "figure",
+      "family": "figure",
+      "variant": "A",
+      "accentSwap": false,
+      "treatment": "mono",
+      "typeScale": 1.1,
+      "changedAt": "2026-08-19T16:27:15.090Z"
+    },
+    {
+      "venture": "caught-up",
       "slug": "2026-08-16-alibaba-modely-3-miliardy-stazeni-marvel-x-men-llama-kimi",
       "date": "2026-08-16",
       "style": "billboard",
@@ -50,5 +62,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-08-16T11:56:25.009Z"
+  "updatedAt": "2026-08-19T16:27:15.090Z"
 }
