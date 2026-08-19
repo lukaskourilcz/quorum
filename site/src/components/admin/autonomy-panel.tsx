@@ -103,7 +103,7 @@ export function AutonomyPanel({ initial, ventures }: { initial: AdminAutonomySna
   const now = new Date().toISOString();
 
   return (
-    <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8" aria-labelledby="autonomy-heading">
+    <section className="min-w-0" aria-labelledby="autonomy-heading">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">Company health</p>

@@ -111,7 +111,7 @@ function SocialLocalePanel({ pack, locale, localized }: { pack: AdminSocialPack;
 
 export function SocialArchive({ packs, unreadableFiles }: { packs: AdminSocialPack[]; unreadableFiles: string[] }) {
   return (
-    <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8" id="social-archive">
+    <section className="min-w-0" id="social-archive">
       <div className="mb-6 flex items-center gap-3">
         <Images aria-hidden="true" className="size-5 text-[var(--accent)]" />
         <div>

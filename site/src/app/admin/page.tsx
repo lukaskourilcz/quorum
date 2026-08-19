@@ -34,6 +34,7 @@ import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { AdminMoneyPanel } from "@/components/admin/money-panel";
 import { IdeasPanel, MonetizationPanel, type FutureIdeaRow } from "@/components/admin/future-panels";
 import { Panel, Tile } from "@/components/admin/panel";
+import { AdminStateMessage } from "@/components/admin/admin-primitives";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
 import { RenderedDeskPanel } from "@/components/admin/rendered-desk-panel";
 import { TittyTuesdaysProposalsPanel } from "@/components/admin/titty-tuesdays-proposals-panel";
@@ -88,15 +89,6 @@ export const metadata: Metadata = {
   robots: { follow: false, index: false, nocache: true },
   title: "Admin"
 };
-
-/**
- * The panels below predate this shell and bring their own page gutters — `mx-auto`,
- * `max-w-[var(--container)]`, `px-5`, `pb-20`. Inside a 1,180px body those are a second set of
- * margins on top of the body's own. Neutralising them here keeps one layout owner without
- * rewriting six working panels that are correct about everything except where they sit.
- */
-const UNWRAP =
-  "[&>section]:mx-0 [&>section]:mt-0 [&>section]:max-w-none [&>section]:px-0 [&>section]:pb-0";
 
 /** URLs an owner would guess from a display name, pointed at the id that name belongs to. */
 const VENTURE_ALIASES: Readonly<Record<string, string>> = {
@@ -758,7 +750,13 @@ export default async function AdminPage({
       workspaces={workspaces}
     >
       <AdminWriteProvider enabled={writesEnabled}>
-      {!writesEnabled ? <Callout tone="warning">Read-only deployment — saving needs the GitHub token, see NEEDED.md. Existing records remain available to review.</Callout> : null}
+      {!writesEnabled ? (
+        <AdminStateMessage
+          description="Saving needs the production GitHub token listed in NEEDED.md. Existing records remain available to review."
+          state="write-disabled"
+          title="This deployment cannot save changes"
+        />
+      ) : null}
       {selectedView === "future" ? (
         <div className="grid min-w-0 gap-4">
           <Panel note="Read-only" title="Ways this could earn">
@@ -783,7 +781,7 @@ export default async function AdminPage({
       ) : !selectedVenture ? (
         <div className="grid min-w-0 gap-4">
           <div
-            className="grid grid-cols-2 gap-px overflow-hidden rounded-[12px] border border-[#26262b] bg-[#26262b] lg:grid-cols-4"
+            className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] bg-[var(--admin-border)] lg:grid-cols-4"
             data-adm-tiles
           >
             <Tile
@@ -820,17 +818,17 @@ export default async function AdminPage({
             <div className="grid gap-3 md:grid-cols-2" data-admin-recent-activity>
               {recentActivity.map((row) => (
                 <Link
-                  className="grid min-w-0 gap-2 rounded-[10px] border border-[#26262b] bg-[#101013] p-4 transition-colors hover:border-[#52525b]"
+                  className="admin-focus-ring grid min-w-0 gap-2 rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface-secondary)] p-4 transition-colors duration-[var(--admin-motion-fast)] hover:border-[var(--admin-border-strong)] hover:bg-[var(--admin-surface-hover)]"
                   data-recent-venture={row.ventureId}
                   href={row.href}
                   key={row.ventureId}
                 >
                   <div className="flex items-baseline justify-between gap-3">
-                    <h3 className="text-[14px] font-semibold text-[#f4f4f5]">{row.ventureName}</h3>
-                    <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#94949c]">{row.count} recent</span>
+                    <h3 className="text-[length:var(--admin-type-section)] font-semibold text-[var(--admin-foreground)]">{row.ventureName}</h3>
+                    <span className="admin-tabular text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">{row.count} recent</span>
                   </div>
-                  <p className="m-0 text-[13px] leading-[1.55] text-[#d4d4d8]">{row.summary}</p>
-                  <p className="m-0 font-mono text-[10px] uppercase tracking-[0.1em] text-[#94949c]">
+                  <p className="m-0 text-[length:var(--admin-type-body)] leading-[1.55] text-[var(--admin-foreground)]">{row.summary}</p>
+                  <p className="m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">
                     {row.latestAt && row.latestLabel
                       ? `Latest: ${row.latestLabel} · ${row.latestAt.slice(0, 10)}`
                       : "No readable record exists yet"}
@@ -858,7 +856,7 @@ export default async function AdminPage({
               initial={autonomy}
               ventures={portfolio.ventures.map(({ id, name }) => ({ id, name }))}
             />
-            <p className="mt-4 text-[12px] leading-[1.55] text-[#94949c]">
+            <p className="mt-4 text-[length:var(--admin-type-control)] leading-[1.55] text-[var(--admin-foreground-muted)]">
               The switches that decide what a project may do next are on that project&rsquo;s own
               page — open a project in the list on the left. Nothing on this page approves spending,
               logins or a new permission; those still need your signature.
@@ -886,7 +884,7 @@ export default async function AdminPage({
               return (
                 <Link
                   aria-current={on ? "page" : undefined}
-                  className="rounded-[9px] px-3 py-[7px] font-mono text-[10.5px] uppercase tracking-[0.12em] transition-colors"
+                  className="admin-focus-ring min-h-[var(--admin-touch-target)] rounded-[var(--admin-radius)] border px-3 py-2 text-[length:var(--admin-type-label)] font-semibold uppercase tracking-[var(--admin-tracking-label)] transition-colors duration-[var(--admin-motion-fast)] md:min-h-[var(--admin-control-height)]"
                   href={`/admin?venture=${selectedVenture.id}&tab=${tab}`}
                   key={tab}
                   scroll={false}
@@ -896,26 +894,26 @@ export default async function AdminPage({
                   // contrast. The border and the tint carry the identity; the label carries the
                   // word, so it gets the colour that lets it be read.
                   style={{
-                    border: `1px solid ${on ? brand : "#3f3f46"}`,
-                    background: on ? brandTint(brand) : "#101013",
-                    color: on ? "#ffffff" : "#a1a1aa"
+                    borderColor: on ? brand : "var(--admin-border-strong)",
+                    background: on ? brandTint(brand) : "var(--admin-surface-secondary)",
+                    color: "var(--admin-foreground)"
                   }}
                 >
                   {label}
                 </Link>
               );
             })}
-            <span className="ml-auto font-mono text-[10px] uppercase tracking-[0.12em] text-[#94949c]">
+            <span className="admin-tabular ml-auto text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">
               {tabView.count} on this tab
             </span>
           </div>
 
           {ventureUnreadable.length ? (
-            <Callout tone="warning">
-              {ventureUnreadable.length} saved{" "}
-              {ventureUnreadable.length === 1 ? "file cannot" : "files cannot"} be read:{" "}
-              {ventureUnreadable.join(", ")}.
-            </Callout>
+            <AdminStateMessage
+              description={`${ventureUnreadable.length} saved ${ventureUnreadable.length === 1 ? "file cannot" : "files cannot"} be read: ${ventureUnreadable.join(", ")}.`}
+              state="malformed"
+              title="Some saved workspace records are unavailable"
+            />
           ) : null}
 
           {/* GoVIRAL owns exactly one artefact and it is not a card, so the workspace leads with
@@ -923,10 +921,10 @@ export default async function AdminPage({
               the venture had to say for itself. */}
           {selectedVenture.id === "goviral" ? <GoViralProfilePanel profile={goviralProfile} /> : null}
 
-          <div className={`min-w-0 ${UNWRAP}`}>{tabView.node}</div>
+          <div className="min-w-0">{tabView.node}</div>
 
           {selectedAgentControls ? (
-            <div className={`min-w-0 ${UNWRAP}`}>
+            <div className="min-w-0">
               <AgentSwitches
                 initialAgents={selectedAgentControls.agents}
                 ventureId={selectedAgentControls.ventureId}

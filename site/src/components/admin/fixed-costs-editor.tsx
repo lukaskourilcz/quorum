@@ -97,7 +97,7 @@ export function FixedCostsEditor({ initialCosts }: { initialCosts: FixedCostEntr
   }
 
   return (
-    <section aria-labelledby="fixed-costs-heading" className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8">
+    <section aria-labelledby="fixed-costs-heading" className="min-w-0">
       <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-5 md:p-8">
         <div className="flex flex-wrap items-start justify-between gap-5">
           <div className="flex items-start gap-3">

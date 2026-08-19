@@ -36,14 +36,14 @@ const MONEY_LABEL: Readonly<Record<MonetizationStatus, string>> = {
 
 export function AdminMoneyPanel({ snapshot }: { snapshot: PublicMoneySnapshot | null }) {
   if (!snapshot) {
-    return <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8"><Callout tone="warning">Quarterly targets and earning methods will appear after the next 06:00 company cycle.</Callout></section>;
+    return <section><Callout tone="warning">Quarterly targets and earning methods will appear after the next 06:00 company cycle.</Callout></section>;
   }
   const kpiCounts = (["on-track", "at-risk", "off-track", "unavailable"] as const).map((status) => ({
     status,
     count: snapshot.quarter.statuses.filter((entry) => entry.status === status).length
   }));
   return (
-    <section aria-labelledby="admin-money-heading" className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8">
+    <section aria-labelledby="admin-money-heading" className="min-w-0">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="flex items-center gap-3"><CircleDollarSign aria-hidden="true" className="size-5 text-[var(--accent)]" /><p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">Quarter and earning plans</p></div>
