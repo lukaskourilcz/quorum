@@ -36,6 +36,7 @@ export default defineConfig({
   ],
   reporter: [["list"]],
   retries: 0,
+  snapshotPathTemplate: "{testDir}/snapshots/{arg}{ext}",
   testDir: "./tests/e2e",
   testMatch: /admin-visual-qa\.spec\.ts/,
   timeout: 120_000,
