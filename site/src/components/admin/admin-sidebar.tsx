@@ -64,7 +64,7 @@ function DestinationLink({
       <Icon aria-hidden="true" className="size-4 shrink-0" strokeWidth={1.8} />
       {!collapsed ? <span className="min-w-0 truncate">{destination.label}</span> : null}
       {!collapsed && typeof destination.count === "number" ? (
-        <span className="admin-tabular ml-auto shrink-0 font-mono text-[length:var(--admin-type-micro)] text-[var(--admin-sidebar-muted)]">
+        <span className={`admin-tabular ml-auto shrink-0 font-mono text-[length:var(--admin-type-micro)] ${destination.active ? "text-[var(--admin-sidebar-foreground)]" : "text-[var(--admin-sidebar-muted)]"}`}>
           {destination.count}
         </span>
       ) : null}

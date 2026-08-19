@@ -72,6 +72,13 @@ describe("Admin shell", () => {
     expect(html).toContain('aria-current="page"');
     expect(html).toContain('action="/admin/logout"');
     expect(html).toContain("Protected · noindex");
+    expect(html).toContain("Search Admin");
+    expect(html).toContain('aria-keyshortcuts="Meta+K Control+K"');
+    expect(html).toContain('aria-label="Primary Admin navigation"');
+    expect(html).toContain('data-personal-growth-slot="held-until-issue-370-passes"');
+    expect(html).toContain("Workspaces");
+    expect(html).toContain("More");
+    expect(html).not.toContain('href="/admin?venture=personal-growth"');
     expect(html).toContain("Real server content");
   });
 

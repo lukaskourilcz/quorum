@@ -6,6 +6,8 @@ import { LockKeyhole } from "lucide-react";
 import type { AdminShellPreferences, AdminTheme } from "@/lib/admin-shell-preferences";
 import type { AdminNavigationGroup } from "./admin-shell-types";
 import { AdminSidebar } from "./admin-sidebar";
+import { AdminCommandPalette } from "./admin-command-palette";
+import { AdminMobileNav } from "./admin-mobile-nav";
 
 async function persistPreference(patch: Partial<AdminShellPreferences>): Promise<void> {
   const response = await fetch("/admin/api/preferences", {
@@ -43,28 +45,39 @@ export function AdminShellClient({
   const [theme, setTheme] = useState<AdminTheme>(initialPreferences.theme);
   const [collapsed, setCollapsed] = useState(initialPreferences.collapsed);
   const [preferenceStatus, setPreferenceStatus] = useState("");
+  const [preferencePending, setPreferencePending] = useState(false);
   const shellStyle = {
     "--admin-current-sidebar-width": collapsed ? "var(--admin-rail-width)" : "var(--admin-sidebar-width)",
     "--admin-section-accent": brand
   } as CSSProperties;
 
-  const changeTheme = (next: AdminTheme) => {
+  const changeTheme = async (next: AdminTheme) => {
     const previous = theme;
     setTheme(next);
     setPreferenceStatus("");
-    void persistPreference({ theme: next }).catch(() => {
+    setPreferencePending(true);
+    try {
+      await persistPreference({ theme: next });
+    } catch {
       setTheme(previous);
       setPreferenceStatus("Theme was not saved. Try again.");
-    });
+    } finally {
+      setPreferencePending(false);
+    }
   };
-  const changeCollapsed = (next: boolean) => {
+  const changeCollapsed = async (next: boolean) => {
     const previous = collapsed;
     setCollapsed(next);
     setPreferenceStatus("");
-    void persistPreference({ collapsed: next }).catch(() => {
+    setPreferencePending(true);
+    try {
+      await persistPreference({ collapsed: next });
+    } catch {
       setCollapsed(previous);
       setPreferenceStatus("Sidebar preference was not saved. Try again.");
-    });
+    } finally {
+      setPreferencePending(false);
+    }
   };
 
   return (
@@ -72,6 +85,7 @@ export function AdminShellClient({
       className="min-h-svh bg-[var(--admin-desktop)] text-[var(--admin-foreground)] md:h-svh md:overflow-hidden md:px-[var(--admin-desktop-padding-inline)] md:py-[var(--admin-desktop-padding-block)]"
       data-admin
       data-admin-theme={theme}
+      data-preference-pending={preferencePending}
       style={shellStyle}
     >
       <a className="admin-focus-ring fixed left-3 top-3 z-[200] -translate-y-24 rounded-[var(--admin-radius)] bg-[var(--admin-surface-elevated)] px-3 py-2 text-[length:var(--admin-type-control)] shadow-[var(--admin-shadow-elevated)] focus:translate-y-0" href="#admin-content">
@@ -97,12 +111,10 @@ export function AdminShellClient({
             <span className="ml-auto hidden items-center gap-1.5 rounded-full border border-[var(--admin-border-strong)] px-2.5 py-1 font-mono text-[length:var(--admin-type-micro)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)] sm:flex">
               <LockKeyhole aria-hidden="true" className="size-3" /> Protected · noindex
             </span>
-            <form action="/admin/logout" className="sm:hidden" method="post">
-              <button className="admin-focus-ring min-h-[var(--admin-touch-target)] rounded-[var(--admin-radius)] px-2 text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-foreground-muted)]" type="submit">Sign out</button>
-            </form>
+            <AdminCommandPalette groups={groups} theme={theme} />
           </header>
 
-          <main className="min-h-0 flex-1 overflow-y-auto px-4 pb-20 pt-5 md:px-6 md:pb-12 md:pt-6" data-admin-content id="admin-content" tabIndex={-1}>
+          <main className="min-h-0 flex-1 overflow-y-auto px-4 pb-[calc(5rem+env(safe-area-inset-bottom))] pt-5 md:px-6 md:pb-12 md:pt-6" data-admin-content id="admin-content" tabIndex={-1}>
             <div className="mx-auto w-full max-w-[1180px]">
               <div className="mb-5 flex items-end justify-between gap-5" data-admin-page-heading>
                 <div className="min-w-0">
@@ -118,6 +130,7 @@ export function AdminShellClient({
             </div>
           </main>
         </div>
+        <AdminMobileNav groups={groups} onThemeChange={changeTheme} theme={theme} />
       </div>
     </div>
   );
