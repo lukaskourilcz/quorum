@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "cycleId": "20260819080436-article-am",
+  "date": "2026-08-19",
+  "slot": "am",
+  "status": "published",
+  "articleRef": "a261b594cd84a76c89168b66dbdd4f802f0a2fa3fa8ae0f0eaa1aa0f4c959e43",
+  "slateSource": "derived",
+  "subjectRefs": [
+    "ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+  ],
+  "spentUsd": null,
+  "generatedAt": "2026-08-19T08:04:36.493Z"
+}

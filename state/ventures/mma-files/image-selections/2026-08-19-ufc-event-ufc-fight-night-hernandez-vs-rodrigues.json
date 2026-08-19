@@ -1,0 +1,136 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+  "date": "2026-08-19",
+  "rung": "search",
+  "selected": "pexels:28560751",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:28560751",
+      "reason": "Clear MMA action in a cage with two fighters in combat stance, well-lit and sharp, illustrates the sport effectively without being a recognisable portrait of the named fighters.",
+      "candidates": [
+        {
+          "candidateId": "pexels:28560751",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Clear MMA action in a cage with two fighters in combat stance, well-lit and sharp, illustrates the sport effectively without being a recognisable portrait of the named fighters.",
+          "sceneCs": "dva bojovníci v oktagonu"
+        },
+        {
+          "candidateId": "pixabay:1099616",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Car interior with custom seats has nothing to do with MMA or the article.",
+          "sceneCs": "interiér vozidla se sedadly"
+        },
+        {
+          "candidateId": "pexels:9968139",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "low-quality"
+          ],
+          "reason": "An old, faded photograph of a boxing/fighting ring is too poorly preserved and the aged aesthetic dates it visually.",
+          "sceneCs": "prázdný ringový prostor s lanky"
+        },
+        {
+          "candidateId": "pixabay:597166",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Empty abandoned interior space bears no relation to MMA.",
+          "sceneCs": "opuštěná místnost s okny"
+        },
+        {
+          "candidateId": "pexels:28560745",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Dynamic MMA action photograph showing two fighters engaged in combat within the cage, well-exposed and sharp, effectively illustrates the sport.",
+          "sceneCs": "dva bojovníci v oktagonu"
+        },
+        {
+          "candidateId": "pixabay:7819801",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Industrial machinery or equipment has no connection to MMA.",
+          "sceneCs": "průmyslová machinery"
+        },
+        {
+          "candidateId": "pexels:6539276",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "An ice hockey arena is the wrong sport and wrong venue type for an MMA article.",
+          "sceneCs": "prázdná zimní aréna"
+        },
+        {
+          "candidateId": "pixabay:1853520",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "A generic arena interior (appears to be a different sport venue) does not illustrate MMA fighting.",
+          "sceneCs": "moderní sportovní aréna se stropem"
+        },
+        {
+          "candidateId": "pexels:28560744",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "MMA action in cage with two fighters and referee visible; motion blur in foreground does not significantly detract from the clear illustration of the sport.",
+          "sceneCs": "dva bojovníci v oktagonu"
+        },
+        {
+          "candidateId": "pexels:36293741",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "A modern empty training mat facility with no fighters or action present does not illustrate the UFC fight described.",
+          "sceneCs": "prázdný matovaný prostor sportovní haly"
+        },
+        {
+          "candidateId": "pixabay:165406",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Football stadium seating is completely unrelated to MMA.",
+          "sceneCs": "fotbalový stadión"
+        },
+        {
+          "candidateId": "pexels:5645997",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Large stadium seating for spectator events does not illustrate a specific UFC fight or MMA action.",
+          "sceneCs": "velký arenální stadión"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.008023
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-19T08:04:36.493Z"
+}
