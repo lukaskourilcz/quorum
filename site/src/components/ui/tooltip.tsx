@@ -77,6 +77,10 @@ export function Tooltip({
   content,
   label,
   className,
+  bubbleClassName,
+  labelClassName,
+  contentClassName,
+  scopeAttributes,
   side = "top"
 }: {
   /** The element the tooltip describes. It must be able to take a ref and DOM handlers. */
@@ -86,6 +90,11 @@ export function Tooltip({
   /** An optional heading above the body — the slot's hour and room, typically. */
   label?: ReactNode;
   className?: string;
+  bubbleClassName?: string;
+  labelClassName?: string;
+  contentClassName?: string;
+  /** Data attributes copied to the portal bubble for scoped token systems. */
+  scopeAttributes?: Record<`data-${string}`, string>;
   side?: "top" | "bottom";
 }) {
   const [placement, setPlacement] = useState<Placement | null>(null);
@@ -143,11 +152,13 @@ export function Tooltip({
       {placement
         ? createPortal(
             <span
+              {...scopeAttributes}
               className={cn(
                 "pointer-events-none fixed z-[100] w-max max-w-[min(320px,60vw)] -translate-x-1/2",
                 "rounded-lg border border-[#3f3f46] bg-[#101013] px-3 py-2 shadow-[0_18px_40px_rgba(0,0,0,.65)]",
                 "[animation:bai-tip_120ms_ease-out]",
-                placement.side === "top" ? "-translate-y-full" : ""
+                placement.side === "top" ? "-translate-y-full" : "",
+                bubbleClassName
               )}
               data-tooltip-side={placement.side}
               id={id}
@@ -155,11 +166,11 @@ export function Tooltip({
               style={{ left: `${placement.left}px`, top: `${placement.top}px` }}
             >
               {label ? (
-                <span className="mb-1 block font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#94949c]">
+                <span className={cn("mb-1 block font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#94949c]", labelClassName)}>
                   {label}
                 </span>
               ) : null}
-              <span className="block text-[12px] leading-[1.5] text-[#e4e4e7]">{content}</span>
+              <span className={cn("block text-[12px] leading-[1.5] text-[#e4e4e7]", contentClassName)}>{content}</span>
             </span>,
             document.body
           )
