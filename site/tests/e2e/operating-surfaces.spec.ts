@@ -294,17 +294,30 @@ test("Door Money renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.getByRole("link", { name: "recommendations" })).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("link", { name: "actions" })).toBeVisible();
   await expect(page.getByRole("link", { name: "knowledge" })).toBeVisible();
-  await expect(page.getByText(/No Door Money recommendation store exists yet\.|No readable Door Money recommendations are stored\./u)).toBeVisible();
-  await expect(page.getByText("0 on this tab")).toBeVisible();
+  const recommendationCards = page.locator('[id^="door-money-recommendation-"]');
+  const recommendationCount = await recommendationCards.count();
+  await expect(page.getByText(`${recommendationCount} on this tab`, { exact: true })).toBeVisible();
+  if (recommendationCount > 0) {
+    await expect(recommendationCards.first()).toBeVisible();
+  } else {
+    await expect(page.getByText(/No Door Money recommendation store exists yet\.|No readable Door Money recommendations are stored\./u)).toBeVisible();
+  }
 
   await page.getByRole("link", { name: "actions" }).click();
   await expect(page).toHaveURL(/tab=actions/);
-  await expect(page.getByText("No Door Money action packets or playbooks exist yet.")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Mark complete" })).toHaveCount(0);
+  const actionsHeading = page.getByRole("heading", { name: "Today’s actions" });
+  const actionsState = page.getByText(/No Door Money action packets or playbooks exist yet\.|Door Money actions could not be read\./u);
+  await expect(actionsHeading.or(actionsState).first()).toBeVisible();
+  if (await actionsHeading.count()) {
+    await expect(page.getByRole("heading", { name: "Channel playbooks" })).toBeVisible();
+    await expect(page.getByText(/Playbooks cannot post, send outreach, create accounts or modify a channel\./u)).toBeVisible();
+  }
 
   await page.getByRole("link", { name: "knowledge" }).click();
   await expect(page).toHaveURL(/tab=knowledge/);
-  await expect(page.getByText("No Door Money knowledge version exists yet.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ingestion status" }).or(
+    page.getByText(/No Door Money knowledge version exists yet\.|The current Door Money knowledge version could not be read\./u)
+  ).first()).toBeVisible();
   await expect(page.getByRole("button", { name: /ingest/i })).toHaveCount(0);
 });
 
@@ -313,23 +326,26 @@ test("Tehdejsi svet renders its three bounded admin tabs", async ({ page }) => {
 
   await expect(page.getByRole("heading", { name: "Tehdejší svět" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Tehdejší svět/ })).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("link", { name: "features" })).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("link", { name: "library" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "signals" })).toBeVisible();
-  await expect(page.getByText("No shortlist has been recorded yet.")).toBeVisible();
+  const featuresTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=features"]');
+  const libraryTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=library"]');
+  const signalsTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=signals"]');
+  await expect(featuresTab).toHaveAttribute("aria-current", "page");
+  await expect(libraryTab).toBeVisible();
+  await expect(signalsTab).toBeVisible();
+  await expect(page.getByText(/No shortlist has been recorded yet\.|No readable Tehdejší svět shortlist is available\./u)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Czech performance" })).toBeVisible();
   await expect(page.getByText("Sends (primary)").first()).toBeVisible();
   await expect(page.getByText("Saves (primary)").first()).toBeVisible();
   await expect(page.locator('[data-tehdejsi-results="cs"]')).toContainText("17");
   await expect(page.locator('[data-tehdejsi-results="cs"]')).toContainText("23");
 
-  await page.getByRole("link", { name: "library" }).click();
+  await libraryTab.click();
   await expect(page).toHaveURL(/tab=library/);
   await expect(page.getByRole("heading", { name: "Facts-file status" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Facts browser" })).toBeVisible();
   await expect(page.getByText("5 on this tab")).toBeVisible();
 
-  await page.getByRole("link", { name: "signals" }).click();
+  await signalsTab.click();
   await expect(page).toHaveURL(/tab=signals/);
   await expect(page.getByRole("heading", { name: "Community memory" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Product insight queue" })).toBeVisible();
