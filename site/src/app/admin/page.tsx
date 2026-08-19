@@ -78,7 +78,7 @@ import { publicMeetingHref } from "@/lib/idea-ledger-model";
 import { getPublicMoneySnapshot } from "@/lib/money-records";
 import { getPublicStandups } from "@/lib/standup-records";
 import { formatUsd } from "@/lib/utils";
-import { brandTint, ventureBrand } from "@/lib/venture-brand";
+import { ventureBrand } from "@/lib/venture-brand";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -887,14 +887,14 @@ export default async function AdminPage({
                   href={`/admin?venture=${selectedVenture.id}&tab=${tab}`}
                   key={tab}
                   scroll={false}
-                  // The active chip is brand border, brand tint and *white* text, not brand text.
-                  // Brand on a 15%-brand ground measures 1.00:1 — the two are the same hue — and
-                  // "fighters" on FightAIQ's pale red was unreadable rather than merely low
-                  // contrast. The border and the tint carry the identity; the label carries the
-                  // word, so it gets the colour that lets it be read.
+                  // Resolve the tint against the current Admin surface instead of the old
+                  // near-black canvas. This keeps the same brand signal in both themes while the
+                  // shared foreground token keeps the label readable.
                   style={{
                     borderColor: on ? brand : "var(--admin-border-strong)",
-                    background: on ? brandTint(brand) : "var(--admin-surface-secondary)",
+                    background: on
+                      ? `color-mix(in srgb, ${brand} 15%, var(--admin-surface-secondary))`
+                      : "var(--admin-surface-secondary)",
                     color: "var(--admin-foreground)"
                   }}
                 >

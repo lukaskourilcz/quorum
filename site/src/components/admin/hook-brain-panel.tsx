@@ -16,7 +16,7 @@ import type { HookBrainSnapshot } from "@/lib/hook-brain";
 
 function Section({ id, title, subtitle, children }: { id: string; title: string; subtitle: string; children: React.ReactNode }) {
   return (
-    <section aria-labelledby={id}>
+    <section aria-labelledby={id} className="min-w-0">
       <AdminCard>
         <AdminCardHeader>
           <AdminSectionHeading description={subtitle} title={<span id={id}>{title}</span>} />
@@ -39,7 +39,7 @@ function Scroller({ label, children }: { label: string; children: React.ReactNod
 
 export function HookBrainAdminPanel({ snapshot }: { snapshot: HookBrainSnapshot }) {
   return (
-    <div className="mt-8 grid gap-6">
+    <div className="mt-8 grid min-w-0 gap-6">
       <AdminCallout>
         The studio assigns every hook. A gate licenses a claim, so a hook may only front an item
         whose metadata makes its <code>truthRequires</code> true — and when nothing is eligible the

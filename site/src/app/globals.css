@@ -163,7 +163,7 @@ img {
   --admin-section-accent: var(--admin-brand);
 
   /* Semantic state */
-  --admin-information: #0064d1;
+  --admin-information: #005fc7;
   --admin-information-soft: rgba(0, 100, 209, 0.1);
   --admin-success: #1f7a35;
   --admin-success-soft: rgba(31, 122, 53, 0.11);
