@@ -1,13 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 import {
-  ADMIN_SESSION_COOKIE,
-  ADMIN_SESSION_MAX_AGE_SECONDS,
-  createAdminSessionToken
-} from "./src/lib/admin-session";
+  adminE2EServerEnv,
+  adminE2EStorageState
+} from "./tests/e2e/admin-e2e-auth";
 
-const adminUser = "e2e-owner";
-const adminPassword = "e2e-password";
-const sessionStartedAt = Date.now();
 const e2ePort = process.env.E2E_PORT ?? "3187";
 const e2eBaseUrl = `http://localhost:${e2ePort}`;
 const desktopChrome = {
@@ -38,27 +34,7 @@ export default defineConfig({
   reporter: [["list"]],
   use: {
     baseURL: e2eBaseUrl,
-    storageState: {
-      cookies: [
-        {
-          domain: "localhost",
-          expires:
-            Math.floor(sessionStartedAt / 1_000) +
-            ADMIN_SESSION_MAX_AGE_SECONDS,
-          httpOnly: true,
-          name: ADMIN_SESSION_COOKIE,
-          path: "/",
-          sameSite: "Strict",
-          secure: false,
-          value: createAdminSessionToken(
-            adminUser,
-            adminPassword,
-            sessionStartedAt
-          )
-        }
-      ],
-      origins: []
-    },
+    storageState: adminE2EStorageState(),
     trace: "on-first-retry"
   },
   projects: [
@@ -83,11 +59,7 @@ export default defineConfig({
     // invalidating in-flight hydration. The explicit, bounded heap lets that project finish; the
     // package runner then starts a fresh server for the state-writing project.
     command: `pnpm dev:e2e --webpack --port ${e2ePort}`,
-    env: {
-      ADMIN_USER: adminUser,
-      ADMIN_PASSWORD: adminPassword,
-      BOARDLESSAI_REPO_ROOT: process.cwd().replace(/\/site$/, "")
-    },
+    env: adminE2EServerEnv(process.cwd().replace(/\/site$/, "")),
     url: e2eBaseUrl,
     reuseExistingServer: false,
     timeout: 60_000
