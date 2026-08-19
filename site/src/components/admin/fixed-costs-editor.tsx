@@ -2,9 +2,15 @@
 
 import { useState } from "react";
 import { CircleDollarSign, Plus, Save, Trash2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Callout } from "@/components/ui/callout";
+import {
+  AdminButton,
+  AdminEntityBadge,
+  AdminInput,
+  AdminLabel,
+  AdminSectionHeading,
+  AdminSelect,
+  AdminStateMessage,
+} from "./admin-primitives";
 import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import {
   fixedCostCategories,
@@ -97,63 +103,62 @@ export function FixedCostsEditor({ initialCosts }: { initialCosts: FixedCostEntr
   }
 
   return (
-    <section aria-labelledby="fixed-costs-heading" className="min-w-0">
-      <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-5 md:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-5">
-          <div className="flex items-start gap-3">
-            <CircleDollarSign aria-hidden="true" className="mt-1 size-5 shrink-0 text-[var(--accent)]" />
-            <div>
-              <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">Money</p>
-              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.04em]" id="fixed-costs-heading">Fixed monthly costs</h2>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--fog)]">Add only subscriptions and services you actually pay for. AI usage is counted separately from meeting receipts.</p>
-            </div>
-          </div>
-          <Badge tone={costs.length ? "warning" : "neutral"}>{formatUsd(monthlyTotal)} each month</Badge>
+    <section aria-labelledby="fixed-costs-heading" className="grid min-w-0 gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="flex items-start gap-2">
+          <CircleDollarSign aria-hidden className="mt-0.5 size-4 shrink-0 text-[var(--admin-section-accent)]" />
+          <AdminSectionHeading description="Add only subscriptions and services you actually pay for. AI usage is counted separately." title="Recurring non-API spend" />
         </div>
+        <AdminEntityBadge>{formatUsd(monthlyTotal)} each month</AdminEntityBadge>
+      </div>
+      <span className="sr-only" id="fixed-costs-heading">Fixed monthly costs</span>
 
-        <form className="mt-7" onSubmit={save}><fieldset disabled={!writesEnabled}>
+      <form onSubmit={save}><fieldset disabled={!writesEnabled}>
           {costs.length ? (
-            <div className="grid gap-4">
+            <div className="divide-y divide-[var(--admin-border)] border-y border-[var(--admin-border)]">
               {costs.map((cost, index) => (
-                <fieldset className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-4" key={cost.rowId}>
-                  <legend className="px-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--fog)]">Cost {index + 1}</legend>
-                  <div className="grid gap-4 md:grid-cols-[minmax(12rem,1.4fr)_minmax(8rem,0.7fr)_minmax(10rem,0.8fr)_minmax(10rem,0.8fr)_auto] md:items-end">
+                <fieldset className="py-3" key={cost.rowId}>
+                  <legend className="px-1 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Cost {index + 1}</legend>
+                  <div className="grid gap-3 md:grid-cols-[minmax(12rem,1.4fr)_minmax(8rem,0.7fr)_minmax(10rem,0.8fr)_minmax(10rem,0.8fr)_auto] md:items-end">
                     <div>
-                      <label className="text-sm font-semibold" htmlFor={`fixed-cost-name-${cost.rowId}`}>Name</label>
-                      <input className="mt-2 min-h-11 w-full rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] px-3" id={`fixed-cost-name-${cost.rowId}`} maxLength={120} onChange={(event) => update(cost.rowId, { name: event.target.value })} required type="text" value={cost.name} />
+                      <AdminLabel htmlFor={`fixed-cost-name-${cost.rowId}`}>Name</AdminLabel>
+                      <AdminInput id={`fixed-cost-name-${cost.rowId}`} maxLength={120} onChange={(event) => update(cost.rowId, { name: event.target.value })} required type="text" value={cost.name} />
                     </div>
                     <div>
-                      <label className="text-sm font-semibold" htmlFor={`fixed-cost-amount-${cost.rowId}`}>Monthly USD</label>
-                      <input className="mt-2 min-h-11 w-full rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] px-3 tabular-nums" id={`fixed-cost-amount-${cost.rowId}`} min="0.0001" onChange={(event) => update(cost.rowId, { monthlyUsd: event.target.valueAsNumber })} required step="0.0001" type="number" value={Number.isNaN(cost.monthlyUsd) ? "" : cost.monthlyUsd} />
+                      <AdminLabel htmlFor={`fixed-cost-amount-${cost.rowId}`}>Monthly USD</AdminLabel>
+                      <AdminInput className="admin-tabular" id={`fixed-cost-amount-${cost.rowId}`} inputMode="decimal" min="0.0001" onChange={(event) => update(cost.rowId, { monthlyUsd: event.target.valueAsNumber })} required step="0.0001" type="number" value={Number.isNaN(cost.monthlyUsd) ? "" : cost.monthlyUsd} />
                     </div>
                     <div>
-                      <label className="text-sm font-semibold" htmlFor={`fixed-cost-category-${cost.rowId}`}>Category</label>
-                      <select className="mt-2 min-h-11 w-full rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] px-3" id={`fixed-cost-category-${cost.rowId}`} onChange={(event) => update(cost.rowId, { category: event.target.value as FixedCostCategory })} value={cost.category}>
+                      <AdminLabel htmlFor={`fixed-cost-category-${cost.rowId}`}>Category</AdminLabel>
+                      <AdminSelect id={`fixed-cost-category-${cost.rowId}`} onChange={(event) => update(cost.rowId, { category: event.target.value as FixedCostCategory })} value={cost.category}>
                         {fixedCostCategories.map((category) => <option key={category} value={category}>{categoryLabel(category)}</option>)}
-                      </select>
+                      </AdminSelect>
                     </div>
                     <div>
-                      <label className="text-sm font-semibold" htmlFor={`fixed-cost-since-${cost.rowId}`}>Paid since</label>
-                      <input className="mt-2 min-h-11 w-full rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] px-3" id={`fixed-cost-since-${cost.rowId}`} onChange={(event) => update(cost.rowId, { since: event.target.value })} required type="date" value={cost.since} />
+                      <AdminLabel htmlFor={`fixed-cost-since-${cost.rowId}`}>Paid since</AdminLabel>
+                      <AdminInput id={`fixed-cost-since-${cost.rowId}`} onChange={(event) => update(cost.rowId, { since: event.target.value })} required type="date" value={cost.since} />
                     </div>
-                    <Button aria-label={`Remove ${cost.name || `cost ${index + 1}`}`} disabled={pending || !writesEnabled} onClick={() => setCosts((current) => current.filter((entry) => entry.rowId !== cost.rowId))} size="small" type="button" variant="ghost">
+                    <AdminButton aria-label={`Remove ${cost.name || `cost ${index + 1}`}`} disabled={pending || !writesEnabled} onClick={() => setCosts((current) => current.filter((entry) => entry.rowId !== cost.rowId))} type="button" variant="ghost">
                       <Trash2 aria-hidden="true" className="size-4" />
-                      <span className="md:sr-only">Remove</span>
-                    </Button>
+                      <span>Remove</span>
+                    </AdminButton>
                   </div>
                 </fieldset>
               ))}
             </div>
           ) : (
-            <Callout>No fixed costs are saved. Money shows $0 for this part and explains that no real amount has been entered.</Callout>
+            <AdminStateMessage description="Money shows $0 for this part and explains that no real amount has been entered." state="initial-empty" title="No fixed costs are saved" />
           )}
 
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Button disabled={pending || !writesEnabled} onClick={add} type="button" variant="secondary"><Plus aria-hidden="true" className="size-4" />Add cost</Button>
-            <Button disabled={pending || !writesEnabled} type="submit"><Save aria-hidden="true" className="size-4" />{pending ? "Saving…" : "Save fixed costs"}</Button>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <AdminButton disabled={pending || !writesEnabled} onClick={add} type="button" variant="secondary"><Plus aria-hidden="true" className="size-4" />Add cost</AdminButton>
+            <AdminButton disabled={pending || !writesEnabled} type="submit" variant="primary"><Save aria-hidden="true" className="size-4" />{pending ? "Saving…" : "Save fixed costs"}</AdminButton>
           </div>
         </fieldset></form>
-        <div aria-live="polite" className="mt-4 min-h-6 text-sm" role={error ? "alert" : "status"}>{error ? <span className="text-[var(--destructive)]">{error} Reload the page before trying again if another edit was saved.</span> : <span className="text-[var(--fog)]">{message}</span>}</div>
+      <div aria-live="polite" role={error ? "alert" : "status"}>
+        {error ? <AdminStateMessage description="Reload the page before trying again if another edit was saved." state="error" title={error} /> : null}
+        {!error && message && message !== "Saving…" ? <AdminStateMessage state="success" title={message} /> : null}
+        {!error && message === "Saving…" ? <AdminStateMessage state="loading" title="Saving fixed costs" /> : null}
       </div>
     </section>
   );

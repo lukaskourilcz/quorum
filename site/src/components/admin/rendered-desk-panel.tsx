@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AdminButton, AdminStateMessage } from "./admin-primitives";
 import type { RenderedArticle, RenderedDesk } from "@/lib/rendered-desk";
 
 /**
@@ -25,8 +26,8 @@ function domainOf(url: string | null): string | null {
 
 function ShareCard({ article }: { article: RenderedArticle }) {
   return (
-    <article className="grid overflow-hidden rounded-[10px] border border-[#26262b] bg-[#0e0e11]">
-      <div className="flex aspect-[1.91/1] items-center justify-center overflow-hidden bg-[#141418]">
+    <article className="grid overflow-hidden rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface-secondary)]">
+      <div className="flex aspect-[1.91/1] items-center justify-center overflow-hidden bg-[var(--admin-surface-muted)]">
         {article.imageHref ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -36,22 +37,22 @@ function ShareCard({ article }: { article: RenderedArticle }) {
             src={article.imageHref}
           />
         ) : (
-          <p className="m-0 max-w-[36ch] px-4 text-center font-mono text-[10px] uppercase leading-[1.6] tracking-[0.1em] text-[#a1a1aa]">
+          <p className="m-0 max-w-[36ch] px-4 text-center text-[length:var(--admin-type-micro)] font-semibold uppercase leading-[1.6] tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">
             {article.imageNote ?? "No picture recorded"}
           </p>
         )}
       </div>
-      <div className="grid gap-1 border-t border-[#1e1e22] p-3.5">
-        <span className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">
+      <div className="grid gap-1 border-t border-[var(--admin-border)] p-3.5">
+        <span className="text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">
           {domainOf(article.url) ?? article.ventureName}
         </span>
-        <span className="text-[13.5px] font-semibold leading-[1.4] text-[#f4f4f5]">{article.title}</span>
+        <span className="text-[length:var(--admin-type-section)] font-semibold leading-[1.4] text-[var(--admin-foreground)]">{article.title}</span>
         {article.description ? (
-          <span className="line-clamp-2 text-[12px] leading-[1.5] text-[#94949c]">{article.description}</span>
+          <span className="line-clamp-2 text-[length:var(--admin-type-control)] leading-[1.5] text-[var(--admin-foreground-muted)]">{article.description}</span>
         ) : null}
         {article.url ? (
           <a
-            className="mt-1 truncate font-mono text-[10px] text-[#a1a1aa] underline"
+            className="admin-focus-ring mt-1 truncate text-[length:var(--admin-type-micro)] text-[var(--admin-foreground-muted)] underline underline-offset-2"
             href={article.url}
             rel="noreferrer"
             target="_blank"
@@ -59,7 +60,7 @@ function ShareCard({ article }: { article: RenderedArticle }) {
             {article.url}
           </a>
         ) : (
-          <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[#a1a1aa]">
+          <span className="mt-1 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">
             No published address was recorded
           </span>
         )}
@@ -74,9 +75,7 @@ export function RenderedDeskPanel({ desk }: { desk: RenderedDesk }) {
 
   if (!day) {
     return (
-      <p className="m-0 text-[13px] leading-[1.6] text-[#94949c]">
-        Nothing has been recorded in the last three days.
-      </p>
+      <AdminStateMessage state="initial-empty" title="Nothing has been recorded in the last three days" />
     );
   }
 
@@ -88,29 +87,26 @@ export function RenderedDeskPanel({ desk }: { desk: RenderedDesk }) {
         {desk.days.map((entry, entryIndex) => {
           const on = entryIndex === index;
           return (
-            <button
+            <AdminButton
               aria-pressed={on}
-              className="rounded-[9px] border px-3 py-[7px] font-mono text-[10.5px] uppercase tracking-[0.12em] transition-colors"
+              className={on ? "border-[var(--admin-section-accent)] bg-[var(--admin-surface-selected)]" : undefined}
               key={entry.date}
               onClick={() => setIndex(entryIndex)}
-              style={{
-                borderColor: on ? "#a1a1aa" : "#3f3f46",
-                background: on ? "#1a1a1f" : "#101013",
-                color: on ? "#ffffff" : "#a1a1aa"
-              }}
               type="button"
+              variant="secondary"
             >
               {label(entryIndex)} · {entry.date.slice(5)}
-            </button>
+            </AdminButton>
           );
         })}
       </div>
 
       {day.empty ? (
-        <p className="m-0 rounded-[9px] border border-[#3f3f46] bg-[#101013] p-3 text-[13px] leading-[1.55] text-[#d4d4d8]">
-          Nothing was published or produced on {day.date}. A quiet day is a real result — the
-          checks stop work that cannot be supported, and stopping costs nothing.
-        </p>
+        <AdminStateMessage
+          description="A quiet day is a real result: the checks stop unsupported work, and stopping costs nothing."
+          state="initial-empty"
+          title={`Nothing was published or produced on ${day.date}`}
+        />
       ) : null}
 
       {day.articles.length ? (
@@ -122,29 +118,29 @@ export function RenderedDeskPanel({ desk }: { desk: RenderedDesk }) {
       ) : null}
 
       {day.datasets.length || day.streams.length || day.designs.length ? (
-        <ul className="m-0 grid list-none gap-1 p-0 text-[12.5px] text-[#a1a1aa]">
+        <ul className="m-0 grid list-none gap-1 p-0 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">
           {day.datasets.map((entry) => (
             <li key={`${entry.ventureId}-${entry.dataset}`}>
-              <span className="text-[#d4d4d8]">{entry.dataset}</span> — {entry.added} new{" "}
+              <span className="font-medium text-[var(--admin-foreground)]">{entry.dataset}</span> — {entry.added} new{" "}
               {entry.added === 1 ? "entry" : "entries"}
             </li>
           ))}
           {day.streams.map((entry) => (
             <li key={entry.stream}>
-              <span className="text-[#d4d4d8]">{entry.stream}</span> — {entry.added} new{" "}
+              <span className="font-medium text-[var(--admin-foreground)]">{entry.stream}</span> — {entry.added} new{" "}
               {entry.added === 1 ? "item" : "items"}
             </li>
           ))}
           {day.designs.map((entry) => (
             <li key={entry.ventureId}>
-              <span className="text-[#d4d4d8]">{entry.ventureId}</span> — {entry.note}
+              <span className="font-medium text-[var(--admin-foreground)]">{entry.ventureId}</span> — {entry.note}
             </li>
           ))}
         </ul>
       ) : null}
 
       {/* No archive and no cleanup: this is a window over records that stay where they are. */}
-      <p className="m-0 font-mono text-[10px] uppercase tracking-[0.1em] text-[#a1a1aa]">
+      <p className="admin-tabular m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">
         The last three days only · older days stay in the delivery records
         {desk.unreadable > 0 ? ` · ${desk.unreadable} could not be read` : ""}
       </p>
