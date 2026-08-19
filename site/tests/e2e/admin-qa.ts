@@ -48,7 +48,10 @@ export async function setAdminPreferences(
 export function captureAdminRuntimeFailures(page: Page): string[] {
   const failures: string[] = [];
   page.on("console", (message) => {
-    if (message.type() === "error") failures.push(`console: ${message.text()}`);
+    if (message.type() === "error") {
+      const source = message.location().url;
+      failures.push(`console: ${message.text()}${source ? ` @ ${source}` : ""}`);
+    }
   });
   page.on("pageerror", (error) => failures.push(`page: ${error.message}`));
   return failures;
