@@ -521,7 +521,7 @@ items in place. Lack of response never authorizes an action. -->
   new bytes rather than another run; its own receipt says what the magazine refused and why.
   [imp:5] [owner:me] [time:30m] [kind:deploy]
 
-- [ ] **DELIVERY-NOT-BUILT-CAUGHT-UP** — delivered but not being served.
+- [x] **DELIVERY-NOT-BUILT-CAUGHT-UP** — Resolved 2026-08-19: the site is serving it again. Original report: — delivered but not being served.
   https://caughtup-ai.vercel.app/data/board/2026-08-19.json answers 404, so the host has not rebuilt since 2026-08-19 landed on main.
   Nothing is wrong with the package: the commit is on main and its gate was green. This is the
   build that never ran. An empty commit to the magazine's main triggers one; if that is what it
