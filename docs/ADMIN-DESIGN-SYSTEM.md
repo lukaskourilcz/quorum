@@ -4,7 +4,7 @@ This document is the canonical visual contract for the protected BoardlessAI Adm
 
 ## Governing sources
 
-The program order and invariants come from GitHub issue #382. Issue #366 owns only the design foundation described here. Repository authority remains `AGENTS.md`, `CLAUDE.md`, `GOVERNANCE.md`, `docs/ENGINEERING.md`, `docs/NEEDED.md`, and applicable decision records. In particular, D12 in `state/decisions/2026-08-02-workplace-show-design-rollback.md` continues to govern public presentation. This Admin-only foundation does not reopen that decision.
+The program order and invariants come from GitHub issue #382. Issue #366 established this foundation, issue #367 established the shell, and issue #368 migrated the protected surfaces onto both. Repository authority remains `AGENTS.md`, `CLAUDE.md`, `GOVERNANCE.md`, `docs/ENGINEERING.md`, `docs/NEEDED.md`, and applicable decision records. In particular, D12 in `state/decisions/2026-08-02-workplace-show-design-rollback.md` continues to govern public presentation. This Admin-only system does not reopen that decision.
 
 The visual reference is [`lukaskourilcz/own-dashboard`](https://github.com/lukaskourilcz/own-dashboard) pinned at commit `3049c5008b53e7d34d794822eedd552a470492c1`. The implementation audit used these files from that exact commit:
 
@@ -36,7 +36,7 @@ Admin tokens are defined in `site/src/app/globals.css` under `[data-admin]`. The
 
 The shell reads its light/dark choice on the server and sets `data-admin-theme` before hydration. Theme and 224px/64px rail state are written only through the authenticated, same-origin `/admin/api/preferences` boundary into bounded HttpOnly cookies scoped to `/admin`. Portalled Admin dialogs and tooltips copy both Admin data attributes to their portal root because a body-level portal is outside the shell's CSS inheritance tree.
 
-Raw colour values are allowed only at the scoped token boundary. Production Admin primitives consume semantic variables. A venture identity colour may enter through `--admin-section-accent`; it must not be reused to communicate success, warning, risk, or destructive state.
+Raw colour values are allowed only at the scoped token boundary. Production Admin primitives consume semantic variables. A venture identity colour may enter through `--admin-section-accent`; it is reserved for non-text identity decoration and must not communicate links, focus, success, warning, risk, or destructive state. Interactive text uses the theme-specific `--admin-link` token.
 
 ## Visual contract
 
@@ -101,19 +101,27 @@ Static primitives live in `site/src/components/admin/admin-primitives.tsx` and r
 | Actions | `AdminButton`, `adminButtonVariants` |
 | Fields | `AdminLabel`, `AdminInput`, `AdminSelect`, `AdminTextarea` |
 | State and identity | `AdminStatusBadge`, `AdminEntityBadge` |
-| Empty results | `AdminEmptyState` |
+| Empty results and operational states | `AdminEmptyState`, `AdminStateMessage`, `AdminCallout` |
 | Dense data | `AdminTableRegion`, `AdminTable`, `AdminTableHead`, `AdminTableCell`, `AdminListRow` |
 | Overlays | `AdminDialog`, `AdminTooltip` |
 
-`site/src/components/admin/panel.tsx` is a compatibility adapter over the shared card and metric primitives. Its temporary direct-section gutter normalization remains until issue #368 removes the legacy nesting workaround.
+`site/src/components/admin/panel.tsx` remains a thin naming adapter over the shared card and metric primitives for existing server call sites. It carries no layout neutralizer or independent visual contract.
 
-The shared public dialog and tooltip accept optional visual slots and portal data attributes. Their default class strings and behavior are unchanged. Admin wrappers are the only callers that opt into the scoped Admin appearance.
+The shared public dialog and tooltip accept optional visual slots and portal data attributes. Their default class strings and behavior are unchanged. `admin-overlays.tsx` is the only production Admin file allowed to import them: its adapters replace every visual slot and carry the scoped Admin attributes across the portal boundary.
 
 ## Existing implementation audit
 
-Run `pnpm admin:design-audit` from the repository root to reproduce the complete per-file inventory. Use `pnpm --silent admin:design-audit -- --json` for machine-readable output. The audit walks every production `.css`, `.ts`, and `.tsx` file under `site/src/app/admin` and `site/src/components/admin`, excluding test and spec files.
+Run `pnpm admin:design-audit` from the repository root to reproduce the complete per-file inventory and enforce the migrated contract. Use `pnpm --silent admin:design-audit -- --json` for machine-readable output. The audit walks every production `.css`, `.ts`, and `.tsx` file under `site/src/app/admin` and `site/src/components/admin`, excluding test and spec files. It exits non-zero if raw colour, a removed compatibility token, the former `UNWRAP` workaround, or a public UI import outside the explicit overlay adapter returns.
 
 The raw-colour count includes literal hex values, `rgb()` or `rgba()` values, and named Tailwind palette utilities. Radius, typography, and spacing counts are source-rule occurrences. Those three categories include semantic foundation consumers, so zero is not their migration target. Their purpose is to ensure every existing choice is examined rather than silently carried forward.
+
+Issue #368 completion inventory:
+
+| Scope | Files | Raw colour | Legacy tokens | Public UI violations | `UNWRAP` | Radius | Typography | Spacing |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| All production Admin sources | 93 | 0 | 0 | 0 | 0 | 152 | 1,779 | 1,483 |
+
+The temporary compatibility aliases introduced under `[data-admin]` in issue #366 are removed. Standalone protected files, launch binders, login and error recovery inherit the same cookie-selected scope through `app/admin/layout.tsx`; the interactive shell keeps its own live preference state inside that scope.
 
 Baseline captured for issue #366 after adding the foundation:
 
@@ -137,7 +145,7 @@ The largest raw-colour inventories are:
 | `components/admin/booksofhistory-dossiers-panel.tsx` | 27 |
 | `components/admin/rendered-desk-panel.tsx` | 25 |
 
-The 618 occurrences are the issue #366 pre-migration baseline, not approval for new literals. The new production foundation files and the `Panel` and `Tile` compatibility wrappers contain zero raw-colour literals. Issue #367 removed all 31 raw-colour occurrences from the former shell; its shell, sidebar, command palette and mobile navigation consume semantic tokens only. Issue #368 owns panel and view migration, including replacement of raw colour, arbitrary radii, divergent type, excess spacing, nested cards, and ad hoc status treatments. Issue #370 owns final visual, responsive, accessibility, and regression proof.
+The 618 occurrences are the issue #366 pre-migration baseline, not approval for new literals. Issue #367 removed all 31 raw-colour occurrences from the former shell. Issue #368 completed the panel and view migration, removed the layout workaround and compatibility aliases, and reduced raw colour to zero. Issue #370 owns the final visual, responsive, accessibility, and regression proof.
 
 ## Protected behavior
 
@@ -145,7 +153,7 @@ This foundation does not change authentication, protected routes, loaders, serve
 
 Any human-only follow-up belongs exclusively in `docs/NEEDED.md`; the foundation and shell introduce none.
 
-## Foundation gate
+## Admin design gate
 
 Changes to this foundation must pass:
 
@@ -155,6 +163,6 @@ Changes to this foundation must pass:
 - site lint
 - site production build
 - documentation consistency checks
-- `pnpm admin:design-audit`, with no new raw colour in the foundation files
+- `pnpm admin:design-audit`, with zero raw colour, legacy token, disallowed public UI import, and `UNWRAP` violations
 
 Issue #370 adds automated accessibility, route-matrix, and screenshot-diff gates for the fully migrated Admin.

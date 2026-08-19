@@ -136,7 +136,9 @@ img {
   --admin-toolbar: rgba(250, 250, 252, 0.9);
   --admin-sidebar: rgba(20, 20, 22, 0.9);
   --admin-sidebar-hover: rgba(255, 255, 255, 0.1);
-  --admin-sidebar-selected: rgba(255, 255, 255, 0.18);
+  /* Opaque equivalent of 18% white over the sidebar, so automated and assistive
+     contrast tooling can measure the selected destination without guessing layers. */
+  --admin-sidebar-selected: #3e3e41;
   --admin-sidebar-border: rgba(255, 255, 255, 0.08);
   --admin-window-close: #ff5f57;
   --admin-window-minimize: #febc2e;
@@ -146,8 +148,11 @@ img {
   --admin-foreground: #1d1d1f;
   --admin-foreground-muted: #565a60;
   --admin-foreground-subtle: #62666b;
+  --admin-link: #005fc7;
   --admin-sidebar-foreground: #ffffff;
   --admin-sidebar-muted: rgba(255, 255, 255, 0.62);
+  --admin-swatch-on-light: #09090b;
+  --admin-swatch-on-dark: #f4f4f5;
 
   /* Structure and action */
   --admin-border: rgba(0, 0, 0, 0.08);
@@ -161,7 +166,7 @@ img {
   --admin-section-accent: var(--admin-brand);
 
   /* Semantic state */
-  --admin-information: #0064d1;
+  --admin-information: #005fc7;
   --admin-information-soft: rgba(0, 100, 209, 0.1);
   --admin-success: #1f7a35;
   --admin-success-soft: rgba(31, 122, 53, 0.11);
@@ -207,35 +212,6 @@ img {
   --admin-shadow-elevated: 0 18px 48px -16px rgba(0, 0, 0, 0.34);
   --admin-shadow-window: 0 30px 80px -20px rgba(0, 0, 0, 0.52), 0 0 0 1px rgba(0, 0, 0, 0.16);
 
-  /* Compatibility aliases let existing token-backed Admin panels migrate
-     without inheriting a second palette. Literal-hex panels move in #368. */
-  --background: var(--admin-background);
-  --foreground: var(--admin-foreground);
-  --card: var(--admin-surface);
-  --card-foreground: var(--admin-foreground);
-  --primary: var(--admin-primary);
-  --primary-foreground: var(--admin-primary-foreground);
-  --secondary: var(--admin-surface-secondary);
-  --secondary-foreground: var(--admin-foreground);
-  --muted: var(--admin-surface-muted);
-  --muted-foreground: var(--admin-foreground-muted);
-  --accent: var(--admin-brand);
-  --accent-hover: var(--admin-primary-hover);
-  --accent-soft: var(--admin-brand-soft);
-  --accent-foreground: var(--admin-primary-foreground);
-  --border: var(--admin-border);
-  --ring: var(--admin-brand);
-  --surface: var(--admin-surface);
-  --surface-raised: var(--admin-surface-elevated);
-  --line-strong: var(--admin-border-strong);
-  --iron: var(--admin-border-strong);
-  --steel: var(--admin-border-strong);
-  --fog: var(--admin-foreground-subtle);
-  --ash: var(--admin-foreground-muted);
-  --mist: var(--admin-foreground);
-  --radius-card: var(--admin-radius-lg);
-  --radius-button: var(--admin-radius);
-
   background: var(--admin-background);
   color: var(--admin-foreground);
   font-family: -apple-system, BlinkMacSystemFont, var(--font-dm-sans), "Segoe UI", sans-serif;
@@ -263,6 +239,7 @@ img {
   --admin-foreground: #f1f0ec;
   --admin-foreground-muted: #b1b2b3;
   --admin-foreground-subtle: #92969b;
+  --admin-link: #8db4e5;
   --admin-border: #2a2f34;
   --admin-border-strong: #3b424a;
   --admin-brand: #ff7a33;

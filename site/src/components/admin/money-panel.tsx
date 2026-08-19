@@ -1,83 +1,94 @@
 import Link from "next/link";
 import { ArrowRight, CircleDollarSign, ListChecks } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
-import { Callout } from "@/components/ui/callout";
+import {
+  AdminCallout,
+  AdminMetric,
+  AdminSectionHeading,
+  AdminStateMessage,
+  AdminStatusBadge,
+  adminButtonVariants,
+} from "./admin-primitives";
 import type { KpiStatus, MonetizationStatus, PublicMoneySnapshot } from "@/lib/money-records";
 
-const kpiTone = (status: KpiStatus): "success" | "warning" | "danger" | "neutral" => status === "on-track" ? "success" : status === "at-risk" ? "warning" : status === "off-track" ? "danger" : "neutral";
-const moneyTone = (status: MonetizationStatus): "success" | "warning" | "accent" | "neutral" => status === "active" ? "success" : status === "proposed" ? "warning" : status === "ready" ? "accent" : "neutral";
+const kpiTone = (status: KpiStatus): "success" | "warning" | "destructive" | "neutral" => status === "on-track" ? "success" : status === "at-risk" ? "warning" : status === "off-track" ? "destructive" : "neutral";
+const moneyTone = (status: MonetizationStatus): "success" | "warning" | "information" | "neutral" => status === "active" ? "success" : status === "proposed" ? "warning" : status === "ready" ? "information" : "neutral";
 
-/**
- * Target states in plain words.
- *
- * "unavailable" is the one that mattered: it means nothing has been measured yet, and it read as
- * though the target itself had gone missing.
- */
 const KPI_LABEL: Readonly<Record<KpiStatus, string>> = {
   "on-track": "On track",
   "at-risk": "Slipping",
   "off-track": "Off track",
-  unavailable: "Not measured yet"
+  unavailable: "Not measured yet",
 };
 
-/**
- * Six earning methods all reading "locked" is six copies of one sentence.
- *
- * They are locked for the same reason and they unlock on the same event, so the panel says that
- * once, above them, and each card carries only what is true of it alone.
- */
 const MONEY_LABEL: Readonly<Record<MonetizationStatus, string>> = {
   active: "Earning",
   proposed: "Waiting for you",
   ready: "Ready to start",
-  locked: "Not yet"
+  locked: "Not yet",
 };
 
 export function AdminMoneyPanel({ snapshot }: { snapshot: PublicMoneySnapshot | null }) {
   if (!snapshot) {
-    return <section className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8"><Callout tone="warning">Quarterly targets and earning methods will appear after the next 06:00 company cycle.</Callout></section>;
+    return <AdminStateMessage state="unavailable" title="Quarterly targets and earning methods will appear after the next 06:00 company cycle" />;
   }
   const kpiCounts = (["on-track", "at-risk", "off-track", "unavailable"] as const).map((status) => ({
     status,
-    count: snapshot.quarter.statuses.filter((entry) => entry.status === status).length
+    count: snapshot.quarter.statuses.filter((entry) => entry.status === status).length,
   }));
+
   return (
-    <section aria-labelledby="admin-money-heading" className="mx-auto max-w-[var(--container)] px-5 pb-20 md:px-8">
-      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3"><CircleDollarSign aria-hidden="true" className="size-5 text-[var(--accent)]" /><p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">Quarter and earning plans</p></div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-[-0.04em]" id="admin-money-heading">What needs attention before money can move</h2>
+    <section aria-labelledby="admin-money-heading" className="grid min-w-0 gap-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="flex items-start gap-2">
+          <CircleDollarSign aria-hidden className="mt-0.5 size-4 shrink-0 text-[var(--admin-section-accent)]" />
+          <AdminSectionHeading description="What needs attention before money can move." title="Quarter and earning plans" />
         </div>
-        <Link className={buttonVariants({ variant: "secondary" })} href="/results#money">Public Money <ArrowRight aria-hidden="true" className="size-4" /></Link>
+        <Link className={adminButtonVariants({ variant: "secondary" })} href="/results#money">Public Money <ArrowRight aria-hidden className="size-4" /></Link>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {kpiCounts.map(({ status, count }) => <div className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] p-4" key={status}><Badge tone={kpiTone(status)}>{KPI_LABEL[status]}</Badge><p className="mt-3 text-3xl font-semibold tabular-nums">{count}</p><p className="mt-1 text-xs text-[var(--fog)]">of this quarter&rsquo;s targets</p></div>)}
+      <span className="sr-only" id="admin-money-heading">Quarter and earning plans</span>
+
+      <div className="grid gap-px overflow-hidden rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-border)] sm:grid-cols-2 xl:grid-cols-4">
+        {kpiCounts.map(({ status, count }) => (
+          <AdminMetric key={status} label={KPI_LABEL[status]} note="of this quarter’s targets" value={String(count)} />
+        ))}
       </div>
+
       {snapshot.monetization.length > 0 && snapshot.monetization.every((method) => method.status === "locked") ? (
-        <p className="mt-5 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--card)] p-4 text-sm leading-6 text-[var(--fog)]">
-          None of the earning methods below can start yet, and they are all waiting on the same
-          thing: the site has no measured audience. Each one gets its own plan here once it is
-          close enough to be worth writing.
-        </p>
+        <AdminStateMessage
+          description="The site has no measured audience. Each method gets a plan only when it is close enough to be worth writing."
+          state="held"
+          title="No earning method can start yet"
+        />
       ) : null}
-      <div className="mt-5 grid gap-4 xl:grid-cols-2">
+
+      <div className="divide-y divide-[var(--admin-border)] border-y border-[var(--admin-border)]">
         {snapshot.monetization.map((method) => (
-          <article className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-5 md:p-6" key={method.id}>
-            <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-[var(--accent)]">{method.venture.replaceAll("-", " ")}</p><h3 className="mt-2 text-xl font-semibold">{method.method}</h3></div><Badge tone={moneyTone(method.status)}>{MONEY_LABEL[method.status]}</Badge></div>
-            <p className="mt-4 text-sm leading-6 text-[var(--fog)]">{method.readiness.detail}</p>
-            {method.proposal ? (
-              <div className="mt-5 rounded-[var(--radius-button)] border border-[var(--accent)] bg-[var(--surface)] p-5">
-                <div className="flex items-center gap-2"><ListChecks aria-hidden="true" className="size-4 text-[var(--accent)]" /><p className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--accent)]">Owner proposal</p></div>
-                <p className="mt-3 text-sm leading-6">{method.proposal.summary}</p>
-                <h4 className="mt-5 text-sm font-semibold">Checklist</h4>
-                <ol className="mt-2 list-decimal space-y-2 pl-5 text-sm leading-6 text-[var(--fog)]">{method.proposal.ownerChecklist.map((item) => <li key={item}>{item}</li>)}</ol>
-                {method.proposal.channels.length ? <><h4 className="mt-5 text-sm font-semibold">Channels</h4><ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-[var(--fog)]">{method.proposal.channels.map((item) => <li key={item}>{item}</li>)}</ul></> : null}
-                {method.proposal.constraints.length ? <><h4 className="mt-5 text-sm font-semibold">Limits</h4><ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-[var(--fog)]">{method.proposal.constraints.map((item) => <li key={item}>{item}</li>)}</ul></> : null}
+          <article className="grid gap-3 py-4" key={method.id}>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">{method.venture.replaceAll("-", " ")}</p>
+                <h3 className="m-0 mt-1 text-[length:var(--admin-type-section)] font-semibold">{method.method}</h3>
               </div>
+              <AdminStatusBadge tone={moneyTone(method.status)}>{MONEY_LABEL[method.status]}</AdminStatusBadge>
+            </div>
+            <p className="m-0 text-[length:var(--admin-type-control)] leading-5 text-[var(--admin-foreground-muted)]">{method.readiness.detail}</p>
+            {method.proposal ? (
+              <AdminCallout tone="information">
+                <div className="flex items-center gap-2"><ListChecks aria-hidden className="size-4" /><strong>Owner proposal</strong></div>
+                <p className="m-0 mt-2">{method.proposal.summary}</p>
+                <div className="mt-3 grid gap-3 lg:grid-cols-3">
+                  <div><h4 className="m-0 font-semibold">Checklist</h4><ol className="mt-1 list-decimal space-y-1 pl-5">{method.proposal.ownerChecklist.map((item) => <li key={item}>{item}</li>)}</ol></div>
+                  {method.proposal.channels.length ? <div><h4 className="m-0 font-semibold">Channels</h4><ul className="mt-1 list-disc space-y-1 pl-5">{method.proposal.channels.map((item) => <li key={item}>{item}</li>)}</ul></div> : null}
+                  {method.proposal.constraints.length ? <div><h4 className="m-0 font-semibold">Limits</h4><ul className="mt-1 list-disc space-y-1 pl-5">{method.proposal.constraints.map((item) => <li key={item}>{item}</li>)}</ul></div> : null}
+                </div>
+              </AdminCallout>
             ) : null}
           </article>
         ))}
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {kpiCounts.map(({ status, count }) => <AdminStatusBadge key={status} tone={kpiTone(status)}>{KPI_LABEL[status]} · {count}</AdminStatusBadge>)}
       </div>
     </section>
   );

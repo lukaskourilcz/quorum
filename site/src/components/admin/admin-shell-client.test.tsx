@@ -49,7 +49,13 @@ describe("Admin shell", () => {
   it("server-renders bookmarkable grouped navigation and the desktop window contract", () => {
     const html = renderToStaticMarkup(
       <AdminShellClient
-        attention={[{ label: "Approvals waiting", value: 2 }]}
+        attention={[
+          { label: "Approvals waiting", value: 2 },
+          { label: "Approved deliveries waiting", value: 1 },
+          { label: "Only you can do", value: 3 },
+          { label: "Priorities awaiting a board slot", value: 4 },
+          { label: "Unreadable files", value: 5 }
+        ]}
         brand="var(--admin-brand)"
         breadcrumb="Company Overview"
         groups={groups}
@@ -66,6 +72,9 @@ describe("Admin shell", () => {
     expect(html).toContain("--admin-current-sidebar-width:var(--admin-sidebar-width)");
     expect(html).toContain('data-admin-window="true"');
     expect(html).toContain('data-admin-window-controls="true"');
+    expect(html).toContain('data-admin-attention-total="true">15</span>');
+    expect(html).toContain('data-admin-attention-item="Unreadable files"');
+    expect(html).toContain("Unreadable files");
     expect(html).toContain('aria-label="Admin navigation"');
     expect(html).toContain('href="/admin?view=approvals"');
     expect(html).toContain('href="/admin?venture=kvorum"');

@@ -39,6 +39,7 @@ describe("the read-only Kvórum monitor panel", () => {
     expect(html).toContain("stit-demokracie-facebook");
     expect(html).toContain("iROZHLAS");
     expect(html).toContain("$0.151 / $2.000 venture share");
+    expect(html).toContain('data-admin-metrics="true"');
     expect(html).toContain("Financování médií veřejné služby");
     expect(html).toContain("Sněmovna projedná financování médií veřejné služby.");
     expect(html).toContain("Andrej Babiš");

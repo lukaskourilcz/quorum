@@ -3,8 +3,12 @@
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
-import { Callout } from "@/components/ui/callout";
+import {
+  AdminButton,
+  AdminCallout,
+  AdminInput,
+  AdminLabel,
+} from "./admin-primitives";
 
 interface LoginError {
   title: string;
@@ -14,20 +18,17 @@ interface LoginError {
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <button
-      className={buttonVariants({
-        className: "cursor-pointer",
-        variant: "accent",
-        size: "large"
-      })}
+    <AdminButton
+      className="w-full cursor-pointer"
       disabled={pending}
       type="submit"
+      variant="primary"
     >
       {pending ? (
         <LoaderCircle aria-hidden="true" className="size-4 animate-spin" />
       ) : null}
       {pending ? "Checking your details…" : "Open project desk"}
-    </button>
+    </AdminButton>
   );
 }
 
@@ -37,10 +38,10 @@ export function AdminLoginForm({ error, returnTo }: { error?: LoginError; return
   return (
     <>
       {error ? (
-        <Callout className="mb-6" id="login-error" tone="danger">
+        <AdminCallout className="mb-6" id="login-error" tone="destructive">
           <strong className="block">{error.title}</strong>
           <span className="mt-1 block">{error.message}</span>
-        </Callout>
+        </AdminCallout>
       ) : null}
 
       <form action="/admin/login/submit" className="grid gap-5" method="post">
@@ -48,15 +49,15 @@ export function AdminLoginForm({ error, returnTo }: { error?: LoginError; return
             because a form field is whatever the browser sends. */}
         {returnTo ? <input name="returnTo" type="hidden" value={returnTo} /> : null}
         <div>
-          <label className="mb-2 block text-sm font-semibold" htmlFor="username">
+          <AdminLabel htmlFor="username">
             Username
-          </label>
-          <input
+          </AdminLabel>
+          <AdminInput
             aria-describedby={error ? "login-error" : undefined}
             aria-invalid={error ? true : undefined}
             autoComplete="username"
             autoFocus
-            className="min-h-12 w-full rounded-[var(--radius-button)] border border-[var(--steel)] bg-[var(--surface)] px-4 text-base text-[var(--foreground)] outline-none transition-colors placeholder:text-[var(--fog)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/25"
+            className="min-h-12 px-4 text-base"
             id="username"
             maxLength={160}
             name="username"
@@ -66,15 +67,15 @@ export function AdminLoginForm({ error, returnTo }: { error?: LoginError; return
           />
         </div>
         <div>
-          <label className="mb-2 block text-sm font-semibold" htmlFor="password">
+          <AdminLabel htmlFor="password">
             Password
-          </label>
+          </AdminLabel>
           <div className="relative">
-            <input
+            <AdminInput
               aria-describedby={error ? "login-error" : undefined}
               aria-invalid={error ? true : undefined}
               autoComplete="current-password"
-              className="min-h-12 w-full rounded-[var(--radius-button)] border border-[var(--steel)] bg-[var(--surface)] px-4 pr-14 text-base text-[var(--foreground)] outline-none transition-colors focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/25"
+              className="min-h-12 px-4 pr-14 text-base"
               id="password"
               maxLength={512}
               name="password"
@@ -84,7 +85,7 @@ export function AdminLoginForm({ error, returnTo }: { error?: LoginError; return
             <button
               aria-label={showPassword ? "Hide password" : "Show password"}
               aria-pressed={showPassword}
-              className="absolute inset-y-0 right-0 flex min-w-12 cursor-pointer items-center justify-center rounded-r-[var(--radius-button)] text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)]"
+              className="admin-focus-ring absolute inset-y-0 right-0 flex min-w-12 cursor-pointer items-center justify-center rounded-r-[var(--admin-radius)] text-[var(--admin-foreground-muted)] transition-colors hover:text-[var(--admin-foreground)]"
               onClick={() => setShowPassword((visible) => !visible)}
               type="button"
             >

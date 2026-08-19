@@ -2,10 +2,17 @@
 
 import { useState } from "react";
 import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Callout } from "@/components/ui/callout";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  AdminButton as Button,
+  AdminCallout as Callout,
+  AdminCard as Card,
+  AdminCardContent as CardContent,
+  AdminLabel,
+  AdminSectionHeading,
+  AdminStateMessage,
+  AdminStatusBadge as Badge,
+  AdminTextarea,
+} from "./admin-primitives";
 import type {
   DoorMoneyActionsView,
   DoorMoneyActionStatus,
@@ -33,9 +40,6 @@ export interface DoorMoneyActionCompletionRequest {
 
 const OUTCOME_LIMIT = 1_000;
 const ID_LIMIT = 160;
-const fieldClass =
-  "w-full rounded-[var(--radius-button)] border border-[var(--steel)] bg-[var(--surface)] px-3 py-2.5 text-base leading-6 text-[var(--foreground)] placeholder:text-[var(--fog)] disabled:opacity-50";
-
 function boundedId(value: string): boolean {
   return value.length > 0 && value.length <= ID_LIMIT && /^[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(value);
 }
@@ -106,43 +110,43 @@ function ActionTask({ initial, packetId }: { initial: DoorMoneyActionTaskView; p
   return (
     <li>
       <Card>
-        <CardContent className="grid gap-5">
+        <CardContent className="grid gap-4">
           <header className="flex flex-wrap items-start justify-between gap-3">
             <div>
-              <h4 className="text-xl font-semibold leading-tight tracking-[-0.03em]">{task.title}</h4>
-              <p className="mt-2 text-sm leading-6 text-[var(--fog)]">{task.why}</p>
+              <h4 className="m-0 text-[length:var(--admin-type-section)] font-semibold">{task.title}</h4>
+              <p className="m-0 mt-1 text-[length:var(--admin-type-control)] leading-5 text-[var(--admin-foreground-muted)]">{task.why}</p>
             </div>
             <Badge tone={taskStatusTone(task.status)}>{task.status}</Badge>
           </header>
 
-          <dl className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--secondary)] p-4">
-              <dt className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--fog)]">Effort</dt>
-              <dd className="mt-1 text-sm leading-6 text-[var(--foreground)]">{task.effort}</dd>
+          <dl className="grid overflow-hidden rounded-[var(--admin-radius)] border border-[var(--admin-border)] sm:grid-cols-2 sm:divide-x sm:divide-[var(--admin-border)]">
+            <div className="bg-[var(--admin-surface-secondary)] p-3">
+              <dt className="text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Effort</dt>
+              <dd className="m-0 mt-1 text-[length:var(--admin-type-control)] leading-5 text-[var(--admin-foreground)]">{task.effort}</dd>
             </div>
-            <div className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--secondary)] p-4">
-              <dt className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--fog)]">Expected impact</dt>
-              <dd className="mt-1 text-sm leading-6 text-[var(--foreground)]">{task.expectedImpact}</dd>
+            <div className="border-t border-[var(--admin-border)] bg-[var(--admin-surface-secondary)] p-3 sm:border-t-0">
+              <dt className="text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Expected impact</dt>
+              <dd className="m-0 mt-1 text-[length:var(--admin-type-control)] leading-5 text-[var(--admin-foreground)]">{task.expectedImpact}</dd>
             </div>
           </dl>
 
           <section aria-labelledby={`${fieldId}-steps`}>
-            <h5 className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--mist)]" id={`${fieldId}-steps`}>Steps</h5>
-            <ol className="mt-3 grid list-decimal gap-2 pl-5 text-sm leading-6 text-[var(--foreground)]">
+            <h5 className="m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]" id={`${fieldId}-steps`}>Steps</h5>
+            <ol className="m-0 mt-2 grid list-decimal gap-1.5 pl-5 text-[length:var(--admin-type-control)] leading-5 text-[var(--admin-foreground)]">
               {task.steps.map((step, index) => <li key={`${task.id}-step-${index + 1}`}>{step}</li>)}
             </ol>
           </section>
 
           {task.templates.length ? (
             <section aria-labelledby={`${fieldId}-templates`}>
-              <h5 className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--mist)]" id={`${fieldId}-templates`}>Prepared templates</h5>
-              <div className="mt-3 grid gap-2">
+              <h5 className="m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]" id={`${fieldId}-templates`}>Prepared templates</h5>
+              <div className="mt-2 grid gap-2">
                 {task.templates.map((template) => (
-                  <details className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-4" key={template.id}>
-                    <summary className="cursor-pointer font-semibold text-[var(--foreground)]">{template.label}</summary>
-                    <p className="mt-2 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">{template.kind.replaceAll("-", " ")}</p>
-                    <pre className="mt-3 whitespace-pre-wrap font-sans text-sm leading-6 text-[var(--foreground)]">{template.body}</pre>
-                    <p className="mt-3 text-xs leading-5 text-[var(--fog)]">Prepared draft. Copy and send it yourself; this panel never contacts the channel.</p>
+                  <details className="rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface-secondary)] p-3" key={template.id}>
+                    <summary className="admin-focus-ring cursor-pointer rounded-[var(--admin-radius-sm)] font-semibold text-[var(--admin-foreground)]">{template.label}</summary>
+                    <p className="m-0 mt-2 text-[length:var(--admin-type-micro)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">{template.kind.replaceAll("-", " ")}</p>
+                    <pre className="m-0 mt-2 whitespace-pre-wrap font-sans text-[length:var(--admin-type-control)] leading-5 text-[var(--admin-foreground)]">{template.body}</pre>
+                    <p className="m-0 mt-2 text-[length:var(--admin-type-label)] leading-5 text-[var(--admin-foreground-muted)]">Prepared draft. Copy and send it yourself; this panel never contacts the channel.</p>
                   </details>
                 ))}
               </div>
@@ -150,25 +154,25 @@ function ActionTask({ initial, packetId }: { initial: DoorMoneyActionTaskView; p
           ) : null}
 
           {task.status === "completed" ? (
-            <section className="border-t border-[var(--border)] pt-4" aria-label="Recorded completion">
-              <p className="font-semibold text-[var(--success)]">Completed</p>
-              <p className="mt-2 text-sm leading-6 text-[var(--foreground)]">Outcome: {task.outcome ?? "No outcome was returned."}</p>
-              {task.completedAt ? <p className="mt-1 text-xs text-[var(--fog)]">Recorded {task.completedAt}</p> : null}
+            <section className="border-t border-[var(--admin-border)] pt-4" aria-label="Recorded completion">
+              <p className="font-semibold text-[var(--admin-success)]">Completed</p>
+              <p className="mt-2 text-sm leading-6 text-[var(--admin-foreground)]">Outcome: {task.outcome ?? "No outcome was returned."}</p>
+              {task.completedAt ? <p className="mt-1 text-xs text-[var(--admin-foreground-muted)]">Recorded {task.completedAt}</p> : null}
             </section>
           ) : (
-            <form className="grid gap-3 border-t border-[var(--border)] pt-4" onSubmit={(event) => {
+            <form className="grid gap-3 border-t border-[var(--admin-border)] pt-4" onSubmit={(event) => {
               event.preventDefault();
               setTouched(true);
               void complete();
             }}>
-              <label htmlFor={fieldId}>
-                <span className="font-semibold text-[var(--foreground)]">Outcome (required)</span>
-                <span className="mt-1 block text-xs leading-5 text-[var(--fog)]" id={`${fieldId}-help`}>Record what you did and what happened. For example: contacted 5 synthetic prospects; 2 replied.</span>
-                <textarea aria-describedby={`${fieldId}-help ${fieldId}-error`} aria-invalid={touched && !request}
-                  className={`${fieldClass} mt-2 min-h-24`} disabled={pending || !writesEnabled} id={fieldId} maxLength={OUTCOME_LIMIT}
+              <div>
+                <AdminLabel htmlFor={fieldId}>Outcome (required)</AdminLabel>
+                <span className="block text-[length:var(--admin-type-label)] leading-5 text-[var(--admin-foreground-muted)]" id={`${fieldId}-help`}>Record what you did and what happened. For example: contacted 5 synthetic prospects; 2 replied.</span>
+                <AdminTextarea aria-describedby={`${fieldId}-help ${fieldId}-error`} aria-invalid={touched && !request}
+                  className="mt-2" disabled={pending || !writesEnabled} id={fieldId} maxLength={OUTCOME_LIMIT}
                   onBlur={() => setTouched(true)} onChange={(event) => { setOutcome(event.target.value); setError(""); }} required value={outcome} />
-              </label>
-              <p className="min-h-5 text-xs text-[var(--destructive)]" id={`${fieldId}-error`}>
+              </div>
+              <p className="min-h-5 text-xs text-[var(--admin-destructive)]" id={`${fieldId}-error`}>
                 {touched && !request ? "Enter an outcome before marking this action complete." : ""}
               </p>
               <Button className="justify-self-start" disabled={pending || !writesEnabled || !request} type="submit">
@@ -178,7 +182,7 @@ function ActionTask({ initial, packetId }: { initial: DoorMoneyActionTaskView; p
           )}
 
           <div aria-live="polite" className="min-h-5 text-sm" role={error ? "alert" : "status"}>
-            {error ? <span className="text-[var(--destructive)]">{error}</span> : <span className="text-[var(--fog)]">{message}</span>}
+            {error ? <span className="text-[var(--admin-destructive)]">{error}</span> : <span className="text-[var(--admin-foreground-muted)]">{message}</span>}
           </div>
         </CardContent>
       </Card>
@@ -192,16 +196,16 @@ function Playbook({ playbook }: { playbook: DoorMoneyChannelPlaybookView }) {
       <CardContent className="grid gap-4">
         <header className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--fog)]">{playbook.channel} · {playbook.revision}</p>
-            <h4 className="mt-2 text-xl font-semibold tracking-[-0.03em]">{playbook.title}</h4>
+            <p className="m-0 text-[length:var(--admin-type-micro)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">{playbook.channel} · {playbook.revision}</p>
+            <h4 className="m-0 mt-1 text-[length:var(--admin-type-section)] font-semibold">{playbook.title}</h4>
           </div>
           <Badge>Read-only</Badge>
         </header>
-        <p className="text-sm leading-6 text-[var(--fog)]">{playbook.summary}</p>
-        <ol className="grid list-decimal gap-2 pl-5 text-sm leading-6 text-[var(--foreground)]">
+        <p className="text-sm leading-6 text-[var(--admin-foreground-muted)]">{playbook.summary}</p>
+        <ol className="grid list-decimal gap-2 pl-5 text-sm leading-6 text-[var(--admin-foreground)]">
           {playbook.steps.map((step, index) => <li key={`${playbook.id}-step-${index + 1}`}>{step}</li>)}
         </ol>
-        <footer className="border-t border-[var(--border)] pt-3 font-mono text-[0.65625rem] leading-5 text-[var(--fog)]">
+        <footer className="border-t border-[var(--admin-border)] pt-3 font-mono text-[0.65625rem] leading-5 text-[var(--admin-foreground-muted)]">
           <p>Updated {playbook.updatedAt}</p>
           {playbook.evidenceRefs.length ? <p>Evidence: {playbook.evidenceRefs.join(", ")}</p> : null}
         </footer>
@@ -212,40 +216,33 @@ function Playbook({ playbook }: { playbook: DoorMoneyChannelPlaybookView }) {
 
 export function DoorMoneyActionsPanel({ snapshot }: { snapshot: DoorMoneyActionsView }) {
   if (snapshot.state === "missing") {
-    return <Callout>No Door Money action packets or playbooks exist yet.</Callout>;
+    return <AdminStateMessage state="initial-empty" title="No Door Money action packets or playbooks exist yet." />;
   }
   if (snapshot.state === "unreadable") {
-    return <Callout tone="danger">Door Money actions could not be read. No replacement tasks were invented.</Callout>;
+    return <AdminStateMessage state="malformed" title="Door Money actions could not be read." description="No replacement tasks were invented." />;
   }
   return (
-    <div className="grid gap-10">
+    <div className="grid gap-6">
       {snapshot.unreadable > 0 ? <Callout tone="warning">{snapshot.unreadable} action record{snapshot.unreadable === 1 ? " was" : "s were"} dropped because it could not be read.</Callout> : null}
       <section aria-labelledby="door-money-today-heading">
-        <div className="mb-5">
-          <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--mist)]">Standing owner to-do list</p>
-          <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em]" id="door-money-today-heading">Today’s actions</h3>
-        </div>
+        <AdminSectionHeading className="mb-3" description="Standing owner to-do list" title={<span id="door-money-today-heading">Today’s actions</span>} />
         {snapshot.packets.length ? snapshot.packets.map((packet) => (
-          <article className="mb-8" key={packet.id}>
-            <header className="mb-4 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--secondary)] p-5">
-              <p className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--fog)]">{packet.date} · {packet.agenda}</p>
-              <h4 className="mt-2 text-xl font-semibold tracking-[-0.03em]">{packet.title}</h4>
-              <p className="mt-2 text-sm leading-6 text-[var(--fog)]">{packet.summary}</p>
+          <article className="mb-5" key={packet.id}>
+            <header className="mb-3 border-l-2 border-[var(--admin-section-accent)] pl-3">
+              <p className="m-0 text-[length:var(--admin-type-micro)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">{packet.date} · {packet.agenda}</p>
+              <h4 className="m-0 mt-1 text-[length:var(--admin-type-section)] font-semibold">{packet.title}</h4>
+              <p className="m-0 mt-1 text-[length:var(--admin-type-control)] leading-5 text-[var(--admin-foreground-muted)]">{packet.summary}</p>
             </header>
             {packet.tasks.length ? <ol className="grid gap-4">{packet.tasks.map((task) => <ActionTask initial={task} key={task.id} packetId={packet.id} />)}</ol>
-              : <Callout>This packet has no owner actions.</Callout>}
+              : <AdminStateMessage state="initial-empty" title="This packet has no owner actions." />}
           </article>
-        )) : <Callout>No owner action packet is ready.</Callout>}
+        )) : <AdminStateMessage state="initial-empty" title="No owner action packet is ready." />}
       </section>
 
       <section aria-labelledby="door-money-playbooks-heading">
-        <div className="mb-5">
-          <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--mist)]">Reference desk</p>
-          <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em]" id="door-money-playbooks-heading">Channel playbooks</h3>
-          <p className="mt-2 text-sm leading-6 text-[var(--fog)]">Guidance only. Playbooks cannot post, send outreach, create accounts or modify a channel.</p>
-        </div>
+        <AdminSectionHeading className="mb-3" description="Guidance only. Playbooks cannot post, send outreach, create accounts or modify a channel." title={<span id="door-money-playbooks-heading">Channel playbooks</span>} />
         {snapshot.playbooks.length ? <div className="grid gap-4 lg:grid-cols-2">{snapshot.playbooks.map((playbook) => <Playbook key={playbook.id} playbook={playbook} />)}</div>
-          : <Callout>No channel playbooks are available.</Callout>}
+          : <AdminStateMessage state="initial-empty" title="No channel playbooks are available." />}
       </section>
     </div>
   );

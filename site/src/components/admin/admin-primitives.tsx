@@ -15,6 +15,35 @@ import type {
 } from "react";
 import { cn } from "@/lib/utils";
 
+export type AdminStateKind =
+  | "initial-empty"
+  | "filtered-empty"
+  | "loading"
+  | "unavailable"
+  | "malformed"
+  | "write-disabled"
+  | "permission-required"
+  | "success"
+  | "error"
+  | "held"
+  | "archived";
+
+type AdminTone = "neutral" | "information" | "success" | "warning" | "risk" | "destructive";
+
+const adminStatePresentation: Readonly<Record<AdminStateKind, { label: string; tone: AdminTone }>> = {
+  "initial-empty": { label: "No records yet", tone: "neutral" },
+  "filtered-empty": { label: "No matches", tone: "information" },
+  loading: { label: "Loading", tone: "information" },
+  unavailable: { label: "Unavailable", tone: "warning" },
+  malformed: { label: "Unreadable record", tone: "destructive" },
+  "write-disabled": { label: "Read only", tone: "warning" },
+  "permission-required": { label: "Approval required", tone: "risk" },
+  success: { label: "Saved", tone: "success" },
+  error: { label: "Action failed", tone: "destructive" },
+  held: { label: "Held", tone: "warning" },
+  archived: { label: "Archived", tone: "neutral" },
+};
+
 export function AdminPageHeader({
   title,
   description,
@@ -236,6 +265,59 @@ export function AdminEmptyState({
   );
 }
 
+export function AdminCallout({
+  className,
+  tone = "neutral",
+  ...props
+}: HTMLAttributes<HTMLDivElement> & { tone?: AdminTone }) {
+  const tones: Readonly<Record<AdminTone, string>> = {
+    neutral: "border-[var(--admin-border-strong)] bg-[var(--admin-surface-secondary)] text-[var(--admin-foreground)]",
+    information: "border-[var(--admin-information)] bg-[var(--admin-information-soft)] text-[var(--admin-information)]",
+    success: "border-[var(--admin-success)] bg-[var(--admin-success-soft)] text-[var(--admin-success)]",
+    warning: "border-[var(--admin-warning)] bg-[var(--admin-warning-soft)] text-[var(--admin-warning)]",
+    risk: "border-[var(--admin-risk)] bg-[var(--admin-risk-soft)] text-[var(--admin-risk)]",
+    destructive: "border-[var(--admin-destructive)] bg-[var(--admin-destructive-soft)] text-[var(--admin-destructive)]",
+  };
+
+  return (
+    <div
+      className={cn(
+        "rounded-[var(--admin-radius)] border border-l-[3px] p-4 text-[length:var(--admin-type-body)] leading-5",
+        tones[tone],
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export function AdminStateMessage({
+  state,
+  title,
+  description,
+  action,
+  className,
+}: {
+  state: AdminStateKind;
+  title: ReactNode;
+  description?: ReactNode;
+  action?: ReactNode;
+  className?: string;
+}) {
+  const presentation = adminStatePresentation[state];
+
+  return (
+    <AdminCallout className={cn("grid gap-2", className)} data-admin-state={state} tone={presentation.tone}>
+      <AdminStatusBadge className="w-fit" tone={presentation.tone}>{presentation.label}</AdminStatusBadge>
+      <div>
+        <p className="m-0 font-semibold text-current">{title}</p>
+        {description ? <p className="m-0 mt-1 text-[length:var(--admin-type-control)] text-current opacity-90">{description}</p> : null}
+      </div>
+      {action ? <div className="mt-1">{action}</div> : null}
+    </AdminCallout>
+  );
+}
+
 export function AdminTableRegion({
   label,
   className,
@@ -249,6 +331,7 @@ export function AdminTableRegion({
     <div
       aria-label={label}
       className={cn("admin-focus-ring max-w-full overflow-x-auto rounded-[var(--admin-radius)] border border-[var(--admin-border)]", className)}
+      data-horizontal-scroll
       role="region"
       tabIndex={0}
     >

@@ -12,25 +12,25 @@ import type { DesignLabVenture } from "@/lib/design-lab-ventures";
  * a monospace list tells you nothing about how the headline will sit.
  */
 
-const LABEL = "font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--muted-foreground)]";
+const LABEL = "font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]";
 
 function swatchText(value: string): string {
   const match = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(value);
-  if (!match) return "#09090b";
+  if (!match) return "var(--admin-swatch-on-light)";
 
   const linear = (channel: string) => {
     const srgb = Number.parseInt(channel, 16) / 255;
     return srgb <= 0.04045 ? srgb / 12.92 : ((srgb + 0.055) / 1.055) ** 2.4;
   };
   const luminance = 0.2126 * linear(match[1]!) + 0.7152 * linear(match[2]!) + 0.0722 * linear(match[3]!);
-  return luminance > 0.179 ? "#09090b" : "#f4f4f5";
+  return luminance > 0.179 ? "var(--admin-swatch-on-light)" : "var(--admin-swatch-on-dark)";
 }
 
 function Swatch({ token, value }: { token: string; value: string }) {
   return (
     <li className="flex flex-col gap-1">
       <span
-        className="flex h-14 items-end rounded-md border border-[var(--border)] px-2 pb-1.5"
+        className="flex h-14 items-end rounded-[var(--admin-radius)] border border-[var(--admin-border)] px-2 pb-1.5"
         style={{ backgroundColor: value, color: swatchText(value) }}
       >
         <span className="font-mono text-[0.625rem] uppercase tracking-[0.08em]">{value}</span>
@@ -48,7 +48,7 @@ export function DesignLabIdentity({ venture }: { venture: DesignLabVenture }) {
   ];
 
   return (
-    <section className="grid gap-6 rounded-lg border border-[var(--border)] p-5 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+    <section className="grid gap-5 rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] bg-[var(--admin-surface)] p-[var(--admin-card-padding)] md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
       <div className="flex flex-col gap-3">
         <h3 className={LABEL}>Barvy značky</h3>
         <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-7">
@@ -66,7 +66,7 @@ export function DesignLabIdentity({ venture }: { venture: DesignLabVenture }) {
                 {sample.role} · {sample.family}
               </dt>
               <dd
-                className={`truncate text-[var(--card-foreground)] ${sample.className}`}
+                className={`truncate text-[var(--admin-foreground)] ${sample.className}`}
                 style={{ fontFamily: `"${sample.family}", system-ui, sans-serif` }}
               >
                 {sample.sample}

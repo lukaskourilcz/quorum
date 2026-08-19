@@ -4,9 +4,13 @@ import { ArrowLeft, KeyRound, LockKeyhole, ShieldCheck } from "lucide-react";
 import { AdminLoginForm } from "@/components/admin/admin-login-form";
 import { sanitizeAdminReturnTo } from "@/lib/admin-return-to";
 import { Mark } from "@/components/brand/mark";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  AdminCard,
+  AdminCardContent,
+  AdminPageHeader,
+  AdminStatusBadge,
+  adminButtonVariants,
+} from "@/components/admin/admin-primitives";
 
 export const metadata: Metadata = {
   title: "Admin login",
@@ -48,61 +52,54 @@ export default async function AdminLoginPage({
   const destination = sanitizeAdminReturnTo(returnTo, "https://boardless.invalid");
 
   return (
-    <main className="editorial-grid flex min-h-dvh items-center px-5 py-10 md:px-8">
+    <main className="flex min-h-dvh items-center bg-[var(--admin-background)] px-5 py-10 md:px-8">
       <div className="mx-auto grid w-full max-w-5xl gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <section aria-labelledby="login-heading" className="max-w-2xl">
           <div className="flex items-center gap-3">
-            <Mark />
+            <Mark className="bg-[var(--admin-primary)] text-[var(--admin-primary-foreground)]" />
             <span className="font-semibold">BoardlessAI</span>
-            <Badge tone="warning">Private</Badge>
+            <AdminStatusBadge tone="warning">Private</AdminStatusBadge>
           </div>
-          <p className="mt-12 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">
-            Owner access
-          </p>
-          <h1
-            className="mt-4 text-5xl font-semibold tracking-[-0.06em] sm:text-6xl lg:text-7xl"
-            id="login-heading"
-          >
-            Your project desk
-            <span className="text-[var(--accent)]">.</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-base leading-7 text-[var(--muted-foreground)]">
-            Review saved ideas, control optional agents and inspect article and social drafts. Nothing here publishes by itself.
-          </p>
-          <div className="mt-8 grid gap-3 text-sm sm:grid-cols-2">
-            <div className="flex items-start gap-3 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-4">
-              <ShieldCheck aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-[var(--accent)]" />
+          <AdminPageHeader
+            className="mt-10"
+            description="Review saved ideas, control optional agents and inspect article and social drafts. Nothing here publishes by itself."
+            eyebrow="Owner access"
+            title={<span id="login-heading">Your project desk<span className="text-[var(--admin-section-accent)]">.</span></span>}
+          />
+          <div className="mt-7 grid gap-3 text-[length:var(--admin-type-body)] sm:grid-cols-2">
+            <div className="flex items-start gap-3 rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface)] p-4">
+              <ShieldCheck aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-[var(--admin-section-accent)]" />
               <span>Eight-hour secure session</span>
             </div>
-            <div className="flex items-start gap-3 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-4">
-              <LockKeyhole aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-[var(--accent)]" />
+            <div className="flex items-start gap-3 rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface)] p-4">
+              <LockKeyhole aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-[var(--admin-section-accent)]" />
               <span>Hidden from search engines</span>
             </div>
           </div>
         </section>
 
-        <Card className="bg-[var(--card)] shadow-2xl shadow-black/20">
-          <CardContent className="p-6 sm:p-8">
+        <AdminCard>
+          <AdminCardContent className="p-6 sm:p-8">
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex size-11 items-center justify-center rounded-[var(--radius-button)] bg-[var(--secondary)] text-[var(--accent)]">
+              <div className="flex size-11 items-center justify-center rounded-[var(--admin-radius)] bg-[var(--admin-surface-secondary)] text-[var(--admin-section-accent)]">
                 <KeyRound aria-hidden="true" className="size-5" />
               </div>
               <div>
-                <h2 className="text-2xl font-semibold tracking-[-0.04em]">Sign in</h2>
-                <p className="mt-1 text-sm text-[var(--muted-foreground)]">Use the details saved in Vercel.</p>
+                <h2 className="text-[length:var(--admin-type-dialog)] font-semibold tracking-[var(--admin-tracking-tight)]">Sign in</h2>
+                <p className="mt-1 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">Use the details saved in Vercel.</p>
               </div>
             </div>
 
             <AdminLoginForm error={error} returnTo={destination} />
 
-            <div className="mt-6 border-t border-[var(--border)] pt-5">
-              <Link className={buttonVariants({ variant: "ghost", size: "small" })} href="/">
+            <div className="mt-6 border-t border-[var(--admin-border)] pt-5">
+              <Link className={adminButtonVariants({ variant: "ghost" })} href="/">
                 <ArrowLeft aria-hidden="true" className="size-4" />
                 Return to the public site
               </Link>
             </div>
-          </CardContent>
-        </Card>
+          </AdminCardContent>
+        </AdminCard>
       </div>
     </main>
   );

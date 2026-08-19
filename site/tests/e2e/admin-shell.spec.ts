@@ -48,9 +48,15 @@ test("desktop Admin shell keeps its window, scroll, preferences and real command
   await page.reload({ waitUntil: "networkidle" });
   await expect(page.locator("[data-admin-window]").locator("..")).toHaveAttribute("data-admin-theme", "dark");
 
-  await page.keyboard.press("ControlOrMeta+K");
   const palette = page.getByRole("dialog", { name: "Admin navigation" });
-  await expect(palette).toBeVisible();
+  // A reload can paint the server-rendered shell just before the command palette's keyboard
+  // listener hydrates. Retry only while the visible dialog is absent so a successful shortcut is
+  // never toggled closed and the assertion remains tied to user-visible state.
+  await expect.poll(async () => {
+    if (await palette.isVisible()) return true;
+    await page.keyboard.press("ControlOrMeta+K");
+    return palette.isVisible();
+  }, { timeout: 30_000 }).toBe(true);
   await palette.getByRole("searchbox", { name: "Search Admin destinations" }).fill("kvorum");
   await expect(palette.getByRole("option")).toHaveCount(1);
   await palette.getByRole("searchbox", { name: "Search Admin destinations" }).press("Enter");

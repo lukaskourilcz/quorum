@@ -1,4 +1,4 @@
-import { Callout } from "@/components/ui/callout";
+import { AdminCallout } from "./admin-primitives";
 import { DesignLabIdentity } from "@/components/admin/design-lab-identity";
 import { DesignLabWorkspace } from "@/components/admin/design-lab-workspace";
 import type { DesignLabSection, DesignLabVenture } from "@/lib/design-lab-ventures";
@@ -31,17 +31,17 @@ export function DesignLabSectionNav({
             <li key={section.id}>
               <a
                 aria-current={on ? "page" : undefined}
-                className={`flex items-center gap-2 rounded-full border px-3 py-1 transition ${CHIP} ${
+                className={`admin-focus-ring flex min-h-[var(--admin-touch-target)] items-center gap-2 rounded-full border px-3 transition md:min-h-[var(--admin-control-height)] ${CHIP} ${
                   on
-                    ? "text-[var(--card-foreground)]"
-                    : "border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--card-foreground)]"
+                    ? "text-[var(--admin-foreground)]"
+                    : "border-[var(--admin-border)] text-[var(--admin-foreground-muted)] hover:text-[var(--admin-foreground)]"
                 }`}
                 href={`/admin?venture=design-lab&tab=studio&brand=${section.id}`}
                 style={on ? { borderColor: section.accent } : undefined}
               >
                 <span aria-hidden className="h-2 w-2 rounded-full" style={{ backgroundColor: section.accent }} />
                 {section.name}
-                <span className="text-[var(--muted-foreground)]">
+                <span className="text-[var(--admin-foreground-muted)]">
                   {section.publishesArticles ? section.articleCount : section.presetCount}
                 </span>
               </a>
@@ -63,11 +63,11 @@ export function DesignLabVentureSection({ venture }: { venture: DesignLabVenture
         // Three ventures do not deliver articles at all, and the workspace's own empty state would
         // read as "nothing has been written yet" — which is a different, fixable thing. Saying
         // which kind of empty this is keeps the section from looking broken.
-        <Callout tone="accent">
+        <AdminCallout tone="information">
           {venture.name} nevydává články, takže tu zatím nejsou návrhy z redakce. Paleta, písma a{" "}
           {venture.presetCount === 1 ? "jedna nevázaná šablona" : `${venture.presetCount} nevázaných šablon`} výše
           platí pro každý karusel, který se pro tuhle značku vykreslí.
-        </Callout>
+        </AdminCallout>
       )}
     </div>
   );

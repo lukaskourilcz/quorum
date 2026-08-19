@@ -9,6 +9,7 @@ import {
   AdminLabel,
   AdminMetric,
   AdminPageHeader,
+  AdminStateMessage,
   AdminStatusBadge,
   AdminTable,
   AdminTableCell,
@@ -67,6 +68,23 @@ describe("Admin design primitives", () => {
     expect(html).toContain('aria-label="Venture evidence"');
     expect(html).toContain('tabindex="0"');
     expect(html).toContain("<th");
+  });
+
+  it("names operational states independently of colour", () => {
+    const html = renderToStaticMarkup(
+      <>
+        <AdminStateMessage state="write-disabled" title="Saving is unavailable" />
+        <AdminStateMessage state="malformed" title="One record could not be read" />
+        <AdminStateMessage state="filtered-empty" title="No records match this view" />
+      </>,
+    );
+
+    expect(html).toContain('data-admin-state="write-disabled"');
+    expect(html).toContain('data-admin-state="malformed"');
+    expect(html).toContain('data-admin-state="filtered-empty"');
+    expect(html).toContain("Read only");
+    expect(html).toContain("Unreadable record");
+    expect(html).toContain("No matches");
   });
 
   it("keeps empty states and legacy wrappers on the shared foundation", () => {

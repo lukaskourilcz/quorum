@@ -2,9 +2,15 @@
 
 import { useState } from "react";
 import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Callout } from "@/components/ui/callout";
+import {
+  AdminButton as Button,
+  AdminEntityBadge,
+  AdminInput,
+  AdminLabel,
+  AdminSelect,
+  AdminStateMessage,
+  AdminTextarea,
+} from "./admin-primitives";
 import {
   DOOR_MONEY_RESULT_METRICS,
   type DoorMoneyOwnerResult,
@@ -15,9 +21,6 @@ import {
 } from "@/lib/door-money-result-model";
 
 const ENDPOINT = "/admin/api/door-money/results";
-const fieldClass =
-  "w-full rounded-[var(--radius-button)] border border-[var(--steel)] bg-[var(--surface)] px-3 py-2.5 text-base leading-6 text-[var(--foreground)] placeholder:text-[var(--fog)] disabled:opacity-50";
-
 const METRIC_LABELS: Record<DoorMoneyResultMetric, string> = {
   views: "Views",
   likes: "Likes",
@@ -57,30 +60,30 @@ export function doorMoneyOwnerResultEnvelope(input: {
 
 function ResultRecord({ intent, result }: { intent: string; result: DoorMoneyOwnerResult }) {
   return (
-    <li className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--secondary)] p-4">
+    <li className="border-l-2 border-[var(--admin-section-accent)] pl-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <Badge tone="dark">{result.platform}</Badge>
-        <p className="font-mono text-[0.65625rem] text-[var(--fog)]">{result.capturedAt}</p>
+        <AdminEntityBadge>{result.platform}</AdminEntityBadge>
+        <p className="m-0 text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{result.capturedAt}</p>
       </div>
       <dl className="mt-4 grid gap-4 md:grid-cols-2">
         <div>
-          <dt className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--mist)]">Intent</dt>
-          <dd className="mt-2 text-sm leading-6 text-[var(--fog)]">{intent}</dd>
+          <dt className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--admin-foreground)]">Intent</dt>
+          <dd className="mt-2 text-sm leading-6 text-[var(--admin-foreground-muted)]">{intent}</dd>
         </div>
         <div>
-          <dt className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--mist)]">Owner-entered outcome</dt>
-          <dd className="mt-2 text-sm leading-6 text-[var(--foreground)]">{result.outcome}</dd>
+          <dt className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--admin-foreground)]">Owner-entered outcome</dt>
+          <dd className="mt-2 text-sm leading-6 text-[var(--admin-foreground)]">{result.outcome}</dd>
         </div>
       </dl>
-      <dl className="mt-4 flex flex-wrap gap-2">
+      <dl className="m-0 mt-3 grid overflow-hidden rounded-[var(--admin-radius)] border border-[var(--admin-border)] sm:grid-cols-2 lg:grid-cols-4">
         {DOOR_MONEY_RESULT_METRICS.flatMap((metric) => result.metrics[metric] === undefined ? [] : [
-          <div className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2" key={metric}>
-            <dt className="font-mono text-[0.625rem] uppercase tracking-[0.1em] text-[var(--fog)]">{METRIC_LABELS[metric]}</dt>
-            <dd className="mt-1 text-sm font-semibold text-[var(--foreground)]">{result.metrics[metric]!.toLocaleString("en")}</dd>
+          <div className="border-b border-r border-[var(--admin-border)] bg-[var(--admin-surface-secondary)] px-3 py-2 last:border-r-0" key={metric}>
+            <dt className="text-[length:var(--admin-type-micro)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">{METRIC_LABELS[metric]}</dt>
+            <dd className="admin-tabular m-0 mt-1 text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-foreground)]">{result.metrics[metric]!.toLocaleString("en")}</dd>
           </div>
         ])}
       </dl>
-      <p className="mt-3 font-mono text-[0.65625rem] text-[var(--fog)]">Manual record · {result.id}</p>
+      <p className="mt-3 font-mono text-[0.65625rem] text-[var(--admin-foreground-muted)]">Manual record · {result.id}</p>
     </li>
   );
 }
@@ -138,41 +141,41 @@ export function DoorMoneyResultEntry({
   }
 
   return (
-    <section className="border-t border-[var(--border)] pt-5" aria-labelledby={`${formId}-heading`}>
-      <h4 className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--mist)]" id={`${formId}-heading`}>Owner results</h4>
+    <section className="border-t border-[var(--admin-border)] pt-5" aria-labelledby={`${formId}-heading`}>
+      <h4 className="m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]" id={`${formId}-heading`}>Owner results</h4>
       {results.length ? <ul className="mt-3 grid gap-3">{results.map((result) => <ResultRecord intent={intent} key={result.id} result={result} />)}</ul>
-        : <p className="mt-2 text-sm leading-6 text-[var(--fog)]">No owner result has been entered for this recommendation.</p>}
+        : <AdminStateMessage className="mt-2" state="initial-empty" title="No owner result has been entered for this recommendation." />}
 
-      {!postedUrl ? <Callout className="mt-4">Record the manual post URL before adding its result.</Callout> : (
+      {!postedUrl ? <AdminStateMessage className="mt-4" state="held" title="Record the manual post URL before adding its result." /> : (
         <form className="mt-5 grid gap-4" onSubmit={(event) => { event.preventDefault(); setTouched(true); void save(); }}>
-          <p className="text-sm leading-6 text-[var(--fog)]">Type only numbers you can see yourself. This form does not collect analytics.</p>
-          <label htmlFor={`${formId}-platform`}>
-            <span className="font-semibold text-[var(--foreground)]">Platform</span>
-            <select className={`${fieldClass} mt-2`} disabled={pending || !writesEnabled} id={`${formId}-platform`}
+          <p className="text-sm leading-6 text-[var(--admin-foreground-muted)]">Type only numbers you can see yourself. This form does not collect analytics.</p>
+          <div>
+            <AdminLabel htmlFor={`${formId}-platform`}>Platform</AdminLabel>
+            <AdminSelect disabled={pending || !writesEnabled} id={`${formId}-platform`}
               onChange={(event) => setPlatform(event.target.value as DoorMoneyResultPlatform)} value={platform}>
               {platforms.map((item) => <option key={item} value={item}>{item}</option>)}
-            </select>
-          </label>
+            </AdminSelect>
+          </div>
           <fieldset>
-            <legend className="font-semibold text-[var(--foreground)]">Visible metrics (at least one required)</legend>
+            <legend className="font-semibold text-[var(--admin-foreground)]">Visible metrics (at least one required)</legend>
             <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {DOOR_MONEY_RESULT_METRICS.map((metric) => (
-                <label htmlFor={`${formId}-${metric}`} key={metric}>
-                  <span className="text-sm text-[var(--fog)]">{METRIC_LABELS[metric]}</span>
-                  <input className={`${fieldClass} mt-1`} disabled={pending || !writesEnabled} id={`${formId}-${metric}`}
+                <div key={metric}>
+                  <AdminLabel htmlFor={`${formId}-${metric}`}>{METRIC_LABELS[metric]}</AdminLabel>
+                  <AdminInput disabled={pending || !writesEnabled} id={`${formId}-${metric}`}
                     inputMode="numeric" min="0" onChange={(event) => { setMetrics((current) => ({ ...current, [metric]: event.target.value })); setError(""); }}
                     step="1" type="number" value={metrics[metric]} />
-                </label>
+                </div>
               ))}
             </div>
           </fieldset>
-          <label htmlFor={`${formId}-outcome`}>
-            <span className="font-semibold text-[var(--foreground)]">Outcome (required)</span>
-            <textarea aria-describedby={`${formId}-error`} aria-invalid={touched && !request} className={`${fieldClass} mt-2 min-h-24`}
+          <div>
+            <AdminLabel htmlFor={`${formId}-outcome`}>Outcome (required)</AdminLabel>
+            <AdminTextarea aria-describedby={`${formId}-error`} aria-invalid={touched && !request}
               disabled={pending || !writesEnabled} id={`${formId}-outcome`} maxLength={1_000}
               onChange={(event) => { setOutcome(event.target.value); setError(""); }} required value={outcome} />
-          </label>
-          <p className="min-h-5 text-xs text-[var(--destructive)]" id={`${formId}-error`}>
+          </div>
+          <p className="min-h-5 text-xs text-[var(--admin-destructive)]" id={`${formId}-error`}>
             {touched && !request ? "Enter an outcome and at least one whole, nonnegative metric." : ""}
           </p>
           <Button className="justify-self-start" disabled={pending || !writesEnabled || !request} type="submit">
@@ -181,7 +184,7 @@ export function DoorMoneyResultEntry({
         </form>
       )}
       <div aria-live="polite" className="mt-3 min-h-5 text-sm" role={error ? "alert" : "status"}>
-        {error ? <span className="text-[var(--destructive)]">{error}</span> : <span className="text-[var(--fog)]">{message}</span>}
+        {error ? <span className="text-[var(--admin-destructive)]">{error}</span> : <span className="text-[var(--admin-foreground-muted)]">{message}</span>}
       </div>
     </section>
   );

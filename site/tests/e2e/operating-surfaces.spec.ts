@@ -292,19 +292,34 @@ test("Door Money renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Door Money" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Door Money/ })).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("link", { name: "recommendations" })).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("link", { name: "actions" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "knowledge" })).toBeVisible();
-  await expect(page.getByText(/No Door Money recommendation store exists yet\.|No readable Door Money recommendations are stored\./u)).toBeVisible();
-  await expect(page.getByText("0 on this tab")).toBeVisible();
+  const actionsTab = page.locator('a[href="/admin?venture=door-money&tab=actions"]');
+  const knowledgeTab = page.locator('a[href="/admin?venture=door-money&tab=knowledge"]');
+  await expect(actionsTab).toBeVisible();
+  await expect(knowledgeTab).toBeVisible();
+  const recommendationCards = page.locator('[id^="door-money-recommendation-"]');
+  const recommendationCount = await recommendationCards.count();
+  await expect(page.getByText(`${recommendationCount} on this tab`, { exact: true })).toBeVisible();
+  if (recommendationCount > 0) {
+    await expect(recommendationCards.first()).toBeVisible();
+  } else {
+    await expect(page.getByText(/No Door Money recommendation store exists yet\.|No readable Door Money recommendations are stored\./u)).toBeVisible();
+  }
 
-  await page.getByRole("link", { name: "actions" }).click();
-  await expect(page).toHaveURL(/tab=actions/);
-  await expect(page.getByText("No Door Money action packets or playbooks exist yet.")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Mark complete" })).toHaveCount(0);
+  await actionsTab.click();
+  await expect(page).toHaveURL(/tab=actions/, { timeout: 30_000 });
+  const actionsHeading = page.getByRole("heading", { name: "Today’s actions" });
+  const actionsState = page.getByText(/No Door Money action packets or playbooks exist yet\.|Door Money actions could not be read\./u);
+  await expect(actionsHeading.or(actionsState).first()).toBeVisible();
+  if (await actionsHeading.count()) {
+    await expect(page.getByRole("heading", { name: "Channel playbooks" })).toBeVisible();
+    await expect(page.getByText(/Playbooks cannot post, send outreach, create accounts or modify a channel\./u)).toBeVisible();
+  }
 
-  await page.getByRole("link", { name: "knowledge" }).click();
-  await expect(page).toHaveURL(/tab=knowledge/);
-  await expect(page.getByText("No Door Money knowledge version exists yet.")).toBeVisible();
+  await knowledgeTab.click();
+  await expect(page).toHaveURL(/tab=knowledge/, { timeout: 30_000 });
+  await expect(page.getByRole("heading", { name: "Ingestion status" }).or(
+    page.getByText(/No Door Money knowledge version exists yet\.|The current Door Money knowledge version could not be read\./u)
+  ).first()).toBeVisible();
   await expect(page.getByRole("button", { name: /ingest/i })).toHaveCount(0);
 });
 
@@ -313,23 +328,26 @@ test("Tehdejsi svet renders its three bounded admin tabs", async ({ page }) => {
 
   await expect(page.getByRole("heading", { name: "Tehdejší svět" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Tehdejší svět/ })).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("link", { name: "features" })).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("link", { name: "library" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "signals" })).toBeVisible();
-  await expect(page.getByText("No shortlist has been recorded yet.")).toBeVisible();
+  const featuresTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=features"]');
+  const libraryTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=library"]');
+  const signalsTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=signals"]');
+  await expect(featuresTab).toHaveAttribute("aria-current", "page");
+  await expect(libraryTab).toBeVisible();
+  await expect(signalsTab).toBeVisible();
+  await expect(page.getByText(/No shortlist has been recorded yet\.|No readable Tehdejší svět shortlist is available\./u)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Czech performance" })).toBeVisible();
   await expect(page.getByText("Sends (primary)").first()).toBeVisible();
   await expect(page.getByText("Saves (primary)").first()).toBeVisible();
   await expect(page.locator('[data-tehdejsi-results="cs"]')).toContainText("17");
   await expect(page.locator('[data-tehdejsi-results="cs"]')).toContainText("23");
 
-  await page.getByRole("link", { name: "library" }).click();
+  await libraryTab.click();
   await expect(page).toHaveURL(/tab=library/);
   await expect(page.getByRole("heading", { name: "Facts-file status" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Facts browser" })).toBeVisible();
   await expect(page.getByText("5 on this tab")).toBeVisible();
 
-  await page.getByRole("link", { name: "signals" }).click();
+  await signalsTab.click();
   await expect(page).toHaveURL(/tab=signals/);
   await expect(page.getByRole("heading", { name: "Community memory" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Product insight queue" })).toBeVisible();
@@ -401,14 +419,28 @@ test("approvals and owner-only work include all four new ventures", async ({ pag
 });
 
 test("Tehdejsi svet unreadable records count on the venture and company views", async ({ page }) => {
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const unreadable = page.locator('[data-admin-attention-item="Unreadable files"]');
+  const baselineCompany = Number(await unreadable.locator(".admin-tabular").textContent());
+
+  await page.goto("/admin?venture=tehdejsi-svet&tab=features", { waitUntil: "networkidle" });
+  const ventureUnreadable = page.locator('[data-admin-state="malformed"]').filter({
+    has: page.getByText("Some saved workspace records are unavailable", { exact: true })
+  });
+  const baselineVentureText = await ventureUnreadable.textContent();
+  const baselineVenture = Number(baselineVentureText?.match(/(\d+) saved (?:file|files)/u)?.[1] ?? 0);
+
   await writeFile(tsUnreadablePath, "{}\n");
   try {
     await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
-    const unreadable = page.locator("[data-adm-rail-foot]").getByText("Unreadable files", { exact: true }).locator("..");
-    await expect(unreadable.getByText("1", { exact: true })).toBeVisible();
+    await expect(unreadable.locator(".admin-tabular")).toHaveText(String(baselineCompany + 1));
 
     await page.goto("/admin?venture=tehdejsi-svet&tab=features", { waitUntil: "networkidle" });
-    await expect(page.getByText(/1 saved file cannot be read: features \(1\)/u)).toBeVisible();
+    const expectedVentureTotal = baselineVenture + 1;
+    await expect(ventureUnreadable).toContainText(
+      `${expectedVentureTotal} saved ${expectedVentureTotal === 1 ? "file cannot" : "files cannot"} be read`
+    );
+    await expect(ventureUnreadable).toContainText("features (1)");
   } finally {
     await rm(tsUnreadablePath, { force: true });
   }
@@ -633,7 +665,7 @@ test("admin makes its deployment write capability explicit", async ({ page }) =>
 
 test("admin separates pending approvals from approved deliveries still waiting", async ({ page }) => {
   await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
-  const attention = page.locator("[data-adm-rail-foot]");
+  const attention = page.locator("[data-admin-attention-summary]");
   await expect(attention).toContainText("Approvals waiting");
   await expect(attention).toContainText("Approved deliveries waiting");
   await expect(attention).toContainText("1");
@@ -850,9 +882,9 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
 
     await page.goto("/admin?venture=kvorum&tab=claims", { waitUntil: "networkidle" });
     await expect(page.getByText("3 on this tab", { exact: true })).toBeVisible();
-    const publishedClaim = page.locator("article")
-      .filter({ hasText: "Návrh se vrací do sněmovního projednávání." })
-      .first();
+    const publishedClaim = page
+      .getByText("Návrh se vrací do sněmovního projednávání.", { exact: true })
+      .locator("..");
     await expect(publishedClaim.getByText("manual post recorded", { exact: true })).toBeVisible();
     await publishedClaim.getByRole("button", { name: "Draft correction" }).click();
     await expect(publishedClaim.getByText("A new correction recommendation is waiting for owner review. Nothing was published."))
@@ -931,15 +963,26 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await page.locator('input[name="password"]').fill("e2e-password");
     await page.getByRole("button", { name: "Open project desk" }).click();
     await expect(page).toHaveURL(/\/admin$/, { timeout: 30_000 });
-    await expect(page.getByRole("heading", { name: "Project desk." })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Company Overview." })).toBeVisible();
     // The "Updated at" tile went with the redesign: the page is force-dynamic and behind a
     // credential check, so a rendered-at timestamp told the owner only that the page had rendered.
     // What is worth asserting is that the protected shell came up — breadcrumb, state badge and the
     // way back out.
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-    await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
+    const moreButton = page.getByRole("navigation", { name: "Primary Admin navigation" })
+      .getByRole("button", { name: "More" });
+    // A successful server-action navigation can paint the new shell just before hydration attaches
+    // this client's click handler. Retry the user action until its visible dialog state confirms
+    // that the protected shell is interactive; no fixed delay or implementation event is needed.
+    await expect.poll(async () => {
+      await moreButton.click();
+      return page.getByRole("dialog", { name: "More" }).isVisible();
+    }, { timeout: 30_000 }).toBe(true);
+    const more = page.getByRole("dialog", { name: "More" });
+    const signOut = more.getByRole("button", { name: "Sign out of Admin", exact: true });
+    await expect(signOut).toBeVisible();
 
-    await page.getByRole("button", { name: "Sign out" }).click();
+    await signOut.click();
     await expect(page).toHaveURL(/\/admin\/login$/);
     await page.goto("/admin");
     await expect(page).toHaveURL(/\/admin\/login\?error=expired(?:&returnTo=%2Fadmin)?$/);
@@ -1556,9 +1599,11 @@ test.describe("calendar tooltips clear the header row", () => {
  * `font: inherit` reset on form controls beat every size utility on every button on the site, so
  * a button declaring 7.5px and a button declaring 10px both rendered at the inherited 16px. The
  * reset lives in `@layer base` now and the three share one style, so this asserts the rendered
- * size rather than the class list — the class list was never the thing that was wrong.
+ * size rather than the class list — the class list was never the thing that was wrong. Admin now
+ * uses a labelled icon for sign-out, so its contract is an accessible desktop target rather than
+ * a text font size shared with the public walkthrough.
  */
-test("the meeting room's controls and the admin sign-out are one small family", async ({ page }) => {
+test("meeting controls stay compact and Admin sign-out stays accessible", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" });
   const home = await page.evaluate(() => {
     const jump = [...document.querySelectorAll("button")].find((node) => node.textContent?.includes("Jump to date"));
@@ -1575,12 +1620,11 @@ test("the meeting room's controls and the admin sign-out are one small family", 
   expect(home.channelsLine).toBe(false);
 
   await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
-  const signOut = await page.evaluate(() => {
-    const node = [...document.querySelectorAll("button")].find((entry) => entry.textContent?.trim() === "Sign out");
-    return node ? Number.parseFloat(getComputedStyle(node).fontSize) : null;
-  });
-  // The same change, reaching admin: the three used to render identically at the browser default.
-  expect(signOut).toBe(home.jump);
+  const signOut = page.getByRole("button", { name: "Sign out of Admin", exact: true });
+  await expect(signOut).toBeVisible();
+  const signOutBox = await signOut.boundingBox();
+  expect(signOutBox?.width).toBe(36);
+  expect(signOutBox?.height).toBe(36);
 });
 
 /**

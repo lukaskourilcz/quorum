@@ -2,7 +2,9 @@ import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
 
 const globalsUrl = new URL("../../app/globals.css", import.meta.url);
+const layoutUrl = new URL("../../app/admin/layout.tsx", import.meta.url);
 const shellUrl = new URL("./admin-shell-client.tsx", import.meta.url);
+const auditUrl = new URL("../../../../scripts/admin-design-audit.mjs", import.meta.url);
 const designSystemUrl = new URL("../../../../docs/ADMIN-DESIGN-SYSTEM.md", import.meta.url);
 
 describe("Admin design tokens", () => {
@@ -16,6 +18,8 @@ describe("Admin design tokens", () => {
     expect(adminStyles).toContain("[data-admin] {");
     expect(adminStyles).toContain('[data-admin][data-admin-theme="dark"]');
     expect(adminStyles).not.toMatch(/:root\s*{[^}]*--admin-/s);
+    expect(adminStyles).not.toContain("--background: var(--admin-background)");
+    expect(adminStyles).not.toContain("--radius-card: var(--admin-radius-lg)");
   });
 
   it("defines the semantic surface, state, density and focus contract", async () => {
@@ -49,8 +53,14 @@ describe("Admin design tokens", () => {
   });
 
   it("lets the protected shell select either scoped Admin palette", async () => {
-    const shell = await readFile(shellUrl, "utf8");
+    const [layout, shell] = await Promise.all([
+      readFile(layoutUrl, "utf8"),
+      readFile(shellUrl, "utf8"),
+    ]);
 
+    expect(layout).toContain("ADMIN_THEME_COOKIE");
+    expect(layout).toContain("data-admin");
+    expect(layout).toContain("data-admin-theme={theme}");
     expect(shell).toContain("data-admin");
     expect(shell).toContain("data-admin-theme={theme}");
     expect(shell).toContain("--admin-current-sidebar-width");
@@ -63,5 +73,14 @@ describe("Admin design tokens", () => {
     expect(designSystem).toContain("3049c5008b53e7d34d794822eedd552a470492c1");
     expect(designSystem).toContain("pnpm admin:design-audit");
     expect(designSystem).toContain("does not alter the locked public presentation");
+  });
+
+  it("fails the Admin audit when migration-only styling returns", async () => {
+    const audit = await readFile(auditUrl, "utf8");
+
+    expect(audit).toContain("legacyToken");
+    expect(audit).toContain("publicUiImport");
+    expect(audit).toContain("unwrap");
+    expect(audit).toContain("process.exitCode = 1");
   });
 });

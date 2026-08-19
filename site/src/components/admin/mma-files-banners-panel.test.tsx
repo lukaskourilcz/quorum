@@ -20,4 +20,17 @@ describe("MMA banner crop panel", () => {
     expect(html).toContain("Připravit přesný ořez");
     expect(html).toContain("Doručit");
   });
+
+  it("names an empty banner registry", () => {
+    const banners: AdminMmaBanners = {
+      status: "delivered",
+      preparedAt: "2026-08-09T00:00:00.000Z",
+      receiptRef: null,
+      slots: [],
+    };
+    const html = renderToStaticMarkup(<MmaFilesBannersPanel banners={banners} />);
+
+    expect(html).toContain('data-admin-state="initial-empty"');
+    expect(html).toContain("žádné bannerové sloty");
+  });
 });

@@ -137,7 +137,7 @@ export function AdminSidebar({
       </div>
 
       <div className={`flex min-h-11 shrink-0 items-center gap-2.5 px-3 ${collapsed ? "justify-center" : ""}`}>
-        <Mark className="size-7 shrink-0" />
+        <Mark className="size-7 shrink-0 bg-[var(--admin-primary)] text-[var(--admin-primary-foreground)]" />
         {!collapsed ? (
           <div className="min-w-0">
             <p className="truncate text-[length:var(--admin-type-section)] font-semibold tracking-[var(--admin-tracking-tight)]">BoardlessAI</p>
@@ -172,13 +172,13 @@ export function AdminSidebar({
 
       <div className="shrink-0 border-t border-[var(--admin-sidebar-border)] p-2.5">
         {!collapsed ? (
-          <div className="mb-2 rounded-[var(--admin-radius)] border border-[var(--admin-sidebar-border)] bg-[var(--admin-sidebar-hover)] p-2.5">
+          <div className="mb-2 rounded-[var(--admin-radius)] border border-[var(--admin-sidebar-border)] bg-[var(--admin-sidebar-hover)] p-2.5" data-admin-attention-summary>
             <p className="mb-1.5 flex items-center gap-1.5 font-mono text-[length:var(--admin-type-micro)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-sidebar-muted)]">
               <ShieldAlert aria-hidden="true" className="size-3.5" /> Needs you
-              <span className="admin-tabular ml-auto text-[var(--admin-sidebar-foreground)]">{attentionTotal}</span>
+              <span className="admin-tabular ml-auto text-[var(--admin-sidebar-foreground)]" data-admin-attention-total>{attentionTotal}</span>
             </p>
-            {attention.slice(0, 3).map((entry) => (
-              <p className="flex gap-2 py-0.5 text-[length:var(--admin-type-micro)] text-[var(--admin-sidebar-muted)]" key={entry.label}>
+            {attention.map((entry) => (
+              <p className="flex gap-2 py-0.5 text-[length:var(--admin-type-micro)] text-[var(--admin-sidebar-muted)]" data-admin-attention-item={entry.label} key={entry.label}>
                 <span className="truncate">{entry.label}</span>
                 <span className="admin-tabular ml-auto text-[var(--admin-sidebar-foreground)]">{entry.value}</span>
               </p>

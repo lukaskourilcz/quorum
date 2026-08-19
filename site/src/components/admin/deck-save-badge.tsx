@@ -1,5 +1,7 @@
 "use client";
 
+import { AdminStatusBadge } from "./admin-primitives";
+
 /**
  * What a save is saying, which is never what the preview is showing.
  *
@@ -39,14 +41,13 @@ export function DeckSaveBadge({ save }: { save: SaveState }) {
     : save.kind === "warning" ? "neuloženo"
     : `vychází ${save.style}`;
   return (
-    <span
+    <AdminStatusBadge
       data-save-state={save.kind}
       aria-live="polite"
-      className={`self-center font-mono text-[0.65625rem] uppercase tracking-[0.12em] ${
-        save.kind === "warning" ? "text-[var(--warning)]" : "text-[var(--fog)]"
-      }`}
+      className="self-center"
+      tone={save.kind === "warning" ? "warning" : save.kind === "saved" ? "success" : save.kind === "saving" ? "information" : "neutral"}
     >
       {text}
-    </span>
+    </AdminStatusBadge>
   );
 }

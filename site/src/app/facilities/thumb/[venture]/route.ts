@@ -18,6 +18,11 @@ export const dynamic = "force-static";
 
 const VENTURES = ["caught-up", "mma-files"] as const;
 type Venture = (typeof VENTURES)[number];
+const MEDIA_TYPES: Readonly<Record<string, string>> = {
+  png: "image/png",
+  svg: "image/svg+xml; charset=utf-8",
+  webp: "image/webp"
+};
 
 export function generateStaticParams() {
   return VENTURES.map((venture) => ({ venture }));
@@ -58,12 +63,20 @@ export async function GET(
   if (!VENTURES.includes(venture as Venture)) return new Response(null, { status: 404 });
 
   const pkg = await newestPackage(venture as Venture);
-  const encoded = (pkg?.image as { thumb_bytes_base64?: unknown } | undefined)?.thumb_bytes_base64;
-  if (typeof encoded !== "string" || encoded.length === 0) return new Response(null, { status: 404 });
+  const image = pkg?.image as { thumb_bytes_base64?: unknown; thumb_path?: unknown } | undefined;
+  const encoded = image?.thumb_bytes_base64;
+  const extension = typeof image?.thumb_path === "string"
+    ? /\.(png|svg|webp)$/u.exec(image.thumb_path)?.[1]
+    : undefined;
+  if (typeof encoded !== "string" || encoded.length === 0 || !extension) {
+    return new Response(null, { status: 404 });
+  }
 
-  return new Response(Buffer.from(encoded, "base64") as unknown as BodyInit, {
+  return new Response(new Uint8Array(Buffer.from(encoded, "base64")), {
     headers: {
-      "Content-Type": "image/webp",
+      "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+      "Content-Type": MEDIA_TYPES[extension]!,
+      "X-Content-Type-Options": "nosniff",
       // The bytes are immutable for a given delivery, and a new delivery rebuilds the site.
       "Cache-Control": "public, max-age=3600, must-revalidate"
     }

@@ -2,8 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
+import {
+  AdminButton as Button,
+  AdminLabel,
+  AdminSelect,
+  AdminTextarea,
+} from "./admin-primitives";
 
 export function FightAiQDiscrepancyResolution({ fighterRef, field, values }: {
   fighterRef: string;
@@ -40,19 +45,19 @@ export function FightAiQDiscrepancyResolution({ fighterRef, field, values }: {
   }
 
   return <form action={submit} className="mt-5 grid gap-4"><fieldset className="contents" disabled={!writesEnabled}>
-    <label className="grid gap-2 text-sm font-semibold" htmlFor={`${fighterRef}-${field}-source`}>
-      Value to keep
-      <select className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] px-3" defaultValue="" id={`${fighterRef}-${field}-source`} name="selectedSourceRef" required>
+    <div>
+      <AdminLabel htmlFor={`${fighterRef}-${field}-source`}>Value to keep</AdminLabel>
+      <AdminSelect defaultValue="" id={`${fighterRef}-${field}-source`} name="selectedSourceRef" required>
         <option disabled value="">Choose a cited value</option>
         {values.map((value) => <option key={value.sourceRef} value={value.sourceRef}>{value.displayValue} · {value.sourceRef}</option>)}
-      </select>
-    </label>
-    <label className="grid gap-2 text-sm font-semibold" htmlFor={`${fighterRef}-${field}-reason`}>
-      Why this source wins
-      <textarea className="min-h-24 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] p-3 font-normal" id={`${fighterRef}-${field}-reason`} maxLength={280} name="reason" required />
-    </label>
+      </AdminSelect>
+    </div>
+    <div>
+      <AdminLabel htmlFor={`${fighterRef}-${field}-reason`}>Why this source wins</AdminLabel>
+      <AdminTextarea id={`${fighterRef}-${field}-reason`} maxLength={280} name="reason" required />
+    </div>
     <div><Button disabled={busy || !writesEnabled} type="submit">{busy ? "Saving…" : "Resolve disagreement"}</Button></div>
     </fieldset>
-    {message ? <p aria-live="polite" className="text-sm text-[var(--fog)]">{message}</p> : null}
+    {message ? <p aria-live="polite" className="text-sm text-[var(--admin-foreground-muted)]">{message}</p> : null}
   </form>;
 }

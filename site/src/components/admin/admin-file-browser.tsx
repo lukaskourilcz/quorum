@@ -1,6 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import {
+  AdminButton,
+  AdminCard,
+  AdminCardContent,
+  AdminCardHeader,
+  AdminStateMessage,
+  AdminStatusBadge,
+} from "./admin-primitives";
 
 const OWNER_FACING_FILE_TERMS: ReadonlyArray<readonly [string, string]> = [
   ["METRICS_INGESTION_ENABLED=false", "automated metric collection stays turned off"]
@@ -79,74 +87,76 @@ export function AdminFileBrowser({
 
   if (!selected) {
     return (
-      <div className="rounded-[12px] border border-[#26262b] bg-[#0c0c0f] p-[18px]">
-        <p className="m-0 text-[13px] leading-[1.6] text-[#a1a1aa]">
-          No source file could be read. That is a fault worth looking at, not an empty state.
-        </p>
-      </div>
+      <AdminStateMessage
+        description="That is a fault worth looking at, not an empty record set."
+        state="unavailable"
+        title="No source file could be read."
+      />
     );
   }
 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[5fr_7fr]" data-adm-cols>
-      <div className="rounded-[12px] border border-[#26262b] bg-[#0c0c0f]">
-        <div className="flex items-center justify-between gap-3 border-b border-[#1e1e22] px-[18px] py-3.5">
-          <p className="m-0 text-[14px] font-semibold">Saved source files</p>
-          <span className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#94949c]">Read only</span>
-        </div>
-        <div className="max-h-[340px] overflow-y-auto p-2 [overscroll-behavior:contain]">
+      <AdminCard>
+        <AdminCardHeader className="flex items-center justify-between gap-3">
+          <p className="m-0 text-[length:var(--admin-type-section)] font-semibold">Saved source files</p>
+          <AdminStatusBadge tone="neutral">Read only</AdminStatusBadge>
+        </AdminCardHeader>
+        <AdminCardContent className="max-h-[340px] overflow-y-auto p-2 [overscroll-behavior:contain]">
           {files.map((file, fileIndex) => (
             <button
-              className="mb-0.5 flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[12.5px] transition-colors"
+              aria-pressed={fileIndex === index}
+              className={`admin-focus-ring mb-0.5 flex min-h-[var(--admin-touch-target)] w-full items-center gap-2 rounded-[var(--admin-radius)] px-2.5 py-2 text-left text-[length:var(--admin-type-control)] transition-colors md:min-h-[var(--admin-row-dense)] ${
+                fileIndex === index
+                  ? "bg-[var(--admin-surface-selected)] text-[var(--admin-foreground)]"
+                  : "text-[var(--admin-foreground-muted)] hover:bg-[var(--admin-surface-hover)] hover:text-[var(--admin-foreground)]"
+              }`}
               key={file.name}
               onClick={() => setIndex(fileIndex)}
-              style={{
-                background: fileIndex === index ? "#1a1a1f" : "transparent",
-                color: fileIndex === index ? "#ffffff" : "#a1a1aa"
-              }}
               type="button"
             >
               <span className="min-w-0 truncate">{file.name}</span>
-              <span className="ml-auto shrink-0 font-mono text-[9.5px] text-[#94949c]">{file.size}</span>
+              <span className="admin-tabular ml-auto shrink-0 font-mono text-[length:var(--admin-type-micro)] text-[var(--admin-foreground-subtle)]">{file.size}</span>
             </button>
           ))}
-        </div>
-      </div>
+        </AdminCardContent>
+      </AdminCard>
 
-      <div className="flex flex-col rounded-[12px] border border-[#26262b] bg-[#0c0c0f]">
-        <div className="flex items-center justify-between gap-3 border-b border-[#1e1e22] px-[18px] py-3.5">
-          <p className="m-0 font-mono text-[12.5px] font-semibold text-[#f4f4f5]">{selected.name}</p>
-          <span className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#94949c]">
+      <AdminCard className="flex flex-col">
+        <AdminCardHeader className="flex items-center justify-between gap-3">
+          <p className="m-0 min-w-0 break-all font-mono text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-foreground)]">{selected.name}</p>
+          <span className="admin-tabular shrink-0 font-mono text-[length:var(--admin-type-micro)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">
             {selected.size} · read only
           </span>
-        </div>
+        </AdminCardHeader>
         {summary ? (
-          <div className="grid gap-1.5 border-b border-[#1e1e22] px-[18px] py-4">
-            <p className="m-0 text-[13px] leading-[1.6] text-[#d4d4d8]">{summary[0]}</p>
+          <div className="grid gap-1.5 border-b border-[var(--admin-border)] px-[var(--admin-card-padding)] py-4">
+            <p className="m-0 text-[length:var(--admin-type-body)] leading-relaxed text-[var(--admin-foreground)]">{summary[0]}</p>
             <ul className="m-0 grid list-none gap-1 p-0">
               {summary.slice(1).map((entry) => (
-                <li className="font-mono text-[11.5px] text-[#a1a1aa]" key={entry}>{entry}</li>
+                <li className="admin-tabular break-all font-mono text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]" key={entry}>{entry}</li>
               ))}
             </ul>
-            <button
-              className="justify-self-start font-mono text-[10px] uppercase tracking-[0.12em] text-[#94949c] underline"
+            <AdminButton
+              className="justify-self-start"
               onClick={() => setShowRaw((open) => !open)}
               type="button"
+              variant="ghost"
             >
               {showRaw ? "Hide the file" : "Show the file"}
-            </button>
+            </AdminButton>
           </div>
         ) : null}
         {summary && !showRaw ? null : (
           <pre
             aria-label={`${selected.name} file content`}
-            className="m-0 max-h-[340px] flex-1 overflow-auto whitespace-pre-wrap break-words px-[18px] py-4 font-mono text-[11.5px] leading-[1.6] text-[#d4d4d8]"
+            className="admin-focus-ring m-0 max-h-[340px] flex-1 overflow-auto whitespace-pre-wrap break-words px-[var(--admin-card-padding)] py-4 font-mono text-[length:var(--admin-type-label)] leading-relaxed text-[var(--admin-foreground)]"
             tabIndex={0}
           >
             {displayedContent}
           </pre>
         )}
-      </div>
+      </AdminCard>
     </div>
   );
 }

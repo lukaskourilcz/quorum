@@ -1,13 +1,22 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Callout } from "@/components/ui/callout";
 import { CopySocialText } from "@/components/admin/copy-social-text";
 import { DeckSaveBadge, warningFor, type SaveState } from "@/components/admin/deck-save-badge";
 import { DesignLabBilingualSlide } from "@/components/admin/design-lab-bilingual-slide";
 import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
+import {
+  AdminButton as Button,
+  AdminCallout as Callout,
+  AdminCard,
+  AdminCardContent,
+  AdminEntityBadge,
+  AdminInput,
+  AdminLabel,
+  AdminStateMessage,
+  AdminStatusBadge as Badge,
+  AdminTextarea,
+} from "./admin-primitives";
 import type { LabArticle, LabPreset } from "@/lib/design-lab";
 
 /**
@@ -77,13 +86,13 @@ function words(value: string): number {
 }
 
 function chipClass(on: boolean): string {
-  // Brand text on a brand tint measures 1.00:1 — the two are the same hue. An active chip is
-  // brand border, brand tint and white text; the border carries the identity, the label carries
-  // the word, so it gets the colour that lets it be read.
-  return `rounded-full border px-3 py-1 font-mono text-[0.65625rem] uppercase tracking-[0.12em] transition ${
+  // Brand text on a brand tint measures 1.00:1 — the two are the same hue. An active chip uses
+  // the primary fill and its paired foreground token so both the selection and its label remain
+  // legible in every Admin theme.
+  return `admin-focus-ring inline-flex min-h-[var(--admin-touch-target)] items-center rounded-full border px-3 text-[length:var(--admin-type-label)] font-semibold uppercase tracking-[var(--admin-tracking-label)] transition md:min-h-[var(--admin-control-height)] ${
     on
-      ? "border-[var(--accent)] bg-[var(--accent)] text-[var(--background)]"
-      : "border-[var(--border)] text-[var(--muted-foreground)] hover:border-[var(--accent)] hover:text-[var(--card-foreground)]"
+      ? "border-[var(--admin-primary)] bg-[var(--admin-primary)] text-[var(--admin-primary-foreground)]"
+      : "border-[var(--admin-border)] text-[var(--admin-foreground-muted)] hover:border-[var(--admin-section-accent)] hover:text-[var(--admin-foreground)]"
   }`;
 }
 
@@ -103,20 +112,13 @@ function SlideImage({ src, alt, ratio }: { src: string; alt: string; ratio: numb
   const pending = loaded !== url;
 
   if (failed === url) {
-    return (
-      <div className="flex flex-col items-center gap-2 rounded-[var(--radius-card)] border border-[var(--warning)] p-6 text-center">
-        <p className="text-xs text-[var(--warning)]">Slide se nevykreslil.</p>
-        <Button onClick={() => setAttempt((value) => value + 1)} size="small" type="button" variant="secondary">
-          Zkusit znovu
-        </Button>
-      </div>
-    );
+    return <AdminStateMessage state="error" title="Slide se nevykreslil." action={<Button onClick={() => setAttempt((value) => value + 1)}>Zkusit znovu</Button>} />;
   }
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
       alt={alt}
-      className={`w-full rounded-[var(--radius-card)] border border-[var(--border)] transition-opacity ${pending ? "opacity-40" : "opacity-100"}`}
+      className={`w-full rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] transition-opacity ${pending ? "opacity-40" : "opacity-100"}`}
       data-slide-canvas
       onError={() => setFailed(url)}
       onLoad={() => setLoaded(url)}
@@ -181,20 +183,22 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
   }
 
   return (
-    <article className="grid min-w-0 gap-5 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-5" data-lab-article={`${article.venture}/${article.slug}/${article.date}`}>
-      <header className="flex min-w-0 flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="break-words font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
-            {article.ventureLabel} · {article.date} · {article.slides.length} slidů
-          </p>
-          <h3 className="mt-1 truncate text-base font-semibold text-[var(--card-foreground)]">{article.headline}</h3>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {article.hasHero ? null : <Badge tone="warning">bez obrázku</Badge>}
-          <Badge tone={article.renderable ? "success" : "danger"}>{article.renderable ? "připraveno" : "neúplné"}</Badge>
-          <Badge>{article.origin === "recorded" ? "zaznamenáno" : "odvozeno"}</Badge>
-        </div>
-      </header>
+    <article className="min-w-0" data-lab-article={`${article.venture}/${article.slug}/${article.date}`}>
+      <AdminCard>
+        <AdminCardContent className="grid min-w-0 gap-5">
+        <header className="flex min-w-0 flex-wrap items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="break-words font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">
+              {article.ventureLabel} · {article.date} · {article.slides.length} slidů
+            </p>
+            <h3 className="mt-1 truncate text-base font-semibold text-[var(--admin-foreground)]">{article.headline}</h3>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {article.hasHero ? null : <Badge tone="warning">bez obrázku</Badge>}
+            <Badge tone={article.renderable ? "success" : "destructive"}>{article.renderable ? "připraveno" : "neúplné"}</Badge>
+            <AdminEntityBadge>{article.origin === "recorded" ? "zaznamenáno" : "odvozeno"}</AdminEntityBadge>
+          </div>
+        </header>
 
       {article.problems.length > 0 ? <Callout tone="warning">{article.problems.join(" ")}</Callout> : null}
 
@@ -222,8 +226,8 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
             // The platform's own chrome, drawn over the canvas: a profile row along the top and a
             // reply bar along the bottom cover roughly a seventh of the frame at each end.
             <div aria-hidden="true" className="pointer-events-none absolute inset-0" data-safe-area>
-              <div className="absolute inset-x-0 top-0 h-[14%] bg-[var(--destructive-soft)] opacity-60" />
-              <div className="absolute inset-x-0 bottom-0 h-[16%] bg-[var(--destructive-soft)] opacity-60" />
+              <div className="absolute inset-x-0 top-0 h-[14%] bg-[var(--admin-destructive-soft)] opacity-60" />
+              <div className="absolute inset-x-0 bottom-0 h-[16%] bg-[var(--admin-destructive-soft)] opacity-60" />
             </div>
           ) : null}
         </div>
@@ -248,157 +252,158 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
 
           {dedicatedBilingual ? (
             <DesignLabBilingualSlide pack={article.dualLanguage} slide={slide} />
-          ) : <>
-          <div className="grid min-w-0 gap-2">
-            <label className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]" htmlFor={`slide-${article.id}`}>
-              Text slidu {slide + 1}
-            </label>
-            <textarea
-              className="min-h-24 w-full rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--background)] p-3 text-sm text-[var(--foreground)]"
-              disabled={!writesEnabled}
-              id={`slide-${article.id}`}
-              onChange={(event) => {
-                const next = [...texts];
-                next[slide] = event.target.value;
-                setTexts(next);
-              }}
-              value={current}
-            />
-            <div className="flex flex-wrap items-center gap-3">
-              <span className={`font-mono text-[0.65625rem] uppercase tracking-[0.12em] ${overLimit ? "text-[var(--destructive)]" : "text-[var(--fog)]"}`} data-word-count>
-                {words(current)}/{MAX_WORDS} slov
-              </span>
-              <Button
-                data-save-slide
-                disabled={!writesEnabled || overLimit || !changed}
-                onClick={() => { void post({ slide, text: current }, `slide ${slide + 1}`); }}
-                size="small"
-                type="button"
-                variant="secondary"
-              >
-                Uložit slide
-              </Button>
-              {overLimit ? (
-                <span className="text-xs text-[var(--destructive)]">
-                  Slide {slide + 1} má {words(current)} slov, přes limit {MAX_WORDS} slov.
-                </span>
-              ) : null}
-            </div>
-          </div>
+          ) : (
+            <div className="grid min-w-0 gap-4">
+              <div className="grid min-w-0 gap-2">
+                <AdminLabel htmlFor={`slide-${article.id}`}>
+                  Text slidu {slide + 1}
+                </AdminLabel>
+                <AdminTextarea
+                  disabled={!writesEnabled}
+                  id={`slide-${article.id}`}
+                  onChange={(event) => {
+                    const next = [...texts];
+                    next[slide] = event.target.value;
+                    setTexts(next);
+                  }}
+                  value={current}
+                />
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className={`font-mono text-[0.65625rem] uppercase tracking-[0.12em] ${overLimit ? "text-[var(--admin-destructive)]" : "text-[var(--admin-foreground-muted)]"}`} data-word-count>
+                    {words(current)}/{MAX_WORDS} slov
+                  </span>
+                  <Button
+                    data-save-slide
+                    disabled={!writesEnabled || overLimit || !changed}
+                    onClick={() => { void post({ slide, text: current }, `slide ${slide + 1}`); }}
+                    type="button"
+                    variant="secondary"
+                  >
+                    Uložit slide
+                  </Button>
+                  {overLimit ? (
+                    <span className="text-xs text-[var(--admin-destructive)]">
+                      Slide {slide + 1} má {words(current)} slov, přes limit {MAX_WORDS} slov.
+                    </span>
+                  ) : null}
+                </div>
+              </div>
 
-          <div className="grid min-w-0 gap-2">
-            <p className="break-words font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]" data-recipe-line>
-              {line(recipe)}{article.recipePinned ? " · vybráno" : " · odvozeno"}
-            </p>
-            {/*
-              * Twenty-three chips wrap; ten fitted one row. A single non-wrapping row of
-              * twenty-three would put two thirds of the library behind a horizontal scroll the
-              * owner has no reason to expect, so the row becomes a block. The scroller stays
-              * marked for the containment guard, which reads an unmarked overflowing element as a
-              * layout bug rather than a scroller.
-              */}
-            <div className="w-full overflow-x-auto" data-horizontal-scroll>
-              <div className="flex flex-wrap gap-2">
-                {FAMILIES.map((family) => (
-                  <button aria-pressed={recipe.family === family} className={chipClass(recipe.family === family)} data-family={family} key={family} onClick={() => change({ family })} type="button">
-                    {family}
+              <div className="grid min-w-0 gap-2">
+                <p className="break-words font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]" data-recipe-line>
+                  {line(recipe)}{article.recipePinned ? " · vybráno" : " · odvozeno"}
+                </p>
+                {/*
+                  * Twenty-three chips wrap; ten fitted one row. A single non-wrapping row of
+                  * twenty-three would put two thirds of the library behind a horizontal scroll the
+                  * owner has no reason to expect, so the row becomes a block. The scroller stays
+                  * marked for the containment guard, which reads an unmarked overflowing element as a
+                  * layout bug rather than a scroller.
+                  */}
+                <div className="w-full overflow-x-auto" data-horizontal-scroll>
+                  <div className="flex flex-wrap gap-2">
+                    {FAMILIES.map((family) => (
+                      <button aria-pressed={recipe.family === family} className={chipClass(recipe.family === family)} data-family={family} key={family} onClick={() => change({ family })} type="button">
+                        {family}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button aria-pressed={!recipe.accentSwap} className={chipClass(!recipe.accentSwap)} onClick={() => change({ accentSwap: false, variant: "A" })} type="button">A</button>
+                  <button aria-pressed={recipe.accentSwap} className={chipClass(recipe.accentSwap)} onClick={() => change({ accentSwap: true, variant: "B" })} type="button">B</button>
+                  {TREATMENTS.map((entry) => (
+                    <button aria-pressed={recipe.treatment === entry.id} className={chipClass(recipe.treatment === entry.id)} key={entry.id} onClick={() => change({ treatment: entry.id })} type="button">
+                      {entry.label}
+                    </button>
+                  ))}
+                  {SCALES.map((scale) => (
+                    <button aria-pressed={recipe.typeScale === scale} className={chipClass(recipe.typeScale === scale)} key={scale} onClick={() => change({ typeScale: scale })} type="button">
+                      {scale}×
+                    </button>
+                  ))}
+                  <button className={chipClass(false)} onClick={() => change({ phaseSeed: (recipe.phaseSeed + 1) % 4 })} type="button">
+                    fáze ▸
                   </button>
-                ))}
+                  <DeckSaveBadge save={save} />
+                </div>
+                <div className="flex min-w-0 flex-wrap items-center gap-2" data-presets>
+                  {presets.map((preset) => (
+                    <button
+                      className={chipClass(false)}
+                      key={preset.id}
+                      onClick={() => change({
+                        family: preset.family,
+                        variant: preset.variant,
+                        accentSwap: preset.accentSwap,
+                        treatment: preset.treatment,
+                        typeScale: preset.typeScale
+                      })}
+                      type="button"
+                    >
+                      {preset.name}{preset.status === "draft" ? " · koncept" : ""}
+                    </button>
+                  ))}
+                  <AdminLabel className="sr-only" htmlFor={`preset-${article.id}`}>Název presetu</AdminLabel>
+                  <AdminInput
+                    className="w-auto min-w-44"
+                    disabled={!writesEnabled}
+                    id={`preset-${article.id}`}
+                    onChange={(event) => setPresetName(event.target.value)}
+                    placeholder="Uložit jako preset"
+                    value={presetName}
+                  />
+                  <Button
+                    data-save-preset
+                    disabled={!writesEnabled || presetName.trim().length < 2}
+                    onClick={() => { void post({ ...recipe, presetName, presetStatus: "draft" }, presetName); }}
+                    type="button"
+                    variant="secondary"
+                  >
+                    Uložit preset
+                  </Button>
+                </div>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <button aria-pressed={!recipe.accentSwap} className={chipClass(!recipe.accentSwap)} onClick={() => change({ accentSwap: false, variant: "A" })} type="button">A</button>
-              <button aria-pressed={recipe.accentSwap} className={chipClass(recipe.accentSwap)} onClick={() => change({ accentSwap: true, variant: "B" })} type="button">B</button>
-              {TREATMENTS.map((entry) => (
-                <button aria-pressed={recipe.treatment === entry.id} className={chipClass(recipe.treatment === entry.id)} key={entry.id} onClick={() => change({ treatment: entry.id })} type="button">
-                  {entry.label}
-                </button>
-              ))}
-              {SCALES.map((scale) => (
-                <button aria-pressed={recipe.typeScale === scale} className={chipClass(recipe.typeScale === scale)} key={scale} onClick={() => change({ typeScale: scale })} type="button">
-                  {scale}×
-                </button>
-              ))}
-              <button className={chipClass(false)} onClick={() => change({ phaseSeed: (recipe.phaseSeed + 1) % 4 })} type="button">
-                fáze ▸
-              </button>
-              <DeckSaveBadge save={save} />
-            </div>
-            <div className="flex min-w-0 flex-wrap items-center gap-2" data-presets>
-              {presets.map((preset) => (
-                <button
-                  className={chipClass(false)}
-                  key={preset.id}
-                  onClick={() => change({
-                    family: preset.family,
-                    variant: preset.variant,
-                    accentSwap: preset.accentSwap,
-                    treatment: preset.treatment,
-                    typeScale: preset.typeScale
-                  })}
-                  type="button"
-                >
-                  {preset.name}{preset.status === "draft" ? " · koncept" : ""}
-                </button>
-              ))}
-              <label className="sr-only" htmlFor={`preset-${article.id}`}>Název presetu</label>
-              <input
-                className="rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--background)] px-3 py-1 text-xs text-[var(--foreground)]"
-                disabled={!writesEnabled}
-                id={`preset-${article.id}`}
-                onChange={(event) => setPresetName(event.target.value)}
-                placeholder="Uložit jako preset"
-                value={presetName}
-              />
-              <Button
-                data-save-preset
-                disabled={!writesEnabled || presetName.trim().length < 2}
-                onClick={() => { void post({ ...recipe, presetName, presetStatus: "draft" }, presetName); }}
-                size="small"
-                type="button"
-                variant="secondary"
-              >
-                Uložit preset
-              </Button>
-            </div>
-          </div>
-          </>}
+          )}
         </div>
       </div>
 
-      <div className="grid min-w-0 gap-3 border-t border-[var(--border)] pt-4">
+      <div className="grid min-w-0 gap-3 border-t border-[var(--admin-border)] pt-4">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">Popisek</span>
+          <span className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">Popisek</span>
           <CopySocialText text={article.caption} />
-          <span className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">Threads</span>
+          <span className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">Threads</span>
           <CopySocialText text={article.copy.copy.threadsText} />
-          <span className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">Story</span>
+          <span className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">Story</span>
           <CopySocialText text={article.copy.copy.storyLine} />
           <a
-            className="rounded-full border border-[var(--border)] px-3 py-1 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--muted-foreground)] hover:border-[var(--accent)] hover:text-[var(--card-foreground)]"
+            className="admin-focus-ring inline-flex min-h-[var(--admin-touch-target)] items-center rounded-full border border-[var(--admin-border)] px-3 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)] hover:border-[var(--admin-section-accent)] hover:text-[var(--admin-foreground)] md:min-h-[var(--admin-control-height)]"
             download
             href={slideUrl(article, recipe, format, slide + 1, true)}
           >
             Stáhnout slide
           </a>
           <a
-            className="rounded-full border border-[var(--border)] px-3 py-1 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--muted-foreground)] hover:border-[var(--accent)] hover:text-[var(--card-foreground)]"
+            className="admin-focus-ring inline-flex min-h-[var(--admin-touch-target)] items-center rounded-full border border-[var(--admin-border)] px-3 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)] hover:border-[var(--admin-section-accent)] hover:text-[var(--admin-foreground)] md:min-h-[var(--admin-control-height)]"
             download
             href={`/admin/api/carousel-studio/export/${article.venture}/${encodeURIComponent(article.slug)}/${article.date}/${encodeURIComponent(token(recipe))}?format=${format}`}
           >
             Stáhnout celý deck
           </a>
         </div>
-        <p className="whitespace-pre-wrap break-words text-sm text-[var(--foreground)]" data-caption>{article.caption}</p>
-        <p className="break-words font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
+        <p className="whitespace-pre-wrap break-words text-sm text-[var(--admin-foreground)]" data-caption>{article.caption}</p>
+        <p className="break-words font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">
           {article.copy.copy.hashtags.map((tag) => `#${tag}`).join(" ")}
         </p>
         {article.heroCredit ? (
           // Not removable, and not the model's to forget: the credit is appended by code, and most
           // of these photographs are CC BY.
-          <p className="text-xs text-[var(--fog)]">Kredit fotografie je součástí popisku: {article.heroCredit}</p>
+          <p className="text-xs text-[var(--admin-foreground-muted)]">Kredit fotografie je součástí popisku: {article.heroCredit}</p>
         ) : null}
       </div>
+        </AdminCardContent>
+      </AdminCard>
     </article>
   );
 }
@@ -408,12 +413,12 @@ export function DesignLabWorkspace({ articles, presets }: { articles: LabArticle
   const article = useMemo(() => articles.find((entry) => entry.id === selected) ?? articles[0], [articles, selected]);
 
   if (articles.length === 0) {
-    return <Callout tone="accent">Zatím tu není žádný článek, ze kterého by šel karusel postavit.</Callout>;
+    return <AdminStateMessage state="initial-empty" title="Zatím tu není žádný článek, ze kterého by šel karusel postavit." />;
   }
 
   return (
     <div className="grid min-w-0 gap-4">
-      <Callout tone="accent">
+      <Callout tone="information">
         Karusely se skládají ke každému článku a nikam se neposílají. Publikování je zavřené
         rozhodnutím social-2026-08a, dokud každý magazín nevydá deset článků.
       </Callout>
@@ -424,21 +429,21 @@ export function DesignLabWorkspace({ articles, presets }: { articles: LabArticle
             <li key={entry.id}>
               <button
                 aria-pressed={entry.id === article?.id}
-                className={`flex min-w-56 flex-col gap-1 rounded-[var(--radius-card)] border px-4 py-3 text-left transition ${
+                className={`admin-focus-ring flex min-h-[var(--admin-touch-target)] min-w-56 flex-col gap-1 rounded-[var(--admin-radius-lg)] border px-4 py-3 text-left transition ${
                   entry.id === article?.id
-                    ? "border-[var(--accent)] bg-[var(--surface-raised)]"
-                    : "border-[var(--border)] hover:border-[var(--accent)]"
+                    ? "border-[var(--admin-section-accent)] bg-[var(--admin-surface-elevated)]"
+                    : "border-[var(--admin-border)] hover:border-[var(--admin-section-accent)]"
                 }`}
                 onClick={() => setSelected(entry.id)}
                 type="button"
               >
-                <span className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-[var(--fog)]">
+                <span className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">
                   {entry.ventureLabel} · {entry.date} · {entry.slides.length} slidů
                 </span>
-                <span className="line-clamp-2 text-sm text-[var(--card-foreground)]">{entry.headline}</span>
+                <span className="line-clamp-2 text-sm text-[var(--admin-foreground)]">{entry.headline}</span>
                 <span className="flex gap-1">
                   {entry.hasHero ? null : <Badge tone="warning">bez obrázku</Badge>}
-                  {entry.renderable ? null : <Badge tone="danger">neúplné</Badge>}
+                  {entry.renderable ? null : <Badge tone="destructive">neúplné</Badge>}
                 </span>
               </button>
             </li>
