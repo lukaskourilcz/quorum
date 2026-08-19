@@ -154,16 +154,20 @@ function RecommendationCard({ initial }: { initial: AdminDoorMoneyRecommendation
           </p>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2">
-          <div>
+        <section className="grid min-w-0 gap-4 md:grid-cols-2">
+          <div className="min-w-0">
             <h4 className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--admin-foreground)]">Why this works</h4>
             <p className="mt-2 text-sm leading-6 text-[var(--admin-foreground-muted)]">{recommendation.rationale}</p>
           </div>
-          <div>
+          <div className="min-w-0">
             <h4 className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--admin-foreground)]">Gate results</h4>
             <ul className="mt-2 grid gap-2 text-sm leading-6 text-[var(--admin-foreground-muted)]">
               {recommendation.gateResults.map((result) => (
-                <li key={result.gate}><strong className="text-[var(--admin-success)]">Passed · {result.gate}</strong><br />{result.detail}</li>
+                <li className="min-w-0" key={result.gate}>
+                  <strong className="text-[var(--admin-success)]">Passed · {result.gate}</strong>
+                  <br />
+                  <span className="break-all">{result.detail}</span>
+                </li>
               ))}
             </ul>
           </div>
