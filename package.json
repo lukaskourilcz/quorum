@@ -9,6 +9,7 @@
     "node": ">=22"
   },
   "scripts": {
+    "admin:design-audit": "node scripts/admin-design-audit.mjs",
     "agents:validate": "pnpm --filter @boardlessai/orchestrator agents:validate",
     "bh:seed": "pnpm --filter @boardlessai/orchestrator bh:seed",
     "contracts:export": "pnpm --filter @boardlessai/orchestrator exec tsx src/contracts/export-json-schema.ts",

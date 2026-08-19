@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 const globalsUrl = new URL("../../app/globals.css", import.meta.url);
 const shellUrl = new URL("./admin-shell.tsx", import.meta.url);
+const designSystemUrl = new URL("../../../../docs/ADMIN-DESIGN-SYSTEM.md", import.meta.url);
 
 describe("Admin design tokens", () => {
   it("keeps the Admin palette scoped away from public surfaces", async () => {
@@ -52,5 +53,14 @@ describe("Admin design tokens", () => {
 
     expect(shell).toContain("data-admin");
     expect(shell).toContain('data-admin-theme="dark"');
+  });
+
+  it("pins the canonical design contract to the inspected reference", async () => {
+    const designSystem = await readFile(designSystemUrl, "utf8");
+
+    expect(designSystem).toContain("lukaskourilcz/own-dashboard");
+    expect(designSystem).toContain("3049c5008b53e7d34d794822eedd552a470492c1");
+    expect(designSystem).toContain("pnpm admin:design-audit");
+    expect(designSystem).toContain("does not alter the locked public presentation");
   });
 });
