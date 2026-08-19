@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { AdminButton, AdminLabel, AdminStateMessage, AdminTextarea } from "./admin-primitives";
 import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import { formatDateTime } from "@/lib/utils";
 import type {
@@ -96,12 +96,12 @@ export function RatingWidget({
         </legend>
         <div className="mt-3 grid grid-cols-3 gap-2">
           {choices.map((choice) => (
-            <Button
+            <AdminButton
               aria-pressed={active === choice.value}
               className={active === choice.value
                 ? choice.value === "bad"
-                  ? "border-[var(--destructive)] bg-[var(--destructive-soft)] text-[var(--destructive)]"
-                  : "border-[var(--accent)] bg-[var(--accent)] text-[var(--obsidian)]"
+                  ? "border-[var(--admin-destructive)] bg-[var(--admin-destructive-soft)] text-[var(--admin-destructive)]"
+                  : "border-[var(--admin-section-accent)] bg-[var(--admin-surface-selected)] text-[var(--admin-foreground)]"
                 : "px-3"
               }
               disabled={pending || !writesEnabled}
@@ -111,16 +111,13 @@ export function RatingWidget({
               variant="secondary"
             >
               {choice.label}
-            </Button>
+            </AdminButton>
           ))}
         </div>
       </fieldset>
-      <label className="mt-4 block" htmlFor={noteId}>
-        <span className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-[var(--fog)]">
-          Note (optional)
-        </span>
-        <textarea
-          className="mt-2 min-h-24 w-full rounded-[var(--radius-button)] border border-[var(--steel)] bg-[var(--surface)] p-3 text-base leading-6 text-[var(--foreground)] placeholder:text-[var(--fog)] disabled:opacity-50"
+      <div className="mt-4">
+        <AdminLabel htmlFor={noteId}>Note (optional)</AdminLabel>
+        <AdminTextarea
           disabled={pending || !writesEnabled}
           id={noteId}
           maxLength={500}
@@ -128,9 +125,11 @@ export function RatingWidget({
           placeholder="What should the style reviewer learn from this?"
           value={note}
         />
-      </label>
-      <div aria-live="polite" className="mt-2 min-h-5 text-sm" role={error ? "alert" : "status"}>
-        {error ? <span className="text-[var(--destructive)]">{error}</span> : <span className="text-[var(--fog)]">{message}</span>}
+      </div>
+      <div aria-live="polite" className="mt-2" role={error ? "alert" : "status"}>
+        {error ? <AdminStateMessage state="error" title={error} /> : null}
+        {!error && message === "Saving rating…" ? <AdminStateMessage state="loading" title={message} /> : null}
+        {!error && message && message !== "Saving rating…" ? <AdminStateMessage state="success" title={message} /> : null}
       </div>
       {history.length ? (
         <details className="mt-3 text-sm text-[var(--fog)]">

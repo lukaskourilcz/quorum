@@ -2,16 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { RatingWidget } from "@/components/admin/rating-widget";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import type { AdminCard } from "@/lib/admin-portfolio";
+import { AdminCard, AdminCardContent, AdminEntityBadge, AdminStatusBadge } from "./admin-primitives";
+import type { AdminCard as AdminPortfolioCard } from "@/lib/admin-portfolio";
 import { formatDate, formatDateTime } from "@/lib/utils";
 
-function statusTone(status: string): "neutral" | "accent" | "success" | "warning" | "danger" {
+function statusTone(status: string): "neutral" | "information" | "success" | "warning" | "destructive" {
   if (["approved", "accepted", "published", "shortlist", "shipped"].includes(status)) return "success";
-  if (["bad", "failed", "killed", "vetoed", "archived"].includes(status)) return "danger";
+  if (["bad", "failed", "killed", "vetoed", "archived"].includes(status)) return "destructive";
   if (["owner_rated", "queued", "deferred", "proposed"].includes(status)) return "warning";
-  if (["live", "in_progress"].includes(status)) return "accent";
+  if (["live", "in_progress"].includes(status)) return "information";
   return "neutral";
 }
 
@@ -24,7 +23,7 @@ export function isAdminImageAsset(source: string): boolean {
   return /^\/.+\.(?:png|jpe?g|webp|svg)$/iu.test(source);
 }
 
-export function PortfolioCard({ card, originHref }: { card: AdminCard; originHref: string | null }) {
+export function PortfolioCard({ card, originHref }: { card: AdminPortfolioCard; originHref: string | null }) {
   const detailHref = card.detailPath
     ? `/admin/files/${card.detailPath.split("/").map(encodeURIComponent).join("/")}`
     : null;
@@ -32,17 +31,17 @@ export function PortfolioCard({ card, originHref }: { card: AdminCard; originHre
   const imageAssets = card.media.filter(isAdminImageAsset);
   const otherAssets = card.media.filter((source) => !isAdminImageAsset(source));
   return (
-    <Card className="min-w-0">
-      <CardContent className="grid h-full gap-5">
+    <AdminCard className="min-w-0">
+      <AdminCardContent className="grid h-full gap-4">
         <div>
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <Badge>{card.kind.replaceAll("-", " ")}</Badge>
-            <Badge tone={card.graduation ? statusTone(currentRating?.rating ?? card.status) : statusTone(card.status)}>
+            <AdminEntityBadge>{card.kind.replaceAll("-", " ")}</AdminEntityBadge>
+            <AdminStatusBadge tone={card.graduation ? statusTone(currentRating?.rating ?? card.status) : statusTone(card.status)}>
               {card.graduation ?? card.status.replaceAll("_", " ")}
-            </Badge>
+            </AdminStatusBadge>
           </div>
-          <h3 className="mt-5 text-2xl font-semibold leading-tight tracking-[-0.04em]">{card.title}</h3>
-          <p className="mt-3 line-clamp-5 text-sm leading-6 text-[var(--fog)]">{card.summary}</p>
+          <h3 className="mt-3 text-[length:var(--admin-type-section)] font-semibold leading-tight">{card.title}</h3>
+          <p className="mt-2 line-clamp-5 text-[length:var(--admin-type-control)] leading-5 text-[var(--admin-foreground-muted)]">{card.summary}</p>
           {currentRating ? (
             <p className="mt-3 text-sm font-medium text-[var(--mist)]">
               Saved rating: <span className="capitalize">{currentRating.rating}</span>
@@ -108,7 +107,7 @@ export function PortfolioCard({ card, originHref }: { card: AdminCard; originHre
           objectKind={card.kind}
           ventureId={card.ventureId}
         />
-      </CardContent>
-    </Card>
+      </AdminCardContent>
+    </AdminCard>
   );
 }

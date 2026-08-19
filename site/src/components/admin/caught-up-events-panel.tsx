@@ -1,22 +1,22 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import {
+  AdminButton,
+  AdminEntityBadge,
+  AdminInput,
+  AdminLabel,
+  AdminSectionHeading,
+  AdminSelect,
+  AdminStateMessage,
+  AdminStatusBadge,
+} from "./admin-primitives";
 import type { MagazineEvent } from "@/lib/caught-up-events-store";
 import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 
-/**
- * The Akce manager: the one manual content category in DNESKAi.
- *
- * Everything else in the magazine arrives through a delivery contract; these
- * the owner types. The panel's job is therefore to make the two irreversible
- * things obvious: that a past event cannot be edited without saying it is a
- * correction, and that archiving removes an event from the reader.
- */
 export interface EventsPanelProps {
   events: MagazineEvent[];
-  /** The publishing day, passed in so upcoming and past never depend on a clock. */
   today: string;
-  /** `missing` is the first run: the store file has never been written. */
   eventStore?: "missing" | "unreadable" | "present";
   engine: {
     lastEdition?: { date: string; slug: string | null } | null;
@@ -63,7 +63,7 @@ export function CaughtUpEventsPanel({ events, today, engine, eventStore = "prese
   const writesEnabled = useAdminWritesEnabled();
   const [draft, setDraft] = useState<Draft>(EMPTY);
   const [scopeFilter, setScopeFilter] = useState<"all" | "cz" | "global">("all");
-  const [status, setStatus] = useState<string | null>(null);
+  const [status, setStatus] = useState<{ error: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
 
   const { upcoming, past } = useMemo(() => {
@@ -97,220 +97,112 @@ export function CaughtUpEventsPanel({ events, today, engine, eventStore = "prese
         }),
       });
       const body = (await response.json()) as { error?: string; action?: string };
-      setStatus(response.ok ? `Saved: ${body.action}.` : (body.error ?? "The event was not saved."));
+      setStatus({ error: !response.ok, text: response.ok ? `Saved: ${body.action}.` : (body.error ?? "The event was not saved.") });
       if (response.ok && !options.archive) setDraft(EMPTY);
     } catch {
-      setStatus("The event was not saved.");
+      setStatus({ error: true, text: "The event was not saved." });
     } finally {
       setBusy(false);
     }
   };
 
-  const field = (key: keyof Draft, label: string, hint?: string, type = "text") => (
-    <label className="grid gap-1 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">
-      {label}
-      <input
-        className="rounded-[7px] border border-[#3f3f46] bg-[#0d0d10] px-2 py-1.5 font-sans text-[13px] normal-case tracking-normal text-[#f4f4f5]"
-        onChange={(e) => setDraft({ ...draft, [key]: e.target.value })}
-        disabled={!writesEnabled}
-        type={type}
-        value={String(draft[key] ?? "")}
-      />
-      {hint ? (
-        <span className="font-sans text-[11px] normal-case tracking-normal text-[#71717a]">{hint}</span>
-      ) : null}
-    </label>
-  );
+  const field = (key: keyof Draft, label: string, hint?: string, type = "text") => {
+    const id = `caught-up-event-${key}`;
+    return (
+      <div>
+        <AdminLabel htmlFor={id}>{label}</AdminLabel>
+        <AdminInput disabled={!writesEnabled} id={id} onChange={(event) => setDraft({ ...draft, [key]: event.target.value })} type={type} value={String(draft[key] ?? "")} />
+        {hint ? <p className="m-0 mt-1 text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{hint}</p> : null}
+      </div>
+    );
+  };
 
-  const row = (event: MagazineEvent, muted: boolean) => (
-    <li
-      className={`grid gap-1 border-b border-[#26262b] py-2 ${muted ? "text-[#71717a]" : "text-[#d4d4d8]"}`}
-      key={event.id}
-    >
-      <span className="flex items-baseline gap-2">
-        <span className="font-mono text-[10.5px] tabular-nums">{event.starts}</span>
-        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#71717a]">
-          {event.scope === "cz" ? "Czech" : "World"}
-        </span>
-        <span className="text-[13px]">{event.title}</span>
-        {event.corrected ? (
-          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#f5a524]">
-            corrected {event.corrected}
-          </span>
-        ) : null}
-      </span>
-      <button
-        className="justify-self-start font-mono text-[10px] uppercase tracking-[0.12em] text-[#a1a1aa] underline"
-        onClick={() =>
-          setDraft({
-            id: event.id,
-            scope: event.scope,
-            title: event.title,
-            description: event.description ?? "",
-            starts: event.starts,
-            ends: event.ends ?? "",
-            city: event.city ?? "",
-            venue: event.venue ?? "",
-            online: event.online,
-            url: event.url,
-            price: event.price ?? "",
-            organizer: event.organizer ?? "",
-          })
-        }
-        type="button"
-      >
-        Load into the form
-      </button>
+  const load = (event: MagazineEvent) => setDraft({
+    id: event.id,
+    scope: event.scope,
+    title: event.title,
+    description: event.description ?? "",
+    starts: event.starts,
+    ends: event.ends ?? "",
+    city: event.city ?? "",
+    venue: event.venue ?? "",
+    online: event.online,
+    url: event.url,
+    price: event.price ?? "",
+    organizer: event.organizer ?? "",
+  });
+
+  const eventRows = (rows: MagazineEvent[], archived: boolean) => rows.map((event) => (
+    <li className="grid gap-2 border-b border-[var(--admin-border)] py-2.5 last:border-b-0" key={event.id}>
+      <div className="flex min-w-0 flex-wrap items-center gap-2">
+        <time className="admin-tabular text-[length:var(--admin-type-control)]" dateTime={event.starts}>{event.starts}</time>
+        <AdminEntityBadge>{event.scope === "cz" ? "Czech" : "World"}</AdminEntityBadge>
+        <span className={archived ? "text-[var(--admin-foreground-muted)]" : "font-medium text-[var(--admin-foreground)]"}>{event.title}</span>
+        {event.corrected ? <AdminStatusBadge tone="warning">Corrected {event.corrected}</AdminStatusBadge> : null}
+      </div>
+      <AdminButton className="justify-self-start" onClick={() => load(event)} type="button" variant="ghost">Load into the form</AdminButton>
     </li>
-  );
+  ));
+
+  const emptyState = scopeFilter === "all" ? "initial-empty" as const : "filtered-empty" as const;
 
   return (
     <div className="grid gap-5">
-      <section className="grid gap-2">
-        <h3 className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">DNESKAi engine</h3>
-        {/* Each empty row names the thing that has not happened yet. "None on record" read the
-            same whether a step had never run or had run and found nothing. */}
-        <dl className="grid gap-1 font-mono text-[11px] text-[#d4d4d8] sm:grid-cols-2">
-          <div className="flex justify-between gap-3">
-            <dt className="text-[#71717a]">Last edition</dt>
-            <dd>
-              {engine.lastEdition
-                ? `${engine.lastEdition.date}${engine.lastEdition.slug ? ` · ${engine.lastEdition.slug}` : ""}`
-                : "no edition published yet"}
-            </dd>
-          </div>
-          <div className="flex justify-between gap-3">
-            <dt className="text-[#71717a]">Last stream sync</dt>
-            <dd>
-              {engine.lastStreamSync
-                ? `${engine.lastStreamSync.date} · ${engine.lastStreamSync.stream} (+${engine.lastStreamSync.added})`
-                : "no sync has run yet"}
-            </dd>
-          </div>
-          <div className="flex justify-between gap-3">
-            <dt className="text-[#71717a]">Last dataset append</dt>
-            <dd>
-              {engine.lastDatasetAppend
-                ? `${engine.lastDatasetAppend.date} · ${engine.lastDatasetAppend.dataset}`
-                : "nothing appended yet"}
-            </dd>
-          </div>
-          <div className="flex justify-between gap-3">
-            <dt className="text-[#71717a]">Upcoming events</dt>
-            <dd>
-              Czech {events.filter((e) => e.scope === "cz" && !isPast(e, today)).length} · world{" "}
-              {events.filter((e) => e.scope === "global" && !isPast(e, today)).length}
-            </dd>
-          </div>
+      <section className="grid gap-3 border-b border-[var(--admin-border)] pb-4">
+        <AdminSectionHeading title="DNESKAi engine" />
+        <dl className="grid gap-x-6 gap-y-2 text-[length:var(--admin-type-control)] sm:grid-cols-2">
+          <div className="flex min-w-0 justify-between gap-3"><dt className="text-[var(--admin-foreground-muted)]">Last edition</dt><dd className="admin-tabular m-0 break-all text-right">{engine.lastEdition ? `${engine.lastEdition.date}${engine.lastEdition.slug ? ` · ${engine.lastEdition.slug}` : ""}` : "no edition published yet"}</dd></div>
+          <div className="flex min-w-0 justify-between gap-3"><dt className="text-[var(--admin-foreground-muted)]">Last stream sync</dt><dd className="admin-tabular m-0 break-all text-right">{engine.lastStreamSync ? `${engine.lastStreamSync.date} · ${engine.lastStreamSync.stream} (+${engine.lastStreamSync.added})` : "no sync has run yet"}</dd></div>
+          <div className="flex min-w-0 justify-between gap-3"><dt className="text-[var(--admin-foreground-muted)]">Last dataset append</dt><dd className="admin-tabular m-0 break-all text-right">{engine.lastDatasetAppend ? `${engine.lastDatasetAppend.date} · ${engine.lastDatasetAppend.dataset}` : "nothing appended yet"}</dd></div>
+          <div className="flex min-w-0 justify-between gap-3"><dt className="text-[var(--admin-foreground-muted)]">Upcoming events</dt><dd className="admin-tabular m-0 text-right">Czech {events.filter((event) => event.scope === "cz" && !isPast(event, today)).length} · world {events.filter((event) => event.scope === "global" && !isPast(event, today)).length}</dd></div>
         </dl>
       </section>
 
       <section className="grid gap-3">
-        <div className="flex items-center gap-3">
-          <h3 className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">Events</h3>
-          <select
-            className="rounded-[7px] border border-[#3f3f46] bg-[#0d0d10] px-2 py-1 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#d4d4d8]"
-            onChange={(e) => setScopeFilter(e.target.value as "all" | "cz" | "global")}
-            value={scopeFilter}
-          >
-            <option value="all">all</option>
-            <option value="cz">czech</option>
-            <option value="global">world</option>
-          </select>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <AdminSectionHeading title="Events" />
+          <div className="min-w-36"><AdminLabel htmlFor="caught-up-event-filter">Scope</AdminLabel><AdminSelect id="caught-up-event-filter" onChange={(event) => setScopeFilter(event.target.value as "all" | "cz" | "global")} value={scopeFilter}><option value="all">All</option><option value="cz">Czech</option><option value="global">World</option></AdminSelect></div>
         </div>
-
-        {/* The first run has no file at all, which is not the same as a file that has been
-            emptied. Only the first is worth explaining, and it is the only moment the owner
-            needs to be told what this panel is for. */}
         {eventStore === "missing" ? (
-          <p className="rounded-[9px] border border-[#3f3f46] bg-[#101013] p-3 text-[13px] leading-[1.55] text-[#d4d4d8]">
-            No event has ever been entered. This is where you add the first one — events are the
-            one part of the magazine nothing fetches, so the list stays empty until you type one
-            in. Saving below creates <code className="font-mono text-[11px] text-[#a1a1aa]">state/ventures/caught-up/events/events.json</code>,
-            and the magazine reads that file from then on.
-          </p>
+          <AdminStateMessage
+            description={<>Events are the one magazine input nothing fetches. Saving below creates <code>state/ventures/caught-up/events/events.json</code>.</>}
+            state="initial-empty"
+            title="No event has ever been entered"
+          />
         ) : null}
         {eventStore === "unreadable" ? (
-          <p className="rounded-[9px] border border-[#f5a524] bg-[#101013] p-3 text-[13px] leading-[1.55] text-[#f5a524]">
-            The saved events file cannot be read, so nothing is listed below. The file is
-            <code className="font-mono text-[11px]"> state/ventures/caught-up/events/events.json</code>.
-            Saving from this form would replace it.
-          </p>
+          <AdminStateMessage
+            description={<>The file is <code>state/ventures/caught-up/events/events.json</code>. Saving this form would replace it.</>}
+            state="malformed"
+            title="The saved events file cannot be read"
+          />
         ) : null}
-
-        <div className="grid gap-4 lg:grid-cols-2">
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#71717a]">Upcoming ({upcoming.length})</p>
-            <ul className="mt-1">{upcoming.map((event) => row(event, false))}</ul>
-            {upcoming.length === 0 ? <p className="py-2 text-[13px] text-[#71717a]">Nothing upcoming.</p> : null}
-          </div>
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#71717a]">Past ({past.length})</p>
-            <ul className="mt-1">{past.map((event) => row(event, true))}</ul>
-            {past.length === 0 ? <p className="py-2 text-[13px] text-[#71717a]">Nothing past.</p> : null}
-          </div>
+        <div className="grid gap-5 lg:grid-cols-2">
+          <div><p className="m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Upcoming ({upcoming.length})</p>{upcoming.length ? <ul className="m-0 mt-1 list-none p-0">{eventRows(upcoming, false)}</ul> : <AdminStateMessage className="mt-2" state={emptyState} title="Nothing upcoming" />}</div>
+          <div><p className="m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Past ({past.length})</p>{past.length ? <ul className="m-0 mt-1 list-none p-0">{eventRows(past, true)}</ul> : <AdminStateMessage className="mt-2" state={emptyState} title="Nothing past" />}</div>
         </div>
       </section>
 
-      <section className="grid gap-3">
-        <h3 className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">Add or edit</h3>
-        <div className="grid gap-2 sm:grid-cols-2">
-          {field("id", "short name", "Lowercase letters, numbers and hyphens. It identifies this event and never changes.")}
-          <label className="grid gap-1 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">
-            where it counts
-            <select
-              className="rounded-[7px] border border-[#3f3f46] bg-[#0d0d10] px-2 py-1.5 font-sans text-[13px] normal-case tracking-normal text-[#f4f4f5]"
-              disabled={!writesEnabled}
-              onChange={(e) => setDraft({ ...draft, scope: e.target.value as Draft["scope"] })}
-              value={draft.scope}
-            >
-              <option value="cz">Czech</option>
-              <option value="global">World</option>
-            </select>
-          </label>
-          {field("title", "title", "Written in Czech — this is what the reader sees.")}
-          {field("url", "link", "Must start with https://")}
-          {field("starts", "first day", undefined, "date")}
-          {field("ends", "last day", "Leave empty for a one-day event.", "date")}
-          {field("city", "city")}
-          {field("venue", "venue")}
-          {field("price", "price")}
-          {field("organizer", "organiser")}
-          {field("description", "description", "At most 280 characters.")}
-          <label className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#a1a1aa]">
-            <input checked={draft.online} disabled={!writesEnabled} onChange={(e) => setDraft({ ...draft, online: e.target.checked })} type="checkbox" />
-            happens online
-          </label>
+      <section className="grid gap-3 border-t border-[var(--admin-border)] pt-4">
+        <AdminSectionHeading description="Past events require an explicit correction; archiving removes an event from the reader." title="Add or edit" />
+        <div className="grid gap-3 sm:grid-cols-2">
+          {field("id", "Short name", "Lowercase letters, numbers and hyphens. It never changes.")}
+          <div><AdminLabel htmlFor="caught-up-event-scope">Where it counts</AdminLabel><AdminSelect disabled={!writesEnabled} id="caught-up-event-scope" onChange={(event) => setDraft({ ...draft, scope: event.target.value as Draft["scope"] })} value={draft.scope}><option value="cz">Czech</option><option value="global">World</option></AdminSelect></div>
+          {field("title", "Title", "Written in Czech — this is what the reader sees.")}
+          {field("url", "Link", "Must start with https://")}
+          {field("starts", "First day", undefined, "date")}
+          {field("ends", "Last day", "Leave empty for a one-day event.", "date")}
+          {field("city", "City")}{field("venue", "Venue")}{field("price", "Price")}{field("organizer", "Organiser")}
+          {field("description", "Description", "At most 280 characters.")}
+          <label className="admin-focus-ring flex min-h-[var(--admin-touch-target)] items-center gap-2 rounded-[var(--admin-radius)] px-2 text-[length:var(--admin-type-control)] font-medium"><input checked={draft.online} disabled={!writesEnabled} onChange={(event) => setDraft({ ...draft, online: event.target.checked })} type="checkbox" />Happens online</label>
         </div>
-
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            className="rounded-[9px] border border-[#3f3f46] bg-[#101013] px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#d4d4d8] disabled:opacity-50"
-            disabled={busy || !writesEnabled}
-            onClick={() => void submit()}
-            type="button"
-          >
-            Save
-          </button>
-          {/* A past event is a record of something that happened. Changing one
-              has to be stated as a correction rather than done silently. */}
-          <button
-            className="rounded-[9px] border border-[#3f3f46] bg-[#101013] px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#f5a524] disabled:opacity-50"
-            disabled={busy || !writesEnabled}
-            onClick={() => void submit({ correction: true })}
-            type="button"
-          >
-            Save as correction
-          </button>
-          <button
-            className="rounded-[9px] border border-[#3f3f46] bg-[#101013] px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#f87171] disabled:opacity-50"
-            disabled={busy || !writesEnabled}
-            onClick={() => void submit({ archive: true })}
-            type="button"
-          >
-            Archive
-          </button>
-          {status ? <span className="font-mono text-[11px] text-[#d4d4d8]">{status}</span> : null}
+          <AdminButton disabled={busy || !writesEnabled} onClick={() => void submit()} type="button" variant="primary">Save</AdminButton>
+          <AdminButton disabled={busy || !writesEnabled} onClick={() => void submit({ correction: true })} type="button" variant="secondary">Save as correction</AdminButton>
+          <AdminButton disabled={busy || !writesEnabled} onClick={() => void submit({ archive: true })} type="button" variant="destructive">Archive</AdminButton>
+        </div>
+        <div aria-live="polite" role={status?.error ? "alert" : "status"}>
+          {status ? <AdminStateMessage state={status.error ? "error" : "success"} title={status.text} /> : null}
         </div>
       </section>
     </div>

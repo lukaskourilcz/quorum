@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { AdminButton } from "./admin-primitives";
 
 export function CopySocialText({ text }: { text: string }) {
   const [status, setStatus] = useState<"idle" | "copied" | "blocked">("idle");
@@ -45,15 +45,14 @@ export function CopySocialText({ text }: { text: string }) {
   }
 
   return (
-    <Button
+    <AdminButton
       aria-live="polite"
       onClick={copy}
-      size="small"
       type="button"
       variant="secondary"
     >
       {status === "copied" ? <Check aria-hidden="true" className="size-3.5" /> : <Copy aria-hidden="true" className="size-3.5" />}
       {status === "copied" ? "Copied" : status === "blocked" ? "Copy blocked" : "Copy"}
-    </Button>
+    </AdminButton>
   );
 }

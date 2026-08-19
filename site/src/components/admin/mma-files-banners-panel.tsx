@@ -3,10 +3,15 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Callout } from "@/components/ui/callout";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  AdminButton,
+  AdminCallout,
+  AdminCard,
+  AdminCardContent,
+  AdminInput,
+  AdminSelect,
+  AdminStatusBadge,
+} from "./admin-primitives";
 import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
 import type { AdminMmaBannerSlot, AdminMmaBanners, AdminMmaBannerSize } from "@/lib/admin-mma-files";
 
@@ -127,22 +132,22 @@ function BannerEditor({ slot }: { slot: AdminMmaBannerSlot }) {
   }
 
   const currentSrc = slot.image ? `/admin/api/mma-files/banners/media?src=${encodeURIComponent(slot.image.src)}` : null;
-  return <Card><CardContent>
-    <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-xs uppercase text-[var(--fog)]">{slot.pages.join(" · ")}</p><h3 className="mt-2 text-xl font-semibold">{slot.id}</h3></div><div className="flex gap-2"><Badge tone={slot.enabled ? "success" : "neutral"}>{slot.enabled ? "zapnuto" : "vypnuto"}</Badge>{slot.stagedChanged ? <Badge tone="warning">čeká změna</Badge> : null}</div></div>
+  return <AdminCard><AdminCardContent>
+    <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">{slot.pages.join(" · ")}</p><h3 className="mt-1 text-[length:var(--admin-type-section)] font-semibold">{slot.id}</h3></div><div className="flex gap-2"><AdminStatusBadge tone={slot.enabled ? "success" : "neutral"}>{slot.enabled ? "zapnuto" : "vypnuto"}</AdminStatusBadge>{slot.stagedChanged ? <AdminStatusBadge tone="warning">čeká změna</AdminStatusBadge> : null}</div></div>
     {currentSrc && slot.image ? <Image alt={slot.alt} className="mt-5 h-auto max-h-64 w-full rounded-[var(--radius-button)] border border-[var(--border)] object-contain" height={slot.image.height} src={currentSrc} unoptimized width={slot.image.width} /> : <div className="mt-5 grid min-h-32 place-items-center rounded-[var(--radius-button)] border border-dashed border-[var(--border)] text-sm text-[var(--fog)]">Žádná kreativa</div>}
     <div className="mt-5 grid gap-4">
-      <label className="grid gap-1 text-sm font-semibold">Rozměr<select className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] px-3" disabled={!writesEnabled} onChange={(event) => setSelected(event.target.value)} value={selected}>{choices.map((size) => <option key={sizeKey(size)} value={sizeKey(size)}>{size.width}×{size.height}</option>)}</select></label>
-      <label className="grid gap-1 text-sm font-semibold">Obrázek<input accept="image/jpeg,image/png,image/webp" className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] p-2" disabled={!writesEnabled} onChange={(event) => setFile(event.target.files?.[0] ?? null)} type="file" /></label>
+      <label className="grid gap-1 text-[length:var(--admin-type-control)] font-semibold">Rozměr<AdminSelect disabled={!writesEnabled} onChange={(event) => setSelected(event.target.value)} value={selected}>{choices.map((size) => <option key={sizeKey(size)} value={sizeKey(size)}>{size.width}×{size.height}</option>)}</AdminSelect></label>
+      <label className="grid gap-1 text-[length:var(--admin-type-control)] font-semibold">Obrázek<AdminInput accept="image/jpeg,image/png,image/webp" className="p-2" disabled={!writesEnabled} onChange={(event) => setFile(event.target.files?.[0] ?? null)} type="file" /></label>
       {preview ? <Image alt="Náhled přesného ořezu" className="h-auto w-full rounded-[var(--radius-button)] border border-[var(--accent)] object-contain" height={target.height} src={preview} unoptimized width={target.width} /> : null}
       <label className="grid gap-1 text-sm font-semibold">Vodorovné těžiště ořezu<input aria-label="Vodorovné těžiště ořezu" disabled={!writesEnabled} max="100" min="0" onChange={(event) => setFocusX(Number(event.target.value))} type="range" value={focusX} /></label>
       <label className="grid gap-1 text-sm font-semibold">Svislé těžiště ořezu<input aria-label="Svislé těžiště ořezu" disabled={!writesEnabled} max="100" min="0" onChange={(event) => setFocusY(Number(event.target.value))} type="range" value={focusY} /></label>
-      <label className="grid gap-1 text-sm font-semibold">Alternativní text<input className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] px-3" disabled={!writesEnabled} maxLength={300} onChange={(event) => setAlt(event.target.value)} value={alt} /></label>
-      <label className="grid gap-1 text-sm font-semibold">Cílový odkaz (HTTPS, nepovinný)<input className="min-h-11 rounded-[var(--radius-button)] border border-[var(--border)] bg-[var(--surface)] px-3" disabled={!writesEnabled} onChange={(event) => setHref(event.target.value)} type="url" value={href} /></label>
+      <label className="grid gap-1 text-[length:var(--admin-type-control)] font-semibold">Alternativní text<AdminInput disabled={!writesEnabled} maxLength={300} onChange={(event) => setAlt(event.target.value)} value={alt} /></label>
+      <label className="grid gap-1 text-[length:var(--admin-type-control)] font-semibold">Cílový odkaz (HTTPS, nepovinný)<AdminInput disabled={!writesEnabled} onChange={(event) => setHref(event.target.value)} type="url" value={href} /></label>
       <label className="flex min-h-11 items-center gap-2 text-sm font-semibold"><input checked={enabled} disabled={!writesEnabled} onChange={(event) => setEnabled(event.target.checked)} type="checkbox" /> Po doručení zapnout</label>
-      <div className="flex flex-wrap gap-3"><Button disabled={!writesEnabled || busy || !cropped} onClick={stage}>{busy ? "Ukládám…" : "Připravit přesný ořez"}</Button><Button disabled={!writesEnabled || busy || (!slot.image && !slot.enabled)} onClick={toggle} variant="secondary">{slot.enabled ? "Připravit vypnutí" : "Připravit zapnutí"}</Button></div>
+      <div className="flex flex-wrap gap-3"><AdminButton disabled={!writesEnabled || busy || !cropped} onClick={stage} variant="primary">{busy ? "Ukládám…" : "Připravit přesný ořez"}</AdminButton><AdminButton disabled={!writesEnabled || busy || (!slot.image && !slot.enabled)} onClick={toggle} variant="secondary">{slot.enabled ? "Připravit vypnutí" : "Připravit zapnutí"}</AdminButton></div>
       {message ? <p aria-live="polite" className="text-sm text-[var(--fog)]">{message}</p> : null}
     </div>
-  </CardContent></Card>;
+  </AdminCardContent></AdminCard>;
 }
 
 export function MmaFilesBannersPanel({ banners }: { banners: AdminMmaBanners }) {
@@ -161,8 +166,8 @@ export function MmaFilesBannersPanel({ banners }: { banners: AdminMmaBanners }) 
     finally { setBusy(false); }
   }
   return <div className="mt-8 grid gap-5">
-    <Callout tone={banners.status === "staged" ? "warning" : "neutral"}>Stav kontraktu: {banners.status}. {banners.status === "staged" ? "Změny jsou jen ve stagingu a na magazínu ještě nejsou." : banners.receiptRef ?? "Zatím neexistuje doručenka."}</Callout>
-    <div className="flex flex-wrap items-center gap-3"><Button disabled={!writesEnabled || busy || banners.status !== "staged"} onClick={deliver}>{busy ? "Spouštím…" : "Doručit"}</Button><p className="text-sm text-[var(--fog)]">Akce spustí pouze ruční delivery-only cestu; nevyrábí nový obsah.</p></div>
+    <AdminCallout tone={banners.status === "staged" ? "warning" : "neutral"}>Stav kontraktu: {banners.status}. {banners.status === "staged" ? "Změny jsou jen ve stagingu a na magazínu ještě nejsou." : banners.receiptRef ?? "Zatím neexistuje doručenka."}</AdminCallout>
+    <div className="flex flex-wrap items-center gap-3"><AdminButton disabled={!writesEnabled || busy || banners.status !== "staged"} onClick={deliver} variant="primary">{busy ? "Spouštím…" : "Doručit"}</AdminButton><p className="text-sm text-[var(--fog)]">Akce spustí pouze ruční delivery-only cestu; nevyrábí nový obsah.</p></div>
     {message ? <p aria-live="polite" className="text-sm text-[var(--fog)]">{message}</p> : null}
     <div className="grid gap-5 lg:grid-cols-2">{banners.slots.map((slot) => <BannerEditor key={slot.id} slot={slot} />)}</div>
   </div>;
