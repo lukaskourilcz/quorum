@@ -36,7 +36,7 @@ function inline(value: string): ReactNode[] {
     const index = match.index ?? 0;
     if (index > cursor) output.push(value.slice(cursor, index));
     const href = `https://mma-files.vercel.app/cs${match[2]}`;
-    output.push(<a className="admin-focus-ring rounded-[var(--admin-radius-sm)] font-semibold text-[var(--admin-section-accent)] underline underline-offset-4" href={href} key={`${match[2]}-${index}`} rel="noreferrer" target="_blank">{match[1]}</a>);
+    output.push(<a className="admin-focus-ring rounded-[var(--admin-radius-sm)] font-semibold text-[var(--admin-link)] underline underline-offset-4" href={href} key={`${match[2]}-${index}`} rel="noreferrer" target="_blank">{match[1]}</a>);
     cursor = index + match[0].length;
   }
   if (cursor < value.length) output.push(value.slice(cursor));

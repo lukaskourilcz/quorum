@@ -128,7 +128,7 @@ function ClusterDigest({ day }: { day: AdminKvorumMonitorDay }) {
               {cluster.sources.map((source) => (
                 <div className="min-w-0 p-3" key={`${cluster.id}-${source.sourceId}-${source.url}`}>
                   <div className="flex flex-wrap items-center gap-2">
-                    <a className="admin-focus-ring rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-section-accent)] underline underline-offset-2" href={source.url} rel="noreferrer" target="_blank">{source.sourceName}</a>
+                    <a className="admin-focus-ring rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-link)] underline underline-offset-2" href={source.url} rel="noreferrer" target="_blank">{source.sourceName}</a>
                     {source.discoveryOnly ? <AdminStatusBadge tone="warning">Context only</AdminStatusBadge> : null}
                   </div>
                   <p className="m-0 mt-2 text-[length:var(--admin-type-control)] leading-5">{source.excerpt}</p>

@@ -169,7 +169,7 @@ function ClaimsTable({ recommendation }: { recommendation: AdminKvorumRecommenda
                   {claim.sources.map((source) => (
                     <li key={`${claim.id}-${source.sourceId}-${source.url}`}>
                       <a
-                        className="admin-focus-ring rounded-[var(--admin-radius-sm)] text-[var(--admin-section-accent)] underline underline-offset-2"
+                        className="admin-focus-ring rounded-[var(--admin-radius-sm)] text-[var(--admin-link)] underline underline-offset-2"
                         href={source.url}
                         rel="noreferrer"
                         target="_blank"
@@ -437,7 +437,7 @@ function RecommendationCard({ recommendation }: { recommendation: AdminKvorumRec
             <p className="mt-2 text-[11.5px] leading-[1.55] text-[var(--admin-foreground-subtle)]">{display.ourAngleDiffers}</p>
           </section>
           <section className="rounded-[var(--admin-radius)] border border-[var(--admin-warning)] bg-[var(--admin-warning-soft)] p-3">
-            <h4 className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[var(--admin-section-accent)]">TRIBUN · why this is worth it</h4>
+            <h4 className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">TRIBUN · why this is worth it</h4>
             <p className="mt-2 text-[12.5px] leading-[1.6] text-[var(--admin-foreground)]">{display.whyThisIsWorthIt}</p>
           </section>
         </div>
@@ -538,7 +538,7 @@ function RecommendationCard({ recommendation }: { recommendation: AdminKvorumRec
           <section className="grid gap-4 rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface)] p-3">
             <h4 className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--admin-foreground-subtle)]">Outcome beside intent</h4>
             {postedUrl ? (
-              <a className="block break-all text-[12px] text-[var(--admin-section-accent)] underline" href={postedUrl} rel="noreferrer" target="_blank">{postedUrl}</a>
+              <a className="block break-all text-[12px] text-[var(--admin-link)] underline" href={postedUrl} rel="noreferrer" target="_blank">{postedUrl}</a>
             ) : null}
             {results.length > 0 ? (
               <div className="grid gap-2">

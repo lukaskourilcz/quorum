@@ -36,7 +36,7 @@ Admin tokens are defined in `site/src/app/globals.css` under `[data-admin]`. The
 
 The shell reads its light/dark choice on the server and sets `data-admin-theme` before hydration. Theme and 224px/64px rail state are written only through the authenticated, same-origin `/admin/api/preferences` boundary into bounded HttpOnly cookies scoped to `/admin`. Portalled Admin dialogs and tooltips copy both Admin data attributes to their portal root because a body-level portal is outside the shell's CSS inheritance tree.
 
-Raw colour values are allowed only at the scoped token boundary. Production Admin primitives consume semantic variables. A venture identity colour may enter through `--admin-section-accent`; it must not be reused to communicate success, warning, risk, or destructive state.
+Raw colour values are allowed only at the scoped token boundary. Production Admin primitives consume semantic variables. A venture identity colour may enter through `--admin-section-accent`; it is reserved for non-text identity decoration and must not communicate links, focus, success, warning, risk, or destructive state. Interactive text uses the theme-specific `--admin-link` token.
 
 ## Visual contract
 

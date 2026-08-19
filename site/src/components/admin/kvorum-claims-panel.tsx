@@ -75,7 +75,7 @@ function ClaimCard({ initial }: { initial: AdminKvorumLedgerClaim }) {
         <ul className="m-0 flex list-none flex-wrap gap-x-3 gap-y-2 p-0">
           {claim.sources.map((source) => (
             <li className="flex flex-wrap items-center gap-1.5" key={`${claim.id}-${source.sourceId}-${source.url}`}>
-              <a className="admin-focus-ring rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-section-accent)] underline underline-offset-2" href={source.url} rel="noreferrer" target="_blank">
+              <a className="admin-focus-ring rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-link)] underline underline-offset-2" href={source.url} rel="noreferrer" target="_blank">
                 {source.sourceName}
               </a>
               {source.discoveryOnly ? <AdminStatusBadge tone="warning">Context only</AdminStatusBadge> : null}
@@ -91,7 +91,7 @@ function ClaimCard({ initial }: { initial: AdminKvorumLedgerClaim }) {
             <AdminButton disabled={!writesEnabled || busy} onClick={() => void draft("retracted")} variant="destructive">Draft retraction</AdminButton>
           </div>
         ) : claim.hasCorrectionDraft ? (
-          <Link className="admin-focus-ring w-fit rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-section-accent)] underline underline-offset-2" href="/admin?venture=kvorum&tab=recommendations" scroll={false}>
+          <Link className="admin-focus-ring w-fit rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-link)] underline underline-offset-2" href="/admin?venture=kvorum&tab=recommendations" scroll={false}>
             Open the correction draft →
           </Link>
         ) : (

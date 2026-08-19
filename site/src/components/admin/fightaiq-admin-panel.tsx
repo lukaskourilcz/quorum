@@ -117,7 +117,7 @@ function SourceCard({ source }: { source: Source }) {
         <p className="m-0 mt-3 text-[length:var(--admin-type-control)] leading-5">{source.termsNote}</p>
         <p className="m-0 mt-2 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">Free use: {source.freeLimit}</p>
         {source.credentialEnv ? <p className="m-0 mt-2 text-[length:var(--admin-type-control)]"><AdminStatusBadge tone={source.credentialReady ? "success" : "warning"}>{source.credentialReady ? "Key ready" : "Key missing"}</AdminStatusBadge> <code className="break-all">{source.credentialEnv}</code></p> : null}
-        <a className="admin-focus-ring mt-3 inline-flex min-h-[var(--admin-touch-target)] items-center gap-2 rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-section-accent)] underline underline-offset-2 md:min-h-[var(--admin-control-height)]" href={source.evidenceUrl} rel="noreferrer" target="_blank">Review source rules <ExternalLink aria-hidden className="size-4" /></a>
+        <a className="admin-focus-ring mt-3 inline-flex min-h-[var(--admin-touch-target)] items-center gap-2 rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-link)] underline underline-offset-2 md:min-h-[var(--admin-control-height)]" href={source.evidenceUrl} rel="noreferrer" target="_blank">Review source rules <ExternalLink aria-hidden className="size-4" /></a>
         {source.state === "blocked" ? <AdminCallout className="mt-3 flex gap-2" tone="destructive"><ShieldAlert aria-hidden className="mt-0.5 size-4 shrink-0" /> No connection or workaround is allowed.</AdminCallout> : null}
       </AdminCardContent>
     </AdminCard>

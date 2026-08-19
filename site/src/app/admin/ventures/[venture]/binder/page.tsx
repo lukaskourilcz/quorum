@@ -70,7 +70,7 @@ export default async function LaunchBinderPage({
           <div className="mt-10 grid gap-12">
             {[...groups.entries()].map(([season, plans], groupIndex) => (
               <section className={groupIndex ? "print-break" : undefined} key={season}>
-                <p className="font-mono text-[length:var(--admin-type-label)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-section-accent)]">Season</p>
+                <p className="font-mono text-[length:var(--admin-type-label)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Season</p>
                 <h2 className="mt-2 text-[length:var(--admin-type-dialog)] font-semibold tracking-[var(--admin-tracking-tight)]">{season}</h2>
                 <div className="mt-5 grid gap-5">
                   {plans.map((plan) => (

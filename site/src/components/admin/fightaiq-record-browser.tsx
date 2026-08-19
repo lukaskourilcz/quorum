@@ -116,7 +116,7 @@ export function FightAiQRecordBrowser({ fighters, bouts, view }: { fighters: Bro
     </div>
     {resultCount === 0 ? <AdminStateMessage className="mt-4" state="filtered-empty" title={`No ${view} match these filters.`} /> : <div className="mt-4 grid gap-4 xl:grid-cols-2">
       {view === "fighters" ? visibleFighters.map((fighter) => <details className="group rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] bg-[var(--admin-surface)]" key={fighter.id}>
-        <summary className="min-h-14 cursor-pointer list-none p-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--admin-section-accent)]">
+        <summary className="min-h-14 cursor-pointer list-none p-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--admin-information)]">
           <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-xs uppercase text-[var(--admin-foreground-muted)]">{fighter.org} · {fieldText(fighter, "division") || "Division missing"}</p><h3 className="mt-1 text-xl font-semibold">{fighterName(fighter)}</h3></div><Badge tone={fighter.modelEligible ? "success" : "warning"}>{fighter.modelEligible ? "ready" : "needs evidence"}</Badge></div>
           <p className="mt-3 text-sm text-[var(--admin-foreground-muted)]">{Math.round(fighter.completeness * 100)}% complete · {fighter.historyCount} recorded fights · {fighter.sourceCount} sources</p>
         </summary>

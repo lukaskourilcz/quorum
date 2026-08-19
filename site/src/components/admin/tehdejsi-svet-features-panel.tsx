@@ -406,7 +406,7 @@ function FeatureReview({ initial }: { initial: AdminTehdejsiFeature }) {
       <div className="mt-5"><GateSummary feature={feature} /></div>
 
       {feature.designLab.ready ? (
-        <Link className="mt-5 inline-flex min-h-11 items-center font-semibold text-[var(--admin-section-accent)] underline underline-offset-4"
+        <Link className="mt-5 inline-flex min-h-11 items-center font-semibold text-[var(--admin-link)] underline underline-offset-4"
           href="/admin?venture=carousel-studio&tab=studio&brand=tehdejsi-svet">
           Open the recorded package in Design Lab for PNG and ZIP export →
         </Link>

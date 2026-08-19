@@ -148,6 +148,7 @@ img {
   --admin-foreground: #1d1d1f;
   --admin-foreground-muted: #565a60;
   --admin-foreground-subtle: #62666b;
+  --admin-link: #005fc7;
   --admin-sidebar-foreground: #ffffff;
   --admin-sidebar-muted: rgba(255, 255, 255, 0.62);
   --admin-swatch-on-light: #09090b;
@@ -238,6 +239,7 @@ img {
   --admin-foreground: #f1f0ec;
   --admin-foreground-muted: #b1b2b3;
   --admin-foreground-subtle: #92969b;
+  --admin-link: #8db4e5;
   --admin-border: #2a2f34;
   --admin-border-strong: #3b424a;
   --admin-brand: #ff7a33;

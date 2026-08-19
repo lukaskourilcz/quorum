@@ -92,7 +92,7 @@ export function PortfolioCard({ card, originHref }: { card: AdminPortfolioCard; 
             </Link>
           ) : null}
           {originHref ? (
-            <Link className="admin-focus-ring inline-flex min-h-[var(--admin-touch-target)] items-center gap-2 rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-section-accent)] underline underline-offset-4" href={originHref}>
+            <Link className="admin-focus-ring inline-flex min-h-[var(--admin-touch-target)] items-center gap-2 rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-link)] underline underline-offset-4" href={originHref}>
               Source meeting <ExternalLink aria-hidden="true" className="size-4" />
             </Link>
           ) : (
