@@ -23,6 +23,16 @@ export function isAdminImageAsset(source: string): boolean {
   return /^\/.+\.(?:png|jpe?g|webp|svg)$/iu.test(source);
 }
 
+/** Rebuild committed social frames behind Admin instead of assuming private binaries are public. */
+export function adminImagePreviewSource(source: string): string {
+  const match = source.match(
+    /^\/social\/(\d{4}-\d{2}-\d{2})\/(en|cs)\/(instagram|threads)\/frame-(\d{2})\.png$/u
+  );
+  if (!match) return source;
+  const [, date, locale, channel, slide] = match;
+  return `/admin/api/social-frames/${date}/${locale}/${channel}/${Number(slide)}`;
+}
+
 export function PortfolioCard({ card, originHref }: { card: AdminPortfolioCard; originHref: string | null }) {
   const detailHref = card.detailPath
     ? `/admin/files/${card.detailPath.split("/").map(encodeURIComponent).join("/")}`
@@ -51,17 +61,20 @@ export function PortfolioCard({ card, originHref }: { card: AdminPortfolioCard; 
 
         {imageAssets.length ? (
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {imageAssets.slice(0, 4).map((source, index) => (
+            {imageAssets.slice(0, 4).map((source, index) => {
+              const preview = adminImagePreviewSource(source);
+              return (
               <a
                 className="admin-focus-ring overflow-hidden rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface-secondary)]"
-                href={source}
+                href={preview}
                 key={source}
                 rel="noreferrer"
                 target="_blank"
               >
-                <Image alt={`Open ${card.title} asset ${index + 1}`} height={320} src={source} unoptimized width={320} />
+                <Image alt={`Open ${card.title} asset ${index + 1}`} height={320} src={preview} unoptimized width={320} />
               </a>
-            ))}
+              );
+            })}
           </div>
         ) : null}
 

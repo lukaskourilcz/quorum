@@ -18,16 +18,17 @@ export async function GET(
   const authorization = verifyAdminRequest(request);
   if (authorization !== "ok") return adminAuthorizationError(authorization);
   const { date, locale, channel, slide } = await params;
-  if (!/^\d{4}-\d{2}-\d{2}$/u.test(date) || !["en", "cs"].includes(locale) || channel !== "instagram") {
+  if (!/^\d{4}-\d{2}-\d{2}$/u.test(date) || !["en", "cs"].includes(locale) || !["instagram", "threads"].includes(channel)) {
     return new Response("Frame not found.", { status: 404 });
   }
   const packLocale = locale as "en" | "cs";
+  const packChannel = channel as "instagram" | "threads";
   const index = Number(slide) - 1;
   if (!Number.isInteger(index) || index < 0 || index > 9) return new Response("Frame not found.", { status: 404 });
   try {
     const pack = record(JSON.parse(await readFile(path.join(repositoryRoot, "state", "social", "packs", `${date}.json`), "utf8")));
     const localized = record(record(pack?.byLocale)?.[packLocale]);
-    const visual = record(record(localized?.instagram)?.visual);
+    const visual = record(record(localized?.[packChannel])?.visual);
     const templateId = typeof visual?.template_id === "string" ? visual.template_id : null;
     const version = typeof visual?.version === "string" ? visual.version : null;
     const content = record(visual?.content);
@@ -40,7 +41,7 @@ export async function GET(
       template,
       payload: { locale: packLocale, strings: strings as Record<string, string> },
       brand: CAROUSEL_BRANDS["caught-up"],
-      format: "instagram-portrait"
+      format: packChannel === "instagram" ? "instagram-portrait" : "threads"
     })[index];
     if (!render) return new Response("Frame not found.", { status: 404 });
     return new Response(render.svg, {
