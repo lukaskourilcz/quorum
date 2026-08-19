@@ -1,11 +1,22 @@
 {
   "schemaVersion": 1,
   "date": "2026-08-19",
-  "packageHash": "30d144fbe0c050f5b894cf6e09d64bfb65633f664abe1f465d093909e341befa",
+  "packageHash": "8211d47869a2926d5aed5d6554866a220d60e444e4b9395a19c4b408d08ca335",
   "status": "delivered",
-  "editionStatus": "no_edition",
+  "editionStatus": "edition",
   "targetRepository": "lukaskourilcz/aifirst",
-  "targetCommit": "e319aa8f66ce5514376c61737cd0855f149d2641",
-  "deliveredAt": "2026-08-19T03:05:37.346Z",
-  "tags": []
+  "targetCommit": "b2f80aede6656ceea06316acd43d958d5d23d299",
+  "deliveredAt": "2026-08-19T07:12:39.815Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-19-chatgpt-reklamy-evropa-ai-hardware",
+  "tags": [
+    "umela-inteligence",
+    "reklama",
+    "openai",
+    "hardware",
+    "cina",
+    "kosmonautika"
+  ],
+  "supersededPackageHashes": [
+    "30d144fbe0c050f5b894cf6e09d64bfb65633f664abe1f465d093909e341befa"
+  ]
 }

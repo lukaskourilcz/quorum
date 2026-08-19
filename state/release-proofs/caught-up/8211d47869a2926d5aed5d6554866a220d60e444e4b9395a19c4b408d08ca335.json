@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-07766b0808e5d1a1",
+  "venture": "caught-up",
+  "packageHash": "8211d47869a2926d5aed5d6554866a220d60e444e4b9395a19c4b408d08ca335",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "b2f80aede6656ceea06316acd43d958d5d23d299",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit b2f80aede6656ceea06316acd43d958d5d23d299 is readable",
+      "checkedAt": "2026-08-19T07:12:38.296Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-19T07:12:38.296Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-19T07:12:38.296Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-19-chatgpt-reklamy-evropa-ai-hardware?boardless_verify=8211d47869a2-1787123558296",
+      "checkedAt": "2026-08-19T07:12:38.296Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-19-chatgpt-reklamy-evropa-ai-hardware match",
+      "checkedAt": "2026-08-19T07:12:38.296Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 8211d47869a2926d5aed5d6554866a220d60e444e4b9395a19c4b408d08ca335",
+      "checkedAt": "2026-08-19T07:12:38.296Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-19-chatgpt-reklamy-evropa-ai-hardware/hero.svg?boardless_verify=8211d47869a2-1787123558296",
+      "checkedAt": "2026-08-19T07:12:38.296Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-19T07:12:38.296Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "FRAME fallback needs no external photo credit",
+      "checkedAt": "2026-08-19T07:12:38.296Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-19T07:11:36.697Z",
+  "completedAt": "2026-08-19T07:12:38.820Z"
+}
