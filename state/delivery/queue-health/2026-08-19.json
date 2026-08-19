@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-08-19T07:12:42.409Z",
+  "checkedAt": "2026-08-19T08:09:35.935Z",
   "date": "2026-08-19",
   "ventures": [
     {
@@ -50,8 +50,8 @@
     },
     {
       "venture": "mma-files",
-      "url": "https://mma-files.vercel.app/cs/articles/ufc-alex-perez",
-      "expected": "ufc-alex-perez",
+      "url": "https://mma-files.vercel.app/cs/articles/ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+      "expected": "ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
       "status": 200,
       "live": true
     }
