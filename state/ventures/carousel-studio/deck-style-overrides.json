@@ -5,13 +5,13 @@
       "venture": "caught-up",
       "slug": "2026-08-19-chatgpt-reklamy-evropa-ai-hardware",
       "date": "2026-08-19",
-      "style": "concrete",
-      "family": "concrete",
+      "style": "zurich",
+      "family": "zurich",
       "variant": "B",
       "accentSwap": true,
       "treatment": "mono",
       "typeScale": 1.1,
-      "changedAt": "2026-08-19T16:27:39.650Z"
+      "changedAt": "2026-08-19T16:27:40.909Z"
     },
     {
       "venture": "caught-up",
@@ -62,5 +62,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-08-19T16:27:39.650Z"
+  "updatedAt": "2026-08-19T16:27:40.909Z"
 }
