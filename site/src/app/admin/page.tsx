@@ -359,9 +359,9 @@ export default async function AdminPage({
   const workspaces: AdminWorkspace[] = [
     {
       id: "global",
-      name: "Company files",
+      name: "Company Overview",
       count: files.length,
-      href: "/admin?venture=global",
+      href: "/admin",
       active: !selectedVenture && !selectedView
     },
     ...portfolio.ventures.map((venture) => ({
@@ -724,7 +724,7 @@ export default async function AdminPage({
         // declare one and store none, and the button opened an empty binder.
         selectedVenture?.cards.some((card) => card.kind === "plan") ? (
           <Link
-            className="shrink-0 rounded-[9px] border border-[#3f3f46] bg-[#101013] px-[13px] py-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#d4d4d8] transition-colors hover:border-[#a1a1aa] hover:text-[#f4f4f5]"
+            className="admin-focus-ring shrink-0 rounded-[var(--admin-radius)] border border-[var(--admin-border-strong)] bg-[var(--admin-surface-secondary)] px-3 py-2 font-mono text-[length:var(--admin-type-control)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground)] transition-colors hover:bg-[var(--admin-surface-hover)]"
             href={`/admin/ventures/${selectedVenture.id}/binder`}
           >
             Launch checklist →
@@ -738,7 +738,7 @@ export default async function AdminPage({
           ? ventureName(selectedVenture.id, selectedVenture.name)
           : selectedView
             ? SECTION_TITLES[selectedView]
-            : "Company files"
+            : "Company Overview"
       }
       lead={
         selectedVenture
@@ -753,7 +753,7 @@ export default async function AdminPage({
           ? ventureName(selectedVenture.id, selectedVenture.name)
           : selectedView
             ? SECTION_TITLES[selectedView]
-            : "Project desk"
+            : "Company Overview"
       }
       workspaces={workspaces}
     >

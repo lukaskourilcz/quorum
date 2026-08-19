@@ -34,7 +34,7 @@ The deployed guest tour was also checked at desktop light, desktop dark, and a 3
 
 Admin tokens are defined in `site/src/app/globals.css` under `[data-admin]`. The base selector is the light palette. `[data-admin][data-admin-theme="dark"]` overrides it with the dark palette. No `--admin-*` token is declared on `:root`, so public pages cannot inherit this system accidentally.
 
-The current legacy shell sets `data-admin-theme="dark"` until issue #367 migrates shell geometry and theme behavior. Portalled Admin dialogs and tooltips copy both Admin data attributes to their portal root because a body-level portal is outside the shell's CSS inheritance tree.
+The shell reads its light/dark choice on the server and sets `data-admin-theme` before hydration. Theme and 224px/64px rail state are written only through the authenticated, same-origin `/admin/api/preferences` boundary into bounded HttpOnly cookies scoped to `/admin`. Portalled Admin dialogs and tooltips copy both Admin data attributes to their portal root because a body-level portal is outside the shell's CSS inheritance tree.
 
 Raw colour values are allowed only at the scoped token boundary. Production Admin primitives consume semantic variables. A venture identity colour may enter through `--admin-section-accent`; it must not be reused to communicate success, warning, risk, or destructive state.
 
@@ -77,7 +77,17 @@ State uses six named tones: neutral, information, success, warning, risk, and de
 
 ### Responsive behavior
 
-Desktop is compact, but mobile controls retain the 44px touch target. Page headers stack before actions overlap. Wide tables sit inside a named, keyboard-focusable scroll region. Long labels and identifiers must wrap or truncate without widening the viewport. Shell navigation behavior is owned by issue #367; full responsive regression proof is owned by issue #370.
+Desktop is compact, but mobile controls retain the 44px touch target. Page headers stack before actions overlap. Wide tables sit inside a named, keyboard-focusable scroll region. Long labels and identifiers must wrap or truncate without widening the viewport. Issue #367 implements the responsive shell contract below; full migrated-panel regression proof remains owned by issue #370.
+
+## Shell and navigation
+
+The protected Admin uses one contained macOS-style window on a graphite desktop at `md` and above. Its expanded sidebar is 224px, its collapsed rail is 64px, and its toolbar is 52px. The outer desktop document remains exactly one viewport high; the main content region owns vertical scrolling. The collapsed state preserves accessible link names and supplies portalled tooltips instead of leaving icon-only destinations unexplained.
+
+The server resolves every navigation entry from the existing company views and recorded portfolio ventures before the interactive boundary. Company Overview, Approvals, Only you can do, Future, Design Lab, and each workspace remain canonical `/admin` query URLs, so reload, copy, browser back, and bookmarks preserve context. Design Lab is grouped under Production without changing its stored `carousel-studio` identifier. No duplicate route is created for system panels that already live in Company Overview.
+
+The toolbar command palette opens from its real button or `Command/Ctrl + K`, filters the same server-resolved registry, supports arrow and Enter navigation, and contains no synthetic result. On mobile, the persistent bottom navigation exposes Overview and Approvals directly; Workspaces opens a focused workspace sheet; More lists every live Admin destination plus theme, public-site and sign-out actions. The future Personal Growth slot is deliberately absent until issue #370 has completed and passed its Admin gates.
+
+The shell-specific automated proof lives in `site/tests/e2e/admin-shell.spec.ts`. It checks desktop geometry and internal scrolling, preference persistence, canonical command navigation, 390 by 844 mobile targets and overflow, complete More-sheet coverage, and WCAG 2 A/AA plus 2.1 A/AA checks for the new shell chrome.
 
 ## Shared primitives
 
@@ -127,13 +137,13 @@ The largest raw-colour inventories are:
 | `components/admin/booksofhistory-dossiers-panel.tsx` | 27 |
 | `components/admin/rendered-desk-panel.tsx` | 25 |
 
-The 618 occurrences are pre-existing migration inventory, not approval for new literals. The new production foundation files and the `Panel` and `Tile` compatibility wrappers contain zero raw-colour literals. Issue #367 owns the shell inventory. Issue #368 owns panel and view migration, including replacement of raw colour, arbitrary radii, divergent type, excess spacing, nested cards, and ad hoc status treatments. Issue #370 owns final visual, responsive, accessibility, and regression proof.
+The 618 occurrences are the issue #366 pre-migration baseline, not approval for new literals. The new production foundation files and the `Panel` and `Tile` compatibility wrappers contain zero raw-colour literals. Issue #367 removed all 31 raw-colour occurrences from the former shell; its shell, sidebar, command palette and mobile navigation consume semantic tokens only. Issue #368 owns panel and view migration, including replacement of raw colour, arbitrary radii, divergent type, excess spacing, nested cards, and ad hoc status treatments. Issue #370 owns final visual, responsive, accessibility, and regression proof.
 
 ## Protected behavior
 
 This foundation does not change authentication, protected routes, loaders, server actions, canonical writes, budgets, evidence rules, privacy, public/private boundaries, release gates, or operational controls. It does not enable publishing, replies, account creation, credentials, purchases, or plan upgrades. Personal Growth implementation remains blocked until issue #370 is complete and its Admin gates pass.
 
-Any human-only follow-up belongs exclusively in `docs/NEEDED.md`; this foundation introduces none.
+Any human-only follow-up belongs exclusively in `docs/NEEDED.md`; the foundation and shell introduce none.
 
 ## Foundation gate
 
