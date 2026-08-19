@@ -520,3 +520,10 @@ items in place. Lack of response never authorizes an action. -->
   Live counts are in state/delivery/queue-health/, rewritten every day. A parked package needs
   new bytes rather than another run; its own receipt says what the magazine refused and why.
   [imp:5] [owner:me] [time:30m] [kind:deploy]
+
+- [ ] **DELIVERY-NOT-BUILT-CAUGHT-UP** — delivered but not being served.
+  https://caughtup-ai.vercel.app/data/board/2026-08-19.json answers 404, so the host has not rebuilt since 2026-08-19 landed on main.
+  Nothing is wrong with the package: the commit is on main and its gate was green. This is the
+  build that never ran. An empty commit to the magazine's main triggers one; if that is what it
+  takes twice, the host's git integration is the thing to look at.
+  [imp:5] [owner:me] [time:15m] [kind:deploy]
