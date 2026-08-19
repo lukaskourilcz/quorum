@@ -1,11 +1,22 @@
+import {
+  AdminCallout,
+  AdminCard,
+  AdminCardContent,
+  AdminEntityBadge,
+  AdminMetric,
+  AdminStateMessage,
+  AdminStatusBadge,
+} from "./admin-primitives";
 import type { AdminKvorumMonitorDay, AdminKvorumSnapshot } from "@/lib/admin-kvorum";
 
-const STATUS_COLOUR: Record<AdminKvorumMonitorDay["sourceResults"][number]["status"], string> = {
-  success: "#86efac",
-  fixture: "#f5d90a",
-  skipped: "#a1a1aa",
-  failed: "#f87171"
-};
+type SourceStatus = AdminKvorumMonitorDay["sourceResults"][number]["status"];
+
+function sourceTone(status: SourceStatus): "success" | "information" | "neutral" | "destructive" {
+  if (status === "success") return "success";
+  if (status === "fixture") return "information";
+  if (status === "failed") return "destructive";
+  return "neutral";
+}
 
 function usd(value: number): string {
   return `$${value.toFixed(3)}`;
@@ -13,7 +24,7 @@ function usd(value: number): string {
 
 export function weeklyEntityHeat(
   days: readonly AdminKvorumMonitorDay[],
-  labels: Readonly<Record<string, string>>
+  labels: Readonly<Record<string, string>>,
 ): Array<{ id: string; label: string; mentions: number }> {
   const latest = days.map((day) => day.date).sort().at(-1);
   if (!latest) return [];
@@ -33,81 +44,59 @@ export function weeklyEntityHeat(
 
 function Quota({ snapshot }: { snapshot: AdminKvorumSnapshot }) {
   if (!snapshot.quota) {
-    return (
-      <section className="rounded-[10px] border border-[#26262b] bg-[#101013] p-3.5">
-        <h3 className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#94949c]">Apify quota</h3>
-        <p className="mt-2 text-[12.5px] leading-[1.55] text-[#d4d4d8]">
-          {snapshot.quotaState === "missing"
-            ? "No quota record has been written yet. This does not mean the share is available."
-            : "The saved quota record cannot be read, so no usage number is shown."}
-        </p>
-      </section>
-    );
+    return <AdminStateMessage state={snapshot.quotaState === "unreadable" ? "malformed" : "unavailable"}
+      title="Apify quota"
+      description={snapshot.quotaState === "missing"
+        ? "No quota record has been written yet. This does not mean the share is available."
+        : "The saved quota record cannot be read, so no usage number is shown."} />;
   }
   const quota = snapshot.quota;
   const percent = quota.shareCapUsd > 0 ? Math.min(100, (quota.estimatedUsedUsd / quota.shareCapUsd) * 100) : 0;
   return (
-    <section className="rounded-[10px] border border-[#26262b] bg-[#101013] p-3.5">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#94949c]">Apify quota · {quota.month}</h3>
-        <span className="font-mono text-[11px] tabular-nums text-[#f5d90a]">
-          {usd(quota.estimatedUsedUsd)} / {usd(quota.shareCapUsd)} venture share
-        </span>
-      </div>
-      <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#26262b]">
-        <span className="block h-full bg-[#f5d90a]" style={{ width: `${percent.toFixed(2)}%` }} />
-      </div>
-      <dl className="mt-3 grid gap-2 text-[11.5px] text-[#a1a1aa] sm:grid-cols-3">
-        <div><dt className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#94949c]">Reserved per run</dt><dd className="mt-1 tabular-nums">{usd(quota.reservedPerRun)}</dd></div>
-        <div><dt className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#94949c]">Shared account used</dt><dd className="mt-1 tabular-nums">{quota.sharedAccountUsedUsd === null ? "not recorded" : usd(quota.sharedAccountUsedUsd)}</dd></div>
-        <div><dt className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#94949c]">Last recorded</dt><dd className="mt-1 tabular-nums">{quota.updatedAt}</dd></div>
-      </dl>
-      {quota.perActorCounts.length ? (
-        <div className="mt-3 overflow-x-auto" data-horizontal-scroll>
-          <div className="flex min-w-max gap-2">
-            {quota.perActorCounts.map((actor) => (
-              <span className="rounded-[7px] border border-[#3f3f46] bg-[#0d0d10] px-2.5 py-2 font-mono text-[9.5px] text-[#a1a1aa]" key={actor.actorId}>
-                {actor.actorId} · {actor.runs} runs · {actor.items} items · {usd(actor.estimatedUsd)}
-              </span>
-            ))}
+    <AdminCard>
+      <AdminCardContent>
+        <AdminMetric label={`Apify quota · ${quota.month}`} progress={percent} value={`${usd(quota.estimatedUsedUsd)} / ${usd(quota.shareCapUsd)} venture share`} />
+        <dl className="m-0 mt-3 grid divide-y divide-[var(--admin-border)] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          <AdminMetric className="px-3 first:pl-0" label="Reserved per run" value={usd(quota.reservedPerRun)} />
+          <AdminMetric className="px-3" label="Shared account used" value={quota.sharedAccountUsedUsd === null ? "Not recorded" : usd(quota.sharedAccountUsedUsd)} />
+          <AdminMetric className="px-3 last:pr-0" label="Last recorded" value={<span className="break-all text-[length:var(--admin-type-control)]">{quota.updatedAt}</span>} />
+        </dl>
+        {quota.perActorCounts.length ? (
+          <div className="mt-3 overflow-x-auto pb-1" data-horizontal-scroll>
+            <div className="flex min-w-max gap-2">
+              {quota.perActorCounts.map((actor) => (
+                <AdminEntityBadge className="py-2" key={actor.actorId}>
+                  {actor.actorId} · {actor.runs} runs · {actor.items} items · {usd(actor.estimatedUsd)}
+                </AdminEntityBadge>
+              ))}
+            </div>
           </div>
-        </div>
-      ) : (
-        <p className="mt-3 text-[11.5px] text-[#94949c]">No actor run is recorded in this month.</p>
-      )}
-      <p className="mt-3 text-[11px] leading-[1.5] text-[#94949c]">
-        This bar is a record, not permission to run. Source and account approvals still gate every external call.
-      </p>
-    </section>
+        ) : <AdminStateMessage className="mt-3" state="initial-empty" title="No actor run is recorded in this month." />}
+        <p className="m-0 mt-3 text-[length:var(--admin-type-label)] leading-5 text-[var(--admin-foreground-muted)]">
+          This bar is a record, not permission to run. Source and account approvals still gate every external call.
+        </p>
+      </AdminCardContent>
+    </AdminCard>
   );
 }
 
 function SourceHealth({ day }: { day: AdminKvorumMonitorDay }) {
   return (
     <section className="grid min-w-0 gap-2">
-      <h3 className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#94949c]">Source health · recorded response</h3>
+      <h3 className="m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Source health · recorded response</h3>
       <div className="overflow-x-auto pb-1" data-horizontal-scroll>
         <div className="flex min-w-max gap-2">
-          {day.sourceResults.map((source) => {
-            const colour = STATUS_COLOUR[source.status];
-            return (
-              <article
-                className="w-64 rounded-[9px] border bg-[#101013] p-3"
-                key={`${source.kind}-${source.sourceId}`}
-                style={{ borderColor: colour }}
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-mono text-[9.5px] uppercase tracking-[0.1em]" style={{ color: colour }}>{source.status}</span>
-                  <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#94949c]">{source.kind}</span>
-                </div>
-                <p className="mt-2 text-[12.5px] font-semibold text-[#e4e4e7]">{source.sourceId}</p>
-                <p className="mt-1 font-mono text-[10px] tabular-nums text-[#a1a1aa]">
-                  {source.attempted ? "attempted" : "not attempted"} · {source.count} kept
-                </p>
-                {source.reason ? <p className="mt-2 text-[11px] leading-[1.45] text-[#94949c]">{source.reason}</p> : null}
-              </article>
-            );
-          })}
+          {day.sourceResults.map((source) => (
+            <article className="w-64 rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface)] p-3" key={`${source.kind}-${source.sourceId}`}>
+              <div className="flex items-center justify-between gap-2">
+                <AdminStatusBadge tone={sourceTone(source.status)}>{source.status}</AdminStatusBadge>
+                <AdminEntityBadge>{source.kind}</AdminEntityBadge>
+              </div>
+              <p className="m-0 mt-2 text-[length:var(--admin-type-control)] font-semibold">{source.sourceId}</p>
+              <p className="admin-tabular m-0 mt-1 text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{source.attempted ? "attempted" : "not attempted"} · {source.count} kept</p>
+              {source.reason ? <p className="m-0 mt-2 text-[length:var(--admin-type-label)] leading-5 text-[var(--admin-foreground-muted)]">{source.reason}</p> : null}
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -116,50 +105,40 @@ function SourceHealth({ day }: { day: AdminKvorumMonitorDay }) {
 
 function ClusterDigest({ day }: { day: AdminKvorumMonitorDay }) {
   if (day.clusters.length === 0) {
-    return (
-      <p className="rounded-[9px] border border-[#3f3f46] bg-[#101013] p-3 text-[12.5px] text-[#d4d4d8]">
-        This receipt retained no ranked cluster. The digest is honestly quiet.
-      </p>
-    );
+    return <AdminStateMessage state="initial-empty" title="This receipt retained no ranked cluster." description="The digest is honestly quiet." />;
   }
   return (
     <section className="grid gap-3">
-      <h3 className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#94949c]">Ranked digest</h3>
+      <h3 className="m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Ranked digest</h3>
       {day.clusters.map((cluster) => (
-        <article className="rounded-[10px] border border-[#26262b] bg-[#101013] p-3.5" key={cluster.id}>
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <p className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#f5d90a]">Rank {cluster.rank.position} · score {cluster.rank.score}</p>
-              <h4 className="mt-1 text-[16px] font-semibold text-[#f4f4f5]">{cluster.title}</h4>
-            </div>
-            {cluster.continuationOf ? (
-              <span className="rounded-full border border-[#3f3f46] px-2 py-1 font-mono text-[9px] uppercase tracking-[0.1em] text-[#a1a1aa]">
-                continuation
-              </span>
-            ) : null}
-          </div>
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {cluster.entityIds.map((entity) => <span className="rounded-full bg-[#1e1e22] px-2 py-1 text-[10px] text-[#a1a1aa]" key={entity}>{entity}</span>)}
-            {cluster.topicTokens.map((topic) => <span className="rounded-full bg-[#111005] px-2 py-1 text-[10px] text-[#d8cf69]" key={topic}>#{topic}</span>)}
-          </div>
-          <div className="mt-4 grid gap-2 lg:grid-cols-2">
-            {cluster.sources.map((source) => (
-              <div className="rounded-[8px] border border-[#26262b] bg-[#0d0d10] p-3" key={`${cluster.id}-${source.sourceId}-${source.url}`}>
-                <div className="flex flex-wrap items-center gap-2">
-                  <a className="text-[12px] font-semibold text-[#f5d90a] underline" href={source.url} rel="noreferrer" target="_blank">{source.sourceName}</a>
-                  {source.discoveryOnly ? <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#f5a524]">context only</span> : null}
-                </div>
-                <p className="mt-2 text-[12px] leading-[1.55] text-[#d4d4d8]">{source.excerpt}</p>
-                <p className="mt-2 font-mono text-[9px] tabular-nums text-[#94949c]">{source.publishedAt}</p>
-                {source.engagement ? (
-                  <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.08em] text-[#a1a1aa]">
-                    {source.engagement.likes ?? "—"} likes · {source.engagement.comments ?? "—"} comments · {source.engagement.shares ?? "—"} shares
-                  </p>
-                ) : null}
+        <AdminCard key={cluster.id}>
+          <AdminCardContent>
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="m-0 text-[length:var(--admin-type-micro)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Rank {cluster.rank.position} · score {cluster.rank.score}</p>
+                <h4 className="m-0 mt-1 text-[length:var(--admin-type-section)] font-semibold">{cluster.title}</h4>
               </div>
-            ))}
-          </div>
-        </article>
+              {cluster.continuationOf ? <AdminStatusBadge tone="information">Continuation</AdminStatusBadge> : null}
+            </div>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {cluster.entityIds.map((entity) => <AdminEntityBadge key={entity}>{entity}</AdminEntityBadge>)}
+              {cluster.topicTokens.map((topic) => <AdminEntityBadge key={topic}>#{topic}</AdminEntityBadge>)}
+            </div>
+            <div className="mt-3 grid divide-y divide-[var(--admin-border)] border-y border-[var(--admin-border)] lg:grid-cols-2 lg:divide-x lg:divide-y-0">
+              {cluster.sources.map((source) => (
+                <div className="min-w-0 p-3" key={`${cluster.id}-${source.sourceId}-${source.url}`}>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <a className="admin-focus-ring rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-section-accent)] underline underline-offset-2" href={source.url} rel="noreferrer" target="_blank">{source.sourceName}</a>
+                    {source.discoveryOnly ? <AdminStatusBadge tone="warning">Context only</AdminStatusBadge> : null}
+                  </div>
+                  <p className="m-0 mt-2 text-[length:var(--admin-type-control)] leading-5">{source.excerpt}</p>
+                  <p className="m-0 mt-2 break-all text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{source.publishedAt}</p>
+                  {source.engagement ? <p className="admin-tabular m-0 mt-1 text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{source.engagement.likes ?? "—"} likes · {source.engagement.comments ?? "—"} comments · {source.engagement.shares ?? "—"} shares</p> : null}
+                </div>
+              ))}
+            </div>
+          </AdminCardContent>
+        </AdminCard>
       ))}
     </section>
   );
@@ -169,73 +148,58 @@ function EntityHeatmap({ snapshot }: { snapshot: AdminKvorumSnapshot }) {
   const heat = weeklyEntityHeat(snapshot.monitor, snapshot.entityLabels);
   const maximum = heat[0]?.mentions ?? 1;
   return (
-    <section className="rounded-[10px] border border-[#26262b] bg-[#101013] p-3.5">
-      <h3 className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#94949c]">Entity heat · latest seven recorded days</h3>
-      {heat.length ? (
-        <div className="mt-3 grid gap-2 sm:grid-cols-2">
-          {heat.map((entity) => (
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2" key={entity.id}>
-              <div className="min-w-0">
-                <div className="flex justify-between gap-2 text-[11px] text-[#d4d4d8]"><span className="truncate">{entity.label}</span><span className="tabular-nums text-[#a1a1aa]">{entity.mentions}</span></div>
-                <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-[#26262b]"><span className="block h-full bg-[#f5d90a]" style={{ width: `${(entity.mentions / maximum) * 100}%` }} /></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : <p className="mt-2 text-[12px] text-[#94949c]">No retained cluster contains an entity in this window.</p>}
-    </section>
+    <AdminCard>
+      <AdminCardContent>
+        <h3 className="m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Entity heat · latest seven recorded days</h3>
+        {heat.length ? <div className="mt-3 grid gap-2 sm:grid-cols-2">{heat.map((entity) => (
+          <div className="min-w-0" key={entity.id}>
+            <div className="flex justify-between gap-2 text-[length:var(--admin-type-control)]"><span className="truncate">{entity.label}</span><span className="admin-tabular text-[var(--admin-foreground-muted)]">{entity.mentions}</span></div>
+            <div aria-label={`${entity.label}: ${entity.mentions} mentions`} aria-valuemax={maximum} aria-valuemin={0} aria-valuenow={entity.mentions} className="mt-1 h-1 overflow-hidden rounded-full bg-[var(--admin-surface-muted)]" role="meter"><span className="block h-full bg-[var(--admin-section-accent)]" style={{ width: `${(entity.mentions / maximum) * 100}%` }} /></div>
+          </div>
+        ))}</div> : <AdminStateMessage className="mt-2" state="initial-empty" title="No retained cluster contains an entity in this window." />}
+      </AdminCardContent>
+    </AdminCard>
   );
 }
 
 function PurgeClock({ day }: { day: AdminKvorumMonitorDay }) {
   return (
-    <section className="rounded-[10px] border border-[#26262b] bg-[#101013] p-3.5">
-      <h3 className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#94949c]">Raw-item purge clock</h3>
-      <p className="mt-2 text-[13px] leading-[1.55] text-[#d4d4d8]">
-        {day.purge.retentionDays}-day window · items older than <span className="font-mono text-[#f5d90a]">{day.purge.cutoffPublishedAt}</span> were eligible at the last evaluation.
-      </p>
-      <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.1em] text-[#a1a1aa]">
-        Evaluated {day.purge.evaluatedAt} · {day.purge.rawItemsBefore} before · {day.purge.rawItemsAfter} after · {day.purge.purgedCount} purged
-      </p>
-    </section>
+    <AdminCard>
+      <AdminCardContent>
+        <h3 className="m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Raw-item purge clock</h3>
+        <p className="m-0 mt-2 text-[length:var(--admin-type-body)] leading-5">{day.purge.retentionDays}-day window · items older than <span className="admin-tabular">{day.purge.cutoffPublishedAt}</span> were eligible at the last evaluation.</p>
+        <p className="admin-tabular m-0 mt-2 text-[length:var(--admin-type-label)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Evaluated {day.purge.evaluatedAt} · {day.purge.rawItemsBefore} before · {day.purge.rawItemsAfter} after · {day.purge.purgedCount} purged</p>
+      </AdminCardContent>
+    </AdminCard>
   );
 }
 
 export function KvorumMonitorPanel({ snapshot }: { snapshot: AdminKvorumSnapshot }) {
   const day = snapshot.monitor[0] ?? null;
+  const emptyTitle = snapshot.monitorState === "missing"
+    ? "The Kvórum monitor has not written its first receipt yet."
+    : snapshot.monitorState === "unreadable"
+      ? "Monitor receipts exist, but none can be read safely."
+      : "The monitor store exists and contains no receipt.";
   return (
     <div className="grid gap-4">
-      {snapshot.unreadable > 0 ? (
-        <p className="rounded-[9px] border border-[#92400e] bg-[#160f07] p-3 text-[12px] text-[#f5a524]">
-          {snapshot.unreadable} Kvórum state {snapshot.unreadable === 1 ? "record was" : "records were"} dropped because they could not be read.
-        </p>
-      ) : null}
+      {snapshot.unreadable > 0 ? <AdminCallout tone="warning">{snapshot.unreadable} Kvórum state {snapshot.unreadable === 1 ? "record was" : "records were"} dropped because they could not be read.</AdminCallout> : null}
       <Quota snapshot={snapshot} />
-      {!day ? (
-        <p className="rounded-[9px] border border-[#3f3f46] bg-[#101013] p-3 text-[13px] leading-[1.55] text-[#d4d4d8]">
-          {snapshot.monitorState === "missing"
-            ? "The Kvórum monitor has not written its first receipt yet."
-            : snapshot.monitorState === "unreadable"
-              ? "Monitor receipts exist, but none can be read safely."
-              : "The monitor store exists and contains no receipt."}
-        </p>
-      ) : (
+      {!day ? <AdminStateMessage state={snapshot.monitorState === "unreadable" ? "malformed" : "initial-empty"} title={emptyTitle} /> : (
         <>
-          <header className="rounded-[10px] border border-[#26262b] bg-[#0c0c0f] p-3.5">
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <div><p className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[#f5d90a]">Latest monitor digest</p><h2 className="mt-1 text-[18px] font-semibold text-[#f4f4f5]">{day.date}</h2></div>
-              <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#a1a1aa]">{day.itemsKept} raw items retained</span>
-            </div>
-            {day.fixtureOnly ? <p className="mt-3 text-[12px] text-[#f5a524]">Fixture-only receipt: no external source was attempted and no spend occurred.</p> : null}
-          </header>
+          <AdminCard>
+            <AdminCardContent className="flex flex-wrap items-start justify-between gap-3">
+              <div><p className="m-0 text-[length:var(--admin-type-micro)] uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Latest monitor digest</p><h2 className="m-0 mt-1 text-[length:var(--admin-type-section)] font-semibold">{day.date}</h2></div>
+              <AdminEntityBadge>{day.itemsKept} raw items retained</AdminEntityBadge>
+              {day.fixtureOnly ? <AdminCallout className="w-full" tone="information">Fixture-only receipt: no external source was attempted and no spend occurred.</AdminCallout> : null}
+            </AdminCardContent>
+          </AdminCard>
           <SourceHealth day={day} />
           <ClusterDigest day={day} />
           <div className="grid gap-4 xl:grid-cols-2"><EntityHeatmap snapshot={snapshot} /><PurgeClock day={day} /></div>
         </>
       )}
-      <p className="text-[11px] leading-[1.5] text-[#94949c]">
-        Read-only. Source enablement lives in reviewed configuration; this panel cannot fetch, spend or change it.
-      </p>
+      <AdminCallout>Read-only. Source enablement lives in reviewed configuration; this panel cannot fetch, spend or change it.</AdminCallout>
     </div>
   );
 }
