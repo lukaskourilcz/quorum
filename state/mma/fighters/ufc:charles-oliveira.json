@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Charles_Oliveira",
       "publisher": "Wikipedia",
       "title": "Charles Oliveira",
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -77,7 +77,7 @@
         "source:wikipedia:27167974",
         "source:wikipedia:43536705"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "verified",
       "corroborated": true
     },
@@ -424,9 +424,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 1.233607,
-        "layoffDays": 164
+        "layoffDays": 165
       },
-      "updatedAt": "2026-08-18T06:01:20.935Z"
+      "updatedAt": "2026-08-19T06:02:00.779Z"
     }
   ],
   "rating": {
@@ -436,7 +436,7 @@
     "volatility": 0.06001131,
     "boutCount": 14,
     "asOfBoutRef": "ufc:bout:history-c6fc64313b7df511bca8",
-    "updatedAt": "2026-08-18T06:01:20.935Z"
+    "updatedAt": "2026-08-19T06:02:00.779Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2655,11 +2655,28 @@
         "source:wikipedia:43536705"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-19T06:02:00.779Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:27167974",
+        "source:wikipedia:44264537",
+        "source:wikipedia:43536705"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-18T06:01:20.935Z"
+  "updatedAt": "2026-08-19T06:02:00.779Z"
 }

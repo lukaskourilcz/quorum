@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Jamahal_Hill",
       "publisher": "Wikipedia",
       "title": "Jamahal Hill",
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q97171293",
         "source:wikipedia:65645016"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "verified",
       "corroborated": true
     },
@@ -145,9 +145,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 365.25,
-        "layoffDays": 857
+        "layoffDays": 858
       },
-      "updatedAt": "2026-08-18T06:01:20.935Z"
+      "updatedAt": "2026-08-19T06:02:00.779Z"
     }
   ],
   "rating": {
@@ -157,7 +157,7 @@
     "volatility": 0.05999815,
     "boutCount": 2,
     "asOfBoutRef": "ufc:bout:history-c0ddb8a7ae79b4641b9f",
-    "updatedAt": "2026-08-18T06:01:20.935Z"
+    "updatedAt": "2026-08-19T06:02:00.779Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1493,11 +1493,24 @@
         "source:wikipedia:42031348"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-19T06:02:00.779Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-18T06:01:20.935Z"
+  "updatedAt": "2026-08-19T06:02:00.779Z"
 }

@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Andr%C3%A9_Lima_(fighter)",
       "publisher": "Wikipedia",
       "title": "André Lima (fighter)",
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -67,7 +67,7 @@
         "source:wikidata:Q134458124",
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "verified",
       "corroborated": true
     },
@@ -77,7 +77,7 @@
         "source:wikidata:Q134458124",
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "verified",
       "corroborated": true
     },
@@ -86,7 +86,7 @@
       "sourceRefs": [
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -95,7 +95,7 @@
       "sourceRefs": [
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -104,7 +104,7 @@
       "sourceRefs": [
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -114,7 +114,7 @@
         "source:cito-ufc:2026-08-05:fighter:349419ef-5b6c-43f5-bbe3-43ffbe3cfd46",
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "verified",
       "corroborated": true
     },
@@ -123,7 +123,7 @@
       "sourceRefs": [
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -186,7 +186,7 @@
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [],
-    "lastReviewedAt": "2026-08-18T06:01:20.935Z"
+    "lastReviewedAt": "2026-08-19T06:02:00.779Z"
   },
   "changeLog": [
     {
@@ -2340,11 +2340,29 @@
         "source:wikipedia:83018693"
       ],
       "note": "Reviewed the Wikipedia profile and found 12 historical fight rows."
+    },
+    {
+      "at": "2026-08-19T06:02:00.779Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:83018693"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 12 historical fight rows."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-18T06:01:20.935Z"
+  "updatedAt": "2026-08-19T06:02:00.779Z"
 }

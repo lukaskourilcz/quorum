@@ -11,31 +11,16 @@
   ],
   "applied": [
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-jalin-turner-vs-kaue-fernandes-3",
-      "winner": "red",
-      "method": "KO (punches)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-edson-barboza-vs-esteban-ribovics-4",
-      "winner": "blue",
-      "method": "TKO (punches)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-vicente-luque-vs-tresean-gore-7",
-      "winner": "blue",
-      "method": "Decision (unanimous)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-neil-magny-vs-ramiz-brahimaj-11",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-neil-magny-vs-ramiz-brahimaj-10",
       "winner": "red",
       "method": "TKO (punches)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-jeremiah-wells-vs-myktybek-orolbai-12",
+      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-jeremiah-wells-vs-myktybek-orolbai-11",
       "winner": "red",
       "method": "Technical Submission (ninja choke)"
     }
   ],
-  "untracked": 7,
-  "generatedAt": "2026-08-18T06:01:20.935Z"
+  "untracked": 10,
+  "generatedAt": "2026-08-19T06:02:00.779Z"
 }

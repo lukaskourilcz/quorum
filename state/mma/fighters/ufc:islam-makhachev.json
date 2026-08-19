@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Islam_Makhachev",
       "publisher": "Wikipedia",
       "title": "Islam Makhachev",
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q18637676",
         "source:wikipedia:44264537"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "verified",
       "corroborated": true
     },
@@ -283,9 +283,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 0.819542,
-        "layoffDays": 3
+        "layoffDays": 4
       },
-      "updatedAt": "2026-08-18T06:01:20.935Z"
+      "updatedAt": "2026-08-19T06:02:00.779Z"
     }
   ],
   "rating": {
@@ -295,7 +295,7 @@
     "volatility": 0.06000279,
     "boutCount": 7,
     "asOfBoutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-islam-makhachev-vs-ian-machado-garry-1",
-    "updatedAt": "2026-08-18T06:01:20.935Z"
+    "updatedAt": "2026-08-19T06:02:00.779Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1821,11 +1821,29 @@
         "source:wikipedia:2026-08-16:UFC 330: Makhachev vs. Machado Garry"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-19T06:02:00.779Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:60889979",
+        "source:wikipedia:44264537",
+        "source:wikipedia:27167974",
+        "source:wikipedia:2026-08-16:UFC 330: Makhachev vs. Machado Garry"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": true,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-18T06:01:20.935Z"
+  "updatedAt": "2026-08-19T06:02:00.779Z"
 }

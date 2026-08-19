@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Rafael_dos_Anjos",
       "publisher": "Wikipedia",
       "title": "Rafael dos Anjos",
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q5961540",
         "source:wikipedia:18427840"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "verified",
       "corroborated": true
     },
@@ -175,9 +175,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 4.722963,
-        "layoffDays": 2586
+        "layoffDays": 2587
       },
-      "updatedAt": "2026-08-18T06:01:20.935Z"
+      "updatedAt": "2026-08-19T06:02:00.779Z"
     }
   ],
   "rating": {
@@ -187,7 +187,7 @@
     "volatility": 0.05999781,
     "boutCount": 4,
     "asOfBoutRef": "ufc:bout:history-ba7412e69c56d30fd379",
-    "updatedAt": "2026-08-18T06:01:20.935Z"
+    "updatedAt": "2026-08-19T06:02:00.779Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1600,11 +1600,25 @@
         "source:wikipedia:46384799"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-19T06:02:00.779Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49620123",
+        "source:wikipedia:46384799"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-18T06:01:20.935Z"
+  "updatedAt": "2026-08-19T06:02:00.779Z"
 }

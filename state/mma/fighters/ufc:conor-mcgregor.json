@@ -9,7 +9,8 @@
     "wikidataId": "Q5162259",
     "wikipediaTitle": "Conor McGregor",
     "externalIds": {
-      "wikipediaPageId": "38738224"
+      "wikipediaPageId": "38738224",
+      "cito": "7d3f710b-8699-4f30-a030-0c26a004dc7d"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-19:fighter:7d3f710b-8699-4f30-a030-0c26a004dc7d",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Conor McGregor",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q5162259",
       "url": "https://www.wikidata.org/wiki/Q5162259",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Conor_McGregor",
       "publisher": "Wikipedia",
       "title": "Conor McGregor",
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -56,10 +64,11 @@
     "name": {
       "value": "Conor McGregor",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-19:fighter:7d3f710b-8699-4f30-a030-0c26a004dc7d",
         "source:wikidata:Q5162259",
         "source:wikipedia:38738224"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "verified",
       "corroborated": true
     },
@@ -68,7 +77,7 @@
       "sourceRefs": [
         "source:wikipedia:38738224"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -77,7 +86,7 @@
       "sourceRefs": [
         "source:wikipedia:38738224"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -86,7 +95,7 @@
       "sourceRefs": [
         "source:wikipedia:38738224"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -95,18 +104,19 @@
       "sourceRefs": [
         "source:wikipedia:38738224"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "provisional",
       "corroborated": false
     },
     "record": {
       "value": "22-7-0",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-19:fighter:7d3f710b-8699-4f30-a030-0c26a004dc7d",
         "source:wikipedia:38738224"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
+      "status": "verified",
+      "corroborated": true
     },
     "dateOfBirth": {
       "value": "1988-07-14",
@@ -123,7 +133,7 @@
         "source:wikidata:Q5162259",
         "source:wikipedia:38738224"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "verified",
       "corroborated": true
     }
@@ -161,6 +171,20 @@
         }
       ],
       "status": "resolved"
+    },
+    {
+      "field": "division",
+      "values": [
+        {
+          "value": "Lightweight",
+          "sourceRef": "source:wikipedia:38738224"
+        },
+        {
+          "value": "welterweight",
+          "sourceRef": "source:cito-ufc:2026-08-19:fighter:7d3f710b-8699-4f30-a030-0c26a004dc7d"
+        }
+      ],
+      "status": "open"
     }
   ],
   "history": [],
@@ -177,7 +201,7 @@
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [],
-    "lastReviewedAt": "2026-08-14T06:02:00.810Z"
+    "lastReviewedAt": "2026-08-19T06:02:00.779Z"
   },
   "changeLog": [
     {
@@ -2203,11 +2227,40 @@
         "source:wikipedia:38738224"
       ],
       "note": "Reviewed the Wikipedia profile and found 0 historical fight rows."
+    },
+    {
+      "at": "2026-08-19T06:02:00.779Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "record"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-19:fighter:7d3f710b-8699-4f30-a030-0c26a004dc7d"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-19T06:02:00.779Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "heightCm",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:38738224"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 0 historical fight rows."
     }
   ],
   "completeness": 1,
-  "corroboration": 0.25,
+  "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-08-19T06:02:00.779Z"
 }

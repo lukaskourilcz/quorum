@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Valentina_Shevchenko",
       "publisher": "Wikipedia",
       "title": "Valentina Shevchenko",
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q4522047",
         "source:wikipedia:44159133"
       ],
-      "retrievedAt": "2026-08-18T06:01:20.935Z",
+      "retrievedAt": "2026-08-19T06:02:00.779Z",
       "status": "verified",
       "corroborated": true
     },
@@ -409,9 +409,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 0.8,
         "fightsPerYear": 1.546764,
-        "layoffDays": 276
+        "layoffDays": 277
       },
-      "updatedAt": "2026-08-18T06:01:20.935Z"
+      "updatedAt": "2026-08-19T06:02:00.779Z"
     }
   ],
   "rating": {
@@ -421,7 +421,7 @@
     "volatility": 0.06001017,
     "boutCount": 14,
     "asOfBoutRef": "ufc:bout:history-dd4842d8223d37c6c9c8",
-    "updatedAt": "2026-08-18T06:01:20.935Z"
+    "updatedAt": "2026-08-19T06:02:00.779Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2111,11 +2111,29 @@
         "source:wikipedia:45441761"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-19T06:02:00.779Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:44159133",
+        "source:wikipedia:30387040",
+        "source:wikipedia:40078160",
+        "source:wikipedia:45441761"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.5,
   "modelEligible": false,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-18T06:01:20.935Z"
+  "updatedAt": "2026-08-19T06:02:00.779Z"
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "bout/1",
-  "id": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-marquel-mederos-vs-mason-jones-4",
+  "id": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-anthony-wint-vs-terrance-chatman-6",
   "org": "ufc",
   "event": {
     "ref": "ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
@@ -9,43 +9,37 @@
     "venue": "Golden 1 Center"
   },
   "fighters": {
-    "red": "ufc:marquel-mederos",
-    "blue": "ufc:mason-jones"
+    "red": "ufc:anthony-wint",
+    "blue": "ufc:terrance-chatman"
   },
-  "division": "lightweight",
+  "division": "heavyweight",
   "scheduledRounds": 3,
   "status": "announced",
   "statusHistory": [
     {
       "status": "announced",
-      "at": "2026-08-16T06:00:53.643Z",
+      "at": "2026-08-19T06:02:00.779Z",
       "sourceRefs": [
-        "source:wikipedia:2026-08-16:List of UFC events"
+        "source:wikipedia:2026-08-19:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
     }
   ],
   "discovery": {
-    "firstSeenAt": "2026-08-16T06:00:53.643Z",
+    "firstSeenAt": "2026-08-19T06:02:00.779Z",
     "lastSeenAt": "2026-08-19T06:02:00.779Z",
     "sourceRefs": [
-      "source:wikipedia:2026-08-16:List of UFC events",
-      "source:wikipedia:2026-08-17:List of UFC events",
-      "source:wikipedia:2026-08-18:List of UFC events",
       "source:wikipedia:2026-08-19:List of UFC events"
     ]
   },
   "sourceRefs": [
-    "source:wikipedia:2026-08-16:List of UFC events",
-    "source:wikipedia:2026-08-17:List of UFC events",
-    "source:wikipedia:2026-08-18:List of UFC events",
     "source:wikipedia:2026-08-19:List of UFC events"
   ],
   "result": null,
   "predictionRefs": [],
   "changeLog": [
     {
-      "at": "2026-08-16T06:00:53.643Z",
+      "at": "2026-08-19T06:02:00.779Z",
       "kind": "created",
       "fields": [
         "event",
@@ -53,10 +47,10 @@
         "status"
       ],
       "sourceRefs": [
-        "source:wikipedia:2026-08-16:List of UFC events"
+        "source:wikipedia:2026-08-19:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
     }
   ],
-  "updatedAt": "2026-08-16T06:00:53.643Z"
+  "updatedAt": "2026-08-19T06:02:00.779Z"
 }

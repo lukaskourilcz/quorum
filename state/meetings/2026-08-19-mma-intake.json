@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260819060200-mma-intake",
+  "date": "2026-08-19",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.02586,
+    "monthAllInUsd": 7.856853999999997,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+      "source:the-odds-api:2026-08-19",
+      "source:wikipedia-schedule:2026-08-19",
+      "source:cito-ufc:2026-08-19",
+      "source:wikimedia:2026-08-19"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "UFC Fight Night Hernandez–Rodrigues 13-bout card announced and confirmed across two sources. No model run exists yet; critical fighter fields incomplete across 50 records (0 fully ready). Data intake healthy. Next: resolve fighter credentials before probability model use.",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+        "source:the-odds-api:2026-08-19",
+        "source:wikipedia-schedule:2026-08-19"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon appears on the horizon, but no Oktagon bout, weigh-in, or fighter field has two-source confirmation. UFC is also incomplete; no model use is safe.",
+      "evidenceRefs": [
+        "source:cito-ufc:2026-08-19",
+        "source:wikimedia:2026-08-19",
+        "source:wikipedia-schedule:2026-08-19"
+      ]
+    },
+    {
+      "agent": "TAPE",
+      "summary": "UFC Fight Night Hernandez–Rodrigues: 13 bouts announced, all five critical fighter fields incomplete across 50 roster entries. No adjustment proposed until two independent sources confirm fighter credentials.",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+        "source:the-odds-api:2026-08-19",
+        "source:cito-ufc:2026-08-19",
+        "source:wikimedia:2026-08-19",
+        "source:wikipedia-schedule:2026-08-19"
+      ]
+    },
+    {
+      "agent": "SIGMA",
+      "summary": "UFC checked; Oktagon source health is incomplete. No bout is confirmed by two providers, no fighter record is complete, and no ModelRun can issue probabilities.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-19",
+        "source:cito-ufc:2026-08-19",
+        "source:wikimedia:2026-08-19",
+        "source:wikipedia-schedule:2026-08-19"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SIGMA",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260819060200-MMA-INTAKE-03",
+      "owner": "TAPE",
+      "summary": "Cross-verify heightCm, reachCm, stance, division and age for Hernandez, Rodrigues and top-four card slots against fight-week weigh-in or official UFC roster. Flag any source disagreement.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Data only. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+      "source:the-odds-api:2026-08-19",
+      "source:wikipedia-schedule:2026-08-19",
+      "source:cito-ufc:2026-08-19",
+      "source:wikimedia:2026-08-19"
+    ]
+  },
+  "generatedAt": "2026-08-19T06:07:00.779Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-19T06:02:00.779Z",
+    "closedAt": "2026-08-19T06:07:00.779Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-19T06:02:00.779Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-19T06:03:00.779Z",
+        "text": "UFC Fight Night Hernandez–Rodrigues 13-bout card announced and confirmed across two sources. No model run exists yet; critical fighter fields incomplete across 50 records (0 fully ready). Data intake healthy. Next: resolve fighter credentials before probability model use.",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+          "source:the-odds-api:2026-08-19",
+          "source:wikipedia-schedule:2026-08-19"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-19T06:04:00.779Z",
+        "text": "Oktagon appears on the horizon, but no Oktagon bout, weigh-in, or fighter field has two-source confirmation. UFC is also incomplete; no model use is safe.",
+        "evidenceRefs": [
+          "source:cito-ufc:2026-08-19",
+          "source:wikimedia:2026-08-19",
+          "source:wikipedia-schedule:2026-08-19"
+        ]
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-19T06:05:00.779Z",
+        "text": "UFC Fight Night Hernandez–Rodrigues: 13 bouts announced, all five critical fighter fields incomplete across 50 roster entries. No adjustment proposed until two independent sources confirm fighter credentials.",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+          "source:the-odds-api:2026-08-19",
+          "source:cito-ufc:2026-08-19",
+          "source:wikimedia:2026-08-19",
+          "source:wikipedia-schedule:2026-08-19"
+        ]
+      },
+      {
+        "agent": "SIGMA",
+        "mode": "statement",
+        "sentAt": "2026-08-19T06:06:00.779Z",
+        "text": "UFC checked; Oktagon source health is incomplete. No bout is confirmed by two providers, no fighter record is complete, and no ModelRun can issue probabilities.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-19",
+          "source:cito-ufc:2026-08-19",
+          "source:wikimedia:2026-08-19",
+          "source:wikipedia-schedule:2026-08-19"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-19T06:07:00.779Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}
