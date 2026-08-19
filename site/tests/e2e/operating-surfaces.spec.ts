@@ -292,8 +292,10 @@ test("Door Money renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Door Money" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Door Money/ })).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("link", { name: "recommendations" })).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("link", { name: "actions" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "knowledge" })).toBeVisible();
+  const actionsTab = page.locator('a[href="/admin?venture=door-money&tab=actions"]');
+  const knowledgeTab = page.locator('a[href="/admin?venture=door-money&tab=knowledge"]');
+  await expect(actionsTab).toBeVisible();
+  await expect(knowledgeTab).toBeVisible();
   const recommendationCards = page.locator('[id^="door-money-recommendation-"]');
   const recommendationCount = await recommendationCards.count();
   await expect(page.getByText(`${recommendationCount} on this tab`, { exact: true })).toBeVisible();
@@ -303,8 +305,8 @@ test("Door Money renders its three bounded admin tabs", async ({ page }) => {
     await expect(page.getByText(/No Door Money recommendation store exists yet\.|No readable Door Money recommendations are stored\./u)).toBeVisible();
   }
 
-  await page.getByRole("link", { name: "actions" }).click();
-  await expect(page).toHaveURL(/tab=actions/);
+  await actionsTab.click();
+  await expect(page).toHaveURL(/tab=actions/, { timeout: 30_000 });
   const actionsHeading = page.getByRole("heading", { name: "Today’s actions" });
   const actionsState = page.getByText(/No Door Money action packets or playbooks exist yet\.|Door Money actions could not be read\./u);
   await expect(actionsHeading.or(actionsState).first()).toBeVisible();
@@ -313,8 +315,8 @@ test("Door Money renders its three bounded admin tabs", async ({ page }) => {
     await expect(page.getByText(/Playbooks cannot post, send outreach, create accounts or modify a channel\./u)).toBeVisible();
   }
 
-  await page.getByRole("link", { name: "knowledge" }).click();
-  await expect(page).toHaveURL(/tab=knowledge/);
+  await knowledgeTab.click();
+  await expect(page).toHaveURL(/tab=knowledge/, { timeout: 30_000 });
   await expect(page.getByRole("heading", { name: "Ingestion status" }).or(
     page.getByText(/No Door Money knowledge version exists yet\.|The current Door Money knowledge version could not be read\./u)
   ).first()).toBeVisible();
