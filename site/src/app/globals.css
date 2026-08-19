@@ -148,6 +148,8 @@ img {
   --admin-foreground-subtle: #62666b;
   --admin-sidebar-foreground: #ffffff;
   --admin-sidebar-muted: rgba(255, 255, 255, 0.62);
+  --admin-swatch-on-light: #09090b;
+  --admin-swatch-on-dark: #f4f4f5;
 
   /* Structure and action */
   --admin-border: rgba(0, 0, 0, 0.08);
