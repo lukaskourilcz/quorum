@@ -428,23 +428,21 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
             <span>BoardlessAI</span>
           </button>
           {/*
-            The active mark takes no layout space at all.
-            It used to be an inline dot rendered at zero opacity when inactive, which stopped the
-            rail twitching by making every label carry twelve pixels of permanent empty gap for a
-            dot that was not there — the owner's report was the gap, not the twitch. Absolutely
-            positioned under the label it is out of the flow entirely: nothing reserves room for
-            it, nothing moves when it appears, and the row measures the same in both states.
+            The horizontal scroller needs paint room below the fixed header because overflow-x
+            also clips the other axis. Its negative margin keeps the header and every button box
+            unchanged while the active link's out-of-flow beam can reach the room below.
           */}
           <nav
             aria-label="Primary"
-            className="hide-scrollbar flex min-w-0 flex-1 items-center justify-center gap-1 overflow-x-auto md:gap-2"
+            className="hide-scrollbar -mb-3 flex h-20 min-w-0 flex-1 items-start justify-start gap-1 overflow-x-auto pt-4 md:gap-2 lg:justify-center"
             data-horizontal-scroll
             data-nav
           >
             {NAV.map((entry) => (
               <button
                 aria-current={active === entry.index ? "true" : undefined}
-                className="relative inline-flex shrink-0 items-center whitespace-nowrap rounded-lg px-2.5 py-2 text-[12px] font-medium text-[#d4d4d8] transition-colors hover:bg-[#202024] hover:text-white md:px-3 md:text-[13px]"
+                className="relative inline-flex shrink-0 items-center whitespace-nowrap rounded-lg px-2.5 py-2 text-[12px] font-medium text-[#d4d4d8] transition-colors hover:bg-[#202024] hover:text-white data-[active=true]:text-white md:px-3 md:text-[13px]"
+                data-active={active === entry.index}
                 data-nav-item
                 key={entry.label}
                 onClick={() => goTo(entry.index)}
@@ -453,8 +451,8 @@ export function OfficeWalkthrough({ data }: { data: OfficeWalkthroughData }) {
                 {entry.label}
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute bottom-[3px] left-1/2 size-[5px] -translate-x-1/2 rounded-full bg-[var(--bai-accent)] transition-opacity"
-                  style={{ opacity: active === entry.index ? 1 : 0 }}
+                  data-active={active === entry.index}
+                  data-nav-spotlight
                 />
               </button>
             ))}

@@ -1947,6 +1947,102 @@ test.describe("footer links open dialogs", () => {
  * rather than trusting the class list.
  */
 test.describe("navigation reserves no space it does not paint", () => {
+  test("one walkthrough link casts the spotlight without retaining the active dot", async ({ page }) => {
+    await page.goto("/", { waitUntil: "networkidle" });
+    const items = page.locator("[data-nav-item]");
+    const spotlights = page.locator("[data-nav-spotlight]");
+
+    await expect(items).toHaveCount(7);
+    await expect(spotlights).toHaveCount(7);
+    await expect(
+      page.locator('[data-nav-item] > [aria-hidden="true"]:not([data-nav-spotlight])')
+    ).toHaveCount(0);
+
+    const boxes = async () => page.evaluate(() =>
+      [...document.querySelectorAll("[data-nav-item]")].map((node) => {
+        const rect = node.getBoundingClientRect();
+        return [rect.x, rect.y, rect.width, rect.height];
+      }));
+    const before = await boxes();
+
+    await page.getByRole("button", { name: "Calendar", exact: true }).click();
+    const activeSpotlight = page.locator('[data-nav-spotlight][data-active="true"]');
+    await expect(activeSpotlight).toHaveCount(1);
+    await expect(activeSpotlight).toHaveCSS("opacity", "1");
+    await expect(page.getByRole("button", { name: "Calendar", exact: true })).toHaveAttribute(
+      "aria-current",
+      "true"
+    );
+    expect(await boxes()).toEqual(before);
+
+    const beam = await activeSpotlight.evaluate((node) => {
+      const marker = node as HTMLElement;
+      const style = getComputedStyle(marker);
+      const outer = getComputedStyle(marker, "::before");
+      const core = getComputedStyle(marker, "::after");
+      const rect = marker.getBoundingClientRect();
+      const itemRect = marker.parentElement!.getBoundingClientRect();
+      return {
+        centerDelta: Math.abs(
+          rect.left + rect.width / 2 - (itemRect.left + itemRect.width / 2)
+        ),
+        core: core.backgroundImage,
+        height: rect.height,
+        opacity: style.opacity,
+        outer: outer.backgroundImage,
+        pointerEvents: style.pointerEvents,
+        text: marker.textContent,
+        width: rect.width
+      };
+    });
+    expect(beam).toMatchObject({
+      centerDelta: 0,
+      height: 28,
+      opacity: "1",
+      pointerEvents: "none",
+      text: "",
+      width: 82
+    });
+    expect(beam.outer).toContain("radial-gradient");
+    expect(beam.core).toContain("radial-gradient");
+
+    await page.locator("[data-dot]").nth(2).click();
+    await expect(page.locator('[data-nav-spotlight][data-active="true"]')).toHaveCount(1);
+    await expect(page.getByRole("button", { name: "Meetings", exact: true })).toHaveAttribute(
+      "aria-current",
+      "true"
+    );
+    expect(await boxes()).toEqual(before);
+
+    await page.keyboard.press("PageDown");
+    await expect(page.getByRole("button", { name: "Projects", exact: true })).toHaveAttribute(
+      "aria-current",
+      "true"
+    );
+    await expect(page.locator('[data-nav-spotlight][data-active="true"]')).toHaveCount(1);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.reload({ waitUntil: "networkidle" });
+    const narrowNavigation = await page.locator("[data-nav]").evaluate((node) => ({
+      clientWidth: node.clientWidth,
+      scrollWidth: node.scrollWidth
+    }));
+    expect(narrowNavigation.scrollWidth).toBeGreaterThan(narrowNavigation.clientWidth);
+    await expect(page.getByRole("button", { name: "Calendar", exact: true })).toBeInViewport();
+    await page.getByRole("button", { name: "Company", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Company", exact: true })).toHaveAttribute(
+      "aria-current",
+      "true"
+    );
+    await expect(page.locator('[data-nav-spotlight][data-active="true"]')).toHaveCount(1);
+    await expect(page.getByRole("button", { name: "Company", exact: true })).toBeInViewport();
+    await page.getByRole("button", { name: "Calendar", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Calendar", exact: true })).toBeInViewport();
+    expect(await page.evaluate(() =>
+      document.documentElement.scrollWidth - document.documentElement.clientWidth
+    )).toBe(0);
+  });
+
   test("hovering a walkthrough nav item moves nothing", async ({ page }) => {
     await page.goto("/", { waitUntil: "networkidle" });
     const items = page.locator("[data-nav-item]");
@@ -2011,6 +2107,16 @@ test.describe("navigation reserves no space it does not paint", () => {
     const before = await item.boundingBox();
     await item.hover();
     expect(await item.boundingBox()).toEqual(before);
+    await item.click();
+    const spotlight = page.locator('[data-nav-spotlight][data-active="true"]');
+    await expect(spotlight).toHaveCSS("opacity", "1");
+    const transitionDuration = await spotlight.evaluate((node) =>
+      getComputedStyle(node).transitionDuration
+    );
+    const durationMs = transitionDuration.endsWith("ms")
+      ? Number.parseFloat(transitionDuration)
+      : Number.parseFloat(transitionDuration) * 1_000;
+    expect(durationMs).toBeLessThanOrEqual(0.01);
   });
 });
 
