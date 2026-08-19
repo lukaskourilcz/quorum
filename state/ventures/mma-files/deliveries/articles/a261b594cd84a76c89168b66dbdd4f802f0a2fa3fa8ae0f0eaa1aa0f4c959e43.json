@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "a261b594cd84a76c89168b66dbdd4f802f0a2fa3fa8ae0f0eaa1aa0f4c959e43",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "3d73dbee35b9dba18f6a6be954ebc20d2b722f2c",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+  "recordedAt": "2026-08-19T08:09:33.417Z"
+}

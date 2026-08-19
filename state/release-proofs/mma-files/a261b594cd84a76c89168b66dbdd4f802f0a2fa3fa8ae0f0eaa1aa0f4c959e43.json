@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-c06c41920f20e888",
+  "venture": "mma-files",
+  "packageHash": "a261b594cd84a76c89168b66dbdd4f802f0a2fa3fa8ae0f0eaa1aa0f4c959e43",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "3d73dbee35b9dba18f6a6be954ebc20d2b722f2c",
+  "deploymentUrl": "https://mma-files.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 3d73dbee35b9dba18f6a6be954ebc20d2b722f2c is readable",
+      "checkedAt": "2026-08-19T08:09:31.822Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-19T08:09:31.822Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-19T08:09:31.822Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/cs/articles/ufc-event-ufc-fight-night-hernandez-vs-rodrigues?boardless_verify=a261b594cd84-1787126971822",
+      "checkedAt": "2026-08-19T08:09:31.822Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and ufc-event-ufc-fight-night-hernandez-vs-rodrigues match",
+      "checkedAt": "2026-08-19T08:09:31.822Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose a261b594cd84a76c89168b66dbdd4f802f0a2fa3fa8ae0f0eaa1aa0f4c959e43",
+      "checkedAt": "2026-08-19T08:09:31.822Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/images/articles/ufc-event-ufc-fight-night-hernandez-vs-rodrigues/hero.webp?boardless_verify=a261b594cd84-1787126971822",
+      "checkedAt": "2026-08-19T08:09:31.822Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-19T08:09:31.822Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "BYB BYB · Pexels License",
+      "checkedAt": "2026-08-19T08:09:31.822Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-19T08:08:29.408Z",
+  "completedAt": "2026-08-19T08:09:32.303Z"
+}
