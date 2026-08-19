@@ -123,11 +123,11 @@ function SourceStatus({ now, snapshot }: { now: string; snapshot: AdminTehdejsiS
         <Badge>Owner-copied · read only</Badge>
       </div>
       <Card className="mt-3"><CardContent>
-        <dl className="grid divide-y divide-[var(--admin-border)] md:grid-cols-3 md:divide-x md:divide-y-0">
+        <div className="grid divide-y divide-[var(--admin-border)] md:grid-cols-3 md:divide-x md:divide-y-0" data-admin-metrics>
           <AdminMetric className="px-3 first:pl-0" label="Copied" value={<span className="text-[length:var(--admin-type-control)]">{formatDateTime(snapshot.facts.copiedAt)} · {ageDays} day{ageDays === 1 ? "" : "s"} old</span>} />
           <AdminMetric className="px-3" label="Envelope hash" value={<span className="block break-all text-[length:var(--admin-type-control)]">{snapshot.facts.contentHash}</span>} />
           <AdminMetric className="px-3 last:pr-0" label="Recorded origin note" value={<span className="text-[length:var(--admin-type-control)]">{snapshot.facts.copiedFrom}</span>} />
-        </dl>
+        </div>
       </CardContent></Card>
       <Callout className="mt-4" tone="warning">
         Product drift is not measured automatically: this venture has no product-repository connection. The owner must compare sources before replacing the committed facts file.

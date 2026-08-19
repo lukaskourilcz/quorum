@@ -82,6 +82,7 @@ describe("Door Money knowledge panel", () => {
     const html = renderToStaticMarkup(<DoorMoneyKnowledgePanel knowledge={present} />);
 
     expect(html).toContain("Ingestion status");
+    expect(html).toContain('data-admin-metrics="true"');
     expect(html).toContain(`sha256:${"a".repeat(64)}`);
     expect(html).toContain("fixture-annotation-v1");
     expect(html).toContain("Chapters and passages");

@@ -56,11 +56,11 @@ function Quota({ snapshot }: { snapshot: AdminKvorumSnapshot }) {
     <AdminCard>
       <AdminCardContent>
         <AdminMetric label={`Apify quota · ${quota.month}`} progress={percent} value={`${usd(quota.estimatedUsedUsd)} / ${usd(quota.shareCapUsd)} venture share`} />
-        <dl className="m-0 mt-3 grid divide-y divide-[var(--admin-border)] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        <div className="m-0 mt-3 grid divide-y divide-[var(--admin-border)] sm:grid-cols-3 sm:divide-x sm:divide-y-0" data-admin-metrics>
           <AdminMetric className="px-3 first:pl-0" label="Reserved per run" value={usd(quota.reservedPerRun)} />
           <AdminMetric className="px-3" label="Shared account used" value={quota.sharedAccountUsedUsd === null ? "Not recorded" : usd(quota.sharedAccountUsedUsd)} />
           <AdminMetric className="px-3 last:pr-0" label="Last recorded" value={<span className="break-all text-[length:var(--admin-type-control)]">{quota.updatedAt}</span>} />
-        </dl>
+        </div>
         {quota.perActorCounts.length ? (
           <div className="mt-3 overflow-x-auto pb-1" data-horizontal-scroll>
             <div className="flex min-w-max gap-2">

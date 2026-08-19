@@ -200,12 +200,12 @@ export function DoorMoneyKnowledgePanel({ knowledge }: { knowledge: AdminDoorMon
       <section aria-labelledby="door-money-ingestion-heading">
         <div className="flex flex-wrap items-baseline justify-between gap-3"><Heading id="door-money-ingestion-heading">Ingestion status</Heading><Badge>Read-only</Badge></div>
         <Card className="mt-3"><CardContent>
-          <dl className="grid divide-y divide-[var(--admin-border)] sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-4">
+          <div className="grid divide-y divide-[var(--admin-border)] sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-4" data-admin-metrics>
             <AdminMetric className="px-3 first:pl-0" label="Manuscript hash" value={<span className="block break-all text-[length:var(--admin-type-control)]">{index.manuscriptHash}</span>} />
             <AdminMetric className="px-3" label="Chunks" value={index.chunkCount} />
             <AdminMetric className="px-3" label="Recorded cost" value={formatUsd(index.ingestionCostUsd)} />
             <AdminMetric className="px-3 last:pr-0" label="Generated" value={<span className="block break-all text-[length:var(--admin-type-control)]">{index.generatedAt}</span>} />
-          </dl>
+          </div>
           <p className="mt-5 text-sm leading-6 text-[var(--admin-foreground-muted)]">Models: annotation {index.modelVersions.annotation}; rollup {index.modelVersions.rollup}; embedding {index.modelVersions.embedding}; style map {styleProfile.modelVersions.chapterMap}; synthesis {styleProfile.modelVersions.synthesis}.</p>
           <p className="mt-2 text-xs leading-5 text-[var(--admin-foreground-muted)]">This page cannot re-run ingestion. The owner-approved CLI creates a new recorded version.</p>
         </CardContent></Card>

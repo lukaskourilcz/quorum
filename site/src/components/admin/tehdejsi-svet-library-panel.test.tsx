@@ -65,6 +65,7 @@ describe("Tehdejsi svet library panel", () => {
     );
 
     expect(html).toContain("Facts-file status");
+    expect(html).toContain('data-admin-metrics="true"');
     expect(html).toContain("8 days old");
     expect(html).toContain("Envelope hash");
     expect(html).toContain("Product drift is not measured automatically");
