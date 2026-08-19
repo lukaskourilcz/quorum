@@ -417,14 +417,28 @@ test("approvals and owner-only work include all four new ventures", async ({ pag
 });
 
 test("Tehdejsi svet unreadable records count on the venture and company views", async ({ page }) => {
+  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  const unreadable = page.locator('[data-admin-attention-item="Unreadable files"]');
+  const baselineCompany = Number(await unreadable.locator(".admin-tabular").textContent());
+
+  await page.goto("/admin?venture=tehdejsi-svet&tab=features", { waitUntil: "networkidle" });
+  const ventureUnreadable = page.locator('[data-admin-state="malformed"]').filter({
+    has: page.getByText("Some saved workspace records are unavailable", { exact: true })
+  });
+  const baselineVentureText = await ventureUnreadable.textContent();
+  const baselineVenture = Number(baselineVentureText?.match(/(\d+) saved (?:file|files)/u)?.[1] ?? 0);
+
   await writeFile(tsUnreadablePath, "{}\n");
   try {
     await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
-    const unreadable = page.locator("[data-adm-rail-foot]").getByText("Unreadable files", { exact: true }).locator("..");
-    await expect(unreadable.getByText("1", { exact: true })).toBeVisible();
+    await expect(unreadable.locator(".admin-tabular")).toHaveText(String(baselineCompany + 1));
 
     await page.goto("/admin?venture=tehdejsi-svet&tab=features", { waitUntil: "networkidle" });
-    await expect(page.getByText(/1 saved file cannot be read: features \(1\)/u)).toBeVisible();
+    const expectedVentureTotal = baselineVenture + 1;
+    await expect(ventureUnreadable).toContainText(
+      `${expectedVentureTotal} saved ${expectedVentureTotal === 1 ? "file cannot" : "files cannot"} be read`
+    );
+    await expect(ventureUnreadable).toContainText("features (1)");
   } finally {
     await rm(tsUnreadablePath, { force: true });
   }
@@ -649,7 +663,7 @@ test("admin makes its deployment write capability explicit", async ({ page }) =>
 
 test("admin separates pending approvals from approved deliveries still waiting", async ({ page }) => {
   await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
-  const attention = page.locator("[data-adm-rail-foot]");
+  const attention = page.locator("[data-admin-attention-summary]");
   await expect(attention).toContainText("Approvals waiting");
   await expect(attention).toContainText("Approved deliveries waiting");
   await expect(attention).toContainText("1");
