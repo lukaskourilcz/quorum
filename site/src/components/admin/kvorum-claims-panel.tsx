@@ -3,16 +3,22 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
+import {
+  AdminButton,
+  AdminCallout,
+  AdminCard,
+  AdminCardContent,
+  AdminEntityBadge,
+  AdminStateMessage,
+  AdminStatusBadge,
+} from "./admin-primitives";
 import type { AdminKvorumLedgerClaim, AdminKvorumStoreState } from "@/lib/admin-kvorum";
 
-const STATUS_COLOUR: Record<AdminKvorumLedgerClaim["status"], string> = {
-  standing: "#86efac",
-  corrected: "#f5d90a",
-  retracted: "#f87171"
-};
-
-const buttonClass =
-  "rounded-[8px] border border-[#665f16] bg-[#111005] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#f5d90a] disabled:cursor-not-allowed disabled:opacity-40";
+function claimTone(status: AdminKvorumLedgerClaim["status"]): "success" | "warning" | "destructive" {
+  if (status === "standing") return "success";
+  if (status === "corrected") return "warning";
+  return "destructive";
+}
 
 export function kvorumClaimActionRef(claim: Pick<AdminKvorumLedgerClaim, "date" | "slug">): string {
   return `state/ventures/kvorum/claims/${claim.date}-${claim.slug}.json`;
@@ -38,8 +44,8 @@ function ClaimCard({ initial }: { initial: AdminKvorumLedgerClaim }) {
         body: JSON.stringify({
           action: "draft-correction",
           ref: kvorumClaimActionRef(claim),
-          resolution
-        })
+          resolution,
+        }),
       });
       const payload = await response.json() as { error?: string; status?: AdminKvorumLedgerClaim["status"] };
       if (!response.ok || payload.status !== resolution) {
@@ -55,87 +61,78 @@ function ClaimCard({ initial }: { initial: AdminKvorumLedgerClaim }) {
     }
   }
 
-  const colour = STATUS_COLOUR[claim.status];
   return (
-    <article className="rounded-[10px] border border-[#26262b] bg-[#101013] p-4">
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded-full border px-2 py-1 font-mono text-[9px] uppercase tracking-[0.1em]" style={{ borderColor: colour, color: colour }}>
-          {claim.status}
-        </span>
-        <span className="rounded-full border border-[#3f3f46] px-2 py-1 font-mono text-[9px] uppercase tracking-[0.1em] text-[#d4d4d8]">
-          {claim.type}
-        </span>
-        <span className="font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#94949c]">
-          {claim.recommendationStatus === "posted" ? "manual post recorded" : "approved draft · not published"}
-        </span>
-      </div>
-      <p className="mt-3 text-[14px] leading-[1.65] text-[#e4e4e7]">{claim.claim}</p>
-      <ul className="mt-3 flex flex-wrap gap-2">
-        {claim.sources.map((source) => (
-          <li key={`${claim.id}-${source.sourceId}-${source.url}`}>
-            <a className="text-[11.5px] text-[#f5d90a] underline underline-offset-2" href={source.url} rel="noreferrer" target="_blank">
-              {source.sourceName}
-            </a>
-            {source.discoveryOnly ? <span className="ml-1.5 text-[10px] text-[#f5a524]">context only</span> : null}
-          </li>
-        ))}
-      </ul>
-      <p className="mt-3 font-mono text-[9.5px] uppercase tracking-[0.1em] text-[#94949c]">
-        Recorded {claim.createdAt}{claim.publishedAt ? ` · posted ${claim.publishedAt}` : ""}
-      </p>
-      {claim.recommendationStatus === "posted" && claim.status === "standing" ? (
-        <div className="mt-4 flex flex-wrap gap-2 border-t border-[#26262b] pt-4">
-          <button className={buttonClass} disabled={!writesEnabled || busy} onClick={() => void draft("corrected")} type="button">
-            Draft correction
-          </button>
-          <button className={`${buttonClass} border-[#7f1d1d] text-[#f87171]`} disabled={!writesEnabled || busy} onClick={() => void draft("retracted")} type="button">
-            Draft retraction
-          </button>
+    <AdminCard>
+      <AdminCardContent className="grid gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <AdminStatusBadge tone={claimTone(claim.status)}>{claim.status}</AdminStatusBadge>
+          <AdminEntityBadge>{claim.type}</AdminEntityBadge>
+          <AdminStatusBadge tone={claim.recommendationStatus === "posted" ? "success" : "warning"}>
+            {claim.recommendationStatus === "posted" ? "manual post recorded" : "approved draft · not published"}
+          </AdminStatusBadge>
         </div>
-      ) : claim.hasCorrectionDraft ? (
-        <Link className="mt-4 inline-block text-[11.5px] text-[#f5d90a] underline underline-offset-2" href="/admin?venture=kvorum&tab=recommendations" scroll={false}>
-          Open the correction draft →
-        </Link>
-      ) : (
-        <p className="mt-4 text-[11.5px] leading-[1.55] text-[#94949c]">
-          Correction controls stay closed until the owner records a manual post URL.
+        <p className="m-0 text-[length:var(--admin-type-body)] leading-6">{claim.claim}</p>
+        <ul className="m-0 flex list-none flex-wrap gap-x-3 gap-y-2 p-0">
+          {claim.sources.map((source) => (
+            <li className="flex flex-wrap items-center gap-1.5" key={`${claim.id}-${source.sourceId}-${source.url}`}>
+              <a className="admin-focus-ring rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-section-accent)] underline underline-offset-2" href={source.url} rel="noreferrer" target="_blank">
+                {source.sourceName}
+              </a>
+              {source.discoveryOnly ? <AdminStatusBadge tone="warning">Context only</AdminStatusBadge> : null}
+            </li>
+          ))}
+        </ul>
+        <p className="m-0 break-all text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">
+          Recorded {claim.createdAt}{claim.publishedAt ? ` · posted ${claim.publishedAt}` : ""}
         </p>
-      )}
-      <div aria-live="polite" className="mt-3 min-h-5 font-mono text-[10.5px]" role={error ? "alert" : "status"}>
-        {error ? <span className="text-[#f87171]">{error}</span> : <span className="text-[#a1a1aa]">{message}</span>}
-      </div>
-    </article>
+        {claim.recommendationStatus === "posted" && claim.status === "standing" ? (
+          <div className="flex flex-wrap gap-2 border-t border-[var(--admin-border)] pt-3">
+            <AdminButton disabled={!writesEnabled || busy} onClick={() => void draft("corrected")}>Draft correction</AdminButton>
+            <AdminButton disabled={!writesEnabled || busy} onClick={() => void draft("retracted")} variant="destructive">Draft retraction</AdminButton>
+          </div>
+        ) : claim.hasCorrectionDraft ? (
+          <Link className="admin-focus-ring w-fit rounded-[var(--admin-radius-sm)] text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-section-accent)] underline underline-offset-2" href="/admin?venture=kvorum&tab=recommendations" scroll={false}>
+            Open the correction draft →
+          </Link>
+        ) : (
+          <AdminStateMessage state="held" title="Correction controls stay closed until the owner records a manual post URL." />
+        )}
+        <div aria-live="polite" className="min-h-5 text-[length:var(--admin-type-control)]" role={error ? "alert" : "status"}>
+          {error ? <span className="text-[var(--admin-destructive)]">{error}</span> : <span className="text-[var(--admin-foreground-muted)]">{message}</span>}
+        </div>
+      </AdminCardContent>
+    </AdminCard>
   );
 }
 
 export function KvorumClaimsPanel({
   claims,
   state,
-  unreadable
+  unreadable,
 }: {
   claims: AdminKvorumLedgerClaim[];
   state: AdminKvorumStoreState;
   unreadable: number;
 }) {
   if (claims.length === 0) {
-    const message = state === "missing"
+    const title = state === "missing"
       ? "No claim records are stored yet. Approval records claims without calling them published."
       : state === "unreadable"
         ? "Claim records exist, but none can be read safely."
         : "The claims store exists and contains no record.";
-    return <p className="rounded-[9px] border border-[#3f3f46] bg-[#101013] p-3 text-[13px] leading-[1.55] text-[#d4d4d8]">{message}</p>;
+    return <AdminStateMessage state={state === "unreadable" ? "malformed" : "initial-empty"} title={title} />;
   }
   return (
     <div className="grid gap-4">
       {unreadable > 0 ? (
-        <p className="rounded-[9px] border border-[#92400e] bg-[#160f07] p-3 text-[12px] text-[#f5a524]">
+        <AdminCallout tone="warning">
           {unreadable} claim {unreadable === 1 ? "record was" : "records were"} dropped because it could not be read.
-        </p>
+        </AdminCallout>
       ) : null}
-      <p className="text-[11.5px] leading-[1.55] text-[#94949c]">
+      <AdminCallout>
         Approved drafts are captured here for continuity, but only rows with a manual post receipt are published claims.
         Every correction opens a new recommendation for owner review; this control never posts.
-      </p>
+      </AdminCallout>
       {claims.map((claim) => <ClaimCard initial={claim} key={claim.id} />)}
     </div>
   );
