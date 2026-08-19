@@ -4,7 +4,7 @@ This document is the canonical visual contract for the protected BoardlessAI Adm
 
 ## Governing sources
 
-The program order and invariants come from GitHub issue #382. Issue #366 established this foundation, issue #367 established the shell, and issue #368 migrated the protected surfaces onto both. Repository authority remains `AGENTS.md`, `CLAUDE.md`, `GOVERNANCE.md`, `docs/ENGINEERING.md`, `docs/NEEDED.md`, and applicable decision records. In particular, D12 in `state/decisions/2026-08-02-workplace-show-design-rollback.md` continues to govern public presentation. This Admin-only system does not reopen that decision.
+The program order and invariants come from GitHub issue #382. Issue #366 established this foundation, issue #367 established the shell, issue #368 migrated the protected surfaces onto both, and issue #370 completed the visual, responsive, accessibility, and regression proof recorded in `docs/ADMIN-VISUAL-QA.md`. Repository authority remains `AGENTS.md`, `CLAUDE.md`, `GOVERNANCE.md`, `docs/ENGINEERING.md`, `docs/NEEDED.md`, and applicable decision records. In particular, D12 in `state/decisions/2026-08-02-workplace-show-design-rollback.md` continues to govern public presentation. This Admin-only system does not reopen that decision.
 
 The visual reference is [`lukaskourilcz/own-dashboard`](https://github.com/lukaskourilcz/own-dashboard) pinned at commit `3049c5008b53e7d34d794822eedd552a470492c1`. The implementation audit used these files from that exact commit:
 
@@ -77,7 +77,7 @@ State uses six named tones: neutral, information, success, warning, risk, and de
 
 ### Responsive behavior
 
-Desktop is compact, but mobile controls retain the 44px touch target. Page headers stack before actions overlap. Wide tables sit inside a named, keyboard-focusable scroll region. Long labels and identifiers must wrap or truncate without widening the viewport. Issue #367 implements the responsive shell contract below; full migrated-panel regression proof remains owned by issue #370.
+Desktop is compact, but mobile controls retain the 44px touch target. Page headers stack before actions overlap. Wide tables sit inside a named, keyboard-focusable scroll region. Long labels and identifiers must wrap or truncate without widening the viewport. Issue #367 implements the responsive shell contract below; issue #370 proves the migrated shell and panels at 360, 430, 768, 1024, 1440, and 1728px in both themes.
 
 ## Shell and navigation
 
@@ -87,7 +87,7 @@ The server resolves every navigation entry from the existing company views and r
 
 The toolbar command palette opens from its real button or `Command/Ctrl + K`, filters the same server-resolved registry, supports arrow and Enter navigation, and contains no synthetic result. On mobile, the persistent bottom navigation exposes Overview and Approvals directly; Workspaces opens a focused workspace sheet; More lists every live Admin destination plus theme, public-site and sign-out actions. The future Personal Growth slot is deliberately absent until issue #370 has completed and passed its Admin gates.
 
-The shell-specific automated proof lives in `site/tests/e2e/admin-shell.spec.ts`. It checks desktop geometry and internal scrolling, preference persistence, canonical command navigation, 390 by 844 mobile targets and overflow, complete More-sheet coverage, and WCAG 2 A/AA plus 2.1 A/AA checks for the new shell chrome.
+The shell-specific automated proof lives in `site/tests/e2e/admin-shell.spec.ts`. It checks desktop geometry and internal scrolling, preference persistence, canonical command navigation, 390 by 844 mobile targets and overflow, complete More-sheet coverage, and WCAG 2 A/AA plus 2.1 A/AA checks for the new shell chrome. The optimized-production matrix, full destination and workflow coverage, stable screenshot baselines, reduced-motion checks, and serious/critical axe gate live in the three `site/tests/e2e/admin-*-qa.spec.ts` files and are documented in `docs/ADMIN-VISUAL-QA.md`.
 
 ## Shared primitives
 
@@ -165,4 +165,4 @@ Changes to this foundation must pass:
 - documentation consistency checks
 - `pnpm admin:design-audit`, with zero raw colour, legacy token, disallowed public UI import, and `UNWRAP` violations
 
-Issue #370 adds automated accessibility, route-matrix, and screenshot-diff gates for the fully migrated Admin.
+Run `pnpm admin:qa` for the issue #370 optimized-production accessibility, route-matrix, workflow, and screenshot-diff gate. Run `pnpm --filter @boardlessai/site test:e2e` for the complete existing route audit and isolated canonical write journeys. The exact matrix, intentional project isolation, and latest verified results are recorded in `docs/ADMIN-VISUAL-QA.md`.
