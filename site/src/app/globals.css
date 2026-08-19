@@ -184,6 +184,18 @@ img {
   --admin-row-regular: 2.875rem;
   --admin-touch-target: 2.75rem;
   --admin-control-height: 2rem;
+  --admin-card-padding: 1rem;
+  --admin-page-gap: 1.25rem;
+  --admin-type-micro: 0.625rem;
+  --admin-type-label: 0.6875rem;
+  --admin-type-control: 0.75rem;
+  --admin-type-body: 0.8125rem;
+  --admin-type-section: 0.875rem;
+  --admin-type-dialog: 1.125rem;
+  --admin-type-page: 1.375rem;
+  --admin-type-metric: 1.5rem;
+  --admin-tracking-tight: -0.025em;
+  --admin-tracking-label: 0.08em;
   --admin-motion-fast: 110ms;
   --admin-motion-standard: 170ms;
   --admin-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -223,7 +235,7 @@ img {
   background: var(--admin-background);
   color: var(--admin-foreground);
   font-family: -apple-system, BlinkMacSystemFont, var(--font-dm-sans), "Segoe UI", sans-serif;
-  font-size: 13px;
+  font-size: var(--admin-type-body);
   font-feature-settings: "ss01", "ss03", "cv11";
   line-height: 1.5;
   text-rendering: optimizeLegibility;

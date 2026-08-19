@@ -58,7 +58,7 @@ export function Panel({
       <AdminCardHeader>
         <AdminSectionHeading
           actions={note ? (
-            <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--admin-foreground-muted)]">{note}</span>
+            <span className="text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">{note}</span>
           ) : undefined}
           title={title}
         />

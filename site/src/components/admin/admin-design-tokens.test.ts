@@ -33,6 +33,9 @@ describe("Admin design tokens", () => {
       "--admin-radius",
       "--admin-row-dense",
       "--admin-touch-target",
+      "--admin-type-page",
+      "--admin-type-body",
+      "--admin-type-label",
       "--admin-focus",
     ];
 
