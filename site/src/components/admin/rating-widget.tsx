@@ -89,9 +89,9 @@ export function RatingWidget({
   }
 
   return (
-    <div className="border-t border-[var(--border)] pt-5">
+    <div className="border-t border-[var(--admin-border)] pt-5">
       <fieldset>
-        <legend className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--mist)]">
+        <legend className="font-mono text-[length:var(--admin-type-label)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground)]">
           Your rating
         </legend>
         <div className="mt-3 grid grid-cols-3 gap-2">
@@ -132,14 +132,14 @@ export function RatingWidget({
         {!error && message && message !== "Saving rating…" ? <AdminStateMessage state="success" title={message} /> : null}
       </div>
       {history.length ? (
-        <details className="mt-3 text-sm text-[var(--fog)]">
-          <summary className="min-h-11 cursor-pointer content-center font-semibold text-[var(--mist)]">
+        <details className="mt-3 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">
+          <summary className="admin-focus-ring min-h-[var(--admin-touch-target)] cursor-pointer content-center rounded-[var(--admin-radius-sm)] font-semibold text-[var(--admin-foreground)]">
             Rating history ({history.length})
           </summary>
-          <ol className="mt-2 grid gap-3 border-l border-[var(--border)] pl-4">
+          <ol className="mt-2 grid gap-3 border-l border-[var(--admin-border)] pl-4">
             {history.map((rating) => (
               <li key={rating.id}>
-                <p><strong className="capitalize text-[var(--foreground)]">{rating.rating}</strong> · <time dateTime={rating.ratedAt}>{formatDateTime(rating.ratedAt)}</time></p>
+                <p><strong className="capitalize text-[var(--admin-foreground)]">{rating.rating}</strong> · <time className="admin-tabular" dateTime={rating.ratedAt}>{formatDateTime(rating.ratedAt)}</time></p>
                 {rating.note ? <p className="mt-1 leading-5">{rating.note}</p> : null}
               </li>
             ))}
