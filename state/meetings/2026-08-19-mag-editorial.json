@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260819121913-mag-editorial",
+  "date": "2026-08-19",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.024334,
+    "monthAllInUsd": 8.383288249999994,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "AM: assigned; PM: killed",
+    "evidenceRefs": [
+      "meeting:2026-08-18-mag-desk",
+      "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+      "meeting:2026-08-18-mma-analysis"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "CANVAS",
+      "summary": "Kill the PM slot. UFC Fight Night Hernandez vs. Rodrigues was assigned and published as AM preview on 2026-08-19. No fresh angle, fighter profile, or result exists to justify a second slot today.",
+      "evidenceRefs": [
+        "meeting:2026-08-18-mag-desk",
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+      ]
+    },
+    {
+      "agent": "JAB",
+      "summary": "Slot zabít: po včerejší preview není nový zdrojový subjekt ani modelová analýza. Karta UFC je již pokrytá a další text by opakoval téma.",
+      "evidenceRefs": [
+        "meeting:2026-08-18-mma-analysis",
+        "meeting:2026-08-18-mag-desk",
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+      ]
+    },
+    {
+      "agent": "QUILL",
+      "summary": "Kill slot. UFC Fight Night Hernandez vs. Rodrigues was published 2026-08-19 AM as fight-week-preview. No fresh subject available for today's single article. Bridge shows no model run queued and no Oktagon event in priority.",
+      "evidenceRefs": [
+        "meeting:2026-08-18-mma-analysis",
+        "meeting:2026-08-18-mag-desk",
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Kill today’s slot: no verified FightAIQ file or model run exists, and the UFC event was already covered on 19 August. Do not repeat the preview.",
+      "evidenceRefs": [
+        "meeting:2026-08-18-mma-analysis",
+        "meeting:2026-08-18-mag-desk",
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "CANVAS",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "JAB",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-19.json",
+  "generatedAt": "2026-08-19T12:24:13.328Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-19T12:19:13.328Z",
+    "closedAt": "2026-08-19T12:24:13.328Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-19T12:19:13.328Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "veto",
+        "sentAt": "2026-08-19T12:20:13.328Z",
+        "text": "Kill the PM slot. UFC Fight Night Hernandez vs. Rodrigues was assigned and published as AM preview on 2026-08-19. No fresh angle, fighter profile, or result exists to justify a second slot today.",
+        "evidenceRefs": [
+          "meeting:2026-08-18-mag-desk",
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+        ]
+      },
+      {
+        "agent": "JAB",
+        "mode": "veto",
+        "sentAt": "2026-08-19T12:21:13.328Z",
+        "text": "Slot zabít: po včerejší preview není nový zdrojový subjekt ani modelová analýza. Karta UFC je již pokrytá a další text by opakoval téma.",
+        "evidenceRefs": [
+          "meeting:2026-08-18-mma-analysis",
+          "meeting:2026-08-18-mag-desk",
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+        ]
+      },
+      {
+        "agent": "QUILL",
+        "mode": "veto",
+        "sentAt": "2026-08-19T12:22:13.328Z",
+        "text": "Kill slot. UFC Fight Night Hernandez vs. Rodrigues was published 2026-08-19 AM as fight-week-preview. No fresh subject available for today's single article. Bridge shows no model run queued and no Oktagon event in priority.",
+        "evidenceRefs": [
+          "meeting:2026-08-18-mma-analysis",
+          "meeting:2026-08-18-mag-desk",
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-19T12:23:13.328Z",
+        "text": "Kill today’s slot: no verified FightAIQ file or model run exists, and the UFC event was already covered on 19 August. Do not repeat the preview.",
+        "evidenceRefs": [
+          "meeting:2026-08-18-mma-analysis",
+          "meeting:2026-08-18-mag-desk",
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-19T12:24:13.328Z",
+        "text": "AM: assigned; PM: killed"
+      }
+    ]
+  }
+}

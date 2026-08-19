@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260819121913-mag-editorial",
+  "phase": "mag-editorial",
+  "outcome": "PLAN",
+  "summary": "AM: assigned; PM: killed",
+  "evidenceRefs": [
+    "meeting:2026-08-18-mag-desk",
+    "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+    "meeting:2026-08-18-mma-analysis"
+  ],
+  "generatedAt": "2026-08-19T12:24:13.328Z"
+}
