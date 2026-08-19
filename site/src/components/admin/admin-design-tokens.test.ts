@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
 
 const globalsUrl = new URL("../../app/globals.css", import.meta.url);
-const shellUrl = new URL("./admin-shell.tsx", import.meta.url);
+const shellUrl = new URL("./admin-shell-client.tsx", import.meta.url);
 const designSystemUrl = new URL("../../../../docs/ADMIN-DESIGN-SYSTEM.md", import.meta.url);
 
 describe("Admin design tokens", () => {
@@ -48,11 +48,12 @@ describe("Admin design tokens", () => {
     expect(stylesheet).toContain("--admin-touch-target: 2.75rem");
   });
 
-  it("pins the legacy Admin shell to the dark compatibility palette", async () => {
+  it("lets the protected shell select either scoped Admin palette", async () => {
     const shell = await readFile(shellUrl, "utf8");
 
     expect(shell).toContain("data-admin");
-    expect(shell).toContain('data-admin-theme="dark"');
+    expect(shell).toContain("data-admin-theme={theme}");
+    expect(shell).toContain("--admin-current-sidebar-width");
   });
 
   it("pins the canonical design contract to the inspected reference", async () => {
