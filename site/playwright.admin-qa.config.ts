@@ -38,7 +38,7 @@ export default defineConfig({
   retries: 0,
   snapshotPathTemplate: "{testDir}/snapshots/{arg}{ext}",
   testDir: "./tests/e2e",
-  testMatch: /admin-visual-qa\.spec\.ts/,
+  testMatch: /admin-(navigation|visual|workflows)-qa\.spec\.ts/,
   timeout: 120_000,
   use: {
     baseURL,
