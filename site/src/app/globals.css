@@ -113,6 +113,180 @@ img {
   text-transform: uppercase;
 }
 
+/* ---- Protected Admin design foundation ----------------------------------
+   OwnDashboard 3049c5008b53e7d34d794822eedd552a470492c1 is the visual
+   reference. Every token stays under data-admin so the public BoardlessAI
+   surface keeps its locked editorial system. Raw colour values belong here,
+   at the token boundary; Admin components consume only the semantic names. */
+
+[data-admin] {
+  color-scheme: light;
+
+  /* Surfaces */
+  --admin-background: #f5f5f7;
+  --admin-surface: #ffffff;
+  --admin-surface-secondary: #f5f5f7;
+  --admin-surface-muted: #eeeeef;
+  --admin-surface-inset: #f0f0f2;
+  --admin-surface-hover: #eaeaed;
+  --admin-surface-selected: #fff0e8;
+  --admin-surface-elevated: #ffffff;
+  --admin-overlay: rgba(0, 0, 0, 0.38);
+  --admin-toolbar: rgba(250, 250, 252, 0.9);
+  --admin-sidebar: rgba(20, 20, 22, 0.9);
+  --admin-sidebar-hover: rgba(255, 255, 255, 0.1);
+  --admin-sidebar-selected: rgba(255, 255, 255, 0.18);
+  --admin-sidebar-border: rgba(255, 255, 255, 0.08);
+
+  /* Content */
+  --admin-foreground: #1d1d1f;
+  --admin-foreground-muted: #565a60;
+  --admin-foreground-subtle: #62666b;
+  --admin-sidebar-foreground: #ffffff;
+  --admin-sidebar-muted: rgba(255, 255, 255, 0.62);
+
+  /* Structure and action */
+  --admin-border: rgba(0, 0, 0, 0.08);
+  --admin-border-strong: rgba(0, 0, 0, 0.16);
+  --admin-brand: var(--ember);
+  --admin-brand-soft: var(--ember-soft);
+  --admin-primary: var(--ember);
+  --admin-primary-hover: var(--ember-hover);
+  --admin-primary-foreground: var(--obsidian);
+  --admin-focus: rgba(255, 90, 0, 0.38);
+  --admin-section-accent: var(--admin-brand);
+
+  /* Semantic state */
+  --admin-information: #0064d1;
+  --admin-information-soft: rgba(0, 100, 209, 0.1);
+  --admin-success: #1f7a35;
+  --admin-success-soft: rgba(31, 122, 53, 0.11);
+  --admin-warning: #8a4b08;
+  --admin-warning-soft: rgba(154, 85, 11, 0.12);
+  --admin-risk: #963825;
+  --admin-risk-soft: rgba(161, 59, 41, 0.11);
+  --admin-destructive: #a52b2b;
+  --admin-destructive-soft: rgba(165, 43, 43, 0.1);
+  --admin-destructive-button: #a52b2b;
+  --admin-destructive-foreground: #ffffff;
+
+  /* Shape, density and motion */
+  --admin-radius-sm: 5px;
+  --admin-radius: 7px;
+  --admin-radius-lg: 12px;
+  --admin-radius-xl: 14px;
+  --admin-sidebar-width: 14rem;
+  --admin-rail-width: 4rem;
+  --admin-toolbar-height: 3.25rem;
+  --admin-desktop-padding-block: 1.25rem;
+  --admin-desktop-padding-inline: 1.875rem;
+  --admin-row-dense: 2.375rem;
+  --admin-row-regular: 2.875rem;
+  --admin-touch-target: 2.75rem;
+  --admin-control-height: 2rem;
+  --admin-motion-fast: 110ms;
+  --admin-motion-standard: 170ms;
+  --admin-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --admin-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --admin-shadow-elevated: 0 18px 48px -16px rgba(0, 0, 0, 0.34);
+  --admin-shadow-window: 0 30px 80px -20px rgba(0, 0, 0, 0.52), 0 0 0 1px rgba(0, 0, 0, 0.16);
+
+  /* Compatibility aliases let existing token-backed Admin panels migrate
+     without inheriting a second palette. Literal-hex panels move in #368. */
+  --background: var(--admin-background);
+  --foreground: var(--admin-foreground);
+  --card: var(--admin-surface);
+  --card-foreground: var(--admin-foreground);
+  --primary: var(--admin-primary);
+  --primary-foreground: var(--admin-primary-foreground);
+  --secondary: var(--admin-surface-secondary);
+  --secondary-foreground: var(--admin-foreground);
+  --muted: var(--admin-surface-muted);
+  --muted-foreground: var(--admin-foreground-muted);
+  --accent: var(--admin-brand);
+  --accent-hover: var(--admin-primary-hover);
+  --accent-soft: var(--admin-brand-soft);
+  --accent-foreground: var(--admin-primary-foreground);
+  --border: var(--admin-border);
+  --ring: var(--admin-brand);
+  --surface: var(--admin-surface);
+  --surface-raised: var(--admin-surface-elevated);
+  --line-strong: var(--admin-border-strong);
+  --iron: var(--admin-border-strong);
+  --steel: var(--admin-border-strong);
+  --fog: var(--admin-foreground-subtle);
+  --ash: var(--admin-foreground-muted);
+  --mist: var(--admin-foreground);
+  --radius-card: var(--admin-radius-lg);
+  --radius-button: var(--admin-radius);
+
+  background: var(--admin-background);
+  color: var(--admin-foreground);
+  font-family: -apple-system, BlinkMacSystemFont, var(--font-dm-sans), "Segoe UI", sans-serif;
+  font-size: 13px;
+  font-feature-settings: "ss01", "ss03", "cv11";
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+}
+
+[data-admin][data-admin-theme="dark"] {
+  color-scheme: dark;
+  --admin-background: #101214;
+  --admin-surface: #15181b;
+  --admin-surface-secondary: #1a1d20;
+  --admin-surface-muted: #202429;
+  --admin-surface-inset: #0d0f11;
+  --admin-surface-hover: #23282e;
+  --admin-surface-selected: #332218;
+  --admin-surface-elevated: #1c2024;
+  --admin-overlay: rgba(0, 0, 0, 0.62);
+  --admin-toolbar: rgba(30, 30, 32, 0.92);
+  --admin-sidebar: rgba(12, 12, 14, 0.94);
+  --admin-sidebar-border: rgba(255, 255, 255, 0.1);
+  --admin-foreground: #f1f0ec;
+  --admin-foreground-muted: #b1b2b3;
+  --admin-foreground-subtle: #92969b;
+  --admin-border: #2a2f34;
+  --admin-border-strong: #3b424a;
+  --admin-brand: #ff7a33;
+  --admin-brand-soft: #332218;
+  --admin-primary: #ff7a33;
+  --admin-primary-hover: #ff8a4a;
+  --admin-focus: rgba(255, 122, 51, 0.42);
+  --admin-information: #8db4e5;
+  --admin-information-soft: #1b2b40;
+  --admin-success: #70bf8f;
+  --admin-success-soft: #182a20;
+  --admin-warning: #e5ad55;
+  --admin-warning-soft: #302514;
+  --admin-risk: #e58a73;
+  --admin-risk-soft: #311f1b;
+  --admin-destructive: #ef8a8a;
+  --admin-destructive-soft: #311b1b;
+  --admin-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.32);
+}
+
+[data-admin] .admin-focus-ring {
+  outline: none;
+}
+
+[data-admin] .admin-focus-ring:focus-visible {
+  box-shadow: 0 0 0 3px var(--admin-focus);
+}
+
+[data-admin] .admin-tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+[data-admin] button,
+[data-admin] [role="button"],
+[data-admin] input,
+[data-admin] select,
+[data-admin] textarea {
+  touch-action: manipulation;
+}
+
 .panel-grid {
   display: grid;
   gap: 1px;

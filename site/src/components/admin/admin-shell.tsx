@@ -73,6 +73,7 @@ export function AdminShell({
     <div
       className="grid min-h-svh grid-cols-1 bg-[#09090b] text-[#f4f4f5] lg:grid-cols-[208px_1fr] xl:grid-cols-[248px_1fr]"
       data-admin
+      data-admin-theme="dark"
     >
       <aside
         className="flex flex-col gap-[18px] border-b border-[#1e1e22] bg-[#0b0b0d] px-3.5 py-[18px] lg:sticky lg:top-0 lg:h-svh lg:overflow-y-auto lg:border-b-0 lg:border-r"
