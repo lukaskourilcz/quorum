@@ -17,4 +17,12 @@ describe("AdminFileBrowser owner-facing copy", () => {
     expect(html).not.toContain("METRICS_INGESTION_ENABLED");
     expect(html).toContain("automated metric collection stays turned off");
   });
+
+  it("distinguishes an unavailable source from an empty record set", () => {
+    const html = renderToStaticMarkup(<AdminFileBrowser files={[]} />);
+
+    expect(html).toContain('data-admin-state="unavailable"');
+    expect(html).toContain("No source file could be read");
+    expect(html).toContain("not an empty record set");
+  });
 });
