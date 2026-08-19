@@ -311,7 +311,7 @@ export function AdminStateMessage({
       <AdminStatusBadge className="w-fit" tone={presentation.tone}>{presentation.label}</AdminStatusBadge>
       <div>
         <p className="m-0 font-semibold text-current">{title}</p>
-        {description ? <p className="m-0 mt-1 text-[length:var(--admin-type-control)] text-current opacity-90">{description}</p> : null}
+        {description ? <p className="m-0 mt-1 text-[length:var(--admin-type-control)] text-current">{description}</p> : null}
       </div>
       {action ? <div className="mt-1">{action}</div> : null}
     </AdminCallout>

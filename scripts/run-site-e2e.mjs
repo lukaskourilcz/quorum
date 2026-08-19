@@ -7,6 +7,14 @@ if (!pnpmCli) {
 
 const suppliedArgs = process.argv.slice(2);
 const forwardedArgs = suppliedArgs[0] === "--" ? suppliedArgs.slice(1) : suppliedArgs;
+const explicitSpecFiles = forwardedArgs.filter((argument) =>
+  /(?:^|\/)tests\/e2e\/[^/]+\.spec\.[cm]?[jt]sx?$/u.test(argument)
+);
+const includesWriteJourneyFile = explicitSpecFiles.some(
+  (argument) =>
+    argument.endsWith("/operating-surfaces.spec.ts") ||
+    argument === "tests/e2e/operating-surfaces.spec.ts"
+);
 
 /*
  * The default read-only audit compiles nearly every route in one development-server process.
@@ -39,13 +47,23 @@ const readOnlyRuns = forwardedArgs.length > 0
 
 const runs = [
   ...readOnlyRuns.map((args) => ({ args, project: "chromium" })),
-  { args: forwardedArgs, project: "chromium-write-journeys" }
+  ...(forwardedArgs.length === 0 || explicitSpecFiles.length === 0 || includesWriteJourneyFile
+    ? [{ args: forwardedArgs, project: "chromium-write-journeys" }]
+    : [])
 ];
 
 for (const { args, project } of runs) {
   const result = spawnSync(
     process.execPath,
-    [pnpmCli, "exec", "playwright", "test", `--project=${project}`, ...args],
+    [
+      pnpmCli,
+      "exec",
+      "playwright",
+      "test",
+      `--project=${project}`,
+      ...(forwardedArgs.length > 0 ? ["--pass-with-no-tests"] : []),
+      ...args
+    ],
     {
       cwd: process.cwd(),
       env: process.env,

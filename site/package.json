@@ -8,6 +8,7 @@
     "predev:e2e": "pnpm --filter @boardlessai/carousel-studio build",
     "pretest": "pnpm --filter @boardlessai/carousel-studio build",
     "pretest:e2e": "pnpm --filter @boardlessai/carousel-studio build",
+    "pretest:e2e:admin-qa": "pnpm build",
     "pretypecheck": "pnpm --filter @boardlessai/carousel-studio build",
     "build": "next build",
     "dev": "next dev",
@@ -16,6 +17,7 @@
     "start": "next start",
     "test": "vitest run --passWithNoTests",
     "test:e2e": "node ../scripts/run-site-e2e.mjs",
+    "test:e2e:admin-qa": "playwright test --config=playwright.admin-qa.config.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
