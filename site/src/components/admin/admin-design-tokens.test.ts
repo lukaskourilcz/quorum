@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
 
 const globalsUrl = new URL("../../app/globals.css", import.meta.url);
+const layoutUrl = new URL("../../app/admin/layout.tsx", import.meta.url);
 const shellUrl = new URL("./admin-shell-client.tsx", import.meta.url);
 const designSystemUrl = new URL("../../../../docs/ADMIN-DESIGN-SYSTEM.md", import.meta.url);
 
@@ -49,8 +50,14 @@ describe("Admin design tokens", () => {
   });
 
   it("lets the protected shell select either scoped Admin palette", async () => {
-    const shell = await readFile(shellUrl, "utf8");
+    const [layout, shell] = await Promise.all([
+      readFile(layoutUrl, "utf8"),
+      readFile(shellUrl, "utf8"),
+    ]);
 
+    expect(layout).toContain("ADMIN_THEME_COOKIE");
+    expect(layout).toContain("data-admin");
+    expect(layout).toContain("data-admin-theme={theme}");
     expect(shell).toContain("data-admin");
     expect(shell).toContain("data-admin-theme={theme}");
     expect(shell).toContain("--admin-current-sidebar-width");

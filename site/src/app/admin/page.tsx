@@ -34,12 +34,11 @@ import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { AdminMoneyPanel } from "@/components/admin/money-panel";
 import { IdeasPanel, MonetizationPanel, type FutureIdeaRow } from "@/components/admin/future-panels";
 import { Panel, Tile } from "@/components/admin/panel";
-import { AdminStateMessage } from "@/components/admin/admin-primitives";
+import { AdminCallout, AdminStateMessage } from "@/components/admin/admin-primitives";
 import { PortfolioCard } from "@/components/admin/portfolio-card";
 import { RenderedDeskPanel } from "@/components/admin/rendered-desk-panel";
 import { TittyTuesdaysProposalsPanel } from "@/components/admin/titty-tuesdays-proposals-panel";
 import { SocialArchive } from "@/components/admin/social-archive-panel";
-import { Callout } from "@/components/ui/callout";
 import {
   CURRENT_DAILY_OPERATING_PACE_USD,
   CURRENT_MONTHLY_API_LIMIT_USD,
@@ -700,10 +699,10 @@ export default async function AdminPage({
     }
     return {
       node: (
-        <Callout>
+        <AdminCallout>
           Nothing is stored under {selectedTab ? tabLabel(selectedTab) : "this tab"} for{" "}
           {ventureName(id, selectedVenture.name)} yet. The admin does not add fake examples.
-        </Callout>
+        </AdminCallout>
       ),
       count: 0
     };

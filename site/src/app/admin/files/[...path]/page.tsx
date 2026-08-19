@@ -4,8 +4,13 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { notFound } from "next/navigation";
 import { ArrowLeft, FileText } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import {
+  AdminCard,
+  AdminCardContent,
+  AdminEntityBadge,
+  AdminPageHeader,
+  adminButtonVariants,
+} from "@/components/admin/admin-primitives";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -42,19 +47,27 @@ export default async function AdminMarkdownPage({ params }: { params: Promise<{ 
   const record = await adminMarkdown((await params).path);
   if (!record) notFound();
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-      <header className="border-b border-[var(--border)] bg-[var(--surface)]">
+    <main className="min-h-screen bg-[var(--admin-background)] text-[var(--admin-foreground)]">
+      <header className="border-b border-[var(--admin-border)] bg-[var(--admin-surface)]">
         <div className="mx-auto flex max-w-[var(--container)] flex-wrap items-center justify-between gap-4 px-5 py-6 md:px-8">
-          <div>
-            <div className="flex items-center gap-2"><FileText aria-hidden="true" className="size-4 text-[var(--accent)]" /><Badge>Full Markdown file</Badge></div>
-            <h1 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">Detailed notes</h1>
-            <p className="mt-2 break-all font-mono text-[0.6875rem] text-[var(--fog)]">state/{record.relativePath}</p>
-          </div>
-          <Link className={buttonVariants({ variant: "secondary" })} href="/admin"><ArrowLeft aria-hidden="true" className="size-4" />Back to summaries</Link>
+          <AdminPageHeader
+            actions={(
+              <Link className={adminButtonVariants({ variant: "secondary" })} href="/admin">
+                <ArrowLeft aria-hidden="true" className="size-4" />Back to summaries
+              </Link>
+            )}
+            description={<span className="break-all font-mono">state/{record.relativePath}</span>}
+            eyebrow={<span className="flex items-center gap-2"><FileText aria-hidden="true" className="size-4 text-[var(--admin-section-accent)]" /><AdminEntityBadge>Full Markdown file</AdminEntityBadge></span>}
+            title="Detailed notes"
+          />
         </div>
       </header>
       <article className="mx-auto max-w-4xl px-5 py-10 md:px-8 md:py-14">
-        <pre className="whitespace-pre-wrap break-words rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-6 font-sans text-sm leading-7 text-[var(--mist)] md:p-8">{record.content}</pre>
+        <AdminCard>
+          <AdminCardContent>
+            <pre className="m-0 whitespace-pre-wrap break-words font-sans text-[length:var(--admin-type-body)] leading-7 text-[var(--admin-foreground)]">{record.content}</pre>
+          </AdminCardContent>
+        </AdminCard>
       </article>
     </main>
   );
