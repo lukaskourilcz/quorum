@@ -882,9 +882,9 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
 
     await page.goto("/admin?venture=kvorum&tab=claims", { waitUntil: "networkidle" });
     await expect(page.getByText("3 on this tab", { exact: true })).toBeVisible();
-    const publishedClaim = page.locator("article")
-      .filter({ hasText: "Návrh se vrací do sněmovního projednávání." })
-      .first();
+    const publishedClaim = page
+      .getByText("Návrh se vrací do sněmovního projednávání.", { exact: true })
+      .locator("..");
     await expect(publishedClaim.getByText("manual post recorded", { exact: true })).toBeVisible();
     await publishedClaim.getByRole("button", { name: "Draft correction" }).click();
     await expect(publishedClaim.getByText("A new correction recommendation is waiting for owner review. Nothing was published."))
@@ -963,15 +963,26 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await page.locator('input[name="password"]').fill("e2e-password");
     await page.getByRole("button", { name: "Open project desk" }).click();
     await expect(page).toHaveURL(/\/admin$/, { timeout: 30_000 });
-    await expect(page.getByRole("heading", { name: "Project desk." })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Company Overview." })).toBeVisible();
     // The "Updated at" tile went with the redesign: the page is force-dynamic and behind a
     // credential check, so a rendered-at timestamp told the owner only that the page had rendered.
     // What is worth asserting is that the protected shell came up — breadcrumb, state badge and the
     // way back out.
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-    await expect(page.getByRole("button", { name: "Sign out" })).toBeVisible();
+    const moreButton = page.getByRole("navigation", { name: "Primary Admin navigation" })
+      .getByRole("button", { name: "More" });
+    // A successful server-action navigation can paint the new shell just before hydration attaches
+    // this client's click handler. Retry the user action until its visible dialog state confirms
+    // that the protected shell is interactive; no fixed delay or implementation event is needed.
+    await expect.poll(async () => {
+      await moreButton.click();
+      return page.getByRole("dialog", { name: "More" }).isVisible();
+    }, { timeout: 30_000 }).toBe(true);
+    const more = page.getByRole("dialog", { name: "More" });
+    const signOut = more.getByRole("button", { name: "Sign out of Admin", exact: true });
+    await expect(signOut).toBeVisible();
 
-    await page.getByRole("button", { name: "Sign out" }).click();
+    await signOut.click();
     await expect(page).toHaveURL(/\/admin\/login$/);
     await page.goto("/admin");
     await expect(page).toHaveURL(/\/admin\/login\?error=expired(?:&returnTo=%2Fadmin)?$/);
