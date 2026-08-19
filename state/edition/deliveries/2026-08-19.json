@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-19",
+  "packageHash": "30d144fbe0c050f5b894cf6e09d64bfb65633f664abe1f465d093909e341befa",
+  "status": "delivered",
+  "editionStatus": "no_edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "e319aa8f66ce5514376c61737cd0855f149d2641",
+  "deliveredAt": "2026-08-19T03:05:37.346Z",
+  "tags": []
+}
