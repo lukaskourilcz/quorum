@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-08-20T07:05:11.983Z",
+  "checkedAt": "2026-08-20T08:04:41.268Z",
   "date": "2026-08-20",
   "ventures": [
     {
@@ -17,6 +17,12 @@
           "label": "2026-08-08 AM ufc-event-ufc-fight-night-gamrot-vs-salkilld",
           "packageHash": "ded05ff0de52096b73b12be2a5246601cc879d488c09da74094b853a1b648c0e",
           "date": "2026-08-08",
+          "code": "hash_conflict"
+        },
+        {
+          "label": "2026-08-20 AM ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+          "packageHash": "aeaf73172353d89152fba247feafba8ae55ba6fcafe7355df1691dba86c54c5d",
+          "date": "2026-08-20",
           "code": "hash_conflict"
         }
       ],
