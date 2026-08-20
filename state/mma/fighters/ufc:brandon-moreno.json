@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Brandon_Moreno",
       "publisher": "Wikipedia",
       "title": "Brandon Moreno",
-      "retrievedAt": "2026-08-19T06:02:00.779Z",
+      "retrievedAt": "2026-08-20T06:01:11.343Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -78,7 +78,7 @@
         "source:wikipedia:52475971",
         "source:wikipedia:64585580"
       ],
-      "retrievedAt": "2026-08-19T06:02:00.779Z",
+      "retrievedAt": "2026-08-20T06:01:11.343Z",
       "status": "verified",
       "corroborated": true
     },
@@ -399,9 +399,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 0.589438,
-        "layoffDays": 655
+        "layoffDays": 656
       },
-      "updatedAt": "2026-08-19T06:02:00.779Z"
+      "updatedAt": "2026-08-20T06:01:11.343Z"
     }
   ],
   "rating": {
@@ -411,7 +411,7 @@
     "volatility": 0.06002601,
     "boutCount": 14,
     "asOfBoutRef": "ufc:bout:history-e5ac17f2c927ab8a95da",
-    "updatedAt": "2026-08-19T06:02:00.779Z"
+    "updatedAt": "2026-08-20T06:01:11.343Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1884,11 +1884,28 @@
         "source:wikipedia:64585580"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-20T06:01:11.343Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:52475971",
+        "source:wikipedia:64585580"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.625,
   "modelEligible": true,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-19T06:02:00.779Z"
+  "updatedAt": "2026-08-20T06:01:11.343Z"
 }

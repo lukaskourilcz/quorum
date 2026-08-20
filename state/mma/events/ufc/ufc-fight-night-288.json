@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "event-card/1",
+  "id": "ufc:event:ufc-fight-night-288",
+  "org": "ufc",
+  "name": "UFC Fight Night 288",
+  "venue": "Desert Diamond Arena",
+  "startsAtLocal": "2026-09-12T00:00:00.000Z",
+  "timeZone": "UTC",
+  "startsAtUtc": "2026-09-12T00:00:00.000Z",
+  "sourceRefs": [
+    "source:wikipedia:2026-08-20:List of UFC events"
+  ],
+  "bouts": [
+    {
+      "id": "ufc:ufc-fight-night-288:bout:brandon-moreno-vs-joseph-morales-1",
+      "red": "ufc:brandon-moreno",
+      "blue": "ufc:joseph-morales",
+      "division": "flyweight",
+      "scheduledRounds": 5,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-288:bout:tommy-mcmillen-vs-marwan-rahiki-2",
+      "red": "ufc:tommy-mcmillen",
+      "blue": "ufc:marwan-rahiki",
+      "division": "featherweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-288:bout:manon-fiorot-vs-alexa-grasso-3",
+      "red": "ufc:manon-fiorot",
+      "blue": "ufc:alexa-grasso",
+      "division": "womens-flyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-288:bout:waldo-cortes-acosta-vs-curtis-blaydes-4",
+      "red": "ufc:waldo-cortes-acosta",
+      "blue": "ufc:curtis-blaydes",
+      "division": "heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-288:bout:david-martinez-vs-dan-ige-5",
+      "red": "ufc:david-martinez",
+      "blue": "ufc:dan-ige",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-288:bout:tim-elliott-vs-edgar-chairez-6",
+      "red": "ufc:tim-elliott",
+      "blue": "ufc:edgar-chairez",
+      "division": "flyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-288:bout:ignacio-bahamondes-vs-muslim-salikhov-7",
+      "red": "ufc:ignacio-bahamondes",
+      "blue": "ufc:muslim-salikhov",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-288:bout:jj-aldrich-vs-regina-tarin-8",
+      "red": "ufc:jj-aldrich",
+      "blue": "ufc:regina-tarin",
+      "division": "womens-flyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    }
+  ],
+  "updatedAt": "2026-08-20T06:01:11.343Z"
+}

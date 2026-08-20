@@ -27,7 +27,7 @@
   ],
   "discovery": {
     "firstSeenAt": "2026-08-08T06:01:41.482Z",
-    "lastSeenAt": "2026-08-19T06:02:00.779Z",
+    "lastSeenAt": "2026-08-20T06:01:11.343Z",
     "sourceRefs": [
       "source:wikipedia:2026-08-08:List of UFC events",
       "source:wikipedia:2026-08-12:List of UFC events",
@@ -37,7 +37,8 @@
       "source:wikipedia:2026-08-16:List of UFC events",
       "source:wikipedia:2026-08-17:List of UFC events",
       "source:wikipedia:2026-08-18:List of UFC events",
-      "source:wikipedia:2026-08-19:List of UFC events"
+      "source:wikipedia:2026-08-19:List of UFC events",
+      "source:wikipedia:2026-08-20:List of UFC events"
     ]
   },
   "sourceRefs": [
@@ -49,7 +50,8 @@
     "source:wikipedia:2026-08-16:List of UFC events",
     "source:wikipedia:2026-08-17:List of UFC events",
     "source:wikipedia:2026-08-18:List of UFC events",
-    "source:wikipedia:2026-08-19:List of UFC events"
+    "source:wikipedia:2026-08-19:List of UFC events",
+    "source:wikipedia:2026-08-20:List of UFC events"
   ],
   "result": null,
   "predictionRefs": [],

@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Billy_Quarantillo",
       "publisher": "Wikipedia",
       "title": "Billy Quarantillo",
-      "retrievedAt": "2026-08-19T06:02:00.779Z",
+      "retrievedAt": "2026-08-20T06:01:11.343Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q99317271",
         "source:wikipedia:64857899"
       ],
-      "retrievedAt": "2026-08-19T06:02:00.779Z",
+      "retrievedAt": "2026-08-20T06:01:11.343Z",
       "status": "verified",
       "corroborated": true
     },
@@ -235,9 +235,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.666667,
         "fightsPerYear": 0.546361,
-        "layoffDays": 11
+        "layoffDays": 12
       },
-      "updatedAt": "2026-08-19T06:02:00.779Z"
+      "updatedAt": "2026-08-20T06:01:11.343Z"
     }
   ],
   "rating": {
@@ -247,7 +247,7 @@
     "volatility": 0.06000896,
     "boutCount": 3,
     "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-carlos-diego-ferreira-vs-billy-quarantillo-2",
-    "updatedAt": "2026-08-19T06:02:00.779Z"
+    "updatedAt": "2026-08-20T06:01:11.343Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1834,11 +1834,27 @@
         "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-20T06:01:11.343Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64857899",
+        "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-19T06:02:00.779Z"
+  "updatedAt": "2026-08-20T06:01:11.343Z"
 }

@@ -9,18 +9,7 @@
       "results": 12
     }
   ],
-  "applied": [
-    {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-neil-magny-vs-ramiz-brahimaj-10",
-      "winner": "red",
-      "method": "TKO (punches)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-330-makhachev-vs-machado-garry-bout-jeremiah-wells-vs-myktybek-orolbai-11",
-      "winner": "red",
-      "method": "Technical Submission (ninja choke)"
-    }
-  ],
-  "untracked": 10,
-  "generatedAt": "2026-08-19T06:02:00.779Z"
+  "applied": [],
+  "untracked": 12,
+  "generatedAt": "2026-08-20T06:01:11.343Z"
 }

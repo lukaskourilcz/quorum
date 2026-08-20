@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-05T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-19:List of UFC events"
+    "source:wikipedia:2026-08-20:List of UFC events"
   ],
   "bouts": [
     {
@@ -98,7 +98,15 @@
       "division": "middleweight",
       "scheduledRounds": 3,
       "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:delphine-benouaich-vs-sofia-montenegro-12",
+      "red": "ufc:delphine-benouaich",
+      "blue": "ufc:sofia-montenegro",
+      "division": "womens-flyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-19T06:02:00.779Z"
+  "updatedAt": "2026-08-20T06:01:11.343Z"
 }

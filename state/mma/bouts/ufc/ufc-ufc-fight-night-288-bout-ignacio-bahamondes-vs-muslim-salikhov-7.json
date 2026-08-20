@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:ufc-ufc-fight-night-288-bout-ignacio-bahamondes-vs-muslim-salikhov-7",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:ufc-fight-night-288",
+    "name": "UFC Fight Night 288",
+    "startsAtUtc": "2026-09-12T00:00:00.000Z",
+    "venue": "Desert Diamond Arena"
+  },
+  "fighters": {
+    "red": "ufc:ignacio-bahamondes",
+    "blue": "ufc:muslim-salikhov"
+  },
+  "division": "welterweight",
+  "scheduledRounds": 3,
+  "status": "announced",
+  "statusHistory": [
+    {
+      "status": "announced",
+      "at": "2026-08-20T06:01:11.343Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-20:List of UFC events"
+      ],
+      "note": "Status imported from the Cito event listing."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-20T06:01:11.343Z",
+    "lastSeenAt": "2026-08-20T06:01:11.343Z",
+    "sourceRefs": [
+      "source:wikipedia:2026-08-20:List of UFC events"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:2026-08-20:List of UFC events"
+  ],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-20T06:01:11.343Z",
+      "kind": "created",
+      "fields": [
+        "event",
+        "fighters",
+        "status"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-20:List of UFC events"
+      ],
+      "note": "Discovered on the approved Cito free-tier intake."
+    }
+  ],
+  "updatedAt": "2026-08-20T06:01:11.343Z"
+}

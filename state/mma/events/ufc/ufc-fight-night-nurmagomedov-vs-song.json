@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-08-29T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-19:List of UFC events"
+    "source:wikipedia:2026-08-20:List of UFC events"
   ],
   "bouts": [
     {
@@ -52,7 +52,15 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:namsrai-batbayar-vs-andre-lima-6",
+      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:bilal-hasan-vs-nilson-rojas-6",
+      "red": "ufc:bilal-hasan",
+      "blue": "ufc:nilson-rojas",
+      "division": "flyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:namsrai-batbayar-vs-andre-lima-7",
       "red": "ufc:namsrai-batbayar",
       "blue": "ufc:andre-lima",
       "division": "flyweight",
@@ -60,7 +68,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:jack-jenkins-vs-sean-woodson-7",
+      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:jack-jenkins-vs-sean-woodson-8",
       "red": "ufc:jack-jenkins",
       "blue": "ufc:sean-woodson",
       "division": "featherweight",
@@ -68,7 +76,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:rei-tsuruya-vs-kevin-borjas-8",
+      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:rei-tsuruya-vs-kevin-borjas-9",
       "red": "ufc:rei-tsuruya",
       "blue": "ufc:kevin-borjas",
       "division": "flyweight",
@@ -76,7 +84,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:xiong-jingnan-vs-julia-polastri-9",
+      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:xiong-jingnan-vs-julia-polastri-10",
       "red": "ufc:xiong-jingnan",
       "blue": "ufc:julia-polastri",
       "division": "womens-strawweight",
@@ -84,5 +92,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-19T06:02:00.779Z"
+  "updatedAt": "2026-08-20T06:01:11.343Z"
 }

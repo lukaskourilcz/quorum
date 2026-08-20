@@ -182,7 +182,7 @@
       "requestedAt": "2026-08-16T06:00:53.643Z",
       "notBefore": "2026-08-16",
       "expiresAt": "2026-08-19T23:59:59.000Z",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "schemaVersion": "meeting-agenda/1",
@@ -202,7 +202,26 @@
       "notBefore": "2026-08-19",
       "expiresAt": "2026-08-22T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-dc8b84714b443ff2",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-20-mma-intake",
+      "summary": "Decide: Run probability model on confirmed UFC Fight Night Hernandez vs. Rodrigues card once critical fighter fields close to two-source agreement. Current blockers: 50 records with missing height, reach, stance or division.",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+        "source:cito-ufc:2026-08-20",
+        "source:the-odds-api:2026-08-20"
+      ],
+      "requestedAt": "2026-08-20T06:01:11.343Z",
+      "notBefore": "2026-08-20",
+      "expiresAt": "2026-08-23T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-19T06:02:00.779Z"
+  "updatedAt": "2026-08-20T06:01:11.343Z"
 }
