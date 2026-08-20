@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-08-20-stripe-kupuje-openrouter-vmware-na-azure-konci-spirit-data-googlu",
+  "date": "2026-08-20",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Stripe zaplatil 7,5 miliardy za OpenRouter – startup, který před třemi měsíci stál 1,3 miliardy. Microsoft ruší levnější variantu VMwaru na Azure a zákazníci mají rok na rozhodnutí. A Spirit Airlines prodává data svých zaměstnanců Googlu v rámci insolvenčního řízení, aniž by je předem informovala.",
+    "hashtags": [
+      "stripe",
+      "openrouter",
+      "vmware",
+      "broadcom",
+      "artificialintelligence",
+      "fintech",
+      "spiritairlines",
+      "google",
+      "anthropic",
+      "llamacpp"
+    ],
+    "threadsText": "Stripe zaplatil 7,5 miliardy za OpenRouter – ten v květnu stál 1,3 miliardy. Zakladatelé vysvětlují nákup „singularitou\", analytici vidí prostší důvod: kdo drží vrstvu pro přepínání AI modelů, kontroluje transakce. Mezitím Microsoft ruší levnější VMware na Azure a Spirit Airlines prodává zaměstnanecká data Googlu bez vědomí dotčených.",
+    "storyLine": "Stripe platí 7,5 mld. za AI routing, VMware zdražuje"
+  },
+  "heroCredit": "Photo by Mikhail Nilov on Pexels",
+  "origin": "desk"
+}

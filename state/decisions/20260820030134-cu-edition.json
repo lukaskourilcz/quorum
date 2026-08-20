@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260820030134-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Tři příběhy z jednoho dne ukazují, jak se AI infrastruktura, podniková virtualizace a osobní data propojují do rozhodnutí, která zasáhnou vývojáře, IT oddělení i běžné zaměstnance dříve, než si uvědomí možnosti odporu.",
+  "evidenceRefs": [
+    "source:the-verge",
+    "source:techcrunch-ai",
+    "source:the-register",
+    "source:spaceflight-news",
+    "source:github-ai-releases",
+    "source:ars-technica"
+  ],
+  "editionRef": "8c437f11ad7e718c84a2d1687e38e53d3986af86d0b38fe9c3095cab489ae697",
+  "generatedAt": "2026-08-20T03:01:39.307Z"
+}

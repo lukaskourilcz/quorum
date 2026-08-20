@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-20-stripe-kupuje-openrouter-vmware-na-azure-konci-spirit-data-googlu",
+  "date": "2026-08-20",
+  "rung": "search",
+  "selected": "pexels:9242928",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:9242928",
+      "reason": "Hands in professional dress installing or working on a green motherboard in clean lighting—genuine technical labour, well-lit, no identifiable faces, relevant to hardware and infrastructure.",
+      "candidates": [
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 3,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Museum or exhibition setting with circuit board display on screen feels dated and overly specific to a particular event rather than illustrating the general topic of AI and technology business.",
+          "sceneCs": "muzejní expozice s obrazovkou"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Classic stock AI-generated image of a circuit-board brain—precisely the kind of glowing, stylized visual the rules forbid for a serious tech briefing.",
+          "sceneCs": "mozek z elektronických součástek"
+        },
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Shows real hands soldering on a motherboard, which is authentic hardware work, but the visible hand and skin tones risk being read as a specific person rather than generic technical work.",
+          "sceneCs": "ruce pájející desku plošných spojů"
+        },
+        {
+          "candidateId": "pixabay:2528363",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Red-tinted face projection on a circuit board—reads as an identifiable human face overlaid on electronics, which violates the recognisable-face rule.",
+          "sceneCs": "tvář promítnutá na elektroniku"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Real motherboard with hands and heatsinks in good light—shows genuine hardware assembly work relevant to tech infrastructure without dated styling or faces.",
+          "sceneCs": "deska plošných spojů s procesorem"
+        },
+        {
+          "candidateId": "pixabay:3963944",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Stylised digital illustration with glowing holographic figures and abstract data—classic mid-2000s stock AI imagery that looks machine-generated and dated.",
+          "sceneCs": "digitální ilustrace se svítícími postavami"
+        },
+        {
+          "candidateId": "pexels:9242892",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Hands soldering on a green circuit board in natural light—authentic, well-lit technical work that illustrates hardware and engineering without dated tropes or identifiable faces.",
+          "sceneCs": "ruce pájející zelenou desku plošných spojů"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Heavily stylised chip with neon pink and blue glow on black background—clearly designed/rendered imagery that looks machine-generated and belongs to dated stock aesthetic.",
+          "sceneCs": "procesor s neonovým osvětlením"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "recognisable-face"
+          ],
+          "reason": "Stock illustration of a suited figure with particles and glowing dots—combines an identifiable human silhouette with synthetic, machine-generated styling.",
+          "sceneCs": "postava v obleku s digitálními částicemi"
+        },
+        {
+          "candidateId": "pexels:9242891",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Hands assembling or working on a green circuit board with cables in good indoor light—authentic hardware work, well-executed, illustrates tech infrastructure without identifying faces.",
+          "sceneCs": "ruce montující desku plošných spojů"
+        },
+        {
+          "candidateId": "pixabay:3382521",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Glowing blue brain pattern on digital grid background—textbook stock AI/machine learning visual cliché that dates to mid-2000s design trends.",
+          "sceneCs": "mozek ze svítících čar na mřížce"
+        },
+        {
+          "candidateId": "pexels:9242928",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Hands in professional dress installing or working on a green motherboard in clean lighting—genuine technical labour, well-lit, no identifiable faces, relevant to hardware and infrastructure.",
+          "sceneCs": "ruce instalující komponentu na desku plošných spojů"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.009353
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-20T03:01:34.307Z"
+}

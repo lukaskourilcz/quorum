@@ -1,0 +1,303 @@
+{
+  "schemaVersion": 1,
+  "runId": "b7e8805d-b6f9-4c5f-aa1c-93395ae15aaa",
+  "date": "2026-08-20",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-08-20T03:01:40.180Z",
+  "completedAt": "2026-08-20T03:06:17.467Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-20T03:01:40.185Z",
+      "completedAt": "2026-08-20T03:02:02.643Z",
+      "durationMs": 22458
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-08-20T03:02:02.643Z",
+      "completedAt": "2026-08-20T03:04:15.852Z",
+      "durationMs": 133209,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 66,\n    \"inclusive\": true,\n    \"path\": [\n      \"story_line\"\n    ],\n    \"message\": \"Too big: expected string to have <=66 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-08-20T03:04:15.852Z",
+      "completedAt": "2026-08-20T03:05:58.641Z",
+      "durationMs": 102789
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-08-20T03:05:58.642Z",
+      "completedAt": "2026-08-20T03:05:58.647Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_1",
+      "status": "success",
+      "startedAt": "2026-08-20T03:05:58.648Z",
+      "completedAt": "2026-08-20T03:05:58.648Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-08-20T03:05:58.648Z",
+      "completedAt": "2026-08-20T03:06:17.465Z",
+      "durationMs": 18817
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 1,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11524,
+      "outputTokens": 914,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.048282
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14636,
+      "outputTokens": 4624,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1224405
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 14636,
+      "outputTokens": 4623,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2550,
+      "costUsd": 0.1228155
+    }
+  ],
+  "measuredCostUsd": 0.293538,
+  "quality": {
+    "metrics": {
+      "successfulSources": 31,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 83,
+      "maximumSingleSourceShare": 0.375,
+      "sourceDiversity": 0.78125,
+      "duplicateStorySimilarity": 0.11764705882352941,
+      "repeatedTopicFrequency": 0.3333333333333333,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.293538
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": false,
+    "score": 45,
+    "violations": [
+      {
+        "code": "bureaucratic_filler",
+        "locale": "cs",
+        "message": "Použij přímé sloveso místo úřednické konstrukce."
+      }
+    ]
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/bureaucratic_filler"
+    ]
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": "pexels:9242928",
+        "reason": "Hands in professional dress installing or working on a green motherboard in clean lighting—genuine technical labour, well-lit, no identifiable faces, relevant to hardware and infrastructure.",
+        "candidates": [
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 3,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Museum or exhibition setting with circuit board display on screen feels dated and overly specific to a particular event rather than illustrating the general topic of AI and technology business.",
+            "sceneCs": "muzejní expozice s obrazovkou"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Classic stock AI-generated image of a circuit-board brain—precisely the kind of glowing, stylized visual the rules forbid for a serious tech briefing.",
+            "sceneCs": "mozek z elektronických součástek"
+          },
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "Shows real hands soldering on a motherboard, which is authentic hardware work, but the visible hand and skin tones risk being read as a specific person rather than generic technical work.",
+            "sceneCs": "ruce pájející desku plošných spojů"
+          },
+          {
+            "candidateId": "pixabay:2528363",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "Red-tinted face projection on a circuit board—reads as an identifiable human face overlaid on electronics, which violates the recognisable-face rule.",
+            "sceneCs": "tvář promítnutá na elektroniku"
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Real motherboard with hands and heatsinks in good light—shows genuine hardware assembly work relevant to tech infrastructure without dated styling or faces.",
+            "sceneCs": "deska plošných spojů s procesorem"
+          },
+          {
+            "candidateId": "pixabay:3963944",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Stylised digital illustration with glowing holographic figures and abstract data—classic mid-2000s stock AI imagery that looks machine-generated and dated.",
+            "sceneCs": "digitální ilustrace se svítícími postavami"
+          },
+          {
+            "candidateId": "pexels:9242892",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands soldering on a green circuit board in natural light—authentic, well-lit technical work that illustrates hardware and engineering without dated tropes or identifiable faces.",
+            "sceneCs": "ruce pájející zelenou desku plošných spojů"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Heavily stylised chip with neon pink and blue glow on black background—clearly designed/rendered imagery that looks machine-generated and belongs to dated stock aesthetic.",
+            "sceneCs": "procesor s neonovým osvětlením"
+          },
+          {
+            "candidateId": "pixabay:3435575",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look",
+              "recognisable-face"
+            ],
+            "reason": "Stock illustration of a suited figure with particles and glowing dots—combines an identifiable human silhouette with synthetic, machine-generated styling.",
+            "sceneCs": "postava v obleku s digitálními částicemi"
+          },
+          {
+            "candidateId": "pexels:9242891",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands assembling or working on a green circuit board with cables in good indoor light—authentic hardware work, well-executed, illustrates tech infrastructure without identifying faces.",
+            "sceneCs": "ruce montující desku plošných spojů"
+          },
+          {
+            "candidateId": "pixabay:3382521",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Glowing blue brain pattern on digital grid background—textbook stock AI/machine learning visual cliché that dates to mid-2000s design trends.",
+            "sceneCs": "mozek ze svítících čar na mřížce"
+          },
+          {
+            "candidateId": "pexels:9242928",
+            "provider": "pexels",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Hands in professional dress installing or working on a green motherboard in clean lighting—genuine technical labour, well-lit, no identifiable faces, relevant to hardware and infrastructure.",
+            "sceneCs": "ruce instalující komponentu na desku plošných spojů"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.009353
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 66,\n    \"inclusive\": true,\n    \"path\": [\n      \"story_line\"\n    ],\n    \"message\": \"Too big: expected string to have <=66 characters\"\n  }\n]",
+    "stet:bureaucratic_filler",
+    "shipped_with_unresolved_review:stet:cs/bureaucratic_filler",
+    "image_rung:search",
+    "image_gate:search:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

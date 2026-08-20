@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-20-stripe-kupuje-openrouter-vmware-na-azure-konci-spirit-data-googlu",
+  "date": "2026-08-20",
+  "locale": "cs",
+  "kicker": "DNESKAi · 20. srp",
+  "headline": "Stripe kupuje OpenRouter za 7,5 miliardy dolarů, Microsoft ruší levnější cestu k VMwaru",
+  "coverLine": "Azure přestává nabízet VMware bez VCF, Microsoft tlačí zákazníky ke Broadcomu",
+  "standfirst": "Platební gigant vysvětluje akvizici modelem budoucnosti, analytici vidí jiný důvod. Azure přestane prodávat VMware bez Broadcomova velkého balíku. A Spirit Airlines prodává data svých zaměstnanců Googlu.",
+  "passages": [
+    "Stripe potvrdil akvizici OpenRouteru za 7,5 miliardy dolarů, čímž vsadil na kontrolu AI modelu routování přímo u platební vrstvy.",
+    "Microsoft oznámil ukončení licence-included varianty Azure VMware Solution k 30. srpnu 2027; zákazníci musí přejít na VCF nebo jinou platformu.",
+    "Google uzavřel dohodu s Marvellem na vývoj zákaznického křemíku pro TPU ekosystém, Marvell vydal warrant v hodnotě 12,2 miliardy dolarů.",
+    "Anthropic vydal Python SDK v0.125.0 s novým API pro konfiguraci webového vyhledávání agentů a trvalou sandbox paměť.",
+    "Stripe ovládne vrstvu, kde vývojáři přepínají mezi jazykovými modely a platí za tokeny – kdo drží tuto infrastrukturu, určuje podmínky pro celý trh agentních aplikací.",
+    "Zákazníci Azure VMware Solution mají rok na rozhodnutí: buď přejít na Broadcomův drahý balík VCF, nebo migrovat pryč od VMwaru úplně – obojí je nákladné.",
+    "Případ Spirit Airlines naznačuje mezeru v insolvenčním právu: osobní data zaměstnanců mohou být prodána jako součást majetku úpadce, aniž by dotčení měli právo veta.",
+    "Google ani Spirit Airlines dosud nevysvětlily, k jakému účelu budou data zaměstnanců sloužit, ani jaká data přesně transakce zahrnuje."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Photo by Mikhail Nilov on Pexels"
+}
