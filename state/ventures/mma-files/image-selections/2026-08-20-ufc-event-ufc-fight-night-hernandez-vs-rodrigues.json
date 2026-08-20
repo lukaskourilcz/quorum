@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+  "date": "2026-08-20",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:39226871",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "logo-or-watermark"
+          ],
+          "reason": "The image shows an event venue setup with prominent GMC and UFC logos/branding burned into the frame, which violates the no-logo rule; while it does relate to a UFC event, the branded signage makes it unsuitable as a lead picture.",
+          "sceneCs": "prázdná arena s osvětlením a logy"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002298
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:37512294",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "embedded-text",
+            "logo-or-watermark"
+          ],
+          "reason": "The frame contains visible sponsor logos, watermarks, and embedded text on the backdrop and banner, which violates the rules regardless of the otherwise appropriate MMA venue setting.",
+          "sceneCs": "klec se zápasníky a diváky v hale"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002261
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:12627322",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "logo-or-watermark",
+            "embedded-text"
+          ],
+          "reason": "The Showtime Sports logo and broadcast graphics are burned into the frame, violating the no-watermark rule, and this appears to be a document of a specific Showtime event rather than a generic illustration of mixed martial arts.",
+          "sceneCs": "oktagón v aréně se zápasníky a diváky"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002361
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-20T08:00:59.296Z"
+}
