@@ -456,7 +456,9 @@
       "at": "2026-08-20T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-20-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Zabijte slot: po včerejším preview chybí nový ověřený subjekt, modelový běh i výsledková data. Další text o stejné UFC kartě by porušil pravidlo čerst"
     },
     {
       "at": "2026-08-20T08:00:00.000Z",

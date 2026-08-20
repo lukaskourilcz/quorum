@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260820070146-mag-editorial",
+  "date": "2026-08-20",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.032336,
+    "monthAllInUsd": 8.865470649999994,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "VETO",
+    "summary": "AUDIT vetoed the room output: Zabijte slot: po včerejším preview chybí nový ověřený subjekt, modelový běh i výsledková data. Další text o stejné UFC kartě by porušil pravidlo čerstvosti.",
+    "evidenceRefs": [
+      "meeting:2026-08-19-mma-analysis",
+      "meeting:2026-08-19-mag-desk",
+      "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "JAB",
+      "summary": "Slot nemá nový zdrojově podložený subjekt. UFC Fight Night v Sacramentu už byl pokryt 19. srpna a modelová data chybí, proto článek nelze bezpečně napsat.",
+      "evidenceRefs": [
+        "meeting:2026-08-19-mma-analysis",
+        "meeting:2026-08-19-mag-desk",
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Zabijte slot: po včerejším preview chybí nový ověřený subjekt, modelový běh i výsledková data. Další text o stejné UFC kartě by porušil pravidlo čerstvosti.",
+      "evidenceRefs": [
+        "meeting:2026-08-19-mma-analysis",
+        "meeting:2026-08-19-mag-desk",
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "veto",
+      "veto": true
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-20.json",
+  "generatedAt": "2026-08-20T07:04:46.916Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-20T07:01:46.916Z",
+    "closedAt": "2026-08-20T07:04:46.916Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-20T07:01:46.916Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-20T07:02:46.916Z",
+        "text": "Slot nemá nový zdrojově podložený subjekt. UFC Fight Night v Sacramentu už byl pokryt 19. srpna a modelová data chybí, proto článek nelze bezpečně napsat.",
+        "evidenceRefs": [
+          "meeting:2026-08-19-mma-analysis",
+          "meeting:2026-08-19-mag-desk",
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "veto",
+        "sentAt": "2026-08-20T07:03:46.916Z",
+        "text": "Zabijte slot: po včerejším preview chybí nový ověřený subjekt, modelový běh i výsledková data. Další text o stejné UFC kartě by porušil pravidlo čerstvosti.",
+        "evidenceRefs": [
+          "meeting:2026-08-19-mma-analysis",
+          "meeting:2026-08-19-mag-desk",
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-20T07:04:46.916Z",
+        "text": "AUDIT vetoed the room output: Zabijte slot: po včerejším preview chybí nový ověřený subjekt, modelový běh i výsledková data. Další text o stejné UFC kartě by porušil pravidlo čerstvosti."
+      }
+    ]
+  }
+}
