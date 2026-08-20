@@ -3,43 +3,7 @@
   "items": [
     {
       "schemaVersion": "priority-item/1",
-      "id": "priority-61acb73d9bad711a",
-      "venture": "titty-tuesdays",
-      "question": "What is currently blocking this objective: Build a complete inventory of campaigns that are ready to launch?",
-      "decision_at_stake": "Which next bounded action moves campaign-inventory for Titty Tuesdays.",
-      "evidence_needed": [
-        "campaign-inventory"
-      ],
-      "requested_by": "VIZE",
-      "created": "2026-08-03T08:33:18.686Z",
-      "expires": "2026-08-10T08:33:18.686Z",
-      "status": "why-not",
-      "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; no seat requested a room. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
-      "consumed_by": null,
-      "origin": "seeded",
-      "proposal": null
-    },
-    {
-      "schemaVersion": "priority-item/1",
-      "id": "priority-804d469d3461b01d",
-      "venture": "incubator",
-      "question": "What is currently blocking this objective: Produce evidence-backed content venture proposals?",
-      "decision_at_stake": "Which next bounded action moves evidence-backed-proposals for Magazine Incubator.",
-      "evidence_needed": [
-        "evidence-backed-proposals"
-      ],
-      "requested_by": "VIZE",
-      "created": "2026-08-03T08:33:18.686Z",
-      "expires": "2026-08-10T08:33:18.686Z",
-      "status": "why-not",
-      "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; no seat requested a room. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
-      "consumed_by": null,
-      "origin": "seeded",
-      "proposal": null
-    },
-    {
-      "schemaVersion": "priority-item/1",
-      "id": "priority-a0a157e6aad6d859",
+      "id": "priority-1fb923c0d706aac1",
       "venture": "fightaiq",
       "question": "What is currently blocking this objective: Improve verified fight coverage and build readiness dossiers?",
       "decision_at_stake": "Which next bounded action moves event-fighter-coverage, two-source-agreement, readiness-dossiers for FightAIQ.",
@@ -49,8 +13,8 @@
         "readiness-dossiers"
       ],
       "requested_by": "VIZE",
-      "created": "2026-08-03T08:33:18.686Z",
-      "expires": "2026-08-10T08:33:18.686Z",
+      "created": "2026-08-20T04:03:53.732Z",
+      "expires": "2026-08-27T04:03:53.732Z",
       "status": "why-not",
       "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; no seat requested a room. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
       "consumed_by": null,
@@ -59,25 +23,7 @@
     },
     {
       "schemaVersion": "priority-item/1",
-      "id": "priority-badb7d554eef5583",
-      "venture": "carousel-studio",
-      "question": "What is currently blocking this objective: Grow a checked library of original, reusable carousel layouts?",
-      "decision_at_stake": "Which next bounded action moves live-template-library for Carousel Studio.",
-      "evidence_needed": [
-        "live-template-library"
-      ],
-      "requested_by": "VIZE",
-      "created": "2026-08-03T08:33:18.686Z",
-      "expires": "2026-08-10T08:33:18.686Z",
-      "status": "why-not",
-      "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; no seat requested a room. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
-      "consumed_by": null,
-      "origin": "seeded",
-      "proposal": null
-    },
-    {
-      "schemaVersion": "priority-item/1",
-      "id": "priority-7909b87102cf7c09",
+      "id": "priority-466e5281935d9eb5",
       "venture": "mma-files",
       "question": "What is currently blocking this objective: Fill evidenced article slots and render verified FightAIQ coverage?",
       "decision_at_stake": "Which next bounded action moves slot-fill, rendered-fightaiq-coverage for MMA Files.",
@@ -86,107 +32,14 @@
         "rendered-fightaiq-coverage"
       ],
       "requested_by": "VIZE",
-      "created": "2026-08-03T08:33:18.686Z",
-      "expires": "2026-08-10T08:33:18.686Z",
+      "created": "2026-08-20T04:03:53.732Z",
+      "expires": "2026-08-27T04:03:53.732Z",
       "status": "why-not",
       "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; no seat requested a room. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
       "consumed_by": null,
-      "origin": "seeded",
-      "proposal": null
-    },
-    {
-      "schemaVersion": "priority-item/1",
-      "id": "priority-b5f3863015937676",
-      "venture": "titty-tuesdays",
-      "question": "What is currently blocking this objective: Build a complete inventory of campaigns that are ready to launch?",
-      "decision_at_stake": "Which next bounded action moves campaign-inventory for Titty Tuesdays.",
-      "evidence_needed": [
-        "campaign-inventory"
-      ],
-      "requested_by": "VIZE",
-      "created": "2026-08-04T05:49:06.490Z",
-      "expires": "2026-08-11T05:49:06.490Z",
-      "status": "why-not",
-      "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; no seat requested a room. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
-      "consumed_by": null,
-      "origin": "seeded",
-      "proposal": null
-    },
-    {
-      "schemaVersion": "priority-item/1",
-      "id": "priority-1908332c3b226929",
-      "venture": "incubator",
-      "question": "What is currently blocking this objective: Produce evidence-backed content venture proposals?",
-      "decision_at_stake": "Which next bounded action moves evidence-backed-proposals for Magazine Incubator.",
-      "evidence_needed": [
-        "evidence-backed-proposals"
-      ],
-      "requested_by": "VIZE",
-      "created": "2026-08-04T05:49:06.490Z",
-      "expires": "2026-08-11T05:49:06.490Z",
-      "status": "why-not",
-      "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; no seat requested a room. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
-      "consumed_by": null,
-      "origin": "seeded",
-      "proposal": null
-    },
-    {
-      "schemaVersion": "priority-item/1",
-      "id": "priority-c0b11b4f3da25494",
-      "venture": "fightaiq",
-      "question": "What is currently blocking this objective: Improve verified fight coverage and build readiness dossiers?",
-      "decision_at_stake": "Which next bounded action moves event-fighter-coverage, two-source-agreement, readiness-dossiers for FightAIQ.",
-      "evidence_needed": [
-        "event-fighter-coverage",
-        "two-source-agreement",
-        "readiness-dossiers"
-      ],
-      "requested_by": "VIZE",
-      "created": "2026-08-04T05:49:06.490Z",
-      "expires": "2026-08-11T05:49:06.490Z",
-      "status": "why-not",
-      "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; no seat requested a room. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
-      "consumed_by": null,
-      "origin": "seeded",
-      "proposal": null
-    },
-    {
-      "schemaVersion": "priority-item/1",
-      "id": "priority-4bcd8f4e73bcfd1f",
-      "venture": "carousel-studio",
-      "question": "What is currently blocking this objective: Grow a checked library of original, reusable carousel layouts?",
-      "decision_at_stake": "Which next bounded action moves live-template-library for Carousel Studio.",
-      "evidence_needed": [
-        "live-template-library"
-      ],
-      "requested_by": "VIZE",
-      "created": "2026-08-04T05:49:06.490Z",
-      "expires": "2026-08-11T05:49:06.490Z",
-      "status": "why-not",
-      "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; no seat requested a room. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
-      "consumed_by": null,
-      "origin": "seeded",
-      "proposal": null
-    },
-    {
-      "schemaVersion": "priority-item/1",
-      "id": "priority-ef8d44c0aaa3ba49",
-      "venture": "mma-files",
-      "question": "What is currently blocking this objective: Fill evidenced article slots and render verified FightAIQ coverage?",
-      "decision_at_stake": "Which next bounded action moves slot-fill, rendered-fightaiq-coverage for MMA Files.",
-      "evidence_needed": [
-        "slot-fill",
-        "rendered-fightaiq-coverage"
-      ],
-      "requested_by": "VIZE",
-      "created": "2026-08-04T05:49:06.490Z",
-      "expires": "2026-08-11T05:49:06.490Z",
-      "status": "selected",
-      "why_not_reason": null,
-      "consumed_by": "standups/2026-08-04-morning",
       "origin": "seeded",
       "proposal": null
     }
   ],
-  "updatedAt": "2026-08-17T04:27:57.066Z"
+  "updatedAt": "2026-08-20T04:03:53.732Z"
 }

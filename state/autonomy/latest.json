@@ -1,6 +1,6 @@
 {
   "schemaVersion": "autonomy-snapshot/1",
-  "generatedAt": "2026-08-17T04:27:57.066Z",
+  "generatedAt": "2026-08-20T04:03:53.732Z",
   "metricsIngestionEnabled": false,
   "growth": [
     {
@@ -10,9 +10,9 @@
         {
           "id": "edition-cadence",
           "label": "Edition cadence",
-          "value": 0.9,
+          "value": 0.9231,
           "unit": "ratio",
-          "detail": "9 delivered, 1 failed; NO_EDITION is neutral."
+          "detail": "12 delivered, 1 failed; NO_EDITION is neutral."
         },
         {
           "id": "source-coverage",
@@ -83,9 +83,9 @@
         {
           "id": "two-source-agreement",
           "label": "Two-source agreement",
-          "value": 0.4013,
+          "value": 0.4026,
           "unit": "ratio",
-          "detail": "246 of 613 fighter fields are corroborated."
+          "detail": "248 of 616 fighter fields are corroborated."
         },
         {
           "id": "readiness-dossiers",
@@ -129,16 +129,16 @@
         {
           "id": "slot-fill",
           "label": "Evidenced slot fill",
-          "value": 0.6667,
+          "value": 0.7333,
           "unit": "ratio",
-          "detail": "8 published articles for 12 assigned slots."
+          "detail": "11 published articles for 15 assigned slots."
         },
         {
           "id": "rendered-fightaiq-coverage",
           "label": "FightAIQ files rendered",
-          "value": 8,
+          "value": 17,
           "unit": "count",
-          "detail": "8 distinct fighter references reached published articles."
+          "detail": "17 distinct fighter references reached published articles."
         }
       ]
     },
@@ -149,9 +149,9 @@
         {
           "id": "package-cadence",
           "label": "Draft recommendation packages",
-          "value": 4,
+          "value": 7,
           "unit": "count",
-          "detail": "4 complete evidence-linked recommendation packages were recorded."
+          "detail": "7 complete evidence-linked recommendation packages were recorded."
         },
         {
           "id": "action-completion",
@@ -206,17 +206,17 @@
   "quality": {
     "killedSlotReasons": {
       "evidence": 4,
-      "other": 6
+      "other": 9
     },
-    "vetoRate": 0.1028,
+    "vetoRate": 0.0986,
     "firstPassRate": 0,
     "retryRate": 0,
-    "sourceAgreementRate": 0.4013,
+    "sourceAgreementRate": 0.4026,
     "verifierPassRate": 0,
     "denominators": {
-      "meetings": 107,
+      "meetings": 142,
       "proofs": 0,
-      "fighterFields": 613
+      "fighterFields": 616
     }
   }
 }

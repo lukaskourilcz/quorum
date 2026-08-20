@@ -6,7 +6,7 @@
 
 | ID | Title (≤8 words) | Status | Last reason |
 | --- | --- | --- | --- |
-| — | No ideas recorded | — | — |
+| idea-2026-08-20-b4962e1a | Add a Rating Gate to the Trend Brief | proposed | VAULT novel: Introduces a pre-publication quality gate requiring owner ratings on trend brief plays with flagging mecha… |
 
 Omitted older current entries: 0.
 Collapsed superseded entries: 0.
