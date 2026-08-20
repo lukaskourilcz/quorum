@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-20",
+  "packageHash": "8c437f11ad7e718c84a2d1687e38e53d3986af86d0b38fe9c3095cab489ae697",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "7365dbcb8246fdd7a951c7698b90d71d8418f94b",
+  "deliveredAt": "2026-08-20T03:11:07.107Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-20-stripe-kupuje-openrouter-vmware-na-azure-konci-spirit-data-googlu",
+  "tags": [
+    "umela-inteligence",
+    "fintech",
+    "virtualizace",
+    "data-soukromi",
+    "open-source",
+    "polovodice"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-fd8e808abd9d3b6e",
+  "venture": "caught-up",
+  "packageHash": "8c437f11ad7e718c84a2d1687e38e53d3986af86d0b38fe9c3095cab489ae697",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "7365dbcb8246fdd7a951c7698b90d71d8418f94b",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 7365dbcb8246fdd7a951c7698b90d71d8418f94b is readable",
+      "checkedAt": "2026-08-20T03:11:05.302Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-20T03:11:05.302Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-20T03:11:05.302Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-20-stripe-kupuje-openrouter-vmware-na-azure-konci-spirit-data-googlu?boardless_verify=8c437f11ad7e-1787195465302",
+      "checkedAt": "2026-08-20T03:11:05.302Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-20-stripe-kupuje-openrouter-vmware-na-azure-konci-spirit-data-googlu match",
+      "checkedAt": "2026-08-20T03:11:05.302Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 8c437f11ad7e718c84a2d1687e38e53d3986af86d0b38fe9c3095cab489ae697",
+      "checkedAt": "2026-08-20T03:11:05.302Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-20-stripe-kupuje-openrouter-vmware-na-azure-konci-spirit-data-googlu/hero.webp?boardless_verify=8c437f11ad7e-1787195465302",
+      "checkedAt": "2026-08-20T03:11:05.302Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-20T03:11:05.302Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Mikhail Nilov · Pexels License",
+      "checkedAt": "2026-08-20T03:11:05.302Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-20T03:10:02.994Z",
+  "completedAt": "2026-08-20T03:11:06.158Z"
+}
