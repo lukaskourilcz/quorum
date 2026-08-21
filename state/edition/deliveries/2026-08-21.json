@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-21",
+  "packageHash": "94220c5a537605e8aa6716fef094ea50af0301fc6acdcf88598751a076dc207e",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "c2eac38b3f3e2fe5135e90261142bc82df7c1b38",
+  "deliveredAt": "2026-08-21T03:08:40.810Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-21-supermicro-propusteni-pozoruhodne-chatgpt-vyhledavani",
+  "tags": [
+    "supermicro",
+    "exportni-kontroly",
+    "umela-inteligence",
+    "chatgpt-vyhledavani",
+    "pravo-a-regulace",
+    "medialni-prumysl"
+  ]
+}

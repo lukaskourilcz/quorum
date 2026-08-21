@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-19b5eb1505990fa2",
+  "venture": "caught-up",
+  "packageHash": "94220c5a537605e8aa6716fef094ea50af0301fc6acdcf88598751a076dc207e",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "c2eac38b3f3e2fe5135e90261142bc82df7c1b38",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit c2eac38b3f3e2fe5135e90261142bc82df7c1b38 is readable",
+      "checkedAt": "2026-08-21T03:08:39.362Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-21T03:08:39.362Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-21T03:08:39.362Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-21-supermicro-propusteni-pozoruhodne-chatgpt-vyhledavani?boardless_verify=94220c5a5376-1787281719362",
+      "checkedAt": "2026-08-21T03:08:39.362Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-21-supermicro-propusteni-pozoruhodne-chatgpt-vyhledavani match",
+      "checkedAt": "2026-08-21T03:08:39.362Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 94220c5a537605e8aa6716fef094ea50af0301fc6acdcf88598751a076dc207e",
+      "checkedAt": "2026-08-21T03:08:39.362Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-21-supermicro-propusteni-pozoruhodne-chatgpt-vyhledavani/hero.webp?boardless_verify=94220c5a5376-1787281719362",
+      "checkedAt": "2026-08-21T03:08:39.362Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-21T03:08:39.362Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "panumas nikhomkhai · Pexels License",
+      "checkedAt": "2026-08-21T03:08:39.362Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-21T03:07:37.886Z",
+  "completedAt": "2026-08-21T03:08:40.041Z"
+}
