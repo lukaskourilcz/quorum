@@ -673,7 +673,9 @@
       "at": "2026-08-21T17:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-analysis",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-21-mma-analysis",
+      "decisionOneLiner": "No model run exists to review yet — waiting for the odds data key."
     },
     {
       "at": "2026-08-21T18:00:00.000Z",
