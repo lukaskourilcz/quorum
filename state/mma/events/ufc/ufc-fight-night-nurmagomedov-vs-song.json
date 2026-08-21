@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-08-29T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-20:List of UFC events"
+    "source:wikipedia:2026-08-21:List of UFC events"
   ],
   "bouts": [
     {
@@ -68,15 +68,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:jack-jenkins-vs-sean-woodson-8",
-      "red": "ufc:jack-jenkins",
-      "blue": "ufc:sean-woodson",
-      "division": "featherweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:rei-tsuruya-vs-kevin-borjas-9",
+      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:rei-tsuruya-vs-kevin-borjas-8",
       "red": "ufc:rei-tsuruya",
       "blue": "ufc:kevin-borjas",
       "division": "flyweight",
@@ -84,13 +76,45 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:xiong-jingnan-vs-julia-polastri-10",
+      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:xiao-long-vs-francesco-nuzzi-9",
+      "red": "ufc:xiao-long",
+      "blue": "ufc:francesco-nuzzi",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:jack-jenkins-vs-sean-woodson-10",
+      "red": "ufc:jack-jenkins",
+      "blue": "ufc:sean-woodson",
+      "division": "featherweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:lawrence-lui-vs-hector-santiago-11",
+      "red": "ufc:lawrence-lui",
+      "blue": "ufc:hector-santiago",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:xiong-jingnan-vs-julia-polastri-12",
       "red": "ufc:xiong-jingnan",
       "blue": "ufc:julia-polastri",
       "division": "womens-strawweight",
       "scheduledRounds": 3,
       "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:ding-meng-vs-cameron-nelson-13",
+      "red": "ufc:ding-meng",
+      "blue": "ufc:cameron-nelson",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-20T06:01:11.343Z"
+  "updatedAt": "2026-08-21T06:01:25.374Z"
 }

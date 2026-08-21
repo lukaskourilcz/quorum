@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Anthony_Hernandez",
       "publisher": "Wikipedia",
       "title": "Anthony Hernandez",
-      "retrievedAt": "2026-08-20T06:01:11.343Z",
+      "retrievedAt": "2026-08-21T06:01:25.374Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q96372195",
         "source:wikipedia:64111674"
       ],
-      "retrievedAt": "2026-08-20T06:01:11.343Z",
+      "retrievedAt": "2026-08-21T06:01:25.374Z",
       "status": "verified",
       "corroborated": true
     },
@@ -78,7 +78,7 @@
         "source:wikidata:Q96372195",
         "source:wikipedia:64111674"
       ],
-      "retrievedAt": "2026-08-20T06:01:11.343Z",
+      "retrievedAt": "2026-08-21T06:01:25.374Z",
       "status": "verified",
       "corroborated": true
     },
@@ -87,7 +87,7 @@
       "sourceRefs": [
         "source:wikipedia:64111674"
       ],
-      "retrievedAt": "2026-08-20T06:01:11.343Z",
+      "retrievedAt": "2026-08-21T06:01:25.374Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -96,7 +96,7 @@
       "sourceRefs": [
         "source:wikipedia:64111674"
       ],
-      "retrievedAt": "2026-08-20T06:01:11.343Z",
+      "retrievedAt": "2026-08-21T06:01:25.374Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -106,7 +106,7 @@
         "source:cito-ufc:2026-08-06:fighter:d4c0878c-0a8f-4b3a-9f92-05048ed3e07f",
         "source:wikipedia:64111674"
       ],
-      "retrievedAt": "2026-08-20T06:01:11.343Z",
+      "retrievedAt": "2026-08-21T06:01:25.374Z",
       "status": "verified",
       "corroborated": true
     },
@@ -115,7 +115,7 @@
       "sourceRefs": [
         "source:wikipedia:64111674"
       ],
-      "retrievedAt": "2026-08-20T06:01:11.343Z",
+      "retrievedAt": "2026-08-21T06:01:25.374Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -124,7 +124,7 @@
       "sourceRefs": [
         "source:wikipedia:64111674"
       ],
-      "retrievedAt": "2026-08-20T06:01:11.343Z",
+      "retrievedAt": "2026-08-21T06:01:25.374Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -133,7 +133,7 @@
       "sourceRefs": [
         "source:wikipedia:64111674"
       ],
-      "retrievedAt": "2026-08-20T06:01:11.343Z",
+      "retrievedAt": "2026-08-21T06:01:25.374Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -290,9 +290,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 0.619475,
-        "layoffDays": 180
+        "layoffDays": 181
       },
-      "updatedAt": "2026-08-20T06:01:11.343Z"
+      "updatedAt": "2026-08-21T06:01:25.374Z"
     }
   ],
   "rating": {
@@ -302,14 +302,14 @@
     "volatility": 0.06000041,
     "boutCount": 6,
     "asOfBoutRef": "ufc:bout:history-d8dd91d4fd4dc8a7d2c0",
-    "updatedAt": "2026-08-20T06:01:11.343Z"
+    "updatedAt": "2026-08-21T06:01:25.374Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "record-history-incomplete"
     ],
-    "lastReviewedAt": "2026-08-20T06:01:11.343Z"
+    "lastReviewedAt": "2026-08-21T06:01:25.374Z"
   },
   "changeLog": [
     {
@@ -2014,11 +2014,45 @@
         "source:wikipedia:64111674"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-21T06:01:25.374Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64111674"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 19 historical fight rows."
+    },
+    {
+      "at": "2026-08-21T06:01:25.374Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64111674"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-20T06:01:11.343Z"
+  "updatedAt": "2026-08-21T06:01:25.374Z"
 }

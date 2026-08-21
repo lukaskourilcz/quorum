@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260821060125-mma-intake",
+  "date": "2026-08-21",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SONAR",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.027114,
+    "monthAllInUsd": 9.380363149999994,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+      "source:the-odds-api:2026-08-21",
+      "source:wikipedia-schedule:2026-08-21",
+      "source:cito-ufc:2026-08-21",
+      "source:wikimedia:2026-08-21"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "UFC Fight Night Hernandez vs. Rodrigues card confirmed across two sources; 13 bouts announced. 50 fighters on file, 0 complete on all critical fields. Height and reach gaps block model use for 50 fighters. No Oktagon cards in horizon. Daily lead (Oktagon) has no active work.",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+        "source:the-odds-api:2026-08-21",
+        "source:wikipedia-schedule:2026-08-21"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon is listed for 22 Aug horizon, but no Oktagon bout, weigh-in, or fighter evidence is supplied. UFC data is present; critical fighter fields remain incomplete. Verify official Oktagon card next.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-21",
+        "source:cito-ufc:2026-08-21",
+        "source:wikimedia:2026-08-21",
+        "source:wikipedia-schedule:2026-08-21"
+      ]
+    },
+    {
+      "agent": "TAPE",
+      "summary": "UFC Fight Night Hernandez vs. Rodrigues (13 bouts, 1 day out): card is announced and confirmed across two independent sources. No fighter critical fields are complete; 50 records seen, 0 fully credentialed. No model run exists yet to adjust. Source health nominal.",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+        "source:the-odds-api:2026-08-21",
+        "source:cito-ufc:2026-08-21",
+        "source:wikipedia-schedule:2026-08-21"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260821060125-MMA-INTAKE-02",
+      "owner": "SPOTTER",
+      "summary": "Obtain two-provider confirmation for the Oktagon 93 card and capture official weigh-in outcomes before any record enters model use.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Data only. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+      "source:the-odds-api:2026-08-21",
+      "source:wikipedia-schedule:2026-08-21",
+      "source:cito-ufc:2026-08-21",
+      "source:wikimedia:2026-08-21"
+    ]
+  },
+  "generatedAt": "2026-08-21T06:05:25.374Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-21T06:01:25.374Z",
+    "closedAt": "2026-08-21T06:05:25.374Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-21T06:01:25.374Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-21T06:02:25.374Z",
+        "text": "UFC Fight Night Hernandez vs. Rodrigues card confirmed across two sources; 13 bouts announced. 50 fighters on file, 0 complete on all critical fields. Height and reach gaps block model use for 50 fighters. No Oktagon cards in horizon. Daily lead (Oktagon) has no active work.",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+          "source:the-odds-api:2026-08-21",
+          "source:wikipedia-schedule:2026-08-21"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-21T06:03:25.374Z",
+        "text": "Oktagon is listed for 22 Aug horizon, but no Oktagon bout, weigh-in, or fighter evidence is supplied. UFC data is present; critical fighter fields remain incomplete. Verify official Oktagon card next.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-21",
+          "source:cito-ufc:2026-08-21",
+          "source:wikimedia:2026-08-21",
+          "source:wikipedia-schedule:2026-08-21"
+        ]
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-21T06:04:25.374Z",
+        "text": "UFC Fight Night Hernandez vs. Rodrigues (13 bouts, 1 day out): card is announced and confirmed across two independent sources. No fighter critical fields are complete; 50 records seen, 0 fully credentialed. No model run exists yet to adjust. Source health nominal.",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+          "source:the-odds-api:2026-08-21",
+          "source:cito-ufc:2026-08-21",
+          "source:wikipedia-schedule:2026-08-21"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-21T06:05:25.374Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

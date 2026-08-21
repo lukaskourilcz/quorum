@@ -221,7 +221,26 @@
       "notBefore": "2026-08-20",
       "expiresAt": "2026-08-23T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-9a6947cb20c47d0a",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-21-mma-intake",
+      "summary": "Decide: source a two-independent-source resolution for height and reach on the 50 fighters with gaps before model run can consume Hernandez vs. Rodrigues card.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-21",
+        "source:cito-ufc:2026-08-21",
+        "source:wikimedia:2026-08-21"
+      ],
+      "requestedAt": "2026-08-21T06:01:25.374Z",
+      "notBefore": "2026-08-21",
+      "expiresAt": "2026-08-24T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-20T06:01:11.343Z"
+  "updatedAt": "2026-08-21T06:01:25.374Z"
 }

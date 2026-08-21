@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Tom_Aspinall",
       "publisher": "Wikipedia",
       "title": "Tom Aspinall",
-      "retrievedAt": "2026-08-20T06:01:11.343Z",
+      "retrievedAt": "2026-08-21T06:01:25.374Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q105612429",
         "source:wikipedia:66304460"
       ],
-      "retrievedAt": "2026-08-20T06:01:11.343Z",
+      "retrievedAt": "2026-08-21T06:01:25.374Z",
       "status": "verified",
       "corroborated": true
     },
@@ -247,9 +247,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 0.595181,
-        "layoffDays": 299
+        "layoffDays": 300
       },
-      "updatedAt": "2026-08-20T06:01:11.343Z"
+      "updatedAt": "2026-08-21T06:01:25.374Z"
     }
   ],
   "rating": {
@@ -259,7 +259,7 @@
     "volatility": 0.0599992,
     "boutCount": 3,
     "asOfBoutRef": "ufc:bout:history-45ba6c53d8a161a93199",
-    "updatedAt": "2026-08-20T06:01:11.343Z"
+    "updatedAt": "2026-08-21T06:01:25.374Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1890,11 +1890,28 @@
         "source:wikipedia:66304460"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-21T06:01:25.374Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:69880085",
+        "source:wikipedia:28754266",
+        "source:wikipedia:66304460"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-20T06:01:11.343Z"
+  "updatedAt": "2026-08-21T06:01:25.374Z"
 }
