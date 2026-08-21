@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+  "date": "2026-08-21",
+  "locale": "cs",
+  "kicker": "MMA Files · 21. srp",
+  "headline": "UFC Fight Night: Hernandez vs. Rodrigues míří do Golden 1 Center",
+  "coverLine": "Hernandez vs. Rodrigues v sobotu v Sacramentu",
+  "standfirst": "Ve střední váze se v sobotu v Sacramentu utká Anthony Hernandez s Gregorym Rodriguesem. Karta nabídne také zápasy v lehké, těžké a ženské muší váze.",
+  "passages": [
+    "UFC Fight Night: Hernandez vs. Rodrigues se odehraje 22. srpna v Golden 1 Center v Sacramentu. Organizace staví večer na souboji střední váhy, který je naplánován na pět kol.",
+    "V hlavním zápase nastoupí Anthony Hernandez proti Gregorymu Rodriguesovi.",
+    "Hernandez má na kontě bilanci 15 výher a 3 prohrami, trénuje v MMA Gold Marinoble's Martial Arts a patří do střední váhové kategorie. Kartu doplňují tři potvrzené předzápasy.",
+    "V lehké váze se utkají Chris Padilla a Nasrat Haqparast, každý zápas je na tři kola. V ženské muší váze nastoupí Carli Judice proti Jeisle Chavesové, také na tři kola.",
+    "Těžká váha přinese duel Anthony Winta s Terranceem Chatmanem, rovněž na tři kola."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "Artwork by BoardlessAI FRAME"
+}

@@ -1,0 +1,213 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+  "date": "2026-08-21",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "pexels:28560751",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Two shirtless fighters in an octagon - perfect MMA subject, but the faces are clearly visible and recognisable, which violates the core rule.",
+          "sceneCs": "dva bojovníci v kleci"
+        },
+        {
+          "candidateId": "pixabay:3559469",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "European town square with historic architecture - completely unrelated to mixed martial arts.",
+          "sceneCs": "historické město"
+        },
+        {
+          "candidateId": "pexels:6539265",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Empty arena seats in yellow and blue - while stadium-like, this lacks the energy and MMA context needed for the article.",
+          "sceneCs": "prázdné sedadla v hale"
+        },
+        {
+          "candidateId": "pixabay:10123467",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Aerial architectural shot of stadium seating - too abstract and generic, no MMA context.",
+          "sceneCs": "letecký pohled na stadion"
+        },
+        {
+          "candidateId": "pexels:28560745",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Dynamic moment of two fighters engaging in combat - excellent MMA imagery but both fighters' faces are recognisable and visible.",
+          "sceneCs": "dva bojovníci v kleci"
+        },
+        {
+          "candidateId": "pixabay:5300430",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Public ice skating venue in a European city square - no connection to MMA.",
+          "sceneCs": "ledová plocha v městě"
+        },
+        {
+          "candidateId": "pexels:35781790",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject",
+            "logo-or-watermark"
+          ],
+          "reason": "Football stadium with UEFA branding visible - wrong sport entirely and contains embedded text/logo.",
+          "sceneCs": "fotbalový stadion"
+        },
+        {
+          "candidateId": "pixabay:85865",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Football pitch in a stadium - wrong sport, no MMA context.",
+          "sceneCs": "fotbalové hřiště"
+        },
+        {
+          "candidateId": "pexels:28560744",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Dynamic octagon action shot with visible crowd - good MMA composition but the fighter's face is clearly visible and recognisable.",
+          "sceneCs": "bojovník v kleci"
+        },
+        {
+          "candidateId": "pixabay:7464577",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Ancient Roman amphitheatre - historical monument with no connection to modern MMA.",
+          "sceneCs": "antický amfiteátr"
+        },
+        {
+          "candidateId": "pexels:6541488",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Ice hockey arena seating - while an indoor venue, this is clearly a hockey venue not associated with MMA.",
+          "sceneCs": "hokejová hala"
+        },
+        {
+          "candidateId": "pixabay:1853520",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Abstract architectural dome interior - generic stadium shot with no MMA context or energy.",
+          "sceneCs": "stavební architektura"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.007774
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:39226871",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "logo-or-watermark"
+          ],
+          "reason": "The image shows the UFC Fight Night setup with prominent GMC and UFC logos/branding visible on the stage, which violates the no-logo rule.",
+          "sceneCs": "vyzdobená plocha se stage pro MMA zápasy"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002237
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:37512294",
+          "provider": "wikimedia",
+          "fit": 7,
+          "vetoes": [
+            "logo-or-watermark"
+          ],
+          "reason": "Clear octagon setup in a venue shows the fighting environment aptly, but the visible sponsor/event signage on the banner behind the cage violates the watermark rule.",
+          "sceneCs": "oktagonová klec v hale se zástupy diváků"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00221
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:12627322",
+          "provider": "wikimedia",
+          "fit": 3,
+          "vetoes": [
+            "logo-or-watermark",
+            "embedded-text"
+          ],
+          "reason": "The Showtime Sports logo and sponsor boards are prominently burned into the frame, violating the no-watermark and no-embedded-text rules; while the octagon and crowd composition illustrate MMA fighting generally, the branded elements make it unsuitable for publication.",
+          "sceneCs": "oktagón se zápasnícími během zápasu"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002325
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": null,
+      "reason": "cap:article-cap",
+      "candidates": [],
+      "skipped": [],
+      "costUsd": 0
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-21T08:01:44.071Z"
+}
