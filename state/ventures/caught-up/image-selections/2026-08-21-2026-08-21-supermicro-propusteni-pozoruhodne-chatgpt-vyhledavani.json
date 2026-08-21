@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-21-supermicro-propusteni-pozoruhodne-chatgpt-vyhledavani",
+  "date": "2026-08-21",
+  "rung": "search",
+  "selected": "pexels:37730211",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:37730211",
+      "reason": "Direct, clear imaging of server hardware with blue backlighting that suggests enterprise technology without dated styling or gimmicks; illustrates the infrastructure central to the GPU smuggling plot.",
+      "candidates": [
+        {
+          "candidateId": "pexels:37730212",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Server infrastructure imagery is thematically appropriate for an article about GPU smuggling and enterprise hardware, but the teal-green color grading and lens flare give it a dated 2010s tech aesthetic that feels overly stylized.",
+          "sceneCs": "serverový rack se zelenými indikátory"
+        },
+        {
+          "candidateId": "pixabay:8118377",
+          "provider": "pixabay",
+          "fit": 5,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "While the server context fits, a human hand in the frame risks suggesting a specific person or action tied to the smuggling incident, which violates the rule against illustrating the specific event.",
+          "sceneCs": "ruka v serverovém racku"
+        },
+        {
+          "candidateId": "pexels:28438355",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "recognisable-face",
+            "wrong-subject"
+          ],
+          "reason": "Although containers appear in smuggling contexts, the visible human figure and the physical labor angle misrepresent the article's focus on corporate misconduct and export violations rather than dock operations.",
+          "sceneCs": "pracovník u červených kontejnerů"
+        },
+        {
+          "candidateId": "pixabay:6849995",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "A generic city skyline has no connection to the article's themes of server manufacturing, GPU smuggling, or corporate misconduct.",
+          "sceneCs": "noční městská silueta"
+        },
+        {
+          "candidateId": "pexels:36834057",
+          "provider": "pexels",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "A lecture hall or cinema interior has no relevance to an article about GPU smuggling and server infrastructure.",
+          "sceneCs": "prázdná učebna s modrými sedadly"
+        },
+        {
+          "candidateId": "pixabay:572776",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Theater seating is completely unrelated to the article's subject matter of GPU smuggling and corporate compliance violations.",
+          "sceneCs": "řada modrých sedadel"
+        },
+        {
+          "candidateId": "pexels:37730211",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Direct, clear imaging of server hardware with blue backlighting that suggests enterprise technology without dated styling or gimmicks; illustrates the infrastructure central to the GPU smuggling plot.",
+          "sceneCs": "modře osvětlená serverová skříň"
+        },
+        {
+          "candidateId": "pixabay:8097838",
+          "provider": "pixabay",
+          "fit": 6,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Server storage imagery is contextually appropriate, but the heavy blue neon lighting and dramatic staging feel more like stock photography from 2015 than a contemporary tech illustration.",
+          "sceneCs": "modře osvětlené serverové disky"
+        },
+        {
+          "candidateId": "pexels:3057963",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "While containers might evoke smuggling conceptually, a shipping port aerial view doesn't illustrate the article's core focus on server manufacturer misconduct and GPU export violations.",
+          "sceneCs": "přístav s barevnými kontejnery"
+        },
+        {
+          "candidateId": "pixabay:1845350",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Stacked shipping containers on a sunny day suggest logistics but not the corporate, regulatory, or hardware-manufacturing aspects central to the Supermicro story.",
+          "sceneCs": "hromada barevných přepravních kontejnerů"
+        },
+        {
+          "candidateId": "pexels:276175",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Theater or stadium seating has no bearing on an article about GPU smuggling and server manufacturer compliance.",
+          "sceneCs": "řady sedadel v hledišti"
+        },
+        {
+          "candidateId": "pixabay:1556341",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Auditorium seats are entirely unrelated to the article's themes and subject matter.",
+          "sceneCs": "červená sedadla v sále"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.00859
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-21T03:02:05.401Z"
+}

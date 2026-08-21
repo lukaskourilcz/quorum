@@ -511,8 +511,7 @@
       "at": "2026-08-20T14:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "dm-growth",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
     },
     {
       "at": "2026-08-20T15:00:00.000Z",
@@ -549,19 +548,24 @@
       "at": "2026-08-20T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
       "at": "2026-08-20T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-20-night",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-21T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-21-cu-edition",
+      "decisionOneLiner": "Supermicro případ posouvá americkou exportní regulaci od pokut k přímým personálním důsledkům – to se dotýká každé firmy v dodavatelském řetězci serverového hardwaru."
     },
     {
       "at": "2026-08-21T04:00:00.000Z",

@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "runId": "43949e9b-2d1d-437a-abce-93e7133cf1fa",
+  "date": "2026-08-21",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-08-21T03:02:11.488Z",
+  "completedAt": "2026-08-21T03:04:35.481Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-21T03:02:11.492Z",
+      "completedAt": "2026-08-21T03:02:32.456Z",
+      "durationMs": 20964
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-08-21T03:02:32.456Z",
+      "completedAt": "2026-08-21T03:04:19.278Z",
+      "durationMs": 106822
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-08-21T03:04:19.278Z",
+      "completedAt": "2026-08-21T03:04:19.282Z",
+      "durationMs": 4
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-08-21T03:04:19.283Z",
+      "completedAt": "2026-08-21T03:04:19.283Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-08-21T03:04:19.283Z",
+      "completedAt": "2026-08-21T03:04:35.479Z",
+      "durationMs": 16196
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 1,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12039,
+      "outputTokens": 880,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.049317
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 13836,
+      "outputTokens": 4377,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1163355
+    }
+  ],
+  "measuredCostUsd": 0.1656525,
+  "quality": {
+    "metrics": {
+      "successfulSources": 30,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 86,
+      "maximumSingleSourceShare": 0.2857142857142857,
+      "sourceDiversity": 0.8163265306122449,
+      "duplicateStorySimilarity": 0.06666666666666667,
+      "repeatedTopicFrequency": 0.16666666666666666,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1656525
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": false,
+    "score": 45,
+    "violations": [
+      {
+        "code": "bureaucratic_filler",
+        "locale": "cs",
+        "message": "Použij přímé sloveso místo úřednické konstrukce."
+      }
+    ]
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/bureaucratic_filler"
+    ]
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": "pexels:37730211",
+        "reason": "Direct, clear imaging of server hardware with blue backlighting that suggests enterprise technology without dated styling or gimmicks; illustrates the infrastructure central to the GPU smuggling plot.",
+        "candidates": [
+          {
+            "candidateId": "pexels:37730212",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Server infrastructure imagery is thematically appropriate for an article about GPU smuggling and enterprise hardware, but the teal-green color grading and lens flare give it a dated 2010s tech aesthetic that feels overly stylized.",
+            "sceneCs": "serverový rack se zelenými indikátory"
+          },
+          {
+            "candidateId": "pixabay:8118377",
+            "provider": "pixabay",
+            "fit": 5,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "While the server context fits, a human hand in the frame risks suggesting a specific person or action tied to the smuggling incident, which violates the rule against illustrating the specific event.",
+            "sceneCs": "ruka v serverovém racku"
+          },
+          {
+            "candidateId": "pexels:28438355",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "recognisable-face",
+              "wrong-subject"
+            ],
+            "reason": "Although containers appear in smuggling contexts, the visible human figure and the physical labor angle misrepresent the article's focus on corporate misconduct and export violations rather than dock operations.",
+            "sceneCs": "pracovník u červených kontejnerů"
+          },
+          {
+            "candidateId": "pixabay:6849995",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "wrong-subject"
+            ],
+            "reason": "A generic city skyline has no connection to the article's themes of server manufacturing, GPU smuggling, or corporate misconduct.",
+            "sceneCs": "noční městská silueta"
+          },
+          {
+            "candidateId": "pexels:36834057",
+            "provider": "pexels",
+            "fit": 0,
+            "vetoes": [
+              "wrong-subject"
+            ],
+            "reason": "A lecture hall or cinema interior has no relevance to an article about GPU smuggling and server infrastructure.",
+            "sceneCs": "prázdná učebna s modrými sedadly"
+          },
+          {
+            "candidateId": "pixabay:572776",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "wrong-subject"
+            ],
+            "reason": "Theater seating is completely unrelated to the article's subject matter of GPU smuggling and corporate compliance violations.",
+            "sceneCs": "řada modrých sedadel"
+          },
+          {
+            "candidateId": "pexels:37730211",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Direct, clear imaging of server hardware with blue backlighting that suggests enterprise technology without dated styling or gimmicks; illustrates the infrastructure central to the GPU smuggling plot.",
+            "sceneCs": "modře osvětlená serverová skříň"
+          },
+          {
+            "candidateId": "pixabay:8097838",
+            "provider": "pixabay",
+            "fit": 6,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Server storage imagery is contextually appropriate, but the heavy blue neon lighting and dramatic staging feel more like stock photography from 2015 than a contemporary tech illustration.",
+            "sceneCs": "modře osvětlené serverové disky"
+          },
+          {
+            "candidateId": "pexels:3057963",
+            "provider": "pexels",
+            "fit": 3,
+            "vetoes": [
+              "wrong-subject"
+            ],
+            "reason": "While containers might evoke smuggling conceptually, a shipping port aerial view doesn't illustrate the article's core focus on server manufacturer misconduct and GPU export violations.",
+            "sceneCs": "přístav s barevnými kontejnery"
+          },
+          {
+            "candidateId": "pixabay:1845350",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "wrong-subject"
+            ],
+            "reason": "Stacked shipping containers on a sunny day suggest logistics but not the corporate, regulatory, or hardware-manufacturing aspects central to the Supermicro story.",
+            "sceneCs": "hromada barevných přepravních kontejnerů"
+          },
+          {
+            "candidateId": "pexels:276175",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "wrong-subject"
+            ],
+            "reason": "Theater or stadium seating has no bearing on an article about GPU smuggling and server manufacturer compliance.",
+            "sceneCs": "řady sedadel v hledišti"
+          },
+          {
+            "candidateId": "pixabay:1556341",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "wrong-subject"
+            ],
+            "reason": "Auditorium seats are entirely unrelated to the article's themes and subject matter.",
+            "sceneCs": "červená sedadla v sále"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.00859
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "stet:bureaucratic_filler",
+    "shipped_with_unresolved_review:stet:cs/bureaucratic_filler",
+    "image_rung:search",
+    "image_gate:search:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 30,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}

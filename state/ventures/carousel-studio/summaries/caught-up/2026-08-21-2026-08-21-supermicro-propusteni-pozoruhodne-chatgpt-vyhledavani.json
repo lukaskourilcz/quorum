@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-21-supermicro-propusteni-pozoruhodne-chatgpt-vyhledavani",
+  "date": "2026-08-21",
+  "locale": "cs",
+  "kicker": "DNESKAi · 21. srp",
+  "headline": "Supermicro propustilo zaměstnance po vyšetřování pašování GPU za 2,5 miliardy dolarů do Číny",
+  "coverLine": "Exportní kontroly dopadají na Supermicro: propouštění po vyšetřování GPU za 2,5 miliardy",
+  "standfirst": "Americký výrobce serverů odvolal zaměstnance poté, co interní vyšetřování potvrdilo porušení exportních pravidel. Mezitím ChatGPT tiše přepsal svůj vyhledávač a Berkeley Law zakázala AI jako výchozí volbu.",
+  "passages": [
+    "Supermicro propustilo zaměstnance včetně obžalovaných spoluzakladatele Liawa a manažera Changa po dokončení interního vyšetřování exportních kontrol.",
+    "ChatGPT Search začal po nasazení GPT-5.6 používat cílení na domény v padesátinásobně vyšší míře, přičemž OpenAI tuto změnu veřejně neohlásil.",
+    "Every sestavilo kopírovací agenta ze 30 000 historických úprav šéfredaktorky a tvrdí, že AI nyní píše prakticky veškerý firemní kód.",
+    "Berkeley Law zavedla výchozí zákaz AI ve výuce namísto přístupu opt-in, který je v akademickém prostředí běžnější.",
+    "Supermicro případ ukazuje, že americká exportní regulace přestává být záležitostí pokut a přechází k osobní odpovědnosti konkrétních lidí v technologickém dodavatelském řetězci.",
+    "Tichá změna vyhledávací strategie ChatGPT mění podmínky pro každého, kdo optimalizuje přítomnost svého obsahu v odpovědích AI nástrojů – bez jakéhokoli veřejného oznámení.",
+    "Berkeley Law nastavuje zákaz AI jako výchozí stav, nikoli výjimku, a tím otevírá otázku, kam se posunou jiné odborné školy zvažující podobný krok.",
+    "Willison nedokázal potvrdit, zda systémový prompt ChatGPT obsahuje explicitní instrukci omezující Reddit – jde o jeho úsudek na základě testování."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Photo by panumas nikhomkhai on Pexels"
+}

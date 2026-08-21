@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260821030205-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Supermicro případ posouvá americkou exportní regulaci od pokut k přímým personálním důsledkům – to se dotýká každé firmy v dodavatelském řetězci serverového hardwaru.",
+  "evidenceRefs": [
+    "source:the-register",
+    "source:the-verge",
+    "source:variety",
+    "source:simonw",
+    "source:platformer",
+    "source:tensorfeed"
+  ],
+  "editionRef": "94220c5a537605e8aa6716fef094ea50af0301fc6acdcf88598751a076dc207e",
+  "generatedAt": "2026-08-21T03:02:10.401Z"
+}
