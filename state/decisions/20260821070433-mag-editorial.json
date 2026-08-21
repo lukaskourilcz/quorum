@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260821070433-mag-editorial",
+  "phase": "mag-editorial",
+  "outcome": "VETO",
+  "summary": "AUDIT vetoed the room output: Zabij slot: ověřené téma chybí. UFC karta je už opakovaně pokrytá a FightAIQ nemá aktuální Stats běh ani nový podklad.",
+  "evidenceRefs": [
+    "meeting:2026-08-20-mma-analysis",
+    "meeting:2026-08-20-mag-desk",
+    "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+  ],
+  "generatedAt": "2026-08-21T07:08:33.559Z"
+}
