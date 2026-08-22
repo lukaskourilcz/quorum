@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260822160051-ts-desk",
+  "date": "2026-08-22",
+  "phase": "ts-desk",
+  "fixture": false,
+  "status": "PAUSED",
+  "stage": "VALIDATION",
+  "operatingBrief": "Hold the Tehdejsi svet slot without pretending paid editorial work ran. The founding decision is pending countersignature.",
+  "participantReasons": [
+    {
+      "agent": "LETOPIS",
+      "reason": "Registered for the desk but not called while the owner countersignature is absent; the slot costs $0.",
+      "participated": false
+    },
+    {
+      "agent": "VERBA",
+      "reason": "Registered for the desk but not called while the owner countersignature is absent; the slot costs $0.",
+      "participated": false
+    },
+    {
+      "agent": "QUILL",
+      "reason": "Registered for the desk but not called while the owner countersignature is absent; the slot costs $0.",
+      "participated": false
+    },
+    {
+      "agent": "HACEK",
+      "reason": "Registered for the desk but not called while the owner countersignature is absent; the slot costs $0.",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "Registered for the desk but not called while the owner countersignature is absent; the slot costs $0.",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 10.04922865,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "RESUME",
+    "summary": "The Tehdejsi svet desk remains behind its owner countersignature. The free shortlist may be recorded, but no brief, copy, render or publication was created and nothing was spent.",
+    "evidenceRefs": [
+      "decisions/2026-08-12-tehdejsi-svet-founding.md"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "LETOPIS",
+      "summary": "The Tehdejsi svet desk remains behind its owner countersignature. The free shortlist may be recorded, but no brief, copy, render or publication was created and nothing was spent.",
+      "evidenceRefs": [
+        "decisions/2026-08-12-tehdejsi-svet-founding.md"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "AUDIT",
+      "firstChoice": "RESUME",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260822160051-ts-desk-PIPELINE",
+      "owner": "LETOPIS",
+      "summary": "Resume the current Tehdejsi svet phase after the owner countersigns the founding decision.",
+      "status": "blocked"
+    }
+  ],
+  "growthPlan": "No public action is authorized. Tehdejsi svet remains drafts-only and owner-posted.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-22T16:00:51.732Z",
+  "kind": "ts-desk",
+  "roomTranscript": {
+    "openedAt": "2026-08-22T16:00:51.731Z",
+    "closedAt": "2026-08-22T16:00:51.732Z",
+    "gavel": "LETOPIS",
+    "setting": "A deterministic checkpoint. No model, product data, account or social channel was touched.",
+    "turns": [
+      {
+        "agent": "LETOPIS",
+        "mode": "close",
+        "sentAt": "2026-08-22T16:00:51.732Z",
+        "text": "The Tehdejsi svet desk remains behind its owner countersignature. The free shortlist may be recorded, but no brief, copy, render or publication was created and nothing was spent."
+      }
+    ]
+  }
+}

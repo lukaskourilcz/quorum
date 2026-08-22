@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "tehdejsi-shortlist/1",
+  "date": "2026-08-22",
+  "factsHash": "1808b7c4c950613f711496634944ea569584563a5bd4e354952c72ffb11e952d",
+  "goViralPlanRef": null,
+  "entries": [
+    {
+      "rank": 1,
+      "factId": "cs-1970s-vecernicek",
+      "score": 20,
+      "factors": {
+        "askability": 8,
+        "anniversary": 8,
+        "culturalMoment": 0,
+        "wartimeAwareness": 0,
+        "sourceConfidence": 4,
+        "countryBalance": 0,
+        "tierCost": 0,
+        "performanceMultiplier": 1
+      },
+      "veto": null
+    },
+    {
+      "rank": 2,
+      "factId": "cs-1960s-trabant-wait",
+      "score": 17,
+      "factors": {
+        "askability": 10,
+        "anniversary": 8,
+        "culturalMoment": 0,
+        "wartimeAwareness": 0,
+        "sourceConfidence": 0,
+        "countryBalance": 0,
+        "tierCost": -1,
+        "performanceMultiplier": 1
+      },
+      "veto": null
+    },
+    {
+      "rank": 3,
+      "factId": "ua-1970s-kyiv-metro-token",
+      "score": 16,
+      "factors": {
+        "askability": 9,
+        "anniversary": 8,
+        "culturalMoment": 0,
+        "wartimeAwareness": 0,
+        "sourceConfidence": 0,
+        "countryBalance": 0,
+        "tierCost": -1,
+        "performanceMultiplier": 1
+      },
+      "veto": null
+    },
+    {
+      "rank": 4,
+      "factId": "ua-1986-chornobyl-spring",
+      "score": 7,
+      "factors": {
+        "askability": 3,
+        "anniversary": 4,
+        "culturalMoment": 0,
+        "wartimeAwareness": 0,
+        "sourceConfidence": 6,
+        "countryBalance": 0,
+        "tierCost": -6,
+        "performanceMultiplier": 1
+      },
+      "veto": "tier-2-review-required"
+    },
+    {
+      "rank": 5,
+      "factId": "cs-1989-velvet-november",
+      "score": 6,
+      "factors": {
+        "askability": 3,
+        "anniversary": 0,
+        "culturalMoment": 0,
+        "wartimeAwareness": 0,
+        "sourceConfidence": 4,
+        "countryBalance": 0,
+        "tierCost": -1,
+        "performanceMultiplier": 1
+      },
+      "veto": null
+    }
+  ]
+}
