@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-22",
+  "packageHash": "e424431832dff26356e5888368f675ebb22ffc891b6aee36ffa8bb80e6e9543e",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "0bb90631255cb2640294afe0332d7961ad934fe2",
+  "deliveredAt": "2026-08-22T03:11:59.461Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-22-tiktok-400-millionu-pokuta-paramount-warner-nvidia",
+  "tags": [
+    "ochrana-soukromi",
+    "medialni-prumysl",
+    "umela-inteligence",
+    "datova-centra",
+    "bezpecnost",
+    "regulace"
+  ]
+}

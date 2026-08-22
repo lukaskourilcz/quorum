@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-c564dc87e46b6ae1",
+  "venture": "caught-up",
+  "packageHash": "e424431832dff26356e5888368f675ebb22ffc891b6aee36ffa8bb80e6e9543e",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "0bb90631255cb2640294afe0332d7961ad934fe2",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 0bb90631255cb2640294afe0332d7961ad934fe2 is readable",
+      "checkedAt": "2026-08-22T03:11:57.679Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-22T03:11:57.679Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-22T03:11:57.679Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-22-tiktok-400-millionu-pokuta-paramount-warner-nvidia?boardless_verify=e424431832df-1787368317679",
+      "checkedAt": "2026-08-22T03:11:57.679Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-22-tiktok-400-millionu-pokuta-paramount-warner-nvidia match",
+      "checkedAt": "2026-08-22T03:11:57.679Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose e424431832dff26356e5888368f675ebb22ffc891b6aee36ffa8bb80e6e9543e",
+      "checkedAt": "2026-08-22T03:11:57.679Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-22-tiktok-400-millionu-pokuta-paramount-warner-nvidia/hero.webp?boardless_verify=e424431832df-1787368317679",
+      "checkedAt": "2026-08-22T03:11:57.679Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-22T03:11:57.679Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Max Vakhtbovych · Pexels License",
+      "checkedAt": "2026-08-22T03:11:57.679Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-22T03:10:55.777Z",
+  "completedAt": "2026-08-22T03:11:58.423Z"
+}
