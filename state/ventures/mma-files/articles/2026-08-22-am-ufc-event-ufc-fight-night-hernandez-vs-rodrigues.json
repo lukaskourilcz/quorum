@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "article/1",
+  "slug": "ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+  "localizations": {
+    "cs": {
+      "title": "UFC Fight Night: Hernandez vs. Rodrigues míří do Golden 1 Center",
+      "dek": "Anthony Hernandez nastoupí dnes večer jako hlavní hvězda karty UFC v Sacramentu. Střední váha nabízí pětikolový souboj, který rozhodne o dalším směřování obou bojovníků.",
+      "altHeadline": "Hernandez vs. Rodrigues dnes v Sacramentu",
+      "igCaption": "UFC Fight Night dorazilo do Golden 1 Center v Sacramentu. Hlavní zápas střední váhy: Anthony Hernandez (15-3-0) proti Gregorymu Rodriguesovi na pět kol. Na kartě dále lehká váha, těžká váha i ženská muší váha. Večer začíná 22. srpna 2026.",
+      "hashtags": [
+        "ufc",
+        "mma",
+        "ufcfightnight",
+        "strednivaha",
+        "sacramento"
+      ],
+      "threadsText": "UFC Fight Night je dnes v Sacramentu. Anthony Hernandez (15-3-0) bude v hlavním zápasu čelit Gregorymu Rodriguesovi v pětikolovém souboji střední váhy v Golden 1 Center. Na kartě jsou také zápasy v lehké, těžké a ženské muší váze.",
+      "storyLine": "UFC v Sacramentu: Hernandez vs. Rodrigues dnes večer",
+      "bodyMDX": "UFC Fight Night: Hernandez vs. Rodrigues se dnes koná v Golden 1 Center v Sacramentu. Hlavní zápas střední váhy je naplánován na pět kol.\n\n[Anthony Hernandez](/fighters/ufc/anthony-hernandez) vstupuje do oktagonu s bilancí 15 výher, 3 porážek a jedním no contest. Trénuje v MMA Gold Marinoble's Martial Arts. Jeho soupeřem je Gregory Rodrigues.\n\nKarta nabízí zápasy napříč váhovými kategoriemi. V lehké váze změří síly Chris Padilla s Nasratem Haqparastem. Těžkou váhu obstarají Anthony Wint a Terrance Chatman. Ženskou muší váhu zastupují Carli Judice a Jeisla Chaves.\n\nVšechny zápasy jsou zatím ve stavu ohlášeno, výsledky nejsou k dispozici."
+    }
+  },
+  "organization": "ufc",
+  "format": "fight-week-preview",
+  "sources": [
+    {
+      "kind": "internal",
+      "ref": "state/mma/fighters/ufc:anthony-hernandez.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-anthony-hernandez-vs-gregory-rodrigues-1.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-anthony-wint-vs-terrance-chatman-6.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-carli-judice-vs-jeisla-chaves-4.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-carli-judice-vs-jeisla-chaves-5.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-chris-padilla-vs-nasrat-haqparast-8.json"
+    },
+    {
+      "kind": "internal",
+      "ref": "state/mma/bouts/ufc/ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-chris-padilla-vs-nasrat-haqparast-9.json"
+    }
+  ],
+  "image": {
+    "hero_path": "public/images/articles/ufc-event-ufc-fight-night-hernandez-vs-rodrigues/hero.svg",
+    "thumb_path": "public/images/articles/ufc-event-ufc-fight-night-hernandez-vs-rodrigues/thumb.svg",
+    "width": 1600,
+    "height": 900,
+    "alt_en": "MMA Files cover for 2026-08-22, marked Fight Week Preview, Anthony Hernandez. A generated panel of coloured bars, carrying no photograph.",
+    "alt_cs": "Obálka MMA Files k 2026-08-22, témata Fight Week Preview, Anthony Hernandez. Generovaný panel barevných sloupců, bez fotografie.",
+    "license": {
+      "name": "BoardlessAI deterministic",
+      "author": "BoardlessAI FRAME",
+      "source_url": "https://boardless-ai.vercel.app/",
+      "attribution_html": "Artwork by BoardlessAI FRAME"
+    },
+    "origin": "svg",
+    "hero_bytes_base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+PHRpdGxlIGlkPSJ0aXRsZSI+TU1BIEZJTEVTIGNvdmVyPC90aXRsZT48ZGVzYyBpZD0iZGVzYyI+QSBnZW5lcmF0ZWQgTU1BIEZJTEVTIGNvdmVyOyB0aGUgYXJ0aWNsZSdzIG93biB3b3JkcyBhcmUgbm90IHJlcGVhdGVkIGhlcmUuPC9kZXNjPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxMDExMTYiLz48cmVjdCB4PSI2MCIgeT0iNjAiIHdpZHRoPSIxNDgwIiBoZWlnaHQ9Ijc4MCIgcng9IjM1IiBmaWxsPSIjMTgxYTIwIiBzdHJva2U9IiNlZjZjMzUiIHN0cm9rZS13aWR0aD0iNC41Ii8+PHJlY3QgeD0iMTAwLjAiIHk9IjcwMC41IiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSI0OS41IiByeD0iOS4wIiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjM1Ii8+PHJlY3QgeD0iMTg3LjUiIHk9IjY1NS40IiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSI5NC42IiByeD0iOS4wIiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjgwIi8+PHJlY3QgeD0iMjc1LjAiIHk9IjY3MC40IiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSI3OS42IiByeD0iOS4wIiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjQ3Ii8+PHJlY3QgeD0iMzYyLjUiIHk9IjYxMC4zIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxMzkuNyIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4xOCIvPjxyZWN0IHg9IjQ1MC4wIiB5PSI2NDAuNCIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTA5LjYiIHJ4PSI5LjAiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuMjYiLz48cmVjdCB4PSI1MzcuNSIgeT0iNTk1LjMiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjE1NC43IiByeD0iOS4wIiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjUxIi8+PHJlY3QgeD0iNjI1LjAiIHk9IjQ5MC4wIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIyNjAuMCIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4yNiIvPjxyZWN0IHg9IjcxMi41IiB5PSI2NDAuNCIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTA5LjYiIHJ4PSI5LjAiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuNzIiLz48cmVjdCB4PSI4MDAuMCIgeT0iNDc1LjAiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjI3NS4wIiByeD0iOS4wIiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjQ3Ii8+PHJlY3QgeD0iODg3LjUiIHk9IjU5NS4zIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxNTQuNyIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4xOCIvPjxyZWN0IHg9Ijk3NS4wIiB5PSI3MDAuNSIgd2lkdGg9IjU1LjAiIGhlaWdodD0iNDkuNSIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4zMCIvPjxyZWN0IHg9IjEwNjIuNSIgeT0iNjcwLjQiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9Ijc5LjYiIHJ4PSI5LjAiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuMjYiLz48cmVjdCB4PSIxMTUwLjAiIHk9IjU4MC4yIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxNjkuOCIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC40MyIvPjxyZWN0IHg9IjEyMzcuNSIgeT0iNjcwLjQiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9Ijc5LjYiIHJ4PSI5LjAiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuMzUiLz48cmVjdCB4PSIxMzI1LjAiIHk9IjUwNS4xIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIyNDQuOSIgcng9IjkuMCIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC40NyIvPjxyZWN0IHg9IjE0MTIuNSIgeT0iNTk1LjMiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjE1NC43IiByeD0iOS4wIiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjc2Ii8+PHRleHQgeD0iMTAwIiB5PSIyMDAiIGZpbGw9IiNlZjZjMzUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzNSIgZm9udC13ZWlnaHQ9IjcwMCIgbGV0dGVyLXNwYWNpbmc9IjUuNiI+TU1BIEZJTEVTPC90ZXh0Pjx0ZXh0IHg9IjEwMCIgeT0iMzAwIiBmaWxsPSIjZjdmNGVjIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjM3Ij4yMDI2LTA4LTIyPC90ZXh0Pjx0ZXh0IHg9IjEwMCIgeT0iMzg1IiBmaWxsPSIjOWRhMWFhIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjI5IiBsZXR0ZXItc3BhY2luZz0iMy41Ij5GaWdodCBXZWVrIFByZXZpZXcgwrcgQW50aG9ueSBIZXJuYW5kZXo8L3RleHQ+PC9zdmc+",
+    "thumb_bytes_base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iMzYwIiB2aWV3Qm94PSIwIDAgNjQwIDM2MCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIGRlc2MiPjx0aXRsZSBpZD0idGl0bGUiPk1NQSBGSUxFUyBjb3ZlcjwvdGl0bGU+PGRlc2MgaWQ9ImRlc2MiPkEgZ2VuZXJhdGVkIE1NQSBGSUxFUyBjb3ZlcjsgdGhlIGFydGljbGUncyBvd24gd29yZHMgYXJlIG5vdCByZXBlYXRlZCBoZXJlLjwvZGVzYz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTAxMTE2Ii8+PHJlY3QgeD0iMjQiIHk9IjI0IiB3aWR0aD0iNTkyIiBoZWlnaHQ9IjMxMiIgcng9IjE0IiBmaWxsPSIjMTgxYTIwIiBzdHJva2U9IiNlZjZjMzUiIHN0cm9rZS13aWR0aD0iMi4wIi8+PHJlY3QgeD0iNDAuMCIgeT0iMjgwLjIiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjE5LjgiIHJ4PSIzLjYiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuMzUiLz48cmVjdCB4PSI3NS4wIiB5PSIyNjIuMiIgd2lkdGg9IjIyLjAiIGhlaWdodD0iMzcuOCIgcng9IjMuNiIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC44MCIvPjxyZWN0IHg9IjExMC4wIiB5PSIyNjguMiIgd2lkdGg9IjIyLjAiIGhlaWdodD0iMzEuOCIgcng9IjMuNiIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC40NyIvPjxyZWN0IHg9IjE0NS4wIiB5PSIyNDQuMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNTUuOSIgcng9IjMuNiIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4xOCIvPjxyZWN0IHg9IjE4MC4wIiB5PSIyNTYuMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNDMuOSIgcng9IjMuNiIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC4yNiIvPjxyZWN0IHg9IjIxNS4wIiB5PSIyMzguMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNjEuOSIgcng9IjMuNiIgZmlsbD0iI2VmNmMzNSIgb3BhY2l0eT0iMC41MSIvPjxyZWN0IHg9IjI1MC4wIiB5PSIxOTYuMCIgd2lkdGg9IjIyLjAiIGhlaWdodD0iMTA0LjAiIHJ4PSIzLjYiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuMjYiLz48cmVjdCB4PSIyODUuMCIgeT0iMjU2LjEiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjQzLjkiIHJ4PSIzLjYiIGZpbGw9IiNlZjZjMzUiIG9wYWNpdHk9IjAuNzIiLz48cmVjdCB4PSIzMjAuMCIgeT0iMTkwLjAiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjExMC4wIiByeD0iMy42IiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjQ3Ii8+PHJlY3QgeD0iMzU1LjAiIHk9IjIzOC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI2MS45IiByeD0iMy42IiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjE4Ii8+PHJlY3QgeD0iMzkwLjAiIHk9IjI4MC4yIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIxOS44IiByeD0iMy42IiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjMwIi8+PHJlY3QgeD0iNDI1LjAiIHk9IjI2OC4yIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIzMS44IiByeD0iMy42IiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjI2Ii8+PHJlY3QgeD0iNDYwLjAiIHk9IjIzMi4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI2Ny45IiByeD0iMy42IiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjQzIi8+PHJlY3QgeD0iNDk1LjAiIHk9IjI2OC4yIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIzMS44IiByeD0iMy42IiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjM1Ii8+PHJlY3QgeD0iNTMwLjAiIHk9IjIwMi4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI5OC4wIiByeD0iMy42IiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjQ3Ii8+PHJlY3QgeD0iNTY1LjAiIHk9IjIzOC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI2MS45IiByeD0iMy42IiBmaWxsPSIjZWY2YzM1IiBvcGFjaXR5PSIwLjc2Ii8+PHRleHQgeD0iNDAiIHk9IjgwIiBmaWxsPSIjZWY2YzM1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSIyLjIiPk1NQSBGSUxFUzwvdGV4dD48dGV4dCB4PSI0MCIgeT0iMTIwIiBmaWxsPSIjZjdmNGVjIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE1Ij4yMDI2LTA4LTIyPC90ZXh0Pjx0ZXh0IHg9IjQwIiB5PSIxNTQiIGZpbGw9IiM5ZGExYWEiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTEiIGxldHRlci1zcGFjaW5nPSIxLjQiPkZpZ2h0IFdlZWsgUHJldmlldyDCtyBBbnRob255IEhlcm5hbmRlejwvdGV4dD48L3N2Zz4="
+  },
+  "heroSpec": {
+    "template": "fight-desk",
+    "bindings": {
+      "headline": "ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+    }
+  },
+  "fighterRefs": [
+    "ufc:anthony-hernandez"
+  ],
+  "eventRef": "ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+  "publishAt": "2026-08-22T08:01:34.482Z",
+  "slot": "am",
+  "status": "published",
+  "packageHash": "9ace4d63fc98c486cbb8881dff2018da268fc38e9d0ab03c575a3196bd9570d5"
+}

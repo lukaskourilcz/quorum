@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+  "date": "2026-08-22",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:39226871",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "logo-or-watermark",
+            "embedded-text"
+          ],
+          "reason": "The image shows an event setup with prominent GMC logo and 'UFC' branding/text burned into the frame, which violates the no-logo and no-embedded-text rules.",
+          "sceneCs": "promo pódium a příprava sálu na sportovní akci"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002218
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:37512294",
+          "provider": "wikimedia",
+          "fit": 4,
+          "vetoes": [
+            "logo-or-watermark",
+            "embedded-text"
+          ],
+          "reason": "The image shows an octagon cage setup with visible sponsor logos, watermarks and a banner with embedded text above the cage, which violates guidelines despite being generic MMA content.",
+          "sceneCs": "zápasová klec s osvětlením v hale"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002301
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:12627322",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "logo-or-watermark"
+          ],
+          "reason": "The image contains a prominent SHOWTIME sports watermark/logo burned into the frame, which is a disqualifying veto regardless of otherwise acceptable content.",
+          "sceneCs": "oktagón s diváky v hledišti"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002166
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-22T08:01:34.482Z"
+}

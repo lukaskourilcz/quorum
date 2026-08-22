@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "carousel-recipe/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+  "date": "2026-08-22",
+  "family": "concrete",
+  "variant": "A",
+  "accentSwap": false,
+  "treatment": "none",
+  "typeScale": 1.1,
+  "phaseSeed": 3,
+  "summaryRef": "ventures/carousel-studio/summaries/mma-files/2026-08-22-ufc-event-ufc-fight-night-hernandez-vs-rodrigues.json",
+  "copyRef": "ventures/carousel-studio/social-copy/mma-files/2026-08-22-ufc-event-ufc-fight-night-hernandez-vs-rodrigues.json"
+}
