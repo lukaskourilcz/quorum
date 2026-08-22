@@ -689,19 +689,24 @@
       "at": "2026-08-21T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
       "at": "2026-08-21T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-21-night",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-22T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-22-cu-edition",
+      "decisionOneLiner": "[\"Pokuta 400 milionů dolarů pro TikTok nastavuje nový standard vymáhání dětské online bezpečnosti a dopadá na každou platformu, která zpracovává data mladistvých uživatelů.\"]"
     },
     {
       "at": "2026-08-22T04:00:00.000Z",

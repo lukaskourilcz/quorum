@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260822030357-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "[\"Pokuta 400 milionů dolarů pro TikTok nastavuje nový standard vymáhání dětské online bezpečnosti a dopadá na každou platformu, která zpracovává data mladistvých uživatelů.\"]",
+  "evidenceRefs": [
+    "source:techcrunch-ai",
+    "source:the-verge",
+    "source:variety",
+    "source:the-register",
+    "source:tensorfeed"
+  ],
+  "editionRef": "e424431832dff26356e5888368f675ebb22ffc891b6aee36ffa8bb80e6e9543e",
+  "generatedAt": "2026-08-22T03:04:02.534Z"
+}

@@ -1,0 +1,139 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-22-tiktok-400-millionu-pokuta-paramount-warner-nvidia",
+  "date": "2026-08-22",
+  "rung": "search",
+  "selected": "pexels:7511753",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:7511753",
+      "reason": "Contemporary office space with modern furniture, blue accents, and glass partitions; clean, professional, and generic enough to illustrate tech-industry work without dating or showing faces; good fit for the briefing.",
+      "candidates": [
+        {
+          "candidateId": "pexels:36631699",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Generic corporate office interior with no connection to the specific tech stories about TikTok, Anthropic, or Nvidia; the fluorescent-lit bland aesthetic feels dated and stock-like.",
+          "sceneCs": "recepcí v kancelářské budově"
+        },
+        {
+          "candidateId": "pixabay:594132",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "recognisable-face",
+            "low-quality"
+          ],
+          "reason": "Cropped view of a recognisable person wearing a white shirt; face visibility is a fatal veto regardless of context.",
+          "sceneCs": "muž pracující s papírem"
+        },
+        {
+          "candidateId": "pexels:16544931",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Humanoid robot in a stylised corridor; the synthetic aesthetic and staged composition suggest AI-generation or overly-processed rendering rather than a genuine illustration of tech topics.",
+          "sceneCs": "robot v chodbě"
+        },
+        {
+          "candidateId": "pixabay:849828",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Person visible at laptop with recognisable facial features in profile; face visibility is a fatal veto.",
+          "sceneCs": "osoba s notebookem"
+        },
+        {
+          "candidateId": "pexels:373543",
+          "provider": "pexels",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Glowing blue circuit-board aesthetic with neon lines and city grid—a stereotypical mid-2000s tech cliché that looks machine-generated and is explicitly forbidden.",
+          "sceneCs": "abstraktní modrá síť"
+        },
+        {
+          "candidateId": "pixabay:849826",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Close-up of hands and a recognisable person at a laptop; face and identifying features are visible.",
+          "sceneCs": "ruce na klávesnici"
+        },
+        {
+          "candidateId": "pexels:17483873",
+          "provider": "pexels",
+          "fit": 4,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Abstract white pixelated form suggests data, technology, or digital transformation, but the hyper-stylised rendering and glitch-art quality feel machine-generated rather than authentically illustrative.",
+          "sceneCs": "abstraktní pixelované tvary"
+        },
+        {
+          "candidateId": "pixabay:5382501",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "recognisable-face",
+            "low-quality"
+          ],
+          "reason": "Blurred and low-quality shot showing recognisable human faces and hands; face visibility disqualifies this regardless of subject matter.",
+          "sceneCs": "lidé pracující u stolu"
+        },
+        {
+          "candidateId": "pexels:6804612",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Modern workspace with desks, monitors, and tech equipment in an empty office; clean composition and good quality that honestly illustrates a tech-industry setting without dated clichés or faces.",
+          "sceneCs": "kancelářský prostor s počítači"
+        },
+        {
+          "candidateId": "pixabay:849804",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Person at a desk with multiple monitors; recognisable facial profile and features are visible.",
+          "sceneCs": "osoba u počítače"
+        },
+        {
+          "candidateId": "pexels:7511753",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Contemporary office space with modern furniture, blue accents, and glass partitions; clean, professional, and generic enough to illustrate tech-industry work without dating or showing faces; good fit for the briefing.",
+          "sceneCs": "moderní kancelářský otevřený prostor"
+        },
+        {
+          "candidateId": "pixabay:849824",
+          "provider": "pixabay",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Minimalist workspace with wooden table and bookshelves; tasteful and clean but somewhat sparse and not immediately suggestive of the large-scale corporate tech stories mentioned.",
+          "sceneCs": "pracovní stůl v knihovně"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.0086
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-22T03:03:57.534Z"
+}
