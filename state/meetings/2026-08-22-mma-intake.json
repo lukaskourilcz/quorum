@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260822060128-mma-intake",
+  "date": "2026-08-22",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.022598,
+    "monthAllInUsd": 9.934768649999986,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+      "source:the-odds-api:2026-08-22",
+      "source:cito-ufc:2026-08-22",
+      "source:wikimedia:2026-08-22",
+      "source:wikipedia-schedule:2026-08-22"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "UFC Fight Night Hernandez–Rodrigues card (13 bouts, announced) is ready for intake. Critical gap: 50 fighters across portfolio missing heightCm or reachCm; 0 complete. Two independent sources needed before model use. Next: resolve David Onama, David Heath cohort via wikimedia + c",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+        "source:the-odds-api:2026-08-22",
+        "source:cito-ufc:2026-08-22",
+        "source:wikimedia:2026-08-22"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon 93 is 21 days out, but no bout-level or fighter-field evidence is supplied here. UFC is also incomplete. Do not model; verify the Oktagon card and critical fields next.",
+      "evidenceRefs": [
+        "source:wikimedia:2026-08-22",
+        "source:wikipedia-schedule:2026-08-22"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260822060128-MMA-INTAKE-01",
+      "owner": "FORGE",
+      "summary": "Audit David Onama, David Heath, David Hood fighter records: confirm division, stance, heightCm, reachCm from wikimedia + cito-ufc. Flag any open discrepancy; approve both-source match or mark incomplete.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Data only. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+      "source:the-odds-api:2026-08-22",
+      "source:cito-ufc:2026-08-22",
+      "source:wikimedia:2026-08-22",
+      "source:wikipedia-schedule:2026-08-22"
+    ]
+  },
+  "generatedAt": "2026-08-22T06:04:28.960Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-22T06:01:28.960Z",
+    "closedAt": "2026-08-22T06:04:28.960Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-22T06:01:28.960Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-22T06:02:28.960Z",
+        "text": "UFC Fight Night Hernandez–Rodrigues card (13 bouts, announced) is ready for intake. Critical gap: 50 fighters across portfolio missing heightCm or reachCm; 0 complete. Two independent sources needed before model use. Next: resolve David Onama, David Heath cohort via wikimedia + c",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+          "source:the-odds-api:2026-08-22",
+          "source:cito-ufc:2026-08-22",
+          "source:wikimedia:2026-08-22"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-22T06:03:28.960Z",
+        "text": "Oktagon 93 is 21 days out, but no bout-level or fighter-field evidence is supplied here. UFC is also incomplete. Do not model; verify the Oktagon card and critical fields next.",
+        "evidenceRefs": [
+          "source:wikimedia:2026-08-22",
+          "source:wikipedia-schedule:2026-08-22"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-22T06:04:28.960Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

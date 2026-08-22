@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260822060128-mma-intake",
+  "phase": "mma-intake",
+  "outcome": "PLAN",
+  "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+  "evidenceRefs": [
+    "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+    "source:the-odds-api:2026-08-22",
+    "source:cito-ufc:2026-08-22",
+    "source:wikimedia:2026-08-22",
+    "source:wikipedia-schedule:2026-08-22"
+  ],
+  "generatedAt": "2026-08-22T06:04:28.960Z"
+}

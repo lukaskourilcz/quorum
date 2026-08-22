@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Aori_Qileng",
       "publisher": "Wikipedia",
       "title": "Aori Qileng",
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q111701050",
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "verified",
       "corroborated": true
     },
@@ -69,7 +69,7 @@
         "source:wikidata:Q111701050",
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "verified",
       "corroborated": true
     },
@@ -78,7 +78,7 @@
       "sourceRefs": [
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -87,7 +87,7 @@
       "sourceRefs": [
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -96,7 +96,7 @@
       "sourceRefs": [
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -105,7 +105,7 @@
       "sourceRefs": [
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -114,7 +114,7 @@
       "sourceRefs": [
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -123,7 +123,7 @@
       "sourceRefs": [
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -491,9 +491,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.5,
         "fightsPerYear": 1.988101,
-        "layoffDays": 83
+        "layoffDays": 84
       },
-      "updatedAt": "2026-08-21T06:01:25.374Z"
+      "updatedAt": "2026-08-22T06:01:28.960Z"
     }
   ],
   "rating": {
@@ -503,14 +503,14 @@
     "volatility": 0.06000016,
     "boutCount": 21,
     "asOfBoutRef": "ufc:bout:history-c2912bfff11319101525",
-    "updatedAt": "2026-08-21T06:01:25.374Z"
+    "updatedAt": "2026-08-22T06:01:28.960Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "record-history-incomplete"
     ],
-    "lastReviewedAt": "2026-08-21T06:01:25.374Z"
+    "lastReviewedAt": "2026-08-22T06:01:28.960Z"
   },
   "changeLog": [
     {
@@ -2264,11 +2264,46 @@
         "source:wikipedia:54051600"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-22T06:01:28.960Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178359"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 21 historical fight rows."
+    },
+    {
+      "at": "2026-08-22T06:01:28.960Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178359",
+        "source:wikipedia:54051600"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-21T06:01:25.374Z"
+  "updatedAt": "2026-08-22T06:01:28.960Z"
 }

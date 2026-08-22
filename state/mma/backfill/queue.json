@@ -1,6 +1,6 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-08-21T06:01:25.374Z",
+  "generatedAt": "2026-08-22T06:01:28.960Z",
   "items": [
     {
       "fighterRef": "ufc:joshua-van",
@@ -52,7 +52,7 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-21T06:01:25.374Z",
+      "reviewedAt": "2026-08-22T06:01:28.960Z",
       "uncorroborated": [
         "division"
       ]
@@ -65,7 +65,7 @@
         "stance",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-21T06:01:25.374Z",
+      "reviewedAt": "2026-08-22T06:01:28.960Z",
       "uncorroborated": [
         "division",
         "record"
@@ -78,7 +78,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-21T06:01:25.374Z",
+      "reviewedAt": "2026-08-22T06:01:28.960Z",
       "uncorroborated": [
         "record"
       ]
@@ -90,7 +90,7 @@
       "gaps": [
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-08-21T06:01:25.374Z",
+      "reviewedAt": "2026-08-22T06:01:28.960Z",
       "uncorroborated": [
         "division"
       ]
@@ -102,22 +102,9 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-21T06:01:25.374Z",
+      "reviewedAt": "2026-08-22T06:01:28.960Z",
       "uncorroborated": [
         "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:anthony-hernandez",
-      "priority": 1010,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-08-21T06:01:25.374Z",
-      "uncorroborated": [
-        "division",
-        "record"
       ]
     },
     {
@@ -127,7 +114,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-21T06:01:25.374Z",
+      "reviewedAt": "2026-08-22T06:01:28.960Z",
       "uncorroborated": [
         "division",
         "record"
@@ -140,7 +127,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-21T06:01:25.374Z",
+      "reviewedAt": "2026-08-22T06:01:28.960Z",
       "uncorroborated": [
         "division",
         "record"
@@ -151,7 +138,7 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-08-21T06:01:25.374Z",
+      "reviewedAt": "2026-08-22T06:01:28.960Z",
       "uncorroborated": [
         "division"
       ]
@@ -182,7 +169,7 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-08-21T06:01:25.374Z",
+      "reviewedAt": "2026-08-22T06:01:28.960Z",
       "uncorroborated": [
         "name",
         "division",
@@ -196,27 +183,7 @@
       "gaps": [
         "team"
       ],
-      "reviewedAt": "2026-08-21T06:01:25.374Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:anshul-jubli",
-      "priority": 600,
-      "reason": "missing-history",
-      "gaps": [],
-      "reviewedAt": "2026-08-18T06:01:20.935Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:conor-mcgregor",
-      "priority": 600,
-      "reason": "missing-history",
-      "gaps": [],
-      "reviewedAt": "2026-08-19T06:02:00.779Z",
+      "reviewedAt": "2026-08-22T06:01:28.960Z",
       "uncorroborated": [
         "division"
       ]
@@ -237,6 +204,26 @@
       "reason": "missing-history",
       "gaps": [],
       "reviewedAt": "2026-08-21T06:01:25.374Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:anshul-jubli",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-08-22T06:01:28.960Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:conor-mcgregor",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-08-22T06:01:28.960Z",
       "uncorroborated": [
         "division"
       ]
@@ -337,6 +324,21 @@
     },
     {
       "fighterRef": "ufc:ciryl-gane",
+      "priority": 480,
+      "reason": "uncorroborated",
+      "gaps": [
+        "reachCm",
+        "team",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:deiveson-figueiredo",
       "priority": 480,
       "reason": "uncorroborated",
       "gaps": [
@@ -871,6 +873,19 @@
       ]
     },
     {
+      "fighterRef": "ufc:anthony-hernandez",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-21T06:01:25.374Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
       "fighterRef": "ufc:ateba-gautier",
       "priority": 450,
       "reason": "uncorroborated",
@@ -890,19 +905,6 @@
         "division",
         "record"
       ]
-    },
-    {
-      "fighterRef": "ufc:deiveson-figueiredo",
-      "priority": 350,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "reachCm",
-        "team"
-      ],
-      "reviewedAt": ""
     },
     {
       "fighterRef": "ufc:israel-adesanya",

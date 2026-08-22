@@ -56,7 +56,7 @@
       "url": "https://en.wikipedia.org/wiki/Max_Holloway",
       "publisher": "Wikipedia",
       "title": "Max Holloway",
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -69,7 +69,7 @@
         "source:wikipedia:33543499",
         "source:wikipedia:34427783"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "verified",
       "corroborated": true
     },
@@ -380,9 +380,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0.2,
         "fightsPerYear": 1.348691,
-        "layoffDays": 167
+        "layoffDays": 168
       },
-      "updatedAt": "2026-08-21T06:01:25.374Z"
+      "updatedAt": "2026-08-22T06:01:28.960Z"
     }
   ],
   "rating": {
@@ -392,7 +392,7 @@
     "volatility": 0.06001246,
     "boutCount": 17,
     "asOfBoutRef": "ufc:bout:history-c6fc64313b7df511bca8",
-    "updatedAt": "2026-08-21T06:01:25.374Z"
+    "updatedAt": "2026-08-22T06:01:28.960Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2152,11 +2152,32 @@
         "source:wikipedia:66838633"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-22T06:01:28.960Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40814604",
+        "source:wikipedia:33543499",
+        "source:wikipedia:27167974",
+        "source:wikipedia:32815938",
+        "source:wikipedia:54197580",
+        "source:wikipedia:45514815",
+        "source:wikipedia:49598119",
+        "source:wikipedia:49172283",
+        "source:wikipedia:66838633"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-21T06:01:25.374Z"
+  "updatedAt": "2026-08-22T06:01:28.960Z"
 }

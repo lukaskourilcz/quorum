@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Alateng_Heili",
       "publisher": "Wikipedia",
       "title": "Alateng Heili",
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -58,7 +58,7 @@
       "sourceRefs": [
         "source:wikipedia:65489732"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -68,7 +68,7 @@
         "source:wikidata:Q99937818",
         "source:wikipedia:65489732"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "verified",
       "corroborated": true
     },
@@ -77,7 +77,7 @@
       "sourceRefs": [
         "source:wikipedia:65489732"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -86,7 +86,7 @@
       "sourceRefs": [
         "source:wikipedia:65489732"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -95,7 +95,7 @@
       "sourceRefs": [
         "source:wikipedia:65489732"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -104,7 +104,7 @@
       "sourceRefs": [
         "source:wikipedia:65489732"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -113,7 +113,7 @@
       "sourceRefs": [
         "source:wikipedia:65489732"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -169,7 +169,7 @@
     "gaps": [
       "stance"
     ],
-    "lastReviewedAt": "2026-08-21T06:01:25.374Z"
+    "lastReviewedAt": "2026-08-22T06:01:28.960Z"
   },
   "changeLog": [
     {
@@ -2354,11 +2354,29 @@
         "source:wikipedia:65489732"
       ],
       "note": "Reviewed the Wikipedia profile and found 29 historical fight rows."
+    },
+    {
+      "at": "2026-08-22T06:01:28.960Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:65489732"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 29 historical fight rows."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-21T06:01:25.374Z"
+  "updatedAt": "2026-08-22T06:01:28.960Z"
 }

@@ -240,7 +240,25 @@
       "notBefore": "2026-08-21",
       "expiresAt": "2026-08-24T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-e70e7402791e9da4",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-22-mma-intake",
+      "summary": "Decide: can model run proceed without complete critical fields for David Onama cohort (50 fighters, 0 complete), or must intake block until two-source match on heightCm/reachCm?",
+      "evidenceRefs": [
+        "source:wikimedia:2026-08-22",
+        "source:cito-ufc:2026-08-22"
+      ],
+      "requestedAt": "2026-08-22T06:01:28.960Z",
+      "notBefore": "2026-08-22",
+      "expiresAt": "2026-08-25T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-21T06:01:25.374Z"
+  "updatedAt": "2026-08-22T06:01:28.960Z"
 }

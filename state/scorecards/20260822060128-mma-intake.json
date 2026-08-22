@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260822060128-mma-intake",
+  "phase": "mma-intake",
+  "estimatedWorstCaseUsd": 0.031703,
+  "actualUsd": 0.022598,
+  "participants": [
+    "FORGE",
+    "CORNER",
+    "SPOTTER",
+    "TAPE"
+  ],
+  "agendaId": null,
+  "generatedAt": "2026-08-22T06:04:28.960Z"
+}

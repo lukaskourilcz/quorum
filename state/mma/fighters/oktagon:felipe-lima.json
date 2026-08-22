@@ -38,7 +38,7 @@
       "url": "https://en.wikipedia.org/wiki/Felipe_Lima_(fighter)",
       "publisher": "Wikipedia",
       "title": "Felipe Lima (fighter)",
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +50,7 @@
         "source:wikidata:Q126887995",
         "source:wikipedia:80310974"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-22T06:01:28.960Z",
       "status": "verified",
       "corroborated": true
     },
@@ -398,9 +398,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.8,
         "fightsPerYear": 1.516788,
-        "layoffDays": 419
+        "layoffDays": 420
       },
-      "updatedAt": "2026-08-21T06:01:25.374Z"
+      "updatedAt": "2026-08-22T06:01:28.960Z"
     }
   ],
   "rating": {
@@ -410,7 +410,7 @@
     "volatility": 0.05999492,
     "boutCount": 16,
     "asOfBoutRef": "oktagon:bout:history-e907035d5dc59ab9048e",
-    "updatedAt": "2026-08-21T06:01:25.374Z"
+    "updatedAt": "2026-08-22T06:01:28.960Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1844,11 +1844,24 @@
         "source:wikipedia:80310974"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-22T06:01:28.960Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:80310974"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-21T06:01:25.374Z"
+  "updatedAt": "2026-08-22T06:01:28.960Z"
 }

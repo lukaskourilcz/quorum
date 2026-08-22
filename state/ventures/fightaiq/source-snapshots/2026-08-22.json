@@ -1,0 +1,3384 @@
+{
+  "schemaVersion": "fightaiq-source-snapshot/1",
+  "date": "2026-08-22",
+  "retrievedAt": "2026-08-22T06:01:28.960Z",
+  "contentHash": "e4b08e2a569a57a663d36920bddf9a09046c90f3700f4964a2c8fd9338adcb81",
+  "evidenceRefs": [
+    "source:the-odds-api:2026-08-22",
+    "source:cito-ufc:2026-08-22",
+    "source:wikimedia:2026-08-22",
+    "source:wikipedia-schedule:2026-08-22"
+  ],
+  "sources": [
+    {
+      "sourceId": "apify-mma",
+      "status": "skipped",
+      "reason": "MMA Apify sources are waiting for APIFY-ACCOUNT-001 and APIFY-MMA-SOURCES-001; no actor ran and nothing was spent.",
+      "items": []
+    },
+    {
+      "sourceId": "the-odds-api",
+      "status": "success",
+      "reason": null,
+      "items": [
+        {
+          "id": "a164f5a2e45bec9a6f6caae1911ee32b",
+          "commenceTime": "2026-08-22T21:15:00.000Z",
+          "red": "Shanelle Dyer",
+          "blue": "Elise Reed",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.13,
+              "blueDecimal": 6.34
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.09,
+              "blueDecimal": 6.5
+            },
+            {
+              "name": "888sport",
+              "redDecimal": 1.12,
+              "blueDecimal": 6.1
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.1,
+              "blueDecimal": 7.15
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.1,
+              "blueDecimal": 7.15
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 1.14,
+              "blueDecimal": 6.15
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 1.14,
+              "blueDecimal": 7
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 1.11,
+              "blueDecimal": 5.85
+            },
+            {
+              "name": "Matchbook",
+              "redDecimal": 1.14,
+              "blueDecimal": 7
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.12,
+              "blueDecimal": 7.15
+            }
+          ]
+        },
+        {
+          "id": "2a5f52a6a7d33606f861f3d4489d5cca",
+          "commenceTime": "2026-08-22T21:30:00.000Z",
+          "red": "Dakota Bush",
+          "blue": "Morquez Forest",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.5,
+              "blueDecimal": 2.74
+            }
+          ]
+        },
+        {
+          "id": "bd516d8d2a201bcacdc43f21c00c56c4",
+          "commenceTime": "2026-08-22T21:45:00.000Z",
+          "red": "Gadzhi Rabadanov",
+          "blue": "Tracy Reeder",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.02,
+              "blueDecimal": 16.5
+            }
+          ]
+        },
+        {
+          "id": "038228122fc63c55832841739444063f",
+          "commenceTime": "2026-08-22T21:45:00.000Z",
+          "red": "Jackson McVey",
+          "blue": "Wes Schultz",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.58,
+              "blueDecimal": 2.5
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.53,
+              "blueDecimal": 2.43
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.56,
+              "blueDecimal": 2.54
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.52,
+              "blueDecimal": 2.55
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.52,
+              "blueDecimal": 2.55
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 1.57,
+              "blueDecimal": 2.48
+            },
+            {
+              "name": "888sport",
+              "redDecimal": 1.53,
+              "blueDecimal": 2.45
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 1.57,
+              "blueDecimal": 2.52
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 1.59,
+              "blueDecimal": 2.4
+            },
+            {
+              "name": "Matchbook",
+              "redDecimal": 1.57,
+              "blueDecimal": 2.52
+            }
+          ]
+        },
+        {
+          "id": "0e88a8512a930d6be363fe02d403cabd",
+          "commenceTime": "2026-08-22T21:45:00.000Z",
+          "red": "Luke Trainer",
+          "blue": "Roland Dunlap",
+          "bookmakers": [
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 1.15,
+              "blueDecimal": 3.8
+            },
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.2,
+              "blueDecimal": 4.83
+            }
+          ]
+        },
+        {
+          "id": "5b18bbdd22533e90638a083a6e5939cd",
+          "commenceTime": "2026-08-22T22:15:00.000Z",
+          "red": "Gauge Young",
+          "blue": "Stan Dorsainvil",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.59,
+              "blueDecimal": 2.49
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.6,
+              "blueDecimal": 2.28
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 1.64,
+              "blueDecimal": 2.32
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 1.59,
+              "blueDecimal": 2.4
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.62,
+              "blueDecimal": 2.35
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.62,
+              "blueDecimal": 2.35
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 1.63,
+              "blueDecimal": 2.52
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.62,
+              "blueDecimal": 2.41
+            },
+            {
+              "name": "Matchbook",
+              "redDecimal": 1.63,
+              "blueDecimal": 2.52
+            }
+          ]
+        },
+        {
+          "id": "da9b4889587902d20f9bc83b06c759ab",
+          "commenceTime": "2026-08-22T22:45:00.000Z",
+          "red": "Márcio Barbosa",
+          "blue": "Ryan Kuse",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.12,
+              "blueDecimal": 6.5
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.1,
+              "blueDecimal": 6.15
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 1.11,
+              "blueDecimal": 7
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 1.11,
+              "blueDecimal": 5.85
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.09,
+              "blueDecimal": 7
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.09,
+              "blueDecimal": 7
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 1.13,
+              "blueDecimal": 7.2
+            },
+            {
+              "name": "Matchbook",
+              "redDecimal": 1.13,
+              "blueDecimal": 7.4
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.12,
+              "blueDecimal": 7.25
+            }
+          ]
+        },
+        {
+          "id": "48a306bf72bb5aa469f973e8b0a0ab01",
+          "commenceTime": "2026-08-22T23:15:00.000Z",
+          "red": "Nasrat Haqparast",
+          "blue": "Chris Padilla",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 2,
+              "blueDecimal": 1.83
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.91,
+              "blueDecimal": 1.84
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.97,
+              "blueDecimal": 1.9
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.87,
+              "blueDecimal": 1.95
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.87,
+              "blueDecimal": 1.95
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 1.89,
+              "blueDecimal": 1.95
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 2.02,
+              "blueDecimal": 1.91
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 1.91,
+              "blueDecimal": 1.83
+            },
+            {
+              "name": "Matchbook",
+              "redDecimal": 2.04,
+              "blueDecimal": 1.92
+            }
+          ]
+        },
+        {
+          "id": "c35fe773a6172aac0a95c4358fb1b7f3",
+          "commenceTime": "2026-08-22T23:30:00.000Z",
+          "red": "Shamil Gaziev",
+          "blue": "Kennedy Nzechukwu",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.79,
+              "blueDecimal": 2.06
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.69,
+              "blueDecimal": 2.12
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.8,
+              "blueDecimal": 2.09
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.73,
+              "blueDecimal": 2.1
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.73,
+              "blueDecimal": 2.1
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 1.72,
+              "blueDecimal": 2.17
+            },
+            {
+              "name": "888sport",
+              "redDecimal": 1.75,
+              "blueDecimal": 2.05
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 1.82,
+              "blueDecimal": 2.2
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 1.71,
+              "blueDecimal": 2.1
+            },
+            {
+              "name": "Matchbook",
+              "redDecimal": 1.82,
+              "blueDecimal": 2.2
+            }
+          ]
+        },
+        {
+          "id": "7152a2ed6c39377b4d29dce4fc635ab2",
+          "commenceTime": "2026-08-22T23:45:00.000Z",
+          "red": "Jamall Emmers",
+          "blue": "Lerryan Douglas",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 4,
+              "blueDecimal": 1.25
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 3.99,
+              "blueDecimal": 1.23
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 4.12,
+              "blueDecimal": 1.26
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 4.15,
+              "blueDecimal": 1.24
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 4.15,
+              "blueDecimal": 1.24
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 4.05,
+              "blueDecimal": 1.26
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 4.2,
+              "blueDecimal": 1.29
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 3.65,
+              "blueDecimal": 1.25
+            },
+            {
+              "name": "Matchbook",
+              "redDecimal": 4.2,
+              "blueDecimal": 1.29
+            }
+          ]
+        },
+        {
+          "id": "05ce55035aaf59ca97e0fae3c6833627",
+          "commenceTime": "2026-08-23T00:00:00.000Z",
+          "red": "Cris Cyborg",
+          "blue": "Ketlen Vieira",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.2,
+              "blueDecimal": 4.83
+            }
+          ]
+        },
+        {
+          "id": "d55e2963b6b311659d26a93397b1ce93",
+          "commenceTime": "2026-08-23T00:00:00.000Z",
+          "red": "Magomed Magomedov",
+          "blue": "Daniel Marcos",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 2.3,
+              "blueDecimal": 1.67
+            }
+          ]
+        },
+        {
+          "id": "f3a279eb29a937d3e77d29d3a546c2d3",
+          "commenceTime": "2026-08-23T00:00:00.000Z",
+          "red": "Eoin Sheridan",
+          "blue": "James Vake",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.14,
+              "blueDecimal": 6
+            }
+          ]
+        },
+        {
+          "id": "ee1e1cd5b51f58fdfcf54c37c895468a",
+          "commenceTime": "2026-08-23T00:00:00.000Z",
+          "red": "Gino van Steenis",
+          "blue": "Robert Watley",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.56,
+              "blueDecimal": 2.57
+            }
+          ]
+        },
+        {
+          "id": "8ec5ce1644e81511d4c6fd2f55ae5da1",
+          "commenceTime": "2026-08-23T00:00:00.000Z",
+          "red": "Merab Dvalishvili",
+          "blue": "Henry Cejudo",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.83,
+              "blueDecimal": 2.01
+            }
+          ]
+        },
+        {
+          "id": "1858953fd98313551819c53a10147414",
+          "commenceTime": "2026-08-23T00:00:00.000Z",
+          "red": "Movsar Ibragimov",
+          "blue": "Javid Basharat",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 3,
+              "blueDecimal": 1.42
+            }
+          ]
+        },
+        {
+          "id": "37dd01661c351a2d01f5c0a1c703e96a",
+          "commenceTime": "2026-08-23T00:00:00.000Z",
+          "red": "Tyron Woodley",
+          "blue": "Joaquin Buckley",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.62,
+              "blueDecimal": 2.4
+            }
+          ]
+        },
+        {
+          "id": "b4e43089eb6b3a4806f094a746de61fb",
+          "commenceTime": "2026-08-23T00:00:00.000Z",
+          "red": "Natan Schulte",
+          "blue": "Makkasharip Zaynukov",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 2.57,
+              "blueDecimal": 1.56
+            }
+          ]
+        },
+        {
+          "id": "e30873760eee92b484a4cd4e20694f94",
+          "commenceTime": "2026-08-23T00:00:00.000Z",
+          "red": "Marcirley Alves da Silva",
+          "blue": "Nkosi Ndebele",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.5,
+              "blueDecimal": 2.74
+            }
+          ]
+        },
+        {
+          "id": "ee1de3436dacc22cf227e3530154a5a9",
+          "commenceTime": "2026-08-23T00:00:00.000Z",
+          "red": "Taila Santos",
+          "blue": "Sabrinna de Sousa",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.62,
+              "blueDecimal": 2.4
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 1.52,
+              "blueDecimal": 2
+            }
+          ]
+        },
+        {
+          "id": "84ce25a06c07939a9152fcfb93693541",
+          "commenceTime": "2026-08-23T00:15:00.000Z",
+          "red": "Anthony Wint",
+          "blue": "Terrance Chatman",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.1,
+              "blueDecimal": 7.61
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 1.06,
+              "blueDecimal": 7.25
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.08,
+              "blueDecimal": 7.8
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 1.1,
+              "blueDecimal": 7.5
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 1.09,
+              "blueDecimal": 6.65
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 1.08,
+              "blueDecimal": 6.5
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.09,
+              "blueDecimal": 8
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.09,
+              "blueDecimal": 8
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 1.11,
+              "blueDecimal": 1.03
+            },
+            {
+              "name": "Matchbook",
+              "redDecimal": 1.11,
+              "blueDecimal": 7.6
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.1,
+              "blueDecimal": 7.76
+            },
+            {
+              "name": "PMU (FR)",
+              "redDecimal": 1.09,
+              "blueDecimal": 7.5
+            }
+          ]
+        },
+        {
+          "id": "0e0e14fd9105a24d4a6e8d2d68b00d39",
+          "commenceTime": "2026-08-23T00:45:00.000Z",
+          "red": "Carli Judice",
+          "blue": "Jeisla Chaves",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.17,
+              "blueDecimal": 5.25
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.17,
+              "blueDecimal": 5.09
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 1.13,
+              "blueDecimal": 5.1
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 1.13,
+              "blueDecimal": 4.3
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.17,
+              "blueDecimal": 5.49
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.17,
+              "blueDecimal": 5.15
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.17,
+              "blueDecimal": 5.15
+            },
+            {
+              "name": "888sport",
+              "redDecimal": 1.17,
+              "blueDecimal": 5.1
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 1.17,
+              "blueDecimal": 5.4
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 1.19,
+              "blueDecimal": 6
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 1.17,
+              "blueDecimal": 4.6
+            },
+            {
+              "name": "Matchbook",
+              "redDecimal": 1.19,
+              "blueDecimal": 6
+            },
+            {
+              "name": "PMU (FR)",
+              "redDecimal": 1.18,
+              "blueDecimal": 4.9
+            }
+          ]
+        },
+        {
+          "id": "1aca646f685633d13a655dc956cf0dbd",
+          "commenceTime": "2026-08-23T01:15:00.000Z",
+          "red": "Marquel Mederos",
+          "blue": "Mason Jones",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 3.89,
+              "blueDecimal": 1.28
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 3.61,
+              "blueDecimal": 1.3
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 3.79,
+              "blueDecimal": 1.3
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 3.6,
+              "blueDecimal": 1.31
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 3.6,
+              "blueDecimal": 1.31
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 3.45,
+              "blueDecimal": 1.33
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 3.6,
+              "blueDecimal": 1.25
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 3.85,
+              "blueDecimal": 1.31
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 3.5,
+              "blueDecimal": 1.3
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 3.55,
+              "blueDecimal": 1.25
+            },
+            {
+              "name": "Matchbook",
+              "redDecimal": 3.9,
+              "blueDecimal": 1.31
+            },
+            {
+              "name": "PMU (FR)",
+              "redDecimal": 3.7,
+              "blueDecimal": 1.28
+            }
+          ]
+        },
+        {
+          "id": "81180cf766db17019c8063ec7afb6d0c",
+          "commenceTime": "2026-08-23T01:45:00.000Z",
+          "red": "Reinier de Ridder",
+          "blue": "Roman Dolidze",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.25,
+              "blueDecimal": 4
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.26,
+              "blueDecimal": 3.9
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 1.22,
+              "blueDecimal": 3.9
+            },
+            {
+              "name": "888sport",
+              "redDecimal": 1.25,
+              "blueDecimal": 4
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 1.23,
+              "blueDecimal": 3.7
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.27,
+              "blueDecimal": 4.03
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.23,
+              "blueDecimal": 4.3
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.23,
+              "blueDecimal": 4.3
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 1.25,
+              "blueDecimal": 4.15
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 1.27,
+              "blueDecimal": 4.3
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 1.26,
+              "blueDecimal": 3.5
+            },
+            {
+              "name": "Matchbook",
+              "redDecimal": 1.27,
+              "blueDecimal": 4.3
+            },
+            {
+              "name": "PMU (FR)",
+              "redDecimal": 1.22,
+              "blueDecimal": 4.3
+            }
+          ]
+        },
+        {
+          "id": "97b2100edfd0274e695646adcdbaeb21",
+          "commenceTime": "2026-08-23T02:15:00.000Z",
+          "red": "Sergey Spivak",
+          "blue": "Vitor Petrino",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 2.25,
+              "blueDecimal": 1.69
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 2.21,
+              "blueDecimal": 1.68
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 2.23,
+              "blueDecimal": 1.58
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 2.35,
+              "blueDecimal": 1.65
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 2.2,
+              "blueDecimal": 1.7
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 2.2,
+              "blueDecimal": 1.7
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 2.25,
+              "blueDecimal": 1.68
+            },
+            {
+              "name": "888sport",
+              "redDecimal": 2.3,
+              "blueDecimal": 1.62
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 2.38,
+              "blueDecimal": 1.69
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 2.12,
+              "blueDecimal": 1.7
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 2.15,
+              "blueDecimal": 1.6
+            },
+            {
+              "name": "PMU (FR)",
+              "redDecimal": 2.3,
+              "blueDecimal": 1.62
+            }
+          ]
+        },
+        {
+          "id": "c6715c3c940e05a817b305e6bde81e0f",
+          "commenceTime": "2026-08-23T02:45:00.000Z",
+          "red": "Anthony Hernandez",
+          "blue": "Gregory Rodrigues",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.47,
+              "blueDecimal": 2.81
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 1.44,
+              "blueDecimal": 2.7
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 1.43,
+              "blueDecimal": 2.63
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.49,
+              "blueDecimal": 2.64
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.48,
+              "blueDecimal": 2.81
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.51,
+              "blueDecimal": 2.6
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.51,
+              "blueDecimal": 2.6
+            },
+            {
+              "name": "888sport",
+              "redDecimal": 1.45,
+              "blueDecimal": 2.75
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 1.52,
+              "blueDecimal": 2.62
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 1.53,
+              "blueDecimal": 2.84
+            },
+            {
+              "name": "BetAnything",
+              "redDecimal": 1.51,
+              "blueDecimal": 2.65
+            },
+            {
+              "name": "Matchbook",
+              "redDecimal": 1.53,
+              "blueDecimal": 2.84
+            },
+            {
+              "name": "PMU (FR)",
+              "redDecimal": 1.47,
+              "blueDecimal": 2.7
+            }
+          ]
+        },
+        {
+          "id": "8d1081fee4b7c067a44293053217ae67",
+          "commenceTime": "2026-08-29T10:00:00.000Z",
+          "red": "Alex Perez",
+          "blue": "Su Mudaerji",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 2.8,
+              "blueDecimal": 1.48
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 2.85,
+              "blueDecimal": 1.45
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 2.63,
+              "blueDecimal": 1.43
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 2.93,
+              "blueDecimal": 1.43
+            }
+          ]
+        },
+        {
+          "id": "d5e6a2e19cb6c6f21ec09652e04107ac",
+          "commenceTime": "2026-08-29T10:00:00.000Z",
+          "red": "Namsrai Batbayar",
+          "blue": "Andre Lima",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 3,
+              "blueDecimal": 1.43
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 2.91,
+              "blueDecimal": 1.5
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 3.08,
+              "blueDecimal": 1.4
+            }
+          ]
+        },
+        {
+          "id": "913e13aa5eca23874d07e062dcd44484",
+          "commenceTime": "2026-08-29T10:00:00.000Z",
+          "red": "Aori Qileng",
+          "blue": "Kai Asakura",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 4.3,
+              "blueDecimal": 1.25
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 4.2,
+              "blueDecimal": 1.25
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 4.1,
+              "blueDecimal": 1.2
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 4.24,
+              "blueDecimal": 1.25
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 3.6,
+              "blueDecimal": 1.19
+            }
+          ]
+        },
+        {
+          "id": "63cc20a3709c35a89f75821805a9041f",
+          "commenceTime": "2026-08-29T10:00:00.000Z",
+          "red": "Nilson Rojas",
+          "blue": "Bilal Hasan",
+          "bookmakers": [
+            {
+              "name": "Pinnacle",
+              "redDecimal": 4.88,
+              "blueDecimal": 1.2
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 4.87,
+              "blueDecimal": 1.2
+            },
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 4.85,
+              "blueDecimal": 1.2
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 4.7,
+              "blueDecimal": 1.15
+            }
+          ]
+        },
+        {
+          "id": "374e3ebb812a4a0ca6510a48c5095cf6",
+          "commenceTime": "2026-08-29T10:00:00.000Z",
+          "red": "Cameron Nelson",
+          "blue": "Meng Ding",
+          "bookmakers": [
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.8,
+              "blueDecimal": 2.07
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.92,
+              "blueDecimal": 2
+            },
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.89,
+              "blueDecimal": 1.93
+            }
+          ]
+        },
+        {
+          "id": "ed0aac84833d231a21c19eb73f0ff9fb",
+          "commenceTime": "2026-08-29T10:00:00.000Z",
+          "red": "Yan Xiaonan",
+          "blue": "Denise Gomes",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.71,
+              "blueDecimal": 2.2
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.69,
+              "blueDecimal": 2.25
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 1.63,
+              "blueDecimal": 2.15
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.68,
+              "blueDecimal": 2.26
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 1.6,
+              "blueDecimal": 2
+            }
+          ]
+        },
+        {
+          "id": "929a13c0f4a7f5db02a36b8bb3763ba1",
+          "commenceTime": "2026-08-29T10:00:00.000Z",
+          "red": "Long Xiao",
+          "blue": "Francesco Nuzzi",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.56,
+              "blueDecimal": 2.55
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.61,
+              "blueDecimal": 2.55
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.63,
+              "blueDecimal": 2.36
+            }
+          ]
+        },
+        {
+          "id": "3a16026e78c800d83c0b18c2e1d7395a",
+          "commenceTime": "2026-08-29T10:00:00.000Z",
+          "red": "Hector Santiago",
+          "blue": "Lawrence Lui",
+          "bookmakers": [
+            {
+              "name": "Pinnacle",
+              "redDecimal": 3.47,
+              "blueDecimal": 1.33
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 3.51,
+              "blueDecimal": 1.37
+            },
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 3.5,
+              "blueDecimal": 1.33
+            }
+          ]
+        },
+        {
+          "id": "27e0e85538acefc40d052b90b4de7f98",
+          "commenceTime": "2026-08-29T10:00:00.000Z",
+          "red": "Jack Jenkins",
+          "blue": "Sean Woodson",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 2.25,
+              "blueDecimal": 1.69
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 2.29,
+              "blueDecimal": 1.73
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 2.31,
+              "blueDecimal": 1.65
+            }
+          ]
+        },
+        {
+          "id": "66b8f49297a41c35f555e048ea64bf09",
+          "commenceTime": "2026-08-29T10:00:00.000Z",
+          "red": "Jingnan Xiong",
+          "blue": "Julia Polastri",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 2.8,
+              "blueDecimal": 1.48
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 2.99,
+              "blueDecimal": 1.48
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 3.05,
+              "blueDecimal": 1.41
+            }
+          ]
+        },
+        {
+          "id": "c0f2cf1fe9e78538bed4adbf0159a987",
+          "commenceTime": "2026-08-29T10:00:00.000Z",
+          "red": "Rei Tsuruya",
+          "blue": "Kevin Borjas",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.17,
+              "blueDecimal": 5.5
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.22,
+              "blueDecimal": 5.19
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.16,
+              "blueDecimal": 5.76
+            }
+          ]
+        },
+        {
+          "id": "8efe763cfd08b280b54f56d7e2e6604f",
+          "commenceTime": "2026-08-29T10:00:00.000Z",
+          "red": "Levi Rodrigues",
+          "blue": "Liu Ce",
+          "bookmakers": [
+            {
+              "name": "Pinnacle",
+              "redDecimal": 2.45,
+              "blueDecimal": 1.59
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 2.43,
+              "blueDecimal": 1.59
+            },
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 2.6,
+              "blueDecimal": 1.54
+            }
+          ]
+        },
+        {
+          "id": "8ab8d406b097e3650cac5c1e838b262b",
+          "commenceTime": "2026-08-29T20:00:00.000Z",
+          "red": "Umar Nurmagomedov",
+          "blue": "Song Yadong",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.2,
+              "blueDecimal": 4.85
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 1.16,
+              "blueDecimal": 4.6
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.19,
+              "blueDecimal": 5.19
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.2,
+              "blueDecimal": 4.25
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.2,
+              "blueDecimal": 4.25
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 1.17,
+              "blueDecimal": 4.3
+            },
+            {
+              "name": "Coolbet",
+              "redDecimal": 1.22,
+              "blueDecimal": 4.5
+            },
+            {
+              "name": "Pinnacle",
+              "redDecimal": 1.21,
+              "blueDecimal": 4.66
+            },
+            {
+              "name": "888sport",
+              "redDecimal": 1.18,
+              "blueDecimal": 4.8
+            }
+          ]
+        },
+        {
+          "id": "498c96d1ea91a8a145437157bb94d8ba",
+          "commenceTime": "2026-09-10T00:00:00.000Z",
+          "red": "Arman Tsarukyan",
+          "blue": "Mauricio Ruffy",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.26,
+              "blueDecimal": 4.03
+            }
+          ]
+        },
+        {
+          "id": "abbbe87fdceccc64521b351a8922087d",
+          "commenceTime": "2026-09-10T00:00:00.000Z",
+          "red": "Tai Tuivasa",
+          "blue": "Robelis Despaigne",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 5.09,
+              "blueDecimal": 1.19
+            }
+          ]
+        },
+        {
+          "id": "6e6cb994b418806cf161af83bf19c97b",
+          "commenceTime": "2026-09-12T18:00:00.000Z",
+          "red": "Jean Silva",
+          "blue": "Jose Delgado",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.24,
+              "blueDecimal": 4.55
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 1.15,
+              "blueDecimal": 4.75
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.28,
+              "blueDecimal": 4.14
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.16,
+              "blueDecimal": 4.65
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.16,
+              "blueDecimal": 4.65
+            }
+          ]
+        },
+        {
+          "id": "430372943e1a714088d294f9501e2c06",
+          "commenceTime": "2026-09-20T00:00:00.000Z",
+          "red": "Gable Steveson",
+          "blue": "Sean Sharaf",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.07,
+              "blueDecimal": 7
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.05,
+              "blueDecimal": 10.1
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.07,
+              "blueDecimal": 7.55
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.07,
+              "blueDecimal": 7.55
+            }
+          ]
+        },
+        {
+          "id": "35495c892bf6e3997d2725df4ca003df",
+          "commenceTime": "2026-09-20T00:00:00.000Z",
+          "red": "Tai Tuivasa",
+          "blue": "Robelis Despaigne",
+          "bookmakers": [
+            {
+              "name": "1xBet",
+              "redDecimal": 4.66,
+              "blueDecimal": 1.23
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 4.25,
+              "blueDecimal": 1.2
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 4.25,
+              "blueDecimal": 1.2
+            }
+          ]
+        },
+        {
+          "id": "9c81899bd5c97424298cb75824aa9b39",
+          "commenceTime": "2026-09-20T03:30:00.000Z",
+          "red": "Arman Tsarukyan",
+          "blue": "Mauricio Ruffy",
+          "bookmakers": [
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 1.22,
+              "blueDecimal": 3.9
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 1.22,
+              "blueDecimal": 3.35
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.25,
+              "blueDecimal": 4.25
+            },
+            {
+              "name": "888sport",
+              "redDecimal": 1.25,
+              "blueDecimal": 4
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.25,
+              "blueDecimal": 3.75
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.25,
+              "blueDecimal": 3.75
+            },
+            {
+              "name": "Marathon Bet",
+              "redDecimal": 1.22,
+              "blueDecimal": 4.1
+            }
+          ]
+        },
+        {
+          "id": "097259d4c82c4ae646995fc8d665c410",
+          "commenceTime": "2026-09-20T04:00:00.000Z",
+          "red": "Joshua Van",
+          "blue": "Alexandre Pantoja",
+          "bookmakers": [
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 1.9,
+              "blueDecimal": 1.8
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.81,
+              "blueDecimal": 2.05
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 1.78,
+              "blueDecimal": 1.82
+            },
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.89,
+              "blueDecimal": 1.93
+            },
+            {
+              "name": "888sport",
+              "redDecimal": 1.91,
+              "blueDecimal": 1.91
+            },
+            {
+              "name": "Betsson",
+              "redDecimal": 1.77,
+              "blueDecimal": 2
+            },
+            {
+              "name": "Nordic Bet",
+              "redDecimal": 1.77,
+              "blueDecimal": 2
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 1.87,
+              "blueDecimal": 1.87
+            }
+          ]
+        },
+        {
+          "id": "6f0a7aa6f088decf678edccd5db84fc5",
+          "commenceTime": "2026-09-26T18:00:00.000Z",
+          "red": "Darren Till",
+          "blue": "Yoel Romero",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.56,
+              "blueDecimal": 2.4
+            }
+          ]
+        },
+        {
+          "id": "96e3358cd42ab238e7b471c8fedc75f2",
+          "commenceTime": "2026-10-04T01:00:00.000Z",
+          "red": "Deiveson Figueiredo",
+          "blue": "Payton Talbott",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 5.15,
+              "blueDecimal": 1.18
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 4.47,
+              "blueDecimal": 1.14
+            }
+          ]
+        },
+        {
+          "id": "dfbd1a631a7fefac361c91b1da9511e0",
+          "commenceTime": "2026-10-04T01:00:00.000Z",
+          "red": "Valentina Shevchenko",
+          "blue": "Natalia Silva",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.62,
+              "blueDecimal": 2.4
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.56,
+              "blueDecimal": 2.24
+            }
+          ]
+        },
+        {
+          "id": "434aefea124f696fec6cba7d9ec6f582",
+          "commenceTime": "2026-10-25T03:30:00.000Z",
+          "red": "Petr Yan",
+          "blue": "Merab Dvalishvili",
+          "bookmakers": [
+            {
+              "name": "1xBet",
+              "redDecimal": 1.62,
+              "blueDecimal": 2.39
+            },
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 1.56,
+              "blueDecimal": 2.28
+            },
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.59,
+              "blueDecimal": 2.49
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 1.52,
+              "blueDecimal": 2.3
+            },
+            {
+              "name": "Marathon Bet",
+              "redDecimal": 1.57,
+              "blueDecimal": 2.34
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 1.05,
+              "blueDecimal": 2.38
+            }
+          ]
+        },
+        {
+          "id": "73e2bada18e572af297a62064bd02d95",
+          "commenceTime": "2026-10-25T04:00:00.000Z",
+          "red": "Alex Volkanovski",
+          "blue": "Movsar Evloev",
+          "bookmakers": [
+            {
+              "name": "Betclic (FR)",
+              "redDecimal": 1.85,
+              "blueDecimal": 1.85
+            },
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.85,
+              "blueDecimal": 1.98
+            },
+            {
+              "name": "1xBet",
+              "redDecimal": 1.95,
+              "blueDecimal": 1.91
+            },
+            {
+              "name": "Winamax (FR)",
+              "redDecimal": 1.78,
+              "blueDecimal": 1.9
+            },
+            {
+              "name": "Marathon Bet",
+              "redDecimal": 1.9,
+              "blueDecimal": 1.86
+            },
+            {
+              "name": "Betfair",
+              "redDecimal": 1.71,
+              "blueDecimal": 1.83
+            }
+          ]
+        },
+        {
+          "id": "be9636f30a46a5e2c5f9c869b685b788",
+          "commenceTime": "2026-12-27T03:00:00.000Z",
+          "red": "Manel Kape",
+          "blue": "Joshua Van",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.56,
+              "blueDecimal": 2.55
+            }
+          ]
+        },
+        {
+          "id": "1e19939d57d05943b27a369682cc1c2d",
+          "commenceTime": "2026-12-31T05:00:00.000Z",
+          "red": "Josh Hokit",
+          "blue": "Alex Pereira",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.62,
+              "blueDecimal": 2.4
+            }
+          ]
+        },
+        {
+          "id": "1a92f8c10f11dd40d8ad174b894d33a3",
+          "commenceTime": "2026-12-31T05:00:00.000Z",
+          "red": "Justin Gaethje",
+          "blue": "Arman Tsarukyan",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 4.85,
+              "blueDecimal": 1.2
+            }
+          ]
+        },
+        {
+          "id": "fd4ac76a3a3201af9c0c1426898605ff",
+          "commenceTime": "2026-12-31T05:00:00.000Z",
+          "red": "Ciryl Gane",
+          "blue": "Josh Hokit",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.4,
+              "blueDecimal": 3.1
+            }
+          ]
+        },
+        {
+          "id": "c0d24eeb24d69c7f938f38f857924c72",
+          "commenceTime": "2026-12-31T05:00:00.000Z",
+          "red": "Justin Gaethje",
+          "blue": "Ilia Topuria",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 3.1,
+              "blueDecimal": 1.4
+            }
+          ]
+        },
+        {
+          "id": "944dd8a4945ba0df2c4370de73387c5d",
+          "commenceTime": "2026-12-31T17:00:00.000Z",
+          "red": "Conor McGregor",
+          "blue": "Jorge Masvidal",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.69,
+              "blueDecimal": 2.25
+            }
+          ]
+        },
+        {
+          "id": "fa2d7e022c2c47e0855f04084d08f163",
+          "commenceTime": "2027-01-01T03:00:00.000Z",
+          "red": "Tom Aspinall",
+          "blue": "Ciryl Gane",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.87,
+              "blueDecimal": 1.95
+            }
+          ]
+        },
+        {
+          "id": "8488c2a34f7093513d463d4b2730572e",
+          "commenceTime": "2027-01-01T03:00:00.000Z",
+          "red": "Khamzat Chimaev",
+          "blue": "Paulo Henrique Costa",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.2,
+              "blueDecimal": 4.75
+            }
+          ]
+        },
+        {
+          "id": "e697d4df59aa825d85fa764db999757f",
+          "commenceTime": "2027-01-01T03:00:00.000Z",
+          "red": "Sean Strickland",
+          "blue": "Khamzat Chimaev",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 2.75,
+              "blueDecimal": 1.49
+            }
+          ]
+        },
+        {
+          "id": "408347757571816aeae5ff71d1fd3849",
+          "commenceTime": "2027-01-01T03:00:00.000Z",
+          "red": "Max Holloway",
+          "blue": "Paddy Pimblett",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.56,
+              "blueDecimal": 2.55
+            }
+          ]
+        },
+        {
+          "id": "ead94688d843f96aba0f1486ce663b61",
+          "commenceTime": "2027-01-01T03:00:00.000Z",
+          "red": "Sean Strickland",
+          "blue": "Nassourdine Imavov",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.94,
+              "blueDecimal": 1.88
+            }
+          ]
+        },
+        {
+          "id": "a07b585e39e3bdba3b3d2692e0552524",
+          "commenceTime": "2027-04-25T02:00:00.000Z",
+          "red": "Islam Makhachev",
+          "blue": "Carlos Prates",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.4,
+              "blueDecimal": 3.07
+            }
+          ]
+        },
+        {
+          "id": "5f889b13fd30ec2449fda285a1343314",
+          "commenceTime": "2027-04-25T02:00:00.000Z",
+          "red": "Islam Makhachev",
+          "blue": "Michael Morales",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.5,
+              "blueDecimal": 2.74
+            }
+          ]
+        },
+        {
+          "id": "fcee675894f8285afc8daf0808198b74",
+          "commenceTime": "2027-07-02T02:00:00.000Z",
+          "red": "Islam Makhachev",
+          "blue": "Kamaru Usman",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.25,
+              "blueDecimal": 4.3
+            }
+          ]
+        },
+        {
+          "id": "9f2a5922ae9758c3b18ad1a31ea88959",
+          "commenceTime": "2027-07-11T00:00:00.000Z",
+          "red": "Paddy Pimblett",
+          "blue": "Conor McGregor",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.62,
+              "blueDecimal": 2.4
+            }
+          ]
+        },
+        {
+          "id": "51c1b5be2ac155f167f99a26ed20bf4d",
+          "commenceTime": "2027-08-01T02:00:00.000Z",
+          "red": "Magomed Ankalaev",
+          "blue": "Carlos Ulberg",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.56,
+              "blueDecimal": 2.57
+            }
+          ]
+        },
+        {
+          "id": "0d48546636ab555d10e35fa641b41eb1",
+          "commenceTime": "2027-08-01T02:00:00.000Z",
+          "red": "Magomed Ankalaev",
+          "blue": "Jiri Prochazka",
+          "bookmakers": [
+            {
+              "name": "BetOnline.ag",
+              "redDecimal": 1.5,
+              "blueDecimal": 2.74
+            }
+          ]
+        }
+      ],
+      "quota": {
+        "remainingCredits": 482,
+        "usedCredits": 18,
+        "lastRequestCredits": 1,
+        "exhausted": false
+      }
+    },
+    {
+      "sourceId": "cito-ufc",
+      "status": "success",
+      "reason": null,
+      "items": [
+        {
+          "kind": "fighter",
+          "id": "fecaef7e-a441-44d8-9fef-1aac1dca2df8",
+          "slug": "david-heath",
+          "name": "David Heath",
+          "record": "18-7-0",
+          "division": "Light Heavyweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "01adab74-d6c3-4125-a7e8-d7308d91e8e2",
+          "slug": "mark-khominik-1",
+          "name": "David Hood",
+          "record": "1-3-0",
+          "division": null,
+          "stance": null,
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "713130fa-ffd0-401d-aef0-84816666ab24",
+          "slug": "david-kaplan",
+          "name": "David Kaplan",
+          "record": "3-4-0",
+          "division": null,
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "4cdd8d75-0afd-4ba5-9d56-b5e3e0681b15",
+          "slug": "david-lee",
+          "name": "David Lee",
+          "record": "12-10-0",
+          "division": "Lightweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "b691595e-7f82-4c48-ba22-4bd01a283202",
+          "slug": "david-levicki",
+          "name": "David Levicki",
+          "record": "1-3-0",
+          "division": null,
+          "stance": null,
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "bb44cd36-da1d-4cc5-825a-fa7e450c109e",
+          "slug": "david-loiseau",
+          "name": "David Loiseau",
+          "record": "23-11-0",
+          "division": "Middleweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "37c7ced4-4e02-49d9-adb6-11a5f81e4fbe",
+          "slug": "david-martinez",
+          "name": "David Martinez",
+          "record": "14-1-0",
+          "division": "Bantamweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "1bf3522d-a7ce-4b27-b06a-2699312e7c61",
+          "slug": "david-michaud",
+          "name": "David Michaud",
+          "record": "11-3-0",
+          "division": "Lightweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "2e418039-f0a7-4fcb-9130-a83d9815341b",
+          "slug": "david-mitchell",
+          "name": "David Mitchell",
+          "record": "22-7-0",
+          "division": "Welterweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "d4a8cc19-c365-4497-9069-513879035dde",
+          "slug": "david-onama",
+          "name": "David Onama",
+          "record": "14-3-0",
+          "division": "Featherweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "9ae98a5c-e537-43c8-822d-8f902d691a90",
+          "slug": "david-roberts",
+          "name": "David Roberts",
+          "record": "5-8-0",
+          "division": null,
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "3358e5df-2f96-4777-8905-a8c13ee54d10",
+          "slug": "david-terrell",
+          "name": "David Terrell",
+          "record": "6-2-0",
+          "division": "Middleweight",
+          "stance": "Southpaw",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "a72459de-d80a-4073-ad5f-2d31e220ce33",
+          "slug": "david-teymur",
+          "name": "David Teymur",
+          "record": "8-2-0",
+          "division": "Lightweight",
+          "stance": "Southpaw",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "ef0b2cb4-92ae-4ca9-9ea1-048a1167bda1",
+          "slug": "dzho-vedepo-0",
+          "name": "David Velasquez",
+          "record": "10-10-0",
+          "division": "Lightweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "5c46f7e1-6fc4-4883-befe-9a1c2356f284",
+          "slug": "david-zawada",
+          "name": "David Zawada",
+          "record": "17-7-0",
+          "division": "Welterweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "5e17ef2e-8e17-45e8-b494-f8b6b401fb2e",
+          "slug": "dayana-da-silva-santos",
+          "name": "Dayana da Silva Santos",
+          "record": "0-0-0",
+          "division": "Women's Bantamweight",
+          "stance": null,
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "34e3fdc7-8030-44f8-96a6-f408f9c4ee7b",
+          "slug": "deanna-bennett",
+          "name": "DeAnna Bennett",
+          "record": "8-3-1",
+          "division": "Women's Flyweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "5fe91bde-6637-4b2b-8a12-3991817e00cb",
+          "slug": "dean-barry",
+          "name": "Dean Barry",
+          "record": "4-2-0",
+          "division": "Welterweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "b7a27bc6-3458-4c7a-8920-1c91849498b6",
+          "slug": "dean-lister",
+          "name": "Dean Lister",
+          "record": "13-7-0",
+          "division": "Middleweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "8ed740c3-5fa4-4b36-ae20-7b1ceb437129",
+          "slug": "deiveson-figueiredo",
+          "name": "Deiveson Figueiredo",
+          "record": "25-7-1",
+          "division": "Bantamweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "272460f3-0455-4fd8-80bc-a8310215593d",
+          "slug": "delphine-benouaich",
+          "name": "Delphine Benouaich",
+          "record": "7-2-0",
+          "division": "Women's Strawweight",
+          "stance": null,
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "af879035-3ccb-4b2e-b03c-f1aa55e2b68c",
+          "slug": "delson-heleno",
+          "name": "Delson Heleno",
+          "record": "29-10-0",
+          "division": "Middleweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "49d548df-34a9-4980-a246-9de6f8b87750",
+          "slug": "temetoriasu-shiyonson",
+          "name": "Demetrious Johnson",
+          "record": "27-3-1",
+          "division": "Flyweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "fa992ca2-fa93-4eff-ae5c-85f6fab87fb8",
+          "slug": "demian-maia",
+          "name": "Demian Maia",
+          "record": "28-11-0",
+          "division": "Welterweight",
+          "stance": "Southpaw",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "0963720b-ba77-4054-bf67-062297561a0f",
+          "slug": "denis-kang",
+          "name": "Denis Kang",
+          "record": "35-16-2",
+          "division": "Middleweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "13fdb25e-b54b-461a-8120-ff49738f8515",
+          "slug": "denis-stojnic",
+          "name": "Denis Stojnic",
+          "record": "13-3-0",
+          "division": "Heavyweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "d7b25cb5-1fdf-4587-a090-982fb9e5bc2a",
+          "slug": "denis-tiuliulin",
+          "name": "Denis Tiuliulin",
+          "record": "10-10-0",
+          "division": "Middleweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "5177fc8d-ed9b-4144-ae11-65b330c8f996",
+          "slug": "denise-gomes",
+          "name": "Denise Gomes",
+          "record": "12-3-0",
+          "division": "Women's Strawweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "09747aa0-ba86-4a60-be52-dff3915c627a",
+          "slug": "tenisu-hamiyutesu",
+          "name": "Dennis Bermudez",
+          "record": "17-9-0",
+          "division": "Lightweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "9d92475f-65b4-46b9-a840-a5f348902bce",
+          "slug": "dennis-bryant",
+          "name": "Dennis Bryant",
+          "record": "5-2-0",
+          "division": "Light Heavyweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "e41d4b4c-129f-41a0-bd19-af31fcfa41fb",
+          "slug": "dennis-buzukja",
+          "name": "Dennis Buzukja",
+          "record": "12-7-0",
+          "division": "Featherweight",
+          "stance": null,
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "3c8bb6ac-6f34-486b-bbaf-d311d769d328",
+          "slug": "dennis-hallman",
+          "name": "Dennis Hallman",
+          "record": "53-20-2",
+          "division": "Lightweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "cf3b482d-df71-43b2-b4e8-046caa4b3e0c",
+          "slug": "dennis-siver",
+          "name": "Dennis Siver",
+          "record": "23-11-0",
+          "division": "Featherweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "150261b6-8474-4bd3-b496-8f9bc07ac101",
+          "slug": "denys-bondar",
+          "name": "Denys Bondar",
+          "record": "14-5-0",
+          "division": "Flyweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "f7052927-46b5-4b85-b3c7-20459d692c5c",
+          "slug": "denzel-freeman",
+          "name": "Denzel Freeman",
+          "record": "7-2-0",
+          "division": "Heavyweight",
+          "stance": "Southpaw",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "026d73ee-0ec8-4ee8-a864-1e82d6d4c4a4",
+          "slug": "dequan-townsend",
+          "name": "Dequan Townsend",
+          "record": "21-12-0",
+          "division": "Middleweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "d76013ee-eb5d-4e78-9531-92ec53339aca",
+          "slug": "derek-brunson",
+          "name": "Derek Brunson",
+          "record": "23-9-0",
+          "division": "Middleweight",
+          "stance": "Southpaw",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "3297fcaf-0ac1-4a34-9000-5b663250074e",
+          "slug": "derek-downey",
+          "name": "Derek Downey",
+          "record": "11-4-0",
+          "division": "Middleweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "e6938eea-efa3-423a-8ec3-f7a1a8d90156",
+          "slug": "deron-winn",
+          "name": "Deron Winn",
+          "record": "7-3-0",
+          "division": "Middleweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "d6057450-bcf8-40f3-80bc-70e5a1392e3e",
+          "slug": "derrick-krantz",
+          "name": "Derrick Krantz",
+          "record": "22-12-0",
+          "division": "Welterweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "a231a8c4-ad2e-48c0-a227-21b91e86fc10",
+          "slug": "derrick-lewis",
+          "name": "Derrick Lewis",
+          "record": "29-14-0",
+          "division": "Heavyweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "3ae054a8-0140-420d-a7d8-e2c1a466de68",
+          "slug": "derrick-noble",
+          "name": "Derrick Noble",
+          "record": "27-15-1",
+          "division": "Welterweight",
+          "stance": "Southpaw",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "e5a13599-d3fd-43a0-ac51-b2f787457644",
+          "slug": "desmond-green",
+          "name": "Desmond Green",
+          "record": "23-8-0",
+          "division": "Lightweight",
+          "stance": "Southpaw",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "eb26211f-738a-4546-8e8a-dc3f341523a2",
+          "slug": "desmond-torres",
+          "name": "Desmond Torres",
+          "record": "7-2-0",
+          "division": "Bantamweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "05ea9676-7ee0-44c2-9be4-c1cc60b2f26c",
+          "slug": "devin-clark",
+          "name": "Devin Clark",
+          "record": "14-9-0",
+          "division": "Light Heavyweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "0c212b86-3c60-4514-8ebc-27110c8d27bb",
+          "slug": "devin-powell",
+          "name": "Devin Powell",
+          "record": "9-4-0",
+          "division": "Lightweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "7f015248-3402-42a2-bb97-4f3c5e7016e6",
+          "slug": "devin-smyth",
+          "name": "Devin Smyth",
+          "record": "4-2-0",
+          "division": "Welterweight",
+          "stance": "Switch",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "d160cb8c-1b6b-4190-96db-22dbc1cee3fb",
+          "slug": "devonte-smith",
+          "name": "Devonte Smith",
+          "record": "11-4-0",
+          "division": "Lightweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "e1e4a32f-9695-493e-8499-c00e86ddddb6",
+          "slug": "dhiego-lima",
+          "name": "Dhiego Lima",
+          "record": "17-9-0",
+          "division": "Welterweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "fighter",
+          "id": "32f32a26-095f-4691-8f74-554df3c26d57",
+          "slug": "diana-belbita",
+          "name": "Diana Belbita",
+          "record": "15-10-0",
+          "division": "Women's Flyweight",
+          "stance": "Orthodox",
+          "heightCm": null,
+          "reachCm": null
+        },
+        {
+          "kind": "event",
+          "id": "9f8aa2a4-286b-4385-b8a1-9324daa55485",
+          "slug": "ufc-fight-night-august-22-2026",
+          "name": "UFC Fight Night: Hernandez vs Rodrigues",
+          "venue": "Golden 1 Center",
+          "startsAt": "2026-08-23T00:00:00.000Z",
+          "timeZone": null,
+          "bouts": []
+        },
+        {
+          "kind": "event",
+          "id": "b170ec7f-ee22-4541-9426-7b58e252ec33",
+          "slug": "dwcs-10-3",
+          "name": "Dana White's Contender Series 10.3",
+          "venue": "Meta Apex",
+          "startsAt": "2026-08-26T00:00:00.000Z",
+          "timeZone": null,
+          "bouts": []
+        },
+        {
+          "kind": "event",
+          "id": "5bd447e9-0ffd-4722-baf1-cb0262aa7e70",
+          "slug": "ufc-fight-night-august-29-2026",
+          "name": "UFC Fight Night: Nurmagomedov vs Song",
+          "venue": "Oriental Sports Center",
+          "startsAt": "2026-08-29T10:00:00.000Z",
+          "timeZone": null,
+          "bouts": []
+        },
+        {
+          "kind": "event",
+          "id": "fe411dff-075f-4650-b513-1d5324cd2d22",
+          "slug": "dwcs-10-4",
+          "name": "Dana White's Contender Series 10.4",
+          "venue": "Meta Apex",
+          "startsAt": "2026-09-01T23:00:00.000Z",
+          "timeZone": null,
+          "bouts": []
+        },
+        {
+          "kind": "event",
+          "id": "0ac45785-4377-4988-881d-e3f2e445c2f1",
+          "slug": "ufc-fight-night-september-05-2026",
+          "name": "UFC Fight Night: Hooker vs Parnasse",
+          "venue": "Accor Arena",
+          "startsAt": "2026-09-05T19:00:00.000Z",
+          "timeZone": null,
+          "bouts": []
+        },
+        {
+          "kind": "event",
+          "id": "160cd170-783d-4a40-a4a0-f4ccd90b0818",
+          "slug": "dwcs-10-5",
+          "name": "Dana White's Contender Series 10.5",
+          "venue": "Meta Apex",
+          "startsAt": "2026-09-08T23:00:00.000Z",
+          "timeZone": null,
+          "bouts": []
+        },
+        {
+          "kind": "event",
+          "id": "af7fb97f-bc2a-440b-abdc-b03d4228bf44",
+          "slug": "ufc-fight-night-september-12-2026",
+          "name": "Noche UFC",
+          "venue": "Desert Diamond Arena",
+          "startsAt": "2026-09-12T21:00:00.000Z",
+          "timeZone": null,
+          "bouts": []
+        },
+        {
+          "kind": "event",
+          "id": "8a61c1d1-ed95-4396-8095-e3d68f6c5896",
+          "slug": "cryptocom-ufc-331",
+          "name": "Crypto.com UFC 331",
+          "venue": "Crypto.com Arena",
+          "startsAt": "2026-09-20T01:00:00.000Z",
+          "timeZone": null,
+          "bouts": []
+        },
+        {
+          "kind": "event",
+          "id": "c12ca7e4-b662-4807-99b7-59231a5ec009",
+          "slug": "ufc-fight-night-september-26-2026",
+          "name": "UFC Fight Night: Rosas Jr. vs Barcelos",
+          "venue": "Meta APEX",
+          "startsAt": "2026-09-26T22:00:00.000Z",
+          "timeZone": null,
+          "bouts": []
+        },
+        {
+          "kind": "event",
+          "id": "87b955b3-c67a-4185-9f87-e8eb2a3c8043",
+          "slug": "ufc-332",
+          "name": "UFC 332",
+          "venue": "Delta Center",
+          "startsAt": "2026-10-04T01:00:00.000Z",
+          "timeZone": null,
+          "bouts": []
+        }
+      ]
+    },
+    {
+      "sourceId": "wikimedia",
+      "status": "success",
+      "reason": null,
+      "items": [
+        {
+          "org": "ufc",
+          "name": "Aaron Pico",
+          "slug": "aaron-pico",
+          "wikipediaTitle": "Aaron Pico",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Aaron_Pico",
+          "pageId": 44843191
+        },
+        {
+          "org": "ufc",
+          "name": "Abusupiyan Magomedov",
+          "slug": "abusupiyan-magomedov",
+          "wikipediaTitle": "Abusupiyan Magomedov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Abusupiyan_Magomedov",
+          "pageId": 80563842
+        },
+        {
+          "org": "ufc",
+          "name": "Adrian Yañez",
+          "slug": "adrian-yanez",
+          "wikipediaTitle": "Adrian Yañez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Adrian_Ya%C3%B1ez",
+          "pageId": 67943570
+        },
+        {
+          "org": "ufc",
+          "name": "Aiemann Zahabi",
+          "slug": "aiemann-zahabi",
+          "wikipediaTitle": "Aiemann Zahabi",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Aiemann_Zahabi",
+          "pageId": 54051600
+        },
+        {
+          "org": "ufc",
+          "name": "Ailín Pérez",
+          "slug": "ailin-perez",
+          "wikipediaTitle": "Ailín Pérez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ail%C3%ADn_P%C3%A9rez",
+          "pageId": 76555249
+        },
+        {
+          "org": "ufc",
+          "name": "Alateng Heili",
+          "slug": "alateng-heili",
+          "wikipediaTitle": "Alateng Heili",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alateng_Heili",
+          "pageId": 65489732
+        },
+        {
+          "org": "ufc",
+          "name": "Aleksandar Rakić",
+          "slug": "aleksandar-rakic",
+          "wikipediaTitle": "Aleksandar Rakić",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Aleksandar_Raki%C4%87",
+          "pageId": 56012518
+        },
+        {
+          "org": "ufc",
+          "name": "Aleksandre Topuria",
+          "slug": "aleksandre-topuria",
+          "wikipediaTitle": "Aleksandre Topuria",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Aleksandre_Topuria",
+          "pageId": 81849591
+        },
+        {
+          "org": "ufc",
+          "name": "Alex Pereira",
+          "slug": "alex-pereira",
+          "wikipediaTitle": "Alex Pereira",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alex_Pereira",
+          "pageId": 42031348
+        },
+        {
+          "org": "ufc",
+          "name": "Alex Perez (fighter)",
+          "slug": "alex-perez",
+          "wikipediaTitle": "Alex Perez (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alex_Perez_(fighter)",
+          "pageId": 58085526
+        },
+        {
+          "org": "ufc",
+          "name": "Alexa Grasso",
+          "slug": "alexa-grasso",
+          "wikipediaTitle": "Alexa Grasso",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alexa_Grasso",
+          "pageId": 45441761
+        },
+        {
+          "org": "ufc",
+          "name": "Alexander Hernandez",
+          "slug": "alexander-hernandez",
+          "wikipediaTitle": "Alexander Hernandez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alexander_Hernandez",
+          "pageId": 58018549
+        },
+        {
+          "org": "ufc",
+          "name": "Alexander Volkanovski",
+          "slug": "alexander-volkanovski",
+          "wikipediaTitle": "Alexander Volkanovski",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alexander_Volkanovski",
+          "pageId": 54197580
+        },
+        {
+          "org": "ufc",
+          "name": "Alexander Volkov (fighter)",
+          "slug": "alexander-volkov",
+          "wikipediaTitle": "Alexander Volkov (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alexander_Volkov_(fighter)",
+          "pageId": 28754266
+        },
+        {
+          "org": "ufc",
+          "name": "Alexandre Pantoja",
+          "slug": "alexandre-pantoja",
+          "wikipediaTitle": "Alexandre Pantoja",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alexandre_Pantoja",
+          "pageId": 54180928
+        },
+        {
+          "org": "ufc",
+          "name": "Aljamain Sterling",
+          "slug": "aljamain-sterling",
+          "wikipediaTitle": "Aljamain Sterling",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Aljamain_Sterling",
+          "pageId": 43320208
+        },
+        {
+          "org": "ufc",
+          "name": "Alonzo Menifield",
+          "slug": "alonzo-menifield",
+          "wikipediaTitle": "Alonzo Menifield",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Alonzo_Menifield",
+          "pageId": 64198883
+        },
+        {
+          "org": "ufc",
+          "name": "Amanda Lemos",
+          "slug": "amanda-lemos",
+          "wikipediaTitle": "Amanda Lemos",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Amanda_Lemos",
+          "pageId": 64535234
+        },
+        {
+          "org": "ufc",
+          "name": "Amanda Nunes",
+          "slug": "amanda-nunes",
+          "wikipediaTitle": "Amanda Nunes",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Amanda_Nunes",
+          "pageId": 30387040
+        },
+        {
+          "org": "ufc",
+          "name": "Amanda Ribas",
+          "slug": "amanda-ribas",
+          "wikipediaTitle": "Amanda Ribas",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Amanda_Ribas",
+          "pageId": 63376607
+        },
+        {
+          "org": "ufc",
+          "name": "Amir Albazi",
+          "slug": "amir-albazi",
+          "wikipediaTitle": "Amir Albazi",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Amir_Albazi",
+          "pageId": 64585580
+        },
+        {
+          "org": "ufc",
+          "name": "Andre Fili",
+          "slug": "andre-fili",
+          "wikipediaTitle": "Andre Fili",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Andre_Fili",
+          "pageId": 40814604
+        },
+        {
+          "org": "ufc",
+          "name": "André Lima (fighter)",
+          "slug": "andre-lima",
+          "wikipediaTitle": "André Lima (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Andr%C3%A9_Lima_(fighter)",
+          "pageId": 83018693
+        },
+        {
+          "org": "ufc",
+          "name": "Andre Petroski",
+          "slug": "andre-petroski",
+          "wikipediaTitle": "Andre Petroski",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Andre_Petroski",
+          "pageId": 70178404
+        },
+        {
+          "org": "ufc",
+          "name": "Angela Hill",
+          "slug": "angela-hill",
+          "wikipediaTitle": "Angela Hill",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Angela_Hill",
+          "pageId": 47691727
+        },
+        {
+          "org": "ufc",
+          "name": "Anshul Jubli",
+          "slug": "anshul-jubli",
+          "wikipediaTitle": "Anshul Jubli",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Anshul_Jubli",
+          "pageId": 72989309
+        },
+        {
+          "org": "ufc",
+          "name": "Anthony Hernandez",
+          "slug": "anthony-hernandez",
+          "wikipediaTitle": "Anthony Hernandez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Anthony_Hernandez",
+          "pageId": 64111674
+        },
+        {
+          "org": "ufc",
+          "name": "Aori Qileng",
+          "slug": "aori-qileng",
+          "wikipediaTitle": "Aori Qileng",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Aori_Qileng",
+          "pageId": 70178359
+        },
+        {
+          "org": "ufc",
+          "name": "Ariane Carnelossi",
+          "slug": "ariane-carnelossi",
+          "wikipediaTitle": "Ariane Carnelossi",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ariane_Carnelossi",
+          "pageId": 68442521
+        },
+        {
+          "org": "ufc",
+          "name": "Arman Tsarukyan",
+          "slug": "arman-tsarukyan",
+          "wikipediaTitle": "Arman Tsarukyan",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Arman_Tsarukyan",
+          "pageId": 60889979
+        },
+        {
+          "org": "ufc",
+          "name": "Arnold Allen",
+          "slug": "arnold-allen",
+          "wikipediaTitle": "Arnold Allen",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Arnold_Allen",
+          "pageId": 49598119
+        },
+        {
+          "org": "ufc",
+          "name": "Asu Almabayev",
+          "slug": "asu-almabayev",
+          "wikipediaTitle": "Asu Almabayev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Asu_Almabayev",
+          "pageId": 77593874
+        },
+        {
+          "org": "ufc",
+          "name": "Ateba Gautier",
+          "slug": "ateba-gautier",
+          "wikipediaTitle": "Ateba Gautier",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ateba_Gautier",
+          "pageId": 82864883
+        },
+        {
+          "org": "ufc",
+          "name": "Azamat Bekoev",
+          "slug": "azamat-bekoev",
+          "wikipediaTitle": "Azamat Bekoev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Azamat_Bekoev",
+          "pageId": 79879282
+        },
+        {
+          "org": "ufc",
+          "name": "Azamat Murzakanov",
+          "slug": "azamat-murzakanov",
+          "wikipediaTitle": "Azamat Murzakanov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Azamat_Murzakanov",
+          "pageId": 56012507
+        },
+        {
+          "org": "ufc",
+          "name": "Belal Muhammad",
+          "slug": "belal-muhammad",
+          "wikipediaTitle": "Belal Muhammad",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Belal_Muhammad",
+          "pageId": 51781968
+        },
+        {
+          "org": "ufc",
+          "name": "Beneil Dariush",
+          "slug": "beneil-dariush",
+          "wikipediaTitle": "Beneil Dariush",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Beneil_Dariush",
+          "pageId": 43536705
+        },
+        {
+          "org": "ufc",
+          "name": "Benoît Saint Denis",
+          "slug": "benoit-saint-denis",
+          "wikipediaTitle": "Benoît Saint Denis",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Beno%C3%AEt_Saint_Denis",
+          "pageId": 71431355
+        },
+        {
+          "org": "ufc",
+          "name": "Billy Elekana",
+          "slug": "billy-elekana",
+          "wikipediaTitle": "Billy Elekana",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Billy_Elekana",
+          "pageId": 82830749
+        },
+        {
+          "org": "ufc",
+          "name": "Billy Quarantillo",
+          "slug": "billy-quarantillo",
+          "wikipediaTitle": "Billy Quarantillo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Billy_Quarantillo",
+          "pageId": 64857899
+        },
+        {
+          "org": "ufc",
+          "name": "Bogdan Guskov",
+          "slug": "bogdan-guskov",
+          "wikipediaTitle": "Bogdan Guskov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Bogdan_Guskov",
+          "pageId": 76773370
+        },
+        {
+          "org": "ufc",
+          "name": "Brad Tavares",
+          "slug": "brad-tavares",
+          "wikipediaTitle": "Brad Tavares",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brad_Tavares",
+          "pageId": 26689399
+        },
+        {
+          "org": "ufc",
+          "name": "Brando Peričić",
+          "slug": "brando-pericic",
+          "wikipediaTitle": "Brando Peričić",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brando_Peri%C4%8Di%C4%87",
+          "pageId": 83477071
+        },
+        {
+          "org": "ufc",
+          "name": "Brandon Moreno",
+          "slug": "brandon-moreno",
+          "wikipediaTitle": "Brandon Moreno",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brandon_Moreno",
+          "pageId": 52475971
+        },
+        {
+          "org": "ufc",
+          "name": "Brandon Royval",
+          "slug": "brandon-royval",
+          "wikipediaTitle": "Brandon Royval",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brandon_Royval",
+          "pageId": 64578559
+        },
+        {
+          "org": "ufc",
+          "name": "Brendan Allen",
+          "slug": "brendan-allen",
+          "wikipediaTitle": "Brendan Allen",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brendan_Allen",
+          "pageId": 64400223
+        },
+        {
+          "org": "ufc",
+          "name": "Brian Ortega",
+          "slug": "brian-ortega",
+          "wikipediaTitle": "Brian Ortega",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Brian_Ortega",
+          "pageId": 32815938
+        },
+        {
+          "org": "ufc",
+          "name": "Carlos Ulberg",
+          "slug": "carlos-ulberg",
+          "wikipediaTitle": "Carlos Ulberg",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Carlos_Ulberg",
+          "pageId": 66657574
+        },
+        {
+          "org": "ufc",
+          "name": "Charles Oliveira",
+          "slug": "charles-oliveira",
+          "wikipediaTitle": "Charles Oliveira",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Charles_Oliveira",
+          "pageId": 27167974
+        },
+        {
+          "org": "ufc",
+          "name": "Ciryl Gane",
+          "slug": "ciryl-gane",
+          "wikipediaTitle": "Ciryl Gane",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ciryl_Gane",
+          "pageId": 62192397
+        },
+        {
+          "org": "ufc",
+          "name": "Cody Garbrandt",
+          "slug": "cody-garbrandt",
+          "wikipediaTitle": "Cody Garbrandt",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Cody_Garbrandt",
+          "pageId": 47163936
+        },
+        {
+          "org": "ufc",
+          "name": "Conor McGregor",
+          "slug": "conor-mcgregor",
+          "wikipediaTitle": "Conor McGregor",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Conor_McGregor",
+          "pageId": 38738224
+        },
+        {
+          "org": "ufc",
+          "name": "Deiveson Figueiredo",
+          "slug": "deiveson-figueiredo",
+          "wikipediaTitle": "Deiveson Figueiredo",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Deiveson_Figueiredo",
+          "pageId": 56637932
+        },
+        {
+          "org": "ufc",
+          "name": "Dricus du Plessis",
+          "slug": "dricus-du-plessis",
+          "wikipediaTitle": "Dricus du Plessis",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Dricus_du_Plessis",
+          "pageId": 62595898
+        },
+        {
+          "org": "ufc",
+          "name": "Ilia Topuria",
+          "slug": "ilia-topuria",
+          "wikipediaTitle": "Ilia Topuria",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ilia_Topuria",
+          "pageId": 66838633
+        },
+        {
+          "org": "ufc",
+          "name": "Islam Makhachev",
+          "slug": "islam-makhachev",
+          "wikipediaTitle": "Islam Makhachev",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Islam_Makhachev",
+          "pageId": 44264537
+        },
+        {
+          "org": "ufc",
+          "name": "Israel Adesanya",
+          "slug": "israel-adesanya",
+          "wikipediaTitle": "Israel Adesanya",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Israel_Adesanya",
+          "pageId": 51774563
+        },
+        {
+          "org": "ufc",
+          "name": "Jamahal Hill",
+          "slug": "jamahal-hill",
+          "wikipediaTitle": "Jamahal Hill",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jamahal_Hill",
+          "pageId": 65645016
+        },
+        {
+          "org": "ufc",
+          "name": "Jan Błachowicz",
+          "slug": "jan-b-achowicz",
+          "wikipediaTitle": "Jan Błachowicz",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Jan_B%C5%82achowicz",
+          "pageId": 28667675
+        },
+        {
+          "org": "ufc",
+          "name": "Jéssica Andrade",
+          "slug": "jessica-andrade",
+          "wikipediaTitle": "Jéssica Andrade",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/J%C3%A9ssica_Andrade",
+          "pageId": 40078160
+        },
+        {
+          "org": "ufc",
+          "name": "Jiří Procházka",
+          "slug": "jiri-prochazka",
+          "wikipediaTitle": "Jiří Procházka",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Ji%C5%99%C3%AD_Proch%C3%A1zka",
+          "pageId": 64548777
+        },
+        {
+          "org": "ufc",
+          "name": "Joshua Van",
+          "slug": "joshua-van",
+          "wikipediaTitle": "Joshua Van",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Joshua_Van",
+          "pageId": 78781693
+        },
+        {
+          "org": "ufc",
+          "name": "Julianna Peña",
+          "slug": "julianna-pena",
+          "wikipediaTitle": "Julianna Peña",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Julianna_Pe%C3%B1a",
+          "pageId": 41237982
+        },
+        {
+          "org": "ufc",
+          "name": "Justin Gaethje",
+          "slug": "justin-gaethje",
+          "wikipediaTitle": "Justin Gaethje",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Justin_Gaethje",
+          "pageId": 49172283
+        },
+        {
+          "org": "ufc",
+          "name": "Kamaru Usman",
+          "slug": "kamaru-usman",
+          "wikipediaTitle": "Kamaru Usman",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Kamaru_Usman",
+          "pageId": 49620123
+        },
+        {
+          "org": "ufc",
+          "name": "Leon Edwards",
+          "slug": "leon-edwards",
+          "wikipediaTitle": "Leon Edwards",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Leon_Edwards",
+          "pageId": 46384799
+        },
+        {
+          "org": "ufc",
+          "name": "Max Holloway",
+          "slug": "max-holloway",
+          "wikipediaTitle": "Max Holloway",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Max_Holloway",
+          "pageId": 34427783
+        },
+        {
+          "org": "ufc",
+          "name": "Merab Dvalishvili",
+          "slug": "merab-dvalishvili",
+          "wikipediaTitle": "Merab Dvalishvili",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Merab_Dvalishvili",
+          "pageId": 56012380
+        },
+        {
+          "org": "ufc",
+          "name": "Miesha Tate",
+          "slug": "miesha-tate",
+          "wikipediaTitle": "Miesha Tate",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Miesha_Tate",
+          "pageId": 22359670
+        },
+        {
+          "org": "ufc",
+          "name": "Petr Yan",
+          "slug": "petr-yan",
+          "wikipediaTitle": "Petr Yan",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Petr_Yan",
+          "pageId": 57503647
+        },
+        {
+          "org": "ufc",
+          "name": "Rafael dos Anjos",
+          "slug": "rafael-dos-anjos",
+          "wikipediaTitle": "Rafael dos Anjos",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rafael_dos_Anjos",
+          "pageId": 18427840
+        },
+        {
+          "org": "ufc",
+          "name": "Raquel Pennington",
+          "slug": "raquel-pennington",
+          "wikipediaTitle": "Raquel Pennington",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Raquel_Pennington",
+          "pageId": 41274218
+        },
+        {
+          "org": "ufc",
+          "name": "Robert Whittaker (fighter)",
+          "slug": "robert-whittaker",
+          "wikipediaTitle": "Robert Whittaker (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Robert_Whittaker_(fighter)",
+          "pageId": 37237007
+        },
+        {
+          "org": "ufc",
+          "name": "Rose Namajunas",
+          "slug": "rose-namajunas",
+          "wikipediaTitle": "Rose Namajunas",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Rose_Namajunas",
+          "pageId": 39957370
+        },
+        {
+          "org": "ufc",
+          "name": "Sean O'Malley (fighter)",
+          "slug": "sean-o-malley",
+          "wikipediaTitle": "Sean O'Malley (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Sean_O'Malley_(fighter)",
+          "pageId": 55885581
+        },
+        {
+          "org": "ufc",
+          "name": "Sean Strickland",
+          "slug": "sean-strickland",
+          "wikipediaTitle": "Sean Strickland",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Sean_Strickland",
+          "pageId": 42944791
+        },
+        {
+          "org": "ufc",
+          "name": "Tom Aspinall",
+          "slug": "tom-aspinall",
+          "wikipediaTitle": "Tom Aspinall",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Tom_Aspinall",
+          "pageId": 66304460
+        },
+        {
+          "org": "ufc",
+          "name": "Valentina Shevchenko",
+          "slug": "valentina-shevchenko",
+          "wikipediaTitle": "Valentina Shevchenko",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Valentina_Shevchenko",
+          "pageId": 44159133
+        },
+        {
+          "org": "ufc",
+          "name": "Yair Rodríguez",
+          "slug": "yair-rodriguez",
+          "wikipediaTitle": "Yair Rodríguez",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Yair_Rodr%C3%ADguez",
+          "pageId": 45514815
+        },
+        {
+          "org": "ufc",
+          "name": "Zhang Weili",
+          "slug": "zhang-weili",
+          "wikipediaTitle": "Zhang Weili",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Zhang_Weili",
+          "pageId": 60121510
+        },
+        {
+          "org": "oktagon",
+          "name": "Felipe Lima (fighter)",
+          "slug": "felipe-lima",
+          "wikipediaTitle": "Felipe Lima (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Felipe_Lima_(fighter)",
+          "pageId": 80310974
+        },
+        {
+          "org": "oktagon",
+          "name": "Gustavo Lopez (fighter)",
+          "slug": "gustavo-lopez",
+          "wikipediaTitle": "Gustavo Lopez (fighter)",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Gustavo_Lopez_(fighter)",
+          "pageId": 64100795
+        },
+        {
+          "org": "oktagon",
+          "name": "Karlos Vémola",
+          "slug": "karlos-vemola",
+          "wikipediaTitle": "Karlos Vémola",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Karlos_V%C3%A9mola",
+          "pageId": 26668929
+        },
+        {
+          "org": "oktagon",
+          "name": "Losene Keita",
+          "slug": "losene-keita",
+          "wikipediaTitle": "Losene Keita",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Losene_Keita",
+          "pageId": 78757319
+        },
+        {
+          "org": "oktagon",
+          "name": "Lucia Szabová",
+          "slug": "lucia-szabova",
+          "wikipediaTitle": "Lucia Szabová",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Lucia_Szabov%C3%A1",
+          "pageId": 83844409
+        },
+        {
+          "org": "oktagon",
+          "name": "Makhmud Muradov",
+          "slug": "makhmud-muradov",
+          "wikipediaTitle": "Makhmud Muradov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Makhmud_Muradov",
+          "pageId": 61905642
+        },
+        {
+          "org": "oktagon",
+          "name": "Mallory Martin",
+          "slug": "mallory-martin",
+          "wikipediaTitle": "Mallory Martin",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mallory_Martin",
+          "pageId": 59862260
+        },
+        {
+          "org": "oktagon",
+          "name": "Martin Buday",
+          "slug": "martin-buday",
+          "wikipediaTitle": "Martin Buday",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Martin_Buday",
+          "pageId": 80546380
+        },
+        {
+          "org": "oktagon",
+          "name": "Mateusz Legierski",
+          "slug": "mateusz-legierski",
+          "wikipediaTitle": "Mateusz Legierski",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Mateusz_Legierski",
+          "pageId": 81719858
+        },
+        {
+          "org": "oktagon",
+          "name": "Niamh Kinehan",
+          "slug": "niamh-kinehan",
+          "wikipediaTitle": "Niamh Kinehan",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Niamh_Kinehan",
+          "pageId": 78356806
+        },
+        {
+          "org": "oktagon",
+          "name": "Viktor Pešta",
+          "slug": "viktor-pesta",
+          "wikipediaTitle": "Viktor Pešta",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Viktor_Pe%C5%A1ta",
+          "pageId": 42735957
+        },
+        {
+          "org": "oktagon",
+          "name": "Will Fleury",
+          "slug": "will-fleury",
+          "wikipediaTitle": "Will Fleury",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Will_Fleury",
+          "pageId": 78757307
+        },
+        {
+          "org": "oktagon",
+          "name": "Zhalgas Zhumagulov",
+          "slug": "zhalgas-zhumagulov",
+          "wikipediaTitle": "Zhalgas Zhumagulov",
+          "wikipediaUrl": "https://en.wikipedia.org/wiki/Zhalgas_Zhumagulov",
+          "pageId": 64559517
+        }
+      ]
+    },
+    {
+      "sourceId": "wikipedia-schedule",
+      "status": "success",
+      "reason": null,
+      "items": [
+        {
+          "kind": "event",
+          "id": "ufc:event:ufc-fight-night-nurmagomedov-vs-song",
+          "name": "UFC Fight Night: Nurmagomedov vs. Song",
+          "startsAtUtc": "2026-08-29T00:00:00.000Z",
+          "bouts": 13
+        },
+        {
+          "kind": "event",
+          "id": "ufc:event:ufc-fight-night-hooker-vs-parnasse",
+          "name": "UFC Fight Night: Hooker vs. Parnasse",
+          "startsAtUtc": "2026-09-05T00:00:00.000Z",
+          "bouts": 12
+        },
+        {
+          "kind": "event",
+          "id": "oktagon:event:oktagon-93-rousal-vs-magard",
+          "name": "Oktagon 93: Roušal vs. Mågård",
+          "startsAtUtc": "2026-09-12T00:00:00.000Z",
+          "bouts": 9
+        },
+        {
+          "kind": "event",
+          "id": "ufc:event:ufc-fight-night-288",
+          "name": "UFC Fight Night 288",
+          "startsAtUtc": "2026-09-12T00:00:00.000Z",
+          "bouts": 8
+        },
+        {
+          "kind": "event",
+          "id": "ufc:event:ufc-331-van-vs-pantoja-2",
+          "name": "UFC 331: Van vs. Pantoja 2",
+          "startsAtUtc": "2026-09-19T00:00:00.000Z",
+          "bouts": 13
+        },
+        {
+          "kind": "event",
+          "id": "ufc:event:ufc-fight-night-rosas-jr-vs-barcelos",
+          "name": "UFC Fight Night: Rosas Jr. vs. Barcelos",
+          "startsAtUtc": "2026-09-26T00:00:00.000Z",
+          "bouts": 1
+        }
+      ]
+    }
+  ]
+}
