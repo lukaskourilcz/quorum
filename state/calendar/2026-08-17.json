@@ -773,13 +773,17 @@
       "at": "2026-08-22T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-22-afternoon",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-22T13:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "dm-desk",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-22-dm-desk",
+      "decisionOneLiner": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped."
     },
     {
       "at": "2026-08-22T14:00:00.000Z",
