@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "9ace4d63fc98c486cbb8881dff2018da268fc38e9d0ab03c575a3196bd9570d5",
+  "status": "needs_reconciliation",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "code": "hash_conflict",
+  "detail": "> mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-22-am-ufc-event-ufc-fight-night-hernandez-vs-rodrigues.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-22:am reuses the slug of 2026-08-19:am",
+  "recordedAt": "2026-08-22T08:05:32.181Z"
+}
