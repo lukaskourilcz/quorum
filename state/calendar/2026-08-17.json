@@ -735,7 +735,9 @@
       "at": "2026-08-22T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-22-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Zabijte slot: chybí nový ověřený subjekt i modelová data a event s Hernandezem je v indexu opakovaně pokrytý. Další preview by porušilo pravidlo čerst"
     },
     {
       "at": "2026-08-22T08:00:00.000Z",

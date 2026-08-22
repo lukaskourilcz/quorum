@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260822070147-mag-editorial",
+  "date": "2026-08-22",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.026324,
+    "monthAllInUsd": 9.961092649999987,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "VETO",
+    "summary": "AUDIT vetoed the room output: Zabijte slot: chybí nový ověřený subjekt i modelová data a event s Hernandezem je v indexu opakovaně pokrytý. Další preview by porušilo pravidlo čerstvosti.",
+    "evidenceRefs": [
+      "meeting:2026-08-21-mma-analysis",
+      "meeting:2026-08-21-mag-desk",
+      "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "JAB",
+      "summary": "Slot zabít: jediný ověřený podklad je opakovaně publikovaný event UFC, bez nového FightAIQ běhu, fighter souboru nebo výsledku. Nový článek by jen opakoval téma.",
+      "evidenceRefs": [
+        "meeting:2026-08-21-mma-analysis",
+        "meeting:2026-08-21-mag-desk",
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+      ]
+    },
+    {
+      "agent": "QUILL",
+      "summary": "Kill the slot. UFC Fight Night Hernandez vs. Rodrigues was published three times in consecutive days (Aug 19–21); event occurs Aug 22. No fresh angle, fighter development or card evolution exists to justify a fourth preview. Desk needs a different subject.",
+      "evidenceRefs": [
+        "meeting:2026-08-21-mma-analysis",
+        "meeting:2026-08-21-mag-desk",
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Zabijte slot: chybí nový ověřený subjekt i modelová data a event s Hernandezem je v indexu opakovaně pokrytý. Další preview by porušilo pravidlo čerstvosti.",
+      "evidenceRefs": [
+        "meeting:2026-08-21-mma-analysis",
+        "meeting:2026-08-21-mag-desk",
+        "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "JAB",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "veto",
+      "veto": true
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-22.json",
+  "generatedAt": "2026-08-22T07:05:47.142Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-22T07:01:47.142Z",
+    "closedAt": "2026-08-22T07:05:47.142Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-22T07:01:47.142Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "JAB",
+        "mode": "veto",
+        "sentAt": "2026-08-22T07:02:47.142Z",
+        "text": "Slot zabít: jediný ověřený podklad je opakovaně publikovaný event UFC, bez nového FightAIQ běhu, fighter souboru nebo výsledku. Nový článek by jen opakoval téma.",
+        "evidenceRefs": [
+          "meeting:2026-08-21-mma-analysis",
+          "meeting:2026-08-21-mag-desk",
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+        ]
+      },
+      {
+        "agent": "QUILL",
+        "mode": "veto",
+        "sentAt": "2026-08-22T07:03:47.142Z",
+        "text": "Kill the slot. UFC Fight Night Hernandez vs. Rodrigues was published three times in consecutive days (Aug 19–21); event occurs Aug 22. No fresh angle, fighter development or card evolution exists to justify a fourth preview. Desk needs a different subject.",
+        "evidenceRefs": [
+          "meeting:2026-08-21-mma-analysis",
+          "meeting:2026-08-21-mag-desk",
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "veto",
+        "sentAt": "2026-08-22T07:04:47.142Z",
+        "text": "Zabijte slot: chybí nový ověřený subjekt i modelová data a event s Hernandezem je v indexu opakovaně pokrytý. Další preview by porušilo pravidlo čerstvosti.",
+        "evidenceRefs": [
+          "meeting:2026-08-21-mma-analysis",
+          "meeting:2026-08-21-mag-desk",
+          "event:ufc:event:ufc-fight-night-hernandez-vs-rodrigues"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-22T07:05:47.142Z",
+        "text": "AUDIT vetoed the room output: Zabijte slot: chybí nový ověřený subjekt i modelová data a event s Hernandezem je v indexu opakovaně pokrytý. Další preview by porušilo pravidlo čerstvosti."
+      }
+    ]
+  }
+}
