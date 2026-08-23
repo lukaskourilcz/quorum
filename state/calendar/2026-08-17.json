@@ -874,7 +874,9 @@
       "at": "2026-08-23T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-23-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Zabij slot: chybí aktuální ověřený subjekt a navíc je jediný uvedený UFC event již opakovaně publikovaný."
     },
     {
       "at": "2026-08-23T08:00:00.000Z",

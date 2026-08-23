@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260823070206-mag-editorial",
+  "phase": "mag-editorial",
+  "outcome": "VETO",
+  "summary": "AUDIT vetoed the room output: Zabij slot: chybí aktuální ověřený subjekt a navíc je jediný uvedený UFC event již opakovaně publikovaný.",
+  "evidenceRefs": [
+    "meeting:2026-08-22-mma-analysis",
+    "meeting:2026-08-22-mag-desk"
+  ],
+  "generatedAt": "2026-08-23T07:06:06.388Z"
+}
