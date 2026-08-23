@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-a48006d056497967",
+  "venture": "mma-files",
+  "packageHash": "12f3dfda3351b1f020e5514fd1b0c5eb3bed7efc89a9de9d2aa9482453b7c8a8",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "013dd2e9ce4f43982924b41a162546c091750e8b",
+  "deploymentUrl": "https://mma-files.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 013dd2e9ce4f43982924b41a162546c091750e8b is readable",
+      "checkedAt": "2026-08-23T08:05:41.908Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-23T08:05:41.908Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-23T08:05:41.908Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/cs/articles/ufc-alexander-hernandez?boardless_verify=12f3dfda3351-1787472341908",
+      "checkedAt": "2026-08-23T08:05:41.908Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and ufc-alexander-hernandez match",
+      "checkedAt": "2026-08-23T08:05:41.908Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 12f3dfda3351b1f020e5514fd1b0c5eb3bed7efc89a9de9d2aa9482453b7c8a8",
+      "checkedAt": "2026-08-23T08:05:41.908Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/images/articles/ufc-alexander-hernandez/hero.webp?boardless_verify=12f3dfda3351-1787472341908",
+      "checkedAt": "2026-08-23T08:05:41.908Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-23T08:05:41.908Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "MMAnytt · CC BY",
+      "checkedAt": "2026-08-23T08:05:41.908Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-23T08:04:59.378Z",
+  "completedAt": "2026-08-23T08:05:42.653Z"
+}

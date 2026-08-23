@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "12f3dfda3351b1f020e5514fd1b0c5eb3bed7efc89a9de9d2aa9482453b7c8a8",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "013dd2e9ce4f43982924b41a162546c091750e8b",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/ufc-alexander-hernandez",
+  "recordedAt": "2026-08-23T08:05:43.693Z"
+}
