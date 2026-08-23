@@ -913,13 +913,17 @@
       "at": "2026-08-23T12:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-afternoon",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-23-afternoon",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-23T13:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "dm-desk",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-23-dm-desk",
+      "decisionOneLiner": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped."
     },
     {
       "at": "2026-08-23T14:00:00.000Z",
