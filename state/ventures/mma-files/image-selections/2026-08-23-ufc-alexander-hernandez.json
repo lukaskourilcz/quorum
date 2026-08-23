@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-alexander-hernandez",
+  "date": "2026-08-23",
+  "rung": "entity-linked",
+  "selected": "wikidata:Q51883206",
+  "verdicts": [
+    {
+      "mode": "identity-advisory",
+      "considered": 1,
+      "selected": null,
+      "reason": "advisory-only",
+      "candidates": [
+        {
+          "candidateId": "wikidata:Q51883206",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "logo-or-watermark",
+            "embedded-text"
+          ],
+          "reason": "Shirtless weigh-in photo with UFC branding, sponsor logos, and event text burned into the frame—this is a document of a specific event rather than an illustrative portrait of the fighter.",
+          "sceneCs": "muž bez trička na oficiální váze, pozadí s logy"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002227
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-23T08:00:32.059Z"
+}

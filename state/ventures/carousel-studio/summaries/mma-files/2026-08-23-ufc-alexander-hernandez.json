@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "ufc-alexander-hernandez",
+  "date": "2026-08-23",
+  "locale": "cs",
+  "kicker": "MMA Files · 23. srp",
+  "headline": "Alexander Hernandez: lehká váha UFC s bilancí 18-9",
+  "coverLine": "Hernandez: osmnáct výher v lehké váze UFC",
+  "standfirst": "Profil bojovníka, jehož kariéra v lehké váze zahrnuje bleskový knockout i ztrátu technickým knockoutem.",
+  "passages": [
+    "Alexander Hernandez je aktivní bojovník lehké váhy UFC s bilancí 18 výher a 9 proher. Narozen 1. října 1992, trénuje v Ohana Academy Factory X.",
+    "Do širšího povědomí vstoupil 3. března 2018 na UFC 222, kde knokautoval Beneil Dariushe po pouhých 42 sekundách první kola. Krátká výměna, rychlý konec.",
+    "O necelé čtyři roky později přišla výrazná porážka.",
+    "Na UFC 282 dne 10. prosince 2022 zastavil Hernandeze Billy Quarantillo technickým knockoutem koleny a údery ve druhém kole, po 570 sekundách zápasu.",
+    "Z dosud zdokumentovaných zápasů v databázi zakončil Hernandez všechny výhry i prohry finišem. Míra dokončení přes výhry i prohry je stoprocentní, žádný ze zaznamenaných výsledků neskončil na body.",
+    "Bilance Dariushe podle dostupných dat činí 23-8-1. Quarantillo má podle jednoho zdroje 18-7-0, podle jiného 18-8-0. Rozpor zatím nebyl uzavřen."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "MMAnytt · CC BY · Wikimedia Commons"
+}
