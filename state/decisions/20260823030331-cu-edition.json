@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260823030331-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Torvaldsův přímý popis konkrétní ladicí relace je vzácný první pohled na to, kde AI asistence v kernelové práci opravdu stojí, a koriguje zároveň přehnaný optimismus i přehnaný pesimismus kolem nástrojů pro vývojáře.",
+  "evidenceRefs": [
+    "source:simonw",
+    "source:variety",
+    "source:the-verge",
+    "source:hn-frontpage",
+    "source:tensorfeed"
+  ],
+  "editionRef": "8025eeb6c50d966b97dc37233a252246d2c7cae16aff64f5689ac82d112c1720",
+  "generatedAt": "2026-08-23T03:03:36.627Z"
+}

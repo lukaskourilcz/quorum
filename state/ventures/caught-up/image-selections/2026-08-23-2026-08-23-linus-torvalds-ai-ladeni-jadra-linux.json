@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-23-linus-torvalds-ai-ladeni-jadra-linux",
+  "date": "2026-08-23",
+  "rung": "search",
+  "selected": "pexels:9242891",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:9242891",
+      "reason": "Hands assembling or working on a green motherboard with cables is authentic, well-lit, directly relevant to hardware/kernel work, and avoids all red flags.",
+      "candidates": [
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 3,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Museum display of vintage electronics feels off-topic for a software debugging article; the aesthetic and lighting read as dated.",
+          "sceneCs": "muzejní expozice starých počítačů"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "The circuit-board brain is the textbook example of an AI-cliché image that violates the rules against dated 2000s aesthetics and machine-generated appearance.",
+          "sceneCs": "mozek složený z obvodů"
+        },
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Shows hands working on a motherboard with actual tools—practical, grounded, and illustrates hardware work without looking artificial or dated.",
+          "sceneCs": "ruce pracující s základní deskou"
+        },
+        {
+          "candidateId": "pixabay:2528363",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Glowing red faces projected onto a circuit board is pure 2000s stock imagery cliché and looks synthetically generated.",
+          "sceneCs": "svítící obličeje na desce plošných spojů"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "The neon-pink thermal rendering of a chip is too stylized and falls into the dated holographic/glowing aesthetic prohibited by the rules.",
+          "sceneCs": "chip v neonově-růžovém tepelném zobrazení"
+        },
+        {
+          "candidateId": "pixabay:3963944",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "wrong-subject"
+          ],
+          "reason": "Abstract digital visualization with floating figures and graphs has nothing to do with kernel debugging and looks like generic AI-generated tech imagery.",
+          "sceneCs": "abstraktní digitální vizualizace s figurami"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Close-up of real motherboard components with heatsinks shows actual hardware clearly; practical and honest, though somewhat generic for this specific story.",
+          "sceneCs": "detailní pohled na součástky základní desky"
+        },
+        {
+          "candidateId": "pexels:9242892",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Hands soldering or working on a green PCB is authentic, well-lit, and directly illustrates the hands-on technical work implied by debugging—solid choice.",
+          "sceneCs": "ruce pracující na zelené desce plošných spojů"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Shows a recognisable face in profile, which is an automatic veto regardless of context.",
+          "sceneCs": "obličej člověka"
+        },
+        {
+          "candidateId": "pexels:9242891",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Hands assembling or working on a green motherboard with cables is authentic, well-lit, directly relevant to hardware/kernel work, and avoids all red flags.",
+          "sceneCs": "ruce pracující s deskou plošných spojů a kabely"
+        },
+        {
+          "candidateId": "pixabay:3382521",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Blue neon circuit-pattern brain is the epitome of prohibited 2000s holographic AI clichés—exactly what the rules forbid.",
+          "sceneCs": "neonová mozková síť"
+        },
+        {
+          "candidateId": "pexels:9242928",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Hands assembling a motherboard in good light is authentic, practical, clearly illustrates technical work, and has no dated or artificial styling.",
+          "sceneCs": "ruce montující základní desku"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.009139
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-23T03:03:31.627Z"
+}

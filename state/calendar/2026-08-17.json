@@ -828,19 +828,24 @@
       "at": "2026-08-22T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
       "at": "2026-08-22T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-22-night",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-23T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-23-cu-edition",
+      "decisionOneLiner": "Torvaldsův přímý popis konkrétní ladicí relace je vzácný první pohled na to, kde AI asistence v kernelové práci opravdu stojí, a koriguje zároveň přehnaný optimismus i přehnaný pes"
     },
     {
       "at": "2026-08-23T04:00:00.000Z",

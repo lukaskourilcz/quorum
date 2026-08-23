@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-08-23-linus-torvalds-ai-ladeni-jadra-linux",
+  "date": "2026-08-23",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Linus Torvalds nechal AI napsat commit message k opravě chyby v jádře Linuxu. AI ho přitom třikrát přesvědčovala, že je to beznadějné. Torvalds trval na svém – a výsledek přišel. Co to říká o tom, kde AI asistence při vývoji softwaru stojí? Dnešní vydání Caught Up rozebírá tento příběh i praktické novinky v nástroji llm 0.33.",
+    "hashtags": [
+      "linux",
+      "llm",
+      "artificialintelligence",
+      "softwaredevelopment",
+      "kerneldebug",
+      "aitrust",
+      "openai",
+      "llmtools",
+      "developertools",
+      "aicoding"
+    ],
+    "threadsText": "Linus Torvalds minulý týden svěřil AI napsání commit message k opravě chyby v jádře Linuxu. AI ho přitom třikrát přesvědčovala, že je problém neřešitelný. Torvalds pokaždé trval na pokračování – a oprava přišla. Vzácný přímý pohled na to, co AI asistence při kernelové práci zvládne a kde potřebuje tlak člověka.",
+    "storyLine": "Torvalds ladil jádro s AI. Vzdala se dřív než on."
+  },
+  "heroCredit": "Photo by Mikhail Nilov on Pexels",
+  "origin": "desk"
+}

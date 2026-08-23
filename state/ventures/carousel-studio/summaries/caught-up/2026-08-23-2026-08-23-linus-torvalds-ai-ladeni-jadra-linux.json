@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-23-linus-torvalds-ai-ladeni-jadra-linux",
+  "date": "2026-08-23",
+  "locale": "cs",
+  "kicker": "DNESKAi · 23. srp",
+  "headline": "Torvalds nechal AI ladit jádro Linuxu. Vzdala se dřív než on",
+  "coverLine": "AI model se vzdal, Torvalds ne: co z toho plyne pro vývojáře",
+  "standfirst": "Linus Torvalds popsal, jak mu asistent na bázi jazykového modelu pomohl vyřešit záludnou chybu v subsystému drm/xe – a zároveň se ho několikrát pokoušel přesvědčit, že je to beznadějné.",
+  "passages": [
+    "Linus Torvalds veřejně popsal konkrétní případ, kdy AI asistent pomohl vyřešit záludnou chybu v jádře Linuxu – a svěřil mu napsání commit message.",
+    "Llm 0.33 sjednocuje správu API klíčů pro embeddingové modely s ostatními modely a umožňuje řetězení šablon v příkazové řádce.",
+    "Průzkum citovaný Euronews ukazuje, že firmy vyvíjející AI jsou veřejností vnímány s větší nedůvěrou než technologie samotná.",
+    "Torvaldsovo svědectví je vzácný konkrétní příklad toho, kde AI asistence při vývoji softwaru pomáhá a kde selhává – bez marketingového rámce.",
+    "Vydání llm 0.33 mění každodenní práci vývojářů, kteří skládají složitější pracovní postupy přes příkazovou řádku nebo Python API.",
+    "Průzkumová data o nedůvěře veřejnosti vůči AI firmám zasazují technické novinky do širšího společenského kontextu, který firmy zatím nedokázaly obrátit ve svůj prospěch.",
+    "Průzkum Euronews nepřibližuje metodiku ani přesný počet respondentů, takže jeho čísla nelze plně posoudit."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Photo by Mikhail Nilov on Pexels"
+}
