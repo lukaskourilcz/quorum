@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-12T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-22:List of UFC events"
+    "source:wikipedia:2026-08-23:List of UFC events"
   ],
   "bouts": [
     {
@@ -68,7 +68,23 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-288:bout:jj-aldrich-vs-regina-tarin-8",
+      "id": "ufc:ufc-fight-night-288:bout:ramiro-jimenez-vs-rodrigo-vera-8",
+      "red": "ufc:ramiro-jimenez",
+      "blue": "ufc:rodrigo-vera",
+      "division": "featherweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-288:bout:rafa-garcia-vs-rong-zhu-9",
+      "red": "ufc:rafa-garcia",
+      "blue": "ufc:rong-zhu",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-288:bout:jj-aldrich-vs-regina-tarin-10",
       "red": "ufc:jj-aldrich",
       "blue": "ufc:regina-tarin",
       "division": "womens-flyweight",
@@ -76,5 +92,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-22T06:01:28.960Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }

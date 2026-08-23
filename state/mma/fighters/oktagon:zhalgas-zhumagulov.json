@@ -38,7 +38,7 @@
       "url": "https://en.wikipedia.org/wiki/Zhalgas_Zhumagulov",
       "publisher": "Wikipedia",
       "title": "Zhalgas Zhumagulov",
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +50,7 @@
         "source:wikidata:Q107485020",
         "source:wikipedia:64559517"
       ],
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "verified",
       "corroborated": true
     },
@@ -497,9 +497,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 1.885786,
-        "layoffDays": 77
+        "layoffDays": 78
       },
-      "updatedAt": "2026-08-22T06:01:28.960Z"
+      "updatedAt": "2026-08-23T06:03:51.296Z"
     }
   ],
   "rating": {
@@ -509,7 +509,7 @@
     "volatility": 0.06000115,
     "boutCount": 22,
     "asOfBoutRef": "oktagon:bout:history-067a78d62f7fd2607810",
-    "updatedAt": "2026-08-22T06:01:28.960Z"
+    "updatedAt": "2026-08-23T06:03:51.296Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2031,11 +2031,26 @@
         "source:wikipedia:64559517"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-23T06:03:51.296Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64559517"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-22T06:01:28.960Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }

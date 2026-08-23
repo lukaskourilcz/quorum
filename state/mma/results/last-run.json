@@ -4,12 +4,83 @@
   "windowDays": 10,
   "cards": [
     {
+      "name": "UFC Fight Night: Hernandez vs. Rodrigues",
+      "startsAtUtc": "2026-08-22T00:00:00.000Z",
+      "results": 13
+    },
+    {
       "name": "UFC 330: Makhachev vs. Machado Garry",
       "startsAtUtc": "2026-08-15T00:00:00.000Z",
       "results": 12
     }
   ],
-  "applied": [],
+  "applied": [
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-anthony-hernandez-vs-gregory-rodrigues-1",
+      "winner": "blue",
+      "method": "Decision (unanimous)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-serghei-spivac-vs-vitor-petrino-2",
+      "winner": "blue",
+      "method": "Decision (unanimous)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-reinier-de-ridder-vs-roman-dolidze-3",
+      "winner": "red",
+      "method": "TKO (punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-marquel-mederos-vs-mason-jones-4",
+      "winner": "red",
+      "method": "TKO (elbows and punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-carli-judice-vs-jeisla-chaves-5",
+      "winner": "red",
+      "method": "TKO (front kick to the body and punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-terrance-chatman-vs-anthony-wint-6",
+      "winner": "blue",
+      "method": "Technical Submission (arm-triangle choke)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-jamall-emmers-vs-lerryan-douglas-7",
+      "winner": "red",
+      "method": "TKO (punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-kennedy-nzechukwu-vs-shamil-gaziev-8",
+      "winner": "blue",
+      "method": "KO (punch)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-chris-padilla-vs-nasrat-haqparast-9",
+      "winner": "red",
+      "method": "Technical Submission (arm-triangle choke)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-marcio-barbosa-vs-ryan-kuse-12",
+      "winner": "red",
+      "method": "TKO (punch)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-gauge-young-vs-stanley-dorsainvil-9",
+      "winner": "blue",
+      "method": "Decision (unanimous)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-wesley-schultz-vs-jackson-mcvey-7",
+      "winner": "blue",
+      "method": "TKO (knee to the body and punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-shanelle-dyer-vs-elise-reed-8",
+      "winner": "red",
+      "method": "TKO (punches)"
+    }
+  ],
   "untracked": 12,
-  "generatedAt": "2026-08-22T06:01:28.960Z"
+  "generatedAt": "2026-08-23T06:03:51.296Z"
 }

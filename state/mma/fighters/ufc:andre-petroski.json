@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Andre_Petroski",
       "publisher": "Wikipedia",
       "title": "Andre Petroski",
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q112033004",
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "verified",
       "corroborated": true
     },
@@ -78,7 +78,7 @@
         "source:wikidata:Q112033004",
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "verified",
       "corroborated": true
     },
@@ -87,7 +87,7 @@
       "sourceRefs": [
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -96,7 +96,7 @@
       "sourceRefs": [
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -105,7 +105,7 @@
       "sourceRefs": [
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -115,7 +115,7 @@
         "source:cito-ufc:2026-08-05:fighter:3c4fbc90-5087-454a-80a0-82a53f381455",
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "verified",
       "corroborated": true
     },
@@ -124,7 +124,7 @@
       "sourceRefs": [
         "source:wikipedia:70178404"
       ],
-      "retrievedAt": "2026-08-21T06:01:25.374Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -187,7 +187,7 @@
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [],
-    "lastReviewedAt": "2026-08-21T06:01:25.374Z"
+    "lastReviewedAt": "2026-08-23T06:03:51.296Z"
   },
   "changeLog": [
     {
@@ -2306,11 +2306,29 @@
         "source:wikipedia:70178404"
       ],
       "note": "Reviewed the Wikipedia profile and found 19 historical fight rows."
+    },
+    {
+      "at": "2026-08-23T06:03:51.296Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178404"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 19 historical fight rows."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-21T06:01:25.374Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }

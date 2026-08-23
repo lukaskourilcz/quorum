@@ -14,7 +14,7 @@
   },
   "division": "heavyweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-08:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-23T06:03:51.296Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "note": "Result read from the UFC Fight Night: Hernandez vs. Rodrigues article after the event."
     }
   ],
   "discovery": {
@@ -53,9 +61,18 @@
     "source:wikipedia:2026-08-18:List of UFC events",
     "source:wikipedia:2026-08-19:List of UFC events",
     "source:wikipedia:2026-08-20:List of UFC events",
-    "source:wikipedia:2026-08-21:List of UFC events"
+    "source:wikipedia:2026-08-21:List of UFC events",
+    "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
   ],
-  "result": null,
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -70,7 +87,19 @@
         "source:wikipedia:2026-08-08:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-23T06:03:51.296Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "note": "Vitor Petrino def. Serghei Spivac by Decision (unanimous)."
     }
   ],
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }

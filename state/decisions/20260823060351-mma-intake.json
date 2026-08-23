@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260823060351-mma-intake",
+  "phase": "mma-intake",
+  "outcome": "PLAN",
+  "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+  "evidenceRefs": [
+    "source:cito-ufc:2026-08-23",
+    "source:the-odds-api:2026-08-23",
+    "source:wikimedia:2026-08-23",
+    "source:wikipedia-schedule:2026-08-23"
+  ],
+  "generatedAt": "2026-08-23T06:08:51.296Z"
+}

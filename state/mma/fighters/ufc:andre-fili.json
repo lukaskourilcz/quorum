@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Andre_Fili",
       "publisher": "Wikipedia",
       "title": "Andre Fili",
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q16233140",
         "source:wikipedia:40814604"
       ],
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "verified",
       "corroborated": true
     },
@@ -829,9 +829,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 2.48176,
-        "layoffDays": 63
+        "layoffDays": 64
       },
-      "updatedAt": "2026-08-22T06:01:28.960Z"
+      "updatedAt": "2026-08-23T06:03:51.296Z"
     }
   ],
   "rating": {
@@ -841,7 +841,7 @@
     "volatility": 0.06000571,
     "boutCount": 41,
     "asOfBoutRef": "ufc:bout:history-268251a0846104a02830",
-    "updatedAt": "2026-08-22T06:01:28.960Z"
+    "updatedAt": "2026-08-23T06:03:51.296Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2398,11 +2398,26 @@
         "source:wikipedia:40814604"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-23T06:03:51.296Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40814604"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-22T06:01:28.960Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }

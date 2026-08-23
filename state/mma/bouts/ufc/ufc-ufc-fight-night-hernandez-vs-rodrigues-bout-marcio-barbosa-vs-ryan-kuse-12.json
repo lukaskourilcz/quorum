@@ -14,7 +14,7 @@
   },
   "division": "featherweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-18:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-23T06:03:51.296Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "note": "Result read from the UFC Fight Night: Hernandez vs. Rodrigues article after the event."
     }
   ],
   "discovery": {
@@ -33,9 +41,18 @@
     ]
   },
   "sourceRefs": [
-    "source:wikipedia:2026-08-18:List of UFC events"
+    "source:wikipedia:2026-08-18:List of UFC events",
+    "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "TKO (punch)",
+    "round": 1,
+    "elapsedSeconds": 167,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -50,7 +67,19 @@
         "source:wikipedia:2026-08-18:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-23T06:03:51.296Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "note": "Márcio Barbosa def. Ryan Kuse by TKO (punch)."
     }
   ],
-  "updatedAt": "2026-08-18T06:01:20.935Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }

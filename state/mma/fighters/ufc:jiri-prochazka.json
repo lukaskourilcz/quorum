@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Ji%C5%99%C3%AD_Proch%C3%A1zka",
       "publisher": "Wikipedia",
       "title": "Jiří Procházka",
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q27917811",
         "source:wikipedia:64548777"
       ],
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "verified",
       "corroborated": true
     },
@@ -235,9 +235,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0.2,
         "fightsPerYear": 2.89875,
-        "layoffDays": 133
+        "layoffDays": 134
       },
-      "updatedAt": "2026-08-22T06:01:28.960Z"
+      "updatedAt": "2026-08-23T06:03:51.296Z"
     }
   ],
   "rating": {
@@ -247,7 +247,7 @@
     "volatility": 0.05999259,
     "boutCount": 8,
     "asOfBoutRef": "ufc:bout:history-ff1e9562a8c587783fb4",
-    "updatedAt": "2026-08-22T06:01:28.960Z"
+    "updatedAt": "2026-08-23T06:03:51.296Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1754,11 +1754,26 @@
         "source:wikipedia:66657574"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-23T06:03:51.296Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42031348",
+        "source:wikipedia:56012518",
+        "source:wikipedia:66657574"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-22T06:01:28.960Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }

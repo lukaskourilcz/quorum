@@ -73,7 +73,7 @@
       "url": "https://en.wikipedia.org/wiki/Ariane_Carnelossi",
       "publisher": "Wikipedia",
       "title": "Ariane Carnelossi",
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -86,7 +86,7 @@
         "source:wikidata:Q108911384",
         "source:wikipedia:68442521"
       ],
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "verified",
       "corroborated": true
     },
@@ -369,9 +369,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 0.855369,
-        "layoffDays": 77
+        "layoffDays": 78
       },
-      "updatedAt": "2026-08-22T06:01:28.960Z"
+      "updatedAt": "2026-08-23T06:03:51.296Z"
     }
   ],
   "rating": {
@@ -381,7 +381,7 @@
     "volatility": 0.05999954,
     "boutCount": 11,
     "asOfBoutRef": "ufc:bout:history-8f1280fc61894233ce08",
-    "updatedAt": "2026-08-22T06:01:28.960Z"
+    "updatedAt": "2026-08-23T06:03:51.296Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1984,11 +1984,26 @@
         "source:wikipedia:68442521"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-23T06:03:51.296Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:68442521"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-22T06:01:28.960Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }

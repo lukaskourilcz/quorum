@@ -3,18 +3,18 @@
   "status": "success",
   "processed": 12,
   "artifacts": [
+    "mma/fighters/ufc:ailin-perez.json",
     "mma/fighters/ufc:alateng-heili.json",
     "mma/fighters/ufc:alex-perez.json",
     "mma/fighters/ufc:alexa-grasso.json",
     "mma/fighters/ufc:alexandre-pantoja.json",
     "mma/fighters/ufc:alonzo-menifield.json",
     "mma/fighters/ufc:andre-lima.json",
-    "mma/fighters/ufc:anshul-jubli.json",
+    "mma/fighters/ufc:andre-petroski.json",
     "mma/fighters/ufc:aori-qileng.json",
     "mma/fighters/ufc:brando-pericic.json",
     "mma/fighters/ufc:brian-ortega.json",
-    "mma/fighters/ufc:conor-mcgregor.json",
     "mma/fighters/ufc:yair-rodriguez.json"
   ],
-  "generatedAt": "2026-08-22T06:01:28.960Z"
+  "generatedAt": "2026-08-23T06:03:51.296Z"
 }

@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Rose_Namajunas",
       "publisher": "Wikipedia",
       "title": "Rose Namajunas",
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -69,7 +69,7 @@
         "source:wikipedia:39957370",
         "source:wikipedia:47691727"
       ],
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "verified",
       "corroborated": true
     },
@@ -230,9 +230,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 0.708292,
-        "layoffDays": 882
+        "layoffDays": 883
       },
-      "updatedAt": "2026-08-22T06:01:28.960Z"
+      "updatedAt": "2026-08-23T06:03:51.296Z"
     }
   ],
   "rating": {
@@ -242,7 +242,7 @@
     "volatility": 0.05999904,
     "boutCount": 7,
     "asOfBoutRef": "ufc:bout:history-79a86e49e1376f9c2432",
-    "updatedAt": "2026-08-22T06:01:28.960Z"
+    "updatedAt": "2026-08-23T06:03:51.296Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1716,11 +1716,26 @@
         "source:wikipedia:63376607"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-23T06:03:51.296Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47691727",
+        "source:wikipedia:40078160",
+        "source:wikipedia:63376607"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-22T06:01:28.960Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }

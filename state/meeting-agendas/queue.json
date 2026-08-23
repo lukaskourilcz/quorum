@@ -201,7 +201,7 @@
       "requestedAt": "2026-08-19T06:02:00.779Z",
       "notBefore": "2026-08-19",
       "expiresAt": "2026-08-22T23:59:59.000Z",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "schemaVersion": "meeting-agenda/1",
@@ -258,7 +258,25 @@
       "notBefore": "2026-08-22",
       "expiresAt": "2026-08-25T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-2f4bf81935ebb3d0",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-23-mma-intake",
+      "summary": "Decide whether to block probability model run until critical fields reach 80%+ coverage, or proceed with sparse records flagged as incomplete in output.",
+      "evidenceRefs": [
+        "source:cito-ufc:2026-08-23",
+        "source:wikimedia:2026-08-23"
+      ],
+      "requestedAt": "2026-08-23T06:03:51.296Z",
+      "notBefore": "2026-08-23",
+      "expiresAt": "2026-08-26T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-22T06:01:28.960Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }

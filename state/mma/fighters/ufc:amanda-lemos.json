@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Amanda_Lemos",
       "publisher": "Wikipedia",
       "title": "Amanda Lemos",
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q98684485",
         "source:wikipedia:64535234"
       ],
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "verified",
       "corroborated": true
     },
@@ -605,9 +605,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0.2,
         "fightsPerYear": 2.155801,
-        "layoffDays": 14
+        "layoffDays": 15
       },
-      "updatedAt": "2026-08-22T06:01:28.960Z"
+      "updatedAt": "2026-08-23T06:03:51.296Z"
     }
   ],
   "rating": {
@@ -617,7 +617,7 @@
     "volatility": 0.06000426,
     "boutCount": 26,
     "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-gamrot-vs-salkilld-bout-amanda-lemos-vs-alexia-thainara-9",
-    "updatedAt": "2026-08-22T06:01:28.960Z"
+    "updatedAt": "2026-08-23T06:03:51.296Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2274,11 +2274,28 @@
         "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-23T06:03:51.296Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64535234",
+        "source:wikipedia:2026-08-13:UFC Fight Night: Gamrot vs. Salkilld",
+        "source:wikipedia:2026-08-12:UFC Fight Night: Gamrot vs. Salkilld"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-22T06:01:28.960Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }

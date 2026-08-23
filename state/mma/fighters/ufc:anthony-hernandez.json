@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Anthony_Hernandez",
       "publisher": "Wikipedia",
       "title": "Anthony Hernandez",
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q96372195",
         "source:wikipedia:64111674"
       ],
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "retrievedAt": "2026-08-23T06:03:51.296Z",
       "status": "verified",
       "corroborated": true
     },
@@ -263,6 +263,21 @@
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-anthony-hernandez-vs-gregory-rodrigues-1",
+      "eventRef": "ufc:event:ufc-fight-night-hernandez-vs-rodrigues",
+      "happenedAt": "2026-08-22T00:00:00.000Z",
+      "opponentRef": "ufc:gregory-rodrigues",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
     }
   ],
   "statsProfiles": [
@@ -272,11 +287,11 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:anthony-hernandez:history",
-      "bouts": 6,
+      "bouts": 7,
       "values": {
-        "bouts": 6,
+        "bouts": 7,
         "wins": 4,
-        "losses": 2,
+        "losses": 3,
         "draws": 0,
         "noContests": 0,
         "finishRate": 0,
@@ -286,23 +301,23 @@
         "koTkoWinShare": 0,
         "submissionWinShare": 0,
         "decisionWinShare": 1,
-        "averageElapsedSeconds": 1047.666667,
-        "recentThreeWinRate": 0.333333,
-        "recentFiveWinRate": 0.6,
-        "fightsPerYear": 0.619475,
-        "layoffDays": 182
+        "averageElapsedSeconds": 1112.285714,
+        "recentThreeWinRate": 0,
+        "recentFiveWinRate": 0.4,
+        "fightsPerYear": 0.700145,
+        "layoffDays": 1
       },
-      "updatedAt": "2026-08-22T06:01:28.960Z"
+      "updatedAt": "2026-08-23T06:03:51.296Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1478.43737523,
-    "deviation": 186.0556848,
-    "volatility": 0.06000041,
-    "boutCount": 6,
-    "asOfBoutRef": "ufc:bout:history-d8dd91d4fd4dc8a7d2c0",
-    "updatedAt": "2026-08-22T06:01:28.960Z"
+    "rating": 1421.64204574,
+    "deviation": 175.41302674,
+    "volatility": 0.06000016,
+    "boutCount": 7,
+    "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-anthony-hernandez-vs-gregory-rodrigues-1",
+    "updatedAt": "2026-08-23T06:03:51.296Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2063,11 +2078,27 @@
         "source:wikipedia:64111674"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-23T06:03:51.296Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64111674",
+        "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-22T06:01:28.960Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }

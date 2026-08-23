@@ -14,7 +14,7 @@
   },
   "division": "featherweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-16:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-23T06:03:51.296Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "note": "Result read from the UFC Fight Night: Hernandez vs. Rodrigues article after the event."
     }
   ],
   "discovery": {
@@ -41,9 +49,18 @@
     "source:wikipedia:2026-08-17:List of UFC events",
     "source:wikipedia:2026-08-19:List of UFC events",
     "source:wikipedia:2026-08-20:List of UFC events",
-    "source:wikipedia:2026-08-21:List of UFC events"
+    "source:wikipedia:2026-08-21:List of UFC events",
+    "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 218,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -58,7 +75,19 @@
         "source:wikipedia:2026-08-16:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-23T06:03:51.296Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "note": "Jamall Emmers def. Lerryan Douglas by TKO (punches)."
     }
   ],
-  "updatedAt": "2026-08-16T06:00:53.643Z"
+  "updatedAt": "2026-08-23T06:03:51.296Z"
 }
