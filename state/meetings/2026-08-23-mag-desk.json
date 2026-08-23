@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260823180134-mag-desk",
+  "date": "2026-08-23",
+  "phase": "mag-desk",
+  "fixture": false,
+  "status": "PAUSED",
+  "stage": "VALIDATION",
+  "operatingBrief": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent.",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "registered for this meeting but not asked anything, because it had nothing to decide",
+      "participated": false
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "registered for this meeting but not asked anything, because it had nothing to decide",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "registered for this meeting but not asked anything, because it had nothing to decide",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 10.564162949999991,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "CANVAS",
+      "summary": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "CANVAS",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Nothing was decided and nothing was authorized: a meeting with nothing to settle produces no work, spend, publishing or outreach.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-23T18:01:34.299Z",
+  "kind": "mag-desk",
+  "roomTranscript": {
+    "openedAt": "2026-08-23T18:01:34.298Z",
+    "closedAt": "2026-08-23T18:01:34.299Z",
+    "gavel": "CANVAS",
+    "setting": "Nothing had been queued for this meeting to decide, so it did not meet and nobody was asked anything.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-23T18:01:34.299Z",
+        "text": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent."
+      }
+    ]
+  }
+}

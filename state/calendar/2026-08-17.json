@@ -960,7 +960,9 @@
       "at": "2026-08-23T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-23-mag-desk",
+      "decisionOneLiner": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-23T19:00:00.000Z",
