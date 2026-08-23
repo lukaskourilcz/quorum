@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-23",
+  "packageHash": "8025eeb6c50d966b97dc37233a252246d2c7cae16aff64f5689ac82d112c1720",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "cd008e4af09e485fd07cc8b436bfcfedda09f15f",
+  "deliveredAt": "2026-08-23T03:10:42.832Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-23-linus-torvalds-ai-ladeni-jadra-linux",
+  "tags": [
+    "umela-inteligence",
+    "linux",
+    "nastroje-pro-vyvojare",
+    "spotrebitelska-elektronika",
+    "verejne-mineni",
+    "ladeni-kodu"
+  ]
+}
