@@ -1,0 +1,316 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260823150102-cu-product",
+  "date": "2026-08-23",
+  "phase": "cu-product",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Review SPARK's morning idea, read VAULT's ledger ruling, record a bounded verdict and inspect yesterday's delivery outcome.",
+  "participantReasons": [
+    {
+      "agent": "HERALD",
+      "reason": "owns product objective",
+      "participated": true
+    },
+    {
+      "agent": "SPARK",
+      "reason": "required by product-room preset",
+      "participated": true
+    },
+    {
+      "agent": "VAULT",
+      "reason": "required by product-room preset",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "required by product-room preset",
+      "participated": true
+    },
+    {
+      "agent": "VIZE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FORGE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PULSE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCRIBE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "LENS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "QUILL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RADAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "KEEPER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "THREADS",
+      "reason": "switched off for caught-up",
+      "participated": false
+    },
+    {
+      "agent": "INSTAGRAM",
+      "reason": "switched off for caught-up",
+      "participated": false
+    },
+    {
+      "agent": "PEOPLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "LEDGER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STET",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "HACEK",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FRAME",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RELAY",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "COHORT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FUNNEL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PALATE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCENE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STUNT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CORNER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "TAPE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VIG",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SONAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CANVAS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "JAB",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "REACH",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPLIT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "EASEL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "MOTIF",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "MAKO",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CHUM",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FOLIO",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PLOT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "GHOST",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "BOOKER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "LETOPIS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VERBA",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "TRIBUN",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.03,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 10.56416295,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "defer",
+    "summary": "Defer. No screened Caught Up idea arrived from the morning meeting.",
+    "evidenceRefs": []
+  },
+  "proposals": [],
+  "voteMatrix": [
+    {
+      "voter": "HERALD",
+      "firstChoice": "defer:NO_MORNING_IDEA",
+      "veto": false
+    },
+    {
+      "voter": "SPARK",
+      "firstChoice": "defer:NO_MORNING_IDEA",
+      "veto": false
+    },
+    {
+      "voter": "VAULT",
+      "firstChoice": "defer:NO_MORNING_IDEA",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "defer:NO_MORNING_IDEA",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Publishing is blocked (NO_POST): a product-room verdict authorizes no promotion.",
+  "eveningOutcome": "Yesterday's edition has a reconciled delivery receipt; no sentinel flag is recorded in Quorum state.",
+  "generatedAt": "2026-08-23T15:01:06.916Z",
+  "kind": "cu-product",
+  "roomTranscript": {
+    "openedAt": "2026-08-23T15:01:02.916Z",
+    "closedAt": "2026-08-23T15:01:06.916Z",
+    "gavel": "HERALD",
+    "setting": "Live Caught Up product room. Participants receive the compact idea index, not the raw JSONL ledger.",
+    "turns": [
+      {
+        "agent": "HERALD",
+        "mode": "gavel",
+        "sentAt": "2026-08-23T15:01:02.916Z",
+        "text": "The product room opened and closed without deliberating: the idea history had already settled this idea, so nothing was asked and nothing was spent."
+      },
+      {
+        "agent": "HERALD",
+        "mode": "close",
+        "sentAt": "2026-08-23T15:01:06.916Z",
+        "text": "Defer. No screened Caught Up idea arrived from the morning meeting."
+      }
+    ]
+  }
+}

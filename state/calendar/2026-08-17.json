@@ -936,7 +936,9 @@
       "at": "2026-08-23T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-23-cu-product",
+      "decisionOneLiner": "Defer. No screened Caught Up idea arrived from the morning meeting."
     },
     {
       "at": "2026-08-23T16:00:00.000Z",
