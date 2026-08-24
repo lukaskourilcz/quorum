@@ -37,7 +37,9 @@
       "at": "2026-08-24T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-24-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Nelze přiřadit článek: chybí konkrétní ověřený subjekt z dnešního jednání a dostupné záznamy potvrzují jen absenci modelového běhu. Slot zabít."
     },
     {
       "at": "2026-08-24T08:00:00.000Z",
