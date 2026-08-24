@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "edition-package/1",
+  "date": "2026-08-24",
+  "idempotencyKey": "0d60e4d1e54c135951d27dfe12bc34fca49dbd6d91e7e282e709c4d689f092a0",
+  "generation": {
+    "models": {
+      "curation": "claude-sonnet-4-6",
+      "writing": "claude-sonnet-4-6"
+    },
+    "costUsd": 0.41973825
+  },
+  "reason": "cu-edition decision meetings/2026-08-24-cu-edition",
+  "status": "no_edition",
+  "board": {
+    "meetingRef": "meetings/2026-08-24-cu-edition",
+    "roomUrl": "https://boardless-ai.vercel.app/meetings/2026-08-24-cu-edition",
+    "noEditionReason": "The article failed its own checks on every attempt the budget allowed, so nothing was published."
+  }
+}
