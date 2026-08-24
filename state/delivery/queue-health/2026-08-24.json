@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-08-24T07:04:10.468Z",
+  "checkedAt": "2026-08-24T08:07:04.842Z",
   "date": "2026-08-24",
   "ventures": [
     {
@@ -68,8 +68,8 @@
     },
     {
       "venture": "mma-files",
-      "url": "https://mma-files.vercel.app/cs/articles/ufc-alexander-hernandez",
-      "expected": "ufc-alexander-hernandez",
+      "url": "https://mma-files.vercel.app/cs/articles/ufc-aljamain-sterling",
+      "expected": "ufc-aljamain-sterling",
       "status": 200,
       "live": true
     }
