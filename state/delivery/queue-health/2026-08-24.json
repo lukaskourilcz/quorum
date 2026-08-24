@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-08-24T03:10:48.500Z",
+  "checkedAt": "2026-08-24T04:01:36.267Z",
   "date": "2026-08-24",
   "ventures": [
     {
@@ -63,8 +63,8 @@
       "venture": "caught-up",
       "url": "https://caughtup-ai.vercel.app/data/board/2026-08-24.json",
       "expected": "2026-08-24",
-      "status": 404,
-      "live": false
+      "status": 200,
+      "live": true
     },
     {
       "venture": "mma-files",

@@ -540,7 +540,7 @@ items in place. Lack of response never authorizes an action. -->
   A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
 
-- [ ] **DELIVERY-NOT-BUILT-CAUGHT-UP** — delivered but not being served.
+- [x] **DELIVERY-NOT-BUILT-CAUGHT-UP** — Resolved 2026-08-24: the site is serving it again. Original report: — delivered but not being served.
   https://caughtup-ai.vercel.app/data/board/2026-08-24.json answers 404, so the host has not rebuilt since 2026-08-24 landed on main.
   Nothing is wrong with the package: the commit is on main and its gate was green. This is the
   build that never ran. An empty commit to the magazine's main triggers one; if that is what it
