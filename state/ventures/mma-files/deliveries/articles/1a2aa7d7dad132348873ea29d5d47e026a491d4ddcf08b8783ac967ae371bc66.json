@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "1a2aa7d7dad132348873ea29d5d47e026a491d4ddcf08b8783ac967ae371bc66",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "8e4fdaa4c5de149cabe2dc0ad3756f6878375e81",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/ufc-aljamain-sterling",
+  "recordedAt": "2026-08-24T08:07:02.008Z"
+}
