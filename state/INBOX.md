@@ -539,3 +539,10 @@ items in place. Lack of response never authorizes an action. -->
 - [ ] **MMA-FILES-DELIVERY-2026-08-22-am** — hash_conflict: > mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-22-am-ufc-event-ufc-fight-night-hernandez-vs-rodrigues.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-22:am r.
   A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+- [ ] **DELIVERY-NOT-BUILT-CAUGHT-UP** — delivered but not being served.
+  https://caughtup-ai.vercel.app/data/board/2026-08-24.json answers 404, so the host has not rebuilt since 2026-08-24 landed on main.
+  Nothing is wrong with the package: the commit is on main and its gate was green. This is the
+  build that never ran. An empty commit to the magazine's main triggers one; if that is what it
+  takes twice, the host's git integration is the thing to look at.
+  [imp:5] [owner:me] [time:15m] [kind:deploy]
