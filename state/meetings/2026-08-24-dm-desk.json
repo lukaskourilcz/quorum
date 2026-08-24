@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260824130047-dm-desk",
+  "date": "2026-08-24",
+  "phase": "dm-desk",
+  "fixture": true,
+  "status": "PLAN",
+  "stage": "VALIDATION",
+  "operatingBrief": "Turn only code-selected private-store passages into bounded English draft recommendations for owner review; never publish.",
+  "participantReasons": [
+    {
+      "agent": "GHOST",
+      "reason": "writes one bounded recommendation response from the selected evidence packet",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "keeps source, budget and drafts-only boundaries visible in the record",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.08,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 11.347935999999992,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped.",
+    "evidenceRefs": [
+      "door-money:chunk:ch01-s02-c004"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "GHOST",
+      "summary": "A missed handoff became the only part of the invented route worth keeping. carousel: The synthetic scene supplies a concrete object, a practical reversal and a restrained finish.",
+      "evidenceRefs": [
+        "door-money:chunk:ch01-s02-c004"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "AUDIT",
+      "firstChoice": "owner-review",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Drafts only. Seven deterministic gates passed before every stored recommendation. Nothing was published, posted, scheduled, bought or sent; nothing was queued or used to create an account, and no channel or treasury path was touched. Owner approval remains mandatory.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-24T13:00:50.093Z",
+  "kind": "dm-desk",
+  "roomTranscript": {
+    "openedAt": "2026-08-24T13:00:47.093Z",
+    "closedAt": "2026-08-24T13:00:50.093Z",
+    "gavel": "GHOST",
+    "setting": "Labeled synthetic fixture. Selection and packet assembly ran; no provider or external system was contacted.",
+    "turns": [
+      {
+        "agent": "GHOST",
+        "mode": "gavel",
+        "sentAt": "2026-08-24T13:00:47.093Z",
+        "text": "The code-selected evidence packet is the whole writing boundary."
+      },
+      {
+        "agent": "GHOST",
+        "mode": "statement",
+        "sentAt": "2026-08-24T13:00:48.093Z",
+        "text": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped."
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-24T13:00:49.093Z",
+        "text": "Failed packages were dropped; stored records are drafts, not approvals. Nothing left the review boundary."
+      },
+      {
+        "agent": "GHOST",
+        "mode": "close",
+        "sentAt": "2026-08-24T13:00:50.093Z",
+        "text": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped."
+      }
+    ]
+  }
+}
