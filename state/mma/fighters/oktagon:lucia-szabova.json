@@ -38,7 +38,7 @@
       "url": "https://en.wikipedia.org/wiki/Lucia_Szabov%C3%A1",
       "publisher": "Wikipedia",
       "title": "Lucia Szabová",
-      "retrievedAt": "2026-08-23T06:03:51.296Z",
+      "retrievedAt": "2026-08-24T06:00:32.886Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +50,7 @@
         "source:wikidata:Q134352895",
         "source:wikipedia:83844409"
       ],
-      "retrievedAt": "2026-08-23T06:03:51.296Z",
+      "retrievedAt": "2026-08-24T06:00:32.886Z",
       "status": "verified",
       "corroborated": true
     },
@@ -265,9 +265,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 1.581136,
-        "layoffDays": 22
+        "layoffDays": 23
       },
-      "updatedAt": "2026-08-23T06:03:51.296Z"
+      "updatedAt": "2026-08-24T06:00:32.886Z"
     }
   ],
   "rating": {
@@ -277,7 +277,7 @@
     "volatility": 0.05999392,
     "boutCount": 10,
     "asOfBoutRef": "oktagon:bout:history-a83fb3b727d03ecfe6dd",
-    "updatedAt": "2026-08-23T06:03:51.296Z"
+    "updatedAt": "2026-08-24T06:00:32.886Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2392,11 +2392,24 @@
         "source:wikipedia:83844409"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-24T06:00:32.886Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:83844409"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.5,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-23T06:03:51.296Z"
+  "updatedAt": "2026-08-24T06:00:32.886Z"
 }

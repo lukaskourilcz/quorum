@@ -14,19 +14,24 @@
       "at": "2026-08-24T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The run behind this meeting failed before it finished."
     },
     {
       "at": "2026-08-24T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ms-daily",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-24-ms-daily",
+      "decisionOneLiner": "No package was drafted. devshark: model-output-invalid."
     },
     {
       "at": "2026-08-24T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-intake",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-24-mma-intake",
+      "decisionOneLiner": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
     },
     {
       "at": "2026-08-24T07:00:00.000Z",

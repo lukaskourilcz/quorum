@@ -14,7 +14,7 @@
   },
   "division": "womens-strawweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-15:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-24T06:00:32.886Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-24:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "note": "Result read from the UFC Fight Night: Hernandez vs. Rodrigues article after the event."
     }
   ],
   "discovery": {
@@ -33,9 +41,18 @@
     ]
   },
   "sourceRefs": [
-    "source:wikipedia:2026-08-15:List of UFC events"
+    "source:wikipedia:2026-08-15:List of UFC events",
+    "source:wikipedia:2026-08-24:UFC Fight Night: Hernandez vs. Rodrigues"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 3,
+    "elapsedSeconds": 702,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-24:UFC Fight Night: Hernandez vs. Rodrigues"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -50,7 +67,19 @@
         "source:wikipedia:2026-08-15:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-24T06:00:32.886Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-24:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "note": "Shanelle Dyer def. Elise Reed by TKO (punches)."
     }
   ],
-  "updatedAt": "2026-08-15T06:01:47.325Z"
+  "updatedAt": "2026-08-24T06:00:32.886Z"
 }

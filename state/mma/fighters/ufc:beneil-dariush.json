@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Beneil_Dariush",
       "publisher": "Wikipedia",
       "title": "Beneil Dariush",
-      "retrievedAt": "2026-08-23T06:03:51.296Z",
+      "retrievedAt": "2026-08-24T06:00:32.886Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q17505060",
         "source:wikipedia:43536705"
       ],
-      "retrievedAt": "2026-08-23T06:03:51.296Z",
+      "retrievedAt": "2026-08-24T06:00:32.886Z",
       "status": "verified",
       "corroborated": true
     },
@@ -740,9 +740,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0.2,
         "fightsPerYear": 2.128098,
-        "layoffDays": 113
+        "layoffDays": 114
       },
-      "updatedAt": "2026-08-23T06:03:51.296Z"
+      "updatedAt": "2026-08-24T06:00:32.886Z"
     }
   ],
   "rating": {
@@ -752,7 +752,7 @@
     "volatility": 0.06000887,
     "boutCount": 35,
     "asOfBoutRef": "ufc:bout:history-0ece9616e00d6efdfbac",
-    "updatedAt": "2026-08-23T06:03:51.296Z"
+    "updatedAt": "2026-08-24T06:00:32.886Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2378,11 +2378,27 @@
         "source:wikipedia:27167974"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-24T06:00:32.886Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43536705",
+        "source:wikipedia:27167974"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-23T06:03:51.296Z"
+  "updatedAt": "2026-08-24T06:00:32.886Z"
 }

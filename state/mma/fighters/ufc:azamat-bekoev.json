@@ -62,7 +62,7 @@
       "url": "https://en.wikipedia.org/wiki/Azamat_Bekoev",
       "publisher": "Wikipedia",
       "title": "Azamat Bekoev",
-      "retrievedAt": "2026-08-23T06:03:51.296Z",
+      "retrievedAt": "2026-08-24T06:00:32.886Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -76,7 +76,7 @@
         "source:wikidata:Q124754561",
         "source:wikipedia:79879282"
       ],
-      "retrievedAt": "2026-08-23T06:03:51.296Z",
+      "retrievedAt": "2026-08-24T06:00:32.886Z",
       "status": "verified",
       "corroborated": true
     },
@@ -542,9 +542,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 2.091446,
-        "layoffDays": 141
+        "layoffDays": 142
       },
-      "updatedAt": "2026-08-23T06:03:51.296Z"
+      "updatedAt": "2026-08-24T06:00:32.886Z"
     }
   ],
   "rating": {
@@ -554,7 +554,7 @@
     "volatility": 0.06000056,
     "boutCount": 23,
     "asOfBoutRef": "ufc:bout:history-afa3deeda91a90d9c115",
-    "updatedAt": "2026-08-23T06:03:51.296Z"
+    "updatedAt": "2026-08-24T06:00:32.886Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2147,11 +2147,26 @@
         "source:wikipedia:79879282"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-24T06:00:32.886Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:79879282"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-23T06:03:51.296Z"
+  "updatedAt": "2026-08-24T06:00:32.886Z"
 }

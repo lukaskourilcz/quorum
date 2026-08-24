@@ -14,7 +14,7 @@
   },
   "division": "womens-flyweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-08:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-24T06:00:32.886Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-24:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "note": "Result read from the UFC Fight Night: Hernandez vs. Rodrigues article after the event."
     }
   ],
   "discovery": {
@@ -41,9 +49,18 @@
     "source:wikipedia:2026-08-12:List of UFC events",
     "source:wikipedia:2026-08-13:List of UFC events",
     "source:wikipedia:2026-08-14:List of UFC events",
-    "source:wikipedia:2026-08-15:List of UFC events"
+    "source:wikipedia:2026-08-15:List of UFC events",
+    "source:wikipedia:2026-08-24:UFC Fight Night: Hernandez vs. Rodrigues"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "TKO (front kick to the body and punches)",
+    "round": 1,
+    "elapsedSeconds": 99,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-24:UFC Fight Night: Hernandez vs. Rodrigues"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -58,7 +75,19 @@
         "source:wikipedia:2026-08-08:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-24T06:00:32.886Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-24:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "note": "Carli Judice def. Jeisla Chaves by TKO (front kick to the body and punches)."
     }
   ],
-  "updatedAt": "2026-08-08T06:01:41.482Z"
+  "updatedAt": "2026-08-24T06:00:32.886Z"
 }

@@ -3,13 +3,14 @@
   "id": "ufc:dricus-du-plessis",
   "slug": "dricus-du-plessis",
   "org": "ufc",
-  "canonicalName": "Dricus du Plessis",
+  "canonicalName": "Dricus Du Plessis",
   "aliases": [],
   "identity": {
     "wikidataId": "Q48870794",
     "wikipediaTitle": "Dricus du Plessis",
     "externalIds": {
-      "wikipediaPageId": "62595898"
+      "wikipediaPageId": "62595898",
+      "cito": "a1cafacc-8d8b-464e-b860-f1876e2add90"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-08-24:fighter:a1cafacc-8d8b-464e-b860-f1876e2add90",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Dricus Du Plessis",
+      "retrievedAt": "2026-08-24T06:00:32.886Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q48870794",
       "url": "https://www.wikidata.org/wiki/Q48870794",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Dricus_du_Plessis",
       "publisher": "Wikipedia",
       "title": "Dricus du Plessis",
-      "retrievedAt": "2026-08-23T06:03:51.296Z",
+      "retrievedAt": "2026-08-24T06:00:32.886Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +67,7 @@
         "source:wikidata:Q48870794",
         "source:wikipedia:62595898"
       ],
-      "retrievedAt": "2026-08-23T06:03:51.296Z",
+      "retrievedAt": "2026-08-24T06:00:32.886Z",
       "status": "verified",
       "corroborated": true
     },
@@ -93,11 +101,12 @@
     "record": {
       "value": "24-3-0",
       "sourceRefs": [
+        "source:cito-ufc:2026-08-24:fighter:a1cafacc-8d8b-464e-b860-f1876e2add90",
         "source:wikipedia:62595898"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-08-24T06:00:32.886Z",
+      "status": "verified",
+      "corroborated": true
     },
     "dateOfBirth": {
       "value": "1994-01-14",
@@ -114,6 +123,15 @@
         "source:wikidata:Q48870794"
       ],
       "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "middleweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-24:fighter:a1cafacc-8d8b-464e-b860-f1876e2add90"
+      ],
+      "retrievedAt": "2026-08-24T06:00:32.886Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -134,6 +152,20 @@
         {
           "value": 182.88,
           "sourceRef": "source:wikipedia:62595898"
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "field": "stance",
+      "values": [
+        {
+          "value": "orthodox",
+          "sourceRef": "source:wikipedia:62595898"
+        },
+        {
+          "value": "switch",
+          "sourceRef": "source:cito-ufc:2026-08-24:fighter:a1cafacc-8d8b-464e-b860-f1876e2add90"
         }
       ],
       "status": "open"
@@ -346,9 +378,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 2.720154,
-        "layoffDays": 36
+        "layoffDays": 37
       },
-      "updatedAt": "2026-08-23T06:03:51.296Z"
+      "updatedAt": "2026-08-24T06:00:32.886Z"
     }
   ],
   "rating": {
@@ -358,12 +390,11 @@
     "volatility": 0.05998999,
     "boutCount": 12,
     "asOfBoutRef": "ufc:bout:history-de7ea506536dccdb23ea",
-    "updatedAt": "2026-08-23T06:03:51.296Z"
+    "updatedAt": "2026-08-24T06:00:32.886Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
       "record-history-incomplete"
     ],
     "lastReviewedAt": "2026-08-03T18:14:46.640Z"
@@ -2092,11 +2123,40 @@
         "source:wikipedia:42944791"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-24T06:00:32.886Z",
+      "kind": "source-refresh",
+      "fields": [
+        "division",
+        "record"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-08-24:fighter:a1cafacc-8d8b-464e-b860-f1876e2add90"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-08-24T06:00:32.886Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26689399",
+        "source:wikipedia:62595898",
+        "source:wikipedia:42944791"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.875,
-  "corroboration": 0.125,
+  "completeness": 1,
+  "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-23T06:03:51.296Z"
+  "updatedAt": "2026-08-24T06:00:32.886Z"
 }

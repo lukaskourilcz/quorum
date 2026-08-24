@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-12T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-23:2026 in Oktagon MMA"
+    "source:wikipedia:2026-08-24:2026 in Oktagon MMA"
   ],
   "bouts": [
     {
@@ -44,7 +44,15 @@
       "status": "announced"
     },
     {
-      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:jakub-dohnal-vs-vojto-barborik-5",
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:daniel-ligocki-vs-brajan-przysiwek-5",
+      "red": "oktagon:daniel-ligocki",
+      "blue": "oktagon:brajan-przysiwek",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:jakub-dohnal-vs-vojto-barborik-6",
       "red": "oktagon:jakub-dohnal",
       "blue": "oktagon:vojto-barborik",
       "division": "lightweight",
@@ -52,7 +60,7 @@
       "status": "announced"
     },
     {
-      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:tomas-ciganik-vs-murat-tuysuz-6",
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:tomas-ciganik-vs-murat-tuysuz-7",
       "red": "oktagon:tomas-ciganik",
       "blue": "oktagon:murat-tuysuz",
       "division": "lightweight",
@@ -60,18 +68,10 @@
       "status": "announced"
     },
     {
-      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:niamh-kinehan-vs-alana-cook-7",
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:niamh-kinehan-vs-alana-cook-8",
       "red": "oktagon:niamh-kinehan",
       "blue": "oktagon:alana-cook",
       "division": "womens-bantamweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:simon-bruknar-vs-nathan-haywood-8",
-      "red": "oktagon:simon-bruknar",
-      "blue": "oktagon:nathan-haywood",
-      "division": "bantamweight",
       "scheduledRounds": 3,
       "status": "announced"
     },
@@ -82,7 +82,15 @@
       "division": "light-heavyweight",
       "scheduledRounds": 3,
       "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:simon-bruknar-vs-nathan-haywood-10",
+      "red": "oktagon:simon-bruknar",
+      "blue": "oktagon:nathan-haywood",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-23T06:03:51.296Z"
+  "updatedAt": "2026-08-24T06:00:32.886Z"
 }

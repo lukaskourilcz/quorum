@@ -1,0 +1,185 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260824060032-mma-intake",
+  "date": "2026-08-24",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.016239,
+    "monthAllInUsd": 11.221883999999987,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-24",
+      "source:cito-ufc:2026-08-24",
+      "source:wikimedia:2026-08-24",
+      "source:wikipedia-schedule:2026-08-24"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "MMA intake phase shows healthy source pipeline (4/5 active, 53–93 items each) and seven verified cards in horizon. Critical blocker: 50 fighters tracked, zero complete on all fields. Next: two-source validation pass on height/reach for Nurmagomedov card (5 days).",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-24",
+        "source:cito-ufc:2026-08-24",
+        "source:wikimedia:2026-08-24",
+        "source:wikipedia-schedule:2026-08-24"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon roster coverage is broad, but 0 of 50 fighter records meet critical-field completeness; no model use is safe. Verify identities, measurements, stances and weigh-ins from a second provider.",
+      "evidenceRefs": [
+        "source:cito-ufc:2026-08-24",
+        "source:wikimedia:2026-08-24",
+        "source:wikipedia-schedule:2026-08-24"
+      ]
+    },
+    {
+      "agent": "TAPE",
+      "summary": "No fight-week card inside three-day window. UFC and Oktagon rosters 80 and 13 pages resolved. Critical fields missing on 50 fighters across height, reach, stance. Next safe action: file completion work before odds model run.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-24",
+        "source:cito-ufc:2026-08-24",
+        "source:wikimedia:2026-08-24",
+        "source:wikipedia-schedule:2026-08-24"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260824060032-MMA-INTAKE-01",
+      "owner": "FORGE",
+      "summary": "Build a two-source reconciliation CLI that flags missing height/reach on fighters in the next three events (Nurmagomedov, Hooker, Oktagon 93). Output CSV with fighter name, event, sources consulted, gap category.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260824060032-MMA-INTAKE-02",
+      "owner": "SPOTTER",
+      "summary": "Resolve Oktagon fighter identities and critical fields with independent regional or official sources before any model intake.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260824060032-MMA-INTAKE-03",
+      "owner": "TAPE",
+      "summary": "Backfill heightCm, reachCm and stance for 50 fighters seen in scheduled cards before model run ingests odds data.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Data only. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-24",
+      "source:cito-ufc:2026-08-24",
+      "source:wikimedia:2026-08-24",
+      "source:wikipedia-schedule:2026-08-24"
+    ]
+  },
+  "generatedAt": "2026-08-24T06:04:32.886Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-24T06:00:32.886Z",
+    "closedAt": "2026-08-24T06:04:32.886Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-24T06:00:32.886Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-24T06:01:32.886Z",
+        "text": "MMA intake phase shows healthy source pipeline (4/5 active, 53–93 items each) and seven verified cards in horizon. Critical blocker: 50 fighters tracked, zero complete on all fields. Next: two-source validation pass on height/reach for Nurmagomedov card (5 days).",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-24",
+          "source:cito-ufc:2026-08-24",
+          "source:wikimedia:2026-08-24",
+          "source:wikipedia-schedule:2026-08-24"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-24T06:02:32.886Z",
+        "text": "Oktagon roster coverage is broad, but 0 of 50 fighter records meet critical-field completeness; no model use is safe. Verify identities, measurements, stances and weigh-ins from a second provider.",
+        "evidenceRefs": [
+          "source:cito-ufc:2026-08-24",
+          "source:wikimedia:2026-08-24",
+          "source:wikipedia-schedule:2026-08-24"
+        ]
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-24T06:03:32.886Z",
+        "text": "No fight-week card inside three-day window. UFC and Oktagon rosters 80 and 13 pages resolved. Critical fields missing on 50 fighters across height, reach, stance. Next safe action: file completion work before odds model run.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-24",
+          "source:cito-ufc:2026-08-24",
+          "source:wikimedia:2026-08-24",
+          "source:wikipedia-schedule:2026-08-24"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-24T06:04:32.886Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}
