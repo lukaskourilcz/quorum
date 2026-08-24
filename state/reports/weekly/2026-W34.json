@@ -1,0 +1,247 @@
+{
+  "schemaVersion": "ops-report/1",
+  "period": "weekly",
+  "periodKey": "2026-W34",
+  "generatedAt": "2026-08-24T20:01:18.843Z",
+  "meetings": {
+    "scheduled": 126,
+    "held": 60,
+    "skipped": [
+      {
+        "date": "2026-08-17",
+        "phase": "cu-product",
+        "reason": "The run behind this meeting failed before it finished."
+      },
+      {
+        "date": "2026-08-17",
+        "phase": "kv-desk",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-08-17",
+        "phase": "tt-marketing",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-08-18",
+        "phase": "kv-desk",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-08-18",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-08-18",
+        "phase": "tt-marketing",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-08-19",
+        "phase": "kv-desk",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-08-19",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-08-19",
+        "phase": "tt-marketing",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-08-20",
+        "phase": "cu-product",
+        "reason": "The run behind this meeting failed before it finished."
+      },
+      {
+        "date": "2026-08-20",
+        "phase": "dm-growth",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-08-20",
+        "phase": "kv-desk",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-08-20",
+        "phase": "tt-marketing",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-08-21",
+        "phase": "kv-desk",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-08-21",
+        "phase": "morning",
+        "reason": "The run behind this meeting failed before it finished."
+      },
+      {
+        "date": "2026-08-21",
+        "phase": "tt-marketing",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-08-22",
+        "phase": "kv-desk",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-08-22",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-08-22",
+        "phase": "tt-marketing",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-08-23",
+        "phase": "kv-desk",
+        "reason": "The countersign-aware budget shape disabled this phase."
+      },
+      {
+        "date": "2026-08-23",
+        "phase": "morning",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      },
+      {
+        "date": "2026-08-23",
+        "phase": "tt-marketing",
+        "reason": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
+      }
+    ],
+    "missingDays": []
+  },
+  "spend": {
+    "periodUsd": 4.23180835,
+    "mtdUsd": 11.347936,
+    "capUsd": 30,
+    "byVenture": {
+      "caught-up": 1.79684775,
+      "global": 1.2381456,
+      "marketingshark": 0.244338,
+      "mma-files": 0.547005,
+      "titty-tuesdays": 0.285977,
+      "fightaiq": 0.118157,
+      "door-money": 0.001338
+    }
+  },
+  "content": {
+    "published": [],
+    "scores": null
+  },
+  "quality": {
+    "vetoRate": 0.0986,
+    "firstPassRate": null,
+    "retryRate": null
+  },
+  "incidents": [
+    {
+      "kind": "dropped-seat",
+      "date": "2026-08-17",
+      "note": "VIZE: Unparsable on both attempts: Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-08-17",
+      "note": "FORGE: Unparsable on both attempts: Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-08-20",
+      "note": "VIZE: Unparsable on both attempts: Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "kind": "dropped-seat",
+      "date": "2026-08-20",
+      "note": "FORGE: Unparsable on both attempts: Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    }
+  ],
+  "fixTasks": {
+    "opened": 0,
+    "closed": 0
+  },
+  "perVenture": [
+    {
+      "ventureId": "booksofhistory",
+      "verdictSummary": "needs-attention",
+      "outputs": 0,
+      "spendUsd": 0
+    },
+    {
+      "ventureId": "carousel-studio",
+      "verdictSummary": "on-track",
+      "outputs": 0,
+      "spendUsd": 0
+    },
+    {
+      "ventureId": "caught-up",
+      "verdictSummary": "on-track",
+      "outputs": 0,
+      "spendUsd": 1.79684775
+    },
+    {
+      "ventureId": "door-money",
+      "verdictSummary": "needs-attention",
+      "outputs": 0,
+      "spendUsd": 0.001338
+    },
+    {
+      "ventureId": "fightaiq",
+      "verdictSummary": "needs-attention",
+      "outputs": 0,
+      "spendUsd": 0.118157
+    },
+    {
+      "ventureId": "global",
+      "verdictSummary": "no verdict recorded this period",
+      "outputs": 0,
+      "spendUsd": 1.2381456
+    },
+    {
+      "ventureId": "goviral",
+      "verdictSummary": "needs-attention",
+      "outputs": 0,
+      "spendUsd": 0
+    },
+    {
+      "ventureId": "kvorum",
+      "verdictSummary": "stalled",
+      "outputs": 0,
+      "spendUsd": 0
+    },
+    {
+      "ventureId": "marketingshark",
+      "verdictSummary": "stalled",
+      "outputs": 0,
+      "spendUsd": 0.244338
+    },
+    {
+      "ventureId": "mma-files",
+      "verdictSummary": "needs-attention",
+      "outputs": 0,
+      "spendUsd": 0.547005
+    },
+    {
+      "ventureId": "tehdejsi-svet",
+      "verdictSummary": "needs-attention",
+      "outputs": 0,
+      "spendUsd": 0
+    },
+    {
+      "ventureId": "titty-tuesdays",
+      "verdictSummary": "needs-attention",
+      "outputs": 0,
+      "spendUsd": 0.285977
+    }
+  ],
+  "narrative": null
+}
