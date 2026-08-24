@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-aljamain-sterling",
+  "date": "2026-08-24",
+  "rung": "entity-linked",
+  "selected": "wikidata:Q17403242",
+  "verdicts": [
+    {
+      "mode": "identity-advisory",
+      "considered": 1,
+      "selected": null,
+      "reason": "advisory-only",
+      "candidates": [
+        {
+          "candidateId": "wikidata:Q17403242",
+          "provider": "wikimedia",
+          "fit": 7,
+          "vetoes": [
+            "logo-or-watermark"
+          ],
+          "reason": "Sharp portrait of the subject in appropriate context, but UFC logos and sponsor boards visible in background prevent use as lead image.",
+          "sceneCs": "portrét muže bez košile s řetězy"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002121
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-24T08:01:46.960Z"
+}

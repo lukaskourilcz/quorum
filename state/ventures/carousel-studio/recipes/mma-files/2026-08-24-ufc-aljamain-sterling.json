@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "carousel-recipe/1",
+  "venture": "mma-files",
+  "slug": "ufc-aljamain-sterling",
+  "date": "2026-08-24",
+  "family": "gutter",
+  "variant": "A",
+  "accentSwap": false,
+  "treatment": "mono",
+  "typeScale": 1,
+  "phaseSeed": 0,
+  "summaryRef": "ventures/carousel-studio/summaries/mma-files/2026-08-24-ufc-aljamain-sterling.json",
+  "copyRef": "ventures/carousel-studio/social-copy/mma-files/2026-08-24-ufc-aljamain-sterling.json"
+}

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "ufc-aljamain-sterling",
+  "date": "2026-08-24",
+  "locale": "cs",
+  "kicker": "MMA Files · 24. srp",
+  "headline": "Aljamain Sterling: profil bojovníka s rekordem 26–5",
+  "coverLine": "Sterling porazil Ortegu na body loni v srpnu",
+  "standfirst": "Sterling porazil Briana Ortegu na body a drží bilanci 26 výher a 5 porážek. Přehled jeho nejdůležitějších zápasů v UFC.",
+  "passages": [
+    "Aljamain Sterling vstoupil do roku 2026 s bilancí 26 výher a 5 porážek. Trénuje v Serra-Longo Fight Team a v kariéře prošel třemi zásadními soupeřstvími, která jeho profil formovala nejvýrazněji.",
+    "Naposledy nastoupil 23. srpna 2025 na UFC Fight Night: Walker vs. Zhang, kde se utkal s Brianem Ortegou. Sterling zvítězil jednomyslným rozhodnutím rozhodčích po pěti kolech.",
+    "Před tím se dvakrát střetl s Petrem Yanem. Na UFC 259 dne 6. března 2021 získal Sterling titul diskvalifikací ve čtvrtém kole, poté co Yan zasadil nezákonné koleno.",
+    "Odveta na UFC 273 dne 9. dubna 2022 skončila po pěti kolech rozděleným rozhodnutím opět ve Sterlingův prospěch.",
+    "Serpentina se přetrhla na UFC 292, kde 19. srpna 2023 Sterling narazil na Seana O'Malleyho. Ten ho zastavil technickým knockoutem údery ve druhém kole.",
+    "Sterling, narozený 31. července 1989, měří 170 centimetrů. Bojuje v ortodoxním postoji."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "MMAnytt · CC BY · Wikimedia Commons"
+}
