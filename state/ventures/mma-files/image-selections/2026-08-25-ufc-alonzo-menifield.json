@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-alonzo-menifield",
+  "date": "2026-08-25",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:12627322",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "logo-or-watermark"
+          ],
+          "reason": "The image contains a prominent SHOWTIME sports logo/watermark at the top center of the frame, which violates the no-logo rule.",
+          "sceneCs": "oktagón se zápasníky v kleci během zápasu"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002183
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:112399571",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "dated-aesthetic",
+            "logo-or-watermark"
+          ],
+          "reason": "This is a massive arena production shot with heavy lighting effects and what appears to be sponsor branding—the dated mid-2000s style of the setup and the glowing blue/pink lens flare aesthetic are disqualifying for a serious MMA article.",
+          "sceneCs": "osvětlená aréna s davem a velkoplošným displejem"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002276
+    },
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustrative:37544651",
+          "provider": "wikimedia",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "This is a concert or stage event with theatrical lighting and smoke effects, entirely unrelated to mixed martial arts or the UFC 331 article about fighter Alonzo Menifield.",
+          "sceneCs": "scéna s osvětlením a kouřem"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002259
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-25T08:01:13.143Z"
+}

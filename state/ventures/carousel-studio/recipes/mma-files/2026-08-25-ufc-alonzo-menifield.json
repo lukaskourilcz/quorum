@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "carousel-recipe/1",
+  "venture": "mma-files",
+  "slug": "ufc-alonzo-menifield",
+  "date": "2026-08-25",
+  "family": "bevel",
+  "variant": "A",
+  "accentSwap": true,
+  "treatment": "mono",
+  "typeScale": 1,
+  "phaseSeed": 2,
+  "summaryRef": "ventures/carousel-studio/summaries/mma-files/2026-08-25-ufc-alonzo-menifield.json",
+  "copyRef": "ventures/carousel-studio/social-copy/mma-files/2026-08-25-ufc-alonzo-menifield.json"
+}

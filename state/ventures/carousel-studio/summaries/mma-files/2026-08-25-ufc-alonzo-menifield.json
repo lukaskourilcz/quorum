@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "ufc-alonzo-menifield",
+  "date": "2026-08-25",
+  "locale": "cs",
+  "kicker": "MMA Files · 25. srp",
+  "headline": "Menifield míří na UFC 331 s bilancí 18-6-1 a dvěma KO porážkami v zádech",
+  "coverLine": "Menifield na UFC 331 čelí Baraniewski",
+  "standfirst": "Polotěžkář Alonzo Menifield nastoupí 19. září v Los Angeles proti Iwu Baraniewski. Za sebou má těžké období: dvě stopky nokautem během tří měsíců.",
+  "passages": [
+    "Alonzo Menifield nastoupí 19. září 2026 v Los Angeles na akci UFC 331: Van vs. Pantoja 2.",
+    "Soupeřem mu bude Iwo Baraniewski, zápas je naplánován na tři kola v polotěžké váze. Dějištěm je Crypto.com Arena.",
+    "Menifield vstupuje do klece s celkovým rekordem 18-6-1 a za sebou nechává jedno z těžších období kariéry.",
+    "V květnu 2024 prohrál s Carlosem Ulbergem na akci UFC on ESPN: Lewis vs. Nascimento. Ulberg ho zastavil v prvním kole po pouhých 12 sekundách technickým knockoutem.",
+    "O necelé tři měsíce později, 3. srpna 2024 na UFC on ABC: Sandhagen vs. Nurmagomedov, vzal Menifielda pod sebe Azamat Murzakanov.",
+    "Tentokrát šlo do druhého kola, ukončení přišlo v čase 8:18 opět knockoutem. Murzakanov má aktuálně rekord 16-1-0 a ve čtyřech zdokumentovaných zápasech v UFC skončil každý výhrou přes KO.",
+    "Ulberg figuruje s bilancí 15-1-0. Menifield trénoval v Fortis MMA. Zápas na UFC 331 byl oznámen 15. srpna 2026."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "Artwork by BoardlessAI FRAME"
+}
