@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260825140049-dm-growth",
+  "phase": "dm-growth",
+  "estimatedWorstCaseUsd": 0,
+  "actualUsd": 0,
+  "participants": [],
+  "agenda": {
+    "isoWeek": "2026-W35",
+    "topicId": "podcasts-press"
+  },
+  "generatedAt": "2026-08-25T14:00:50.103Z"
+}
