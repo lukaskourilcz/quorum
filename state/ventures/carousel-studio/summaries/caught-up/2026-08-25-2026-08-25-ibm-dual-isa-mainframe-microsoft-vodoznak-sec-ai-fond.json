@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-25-ibm-dual-isa-mainframe-microsoft-vodoznak-sec-ai-fond",
+  "date": "2026-08-25",
+  "locale": "cs",
+  "kicker": "DNESKAi · 25. srp",
+  "headline": "IBM vsadil na dva instrukční sety najednou. A Microsoft tiše přidal vaše ID do obrázků.",
+  "coverLine": "Mainframe s Arm jádry a vodoznak, který vás prozradí: co přinesl 25. srpen",
+  "standfirst": "Nový mainframový čip IBM spouští kód pro Arm i Z architekturu souběžně, bez emulace.",
+  "passages": [
+    "IBM ohlásil první čip, jehož jádra nativně vykonávají Arm a Z instrukce souběžně, bez emulace.",
+    "Výzkumník prokázal, že Microsoft vkládá do AI vodoznaků ve Windows identifikátor účtu bez viditelného upozornění uživateli.",
+    "SEC předvolala banky spojené s AI hedgeovým fondem Situational Awareness po jeho letním kolapsu.",
+    "Vyšetřování NYT identifikovalo ruský dron Molnija v Záporoží jako pravděpodobně první zdokumentovaný případ autonomního smrtícího úderu AI řízeným systémem.",
+    "IBM dual-ISA design je přiznáním, že Z ekosystém sám o sobě nestačí přilákat vývojáře – a zároveň konkrétním pokusem, jak problém obejít bez ztráty výhod mainframové platformy.",
+    "Vodoznak s uživatelským ID mění C2PA standard z nástroje transparentnosti na nástroj dohledatelnosti, a to bez vědomí uživatele – s přímým dopadem na novináře a aktivisty.",
+    "Stanfordská data o zaměstnanosti vstupních pozic jsou dosud nejpřesnějším číselným signálem, že automatizační dividenda plyne k těm, kdo práci již mají, nikoli k nově příchozím.",
+    "Plná autonomie dronu Molnija nebyla nezávisle ověřena; absence rádiové antény je silnou indicií, nikoli přímým důkazem autonomního výběru cíle."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Photo by Mikhail Nilov on Pexels"
+}

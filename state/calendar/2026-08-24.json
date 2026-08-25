@@ -130,19 +130,24 @@
       "at": "2026-08-24T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
       "at": "2026-08-24T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-24-night",
+      "decisionOneLiner": "No externally consequential action was approved."
     },
     {
       "at": "2026-08-25T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-25-cu-edition",
+      "decisionOneLiner": "longtime Arm ekosystém a mainframový svět se dosud rozcházely; IBM dual-ISA čip je první konkrétní konstrukce, která překlenuje obě platformy bez emulace a mění výpočet pro ISV i z"
     },
     {
       "at": "2026-08-25T04:00:00.000Z",

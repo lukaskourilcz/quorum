@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-08-25-ibm-dual-isa-mainframe-microsoft-vodoznak-sec-ai-fond",
+  "date": "2026-08-25",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "IBM představil čip, který souběžně spouští kód pro Arm i mainframovou Z architekturu – bez emulace. Zároveň výzkumník odhalil, že vodoznaky AI nástrojů ve Windows nesou ID vašeho účtu. A stanfordská studie změřila, co mnozí tušili: AI seká vstupní pozice nejrychleji, o 19 procentních bodů víc než profese mimo dosah automatizace.",
+    "hashtags": [
+      "ibm",
+      "mainframe",
+      "arm",
+      "watermark",
+      "soukromi",
+      "sec",
+      "hedgefund",
+      "autonomnidron",
+      "trhprace",
+      "sleepwalker"
+    ],
+    "threadsText": "Microsoft vkládá do AI vodoznaků ve Windows identifikátor vašeho účtu – bez upozornění. IBM zároveň ohlásil čip, který nativně běží na Arm i Z architektuře současně. A stanfordská studie ukázala, že zaměstnanost mladých v AI exponovaných oborech klesla o 19 p. b. oproti méně automatizovaným profesím.",
+    "storyLine": "IBM dual-ISA čip a tichý vodoznak s vaším ID"
+  },
+  "heroCredit": "Photo by Mikhail Nilov on Pexels",
+  "origin": "desk"
+}

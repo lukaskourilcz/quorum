@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-25-ibm-dual-isa-mainframe-microsoft-vodoznak-sec-ai-fond",
+  "date": "2026-08-25",
+  "rung": "search",
+  "selected": "pexels:9242891",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "scene:6212692",
+          "provider": "wikimedia",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "A server room illustrates the hardware infrastructure theme relevant to IBM's mainframe chip innovation, but the image is generic and doesn't specifically convey the technical advancement of dual instruction set execution or the AI watermarking discovery.",
+          "sceneCs": "serverovna s řadami datových center"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002192
+    },
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:9242891",
+      "reason": "Hands assembling or working on a real motherboard in practical lighting; shows actual technical work on hardware without artificiality or recognisable faces.",
+      "candidates": [
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 4,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Museum or exhibition interior, too specific to a venue and the lighting/staging feels like documentation of a particular moment rather than illustration of technology concepts.",
+          "sceneCs": "expozice v muzeu s obrazovkami a exponáty"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "The glossy blue circuit-board brain is a textbook example of the clichéd AI illustration style the rules explicitly forbid—glowing, dated, and machine-generated in appearance.",
+          "sceneCs": "mozek z elektrotechnických prvků"
+        },
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "A hand soldering a circuit board illustrates hardware/technical work clearly and honestly without being dated or clichéd; reasonably good match for an article on chip architecture.",
+          "sceneCs": "ruce pájející desku plošných spojů"
+        },
+        {
+          "candidateId": "pixabay:2528363",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Translucent glowing heads overlaid on circuit board—a maximally clichéd AI-era stock image that violates the rules against dated holographic/glowing aesthetic.",
+          "sceneCs": "průsvitné hlavy se svítícími prvky na desce"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Close-up of a real motherboard with heatsink and connectors, properly lit and in focus; directly illustrates hardware at the level of chipsets and architecture.",
+          "sceneCs": "matka deska s chladičem a sloty"
+        },
+        {
+          "candidateId": "pixabay:3963944",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Stylized digital illustration of a lightbulb surrounded by data points—classic stock imagery for AI/innovation that feels generated and dated.",
+          "sceneCs": "digitální ilustrace se žárovkou a tečkami"
+        },
+        {
+          "candidateId": "pexels:9242892",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Hands working on a real circuit board with tools, well-lit and in focus; directly shows electronics work and hardware maintenance without artificiality.",
+          "sceneCs": "ruce pracující na desce s pájecím kolíkem"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "recognisable-face",
+            "ai-generated-look"
+          ],
+          "reason": "Shows a recognisable face (man in business attire) with digital effects overlay—violates the recognisable-face rule even though the digital elements are stylised.",
+          "sceneCs": "muž se svítícími efekty"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Neon-glowing chip with pinkish-blue lighting is textbook dated CGI aesthetic—exactly the style the rules forbid as it evokes mid-2020s AI hype imagery.",
+          "sceneCs": "procesor se zářícím osvětlením"
+        },
+        {
+          "candidateId": "pexels:9242891",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Hands assembling or working on a real motherboard in practical lighting; shows actual technical work on hardware without artificiality or recognisable faces.",
+          "sceneCs": "ruce pracující na desce plošných spojů"
+        },
+        {
+          "candidateId": "pixabay:3389904",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "recognisable-face",
+            "ai-generated-look"
+          ],
+          "reason": "Hands touching with digital effects and recognisable face visible; violates recognisable-face rule and has generic AI-era glowing aesthetic.",
+          "sceneCs": "dvě ruce s digitálními efekty"
+        },
+        {
+          "candidateId": "pexels:9242928",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Hands inserting component into a real motherboard, properly lit and in focus; directly illustrates hardware assembly without artificiality or facial visibility.",
+          "sceneCs": "ruce instalující součástku do desky plošných spojů"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.009572
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-25T03:02:14.781Z"
+}
