@@ -1,6 +1,6 @@
 {
   "schemaVersion": "bout/1",
-  "id": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-xiao-long-vs-francesco-nuzzi-9",
+  "id": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-liu-ce-vs-levi-rodrigues-jr-5",
   "org": "ufc",
   "event": {
     "ref": "ufc:event:ufc-fight-night-nurmagomedov-vs-song",
@@ -9,45 +9,37 @@
     "venue": "SPD Bank Oriental Sports Center"
   },
   "fighters": {
-    "red": "ufc:xiao-long",
-    "blue": "ufc:francesco-nuzzi"
+    "red": "ufc:liu-ce",
+    "blue": "ufc:levi-rodrigues-jr"
   },
-  "division": "bantamweight",
+  "division": "light-heavyweight",
   "scheduledRounds": 3,
   "status": "announced",
   "statusHistory": [
     {
       "status": "announced",
-      "at": "2026-08-21T06:01:25.374Z",
+      "at": "2026-08-25T06:03:07.316Z",
       "sourceRefs": [
-        "source:wikipedia:2026-08-21:List of UFC events"
+        "source:wikipedia:2026-08-25:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
     }
   ],
   "discovery": {
-    "firstSeenAt": "2026-08-21T06:01:25.374Z",
+    "firstSeenAt": "2026-08-25T06:03:07.316Z",
     "lastSeenAt": "2026-08-25T06:03:07.316Z",
     "sourceRefs": [
-      "source:wikipedia:2026-08-21:List of UFC events",
-      "source:wikipedia:2026-08-22:List of UFC events",
-      "source:wikipedia:2026-08-23:List of UFC events",
-      "source:wikipedia:2026-08-24:List of UFC events",
       "source:wikipedia:2026-08-25:List of UFC events"
     ]
   },
   "sourceRefs": [
-    "source:wikipedia:2026-08-21:List of UFC events",
-    "source:wikipedia:2026-08-22:List of UFC events",
-    "source:wikipedia:2026-08-23:List of UFC events",
-    "source:wikipedia:2026-08-24:List of UFC events",
     "source:wikipedia:2026-08-25:List of UFC events"
   ],
   "result": null,
   "predictionRefs": [],
   "changeLog": [
     {
-      "at": "2026-08-21T06:01:25.374Z",
+      "at": "2026-08-25T06:03:07.316Z",
       "kind": "created",
       "fields": [
         "event",
@@ -55,10 +47,10 @@
         "status"
       ],
       "sourceRefs": [
-        "source:wikipedia:2026-08-21:List of UFC events"
+        "source:wikipedia:2026-08-25:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
     }
   ],
-  "updatedAt": "2026-08-21T06:01:25.374Z"
+  "updatedAt": "2026-08-25T06:03:07.316Z"
 }

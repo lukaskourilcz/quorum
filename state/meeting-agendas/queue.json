@@ -239,7 +239,7 @@
       "requestedAt": "2026-08-21T06:01:25.374Z",
       "notBefore": "2026-08-21",
       "expiresAt": "2026-08-24T23:59:59.000Z",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "schemaVersion": "meeting-agenda/1",
@@ -294,7 +294,25 @@
       "notBefore": "2026-08-24",
       "expiresAt": "2026-08-27T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-872885e91f871d95",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-25-mma-intake",
+      "summary": "Decide: after gap report is filed, does the model run proceed with partial data for the four nearest cards, or does intake pause until critical fields reach the two-source threshold?",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-25",
+        "source:cito-ufc:2026-08-25"
+      ],
+      "requestedAt": "2026-08-25T06:03:07.316Z",
+      "notBefore": "2026-08-25",
+      "expiresAt": "2026-08-28T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-24T06:00:32.886Z"
+  "updatedAt": "2026-08-25T06:03:07.316Z"
 }

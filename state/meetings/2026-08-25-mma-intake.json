@@ -1,0 +1,223 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260825060307-mma-intake",
+  "date": "2026-08-25",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SONAR",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.020089,
+    "monthAllInUsd": 11.76648829999999,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-25",
+      "source:cito-ufc:2026-08-25",
+      "source:wikimedia:2026-08-25",
+      "source:wikipedia-schedule:2026-08-25"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "MMA intake is file-work continuation, not a decision gate. 50 fighters seen, 0 complete on critical fields. Next: resolve the 50 height/reach/stance gaps across sources before model run can proceed.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-25",
+        "source:cito-ufc:2026-08-25",
+        "source:wikimedia:2026-08-25",
+        "source:wikipedia-schedule:2026-08-25"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon is present but no critical fighter file is complete; UFC has the nearer lead card. Keep Oktagon intake open and verify fields before model use.",
+      "evidenceRefs": [
+        "source:cito-ufc:2026-08-25",
+        "source:wikimedia:2026-08-25",
+        "source:wikipedia-schedule:2026-08-25"
+      ]
+    },
+    {
+      "agent": "TAPE",
+      "summary": "No upcoming bout inside three-day fight-week window; 50 fighter records seen with 0 complete on every critical field. File work continues. Next safe action: resolve height, reach, stance and division gaps for Nurmagomedov vs. Song card (4 days out).",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-25",
+        "source:cito-ufc:2026-08-25",
+        "source:wikimedia:2026-08-25",
+        "source:wikipedia-schedule:2026-08-25"
+      ]
+    },
+    {
+      "agent": "SONAR",
+      "summary": "UFC lead: Four sources healthy, 50 fighters on file, zero complete critical-field records. Gap work continues. Oktagon file coverage thin (13 pages vs UFC 80). No source proposal needed today; existing adapters are capturing schedule and odds.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-25",
+        "source:cito-ufc:2026-08-25",
+        "source:wikimedia:2026-08-25",
+        "source:wikipedia-schedule:2026-08-25"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "plan",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SONAR",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260825060307-MMA-INTAKE-01",
+      "owner": "FORGE",
+      "summary": "Build a fighter-field gap report: list the 50 incomplete records, their missing critical fields (height/reach/stance/division), and which sources have been checked. Flag any open discrepancies between the-odds-api and cito-ufc for the same",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260825060307-MMA-INTAKE-02",
+      "owner": "SPOTTER",
+      "summary": "Reconcile Oktagon roster identities, divisions, stances, height and reach from two independent providers; log discrepancies and weigh-in status.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260825060307-MMA-INTAKE-03",
+      "owner": "TAPE",
+      "summary": "Cross-check critical fields for UFC Fight Night: Nurmagomedov vs. Song (13 bouts) against wikimedia and cito-ufc to confirm identity, division, stance, height and reach before model sees any bout.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260825060307-MMA-INTAKE-04",
+      "owner": "SONAR",
+      "summary": "Prioritize Oktagon fighter-page scrape to close division, stance, height, reach gaps on 10-bout Oktagon 93 card (in 18 days). Two independent sources required before model sees any critical field.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Data only. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-25",
+      "source:cito-ufc:2026-08-25",
+      "source:wikimedia:2026-08-25",
+      "source:wikipedia-schedule:2026-08-25"
+    ]
+  },
+  "generatedAt": "2026-08-25T06:08:07.316Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-25T06:03:07.316Z",
+    "closedAt": "2026-08-25T06:08:07.316Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-25T06:03:07.316Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-25T06:04:07.316Z",
+        "text": "MMA intake is file-work continuation, not a decision gate. 50 fighters seen, 0 complete on critical fields. Next: resolve the 50 height/reach/stance gaps across sources before model run can proceed.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-25",
+          "source:cito-ufc:2026-08-25",
+          "source:wikimedia:2026-08-25",
+          "source:wikipedia-schedule:2026-08-25"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-25T06:05:07.316Z",
+        "text": "Oktagon is present but no critical fighter file is complete; UFC has the nearer lead card. Keep Oktagon intake open and verify fields before model use.",
+        "evidenceRefs": [
+          "source:cito-ufc:2026-08-25",
+          "source:wikimedia:2026-08-25",
+          "source:wikipedia-schedule:2026-08-25"
+        ]
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-25T06:06:07.316Z",
+        "text": "No upcoming bout inside three-day fight-week window; 50 fighter records seen with 0 complete on every critical field. File work continues. Next safe action: resolve height, reach, stance and division gaps for Nurmagomedov vs. Song card (4 days out).",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-25",
+          "source:cito-ufc:2026-08-25",
+          "source:wikimedia:2026-08-25",
+          "source:wikipedia-schedule:2026-08-25"
+        ]
+      },
+      {
+        "agent": "SONAR",
+        "mode": "statement",
+        "sentAt": "2026-08-25T06:07:07.316Z",
+        "text": "UFC lead: Four sources healthy, 50 fighters on file, zero complete critical-field records. Gap work continues. Oktagon file coverage thin (13 pages vs UFC 80). No source proposal needed today; existing adapters are capturing schedule and odds.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-25",
+          "source:cito-ufc:2026-08-25",
+          "source:wikimedia:2026-08-25",
+          "source:wikipedia-schedule:2026-08-25"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-25T06:08:07.316Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

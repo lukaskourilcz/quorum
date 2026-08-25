@@ -1,6 +1,6 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-08-24T06:00:32.886Z",
+  "generatedAt": "2026-08-25T06:03:07.316Z",
   "items": [
     {
       "fighterRef": "ufc:joshua-van",
@@ -52,7 +52,7 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-24T06:00:32.886Z",
+      "reviewedAt": "2026-08-25T06:03:07.316Z",
       "uncorroborated": [
         "division"
       ]
@@ -65,7 +65,7 @@
         "stance",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-24T06:00:32.886Z",
+      "reviewedAt": "2026-08-25T06:03:07.316Z",
       "uncorroborated": [
         "division",
         "record"
@@ -78,7 +78,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-24T06:00:32.886Z",
+      "reviewedAt": "2026-08-25T06:03:07.316Z",
       "uncorroborated": [
         "record"
       ]
@@ -90,7 +90,7 @@
       "gaps": [
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-08-24T06:00:32.886Z",
+      "reviewedAt": "2026-08-25T06:03:07.316Z",
       "uncorroborated": [
         "division"
       ]
@@ -102,7 +102,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-24T06:00:32.886Z",
+      "reviewedAt": "2026-08-25T06:03:07.316Z",
       "uncorroborated": [
         "division"
       ]
@@ -114,7 +114,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-24T06:00:32.886Z",
+      "reviewedAt": "2026-08-25T06:03:07.316Z",
       "uncorroborated": [
         "division",
         "record"
@@ -127,7 +127,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-24T06:00:32.886Z",
+      "reviewedAt": "2026-08-25T06:03:07.316Z",
       "uncorroborated": [
         "division",
         "record"
@@ -138,7 +138,7 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-08-24T06:00:32.886Z",
+      "reviewedAt": "2026-08-25T06:03:07.316Z",
       "uncorroborated": [
         "division"
       ]
@@ -169,7 +169,7 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-08-24T06:00:32.886Z",
+      "reviewedAt": "2026-08-25T06:03:07.316Z",
       "uncorroborated": [
         "name",
         "division",
@@ -183,27 +183,7 @@
       "gaps": [
         "team"
       ],
-      "reviewedAt": "2026-08-24T06:00:32.886Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:ailin-perez",
-      "priority": 600,
-      "reason": "missing-history",
-      "gaps": [],
-      "reviewedAt": "2026-08-23T06:03:51.296Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:andre-petroski",
-      "priority": 600,
-      "reason": "missing-history",
-      "gaps": [],
-      "reviewedAt": "2026-08-23T06:03:51.296Z",
+      "reviewedAt": "2026-08-25T06:03:07.316Z",
       "uncorroborated": [
         "division"
       ]
@@ -224,6 +204,26 @@
       "reason": "missing-history",
       "gaps": [],
       "reviewedAt": "2026-08-24T06:00:32.886Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:ailin-perez",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-08-25T06:03:07.316Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:andre-petroski",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-08-25T06:03:07.316Z",
       "uncorroborated": [
         "division"
       ]

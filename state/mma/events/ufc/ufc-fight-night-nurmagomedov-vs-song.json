@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-08-29T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-24:List of UFC events"
+    "source:wikipedia:2026-08-25:List of UFC events"
   ],
   "bouts": [
     {
@@ -44,9 +44,9 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:liu-ce-vs-junior-tafa-5",
+      "id": "ufc:ufc-fight-night-nurmagomedov-vs-song:bout:liu-ce-vs-levi-rodrigues-jr-5",
       "red": "ufc:liu-ce",
-      "blue": "ufc:junior-tafa",
+      "blue": "ufc:levi-rodrigues-jr",
       "division": "light-heavyweight",
       "scheduledRounds": 3,
       "status": "announced"
@@ -116,5 +116,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-24T06:00:32.886Z"
+  "updatedAt": "2026-08-25T06:03:07.316Z"
 }

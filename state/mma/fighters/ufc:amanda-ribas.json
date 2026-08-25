@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Amanda_Ribas",
       "publisher": "Wikipedia",
       "title": "Amanda Ribas",
-      "retrievedAt": "2026-08-24T06:00:32.886Z",
+      "retrievedAt": "2026-08-25T06:03:07.316Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -78,7 +78,7 @@
         "source:wikipedia:63376607",
         "source:wikipedia:68442521"
       ],
-      "retrievedAt": "2026-08-24T06:00:32.886Z",
+      "retrievedAt": "2026-08-25T06:03:07.316Z",
       "status": "verified",
       "corroborated": true
     },
@@ -242,9 +242,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.666667,
         "fightsPerYear": 0.210818,
-        "layoffDays": 884
+        "layoffDays": 885
       },
-      "updatedAt": "2026-08-24T06:00:32.886Z"
+      "updatedAt": "2026-08-25T06:03:07.316Z"
     }
   ],
   "rating": {
@@ -254,7 +254,7 @@
     "volatility": 0.05999841,
     "boutCount": 3,
     "asOfBoutRef": "ufc:bout:history-79a86e49e1376f9c2432",
-    "updatedAt": "2026-08-24T06:00:32.886Z"
+    "updatedAt": "2026-08-25T06:03:07.316Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1716,11 +1716,27 @@
         "source:wikipedia:63376607"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-25T06:03:07.316Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:68442521",
+        "source:wikipedia:63376607"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-24T06:00:32.886Z"
+  "updatedAt": "2026-08-25T06:03:07.316Z"
 }

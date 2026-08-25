@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Miesha_Tate",
       "publisher": "Wikipedia",
       "title": "Miesha Tate",
-      "retrievedAt": "2026-08-24T06:00:32.886Z",
+      "retrievedAt": "2026-08-25T06:03:07.316Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q1138101",
         "source:wikipedia:22359670"
       ],
-      "retrievedAt": "2026-08-24T06:00:32.886Z",
+      "retrievedAt": "2026-08-25T06:03:07.316Z",
       "status": "verified",
       "corroborated": true
     },
@@ -145,9 +145,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 365.25,
-        "layoffDays": 3698
+        "layoffDays": 3699
       },
-      "updatedAt": "2026-08-24T06:00:32.886Z"
+      "updatedAt": "2026-08-25T06:03:07.316Z"
     }
   ],
   "rating": {
@@ -157,7 +157,7 @@
     "volatility": 0.05999844,
     "boutCount": 2,
     "asOfBoutRef": "ufc:bout:history-dae65e063210f80d2db2",
-    "updatedAt": "2026-08-24T06:00:32.886Z"
+    "updatedAt": "2026-08-25T06:03:07.316Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1571,11 +1571,24 @@
         "source:wikipedia:30387040"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-25T06:03:07.316Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:30387040"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-24T06:00:32.886Z"
+  "updatedAt": "2026-08-25T06:03:07.316Z"
 }

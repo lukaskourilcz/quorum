@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Adrian_Ya%C3%B1ez",
       "publisher": "Wikipedia",
       "title": "Adrian Yañez",
-      "retrievedAt": "2026-08-24T06:00:32.886Z",
+      "retrievedAt": "2026-08-25T06:03:07.316Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q107638714",
         "source:wikipedia:67943570"
       ],
-      "retrievedAt": "2026-08-24T06:00:32.886Z",
+      "retrievedAt": "2026-08-25T06:03:07.316Z",
       "status": "verified",
       "corroborated": true
     },
@@ -184,9 +184,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 365.25,
-        "layoffDays": 44
+        "layoffDays": 45
       },
-      "updatedAt": "2026-08-24T06:00:32.886Z"
+      "updatedAt": "2026-08-25T06:03:07.316Z"
     }
   ],
   "rating": {
@@ -196,7 +196,7 @@
     "volatility": 0.05999833,
     "boutCount": 2,
     "asOfBoutRef": "ufc:bout:history-a1fe45c21699c6fce4eb",
-    "updatedAt": "2026-08-24T06:00:32.886Z"
+    "updatedAt": "2026-08-25T06:03:07.316Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1703,11 +1703,26 @@
         "source:wikipedia:47163936"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-25T06:03:07.316Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:47163936"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.5,
   "modelEligible": true,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-24T06:00:32.886Z"
+  "updatedAt": "2026-08-25T06:03:07.316Z"
 }

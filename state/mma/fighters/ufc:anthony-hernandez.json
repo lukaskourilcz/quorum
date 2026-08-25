@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Anthony_Hernandez",
       "publisher": "Wikipedia",
       "title": "Anthony Hernandez",
-      "retrievedAt": "2026-08-24T06:00:32.886Z",
+      "retrievedAt": "2026-08-25T06:03:07.316Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q96372195",
         "source:wikipedia:64111674"
       ],
-      "retrievedAt": "2026-08-24T06:00:32.886Z",
+      "retrievedAt": "2026-08-25T06:03:07.316Z",
       "status": "verified",
       "corroborated": true
     },
@@ -305,9 +305,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 0.700145,
-        "layoffDays": 2
+        "layoffDays": 3
       },
-      "updatedAt": "2026-08-24T06:00:32.886Z"
+      "updatedAt": "2026-08-25T06:03:07.316Z"
     }
   ],
   "rating": {
@@ -317,7 +317,7 @@
     "volatility": 0.06000016,
     "boutCount": 7,
     "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-anthony-hernandez-vs-gregory-rodrigues-1",
-    "updatedAt": "2026-08-24T06:00:32.886Z"
+    "updatedAt": "2026-08-25T06:03:07.316Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2110,11 +2110,27 @@
         "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-25T06:03:07.316Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64111674",
+        "source:wikipedia:2026-08-23:UFC Fight Night: Hernandez vs. Rodrigues"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-24T06:00:32.886Z"
+  "updatedAt": "2026-08-25T06:03:07.316Z"
 }
