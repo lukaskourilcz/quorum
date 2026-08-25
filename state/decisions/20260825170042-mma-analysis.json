@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260825170042-mma-analysis",
+  "phase": "mma-analysis",
+  "outcome": "NO_ACTION",
+  "summary": "No model run exists to review yet — waiting for the odds data key.",
+  "evidenceRefs": [],
+  "generatedAt": "2026-08-25T17:00:42.584Z"
+}
