@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260825070435-mag-editorial",
+  "phase": "mag-editorial",
+  "outcome": "VETO",
+  "summary": "AUDIT vetoed the room output: Slot nelze přiřadit: chybí ověřený nový subjekt i modelová data a index uvádí, že existující témata nejsou čerstvá.",
+  "evidenceRefs": [
+    "meeting:2026-08-24-mma-analysis",
+    "meeting:2026-08-24-mag-desk"
+  ],
+  "generatedAt": "2026-08-25T07:08:35.172Z"
+}

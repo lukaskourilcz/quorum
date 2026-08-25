@@ -176,7 +176,9 @@
       "at": "2026-08-25T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-25-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Slot nelze přiřadit: chybí ověřený nový subjekt i modelová data a index uvádí, že existující témata nejsou čerstvá."
     },
     {
       "at": "2026-08-25T08:00:00.000Z",
