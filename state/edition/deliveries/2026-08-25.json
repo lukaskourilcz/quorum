@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-25",
+  "packageHash": "e51d5aa6dceb9e194e8ee78ac8b866ff44fe933270ac0f0ddada09bfdbca0fd3",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "6432e9acbfa902e6680f435bfaa864f089f78201",
+  "deliveredAt": "2026-08-25T03:10:52.131Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-25-ibm-dual-isa-mainframe-microsoft-vodoznak-sec-ai-fond",
+  "tags": [
+    "procesory",
+    "mainframe",
+    "soukromi",
+    "autonomni-zbrane",
+    "trh-prace",
+    "kyberneticka-bezpecnost"
+  ]
+}
