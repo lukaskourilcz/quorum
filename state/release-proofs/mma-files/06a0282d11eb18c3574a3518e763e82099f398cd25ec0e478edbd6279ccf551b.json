@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-467e024989e76dce",
+  "venture": "mma-files",
+  "packageHash": "06a0282d11eb18c3574a3518e763e82099f398cd25ec0e478edbd6279ccf551b",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "1d5c4f51d93b096529ac62a74aa12180810de08d",
+  "deploymentUrl": "https://mma-files.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 1d5c4f51d93b096529ac62a74aa12180810de08d is readable",
+      "checkedAt": "2026-08-25T08:06:24.671Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-25T08:06:24.671Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-25T08:06:24.671Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/cs/articles/ufc-alonzo-menifield?boardless_verify=06a0282d11eb-1787645184671",
+      "checkedAt": "2026-08-25T08:06:24.671Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and ufc-alonzo-menifield match",
+      "checkedAt": "2026-08-25T08:06:24.671Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 06a0282d11eb18c3574a3518e763e82099f398cd25ec0e478edbd6279ccf551b",
+      "checkedAt": "2026-08-25T08:06:24.671Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/images/articles/ufc-alonzo-menifield/hero.svg?boardless_verify=06a0282d11eb-1787645184671",
+      "checkedAt": "2026-08-25T08:06:24.671Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-25T08:06:24.671Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "FRAME fallback needs no external photo credit",
+      "checkedAt": "2026-08-25T08:06:24.671Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-25T08:05:42.793Z",
+  "completedAt": "2026-08-25T08:06:25.203Z"
+}

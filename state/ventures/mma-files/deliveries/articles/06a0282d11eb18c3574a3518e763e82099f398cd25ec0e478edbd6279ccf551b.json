@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "06a0282d11eb18c3574a3518e763e82099f398cd25ec0e478edbd6279ccf551b",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "1d5c4f51d93b096529ac62a74aa12180810de08d",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/ufc-alonzo-menifield",
+  "recordedAt": "2026-08-25T08:06:26.259Z"
+}
