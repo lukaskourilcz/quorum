@@ -51,7 +51,7 @@ describe("venture capability map", () => {
     expect(map.mapVersion).toBe("1.0.0");
     expect(map.nodes.find((node) => node.id === "design-lab")).toMatchObject({
       classification: "rendering-service",
-      canonicalOwner: "design-lab",
+      canonicalOwner: "carousel-studio",
       dataActionClasses: ["rendering"]
     });
     expect(JSON.stringify(map)).not.toMatch(/"(?:\*|all-content|portfolio-read)"/u);
