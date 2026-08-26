@@ -9,10 +9,13 @@ import type {
 interface RawVentureRegistry {
   schemaVersion: string;
   ventures: Array<{
+    id: string;
+    visibility: "public" | "owner-only";
     meetings: Array<{
       kind: string;
       label: string;
       cadence: string;
+      cast: string[];
     }>;
     productionJobs?: Array<{
       kind: string;
@@ -27,8 +30,7 @@ const portfolioBoardSlots: readonly CalendarDefinition[] = [
   { hour: 22, kind: "venture-night", label: "Night shift" }
 ];
 
-function registryPath(): string {
-  const root = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
+function registryPath(root = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")): string {
   return path.join(root, "config", "ventures.json");
 }
 
@@ -66,20 +68,42 @@ function productionDefinitions(kind: string, cadence: string): CalendarDefinitio
   throw new Error(`Unsupported public production schedule: ${kind} ${cadence}`);
 }
 
-export async function getPublicCalendarSchedule(): Promise<readonly CalendarDefinition[]> {
-  const registry = JSON.parse(await readFile(registryPath(), "utf8")) as RawVentureRegistry;
-  if (registry.schemaVersion !== "venture-registry/1" || !Array.isArray(registry.ventures)) {
-    throw new Error("Invalid public venture registry");
-  }
-  const ventureSlots = registry.ventures.flatMap((venture) => [
-    ...venture.meetings.map((meeting) => ({
-      hour: cadenceHour(meeting.cadence),
-      kind: calendarKind(meeting.kind),
-      label: meeting.label
-    })),
-    ...(venture.productionJobs ?? []).flatMap((job) => productionDefinitions(job.kind, job.cadence))
-  ]);
+export async function getPublicCalendarSchedule(root?: string): Promise<readonly CalendarDefinition[]> {
+  const registry = await getRegistry(root);
+  const ventureSlots = registry.ventures
+    .filter((venture) => venture.visibility === "public")
+    .flatMap((venture) => [
+      ...venture.meetings.map((meeting) => ({
+        hour: cadenceHour(meeting.cadence),
+        kind: calendarKind(meeting.kind),
+        label: meeting.label,
+        cast: meeting.cast
+      })),
+      ...(venture.productionJobs ?? []).flatMap((job) => productionDefinitions(job.kind, job.cadence))
+    ]);
   return [...portfolioBoardSlots, ...ventureSlots].sort(
     (left, right) => left.hour - right.hour
   );
+}
+
+async function getRegistry(root?: string): Promise<RawVentureRegistry> {
+  const registry = JSON.parse(await readFile(registryPath(root), "utf8")) as RawVentureRegistry;
+  if (registry.schemaVersion !== "venture-registry/1" || !Array.isArray(registry.ventures)) {
+    throw new Error("Invalid venture registry");
+  }
+  return registry;
+}
+
+export async function getOwnerOnlyVentureIds(root?: string): Promise<ReadonlySet<string>> {
+  const registry = await getRegistry(root);
+  return new Set(registry.ventures
+    .filter((venture) => venture.visibility === "owner-only")
+    .map((venture) => venture.id));
+}
+
+export async function getOwnerOnlyMeetingKinds(root?: string): Promise<ReadonlySet<string>> {
+  const registry = await getRegistry(root);
+  return new Set(registry.ventures
+    .filter((venture) => venture.visibility === "owner-only")
+    .flatMap((venture) => venture.meetings.map((meeting) => meeting.kind)));
 }

@@ -2,6 +2,7 @@ import "server-only";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { parsePublicIdeaLedger, type PublicIdeaEntry } from "@/lib/idea-ledger-model";
+import { getOwnerOnlyVentureIds } from "@/lib/venture-registry";
 
 function ideasRoot() {
   const repoRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
@@ -11,9 +12,10 @@ function ideasRoot() {
 export async function getPublicIdeas(): Promise<readonly PublicIdeaEntry[]> {
   try {
     const root = ideasRoot();
+    const ownerOnlyVentureIds = await getOwnerOnlyVentureIds();
     const entries = await readdir(root, { withFileTypes: true });
     const namespaces = entries
-      .filter((entry) => entry.isDirectory() && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(entry.name))
+      .filter((entry) => entry.isDirectory() && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(entry.name) && !ownerOnlyVentureIds.has(entry.name))
       .map((entry) => entry.name)
       .sort();
     const ledgers = await Promise.all(namespaces.map(async (ventureId) => {

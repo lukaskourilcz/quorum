@@ -1,6 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { agentById } from "@/data/agents";
 import { publicAgentAssignment, publicAgentAssignments } from "./agent-assignments";
+
+vi.mock("server-only", () => ({}));
 
 function agent(id: "HACEK" | "QUILL" | "GHOST" | "FOLIO" | "LETOPIS" | "TRIBUN") {
   const value = agentById.get(id);
@@ -31,5 +33,6 @@ describe("public agent assignments", () => {
 
   it("drops an invalid machine id instead of printing it publicly", () => {
     expect(publicAgentAssignment({ ventures: ["private-machine-path"] })).toBe("No venture assignment recorded");
+    expect(publicAgentAssignment({ ventures: ["personal-growth"] })).toBe("No venture assignment recorded");
   });
 });

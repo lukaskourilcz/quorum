@@ -179,7 +179,9 @@ async function metricCount(root: string, source: MetricSource): Promise<number |
 }
 
 export async function readVentureIndex(root = repositoryRoot()): Promise<VentureIndexCard[]> {
-  return Promise.all(ventureRegistry.ventures.map(async (venture) => {
+  return Promise.all(ventureRegistry.ventures
+    .filter((venture) => venture.visibility === "public")
+    .map(async (venture) => {
     const copy = COPY[venture.id];
     if (!copy) throw new Error(`Missing public venture-index copy for ${venture.id}`);
     return {
@@ -194,5 +196,5 @@ export async function readVentureIndex(root = repositoryRoot()): Promise<Venture
       href: copy.href,
       external: copy.external ?? false
     };
-  }));
+    }));
 }

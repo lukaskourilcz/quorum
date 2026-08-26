@@ -17,8 +17,11 @@ describe("the public venture index", () => {
     const root = await mkdtemp(path.join(tmpdir(), "venture-index-empty-"));
     const cards = await readVentureIndex(root);
 
-    expect(cards.map((card) => card.id)).toEqual(ventureRegistry.ventures.map((venture) => venture.id));
+    expect(cards.map((card) => card.id)).toEqual(ventureRegistry.ventures
+      .filter((venture) => venture.visibility === "public")
+      .map((venture) => venture.id));
     expect(cards).toHaveLength(11);
+    expect(cards.map((card) => card.id)).not.toContain("personal-growth");
     expect(cards.every((card) => card.status === "Operating")).toBe(true);
     expect(cards.every((card) => card.promise.length > 0 && card.boundary.length > 0)).toBe(true);
     expect(cards.every((card) => card.metric.count === null)).toBe(true);

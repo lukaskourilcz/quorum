@@ -46,6 +46,7 @@ const VentureDefinitionSchema = openObject({
   id: VentureIdSchema,
   name: z.string().trim().min(1).max(100),
   status: z.enum(["exploration", "operating", "paused"]),
+  visibility: z.enum(["public", "owner-only"]),
   taste: z.boolean(),
   ledgerNamespace: VentureIdSchema,
   growth_objective: openObject({

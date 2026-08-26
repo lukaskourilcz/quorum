@@ -23,6 +23,7 @@ describe("admin portfolio projection", () => {
         id: "caught-up",
         name: "DNESKAi",
         status: "operating",
+        visibility: "public",
         ledgerNamespace: "caught-up",
         adminTabs: ["ideas", "plans", "visuals"]
       }]
@@ -85,7 +86,7 @@ describe("admin portfolio projection", () => {
     await writeFile(path.join(root, "config", "ventures.json"), JSON.stringify({
       schemaVersion: "venture-registry/1",
       ventures: [{
-        id: "titty-tuesdays", name: "Titty Tuesdays", status: "operating",
+        id: "titty-tuesdays", name: "Titty Tuesdays", status: "operating", visibility: "public",
         ledgerNamespace: "titty-tuesdays", adminTabs: ["ideas"]
       }]
     }));
@@ -113,7 +114,7 @@ describe("admin portfolio projection", () => {
     await writeFile(path.join(root, "config", "ventures.json"), JSON.stringify({
       schemaVersion: "venture-registry/1",
       ventures: [{
-        id: "future-venture", name: "Future venture", status: "exploration",
+        id: "future-venture", name: "Future venture", status: "exploration", visibility: "public",
         ledgerNamespace: "future-venture", adminTabs: ["visuals"]
       }]
     }));
@@ -130,6 +131,7 @@ describe("admin portfolio projection", () => {
         id: "kvorum",
         name: "Kvórum",
         status: "operating",
+        visibility: "public",
         ledgerNamespace: "kvorum",
         adminTabs: ["recommendations", "monitor", "claims"]
       }]
@@ -151,6 +153,7 @@ describe("launch binder readiness", () => {
         id: "titty-tuesdays",
         name: "Titty Tuesdays",
         status: "operating",
+        visibility: "public",
         ledgerNamespace: "titty-tuesdays",
         adminTabs: ["plans", "ideas"]
       }]
@@ -220,5 +223,10 @@ describe("declared tabs against stored cards", () => {
         .map((kind) => `${venture.id}/${kind}`);
     });
     expect(orphaned).toEqual([]);
+    expect(portfolio.ventures.find((venture) => venture.id === "personal-growth")).toMatchObject({
+      name: "Lukáš Growth Desk",
+      visibility: "owner-only",
+      tabs: ["plans"]
+    });
   });
 });

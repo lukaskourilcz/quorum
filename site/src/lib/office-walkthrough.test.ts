@@ -6,7 +6,7 @@ describe("the home-page venture registry projection", () => {
   it("keeps every operating venture on the wall, in results and in facilities", async () => {
     const data = await readOfficeWalkthrough(new Date("2026-08-13T12:00:00.000Z"));
     const registered = ventureRegistry.ventures
-      .filter((venture) => venture.status === "operating")
+      .filter((venture) => venture.status === "operating" && venture.visibility === "public")
       .map((venture) => venture.id);
 
     expect(data.projects.map((project) => project.id)).toEqual(registered);

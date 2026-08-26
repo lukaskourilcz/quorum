@@ -54,6 +54,7 @@ export interface AdminVenture {
   id: string;
   name: string;
   status: "exploration" | "operating" | "paused";
+  visibility: "public" | "owner-only";
   tabs: AdminVentureTab[];
   cards: AdminCard[];
   unreadableFiles: string[];
@@ -470,6 +471,7 @@ interface VentureConfig {
   id: string;
   name: string;
   status: AdminVenture["status"];
+  visibility: AdminVenture["visibility"];
   ledgerNamespace: string;
   adminTabs: AdminVentureTab[];
 }
@@ -487,13 +489,16 @@ async function ventureConfigs(root: string): Promise<VentureConfig[]> {
     const status = venture?.status === "exploration" || venture?.status === "operating" || venture?.status === "paused"
       ? venture.status
       : null;
+    const visibility = venture?.visibility === "public" || venture?.visibility === "owner-only"
+      ? venture.visibility
+      : null;
     const tabs = Array.isArray(venture?.adminTabs)
       ? venture.adminTabs.filter((tab): tab is AdminVentureTab => typeof tab === "string" && adminTabs.includes(tab as AdminVentureTab))
       : null;
-    if (!id || !venturePattern.test(id) || !name || !ledgerNamespace || !venturePattern.test(ledgerNamespace) || !status || !tabs) {
+    if (!id || !venturePattern.test(id) || !name || !ledgerNamespace || !venturePattern.test(ledgerNamespace) || !status || !visibility || !tabs) {
       throw new Error("Admin encountered an invalid venture registry entry");
     }
-    return { id, name, ledgerNamespace, status, adminTabs: tabs };
+    return { id, name, ledgerNamespace, status, visibility, adminTabs: tabs };
   });
 }
 
@@ -531,6 +536,7 @@ export async function readAdminPortfolio(root = repositoryRoot): Promise<AdminPo
       id: venture.id,
       name: venture.name,
       status: venture.status,
+      visibility: venture.visibility,
       tabs: venture.adminTabs,
       cards: [...ideas.cards, ...plans.cards, ...visuals, ...packages.cards]
         .sort((left, right) => (right.updatedAt ?? "").localeCompare(left.updatedAt ?? "") || left.id.localeCompare(right.id)),

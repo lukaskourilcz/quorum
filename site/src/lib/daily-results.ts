@@ -3,6 +3,7 @@ import path from "node:path";
 import { publicAgentText } from "@/components/agent-language";
 import { readsAsMachineText } from "@/lib/public-prose";
 import { publicKindLabel } from "@/lib/slot-labels";
+import { getOwnerOnlyVentureIds } from "@/lib/venture-registry";
 
 /**
  * The daily results ledger, read from the digest receipts the night cycle already writes.
@@ -166,6 +167,7 @@ export function parseDailyResult(raw: unknown): DailyResult | null {
  * and they were on two different pages.
  */
 export async function getVentureKpiStatuses(root = repositoryRoot()): Promise<VentureKpiStatus[]> {
+  const ownerOnlyVentureIds = await getOwnerOnlyVentureIds(root);
   let snapshot: { statuses?: unknown };
   try {
     snapshot = JSON.parse(
@@ -179,7 +181,7 @@ export async function getVentureKpiStatuses(root = repositoryRoot()): Promise<Ve
   for (const entry of statuses as Array<{ venture?: unknown; status?: unknown }>) {
     const ventureId = text(entry.venture);
     const status = text(entry.status);
-    if (!ventureId) continue;
+    if (!ventureId || ownerOnlyVentureIds.has(ventureId)) continue;
     const current = byVenture.get(ventureId) ?? {
       ventureId,
       ventureLabel: ventureLabel(ventureId),
@@ -230,6 +232,7 @@ function repositoryRoot(): string {
 }
 
 export async function getDailyResults(root = repositoryRoot()): Promise<DailyResult[]> {
+  const ownerOnlyVentureIds = await getOwnerOnlyVentureIds(root);
   const directory = path.join(root, "state/notify/digest");
   let files: string[];
   try {
@@ -247,5 +250,17 @@ export async function getDailyResults(root = repositoryRoot()): Promise<DailyRes
     })
   );
   // Most recent first.
-  return parsed.filter((entry): entry is DailyResult => entry !== null).sort((left, right) => right.date.localeCompare(left.date));
+  return parsed
+    .filter((entry): entry is DailyResult => entry !== null)
+    .map((entry) => {
+      const containsOwnerOnlyRow = entry.rows.some((row) => ownerOnlyVentureIds.has(row.ventureId));
+      const rows = entry.rows.filter((row) => !ownerOnlyVentureIds.has(row.ventureId));
+      return {
+        ...entry,
+        portfolioLine: containsOwnerOnlyRow ? "" : entry.portfolioLine,
+        rows,
+        totalCostUsd: Number(rows.reduce((sum, row) => sum + row.costUsd, 0).toFixed(6))
+      };
+    })
+    .sort((left, right) => right.date.localeCompare(left.date));
 }
