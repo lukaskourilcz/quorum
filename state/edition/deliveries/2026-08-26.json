@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-26",
+  "packageHash": "03bfef977a1803c0ac7b2c7e2eeaf15a764e560fed66359813adf788d9981b35",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "76fb8b4d14b42f57c1724cb4bc45cd08ff1fae2c",
+  "deliveredAt": "2026-08-26T03:09:31.242Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-26-openai-odchody-robotika-valuace",
+  "tags": [
+    "openai",
+    "umela-inteligence",
+    "robotika",
+    "datova-centra",
+    "rizikovy-kapital",
+    "email"
+  ]
+}
