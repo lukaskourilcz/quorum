@@ -127,6 +127,15 @@ for (const viewport of ADMIN_VIEWPORTS) {
         page,
         `${theme} Admin at ${viewport.width}px`
       );
+
+      const operationsResponse = await page.goto("/admin/operations?view=nodes", {
+        waitUntil: "domcontentloaded"
+      });
+      expect(operationsResponse?.status()).toBe(200);
+      await expect(page.getByRole("heading", { name: "Operations control center" })).toBeVisible();
+      await expect(page.getByRole("navigation", { name: "Operations views" })).toBeVisible();
+      await expect(page.getByLabel("Health")).toBeVisible();
+      await expectNoDocumentOverflow(page, `${theme} Operations at ${viewport.width}px`);
       expect(failures).toEqual([]);
       expect(mutationAttempts).toEqual([]);
     });

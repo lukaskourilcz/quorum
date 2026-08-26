@@ -21,6 +21,7 @@ denial, even when both nodes live in this repository.
 | Recovery history | `venture-recovery-attempt/1` | `state/operations/recovery/` |
 | Owner escalation | compatible `owner-attention/1` extension | `state/owner-attention.json` |
 | Bounded incident view | `operations-incident-snapshot/1` | `state/operations/incidents/current.json` |
+| Migration evidence | `operations-migration-report/1` | `state/operations/migration/current.json` |
 
 Domain receipts remain canonical. A common run receipt names those records and normalizes only
 execution metadata. It never copies an article, manuscript, research dossier, provider payload,
@@ -97,3 +98,82 @@ failure holds the same accepted payload; it does not ask a model for replacement
 Money private-store outage pauses Door Money while Design Lab and Social Distribution keep their
 own health. A deployment problem is reported and handled by the explicit release runbook in
 `docs/ENGINEERING.md`; recovery never deploys.
+
+## Protected Operations control center
+
+`/admin/operations` is protected by the existing `/admin` session boundary and composes one
+server-only snapshot in `site/src/lib/admin-operations.ts`. The browser receives a deliberately
+small operational projection: registry identity and stage, validated health/SLO reasons, cadence,
+capacity decisions, budget and provider headroom, cache/reuse counts, incident actions, capability
+counts, a compact reference to the canonical Implementation Plans snapshot and the read-only Git
+deployment posture.
+
+The reader parses or drops each record independently. Missing state remains unavailable, planned
+or optional work remains held, and a malformed node cannot hide the other nodes. It never scans a
+venture content directory and never returns articles, drafts, manuscripts, research, private
+knowledge, political output, Personal Growth data, Contest Radar entries, contacts, provider
+payloads or credentials. Credential-shaped text in an otherwise valid operational reason is
+redacted again at the Admin boundary. Client code does not read state or GitHub and does not derive
+health or implementation progress.
+
+The control center can copy its sanitized diagnostic summary and record a protected refresh request.
+The request is cooldown-bound and is consumed by the existing orchestrator checkpoint; it does not
+run a provider, read GitHub from the browser or create another scheduler. On a first checkout, valid
+registries still render while absent health, capacity and incident records stay explicitly unavailable.
+It cannot change a capability edge, cadence, budget, provider, credential, content approval, account,
+monetization plan or deployment. The full program/work-item interface remains owned by
+`/admin/implementation-plans`; Operations embeds only a compact summary from the same #419 reader.
+Monetization is information-only and design-template sales remain absent.
+
+The live cycle materializes `state/operations/current.json` and one current health record per node at
+the existing night checkpoint, or sooner for a valid Admin refresh request. It reads the common
+append-only receipt ledger and canonical owner-attention incidents only. Dependency health settles
+to a deterministic snapshot before persistence, so a retry at the same checkpoint is idempotent.
+
+## Release stages
+
+- **Stage 0 — contracts and fixtures:** capability, health, capacity, recovery and progress contracts
+  exist without changing external behavior.
+- **Stage 1 — observe only:** the current release materializes receipt-backed health and incidents,
+  and exposes protected read-only Operations and Implementation Plans views.
+- **Stage 2 — narrow deterministic recovery:** existing `$0`, idempotent recovery primitives may run
+  only through an exact recorded policy and their owning domain primitive.
+- **Stage 3 — governed routine self-healing:** remains inactive until each exact action is separately
+  countersigned. Publishing, contest entry, accounts, credentials, deployment and monetization stay
+  separately governed or prohibited.
+
+Code existence never activates a later stage. Run
+`pnpm --filter @boardlessai/orchestrator operations:release-audit` for the deterministic repository
+gate; it exits non-zero when any registry, authority, isolation, Admin, deployment or migration check
+fails.
+
+## Migration and rollback
+
+`pnpm --filter @boardlessai/orchestrator operations:migrate` reads optional JSON candidates from
+`state/operations/migration-input/`. A candidate must already be an exact
+`venture-run-receipt/1`, belong to a registered non-held node and reference canonical domain
+evidence. The migration does not derive or fabricate a run from domain content. Dry/fixture and
+unknown-node candidates are dropped, malformed or conflicting receipt ids are isolated, and
+planned/paused nodes remain held.
+
+The target common ledger is append-only. An exact existing receipt is `unchanged`, so rerunning the
+migration creates no duplicate. The report counts `migrated`, `unchanged`, `held`, `unavailable`,
+`dropped` and `malformed` and is written to `state/operations/migration/current.json`.
+
+Migration inputs and every domain record are preserved. There is deliberately no automatic rollback deletion.
+If a bad operator-supplied candidate was accepted, first activate the relevant
+recovery kill switch, preserve the migration report and common ledger, correct the source evidence,
+and restore the append-only Operations state from the pre-migration backup under the normal owner
+runbook. Never delete domain receipts or rewrite history in place.
+
+## Final release gate
+
+`orchestrator/tests/operations-release.test.ts` runs the permanent final audit. It verifies exact
+node/capability/SLO/recovery coverage, distinct outcomes, canonical receipt references, the sole
+Europe/Prague scheduler, capacity and recovery authority limits, canonical owner attention,
+venture isolation, #419/#431/#428 progress ownership, protected Admin reads, the #422 deployment
+guard, information-only monetization and idempotent migration.
+
+Social Distribution, Contest Radar and unfinished WebDev Signal integration may remain honestly
+planned/held and do not fail the company gate. Contest Radar is registry metadata only in this
+release; no Contest Radar runtime, feature workspace or entry data is implemented here.
