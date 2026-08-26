@@ -157,7 +157,7 @@ test("money, fixed costs, file details and launch binder remain truthful and con
   await page.goto("/admin", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { name: "Fixed costs" }))
     .toBeVisible();
-  await expect(page.getByText("$30.00", { exact: false }).first())
+  await expect(page.getByText("$50.00", { exact: false }).first())
     .toBeVisible();
   await expect(page.getByRole("button", { name: "Add cost" })).toBeDisabled();
   await expect(page.getByRole("button", { name: "Save fixed costs" }))

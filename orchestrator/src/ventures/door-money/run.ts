@@ -5,6 +5,7 @@ import { z } from "zod";
 import {
   BudgetError,
   BudgetLedgerEntrySchema,
+  COUNTERSIGNED_MONTHLY_OPERATING_USD,
   DEFAULT_BUDGET_LIMITS,
   type ReserveContext
 } from "../../budget.js";
@@ -322,7 +323,12 @@ export async function buildDoorMoneyDryKnowledge(now: Date): Promise<DoorMoneyDe
         allInCommittedUsd: 0,
         knownMonthlyForecastUsd: 0,
         remainingScheduledCycles: 1,
-        limits: { ...DEFAULT_BUDGET_LIMITS, dailyUsd: 1, monthlyApiUsd: 25, monthlyOperatingUsd: 30 }
+        limits: {
+          ...DEFAULT_BUDGET_LIMITS,
+          dailyUsd: 1,
+          monthlyApiUsd: 25,
+          monthlyOperatingUsd: COUNTERSIGNED_MONTHLY_OPERATING_USD
+        }
       })
     });
     const stored = report.manuscriptHash ? store.versions.get(report.manuscriptHash) : undefined;

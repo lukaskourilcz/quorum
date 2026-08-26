@@ -9,9 +9,9 @@ import { resolveEffectivePortfolioSchedule, type EffectivePortfolioSchedule } fr
  * The caps the runtime actually enforces, from the countersigned decision and the workflow env.
  *
  * Every phase has to reach the same numbers. Article production carried its own literal —
- * $2.20 a day, $42 a month API, $50 all-in — which are the figures of budget-2026-08d, a
- * decision superseded on 2 August by budget-2026-08e at $1.00, $25 and $30. A phase-local
- * copy of a cap silently keeps spending against a decision the owner has replaced, so there
+ * $2.20 a day, $42 a month API, $50 all-in, which are the figures of budget-2026-08d. The
+ * current decision is budget-2026-08f at $1.00, $25 and $50. A phase-local copy of a cap
+ * silently keeps spending against a decision the owner has replaced, so there
  * is one resolver and the phases tighten it rather than restating it.
  */
 export function environmentBudgetLimits(schedule: {

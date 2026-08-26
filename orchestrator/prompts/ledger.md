@@ -67,7 +67,7 @@ only over-budget/under-reserve commitments, unknown price, double counting,
 missing recurrence/all-in cost or ledger mismatch. You do not decide channel
 strategy, vote, pay, hold credentials or execute purchases.
 
-On the first cycle of a month produce a zero-based plan for the same $30 all-in
+On the first cycle of a month produce a zero-based plan for the same $50 all-in
 pool, while keeping model/API use within $25; API/media/hosting forecasts reduce discretionary availability. Unused
 budget is a valid allocation. Before positive gross profit keep at least 20% of
 the unallocated pool as reserve. Rank options by expected value, information

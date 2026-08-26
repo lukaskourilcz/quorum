@@ -1,7 +1,7 @@
 {
   "schemaVersion": "goviral-sources/1",
   "verifiedAt": "2026-08-06",
-  "$comment": "Apify actors GoVIRAL may run, and the topic sets it runs them on. The Free plan's $5 monthly platform credit is the budget guard: when it is spent the actors stop, so overspend is impossible and no cash is at risk. Upgrading the plan needs a new owner approval — Starter is $29/mo and does not fit the $30 all-in cap.",
+  "$comment": "Apify actors GoVIRAL may run, and the topic sets it runs them on. The Free plan's $5 monthly platform credit is the budget guard: when it is spent the actors stop, so overspend is impossible and no cash is at risk. Upgrading the plan needs a new owner approval. Starter is $29/mo and would consume more than half of the $50 all-in cap.",
   "actors": [
     {
       "id": "instagram-popular-reels",
@@ -125,7 +125,7 @@
   "rejected": [
     {
       "what": "X/Twitter scraping, in any form",
-      "why": "Every usable Apify actor needs the $29 Starter plan, which alone busts the $30 all-in cap."
+      "why": "Every usable Apify actor needs the unapproved $29 Starter plan, which would consume more than half of the $50 all-in cap."
     },
     {
       "what": "The Apify Google News rental actor",

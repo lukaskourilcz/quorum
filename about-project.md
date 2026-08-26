@@ -171,7 +171,7 @@ Když nějaká brána poradu vypne, zapíše se do `state/meetings/skips/` důvo
 označí jako **Skipped** s vysvětlením v popisku. Prázdný den tak řekne, kterou bránu
 otevřít, místo aby vypadal jako porucha.
 
-Podepsané rozhodnutí `budget-2026-08e` stanovuje celkový měsíční limit **30 dolarů**,
+Podepsané rozhodnutí `budget-2026-08f` stanovuje celkový měsíční limit **50 dolarů**,
 z toho 25 dolarů pro modely a API a denní tempo 1,00 dolaru. Nahrazuje starší
 `budget-2026-08d` (50 / 42 / 2,20). Jeden resolver drží tyto částky pro celý běh; každá
 fáze si limit smí jen utáhnout, nikdy povolit. Systém si limit nesmí zvýšit sám a platby

@@ -284,7 +284,7 @@ autopublish through the existing publisher with the venture's own unlock counter
 
 Standing rules that need no new approval, restated in the founding decision: no paid ads,
 no giveaways involving payment, no outreach sent by the system (BOOKER drafts, the owner
-sends), treasury untouched, $30/$25/$1.00 ceilings untouched.
+sends), treasury untouched, $50/$25/$1.00 ceilings untouched.
 
 ## 13. Metrics and KPIs
 
@@ -484,7 +484,7 @@ lesson is indistinguishable from drift.
 
 ## What this does not touch
 
-The $30 / $25 / $1.00 ceilings. The social triple-lock — nothing here posts, and the
+The $50 / $25 / $1.00 ceilings. The social triple-lock: nothing here posts, and the
 venture has no channel, no credentials and no publisher path until separate future
 decisions. The treasury and payment rules. `METRICS_INGESTION_ENABLED=false` and the D9
 measurement hold — owner-entered results are typed by a human into a protected surface,

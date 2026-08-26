@@ -482,7 +482,7 @@ fails any package whose only content is what they already said.
 
 ## What this does not touch
 
-The $30 / $25 / $1.00 ceilings. The social triple-lock — nothing posts, no channel, no
+The $50 / $25 / $1.00 ceilings. The social triple-lock: nothing posts, no channel, no
 credentials, publisher refuses the venture by name. Treasury and payments. The magazines'
 truth gates and delivery paths. GoVIRAL's pinned actors and its Monday recipe (the quota
 priority note changes when its guard trims, not what it may do). The streams path's

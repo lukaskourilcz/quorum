@@ -38,7 +38,7 @@ function budget(cycleId: string): ReserveContext {
   return {
     now: NOW, cycleId, stage: "VALIDATION", ledger: [], allInNonApiSpentUsd: 0,
     allInCommittedUsd: 0, knownMonthlyForecastUsd: 0, remainingScheduledCycles: 1,
-    limits: { ...DEFAULT_BUDGET_LIMITS, dailyUsd: 1, monthlyApiUsd: 25, monthlyOperatingUsd: 30 }
+    limits: { ...DEFAULT_BUDGET_LIMITS, dailyUsd: 1, monthlyApiUsd: 25, monthlyOperatingUsd: 50 }
   };
 }
 

@@ -12,8 +12,8 @@ import type { FooterFacts } from "@/components/footer-dialogs";
  * actually recorded, and the updates are the newest recorded meetings.
  */
 
-/** The all-in monthly operating limit from `budget-2026-08e`. */
-const ALL_IN_CAP_USD = 30;
+/** The all-in monthly operating limit from `budget-2026-08f`. */
+const ALL_IN_CAP_USD = 50;
 
 export async function readFooterFacts(): Promise<FooterFacts> {
   const [money, standups] = await Promise.all([

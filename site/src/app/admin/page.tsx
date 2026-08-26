@@ -126,7 +126,7 @@ const SECTION_LEADS: Readonly<Record<CompanyView, string>> = {
  * Money at headline size, always to the cent.
  *
  * `formatUsd` allows four decimals because a single model call costs a fraction of a cent and the
- * detail tables need that precision. At 26px beside "of the $30.00 limit" the same function
+ * detail tables need that precision. At 26px beside "of the $50.00 limit" the same function
  * printed "$2.901", which reads as a typo rather than as a sum. The tiles round; the tables that
  * account for the pennies still do not.
  */

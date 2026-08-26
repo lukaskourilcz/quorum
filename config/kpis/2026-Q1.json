@@ -21,7 +21,7 @@
       "venture": "company",
       "name": "Highest monthly operating cost",
       "metric_source": "state/metrics/quarterly#maximum_monthly_all_in_usd",
-      "target": 30,
+      "target": 50,
       "direction": "at-most",
       "unit": "usd",
       "critical": true,

@@ -52,14 +52,14 @@ export type BudgetLedgerEntry = z.infer<typeof BudgetLedgerEntrySchema>;
  * Every meeting page prints "Spent this month $X of $Y", and Y was a literal written into each
  * builder: 20 in the new-idea rooms, 30 in the Caught Up rooms, 50 in one portfolio record. A
  * visitor reading two meetings from the same week saw two different budgets for the same company.
- * `state/FINANCE.md` has one answer — "Effective countersigned monthly all-in cap: $30.00 under
- * `budget-2026-08e`" — and this is it, so a record can no longer disagree with the company.
+ * `state/FINANCE.md` has one answer: "Effective countersigned monthly all-in cap: $50.00 under
+ * `budget-2026-08f`." This is it, so a record can no longer disagree with the company.
  *
  * It is a published figure, not a spending guard: `DEFAULT_BUDGET_LIMITS.monthlyOperatingUsd`
  * below is what the runtime refuses calls against when the environment sets nothing, and it is
  * deliberately lower.
  */
-export const COUNTERSIGNED_MONTHLY_OPERATING_USD = 30;
+export const COUNTERSIGNED_MONTHLY_OPERATING_USD = 50;
 
 export interface BudgetLimits {
   perTextCallUsd: number;

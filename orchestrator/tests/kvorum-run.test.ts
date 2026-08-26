@@ -93,7 +93,7 @@ describe("Kvórum desk runner", () => {
         kind: "kv-desk",
         fixture: true,
         status: "PLAN",
-        ledger: { estimatedCycleUsd: 0.1, actualCycleUsd: 0, monthCapUsd: 30 },
+        ledger: { estimatedCycleUsd: 0.1, actualCycleUsd: 0, monthCapUsd: 50 },
         decision: { outcome: "PLAN" },
         kvorumDesk: {
           monitorRef: "state/ventures/kvorum/monitor/2026-08-12.json",
@@ -420,7 +420,7 @@ describe("Kvórum desk runner", () => {
         status: "PLAN",
         fixture: false,
         agendaRef: `${MEETING_AGENDA_PATH}#${inbound.agenda.id}`,
-        ledger: { actualCycleUsd: result.spendUsd, monthAllInUsd: result.spendUsd, monthCapUsd: 30 },
+        ledger: { actualCycleUsd: result.spendUsd, monthAllInUsd: result.spendUsd, monthCapUsd: 50 },
         kvorumDesk: { runStatus: "packages", providerCallMade: true, packages: result.packages }
       });
       const agendaQueue = MeetingAgendaQueueSchema.parse(JSON.parse(await readFile(

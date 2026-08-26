@@ -4,8 +4,8 @@ import { BudgetLedgerEntrySchema, hasLedgerEntry, type BudgetLedgerEntry } from 
 /**
  * What the image programme may spend, and what happens when it cannot.
  *
- * Three numbers, all from `article-image-fit-2026-08-08`, all inside the $30 all-in operating cap
- * of `budget-2026-08e`. They are hard limits in one direction only: a run that hits one descends a
+ * Three numbers, all from `article-image-fit-2026-08-08`, all inside the $50 all-in operating cap
+ * of `budget-2026-08f`. They are hard limits in one direction only: a run that hits one descends a
  * rung of the certainty ladder and keeps going. An article can always ship with the FRAME plate,
  * so a cap can cost a photograph and must never cost a publication.
  *

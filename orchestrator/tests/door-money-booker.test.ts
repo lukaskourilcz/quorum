@@ -91,7 +91,7 @@ function budget(cycleId: string): ReserveContext {
       ...DEFAULT_BUDGET_LIMITS,
       dailyUsd: 1,
       monthlyApiUsd: 25,
-      monthlyOperatingUsd: 30
+      monthlyOperatingUsd: 50
     }
   };
 }

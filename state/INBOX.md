@@ -13,7 +13,7 @@ items in place. Lack of response never authorizes an action. -->
     reserve one to three. Synthesis has no search tool. Each call remains beneath
     the portfolio's immutable `$0.10` text-call ceiling.
   - **The narrower spend guards:** no more than `$0.50` of research per cycle and
-    `$5.00` per month, both inside the signed `$25` model/API share and `$30`
+    `$5.00` per month, both inside the signed `$25` model/API share and `$50`
     all-in ceiling. Every call reserves before it runs and records actual use after.
   - **The retained evidence:** the research ledger records provider, model, book,
     reason, requesting meeting, tokens, searches, cost, dossier reference and later
@@ -101,7 +101,7 @@ items in place. Lack of response never authorizes an action. -->
   Mondays, finds no scout data, records that in one plain sentence and spends
   nothing. Everything else in the system is unaffected.
   **Never upgrade the plan without a new approval.** Starter is $29/month, which
-  alone would consume the entire $30 all-in operating cap from `budget-2026-08e`.
+  would consume more than half of the $50 all-in operating cap from `budget-2026-08f`.
 
 - [ ] HUMAN_APPROVAL TT-VISUALS-SPEND-001 — Allow the first routine image spend:
   two Titty Tuesdays garment renders a day, one per provider, inside the existing
@@ -182,8 +182,8 @@ items in place. Lack of response never authorizes an action. -->
     sends as the Authorization bearer on its own cron requests.
   - **That it can trigger paid model runs:** yes. A dispatch started with this
     token runs the council live and calls the paid model APIs, exactly as a
-    GitHub cron firing does, and spends against the same $30/month all-in
-    operating cap from `budget-2026-08e`. It raises no limit and skips no
+    GitHub cron firing does, and spends against the same $50/month all-in
+    operating cap from `budget-2026-08f`. It raises no limit and skips no
     budget, gate or gating switch.
   What it does not get: no access to repository contents, secrets, or any other
   repository, and no say in what a run does. `site/src/app/api/cron/[phase]`
@@ -227,8 +227,8 @@ items in place. Lack of response never authorizes an action. -->
     on `lukaskourilcz/quorum`, read only by `cycle.yml`.
   Until this is resolved the whole MMA-actor path is a $0 no-op that reports
   itself in one plain sentence per run. **Never upgrade the plan without a new
-  approval** — Starter is $29/month, which alone would consume the entire $30
-  all-in operating cap from `budget-2026-08e`.
+  approval**: Starter is $29/month, which would consume more than half of the $50
+  all-in operating cap from `budget-2026-08f`.
 
 - [ ] HUMAN_APPROVAL BOOK-SOURCE-001 — Provide Door Money's private manuscript
   source and approve the public/private boundary.
@@ -260,7 +260,7 @@ items in place. Lack of response never authorizes an action. -->
   What this approves, exactly:
   - **The ceilings:** at most $3.00 for the whole ingestion program, at most
     $0.80 on any day and at most $0.10 for any paid call. These are sub-limits;
-    the signed $30 all-in monthly, $25 model/API and $1.00 daily ceilings still
+    the signed $50 all-in monthly, $25 model/API and $1.00 daily ceilings still
     win.
   - **The model work:** `BOOK_INGEST` uses the configured Anthropic Haiku route
     for bounded annotation, scoring and map work; `BOOK_STYLE` uses the
@@ -359,7 +359,7 @@ items in place. Lack of response never authorizes an action. -->
   research through the existing shared provider.
   What this approves, exactly:
   - **The ceilings:** at most `$0.30` per brief and `$2.00` per month, inside the
-    immutable `$0.10` per-call, `$1.00` daily, `$25` model/API and `$30` all-in
+    immutable `$0.10` per-call, `$1.00` daily, `$25` model/API and `$50` all-in
     portfolio limits. Every call reserves first and records actual use after.
   - **The priorities:** Ukrainian coverage gaps first, then names and music. A
     reusable cited dossier wins before new spend; one canonical dossier supports

@@ -857,7 +857,7 @@ experiment: hook frame parent-vs-self on feature 1; agenda filed: none.
 
 The `dontwannaknow` repository — no writes, ever; adoption is marketing-side only.
 The product's privacy architecture, its no-runtime-AI rule, its monetization limits
-(no ads, no tracking scripts) and its editorial gates. The $30 / $25 / $1.00
+(no ads, no tracking scripts) and its editorial gates. The $50 / $25 / $1.00
 ceilings ($4/month model + $2/month research fits under them). The social
 triple-lock — drafts-only, owner-hand posting, publisher refuses the venture by
 name. Treasury, metrics-ingestion hold, the magazines, the sibling venture designs.

@@ -6,7 +6,7 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 
 ## Peníze teď
 
-- Zaznamenané náklady se počítají z uložené historie API volání. Podepsané rozhodnutí `budget-2026-08e` nastavuje společný limit **$30 / měsíc**, z toho $25 pro modely a $1.00 denně. Při 80 % systém varuje; při 100 % nebo po třech vyčerpaných dnech další náklady zastaví. Soubor fixních nákladů nyní uvádí $0, ale předplacený kredit fal.ai ještě není smířený, takže nejde o úplně odsouhlasený all-in účet.
+- Zaznamenané náklady se počítají z uložené historie API volání. Podepsané rozhodnutí `budget-2026-08f` nastavuje společný limit **$50 / měsíc**, z toho $25 pro modely a $1.00 denně. Personal Growth má v tomto limitu vlastní strop $20. Při 80 % systém varuje; při 100 % nebo po třech vyčerpaných dnech další náklady zastaví. Soubor fixních nákladů nyní uvádí $0, ale předplacený kredit fal.ai ještě není smířený, takže nejde o úplně odsouhlasený all-in účet.
 - Každý externí výdaj schvaluje člověk (položka `HUMAN_APPROVAL` / `SPEND`); agent nedrží platební údaje.
 - Obrázky vytvářené přímo v kódu mají plánovaný náklad $0. Denní souhrn se nikam
   neposílá e-mailem — čte se na webu v sekci **Results**, takže nevyžaduje žádného
@@ -25,7 +25,7 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 
 ## Náklady podle projektu
 
-Všechny řádky níže jsou podřízené společnému limitu `$30` měsíčně, modelovému a API
+Všechny řádky níže jsou podřízené společnému limitu `$50` měsíčně, modelovému a API
 podílu `$25` a tempu `$1.00` denně. Obálka je nejvyšší povolená částka, ne očekávaná
 útrata. Pozastavená, prázdná nebo důkazy zablokovaná cesta stojí `$0`.
 
