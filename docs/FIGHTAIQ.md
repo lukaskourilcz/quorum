@@ -14,6 +14,11 @@ FightAIQ is BoardlessAI’s sourced UFC and Oktagon data and analysis project. D
 D8 turns guarded analysis on. It never places bets, signs into a bookmaker, publishes
 affiliate links or presents a forecast as advice or income.
 
+The 2026-08-26 autonomy-first capability decision also denies every monetization
+execution class: premium picks, betting affiliate, paid feed, subscription, sponsor
+offer and data-licensing runtime. Readiness evidence may be displayed only as future
+reference; it cannot generate a proposal, task, offer or external action.
+
 ## What happens in a data run
 
 1. The $0 roster reader checks reviewed Wikimedia categories and creates missing

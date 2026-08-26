@@ -596,9 +596,8 @@ Procedures, not gates. They verify plumbing; none of them is a content approval.
    measurements should say **No data**; recognised revenue stays `$0.00` until a verified revenue
    entry exists.
 
-An earning method becoming ready creates a full proposal in `/admin` and an item in this document.
-Readiness is not permission to launch it: sponsorship, affiliate work, commerce, accounts, payments
-and legal setup remain owner-controlled.
+Monetization readiness is information-only. It creates no proposal or item in this
+document, and no earning implementation may begin without a new owner decision.
 
 ### 2. Finish the remaining account connections
 

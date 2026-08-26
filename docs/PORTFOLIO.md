@@ -1,6 +1,7 @@
 # BoardlessAI project model
 
-BoardlessAI is one guarded operating system with eleven project workspaces. Shared
+BoardlessAI is one guarded operating system with eleven public project workspaces and
+one owner-only Personal Growth workspace. Shared
 infrastructure owns the agent registry, budget, source policy, meeting records,
 specialist agendas, calendar, admin, delivery checks and public explanation. Each
 project keeps a narrow output boundary rather than cloning the orchestrator.
@@ -20,6 +21,26 @@ project keeps a narrow output boundary rather than cloning the orchestrator.
 | Door Money | Implementation complete, pending countersignature | Evidence-linked English book-storytelling recommendations and a Thursday owner action packet | Manuscript/full chunks/embeddings stay private; no posting, account, channel or outreach; results are owner-entered only |
 | Tehdejší svět | Implementation complete, pending countersignature | Ranks a hand-committed facts file and produces independent Czech and Ukrainian family-history drafts through a two-day cycle | The existing product and its repository stay separate; no runtime connection, tracking, account, channel or posting path; tier-two review blocks release |
 | Kvórum | Implementation complete, held live | Turns corroborated Czech political clusters into one or two typed, cited recommendation drafts | Founding and capacity signatures plus four owner approvals fail closed independently; no party endorsement, automated post, account, analytics or treasury path |
+
+## Directional capability map
+
+`config/venture-capabilities.json` is the versioned, deny-by-default source of truth for
+cross-venture and venture-to-service content/data access. A valid request must match one
+exact source, target, capability and payload schema version; an allowed edge still grants
+no publishing, spending, credentials or external-action authority.
+
+BOOKSOFHISTORY and Tehdejší svět cannot exchange candidates, research, dossiers, claims,
+drafts, agendas, performance priors or campaign packages. Personal Growth accepts no
+automatic portfolio discovery or nominations. Kvórum has no outbound political-content
+edge. FightAIQ has no monetization-execution capability. GoVIRAL can provide only bounded,
+expiring intelligence packets, never final copy or publishing payloads.
+
+Door Money has exactly three registered content/service relationships: a held GoVIRAL
+intelligence input, an approved bounded summary to Design Lab and an approved immutable
+package reference to Social Distribution. The latter still requires Social Distribution's
+own connection, provider and routine authority. The planned WebDev Signal boundary mirrors
+those three social-core relationships plus exact held access to its own metrics, progress,
+health and owner-attention services; it has no core edge to Caught Up or any other venture.
 
 `config/ventures.json` stores each project's meetings, participating roles, cost
 envelope and admin tabs. `config/venture-agent-controls.json` stores optional agent switches. Internal
@@ -181,13 +202,13 @@ a mandatory `continue / pivot / stop` board item and owner packet. A company mis
 also requires the board to review its operating pattern. The evidence can inform a
 stage decision, but only the owner can change the stage.
 
-`/money` publishes the sanitized target status, earning-method gates, API spend,
-owner-entered fixed-cost categories and verified revenue. Earning methods may move
-from waiting to ready and produce a complete owner proposal. They never become active
-without the owner. FightAIQ remains explicitly unmonetized in Q1 and Q2 while its
-evaluation record is too young.
+`/money` publishes the sanitized target status, information-only earning readiness, API
+spend, owner-entered fixed-cost categories and verified revenue. Every earning method
+remains locked regardless of KPI readiness. No proposal, experiment, agenda, task or
+owner-attention item is generated; monetization requires a new owner decision before any
+implementation can begin. FightAIQ has no monetization execution capability.
 
-The protected admin holds the full proposal checklists and edits
+The protected admin displays the read-only future-reference catalog and edits
 `config/fixed-costs.json`. An empty fixed-cost file is valid but means "not entered,"
 not "free." API totals still come only from the budget ledger, and public output does
 not include invoices, credentials or personal data.

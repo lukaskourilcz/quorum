@@ -1,15 +1,16 @@
 # BoardlessAI — monetizace
 
-Katalog je v `config/monetization-options.json` a administrace ho zobrazuje v části
-**Future → Ways this could earn**. Obsahuje sedmnáct možností v kategoriích reklama,
-affiliate, obchod, předplatné, produkty, služby, licence a podpora. U každé uvádí prostý
-popis, náklad na spuštění, vhodné projekty a překážky.
+Katalog v `config/monetization-options.json` je verzovaný seznam šestnácti možností pro
+budoucí orientaci. Administrace ho zobrazuje v části **Future → Ways this could earn**.
+U každé položky uvádí popis, náklad, možné projekty a známé překážky.
 
-Tento soubor je jediný zdroj. Dříve zde byla druhá tabulka stejných možností. Právě
-takovému rozcházení dvou seznamů brání pravidlo 4 v `docs/ENGINEERING.md`.
+Jeho závazná poloha je `information-only` a `executionEnabled` je `false`. Katalog nemůže
+založit práci, návrh, experiment, agendu, owner-attention položku, nabídku, kontakt,
+cenotvorbu, účet, obchod, affiliate umístění, předplatné ani výdaj. Dosažené KPI se mohou
+zobrazit jako informace, ale runtime ponechá všechny monetizační metody zamčené a nevytvoří
+proposal soubor ani úkol v `docs/NEEDED.md`.
 
-Nic v katalogu není zapnuté a nic neutratí peníze. Každá možnost, která by něco stála,
-založila účet nebo otevřela kanál, nejprve potřebuje `HUMAN_APPROVAL` ve
-`state/INBOX.md` a musí se vejít do společného limitu `$50` z rozhodnutí
-`budget-2026-08f`. Přidání owner-only projektu žádnou možnost nezapnulo ani
-nezdvojilo; výdělečné cesty se stále definují jen v katalogu.
+Prodej designových šablon není součástí katalogu a Design Lab, marketingShark ani GoVIRAL
+nemají oprávnění šablony prodávat. Jakákoli monetizační implementace vyžaduje nové rozhodnutí
+vlastníka, které teprve vymezí konkrétní rozsah, právní podmínky, účty, platby, rozpočet a
+runtime brány. Tento soubor je jediný zdroj katalogu; nevytvářejte paralelní seznam.

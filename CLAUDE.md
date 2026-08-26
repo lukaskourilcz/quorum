@@ -9,9 +9,12 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   EXPERIMENTS, FINANCE, CONTENT_INVENTORY, CLAIMS, BRAND, ROADMAP, INBOX and
   decisions.
 - `orchestrator/` — cycle engine + council prompts. `site/` — Next.js app.
-- `config/ventures.json` — the canonical venture set: Caught Up (DNESKAi), Titty
+- `config/ventures.json` — the canonical public venture set: Caught Up (DNESKAi), Titty
   Tuesdays, GoVIRAL, BOOKSOFHISTORY, FightAIQ, Design Lab, marketingShark, MMA Files,
-  Door Money, Tehdejší svět and Kvórum. It also owns each venture room and envelope.
+  Door Money, Tehdejší svět and Kvórum, plus the owner-only Personal Growth workspace.
+  It also owns each venture room and envelope. `config/venture-capabilities.json` is the
+  separate deny-by-default graph for exact cross-boundary data and service handoffs;
+  it also reserves the planned `webdev-signal` boundary without founding that venture.
 - `studio/` — `@boardlessai/carousel-studio`, the deterministic render package. It is
   consumed as built output (`dist/`, gitignored). `pnpm install` builds it through the
   studio's `prepare`, and the gates rebuild it through `pre*` scripts in `site` and
@@ -76,6 +79,16 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
 - **Kvórum is built but held.** Its 21:00 fixture monitor costs `$0`. No external source or TRIBUN
   call may run until both the founding record and a separate capacity-reallocation record are
   countersigned; a venture switch is not a substitute for either decision.
+- **There is no portfolio-wide content bridge.** A cross-venture or venture-to-service adapter
+  must call `resolveVentureCapability` with an exact source, target, capability and payload schema.
+  Unknown and unregistered requests fail closed. Never infer access from a shared topic, tag,
+  storage shape or neighboring package. BOOKSOFHISTORY and Tehdejší svět are mutually isolated;
+  Personal Growth cannot enumerate the portfolio; Kvórum cannot export political content; and
+  GoVIRAL supplies only bounded expiring intelligence, never final copy.
+- **The monetization catalog is reference material, not a queue.** Its v2 posture is
+  `information-only`, `executionEnabled` is false and every runtime method remains locked even
+  when a readiness KPI is met. Catalog reads must never create a proposal, experiment, agenda,
+  task, owner-attention item, offer or external action.
 
 ## Golden rules
 

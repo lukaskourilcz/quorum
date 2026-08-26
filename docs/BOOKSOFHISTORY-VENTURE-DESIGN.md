@@ -204,24 +204,20 @@ Workspace `/admin?venture=booksofhistory`, three tabs:
   results, Design Lab handoff, approve / edit / reject, posted-URL and results entry,
   RatingWidget.
 
-## 10. GoVIRAL and Design Lab — the shared spine (all ventures)
+## 10. Bounded intelligence and shared rendering infrastructure
 
-Standing rule, applied here and retrofitted to the sibling programs: **every BoardlessAI
-venture is fully connected to GoVIRAL and the Design Lab.** Concretely, a venture is
-"connected" when all four hold:
+The 2026-08-26 autonomy-first decision supersedes the earlier "shared spine" proposal.
+Repository proximity, a GoVIRAL topic set, meeting policy and use of Design Lab do not
+create a generic cross-venture edge. BOOKSOFHISTORY may consume only the registered
+`goviral -> booksofhistory: intelligence-read` payload as deterministic, expiring trend
+context. It cannot receive final copy, campaigns or publishing authority, and it has no
+direct content/data edge to Tehdejší svět, Door Money, DNESKAi or another venture.
 
-1. **GoVIRAL scouts for it** — `config/goviral-sources.json` `topicSets` gains a set per
-   venture (for BOOKSOFHISTORY: book-history, literary-anniversary and publishing-story
-   terms in both languages), so the Monday scout reads the market for every venture at
-   no extra recipe cost.
-2. **The venture reads the brief** — its runner consumes the latest recorded GoVIRAL
-   plan as deterministic context (here: trend-crossover boosts in the shortlist and a
-   "cultural moment" flag the meeting sees).
-3. **Agendas flow both ways** — `config/meeting-policy.json` transitions let `gv-brief`
-   hand one agenda to the venture's room and the venture's room file one back.
-4. **The Design Lab is the only rendering path** — a venture brand token set, the
-   recorded carousel summary as the studio handoff, and every visual deterministic. No
-   venture ever grows a private rendering path.
+Design Lab remains generic deterministic rendering infrastructure. It receives the
+venture-owned bounded summary required by its own service contract; it does not become
+strategy or content owner. Existing direct GoVIRAL readers are legacy adapters and gain
+no broader authority from their historical input shape. New or changed adapters must use
+`resolveVentureCapability` and an exact schema before they can cross a boundary.
 
 BOOKSOFHISTORY adds the bilingual wrinkle: each feature writes **two** recorded
 summaries (locale `cs` and `en`) under the same slug, so both language decks sit side by
@@ -237,10 +233,8 @@ are what social growth compounds on; derivative packages from the same dossier (
 card, thread, single-fact card — no new research, gate-checked against the same claims);
 the anniversary calendar auto-proposing cycle timing weeks ahead; supplemental
 "freshness" calls (≤$0.05, capped) when a shelf dossier is chosen after 90+ days —
-stable history is reused, only the time-sensitive layer refreshes; cross-venture
-crossovers (a Czech classic for DNESKAi's audience, a music memoir for Door Money's);
-and — post-triple-lock — queued autopublish per lane behind the venture's own unlock
-counter.
+stable history is reused, only the time-sensitive layer refreshes; and, after a separate
+future decision, queued autopublish per lane behind the venture's own unlock counter.
 
 ## 12. Human approval requirements
 
