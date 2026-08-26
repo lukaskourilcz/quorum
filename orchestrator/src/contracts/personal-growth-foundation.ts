@@ -44,7 +44,11 @@ export const PersonalGrowthFoundationSchema = z.strictObject({
     projectLive: z.boolean(),
     paidSynthesis: z.boolean(),
     insightsIngestion: z.boolean(),
+    instagramInsights: z.boolean(),
+    threadsInsights: z.boolean(),
     threadsSearch: z.boolean(),
+    providerLive: z.boolean(),
+    tokenRefresh: z.boolean(),
     bufferQueue: z.boolean(),
     publishing: z.literal(false)
   }),

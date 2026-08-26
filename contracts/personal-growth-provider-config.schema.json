@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-provider-config/1"
+    },
+    "auditedAt": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "officialSourcesOnly": {
+      "type": "boolean",
+      "const": true
+    },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "graphApiVersion": {
+          "type": "string",
+          "const": "v26.0"
+        },
+        "threadsApiVersion": {
+          "type": "string",
+          "const": "v1.0"
+        },
+        "instagramApiFamilies": {
+          "minItems": 2,
+          "maxItems": 2,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "instagram-login",
+              "facebook-login"
+            ]
+          }
+        },
+        "instagramProfessionalAccountTypes": {
+          "minItems": 2,
+          "maxItems": 2,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "business",
+              "creator"
+            ]
+          }
+        },
+        "instagramPermissions": {
+          "type": "object",
+          "properties": {
+            "instagramLogin": {
+              "minItems": 2,
+              "maxItems": 2,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "instagram_business_basic",
+                  "instagram_business_manage_insights"
+                ]
+              }
+            },
+            "facebookLogin": {
+              "minItems": 3,
+              "maxItems": 3,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "instagram_basic",
+                  "instagram_manage_insights",
+                  "pages_read_engagement"
+                ]
+              }
+            }
+          },
+          "required": [
+            "instagramLogin",
+            "facebookLogin"
+          ],
+          "additionalProperties": false
+        },
+        "threadsPermissions": {
+          "minItems": 2,
+          "maxItems": 2,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "threads_basic",
+              "threads_manage_insights"
+            ]
+          }
+        },
+        "threadsSearchPermission": {
+          "type": "string",
+          "const": "threads_keyword_search"
+        },
+        "docs": {
+          "type": "object",
+          "properties": {
+            "versions": {
+              "type": "string",
+              "pattern": "^https:\\/\\/"
+            },
+            "instagramOverview": {
+              "type": "string",
+              "pattern": "^https:\\/\\/"
+            },
+            "instagramInsights": {
+              "type": "string",
+              "pattern": "^https:\\/\\/"
+            },
+            "threadsOverview": {
+              "type": "string",
+              "pattern": "^https:\\/\\/"
+            },
+            "threadsInsights": {
+              "type": "string",
+              "pattern": "^https:\\/\\/"
+            },
+            "threadsKeywordSearch": {
+              "type": "string",
+              "pattern": "^https:\\/\\/"
+            }
+          },
+          "required": [
+            "versions",
+            "instagramOverview",
+            "instagramInsights",
+            "threadsOverview",
+            "threadsInsights",
+            "threadsKeywordSearch"
+          ],
+          "additionalProperties": false
+        },
+        "retentionPolicy": {
+          "type": "string",
+          "const": "provider-defined-do-not-assume"
+        },
+        "deprecatedMetricPolicy": {
+          "type": "string",
+          "const": "unavailable-never-zero"
+        }
+      },
+      "required": [
+        "graphApiVersion",
+        "threadsApiVersion",
+        "instagramApiFamilies",
+        "instagramProfessionalAccountTypes",
+        "instagramPermissions",
+        "threadsPermissions",
+        "threadsSearchPermission",
+        "docs",
+        "retentionPolicy",
+        "deprecatedMetricPolicy"
+      ],
+      "additionalProperties": false
+    },
+    "buffer": {
+      "type": "object",
+      "properties": {
+        "auditedAt": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "docs": {
+          "type": "string",
+          "pattern": "^https:\\/\\/"
+        },
+        "apiStyle": {
+          "type": "string",
+          "const": "graphql"
+        },
+        "supportedPlatforms": {
+          "minItems": 2,
+          "maxItems": 2,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "instagram",
+              "threads"
+            ]
+          }
+        },
+        "adapterEnabled": {
+          "type": "boolean",
+          "const": false
+        },
+        "ownerApprovalRequired": {
+          "type": "boolean",
+          "const": true
+        },
+        "purchaseAuthorized": {
+          "type": "boolean",
+          "const": false
+        },
+        "publishingAuthorized": {
+          "type": "boolean",
+          "const": false
+        },
+        "planAssumption": {
+          "type": "string",
+          "const": "none"
+        }
+      },
+      "required": [
+        "auditedAt",
+        "docs",
+        "apiStyle",
+        "supportedPlatforms",
+        "adapterEnabled",
+        "ownerApprovalRequired",
+        "purchaseAuthorized",
+        "publishingAuthorized",
+        "planAssumption"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "auditedAt",
+    "officialSourcesOnly",
+    "meta",
+    "buffer"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-provider-config.schema.json"
+}

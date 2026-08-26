@@ -1,0 +1,395 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-instagram-recommendation/1"
+    },
+    "recommendationDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "actionType": {
+      "type": "string",
+      "enum": [
+        "personal-photo",
+        "photo-dump",
+        "okraj-distribution",
+        "bbarak-distribution",
+        "reel",
+        "story-sequence",
+        "owner-manual-venture-reshare",
+        "owner-entered-behind-scenes",
+        "no-post"
+      ]
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "feed-photo",
+        "feed-carousel",
+        "reel",
+        "story",
+        "distribution-checklist",
+        "none"
+      ]
+    },
+    "pillar": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "life-lifestyle",
+            "writing-publishing",
+            "hip-hop",
+            "rapovej-denik",
+            "travel-places-lived",
+            "prague",
+            "software-products",
+            "boardlessai-behind-scenes",
+            "fitness-discipline-muay-thai",
+            "books-reading",
+            "clothing-personal-style"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "goal": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dueWindow": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "ownerSourceRefs": {
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "collaborator": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "assetChecklist": {
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "distributionChecklist": {
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "storiesSupport": {
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "projectedPersonalRatio": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "goviralSignalId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^pg-gv-[a-f0-9]{16}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "activeExperimentId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 360
+    },
+    "noPostReason": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "no-useful-candidate",
+            "policy-blocked",
+            "english-profile-unavailable",
+            "authority-held"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reel": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "suggestionId": {
+              "type": "string",
+              "pattern": "^pg-reel-[a-f0-9]{16}$"
+            },
+            "series": {
+              "type": "string",
+              "enum": [
+                "rapovej-moment",
+                "behind-the-page",
+                "life-between-projects",
+                "trend-met-memory",
+                "english-rapovej-denik"
+              ]
+            },
+            "concept": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 600
+            },
+            "purpose": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "durationBandSeconds": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                }
+              ]
+            },
+            "assetChecklist": {
+              "minItems": 1,
+              "maxItems": 12,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              }
+            },
+            "shotChecklist": {
+              "minItems": 1,
+              "maxItems": 12,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              }
+            },
+            "language": {
+              "type": "string",
+              "enum": [
+                "cs",
+                "en"
+              ]
+            },
+            "subtitleLanguages": {
+              "maxItems": 2,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "cs",
+                  "en"
+                ]
+              }
+            },
+            "collaborator": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "trendExpiresAt": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "ownerMemoryEvidenceRefs": {
+              "maxItems": 8,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              }
+            },
+            "considerTrialReel": {
+              "type": "boolean"
+            },
+            "experimentId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "suggestionId",
+            "series",
+            "concept",
+            "purpose",
+            "durationBandSeconds",
+            "assetChecklist",
+            "shotChecklist",
+            "language",
+            "subtitleLanguages",
+            "collaborator",
+            "trendExpiresAt",
+            "ownerMemoryEvidenceRefs",
+            "considerTrialReel",
+            "experimentId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "manualVentureReferenceId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^pg-manual-ref-[a-f0-9]{16}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "ownerWritesArtifact": {
+      "type": "boolean",
+      "const": true
+    },
+    "publishingAuthorized": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "recommendationDate",
+    "generatedAt",
+    "actionType",
+    "format",
+    "pillar",
+    "goal",
+    "dueWindow",
+    "ownerSourceRefs",
+    "collaborator",
+    "assetChecklist",
+    "distributionChecklist",
+    "storiesSupport",
+    "projectedPersonalRatio",
+    "goviralSignalId",
+    "activeExperimentId",
+    "reason",
+    "noPostReason",
+    "reel",
+    "manualVentureReferenceId",
+    "ownerWritesArtifact",
+    "publishingAuthorized"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-instagram-recommendation.schema.json"
+}

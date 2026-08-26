@@ -1,0 +1,552 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-threads-recommendation/1"
+    },
+    "recommendationDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "inputHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "RECOMMEND",
+        "NO_POST",
+        "HELD"
+      ]
+    },
+    "noPostReason": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "no-useful-candidate",
+            "english-profile-unavailable",
+            "authority-held",
+            "all-candidates-rejected"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "primary": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "suggestionId": {
+              "type": "string",
+              "pattern": "^pg-thread-[a-f0-9]{16}$"
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 10000
+            },
+            "language": {
+              "type": "string",
+              "enum": [
+                "cs",
+                "en"
+              ]
+            },
+            "characterCount": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "topicTag": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 80,
+                  "pattern": "^#[\\p{L}\\p{N}_]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "sourceLane": {
+              "type": "string",
+              "enum": [
+                "owner-idea",
+                "current-life-note",
+                "private-journal-style",
+                "owner-publication-metadata",
+                "hip-hop-note",
+                "building-note",
+                "goviral-intelligence"
+              ]
+            },
+            "personalPillar": {
+              "type": "string",
+              "enum": [
+                "life-lifestyle",
+                "writing-publishing",
+                "hip-hop",
+                "rapovej-denik",
+                "travel-places-lived",
+                "prague",
+                "software-products",
+                "boardlessai-behind-scenes",
+                "fitness-discipline-muay-thai",
+                "books-reading",
+                "clothing-personal-style"
+              ]
+            },
+            "provenanceRefs": {
+              "minItems": 1,
+              "maxItems": 12,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              }
+            },
+            "selectionReason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 360
+            },
+            "conversationPurpose": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "goviralSignalId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^pg-gv-[a-f0-9]{16}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "recentSimilarity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "similarityVerdict": {
+              "type": "string",
+              "const": "pass"
+            },
+            "activeExperimentId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "generatedVersion": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "profileVersion": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "leakAudit": {
+              "type": "object",
+              "properties": {
+                "schemaVersion": {
+                  "type": "string",
+                  "const": "personal-growth-leak-audit/1"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "pass",
+                    "blocked"
+                  ]
+                },
+                "exactLongNgram": {
+                  "type": "boolean"
+                },
+                "similarity": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "quoteCharacters": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "serializedPrivateField": {
+                  "type": "boolean"
+                },
+                "safeToPersistPublicly": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "schemaVersion",
+                "status",
+                "exactLongNgram",
+                "similarity",
+                "quoteCharacters",
+                "serializedPrivateField",
+                "safeToPersistPublicly"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "suggestionId",
+            "text",
+            "language",
+            "characterCount",
+            "topicTag",
+            "sourceLane",
+            "personalPillar",
+            "provenanceRefs",
+            "selectionReason",
+            "conversationPurpose",
+            "goviralSignalId",
+            "recentSimilarity",
+            "similarityVerdict",
+            "activeExperimentId",
+            "generatedVersion",
+            "profileVersion",
+            "leakAudit"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "alternatives": {
+      "maxItems": 2,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "suggestionId": {
+            "type": "string",
+            "pattern": "^pg-thread-[a-f0-9]{16}$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 10000
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "cs",
+              "en"
+            ]
+          },
+          "characterCount": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "topicTag": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80,
+                "pattern": "^#[\\p{L}\\p{N}_]+$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sourceLane": {
+            "type": "string",
+            "enum": [
+              "owner-idea",
+              "current-life-note",
+              "private-journal-style",
+              "owner-publication-metadata",
+              "hip-hop-note",
+              "building-note",
+              "goviral-intelligence"
+            ]
+          },
+          "personalPillar": {
+            "type": "string",
+            "enum": [
+              "life-lifestyle",
+              "writing-publishing",
+              "hip-hop",
+              "rapovej-denik",
+              "travel-places-lived",
+              "prague",
+              "software-products",
+              "boardlessai-behind-scenes",
+              "fitness-discipline-muay-thai",
+              "books-reading",
+              "clothing-personal-style"
+            ]
+          },
+          "provenanceRefs": {
+            "minItems": 1,
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "selectionReason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 360
+          },
+          "conversationPurpose": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "goviralSignalId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^pg-gv-[a-f0-9]{16}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "recentSimilarity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "similarityVerdict": {
+            "type": "string",
+            "const": "pass"
+          },
+          "activeExperimentId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "generatedVersion": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "profileVersion": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "leakAudit": {
+            "type": "object",
+            "properties": {
+              "schemaVersion": {
+                "type": "string",
+                "const": "personal-growth-leak-audit/1"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "pass",
+                  "blocked"
+                ]
+              },
+              "exactLongNgram": {
+                "type": "boolean"
+              },
+              "similarity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "quoteCharacters": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "serializedPrivateField": {
+                "type": "boolean"
+              },
+              "safeToPersistPublicly": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "status",
+              "exactLongNgram",
+              "similarity",
+              "quoteCharacters",
+              "serializedPrivateField",
+              "safeToPersistPublicly"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "suggestionId",
+          "text",
+          "language",
+          "characterCount",
+          "topicTag",
+          "sourceLane",
+          "personalPillar",
+          "provenanceRefs",
+          "selectionReason",
+          "conversationPurpose",
+          "goviralSignalId",
+          "recentSimilarity",
+          "similarityVerdict",
+          "activeExperimentId",
+          "generatedVersion",
+          "profileVersion",
+          "leakAudit"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "conversationStatus": {
+      "type": "string",
+      "enum": [
+        "available",
+        "unavailable"
+      ]
+    },
+    "conversationOpportunities": {
+      "maxItems": 3,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "opportunityId": {
+            "type": "string",
+            "pattern": "^pg-conversation-[a-f0-9]{16}$"
+          },
+          "provider": {
+            "type": "string",
+            "enum": [
+              "official-threads-search",
+              "accepted-goviral"
+            ]
+          },
+          "publicUrl": {
+            "type": "string",
+            "pattern": "^https:\\/\\/"
+          },
+          "observedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "evidenceRefs": {
+            "minItems": 1,
+            "maxItems": 8,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "manualReplyOnly": {
+            "type": "boolean",
+            "const": true
+          }
+        },
+        "required": [
+          "opportunityId",
+          "provider",
+          "publicUrl",
+          "observedAt",
+          "expiresAt",
+          "evidenceRefs",
+          "purpose",
+          "manualReplyOnly"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "publishingAuthorized": {
+      "type": "boolean",
+      "const": false
+    },
+    "repliesAuthorized": {
+      "type": "boolean",
+      "const": false
+    },
+    "rejectedCounts": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "recommendationDate",
+    "generatedAt",
+    "inputHash",
+    "decision",
+    "noPostReason",
+    "primary",
+    "alternatives",
+    "conversationStatus",
+    "conversationOpportunities",
+    "publishingAuthorized",
+    "repliesAuthorized",
+    "rejectedCounts"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-threads-recommendation.schema.json"
+}

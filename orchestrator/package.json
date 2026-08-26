@@ -32,6 +32,7 @@
     "operations:release-audit": "node --import tsx src/operations/release-audit-cli.ts",
     "palate": "tsx src/taste/palate-cli.ts",
     "personal-growth:ingest": "tsx src/ventures/personal-growth/journal-cli.ts",
+    "personal-growth:result": "tsx src/ventures/personal-growth/result-cli.ts",
     "proof:rooms": "tsx src/proof/portfolio-proof.ts",
     "programs:sync": "tsx src/programs/sync-cli.ts",
     "social:publish": "tsx src/social/index.ts",

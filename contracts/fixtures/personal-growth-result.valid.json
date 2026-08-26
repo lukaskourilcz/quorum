@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "personal-growth-result/1",
+  "resultId": "pg-result-0123456789abcdef",
+  "platform": "instagram",
+  "nativePostId": "fixture-post",
+  "url": "https://www.instagram.com/p/fixture/",
+  "publishedAt": "2026-08-26T20:00:00.000Z",
+  "format": "photo",
+  "language": "cs",
+  "personalPillar": "life-lifestyle",
+  "contentOrigin": "owner-current-life",
+  "collaborator": null,
+  "publicationRelation": null,
+  "reelSeries": null,
+  "goviralSignalId": null,
+  "manualVentureReference": null,
+  "experimentId": null,
+  "classification": "personal-or-personally-authored",
+  "provenance": {
+    "entryMode": "manual",
+    "ownerEvidenceRefs": ["fixture:owner-result"],
+    "automaticPortfolioLookup": false,
+    "socialDistributionCampaignRef": null,
+    "monetizationRef": null
+  },
+  "observations": [],
+  "ownerRating": null,
+  "ownerNote": null,
+  "corrections": [],
+  "updatedAt": "2026-08-27T21:00:00.000Z"
+}

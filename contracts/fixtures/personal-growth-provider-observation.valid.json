@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "personal-growth-provider-observation/1",
+  "observationId": "pg-observation-0123456789abcdef",
+  "idempotencyKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "platform": "instagram",
+  "scope": "post",
+  "ownerAccountAlias": "pg-owner-fixture",
+  "nativePostId": "fixture-post",
+  "nativeUrl": "https://www.instagram.com/p/fixture/",
+  "observedAt": "2026-08-27T21:00:00.000Z",
+  "publishedAt": "2026-08-26T20:00:00.000Z",
+  "pragueReportingDate": "2026-08-27",
+  "apiVersion": "v26.0",
+  "maturityWindow": "24h",
+  "metrics": [{ "name": "reach", "value": 120, "unavailableReason": null }],
+  "unavailableReason": "none",
+  "droppedItemCount": 0,
+  "snapshotHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "credentialMaterialPresent": false,
+  "audienceIdentityPresent": false
+}

@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-baseline/1"
+    },
+    "ventureId": {
+      "type": "string",
+      "const": "personal-growth"
+    },
+    "startsOn": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "endsOn": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "evaluatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "elapsedDays": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 28
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "collecting",
+        "proposal-due"
+      ]
+    },
+    "acceptedResultCount": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "droppedResultCount": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "segments": {
+      "maxItems": 500,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "enum": [
+              "instagram",
+              "threads"
+            ]
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "pillar": {
+            "type": "string",
+            "enum": [
+              "life-lifestyle",
+              "writing-publishing",
+              "hip-hop",
+              "rapovej-denik",
+              "travel-places-lived",
+              "prague",
+              "software-products",
+              "boardlessai-behind-scenes",
+              "fitness-discipline-muay-thai",
+              "books-reading",
+              "clothing-personal-style"
+            ]
+          },
+          "originClass": {
+            "type": "string",
+            "enum": [
+              "ordinary-personal",
+              "goviral-assisted",
+              "owner-manual-venture-reference"
+            ]
+          },
+          "resultCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "metrics": {
+            "maxItems": 30,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "metric": {
+                  "type": "string",
+                  "enum": [
+                    "followers",
+                    "net_follower_growth",
+                    "views",
+                    "reach",
+                    "non_follower_reach",
+                    "profile_views",
+                    "follows",
+                    "likes",
+                    "comments",
+                    "replies",
+                    "reposts",
+                    "quotes",
+                    "shares",
+                    "saves",
+                    "watch_time_ms",
+                    "average_watch_time_ms",
+                    "early_exit_count",
+                    "non_follower_reach_ratio",
+                    "profile_view_to_follow_rate",
+                    "saves_per_1000_reach",
+                    "shares_per_1000_reach",
+                    "early_exit_rate",
+                    "replies_per_1000_views",
+                    "reposts_quotes_per_1000_views"
+                  ]
+                },
+                "median": {
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "sampleSize": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "unavailableCount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "metric",
+                "median",
+                "sampleSize",
+                "unavailableCount"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "platform",
+          "format",
+          "pillar",
+          "originClass",
+          "resultCount",
+          "metrics"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "targetProposal": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "ownerDecisionRequired": {
+          "type": "boolean",
+          "const": true
+        },
+        "activatedTargets": {
+          "type": "number",
+          "const": 0
+        },
+        "evidenceRefs": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        }
+      },
+      "required": [
+        "required",
+        "ownerDecisionRequired",
+        "activatedTargets",
+        "evidenceRefs"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "ventureId",
+    "startsOn",
+    "endsOn",
+    "evaluatedAt",
+    "elapsedDays",
+    "status",
+    "acceptedResultCount",
+    "droppedResultCount",
+    "segments",
+    "targetProposal"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-baseline.schema.json"
+}

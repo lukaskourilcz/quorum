@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "personal-growth-content-config/1",
+  "ventureId": "personal-growth",
+  "defaultLanguage": "cs",
+  "englishProfileAvailable": false,
+  "baseline": {
+    "startsOn": "2026-08-27",
+    "days": 28
+  },
+  "threads": {
+    "characterLimit": 500,
+    "maximumTopicTags": 1,
+    "recentSimilarityMaximum": 0.42,
+    "maximumAlternatives": 2,
+    "maximumConversationOpportunities": 3
+  },
+  "policy": {
+    "schemaVersion": "personal-growth-content-policy/1",
+    "ventureId": "personal-growth",
+    "currentRevision": 0,
+    "revisions": [
+      {
+        "revision": 0,
+        "effectiveFrom": "2026-08-26",
+        "personalFeedMinimum": 0.85,
+        "ventureLedMaximum": 0.15,
+        "ventureStoriesPerSevenDaysMaximum": 2,
+        "sameVentureCooldownDays": 10,
+        "looseningDecisionRef": null
+      }
+    ],
+    "ownerManualReferenceRequired": true,
+    "ownerCommentaryRequired": true,
+    "automaticVentureDiscovery": false,
+    "automaticVentureNomination": false,
+    "automaticReshare": false,
+    "ventureOnlyFeedPublishing": false,
+    "kvorumEligible": false,
+    "mmaFilesDefaultEligible": false
+  },
+  "pillars": [
+    { "pillar": "life-lifestyle", "status": "enabled", "weight": 0.14, "vetoes": [] },
+    { "pillar": "writing-publishing", "status": "enabled", "weight": 0.14, "vetoes": [] },
+    { "pillar": "hip-hop", "status": "enabled", "weight": 0.11, "vetoes": [] },
+    { "pillar": "rapovej-denik", "status": "enabled", "weight": 0.11, "vetoes": [] },
+    { "pillar": "travel-places-lived", "status": "enabled", "weight": 0.08, "vetoes": [] },
+    { "pillar": "prague", "status": "enabled", "weight": 0.08, "vetoes": [] },
+    { "pillar": "software-products", "status": "enabled", "weight": 0.11, "vetoes": [] },
+    { "pillar": "boardlessai-behind-scenes", "status": "enabled", "weight": 0.07, "vetoes": [] },
+    { "pillar": "fitness-discipline-muay-thai", "status": "enabled", "weight": 0.06, "vetoes": [] },
+    { "pillar": "books-reading", "status": "enabled", "weight": 0.05, "vetoes": [] },
+    { "pillar": "clothing-personal-style", "status": "enabled", "weight": 0.05, "vetoes": [] }
+  ],
+  "reelFormats": [
+    "rapovej-moment",
+    "behind-the-page",
+    "life-between-projects",
+    "trend-met-memory",
+    "english-rapovej-denik"
+  ]
+}

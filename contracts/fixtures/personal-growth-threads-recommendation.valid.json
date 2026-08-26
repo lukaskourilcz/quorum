@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "personal-growth-threads-recommendation/1",
+  "recommendationDate": "2026-08-28",
+  "generatedAt": "2026-08-27T21:00:00.000Z",
+  "inputHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "decision": "RECOMMEND",
+  "noPostReason": null,
+  "primary": {
+    "suggestionId": "pg-thread-0123456789abcdef",
+    "text": "Vlastní testovací poznámka bez skutečné osobní informace.",
+    "language": "cs",
+    "characterCount": 57,
+    "topicTag": null,
+    "sourceLane": "owner-idea",
+    "personalPillar": "writing-publishing",
+    "provenanceRefs": ["fixture:owner-idea"],
+    "selectionReason": "Invented fixture clears deterministic gates.",
+    "conversationPurpose": "Test the contract.",
+    "goviralSignalId": null,
+    "recentSimilarity": 0,
+    "similarityVerdict": "pass",
+    "activeExperimentId": null,
+    "generatedVersion": "fixture/1",
+    "profileVersion": "fixture-profile/1",
+    "leakAudit": {
+      "schemaVersion": "personal-growth-leak-audit/1",
+      "status": "pass",
+      "exactLongNgram": false,
+      "similarity": 0,
+      "quoteCharacters": 0,
+      "serializedPrivateField": false,
+      "safeToPersistPublicly": true
+    }
+  },
+  "alternatives": [],
+  "conversationStatus": "unavailable",
+  "conversationOpportunities": [],
+  "publishingAuthorized": false,
+  "repliesAuthorized": false,
+  "rejectedCounts": {}
+}

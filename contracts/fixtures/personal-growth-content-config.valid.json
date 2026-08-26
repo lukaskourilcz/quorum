@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "personal-growth-content-config/1",
+  "ventureId": "personal-growth",
+  "defaultLanguage": "cs",
+  "englishProfileAvailable": false,
+  "baseline": { "startsOn": "2026-08-27", "days": 28 },
+  "threads": {
+    "characterLimit": 500,
+    "maximumTopicTags": 1,
+    "recentSimilarityMaximum": 0.42,
+    "maximumAlternatives": 2,
+    "maximumConversationOpportunities": 3
+  },
+  "policy": {
+    "schemaVersion": "personal-growth-content-policy/1",
+    "ventureId": "personal-growth",
+    "currentRevision": 0,
+    "revisions": [{
+      "revision": 0,
+      "effectiveFrom": "2026-08-26",
+      "personalFeedMinimum": 0.85,
+      "ventureLedMaximum": 0.15,
+      "ventureStoriesPerSevenDaysMaximum": 2,
+      "sameVentureCooldownDays": 10,
+      "looseningDecisionRef": null
+    }],
+    "ownerManualReferenceRequired": true,
+    "ownerCommentaryRequired": true,
+    "automaticVentureDiscovery": false,
+    "automaticVentureNomination": false,
+    "automaticReshare": false,
+    "ventureOnlyFeedPublishing": false,
+    "kvorumEligible": false,
+    "mmaFilesDefaultEligible": false
+  },
+  "pillars": [{ "pillar": "life-lifestyle", "status": "enabled", "weight": 1, "vetoes": [] }],
+  "reelFormats": ["rapovej-moment", "behind-the-page", "life-between-projects", "trend-met-memory", "english-rapovej-denik"]
+}
