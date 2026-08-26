@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-leak-audit/1"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "blocked"
+      ]
+    },
+    "exactLongNgram": {
+      "type": "boolean"
+    },
+    "similarity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "quoteCharacters": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "serializedPrivateField": {
+      "type": "boolean"
+    },
+    "safeToPersistPublicly": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "status",
+    "exactLongNgram",
+    "similarity",
+    "quoteCharacters",
+    "serializedPrivateField",
+    "safeToPersistPublicly"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-leak-audit.schema.json"
+}

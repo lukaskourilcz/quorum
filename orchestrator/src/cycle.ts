@@ -108,6 +108,7 @@ import {
   loadVentureAgentControls
 } from "./ventures/agent-controls.js";
 import { ScheduledPhaseSchema, type RunnablePhase, type Stage } from "./types.js";
+import { runPersonalGrowthDesk } from "./ventures/personal-growth/room.js";
 import { findSlotRecord } from "./meetings/slot-record.js";
 import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
 import { runMarketingSharkCycle } from "./ventures/marketingshark/run.js";
@@ -408,6 +409,23 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       };
     };
     return options.dry ? run() : withFileLock(stateRoot, ".lock", quietly(run));
+  }
+  if (options.phase === "pg-desk") {
+    const run = async (): Promise<CycleResult> => {
+      const result = await runPersonalGrowthDesk({ now, dry: options.dry });
+      return {
+        cycleId,
+        phase: options.phase,
+        dry: options.dry,
+        status: options.dry ? "dry_complete" : result.status === "held" || result.status === "failed" || result.status === "unavailable" ? "paused" : "live_complete",
+        decision: result.status === "planned" ? "PLAN" : result.status === "held" ? "PAUSED" : "NO_ACTION",
+        estimatedWorstCaseUsd: result.spendUsd,
+        selectedAgents: result.status === "planned" ? ["PULSE", "AUDIT"] : ["AUDIT"],
+        skippedAgents: result.status === "planned" ? [] : ["PULSE"],
+        artifacts: result.artifacts.map((artifact) => path.relative(repoRoot, path.join(options.dry ? path.join(repoRoot, "tmp/dry-run/state") : stateRoot, artifact)))
+      };
+    };
+    return options.dry ? run() : withFileLock(stateRoot, ".lock", run);
   }
   if (isDoorMoneyPhase(options.phase)) {
     if (options.phase === "dm-desk") {

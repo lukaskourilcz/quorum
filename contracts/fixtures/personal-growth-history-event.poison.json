@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "personal-growth-history-event/1",
+  "eventId": "pg-event-0123456789abcdef",
+  "lane": "okraj",
+  "occurrenceDate": "2026-08-27",
+  "action": "completed",
+  "recordedAt": "2026-08-26T20:00:00.000Z",
+  "rescheduledTo": "2026-08-29",
+  "finalUrl": null,
+  "articleUrl": null,
+  "collaborationUrl": null
+}

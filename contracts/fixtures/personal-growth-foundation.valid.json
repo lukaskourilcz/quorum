@@ -29,7 +29,7 @@
   "featureGates": {
     "projectLive": true,
     "paidSynthesis": false,
-    "insightsIngestion": false,
+    "insightsIngestion": true,
     "threadsSearch": false,
     "bufferQueue": false,
     "publishing": false

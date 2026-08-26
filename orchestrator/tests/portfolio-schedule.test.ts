@@ -50,8 +50,8 @@ describe("portfolio schedule and budget gate", () => {
     // vacated. 15:00 and 16:00 came with Door Money. 18:00 came back with Tehdejsi svet, which
     // took the hour the evening article slot left; it sits exactly 60 minutes from mma-analysis
     // on one side and the night shift's neighbour on the other. Kvórum uses the former
-    // incubator hour at 21:00.
-    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]);
+    // incubator hour at 21:00. Personal Growth uses the final 23:00 owner-only slot.
+    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]);
     const colliding = structuredClone(registry);
     colliding.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!.cadence = "daily@09:00";
     expect(() => parseVentureRegistry(colliding)).toThrow(/60 minutes apart/);
@@ -224,7 +224,7 @@ describe("portfolio schedule and budget gate", () => {
     // back as github.event.schedule, so "0 11,12" could not say which hour had fired, and
     // 12:00 UTC is both the 13:00 slot's winter variant and the afternoon meeting's summer one.
     const expressions = scheduledCronExpressions(await loadVentureRegistry());
-    expect(expressions).toHaveLength(19);
+    expect(expressions).toHaveLength(20);
     // Every firing sits on CRON_MINUTE, off the start-of-hour queue GitHub warns about, and the
     // generator emits the same strings the workflow deploys — otherwise the resolver is only
     // ever exercised on expressions github.event.schedule will never send it.

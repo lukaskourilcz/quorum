@@ -91,6 +91,16 @@ import {
   SharedResourceLeaseSchema
 } from "./operations-coordination.js";
 import { PersonalGrowthFoundationSchema } from "./personal-growth-foundation.js";
+import {
+  PersonalGrowthDailyBriefSchema,
+  PersonalGrowthGoViralFeedbackSchema,
+  PersonalGrowthGoViralPacketSchema,
+  PersonalGrowthHistoryEventSchema,
+  PersonalGrowthJournalMetadataSchema,
+  PersonalGrowthLeakAuditSchema,
+  PersonalGrowthPlannerConfigSchema,
+  PersonalGrowthRollingPlanSchema
+} from "./personal-growth.js";
 import { AnyVentureRecommendationSchema } from "./venture-recommendation.js";
 import { VisualWeightsSchema } from "./visual-weights.js";
 import { VentureRecommendationSchema } from "./venture-recommendation.js";
@@ -190,6 +200,14 @@ export const ContractSchemas = {
   "venture-recovery-attempt": VentureRecoveryAttemptSchema,
   "operations-incident-snapshot": OperationsIncidentSnapshotSchema,
   "personal-growth-foundation": PersonalGrowthFoundationSchema,
+  "personal-growth-planner-config": PersonalGrowthPlannerConfigSchema,
+  "personal-growth-history-event": PersonalGrowthHistoryEventSchema,
+  "personal-growth-rolling-plan": PersonalGrowthRollingPlanSchema,
+  "personal-growth-daily-brief": PersonalGrowthDailyBriefSchema,
+  "personal-growth-goviral-packet": PersonalGrowthGoViralPacketSchema,
+  "personal-growth-goviral-feedback": PersonalGrowthGoViralFeedbackSchema,
+  "personal-growth-journal-metadata": PersonalGrowthJournalMetadataSchema,
+  "personal-growth-leak-audit": PersonalGrowthLeakAuditSchema,
   "venture-recommendation": AnyVentureRecommendationSchema,
   "visual-weights": VisualWeightsSchema,
   "article-image": ArticleImageSchema,

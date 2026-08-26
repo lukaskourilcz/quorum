@@ -39,7 +39,7 @@ describe("Personal Growth foundation", () => {
       name: "Lukáš Growth Desk",
       ledgerNamespace: "personal-growth",
       visibility: "owner-only",
-      meetings: []
+      meetings: [expect.objectContaining({ kind: "pg-desk", cadence: "daily@23:00" })]
     });
     expect(publicVentures(registry).map((venture) => venture.id)).not.toContain("personal-growth");
     expect(publicVentures(registry)).toHaveLength(11);
@@ -55,7 +55,7 @@ describe("Personal Growth foundation", () => {
     expect(foundation.featureGates).toEqual({
       projectLive: true,
       paidSynthesis: false,
-      insightsIngestion: false,
+      insightsIngestion: true,
       threadsSearch: false,
       bufferQueue: false,
       publishing: false

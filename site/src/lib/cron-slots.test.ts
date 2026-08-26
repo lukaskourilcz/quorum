@@ -38,7 +38,8 @@ describe("the slot table the cron route dispatches from", () => {
       "19:mma-analysis",
       "20:mag-desk",
       "21:kv-desk",
-      "22:night"
+      "22:night",
+      "23:pg-desk"
     ]);
   });
 

@@ -10,9 +10,10 @@ import {
   loadMeetingRecords,
   loadMeetingSkips,
   mondayOfWeek,
-  pragueSlotInstant
+  pragueSlotInstant,
+  PUBLIC_MEETING_CLOCK
 } from "./calendar.js";
-import { MEETING_CLOCK, pragueClockParts } from "./clock.js";
+import { pragueClockParts } from "./clock.js";
 
 function valueAfter(args: string[], flag: string): string | undefined {
   const index = args.indexOf(flag);
@@ -103,7 +104,7 @@ export async function reconcileMeetingDay(
     feed.slots.map((slot) => [`${slot.at}:${slotPhase(slot.kind)}`, slot.status])
   );
   const recorded: string[] = [];
-  for (const definition of MEETING_CLOCK) {
+  for (const definition of PUBLIC_MEETING_CLOCK) {
     // Matched on the slot's own instant rather than on a date prefix of the UTC timestamp: a
     // Prague slot early enough in the day belongs to the previous UTC date.
     const at = pragueSlotInstant(date, definition.hour).toISOString();

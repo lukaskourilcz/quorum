@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "personal-growth-daily-brief/1",
+  "targetPragueDate": "2026-08-27",
+  "generatedAt": "2026-08-26T21:00:00.000Z",
+  "room": { "kind": "pg-desk", "result": "not-needed" },
+  "inputHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "authority": { "publishingAuthorized": false, "ownerWritesAllContent": true },
+  "budget": { "dry": true, "mainSyntheses": 0, "deterministicValidations": 1, "repairs": 0, "estimatedUsd": 0, "hardMaximumUsd": 0.15 },
+  "timelines": [],
+  "deadlines": [],
+  "primaryAction": { "occurrenceId": null, "decision": "NO_ACTION", "noActionReason": "none-due" },
+  "platformPlaceholders": { "threads": "NO_POST", "instagram": "NO_POST", "reel": "NO_POST", "noPostReason": "none-due" },
+  "optionalInputs": { "goviral": "unavailable", "ownerManualReference": "not-needed" },
+  "contentMix": { "okrajDue": 0, "bbarakDue": 0, "collision": false, "overpromotion": false },
+  "experiment": { "id": null, "status": "placeholder" },
+  "kpi": { "id": null, "status": "placeholder" },
+  "warnings": ["optional-input-unavailable"],
+  "unavailable": ["goviral"],
+  "ownerOnlyActions": ["write", "edit", "approve", "publish", "record-outcome"],
+  "correction": { "revision": 0, "correctedAt": null }
+}

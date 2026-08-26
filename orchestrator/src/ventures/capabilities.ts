@@ -11,6 +11,7 @@ import {
   type VentureCapabilityMap
 } from "../contracts/venture-capability.js";
 import { VentureOperationHealthSchema } from "../contracts/venture-operations.js";
+import { PersonalGrowthGoViralPacketSchema } from "../contracts/personal-growth.js";
 import { configRoot as defaultConfigRoot } from "../paths.js";
 
 export interface CapabilityRequest {
@@ -33,7 +34,8 @@ const payloadSchemas: Readonly<Record<string, ZodType>> = {
   "goviral-intelligence-packet/1": GoViralIntelligencePacketSchema,
   "bounded-render-summary/1": BoundedRenderSummarySchema,
   "approved-publish-package/1": ApprovedPublishPackageRefSchema,
-  "venture-operation-health/1": VentureOperationHealthSchema
+  "venture-operation-health/1": VentureOperationHealthSchema,
+  "personal-growth-goviral-packet/1": PersonalGrowthGoViralPacketSchema
 };
 
 const denied = (reason: string): CapabilityResolution => ({

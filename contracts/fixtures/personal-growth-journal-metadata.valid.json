@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "personal-growth-journal-metadata/1",
+  "language": "cs",
+  "sourceHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "titleHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "versionId": "pg-journal-cs-0123456789abcdef",
+  "status": "current",
+  "generatedAt": "2026-08-26T12:00:00.000Z",
+  "chunkCount": 2,
+  "retrievalAvailable": true,
+  "style": { "sampledSentences": 8, "meanWordsPerSentence": 9.5, "medianWordsPerSentence": 8, "fragmentRatio": 0.1, "oneSentenceParagraphRatio": 0.25, "punctuationDensity": 0.04 },
+  "cost": { "actualUsd": 0, "monthlyCapUsd": 20, "degradation": "healthy" }
+}

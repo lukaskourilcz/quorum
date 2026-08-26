@@ -20,7 +20,8 @@
     "cu-edition",
     "cu-product",
     "mag-editorial",
-    "article-am"
+    "article-am",
+    "pg-desk"
   ],
   "transitions": {
     "morning": [

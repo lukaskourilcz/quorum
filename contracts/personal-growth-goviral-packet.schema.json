@@ -1,0 +1,326 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-goviral-packet/1"
+    },
+    "packetId": {
+      "type": "string",
+      "pattern": "^pg-goviral-\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "weekOf": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "inputHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "goviralBriefId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "goviralBriefHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "sourceRegistryRef": {
+      "type": "string",
+      "const": "config/goviral-sources.json"
+    },
+    "profileRef": {
+      "type": "string",
+      "const": "state/ventures/goviral/profile.md"
+    },
+    "sourceHealth": {
+      "type": "string",
+      "enum": [
+        "healthy",
+        "degraded",
+        "unavailable"
+      ]
+    },
+    "quota": {
+      "type": "string",
+      "enum": [
+        "available",
+        "constrained",
+        "exhausted",
+        "unknown"
+      ]
+    },
+    "retrieval": {
+      "type": "object",
+      "properties": {
+        "threadsKeywordMode": {
+          "type": "string",
+          "enum": [
+            "official-future-seam",
+            "bounded-public-actor",
+            "unavailable"
+          ]
+        },
+        "accountCredentialsUsed": {
+          "type": "boolean",
+          "const": false
+        },
+        "apifyUpgradeRequired": {
+          "type": "boolean",
+          "const": false
+        }
+      },
+      "required": [
+        "threadsKeywordMode",
+        "accountCredentialsUsed",
+        "apifyUpgradeRequired"
+      ],
+      "additionalProperties": false
+    },
+    "reusedWeeklyBrief": {
+      "type": "boolean",
+      "const": true
+    },
+    "providerRerun": {
+      "type": "boolean",
+      "const": false
+    },
+    "incrementalCostUsd": {
+      "type": "number",
+      "const": 0
+    },
+    "opportunities": {
+      "maxItems": 3,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "opportunityId": {
+            "type": "string",
+            "pattern": "^pg-gv-[a-f0-9]{16}$"
+          },
+          "topic": {
+            "type": "string",
+            "enum": [
+              "owner-writing",
+              "building-in-public",
+              "ai-tools",
+              "solo-founder",
+              "hip-hop-culture",
+              "life-stories"
+            ]
+          },
+          "disposition": {
+            "type": "string",
+            "enum": [
+              "use",
+              "watch",
+              "ignore"
+            ]
+          },
+          "evidenceStatus": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "corroborated"
+            ]
+          },
+          "evidenceRefs": {
+            "minItems": 1,
+            "maxItems": 8,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "sourceRefs": {
+            "minItems": 1,
+            "maxItems": 8,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "velocity": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -100,
+                "maximum": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "relevance": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "pillar": {
+            "type": "string",
+            "enum": [
+              "craft",
+              "career",
+              "culture",
+              "business",
+              "personal"
+            ]
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "threads",
+              "instagram-carousel",
+              "reel",
+              "article"
+            ]
+          },
+          "fit": {
+            "type": "string",
+            "enum": [
+              "strong",
+              "possible",
+              "weak"
+            ]
+          },
+          "risk": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "overload": {
+            "type": "string",
+            "enum": [
+              "clear",
+              "collision",
+              "skip"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "available",
+              "accepted",
+              "expired",
+              "rejected"
+            ]
+          },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "unused",
+              "used",
+              "rejected",
+              "ignored",
+              "posted"
+            ]
+          }
+        },
+        "required": [
+          "opportunityId",
+          "topic",
+          "disposition",
+          "evidenceStatus",
+          "evidenceRefs",
+          "sourceRefs",
+          "velocity",
+          "relevance",
+          "pillar",
+          "expiresAt",
+          "format",
+          "fit",
+          "risk",
+          "overload",
+          "status",
+          "outcome"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "agenda": {
+      "type": "object",
+      "properties": {
+        "weekKey": {
+          "type": "string",
+          "pattern": "^\\d{4}-W\\d{2}$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "created",
+            "reused",
+            "not-needed",
+            "unavailable"
+          ]
+        },
+        "agendaRef": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "weekKey",
+        "status",
+        "agendaRef"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "packetId",
+    "weekOf",
+    "generatedAt",
+    "expiresAt",
+    "inputHash",
+    "goviralBriefId",
+    "goviralBriefHash",
+    "sourceRegistryRef",
+    "profileRef",
+    "sourceHealth",
+    "quota",
+    "retrieval",
+    "reusedWeeklyBrief",
+    "providerRerun",
+    "incrementalCostUsd",
+    "opportunities",
+    "agenda"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-goviral-packet.schema.json"
+}

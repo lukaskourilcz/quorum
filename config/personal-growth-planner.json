@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "personal-growth-planner-config/1",
+  "ventureId": "personal-growth",
+  "timezone": "Europe/Prague",
+  "room": {
+    "kind": "pg-desk",
+    "label": "Lukáš personal growth desk",
+    "cadence": "daily@23:00",
+    "target": "next-prague-calendar-date"
+  },
+  "planningWindowDays": 30,
+  "strategicRhythmDays": 10,
+  "runBudget": {
+    "ordinaryMainSyntheses": 1,
+    "deterministicValidations": 1,
+    "maximumRepairs": 1,
+    "approximateUsd": 0.12,
+    "hardMaximumUsd": 0.15,
+    "dryUsd": 0
+  },
+  "lanes": [
+    {
+      "lane": "okraj",
+      "intervalDays": 10,
+      "recurrenceAnchorDate": "2026-08-27",
+      "ownerAuthorshipRequired": true,
+      "collaboratorId": "okraj",
+      "publicationId": "okraj",
+      "anchorIds": ["life-story", "sandra"],
+      "initialSubjectId": "sandra",
+      "targetSlides": 10,
+      "format": "life-story-carousel",
+      "defaultStatus": "planned",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    },
+    {
+      "lane": "bbarak",
+      "intervalDays": 3,
+      "recurrenceAnchorDate": "2026-08-27",
+      "ownerAuthorshipRequired": true,
+      "collaboratorId": "bbarak",
+      "publicationId": "bbarak",
+      "anchorIds": ["hip-hop", "article"],
+      "initialSubjectId": null,
+      "targetSlides": null,
+      "format": "hip-hop-article",
+      "defaultStatus": "planned",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    }
+  ]
+}

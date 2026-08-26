@@ -570,7 +570,27 @@
       "adminTabs": [
         "plans"
       ],
-      "meetings": []
+      "meetings": [
+        {
+          "kind": "pg-desk",
+          "label": "Lukáš personal growth desk",
+          "cadence": "daily@23:00",
+          "cast": [
+            "PULSE",
+            "AUDIT"
+          ],
+          "envelopeUsd": 0.15,
+          "packet": {
+            "topicType": "growth",
+            "decisionNeeded": "PLAN",
+            "preset": "pg-desk-room",
+            "objectives": {
+              "dry": "Build the next Prague date's deterministic owner-only plan from invented fixtures at zero cost.",
+              "live": "Build the next Prague date's bounded owner-only plan without writing content or granting publishing authority."
+            }
+          }
+        }
+      ]
     }
   ]
 }

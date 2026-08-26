@@ -27,6 +27,12 @@ export const SLOT_DELIVERY_GRACE_MS =
 /** What the calendar says about a slot whose run has not arrived but still can. */
 export const LATE_SLOT_REASON = "The run for this slot has not arrived yet.";
 
+/**
+ * Slots whose state is safe to publish. Personal Growth uses the shared scheduler, but its
+ * owner-only desk is deliberately absent from both the public calendar and its reconciler.
+ */
+export const PUBLIC_MEETING_CLOCK = MEETING_CLOCK.filter(({ phase }) => phase !== "pg-desk");
+
 function addDays(date: string, days: number): string {
   const value = new Date(`${date}T12:00:00.000Z`);
   value.setUTCDate(value.getUTCDate() + days);
@@ -81,6 +87,7 @@ function slotKind(phase: (typeof MEETING_CLOCK)[number]["phase"]): CalendarFeed[
   if (phase === "morning") return "venture-morning";
   if (phase === "afternoon") return "venture-afternoon";
   if (phase === "night") return "venture-night";
+  if (phase === "pg-desk") throw new Error("The private Personal Growth desk has no public calendar kind");
   return phase;
 }
 
@@ -117,7 +124,7 @@ export function buildCalendarFeed(input: {
   const slots: CalendarFeed["slots"] = [];
   for (let day = 0; day < 7; day += 1) {
     const date = addDays(weekOf, day);
-    for (const definition of MEETING_CLOCK) {
+    for (const definition of PUBLIC_MEETING_CLOCK) {
       const kind = slotKind(definition.phase);
       const at = pragueSlotInstant(date, definition.hour);
       const record = bySlot.get(`${date}:${kind}`);
