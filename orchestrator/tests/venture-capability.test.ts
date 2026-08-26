@@ -59,7 +59,12 @@ describe("venture capability map", () => {
     expect(VentureCapabilityMapSchema.safeParse(await fixture("venture-capability-map.poison.json")).success).toBe(false);
     expect(VentureCapabilityEdgeSchema.safeParse(await fixture("venture-capability-edge.valid.json")).success).toBe(true);
     expect(VentureCapabilityEdgeSchema.safeParse(await fixture("venture-capability-edge.poison.json")).success).toBe(false);
-    for (const edge of map.edges) await expect(access(path.join(repoRoot, edge.runtimeEnforcementPoint))).resolves.toBeUndefined();
+    for (const edge of map.edges) {
+      await expect(
+        access(path.join(repoRoot, edge.runtimeEnforcementPoint)),
+        `missing runtime enforcement point: ${edge.runtimeEnforcementPoint}`
+      ).resolves.toBeUndefined();
+    }
   });
 
   it("fails closed for unknown, malformed, conflicting and unavailable requests", async () => {
