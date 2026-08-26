@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260826140510-dm-growth",
+  "date": "2026-08-26",
+  "phase": "dm-growth",
+  "fixture": false,
+  "status": "PAUSED",
+  "stage": "VALIDATION",
+  "operatingBrief": "This room meets on Thursdays. Nothing was spent.",
+  "participantReasons": [
+    {
+      "agent": "BOOKER",
+      "reason": "registered for the room but not asked anything because the room meets on Thursdays",
+      "participated": false
+    },
+    {
+      "agent": "PULSE",
+      "reason": "registered for the room but not asked anything because the room meets on Thursdays",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "registered for the room but not asked anything because the room meets on Thursdays",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 12.4255646,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "$0 — this room meets on Thursdays. Nothing was spent and no action was taken.",
+    "evidenceRefs": []
+  },
+  "proposals": [],
+  "voteMatrix": [],
+  "tasks": [],
+  "growthPlan": "Nothing was published, posted, scheduled, bought or sent; no account or channel was touched and no spend was authorized.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-26T14:05:11.396Z",
+  "kind": "dm-growth",
+  "roomTranscript": {
+    "openedAt": "2026-08-26T14:05:10.396Z",
+    "closedAt": "2026-08-26T14:05:11.396Z",
+    "gavel": "AUDIT",
+    "setting": "The Thursday gate closed before any seat was called.",
+    "turns": [
+      {
+        "agent": "AUDIT",
+        "mode": "close",
+        "sentAt": "2026-08-26T14:05:11.396Z",
+        "text": "$0 — this room meets on Thursdays. Nothing was spent and no action was taken."
+      }
+    ]
+  }
+}
