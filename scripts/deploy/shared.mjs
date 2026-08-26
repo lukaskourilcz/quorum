@@ -36,9 +36,11 @@ export function runCommand(command, args, options = {}) {
     let stderr = "";
     child.stdout?.on("data", (chunk) => {
       stdout += chunk;
+      if (options.mirrorOutput) process.stdout.write(chunk);
     });
     child.stderr?.on("data", (chunk) => {
       stderr += chunk;
+      if (options.mirrorOutput) process.stderr.write(chunk);
     });
     child.once("error", reject);
     child.once("exit", (code, signal) => {
