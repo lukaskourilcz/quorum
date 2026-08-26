@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-08-26T07:08:22.842Z",
+  "checkedAt": "2026-08-26T08:07:27.667Z",
   "date": "2026-08-26",
   "ventures": [
     {
@@ -68,8 +68,8 @@
     },
     {
       "venture": "mma-files",
-      "url": "https://mma-files.vercel.app/cs/articles/ufc-alonzo-menifield",
-      "expected": "ufc-alonzo-menifield",
+      "url": "https://mma-files.vercel.app/cs/articles/ufc-event-ufc-fight-night-nurmagomedov-vs-song",
+      "expected": "ufc-event-ufc-fight-night-nurmagomedov-vs-song",
       "status": 200,
       "live": true
     }
