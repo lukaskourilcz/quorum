@@ -139,6 +139,7 @@ import { writeMonthlyReportIfDue, writeWeeklyReportIfDue } from "./reports/write
 import { RETRO_ENVELOPE_USD, runWeeklyRetro, weeklyRetroEnabled } from "./reports/retro.js";
 import { collectOwnerAttention } from "./org/owner-attention.js";
 import { implementationRefreshPending, programSyncConfigured, synchronizeImplementationPrograms } from "./programs/service.js";
+import { materializeOperationsState, operationsRefreshPending } from "./operations/service.js";
 
 
 
@@ -1201,6 +1202,15 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     const ownerAttentionArtifacts = options.dry
       ? []
       : [(await collectOwnerAttention({ repoRoot, stateRoot: artifactRoot, now })).path];
+    const operationsRefreshRequested = options.dry
+      ? false
+      : await operationsRefreshPending(artifactRoot, now);
+    const operationsResult = !options.dry && (venturePhase === "night" || operationsRefreshRequested)
+      ? await materializeOperationsState({ repoRoot, stateRoot: artifactRoot, now })
+      : null;
+    const operationsArtifacts = operationsResult
+      ? [operationsResult.path, ...operationsResult.healthPaths, ...(operationsResult.incidentPath ? [operationsResult.incidentPath] : [])]
+      : [];
     /*
      * Implementation truth joins the existing night checkpoint only when a GitHub read mode is
      * configured. CI and ordinary tests never make a live request; the synchronizer itself keeps
@@ -1300,7 +1310,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         ? room.skippedParticipants.map(({ agent }) => agent)
         : [...room.selectedParticipants, ...room.skippedParticipants].map(({ agent }) => agent),
       artifacts: [
-        ...[...artifacts, ...contentGateArtifacts, ...reportArtifacts, ...ownerAttentionArtifacts, ...programArtifacts]
+        ...[...artifacts, ...contentGateArtifacts, ...reportArtifacts, ...ownerAttentionArtifacts, ...operationsArtifacts, ...programArtifacts]
           .map((artifact) => path.relative(repoRoot, path.join(artifactRoot, artifact))),
         ...(ecosystemArtifact ? [ecosystemArtifact] : [])
       ],

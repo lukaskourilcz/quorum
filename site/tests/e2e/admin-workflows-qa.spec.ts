@@ -273,5 +273,14 @@ for (const theme of ["light", "dark"] as const) {
       `${theme} dense Design Lab tables`,
       ["[data-admin-content]"]
     );
+
+    await page.goto("/admin/operations?view=nodes", {
+      waitUntil: "domcontentloaded"
+    });
+    await expectNoHighImpactAxeViolations(
+      page,
+      `${theme} Operations filters and table`,
+      ["[data-admin-content]"]
+    );
   });
 }
