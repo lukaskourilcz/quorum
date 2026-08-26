@@ -30,6 +30,7 @@ export const validationReceiptPath: string;
 export const pnpmExecutable: string;
 export const releaseSteps: Array<[string, string[]]>;
 
+export function pnpmForPlatform(platform: NodeJS.Platform): string;
 export function printableCommand(command: string, args: string[]): string;
 export function runCommand(command: string, args: string[], options?: CommandOptions): Promise<CommandResult>;
 export function captureCommand(command: string, args: string[], options?: CommandOptions): Promise<CommandResult>;

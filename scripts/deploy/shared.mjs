@@ -7,7 +7,11 @@ export const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)
 export const receiptDirectory = path.join(repoRoot, ".deploy");
 export const validationReceiptPath = path.join(receiptDirectory, "validation.json");
 
-export const pnpmExecutable = process.platform === "win32" ? "pnpm.cmd" : "pnpm";
+export function pnpmForPlatform(platform) {
+  return platform === "win32" ? "pnpm.cmd" : "pnpm";
+}
+
+export const pnpmExecutable = pnpmForPlatform(process.platform);
 
 export const releaseSteps = [
   [pnpmExecutable, ["install", "--frozen-lockfile"]],

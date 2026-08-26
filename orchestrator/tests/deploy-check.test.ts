@@ -1,7 +1,7 @@
 import { EventEmitter } from "node:events";
 import { describe, expect, it, vi } from "vitest";
 import { runReleaseCheck } from "../../scripts/deploy/check.mjs";
-import { releaseSteps, runWithSiteServer } from "../../scripts/deploy/shared.mjs";
+import { pnpmForPlatform, releaseSteps, runWithSiteServer } from "../../scripts/deploy/shared.mjs";
 
 const cleanState = {
   sha: "0123456789abcdef0123456789abcdef01234567",
@@ -10,6 +10,11 @@ const cleanState = {
 };
 
 describe("the local release gate", () => {
+  it("selects the package-manager executable without a shell on Windows", () => {
+    expect(pnpmForPlatform("win32")).toBe("pnpm.cmd");
+    expect(pnpmForPlatform("linux")).toBe("pnpm");
+  });
+
   it("stops at the first failed command and records an honest failure", async () => {
     const calls: string[] = [];
     const receipts: unknown[] = [];
@@ -114,5 +119,17 @@ describe("the release gate site process", () => {
     signals.emit("SIGTERM");
     await expect(run).rejects.toThrow("interrupted by SIGTERM");
     expect(stop).toHaveBeenCalledOnce();
+  });
+
+  it("fails immediately when the site process exits before readiness", async () => {
+    const child = Object.assign(new EventEmitter(), { exitCode: null, signalCode: null });
+    const run = runWithSiteServer({
+      start: () => child as never,
+      ready: () => new Promise(() => undefined),
+      smoke: async () => undefined,
+      stop: async () => undefined
+    });
+    child.emit("exit", 2, null);
+    await expect(run).rejects.toThrow("exit code 2");
   });
 });
