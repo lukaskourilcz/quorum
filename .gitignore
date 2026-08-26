@@ -9,6 +9,9 @@ coverage/
 .env.local
 .env.*.local
 !.env.example
+.deploy/
+.vercel/
+site/.vercel/
 tmp/
 site/.next/
 orchestrator/.dry-run/

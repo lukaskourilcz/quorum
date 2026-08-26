@@ -20,6 +20,9 @@
     "cycle": "pnpm --filter @boardlessai/orchestrator cycle",
     "cycle:phase": "pnpm --filter @boardlessai/orchestrator cycle:phase",
     "delivery": "pnpm --filter @boardlessai/orchestrator delivery",
+    "deploy:check": "node scripts/deploy/check.mjs",
+    "deploy:preview": "node scripts/deploy/release.mjs preview",
+    "deploy:production": "node scripts/deploy/release.mjs production",
     "release:verify": "pnpm --filter @boardlessai/orchestrator release:verify",
     "digest:daily": "pnpm --filter @boardlessai/orchestrator digest:daily",
     "docs:check": "pnpm --filter @boardlessai/orchestrator docs:refresh -- --check",
@@ -57,5 +60,8 @@
       "js-yaml@<4.3.1": "^4.3.1",
       "nanoid@<3.3.17": "^3.3.17"
     }
+  },
+  "devDependencies": {
+    "vercel": "58.4.4"
   }
 }

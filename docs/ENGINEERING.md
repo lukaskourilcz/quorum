@@ -91,3 +91,96 @@ file under `state/decisions/`, and a session ticks them off one commit at a time
 
 **17. Every repository carries this file.** `CLAUDE.md`, `AGENTS.md` and `CONTRIBUTING.md` point at
 it rather than restating it, because a rule stated in four places is four rules that will drift.
+
+## Deployment and Vercel cost control
+
+`site/vercel.json` is the one Vercel project configuration in this repository. Its
+`git.deploymentEnabled: false` guard deliberately stops Git pushes and pull requests from creating
+deployments. The cron array in the same file still ships with every production deployment and is
+not part of this cost-control change. The deployment that first carries the Git guard may be the
+last automatic Git deployment.
+
+The release loop is:
+
+```text
+Codex makes frequent coherent commits
+-> pushes a branch safely
+-> GitHub CI validates source changes
+-> no automatic Vercel deployment
+-> run deploy:check on a coherent release candidate
+-> create one explicit preview when needed
+-> verify environment-specific behavior
+-> create one explicit production deployment
+```
+
+### First-time local setup
+
+Use Node 22 or later and pnpm 10.30.0. From the repository root, sign in with the developer's
+normal Vercel CLI session and run `pnpm exec vercel link`. Select the existing Quorum project and
+team. Confirm in the Vercel project settings that its Root Directory is `site`; do not create a
+second project to make the command pass. The CLI is pinned in `devDependencies`, and `.vercel/`,
+pulled local environment files and deployment receipts are ignored by Git. A non-interactive
+session may provide `VERCEL_TOKEN` through the environment, but the token must never appear in a
+command, log, receipt or tracked file.
+
+Vercel's current monorepo guidance says to invoke its CLI from the monorepo root. `vercel pull`
+then loads the linked project settings and the selected Preview or Production environment. The
+wrapper verifies that pull did not change the linked project before it builds or deploys. See the
+[monorepo guide](https://vercel.com/docs/monorepos),
+[`vercel pull`](https://vercel.com/docs/cli/pull) and
+[`vercel build`](https://vercel.com/docs/cli/build).
+
+### Validate and deploy
+
+Run `pnpm deploy:check` on a clean commit. It performs the frozen install, agent validation, lint,
+hook gates, typecheck, tests and one production build. It then starts that built site, waits for
+readiness, runs the production route/link smoke and always stops the server. A successful run
+writes an ignored `.deploy/validation.json` receipt tied to the exact commit. A different commit
+or dirty tree invalidates it.
+
+Run `pnpm deploy:preview` to pull Preview configuration, build `.vercel/output` locally and upload
+it once with `vercel deploy --prebuilt`. Verify the returned URL, including server routes,
+redirects, protected Admin behavior and cron configuration. This first manual preview is also the
+required parity check for the linked monorepo settings and build-time Vercel values.
+
+Production is deliberately more explicit:
+
+```text
+pnpm deploy:production -- --confirm-production=<full-commit-sha>
+```
+
+It accepts only a clean `main`, fetches `origin/main`, requires both tips to equal the validated
+SHA, builds with Production configuration and uploads one prebuilt production deployment. Both
+commands print the deployment URL and commit and leave an ignored bounded receipt under
+`.deploy/`.
+
+### Prebuilt failure and one remote-build fallback
+
+Do not treat a failed or unclear prebuilt upload as permission to deploy again. If the CLI exits
+successfully without a URL, the receipt says `ambiguous`; inspect Vercel before doing anything
+else. If the preview proves that the linked monorepo cannot safely produce a complete local
+`.vercel/output`, record the exact technical reason and deliberately request one cloud build:
+
+```text
+pnpm deploy:preview -- --remote-build --confirm-remote-build
+pnpm deploy:production -- --confirm-production=<full-commit-sha> --remote-build --confirm-remote-build
+```
+
+The wrapper labels this `manual-remote-build` and warns that it consumes one Vercel build. It never
+falls back to it automatically. Return to the default prebuilt path after the documented platform
+limitation is removed. See [`vercel deploy`](https://vercel.com/docs/cli/deploy).
+
+### Recovery, rollback and re-enablement
+
+For a failed local build, fix the source and rerun `deploy:check`; nothing was deployed. For an
+ambiguous upload, inspect the project activity and deployment list, record the actual outcome and
+do not retry merely because the local receipt lacks a URL. Roll production back to a known prior
+deployment with the Vercel dashboard or the pinned `vercel rollback` command, following the
+[rollback guide](https://vercel.com/docs/cli/rollback). A rollback does not require Git
+auto-deployments to be re-enabled.
+
+Re-enable Git deployments only in a reviewed future change that removes or changes
+`git.deploymentEnabled` in `site/vercel.json`, updates its architecture test and explains the cost
+impact. Do not use a dashboard-only exception or branch rule to bypass the repository guard. The
+[Git configuration reference](https://vercel.com/docs/project-configuration/git-configuration)
+is the authority for the setting.
