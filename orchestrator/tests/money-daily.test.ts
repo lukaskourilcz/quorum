@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -66,6 +66,17 @@ describe("daily Money and KPI materialization", () => {
       schemaVersion: "money-public/1",
       revenue: { recognizedUsd: 0 }
     });
-    expect(await readFile(path.join(stateRoot, "money/proposals/caught-up-sponsorship.json"), "utf8")).toContain("ownerActivationRequired");
+    await expect(access(path.join(stateRoot, "money/proposals/caught-up-sponsorship.json"))).rejects.toThrow();
+    expect(result.artifacts.some((artifact) => artifact.startsWith("money/proposals/"))).toBe(false);
+    const monetization = JSON.parse(await readFile(path.join(stateRoot, "money/monetization.json"), "utf8")) as {
+      posture: string;
+      executionEnabled: boolean;
+      methods: Array<{ status: string; proposal: unknown }>;
+    };
+    expect(monetization).toMatchObject({
+      posture: "information-only",
+      executionEnabled: false
+    });
+    expect(monetization.methods.every((method) => method.status === "locked" && method.proposal === null)).toBe(true);
   });
 });

@@ -1,6 +1,8 @@
 {
-  "schemaVersion": "monetization-option/1",
-  "updatedAt": "2026-08-09",
+  "schemaVersion": "monetization-option/2",
+  "updatedAt": "2026-08-26",
+  "posture": "information-only",
+  "executionEnabled": false,
   "options": [
     {
       "id": "display-ads",
@@ -36,7 +38,7 @@
       "blockers": [
         "Needs an audience number to price against"
       ],
-      "status": "idea"
+      "status": "future-reference"
     },
     {
       "id": "newsletter-sponsorship",
@@ -54,7 +56,7 @@
         "Needs audience numbers",
         "Sponsor outreach = owner contact"
       ],
-      "status": "idea"
+      "status": "future-reference"
     },
     {
       "id": "affiliate-saas",
@@ -71,7 +73,7 @@
         "Affiliate account creation = HUMAN_APPROVAL",
         "Disclosure labels required"
       ],
-      "status": "ready"
+      "status": "future-reference"
     },
     {
       "id": "affiliate-gear",
@@ -87,7 +89,7 @@
       "blockers": [
         "Amazon Associates account = HUMAN_APPROVAL"
       ],
-      "status": "idea"
+      "status": "future-reference"
     },
     {
       "id": "betting-affiliate",
@@ -123,7 +125,7 @@
         "Shop + POD account = HUMAN_APPROVAL",
         "Payment processing = owner-only"
       ],
-      "status": "ready"
+      "status": "future-reference"
     },
     {
       "id": "dropshipping",
@@ -139,7 +141,7 @@
       "blockers": [
         "Same commerce approvals as POD"
       ],
-      "status": "idea"
+      "status": "future-reference"
     },
     {
       "id": "paid-newsletter",
@@ -156,7 +158,7 @@
         "Payment processing = owner-only",
         "Needs a subscriber base first"
       ],
-      "status": "idea"
+      "status": "future-reference"
     },
     {
       "id": "premium-picks",
@@ -191,26 +193,7 @@
       "blockers": [
         "Account creation + payments = HUMAN_APPROVAL"
       ],
-      "status": "idea"
-    },
-    {
-      "id": "digital-templates",
-      "name": "Digital products: template packs",
-      "category": "products",
-      "description": "Selling the carousel/IG/FB/Threads template packs the system already produces - on Gumroad (about 10% + processing, 15-minute setup), Etsy (94M buyers, discovery) or Creative Market. Multi-product template sellers average around 5x the revenue of single-product sellers, and the Design Lab generates the portfolio naturally.",
-      "fitFor": [
-        "marketingshark",
-        "goviral",
-        "carousel-studio"
-      ],
-      "effort": "medium",
-      "upfrontCostUsd": 0,
-      "recurringCostUsd": 0,
-      "blockers": [
-        "Marketplace account = HUMAN_APPROVAL",
-        "Payments = owner-only"
-      ],
-      "status": "ready"
+      "status": "future-reference"
     },
     {
       "id": "productized-service",
@@ -229,7 +212,7 @@
         "No verified demand yet",
         "Order intake + payments = owner-only"
       ],
-      "status": "idea"
+      "status": "future-reference"
     },
     {
       "id": "data-licensing",
@@ -247,7 +230,7 @@
         "Model must run first",
         "Licence terms need a legal look"
       ],
-      "status": "idea"
+      "status": "future-reference"
     },
     {
       "id": "syndication",
@@ -264,7 +247,7 @@
       "blockers": [
         "Needs scale and inbound interest"
       ],
-      "status": "idea"
+      "status": "future-reference"
     },
     {
       "id": "donations",
@@ -281,7 +264,7 @@
       "blockers": [
         "Account creation = HUMAN_APPROVAL"
       ],
-      "status": "ready"
+      "status": "future-reference"
     },
     {
       "id": "job-board",
@@ -297,7 +280,7 @@
       "blockers": [
         "Needs a measurable audience first"
       ],
-      "status": "idea"
+      "status": "future-reference"
     }
   ]
 }

@@ -49,7 +49,7 @@ function statusTone(status: KpiStatus): "success" | "warning" | "danger" | "neut
 function moneyStatusLabel(status: MonetizationStatus): string {
   const labels: Record<MonetizationStatus, string> = {
     locked: "Waiting",
-    ready: "Ready for a plan",
+    ready: "Readiness observed",
     proposed: "Waiting for owner",
     active: "Active"
   };

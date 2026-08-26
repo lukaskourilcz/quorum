@@ -19,11 +19,13 @@ export interface MonetizationOption {
   upfrontCostUsd: number;
   recurringCostUsd: number;
   blockers: string[];
-  status: "ready" | "idea" | "blocked";
+  status: "future-reference" | "blocked";
 }
 
 export interface MonetizationCatalog {
   updatedAt: string | null;
+  posture: "information-only";
+  executionEnabled: false;
   /** Grouped by category, categories in alphabetical order, options in file order inside each. */
   byCategory: Array<{ category: string; options: MonetizationOption[] }>;
   total: number;
@@ -66,7 +68,7 @@ function parseOption(value: unknown): MonetizationOption | null {
   const effort = ["low", "medium", "high"].includes(String(option?.effort))
     ? option!.effort as MonetizationOption["effort"]
     : null;
-  const status = ["ready", "idea", "blocked"].includes(String(option?.status))
+  const status = ["future-reference", "blocked"].includes(String(option?.status))
     ? option!.status as MonetizationOption["status"]
     : null;
   if (!id || !name || !category || !description || !effort || !status
@@ -89,6 +91,8 @@ function parseOption(value: unknown): MonetizationOption | null {
 export async function readMonetizationOptions(root = repositoryRoot): Promise<MonetizationCatalog> {
   const empty: MonetizationCatalog = {
     updatedAt: null,
+    posture: "information-only",
+    executionEnabled: false,
     byCategory: [],
     total: 0,
     dropped: 0,
@@ -103,7 +107,10 @@ export async function readMonetizationOptions(root = repositoryRoot): Promise<Mo
   }
 
   const file = record(parsed);
-  if (file?.schemaVersion !== "monetization-option/1" || !Array.isArray(file.options)) return empty;
+  if (file?.schemaVersion !== "monetization-option/2"
+    || file.posture !== "information-only"
+    || file.executionEnabled !== false
+    || !Array.isArray(file.options)) return empty;
 
   let dropped = 0;
   const options: MonetizationOption[] = [];
@@ -120,6 +127,8 @@ export async function readMonetizationOptions(root = repositoryRoot): Promise<Mo
 
   return {
     updatedAt: text(file.updatedAt, 10),
+    posture: "information-only",
+    executionEnabled: false,
     byCategory: [...byCategory.entries()]
       .sort(([left], [right]) => left.localeCompare(right))
       .map(([category, entries]) => ({ category, options: entries })),

@@ -16,8 +16,7 @@ import { currentRating } from "@/lib/rating-model";
 /** Read-only projections of the owner-curated catalog and append-only idea ledgers. */
 
 const STATUS = {
-  ready: { label: "Ready", tone: "success" },
-  idea: { label: "Idea", tone: "neutral" },
+  "future-reference": { label: "Future reference", tone: "neutral" },
   blocked: { label: "Blocked", tone: "warning" },
 } as const;
 
@@ -52,9 +51,8 @@ export function MonetizationPanel({ catalog }: { catalog: MonetizationCatalog })
   return (
     <div className="grid gap-5">
       <p className="m-0 max-w-[75ch] text-[length:var(--admin-type-body)] leading-5 text-[var(--admin-foreground-muted)]">
-        Every way this company could bring money in, with what each one needs before it could
-        start. Nothing here is switched on and nothing here spends anything — it is a list to
-        choose from.
+        Reference material for a possible future owner decision. This catalog cannot start work,
+        prepare a proposal, create a task, request attention, publish, spend or activate revenue.
       </p>
 
       {catalog.byCategory.map((group) => (
@@ -64,7 +62,7 @@ export function MonetizationPanel({ catalog }: { catalog: MonetizationCatalog })
           </h3>
           <div className="divide-y divide-[var(--admin-border)] border-y border-[var(--admin-border)]">
             {group.options.map((option) => {
-              const status = STATUS[option.status] ?? STATUS.idea;
+              const status = STATUS[option.status];
               return (
                 <article className="grid gap-2 py-3" key={option.id}>
                   <div className="flex flex-wrap items-center gap-2">

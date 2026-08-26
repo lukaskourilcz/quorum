@@ -70,6 +70,9 @@ export type MonetizationProposal = z.infer<typeof MonetizationProposalSchema>;
 export type MonetizationMethodState = z.infer<typeof MonetizationMethodStateSchema>;
 export type PublicMonetizationMethod = z.infer<typeof PublicMonetizationMethodSchema>;
 
+export const MONETIZATION_POSTURE = "information-only" as const;
+export const MONETIZATION_EXECUTION_ENABLED = false as const;
+
 export interface MonetizationMeasurements {
   caughtUpWeeklyPageviews?: readonly (number | null)[];
   caughtUpFollowers?: number | null;
@@ -93,7 +96,6 @@ interface MethodDefinition {
   method: string;
   activationKpi: string;
   note: string;
-  proposal: MonetizationProposal | null;
   readiness: (measurements: MonetizationMeasurements) => Readiness;
 }
 
@@ -118,16 +120,6 @@ export const MONETIZATION_METHODS: readonly MethodDefinition[] = [
     method: "Sponsorship",
     activationKpi: "Four consecutive weeks at 500 pageviews per week, or 1,000 combined followers.",
     note: "First-party sponsorship only. Programmatic advertising remains outside the approved scope.",
-    proposal: {
-      summary: "A first-party sponsor kit with fixed placements and clear editorial separation.",
-      channels: ["Caught Up sponsor block", "Owner-approved sponsor kit"],
-      ownerChecklist: [
-        "Approve the sponsor kit and price list.",
-        "Approve placement rules and sponsor acceptance criteria.",
-        "Complete the legal, account, invoicing, and payment setup."
-      ],
-      constraints: ["No programmatic ads.", "No sponsor influence over editorial selection."]
-    },
     readiness: (measurements) => {
       const followerReady = validCount(measurements.caughtUpFollowers) && measurements.caughtUpFollowers >= 1_000;
       const pageviewReady = lastFourMeet(measurements.caughtUpWeeklyPageviews, 500);
@@ -148,16 +140,6 @@ export const MONETIZATION_METHODS: readonly MethodDefinition[] = [
     method: "Sponsorship or non-bookmaker affiliate",
     activationKpi: "Owner-enabled indexing and four consecutive weeks at 750 pageviews per week.",
     note: "Bookmaker affiliate programs need a separate owner and legal decision.",
-    proposal: {
-      summary: "A sponsorship and non-bookmaker affiliate plan for the indexed magazine.",
-      channels: ["MMA Files sponsor placements", "Owner-approved non-bookmaker affiliate placements"],
-      ownerChecklist: [
-        "Confirm that indexing is enabled by the owner.",
-        "Approve sponsor and affiliate acceptance rules.",
-        "Complete the legal, account, invoicing, and payment setup."
-      ],
-      constraints: ["No bookmaker affiliate program without a separate owner and legal decision."]
-    },
     readiness: (measurements) => {
       const viewsAvailable = fourWeeksAvailable(measurements.mmaFilesWeeklyPageviews);
       const met = measurements.mmaFilesIndexingEnabled && lastFourMeet(measurements.mmaFilesWeeklyPageviews, 750);
@@ -180,16 +162,6 @@ export const MONETIZATION_METHODS: readonly MethodDefinition[] = [
     method: "Season 1 commerce",
     activationKpi: "Eight launch-ready campaigns and 500 combined followers.",
     note: "Launch also requires the owner-built shop and explicit commerce approval.",
-    proposal: {
-      summary: "A season 1 launch plan based on the completed commerce-readiness dossier.",
-      channels: ["Owner-built shop", "Owner-approved organic launch channels"],
-      ownerChecklist: [
-        "Approve the season 1 product and supplier plan.",
-        "Build and approve the shop, legal terms, accounts, payments, and fulfilment.",
-        "Approve the final launch date and channel plan."
-      ],
-      constraints: ["BoardlessAI cannot open the shop, accept payments, or sign supplier terms."]
-    },
     readiness: (measurements) => {
       const campaigns = measurements.tittyTuesdaysCampaigns;
       const followers = measurements.tittyTuesdaysFollowers;
@@ -208,7 +180,6 @@ export const MONETIZATION_METHODS: readonly MethodDefinition[] = [
     method: "No monetization in Q1 or Q2",
     activationKpi: "Earliest review after 30 evaluated events with published calibration, plus separate owner and legal approval.",
     note: "FightAIQ does not sell or promote an unvalidated model.",
-    proposal: null,
     readiness: (measurements) => {
       const evidenceReady = validCount(measurements.fightAiQEvaluatedEvents)
         && measurements.fightAiQEvaluatedEvents >= 30
@@ -228,7 +199,6 @@ export const MONETIZATION_METHODS: readonly MethodDefinition[] = [
     method: "Not monetized — internal engine",
     activationKpi: "Locked. A standalone product needs a separate owner decision and extraction plan.",
     note: "The package stays self-contained so a future standalone product remains possible, but no extraction, sale or service is authorized.",
-    proposal: null,
     readiness: () => ({ met: false, unavailable: false, detail: "Internal portfolio infrastructure; future product extraction is locked." })
   },
   {
@@ -237,7 +207,6 @@ export const MONETIZATION_METHODS: readonly MethodDefinition[] = [
     method: "Not monetized — internal agency",
     activationKpi: "Locked. marketingShark earns nothing directly; its value appears in the products it markets.",
     note: "An internal service for the Shark family. devShark's own revenue, if any, sits outside BoardlessAI's accounts until the owner decides otherwise, and no marketingShark output may be sold, sponsored or placed for payment.",
-    proposal: null,
     readiness: () => ({ met: false, unavailable: false, detail: "Internal service; recognized revenue is $0 and activation is owner-only." })
   }
 ];
@@ -248,17 +217,7 @@ export function advanceMonetizationStatus(input: {
   proposalPrepared: boolean;
   ownerApproval?: { approvedBy: "owner"; decisionRef: string };
 }): MonetizationStatus {
-  if (input.current === "active") return "active";
-  if (input.ownerApproval) {
-    if (input.current !== "proposed" || !input.proposalPrepared || !input.ownerApproval.decisionRef.trim()) {
-      throw new Error("Owner activation requires a proposed method and a decision reference");
-    }
-    return "active";
-  }
-  if (input.current === "proposed") return "proposed";
-  if (input.current === "ready") return input.proposalPrepared ? "proposed" : "ready";
-  if (input.activationReady && input.proposalPrepared) return "proposed";
-  if (input.activationReady) return "ready";
+  void input;
   return "locked";
 }
 
@@ -270,11 +229,10 @@ export function evaluateMonetizationMethods(input: {
     const readiness = definition.readiness(input.measurements);
     const saved = input.states?.[definition.id];
     const state = saved ? MonetizationMethodStateSchema.parse(saved) : null;
-    const proposalPrepared = Boolean(state?.proposalPreparedAt);
     const status = advanceMonetizationStatus({
       current: state?.status ?? "locked",
       activationReady: readiness.met,
-      proposalPrepared
+      proposalPrepared: false
     });
     return PublicMonetizationMethodSchema.parse({
       id: definition.id,
@@ -283,9 +241,7 @@ export function evaluateMonetizationMethods(input: {
       status,
       activationKpi: definition.activationKpi,
       readiness,
-      proposal: readiness.met || ["ready", "proposed", "active"].includes(status)
-        ? definition.proposal
-        : null,
+      proposal: null,
       ownerGateRequired: true,
       note: definition.note
     });
@@ -301,24 +257,11 @@ export async function writeMonetizationReadiness(input: {
   const statePath = "money/monetization.json";
   const proposalPaths: string[] = [];
   await atomicWriteJson(input.root, statePath, {
-    schemaVersion: "monetization-readiness/1",
+    schemaVersion: "monetization-readiness/2",
+    posture: MONETIZATION_POSTURE,
+    executionEnabled: MONETIZATION_EXECUTION_ENABLED,
     generatedAt: input.generatedAt.toISOString(),
     methods
   });
-  for (const method of methods) {
-    if (!method.readiness.met || !method.proposal) continue;
-    const path = `money/proposals/${method.id}.json`;
-    proposalPaths.push(path);
-    await atomicWriteJson(input.root, path, {
-      schemaVersion: "monetization-proposal/1",
-      methodId: method.id,
-      venture: method.venture,
-      activationKpi: method.activationKpi,
-      status: method.status,
-      proposal: method.proposal,
-      ownerActivationRequired: true,
-      generatedAt: input.generatedAt.toISOString()
-    });
-  }
   return { statePath, proposalPaths };
 }
