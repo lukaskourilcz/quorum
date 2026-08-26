@@ -20,6 +20,7 @@
     "cycle": "pnpm --filter @boardlessai/orchestrator cycle",
     "cycle:phase": "pnpm --filter @boardlessai/orchestrator cycle:phase",
     "delivery": "pnpm --filter @boardlessai/orchestrator delivery",
+    "deploy:check": "node scripts/deploy/check.mjs",
     "release:verify": "pnpm --filter @boardlessai/orchestrator release:verify",
     "digest:daily": "pnpm --filter @boardlessai/orchestrator digest:daily",
     "docs:check": "pnpm --filter @boardlessai/orchestrator docs:refresh -- --check",
