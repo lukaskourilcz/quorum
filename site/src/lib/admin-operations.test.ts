@@ -101,4 +101,33 @@ describe("the Admin Operations boundary", () => {
     expect(snapshot.nodes.find((node) => node.id === "caught-up")).toMatchObject({ health: "unavailable", recordState: "malformed", holds: null });
     expect(snapshot.unreadableRecords).toBe(1);
   });
+
+  it("projects only bounded incident and recovery metadata", async () => {
+    const directory = await root();
+    await copyConfiguration(directory);
+    await writeJson(directory, "state/operations/incidents/current.json", {
+      schemaVersion: "operations-incident-snapshot/1",
+      generatedAt: "2026-08-26T09:00:00.000Z",
+      activeIncidentRefs: ["state/owner-attention.json#incident-one"],
+      recentAttemptRefs: ["state/operations/recovery/attempt-one.json"],
+      pausedScopes: ["caught-up:delivery"],
+      nextRetryAt: null,
+      exactOwnerActions: ["Verify the delivery in the provider dashboard."],
+      affectedNodeIds: ["caught-up"],
+      unaffectedNodeIds: ["webdev-signal"],
+      policyVersions: ["1.0.0"],
+      killSwitchActive: false,
+      statistics: { consideredAttempts: 1, recovered: 0, failed: 1, ambiguous: 0, ownerRequired: 1, meanRecoveryMinutes: null, costUsd: 0 },
+      snapshotHash: HASH
+    });
+    const snapshot = await readAdminOperations(directory);
+    expect(snapshot.incidents).toMatchObject({
+      state: "present",
+      activeCount: 1,
+      recentAttemptRefs: ["state/operations/recovery/attempt-one.json"],
+      affectedNodeIds: ["caught-up"],
+      unaffectedNodeIds: ["webdev-signal"],
+      policyVersions: ["1.0.0"]
+    });
+  });
 });
