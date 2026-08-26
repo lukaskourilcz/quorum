@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260826030208-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Odchod klíčového manažera infrastruktury z OpenAI a zdvojnásobení valuace robotického startupu Generalist v řádu měsíců jsou dva konkrétní signály o tom, kde AI průmysl právě stojí – a kam teče kapitál.",
+  "evidenceRefs": [
+    "source:variety",
+    "source:techcrunch-ai",
+    "source:github-ai-releases",
+    "source:the-verge",
+    "source:the-register",
+    "source:mit-tech-review"
+  ],
+  "editionRef": "03bfef977a1803c0ac7b2c7e2eeaf15a764e560fed66359813adf788d9981b35",
+  "generatedAt": "2026-08-26T03:02:13.842Z"
+}

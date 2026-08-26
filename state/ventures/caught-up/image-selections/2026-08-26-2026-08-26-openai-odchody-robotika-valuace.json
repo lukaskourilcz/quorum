@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-26-openai-odchody-robotika-valuace",
+  "date": "2026-08-26",
+  "rung": "curated",
+  "selected": "scene:6212692",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 1,
+      "selected": "scene:6212692",
+      "reason": "Reálné zobrazení datového centra s serverovými racky ilustruje infrastrukturní aspekt článku o OpenAI a datových centrech, ačkoli není nijak specifické k tomuto případu.",
+      "candidates": [
+        {
+          "candidateId": "scene:6212692",
+          "provider": "wikimedia",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Reálné zobrazení datového centra s serverovými racky ilustruje infrastrukturní aspekt článku o OpenAI a datových centrech, ačkoli není nijak specifické k tomuto případu.",
+          "sceneCs": "datové centrum se servery"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002224
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-26T03:02:08.842Z"
+}

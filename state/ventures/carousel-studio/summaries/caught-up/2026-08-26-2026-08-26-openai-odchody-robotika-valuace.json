@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-26-openai-odchody-robotika-valuace",
+  "date": "2026-08-26",
+  "locale": "cs",
+  "kicker": "DNESKAi · 26. srp",
+  "headline": "OpenAI přišlo o šéfa datových center. Robotický startup mezitím zdvojnásobil hodnotu",
+  "coverLine": "Šéf datových center opouští OpenAI po organizační změně, která ho odstavila od vedení",
+  "standfirst": "Odchod Chrise Maloneho přichází po reorganizaci, která ho odřízla od přímé linie k Gregu Brockmanovi. Generalist zároveň dosáhl valuace 3 miliardy dolarů – jen měsíce poté, co oznámil dvě miliardy.",
+  "passages": [
+    "Chris Malone, šéf datových center OpenAI, firmu opustil minulý týden; předtím přišel o přímou linii k prezidentu Gregu Brockmanovi.",
+    "Generalist uzavřel rozšíření série B za téměř 200 milionů dolarů vedené 8VC a dosáhl valuace 3 miliardy dolarů, oproti 2 miliardám v červnu.",
+    "Podíl velkých domén se vlastní poštovní infrastrukturou klesl podle analýzy DNS záznamů z 44,6 % v roce 2016 na 22,4 % v roce 2026.",
+    "Dolly Parton zemřela ve věku 80 let; Taylor Swift vydala první veřejnou reakci.",
+    "Odchod šéfa datových center z OpenAI po interní reorganizaci naznačuje, že spory o kontrolu nad klíčovou infrastrukturou přetrvávají i přes veřejná ujištění o stabilitě vedení.",
+    "Zdvojnásobení valuace Generalistu na 3 miliardy dolarů v řádu měsíců dokumentuje, jak rychle se v oblasti fyzické robotiky komprimují investiční cykly – a jak velký je rozdíl mezi tím,",
+    "co startupy tvrdí, a tím, co je ověřeno.",
+    "Propad vlastního hostování e-mailu z 44,6 % na 22,4 % za deset let přesouvá klíčovou komunikační infrastrukturu do rukou dvou soukromých společností, které tak získávají faktickou moc nad doručitelností zpráv."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Florian Hirzinger - www.fh-ap.com · CC BY-SA · Wikimedia Commons"
+}

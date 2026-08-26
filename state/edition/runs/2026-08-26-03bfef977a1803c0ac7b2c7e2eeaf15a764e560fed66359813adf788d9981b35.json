@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "runId": "d06169f5-127c-4a0b-8cbf-ca73f632c815",
+  "date": "2026-08-26",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-08-26T03:02:16.365Z",
+  "completedAt": "2026-08-26T03:04:33.961Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-26T03:02:16.371Z",
+      "completedAt": "2026-08-26T03:02:33.098Z",
+      "durationMs": 16727
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-08-26T03:02:33.098Z",
+      "completedAt": "2026-08-26T03:04:29.398Z",
+      "durationMs": 116300
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-08-26T03:04:29.398Z",
+      "completedAt": "2026-08-26T03:04:29.404Z",
+      "durationMs": 6
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-08-26T03:04:29.404Z",
+      "completedAt": "2026-08-26T03:04:29.404Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-08-26T03:04:29.404Z",
+      "completedAt": "2026-08-26T03:04:33.957Z",
+      "durationMs": 4553
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 10381,
+      "outputTokens": 651,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.040908
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14912,
+      "outputTokens": 4397,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1198635
+    }
+  ],
+  "measuredCostUsd": 0.1607715,
+  "quality": {
+    "metrics": {
+      "successfulSources": 31,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 85,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.8125,
+      "duplicateStorySimilarity": 0.05,
+      "repeatedTopicFrequency": 0.3333333333333333,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1607715
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "curated",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 1,
+        "selected": "scene:6212692",
+        "reason": "Reálné zobrazení datového centra s serverovými racky ilustruje infrastrukturní aspekt článku o OpenAI a datových centrech, ačkoli není nijak specifické k tomuto případu.",
+        "candidates": [
+          {
+            "candidateId": "scene:6212692",
+            "provider": "wikimedia",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Reálné zobrazení datového centra s serverovými racky ilustruje infrastrukturní aspekt článku o OpenAI a datových centrech, ačkoli není nijak specifické k tomuto případu.",
+            "sceneCs": "datové centrum se servery"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002224
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "image_rung:curated",
+    "image_gate:curated:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}
