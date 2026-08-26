@@ -18,9 +18,20 @@ interface CronEntry {
   schedule: string;
 }
 
-async function vercelCrons(): Promise<CronEntry[]> {
+interface VercelConfig {
+  git: {
+    deploymentEnabled: boolean;
+  };
+  crons: CronEntry[];
+}
+
+async function vercelConfig(): Promise<VercelConfig> {
   const raw = await readFile(path.join(repoRoot, "site", "vercel.json"), "utf8");
-  return (JSON.parse(raw) as { crons: CronEntry[] }).crons;
+  return JSON.parse(raw) as VercelConfig;
+}
+
+async function vercelCrons(): Promise<CronEntry[]> {
+  return (await vercelConfig()).crons;
 }
 
 /**
@@ -30,6 +41,10 @@ async function vercelCrons(): Promise<CronEntry[]> {
  * that the slot went back to arriving hours late.
  */
 describe("the deployed Vercel schedule matches the meeting clock", () => {
+  it("keeps automatic Git deployments disabled", async () => {
+    expect((await vercelConfig()).git).toEqual({ deploymentEnabled: false });
+  });
+
   it("carries both daylight-saving variants of every scheduled slot and nothing else", async () => {
     // Every meeting slot, plus one dispatch that is not a meeting: the edition slot's same-day
     // retry. It carries no Prague hour of its own on the clock -- 09:00 belongs to the story
