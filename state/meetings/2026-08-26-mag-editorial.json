@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260826070440-mag-editorial",
+  "date": "2026-08-26",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.027247,
+    "monthAllInUsd": 12.324167600000001,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "AM: assigned; PM: killed",
+    "evidenceRefs": [
+      "meeting:2026-08-25-mma-analysis",
+      "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song",
+      "meeting:2026-08-25-mag-desk"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "JAB",
+      "summary": "Nelze obsadit slot: balíček neobsahuje ověřený FightAIQ model ani zdrojový soubor k novému článku. Event má jen oznámenou kartu, bez podkladu pro profil či preview.",
+      "evidenceRefs": [
+        "meeting:2026-08-25-mma-analysis",
+        "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+      ]
+    },
+    {
+      "agent": "QUILL",
+      "summary": "UFC Fight Night: Nurmagomedov vs. Song (29 Aug, Shanghai) is fresh fight-week material. No Czech article exists yet. Event card confirmed. Bridge notes no model run ready and no queue decision pending. Pass to mag-desk for assignment.",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song",
+        "meeting:2026-08-25-mma-analysis",
+        "meeting:2026-08-25-mag-desk"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Kill dnešní slot: FightAIQ model ani čerstvý zdrojový soubor nejsou k dispozici. Event UFC je ověřený, ale bez dat nelze bezpečně přidat nový článek.",
+      "evidenceRefs": [
+        "meeting:2026-08-25-mma-analysis",
+        "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-26.json",
+  "generatedAt": "2026-08-26T07:08:40.365Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-26T07:04:40.365Z",
+    "closedAt": "2026-08-26T07:08:40.365Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-26T07:04:40.365Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-26T07:05:40.365Z",
+        "text": "Nelze obsadit slot: balíček neobsahuje ověřený FightAIQ model ani zdrojový soubor k novému článku. Event má jen oznámenou kartu, bez podkladu pro profil či preview.",
+        "evidenceRefs": [
+          "meeting:2026-08-25-mma-analysis",
+          "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+        ]
+      },
+      {
+        "agent": "QUILL",
+        "mode": "statement",
+        "sentAt": "2026-08-26T07:06:40.365Z",
+        "text": "UFC Fight Night: Nurmagomedov vs. Song (29 Aug, Shanghai) is fresh fight-week material. No Czech article exists yet. Event card confirmed. Bridge notes no model run ready and no queue decision pending. Pass to mag-desk for assignment.",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song",
+          "meeting:2026-08-25-mma-analysis",
+          "meeting:2026-08-25-mag-desk"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-08-26T07:07:40.365Z",
+        "text": "Kill dnešní slot: FightAIQ model ani čerstvý zdrojový soubor nejsou k dispozici. Event UFC je ověřený, ale bez dat nelze bezpečně přidat nový článek.",
+        "evidenceRefs": [
+          "meeting:2026-08-25-mma-analysis",
+          "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-26T07:08:40.365Z",
+        "text": "AM: assigned; PM: killed"
+      }
+    ]
+  }
+}

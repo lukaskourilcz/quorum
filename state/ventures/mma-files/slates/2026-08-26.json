@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "editorial-slate/1",
+  "date": "2026-08-26",
+  "slots": [
+    {
+      "slot": "am",
+      "organization": "ufc",
+      "format": "fight-week-preview",
+      "subjectRefs": [
+        "ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+      ],
+      "rationale": "The nearest verified card is inside the three-day window and takes one daily slot.",
+      "assignedWriter": "JAB",
+      "status": "assigned"
+    },
+    {
+      "slot": "pm",
+      "format": "desk-notes",
+      "subjectRefs": [
+        "missing:2026-08-26:pm"
+      ],
+      "rationale": "The desk publishes one article a day; this slot is not scheduled.",
+      "assignedWriter": "QUILL",
+      "status": "killed",
+      "killedReason": "single-slot cadence"
+    }
+  ],
+  "vaultVerdicts": [
+    {
+      "subjectRef": "missing:2026-08-26:pm",
+      "verdict": "repeat",
+      "evidenceRef": "meeting:2026-08-26-mag-editorial"
+    },
+    {
+      "subjectRef": "ufc:event:ufc-fight-night-nurmagomedov-vs-song",
+      "verdict": "fresh",
+      "evidenceRef": "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+    }
+  ]
+}
