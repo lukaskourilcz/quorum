@@ -1,0 +1,176 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260826060151-mma-intake",
+  "date": "2026-08-26",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.025579,
+    "monthAllInUsd": 12.296920599999998,
+    "monthCapUsd": 30
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-26",
+      "source:cito-ufc:2026-08-26",
+      "source:wikimedia:2026-08-26",
+      "source:wikipedia-schedule:2026-08-26"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "No BUILD task queued. mma-intake confirms UFC card stable, 50 fighters on file, 0 complete on all critical fields. 50 height/reach gaps block model use. Oktagon lead delegates to UFC daily check.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-26",
+        "source:cito-ufc:2026-08-26",
+        "source:wikimedia:2026-08-26",
+        "source:wikipedia-schedule:2026-08-26"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon 93 is listed, but no Oktagon source records, weigh-ins, or confirmed bouts are supplied. UFC sources do not validate Oktagon fields. Keep Oktagon outside model use pending two-provider checks.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-26",
+        "source:wikimedia:2026-08-26"
+      ]
+    },
+    {
+      "agent": "SIGMA",
+      "summary": "No model run: UFC bout confirmation and all critical fighter fields remain insufficient; Oktagon was not independently checked. Do not publish probabilities. Next safe action: corroborate both cards and fighter files.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-26",
+        "source:cito-ufc:2026-08-26",
+        "source:wikimedia:2026-08-26",
+        "source:wikipedia-schedule:2026-08-26"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SIGMA",
+      "firstChoice": "veto",
+      "veto": true
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260826060151-MMA-INTAKE-02",
+      "owner": "SPOTTER",
+      "summary": "Obtain two independent Oktagon sources for Oktagon 93 bout confirmations and critical fighter fields; capture retrieval times and weigh-in status before intake.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Data only. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-26",
+      "source:cito-ufc:2026-08-26",
+      "source:wikimedia:2026-08-26",
+      "source:wikipedia-schedule:2026-08-26"
+    ]
+  },
+  "generatedAt": "2026-08-26T06:05:51.845Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-26T06:01:51.845Z",
+    "closedAt": "2026-08-26T06:05:51.845Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-26T06:01:51.845Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-26T06:02:51.845Z",
+        "text": "No BUILD task queued. mma-intake confirms UFC card stable, 50 fighters on file, 0 complete on all critical fields. 50 height/reach gaps block model use. Oktagon lead delegates to UFC daily check.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-26",
+          "source:cito-ufc:2026-08-26",
+          "source:wikimedia:2026-08-26",
+          "source:wikipedia-schedule:2026-08-26"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-26T06:03:51.845Z",
+        "text": "Oktagon 93 is listed, but no Oktagon source records, weigh-ins, or confirmed bouts are supplied. UFC sources do not validate Oktagon fields. Keep Oktagon outside model use pending two-provider checks.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-26",
+          "source:wikimedia:2026-08-26"
+        ]
+      },
+      {
+        "agent": "SIGMA",
+        "mode": "veto",
+        "sentAt": "2026-08-26T06:04:51.845Z",
+        "text": "No model run: UFC bout confirmation and all critical fighter fields remain insufficient; Oktagon was not independently checked. Do not publish probabilities. Next safe action: corroborate both cards and fighter files.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-26",
+          "source:cito-ufc:2026-08-26",
+          "source:wikimedia:2026-08-26",
+          "source:wikipedia-schedule:2026-08-26"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-26T06:05:51.845Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

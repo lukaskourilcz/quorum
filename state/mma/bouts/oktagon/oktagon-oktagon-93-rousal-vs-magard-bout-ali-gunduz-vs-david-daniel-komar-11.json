@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:oktagon-oktagon-93-rousal-vs-magard-bout-ali-gunduz-vs-david-daniel-komar-11",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:oktagon-93-rousal-vs-magard",
+    "name": "Oktagon 93: Roušal vs. Mågård",
+    "startsAtUtc": "2026-09-12T00:00:00.000Z",
+    "venue": "Winning Group Arena"
+  },
+  "fighters": {
+    "red": "oktagon:ali-gunduz",
+    "blue": "oktagon:david-daniel-komar"
+  },
+  "division": "bantamweight",
+  "scheduledRounds": 3,
+  "status": "announced",
+  "statusHistory": [
+    {
+      "status": "announced",
+      "at": "2026-08-26T06:01:51.845Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-26:2026 in Oktagon MMA"
+      ],
+      "note": "Status imported from the Cito event listing."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-26T06:01:51.845Z",
+    "lastSeenAt": "2026-08-26T06:01:51.845Z",
+    "sourceRefs": [
+      "source:wikipedia:2026-08-26:2026 in Oktagon MMA"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:2026-08-26:2026 in Oktagon MMA"
+  ],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-26T06:01:51.845Z",
+      "kind": "created",
+      "fields": [
+        "event",
+        "fighters",
+        "status"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-26:2026 in Oktagon MMA"
+      ],
+      "note": "Discovered on the approved Cito free-tier intake."
+    }
+  ],
+  "updatedAt": "2026-08-26T06:01:51.845Z"
+}

@@ -38,7 +38,7 @@
       "url": "https://en.wikipedia.org/wiki/Viktor_Pe%C5%A1ta",
       "publisher": "Wikipedia",
       "title": "Viktor Pešta",
-      "retrievedAt": "2026-08-25T06:03:07.316Z",
+      "retrievedAt": "2026-08-26T06:01:51.845Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +50,7 @@
         "source:wikidata:Q16876068",
         "source:wikipedia:42735957"
       ],
-      "retrievedAt": "2026-08-25T06:03:07.316Z",
+      "retrievedAt": "2026-08-26T06:01:51.845Z",
       "status": "verified",
       "corroborated": true
     },
@@ -572,9 +572,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 2.072189,
-        "layoffDays": 983
+        "layoffDays": 984
       },
-      "updatedAt": "2026-08-25T06:03:07.316Z"
+      "updatedAt": "2026-08-26T06:01:51.845Z"
     }
   ],
   "rating": {
@@ -584,7 +584,7 @@
     "volatility": 0.06000491,
     "boutCount": 28,
     "asOfBoutRef": "oktagon:bout:history-d67494ab87a47e691fcb",
-    "updatedAt": "2026-08-25T06:03:07.316Z"
+    "updatedAt": "2026-08-26T06:01:51.845Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2015,11 +2015,24 @@
         "source:wikipedia:42735957"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-26T06:01:51.845Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42735957"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-25T06:03:07.316Z"
+  "updatedAt": "2026-08-26T06:01:51.845Z"
 }

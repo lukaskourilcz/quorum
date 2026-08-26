@@ -11,26 +11,11 @@
   ],
   "applied": [
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-anthony-wint-vs-terrance-chatman-6",
-      "winner": "red",
-      "method": "Technical Submission (arm-triangle choke)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-kennedy-nzechukwu-vs-shamil-gaziev-5",
-      "winner": "blue",
-      "method": "KO (punch)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-wesley-schultz-vs-jackson-mcvey-12",
-      "winner": "blue",
-      "method": "TKO (knee to the body and punches)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-shanelle-dyer-vs-elise-reed-13",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-shanelle-dyer-vs-elise-reed-11",
       "winner": "red",
       "method": "TKO (punches)"
     }
   ],
-  "untracked": 9,
-  "generatedAt": "2026-08-25T06:03:07.316Z"
+  "untracked": 12,
+  "generatedAt": "2026-08-26T06:01:51.845Z"
 }

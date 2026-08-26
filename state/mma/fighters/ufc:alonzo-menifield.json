@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alonzo_Menifield",
       "publisher": "Wikipedia",
       "title": "Alonzo Menifield",
-      "retrievedAt": "2026-08-25T06:03:07.316Z",
+      "retrievedAt": "2026-08-26T06:01:51.845Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q96103548",
         "source:wikipedia:64198883"
       ],
-      "retrievedAt": "2026-08-25T06:03:07.316Z",
+      "retrievedAt": "2026-08-26T06:01:51.845Z",
       "status": "verified",
       "corroborated": true
     },
@@ -78,7 +78,7 @@
         "source:wikidata:Q96103548",
         "source:wikipedia:64198883"
       ],
-      "retrievedAt": "2026-08-25T06:03:07.316Z",
+      "retrievedAt": "2026-08-26T06:01:51.845Z",
       "status": "verified",
       "corroborated": true
     },
@@ -87,7 +87,7 @@
       "sourceRefs": [
         "source:wikipedia:64198883"
       ],
-      "retrievedAt": "2026-08-25T06:03:07.316Z",
+      "retrievedAt": "2026-08-26T06:01:51.845Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -96,7 +96,7 @@
       "sourceRefs": [
         "source:wikipedia:64198883"
       ],
-      "retrievedAt": "2026-08-25T06:03:07.316Z",
+      "retrievedAt": "2026-08-26T06:01:51.845Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -105,7 +105,7 @@
       "sourceRefs": [
         "source:wikipedia:64198883"
       ],
-      "retrievedAt": "2026-08-25T06:03:07.316Z",
+      "retrievedAt": "2026-08-26T06:01:51.845Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -115,7 +115,7 @@
         "source:cito-ufc:2026-08-05:fighter:d8fe6185-b049-4b23-93dc-87d191b3113c",
         "source:wikipedia:64198883"
       ],
-      "retrievedAt": "2026-08-25T06:03:07.316Z",
+      "retrievedAt": "2026-08-26T06:01:51.845Z",
       "status": "verified",
       "corroborated": true
     },
@@ -124,7 +124,7 @@
       "sourceRefs": [
         "source:wikipedia:64198883"
       ],
-      "retrievedAt": "2026-08-25T06:03:07.316Z",
+      "retrievedAt": "2026-08-26T06:01:51.845Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -246,9 +246,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 13.044375,
-        "layoffDays": 752
+        "layoffDays": 753
       },
-      "updatedAt": "2026-08-25T06:03:07.316Z"
+      "updatedAt": "2026-08-26T06:01:51.845Z"
     }
   ],
   "rating": {
@@ -258,14 +258,14 @@
     "volatility": 0.05999752,
     "boutCount": 4,
     "asOfBoutRef": "ufc:bout:history-19c0ccbe8c8c67c819a2",
-    "updatedAt": "2026-08-25T06:03:07.316Z"
+    "updatedAt": "2026-08-26T06:01:51.845Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "record-history-incomplete"
     ],
-    "lastReviewedAt": "2026-08-25T06:03:07.316Z"
+    "lastReviewedAt": "2026-08-26T06:01:51.845Z"
   },
   "changeLog": [
     {
@@ -2149,11 +2149,45 @@
         "source:wikipedia:64198883"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-26T06:01:51.845Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64198883"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 25 historical fight rows."
+    },
+    {
+      "at": "2026-08-26T06:01:51.845Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:66657574",
+        "source:wikipedia:64198883"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-25T06:03:07.316Z"
+  "updatedAt": "2026-08-26T06:01:51.845Z"
 }

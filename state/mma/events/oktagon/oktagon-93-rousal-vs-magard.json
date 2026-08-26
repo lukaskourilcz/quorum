@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-12T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-25:2026 in Oktagon MMA"
+    "source:wikipedia:2026-08-26:2026 in Oktagon MMA"
   ],
   "bouts": [
     {
@@ -90,7 +90,15 @@
       "division": "bantamweight",
       "scheduledRounds": 3,
       "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:ali-gunduz-vs-david-daniel-komar-11",
+      "red": "oktagon:ali-gunduz",
+      "blue": "oktagon:david-daniel-komar",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-25T06:03:07.316Z"
+  "updatedAt": "2026-08-26T06:01:51.845Z"
 }

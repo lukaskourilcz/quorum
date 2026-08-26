@@ -257,7 +257,7 @@
       "requestedAt": "2026-08-22T06:01:28.960Z",
       "notBefore": "2026-08-22",
       "expiresAt": "2026-08-25T23:59:59.000Z",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "schemaVersion": "meeting-agenda/1",
@@ -312,7 +312,25 @@
       "notBefore": "2026-08-25",
       "expiresAt": "2026-08-28T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-bdc1584fc25fad28",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-26-mma-intake",
+      "summary": "Decide: source height/reach via roster pages (cito-ufc, wikimedia) or halt fighter commits until anthropometric data meets two-source rule.",
+      "evidenceRefs": [
+        "source:cito-ufc:2026-08-26",
+        "source:wikimedia:2026-08-26"
+      ],
+      "requestedAt": "2026-08-26T06:01:51.845Z",
+      "notBefore": "2026-08-26",
+      "expiresAt": "2026-08-29T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-25T06:03:07.316Z"
+  "updatedAt": "2026-08-26T06:01:51.845Z"
 }

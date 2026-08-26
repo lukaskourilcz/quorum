@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Robert_Whittaker_(fighter)",
       "publisher": "Wikipedia",
       "title": "Robert Whittaker (fighter)",
-      "retrievedAt": "2026-08-25T06:03:07.316Z",
+      "retrievedAt": "2026-08-26T06:01:51.845Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q4845777",
         "source:wikipedia:37237007"
       ],
-      "retrievedAt": "2026-08-25T06:03:07.316Z",
+      "retrievedAt": "2026-08-26T06:01:51.845Z",
       "status": "verified",
       "corroborated": true
     },
@@ -190,9 +190,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.5,
         "fightsPerYear": 0.36757,
-        "layoffDays": 1144
+        "layoffDays": 1145
       },
-      "updatedAt": "2026-08-25T06:03:07.316Z"
+      "updatedAt": "2026-08-26T06:01:51.845Z"
     }
   ],
   "rating": {
@@ -202,7 +202,7 @@
     "volatility": 0.05999827,
     "boutCount": 4,
     "asOfBoutRef": "ufc:bout:history-fc1c130d396457cfcbd0",
-    "updatedAt": "2026-08-25T06:03:07.316Z"
+    "updatedAt": "2026-08-26T06:01:51.845Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1680,11 +1680,25 @@
         "source:wikipedia:62595898"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-26T06:01:51.845Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26689399",
+        "source:wikipedia:62595898"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-25T06:03:07.316Z"
+  "updatedAt": "2026-08-26T06:01:51.845Z"
 }
