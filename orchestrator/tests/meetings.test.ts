@@ -14,7 +14,8 @@ import {
   buildCalendarFeed,
   loadMeetingRecords,
   mondayOfWeek,
-  pragueSlotInstant
+  pragueSlotInstant,
+  PUBLIC_MEETING_CLOCK
  } from "../src/meetings/calendar.js";
 import {
   MEETING_CLOCK,
@@ -388,7 +389,8 @@ describe("meeting calendar", () => {
     }));
     // Seven days of the clock. Counted off it rather than pinned, so a cadence change moves
     // the calendar and this case together instead of failing on arithmetic.
-    expect(feed.slots).toHaveLength(MEETING_CLOCK.length * 7);
+    expect(feed.slots).toHaveLength(PUBLIC_MEETING_CLOCK.length * 7);
+    expect(feed.slots.map(({ kind }) => String(kind))).not.toContain("pg-desk");
     const edition = feed.slots.find((slot) => slot.kind === "cu-edition" && slot.status === "held");
     expect(edition?.at).toBe("2026-08-04T03:00:00.000Z");
     expect(edition?.meetingRef).toBe("meetings/2026-08-04-cu-edition");

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "personal-growth-goviral-packet/1",
+  "packetId": "pg-goviral-2026-08-24",
+  "weekOf": "2026-08-24",
+  "generatedAt": "2026-08-24T11:00:00.000Z",
+  "expiresAt": "2026-09-01T00:00:00.000Z",
+  "inputHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "goviralBriefId": "gv-brief-2026-08-24",
+  "goviralBriefHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "sourceRegistryRef": "config/goviral-sources.json",
+  "profileRef": "state/ventures/goviral/profile.md",
+  "sourceHealth": "healthy",
+  "quota": "available",
+  "retrieval": { "threadsKeywordMode": "bounded-public-actor", "accountCredentialsUsed": false, "apifyUpgradeRequired": false },
+  "reusedWeeklyBrief": true,
+  "providerRerun": false,
+  "incrementalCostUsd": 0,
+  "opportunities": [],
+  "agenda": { "weekKey": "2026-W35", "status": "not-needed", "agendaRef": null }
+}

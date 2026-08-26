@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-journal-metadata/1"
+    },
+    "language": {
+      "type": "string",
+      "enum": [
+        "cs",
+        "en"
+      ]
+    },
+    "sourceHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "titleHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "versionId": {
+      "type": "string",
+      "pattern": "^pg-journal-(?:cs|en)-[a-f0-9]{16}$"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "current",
+        "superseded"
+      ]
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "chunkCount": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "retrievalAvailable": {
+      "type": "boolean"
+    },
+    "style": {
+      "type": "object",
+      "properties": {
+        "sampledSentences": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "meanWordsPerSentence": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "medianWordsPerSentence": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "fragmentRatio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "oneSentenceParagraphRatio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "punctuationDensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "sampledSentences",
+        "meanWordsPerSentence",
+        "medianWordsPerSentence",
+        "fragmentRatio",
+        "oneSentenceParagraphRatio",
+        "punctuationDensity"
+      ],
+      "additionalProperties": false
+    },
+    "cost": {
+      "type": "object",
+      "properties": {
+        "actualUsd": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "monthlyCapUsd": {
+          "type": "number",
+          "const": 20
+        },
+        "degradation": {
+          "type": "string",
+          "enum": [
+            "healthy",
+            "reduced",
+            "low",
+            "critical",
+            "exhausted"
+          ]
+        }
+      },
+      "required": [
+        "actualUsd",
+        "monthlyCapUsd",
+        "degradation"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "language",
+    "sourceHash",
+    "titleHash",
+    "versionId",
+    "status",
+    "generatedAt",
+    "chunkCount",
+    "retrievalAvailable",
+    "style",
+    "cost"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-journal-metadata.schema.json"
+}

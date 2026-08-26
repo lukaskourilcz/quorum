@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "personal-growth-leak-audit/1",
+  "status": "pass",
+  "exactLongNgram": true,
+  "similarity": 0.9,
+  "quoteCharacters": 500,
+  "serializedPrivateField": true,
+  "safeToPersistPublicly": true,
+  "source": "forbidden"
+}

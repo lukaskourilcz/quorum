@@ -5,8 +5,7 @@ import { describe, expect, it } from "vitest";
 import { parse } from "yaml";
 import { loadRoutingConfig, routeBoardroom } from "../src/boardroom/router.js";
 import { MeetingSkipSchema } from "../src/contracts/meeting-skip.js";
-import { pragueSlotInstant } from "../src/meetings/calendar.js";
-import { MEETING_CLOCK } from "../src/meetings/clock.js";
+import { pragueSlotInstant, PUBLIC_MEETING_CLOCK } from "../src/meetings/calendar.js";
 import {
   NO_RECORD_REASON,
   previousPragueDate,
@@ -67,9 +66,9 @@ describe("a day with no record of its slots still gets one", () => {
     // showed the slot red as "missed" with nothing saying why.
     const root = await emptyRoot();
     const result = await reconcileMeetingDay(root, DATE, NOW);
-    expect(MEETING_CLOCK.length).toBeGreaterThan(0);
-    expect(result.recorded).toHaveLength(MEETING_CLOCK.length);
-    for (const definition of MEETING_CLOCK) {
+    expect(PUBLIC_MEETING_CLOCK.length).toBeGreaterThan(0);
+    expect(result.recorded).toHaveLength(PUBLIC_MEETING_CLOCK.length);
+    for (const definition of PUBLIC_MEETING_CLOCK) {
       const skip = MeetingSkipSchema.parse(
         JSON.parse(await readFile(skipPath(root, definition.phase), "utf8"))
       );
@@ -79,6 +78,7 @@ describe("a day with no record of its slots still gets one", () => {
       // cannot establish: nothing here distinguishes an undelivered cron from a cancelled run.
       expect(skip.reason).not.toMatch(/never started|cancel|GitHub/iu);
     }
+    expect(await exists(skipPath(root, "pg-desk"))).toBe(false);
   });
 
   it("writes nothing on a second pass over the same day", async () => {
@@ -115,7 +115,7 @@ describe("a day with no record of its slots still gets one", () => {
 
     // Every slot on the clock but the three this case already gave a record, a published
     // article or an existing skip.
-    expect(result.recorded).toHaveLength(MEETING_CLOCK.length - 3);
+    expect(result.recorded).toHaveLength(PUBLIC_MEETING_CLOCK.length - 3);
     expect(await readFile(recordFile, "utf8")).toBe(recordBefore);
     expect(await exists(skipPath(root, "cu-edition"))).toBe(false);
     expect(await exists(skipPath(root, "article-am"))).toBe(false);
@@ -137,7 +137,7 @@ describe("a day with no record of its slots still gets one", () => {
     // would be false by the time anybody read it. Asserted rather than assumed: this is the one
     // place where the calendar's new status decides whether a claim gets written to disk.
     const root = await emptyRoot();
-    const lastSlot = MEETING_CLOCK.reduce((latest, slot) => slot.hour > latest.hour ? slot : latest);
+    const lastSlot = PUBLIC_MEETING_CLOCK.reduce((latest, slot) => slot.hour > latest.hour ? slot : latest);
     // The night shift sits at 22:00 Prague and its window closes at 03:00 the next morning, so
     // 01:00 is past midnight — a finished Prague day, which the guard lets through — while the
     // slot is still inside its window. Only the status stops it here.

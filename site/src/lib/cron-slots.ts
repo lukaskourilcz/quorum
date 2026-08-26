@@ -29,6 +29,7 @@ export const SCHEDULED_PHASES = [
   "bh-desk",
   "ts-desk",
   "kv-desk",
+  "pg-desk",
   "article-am",
   "night"
 ] as const;

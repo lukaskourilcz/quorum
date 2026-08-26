@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-planner-config/1"
+    },
+    "ventureId": {
+      "type": "string",
+      "const": "personal-growth"
+    },
+    "timezone": {
+      "type": "string",
+      "const": "Europe/Prague"
+    },
+    "room": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "pg-desk"
+        },
+        "label": {
+          "type": "string",
+          "const": "Lukáš personal growth desk"
+        },
+        "cadence": {
+          "type": "string",
+          "const": "daily@23:00"
+        },
+        "target": {
+          "type": "string",
+          "const": "next-prague-calendar-date"
+        }
+      },
+      "required": [
+        "kind",
+        "label",
+        "cadence",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "planningWindowDays": {
+      "type": "number",
+      "const": 30
+    },
+    "strategicRhythmDays": {
+      "type": "number",
+      "const": 10
+    },
+    "runBudget": {
+      "type": "object",
+      "properties": {
+        "ordinaryMainSyntheses": {
+          "type": "number",
+          "const": 1
+        },
+        "deterministicValidations": {
+          "type": "number",
+          "const": 1
+        },
+        "maximumRepairs": {
+          "type": "number",
+          "const": 1
+        },
+        "approximateUsd": {
+          "type": "number",
+          "const": 0.12
+        },
+        "hardMaximumUsd": {
+          "type": "number",
+          "const": 0.15
+        },
+        "dryUsd": {
+          "type": "number",
+          "const": 0
+        }
+      },
+      "required": [
+        "ordinaryMainSyntheses",
+        "deterministicValidations",
+        "maximumRepairs",
+        "approximateUsd",
+        "hardMaximumUsd",
+        "dryUsd"
+      ],
+      "additionalProperties": false
+    },
+    "lanes": {
+      "minItems": 2,
+      "maxItems": 2,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "lane": {
+            "type": "string",
+            "enum": [
+              "okraj",
+              "bbarak"
+            ]
+          },
+          "intervalDays": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 30
+          },
+          "recurrenceAnchorDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "ownerAuthorshipRequired": {
+            "type": "boolean",
+            "const": true
+          },
+          "collaboratorId": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "publicationId": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "anchorIds": {
+            "minItems": 1,
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 80,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          },
+          "initialSubjectId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "targetSlides": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "life-story-carousel",
+              "hip-hop-article"
+            ]
+          },
+          "defaultStatus": {
+            "type": "string",
+            "enum": [
+              "planned",
+              "held"
+            ]
+          },
+          "finalUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500,
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "articleUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500,
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "collaborationUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500,
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "lane",
+          "intervalDays",
+          "recurrenceAnchorDate",
+          "ownerAuthorshipRequired",
+          "collaboratorId",
+          "publicationId",
+          "anchorIds",
+          "initialSubjectId",
+          "targetSlides",
+          "format",
+          "defaultStatus",
+          "finalUrl",
+          "articleUrl",
+          "collaborationUrl"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "ventureId",
+    "timezone",
+    "room",
+    "planningWindowDays",
+    "strategicRhythmDays",
+    "runBudget",
+    "lanes"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-planner-config.schema.json"
+}

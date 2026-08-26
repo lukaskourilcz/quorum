@@ -1,0 +1,473 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-daily-brief/1"
+    },
+    "targetPragueDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "room": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "pg-desk"
+        },
+        "result": {
+          "type": "string",
+          "enum": [
+            "planned",
+            "quiet",
+            "not-needed",
+            "held",
+            "failed",
+            "unavailable"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    "inputHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "authority": {
+      "type": "object",
+      "properties": {
+        "publishingAuthorized": {
+          "type": "boolean",
+          "const": false
+        },
+        "ownerWritesAllContent": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": [
+        "publishingAuthorized",
+        "ownerWritesAllContent"
+      ],
+      "additionalProperties": false
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "dry": {
+          "type": "boolean"
+        },
+        "mainSyntheses": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "deterministicValidations": {
+          "type": "number",
+          "const": 1
+        },
+        "repairs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "estimatedUsd": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.15
+        },
+        "hardMaximumUsd": {
+          "type": "number",
+          "const": 0.15
+        }
+      },
+      "required": [
+        "dry",
+        "mainSyntheses",
+        "deterministicValidations",
+        "repairs",
+        "estimatedUsd",
+        "hardMaximumUsd"
+      ],
+      "additionalProperties": false
+    },
+    "timelines": {
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "occurrenceId": {
+            "type": "string",
+            "pattern": "^pg-(?:okraj|bbarak)-\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "lane": {
+            "type": "string",
+            "enum": [
+              "okraj",
+              "bbarak"
+            ]
+          },
+          "originalDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "scheduledDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "due",
+              "upcoming",
+              "overdue",
+              "completed",
+              "skipped",
+              "rescheduled"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "recurrence",
+              "reschedule"
+            ]
+          },
+          "finalUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500,
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "articleUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500,
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "collaborationUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500,
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "occurrenceId",
+          "lane",
+          "originalDate",
+          "scheduledDate",
+          "status",
+          "source",
+          "finalUrl",
+          "articleUrl",
+          "collaborationUrl"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "deadlines": {
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "date",
+        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+      }
+    },
+    "primaryAction": {
+      "type": "object",
+      "properties": {
+        "occurrenceId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^pg-(?:okraj|bbarak)-\\d{4}-\\d{2}-\\d{2}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "ACTION",
+            "NO_ACTION"
+          ]
+        },
+        "noActionReason": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "none-due",
+                "held",
+                "unavailable"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "occurrenceId",
+        "decision",
+        "noActionReason"
+      ],
+      "additionalProperties": false
+    },
+    "platformPlaceholders": {
+      "type": "object",
+      "properties": {
+        "threads": {
+          "type": "string",
+          "enum": [
+            "NO_POST",
+            "owner-only-draft-placeholder"
+          ]
+        },
+        "instagram": {
+          "type": "string",
+          "enum": [
+            "NO_POST",
+            "owner-only-draft-placeholder"
+          ]
+        },
+        "reel": {
+          "type": "string",
+          "enum": [
+            "NO_POST",
+            "owner-only-draft-placeholder"
+          ]
+        },
+        "noPostReason": {
+          "type": "string",
+          "enum": [
+            "publishing-not-authorized",
+            "none-due",
+            "owner-only"
+          ]
+        }
+      },
+      "required": [
+        "threads",
+        "instagram",
+        "reel",
+        "noPostReason"
+      ],
+      "additionalProperties": false
+    },
+    "optionalInputs": {
+      "type": "object",
+      "properties": {
+        "goviral": {
+          "type": "string",
+          "enum": [
+            "available",
+            "unavailable",
+            "held",
+            "not-needed"
+          ]
+        },
+        "ownerManualReference": {
+          "type": "string",
+          "enum": [
+            "available",
+            "unavailable",
+            "held",
+            "not-needed"
+          ]
+        }
+      },
+      "required": [
+        "goviral",
+        "ownerManualReference"
+      ],
+      "additionalProperties": false
+    },
+    "contentMix": {
+      "type": "object",
+      "properties": {
+        "okrajDue": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "bbarakDue": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "collision": {
+          "type": "boolean"
+        },
+        "overpromotion": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "okrajDue",
+        "bbarakDue",
+        "collision",
+        "overpromotion"
+      ],
+      "additionalProperties": false
+    },
+    "experiment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "null"
+        },
+        "status": {
+          "type": "string",
+          "const": "placeholder"
+        }
+      },
+      "required": [
+        "id",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "kpi": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "null"
+        },
+        "status": {
+          "type": "string",
+          "const": "placeholder"
+        }
+      },
+      "required": [
+        "id",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "collision",
+          "overdue",
+          "overpromotion",
+          "optional-input-unavailable"
+        ]
+      }
+    },
+    "unavailable": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "goviral",
+          "owner-manual-reference",
+          "english-journal"
+        ]
+      }
+    },
+    "ownerOnlyActions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "write",
+          "edit",
+          "approve",
+          "publish",
+          "record-outcome"
+        ]
+      }
+    },
+    "correction": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "correctedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "revision",
+        "correctedAt"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "targetPragueDate",
+    "generatedAt",
+    "room",
+    "inputHash",
+    "authority",
+    "budget",
+    "timelines",
+    "deadlines",
+    "primaryAction",
+    "platformPlaceholders",
+    "optionalInputs",
+    "contentMix",
+    "experiment",
+    "kpi",
+    "warnings",
+    "unavailable",
+    "ownerOnlyActions",
+    "correction"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-daily-brief.schema.json"
+}

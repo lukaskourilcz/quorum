@@ -88,7 +88,10 @@ export function resolveDailyEnvelopePlan(input: {
   if (input.rooms.some(({ envelopeUsd }) => !Number.isFinite(envelopeUsd) || envelopeUsd < 0)) {
     throw new Error("Room envelopes must be non-negative finite numbers");
   }
-  const active = input.rooms.filter(({ phase }) => weekdayRoomIsDue(phase, input.date));
+  // Personal Growth has its own countersigned $20 nested budget and must never consume or evict
+  // a shared portfolio reservation. It still lives on the canonical clock; only this budget
+  // calculation excludes it.
+  const active = input.rooms.filter(({ phase }) => phase !== "pg-desk" && weekdayRoomIsDue(phase, input.date));
   const dropped: ScheduledPhase[] = [];
   let reservedUsd = active.reduce((sum, room) => sum + room.envelopeUsd, input.nonRoomReservationUsd);
   for (const phase of ROOM_DEGRADATION_ORDER) {

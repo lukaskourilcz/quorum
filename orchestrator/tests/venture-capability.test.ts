@@ -89,11 +89,11 @@ describe("venture capability map", () => {
     }
   });
 
-  it("allows Personal Growth only a manual owner reference and holds its optional GoVIRAL input", async () => {
+  it("allows Personal Growth only its bounded GoVIRAL packet and a manual owner reference", async () => {
     const map = await loadVentureCapabilityMap(configRoot);
     const inbound = map.edges.filter((edge) => edge.target === "personal-growth" && edge.decision !== "denied");
     expect(inbound.map((edge) => [edge.source, edge.capability, edge.decision])).toEqual([
-      ["goviral", "intelligence-read", "held"],
+      ["goviral", "intelligence-read", "allowed"],
       ["admin-service", "owner-manual-reference-read", "allowed"]
     ]);
     await expect(resolvePersonalGrowthInput({
@@ -104,8 +104,8 @@ describe("venture capability map", () => {
     await expect(resolvePersonalGrowthInput({
       source: "goviral",
       capability: "intelligence-read",
-      schemaVersion: "goviral-intelligence-packet/1"
-    }, { configRoot })).resolves.toMatchObject({ decision: "held" });
+      schemaVersion: "personal-growth-goviral-packet/1"
+    }, { configRoot })).resolves.toMatchObject({ decision: "allowed", authorityGranted: false, publishingAuthorized: false, spendAuthorized: false });
     for (const source of ["kvorum", "social-distribution", "door-money", "caught-up"]) {
       await expect(resolvePersonalGrowthInput({
         source,
@@ -113,6 +113,14 @@ describe("venture capability map", () => {
         schemaVersion: "goviral-intelligence-packet/1"
       }, { configRoot })).resolves.toMatchObject({ decision: "denied" });
     }
+    expect(validateVentureCapabilityPayload(
+      "personal-growth-goviral-packet/1",
+      await fixture("personal-growth-goviral-packet.valid.json")
+    )).toMatchObject({ valid: true });
+    expect(validateVentureCapabilityPayload(
+      "personal-growth-goviral-packet/1",
+      await fixture("personal-growth-goviral-packet.poison.json")
+    )).toMatchObject({ valid: false });
   });
 
   it("prevents Kvórum and FightAIQ from exporting political or monetization authority", async () => {
