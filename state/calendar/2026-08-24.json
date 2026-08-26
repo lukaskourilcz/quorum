@@ -154,7 +154,8 @@
       "at": "2026-08-25T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-25T05:00:00.000Z",
@@ -191,7 +192,8 @@
       "at": "2026-08-25T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-25T10:00:00.000Z",
@@ -292,15 +294,13 @@
       "at": "2026-08-26T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
     },
     {
       "at": "2026-08-26T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ms-daily",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
     },
     {
       "at": "2026-08-26T06:00:00.000Z",
@@ -322,19 +322,23 @@
       "at": "2026-08-26T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "scheduled"
+      "status": "held",
+      "decisionOneLiner": "The desk published this slot's article."
     },
     {
       "at": "2026-08-26T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "scheduled"
+      "status": "late",
+      "decisionOneLiner": "The run for this slot has not arrived yet."
     },
     {
       "at": "2026-08-26T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-26-bh-desk",
+      "decisionOneLiner": "The selection phase remains current. No provider was called, nothing was published and this day cost $0."
     },
     {
       "at": "2026-08-26T11:00:00.000Z",
