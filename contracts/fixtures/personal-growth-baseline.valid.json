@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "personal-growth-baseline/1",
+  "ventureId": "personal-growth",
+  "startsOn": "2026-08-03",
+  "endsOn": "2026-08-30",
+  "evaluatedAt": "2026-08-20T12:00:00.000Z",
+  "elapsedDays": 18,
+  "status": "collecting",
+  "acceptedResultCount": 0,
+  "droppedResultCount": 0,
+  "segments": [],
+  "targetProposal": {
+    "required": false,
+    "ownerDecisionRequired": true,
+    "activatedTargets": 0,
+    "evidenceRefs": []
+  }
+}

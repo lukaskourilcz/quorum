@@ -165,9 +165,22 @@ describe("Personal Growth planner and pg-desk", () => {
     });
     expect(result.status).toBe("planned");
     expect(result.spendUsd).toBe(0);
+    expect(result.artifacts).toEqual([
+      "ventures/personal-growth/briefs/2026-08-27.json",
+      "meetings/2026-08-26-pg-desk.json",
+      "ventures/personal-growth/recommendations/threads/2026-08-27.json",
+      "ventures/personal-growth/recommendations/instagram/2026-08-27.json",
+      "ventures/personal-growth/analysis/baseline.json"
+    ]);
     expect(result.brief?.optionalInputs).toEqual({ goviral: "unavailable", ownerManualReference: "not-needed" });
     const committed = await readFile(path.join(root, "ventures/personal-growth/briefs/2026-08-27.json"), "utf8");
     expect(committed).not.toMatch(/kvorum|portfolio|social-distribution|credential|manuscript/iu);
+    const threads = JSON.parse(await readFile(path.join(root, "ventures/personal-growth/recommendations/threads/2026-08-27.json"), "utf8"));
+    expect(threads).toMatchObject({ decision: "NO_POST", publishingAuthorized: false, repliesAuthorized: false });
+    const instagram = JSON.parse(await readFile(path.join(root, "ventures/personal-growth/recommendations/instagram/2026-08-27.json"), "utf8"));
+    expect(instagram).toMatchObject({ actionType: "bbarak-distribution", ownerWritesArtifact: true, publishingAuthorized: false });
+    const baseline = JSON.parse(await readFile(path.join(root, "ventures/personal-growth/analysis/baseline.json"), "utf8"));
+    expect(baseline).toMatchObject({ status: "collecting", acceptedResultCount: 0, targetProposal: { activatedTargets: 0 } });
   });
 
   it("rejects malformed history and per-run authority above the hard maximum", async () => {

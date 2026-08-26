@@ -490,6 +490,18 @@ Judgement calls. Nothing is blocked on code for any of these.
 
 ---
 
+## Only before Personal Growth channel insights
+
+- [ ] **Authorise the owner-only Meta insight connection.** Create or select the Meta app for
+  `lukaskouril93`, grant only the Instagram/Threads read permissions listed in
+  `docs/PERSONAL-GROWTH-PROVIDERS.md`, and place the access token plus Instagram and Threads account
+  ids in the approved server-side secret store. Do not reuse a brand publisher credential or put a
+  token in Git. Leave `instagramInsights`, `threadsInsights`, `threadsSearch`, `providerLive` and
+  `tokenRefresh` false until a reviewed connection test confirms the exact scopes and renewal path.
+  This task grants no posting or Buffer authority. [imp:2] [owner:me] [time:30m] [kind:setup]
+
+---
+
 ## Only before social posting
 
 Roughly a month out. Nothing here is needed until a channel actually opens, and opening one is a

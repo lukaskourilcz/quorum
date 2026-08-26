@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "personal-growth-provider-config/1",
+  "auditedAt": "2026-08-26",
+  "officialSourcesOnly": true,
+  "meta": {
+    "graphApiVersion": "v26.0",
+    "threadsApiVersion": "v1.0",
+    "instagramApiFamilies": ["instagram-login", "facebook-login"],
+    "instagramProfessionalAccountTypes": ["business", "creator"],
+    "instagramPermissions": {
+      "instagramLogin": ["instagram_business_basic", "instagram_business_manage_insights"],
+      "facebookLogin": ["instagram_basic", "instagram_manage_insights", "pages_read_engagement"]
+    },
+    "threadsPermissions": ["threads_basic", "threads_manage_insights"],
+    "threadsSearchPermission": "threads_keyword_search",
+    "docs": {
+      "versions": "https://developers.facebook.com/docs/graph-api/changelog/versions/",
+      "instagramOverview": "https://developers.facebook.com/documentation/instagram-platform/overview",
+      "instagramInsights": "https://developers.facebook.com/documentation/instagram-platform/insights",
+      "threadsOverview": "https://developers.facebook.com/documentation/threads",
+      "threadsInsights": "https://developers.facebook.com/documentation/threads/insights",
+      "threadsKeywordSearch": "https://developers.facebook.com/documentation/threads/keyword-search"
+    },
+    "retentionPolicy": "provider-defined-do-not-assume",
+    "deprecatedMetricPolicy": "unavailable-never-zero"
+  },
+  "buffer": {
+    "auditedAt": "2026-08-26",
+    "docs": "https://developers.buffer.com/guides/posts-and-scheduling.html",
+    "apiStyle": "graphql",
+    "supportedPlatforms": ["instagram", "threads"],
+    "adapterEnabled": false,
+    "ownerApprovalRequired": true,
+    "purchaseAuthorized": false,
+    "publishingAuthorized": false,
+    "planAssumption": "none"
+  }
+}

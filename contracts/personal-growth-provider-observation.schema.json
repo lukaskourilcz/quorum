@@ -1,0 +1,234 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-provider-observation/1"
+    },
+    "observationId": {
+      "type": "string",
+      "pattern": "^pg-observation-[a-f0-9]{16}$"
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "instagram",
+        "threads"
+      ]
+    },
+    "scope": {
+      "type": "string",
+      "enum": [
+        "account",
+        "post",
+        "keyword-search"
+      ]
+    },
+    "ownerAccountAlias": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^pg-owner-[a-z0-9-]+$"
+    },
+    "nativePostId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nativeUrl": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^https:\\/\\/"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "observedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "publishedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "pragueReportingDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "apiVersion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "maturityWindow": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "24h",
+            "72h",
+            "7d",
+            "28d"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "metrics": {
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "followers",
+              "net_follower_growth",
+              "views",
+              "reach",
+              "non_follower_reach",
+              "profile_views",
+              "follows",
+              "likes",
+              "comments",
+              "replies",
+              "reposts",
+              "quotes",
+              "shares",
+              "saves",
+              "watch_time_ms",
+              "average_watch_time_ms",
+              "early_exit_count",
+              "non_follower_reach_ratio",
+              "profile_view_to_follow_rate",
+              "saves_per_1000_reach",
+              "shares_per_1000_reach",
+              "early_exit_rate",
+              "replies_per_1000_views",
+              "reposts_quotes_per_1000_views"
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unavailableReason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "not-returned",
+                  "unsupported",
+                  "threshold-restricted",
+                  "missing-permission",
+                  "missing-credential",
+                  "expired-token",
+                  "rate-limited",
+                  "provider-error",
+                  "invalid-denominator"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "value",
+          "unavailableReason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "unavailableReason": {
+      "type": "string",
+      "enum": [
+        "none",
+        "empty-response",
+        "missing-permission",
+        "missing-credential",
+        "expired-token",
+        "rate-limited",
+        "unsupported-account",
+        "provider-disabled",
+        "provider-error"
+      ]
+    },
+    "droppedItemCount": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "snapshotHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "credentialMaterialPresent": {
+      "type": "boolean",
+      "const": false
+    },
+    "audienceIdentityPresent": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "observationId",
+    "idempotencyKey",
+    "platform",
+    "scope",
+    "ownerAccountAlias",
+    "nativePostId",
+    "nativeUrl",
+    "observedAt",
+    "publishedAt",
+    "pragueReportingDate",
+    "apiVersion",
+    "maturityWindow",
+    "metrics",
+    "unavailableReason",
+    "droppedItemCount",
+    "snapshotHash",
+    "credentialMaterialPresent",
+    "audienceIdentityPresent"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-provider-observation.schema.json"
+}

@@ -107,7 +107,19 @@
         "insightsIngestion": {
           "type": "boolean"
         },
+        "instagramInsights": {
+          "type": "boolean"
+        },
+        "threadsInsights": {
+          "type": "boolean"
+        },
         "threadsSearch": {
+          "type": "boolean"
+        },
+        "providerLive": {
+          "type": "boolean"
+        },
+        "tokenRefresh": {
           "type": "boolean"
         },
         "bufferQueue": {
@@ -122,7 +134,11 @@
         "projectLive",
         "paidSynthesis",
         "insightsIngestion",
+        "instagramInsights",
+        "threadsInsights",
         "threadsSearch",
+        "providerLive",
+        "tokenRefresh",
         "bufferQueue",
         "publishing"
       ],

@@ -2,9 +2,10 @@
 
 Personal Growth is the owner's private planning workspace. Its scheduled room is `pg-desk` at
 23:00 in `Europe/Prague`; each run targets the next Prague calendar date. The room owns a rolling
-30-day plan and a 10-day strategic rhythm. It does not write, rewrite, outline or critique content,
-publish to a social platform, monetize an audience, inspect another venture, or nominate work from
-the portfolio.
+30-day plan and a 10-day strategic rhythm. It can prepare bounded Threads, Instagram and Reel
+recommendations from owner-supplied evidence, but it does not write or rewrite OKRAJ and BBARAK
+artifacts, publish to a social platform, monetize an audience, inspect another venture, or nominate
+work from the portfolio.
 
 ## Inputs and authority
 
@@ -24,6 +25,51 @@ The ordinary room may make at most one main synthesis and one deterministic repa
 ceiling is about $0.12 and the hard per-run ceiling is $0.15. Dry fixtures make no provider calls
 and cost $0. The nested Personal Growth all-in cap remains $20 per month. Neither the room nor an
 input capability grants publishing or spend authority.
+
+## Threads, Instagram and Reels
+
+The Threads packet contains one primary suggestion, at most two distinct alternatives, or an
+explicit `NO_POST`. Every accepted suggestion records language, Unicode character count, at most
+one topic tag, pillar, source lane, provenance, selection reason, conversation purpose, current
+experiment and profile versions. The gate rejects expired GoVIRAL signals, false memories,
+manuscript overlap, owner vetoes, repetitive recent text, unsafe quality flags and any Kvórum,
+portfolio or Social Distribution reference. Conversation opportunities contain public URLs and
+evidence only. Replies remain manual.
+
+Instagram uses a versioned owner policy. Its founding bounds reserve at least 85% of feed items for
+personal or personally authored work, limit venture-led items to owner-manual references, cap
+venture Story reshares at two per seven days and enforce a ten-day same-venture cooldown. Kvórum is
+ineligible. MMA Files needs owner authorship or a recorded personal connection. A policy change
+appends history; a looser revision needs an owner decision reference.
+
+The Reel inventory covers Rapovej moment, Behind the page, Life between projects, A trend met a
+memory and the optional English Rapovej deník lane. Each plan lists real assets, shots, language,
+subtitles and evidence for any memory. The engine creates no footage and has no AI video path.
+
+## Results and learning
+
+Official Meta observations and manual entries share one Personal Growth-owned result contract.
+Observations append at 24 hours, 72 hours, 7 days and 28 days and use an idempotency key. Missing
+metrics stay unavailable. A manual result survives provider failure, and later API data adds a
+second provenance lane instead of replacing it.
+
+Before the protected Admin editor exists, the owner can append a complete manual result with
+`pnpm --filter @boardlessai/orchestrator personal-growth:result -- --file <result.json>`. The
+command validates the same published contract and returns only the result id and idempotency
+status.
+
+The first 28 days establish medians by platform, format, pillar and origin class. The baseline
+activates no target; after day 28 it requests an owner decision for any 90-day target. Twelve
+operational Personal Growth metrics use the existing quarterly evaluator. Growth rates are
+calculated only with valid denominators.
+
+At most two experiments may be active or under review. Their hypothesis, single changed variable,
+metric, guardrail, sample minimum, window and stop condition freeze after start. A short sample
+returns `INSUFFICIENT_DATA`. Feedback proposes bounded Personal Growth weights without changing
+the original results or sending data to another venture.
+
+Provider versions, permissions and the disabled Buffer seam are recorded in
+`docs/PERSONAL-GROWTH-PROVIDERS.md`.
 
 ## Owner-authored lanes
 

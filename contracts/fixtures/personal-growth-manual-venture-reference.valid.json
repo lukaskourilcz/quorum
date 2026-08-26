@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "owner-manual-reference/1",
+  "referenceId": "pg-manual-ref-0123456789abcdef",
+  "sourceProject": "caught-up",
+  "publicItemId": "fixture-public-item",
+  "publicUrl": "https://example.com/fixture-public-item",
+  "ownerAuthored": true,
+  "personalConnection": null,
+  "ownerCommentaryNote": "Invented owner commentary used only by the fixture.",
+  "publicationVerifiedByOwner": true,
+  "ownerManuallySupplied": true,
+  "personalItemsInRollingWindow": 6,
+  "ventureItemsInRollingWindow": 0,
+  "requestedAction": "RESHARE_WITH_PERSONAL_NOTE",
+  "recordedAt": "2026-08-27T20:00:00.000Z",
+  "expiresAt": "2026-08-29T20:00:00.000Z",
+  "ownerProvenanceRef": "fixture:manual-reference"
+}

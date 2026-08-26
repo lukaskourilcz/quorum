@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "personal-growth-experiment-register/1",
+  "ventureId": "personal-growth",
+  "experiments": [
+    {"id":"one","status":"active"},
+    {"id":"two","status":"active"},
+    {"id":"three","status":"active"}
+  ],
+  "updatedAt": "2026-08-27T21:00:00.000Z"
+}

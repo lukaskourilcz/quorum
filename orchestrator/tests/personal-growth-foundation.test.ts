@@ -56,7 +56,11 @@ describe("Personal Growth foundation", () => {
       projectLive: true,
       paidSynthesis: false,
       insightsIngestion: true,
+      instagramInsights: false,
+      threadsInsights: false,
       threadsSearch: false,
+      providerLive: false,
+      tokenRefresh: false,
       bufferQueue: false,
       publishing: false
     });

@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-experiment-register/1"
+    },
+    "ventureId": {
+      "type": "string",
+      "const": "personal-growth"
+    },
+    "experiments": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "string",
+            "const": "personal-growth-experiment/1"
+          },
+          "id": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^pg-exp-[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "backlog",
+              "active",
+              "review",
+              "completed",
+              "stopped"
+            ]
+          },
+          "hypothesis": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 800
+          },
+          "changedVariable": {
+            "type": "string",
+            "enum": [
+              "trial-reel",
+              "language",
+              "photo-format",
+              "goviral-opening",
+              "threads-topic-tag",
+              "timing-window",
+              "manual-venture-reference"
+            ]
+          },
+          "platform": {
+            "type": "string",
+            "enum": [
+              "instagram",
+              "threads"
+            ]
+          },
+          "format": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "primaryMetric": {
+            "type": "string",
+            "enum": [
+              "followers",
+              "net_follower_growth",
+              "views",
+              "reach",
+              "non_follower_reach",
+              "profile_views",
+              "follows",
+              "likes",
+              "comments",
+              "replies",
+              "reposts",
+              "quotes",
+              "shares",
+              "saves",
+              "watch_time_ms",
+              "average_watch_time_ms",
+              "early_exit_count",
+              "non_follower_reach_ratio",
+              "profile_view_to_follow_rate",
+              "saves_per_1000_reach",
+              "shares_per_1000_reach",
+              "early_exit_rate",
+              "replies_per_1000_views",
+              "reposts_quotes_per_1000_views"
+            ]
+          },
+          "secondaryGuardrail": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "minimumSample": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 1000
+          },
+          "evaluationWindowDays": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 90
+          },
+          "stopCondition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "evidenceResultIds": {
+            "maxItems": 1000,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^pg-result-[a-f0-9]{16}$"
+            }
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "KEEP",
+              "ITERATE",
+              "STOP",
+              "INSUFFICIENT_DATA"
+            ]
+          },
+          "maxCostUsd": {
+            "type": "number",
+            "const": 0
+          },
+          "publishingAuthorized": {
+            "type": "boolean",
+            "const": false
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "id",
+          "status",
+          "hypothesis",
+          "changedVariable",
+          "platform",
+          "format",
+          "primaryMetric",
+          "secondaryGuardrail",
+          "startDate",
+          "minimumSample",
+          "evaluationWindowDays",
+          "stopCondition",
+          "evidenceResultIds",
+          "verdict",
+          "maxCostUsd",
+          "publishingAuthorized"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "ventureId",
+    "experiments",
+    "updatedAt"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-experiment-register.schema.json"
+}

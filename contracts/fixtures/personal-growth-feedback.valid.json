@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "personal-growth-feedback/1",
+  "evaluatedAt": "2026-08-27T21:00:00.000Z",
+  "sourceResultIds": ["pg-result-0123456789abcdef"],
+  "pillarWeights": [{"pillar":"life-lifestyle","prior":0.5,"proposed":0.6,"sampleSize":2}],
+  "formatPriors": {},
+  "goviralUtility": null,
+  "reelSeriesUtility": {},
+  "manualVentureReferenceUseful": null,
+  "mutatesEvidence": false,
+  "weakensPolicy": false,
+  "externalDestinations": []
+}

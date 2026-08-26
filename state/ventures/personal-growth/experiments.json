@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "personal-growth-experiment-register/1",
+  "ventureId": "personal-growth",
+  "experiments": [
+    {
+      "schemaVersion": "personal-growth-experiment/1",
+      "id": "pg-exp-trial-reel",
+      "status": "backlog",
+      "hypothesis": "A Trial Reel improves non-follower reach without increasing early exits.",
+      "changedVariable": "trial-reel",
+      "platform": "instagram",
+      "format": "reel",
+      "primaryMetric": "non_follower_reach_ratio",
+      "secondaryGuardrail": "Early-exit rate does not worsen.",
+      "startDate": "2026-08-27",
+      "minimumSample": 6,
+      "evaluationWindowDays": 28,
+      "stopCondition": "Stop on a privacy, authority or personal-content-policy violation.",
+      "evidenceResultIds": [],
+      "verdict": "INSUFFICIENT_DATA",
+      "maxCostUsd": 0,
+      "publishingAuthorized": false
+    },
+    {
+      "schemaVersion": "personal-growth-experiment/1",
+      "id": "pg-exp-threads-topic-tag",
+      "status": "backlog",
+      "hypothesis": "One relevant Threads topic tag improves replies per view against no tag.",
+      "changedVariable": "threads-topic-tag",
+      "platform": "threads",
+      "format": "text",
+      "primaryMetric": "replies_per_1000_views",
+      "secondaryGuardrail": "Recent-post similarity stays below the configured limit.",
+      "startDate": "2026-08-27",
+      "minimumSample": 8,
+      "evaluationWindowDays": 28,
+      "stopCondition": "Stop on a voice, provenance, privacy or quality-gate violation.",
+      "evidenceResultIds": [],
+      "verdict": "INSUFFICIENT_DATA",
+      "maxCostUsd": 0,
+      "publishingAuthorized": false
+    }
+  ],
+  "updatedAt": "2026-08-26T00:00:00.000Z"
+}

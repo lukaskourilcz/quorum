@@ -92,6 +92,22 @@ import {
 } from "./operations-coordination.js";
 import { PersonalGrowthFoundationSchema } from "./personal-growth-foundation.js";
 import {
+  PersonalGrowthContentConfigSchema,
+  PersonalGrowthInstagramRecommendationSchema,
+  PersonalGrowthManualVentureReferenceSchema,
+  PersonalGrowthThreadsPacketSchema
+} from "./personal-growth-recommendations.js";
+import {
+  PersonalGrowthProviderConfigSchema,
+  PersonalGrowthProviderObservationSchema,
+  PersonalGrowthResultSchema
+} from "./personal-growth-results.js";
+import {
+  PersonalGrowthBaselineSchema,
+  PersonalGrowthExperimentRegisterSchema,
+  PersonalGrowthFeedbackSchema
+} from "./personal-growth-analysis.js";
+import {
   PersonalGrowthDailyBriefSchema,
   PersonalGrowthGoViralFeedbackSchema,
   PersonalGrowthGoViralPacketSchema,
@@ -200,6 +216,16 @@ export const ContractSchemas = {
   "venture-recovery-attempt": VentureRecoveryAttemptSchema,
   "operations-incident-snapshot": OperationsIncidentSnapshotSchema,
   "personal-growth-foundation": PersonalGrowthFoundationSchema,
+  "personal-growth-content-config": PersonalGrowthContentConfigSchema,
+  "personal-growth-threads-recommendation": PersonalGrowthThreadsPacketSchema,
+  "personal-growth-instagram-recommendation": PersonalGrowthInstagramRecommendationSchema,
+  "personal-growth-manual-venture-reference": PersonalGrowthManualVentureReferenceSchema,
+  "personal-growth-provider-config": PersonalGrowthProviderConfigSchema,
+  "personal-growth-provider-observation": PersonalGrowthProviderObservationSchema,
+  "personal-growth-result": PersonalGrowthResultSchema,
+  "personal-growth-baseline": PersonalGrowthBaselineSchema,
+  "personal-growth-experiment-register": PersonalGrowthExperimentRegisterSchema,
+  "personal-growth-feedback": PersonalGrowthFeedbackSchema,
   "personal-growth-planner-config": PersonalGrowthPlannerConfigSchema,
   "personal-growth-history-event": PersonalGrowthHistoryEventSchema,
   "personal-growth-rolling-plan": PersonalGrowthRollingPlanSchema,

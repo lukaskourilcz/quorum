@@ -21,6 +21,7 @@ import { FixedCostRegistrySchema } from "../money/fixed-costs.js";
 import type { MonetizationMeasurements } from "../money/monetization.js";
 import type { KpiMeasurements } from "./quarterly.js";
 import { resolveLedgerVentureId } from "../ventures/accounting.js";
+import { collectPersonalGrowthOperationalMeasurements } from "../ventures/personal-growth/analytics.js";
 import {
   CAROUSEL_BRANDS,
   CarouselTemplateSchema,
@@ -314,7 +315,12 @@ export async function collectQuarterlyMeasurements(input: {
     tehdejsiResearchLedgerRaw,
     kvorumRecommendationsRaw,
     kvorumQuotaRaw,
-    ventureRegistryRaw
+    ventureRegistryRaw,
+    personalGrowthBriefsRaw,
+    personalGrowthThreadsRaw,
+    personalGrowthInstagramRaw,
+    personalGrowthResultsRaw,
+    personalGrowthHistoryRaw
   ] = await Promise.all([
     jsonFile(path.join(input.stateRoot, "budget", "ledger.json")),
     jsonFile(path.join(input.repoRoot, "config", "fixed-costs.json")),
@@ -354,7 +360,12 @@ export async function collectQuarterlyMeasurements(input: {
     jsonLinesCounted(path.join(input.stateRoot, "ventures", "tehdejsi-svet", "research-ledger.jsonl")),
     jsonFiles(path.join(input.stateRoot, "ventures", "kvorum", "recommendations")),
     jsonFile(path.join(input.stateRoot, "kvorum", "source-quota", "apify.json")),
-    jsonFile(path.join(input.repoRoot, "config", "ventures.json"))
+    jsonFile(path.join(input.repoRoot, "config", "ventures.json")),
+    jsonFilesCounted(path.join(input.stateRoot, "ventures", "personal-growth", "briefs")),
+    jsonFilesCounted(path.join(input.stateRoot, "ventures", "personal-growth", "recommendations", "threads")),
+    jsonFilesCounted(path.join(input.stateRoot, "ventures", "personal-growth", "recommendations", "instagram")),
+    jsonFilesCounted(path.join(input.stateRoot, "ventures", "personal-growth", "results")),
+    jsonFile(path.join(input.stateRoot, "ventures", "personal-growth", "history.json"))
   ]);
 
   const measurements: Record<string, number | null> = {};
@@ -430,6 +441,20 @@ export async function collectQuarterlyMeasurements(input: {
   measurements["state/budget/ledger.json#door_money_maximum_monthly_model_usd"] = maximumMonthlyVentureSpend("door-money");
   measurements["state/budget/ledger.json#tehdejsi_svet_maximum_monthly_model_usd"] = maximumMonthlyVentureSpend("tehdejsi-svet");
   measurements["state/budget/ledger.json#kvorum_model_spend_usd"] = maximumMonthlyVentureSpend("kvorum");
+  measurements["state/budget/ledger.json#personal_growth_maximum_monthly_all_in_usd"] = maximumMonthlyVentureSpend("personal-growth");
+
+  const withUnreadable = (value: { values: unknown[]; unreadable: number }) => [
+    ...value.values,
+    ...Array.from({ length: value.unreadable }, () => null)
+  ];
+  const personalGrowthHistory = record(personalGrowthHistoryRaw)?.events;
+  Object.assign(measurements, collectPersonalGrowthOperationalMeasurements({
+    briefs: withUnreadable(personalGrowthBriefsRaw),
+    threadsPackets: withUnreadable(personalGrowthThreadsRaw),
+    instagramRecommendations: withUnreadable(personalGrowthInstagramRaw),
+    results: withUnreadable(personalGrowthResultsRaw),
+    historyEvents: Array.isArray(personalGrowthHistory) ? personalGrowthHistory : []
+  }));
 
   const dueSlots = calendars.flatMap((calendar) => {
     const value = record(calendar);

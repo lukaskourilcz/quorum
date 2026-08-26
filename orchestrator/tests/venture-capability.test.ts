@@ -121,6 +121,14 @@ describe("venture capability map", () => {
       "personal-growth-goviral-packet/1",
       await fixture("personal-growth-goviral-packet.poison.json")
     )).toMatchObject({ valid: false });
+    expect(validateVentureCapabilityPayload(
+      "owner-manual-reference/1",
+      await fixture("personal-growth-manual-venture-reference.valid.json")
+    )).toMatchObject({ valid: true });
+    expect(validateVentureCapabilityPayload(
+      "owner-manual-reference/1",
+      await fixture("personal-growth-manual-venture-reference.poison.json")
+    )).toMatchObject({ valid: false });
   });
 
   it("prevents Kvórum and FightAIQ from exporting political or monetization authority", async () => {

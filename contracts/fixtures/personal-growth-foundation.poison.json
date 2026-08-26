@@ -15,7 +15,11 @@
     "projectLive": true,
     "paidSynthesis": true,
     "insightsIngestion": true,
+    "instagramInsights": true,
+    "threadsInsights": true,
     "threadsSearch": true,
+    "providerLive": true,
+    "tokenRefresh": true,
     "bufferQueue": true,
     "publishing": true
   },

@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-content-config/1"
+    },
+    "ventureId": {
+      "type": "string",
+      "const": "personal-growth"
+    },
+    "defaultLanguage": {
+      "type": "string",
+      "const": "cs"
+    },
+    "englishProfileAvailable": {
+      "type": "boolean"
+    },
+    "baseline": {
+      "type": "object",
+      "properties": {
+        "startsOn": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "days": {
+          "type": "number",
+          "const": 28
+        }
+      },
+      "required": [
+        "startsOn",
+        "days"
+      ],
+      "additionalProperties": false
+    },
+    "threads": {
+      "type": "object",
+      "properties": {
+        "characterLimit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "maximumTopicTags": {
+          "type": "number",
+          "const": 1
+        },
+        "recentSimilarityMaximum": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "maximumAlternatives": {
+          "type": "number",
+          "const": 2
+        },
+        "maximumConversationOpportunities": {
+          "type": "number",
+          "const": 3
+        }
+      },
+      "required": [
+        "characterLimit",
+        "maximumTopicTags",
+        "recentSimilarityMaximum",
+        "maximumAlternatives",
+        "maximumConversationOpportunities"
+      ],
+      "additionalProperties": false
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "personal-growth-content-policy/1"
+        },
+        "ventureId": {
+          "type": "string",
+          "const": "personal-growth"
+        },
+        "currentRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "revisions": {
+          "minItems": 1,
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "revision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "effectiveFrom": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "personalFeedMinimum": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "ventureLedMaximum": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "ventureStoriesPerSevenDaysMaximum": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 365
+              },
+              "sameVentureCooldownDays": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 365
+              },
+              "looseningDecisionRef": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "revision",
+              "effectiveFrom",
+              "personalFeedMinimum",
+              "ventureLedMaximum",
+              "ventureStoriesPerSevenDaysMaximum",
+              "sameVentureCooldownDays",
+              "looseningDecisionRef"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "ownerManualReferenceRequired": {
+          "type": "boolean",
+          "const": true
+        },
+        "ownerCommentaryRequired": {
+          "type": "boolean",
+          "const": true
+        },
+        "automaticVentureDiscovery": {
+          "type": "boolean",
+          "const": false
+        },
+        "automaticVentureNomination": {
+          "type": "boolean",
+          "const": false
+        },
+        "automaticReshare": {
+          "type": "boolean",
+          "const": false
+        },
+        "ventureOnlyFeedPublishing": {
+          "type": "boolean",
+          "const": false
+        },
+        "kvorumEligible": {
+          "type": "boolean",
+          "const": false
+        },
+        "mmaFilesDefaultEligible": {
+          "type": "boolean",
+          "const": false
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "ventureId",
+        "currentRevision",
+        "revisions",
+        "ownerManualReferenceRequired",
+        "ownerCommentaryRequired",
+        "automaticVentureDiscovery",
+        "automaticVentureNomination",
+        "automaticReshare",
+        "ventureOnlyFeedPublishing",
+        "kvorumEligible",
+        "mmaFilesDefaultEligible"
+      ],
+      "additionalProperties": false
+    },
+    "pillars": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pillar": {
+            "type": "string",
+            "enum": [
+              "life-lifestyle",
+              "writing-publishing",
+              "hip-hop",
+              "rapovej-denik",
+              "travel-places-lived",
+              "prague",
+              "software-products",
+              "boardlessai-behind-scenes",
+              "fitness-discipline-muay-thai",
+              "books-reading",
+              "clothing-personal-style"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "paused"
+            ]
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "vetoes": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          }
+        },
+        "required": [
+          "pillar",
+          "status",
+          "weight",
+          "vetoes"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "reelFormats": {
+      "minItems": 5,
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "rapovej-moment",
+          "behind-the-page",
+          "life-between-projects",
+          "trend-met-memory",
+          "english-rapovej-denik"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "ventureId",
+    "defaultLanguage",
+    "englishProfileAvailable",
+    "baseline",
+    "threads",
+    "policy",
+    "pillars",
+    "reelFormats"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-content-config.schema.json"
+}
