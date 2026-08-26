@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "operations-incident-snapshot/1",
+  "generatedAt": "2026-08-26T09:00:00.000Z",
+  "activeIncidentRefs": [],
+  "recentAttemptRefs": [],
+  "pausedScopes": [],
+  "nextRetryAt": null,
+  "exactOwnerActions": [],
+  "affectedNodeIds": [],
+  "unaffectedNodeIds": ["caught-up"],
+  "policyVersions": ["1.0.0"],
+  "killSwitchActive": false,
+  "statistics": { "consideredAttempts": 0, "recovered": 0, "failed": 0, "ambiguous": 0, "ownerRequired": 0, "meanRecoveryMinutes": null, "costUsd": 0 },
+  "snapshotHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

@@ -5,7 +5,7 @@ import {
   OwnerAttentionSchema,
   type OwnerAttention
 } from "../contracts/owner-attention.js";
-import { atomicWriteJson } from "../state.js";
+import { atomicWriteJson, readJson, withFileLock } from "../state.js";
 
 /**
  * The owner-attention collector: deterministic, free, and run every cycle.
@@ -326,17 +326,62 @@ export async function collectOwnerAttention(input: {
   }
 
   const order: Record<Urgency, number> = { blocking: 0, soon: 1, whenever: 2 };
-  const record = OwnerAttentionSchema.parse({
-    schemaVersion: "owner-attention/1",
-    generatedAt: input.now.toISOString(),
-    approvals: parseInboxApprovals(inbox)
-      .sort((left, right) => order[left.urgency] - order[right.urgency] || left.id.localeCompare(right.id)),
-    manualTasks: [...byId.values()]
-      .sort((left, right) => order[left.urgency] - order[right.urgency] || left.id.localeCompare(right.id))
+  const record = await withFileLock(input.stateRoot, "owner-attention.writer.lock", async () => {
+    const previous = OwnerAttentionSchema.safeParse(
+      await readJson<unknown | null>(input.stateRoot, OWNER_ATTENTION_PATH, null)
+    );
+    const next = OwnerAttentionSchema.parse({
+      schemaVersion: "owner-attention/1",
+      generatedAt: input.now.toISOString(),
+      approvals: parseInboxApprovals(inbox)
+        .sort((left, right) => order[left.urgency] - order[right.urgency] || left.id.localeCompare(right.id)),
+      manualTasks: [...byId.values()]
+        .sort((left, right) => order[left.urgency] - order[right.urgency] || left.id.localeCompare(right.id)),
+      operationalIncidents: previous.success ? previous.data.operationalIncidents ?? [] : []
+    });
+    await atomicWriteJson(input.stateRoot, OWNER_ATTENTION_PATH, next);
+    return next;
   });
-
-  await atomicWriteJson(input.stateRoot, OWNER_ATTENTION_PATH, record);
   return { path: OWNER_ATTENTION_PATH, record };
+}
+
+export async function recordOperationalIncident(input: {
+  stateRoot: string;
+  generatedAt: string;
+  incident: NonNullable<OwnerAttention["operationalIncidents"]>[number];
+}): Promise<OwnerAttention> {
+  return withFileLock(input.stateRoot, "owner-attention.writer.lock", async () => {
+    const currentValue = await readJson<unknown | null>(input.stateRoot, OWNER_ATTENTION_PATH, null);
+    const current = OwnerAttentionSchema.safeParse(currentValue);
+    const base: OwnerAttention = current.success ? current.data : {
+      schemaVersion: "owner-attention/1",
+      generatedAt: input.generatedAt,
+      approvals: [],
+      manualTasks: []
+    };
+    const incidents = [...(base.operationalIncidents ?? [])];
+    const existing = incidents.findIndex((candidate) =>
+      candidate.conditionKey === input.incident.conditionKey && candidate.status === "active");
+    if (existing >= 0) {
+      const previous = incidents[existing]!;
+      incidents[existing] = {
+        ...input.incident,
+        incidentId: previous.incidentId,
+        firstSeenAt: previous.firstSeenAt,
+        evidenceRefs: [...new Set([...previous.evidenceRefs, ...input.incident.evidenceRefs])].sort().slice(0, 24),
+        correctionHistory: previous.correctionHistory
+      };
+    } else {
+      incidents.push(input.incident);
+    }
+    const next = OwnerAttentionSchema.parse({
+      ...base,
+      generatedAt: input.generatedAt,
+      operationalIncidents: incidents.sort((left, right) => left.conditionKey.localeCompare(right.conditionKey)).slice(-100)
+    });
+    await atomicWriteJson(input.stateRoot, OWNER_ATTENTION_PATH, next);
+    return next;
+  });
 }
 
 export { isoDay };

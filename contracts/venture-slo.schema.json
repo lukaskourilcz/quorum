@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "venture-slo/1"
+    },
+    "nodeId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "policyVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "effectiveDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "lifecycleStage": {
+      "type": "string",
+      "enum": [
+        "operating",
+        "exploration",
+        "planned",
+        "paused",
+        "setup-needed"
+      ]
+    },
+    "cadence": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "continuous",
+            "daily",
+            "weekly",
+            "manual",
+            "held"
+          ]
+        },
+        "timezone": {
+          "type": "string",
+          "const": "Europe/Prague"
+        },
+        "windows": {
+          "maxItems": 14,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "timezone",
+        "windows"
+      ],
+      "additionalProperties": false
+    },
+    "maximumLatenessMinutes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "maximumStalenessMinutes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "satisfyingOutcomes": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "success",
+          "quiet",
+          "no-work",
+          "held",
+          "partial",
+          "failed",
+          "replayed",
+          "cancelled"
+        ]
+      }
+    },
+    "rollingWindowRuns": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 100
+    },
+    "rollingValidRunTarget": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "consecutiveFailureThreshold": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 20
+    },
+    "ownerInterventionTargetPerWindow": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "recoveryTargetMinutes": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "requiredEvidenceRefs": {
+      "maxItems": 32,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "dependencyNodeIds": {
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 80,
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "costGuardrails": {
+      "type": "object",
+      "properties": {
+        "maximumRunUsd": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "duplicateProviderCallsAllowed": {
+          "type": "boolean",
+          "const": false
+        }
+      },
+      "required": [
+        "maximumRunUsd",
+        "duplicateProviderCallsAllowed"
+      ],
+      "additionalProperties": false
+    },
+    "exclusions": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "fixture",
+          "dry",
+          "disabled",
+          "owner-held"
+        ]
+      }
+    },
+    "escalationPolicyRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "reviewDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "nodeId",
+    "policyVersion",
+    "effectiveDate",
+    "lifecycleStage",
+    "cadence",
+    "maximumLatenessMinutes",
+    "maximumStalenessMinutes",
+    "satisfyingOutcomes",
+    "rollingWindowRuns",
+    "rollingValidRunTarget",
+    "consecutiveFailureThreshold",
+    "ownerInterventionTargetPerWindow",
+    "recoveryTargetMinutes",
+    "requiredEvidenceRefs",
+    "dependencyNodeIds",
+    "costGuardrails",
+    "exclusions",
+    "escalationPolicyRef",
+    "reviewDate"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/venture-slo.schema.json"
+}

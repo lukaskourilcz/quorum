@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "operations-capacity-snapshot/1",
+  "generatedAt": "2026-08-26T09:00:00.000Z",
+  "planRef": "state/operations/capacity/2026-08-26.json",
+  "due": 1,
+  "running": 1,
+  "skipped": 0,
+  "held": 0,
+  "deferred": 0,
+  "estimatedCostUsd": 0,
+  "actualCostUsd": 0,
+  "artifactsReused": 1,
+  "duplicateRunsPrevented": 0,
+  "providerCallsAvoided": 1,
+  "collisionCount": 0,
+  "activeLeaseRefs": [],
+  "nextUnblockedJobId": "daily-edition",
+  "freshness": "fresh",
+  "snapshotHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

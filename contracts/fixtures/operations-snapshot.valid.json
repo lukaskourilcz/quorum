@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "operations-snapshot/1",
+  "generatedAt": "2026-08-26T09:00:00.000Z",
+  "nodes": [
+    {
+      "nodeId": "caught-up",
+      "displayName": "Caught Up",
+      "lifecycleStage": "operating",
+      "health": "healthy",
+      "reason": "The latest run completed with valid evidence.",
+      "lastValidAt": "2026-08-26T08:01:00.000Z",
+      "nextExpectedAt": null,
+      "sloSatisfied": true,
+      "failureCount": 0,
+      "recoveryRefs": [],
+      "ownerAttentionRefs": [],
+      "costUsd": 0,
+      "artifactsReused": 0,
+      "staleRecords": 0,
+      "malformedRecords": 0,
+      "evidenceRefs": ["state/operations/run-receipts/caught-up/example.json"]
+    }
+  ],
+  "malformedAdapterCount": 0,
+  "unavailableAdapterCount": 0,
+  "snapshotHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

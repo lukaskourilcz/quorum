@@ -164,4 +164,33 @@ describe("the collected file", () => {
     expect(record.approvals).toEqual([]);
     expect(record.manualTasks.every((task) => task.source.kind === "runtime")).toBe(true);
   });
+
+  it("preserves deduplicated operational incidents in the same owner-attention store", async () => {
+    const { repoRoot, stateRoot } = await root({});
+    await writeFile(path.join(stateRoot, "owner-attention.json"), JSON.stringify({
+      schemaVersion: "owner-attention/1",
+      generatedAt: "2026-08-26T08:00:00.000Z",
+      approvals: [],
+      manualTasks: [],
+      operationalIncidents: [{
+        incidentId: "incident-caught-up",
+        conditionKey: "caught-up.delivery.token",
+        nodeId: "caught-up",
+        affectedScope: "Instagram connection",
+        firstSeenAt: "2026-08-26T08:00:00.000Z",
+        lastSeenAt: "2026-08-26T08:00:00.000Z",
+        evidenceRefs: ["state/operations/health/caught-up/current.json"],
+        exactOwnerAction: "Reconnect the existing account.",
+        impact: "One connection is paused.",
+        unaffectedScope: "Editorial and website operation continue.",
+        retryCondition: "Resume after the existing credential is restored.",
+        sourcePolicyRef: "config/operations-recovery.json#caught-up:routine",
+        status: "active",
+        correctionHistory: []
+      }]
+    }));
+    const { record } = await collectOwnerAttention({ repoRoot, stateRoot, now: NOW, env: {} });
+    expect(record.operationalIncidents).toHaveLength(1);
+    expect(record.operationalIncidents?.[0]?.conditionKey).toBe("caught-up.delivery.token");
+  });
 });

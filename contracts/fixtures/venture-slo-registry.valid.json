@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "venture-slo-registry/1",
+  "registryVersion": "1.0.0",
+  "effectiveDate": "2026-08-26",
+  "policies": [
+    {
+      "schemaVersion": "venture-slo/1",
+      "nodeId": "caught-up",
+      "policyVersion": "1.0.0",
+      "effectiveDate": "2026-08-26",
+      "lifecycleStage": "operating",
+      "cadence": { "kind": "daily", "timezone": "Europe/Prague", "windows": ["daily editorial window"] },
+      "maximumLatenessMinutes": 180,
+      "maximumStalenessMinutes": 2880,
+      "satisfyingOutcomes": ["success", "quiet", "no-work", "held"],
+      "rollingWindowRuns": 14,
+      "rollingValidRunTarget": 0.9,
+      "consecutiveFailureThreshold": 3,
+      "ownerInterventionTargetPerWindow": 1,
+      "recoveryTargetMinutes": 1440,
+      "requiredEvidenceRefs": ["config/operations-nodes.json"],
+      "dependencyNodeIds": [],
+      "costGuardrails": { "maximumRunUsd": 0, "duplicateProviderCallsAllowed": false },
+      "exclusions": ["fixture", "dry", "disabled", "owner-held"],
+      "escalationPolicyRef": "GitHub #427",
+      "reviewDate": "2026-11-26"
+    }
+  ]
+}

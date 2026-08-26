@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "venture-recovery-policy/1",
+  "nodeId": "caught-up",
+  "phase": "*",
+  "policyVersion": "1.0.0",
+  "effectiveDate": "2026-08-26",
+  "reviewDate": "2026-11-26",
+  "triggerStates": ["failing"],
+  "permittedActions": ["resume-transient"],
+  "maximumAttempts": 2,
+  "cooldownMinutes": 30,
+  "reconciliationRequired": true,
+  "requiredEvidenceRefs": [],
+  "dependencyHealthRefs": [],
+  "maximumIncrementalCostUsd": 1,
+  "ownerAttentionThreshold": 2,
+  "pauseScope": "phase",
+  "automaticResume": { "allowed": false, "requiresTransientConditionCleared": true, "requiresCurrentAuthority": true },
+  "killSwitchKeys": ["BOARDLESSAI_RECOVERY_KILL"],
+  "prohibitedActions": ["account", "oauth-or-secret", "scope-expansion", "budget-increase", "content-approval", "capability-change", "outreach", "contest-entry", "monetization", "deployment"],
+  "escalationPolicyRef": "state/owner-attention.json"
+}

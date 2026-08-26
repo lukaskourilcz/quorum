@@ -48,7 +48,7 @@ describe("venture capability map", () => {
     for (const venture of registry.ventures) expect(nodeIds.has(venture.id)).toBe(true);
     expect(nodeIds.has("webdev-signal")).toBe(true);
     expect(map.defaultVentureContentPosture).toBe("deny");
-    expect(map.mapVersion).toBe("1.0.0");
+    expect(map.mapVersion).toBe("1.1.0");
     expect(map.nodes.find((node) => node.id === "design-lab")).toMatchObject({
       classification: "rendering-service",
       canonicalOwner: "carousel-studio",
@@ -141,6 +141,8 @@ describe("venture capability map", () => {
       .filter((edge) => (edge.source === "door-money" || edge.target === "door-money") && edge.decision !== "denied")
       .map((edge) => [edge.source, edge.target, edge.capability, edge.decision]);
     expect(relationships).toEqual([
+      ["design-lab", "door-money", "health-read", "allowed"],
+      ["social-distribution", "door-money", "health-read", "allowed"],
       ["goviral", "door-money", "intelligence-read", "held"],
       ["door-money", "design-lab", "bounded-render-summary", "allowed"],
       ["door-money", "social-distribution", "approved-publish-package", "allowed"]

@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "venture-recovery-policy/1"
+    },
+    "nodeId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "phase": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "policyVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "effectiveDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "reviewDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "triggerStates": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "healthy",
+          "quiet",
+          "held",
+          "degraded",
+          "stale",
+          "failing",
+          "paused",
+          "setup-needed",
+          "unavailable"
+        ]
+      }
+    },
+    "permittedActions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "replay-idempotent-job",
+          "reconcile-ambiguous",
+          "reuse-last-valid",
+          "deterministic-fallback",
+          "reduce-optional-work",
+          "rebuild-derived-view",
+          "isolate-malformed-item",
+          "release-stale-lock",
+          "postpone-next-window",
+          "pause-scope",
+          "resume-transient"
+        ]
+      }
+    },
+    "maximumAttempts": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20
+    },
+    "cooldownMinutes": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 43200
+    },
+    "reconciliationRequired": {
+      "type": "boolean"
+    },
+    "requiredEvidenceRefs": {
+      "maxItems": 32,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "dependencyHealthRefs": {
+      "maxItems": 32,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "maximumIncrementalCostUsd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "ownerAttentionThreshold": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 20
+    },
+    "pauseScope": {
+      "type": "string",
+      "enum": [
+        "item",
+        "connection",
+        "phase",
+        "venture"
+      ]
+    },
+    "automaticResume": {
+      "type": "object",
+      "properties": {
+        "allowed": {
+          "type": "boolean"
+        },
+        "requiresTransientConditionCleared": {
+          "type": "boolean",
+          "const": true
+        },
+        "requiresCurrentAuthority": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": [
+        "allowed",
+        "requiresTransientConditionCleared",
+        "requiresCurrentAuthority"
+      ],
+      "additionalProperties": false
+    },
+    "killSwitchKeys": {
+      "minItems": 1,
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 120,
+        "pattern": "^[A-Z0-9_]+$"
+      }
+    },
+    "prohibitedActions": {
+      "minItems": 10,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "account",
+          "oauth-or-secret",
+          "scope-expansion",
+          "budget-increase",
+          "content-approval",
+          "capability-change",
+          "outreach",
+          "contest-entry",
+          "monetization",
+          "deployment"
+        ]
+      }
+    },
+    "escalationPolicyRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "nodeId",
+    "phase",
+    "policyVersion",
+    "effectiveDate",
+    "reviewDate",
+    "triggerStates",
+    "permittedActions",
+    "maximumAttempts",
+    "cooldownMinutes",
+    "reconciliationRequired",
+    "requiredEvidenceRefs",
+    "dependencyHealthRefs",
+    "maximumIncrementalCostUsd",
+    "ownerAttentionThreshold",
+    "pauseScope",
+    "automaticResume",
+    "killSwitchKeys",
+    "prohibitedActions",
+    "escalationPolicyRef"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/venture-recovery-policy.schema.json"
+}

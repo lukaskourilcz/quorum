@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "operations-capacity-plan/1",
+  "period": "2026-08-26",
+  "timezone": "Europe/Prague",
+  "generatedAt": "2026-08-26T09:00:00.000Z",
+  "budget": { "maximumUsd": 1, "spentUsd": 0, "reservedUsd": 0, "headroomUsd": 1 },
+  "deployment": { "guardActive": true, "releaseReady": true, "evidenceRef": "scripts/deploy/check.mjs", "scheduled": false },
+  "jobs": [],
+  "selectedExecutionOrder": [],
+  "activeLeaseRefs": [],
+  "collisionGroups": [],
+  "providerHeadroom": {},
+  "counts": { "due": 0, "running": 0, "reused": 0, "skipped": 0, "held": 0, "deferred": 0 },
+  "planHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
