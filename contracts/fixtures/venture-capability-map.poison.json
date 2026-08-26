@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "venture-capability-map/1",
+  "mapVersion": "1.0.0",
+  "effectiveDate": "2026-08-26",
+  "defaultVentureContentPosture": "allow",
+  "decisionReference": "state/decisions/2026-08-26-autonomy-first-capabilities.md",
+  "nodes": [],
+  "edges": [],
+  "isolationRules": [],
+  "supersessionHistory": []
+}

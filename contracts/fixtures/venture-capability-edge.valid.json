@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "venture-capability-edge/1",
+  "source": "door-money",
+  "target": "design-lab",
+  "capability": "bounded-render-summary",
+  "dataSchemaVersion": "bounded-render-summary/1",
+  "direction": "source-to-target",
+  "decision": "allowed",
+  "reason": "The renderer receives only a bounded approved summary.",
+  "governingReference": "GitHub #424",
+  "runtimeEnforcementPoint": "orchestrator/src/ventures/capabilities.ts",
+  "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+}

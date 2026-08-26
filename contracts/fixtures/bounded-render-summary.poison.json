@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "bounded-render-summary/1",
+  "sourceId": "door-money",
+  "sourceArtifactRef": "state/ventures/door-money/packages/launch-summary.json",
+  "locale": "en",
+  "title": "Launch theme",
+  "points": ["One approved public idea"],
+  "approvalRef": "state/decisions/door-money-package.md",
+  "contentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "manuscriptChunk": "Private text must never cross this edge."
+}

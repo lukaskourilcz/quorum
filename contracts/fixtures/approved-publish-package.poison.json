@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "approved-publish-package/1",
+  "sourceId": "door-money",
+  "packageRef": "state/ventures/door-money/packages/approved-launch.json",
+  "assetRefs": ["state/ventures/personal-growth/private.png"],
+  "packageHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "approvalRef": "state/decisions/door-money-publish.md",
+  "caption": "The distribution edge receives references, not copy."
+}

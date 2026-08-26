@@ -58,6 +58,13 @@ import { SeasonFileSchema } from "./season.js";
 import { SocialPackSchema } from "./social-pack.js";
 import { StyleProfileSchema } from "./style-profile.js";
 import { VentureRegistrySchema } from "./venture-registry.js";
+import {
+  ApprovedPublishPackageRefSchema,
+  BoundedRenderSummarySchema,
+  GoViralIntelligencePacketSchema,
+  VentureCapabilityEdgeSchema,
+  VentureCapabilityMapSchema
+} from "./venture-capability.js";
 import { PersonalGrowthFoundationSchema } from "./personal-growth-foundation.js";
 import { AnyVentureRecommendationSchema } from "./venture-recommendation.js";
 import { VisualWeightsSchema } from "./visual-weights.js";
@@ -135,6 +142,11 @@ export const ContractSchemas = {
   "social-pack": SocialPackSchema,
   "style-profile": StyleProfileSchema,
   "venture-registry": VentureRegistrySchema,
+  "venture-capability-map": VentureCapabilityMapSchema,
+  "venture-capability-edge": VentureCapabilityEdgeSchema,
+  "goviral-intelligence-packet": GoViralIntelligencePacketSchema,
+  "bounded-render-summary": BoundedRenderSummarySchema,
+  "approved-publish-package": ApprovedPublishPackageRefSchema,
   "personal-growth-foundation": PersonalGrowthFoundationSchema,
   "venture-recommendation": AnyVentureRecommendationSchema,
   "visual-weights": VisualWeightsSchema,

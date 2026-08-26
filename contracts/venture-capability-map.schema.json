@@ -1,0 +1,337 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "venture-capability-map/1"
+    },
+    "mapVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "effectiveDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "defaultVentureContentPosture": {
+      "type": "string",
+      "const": "deny"
+    },
+    "decisionReference": {
+      "type": "string",
+      "const": "state/decisions/2026-08-26-autonomy-first-capabilities.md"
+    },
+    "nodes": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "classification": {
+            "type": "string",
+            "enum": [
+              "content-venture",
+              "data-venture",
+              "private-owner-workspace",
+              "intelligence-service",
+              "rendering-service",
+              "distribution-service",
+              "system-service"
+            ]
+          },
+          "canonicalOwner": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "dataActionClasses": {
+            "minItems": 1,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "content",
+                "private-data",
+                "intelligence",
+                "rendering",
+                "distribution",
+                "metrics",
+                "progress",
+                "health",
+                "owner-attention",
+                "system-control"
+              ]
+            }
+          },
+          "authorityRequirement": {
+            "type": "string",
+            "enum": [
+              "decision-and-runtime-gates",
+              "owner-manual-only",
+              "service-policy",
+              "none"
+            ]
+          },
+          "privacyClassification": {
+            "type": "string",
+            "enum": [
+              "public",
+              "internal",
+              "owner-only",
+              "private-source"
+            ]
+          },
+          "maximumPayloadClass": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "evidenceReferences": {
+            "minItems": 1,
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "reviewAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "classification",
+          "canonicalOwner",
+          "dataActionClasses",
+          "authorityRequirement",
+          "privacyClassification",
+          "maximumPayloadClass",
+          "evidenceReferences",
+          "reviewAt"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "string",
+            "const": "venture-capability-edge/1"
+          },
+          "source": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "target": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "capability": {
+            "type": "string",
+            "enum": [
+              "intelligence-read",
+              "bounded-render-summary",
+              "approved-publish-package",
+              "own-metrics-read",
+              "implementation-progress-read",
+              "health-read",
+              "owner-attention-write",
+              "owner-manual-reference-read"
+            ]
+          },
+          "dataSchemaVersion": {
+            "type": "string",
+            "maxLength": 120,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\/\\d+$"
+          },
+          "direction": {
+            "type": "string",
+            "const": "source-to-target"
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "allowed",
+              "denied",
+              "held"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "governingReference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "runtimeEnforcementPoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "testProbeReference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "source",
+          "target",
+          "capability",
+          "dataSchemaVersion",
+          "direction",
+          "decision",
+          "reason",
+          "governingReference",
+          "runtimeEnforcementPoint",
+          "testProbeReference"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "isolationRules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "sources": {
+            "minItems": 1,
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 80,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          },
+          "targets": {
+            "minItems": 1,
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 80,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            }
+          },
+          "capabilities": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "intelligence-read",
+                "bounded-render-summary",
+                "approved-publish-package",
+                "own-metrics-read",
+                "implementation-progress-read",
+                "health-read",
+                "owner-attention-write",
+                "owner-manual-reference-read"
+              ]
+            }
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "governingReference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "required": [
+          "id",
+          "sources",
+          "targets",
+          "capabilities",
+          "reason",
+          "governingReference"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "supersessionHistory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "mapVersion": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$"
+          },
+          "effectiveAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "decisionReference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        },
+        "required": [
+          "mapVersion",
+          "effectiveAt",
+          "decisionReference",
+          "note"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "mapVersion",
+    "effectiveDate",
+    "defaultVentureContentPosture",
+    "decisionReference",
+    "nodes",
+    "edges",
+    "isolationRules",
+    "supersessionHistory"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/venture-capability-map.schema.json"
+}
