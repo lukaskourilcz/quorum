@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "implementation-progress-event/1"
+    },
+    "eventId": {
+      "type": "string",
+      "pattern": "^program-event-[a-f0-9]{20}$"
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+    },
+    "programId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "itemId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "transition": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "work-started",
+        "pr-opened",
+        "pr-merged",
+        "pr-closed",
+        "evidence-valid",
+        "evidence-invalid",
+        "item-completed",
+        "blocker-added",
+        "blocker-cleared",
+        "owner-action-added",
+        "owner-action-cleared",
+        "optional-held",
+        "manifest-superseded",
+        "correction"
+      ]
+    },
+    "fromState": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "not-started",
+            "ready",
+            "in-progress",
+            "implemented-awaiting-verification",
+            "owner-action",
+            "blocked",
+            "complete",
+            "held-optional",
+            "stale",
+            "inconsistent",
+            "superseded"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "toState": {
+      "type": "string",
+      "enum": [
+        "not-started",
+        "ready",
+        "in-progress",
+        "implemented-awaiting-verification",
+        "owner-action",
+        "blocked",
+        "complete",
+        "held-optional",
+        "stale",
+        "inconsistent",
+        "superseded"
+      ]
+    },
+    "evidenceRefs": {
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "snapshotHash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "eventId",
+    "occurredAt",
+    "programId",
+    "itemId",
+    "transition",
+    "fromState",
+    "toState",
+    "evidenceRefs",
+    "snapshotHash"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/implementation-progress-event.schema.json"
+}

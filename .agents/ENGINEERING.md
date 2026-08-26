@@ -49,6 +49,10 @@ The company-level health, capacity and recovery boundaries are documented in
 `docs/AUTONOMOUS-OPERATIONS.md`. They observe existing domain truth, use the capability map for
 every dependency and never grant content, spend, publishing or deployment authority.
 
+Cross-program implementation truth is documented in `docs/IMPLEMENTATION-PLANS.md`. Its versioned
+registry, GitHub and repository probes, deterministic resolver, append-only transitions and
+protected Admin reader share one rule: an issue state is evidence, never completion by itself.
+
 ## Modules
 
 **8. A soft cap of about 400 lines per hand-written file.** Named debt, at the time of writing:

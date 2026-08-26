@@ -30,6 +30,7 @@
     "org:maintain": "tsx src/org/maintenance.ts",
     "palate": "tsx src/taste/palate-cli.ts",
     "proof:rooms": "tsx src/proof/portfolio-proof.ts",
+    "programs:sync": "tsx src/programs/sync-cli.ts",
     "social:publish": "tsx src/social/index.ts",
     "sources:shadow": "tsx src/sources/shadow.ts",
     "pretest": "pnpm --filter @boardlessai/carousel-studio build",

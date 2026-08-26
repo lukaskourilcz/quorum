@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "implementation-work-item/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "primaryProgramId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "programRefs": {
+      "minItems": 1,
+      "maxItems": 4,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "phaseId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "issue": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      },
+      "required": [
+        "number",
+        "url",
+        "title",
+        "summary"
+      ],
+      "additionalProperties": false
+    },
+    "dependencyIds": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "posture": {
+      "type": "string",
+      "enum": [
+        "mandatory",
+        "optional",
+        "held-optional"
+      ]
+    },
+    "safeParallelGroup": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "protectedFileGroups": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "expectedDeliverables": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "decision",
+          "contract",
+          "configuration",
+          "runtime",
+          "admin",
+          "test",
+          "documentation",
+          "release"
+        ]
+      }
+    },
+    "probes": {
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "path-exists",
+              "json-parses",
+              "contract-export-exists",
+              "test-path-exists",
+              "release-receipt-parses",
+              "owner-task"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "expectedSchemaVersion": {
+            "default": null,
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ownerTaskKey": {
+            "default": null,
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "path",
+          "expectedSchemaVersion",
+          "ownerTaskKey",
+          "description"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "ownerOnlySetupClasses": {
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "account",
+          "handle",
+          "oauth",
+          "credential",
+          "source-approval",
+          "routine-scope",
+          "content-approval"
+        ]
+      }
+    },
+    "completionPolicy": {
+      "type": "object",
+      "properties": {
+        "requiresIssueClosed": {
+          "type": "boolean"
+        },
+        "requiresMergedPullRequest": {
+          "type": "boolean"
+        },
+        "requiredProbeIds": {
+          "maxItems": 30,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          }
+        }
+      },
+      "required": [
+        "requiresIssueClosed",
+        "requiresMergedPullRequest",
+        "requiredProbeIds"
+      ],
+      "additionalProperties": false
+    },
+    "weight": {
+      "anyOf": [
+        {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "finalGate": {
+      "type": "boolean"
+    },
+    "sharedWorkItemRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "supersededBy": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "primaryProgramId",
+    "programRefs",
+    "phaseId",
+    "issue",
+    "dependencyIds",
+    "posture",
+    "safeParallelGroup",
+    "protectedFileGroups",
+    "expectedDeliverables",
+    "probes",
+    "ownerOnlySetupClasses",
+    "completionPolicy",
+    "weight",
+    "finalGate",
+    "sharedWorkItemRef",
+    "supersededBy"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/implementation-work-item.schema.json"
+}

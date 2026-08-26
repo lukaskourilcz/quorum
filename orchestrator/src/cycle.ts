@@ -138,6 +138,7 @@ import { contentGateEnabled, runContentGate } from "./quality/content-gate.js";
 import { writeMonthlyReportIfDue, writeWeeklyReportIfDue } from "./reports/writers.js";
 import { RETRO_ENVELOPE_USD, runWeeklyRetro, weeklyRetroEnabled } from "./reports/retro.js";
 import { collectOwnerAttention } from "./org/owner-attention.js";
+import { implementationRefreshPending, programSyncConfigured, synchronizeImplementationPrograms } from "./programs/service.js";
 
 
 
@@ -1200,6 +1201,17 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     const ownerAttentionArtifacts = options.dry
       ? []
       : [(await collectOwnerAttention({ repoRoot, stateRoot: artifactRoot, now })).path];
+    /*
+     * Implementation truth joins the existing night checkpoint only when a GitHub read mode is
+     * configured. CI and ordinary tests never make a live request; the synchronizer itself keeps
+     * per-item failures isolated and retains its last-known-good snapshot.
+     */
+    const programRefreshPending = !options.dry && programSyncConfigured()
+      ? await implementationRefreshPending(artifactRoot, now)
+      : false;
+    const programArtifacts = !options.dry && programSyncConfigured() && (venturePhase === "night" || programRefreshPending)
+      ? [(await synchronizeImplementationPrograms({ repoRoot, stateRoot: artifactRoot, now, force: programRefreshPending })).path]
+      : [];
     const reportArtifacts: string[] = [];
     if (!options.dry && venturePhase === "night") {
       const today = pragueClockParts(now).date;
@@ -1288,7 +1300,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         ? room.skippedParticipants.map(({ agent }) => agent)
         : [...room.selectedParticipants, ...room.skippedParticipants].map(({ agent }) => agent),
       artifacts: [
-        ...[...artifacts, ...contentGateArtifacts, ...reportArtifacts, ...ownerAttentionArtifacts]
+        ...[...artifacts, ...contentGateArtifacts, ...reportArtifacts, ...ownerAttentionArtifacts, ...programArtifacts]
           .map((artifact) => path.relative(repoRoot, path.join(artifactRoot, artifact))),
         ...(ecosystemArtifact ? [ecosystemArtifact] : [])
       ],

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "implementation-progress-event/1",
+  "eventId": "program-event-dddddddddddddddddddd",
+  "occurredAt": "2026-08-26T12:00:00.000Z",
+  "programId": "fixture-program",
+  "itemId": "fixture-item",
+  "transition": "item-completed",
+  "fromState": "implemented-awaiting-verification",
+  "toState": "complete",
+  "evidenceRefs": [
+    "https://github.com/example/example/issues/1"
+  ],
+  "snapshotHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+}
+

@@ -12,6 +12,7 @@ import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
 import { KvorumClaimsPanel } from "@/components/admin/kvorum-claims-panel";
 import { KvorumMonitorPanel } from "@/components/admin/kvorum-monitor-panel";
 import { KvorumRecommendationsPanel } from "@/components/admin/kvorum-recommendations-panel";
+import { ImplementationProgramCompactSummary } from "@/components/admin/implementation-plans";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { GoViralProfilePanel } from "@/components/admin/goviral-profile-panel";
 import { OwnerAttentionPanel } from "@/components/admin/owner-attention-panel";
@@ -62,6 +63,7 @@ import { readAdminDoorMoney } from "@/lib/admin-door-money";
 import { readAdminTehdejsiSvet } from "@/lib/admin-tehdejsi-svet";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { readAdminKvorum } from "@/lib/admin-kvorum";
+import { readAdminImplementationProgress } from "@/lib/admin-implementation-plans";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
 import { readAdminSnapshot } from "@/lib/admin-state";
@@ -174,7 +176,8 @@ export default async function AdminPage({
     approvedUndelivered,
     doorMoney,
     tehdejsiSvet,
-    kvorum
+    kvorum,
+    implementationProgress
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -201,7 +204,8 @@ export default async function AdminPage({
     readApprovedUndeliveredPayloads(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")),
     readAdminDoorMoney(),
     readAdminTehdejsiSvet(),
-    readAdminKvorum()
+    readAdminKvorum(),
+    readAdminImplementationProgress()
   ]);
   /*
    * `design-lab` is the name; `carousel-studio` is the id.
@@ -439,6 +443,13 @@ export default async function AdminPage({
 
   const sections: AdminSection[] = [
     {
+      id: "implementation-plans",
+      name: "Implementation Plans",
+      href: "/admin/implementation-plans",
+      active: false,
+      count: implementationProgress.state === "missing" ? null : implementationProgress.programs.length
+    },
+    {
       id: "approvals",
       name: "Approvals",
       href: "/admin?view=approvals",
@@ -519,7 +530,8 @@ export default async function AdminPage({
         ownerAttention.unreadable +
         doorMoney.unreadable +
         tehdejsiSvet.unreadable.total +
-        kvorum.unreadable
+        kvorum.unreadable +
+        implementationProgress.unreadableItems
     }
   ];
 
@@ -912,6 +924,13 @@ export default async function AdminPage({
               description={`${ventureUnreadable.length} saved ${ventureUnreadable.length === 1 ? "file cannot" : "files cannot"} be read: ${ventureUnreadable.join(", ")}.`}
               state="malformed"
               title="Some saved workspace records are unavailable"
+            />
+          ) : null}
+
+          {selectedVenture?.id === "personal-growth" ? (
+            <ImplementationProgramCompactSummary
+              programId={selectedVenture.id}
+              snapshot={implementationProgress}
             />
           ) : null}
 
