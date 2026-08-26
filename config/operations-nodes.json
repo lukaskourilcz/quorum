@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "operations-node-registry/1",
+  "registryVersion": "1.0.0",
+  "effectiveDate": "2026-08-26",
+  "reviewDate": "2026-11-26",
+  "nodes": [
+    { "id": "caught-up", "displayName": "Caught Up" },
+    { "id": "titty-tuesdays", "displayName": "Titty Tuesdays" },
+    { "id": "goviral", "displayName": "GoVIRAL" },
+    { "id": "booksofhistory", "displayName": "BOOKSOFHISTORY" },
+    { "id": "fightaiq", "displayName": "FightAIQ" },
+    { "id": "carousel-studio", "displayName": "Design Lab renderer" },
+    { "id": "marketingshark", "displayName": "marketingShark" },
+    { "id": "mma-files", "displayName": "MMA Files" },
+    { "id": "door-money", "displayName": "Door Money" },
+    { "id": "tehdejsi-svet", "displayName": "Tehdejší svět" },
+    { "id": "kvorum", "displayName": "Kvórum" },
+    { "id": "personal-growth", "displayName": "Lukáš Growth Desk" },
+    { "id": "webdev-signal", "displayName": "WebDev Signal" },
+    { "id": "contest-radar", "displayName": "Contest Radar" },
+    { "id": "boardlessai-umbrella", "displayName": "BoardlessAI umbrella" },
+    { "id": "devshark", "displayName": "devShark" },
+    { "id": "design-lab", "displayName": "Design Lab service" },
+    { "id": "social-distribution", "displayName": "Social Distribution" },
+    { "id": "metrics-service", "displayName": "Metrics service" },
+    { "id": "implementation-plans", "displayName": "Implementation Plans" },
+    { "id": "health-service", "displayName": "Health service" },
+    { "id": "owner-attention", "displayName": "Owner attention" },
+    { "id": "budget-service", "displayName": "Budget service" },
+    { "id": "scheduler-service", "displayName": "Scheduler service" },
+    { "id": "admin-service", "displayName": "Admin service" }
+  ]
+}

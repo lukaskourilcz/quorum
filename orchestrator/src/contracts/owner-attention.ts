@@ -42,7 +42,27 @@ export const OwnerAttentionSchema = z.object({
     since: z.string().date().nullable(),
     urgency: z.enum(["blocking", "soon", "whenever"]),
     needsPlainCopy: z.boolean().optional()
-  }))
+  })),
+  operationalIncidents: z.array(z.object({
+    incidentId: z.string().regex(/^[a-z0-9]+(?:[.:_-][a-z0-9]+)*$/).max(160),
+    conditionKey: z.string().regex(/^[a-z0-9]+(?:[.:_-][a-z0-9]+)*$/).max(200),
+    nodeId: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(80),
+    affectedScope: z.string().min(1).max(240),
+    firstSeenAt: z.string().datetime(),
+    lastSeenAt: z.string().datetime(),
+    evidenceRefs: z.array(z.string().min(1).max(160)).max(24),
+    exactOwnerAction: z.string().min(1).max(400),
+    impact: z.string().min(1).max(400),
+    unaffectedScope: z.string().min(1).max(400),
+    retryCondition: z.string().min(1).max(400),
+    sourcePolicyRef: z.string().min(1).max(160),
+    status: z.enum(["active", "corrected", "resolved"]),
+    correctionHistory: z.array(z.object({
+      at: z.string().datetime(),
+      status: z.enum(["corrected", "resolved"]),
+      evidenceRef: z.string().min(1).max(160)
+    })).max(20)
+  })).max(100).optional()
 });
 
 export type OwnerAttention = z.infer<typeof OwnerAttentionSchema>;

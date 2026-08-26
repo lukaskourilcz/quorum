@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "operations-efficiency-observation/1"
+    },
+    "observationId": {
+      "type": "string",
+      "maxLength": 160,
+      "pattern": "^[a-z0-9]+(?:[.:_-][a-z0-9]+)*$"
+    },
+    "nodeId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "phase": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "jobId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "inputHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "configHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "modelVersion": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "cacheResult": {
+      "type": "string",
+      "enum": [
+        "hit",
+        "miss",
+        "not-eligible",
+        "unavailable"
+      ]
+    },
+    "artifactsReused": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "providerCallsAvoided": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "providerCallsMade": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "modelCallsAvoided": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "modelCallsMade": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "duplicateRunPrevented": {
+      "type": "boolean"
+    },
+    "bytesProcessed": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "recordsProcessed": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "durationMs": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "actualCostUsd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "validityRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "noOptimizationReason": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 400
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "planner",
+        "runner",
+        "cache",
+        "reconciliation"
+      ]
+    },
+    "observedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "observationId",
+    "nodeId",
+    "phase",
+    "jobId",
+    "inputHash",
+    "configHash",
+    "modelVersion",
+    "cacheResult",
+    "artifactsReused",
+    "providerCallsAvoided",
+    "providerCallsMade",
+    "modelCallsAvoided",
+    "modelCallsMade",
+    "duplicateRunPrevented",
+    "bytesProcessed",
+    "recordsProcessed",
+    "durationMs",
+    "actualCostUsd",
+    "validityRef",
+    "noOptimizationReason",
+    "source",
+    "observedAt"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/operations-efficiency-observation.schema.json"
+}

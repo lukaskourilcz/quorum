@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "shared-resource-lease/1",
+  "leaseId": "lease-bad",
+  "resourceType": "deployment-gate",
+  "resourceKey": "deployment",
+  "holderNodeId": "caught-up",
+  "holderJobId": "release",
+  "idempotencyKey": "bad",
+  "acquiredAt": "2026-08-26T09:10:00.000Z",
+  "expiresAt": "2026-08-26T09:00:00.000Z",
+  "state": "active",
+  "authorityGranted": true,
+  "contentAccessGranted": false,
+  "spendAuthorized": false,
+  "supersedesLeaseRef": null
+}

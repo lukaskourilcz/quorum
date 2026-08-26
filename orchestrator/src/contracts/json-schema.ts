@@ -65,6 +65,25 @@ import {
   VentureCapabilityEdgeSchema,
   VentureCapabilityMapSchema
 } from "./venture-capability.js";
+import {
+  OperationsSnapshotSchema,
+  VentureOperationHealthSchema,
+  VentureRunReceiptSchema,
+  VentureSloRegistrySchema,
+  VentureSloSchema
+} from "./venture-operations.js";
+import {
+  OperationsIncidentSnapshotSchema,
+  VentureRecoveryAttemptSchema,
+  VentureRecoveryPolicyRegistrySchema,
+  VentureRecoveryPolicySchema
+} from "./venture-recovery.js";
+import {
+  OperationsCapacityPlanSchema,
+  OperationsCapacitySnapshotSchema,
+  OperationsEfficiencyObservationSchema,
+  SharedResourceLeaseSchema
+} from "./operations-coordination.js";
 import { PersonalGrowthFoundationSchema } from "./personal-growth-foundation.js";
 import { AnyVentureRecommendationSchema } from "./venture-recommendation.js";
 import { VisualWeightsSchema } from "./visual-weights.js";
@@ -147,6 +166,19 @@ export const ContractSchemas = {
   "goviral-intelligence-packet": GoViralIntelligencePacketSchema,
   "bounded-render-summary": BoundedRenderSummarySchema,
   "approved-publish-package": ApprovedPublishPackageRefSchema,
+  "venture-operation-health": VentureOperationHealthSchema,
+  "venture-run-receipt": VentureRunReceiptSchema,
+  "venture-slo": VentureSloSchema,
+  "venture-slo-registry": VentureSloRegistrySchema,
+  "operations-snapshot": OperationsSnapshotSchema,
+  "operations-capacity-plan": OperationsCapacityPlanSchema,
+  "operations-efficiency-observation": OperationsEfficiencyObservationSchema,
+  "shared-resource-lease": SharedResourceLeaseSchema,
+  "operations-capacity-snapshot": OperationsCapacitySnapshotSchema,
+  "venture-recovery-policy": VentureRecoveryPolicySchema,
+  "venture-recovery-policy-registry": VentureRecoveryPolicyRegistrySchema,
+  "venture-recovery-attempt": VentureRecoveryAttemptSchema,
+  "operations-incident-snapshot": OperationsIncidentSnapshotSchema,
   "personal-growth-foundation": PersonalGrowthFoundationSchema,
   "venture-recommendation": AnyVentureRecommendationSchema,
   "visual-weights": VisualWeightsSchema,

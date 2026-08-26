@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "shared-resource-lease/1",
+  "leaseId": "lease-caught-up",
+  "resourceType": "writer-path",
+  "resourceKey": "state/ventures/caught-up/edition.json",
+  "holderNodeId": "caught-up",
+  "holderJobId": "daily-edition",
+  "idempotencyKey": "caught-up:2026-08-26",
+  "acquiredAt": "2026-08-26T09:00:00.000Z",
+  "expiresAt": "2026-08-26T09:10:00.000Z",
+  "state": "active",
+  "authorityGranted": false,
+  "contentAccessGranted": false,
+  "spendAuthorized": false,
+  "supersedesLeaseRef": null
+}
