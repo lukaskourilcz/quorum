@@ -13,12 +13,12 @@ const repoRoot = path.resolve(process.cwd(), "..");
 describe("living ecosystem document", () => {
   it("generates current counts, modes and gates without a provider call", async () => {
     const block = await buildCurrentOperatingTruth(repoRoot);
-    expect(block).toContain("| Portfolio | 11 projects");
+    expect(block).toContain("| Portfolio | 11 public projects; 1 owner-only workspace |");
     expect(block).toContain("| Agent roster | 40 active: 25 Anthropic, 15 OpenAI");
     // The spend boundary is generated from the resolver, not written into the generator. It
     // carried budget-2026-08d's superseded $50/$42/$2.20 as a literal while the runtime enforced
     // budget-2026-08e -- a generated block stating a cap nothing was applying.
-    expect(block).toContain("| Approved spend boundary | $30.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |");
+    expect(block).toContain("| Approved spend boundary | $50.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |");
     // The workshop's reader-facing name is Design Lab (D13). Its venture id stays
     // `carousel-studio`, which is why the generated table's row label moved and nothing else did.
     expect(block).toContain("Design Lab");

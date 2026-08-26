@@ -94,7 +94,8 @@ describe("Door Money's free GoVIRAL spine", () => {
     const registry = await loadGoViralSourceRegistry();
     const free = await collectFreeTrendingSignals({
       root, date: "2026-08-10", now: new Date("2026-08-10T11:00:00.000Z"),
-      topicSets: registry.topicSets, fetchImpl: freeFetch()
+      topicSets: registry.topicSets, fetchImpl: freeFetch(),
+      resolveImpl: async () => ["93.184.216.34"]
     });
     const topicSet = registry.topicSets["door-money"];
     expect(topicSet).toBeDefined();

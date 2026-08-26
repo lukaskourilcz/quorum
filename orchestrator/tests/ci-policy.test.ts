@@ -465,16 +465,15 @@ describe("automation policy", () => {
     // The cap was raised to make the second rewrite affordable, not to allow a third.
     expect(editionQuality.budgets.maximumRegenerationAttemptsPerDate).toBe(2);
 
-    // Permanent, and the point of the whole block. budget-2026-08e's $25 model/API share and $30
-    // all-in cap are the ceiling the owner countersigned and deliberately did not move; a per-run
-    // cap rising must never carry the month up with it, on this raise or a later one.
+    // The model/API share stays fixed while budget-2026-08f independently raises the all-in cap.
+    // A per-run cap must never move either monthly value without its own authority record.
     expect(valueOf("MONTHLY_BUDGET_USD"), "the monthly model/API share may not move here").toBe(
       "25"
     );
     expect(
       valueOf("MONTHLY_OPERATING_CAP_USD"),
       "the all-in operating cap may not move here"
-    ).toBe("30");
+    ).toBe("50");
   });
 
   it("keeps channel scopes inside the owner-countersigned posting-only decision", async () => {

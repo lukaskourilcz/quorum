@@ -160,7 +160,7 @@ for (const sample of [
   {
     label: "money values",
     route: "/admin",
-    text: "$30.00"
+    text: "$50.00"
   },
   {
     label: "dense tables",

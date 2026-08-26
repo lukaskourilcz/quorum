@@ -247,7 +247,7 @@ describe("the curated registry", () => {
 
 describe("a sync pass", () => {
   const xml = `<?xml version="1.0"?><rss version="2.0"><channel><title>F</title>
-    <item><title>A</title><link>https://www.interconnects.ai/p/a</link><pubDate>Fri, 08 Aug 2026 09:00:00 GMT</pubDate></item>
+    <item><title>A</title><link>https://www.interconnects.ai/p/a</link><pubDate>Sat, 08 Aug 2026 09:00:00 GMT</pubDate></item>
   </channel></rss>`;
 
   const registry = {
@@ -263,6 +263,7 @@ describe("a sync pass", () => {
       registry,
       deps: {
         now: "2026-08-09",
+        resolveImpl: async () => ["93.184.216.34"],
         fetchImpl: (async () =>
           new Response(xml, { status: 200, headers: { "content-type": "application/rss+xml" } })) as typeof fetch,
       },
@@ -294,6 +295,7 @@ describe("a sync pass", () => {
   it("is idempotent: a second identical sync adds nothing", async () => {
     const deps = {
       now: "2026-08-09",
+      resolveImpl: async () => ["93.184.216.34"],
       fetchImpl: (async () =>
         new Response(xml, { status: 200, headers: { "content-type": "application/rss+xml" } })) as typeof fetch,
     };

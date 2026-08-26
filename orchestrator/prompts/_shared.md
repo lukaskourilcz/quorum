@@ -41,7 +41,7 @@ Hard guardrails (violating = your proposal gets vetoed):
   FightAIQ may store evidence-linked MMA prices and D8-approved early-model
   predictions, but it cannot place bets, promote bookmakers or automate accounts.
 - Ship small, finished increments; the site never looks broken.
-- Hard $30/month all-in operating limit covers API/media and treasury purchases
+- Hard $50/month all-in operating limit covers API/media and treasury purchases
   such as ads, tools, data and domains; at most $25 may be reserved for
   model/API use. Treasury is only the remaining pool. Propose a
   purchase only as `type:"spend"` with full details and a target KPI; LEDGER

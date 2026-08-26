@@ -1,7 +1,10 @@
 # Finance
 
 Currency: USD  
-Effective countersigned monthly all-in cap: $30.00 under `budget-2026-08e`
+Effective countersigned monthly all-in cap: $50.00 under `budget-2026-08f`
+
+Personal Growth has a nested $20.00 monthly all-in cap. Its spend remains part of the
+company total and never expands the $25.00 model/API share or $1.00 daily model/API pace.
 
 > The block below is written by a generator and is only as current as its own stamp. The
 > canonical figures are always `state/budget/ledger.json`; if the date under this line is not

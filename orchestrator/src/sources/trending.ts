@@ -51,6 +51,7 @@ export interface TrendingProviderResult {
 interface FetchInput {
   now: Date;
   fetchImpl?: typeof fetch;
+  resolveImpl?: (hostname: string) => Promise<string[]>;
 }
 
 async function text(url: string, input: FetchInput): Promise<string> {
@@ -58,7 +59,8 @@ async function text(url: string, input: FetchInput): Promise<string> {
     allowHosts: [...TRENDING_HOSTS],
     headers: { "user-agent": USER_AGENT, accept: "application/json, application/rss+xml, application/xml, text/xml" },
     timeoutMs: 8_000,
-    ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
+    ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {}),
+    ...(input.resolveImpl ? { resolveImpl: input.resolveImpl } : {})
   });
   return new TextDecoder().decode(response.body);
 }

@@ -129,9 +129,9 @@ jobs:
       # second rewrite and nothing else.
       #
       # The two monthly ceilings do not move, here or anywhere: MONTHLY_BUDGET_USD is the $25
-      # model/API share and MONTHLY_OPERATING_CAP_USD the $30 all-in cap, both from
-      # budget-2026-08e. A per-run cap lets one run try harder; it buys no extra month.
-      MONTHLY_OPERATING_CAP_USD: "30"
+      # model/API share and MONTHLY_OPERATING_CAP_USD the $50 all-in cap, from
+      # budget-2026-08f. A per-run cap lets one run try harder; it buys no extra month.
+      MONTHLY_OPERATING_CAP_USD: "50"
       MAX_CYCLE_BUDGET_USD: "0.20"
       CU_MEETING_BUDGET_USD: "0.08"
       EDITION_PRODUCTION_BUDGET_USD: "0.50"

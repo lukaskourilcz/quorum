@@ -1,6 +1,6 @@
 {
   "schemaVersion": "ts-brief-priorities/1",
-  "_comment": "What the desk would research next if it were researching anything. Ranked data rather than prose in a prompt, so the order is reviewable in a diff and the desk cannot quietly re-rank it. Research is the venture's only paid dependency beyond the model passes: at most $0.30 a brief and $2.00 a month, inside the $4.00 venture target and the standing $30 all-in operating cap. Additions come from a recorded room decision, never from a run.",
+  "_comment": "What the desk would research next if it were researching anything. Ranked data rather than prose in a prompt, so the order is reviewable in a diff and the desk cannot quietly re-rank it. Research is the venture's only paid dependency beyond the model passes: at most $0.30 a brief and $2.00 a month, inside the $4.00 venture target and the standing $50 all-in operating cap. Additions come from a recorded room decision, never from a run.",
   "priorities": [
     {
       "topicKey": "ua-everyday-1970s",

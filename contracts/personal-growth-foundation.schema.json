@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "personal-growth-foundation/1"
+    },
+    "ventureId": {
+      "type": "string",
+      "const": "personal-growth"
+    },
+    "visibility": {
+      "type": "string",
+      "const": "owner-only"
+    },
+    "authority": {
+      "type": "object",
+      "properties": {
+        "foundingDecisionRef": {
+          "type": "string",
+          "const": "state/decisions/2026-08-26-personal-growth-founding.md"
+        },
+        "budgetDecisionRef": {
+          "type": "string",
+          "const": "state/decisions/2026-08-26-budget-personal-growth.md"
+        }
+      },
+      "required": [
+        "foundingDecisionRef",
+        "budgetDecisionRef"
+      ],
+      "additionalProperties": false
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "monthlyAllInUsd": {
+          "type": "number",
+          "const": 20
+        },
+        "activeMode": {
+          "type": "string",
+          "enum": [
+            "default",
+            "buffer"
+          ]
+        },
+        "modes": {
+          "minItems": 2,
+          "maxItems": 2,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "enum": [
+                  "default",
+                  "buffer"
+                ]
+              },
+              "synthesisUsd": {
+                "type": "number",
+                "minimum": 0
+              },
+              "researchUsd": {
+                "type": "number",
+                "minimum": 0
+              },
+              "schedulingUsd": {
+                "type": "number",
+                "minimum": 0
+              },
+              "reserveUsd": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "id",
+              "synthesisUsd",
+              "researchUsd",
+              "schedulingUsd",
+              "reserveUsd"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "monthlyAllInUsd",
+        "activeMode",
+        "modes"
+      ],
+      "additionalProperties": false
+    },
+    "featureGates": {
+      "type": "object",
+      "properties": {
+        "projectLive": {
+          "type": "boolean"
+        },
+        "paidSynthesis": {
+          "type": "boolean"
+        },
+        "insightsIngestion": {
+          "type": "boolean"
+        },
+        "threadsSearch": {
+          "type": "boolean"
+        },
+        "bufferQueue": {
+          "type": "boolean"
+        },
+        "publishing": {
+          "type": "boolean",
+          "const": false
+        }
+      },
+      "required": [
+        "projectLive",
+        "paidSynthesis",
+        "insightsIngestion",
+        "threadsSearch",
+        "bufferQueue",
+        "publishing"
+      ],
+      "additionalProperties": false
+    },
+    "degradation": {
+      "type": "object",
+      "properties": {
+        "healthyBelowRatio": {
+          "type": "number",
+          "const": 0.5
+        },
+        "reducedBelowRatio": {
+          "type": "number",
+          "const": 0.7
+        },
+        "lowBelowRatio": {
+          "type": "number",
+          "const": 0.85
+        }
+      },
+      "required": [
+        "healthyBelowRatio",
+        "reducedBelowRatio",
+        "lowBelowRatio"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "ventureId",
+    "visibility",
+    "authority",
+    "budget",
+    "featureGates",
+    "degradation"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/personal-growth-foundation.schema.json"
+}

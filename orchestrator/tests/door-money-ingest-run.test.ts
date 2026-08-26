@@ -45,7 +45,7 @@ function reserveContext(now: Date) {
     allInCommittedUsd: 0,
     knownMonthlyForecastUsd: 0,
     remainingScheduledCycles: 1,
-    limits: { ...DEFAULT_BUDGET_LIMITS, dailyUsd: 1, monthlyApiUsd: 25, monthlyOperatingUsd: 30 }
+    limits: { ...DEFAULT_BUDGET_LIMITS, dailyUsd: 1, monthlyApiUsd: 25, monthlyOperatingUsd: 50 }
   });
 }
 

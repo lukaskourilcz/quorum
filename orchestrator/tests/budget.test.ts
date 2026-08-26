@@ -193,7 +193,7 @@ describe("budget guard", () => {
 describe("every phase reaches the countersigned caps", () => {
   it("resolves the amounts of the newest countersigned budget decision, not a phase literal", async () => {
     // Article production carried its own $2.20 / $42 / $50, the figures of budget-2026-08d.
-    // budget-2026-08e superseded them on 2 August with $1.00 / $25 / $30, and that phase
+    // budget-2026-08f now sets $1.00 / $25 / $50, and that phase
     // went on enforcing the replaced decision because it never read the resolver.
     const previous = { ...process.env };
     for (const name of ["DAILY_BUDGET_USD", "MONTHLY_BUDGET_USD", "MONTHLY_OPERATING_CAP_USD", "MAX_CYCLE_BUDGET_USD"]) {
@@ -203,7 +203,7 @@ describe("every phase reaches the countersigned caps", () => {
       const limits = await loadRuntimeBudgetLimits();
       expect(limits.dailyUsd).toBe(1);
       expect(limits.monthlyApiUsd).toBe(25);
-      expect(limits.monthlyOperatingUsd).toBe(30);
+      expect(limits.monthlyOperatingUsd).toBe(50);
 
       // loadRuntimeBudgetLimits reads the amounts at zero headroom, which is only sound
       // because headroom decides which phases stay active and never what the caps are.
@@ -226,7 +226,7 @@ describe("every phase reaches the countersigned caps", () => {
       expect(phase.maxCycleUsd).toBe(0.16);
       expect(phase.dailyUsd).toBe(1);
       expect(phase.monthlyApiUsd).toBe(25);
-      expect(phase.monthlyOperatingUsd).toBe(30);
+      expect(phase.monthlyOperatingUsd).toBe(50);
     } finally {
       Object.assign(process.env, previous);
     }

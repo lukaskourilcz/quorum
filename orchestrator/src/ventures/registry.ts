@@ -53,6 +53,10 @@ export async function loadVentureRegistry(
   return parseVentureRegistry(JSON.parse(await readFile(filePath, "utf8")));
 }
 
+export function publicVentures(registry: VentureRegistry): VentureRegistry["ventures"] {
+  return registry.ventures.filter((venture) => venture.visibility === "public");
+}
+
 export function resolveMeetingClock(
   registry: VentureRegistry
 ): ResolvedMeetingSlot[] {

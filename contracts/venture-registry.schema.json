@@ -30,6 +30,13 @@
               "paused"
             ]
           },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "public",
+              "owner-only"
+            ]
+          },
           "taste": {
             "type": "boolean"
           },
@@ -330,6 +337,7 @@
           "id",
           "name",
           "status",
+          "visibility",
           "taste",
           "ledgerNamespace",
           "growth_objective",

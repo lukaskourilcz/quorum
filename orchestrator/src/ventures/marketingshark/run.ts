@@ -689,7 +689,7 @@ export async function runMarketingSharkCycle(input: {
             // yet -- the second brand's call could not see the first brand's.
             ledger: (await readJson<{ entries: BudgetLedgerEntry[] }>(root, "budget/ledger.json", { entries: [] }))
               .entries.map((entry) => BudgetLedgerEntrySchema.parse(entry)),
-            // The $30 all-in limb of the cap sums this with the model spend. Every other live call
+            // The $50 all-in limb of the cap sums this with the model spend. Every other live call
             // site supplies the real figure; passing zero here made this the one paid path that
             // could not see the company's fixed costs.
             allInNonApiSpentUsd: fixedMonthlyUsd,

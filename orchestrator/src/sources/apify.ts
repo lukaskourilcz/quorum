@@ -22,8 +22,8 @@ import {
  *
  * Everything here is Free-plan only, and that is the budget control rather than a preference:
  * the Free plan carries $5 of platform credit a month, actors simply stop when it is spent, and
- * no card is on file, so an overspend is not possible. Starter is $29/mo, which alone would eat
- * the whole $30 all-in operating cap — upgrading is an owner decision with its own approval, and
+ * no card is on file, so an overspend is not possible. Starter is $29/mo, which would consume
+ * more than half of the $50 all-in operating cap. Upgrading is an owner decision with its own approval, and
  * nothing in this file or its config may assume a paid plan.
  *
  * The guard below is the same shape as the Cito one in portfolio/evidence.ts: a counter file,

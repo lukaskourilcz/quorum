@@ -95,7 +95,7 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
    `HUMAN_APPROVAL`. After that one-time approval, the dedicated publisher may
    send validated organic queue items within the exact approved scope; an
    interactive builder never posts directly. All API/media/hosting/tool/ad
-   costs share the hard $30/mo all-in operating cap from `budget-2026-08e`
+   costs share the hard $50/mo all-in operating cap from `budget-2026-08f`
    ($25 model/API share, $1.00 daily pace); council purchases run through
    `state/treasury/ledger.json`, only the human executes payments and resolves
    SPEND items — never mark them yourself.
@@ -131,7 +131,7 @@ append path.
   `state/ventures/<venture>/datasets/`; the delivered file keeps exactly the
   shape the magazines' loaders expect.
 - **Cost.** Human curation is the default and costs nothing. Nothing in the
-  append path calls a model, so this work sits outside the `budget-2026-08e`
+  append path calls a model, so this work sits outside the `budget-2026-08f`
   model share entirely. Drafting entries with a model would draw on that cap and
   needs a ledger line before it runs.
 
@@ -205,7 +205,7 @@ GoVIRAL's craft rules are distilled into `orchestrator/prompts/goviral.md`
 instead.
 
 The vendored marketing skills are generic advice. **This repository's contracts always
-win**: the $30 all-in operating cap, the social triple-lock, the truth gates and
+win**: the $50 all-in operating cap, the social triple-lock, the truth gates and
 the treasury rules are not negotiable by a skill file. Each carries an
 `UPSTREAM.md` recording where it diverges — most importantly `social`, whose
 reverse-engineering reference suggests standing up an Apify account that this

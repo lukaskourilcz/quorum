@@ -189,9 +189,9 @@ describe("portfolio schedule and budget gate", () => {
       fightAiQFoundingRaw: signedDecision,
       monthlyApiHeadroomUsd: 25
     });
-    // budget-2026-08d unlocks the full clock; budget-2026-08e supersedes it on amounts,
-    // lowering the all-in limit to $30, the model share to $25 and the daily pace to $1.00.
-    expect(full).toMatchObject({ fiftyDecisionStatus: "countersigned", monthlyBudgetUsd: 25, dailyBudgetUsd: 1, monthlyOperatingUsd: 30 });
+    // budget-2026-08d unlocks the full clock; budget-2026-08f restores its $50 all-in amount
+    // while preserving the later $25 model share and $1.00 daily pace.
+    expect(full).toMatchObject({ fiftyDecisionStatus: "countersigned", monthlyBudgetUsd: 25, dailyBudgetUsd: 1, monthlyOperatingUsd: 50 });
     expect(full.activePhases).toEqual(expect.arrayContaining(["mma-intake", "mma-analysis", "mag-editorial", "article-am", "mag-desk"]));
     // One article a day: the evening slot is off the clock entirely, not merely disabled.
     expect(full.activePhases).not.toContain("article-pm");

@@ -31,6 +31,7 @@ export interface CalendarDefinition {
   hour: number;
   kind: CalendarKind;
   label: string;
+  cast?: readonly string[];
 }
 
 export interface CalendarSlot {

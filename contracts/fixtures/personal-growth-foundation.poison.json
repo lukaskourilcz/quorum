@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "personal-growth-foundation/1",
+  "ventureId": "personal-growth",
+  "visibility": "public",
+  "authority": {
+    "foundingDecisionRef": "state/decisions/2026-08-26-personal-growth-founding.md",
+    "budgetDecisionRef": "state/decisions/2026-08-26-budget-personal-growth.md"
+  },
+  "budget": {
+    "monthlyAllInUsd": 21,
+    "activeMode": "default",
+    "modes": []
+  },
+  "featureGates": {
+    "projectLive": true,
+    "paidSynthesis": true,
+    "insightsIngestion": true,
+    "threadsSearch": true,
+    "bufferQueue": true,
+    "publishing": true
+  },
+  "degradation": {
+    "healthyBelowRatio": 0.5,
+    "reducedBelowRatio": 0.7,
+    "lowBelowRatio": 0.85
+  }
+}

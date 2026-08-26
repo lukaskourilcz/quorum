@@ -249,12 +249,11 @@ export async function runLiveEdition(input: {
     .reduce((sum, entry) => sum + entry.usd, 0)
     .toFixed(8));
   // The fallbacks a run uses when the environment sets nothing come from the newest countersigned
-  // decision, not from literals here. They were literals: $50 all-in, which is budget-2026-08d's
-  // figure, superseded on 2 August by budget-2026-08e at $30; and $15 a month API with $0.70 a day,
-  // which predate that raise entirely against 08e's $25 and $1.00. So an unconfigured run enforced
-  // an all-in limit $20 looser than the owner approved and a daily pace tighter than it. That is
-  // the drift portfolio/limits.ts exists to stop: one resolver, and phases tighten it rather than
-  // restating it. This resolves to $25 / $1.00 / $30 / $0.50 today. envCap still runs on top, so a
+  // decision, not from literals here. They were literals from budget-2026-08d, followed by
+  // budget-2026-08e's $30 all-in, $25 monthly API and $1.00 daily values. The current
+  // budget-2026-08f restores the $50 all-in figure while keeping the latter two amounts. The
+  // drift portfolio/limits.ts exists to stop is a phase retaining any replaced value. This
+  // resolves to $25 / $1.00 / $50 / $0.50 today. envCap still runs on top, so a
   // malformed env value is rejected outright rather than silently falling back to these.
   // The $0.35 in that sentence is now $0.50; the cap and edition-quality.json move together,
   // because a resolved cap under the configured one blocks every run.

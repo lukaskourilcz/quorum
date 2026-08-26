@@ -123,8 +123,9 @@ resolved table.
 
 ## Spending behavior
 
-The owner countersigned one `$30` monthly all-in limit in `budget-2026-08e`. No more
-than `$25` is reserved for model/API calls, with a `$1.00` daily pace. At 80% the
+The owner countersigned one `$50` monthly all-in limit in `budget-2026-08f`. No more
+than `$25` is reserved for model/API calls, with a `$1.00` daily pace. Personal Growth
+has a nested `$20` all-in limit and cannot borrow beyond either ceiling. At 80% the
 summary warns with a project breakdown. At 100%, or after three consecutive exhausted
 days, new paid work stops and one approval item opens. The runtime cannot borrow from
 next month or raise its own limit. Payments remain human-only.

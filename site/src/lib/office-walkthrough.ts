@@ -432,7 +432,9 @@ const PROJECT_COPY: Record<string, { status: string; description: string; url: s
   }
 };
 
-const PROJECT_ORDER = ventureRegistry.ventures.map((venture) => venture.id);
+const PROJECT_ORDER = ventureRegistry.ventures
+  .filter((venture) => venture.visibility === "public")
+  .map((venture) => venture.id);
 
 /* ------------------------------------------------------------------ team */
 
@@ -726,7 +728,9 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
 
   /* ---- 03 Projects ------------------------------------------------------ */
 
-  const registered = new Map(ventureRegistry.ventures.map((venture) => [venture.id, venture]));
+  const registered = new Map(ventureRegistry.ventures
+    .filter((venture) => venture.visibility === "public")
+    .map((venture) => [venture.id, venture]));
   const projects: OfficeProject[] = PROJECT_ORDER.flatMap((id) => {
     const venture = registered.get(id);
     const copy = PROJECT_COPY[id];

@@ -45,10 +45,10 @@ Refreshed from committed state: **2026-08-25T20:02:00.241Z**. This block is gene
 
 | Item | Current value |
 | --- | --- |
-| Portfolio | 11 projects; 11 marked operating |
+| Portfolio | 11 public projects; 1 owner-only workspace |
 | Agent roster | 40 active: 25 Anthropic, 15 OpenAI |
 | Scheduled specialist/service rooms | 14; combined maximum room envelopes $1.61 if every room is commissioned |
-| Approved spend boundary | $30.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |
+| Approved spend boundary | $50.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |
 | Recorded API spend | $8.69 this month; $8.70 cumulative |
 | Entered fixed costs | $0.00 monthly |
 | Recognized revenue | $0.00 |
@@ -387,7 +387,7 @@ deterministic. More importantly, the live payable shape is capped: existing room
 envelopes, article production and the morning cap reserve `$0.98`. Adding Kvórum's
 declared envelope would make `$1.08`, so the runner excludes it until a countersigned
 record frees at least `$0.08`. The daily API pace remains `$1.00`; the monthly
-model/API share remains `$25` inside the `$30` all-in ceiling.
+model/API share remains `$25` inside the `$50` all-in ceiling.
 
 There are two deterministic degradation checks. Monthly API headroom first disables
 optional content scoring below `$3`; below `$2.75` BOOKSOFHISTORY researches one

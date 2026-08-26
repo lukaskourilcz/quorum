@@ -5,6 +5,7 @@
       "id": "caught-up",
       "name": "Caught Up",
       "status": "operating",
+      "visibility": "public",
       "taste": false,
       "ledgerNamespace": "caught-up",
       "growth_objective": {
@@ -46,6 +47,7 @@
       "id": "kvorum",
       "name": "Kvórum",
       "status": "operating",
+      "visibility": "public",
       "taste": true,
       "ledgerNamespace": "kvorum",
       "growth_objective": {
@@ -92,6 +94,7 @@
       "id": "booksofhistory",
       "name": "BOOKSOFHISTORY",
       "status": "operating",
+      "visibility": "public",
       "taste": true,
       "ledgerNamespace": "booksofhistory",
       "growth_objective": {

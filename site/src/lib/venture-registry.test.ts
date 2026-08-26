@@ -2,7 +2,11 @@ import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getPublicCalendarSchedule } from "./venture-registry";
+import {
+  getOwnerOnlyMeetingKinds,
+  getOwnerOnlyVentureIds,
+  getPublicCalendarSchedule
+} from "./venture-registry";
 import { CALENDAR_SLOTS } from "./calendar-feed-model";
 
 vi.mock("server-only", () => ({}));
@@ -11,9 +15,11 @@ afterEach(() => vi.unstubAllEnvs());
 describe("public project schedule", () => {
   it("matches the live registry exactly, with one row per Prague hour", async () => {
     const schedule = await getPublicCalendarSchedule();
-    expect(schedule).toEqual(CALENDAR_SLOTS);
+    expect(schedule.map(({ hour, kind, label }) => ({ hour, kind, label }))).toEqual(CALENDAR_SLOTS);
     expect(new Set(schedule.map(({ hour }) => hour)).size).toBe(schedule.length);
-    expect(schedule.filter(({ kind }) => ["bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk"].includes(kind)))
+    expect(schedule
+      .filter(({ kind }) => ["bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk"].includes(kind))
+      .map(({ hour, kind, label }) => ({ hour, kind, label })))
       .toEqual([
         { hour: 12, kind: "bh-desk", label: "BOOKSOFHISTORY editorial desk" },
         { hour: 15, kind: "dm-desk", label: "Door Money daily storytelling desk" },
@@ -29,12 +35,17 @@ describe("public project schedule", () => {
     await writeFile(path.join(root, "config", "ventures.json"), JSON.stringify({
       schemaVersion: "venture-registry/1",
       ventures: [{
+        id: "magazine",
+        visibility: "public",
         meetings: [{ kind: "mag-editorial", label: "Story meeting", cadence: "daily@09:00" }],
         productionJobs: [{ kind: "article-production", cadence: "2x-daily@10:00,18:00" }]
+      }, {
+        id: "personal-growth",
+        visibility: "owner-only",
+        meetings: [{ kind: "pg-desk", label: "Private desk", cadence: "daily@23:00", cast: ["GUIDE"] }]
       }]
     }));
-    vi.stubEnv("BOARDLESSAI_REPO_ROOT", root);
-    const schedule = await getPublicCalendarSchedule();
+    const schedule = await getPublicCalendarSchedule(root);
     expect(schedule.map(({ hour, kind }) => ({ hour, kind }))).toEqual([
       { hour: 6, kind: "venture-morning" },
       { hour: 9, kind: "mag-editorial" },
@@ -43,5 +54,8 @@ describe("public project schedule", () => {
       { hour: 18, kind: "article-pm" },
       { hour: 22, kind: "venture-night" }
     ]);
+    expect(await getOwnerOnlyVentureIds(root)).toEqual(new Set(["personal-growth"]));
+    expect(await getOwnerOnlyMeetingKinds(root)).toEqual(new Set(["pg-desk"]));
+    expect(JSON.stringify(schedule)).not.toContain("Private desk");
   });
 });

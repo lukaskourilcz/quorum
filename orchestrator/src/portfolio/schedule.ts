@@ -18,7 +18,7 @@ export interface EffectivePortfolioSchedule {
   fiftyDecisionStatus: "countersigned" | "pending";
   monthlyBudgetUsd: 15 | 18 | 25;
   dailyBudgetUsd: 0.7 | 1;
-  monthlyOperatingUsd: 20 | 30;
+  monthlyOperatingUsd: 20 | 50;
   ttTranscriptMode: "full" | "minimal" | "paused";
   /**
    * Whether the night may pay to score what the day published.
@@ -154,8 +154,8 @@ export function resolveEffectivePortfolioSchedule(input: {
   const kvorumBudgetCapacityStatus = kvorumBudgetCapacityDecision(input.kvorumBudgetCapacityRaw ?? "");
   const shape: BudgetShape = decisionStatus === "countersigned-shape-a" ? "A" : "B";
   // budget-2026-08d unlocks the full scheduled clock and is still the signal the runtime
-  // reads. budget-2026-08e supersedes it on amounts only: $30 all-in, $25 model share, $1.00
-  // daily pace. The flag is named for what it selects, not for the superseded figure.
+  // reads. budget-2026-08f supersedes the later $30 all-in amount with $50 while preserving the
+  // $25 model share and $1.00 daily pace. The flag is named for the clock it selects.
   const fullScheduleShape = fiftyDecisionStatus === "countersigned";
   const active = new Set((fullScheduleShape ? resolveScheduledClock(input.registry) : resolveMeetingClock(input.registry)).map((slot) => slot.phase));
   const envelopeByPhase: Partial<Record<ScheduledPhase, number>> = {};

@@ -160,6 +160,11 @@
         "KEEPER"
       ],
       "disabled": []
+    },
+    "personal-growth": {
+      "lockedOn": [],
+      "switchable": [],
+      "disabled": []
     }
   }
 }

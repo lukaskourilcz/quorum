@@ -5,6 +5,7 @@
       "id": "caught-up",
       "name": "Caught Up",
       "status": "operating",
+      "visibility": "public",
       "taste": false,
       "ledgerNamespace": "caught-up",
       "growth_objective": {
@@ -68,6 +69,7 @@
       "id": "titty-tuesdays",
       "name": "Titty Tuesdays",
       "status": "operating",
+      "visibility": "public",
       "taste": true,
       "ledgerNamespace": "titty-tuesdays",
       "growth_objective": {
@@ -109,6 +111,7 @@
       "id": "goviral",
       "name": "GoVIRAL",
       "status": "operating",
+      "visibility": "public",
       "taste": true,
       "ledgerNamespace": "goviral",
       "growth_objective": {
@@ -150,6 +153,7 @@
       "id": "booksofhistory",
       "name": "BOOKSOFHISTORY",
       "status": "operating",
+      "visibility": "public",
       "taste": true,
       "ledgerNamespace": "booksofhistory",
       "growth_objective": {
@@ -194,6 +198,7 @@
       "id": "fightaiq",
       "name": "FightAIQ",
       "status": "operating",
+      "visibility": "public",
       "mode": "live-analysis",
       "taste": true,
       "ledgerNamespace": "fightaiq",
@@ -263,6 +268,7 @@
       "id": "carousel-studio",
       "name": "Design Lab",
       "status": "operating",
+      "visibility": "public",
       "taste": true,
       "ledgerNamespace": "carousel-studio",
       "growth_objective": {
@@ -283,6 +289,7 @@
       "id": "marketingshark",
       "name": "marketingShark",
       "status": "operating",
+      "visibility": "public",
       "taste": false,
       "$tasteComment": "false on purpose. taste:true adds a PALATE pre-step to the venture's first meeting, which is a second model call; this room is designed around exactly one paid call per brand per day.",
       "ledgerNamespace": "marketingshark",
@@ -323,6 +330,7 @@
       "id": "mma-files",
       "name": "MMA Files",
       "status": "operating",
+      "visibility": "public",
       "taste": true,
       "ledgerNamespace": "mma-files",
       "growth_objective": {
@@ -394,6 +402,7 @@
       "id": "door-money",
       "name": "Door Money",
       "status": "operating",
+      "visibility": "public",
       "taste": true,
       "ledgerNamespace": "door-money",
       "growth_objective": {
@@ -455,6 +464,7 @@
       "id": "tehdejsi-svet",
       "name": "Tehdejší svět",
       "status": "operating",
+      "visibility": "public",
       "taste": true,
       "ledgerNamespace": "tehdejsi-svet",
       "growth_objective": {
@@ -500,6 +510,7 @@
       "id": "kvorum",
       "name": "Kvórum",
       "status": "operating",
+      "visibility": "public",
       "taste": true,
       "ledgerNamespace": "kvorum",
       "growth_objective": {
@@ -542,6 +553,24 @@
           }
         }
       ]
+    },
+    {
+      "id": "personal-growth",
+      "name": "Lukáš Growth Desk",
+      "status": "operating",
+      "visibility": "owner-only",
+      "taste": false,
+      "ledgerNamespace": "personal-growth",
+      "growth_objective": {
+        "label": "Plan and measure the owner's personal publishing rhythm",
+        "components": [
+          "action-completion"
+        ]
+      },
+      "adminTabs": [
+        "plans"
+      ],
+      "meetings": []
     }
   ]
 }

@@ -81,7 +81,7 @@ export function ledgerSpend(
  * The deterministic afternoon and night shifts write the newest standup of any day, and the
  * site reads the newest standup for its headline running cost. A literal here is therefore
  * published as fact: the site showed "$0.00 of $50" on a day the ledger held $1.18 against a
- * countersigned $30 cap.
+ * countersigned $50 cap.
  */
 export async function monthToDateLedger(root: string, now: Date): Promise<{ monthAllInUsd: number; monthCapUsd: number }> {
   const [entries, limits, fixedMonthlyUsd] = await Promise.all([

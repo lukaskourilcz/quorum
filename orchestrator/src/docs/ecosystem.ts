@@ -15,6 +15,7 @@ interface VentureRegistry {
     id: string;
     name: string;
     status: string;
+    visibility: "public" | "owner-only";
     meetings: Array<{ kind: string; cadence: string; envelopeUsd: number }>;
   }>;
 }
@@ -95,8 +96,9 @@ export async function buildCurrentOperatingTruth(repoRoot: string): Promise<stri
     .filter((status) => status.critical && status.status !== "on-track")
     .map((status) => status.id);
   const refreshedAt = latestIso([activation.updatedAt, kpis.evaluatedAt, moneyState.generatedAt, latestStandup ?? ""]);
-  const meetingCount = ventures.ventures.reduce((sum, venture) => sum + venture.meetings.length, 0);
-  const dailyMeetingEnvelope = ventures.ventures.reduce(
+  const publicVentures = ventures.ventures.filter((venture) => venture.visibility === "public");
+  const meetingCount = publicVentures.reduce((sum, venture) => sum + venture.meetings.length, 0);
+  const dailyMeetingEnvelope = publicVentures.reduce(
     (sum, venture) => sum + venture.meetings.reduce((ventureSum, meeting) => ventureSum + meeting.envelopeUsd, 0),
     0
   );
@@ -109,7 +111,7 @@ export async function buildCurrentOperatingTruth(repoRoot: string): Promise<stri
     "",
     "| Item | Current value |",
     "| --- | --- |",
-    `| Portfolio | ${ventures.ventures.length} projects; ${ventures.ventures.filter((venture) => venture.status === "operating").length} marked operating |`,
+    `| Portfolio | ${publicVentures.length} public projects; ${ventures.ventures.filter((venture) => venture.visibility === "owner-only").length} owner-only workspace |`,
     `| Agent roster | ${activeAgents.length} active: ${providerCounts.get("Anthropic") ?? 0} Anthropic, ${providerCounts.get("OpenAI") ?? 0} OpenAI |`,
     `| Scheduled specialist/service rooms | ${meetingCount}; combined maximum room envelopes ${money(dailyMeetingEnvelope)} if every room is commissioned |`,
     // Read from the resolver rather than written here. This line was a literal carrying
@@ -130,7 +132,7 @@ export async function buildCurrentOperatingTruth(repoRoot: string): Promise<stri
     "",
     "| Project | Mode | Rooms | Disabled optional roles | Social readiness |",
     "| --- | --- | --- | --- | --- |",
-    ...ventures.ventures.map((venture) => {
+    ...publicVentures.map((venture) => {
       const social = activation.ventures[venture.id];
       const socialText = social ? `${social.status} (${social.counter}/${social.required})` : "not applicable";
       const disabled = controls.ventures[venture.id]?.disabled.join(", ") || "none";

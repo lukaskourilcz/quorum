@@ -34,8 +34,8 @@ and venture rooms. It records decisions in `state/` as plain files in Git.
 deterministic render package: the same input produces the same bytes. GitHub
 Actions runs the cycles. Vercel deploys the site from `main`.
 
-The company has a hard **$30 monthly cap** across models, APIs, media, hosting,
-and tools.
+The company has a hard **$50 monthly cap** across models, APIs, media, hosting,
+and tools. Personal Growth has a nested $20 cap inside it and remains owner-only.
 
 ## Prague clock
 

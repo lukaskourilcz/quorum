@@ -123,6 +123,22 @@ describe("public Money snapshot", () => {
       toolUses: 0,
       usd: 1,
       kind: "text"
+    }, {
+      ts: "2026-08-10T13:00:00.000Z",
+      cycleId: "cycle-private-money-test",
+      requestHash: "request-hash-private-money-test",
+      phase: "personal-growth",
+      ventureId: "personal-growth",
+      agent: "LEDGER",
+      provider: "openai",
+      model: "test-model",
+      serviceTier: "default",
+      tokensIn: 1,
+      cachedTokensIn: 0,
+      tokensOut: 1,
+      toolUses: 0,
+      usd: 0.5,
+      kind: "text"
     }];
     const snapshot = buildPublicMoneySnapshot({
       generatedAt: at,
@@ -161,10 +177,10 @@ describe("public Money snapshot", () => {
     });
     expect(snapshot.revenue.recognizedUsd).toBe(0);
     expect(snapshot.costs).toMatchObject({
-      api: { monthlyUsd: 1, cumulativeUsd: 1 },
+      api: { monthlyUsd: 1.5, cumulativeUsd: 1.5 },
       fixed: { monthlyUsd: 20, cumulativeUsd: 40 },
-      totalMonthlyBurnUsd: 21,
-      cumulativeSpendUsd: 41
+      totalMonthlyBurnUsd: 21.5,
+      cumulativeSpendUsd: 41.5
     });
     expect(snapshot.costs.byVenture.find((entry) => entry.ventureId === "booksofhistory"))
       .toMatchObject({ modelUsd: 0, researchUsd: 0.25, sourceUsd: null });
@@ -174,6 +190,8 @@ describe("public Money snapshot", () => {
     expect(serialized).not.toContain("PRIVATE SERVICE NAME");
     expect(serialized).not.toContain("invoice/private-customer");
     expect(serialized).not.toContain("SECRET CUSTOMER DATA");
+    expect(serialized).not.toContain("personal-growth");
+    expect(serialized).not.toContain("Lukáš Growth Desk");
 
     const root = await mkdtemp(path.join(os.tmpdir(), "boardless-money-public-"));
     await expect(writePublicMoneySnapshot(root, snapshot)).resolves.toBe("money/public.json");

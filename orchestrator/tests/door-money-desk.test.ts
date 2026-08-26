@@ -40,7 +40,7 @@ function budget(cycleId: string, perTextCallUsd = DEFAULT_BUDGET_LIMITS.perTextC
       perTextCallUsd,
       dailyUsd: 1,
       monthlyApiUsd: 25,
-      monthlyOperatingUsd: 30
+      monthlyOperatingUsd: 50
     }
   };
 }

@@ -5,6 +5,7 @@
       "id": "booksofhistory",
       "name": "BOOKSOFHISTORY",
       "status": "operating",
+      "visibility": "public",
       "taste": true,
       "ledgerNamespace": "booksofhistory",
       "growth_objective": {

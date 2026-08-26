@@ -369,7 +369,7 @@ transitions) + results/weights + docs + NEEDED + honest-gaps + prompt deletion.
 
 ## What this does not touch
 
-The $30 / $25 / $1.00 ceilings. The social triple-lock — drafts-only, no channels, no
+The $50 / $25 / $1.00 ceilings. The social triple-lock: drafts-only, no channels, no
 credentials, publisher refuses by name. Treasury and payments.
 `METRICS_INGESTION_ENABLED=false` — owner-entered results only. The magazines' truth
 gates and delivery paths. GoVIRAL's Apify recipe and quota (the topicSet additions ride

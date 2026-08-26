@@ -34,7 +34,7 @@ four may create an account, publish, contact a channel or infer authority from i
 
 ## Budget
 
-Effective countersigned all-in hard cap: $30 USD.
+Effective countersigned all-in hard cap: $50 USD.
 
 - API monthly cap: $25
 - API daily cap: $1.00
@@ -43,9 +43,10 @@ Effective countersigned all-in hard cap: $30 USD.
 - Edition production cap: $0.35 per article run
 - Media monthly cap: $2, with deterministic media costing $0 by default
 
-The owner countersigned `budget-2026-08e` on 2026-08-02. It sets one $30 limit,
-a $25 model share and a $1.00 daily pace across the portfolio. Project-specific
-live switches and evidence gates still decide whether a meeting may run.
+The owner countersigned `budget-2026-08f` on 2026-08-26. It sets one $50 limit,
+keeps the $25 model share and $1.00 daily pace across the portfolio, and places
+Personal Growth under a nested $20 all-in limit. Project-specific live switches
+and evidence gates still decide whether a meeting may run.
 
 `config/fixed-costs.json` currently records `confirmedNoFixedCosts: true` and an empty
 list, so fixed subscriptions evaluate to `$0` rather than unavailable. The owner must
@@ -172,7 +173,7 @@ results, account and spend permissions remain individually gated.
 
 ## Constraints
 
-The countersigned `$30` all-in limit and `$25` model/API share, human-only payments,
+The countersigned `$50` all-in limit and `$25` model/API share, human-only payments,
 per-project social gates, the global posting stop, sanitization boundary, evidence
 rules, security controls and release gates remain binding. Titty Tuesdays carries a
 standing daily agenda for pre-commerce marketing ideas. Other agenda-gated specialist

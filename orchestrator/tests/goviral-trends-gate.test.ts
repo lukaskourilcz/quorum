@@ -60,7 +60,8 @@ describe("the free trending signals reach the day's output on every path", () =>
       root,
       date: "2026-08-10",
       now: new Date("2026-08-10T11:00:00.000Z"),
-      fetchImpl: stubFetch()
+      fetchImpl: stubFetch(),
+      resolveImpl: async () => ["93.184.216.34"]
     });
 
     // No token and no snapshot, so the room still does not meet — that gate is unchanged.
@@ -83,7 +84,8 @@ describe("the free trending signals reach the day's output on every path", () =>
       root,
       date: "2026-08-10",
       now: new Date("2026-08-10T11:00:00.000Z"),
-      fetchImpl: stubFetch()
+      fetchImpl: stubFetch(),
+      resolveImpl: async () => ["93.184.216.34"]
     });
     expect(new Set(result.evidenceRefs).size).toBe(result.evidenceRefs.length);
   });
@@ -95,7 +97,8 @@ describe("the free trending signals reach the day's output on every path", () =>
       root,
       date: "2026-08-10",
       now: new Date("2026-08-10T11:00:00.000Z"),
-      fetchImpl: stubFetch()
+      fetchImpl: stubFetch(),
+      resolveImpl: async () => ["93.184.216.34"]
     });
     expect(result.reason.length).toBeGreaterThan(0);
     expect(result.snapshotDate).toBeNull();

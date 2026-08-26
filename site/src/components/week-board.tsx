@@ -25,7 +25,6 @@ import {
   Layers,
   type LucideIcon
 } from "lucide-react";
-import ventureRegistrySource from "../../../config/ventures.json";
 import {
   agentById,
   type AgentId
@@ -64,16 +63,10 @@ type DisplayStatus = CalendarStatus | "test";
 const companyCouncil: readonly AgentId[] = ["VIZE", "FORGE", "PULSE", "AUDIT"];
 const morningDecisionRoom: readonly AgentId[] = [...companyCouncil, "SPARK", "VAULT"];
 const articleAuthors: readonly AgentId[] = ["JAB", "HACEK"];
-const configuredMeetingCast = new Map<string, readonly AgentId[]>(
-  ventureRegistrySource.ventures.flatMap((venture) =>
-    venture.meetings.map((meeting) => [
-      meeting.kind,
-      meeting.cast as readonly AgentId[]
-    ] as const)
-  )
-);
-
-function calendarParticipants(kind: CalendarKind): readonly AgentId[] {
+function calendarParticipants(
+  kind: CalendarKind,
+  configuredMeetingCast: ReadonlyMap<string, readonly AgentId[]>
+): readonly AgentId[] {
   if (kind === "venture-morning") return morningDecisionRoom;
   if (kind === "venture-afternoon" || kind === "venture-night") return [];
   if (kind === "article-am" || kind === "article-pm") return articleAuthors;
@@ -88,9 +81,12 @@ function calendarParticipants(kind: CalendarKind): readonly AgentId[] {
  * not price order, and for JAB it is the $0.047 article call — an unnamed JAB slot would have
  * printed twelve times the $0.0038 editorial-room call it really makes.
  */
-function calendarCostUsd(kind: CalendarKind): number {
+function calendarCostUsd(
+  kind: CalendarKind,
+  configuredMeetingCast: ReadonlyMap<string, readonly AgentId[]>
+): number {
   const contexts = calendarCostContexts[kind];
-  return Number(calendarParticipants(kind).reduce((sum, agentId) => {
+  return Number(calendarParticipants(kind, configuredMeetingCast).reduce((sum, agentId) => {
     const apiModels = agentById.get(agentId)?.apiModels ?? [];
     const apiModel =
       (contexts?.[agentId]
@@ -103,8 +99,11 @@ function calendarCostUsd(kind: CalendarKind): number {
   }, 0).toFixed(8));
 }
 
-function calendarCostLabel(kind: CalendarKind): string {
-  return `~$${calendarCostUsd(kind).toFixed(3)}`;
+function calendarCostLabel(
+  kind: CalendarKind,
+  configuredMeetingCast: ReadonlyMap<string, readonly AgentId[]>
+): string {
+  return `~$${calendarCostUsd(kind, configuredMeetingCast).toFixed(3)}`;
 }
 
 const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone: string; slotColor: string }> = {
@@ -287,6 +286,12 @@ export function WeekBoard({
   availableWeeks: readonly string[];
   headingLevel?: "section" | "page";
 }) {
+  const configuredMeetingCast = new Map<string, readonly AgentId[]>(
+    feed.definitions.map((definition) => [
+      definition.kind,
+      (definition.cast ?? []).filter((agent): agent is AgentId => agentById.has(agent as AgentId))
+    ])
+  );
   const days = Array.from({ length: 5 }, (_, index) => addCalendarDays(anchorDate, index - 1));
   const slotByDateAndKind = new Map<string, CalendarSlot>();
   for (const sourceFeed of [feed, ...adjacentFeeds]) {
@@ -361,11 +366,11 @@ export function WeekBoard({
                   </p>
                   <p className="mt-0.5 text-xs leading-4 text-[var(--fog)]">{publicKindLabel(definition.kind)}</p>
                   <span
-                    aria-label={`Approximate live API cost ${calendarCostLabel(definition.kind)}`}
+                    aria-label={`Approximate live API cost ${calendarCostLabel(definition.kind, configuredMeetingCast)}`}
                     className="mt-1 flex items-center gap-1 font-mono text-[0.625rem] font-medium tracking-[0.04em] text-[var(--ash)]"
                   >
                     <CircleDollarSign aria-hidden="true" className="size-3" />
-                    {calendarCostLabel(definition.kind)}
+                    {calendarCostLabel(definition.kind, configuredMeetingCast)}
                   </span>
                 </div>
               </div>

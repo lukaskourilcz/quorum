@@ -74,8 +74,8 @@ is the single thing standing between a proven path and a working one.
   posts and none of them takes a login or a cookie, so your own accounts are never involved and
   carry no ban risk from this. Without the token everything still runs: the Monday room opens,
   finds no scout data, records that in one sentence and spends nothing. **Never upgrade the plan
-  without a new approval** — Starter is $29/month, which alone would consume the entire $30 all-in
-  cap. `state/INBOX.md` carries this as `APIFY-ACCOUNT-001`.
+  without a new approval**: Starter is $29/month, which would consume more than half of the $50
+  all-in cap. `state/INBOX.md` carries this as `APIFY-ACCOUNT-001`.
   [imp:4] [owner:me] [time:10m] [kind:setup]
 
 - [ ] **Approve the reviewed MMA scope for the same Apify token** — `APIFY-MMA-SOURCES-001` in
@@ -124,7 +124,7 @@ is the single thing standing between a proven path and a working one.
   [imp:4] [owner:me] [time:20m] [kind:decision]
 
 - [ ] **Record the fal.ai prepaid credit in the finance state** — the prepayment on 2026-08-08
-  is real operating spend under the $30 all-in cap, and only the owner records payments: add the
+  is real operating spend under the $50 all-in cap, and only the owner records payments: add the
   amount and date where LEDGER reconciles (`state/treasury/` / `state/FINANCE.md`) so the monthly
   numbers include it. [imp:3] [owner:me] [time:5m] [kind:decision]
 
@@ -296,7 +296,7 @@ Judgement calls. Nothing is blocked on code for any of these.
   `config/fixed-costs.json` carries `confirmedNoFixedCosts: true`, which says "there are none"
   rather than "nobody has entered any". If that is right, tick this. If you do pay for something,
   enter each subscription with its monthly USD amount, category and first-paid date: that registry
-  feeds the non-API half of the all-in total measured against the $30 cap (`allInNonApiSpentUsd` in
+  feeds the non-API half of the all-in total measured against the $50 cap (`allInNonApiSpentUsd` in
   `orchestrator/src/budget.ts`), so a wrong answer makes the company look cheaper than it is. Do
   not enter example prices. [imp:3] [owner:me] [time:15m] [kind:setup]
 
@@ -388,7 +388,7 @@ Judgement calls. Nothing is blocked on code for any of these.
   [imp:2] [owner:me] [time:5m] [kind:decision]
 
 - [ ] **Confirm the wallboard's five figures are the ones you want on the wall** — the home page's
-  TV shows published articles, publishing reliability, cost per article, spend against the $30
+  TV shows published articles, publishing reliability, cost per article, spend against the $50
   limit and ideas from meetings, all read from the record. Any figure the record cannot supply
   prints an em dash rather than a zero. [imp:2] [owner:me] [time:10m] [kind:decision]
 

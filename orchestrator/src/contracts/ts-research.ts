@@ -11,7 +11,7 @@ import { DateTimeSchema } from "./common.js";
  * it worth having.
  *
  * The two ceilings are carried here rather than in a comment: no single brief above `$0.30` and
- * no month above `$2.00`, both inside the venture's `$4.00` target and the standing `$30`
+ * no month above `$2.00`, both inside the venture's `$4.00` target and the standing `$50`
  * all-in operating cap. A schema that accepts a cost it is not allowed to spend is a schema that
  * will eventually record one.
  */
