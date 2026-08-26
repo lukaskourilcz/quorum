@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "a0b8c6e3c98d336e22bbf2e8e0b9c794b136be4e5f7cd6d35ae813aaf38208ce",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "ec049860112284cd82c2b3407a88ca47525b6619",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/ufc-event-ufc-fight-night-nurmagomedov-vs-song",
+  "recordedAt": "2026-08-26T08:07:24.669Z"
+}

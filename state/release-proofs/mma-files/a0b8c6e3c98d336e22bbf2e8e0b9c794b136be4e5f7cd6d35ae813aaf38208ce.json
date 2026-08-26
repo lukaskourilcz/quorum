@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-e9925e941f57744d",
+  "venture": "mma-files",
+  "packageHash": "a0b8c6e3c98d336e22bbf2e8e0b9c794b136be4e5f7cd6d35ae813aaf38208ce",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "ec049860112284cd82c2b3407a88ca47525b6619",
+  "deploymentUrl": "https://mma-files.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit ec049860112284cd82c2b3407a88ca47525b6619 is readable",
+      "checkedAt": "2026-08-26T08:07:22.921Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-26T08:07:22.921Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-26T08:07:22.921Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/cs/articles/ufc-event-ufc-fight-night-nurmagomedov-vs-song?boardless_verify=a0b8c6e3c98d-1787731642921",
+      "checkedAt": "2026-08-26T08:07:22.921Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and ufc-event-ufc-fight-night-nurmagomedov-vs-song match",
+      "checkedAt": "2026-08-26T08:07:22.921Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose a0b8c6e3c98d336e22bbf2e8e0b9c794b136be4e5f7cd6d35ae813aaf38208ce",
+      "checkedAt": "2026-08-26T08:07:22.921Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/images/articles/ufc-event-ufc-fight-night-nurmagomedov-vs-song/hero.webp?boardless_verify=a0b8c6e3c98d-1787731642921",
+      "checkedAt": "2026-08-26T08:07:22.921Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-26T08:07:22.921Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Arto Suraj · Pexels License",
+      "checkedAt": "2026-08-26T08:07:22.921Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-26T08:06:40.532Z",
+  "completedAt": "2026-08-26T08:07:23.577Z"
+}
