@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-fight-night-nurmagomedov-vs-song",
+  "date": "2026-08-26",
+  "rung": "search",
+  "selected": "pexels:36293742",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:36293742",
+      "reason": "Professional MMA facility interior with matting and professional lighting, clean and well-composed illustration of the sport's infrastructure without identifying individuals.",
+      "candidates": [
+        {
+          "candidateId": "pexels:28560751",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Two fighters in a cage showing clear facial features that could identify them as specific individuals from the event being covered.",
+          "sceneCs": "dva bojovníci v kleci během zápasu"
+        },
+        {
+          "candidateId": "pixabay:1853520",
+          "provider": "pixabay",
+          "fit": 3,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Empty stadium interior with artificial blue holographic ceiling effect looks overly stylized and machine-generated rather than photojournalistic.",
+          "sceneCs": "futuristický interiér haly s modrým osvětlením"
+        },
+        {
+          "candidateId": "pexels:36293741",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Clean, well-lit professional training facility with mat setup illustrates MMA infrastructure without identifying any specific individuals or event.",
+          "sceneCs": "sportovní hala s tréninkovými matami"
+        },
+        {
+          "candidateId": "pixabay:8656164",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Appears to be wrestling or grappling on ground mat, but too dark and unclear to properly illustrate an MMA article.",
+          "sceneCs": "dva lidé na zemi v tmaě"
+        },
+        {
+          "candidateId": "pexels:28560745",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Clear facial features of two fighters actively exchanging strikes in cage, directly depicting specific individuals from the UFC event.",
+          "sceneCs": "dva bojovníci v kletové kleci během zápasu"
+        },
+        {
+          "candidateId": "pixabay:165406",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Empty stadium seating with minimal visual interest does not illustrate MMA or combat sports.",
+          "sceneCs": "prázdné sedačky na stadionu"
+        },
+        {
+          "candidateId": "pexels:36293742",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Professional MMA facility interior with matting and professional lighting, clean and well-composed illustration of the sport's infrastructure without identifying individuals.",
+          "sceneCs": "profesionální octagon hala s LED osvětlením"
+        },
+        {
+          "candidateId": "pixabay:1665747",
+          "provider": "pixabay",
+          "fit": 4,
+          "vetoes": [
+            "logo-or-watermark"
+          ],
+          "reason": "Martial arts uniforms with visible logos and sponsor branding make this unsuitable as lead image.",
+          "sceneCs": "rozložené kimono s vybavením"
+        },
+        {
+          "candidateId": "pexels:28560744",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Clear view of fighter's face in cage during active competition, directly identifying individuals from the specific event.",
+          "sceneCs": "bojovník v kleci během zápasu"
+        },
+        {
+          "candidateId": "pixabay:7180754",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Empty stadium seating is unrelated to MMA or combat sports illustration.",
+          "sceneCs": "prázdné modré řady sedaček"
+        },
+        {
+          "candidateId": "pexels:5750883",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Professional training environment with ring and sparring partners illustrated in good lighting, though faces visible but not clearly identifiable individuals from the article.",
+          "sceneCs": "tréning v boxovacím ringu"
+        },
+        {
+          "candidateId": "pixabay:2578819",
+          "provider": "pixabay",
+          "fit": 5,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Silhouetted fighter against sunset is atmospheric but has stock-photo dating quality and doesn't specifically illustrate professional MMA sport.",
+          "sceneCs": "silueta bojovníka při západu slunce"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.008236
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-26T08:01:50.715Z"
+}
