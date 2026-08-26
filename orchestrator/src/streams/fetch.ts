@@ -63,6 +63,7 @@ export async function parseFeed(xml: string): Promise<RawStreamInput[]> {
 
 export interface FetchDeps {
   fetchImpl?: typeof fetch;
+  resolveImpl?: (hostname: string) => Promise<string[]>;
   now: string;
 }
 
@@ -72,6 +73,7 @@ async function readFeed(entry: StreamSourceEntry, allowHosts: readonly string[],
     maxBytes: MAX_FEED_BYTES,
     timeoutMs: FETCH_TIMEOUT_MS,
     ...(deps.fetchImpl ? { fetchImpl: deps.fetchImpl } : {}),
+    ...(deps.resolveImpl ? { resolveImpl: deps.resolveImpl } : {}),
   });
   return new TextDecoder().decode(response.body);
 }

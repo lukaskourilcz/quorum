@@ -15,6 +15,7 @@ import path from "node:path";
 import { configRoot } from "../src/paths.js";
 
 const now = new Date("2026-08-10T12:00:00.000Z");
+const resolved = { resolveImpl: async () => ["93.184.216.34"] };
 
 function respond(body: string, contentType = "application/json"): typeof fetch {
   return vi.fn(async () => new Response(body, {
@@ -31,6 +32,7 @@ describe("free trending signals", () => {
   it("reads Hacker News as a speed, not a total", async () => {
     const result = await fetchHackerNewsVelocity({
       now,
+      ...resolved,
       query: "anthropic",
       fetchImpl: respond(JSON.stringify({
         hits: [
@@ -52,6 +54,7 @@ describe("free trending signals", () => {
   it("lines Google Trends terms up with their own traffic figures", async () => {
     const result = await fetchGoogleTrends({
       now,
+      ...resolved,
       geo: "CZ",
       fetchImpl: respond(`<rss><channel><title>Daily Search Trends</title>
         <item><title>Oktagon 60</title><ht:approx_traffic>20,000+</ht:approx_traffic></item>
@@ -70,6 +73,7 @@ describe("free trending signals", () => {
   it("counts Google News articles as volume, never as engagement", async () => {
     const result = await fetchGoogleNewsVolume({
       now,
+      ...resolved,
       query: "Jiri Prochazka",
       locale: "cs",
       fetchImpl: respond(`<rss><channel><title>Feed</title>
@@ -83,6 +87,7 @@ describe("free trending signals", () => {
   it("reads Reddit as rank only, and treats a closed feed as absence", async () => {
     const ranked = await fetchSubredditRanks({
       now,
+      ...resolved,
       subreddit: "MMA",
       fetchImpl: respond(`<feed><title>r/MMA</title>
         <entry><title>Top post</title></entry><entry><title>Second post</title></entry>
@@ -93,14 +98,14 @@ describe("free trending signals", () => {
 
     // Reddit has flagged RSS as the next thing it closes. When it goes, this is the answer:
     // a failed provider with a reason, zero signals, and nothing thrown.
-    const closed = await fetchSubredditRanks({ now, subreddit: "MMA", fetchImpl: failing });
+    const closed = await fetchSubredditRanks({ now, ...resolved, subreddit: "MMA", fetchImpl: failing });
     expect(closed.status).toBe("failed");
     expect(closed.signals).toEqual([]);
     expect(closed.reason).toContain("Reddit closed the feed");
   });
 
   it("tells an empty answer apart from a failed one, because they are not the same news", async () => {
-    const empty = await fetchHackerNewsVelocity({ now, query: "nothing", fetchImpl: respond(JSON.stringify({ hits: [] })) });
+    const empty = await fetchHackerNewsVelocity({ now, ...resolved, query: "nothing", fetchImpl: respond(JSON.stringify({ hits: [] })) });
     expect(empty.status).toBe("empty");
     expect((await fetchHackerNewsVelocity({ now, query: "boom", fetchImpl: failing })).status).toBe("failed");
   });

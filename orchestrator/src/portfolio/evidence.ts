@@ -524,6 +524,7 @@ export async function refreshGoViralTrends(input: {
   date: string;
   now: Date;
   fetchImpl?: typeof fetch;
+  resolveImpl?: (hostname: string) => Promise<string[]>;
 }): Promise<{
   artifactPaths: string[];
   evidenceRefs: string[];
@@ -560,7 +561,8 @@ export async function refreshGoViralTrends(input: {
     date: input.date,
     now: input.now,
     topicSets: registry.topicSets,
-    ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
+    ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {}),
+    ...(input.resolveImpl ? { resolveImpl: input.resolveImpl } : {})
   });
   const freeRefs = [...new Set(
     free.results
@@ -703,6 +705,7 @@ export async function collectFreeTrendingSignals(input: {
   now: Date;
   topicSets: GoViralSourceRegistry["topicSets"];
   fetchImpl?: typeof fetch;
+  resolveImpl?: (hostname: string) => Promise<string[]>;
 }): Promise<{ results: TrendingProviderResult[]; ai: TrendingSignal[]; mma: TrendingSignal[] }> {
   const [events, rosterPolicy] = await Promise.all([
     loadEventCards(path.join(input.root, "mma", "events")),
@@ -748,7 +751,8 @@ export async function collectFreeTrendingSignals(input: {
         .sort((left, right) => left.order.localeCompare(right.order) || left.query.localeCompare(right.query))
         .slice(0, 3)
         .map(({ query }) => ({ topicSet, query }))),
-    ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
+    ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {}),
+    ...(input.resolveImpl ? { resolveImpl: input.resolveImpl } : {})
   });
   const results = collected.map((result) => ({
     ...result,

@@ -155,8 +155,8 @@ describe("the slot record a second firing looks for", () => {
     const run = (phase: string) =>
       new Promise<string>((resolve, reject) => {
         execFile(
-          "npx",
-          ["tsx", cli, "--phase", phase, "--at", "1999-01-04T08:00:00.000Z"],
+          process.execPath,
+          ["--import", "tsx", cli, "--phase", phase, "--at", "1999-01-04T08:00:00.000Z"],
           { cwd: path.join(repoRoot, "orchestrator") },
           (error, stdout) => (error ? reject(error) : resolve(stdout.trim()))
         );
