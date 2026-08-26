@@ -443,6 +443,12 @@ export default async function AdminPage({
 
   const sections: AdminSection[] = [
     {
+      id: "operations",
+      name: "Operations",
+      href: "/admin/operations",
+      active: false
+    },
+    {
       id: "implementation-plans",
       name: "Implementation Plans",
       href: "/admin/implementation-plans",

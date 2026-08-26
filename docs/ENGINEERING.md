@@ -47,7 +47,9 @@ a week when nothing had been released at all.
 
 The company-level health, capacity and recovery boundaries are documented in
 `docs/AUTONOMOUS-OPERATIONS.md`. They observe existing domain truth, use the capability map for
-every dependency and never grant content, spend, publishing or deployment authority.
+every dependency and never grant content, spend, publishing or deployment authority. The existing
+night checkpoint owns Operations materialization; the protected Admin refresh records a request
+for that checkpoint and must never become a second scheduler or a client-side state reader.
 
 Cross-program implementation truth is documented in `docs/IMPLEMENTATION-PLANS.md`. Its versioned
 registry, GitHub and repository probes, deterministic resolver, append-only transitions and

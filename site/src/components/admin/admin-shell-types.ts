@@ -2,6 +2,7 @@ export type AdminDestinationIcon =
   | "approvals"
   | "future"
   | "manual"
+  | "operations"
   | "overview"
   | "production"
   | "workspace";

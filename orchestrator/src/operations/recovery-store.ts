@@ -4,7 +4,38 @@ import {
   type OperationsIncidentSnapshot,
   type VentureRecoveryAttempt
 } from "../contracts/venture-recovery.js";
+import { readFile, readdir, stat } from "node:fs/promises";
+import path from "node:path";
 import { appendJsonLine, atomicWriteJson, withFileLock } from "../state.js";
+
+export async function readRecoveryAttempts(stateRoot: string, nodeId: string): Promise<unknown[]> {
+  const directory = path.join(stateRoot, "operations/recovery", nodeId);
+  let entries: string[];
+  try {
+    entries = (await readdir(directory)).filter((entry) => /^\d{4}-\d{2}\.jsonl$/u.test(entry)).sort();
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
+    throw error;
+  }
+  const attempts: unknown[] = [];
+  for (const entry of entries.slice(-3)) {
+    const target = path.join(directory, entry);
+    const metadata = await stat(target);
+    if (metadata.size > 256 * 1_024) {
+      attempts.push({ malformed: true });
+      continue;
+    }
+    const raw = await readFile(target, "utf8");
+    for (const line of raw.split(/\r?\n/u).filter(Boolean)) {
+      try {
+        attempts.push(JSON.parse(line) as unknown);
+      } catch {
+        attempts.push({ malformed: true });
+      }
+    }
+  }
+  return attempts.slice(-256);
+}
 
 export async function appendRecoveryAttempt(stateRoot: string, value: VentureRecoveryAttempt): Promise<void> {
   const attempt = VentureRecoveryAttemptSchema.parse(value);

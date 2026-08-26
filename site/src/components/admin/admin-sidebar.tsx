@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import {
+  Activity,
   CheckCheck,
   ChevronLeft,
   ChevronRight,
@@ -30,6 +31,7 @@ const ICONS = {
   approvals: CheckCheck,
   future: Sparkles,
   manual: KeyRound,
+  operations: Activity,
   overview: LayoutDashboard,
   production: Palette,
   workspace: FolderKanban

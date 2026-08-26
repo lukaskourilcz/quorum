@@ -59,6 +59,7 @@ pnpm build
 pnpm cycle -- --phase morning --dry
 pnpm agents:validate
 pnpm docs:check
+pnpm --filter @boardlessai/orchestrator operations:release-audit
 ```
 
 Use Node 22 or newer. The dry cycle uses fixtures, spends nothing, and needs no
@@ -67,7 +68,8 @@ API key. The site reads committed state.
 ## Documentation map
 
 - Start with the [operating model](docs/ECOSYSTEM.md), [portfolio map](docs/PORTFOLIO.md),
-  [governance](GOVERNANCE.md) and [engineering contract](docs/ENGINEERING.md).
+  [governance](GOVERNANCE.md), [autonomous operations](docs/AUTONOMOUS-OPERATIONS.md)
+  and [engineering contract](docs/ENGINEERING.md).
 - Owner-facing context lives in [about-project](about-project.md), [scaling](scaling.md),
   [monetization](monetization.md) and the single [owner action list](docs/NEEDED.md).
 - Venture designs: [BOOKSOFHISTORY](docs/BOOKSOFHISTORY-VENTURE-DESIGN.md),

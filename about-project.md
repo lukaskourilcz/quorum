@@ -44,8 +44,13 @@ GitHub Actions / příkazová řádka
            Next.js web
      ├─ úvodní stránka jako procházka kanceláří (7 sekcí)
      ├─ veřejné stránky a kalendář
-     └─ chráněná správa projektů (rail podle projektů)
+     └─ chráněná správa projektů a Operations (rail podle projektů)
 ```
+
+Chráněná stránka Operations ukazuje ověřený zdravotní stav, SLO, kapacitu, incidenty,
+hranice mezi projekty a souhrn implementačních plánů. Čte jen omezená provozní metadata:
+nepřenáší obsah projektů, soukromá data ani přihlašovací údaje a neumí publikovat, utrácet
+nebo nasadit web. Chybějící stav zůstává označený jako nedostupný, nikoli jako nula.
 
 V rejstříku je 49 rolí, z toho **40 aktivních**: čtyři hlasující členové rady a 36
 odborných rolí. Šest rolí je pozastavených a tři vyřazené; veřejný web počítá

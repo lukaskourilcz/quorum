@@ -17,6 +17,8 @@ const registry = JSON.parse(
 ) as VentureRegistry;
 const canonicalDestinations = [
   "/admin",
+  "/admin/operations",
+  "/admin/implementation-plans",
   "/admin?view=approvals",
   "/admin?view=manual-tasks",
   "/admin?view=future",

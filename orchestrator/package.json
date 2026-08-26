@@ -28,6 +28,8 @@
     "queue:health": "tsx src/delivery/queue-health-cli.ts",
     "recall:image": "tsx src/mma-files/recall-image-cli.ts",
     "org:maintain": "tsx src/org/maintenance.ts",
+    "operations:migrate": "tsx src/operations/migrate-cli.ts",
+    "operations:release-audit": "node --import tsx src/operations/release-audit-cli.ts",
     "palate": "tsx src/taste/palate-cli.ts",
     "proof:rooms": "tsx src/proof/portfolio-proof.ts",
     "programs:sync": "tsx src/programs/sync-cli.ts",
