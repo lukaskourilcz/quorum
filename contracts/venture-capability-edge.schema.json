@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "venture-capability-edge/1"
+    },
+    "source": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "target": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "capability": {
+      "type": "string",
+      "enum": [
+        "intelligence-read",
+        "bounded-render-summary",
+        "approved-publish-package",
+        "own-metrics-read",
+        "implementation-progress-read",
+        "health-read",
+        "owner-attention-write",
+        "owner-manual-reference-read"
+      ]
+    },
+    "dataSchemaVersion": {
+      "type": "string",
+      "maxLength": 120,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\/\\d+$"
+    },
+    "direction": {
+      "type": "string",
+      "const": "source-to-target"
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "allowed",
+        "denied",
+        "held"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "governingReference": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "runtimeEnforcementPoint": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "testProbeReference": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "source",
+    "target",
+    "capability",
+    "dataSchemaVersion",
+    "direction",
+    "decision",
+    "reason",
+    "governingReference",
+    "runtimeEnforcementPoint",
+    "testProbeReference"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/venture-capability-edge.schema.json"
+}

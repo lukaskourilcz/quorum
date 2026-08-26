@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "venture-capability-edge/1",
+  "source": "door-money",
+  "target": "*",
+  "capability": "portfolio-read",
+  "dataSchemaVersion": "all-content/1",
+  "direction": "source-to-target",
+  "decision": "allowed",
+  "reason": "Wildcard access must never parse.",
+  "governingReference": "none",
+  "runtimeEnforcementPoint": "none",
+  "testProbeReference": "none"
+}

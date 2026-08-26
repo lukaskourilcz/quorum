@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "approved-publish-package/1"
+    },
+    "sourceId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "packageRef": {
+      "type": "string",
+      "maxLength": 300,
+      "pattern": "^state\\/ventures\\/[a-z0-9]+(?:-[a-z0-9]+)*\\/[a-zA-Z0-9._/-]+\\.json$"
+    },
+    "assetRefs": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 300,
+        "pattern": "^state\\/ventures\\/[a-z0-9]+(?:-[a-z0-9]+)*\\/[a-zA-Z0-9._/-]+$"
+      }
+    },
+    "packageHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "approvalRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "sourceId",
+    "packageRef",
+    "assetRefs",
+    "packageHash",
+    "approvalRef"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/approved-publish-package.schema.json"
+}

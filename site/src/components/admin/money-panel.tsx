@@ -23,7 +23,7 @@ const KPI_LABEL: Readonly<Record<KpiStatus, string>> = {
 const MONEY_LABEL: Readonly<Record<MonetizationStatus, string>> = {
   active: "Earning",
   proposed: "Waiting for you",
-  ready: "Ready to start",
+  ready: "Readiness observed",
   locked: "Not yet",
 };
 

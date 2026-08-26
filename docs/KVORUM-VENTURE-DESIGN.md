@@ -190,12 +190,12 @@ same envelope.
   institutions, standing topics (public media, Ukraine aid, Agrofert, the October 2026
   municipal/Senate elections), each with aliases for matching. Owner-editable; the desk
   proposes additions it cannot add itself.
-- **Design Lab, budget ledger, GoVIRAL bridge** — as in the sibling venture, on the
-  four-leg spine every venture carries (`docs/BOOKSOFHISTORY-VENTURE-DESIGN.md` §10):
-  GoVIRAL scouts a `kvorum` topicSet, the desk reads the Monday brief into its cluster
-  ranking, agendas flow both ways through the meeting-policy transitions, and the
-  Design Lab is the only rendering path. No new cash anywhere: model spend ≈
-  $2.20/month, Apify rides the free credit.
+- **Design Lab, budget ledger and bounded GoVIRAL input** — GoVIRAL may supply only
+  registered intelligence evidence for cluster timing; it cannot provide final copy,
+  campaigns or publishing authority. Design Lab is generic deterministic infrastructure,
+  not a content owner. Kvórum recommendations, claims and political output cannot leave
+  Kvórum for Personal Growth, another venture, a profile or Social Distribution. No new
+  cash anywhere: model spend ≈ $2.20/month, Apify rides the free credit.
 
 ## 8. Content generation workflow
 

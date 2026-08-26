@@ -1,9 +1,9 @@
 # BoardlessAI ecosystem — standing full-context brief
 
-Updated: 2026-08-13
-Status: implementation complete; established publication paths operate, while the four 12 August ventures remain behind pending countersignatures and owner-only setup in `docs/NEEDED.md`
+Updated: 2026-08-26
+Status: autonomy-first capability boundaries are active; established publication paths operate, while the four 12 August ventures remain behind pending countersignatures and owner-only setup in `docs/NEEDED.md`
 Audience: owner, product partners and Fable brainstorming  
-Authority: current code, committed state, decisions D1–D14 and the four pending venture founding records
+Authority: current code, committed state, decisions D1–D14, the 2026-08-26 autonomy-first decision and the four pending venture founding records
 
 ## What BoardlessAI is
 
@@ -91,6 +91,30 @@ Specialists collect evidence, design, write, check, calculate or deliver within
 their packet. They do not approve their own release or expand their own scope.
 External pages, articles, APIs and owner notes enter as untrusted data; they never
 become instructions. Numeric and factual claims must retain evidence references.
+
+## Venture capability boundaries
+
+`config/venture-capabilities.json` is the versioned source of truth for cross-venture
+and venture-to-service content/data access. The default is deny. Every allowed or held
+handoff names its direction, exact capability and payload schema; isolation rules win
+before an edge is considered. Shared topics, tags, services, repository paths or similar
+data shapes never create an implicit bridge. An allowed edge carries neither publishing
+nor spending authority, and all stricter venture, evidence, connection and owner gates
+remain independent.
+
+BOOKSOFHISTORY and Tehdejší svět are mutually isolated. Personal Growth cannot discover,
+scan or receive nominations from the portfolio. Kvórum cannot export recommendations,
+claims or political output to another venture, profile or Social Distribution. FightAIQ
+cannot resolve a monetization action. GoVIRAL supplies only bounded measured intelligence
+with evidence and expiry, never final copy, campaigns or a publish package.
+
+Door Money has exactly a held GoVIRAL intelligence input, a bounded approved render
+summary to Design Lab and an immutable approved package reference to Social Distribution;
+no manuscript, chunk, embedding, private annotation or style exemplar can cross. The
+planned `webdev-signal` node has the same three social-core relationships and exact held
+own-metrics, progress, health and owner-attention service edges. It has no core content
+edge to Caught Up, devShark or any other venture; #447 is the only place a future bounded
+house-promo artifact may be considered under a separate decision.
 
 ## The eleven projects
 
@@ -505,10 +529,11 @@ Both publish in Czech only; both use one licensed hero/fallback; both are delive
 through a repository-scoped App and verified after deployment. Social payload
 generation is separately gated, so locked social projects make no caption/model calls.
 
-Door Money never enters that publisher. Owner approval writes only a bounded English
-summary and copy package for the Design Lab; the owner must perform any external post.
-The shared renderer remains deterministic and `$0`, and no raw manuscript or embedding
-crosses into its state.
+Door Money never enters an article publisher. Its Design Lab edge accepts only a bounded
+approved English summary, and its Social Distribution edge accepts only immutable package
+and asset references after that service's independent authority gates pass. Neither edge
+owns strategy or external action. The shared renderer remains deterministic and `$0`, and
+no manuscript, full chunk, embedding, private annotation or style exemplar crosses it.
 
 When enabled, every social producer returns a live `template_id`, semantic `version`
 and bounded `content` payload. FRAME resolves the version through the Design Lab,
@@ -520,7 +545,7 @@ Kvórum is narrower still: an approved recommendation creates only a Design Lab 
 and draft-ready deck. The owner records any later manual post; no publisher mapping,
 credential lookup, image-model fallback or automated channel action exists for it.
 
-The publisher validates the queue without an LLM, uses an idempotency key, records a
+Social Distribution validates its queue without an LLM, uses an idempotency key, records a
 platform receipt, and checks the live post at `$0`. One retry is allowed; a second
 failure pauses that project. It never follows, likes, comments, messages or downloads
 engagement data.
@@ -570,11 +595,12 @@ The public `/money` projection combines API ledger entries, owner-entered fixed 
 verified revenue and KPI readiness. Recognized revenue remains `$0` until the owner
 accepts a real event. Empty fixed-cost state means not entered, not free.
 
-Caught Up sponsorship, MMA Files sponsorship/affiliate and Titty Tuesdays commerce
-are locked hypotheses with explicit readiness and future legal/account/payment work.
-FightAIQ is intentionally unmonetized through Q1/Q2; review begins only after 30
-evaluated events and calibration. The Design Lab is an internal engine; standalone extraction is a locked future possibility. Readiness may
-prepare a proposal but never activate an earning method.
+Caught Up sponsorship, MMA Files sponsorship/affiliate and Titty Tuesdays commerce are
+information-only future references with observed readiness and known constraints.
+Readiness cannot prepare a proposal, create work, request owner attention or activate an
+earning method. FightAIQ has no monetization-execution capability. The Design Lab remains
+an internal renderer; design-template sales are absent and not replaced by another design
+product.
 BOOKSOFHISTORY has no website, newsletter, database, store or other earning surface in
 this program; building one would require a separate owner decision.
 Door Money is likewise drafts-only: it has no earning activation, publisher, channel or
@@ -614,7 +640,7 @@ implementation readiness.
 - Payments, new spend, budget raises, account creation, legal posture and personal
   data remain human-only regardless of a model vote.
 
-## Decision map: D1–D14 and four venture foundings
+## Decision map: D1–D14, venture foundings and autonomy-first isolation
 
 | Decision | Current effect |
 | --- | --- |
@@ -627,7 +653,7 @@ implementation readiness.
 | D7 Unchanged gates | money, accounts, legal, commerce, personal data and scope remain owner-only |
 | D8 FightAIQ analysis/free data | guarded early-model analysis is approved; evidence and free-source rules bind it |
 | D9 Measurement readiness | contracts/assignment may exist, but ingestion and SPLIT remain off |
-| D10 Money and quarterly KPIs | public cost/revenue truth, 90-day protocol and owner-only earning activation |
+| D10 Money and quarterly KPIs | public cost/revenue truth and the 90-day protocol; its activation path is superseded by the information-only posture below |
 | D11 Design Lab | sixth project, monorepo engine, 23 live template families, deterministic service and public showcase |
 | D12 Original presentation | approved agent photographs and plain interface labels; no workplace-show framing |
 | D13 marketingShark founding | seventh project, `ms-daily` at 07:00, MAKO and CHUM, devShark folded in as a portfolio product, geoShark present and disabled, drafts only |
@@ -635,6 +661,7 @@ implementation readiness.
 | Door Money founding | pending owner signature; ninth project, `dm-desk` at 15:00 and Thursday-only `dm-growth` at 16:00, private manuscript boundary, Design Lab-only rendering and drafts/actions only |
 | Tehdejší svět founding | pending owner signature; tenth project and first adoption, `ts-desk` at 18:00, hand-committed facts, independent Czech/Ukrainian drafts, no product-repository link, Design Lab-only rendering and manual posting/results |
 | Kvórum founding | pending owner and capacity signatures; eleventh project, `kv-desk` at 21:00, TRIBUN over corroborated political clusters, Design Lab-only rendering and manual approval/post/result records |
+| Autonomy-first capabilities (`operations-2026-08a`) | correctness/privacy/evidence first; versioned deny-by-default directional capability map; no monetization execution before a new owner decision |
 
 Historical records remain append-only under `state/decisions/`; later decisions may
 supersede a setting without rewriting the earlier context.

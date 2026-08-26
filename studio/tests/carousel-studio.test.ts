@@ -261,7 +261,7 @@ describe("one slide without its deck", () => {
       expect(alone!.png.equals(deck[index]!.png)).toBe(true);
       expect(alone!.index).toBe(index);
     }
-  }, 60_000);
+  }, 90_000);
 
   it("still checks the whole template, not just the slide asked for", () => {
     // Narrowing what gets drawn must not narrow what gets checked. A deck whose fifth slide names

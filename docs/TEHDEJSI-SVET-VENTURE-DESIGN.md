@@ -448,9 +448,10 @@ state machine (the BOOKSOFHISTORY pattern):
   from the owner-pasted comment digest, product-insight queue grooming and replay-verified weight
   proposals. It is deterministic, makes no provider call and costs `$0`.
 
-Agendas flow both ways with `gv-brief` (the four-leg GoVIRAL spine every venture
-carries); a Czech-book or history crossover can hand one agenda to DNESKAi's or
-BOOKSOFHISTORY's room and receive one back.
+GoVIRAL may supply only its registered bounded intelligence packet. That input carries
+no candidate, final-copy, campaign or publishing authority. Tehdejší svět has no direct
+content/data or agenda edge to DNESKAi or BOOKSOFHISTORY; their independent use of
+generic schedule, budget, Admin and Design Lab infrastructure is not a venture bridge.
 
 ### 30. Content opportunity scoring
 
@@ -489,8 +490,9 @@ committed fonts (Literata + Inter, OFL, added to the font-metrics pipeline with 
 glyph-coverage test for the UA alphabet); a **bilingual family kit** implementing the
 §16 slide law inside the studio (two stacked text slots with per-slot fit rules, the
 crosshair/top-bar/coral-tick devices, photo slide with attribution slot); the venture's
-copy pack carries CS+UA per slide. Rendering happens only in the Design Lab — the
-four-leg spine's fourth leg, test-pinned. The product's own share images remain the
+copy pack carries CS+UA per slide. Rendering happens only through Design Lab's generic,
+bounded service contract; this does not create a cross-venture content edge or transfer
+strategy ownership. The product's own share images remain the
 product's; the studio kit *echoes* the composition law so a social card and a product
 export are recognizably siblings.
 

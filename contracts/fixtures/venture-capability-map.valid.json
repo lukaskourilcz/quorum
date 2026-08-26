@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "venture-capability-map/1",
+  "mapVersion": "1.0.0",
+  "effectiveDate": "2026-08-26",
+  "defaultVentureContentPosture": "deny",
+  "decisionReference": "state/decisions/2026-08-26-autonomy-first-capabilities.md",
+  "nodes": [
+    {
+      "id": "door-money",
+      "classification": "content-venture",
+      "canonicalOwner": "door-money",
+      "dataActionClasses": ["content", "private-data"],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "private-source",
+      "maximumPayloadClass": "approved-reference-only",
+      "evidenceReferences": ["GitHub #424"],
+      "reviewAt": null
+    },
+    {
+      "id": "design-lab",
+      "classification": "rendering-service",
+      "canonicalOwner": "design-lab",
+      "dataActionClasses": ["rendering"],
+      "authorityRequirement": "service-policy",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "bounded-render-summary/1",
+      "evidenceReferences": ["GitHub #424"],
+      "reviewAt": null
+    }
+  ],
+  "edges": [
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "door-money",
+      "target": "design-lab",
+      "capability": "bounded-render-summary",
+      "dataSchemaVersion": "bounded-render-summary/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "The renderer receives only a bounded approved summary.",
+      "governingReference": "GitHub #424",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/capabilities.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    }
+  ],
+  "isolationRules": [],
+  "supersessionHistory": [
+    {
+      "mapVersion": "1.0.0",
+      "effectiveAt": "2026-08-26T00:00:00.000Z",
+      "decisionReference": "GitHub #424",
+      "note": "Fixture founding map."
+    }
+  ]
+}

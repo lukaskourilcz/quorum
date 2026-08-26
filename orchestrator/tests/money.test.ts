@@ -58,25 +58,19 @@ describe("fixed-cost registry", () => {
 });
 
 describe("monetization state machine", () => {
-  it("moves through ready and proposed without automatic activation", () => {
-    expect(advanceMonetizationStatus({ current: "locked", activationReady: true, proposalPrepared: false })).toBe("ready");
-    expect(advanceMonetizationStatus({ current: "ready", activationReady: true, proposalPrepared: true })).toBe("proposed");
-    expect(advanceMonetizationStatus({ current: "proposed", activationReady: true, proposalPrepared: true })).toBe("proposed");
-    expect(() => advanceMonetizationStatus({
-      current: "ready",
-      activationReady: true,
-      proposalPrepared: true,
-      ownerApproval: { approvedBy: "owner", decisionRef: "D10" }
-    })).toThrow("requires a proposed method");
+  it("keeps every method locked under the information-only posture", () => {
+    expect(advanceMonetizationStatus({ current: "locked", activationReady: true, proposalPrepared: false })).toBe("locked");
+    expect(advanceMonetizationStatus({ current: "ready", activationReady: true, proposalPrepared: true })).toBe("locked");
+    expect(advanceMonetizationStatus({ current: "proposed", activationReady: true, proposalPrepared: true })).toBe("locked");
     expect(advanceMonetizationStatus({
       current: "proposed",
       activationReady: true,
       proposalPrepared: true,
       ownerApproval: { approvedBy: "owner", decisionRef: "D10" }
-    })).toBe("active");
+    })).toBe("locked");
   });
 
-  it("prepares the complete proposal when an activation KPI is met", () => {
+  it("measures readiness without preparing or activating a proposal", () => {
     const methods = evaluateMonetizationMethods({
       measurements: {
         caughtUpFollowers: 1_000,
@@ -86,11 +80,11 @@ describe("monetization state machine", () => {
       }
     });
     expect(methods.find((method) => method.id === "caught-up-sponsorship")).toMatchObject({
-      status: "ready",
+      status: "locked",
       readiness: { met: true },
-      ownerGateRequired: true
+      ownerGateRequired: true,
+      proposal: null
     });
-    expect(methods.find((method) => method.id === "caught-up-sponsorship")?.proposal?.ownerChecklist.length).toBeGreaterThan(0);
     expect(methods.find((method) => method.id === "fightaiq-none")).toMatchObject({ status: "locked", proposal: null });
     expect(methods.find((method) => method.id === "carousel-studio-internal")).toMatchObject({ status: "locked", venture: "carousel-studio", proposal: null });
   });

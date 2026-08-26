@@ -35,18 +35,22 @@ async function root(file: unknown): Promise<string> {
 describe("the monetization catalog", () => {
   it("groups by category and keeps file order inside each", async () => {
     const catalog = await readMonetizationOptions(await root({
-      schemaVersion: "monetization-option/1",
-      updatedAt: "2026-08-09",
+      schemaVersion: "monetization-option/2",
+      updatedAt: "2026-08-26",
+      posture: "information-only",
+      executionEnabled: false,
       options: [
         option,
         { ...option, id: "direct-banner-sales", name: "Direct banner sales" },
-        { ...option, id: "affiliate", name: "Affiliate links", category: "affiliate", status: "idea" }
+        { ...option, id: "affiliate", name: "Affiliate links", category: "affiliate", status: "future-reference" }
       ]
     }));
 
     expect(catalog.state).toBe("present");
     expect(catalog.total).toBe(3);
-    expect(catalog.updatedAt).toBe("2026-08-09");
+    expect(catalog.updatedAt).toBe("2026-08-26");
+    expect(catalog.posture).toBe("information-only");
+    expect(catalog.executionEnabled).toBe(false);
     expect(catalog.byCategory.map((group) => group.category)).toEqual(["ads", "affiliate"]);
     expect(catalog.byCategory[0]?.options.map((entry) => entry.id))
       .toEqual(["display-ads", "direct-banner-sales"]);
@@ -54,8 +58,10 @@ describe("the monetization catalog", () => {
 
   it("drops a malformed entry and counts it, instead of failing the page", async () => {
     const catalog = await readMonetizationOptions(await root({
-      schemaVersion: "monetization-option/1",
-      updatedAt: "2026-08-09",
+      schemaVersion: "monetization-option/2",
+      updatedAt: "2026-08-26",
+      posture: "information-only",
+      executionEnabled: false,
       options: [
         option,
         { ...option, id: "bad-effort", effort: "enormous" },
@@ -71,7 +77,7 @@ describe("the monetization catalog", () => {
   it("reads a missing or wrong-version file as absent", async () => {
     expect((await readMonetizationOptions(await root(undefined))).state).toBe("missing");
     expect((await readMonetizationOptions(await root("{ not json"))).state).toBe("missing");
-    expect((await readMonetizationOptions(await root({ schemaVersion: "monetization-option/2" }))).state)
+    expect((await readMonetizationOptions(await root({ schemaVersion: "monetization-option/1" }))).state)
       .toBe("missing");
   });
 
@@ -79,7 +85,11 @@ describe("the monetization catalog", () => {
     const catalog = await readMonetizationOptions();
     expect(catalog.state).toBe("present");
     expect(catalog.dropped).toBe(0);
-    expect(catalog.total).toBe(17);
+    expect(catalog.total).toBe(16);
+    expect(catalog.posture).toBe("information-only");
+    expect(catalog.executionEnabled).toBe(false);
+    expect(catalog.byCategory.flatMap((group) => group.options).map((entry) => entry.id))
+      .not.toContain(["digital", "templates"].join("-"));
     // Every option carries a description a non-technical reader can act on.
     for (const group of catalog.byCategory) {
       for (const entry of group.options) expect(entry.description.length).toBeGreaterThan(40);

@@ -12,9 +12,11 @@ import {
   type QuarterlyKpiSnapshot
 } from "../metrics/quarterly.js";
 import { collectQuarterlyMeasurements, loadCurrentKpiSet } from "../metrics/quarterly-collector.js";
-import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
+import { atomicWriteJson, readJson } from "../state.js";
 import { FixedCostRegistrySchema } from "./fixed-costs.js";
 import {
+  MONETIZATION_EXECUTION_ENABLED,
+  MONETIZATION_POSTURE,
   MonetizationMethodIdSchema,
   MonetizationMethodStateSchema,
   evaluateMonetizationMethods,
@@ -108,43 +110,22 @@ async function persistMonetizationStates(input: {
 }): Promise<string> {
   const methods: Partial<Record<MonetizationMethodId, MonetizationMethodState>> = {};
   for (const method of input.methods) {
-    const before = input.previous[method.id];
-    const proposalPreparedAt = before?.proposalPreparedAt
-      ?? (method.readiness.met && method.proposal ? input.now.toISOString() : null);
     methods[method.id] = MonetizationMethodStateSchema.parse({
-      status: method.status,
-      proposalPreparedAt,
-      ownerApprovalRef: method.status === "active" ? before?.ownerApprovalRef ?? null : null,
+      status: "locked",
+      proposalPreparedAt: null,
+      ownerApprovalRef: null,
       updatedAt: input.now.toISOString()
     });
   }
   const relative = "money/status.json";
   await atomicWriteJson(input.root, relative, {
-    schemaVersion: "monetization-status/1",
+    schemaVersion: "monetization-status/2",
+    posture: MONETIZATION_POSTURE,
+    executionEnabled: MONETIZATION_EXECUTION_ENABLED,
     methods,
     updatedAt: input.now.toISOString()
   });
   return relative;
-}
-
-async function addReadyProposalNotices(input: {
-  repoRoot: string;
-  methods: readonly PublicMonetizationMethod[];
-}): Promise<boolean> {
-  const ready = input.methods.filter((method) => method.readiness.met && method.proposal);
-  if (ready.length === 0) return false;
-  const relative = "docs/NEEDED.md";
-  let content = await readText(input.repoRoot, relative, "# Needs your help now\n");
-  const additions = ready.filter((method) => !content.includes(`MONETIZATION-PROPOSAL-${method.id}`));
-  if (additions.length === 0) return false;
-  if (!content.includes("## Monetization proposals ready for owner review")) {
-    content = `${content.trimEnd()}\n\n## Monetization proposals ready for owner review\n`;
-  }
-  content = `${content.trimEnd()}\n\n${additions.map((method) =>
-    `- [ ] **Review ${method.venture} earning proposal** — Read \`state/money/proposals/${method.id}.json\`. Activation remains blocked until you record an owner decision and complete its legal, account, and payment checklist. \`MONETIZATION-PROPOSAL-${method.id}\``
-  ).join("\n")}\n`;
-  await atomicWriteText(input.repoRoot, relative, content);
-  return true;
 }
 
 export async function runDailyMoneyAndKpis(input: {
@@ -240,9 +221,6 @@ export async function runDailyMoneyAndKpis(input: {
     }
   });
   artifacts.push(await writePublicMoneySnapshot(input.stateRoot, publicSnapshot));
-  if (input.writeOwnerNotices === true && await addReadyProposalNotices({ repoRoot: input.repoRoot, methods: monetization })) {
-    artifacts.push("docs/NEEDED.md");
-  }
   return {
     summary: packetSummary(snapshot),
     fixedMonthlyUsd: publicSnapshot.costs.fixed.monthlyUsd,

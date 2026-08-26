@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "goviral-intelligence-packet/1",
+  "topic": "documented publishing history",
+  "measuredAt": "2026-08-26T08:00:00.000Z",
+  "expiresAt": "2026-08-25T08:00:00.000Z",
+  "velocity": 8,
+  "evidenceRefs": ["state/goviral/trends/2026-08-26.json"],
+  "caption": "Final copy is forbidden."
+}
