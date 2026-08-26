@@ -17,6 +17,7 @@ export * from "./door-money-playbook.js";
 export * from "./edition-package.js";
 export * from "./hook-assignment.js";
 export * from "./idea-ledger.js";
+export * from "./implementation-program.js";
 export * from "./kpi-set.js";
 export * from "./kvorum-apify-quota.js";
 export * from "./kvorum-claim.js";

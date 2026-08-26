@@ -24,6 +24,12 @@ import { DoorMoneyPlaybookSchema } from "./door-money-playbook.js";
 import { EditionPackageSchema } from "./edition-package.js";
 import { HookAssignmentSchema } from "./hook-assignment.js";
 import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
+import {
+  ImplementationProgramSchema,
+  ImplementationWorkItemSchema,
+  ImplementationProgressSchema,
+  ImplementationProgressEventSchema
+} from "./implementation-program.js";
 import { KpiSetSchema } from "./kpi-set.js";
 import { KvorumApifyQuotaSchema } from "./kvorum-apify-quota.js";
 import { KvorumClaimSchema } from "./kvorum-claim.js";
@@ -126,6 +132,10 @@ export const ContractSchemas = {
   "edition-package": EditionPackageSchema,
   "hook-assignment": HookAssignmentSchema,
   "idea-ledger": IdeaLedgerEntrySchema,
+  "implementation-program": ImplementationProgramSchema,
+  "implementation-work-item": ImplementationWorkItemSchema,
+  "implementation-progress": ImplementationProgressSchema,
+  "implementation-progress-event": ImplementationProgressEventSchema,
   "kpi-set": KpiSetSchema,
   "kvorum-apify-quota": KvorumApifyQuotaSchema,
   "kvorum-claim": KvorumClaimSchema,

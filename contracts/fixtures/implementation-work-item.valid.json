@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "implementation-work-item/1",
+  "id": "fixture-item",
+  "primaryProgramId": "fixture-program",
+  "programRefs": [
+    "fixture-program"
+  ],
+  "phaseId": "release",
+  "issue": {
+    "number": 1,
+    "url": "https://github.com/example/example/issues/1",
+    "title": "Fixture release",
+    "summary": "Verify the fixture program."
+  },
+  "dependencyIds": [],
+  "posture": "mandatory",
+  "safeParallelGroup": null,
+  "protectedFileGroups": [
+    "fixture-state"
+  ],
+  "expectedDeliverables": [
+    "test",
+    "release"
+  ],
+  "probes": [
+    {
+      "id": "fixture-probe",
+      "kind": "test-path-exists",
+      "path": "orchestrator/tests/contracts.test.ts",
+      "expectedSchemaVersion": null,
+      "ownerTaskKey": null,
+      "description": "Published contract tests exist."
+    }
+  ],
+  "ownerOnlySetupClasses": [],
+  "completionPolicy": {
+    "requiresIssueClosed": true,
+    "requiresMergedPullRequest": true,
+    "requiredProbeIds": [
+      "fixture-probe"
+    ]
+  },
+  "weight": 1,
+  "finalGate": true,
+  "sharedWorkItemRef": null,
+  "supersededBy": null
+}
+

@@ -1,0 +1,142 @@
+{
+  "schemaVersion": "implementation-progress/1",
+  "snapshotId": "programs-aaaaaaaaaaaaaaaa",
+  "manifestVersion": "1.0.0",
+  "generatedAt": "2026-08-26T12:00:00.000Z",
+  "sourceFreshness": "fresh",
+  "github": {
+    "cacheStatus": "fresh",
+    "rateRemaining": 4999,
+    "rateResetAt": "2026-08-26T13:00:00.000Z",
+    "failedItems": 0
+  },
+  "programs": [
+    {
+      "programId": "fixture-program",
+      "name": "Fixture program",
+      "description": "A bounded fixture for contract publication.",
+      "parentIssueNumber": 1,
+      "parentIssueUrl": "https://github.com/example/example/issues/1",
+      "visibility": "internal",
+      "manifestVersion": "1.0.0",
+      "phases": [
+        {
+          "id": "release",
+          "name": "Release",
+          "workItemIds": [
+            "fixture-item"
+          ]
+        }
+      ],
+      "prerequisiteIssueNumbers": [],
+      "finalReleaseItemId": "fixture-item",
+      "mandatoryCompleted": 1,
+      "mandatoryTotal": 1,
+      "weightedProgressPercent": 100,
+      "stateCounts": {
+        "not-started": 0,
+        "ready": 0,
+        "in-progress": 0,
+        "implemented-awaiting-verification": 0,
+        "owner-action": 0,
+        "blocked": 0,
+        "complete": 1,
+        "held-optional": 0,
+        "stale": 0,
+        "inconsistent": 0,
+        "superseded": 0
+      },
+      "currentItemId": null,
+      "nextUnblockedItemIds": [],
+      "parallelSafeItemIds": [],
+      "ownerWaitingItemIds": [],
+      "finalGateReady": false,
+      "finalGateComplete": true
+    }
+  ],
+  "items": [
+    {
+      "itemId": "fixture-item",
+      "programRefs": [
+        "fixture-program"
+      ],
+      "issueNumber": 1,
+      "issueUrl": "https://github.com/example/example/issues/1",
+      "title": "Fixture release",
+      "summary": "Verify the fixture program.",
+      "phaseId": "release",
+      "posture": "mandatory",
+      "dependencyIds": [],
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "fixture-state"
+      ],
+      "expectedDeliverables": [
+        "test",
+        "release"
+      ],
+      "ownerOnlySetupClasses": [],
+      "weight": 1,
+      "finalGate": true,
+      "sharedWorkItemRef": null,
+      "supersededBy": null,
+      "state": "complete",
+      "explanation": "The issue is closed, merged and verified.",
+      "github": {
+        "issue": {
+          "number": 1,
+          "url": "https://github.com/example/example/issues/1",
+          "state": "closed",
+          "title": "Fixture release",
+          "updatedAt": "2026-08-26T11:00:00.000Z",
+          "checklist": {
+            "completed": 1,
+            "total": 1
+          }
+        },
+        "pullRequests": [
+          {
+            "number": 2,
+            "url": "https://github.com/example/example/pull/2",
+            "state": "closed",
+            "merged": true,
+            "headSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "mergeCommitSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "checksPassed": true,
+            "updatedAt": "2026-08-26T11:30:00.000Z"
+          }
+        ],
+        "baseBranchContainsMerge": true,
+        "fetchedAt": "2026-08-26T12:00:00.000Z",
+        "stale": false,
+        "errors": []
+      },
+      "probes": [
+        {
+          "probeId": "fixture-probe",
+          "status": "pass",
+          "evidenceRef": "orchestrator/tests/contracts.test.ts",
+          "detail": "Published contract tests exist."
+        }
+      ],
+      "blockerItemIds": [],
+      "ownerActions": [],
+      "discrepancies": [],
+      "recommendedAction": "No action required.",
+      "evidenceRefs": [
+        "https://github.com/example/example/issues/1",
+        "https://github.com/example/example/pull/2",
+        "orchestrator/tests/contracts.test.ts"
+      ]
+    }
+  ],
+  "sharedItemIds": [],
+  "currentItemId": null,
+  "nextUnblockedItemIds": [],
+  "parallelSafeItemIds": [],
+  "ownerWaitingItemIds": [],
+  "malformedProbeCount": 0,
+  "boundedErrors": [],
+  "lastSuccessfulSyncAt": "2026-08-26T12:00:00.000Z",
+  "snapshotHash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+}

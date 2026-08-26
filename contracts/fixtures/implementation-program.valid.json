@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "implementation-program/1",
+  "id": "fixture-program",
+  "name": "Fixture program",
+  "description": "A bounded fixture for contract publication.",
+  "parentIssue": {
+    "number": 1,
+    "url": "https://github.com/example/example/issues/1"
+  },
+  "owner": "BoardlessAI",
+  "visibility": "internal",
+  "repository": {
+    "owner": "example",
+    "name": "example",
+    "baseBranch": "main"
+  },
+  "phases": [
+    {
+      "id": "release",
+      "name": "Release",
+      "workItemIds": [
+        "fixture-item"
+      ]
+    }
+  ],
+  "prerequisiteIssueNumbers": [],
+  "safeParallelGroups": [],
+  "protectedFileCollisionGroups": [
+    {
+      "id": "fixture-state",
+      "paths": [
+        "state/programs/fixture"
+      ]
+    }
+  ],
+  "acceptanceProbeIds": [
+    "fixture-probe"
+  ],
+  "ownerActionProbeIds": [],
+  "finalReleaseItemId": "fixture-item",
+  "archived": false,
+  "supersededBy": null,
+  "manifestVersion": "1.0.0",
+  "effectiveDate": "2026-08-26"
+}
+

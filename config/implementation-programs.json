@@ -1,0 +1,3359 @@
+{
+  "schemaVersion": "implementation-manifest-registry/1",
+  "manifestVersion": "1.0.0",
+  "effectiveDate": "2026-08-26",
+  "programs": [
+    {
+      "schemaVersion": "implementation-program/1",
+      "id": "personal-growth",
+      "name": "Personal Growth",
+      "description": "Owner-only growth desk with no automatic portfolio or Kvórum bridge.",
+      "parentIssue": {
+        "number": 382,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/382"
+      },
+      "owner": "BoardlessAI",
+      "visibility": "owner-only",
+      "repository": {
+        "owner": "lukaskourilcz",
+        "name": "quorum",
+        "baseBranch": "main"
+      },
+      "phases": [
+        {
+          "id": "foundation",
+          "name": "Foundation",
+          "workItemIds": [
+            "issue-371",
+            "issue-372",
+            "issue-373",
+            "issue-374"
+          ]
+        },
+        {
+          "id": "channels",
+          "name": "Channels and measurement",
+          "workItemIds": [
+            "issue-375",
+            "issue-376",
+            "issue-377",
+            "issue-378"
+          ]
+        },
+        {
+          "id": "workspace",
+          "name": "Workspace and release",
+          "workItemIds": [
+            "issue-379",
+            "issue-380",
+            "issue-381"
+          ]
+        }
+      ],
+      "prerequisiteIssueNumbers": [
+        370,
+        422,
+        424
+      ],
+      "safeParallelGroups": [
+        {
+          "id": "personal-growth-foundation-parallel",
+          "workItemIds": [
+            "issue-371",
+            "issue-372",
+            "issue-373",
+            "issue-374"
+          ]
+        },
+        {
+          "id": "personal-growth-channels-parallel",
+          "workItemIds": [
+            "issue-375",
+            "issue-376",
+            "issue-377",
+            "issue-378"
+          ]
+        },
+        {
+          "id": "personal-growth-workspace-parallel",
+          "workItemIds": [
+            "issue-379",
+            "issue-380",
+            "issue-381"
+          ]
+        }
+      ],
+      "protectedFileCollisionGroups": [
+        {
+          "id": "personal-growth-state",
+          "paths": [
+            "state/programs/personal-growth"
+          ]
+        }
+      ],
+      "acceptanceProbeIds": [
+        "personal-boundary",
+        "personal-release"
+      ],
+      "ownerActionProbeIds": [],
+      "finalReleaseItemId": "issue-381",
+      "archived": false,
+      "supersededBy": null,
+      "manifestVersion": "1.0.0",
+      "effectiveDate": "2026-08-26"
+    },
+    {
+      "schemaVersion": "implementation-program/1",
+      "id": "social-distribution",
+      "name": "Social Distribution",
+      "description": "Capability-gated owned profiles, immutable queues, campaigns and official metrics.",
+      "parentIssue": {
+        "number": 403,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/403"
+      },
+      "owner": "BoardlessAI",
+      "visibility": "owner-only",
+      "repository": {
+        "owner": "lukaskourilcz",
+        "name": "quorum",
+        "baseBranch": "main"
+      },
+      "phases": [
+        {
+          "id": "foundation",
+          "name": "Decision and contracts",
+          "workItemIds": [
+            "issue-405",
+            "issue-406"
+          ]
+        },
+        {
+          "id": "profiles",
+          "name": "Profile policy and Admin",
+          "workItemIds": [
+            "issue-415",
+            "issue-407"
+          ]
+        },
+        {
+          "id": "connections",
+          "name": "Official connections",
+          "workItemIds": [
+            "issue-409",
+            "issue-417"
+          ]
+        },
+        {
+          "id": "campaigns",
+          "name": "Campaigns and daily selection",
+          "workItemIds": [
+            "issue-410",
+            "issue-418",
+            "issue-433",
+            "issue-434"
+          ]
+        },
+        {
+          "id": "learning",
+          "name": "Metrics and optional network",
+          "workItemIds": [
+            "issue-412",
+            "issue-411"
+          ]
+        },
+        {
+          "id": "shared-integration",
+          "name": "Contest integrations",
+          "workItemIds": [
+            "issue-420",
+            "issue-421",
+            "issue-430"
+          ]
+        },
+        {
+          "id": "release",
+          "name": "Release",
+          "workItemIds": [
+            "issue-413"
+          ]
+        }
+      ],
+      "prerequisiteIssueNumbers": [
+        370,
+        419,
+        422,
+        424
+      ],
+      "safeParallelGroups": [
+        {
+          "id": "social-distribution-foundation-parallel",
+          "workItemIds": [
+            "issue-405",
+            "issue-406"
+          ]
+        },
+        {
+          "id": "social-distribution-profiles-parallel",
+          "workItemIds": [
+            "issue-415",
+            "issue-407"
+          ]
+        },
+        {
+          "id": "social-distribution-connections-parallel",
+          "workItemIds": [
+            "issue-409",
+            "issue-417"
+          ]
+        },
+        {
+          "id": "social-distribution-campaigns-parallel",
+          "workItemIds": [
+            "issue-410",
+            "issue-418",
+            "issue-433",
+            "issue-434"
+          ]
+        },
+        {
+          "id": "social-distribution-learning-parallel",
+          "workItemIds": [
+            "issue-412",
+            "issue-411"
+          ]
+        },
+        {
+          "id": "social-distribution-shared-integration-parallel",
+          "workItemIds": [
+            "issue-420",
+            "issue-421",
+            "issue-430"
+          ]
+        }
+      ],
+      "protectedFileCollisionGroups": [
+        {
+          "id": "social-distribution-state",
+          "paths": [
+            "state/programs/social-distribution"
+          ]
+        }
+      ],
+      "acceptanceProbeIds": [
+        "social-release"
+      ],
+      "ownerActionProbeIds": [],
+      "finalReleaseItemId": "issue-413",
+      "archived": false,
+      "supersededBy": null,
+      "manifestVersion": "1.0.0",
+      "effectiveDate": "2026-08-26"
+    },
+    {
+      "schemaVersion": "implementation-program/1",
+      "id": "contest-radar",
+      "name": "Contest Radar",
+      "description": "Private contest discovery, legal capacity, repeat planning and owner-only Admin.",
+      "parentIssue": {
+        "number": 408,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/408"
+      },
+      "owner": "BoardlessAI",
+      "visibility": "owner-only",
+      "repository": {
+        "owner": "lukaskourilcz",
+        "name": "quorum",
+        "baseBranch": "main"
+      },
+      "phases": [
+        {
+          "id": "foundation",
+          "name": "Authority and safe collection",
+          "workItemIds": [
+            "issue-385",
+            "issue-386",
+            "issue-387",
+            "issue-388",
+            "issue-389",
+            "issue-390"
+          ]
+        },
+        {
+          "id": "sources",
+          "name": "Sources and extraction",
+          "workItemIds": [
+            "issue-391",
+            "issue-392",
+            "issue-393",
+            "issue-394",
+            "issue-395",
+            "issue-396",
+            "issue-397"
+          ]
+        },
+        {
+          "id": "core",
+          "name": "Ranking and execution",
+          "workItemIds": [
+            "issue-398",
+            "issue-399",
+            "issue-400"
+          ]
+        },
+        {
+          "id": "shared-integration",
+          "name": "Social integration",
+          "workItemIds": [
+            "issue-420",
+            "issue-421",
+            "issue-430"
+          ]
+        },
+        {
+          "id": "admin",
+          "name": "Private Admin and learning",
+          "workItemIds": [
+            "issue-401",
+            "issue-402",
+            "issue-414"
+          ]
+        },
+        {
+          "id": "release",
+          "name": "Release",
+          "workItemIds": [
+            "issue-404"
+          ]
+        }
+      ],
+      "prerequisiteIssueNumbers": [
+        370,
+        419,
+        422,
+        424
+      ],
+      "safeParallelGroups": [
+        {
+          "id": "contest-radar-foundation-parallel",
+          "workItemIds": [
+            "issue-385",
+            "issue-386",
+            "issue-387",
+            "issue-388",
+            "issue-389",
+            "issue-390"
+          ]
+        },
+        {
+          "id": "contest-radar-sources-parallel",
+          "workItemIds": [
+            "issue-391",
+            "issue-392",
+            "issue-393",
+            "issue-394",
+            "issue-395",
+            "issue-396",
+            "issue-397"
+          ]
+        },
+        {
+          "id": "contest-radar-core-parallel",
+          "workItemIds": [
+            "issue-398",
+            "issue-399",
+            "issue-400"
+          ]
+        },
+        {
+          "id": "contest-radar-shared-integration-parallel",
+          "workItemIds": [
+            "issue-420",
+            "issue-421",
+            "issue-430"
+          ]
+        },
+        {
+          "id": "contest-radar-admin-parallel",
+          "workItemIds": [
+            "issue-401",
+            "issue-402",
+            "issue-414"
+          ]
+        }
+      ],
+      "protectedFileCollisionGroups": [
+        {
+          "id": "contest-radar-state",
+          "paths": [
+            "state/programs/contest-radar"
+          ]
+        }
+      ],
+      "acceptanceProbeIds": [
+        "contest-release"
+      ],
+      "ownerActionProbeIds": [],
+      "finalReleaseItemId": "issue-404",
+      "archived": false,
+      "supersededBy": null,
+      "manifestVersion": "1.0.0",
+      "effectiveDate": "2026-08-26"
+    },
+    {
+      "schemaVersion": "implementation-program/1",
+      "id": "autonomous-operations",
+      "name": "Autonomous Operations",
+      "description": "Capability isolation, health, efficient scheduling, recovery and protected operations control.",
+      "parentIssue": {
+        "number": 423,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/423"
+      },
+      "owner": "BoardlessAI",
+      "visibility": "owner-only",
+      "repository": {
+        "owner": "lukaskourilcz",
+        "name": "quorum",
+        "baseBranch": "main"
+      },
+      "phases": [
+        {
+          "id": "truth",
+          "name": "Authority and health",
+          "workItemIds": [
+            "issue-424",
+            "issue-425"
+          ]
+        },
+        {
+          "id": "execution",
+          "name": "Capacity and recovery",
+          "workItemIds": [
+            "issue-426",
+            "issue-427"
+          ]
+        },
+        {
+          "id": "release",
+          "name": "Admin and release",
+          "workItemIds": [
+            "issue-428",
+            "issue-429"
+          ]
+        }
+      ],
+      "prerequisiteIssueNumbers": [
+        370,
+        419,
+        422
+      ],
+      "safeParallelGroups": [
+        {
+          "id": "autonomous-operations-truth-parallel",
+          "workItemIds": [
+            "issue-424",
+            "issue-425"
+          ]
+        },
+        {
+          "id": "autonomous-operations-execution-parallel",
+          "workItemIds": [
+            "issue-426",
+            "issue-427"
+          ]
+        },
+        {
+          "id": "autonomous-operations-release-parallel",
+          "workItemIds": [
+            "issue-428",
+            "issue-429"
+          ]
+        }
+      ],
+      "protectedFileCollisionGroups": [
+        {
+          "id": "autonomous-operations-state",
+          "paths": [
+            "state/programs/autonomous-operations"
+          ]
+        }
+      ],
+      "acceptanceProbeIds": [
+        "capability-map",
+        "capability-regression",
+        "venture-slos",
+        "health-regression",
+        "capacity-regression",
+        "recovery-regression",
+        "operations-admin",
+        "operations-release"
+      ],
+      "ownerActionProbeIds": [],
+      "finalReleaseItemId": "issue-429",
+      "archived": false,
+      "supersededBy": null,
+      "manifestVersion": "1.0.0",
+      "effectiveDate": "2026-08-26"
+    },
+    {
+      "schemaVersion": "implementation-program/1",
+      "id": "deployment-cost",
+      "name": "Guarded deployment workflow",
+      "description": "Standalone Priority 0 release guard that prevents per-commit deployment cost.",
+      "parentIssue": {
+        "number": 422,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/422"
+      },
+      "owner": "BoardlessAI",
+      "visibility": "internal",
+      "repository": {
+        "owner": "lukaskourilcz",
+        "name": "quorum",
+        "baseBranch": "main"
+      },
+      "phases": [
+        {
+          "id": "deployment",
+          "name": "Deployment guard",
+          "workItemIds": [
+            "issue-422"
+          ]
+        }
+      ],
+      "prerequisiteIssueNumbers": [],
+      "safeParallelGroups": [],
+      "protectedFileCollisionGroups": [
+        {
+          "id": "deployment-cost-state",
+          "paths": [
+            "state/programs/deployment-cost"
+          ]
+        }
+      ],
+      "acceptanceProbeIds": [
+        "deploy-guard",
+        "deploy-guard-tests"
+      ],
+      "ownerActionProbeIds": [],
+      "finalReleaseItemId": "issue-422",
+      "archived": false,
+      "supersededBy": null,
+      "manifestVersion": "1.0.0",
+      "effectiveDate": "2026-08-26"
+    },
+    {
+      "schemaVersion": "implementation-program/1",
+      "id": "webdev-signal",
+      "name": "WebDev Signal",
+      "description": "Bilingual autonomous web-development news desk with held external setup.",
+      "parentIssue": {
+        "number": 435,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/435"
+      },
+      "owner": "BoardlessAI",
+      "visibility": "internal",
+      "repository": {
+        "owner": "lukaskourilcz",
+        "name": "quorum",
+        "baseBranch": "main"
+      },
+      "phases": [
+        {
+          "id": "foundation",
+          "name": "Decision, contracts and registration",
+          "workItemIds": [
+            "issue-436",
+            "issue-437",
+            "issue-438"
+          ]
+        },
+        {
+          "id": "editorial",
+          "name": "Sources and editorial core",
+          "workItemIds": [
+            "issue-439",
+            "issue-440",
+            "issue-441"
+          ]
+        },
+        {
+          "id": "distribution",
+          "name": "Design, distribution and learning",
+          "workItemIds": [
+            "issue-442",
+            "issue-443",
+            "issue-444"
+          ]
+        },
+        {
+          "id": "release",
+          "name": "Admin, release and optional web",
+          "workItemIds": [
+            "issue-445",
+            "issue-446",
+            "issue-447"
+          ]
+        }
+      ],
+      "prerequisiteIssueNumbers": [
+        370,
+        419,
+        422,
+        424,
+        431
+      ],
+      "safeParallelGroups": [
+        {
+          "id": "webdev-signal-foundation-parallel",
+          "workItemIds": [
+            "issue-436",
+            "issue-437",
+            "issue-438"
+          ]
+        },
+        {
+          "id": "webdev-signal-editorial-parallel",
+          "workItemIds": [
+            "issue-439",
+            "issue-440",
+            "issue-441"
+          ]
+        },
+        {
+          "id": "webdev-signal-distribution-parallel",
+          "workItemIds": [
+            "issue-442",
+            "issue-443",
+            "issue-444"
+          ]
+        },
+        {
+          "id": "webdev-signal-release-parallel",
+          "workItemIds": [
+            "issue-445",
+            "issue-446",
+            "issue-447"
+          ]
+        }
+      ],
+      "protectedFileCollisionGroups": [
+        {
+          "id": "webdev-signal-state",
+          "paths": [
+            "state/programs/webdev-signal"
+          ]
+        }
+      ],
+      "acceptanceProbeIds": [
+        "webdev-release"
+      ],
+      "ownerActionProbeIds": [],
+      "finalReleaseItemId": "issue-446",
+      "archived": false,
+      "supersededBy": null,
+      "manifestVersion": "1.0.0",
+      "effectiveDate": "2026-08-26"
+    }
+  ],
+  "workItems": [
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-371",
+      "primaryProgramId": "personal-growth",
+      "programRefs": [
+        "personal-growth"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 371,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/371",
+        "title": "Found the owner-only Personal Growth project and enforce visibility and budget authority",
+        "summary": "Found the owner-only Personal Growth project and enforce visibility and budget authority"
+      },
+      "dependencyIds": [],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "personal-growth-state"
+      ],
+      "expectedDeliverables": [
+        "decision",
+        "configuration"
+      ],
+      "probes": [
+        {
+          "id": "personal-boundary",
+          "kind": "test-path-exists",
+          "path": "site/src/lib/public-owner-only-boundary.test.ts",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Owner-only public boundary regression exists."
+        }
+      ],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": [
+          "personal-boundary"
+        ]
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-372",
+      "primaryProgramId": "personal-growth",
+      "programRefs": [
+        "personal-growth"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 372,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/372",
+        "title": "Implement the isolated Personal Growth room, daily brief and recurring content planner",
+        "summary": "Implement the isolated Personal Growth room, daily brief and recurring content planner"
+      },
+      "dependencyIds": [
+        "issue-371"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "personal-growth-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-373",
+      "primaryProgramId": "personal-growth",
+      "programRefs": [
+        "personal-growth"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 373,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/373",
+        "title": "Integrate GoVIRAL as the single trend-intelligence layer for Personal Growth",
+        "summary": "Integrate GoVIRAL as the single trend-intelligence layer for Personal Growth"
+      },
+      "dependencyIds": [
+        "issue-372",
+        "issue-424"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "personal-growth-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-374",
+      "primaryProgramId": "personal-growth",
+      "programRefs": [
+        "personal-growth"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 374,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/374",
+        "title": "Add a private Rapovej deník voice system without putting manuscript text in Git",
+        "summary": "Add a private Rapovej deník voice system without putting manuscript text in Git"
+      },
+      "dependencyIds": [
+        "issue-373"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "personal-growth-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-375",
+      "primaryProgramId": "personal-growth",
+      "programRefs": [
+        "personal-growth"
+      ],
+      "phaseId": "channels",
+      "issue": {
+        "number": 375,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/375",
+        "title": "Build daily Threads recommendations from owner and GoVIRAL inputs",
+        "summary": "Build daily Threads recommendations from owner and GoVIRAL inputs"
+      },
+      "dependencyIds": [
+        "issue-373",
+        "issue-374"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "personal-growth-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-376",
+      "primaryProgramId": "personal-growth",
+      "programRefs": [
+        "personal-growth"
+      ],
+      "phaseId": "channels",
+      "issue": {
+        "number": 376,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/376",
+        "title": "Build Instagram planning and recurring Reels without an automatic portfolio bridge",
+        "summary": "Build Instagram planning and recurring Reels without an automatic portfolio bridge"
+      },
+      "dependencyIds": [
+        "issue-375"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "personal-growth-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-377",
+      "primaryProgramId": "personal-growth",
+      "programRefs": [
+        "personal-growth"
+      ],
+      "phaseId": "channels",
+      "issue": {
+        "number": 377,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/377",
+        "title": "Integrate official Instagram and Threads insights with isolated owner result records",
+        "summary": "Integrate official Instagram and Threads insights with isolated owner result records"
+      },
+      "dependencyIds": [
+        "issue-376"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "personal-growth-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-378",
+      "primaryProgramId": "personal-growth",
+      "programRefs": [
+        "personal-growth"
+      ],
+      "phaseId": "channels",
+      "issue": {
+        "number": 378,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/378",
+        "title": "Add the 28-day Personal Growth baseline, KPIs, experiments and optional Buffer queue",
+        "summary": "Add the 28-day Personal Growth baseline, KPIs, experiments and optional Buffer queue"
+      },
+      "dependencyIds": [
+        "issue-377"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "personal-growth-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-379",
+      "primaryProgramId": "personal-growth",
+      "programRefs": [
+        "personal-growth"
+      ],
+      "phaseId": "workspace",
+      "issue": {
+        "number": 379,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/379",
+        "title": "Build the core Lukáš Growth Desk without portfolio or Kvórum bridges",
+        "summary": "Build the core Lukáš Growth Desk without portfolio or Kvórum bridges"
+      },
+      "dependencyIds": [
+        "issue-378"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "personal-growth-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-380",
+      "primaryProgramId": "personal-growth",
+      "programRefs": [
+        "personal-growth"
+      ],
+      "phaseId": "workspace",
+      "issue": {
+        "number": 380,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/380",
+        "title": "Add Personal Growth Results, Experiments, Voice, Strategy and Budget controls without portfolio coupling",
+        "summary": "Add Personal Growth Results, Experiments, Voice, Strategy and Budget controls without portfolio coupling"
+      },
+      "dependencyIds": [
+        "issue-379"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "personal-growth-state"
+      ],
+      "expectedDeliverables": [
+        "configuration",
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-381",
+      "primaryProgramId": "personal-growth",
+      "programRefs": [
+        "personal-growth"
+      ],
+      "phaseId": "workspace",
+      "issue": {
+        "number": 381,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/381",
+        "title": "Complete Personal Growth integration, isolation review and full release gate",
+        "summary": "Complete Personal Growth integration, isolation review and full release gate"
+      },
+      "dependencyIds": [
+        "issue-380"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "personal-growth-state"
+      ],
+      "expectedDeliverables": [
+        "test",
+        "documentation",
+        "release"
+      ],
+      "probes": [
+        {
+          "id": "personal-release",
+          "kind": "test-path-exists",
+          "path": "orchestrator/tests/personal-growth-release.test.ts",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Personal Growth release regression exists."
+        }
+      ],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": [
+          "personal-release"
+        ]
+      },
+      "weight": 1,
+      "finalGate": true,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-385",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 385,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/385",
+        "title": "Audit free and Apify sources before implementation",
+        "summary": "Audit free and Apify sources before implementation"
+      },
+      "dependencyIds": [],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "decision",
+        "configuration",
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-386",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 386,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/386",
+        "title": "Founding decision, owner-only authority and fail-closed budget",
+        "summary": "Founding decision, owner-only authority and fail-closed budget"
+      },
+      "dependencyIds": [
+        "issue-385"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "decision",
+        "configuration"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-387",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 387,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/387",
+        "title": "Add core contest, source, run and owner-event contracts",
+        "summary": "Add core contest, source, run and owner-event contracts"
+      },
+      "dependencyIds": [
+        "issue-386"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "contract",
+        "configuration",
+        "runtime",
+        "test"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-388",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 388,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/388",
+        "title": "Register the private venture and attach the zero-cost scan to the existing checkpoint",
+        "summary": "Register the private venture and attach the zero-cost scan to the existing checkpoint"
+      },
+      "dependencyIds": [
+        "issue-387"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "configuration"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-389",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 389,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/389",
+        "title": "Add the source registry and shared Apify quota authority",
+        "summary": "Add the source registry and shared Apify quota authority"
+      },
+      "dependencyIds": [
+        "issue-388"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "configuration",
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [
+        "source-approval"
+      ],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-390",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 390,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/390",
+        "title": "Build safe fetching, conditional cache and per-source receipts",
+        "summary": "Build safe fetching, conditional cache and per-source receipts"
+      },
+      "dependencyIds": [
+        "issue-389"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "configuration",
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-391",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "sources",
+      "issue": {
+        "number": 391,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/391",
+        "title": "Canonicalize, prefilter and deduplicate candidates before enrichment",
+        "summary": "Canonicalize, prefilter and deduplicate candidates before enrichment"
+      },
+      "dependencyIds": [
+        "issue-390"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": "sources-parallel",
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-392",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "sources",
+      "issue": {
+        "number": 392,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/392",
+        "title": "Add verified Czech and Slovak consumer source adapters",
+        "summary": "Add verified Czech and Slovak consumer source adapters"
+      },
+      "dependencyIds": [
+        "issue-391"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": "sources-parallel",
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "configuration",
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [
+        "source-approval"
+      ],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-393",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "sources",
+      "issue": {
+        "number": 393,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/393",
+        "title": "Add free developer, hackathon and data-challenge adapters",
+        "summary": "Add free developer, hackathon and data-challenge adapters"
+      },
+      "dependencyIds": [
+        "issue-391"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": "sources-parallel",
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [
+        "source-approval"
+      ],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-394",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "sources",
+      "issue": {
+        "number": 394,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/394",
+        "title": "Add manual imports, owner feeds and the capability-gated GoVIRAL bridge",
+        "summary": "Add manual imports, owner feeds and the capability-gated GoVIRAL bridge"
+      },
+      "dependencyIds": [
+        "issue-391"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": "sources-parallel",
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [
+        "source-approval"
+      ],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-395",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "sources",
+      "issue": {
+        "number": 395,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/395",
+        "title": "Add optional Apify discovery and fallback adapters",
+        "summary": "Add optional Apify discovery and fallback adapters"
+      },
+      "dependencyIds": [
+        "issue-389",
+        "issue-390"
+      ],
+      "posture": "optional",
+      "safeParallelGroup": "sources-parallel",
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [
+        "account",
+        "credential",
+        "source-approval"
+      ],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": null,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-396",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "sources",
+      "issue": {
+        "number": 396,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/396",
+        "title": "Extract deterministic contest facts, rule evidence and confidence",
+        "summary": "Extract deterministic contest facts, rule evidence and confidence"
+      },
+      "dependencyIds": [
+        "issue-392",
+        "issue-393",
+        "issue-394"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": "sources-parallel",
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "test"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-397",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "sources",
+      "issue": {
+        "number": 397,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/397",
+        "title": "Add bounded model enrichment and Czech entry preparation",
+        "summary": "Add bounded model enrichment and Czech entry preparation"
+      },
+      "dependencyIds": [
+        "issue-396"
+      ],
+      "posture": "optional",
+      "safeParallelGroup": "sources-parallel",
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": null,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-398",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "core",
+      "issue": {
+        "number": 398,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/398",
+        "title": "Rank readiness, legal capacity, effort, legitimacy and expected value",
+        "summary": "Rank readiness, legal capacity, effort, legitimacy and expected value"
+      },
+      "dependencyIds": [
+        "issue-396"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-399",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "core",
+      "issue": {
+        "number": 399,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/399",
+        "title": "Persist records, entry policies/capacity, owner events, archives and run receipts",
+        "summary": "Persist records, entry policies/capacity, owner events, archives and run receipts"
+      },
+      "dependencyIds": [
+        "issue-398",
+        "issue-420"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-400",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "core",
+      "issue": {
+        "number": 400,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/400",
+        "title": "Assemble the idempotent daily scan, capacity and ranking workflow",
+        "summary": "Assemble the idempotent daily scan, capacity and ranking workflow"
+      },
+      "dependencyIds": [
+        "issue-399"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-401",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "admin",
+      "issue": {
+        "number": 401,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/401",
+        "title": "Build the private Admin radar, legal-capacity queues and filters",
+        "summary": "Build the private Admin radar, legal-capacity queues and filters"
+      },
+      "dependencyIds": [
+        "issue-400"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "runtime",
+        "admin"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-402",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "admin",
+      "issue": {
+        "number": 402,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/402",
+        "title": "Add contest detail, repeat-entry workflow, owner actions and outcome learning",
+        "summary": "Add contest detail, repeat-entry workflow, owner actions and outcome learning"
+      },
+      "dependencyIds": [
+        "issue-401",
+        "issue-421"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "runtime",
+        "test"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-404",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "release",
+      "issue": {
+        "number": 404,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/404",
+        "title": "Complete private-core integration, documentation and full release gate",
+        "summary": "Complete private-core integration, documentation and full release gate"
+      },
+      "dependencyIds": [
+        "issue-402",
+        "issue-420",
+        "issue-421"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "test",
+        "documentation",
+        "release"
+      ],
+      "probes": [
+        {
+          "id": "contest-release",
+          "kind": "test-path-exists",
+          "path": "orchestrator/tests/contest-radar-release.test.ts",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Contest Radar final regression exists."
+        }
+      ],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": [
+          "contest-release"
+        ]
+      },
+      "weight": 1,
+      "finalGate": true,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-405",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 405,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/405",
+        "title": "Audit platforms/providers and record the capability-compatible operating decision",
+        "summary": "Audit platforms/providers and record the capability-compatible operating decision"
+      },
+      "dependencyIds": [],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "decision"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-406",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 406,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/406",
+        "title": "Add versioned profile, connection, campaign and share-kit contracts",
+        "summary": "Add versioned profile, connection, campaign and share-kit contracts"
+      },
+      "dependencyIds": [
+        "issue-405"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "contract",
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-407",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "profiles",
+      "issue": {
+        "number": 407,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/407",
+        "title": "Build the core Venture and Amplification Profiles Admin workspace",
+        "summary": "Build the core Venture and Amplification Profiles Admin workspace"
+      },
+      "dependencyIds": [
+        "issue-415"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "runtime",
+        "admin"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-409",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "connections",
+      "issue": {
+        "number": 409,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/409",
+        "title": "Generalize the queue and official-account connectors with capability-aware targets",
+        "summary": "Generalize the queue and official-account connectors with capability-aware targets"
+      },
+      "dependencyIds": [
+        "issue-406",
+        "issue-415",
+        "issue-424"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [
+        "account",
+        "oauth",
+        "credential"
+      ],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-410",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "campaigns",
+      "issue": {
+        "number": 410,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/410",
+        "title": "Generate verified-release campaigns for primary, umbrella and amplifier profiles",
+        "summary": "Generate verified-release campaigns for primary, umbrella and amplifier profiles"
+      },
+      "dependencyIds": [
+        "issue-409"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": "campaigns-parallel",
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "runtime",
+        "test",
+        "documentation",
+        "release"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-411",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "learning",
+      "issue": {
+        "number": 411,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/411",
+        "title": "Add the optional opt-in ambassador, creator and community Network",
+        "summary": "Add the optional opt-in ambassador, creator and community Network"
+      },
+      "dependencyIds": [
+        "issue-410"
+      ],
+      "posture": "optional",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": null,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-412",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "learning",
+      "issue": {
+        "number": 412,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/412",
+        "title": "Add official metrics, owned-profile attribution and bounded experiments",
+        "summary": "Add official metrics, owned-profile attribution and bounded experiments"
+      },
+      "dependencyIds": [
+        "issue-410"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-413",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "release",
+      "issue": {
+        "number": 413,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/413",
+        "title": "Complete capability, autonomy, privacy and release regression",
+        "summary": "Complete capability, autonomy, privacy and release regression"
+      },
+      "dependencyIds": [
+        "issue-407",
+        "issue-409",
+        "issue-410",
+        "issue-412",
+        "issue-420",
+        "issue-421",
+        "issue-433",
+        "issue-434"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "test",
+        "documentation",
+        "release"
+      ],
+      "probes": [
+        {
+          "id": "social-release",
+          "kind": "test-path-exists",
+          "path": "orchestrator/tests/social-distribution-release.test.ts",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Social Distribution final regression exists."
+        }
+      ],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": [
+          "social-release"
+        ]
+      },
+      "weight": 1,
+      "finalGate": true,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-414",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar"
+      ],
+      "phaseId": "release",
+      "issue": {
+        "number": 414,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/414",
+        "title": "Pilot optional GoVIRAL-owned Instagram and TikTok contest discovery",
+        "summary": "Pilot optional GoVIRAL-owned Instagram and TikTok contest discovery"
+      },
+      "dependencyIds": [
+        "issue-394"
+      ],
+      "posture": "optional",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "test"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": null,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-415",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "profiles",
+      "issue": {
+        "number": 415,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/415",
+        "title": "Define the owned-amplifier portfolio, purpose gate and central policy",
+        "summary": "Define the owned-amplifier portfolio, purpose gate and central policy"
+      },
+      "dependencyIds": [
+        "issue-406"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "contract"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-417",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "connections",
+      "issue": {
+        "number": 417,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/417",
+        "title": "Add the provider control plane and direct Meta runtime",
+        "summary": "Add the provider control plane and direct Meta runtime"
+      },
+      "dependencyIds": [
+        "issue-409"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [
+        "account",
+        "oauth",
+        "credential"
+      ],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-418",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "campaigns",
+      "issue": {
+        "number": 418,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/418",
+        "title": "Add profile editorial strategies and rolling original-content inventory",
+        "summary": "Add profile editorial strategies and rolling original-content inventory"
+      },
+      "dependencyIds": [
+        "issue-407",
+        "issue-410"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": "campaigns-parallel",
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-420",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar",
+        "social-distribution"
+      ],
+      "phaseId": "shared-integration",
+      "issue": {
+        "number": 420,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/420",
+        "title": "Add rule-aware legal entry policy and capacity resolution",
+        "summary": "Add rule-aware legal entry policy and capacity resolution"
+      },
+      "dependencyIds": [
+        "issue-396",
+        "issue-406",
+        "issue-415",
+        "issue-424"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "contract",
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": "issue-420",
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-421",
+      "primaryProgramId": "contest-radar",
+      "programRefs": [
+        "contest-radar",
+        "social-distribution"
+      ],
+      "phaseId": "shared-integration",
+      "issue": {
+        "number": 421,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/421",
+        "title": "Add the private repeat-entry scheduler and append-only entry events",
+        "summary": "Add the private repeat-entry scheduler and append-only entry events"
+      },
+      "dependencyIds": [
+        "issue-400",
+        "issue-410",
+        "issue-418",
+        "issue-420"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "contest-state"
+      ],
+      "expectedDeliverables": [
+        "configuration",
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": "issue-421",
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-422",
+      "primaryProgramId": "deployment-cost",
+      "programRefs": [
+        "deployment-cost"
+      ],
+      "phaseId": "deployment",
+      "issue": {
+        "number": 422,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/422",
+        "title": "Stop per-commit Vercel builds and add a guarded local deployment workflow",
+        "summary": "Stop per-commit Vercel builds and add a guarded local deployment workflow"
+      },
+      "dependencyIds": [],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "deployment-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [
+        {
+          "id": "deploy-guard",
+          "kind": "path-exists",
+          "path": "scripts/deploy/check.mjs",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Guarded local deployment check exists."
+        },
+        {
+          "id": "deploy-guard-tests",
+          "kind": "test-path-exists",
+          "path": "orchestrator/tests/deploy-check.test.ts",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Deployment gate tests exist."
+        }
+      ],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": [
+          "deploy-guard",
+          "deploy-guard-tests"
+        ]
+      },
+      "weight": 1,
+      "finalGate": true,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-424",
+      "primaryProgramId": "autonomous-operations",
+      "programRefs": [
+        "autonomous-operations"
+      ],
+      "phaseId": "truth",
+      "issue": {
+        "number": 424,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/424",
+        "title": "Record the autonomy-first decision, capability graph and information-only monetization posture",
+        "summary": "Record the autonomy-first decision, capability graph and information-only monetization posture"
+      },
+      "dependencyIds": [],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "operations-state"
+      ],
+      "expectedDeliverables": [
+        "decision"
+      ],
+      "probes": [
+        {
+          "id": "capability-map",
+          "kind": "json-parses",
+          "path": "config/venture-capabilities.json",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "The capability map parses."
+        },
+        {
+          "id": "capability-regression",
+          "kind": "test-path-exists",
+          "path": "orchestrator/tests/venture-capability.test.ts",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Capability isolation regression exists."
+        }
+      ],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": [
+          "capability-map",
+          "capability-regression"
+        ]
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-425",
+      "primaryProgramId": "autonomous-operations",
+      "programRefs": [
+        "autonomous-operations"
+      ],
+      "phaseId": "truth",
+      "issue": {
+        "number": 425,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/425",
+        "title": "Add canonical venture health, run receipts and service-level objectives",
+        "summary": "Add canonical venture health, run receipts and service-level objectives"
+      },
+      "dependencyIds": [
+        "issue-424"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "operations-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [
+        {
+          "id": "venture-slos",
+          "kind": "json-parses",
+          "path": "config/venture-slos.json",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Per-node SLO registry parses."
+        },
+        {
+          "id": "health-regression",
+          "kind": "test-path-exists",
+          "path": "orchestrator/tests/operations-health.test.ts",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Operations health tests exist."
+        }
+      ],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": [
+          "venture-slos",
+          "health-regression"
+        ]
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-426",
+      "primaryProgramId": "autonomous-operations",
+      "programRefs": [
+        "autonomous-operations"
+      ],
+      "phaseId": "execution",
+      "issue": {
+        "number": 426,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/426",
+        "title": "Coordinate schedules, capacity, caching and execution efficiency",
+        "summary": "Coordinate schedules, capacity, caching and execution efficiency"
+      },
+      "dependencyIds": [
+        "issue-425"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "operations-state"
+      ],
+      "expectedDeliverables": [
+        "configuration",
+        "runtime"
+      ],
+      "probes": [
+        {
+          "id": "capacity-regression",
+          "kind": "test-path-exists",
+          "path": "orchestrator/tests/operations-capacity.test.ts",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Capacity and reuse tests exist."
+        }
+      ],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": [
+          "capacity-regression"
+        ]
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-427",
+      "primaryProgramId": "autonomous-operations",
+      "programRefs": [
+        "autonomous-operations"
+      ],
+      "phaseId": "execution",
+      "issue": {
+        "number": 427,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/427",
+        "title": "Add isolated self-healing, recovery policies and owner-attention escalation",
+        "summary": "Add isolated self-healing, recovery policies and owner-attention escalation"
+      },
+      "dependencyIds": [
+        "issue-426"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "operations-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [
+        {
+          "id": "recovery-regression",
+          "kind": "test-path-exists",
+          "path": "orchestrator/tests/operations-recovery.test.ts",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Recovery isolation tests exist."
+        }
+      ],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": [
+          "recovery-regression"
+        ]
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-428",
+      "primaryProgramId": "autonomous-operations",
+      "programRefs": [
+        "autonomous-operations"
+      ],
+      "phaseId": "release",
+      "issue": {
+        "number": 428,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/428",
+        "title": "Build the protected Operations control center in Admin",
+        "summary": "Build the protected Operations control center in Admin"
+      },
+      "dependencyIds": [
+        "issue-427"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "operations-state"
+      ],
+      "expectedDeliverables": [
+        "runtime",
+        "admin"
+      ],
+      "probes": [
+        {
+          "id": "operations-admin",
+          "kind": "path-exists",
+          "path": "site/src/components/admin/operations-control-center.tsx",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Protected Operations control center exists."
+        }
+      ],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": [
+          "operations-admin"
+        ]
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-429",
+      "primaryProgramId": "autonomous-operations",
+      "programRefs": [
+        "autonomous-operations"
+      ],
+      "phaseId": "release",
+      "issue": {
+        "number": 429,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/429",
+        "title": "Complete migration, isolation regression, documentation and release gate",
+        "summary": "Complete migration, isolation regression, documentation and release gate"
+      },
+      "dependencyIds": [
+        "issue-428"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "operations-state"
+      ],
+      "expectedDeliverables": [
+        "test",
+        "documentation",
+        "release"
+      ],
+      "probes": [
+        {
+          "id": "operations-release",
+          "kind": "test-path-exists",
+          "path": "orchestrator/tests/operations-release.test.ts",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "Autonomous Operations final regression exists."
+        }
+      ],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": [
+          "operations-release"
+        ]
+      },
+      "weight": 1,
+      "finalGate": true,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-430",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution",
+        "contest-radar"
+      ],
+      "phaseId": "shared-integration",
+      "issue": {
+        "number": 430,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/430",
+        "title": "Add rule-permitted Contest Radar referral promotion to Social Distribution",
+        "summary": "Add rule-permitted Contest Radar referral promotion to Social Distribution"
+      },
+      "dependencyIds": [
+        "issue-411",
+        "issue-421"
+      ],
+      "posture": "held-optional",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "runtime",
+        "test"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": null,
+      "finalGate": false,
+      "sharedWorkItemRef": "issue-430",
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-433",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "campaigns",
+      "issue": {
+        "number": 433,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/433",
+        "title": "Add daily profile selection, exact routine scopes and immutable queue handoff",
+        "summary": "Add daily profile selection, exact routine scopes and immutable queue handoff"
+      },
+      "dependencyIds": [
+        "issue-418"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": "campaigns-parallel",
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [
+        "routine-scope"
+      ],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-434",
+      "primaryProgramId": "social-distribution",
+      "programRefs": [
+        "social-distribution"
+      ],
+      "phaseId": "campaigns",
+      "issue": {
+        "number": 434,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/434",
+        "title": "Add profile learning, continuation proposals and domain health integration",
+        "summary": "Add profile learning, continuation proposals and domain health integration"
+      },
+      "dependencyIds": [
+        "issue-433",
+        "issue-425"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": "campaigns-parallel",
+      "protectedFileGroups": [
+        "social-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-436",
+      "primaryProgramId": "webdev-signal",
+      "programRefs": [
+        "webdev-signal"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 436,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/436",
+        "title": "Audit the name, audience, official sources and record the founding decision",
+        "summary": "Audit the name, audience, official sources and record the founding decision"
+      },
+      "dependencyIds": [],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "webdev-state"
+      ],
+      "expectedDeliverables": [
+        "decision",
+        "configuration"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-437",
+      "primaryProgramId": "webdev-signal",
+      "programRefs": [
+        "webdev-signal"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 437,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/437",
+        "title": "Add versioned contracts, taxonomy, bilingual truth rules and fixtures",
+        "summary": "Add versioned contracts, taxonomy, bilingual truth rules and fixtures"
+      },
+      "dependencyIds": [
+        "issue-436"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "webdev-state"
+      ],
+      "expectedDeliverables": [
+        "contract",
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-438",
+      "primaryProgramId": "webdev-signal",
+      "programRefs": [
+        "webdev-signal"
+      ],
+      "phaseId": "foundation",
+      "issue": {
+        "number": 438,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/438",
+        "title": "Register the venture, capability edges, fail-closed budget and existing-clock schedule",
+        "summary": "Register the venture, capability edges, fail-closed budget and existing-clock schedule"
+      },
+      "dependencyIds": [
+        "issue-437",
+        "issue-424",
+        "issue-422"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "webdev-state"
+      ],
+      "expectedDeliverables": [
+        "configuration"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [
+        "account",
+        "handle",
+        "oauth",
+        "credential"
+      ],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-439",
+      "primaryProgramId": "webdev-signal",
+      "programRefs": [
+        "webdev-signal"
+      ],
+      "phaseId": "editorial",
+      "issue": {
+        "number": 439,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/439",
+        "title": "Add the audited source registry, safe fetching, conditional cache and official adapters",
+        "summary": "Add the audited source registry, safe fetching, conditional cache and official adapters"
+      },
+      "dependencyIds": [
+        "issue-438"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "webdev-state"
+      ],
+      "expectedDeliverables": [
+        "decision",
+        "configuration",
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [
+        "source-approval"
+      ],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-440",
+      "primaryProgramId": "webdev-signal",
+      "programRefs": [
+        "webdev-signal"
+      ],
+      "phaseId": "editorial",
+      "issue": {
+        "number": 440,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/440",
+        "title": "Canonicalize, cluster, score and select zero or one daily story",
+        "summary": "Canonicalize, cluster, score and select zero or one daily story"
+      },
+      "dependencyIds": [
+        "issue-439"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "webdev-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-441",
+      "primaryProgramId": "webdev-signal",
+      "programRefs": [
+        "webdev-signal"
+      ],
+      "phaseId": "editorial",
+      "issue": {
+        "number": 441,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/441",
+        "title": "Build the evidence brief and native Czech and English editorial packages",
+        "summary": "Build the evidence brief and native Czech and English editorial packages"
+      },
+      "dependencyIds": [
+        "issue-440"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "webdev-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-442",
+      "primaryProgramId": "webdev-signal",
+      "programRefs": [
+        "webdev-signal"
+      ],
+      "phaseId": "distribution",
+      "issue": {
+        "number": 442,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/442",
+        "title": "Add the Design Lab brand system and deterministic bilingual carousel rendering",
+        "summary": "Add the Design Lab brand system and deterministic bilingual carousel rendering"
+      },
+      "dependencyIds": [
+        "issue-441"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "webdev-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-443",
+      "primaryProgramId": "webdev-signal",
+      "programRefs": [
+        "webdev-signal"
+      ],
+      "phaseId": "distribution",
+      "issue": {
+        "number": 443,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/443",
+        "title": "Add Czech and English Venture Profiles and governed Instagram and Threads publishing",
+        "summary": "Add Czech and English Venture Profiles and governed Instagram and Threads publishing"
+      },
+      "dependencyIds": [
+        "issue-442",
+        "issue-409",
+        "issue-415"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "webdev-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [
+        "account",
+        "handle",
+        "oauth",
+        "credential",
+        "routine-scope"
+      ],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-444",
+      "primaryProgramId": "webdev-signal",
+      "programRefs": [
+        "webdev-signal"
+      ],
+      "phaseId": "distribution",
+      "issue": {
+        "number": 444,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/444",
+        "title": "Add observations, a 28-day baseline, bounded learning and operational health",
+        "summary": "Add observations, a 28-day baseline, bounded learning and operational health"
+      },
+      "dependencyIds": [
+        "issue-443"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "webdev-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-445",
+      "primaryProgramId": "webdev-signal",
+      "programRefs": [
+        "webdev-signal"
+      ],
+      "phaseId": "release",
+      "issue": {
+        "number": 445,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/445",
+        "title": "Build the protected editorial, delivery and operations workspace in Admin",
+        "summary": "Build the protected editorial, delivery and operations workspace in Admin"
+      },
+      "dependencyIds": [
+        "issue-444"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "webdev-state"
+      ],
+      "expectedDeliverables": [
+        "runtime",
+        "admin"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": 1,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-446",
+      "primaryProgramId": "webdev-signal",
+      "programRefs": [
+        "webdev-signal"
+      ],
+      "phaseId": "release",
+      "issue": {
+        "number": 446,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/446",
+        "title": "Complete integration, source, privacy and autonomy regression and release the social core",
+        "summary": "Complete integration, source, privacy and autonomy regression and release the social core"
+      },
+      "dependencyIds": [
+        "issue-445"
+      ],
+      "posture": "mandatory",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "webdev-state"
+      ],
+      "expectedDeliverables": [
+        "configuration",
+        "test",
+        "documentation",
+        "release"
+      ],
+      "probes": [
+        {
+          "id": "webdev-release",
+          "kind": "test-path-exists",
+          "path": "orchestrator/tests/webdev-signal-release.test.ts",
+          "expectedSchemaVersion": null,
+          "ownerTaskKey": null,
+          "description": "WebDev Signal final regression exists."
+        }
+      ],
+      "ownerOnlySetupClasses": [],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": [
+          "webdev-release"
+        ]
+      },
+      "weight": 1,
+      "finalGate": true,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    },
+    {
+      "schemaVersion": "implementation-work-item/1",
+      "id": "issue-447",
+      "primaryProgramId": "webdev-signal",
+      "programRefs": [
+        "webdev-signal"
+      ],
+      "phaseId": "release",
+      "issue": {
+        "number": 447,
+        "url": "https://github.com/lukaskourilcz/quorum/issues/447",
+        "title": "Build a future bilingual website and measured DNESKAi house-promotion experiment",
+        "summary": "Build a future bilingual website and measured DNESKAi house-promotion experiment"
+      },
+      "dependencyIds": [
+        "issue-446"
+      ],
+      "posture": "held-optional",
+      "safeParallelGroup": null,
+      "protectedFileGroups": [
+        "webdev-state"
+      ],
+      "expectedDeliverables": [
+        "runtime"
+      ],
+      "probes": [],
+      "ownerOnlySetupClasses": [
+        "routine-scope",
+        "content-approval"
+      ],
+      "completionPolicy": {
+        "requiresIssueClosed": true,
+        "requiresMergedPullRequest": true,
+        "requiredProbeIds": []
+      },
+      "weight": null,
+      "finalGate": false,
+      "sharedWorkItemRef": null,
+      "supersededBy": null
+    }
+  ]
+}
