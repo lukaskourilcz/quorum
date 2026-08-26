@@ -17,6 +17,33 @@ Updated: 2026-08-13.
 In the order that unblocks the most. Each of these is a switch, a key or an account, and each one
 is the single thing standing between a proven path and a working one.
 
+- [ ] **Verify the linked Quorum Vercel project** — from the repository root run
+  `pnpm exec vercel link`, select the existing Quorum team/project, and confirm in its settings
+  that Root Directory is `site`. Do not create a duplicate project. [imp:5] [owner:me] [time:10m]
+  [kind:setup]
+
+- [ ] **Disable Vercel On-Demand Concurrent Builds** — inspect the Quorum project setting and turn
+  it off if it is currently enabled; do not change the paid plan. [imp:3] [owner:me] [time:5m]
+  [kind:setup]
+
+- [ ] **Configure Vercel Spend Management** — add useful build-spend notifications and a sensible
+  soft or hard limit for the Quorum project without purchasing a plan or add-on. [imp:4]
+  [owner:me] [time:10m] [kind:setup]
+
+- [ ] **Inspect the Vercel build machine** — confirm the assigned machine and remove an
+  unjustified Enhanced or Turbo override; keep a larger machine only with a recorded reason.
+  [imp:3] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Verify the Git deployment guard after release** — after the production deployment that
+  carries `git.deploymentEnabled: false`, push a normal source commit and confirm that it creates
+  no Vercel deployment while GitHub CI still runs. [imp:5] [owner:me] [time:10m] [kind:deploy]
+
+- [ ] **Verify one manual preview and production release** — run `pnpm deploy:check`, deploy one
+  prebuilt preview, inspect environment-specific routes and cron configuration, then run the
+  guarded production command. If prebuilt output is not viable, record the exact limitation
+  before using the explicitly confirmed one-cloud-build fallback. [imp:5] [owner:me] [time:30m]
+  [kind:deploy]
+
 - [ ] **Switch the DNESKAi streams on** — set the Actions variable
   `CAUGHT_UP_STREAMS_ENABLED=true`. Until then `/o-cem-se-mluvi` and `/podcasty` render their
   honest empty states, which is the correct state and costs nothing. The delivery steps live
