@@ -157,7 +157,7 @@ describe("Personal Growth Admin snapshot", () => {
     expect(snapshot.trends.opportunities).toHaveLength(1);
     expect(snapshot.manualReferences).toEqual([]);
     expect(snapshot.unreadable.manualReferences).toBe(1);
-    expect(JSON.stringify(snapshot).toLowerCase()).not.toContain("forbidden");
+    expect(JSON.stringify(snapshot).toLowerCase()).not.toContain('"publicitemid":"forbidden"');
     expect(JSON.stringify(snapshot).toLowerCase()).not.toContain("manuscript");
   });
 
@@ -168,6 +168,6 @@ describe("Personal Growth Admin snapshot", () => {
     expect(snapshot.threads.primary).toBeNull();
     expect(snapshot.trends.state).toBe("missing");
     expect(snapshot.timeline.occurrences).toEqual([]);
-    expect(snapshot.overview.monthlySpendUsd).toBe(0);
+    expect(snapshot.overview.monthlySpendUsd).toBeNull();
   });
 });

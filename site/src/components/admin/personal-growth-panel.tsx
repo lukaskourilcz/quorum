@@ -20,6 +20,17 @@ import {
   PersonalGrowthThreadActions,
   PersonalGrowthTimelineAction
 } from "./personal-growth-actions";
+import {
+  PersonalGrowthBudgetModeForm,
+  PersonalGrowthDisableCapability,
+  PersonalGrowthExperimentActions,
+  PersonalGrowthExperimentCreateForm,
+  PersonalGrowthPillarForm,
+  PersonalGrowthPolicyForm,
+  PersonalGrowthResultCorrectionForm,
+  PersonalGrowthResultCreateForm,
+  PersonalGrowthSettingsForm
+} from "./personal-growth-insight-actions";
 import type {
   AdminPersonalGrowthSnapshot,
   PersonalGrowthCoreTab,
@@ -44,6 +55,10 @@ function displayDate(value: string | null): string {
 
 function percent(value: number): string {
   return new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 0 }).format(value);
+}
+
+function usd(value: number | null): string {
+  return value === null ? "Unavailable" : `$${value.toFixed(2)}`;
 }
 
 function CoreCard({
@@ -84,7 +99,7 @@ export function PersonalGrowthOverview({ snapshot }: { snapshot: AdminPersonalGr
           <AdminMetric label="Next OKRAJ" note="10-day owner-authored anchor" value={displayDate(snapshot.overview.nextOkrajDeadline)} />
           <AdminMetric label="Next BBARAK" note="3-day owner-authored anchor" value={displayDate(snapshot.overview.nextBbarakDeadline)} />
           <AdminMetric label="Personal mix" note="85% minimum" progress={snapshot.today.personalRatio * 100} value={percent(snapshot.today.personalRatio)} />
-          <AdminMetric label="Monthly headroom" note={`of $${snapshot.overview.monthlyCapUsd.toFixed(2)} nested cap`} progress={(snapshot.overview.monthlySpendUsd / snapshot.overview.monthlyCapUsd) * 100} value={`$${snapshot.overview.monthlyHeadroomUsd.toFixed(2)}`} />
+          <AdminMetric label="Monthly headroom" note={`of $${snapshot.overview.monthlyCapUsd.toFixed(2)} nested cap`} progress={snapshot.overview.monthlySpendUsd === null ? undefined : (snapshot.overview.monthlySpendUsd / snapshot.overview.monthlyCapUsd) * 100} value={usd(snapshot.overview.monthlyHeadroomUsd)} />
         </div>
         <div className="grid gap-3 md:grid-cols-2">
           <div className="rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface-secondary)] p-3">
@@ -146,7 +161,7 @@ function Today({ snapshot }: { snapshot: AdminPersonalGrowthSnapshot }) {
       <AdminStateMessage
         description={`Budget degradation is ${snapshot.today.budgetDegradation}. Publishing, replying and purchases remain disabled.`}
         state={snapshot.today.budgetDegradation === "healthy" ? "success" : "held"}
-        title={`$${snapshot.overview.monthlyHeadroomUsd.toFixed(2)} remains under the $20.00 nested cap`}
+        title={snapshot.overview.monthlyHeadroomUsd === null ? "Recorded spend is unavailable" : `${usd(snapshot.overview.monthlyHeadroomUsd)} remains under the $20.00 nested cap`}
       />
     </div>
   );
@@ -309,6 +324,102 @@ function TrendRadar({ snapshot }: { snapshot: AdminPersonalGrowthSnapshot }) {
   );
 }
 
+function metricLabel(value: string): string {
+  return value.replaceAll("_", " ");
+}
+
+function Results({ snapshot }: { snapshot: AdminPersonalGrowthSnapshot }) {
+  return (
+    <div className="grid min-w-0 gap-4" data-personal-growth-tab="results">
+      {snapshot.insightsUnreadable.forbidden ? <AdminStateMessage description={`${snapshot.insightsUnreadable.forbidden} cross-boundary or private result ${snapshot.insightsUnreadable.forbidden === 1 ? "input was" : "inputs were"} dropped before projection.`} state="held" title="Isolated inputs rejected" /> : null}
+      <CoreCard note={snapshot.results.baseline.status} title="28-day baseline">
+        {snapshot.results.baseline.state === "present" ? (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <AdminMetric label="Baseline window" note={`${displayDate(snapshot.results.baseline.startsOn)}–${displayDate(snapshot.results.baseline.endsOn)}`} value={`${snapshot.results.baseline.elapsedDays ?? 0} / 28 days`} />
+            <AdminMetric label="Accepted results" note="valid Personal Growth records" value={String(snapshot.results.baseline.acceptedResultCount ?? 0)} />
+            <AdminMetric label="Dropped inputs" note="malformed or isolated" value={String(snapshot.results.baseline.droppedResultCount)} />
+            <AdminMetric label="Targets" note="owner decision required" value={snapshot.results.baseline.targetProposalRequired ? "Proposal due" : "Not activated"} />
+          </div>
+        ) : <AdminStateMessage description="No valid baseline artifact is recorded. Results below remain usable and no target is invented." state={snapshot.results.baseline.state === "unreadable" ? "malformed" : "unavailable"} title="Baseline unavailable" />}
+      </CoreCard>
+      <PersonalGrowthResultCreateForm />
+      {snapshot.results.windows.map((window) => (
+        <CoreCard key={window.days} note={`${window.days} days`} title={`${displayDate(window.startsOn)}–${displayDate(window.endsOn)}`}>
+          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-border)] lg:grid-cols-4">
+            <AdminMetric label="Recorded results" note={`${window.manualOnlyCount} manual-only · ${window.apiObservedCount} API-observed`} value={String(window.resultCount)} />
+            <AdminMetric label="Follower direction" note="needs two valid observations" value={window.followerDirection === null ? "Unavailable" : `${window.followerDirection >= 0 ? "+" : ""}${window.followerDirection}`} />
+            <AdminMetric label="Personal ratio" note={`${window.ownerManualVentureCount} owner-manual venture records`} progress={window.personalRatio === null ? undefined : window.personalRatio * 100} value={window.personalRatio === null ? "Unavailable" : percent(window.personalRatio)} />
+            <AdminMetric label="Owner actions" note={`${window.missedDeadlines} missed deadlines`} value={`${window.completedOwnerActions} completed`} />
+          </div>
+          <AdminTableRegion className="mt-4" label={`${window.days}-day Personal Growth measurements`}>
+            <AdminTable><thead><tr><AdminTableHead>Metric</AdminTableHead><AdminTableHead>Recorded aggregate</AdminTableHead><AdminTableHead>State</AdminTableHead></tr></thead><tbody>{window.metrics.map((metric) => <tr key={metric.name}><AdminTableCell className="font-semibold capitalize">{metricLabel(metric.name)}</AdminTableCell><AdminTableCell className="admin-tabular">{metric.value === null ? "Unavailable" : metric.value.toLocaleString("en-US", { maximumFractionDigits: 4 })}</AdminTableCell><AdminTableCell>{metric.value === null ? metric.unavailableReason ?? "unavailable" : "measured"}</AdminTableCell></tr>)}</tbody></AdminTable>
+          </AdminTableRegion>
+          <AdminTableRegion className="mt-4" label={`${window.days}-day Personal Growth breakdowns`}>
+            <AdminTable><thead><tr><AdminTableHead>Dimension</AdminTableHead><AdminTableHead>Group</AdminTableHead><AdminTableHead>Results</AdminTableHead><AdminTableHead>Typical reach/views</AdminTableHead></tr></thead><tbody>{window.breakdowns.length ? window.breakdowns.map((row) => <tr key={`${row.dimension}-${row.label}`}><AdminTableCell>{row.dimension}</AdminTableCell><AdminTableCell className="font-semibold">{row.label}</AdminTableCell><AdminTableCell>{row.resultCount}</AdminTableCell><AdminTableCell>{row.typicalReachOrViews === null ? "Unavailable" : row.typicalReachOrViews.toLocaleString("en-US", { maximumFractionDigits: 2 })}</AdminTableCell></tr>) : <tr><AdminTableCell colSpan={4}>No valid result groups exist for this window.</AdminTableCell></tr>}</tbody></AdminTable>
+          </AdminTableRegion>
+          <p className="m-0 mt-3 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">Current-month Personal Growth spend alongside outcomes: {usd(window.currentMonthSpendUsd)}. Sparse data stays tabular; no trend line is fabricated.</p>
+        </CoreCard>
+      ))}
+      <AdminSectionHeading description="Manual/API provenance, latest bounded observation and append-only corrections." title="Result records" />
+      {snapshot.results.items.length ? snapshot.results.items.map((result) => (
+        <CoreCard key={result.resultId} note={result.provenance} title={`${result.platform} · ${result.format} · ${displayDate(result.publishedAt.slice(0, 10))}`}>
+          <div className="flex flex-wrap gap-2"><AdminEntityBadge>{result.personalPillar}</AdminEntityBadge><AdminEntityBadge>{result.goviralAssisted ? "GoVIRAL-assisted" : "ordinary personal"}</AdminEntityBadge>{result.manualVentureReference ? <AdminEntityBadge>owner-manual venture reference</AdminEntityBadge> : null}{result.publicationRelation ? <AdminEntityBadge>{result.publicationRelation} collaboration</AdminEntityBadge> : null}{result.reelSeries ? <AdminEntityBadge>{result.reelSeries}</AdminEntityBadge> : null}</div>
+          <dl className="mt-3 grid gap-2 text-[length:var(--admin-type-control)] sm:grid-cols-2"><div><dt className="font-semibold">Last observation</dt><dd className="m-0 text-[var(--admin-foreground-muted)]">{result.latestObservationAt ? displayDate(result.latestObservationAt.slice(0, 10)) : "Manual-only · unavailable"}</dd></div><div><dt className="font-semibold">Corrections / rating</dt><dd className="m-0 text-[var(--admin-foreground-muted)]">{result.correctionCount} · {result.ownerRating ?? "unavailable"}</dd></div></dl>
+          <a className="admin-focus-ring mt-3 inline-block text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-information)]" href={result.url} rel="noreferrer" target="_blank">Open public result ↗</a>
+          <PersonalGrowthResultCorrectionForm result={result} />
+        </CoreCard>
+      )) : <AdminEmptyState description="Record a real owner-supplied result above. The Admin does not create example performance." title="No valid Personal Growth results" />}
+    </div>
+  );
+}
+
+function Experiments({ snapshot }: { snapshot: AdminPersonalGrowthSnapshot }) {
+  return (
+    <div className="grid min-w-0 gap-4" data-personal-growth-tab="experiments">
+      <AdminStateMessage description={`${snapshot.experiments.activeCount} of ${snapshot.experiments.maximumActive} experiments are active or under review. Every experiment remains zero-cost and cannot publish.`} state={snapshot.experiments.activeCount >= snapshot.experiments.maximumActive ? "held" : "success"} title="Two-live-experiment ceiling" />
+      <CoreCard note="creates in backlog" title="New bounded experiment"><PersonalGrowthExperimentCreateForm /></CoreCard>
+      {snapshot.experiments.items.map((experiment) => (
+        <CoreCard key={experiment.id} note={experiment.status} title={experiment.hypothesis}>
+          <div className="flex flex-wrap gap-2"><AdminStatusBadge tone={experiment.status === "completed" ? "success" : experiment.status === "stopped" ? "risk" : experiment.status === "active" || experiment.status === "review" ? "information" : "neutral"}>{experiment.status}</AdminStatusBadge><AdminEntityBadge>{experiment.changedVariable}</AdminEntityBadge><AdminEntityBadge>{experiment.platform} · {experiment.format}</AdminEntityBadge><AdminEntityBadge>$0 · no publishing</AdminEntityBadge></div>
+          <dl className="mt-3 grid gap-3 text-[length:var(--admin-type-control)] sm:grid-cols-2 lg:grid-cols-3"><div><dt className="font-semibold">Primary metric</dt><dd className="m-0 text-[var(--admin-foreground-muted)]">{metricLabel(experiment.primaryMetric)}</dd></div><div><dt className="font-semibold">Evidence</dt><dd className="m-0 text-[var(--admin-foreground-muted)]">{experiment.evidenceResultIds.length} / {experiment.minimumSample} minimum · {experiment.verdict}</dd></div><div><dt className="font-semibold">Window</dt><dd className="m-0 text-[var(--admin-foreground-muted)]">{experiment.evaluationWindowDays} days from {displayDate(experiment.startDate)}</dd></div><div className="sm:col-span-2"><dt className="font-semibold">Guardrail</dt><dd className="m-0 text-[var(--admin-foreground-muted)]">{experiment.secondaryGuardrail}</dd></div><div><dt className="font-semibold">Latest owner note</dt><dd className="m-0 text-[var(--admin-foreground-muted)]">{experiment.note ?? "None recorded"}</dd></div></dl>
+          {experiment.status === "completed" || experiment.status === "stopped" ? <AdminStateMessage className="mt-3" description={`Final evidence verdict: ${experiment.verdict}. Earlier preregistration and evidence remain immutable.`} state={experiment.status === "completed" ? "success" : "held"} title={`Experiment ${experiment.status}`} /> : <PersonalGrowthExperimentActions experiment={experiment} />}
+        </CoreCard>
+      ))}
+    </div>
+  );
+}
+
+function hashPreview(value: string | null): string {
+  return value ? `${value.slice(0, 12)}…${value.slice(-8)}` : "Unavailable";
+}
+
+function VoiceStrategy({ snapshot }: { snapshot: AdminPersonalGrowthSnapshot }) {
+  const strategy = snapshot.strategy;
+  return (
+    <div className="grid min-w-0 gap-4" data-personal-growth-tab="voice-strategy">
+      <AdminCallout tone="information">Only non-reconstructive metadata reaches this page. Source text, retrieved chunks, embeddings and unpublished writing are never loaded into the client snapshot.</AdminCallout>
+      <div className="grid gap-4 lg:grid-cols-2">{snapshot.voice.journals.map((journal) => <CoreCard key={journal.language} note={journal.state} title={`${journal.language.toUpperCase()} Rapovej deník health`}><dl className="grid gap-2 text-[length:var(--admin-type-control)] sm:grid-cols-2"><div><dt className="font-semibold">Source / title hashes</dt><dd className="m-0 font-mono text-[var(--admin-foreground-muted)]">{hashPreview(journal.sourceHash)} · {hashPreview(journal.titleHash)}</dd></div><div><dt className="font-semibold">Style profile</dt><dd className="m-0 text-[var(--admin-foreground-muted)]">{journal.versionId ?? "Unavailable"}</dd></div><div><dt className="font-semibold">Last ingestion / retrieval</dt><dd className="m-0 text-[var(--admin-foreground-muted)]">{journal.generatedAt ? displayDate(journal.generatedAt.slice(0, 10)) : "Unavailable"} · {journal.retrievalAvailable === null ? "unavailable" : journal.retrievalAvailable ? "available" : "held"}</dd></div><div><dt className="font-semibold">Samples / exemplars</dt><dd className="m-0 text-[var(--admin-foreground-muted)]">{journal.styleSampleCount ?? "Unavailable"} sentences · {journal.boundedExemplarCount ?? "Unavailable"} bounded exemplars</dd></div><div><dt className="font-semibold">Profile cost / state</dt><dd className="m-0 text-[var(--admin-foreground-muted)]">{usd(journal.costUsd)} · {journal.costStatus}</dd></div></dl></CoreCard>)}</div>
+      <CoreCard note={`${snapshot.voice.profile.completedSections}/${snapshot.voice.profile.totalSections} sections`} title="GoVIRAL owner profile"><p className="m-0 text-[length:var(--admin-type-body)]">Completeness is measured without returning profile text. Private-store status: {snapshot.voice.privateStoreStatus}. Latest leak gate: {snapshot.voice.leakGate}.</p><Link className="admin-focus-ring mt-3 inline-block text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-information)]" href={snapshot.voice.profile.workspaceHref}>Open GoVIRAL workspace →</Link></CoreCard>
+      {strategy ? <><CoreCard note={`revision ${strategy.policy.revision} · ${strategy.historyCount} history entries`} title="Language and platforms actually used"><PersonalGrowthSettingsForm strategy={strategy} /></CoreCard><CoreCard note="85/15 safe bounds" title="Personal-content policy"><p className="m-0 mb-3 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">Owner-manual provenance and owner commentary remain mandatory; automatic discovery and nomination remain unavailable.</p><PersonalGrowthPolicyForm strategy={strategy} /></CoreCard><AdminSectionHeading description="Each status, weight and explicit veto change is recorded with a reason." title="Personal pillars" />{strategy.pillars.map((pillar) => <CoreCard key={pillar.pillar} note={`${pillar.status} · ${percent(pillar.weight)}`} title={pillar.pillar}><PersonalGrowthPillarForm pillar={pillar} /></CoreCard>)}</> : <AdminStateMessage description="The content strategy is missing or malformed. No defaults are fabricated and no write is offered." state="malformed" title="Strategy unavailable" />}
+    </div>
+  );
+}
+
+function Budget({ snapshot }: { snapshot: AdminPersonalGrowthSnapshot }) {
+  const budget = snapshot.budget;
+  return (
+    <div className="grid min-w-0 gap-4" data-personal-growth-tab="budget">
+      <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-border)] lg:grid-cols-4"><AdminMetric label="Nested cap" note="cannot be raised here" value="$20.00" /><AdminMetric label="Recorded spend" note="current UTC month" value={usd(budget.monthlySpendUsd)} /><AdminMetric label="Effective headroom" note="minimum of nested and company headroom" value={usd(budget.remainingUsd)} /><AdminMetric label="Company interaction" note={`${usd(budget.companyRecordedSpendUsd)} recorded of $50.00`} value={usd(budget.companyRemainingUsd)} /></div>
+      <AdminStateMessage description={`Current allocation is ${budget.activeMode}. Effective state is ${budget.degradation}; the company cap always remains authoritative.`} state={budget.degradation === "healthy" ? "success" : budget.degradation === "exhausted" ? "held" : "unavailable"} title={`Budget ${budget.degradation}`} />
+      <CoreCard note="authorised modes only" title="Allocation control"><PersonalGrowthBudgetModeForm activeMode={budget.activeMode} /><AdminTableRegion className="mt-4" label="Personal Growth allocation modes"><AdminTable><thead><tr><AdminTableHead>Mode</AdminTableHead><AdminTableHead>Synthesis</AdminTableHead><AdminTableHead>Research</AdminTableHead><AdminTableHead>Scheduling</AdminTableHead><AdminTableHead>Reserve</AdminTableHead></tr></thead><tbody>{budget.allocations.map((mode) => <tr key={mode.id}><AdminTableCell className="font-semibold">{mode.id}{mode.id === budget.activeMode ? " · active" : ""}</AdminTableCell><AdminTableCell>{usd(mode.synthesisUsd)}</AdminTableCell><AdminTableCell>{usd(mode.researchUsd)}</AdminTableCell><AdminTableCell>{usd(mode.schedulingUsd)}</AdminTableCell><AdminTableCell>{usd(mode.reserveUsd)}</AdminTableCell></tr>)}</tbody></AdminTable></AdminTableRegion></CoreCard>
+      <CoreCard note="actuals only" title="Spend by category and provider"><AdminTableRegion label="Personal Growth recorded spend"><AdminTable><thead><tr><AdminTableHead>Class</AdminTableHead><AdminTableHead>Source</AdminTableHead><AdminTableHead>Actual USD</AdminTableHead><AdminTableHead>State</AdminTableHead></tr></thead><tbody>{budget.spendByCategory.map((row) => <tr key={`${row.category}-${row.label}`}><AdminTableCell>{row.category}</AdminTableCell><AdminTableCell className="font-semibold">{row.label}</AdminTableCell><AdminTableCell>{usd(row.usd)}</AdminTableCell><AdminTableCell>{row.state}</AdminTableCell></tr>)}</tbody></AdminTable></AdminTableRegion><p className="m-0 mt-3 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">GoVIRAL incremental attribution: {usd(budget.goviralIncrementalUsd)} · Meta provider cost status: {budget.metaProviderStatus}; no cost is inferred without a receipt.</p></CoreCard>
+      <CoreCard note="optional · held by default" title="Buffer capability"><p className="m-0 text-[length:var(--admin-type-body)]">Adapter {budget.buffer.adapterEnabled === null ? "unavailable" : budget.buffer.adapterEnabled ? "enabled" : "disabled"}; queue {budget.buffer.queueEnabled ? "enabled" : "held"}; subscription {budget.buffer.subscriptionStatus}. Purchase and publishing authority are both absent.</p></CoreCard>
+      <AdminSectionHeading description="Enabled capabilities may only be disabled here. There is no enable, purchase, upgrade, cap or publishing action." title="Feature flags" />
+      <div className="grid gap-3 lg:grid-cols-2">{budget.featureFlags.map((flag) => <CoreCard key={flag.id} note={flag.enabled ? "enabled" : "held"} title={flag.id}>{flag.canDisable ? <PersonalGrowthDisableCapability capability={flag.id} /> : <p className="m-0 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">No activation control is available.</p>}</CoreCard>)}</div>
+    </div>
+  );
+}
+
 export function PersonalGrowthPanel({
   snapshot,
   tab
@@ -316,6 +427,10 @@ export function PersonalGrowthPanel({
   snapshot: AdminPersonalGrowthSnapshot;
   tab: PersonalGrowthCoreTab;
 }) {
+  if (tab === "results") return <Results snapshot={snapshot} />;
+  if (tab === "experiments") return <Experiments snapshot={snapshot} />;
+  if (tab === "voice-strategy") return <VoiceStrategy snapshot={snapshot} />;
+  if (tab === "budget") return <Budget snapshot={snapshot} />;
   if (tab === "timeline") return <Timeline snapshot={snapshot} />;
   if (tab === "threads") return <Threads snapshot={snapshot} />;
   if (tab === "instagram") return <Instagram snapshot={snapshot} />;

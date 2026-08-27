@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { AdminButton, AdminInput, AdminLabel, AdminSelect, AdminTextarea } from "./admin-primitives";
 
-async function saveAction(payload: unknown): Promise<{ ok: boolean; message: string }> {
+export async function savePersonalGrowthAction(payload: unknown): Promise<{ ok: boolean; message: string }> {
   const response = await fetch("/admin/api/personal-growth", {
     body: JSON.stringify(payload),
     credentials: "same-origin",
@@ -17,7 +17,7 @@ async function saveAction(payload: unknown): Promise<{ ok: boolean; message: str
     : { ok: false, message: typeof body.error === "string" ? body.error : "The action was not saved." };
 }
 
-function Status({ value }: { value: { ok: boolean; message: string } | null }) {
+export function PersonalGrowthActionStatus({ value }: { value: { ok: boolean; message: string } | null }) {
   return value ? (
     <p
       aria-live="polite"
@@ -46,7 +46,7 @@ export function PersonalGrowthAnchorForm({
         event.preventDefault();
         const fields = new FormData(event.currentTarget);
         startTransition(async () => {
-          const result = await saveAction({
+          const result = await savePersonalGrowthAction({
             type: "anchor",
             lane,
             date: fields.get("date"),
@@ -66,7 +66,7 @@ export function PersonalGrowthAnchorForm({
         <AdminInput id={`${lane}-anchor-reason`} maxLength={500} name="reason" placeholder="Why this anchor changes" required />
       </div>
       <AdminButton disabled={pending} type="submit" variant="primary">{pending ? "Saving…" : "Set anchor"}</AdminButton>
-      <div className="sm:col-span-3"><Status value={status} /></div>
+      <div className="sm:col-span-3"><PersonalGrowthActionStatus value={status} /></div>
     </form>
   );
 }
@@ -91,7 +91,7 @@ export function PersonalGrowthTimelineAction({
           event.preventDefault();
           const fields = new FormData(event.currentTarget);
           startTransition(async () => {
-            const result = await saveAction({
+            const result = await savePersonalGrowthAction({
               type: "timeline",
               lane,
               occurrenceDate,
@@ -144,7 +144,7 @@ export function PersonalGrowthTimelineAction({
         ) : null}
         <div className="flex flex-wrap items-center gap-3">
           <AdminButton disabled={pending} type="submit" variant="primary">{pending ? "Saving…" : "Record update"}</AdminButton>
-          <Status value={status} />
+          <PersonalGrowthActionStatus value={status} />
         </div>
       </form>
     </details>
@@ -185,7 +185,7 @@ export function PersonalGrowthThreadActions({
           event.preventDefault();
           const fields = new FormData(event.currentTarget);
           startTransition(async () => {
-            const result = await saveAction({
+            const result = await savePersonalGrowthAction({
               type: "thread",
               suggestionId,
               operation,
@@ -220,7 +220,7 @@ export function PersonalGrowthThreadActions({
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <AdminButton disabled={pending} type="submit" variant="primary">{pending ? "Saving…" : "Record decision"}</AdminButton>
-          <Status value={status} />
+          <PersonalGrowthActionStatus value={status} />
         </div>
       </form>
     </div>

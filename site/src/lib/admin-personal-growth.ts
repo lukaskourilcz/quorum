@@ -2,6 +2,10 @@ import "server-only";
 
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
+import {
+  readPersonalGrowthAdminInsights,
+  type PersonalGrowthAdminInsightsSnapshot
+} from "./personal-growth-admin-insights";
 
 export type PersonalGrowthCoreTab =
   | "today"
@@ -9,7 +13,11 @@ export type PersonalGrowthCoreTab =
   | "threads"
   | "instagram"
   | "reels"
-  | "trend-radar";
+  | "trend-radar"
+  | "results"
+  | "experiments"
+  | "voice-strategy"
+  | "budget";
 
 export type PersonalGrowthArtifactState = "missing" | "present" | "unreadable";
 export type PersonalGrowthTimelineStatus =
@@ -124,7 +132,7 @@ export interface PersonalGrowthManualReferenceView {
   verdict: "eligible" | "expired";
 }
 
-export interface AdminPersonalGrowthSnapshot {
+export interface AdminPersonalGrowthSnapshot extends PersonalGrowthAdminInsightsSnapshot {
   generatedAt: string;
   today: {
     pragueDate: string;
@@ -192,8 +200,8 @@ export interface AdminPersonalGrowthSnapshot {
     nextBbarakDeadline: string | null;
     latestGoViral: PersonalGrowthTrendView | null;
     monthlyCapUsd: 20;
-    monthlySpendUsd: number;
-    monthlyHeadroomUsd: number;
+    monthlySpendUsd: number | null;
+    monthlyHeadroomUsd: number | null;
   };
   unavailable: {
     optionalInputs: number;
@@ -731,6 +739,7 @@ export async function readAdminPersonalGrowth(
   const historyParsed = historyRead.state === "present" ? parseHistory(historyRead.value) : historyRead.state === "missing" ? { events: [], unreadable: 0 } : null;
   const events = historyParsed?.events ?? [];
   const occurrences = planner ? timeline({ planner, events, today }) : [];
+  const insightsPromise = readPersonalGrowthAdminInsights({ root, now, timeline: occurrences });
 
   const briefs = latestPresent(briefFiles.files.map((read) => {
     const input = read.state === "present" ? record(read.value) : null;
@@ -812,7 +821,8 @@ export async function readAdminPersonalGrowth(
     };
   });
 
-  const spendUsd = 0;
+  const insights = await insightsPromise;
+  const spendUsd = insights.budget.monthlySpendUsd;
   const personalRatio = instagram.projectedPersonalRatio ?? 0.85;
   const warnings = [
     ...(new Set(activeOccurrences.map(({ scheduledDate }) => scheduledDate)).size < activeOccurrences.length ? ["collision"] : []),
@@ -832,7 +842,7 @@ export async function readAdminPersonalGrowth(
     decisions: decisionsRead.state === "unreadable" || !decisions ? 1 : decisions.unreadable,
     total: 0
   };
-  unreadable.total = Object.entries(unreadable).filter(([key]) => key !== "total").reduce((sum, [, count]) => sum + count, 0);
+  unreadable.total = Object.entries(unreadable).filter(([key]) => key !== "total").reduce((sum, [, count]) => sum + count, 0) + insights.insightsUnreadable.total;
   const trendItems = trends?.opportunities ?? [];
   const nextByLane = (lane: "okraj" | "bbarak") => activeOccurrences.find((item) => item.lane === lane)?.scheduledDate ?? null;
   const okrajAnchor = planner?.lanes.find(({ lane }) => lane === "okraj")?.recurrenceAnchorDate ?? today;
@@ -891,6 +901,7 @@ export async function readAdminPersonalGrowth(
       };
 
   return {
+    ...insights,
     generatedAt: now.toISOString(),
     today: {
       pragueDate: today,
@@ -900,7 +911,7 @@ export async function readAdminPersonalGrowth(
       due,
       overdueCount: activeOccurrences.filter(({ status }) => status === "overdue").length,
       warnings: [...new Set([...(briefs.value?.warnings ?? []), ...warnings])],
-      budgetDegradation: foundation?.projectLive === false ? "critical" : "healthy",
+      budgetDegradation: foundation?.projectLive === false ? "critical" : insights.budget.degradation,
       personalRatio,
       ownerWritesAllContent: true
     },
@@ -948,7 +959,7 @@ export async function readAdminPersonalGrowth(
         ?? null,
       monthlyCapUsd: 20,
       monthlySpendUsd: spendUsd,
-      monthlyHeadroomUsd: Math.max(0, 20 - spendUsd)
+      monthlyHeadroomUsd: insights.budget.remainingUsd
     },
     unavailable: {
       optionalInputs: Number(!trends) + Number(manualReferences.length === 0),

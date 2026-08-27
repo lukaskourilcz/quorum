@@ -104,6 +104,7 @@ function tabLabel(tab: AdminVentureTab): string {
   if (tab === "studio") return "studio";
   if (tab === "social-lab") return "social drafts";
   if (tab === "trend-radar") return "trend radar";
+  if (tab === "voice-strategy") return "voice & strategy";
   return tab;
 }
 
@@ -312,7 +313,9 @@ export default async function AdminPage({
   const personalGrowthItemCount = personalGrowth.timeline.occurrences.length +
     Number(personalGrowth.threads.primary !== null) + personalGrowth.threads.alternatives.length +
     Number(personalGrowth.instagram.state === "present") + personalGrowth.reels.length +
-    personalGrowth.trends.opportunities.length + personalGrowth.manualReferences.length + personalGrowth.threads.decisions.length;
+    personalGrowth.trends.opportunities.length + personalGrowth.manualReferences.length + personalGrowth.threads.decisions.length +
+    personalGrowth.results.items.length + personalGrowth.experiments.items.length +
+    personalGrowth.voice.journals.filter(({ state }) => state === "present").length;
 
   /**
    * How many stored items a workspace holds.
@@ -720,7 +723,11 @@ export default async function AdminPage({
           : tab === "threads" ? Number(personalGrowth.threads.primary !== null) + personalGrowth.threads.alternatives.length + personalGrowth.threads.conversationOpportunities.length
             : tab === "instagram" ? Number(personalGrowth.instagram.state === "present") + personalGrowth.manualReferences.length
               : tab === "reels" ? personalGrowth.reels.length
-                : personalGrowth.trends.opportunities.length;
+                : tab === "trend-radar" ? personalGrowth.trends.opportunities.length
+                  : tab === "results" ? personalGrowth.results.items.length
+                    : tab === "experiments" ? personalGrowth.experiments.items.length
+                      : tab === "voice-strategy" ? personalGrowth.voice.journals.filter(({ state }) => state === "present").length + (personalGrowth.strategy?.pillars.length ?? 0)
+                        : personalGrowth.budget.featureFlags.length;
       return { node: <PersonalGrowthPanel snapshot={personalGrowth} tab={tab} />, count };
     }
     if (visibleCards.length) {
