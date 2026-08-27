@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260827170039-mma-analysis",
+  "date": "2026-08-27",
+  "phase": "mma-analysis",
+  "fixture": false,
+  "status": "PAUSED",
+  "stage": "VALIDATION",
+  "operatingBrief": "No model run exists to review yet — waiting for the odds data key.",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "registered for this meeting but not asked anything, because there is no model run to review yet",
+      "participated": false
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "registered for this meeting but not asked anything, because there is no model run to review yet",
+      "participated": false
+    },
+    {
+      "agent": "VIG",
+      "reason": "registered for this meeting but not asked anything, because there is no model run to review yet",
+      "participated": false
+    },
+    {
+      "agent": "TAPE",
+      "reason": "registered for this meeting but not asked anything, because there is no model run to review yet",
+      "participated": false
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "registered for this meeting but not asked anything, because there is no model run to review yet",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "registered for this meeting but not asked anything, because there is no model run to review yet",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 13.101713899999995,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "No model run exists to review yet — waiting for the odds data key.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "No model run exists to review yet — waiting for the odds data key.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Nothing was decided and nothing was authorized: the meeting reviews model runs, and none exist yet.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "No model run exists to review yet — waiting for the odds data key.",
+    "evidenceRefs": []
+  },
+  "generatedAt": "2026-08-27T17:00:39.638Z",
+  "kind": "mma-analysis",
+  "roomTranscript": {
+    "openedAt": "2026-08-27T17:00:39.637Z",
+    "closedAt": "2026-08-27T17:00:39.638Z",
+    "gavel": "FORGE",
+    "setting": "The fight data was refreshed as usual. No model run has been produced yet, so there was nothing for this meeting to read and nobody was asked anything.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-27T17:00:39.638Z",
+        "text": "No model run exists to review yet — waiting for the odds data key."
+      }
+    ]
+  }
+}
