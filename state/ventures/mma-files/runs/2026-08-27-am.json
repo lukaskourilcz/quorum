@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "cycleId": "20260827080215-article-am",
+  "date": "2026-08-27",
+  "slot": "am",
+  "status": "published",
+  "articleRef": "7cafa56b6dcab8a20724af28c7cee0bf1a2378ff8f82a4741fd6be281712095f",
+  "slateSource": "derived",
+  "subjectRefs": [
+    "ufc:amanda-nunes"
+  ],
+  "spentUsd": null,
+  "generatedAt": "2026-08-27T08:02:15.516Z"
+}

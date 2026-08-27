@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "carousel-recipe/1",
+  "venture": "mma-files",
+  "slug": "ufc-amanda-nunes",
+  "date": "2026-08-27",
+  "family": "concrete",
+  "variant": "A",
+  "accentSwap": true,
+  "treatment": "duotone",
+  "typeScale": 1,
+  "phaseSeed": 1,
+  "summaryRef": "ventures/carousel-studio/summaries/mma-files/2026-08-27-ufc-amanda-nunes.json",
+  "copyRef": "ventures/carousel-studio/social-copy/mma-files/2026-08-27-ufc-amanda-nunes.json"
+}

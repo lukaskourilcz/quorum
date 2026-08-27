@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "ufc-amanda-nunes",
+  "date": "2026-08-27",
+  "locale": "cs",
+  "kicker": "MMA Files · 27. srp",
+  "headline": "Amanda Nunes: co říkají čísla o kariéře brazilské šampionky UFC",
+  "coverLine": "Nunesová: kariéra v číslech a klíčových zápasech",
+  "standfirst": "Bilance 23 vítězství a 5 porážek, dvě prohry a návrat na vrchol. Kariérní data Nunesové ukazují, čím se její pouť oktagonem vyznačuje.",
+  "passages": [
+    "Amanda Nunes ukončila svou pouť v UFC s celkovou bilancí 23 vítězství a 5 porážek. Organizace ji od srpna 2026 vede jako bývalou bojovnici.",
+    "Z dvanácti zápasů zachycených v dostupných datech vyhrála deset. Šest výher přišlo na body, dvě technickým knockoutem a dvě submisí.",
+    "Peñová a obě strany rivalství Nejvýraznější epizodu kariéry tvoří dvojzápas s Juliannou Peñovou. Na UFC 269 v prosinci 2021 Nunesová podlehla škrcením zezadu ve 2. kole.",
+    "Bylo to rychlé: zápas trval 506 sekund. Na UFC 277 v červenci 2022 odčinila porážku jednomyslným rozhodnutím. Tentokrát odboxovaly všech pět kol, tedy 1 500 sekund.",
+    "Pennington v pátém kole Dříve, na UFC 224 v květnu 2018, zastavila Nunesová Raquel Pennington technickým knockoutem lokty a pěstmi ve 5. kole po 1 356 sekundách boje.",
+    "Co říkají souhrnná čísla Průměrná délka zápasu v databázi činí 993 sekund. Z posledních pěti utkání Nunesová vyhrála tři.",
+    "Poslední zaznamenaný zápas proběhl na UFC 277 v červenci 2022, od té doby databáze žádný další nezachycuje."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "MMAnytt · CC BY · Wikimedia Commons"
+}

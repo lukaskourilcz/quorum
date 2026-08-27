@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-amanda-nunes",
+  "date": "2026-08-27",
+  "rung": "entity-linked",
+  "selected": "wikidata:Q4739716",
+  "verdicts": [
+    {
+      "mode": "identity-advisory",
+      "considered": 1,
+      "selected": null,
+      "reason": "advisory-only",
+      "candidates": [
+        {
+          "candidateId": "wikidata:Q4739716",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "logo-or-watermark",
+            "embedded-text"
+          ],
+          "reason": "The image shows a weigh-in moment with prominent sponsor logos (T-Mobile, crypto.com, UFC) and burned-in event text visible in the background, which violates the publication rules against logos and embedded text.",
+          "sceneCs": "sportkyně v pase na váhování"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002276
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-27T08:02:15.516Z"
+}

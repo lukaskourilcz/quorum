@@ -4,6 +4,7 @@
 
 | Published | Slot | Status | Format | Czech title | Subjects covered |
 | --- | --- | --- | --- | --- | --- |
+| 2026-08-27 | am | published | fighter-profile | Amanda Nunes: co říkají čísla o kariéře brazilské šampionky UFC | ufc:amanda-nunes ufc:julianna-pena ufc:raquel-pennington |
 | 2026-08-26 | am | published | fight-week-preview | UFC Fight Night: Nurmagomedov vs. Song přivítá Aori Qilenga v bantamo… | ufc:event:ufc-fight-night-nurmagomedov-vs-song ufc:aori-qileng |
 | 2026-08-25 | am | published | fighter-profile | Menifield míří na UFC 331 s bilancí 18-6-1 a dvěma KO porážkami v zád… | ufc:alonzo-menifield ufc:azamat-murzakanov ufc:carlos-ulberg |
 | 2026-08-24 | am | published | fighter-profile | Aljamain Sterling: profil bojovníka s rekordem 26–5 | ufc:aljamain-sterling ufc:brian-ortega ufc:petr-yan ufc:sean-o-malley |
@@ -23,4 +24,4 @@
 | 2026-08-04 | am | published | fighter-profile | Gustavo Lopez: bantamová váha mezi UFC a evropskými promotéry | oktagon:gustavo-lopez |
 | 2026-08-02 | am | published | fighter-profile | Valentina Shevchenko: tři zápasy s Grasso tvoří závěrečnou kapitolu k… | ufc:alexa-grasso ufc:valentina-shevchenko |
 
-Articles on file: 18. Rows shown: 18.
+Articles on file: 19. Rows shown: 19.
