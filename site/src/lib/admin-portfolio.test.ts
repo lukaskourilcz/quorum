@@ -226,7 +226,7 @@ describe("declared tabs against stored cards", () => {
     expect(portfolio.ventures.find((venture) => venture.id === "personal-growth")).toMatchObject({
       name: "Lukáš Growth Desk",
       visibility: "owner-only",
-      tabs: ["plans"]
+      tabs: ["today", "timeline", "threads", "instagram", "reels", "trend-radar"]
     });
   });
 });

@@ -568,7 +568,12 @@
         ]
       },
       "adminTabs": [
-        "plans"
+        "today",
+        "timeline",
+        "threads",
+        "instagram",
+        "reels",
+        "trend-radar"
       ],
       "meetings": [
         {

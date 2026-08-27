@@ -57,7 +57,7 @@ export function AdminMobileNav({
         aria-label="Primary Admin navigation"
         className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 gap-1 border-t border-[var(--admin-border)] bg-[var(--admin-toolbar)] px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden"
         data-admin-mobile-nav
-        data-personal-growth-slot="held-until-issue-370-passes"
+        data-personal-growth-workspace="available"
       >
         {overview ? <MobileDestinationLink destination={overview} icon={LayoutDashboard} /> : null}
         {approvals ? <MobileDestinationLink destination={approvals} icon={CheckCheck} /> : null}
