@@ -3,6 +3,8 @@ import { expect, test } from "@playwright/test";
 
 const adminDestinations = [
   "/admin",
+  "/admin/operations",
+  "/admin/implementation-plans",
   "/admin?view=approvals",
   "/admin?view=manual-tasks",
   "/admin?view=future",

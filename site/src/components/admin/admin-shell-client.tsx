@@ -86,7 +86,7 @@ export function AdminShellClient({
     <div
       className="min-h-svh bg-[var(--admin-desktop)] text-[var(--admin-foreground)] md:h-svh md:overflow-hidden md:px-[var(--admin-desktop-padding-inline)] md:py-[var(--admin-desktop-padding-block)]"
       data-admin
-      data-admin-hydrated={hydrated}
+      data-admin-hydrated={hydrated ? "true" : "false"}
       data-admin-theme={theme}
       data-preference-pending={preferencePending}
       style={shellStyle}
