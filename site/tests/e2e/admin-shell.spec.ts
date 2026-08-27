@@ -29,7 +29,7 @@ test("desktop Admin shell keeps its window, scroll, preferences and real command
   await expect(page.getByRole("navigation", { name: "Admin destinations" })).toBeVisible();
   await expect(page.locator("[data-admin-window-controls] span")).toHaveCount(3);
   await expect(page.locator("[data-admin-sidebar]")).toHaveCSS("width", "224px");
-  await expect(page.locator("[data-admin]").first()).toHaveAttribute("data-admin-hydrated", "true");
+  await expect(page.locator("[data-admin-hydrated]")).toHaveAttribute("data-admin-hydrated", "true");
   expect(await page.evaluate(() => ({
     documentHeight: document.documentElement.scrollHeight,
     viewportHeight: window.innerHeight,
