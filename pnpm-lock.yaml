@@ -5,9 +5,14 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  brace-expansion@<1.1.18: ^1.1.18
-  js-yaml@<4.3.1: ^4.3.1
-  nanoid@<3.3.17: ^3.3.17
+  bare-events@>=2.9.2: 2.9.1
+  brace-expansion@<1.1.18: 1.1.18
+  brace-expansion@1.1.16: 1.1.17
+  brace-expansion@5.0.7: 5.0.9
+  js-yaml@<4.3.1: 4.3.1
+  nanoid@<3.3.17: 3.3.17
+  postcss@<8.5.18: 8.5.25
+  sharp@<0.35.0: 0.35.3
 
 importers:
 
@@ -2050,8 +2055,8 @@ packages:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
     engines: {node: 18 || 20 || >=22}
 
-  bare-events@2.9.2:
-    resolution: {integrity: sha512-AIPKioV7/Y/8KfZ3AAhjPJxLLbY49S64Ym5DakZlUg75qQiTgUq9hEJoEwa4eUezPUlXRy/i5NpsKvo9jgKmoA==}
+  bare-events@2.9.1:
+    resolution: {integrity: sha512-Z0oHEHAFDZkffN8Qc39zNZjQlMDkPJRyyyZieU1VH7u8c5S+qHZ2S8ixdKIAxEjfHO7FJxXmJWgteOghVanIsg==}
     peerDependencies:
       bare-abort-controller: '*'
     peerDependenciesMeta:
@@ -5893,7 +5898,7 @@ snapshots:
 
   balanced-match@4.0.4: {}
 
-  bare-events@2.9.2: {}
+  bare-events@2.9.1: {}
 
   baseline-browser-mapping@2.11.1: {}
 
@@ -6551,7 +6556,7 @@ snapshots:
 
   events-universal@1.0.1:
     dependencies:
-      bare-events: 2.9.2
+      bare-events: 2.9.1
     transitivePeerDependencies:
       - bare-abort-controller
 
