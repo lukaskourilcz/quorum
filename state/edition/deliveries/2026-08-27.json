@@ -1,11 +1,12 @@
 {
   "schemaVersion": 1,
   "date": "2026-08-27",
-  "packageHash": "89ec048fa408e94402b660b9c79c75d44f54fff79397470cbe863cda7d13f3bf",
-  "status": "delivered",
+  "packageHash": "029e618ac90c8d20ae43462fd4117762eaab52848a8f028c43b9197b8a049789",
+  "status": "needs_reconciliation",
   "editionStatus": "no_edition",
   "targetRepository": "lukaskourilcz/aifirst",
-  "targetCommit": "49a34e37b124901120889f444d17daf2215ce2dc",
-  "deliveredAt": "2026-08-27T03:11:41.205Z",
+  "code": "hash_conflict",
+  "detail": "> aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-08-27-029e618ac90c8d20ae43462fd4117762eaab52848a8f028c43b9197b8a049789.json /home/runner/work/_temp/aifirst-delivery-1 [delivery:hash_conflict] public/data/board/2026-08-27.json is missing or differs from the immutable delivered bytes ELIFECYCLE Command failed with exit code 1.",
+  "recordedAt": "2026-08-27T07:03:38.929Z",
   "tags": []
 }

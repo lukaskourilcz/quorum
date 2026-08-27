@@ -4,7 +4,7 @@
   "date": "2026-08-27",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "NO_EDITION",
+  "status": "NEEDS_RECONCILIATION",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -262,7 +262,7 @@
   },
   "decision": {
     "outcome": "NO_EDITION",
-    "summary": "The day's writing budget was already spent, so no article was written.",
+    "summary": "A different edition already holds this date in the magazine, so this one was held back. The owner has the technical report.",
     "evidenceRefs": [
       "source:404-media",
       "source:anthropic-news",

@@ -553,3 +553,7 @@ items in place. Lack of response never authorizes an action. -->
   build that never ran. An empty commit to the magazine's main triggers one; if that is what it
   takes twice, the host's git integration is the thing to look at.
   [imp:5] [owner:me] [time:15m] [kind:deploy]
+
+- [ ] **CAUGHT-UP-DELIVERY-2026-08-27** — hash_conflict: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-08-27-029e618ac90c8d20ae43462fd4117762eaab52848a8f028c43b9197b8a049789.json /home/runner/work/_temp/aifirst-delivery-1 [delive.
+  RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
