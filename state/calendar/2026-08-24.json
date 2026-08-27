@@ -424,14 +424,13 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-27-cu-edition",
-      "decisionOneLiner": "The day's writing budget was already spent, so no article was written."
+      "decisionOneLiner": "A different edition already holds this date in the magazine, so this one was held back. The owner has the technical report."
     },
     {
       "at": "2026-08-27T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
     },
     {
       "at": "2026-08-27T05:00:00.000Z",
@@ -460,19 +459,23 @@
       "at": "2026-08-27T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "scheduled"
+      "status": "held",
+      "decisionOneLiner": "The desk published this slot's article."
     },
     {
       "at": "2026-08-27T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "scheduled"
+      "status": "late",
+      "decisionOneLiner": "The run for this slot has not arrived yet."
     },
     {
       "at": "2026-08-27T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-27-bh-desk",
+      "decisionOneLiner": "The selection phase remains current. No provider was called, nothing was published and this day cost $0."
     },
     {
       "at": "2026-08-27T11:00:00.000Z",
