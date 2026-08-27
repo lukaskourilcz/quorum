@@ -2,6 +2,7 @@ import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promis
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { MAX_OWNER_RESULT_BYTES } from "@/lib/admin-route-limits";
 
 vi.mock("server-only", () => ({}));
 
@@ -48,7 +49,7 @@ async function routeFor(root: string, production = false) {
   vi.stubEnv("ADMIN_PASSWORD", "correct-password");
   if (production) vi.stubEnv("VERCEL", "1");
   vi.resetModules();
-  const [{ POST, MAX_OWNER_RESULT_BYTES }, { createAdminSessionToken, ADMIN_SESSION_COOKIE }] = await Promise.all([
+  const [{ POST }, { createAdminSessionToken, ADMIN_SESSION_COOKIE }] = await Promise.all([
     import("./route"),
     import("@/lib/admin-session")
   ]);

@@ -6,7 +6,7 @@ import {
   DEFAULT_CHUNK_MAX_TOKENS,
   DEFAULT_CHUNK_MIN_TOKENS,
   estimateBookTokens
-} from "../src/ventures/door-money/ingest/chunker.js";
+} from "../src/manuscript-chunker.js";
 
 const fixturePath = path.join(process.cwd(), "tests/fixtures/door-money/synthetic-diary.md");
 let fixture = "";

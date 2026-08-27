@@ -3,6 +3,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { MAX_RECOMMENDATION_DECISION_BYTES } from "@/lib/admin-route-limits";
 
 vi.mock("server-only", () => ({}));
 
@@ -35,7 +36,7 @@ async function routeFor(root: string, production = false) {
   vi.stubEnv("ADMIN_PASSWORD", "correct-password");
   if (production) vi.stubEnv("VERCEL", "1");
   vi.resetModules();
-  const [{ POST, MAX_RECOMMENDATION_DECISION_BYTES }, { createAdminSessionToken, ADMIN_SESSION_COOKIE }] = await Promise.all([
+  const [{ POST }, { createAdminSessionToken, ADMIN_SESSION_COOKIE }] = await Promise.all([
     import("./route"),
     import("@/lib/admin-session")
   ]);

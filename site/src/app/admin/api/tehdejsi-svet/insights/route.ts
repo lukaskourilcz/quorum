@@ -2,9 +2,9 @@ import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request
 import { parseTehdejsiProductInsightAction } from "@/lib/tehdejsi-product-insight-model";
 import { updateTehdejsiProductInsight } from "@/lib/tehdejsi-product-insights-store";
 import { TehdejsiStateError } from "@/lib/tehdejsi-state-store";
+import { MAX_INSIGHT_ACTION_BYTES } from "@/lib/admin-route-limits";
 
 export const dynamic = "force-dynamic";
-export const MAX_INSIGHT_ACTION_BYTES = 2_048;
 const json = (value: unknown, status: number) => Response.json(value, { status, headers: { "Cache-Control": "no-store, private" } });
 
 export async function POST(request: Request): Promise<Response> {

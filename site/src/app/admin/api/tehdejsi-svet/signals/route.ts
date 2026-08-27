@@ -2,9 +2,9 @@ import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request
 import { parseTehdejsiSignalHarvestInput } from "@/lib/tehdejsi-signal-model";
 import { saveTehdejsiSignalHarvest } from "@/lib/tehdejsi-signals-store";
 import { TehdejsiStateError } from "@/lib/tehdejsi-state-store";
+import { MAX_SIGNAL_BYTES } from "@/lib/admin-route-limits";
 
 export const dynamic = "force-dynamic";
-export const MAX_SIGNAL_BYTES = 32_768;
 
 const json = (value: unknown, status: number) =>
   Response.json(value, { status, headers: { "Cache-Control": "no-store, private" } });

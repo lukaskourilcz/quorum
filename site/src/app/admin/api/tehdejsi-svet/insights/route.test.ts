@@ -2,6 +2,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { MAX_INSIGHT_ACTION_BYTES } from "@/lib/admin-route-limits";
 
 vi.mock("server-only", () => ({}));
 const roots: string[] = [];
@@ -15,7 +16,7 @@ async function route() {
   const directory = path.join(root, "state/ventures/tehdejsi-svet/product-insights"); await mkdir(directory, { recursive: true });
   await writeFile(path.join(directory, `${insight.id}.json`), `${JSON.stringify(insight, null, 2)}\n`);
   vi.stubEnv("BOARDLESSAI_REPO_ROOT", root); vi.stubEnv("ADMIN_USER", "owner"); vi.stubEnv("ADMIN_PASSWORD", "correct-password"); vi.resetModules();
-  const [{ POST, MAX_INSIGHT_ACTION_BYTES }, { createAdminSessionToken, ADMIN_SESSION_COOKIE }] = await Promise.all([import("./route"), import("@/lib/admin-session")]);
+  const [{ POST }, { createAdminSessionToken, ADMIN_SESSION_COOKIE }] = await Promise.all([import("./route"), import("@/lib/admin-session")]);
   return { root, insight, POST, MAX_INSIGHT_ACTION_BYTES, cookie: `${ADMIN_SESSION_COOKIE}=${createAdminSessionToken("owner", "correct-password")}` };
 }
 

@@ -9,7 +9,7 @@ import {
   runBookAnnotationPass,
   type BookIngestCall
 } from "../src/ventures/door-money/ingest/annotate.js";
-import { chunkManuscript } from "../src/ventures/door-money/ingest/chunker.js";
+import { chunkManuscript } from "../src/manuscript-chunker.js";
 
 const fixturePath = path.join(process.cwd(), "tests/fixtures/door-money/synthetic-diary.md");
 let fixture = "";

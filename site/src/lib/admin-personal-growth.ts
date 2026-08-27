@@ -258,7 +258,7 @@ const REEL_SERIES: Readonly<Record<string, { concept: string; purpose: string }>
     purpose: "Use trend intelligence without letting it invent or own the final story."
   },
   "english-rapovej-denik": {
-    concept: "A bounded English or bilingual Rapovej deník experiment.",
+    concept: "A bounded English Rapovej deník experiment with optional Czech subtitles.",
     purpose: "Test the separate English lane only after its private profile exists."
   }
 };

@@ -20,7 +20,7 @@ import {
   type BookIngestCallContext,
   type BookIngestRoute
 } from "./annotate.js";
-import type { ChunkedManuscript } from "./chunker.js";
+import type { ChunkedManuscript } from "../../../manuscript-chunker.js";
 
 const Sha256Schema = z.string().regex(/^sha256:[a-f0-9]{64}$/);
 

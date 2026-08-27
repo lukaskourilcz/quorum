@@ -5,9 +5,9 @@ import {
   ADMIN_THEME_COOKIE,
   parseAdminShellPreferencePatch
 } from "@/lib/admin-shell-preferences";
+import { MAX_ADMIN_PREFERENCE_BYTES } from "@/lib/admin-route-limits";
 
 export const dynamic = "force-dynamic";
-export const MAX_ADMIN_PREFERENCE_BYTES = 256;
 
 const privateHeaders = {
   "Cache-Control": "no-store, private",

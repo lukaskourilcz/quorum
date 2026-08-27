@@ -71,6 +71,24 @@ the original results or sending data to another venture.
 Provider versions, permissions and the disabled Buffer seam are recorded in
 `docs/PERSONAL-GROWTH-PROVIDERS.md`.
 
+## Protected Admin workspace
+
+The authenticated Admin exposes one server-built Personal Growth snapshot across ten tabs: Today,
+Timeline, Threads, Instagram, Reels, Trend Radar, Results, Experiments, Voice & Strategy, and
+Budget. Missing or malformed records stay explicitly unavailable; the loader does not manufacture
+metrics or examples. The same owner-only POST boundary handles bounded anchor changes, timeline
+completion/skip/reschedule reasons, Threads decisions, manual results and corrections, experiment
+lifecycle actions, strategy revisions, allocation-mode selection, and disabling an already-enabled
+capability. Histories are append-only and replay-safe.
+
+The Admin can never raise the $20 cap, enable a held provider, buy or upgrade a service, queue a
+Buffer post, publish, reply, or discover portfolio work. Results accept only Personal Growth
+records and bounded owner-manual references; invalid automatic portfolio, foreign-venture, and
+private-field inputs are discarded before projection. Voice & Strategy receives only hashes,
+counts, bounded style measurements, dates, costs and status. It never loads source journal text,
+chunks, embeddings, unpublished writing, provider prompts or provider responses into the client
+snapshot.
+
 ## Owner-authored lanes
 
 OKRAJ is a 10-day, approximately 10-slide life-story carousel rhythm. Sandra is the configured
@@ -85,8 +103,9 @@ ingests one owner-selected journal file. Live ingestion also requires
 `PERSONAL_GROWTH_PRIVATE_CLONE_PATH` or `--private-root` pointing at a separate private Git clone.
 The public state root and private clone must not overlap.
 
-The implementation reuses Door Money's deterministic structural chunker and local-private-store
-pattern. Czech and English are independent lanes and are never merged or translated. Source text,
+The implementation uses the repository's venture-neutral deterministic structural chunker and a
+separate local-private-store boundary. Czech and English are independent lanes and are never
+merged or translated. Source text,
 chunks and structural retrieval material stay in the private clone. Git state receives only a
 source hash, title hash, version id, counts, bounded numeric style traits, cost and availability.
 An absent English lane is `unavailable`, not a request to translate Czech material.

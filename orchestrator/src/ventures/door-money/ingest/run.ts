@@ -13,7 +13,7 @@ import { guardedJsonCall, type GuardedCallInput } from "../../../llm/call.js";
 import { readJson } from "../../../state.js";
 import type { StyleProfile } from "../../../contracts/style-profile.js";
 import type { BookAnnotationRollups, AnnotatedBookChunk, BookIngestCall } from "./annotate.js";
-import { chunkManuscript, type ChunkedManuscript } from "./chunker.js";
+import { chunkManuscript, type ChunkedManuscript } from "../../../manuscript-chunker.js";
 import {
   bookIngestCycleId,
   manuscriptSha256,

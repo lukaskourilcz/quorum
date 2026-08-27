@@ -12,7 +12,7 @@ import { StyleProfileSchema, type StyleExemplar, type StyleProfile } from "../..
 import { guardedJsonCall } from "../../../llm/call.js";
 import { configRoot } from "../../../paths.js";
 import { wrapUntrustedData } from "../../../security/content.js";
-import { estimateBookTokens, type ChunkedManuscript } from "./chunker.js";
+import { estimateBookTokens, type ChunkedManuscript } from "../../../manuscript-chunker.js";
 import type { AnnotatedBookChunk, BookIngestCall } from "./annotate.js";
 
 const HashSchema = z.string().regex(/^sha256:[a-f0-9]{64}$/);

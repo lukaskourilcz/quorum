@@ -10,7 +10,7 @@ import {
   type AnnotatedBookChunk,
   type BookIngestCall
 } from "../src/ventures/door-money/ingest/annotate.js";
-import { chunkManuscript, type ChunkedManuscript } from "../src/ventures/door-money/ingest/chunker.js";
+import { chunkManuscript, type ChunkedManuscript } from "../src/manuscript-chunker.js";
 import {
   assertStyleRouteReservations,
   loadBookStyleRoutes,

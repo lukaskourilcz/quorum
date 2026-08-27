@@ -12,7 +12,7 @@
     "pretypecheck": "pnpm --filter @boardlessai/carousel-studio build",
     "build": "next build",
     "dev": "next dev",
-    "dev:e2e": "node --max-old-space-size=5120 node_modules/next/dist/bin/next dev",
+    "dev:e2e": "node --max-old-space-size=5120 node_modules/next/dist/bin/next dev --hostname 127.0.0.1",
     "lint": "eslint .",
     "start": "next start",
     "test": "vitest run --passWithNoTests",

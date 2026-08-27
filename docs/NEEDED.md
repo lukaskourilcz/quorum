@@ -490,7 +490,18 @@ Judgement calls. Nothing is blocked on code for any of these.
 
 ---
 
-## Only before Personal Growth channel insights
+## Personal Growth owner actions
+
+- [ ] **Configure the separate Personal Growth private clone and ingest owner-selected journals.**
+  Set `PERSONAL_GROWTH_PRIVATE_CLONE_PATH` to a private clone that does not overlap this
+  repository, then run the documented ingestion command separately for the Czech and optional
+  English Rapovej deník sources. Select the files and titles yourself; no agent may infer,
+  translate or move private journal text into Git. [imp:3] [owner:me] [time:30m] [kind:setup]
+
+- [ ] **Review the Personal Growth recurrence anchors in Admin.** Confirm the first OKRAJ and
+  BBARAK dates and adjust them through the protected Timeline controls if the seeded dates no
+  longer match the real publishing rhythm. The owner writes and publishes both artifacts.
+  [imp:2] [owner:me] [time:10m] [kind:decision]
 
 - [ ] **Authorise the owner-only Meta insight connection.** Create or select the Meta app for
   `lukaskouril93`, grant only the Instagram/Threads read permissions listed in
@@ -499,6 +510,16 @@ Judgement calls. Nothing is blocked on code for any of these.
   token in Git. Leave `instagramInsights`, `threadsInsights`, `threadsSearch`, `providerLive` and
   `tokenRefresh` false until a reviewed connection test confirms the exact scopes and renewal path.
   This task grants no posting or Buffer authority. [imp:2] [owner:me] [time:30m] [kind:setup]
+
+- [ ] **Decide whether Personal Growth should ever use Buffer.** The adapter, queue, purchase and
+  publishing authorities are all held. If scheduling becomes useful, approve the exact plan,
+  account and queue scope first; do not enable `bufferQueue` or select the buffer allocation
+  merely because the seam exists. [imp:1] [owner:me] [time:10m] [kind:decision]
+
+- [ ] **Enable Personal Growth provider flags only after the reviewed connection test.** Once the
+  exact read scopes, account ids, token storage and renewal path are verified, countersign the
+  production change that enables only the required insight flags. Keep `publishing` false;
+  Personal Growth has no posting authority. [imp:2] [owner:me] [time:10m] [kind:decision]
 
 ---
 

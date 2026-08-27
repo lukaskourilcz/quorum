@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ADMIN_SESSION_COOKIE, createAdminSessionToken } from "@/lib/admin-session";
 import { ADMIN_RAIL_COOKIE, ADMIN_THEME_COOKIE } from "@/lib/admin-shell-preferences";
-import { MAX_ADMIN_PREFERENCE_BYTES, POST } from "./route";
+import { MAX_ADMIN_PREFERENCE_BYTES } from "@/lib/admin-route-limits";
+import { POST } from "./route";
 
 const ORIGIN = "https://boardless.example";
 const now = new Date("2026-08-19T10:00:00.000Z");

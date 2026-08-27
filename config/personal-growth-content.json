@@ -35,7 +35,6 @@
     "automaticVentureNomination": false,
     "automaticReshare": false,
     "ventureOnlyFeedPublishing": false,
-    "kvorumEligible": false,
     "mmaFilesDefaultEligible": false
   },
   "pillars": [

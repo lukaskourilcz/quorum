@@ -2,6 +2,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { MAX_TEHDEJSI_RESULT_BYTES } from "@/lib/admin-route-limits";
 
 vi.mock("server-only", () => ({}));
 const roots: string[] = [];
@@ -42,7 +43,7 @@ async function setup() {
   vi.stubEnv("ADMIN_PASSWORD", "correct-password");
   vi.stubEnv("NODE_ENV", "development");
   vi.resetModules();
-  const [{ POST, MAX_TEHDEJSI_RESULT_BYTES }, session] = await Promise.all([import("./route"), import("@/lib/admin-session")]);
+  const [{ POST }, session] = await Promise.all([import("./route"), import("@/lib/admin-session")]);
   return {
     POST,
     MAX_TEHDEJSI_RESULT_BYTES,
