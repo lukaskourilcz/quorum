@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "runId": "d843f6fd-3c64-4b0a-8ae3-3ee4af155f8f",
+  "date": "2026-08-27",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-08-27T07:00:51.206Z",
+  "completedAt": "2026-08-27T07:00:51.207Z",
+  "stages": [],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [],
+  "packageStatus": "no_edition",
+  "warnings": [
+    "budget_exhausted"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}

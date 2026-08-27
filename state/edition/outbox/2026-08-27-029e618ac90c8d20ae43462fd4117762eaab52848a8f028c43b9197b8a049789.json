@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "edition-package/1",
+  "date": "2026-08-27",
+  "idempotencyKey": "029e618ac90c8d20ae43462fd4117762eaab52848a8f028c43b9197b8a049789",
+  "generation": {
+    "models": {
+      "curation": "claude-sonnet-4-6",
+      "writing": "claude-sonnet-4-6"
+    }
+  },
+  "reason": "cu-edition decision meetings/2026-08-27-cu-edition",
+  "status": "no_edition",
+  "board": {
+    "meetingRef": "meetings/2026-08-27-cu-edition",
+    "roomUrl": "https://boardless-ai.vercel.app/meetings/2026-08-27-cu-edition",
+    "noEditionReason": "The day's writing budget was already spent, so no article was written."
+  }
+}

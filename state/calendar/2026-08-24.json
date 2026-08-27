@@ -424,7 +424,7 @@
       "kind": "cu-edition",
       "status": "held",
       "meetingRef": "meetings/2026-08-27-cu-edition",
-      "decisionOneLiner": "The article failed its own checks on every attempt the budget allowed, so nothing was published."
+      "decisionOneLiner": "The day's writing budget was already spent, so no article was written."
     },
     {
       "at": "2026-08-27T04:00:00.000Z",
@@ -453,7 +453,8 @@
       "at": "2026-08-27T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "late",
+      "decisionOneLiner": "The run for this slot has not arrived yet."
     },
     {
       "at": "2026-08-27T08:00:00.000Z",
