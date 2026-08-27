@@ -18,7 +18,7 @@ import {
 } from "../../contracts/venture-recommendation.js";
 import { repoRoot } from "../../paths.js";
 import { AnnotatedBookChunkSchema } from "./ingest/annotate.js";
-import type { ManuscriptChunk } from "./ingest/chunker.js";
+import type { ManuscriptChunk } from "../../manuscript-chunker.js";
 import type { BookIngestEmbedding } from "./ingest/run.js";
 import {
   doorMoneyHookStyle,

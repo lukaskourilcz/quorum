@@ -23,6 +23,9 @@ const registeredTabs = registry.ventures.flatMap((venture) =>
     venture: venture.id
   }))
 );
+const personalGrowthTabs = registry.ventures
+  .find(({ id }) => id === "personal-growth")!
+  .adminTabs;
 
 async function expectNoHighImpactAxeViolations(
   page: Page,
@@ -61,6 +64,48 @@ test("every tab in the venture registry loads from the production artifact witho
     ).toHaveCount(0);
   }
 
+  expect(failures).toEqual([]);
+  expect(mutationAttempts).toEqual([]);
+});
+
+test("Personal Growth keeps all ten owner-only views contained and private across themes and breakpoints", async ({
+  page
+}) => {
+  test.setTimeout(600_000);
+  const failures = captureAdminRuntimeFailures(page);
+  const mutationAttempts = await guardAdminWrites(page);
+
+  for (const sample of [
+    { theme: "light" as const, viewport: { height: 900, width: 1440 } },
+    { theme: "dark" as const, viewport: { height: 900, width: 1440 } },
+    { theme: "light" as const, viewport: { height: 844, width: 390 } },
+    { theme: "dark" as const, viewport: { height: 844, width: 390 } }
+  ]) {
+    await page.setViewportSize(sample.viewport);
+    await setAdminPreferences(page, { theme: sample.theme });
+    for (const tab of personalGrowthTabs) {
+      const route = `/admin?venture=personal-growth&tab=${tab}`;
+      const response = await page.goto(route, { waitUntil: "domcontentloaded" });
+      expect(response?.status(), route).toBe(200);
+      await expect(page.locator(`[data-personal-growth-tab="${tab}"]`))
+        .toBeVisible();
+      await expect(page.locator(`a[href="${route}"][aria-current="page"]`))
+        .toBeVisible();
+      await expectNoDocumentOverflow(
+        page,
+        `${sample.theme} Personal Growth ${tab} at ${sample.viewport.width}px`
+      );
+      expect((await page.locator("body").innerText()).toLowerCase())
+        .not.toMatch(/manuscripttext|rawprompt|rawresponse|private source fixture/u);
+    }
+    await expectNoHighImpactAxeViolations(
+      page,
+      `${sample.theme} Personal Growth at ${sample.viewport.width}px`,
+      ["[data-admin-content]"]
+    );
+  }
+
+  expect(personalGrowthTabs).toHaveLength(10);
   expect(failures).toEqual([]);
   expect(mutationAttempts).toEqual([]);
 });

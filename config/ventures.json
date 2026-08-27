@@ -568,7 +568,16 @@
         ]
       },
       "adminTabs": [
-        "plans"
+        "today",
+        "timeline",
+        "threads",
+        "instagram",
+        "reels",
+        "trend-radar",
+        "results",
+        "experiments",
+        "voice-strategy",
+        "budget"
       ],
       "meetings": [
         {

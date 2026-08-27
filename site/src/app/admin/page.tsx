@@ -16,6 +16,7 @@ import { ImplementationProgramCompactSummary } from "@/components/admin/implemen
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { GoViralProfilePanel } from "@/components/admin/goviral-profile-panel";
 import { OwnerAttentionPanel } from "@/components/admin/owner-attention-panel";
+import { PersonalGrowthOverview, PersonalGrowthPanel } from "@/components/admin/personal-growth-panel";
 import { CaughtUpEventsPanel } from "@/components/admin/caught-up-events-panel";
 import { BooksofhistoryDossiersPanel } from "@/components/admin/booksofhistory-dossiers-panel";
 import { BooksofhistoryFeaturesPanel } from "@/components/admin/booksofhistory-features-panel";
@@ -65,6 +66,7 @@ import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { readAdminKvorum } from "@/lib/admin-kvorum";
 import { readAdminImplementationProgress } from "@/lib/admin-implementation-plans";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
+import { readAdminPersonalGrowth, type PersonalGrowthCoreTab } from "@/lib/admin-personal-growth";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
 import { readAdminSnapshot } from "@/lib/admin-state";
 import { readCarouselStudio } from "@/lib/carousel-studio";
@@ -101,6 +103,8 @@ function tabLabel(tab: AdminVentureTab): string {
   if (tab === "visuals") return "images";
   if (tab === "studio") return "studio";
   if (tab === "social-lab") return "social drafts";
+  if (tab === "trend-radar") return "trend radar";
+  if (tab === "voice-strategy") return "voice & strategy";
   return tab;
 }
 
@@ -177,7 +181,8 @@ export default async function AdminPage({
     doorMoney,
     tehdejsiSvet,
     kvorum,
-    implementationProgress
+    implementationProgress,
+    personalGrowth
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -205,7 +210,8 @@ export default async function AdminPage({
     readAdminDoorMoney(),
     readAdminTehdejsiSvet(),
     readAdminKvorum(),
-    readAdminImplementationProgress()
+    readAdminImplementationProgress(),
+    readAdminPersonalGrowth()
   ]);
   /*
    * `design-lab` is the name; `carousel-studio` is the id.
@@ -304,6 +310,12 @@ export default async function AdminPage({
   };
   const tehdejsiSignalsItemCount = tehdejsiSignals.digests.length + tehdejsiSignals.themes.length +
     tehdejsiSignals.requests.length + tehdejsiSignals.insights.length + tehdejsiSignals.pendingHarvests;
+  const personalGrowthItemCount = personalGrowth.timeline.occurrences.length +
+    Number(personalGrowth.threads.primary !== null) + personalGrowth.threads.alternatives.length +
+    Number(personalGrowth.instagram.state === "present") + personalGrowth.reels.length +
+    personalGrowth.trends.opportunities.length + personalGrowth.manualReferences.length + personalGrowth.threads.decisions.length +
+    personalGrowth.results.items.length + personalGrowth.experiments.items.length +
+    personalGrowth.voice.journals.filter(({ state }) => state === "present").length;
 
   /**
    * How many stored items a workspace holds.
@@ -313,7 +325,9 @@ export default async function AdminPage({
    * records. Each such venture is counted from the loader that actually reads it.
    */
   const savedItemCount = (ventureId: string, fallback: number) =>
-    ventureId === "mma-files"
+    ventureId === "personal-growth"
+      ? personalGrowthItemCount
+      : ventureId === "mma-files"
       ? mmaFiles.articles.length + mmaFiles.socialPacks.length + mmaFiles.calendar.length
       : ventureId === "door-money"
         ? doorMoney.recommendations.items.length + doorMoneyActionCount + doorMoneyKnowledgeCount
@@ -537,6 +551,7 @@ export default async function AdminPage({
         doorMoney.unreadable +
         tehdejsiSvet.unreadable.total +
         kvorum.unreadable +
+        personalGrowth.unreadable.total +
         implementationProgress.unreadableItems
     }
   ];
@@ -557,6 +572,8 @@ export default async function AdminPage({
           ? [...selectedVenture.unreadableFiles, ...Object.entries(tehdejsiSvet.unreadable).flatMap(([store, count]) => store !== "total" && count ? [`${store} (${count})`] : [])]
         : selectedVenture?.id === "kvorum" && kvorum.unreadable > 0
           ? [...selectedVenture.unreadableFiles, `Kvórum stores (${kvorum.unreadable})`]
+          : selectedVenture?.id === "personal-growth" && personalGrowth.unreadable.total > 0
+            ? [...selectedVenture.unreadableFiles, `Personal Growth stores (${personalGrowth.unreadable.total})`]
         : selectedVenture?.unreadableFiles ?? [];
 
   const cardKindByTab: Partial<Record<AdminVentureTab, "idea" | "plan" | "visual" | "social-variant">> = {
@@ -699,6 +716,20 @@ export default async function AdminPage({
     if (id === "booksofhistory" && selectedTab === "features") {
       return { node: <BooksofhistoryFeaturesPanel snapshot={booksofhistory} />, count: booksofhistory.features.length };
     }
+    if (id === "personal-growth" && selectedTab) {
+      const tab = selectedTab as PersonalGrowthCoreTab;
+      const count = tab === "today" ? personalGrowth.today.due.length + Number(personalGrowth.threads.primary !== null) + Number(personalGrowth.instagram.state === "present")
+        : tab === "timeline" ? personalGrowth.timeline.occurrences.length + personalGrowth.timeline.rhythmOpportunities.length
+          : tab === "threads" ? Number(personalGrowth.threads.primary !== null) + personalGrowth.threads.alternatives.length + personalGrowth.threads.conversationOpportunities.length
+            : tab === "instagram" ? Number(personalGrowth.instagram.state === "present") + personalGrowth.manualReferences.length
+              : tab === "reels" ? personalGrowth.reels.length
+                : tab === "trend-radar" ? personalGrowth.trends.opportunities.length
+                  : tab === "results" ? personalGrowth.results.items.length
+                    : tab === "experiments" ? personalGrowth.experiments.items.length
+                      : tab === "voice-strategy" ? personalGrowth.voice.journals.filter(({ state }) => state === "present").length + (personalGrowth.strategy?.pillars.length ?? 0)
+                        : personalGrowth.budget.featureFlags.length;
+      return { node: <PersonalGrowthPanel snapshot={personalGrowth} tab={tab} />, count };
+    }
     if (visibleCards.length) {
       return {
         node: (
@@ -797,6 +828,7 @@ export default async function AdminPage({
         </div>
       ) : !selectedVenture ? (
         <div className="grid min-w-0 gap-4">
+          <PersonalGrowthOverview snapshot={personalGrowth} />
           <div
             className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] bg-[var(--admin-border)] lg:grid-cols-4"
             data-adm-tiles

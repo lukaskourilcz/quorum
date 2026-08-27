@@ -40,6 +40,15 @@ const groups: AdminNavigationGroup[] = [
         icon: "workspace",
         id: "workspace-kvorum",
         label: "Kvórum"
+      },
+      {
+        accent: "var(--admin-information)",
+        active: false,
+        count: 10,
+        href: "/admin?venture=personal-growth",
+        icon: "workspace",
+        id: "workspace-personal-growth",
+        label: "Lukáš Growth Desk"
       }
     ]
   }
@@ -69,6 +78,7 @@ describe("Admin shell", () => {
     );
 
     expect(html).toContain('data-admin-theme="light"');
+    expect(html).toContain('data-admin-hydrated="false"');
     expect(html).toContain("--admin-current-sidebar-width:var(--admin-sidebar-width)");
     expect(html).toContain('data-admin-window="true"');
     expect(html).toContain('data-admin-window-controls="true"');
@@ -84,10 +94,10 @@ describe("Admin shell", () => {
     expect(html).toContain("Search Admin");
     expect(html).toContain('aria-keyshortcuts="Meta+K Control+K"');
     expect(html).toContain('aria-label="Primary Admin navigation"');
-    expect(html).toContain('data-personal-growth-slot="held-until-issue-370-passes"');
+    expect(html).toContain('data-personal-growth-workspace="available"');
     expect(html).toContain("Workspaces");
     expect(html).toContain("More");
-    expect(html).not.toContain('href="/admin?venture=personal-growth"');
+    expect(html).toContain('href="/admin?venture=personal-growth"');
     expect(html).toContain("Real server content");
   });
 

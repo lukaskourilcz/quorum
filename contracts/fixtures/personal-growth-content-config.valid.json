@@ -30,7 +30,6 @@
     "automaticVentureNomination": false,
     "automaticReshare": false,
     "ventureOnlyFeedPublishing": false,
-    "kvorumEligible": false,
     "mmaFilesDefaultEligible": false
   },
   "pillars": [{ "pillar": "life-lifestyle", "status": "enabled", "weight": 1, "vetoes": [] }],

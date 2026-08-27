@@ -55,7 +55,6 @@ export const PersonalGrowthContentPolicySchema = z.strictObject({
   automaticVentureNomination: z.literal(false),
   automaticReshare: z.literal(false),
   ventureOnlyFeedPublishing: z.literal(false),
-  kvorumEligible: z.literal(false),
   mmaFilesDefaultEligible: z.literal(false)
 }).superRefine((policy, context) => {
   const revisions = policy.revisions.map(({ revision }) => revision);

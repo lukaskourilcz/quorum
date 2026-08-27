@@ -3,6 +3,8 @@ import { expect, test } from "@playwright/test";
 
 const adminDestinations = [
   "/admin",
+  "/admin/operations",
+  "/admin/implementation-plans",
   "/admin?view=approvals",
   "/admin?view=manual-tasks",
   "/admin?view=future",
@@ -16,7 +18,8 @@ const adminDestinations = [
   "/admin?venture=mma-files",
   "/admin?venture=door-money",
   "/admin?venture=tehdejsi-svet",
-  "/admin?venture=kvorum"
+  "/admin?venture=kvorum",
+  "/admin?venture=personal-growth"
 ] as const;
 
 test("desktop Admin shell keeps its window, scroll, preferences and real command destinations", async ({ page }) => {
@@ -26,6 +29,7 @@ test("desktop Admin shell keeps its window, scroll, preferences and real command
   await expect(page.getByRole("navigation", { name: "Admin destinations" })).toBeVisible();
   await expect(page.locator("[data-admin-window-controls] span")).toHaveCount(3);
   await expect(page.locator("[data-admin-sidebar]")).toHaveCSS("width", "224px");
+  await expect(page.locator("[data-admin-hydrated]")).toHaveAttribute("data-admin-hydrated", "true");
   expect(await page.evaluate(() => ({
     documentHeight: document.documentElement.scrollHeight,
     viewportHeight: window.innerHeight,
@@ -83,7 +87,7 @@ test("mobile Admin navigation has safe targets and exposes every live destinatio
     expect(box.width).toBeGreaterThanOrEqual(44);
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBe(0);
-  await expect(page.locator('a[href*="personal-growth"]')).toHaveCount(0);
+  await expect(mobileNav).toHaveAttribute("data-personal-growth-workspace", "available");
 
   await mobileNav.getByRole("button", { name: "More" }).click();
   const more = page.getByRole("dialog", { name: "More" });
@@ -97,6 +101,7 @@ test("mobile Admin navigation has safe targets and exposes every live destinatio
   const workspaces = page.getByRole("dialog", { name: "Workspaces" });
   await expect(workspaces).toBeVisible();
   await expect(workspaces.getByRole("link", { name: /Kvórum/ })).toHaveAttribute("href", "/admin?venture=kvorum");
+  await expect(workspaces.getByRole("link", { name: "Lukáš Growth Desk" })).toHaveAttribute("href", "/admin?venture=personal-growth");
 });
 
 test("new Admin shell chrome and mobile sheet pass the accessibility gate", async ({ page }) => {

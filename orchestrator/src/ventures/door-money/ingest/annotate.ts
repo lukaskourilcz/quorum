@@ -14,8 +14,8 @@ import {
 import { guardedJsonCall } from "../../../llm/call.js";
 import { configRoot } from "../../../paths.js";
 import { wrapUntrustedData } from "../../../security/content.js";
-import type { ChunkedManuscript, ManuscriptChunk } from "./chunker.js";
-import { estimateBookTokens } from "./chunker.js";
+import type { ChunkedManuscript, ManuscriptChunk } from "../../../manuscript-chunker.js";
+import { estimateBookTokens } from "../../../manuscript-chunker.js";
 
 const SlugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(100);
 const SummarySchema = z.string().trim().min(1).max(600);

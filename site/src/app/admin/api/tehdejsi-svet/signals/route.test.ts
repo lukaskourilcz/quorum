@@ -2,6 +2,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { MAX_SIGNAL_BYTES } from "@/lib/admin-route-limits";
 
 vi.mock("server-only", () => ({}));
 const roots: string[] = [];
@@ -18,7 +19,7 @@ async function route(approved = true) {
   await writeFile(path.join(root, "state/INBOX.md"), `- [${approved ? "x" : " "}] HUMAN_APPROVAL TS-RESULTS-005 — synthetic route test.\n`);
   vi.stubEnv("BOARDLESSAI_REPO_ROOT", root); vi.stubEnv("ADMIN_USER", "owner"); vi.stubEnv("ADMIN_PASSWORD", "correct-password");
   vi.resetModules();
-  const [{ POST, MAX_SIGNAL_BYTES }, { createAdminSessionToken, ADMIN_SESSION_COOKIE }] = await Promise.all([
+  const [{ POST }, { createAdminSessionToken, ADMIN_SESSION_COOKIE }] = await Promise.all([
     import("./route"), import("@/lib/admin-session")
   ]);
   return { root, POST, MAX_SIGNAL_BYTES, cookie: `${ADMIN_SESSION_COOKIE}=${createAdminSessionToken("owner", "correct-password")}` };

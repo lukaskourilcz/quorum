@@ -85,7 +85,7 @@ The protected Admin uses one contained macOS-style window on a graphite desktop 
 
 The server resolves every navigation entry from the existing company views and recorded portfolio ventures before the interactive boundary. Company Overview, Approvals, Only you can do, Future, Design Lab, and each workspace remain canonical `/admin` query URLs, so reload, copy, browser back, and bookmarks preserve context. Design Lab is grouped under Production without changing its stored `carousel-studio` identifier. No duplicate route is created for system panels that already live in Company Overview.
 
-The toolbar command palette opens from its real button or `Command/Ctrl + K`, filters the same server-resolved registry, supports arrow and Enter navigation, and contains no synthetic result. On mobile, the persistent bottom navigation exposes Overview and Approvals directly; Workspaces opens a focused workspace sheet; More lists every live Admin destination plus theme, public-site and sign-out actions. The future Personal Growth slot is deliberately absent until issue #370 has completed and passed its Admin gates.
+The toolbar command palette opens from its real button or `Command/Ctrl + K`, filters the same server-resolved registry, supports arrow and Enter navigation, and contains no synthetic result. On mobile, the persistent bottom navigation exposes Overview and Approvals directly; Workspaces opens a focused workspace sheet; More lists every live Admin destination plus theme, public-site and sign-out actions. Personal Growth is now a registered owner-only workspace with ten canonical tabs; it uses the same shell and scoped primitives and never appears on a public route.
 
 The shell-specific automated proof lives in `site/tests/e2e/admin-shell.spec.ts`. It checks desktop geometry and internal scrolling, preference persistence, canonical command navigation, 390 by 844 mobile targets and overflow, complete More-sheet coverage, and WCAG 2 A/AA plus 2.1 A/AA checks for the new shell chrome. The optimized-production matrix, full destination and workflow coverage, stable screenshot baselines, reduced-motion checks, and serious/critical axe gate live in the three `site/tests/e2e/admin-*-qa.spec.ts` files and are documented in `docs/ADMIN-VISUAL-QA.md`.
 
@@ -149,7 +149,7 @@ The 618 occurrences are the issue #366 pre-migration baseline, not approval for 
 
 ## Protected behavior
 
-This foundation does not change authentication, protected routes, loaders, server actions, canonical writes, budgets, evidence rules, privacy, public/private boundaries, release gates, or operational controls. It does not enable publishing, replies, account creation, credentials, purchases, or plan upgrades. Personal Growth implementation remains blocked until issue #370 is complete and its Admin gates pass.
+This foundation does not change authentication, protected routes, loaders, server actions, canonical writes, budgets, evidence rules, privacy, public/private boundaries, release gates, or operational controls. It does not enable publishing, replies, account creation, credentials, purchases, or plan upgrades. Personal Growth was added only after the issue #370 gate and remains inside the protected Admin boundary.
 
 Any human-only follow-up belongs exclusively in `docs/NEEDED.md`; the foundation and shell introduce none.
 

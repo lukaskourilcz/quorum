@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
@@ -71,8 +71,7 @@ describe("Personal Growth Instagram and Reels planning", () => {
     expect(config.policy).toMatchObject({
       automaticVentureDiscovery: false,
       automaticVentureNomination: false,
-      automaticReshare: false,
-      kvorumEligible: false
+      automaticReshare: false
     });
     expect(config.pillars).toHaveLength(11);
     expect(config.reelFormats).toEqual([
@@ -175,11 +174,23 @@ describe("Personal Growth Instagram and Reels planning", () => {
     expect(() => assertPersonalGrowthContentPolicyUpdate(policy, looser)).toThrow();
   });
 
-  it("contains no automatic portfolio, venture-store or Social Distribution loader", async () => {
-    const sources = await Promise.all([
-      "recommendations.ts", "providers.ts", "results.ts", "analytics.ts"
-    ].map((name) => readFile(path.join(repoRoot, "orchestrator/src/ventures/personal-growth", name), "utf8")));
+  it("contains no automatic portfolio, foreign-venture or Social Distribution loader", async () => {
+    const directory = path.join(repoRoot, "orchestrator/src/ventures/personal-growth");
+    const sources = await Promise.all((await readdir(directory))
+      .filter((name) => name.endsWith(".ts"))
+      .map((name) => readFile(path.join(directory, name), "utf8")));
     const imports = sources.flatMap((source) => source.match(/^import[^;]+;/gmu) ?? []);
-    expect(imports.join("\n")).not.toMatch(/ventures\/(?:kvorum|door-money|booksofhistory|tehdejsi-svet|mma-files)|social-distribution|ventures\/registry|portfolio\//iu);
+    const registry = JSON.parse(await readFile(path.join(repoRoot, "config/ventures.json"), "utf8")) as {
+      ventures: Array<{ id: string }>;
+    };
+    const foreignVentures = registry.ventures
+      .map(({ id }) => id)
+      .filter((id) => id !== "personal-growth");
+    for (const ventureId of foreignVentures) {
+      expect(imports.join("\n")).not.toContain(`ventures/${ventureId}`);
+      expect(imports.join("\n")).not.toContain(`../${ventureId}`);
+    }
+    expect(imports.join("\n")).not.toMatch(/social-distribution|ventures\/registry|portfolio\//iu);
+    expect(sources.join("\n")).not.toContain("kvorumEligible");
   });
 });

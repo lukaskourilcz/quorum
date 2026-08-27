@@ -37,7 +37,16 @@ At widths of 768px and above, the window has a 30px horizontal and 20px vertical
 
 Every matrix entry asserts that the document is no more than one CSS pixel wider than its client width and reports the first uncontained element if one exists. Additional 360px stress cases cover long owner labels, technical envelope identifiers, money values, and keyboard-focusable dense table regions.
 
-The test captures browser console errors and uncaught page errors with their source URL. All 35 Admin tabs declared by `config/ventures.json` are opened from the production artifact and must show their canonical active route without a runtime recovery state or attempted mutation.
+The test captures browser console errors and uncaught page errors with their source URL. All 45 Admin tabs declared by `config/ventures.json` are opened from the production artifact and must show their canonical active route without a runtime recovery state or attempted mutation.
+
+### Personal Growth matrix
+
+The owner-only Personal Growth workspace contributes ten of those tabs: Today, Timeline, Threads,
+Instagram, Reels, Trend Radar, Results, Experiments, Voice & Strategy, and Budget. A dedicated
+matrix opens every tab at 1440 by 900 and 390 by 844 in both light and dark themes. Each route must
+render its canonical panel, retain the active navigation state, stay within the document width,
+make no write request, and expose none of the private journal serialization fields. A serious or
+critical axe violation fails every theme and breakpoint sample.
 
 ## Navigation and interaction proof
 
@@ -61,6 +70,8 @@ The representative workflow gate covers:
 - fixed-cost and money displays at 430px;
 - protected file details and a launch binder;
 - explicit unavailable and held states instead of fabricated data.
+- all ten Personal Growth views, its truthful unavailable states, owner-only controls, nested
+  budget, and non-reconstructive journal metadata.
 
 Axe scans run in light and dark themes over the shell, command palette, mobile More dialog, owner decision/result/rating panels, and dense Design Lab tables. The gate fails on every serious or critical violation. Behavioral assertions remain authoritative; screenshots cover only stable shell and layout landmarks.
 

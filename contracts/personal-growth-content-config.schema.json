@@ -173,10 +173,6 @@
           "type": "boolean",
           "const": false
         },
-        "kvorumEligible": {
-          "type": "boolean",
-          "const": false
-        },
         "mmaFilesDefaultEligible": {
           "type": "boolean",
           "const": false
@@ -193,7 +189,6 @@
         "automaticVentureNomination",
         "automaticReshare",
         "ventureOnlyFeedPublishing",
-        "kvorumEligible",
         "mmaFilesDefaultEligible"
       ],
       "additionalProperties": false

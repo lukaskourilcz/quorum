@@ -15,7 +15,7 @@ import type { GuardedCallInput } from "../src/llm/call.js";
 import { requestHash } from "../src/llm/cache.js";
 import { readJson } from "../src/state.js";
 import type { BookIngestCall } from "../src/ventures/door-money/ingest/annotate.js";
-import { chunkManuscript } from "../src/ventures/door-money/ingest/chunker.js";
+import { chunkManuscript } from "../src/manuscript-chunker.js";
 import {
   BookIngestCursorSchema,
   BookKbVersionsSchema,

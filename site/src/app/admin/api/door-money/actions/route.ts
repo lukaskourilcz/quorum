@@ -7,9 +7,9 @@ import {
   applyDoorMoneyActionCompletion,
   parseDoorMoneyActionCompletion
 } from "@/lib/door-money-actions-store";
+import { MAX_ACTION_COMPLETION_BYTES } from "@/lib/admin-route-limits";
 
 export const dynamic = "force-dynamic";
-export const MAX_ACTION_COMPLETION_BYTES = 8_192;
 
 const json = (value: unknown, status: number) =>
   Response.json(value, { status, headers: { "Cache-Control": "no-store, private" } });

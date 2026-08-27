@@ -2,9 +2,9 @@ import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request
 import { parseTehdejsiOwnerResultInput } from "@/lib/tehdejsi-result-model";
 import { saveTehdejsiOwnerResult } from "@/lib/tehdejsi-results-store";
 import { TehdejsiStateError } from "@/lib/tehdejsi-state-store";
+import { MAX_TEHDEJSI_RESULT_BYTES } from "@/lib/admin-route-limits";
 
 export const dynamic = "force-dynamic";
-export const MAX_TEHDEJSI_RESULT_BYTES = 8_192;
 const json = (value: unknown, status: number) => Response.json(value, { status, headers: { "Cache-Control": "no-store, private" } });
 
 /** Records manual owner evidence only; it cannot read a platform or analytics service. */

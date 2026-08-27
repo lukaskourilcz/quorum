@@ -100,7 +100,17 @@ const VentureDefinitionSchema = openObject({
     "monitor",
     "claims",
     "library",
-    "signals"
+    "signals",
+    "today",
+    "timeline",
+    "threads",
+    "instagram",
+    "reels",
+    "trend-radar",
+    "results",
+    "experiments",
+    "voice-strategy",
+    "budget"
   ])),
   rendering: VentureRenderingSchema.optional(),
   productionJobs: z.array(openObject({

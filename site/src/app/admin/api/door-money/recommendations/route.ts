@@ -7,11 +7,9 @@ import {
   type DoorMoneyPersistenceCode,
   type DoorMoneyRecommendationAction
 } from "@/lib/door-money-recommendations-store";
+import { MAX_RECOMMENDATION_DECISION_BYTES } from "@/lib/admin-route-limits";
 
 export const dynamic = "force-dynamic";
-
-/** Forty contract-sized edited blocks plus the small decision envelope. */
-export const MAX_RECOMMENDATION_DECISION_BYTES = 196_608;
 
 const json = (value: unknown, status: number) =>
   Response.json(value, { status, headers: { "Cache-Control": "no-store, private" } });

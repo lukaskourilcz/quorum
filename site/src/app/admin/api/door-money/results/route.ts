@@ -5,9 +5,9 @@ import {
 } from "@/lib/door-money-recommendations-store";
 import { parseDoorMoneyOwnerResultInput } from "@/lib/door-money-result-model";
 import { saveDoorMoneyOwnerResult } from "@/lib/door-money-results-store";
+import { MAX_OWNER_RESULT_BYTES } from "@/lib/admin-route-limits";
 
 export const dynamic = "force-dynamic";
-export const MAX_OWNER_RESULT_BYTES = 8_192;
 
 const json = (value: unknown, status: number) =>
   Response.json(value, { status, headers: { "Cache-Control": "no-store, private" } });

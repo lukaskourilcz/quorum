@@ -8,7 +8,7 @@ import {
   type PersonalGrowthLeakAudit
 } from "../../contracts/personal-growth.js";
 import { atomicWriteJson, readJson } from "../../state.js";
-import { chunkManuscript } from "../door-money/ingest/chunker.js";
+import { chunkManuscript } from "../../manuscript-chunker.js";
 import { personalGrowthHash } from "./planner.js";
 
 export type PersonalGrowthJournalLanguage = "cs" | "en";
