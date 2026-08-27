@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "action-packet/1",
+  "id": "action-packet-2026-08-27",
+  "ventureId": "door-money",
+  "date": "2026-08-27",
+  "weekOf": "2026-08-24",
+  "agenda": {
+    "isoWeek": "2026-W35",
+    "topicId": "podcasts-press",
+    "title": "Podcasts and press outreach"
+  },
+  "title": "Door Money actions: Podcasts and press outreach",
+  "summary": "No executable podcasts or press outreach action can be prepared from the supplied evidence.",
+  "outcome": "NO_ACTION",
+  "noActionReason": "The scheduled topic is only a bounded question, and there are no allowed evidence references, playbooks, owner results, or completion records to support a concrete task or revision.",
+  "contextRefs": [],
+  "tasks": [],
+  "generatedAt": "2026-08-27T14:00:54.144Z",
+  "updatedAt": "2026-08-27T14:00:54.144Z"
+}

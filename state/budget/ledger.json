@@ -13813,6 +13813,23 @@
       "toolUses": 0,
       "usd": 0.006273,
       "kind": "text"
+    },
+    {
+      "ts": "2026-08-27T14:00:54.144Z",
+      "cycleId": "20260827140054-dm-growth",
+      "requestHash": "a88394fd6ff87fcabe2a9bc3291c163177eba43eeee863c4e356b2338d9cd859",
+      "phase": "dm-growth",
+      "ventureId": "door-money",
+      "agent": "BOOKER",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "serviceTier": "default",
+      "tokensIn": 808,
+      "cachedTokensIn": 0,
+      "tokensOut": 87,
+      "toolUses": 0,
+      "usd": 0.00133,
+      "kind": "text"
     }
   ]
 }

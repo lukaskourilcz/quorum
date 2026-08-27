@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260827140054-dm-growth",
+  "date": "2026-08-27",
+  "phase": "dm-growth",
+  "fixture": false,
+  "status": "NO_ACTION",
+  "stage": "VALIDATION",
+  "operatingBrief": "2026-W35 · Podcasts and press outreach. Prepare owner-executable research without outreach, publishing, account action or spend.",
+  "participantReasons": [
+    {
+      "agent": "BOOKER",
+      "reason": "prepared the bounded Podcasts and press outreach response without external action",
+      "participated": true
+    },
+    {
+      "agent": "PULSE",
+      "reason": "reviewed the bounded growth-room posture without taking external action",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "reviewed the bounded growth-room posture without taking external action",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.00133,
+    "monthAllInUsd": 13.078502899999995,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "Honest NO_ACTION: The scheduled topic is only a bounded question, and there are no allowed evidence references, playbooks, owner results, or completion records to support a concrete task or revision. Nothing was sent, posted or invented to fill the packet.",
+    "evidenceRefs": []
+  },
+  "proposals": [],
+  "voteMatrix": [
+    {
+      "voter": "PULSE",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Nothing was published, posted, scheduled, bought or sent; no account or channel was touched and no spend was authorized.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-27T14:00:55.144Z",
+  "kind": "dm-growth",
+  "roomTranscript": {
+    "openedAt": "2026-08-27T14:00:54.144Z",
+    "closedAt": "2026-08-27T14:00:55.144Z",
+    "gavel": "BOOKER",
+    "setting": "Bounded growth room for 2026-W35: Podcasts and press outreach. No external action path exists in this runner.",
+    "turns": [
+      {
+        "agent": "BOOKER",
+        "mode": "close",
+        "sentAt": "2026-08-27T14:00:55.144Z",
+        "text": "Honest NO_ACTION: The scheduled topic is only a bounded question, and there are no allowed evidence references, playbooks, owner results, or completion records to support a concrete task or revision. Nothing was sent, posted or invented to fill the packet."
+      }
+    ]
+  }
+}

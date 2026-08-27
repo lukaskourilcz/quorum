@@ -465,8 +465,7 @@
       "at": "2026-08-27T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
     },
     {
       "at": "2026-08-27T10:00:00.000Z",
@@ -504,7 +503,9 @@
       "at": "2026-08-27T14:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "dm-growth",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-27-dm-growth",
+      "decisionOneLiner": "Honest NO_ACTION: The scheduled topic is only a bounded question, and there are no allowed evidence references, playbooks, owner results, or completion records to support a concret"
     },
     {
       "at": "2026-08-27T15:00:00.000Z",
