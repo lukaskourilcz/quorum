@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/J%C3%A9ssica_Andrade",
       "publisher": "Wikipedia",
       "title": "Jéssica Andrade",
-      "retrievedAt": "2026-08-26T06:01:51.845Z",
+      "retrievedAt": "2026-08-27T06:00:56.984Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q15131640",
         "source:wikipedia:40078160"
       ],
-      "retrievedAt": "2026-08-26T06:01:51.845Z",
+      "retrievedAt": "2026-08-27T06:00:56.984Z",
       "status": "verified",
       "corroborated": true
     },
@@ -399,9 +399,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 1.850266,
-        "layoffDays": 1586
+        "layoffDays": 1587
       },
-      "updatedAt": "2026-08-26T06:01:51.845Z"
+      "updatedAt": "2026-08-27T06:00:56.984Z"
     }
   ],
   "rating": {
@@ -411,7 +411,7 @@
     "volatility": 0.06002014,
     "boutCount": 16,
     "asOfBoutRef": "ufc:bout:history-848471285b300fe2f248",
-    "updatedAt": "2026-08-26T06:01:51.845Z"
+    "updatedAt": "2026-08-27T06:00:56.984Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2231,11 +2231,28 @@
         "source:wikipedia:64535234"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-27T06:00:56.984Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40078160",
+        "source:wikipedia:44159133",
+        "source:wikipedia:64535234"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.75,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-26T06:01:51.845Z"
+  "updatedAt": "2026-08-27T06:00:56.984Z"
 }

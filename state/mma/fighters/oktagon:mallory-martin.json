@@ -38,7 +38,7 @@
       "url": "https://en.wikipedia.org/wiki/Mallory_Martin",
       "publisher": "Wikipedia",
       "title": "Mallory Martin",
-      "retrievedAt": "2026-08-26T06:01:51.845Z",
+      "retrievedAt": "2026-08-27T06:00:56.984Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +50,7 @@
         "source:wikidata:Q61483130",
         "source:wikipedia:59862260"
       ],
-      "retrievedAt": "2026-08-26T06:01:51.845Z",
+      "retrievedAt": "2026-08-27T06:00:56.984Z",
       "status": "verified",
       "corroborated": true
     },
@@ -413,9 +413,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 0.8,
         "fightsPerYear": 1.913517,
-        "layoffDays": 487
+        "layoffDays": 488
       },
-      "updatedAt": "2026-08-26T06:01:51.845Z"
+      "updatedAt": "2026-08-27T06:00:56.984Z"
     }
   ],
   "rating": {
@@ -425,7 +425,7 @@
     "volatility": 0.06000079,
     "boutCount": 17,
     "asOfBoutRef": "oktagon:bout:history-1e0a0bb3fabd5b5bd51b",
-    "updatedAt": "2026-08-26T06:01:51.845Z"
+    "updatedAt": "2026-08-27T06:00:56.984Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2060,11 +2060,26 @@
         "source:wikipedia:59862260"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-27T06:00:56.984Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:59862260"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-26T06:01:51.845Z"
+  "updatedAt": "2026-08-27T06:00:56.984Z"
 }

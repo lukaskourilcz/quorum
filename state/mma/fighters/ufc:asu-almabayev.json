@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Asu_Almabayev",
       "publisher": "Wikipedia",
       "title": "Asu Almabayev",
-      "retrievedAt": "2026-08-26T06:01:51.845Z",
+      "retrievedAt": "2026-08-27T06:00:56.984Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q128803907",
         "source:wikipedia:77593874"
       ],
-      "retrievedAt": "2026-08-26T06:01:51.845Z",
+      "retrievedAt": "2026-08-27T06:00:56.984Z",
       "status": "verified",
       "corroborated": true
     },
@@ -621,9 +621,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 0.8,
         "fightsPerYear": 2.065678,
-        "layoffDays": 60
+        "layoffDays": 61
       },
-      "updatedAt": "2026-08-26T06:01:51.845Z"
+      "updatedAt": "2026-08-27T06:00:56.984Z"
     }
   ],
   "rating": {
@@ -633,7 +633,7 @@
     "volatility": 0.05999077,
     "boutCount": 28,
     "asOfBoutRef": "ufc:bout:history-85e14f7fa823fcd219e6",
-    "updatedAt": "2026-08-26T06:01:51.845Z"
+    "updatedAt": "2026-08-27T06:00:56.984Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2169,11 +2169,27 @@
         "source:wikipedia:58085526"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-27T06:00:56.984Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:77593874",
+        "source:wikipedia:58085526"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-26T06:01:51.845Z"
+  "updatedAt": "2026-08-27T06:00:56.984Z"
 }

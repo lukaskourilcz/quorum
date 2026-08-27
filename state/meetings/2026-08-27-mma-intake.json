@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260827060056-mma-intake",
+  "date": "2026-08-27",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.021706,
+    "monthAllInUsd": 12.994744899999997,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-27",
+      "source:cito-ufc:2026-08-27",
+      "source:wikimedia:2026-08-27",
+      "source:wikipedia-schedule:2026-08-27",
+      "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song",
+      "meeting:2026-08-26-mma-analysis"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "Intake phase: 13 UFC Fight Night bouts confirmed across four sources. 50 fighter records flagged with missing critical fields (height, reach, stance, division). No model run exists yet; odds key awaited. Safe to proceed with weigh-in confirmation when event approaches.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-27",
+        "source:cito-ufc:2026-08-27",
+        "source:wikimedia:2026-08-27",
+        "source:wikipedia-schedule:2026-08-27"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon card is listed but no Oktagon event or fighter evidence is present in this run; no records can be safely updated or modeled.",
+      "evidenceRefs": [
+        "source:cito-ufc:2026-08-27",
+        "source:wikimedia:2026-08-27"
+      ]
+    },
+    {
+      "agent": "TAPE",
+      "summary": "UFC Fight Night: Nurmagomedov vs. Song (Aug 29) has 13 bouts announced. No model run exists yet to adjust. Critical fighter fields incomplete on 50 roster entries; cannot propose adjustments without versioned ModelRun baseline.",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song",
+        "source:the-odds-api:2026-08-27",
+        "source:cito-ufc:2026-08-27",
+        "meeting:2026-08-26-mma-analysis"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260827060056-MMA-INTAKE-03",
+      "owner": "TAPE",
+      "summary": "Generate and version ModelRun for UFC Fight Night: Nurmagomedov vs. Song before TAPE can propose adjustments capped at ±3 points per bout.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Data only. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-27",
+      "source:cito-ufc:2026-08-27",
+      "source:wikimedia:2026-08-27",
+      "source:wikipedia-schedule:2026-08-27",
+      "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song",
+      "meeting:2026-08-26-mma-analysis"
+    ]
+  },
+  "generatedAt": "2026-08-27T06:04:56.984Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-27T06:00:56.984Z",
+    "closedAt": "2026-08-27T06:04:56.984Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-27T06:00:56.984Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-27T06:01:56.984Z",
+        "text": "Intake phase: 13 UFC Fight Night bouts confirmed across four sources. 50 fighter records flagged with missing critical fields (height, reach, stance, division). No model run exists yet; odds key awaited. Safe to proceed with weigh-in confirmation when event approaches.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-27",
+          "source:cito-ufc:2026-08-27",
+          "source:wikimedia:2026-08-27",
+          "source:wikipedia-schedule:2026-08-27"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-27T06:02:56.984Z",
+        "text": "Oktagon card is listed but no Oktagon event or fighter evidence is present in this run; no records can be safely updated or modeled.",
+        "evidenceRefs": [
+          "source:cito-ufc:2026-08-27",
+          "source:wikimedia:2026-08-27"
+        ]
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-27T06:03:56.984Z",
+        "text": "UFC Fight Night: Nurmagomedov vs. Song (Aug 29) has 13 bouts announced. No model run exists yet to adjust. Critical fighter fields incomplete on 50 roster entries; cannot propose adjustments without versioned ModelRun baseline.",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song",
+          "source:the-odds-api:2026-08-27",
+          "source:cito-ufc:2026-08-27",
+          "meeting:2026-08-26-mma-analysis"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-27T06:04:56.984Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

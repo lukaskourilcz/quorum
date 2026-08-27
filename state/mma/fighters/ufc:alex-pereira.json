@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alex_Pereira",
       "publisher": "Wikipedia",
       "title": "Alex Pereira",
-      "retrievedAt": "2026-08-26T06:01:51.845Z",
+      "retrievedAt": "2026-08-27T06:00:56.984Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q15987809",
         "source:wikipedia:42031348"
       ],
-      "retrievedAt": "2026-08-26T06:01:51.845Z",
+      "retrievedAt": "2026-08-27T06:00:56.984Z",
       "status": "verified",
       "corroborated": true
     },
@@ -419,9 +419,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 3.7967,
-        "layoffDays": 73
+        "layoffDays": 74
       },
-      "updatedAt": "2026-08-26T06:01:51.845Z"
+      "updatedAt": "2026-08-27T06:00:56.984Z"
     }
   ],
   "rating": {
@@ -431,7 +431,7 @@
     "volatility": 0.05999498,
     "boutCount": 16,
     "asOfBoutRef": "ufc:bout:history-82f2514e207949285bbb",
-    "updatedAt": "2026-08-26T06:01:51.845Z"
+    "updatedAt": "2026-08-27T06:00:56.984Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2164,11 +2164,27 @@
         "source:wikipedia:42031348"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-27T06:00:56.984Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42944791",
+        "source:wikipedia:42031348"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.625,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-26T06:01:51.845Z"
+  "updatedAt": "2026-08-27T06:00:56.984Z"
 }

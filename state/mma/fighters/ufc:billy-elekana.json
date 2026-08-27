@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Billy_Elekana",
       "publisher": "Wikipedia",
       "title": "Billy Elekana",
-      "retrievedAt": "2026-08-26T06:01:51.845Z",
+      "retrievedAt": "2026-08-27T06:00:56.984Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q137584666",
         "source:wikipedia:82830749"
       ],
-      "retrievedAt": "2026-08-26T06:01:51.845Z",
+      "retrievedAt": "2026-08-27T06:00:56.984Z",
       "status": "verified",
       "corroborated": true
     },
@@ -230,9 +230,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 365.25,
-        "layoffDays": 585
+        "layoffDays": 586
       },
-      "updatedAt": "2026-08-26T06:01:51.845Z"
+      "updatedAt": "2026-08-27T06:00:56.984Z"
     }
   ],
   "rating": {
@@ -242,7 +242,7 @@
     "volatility": 0.05999893,
     "boutCount": 2,
     "asOfBoutRef": "ufc:bout:history-75eb0f642a0b842312d7",
-    "updatedAt": "2026-08-26T06:01:51.845Z"
+    "updatedAt": "2026-08-27T06:00:56.984Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1881,11 +1881,27 @@
         "source:wikipedia:82830749"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-27T06:00:56.984Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:76773370",
+        "source:wikipedia:82830749"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-26T06:01:51.845Z"
+  "updatedAt": "2026-08-27T06:00:56.984Z"
 }

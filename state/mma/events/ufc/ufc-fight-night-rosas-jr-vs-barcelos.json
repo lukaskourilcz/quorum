@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-26T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-26:List of UFC events"
+    "source:wikipedia:2026-08-27:List of UFC events"
   ],
   "bouts": [
     {
@@ -18,7 +18,87 @@
       "division": "bantamweight",
       "scheduledRounds": 5,
       "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:melissa-amaya-vs-valesca-machado-2",
+      "red": "ufc:melissa-amaya",
+      "blue": "ufc:valesca-machado",
+      "division": "womens-strawweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:mehemmedeli-osmanli-vs-ilimbek-akylbek-uulu-3",
+      "red": "ufc:mehemmedeli-osmanli",
+      "blue": "ufc:ilimbek-akylbek-uulu",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:montel-jackson-vs-ricky-simon-4",
+      "red": "ufc:montel-jackson",
+      "blue": "ufc:ricky-simon",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:rodolfo-bellato-vs-christian-edwards-5",
+      "red": "ufc:rodolfo-bellato",
+      "blue": "ufc:christian-edwards",
+      "division": "light-heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:rodolfo-vieira-vs-robert-bryczek-6",
+      "red": "ufc:rodolfo-vieira",
+      "blue": "ufc:robert-bryczek",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:brady-hiestand-vs-rinya-nakamura-7",
+      "red": "ufc:brady-hiestand",
+      "blue": "ufc:rinya-nakamura",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:john-castaneda-vs-alateng-heili-8",
+      "red": "ufc:john-castaneda",
+      "blue": "ufc:alateng-heili",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:josiah-harrell-vs-elves-brener-9",
+      "red": "ufc:josiah-harrell",
+      "blue": "ufc:elves-brener",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:norma-dumont-vs-ailin-perez-10",
+      "red": "ufc:norma-dumont",
+      "blue": "ufc:ailin-perez",
+      "division": "womens-bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:vanessa-demopoulos-vs-yazmin-jauregui-11",
+      "red": "ufc:vanessa-demopoulos",
+      "blue": "ufc:yazmin-jauregui",
+      "division": "womens-strawweight",
+      "scheduledRounds": 3,
+      "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-26T06:01:51.845Z"
+  "updatedAt": "2026-08-27T06:00:56.984Z"
 }

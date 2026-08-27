@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260827060056-mma-intake",
+  "phase": "mma-intake",
+  "outcome": "PLAN",
+  "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+  "evidenceRefs": [
+    "source:the-odds-api:2026-08-27",
+    "source:cito-ufc:2026-08-27",
+    "source:wikimedia:2026-08-27",
+    "source:wikipedia-schedule:2026-08-27",
+    "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song",
+    "meeting:2026-08-26-mma-analysis"
+  ],
+  "generatedAt": "2026-08-27T06:04:56.984Z"
+}

@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-05T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-26:List of UFC events"
+    "source:wikipedia:2026-08-27:List of UFC events"
   ],
   "bouts": [
     {
@@ -36,7 +36,15 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:morgan-charriere-vs-felipe-lima-4",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:daniil-donchenko-vs-punahele-soriano-4",
+      "red": "ufc:daniil-donchenko",
+      "blue": "ufc:punahele-soriano",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:morgan-charriere-vs-felipe-lima-5",
       "red": "ufc:morgan-charriere",
       "blue": "ufc:felipe-lima",
       "division": "featherweight",
@@ -44,7 +52,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:losene-keita-vs-muhammad-naimov-5",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:losene-keita-vs-muhammad-naimov-6",
       "red": "ufc:losene-keita",
       "blue": "ufc:muhammad-naimov",
       "division": "featherweight",
@@ -52,7 +60,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:mario-pinto-vs-ryan-spann-6",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:mario-pinto-vs-ryan-spann-7",
       "red": "ufc:mario-pinto",
       "blue": "ufc:ryan-spann",
       "division": "heavyweight",
@@ -60,7 +68,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:kurtis-campbell-vs-trevor-peek-7",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:kurtis-campbell-vs-trevor-peek-8",
       "red": "ufc:kurtis-campbell",
       "blue": "ufc:trevor-peek",
       "division": "featherweight",
@@ -68,7 +76,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:oumar-sy-vs-modestas-bukauskas-8",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:oumar-sy-vs-modestas-bukauskas-9",
       "red": "ufc:oumar-sy",
       "blue": "ufc:modestas-bukauskas",
       "division": "light-heavyweight",
@@ -76,7 +84,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:nathaniel-wood-vs-mairon-santos-9",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:nathaniel-wood-vs-mairon-santos-10",
       "red": "ufc:nathaniel-wood",
       "blue": "ufc:mairon-santos",
       "division": "featherweight",
@@ -84,7 +92,15 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:nora-cornolle-vs-klaudia-sygu-a-10",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:michael-aljarouj-vs-fabia-sintes-11",
+      "red": "ufc:michael-aljarouj",
+      "blue": "ufc:fabia-sintes",
+      "division": "flyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:nora-cornolle-vs-klaudia-sygu-a-12",
       "red": "ufc:nora-cornolle",
       "blue": "ufc:klaudia-sygu-a",
       "division": "womens-bantamweight",
@@ -92,7 +108,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:matthieu-letho-duclos-vs-luis-felipe-dias-11",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:matthieu-letho-duclos-vs-luis-felipe-dias-13",
       "red": "ufc:matthieu-letho-duclos",
       "blue": "ufc:luis-felipe-dias",
       "division": "middleweight",
@@ -100,7 +116,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:delphine-benouaich-vs-sofia-montenegro-12",
+      "id": "ufc:ufc-fight-night-hooker-vs-parnasse:bout:delphine-benouaich-vs-sofia-montenegro-14",
       "red": "ufc:delphine-benouaich",
       "blue": "ufc:sofia-montenegro",
       "division": "womens-strawweight",
@@ -108,5 +124,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-26T06:01:51.845Z"
+  "updatedAt": "2026-08-27T06:00:56.984Z"
 }

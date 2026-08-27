@@ -9,13 +9,7 @@
       "results": 13
     }
   ],
-  "applied": [
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-hernandez-vs-rodrigues-bout-shanelle-dyer-vs-elise-reed-11",
-      "winner": "red",
-      "method": "TKO (punches)"
-    }
-  ],
-  "untracked": 12,
-  "generatedAt": "2026-08-26T06:01:51.845Z"
+  "applied": [],
+  "untracked": 13,
+  "generatedAt": "2026-08-27T06:00:56.984Z"
 }

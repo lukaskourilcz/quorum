@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-kurtis-campbell-vs-trevor-peek-8",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:ufc-fight-night-hooker-vs-parnasse",
+    "name": "UFC Fight Night: Hooker vs. Parnasse",
+    "startsAtUtc": "2026-09-05T00:00:00.000Z",
+    "venue": "Accor Arena"
+  },
+  "fighters": {
+    "red": "ufc:kurtis-campbell",
+    "blue": "ufc:trevor-peek"
+  },
+  "division": "featherweight",
+  "scheduledRounds": 3,
+  "status": "announced",
+  "statusHistory": [
+    {
+      "status": "announced",
+      "at": "2026-08-27T06:00:56.984Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-27:List of UFC events"
+      ],
+      "note": "Status imported from the Cito event listing."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-27T06:00:56.984Z",
+    "lastSeenAt": "2026-08-27T06:00:56.984Z",
+    "sourceRefs": [
+      "source:wikipedia:2026-08-27:List of UFC events"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:2026-08-27:List of UFC events"
+  ],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-27T06:00:56.984Z",
+      "kind": "created",
+      "fields": [
+        "event",
+        "fighters",
+        "status"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-27:List of UFC events"
+      ],
+      "note": "Discovered on the approved Cito free-tier intake."
+    }
+  ],
+  "updatedAt": "2026-08-27T06:00:56.984Z"
+}

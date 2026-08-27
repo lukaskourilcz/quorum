@@ -275,7 +275,7 @@
       "requestedAt": "2026-08-23T06:03:51.296Z",
       "notBefore": "2026-08-23",
       "expiresAt": "2026-08-26T23:59:59.000Z",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "schemaVersion": "meeting-agenda/1",
@@ -330,7 +330,24 @@
       "notBefore": "2026-08-26",
       "expiresAt": "2026-08-29T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-0979753d8e764fcf",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-27-mma-intake",
+      "summary": "Decide: source Francesco Nuzzi height, reach, stance from two independent providers (current gap blocks model use for bout 9). Wikimedia and CITO both missing; try fighter roster cross-check or fight record archive.",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+      ],
+      "requestedAt": "2026-08-27T06:00:56.984Z",
+      "notBefore": "2026-08-27",
+      "expiresAt": "2026-08-30T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-26T06:01:51.845Z"
+  "updatedAt": "2026-08-27T06:00:56.984Z"
 }
