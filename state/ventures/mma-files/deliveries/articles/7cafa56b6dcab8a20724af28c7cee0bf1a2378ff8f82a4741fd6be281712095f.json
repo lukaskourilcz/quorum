@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "article",
+  "packageHash": "7cafa56b6dcab8a20724af28c7cee0bf1a2378ff8f82a4741fd6be281712095f",
+  "status": "delivered",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "378a8dba33bc04f2def485fd4c33928bcd881d54",
+  "articleUrl": "https://mma-files.vercel.app/cs/articles/ufc-amanda-nunes",
+  "recordedAt": "2026-08-27T08:07:56.419Z"
+}

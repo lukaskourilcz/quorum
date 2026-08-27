@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-f24d2a685cb8774f",
+  "venture": "mma-files",
+  "packageHash": "7cafa56b6dcab8a20724af28c7cee0bf1a2378ff8f82a4741fd6be281712095f",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "targetCommit": "378a8dba33bc04f2def485fd4c33928bcd881d54",
+  "deploymentUrl": "https://mma-files.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 378a8dba33bc04f2def485fd4c33928bcd881d54 is readable",
+      "checkedAt": "2026-08-27T08:07:54.618Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-27T08:07:54.618Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-27T08:07:54.618Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/cs/articles/ufc-amanda-nunes?boardless_verify=7cafa56b6dca-1787818074618",
+      "checkedAt": "2026-08-27T08:07:54.618Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and ufc-amanda-nunes match",
+      "checkedAt": "2026-08-27T08:07:54.618Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 7cafa56b6dcab8a20724af28c7cee0bf1a2378ff8f82a4741fd6be281712095f",
+      "checkedAt": "2026-08-27T08:07:54.618Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://mma-files.vercel.app/images/articles/ufc-amanda-nunes/hero.webp?boardless_verify=7cafa56b6dca-1787818074618",
+      "checkedAt": "2026-08-27T08:07:54.618Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-27T08:07:54.618Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "MMAnytt · CC BY",
+      "checkedAt": "2026-08-27T08:07:54.618Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-27T08:07:12.437Z",
+  "completedAt": "2026-08-27T08:07:55.336Z"
+}
