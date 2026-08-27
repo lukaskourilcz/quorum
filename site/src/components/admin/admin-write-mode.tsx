@@ -12,10 +12,14 @@ export function AdminWriteProvider({ children, enabled }: { children: ReactNode;
   return <AdminWriteMode.Provider value={enabled}>{children}</AdminWriteMode.Provider>;
 }
 
+export function useAdminHydrated(): boolean {
+  return useSyncExternalStore(subscribeToHydration, () => true, () => false);
+}
+
 export function useAdminWritesEnabled(): boolean {
   const configured = useContext(AdminWriteMode);
   // A server-rendered enabled button has no handler yet. Keeping the whole admin write surface
   // inert until hydration prevents an early click from looking accepted while doing nothing.
-  const hydrated = useSyncExternalStore(subscribeToHydration, () => true, () => false);
+  const hydrated = useAdminHydrated();
   return configured && hydrated;
 }

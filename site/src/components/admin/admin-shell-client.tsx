@@ -5,6 +5,7 @@ import { useState } from "react";
 import { LockKeyhole } from "lucide-react";
 import type { AdminShellPreferences, AdminTheme } from "@/lib/admin-shell-preferences";
 import type { AdminNavigationGroup } from "./admin-shell-types";
+import { useAdminHydrated } from "./admin-write-mode";
 import { AdminSidebar } from "./admin-sidebar";
 import { AdminCommandPalette } from "./admin-command-palette";
 import { AdminMobileNav } from "./admin-mobile-nav";
@@ -46,6 +47,7 @@ export function AdminShellClient({
   const [collapsed, setCollapsed] = useState(initialPreferences.collapsed);
   const [preferenceStatus, setPreferenceStatus] = useState("");
   const [preferencePending, setPreferencePending] = useState(false);
+  const hydrated = useAdminHydrated();
   const shellStyle = {
     "--admin-current-sidebar-width": collapsed ? "var(--admin-rail-width)" : "var(--admin-sidebar-width)",
     "--admin-section-accent": brand
@@ -84,6 +86,7 @@ export function AdminShellClient({
     <div
       className="min-h-svh bg-[var(--admin-desktop)] text-[var(--admin-foreground)] md:h-svh md:overflow-hidden md:px-[var(--admin-desktop-padding-inline)] md:py-[var(--admin-desktop-padding-block)]"
       data-admin
+      data-admin-hydrated={hydrated}
       data-admin-theme={theme}
       data-preference-pending={preferencePending}
       style={shellStyle}
@@ -96,6 +99,7 @@ export function AdminShellClient({
           attention={attention}
           collapsed={collapsed}
           groups={groups}
+          interactive={hydrated}
           onCollapseChange={changeCollapsed}
           onThemeChange={changeTheme}
           ownerName={ownerName}
@@ -130,7 +134,7 @@ export function AdminShellClient({
             </div>
           </main>
         </div>
-        <AdminMobileNav groups={groups} onThemeChange={changeTheme} theme={theme} />
+        <AdminMobileNav groups={groups} interactive={hydrated} onThemeChange={changeTheme} theme={theme} />
       </div>
     </div>
   );

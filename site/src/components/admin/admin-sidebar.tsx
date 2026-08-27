@@ -97,6 +97,7 @@ export function AdminSidebar({
   attention,
   collapsed,
   groups,
+  interactive,
   onCollapseChange,
   onThemeChange,
   ownerName,
@@ -105,6 +106,7 @@ export function AdminSidebar({
   attention: readonly { label: string; value: number }[];
   collapsed: boolean;
   groups: readonly AdminNavigationGroup[];
+  interactive: boolean;
   onCollapseChange: (collapsed: boolean) => void;
   onThemeChange: (theme: AdminTheme) => void;
   ownerName: string;
@@ -131,6 +133,7 @@ export function AdminSidebar({
         <button
           aria-label={collapsed ? "Expand Admin sidebar" : "Collapse Admin sidebar"}
           className="admin-focus-ring ml-auto grid size-8 place-items-center rounded-[var(--admin-radius)] text-[var(--admin-sidebar-muted)] hover:bg-[var(--admin-sidebar-hover)] hover:text-[var(--admin-sidebar-foreground)]"
+          disabled={!interactive}
           onClick={() => onCollapseChange(!collapsed)}
           type="button"
         >
@@ -210,6 +213,7 @@ export function AdminSidebar({
             <button
               aria-label={`Use ${theme === "dark" ? "light" : "dark"} Admin theme`}
               className="admin-focus-ring grid size-9 place-items-center rounded-[var(--admin-radius)] text-[var(--admin-sidebar-muted)] hover:bg-[var(--admin-sidebar-hover)] hover:text-[var(--admin-sidebar-foreground)]"
+              disabled={!interactive}
               onClick={() => onThemeChange(theme === "dark" ? "light" : "dark")}
               type="button"
             >

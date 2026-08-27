@@ -78,6 +78,7 @@ describe("Admin shell", () => {
     );
 
     expect(html).toContain('data-admin-theme="light"');
+    expect(html).toContain('data-admin-hydrated="false"');
     expect(html).toContain("--admin-current-sidebar-width:var(--admin-sidebar-width)");
     expect(html).toContain('data-admin-window="true"');
     expect(html).toContain('data-admin-window-controls="true"');

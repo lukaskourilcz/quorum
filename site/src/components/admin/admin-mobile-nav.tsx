@@ -35,10 +35,12 @@ function MobileDestinationLink({
 
 export function AdminMobileNav({
   groups,
+  interactive,
   onThemeChange,
   theme
 }: {
   groups: readonly AdminNavigationGroup[];
+  interactive: boolean;
   onThemeChange: (theme: AdminTheme) => void;
   theme: AdminTheme;
 }) {
@@ -65,6 +67,7 @@ export function AdminMobileNav({
           aria-haspopup="dialog"
           className="admin-focus-ring flex min-h-[var(--admin-touch-target)] min-w-0 flex-col items-center justify-center gap-0.5 rounded-[var(--admin-radius)] px-1 text-[length:var(--admin-type-micro)] font-semibold text-[var(--admin-foreground-muted)] data-[active=true]:text-[var(--admin-foreground)]"
           data-active={hasActiveWorkspace}
+          disabled={!interactive}
           onClick={() => setSheet("workspaces")}
           type="button"
         >
@@ -75,6 +78,7 @@ export function AdminMobileNav({
         <button
           aria-haspopup="dialog"
           className="admin-focus-ring flex min-h-[var(--admin-touch-target)] min-w-0 flex-col items-center justify-center gap-0.5 rounded-[var(--admin-radius)] px-1 text-[length:var(--admin-type-micro)] font-semibold text-[var(--admin-foreground-muted)]"
+          disabled={!interactive}
           onClick={() => setSheet("all")}
           type="button"
         >
@@ -97,6 +101,7 @@ export function AdminMobileNav({
           <>
             <button
               className="admin-focus-ring flex min-h-[var(--admin-touch-target)] items-center gap-2 rounded-[var(--admin-radius)] px-2.5 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)] hover:bg-[var(--admin-surface-hover)] hover:text-[var(--admin-foreground)]"
+              disabled={!interactive}
               onClick={() => onThemeChange(theme === "dark" ? "light" : "dark")}
               type="button"
             >
