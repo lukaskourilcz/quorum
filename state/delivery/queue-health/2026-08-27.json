@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-08-27T07:03:41.140Z",
+  "checkedAt": "2026-08-27T08:07:59.188Z",
   "date": "2026-08-27",
   "ventures": [
     {
@@ -74,8 +74,8 @@
     },
     {
       "venture": "mma-files",
-      "url": "https://mma-files.vercel.app/cs/articles/ufc-event-ufc-fight-night-nurmagomedov-vs-song",
-      "expected": "ufc-event-ufc-fight-night-nurmagomedov-vs-song",
+      "url": "https://mma-files.vercel.app/cs/articles/ufc-amanda-nunes",
+      "expected": "ufc-amanda-nunes",
       "status": 200,
       "live": true
     }
