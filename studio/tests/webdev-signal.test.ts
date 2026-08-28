@@ -70,10 +70,10 @@ describe("WebDev Signal Design Lab family", () => {
       {
         input: { template: webDevSignalTemplate(4), brand, payload: payload(4, "en", "stable"), format: "instagram-portrait" as const },
         hashes: [
-          "bff4cca028f19c63dde177cbe0dbd6d30b14bd82cdb25678deffe5cc6c300412",
-          "db27c58293fc37502b75aa898306b9a0c1b16b68d9b22b1848e00e1846e8c842",
-          "759e9f57f91566f24006df993f0e144670a55611294cdd492a5956d0bc24e944",
-          "7f1d6d66525d46eb34a703d3955fddb5d075e02cf4952c94b37426335e8118f8"
+          "6b49839f069a763d4d3adbe6d130974dbe5bc05b7813449219624af0528f4ab7",
+          "9f69f949830bfdb35e58c684af3beb3ea41a3f371ad3cf37c237f59398e0f8da",
+          "06e1c1bc292470038fc6c38fdb6b2e07bd6be78da6c88852157a6673825811f6",
+          "f5d2cc31b6f0a869983cc86c4b349f14171ad60c718bebe9e90eb718f168edd2"
         ]
       },
       {

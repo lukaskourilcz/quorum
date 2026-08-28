@@ -735,18 +735,21 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
     logoText: "WEBDEV SIGNAL",
     colors: {
       // Ink and paper first: the identity is a precise editorial change record, not a terminal.
+      // The mint is #5ed3a8 and not lighter because the shared deck pool composites the accent
+      // over `surface` at 0.5 opacity on a mesh cover, and the foreground must still clear the
+      // 4.5:1 floor against that blend — the studio checks every brand against every template.
       background: "#0b1115",
       surface: "#131c22",
       "surface-strong": "#1d2931",
       foreground: "#f2f7f5",
       muted: "#b9c8c5",
-      accent: "#82e6c1",
+      accent: "#5ed3a8",
       secondary: "#f7c66a",
-      stable: "#82e6c1",
+      stable: "#5ed3a8",
       preview: "#f7c66a",
       security: "#ff9a9a",
       breaking: "#d8b4fe",
-      insertion: "#82e6c1",
+      insertion: "#5ed3a8",
       removal: "#ff9a9a"
     },
     fonts: { headline: "Figtree", body: "Public Sans", mono: "IBM Plex Mono" }
