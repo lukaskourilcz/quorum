@@ -91,6 +91,20 @@ describe("Social Profiles workspace", () => {
     expect(snapshot.contentRunway).toMatchObject({ authorityGranted: false, queueAuthorized: false, publishingAuthorized: false });
   });
 
+  it("renders separate truthful Results tables without charts, identities or spend controls", async () => {
+    const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
+    const html = renderToStaticMarkup(<SocialProfilesWorkspace section="results" snapshot={snapshot} />);
+
+    expect(html).toContain("Venture Profile results · 0");
+    expect(html).toContain("Amplification Profile results · 0");
+    expect(html).toContain("No Campaign result sets");
+    expect(html).toContain("Unavailable; no winner is declared");
+    expect(html).toContain("At most two may be live");
+    expect(html).toContain("No organic result has created a proposal");
+    expect(html).not.toMatch(/visitor id|audience identity list|private message body|purchase now|boost now/iu);
+    expect(snapshot.socialResults).toMatchObject({ audienceIdentityExposed: false, privateMessagesExposed: false, spendAuthorized: false });
+  });
+
   it("renders campaign gates, immutable bindings and safe actions without fake results", async () => {
     const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
     const fixture = JSON.parse(await readFile(path.join(root, "contracts/fixtures/social-distribution-contracts.valid.json"), "utf8")) as { campaign: unknown };

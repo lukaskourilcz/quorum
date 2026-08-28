@@ -47,9 +47,10 @@ describe("Social Profiles server snapshot", () => {
     expect(snapshot.campaigns).toEqual([]);
     expect(snapshot.campaignDecisions).toEqual([]);
     expect(snapshot.network).toMatchObject({ contacts: [], shareKits: [], benchmark: { target: 50, actual: 0, optedInOrActive: 0, fabricatedProgress: false } });
-    expect(snapshot.dropped).toEqual({ profiles: 0, connections: 0, amplifierProposals: 0, events: 0, campaigns: 0, campaignDecisions: 0, campaignEvents: 0, networkContacts: 0, networkContactEvents: 0, networkShareKits: 0, networkShareKitEvents: 0, providerRecords: 0, providerBindings: 0, providerReceipts: 0, providerHealth: 0, inventoryStrategies: 0, inventories: 0, inventoryReceipts: 0, inventoryIncidents: 0, pauseRecords: 0 });
+    expect(snapshot.dropped).toEqual({ profiles: 0, connections: 0, amplifierProposals: 0, events: 0, campaigns: 0, campaignDecisions: 0, campaignEvents: 0, networkContacts: 0, networkContactEvents: 0, networkShareKits: 0, networkShareKitEvents: 0, providerRecords: 0, providerBindings: 0, providerReceipts: 0, providerHealth: 0, inventoryStrategies: 0, inventories: 0, inventoryReceipts: 0, inventoryIncidents: 0, resultObservations: 0, attributionEvents: 0, resultBaselines: 0, resultExperiments: 0, boostProposals: 0, pauseRecords: 0 });
     expect(snapshot.providerControl).toMatchObject({ summary: { directCoreAvailable: true, activeBindings: 0, heldBindings: 6, ambiguousReceipts: 0 }, authorityGranted: false, purchaseAuthorized: false, automaticFailover: false });
     expect(snapshot.contentRunway).toMatchObject({ summary: { strategies: 6, healthy: 0, lowOrNoRunway: 0, unavailable: 6, actualCostUsd: 0 }, authorityGranted: false, queueAuthorized: false, publishingAuthorized: false });
+    expect(snapshot.socialResults).toMatchObject({ summary: { observations: 0, measuredPosts: 0, unavailablePosts: 0, attributedEvents: 0, unattributedEvents: 0, activeExperiments: 0, actualCostUsd: null }, audienceIdentityExposed: false, privateMessagesExposed: false, authorityGranted: false, spendAuthorized: false });
     expect(snapshot.posture).toMatchObject({ globalKillSwitch: "engaged", liveAuthorityGranted: false });
     expect(snapshot.ventureProfiles.find(({ profile }) => profile.ventureRef === "door-money")).toMatchObject({
       lifecycle: "proposed",
@@ -123,6 +124,31 @@ describe("Social Profiles server snapshot", () => {
     expect(JSON.stringify(snapshot)).not.toContain("contest-radar");
   });
 
+  it("keeps Venture result and campaign attribution evidence bounded and unavailable-aware", async () => {
+    const root = await fixtureRoot();
+    const campaignFixture = JSON.parse(await readFile(path.join(repositoryRoot, "contracts/fixtures/social-distribution-contracts.valid.json"), "utf8")) as { campaign: unknown };
+    const resultFixture = JSON.parse(await readFile(path.join(repositoryRoot, "contracts/fixtures/social-results-contracts.valid.json"), "utf8")) as { observation: Record<string, unknown>; attribution: unknown; baseline: unknown; experiment: unknown; boostProposal: unknown };
+    await mkdir(path.join(root, "state/social/campaigns"), { recursive: true });
+    await mkdir(path.join(root, "state/social/results/observations"), { recursive: true });
+    await mkdir(path.join(root, "state/social/results/attribution"), { recursive: true });
+    await mkdir(path.join(root, "state/social/results/baselines"), { recursive: true });
+    await mkdir(path.join(root, "state/social/results/boost-proposals"), { recursive: true });
+    await writeFile(path.join(root, "state/social/campaigns/campaign.json"), `${JSON.stringify(campaignFixture.campaign, null, 2)}\n`);
+    const observation = { ...resultFixture.observation, profileId: "social-profile-door-money", connectionId: "social-connection-door-money-held", platform: "instagram", nativePostId: "instagram-post-123", publicUrl: "https://www.instagram.com/p/example/", campaignRef: "state/social/campaigns/social-campaign-door-money-release-001.json", campaignItemId: "door-money-instagram-001", releaseId: "door-money-release-001", sourceVentureId: "door-money", format: "carousel", unavailableReason: null, metrics: [{ name: "verified_publish", value: 1, unavailableReason: null }, { name: "reach", value: 120, unavailableReason: null }], policyState: { ...(resultFixture.observation.policyState as Record<string, unknown>), campaignState: "completed" } };
+    await writeFile(path.join(root, "state/social/results/observations/observation.json"), `${JSON.stringify(observation, null, 2)}\n`);
+    await writeFile(path.join(root, "state/social/results/attribution/attribution.json"), `${JSON.stringify(resultFixture.attribution, null, 2)}\n`);
+    await writeFile(path.join(root, "state/social/results/baselines/baseline.json"), `${JSON.stringify(resultFixture.baseline, null, 2)}\n`);
+    await writeFile(path.join(root, "state/social/results/boost-proposals/proposal.json"), `${JSON.stringify(resultFixture.boostProposal, null, 2)}\n`);
+    await writeFile(path.join(root, "state/social/results/experiments.json"), `${JSON.stringify({ schemaVersion: "social-distribution-experiment-register/1", experiments: [resultFixture.experiment], updatedAt: "2026-08-29T12:00:00.000Z", authorityGranted: false }, null, 2)}\n`);
+
+    const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
+    expect(snapshot.socialResults.summary).toMatchObject({ observations: 1, measuredPosts: 1, unavailablePosts: 0, attributedEvents: 1, activeExperiments: 0, actualCostUsd: 0 });
+    expect(snapshot.socialResults.profiles[0]).toMatchObject({ profileId: "social-profile-door-money", targetRole: "primary", verifiedPublishRate: 1, totals: { reach: 120, qualifiedActions: 1 }, providerState: "measured" });
+    expect(snapshot.socialResults.campaigns[0]).toMatchObject({ sourceVentureId: "door-money", releaseId: "door-money-release-001", primaryOnly: true, qualifiedActions: 1, state: "measured" });
+    expect(snapshot.socialResults.boostProposals).toHaveLength(1);
+    expect(JSON.stringify(snapshot.socialResults)).not.toMatch(/"(?:visitorId|audienceIds|privateMessage|messageBody)":/iu);
+  });
+
   it("projects a validated no-candidate inventory and receipt without forcing a post", async () => {
     const root = await fixtureRoot();
     const fixture = JSON.parse(await readFile(path.join(repositoryRoot, "contracts/fixtures/social-inventory-contracts.valid.json"), "utf8")) as { inventory: unknown; receipt: unknown };
@@ -145,6 +171,7 @@ describe("Social Profiles server snapshot", () => {
     expect(resolveSocialProfileSection("network")).toBe("network");
     expect(resolveSocialProfileSection("providers")).toBe("providers");
     expect(resolveSocialProfileSection("content-runway")).toBe("content-runway");
+    expect(resolveSocialProfileSection("results")).toBe("results");
     expect(resolveSocialProfileSection("activity-setup")).toBe("activity-setup");
     expect(resolveSocialProfileSection("future-module")).toBe("venture-profiles");
   });

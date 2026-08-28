@@ -61,4 +61,11 @@ test("Social Profiles sections and detail keep canonical bookmarks and bounded c
   await expect(page.locator('[data-social-runway-detail="social-profile-caught-up"]')).toContainText("Design Lab");
   await expect(page.getByText("No inventory candidates", { exact: true })).toBeVisible();
   await expect(page.locator("[data-social-profiles-section=content-runway]")).not.toContainText(/publish now|queue now|force post|account activation/iu);
+
+  await page.goto("/admin/social-profiles?section=results", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("link", { name: "Results", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByText("No Venture Profile results", { exact: true })).toBeVisible();
+  await expect(page.getByText("No Amplification Profile results", { exact: true })).toBeVisible();
+  await expect(page.getByText("No Campaign result sets", { exact: true })).toBeVisible();
+  await expect(page.locator("[data-social-profiles-section=results]")).not.toContainText(/visitor id|private message body|purchase now|boost now/iu);
 });
