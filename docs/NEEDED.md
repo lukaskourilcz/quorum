@@ -8,7 +8,58 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-08-27.
+Updated: 2026-08-28.
+
+---
+
+## The launch shortlist — 2026-08-28
+
+The owner set the launch set: DNESKAi, MMA Files, marketingShark, BOOKSOFHISTORY, Tehdejší
+svět, Kvórum, plus the owner-only Personal Growth desk. Titty Tuesdays, Door Money, WebDev
+Signal and Contest Radar wait until after launch. The implementation half lives in
+`docs/LAUNCH-BUILD-PROMPT.md` and becomes a GitHub issue program; this shortlist is the owner
+half, ordered by what unblocks the most. Every referenced item already exists below or in
+`state/INBOX.md` — tick it where it lives, not here.
+
+- [ ] **Merge branch `claude/venture-launch-review-7l5nkd`** — it carries the verified fix for
+  the 2026-08-28 release-gate outage (the webdev-signal contrast failure that has skipped every
+  council room since 15:00 UTC) plus this shortlist and the launch build prompt. Until it is on
+  `main`, no scheduled meeting runs. [imp:5] [owner:me] [time:5m] [kind:deploy]
+- [ ] **Run the launch build prompt** — open an Opus session on `docs/LAUNCH-BUILD-PROMPT.md`,
+  let it create the `PROGRAM — Launch` issues, review them once, and let it work them in order.
+  [imp:5] [owner:me] [time:30m] [kind:decision]
+
+Then, in order, the existing items:
+
+1. **Countersign the launch foundings** — Kvórum, BOOKSOFHISTORY and Tehdejší svět from the
+   four 12 August founding decisions (Door Money can wait), plus `KV-EDITORIAL-004` and the
+   Kvórum capacity-reallocation record the program drafts.
+2. **Create the Apify account** — `APIFY-ACCOUNT-001`, then `KV-APIFY-001` and
+   `KV-SOURCES-002` (Kvórum's Facebook page + seven Czech feeds); `APIFY-MMA-SOURCES-001` is
+   optional. Add the free Podcast Index key pair. Fill `state/ventures/goviral/profile.md` —
+   GoVIRAL has never run for want of exactly these.
+3. **Flip the switches** — `PORTFOLIO_LIVE_ENABLED=true` (opens the venture rooms including
+   the Personal Growth desk) and `CAUGHT_UP_STREAMS_ENABLED=true`.
+4. **Set the `/admin` production credentials** — `ADMIN_USER`, `ADMIN_PASSWORD`,
+   `BOARDLESSAI_GITHUB_TOKEN`; without them every admin write stays read-only.
+5. **Merge the mma-files hero-correction branch** — `claude/article-image-selection-61rs70`
+   in `lukaskourilcz/mma-files`; the two wrong heroes stay live until it lands.
+6. **Content approvals for the two held desks** — `TS-SNAPSHOT-001`, `TS-MEDIA-002` and the
+   12-feature bank for Tehdejší svět; `BH-RESEARCH-001`, `BH-SEED-002` and the launch
+   questions for BOOKSOFHISTORY.
+7. **Clear handles, then create the accounts yourself** — Instagram + Threads for DNESKAi and
+   MMA Files (the credential table in `SOCIAL-DISTRIBUTION-CONNECTION-001` is ready for
+   later API posting), `BH-ACCOUNTS-003`, `TS-ACCOUNTS-003` (domain first), `KV-ACCOUNTS-003`.
+   Personal Growth uses the existing `lukaskouril93`. Manual posting from the admin's packs is
+   the launch mode; tokens and `SOCIAL_KILL_SWITCH=false` come only after the activation
+   counters pass.
+8. **Pick the launch five in the Design Lab** — walk the template families, save presets for
+   the five you want per brand and set them live; decide the DNESKAi lockup line while you are
+   there.
+9. **Review the curated scene proposals** — both magazines' queues; the curated rung is the
+   cheapest cure for FRAME-plate covers and it only grows when you tick lines.
+10. **Leave analytics, monetization and Titty Tuesdays where they are** — deliberately parked;
+    reopening any of them is a new decision, not a launch task.
 
 ---
 
@@ -832,6 +883,14 @@ month, while a shelf or stretched day may cost `$0`.
 
 ## Recently finished
 
+- **The 2026-08-28 release-gate outage was root-caused and fixed**, same day, on branch
+  `claude/venture-launch-review-7l5nkd`. The webdev-signal brand's mint accent failed the
+  studio's 4.5:1 contrast floor once the legacy mesh cover composited it over the surface at
+  0.5 opacity, so `pnpm test` went red on `main` at 15:00 UTC and every scheduled room since
+  recorded `repository release gate failed`. The accent deepened to `#5ed3a8`, the two moved
+  SVG hashes were re-pinned, and studio (173), orchestrator webdev (7) and site webdev (2)
+  suites all pass. The fix reaches the engine when the branch merges — the first line of the
+  launch shortlist above.
 - **The repository-wide Markdown sweep completed**, 2026-08-13. It began with 345 tracked
   Markdown files and ends with 352: five served documents were deleted, four durable Kvórum files
   arrived with its completed programme, and eight mirrored tool-boundary notes were added so
