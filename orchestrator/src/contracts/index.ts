@@ -55,5 +55,6 @@ export * from "./operations-coordination.js";
 export * from "./venture-recovery.js";
 export * from "./venture-recommendation.js";
 export * from "./visual-weights.js";
+export * from "./webdev-signal.js";
 export * from "./tehdejsi-signal.js";
 export * from "./tehdejsi-product-insight.js";
