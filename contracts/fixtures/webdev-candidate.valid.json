@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "webdev-candidate/1",
+  "sourceId": "github-npm-advisories",
+  "sourceItemId": "GHSA-invented-0001",
+  "listingUrl": "https://api.github.com/advisories?ecosystem=npm",
+  "targetUrl": "https://github.com/advisories/GHSA-invented-0001",
+  "canonicalProjectUrl": "https://example.org/invented-parser",
+  "title": "Invented parser advisory fixes unsafe template handling",
+  "summary": "The invented parser project states that version 4.2.1 fixes a critical unsafe template handling flaw affecting versions before 4.2.1.",
+  "author": "Invented Parser Maintainers",
+  "project": "Invented Parser",
+  "publishedAt": "2026-08-28T06:00:00+02:00",
+  "updatedAt": null,
+  "versionText": "affected <4.2.1; fixed 4.2.1",
+  "securityText": "critical; GHSA-invented-0001",
+  "topicHints": ["security", "build-tooling"],
+  "changeKindHints": ["security-advisory"],
+  "language": "en",
+  "contentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "provenance": {
+    "authority": "official-advisory",
+    "parserId": "github-advisories",
+    "parserVersion": "1.0.0",
+    "fetchedAt": "2026-08-28T06:05:00+02:00",
+    "evidenceRefs": ["fixture:github-advisory:GHSA-invented-0001"],
+    "fixture": true
+  }
+}

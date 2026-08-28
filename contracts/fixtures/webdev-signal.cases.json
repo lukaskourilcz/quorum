@@ -1,0 +1,22 @@
+{
+  "fixture": true,
+  "version": "1.0.0",
+  "cases": [
+    { "id": "browser-stable-feature", "expected": "eligible" },
+    { "id": "framework-major-release", "expected": "eligible" },
+    { "id": "critical-security-affected-fixed", "expected": "eligible" },
+    { "id": "beta-preview", "expected": "minor-no-material-impact" },
+    { "id": "duplicate-official-sources", "expected": "cluster" },
+    { "id": "secondary-plus-official", "expected": "official-confirmed" },
+    { "id": "unsupported-rumor", "expected": "rumor-unsupported" },
+    { "id": "minor-package-release", "expected": "minor-no-material-impact" },
+    { "id": "conflicting-version-evidence", "expected": "conflicted" },
+    { "id": "valid-cs-en-native", "expected": "parity-pass" },
+    { "id": "literal-translation", "expected": "parity-fail" },
+    { "id": "claim-drift", "expected": "parity-fail" },
+    { "id": "no-edition", "expected": "NO_EDITION" },
+    { "id": "stale-goviral", "expected": "zero-contribution" },
+    { "id": "denied-cross-venture", "expected": "denied" },
+    { "id": "malformed-item", "expected": "drop-one" }
+  ]
+}

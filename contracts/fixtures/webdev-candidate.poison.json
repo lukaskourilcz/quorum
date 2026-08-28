@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "webdev-candidate/1",
+  "sourceId": "invented-weekly",
+  "sourceItemId": "rumor-1",
+  "listingUrl": "https://example.org/rumor",
+  "targetUrl": "https://example.org/rumor",
+  "canonicalProjectUrl": "https://example.org/project",
+  "title": "A rumor",
+  "summary": "An unsupported claim.",
+  "author": null,
+  "project": "Invented Project",
+  "publishedAt": "2026-08-28T06:00:00+02:00",
+  "updatedAt": null,
+  "versionText": null,
+  "securityText": null,
+  "topicHints": ["other-unknown"],
+  "changeKindHints": ["other-unknown"],
+  "language": "en",
+  "contentHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "provenance": {
+    "authority": "secondary-discovery",
+    "parserId": "secondary-feed",
+    "parserVersion": "1.0.0",
+    "fetchedAt": "2026-08-28T06:05:00+02:00",
+    "evidenceRefs": ["fixture:secondary:rumor-1"],
+    "fixture": true
+  },
+  "rawBody": "This field is forbidden even in fixtures."
+}

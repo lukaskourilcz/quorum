@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "webdev-edition-package/1",
+  "id": "edition:invented-parser:en",
+  "locale": "en",
+  "evidenceBriefRef": "state/ventures/webdev-signal/briefs/invented-parser-4.2.1.json",
+  "editionProfileRef": "webdev-signal:en",
+  "headline": "Critical fix lands in Invented Parser 4.2.1",
+  "deck": "Projects on an earlier release should verify and update their dependency.",
+  "explanation": "The official advisory identifies releases before 4.2.1 as affected by unsafe template handling. Maintainers should inspect the installed dependency and move to the fixed release.",
+  "threads": {
+    "primary": "Invented Parser users should check their installed release: the official advisory marks versions before 4.2.1 as affected, with the fix in 4.2.1.",
+    "continuation": ["Use the upstream advisory for the authoritative version range."]
+  },
+  "instagramPanels": [
+    { "role": "cover", "heading": "Critical repair", "body": "Invented Parser 4.2.1" },
+    { "role": "impact", "heading": "Affected projects", "body": "Installations older than 4.2.1." },
+    { "role": "action", "heading": "Next check", "body": "Inspect the dependency and update to 4.2.1." },
+    { "role": "source", "heading": "Authority", "body": "Official security advisory." }
+  ],
+  "cta": "check-affected-version",
+  "altTextInput": "Four panels explain an Invented Parser security fix, the affected release range and the update action.",
+  "sourceAttribution": [
+    { "url": "https://github.com/advisories/GHSA-invented-0001", "label": "Official advisory" }
+  ],
+  "factualSentences": [
+    { "text": "Release 4.2.1 contains the fix.", "claimIds": ["claim:fix"] },
+    { "text": "Releases before 4.2.1 are affected.", "claimIds": ["claim:affected"] },
+    { "text": "Maintainers direct users to update.", "claimIds": ["claim:action"] }
+  ],
+  "claimIdsUsed": ["claim:fix", "claim:affected", "claim:action"],
+  "affectedVersionRefsUsed": ["<4.2.1", "4.2.1"],
+  "affectedAudienceIdsUsed": ["audience:invented-parser-users"],
+  "safeActionIdsUsed": ["action:update"],
+  "languageChecks": { "expectedLocale": "en", "nativeRegister": true, "prohibitedPhraseHits": [] },
+  "parityChecks": {
+    "briefHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "coreClaimsPresent": true,
+    "uncertaintyPreserved": true,
+    "unsupportedFacts": []
+  },
+  "originalityChecks": {
+    "sourceCopyOverlapRatio": 0.04,
+    "literalTranslationRisk": false,
+    "comparedLocalePackageHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "status": "approved",
+  "heldReason": null,
+  "contentVersion": "1.0.0",
+  "contentHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "capabilityRefs": [
+    "webdev-signal-to-design-lab:bounded-render-summary:bounded-render-summary/1",
+    "webdev-signal-to-social-distribution:approved-publish-package:approved-publish-package/1"
+  ]
+}

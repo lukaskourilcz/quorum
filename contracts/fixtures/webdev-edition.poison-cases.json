@@ -1,0 +1,15 @@
+{
+  "fixture": true,
+  "literalClone": {
+    "copyAllEditorialTextFromLocale": "en",
+    "targetLocale": "cs",
+    "expectedReason": "literal-translation-or-clone"
+  },
+  "claimDrift": {
+    "targetLocale": "en",
+    "removeClaimId": "claim:affected",
+    "addClaimId": "claim:invented-benchmark",
+    "expectedReasons": ["en:unsupported-claim", "en:missing-core-claim", "claim-drift"]
+  },
+  "deniedCapability": "caught-up-to-webdev-signal:portfolio-read:any/1"
+}
