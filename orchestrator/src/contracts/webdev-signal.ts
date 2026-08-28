@@ -370,6 +370,9 @@ export const WebDevEvidenceBriefSchema = z.strictObject({
   id: StableId,
   selectedRecordId: z.string().regex(/^wds_[a-f0-9]{24}$/),
   selectionRef: EvidenceRefSchema,
+  selectionHash: Sha256Schema.optional(),
+  inputSnapshotHash: Sha256Schema.optional(),
+  recordHash: Sha256Schema.optional(),
   canonicalDevelopment: z.string().trim().min(1).max(280),
   claims: z.array(WebDevBriefClaimSchema).min(1).max(40),
   whatChangedClaimIds: z.array(StableId).min(1).max(20),
@@ -394,6 +397,8 @@ export const WebDevEvidenceBriefSchema = z.strictObject({
   prohibitedPhrases: z.array(z.string().trim().min(1).max(120)).max(40),
   expiresAt: DateTimeSchema,
   updateConditions: z.array(BoundedString).min(1).max(20),
+  promptVersion: z.string().regex(/^\d+\.\d+\.\d+$/).optional(),
+  extractionVersion: z.string().regex(/^\d+\.\d+\.\d+$/).optional(),
   version: z.string().regex(/^\d+\.\d+\.\d+$/),
   contentHash: Sha256Schema
 }).superRefine((brief, context) => {
@@ -432,6 +437,7 @@ export const WebDevEditionPackageSchema = z.strictObject({
     primary: z.string().trim().min(1).max(500),
     continuation: z.array(z.string().trim().min(1).max(500)).max(3)
   }),
+  instagramCaption: z.string().trim().min(1).max(2_200).optional(),
   instagramPanels: z.array(z.strictObject({
     role: z.enum(["cover", "change", "impact", "action", "source"]),
     heading: z.string().trim().min(1).max(120),
@@ -461,6 +467,20 @@ export const WebDevEditionPackageSchema = z.strictObject({
     literalTranslationRisk: z.boolean(),
     comparedLocalePackageHash: Sha256Schema.nullable()
   }),
+  characterCounts: z.strictObject({
+    headline: z.number().int().nonnegative(),
+    deck: z.number().int().nonnegative(),
+    threadsPrimary: z.number().int().nonnegative(),
+    instagramCaption: z.number().int().nonnegative()
+  }).optional(),
+  editorialProvenance: z.strictObject({
+    modelRole: z.literal("WEBDEV_SIGNAL_EDITOR"),
+    promptVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
+    localePolicyVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
+    provider: z.enum(["openai", "anthropic"]).nullable(),
+    model: z.string().trim().min(1).max(120).nullable(),
+    deterministic: z.boolean()
+  }).optional(),
   status: z.enum(["draft", "held", "approved"]),
   heldReason: BoundedString.nullable(),
   contentVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
