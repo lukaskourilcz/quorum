@@ -91,6 +91,17 @@ describe("Social Profiles workspace", () => {
     expect(snapshot.contentRunway).toMatchObject({ authorityGranted: false, queueAuthorized: false, publishingAuthorized: false });
   });
 
+  it("renders the Prague-day receipt surface with explicit draft-only authority", async () => {
+    const snapshot = await readAdminSocialProfiles(root, { now: new Date("2026-08-28T08:00:00.000Z"), environment: { NODE_ENV: "test" } });
+    const html = renderToStaticMarkup(<SocialProfilesWorkspace section="today" snapshot={snapshot} />);
+    expect(html).toContain("Today · 2026-08-28");
+    expect(html).toContain("No daily operation receipts");
+    expect(html).toContain("No countersigned routine scopes");
+    expect(html).toContain("Do not force filler");
+    expect(html).toContain("None bypasses #409 publishing");
+    expect(snapshot.today).toMatchObject({ authorityGranted: false, publishingAuthorized: false });
+  });
+
   it("renders separate truthful Results tables without charts, identities or spend controls", async () => {
     const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
     const html = renderToStaticMarkup(<SocialProfilesWorkspace section="results" snapshot={snapshot} />);

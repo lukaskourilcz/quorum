@@ -37,6 +37,13 @@ test("Social Profiles sections and detail keep canonical bookmarks and bounded c
   await expect(page.getByText("No verified-release campaigns", { exact: true })).toBeVisible();
   await expect(page.getByText(/Contest Radar candidates are not converted/iu)).toBeVisible();
 
+  await page.goto("/admin/social-profiles?section=today", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("link", { name: "Today", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByText("No daily operation receipts", { exact: true })).toBeVisible();
+  await expect(page.getByText("No countersigned routine scopes", { exact: true })).toBeVisible();
+  await expect(page.locator("[data-social-profiles-section=today]")).toContainText("Do not force filler");
+  await expect(page.locator("[data-social-profiles-section=today]")).not.toContainText(/access token|private-secret-value|publish now|force post|automatic failover/iu);
+
   await page.goto("/admin/social-profiles?section=unknown&profile=social-profile-caught-up", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("link", { name: "Venture Profiles", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(page.locator('[data-social-profile-detail="social-profile-caught-up"]')).toBeVisible();

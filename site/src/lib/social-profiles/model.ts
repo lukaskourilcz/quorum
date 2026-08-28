@@ -2,6 +2,7 @@ export const SOCIAL_PROFILE_SECTIONS = [
   { id: "venture-profiles", label: "Venture Profiles" },
   { id: "amplification-profiles", label: "Amplification Profiles" },
   { id: "campaigns", label: "Campaigns" },
+  { id: "today", label: "Today" },
   { id: "network", label: "Network" },
   { id: "providers", label: "Providers & automation health" },
   { id: "content-runway", label: "Content runway" },

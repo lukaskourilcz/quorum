@@ -19,6 +19,7 @@ async function fixtureRoot(): Promise<string> {
     "config/social-publisher-registry.json",
     "config/social-providers.json",
     "config/social-profile-strategies.json",
+    "config/social-routine-scopes.json",
     "config/social-amplification-policy.json",
     "config/venture-capabilities.json",
     "state/social/activation.json",
@@ -47,10 +48,11 @@ describe("Social Profiles server snapshot", () => {
     expect(snapshot.campaigns).toEqual([]);
     expect(snapshot.campaignDecisions).toEqual([]);
     expect(snapshot.network).toMatchObject({ contacts: [], shareKits: [], benchmark: { target: 50, actual: 0, optedInOrActive: 0, fabricatedProgress: false } });
-    expect(snapshot.dropped).toEqual({ profiles: 0, connections: 0, amplifierProposals: 0, events: 0, campaigns: 0, campaignDecisions: 0, campaignEvents: 0, networkContacts: 0, networkContactEvents: 0, networkShareKits: 0, networkShareKitEvents: 0, providerRecords: 0, providerBindings: 0, providerReceipts: 0, providerHealth: 0, inventoryStrategies: 0, inventories: 0, inventoryReceipts: 0, inventoryIncidents: 0, resultObservations: 0, attributionEvents: 0, resultBaselines: 0, resultExperiments: 0, boostProposals: 0, pauseRecords: 0 });
+    expect(snapshot.dropped).toEqual({ profiles: 0, connections: 0, amplifierProposals: 0, events: 0, campaigns: 0, campaignDecisions: 0, campaignEvents: 0, networkContacts: 0, networkContactEvents: 0, networkShareKits: 0, networkShareKitEvents: 0, providerRecords: 0, providerBindings: 0, providerReceipts: 0, providerHealth: 0, inventoryStrategies: 0, inventories: 0, inventoryReceipts: 0, inventoryIncidents: 0, resultObservations: 0, attributionEvents: 0, resultBaselines: 0, resultExperiments: 0, boostProposals: 0, dailyOperations: 0, routineScopes: 0, pauseRecords: 0 });
     expect(snapshot.providerControl).toMatchObject({ summary: { directCoreAvailable: true, activeBindings: 0, heldBindings: 6, ambiguousReceipts: 0 }, authorityGranted: false, purchaseAuthorized: false, automaticFailover: false });
     expect(snapshot.contentRunway).toMatchObject({ summary: { strategies: 6, healthy: 0, lowOrNoRunway: 0, unavailable: 6, actualCostUsd: 0 }, authorityGranted: false, queueAuthorized: false, publishingAuthorized: false });
     expect(snapshot.socialResults).toMatchObject({ summary: { observations: 0, measuredPosts: 0, unavailablePosts: 0, attributedEvents: 0, unattributedEvents: 0, activeExperiments: 0, actualCostUsd: null }, audienceIdentityExposed: false, privateMessagesExposed: false, authorityGranted: false, spendAuthorized: false });
+    expect(snapshot.today).toMatchObject({ targetDate: "2026-08-27", operations: [], routineScopes: [], summary: { queued: 0, review: 0, held: 0, paused: 0, noPost: 0, attention: 0, actualCostUsd: 0 }, authorityGranted: false, publishingAuthorized: false });
     expect(snapshot.posture).toMatchObject({ globalKillSwitch: "engaged", liveAuthorityGranted: false });
     expect(snapshot.ventureProfiles.find(({ profile }) => profile.ventureRef === "door-money")).toMatchObject({
       lifecycle: "proposed",
@@ -166,8 +168,24 @@ describe("Social Profiles server snapshot", () => {
     });
   });
 
+  it("projects one bounded daily receipt and drops secret-bearing or orphan records", async () => {
+    const root = await fixtureRoot(); await mkdir(path.join(root, "state/social/profile-operations"), { recursive: true });
+    const operation = {
+      schemaVersion: "social-profile-operation/1", id: "social-profile-operation-aaaaaaaaaaaaaaaaaaaa", profileId: "social-profile-caught-up", connectionId: "social-connection-caught-up-threads", targetDate: "2026-08-28", selectionWindow: { notBefore: "2026-08-28T08:00:00.000Z", notAfter: "2026-08-28T10:00:00.000Z" }, candidateRefs: ["state/social/inventory-candidates/social-inventory-candidate-aaaaaaaaaaaaaaaaaaaa.json"], selectedCandidateRef: null, immutableHashes: null,
+      gates: [{ gate: "routine-scope", status: "hold", reason: "The exact scope is not countersigned.", evidenceRef: "docs/NEEDED.md#social-distribution-connection-001" }], routineScopeRef: null, routineScopeState: "draft-only", queue: null, outcome: "review", reasons: ["draft-only"], providerConnectionState: "unavailable", actualCostUsd: 0, incidentRefs: [], ownerAttentionRefs: ["docs/NEEDED.md#social-distribution-connection-001"], replayed: false, createdAt: "2026-08-28T08:00:00.000Z"
+    };
+    await writeFile(path.join(root, "state/social/profile-operations/valid.json"), `${JSON.stringify(operation, null, 2)}\n`);
+    await writeFile(path.join(root, "state/social/profile-operations/secret.json"), `${JSON.stringify({ ...operation, id: "social-profile-operation-bbbbbbbbbbbbbbbbbbbb", accessToken: "must-not-cross" }, null, 2)}\n`);
+    const snapshot = await readAdminSocialProfiles(root, { now: new Date("2026-08-28T08:30:00.000Z"), environment: { NODE_ENV: "test" } });
+    expect(snapshot.today.operations).toMatchObject([{ profileId: "social-profile-caught-up", outcome: "review", routineScopeState: "draft-only", reasons: ["draft-only"], queue: null }]);
+    expect(snapshot.today.summary).toMatchObject({ review: 1, attention: 1, actualCostUsd: 0 });
+    expect(snapshot.dropped.dailyOperations).toBe(1);
+    expect(JSON.stringify(snapshot.today)).not.toContain("must-not-cross");
+  });
+
   it("falls unknown section bookmarks back to Venture Profiles", () => {
     expect(resolveSocialProfileSection("campaigns")).toBe("campaigns");
+    expect(resolveSocialProfileSection("today")).toBe("today");
     expect(resolveSocialProfileSection("network")).toBe("network");
     expect(resolveSocialProfileSection("providers")).toBe("providers");
     expect(resolveSocialProfileSection("content-runway")).toBe("content-runway");
