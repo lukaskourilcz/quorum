@@ -512,6 +512,130 @@ export const WebDevEditionPackageSchema = z.strictObject({
   }));
 });
 
+export const WebDevDesignStatusSchema = z.enum(["stable", "preview", "security", "breaking", "deprecated"]);
+export const WebDevPanelSemanticSchema = z.enum(["lead", "change", "impact", "action", "source", "detail"]);
+
+export const WebDevDesignPayloadSchema = z.strictObject({
+  schemaVersion: z.literal("webdev-design-payload/1"),
+  venture: z.literal("webdev-signal"),
+  edition: z.enum(["CZ", "EN"]),
+  locale: z.enum(["cs", "en"]),
+  packageRef: EvidenceRefSchema,
+  packageHash: Sha256Schema,
+  project: z.string().trim().min(1).max(120),
+  topic: WebDevTopicSchema,
+  changeKind: WebDevChangeKindSchema,
+  status: WebDevDesignStatusSchema,
+  identifiers: z.array(z.strictObject({
+    value: z.string().trim().min(1).max(160),
+    classification: z.enum(["release", "affected", "fixed", "package", "advisory", "other"])
+  })).max(20),
+  panels: z.array(z.strictObject({
+    id: z.string().regex(/^panel-[0-9]{2}$/),
+    semantics: z.array(WebDevPanelSemanticSchema).min(1).max(3),
+    heading: z.string().trim().min(1).max(120),
+    body: z.string().trim().min(1).max(500),
+    claimIds: z.array(StableId).max(20),
+    sourceRefs: z.array(HttpsUrlSchema).max(20)
+  })).min(4).max(6),
+  sources: z.array(z.strictObject({
+    url: HttpsUrlSchema,
+    label: z.string().trim().min(1).max(160),
+    authority: z.enum(["official-primary", "official-advisory"])
+  })).min(1).max(20),
+  altTextSemantic: z.string().trim().min(1).max(800),
+  brand: z.strictObject({ id: z.literal("webdev-signal"), version: z.literal("1.0.0") }),
+  template: z.strictObject({ id: z.string().regex(/^webdev-signal-change-[4-6]$/), version: z.literal("1.0.0") }),
+  correction: z.strictObject({ sequence: z.number().int().nonnegative(), supersedesPayloadHash: Sha256Schema.nullable() }),
+  expiresAt: DateTimeSchema,
+  capabilityRef: z.literal("webdev-signal-to-design-lab:bounded-render-summary:bounded-render-summary/1"),
+  contentHash: Sha256Schema
+}).superRefine((payload, context) => {
+  if ((payload.edition === "CZ") !== (payload.locale === "cs")) {
+    context.addIssue({ code: "custom", path: ["edition"], message: "edition marker must match locale" });
+  }
+  if (payload.template.id !== `webdev-signal-change-${payload.panels.length}`) {
+    context.addIssue({ code: "custom", path: ["template", "id"], message: "template length must match panel count" });
+  }
+  payload.panels.forEach((panel, index) => {
+    if (panel.id !== `panel-${String(index + 1).padStart(2, "0")}`) {
+      context.addIssue({ code: "custom", path: ["panels", index, "id"], message: "panels must be ordered and contiguous" });
+    }
+  });
+  const semantics = new Set(payload.panels.flatMap((panel) => panel.semantics));
+  for (const required of ["lead", "change", "impact", "action", "source"] as const) {
+    if (!semantics.has(required)) context.addIssue({ code: "custom", path: ["panels"], message: `missing ${required} semantic` });
+  }
+  if (!payload.panels[0]?.semantics.includes("lead") || !payload.panels.at(-1)?.semantics.includes("source")) {
+    context.addIssue({ code: "custom", path: ["panels"], message: "lead must be first and source proof last" });
+  }
+  const sourceUrls = new Set(payload.sources.map((source) => source.url));
+  payload.panels.forEach((panel, index) => panel.sourceRefs.forEach((ref, refIndex) => {
+    if (!sourceUrls.has(ref)) context.addIssue({ code: "custom", path: ["panels", index, "sourceRefs", refIndex], message: "panel source must match an immutable payload source" });
+  }));
+  if (!payload.panels.at(-1)?.sourceRefs.length) {
+    context.addIssue({ code: "custom", path: ["panels", payload.panels.length - 1, "sourceRefs"], message: "source proof panel requires a source" });
+  }
+});
+
+export const WebDevRenderReceiptSchema = z.strictObject({
+  schemaVersion: z.literal("webdev-render-receipt/1"),
+  payloadRef: EvidenceRefSchema,
+  payloadHash: Sha256Schema,
+  packageRef: EvidenceRefSchema,
+  packageHash: Sha256Schema,
+  locale: z.enum(["cs", "en"]),
+  renderer: z.strictObject({
+    package: z.literal("@boardlessai/carousel-studio"),
+    version: z.literal("1.0.0"),
+    templateId: z.string().regex(/^webdev-signal-change-[4-6]$/),
+    templateVersion: z.literal("1.0.0"),
+    brandId: z.literal("webdev-signal"),
+    brandVersion: z.literal("1.0.0"),
+    fontSetVersion: z.literal("committed-metrics/1")
+  }),
+  format: z.literal("instagram-portrait"),
+  dimensions: z.strictObject({ width: z.literal(1080), height: z.literal(1350) }),
+  outputs: z.array(z.strictObject({
+    panelId: z.string().regex(/^panel-[0-9]{2}$/),
+    assetRef: EvidenceRefSchema,
+    svgHash: Sha256Schema,
+    pngHash: Sha256Schema
+  })).min(4).max(6),
+  panelCount: z.number().int().min(4).max(6),
+  checks: z.strictObject({
+    schema: z.literal("pass"),
+    capability: z.literal("pass"),
+    textFit: z.enum(["pass", "fail"]),
+    contrast: z.enum(["pass", "fail"]),
+    statusNonColor: z.enum(["pass", "fail"]),
+    sourcePlacement: z.enum(["pass", "fail"]),
+    altTextSemantic: z.enum(["pass", "fail"]),
+    exactIdentifiers: z.enum(["pass", "fail"])
+  }),
+  cache: z.strictObject({ key: Sha256Schema, status: z.enum(["new", "reused"]), reusedReceiptRef: EvidenceRefSchema.nullable() }),
+  export: z.strictObject({ startedAt: DateTimeSchema, completedAt: DateTimeSchema, durationMs: z.number().int().nonnegative() }),
+  outcome: z.enum(["success", "held", "failed"]),
+  reason: BoundedString.nullable(),
+  correctionSequence: z.number().int().nonnegative(),
+  supersededReceiptRef: EvidenceRefSchema.nullable(),
+  providerCostUsd: z.literal(0)
+}).superRefine((receipt, context) => {
+  if (receipt.outputs.length !== receipt.panelCount) {
+    context.addIssue({ code: "custom", path: ["outputs"], message: "output count must match panel count" });
+  }
+  const failures = Object.values(receipt.checks).filter((status) => status === "fail");
+  if (receipt.outcome === "success" && (failures.length > 0 || receipt.reason !== null)) {
+    context.addIssue({ code: "custom", path: ["outcome"], message: "successful renders require every gate and no reason" });
+  }
+  if (receipt.outcome !== "success" && receipt.reason === null) {
+    context.addIssue({ code: "custom", path: ["reason"], message: "held or failed renders require an exact reason" });
+  }
+  if (receipt.cache.status === "reused" && receipt.cache.reusedReceiptRef === null) {
+    context.addIssue({ code: "custom", path: ["cache", "reusedReceiptRef"], message: "reused renders require the winning receipt ref" });
+  }
+});
+
 export const WebDevRunSchema = z.strictObject({
   schemaVersion: z.literal("webdev-run/1"),
   phase: z.literal("webdev-signal-daily"),
@@ -642,4 +766,6 @@ export type WebDevRecord = z.infer<typeof WebDevRecordSchema>;
 export type WebDevSelection = z.infer<typeof WebDevSelectionSchema>;
 export type WebDevEvidenceBrief = z.infer<typeof WebDevEvidenceBriefSchema>;
 export type WebDevEditionPackage = z.infer<typeof WebDevEditionPackageSchema>;
+export type WebDevDesignPayload = z.infer<typeof WebDevDesignPayloadSchema>;
+export type WebDevRenderReceipt = z.infer<typeof WebDevRenderReceiptSchema>;
 export type WebDevRun = z.infer<typeof WebDevRunSchema>;
