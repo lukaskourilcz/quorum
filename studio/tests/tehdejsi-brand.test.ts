@@ -67,7 +67,7 @@ describe("Tehdejsi svet brand tokens", () => {
   });
 
   it("follows the light ladder BOOKSOFHISTORY already established rather than inventing one", () => {
-    // Two of the nine brands are light. Both run their three grounds downward from paper, and
+    // Two of the ten brands are light. Both run their three grounds downward from paper, and
     // both keep the darkest of them well clear of the text tokens — which is the property that
     // makes a shared family work on a light skin at all.
     const light = Object.values(CAROUSEL_BRANDS)

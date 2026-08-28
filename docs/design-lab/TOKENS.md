@@ -2,7 +2,7 @@
 
 ## Type
 
-The engine serves nine brand skins. Every named face is committed as a static SIL OFL 1.1
+The engine serves ten brand skins. Every named face is committed as a static SIL OFL 1.1
 `.ttf`; `studio/src/fonts.ts` resolves a requested weight to the nearest committed face in the
 same family, and `studio/src/font-metrics.generated.ts` supplies its measured advances. Rendering
 does not depend on a system-font fallback.
@@ -18,6 +18,7 @@ does not depend on a system-font fallback.
 | **BOOKSOFHISTORY** `booksofhistory` | Petrona 600/700/800/900 | Karla 400/700 | IBM Plex Mono 400/700 |
 | **Door Money** `door-money` | Barlow Condensed 600/700/800/900 | Barlow 400/700 | IBM Plex Mono 400/700 |
 | **Tehdejší svět** `tehdejsi-svet` | Literata 400/600/700 | Inter 400/600/700 | IBM Plex Mono 400/700 |
+| **WebDev Signal** `webdev-signal` | Figtree 600/700/800/900 | Public Sans 400/700 | IBM Plex Mono 400/700 |
 
 Archivo is Caught Up's wide grotesque. Anton preserves MMA Files' compact poster register and
 has one real weight, so every requested headline weight resolves to its committed 400 face.
@@ -85,14 +86,16 @@ validator checks every declared rendering, not only variant A.
 
 BOOKSOFHISTORY and Tehdejší svět are the two light skins. Their surface ladder moves from paper
 toward darker stock while leaving every text token above the 4.5:1 floor. The other seven skins
-use dark grounds.
+and WebDev Signal use dark grounds. WebDev Signal adds named stable, preview, security and breaking
+accents, but every state also prints a textual label; the extra tokens never carry meaning alone.
 
 ### Validation receipt
 
 The canonical receipt is executable rather than a hand-maintained ratio table:
 
 - `studio/tests/families.test.ts` pins **23** families and validates every deck length the
-  splitter can resolve, all **9** brands and all **4** formats.
+  splitter can resolve, all **10** brands and all **4** formats. The dedicated WebDev Signal suite
+  checks its 4–6 panel family only against its own brand and Instagram portrait export.
 - `validateTemplateForBrand` checks schema, safe area, contrast, brand-token binding, overflow
   and originality; `renderCarouselSvg` refuses a failing template.
 - Contrast walks the actual layer order. It measures text/logo colour against the slide ground
