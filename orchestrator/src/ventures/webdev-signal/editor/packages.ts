@@ -50,6 +50,8 @@ function affectedLabel(record: WebDevRecord, locale: "cs" | "en"): string {
 
 function editorial(locale: "cs" | "en", brief: WebDevEvidenceBrief, record: WebDevRecord) {
   const security = record.changeKind === "security-advisory";
+  const breaking = record.changeKind === "breaking-change";
+  const deprecation = record.changeKind === "deprecation";
   const preview = brief.releaseStability === "beta" || brief.releaseStability === "preview";
   const version = versionLabel(record);
   const affected = affectedLabel(record, locale);
@@ -57,23 +59,31 @@ function editorial(locale: "cs" | "en", brief: WebDevEvidenceBrief, record: WebD
   if (locale === "cs") {
     const headline = security
       ? `${record.project}: oprava v ${version}`
+      : breaking ? `${record.project}: nekompatibilní změna v ${version}`
+      : deprecation ? `${record.project}: končí podpora části rozhraní`
       : preview ? `${record.project}: ${version} je zatím náhled` : `${record.project} ${version}: co se mění`;
     const deck = security
       ? `Oficiální upozornění vymezuje dotčený rozsah: ${affected}.`
+      : breaking || deprecation ? `Oficiální zdroj vymezuje dotčený rozsah: ${affected}.`
       : preview ? "Novinka ještě není stabilní; hodí se k ověření, ne k ukvapenému nasazení." : "Nové vydání mění práci webových vývojářů v rozsahu popsaném oficiálním zdrojem.";
     const explanation = security
       ? `Opravený rozsah je ${record.fixedVersions.join(", ")}. Používáte-li ${affected}, ověřte instalovanou verzi${action ? ` a postupujte podle uvedeného kroku: ${action}` : "."}`
+      : breaking || deprecation ? `Změna se týká ${affected}. Před aktualizací zkontrolujte dotčené použití${action ? ` a postupujte podle uvedeného kroku: ${action}` : "."}`
       : preview ? `Jde o ${brief.releaseStability}, nikoli stabilní vydání. Vývojáři mohou změnu otestovat proti vlastnímu projektu a sledovat další oficiální aktualizace.` : `Oficiální zdroj popisuje změnu pro ${record.project}. Před úpravou projektu zkontrolujte verzi, rozsah a migrační poznámky.`;
     return { headline, deck, explanation, sourceLabel: "Oficiální zdroj", actionLabel: action ?? "Ověřte verzi a oficiální poznámky.", impactLabel: `Týká se: ${affected}.` };
   }
   const headline = security
     ? `${record.project}: fix available in ${version}`
+    : breaking ? `${record.project}: breaking change in ${version}`
+    : deprecation ? `${record.project}: documented API deprecation`
     : preview ? `${record.project} ${version} remains a preview` : `${record.project} ${version}: what changed`;
   const deck = security
     ? `The official advisory defines the affected scope as ${affected}.`
+    : breaking || deprecation ? `The official source defines the affected scope as ${affected}.`
     : preview ? "This is not a stable release; test it deliberately before considering adoption." : "The official release changes a documented part of the working web-development workflow.";
   const explanation = security
     ? `The fixed scope is ${record.fixedVersions.join(", ")}. If a project uses ${affected}, verify the installed version${action ? ` and follow the stated action: ${action}` : "."}`
+    : breaking || deprecation ? `The change affects ${affected}. Check the affected use before updating${action ? ` and follow the stated action: ${action}` : "."}`
     : preview ? `The accepted evidence describes a ${brief.releaseStability}, not stable availability. Test it against a real project and follow subsequent official updates.` : `The official source documents the change for ${record.project}. Check the exact version, affected workflow and migration notes before changing a project.`;
   return { headline, deck, explanation, sourceLabel: "Official source", actionLabel: action ?? "Check the version and official notes.", impactLabel: `Affected scope: ${affected}.` };
 }

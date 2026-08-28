@@ -124,6 +124,18 @@ describe("WebDev Signal native social packages", () => {
     expect(validateGeneratedWebDevPackages({ brief: previewBrief, record: previewRecord, packages, limits: LIMITS })).toEqual({ cs: [], en: [], pair: [] });
   });
 
+  it("keeps breaking-change scope and action explicit in both locales", async () => {
+    const { brief, record } = await acceptedBrief();
+    const breakingRecord = { ...record, changeKind: "breaking-change" as const, security: { severity: "none" as const, advisoryIds: [] }, fixedVersions: [], releaseStability: "stable" as const };
+    const breakingBrief = { ...brief, fixedVersions: [], releaseStability: "stable" as const, uncertainty: [] };
+    const packages = createDeterministicWebDevPackages({ brief: breakingBrief, briefRef: "brief:breaking", record: breakingRecord, limits: LIMITS });
+    expect(packages.cs.headline).toContain("nekompatibilní změna");
+    expect(packages.en.headline).toContain("breaking change");
+    expect(packages.cs.explanation).toContain(breakingBrief.affectedVersions[0]!);
+    expect(packages.en.explanation).toContain(breakingBrief.safeActions[0]!.text);
+    expect(validateGeneratedWebDevPackages({ brief: breakingBrief, record: breakingRecord, packages, limits: LIMITS })).toEqual({ cs: [], en: [], pair: [] });
+  });
+
   it("rejects source copying, hype, over-limit Threads and unsupported versions locally", async () => {
     const { brief, record } = await acceptedBrief();
     const packages = createDeterministicWebDevPackages({ brief, briefRef: "brief:fixture", record, limits: LIMITS });
@@ -247,6 +259,7 @@ describe("WebDev Signal editor role, budget, cache and repair seam", () => {
     expect(result.receipt.reservedUsd).toBeLessThanOrEqual(0.03);
     expect(generate).toHaveBeenCalledTimes(2);
     expect(result.cacheEntry).not.toBeNull();
+    expect(result.packages.cs?.editorialProvenance).toMatchObject({ provider: "openai", model: "gpt-5.6-luna", deterministic: false });
   });
 
   it("preserves one valid locale when the other is malformed and repair has no headroom", async () => {

@@ -113,6 +113,24 @@ function parsePair(raw: string): { cs: WebDevEditionPackage | null; en: WebDevEd
   };
 }
 
+function stampModelProvenance(pack: WebDevEditionPackage, route: WebDevEditorModelRoute, config: WebDevEditorConfig): WebDevEditionPackage {
+  const { contentHash: _oldHash, ...withoutHash } = pack;
+  const value = {
+    ...withoutHash,
+    status: "draft" as const,
+    heldReason: null,
+    editorialProvenance: {
+      modelRole: "WEBDEV_SIGNAL_EDITOR" as const,
+      promptVersion: config.promptVersion,
+      localePolicyVersion: config.localePolicyVersion,
+      provider: route.provider,
+      model: route.model,
+      deterministic: false
+    }
+  };
+  return WebDevEditionPackageSchema.parse({ ...value, contentHash: hash(value) });
+}
+
 export interface WebDevEditorGenerateResult {
   text: string;
   usd: number;
@@ -217,8 +235,8 @@ export async function runWebDevEditor(input: {
     if (parsed.reasons.length === 0) break;
   }
   const reasons: string[] = [...parsed.reasons];
-  let cs = parsed.cs;
-  let en = parsed.en;
+  let cs = parsed.cs ? stampModelProvenance(parsed.cs, input.route, input.config) : null;
+  let en = parsed.en ? stampModelProvenance(parsed.en, input.route, input.config) : null;
   if (cs) reasons.push(...validateWebDevEditionAgainstBrief({ brief: input.brief, edition: cs }).map((value) => `cs:${value}`));
   if (en) reasons.push(...validateWebDevEditionAgainstBrief({ brief: input.brief, edition: en }).map((value) => `en:${value}`));
   if (cs && en) {
