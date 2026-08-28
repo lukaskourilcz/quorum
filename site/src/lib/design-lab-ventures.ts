@@ -1,6 +1,8 @@
 import "server-only";
+import path from "node:path";
 import { CAROUSEL_BRANDS, CAROUSEL_SUMMARY_VENTURES, type BrandTokens } from "@boardlessai/carousel-studio";
 import { readDesignLab, readDesignLabPresets, type LabArticle, type LabPreset } from "@/lib/design-lab";
+import { readWebDevDesignLabSnapshot, type WebDevDesignLabSnapshot } from "@/lib/webdev-signal-design-lab";
 
 /**
  * The Design Lab, one section per venture.
@@ -53,6 +55,7 @@ export interface DesignLabVenture extends DesignLabSection {
   fonts: BrandTokens["fonts"];
   presets: LabPreset[];
   articles: LabArticle[];
+  webDevRenders: WebDevDesignLabSnapshot | null;
 }
 
 function displayName(brand: BrandTokens): string {
@@ -84,9 +87,10 @@ export async function readDesignLabSections(): Promise<DesignLabSection[]> {
   for (const id of designLabVentureIds()) {
     const brand = CAROUSEL_BRANDS[id];
     const publishesArticles = PUBLISHES_ARTICLES.has(id);
-    const [articles, presets] = await Promise.all([
+    const [articles, presets, webDevRenders] = await Promise.all([
       publishesArticles ? readDesignLab(40, id) : Promise.resolve([]),
-      readDesignLabPresets(id)
+      readDesignLabPresets(id),
+      id === "webdev-signal" ? readWebDevDesignLabSnapshot(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")) : Promise.resolve(null)
     ]);
     sections.push({
       id,
@@ -95,7 +99,7 @@ export async function readDesignLabSections(): Promise<DesignLabSection[]> {
       accent: brand.colors.accent ?? brand.colors.foreground ?? "#ffffff",
       publishesArticles,
       articleCount: articles.length,
-      presetCount: presets.length
+      presetCount: id === "webdev-signal" ? webDevRenders?.entries.length ?? 0 : presets.length
     });
   }
   return sections;
@@ -111,9 +115,10 @@ export async function readDesignLabSections(): Promise<DesignLabSection[]> {
 export async function readDesignLabVenture(id: DesignLabVentureId): Promise<DesignLabVenture> {
   const brand = CAROUSEL_BRANDS[id];
   const publishesArticles = PUBLISHES_ARTICLES.has(id);
-  const [articles, presets] = await Promise.all([
+  const [articles, presets, webDevRenders] = await Promise.all([
     publishesArticles ? readDesignLab(40, id) : Promise.resolve([]),
-    readDesignLabPresets(id)
+    readDesignLabPresets(id),
+    id === "webdev-signal" ? readWebDevDesignLabSnapshot(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")) : Promise.resolve(null)
   ]);
   return {
     id,
@@ -122,10 +127,11 @@ export async function readDesignLabVenture(id: DesignLabVentureId): Promise<Desi
     accent: brand.colors.accent ?? brand.colors.foreground ?? "#ffffff",
     publishesArticles,
     articleCount: articles.length,
-    presetCount: presets.length,
+    presetCount: id === "webdev-signal" ? webDevRenders?.entries.length ?? 0 : presets.length,
     swatches: swatches(brand),
     fonts: brand.fonts,
     presets,
-    articles
+    articles,
+    webDevRenders
   };
 }

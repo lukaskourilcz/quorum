@@ -2,6 +2,7 @@ import { AdminCallout } from "./admin-primitives";
 import { DesignLabIdentity } from "@/components/admin/design-lab-identity";
 import { DesignLabWorkspace } from "@/components/admin/design-lab-workspace";
 import type { DesignLabSection, DesignLabVenture } from "@/lib/design-lab-ventures";
+import { WebDevSignalDesignLab } from "@/components/admin/webdev-signal-design-lab";
 
 /**
  * One venture's Design Lab: who it is, then what the desk has proposed for it.
@@ -57,7 +58,9 @@ export function DesignLabVentureSection({ venture }: { venture: DesignLabVenture
   return (
     <div className="grid min-w-0 gap-4">
       <DesignLabIdentity venture={venture} />
-      {venture.publishesArticles ? (
+      {venture.webDevRenders ? (
+        <WebDevSignalDesignLab snapshot={venture.webDevRenders} />
+      ) : venture.publishesArticles ? (
         <DesignLabWorkspace articles={venture.articles} presets={venture.presets} />
       ) : (
         // Three ventures do not deliver articles at all, and the workspace's own empty state would
