@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexander_Volkanovski",
       "publisher": "Wikipedia",
       "title": "Alexander Volkanovski",
-      "retrievedAt": "2026-08-27T06:00:56.984Z",
+      "retrievedAt": "2026-08-28T06:01:45.174Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q30123133",
         "source:wikipedia:54197580"
       ],
-      "retrievedAt": "2026-08-27T06:00:56.984Z",
+      "retrievedAt": "2026-08-28T06:01:45.174Z",
       "status": "verified",
       "corroborated": true
     },
@@ -318,9 +318,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 2.393463,
-        "layoffDays": 922
+        "layoffDays": 923
       },
-      "updatedAt": "2026-08-27T06:00:56.984Z"
+      "updatedAt": "2026-08-28T06:01:45.174Z"
     }
   ],
   "rating": {
@@ -330,7 +330,7 @@
     "volatility": 0.06001207,
     "boutCount": 11,
     "asOfBoutRef": "ufc:bout:history-5b53427c761832ec518c",
-    "updatedAt": "2026-08-27T06:00:56.984Z"
+    "updatedAt": "2026-08-28T06:01:45.174Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2071,11 +2071,30 @@
         "source:wikipedia:66838633"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-28T06:01:45.174Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54197580",
+        "source:wikipedia:32815938",
+        "source:wikipedia:44264537",
+        "source:wikipedia:45514815",
+        "source:wikipedia:66838633"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.375,
   "modelEligible": true,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-27T06:00:56.984Z"
+  "updatedAt": "2026-08-28T06:01:45.174Z"
 }

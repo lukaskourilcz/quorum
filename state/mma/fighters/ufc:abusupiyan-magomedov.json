@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Abusupiyan_Magomedov",
       "publisher": "Wikipedia",
       "title": "Abusupiyan Magomedov",
-      "retrievedAt": "2026-08-27T06:00:56.984Z",
+      "retrievedAt": "2026-08-28T06:01:45.174Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -58,7 +58,7 @@
       "sourceRefs": [
         "source:wikipedia:80563842"
       ],
-      "retrievedAt": "2026-08-27T06:00:56.984Z",
+      "retrievedAt": "2026-08-28T06:01:45.174Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -197,9 +197,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 365.25,
-        "layoffDays": 1153
+        "layoffDays": 1154
       },
-      "updatedAt": "2026-08-27T06:00:56.984Z"
+      "updatedAt": "2026-08-28T06:01:45.174Z"
     }
   ],
   "rating": {
@@ -209,7 +209,7 @@
     "volatility": 0.05999942,
     "boutCount": 2,
     "asOfBoutRef": "ufc:bout:history-84e86d43bcced5fc714e",
-    "updatedAt": "2026-08-27T06:00:56.984Z"
+    "updatedAt": "2026-08-28T06:01:45.174Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1927,11 +1927,27 @@
         "source:wikipedia:80563842"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-28T06:01:45.174Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42944791",
+        "source:wikipedia:80563842"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-27T06:00:56.984Z"
+  "updatedAt": "2026-08-28T06:01:45.174Z"
 }

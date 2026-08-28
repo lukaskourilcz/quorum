@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260828060145-mma-intake",
+  "phase": "mma-intake",
+  "outcome": "NO_ACTION",
+  "summary": "Nothing new arrived since the last check, so this meeting was not needed.",
+  "evidenceRefs": [],
+  "generatedAt": "2026-08-28T06:01:45.175Z"
+}

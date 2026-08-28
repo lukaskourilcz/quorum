@@ -569,19 +569,25 @@
       "at": "2026-08-28T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "standups/2026-08-28-morning",
+      "decisionOneLiner": "The council held the internal work item. No external action, business claim or stage change was approved."
     },
     {
       "at": "2026-08-28T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ms-daily",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-28-ms-daily",
+      "decisionOneLiner": "No package was drafted. devshark: render-failed."
     },
     {
       "at": "2026-08-28T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-intake",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-28-mma-intake",
+      "decisionOneLiner": "Nothing new arrived since the last check, so this meeting was not needed."
     },
     {
       "at": "2026-08-28T07:00:00.000Z",

@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Aljamain_Sterling",
       "publisher": "Wikipedia",
       "title": "Aljamain Sterling",
-      "retrievedAt": "2026-08-27T06:00:56.984Z",
+      "retrievedAt": "2026-08-28T06:01:45.174Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q17403242",
         "source:wikipedia:43320208"
       ],
-      "retrievedAt": "2026-08-27T06:00:56.984Z",
+      "retrievedAt": "2026-08-28T06:01:45.174Z",
       "status": "verified",
       "corroborated": true
     },
@@ -308,9 +308,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 1.567564,
-        "layoffDays": 369
+        "layoffDays": 370
       },
-      "updatedAt": "2026-08-27T06:00:56.984Z"
+      "updatedAt": "2026-08-28T06:01:45.174Z"
     }
   ],
   "rating": {
@@ -320,7 +320,7 @@
     "volatility": 0.05999755,
     "boutCount": 8,
     "asOfBoutRef": "ufc:bout:history-9e76bacdf60736d621e7",
-    "updatedAt": "2026-08-27T06:00:56.984Z"
+    "updatedAt": "2026-08-28T06:01:45.174Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2054,11 +2054,27 @@
         "source:wikipedia:57503647"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-28T06:01:45.174Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43320208",
+        "source:wikipedia:57503647"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.625,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-27T06:00:56.984Z"
+  "updatedAt": "2026-08-28T06:01:45.174Z"
 }
