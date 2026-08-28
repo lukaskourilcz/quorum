@@ -557,3 +557,7 @@ items in place. Lack of response never authorizes an action. -->
 - [ ] **CAUGHT-UP-DELIVERY-2026-08-27** — hash_conflict: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-08-27-029e618ac90c8d20ae43462fd4117762eaab52848a8f028c43b9197b8a049789.json /home/runner/work/_temp/aifirst-delivery-1 [delive.
   RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+- [ ] **MMA-FILES-DELIVERY-2026-08-28-am** — hash_conflict: > mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-28-am-ufc-event-ufc-fight-night-nurmagomedov-vs-song.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-28:am reu.
+  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
