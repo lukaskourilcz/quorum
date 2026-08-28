@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-boost-proposal/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^social-boost-proposal-[a-f0-9]{20}$"
+    },
+    "status": {
+      "type": "string",
+      "const": "held-owner-proposal"
+    },
+    "contentRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "destinationRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "thresholdVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "baselineRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "organicObservationRefs": {
+      "minItems": 2,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "primaryMetric": {
+      "type": "string",
+      "enum": [
+        "verified_publish",
+        "reach",
+        "views",
+        "impressions",
+        "non_follower_reach",
+        "non_follower_reach_ratio",
+        "shares",
+        "reposts",
+        "quotes",
+        "saves",
+        "replies",
+        "comments",
+        "likes",
+        "profile_actions",
+        "referral_visits",
+        "qualified_actions",
+        "conversions",
+        "original_ratio",
+        "support_ratio",
+        "runway_holds",
+        "cooldown_holds",
+        "campaign_holds",
+        "campaign_failures",
+        "time_to_distribute_seconds"
+      ]
+    },
+    "observedValue": {
+      "type": "number",
+      "minimum": 0
+    },
+    "thresholdValue": {
+      "type": "number",
+      "minimum": 0
+    },
+    "sampleSize": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 10000
+    },
+    "contentChecksPassed": {
+      "type": "boolean",
+      "const": true
+    },
+    "destinationChecksPassed": {
+      "type": "boolean",
+      "const": true
+    },
+    "budgetAuthorityRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "proposedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "ownerDecisionRequired": {
+      "type": "boolean",
+      "const": true
+    },
+    "adApiCalled": {
+      "type": "boolean",
+      "const": false
+    },
+    "purchaseAuthorized": {
+      "type": "boolean",
+      "const": false
+    },
+    "spendAuthorized": {
+      "type": "boolean",
+      "const": false
+    },
+    "publishingAuthorized": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "status",
+    "contentRef",
+    "destinationRef",
+    "thresholdVersion",
+    "baselineRef",
+    "organicObservationRefs",
+    "primaryMetric",
+    "observedValue",
+    "thresholdValue",
+    "sampleSize",
+    "contentChecksPassed",
+    "destinationChecksPassed",
+    "budgetAuthorityRef",
+    "proposedAt",
+    "ownerDecisionRequired",
+    "adApiCalled",
+    "purchaseAuthorized",
+    "spendAuthorized",
+    "publishingAuthorized"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/social-boost-proposal.schema.json"
+}

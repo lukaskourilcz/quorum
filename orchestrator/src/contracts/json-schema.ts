@@ -133,6 +133,14 @@ import {
   SocialProfileStrategySchema
 } from "./social-inventory.js";
 import {
+  SocialAttributionEventSchema,
+  SocialBoostProposalSchema,
+  SocialDistributionBaselineSchema,
+  SocialDistributionExperimentSchema,
+  SocialDistributionExperimentRegisterSchema,
+  SocialMetricObservationSchema
+} from "./social-results.js";
+import {
   ArticleImageSchema,
   MetricsPlaceholderSchema,
   PriorityItemSchema,
@@ -262,7 +270,13 @@ export const ContractSchemas = {
   "social-profile-strategy": SocialProfileStrategySchema,
   "social-inventory-candidate": SocialInventoryCandidateSchema,
   "social-profile-inventory": SocialProfileInventorySchema,
-  "social-inventory-build-receipt": SocialInventoryBuildReceiptSchema
+  "social-inventory-build-receipt": SocialInventoryBuildReceiptSchema,
+  "social-metric-observation": SocialMetricObservationSchema,
+  "social-attribution-event": SocialAttributionEventSchema,
+  "social-distribution-baseline": SocialDistributionBaselineSchema,
+  "social-distribution-experiment": SocialDistributionExperimentSchema,
+  "social-distribution-experiment-register": SocialDistributionExperimentRegisterSchema,
+  "social-boost-proposal": SocialBoostProposalSchema
 } satisfies Record<string, ZodType>;
 
 export type ContractName = keyof typeof ContractSchemas;

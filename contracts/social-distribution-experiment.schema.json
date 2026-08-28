@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-distribution-experiment/1"
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 160,
+      "pattern": "^social-distribution-experiment-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "backlog",
+        "proposed",
+        "active",
+        "review",
+        "completed",
+        "stopped"
+      ]
+    },
+    "hypothesis": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "changedVariable": {
+      "type": "string",
+      "enum": [
+        "umbrella-inclusion",
+        "amplifier-inclusion",
+        "umbrella-delay",
+        "amplifier-count",
+        "format",
+        "timing"
+      ]
+    },
+    "control": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "variant": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "primaryMetric": {
+      "type": "string",
+      "enum": [
+        "verified_publish",
+        "reach",
+        "views",
+        "impressions",
+        "non_follower_reach",
+        "non_follower_reach_ratio",
+        "shares",
+        "reposts",
+        "quotes",
+        "saves",
+        "replies",
+        "comments",
+        "likes",
+        "profile_actions",
+        "referral_visits",
+        "qualified_actions",
+        "conversions",
+        "original_ratio",
+        "support_ratio",
+        "runway_holds",
+        "cooldown_holds",
+        "campaign_holds",
+        "campaign_failures",
+        "time_to_distribute_seconds"
+      ]
+    },
+    "guardrail": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "scopeProfileIds": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^social-profile-[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "startsOn": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "endsOn": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "minimumSample": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 1000
+    },
+    "stopCondition": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "baselineRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "evidenceObservationRefs": {
+      "maxItems": 2000,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "KEEP",
+        "ITERATE",
+        "STOP",
+        "INSUFFICIENT_DATA"
+      ]
+    },
+    "hardGatesFrozen": {
+      "type": "boolean",
+      "const": true
+    },
+    "privacyFrozen": {
+      "type": "boolean",
+      "const": true
+    },
+    "manipulationExcluded": {
+      "type": "boolean",
+      "const": true
+    },
+    "maxCostUsd": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "publishingAuthorized": {
+      "type": "boolean",
+      "const": false
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "status",
+    "hypothesis",
+    "changedVariable",
+    "control",
+    "variant",
+    "primaryMetric",
+    "guardrail",
+    "scopeProfileIds",
+    "startsOn",
+    "endsOn",
+    "minimumSample",
+    "stopCondition",
+    "baselineRef",
+    "evidenceObservationRefs",
+    "verdict",
+    "hardGatesFrozen",
+    "privacyFrozen",
+    "manipulationExcluded",
+    "maxCostUsd",
+    "publishingAuthorized",
+    "updatedAt"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/social-distribution-experiment.schema.json"
+}
