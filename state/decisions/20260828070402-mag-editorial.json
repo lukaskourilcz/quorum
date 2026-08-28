@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260828070402-mag-editorial",
+  "phase": "mag-editorial",
+  "outcome": "VETO",
+  "summary": "AUDIT vetoed the room output: Zabijte slot: chybí ověřený FightAIQ modelový běh i nový zdrojový subjekt; event UFC je v indexu opakovaný. Bez čerstvého podkladu nelze napsat článek podle pravidel.",
+  "evidenceRefs": [
+    "meeting:2026-08-27-mma-analysis",
+    "meeting:2026-08-27-mag-desk",
+    "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+  ],
+  "generatedAt": "2026-08-28T07:08:02.446Z"
+}

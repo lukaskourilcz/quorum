@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260828070402-mag-editorial",
+  "date": "2026-08-28",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.026805,
+    "monthAllInUsd": 13.423049199999996,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "VETO",
+    "summary": "AUDIT vetoed the room output: Zabijte slot: chybí ověřený FightAIQ modelový běh i nový zdrojový subjekt; event UFC je v indexu opakovaný. Bez čerstvého podkladu nelze napsat článek podle pravidel.",
+    "evidenceRefs": [
+      "meeting:2026-08-27-mma-analysis",
+      "meeting:2026-08-27-mag-desk",
+      "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "JAB",
+      "summary": "Slot nelze přidělit: chybí FightAIQ model, fighter files i nový ověřený příběh. UFC event je jen oznámená karta a preview stejného eventu už vyšlo 26. srpna.",
+      "evidenceRefs": [
+        "meeting:2026-08-27-mma-analysis",
+        "meeting:2026-08-27-mag-desk",
+        "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+      ]
+    },
+    {
+      "agent": "QUILL",
+      "summary": "Kill AM slot. UFC Fight Night Nurmagomedov vs. Song was already previewed 2026-08-26. No fresh angle, fighter profile or result to assign. Desk has no Czech source material and no model run ready.",
+      "evidenceRefs": [
+        "meeting:2026-08-27-mma-analysis",
+        "meeting:2026-08-27-mag-desk",
+        "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Zabijte slot: chybí ověřený FightAIQ modelový běh i nový zdrojový subjekt; event UFC je v indexu opakovaný. Bez čerstvého podkladu nelze napsat článek podle pravidel.",
+      "evidenceRefs": [
+        "meeting:2026-08-27-mma-analysis",
+        "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "veto",
+      "veto": true
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-08-28.json",
+  "generatedAt": "2026-08-28T07:08:02.446Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-08-28T07:04:02.446Z",
+    "closedAt": "2026-08-28T07:08:02.446Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-08-28T07:04:02.446Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-08-28T07:05:02.446Z",
+        "text": "Slot nelze přidělit: chybí FightAIQ model, fighter files i nový ověřený příběh. UFC event je jen oznámená karta a preview stejného eventu už vyšlo 26. srpna.",
+        "evidenceRefs": [
+          "meeting:2026-08-27-mma-analysis",
+          "meeting:2026-08-27-mag-desk",
+          "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+        ]
+      },
+      {
+        "agent": "QUILL",
+        "mode": "veto",
+        "sentAt": "2026-08-28T07:06:02.446Z",
+        "text": "Kill AM slot. UFC Fight Night Nurmagomedov vs. Song was already previewed 2026-08-26. No fresh angle, fighter profile or result to assign. Desk has no Czech source material and no model run ready.",
+        "evidenceRefs": [
+          "meeting:2026-08-27-mma-analysis",
+          "meeting:2026-08-27-mag-desk",
+          "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "veto",
+        "sentAt": "2026-08-28T07:07:02.446Z",
+        "text": "Zabijte slot: chybí ověřený FightAIQ modelový běh i nový zdrojový subjekt; event UFC je v indexu opakovaný. Bez čerstvého podkladu nelze napsat článek podle pravidel.",
+        "evidenceRefs": [
+          "meeting:2026-08-27-mma-analysis",
+          "event:ufc:event:ufc-fight-night-nurmagomedov-vs-song"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-08-28T07:08:02.446Z",
+        "text": "AUDIT vetoed the room output: Zabijte slot: chybí ověřený FightAIQ modelový běh i nový zdrojový subjekt; event UFC je v indexu opakovaný. Bez čerstvého podkladu nelze napsat článek podle pravidel."
+      }
+    ]
+  }
+}

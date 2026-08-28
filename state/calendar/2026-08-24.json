@@ -593,7 +593,9 @@
       "at": "2026-08-28T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-08-28-mag-editorial",
+      "decisionOneLiner": "AUDIT vetoed the room output: Zabijte slot: chybí ověřený FightAIQ modelový běh i nový zdrojový subjekt; event UFC je v indexu opakovaný. Bez čerstvého podkladu nelze napsat článek"
     },
     {
       "at": "2026-08-28T08:00:00.000Z",
