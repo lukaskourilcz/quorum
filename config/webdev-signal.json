@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "webdev-signal-registration/1",
+  "ventureId": "webdev-signal",
+  "ledgerNamespace": "webdev-signal",
+  "foundingDecisionRef": "state/decisions/2026-08-28-webdev-signal-founding.md",
+  "foundingCountersigned": false,
+  "editions": [
+    { "locale": "cs", "id": "webdev-signal-cs", "profileRef": "social-profile-webdev-signal-cs", "state": "held" },
+    { "locale": "en", "id": "webdev-signal-en", "profileRef": "social-profile-webdev-signal-en", "state": "held" }
+  ],
+  "features": {
+    "ventureRegistration": "enabled",
+    "directSources": "enabled",
+    "secondaryDiscovery": "held",
+    "goviralOverlay": "held",
+    "bilingualSynthesis": "held",
+    "designLabRendering": "held",
+    "czechProfileDelivery": "held",
+    "englishProfileDelivery": "held",
+    "instagramPublishing": "disabled",
+    "threadsPublishing": "disabled",
+    "metricsCollection": "held",
+    "futureWebsiteCrossPromotion": "disabled"
+  },
+  "budget": {
+    "currency": "USD",
+    "directCollectionUsd": 0,
+    "fixtureRunUsd": 0,
+    "perSelectedDayCeilingUsd": 0.03,
+    "monthlyCeilingUsd": 0.75,
+    "maximumSynthesisCalls": 1,
+    "maximumRepairCalls": 1,
+    "borrowingAllowed": false,
+    "automaticIncreaseAllowed": false,
+    "purchaseAllowed": false
+  },
+  "schedule": {
+    "phase": "webdev-signal-daily",
+    "timezone": "Europe/Prague",
+    "pragueHour": 5,
+    "dispatcherAnchorPhase": "cu-edition",
+    "position": "before-anchor",
+    "newCron": false,
+    "publicMeeting": false,
+    "statePath": "state/ventures/webdev-signal/runs"
+  },
+  "operationalSeams": {
+    "healthRef": "config/venture-slos.json#webdev-signal",
+    "capacityRef": "operations-capacity-plan/1",
+    "recoveryRef": "config/operations-recovery.json#webdev-signal:routine",
+    "progressRef": "GitHub #435",
+    "adminRef": "admin-service:owner-only",
+    "ownerAttentionRef": "owner-attention/1",
+    "pauseRef": "state/operations/pauses/webdev-signal.json"
+  }
+}
