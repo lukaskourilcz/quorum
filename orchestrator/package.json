@@ -36,6 +36,7 @@
     "proof:rooms": "tsx src/proof/portfolio-proof.ts",
     "programs:sync": "tsx src/programs/sync-cli.ts",
     "social:publish": "tsx src/social/index.ts",
+    "social:migration-audit": "node --import tsx src/social/migration-audit-cli.ts",
     "sources:shadow": "tsx src/sources/shadow.ts",
     "pretest": "pnpm --filter @boardlessai/carousel-studio build",
     "pretypecheck": "pnpm --filter @boardlessai/carousel-studio build",

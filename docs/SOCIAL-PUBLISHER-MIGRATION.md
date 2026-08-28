@@ -51,6 +51,17 @@ attempt and receipt meaning, records the old content hash and recalculates the v
 does not rewrite the committed history. An unmapped legacy producer such as marketingShark stays a
 manual draft and cannot silently become a publisher.
 
+`pnpm social:migration-audit` is the deterministic, read-only release check for that compatibility
+path. `--write` may persist its one hash-addressed receipt at
+`state/social/migrations/social-distribution-core-v1.json`; rerunning the same inputs does not write
+a duplicate. The report classifies the current repository as 13 migrated records (three legacy
+profiles, six explicit connection references and four queue-v1 compatibility projections), three
+unchanged activation records and 14 held records (three future profiles, six Direct Meta bindings
+and five optional-provider postures). Unavailable, dropped and malformed counts remain explicit.
+The categories describe migration evidence, not live authority: all profiles, connections and
+bindings remain held. Rollback keeps the original queue files and the `QueueItemSchema` and
+`SocialActivationSchema` readers intact.
+
 ## Deny-by-default target resolution
 
 `resolvePublisherTarget` returns `eligible | held | denied`, never authority. In order, it checks:
