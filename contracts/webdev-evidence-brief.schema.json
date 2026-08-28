@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "webdev-evidence-brief/1"
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 160,
+      "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+    },
+    "selectedRecordId": {
+      "type": "string",
+      "pattern": "^wds_[a-f0-9]{24}$"
+    },
+    "selectionRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "canonicalDevelopment": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
+    "claims": {
+      "minItems": 1,
+      "maxItems": 40,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "evidenceRefs": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "requiredInBothLocales": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "confidence",
+          "evidenceRefs",
+          "requiredInBothLocales"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "whatChangedClaimIds": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 160,
+        "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+      }
+    },
+    "whyItMattersClaimIds": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 160,
+        "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+      }
+    },
+    "affectedAudienceIds": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 160,
+        "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+      }
+    },
+    "safeActions": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "claimIds": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 160,
+              "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "text",
+          "claimIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "affectedVersions": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      }
+    },
+    "fixedVersions": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      }
+    },
+    "releaseStability": {
+      "type": "string",
+      "enum": [
+        "stable",
+        "beta",
+        "preview",
+        "deprecated",
+        "withdrawn",
+        "unknown"
+      ]
+    },
+    "uncertainty": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "conflicts": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "sources": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "authority": {
+            "type": "string",
+            "enum": [
+              "official-primary",
+              "official-advisory"
+            ]
+          }
+        },
+        "required": [
+          "url",
+          "label",
+          "authority"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "prohibitedClaims": {
+      "maxItems": 40,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "prohibitedPhrases": {
+      "maxItems": 40,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      }
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "updateConditions": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "contentHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "selectedRecordId",
+    "selectionRef",
+    "canonicalDevelopment",
+    "claims",
+    "whatChangedClaimIds",
+    "whyItMattersClaimIds",
+    "affectedAudienceIds",
+    "safeActions",
+    "affectedVersions",
+    "fixedVersions",
+    "releaseStability",
+    "uncertainty",
+    "conflicts",
+    "sources",
+    "prohibitedClaims",
+    "prohibitedPhrases",
+    "expiresAt",
+    "updateConditions",
+    "version",
+    "contentHash"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/webdev-evidence-brief.schema.json"
+}

@@ -1,0 +1,415 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "webdev-record/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^wds_[a-f0-9]{24}$"
+    },
+    "canonicalUrl": {
+      "type": "string",
+      "pattern": "^https:\\/\\/"
+    },
+    "sourceIds": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 160,
+        "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+      }
+    },
+    "candidateIds": {
+      "minItems": 1,
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 160,
+        "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+      }
+    },
+    "evidenceRefs": {
+      "minItems": 1,
+      "maxItems": 40,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "topic": {
+      "type": "string",
+      "enum": [
+        "browsers-web-platform",
+        "html-css",
+        "javascript",
+        "typescript",
+        "frontend-framework",
+        "meta-framework",
+        "runtime",
+        "package-manager",
+        "build-tooling",
+        "deployment-platform",
+        "security",
+        "performance",
+        "accessibility",
+        "interoperability-standards",
+        "ecosystem-governance-licensing",
+        "other-unknown"
+      ]
+    },
+    "changeKind": {
+      "type": "string",
+      "enum": [
+        "stable-release",
+        "beta-preview",
+        "deprecation",
+        "breaking-change",
+        "security-advisory",
+        "standards-platform-availability",
+        "tooling-workflow-change",
+        "policy-licensing-governance",
+        "incident-fix",
+        "lead-only",
+        "other-unknown"
+      ]
+    },
+    "impactScope": {
+      "type": "string",
+      "enum": [
+        "broad-web-platform",
+        "framework-ecosystem-wide",
+        "specific-version-configuration",
+        "niche-advanced",
+        "unknown"
+      ]
+    },
+    "authority": {
+      "type": "string",
+      "enum": [
+        "official-primary",
+        "official-advisory",
+        "secondary-discovery"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "sourceSummary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 800
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "updatedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "versionRefs": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      }
+    },
+    "affectedVersions": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      }
+    },
+    "fixedVersions": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      }
+    },
+    "affectedConfigurations": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240
+      }
+    },
+    "developerImpact": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "audienceIds": {
+          "minItems": 1,
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+          }
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "evidenceRefs": {
+          "minItems": 1,
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        }
+      },
+      "required": [
+        "summary",
+        "audienceIds",
+        "confidence",
+        "evidenceRefs"
+      ],
+      "additionalProperties": false
+    },
+    "safeActions": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+          },
+          "action": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "urgency": {
+            "type": "string",
+            "enum": [
+              "none",
+              "check",
+              "plan",
+              "act-now"
+            ]
+          },
+          "evidenceRefs": {
+            "minItems": 1,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          }
+        },
+        "required": [
+          "id",
+          "action",
+          "urgency",
+          "evidenceRefs"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "security": {
+      "type": "object",
+      "properties": {
+        "severity": {
+          "type": "string",
+          "enum": [
+            "none",
+            "low",
+            "moderate",
+            "high",
+            "critical",
+            "unknown"
+          ]
+        },
+        "advisoryIds": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        }
+      },
+      "required": [
+        "severity",
+        "advisoryIds"
+      ],
+      "additionalProperties": false
+    },
+    "releaseStability": {
+      "type": "string",
+      "enum": [
+        "stable",
+        "beta",
+        "preview",
+        "deprecated",
+        "withdrawn",
+        "unknown"
+      ]
+    },
+    "agreement": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "single-official",
+            "corroborated",
+            "conflicted"
+          ]
+        },
+        "agreeingSourceIds": {
+          "minItems": 1,
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+          }
+        },
+        "conflictRefs": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        }
+      },
+      "required": [
+        "status",
+        "agreeingSourceIds",
+        "conflictRefs"
+      ],
+      "additionalProperties": false
+    },
+    "firstSeenAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "lastSeenAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "extractionVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "scoringVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "recentEditionSimilarity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "historyRefs": {
+      "maxItems": 40,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "lifecycle": {
+      "type": "string",
+      "enum": [
+        "new",
+        "updated",
+        "selected",
+        "held",
+        "superseded",
+        "withdrawn"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "canonicalUrl",
+    "sourceIds",
+    "candidateIds",
+    "evidenceRefs",
+    "project",
+    "topic",
+    "changeKind",
+    "impactScope",
+    "authority",
+    "title",
+    "sourceSummary",
+    "publishedAt",
+    "updatedAt",
+    "versionRefs",
+    "affectedVersions",
+    "fixedVersions",
+    "affectedConfigurations",
+    "developerImpact",
+    "safeActions",
+    "security",
+    "releaseStability",
+    "agreement",
+    "firstSeenAt",
+    "lastSeenAt",
+    "extractionVersion",
+    "scoringVersion",
+    "recentEditionSimilarity",
+    "historyRefs",
+    "lifecycle"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/webdev-record.schema.json"
+}

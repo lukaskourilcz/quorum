@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "webdev-candidate/1"
+    },
+    "sourceId": {
+      "type": "string",
+      "maxLength": 160,
+      "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+    },
+    "sourceItemId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "listingUrl": {
+      "type": "string",
+      "pattern": "^https:\\/\\/"
+    },
+    "targetUrl": {
+      "type": "string",
+      "pattern": "^https:\\/\\/"
+    },
+    "canonicalProjectUrl": {
+      "type": "string",
+      "pattern": "^https:\\/\\/"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 800
+    },
+    "author": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "publishedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "updatedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "versionText": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "securityText": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "topicHints": {
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "browsers-web-platform",
+          "html-css",
+          "javascript",
+          "typescript",
+          "frontend-framework",
+          "meta-framework",
+          "runtime",
+          "package-manager",
+          "build-tooling",
+          "deployment-platform",
+          "security",
+          "performance",
+          "accessibility",
+          "interoperability-standards",
+          "ecosystem-governance-licensing",
+          "other-unknown"
+        ]
+      }
+    },
+    "changeKindHints": {
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "stable-release",
+          "beta-preview",
+          "deprecation",
+          "breaking-change",
+          "security-advisory",
+          "standards-platform-availability",
+          "tooling-workflow-change",
+          "policy-licensing-governance",
+          "incident-fix",
+          "lead-only",
+          "other-unknown"
+        ]
+      }
+    },
+    "language": {
+      "type": "string",
+      "enum": [
+        "en",
+        "cs",
+        "multi",
+        "unknown"
+      ]
+    },
+    "contentHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "type": "string",
+          "enum": [
+            "official-primary",
+            "official-advisory",
+            "secondary-discovery"
+          ]
+        },
+        "parserId": {
+          "type": "string",
+          "maxLength": 160,
+          "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+        },
+        "parserVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "fetchedAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        "evidenceRefs": {
+          "minItems": 1,
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "fixture": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "authority",
+        "parserId",
+        "parserVersion",
+        "fetchedAt",
+        "evidenceRefs",
+        "fixture"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "sourceId",
+    "sourceItemId",
+    "listingUrl",
+    "targetUrl",
+    "canonicalProjectUrl",
+    "title",
+    "summary",
+    "author",
+    "project",
+    "publishedAt",
+    "updatedAt",
+    "versionText",
+    "securityText",
+    "topicHints",
+    "changeKindHints",
+    "language",
+    "contentHash",
+    "provenance"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/webdev-candidate.schema.json"
+}

@@ -1,0 +1,414 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "webdev-source/1"
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 160,
+      "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "canonicalHost": {
+      "type": "string",
+      "format": "hostname",
+      "pattern": "^(?=.{1,253}\\.?$)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[-0-9a-zA-Z]{0,61}[0-9a-zA-Z])?)*\\.?$"
+    },
+    "sourceKind": {
+      "type": "string",
+      "enum": [
+        "rss",
+        "atom",
+        "json",
+        "github-releases",
+        "github-advisories",
+        "official-html",
+        "manual-fixture"
+      ]
+    },
+    "authority": {
+      "type": "string",
+      "enum": [
+        "official-primary",
+        "official-advisory",
+        "secondary-discovery"
+      ]
+    },
+    "endpoint": {
+      "type": "string",
+      "pattern": "^https:\\/\\/"
+    },
+    "repositoryRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_.-]+\\/[a-zA-Z0-9_.-]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "locale": {
+      "type": "string",
+      "enum": [
+        "en",
+        "cs",
+        "multi",
+        "unknown"
+      ]
+    },
+    "topics": {
+      "minItems": 1,
+      "maxItems": 16,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "browsers-web-platform",
+          "html-css",
+          "javascript",
+          "typescript",
+          "frontend-framework",
+          "meta-framework",
+          "runtime",
+          "package-manager",
+          "build-tooling",
+          "deployment-platform",
+          "security",
+          "performance",
+          "accessibility",
+          "interoperability-standards",
+          "ecosystem-governance-licensing",
+          "other-unknown"
+        ]
+      }
+    },
+    "changeKinds": {
+      "minItems": 1,
+      "maxItems": 11,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "stable-release",
+          "beta-preview",
+          "deprecation",
+          "breaking-change",
+          "security-advisory",
+          "standards-platform-availability",
+          "tooling-workflow-change",
+          "policy-licensing-governance",
+          "incident-fix",
+          "lead-only",
+          "other-unknown"
+        ]
+      }
+    },
+    "verifiedAt": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "verificationDueAt": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "access": {
+      "type": "object",
+      "properties": {
+        "publicLoggedOut": {
+          "type": "boolean"
+        },
+        "authEnvironmentName": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Z][A-Z0-9_]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "termsRef": {
+          "type": "string",
+          "pattern": "^https:\\/\\/"
+        },
+        "robotsRef": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^https:\\/\\/"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "attribution": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      },
+      "required": [
+        "publicLoggedOut",
+        "authEnvironmentName",
+        "termsRef",
+        "robotsRef",
+        "license",
+        "attribution"
+      ],
+      "additionalProperties": false
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "cadenceMinutes": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 43200
+        },
+        "requestCapPerRun": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 10
+        },
+        "pageCapPerRun": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 10
+        },
+        "itemCapPerRun": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 200
+        },
+        "bodyBytes": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 2000000
+        },
+        "timeoutMs": {
+          "type": "integer",
+          "minimum": 500,
+          "maximum": 30000
+        },
+        "redirects": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "concurrency": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "spacingMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 60000
+        }
+      },
+      "required": [
+        "cadenceMinutes",
+        "requestCapPerRun",
+        "pageCapPerRun",
+        "itemCapPerRun",
+        "bodyBytes",
+        "timeoutMs",
+        "redirects",
+        "concurrency",
+        "spacingMs"
+      ],
+      "additionalProperties": false
+    },
+    "conditional": {
+      "type": "object",
+      "properties": {
+        "etag": {
+          "type": "string",
+          "enum": [
+            "observed",
+            "supported-unverified",
+            "not-observed"
+          ]
+        },
+        "lastModified": {
+          "type": "string",
+          "enum": [
+            "observed",
+            "supported-unverified",
+            "not-observed"
+          ]
+        },
+        "contentHashFallback": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": [
+        "etag",
+        "lastModified",
+        "contentHashFallback"
+      ],
+      "additionalProperties": false
+    },
+    "parser": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 160,
+          "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "fixtureVersion": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "fixtureVersion"
+      ],
+      "additionalProperties": false
+    },
+    "healthPolicy": {
+      "type": "object",
+      "properties": {
+        "failureThreshold": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "layoutChangeHoldsSource": {
+          "type": "boolean",
+          "const": true
+        },
+        "emptyIsHealthy": {
+          "type": "boolean",
+          "const": true
+        },
+        "unchangedIsHealthy": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": [
+        "failureThreshold",
+        "layoutChangeHoldsSource",
+        "emptyIsHealthy",
+        "unchangedIsHealthy"
+      ],
+      "additionalProperties": false
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "duplicateOverlap": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 160,
+        "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+      }
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "enabled",
+        "optional",
+        "held",
+        "rejected"
+      ]
+    },
+    "stateReason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "sourceRefs": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "capabilityRefs": {
+      "maxItems": 2,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "official-source-to-webdev-signal:webdev-candidate/1",
+          "goviral-to-webdev-signal:intelligence-read:goviral-intelligence-packet/1"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "project",
+    "owner",
+    "canonicalHost",
+    "sourceKind",
+    "authority",
+    "endpoint",
+    "repositoryRef",
+    "locale",
+    "topics",
+    "changeKinds",
+    "verifiedAt",
+    "verificationDueAt",
+    "access",
+    "limits",
+    "conditional",
+    "parser",
+    "healthPolicy",
+    "priority",
+    "duplicateOverlap",
+    "state",
+    "stateReason",
+    "sourceRefs",
+    "capabilityRefs"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/webdev-source.schema.json"
+}

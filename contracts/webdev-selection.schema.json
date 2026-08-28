@@ -1,0 +1,414 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "webdev-selection/1"
+    },
+    "pragueDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "inputSnapshotHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "scoringVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "candidates": {
+      "maxItems": 500,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "recordId": {
+            "type": "string",
+            "pattern": "^wds_[a-f0-9]{24}$"
+          },
+          "gate": {
+            "type": "string",
+            "enum": [
+              "eligible",
+              "needs-official-confirmation",
+              "conflicted",
+              "stale",
+              "duplicate-recent-edition",
+              "minor-no-material-impact",
+              "rumor-unsupported",
+              "promotional",
+              "out-of-scope",
+              "high-risk-factual-review",
+              "malformed"
+            ]
+          },
+          "gateReasons": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            }
+          },
+          "components": {
+            "maxItems": 12,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "enum": [
+                    "authority-evidence",
+                    "developer-impact",
+                    "breadth",
+                    "actionability",
+                    "urgency",
+                    "magnitude-novelty",
+                    "corroboration",
+                    "freshness",
+                    "audience-relevance",
+                    "concentration-penalty",
+                    "uncertainty-penalty",
+                    "goviral-momentum"
+                  ]
+                },
+                "rawValue": {
+                  "type": "number",
+                  "minimum": -1,
+                  "maximum": 1
+                },
+                "weight": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "contribution": {
+                  "type": "number",
+                  "minimum": -100,
+                  "maximum": 100
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "evidenceRefs": {
+                  "maxItems": 20,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  }
+                }
+              },
+              "required": [
+                "name",
+                "rawValue",
+                "weight",
+                "contribution",
+                "confidence",
+                "evidenceRefs"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "baseScore": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -100,
+                "maximum": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "finalScore": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": -100,
+                "maximum": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "recordId",
+          "gate",
+          "gateReasons",
+          "components",
+          "baseScore",
+          "finalScore",
+          "confidence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "selected",
+        "NO_EDITION"
+      ]
+    },
+    "selectedRecordId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^wds_[a-f0-9]{24}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "noEditionReason": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "urgencyOverride": {
+      "type": "object",
+      "properties": {
+        "used": {
+          "type": "boolean"
+        },
+        "evidenceRefs": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "exactAffectedScope": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exactFixedScope": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "used",
+        "evidenceRefs",
+        "exactAffectedScope",
+        "exactFixedScope"
+      ],
+      "additionalProperties": false
+    },
+    "goviral": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "unavailable",
+            "available-unused",
+            "used",
+            "stale",
+            "denied",
+            "malformed"
+          ]
+        },
+        "packetRef": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "packetHash": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expiresAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contribution": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "actorRerun": {
+          "type": "boolean",
+          "const": false
+        },
+        "duplicateChargeUsd": {
+          "type": "number",
+          "const": 0
+        }
+      },
+      "required": [
+        "status",
+        "packetRef",
+        "packetHash",
+        "observedAt",
+        "expiresAt",
+        "contribution",
+        "actorRerun",
+        "duplicateChargeUsd"
+      ],
+      "additionalProperties": false
+    },
+    "threshold": {
+      "type": "object",
+      "properties": {
+        "minimumBaseScore": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "minimumConfidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "minimumWinnerMargin": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "tieBreaker": {
+          "type": "string",
+          "const": "final-score-desc,published-at-desc,record-id-asc"
+        }
+      },
+      "required": [
+        "minimumBaseScore",
+        "minimumConfidence",
+        "minimumWinnerMargin",
+        "tieBreaker"
+      ],
+      "additionalProperties": false
+    },
+    "idempotencyHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "ownerCorrectionRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "supersedesRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "pragueDate",
+    "inputSnapshotHash",
+    "scoringVersion",
+    "candidates",
+    "outcome",
+    "selectedRecordId",
+    "noEditionReason",
+    "urgencyOverride",
+    "goviral",
+    "threshold",
+    "idempotencyHash",
+    "ownerCorrectionRef",
+    "supersedesRef"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/webdev-selection.schema.json"
+}

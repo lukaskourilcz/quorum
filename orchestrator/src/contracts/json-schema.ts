@@ -121,6 +121,15 @@ import { AnyVentureRecommendationSchema } from "./venture-recommendation.js";
 import { VisualWeightsSchema } from "./visual-weights.js";
 import { VentureRecommendationSchema } from "./venture-recommendation.js";
 import {
+  WebDevCandidateSchema,
+  WebDevEditionPackageSchema,
+  WebDevEvidenceBriefSchema,
+  WebDevRecordSchema,
+  WebDevRunSchema,
+  WebDevSelectionSchema,
+  WebDevSourceSchema
+} from "./webdev-signal.js";
+import {
   ProviderConnectionBindingSchema,
   ProviderDeliveryReceiptSchema,
   ProviderHealthSchema,
@@ -294,7 +303,14 @@ export const ContractSchemas = {
   "social-learning-evaluation": SocialLearningEvaluationSchema,
   "social-strategy-adjustment": SocialStrategyAdjustmentSchema,
   "social-continuation-proposal": SocialContinuationProposalSchema,
-  "social-learning-checkpoint": SocialLearningCheckpointSchema
+  "social-learning-checkpoint": SocialLearningCheckpointSchema,
+  "webdev-source": WebDevSourceSchema,
+  "webdev-candidate": WebDevCandidateSchema,
+  "webdev-record": WebDevRecordSchema,
+  "webdev-selection": WebDevSelectionSchema,
+  "webdev-evidence-brief": WebDevEvidenceBriefSchema,
+  "webdev-edition-package": WebDevEditionPackageSchema,
+  "webdev-run": WebDevRunSchema
 } satisfies Record<string, ZodType>;
 
 export type ContractName = keyof typeof ContractSchemas;

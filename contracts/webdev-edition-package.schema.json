@@ -1,0 +1,371 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "webdev-edition-package/1"
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 160,
+      "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+    },
+    "locale": {
+      "type": "string",
+      "enum": [
+        "cs",
+        "en"
+      ]
+    },
+    "evidenceBriefRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "editionProfileRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "headline": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "deck": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
+    "explanation": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1500
+    },
+    "threads": {
+      "type": "object",
+      "properties": {
+        "primary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "continuation": {
+          "maxItems": 3,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "required": [
+        "primary",
+        "continuation"
+      ],
+      "additionalProperties": false
+    },
+    "instagramPanels": {
+      "minItems": 3,
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "cover",
+              "change",
+              "impact",
+              "action",
+              "source"
+            ]
+          },
+          "heading": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "role",
+          "heading",
+          "body"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "cta": {
+      "type": "string",
+      "enum": [
+        "read-official-source",
+        "check-affected-version",
+        "review-migration-guidance"
+      ]
+    },
+    "altTextInput": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 800
+    },
+    "sourceAttribution": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "pattern": "^https:\\/\\/"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "required": [
+          "url",
+          "label"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "factualSentences": {
+      "minItems": 1,
+      "maxItems": 40,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "claimIds": {
+            "minItems": 1,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 160,
+              "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+            }
+          }
+        },
+        "required": [
+          "text",
+          "claimIds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "claimIdsUsed": {
+      "minItems": 1,
+      "maxItems": 40,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 160,
+        "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+      }
+    },
+    "affectedVersionRefsUsed": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      }
+    },
+    "affectedAudienceIdsUsed": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 160,
+        "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+      }
+    },
+    "safeActionIdsUsed": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 160,
+        "pattern": "^[a-z0-9]+(?:[._:-][a-z0-9]+)*$"
+      }
+    },
+    "languageChecks": {
+      "type": "object",
+      "properties": {
+        "expectedLocale": {
+          "type": "string",
+          "enum": [
+            "cs",
+            "en"
+          ]
+        },
+        "nativeRegister": {
+          "type": "boolean"
+        },
+        "prohibitedPhraseHits": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        }
+      },
+      "required": [
+        "expectedLocale",
+        "nativeRegister",
+        "prohibitedPhraseHits"
+      ],
+      "additionalProperties": false
+    },
+    "parityChecks": {
+      "type": "object",
+      "properties": {
+        "briefHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "coreClaimsPresent": {
+          "type": "boolean"
+        },
+        "uncertaintyPreserved": {
+          "type": "boolean"
+        },
+        "unsupportedFacts": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        }
+      },
+      "required": [
+        "briefHash",
+        "coreClaimsPresent",
+        "uncertaintyPreserved",
+        "unsupportedFacts"
+      ],
+      "additionalProperties": false
+    },
+    "originalityChecks": {
+      "type": "object",
+      "properties": {
+        "sourceCopyOverlapRatio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "literalTranslationRisk": {
+          "type": "boolean"
+        },
+        "comparedLocalePackageHash": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "sourceCopyOverlapRatio",
+        "literalTranslationRisk",
+        "comparedLocalePackageHash"
+      ],
+      "additionalProperties": false
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "held",
+        "approved"
+      ]
+    },
+    "heldReason": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "contentVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "contentHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "capabilityRefs": {
+      "maxItems": 2,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "webdev-signal-to-design-lab:bounded-render-summary:bounded-render-summary/1",
+          "webdev-signal-to-social-distribution:approved-publish-package:approved-publish-package/1"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "locale",
+    "evidenceBriefRef",
+    "editionProfileRef",
+    "headline",
+    "deck",
+    "explanation",
+    "threads",
+    "instagramPanels",
+    "cta",
+    "altTextInput",
+    "sourceAttribution",
+    "factualSentences",
+    "claimIdsUsed",
+    "affectedVersionRefsUsed",
+    "affectedAudienceIdsUsed",
+    "safeActionIdsUsed",
+    "languageChecks",
+    "parityChecks",
+    "originalityChecks",
+    "status",
+    "heldReason",
+    "contentVersion",
+    "contentHash",
+    "capabilityRefs"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/webdev-edition-package.schema.json"
+}

@@ -243,9 +243,369 @@ export const WebDevRecordSchema = z.strictObject({
   }
 });
 
+export const WebDevGateReasonSchema = z.enum([
+  "eligible",
+  "needs-official-confirmation",
+  "conflicted",
+  "stale",
+  "duplicate-recent-edition",
+  "minor-no-material-impact",
+  "rumor-unsupported",
+  "promotional",
+  "out-of-scope",
+  "high-risk-factual-review",
+  "malformed"
+]);
+
+export const WebDevScoreComponentNameSchema = z.enum([
+  "authority-evidence",
+  "developer-impact",
+  "breadth",
+  "actionability",
+  "urgency",
+  "magnitude-novelty",
+  "corroboration",
+  "freshness",
+  "audience-relevance",
+  "concentration-penalty",
+  "uncertainty-penalty",
+  "goviral-momentum"
+]);
+
+export const WebDevScoreComponentSchema = z.strictObject({
+  name: WebDevScoreComponentNameSchema,
+  rawValue: z.number().min(-1).max(1),
+  weight: z.number().min(0).max(1),
+  contribution: z.number().min(-100).max(100),
+  confidence: z.number().min(0).max(1),
+  evidenceRefs: z.array(EvidenceRefSchema).max(20)
+});
+
+const WebDevSelectionCandidateSchema = z.strictObject({
+  recordId: z.string().regex(/^wds_[a-f0-9]{24}$/),
+  gate: WebDevGateReasonSchema,
+  gateReasons: z.array(BoundedString).min(1).max(20),
+  components: z.array(WebDevScoreComponentSchema).max(12),
+  baseScore: z.number().min(-100).max(100).nullable(),
+  finalScore: z.number().min(-100).max(100).nullable(),
+  confidence: z.number().min(0).max(1).nullable()
+}).superRefine((candidate, context) => {
+  if (candidate.gate === "eligible" && (candidate.baseScore === null || candidate.finalScore === null)) {
+    context.addIssue({ code: "custom", path: ["finalScore"], message: "eligible records require scores" });
+  }
+  if (candidate.gate !== "eligible" && (candidate.components.length > 0 || candidate.finalScore !== null)) {
+    context.addIssue({ code: "custom", path: ["components"], message: "hard-gated records cannot be scored" });
+  }
+});
+
+const WebDevGoViralOverlaySchema = z.strictObject({
+  status: z.enum(["unavailable", "available-unused", "used", "stale", "denied", "malformed"]),
+  packetRef: EvidenceRefSchema.nullable(),
+  packetHash: Sha256Schema.nullable(),
+  observedAt: DateTimeSchema.nullable(),
+  expiresAt: DateTimeSchema.nullable(),
+  contribution: z.number().min(0).max(5),
+  actorRerun: z.literal(false),
+  duplicateChargeUsd: z.literal(0)
+}).superRefine((overlay, context) => {
+  if (overlay.status !== "used" && overlay.contribution !== 0) {
+    context.addIssue({ code: "custom", path: ["contribution"], message: "unavailable GoVIRAL cannot contribute" });
+  }
+});
+
+export const WebDevSelectionSchema = z.strictObject({
+  schemaVersion: z.literal("webdev-selection/1"),
+  pragueDate: DateSchema,
+  inputSnapshotHash: Sha256Schema,
+  scoringVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
+  candidates: z.array(WebDevSelectionCandidateSchema).max(500),
+  outcome: z.enum(["selected", "NO_EDITION"]),
+  selectedRecordId: z.string().regex(/^wds_[a-f0-9]{24}$/).nullable(),
+  noEditionReason: BoundedString.nullable(),
+  urgencyOverride: z.strictObject({
+    used: z.boolean(),
+    evidenceRefs: z.array(EvidenceRefSchema).max(20),
+    exactAffectedScope: BoundedString.nullable(),
+    exactFixedScope: BoundedString.nullable()
+  }),
+  goviral: WebDevGoViralOverlaySchema,
+  threshold: z.strictObject({
+    minimumBaseScore: z.number().min(0).max(100),
+    minimumConfidence: z.number().min(0).max(1),
+    minimumWinnerMargin: z.number().min(0).max(100),
+    tieBreaker: z.literal("final-score-desc,published-at-desc,record-id-asc")
+  }),
+  idempotencyHash: Sha256Schema,
+  ownerCorrectionRef: EvidenceRefSchema.nullable(),
+  supersedesRef: EvidenceRefSchema.nullable()
+}).superRefine((selection, context) => {
+  const selected = selection.candidates.filter((candidate) => candidate.recordId === selection.selectedRecordId);
+  if (selection.outcome === "selected" && (selection.selectedRecordId === null || selected.length !== 1 || selected[0]!.gate !== "eligible")) {
+    context.addIssue({ code: "custom", path: ["selectedRecordId"], message: "selected outcome requires exactly one eligible record" });
+  }
+  if (selection.outcome === "selected" && selection.noEditionReason !== null) {
+    context.addIssue({ code: "custom", path: ["noEditionReason"], message: "selected outcome cannot carry a NO_EDITION reason" });
+  }
+  if (selection.outcome === "NO_EDITION" && (selection.selectedRecordId !== null || selection.noEditionReason === null)) {
+    context.addIssue({ code: "custom", path: ["outcome"], message: "NO_EDITION requires a reason and no selected record" });
+  }
+  if (selection.urgencyOverride.used
+    && (selection.urgencyOverride.evidenceRefs.length === 0
+      || selection.urgencyOverride.exactAffectedScope === null
+      || selection.urgencyOverride.exactFixedScope === null)) {
+    context.addIssue({ code: "custom", path: ["urgencyOverride"], message: "urgency override requires exact authoritative affected and fixed scope" });
+  }
+});
+
+const WebDevBriefClaimSchema = z.strictObject({
+  id: StableId,
+  text: BoundedString,
+  confidence: z.number().min(0).max(1),
+  evidenceRefs: z.array(EvidenceRefSchema).min(1).max(20),
+  requiredInBothLocales: z.boolean()
+});
+
+export const WebDevEvidenceBriefSchema = z.strictObject({
+  schemaVersion: z.literal("webdev-evidence-brief/1"),
+  id: StableId,
+  selectedRecordId: z.string().regex(/^wds_[a-f0-9]{24}$/),
+  selectionRef: EvidenceRefSchema,
+  canonicalDevelopment: z.string().trim().min(1).max(280),
+  claims: z.array(WebDevBriefClaimSchema).min(1).max(40),
+  whatChangedClaimIds: z.array(StableId).min(1).max(20),
+  whyItMattersClaimIds: z.array(StableId).min(1).max(20),
+  affectedAudienceIds: z.array(StableId).min(1).max(20),
+  safeActions: z.array(z.strictObject({
+    id: StableId,
+    text: BoundedString,
+    claimIds: z.array(StableId).min(1).max(20)
+  })).max(20),
+  affectedVersions: z.array(z.string().trim().min(1).max(120)).max(20),
+  fixedVersions: z.array(z.string().trim().min(1).max(120)).max(20),
+  releaseStability: z.enum(["stable", "beta", "preview", "deprecated", "withdrawn", "unknown"]),
+  uncertainty: z.array(BoundedString).max(20),
+  conflicts: z.array(BoundedString).max(20),
+  sources: z.array(z.strictObject({
+    url: HttpsUrlSchema,
+    label: z.string().trim().min(1).max(160),
+    authority: z.enum(["official-primary", "official-advisory"])
+  })).min(1).max(20),
+  prohibitedClaims: z.array(BoundedString).max(40),
+  prohibitedPhrases: z.array(z.string().trim().min(1).max(120)).max(40),
+  expiresAt: DateTimeSchema,
+  updateConditions: z.array(BoundedString).min(1).max(20),
+  version: z.string().regex(/^\d+\.\d+\.\d+$/),
+  contentHash: Sha256Schema
+}).superRefine((brief, context) => {
+  const claimIds = new Set(brief.claims.map((claim) => claim.id));
+  for (const [field, ids] of [
+    ["whatChangedClaimIds", brief.whatChangedClaimIds],
+    ["whyItMattersClaimIds", brief.whyItMattersClaimIds]
+  ] as const) {
+    ids.forEach((id, index) => {
+      if (!claimIds.has(id)) context.addIssue({ code: "custom", path: [field, index], message: "brief section references an unknown claim" });
+    });
+  }
+  brief.safeActions.forEach((action, actionIndex) => action.claimIds.forEach((id, claimIndex) => {
+    if (!claimIds.has(id)) context.addIssue({ code: "custom", path: ["safeActions", actionIndex, "claimIds", claimIndex], message: "action references an unknown claim" });
+  }));
+  if (brief.conflicts.length > 0) {
+    context.addIssue({ code: "custom", path: ["conflicts"], message: "unresolved material conflicts cannot enter an accepted brief" });
+  }
+});
+
+const WebDevFactualSentenceSchema = z.strictObject({
+  text: z.string().trim().min(1).max(500),
+  claimIds: z.array(StableId).min(1).max(10)
+});
+
+export const WebDevEditionPackageSchema = z.strictObject({
+  schemaVersion: z.literal("webdev-edition-package/1"),
+  id: StableId,
+  locale: z.enum(["cs", "en"]),
+  evidenceBriefRef: EvidenceRefSchema,
+  editionProfileRef: EvidenceRefSchema,
+  headline: z.string().trim().min(1).max(160),
+  deck: z.string().trim().min(1).max(280),
+  explanation: z.string().trim().min(1).max(1_500),
+  threads: z.strictObject({
+    primary: z.string().trim().min(1).max(500),
+    continuation: z.array(z.string().trim().min(1).max(500)).max(3)
+  }),
+  instagramPanels: z.array(z.strictObject({
+    role: z.enum(["cover", "change", "impact", "action", "source"]),
+    heading: z.string().trim().min(1).max(120),
+    body: z.string().trim().min(1).max(500)
+  })).min(3).max(8),
+  cta: z.enum(["read-official-source", "check-affected-version", "review-migration-guidance"]),
+  altTextInput: z.string().trim().min(1).max(800),
+  sourceAttribution: z.array(z.strictObject({ url: HttpsUrlSchema, label: z.string().trim().min(1).max(160) })).min(1).max(20),
+  factualSentences: z.array(WebDevFactualSentenceSchema).min(1).max(40),
+  claimIdsUsed: z.array(StableId).min(1).max(40),
+  affectedVersionRefsUsed: z.array(z.string().trim().min(1).max(120)).max(20),
+  affectedAudienceIdsUsed: z.array(StableId).max(20),
+  safeActionIdsUsed: z.array(StableId).max(20),
+  languageChecks: z.strictObject({
+    expectedLocale: z.enum(["cs", "en"]),
+    nativeRegister: z.boolean(),
+    prohibitedPhraseHits: z.array(z.string().trim().min(1).max(120)).max(20)
+  }),
+  parityChecks: z.strictObject({
+    briefHash: Sha256Schema,
+    coreClaimsPresent: z.boolean(),
+    uncertaintyPreserved: z.boolean(),
+    unsupportedFacts: z.array(BoundedString).max(20)
+  }),
+  originalityChecks: z.strictObject({
+    sourceCopyOverlapRatio: z.number().min(0).max(1),
+    literalTranslationRisk: z.boolean(),
+    comparedLocalePackageHash: Sha256Schema.nullable()
+  }),
+  status: z.enum(["draft", "held", "approved"]),
+  heldReason: BoundedString.nullable(),
+  contentVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
+  contentHash: Sha256Schema,
+  capabilityRefs: z.array(z.enum([
+    "webdev-signal-to-design-lab:bounded-render-summary:bounded-render-summary/1",
+    "webdev-signal-to-social-distribution:approved-publish-package:approved-publish-package/1"
+  ])).max(2)
+}).superRefine((edition, context) => {
+  if (edition.locale !== edition.languageChecks.expectedLocale) {
+    context.addIssue({ code: "custom", path: ["languageChecks", "expectedLocale"], message: "language check locale must match package locale" });
+  }
+  if (edition.status === "approved" && (edition.heldReason !== null
+    || !edition.languageChecks.nativeRegister
+    || edition.languageChecks.prohibitedPhraseHits.length > 0
+    || !edition.parityChecks.coreClaimsPresent
+    || !edition.parityChecks.uncertaintyPreserved
+    || edition.parityChecks.unsupportedFacts.length > 0
+    || edition.originalityChecks.sourceCopyOverlapRatio > 0.18
+    || edition.originalityChecks.literalTranslationRisk)) {
+    context.addIssue({ code: "custom", path: ["status"], message: "approved editions must pass language, parity and originality gates" });
+  }
+  if (edition.status === "held" && edition.heldReason === null) {
+    context.addIssue({ code: "custom", path: ["heldReason"], message: "held editions require a reason" });
+  }
+  const declaredClaims = new Set(edition.claimIdsUsed);
+  edition.factualSentences.forEach((sentence, sentenceIndex) => sentence.claimIds.forEach((id, claimIndex) => {
+    if (!declaredClaims.has(id)) context.addIssue({ code: "custom", path: ["factualSentences", sentenceIndex, "claimIds", claimIndex], message: "factual sentence references an undeclared claim" });
+  }));
+});
+
+export const WebDevRunSchema = z.strictObject({
+  schemaVersion: z.literal("webdev-run/1"),
+  phase: z.literal("webdev-signal-daily"),
+  pragueDate: DateSchema,
+  mode: z.enum(["fixture", "live"]),
+  idempotencyKey: Sha256Schema,
+  sourceOutcomes: z.array(z.strictObject({
+    sourceId: StableId,
+    outcome: z.enum(["success", "empty", "unchanged", "malformed", "layout-changed", "held", "failed"]),
+    fetched: z.number().int().nonnegative(),
+    kept: z.number().int().nonnegative(),
+    dropped: z.number().int().nonnegative()
+  })).max(100),
+  counts: z.strictObject({
+    candidates: z.number().int().nonnegative(),
+    new: z.number().int().nonnegative(),
+    updated: z.number().int().nonnegative(),
+    duplicate: z.number().int().nonnegative(),
+    malformed: z.number().int().nonnegative()
+  }),
+  selectionOutcome: z.enum(["selected", "NO_EDITION", "held"]),
+  selectionRef: EvidenceRefSchema.nullable(),
+  briefRef: EvidenceRefSchema.nullable(),
+  packageRefs: z.array(EvidenceRefSchema).max(2),
+  renderRefs: z.array(EvidenceRefSchema).max(2),
+  queueRefs: z.array(EvidenceRefSchema).max(2),
+  model: z.strictObject({
+    reservations: z.number().int().min(0).max(2),
+    calls: z.number().int().min(0).max(2),
+    provider: z.string().trim().min(1).max(80).nullable(),
+    model: z.string().trim().min(1).max(120).nullable(),
+    reservedUsd: z.number().min(0).max(0.03),
+    actualUsd: z.number().min(0).max(0.03)
+  }),
+  cache: z.strictObject({
+    unchangedSources: z.number().int().nonnegative(),
+    reusedArtifacts: z.number().int().nonnegative(),
+    providerCallsAvoided: z.number().int().nonnegative()
+  }),
+  errors: z.array(z.strictObject({ code: StableId, sourceId: StableId.nullable(), message: BoundedString })).max(50),
+  nextSafeAction: BoundedString
+}).superRefine((run, context) => {
+  if (run.selectionOutcome === "selected" && run.selectionRef === null) {
+    context.addIssue({ code: "custom", path: ["selectionRef"], message: "selected run requires selection evidence" });
+  }
+  if (run.mode === "fixture" && (run.model.calls !== 0 || run.model.actualUsd !== 0 || run.queueRefs.length > 0)) {
+    context.addIssue({ code: "custom", path: ["mode"], message: "fixture runs cannot call models, spend or queue" });
+  }
+});
+
+function normalizedWords(value: string): string[] {
+  return value.toLocaleLowerCase("en").normalize("NFKD").replace(/[^\p{L}\p{N}]+/gu, " ").trim().split(/\s+/u).filter(Boolean);
+}
+
+function lexicalOverlap(left: string, right: string): number {
+  const leftWords = new Set(normalizedWords(left));
+  const rightWords = new Set(normalizedWords(right));
+  if (leftWords.size === 0 || rightWords.size === 0) return 0;
+  const shared = [...leftWords].filter((word) => rightWords.has(word)).length;
+  return shared / Math.min(leftWords.size, rightWords.size);
+}
+
+export function validateWebDevEditionAgainstBrief(input: {
+  brief: z.infer<typeof WebDevEvidenceBriefSchema>;
+  edition: z.infer<typeof WebDevEditionPackageSchema>;
+}): string[] {
+  const reasons: string[] = [];
+  const briefClaims = new Set(input.brief.claims.map((claim) => claim.id));
+  const requiredClaims = input.brief.claims.filter((claim) => claim.requiredInBothLocales).map((claim) => claim.id);
+  const packageClaims = new Set(input.edition.claimIdsUsed);
+  if (input.edition.parityChecks.briefHash !== input.brief.contentHash) reasons.push("brief-hash-mismatch");
+  if (input.edition.claimIdsUsed.some((id) => !briefClaims.has(id))) reasons.push("unsupported-claim");
+  if (requiredClaims.some((id) => !packageClaims.has(id))) reasons.push("missing-core-claim");
+  if (input.edition.affectedVersionRefsUsed.some((version) => !input.brief.affectedVersions.includes(version) && !input.brief.fixedVersions.includes(version))) reasons.push("unsupported-version");
+  if (input.edition.affectedAudienceIdsUsed.some((id) => !input.brief.affectedAudienceIds.includes(id))) reasons.push("unsupported-audience");
+  const actionIds = new Set(input.brief.safeActions.map((action) => action.id));
+  if (input.edition.safeActionIdsUsed.some((id) => !actionIds.has(id))) reasons.push("unsupported-action");
+  for (const prohibited of input.brief.prohibitedPhrases) {
+    if ([input.edition.headline, input.edition.deck, input.edition.explanation, input.edition.threads.primary].some((value) => value.toLocaleLowerCase().includes(prohibited.toLocaleLowerCase()))) {
+      reasons.push("prohibited-phrase");
+      break;
+    }
+  }
+  return [...new Set(reasons)];
+}
+
+export function validateWebDevBilingualParity(input: {
+  brief: z.infer<typeof WebDevEvidenceBriefSchema>;
+  cs: z.infer<typeof WebDevEditionPackageSchema>;
+  en: z.infer<typeof WebDevEditionPackageSchema>;
+}): string[] {
+  const reasons = [
+    ...validateWebDevEditionAgainstBrief({ brief: input.brief, edition: input.cs }).map((reason) => `cs:${reason}`),
+    ...validateWebDevEditionAgainstBrief({ brief: input.brief, edition: input.en }).map((reason) => `en:${reason}`)
+  ];
+  if (input.cs.locale !== "cs" || input.en.locale !== "en") reasons.push("locale-pair-invalid");
+  const csClaims = [...new Set(input.cs.claimIdsUsed)].sort();
+  const enClaims = [...new Set(input.en.claimIdsUsed)].sort();
+  if (JSON.stringify(csClaims) !== JSON.stringify(enClaims)) reasons.push("claim-drift");
+  const csText = [input.cs.headline, input.cs.deck, input.cs.explanation, input.cs.threads.primary].join(" ");
+  const enText = [input.en.headline, input.en.deck, input.en.explanation, input.en.threads.primary].join(" ");
+  if (csText === enText || lexicalOverlap(csText, enText) > 0.72) reasons.push("literal-translation-or-clone");
+  if (input.cs.status === "held" && input.en.claimIdsUsed.some((id) => !input.cs.claimIdsUsed.includes(id))) reasons.push("held-cs-en-broader");
+  if (input.en.status === "held" && input.cs.claimIdsUsed.some((id) => !input.en.claimIdsUsed.includes(id))) reasons.push("held-en-cs-broader");
+  return [...new Set(reasons)];
+}
+
 export type WebDevTopic = z.infer<typeof WebDevTopicSchema>;
 export type WebDevChangeKind = z.infer<typeof WebDevChangeKindSchema>;
 export type WebDevImpactScope = z.infer<typeof WebDevImpactScopeSchema>;
 export type WebDevSource = z.infer<typeof WebDevSourceSchema>;
 export type WebDevCandidate = z.infer<typeof WebDevCandidateSchema>;
 export type WebDevRecord = z.infer<typeof WebDevRecordSchema>;
+export type WebDevSelection = z.infer<typeof WebDevSelectionSchema>;
+export type WebDevEvidenceBrief = z.infer<typeof WebDevEvidenceBriefSchema>;
+export type WebDevEditionPackage = z.infer<typeof WebDevEditionPackageSchema>;
+export type WebDevRun = z.infer<typeof WebDevRunSchema>;
