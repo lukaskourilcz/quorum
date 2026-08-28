@@ -1,0 +1,27 @@
+[
+  {
+    "id": "official-blog-tracking",
+    "input": "https://DEVELOPER.CHROME.COM:443/blog/example/?utm_source=feed&gclid=discard#section",
+    "expected": "https://developer.chrome.com/blog/example"
+  },
+  {
+    "id": "advisory-semantic-query",
+    "input": "https://api.github.com/advisories?utm_medium=social&ecosystem=npm",
+    "expected": "https://api.github.com/advisories?ecosystem=npm"
+  },
+  {
+    "id": "release-semantic-version",
+    "input": "https://github.com/facebook/react/releases/tag/v20.0.0/?ref_src=twsrc%5Etfw",
+    "expected": "https://github.com/facebook/react/releases/tag/v20.0.0"
+  },
+  {
+    "id": "documentation-query-order",
+    "input": "https://developer.mozilla.org/en-US/docs/Web/API/Test/?version=2&id=feature&utm_campaign=x",
+    "expected": "https://developer.mozilla.org/en-US/docs/Web/API/Test?id=feature&version=2"
+  },
+  {
+    "id": "unapproved-wrapper-not-unwrapped",
+    "input": "https://redirect.example/out?target=https%3A%2F%2Fweb.dev%2Ffeature",
+    "expected": "https://redirect.example/out?target=https%3A%2F%2Fweb.dev%2Ffeature"
+  }
+]

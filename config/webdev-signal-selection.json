@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "webdev-selection-config/1",
+  "canonicalizationVersion": "1.0.0",
+  "extractionVersion": "1.0.0",
+  "scoringVersion": "1.0.0",
+  "trackingParameters": ["fbclid", "gclid", "mc_cid", "mc_eid", "ref_src", "ref_url"],
+  "trackingPrefixes": ["utm_"],
+  "semanticQueryParameters": ["ecosystem", "version", "tag", "id", "page", "per_page"],
+  "redirectWrappers": [],
+  "projectAliases": {
+    "chrome": "Chrome",
+    "googlechrome": "Chrome",
+    "mdn": "MDN Web Docs",
+    "mdnwebdocs": "MDN Web Docs",
+    "react": "React",
+    "reactjs": "React",
+    "nextjs": "Next.js",
+    "vue": "Vue",
+    "vuejs": "Vue",
+    "typescript": "TypeScript",
+    "vite": "Vite",
+    "node": "Node.js",
+    "nodejs": "Node.js",
+    "pnpm": "pnpm",
+    "cloudflaredeveloperplatform": "Cloudflare Developer Platform",
+    "githubadvisorydatabase": "GitHub Advisory Database"
+  },
+  "thresholds": {
+    "minimumBaseScore": 62,
+    "minimumConfidence": 0.75,
+    "minimumWinnerMargin": 4,
+    "freshnessDays": 7,
+    "securityFreshnessDays": 14,
+    "projectCooldownDays": 7,
+    "topicCooldownDays": 3,
+    "maximumGoViralContribution": 5
+  },
+  "weights": {
+    "authority-evidence": 0.18,
+    "developer-impact": 0.18,
+    "breadth": 0.12,
+    "actionability": 0.1,
+    "urgency": 0.1,
+    "magnitude-novelty": 0.1,
+    "corroboration": 0.06,
+    "freshness": 0.08,
+    "audience-relevance": 0.08,
+    "concentration-penalty": 0.08,
+    "uncertainty-penalty": 0.08,
+    "goviral-momentum": 0.05
+  }
+}
