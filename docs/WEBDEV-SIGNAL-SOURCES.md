@@ -51,3 +51,24 @@ conditional-header posture, parser and fixture versions, overlap, health policy,
 date and these source refs. Verification expires after 90 days, or immediately after a redirect,
 content-type, terms, robots, schema or layout change. Repeated schema/layout failures hold that
 source alone; a valid empty or unchanged response remains healthy.
+
+## Runtime collection policy
+
+`collectWebDevSources` is the only WebDev Signal collection entry point. It processes each registry
+source through the shared `safeFetch` boundary, then dispatches bytes to one of three small adapter
+families: RSS/Atom, explicitly allowlisted GitHub Releases, or npm-scoped GitHub advisories. It
+returns validated `webdev-candidate/1` values in deterministic order and always records zero model
+calls. A malformed item increments that source's item count; a parser or transport failure holds
+only that source after its configured threshold.
+
+The conditional cache accepts metadata only: ETag, Last-Modified, SHA-256 response hash, attempt and
+success timestamps, bounded retry-after, parser/source versions, layout fingerprint, failure count
+and a bounded held reason. It cannot accept a response body, cookie, credential or browser state.
+`304` and unchanged hashes skip adapters as healthy unchanged responses. Fixture and dry modes make
+no DNS or network request and return the input cache unchanged; only an explicitly live collection
+result is eligible for atomic metadata persistence.
+
+Source verification is due on the registry date and immediately after a terms, robots, redirect,
+content-type, endpoint, schema or layout change. Re-enabling a held source requires a new bounded
+fixture, a current logged-out access check and an updated registry reason; a shared hostname or a
+working neighboring project never admits a new endpoint.

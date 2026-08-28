@@ -4,7 +4,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { configRoot } from "../src/paths.js";
 import { parseWebDevSource } from "../src/ventures/webdev-signal/sources/adapters.js";
 import { WebDevSourceCacheSchema } from "../src/ventures/webdev-signal/sources/cache.js";
-import { loadWebDevSourceRegistry, webDevSourceHosts } from "../src/ventures/webdev-signal/sources/registry.js";
+import { collectWebDevSources } from "../src/ventures/webdev-signal/sources/collect.js";
+import { loadWebDevSourceRegistry, WebDevSourceRegistrySchema, webDevSourceHosts } from "../src/ventures/webdev-signal/sources/registry.js";
 import { fetchWebDevSource } from "../src/ventures/webdev-signal/sources/transport.js";
 
 const NOW = "2026-08-28T05:00:00.000Z";
@@ -58,6 +59,17 @@ describe("WebDev Signal official adapters", () => {
     const empty = await parseWebDevSource(source, new TextEncoder().encode("[]"), { fetchedAt: NOW, fixture: true });
     expect(empty).toMatchObject({ empty: true, itemsSeen: 0, malformedItems: 0 });
     await expect(parseWebDevSource(source, new TextEncoder().encode('{"unexpected":true}'), { fetchedAt: NOW, fixture: true })).rejects.toThrow(/layout-invalid/);
+  });
+
+  it("keeps secondary editorial input lead-only", async () => {
+    const official = (await loadWebDevSourceRegistry()).sources.find(({ id }) => id === "chrome-developers")!;
+    const source = { ...official, authority: "secondary-discovery" as const, changeKinds: ["lead-only" as const] };
+    const result = await parseWebDevSource(source, await readFile(path.join(fixtureRoot, "feed.xml")), { fetchedAt: NOW, fixture: true });
+    expect(result.candidates).toHaveLength(1);
+    expect(result.candidates[0]).toMatchObject({
+      changeKindHints: ["lead-only"],
+      provenance: { authority: "secondary-discovery" }
+    });
   });
 
   it("orders candidates deterministically independent of input order", async () => {
@@ -150,6 +162,46 @@ describe("WebDev Signal source transport and conditional metadata", () => {
     expect(fetchImpl).toHaveBeenCalledTimes(1);
   });
 
+  it("retries one retryable 5xx within the exact source request cap", async () => {
+    const source = (await loadWebDevSourceRegistry()).sources.find(({ id }) => id === "github-npm-advisories")!;
+    const fetchImpl = vi.fn()
+      .mockResolvedValueOnce(new Response("busy", { status: 503, headers: { "retry-after": "1" } }))
+      .mockResolvedValueOnce(new Response("[]", { status: 200, headers: { "content-type": "application/json" } }));
+    const result = await fetchWebDevSource({
+      source,
+      now: NOW,
+      mode: "live",
+      fetchImpl: fetchImpl as typeof fetch,
+      resolveImpl: PUBLIC_DNS,
+      delayImpl: async () => undefined
+    });
+    expect(result).toMatchObject({ kind: "fetched", attempts: 2 });
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
+  });
+
+  it("records timeout-like transport failure and oversized payload rejection", async () => {
+    const source = (await loadWebDevSourceRegistry()).sources[0]!;
+    const timedOut = await fetchWebDevSource({
+      source,
+      now: NOW,
+      mode: "live",
+      fetchImpl: vi.fn(async () => { throw new DOMException("fixture timeout", "AbortError"); }) as unknown as typeof fetch,
+      resolveImpl: PUBLIC_DNS
+    });
+    expect(timedOut).toMatchObject({ kind: "failed", attempts: 1 });
+    expect((timedOut.kind === "failed" || timedOut.kind === "held") && timedOut.reason).toMatch(/timeout/i);
+
+    const oversized = await fetchWebDevSource({
+      source: { ...source, limits: { ...source.limits, bodyBytes: 4 } },
+      now: NOW,
+      mode: "live",
+      fetchImpl: (async () => new Response("12345", { status: 200, headers: { "content-type": "text/plain" } })) as typeof fetch,
+      resolveImpl: PUBLIC_DNS
+    });
+    expect(oversized).toMatchObject({ kind: "failed" });
+    expect((oversized.kind === "failed" || oversized.kind === "held") && oversized.reason).toMatch(/too large/i);
+  });
+
   it("makes dry and uninjected CI runs network-free", async () => {
     const source = (await loadWebDevSourceRegistry()).sources[0]!;
     const fetchImpl = vi.fn();
@@ -180,5 +232,103 @@ describe("WebDev Signal source transport and conditional metadata", () => {
     });
     expect(redirected).toMatchObject({ kind: "failed" });
     expect((redirected.kind === "failed" || redirected.kind === "held") && redirected.reason).toMatch(/HTTPS URL|private|allowlisted/i);
+  });
+});
+
+describe("WebDev Signal collection isolation and health", () => {
+  it("collects deterministic fixture candidates without mutating cache or calling a model", async () => {
+    const full = await loadWebDevSourceRegistry();
+    const wanted = new Set(["chrome-developers", "react-releases", "github-npm-advisories"]);
+    const registry = WebDevSourceRegistrySchema.parse({ ...full, sources: full.sources.filter(({ id }) => wanted.has(id)) });
+    const cache = WebDevSourceCacheSchema.parse({ schemaVersion: "webdev-source-cache/1", entries: {} });
+    const result = await collectWebDevSources({
+      registry,
+      cache,
+      now: NOW,
+      mode: "fixture",
+      fixtureBodies: {
+        "chrome-developers": await readFile(path.join(fixtureRoot, "feed.xml")),
+        "react-releases": await readFile(path.join(fixtureRoot, "releases.json")),
+        "github-npm-advisories": await readFile(path.join(fixtureRoot, "advisories.json"))
+      }
+    });
+    expect(result.candidates).toHaveLength(3);
+    expect(result.candidates.map(({ publishedAt }) => publishedAt)).toEqual([...result.candidates.map(({ publishedAt }) => publishedAt)].sort().reverse());
+    expect(result.health.every(({ runtimeState }) => runtimeState === "malformed")).toBe(true);
+    expect(result).toMatchObject({ nextCache: cache, cacheMutationAllowed: false, requestCount: 0, modelCalls: 0 });
+  });
+
+  it("charges a bad layout to one source while keeping another source's candidates", async () => {
+    const full = await loadWebDevSourceRegistry();
+    const wanted = new Set(["chrome-developers", "react-releases"]);
+    const registry = WebDevSourceRegistrySchema.parse({ ...full, sources: full.sources.filter(({ id }) => wanted.has(id)) });
+    const result = await collectWebDevSources({
+      registry,
+      cache: { schemaVersion: "webdev-source-cache/1", entries: {} },
+      now: NOW,
+      mode: "fixture",
+      fixtureBodies: {
+        "chrome-developers": await readFile(path.join(fixtureRoot, "feed.xml")),
+        "react-releases": new TextEncoder().encode('{"unexpected":true}')
+      }
+    });
+    expect(result.candidates.map(({ sourceId }) => sourceId)).toEqual(["chrome-developers"]);
+    expect(result.health.find(({ sourceId }) => sourceId === "react-releases")).toMatchObject({ runtimeState: "failed", layoutChanged: true, consecutiveFailures: 1 });
+  });
+
+  it("holds only a repeatedly changed source layout", async () => {
+    const full = await loadWebDevSourceRegistry();
+    const source = full.sources.find(({ id }) => id === "chrome-developers")!;
+    const registry = WebDevSourceRegistrySchema.parse({ ...full, sources: [source] });
+    const seeded = await fetchWebDevSource({ source, now: NOW, mode: "fixture", fixtureBody: new TextEncoder().encode("old") });
+    const cache = WebDevSourceCacheSchema.parse({
+      schemaVersion: "webdev-source-cache/1",
+      entries: {
+        [source.id]: {
+          ...seeded.nextCache,
+          layoutFingerprint: "0".repeat(64),
+          consecutiveFailures: source.healthPolicy.failureThreshold - 1
+        }
+      }
+    });
+    const result = await collectWebDevSources({
+      registry,
+      cache,
+      now: "2026-08-28T06:00:00.000Z",
+      mode: "fixture",
+      fixtureBodies: { [source.id]: await readFile(path.join(fixtureRoot, "feed.xml")) }
+    });
+    expect(result.candidates).toHaveLength(0);
+    expect(result.health[0]).toMatchObject({ runtimeState: "held", layoutChanged: true, consecutiveFailures: source.healthPolicy.failureThreshold });
+    expect(result.nextCache).toEqual(cache);
+  });
+
+  it("distinguishes a healthy empty source and persists only live metadata", async () => {
+    const full = await loadWebDevSourceRegistry();
+    const source = full.sources.find(({ id }) => id === "react-releases")!;
+    const registry = WebDevSourceRegistrySchema.parse({ ...full, sources: [source] });
+    const cache = WebDevSourceCacheSchema.parse({ schemaVersion: "webdev-source-cache/1", entries: {} });
+    const result = await collectWebDevSources({
+      registry,
+      cache,
+      now: NOW,
+      mode: "live",
+      fetchImpl: (async () => new Response("[]", { status: 200, headers: { "content-type": "application/json", etag: "fixture-etag" } })) as typeof fetch,
+      resolveImpl: PUBLIC_DNS,
+      delayImpl: async () => undefined
+    });
+    expect(result.health[0]).toMatchObject({ runtimeState: "empty", itemsFetched: 0, itemsKept: 0 });
+    expect(result.nextCache.entries[source.id]).toMatchObject({ etag: "fixture-etag", lastSuccessAt: NOW, lastNonEmptySuccessAt: null });
+    expect(JSON.stringify(result.nextCache)).not.toContain("[]");
+    expect(result.cacheMutationAllowed).toBe(true);
+  });
+
+  it("reports held registry entries without attempting transport", async () => {
+    const full = await loadWebDevSourceRegistry();
+    const source = { ...full.sources[0]!, state: "held" as const, stateReason: "owner-held fixture" };
+    const registry = WebDevSourceRegistrySchema.parse({ ...full, sources: [source] });
+    const result = await collectWebDevSources({ registry, cache: { schemaVersion: "webdev-source-cache/1", entries: {} }, now: NOW, mode: "fixture" });
+    expect(result).toMatchObject({ candidates: [], requestCount: 0 });
+    expect(result.health[0]).toMatchObject({ runtimeState: "disabled", configuredState: "held" });
   });
 });

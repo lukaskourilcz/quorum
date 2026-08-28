@@ -166,7 +166,10 @@ export async function fetchWebDevSource(input: WebDevTransportInput): Promise<We
           await (input.delayImpl ?? ((milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds))))(Math.min(1_000, Math.max(0, Date.parse(retryAt) - Date.parse(now))));
           continue;
         }
-        return { kind: "backoff", sourceId: source.id, attempts: attempt, reason: `http-${response.status}`, retryAfterAt: retryAt, nextCache };
+        if (response.status === 429) {
+          return { kind: "backoff", sourceId: source.id, attempts: attempt, reason: "http-429", retryAfterAt: retryAt, nextCache };
+        }
+        return fail(source, { ...cache, retryAfterAt: retryAt }, now, `http-${response.status}`, attempt);
       }
       const hash = sha256(response.body);
       const nextCache = successCache({
