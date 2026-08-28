@@ -57,7 +57,7 @@ test("Social Profiles sections and detail keep canonical bookmarks and bounded c
   await expect(page.getByText(/Global kill switch:/u)).toBeVisible();
 
   await page.goto("/admin/social-profiles?section=providers", { waitUntil: "domcontentloaded" });
-  await expect(page.getByRole("link", { name: "Providers & automation health", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: "Providers", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(page.getByText("Provider registry · 6", { exact: true })).toBeVisible();
   await expect(page.getByText("No provider delivery evidence", { exact: true })).toBeVisible();
   await expect(page.locator("[data-social-profiles-section=providers]")).not.toContainText(/private-secret-value|automatic failover enabled|purchase authorized/iu);
@@ -75,4 +75,19 @@ test("Social Profiles sections and detail keep canonical bookmarks and bounded c
   await expect(page.getByText("No Amplification Profile results", { exact: true })).toBeVisible();
   await expect(page.getByText("No Campaign result sets", { exact: true })).toBeVisible();
   await expect(page.locator("[data-social-profiles-section=results]")).not.toContainText(/visitor id|private message body|purchase now|boost now/iu);
+
+  await page.goto("/admin/social-profiles?section=learning", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("link", { name: "Learning", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByText("No weekly learning checkpoint", { exact: true })).toBeVisible();
+  await expect(page.locator("[data-social-profiles-section=learning]")).not.toContainText(/apply now|publish now|retire account/iu);
+
+  await page.goto("/admin/social-profiles?section=automation-health", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("link", { name: "Automation health", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByText("Operations Recovery handoff", { exact: true })).toBeVisible();
+  await expect(page.locator("[data-social-profiles-section=automation-health]")).toContainText("cannot create or delete accounts");
+
+  await page.goto("/admin/social-profiles?section=plan-progress", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("link", { name: "Plan & progress", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByText("Implementation progress unavailable", { exact: true })).toBeVisible();
+  await expect(page.locator("[data-social-profiles-section=plan-progress]")).toContainText("does not run a second issue reader");
 });
