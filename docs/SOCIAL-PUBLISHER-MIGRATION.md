@@ -20,6 +20,12 @@ The connection supplies provider/API version, official scopes, profile-specific 
 Prague-time spacing. Multiple profiles may use one platform without sharing credentials, caps,
 health or pause state.
 
+#417 resolves that connection through `config/social-providers.json`. Every retained connection
+has one held Direct Meta binding, and the registry rejects more than one active provider for the
+same connection. Optional Buffer, Metricool and n8n postures are explicit but create no live
+binding. Make remains deferred and Ayrshare rejected. See `docs/SOCIAL-PROVIDERS.md` for the exact
+migration, ambiguity and rollback procedure.
+
 ## Queue v2 and legacy compatibility
 
 New `schemaVersion: 2` items contain:
@@ -73,12 +79,14 @@ reference names on that connection. It contains no venture credential-prefix tab
 call without a resolved target or with an API-version mismatch. Error text redacts referenced
 credential/native-id values and common secret fields.
 
-Before each of at most two attempts the runner invokes the idempotency reconciliation seam. A
-verified remote item receives an immutable receipt containing profile, connection, provider and
-target provenance. An unresolved ambiguous outcome becomes `needs_reconciliation`, writes a
-per-connection pause and also invokes the existing venture pause. It is never failed over to
-another account/provider. Later company recovery may invoke these exact primitives but cannot
-broaden the target, action or capability.
+The runner invokes the idempotency reconciliation seam before publication and sends at most once.
+Only read-only live verification may retry twice. A verified remote item receives an immutable
+canonical receipt containing profile, connection, provider and target provenance plus a bounded
+`provider-delivery-receipt/1` reference. An unresolved ambiguous outcome becomes
+`needs_reconciliation`, writes a deterministic `provider-health/1` snapshot, pauses the connection
+and invokes the existing venture pause. It is never resent or failed over to another
+account/provider. Later company recovery may invoke these exact primitives but cannot broaden the
+target, action or capability.
 
 No code in this migration creates an account, completes OAuth, activates a connection, reads a
 private audience, automates likes/follows/comments/reposts/DMs, buys ads/provider plans or exposes a
