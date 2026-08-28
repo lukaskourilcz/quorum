@@ -1,0 +1,299 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-provider/1"
+    },
+    "id": {
+      "type": "string",
+      "enum": [
+        "direct-meta",
+        "buffer",
+        "metricool",
+        "n8n",
+        "make",
+        "ayrshare"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "direct-official",
+        "managed-scheduler",
+        "notification-webhook"
+      ]
+    },
+    "supportedPlatforms": {
+      "maxItems": 2,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "instagram",
+          "threads"
+        ]
+      }
+    },
+    "capabilities": {
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "publish-original",
+          "status-read",
+          "reconcile-delivery",
+          "own-insights",
+          "webhook-normalize",
+          "notify-incident"
+        ]
+      }
+    },
+    "implementationVersion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "apiVersion": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "credentialRequirements": {
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "environmentRef": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]{2,100}$"
+          },
+          "requiredFor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "required": [
+          "environmentRef",
+          "requiredFor"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "accountOrBrandLimit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "requestOrPostLimit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "evidenceRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "accountOrBrandLimit",
+        "requestOrPostLimit",
+        "evidenceRef"
+      ],
+      "additionalProperties": false
+    },
+    "idempotency": {
+      "type": "object",
+      "properties": {
+        "providerKeySupported": {
+          "type": "boolean"
+        },
+        "remoteLookup": {
+          "type": "string",
+          "enum": [
+            "provider-key",
+            "remote-id-only",
+            "status-only",
+            "none"
+          ]
+        },
+        "ambiguousResultPolicy": {
+          "type": "string",
+          "const": "hold-and-reconcile-before-resend"
+        }
+      },
+      "required": [
+        "providerKeySupported",
+        "remoteLookup",
+        "ambiguousResultPolicy"
+      ],
+      "additionalProperties": false
+    },
+    "evidenceCapabilities": {
+      "type": "object",
+      "properties": {
+        "deliveryStatus": {
+          "type": "boolean"
+        },
+        "webhooks": {
+          "type": "boolean"
+        },
+        "metrics": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "deliveryStatus",
+        "webhooks",
+        "metrics"
+      ],
+      "additionalProperties": false
+    },
+    "sourceOfTruthRisk": {
+      "type": "object",
+      "properties": {
+        "retention": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "canonicalTruth": {
+          "type": "string",
+          "const": "boardlessai-queue-campaign-receipts"
+        }
+      },
+      "required": [
+        "retention",
+        "canonicalTruth"
+      ],
+      "additionalProperties": false
+    },
+    "cost": {
+      "type": "object",
+      "properties": {
+        "plan": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "monthlyCostPosture": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "purchaseAuthorized": {
+          "type": "boolean",
+          "const": false
+        },
+        "exitPath": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        }
+      },
+      "required": [
+        "plan",
+        "monthlyCostPosture",
+        "purchaseAuthorized",
+        "exitPath"
+      ],
+      "additionalProperties": false
+    },
+    "lastVerifiedDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "enabled",
+        "held",
+        "disabled",
+        "rejected"
+      ]
+    },
+    "healthPolicy": {
+      "type": "object",
+      "properties": {
+        "reverifyBy": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+        },
+        "staleAfterDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 365
+        },
+        "failurePolicy": {
+          "type": "string",
+          "const": "pause-binding-no-automatic-failover"
+        }
+      },
+      "required": [
+        "reverifyBy",
+        "staleAfterDays",
+        "failurePolicy"
+      ],
+      "additionalProperties": false
+    },
+    "decisionRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "strategyAuthority": {
+      "type": "boolean",
+      "const": false
+    },
+    "contentGenerationAuthority": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "role",
+    "supportedPlatforms",
+    "capabilities",
+    "implementationVersion",
+    "apiVersion",
+    "credentialRequirements",
+    "limits",
+    "idempotency",
+    "evidenceCapabilities",
+    "sourceOfTruthRisk",
+    "cost",
+    "lastVerifiedDate",
+    "verdict",
+    "healthPolicy",
+    "decisionRef",
+    "strategyAuthority",
+    "contentGenerationAuthority"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/social-provider.schema.json"
+}

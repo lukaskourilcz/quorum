@@ -121,6 +121,12 @@ import { AnyVentureRecommendationSchema } from "./venture-recommendation.js";
 import { VisualWeightsSchema } from "./visual-weights.js";
 import { VentureRecommendationSchema } from "./venture-recommendation.js";
 import {
+  ProviderConnectionBindingSchema,
+  ProviderDeliveryReceiptSchema,
+  ProviderHealthSchema,
+  SocialProviderSchema
+} from "./social-provider.js";
+import {
   ArticleImageSchema,
   MetricsPlaceholderSchema,
   PriorityItemSchema,
@@ -242,7 +248,11 @@ export const ContractSchemas = {
   "priority-queue": PriorityQueueSchema,
   "release-proof": ReleaseProofSchema,
   "social-activation": SocialActivationSchema,
-  "social-post-receipt": SocialPostReceiptSchema
+  "social-post-receipt": SocialPostReceiptSchema,
+  "social-provider": SocialProviderSchema,
+  "provider-connection-binding": ProviderConnectionBindingSchema,
+  "provider-delivery-receipt": ProviderDeliveryReceiptSchema,
+  "provider-health": ProviderHealthSchema
 } satisfies Record<string, ZodType>;
 
 export type ContractName = keyof typeof ContractSchemas;

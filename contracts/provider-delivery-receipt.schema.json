@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "provider-delivery-receipt/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^provider-delivery-receipt-[a-f0-9]{16}$"
+    },
+    "providerId": {
+      "type": "string",
+      "enum": [
+        "direct-meta",
+        "buffer",
+        "metricool",
+        "n8n",
+        "make",
+        "ayrshare"
+      ]
+    },
+    "bindingId": {
+      "type": "string",
+      "pattern": "^social-provider-binding-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "connectionId": {
+      "type": "string",
+      "pattern": "^social-connection-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "profileId": {
+      "type": "string",
+      "pattern": "^social-profile-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "itemRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "canonicalReceiptRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "idempotencyHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "contentHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "windowHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "attempted",
+        "accepted",
+        "published",
+        "failed",
+        "ambiguous",
+        "reconciled"
+      ]
+    },
+    "remoteId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "publicUrl": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^https:\\/\\/"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "requestedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "respondedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "acceptedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "publishedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "providerImplementationVersion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "providerApiVersion": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "actualCostUsd": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "usageRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "retryOfReceiptRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reconciliationRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correctedReceiptRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "supersedingReceiptRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "rawPayloadExcluded": {
+      "type": "boolean",
+      "const": true
+    },
+    "authorityGranted": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "providerId",
+    "bindingId",
+    "connectionId",
+    "profileId",
+    "itemRef",
+    "canonicalReceiptRef",
+    "idempotencyHash",
+    "contentHash",
+    "windowHash",
+    "state",
+    "remoteId",
+    "publicUrl",
+    "requestedAt",
+    "respondedAt",
+    "acceptedAt",
+    "publishedAt",
+    "status",
+    "error",
+    "providerImplementationVersion",
+    "providerApiVersion",
+    "actualCostUsd",
+    "usageRef",
+    "retryOfReceiptRef",
+    "reconciliationRef",
+    "correctedReceiptRef",
+    "supersedingReceiptRef",
+    "rawPayloadExcluded",
+    "authorityGranted"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/provider-delivery-receipt.schema.json"
+}

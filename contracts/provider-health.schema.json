@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "provider-health/1"
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 180,
+      "pattern": "^provider-health-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "providerId": {
+      "type": "string",
+      "enum": [
+        "direct-meta",
+        "buffer",
+        "metricool",
+        "n8n",
+        "make",
+        "ayrshare"
+      ]
+    },
+    "bindingId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^social-provider-binding-[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "connectionId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^social-connection-[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "healthy",
+        "held",
+        "degraded",
+        "stale",
+        "failing",
+        "paused",
+        "setup-needed",
+        "unavailable"
+      ]
+    },
+    "lastSuccessfulOperationAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "lastAttemptedOperationAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "lastReconciledOperationAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tokenStatus": {
+      "type": "string",
+      "enum": [
+        "not-applicable",
+        "unknown",
+        "healthy",
+        "expiring",
+        "expired",
+        "limited",
+        "unavailable"
+      ]
+    },
+    "appReviewStatus": {
+      "type": "string",
+      "enum": [
+        "not-applicable",
+        "unknown",
+        "healthy",
+        "expiring",
+        "expired",
+        "limited",
+        "unavailable"
+      ]
+    },
+    "planLimitStatus": {
+      "type": "string",
+      "enum": [
+        "not-applicable",
+        "unknown",
+        "healthy",
+        "expiring",
+        "expired",
+        "limited",
+        "unavailable"
+      ]
+    },
+    "rateLimitStatus": {
+      "type": "string",
+      "enum": [
+        "not-applicable",
+        "unknown",
+        "healthy",
+        "expiring",
+        "expired",
+        "limited",
+        "unavailable"
+      ]
+    },
+    "webhookFreshness": {
+      "type": "string",
+      "enum": [
+        "not-applicable",
+        "unknown",
+        "healthy",
+        "expiring",
+        "expired",
+        "limited",
+        "unavailable"
+      ]
+    },
+    "incidentRefs": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "ownerAttentionRefs": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "nextSafeAction": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "reverifyBy": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "snapshotHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "authorityGranted": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "providerId",
+    "bindingId",
+    "connectionId",
+    "state",
+    "lastSuccessfulOperationAt",
+    "lastAttemptedOperationAt",
+    "lastReconciledOperationAt",
+    "tokenStatus",
+    "appReviewStatus",
+    "planLimitStatus",
+    "rateLimitStatus",
+    "webhookFreshness",
+    "incidentRefs",
+    "ownerAttentionRefs",
+    "nextSafeAction",
+    "reverifyBy",
+    "generatedAt",
+    "snapshotHash",
+    "authorityGranted"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/provider-health.schema.json"
+}

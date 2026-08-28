@@ -1,0 +1,307 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "provider-connection-binding/1"
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 180,
+      "pattern": "^social-provider-binding-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "connectionId": {
+      "type": "string",
+      "maxLength": 160,
+      "pattern": "^social-connection-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "providerId": {
+      "type": "string",
+      "enum": [
+        "direct-meta",
+        "buffer",
+        "metricool",
+        "n8n",
+        "make",
+        "ayrshare"
+      ]
+    },
+    "providerImplementationVersion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80
+    },
+    "providerApiVersion": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "held",
+        "active",
+        "migrating",
+        "paused",
+        "retired"
+      ]
+    },
+    "capabilities": {
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "publish-original",
+          "status-read",
+          "reconcile-delivery",
+          "own-insights",
+          "webhook-normalize",
+          "notify-incident"
+        ]
+      }
+    },
+    "credentialRefs": {
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_]{2,100}$"
+      }
+    },
+    "ownerActivationRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "authorityRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "planLimitEvidenceRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "effectiveAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "endedAt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "previousBindingRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "supersedingBindingRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "migration": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "none",
+            "preparing",
+            "reconciling",
+            "ready",
+            "completed",
+            "rollback-required"
+          ]
+        },
+        "inFlightItemRefs": {
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "reconciliationRefs": {
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "rollbackRef": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "state",
+        "inFlightItemRefs",
+        "reconciliationRefs",
+        "rollbackRef"
+      ],
+      "additionalProperties": false
+    },
+    "health": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "healthy",
+            "held",
+            "degraded",
+            "stale",
+            "failing",
+            "paused",
+            "setup-needed",
+            "unavailable"
+          ]
+        },
+        "unavailableReason": {
+          "type": "string",
+          "enum": [
+            "owner-activation-required",
+            "credential-missing",
+            "scope-missing",
+            "token-expired",
+            "app-review-expired",
+            "rate-limited",
+            "plan-limit",
+            "provider-outage",
+            "migration-reconciliation-required",
+            "reverification-required",
+            "none"
+          ]
+        },
+        "lastVerifiedAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "state",
+        "unavailableReason",
+        "lastVerifiedAt"
+      ],
+      "additionalProperties": false
+    },
+    "bindingHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "authorityGranted": {
+      "type": "boolean",
+      "const": false
+    },
+    "publishingAuthorized": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "connectionId",
+    "providerId",
+    "providerImplementationVersion",
+    "providerApiVersion",
+    "mode",
+    "capabilities",
+    "credentialRefs",
+    "ownerActivationRef",
+    "authorityRef",
+    "planLimitEvidenceRef",
+    "createdAt",
+    "effectiveAt",
+    "endedAt",
+    "previousBindingRef",
+    "supersedingBindingRef",
+    "migration",
+    "health",
+    "bindingHash",
+    "authorityGranted",
+    "publishingAuthorized"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/provider-connection-binding.schema.json"
+}
