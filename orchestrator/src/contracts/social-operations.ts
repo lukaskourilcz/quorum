@@ -126,7 +126,7 @@ const SocialOperationReasonSchema = z.enum([
   "provider-held", "connection-held", "missing-authority", "routine-scope-mismatch", "duplicate-similarity", "asset-failure",
   "alt-text-failure", "claim-failure", "evidence-failure", "expired-campaign", "budget-exhausted", "malformed-strategy-inventory",
   "stale-inventory", "denied-capability", "kill-switch", "profile-paused", "connection-paused", "draft-only", "sensitive-review",
-  "prepared-item-missing", "ambiguous-delivery-reconciliation"
+  "prepared-item-missing", "ambiguous-delivery-reconciliation", "campaign-capacity"
 ]);
 
 export const SocialProfileOperationSchema = z.strictObject({
