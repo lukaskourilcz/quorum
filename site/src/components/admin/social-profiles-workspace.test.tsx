@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }) }));
 
 import { readAdminSocialProfiles } from "@/lib/social-profiles/snapshot";
 import { SocialProfilesWorkspace } from "./social-profiles-workspace";

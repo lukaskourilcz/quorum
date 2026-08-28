@@ -17,6 +17,7 @@ import {
 } from "./admin-primitives";
 import { SOCIAL_PROFILE_SECTIONS, type SocialProfileSectionId } from "@/lib/social-profiles/model";
 import type { AdminSocialProfilesSnapshot, SocialProfileView } from "@/lib/social-profiles/snapshot";
+import { SocialProfileLifecycleActions } from "./social-profile-lifecycle-actions";
 
 const statusTone = (value: string) => value === "active" || value === "ready" || value === "healthy" || value === "allowed"
   ? "success" as const
@@ -98,6 +99,7 @@ function ProfileDetail({ profile }: { profile: SocialProfileView }) {
         {profile.profile.ventureRef === "door-money" ? <AdminCallout tone="information">Private-data boundary: this view receives package references only. It exposes no manuscript, source chunk, embedding or unpublished text.</AdminCallout> : null}
         <div><AdminSectionHeading className="mb-3" title="Connections" description="Reference names are visible; secret values and native account values never cross the server boundary." /><Connections profile={profile} /></div>
         <div><AdminSectionHeading className="mb-2" title="Provenance" /><p className="m-0 break-words text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">{profile.profile.provenance.evidenceRefs.join(" · ")}</p></div>
+        <div><AdminSectionHeading className="mb-3" title="Safe lifecycle actions" description="Every action appends bounded evidence; none grants external authority." /><SocialProfileLifecycleActions connections={profile.connections} lifecycle={profile.lifecycle} profileId={profile.profile.id} /></div>
       </AdminCardContent>
     </AdminCard>
   );

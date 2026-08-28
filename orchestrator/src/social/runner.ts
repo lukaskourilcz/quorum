@@ -22,6 +22,7 @@ import {
   type CapabilityAwareQueueItem
 } from "./queue.js";
 import { checkTittyTuesdaysPost, TT_SAFETY_CHECKER_VERSION } from "./tt-safety.js";
+import { loadSocialLifecycleHolds } from "./profile-lifecycle.js";
 
 export interface SocialPublisherOptions {
   validateOnly: boolean;
@@ -109,7 +110,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
     const queueDirectory = path.join(stateRoot, "social", "queue");
     const files = await readdir(queueDirectory).catch((error: NodeJS.ErrnoException) => error.code === "ENOENT" ? [] : Promise.reject(error));
     const queueFiles = files.filter((name) => name.endsWith(".json")).sort();
-    const [publisherRegistry, capabilityMap, profilePauseSets, connectionPauseSets] = await Promise.all([
+    const [publisherRegistry, capabilityMap, profilePauseSets, connectionPauseSets, lifecycleHolds] = await Promise.all([
       loadSocialPublisherRegistry(configRoot),
       loadVentureCapabilityMap(configRoot),
       Promise.all([
@@ -119,16 +120,17 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       Promise.all([
         pauseIds(path.join(stateRoot, "social", "pauses", "connections")),
         pauseIds(path.join(stateRoot, "social", "kill-switches", "connections"))
-      ])
+      ]),
+      loadSocialLifecycleHolds(stateRoot)
     ]);
-    const pausedProfileIds = mergedIds(...profilePauseSets);
-    const pausedConnectionIds = mergedIds(...connectionPauseSets);
+    const pausedProfileIds = mergedIds(...profilePauseSets, lifecycleHolds.pausedProfileIds);
+    const pausedConnectionIds = mergedIds(...connectionPauseSets, lifecycleHolds.pausedConnectionIds);
     const rawEntries = await Promise.all(queueFiles.map(async (name) => ({
       name,
       raw: JSON.parse(await readFile(path.join(queueDirectory, name), "utf8")) as unknown
     })));
     const entries: Array<{ name: string; item: CapabilityAwareQueueItem }> = [];
-    let malformed = 0;
+    let malformed = lifecycleHolds.malformed;
     for (const entry of rawEntries) {
       try {
         entries.push({ name: entry.name, item: resolveCapabilityAwareQueueItem(entry.raw, publisherRegistry) });
