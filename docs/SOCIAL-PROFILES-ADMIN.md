@@ -1,6 +1,6 @@
 # Social Profiles Admin boundary
 
-Version: 2026-08-27
+Version: 2026-08-28
 
 Authority: GitHub #407, consuming #406, #415, #424 and the proposed Social Distribution operating decision.
 
@@ -21,13 +21,14 @@ enter either profile collection. BOOKSOFHISTORY and Tehdejší svět remain sepa
 no cross-use relationship. Door Money carries only its exact `approved-publish-package/1` edge and
 no account or connection.
 
-The stable sections are Venture Profiles, Amplification Profiles, Campaigns, optional Network,
-Providers & automation health, Content runway, Results, and Activity & setup. Campaigns reads only #410's
+The stable sections are Venture Profiles, Amplification Profiles, Campaigns, Today, optional
+Network, Providers, Content runway, Results, Learning, Automation health, and Activity & setup.
+Learning and canonical automation health are specified in
+[`SOCIAL-LEARNING-HEALTH.md`](SOCIAL-LEARNING-HEALTH.md). Campaigns reads only #410's
 validated store. Content runway exposes #418 strategy, planning, receipt and incident evidence but
 has no queue or publish action. Results is the #412 append-only aggregate view and contains no
-audience identity, private message or spend action. Today, Learning and Plan & progress extend the
-same snapshot and navigation only in their owning issues. CONTEST RADAR remains deferred and has
-no source or control here.
+audience identity, private message or spend action. CONTEST RADAR remains deferred and has no
+source or control here.
 
 ## Lifecycle writer
 
