@@ -111,6 +111,9 @@ export const SocialProfileSchema = z.strictObject({
     context.addIssue({ code: "custom", message: "The company umbrella cannot masquerade as a venture primary", path: ["ventureRef"] });
   }
   if (profile.role === "owned-amplifier") {
+    if (profile.ventureRef !== null) {
+      context.addIssue({ code: "custom", message: "An independent amplification profile cannot be a sister venture target", path: ["ventureRef"] });
+    }
     if (profile.amplifierArchetype === null || profile.originalContentPromise === null || profile.recurringFormatRefs.length < 2) {
       context.addIssue({ code: "custom", message: "An amplifier needs a durable archetype, original-content promise and two recurring formats" });
     }
@@ -287,16 +290,59 @@ const CampaignTargetSchema = z.strictObject({
   capabilityRef: SocialCapabilityRefSchema.nullable(),
   amplifierEligibilityRef: EvidenceRefSchema.nullable(),
   fit: z.enum(["eligible", "held", "rejected"]),
-  reasons: z.array(z.enum(["fit", "ratio", "runway", "cooldown", "collision", "duplicate", "capability", "authority", "paused"])).min(1).max(9)
+  reasons: z.array(z.enum([
+    "fit", "ratio", "runway", "cooldown", "collision", "duplicate", "capability", "authority", "paused",
+    "provider", "language", "market", "topic", "format", "freshness", "capacity"
+  ])).min(1).max(16),
+  selection: z.strictObject({
+    hardGates: z.array(z.strictObject({
+      gate: z.enum([
+        "real-owned-profile", "distinct-purpose", "original-runway", "content-ratio", "same-source-cooldown",
+        "support-capacity", "provider-connection", "exact-capability", "audience-fit", "topic-fit", "language-fit",
+        "market-fit", "format-fit", "freshness", "no-duplicate", "no-collision", "distinct-angle", "company-angle", "profile-authority"
+      ]),
+      status: z.enum(["pass", "hold", "reject"]),
+      reason: BoundedTextSchema,
+      evidenceRef: EvidenceRefSchema.nullable()
+    })).min(1).max(18),
+    score: z.strictObject({
+      total: z.number().finite().min(0).max(100).nullable(),
+      components: z.array(z.strictObject({
+        component: z.enum(["audience-fit", "topic-fit", "language-market", "format-fit", "freshness", "capacity", "prior-outcome"]),
+        value: z.number().finite().min(0).max(100).nullable(),
+        weight: z.number().finite().min(0).max(1),
+        reason: BoundedTextSchema,
+        evidenceRef: EvidenceRefSchema.nullable()
+      })).max(7)
+    })
+  })
 }).superRefine((target, context) => {
   if (target.role === "primary" && (target.capabilityRef !== null || target.amplifierEligibilityRef !== null)) {
     context.addIssue({ code: "custom", message: "A source venture's own primary target does not masquerade as a cross-target" });
   }
-  if (target.role === "umbrella" && target.capabilityRef === null) {
+  if (target.role === "umbrella" && target.fit === "eligible" && target.capabilityRef === null) {
     context.addIssue({ code: "custom", message: "An umbrella target needs an exact current capability edge", path: ["capabilityRef"] });
   }
-  if (target.role === "amplifier" && (target.capabilityRef === null || target.amplifierEligibilityRef === null)) {
+  if (target.role === "umbrella" && target.amplifierEligibilityRef !== null) {
+    context.addIssue({ code: "custom", message: "An umbrella target cannot masquerade as an amplification profile", path: ["amplifierEligibilityRef"] });
+  }
+  if (target.role === "amplifier" && target.fit === "eligible" && (target.capabilityRef === null || target.amplifierEligibilityRef === null)) {
     context.addIssue({ code: "custom", message: "An amplifier target needs exact capability and #415 eligibility evidence" });
+  }
+  const failedGate = target.selection.hardGates.some((gate) => gate.status !== "pass");
+  if ((target.fit === "eligible") === failedGate) {
+    context.addIssue({ code: "custom", message: "Only a target that passes every hard gate may be eligible", path: ["selection", "hardGates"] });
+  }
+  if (failedGate && target.selection.score.total !== null) {
+    context.addIssue({ code: "custom", message: "A held or rejected target is never scored", path: ["selection", "score", "total"] });
+  }
+  if (!failedGate && target.selection.score.total === null) {
+    context.addIssue({ code: "custom", message: "An eligible target needs one explainable deterministic score", path: ["selection", "score", "total"] });
+  }
+  const gates = target.selection.hardGates.map(({ gate }) => gate);
+  const components = target.selection.score.components.map(({ component }) => component);
+  if (new Set(gates).size !== gates.length || new Set(components).size !== components.length) {
+    context.addIssue({ code: "custom", message: "Target gate and score component names must be unique", path: ["selection"] });
   }
 });
 
@@ -305,8 +351,28 @@ const CampaignChannelItemSchema = z.strictObject({
   targetId: SlugSchema,
   channel: SocialPlatformSchema,
   locale: LocaleSchema,
+  connectionRef: z.string().regex(/^social-connection-[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(140).nullable(),
+  providerRef: SlugSchema.nullable(),
+  objective: z.enum(["qualified-visit", "trust", "release-awareness", "community-value"]),
+  audience: BoundedTextSchema,
+  copy: z.strictObject({
+    text: z.string().trim().min(1).max(2_200),
+    commentaryType: z.enum(["primary-pack", "company-angle", "profile-native-commentary", "evidence-summary", "localization", "format-adaptation", "attributed-link"]),
+    destination: HttpsUrlSchema,
+    factualClaimRefs: z.array(EvidenceRefSchema).min(1).max(24),
+    evidenceRefs: z.array(EvidenceRefSchema).min(1).max(24),
+    rendererRef: EvidenceRefSchema,
+    assets: z.array(z.strictObject({
+      ref: EvidenceRefSchema,
+      hash: Sha256Schema,
+      altText: z.string().trim().min(1).max(1_000)
+    })).max(10)
+  }),
   contentHash: Sha256Schema,
   assetHashes: z.array(Sha256Schema).max(10),
+  targetHash: Sha256Schema,
+  windowHash: Sha256Schema,
+  policyHash: Sha256Schema,
   window: z.strictObject({ notBefore: DateTimeSchema, notAfter: DateTimeSchema }),
   utm: z.strictObject({
     source: SocialPlatformSchema,
@@ -314,11 +380,23 @@ const CampaignChannelItemSchema = z.strictObject({
     campaign: SlugSchema,
     content: SlugSchema
   }),
-  approvalRef: EvidenceRefSchema,
+  approval: z.strictObject({
+    status: z.enum(["needs-owner-review", "approved", "rejected", "invalidated"]),
+    bindingHash: Sha256Schema,
+    approvalRef: EvidenceRefSchema.nullable(),
+    approvedAt: DateTimeSchema.nullable(),
+    approvedBy: z.literal("owner").nullable()
+  }),
   status: z.enum(["draft", "approved", "held", "queued", "publishing", "published", "failed", "needs-reconciliation", "expired", "cancelled"])
 }).superRefine((item, context) => {
   if (item.utm.source !== item.channel) context.addIssue({ code: "custom", message: "UTM source must match the channel", path: ["utm", "source"] });
   if (Date.parse(item.window.notAfter) <= Date.parse(item.window.notBefore)) context.addIssue({ code: "custom", message: "Campaign item window must end after it starts", path: ["window"] });
+  if (item.copy.assets.map((asset) => asset.hash).join(":") !== item.assetHashes.join(":")) context.addIssue({ code: "custom", message: "Immutable asset hashes must match the declared copy assets", path: ["assetHashes"] });
+  const approved = item.approval.status === "approved";
+  if (approved !== (item.approval.approvalRef !== null && item.approval.approvedAt !== null && item.approval.approvedBy === "owner")) {
+    context.addIssue({ code: "custom", message: "Only an exact owner approval has approval provenance", path: ["approval"] });
+  }
+  if (item.status === "approved" && !approved) context.addIssue({ code: "custom", message: "An approved item needs exact immutable approval", path: ["status"] });
 });
 
 const CampaignHistorySchema = z.strictObject({
@@ -332,8 +410,16 @@ const CampaignHistorySchema = z.strictObject({
 
 export const SocialCampaignSchema = z.strictObject({
   schemaVersion: z.literal("social-campaign/1"),
+  campaignVersion: z.string().regex(/^\d+\.\d+\.\d+$/u),
   id: z.string().regex(/^social-campaign-[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(140),
+  idempotencyKey: Sha256Schema,
   releaseId: SlugSchema,
+  releaseVerification: z.strictObject({
+    sourceType: z.literal("verified-venture-release"),
+    status: z.literal("verified"),
+    verifiedAt: DateTimeSchema,
+    evidenceRef: EvidenceRefSchema
+  }),
   contentIds: z.array(SlugSchema).min(1).max(24),
   inputHash: Sha256Schema,
   sourceVentureId: VentureIdSchema,
@@ -342,10 +428,24 @@ export const SocialCampaignSchema = z.strictObject({
   sourcePackage: z.strictObject({ schemaVersion: z.literal("approved-publish-package/1"), artifactRef: EvidenceRefSchema, packageHash: Sha256Schema }),
   objective: z.enum(["qualified-visit", "trust", "release-awareness", "community-value"]),
   audience: BoundedTextSchema,
+  effectiveDecision: z.strictObject({
+    capabilityMapVersion: z.string().regex(/^\d+\.\d+\.\d+$/u),
+    capabilitySetHash: Sha256Schema,
+    policyVersion: z.string().regex(/^\d+\.\d+\.\d+$/u),
+    policyHash: Sha256Schema,
+    selectorVersion: z.string().regex(/^\d+\.\d+\.\d+$/u)
+  }),
+  schedulePolicy: z.strictObject({
+    timezone: z.literal("Europe/Prague"),
+    primaryOffsetHours: z.literal(0),
+    umbrellaOffsetHours: z.number().int().min(4).max(8),
+    amplifierOffsetHours: z.tuple([z.number().int().min(18).max(30), z.number().int().min(36).max(54)])
+  }),
   targets: z.array(CampaignTargetSchema).min(1).max(24),
   contactAssignments: z.array(z.string().regex(/^distribution-contact-[a-z0-9]+(?:-[a-z0-9]+)*$/u)).max(24),
   channelItems: z.array(CampaignChannelItemSchema).min(1).max(80),
-  status: z.enum(["draft", "approved", "held", "queued", "in-progress", "completed", "cancelled", "expired"]),
+  selectionOutcome: z.enum(["selected", "primary-only", "held"]),
+  status: z.enum(["draft", "needs-owner-review", "approved", "partially-approved", "held", "queued", "in-progress", "completed", "cancelled", "expired"]),
   holdReasons: z.array(z.enum(["fit", "ratio", "runway", "cooldown", "collision", "duplicate", "capability", "authority", "provider", "measurement", "paused"])).max(11),
   providerAvailability: z.enum(["available", "unavailable", "held", "not-configured"]),
   measurementAvailability: z.enum(["available", "unavailable", "held", "manual-only"]),
@@ -358,6 +458,9 @@ export const SocialCampaignSchema = z.strictObject({
   }
   if (campaign.sourceCapabilityRef.source !== campaign.sourceVentureId) {
     context.addIssue({ code: "custom", message: "The package capability must belong to the campaign source venture", path: ["sourceCapabilityRef"] });
+  }
+  if (campaign.contactAssignments.length > 0) {
+    context.addIssue({ code: "custom", message: "Core verified-release campaigns cannot own optional #411 relationship assignments", path: ["contactAssignments"] });
   }
   const targetIds = new Set(campaign.targets.map((target) => target.id));
   if (targetIds.size !== campaign.targets.length || campaign.channelItems.some((item) => !targetIds.has(item.targetId))) {
@@ -382,6 +485,53 @@ export const SocialCampaignSchema = z.strictObject({
   }
   if ((campaign.status === "held") !== (campaign.holdReasons.length > 0)) {
     context.addIssue({ code: "custom", message: "Held campaigns name reasons; non-held campaigns do not", path: ["holdReasons"] });
+  }
+  const eligibleSupport = campaign.targets.filter((target) => target.fit === "eligible" && target.role !== "primary");
+  if (campaign.selectionOutcome !== "held" && (eligibleSupport.length === 0) !== (campaign.selectionOutcome === "primary-only")) {
+    context.addIssue({ code: "custom", message: "Primary-only is the explicit outcome when no support target passes", path: ["selectionOutcome"] });
+  }
+  if (campaign.targets.some((target) => target.role === "amplifier" && target.ventureRef !== null)) {
+    context.addIssue({ code: "custom", message: "An independent amplification profile is not a sister venture target", path: ["targets"] });
+  }
+});
+
+export const SocialCampaignEventSchema = z.strictObject({
+  schemaVersion: z.literal("social-campaign-event/1"),
+  eventId: z.string().regex(/^social-campaign-event-[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(180),
+  campaignId: z.string().regex(/^social-campaign-[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(140),
+  targetId: SlugSchema.nullable(),
+  itemId: SlugSchema.nullable(),
+  action: z.enum(["approve-target", "reject-target", "correct-item", "change-window", "hold", "cancel"]),
+  at: DateTimeSchema,
+  actor: z.literal("owner"),
+  reason: BoundedTextSchema,
+  expectedBindingHash: Sha256Schema.nullable(),
+  replacement: z.strictObject({
+    text: z.string().trim().min(1).max(2_200).nullable(),
+    destination: HttpsUrlSchema.nullable(),
+    altText: z.string().trim().min(1).max(1_000).nullable(),
+    notBefore: DateTimeSchema.nullable(),
+    notAfter: DateTimeSchema.nullable(),
+    bindingHash: Sha256Schema
+  }).nullable()
+}).superRefine((event, context) => {
+  const targetAction = ["approve-target", "reject-target"].includes(event.action);
+  const itemAction = ["correct-item", "change-window"].includes(event.action);
+  if (targetAction !== (event.targetId !== null) || itemAction !== (event.itemId !== null)) {
+    context.addIssue({ code: "custom", message: "Campaign actions must address exactly their bounded target or item", path: ["action"] });
+  }
+  if (itemAction !== (event.replacement !== null)) context.addIssue({ code: "custom", message: "Only bounded item edits carry replacement data", path: ["replacement"] });
+  if (["approve-target", "reject-target", "correct-item", "change-window"].includes(event.action) !== (event.expectedBindingHash !== null)) {
+    context.addIssue({ code: "custom", message: "Target and item actions bind to the exact immutable version", path: ["expectedBindingHash"] });
+  }
+  if (event.action === "change-window" && event.replacement && (event.replacement.notBefore === null || event.replacement.notAfter === null || Date.parse(event.replacement.notAfter) <= Date.parse(event.replacement.notBefore))) {
+    context.addIssue({ code: "custom", message: "A replacement window must be complete and increasing", path: ["replacement"] });
+  }
+  if (event.action === "change-window" && event.replacement && (event.replacement.text !== null || event.replacement.destination !== null || event.replacement.altText !== null)) {
+    context.addIssue({ code: "custom", message: "A window event cannot also change bounded content", path: ["replacement"] });
+  }
+  if (event.action === "correct-item" && event.replacement && event.replacement.text === null && event.replacement.destination === null && event.replacement.altText === null) {
+    context.addIssue({ code: "custom", message: "A correction must change at least one bounded content field", path: ["replacement"] });
   }
 });
 
@@ -516,6 +666,7 @@ export type SocialCapabilityRef = z.infer<typeof SocialCapabilityRefSchema>;
 export type SocialConnection = z.infer<typeof SocialConnectionSchema>;
 export type DistributionContact = z.infer<typeof DistributionContactSchema>;
 export type SocialCampaign = z.infer<typeof SocialCampaignSchema>;
+export type SocialCampaignEvent = z.infer<typeof SocialCampaignEventSchema>;
 export type SocialShareKit = z.infer<typeof SocialShareKitSchema>;
 export type SocialProfileEvent = z.infer<typeof SocialProfileEventSchema>;
 export type AmplificationPolicy = z.infer<typeof AmplificationPolicySchema>;

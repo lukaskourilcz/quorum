@@ -2,6 +2,8 @@ import "server-only";
 import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { parseAmplificationPolicy, parseAmplifierPortfolio } from "./amplifier-model";
+import { parseSocialCampaign, parseSocialCampaignDecision, parseSocialCampaignEvent, type SocialCampaignDecisionRecord, type SocialCampaignEventRecord, type SocialCampaignRecord } from "./campaign-model";
+import { campaignTargetApprovalHash, projectAdminCampaign } from "./campaign-projection";
 import {
   parseSocialConnection,
   parseSocialProfile,
@@ -50,11 +52,23 @@ export interface AmplifierProfileView {
   operationalMetrics: null;
 }
 
+export interface SocialCampaignView {
+  campaign: SocialCampaignRecord;
+  immutableStatus: SocialCampaignRecord["status"];
+  appliedEvents: number;
+  rejectedEvents: number;
+  targetApprovalHashes: Record<string, string>;
+  operationalResults: null;
+}
+
 export interface AdminSocialProfilesSnapshot {
   schemaVersion: "admin-social-profiles/1";
   generatedAt: string;
   ventureProfiles: SocialProfileView[];
   amplificationProfiles: AmplifierProfileView[];
+  campaigns: SocialCampaignView[];
+  campaignDecisions: SocialCampaignDecisionRecord[];
+  campaignActivity: SocialCampaignEventRecord[];
   activity: SocialProfileEventRecord[];
   simulations: SocialProfileSimulationView[];
   simulationsIncluded: boolean;
@@ -64,7 +78,7 @@ export interface AdminSocialProfilesSnapshot {
     ownerDecisionRef: string;
     liveAuthorityGranted: false;
   };
-  dropped: { profiles: number; connections: number; amplifierProposals: number; events: number; pauseRecords: number };
+  dropped: { profiles: number; connections: number; amplifierProposals: number; events: number; campaigns: number; campaignDecisions: number; campaignEvents: number; pauseRecords: number };
   unavailable: string[];
   excluded: { ownerPersonal: number; simulations: number; forbiddenVentureProfiles: number; orphanConnections: number };
 }
@@ -110,6 +124,25 @@ async function events(root: string): Promise<{ accepted: SocialProfileEventRecor
     } catch { dropped += 1; }
   }
   return { accepted: accepted.sort((left, right) => right.at.localeCompare(left.at)), dropped };
+}
+
+async function campaignEvidence(root: string): Promise<{ campaigns: SocialCampaignRecord[]; decisions: SocialCampaignDecisionRecord[]; events: SocialCampaignEventRecord[]; dropped: { campaigns: number; decisions: number; events: number } }> {
+  const campaignDirectory = path.join(root, "state/social/campaigns"); const eventDirectory = path.join(root, "state/social/campaign-events");
+  const campaignFiles = await readdir(campaignDirectory).catch((error: NodeJS.ErrnoException) => error.code === "ENOENT" ? [] : null);
+  const eventFiles = await readdir(eventDirectory).catch((error: NodeJS.ErrnoException) => error.code === "ENOENT" ? [] : null);
+  const campaigns: SocialCampaignRecord[] = []; const decisions: SocialCampaignDecisionRecord[] = []; const acceptedEvents: SocialCampaignEventRecord[] = [];
+  let droppedCampaigns = campaignFiles === null ? 1 : 0; let droppedDecisions = 0; let droppedEvents = eventFiles === null ? 1 : 0;
+  for (const file of (campaignFiles ?? []).filter((name) => name.endsWith(".json")).sort().slice(0, 4_000)) {
+    try {
+      const value = JSON.parse(await readFile(path.join(campaignDirectory, file), "utf8")) as unknown;
+      if (file.endsWith(".decision.json")) { const parsed = parseSocialCampaignDecision(value); if (parsed) decisions.push(parsed); else droppedDecisions += 1; }
+      else { const parsed = parseSocialCampaign(value); if (parsed) campaigns.push(parsed); else droppedCampaigns += 1; }
+    } catch { if (file.endsWith(".decision.json")) droppedDecisions += 1; else droppedCampaigns += 1; }
+  }
+  for (const file of (eventFiles ?? []).filter((name) => name.endsWith(".json")).sort().slice(0, 4_000)) {
+    try { const parsed = parseSocialCampaignEvent(JSON.parse(await readFile(path.join(eventDirectory, file), "utf8")) as unknown); if (parsed) acceptedEvents.push(parsed); else droppedEvents += 1; } catch { droppedEvents += 1; }
+  }
+  return { campaigns, decisions: decisions.sort((left, right) => right.decidedAt.localeCompare(left.decidedAt)), events: acceptedEvents.sort((left, right) => right.at.localeCompare(left.at)), dropped: { campaigns: droppedCampaigns, decisions: droppedDecisions, events: droppedEvents } };
 }
 
 function capabilityMap(value: unknown): { version: string | null; edges: CapabilityEdge[] } {
@@ -177,8 +210,8 @@ function connectionView(connection: SocialConnectionRecord, history: readonly So
 
 export async function readAdminSocialProfiles(root = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), ".."), options: { includeSimulations?: boolean; now?: Date; environment?: NodeJS.ProcessEnv } = {}): Promise<AdminSocialProfilesSnapshot> {
   const now = options.now ?? new Date(); const environment = options.environment ?? process.env;
-  const [registryFile, portfolioFile, policyFile, capabilityFile, activationFile, eventState, profilePauses, profileKills, connectionPauses, connectionKills, repoPause] = await Promise.all([
-    jsonFile(root, "config/social-publisher-registry.json"), jsonFile(root, "state/social/amplifiers/portfolio.json"), jsonFile(root, "config/social-amplification-policy.json"), jsonFile(root, "config/venture-capabilities.json"), jsonFile(root, "state/social/activation.json"), events(root), idFiles(root, "state/social/pauses/profiles"), idFiles(root, "state/social/kill-switches/profiles"), idFiles(root, "state/social/pauses/connections"), idFiles(root, "state/social/kill-switches/connections"), existing(root, "state/social/SOCIAL_PAUSED")
+  const [registryFile, portfolioFile, policyFile, capabilityFile, activationFile, eventState, campaignState, profilePauses, profileKills, connectionPauses, connectionKills, repoPause] = await Promise.all([
+    jsonFile(root, "config/social-publisher-registry.json"), jsonFile(root, "state/social/amplifiers/portfolio.json"), jsonFile(root, "config/social-amplification-policy.json"), jsonFile(root, "config/venture-capabilities.json"), jsonFile(root, "state/social/activation.json"), events(root), campaignEvidence(root), idFiles(root, "state/social/pauses/profiles"), idFiles(root, "state/social/kill-switches/profiles"), idFiles(root, "state/social/pauses/connections"), idFiles(root, "state/social/kill-switches/connections"), existing(root, "state/social/SOCIAL_PAUSED")
   ]);
   const unavailable: string[] = [];
   for (const [label, file] of [["publisher registry", registryFile], ["amplifier portfolio", portfolioFile], ["amplification policy", policyFile], ["capability map", capabilityFile], ["activation state", activationFile]] as const) if (file.state !== "present") unavailable.push(`${label}: ${file.state}`);
@@ -189,6 +222,10 @@ export async function readAdminSocialProfiles(root = process.env.BOARDLESSAI_REP
   const profilePaused = new Set([...profilePauses.ids, ...profileKills.ids]); const connectionPaused = new Set([...connectionPauses.ids, ...connectionKills.ids]); const map = capabilityMap(capabilityFile.value); const activationState = activation(activationFile.value);
   const ventureProfiles = realProfiles.map((profile): SocialProfileView => ({ profile, lifecycle: reducedLifecycle(profile, eventState.accepted), connections: connections.filter((connection) => connection.profileId === profile.id).map((connection) => connectionView(connection, eventState.accepted, connectionPaused, now)), capability: capabilityView(profile, map), activation: profile.ventureRef ? activationState[profile.ventureRef] ?? null : null, paused: profilePaused.has(profile.id), authority: "held", operationalMetrics: null }));
   const portfolio = parseAmplifierPortfolio(portfolioFile.value); const policy = parseAmplificationPolicy(policyFile.value); const amplificationProfiles = (portfolio.portfolio?.proposals ?? []).map((proposal): AmplifierProfileView => ({ proposal, purposeVerdict: proposal.ownerDecision?.verdict ?? "unavailable", purposeReason: proposal.ownerDecision?.reason ?? "The #415 owner purpose verdict has not been recorded.", policy, authority: "held", operationalMetrics: null }));
+  const campaigns = campaignState.campaigns.map((immutable): SocialCampaignView => {
+    const projected = projectAdminCampaign(immutable, campaignState.events);
+    return { campaign: projected.campaign, immutableStatus: immutable.status, appliedEvents: projected.appliedEventIds.length, rejectedEvents: projected.rejectedEventIds.length, targetApprovalHashes: Object.fromEntries(projected.campaign.targets.map((target) => [target.id, campaignTargetApprovalHash(projected.campaign.channelItems.filter((item) => item.targetId === target.id))])), operationalResults: null };
+  }).sort((left, right) => right.campaign.updatedAt.localeCompare(left.campaign.updatedAt));
   const simulationsIncluded = options.includeSimulations === true && environment.NODE_ENV !== "production";
-  return { schemaVersion: "admin-social-profiles/1", generatedAt: now.toISOString(), ventureProfiles, amplificationProfiles, activity: eventState.accepted, simulations: simulationsIncluded ? createAdminSocialProfileSimulations() : [], simulationsIncluded, posture: { globalKillSwitch: environment.SOCIAL_KILL_SWITCH === "false" ? "released" : "engaged", repositoryPause: repoPause, ownerDecisionRef: "state/decisions/2026-08-27-social-distribution-operating-decision.md", liveAuthorityGranted: false }, dropped: { profiles: parsedProfiles.length - acceptedProfiles.length, connections: parsedConnections.length - acceptedConnections.length, amplifierProposals: portfolio.droppedProposals, events: eventState.dropped, pauseRecords: profilePauses.dropped + profileKills.dropped + connectionPauses.dropped + connectionKills.dropped }, unavailable, excluded: { ownerPersonal: ownerPersonal.length, simulations: storedSimulations.length, forbiddenVentureProfiles: acceptedProfiles.length - allowedProfiles.length, orphanConnections: orphanConnections.length } };
+  return { schemaVersion: "admin-social-profiles/1", generatedAt: now.toISOString(), ventureProfiles, amplificationProfiles, campaigns, campaignDecisions: campaignState.decisions, campaignActivity: campaignState.events, activity: eventState.accepted, simulations: simulationsIncluded ? createAdminSocialProfileSimulations() : [], simulationsIncluded, posture: { globalKillSwitch: environment.SOCIAL_KILL_SWITCH === "false" ? "released" : "engaged", repositoryPause: repoPause, ownerDecisionRef: "state/decisions/2026-08-27-social-distribution-operating-decision.md", liveAuthorityGranted: false }, dropped: { profiles: parsedProfiles.length - acceptedProfiles.length, connections: parsedConnections.length - acceptedConnections.length, amplifierProposals: portfolio.droppedProposals, events: eventState.dropped, campaigns: campaignState.dropped.campaigns, campaignDecisions: campaignState.dropped.decisions, campaignEvents: campaignState.dropped.events, pauseRecords: profilePauses.dropped + profileKills.dropped + connectionPauses.dropped + connectionKills.dropped }, unavailable, excluded: { ownerPersonal: ownerPersonal.length, simulations: storedSimulations.length, forbiddenVentureProfiles: acceptedProfiles.length - allowedProfiles.length, orphanConnections: orphanConnections.length } };
 }

@@ -34,6 +34,11 @@ New `schemaVersion: 2` items contain:
 - approval, selection and policy provenance;
 - optional deterministic v1 migration evidence.
 
+#410's verified-release campaign generator is upstream of this queue. It creates immutable owner-
+review items and never writes queue v2 directly. Only its exact approved handoff can later enter
+#418's per-profile inventory, where ratio, cooldown, cadence, provider, routine-scope and kill-
+switch gates run again before any queue handoff.
+
 `migrateLegacyQueueItem` reads DNESKAi, MMA Files and Titty Tuesdays queue v1 through explicit
 registry mappings. It preserves source venture, campaign, locale, variant, content, checks, window,
 attempt and receipt meaning, records the old content hash and recalculates the v2 target hash. It

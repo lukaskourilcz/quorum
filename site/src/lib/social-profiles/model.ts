@@ -1,6 +1,7 @@
 export const SOCIAL_PROFILE_SECTIONS = [
   { id: "venture-profiles", label: "Venture Profiles" },
   { id: "amplification-profiles", label: "Amplification Profiles" },
+  { id: "campaigns", label: "Campaigns" },
   { id: "activity-setup", label: "Activity & setup" }
 ] as const;
 

@@ -107,8 +107,16 @@
   },
   "campaign": {
     "schemaVersion": "social-campaign/1",
+    "campaignVersion": "1.0.0",
     "id": "social-campaign-door-money-release-001",
+    "idempotencyKey": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
     "releaseId": "door-money-release-001",
+    "releaseVerification": {
+      "sourceType": "verified-venture-release",
+      "status": "verified",
+      "verifiedAt": "2026-08-27T00:00:00.000Z",
+      "evidenceRef": "owner-fixture-release-verification-001"
+    },
     "contentIds": ["lesson-001"],
     "inputHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     "sourceVentureId": "door-money",
@@ -128,6 +136,19 @@
     },
     "objective": "qualified-visit",
     "audience": "Readers who opted into practical founder finance releases.",
+    "effectiveDecision": {
+      "capabilityMapVersion": "1.1.0",
+      "capabilitySetHash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "policyVersion": "1.0.0",
+      "policyHash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "selectorVersion": "1.0.0"
+    },
+    "schedulePolicy": {
+      "timezone": "Europe/Prague",
+      "primaryOffsetHours": 0,
+      "umbrellaOffsetHours": 6,
+      "amplifierOffsetHours": [24, 48]
+    },
     "targets": [{
       "id": "door-money-primary",
       "role": "primary",
@@ -136,16 +157,43 @@
       "capabilityRef": null,
       "amplifierEligibilityRef": null,
       "fit": "eligible",
-      "reasons": ["fit"]
+      "reasons": ["fit"],
+      "selection": {
+        "hardGates": [
+          { "gate": "real-owned-profile", "status": "pass", "reason": "The fixture is a transparent owned primary profile.", "evidenceRef": "owner-fixture-profile-001" },
+          { "gate": "exact-capability", "status": "pass", "reason": "The bounded Door Money package edge is exact and current.", "evidenceRef": "GitHub #424" },
+          { "gate": "profile-authority", "status": "pass", "reason": "Campaign drafting is allowed while live authority remains held.", "evidenceRef": "GitHub #410" }
+        ],
+        "score": {
+          "total": 100,
+          "components": [{ "component": "audience-fit", "value": 100, "weight": 1, "reason": "The source primary is the canonical audience owner.", "evidenceRef": "owner-fixture-profile-001" }]
+        }
+      }
     }],
-    "contactAssignments": ["distribution-contact-example-newsletter"],
+    "contactAssignments": [],
     "channelItems": [{
       "id": "door-money-instagram-001",
       "targetId": "door-money-primary",
       "channel": "instagram",
       "locale": "en",
+      "connectionRef": null,
+      "providerRef": null,
+      "objective": "qualified-visit",
+      "audience": "Readers who opted into practical founder finance releases.",
+      "copy": {
+        "text": "An owner-approved Door Money release fixture.",
+        "commentaryType": "primary-pack",
+        "destination": "https://example.com/door-money/release-001",
+        "factualClaimRefs": ["owner-fixture-release-verification-001"],
+        "evidenceRefs": ["state/ventures/door-money/packages/release-001.json"],
+        "rendererRef": "carousel-studio-1",
+        "assets": [{ "ref": "state/ventures/door-money/assets/release-001.png", "hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "altText": "Door Money release fixture card." }]
+      },
       "contentHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "assetHashes": ["dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"],
+      "targetHash": "2222222222222222222222222222222222222222222222222222222222222222",
+      "windowHash": "3333333333333333333333333333333333333333333333333333333333333333",
+      "policyHash": "1111111111111111111111111111111111111111111111111111111111111111",
       "window": {
         "notBefore": "2026-09-01T08:00:00.000Z",
         "notAfter": "2026-09-01T10:00:00.000Z"
@@ -156,9 +204,16 @@
         "campaign": "door-money-release-001",
         "content": "door-money-instagram-001"
       },
-      "approvalRef": "owner-fixture-approval-001",
+      "approval": {
+        "status": "needs-owner-review",
+        "bindingHash": "4444444444444444444444444444444444444444444444444444444444444444",
+        "approvalRef": null,
+        "approvedAt": null,
+        "approvedBy": null
+      },
       "status": "held"
     }],
+    "selectionOutcome": "primary-only",
     "status": "held",
     "holdReasons": ["authority"],
     "providerAvailability": "held",

@@ -42,7 +42,9 @@ describe("Social Profiles server snapshot", () => {
     expect(snapshot.ventureProfiles).toHaveLength(6);
     expect(snapshot.amplificationProfiles).toEqual([]);
     expect(snapshot.simulations).toEqual([]);
-    expect(snapshot.dropped).toEqual({ profiles: 0, connections: 0, amplifierProposals: 0, events: 0, pauseRecords: 0 });
+    expect(snapshot.campaigns).toEqual([]);
+    expect(snapshot.campaignDecisions).toEqual([]);
+    expect(snapshot.dropped).toEqual({ profiles: 0, connections: 0, amplifierProposals: 0, events: 0, campaigns: 0, campaignDecisions: 0, campaignEvents: 0, pauseRecords: 0 });
     expect(snapshot.posture).toMatchObject({ globalKillSwitch: "engaged", liveAuthorityGranted: false });
     expect(snapshot.ventureProfiles.find(({ profile }) => profile.ventureRef === "door-money")).toMatchObject({
       lifecycle: "proposed",
@@ -101,7 +103,23 @@ describe("Social Profiles server snapshot", () => {
     expect(parseSocialProfileEvent({ ...event, action: "corrected" })).toBeNull();
   });
 
+  it("projects validated campaign evidence without inventing results or Contest Radar records", async () => {
+    const root = await fixtureRoot();
+    const contracts = JSON.parse(await readFile(path.join(repositoryRoot, "contracts/fixtures/social-distribution-contracts.valid.json"), "utf8")) as { campaign: unknown };
+    await mkdir(path.join(root, "state/social/campaigns"), { recursive: true });
+    await writeFile(path.join(root, "state/social/campaigns/campaign.json"), `${JSON.stringify(contracts.campaign, null, 2)}\n`);
+    await writeFile(path.join(root, "state/social/campaigns/skip.decision.json"), `${JSON.stringify({ schemaVersion: "social-campaign-generation-decision/1", id: "social-campaign-decision-aaaaaaaaaaaaaaaaaaaa", releaseId: "irrelevant-release", sourceVentureId: "mma-files", idempotencyKey: "a".repeat(64), decision: "skip", reasons: ["missing-stale-held-or-denied-capability"], campaignId: null, evidenceRefs: ["fixture:release"], decidedAt: "2026-08-27T00:00:00.000Z", authorityGranted: false, publishingAuthorized: false }, null, 2)}\n`);
+
+    const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
+    expect(snapshot.campaigns).toHaveLength(1);
+    expect(snapshot.campaigns[0]).toMatchObject({ campaign: { releaseId: "door-money-release-001", selectionOutcome: "primary-only", measurementAvailability: "manual-only" }, operationalResults: null, appliedEvents: 0, rejectedEvents: 0 });
+    expect(snapshot.campaigns[0]!.targetApprovalHashes["door-money-primary"]).toMatch(/^[a-f0-9]{64}$/u);
+    expect(snapshot.campaignDecisions).toMatchObject([{ sourceVentureId: "mma-files", decision: "skip" }]);
+    expect(JSON.stringify(snapshot)).not.toContain("contest-radar");
+  });
+
   it("falls unknown section bookmarks back to Venture Profiles", () => {
+    expect(resolveSocialProfileSection("campaigns")).toBe("campaigns");
     expect(resolveSocialProfileSection("activity-setup")).toBe("activity-setup");
     expect(resolveSocialProfileSection("future-module")).toBe("venture-profiles");
   });

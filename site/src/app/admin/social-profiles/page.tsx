@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default async function SocialProfilesPage({
   searchParams
 }: {
-  searchParams: Promise<{ section?: string; profile?: string; fixtures?: string }>;
+  searchParams: Promise<{ section?: string; profile?: string; campaign?: string; fixtures?: string }>;
 }) {
   const query = await searchParams;
   const fixtureRequest = query.fixtures === "profile-matrix";
@@ -45,18 +45,19 @@ export default async function SocialProfilesPage({
     <AdminShell
       attention={[
         { label: "Profiles held", value: snapshot.ventureProfiles.filter(({ lifecycle }) => lifecycle !== "active").length + snapshot.amplificationProfiles.filter(({ proposal }) => proposal.lifecycle !== "active").length },
+        { label: "Campaign review", value: snapshot.campaigns.filter(({ campaign }) => ["needs-owner-review", "partially-approved", "held"].includes(campaign.status)).length },
         { label: "Setup or reauthorisation", value: snapshot.ventureProfiles.flatMap(({ connections }) => connections).filter(({ currentState }) => ["held", "reauthorisation-required"].includes(currentState)).length },
         { label: "Unreadable records", value: dropped }
       ]}
       brandId="global"
       breadcrumb="Social Profiles"
-      lead="Protected profile, connection, lifecycle and amplifier-policy evidence. Account creation, OAuth, live activation, engagement and purchases stay outside this workspace."
+      lead="Protected profile, connection, campaign-selection, approval, lifecycle and amplifier-policy evidence. Account creation, OAuth, live activation, engagement and purchases stay outside this workspace."
       sections={sections}
       title="Social Profiles"
       workspaces={workspaces}
     >
       <AdminWriteProvider enabled={adminWritesEnabled()}>
-        <SocialProfilesWorkspace profileId={query.profile} section={section} snapshot={snapshot} />
+        <SocialProfilesWorkspace campaignId={query.campaign} profileId={query.profile} section={section} snapshot={snapshot} />
       </AdminWriteProvider>
     </AdminShell>
   );

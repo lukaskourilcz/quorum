@@ -32,6 +32,11 @@ test("Social Profiles sections and detail keep canonical bookmarks and bounded c
   await expect(page.getByText("No Amplification Profiles", { exact: true })).toBeVisible();
   await expect(page.locator("[data-social-profile-simulations]")).toHaveCount(0);
 
+  await page.goto("/admin/social-profiles?section=campaigns", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("link", { name: "Campaigns", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByText("No verified-release campaigns", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Contest Radar candidates are not converted/iu)).toBeVisible();
+
   await page.goto("/admin/social-profiles?section=unknown&profile=social-profile-caught-up", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("link", { name: "Venture Profiles", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(page.locator('[data-social-profile-detail="social-profile-caught-up"]')).toBeVisible();
