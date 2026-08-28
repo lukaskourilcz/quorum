@@ -30,8 +30,7 @@ export const WebDevSignalRegistrationSchema = z.strictObject({
     englishProfileDelivery: FeatureStateSchema,
     instagramPublishing: FeatureStateSchema,
     threadsPublishing: FeatureStateSchema,
-    metricsCollection: FeatureStateSchema,
-    futureWebsiteCrossPromotion: z.literal("disabled")
+    metricsCollection: FeatureStateSchema
   }),
   budget: z.strictObject({
     currency: z.literal("USD"),

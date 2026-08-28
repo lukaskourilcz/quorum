@@ -17,8 +17,8 @@ common use of “signal” for reactive APIs make the name descriptive, not clea
 handle availability was not stable enough to treat search results as a reservation.
 
 Verdict: **keep as a working name; hold final public use** until the owner checks trademark risk,
-domains and the exact Instagram and Threads handles. This is product research, not legal clearance,
-and no account or domain was created.
+the exact Instagram and Threads handles. This is product research, not legal clearance, and no
+account was created.
 
 One master brand keeps the source selection and factual record singular. Two named editions make
 the locale promise visible without pretending one package is a translation of the other.
@@ -102,7 +102,9 @@ Design Lab is the sole renderer and Social Distribution is the sole possible pub
 package edge is not profile, connection, provider, scope, budget or publishing authority.
 Accounts, handles, OAuth, App Review, credentials and routine scopes remain owner-only. Engagement
 automation, ads, boosts, affiliates, sponsors, subscriptions and other monetization are prohibited.
-The optional website and any DNESKAi/house promotion remain held for #447.
+Instagram and Threads are the only public product surfaces in this program. Website, public web
+app, archive/search/SEO/RSS, newsletter and DNESKAi/house-promotion work are excluded. A later
+reconsideration requires a separate owner decision and a new issue; it creates no present edge.
 
 ## Cost and checkpoint proposal
 

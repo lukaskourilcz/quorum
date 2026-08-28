@@ -57,7 +57,7 @@ const VentureDefinitionSchema = openObject({
   taste: z.boolean(),
   ledgerNamespace: VentureIdSchema,
   delivery: z.strictObject({
-    product: z.literal("social-first"),
+    product: z.literal("instagram-threads"),
     website: z.literal("absent")
   }).optional(),
   editions: z.array(VentureEditionSchema).min(1).max(10).optional(),
@@ -159,14 +159,14 @@ export const VentureRegistrySchema = openObject({
   if (webdevSignal) {
     const editions = webdevSignal.editions ?? [];
     if (webdevSignal.ledgerNamespace !== "webdev-signal"
-      || webdevSignal.delivery?.product !== "social-first"
+      || webdevSignal.delivery?.product !== "instagram-threads"
       || webdevSignal.delivery.website !== "absent"
       || editions.length !== 2
       || editions.map(({ locale }) => locale).sort().join(",") !== "cs,en"
       || editions.some(({ state }) => state !== "held")) {
       context.addIssue({
         code: "custom",
-        message: "WebDev Signal must be one held social-first venture with exactly Czech and English editions and no website",
+        message: "WebDev Signal must be one held Instagram-and-Threads venture with exactly Czech and English editions and no website",
         path: ["ventures", ventures.indexOf(webdevSignal)]
       });
     }

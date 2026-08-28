@@ -167,7 +167,7 @@ is the single thing standing between a proven path and a working one.
 Judgement calls. Nothing is blocked on code for any of these.
 
 - [ ] **Countersign or decline WebDev Signal's founding boundary** — review
-  `state/decisions/2026-08-28-webdev-signal-founding.md`, check the working name, domains and exact
+  `state/decisions/2026-08-28-webdev-signal-founding.md`, check the working name and exact
   Instagram/Threads handles without creating an account, and accept or reject
   `WEBDEV-SIGNAL-FOUNDING-001`. Approval confirms the two-edition evidence policy, proposed
   `$0.03` selected-day / `$0.75` monthly ceiling and shared 05:00 Prague checkpoint; it grants no

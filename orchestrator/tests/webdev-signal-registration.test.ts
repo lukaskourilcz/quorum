@@ -12,7 +12,7 @@ import {
 } from "../src/ventures/webdev-signal/registration.js";
 
 describe("WebDev Signal registration", () => {
-  it("registers one held social-first venture, one ledger and two locale editions", async () => {
+  it("registers one held Instagram-and-Threads venture, one ledger and two locale editions", async () => {
     const registry = await loadVentureRegistry();
     const matches = registry.ventures.filter(({ id }) => id === "webdev-signal");
     expect(matches).toHaveLength(1);
@@ -21,7 +21,7 @@ describe("WebDev Signal registration", () => {
       visibility: "owner-only",
       taste: false,
       ledgerNamespace: "webdev-signal",
-      delivery: { product: "social-first", website: "absent" },
+      delivery: { product: "instagram-threads", website: "absent" },
       editions: [
         { locale: "cs", state: "held" },
         { locale: "en", state: "held" }
@@ -44,8 +44,7 @@ describe("WebDev Signal registration", () => {
       englishProfileDelivery: "held",
       instagramPublishing: "disabled",
       threadsPublishing: "disabled",
-      metricsCollection: "held",
-      futureWebsiteCrossPromotion: "disabled"
+      metricsCollection: "held"
     });
     expect(resolveWebDevSignalFeature({ registration, feature: "directSources", authorityAvailable: true })).toMatchObject({ decision: "held" });
     const countersigned = { ...registration, foundingCountersigned: true };

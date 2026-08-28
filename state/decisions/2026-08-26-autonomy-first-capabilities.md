@@ -60,10 +60,10 @@ history-preserving decision and map version.
   render summaries sent to Design Lab and approved immutable package references sent to Social
   Distribution. Raw manuscript text, chunks, embeddings, private annotations and style exemplars
   never cross an edge.
-- WebDev Signal has the same three narrow social-core relationships: held GoVIRAL intelligence,
-  bounded render summaries and approved immutable publish-package references. It has no core edge
-  to Caught Up/DNESKAi, devShark or another venture. A future house-promo artifact requires the
-  separate evidence and decision described in #447.
+- WebDev Signal has the same three narrow Instagram/Threads relationships: held GoVIRAL
+  intelligence, bounded render summaries and approved immutable publish-package references. It has
+  no content edge to Caught Up/DNESKAi, devShark or another venture. Website and house-promotion
+  edges are outside the program; a later reconsideration requires a new owner decision and issue.
 
 ## Closed gates
 

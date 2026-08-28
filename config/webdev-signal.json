@@ -19,8 +19,7 @@
     "englishProfileDelivery": "held",
     "instagramPublishing": "disabled",
     "threadsPublishing": "disabled",
-    "metricsCollection": "held",
-    "futureWebsiteCrossPromotion": "disabled"
+    "metricsCollection": "held"
   },
   "budget": {
     "currency": "USD",

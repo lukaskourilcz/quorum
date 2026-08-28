@@ -111,10 +111,9 @@ with evidence and expiry, never final copy, campaigns or a publish package.
 Door Money has exactly a held GoVIRAL intelligence input, a bounded approved render
 summary to Design Lab and an immutable approved package reference to Social Distribution;
 no manuscript, chunk, embedding, private annotation or style exemplar can cross. The
-planned `webdev-signal` node has the same three social-core relationships and exact held
-own-metrics, progress, health and owner-attention service edges. It has no core content
-edge to Caught Up, devShark or any other venture; #447 is the only place a future bounded
-house-promo artifact may be considered under a separate decision.
+planned `webdev-signal` node has the same three Instagram/Threads relationships and exact held
+own-metrics, progress, health and owner-attention service edges. It has no content edge to Caught
+Up, devShark or any other venture. Website and house-promotion edges are outside the program.
 
 ## The eleven projects
 

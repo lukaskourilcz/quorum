@@ -13,9 +13,10 @@ Sources: GitHub #424, #435, #436, `docs/WEBDEV-SIGNAL-FOUNDING.md` and
 
 ## Decision
 
-BoardlessAI may build WebDev Signal as one social-first web-development news venture with two
-native editions, `cs` and `en`. `WebDev Signal` is retained as the working name; final public use,
-domains and exact social handles remain held for owner clearance. The first stage has no website.
+BoardlessAI may build WebDev Signal as one Instagram-and-Threads-only web-development news venture
+with two native editions, `cs` and `en`. `WebDev Signal` is retained as the working name; final
+public use and exact social handles remain held for owner clearance. Instagram and Threads are the
+entire public product for this program; there is no website stage or website backlog.
 
 The desk owns one language-neutral evidence brief and independently written Czech and English
 packages. It chooses zero or one material story per Prague day and records `NO_EDITION` instead of
@@ -34,9 +35,10 @@ no rendering, profile, connection, provider, routine-scope, queue or publishing 
 Caught Up/DNESKAi, devShark, Personal Growth, Kvórum, Door Money, BOOKSOFHISTORY, Tehdejší svět,
 FightAIQ/MMA Files, Contest Radar and unrelated ventures have no mandatory-core content edge in
 either direction. Design Lab is the only renderer and Social Distribution the only future delivery
-service. Website and house promotion remain absent until #447 supplies evidence and a new decision.
+service. Website, public web surfaces and house promotion are outside this program. Any later
+reconsideration requires a separate owner decision and a new issue and creates no current edge.
 
-External accounts, domains, OAuth, credentials, App Review, routine scopes and live activation are
+External accounts, OAuth, credentials, App Review, routine scopes and live activation are
 owner-only. Automated engagement, ads, boosts, affiliate placement, sponsorship and monetization
 are prohibited by this decision.
 
