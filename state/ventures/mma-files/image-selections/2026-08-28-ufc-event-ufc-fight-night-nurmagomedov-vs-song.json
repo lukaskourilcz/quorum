@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-fight-night-nurmagomedov-vs-song",
+  "date": "2026-08-28",
+  "rung": "search",
+  "selected": "pexels:5485439",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:5485439",
+      "reason": "Two shirtless fighters sparring in an outdoor cage with proper protective gear and audience in soft focus background clearly illustrates MMA action without identifying anyone.",
+      "candidates": [
+        {
+          "candidateId": "pexels:28560744",
+          "provider": "pexels",
+          "fit": 0,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "The image shows identifiable fighters in action within the cage, with clear facial visibility of both the referee and a fighter, making it unsuitable.",
+          "sceneCs": "zápas v kleci s rozhodčím"
+        },
+        {
+          "candidateId": "pixabay:6214718",
+          "provider": "pixabay",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "An empty stadium with overhead architectural detail illustrates the venue type suitable for MMA, though it lacks the energy and specificity of an active fighting environment.",
+          "sceneCs": "prázdný stadion se střešní konstrukcí"
+        },
+        {
+          "candidateId": "pexels:36293742",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "An interior sports facility with professional lighting and colored mat sections suggests MMA training or competition space, but the empty aesthetic lacks dramatic impact.",
+          "sceneCs": "sportovní hala s barevnými matami"
+        },
+        {
+          "candidateId": "pixabay:1853520",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "The highly stylized architectural shot with neon-like blue lighting appears digitally enhanced or AI-generated, which violates editorial standards.",
+          "sceneCs": "abstraktní stadionová architektura"
+        },
+        {
+          "candidateId": "pexels:5485439",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Two shirtless fighters sparring in an outdoor cage with proper protective gear and audience in soft focus background clearly illustrates MMA action without identifying anyone.",
+          "sceneCs": "dva zápasníci v kleci v tréninkovém prostředí"
+        },
+        {
+          "candidateId": "pexels:776805",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "off-brief"
+          ],
+          "reason": "Stadium floodlights over a fence relate to sports infrastructure but have no connection to mixed martial arts specifically.",
+          "sceneCs": "sportovní osvětlení nad plotem"
+        },
+        {
+          "candidateId": "pixabay:931975",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "The stylized image with dramatic lighting and smoke effects appears digitally manipulated or AI-generated, inconsistent with editorial photography standards.",
+          "sceneCs": "dramatické osvětlení se kouřem"
+        },
+        {
+          "candidateId": "pexels:4398344",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "A fighter in red gear stands in a training facility with face clearly visible in the frame, violating the portrait prohibition.",
+          "sceneCs": "zápasník v tréninkovém prostředí"
+        },
+        {
+          "candidateId": "pixabay:2181980",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "An empty conference room with chairs and table is completely unrelated to mixed martial arts.",
+          "sceneCs": "konferenční místnost"
+        },
+        {
+          "candidateId": "pexels:36293741",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "A modern MMA facility with professional mat, lighting, and empty seating perfectly illustrates a fighting venue without identifying anyone or showing active combat.",
+          "sceneCs": "tradiční areál s oktagondálním rámcem"
+        },
+        {
+          "candidateId": "pixabay:1867992",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "off-brief"
+          ],
+          "reason": "A soccer stadium is unrelated to mixed martial arts despite being a sports venue.",
+          "sceneCs": "fotbalový stadion"
+        },
+        {
+          "candidateId": "pexels:1297473",
+          "provider": "pexels",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "This highly stylized, neon-lit octagonal aerial view appears AI-generated or excessively digitally manipulated, unsuitable for editorial use.",
+          "sceneCs": "stylizované 3D znázornění oktágonu"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.008536
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-28T08:02:09.409Z"
+}

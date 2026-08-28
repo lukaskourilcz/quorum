@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "carousel-recipe/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-fight-night-nurmagomedov-vs-song",
+  "date": "2026-08-28",
+  "family": "billboard",
+  "variant": "A",
+  "accentSwap": true,
+  "treatment": "none",
+  "typeScale": 1,
+  "phaseSeed": 3,
+  "summaryRef": "ventures/carousel-studio/summaries/mma-files/2026-08-28-ufc-event-ufc-fight-night-nurmagomedov-vs-song.json",
+  "copyRef": "ventures/carousel-studio/social-copy/mma-files/2026-08-28-ufc-event-ufc-fight-night-nurmagomedov-vs-song.json"
+}

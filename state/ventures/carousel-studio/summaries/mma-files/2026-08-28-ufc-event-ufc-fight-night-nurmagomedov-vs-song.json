@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "ufc-event-ufc-fight-night-nurmagomedov-vs-song",
+  "date": "2026-08-28",
+  "locale": "cs",
+  "kicker": "MMA Files · 28. srp",
+  "headline": "UFC Fight Night: Nurmagomedov vs. Song se koná v Šanghaji, Aori Qileng vstupuje do klece",
+  "coverLine": "Aori Qileng nastoupí v Šanghaji proti Kai Asakurovi",
+  "standfirst": "V sobotu 29. srpna hostí SPD Bank Oriental Sports Center kartu UFC Fight Night: Nurmagomedov vs. Song. Na programu jsou zápasy bantamové, pérové, velterové i muší váhy.",
+  "passages": [
+    "UFC Fight Night: Nurmagomedov vs. Song se odehraje v sobotu 29. srpna v šanghajském SPD Bank Oriental Sports Center. Karta přináší celkem čtyři zveřejněné zápasy napříč váhovými kategoriemi.",
+    "Hlavní zájem domácích diváků upoutá bantamová váha, kde nastoupí Aori Qileng proti Kai Asakurovi. Čínský bojovník má v profesionální kariéře bilanci 26 výher, 13 proher a jedno no contest.",
+    "V UFC odchodil 22 zápasů, z nichž 12 vyhrál. Přibližně dvě pětiny vítězství přišly technickým knockoutem nebo knockoutem, zbytek na body.",
+    "V pérové váze si to rozdají Jack Jenkins a Sean Woodson, oba na tři kola.",
+    "Velterovou část karty obstarají Ding Meng a Cameron Nelson, muší pak Bilal Hasan s Nilsonem Rojasem.",
+    "Všechny čtyři zápasy mají naplánována tři kola a ke dni vydání tohoto textu jsou stále označeny jako ohlášené, výsledky tedy nejsou k dispozici."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "Photo by Bruno Bueno on Pexels"
+}
