@@ -17,6 +17,7 @@ async function fixtureRoot(): Promise<string> {
   temporaryRoots.push(root);
   for (const relative of [
     "config/social-publisher-registry.json",
+    "config/social-providers.json",
     "config/social-amplification-policy.json",
     "config/venture-capabilities.json",
     "state/social/activation.json",
@@ -45,7 +46,8 @@ describe("Social Profiles server snapshot", () => {
     expect(snapshot.campaigns).toEqual([]);
     expect(snapshot.campaignDecisions).toEqual([]);
     expect(snapshot.network).toMatchObject({ contacts: [], shareKits: [], benchmark: { target: 50, actual: 0, optedInOrActive: 0, fabricatedProgress: false } });
-    expect(snapshot.dropped).toEqual({ profiles: 0, connections: 0, amplifierProposals: 0, events: 0, campaigns: 0, campaignDecisions: 0, campaignEvents: 0, networkContacts: 0, networkContactEvents: 0, networkShareKits: 0, networkShareKitEvents: 0, pauseRecords: 0 });
+    expect(snapshot.dropped).toEqual({ profiles: 0, connections: 0, amplifierProposals: 0, events: 0, campaigns: 0, campaignDecisions: 0, campaignEvents: 0, networkContacts: 0, networkContactEvents: 0, networkShareKits: 0, networkShareKitEvents: 0, providerRecords: 0, providerBindings: 0, providerReceipts: 0, providerHealth: 0, pauseRecords: 0 });
+    expect(snapshot.providerControl).toMatchObject({ summary: { directCoreAvailable: true, activeBindings: 0, heldBindings: 6, ambiguousReceipts: 0 }, authorityGranted: false, purchaseAuthorized: false, automaticFailover: false });
     expect(snapshot.posture).toMatchObject({ globalKillSwitch: "engaged", liveAuthorityGranted: false });
     expect(snapshot.ventureProfiles.find(({ profile }) => profile.ventureRef === "door-money")).toMatchObject({
       lifecycle: "proposed",
@@ -122,6 +124,7 @@ describe("Social Profiles server snapshot", () => {
   it("falls unknown section bookmarks back to Venture Profiles", () => {
     expect(resolveSocialProfileSection("campaigns")).toBe("campaigns");
     expect(resolveSocialProfileSection("network")).toBe("network");
+    expect(resolveSocialProfileSection("providers")).toBe("providers");
     expect(resolveSocialProfileSection("activity-setup")).toBe("activity-setup");
     expect(resolveSocialProfileSection("future-module")).toBe("venture-profiles");
   });

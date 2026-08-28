@@ -62,6 +62,20 @@ describe("Social Profiles workspace", () => {
     expect(snapshot.network.benchmark).toEqual({ target: 50, actual: 0, optedInOrActive: 0, fabricatedProgress: false });
   });
 
+  it("renders the direct core and optional provider postures without secrets or failover authority", async () => {
+    const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test", CAUGHT_UP_THREADS_ACCESS_TOKEN: "private-secret-value" } });
+    const html = renderToStaticMarkup(<SocialProfilesWorkspace section="providers" snapshot={snapshot} />);
+    expect(html).toContain("Providers &amp; automation health");
+    expect(html).toContain("Direct Meta");
+    expect(html).toContain("direct-core");
+    expect(html).toContain("Buffer");
+    expect(html).toContain("optional-held");
+    expect(html).toContain("No provider delivery evidence");
+    expect(html).toContain("never trigger automatic failover");
+    expect(html).not.toContain("private-secret-value");
+    expect(snapshot.providerControl.summary).toEqual({ directCoreAvailable: true, activeBindings: 0, heldBindings: 6, ambiguousReceipts: 0 });
+  });
+
   it("renders campaign gates, immutable bindings and safe actions without fake results", async () => {
     const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
     const fixture = JSON.parse(await readFile(path.join(root, "contracts/fixtures/social-distribution-contracts.valid.json"), "utf8")) as { campaign: unknown };

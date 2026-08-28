@@ -21,7 +21,7 @@ import { SocialCampaignActions } from "./social-campaign-actions";
 import { SocialNetworkShareKitActions } from "./social-network-share-kit-actions";
 import { SocialProfileLifecycleActions } from "./social-profile-lifecycle-actions";
 
-const statusTone = (value: string) => ["active", "ready", "healthy", "allowed", "pass", "approved", "eligible", "selected"].includes(value)
+const statusTone = (value: string) => ["active", "ready", "healthy", "allowed", "pass", "approved", "eligible", "selected", "enabled", "direct-core", "published", "reconciled"].includes(value)
   ? "success" as const
   : ["rejected", "reject", "retired", "denied", "expired", "failed", "cancelled"].includes(value)
     ? "destructive" as const
@@ -186,6 +186,34 @@ function Network({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) {
   );
 }
 
+function Providers({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) {
+  const control = snapshot.providerControl;
+  return (
+    <div className="grid gap-4" data-social-profiles-section="providers">
+      <AdminCard><AdminCardHeader><AdminSectionHeading title="Providers & automation health" description="BoardlessAI owns strategy, approvals, queue, campaign, receipt and learning truth. Providers transport exact approved items or report bounded status only." /></AdminCardHeader><AdminCardContent className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <AdminMetric label="Direct core" value={control.summary.directCoreAvailable ? "Available" : "Unavailable"} note="Implementation posture, not live authority" />
+        <AdminMetric label="Active bindings" value={control.summary.activeBindings} note="At most one per connection" />
+        <AdminMetric label="Held bindings" value={control.summary.heldBindings} note="Owner setup remains external" />
+        <AdminMetric label="Ambiguous receipts" value={control.summary.ambiguousReceipts} note="Must reconcile before resend" />
+      </AdminCardContent></AdminCard>
+      <AdminCard><AdminCardHeader><AdminSectionHeading title={`Provider registry · ${control.providers.length}`} description="Direct Meta is the retained core. Buffer, Metricool and n8n are optional and held; Make and Ayrshare keep their dated verdicts." /></AdminCardHeader><AdminCardContent>
+        {control.providers.length ? <AdminTableRegion label="Social provider registry"><AdminTable><thead><tr><AdminTableHead>Provider</AdminTableHead><AdminTableHead>Posture</AdminTableHead><AdminTableHead>Version</AdminTableHead><AdminTableHead>Reverify</AdminTableHead><AdminTableHead>Plan / limits</AdminTableHead></tr></thead><tbody>
+          {control.providers.map(({ provider, posture, activeBindings, bindingCount }) => <tr key={provider.id}><AdminTableCell><span className="block font-semibold">{provider.name}</span><span className="block text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{provider.role} · {provider.supportedPlatforms.join("/")}</span></AdminTableCell><AdminTableCell><AdminStatusBadge tone={statusTone(posture)}>{posture}</AdminStatusBadge><span className="mt-1 block text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{provider.verdict} · {activeBindings}/{bindingCount} active</span></AdminTableCell><AdminTableCell>{provider.implementationVersion}<span className="block text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{provider.apiVersion ?? "No API adapter"}</span></AdminTableCell><AdminTableCell>{provider.reverifyBy}</AdminTableCell><AdminTableCell>{provider.plan}<span className="block text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{provider.monthlyCostPosture}</span></AdminTableCell></tr>)}
+        </tbody></AdminTable></AdminTableRegion> : <AdminEmptyState title="Provider registry unavailable" description="No provider is inferred from connection or environment state." />}
+      </AdminCardContent></AdminCard>
+      <AdminCard><AdminCardHeader><AdminSectionHeading title={`Connection bindings · ${control.bindings.length}`} description="Credential reference names may be shown; values never cross this server boundary. A binding is not publishing authority." /></AdminCardHeader><AdminCardContent>
+        {control.bindings.length ? <AdminTableRegion label="Provider connection bindings"><AdminTable><thead><tr><AdminTableHead>Connection</AdminTableHead><AdminTableHead>Provider / mode</AdminTableHead><AdminTableHead>Token / app review</AdminTableHead><AdminTableHead>Rate / plan</AdminTableHead><AdminTableHead>Setup or attention</AdminTableHead></tr></thead><tbody>
+          {control.bindings.map(({ binding, provider, latestHealth, setupReason }) => <tr key={binding.id}><AdminTableCell><span className="block font-mono text-[length:var(--admin-type-label)]">{binding.connectionId}</span><span className="block text-[length:var(--admin-type-micro)] text-[var(--admin-foreground-muted)]">{binding.credentialRefs.join(" · ")}</span></AdminTableCell><AdminTableCell><span className="block font-semibold">{provider.name}</span><AdminStatusBadge tone={statusTone(binding.mode)}>{binding.mode}</AdminStatusBadge></AdminTableCell><AdminTableCell>{latestHealth ? `${latestHealth.tokenStatus} / ${latestHealth.appReviewStatus}` : "Unavailable / unavailable"}</AdminTableCell><AdminTableCell>{latestHealth ? `${latestHealth.rateLimitStatus} / ${latestHealth.planLimitStatus}` : "Unavailable / unavailable"}</AdminTableCell><AdminTableCell>{latestHealth?.nextSafeAction ?? setupReason}</AdminTableCell></tr>)}
+        </tbody></AdminTable></AdminTableRegion> : <AdminEmptyState title="No provider bindings" description="No connection is silently assigned to a provider." />}
+      </AdminCardContent></AdminCard>
+      <AdminCard><AdminCardHeader><AdminSectionHeading title={`Recent provider evidence · ${control.receipts.length}`} description="Normalized delivery evidence excludes raw provider payloads and cannot authorize a retry or failover." /></AdminCardHeader><AdminCardContent>
+        {control.receipts.length ? <AdminTableRegion label="Provider delivery evidence"><AdminTable><thead><tr><AdminTableHead>Attempt</AdminTableHead><AdminTableHead>Provider</AdminTableHead><AdminTableHead>State</AdminTableHead><AdminTableHead>Status</AdminTableHead><AdminTableHead>Reconciliation</AdminTableHead></tr></thead><tbody>{control.receipts.slice(0, 50).map((receipt) => <tr key={receipt.id}><AdminTableCell>{receipt.requestedAt}</AdminTableCell><AdminTableCell>{receipt.providerId}</AdminTableCell><AdminTableCell><AdminStatusBadge tone={statusTone(receipt.state)}>{receipt.state}</AdminStatusBadge></AdminTableCell><AdminTableCell>{receipt.status}{receipt.error ? ` · ${receipt.error}` : ""}</AdminTableCell><AdminTableCell>{receipt.reconciliationRef ?? (receipt.state === "ambiguous" ? "Required before resend" : "Not required")}</AdminTableCell></tr>)}</tbody></AdminTable></AdminTableRegion> : <AdminEmptyState title="No provider delivery evidence" description="No transport attempt is represented. Missing evidence is not converted to a zero or success." />}
+      </AdminCardContent></AdminCard>
+      {control.migrations.length ? <AdminCallout tone="warning">{control.migrations.length} provider binding migration record(s) require explicit history-preserving review.</AdminCallout> : <AdminCallout tone="information">No provider migration is in progress. Errors never trigger automatic failover, a plan change or a purchase.</AdminCallout>}
+    </div>
+  );
+}
+
 function SimulationMatrix({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) {
   if (!snapshot.simulationsIncluded) return null;
   return <AdminCard className="mt-4" data-social-profile-simulations="explicit"><AdminCardHeader><AdminSectionHeading title="Synthetic visual QA · excluded from totals" description="50 deterministic #406 fixtures. They are not accounts, proposals, evidence or a production fallback." /></AdminCardHeader><AdminCardContent><div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">{snapshot.simulations.map(({ profile, preview }) => <div className="min-w-0 rounded-[var(--admin-radius)] border border-dashed border-[var(--admin-border-strong)] p-3" key={profile.id}><p className="m-0 break-words font-semibold">{profile.displayLabel}</p><div className="mt-2 flex flex-wrap gap-1"><AdminStatusBadge tone="information">simulation</AdminStatusBadge><AdminStatusBadge tone={statusTone(preview.setupState)}>{preview.setupState}</AdminStatusBadge><AdminEntityBadge>{preview.platform}</AdminEntityBadge></div></div>)}</div></AdminCardContent></AdminCard>;
@@ -198,7 +226,7 @@ export function SocialProfilesWorkspace({ campaignId, profileId, section, snapsh
       <nav aria-label="Social Profiles sections" className="mb-4 flex max-w-full gap-1 overflow-x-auto rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface-secondary)] p-1" data-horizontal-scroll>
         {SOCIAL_PROFILE_SECTIONS.map((item) => <Link aria-current={section === item.id ? "page" : undefined} className="admin-focus-ring flex min-h-[var(--admin-touch-target)] shrink-0 items-center rounded-[var(--admin-radius-sm)] px-3 text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-foreground-muted)] data-[active=true]:bg-[var(--admin-surface)] data-[active=true]:text-[var(--admin-foreground)]" data-active={section === item.id} href={sectionHref(item.id, snapshot.simulationsIncluded)} key={item.id}>{item.label}</Link>)}
       </nav>
-      {section === "venture-profiles" ? <VentureProfiles profileId={profileId} snapshot={snapshot} /> : section === "amplification-profiles" ? <AmplificationProfiles profileId={profileId} snapshot={snapshot} /> : section === "campaigns" ? <Campaigns campaignId={campaignId} snapshot={snapshot} /> : section === "network" ? <Network snapshot={snapshot} /> : <ActivitySetup snapshot={snapshot} />}
+      {section === "venture-profiles" ? <VentureProfiles profileId={profileId} snapshot={snapshot} /> : section === "amplification-profiles" ? <AmplificationProfiles profileId={profileId} snapshot={snapshot} /> : section === "campaigns" ? <Campaigns campaignId={campaignId} snapshot={snapshot} /> : section === "network" ? <Network snapshot={snapshot} /> : section === "providers" ? <Providers snapshot={snapshot} /> : <ActivitySetup snapshot={snapshot} />}
       <SimulationMatrix snapshot={snapshot} />
     </div>
   );

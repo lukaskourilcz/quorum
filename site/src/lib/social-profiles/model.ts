@@ -3,6 +3,7 @@ export const SOCIAL_PROFILE_SECTIONS = [
   { id: "amplification-profiles", label: "Amplification Profiles" },
   { id: "campaigns", label: "Campaigns" },
   { id: "network", label: "Network" },
+  { id: "providers", label: "Providers & automation health" },
   { id: "activity-setup", label: "Activity & setup" }
 ] as const;
 

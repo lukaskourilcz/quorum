@@ -48,4 +48,10 @@ test("Social Profiles sections and detail keep canonical bookmarks and bounded c
   await expect(page.getByRole("link", { name: "Activity & setup", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(page.getByText("No lifecycle events", { exact: true })).toBeVisible();
   await expect(page.getByText(/Global kill switch:/u)).toBeVisible();
+
+  await page.goto("/admin/social-profiles?section=providers", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("link", { name: "Providers & automation health", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByText("Provider registry · 6", { exact: true })).toBeVisible();
+  await expect(page.getByText("No provider delivery evidence", { exact: true })).toBeVisible();
+  await expect(page.locator("[data-social-profiles-section=providers]")).not.toContainText(/private-secret-value|automatic failover enabled|purchase authorized/iu);
 });
