@@ -190,6 +190,7 @@ describe("Social Profiles server snapshot", () => {
     expect(resolveSocialProfileSection("providers")).toBe("providers");
     expect(resolveSocialProfileSection("content-runway")).toBe("content-runway");
     expect(resolveSocialProfileSection("results")).toBe("results");
+    expect(resolveSocialProfileSection("plan-progress")).toBe("plan-progress");
     expect(resolveSocialProfileSection("activity-setup")).toBe("activity-setup");
     expect(resolveSocialProfileSection("future-module")).toBe("venture-profiles");
   });

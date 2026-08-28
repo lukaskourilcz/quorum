@@ -91,6 +91,16 @@ describe("Social Profiles workspace", () => {
     expect(snapshot.automationHealth).toMatchObject({ accountActionsAuthorized: false, providerSwitchAuthorized: false, silentResendAuthorized: false, publishingAuthorized: false });
   });
 
+  it("renders shared Plan & progress state without inventing missing progress", async () => {
+    const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
+    const html = renderToStaticMarkup(<SocialProfilesWorkspace section="plan-progress" snapshot={snapshot} />);
+    expect(html).toContain("Plan &amp; progress");
+    expect(html).toContain("#419/#431");
+    expect(html).toContain("Implementation progress unavailable");
+    expect(html).toContain("does not run a second issue reader");
+    expect(html).not.toMatch(/complete.*0\/0/iu);
+  });
+
   it("renders canonical Content runway constitutions without queue or publishing controls", async () => {
     const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
     const html = renderToStaticMarkup(<SocialProfilesWorkspace profileId="social-profile-caught-up" section="content-runway" snapshot={snapshot} />);

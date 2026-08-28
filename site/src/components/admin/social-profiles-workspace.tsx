@@ -355,6 +355,31 @@ function AutomationHealth({ snapshot }: { snapshot: AdminSocialProfilesSnapshot 
   );
 }
 
+function PlanProgress({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) {
+  const progress = snapshot.implementationProgress;
+  const program = progress.programs.find(({ id }) => id === "social-distribution") ?? null;
+  const items = progress.items.filter(({ programRefs }) => programRefs.includes("social-distribution"));
+  if (progress.state !== "present" || !program) {
+    return <div className="grid gap-4" data-social-profiles-section="plan-progress"><AdminCard><AdminCardHeader><AdminSectionHeading title="Plan & progress" description="Read-only #419/#431 implementation evidence for Social Distribution. This surface never edits GitHub or treats a missing snapshot as zero progress." /></AdminCardHeader><AdminCardContent><AdminStateMessage state="unavailable" title="Implementation progress unavailable" description={progress.state === "missing" ? "The canonical state/programs/current.json snapshot has not been materialized." : "The canonical progress snapshot is malformed or has no Social Distribution program."} /></AdminCardContent></AdminCard><AdminCallout tone="neutral">Refresh and GitHub reconciliation remain owned by the shared implementation-progress subsystem. Social Distribution does not run a second issue reader.</AdminCallout></div>;
+  }
+  return (
+    <div className="grid gap-4" data-social-profiles-section="plan-progress">
+      <AdminCard><AdminCardHeader><AdminSectionHeading title="Plan & progress" description="Read-only #419/#431 implementation evidence for Social Distribution, projected from the one canonical progress snapshot." /></AdminCardHeader><AdminCardContent className="grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
+        <AdminMetric label="Mandatory complete" value={`${program.mandatoryCompleted}/${program.mandatoryTotal}`} note="Optional held work excluded" />
+        <AdminMetric label="Weighted progress" value={program.weightedProgressPercent === null ? "Unavailable" : `${program.weightedProgressPercent}%`} note="Derived by shared subsystem" />
+        <AdminMetric label="Current item" value={program.currentItemId ?? "None"} note="No hidden inferred work" />
+        <AdminMetric label="Next unblocked" value={program.nextUnblockedItemIds.length} note="Dependency-derived" />
+        <AdminMetric label="Owner waiting" value={program.ownerWaitingItemIds.length} note="Exact recorded actions" />
+        <AdminMetric label="Final gate" value={program.finalGateComplete ? "Complete" : program.finalGateReady ? "Ready" : "Held"} note={`Source ${progress.sourceFreshness}`} />
+      </AdminCardContent></AdminCard>
+      <AdminCard><AdminCardHeader><AdminSectionHeading title={`Work items · ${items.length}`} description="Issue state, probes, blockers and owner actions are evidence-backed; absent values remain unavailable." /></AdminCardHeader><AdminCardContent>
+        {items.length ? <AdminTableRegion label="Social Distribution implementation progress"><AdminTable><thead><tr><AdminTableHead>Issue</AdminTableHead><AdminTableHead>State</AdminTableHead><AdminTableHead>Posture</AdminTableHead><AdminTableHead>Probes</AdminTableHead><AdminTableHead>Next action</AdminTableHead></tr></thead><tbody>{items.map((item) => <tr key={item.id}><AdminTableCell><a className="admin-focus-ring rounded-sm" href={item.issueUrl} rel="noreferrer" target="_blank">#{item.issueNumber} · {item.title}</a></AdminTableCell><AdminTableCell><AdminStatusBadge tone={statusTone(item.state)}>{item.state}</AdminStatusBadge></AdminTableCell><AdminTableCell>{item.posture}</AdminTableCell><AdminTableCell>{item.probes.filter(({ status }) => status === "pass").length}/{item.probes.length || "Unavailable"}</AdminTableCell><AdminTableCell>{item.ownerActions[0] ?? item.recommendedAction}</AdminTableCell></tr>)}</tbody></AdminTable></AdminTableRegion> : <AdminEmptyState title="No Social Distribution work items" description="The snapshot names the program but contains no readable Social Distribution items." />}
+      </AdminCardContent></AdminCard>
+      <AdminCallout tone="neutral">Generated {progress.generatedAt} · last successful sync {progress.lastSuccessfulSyncAt ?? "unavailable"}. This surface cannot mutate issues, deployment, authority, accounts, queues or publishing.</AdminCallout>
+    </div>
+  );
+}
+
 function SimulationMatrix({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) {
   if (!snapshot.simulationsIncluded) return null;
   return <AdminCard className="mt-4" data-social-profile-simulations="explicit"><AdminCardHeader><AdminSectionHeading title="Synthetic visual QA · excluded from totals" description="50 deterministic #406 fixtures. They are not accounts, proposals, evidence or a production fallback." /></AdminCardHeader><AdminCardContent><div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">{snapshot.simulations.map(({ profile, preview }) => <div className="min-w-0 rounded-[var(--admin-radius)] border border-dashed border-[var(--admin-border-strong)] p-3" key={profile.id}><p className="m-0 break-words font-semibold">{profile.displayLabel}</p><div className="mt-2 flex flex-wrap gap-1"><AdminStatusBadge tone="information">simulation</AdminStatusBadge><AdminStatusBadge tone={statusTone(preview.setupState)}>{preview.setupState}</AdminStatusBadge><AdminEntityBadge>{preview.platform}</AdminEntityBadge></div></div>)}</div></AdminCardContent></AdminCard>;
@@ -367,7 +392,7 @@ export function SocialProfilesWorkspace({ campaignId, profileId, section, snapsh
       <nav aria-label="Social Profiles sections" className="mb-4 flex max-w-full gap-1 overflow-x-auto rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface-secondary)] p-1" data-horizontal-scroll>
         {SOCIAL_PROFILE_SECTIONS.map((item) => <Link aria-current={section === item.id ? "page" : undefined} className="admin-focus-ring flex min-h-[var(--admin-touch-target)] shrink-0 items-center rounded-[var(--admin-radius-sm)] px-3 text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-foreground-muted)] data-[active=true]:bg-[var(--admin-surface)] data-[active=true]:text-[var(--admin-foreground)]" data-active={section === item.id} href={sectionHref(item.id, snapshot.simulationsIncluded)} key={item.id}>{item.label}</Link>)}
       </nav>
-      {section === "venture-profiles" ? <VentureProfiles profileId={profileId} snapshot={snapshot} /> : section === "amplification-profiles" ? <AmplificationProfiles profileId={profileId} snapshot={snapshot} /> : section === "campaigns" ? <Campaigns campaignId={campaignId} snapshot={snapshot} /> : section === "today" ? <Today snapshot={snapshot} /> : section === "network" ? <Network snapshot={snapshot} /> : section === "providers" ? <Providers snapshot={snapshot} /> : section === "content-runway" ? <ContentRunway profileId={profileId} snapshot={snapshot} /> : section === "results" ? <Results snapshot={snapshot} /> : section === "learning" ? <Learning snapshot={snapshot} /> : section === "automation-health" ? <AutomationHealth snapshot={snapshot} /> : <ActivitySetup snapshot={snapshot} />}
+      {section === "venture-profiles" ? <VentureProfiles profileId={profileId} snapshot={snapshot} /> : section === "amplification-profiles" ? <AmplificationProfiles profileId={profileId} snapshot={snapshot} /> : section === "campaigns" ? <Campaigns campaignId={campaignId} snapshot={snapshot} /> : section === "today" ? <Today snapshot={snapshot} /> : section === "network" ? <Network snapshot={snapshot} /> : section === "providers" ? <Providers snapshot={snapshot} /> : section === "content-runway" ? <ContentRunway profileId={profileId} snapshot={snapshot} /> : section === "results" ? <Results snapshot={snapshot} /> : section === "learning" ? <Learning snapshot={snapshot} /> : section === "automation-health" ? <AutomationHealth snapshot={snapshot} /> : section === "plan-progress" ? <PlanProgress snapshot={snapshot} /> : <ActivitySetup snapshot={snapshot} />}
       <SimulationMatrix snapshot={snapshot} />
     </div>
   );
