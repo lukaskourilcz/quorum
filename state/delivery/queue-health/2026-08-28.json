@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "delivery-queue-health/1",
+  "checkedAt": "2026-08-28T03:10:16.601Z",
+  "date": "2026-08-28",
+  "ventures": [
+    {
+      "venture": "mma-files",
+      "waiting": [],
+      "parked": [
+        {
+          "label": "2026-08-06 AM ufc-event-ufc-fight-night-gamrot-vs-salkilld",
+          "packageHash": "c62cca93898a6afbc578ac47525ea4501d5d2b627f26413164ba660d93063081",
+          "date": "2026-08-06",
+          "code": "hash_conflict"
+        },
+        {
+          "label": "2026-08-08 AM ufc-event-ufc-fight-night-gamrot-vs-salkilld",
+          "packageHash": "ded05ff0de52096b73b12be2a5246601cc879d488c09da74094b853a1b648c0e",
+          "date": "2026-08-08",
+          "code": "hash_conflict"
+        },
+        {
+          "label": "2026-08-20 AM ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+          "packageHash": "aeaf73172353d89152fba247feafba8ae55ba6fcafe7355df1691dba86c54c5d",
+          "date": "2026-08-20",
+          "code": "hash_conflict"
+        },
+        {
+          "label": "2026-08-21 AM ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+          "packageHash": "75650c8b31accdf657c0f8b0f3dc9b99d00d565d1383c42adfeb2d9043814d2a",
+          "date": "2026-08-21",
+          "code": "hash_conflict"
+        },
+        {
+          "label": "2026-08-22 AM ufc-event-ufc-fight-night-hernandez-vs-rodrigues",
+          "packageHash": "9ace4d63fc98c486cbb8881dff2018da268fc38e9d0ab03c575a3196bd9570d5",
+          "date": "2026-08-22",
+          "code": "hash_conflict"
+        }
+      ],
+      "oldestWaitingDate": null,
+      "stalledDays": null,
+      "stalled": true
+    },
+    {
+      "venture": "caught-up",
+      "waiting": [],
+      "parked": [
+        {
+          "label": "2026-08-17 edition",
+          "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
+          "date": "2026-08-17",
+          "code": "post_deploy_verification"
+        },
+        {
+          "label": "2026-08-27 no_edition",
+          "packageHash": "029e618ac90c8d20ae43462fd4117762eaab52848a8f028c43b9197b8a049789",
+          "date": "2026-08-27",
+          "code": "hash_conflict"
+        }
+      ],
+      "oldestWaitingDate": null,
+      "stalledDays": null,
+      "stalled": true
+    }
+  ],
+  "deploys": [
+    {
+      "venture": "caught-up",
+      "url": "https://caughtup-ai.vercel.app/data/board/2026-08-28.json",
+      "expected": "2026-08-28",
+      "status": 200,
+      "live": true
+    },
+    {
+      "venture": "mma-files",
+      "url": "https://mma-files.vercel.app/cs/articles/ufc-amanda-nunes",
+      "expected": "ufc-amanda-nunes",
+      "status": 200,
+      "live": true
+    }
+  ],
+  "needsOwner": true
+}
