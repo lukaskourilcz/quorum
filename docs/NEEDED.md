@@ -166,6 +166,14 @@ is the single thing standing between a proven path and a working one.
 
 Judgement calls. Nothing is blocked on code for any of these.
 
+- [ ] **Countersign or decline WebDev Signal's founding boundary** — review
+  `state/decisions/2026-08-28-webdev-signal-founding.md`, check the working name, domains and exact
+  Instagram/Threads handles without creating an account, and accept or reject
+  `WEBDEV-SIGNAL-FOUNDING-001`. Approval confirms the two-edition evidence policy, proposed
+  `$0.03` selected-day / `$0.75` monthly ceiling and shared 05:00 Prague checkpoint; it grants no
+  source, model, account, OAuth, render or publishing authority. [imp:4] [owner:me] [time:20m]
+  [kind:decision]
+
 - [ ] **Sign or decline `BH-RESEARCH-001`** — decide whether BOOKSOFHISTORY may use
   web search on the existing Anthropic key. The item in `state/INBOX.md` fixes gather
   calls at five searches, QUILL checks at one to three, research at no more than
