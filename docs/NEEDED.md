@@ -8,7 +8,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-08-13.
+Updated: 2026-08-27.
 
 ---
 
@@ -536,7 +536,17 @@ Roughly a month out. Nothing here is needed until a channel actually opens, and 
   human setup outside Git.
   [imp:3] [owner:me] [time:15m] [kind:setup]
 
-- [ ] **Connect Instagram and Threads per brand.** The Design Lab has no accounts and needs none.
+- [ ] **Countersign and connect Social Distribution (`SOCIAL-DISTRIBUTION-CONNECTION-001`).**
+  Review `docs/SOCIAL-DISTRIBUTION-DESIGN.md`, confirm direct Meta as the core provider (or record a
+  superseding choice), name each exact real profile, and choose Facebook Login or Instagram Login
+  per Instagram connection. Create/authorise the accounts yourself; approve only the documented
+  publishing scopes and any separately approved own-insight scope; store tokens and native ids in
+  the server-side secret/variable names below. Explicitly accept or decline Buffer; leave Metricool,
+  n8n, Make and Ayrshare disabled unless a later budgeted decision changes their role. Confirm the
+  token renewal/App Review path, provider cancellation/rollback and exact routine publish scope.
+  This single countersignature/setup packet grants no engagement automation and does not waive
+  profile, capability, release, content, accessibility, cadence, budget, reconciliation, receipt or
+  kill-switch gates. The Design Lab has no accounts and needs none.
 
   | Venture | Actions secrets | Repository variables |
   | --- | --- | --- |
