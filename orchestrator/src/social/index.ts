@@ -5,7 +5,8 @@ const args = process.argv.slice(2);
 
 runSocialPublisher({
   validateOnly: args.includes("--validate-only"),
-  dryIfDisabled: args.includes("--dry-if-disabled")
+  dryIfDisabled: args.includes("--dry-if-disabled"),
+  ...(process.env.BOARDLESSAI_STATE_ROOT ? { stateRoot: process.env.BOARDLESSAI_STATE_ROOT } : {})
 })
   .then((result) => {
     console.log(JSON.stringify(result, null, 2));

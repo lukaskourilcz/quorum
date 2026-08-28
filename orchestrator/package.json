@@ -35,7 +35,7 @@
     "personal-growth:result": "tsx src/ventures/personal-growth/result-cli.ts",
     "proof:rooms": "tsx src/proof/portfolio-proof.ts",
     "programs:sync": "tsx src/programs/sync-cli.ts",
-    "social:publish": "tsx src/social/index.ts",
+    "social:publish": "node --import tsx src/social/index.ts",
     "social:migration-audit": "node --import tsx src/social/migration-audit-cli.ts",
     "social:release-audit": "node --import tsx src/social/release-audit-cli.ts",
     "sources:shadow": "tsx src/sources/shadow.ts",
