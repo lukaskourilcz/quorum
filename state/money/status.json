@@ -1,42 +1,44 @@
 {
-  "schemaVersion": "monetization-status/1",
+  "schemaVersion": "monetization-status/2",
+  "posture": "information-only",
+  "executionEnabled": false,
   "methods": {
     "caught-up-sponsorship": {
       "status": "locked",
       "proposalPreparedAt": null,
       "ownerApprovalRef": null,
-      "updatedAt": "2026-08-20T04:03:53.732Z"
+      "updatedAt": "2026-08-28T04:01:06.060Z"
     },
     "mma-files-sponsorship-affiliate": {
       "status": "locked",
       "proposalPreparedAt": null,
       "ownerApprovalRef": null,
-      "updatedAt": "2026-08-20T04:03:53.732Z"
+      "updatedAt": "2026-08-28T04:01:06.060Z"
     },
     "titty-tuesdays-commerce": {
       "status": "locked",
       "proposalPreparedAt": null,
       "ownerApprovalRef": null,
-      "updatedAt": "2026-08-20T04:03:53.732Z"
+      "updatedAt": "2026-08-28T04:01:06.060Z"
     },
     "fightaiq-none": {
       "status": "locked",
       "proposalPreparedAt": null,
       "ownerApprovalRef": null,
-      "updatedAt": "2026-08-20T04:03:53.732Z"
+      "updatedAt": "2026-08-28T04:01:06.060Z"
     },
     "carousel-studio-internal": {
       "status": "locked",
       "proposalPreparedAt": null,
       "ownerApprovalRef": null,
-      "updatedAt": "2026-08-20T04:03:53.732Z"
+      "updatedAt": "2026-08-28T04:01:06.060Z"
     },
     "marketingshark-internal": {
       "status": "locked",
       "proposalPreparedAt": null,
       "ownerApprovalRef": null,
-      "updatedAt": "2026-08-20T04:03:53.732Z"
+      "updatedAt": "2026-08-28T04:01:06.060Z"
     }
   },
-  "updatedAt": "2026-08-20T04:03:53.732Z"
+  "updatedAt": "2026-08-28T04:01:06.060Z"
 }

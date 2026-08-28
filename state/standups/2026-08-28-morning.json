@@ -1,0 +1,742 @@
+{
+  "schemaVersion": 1,
+  "cycleId": "20260828040106-morning",
+  "date": "2026-08-28",
+  "phase": "morning",
+  "episode": {
+    "id": "EP-20260828-MORNING",
+    "shift": "morning",
+    "title": "Morning briefing",
+    "hours": "06:00–14:00",
+    "nextShift": "afternoon",
+    "handoff": "Pass priorities, evidence gaps and blocked work to the afternoon shift."
+  },
+  "fixture": false,
+  "status": "NO_ACTION",
+  "stage": "VALIDATION",
+  "operatingBrief": "Four live council positions reviewed the morning shift internal work item. The council held the internal work item. No external action, business claim or stage change was approved. SPARK carried one VAULT-screened Caught Up idea: Add a Pre-Publish Source Check.",
+  "participantReasons": [
+    {
+      "agent": "VIZE",
+      "reason": "owns council objective",
+      "participated": true
+    },
+    {
+      "agent": "FORGE",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "PULSE",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "LEDGER",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "SPARK",
+      "reason": "required by venture-morning preset",
+      "participated": true
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCRIBE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "LENS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "QUILL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RADAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "KEEPER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "THREADS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "INSTAGRAM",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PEOPLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "HERALD",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STET",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "HACEK",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VAULT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FRAME",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "RELAY",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "COHORT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FUNNEL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PALATE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SCENE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "STUNT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CORNER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "TAPE",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VIG",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SONAR",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CANVAS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "JAB",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "REACH",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "SPLIT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "EASEL",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "MOTIF",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PIVOT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "MAKO",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "CHUM",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "FOLIO",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "PLOT",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "GHOST",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "BOOKER",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "LETOPIS",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "VERBA",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    },
+    {
+      "agent": "TRIBUN",
+      "reason": "not relevant to this bounded room",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.036254,
+    "actualCycleUsd": 0.0952478,
+    "monthAllInUsd": 13.3615422,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "The council held the internal work item. No external action, business claim or stage change was approved.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "PULSE",
+      "summary": "Yesterday’s packet records no ratings or content scores, so content quality cannot be judged. Eight scheduled rooms are unaccounted for, including tt-marketing and gv-brief. Spend stayed below both caps, but the record is incomplete.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Records show spend within both caps, but eight scheduled rooms are unaccounted for on 2026-08-27. The packet also records one budget-disabled skip. This is not a green day because meeting records are incomplete.",
+      "evidenceRefs": []
+    },
+    {
+      "agent": "SPARK",
+      "summary": "Add a Pre-Publish Source Check: Introduce a bounded checklist before publishing that records each item’s source category and flags missing or unclear provenance for review. This supports a healthier source mix without changing the publishing schedule or requiring new tooling.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "PULSE",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "NO_ACTION",
+      "veto": true
+    }
+  ],
+  "tasks": [
+    {
+      "id": "OPS-OBSERVE",
+      "owner": "VIZE",
+      "summary": "Review the current operating record and request at most one allowlisted specialist room when a concrete decision or evidence gap needs it. Content-critical service rooms keep their fixed delivery windows.",
+      "status": "blocked"
+    }
+  ],
+  "growthPlan": "NO_POST — this shift is an internal operating record, not a market or publishing event.",
+  "operatingSignals": {
+    "snapshotRef": "state/autonomy/latest.json",
+    "growth": [
+      {
+        "venture": "caught-up",
+        "objective": "Publish reliably while widening the healthy source mix",
+        "signals": [
+          {
+            "id": "edition-cadence",
+            "label": "Edition cadence",
+            "value": 0.9,
+            "unit": "ratio",
+            "detail": "18 delivered, 2 failed; NO_EDITION is neutral."
+          },
+          {
+            "id": "source-coverage",
+            "label": "Healthy source breadth",
+            "value": 32,
+            "unit": "count",
+            "detail": "32 enabled allowlisted sources."
+          }
+        ]
+      },
+      {
+        "venture": "titty-tuesdays",
+        "objective": "Build a complete inventory of campaigns that are ready to launch",
+        "signals": [
+          {
+            "id": "campaign-inventory",
+            "label": "Launch-ready campaigns",
+            "value": 0,
+            "unit": "count",
+            "detail": "0 campaign plans pass the complete-plan checks."
+          }
+        ]
+      },
+      {
+        "venture": "goviral",
+        "objective": "Deliver a weekly trend brief and keep a rated inventory of marketing plays for every venture",
+        "signals": [
+          {
+            "id": "campaign-inventory",
+            "label": "Launch-ready campaigns",
+            "value": 0,
+            "unit": "count",
+            "detail": "0 campaign plans pass the complete-plan checks."
+          }
+        ]
+      },
+      {
+        "venture": "booksofhistory",
+        "objective": "Turn cheap candidate intelligence into researched, verified, twice-told book stories",
+        "signals": [
+          {
+            "id": "feature-cadence",
+            "label": "Features per completed cycle",
+            "value": null,
+            "unit": "ratio",
+            "detail": "No completed BOOKSOFHISTORY cycles are recorded yet."
+          },
+          {
+            "id": "research-efficiency",
+            "label": "Paid dossiers used",
+            "value": null,
+            "unit": "ratio",
+            "detail": "No paid BOOKSOFHISTORY dossiers are recorded yet."
+          }
+        ]
+      },
+      {
+        "venture": "fightaiq",
+        "objective": "Improve verified fight coverage and build readiness dossiers",
+        "signals": [
+          {
+            "id": "event-fighter-coverage",
+            "label": "Verified fighter files",
+            "value": 93,
+            "unit": "count",
+            "detail": "93 valid UFC or Oktagon fighter files."
+          },
+          {
+            "id": "two-source-agreement",
+            "label": "Two-source agreement",
+            "value": 0.4016,
+            "unit": "ratio",
+            "detail": "249 of 620 fighter fields are corroborated."
+          },
+          {
+            "id": "readiness-dossiers",
+            "label": "Readiness dossiers",
+            "value": 0,
+            "unit": "count",
+            "detail": "0 completed-event review dossiers."
+          }
+        ]
+      },
+      {
+        "venture": "carousel-studio",
+        "objective": "Grow a checked library of original, reusable carousel layouts",
+        "signals": [
+          {
+            "id": "live-template-library",
+            "label": "Live carousel templates",
+            "value": 12,
+            "unit": "count",
+            "detail": "12 templates passed every brand and format check."
+          }
+        ]
+      },
+      {
+        "venture": "marketingshark",
+        "objective": "Draft one complete bilingual carousel package per active brand per day",
+        "signals": [
+          {
+            "id": "package-cadence",
+            "label": "Drafted carousel packages",
+            "value": 0,
+            "unit": "count",
+            "detail": "0 packages carry both carousels and a recorded render."
+          }
+        ]
+      },
+      {
+        "venture": "mma-files",
+        "objective": "Fill evidenced article slots and render verified FightAIQ coverage",
+        "signals": [
+          {
+            "id": "slot-fill",
+            "label": "Evidenced slot fill",
+            "value": 0.8636,
+            "unit": "ratio",
+            "detail": "19 published articles for 22 assigned slots."
+          },
+          {
+            "id": "rendered-fightaiq-coverage",
+            "label": "FightAIQ files rendered",
+            "value": 29,
+            "unit": "count",
+            "detail": "29 distinct fighter references reached published articles."
+          }
+        ]
+      },
+      {
+        "venture": "door-money",
+        "objective": "Turn the book into a daily storytelling channel and a weekly owner action plan",
+        "signals": [
+          {
+            "id": "package-cadence",
+            "label": "Draft recommendation packages",
+            "value": 15,
+            "unit": "count",
+            "detail": "15 complete evidence-linked recommendation packages were recorded."
+          },
+          {
+            "id": "action-completion",
+            "label": "Owner action completion",
+            "value": null,
+            "unit": "ratio",
+            "detail": "No owner actions have been issued; completion is not measured."
+          }
+        ]
+      },
+      {
+        "venture": "tehdejsi-svet",
+        "objective": "Turn the product's curated past into bilingual family conversations",
+        "signals": [
+          {
+            "id": "feature-cadence",
+            "label": "Features per completed cycle",
+            "value": null,
+            "unit": "ratio",
+            "detail": "No completed Tehdejsi svet cycles are recorded yet."
+          },
+          {
+            "id": "research-efficiency",
+            "label": "Paid briefs used",
+            "value": null,
+            "unit": "ratio",
+            "detail": "No paid Tehdejsi svet briefs are recorded yet."
+          }
+        ]
+      },
+      {
+        "venture": "kvorum",
+        "objective": "Publish 1–2 sourced, original political recommendations a day and build the receipts ledger",
+        "signals": [
+          {
+            "id": "package-cadence",
+            "label": "Drafted carousel packages",
+            "value": 0,
+            "unit": "count",
+            "detail": "0 packages carry both carousels and a recorded render."
+          },
+          {
+            "id": "recommendation-approval",
+            "label": "Recommendation approval",
+            "value": null,
+            "unit": "ratio",
+            "detail": "No Kvórum recommendations are recorded; approval is not measured."
+          }
+        ]
+      },
+      {
+        "venture": "personal-growth",
+        "objective": "Plan and measure the owner's personal publishing rhythm",
+        "signals": [
+          {
+            "id": "action-completion",
+            "label": "Owner action completion",
+            "value": null,
+            "unit": "ratio",
+            "detail": "No owner actions have been issued; completion is not measured."
+          }
+        ]
+      }
+    ],
+    "quality": {
+      "killedSlotReasons": {
+        "evidence": 4,
+        "other": 16
+      },
+      "vetoRate": 0.0897,
+      "firstPassRate": 0,
+      "retryRate": 0,
+      "sourceAgreementRate": 0.4016,
+      "verifierPassRate": 0
+    }
+  },
+  "operationsReview": {
+    "reviewDate": "2026-08-27",
+    "perVentureVerdicts": [
+      {
+        "ventureId": "caught-up",
+        "verdict": "needs-attention",
+        "evidence": "No delivery record appears in yesterday’s packet; cadence signal is historical, not daily proof."
+      },
+      {
+        "ventureId": "titty-tuesdays",
+        "verdict": "needs-attention",
+        "evidence": "Launch-ready campaign count is 0, and tt-marketing is unaccounted for on 2026-08-27."
+      },
+      {
+        "ventureId": "goviral",
+        "verdict": "needs-attention",
+        "evidence": "Launch-ready campaign count is 0, and gv-brief is unaccounted for on 2026-08-27."
+      },
+      {
+        "ventureId": "booksofhistory",
+        "verdict": "needs-attention",
+        "evidence": "No completed BOOKSOFHISTORY cycles are recorded; bh-desk is unaccounted for."
+      },
+      {
+        "ventureId": "fightaiq",
+        "verdict": "needs-attention",
+        "evidence": "Readiness dossiers are 0 and two-source agreement is 0.4016."
+      },
+      {
+        "ventureId": "carousel-studio",
+        "verdict": "on-track",
+        "evidence": "The packet records 12 live carousel templates passing brand and format checks."
+      },
+      {
+        "ventureId": "marketingshark",
+        "verdict": "stalled",
+        "evidence": "Drafted carousel packages are 0, with package completeness listed among critical misses."
+      },
+      {
+        "ventureId": "mma-files",
+        "verdict": "needs-attention",
+        "evidence": "Slot fill is 19 of 22, while mag-desk is unaccounted for."
+      },
+      {
+        "ventureId": "door-money",
+        "verdict": "needs-attention",
+        "evidence": "15 recommendation packages exist, but no owner actions have been issued or measured."
+      },
+      {
+        "ventureId": "tehdejsi-svet",
+        "verdict": "needs-attention",
+        "evidence": "No completed cycles are recorded, and ts-desk is unaccounted for."
+      },
+      {
+        "ventureId": "kvorum",
+        "verdict": "needs-attention",
+        "evidence": "No recommendations are recorded; kv-desk was skipped because the budget shape disabled it."
+      },
+      {
+        "ventureId": "personal-growth",
+        "verdict": "needs-attention",
+        "evidence": "No owner actions are issued, and personal-growth desk validity is a critical miss."
+      }
+    ],
+    "fixTasks": [
+      {
+        "proposedBy": "PULSE",
+        "title": "Record outcomes for unaccounted meetings",
+        "scope": "orchestrator/src/meetings",
+        "expectedProof": "Each scheduled 2026-08-27 room has a held record or explicit skip record."
+      }
+    ],
+    "growthIdeas": [],
+    "meetings": {
+      "scheduled": 18,
+      "held": 9,
+      "skipped": [
+        {
+          "phase": "kv-desk",
+          "reason": "The countersign-aware budget shape disabled this phase."
+        }
+      ],
+      "unaccounted": [
+        "venture-morning",
+        "mag-editorial",
+        "tt-marketing",
+        "bh-desk",
+        "gv-brief",
+        "ts-desk",
+        "mma-analysis",
+        "mag-desk"
+      ]
+    },
+    "decisionFileRef": "decisions/2026-08-28-operations.md"
+  },
+  "droppedSeats": [
+    {
+      "agent": "VIZE",
+      "reason": "Unparsable on both attempts: Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    },
+    {
+      "agent": "FORGE",
+      "reason": "Unparsable on both attempts: Response truncated at the 700-token cap for claude-sonnet-5; raise maxOutputTokens"
+    }
+  ],
+  "droppedRequests": [
+    {
+      "agent": "AUDIT",
+      "field": "operations",
+      "reason": "AUDIT holds the veto and proposes no work, so its operations fields were discarded"
+    }
+  ],
+  "starvationReview": [
+    {
+      "ventureId": "fightaiq",
+      "outcome": "why-not",
+      "reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; a room was requested. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
+      "priorityItemId": null
+    },
+    {
+      "ventureId": "mma-files",
+      "outcome": "why-not",
+      "reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; a room was requested. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
+      "priorityItemId": null
+    }
+  ],
+  "quarterlyKpis": {
+    "snapshotRef": "state/kpis/latest.json",
+    "quarterId": "2026-Q1",
+    "onTrack": 33,
+    "atRisk": 6,
+    "offTrack": 24,
+    "unavailable": 28,
+    "criticalMisses": [
+      "company.monthly-api-usd",
+      "marketingshark.package-completeness",
+      "marketingshark.truth-gate-violations",
+      "door-money.cash-spend",
+      "tehdejsi-svet.language-parity",
+      "tehdejsi-svet.research-spend-usd",
+      "kvorum.desk-reliability",
+      "kvorum.published-claim-reference-rate",
+      "personal-growth.desk-valid-result-rate",
+      "personal-growth.brief-availability-rate",
+      "personal-growth.provenance-completeness-rate",
+      "personal-growth.unavailable-honesty-rate"
+    ]
+  },
+  "eveningOutcome": null,
+  "caughtUpIdeaRef": "idea-2026-08-28-a468c2d0",
+  "morningIdeaNamespace": "caught-up",
+  "roomTranscript": {
+    "openedAt": "2026-08-28T04:01:06.060Z",
+    "closedAt": "2026-08-28T04:01:54.801Z",
+    "gavel": "VIZE",
+    "setting": "Live Morning shift council. The room can assess only the approved operating item; pre-revenue authority and human approval gates remain binding.",
+    "turns": [
+      {
+        "agent": "VIZE",
+        "mode": "gavel",
+        "sentAt": "2026-08-28T04:01:06.060Z",
+        "text": "The morning shift opens. We are reviewing Set today's bounded specialist agendas; the scope is internal and no external action is on the table."
+      },
+      {
+        "agent": "LEDGER",
+        "mode": "reads-ledger",
+        "addressedTo": "VIZE",
+        "sentAt": "2026-08-28T04:01:06.061Z",
+        "text": "The recorded API cost for this cycle is $0.0952. Month-to-date API cost is $13.3615 against the $50.00 all-in operating limit."
+      },
+      {
+        "agent": "PULSE",
+        "mode": "response",
+        "sentAt": "2026-08-28T04:01:46.157Z",
+        "text": "Yesterday’s packet records no ratings or content scores, so content quality cannot be judged. Eight scheduled rooms are unaccounted for, including tt-marketing and gv-brief. Spend stayed below both caps, but the record is incomplete."
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "raises-concern",
+        "sentAt": "2026-08-28T04:01:51.475Z",
+        "text": "Records show spend within both caps, but eight scheduled rooms are unaccounted for on 2026-08-27. The packet also records one budget-disabled skip. This is not a green day because meeting records are incomplete."
+      },
+      {
+        "agent": "SPARK",
+        "mode": "statement",
+        "sentAt": "2026-08-28T04:01:06.063Z",
+        "text": "Add a Pre-Publish Source Check. VAULT recorded it as a variant of an existing idea; it is the one Caught Up next-step summary for the product room.",
+        "evidenceRefs": [
+          "idea-2026-08-28-a468c2d0"
+        ]
+      },
+      {
+        "agent": "VIZE",
+        "mode": "close",
+        "sentAt": "2026-08-28T04:01:54.801Z",
+        "text": "The council held the internal work item. No external action, business claim or stage change was approved."
+      }
+    ]
+  },
+  "generatedAt": "2026-08-28T04:01:54.801Z"
+}

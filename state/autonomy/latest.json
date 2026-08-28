@@ -1,6 +1,6 @@
 {
   "schemaVersion": "autonomy-snapshot/1",
-  "generatedAt": "2026-08-20T04:03:53.732Z",
+  "generatedAt": "2026-08-28T04:01:06.060Z",
   "metricsIngestionEnabled": false,
   "growth": [
     {
@@ -10,9 +10,9 @@
         {
           "id": "edition-cadence",
           "label": "Edition cadence",
-          "value": 0.9231,
+          "value": 0.9,
           "unit": "ratio",
-          "detail": "12 delivered, 1 failed; NO_EDITION is neutral."
+          "detail": "18 delivered, 2 failed; NO_EDITION is neutral."
         },
         {
           "id": "source-coverage",
@@ -83,9 +83,9 @@
         {
           "id": "two-source-agreement",
           "label": "Two-source agreement",
-          "value": 0.4026,
+          "value": 0.4016,
           "unit": "ratio",
-          "detail": "248 of 616 fighter fields are corroborated."
+          "detail": "249 of 620 fighter fields are corroborated."
         },
         {
           "id": "readiness-dossiers",
@@ -129,16 +129,16 @@
         {
           "id": "slot-fill",
           "label": "Evidenced slot fill",
-          "value": 0.7333,
+          "value": 0.8636,
           "unit": "ratio",
-          "detail": "11 published articles for 15 assigned slots."
+          "detail": "19 published articles for 22 assigned slots."
         },
         {
           "id": "rendered-fightaiq-coverage",
           "label": "FightAIQ files rendered",
-          "value": 17,
+          "value": 29,
           "unit": "count",
-          "detail": "17 distinct fighter references reached published articles."
+          "detail": "29 distinct fighter references reached published articles."
         }
       ]
     },
@@ -149,9 +149,9 @@
         {
           "id": "package-cadence",
           "label": "Draft recommendation packages",
-          "value": 7,
+          "value": 15,
           "unit": "count",
-          "detail": "7 complete evidence-linked recommendation packages were recorded."
+          "detail": "15 complete evidence-linked recommendation packages were recorded."
         },
         {
           "id": "action-completion",
@@ -201,22 +201,35 @@
           "detail": "No Kvórum recommendations are recorded; approval is not measured."
         }
       ]
+    },
+    {
+      "venture": "personal-growth",
+      "objective": "Plan and measure the owner's personal publishing rhythm",
+      "signals": [
+        {
+          "id": "action-completion",
+          "label": "Owner action completion",
+          "value": null,
+          "unit": "ratio",
+          "detail": "No owner actions have been issued; completion is not measured."
+        }
+      ]
     }
   ],
   "quality": {
     "killedSlotReasons": {
       "evidence": 4,
-      "other": 9
+      "other": 16
     },
-    "vetoRate": 0.0986,
+    "vetoRate": 0.0897,
     "firstPassRate": 0,
     "retryRate": 0,
-    "sourceAgreementRate": 0.4026,
+    "sourceAgreementRate": 0.4016,
     "verifierPassRate": 0,
     "denominators": {
-      "meetings": 142,
+      "meetings": 234,
       "proofs": 0,
-      "fighterFields": 616
+      "fighterFields": 620
     }
   }
 }
