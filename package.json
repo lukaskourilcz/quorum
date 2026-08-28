@@ -46,6 +46,7 @@
     "proof:rooms": "pnpm --filter @boardlessai/orchestrator proof:rooms",
     "social:publish": "pnpm --filter @boardlessai/orchestrator social:publish",
     "social:migration-audit": "pnpm --filter @boardlessai/orchestrator social:migration-audit",
+    "social:release-audit": "pnpm --filter @boardlessai/orchestrator social:release-audit",
     "sources:shadow": "pnpm --filter @boardlessai/orchestrator sources:shadow",
     "site:smoke": "node scripts/smoke-site.mjs",
     "test": "pnpm --filter @boardlessai/carousel-studio build && pnpm -r --parallel exec vitest run --passWithNoTests",

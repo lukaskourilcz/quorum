@@ -65,15 +65,19 @@ function mergedIds(...sets: ReadonlySet<string>[]): Set<string> {
   return new Set(sets.flatMap((set) => [...set]));
 }
 
-function redactedConnectorError(error: unknown, environment: NodeJS.ProcessEnv, target: ResolvedPublisherTarget): string {
+export function redactSocialError(error: unknown, sensitiveValues: readonly string[] = []): string {
   let message = error instanceof Error ? error.message : String(error);
-  for (const reference of [target.credentialRef, target.nativeAccountIdRef]) {
-    const value = environment[reference];
-    if (value) message = message.split(value).join("[REDACTED]");
+  for (const value of sensitiveValues) {
+    if (value) message = message.split(value).join("[REDACTED]").split(encodeURIComponent(value)).join("[REDACTED]");
   }
   return message
     .replace(/(access[_-]?token|authorization|cookie|client[_-]?secret)\s*[=:]\s*[^\s&]+/giu, "$1=[REDACTED]")
+    .replace(/bearer\s+[a-z0-9._~+\/-]+/giu, "Bearer [REDACTED]")
     .slice(0, 500);
+}
+
+function redactedConnectorError(error: unknown, environment: NodeJS.ProcessEnv, target: ResolvedPublisherTarget): string {
+  return redactSocialError(error, [environment[target.credentialRef] ?? "", environment[target.nativeAccountIdRef] ?? ""]);
 }
 
 function sourceVentureActive(item: CapabilityAwareQueueItem, activation: SocialActivation): boolean {

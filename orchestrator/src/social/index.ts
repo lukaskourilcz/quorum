@@ -1,5 +1,5 @@
 import "../env.js";
-import { runSocialPublisher } from "./runner.js";
+import { redactSocialError, runSocialPublisher } from "./runner.js";
 
 const args = process.argv.slice(2);
 
@@ -18,7 +18,7 @@ runSocialPublisher({
       JSON.stringify(
         {
           status: "failed",
-          error: error instanceof Error ? error.message : String(error)
+          error: redactSocialError(error)
         },
         null,
         2
