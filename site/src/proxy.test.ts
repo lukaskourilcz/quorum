@@ -39,6 +39,7 @@ describe("admin session proxy", () => {
     configure();
     expect(proxy(authenticated()).status).toBe(200);
     expect(proxy(authenticated("/admin/operations?view=incidents")).status).toBe(200);
+    expect(proxy(authenticated("/admin/social-profiles?section=activity-setup")).status).toBe(200);
   });
 
   it("protects the Operations control center and preserves its destination", () => {
@@ -48,6 +49,15 @@ describe("admin session proxy", () => {
     const location = new URL(response.headers.get("location")!);
     expect(location.pathname).toBe("/admin/login");
     expect(location.searchParams.get("returnTo")).toBe("/admin/operations?view=schedule");
+  });
+
+  it("protects Social Profiles and preserves its section bookmark", () => {
+    configure();
+    const response = proxy(new NextRequest("https://boardless.example/admin/social-profiles?section=amplification-profiles"));
+    expect(response.status).toBe(307);
+    const location = new URL(response.headers.get("location")!);
+    expect(location.pathname).toBe("/admin/login");
+    expect(location.searchParams.get("returnTo")).toBe("/admin/social-profiles?section=amplification-profiles");
   });
 
   it("returns JSON instead of a login page for expired API requests", async () => {

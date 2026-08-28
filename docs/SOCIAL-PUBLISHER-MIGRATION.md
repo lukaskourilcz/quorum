@@ -7,8 +7,10 @@ Authority: GitHub #409, consuming #405, #406, #415 and the exact capability/isol
 ## Runtime truth
 
 `config/social-publisher-registry.json` is the versioned profile/connection registry used by the
-publisher. It records the three legacy primary profiles and six separate Instagram/Threads
-bindings. Every committed binding is held, unverified and has null human activation. Credential
+publisher. It records three legacy primary profiles, three connectionless internal proposals and
+six separate Instagram/Threads bindings. Door Money has the one exact #424 package edge;
+BOOKSOFHISTORY and Tehdejší svět remain independently proposed and capability-denied. Every
+committed binding is held, unverified and has null human activation. Credential
 and native-account identifiers are environment **reference names** only; values are neither stored
 nor returned by the target resolver.
 

@@ -48,6 +48,15 @@ render its canonical panel, retain the active navigation state, stay within the 
 make no write request, and expose none of the private journal serialization fields. A serious or
 critical axe violation fails every theme and breakpoint sample.
 
+### Social Profiles matrix
+
+The protected Social Profiles route uses the same six viewport sizes and both themes. An explicit
+`fixtures=profile-matrix` query loads the 50 shared #406 simulations, labels every one synthetic
+and leaves the six real Venture Profiles plus the empty real Amplification collection unchanged.
+The test checks contained tables and long labels, desktop/mobile navigation, stable section and
+detail bookmarks, bounded lifecycle controls and WCAG A/AA rules. Production ignores the fixture
+request.
+
 ## Navigation and interaction proof
 
 The navigation tests derive their expected destinations from the same venture registry as the product. They verify the complete canonical destination list and active URL through:
