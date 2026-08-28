@@ -71,4 +71,3 @@ dependency. It separates:
 
 The page also shows the 28-day baseline, bounded experiments and held proposal count. Missing
 records remain unavailable. It exposes no identity, private message, ad purchase or spend control.
-

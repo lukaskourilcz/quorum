@@ -16,4 +16,3 @@ export async function POST(request: Request): Promise<Response> {
   try { const result = await applySocialCampaignAdminAction(value); return json({ ok: true, ...result }, result.changed ? 201 : 200); }
   catch (error) { if (error instanceof SocialCampaignActionError) return json({ error: error.message, code: error.code }, status(error)); return json({ error: "The Social Profiles campaign action was not saved." }, 500); }
 }
-

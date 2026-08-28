@@ -57,4 +57,3 @@ coverage and inventory counts, original/support projection, candidate due/expiry
 state, latest build receipt, actual recorded cost and incidents. Missing inventory is displayed as
 unavailable rather than zero. The surface has no queue, publish, account activation or routine-scope
 action.
-

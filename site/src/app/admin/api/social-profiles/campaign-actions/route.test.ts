@@ -42,4 +42,3 @@ describe("Social Profiles campaign actions route", () => {
     expect((await POST(request({ ...body, reason: "Authorization: Bearer ghp_private" }))).status).toBe(422);
   });
 });
-

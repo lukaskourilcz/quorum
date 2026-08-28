@@ -1,7 +1,9 @@
 # Social Distribution release report
 
-Date: 2026-08-28  
-Program: GitHub #403  
+Date: 2026-08-28
+
+Program: GitHub #403
+
 Final gate: GitHub #413
 
 This report records repository readiness only. It grants no account, OAuth, credential, provider,

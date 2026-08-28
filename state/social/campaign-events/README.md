@@ -7,4 +7,3 @@ Contest Radar.
 
 Material copy/window edits create a new binding and invalidate prior approval. Stale bindings are
 rejected during projection.
-

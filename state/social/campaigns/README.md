@@ -9,4 +9,3 @@ record; a same-path content conflict is refused.
 
 The directory contains no draft-release, public-scrape, relationship or Contest Radar fallback.
 An empty directory means no verified campaign has been created.
-
