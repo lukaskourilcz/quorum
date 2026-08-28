@@ -599,6 +599,20 @@ export function validateWebDevBilingualParity(input: {
   return [...new Set(reasons)];
 }
 
+export function parseWebDevCandidates(values: readonly unknown[]): {
+  candidates: WebDevCandidate[];
+  dropped: number;
+} {
+  const candidates: WebDevCandidate[] = [];
+  let dropped = 0;
+  for (const value of values) {
+    const parsed = WebDevCandidateSchema.safeParse(value);
+    if (parsed.success) candidates.push(parsed.data);
+    else dropped += 1;
+  }
+  return { candidates, dropped };
+}
+
 export type WebDevTopic = z.infer<typeof WebDevTopicSchema>;
 export type WebDevChangeKind = z.infer<typeof WebDevChangeKindSchema>;
 export type WebDevImpactScope = z.infer<typeof WebDevImpactScopeSchema>;
