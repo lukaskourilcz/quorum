@@ -26,10 +26,11 @@ describe("WebDev Signal founding boundary", () => {
     const sources = await repoText("docs/WEBDEV-SIGNAL-SOURCES.md");
     expect(sources).toContain("Lead/corroboration only; no factual authority");
     expect(sources).toContain("`github-npm-advisories`");
-    for (const source of ["`cloudflare-changelog`", "`vercel-changelog`", "`netlify-changelog`", "`w3c-news`"]) {
+    for (const source of ["`vercel-changelog`", "`netlify-changelog`", "`w3c-news`"]) {
       const row = sources.split("\n").find((line) => line.includes(source));
       expect(row).toContain("**held**");
     }
+    expect(sources.split("\n").find((line) => line.includes("`cloudflare-developer-platform`"))).toContain("**keep**");
     expect(sources).toContain("sharing a host never grants access to another repository");
   });
 
