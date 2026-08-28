@@ -62,6 +62,10 @@ and carries the original target, reason, evidence, asset, content, policy, appro
 without rerunning selection. It explicitly leaves original-content ratio, cooldown, cadence,
 provider, routine-scope and kill-switch checks for daily selection and grants no authority.
 
+The receiving #418 inventory persists only the immutable campaign reference and prepared content
+reference. It never recalculates the campaign target, approval binding or score. See
+`docs/SOCIAL-CONTENT-RUNWAY.md` for the rolling inventory, caching and honest-shortage behavior.
+
 ## Admin and prohibited actions
 
 The canonical `/admin/social-profiles?section=campaigns` section reads campaign, decision and event
@@ -74,4 +78,3 @@ The same-origin owner-only campaign route accepts the six exact actions above, l
 canonical GitHub writer in production. It cannot publish, queue, contact a relationship, automate
 likes/follows/comments/replies/reposts/DMs, create an account, finish OAuth, buy a provider or
 handle Contest Radar.
-

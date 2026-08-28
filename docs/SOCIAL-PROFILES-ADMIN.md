@@ -9,8 +9,9 @@ Authority: GitHub #407, consuming #406, #415, #424 and the proposed Social Distr
 `/admin/social-profiles` reads one server-only snapshot from
 `site/src/lib/social-profiles/snapshot.ts`. It validates the publisher registry, official
 connections, the #415 amplifier portfolio and central policy, immutable verified-release
-campaigns, campaign decisions/events, append-only profile events, the #424 capability map,
-activation evidence and profile/connection pause records. A malformed item
+campaigns, campaign decisions/events, append-only profile events, optional Network evidence,
+provider control-plane evidence, #418 strategies/inventories/build receipts/incidents, the #424
+capability map, activation evidence and profile/connection pause records. A malformed item
 increments its own dropped count. Missing evidence stays unavailable.
 
 The client receives bounded profile and connection fields, public handles, approved scope names
@@ -20,11 +21,12 @@ enter either profile collection. BOOKSOFHISTORY and Tehdejší svět remain sepa
 no cross-use relationship. Door Money carries only its exact `approved-publish-package/1` edge and
 no account or connection.
 
-The stable core sections are Venture Profiles, Amplification Profiles, Campaigns and Activity &
-setup. The Campaigns section is owned by #410 and reads only its validated existing store; Network,
-Providers, Results, Content runway, Today, Learning and Plan & progress extend the same snapshot
-and navigation only in their owning issues. CONTEST RADAR remains deferred and has no source or
-control here.
+The stable sections are Venture Profiles, Amplification Profiles, Campaigns, optional Network,
+Providers & automation health, Content runway, and Activity & setup. Campaigns reads only #410's
+validated store. Content runway exposes #418 strategy, planning, receipt and incident evidence but
+has no queue or publish action. Results, Today, Learning and Plan & progress extend the same
+snapshot and navigation only in their owning issues. CONTEST RADAR remains deferred and has no
+source or control here.
 
 ## Lifecycle writer
 
