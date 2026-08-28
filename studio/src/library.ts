@@ -727,6 +727,29 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       secondary: "#1e3f39"
     },
     fonts: { headline: "Literata", body: "Inter", mono: "IBM Plex Mono" }
+  }),
+  "webdev-signal": BrandTokensSchema.parse({
+    schemaVersion: "carousel-brand/1",
+    id: "webdev-signal",
+    name: "WebDev Signal",
+    logoText: "WEBDEV SIGNAL",
+    colors: {
+      // Ink and paper first: the identity is a precise editorial change record, not a terminal.
+      background: "#0b1115",
+      surface: "#131c22",
+      "surface-strong": "#1d2931",
+      foreground: "#f2f7f5",
+      muted: "#b9c8c5",
+      accent: "#82e6c1",
+      secondary: "#f7c66a",
+      stable: "#82e6c1",
+      preview: "#f7c66a",
+      security: "#ff9a9a",
+      breaking: "#d8b4fe",
+      insertion: "#82e6c1",
+      removal: "#ff9a9a"
+    },
+    fonts: { headline: "Figtree", body: "Public Sans", mono: "IBM Plex Mono" }
   })
 };
 
