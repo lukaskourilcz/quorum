@@ -439,7 +439,7 @@ export const WebDevEditionPackageSchema = z.strictObject({
   }),
   instagramCaption: z.string().trim().min(1).max(2_200).optional(),
   instagramPanels: z.array(z.strictObject({
-    role: z.enum(["cover", "change", "impact", "action", "source"]),
+    role: z.enum(["cover", "change", "change-impact", "impact", "action", "source"]),
     heading: z.string().trim().min(1).max(120),
     body: z.string().trim().min(1).max(500)
   })).min(3).max(8),

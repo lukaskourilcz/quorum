@@ -51,6 +51,7 @@ function identifierList(record: WebDevRecord): WebDevDesignPayload["identifiers"
 
 function semanticsFor(role: WebDevEditionPackage["instagramPanels"][number]["role"]) {
   if (role === "cover") return ["lead" as const];
+  if (role === "change-impact") return ["change" as const, "impact" as const];
   return [role] as Array<"change" | "impact" | "action" | "source">;
 }
 
@@ -66,9 +67,6 @@ export function createWebDevDesignPayload(input: {
   if (input.edition.status !== "approved") throw new Error("Design Lab accepts only approved WebDev Signal locale packages");
   if (input.edition.contentHash !== hash(Object.fromEntries(Object.entries(input.edition).filter(([key]) => key !== "contentHash")))) {
     throw new Error("Edition package hash does not match its immutable content");
-  }
-  if (input.edition.evidenceBriefRef !== input.editionRef && input.edition.evidenceBriefRef.length === 0) {
-    throw new Error("Edition package has no evidence brief reference");
   }
   const status = statusFor(input.record, input.brief);
   const identifiers = identifierList(input.record);

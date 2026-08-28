@@ -70,7 +70,7 @@ function editorial(locale: "cs" | "en", brief: WebDevEvidenceBrief, record: WebD
       ? `Opravený rozsah je ${record.fixedVersions.join(", ")}. Používáte-li ${affected}, ověřte instalovanou verzi${action ? ` a postupujte podle uvedeného kroku: ${action}` : "."}`
       : breaking || deprecation ? `Změna se týká ${affected}. Před aktualizací zkontrolujte dotčené použití${action ? ` a postupujte podle uvedeného kroku: ${action}` : "."}`
       : preview ? `Jde o ${brief.releaseStability}, nikoli stabilní vydání. Vývojáři mohou změnu otestovat proti vlastnímu projektu a sledovat další oficiální aktualizace.` : `Oficiální zdroj popisuje změnu pro ${record.project}. Před úpravou projektu zkontrolujte verzi, rozsah a migrační poznámky.`;
-    return { headline, deck, explanation, sourceLabel: "Oficiální zdroj", actionLabel: action ?? "Ověřte verzi a oficiální poznámky.", impactLabel: `Týká se: ${affected}.` };
+    return { headline, deck, explanation, sourceLabel: "Oficiální zdroj", actionLabel: action ?? "Oficiální podklady neuvádějí žádný další krok.", impactLabel: `Týká se: ${affected}.` };
   }
   const headline = security
     ? `${record.project}: fix available in ${version}`
@@ -85,7 +85,7 @@ function editorial(locale: "cs" | "en", brief: WebDevEvidenceBrief, record: WebD
     ? `The fixed scope is ${record.fixedVersions.join(", ")}. If a project uses ${affected}, verify the installed version${action ? ` and follow the stated action: ${action}` : "."}`
     : breaking || deprecation ? `The change affects ${affected}. Check the affected use before updating${action ? ` and follow the stated action: ${action}` : "."}`
     : preview ? `The accepted evidence describes a ${brief.releaseStability}, not stable availability. Test it against a real project and follow subsequent official updates.` : `The official source documents the change for ${record.project}. Check the exact version, affected workflow and migration notes before changing a project.`;
-  return { headline, deck, explanation, sourceLabel: "Official source", actionLabel: action ?? "Check the version and official notes.", impactLabel: `Affected scope: ${affected}.` };
+  return { headline, deck, explanation, sourceLabel: "Official source", actionLabel: action ?? "The official evidence states no additional action.", impactLabel: `Affected scope: ${affected}.` };
 }
 
 function packageFor(input: {
@@ -107,12 +107,18 @@ function packageFor(input: {
   const captionText = isCs
     ? `${copy.headline}\n\n${copy.deck}\n\n${copy.actionLabel}\n\nZdroj: ${source.url}`
     : `${copy.headline}\n\n${copy.deck}\n\n${copy.actionLabel}\n\nSource: ${source.url}`;
-  const panels: WebDevEditionPackage["instagramPanels"] = [
-    { role: "cover", heading: copy.headline, body: versionLabel(input.record) },
-    { role: "change", heading: isCs ? "Co se změnilo" : "What changed", body: copy.deck },
-    { role: "impact", heading: isCs ? "Koho se týká" : "Who is affected", body: copy.impactLabel }
-  ];
-  if (input.brief.safeActions.length > 0) panels.push({ role: "action", heading: isCs ? "Co zkontrolovat" : "What to check", body: copy.actionLabel });
+  const panels: WebDevEditionPackage["instagramPanels"] = input.brief.safeActions.length > 0
+    ? [
+        { role: "cover", heading: copy.headline, body: versionLabel(input.record) },
+        { role: "change", heading: isCs ? "Co se změnilo" : "What changed", body: copy.deck },
+        { role: "impact", heading: isCs ? "Koho se týká" : "Who is affected", body: copy.impactLabel },
+        { role: "action", heading: isCs ? "Co zkontrolovat" : "What to check", body: copy.actionLabel }
+      ]
+    : [
+        { role: "cover", heading: copy.headline, body: versionLabel(input.record) },
+        { role: "change-impact", heading: isCs ? "Změna a dopad" : "Change and impact", body: `${copy.deck} ${copy.impactLabel}` },
+        { role: "action", heading: isCs ? "Co zkontrolovat" : "What to check", body: copy.actionLabel }
+      ];
   if (input.brief.uncertainty.length > 0) panels.push({ role: "impact", heading: isCs ? "Hranice důkazů" : "Evidence boundary", body: input.brief.uncertainty[0]! });
   panels.push({ role: "source", heading: isCs ? "Zdroj" : "Source", body: `${copy.sourceLabel}: ${source.label}` });
   const instagramPanels = panels.slice(0, input.limits.instagramPanelsMax);

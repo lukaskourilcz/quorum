@@ -15,6 +15,7 @@ export function webDevSignalTemplateId(panelCount: number): string {
 }
 
 export function webDevSignalSlot(panelIndex: number, field: "locale" | "status" | "project" | "heading" | "body" | "footer"): string {
+  if (field === "locale" || field === "status" || field === "project") return `webdev-${field}`;
   const panel = String(panelIndex + 1).padStart(2, "0");
   return `panel-${panel}-${field}`;
 }
@@ -70,8 +71,8 @@ export function webDevSignalTemplate(panelCount: number): CarouselTemplate {
     description: "A source-forward change, impact and action carousel for native Czech and English editions.",
     citedObservationRefs: ["GitHub #436", "GitHub #442"],
     formats: deckFormats,
-    requiredSlots: Array.from({ length: panelCount }, (_, panelIndex) =>
-      fields.map((field) => webDevSignalSlot(panelIndex, field))).flat(),
+    requiredSlots: [...new Set(Array.from({ length: panelCount }, (_, panelIndex) =>
+      fields.map((field) => webDevSignalSlot(panelIndex, field))).flat())],
     slides: Array.from({ length: panelCount }, (_, panelIndex) => ({
       id: `slide-webdev-${String(panelIndex + 1).padStart(2, "0")}`,
       backgroundToken: panelIndex === 0 || panelIndex === panelCount - 1 ? "surface" : "background",
@@ -85,12 +86,12 @@ export function webDevSignalTemplate(panelCount: number): CarouselTemplate {
         { type: "logo", x: 0.08, y: 0.165, width: 0.46, height: 0.045, colorToken: "foreground", fontToken: "headline" },
         text(webDevSignalSlot(panelIndex, "locale"), 0.76, 0.165, 0.16, 0.035, {
           colorToken: "muted", fontToken: "mono", fontWeight: 700, minFontSize: 18, maxFontSize: 24,
-          maxChars: 16, maxLines: 1, align: "end", uppercase: true, tracking: 0.08
+          maxChars: 12, maxLines: 1, align: "end", uppercase: true, tracking: 0.08
         }),
         { type: "shape", x: 0.08, y: 0.235, width: 0.26, height: 0.055, fillToken: "accent", strokeWidth: 0, radius: 0.02 },
         text(webDevSignalSlot(panelIndex, "status"), 0.1, 0.244, 0.22, 0.035, {
           colorToken: "background", fontToken: "mono", fontWeight: 700, minFontSize: 18, maxFontSize: 23,
-          maxChars: 30, maxLines: 1, uppercase: true, tracking: 0.05
+          maxChars: 20, maxLines: 1, uppercase: true, tracking: 0.05
         }),
         text(webDevSignalSlot(panelIndex, "project"), 0.08, 0.315, 0.84, 0.06, {
           colorToken: "accent", fontToken: "mono", fontWeight: 700, minFontSize: 20, maxFontSize: 30,
@@ -98,7 +99,7 @@ export function webDevSignalTemplate(panelCount: number): CarouselTemplate {
         }),
         text(webDevSignalSlot(panelIndex, "heading"), 0.08, 0.405, 0.84, 0.15, {
           fontToken: "headline", fontWeight: 800, minFontSize: 38, maxFontSize: 72,
-          maxChars: 120, maxLines: 3
+          maxChars: 108, maxLines: 3
         }),
         text(webDevSignalSlot(panelIndex, "body"), 0.08, 0.59, 0.84, 0.16, {
           colorToken: "muted", minFontSize: 25, maxFontSize: 39, maxChars: 360, maxLines: 6
