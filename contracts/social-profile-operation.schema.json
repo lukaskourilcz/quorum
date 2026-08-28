@@ -1,0 +1,419 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-profile-operation/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^social-profile-operation-[a-f0-9]{20}$"
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "inputHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "supersedesOperationRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "profileId": {
+      "type": "string",
+      "maxLength": 140,
+      "pattern": "^social-profile-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "connectionId": {
+      "type": "string",
+      "maxLength": 160,
+      "pattern": "^social-connection-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "strategyRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "inventoryRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "campaignRefs": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "targetDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "timezone": {
+      "type": "string",
+      "const": "Europe/Prague"
+    },
+    "selectionWindow": {
+      "type": "object",
+      "properties": {
+        "notBefore": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        "notAfter": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        }
+      },
+      "required": [
+        "notBefore",
+        "notAfter"
+      ],
+      "additionalProperties": false
+    },
+    "candidateRefs": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "candidateSetHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "selectedCandidateRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "immutableHashes": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "targetHash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "contentHash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "assetHash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "windowHash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "targetHash",
+            "contentHash",
+            "assetHash",
+            "windowHash"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "gates": {
+      "minItems": 1,
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "gate": {
+            "type": "string",
+            "enum": [
+              "real-profile",
+              "connection",
+              "inventory",
+              "freshness",
+              "expiry",
+              "duplicate",
+              "capability",
+              "ratio",
+              "runway",
+              "cooldown",
+              "campaign-capacity",
+              "content",
+              "claims",
+              "accessibility",
+              "budget",
+              "provider",
+              "authority",
+              "routine-scope",
+              "kill-switch"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "hold",
+              "fail"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "evidenceRef": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "gate",
+          "status",
+          "reason",
+          "evidenceRef"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "routineScopeRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "routineScopeState": {
+      "type": "string",
+      "enum": [
+        "draft-only",
+        "matched",
+        "missing",
+        "mismatch",
+        "revoked",
+        "expired"
+      ]
+    },
+    "queue": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "itemId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "itemRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "payloadHash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "status": {
+              "type": "string",
+              "const": "queued"
+            }
+          },
+          "required": [
+            "itemId",
+            "itemRef",
+            "payloadHash",
+            "status"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "review",
+        "held",
+        "paused",
+        "NO_POST"
+      ]
+    },
+    "reasons": {
+      "minItems": 1,
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "selected",
+          "no-due-useful-candidate",
+          "rest-cadence-window",
+          "original-support-ratio",
+          "cooldown",
+          "incomplete-runway",
+          "provider-held",
+          "connection-held",
+          "missing-authority",
+          "routine-scope-mismatch",
+          "duplicate-similarity",
+          "asset-failure",
+          "alt-text-failure",
+          "claim-failure",
+          "evidence-failure",
+          "expired-campaign",
+          "budget-exhausted",
+          "malformed-strategy-inventory",
+          "stale-inventory",
+          "denied-capability",
+          "kill-switch",
+          "profile-paused",
+          "connection-paused",
+          "draft-only",
+          "sensitive-review",
+          "prepared-item-missing",
+          "ambiguous-delivery-reconciliation"
+        ]
+      }
+    },
+    "providerConnectionState": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "held",
+        "failed",
+        "ambiguous",
+        "unavailable"
+      ]
+    },
+    "actualCostUsd": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "reuseRefs": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "incidentRefs": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "ownerAttentionRefs": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "authorityGranted": {
+      "type": "boolean",
+      "const": false
+    },
+    "publishingAuthorized": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "idempotencyKey",
+    "inputHash",
+    "supersedesOperationRef",
+    "profileId",
+    "connectionId",
+    "strategyRef",
+    "inventoryRef",
+    "campaignRefs",
+    "targetDate",
+    "timezone",
+    "selectionWindow",
+    "candidateRefs",
+    "candidateSetHash",
+    "selectedCandidateRef",
+    "immutableHashes",
+    "gates",
+    "routineScopeRef",
+    "routineScopeState",
+    "queue",
+    "outcome",
+    "reasons",
+    "providerConnectionState",
+    "actualCostUsd",
+    "reuseRefs",
+    "incidentRefs",
+    "ownerAttentionRefs",
+    "replayed",
+    "createdAt",
+    "authorityGranted",
+    "publishingAuthorized"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/social-profile-operation.schema.json"
+}

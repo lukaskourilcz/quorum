@@ -1,0 +1,440 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-prepared-candidate/1"
+    },
+    "candidateId": {
+      "type": "string",
+      "pattern": "^social-inventory-candidate-[a-f0-9]{20}$"
+    },
+    "sourceVentureId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "releaseId": {
+      "type": "string",
+      "maxLength": 120,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "campaignId": {
+      "type": "string",
+      "maxLength": 120,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "profileId": {
+          "type": "string",
+          "maxLength": 140,
+          "pattern": "^social-profile-[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "profileRole": {
+          "type": "string",
+          "enum": [
+            "venture-primary",
+            "company-umbrella",
+            "owned-amplifier"
+          ]
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "umbrella",
+            "amplifier"
+          ]
+        },
+        "connectionId": {
+          "type": "string",
+          "maxLength": 160,
+          "pattern": "^social-connection-[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "capabilityRef": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "mapVersion": {
+                  "type": "string",
+                  "pattern": "^\\d+\\.\\d+\\.\\d+$"
+                },
+                "source": {
+                  "type": "string",
+                  "maxLength": 80,
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                },
+                "target": {
+                  "type": "string",
+                  "const": "social-distribution"
+                },
+                "capability": {
+                  "type": "string",
+                  "const": "approved-publish-package"
+                },
+                "dataSchemaVersion": {
+                  "type": "string",
+                  "const": "approved-publish-package/1"
+                },
+                "decisionReference": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                }
+              },
+              "required": [
+                "mapVersion",
+                "source",
+                "target",
+                "capability",
+                "dataSchemaVersion",
+                "decisionReference"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "amplifierEligibilityRef": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "campaignApprovalRef": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "profileId",
+        "profileRole",
+        "role",
+        "connectionId",
+        "capabilityRef",
+        "amplifierEligibilityRef",
+        "campaignApprovalRef"
+      ],
+      "additionalProperties": false
+    },
+    "sourcePackage": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "approved-publish-package/1"
+        },
+        "artifactRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "packageHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "artifactRef",
+        "packageHash"
+      ],
+      "additionalProperties": false
+    },
+    "objective": {
+      "type": "string",
+      "enum": [
+        "qualified_visit",
+        "value_action",
+        "opt_in",
+        "monetization_intent",
+        "trust"
+      ]
+    },
+    "audience": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "destination": {
+      "type": "string",
+      "pattern": "^https:\\/\\/"
+    },
+    "utm": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "instagram",
+            "threads"
+          ]
+        },
+        "medium": {
+          "type": "string",
+          "const": "organic_social"
+        },
+        "campaign": {
+          "type": "string",
+          "maxLength": 120,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 120,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        }
+      },
+      "required": [
+        "source",
+        "medium",
+        "campaign",
+        "content"
+      ],
+      "additionalProperties": false
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2200
+        },
+        "altText": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "assetPaths": {
+          "maxItems": 10,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.[a-zA-Z0-9]+$"
+          }
+        },
+        "factualClaimRefs": {
+          "minItems": 1,
+          "maxItems": 30,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "rendererVersion": {
+          "type": "string",
+          "const": "carousel-studio-1"
+        }
+      },
+      "required": [
+        "text",
+        "altText",
+        "assetPaths",
+        "factualClaimRefs",
+        "rendererVersion"
+      ],
+      "additionalProperties": false
+    },
+    "publishWindow": {
+      "type": "object",
+      "properties": {
+        "notBefore": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        "notAfter": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        }
+      },
+      "required": [
+        "notBefore",
+        "notAfter"
+      ],
+      "additionalProperties": false
+    },
+    "formatId": {
+      "type": "string",
+      "maxLength": 120,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "sourceKind": {
+      "type": "string",
+      "enum": [
+        "strategy-owned",
+        "accepted-campaign",
+        "approved-package"
+      ]
+    },
+    "contentClass": {
+      "type": "string",
+      "enum": [
+        "original",
+        "campaign-primary",
+        "campaign-umbrella",
+        "campaign-amplifier"
+      ]
+    },
+    "riskClass": {
+      "type": "string",
+      "enum": [
+        "low",
+        "political",
+        "sensitive",
+        "novel",
+        "paid",
+        "policy-changing"
+      ]
+    },
+    "evidenceRefs": {
+      "minItems": 1,
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "checks": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "type": "string",
+          "const": "pass"
+        },
+        "brand": {
+          "type": "string",
+          "const": "pass"
+        },
+        "claims": {
+          "type": "string",
+          "const": "pass"
+        },
+        "quill": {
+          "type": "string",
+          "const": "pass"
+        },
+        "keeper": {
+          "type": "string",
+          "const": "pass"
+        },
+        "duplicate": {
+          "type": "string",
+          "const": "pass"
+        },
+        "accessibility": {
+          "type": "string",
+          "const": "pass"
+        },
+        "budget": {
+          "type": "string",
+          "const": "pass"
+        },
+        "capability": {
+          "type": "string",
+          "const": "pass"
+        },
+        "policy": {
+          "type": "string",
+          "const": "pass"
+        }
+      },
+      "required": [
+        "schema",
+        "brand",
+        "claims",
+        "quill",
+        "keeper",
+        "duplicate",
+        "accessibility",
+        "budget",
+        "capability",
+        "policy"
+      ],
+      "additionalProperties": false
+    },
+    "approvalRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "estimatedCostUsd": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "preparedHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "queueAuthorized": {
+      "type": "boolean",
+      "const": false
+    },
+    "publishingAuthorized": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "candidateId",
+    "sourceVentureId",
+    "releaseId",
+    "campaignId",
+    "target",
+    "sourcePackage",
+    "objective",
+    "audience",
+    "destination",
+    "utm",
+    "content",
+    "publishWindow",
+    "formatId",
+    "sourceKind",
+    "contentClass",
+    "riskClass",
+    "evidenceRefs",
+    "checks",
+    "approvalRef",
+    "estimatedCostUsd",
+    "preparedHash",
+    "queueAuthorized",
+    "publishingAuthorized"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/social-prepared-candidate.schema.json"
+}

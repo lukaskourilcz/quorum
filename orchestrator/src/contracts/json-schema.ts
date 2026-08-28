@@ -141,6 +141,11 @@ import {
   SocialMetricObservationSchema
 } from "./social-results.js";
 import {
+  SocialPreparedCandidateSchema,
+  SocialProfileOperationSchema,
+  SocialRoutineScopeSchema
+} from "./social-operations.js";
+import {
   ArticleImageSchema,
   MetricsPlaceholderSchema,
   PriorityItemSchema,
@@ -276,7 +281,10 @@ export const ContractSchemas = {
   "social-distribution-baseline": SocialDistributionBaselineSchema,
   "social-distribution-experiment": SocialDistributionExperimentSchema,
   "social-distribution-experiment-register": SocialDistributionExperimentRegisterSchema,
-  "social-boost-proposal": SocialBoostProposalSchema
+  "social-boost-proposal": SocialBoostProposalSchema,
+  "social-routine-scope": SocialRoutineScopeSchema,
+  "social-prepared-candidate": SocialPreparedCandidateSchema,
+  "social-profile-operation": SocialProfileOperationSchema
 } satisfies Record<string, ZodType>;
 
 export type ContractName = keyof typeof ContractSchemas;
