@@ -252,11 +252,16 @@
                   },
                   "capability": {
                     "type": "string",
-                    "const": "approved-publish-package"
+                    "enum": [
+                      "intelligence-read",
+                      "bounded-render-summary",
+                      "approved-publish-package"
+                    ]
                   },
                   "dataSchemaVersion": {
                     "type": "string",
-                    "const": "approved-publish-package/1"
+                    "maxLength": 120,
+                    "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\/\\d+$"
                   },
                   "decisionReference": {
                     "type": "string",

@@ -55,16 +55,15 @@ export function resolveEffectiveSocialProfileStrategy(input: {
     return resolution("denied", ["strategy-profile-constitution-mismatch"], strategy);
   }
   const profileCapabilities = profile.capabilityRefs ?? [];
-  if (strategy.allowedCapabilities.length !== profileCapabilities.length
-    || strategy.allowedCapabilities.some((reference) => !profileCapabilities.some((candidate) => JSON.stringify(candidate) === JSON.stringify(reference)))) {
+  if (profileCapabilities.some((reference) => !strategy.allowedCapabilities.some((candidate) => JSON.stringify(candidate) === JSON.stringify(reference)))) {
     return resolution("denied", ["strategy-capability-set-mismatch"], strategy);
   }
   for (const reference of strategy.allowedCapabilities) {
     const resolved = resolveVentureCapabilityInMap(input.capabilityMap, {
       source: reference.source,
       target: "social-distribution",
-      capability: "approved-publish-package",
-      schemaVersion: "approved-publish-package/1"
+      capability: reference.capability,
+      schemaVersion: reference.dataSchemaVersion
     });
     if (resolved.decision !== "allowed" || !resolved.edge || input.capabilityMap.mapVersion !== reference.mapVersion
       || resolved.edge.governingReference !== reference.decisionReference || resolved.edge.dataSchemaVersion !== reference.dataSchemaVersion) {

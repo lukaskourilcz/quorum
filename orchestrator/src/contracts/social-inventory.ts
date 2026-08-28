@@ -6,7 +6,6 @@ import {
   Sha256Schema,
   VentureIdSchema
 } from "./common.js";
-import { SocialCapabilityRefSchema } from "./social-distribution.js";
 
 const ProfileIdSchema = z.string().regex(/^social-profile-[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(140);
 const StrategyIdSchema = z.string().regex(/^social-profile-strategy-[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(180);
@@ -14,6 +13,14 @@ const PillarIdSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(80);
 const FormatIdSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(80);
 const PlatformSchema = z.enum(["instagram", "threads"]);
 const LocaleSchema = z.enum(["cs", "en"]);
+const InventoryCapabilityRefSchema = z.strictObject({
+  mapVersion: z.string().regex(/^\d+\.\d+\.\d+$/u),
+  source: VentureIdSchema,
+  target: z.literal("social-distribution"),
+  capability: z.enum(["intelligence-read", "bounded-render-summary", "approved-publish-package"]),
+  dataSchemaVersion: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*\/\d+$/u).max(120),
+  decisionReference: EvidenceRefSchema
+});
 
 const StrategyFormatSchema = z.strictObject({
   id: FormatIdSchema,
@@ -39,7 +46,7 @@ export const SocialProfileStrategySchema = z.strictObject({
   audience: z.string().trim().min(1).max(500),
   languages: z.array(LocaleSchema).min(1).max(2),
   markets: z.array(z.string().regex(/^[A-Z]{2}$/u)).min(1).max(20),
-  allowedCapabilities: z.array(SocialCapabilityRefSchema).max(50),
+  allowedCapabilities: z.array(InventoryCapabilityRefSchema).max(50),
   contentPillars: z.array(z.strictObject({
     id: PillarIdSchema,
     label: z.string().trim().min(1).max(120),
@@ -147,7 +154,7 @@ export const SocialInventoryCandidateSchema = z.strictObject({
   sourceRefs: z.array(EvidenceRefSchema).min(1).max(50),
   sourceKind: z.enum(["strategy-owned", "profile-owned", "approved-package", "goviral-intelligence", "accepted-campaign"]),
   sourceVentureId: VentureIdSchema.nullable(),
-  capabilityRef: SocialCapabilityRefSchema.nullable(),
+  capabilityRef: InventoryCapabilityRefSchema.nullable(),
   approvedPackageRef: EvidenceRefSchema.nullable(),
   campaignRef: EvidenceRefSchema.nullable(),
   asset: z.strictObject({
@@ -190,8 +197,11 @@ export const SocialInventoryCandidateSchema = z.strictObject({
   if (candidate.candidateType === "campaign" && candidate.sourceKind !== "accepted-campaign") {
     context.addIssue({ code: "custom", message: "Campaign candidates must come from accepted #410 campaign state", path: ["candidateType"] });
   }
-  if (["personal-growth", "kvorum", "goviral", "contest-radar"].includes(candidate.sourceVentureId ?? "")) {
+  if (["personal-growth", "kvorum", "contest-radar"].includes(candidate.sourceVentureId ?? "")) {
     context.addIssue({ code: "custom", message: "The source is permanently isolated from core inventory", path: ["sourceVentureId"] });
+  }
+  if (candidate.sourceKind === "goviral-intelligence" && candidate.sourceVentureId !== "goviral") {
+    context.addIssue({ code: "custom", message: "GoVIRAL intelligence must retain its exact service source", path: ["sourceVentureId"] });
   }
 });
 
