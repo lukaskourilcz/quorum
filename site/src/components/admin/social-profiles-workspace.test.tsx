@@ -76,6 +76,21 @@ describe("Social Profiles workspace", () => {
     expect(snapshot.providerControl.summary).toEqual({ directCoreAvailable: true, activeBindings: 0, heldBindings: 6, ambiguousReceipts: 0 });
   });
 
+  it("renders canonical Content runway constitutions without queue or publishing controls", async () => {
+    const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
+    const html = renderToStaticMarkup(<SocialProfilesWorkspace profileId="social-profile-caught-up" section="content-runway" snapshot={snapshot} />);
+
+    expect(html).toContain("Profile constitutions · 6");
+    expect(html).toContain("data-social-runway-detail=\"social-profile-caught-up\"");
+    expect(html).toContain("Deterministic first");
+    expect(html).toContain("Design Lab");
+    expect(html).toContain("No inventory candidates");
+    expect(html).toContain("No inventory build receipt");
+    expect(html).toContain("exposes no queue, publish, account activation or routine-scope action");
+    expect(snapshot.contentRunway.summary).toEqual({ strategies: 6, healthy: 0, lowOrNoRunway: 0, unavailable: 6, actualCostUsd: 0 });
+    expect(snapshot.contentRunway).toMatchObject({ authorityGranted: false, queueAuthorized: false, publishingAuthorized: false });
+  });
+
   it("renders campaign gates, immutable bindings and safe actions without fake results", async () => {
     const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
     const fixture = JSON.parse(await readFile(path.join(root, "contracts/fixtures/social-distribution-contracts.valid.json"), "utf8")) as { campaign: unknown };

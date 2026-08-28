@@ -54,4 +54,11 @@ test("Social Profiles sections and detail keep canonical bookmarks and bounded c
   await expect(page.getByText("Provider registry · 6", { exact: true })).toBeVisible();
   await expect(page.getByText("No provider delivery evidence", { exact: true })).toBeVisible();
   await expect(page.locator("[data-social-profiles-section=providers]")).not.toContainText(/private-secret-value|automatic failover enabled|purchase authorized/iu);
+
+  await page.goto("/admin/social-profiles?section=content-runway&profile=social-profile-caught-up", { waitUntil: "domcontentloaded" });
+  await expect(page.getByRole("link", { name: "Content runway", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByText("Profile constitutions · 6", { exact: true })).toBeVisible();
+  await expect(page.locator('[data-social-runway-detail="social-profile-caught-up"]')).toContainText("Design Lab");
+  await expect(page.getByText("No inventory candidates", { exact: true })).toBeVisible();
+  await expect(page.locator("[data-social-profiles-section=content-runway]")).not.toContainText(/publish now|queue now|force post|account activation/iu);
 });
