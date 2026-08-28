@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-28-anthropic-soud-blacklist-xai-zaloba-alphabet",
+  "date": "2026-08-28",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": null,
+      "reason": "unparsable:[\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"verdicts\"\n    ],\n    \"message\": \"Invalid input: expected array, received undefined\"\n  }\n]",
+      "candidates": [],
+      "skipped": [],
+      "costUsd": 0.009611
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-28T03:02:03.543Z"
+}

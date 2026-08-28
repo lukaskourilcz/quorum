@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-28-anthropic-soud-blacklist-xai-zaloba-alphabet",
+  "date": "2026-08-28",
+  "locale": "cs",
+  "kicker": "DNESKAi · 28. srp",
+  "headline": "Soud zrušil blacklist, ale bezpečnostní díra zůstala",
+  "coverLine": "Federální soud vrátil Anthropicu čistý štít, bezpečnostní výzkumník mu pak sebral část lesku",
+  "standfirst": "Federální soudce prohlásil zařazení Anthropicu na vládní blacklist za nezákonné. Ve stejný den se objevil útok s 80% úspěšností, který obchází bezpečnostní klasifikátor Claude Code.",
+  "passages": [
+    "Federální soudce prohlásil zařazení Anthropicu na vládní blacklist za nezákonné.",
+    "Výzkumník zdokumentoval 80% spolehlivý prompt injection útok, který obchází auto mode Claude Code.",
+    "Meta uzavřela narovnání za 18 miliard dolarů a přijala omezení, jejichž standard platí i pro konkurenci.",
+    "Alphabet od května ztratil přibližně 700 miliard dolarů tržní kapitalizace kvůli rostoucím nákladům na AI.",
+    "Soudní limit na blacklistování omezuje výkonnou moc USA v trestání AI laboratoří mimosoudními nástroji – to se týká každé firmy, která staví na americké AI infrastruktuře.",
+    "Zranitelnost Claude Code ukazuje, že prompt injection zůstává otevřeným problémem i tam, kde výrobce zavedl speciální bezpečnostní klasifikátor – a nehlídané agenty jsou nyní výchozím nastavením.",
+    "Metino narovnání nenastavuje pravidla jen pro Meta: soud podmínil dohodu tím, aby srovnatelné ochrany zavedlo i celé odvětví sociálních sítí.",
+    "Žaloba na xAI za použití CSAM při trénování Groku jsou zatím tvrzení žalobců; xAI se nevyjádřil a soud dosud nerozhodl."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Artwork by BoardlessAI FRAME"
+}

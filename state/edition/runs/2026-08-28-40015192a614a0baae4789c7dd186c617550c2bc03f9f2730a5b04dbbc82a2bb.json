@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "runId": "139493e0-6721-41a0-a89b-80e87ba0c5f1",
+  "date": "2026-08-28",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-08-28T03:02:06.519Z",
+  "completedAt": "2026-08-28T03:04:30.482Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-28T03:02:06.526Z",
+      "completedAt": "2026-08-28T03:02:28.805Z",
+      "durationMs": 22279
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-08-28T03:02:28.806Z",
+      "completedAt": "2026-08-28T03:04:14.774Z",
+      "durationMs": 105968
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-08-28T03:04:14.774Z",
+      "completedAt": "2026-08-28T03:04:14.779Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-08-28T03:04:14.780Z",
+      "completedAt": "2026-08-28T03:04:14.780Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-08-28T03:04:14.780Z",
+      "completedAt": "2026-08-28T03:04:30.481Z",
+      "durationMs": 15701
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 1,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12564,
+      "outputTokens": 882,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.050922
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 10140,
+      "outputTokens": 4297,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1040475
+    }
+  ],
+  "measuredCostUsd": 0.1549695,
+  "quality": {
+    "metrics": {
+      "successfulSources": 31,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 83,
+      "maximumSingleSourceShare": 0.2857142857142857,
+      "sourceDiversity": 0.8163265306122449,
+      "duplicateStorySimilarity": 0,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1549695
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": false,
+    "score": 45,
+    "violations": [
+      {
+        "code": "bureaucratic_filler",
+        "locale": "cs",
+        "message": "Použij přímé sloveso místo úřednické konstrukce."
+      }
+    ]
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/bureaucratic_filler"
+    ]
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "plate",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": null,
+        "reason": "unparsable:[\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"verdicts\"\n    ],\n    \"message\": \"Invalid input: expected array, received undefined\"\n  }\n]",
+        "candidates": [],
+        "skipped": [],
+        "costUsd": 0.009611
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "stet:bureaucratic_filler",
+    "shipped_with_unresolved_review:stet:cs/bureaucratic_filler",
+    "image_rung:plate",
+    "image_gate:search:unparsable:[\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"verdicts\"\n    ],\n    \"message\": \"Invalid input: expected array, received undefined\"\n  }\n]"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}

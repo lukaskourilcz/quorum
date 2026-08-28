@@ -1,0 +1,270 @@
+{
+  "schemaVersion": "edition-package/1",
+  "date": "2026-08-28",
+  "idempotencyKey": "40015192a614a0baae4789c7dd186c617550c2bc03f9f2730a5b04dbbc82a2bb",
+  "generation": {
+    "models": {
+      "curation": "claude-sonnet-4-6",
+      "writing": "claude-sonnet-4-6"
+    },
+    "costUsd": 0.1549695
+  },
+  "reason": "cu-edition decision meetings/2026-08-28-cu-edition",
+  "status": "edition",
+  "article": {
+    "cs": {
+      "frontmatter": {
+        "schema_version": 2,
+        "title": "Soud zrušil blacklist, ale bezpečnostní díra zůstala",
+        "slug": "2026-08-28-anthropic-soud-blacklist-xai-zaloba-alphabet",
+        "date": "2026-08-28",
+        "lang": "cs",
+        "dek": "Federální soudce prohlásil zařazení Anthropicu na vládní blacklist za nezákonné. Ve stejný den se objevil útok s 80% úspěšností, který obchází bezpečnostní klasifikátor Claude Code. A žaloba tvrdí, že xAI trénoval Grok na materiálech sexuálního zneužívání dětí.",
+        "alternative_headlines": [
+          "Federální soud vrátil Anthropicu čistý štít, bezpečnostní výzkumník mu pak sebral část lesku",
+          "Tři zprávy o Anthropicu: výhra v soudu, nová norma pro roboty a díra v bezpečnostním kódu"
+        ],
+        "social_copy": {
+          "igCaption": "Federální soudce prohlásil blacklist Anthropicu za nezákonný. Ve stejný den bezpečnostní výzkumník ukázal, že Claude Code v auto módu lze oklamat s 80% spolehlivostí. A Meta zaplatí 18 miliard – přičemž pravidla, která přijala, platí i pro zbytek odvětví.",
+          "hashtags": [
+            "artificialintelligence",
+            "anthropic",
+            "claudeai",
+            "promptinjection",
+            "alphabet",
+            "google",
+            "xai",
+            "grok",
+            "metasettlement",
+            "airegulation"
+          ],
+          "threadsText": "Federální soud zrušil vládní blacklist Anthropicu jako nezákonný. Téhož dne výzkumník zdokumentoval útok, který obchází bezpečnostní klasifikátor Claude Code v 80 % případů. Alphabet mezitím ztratil od května 700 miliard dolarů a Meta uzavřela narovnání za 18 miliard, jehož pravidla pro ochranu mladistvých platí i pro ostatní platformy.",
+          "storyLine": "Soud, bezpečnostní díra a 18 miliard pro Meta"
+        },
+        "tags": [
+          "umela-inteligence",
+          "regulace",
+          "bezpecnost",
+          "socialni-site",
+          "burza",
+          "trestni-pravo"
+        ],
+        "sources": [
+          {
+            "id": "49473522",
+            "url": "https://www.nytimes.com/2026/08/27/technology/anthropic-government-blacklisting-ruling.html",
+            "title": "Judge Rules Trump Administration’s Blacklisting of Anthropic Was Illegal",
+            "source_id": "hn-frontpage",
+            "classification": "secondary",
+            "published_at": "2026-08-28T02:03:38.000Z",
+            "supports": [
+              "A court overturning a government AI-company blacklist sets a major precedent for how the executive branch can regulate — or punish — frontier AI labs. Every company operating in the US AI market should track this."
+            ]
+          },
+          {
+            "id": "378157987",
+            "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b10663",
+            "title": "ggml-org/llama.cpp b10663",
+            "source_id": "github-ai-releases",
+            "classification": "secondary",
+            "published_at": "2026-08-27T22:24:20.000Z",
+            "supports": [
+              "Security researcher Johann Rehberger found that Claude's auto mode, recently made the default for Claude Code, can be bypassed: a malicious zip archive tricks it into running local code — and when Claude tries to self-correct, auto mode blocks the cleanup command. This is the flagship safety feature marketed as protecting unattended coding agents."
+            ]
+          },
+          {
+            "id": "378146949",
+            "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-fireworks%3D%3D1.6.1",
+            "title": "langchain-ai/langchain langchain-fireworks==1.6.1",
+            "source_id": "github-ai-releases",
+            "classification": "secondary",
+            "published_at": "2026-08-27T21:56:28.000Z",
+            "supports": [
+              "A standardised 'plumbing spec' for physical-world AI control bridges the gap between software agents and real hardware — centrifuges, robotic arms, etc. If adopted broadly, it accelerates industrial AI automation and raises new safety questions."
+            ]
+          },
+          {
+            "id": "https://www.semafor.com/article/08/27/2026/alphabet-stock-sheds-700b-as-ai-bills-climb",
+            "url": "https://www.semafor.com/article/08/27/2026/alphabet-stock-sheds-700b-as-ai-bills-climb",
+            "title": "Alphabet stock sheds $700B as AI bills climb",
+            "source_id": "tensorfeed",
+            "classification": "secondary",
+            "published_at": "2026-08-28T02:23:11.000Z",
+            "supports": [
+              "The scale of the market-cap drop signals that investor patience with AI capex is thinning. It adds pressure across the industry to show ROI on GPU spending, and directly affects Google's ability to fund future model development."
+            ]
+          },
+          {
+            "id": "https://arstechnica.com/tech-policy/2026/08/elon-musks-xai-used-child-porn-to-train-grok-models-lawsuit-says/",
+            "url": "https://arstechnica.com/tech-policy/2026/08/elon-musks-xai-used-child-porn-to-train-grok-models-lawsuit-says/",
+            "title": "Elon Musk’s xAI used child porn to train Grok models, lawsuit says",
+            "source_id": "ars-technica",
+            "classification": "secondary",
+            "published_at": "2026-08-27T20:52:31.000Z",
+            "supports": [
+              "A lawsuit accusing a major frontier lab of training on CSAM — including AI-generated material — is an extreme allegation with serious legal and reputational stakes, and could accelerate regulatory action on training-data transparency."
+            ]
+          },
+          {
+            "id": "https://www.socialmediatoday.com/news/how-will-metas-settlement-impact-social-media/829033/",
+            "url": "https://www.socialmediatoday.com/news/how-will-metas-settlement-impact-social-media/829033/",
+            "title": "How will Meta’s settlement impact social media?",
+            "source_id": "social-media-today",
+            "classification": "secondary",
+            "published_at": "2026-08-28T00:29:23.000Z",
+            "supports": [
+              "The settlement's terms reportedly require other apps to implement similar restrictions, not just Meta. That makes it a de facto regulatory floor for the entire social-media industry, affecting product roadmaps well beyond Instagram and Facebook."
+            ]
+          },
+          {
+            "id": "https://variety.com/?p=1236845596",
+            "url": "https://variety.com/2026/tv/news/scooby-doo-netflix-series-cast-andre-3000-cathy-moriarty-1236845596/",
+            "title": "‘Scooby-Doo’ Netflix Series Casts Andre Benjamin, Cathy Moriarty",
+            "source_id": "variety",
+            "classification": "secondary",
+            "published_at": "2026-08-27T21:12:19.000Z",
+            "supports": [
+              "A first-party firmware fix directly responds to the 'pervert glasses' backlash. It confirms the privacy gap was real and exploitable, and sets a baseline for what passive surveillance hardware must now prevent."
+            ]
+          }
+        ],
+        "illustration": {
+          "path": "/images/editions/2026-08-28-anthropic-soud-blacklist-xai-zaloba-alphabet/hero.svg",
+          "thumbnail_path": "/images/editions/2026-08-28-anthropic-soud-blacklist-xai-zaloba-alphabet/thumb.svg",
+          "alt": "Obálka DNESKAi k 2026-08-28, témata Umela Inteligence, Regulace, Bezpecnost. Generovaný panel barevných sloupců, bez fotografie.",
+          "width": 1600,
+          "height": 900,
+          "origin": "svg",
+          "attribution": {
+            "license": "BoardlessAI deterministic",
+            "author": "BoardlessAI FRAME",
+            "source_url": "https://boardless-ai.vercel.app/",
+            "text": "Artwork by BoardlessAI FRAME"
+          }
+        },
+        "signal_strength": 83,
+        "why_it_matters": [
+          "Soudní limit na blacklistování omezuje výkonnou moc USA v trestání AI laboratoří mimosoudními nástroji – to se týká každé firmy, která staví na americké AI infrastruktuře.",
+          "Zranitelnost Claude Code ukazuje, že prompt injection zůstává otevřeným problémem i tam, kde výrobce zavedl speciální bezpečnostní klasifikátor – a nehlídané agenty jsou nyní výchozím nastavením.",
+          "Metino narovnání nenastavuje pravidla jen pro Meta: soud podmínil dohodu tím, aby srovnatelné ochrany zavedlo i celé odvětví sociálních sítí."
+        ],
+        "what_changed": [
+          "Federální soudce prohlásil zařazení Anthropicu na vládní blacklist za nezákonné.",
+          "Výzkumník zdokumentoval 80% spolehlivý prompt injection útok, který obchází auto mode Claude Code.",
+          "Meta uzavřela narovnání za 18 miliard dolarů a přijala omezení, jejichž standard platí i pro konkurenci.",
+          "Alphabet od května ztratil přibližně 700 miliard dolarů tržní kapitalizace kvůli rostoucím nákladům na AI."
+        ],
+        "uncertainty": [
+          "Žaloba na xAI za použití CSAM při trénování Groku jsou zatím tvrzení žalobců; xAI se nevyjádřil a soud dosud nerozhodl.",
+          "Není jasné, zda Anthropic na základě soudního rozhodnutí o blacklistu okamžitě získá přístup k vládním zakázkám, nebo zda vláda podá odvolání.",
+          "Rehbergerův útok byl dokumentován, ale Anthropic dosud nezveřejnil, zda záplatu plánuje a v jakém časovém horizontu."
+        ],
+        "generation": {
+          "generated_at": "2026-08-28T03:02:03.543Z",
+          "human_reviewed": false,
+          "models": {
+            "curation": "claude-sonnet-4-6",
+            "writing": "claude-sonnet-4-6"
+          },
+          "source_candidates": 80,
+          "cited_sources": 7,
+          "image_provider": "BoardlessAI FRAME",
+          "cost": {
+            "amount": 0.1549695,
+            "currency": "USD"
+          },
+          "package_hash": "40015192a614a0baae4789c7dd186c617550c2bc03f9f2730a5b04dbbc82a2bb"
+        },
+        "translation_of": "2026-08-28-anthropic-soud-blacklist-xai-zaloba-alphabet",
+        "dispatches": [
+          {
+            "title": "Llama.cpp opravuje chybu vah v normalizaci",
+            "body": "Vydání b10663 knihovny llama.cpp opravuje chybu posunu vah funkce RMS_NORM_MUL při skupinových a broadcast normách. Jde o technickou záplatu bez nových funkcí.",
+            "source_url": "https://github.com/ggml-org/llama.cpp/releases/tag/b10663",
+            "topic": "open-source AI"
+          },
+          {
+            "title": "Waymo: deset poznatků ze 200 milionů autonomních mil",
+            "body": "Waymo zveřejnil přehled interních poznatků nashromážděných při provozu robotaxi. Mezi hlavními body figuruje spolehlivost systémů při neočekávaných překážkách a způsob, jakým reálný provoz odhaluje slepá místa simulací.",
+            "source_url": "https://waymo.com/blog/2026/08/10ailessons/",
+            "topic": "autonomní vozidla"
+          },
+          {
+            "title": "Leadcode izoluje klientské účty pro Claude Code a Codex",
+            "body": "Nový nástroj Leadcode nabízí oddělení přístupu k Claude Code, Codex a GitHub Copilot na úrovni jednotlivých klientů. Cílí na agentury a konzultanty, kteří spravují více zákaznických projektů z jednoho prostředí.",
+            "source_url": "https://leadcode.build/",
+            "topic": "vývojářské nástroje"
+          },
+          {
+            "title": "GTA VI: 27 minut záběrů ze hry na YouTube i Netflixu",
+            "body": "Rockstar Games zveřejnil rozšířenou ukázku ze hry Grand Theft Auto VI současně na YouTube a prostřednictvím Netflixu. The Verge upozorňuje, že vydání přišlo uprostřed probíhajících úniků z produkce.",
+            "source_url": "https://www.theverge.com/games/985910/grand-theft-auto-gta-vi-extended-look-youtube-netflix-stream",
+            "topic": "videohry"
+          }
+        ],
+        "wire": [
+          {
+            "title": "AI Lessons from Driving 200M Autonomous Miles",
+            "url": "https://waymo.com/blog/2026/08/10ailessons/",
+            "source": "Waymo Blog"
+          },
+          {
+            "title": "Show HN: ChessRabbit – The AI Chess Analysis Platform",
+            "url": "https://chessrabbit.co/",
+            "source": "tensorfeed"
+          },
+          {
+            "title": "Ask Me Twice – A longitudinal archive of AI chatbot responses",
+            "url": "https://wayback-api.archive.org/services/amt/",
+            "source": "tensorfeed"
+          },
+          {
+            "title": "AI-Powered Tilichu VST/AU Synth Released by Butterlamp Audio",
+            "url": "https://rekkerd.org/butterlamp-audio-releases-tilichu-wavetable-synthesizer-vst3-au/",
+            "source": "tensorfeed"
+          },
+          {
+            "title": "Has Gemini AI has altered the interpretation of Google trends?",
+            "url": "https://old.reddit.com/r/mildyinteresting/comments/1vzz8y7/my_cycle_has_been_off_this_past_month_and/p69f88q/",
+            "source": "tensorfeed"
+          },
+          {
+            "title": "The Dirty AI lie: How the GREATEST bet in human history started to crack [video]",
+            "url": "https://www.youtube.com/watch?v=WcckBmkauBQ",
+            "source": "tensorfeed"
+          }
+        ],
+        "type": "daily"
+      },
+      "body": "Federální soudce rozhodl 27. srpna, že Trumpova administrativa postupovala nezákonně, když zařadila Anthropic na vládní blacklist. Rozsudek ruší omezení, která společnosti blokovala přístup k určitým vládním zakázkám. Podle [The New York Times](https://www.nytimes.com/2026/08/27/technology/anthropic-government-blacklisting-ruling.html) jde o první případ, kdy soud přímo posoudil, zda může exekutiva takto trestat frontierovou AI laboratoř bez zákonného podkladu. Rozhodnutí neznamená, že Anthropic vyhrál spor o svou technologii – znamená, že způsob, jakým vláda trest uložila, nebyl v souladu s právem.\n\nPro ostatní firmy na americkém AI trhu to není jen akademická záležitost. Pokud by blacklistování jako nástroj obstálo, stal by se z něj mocný politický páku vůči komerčním laboratořím. Teď je jeho použití ztíženo.\n\n## Bezpečnostní klasifikátor pod tlakem\n\nVe stejný den, kdy Anthropic slavil soudní výhru, dokumentoval bezpečnostní výzkumník Johann Rehberger útok na Claude Code, který se ukázal spolehlivý v 80 % případů. Cílem je tzv. auto mode, který Anthropic nedávno nastavil jako výchozí pro nehlídané kódovací agenty – a který firma prezentuje jako bezpečnostní zábranu.\n\nÚtok funguje přes záměrně upravenou ZIP archiv: škodlivý kód v archivu přiměje Claude Code, aby na lokálním stroji spustil příkaz, který by jinak odmítl. Paradox spočívá v tom, co se stane dál – když se model pokusí situaci napravit a škodlivý příkaz zastavit, auto mode mu samotný čistící příkaz zablokuje. Bezpečnostní vrstva, která má chránit, v tomto scénáři chrání útočníka.\n\nTato třída zranitelnosti se nazývá prompt injection: útočník vloží instrukce do dat, která model zpracovává, a model je poslechne, jako by pocházely od oprávněného uživatele. Není to chyba specifická pro Claude – trápí obecně všechny systémy, kde AI agenti čtou nedůvěryhodný obsah a zároveň mají právo volat nástroje. Rehbergerův nález ale ukazuje, že ani Anthropicův klasifikátor, navržený právě pro tuto hrozbu, zatím nestačí.\n\n## xAI: žaloba, nikoli verdikt\n\nArs Technica [informuje](https://arstechnica.com/tech-policy/2026/08/elon-musks-xai-used-child-porn-to-train-grok-models-lawsuit-says/) o žalobě, která tvrdí, že xAI při trénování modelů řady Grok použil materiály sexuálního zneužívání dětí – včetně materiálů generovaných umělou inteligencí. Jde o tvrzení žalobců, nikoli o prokázanou skutečnost. xAI se k žalobě zatím veřejně nevyjádřil.\n\nPokud by se obvinění potvrdila, šlo by o nejzávažnější případ, jaký byl vůči frontierové laboratoři vznesen. I bez rozhodnutí soudu přitom žaloba zasahuje do probíhající debaty o transparentnosti tréninkových dat – téma, u kterého zákonodárci v několika zemích zvažují povinná pravidla zveřejňování.\n\n## Alphabet ztratil tržní hodnotu sedmi set miliard dolarů\n\nAkcie Alphabetu klesly od květnového vrcholu o více než 15 %, čímž zmizelo přibližně 700 miliard dolarů tržní kapitalizace. [Semafor](https://www.semafor.com/article/08/27/2026/alphabet-stock-sheds-700b-as-ai-bills-climb) píše, že investoři reagují na kombinaci rostoucích nákladů na AI infrastrukturu a absence jednoznačného technologického průlomu.\n\nZ interního hlediska firma prošla otřesy: odešel přední vědec, její nejznámější AI mozek přešel na jinou pozici a nejnovější model Gemini má zpoždění. Komentátor Wall Street Journal nicméně argumentoval, že Google má silné produktové portfolio a návrat spoluzakladatele Sergeje Brina do každodenního provozu může být signálem stabilizace, nikoli krize. Obojí jsou zatím interpretace, nikoli výsledky.\n\nPokles hodnoty Alphabetu ale vysílá konkrétní signál celému odvětví: trpělivost investorů s výdaji na grafické procesory se tenčí a firmy budou muset ROI na AI infrastrukturu doložit dříve, než předpokládaly.\n\n## Meta a odvětvový standard pro bezpečnost mladistvých\n\nDne 26. srpna Meta souhlasila s úhradou přibližně 18 miliard dolarů v rámci narovnání s koalicí 29 amerických státních prokurátorů. Ti tvrdili, že Meta vědomě vytvořila návykové aplikace maximalizující čas strávený na platformě. Podle [Social Media Today](https://www.socialmediatoday.com/news/how-will-metas-settlement-impact-social-media/829033/) je finanční část jen jednou složkou dohody.\n\nMeta se zavázala zavést pro americké uživatele do 18 let výchozí dvouhodinový denní limit používání aplikací Facebook a Instagram dohromady, blokovat aplikace mezi půlnocí a šestou hodinou ráno a ztlumit notifikace během školní doby. Soud přitom formuloval podmínky tak, aby podobná omezení musely implementovat i jiné platformy – nikoli jen Meta.\n\nDohoda tak de facto stanovuje regulační minimum pro celé odvětví sociálních sítí. Firmy jako TikTok, Snapchat nebo YouTube budou muset prověřit, zda jejich přístupy k ochraně mladistvých tomuto novému standardu dostačují.\n\nNarovnání přišlo záhy po výpovědi generálního ředitele Instagramu Adama Mosseriho, v níž vyšlo najevo, že funkci „Udělej si přestávku\" si aktivovalo pouhých 1,8 % dospívajících uživatelů Instagramu. Mosseri podle zpráv data nerozporoval, ale popřel, že by firma záměrně potlačovala jejich zveřejnění."
+    }
+  },
+  "image": {
+    "hero_path": "public/images/editions/2026-08-28-anthropic-soud-blacklist-xai-zaloba-alphabet/hero.svg",
+    "thumb_path": "public/images/editions/2026-08-28-anthropic-soud-blacklist-xai-zaloba-alphabet/thumb.svg",
+    "width": 1600,
+    "height": 900,
+    "alt_en": "DNESKAi cover for 2026-08-28, marked Umela Inteligence, Regulace, Bezpecnost. A generated panel of coloured bars, carrying no photograph.",
+    "alt_cs": "Obálka DNESKAi k 2026-08-28, témata Umela Inteligence, Regulace, Bezpecnost. Generovaný panel barevných sloupců, bez fotografie.",
+    "license": {
+      "name": "BoardlessAI deterministic",
+      "author": "BoardlessAI FRAME",
+      "source_url": "https://boardless-ai.vercel.app/",
+      "attribution_html": "Artwork by BoardlessAI FRAME"
+    },
+    "origin": "svg",
+    "hero_bytes_base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+PHRpdGxlIGlkPSJ0aXRsZSI+RE5FU0tBaSBjb3ZlcjwvdGl0bGU+PGRlc2MgaWQ9ImRlc2MiPkEgZ2VuZXJhdGVkIERORVNLQWkgY292ZXI7IHRoZSBhcnRpY2xlJ3Mgb3duIHdvcmRzIGFyZSBub3QgcmVwZWF0ZWQgaGVyZS48L2Rlc2M+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzEwMTExNiIvPjxyZWN0IHg9IjYwIiB5PSI2MCIgd2lkdGg9IjE0ODAiIGhlaWdodD0iNzgwIiByeD0iMzUiIGZpbGw9IiMxODFhMjAiIHN0cm9rZT0iIzc5ZjJjMCIgc3Ryb2tlLXdpZHRoPSI0LjUiLz48cmVjdCB4PSIxMDAuMCIgeT0iNDkwLjAiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjI2MC4wIiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjE4Ii8+PHJlY3QgeD0iMTg3LjUiIHk9IjU2NS4yIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxODQuOCIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC41NSIvPjxyZWN0IHg9IjI3NS4wIiB5PSI1MjAuMSIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMjI5LjkiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNTUiLz48cmVjdCB4PSIzNjIuNSIgeT0iNDc1LjAiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjI3NS4wIiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjIyIi8+PHJlY3QgeD0iNDUwLjAiIHk9IjU5NS4zIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxNTQuNyIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC40MyIvPjxyZWN0IHg9IjUzNy41IiB5PSI1ODAuMiIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTY5LjgiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuMzAiLz48cmVjdCB4PSI2MjUuMCIgeT0iNTgwLjIiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjE2OS44IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjE4Ii8+PHJlY3QgeD0iNzEyLjUiIHk9IjcwMC41IiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSI0OS41IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjU5Ii8+PHJlY3QgeD0iODAwLjAiIHk9IjU2NS4yIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxODQuOCIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4zOSIvPjxyZWN0IHg9Ijg4Ny41IiB5PSI1NjUuMiIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTg0LjgiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNzYiLz48cmVjdCB4PSI5NzUuMCIgeT0iNjg1LjUiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjY0LjUiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNTUiLz48cmVjdCB4PSIxMDYyLjUiIHk9IjYxMC4zIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxMzkuNyIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC42OCIvPjxyZWN0IHg9IjExNTAuMCIgeT0iNjU1LjQiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9Ijk0LjYiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuODAiLz48cmVjdCB4PSIxMjM3LjUiIHk9IjcwMC41IiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSI0OS41IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjQ3Ii8+PHJlY3QgeD0iMTMyNS4wIiB5PSI1NTAuMiIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTk5LjgiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNTEiLz48cmVjdCB4PSIxNDEyLjUiIHk9IjYyNS4zIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxMjQuNyIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC41MSIvPjx0ZXh0IHg9IjEwMCIgeT0iMjAwIiBmaWxsPSIjNzlmMmMwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzUiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSI1LjYiPkRORVNLQWk8L3RleHQ+PHRleHQgeD0iMTAwIiB5PSIzMDAiIGZpbGw9IiNmN2Y0ZWMiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMzciPjIwMjYtMDgtMjg8L3RleHQ+PHRleHQgeD0iMTAwIiB5PSIzODUiIGZpbGw9IiM5ZGExYWEiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMjkiIGxldHRlci1zcGFjaW5nPSIzLjUiPlVtZWxhIEludGVsaWdlbmNlIMK3IFJlZ3VsYWNlIMK3IEJlenBlY25vc3Q8L3RleHQ+PC9zdmc+",
+    "thumb_bytes_base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iMzYwIiB2aWV3Qm94PSIwIDAgNjQwIDM2MCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIGRlc2MiPjx0aXRsZSBpZD0idGl0bGUiPkRORVNLQWkgY292ZXI8L3RpdGxlPjxkZXNjIGlkPSJkZXNjIj5BIGdlbmVyYXRlZCBETkVTS0FpIGNvdmVyOyB0aGUgYXJ0aWNsZSdzIG93biB3b3JkcyBhcmUgbm90IHJlcGVhdGVkIGhlcmUuPC9kZXNjPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxMDExMTYiLz48cmVjdCB4PSIyNCIgeT0iMjQiIHdpZHRoPSI1OTIiIGhlaWdodD0iMzEyIiByeD0iMTQiIGZpbGw9IiMxODFhMjAiIHN0cm9rZT0iIzc5ZjJjMCIgc3Ryb2tlLXdpZHRoPSIyLjAiLz48cmVjdCB4PSI0MC4wIiB5PSIxOTYuMCIgd2lkdGg9IjIyLjAiIGhlaWdodD0iMTA0LjAiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuMTgiLz48cmVjdCB4PSI3NS4wIiB5PSIyMjYuMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNzMuOSIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC41NSIvPjxyZWN0IHg9IjExMC4wIiB5PSIyMDguMCIgd2lkdGg9IjIyLjAiIGhlaWdodD0iOTIuMCIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC41NSIvPjxyZWN0IHg9IjE0NS4wIiB5PSIxOTAuMCIgd2lkdGg9IjIyLjAiIGhlaWdodD0iMTEwLjAiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuMjIiLz48cmVjdCB4PSIxODAuMCIgeT0iMjM4LjEiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjYxLjkiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNDMiLz48cmVjdCB4PSIyMTUuMCIgeT0iMjMyLjEiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjY3LjkiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuMzAiLz48cmVjdCB4PSIyNTAuMCIgeT0iMjMyLjEiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjY3LjkiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuMTgiLz48cmVjdCB4PSIyODUuMCIgeT0iMjgwLjIiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjE5LjgiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNTkiLz48cmVjdCB4PSIzMjAuMCIgeT0iMjI2LjEiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjczLjkiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuMzkiLz48cmVjdCB4PSIzNTUuMCIgeT0iMjI2LjEiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjczLjkiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNzYiLz48cmVjdCB4PSIzOTAuMCIgeT0iMjc0LjIiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjI1LjgiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNTUiLz48cmVjdCB4PSI0MjUuMCIgeT0iMjQ0LjEiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjU1LjkiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNjgiLz48cmVjdCB4PSI0NjAuMCIgeT0iMjYyLjIiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjM3LjgiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuODAiLz48cmVjdCB4PSI0OTUuMCIgeT0iMjgwLjIiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjE5LjgiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNDciLz48cmVjdCB4PSI1MzAuMCIgeT0iMjIwLjEiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9Ijc5LjkiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNTEiLz48cmVjdCB4PSI1NjUuMCIgeT0iMjUwLjEiIHdpZHRoPSIyMi4wIiBoZWlnaHQ9IjQ5LjkiIHJ4PSIzLjYiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNTEiLz48dGV4dCB4PSI0MCIgeT0iODAiIGZpbGw9IiM3OWYyYzAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjcwMCIgbGV0dGVyLXNwYWNpbmc9IjIuMiI+RE5FU0tBaTwvdGV4dD48dGV4dCB4PSI0MCIgeT0iMTIwIiBmaWxsPSIjZjdmNGVjIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjE1Ij4yMDI2LTA4LTI4PC90ZXh0Pjx0ZXh0IHg9IjQwIiB5PSIxNTQiIGZpbGw9IiM5ZGExYWEiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTEiIGxldHRlci1zcGFjaW5nPSIxLjQiPlVtZWxhIEludGVsaWdlbmNlIMK3IFJlZ3VsYWNlIMK3IEJlenBlY25vc3Q8L3RleHQ+PC9zdmc+"
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/bureaucratic_filler"
+    ]
+  },
+  "board": {
+    "meetingRef": "meetings/2026-08-28-cu-edition",
+    "roomUrl": "https://boardless-ai.vercel.app/meetings/2026-08-28-cu-edition",
+    "whyThisStory": "Soudní rozhodnutí o blacklistu mění to, jak může výkonná moc USA trestat AI společnosti – a zároveň bezpečnostní mezera v Claude Code ukazuje, že agenturní AI má vážné problémy dřív, než se stačí rozšířit."
+  }
+}

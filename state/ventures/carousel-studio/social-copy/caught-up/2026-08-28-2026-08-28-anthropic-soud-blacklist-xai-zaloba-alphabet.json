@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-08-28-anthropic-soud-blacklist-xai-zaloba-alphabet",
+  "date": "2026-08-28",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Federální soudce prohlásil blacklist Anthropicu za nezákonný. Ve stejný den bezpečnostní výzkumník ukázal, že Claude Code v auto módu lze oklamat s 80% spolehlivostí. A Meta zaplatí 18 miliard – přičemž pravidla, která přijala, platí i pro zbytek odvětví.",
+    "hashtags": [
+      "artificialintelligence",
+      "anthropic",
+      "claudeai",
+      "promptinjection",
+      "alphabet",
+      "google",
+      "xai",
+      "grok",
+      "metasettlement",
+      "airegulation"
+    ],
+    "threadsText": "Federální soud zrušil vládní blacklist Anthropicu jako nezákonný. Téhož dne výzkumník zdokumentoval útok, který obchází bezpečnostní klasifikátor Claude Code v 80 % případů. Alphabet mezitím ztratil od května 700 miliard dolarů a Meta uzavřela narovnání za 18 miliard, jehož pravidla pro ochranu mladistvých platí i pro ostatní platformy.",
+    "storyLine": "Soud, bezpečnostní díra a 18 miliard pro Meta"
+  },
+  "heroCredit": "Artwork by BoardlessAI FRAME",
+  "origin": "desk"
+}

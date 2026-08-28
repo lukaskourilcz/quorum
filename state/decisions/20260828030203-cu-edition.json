@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260828030203-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Soudní rozhodnutí o blacklistu mění to, jak může výkonná moc USA trestat AI společnosti – a zároveň bezpečnostní mezera v Claude Code ukazuje, že agenturní AI má vážné problémy dřív, než se stačí rozšířit.",
+  "evidenceRefs": [
+    "source:hn-frontpage",
+    "source:github-ai-releases",
+    "source:tensorfeed",
+    "source:ars-technica",
+    "source:social-media-today",
+    "source:variety"
+  ],
+  "editionRef": "40015192a614a0baae4789c7dd186c617550c2bc03f9f2730a5b04dbbc82a2bb",
+  "generatedAt": "2026-08-28T03:02:08.543Z"
+}
