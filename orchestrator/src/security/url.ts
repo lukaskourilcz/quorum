@@ -111,12 +111,13 @@ export interface SafeFetchOptions {
   fetchImpl?: typeof fetch;
   resolveImpl?: (hostname: string) => Promise<string[]>;
   responseHeaderNames?: readonly string[];
+  acceptedStatuses?: readonly number[];
 }
 
 export async function safeFetch(
   raw: string,
   options: SafeFetchOptions
-): Promise<{ url: string; contentType: string; body: Uint8Array; headers: Record<string, string> }> {
+): Promise<{ url: string; status: number; contentType: string; body: Uint8Array; headers: Record<string, string> }> {
   const fetchImpl = options.fetchImpl ?? fetch;
   const resolveImpl = options.resolveImpl ?? resolvePublicAddresses;
   const maxRedirects = options.maxRedirects ?? 3;
@@ -167,7 +168,8 @@ export async function safeFetch(
     } finally {
       clearTimeout(timer);
     }
-    if (response.status >= 300 && response.status < 400) {
+    const explicitlyAccepted = options.acceptedStatuses?.includes(response.status) ?? false;
+    if (response.status >= 300 && response.status < 400 && !explicitlyAccepted) {
       if (method !== "GET") {
         throw new UnsafeUrlError("Redirects are forbidden for non-GET requests");
       }
@@ -178,11 +180,11 @@ export async function safeFetch(
       url = parseSafeHttpsUrl(new URL(location, url).toString());
       continue;
     }
-    if (!response.ok) {
+    if (!response.ok && !explicitlyAccepted) {
       throw new UnsafeUrlError(`Source returned HTTP ${response.status}`);
     }
     const contentType = response.headers.get("content-type")?.split(";")[0] ?? "";
-    if (!ALLOWED_CONTENT_TYPES.includes(contentType)) {
+    if (response.ok && !ALLOWED_CONTENT_TYPES.includes(contentType)) {
       throw new UnsafeUrlError(`Unexpected content type: ${contentType}`);
     }
     const declaredLength = Number(response.headers.get("content-length") ?? 0);
@@ -198,7 +200,7 @@ export async function safeFetch(
       const value = response.headers.get(requestedName);
       if (value !== null) headers[requestedName.toLowerCase()] = value.slice(0, 256);
     }
-    return { url: url.toString(), contentType, body: buffer, headers };
+    return { url: url.toString(), status: response.status, contentType, body: buffer, headers };
   }
   throw new UnsafeUrlError("Redirect limit exceeded");
 }
