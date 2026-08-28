@@ -42,6 +42,13 @@ const VentureRenderingSchema = z.strictObject({
   freeformSocialImages: z.literal(false)
 });
 
+const VentureEditionSchema = z.strictObject({
+  id: VentureIdSchema,
+  locale: z.enum(["cs", "en"]),
+  profileRef: z.string().trim().min(1).max(160),
+  state: z.enum(["held", "draft", "operating"])
+});
+
 const VentureDefinitionSchema = openObject({
   id: VentureIdSchema,
   name: z.string().trim().min(1).max(100),
@@ -49,6 +56,11 @@ const VentureDefinitionSchema = openObject({
   visibility: z.enum(["public", "owner-only"]),
   taste: z.boolean(),
   ledgerNamespace: VentureIdSchema,
+  delivery: z.strictObject({
+    product: z.literal("social-first"),
+    website: z.literal("absent")
+  }).optional(),
+  editions: z.array(VentureEditionSchema).min(1).max(10).optional(),
   growth_objective: openObject({
     label: z.string().trim().min(1).max(200),
     components: z.array(z.enum([
@@ -142,6 +154,22 @@ export const VentureRegistrySchema = openObject({
       message: "Kvórum must declare the Design Lab as its sole rendering path",
       path: ["ventures", ventures.indexOf(kvorum), "rendering"]
     });
+  }
+  const webdevSignal = ventures.find((venture) => venture.id === "webdev-signal");
+  if (webdevSignal) {
+    const editions = webdevSignal.editions ?? [];
+    if (webdevSignal.ledgerNamespace !== "webdev-signal"
+      || webdevSignal.delivery?.product !== "social-first"
+      || webdevSignal.delivery.website !== "absent"
+      || editions.length !== 2
+      || editions.map(({ locale }) => locale).sort().join(",") !== "cs,en"
+      || editions.some(({ state }) => state !== "held")) {
+      context.addIssue({
+        code: "custom",
+        message: "WebDev Signal must be one held social-first venture with exactly Czech and English editions and no website",
+        path: ["ventures", ventures.indexOf(webdevSignal)]
+      });
+    }
   }
   const kinds = ventures.flatMap((venture) => venture.meetings.map(({ kind }) => kind));
   if (new Set(kinds).size !== kinds.length) {

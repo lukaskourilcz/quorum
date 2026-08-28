@@ -600,6 +600,43 @@
           }
         }
       ]
+    },
+    {
+      "id": "webdev-signal",
+      "name": "WebDev Signal",
+      "status": "exploration",
+      "visibility": "owner-only",
+      "taste": false,
+      "ledgerNamespace": "webdev-signal",
+      "delivery": {
+        "product": "social-first",
+        "website": "absent"
+      },
+      "editions": [
+        {
+          "id": "webdev-signal-cs",
+          "locale": "cs",
+          "profileRef": "social-profile-webdev-signal-cs",
+          "state": "held"
+        },
+        {
+          "id": "webdev-signal-en",
+          "locale": "en",
+          "profileRef": "social-profile-webdev-signal-en",
+          "state": "held"
+        }
+      ],
+      "growth_objective": {
+        "label": "Deliver reliable high-signal bilingual editions with broad official-source coverage, factual quality and qualified social outcomes",
+        "components": [
+          "edition-cadence",
+          "source-coverage"
+        ]
+      },
+      "adminTabs": [
+        "sources"
+      ],
+      "meetings": []
     }
   ]
 }
