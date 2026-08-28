@@ -230,10 +230,12 @@
       "maximumActiveSupportCampaigns": 2,
       "duplicateCaptionThreshold": 0.86,
       "duplicateAssetRejected": true,
+      "audienceSpecificAngleRequired": true,
       "staggerRequired": true,
       "minimumStaggerHours": 6
     },
     "profileOverrides": [],
+    "platformOverrides": [],
     "ownerDecisionRef": "fixture:amplification-policy-001",
     "history": [{
       "revision": 1,

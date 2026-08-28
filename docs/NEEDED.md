@@ -546,7 +546,10 @@ Roughly a month out. Nothing here is needed until a channel actually opens, and 
   token renewal/App Review path, provider cancellation/rollback and exact routine publish scope.
   This single countersignature/setup packet grants no engagement automation and does not waive
   profile, capability, release, content, accessibility, cadence, budget, reconciliation, receipt or
-  kill-switch gates. The Design Lab has no accounts and needs none.
+  kill-switch gates. If an owned-amplifier proposal is later accepted, use its generated
+  `amplifier-setup-packet/1` here: select one proposed brand name/handle, create the account
+  manually and record only the generated credential reference name. Do not add an amplifier to the
+  credential table before that owner decision. The Design Lab has no accounts and needs none.
 
   | Venture | Actions secrets | Repository variables |
   | --- | --- | --- |

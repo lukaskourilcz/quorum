@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "social-amplifier-portfolio/1",
+  "version": "1.0.0",
+  "ownerRef": "boardlessai",
+  "updatedAt": "2026-08-27T00:00:00.000Z",
+  "ownerDecisionRef": "GitHub #415",
+  "proposals": [],
+  "history": [
+    {
+      "revision": 1,
+      "at": "2026-08-27T00:00:00.000Z",
+      "action": "created",
+      "ownerDecisionRef": "GitHub #415",
+      "reason": "Canonical amplifier portfolio created empty; no external account, fake live record or implied setup authority exists."
+    }
+  ]
+}

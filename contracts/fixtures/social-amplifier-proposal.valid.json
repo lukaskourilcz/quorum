@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "social-amplifier-proposal/1",
+  "id": "amplifier-proposal-founders-ledger",
+  "profileId": "social-profile-founders-ledger",
+  "profileKind": "owned-brand",
+  "profileRole": "owned-amplifier",
+  "proposalOrigin": "owner-proposal",
+  "workingName": "Founders Ledger",
+  "publicNameCandidates": ["Founders Ledger", "One Founder Number"],
+  "publicHandleCandidates": ["@foundersledger", "@onefoundernumber"],
+  "ownerRef": "boardlessai",
+  "entityRef": "boardlessai",
+  "archetype": "topic-editorial",
+  "purpose": "Explain one bounded founder-finance idea at a time with original context and visible sources.",
+  "audience": "English-speaking early-stage founders who want practical finance context without investment advice.",
+  "independentReasonToFollow": "The feed is a recurring original learning product even when no venture release is being supported.",
+  "languages": ["en"],
+  "markets": ["US"],
+  "supportedTopics": ["founder-finance", "business-models"],
+  "supportedVentures": ["door-money"],
+  "capabilityRefs": [
+    {
+      "mapVersion": "1.1.0",
+      "source": "door-money",
+      "target": "social-distribution",
+      "capability": "approved-publish-package",
+      "dataSchemaVersion": "approved-publish-package/1",
+      "decisionReference": "GitHub #424"
+    }
+  ],
+  "identity": {
+    "presentation": "transparent-owned-brand",
+    "fictionalPerson": false,
+    "repostOnly": false,
+    "rawAccountCountGoal": false
+  },
+  "originalContentPromise": "At least four independently useful original explainers for every one relevant venture-support post.",
+  "repeatableFormats": [
+    {
+      "id": "one-number",
+      "name": "One number",
+      "description": "One founder-finance ratio explained with a worked fictional example.",
+      "sourcePlan": "Use public definitions and independently composed fictional examples."
+    },
+    {
+      "id": "decision-tree",
+      "name": "Decision tree",
+      "description": "A short decision tree for a bounded operating finance question.",
+      "sourcePlan": "Derive the tree from public accounting concepts and record sources before drafting."
+    }
+  ],
+  "expectedCadence": {
+    "postsPerWeek": 3,
+    "sourcePlan": "Maintain a four-week bank of original concepts and refresh sources before approval."
+  },
+  "launchRunway": {
+    "requiredOriginalPosts": 10,
+    "completedOriginalPosts": 0,
+    "firstOriginalConcepts": [
+      { "id": "runway-01", "title": "Runway without false precision", "formatRef": "one-number", "audienceAngle": "Show a new founder how scenario ranges change the answer." },
+      { "id": "runway-02", "title": "Contribution margin in one example", "formatRef": "one-number", "audienceAngle": "Use a fictional small software product instead of a finance textbook abstraction." },
+      { "id": "runway-03", "title": "Fixed or variable first", "formatRef": "decision-tree", "audienceAngle": "Help a bootstrapped founder classify one upcoming cost." },
+      { "id": "runway-04", "title": "Cash timing versus profit", "formatRef": "one-number", "audienceAngle": "Explain why a profitable invoice can still create a cash gap." },
+      { "id": "runway-05", "title": "Choose one planning horizon", "formatRef": "decision-tree", "audienceAngle": "Separate weekly survival decisions from annual planning." },
+      { "id": "runway-06", "title": "A bounded break-even check", "formatRef": "one-number", "audienceAngle": "Use one product and state every assumption." },
+      { "id": "runway-07", "title": "Discount or preserve margin", "formatRef": "decision-tree", "audienceAngle": "Frame the tradeoff for an owner with limited delivery capacity." },
+      { "id": "runway-08", "title": "Three costs a launch hides", "formatRef": "one-number", "audienceAngle": "Include owner time without pretending it is a cash expense." },
+      { "id": "runway-09", "title": "When a forecast is stale", "formatRef": "decision-tree", "audienceAngle": "Give a small team observable refresh triggers." },
+      { "id": "runway-10", "title": "What not to infer from revenue", "formatRef": "one-number", "audienceAngle": "Protect a first-time founder from treating topline as available cash." }
+    ],
+    "evidenceRefs": []
+  },
+  "maximumSupportRatio": 0.2,
+  "policyOverride": {
+    "minimumOriginalContentRatio": 0.8,
+    "maximumVentureSupportRatio": 0.2,
+    "sameSourceVentureCooldownDays": 14,
+    "maximumActiveSupportCampaigns": 1,
+    "minimumStaggerHours": 8,
+    "reason": "The first validation window uses a stricter four-to-one mix and longer cooldown."
+  },
+  "overlapAnalysis": {
+    "reviewedProfileIds": ["social-profile-door-money"],
+    "summary": "The amplifier teaches generic founder-finance concepts; Door Money remains the official product profile.",
+    "collisionWarnings": []
+  },
+  "platformDirection": {
+    "platforms": ["instagram", "threads"],
+    "markets": ["US"],
+    "verdict": "approved",
+    "ownerEvidenceRef": "fixture:owner-platform-direction-001"
+  },
+  "factualBio": "Original founder-finance explainers by BoardlessAI. Educational context, not financial advice.",
+  "logoAvatarRef": "fixture:abstract-ledger-mark-001",
+  "canonicalDestination": "https://example.invalid/founders-ledger",
+  "lifecycle": "proposed",
+  "ownerDecision": {
+    "verdict": "accept",
+    "at": "2026-08-27T00:00:00.000Z",
+    "evidenceRef": "fixture:owner-amplifier-decision-001",
+    "reason": "Strong topic proposition fixture for contract and gate validation only."
+  },
+  "validationPlan": {
+    "reviewAfterDays": 75,
+    "evidenceRequirements": [
+      "original-consistency",
+      "independent-audience-reason",
+      "qualified-results",
+      "support-versus-baseline",
+      "policy-incidents",
+      "owner-attention",
+      "provider-and-model-cost"
+    ],
+    "stopConditions": [
+      "Pause if the original-content runway falls below ten approved concepts before activation.",
+      "Retire if the 75-day review finds no independent reason to follow beyond venture promotion.",
+      "Pause immediately after any capability, identity, duplicate, privacy or authority incident."
+    ]
+  },
+  "history": [
+    {
+      "revision": 1,
+      "at": "2026-08-27T00:00:00.000Z",
+      "action": "created",
+      "actor": "owner",
+      "evidenceRef": "fixture:owner-amplifier-decision-001",
+      "reason": "Invented brand-like proposal fixture; no account exists.",
+      "supersedesRevision": null
+    }
+  ],
+  "createdAt": "2026-08-27T00:00:00.000Z",
+  "updatedAt": "2026-08-27T00:00:00.000Z"
+}

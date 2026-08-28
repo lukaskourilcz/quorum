@@ -12,6 +12,13 @@ const SlugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(100);
 const BoundedTextSchema = z.string().trim().min(1).max(500);
 const LocaleSchema = z.enum(["cs", "en"]);
 export const SocialPlatformSchema = z.enum(["instagram", "threads"]);
+export const AmplifierArchetypeSchema = z.enum([
+  "topic-editorial",
+  "language-market",
+  "geography-community",
+  "format",
+  "audience"
+]);
 
 export const SocialCapabilityRefSchema = z.strictObject({
   mapVersion: z.string().regex(/^\d+\.\d+\.\d+$/u),
@@ -71,7 +78,7 @@ export const SocialProfileSchema = z.strictObject({
   supportedTopics: z.array(SlugSchema).max(24),
   supportedVentures: z.array(VentureIdSchema).max(24),
   capabilityRefs: z.array(SocialCapabilityRefSchema).max(24),
-  amplifierArchetype: z.enum(["topic-editorial", "language-market", "geography-community", "format", "audience"]).nullable(),
+  amplifierArchetype: AmplifierArchetypeSchema.nullable(),
   amplifierEligibility: AmplifierEligibilityRefSchema.nullable(),
   originalContentPromise: z.string().trim().min(1).max(500).nullable(),
   recurringFormatRefs: z.array(SlugSchema).max(12),
@@ -430,8 +437,18 @@ const AmplificationPolicyValuesSchema = z.strictObject({
   maximumActiveSupportCampaigns: z.number().int().nonnegative().max(20),
   duplicateCaptionThreshold: z.number().finite().min(0).max(1),
   duplicateAssetRejected: z.boolean(),
+  audienceSpecificAngleRequired: z.boolean(),
   staggerRequired: z.boolean(),
   minimumStaggerHours: z.number().int().nonnegative().max(168)
+});
+
+const AmplificationPolicyOverrideSchema = z.strictObject({
+  minimumOriginalContentRatio: z.number().finite().min(0).max(1).nullable(),
+  maximumVentureSupportRatio: z.number().finite().min(0).max(1).nullable(),
+  sameSourceVentureCooldownDays: z.number().int().nonnegative().max(365).nullable(),
+  maximumActiveSupportCampaigns: z.number().int().nonnegative().max(20).nullable(),
+  minimumStaggerHours: z.number().int().nonnegative().max(168).nullable(),
+  reason: BoundedTextSchema
 });
 
 const PolicyHistorySchema = z.strictObject({
@@ -449,14 +466,12 @@ export const AmplificationPolicySchema = z.strictObject({
   version: z.string().regex(/^\d+\.\d+\.\d+$/u),
   effectiveDate: DateSchema,
   values: AmplificationPolicyValuesSchema,
-  profileOverrides: z.array(z.strictObject({
+  profileOverrides: z.array(AmplificationPolicyOverrideSchema.extend({
     profileId: z.string().regex(/^social-profile-[a-z0-9]+(?:-[a-z0-9]+)*$/u),
-    minimumOriginalContentRatio: z.number().finite().min(0).max(1).nullable(),
-    maximumVentureSupportRatio: z.number().finite().min(0).max(1).nullable(),
-    sameSourceVentureCooldownDays: z.number().int().nonnegative().max(365).nullable(),
-    maximumActiveSupportCampaigns: z.number().int().nonnegative().max(20).nullable(),
-    reason: BoundedTextSchema
   })).max(100),
+  platformOverrides: z.array(AmplificationPolicyOverrideSchema.extend({
+    platform: SocialPlatformSchema
+  })).max(2),
   ownerDecisionRef: EvidenceRefSchema,
   history: z.array(PolicyHistorySchema).min(1).max(100)
 }).superRefine((policy, context) => {
@@ -465,18 +480,28 @@ export const AmplificationPolicySchema = z.strictObject({
   }
   const profileIds = policy.profileOverrides.map((override) => override.profileId);
   if (new Set(profileIds).size !== profileIds.length) context.addIssue({ code: "custom", message: "Each profile has at most one effective override", path: ["profileOverrides"] });
-  for (const [index, override] of policy.profileOverrides.entries()) {
-    if (override.minimumOriginalContentRatio !== null && override.minimumOriginalContentRatio < policy.values.minimumOriginalContentRatio) {
-      context.addIssue({ code: "custom", message: "Profile override may only require more original content", path: ["profileOverrides", index] });
-    }
-    if (override.maximumVentureSupportRatio !== null && override.maximumVentureSupportRatio > policy.values.maximumVentureSupportRatio) {
-      context.addIssue({ code: "custom", message: "Profile override may only reduce venture support", path: ["profileOverrides", index] });
-    }
-    if (override.sameSourceVentureCooldownDays !== null && override.sameSourceVentureCooldownDays < policy.values.sameSourceVentureCooldownDays) {
-      context.addIssue({ code: "custom", message: "Profile override may only lengthen cooldown", path: ["profileOverrides", index] });
-    }
-    if (override.maximumActiveSupportCampaigns !== null && override.maximumActiveSupportCampaigns > policy.values.maximumActiveSupportCampaigns) {
-      context.addIssue({ code: "custom", message: "Profile override may only lower the active campaign cap", path: ["profileOverrides", index] });
+  const platformIds = policy.platformOverrides.map((override) => override.platform);
+  if (new Set(platformIds).size !== platformIds.length) context.addIssue({ code: "custom", message: "Each platform has at most one effective override", path: ["platformOverrides"] });
+  for (const [collection, overrides] of [
+    ["profileOverrides", policy.profileOverrides],
+    ["platformOverrides", policy.platformOverrides]
+  ] as const) {
+    for (const [index, override] of overrides.entries()) {
+      if (override.minimumOriginalContentRatio !== null && override.minimumOriginalContentRatio < policy.values.minimumOriginalContentRatio) {
+        context.addIssue({ code: "custom", message: "An override may only require more original content", path: [collection, index] });
+      }
+      if (override.maximumVentureSupportRatio !== null && override.maximumVentureSupportRatio > policy.values.maximumVentureSupportRatio) {
+        context.addIssue({ code: "custom", message: "An override may only reduce venture support", path: [collection, index] });
+      }
+      if (override.sameSourceVentureCooldownDays !== null && override.sameSourceVentureCooldownDays < policy.values.sameSourceVentureCooldownDays) {
+        context.addIssue({ code: "custom", message: "An override may only lengthen cooldown", path: [collection, index] });
+      }
+      if (override.maximumActiveSupportCampaigns !== null && override.maximumActiveSupportCampaigns > policy.values.maximumActiveSupportCampaigns) {
+        context.addIssue({ code: "custom", message: "An override may only lower the active campaign cap", path: [collection, index] });
+      }
+      if (override.minimumStaggerHours !== null && override.minimumStaggerHours < policy.values.minimumStaggerHours) {
+        context.addIssue({ code: "custom", message: "An override may only lengthen the minimum stagger", path: [collection, index] });
+      }
     }
   }
   const revisions = policy.history.map((event) => event.revision);
@@ -486,6 +511,7 @@ export const AmplificationPolicySchema = z.strictObject({
 });
 
 export type SocialProfile = z.infer<typeof SocialProfileSchema>;
+export type SocialCapabilityRef = z.infer<typeof SocialCapabilityRefSchema>;
 export type SocialConnection = z.infer<typeof SocialConnectionSchema>;
 export type DistributionContact = z.infer<typeof DistributionContactSchema>;
 export type SocialCampaign = z.infer<typeof SocialCampaignSchema>;

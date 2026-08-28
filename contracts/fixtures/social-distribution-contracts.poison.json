@@ -133,8 +133,9 @@
     "id": "amplification-policy-central",
     "version": "1.0.0",
     "effectiveDate": "2026-08-27",
-    "values": { "minimumOriginalContentRatio": 0.5, "maximumVentureSupportRatio": 0.8, "rollingWindowPosts": 1, "originalContentRunwayPosts": 1, "sameSourceVentureCooldownDays": 1, "maximumActiveSupportCampaigns": 10, "duplicateCaptionThreshold": 0, "duplicateAssetRejected": false, "staggerRequired": false, "minimumStaggerHours": 0 },
-    "profileOverrides": [{ "profileId": "social-profile-poison", "minimumOriginalContentRatio": 0.1, "maximumVentureSupportRatio": 1, "sameSourceVentureCooldownDays": 0, "maximumActiveSupportCampaigns": 20, "reason": "Loosen everything." }],
+    "values": { "minimumOriginalContentRatio": 0.5, "maximumVentureSupportRatio": 0.8, "rollingWindowPosts": 1, "originalContentRunwayPosts": 1, "sameSourceVentureCooldownDays": 1, "maximumActiveSupportCampaigns": 10, "duplicateCaptionThreshold": 0, "duplicateAssetRejected": false, "audienceSpecificAngleRequired": false, "staggerRequired": false, "minimumStaggerHours": 0 },
+    "profileOverrides": [{ "profileId": "social-profile-poison", "minimumOriginalContentRatio": 0.1, "maximumVentureSupportRatio": 1, "sameSourceVentureCooldownDays": 0, "maximumActiveSupportCampaigns": 20, "minimumStaggerHours": 0, "reason": "Loosen everything." }],
+    "platformOverrides": [],
     "ownerDecisionRef": "poison",
     "history": [{ "revision": 1, "effectiveAt": "2026-08-27T00:00:00.000Z", "ownerDecisionRef": "poison", "action": "created", "reason": "Poison.", "supersedesRevision": null }]
   }

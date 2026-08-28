@@ -14,7 +14,7 @@ Authority: GitHub #406, using the provider/authority decision in #405 and capabi
 | `social-campaign/1` | #410 campaign domain | One verified release's exact primary/umbrella/amplifier targets, immutable channel items, unique UTM, holds and correction-safe history. | A generic sister target, a new capability edge or provider authority. |
 | `social-share-kit/1` | Optional #411 Network domain | Bounded factual material for copy/download/manual send to one opted-in contact. | Owned-account queue entry or a claim that delivery/sharing occurred without evidence. |
 | `social-profile-event/1` | Profile/connection lifecycle ledger | Append-only proposal, setup, connection, activation, pause, reauthorisation, disconnect, retire, reject and correction evidence. | Engagement actions; the enum deliberately contains none. |
-| `amplification-policy/1` | #415 amplifier policy domain | One central original/support ratio, runway, cooldown, campaign, duplicate and stagger policy plus stricter overrides/history. | A live amplifier, loosened capability or copied UI/runtime literals. |
+| `amplification-policy/1` | #415 amplifier policy domain | One central original/support ratio, runway, cooldown, campaign, duplicate, audience-angle and stagger policy plus stricter profile/platform overrides and history. | A live amplifier, loosened capability or copied UI/runtime literals. |
 
 Schemas and inferred TypeScript types live in
 `orchestrator/src/contracts/social-distribution.ts`. `parseSocialDistributionRecords` parses or
@@ -51,7 +51,9 @@ runtime composition of all independent gates.
 - Personal Growth, Kvórum and GoVIRAL cannot source campaigns. BOOKSOFHISTORY and Tehdejší svět
   cannot target one another.
 - A delivered share kit requires evidence; it never enters the owned-account queue.
-- Policy overrides can only become stricter than central policy.
+- Policy overrides can only become stricter than central policy. The #415 resolver composes
+  central, platform, profile and proposal values in that order, always retaining the strictest
+  effective value.
 
 ## Simulations
 

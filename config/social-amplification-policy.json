@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "amplification-policy/1",
+  "id": "amplification-policy-central",
+  "version": "1.0.0",
+  "effectiveDate": "2026-08-27",
+  "values": {
+    "minimumOriginalContentRatio": 0.7,
+    "maximumVentureSupportRatio": 0.3,
+    "rollingWindowPosts": 20,
+    "originalContentRunwayPosts": 10,
+    "sameSourceVentureCooldownDays": 10,
+    "maximumActiveSupportCampaigns": 2,
+    "duplicateCaptionThreshold": 0.86,
+    "duplicateAssetRejected": true,
+    "audienceSpecificAngleRequired": true,
+    "staggerRequired": true,
+    "minimumStaggerHours": 6
+  },
+  "profileOverrides": [],
+  "platformOverrides": [
+    {
+      "platform": "instagram",
+      "minimumOriginalContentRatio": 0.75,
+      "maximumVentureSupportRatio": 0.25,
+      "sameSourceVentureCooldownDays": 12,
+      "maximumActiveSupportCampaigns": 1,
+      "minimumStaggerHours": 8,
+      "reason": "Instagram starts with a narrower support posture while the first 60–90 day baseline is established."
+    }
+  ],
+  "ownerDecisionRef": "GitHub #415",
+  "history": [
+    {
+      "revision": 1,
+      "effectiveAt": "2026-08-27T00:00:00.000Z",
+      "ownerDecisionRef": "GitHub #415",
+      "action": "created",
+      "reason": "Founding deny-by-default amplifier policy with one stricter Instagram override.",
+      "supersedesRevision": null
+    }
+  ]
+}
