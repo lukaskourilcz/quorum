@@ -83,6 +83,7 @@ export interface ResolvedPublisherTarget {
   nativeAccountIdRef: string;
   providerId: "direct-meta";
   apiVersion: string;
+  providerBindingId?: string;
 }
 
 export interface PublisherTargetResolution {

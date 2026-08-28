@@ -187,6 +187,10 @@ describe("social and organization controls", () => {
       new Response(JSON.stringify({ id: "remote-1" }), {
         status: 200,
         headers: { "content-type": "application/json" }
+      }),
+      new Response(JSON.stringify({ id: "remote-1", permalink: "https://www.threads.net/@fixture/post/remote-1" }), {
+        status: 200,
+        headers: { "content-type": "application/json" }
       })
     ];
     const fetchMock = vi.fn<typeof fetch>();
@@ -230,9 +234,11 @@ describe("social and organization controls", () => {
       "1".repeat(64),
       target
     );
+    const verified = await adapter.verify(liveChannel, migrated, result.remoteId, target);
 
     expect(result.remoteId).toBe("remote-1");
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(verified).toEqual({ remoteId: "remote-1", remoteUrl: "https://www.threads.net/@fixture/post/remote-1" });
+    expect(fetchMock).toHaveBeenCalledTimes(3);
     expect(String(fetchMock.mock.calls[0]?.[0])).toContain("/threads");
     expect(String(fetchMock.mock.calls[1]?.[0])).toContain("/threads_publish");
   });

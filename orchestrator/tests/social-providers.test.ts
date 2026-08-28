@@ -58,7 +58,7 @@ describe("Social Distribution provider control plane", () => {
   it("holds the committed binding and resolves only one explicitly activated Direct Meta binding", async () => {
     const [providers, publisher] = await Promise.all([loadSocialProviderRegistry(), loadSocialPublisherRegistry()]);
     const connectionId = "social-connection-caught-up-threads";
-    const environment = { CAUGHT_UP_THREADS_ACCESS_TOKEN: "fixture", CAUGHT_UP_THREADS_USER_ID: "fixture" };
+    const environment = { META_GRAPH_API_VERSION: "v26.0", CAUGHT_UP_THREADS_ACCESS_TOKEN: "fixture", CAUGHT_UP_THREADS_USER_ID: "fixture" };
     expect(resolveProviderBinding({ registry: providers, publisherRegistry: publisher, connectionId, environment })).toMatchObject({
       decision: "held",
       automaticFailover: false,

@@ -154,6 +154,9 @@ export function resolveProviderBinding(input: {
   for (const reference of binding.credentialRefs) {
     if (!input.environment[reference]?.trim()) holds.push(`provider-credential-unavailable:${reference}`);
   }
+  for (const requirement of provider.credentialRequirements) {
+    if (!input.environment[requirement.environmentRef]?.trim()) holds.push(`provider-setting-unavailable:${requirement.environmentRef}`);
+  }
   if (holds.length > 0) return bindingResolution("held", holds, target);
   return bindingResolution("eligible", ["exact-active-provider-binding"], target);
 }

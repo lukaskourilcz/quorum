@@ -41,6 +41,15 @@ function accountCredentials(environment: NodeJS.ProcessEnv, target: ResolvedPubl
   if (!target || target.connection.platform !== channel.id) {
     throw new Error("A validated profile/connection binding is required");
   }
+  if (target.providerId !== "direct-meta") {
+    throw new Error("The official Meta adapter accepts only its exact provider binding");
+  }
+  const requiredScopes = channel.id === "threads"
+    ? ["threads_basic", "threads_content_publish"] as const
+    : ["instagram_basic", "instagram_content_publish"] as const;
+  if (requiredScopes.some((scope) => !target.connection.approvedScopes.includes(scope))) {
+    throw new Error("The validated connection is missing an official publish scope");
+  }
   return {
     accessToken: requiredEnvironment(environment, target.credentialRef),
     userId: requiredEnvironment(environment, target.nativeAccountIdRef)
@@ -93,6 +102,9 @@ export function createMetaPublishAdapter(
       if (existing) return { remoteId: existing };
 
       if (channel.connector === "meta_threads" && channel.id === "threads") {
+        if (content.assetPaths.length > 0) {
+          throw new Error("The verified Threads transport currently accepts text-only items");
+        }
         const userId = credentials.userId;
         const base = new URL(
           `https://graph.threads.net/${version}/${encodeURIComponent(userId)}/`
@@ -119,6 +131,9 @@ export function createMetaPublishAdapter(
       }
 
       if (channel.connector === "meta_instagram" && channel.id === "instagram") {
+        if (content.assetPaths.length < 1 || content.assetPaths.some((asset) => !/\.(?:jpe?g|png|webp)$/iu.test(asset))) {
+          throw new Error("The verified Instagram transport requires one to ten image assets");
+        }
         const userId = credentials.userId;
         const base = new URL(
           `https://graph.facebook.com/${version}/${encodeURIComponent(userId)}/`
@@ -178,6 +193,10 @@ export function createMetaPublishAdapter(
       const parsed = MetaLiveResponseSchema.safeParse(await response.json());
       if (!parsed.success || parsed.data.id !== remoteId) throw new Error("Meta post verifier returned an invalid post");
       return { remoteId, remoteUrl: parsed.data.permalink_url ?? parsed.data.permalink! };
+    },
+    async findByIdempotencyKey(_channel: Channel, idempotencyKey: string): Promise<{ remoteId: string } | null> {
+      const remoteId = publishedByKey.get(idempotencyKey);
+      return remoteId ? { remoteId } : null;
     }
   };
 }
