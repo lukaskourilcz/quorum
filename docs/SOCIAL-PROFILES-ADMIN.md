@@ -22,11 +22,12 @@ no cross-use relationship. Door Money carries only its exact `approved-publish-p
 no account or connection.
 
 The stable sections are Venture Profiles, Amplification Profiles, Campaigns, optional Network,
-Providers & automation health, Content runway, and Activity & setup. Campaigns reads only #410's
+Providers & automation health, Content runway, Results, and Activity & setup. Campaigns reads only #410's
 validated store. Content runway exposes #418 strategy, planning, receipt and incident evidence but
-has no queue or publish action. Results, Today, Learning and Plan & progress extend the same
-snapshot and navigation only in their owning issues. CONTEST RADAR remains deferred and has no
-source or control here.
+has no queue or publish action. Results is the #412 append-only aggregate view and contains no
+audience identity, private message or spend action. Today, Learning and Plan & progress extend the
+same snapshot and navigation only in their owning issues. CONTEST RADAR remains deferred and has
+no source or control here.
 
 ## Lifecycle writer
 

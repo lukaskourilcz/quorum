@@ -7,6 +7,11 @@ capability, campaign, approval, policy, cadence, budget and kill-switch gates. I
 profile, campaign, copy, asset, window or experiment. BoardlessAI remains authoritative for the
 queue, campaign, canonical receipt, attribution and learning record.
 
+Own-account insights use the same exact binding resolver with the separate `own-insights`
+capability. The current bindings do not carry that capability or the owner-approved insight scopes,
+so collection records `missing-permission` and makes no provider request. See
+`docs/SOCIAL-RESULTS.md`.
+
 No account, OAuth flow, credential value, provider plan, purchase, live connection or routine
 publishing authority is created by the implementation. All six retained Direct Meta bindings in
 `config/social-providers.json` remain `held`.
