@@ -23,6 +23,7 @@ export const SocialLearningEvaluationSchema = z.strictObject({
   sample: z.strictObject({
     distinctPosts: z.number().int().nonnegative(),
     measured28dPosts: z.number().int().nonnegative(),
+    qualifiedOutcomePosts: z.number().int().nonnegative(),
     unavailablePosts: z.number().int().nonnegative(),
     operationDays: z.number().int().nonnegative(),
     queued: z.number().int().nonnegative(),
@@ -126,9 +127,30 @@ export const SocialContinuationProposalSchema = z.strictObject({
   if ((proposal.verdict === "PAUSE") !== (proposal.queueAction === "request-pause")) context.addIssue({ code: "custom", message: "Only PAUSE may request a bounded queue pause", path: ["queueAction"] });
 });
 
+export const SocialLearningCheckpointSchema = z.strictObject({
+  schemaVersion: z.literal("social-learning-checkpoint/1"),
+  profileId: ProfileIdSchema,
+  evaluatedWeek: DateSchema,
+  currentEvaluationRef: EvidenceRefSchema,
+  evaluationRefs: z.array(EvidenceRefSchema).min(1).max(100),
+  adjustmentEventRefs: z.array(EvidenceRefSchema).max(100),
+  continuationRefs: z.array(EvidenceRefSchema).min(1).max(100),
+  strategyVersionRefs: z.array(EvidenceRefSchema).min(1).max(100),
+  correctionCount: z.number().int().nonnegative(),
+  generatedAt: DateTimeSchema,
+  checkpointHash: Sha256Schema,
+  authorityGranted: z.literal(false),
+  publishingAuthorized: z.literal(false)
+}).superRefine((checkpoint, context) => {
+  if (!checkpoint.evaluationRefs.includes(checkpoint.currentEvaluationRef)) context.addIssue({ code: "custom", message: "Current evaluation must preserve an immutable evaluation reference", path: ["currentEvaluationRef"] });
+  if (checkpoint.correctionCount !== checkpoint.evaluationRefs.length - 1) context.addIssue({ code: "custom", message: "Correction count derives from preserved evaluation versions", path: ["correctionCount"] });
+  if (checkpoint.checkpointHash !== socialLearningCheckpointHash(checkpoint)) context.addIssue({ code: "custom", message: "Learning checkpoint hash must match canonical evidence", path: ["checkpointHash"] });
+});
+
 export type SocialLearningEvaluation = z.infer<typeof SocialLearningEvaluationSchema>;
 export type SocialStrategyAdjustment = z.infer<typeof SocialStrategyAdjustmentSchema>;
 export type SocialContinuationProposal = z.infer<typeof SocialContinuationProposalSchema>;
+export type SocialLearningCheckpoint = z.infer<typeof SocialLearningCheckpointSchema>;
 export const SOCIAL_LEARNING_FROZEN_GATES = ["purpose", "capability", "privacy", "evidence", "original-support-ratio", "runway", "cooldown", "duplicate", "stagger", "authority", "cost", "kill-switch"] as const;
 
 function canonical(value: unknown, excluded: ReadonlySet<string>): unknown { if (Array.isArray(value)) return value.map((entry) => canonical(entry, excluded)); if (value && typeof value === "object") return Object.fromEntries(Object.entries(value as Record<string, unknown>).filter(([key]) => !excluded.has(key)).sort(([left], [right]) => left.localeCompare(right)).map(([key, entry]) => [key, canonical(entry, excluded)])); return value; }
@@ -136,3 +158,4 @@ const digest = (value: unknown, excluded: string[]) => createHash("sha256").upda
 export const socialLearningEvaluationHash = (value: unknown): string => digest(value, ["id", "evaluationHash"]);
 export const socialStrategyAdjustmentHash = (value: unknown): string => digest(value, ["id", "adjustmentHash", "status", "ownerDecisionRef", "appliedStrategyRef", "updatedAt"]);
 export const socialContinuationProposalHash = (value: unknown): string => digest(value, ["id", "proposalHash"]);
+export const socialLearningCheckpointHash = (value: unknown): string => digest(value, ["checkpointHash"]);

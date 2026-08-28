@@ -78,6 +78,7 @@ import {
   recordSocialPackFailure
 } from "./social/pack.js";
 import { socialChannelsEnabled, socialContentGenerationEnabled } from "./social/activation.js";
+import { runSocialLearningCheckpoint } from "./social/learning-checkpoint.js";
 import {
   COUNCIL_SEATS,
   collectLiveCouncil,
@@ -1249,6 +1250,9 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       const monthly = await writeMonthlyReportIfDue({ stateRoot: artifactRoot, today, now, ledger, capUsd });
       for (const due of [weekly, monthly]) {
         if (due) reportArtifacts.push(due.path);
+      }
+      if (weekly) {
+        reportArtifacts.push(...(await runSocialLearningCheckpoint({ repoRoot, stateRoot: artifactRoot, now })).paths);
       }
       // The retro is the judgement layer over the week the writer just measured, so it runs after
       // it and only when there is a report to complete. Off by default; a budget refusal writes a

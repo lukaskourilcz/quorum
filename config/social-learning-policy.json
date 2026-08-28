@@ -2,6 +2,7 @@
   "schemaVersion": "social-learning-policy/1",
   "version": "1.0.0",
   "minimumMeasuredPosts": 8,
+  "maximumLookbackDays": 90,
   "minimumAdjustmentEvidence": 3,
   "outlierMinimumPeers": 4,
   "maximumActiveExperiments": 2,
