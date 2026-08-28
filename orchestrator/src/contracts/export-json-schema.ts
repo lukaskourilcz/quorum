@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { repoRoot } from "../paths.js";
 import { ContractSchemas, jsonSchemaText } from "./json-schema.js";
+import { exportSocialContractFixtures } from "./export-social-fixtures.js";
 
 const outputRoot = path.join(repoRoot, "contracts");
 
@@ -12,3 +13,4 @@ await Promise.all(
     await writeFile(path.join(outputRoot, `${name}.schema.json`), jsonSchemaText(contractName));
   })
 );
+await exportSocialContractFixtures();

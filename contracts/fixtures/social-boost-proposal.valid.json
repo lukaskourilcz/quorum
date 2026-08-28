@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-boost-proposal/1",
+  "id": "social-boost-proposal-aaaaaaaaaaaaaaaaaaaa",
+  "status": "held-owner-proposal",
+  "contentRef": "state/social/posts/social-post-receipt-example.json",
+  "destinationRef": "https://example.com/release",
+  "thresholdVersion": "1.0.0",
+  "baselineRef": "state/social/results/baselines/social-distribution-baseline-2026-08.json",
+  "organicObservationRefs": [
+    "state/social/results/observations/one.json",
+    "state/social/results/observations/two.json"
+  ],
+  "primaryMetric": "qualified_actions",
+  "observedValue": 4,
+  "thresholdValue": 3,
+  "sampleSize": 2,
+  "contentChecksPassed": true,
+  "destinationChecksPassed": true,
+  "budgetAuthorityRef": "state/BUDGETS.md",
+  "proposedAt": "2026-08-29T12:00:00.000Z",
+  "ownerDecisionRequired": true,
+  "adApiCalled": false,
+  "purchaseAuthorized": false,
+  "spendAuthorized": false,
+  "publishingAuthorized": false
+}

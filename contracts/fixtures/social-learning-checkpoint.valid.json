@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "social-learning-checkpoint/1",
+  "profileId": "social-profile-caught-up",
+  "evaluatedWeek": "2026-08-31",
+  "currentEvaluationRef": "state/social/learning/evaluations/social-profile-caught-up/social-learning-evaluation-050206f6498425440974.json",
+  "evaluationRefs": [
+    "state/social/learning/evaluations/social-profile-caught-up/social-learning-evaluation-050206f6498425440974.json"
+  ],
+  "adjustmentEventRefs": [
+    "state/social/learning/adjustments/social-profile-caught-up/social-strategy-adjustment-b4129fb7ece2d4f6016c.json"
+  ],
+  "continuationRefs": [
+    "state/social/learning/continuations/social-profile-caught-up/social-continuation-proposal-ab70a6ab0cb4a3fafcac.json"
+  ],
+  "strategyVersionRefs": [
+    "config/social-profile-strategies.json#social-profile-strategy-caught-up"
+  ],
+  "correctionCount": 0,
+  "generatedAt": "2026-08-31T21:00:00.000Z",
+  "checkpointHash": "9966f4c99dd281b43d7ce38b323741feb8e56c89049d1b3465f34081d120196a",
+  "authorityGranted": false,
+  "publishingAuthorized": false
+}

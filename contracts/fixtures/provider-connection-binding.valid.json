@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "provider-connection-binding/1",
+  "id": "social-provider-binding-caught-up-threads-direct-meta",
+  "connectionId": "social-connection-caught-up-threads",
+  "providerId": "direct-meta",
+  "providerImplementationVersion": "1.0.0",
+  "providerApiVersion": "v26.0",
+  "mode": "held",
+  "capabilities": [
+    "publish-original",
+    "status-read",
+    "reconcile-delivery"
+  ],
+  "credentialRefs": [
+    "CAUGHT_UP_THREADS_ACCESS_TOKEN",
+    "CAUGHT_UP_THREADS_USER_ID"
+  ],
+  "ownerActivationRef": null,
+  "authorityRef": null,
+  "planLimitEvidenceRef": "GitHub #405",
+  "createdAt": "2026-08-27T00:00:00.000Z",
+  "effectiveAt": null,
+  "endedAt": null,
+  "previousBindingRef": null,
+  "supersedingBindingRef": null,
+  "migration": {
+    "state": "none",
+    "inFlightItemRefs": [],
+    "reconciliationRefs": [],
+    "rollbackRef": null
+  },
+  "health": {
+    "state": "held",
+    "unavailableReason": "owner-activation-required",
+    "lastVerifiedAt": null
+  },
+  "bindingHash": "1c8b5888c30ba89f8ec39ee82d576d49caccaeb28f3d4177007ca5b6c37adb40",
+  "authorityGranted": false,
+  "publishingAuthorized": false
+}

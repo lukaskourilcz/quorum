@@ -146,6 +146,12 @@ import {
   SocialRoutineScopeSchema
 } from "./social-operations.js";
 import {
+  SocialContinuationProposalSchema,
+  SocialLearningCheckpointSchema,
+  SocialLearningEvaluationSchema,
+  SocialStrategyAdjustmentSchema
+} from "./social-learning.js";
+import {
   ArticleImageSchema,
   MetricsPlaceholderSchema,
   PriorityItemSchema,
@@ -284,7 +290,11 @@ export const ContractSchemas = {
   "social-boost-proposal": SocialBoostProposalSchema,
   "social-routine-scope": SocialRoutineScopeSchema,
   "social-prepared-candidate": SocialPreparedCandidateSchema,
-  "social-profile-operation": SocialProfileOperationSchema
+  "social-profile-operation": SocialProfileOperationSchema,
+  "social-learning-evaluation": SocialLearningEvaluationSchema,
+  "social-strategy-adjustment": SocialStrategyAdjustmentSchema,
+  "social-continuation-proposal": SocialContinuationProposalSchema,
+  "social-learning-checkpoint": SocialLearningCheckpointSchema
 } satisfies Record<string, ZodType>;
 
 export type ContractName = keyof typeof ContractSchemas;

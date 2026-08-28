@@ -13,7 +13,7 @@
     "admin:qa": "pnpm --filter @boardlessai/site test:e2e:admin-qa",
     "agents:validate": "pnpm --filter @boardlessai/orchestrator agents:validate",
     "bh:seed": "pnpm --filter @boardlessai/orchestrator bh:seed",
-    "contracts:export": "pnpm --filter @boardlessai/orchestrator exec tsx src/contracts/export-json-schema.ts",
+    "contracts:export": "pnpm --filter @boardlessai/orchestrator exec node --import tsx src/contracts/export-json-schema.ts",
     "build": "pnpm docs:refresh && pnpm -r build",
     "budget:alert": "pnpm --filter @boardlessai/orchestrator budget:alert",
     "book:ingest": "pnpm --filter @boardlessai/orchestrator book:ingest",

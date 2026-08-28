@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "social-learning-evaluation/1",
+  "id": "social-learning-evaluation-050206f6498425440974",
+  "evaluationHash": "050206f6498425440974c1437bf8fdb776fdc98bd4674a6c8d1035afed27d41f",
+  "profileId": "social-profile-caught-up",
+  "targetRole": "primary",
+  "strategyId": "social-profile-strategy-caught-up",
+  "strategyVersion": "1.0.0",
+  "evaluatedWeek": "2026-08-31",
+  "evaluatedAt": "2026-08-31T21:00:00.000Z",
+  "observationRefs": [],
+  "operationRefs": [],
+  "experimentRefs": [],
+  "sample": {
+    "distinctPosts": 0,
+    "measured28dPosts": 0,
+    "qualifiedOutcomePosts": 0,
+    "unavailablePosts": 0,
+    "operationDays": 0,
+    "queued": 0,
+    "noPost": 0,
+    "heldOrFailed": 0,
+    "originalPosts": 0,
+    "supportPosts": 0,
+    "actualCostUsd": null,
+    "ownerAttentionCount": 0
+  },
+  "robustMetrics": {
+    "publishReliability": null,
+    "qualifiedActionsMedian": null,
+    "referralVisitsMedian": null,
+    "reachMedian": null,
+    "originalRatio": null,
+    "supportRatio": null
+  },
+  "outlierObservationRefs": [],
+  "minimumSample": 8,
+  "conclusion": "INSUFFICIENT_DATA",
+  "signals": [
+    "A minimum measured sample is not available."
+  ],
+  "proposedAdjustmentRef": null,
+  "hardGatesFrozen": [
+    "purpose",
+    "capability",
+    "privacy",
+    "evidence",
+    "original-support-ratio",
+    "runway",
+    "cooldown",
+    "duplicate",
+    "stagger",
+    "authority",
+    "cost",
+    "kill-switch"
+  ],
+  "authorityGranted": false,
+  "publishingAuthorized": false
+}

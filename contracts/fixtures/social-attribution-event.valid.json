@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "social-attribution-event/1",
+  "id": "social-attribution-event-aaaaaaaaaaaaaaaaaaaa",
+  "idempotencyHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "source": "first-party-destination",
+  "eventType": "qualified-action",
+  "eventCount": 1,
+  "occurredAt": "2026-08-27T09:00:00.000Z",
+  "observedAt": "2026-08-27T09:05:00.000Z",
+  "destination": "https://example.com/release",
+  "utm": {
+    "source": "instagram",
+    "medium": "organic_social",
+    "campaign": "door-money-release-001",
+    "content": "door-money-instagram-001"
+  },
+  "attribution": {
+    "state": "attributed",
+    "campaignRef": "state/social/campaigns/social-campaign-door-money-release-001.json",
+    "campaignItemId": "door-money-instagram-001",
+    "profileId": "social-profile-door-money",
+    "targetRole": "primary"
+  },
+  "deduplicationKey": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "evidenceRefs": [
+    "destination-analytics:event-aggregate"
+  ],
+  "identityExcluded": true,
+  "fingerprintingExcluded": true,
+  "consentInferred": false,
+  "sharingInferred": false,
+  "relationshipKitRef": null,
+  "contestRef": null,
+  "authorityGranted": false
+}

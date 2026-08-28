@@ -317,7 +317,8 @@
           "draft-only",
           "sensitive-review",
           "prepared-item-missing",
-          "ambiguous-delivery-reconciliation"
+          "ambiguous-delivery-reconciliation",
+          "campaign-capacity"
         ]
       }
     },

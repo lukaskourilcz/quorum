@@ -1,0 +1,345 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-learning-evaluation/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^social-learning-evaluation-[a-f0-9]{20}$"
+    },
+    "evaluationHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "profileId": {
+      "type": "string",
+      "maxLength": 140,
+      "pattern": "^social-profile-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "targetRole": {
+      "type": "string",
+      "enum": [
+        "primary",
+        "umbrella",
+        "amplifier"
+      ]
+    },
+    "strategyId": {
+      "type": "string",
+      "maxLength": 180,
+      "pattern": "^social-profile-strategy-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "strategyVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "evaluatedWeek": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "evaluatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "observationRefs": {
+      "maxItems": 2000,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "operationRefs": {
+      "maxItems": 500,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "experimentRefs": {
+      "maxItems": 2,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "sample": {
+      "type": "object",
+      "properties": {
+        "distinctPosts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "measured28dPosts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "qualifiedOutcomePosts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "unavailablePosts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "operationDays": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "queued": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "noPost": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "heldOrFailed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "originalPosts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "supportPosts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "actualCostUsd": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ownerAttentionCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "distinctPosts",
+        "measured28dPosts",
+        "qualifiedOutcomePosts",
+        "unavailablePosts",
+        "operationDays",
+        "queued",
+        "noPost",
+        "heldOrFailed",
+        "originalPosts",
+        "supportPosts",
+        "actualCostUsd",
+        "ownerAttentionCount"
+      ],
+      "additionalProperties": false
+    },
+    "robustMetrics": {
+      "type": "object",
+      "properties": {
+        "publishReliability": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "qualifiedActionsMedian": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "referralVisitsMedian": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reachMedian": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "originalRatio": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "supportRatio": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "publishReliability",
+        "qualifiedActionsMedian",
+        "referralVisitsMedian",
+        "reachMedian",
+        "originalRatio",
+        "supportRatio"
+      ],
+      "additionalProperties": false
+    },
+    "outlierObservationRefs": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "minimumSample": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 1000
+    },
+    "conclusion": {
+      "type": "string",
+      "enum": [
+        "INSUFFICIENT_DATA",
+        "STABLE",
+        "PROPOSE_BOUNDED_CHANGE"
+      ]
+    },
+    "signals": {
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 300
+      }
+    },
+    "proposedAdjustmentRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "hardGatesFrozen": {
+      "minItems": 12,
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "purpose",
+          "capability",
+          "privacy",
+          "evidence",
+          "original-support-ratio",
+          "runway",
+          "cooldown",
+          "duplicate",
+          "stagger",
+          "authority",
+          "cost",
+          "kill-switch"
+        ]
+      }
+    },
+    "authorityGranted": {
+      "type": "boolean",
+      "const": false
+    },
+    "publishingAuthorized": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "evaluationHash",
+    "profileId",
+    "targetRole",
+    "strategyId",
+    "strategyVersion",
+    "evaluatedWeek",
+    "evaluatedAt",
+    "observationRefs",
+    "operationRefs",
+    "experimentRefs",
+    "sample",
+    "robustMetrics",
+    "outlierObservationRefs",
+    "minimumSample",
+    "conclusion",
+    "signals",
+    "proposedAdjustmentRef",
+    "hardGatesFrozen",
+    "authorityGranted",
+    "publishingAuthorized"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/social-learning-evaluation.schema.json"
+}

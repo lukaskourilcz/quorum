@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "social-distribution-experiment-register/1",
+  "experiments": [
+    {
+      "schemaVersion": "social-distribution-experiment/1",
+      "id": "social-distribution-experiment-delay",
+      "status": "proposed",
+      "hypothesis": "A delayed umbrella item may increase qualified visits without reducing primary reliability.",
+      "changedVariable": "umbrella-delay",
+      "control": "Six-hour delay.",
+      "variant": "Twenty-four-hour delay.",
+      "primaryMetric": "qualified_actions",
+      "guardrail": "Verified publish rate must not decrease.",
+      "scopeProfileIds": [
+        "social-profile-caught-up",
+        "social-profile-boardlessai"
+      ],
+      "startsOn": "2026-09-01",
+      "endsOn": "2026-09-29",
+      "minimumSample": 4,
+      "stopCondition": "Stop on any policy, privacy, capability or reliability incident.",
+      "baselineRef": "state/social/results/baselines/social-distribution-baseline-2026-08.json",
+      "evidenceObservationRefs": [],
+      "verdict": "INSUFFICIENT_DATA",
+      "hardGatesFrozen": true,
+      "privacyFrozen": true,
+      "manipulationExcluded": true,
+      "maxCostUsd": 0,
+      "publishingAuthorized": false,
+      "updatedAt": "2026-08-28T08:00:00.000Z"
+    }
+  ],
+  "updatedAt": "2026-08-28T08:00:00.000Z",
+  "authorityGranted": false
+}

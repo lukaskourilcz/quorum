@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "social-provider/1",
+  "id": "direct-meta",
+  "name": "Direct Meta",
+  "role": "direct-official",
+  "supportedPlatforms": [
+    "instagram",
+    "threads"
+  ],
+  "capabilities": [
+    "publish-original",
+    "status-read",
+    "reconcile-delivery"
+  ],
+  "implementationVersion": "1.0.0",
+  "apiVersion": "v26.0",
+  "credentialRequirements": [
+    {
+      "environmentRef": "META_GRAPH_API_VERSION",
+      "requiredFor": "Exact official Graph API version"
+    }
+  ],
+  "limits": {
+    "accountOrBrandLimit": "Only owner-authorized professional accounts",
+    "requestOrPostLimit": "Connection cadence remains canonical",
+    "evidenceRef": "GitHub #405"
+  },
+  "idempotency": {
+    "providerKeySupported": false,
+    "remoteLookup": "remote-id-only",
+    "ambiguousResultPolicy": "hold-and-reconcile-before-resend"
+  },
+  "evidenceCapabilities": {
+    "deliveryStatus": true,
+    "webhooks": false,
+    "metrics": false
+  },
+  "sourceOfTruthRisk": {
+    "retention": "Provider history is evidence only and can disappear after token revocation.",
+    "canonicalTruth": "boardlessai-queue-campaign-receipts"
+  },
+  "cost": {
+    "plan": "Official account API",
+    "monthlyCostPosture": "No new scheduler subscription",
+    "purchaseAuthorized": false,
+    "exitPath": "Pause binding, revoke app or token, and preserve canonical receipts."
+  },
+  "lastVerifiedDate": "2026-08-27",
+  "verdict": "enabled",
+  "healthPolicy": {
+    "reverifyBy": "2026-11-27",
+    "staleAfterDays": 92,
+    "failurePolicy": "pause-binding-no-automatic-failover"
+  },
+  "decisionRef": "GitHub #405",
+  "strategyAuthority": false,
+  "contentGenerationAuthority": false
+}

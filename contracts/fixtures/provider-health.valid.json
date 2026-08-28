@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "provider-health/1",
+  "id": "provider-health-caught-up-threads-direct-meta",
+  "providerId": "direct-meta",
+  "bindingId": "social-provider-binding-caught-up-threads-direct-meta",
+  "connectionId": "social-connection-caught-up-threads",
+  "state": "held",
+  "lastSuccessfulOperationAt": null,
+  "lastAttemptedOperationAt": null,
+  "lastReconciledOperationAt": null,
+  "tokenStatus": "unknown",
+  "appReviewStatus": "unknown",
+  "planLimitStatus": "healthy",
+  "rateLimitStatus": "healthy",
+  "webhookFreshness": "not-applicable",
+  "incidentRefs": [],
+  "ownerAttentionRefs": [
+    "docs/NEEDED.md#social-distribution-connection-001"
+  ],
+  "nextSafeAction": "Owner verifies the account, scopes, token renewal path and routine authority.",
+  "reverifyBy": "2026-11-27",
+  "generatedAt": "2026-08-27T10:00:00.000Z",
+  "snapshotHash": "cd12770ebf4983746acd6aea96afe7f859fb9b74ae2e9ebd6d2b8cd46a87fd66",
+  "authorityGranted": false
+}

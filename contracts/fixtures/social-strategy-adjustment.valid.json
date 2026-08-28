@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "social-strategy-adjustment/1",
+  "id": "social-strategy-adjustment-b4129fb7ece2d4f6016c",
+  "adjustmentHash": "b4129fb7ece2d4f6016c35d2ed72ee5f2dd5ec035daba91317565ae633c8de25",
+  "profileId": "social-profile-caught-up",
+  "strategyId": "social-profile-strategy-caught-up",
+  "baseVersion": "1.0.0",
+  "nextVersion": "1.0.1",
+  "status": "proposed",
+  "change": {
+    "kind": "format-priority",
+    "targetRef": "evidence-commentary",
+    "beforeRank": 1,
+    "afterRank": 0,
+    "delta": -1
+  },
+  "evidenceEvaluationRef": "state/social/learning/evaluations/social-profile-caught-up/social-learning-evaluation-050206f6498425440974.json",
+  "evidenceObservationRefs": [
+    "state/social/results/observations/one.json",
+    "state/social/results/observations/two.json",
+    "state/social/results/observations/three.json"
+  ],
+  "explanation": "One bounded rank change for explicit owner review.",
+  "hardGatesFrozen": [
+    "purpose",
+    "capability",
+    "privacy",
+    "evidence",
+    "original-support-ratio",
+    "runway",
+    "cooldown",
+    "duplicate",
+    "stagger",
+    "authority",
+    "cost",
+    "kill-switch"
+  ],
+  "createsSourceOrTarget": false,
+  "createsCapabilityOrScope": false,
+  "ownerDecisionRef": null,
+  "appliedStrategyRef": null,
+  "createdAt": "2026-08-31T21:00:00.000Z",
+  "updatedAt": "2026-08-31T21:00:00.000Z",
+  "authorityGranted": false,
+  "publishingAuthorized": false
+}

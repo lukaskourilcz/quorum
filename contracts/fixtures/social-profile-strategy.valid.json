@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "social-profile-strategy/1",
+  "id": "social-profile-strategy-caught-up",
+  "profileId": "social-profile-caught-up",
+  "profileRole": "venture-primary",
+  "version": "1.0.0",
+  "purpose": "Publish owner-approved Caught Up editions from its own verified release history.",
+  "audience": "Czech and English readers following bounded daily AI industry reporting.",
+  "languages": [
+    "cs",
+    "en"
+  ],
+  "markets": [
+    "CZ",
+    "US"
+  ],
+  "allowedCapabilities": [],
+  "contentPillars": [
+    {
+      "id": "verified-ai-context",
+      "label": "Verified AI context",
+      "description": "Evidence-led operating context that stays useful without forcing a news claim.",
+      "allowedSourceClasses": [
+        "strategy-owned",
+        "profile-owned",
+        "accepted-campaign"
+      ]
+    }
+  ],
+  "recurringFormats": [
+    {
+      "id": "evidence-commentary",
+      "label": "Evidence commentary plan",
+      "pillarId": "verified-ai-context",
+      "candidateClass": "original",
+      "platforms": [
+        "threads",
+        "instagram"
+      ],
+      "locales": [
+        "cs",
+        "en"
+      ],
+      "evidenceRequirements": [
+        "Use only verified edition or explicitly recorded owned evidence before final copy."
+      ],
+      "sourceClasses": [
+        "strategy-owned",
+        "profile-owned"
+      ],
+      "assetRequirement": "none",
+      "altTextRequired": false,
+      "deterministicBriefTemplate": "Prepare a dated evidence-commentary brief; omit the candidate if no verified source exists."
+    },
+    {
+      "id": "change-watch",
+      "label": "Change watch reserve",
+      "pillarId": "verified-ai-context",
+      "candidateClass": "reserve",
+      "platforms": [
+        "threads"
+      ],
+      "locales": [
+        "cs",
+        "en"
+      ],
+      "evidenceRequirements": [
+        "Name the exact recorded change evidence before final copy."
+      ],
+      "sourceClasses": [
+        "strategy-owned",
+        "profile-owned"
+      ],
+      "assetRequirement": "none",
+      "altTextRequired": false,
+      "deterministicBriefTemplate": "Hold a reserve brief for one verified change and state why it matters."
+    },
+    {
+      "id": "context-card",
+      "label": "Context card slot",
+      "pillarId": "verified-ai-context",
+      "candidateClass": "recurring",
+      "platforms": [
+        "instagram"
+      ],
+      "locales": [
+        "cs",
+        "en"
+      ],
+      "evidenceRequirements": [
+        "Visual facts require claim references and Design Lab output."
+      ],
+      "sourceClasses": [
+        "strategy-owned",
+        "profile-owned"
+      ],
+      "assetRequirement": "optional-design-lab",
+      "altTextRequired": true,
+      "deterministicBriefTemplate": "Plan one source-bound context card; Design Lab remains the only renderer."
+    }
+  ],
+  "prohibited": {
+    "topics": [
+      "unverified rumours",
+      "private company material"
+    ],
+    "claims": [
+      "Invented quote, testimonial, personal experience or unsupported prediction."
+    ],
+    "formats": [
+      "Engagement bait, impersonation, automated reply or direct message."
+    ]
+  },
+  "cadence": {
+    "minimumPerWeek": 0,
+    "targetPerWeek": 5,
+    "maximumPerWeek": 7,
+    "preferredWindows": [
+      "Europe/Prague morning",
+      "Europe/Prague late afternoon"
+    ],
+    "prohibitedWindows": [
+      "Outside an approved item window"
+    ]
+  },
+  "policyRefs": {
+    "amplificationPolicyRef": "config/social-amplification-policy.json",
+    "launchRunwayRef": "GitHub #415",
+    "originalSupportRatioRef": "GitHub #415",
+    "sameSourceCooldownRef": "GitHub #415",
+    "supportCapRef": "GitHub #415"
+  },
+  "platformCaps": {
+    "instagram": {
+      "perDay": 1,
+      "perWeek": 5
+    },
+    "threads": {
+      "perDay": 2,
+      "perWeek": 7
+    }
+  },
+  "assets": {
+    "rendererRef": "Design Lab",
+    "allowedKinds": [
+      "none",
+      "image",
+      "carousel"
+    ],
+    "altTextRequiredForVisuals": true
+  },
+  "localeToneGuidance": [
+    {
+      "locale": "cs",
+      "guidance": "Clear Czech context, short sentences and no translated hype."
+    },
+    {
+      "locale": "en",
+      "guidance": "Concise operator context with explicit evidence boundaries."
+    }
+  ],
+  "generationPolicy": {
+    "deterministicFirst": true,
+    "cacheByContentAndStrategyVersion": true,
+    "modelRole": null,
+    "maximumModelCallsPerBuild": 0,
+    "maximumCostUsdPerBuild": 0,
+    "modelFailurePolicy": "preserve-deterministic-inventory"
+  },
+  "ownerControls": {
+    "vetoRefs": [],
+    "correctionRefs": [],
+    "stricterOnlyWithoutNewDecision": true
+  },
+  "reviewDate": "2026-11-27",
+  "stopConditions": [
+    "Stop when verified evidence is unavailable, duplicated, stale or outside the profile purpose."
+  ],
+  "authorityGranted": false,
+  "queueAuthorized": false,
+  "publishingAuthorized": false
+}

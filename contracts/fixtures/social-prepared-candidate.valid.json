@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "social-prepared-candidate/1",
+  "candidateId": "social-inventory-candidate-aaaaaaaaaaaaaaaaaaaa",
+  "sourceVentureId": "caught-up",
+  "releaseId": "caught-up-original-2026-08-28",
+  "campaignId": "caught-up-original-2026-08-28",
+  "target": {
+    "profileId": "social-profile-caught-up",
+    "profileRole": "venture-primary",
+    "role": "primary",
+    "connectionId": "social-connection-caught-up-threads",
+    "capabilityRef": null,
+    "amplifierEligibilityRef": null,
+    "campaignApprovalRef": null
+  },
+  "sourcePackage": {
+    "schemaVersion": "approved-publish-package/1",
+    "artifactRef": "state/ventures/caught-up/packages/2026-08-28.json",
+    "packageHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "objective": "trust",
+  "audience": "People evaluating evidence-backed AI products.",
+  "destination": "https://example.com/caught-up",
+  "utm": {
+    "source": "threads",
+    "medium": "organic_social",
+    "campaign": "caught-up-original-2026-08-28",
+    "content": "evidence-commentary"
+  },
+  "content": {
+    "text": "A bounded evidence-backed update.",
+    "altText": null,
+    "assetPaths": [],
+    "factualClaimRefs": [
+      "evidence:caught-up-update"
+    ],
+    "rendererVersion": "carousel-studio-1"
+  },
+  "publishWindow": {
+    "notBefore": "2026-08-28T08:00:00.000Z",
+    "notAfter": "2026-08-28T20:00:00.000Z"
+  },
+  "formatId": "evidence-commentary",
+  "sourceKind": "strategy-owned",
+  "contentClass": "original",
+  "riskClass": "low",
+  "evidenceRefs": [
+    "config/social-profile-strategies.json",
+    "owner:prepared-content-001"
+  ],
+  "checks": {
+    "schema": "pass",
+    "brand": "pass",
+    "claims": "pass",
+    "quill": "pass",
+    "keeper": "pass",
+    "duplicate": "pass",
+    "accessibility": "pass",
+    "budget": "pass",
+    "capability": "pass",
+    "policy": "pass"
+  },
+  "approvalRef": "owner:prepared-content-001",
+  "estimatedCostUsd": 0,
+  "preparedHash": "dc3ff9c91461cf5aac3339ca84abcadb56607b076bdc8768fe8d04ca4fe51b3f",
+  "queueAuthorized": false,
+  "publishingAuthorized": false
+}

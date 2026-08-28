@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-continuation-proposal/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^social-continuation-proposal-[a-f0-9]{20}$"
+    },
+    "proposalHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "profileId": {
+      "type": "string",
+      "maxLength": 140,
+      "pattern": "^social-profile-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "targetRole": {
+      "type": "string",
+      "enum": [
+        "primary",
+        "umbrella",
+        "amplifier"
+      ]
+    },
+    "reviewDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "validationDays": {
+      "type": "integer",
+      "minimum": 28,
+      "maximum": 90
+    },
+    "evaluatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "CONTINUE",
+        "NARROW",
+        "PAUSE",
+        "RETIRE",
+        "INSUFFICIENT_DATA"
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "learningEvaluationRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "independentAudienceReason": {
+          "type": "string",
+          "enum": [
+            "recorded",
+            "missing",
+            "not-applicable"
+          ]
+        },
+        "originalConsistency": {
+          "type": "string",
+          "enum": [
+            "sufficient",
+            "insufficient",
+            "unavailable"
+          ]
+        },
+        "ratioPolicy": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "incident",
+            "unavailable"
+          ]
+        },
+        "publishReliability": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "qualifiedOutcomeSample": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "supportBaselineComparable": {
+          "type": "boolean"
+        },
+        "policyIncidents": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "actualCostUsd": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ownerAttentionCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "separateProfileJustified": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no",
+            "unavailable"
+          ]
+        }
+      },
+      "required": [
+        "learningEvaluationRef",
+        "independentAudienceReason",
+        "originalConsistency",
+        "ratioPolicy",
+        "publishReliability",
+        "qualifiedOutcomeSample",
+        "supportBaselineComparable",
+        "policyIncidents",
+        "actualCostUsd",
+        "ownerAttentionCount",
+        "separateProfileJustified"
+      ],
+      "additionalProperties": false
+    },
+    "reasons": {
+      "minItems": 1,
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 300
+      }
+    },
+    "queueAction": {
+      "type": "string",
+      "enum": [
+        "none",
+        "request-pause"
+      ]
+    },
+    "ownerDecisionRequired": {
+      "type": "boolean",
+      "const": true
+    },
+    "externalAccountAction": {
+      "type": "string",
+      "const": "none"
+    },
+    "accountDeleted": {
+      "type": "boolean",
+      "const": false
+    },
+    "accountRetiredAutomatically": {
+      "type": "boolean",
+      "const": false
+    },
+    "publishingAuthorized": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "proposalHash",
+    "profileId",
+    "targetRole",
+    "reviewDate",
+    "validationDays",
+    "evaluatedAt",
+    "verdict",
+    "evidence",
+    "reasons",
+    "queueAction",
+    "ownerDecisionRequired",
+    "externalAccountAction",
+    "accountDeleted",
+    "accountRetiredAutomatically",
+    "publishingAuthorized"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/social-continuation-proposal.schema.json"
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "social-routine-scope/1",
+  "id": "social-routine-scope-caught-up-threads-original",
+  "version": "1.0.0",
+  "status": "active",
+  "profileId": "social-profile-caught-up",
+  "connectionId": "social-connection-caught-up-threads",
+  "platform": "threads",
+  "locales": [
+    "en"
+  ],
+  "allowedContentClasses": [
+    "original"
+  ],
+  "allowedFormats": [
+    "evidence-commentary"
+  ],
+  "allowedSourceKinds": [
+    "strategy-owned"
+  ],
+  "evidenceRequirements": {
+    "minimumEvidenceRefs": 2,
+    "approvedPackageRequired": true,
+    "campaignApprovalRequired": false,
+    "claimsRequired": true,
+    "accessibilityRequired": true
+  },
+  "bounds": {
+    "maximumPostsPerDay": 1,
+    "minimumHoursBetweenPosts": 20,
+    "maximumItemCostUsd": 0
+  },
+  "effectiveOn": "2026-08-28",
+  "expiresOn": "2026-09-28",
+  "prohibitedRiskClasses": [
+    "political",
+    "sensitive",
+    "novel",
+    "paid",
+    "policy-changing"
+  ],
+  "prohibitedActions": [
+    "account-create",
+    "oauth",
+    "credential-change",
+    "provider-change",
+    "engagement",
+    "dm",
+    "ad",
+    "contest",
+    "silent-failover"
+  ],
+  "approvalRef": "owner:scope-approval-001",
+  "countersignatureRef": "owner:scope-countersignature-001",
+  "revocationRef": null,
+  "killBehavior": "pause-and-preserve-evidence",
+  "history": [
+    {
+      "revision": 1,
+      "at": "2026-08-28T00:00:00.000Z",
+      "action": "countersigned",
+      "actor": "owner",
+      "evidenceRef": "owner:scope-countersignature-001",
+      "reason": "Exact low-risk Threads evidence commentary only."
+    }
+  ],
+  "authorityGranted": false,
+  "publishingAuthorized": false
+}

@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "social-profile-operation/1",
+  "id": "social-profile-operation-aaaaaaaaaaaaaaaaaaaa",
+  "idempotencyKey": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "inputHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "supersedesOperationRef": null,
+  "profileId": "social-profile-caught-up",
+  "connectionId": "social-connection-caught-up-threads",
+  "strategyRef": "config/social-profile-strategies.json#social-profile-strategy-caught-up",
+  "inventoryRef": "state/social/inventory/social-profile-caught-up/current.json",
+  "campaignRefs": [],
+  "targetDate": "2026-08-28",
+  "timezone": "Europe/Prague",
+  "selectionWindow": {
+    "notBefore": "2026-08-28T08:00:00.000Z",
+    "notAfter": "2026-08-28T20:00:00.000Z"
+  },
+  "candidateRefs": [
+    "state/social/inventory-candidates/social-inventory-candidate-aaaaaaaaaaaaaaaaaaaa.json"
+  ],
+  "candidateSetHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "selectedCandidateRef": "state/social/inventory-candidates/social-inventory-candidate-aaaaaaaaaaaaaaaaaaaa.json",
+  "immutableHashes": {
+    "targetHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "contentHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "assetHash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "windowHash": "1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "gates": [
+    {
+      "gate": "routine-scope",
+      "status": "pass",
+      "reason": "Exact countersigned scope match.",
+      "evidenceRef": "owner:scope-countersignature-001"
+    }
+  ],
+  "routineScopeRef": "config/social-routine-scopes.json#social-routine-scope-caught-up-threads-original",
+  "routineScopeState": "matched",
+  "queue": {
+    "itemId": "social-daily-caught-up-2026-08-28",
+    "itemRef": "state/social/queue/social-daily-caught-up-2026-08-28.json",
+    "payloadHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "status": "queued"
+  },
+  "outcome": "queued",
+  "reasons": [
+    "selected"
+  ],
+  "providerConnectionState": "ready",
+  "actualCostUsd": 0,
+  "reuseRefs": [],
+  "incidentRefs": [],
+  "ownerAttentionRefs": [],
+  "replayed": false,
+  "createdAt": "2026-08-28T08:00:00.000Z",
+  "authorityGranted": false,
+  "publishingAuthorized": false
+}

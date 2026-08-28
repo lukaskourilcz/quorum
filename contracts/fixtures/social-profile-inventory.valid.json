@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "social-profile-inventory/1",
+  "id": "social-profile-inventory-caught-up",
+  "profileId": "social-profile-caught-up",
+  "strategyId": "social-profile-strategy-caught-up",
+  "strategyVersion": "1.0.0",
+  "horizonStart": "2026-08-28",
+  "horizonDays": 7,
+  "coverageDays": 0,
+  "state": "no-candidate",
+  "counts": {
+    "original": 0,
+    "reserve": 0,
+    "recurring": 0,
+    "campaign": 0,
+    "eligible": 0,
+    "held": 0
+  },
+  "ratioProjection": {
+    "original": 0,
+    "support": 0,
+    "policyRef": "GitHub #415"
+  },
+  "candidates": [],
+  "generatedAt": "2026-08-28T07:00:00.000Z",
+  "inputHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "previousInventoryRef": null,
+  "supersededCandidateRefs": [],
+  "queueAuthorized": false,
+  "publishingAuthorized": false
+}

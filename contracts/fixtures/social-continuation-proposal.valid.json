@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "social-continuation-proposal/1",
+  "id": "social-continuation-proposal-ab70a6ab0cb4a3fafcac",
+  "proposalHash": "ab70a6ab0cb4a3fafcac2ebca3508b1f146395f7fa3080c70c195a529e20b02e",
+  "profileId": "social-profile-caught-up",
+  "targetRole": "primary",
+  "reviewDate": "2026-08-31",
+  "validationDays": 28,
+  "evaluatedAt": "2026-08-31T21:00:00.000Z",
+  "verdict": "INSUFFICIENT_DATA",
+  "evidence": {
+    "learningEvaluationRef": "state/social/learning/evaluations/social-profile-caught-up/social-learning-evaluation-050206f6498425440974.json",
+    "independentAudienceReason": "not-applicable",
+    "originalConsistency": "unavailable",
+    "ratioPolicy": "unavailable",
+    "publishReliability": null,
+    "qualifiedOutcomeSample": 0,
+    "supportBaselineComparable": false,
+    "policyIncidents": 0,
+    "actualCostUsd": null,
+    "ownerAttentionCount": 0,
+    "separateProfileJustified": "unavailable"
+  },
+  "reasons": [
+    "The complete validation window and useful sample are not available."
+  ],
+  "queueAction": "none",
+  "ownerDecisionRequired": true,
+  "externalAccountAction": "none",
+  "accountDeleted": false,
+  "accountRetiredAutomatically": false,
+  "publishingAuthorized": false
+}

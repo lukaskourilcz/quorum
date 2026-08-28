@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "social-inventory-candidate/1",
+  "id": "social-inventory-candidate-aaaaaaaaaaaaaaaaaaaa",
+  "profileId": "social-profile-caught-up",
+  "strategyId": "social-profile-strategy-caught-up",
+  "strategyVersion": "1.0.0",
+  "candidateType": "original",
+  "pillarId": "verified-ai-context",
+  "formatId": "evidence-commentary",
+  "platform": "threads",
+  "locale": "en",
+  "contentRef": "config/social-profile-strategies.json#social-profile-strategy-caught-up/evidence-commentary",
+  "contentBrief": "Prepare a dated evidence-commentary brief; omit it if verified evidence is unavailable.",
+  "evidenceRefs": [
+    "config/social-profile-strategies.json",
+    "GitHub #418"
+  ],
+  "sourceRefs": [
+    "config/social-profile-strategies.json"
+  ],
+  "sourceKind": "strategy-owned",
+  "sourceVentureId": null,
+  "capabilityRef": null,
+  "approvedPackageRef": null,
+  "campaignRef": null,
+  "asset": {
+    "readiness": "not-required",
+    "assetRefs": [],
+    "altTextReady": true
+  },
+  "usefulWindow": {
+    "earliest": "2026-08-28T08:00:00.000Z",
+    "latest": "2026-08-28T20:00:00.000Z",
+    "expiresAt": "2026-08-29T08:00:00.000Z"
+  },
+  "similarityHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "estimatedCostUsd": 0,
+  "authorityClass": "deterministic-plan",
+  "classification": "original",
+  "state": "eligible",
+  "reason": "Deterministic plan; final evidence and copy remain downstream gates.",
+  "finalCopy": false,
+  "generatedAt": "2026-08-28T07:00:00.000Z",
+  "generatorVersion": "social-inventory-builder/1",
+  "inputHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "supersedesCandidateRef": null,
+  "correctedByRef": null,
+  "queueAuthorized": false,
+  "publishingAuthorized": false
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "social-distribution-baseline/1",
+  "id": "social-distribution-baseline-2026-08",
+  "startsOn": "2026-08-01",
+  "endsOn": "2026-08-29",
+  "evaluatedAt": "2026-08-29T12:00:00.000Z",
+  "elapsedDays": 28,
+  "status": "complete",
+  "observationRefs": [],
+  "attributionRefs": [],
+  "acceptedObservationCount": 0,
+  "droppedObservationCount": 0,
+  "metricsAvailable": false,
+  "ownerDecisionRequired": true,
+  "authorityGranted": false
+}
