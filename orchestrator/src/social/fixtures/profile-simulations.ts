@@ -1,4 +1,5 @@
 import { SocialProfileSchema, type SocialProfile } from "../../contracts/social-distribution.js";
+import fixtureMatrix from "../../../../contracts/fixtures/social-profile-simulation-matrix.json" with { type: "json" };
 
 export interface SocialProfileSimulationFixture {
   profile: SocialProfile;
@@ -11,18 +12,17 @@ export interface SocialProfileSimulationFixture {
   };
 }
 
-const FIXTURE_TIME = "2026-08-27T00:00:00.000Z";
-const topics = ["developer-tools", "history", "combat-sports", "books", "culture"] as const;
-const setupStates = ["not-configured", "setup-needed", "held", "paused", "unavailable"] as const;
-const tokenStates = ["not-configured", "expired-simulation", "review-required-simulation", "healthy-simulation"] as const;
-const metricStates = ["unavailable", "missing-denominator", "manual-only", "healthy-simulation"] as const;
+const topics = fixtureMatrix.topics;
+const setupStates = fixtureMatrix.setupStates;
+const tokenStates = fixtureMatrix.tokenStates;
+const metricStates = fixtureMatrix.metricStates;
 
 /**
  * Explicit visual-QA boundary. These records are generated only when a test/dev caller asks for
  * them, carry no handle/native id/credential/connection and fail production target resolution.
  */
 export function createSocialProfileSimulationFixtures(): SocialProfileSimulationFixture[] {
-  return Array.from({ length: 50 }, (_, offset) => {
+  return Array.from({ length: fixtureMatrix.count }, (_, offset) => {
     const index = offset + 1;
     const serial = String(index).padStart(2, "0");
     const longLabel = index % 10 === 0
@@ -56,8 +56,8 @@ export function createSocialProfileSimulationFixtures(): SocialProfileSimulation
       },
       lifecycle: "simulation",
       liveEligible: false,
-      createdAt: FIXTURE_TIME,
-      updatedAt: FIXTURE_TIME,
+      createdAt: fixtureMatrix.fixtureTime,
+      updatedAt: fixtureMatrix.fixtureTime,
       provenance: {
         source: "fixture",
         recordedBy: "system",
@@ -70,9 +70,9 @@ export function createSocialProfileSimulationFixtures(): SocialProfileSimulation
       profile,
       preview: {
         platform: index % 2 === 0 ? "instagram" : "threads",
-        setupState,
-        tokenHealth: tokenStates[offset % tokenStates.length]!,
-        metricState: metricStates[offset % metricStates.length]!,
+        setupState: setupState as SocialProfileSimulationFixture["preview"]["setupState"],
+        tokenHealth: tokenStates[offset % tokenStates.length]! as SocialProfileSimulationFixture["preview"]["tokenHealth"],
+        metricState: metricStates[offset % metricStates.length]! as SocialProfileSimulationFixture["preview"]["metricState"],
         error: setupState === "unavailable" ? `Synthetic provider error ${serial}` : null
       }
     };

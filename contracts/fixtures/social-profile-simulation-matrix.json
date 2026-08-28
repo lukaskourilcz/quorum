@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "social-profile-simulation-matrix/1",
+  "count": 50,
+  "fixtureTime": "2026-08-27T00:00:00.000Z",
+  "topics": ["developer-tools", "history", "combat-sports", "books", "culture"],
+  "setupStates": ["not-configured", "setup-needed", "held", "paused", "unavailable"],
+  "tokenStates": ["not-configured", "expired-simulation", "review-required-simulation", "healthy-simulation"],
+  "metricStates": ["unavailable", "missing-denominator", "manual-only", "healthy-simulation"]
+}

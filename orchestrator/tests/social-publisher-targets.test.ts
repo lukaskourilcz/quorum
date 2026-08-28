@@ -58,15 +58,19 @@ async function legacyQueueItem(): Promise<unknown> {
 }
 
 describe("capability-aware social publisher targets", () => {
-  it("loads explicit held profile/connection bindings with separate per-profile caps", async () => {
+  it("loads held legacy bindings beside connectionless internal profile proposals", async () => {
     const registry = await loadSocialPublisherRegistry(configRoot);
 
     expect(SocialPublisherRegistrySchema.safeParse(registry).success).toBe(true);
     expect(registry.profiles.map((profile) => profile.id)).toEqual([
       "social-profile-caught-up",
       "social-profile-mma-files",
-      "social-profile-titty-tuesdays"
+      "social-profile-titty-tuesdays",
+      "social-profile-door-money",
+      "social-profile-booksofhistory",
+      "social-profile-tehdejsi-svet"
     ]);
+    expect(registry.profiles.slice(3).every((profile) => profile.lifecycle === "proposed" && !profile.liveEligible)).toBe(true);
     expect(registry.connections).toHaveLength(6);
     expect(registry.connections.every((connection) =>
       connection.mode === "held"
