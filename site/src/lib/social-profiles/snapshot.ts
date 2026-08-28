@@ -9,6 +9,8 @@ import { readAdminSocialProviders, type AdminSocialProviderSnapshot } from "./pr
 import { readAdminContentRunway, type AdminContentRunwaySnapshot } from "./inventory-snapshot";
 import { readAdminSocialResults, type AdminSocialResultsSnapshot } from "./results-snapshot";
 import { readAdminSocialDaily, type AdminSocialDailySnapshot } from "./daily-snapshot";
+import { readAdminSocialLearning, type AdminSocialLearningSnapshot } from "./learning-snapshot";
+import { readAdminSocialAutomationHealth, type AdminSocialAutomationSnapshot } from "./automation-health-snapshot";
 import {
   parseSocialConnection,
   parseSocialProfile,
@@ -77,6 +79,8 @@ export interface AdminSocialProfilesSnapshot {
   contentRunway: AdminContentRunwaySnapshot;
   socialResults: AdminSocialResultsSnapshot;
   today: AdminSocialDailySnapshot;
+  learning: AdminSocialLearningSnapshot;
+  automationHealth: AdminSocialAutomationSnapshot;
   campaignDecisions: SocialCampaignDecisionRecord[];
   campaignActivity: SocialCampaignEventRecord[];
   activity: SocialProfileEventRecord[];
@@ -88,7 +92,7 @@ export interface AdminSocialProfilesSnapshot {
     ownerDecisionRef: string;
     liveAuthorityGranted: false;
   };
-  dropped: { profiles: number; connections: number; amplifierProposals: number; events: number; campaigns: number; campaignDecisions: number; campaignEvents: number; networkContacts: number; networkContactEvents: number; networkShareKits: number; networkShareKitEvents: number; providerRecords: number; providerBindings: number; providerReceipts: number; providerHealth: number; inventoryStrategies: number; inventories: number; inventoryReceipts: number; inventoryIncidents: number; resultObservations: number; attributionEvents: number; resultBaselines: number; resultExperiments: number; boostProposals: number; dailyOperations: number; routineScopes: number; pauseRecords: number };
+  dropped: { profiles: number; connections: number; amplifierProposals: number; events: number; campaigns: number; campaignDecisions: number; campaignEvents: number; networkContacts: number; networkContactEvents: number; networkShareKits: number; networkShareKitEvents: number; providerRecords: number; providerBindings: number; providerReceipts: number; providerHealth: number; inventoryStrategies: number; inventories: number; inventoryReceipts: number; inventoryIncidents: number; resultObservations: number; attributionEvents: number; resultBaselines: number; resultExperiments: number; boostProposals: number; dailyOperations: number; routineScopes: number; learningRecords: number; pauseRecords: number };
   unavailable: string[];
   excluded: { ownerPersonal: number; simulations: number; forbiddenVentureProfiles: number; orphanConnections: number };
 }
@@ -220,13 +224,14 @@ function connectionView(connection: SocialConnectionRecord, history: readonly So
 
 export async function readAdminSocialProfiles(root = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), ".."), options: { includeSimulations?: boolean; now?: Date; environment?: NodeJS.ProcessEnv } = {}): Promise<AdminSocialProfilesSnapshot> {
   const now = options.now ?? new Date(); const environment = options.environment ?? process.env;
-  const [registryFile, portfolioFile, policyFile, capabilityFile, activationFile, eventState, campaignState, network, providerControl, contentRunwayState, profilePauses, profileKills, connectionPauses, connectionKills, repoPause] = await Promise.all([
-    jsonFile(root, "config/social-publisher-registry.json"), jsonFile(root, "state/social/amplifiers/portfolio.json"), jsonFile(root, "config/social-amplification-policy.json"), jsonFile(root, "config/venture-capabilities.json"), jsonFile(root, "state/social/activation.json"), events(root), campaignEvidence(root), readAdminDistributionNetwork(root, now), readAdminSocialProviders(root), readAdminContentRunway(root), idFiles(root, "state/social/pauses/profiles"), idFiles(root, "state/social/kill-switches/profiles"), idFiles(root, "state/social/pauses/connections"), idFiles(root, "state/social/kill-switches/connections"), existing(root, "state/social/SOCIAL_PAUSED")
+  const [registryFile, portfolioFile, policyFile, capabilityFile, activationFile, eventState, campaignState, network, providerControl, contentRunwayState, automationHealth, profilePauses, profileKills, connectionPauses, connectionKills, repoPause] = await Promise.all([
+    jsonFile(root, "config/social-publisher-registry.json"), jsonFile(root, "state/social/amplifiers/portfolio.json"), jsonFile(root, "config/social-amplification-policy.json"), jsonFile(root, "config/venture-capabilities.json"), jsonFile(root, "state/social/activation.json"), events(root), campaignEvidence(root), readAdminDistributionNetwork(root, now), readAdminSocialProviders(root), readAdminContentRunway(root), readAdminSocialAutomationHealth(root), idFiles(root, "state/social/pauses/profiles"), idFiles(root, "state/social/kill-switches/profiles"), idFiles(root, "state/social/pauses/connections"), idFiles(root, "state/social/kill-switches/connections"), existing(root, "state/social/SOCIAL_PAUSED")
   ]);
   const unavailable: string[] = [];
   for (const [label, file] of [["publisher registry", registryFile], ["amplifier portfolio", portfolioFile], ["amplification policy", policyFile], ["capability map", capabilityFile], ["activation state", activationFile]] as const) if (file.state !== "present") unavailable.push(`${label}: ${file.state}`);
   unavailable.push(...providerControl.unavailable);
   unavailable.push(...contentRunwayState.unavailable);
+  unavailable.push(...automationHealth.unavailable);
   const registry = rawRecord(registryFile.value); const rawProfiles = registry?.schemaVersion === "social-publisher-registry/1" && Array.isArray(registry.profiles) ? registry.profiles.slice(0, 200) : []; const rawConnections = registry?.schemaVersion === "social-publisher-registry/1" && Array.isArray(registry.connections) ? registry.connections.slice(0, 400) : [];
   const parsedProfiles = rawProfiles.map(parseSocialProfile); const parsedConnections = rawConnections.map(parseSocialConnection); const acceptedProfiles = parsedProfiles.filter((entry): entry is SocialProfileRecord => entry !== null); const acceptedConnections = parsedConnections.filter((entry): entry is SocialConnectionRecord => entry !== null);
   const allowedProfiles = acceptedProfiles.filter((profile) => profile.ventureRef !== "personal-growth" && profile.ventureRef !== "kvorum"); const ownerPersonal = allowedProfiles.filter((profile) => profile.kind === "owner-personal"); const realProfiles = allowedProfiles.filter((profile) => profile.kind === "owned-brand" && ["venture-primary", "company-umbrella"].includes(profile.role)); const storedSimulations = acceptedProfiles.filter((profile) => profile.kind === "simulation");
@@ -259,20 +264,22 @@ export async function readAdminSocialProfiles(root = process.env.BOARDLESSAI_REP
     }
   };
   const knownConnectionIds = new Set(connections.filter(({ profileId }) => runwayProfileIds.has(profileId)).map(({ id }) => id));
-  const [socialResults, today] = await Promise.all([
+  const [socialResults, today, learning] = await Promise.all([
     readAdminSocialResults(
       root,
       runwayProfileIds,
       new Set(campaignState.campaigns.map(({ id }) => `state/social/campaigns/${id}.json`))
     ),
-    readAdminSocialDaily(root, runwayProfileIds, knownConnectionIds, now)
+    readAdminSocialDaily(root, runwayProfileIds, knownConnectionIds, now),
+    readAdminSocialLearning(root, runwayProfileIds)
   ]);
   unavailable.push(...socialResults.unavailable);
   unavailable.push(...today.unavailable);
+  unavailable.push(...learning.unavailable);
   const campaigns = campaignState.campaigns.map((immutable): SocialCampaignView => {
     const projected = projectAdminCampaign(immutable, campaignState.events);
     return { campaign: projected.campaign, immutableStatus: immutable.status, appliedEvents: projected.appliedEventIds.length, rejectedEvents: projected.rejectedEventIds.length, targetApprovalHashes: Object.fromEntries(projected.campaign.targets.map((target) => [target.id, campaignTargetApprovalHash(projected.campaign.channelItems.filter((item) => item.targetId === target.id))])), operationalResults: null };
   }).sort((left, right) => right.campaign.updatedAt.localeCompare(left.campaign.updatedAt));
   const simulationsIncluded = options.includeSimulations === true && environment.NODE_ENV !== "production";
-  return { schemaVersion: "admin-social-profiles/1", generatedAt: now.toISOString(), ventureProfiles, amplificationProfiles, campaigns, network, providerControl, contentRunway, socialResults, today, campaignDecisions: campaignState.decisions, campaignActivity: campaignState.events, activity: eventState.accepted, simulations: simulationsIncluded ? createAdminSocialProfileSimulations() : [], simulationsIncluded, posture: { globalKillSwitch: environment.SOCIAL_KILL_SWITCH === "false" ? "released" : "engaged", repositoryPause: repoPause, ownerDecisionRef: "state/decisions/2026-08-27-social-distribution-operating-decision.md", liveAuthorityGranted: false }, dropped: { profiles: parsedProfiles.length - acceptedProfiles.length, connections: parsedConnections.length - acceptedConnections.length, amplifierProposals: portfolio.droppedProposals, events: eventState.dropped, campaigns: campaignState.dropped.campaigns, campaignDecisions: campaignState.dropped.decisions, campaignEvents: campaignState.dropped.events, networkContacts: network.dropped.contacts, networkContactEvents: network.dropped.contactEvents, networkShareKits: network.dropped.shareKits, networkShareKitEvents: network.dropped.shareKitEvents, providerRecords: providerControl.dropped.providers, providerBindings: providerControl.dropped.bindings + providerControl.dropped.orphanBindings, providerReceipts: providerControl.dropped.receipts, providerHealth: providerControl.dropped.health, inventoryStrategies: contentRunway.dropped.strategies + contentRunway.dropped.orphanRecords, inventories: contentRunway.dropped.inventories, inventoryReceipts: contentRunway.dropped.receipts, inventoryIncidents: contentRunway.dropped.incidents, resultObservations: socialResults.dropped.observations + socialResults.dropped.orphanRecords, attributionEvents: socialResults.dropped.attribution, resultBaselines: socialResults.dropped.baselines, resultExperiments: socialResults.dropped.experiments, boostProposals: socialResults.dropped.boostProposals, dailyOperations: today.dropped.operations + today.dropped.orphanRecords, routineScopes: today.dropped.routineScopes, pauseRecords: profilePauses.dropped + profileKills.dropped + connectionPauses.dropped + connectionKills.dropped }, unavailable, excluded: { ownerPersonal: ownerPersonal.length, simulations: storedSimulations.length, forbiddenVentureProfiles: acceptedProfiles.length - allowedProfiles.length, orphanConnections: orphanConnections.length } };
+  return { schemaVersion: "admin-social-profiles/1", generatedAt: now.toISOString(), ventureProfiles, amplificationProfiles, campaigns, network, providerControl, contentRunway, socialResults, today, learning, automationHealth, campaignDecisions: campaignState.decisions, campaignActivity: campaignState.events, activity: eventState.accepted, simulations: simulationsIncluded ? createAdminSocialProfileSimulations() : [], simulationsIncluded, posture: { globalKillSwitch: environment.SOCIAL_KILL_SWITCH === "false" ? "released" : "engaged", repositoryPause: repoPause, ownerDecisionRef: "state/decisions/2026-08-27-social-distribution-operating-decision.md", liveAuthorityGranted: false }, dropped: { profiles: parsedProfiles.length - acceptedProfiles.length, connections: parsedConnections.length - acceptedConnections.length, amplifierProposals: portfolio.droppedProposals, events: eventState.dropped, campaigns: campaignState.dropped.campaigns, campaignDecisions: campaignState.dropped.decisions, campaignEvents: campaignState.dropped.events, networkContacts: network.dropped.contacts, networkContactEvents: network.dropped.contactEvents, networkShareKits: network.dropped.shareKits, networkShareKitEvents: network.dropped.shareKitEvents, providerRecords: providerControl.dropped.providers, providerBindings: providerControl.dropped.bindings + providerControl.dropped.orphanBindings, providerReceipts: providerControl.dropped.receipts, providerHealth: providerControl.dropped.health, inventoryStrategies: contentRunway.dropped.strategies + contentRunway.dropped.orphanRecords, inventories: contentRunway.dropped.inventories, inventoryReceipts: contentRunway.dropped.receipts, inventoryIncidents: contentRunway.dropped.incidents, resultObservations: socialResults.dropped.observations + socialResults.dropped.orphanRecords, attributionEvents: socialResults.dropped.attribution, resultBaselines: socialResults.dropped.baselines, resultExperiments: socialResults.dropped.experiments, boostProposals: socialResults.dropped.boostProposals, dailyOperations: today.dropped.operations + today.dropped.orphanRecords, routineScopes: today.dropped.routineScopes, learningRecords: Object.values(learning.dropped).reduce((total, value) => total + value, 0), pauseRecords: profilePauses.dropped + profileKills.dropped + connectionPauses.dropped + connectionKills.dropped }, unavailable, excluded: { ownerPersonal: ownerPersonal.length, simulations: storedSimulations.length, forbiddenVentureProfiles: acceptedProfiles.length - allowedProfiles.length, orphanConnections: orphanConnections.length } };
 }

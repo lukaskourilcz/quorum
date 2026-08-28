@@ -21,11 +21,11 @@ import { SocialCampaignActions } from "./social-campaign-actions";
 import { SocialNetworkShareKitActions } from "./social-network-share-kit-actions";
 import { SocialProfileLifecycleActions } from "./social-profile-lifecycle-actions";
 
-const statusTone = (value: string) => ["active", "ready", "healthy", "allowed", "pass", "approved", "eligible", "selected", "enabled", "direct-core", "published", "reconciled"].includes(value)
+const statusTone = (value: string) => ["active", "ready", "healthy", "allowed", "pass", "approved", "eligible", "selected", "enabled", "direct-core", "published", "reconciled", "continue", "stable"].includes(value.toLowerCase())
   ? "success" as const
-  : ["rejected", "reject", "retired", "denied", "expired", "failed", "cancelled"].includes(value)
+  : ["rejected", "reject", "retired", "retire", "denied", "expired", "failed", "failing", "cancelled"].includes(value.toLowerCase())
     ? "destructive" as const
-    : value === "proposed" || value === "draft" || value === "not-configured"
+    : ["proposed", "draft", "not-configured", "insufficient_data"].includes(value.toLowerCase())
       ? "neutral" as const
       : "warning" as const;
 
@@ -225,7 +225,7 @@ function Providers({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) {
   const control = snapshot.providerControl;
   return (
     <div className="grid gap-4" data-social-profiles-section="providers">
-      <AdminCard><AdminCardHeader><AdminSectionHeading title="Providers & automation health" description="BoardlessAI owns strategy, approvals, queue, campaign, receipt and learning truth. Providers transport exact approved items or report bounded status only." /></AdminCardHeader><AdminCardContent className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <AdminCard><AdminCardHeader><AdminSectionHeading title="Providers" description="BoardlessAI owns strategy, approvals, queue, campaign, receipt and learning truth. Providers transport exact approved items or report bounded status only; domain automation health is shown separately." /></AdminCardHeader><AdminCardContent className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <AdminMetric label="Direct core" value={control.summary.directCoreAvailable ? "Available" : "Unavailable"} note="Implementation posture, not live authority" />
         <AdminMetric label="Active bindings" value={control.summary.activeBindings} note="At most one per connection" />
         <AdminMetric label="Held bindings" value={control.summary.heldBindings} note="Owner setup remains external" />
@@ -314,6 +314,47 @@ function Results({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) {
   );
 }
 
+function Learning({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) {
+  const learning = snapshot.learning;
+  return (
+    <div className="grid gap-4" data-social-profiles-section="learning">
+      <AdminCard><AdminCardHeader><AdminSectionHeading title="Weekly learning" description="Deterministic 90-day lookback over canonical 28-day post observations and daily operations. Robust medians may propose one bounded change; every hard gate stays frozen." /></AdminCardHeader><AdminCardContent className="grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
+        <AdminMetric label="Profiles evaluated" value={learning.summary.profiles} note="Existing Monday checkpoint" />
+        <AdminMetric label="Insufficient data" value={learning.summary.insufficient} note="Never treated as zero" />
+        <AdminMetric label="Bounded proposals" value={learning.summary.boundedChanges} note="Maximum one-rank change" />
+        <AdminMetric label="Experiment ceiling" value={learning.summary.activeExperimentsMaximum} note="Active or review" />
+        <AdminMetric label="Preserved corrections" value={learning.summary.corrections} note="Prior evaluations remain immutable" />
+        <AdminMetric label="Owner decisions" value={learning.summary.ownerDecisionsRequired} note="No automatic strategy or account action" />
+      </AdminCardContent></AdminCard>
+      <AdminCard><AdminCardHeader><AdminSectionHeading title={`Learning records · ${learning.profiles.length}`} description="Sample maturity, robust outcomes, ignored outliers, versioned proposals and continuation evidence remain separate per profile." /></AdminCardHeader><AdminCardContent>
+        {learning.profiles.length ? <AdminTableRegion label="Social learning records"><AdminTable><thead><tr><AdminTableHead>Profile / week</AdminTableHead><AdminTableHead>Sample</AdminTableHead><AdminTableHead>Robust outcomes</AdminTableHead><AdminTableHead>Conclusion</AdminTableHead><AdminTableHead>Adjustment</AdminTableHead><AdminTableHead>Continuation</AdminTableHead></tr></thead><tbody>{learning.profiles.map(({ profileId, checkpoint, evaluation, adjustments, continuation }) => <tr key={profileId}><AdminTableCell><span className="block font-semibold">{profileId}</span><span className="block text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{checkpoint.evaluatedWeek} · {checkpoint.correctionCount} correction(s)</span></AdminTableCell><AdminTableCell>{evaluation ? `${evaluation.sample.distinctPosts}/${evaluation.minimumSample} posts` : "Evaluation unavailable"}<span className="block text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{evaluation ? `${evaluation.sample.qualifiedOutcomePosts} qualified · ${evaluation.sample.operationDays} operation days · ${evaluation.outlierCount} outlier(s) ignored` : "No sample inferred"}</span></AdminTableCell><AdminTableCell>{evaluation ? `Qualified ${displayMetric(evaluation.robustMetrics.qualifiedActionsMedian)} · referrals ${displayMetric(evaluation.robustMetrics.referralVisitsMedian)}` : "Unavailable"}<span className="block text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{evaluation ? `Reliability ${displayMetric(evaluation.robustMetrics.publishReliability)} · cost ${evaluation.sample.actualCostUsd === null ? "unavailable" : `$${evaluation.sample.actualCostUsd.toFixed(2)}`}` : ""}</span></AdminTableCell><AdminTableCell>{evaluation ? <AdminStatusBadge tone={statusTone(evaluation.conclusion)}>{evaluation.conclusion}</AdminStatusBadge> : <AdminStatusBadge tone="warning">unavailable</AdminStatusBadge>}<span className="mt-1 block text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{evaluation?.signals.join(" · ") ?? "No valid current evaluation."}</span></AdminTableCell><AdminTableCell>{adjustments[0] ? <><AdminStatusBadge tone={statusTone(adjustments[0].status)}>{adjustments[0].status}</AdminStatusBadge><span className="mt-1 block">{adjustments[0].change.kind} · {adjustments[0].change.targetRef} · rank {adjustments[0].change.beforeRank}→{adjustments[0].change.afterRank}</span><span className="block text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{adjustments[0].evidenceCount} evidence refs · v{adjustments[0].baseVersion}→{adjustments[0].nextVersion}</span></> : "No adjustment proposed"}</AdminTableCell><AdminTableCell>{continuation ? <><AdminStatusBadge tone={statusTone(continuation.verdict)}>{continuation.verdict}</AdminStatusBadge><span className="mt-1 block">{continuation.validationDays}-day review · {continuation.evidence.qualifiedOutcomeSample} qualified</span><span className="block text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{continuation.reasons.join(" · ")}</span></> : "No continuation proposal"}</AdminTableCell></tr>)}</tbody></AdminTable></AdminTableRegion> : <AdminEmptyState title="No weekly learning checkpoint" description="No sample, winner or continuation verdict is inferred. The existing Monday checkpoint will write explicit insufficient-data records when it next runs." />}
+      </AdminCardContent></AdminCard>
+      <AdminCallout tone="information">Owner-safe actions are limited to approving or vetoing one exact adjustment, recording a stricter correction, requesting an exact queue pause, or leaving the proposal unchanged. Learning cannot weaken purpose, capability, privacy, evidence, ratio, runway, cooldown, duplicate, stagger, authority, cost or kill-switch gates.</AdminCallout>
+    </div>
+  );
+}
+
+function AutomationHealth({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) {
+  const automation = snapshot.automationHealth; const health = automation.health;
+  const holdRows = health ? Object.entries(health.holds).flatMap(([kind, reasons]) => reasons.map((reason) => ({ kind, reason }))) : [];
+  return (
+    <div className="grid gap-4" data-social-profiles-section="automation-health">
+      <AdminCard><AdminCardHeader><AdminSectionHeading title="Automation health" description="The canonical Operations health adapter joins profile, connection, inventory, provider, publish/reconcile and policy evidence. It does not schedule or recover work itself." /></AdminCardHeader><AdminCardContent className="grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
+        <AdminMetric label="Domain state" value={health?.state ?? "Unavailable"} note={health?.reason ?? "No canonical health snapshot"} />
+        <AdminMetric label="Queue" value={health?.queue.state ?? "Unavailable"} note={health?.queue.pending === null || health?.queue.pending === undefined ? "Pending count unavailable" : `${health.queue.pending} pending`} />
+        <AdminMetric label="Freshness" value={health?.freshness.state ?? "Unavailable"} note={health?.freshness.ageMinutes === null || health?.freshness.ageMinutes === undefined ? "Age unavailable" : `${health.freshness.ageMinutes} minutes`} />
+        <AdminMetric label="Last valid" value={health?.lastValidAt ?? "Unavailable"} note={health?.freshness.lastKnownGoodRef ?? "No last-known-good ref"} />
+        <AdminMetric label="Next expected" value={health?.nextExpectedAt ?? "Unavailable"} note="Existing Prague cadence" />
+        <AdminMetric label="Owner attention" value={health?.ownerAttentionRefs.length ?? 0} note="Stable canonical refs" />
+      </AdminCardContent></AdminCard>
+      <div className="grid gap-4 lg:grid-cols-2"><AdminCard><AdminCardHeader><AdminSectionHeading title={`Exact-scope holds · ${holdRows.length}`} description="A failing connection does not expand authority or mutate unaffected profiles." /></AdminCardHeader><AdminCardContent>{holdRows.length ? <div className="grid gap-2">{holdRows.map(({ kind, reason }) => <AdminCallout key={`${kind}-${reason}`} tone="warning"><p className="m-0 font-semibold capitalize">{kind}</p><p className="m-0 mt-1">{reason}</p></AdminCallout>)}</div> : <AdminStateMessage state={health ? "success" : "unavailable"} title={health ? "No aggregate holds" : "Health unavailable"} description={health ? "Per-profile and per-provider evidence may still be quiet or held independently." : automation.unavailable.join(" · ")} />}</AdminCardContent></AdminCard>
+      <AdminCard><AdminCardHeader><AdminSectionHeading title="Operations Recovery handoff" description="Recovery remains owned by #427 with bounded attempts, cooldown, $0 incremental cost and exact-scope pauses." /></AdminCardHeader><AdminCardContent className="grid gap-3"><AdminCallout tone={automation.incident?.activeIncidentRefs.length ? "warning" : "neutral"}><p className="m-0 font-semibold">Active incidents · {automation.incident?.activeIncidentRefs.length ?? 0}</p><p className="m-0 mt-1">Paused scopes: {automation.incident?.pausedScopes.join(" · ") || "none"} · next retry {automation.incident?.nextRetryAt ?? "unavailable"}</p></AdminCallout>{automation.incident?.exactOwnerActions.map((action) => <AdminCallout key={action} tone="warning">{action}</AdminCallout>)}</AdminCardContent></AdminCard></div>
+      <AdminCard><AdminCardHeader><AdminSectionHeading title="Safe actions only" description="These are advisory boundaries, not execution controls." /></AdminCardHeader><AdminCardContent><ul className="m-0 grid gap-2 pl-5">{automation.safeActions.map((action) => <li key={action}>{action}</li>)}</ul></AdminCardContent></AdminCard>
+      <AdminCallout tone="neutral">This surface cannot create or delete accounts, enter credentials, switch providers, resend ambiguous work, add capabilities or scope, raise cadence or budget, publish, engage, buy ads, or deploy.</AdminCallout>
+    </div>
+  );
+}
+
 function SimulationMatrix({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) {
   if (!snapshot.simulationsIncluded) return null;
   return <AdminCard className="mt-4" data-social-profile-simulations="explicit"><AdminCardHeader><AdminSectionHeading title="Synthetic visual QA · excluded from totals" description="50 deterministic #406 fixtures. They are not accounts, proposals, evidence or a production fallback." /></AdminCardHeader><AdminCardContent><div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">{snapshot.simulations.map(({ profile, preview }) => <div className="min-w-0 rounded-[var(--admin-radius)] border border-dashed border-[var(--admin-border-strong)] p-3" key={profile.id}><p className="m-0 break-words font-semibold">{profile.displayLabel}</p><div className="mt-2 flex flex-wrap gap-1"><AdminStatusBadge tone="information">simulation</AdminStatusBadge><AdminStatusBadge tone={statusTone(preview.setupState)}>{preview.setupState}</AdminStatusBadge><AdminEntityBadge>{preview.platform}</AdminEntityBadge></div></div>)}</div></AdminCardContent></AdminCard>;
@@ -326,7 +367,7 @@ export function SocialProfilesWorkspace({ campaignId, profileId, section, snapsh
       <nav aria-label="Social Profiles sections" className="mb-4 flex max-w-full gap-1 overflow-x-auto rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface-secondary)] p-1" data-horizontal-scroll>
         {SOCIAL_PROFILE_SECTIONS.map((item) => <Link aria-current={section === item.id ? "page" : undefined} className="admin-focus-ring flex min-h-[var(--admin-touch-target)] shrink-0 items-center rounded-[var(--admin-radius-sm)] px-3 text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-foreground-muted)] data-[active=true]:bg-[var(--admin-surface)] data-[active=true]:text-[var(--admin-foreground)]" data-active={section === item.id} href={sectionHref(item.id, snapshot.simulationsIncluded)} key={item.id}>{item.label}</Link>)}
       </nav>
-      {section === "venture-profiles" ? <VentureProfiles profileId={profileId} snapshot={snapshot} /> : section === "amplification-profiles" ? <AmplificationProfiles profileId={profileId} snapshot={snapshot} /> : section === "campaigns" ? <Campaigns campaignId={campaignId} snapshot={snapshot} /> : section === "today" ? <Today snapshot={snapshot} /> : section === "network" ? <Network snapshot={snapshot} /> : section === "providers" ? <Providers snapshot={snapshot} /> : section === "content-runway" ? <ContentRunway profileId={profileId} snapshot={snapshot} /> : section === "results" ? <Results snapshot={snapshot} /> : <ActivitySetup snapshot={snapshot} />}
+      {section === "venture-profiles" ? <VentureProfiles profileId={profileId} snapshot={snapshot} /> : section === "amplification-profiles" ? <AmplificationProfiles profileId={profileId} snapshot={snapshot} /> : section === "campaigns" ? <Campaigns campaignId={campaignId} snapshot={snapshot} /> : section === "today" ? <Today snapshot={snapshot} /> : section === "network" ? <Network snapshot={snapshot} /> : section === "providers" ? <Providers snapshot={snapshot} /> : section === "content-runway" ? <ContentRunway profileId={profileId} snapshot={snapshot} /> : section === "results" ? <Results snapshot={snapshot} /> : section === "learning" ? <Learning snapshot={snapshot} /> : section === "automation-health" ? <AutomationHealth snapshot={snapshot} /> : <ActivitySetup snapshot={snapshot} />}
       <SimulationMatrix snapshot={snapshot} />
     </div>
   );

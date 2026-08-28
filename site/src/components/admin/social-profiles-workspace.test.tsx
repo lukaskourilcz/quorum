@@ -65,7 +65,7 @@ describe("Social Profiles workspace", () => {
   it("renders the direct core and optional provider postures without secrets or failover authority", async () => {
     const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test", CAUGHT_UP_THREADS_ACCESS_TOKEN: "private-secret-value" } });
     const html = renderToStaticMarkup(<SocialProfilesWorkspace section="providers" snapshot={snapshot} />);
-    expect(html).toContain("Providers &amp; automation health");
+    expect(html).toContain(">Providers<");
     expect(html).toContain("Direct Meta");
     expect(html).toContain("direct-core");
     expect(html).toContain("Buffer");
@@ -74,6 +74,21 @@ describe("Social Profiles workspace", () => {
     expect(html).toContain("never trigger automatic failover");
     expect(html).not.toContain("private-secret-value");
     expect(snapshot.providerControl.summary).toEqual({ directCoreAvailable: true, activeBindings: 0, heldBindings: 6, ambiguousReceipts: 0 });
+  });
+
+  it("renders honest empty Learning and canonical Automation health surfaces", async () => {
+    const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
+    const learning = renderToStaticMarkup(<SocialProfilesWorkspace section="learning" snapshot={snapshot} />);
+    const automation = renderToStaticMarkup(<SocialProfilesWorkspace section="automation-health" snapshot={snapshot} />);
+    expect(learning).toContain("Weekly learning");
+    expect(learning).toContain("No weekly learning checkpoint");
+    expect(learning).toContain("every hard gate stays frozen");
+    expect(learning).not.toMatch(/apply now|publish now|retire account/iu);
+    expect(automation).toContain("Automation health");
+    expect(automation).toContain("Operations Recovery handoff");
+    expect(automation).toContain("never resend silently");
+    expect(automation).toContain("cannot create or delete accounts");
+    expect(snapshot.automationHealth).toMatchObject({ accountActionsAuthorized: false, providerSwitchAuthorized: false, silentResendAuthorized: false, publishingAuthorized: false });
   });
 
   it("renders canonical Content runway constitutions without queue or publishing controls", async () => {
