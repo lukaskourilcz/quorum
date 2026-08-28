@@ -43,6 +43,7 @@ export * from "./performance-weights.js";
 export * from "./rating.js";
 export * from "./season.js";
 export * from "./social-pack.js";
+export * from "./social-distribution.js";
 export * from "./style-profile.js";
 export * from "./venture-registry.js";
 export * from "./venture-capability.js";

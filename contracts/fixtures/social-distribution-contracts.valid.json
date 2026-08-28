@@ -1,0 +1,247 @@
+{
+  "profile": {
+    "schemaVersion": "social-profile/1",
+    "id": "social-profile-door-money",
+    "displayLabel": "Door Money",
+    "kind": "owned-brand",
+    "role": "venture-primary",
+    "ownerRef": "boardlessai",
+    "ventureRef": "door-money",
+    "brandRef": "door-money",
+    "purpose": "Publish bounded owner-approved lessons from the book project.",
+    "audience": "Readers interested in practical founder finance lessons.",
+    "languages": ["en"],
+    "markets": ["US"],
+    "supportedTopics": ["founder-finance"],
+    "supportedVentures": ["door-money"],
+    "capabilityRefs": [{
+      "mapVersion": "1.1.0",
+      "source": "door-money",
+      "target": "social-distribution",
+      "capability": "approved-publish-package",
+      "dataSchemaVersion": "approved-publish-package/1",
+      "decisionReference": "GitHub #424"
+    }],
+    "amplifierArchetype": null,
+    "amplifierEligibility": null,
+    "originalContentPromise": "Original, bounded lessons derived from owner-approved packages only.",
+    "recurringFormatRefs": ["one-money-lesson"],
+    "avatar": {
+      "kind": "descriptor",
+      "descriptor": "Door Money approved brand mark",
+      "reference": null
+    },
+    "lifecycle": "proposed",
+    "liveEligible": false,
+    "createdAt": "2026-08-27T00:00:00.000Z",
+    "updatedAt": "2026-08-27T00:00:00.000Z",
+    "provenance": {
+      "source": "owner",
+      "recordedBy": "owner",
+      "evidenceRefs": ["GitHub #406"],
+      "fixtureKey": null
+    },
+    "notes": "Invented contract fixture; no real account exists."
+  },
+  "connection": {
+    "schemaVersion": "social-connection/1",
+    "id": "social-connection-door-money-instagram",
+    "profileId": "social-profile-door-money",
+    "platform": "instagram",
+    "publicHandle": null,
+    "nativeAccountId": null,
+    "connector": {
+      "id": "meta-instagram",
+      "version": "1.0.0",
+      "providerId": "direct-meta",
+      "apiVersion": "v26.0",
+      "loginMode": "instagram-facebook-login"
+    },
+    "credentialRef": null,
+    "approvedScopes": ["pages_show_list", "pages_read_engagement", "instagram_basic", "instagram_content_publish"],
+    "supportedCapabilities": ["publish-original"],
+    "mode": "held",
+    "health": {
+      "status": "unverified",
+      "unavailableReason": "human-activation-required"
+    },
+    "tokenExpiresAt": null,
+    "appReviewExpiresAt": null,
+    "enabledByHumanAt": null,
+    "cadence": {
+      "maxOrganicPostsPerDay": 1,
+      "minHoursBetweenPosts": 12,
+      "timezone": "Europe/Prague"
+    },
+    "lastVerified": null
+  },
+  "contact": {
+    "schemaVersion": "distribution-contact/1",
+    "id": "distribution-contact-example-newsletter",
+    "label": "Example Newsletter",
+    "type": "newsletter",
+    "topics": ["founder-finance"],
+    "ventures": ["door-money"],
+    "platforms": ["threads"],
+    "languages": ["en"],
+    "markets": ["US"],
+    "publicContactRefs": [{
+      "kind": "public-url",
+      "value": "https://example.invalid/contact",
+      "ownerEnteredAt": "2026-08-27T00:00:00.000Z"
+    }],
+    "relationshipStatus": "opted-in",
+    "consentEvidenceRef": "owner-fixture-consent-001",
+    "preferredFormats": ["link", "image"],
+    "preferredCadence": "At most one relevant release per month.",
+    "lastContactedAt": null,
+    "lastSharedAt": null,
+    "lastDeclinedAt": null,
+    "doNotContact": false,
+    "notes": "Invented relationship fixture.",
+    "provenance": {
+      "source": "owner-entered-public-record",
+      "evidenceRefs": ["fixture:distribution-contact-001"]
+    }
+  },
+  "campaign": {
+    "schemaVersion": "social-campaign/1",
+    "id": "social-campaign-door-money-release-001",
+    "releaseId": "door-money-release-001",
+    "contentIds": ["lesson-001"],
+    "inputHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "sourceVentureId": "door-money",
+    "sourcePrimaryProfileId": "social-profile-door-money",
+    "sourceCapabilityRef": {
+      "mapVersion": "1.1.0",
+      "source": "door-money",
+      "target": "social-distribution",
+      "capability": "approved-publish-package",
+      "dataSchemaVersion": "approved-publish-package/1",
+      "decisionReference": "GitHub #424"
+    },
+    "sourcePackage": {
+      "schemaVersion": "approved-publish-package/1",
+      "artifactRef": "state/ventures/door-money/packages/release-001.json",
+      "packageHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "objective": "qualified-visit",
+    "audience": "Readers who opted into practical founder finance releases.",
+    "targets": [{
+      "id": "door-money-primary",
+      "role": "primary",
+      "profileId": "social-profile-door-money",
+      "ventureRef": "door-money",
+      "capabilityRef": null,
+      "amplifierEligibilityRef": null,
+      "fit": "eligible",
+      "reasons": ["fit"]
+    }],
+    "contactAssignments": ["distribution-contact-example-newsletter"],
+    "channelItems": [{
+      "id": "door-money-instagram-001",
+      "targetId": "door-money-primary",
+      "channel": "instagram",
+      "locale": "en",
+      "contentHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "assetHashes": ["dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"],
+      "window": {
+        "notBefore": "2026-09-01T08:00:00.000Z",
+        "notAfter": "2026-09-01T10:00:00.000Z"
+      },
+      "utm": {
+        "source": "instagram",
+        "medium": "organic_social",
+        "campaign": "door-money-release-001",
+        "content": "door-money-instagram-001"
+      },
+      "approvalRef": "owner-fixture-approval-001",
+      "status": "held"
+    }],
+    "status": "held",
+    "holdReasons": ["authority"],
+    "providerAvailability": "held",
+    "measurementAvailability": "manual-only",
+    "history": [{
+      "eventId": "campaign-created-001",
+      "at": "2026-08-27T00:00:00.000Z",
+      "action": "created",
+      "actor": "owner",
+      "reason": "Invented fixture remains held.",
+      "supersedesEventId": null
+    }],
+    "createdAt": "2026-08-27T00:00:00.000Z",
+    "updatedAt": "2026-08-27T00:00:00.000Z"
+  },
+  "shareKit": {
+    "schemaVersion": "social-share-kit/1",
+    "id": "social-share-kit-door-money-001",
+    "campaignId": "social-campaign-door-money-release-001",
+    "contactId": "distribution-contact-example-newsletter",
+    "sourceVentureId": "door-money",
+    "sourcePackageHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "channel": "threads",
+    "locale": "en",
+    "factualSummary": "An invented, owner-approved package contains one founder finance lesson.",
+    "relevanceReason": "The fixture newsletter opted into this topic.",
+    "talkingPoints": ["One bounded lesson", "Source link included"],
+    "assets": [{
+      "ref": "state/ventures/door-money/assets/lesson-001.png",
+      "hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "altText": "Abstract fixture card with a single finance lesson."
+    }],
+    "link": "https://example.invalid/door-money/lesson-001",
+    "disclosure": "BoardlessAI prepared this owner-approved fixture package.",
+    "attribution": "Source: invented Door Money fixture.",
+    "utm": {
+      "source": "example-newsletter",
+      "medium": "manual_share",
+      "campaign": "door-money-release-001",
+      "content": "newsletter-kit-001"
+    },
+    "expiresAt": "2026-09-30T23:59:59.000Z",
+    "status": "approved",
+    "deliveryMode": "copy",
+    "deliveryEvidenceRef": null
+  },
+  "profileEvent": {
+    "schemaVersion": "social-profile-event/1",
+    "eventId": "social-profile-event-door-money-proposed-001",
+    "at": "2026-08-27T00:00:00.000Z",
+    "profileId": "social-profile-door-money",
+    "connectionId": null,
+    "action": "proposed",
+    "actor": "owner",
+    "provenanceRef": "GitHub #406",
+    "reason": "Internal profile proposal only; no account exists.",
+    "supersededEventRef": null
+  },
+  "policy": {
+    "schemaVersion": "amplification-policy/1",
+    "id": "amplification-policy-central",
+    "version": "1.0.0",
+    "effectiveDate": "2026-08-27",
+    "values": {
+      "minimumOriginalContentRatio": 0.7,
+      "maximumVentureSupportRatio": 0.3,
+      "rollingWindowPosts": 20,
+      "originalContentRunwayPosts": 10,
+      "sameSourceVentureCooldownDays": 10,
+      "maximumActiveSupportCampaigns": 2,
+      "duplicateCaptionThreshold": 0.86,
+      "duplicateAssetRejected": true,
+      "staggerRequired": true,
+      "minimumStaggerHours": 6
+    },
+    "profileOverrides": [],
+    "ownerDecisionRef": "fixture:amplification-policy-001",
+    "history": [{
+      "revision": 1,
+      "effectiveAt": "2026-08-27T00:00:00.000Z",
+      "ownerDecisionRef": "fixture:amplification-policy-001",
+      "action": "created",
+      "reason": "Invented central policy fixture.",
+      "supersedesRevision": null
+    }]
+  }
+}
