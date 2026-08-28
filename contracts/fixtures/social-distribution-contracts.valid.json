@@ -93,6 +93,7 @@
     }],
     "relationshipStatus": "opted-in",
     "consentEvidenceRef": "owner-fixture-consent-001",
+    "consentRecordedAt": "2026-08-27T00:00:00.000Z",
     "preferredFormats": ["link", "image"],
     "preferredCadence": "At most one relevant release per month.",
     "lastContactedAt": null,
@@ -102,7 +103,9 @@
     "notes": "Invented relationship fixture.",
     "provenance": {
       "source": "owner-entered-public-record",
-      "evidenceRefs": ["fixture:distribution-contact-001"]
+      "evidenceRefs": ["fixture:distribution-contact-001"],
+      "importBatchRef": null,
+      "importedAt": null
     }
   },
   "campaign": {
@@ -235,7 +238,17 @@
     "campaignId": "social-campaign-door-money-release-001",
     "contactId": "distribution-contact-example-newsletter",
     "sourceVentureId": "door-money",
+    "sourceCapabilityRef": {
+      "mapVersion": "1.1.0",
+      "source": "door-money",
+      "target": "social-distribution",
+      "capability": "approved-publish-package",
+      "dataSchemaVersion": "approved-publish-package/1",
+      "decisionReference": "GitHub #424"
+    },
     "sourcePackageHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "assignmentRef": "fixture:share-kit-assignment-001",
+    "contactConsentRef": "owner-fixture-consent-001",
     "channel": "threads",
     "locale": "en",
     "factualSummary": "An invented, owner-approved package contains one founder finance lesson.",
@@ -256,9 +269,19 @@
       "content": "newsletter-kit-001"
     },
     "expiresAt": "2026-09-30T23:59:59.000Z",
-    "status": "approved",
+    "status": "assigned",
     "deliveryMode": "copy",
-    "deliveryEvidenceRef": null
+    "deliveryEvidenceRef": null,
+    "outcome": {
+      "state": "assigned",
+      "recordedAt": "2026-08-27T00:00:00.000Z",
+      "evidenceRef": "fixture:share-kit-assignment-001",
+      "attribution": "owner-manual",
+      "identityInferred": false,
+      "consentInferred": false
+    },
+    "createdAt": "2026-08-27T00:00:00.000Z",
+    "updatedAt": "2026-08-27T00:00:00.000Z"
   },
   "profileEvent": {
     "schemaVersion": "social-profile-event/1",

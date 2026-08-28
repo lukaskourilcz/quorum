@@ -263,8 +263,9 @@ export const DistributionContactSchema = z.strictObject({
     value: z.string().trim().min(1).max(300),
     ownerEnteredAt: DateTimeSchema
   })).min(1).max(4),
-  relationshipStatus: z.enum(["unknown", "opted-in", "paused", "declined", "revoked"]),
+  relationshipStatus: z.enum(["prospect", "qualified", "contacted", "opted-in", "active", "paused", "declined", "do-not-contact", "retired"]),
   consentEvidenceRef: EvidenceRefSchema.nullable(),
+  consentRecordedAt: DateTimeSchema.nullable(),
   preferredFormats: z.array(z.enum(["link", "image", "carousel", "video", "text"])).max(5),
   preferredCadence: z.string().trim().min(1).max(160).nullable(),
   lastContactedAt: DateTimeSchema.nullable(),
@@ -272,14 +273,43 @@ export const DistributionContactSchema = z.strictObject({
   lastDeclinedAt: DateTimeSchema.nullable(),
   doNotContact: z.boolean(),
   notes: z.string().trim().max(500),
-  provenance: z.strictObject({ source: z.literal("owner-entered-public-record"), evidenceRefs: z.array(EvidenceRefSchema).min(1).max(8) })
+  provenance: z.strictObject({
+    source: z.enum(["owner-entered-public-record", "owner-import"]),
+    evidenceRefs: z.array(EvidenceRefSchema).min(1).max(8),
+    importBatchRef: EvidenceRefSchema.nullable(),
+    importedAt: DateTimeSchema.nullable()
+  })
 }).superRefine((contact, context) => {
-  if (contact.relationshipStatus === "opted-in" && contact.consentEvidenceRef === null) {
-    context.addIssue({ code: "custom", message: "An opted-in relationship needs consent evidence", path: ["consentEvidenceRef"] });
+  if (["opted-in", "active"].includes(contact.relationshipStatus) && (contact.consentEvidenceRef === null || contact.consentRecordedAt === null)) {
+    context.addIssue({ code: "custom", message: "An opted-in or active relationship needs dated consent evidence", path: ["consentEvidenceRef"] });
   }
-  if (["declined", "revoked"].includes(contact.relationshipStatus) && (!contact.doNotContact || contact.lastDeclinedAt === null)) {
-    context.addIssue({ code: "custom", message: "Declined/revoked contacts remain do-not-contact with dated evidence" });
+  if (["declined", "do-not-contact"].includes(contact.relationshipStatus) && (!contact.doNotContact || contact.lastDeclinedAt === null)) {
+    context.addIssue({ code: "custom", message: "Declined/do-not-contact records remain blocked with dated evidence" });
   }
+  if (contact.doNotContact && !["declined", "do-not-contact", "retired"].includes(contact.relationshipStatus)) {
+    context.addIssue({ code: "custom", message: "A do-not-contact flag needs an explicit blocking lifecycle", path: ["relationshipStatus"] });
+  }
+  if (contact.provenance.source === "owner-import" && (contact.provenance.importBatchRef === null || contact.provenance.importedAt === null)) {
+    context.addIssue({ code: "custom", message: "An imported relationship needs bounded batch provenance", path: ["provenance"] });
+  }
+  if (contact.provenance.source === "owner-entered-public-record" && (contact.provenance.importBatchRef !== null || contact.provenance.importedAt !== null)) {
+    context.addIssue({ code: "custom", message: "A manually entered record cannot carry import provenance", path: ["provenance"] });
+  }
+});
+
+export const DistributionContactEventSchema = z.strictObject({
+  schemaVersion: z.literal("distribution-contact-event/1"),
+  eventId: z.string().regex(/^distribution-contact-event-[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(180),
+  contactId: z.string().regex(/^distribution-contact-[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(140),
+  at: DateTimeSchema,
+  action: z.enum(["created", "qualified", "contacted", "opted-in", "activated", "paused", "declined", "do-not-contact", "retired", "corrected"]),
+  actor: z.literal("owner"),
+  reason: BoundedTextSchema,
+  consentEvidenceRef: EvidenceRefSchema.nullable(),
+  supersededEventRef: EvidenceRefSchema.nullable()
+}).superRefine((event, context) => {
+  if (event.action === "opted-in" && event.consentEvidenceRef === null) context.addIssue({ code: "custom", message: "Opt-in lifecycle evidence must name the consent record", path: ["consentEvidenceRef"] });
+  if ((event.action === "corrected") !== (event.supersededEventRef !== null)) context.addIssue({ code: "custom", message: "Only a correction supersedes an earlier event", path: ["supersededEventRef"] });
 });
 
 const CampaignTargetSchema = z.strictObject({
@@ -541,7 +571,10 @@ export const SocialShareKitSchema = z.strictObject({
   campaignId: z.string().regex(/^social-campaign-[a-z0-9]+(?:-[a-z0-9]+)*$/u),
   contactId: z.string().regex(/^distribution-contact-[a-z0-9]+(?:-[a-z0-9]+)*$/u),
   sourceVentureId: VentureIdSchema,
+  sourceCapabilityRef: SocialCapabilityRefSchema,
   sourcePackageHash: Sha256Schema,
+  assignmentRef: EvidenceRefSchema,
+  contactConsentRef: EvidenceRefSchema,
   channel: SocialPlatformSchema,
   locale: LocaleSchema,
   factualSummary: z.string().trim().min(1).max(800),
@@ -553,13 +586,52 @@ export const SocialShareKitSchema = z.strictObject({
   attribution: z.string().trim().min(1).max(300),
   utm: z.strictObject({ source: SlugSchema, medium: z.literal("manual_share"), campaign: SlugSchema, content: SlugSchema }),
   expiresAt: DateTimeSchema,
-  status: z.enum(["draft", "approved", "expired", "delivered", "declined"]),
+  status: z.enum(["assigned", "delivered", "shared", "declined", "expired", "unknown"]),
   deliveryMode: z.enum(["copy", "download", "manual-send"]),
-  deliveryEvidenceRef: EvidenceRefSchema.nullable()
+  deliveryEvidenceRef: EvidenceRefSchema.nullable(),
+  outcome: z.strictObject({
+    state: z.enum(["assigned", "delivered", "shared", "declined", "expired", "unknown"]),
+    recordedAt: DateTimeSchema,
+    evidenceRef: EvidenceRefSchema.nullable(),
+    attribution: z.enum(["owner-manual", "aggregate", "none"]),
+    identityInferred: z.literal(false),
+    consentInferred: z.literal(false)
+  }),
+  createdAt: DateTimeSchema,
+  updatedAt: DateTimeSchema
 }).superRefine((kit, context) => {
-  if ((kit.status === "delivered") !== (kit.deliveryEvidenceRef !== null)) {
-    context.addIssue({ code: "custom", message: "Only recorded delivery evidence can mark a manual share kit delivered", path: ["deliveryEvidenceRef"] });
+  if (["personal-growth", "kvorum", "goviral", "contest-radar"].includes(kit.sourceVentureId)) {
+    context.addIssue({ code: "custom", message: "Network share kits cannot source isolated or deferred programs", path: ["sourceVentureId"] });
   }
+  if (kit.sourceCapabilityRef.source !== kit.sourceVentureId) {
+    context.addIssue({ code: "custom", message: "A Network kit capability must belong to the campaign source", path: ["sourceCapabilityRef"] });
+  }
+  if (kit.status !== kit.outcome.state) {
+    context.addIssue({ code: "custom", message: "The reduced kit outcome and status must agree", path: ["outcome"] });
+  }
+  if (["delivered", "shared"].includes(kit.status) !== (kit.deliveryEvidenceRef !== null)) {
+    context.addIssue({ code: "custom", message: "Only recorded manual delivery/share evidence can mark a kit delivered or shared", path: ["deliveryEvidenceRef"] });
+  }
+  if (kit.outcome.attribution === "aggregate" && kit.outcome.state === "shared") {
+    context.addIssue({ code: "custom", message: "Aggregate attribution cannot identify a person as having shared", path: ["outcome", "attribution"] });
+  }
+});
+
+export const SocialShareKitOutcomeEventSchema = z.strictObject({
+  schemaVersion: z.literal("social-share-kit-outcome-event/1"),
+  eventId: z.string().regex(/^social-share-kit-outcome-[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(180),
+  kitId: z.string().regex(/^social-share-kit-[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(140),
+  at: DateTimeSchema,
+  actor: z.literal("owner"),
+  outcome: z.enum(["delivered", "shared", "declined", "expired", "unknown"]),
+  attribution: z.enum(["owner-manual", "aggregate", "none"]),
+  evidenceRef: EvidenceRefSchema.nullable(),
+  reason: BoundedTextSchema,
+  identityInferred: z.literal(false),
+  consentInferred: z.literal(false)
+}).superRefine((event, context) => {
+  if (["delivered", "shared"].includes(event.outcome) && (event.attribution !== "owner-manual" || event.evidenceRef === null)) context.addIssue({ code: "custom", message: "Delivered/shared outcomes require owner-recorded evidence", path: ["evidenceRef"] });
+  if (event.attribution === "aggregate" && event.outcome !== "unknown") context.addIssue({ code: "custom", message: "Aggregate UTM evidence may only remain unknown", path: ["attribution"] });
 });
 
 export const SocialProfileEventSchema = z.strictObject({
@@ -665,9 +737,11 @@ export type SocialProfile = z.infer<typeof SocialProfileSchema>;
 export type SocialCapabilityRef = z.infer<typeof SocialCapabilityRefSchema>;
 export type SocialConnection = z.infer<typeof SocialConnectionSchema>;
 export type DistributionContact = z.infer<typeof DistributionContactSchema>;
+export type DistributionContactEvent = z.infer<typeof DistributionContactEventSchema>;
 export type SocialCampaign = z.infer<typeof SocialCampaignSchema>;
 export type SocialCampaignEvent = z.infer<typeof SocialCampaignEventSchema>;
 export type SocialShareKit = z.infer<typeof SocialShareKitSchema>;
+export type SocialShareKitOutcomeEvent = z.infer<typeof SocialShareKitOutcomeEventSchema>;
 export type SocialProfileEvent = z.infer<typeof SocialProfileEventSchema>;
 export type AmplificationPolicy = z.infer<typeof AmplificationPolicySchema>;
 
