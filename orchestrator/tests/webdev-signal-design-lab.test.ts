@@ -91,7 +91,7 @@ describe("WebDev Signal bounded Design Lab handoff", () => {
     for (const edition of [four, five, six]) {
       const payload = createWebDevDesignPayload({ edition, editionRef: `state/ventures/webdev-signal/packages/${edition.instagramPanels.length}.json`, brief, record });
       const semantics = new Set(payload.panels.flatMap((panel) => panel.semantics));
-      expect(semantics).toEqual(new Set(["lead", "change", "impact", "action", "source", ...(edition.instagramPanels.length === 6 ? ["detail"] : [])].filter((value) => value !== "detail" || semantics.has("detail"))));
+      expect(semantics).toEqual(new Set(["lead", "change", "impact", "action", "source", ...(edition.instagramPanels.length === 6 ? ["detail"] : [])]));
     }
   });
 

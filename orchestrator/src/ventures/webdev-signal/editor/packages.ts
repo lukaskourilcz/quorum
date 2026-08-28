@@ -119,7 +119,7 @@ function packageFor(input: {
         { role: "change-impact", heading: isCs ? "Změna a dopad" : "Change and impact", body: `${copy.deck} ${copy.impactLabel}` },
         { role: "action", heading: isCs ? "Co zkontrolovat" : "What to check", body: copy.actionLabel }
       ];
-  if (input.brief.uncertainty.length > 0) panels.push({ role: "impact", heading: isCs ? "Hranice důkazů" : "Evidence boundary", body: input.brief.uncertainty[0]! });
+  if (input.brief.uncertainty.length > 0) panels.push({ role: "detail", heading: isCs ? "Hranice důkazů" : "Evidence boundary", body: input.brief.uncertainty[0]! });
   panels.push({ role: "source", heading: isCs ? "Zdroj" : "Source", body: `${copy.sourceLabel}: ${source.label}` });
   const instagramPanels = panels.slice(0, input.limits.instagramPanelsMax);
   const claimIdsUsed = input.brief.claims.map(({ id }) => id);

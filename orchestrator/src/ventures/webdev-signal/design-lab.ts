@@ -52,7 +52,7 @@ function identifierList(record: WebDevRecord): WebDevDesignPayload["identifiers"
 function semanticsFor(role: WebDevEditionPackage["instagramPanels"][number]["role"]) {
   if (role === "cover") return ["lead" as const];
   if (role === "change-impact") return ["change" as const, "impact" as const];
-  return [role] as Array<"change" | "impact" | "action" | "source">;
+  return [role] as Array<"change" | "impact" | "action" | "source" | "detail">;
 }
 
 /** Select an already accepted locale package into the renderer's strict, source-locked boundary. */
