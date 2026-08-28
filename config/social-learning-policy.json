@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "social-learning-policy/1",
+  "version": "1.0.0",
+  "minimumMeasuredPosts": 8,
+  "minimumAdjustmentEvidence": 3,
+  "outlierMinimumPeers": 4,
+  "maximumActiveExperiments": 2,
+  "maximumRankShift": 1,
+  "primaryReviewDays": 28,
+  "amplifierReviewDays": 75,
+  "maximumOwnerAttentionPerWindow": 4,
+  "minimumPublishReliability": 0.8,
+  "hardGatesFrozen": [
+    "purpose",
+    "capability",
+    "privacy",
+    "evidence",
+    "original-support-ratio",
+    "runway",
+    "cooldown",
+    "duplicate",
+    "stagger",
+    "authority",
+    "cost",
+    "kill-switch"
+  ],
+  "ownerDecisionRef": "GitHub #434"
+}

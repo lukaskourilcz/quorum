@@ -46,6 +46,7 @@ export * from "./social-pack.js";
 export * from "./social-distribution.js";
 export * from "./social-results.js";
 export * from "./social-operations.js";
+export * from "./social-learning.js";
 export * from "./style-profile.js";
 export * from "./venture-registry.js";
 export * from "./venture-capability.js";
