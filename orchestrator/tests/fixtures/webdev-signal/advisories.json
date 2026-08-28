@@ -1,0 +1,20 @@
+[
+  {
+    "ghsa_id": "GHSA-xxxx-yyyy-zzzz",
+    "type": "reviewed",
+    "severity": "high",
+    "summary": "Invented package traversal advisory",
+    "description": "An invented advisory fixture used only to verify bounded affected and fixed ranges.",
+    "html_url": "https://github.com/advisories/GHSA-xxxx-yyyy-zzzz",
+    "published_at": "2026-08-27T09:00:00Z",
+    "updated_at": "2026-08-27T09:30:00Z",
+    "vulnerabilities": [
+      {
+        "package": { "ecosystem": "npm", "name": "fixture-package" },
+        "vulnerable_version_range": ">= 1.0.0, < 1.2.3",
+        "first_patched_version": "1.2.3"
+      }
+    ]
+  },
+  { "ghsa_id": "GHSA-malformed-item" }
+]

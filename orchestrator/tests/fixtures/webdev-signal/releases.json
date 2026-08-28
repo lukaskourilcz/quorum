@@ -1,0 +1,23 @@
+[
+  {
+    "id": 13001,
+    "tag_name": "v20.0.0",
+    "name": "Invented framework 20.0.0",
+    "body": "An invented fixture release with a bounded migration note.",
+    "html_url": "https://github.com/facebook/react/releases/tag/v20.0.0",
+    "draft": false,
+    "prerelease": false,
+    "published_at": "2026-08-27T10:00:00Z",
+    "author": { "login": "fixture-maintainer" }
+  },
+  {
+    "id": 13002,
+    "tag_name": "v20.1.0-draft",
+    "name": "Invented draft",
+    "body": "This draft must be filtered.",
+    "html_url": "https://github.com/facebook/react/releases/tag/v20.1.0-draft",
+    "draft": true,
+    "published_at": "2026-08-27T11:00:00Z"
+  },
+  { "id": 13003, "tag_name": "vbroken" }
+]

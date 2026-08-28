@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Invented Official Web Platform Updates</title>
+    <link>https://developer.chrome.com/</link>
+    <description>Shape-preserving test fixture; not a real announcement.</description>
+    <item>
+      <guid>fixture-chrome-130</guid>
+      <title>Chrome 130 adds an invented CSS capability</title>
+      <link>https://developer.chrome.com/blog/fixture-chrome-130/</link>
+      <description>An invented fixture describing a stable CSS capability for adapter tests.</description>
+      <pubDate>Thu, 27 Aug 2026 12:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <guid>fixture-malformed</guid>
+      <title>Missing link should cost one item</title>
+      <pubDate>Thu, 27 Aug 2026 11:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

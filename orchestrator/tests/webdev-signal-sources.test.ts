@@ -2,15 +2,80 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { configRoot } from "../src/paths.js";
+import { parseWebDevSource } from "../src/ventures/webdev-signal/sources/adapters.js";
 import { WebDevSourceCacheSchema } from "../src/ventures/webdev-signal/sources/cache.js";
 import { loadWebDevSourceRegistry, webDevSourceHosts } from "../src/ventures/webdev-signal/sources/registry.js";
 import { fetchWebDevSource } from "../src/ventures/webdev-signal/sources/transport.js";
 
 const NOW = "2026-08-28T05:00:00.000Z";
 const PUBLIC_DNS = async () => ["203.0.113.10"];
+const fixtureRoot = path.join(import.meta.dirname, "fixtures", "webdev-signal");
 
 afterEach(() => {
   vi.unstubAllEnvs();
+});
+
+describe("WebDev Signal official adapters", () => {
+  it("parses a bounded feed and drops only the malformed item", async () => {
+    const source = (await loadWebDevSourceRegistry()).sources.find(({ id }) => id === "chrome-developers")!;
+    const result = await parseWebDevSource(source, await readFile(path.join(fixtureRoot, "feed.xml")), { fetchedAt: NOW, fixture: true });
+    expect(result).toMatchObject({ itemsSeen: 2, malformedItems: 1, filteredItems: 0, empty: false });
+    expect(result.candidates).toHaveLength(1);
+    expect(result.candidates[0]).toMatchObject({
+      sourceId: "chrome-developers",
+      title: "Chrome 130 adds an invented CSS capability",
+      versionText: "130",
+      provenance: { fixture: true, authority: "official-primary" }
+    });
+  });
+
+  it("parses only allowlisted repository releases and filters drafts", async () => {
+    const source = (await loadWebDevSourceRegistry()).sources.find(({ id }) => id === "react-releases")!;
+    const result = await parseWebDevSource(source, await readFile(path.join(fixtureRoot, "releases.json")), { fetchedAt: NOW, fixture: true });
+    expect(result).toMatchObject({ itemsSeen: 3, malformedItems: 1, filteredItems: 1 });
+    expect(result.candidates).toHaveLength(1);
+    expect(result.candidates[0]).toMatchObject({
+      sourceId: "react-releases",
+      canonicalProjectUrl: "https://github.com/facebook/react",
+      versionText: "v20.0.0"
+    });
+  });
+
+  it("keeps exact npm advisory scope and isolates malformed advisories", async () => {
+    const source = (await loadWebDevSourceRegistry()).sources.find(({ id }) => id === "github-npm-advisories")!;
+    const result = await parseWebDevSource(source, await readFile(path.join(fixtureRoot, "advisories.json")), { fetchedAt: NOW, fixture: true });
+    expect(result).toMatchObject({ itemsSeen: 2, malformedItems: 1, filteredItems: 0 });
+    expect(result.candidates[0]).toMatchObject({
+      sourceItemId: "GHSA-xxxx-yyyy-zzzz",
+      changeKindHints: ["security-advisory"]
+    });
+    expect(result.candidates[0]?.versionText).toContain("fixture-package affected >= 1.0.0, < 1.2.3 fixed 1.2.3");
+    expect(result.candidates[0]?.securityText).toContain("severity high");
+  });
+
+  it("distinguishes legitimate empty arrays from layout failure", async () => {
+    const source = (await loadWebDevSourceRegistry()).sources.find(({ id }) => id === "react-releases")!;
+    const empty = await parseWebDevSource(source, new TextEncoder().encode("[]"), { fetchedAt: NOW, fixture: true });
+    expect(empty).toMatchObject({ empty: true, itemsSeen: 0, malformedItems: 0 });
+    await expect(parseWebDevSource(source, new TextEncoder().encode('{"unexpected":true}'), { fetchedAt: NOW, fixture: true })).rejects.toThrow(/layout-invalid/);
+  });
+
+  it("orders candidates deterministically independent of input order", async () => {
+    const source = (await loadWebDevSourceRegistry()).sources.find(({ id }) => id === "react-releases")!;
+    const original = JSON.parse(await readFile(path.join(fixtureRoot, "releases.json"), "utf8")) as unknown[];
+    const additional = {
+      id: 13000,
+      tag_name: "v19.9.9",
+      name: "Older invented release",
+      body: "Invented older release fixture.",
+      html_url: "https://github.com/facebook/react/releases/tag/v19.9.9",
+      draft: false,
+      published_at: "2026-08-26T10:00:00Z"
+    };
+    const forward = await parseWebDevSource(source, new TextEncoder().encode(JSON.stringify([...original, additional])), { fetchedAt: NOW, fixture: true });
+    const reverse = await parseWebDevSource(source, new TextEncoder().encode(JSON.stringify([additional, ...original])), { fetchedAt: NOW, fixture: true });
+    expect(forward.candidates.map(({ sourceItemId }) => sourceItemId)).toEqual(reverse.candidates.map(({ sourceItemId }) => sourceItemId));
+  });
 });
 
 describe("WebDev Signal source registry", () => {
