@@ -173,6 +173,15 @@
       "model": "claude-sonnet-5",
       "maxInputTokens": 8000,
       "maxOutputTokens": 2500
+    },
+    "_comment_WEBDEV_SIGNAL": "WEBDEV_SIGNAL_EDITOR is the single optional structured bilingual synthesis role. Deterministic packages run first; this route stays held until independent founding, budget and model authority exist. Its 4000/1500 token ceiling keeps one call plus one bounded repair below the venture's $0.03 selected-day cap at the dated price.",
+    "WEBDEV_SIGNAL_EDITOR": {
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "maxInputTokens": 4000,
+      "maxOutputTokens": 1500,
+      "reasoningEffort": "none",
+      "serviceTier": "default"
     }
   }
 }

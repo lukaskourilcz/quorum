@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "webdev-editor-config/1",
+  "modelRole": "WEBDEV_SIGNAL_EDITOR",
+  "roleVersion": "1.0.0",
+  "promptVersion": "1.0.0",
+  "localePolicyVersion": "1.0.0",
+  "deterministicFirst": true,
+  "cacheAcceptedPackages": true,
+  "maximumSynthesisCalls": 1,
+  "maximumRepairCalls": 1,
+  "maximumSelectedDayUsd": 0.03,
+  "persistRawProviderOutput": false
+}

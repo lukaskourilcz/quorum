@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { WebDevCandidateSchema } from "../src/contracts/webdev-signal.js";
 import { repoRoot } from "../src/paths.js";
 import { buildWebDevEvidenceBrief } from "../src/ventures/webdev-signal/editor/brief.js";
@@ -10,6 +10,11 @@ import {
   validateGeneratedWebDevPackages,
   type WebDevSocialContentLimits
 } from "../src/ventures/webdev-signal/editor/packages.js";
+import {
+  loadWebDevEditorConfig,
+  loadWebDevEditorModelRoute,
+  runWebDevEditor
+} from "../src/ventures/webdev-signal/editor/model.js";
 import { loadWebDevSelectionConfig } from "../src/ventures/webdev-signal/selection/config.js";
 import { decideWebDevEdition } from "../src/ventures/webdev-signal/selection/decision.js";
 
@@ -147,5 +152,125 @@ describe("WebDev Signal native social packages", () => {
     const reasons = validateGeneratedWebDevPackages({ brief, record, packages: clone, limits: LIMITS });
     expect(reasons.pair).toContain("literal-translation-or-clone");
     expect(brief).toEqual((await acceptedBrief()).brief);
+  });
+});
+
+describe("WebDev Signal editor role, budget, cache and repair seam", () => {
+  it("resolves one centrally configured low-cost bilingual editor role", async () => {
+    expect(await loadWebDevEditorConfig()).toMatchObject({
+      modelRole: "WEBDEV_SIGNAL_EDITOR",
+      deterministicFirst: true,
+      maximumSynthesisCalls: 1,
+      maximumRepairCalls: 1,
+      maximumSelectedDayUsd: 0.03,
+      persistRawProviderOutput: false
+    });
+    expect(await loadWebDevEditorModelRoute()).toMatchObject({
+      role: "WEBDEV_SIGNAL_EDITOR",
+      provider: "openai",
+      model: "gpt-5.6-luna",
+      maxInputTokens: 4_000,
+      maxOutputTokens: 1_500
+    });
+  });
+
+  it("uses the deterministic pair first with zero reservations or calls", async () => {
+    const { brief, record } = await acceptedBrief();
+    const generate = vi.fn();
+    const result = await runWebDevEditor({
+      brief,
+      briefRef: "brief:fixture",
+      record,
+      limits: LIMITS,
+      authorityAvailable: false,
+      authorityCeilingUsd: null,
+      companyHeadroomUsd: 0,
+      ventureMonthRemainingUsd: 0,
+      now: NOW,
+      config: await loadWebDevEditorConfig(),
+      route: await loadWebDevEditorModelRoute(),
+      generate
+    });
+    expect(result.receipt).toMatchObject({ outcome: "generated", reservations: 0, calls: 0, actualUsd: 0, reasons: ["deterministic-packages-accepted"] });
+    expect(result.packages.cs?.status).toBe("draft");
+    expect(result.packages.en?.status).toBe("draft");
+    expect(generate).not.toHaveBeenCalled();
+  });
+
+  it("makes NO_EDITION and held authority honest no-call outcomes", async () => {
+    const config = await loadWebDevEditorConfig();
+    const route = await loadWebDevEditorModelRoute();
+    const generate = vi.fn();
+    const none = await runWebDevEditor({ brief: null, briefRef: null, record: null, limits: LIMITS, strategy: "model", authorityAvailable: true, authorityCeilingUsd: 0.03, companyHeadroomUsd: 1, ventureMonthRemainingUsd: 1, now: NOW, config, route, generate });
+    expect(none.receipt).toMatchObject({ outcome: "NO_PACKAGE", calls: 0, reservations: 0, reasons: ["no-selected-brief"] });
+    const { brief, record } = await acceptedBrief();
+    const held = await runWebDevEditor({ brief, briefRef: "brief:fixture", record, limits: LIMITS, strategy: "model", authorityAvailable: false, authorityCeilingUsd: null, companyHeadroomUsd: 1, ventureMonthRemainingUsd: 1, now: NOW, config, route, generate });
+    expect(held.receipt).toMatchObject({ outcome: "held", calls: 0, reservations: 0, reasons: ["editorial-authority-missing"] });
+    expect(held.brief).toEqual(brief);
+    expect(generate).not.toHaveBeenCalled();
+  });
+
+  it("reuses an accepted cache key without regeneration", async () => {
+    const { brief, record } = await acceptedBrief();
+    const config = await loadWebDevEditorConfig();
+    const route = await loadWebDevEditorModelRoute();
+    const first = await runWebDevEditor({ brief, briefRef: "brief:fixture", record, limits: LIMITS, authorityAvailable: false, authorityCeilingUsd: null, companyHeadroomUsd: 0, ventureMonthRemainingUsd: 0, now: NOW, config, route });
+    const generate = vi.fn();
+    const reused = await runWebDevEditor({ brief, briefRef: "brief:fixture", record, limits: LIMITS, authorityAvailable: false, authorityCeilingUsd: null, companyHeadroomUsd: 0, ventureMonthRemainingUsd: 0, now: NOW, config, route, cache: { [first.receipt.cacheKey!]: first.cacheEntry! }, generate });
+    expect(reused.receipt).toMatchObject({ outcome: "reused", calls: 0, reservations: 0, actualUsd: 0 });
+    expect(reused.packages).toEqual(first.packages);
+    expect(generate).not.toHaveBeenCalled();
+  });
+
+  it("charges malformed output and performs at most one bounded repair", async () => {
+    const { brief, record } = await acceptedBrief();
+    const valid = createDeterministicWebDevPackages({ brief, briefRef: "brief:fixture", record, limits: LIMITS });
+    const generate = vi.fn()
+      .mockResolvedValueOnce({ text: "not-json", usd: 0.004 })
+      .mockResolvedValueOnce({ text: JSON.stringify(valid), usd: 0.005 });
+    const result = await runWebDevEditor({
+      brief,
+      briefRef: "brief:fixture",
+      record,
+      limits: LIMITS,
+      strategy: "model",
+      authorityAvailable: true,
+      authorityCeilingUsd: 0.03,
+      companyHeadroomUsd: 1,
+      ventureMonthRemainingUsd: 0.75,
+      now: NOW,
+      config: await loadWebDevEditorConfig(),
+      route: await loadWebDevEditorModelRoute(),
+      generate
+    });
+    expect(result.receipt).toMatchObject({ outcome: "generated", calls: 2, reservations: 2, repairCalls: 1, actualUsd: 0.009, rawProviderOutputPersisted: false });
+    expect(result.receipt.reservedUsd).toBeLessThanOrEqual(0.03);
+    expect(generate).toHaveBeenCalledTimes(2);
+    expect(result.cacheEntry).not.toBeNull();
+  });
+
+  it("preserves one valid locale when the other is malformed and repair has no headroom", async () => {
+    const { brief, record } = await acceptedBrief();
+    const valid = createDeterministicWebDevPackages({ brief, briefRef: "brief:fixture", record, limits: LIMITS });
+    const generate = vi.fn(async () => ({ text: JSON.stringify({ cs: valid.cs, en: { malformed: true } }), usd: 0.01 }));
+    const result = await runWebDevEditor({
+      brief,
+      briefRef: "brief:fixture",
+      record,
+      limits: LIMITS,
+      strategy: "model",
+      authorityAvailable: true,
+      authorityCeilingUsd: 0.012,
+      companyHeadroomUsd: 0.012,
+      ventureMonthRemainingUsd: 0.012,
+      now: NOW,
+      config: await loadWebDevEditorConfig(),
+      route: await loadWebDevEditorModelRoute(),
+      generate
+    });
+    expect(result.receipt).toMatchObject({ outcome: "held", calls: 1, repairCalls: 0, localeStates: { cs: "draft", en: "held" } });
+    expect(result.packages.cs?.status).toBe("draft");
+    expect(result.packages.en).toBeNull();
+    expect(result.brief).toEqual(brief);
   });
 });
