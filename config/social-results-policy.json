@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "social-results-policy/1",
+  "version": "1.0.0",
+  "baselineDays": 28,
+  "maximumActiveExperiments": 2,
+  "boostProposal": {
+    "thresholdVersion": "1.0.0",
+    "primaryMetric": "qualified_actions",
+    "minimumObservedValue": 3,
+    "minimumSample": 2,
+    "ownerDecisionRequired": true,
+    "adApiEnabled": false,
+    "purchaseAuthorized": false,
+    "automaticSpendAuthorized": false
+  },
+  "hardGatesFrozen": [
+    "purpose",
+    "capability",
+    "original-support-ratio",
+    "runway",
+    "cooldown",
+    "duplicate",
+    "stagger",
+    "privacy",
+    "authority",
+    "kill-switch"
+  ],
+  "ownerDecisionRef": "GitHub #412"
+}
