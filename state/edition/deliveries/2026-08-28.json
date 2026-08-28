@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-08-28",
+  "packageHash": "40015192a614a0baae4789c7dd186c617550c2bc03f9f2730a5b04dbbc82a2bb",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "64231c608de57bbec538cf432ce446d18819ebc9",
+  "deliveredAt": "2026-08-28T03:10:13.790Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-28-anthropic-soud-blacklist-xai-zaloba-alphabet",
+  "tags": [
+    "umela-inteligence",
+    "regulace",
+    "bezpecnost",
+    "socialni-site",
+    "burza",
+    "trestni-pravo"
+  ]
+}
