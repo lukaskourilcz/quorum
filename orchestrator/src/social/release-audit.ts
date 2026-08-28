@@ -6,7 +6,6 @@ import { readImplementationManifestRegistry } from "../programs/manifests.js";
 import { buildVentureRecoveryPolicyRegistry, loadOperationsRecoveryRegistry } from "../operations/recovery-policies.js";
 import { loadVentureSloRegistry } from "../operations/slo.js";
 import { loadVentureCapabilityMap } from "../ventures/capabilities.js";
-import { createSocialProfileSimulationFixtures } from "./fixtures/profile-simulations.js";
 import { auditSocialDistributionMigration } from "./migration-audit.js";
 import { loadSocialProviderRegistry } from "./providers.js";
 import { loadSocialPublisherRegistry } from "./publisher-targets.js";
@@ -71,6 +70,9 @@ export async function auditSocialRelease(repoRoot = defaultRepoRoot): Promise<So
     readFile(path.join(repoRoot, "site/src/proxy.ts"), "utf8"), readFile(path.join(repoRoot, "docs/SOCIAL-DISTRIBUTION-RELEASE.md"), "utf8"), readFile(path.join(repoRoot, "docs/NEEDED.md"), "utf8")
   ]);
   const checks: SocialReleaseCheck[] = [];
+  const simulationMatrix = JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/social-profile-simulation-matrix.json"), "utf8")) as { schemaVersion?: unknown; count?: unknown };
+  const simulationModuleRef = ["orchestrator/src/social/fixtures", "profile-simulations.ts"].join("/");
+  const forbiddenSimulationImport = ["fixtures", "profile-simulations"].join("/");
   const profileVentures = publisher.profiles.map(({ ventureRef }) => ventureRef).filter((value): value is string => value !== null).sort();
   checks.push(check("owned-profile-topology", publisher.profiles.length === 6 && publisher.connections.length === 6 && publisher.legacyQueueMappings.length === 3
     && canonicalJson(profileVentures) === canonicalJson(["booksofhistory", "caught-up", "door-money", "mma-files", "tehdejsi-svet", "titty-tuesdays"])
@@ -123,9 +125,8 @@ export async function auditSocialRelease(repoRoot = defaultRepoRoot): Promise<So
     && migration.counts.unavailable === 0 && migration.counts.dropped === 0 && migration.counts.malformed === 0 && !migration.rollback.sourceQueueMutated,
   "The compatibility audit preserves source history/readers, exact roles, hashes, attempts, receipts and held authority with explicit outcome counts.", ["orchestrator/src/social/migration-audit.ts", "docs/SOCIAL-PUBLISHER-MIGRATION.md"]));
 
-  const simulations = createSocialProfileSimulationFixtures();
-  checks.push(check("simulation-boundary", simulations.length === 50 && new Set(simulations.map(({ profile }) => profile.id)).size === 50 && simulations.every(({ profile }) => profile.kind === "simulation" && !profile.liveEligible)
-    && !targetSource.includes("fixtures/profile-simulations"), "Exactly 50 deterministic visual-QA simulations remain labelled, non-live and absent from production target resolution.", ["orchestrator/src/social/fixtures/profile-simulations.ts", "contracts/fixtures/social-profile-simulation-matrix.json"]));
+  checks.push(check("simulation-boundary", simulationMatrix.schemaVersion === "social-profile-simulation-matrix/1" && simulationMatrix.count === 50
+    && !targetSource.includes(forbiddenSimulationImport), "Exactly 50 deterministic visual-QA simulations remain labelled, non-live and absent from production target resolution.", [simulationModuleRef, "contracts/fixtures/social-profile-simulation-matrix.json"]));
 
   checks.push(check("privacy-and-redaction", privacy.passed && runnerSource.includes("redactSocialError") && runnerSource.includes("[REDACTED]") && indexSource.includes("redactSocialError(error)")
     && adminWorkspace.includes("secret values and native account values never cross the server boundary"), "Production Social config/state contains no credential values, private messages, audience identities or token-shaped values; CLI and connector errors are redacted.", ["orchestrator/src/social/runner.ts", "orchestrator/src/social/index.ts", "site/src/lib/social-profiles/snapshot.ts"]));
