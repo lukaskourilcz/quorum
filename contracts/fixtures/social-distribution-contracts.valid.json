@@ -58,6 +58,7 @@
       "loginMode": "instagram-facebook-login"
     },
     "credentialRef": null,
+    "nativeAccountIdRef": null,
     "approvedScopes": ["pages_show_list", "pages_read_engagement", "instagram_basic", "instagram_content_publish"],
     "supportedCapabilities": ["publish-original"],
     "mode": "held",

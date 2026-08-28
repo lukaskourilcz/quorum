@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { repoRoot } from "../src/paths.js";
+import { configRoot, repoRoot } from "../src/paths.js";
 import { assertOrgChangeApproved, type OrgChange } from "../src/org/change.js";
 import { assertLiveChannel, type Channel } from "../src/social/channel-registry.js";
 import { socialChannelsEnabled } from "../src/social/activation.js";
@@ -18,6 +18,12 @@ import {
 import { publishQueueItem } from "../src/social/publish.js";
 import { createMetaPublishAdapter } from "../src/social/meta.js";
 import { runSocialPublisher } from "../src/social/runner.js";
+import {
+  loadSocialPublisherRegistry,
+  migrateLegacyQueueItem,
+  resolvePublisherTarget
+} from "../src/social/publisher-targets.js";
+import { loadVentureCapabilityMap } from "../src/ventures/capabilities.js";
 
 const channel: Channel = {
   id: "threads",
@@ -187,7 +193,7 @@ describe("social and organization controls", () => {
     fetchMock.mockImplementation(async () => responses.shift()!);
     const adapter = createMetaPublishAdapter(
       {
-        META_GRAPH_API_VERSION: "v99.0",
+        META_GRAPH_API_VERSION: "v26.0",
         CAUGHT_UP_THREADS_USER_ID: "user-1",
         CAUGHT_UP_THREADS_ACCESS_TOKEN: "secret"
       },
@@ -199,11 +205,30 @@ describe("social and organization controls", () => {
       approvedScopes: ["threads_basic", "threads_content_publish"],
       enabledByHumanAt: "2026-07-23T07:00:00.000Z"
     };
+    const registry = structuredClone(await loadSocialPublisherRegistry());
+    const profile = registry.profiles.find((candidate) => candidate.id === "social-profile-caught-up")!;
+    profile.lifecycle = "active";
+    profile.liveEligible = true;
+    const connection = registry.connections.find((candidate) => candidate.id === "social-connection-caught-up-threads")!;
+    connection.mode = "autopublish";
+    connection.health = { status: "healthy", unavailableReason: null };
+    connection.enabledByHumanAt = "2026-07-23T07:00:00.000Z";
+    const migrated = migrateLegacyQueueItem(queueItem, registry);
+    const target = resolvePublisherTarget({
+      item: migrated,
+      registry,
+      capabilityMap: await loadVentureCapabilityMap(configRoot),
+      environment: {
+        CAUGHT_UP_THREADS_USER_ID: "user-1",
+        CAUGHT_UP_THREADS_ACCESS_TOKEN: "secret"
+      }
+    }).target!;
 
     const result = await adapter.publish(
       liveChannel,
-      queueItem,
-      "1".repeat(64)
+      migrated,
+      "1".repeat(64),
+      target
     );
 
     expect(result.remoteId).toBe("remote-1");

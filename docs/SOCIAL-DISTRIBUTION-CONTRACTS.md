@@ -9,7 +9,7 @@ Authority: GitHub #406, using the provider/authority decision in #405 and capabi
 | Contract | Owner | What it records | What it never grants |
 | --- | --- | --- | --- |
 | `social-profile/1` | Social Distribution profile domain | A real owned brand, non-live owner-personal record or immutable simulation; role, purpose, audience and lifecycle. | Account existence, OAuth, connection, publishing, spend or cross-venture authority. |
-| `social-connection/1` | Social Distribution connection domain | One profile/platform connector binding, credential reference name, exact scopes, health, cadence and human activation evidence. | Publishing authority by itself; engagement, account creation or credential values. |
+| `social-connection/1` | Social Distribution connection domain | One profile/platform connector binding, credential and native-account-id reference names, exact scopes, health, cadence and human activation evidence. | Publishing authority by itself; engagement, account creation or credential/native-id values. |
 | `distribution-contact/1` | Optional #411 Network domain | Minimum owner-entered public refs and consent/do-not-contact state for a genuine relationship. | Profile identity, connection, credential or publish-as authority. |
 | `social-campaign/1` | #410 campaign domain | One verified release's exact primary/umbrella/amplifier targets, immutable channel items, unique UTM, holds and correction-safe history. | A generic sister target, a new capability edge or provider authority. |
 | `social-share-kit/1` | Optional #411 Network domain | Bounded factual material for copy/download/manual send to one opted-in contact. | Owned-account queue entry or a claim that delivery/sharing occurred without evidence. |
@@ -37,6 +37,11 @@ all of the above + activation + content/claim/accessibility/duplicate/budget/cad
 `resolveSocialProfileConnection` therefore returns eligibility/hold/deny with
 `authorityGranted: false` and `publishingAuthorized: false` in every case. #409 owns the later
 runtime composition of all independent gates.
+
+Queue v2 and `social-publisher-registry/1` are documented in
+`docs/SOCIAL-PUBLISHER-MIGRATION.md`. The runtime resolves credentials only through validated
+connection reference names; no venture-prefix branch remains in the Meta adapter or activation
+gate.
 
 ## Structural boundaries
 

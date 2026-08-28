@@ -5,6 +5,10 @@ import { SocialActivationSchema, type SocialActivation } from "../contracts/auto
 import { MarketingPlanSchema } from "../contracts/marketing-plan.js";
 import { ReleaseProofSchema } from "../contracts/autonomy.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
+import {
+  loadSocialPublisherRegistry,
+  type SocialPublisherRegistry
+} from "./publisher-targets.js";
 
 export type DeliveryHealth = "passed" | "failed" | "no-edition";
 export type SocialVenture = "caught-up" | "mma-files" | "titty-tuesdays";
@@ -25,27 +29,6 @@ export function isPublishingVenture(venture: string): venture is SocialVenture {
 
 export const SOCIAL_DECISION_REFERENCE = "D2-autonomy-build-2026-08-01" as const;
 
-export const SOCIAL_CREDENTIALS: Record<SocialVenture, readonly string[]> = {
-  "caught-up": [
-    "CAUGHT_UP_THREADS_ACCESS_TOKEN",
-    "CAUGHT_UP_THREADS_USER_ID",
-    "CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN",
-    "CAUGHT_UP_INSTAGRAM_USER_ID"
-  ],
-  "mma-files": [
-    "MMA_FILES_THREADS_ACCESS_TOKEN",
-    "MMA_FILES_THREADS_USER_ID",
-    "MMA_FILES_INSTAGRAM_ACCESS_TOKEN",
-    "MMA_FILES_INSTAGRAM_USER_ID"
-  ],
-  "titty-tuesdays": [
-    "TITTY_TUESDAYS_THREADS_ACCESS_TOKEN",
-    "TITTY_TUESDAYS_THREADS_USER_ID",
-    "TITTY_TUESDAYS_INSTAGRAM_ACCESS_TOKEN",
-    "TITTY_TUESDAYS_INSTAGRAM_USER_ID"
-  ]
-};
-
 export function caughtUpUnlockCounter(events: readonly DeliveryHealth[]): number {
   let count = 0;
   for (const event of events) {
@@ -61,8 +44,26 @@ export function mmaFilesUnlockCounter(events: readonly Exclude<DeliveryHealth, "
   return Math.min(10, count);
 }
 
-export function missingSocialCredentials(venture: SocialVenture, environment: NodeJS.ProcessEnv): string[] {
-  return SOCIAL_CREDENTIALS[venture]!.filter((name) => !environment[name]?.trim());
+export function socialCredentialReferences(venture: SocialVenture, registry: SocialPublisherRegistry): string[] {
+  const mapping = registry.legacyQueueMappings.find((candidate) => candidate.venture === venture);
+  if (!mapping) return [];
+  return Object.values(mapping.connections).flatMap((connectionId) => {
+    const connection = registry.connections.find((candidate) => candidate.id === connectionId);
+    return connection?.credentialRef && connection.nativeAccountIdRef
+      ? [connection.credentialRef, connection.nativeAccountIdRef]
+      : [];
+  });
+}
+
+export function missingSocialCredentials(
+  venture: SocialVenture,
+  environment: NodeJS.ProcessEnv,
+  registry: SocialPublisherRegistry
+): string[] {
+  const references = socialCredentialReferences(venture, registry);
+  return references.length > 0
+    ? references.filter((name) => !environment[name]?.trim())
+    : ["SOCIAL_PUBLISHER_REGISTRY_UNAVAILABLE"];
 }
 
 /**
@@ -214,6 +215,8 @@ async function recordMissingCredentials(repoRoot: string, missing: Record<Social
 export async function refreshSocialActivation(input: {
   repoRoot: string;
   stateRoot: string;
+  configRoot?: string;
+  publisherRegistry?: SocialPublisherRegistry;
   environment?: NodeJS.ProcessEnv;
   now?: Date;
   safetyCheckerReady?: boolean;
@@ -233,9 +236,14 @@ export async function refreshSocialActivation(input: {
     "mma-files": mmaFilesUnlockCounter(mmaEvents.map((event) => event.health)),
     "titty-tuesdays": Math.min(4, campaignCount)
   };
-  const missing = Object.fromEntries(
-    (Object.keys(SOCIAL_CREDENTIALS) as SocialVenture[]).map((venture) => [venture, missingSocialCredentials(venture, environment)])
-  ) as Record<SocialVenture, string[]>;
+  const publisherRegistry = input.publisherRegistry
+    ?? await loadSocialPublisherRegistry(input.configRoot).catch(() => null);
+  const missing = Object.fromEntries(SOCIAL_VENTURES.map((venture) => [
+    venture,
+    publisherRegistry
+      ? missingSocialCredentials(venture, environment, publisherRegistry)
+      : ["SOCIAL_PUBLISHER_REGISTRY_UNAVAILABLE"]
+  ])) as Record<SocialVenture, string[]>;
   const gateReady: Record<SocialVenture, boolean> = {
     "caught-up": counters["caught-up"]! >= 7,
     "mma-files": counters["mma-files"]! >= 10,

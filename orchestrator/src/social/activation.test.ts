@@ -8,10 +8,12 @@ import { atomicWriteJson } from "../state.js";
 import { caughtUpUnlockCounter, mmaFilesUnlockCounter, refreshSocialActivation } from "./activation.js";
 import { QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
 import { runSocialPublisher } from "./runner.js";
+import { loadSocialPublisherRegistry } from "./publisher-targets.js";
 import { checkTittyTuesdaysPost } from "./tt-safety.js";
 import { composeTittyTuesdaysSocialQueue } from "./venture-packs.js";
 import marketingPlanFixture from "../../../contracts/fixtures/marketing-plan.valid.json" with { type: "json" };
 import sharp from "sharp";
+import { configRoot as canonicalConfigRoot } from "../paths.js";
 
 const roots: string[] = [];
 afterEach(async () => Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
@@ -23,7 +25,7 @@ async function root(): Promise<string> {
 }
 
 function environment(): NodeJS.ProcessEnv {
-  const result: NodeJS.ProcessEnv = { SOCIAL_KILL_SWITCH: "false", META_GRAPH_API_VERSION: "v99.0", PUBLIC_SITE_URL: "https://boardless.example" };
+  const result: NodeJS.ProcessEnv = { SOCIAL_KILL_SWITCH: "false", META_GRAPH_API_VERSION: "v26.0", PUBLIC_SITE_URL: "https://boardless.example" };
   for (const prefix of ["CAUGHT_UP", "MMA_FILES", "TITTY_TUESDAYS"]) {
     result[`${prefix}_THREADS_ACCESS_TOKEN`] = "fixture-token";
     result[`${prefix}_THREADS_USER_ID`] = "fixture-user";
@@ -31,6 +33,23 @@ function environment(): NodeJS.ProcessEnv {
     result[`${prefix}_INSTAGRAM_USER_ID`] = "fixture-user";
   }
   return result;
+}
+
+async function writeActivePublisherConfig(targetConfigRoot: string): Promise<void> {
+  const registry = structuredClone(await loadSocialPublisherRegistry(canonicalConfigRoot));
+  const profile = registry.profiles.find((candidate) => candidate.id === "social-profile-caught-up")!;
+  profile.lifecycle = "active";
+  profile.liveEligible = true;
+  const connection = registry.connections.find((candidate) => candidate.id === "social-connection-caught-up-threads")!;
+  connection.mode = "autopublish";
+  connection.health = { status: "healthy", unavailableReason: null };
+  connection.enabledByHumanAt = "2026-08-01T00:00:00.000Z";
+  await Promise.all([
+    writeFile(path.join(targetConfigRoot, "social-publisher-registry.json"), JSON.stringify(registry)),
+    readFile(path.join(canonicalConfigRoot, "venture-capabilities.json")).then((source) =>
+      writeFile(path.join(targetConfigRoot, "venture-capabilities.json"), source)
+    )
+  ]);
 }
 
 function proof(index: number) {
@@ -143,6 +162,7 @@ describe("per-venture social activation", () => {
       { id: "threads", specialist: "THREADS", mode: "autopublish", connector: "meta_threads", credentialRef: "unused", approvedScopes: ["threads_basic", "threads_content_publish"], nativeFormats: ["text"], maxOrganicPostsPerDay: 2, minHoursBetweenPosts: 6, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" },
       { id: "instagram", specialist: "INSTAGRAM", mode: "autopublish", connector: "meta_instagram", credentialRef: "unused", approvedScopes: ["instagram_basic", "instagram_content_publish"], nativeFormats: ["image"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 12, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" }
     ] }));
+    await writeActivePublisherConfig(configRoot);
     for (let index = 1; index <= 7; index += 1) await atomicWriteJson(stateRoot, `release-proofs/caught-up/${index}.json`, proof(index));
     await atomicWriteJson(stateRoot, "social/queue/fixture.json", queueItem());
     const adapter = {
@@ -154,6 +174,53 @@ describe("per-venture social activation", () => {
     const receipts = await readdir(path.join(stateRoot, "social", "posts"));
     const receipt = SocialPostReceiptSchema.parse(JSON.parse(await readFile(path.join(stateRoot, "social", "posts", receipts[0]!), "utf8")));
     expect(receipt).toMatchObject({ variant: "B", verifiedLive: true, attemptCount: 1, outcome: "published" });
+  });
+
+  it("holds an ambiguous delivery for reconciliation, redacts it and pauses the exact connection", async () => {
+    const repoRoot = await root();
+    const stateRoot = path.join(repoRoot, "state");
+    const configRoot = path.join(repoRoot, "config");
+    await mkdir(configRoot, { recursive: true });
+    await writeFile(path.join(configRoot, "channels.json"), JSON.stringify({ schemaVersion: 1, channels: [
+      { id: "threads", specialist: "THREADS", mode: "autopublish", connector: "meta_threads", credentialRef: "unused", approvedScopes: ["threads_basic", "threads_content_publish"], nativeFormats: ["text"], maxOrganicPostsPerDay: 2, minHoursBetweenPosts: 6, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" },
+      { id: "instagram", specialist: "INSTAGRAM", mode: "autopublish", connector: "meta_instagram", credentialRef: "unused", approvedScopes: ["instagram_basic", "instagram_content_publish"], nativeFormats: ["image"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 12, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" }
+    ] }));
+    await writeActivePublisherConfig(configRoot);
+    for (let index = 1; index <= 7; index += 1) await atomicWriteJson(stateRoot, `release-proofs/caught-up/${index}.json`, proof(index));
+    await atomicWriteJson(stateRoot, "social/queue/fixture.json", queueItem());
+    const adapter = {
+      findByIdempotencyKey: vi.fn(async () => null),
+      publish: vi.fn(async () => { throw new Error("Timeout after access_token=fixture-token may have reached Meta"); }),
+      verify: vi.fn()
+    };
+
+    const report = await runSocialPublisher({
+      validateOnly: false,
+      dryIfDisabled: false,
+      now: new Date("2026-08-08T09:00:00.000Z"),
+      environment: environment(),
+      adapter,
+      repoRoot,
+      stateRoot,
+      configRoot
+    });
+
+    expect(report).toMatchObject({ status: "complete", published: 0, ambiguous: 1 });
+    expect(adapter.findByIdempotencyKey).toHaveBeenCalledTimes(2);
+    expect(adapter.publish).toHaveBeenCalledTimes(2);
+    expect(adapter.verify).not.toHaveBeenCalled();
+    const queued = JSON.parse(await readFile(path.join(stateRoot, "social/queue/fixture.json"), "utf8"));
+    expect(queued).toMatchObject({ schemaVersion: 2, status: "needs_reconciliation" });
+    expect(JSON.stringify(queued)).not.toContain("fixture-token");
+    const pause = JSON.parse(await readFile(
+      path.join(stateRoot, "social/pauses/connections/social-connection-caught-up-threads.json"),
+      "utf8"
+    ));
+    expect(pause).toMatchObject({
+      connectionId: "social-connection-caught-up-threads",
+      profileId: "social-profile-caught-up"
+    });
+    expect(JSON.stringify(pause)).not.toContain("fixture-token");
   });
 
   it("renders TT typographic PNGs and schedules them only for Prague Tuesday", async () => {

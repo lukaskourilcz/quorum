@@ -37,6 +37,7 @@
     "nativeAccountId": "123",
     "connector": { "id": "meta-threads", "version": "1.0.0", "providerId": "direct-meta", "apiVersion": "v26.0", "loginMode": "threads-oauth" },
     "credentialRef": "TOKEN_VALUE",
+    "nativeAccountIdRef": "FAKE_NATIVE_ID",
     "approvedScopes": ["threads_manage_replies"],
     "supportedCapabilities": ["publish-original"],
     "mode": "autopublish",

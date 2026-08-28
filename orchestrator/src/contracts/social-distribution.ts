@@ -183,6 +183,7 @@ export const SocialConnectionSchema = z.strictObject({
     loginMode: z.enum(["threads-oauth", "instagram-facebook-login", "instagram-login", "provider-oauth"])
   }),
   credentialRef: z.string().regex(/^[A-Z][A-Z0-9_]{2,119}$/u).nullable(),
+  nativeAccountIdRef: z.string().regex(/^[A-Z][A-Z0-9_]{2,119}$/u).nullable(),
   approvedScopes: z.array(ApprovedSocialScopeSchema).max(12),
   supportedCapabilities: z.array(z.enum(["publish-original", "own-insights"])).min(1).max(2),
   mode: z.enum(["draft", "held", "autopublish"]),
@@ -225,7 +226,7 @@ export const SocialConnectionSchema = z.strictObject({
   if (connection.mode === "autopublish" && (
     connection.enabledByHumanAt === null
     || connection.credentialRef === null
-    || connection.nativeAccountId === null
+    || (connection.nativeAccountId === null && connection.nativeAccountIdRef === null)
     || connection.health.status !== "healthy"
   )) {
     context.addIssue({ code: "custom", message: "Autopublish shape requires human activation, credential/id references and healthy verification; other gates still apply" });

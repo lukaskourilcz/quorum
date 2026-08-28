@@ -1,4 +1,4 @@
-import type { QueueItem } from "./queue.js";
+import type { RuntimeQueueItem } from "./queue.js";
 
 export const TT_SAFETY_CHECKER_VERSION = "keeper-tt-1";
 
@@ -14,9 +14,10 @@ export interface TtSafetyResult {
   reasons: string[];
 }
 
-export function checkTittyTuesdaysPost(item: QueueItem): TtSafetyResult {
+export function checkTittyTuesdaysPost(item: RuntimeQueueItem): TtSafetyResult {
   const reasons: string[] = [];
-  if (item.venture !== "titty-tuesdays") return { passed: true, version: TT_SAFETY_CHECKER_VERSION, reasons };
+  const sourceVenture = item.schemaVersion === 2 ? item.sourceVentureId : item.venture;
+  if (sourceVenture !== "titty-tuesdays") return { passed: true, version: TT_SAFETY_CHECKER_VERSION, reasons };
   const normalized = `${item.content.text} ${item.content.altText ?? ""}`.normalize("NFKC").toLowerCase();
   for (const term of BLOCKED_TERMS) if (normalized.includes(term)) reasons.push(`Blocked term: ${term}`);
   if (item.content.assetPaths.some((asset) => !asset.includes("/titty-tuesdays/") || !asset.endsWith(".png"))) {

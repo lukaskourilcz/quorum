@@ -1,7 +1,8 @@
 import { z } from "zod";
 import type { Channel } from "./channel-registry.js";
 import type { PublishAdapter } from "./publish.js";
-import { assertQueueItemPublishable, type QueueItem } from "./queue.js";
+import type { ResolvedPublisherTarget } from "./publisher-targets.js";
+import { assertQueueItemPublishable, type RuntimeQueueItem } from "./queue.js";
 
 const MetaIdResponseSchema = z.object({
   id: z.string().min(1)
@@ -25,37 +26,24 @@ function requiredEnvironment(environment: NodeJS.ProcessEnv, name: string): stri
   return value;
 }
 
-function apiVersion(environment: NodeJS.ProcessEnv): string {
+function apiVersion(environment: NodeJS.ProcessEnv, target: ResolvedPublisherTarget): string {
   const version = requiredEnvironment(environment, "META_GRAPH_API_VERSION");
   if (!/^v\d+\.\d+$/.test(version)) {
     throw new Error("META_GRAPH_API_VERSION must match vN.N");
   }
+  if (version !== target.apiVersion) {
+    throw new Error("META_GRAPH_API_VERSION does not match the validated connection binding");
+  }
   return version;
 }
 
-/**
- * The credential prefix each publishing venture's tokens live under.
- *
- * A venture absent from this map has no social account, and that is a fact about the company
- * rather than a gap to fill in: marketingShark drafts carousels for a human to review and owns no
- * channel, no token and no publishing path. Absence throws by name below rather than resolving to
- * `undefined_THREADS_ACCESS_TOKEN` and failing as a confusing missing-environment error.
- */
-const VENTURE_PREFIX: Partial<Record<QueueItem["venture"], string>> = {
-  "caught-up": "CAUGHT_UP",
-  "mma-files": "MMA_FILES",
-  "titty-tuesdays": "TITTY_TUESDAYS"
-};
-
-function accountCredentials(environment: NodeJS.ProcessEnv, item: QueueItem, channel: Channel): { accessToken: string; userId: string } {
-  const prefix = VENTURE_PREFIX[item.venture];
-  if (!prefix) {
-    throw new Error(`${item.venture} has no social credentials and cannot publish`);
+function accountCredentials(environment: NodeJS.ProcessEnv, target: ResolvedPublisherTarget | undefined, channel: Channel): { accessToken: string; userId: string } {
+  if (!target || target.connection.platform !== channel.id) {
+    throw new Error("A validated profile/connection binding is required");
   }
-  const channelPrefix = channel.id === "threads" ? "THREADS" : "INSTAGRAM";
   return {
-    accessToken: requiredEnvironment(environment, `${prefix}_${channelPrefix}_ACCESS_TOKEN`),
-    userId: requiredEnvironment(environment, `${prefix}_${channelPrefix}_USER_ID`)
+    accessToken: requiredEnvironment(environment, target.credentialRef),
+    userId: requiredEnvironment(environment, target.nativeAccountIdRef)
   };
 }
 
@@ -91,13 +79,15 @@ export function createMetaPublishAdapter(
   return {
     async publish(
       channel: Channel,
-      item: QueueItem,
-      idempotencyKey: string
+      item: RuntimeQueueItem,
+      idempotencyKey: string,
+      target?: ResolvedPublisherTarget
     ): Promise<{ remoteId: string }> {
       assertQueueItemPublishable(item);
       const content = item.content!;
-      const version = apiVersion(environment);
-      const credentials = accountCredentials(environment, item, channel);
+      if (!target) throw new Error("A validated profile/connection binding is required");
+      const version = apiVersion(environment, target);
+      const credentials = accountCredentials(environment, target, channel);
       const accessToken = credentials.accessToken;
       const existing = publishedByKey.get(idempotencyKey);
       if (existing) return { remoteId: existing };
@@ -174,9 +164,10 @@ export function createMetaPublishAdapter(
 
       throw new Error(`Unsupported guarded connector: ${channel.connector}`);
     },
-    async verify(channel: Channel, item: QueueItem, remoteId: string): Promise<{ remoteId: string; remoteUrl: string }> {
-      const version = apiVersion(environment);
-      const credentials = accountCredentials(environment, item, channel);
+    async verify(channel: Channel, _item: RuntimeQueueItem, remoteId: string, target?: ResolvedPublisherTarget): Promise<{ remoteId: string; remoteUrl: string }> {
+      if (!target) throw new Error("A validated profile/connection binding is required");
+      const version = apiVersion(environment, target);
+      const credentials = accountCredentials(environment, target, channel);
       const host = channel.id === "threads" ? "graph.threads.net" : "graph.facebook.com";
       const fields = channel.id === "threads" ? "id,permalink" : "id,permalink_url";
       const url = new URL(`https://${host}/${version}/${encodeURIComponent(remoteId)}`);

@@ -1,7 +1,8 @@
 import { createHash } from "node:crypto";
 import type { Channel } from "./channel-registry.js";
 import { assertLiveChannel } from "./channel-registry.js";
-import type { QueueItem } from "./queue.js";
+import type { ResolvedPublisherTarget } from "./publisher-targets.js";
+import type { RuntimeQueueItem } from "./queue.js";
 import {
   assertQueueItemPublishable,
   claimQueueItem,
@@ -11,27 +12,31 @@ import {
 export interface PublishAdapter {
   publish(
     channel: Channel,
-    item: QueueItem,
-    idempotencyKey: string
+    item: RuntimeQueueItem,
+    idempotencyKey: string,
+    target?: ResolvedPublisherTarget
   ): Promise<{ remoteId: string }>;
   verify(
     channel: Channel,
-    item: QueueItem,
-    remoteId: string
+    item: RuntimeQueueItem,
+    remoteId: string,
+    target?: ResolvedPublisherTarget
   ): Promise<{ remoteId: string; remoteUrl: string }>;
   findByIdempotencyKey?(
     channel: Channel,
-    idempotencyKey: string
+    idempotencyKey: string,
+    target?: ResolvedPublisherTarget
   ): Promise<{ remoteId: string } | null>;
 }
 
 export async function publishQueueItem(
   channel: Channel,
-  item: QueueItem,
+  item: RuntimeQueueItem,
   adapter: PublishAdapter,
   environment: NodeJS.ProcessEnv,
-  now = new Date()
-): Promise<QueueItem> {
+  now = new Date(),
+  target?: ResolvedPublisherTarget
+): Promise<RuntimeQueueItem> {
   assertLiveChannel(channel, environment);
   assertQueueItemPublishable(item);
   const idempotencyKey = createHash("sha256")
@@ -45,7 +50,8 @@ export async function publishQueueItem(
     if (adapter.findByIdempotencyKey) {
       const existing = await adapter.findByIdempotencyKey(
         channel,
-        idempotencyKey
+        idempotencyKey,
+        target
       );
       if (existing) {
         return reconcileQueueItem(claimed, {
@@ -54,7 +60,7 @@ export async function publishQueueItem(
         });
       }
     }
-    const result = await adapter.publish(channel, claimed, idempotencyKey);
+    const result = await adapter.publish(channel, claimed, idempotencyKey, target);
     return reconcileQueueItem(claimed, {
       outcome: "published",
       remoteId: result.remoteId
