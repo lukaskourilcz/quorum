@@ -15,7 +15,7 @@
     "supportedTopics": ["founder-finance"],
     "supportedVentures": ["door-money"],
     "capabilityRefs": [{
-      "mapVersion": "1.1.0",
+      "mapVersion": "1.2.0",
       "source": "door-money",
       "target": "social-distribution",
       "capability": "approved-publish-package",
@@ -125,7 +125,7 @@
     "sourceVentureId": "door-money",
     "sourcePrimaryProfileId": "social-profile-door-money",
     "sourceCapabilityRef": {
-      "mapVersion": "1.1.0",
+      "mapVersion": "1.2.0",
       "source": "door-money",
       "target": "social-distribution",
       "capability": "approved-publish-package",
@@ -140,7 +140,7 @@
     "objective": "qualified-visit",
     "audience": "Readers who opted into practical founder finance releases.",
     "effectiveDecision": {
-      "capabilityMapVersion": "1.1.0",
+      "capabilityMapVersion": "1.2.0",
       "capabilitySetHash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
       "policyVersion": "1.0.0",
       "policyHash": "1111111111111111111111111111111111111111111111111111111111111111",
@@ -239,7 +239,7 @@
     "contactId": "distribution-contact-example-newsletter",
     "sourceVentureId": "door-money",
     "sourceCapabilityRef": {
-      "mapVersion": "1.1.0",
+      "mapVersion": "1.2.0",
       "source": "door-money",
       "target": "social-distribution",
       "capability": "approved-publish-package",

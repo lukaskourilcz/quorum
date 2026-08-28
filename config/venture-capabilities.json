@@ -1,6 +1,6 @@
 {
   "schemaVersion": "venture-capability-map/1",
-  "mapVersion": "1.1.0",
+  "mapVersion": "1.2.0",
   "effectiveDate": "2026-08-26",
   "defaultVentureContentPosture": "deny",
   "decisionReference": "state/decisions/2026-08-26-autonomy-first-capabilities.md",
@@ -17,7 +17,7 @@
     { "id": "tehdejsi-svet", "classification": "content-venture", "canonicalOwner": "tehdejsi-svet", "dataActionClasses": ["content", "private-data"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "internal", "maximumPayloadClass": "accepted-bilingual-feature", "evidenceReferences": ["config/ventures.json", "GitHub #424"], "reviewAt": null },
     { "id": "kvorum", "classification": "content-venture", "canonicalOwner": "kvorum", "dataActionClasses": ["content", "private-data"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "internal", "maximumPayloadClass": "kvorum-internal-only", "evidenceReferences": ["config/ventures.json", "GitHub #424"], "reviewAt": null },
     { "id": "personal-growth", "classification": "private-owner-workspace", "canonicalOwner": "personal-growth", "dataActionClasses": ["content", "private-data", "metrics"], "authorityRequirement": "owner-manual-only", "privacyClassification": "owner-only", "maximumPayloadClass": "personal-growth-goviral-packet/1", "evidenceReferences": ["config/ventures.json", "GitHub #372", "GitHub #373", "GitHub #424"], "reviewAt": null },
-    { "id": "webdev-signal", "classification": "content-venture", "canonicalOwner": "webdev-signal", "dataActionClasses": ["content", "metrics"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "internal", "maximumPayloadClass": "accepted-bilingual-package-reference", "evidenceReferences": ["GitHub #424", "GitHub #435"], "reviewAt": null },
+    { "id": "webdev-signal", "classification": "content-venture", "canonicalOwner": "webdev-signal", "dataActionClasses": ["content", "metrics"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "internal", "maximumPayloadClass": "accepted-bilingual-package-reference", "evidenceReferences": ["config/ventures.json", "state/decisions/2026-08-28-webdev-signal-founding.md", "GitHub #424", "GitHub #438"], "reviewAt": "2026-11-26" },
     { "id": "contest-radar", "classification": "data-venture", "canonicalOwner": "contest-radar", "dataActionClasses": ["private-data", "intelligence"], "authorityRequirement": "owner-manual-only", "privacyClassification": "owner-only", "maximumPayloadClass": "contest-record-reference", "evidenceReferences": ["GitHub #408", "GitHub #424"], "reviewAt": null },
     { "id": "boardlessai-umbrella", "classification": "content-venture", "canonicalOwner": "boardlessai-umbrella", "dataActionClasses": ["content"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "public", "maximumPayloadClass": "approved-company-artifact-reference", "evidenceReferences": ["GitHub #403", "GitHub #424"], "reviewAt": null },
     { "id": "devshark", "classification": "content-venture", "canonicalOwner": "devshark", "dataActionClasses": ["content"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "internal", "maximumPayloadClass": "none", "evidenceReferences": ["GitHub #424"], "reviewAt": null },
@@ -65,6 +65,7 @@
   ],
   "supersessionHistory": [
     { "mapVersion": "1.0.0", "effectiveAt": "2026-08-26T00:00:00.000Z", "decisionReference": "state/decisions/2026-08-26-autonomy-first-capabilities.md", "note": "Founding deny-by-default map including the WebDev Signal owner amendment." },
-    { "mapVersion": "1.1.0", "effectiveAt": "2026-08-26T12:30:00.000Z", "decisionReference": "GitHub #425", "note": "Adds exact health-only dependency edges for declared operational consumers; no content or authority edge is added." }
+    { "mapVersion": "1.1.0", "effectiveAt": "2026-08-26T12:30:00.000Z", "decisionReference": "GitHub #425", "note": "Adds exact health-only dependency edges for declared operational consumers; no content or authority edge is added." },
+    { "mapVersion": "1.2.0", "effectiveAt": "2026-08-28T00:00:00.000Z", "decisionReference": "GitHub #438", "note": "Attaches the pre-declared WebDev Signal edges to its held registry identity without adding an edge or activation authority." }
   ]
 }

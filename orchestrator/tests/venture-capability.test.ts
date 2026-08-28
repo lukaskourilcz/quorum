@@ -48,7 +48,7 @@ describe("venture capability map", () => {
     for (const venture of registry.ventures) expect(nodeIds.has(venture.id)).toBe(true);
     expect(nodeIds.has("webdev-signal")).toBe(true);
     expect(map.defaultVentureContentPosture).toBe("deny");
-    expect(map.mapVersion).toBe("1.1.0");
+    expect(map.mapVersion).toBe("1.2.0");
     expect(map.nodes.find((node) => node.id === "design-lab")).toMatchObject({
       classification: "rendering-service",
       canonicalOwner: "carousel-studio",
