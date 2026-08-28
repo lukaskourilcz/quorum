@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { WebDevCandidateSchema, type WebDevCandidate } from "../src/contracts/webdev-signal.js";
 import { loadWebDevSelectionConfig, WebDevSelectionConfigSchema } from "../src/ventures/webdev-signal/selection/config.js";
 import {
   canonicalizeWebDevProject,
@@ -9,8 +10,42 @@ import {
   normalizeWebDevVersion,
   stableWebDevRecordId
 } from "../src/ventures/webdev-signal/selection/canonical.js";
+import { buildWebDevRecords } from "../src/ventures/webdev-signal/selection/records.js";
 
 const fixtureRoot = path.join(import.meta.dirname, "fixtures", "webdev-signal");
+const NOW = "2026-08-28T08:00:00.000Z";
+
+function candidate(overrides: Partial<WebDevCandidate> = {}): WebDevCandidate {
+  return WebDevCandidateSchema.parse({
+    schemaVersion: "webdev-candidate/1",
+    sourceId: "react-releases",
+    sourceItemId: "release-20",
+    listingUrl: "https://api.github.com/repos/facebook/react/releases",
+    targetUrl: "https://github.com/facebook/react/releases/tag/v20.0.0",
+    canonicalProjectUrl: "https://github.com/facebook/react",
+    title: "React 20.0.0 stable release",
+    summary: "The React team published a stable major release with an explicit migration guide for framework projects.",
+    author: "React team",
+    project: "React",
+    publishedAt: "2026-08-28T06:00:00.000Z",
+    updatedAt: null,
+    versionText: "v20.0.0",
+    securityText: null,
+    topicHints: ["frontend-framework"],
+    changeKindHints: ["stable-release"],
+    language: "en",
+    contentHash: "a".repeat(64),
+    provenance: {
+      authority: "official-primary",
+      parserId: "github-releases",
+      parserVersion: "1.0.0",
+      fetchedAt: "2026-08-28T06:05:00.000Z",
+      evidenceRefs: ["fixture:react:20"],
+      fixture: true
+    },
+    ...overrides
+  });
+}
 
 describe("WebDev Signal pure canonicalization", () => {
   it("uses one validated versioned configuration", async () => {
@@ -52,5 +87,136 @@ describe("WebDev Signal pure canonicalization", () => {
     expect(left).toBe(right);
     expect(left).toMatch(/^wds_[a-f0-9]{24}$/u);
     expect(distinct).not.toBe(left);
+  });
+});
+
+describe("WebDev Signal prefilter, clustering and source-backed records", () => {
+  it("clusters official release and documentation variants by project plus explicit version", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const documentation = candidate({
+      sourceId: "react-blog",
+      sourceItemId: "docs-20",
+      targetUrl: "https://react.dev/blog/2026/08/28/react-20",
+      title: "React 20 is now stable",
+      provenance: {
+        authority: "official-primary",
+        parserId: "webdev-feed",
+        parserVersion: "1.0.0",
+        fetchedAt: "2026-08-28T06:06:00.000Z",
+        evidenceRefs: ["fixture:react:docs-20"],
+        fixture: true
+      }
+    });
+    const result = buildWebDevRecords({ candidates: [documentation, candidate()], now: NOW, config });
+    expect(result.records).toHaveLength(1);
+    expect(result.exactClusters).toBe(1);
+    expect(result.records[0]?.record).toMatchObject({
+      project: "React",
+      sourceIds: ["react-blog", "react-releases"],
+      agreement: { status: "corroborated" }
+    });
+  });
+
+  it("keeps explicit version conflicts visible and hard-gated", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const conflicting = candidate({ sourceId: "react-blog", sourceItemId: "conflict", versionText: "v21.0.0", title: "React 21.0.0 stable release" });
+    const result = buildWebDevRecords({ candidates: [candidate(), conflicting], now: NOW, config });
+    expect(result.records).toHaveLength(1);
+    expect(result.records[0]).toMatchObject({ gateHint: "conflicted" });
+    expect(result.records[0]?.gateReasons.join(" ")).toContain("conflicting-identifiers");
+    expect(result.records[0]?.record.agreement).toMatchObject({ status: "conflicted" });
+  });
+
+  it("drops promotional, stale, generic AI and minor patch noise before records", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const inputs = [
+      candidate({ sourceItemId: "promo", title: "Register now for our sponsored launch" }),
+      candidate({ sourceItemId: "old", publishedAt: "2026-07-01T06:00:00.000Z" }),
+      candidate({ sourceItemId: "ai", title: "AI model launch", summary: "A generic LLM announcement without developer consequences." }),
+      candidate({ sourceItemId: "patch", versionText: "v20.0.1", title: "React v20.0.1 patch", summary: "Maintenance bug fixes only." })
+    ];
+    const result = buildWebDevRecords({ candidates: inputs, now: NOW, config });
+    expect(result.records).toHaveLength(0);
+    expect(result.drops.map(({ gate }) => gate).sort()).toEqual(["minor-no-material-impact", "out-of-scope", "promotional", "stale"]);
+  });
+
+  it("uses secondary leads only when clustered with official confirmation", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const secondary = candidate({
+      sourceId: "secondary-magazine",
+      sourceItemId: "lead-20",
+      targetUrl: "https://secondary.example/react-20",
+      changeKindHints: ["lead-only"],
+      provenance: {
+        authority: "secondary-discovery",
+        parserId: "secondary-feed",
+        parserVersion: "1.0.0",
+        fetchedAt: "2026-08-28T06:04:00.000Z",
+        evidenceRefs: ["fixture:secondary:lead"],
+        fixture: true
+      }
+    });
+    const confirmed = buildWebDevRecords({ candidates: [secondary, candidate()], now: NOW, config });
+    expect(confirmed.records).toHaveLength(1);
+    expect(confirmed.records[0]?.record.authority).toBe("official-primary");
+    const unconfirmed = buildWebDevRecords({ candidates: [secondary], now: NOW, config });
+    expect(unconfirmed.records).toHaveLength(0);
+    expect(unconfirmed.drops[0]).toMatchObject({ gate: "needs-official-confirmation" });
+  });
+
+  it("extracts exact affected and fixed advisory scope and safe action", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const advisory = candidate({
+      sourceId: "github-npm-advisories",
+      sourceItemId: "GHSA-xxxx-yyyy-zzzz",
+      targetUrl: "https://github.com/advisories/GHSA-xxxx-yyyy-zzzz",
+      canonicalProjectUrl: "https://github.com/advisories",
+      title: "Critical fixture package advisory GHSA-xxxx-yyyy-zzzz",
+      summary: "The official advisory identifies a critical traversal flaw affecting projects using fixture-package.",
+      project: "fixture-package",
+      versionText: "affected >= 1.0.0, < 1.2.3 fixed 1.2.3",
+      securityText: "critical; GHSA-xxxx-yyyy-zzzz",
+      topicHints: ["security", "package-manager"],
+      changeKindHints: ["security-advisory"],
+      provenance: {
+        authority: "official-advisory",
+        parserId: "github-advisories",
+        parserVersion: "1.0.0",
+        fetchedAt: "2026-08-28T06:05:00.000Z",
+        evidenceRefs: ["fixture:advisory:exact"],
+        fixture: true
+      }
+    });
+    const result = buildWebDevRecords({ candidates: [advisory], now: NOW, config });
+    expect(result.records[0]).toMatchObject({ gateHint: "eligible" });
+    expect(result.records[0]?.record).toMatchObject({
+      changeKind: "security-advisory",
+      affectedVersions: [">= 1.0.0, < 1.2.3"],
+      fixedVersions: ["1.2.3"],
+      security: { severity: "critical", advisoryIds: ["GHSA-xxxx-yyyy-zzzz"] }
+    });
+    expect(result.records[0]?.record.safeActions[0]?.urgency).toBe("act-now");
+  });
+
+  it("holds high-risk items missing exact scope and applies cooldown with a security exception", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const unscoped = candidate({
+      sourceItemId: "security-no-scope",
+      title: "React security update",
+      securityText: "high security update",
+      changeKindHints: ["security-advisory"]
+    });
+    expect(buildWebDevRecords({ candidates: [unscoped], now: NOW, config }).records[0]).toMatchObject({ gateHint: "high-risk-factual-review" });
+
+    const history = [{ recordId: "wds_aaaaaaaaaaaaaaaaaaaaaaaa", canonicalUrl: "https://example.org/older", project: "React", topic: "frontend-framework" as const, selectedAt: "2026-08-27T06:00:00.000Z" }];
+    expect(buildWebDevRecords({ candidates: [candidate()], now: NOW, config, history }).records[0]).toMatchObject({ gateHint: "duplicate-recent-edition" });
+    const scoped = candidate({
+      sourceItemId: "security-scoped",
+      title: "React critical advisory GHSA-aaaa-bbbb-cccc",
+      versionText: "affected < 20.0.1 fixed 20.0.1",
+      securityText: "critical GHSA-aaaa-bbbb-cccc",
+      changeKindHints: ["security-advisory"]
+    });
+    expect(buildWebDevRecords({ candidates: [scoped], now: NOW, config, history }).records[0]).toMatchObject({ gateHint: "eligible" });
   });
 });
