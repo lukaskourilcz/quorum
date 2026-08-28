@@ -168,8 +168,12 @@ export const SocialAttributionEventSchema = z.strictObject({
     context.addIssue({ code: "custom", message: "Attribution id must derive from its idempotency hash", path: ["id"] });
   }
   const utmValues = Object.values(event.utm);
-  if (utmValues.some((value) => value !== null) && utmValues.some((value) => value === null)) {
-    context.addIssue({ code: "custom", message: "Partial UTM tuples are invalid and cannot be attributed", path: ["utm"] });
+  const partialUtm = utmValues.some((value) => value !== null) && utmValues.some((value) => value === null);
+  if (partialUtm && event.attribution.state !== "invalid") {
+    context.addIssue({ code: "custom", message: "Partial UTM tuples must remain explicitly invalid", path: ["utm"] });
+  }
+  if (!partialUtm && event.attribution.state === "invalid") {
+    context.addIssue({ code: "custom", message: "Only a partial bounded UTM tuple uses invalid attribution", path: ["attribution", "state"] });
   }
   const attributionValues = Object.values(event.attribution).slice(1);
   if ((event.attribution.state === "attributed") !== attributionValues.every((value) => value !== null)) {
