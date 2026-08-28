@@ -608,8 +608,7 @@
       "at": "2026-08-28T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
     },
     {
       "at": "2026-08-28T10:00:00.000Z",
@@ -647,7 +646,9 @@
       "at": "2026-08-28T14:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "dm-growth",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-28-dm-growth",
+      "decisionOneLiner": "$0 — this room meets on Thursdays. Nothing was spent and no action was taken."
     },
     {
       "at": "2026-08-28T15:00:00.000Z",
