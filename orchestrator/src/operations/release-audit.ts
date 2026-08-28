@@ -175,16 +175,20 @@ export async function auditOperationsRelease(repoRoot = defaultRepoRoot): Promis
     ["site/src/components/admin/operations-control-center.tsx", "docs/ECOSYSTEM.md"]
   ));
 
-  const heldNodes = ["social-distribution", "contest-radar", "webdev-signal"];
+  const heldNodes = ["contest-radar", "webdev-signal"];
+  const socialSlo = slos.policies.find((policy) => policy.nodeId === "social-distribution");
+  const socialRecovery = recoveryPolicies.policies.find((policy) => policy.nodeId === "social-distribution");
   checks.push(check(
     "optional-nodes-honestly-held",
-    heldNodes.every((nodeId) => {
+    socialSlo?.lifecycleStage === "operating" && socialSlo.cadence.kind === "daily"
+      && socialRecovery?.pauseScope === "connection"
+      && heldNodes.every((nodeId) => {
       const slo = slos.policies.find((policy) => policy.nodeId === nodeId);
       const recovery = recoveryPolicies.policies.find((policy) => policy.nodeId === nodeId);
       return slo?.lifecycleStage === "planned" && slo.cadence.kind === "held"
-        && (nodeId === "social-distribution" || recovery?.maximumAttempts === 0);
+        && recovery?.maximumAttempts === 0;
     }),
-    "Optional Social Distribution, Contest Radar and unfinished WebDev Signal work remain planned/held rather than failing.",
+    "Social Distribution reports its daily engine while Contest Radar and unfinished WebDev Signal remain honestly planned/held.",
     ["config/venture-slos.json", "config/operations-recovery.json"]
   ));
   checks.push(check(

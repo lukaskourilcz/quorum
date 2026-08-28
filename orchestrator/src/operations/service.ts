@@ -14,6 +14,7 @@ import { assertOperationsNodeCoverage, loadOperationsNodeRegistry } from "./node
 import { buildIncidentSnapshot } from "./recovery.js";
 import { readRecoveryAttempts, writeIncidentSnapshot } from "./recovery-store.js";
 import { loadVentureSloRegistry } from "./slo.js";
+import { readSocialDistributionHealthObservation } from "../social/health.js";
 
 const CURRENT_PATH = "operations/current.json";
 
@@ -91,6 +92,7 @@ export async function materializeOperationsState(input: {
     recoveryAttempts.push(...attempts);
   }
   const activeIncidents = ownerAttention?.operationalIncidents?.filter((incident) => incident.status === "active") ?? [];
+  const socialObservation = readSocialDistributionHealthObservation(stateRoot, input.now ?? new Date());
   const adapters = (healthByNode: ReadonlyMap<string, VentureOperationHealth>): HealthAdapter[] => registry.nodes.map((node) => ({
     nodeId: node.id,
     observe: async () => {
@@ -106,13 +108,15 @@ export async function materializeOperationsState(input: {
           state: health.state
         }] : [];
       });
+      const domain = node.id === "social-distribution" ? await socialObservation : { receipts: [] };
       return {
-        receipts: receiptsByNode.get(node.id) ?? [],
+        ...domain,
+        receipts: [...(receiptsByNode.get(node.id) ?? []), ...domain.receipts],
         dependencies,
-        holds: incidents.length ? { owner: incidents.slice(0, 8).map((incident) => incident.exactOwnerAction.slice(0, 240)) } : undefined,
-        queue: { state: "not-applicable" as const, pending: null },
-        ownerAttentionRefs: incidents.map((incident) => `state/owner-attention.json#${incident.incidentId}`),
-        dueWindow: dueWindow ? dueWindow.slice(0, 120) : null
+        holds: { ...domain.holds, owner: [...(domain.holds?.owner ?? []), ...incidents.slice(0, 8).map((incident) => incident.exactOwnerAction.slice(0, 240))].slice(0, 8) },
+        queue: domain.queue ?? { state: "not-applicable" as const, pending: null },
+        ownerAttentionRefs: [...new Set([...(domain.ownerAttentionRefs ?? []), ...incidents.map((incident) => `state/owner-attention.json#${incident.incidentId}`)])].sort(),
+        dueWindow: domain.dueWindow ?? (dueWindow ? dueWindow.slice(0, 120) : null)
       };
     }
   }));
