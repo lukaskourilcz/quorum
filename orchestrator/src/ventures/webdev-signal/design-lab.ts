@@ -115,6 +115,10 @@ export function webDevRenderReceiptRef(payload: Pick<WebDevDesignPayload, "local
   return `state/ventures/webdev-signal/design-lab/receipts/${payload.contentHash}-${payload.locale}.json`;
 }
 
+function receiptRefForHash(payloadHash: string, locale: "cs" | "en"): string {
+  return `state/ventures/webdev-signal/design-lab/receipts/${payloadHash}-${locale}.json`;
+}
+
 function capabilityEnvelope(payload: WebDevDesignPayload, payloadRef: string) {
   return BoundedRenderSummarySchema.parse({
     schemaVersion: "bounded-render-summary/1",
@@ -284,7 +288,9 @@ export async function renderWebDevSignalDesign(input: {
     outcome: failed.length === 0 ? "success" : "held",
     reason: failed.length === 0 ? null : `${failed.join(", ")}${fitFailures.length ? `: ${fitFailures.join(", ")}` : ""}`,
     correctionSequence: payload.correction.sequence,
-    supersededReceiptRef: null,
+    supersededReceiptRef: payload.correction.supersedesPayloadHash === null
+      ? null
+      : receiptRefForHash(payload.correction.supersedesPayloadHash, payload.locale),
     providerCostUsd: 0
   });
   return { payload, payloadRef: input.payloadRef, receipt, receiptRef, assets };

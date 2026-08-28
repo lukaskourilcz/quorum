@@ -576,6 +576,9 @@ export const WebDevDesignPayloadSchema = z.strictObject({
   if (!payload.panels.at(-1)?.sourceRefs.length) {
     context.addIssue({ code: "custom", path: ["panels", payload.panels.length - 1, "sourceRefs"], message: "source proof panel requires a source" });
   }
+  if ((payload.correction.sequence === 0) !== (payload.correction.supersedesPayloadHash === null)) {
+    context.addIssue({ code: "custom", path: ["correction"], message: "only corrected payloads may name, and must name, a superseded payload hash" });
+  }
 });
 
 export const WebDevRenderReceiptSchema = z.strictObject({

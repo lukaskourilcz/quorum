@@ -155,6 +155,27 @@ describe("WebDev Signal bounded Design Lab handoff", () => {
     expect((await authorizeWebDevDesignPayload(payload, webDevDesignPayloadRef(payload), { configRoot: "/unavailable" })).allowed).toBe(false);
   });
 
+  it("gives a correction new assets and links its superseded receipt without deleting history", async () => {
+    const { record, brief, packages } = await fixture();
+    const edition = approve(packages.en);
+    const original = createWebDevDesignPayload({ edition, editionRef: "state/ventures/webdev-signal/packages/en.json", brief, record });
+    const corrected = createWebDevDesignPayload({
+      edition,
+      editionRef: "state/ventures/webdev-signal/packages/en.json",
+      brief,
+      record,
+      correctionSequence: 1,
+      supersedesPayloadHash: original.contentHash
+    });
+    expect(corrected.contentHash).not.toBe(original.contentHash);
+    const design = await renderWebDevSignalDesign({ payload: corrected, payloadRef: webDevDesignPayloadRef(corrected), startedAt: NOW, completedAt: DONE });
+    expect(design.receipt).toMatchObject({
+      correctionSequence: 1,
+      supersededReceiptRef: `state/ventures/webdev-signal/design-lab/receipts/${original.contentHash}-en.json`
+    });
+    expect(design.receipt.outputs.every(({ assetRef }) => assetRef.includes(corrected.contentHash))).toBe(true);
+  }, 20_000);
+
   it("persists immutable payload, assets and receipt, then reads the recorded receipt", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "webdev-design-lab-"));
     temporaryRoots.push(root);
