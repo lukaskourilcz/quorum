@@ -470,6 +470,12 @@ export default async function AdminPage({
       count: implementationProgress.state === "missing" ? null : implementationProgress.programs.length
     },
     {
+      id: "social-profiles",
+      name: "Social Profiles",
+      href: "/admin/social-profiles",
+      active: false
+    },
+    {
       id: "approvals",
       name: "Approvals",
       href: "/admin?view=approvals",

@@ -14,6 +14,7 @@ import {
   LogOut,
   Moon,
   Palette,
+  RadioTower,
   ShieldAlert,
   Sparkles,
   Sun
@@ -34,6 +35,7 @@ const ICONS = {
   operations: Activity,
   overview: LayoutDashboard,
   production: Palette,
+  profiles: RadioTower,
   workspace: FolderKanban
 } satisfies Record<AdminDestinationIcon, typeof LayoutDashboard>;
 

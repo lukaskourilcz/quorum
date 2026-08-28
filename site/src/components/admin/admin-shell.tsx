@@ -34,6 +34,7 @@ export interface AdminSection {
 
 function sectionIcon(id: string): AdminDestination["icon"] {
   if (id === "operations") return "operations";
+  if (id === "social-profiles") return "profiles";
   if (id === "approvals") return "approvals";
   if (id === "manual-tasks") return "manual";
   return "future";

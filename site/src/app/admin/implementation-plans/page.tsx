@@ -36,6 +36,7 @@ export default async function ImplementationPlansPage({
   const sections: AdminSection[] = [
     { id: "operations", name: "Operations", href: "/admin/operations", active: false },
     { id: "implementation-plans", name: "Implementation Plans", href: "/admin/implementation-plans", active: true, count: snapshot.state === "missing" ? null : snapshot.programs.length },
+    { id: "social-profiles", name: "Social Profiles", href: "/admin/social-profiles", active: false },
     { id: "approvals", name: "Approvals", href: "/admin?view=approvals", active: false },
     { id: "manual-tasks", name: "Only you can do", href: "/admin?view=manual-tasks", active: false },
     { id: "future", name: "Future", href: "/admin?view=future", active: false }

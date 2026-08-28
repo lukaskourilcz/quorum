@@ -5,6 +5,7 @@ const adminDestinations = [
   "/admin",
   "/admin/operations",
   "/admin/implementation-plans",
+  "/admin/social-profiles",
   "/admin?view=approvals",
   "/admin?view=manual-tasks",
   "/admin?view=future",
