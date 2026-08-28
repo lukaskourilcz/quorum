@@ -66,9 +66,31 @@ describe("WebDev Signal Design Lab family", () => {
     for (const family of Object.values(brand.fonts)) {
       expect(missingCommittedGlyphs(resolveFace(family, 400), characters), family).toEqual([]);
     }
-    for (const locale of ["cs", "en"] as const) {
-      const input = { template: webDevSignalTemplate(6), brand, payload: payload(6, locale, "security"), format: "instagram-portrait" as const };
-      expect(renderCarouselSvg(input).map((slide) => slide.svgHash)).toEqual(renderCarouselSvg(input).map((slide) => slide.svgHash));
+    const fixtures = [
+      {
+        input: { template: webDevSignalTemplate(4), brand, payload: payload(4, "en", "stable"), format: "instagram-portrait" as const },
+        hashes: [
+          "bff4cca028f19c63dde177cbe0dbd6d30b14bd82cdb25678deffe5cc6c300412",
+          "db27c58293fc37502b75aa898306b9a0c1b16b68d9b22b1848e00e1846e8c842",
+          "759e9f57f91566f24006df993f0e144670a55611294cdd492a5956d0bc24e944",
+          "7f1d6d66525d46eb34a703d3955fddb5d075e02cf4952c94b37426335e8118f8"
+        ]
+      },
+      {
+        input: { template: webDevSignalTemplate(6), brand, payload: payload(6, "cs", "security"), format: "instagram-portrait" as const },
+        hashes: [
+          "b92b6112097b4a38c1249975f50f1cfb590226682a10bb946f8f37160525feaf",
+          "22e82b5b68c5fd1d45af38cf995b6e418e1b2bd50df0295df62d31e6f7f69462",
+          "b9d2bf093bb93e7054586c8033b02170638432cc13daafb798ed00d1e15ab4e6",
+          "18762b2679b02f90281ec9ae1b739f1915d3c192bcd32bd228dd903bcd61aeea",
+          "722f910b0cb2950f78dfb7cc4fecf3a25672c4ca07c46dfd8dbfb987f5265984",
+          "50db7ba22e9d990fa71973744920bb92fbc12ba511a9968dd9e13d1e5ac140e2"
+        ]
+      }
+    ];
+    for (const fixture of fixtures) {
+      expect(renderCarouselSvg(fixture.input).map((slide) => slide.svgHash)).toEqual(fixture.hashes);
+      expect(renderCarouselSvg(fixture.input).map((slide) => slide.svgHash)).toEqual(fixture.hashes);
     }
   });
 });
