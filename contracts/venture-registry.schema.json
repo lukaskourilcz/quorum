@@ -45,6 +45,66 @@
             "maxLength": 80,
             "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           },
+          "delivery": {
+            "type": "object",
+            "properties": {
+              "product": {
+                "type": "string",
+                "const": "social-first"
+              },
+              "website": {
+                "type": "string",
+                "const": "absent"
+              }
+            },
+            "required": [
+              "product",
+              "website"
+            ],
+            "additionalProperties": false
+          },
+          "editions": {
+            "minItems": 1,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "maxLength": 80,
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                },
+                "locale": {
+                  "type": "string",
+                  "enum": [
+                    "cs",
+                    "en"
+                  ]
+                },
+                "profileRef": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "state": {
+                  "type": "string",
+                  "enum": [
+                    "held",
+                    "draft",
+                    "operating"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "locale",
+                "profileRef",
+                "state"
+              ],
+              "additionalProperties": false
+            }
+          },
           "growth_objective": {
             "type": "object",
             "properties": {

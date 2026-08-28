@@ -45,7 +45,7 @@ Refreshed from committed state: **2026-08-28T12:01:54.517Z**. This block is gene
 
 | Item | Current value |
 | --- | --- |
-| Portfolio | 11 public projects; 1 owner-only workspace |
+| Portfolio | 11 public projects; 2 owner-only workspace |
 | Agent roster | 40 active: 25 Anthropic, 15 OpenAI |
 | Scheduled specialist/service rooms | 14; combined maximum room envelopes $1.61 if every room is commissioned |
 | Approved spend boundary | $50.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |
