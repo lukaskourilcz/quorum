@@ -151,7 +151,7 @@ describe("Social Distribution result contracts", () => {
       authorityGranted: false as const
     };
     expect(SocialAttributionEventSchema.parse({ ...common, utm: { source: "threads", medium: "organic_social", campaign: "door-money-release-001", content: "door-money-primary-threads" }, attribution: { state: "attributed", campaignRef: "state/social/campaigns/social-campaign-door-money-release-001.json", campaignItemId: "door-money-primary-threads", profileId: "social-profile-caught-up", targetRole: "primary" } }).attribution.state).toBe("attributed");
-    expect(SocialAttributionEventSchema.parse({ ...common, id: "social-attribution-event-bbbbbbbbbbbbbbbbbbbb", utm: { source: null, medium: null, campaign: null, content: null }, attribution: { state: "unattributed", campaignRef: null, campaignItemId: null, profileId: null, targetRole: null } }).attribution.state).toBe("unattributed");
+    expect(SocialAttributionEventSchema.parse({ ...common, utm: { source: null, medium: null, campaign: null, content: null }, attribution: { state: "unattributed", campaignRef: null, campaignItemId: null, profileId: null, targetRole: null } }).attribution.state).toBe("unattributed");
     expect(SocialAttributionEventSchema.safeParse({ ...common, visitorId: "fingerprint", utm: { source: null, medium: null, campaign: null, content: null }, attribution: { state: "unattributed", campaignRef: null, campaignItemId: null, profileId: null, targetRole: null } }).success).toBe(false);
   });
 

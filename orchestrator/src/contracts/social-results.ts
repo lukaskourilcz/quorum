@@ -87,6 +87,9 @@ export const SocialMetricObservationSchema = z.strictObject({
   rawProviderPayloadExcluded: z.literal(true),
   authorityGranted: z.literal(false)
 }).superRefine((observation, context) => {
+  if (observation.id !== `social-metric-observation-${observation.idempotencyHash.slice(0, 20)}`) {
+    context.addIssue({ code: "custom", message: "Observation id must derive from its idempotency hash", path: ["id"] });
+  }
   if (Date.parse(observation.observedAt) < Date.parse(observation.publishedAt)) {
     context.addIssue({ code: "custom", message: "An observation cannot precede publication", path: ["observedAt"] });
   }
@@ -117,8 +120,11 @@ export const SocialMetricObservationSchema = z.strictObject({
   if (observation.policyState.originalSupportClassification === "support" && observation.campaignRef === null) {
     context.addIssue({ code: "custom", message: "Venture-support results require their immutable campaign reference", path: ["campaignRef"] });
   }
-  if (observation.provider.source === "official-meta" && (observation.provider.providerId !== "direct-meta" || !observation.provider.bindingRef)) {
-    context.addIssue({ code: "custom", message: "Official Meta insights require the exact Direct Meta binding", path: ["provider"] });
+  if (observation.provider.source === "official-meta" && observation.provider.providerId !== "direct-meta") {
+    context.addIssue({ code: "custom", message: "Official Meta insights use only the Direct Meta provider boundary", path: ["provider"] });
+  }
+  if (observation.provider.source === "official-meta" && observation.metrics.length > 0 && !observation.provider.bindingRef) {
+    context.addIssue({ code: "custom", message: "Measured official insights require the exact Direct Meta binding", path: ["provider", "bindingRef"] });
   }
   if (observation.snapshotHash !== socialMetricSnapshotHash(observation)) {
     context.addIssue({ code: "custom", message: "Observation snapshot hash does not match its bounded evidence", path: ["snapshotHash"] });
@@ -158,6 +164,9 @@ export const SocialAttributionEventSchema = z.strictObject({
   contestRef: z.null(),
   authorityGranted: z.literal(false)
 }).superRefine((event, context) => {
+  if (event.id !== `social-attribution-event-${event.idempotencyHash.slice(0, 20)}`) {
+    context.addIssue({ code: "custom", message: "Attribution id must derive from its idempotency hash", path: ["id"] });
+  }
   const utmValues = Object.values(event.utm);
   if (utmValues.some((value) => value !== null) && utmValues.some((value) => value === null)) {
     context.addIssue({ code: "custom", message: "Partial UTM tuples are invalid and cannot be attributed", path: ["utm"] });
@@ -276,7 +285,13 @@ export type SocialBoostProposal = z.infer<typeof SocialBoostProposalSchema>;
 export type SocialResultMetricName = z.infer<typeof SocialResultMetricNameSchema>;
 export type SocialResultUnavailableReason = z.infer<typeof SocialResultUnavailableReasonSchema>;
 
+function canonical(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonical);
+  if (value && typeof value === "object") return Object.fromEntries(Object.entries(value as Record<string, unknown>).sort(([left], [right]) => left.localeCompare(right)).map(([key, entry]) => [key, canonical(entry)]));
+  return value;
+}
+
 export function socialMetricSnapshotHash(observation: Omit<SocialMetricObservation, "snapshotHash"> | SocialMetricObservation): string {
   const { snapshotHash: _snapshotHash, ...bounded } = observation as SocialMetricObservation;
-  return createHash("sha256").update(JSON.stringify(bounded)).digest("hex");
+  return createHash("sha256").update(JSON.stringify(canonical(bounded))).digest("hex");
 }

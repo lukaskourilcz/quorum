@@ -3,7 +3,7 @@
     "schemaVersion": "social-metric-observation/1",
     "id": "social-metric-observation-aaaaaaaaaaaaaaaaaaaa",
     "idempotencyHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    "snapshotHash": "ce301cf49ecf2b191c2bdad62a3f8da34ff36df859cc419342455b3cf97f383a",
+    "snapshotHash": "afa04a3d722210e2980b9f7a3164bfe37983696996aaf7d478a8de807369a85f",
     "correctionOfRef": null,
     "profileId": "social-profile-caught-up",
     "targetRole": "primary",
