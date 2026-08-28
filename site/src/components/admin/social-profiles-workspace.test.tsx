@@ -52,6 +52,16 @@ describe("Social Profiles workspace", () => {
     expect(snapshot.ventureProfiles).toHaveLength(6);
   });
 
+  it("renders an honest optional Network without turning the benchmark into progress", async () => {
+    const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
+    const html = renderToStaticMarkup(<SocialProfilesWorkspace section="network" snapshot={snapshot} />);
+    expect(html).toContain("Planning benchmark");
+    expect(html).toContain("Recorded relationships");
+    expect(html).toContain("No Network relationships");
+    expect(html).toContain("never sends");
+    expect(snapshot.network.benchmark).toEqual({ target: 50, actual: 0, optedInOrActive: 0, fabricatedProgress: false });
+  });
+
   it("renders campaign gates, immutable bindings and safe actions without fake results", async () => {
     const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
     const fixture = JSON.parse(await readFile(path.join(root, "contracts/fixtures/social-distribution-contracts.valid.json"), "utf8")) as { campaign: unknown };

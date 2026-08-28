@@ -18,6 +18,7 @@ import {
 import { SOCIAL_PROFILE_SECTIONS, type SocialProfileSectionId } from "@/lib/social-profiles/model";
 import type { AdminSocialProfilesSnapshot, SocialProfileView } from "@/lib/social-profiles/snapshot";
 import { SocialCampaignActions } from "./social-campaign-actions";
+import { SocialNetworkShareKitActions } from "./social-network-share-kit-actions";
 import { SocialProfileLifecycleActions } from "./social-profile-lifecycle-actions";
 
 const statusTone = (value: string) => ["active", "ready", "healthy", "allowed", "pass", "approved", "eligible", "selected"].includes(value)
@@ -163,6 +164,28 @@ function ActivitySetup({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) 
   );
 }
 
+function Network({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) {
+  const { benchmark, contacts, shareKits } = snapshot.network;
+  return (
+    <div className="grid gap-4" data-social-profiles-section="network">
+      <AdminCard><AdminCardHeader><AdminSectionHeading title="Optional Network" description="A private owner-managed directory for genuine opt-in relationships. The planning benchmark is not a release gate and never becomes fabricated progress." /></AdminCardHeader><AdminCardContent className="grid gap-3 sm:grid-cols-3">
+        <AdminMetric label="Planning benchmark" value={benchmark.target} note="Optional long-term target" />
+        <AdminMetric label="Recorded relationships" value={benchmark.actual} note="Owner-entered real records" />
+        <AdminMetric label="Opted in or active" value={benchmark.optedInOrActive} note="Dated consent evidence" />
+      </AdminCardContent></AdminCard>
+      <AdminCard><AdminCardHeader><AdminSectionHeading title={`Relationships · ${contacts.length}`} description="Contacts remain separate from owned profiles, credentials and queue identities. Public references and private notes are withheld from this table." /></AdminCardHeader><AdminCardContent>
+        {contacts.length ? <AdminTableRegion label="Distribution relationships"><AdminTable><thead><tr><AdminTableHead>Relationship</AdminTableHead><AdminTableHead>Status</AdminTableHead><AdminTableHead>Consent</AdminTableHead><AdminTableHead>Fit</AdminTableHead><AdminTableHead>Last activity</AdminTableHead></tr></thead><tbody>
+          {contacts.map((contact) => <tr key={contact.id}><AdminTableCell><span className="block font-semibold">{contact.label}</span><span className="block text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">{contact.type}</span></AdminTableCell><AdminTableCell><AdminStatusBadge tone={statusTone(contact.relationshipStatus)}>{contact.relationshipStatus}</AdminStatusBadge></AdminTableCell><AdminTableCell>{contact.consentRecordedAt ?? "Not recorded"}</AdminTableCell><AdminTableCell>{contact.platforms.join("/") || "No platform"} · {contact.languages.join("/")} · {contact.markets.join("/")}</AdminTableCell><AdminTableCell>{contact.lastSharedAt ?? contact.lastContactedAt ?? "No contact recorded"}</AdminTableCell></tr>)}
+        </tbody></AdminTable></AdminTableRegion> : <AdminEmptyState title="No Network relationships" description="The real directory is empty. The 50-relationship benchmark does not seed contacts, consent or progress." />}
+      </AdminCardContent></AdminCard>
+      <AdminCard><AdminCardHeader><AdminSectionHeading title={`Manual share kits · ${shareKits.length}`} description="Kits are copied or downloaded for an opted-in relationship. BoardlessAI never sends, posts or communicates as the contact." /></AdminCardHeader><AdminCardContent>
+        {shareKits.length ? <div className="grid gap-3">{shareKits.map((kit) => <article className="rounded-[var(--admin-radius)] border border-[var(--admin-border)] p-3" key={kit.id}><div className="flex flex-wrap items-center justify-between gap-2"><p className="m-0 font-semibold">{kit.sourceVentureId} · {kit.channel}/{kit.locale}</p><AdminStatusBadge tone={statusTone(kit.status)}>{kit.status}</AdminStatusBadge></div><p className="mt-2 text-[length:var(--admin-type-body)]">{kit.factualSummary}</p><p className="m-0 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">{kit.relevanceReason}</p><SocialNetworkShareKitActions kit={kit} /></article>)}</div> : <AdminEmptyState title="No assigned share kits" description="A kit appears only after an approved campaign, exact capability fit and dated opt-in evidence all pass." />}
+      </AdminCardContent></AdminCard>
+      <AdminCallout tone="information">Network controls never send an email or DM, follow an account, post as a contact or infer identity and consent from UTM activity.</AdminCallout>
+    </div>
+  );
+}
+
 function SimulationMatrix({ snapshot }: { snapshot: AdminSocialProfilesSnapshot }) {
   if (!snapshot.simulationsIncluded) return null;
   return <AdminCard className="mt-4" data-social-profile-simulations="explicit"><AdminCardHeader><AdminSectionHeading title="Synthetic visual QA · excluded from totals" description="50 deterministic #406 fixtures. They are not accounts, proposals, evidence or a production fallback." /></AdminCardHeader><AdminCardContent><div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">{snapshot.simulations.map(({ profile, preview }) => <div className="min-w-0 rounded-[var(--admin-radius)] border border-dashed border-[var(--admin-border-strong)] p-3" key={profile.id}><p className="m-0 break-words font-semibold">{profile.displayLabel}</p><div className="mt-2 flex flex-wrap gap-1"><AdminStatusBadge tone="information">simulation</AdminStatusBadge><AdminStatusBadge tone={statusTone(preview.setupState)}>{preview.setupState}</AdminStatusBadge><AdminEntityBadge>{preview.platform}</AdminEntityBadge></div></div>)}</div></AdminCardContent></AdminCard>;
@@ -175,7 +198,7 @@ export function SocialProfilesWorkspace({ campaignId, profileId, section, snapsh
       <nav aria-label="Social Profiles sections" className="mb-4 flex max-w-full gap-1 overflow-x-auto rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface-secondary)] p-1" data-horizontal-scroll>
         {SOCIAL_PROFILE_SECTIONS.map((item) => <Link aria-current={section === item.id ? "page" : undefined} className="admin-focus-ring flex min-h-[var(--admin-touch-target)] shrink-0 items-center rounded-[var(--admin-radius-sm)] px-3 text-[length:var(--admin-type-control)] font-semibold text-[var(--admin-foreground-muted)] data-[active=true]:bg-[var(--admin-surface)] data-[active=true]:text-[var(--admin-foreground)]" data-active={section === item.id} href={sectionHref(item.id, snapshot.simulationsIncluded)} key={item.id}>{item.label}</Link>)}
       </nav>
-      {section === "venture-profiles" ? <VentureProfiles profileId={profileId} snapshot={snapshot} /> : section === "amplification-profiles" ? <AmplificationProfiles profileId={profileId} snapshot={snapshot} /> : section === "campaigns" ? <Campaigns campaignId={campaignId} snapshot={snapshot} /> : <ActivitySetup snapshot={snapshot} />}
+      {section === "venture-profiles" ? <VentureProfiles profileId={profileId} snapshot={snapshot} /> : section === "amplification-profiles" ? <AmplificationProfiles profileId={profileId} snapshot={snapshot} /> : section === "campaigns" ? <Campaigns campaignId={campaignId} snapshot={snapshot} /> : section === "network" ? <Network snapshot={snapshot} /> : <ActivitySetup snapshot={snapshot} />}
       <SimulationMatrix snapshot={snapshot} />
     </div>
   );

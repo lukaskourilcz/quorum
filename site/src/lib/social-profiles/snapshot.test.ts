@@ -44,7 +44,8 @@ describe("Social Profiles server snapshot", () => {
     expect(snapshot.simulations).toEqual([]);
     expect(snapshot.campaigns).toEqual([]);
     expect(snapshot.campaignDecisions).toEqual([]);
-    expect(snapshot.dropped).toEqual({ profiles: 0, connections: 0, amplifierProposals: 0, events: 0, campaigns: 0, campaignDecisions: 0, campaignEvents: 0, pauseRecords: 0 });
+    expect(snapshot.network).toMatchObject({ contacts: [], shareKits: [], benchmark: { target: 50, actual: 0, optedInOrActive: 0, fabricatedProgress: false } });
+    expect(snapshot.dropped).toEqual({ profiles: 0, connections: 0, amplifierProposals: 0, events: 0, campaigns: 0, campaignDecisions: 0, campaignEvents: 0, networkContacts: 0, networkContactEvents: 0, networkShareKits: 0, networkShareKitEvents: 0, pauseRecords: 0 });
     expect(snapshot.posture).toMatchObject({ globalKillSwitch: "engaged", liveAuthorityGranted: false });
     expect(snapshot.ventureProfiles.find(({ profile }) => profile.ventureRef === "door-money")).toMatchObject({
       lifecycle: "proposed",
@@ -120,6 +121,7 @@ describe("Social Profiles server snapshot", () => {
 
   it("falls unknown section bookmarks back to Venture Profiles", () => {
     expect(resolveSocialProfileSection("campaigns")).toBe("campaigns");
+    expect(resolveSocialProfileSection("network")).toBe("network");
     expect(resolveSocialProfileSection("activity-setup")).toBe("activity-setup");
     expect(resolveSocialProfileSection("future-module")).toBe("venture-profiles");
   });
