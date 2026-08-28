@@ -9,6 +9,8 @@ import { caughtUpUnlockCounter, mmaFilesUnlockCounter, refreshSocialActivation }
 import { QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
 import { runSocialPublisher } from "./runner.js";
 import { loadSocialPublisherRegistry } from "./publisher-targets.js";
+import { loadSocialProviderRegistry } from "./providers.js";
+import { providerBindingHash } from "../contracts/social-provider.js";
 import { checkTittyTuesdaysPost } from "./tt-safety.js";
 import { composeTittyTuesdaysSocialQueue } from "./venture-packs.js";
 import marketingPlanFixture from "../../../contracts/fixtures/marketing-plan.valid.json" with { type: "json" };
@@ -37,6 +39,7 @@ function environment(): NodeJS.ProcessEnv {
 
 async function writeActivePublisherConfig(targetConfigRoot: string): Promise<void> {
   const registry = structuredClone(await loadSocialPublisherRegistry(canonicalConfigRoot));
+  const providers = structuredClone(await loadSocialProviderRegistry(canonicalConfigRoot));
   const profile = registry.profiles.find((candidate) => candidate.id === "social-profile-caught-up")!;
   profile.lifecycle = "active";
   profile.liveEligible = true;
@@ -44,8 +47,16 @@ async function writeActivePublisherConfig(targetConfigRoot: string): Promise<voi
   connection.mode = "autopublish";
   connection.health = { status: "healthy", unavailableReason: null };
   connection.enabledByHumanAt = "2026-08-01T00:00:00.000Z";
+  const binding = providers.bindings.find((candidate) => candidate.connectionId === connection.id)!;
+  binding.mode = "active";
+  binding.ownerActivationRef = "fixture:owner-provider-activation";
+  binding.authorityRef = "fixture:owner-publishing-authority";
+  binding.effectiveAt = "2026-08-01T00:00:00.000Z";
+  binding.health = { state: "healthy", unavailableReason: "none", lastVerifiedAt: "2026-08-01T00:00:00.000Z" };
+  binding.bindingHash = providerBindingHash(binding);
   await Promise.all([
     writeFile(path.join(targetConfigRoot, "social-publisher-registry.json"), JSON.stringify(registry)),
+    writeFile(path.join(targetConfigRoot, "social-providers.json"), JSON.stringify(providers)),
     readFile(path.join(canonicalConfigRoot, "venture-capabilities.json")).then((source) =>
       writeFile(path.join(targetConfigRoot, "venture-capabilities.json"), source)
     )
@@ -206,8 +217,8 @@ describe("per-venture social activation", () => {
     });
 
     expect(report).toMatchObject({ status: "complete", published: 0, ambiguous: 1 });
-    expect(adapter.findByIdempotencyKey).toHaveBeenCalledTimes(2);
-    expect(adapter.publish).toHaveBeenCalledTimes(2);
+    expect(adapter.findByIdempotencyKey).toHaveBeenCalledTimes(1);
+    expect(adapter.publish).toHaveBeenCalledTimes(1);
     expect(adapter.verify).not.toHaveBeenCalled();
     const queued = JSON.parse(await readFile(path.join(stateRoot, "social/queue/fixture.json"), "utf8"));
     expect(queued).toMatchObject({ schemaVersion: 2, status: "needs_reconciliation" });
