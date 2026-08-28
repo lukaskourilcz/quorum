@@ -11,6 +11,7 @@ import {
   stableWebDevRecordId
 } from "../src/ventures/webdev-signal/selection/canonical.js";
 import { buildWebDevRecords } from "../src/ventures/webdev-signal/selection/records.js";
+import { decideWebDevEdition } from "../src/ventures/webdev-signal/selection/decision.js";
 
 const fixtureRoot = path.join(import.meta.dirname, "fixtures", "webdev-signal");
 const NOW = "2026-08-28T08:00:00.000Z";
@@ -41,6 +42,31 @@ function candidate(overrides: Partial<WebDevCandidate> = {}): WebDevCandidate {
       parserVersion: "1.0.0",
       fetchedAt: "2026-08-28T06:05:00.000Z",
       evidenceRefs: ["fixture:react:20"],
+      fixture: true
+    },
+    ...overrides
+  });
+}
+
+function advisoryCandidate(overrides: Partial<WebDevCandidate> = {}): WebDevCandidate {
+  return candidate({
+    sourceId: "github-npm-advisories",
+    sourceItemId: "GHSA-xxxx-yyyy-zzzz",
+    targetUrl: "https://github.com/advisories/GHSA-xxxx-yyyy-zzzz",
+    canonicalProjectUrl: "https://github.com/advisories",
+    title: "Critical fixture package advisory GHSA-xxxx-yyyy-zzzz",
+    summary: "The official advisory identifies a critical traversal flaw affecting projects using fixture-package.",
+    project: "fixture-package",
+    versionText: "affected >= 1.0.0, < 1.2.3 fixed 1.2.3",
+    securityText: "critical; GHSA-xxxx-yyyy-zzzz",
+    topicHints: ["security", "package-manager"],
+    changeKindHints: ["security-advisory"],
+    provenance: {
+      authority: "official-advisory",
+      parserId: "github-advisories",
+      parserVersion: "1.0.0",
+      fetchedAt: "2026-08-28T06:05:00.000Z",
+      evidenceRefs: ["fixture:advisory:exact"],
       fixture: true
     },
     ...overrides
@@ -166,27 +192,7 @@ describe("WebDev Signal prefilter, clustering and source-backed records", () => 
 
   it("extracts exact affected and fixed advisory scope and safe action", async () => {
     const config = await loadWebDevSelectionConfig();
-    const advisory = candidate({
-      sourceId: "github-npm-advisories",
-      sourceItemId: "GHSA-xxxx-yyyy-zzzz",
-      targetUrl: "https://github.com/advisories/GHSA-xxxx-yyyy-zzzz",
-      canonicalProjectUrl: "https://github.com/advisories",
-      title: "Critical fixture package advisory GHSA-xxxx-yyyy-zzzz",
-      summary: "The official advisory identifies a critical traversal flaw affecting projects using fixture-package.",
-      project: "fixture-package",
-      versionText: "affected >= 1.0.0, < 1.2.3 fixed 1.2.3",
-      securityText: "critical; GHSA-xxxx-yyyy-zzzz",
-      topicHints: ["security", "package-manager"],
-      changeKindHints: ["security-advisory"],
-      provenance: {
-        authority: "official-advisory",
-        parserId: "github-advisories",
-        parserVersion: "1.0.0",
-        fetchedAt: "2026-08-28T06:05:00.000Z",
-        evidenceRefs: ["fixture:advisory:exact"],
-        fixture: true
-      }
-    });
+    const advisory = advisoryCandidate();
     const result = buildWebDevRecords({ candidates: [advisory], now: NOW, config });
     expect(result.records[0]).toMatchObject({ gateHint: "eligible" });
     expect(result.records[0]?.record).toMatchObject({
@@ -218,5 +224,159 @@ describe("WebDev Signal prefilter, clustering and source-backed records", () => 
       changeKindHints: ["security-advisory"]
     });
     expect(buildWebDevRecords({ candidates: [scoped], now: NOW, config, history }).records[0]).toMatchObject({ gateHint: "eligible" });
+  });
+});
+
+describe("WebDev Signal explainable one-winner decision", () => {
+  it("selects a material stable framework release with no GoVIRAL input", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const result = decideWebDevEdition({ candidates: [candidate()], pragueDate: "2026-08-28", now: NOW, config });
+    expect(result.selection).toMatchObject({ outcome: "selected", goviral: { status: "unavailable", contribution: 0, actorRerun: false, duplicateChargeUsd: 0 } });
+    expect(result.selection.selectedRecordId).toBe(result.records[0]?.id);
+    const score = result.selection.candidates[0]!;
+    expect(score.gate).toBe("eligible");
+    expect(score.baseScore).toBeGreaterThanOrEqual(config.thresholds.minimumBaseScore);
+    expect(score.components).toHaveLength(12);
+    expect(result.metrics).toMatchObject({ outcome: "selected", networkCalls: 0, modelCalls: 0, providerCostUsd: 0 });
+  });
+
+  it("keeps beta previews below threshold and records NO_EDITION", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const beta = candidate({
+      sourceItemId: "release-21-beta",
+      targetUrl: "https://github.com/facebook/react/releases/tag/v21.0.0-beta.1",
+      title: "React 21.0.0 beta preview",
+      summary: "The React team published a beta preview for testing before stable availability.",
+      versionText: "v21.0.0-beta.1",
+      changeKindHints: ["beta-preview"]
+    });
+    const result = decideWebDevEdition({ candidates: [beta], pragueDate: "2026-08-28", now: NOW, config });
+    expect(result.selection).toMatchObject({ outcome: "NO_EDITION", selectedRecordId: null });
+    expect(result.selection.candidates[0]?.baseScore).toBeLessThan(config.thresholds.minimumBaseScore);
+    expect(result.selection.noEditionReason).toContain("base materiality");
+  });
+
+  it("selects an exact critical advisory and never needs a popularity override", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const result = decideWebDevEdition({ candidates: [advisoryCandidate()], pragueDate: "2026-08-28", now: NOW, config });
+    expect(result.selection).toMatchObject({ outcome: "selected", urgencyOverride: { used: false } });
+    expect(result.records[0]).toMatchObject({ changeKind: "security-advisory", security: { severity: "critical" } });
+    expect(result.selection.candidates[0]?.components.find(({ name }) => name === "urgency")?.rawValue).toBe(1);
+  });
+
+  it("caps GoVIRAL and cannot let high momentum rescue weak base materiality", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const beta = candidate({
+      sourceItemId: "release-21-beta",
+      targetUrl: "https://github.com/facebook/react/releases/tag/v21.0.0-beta.1",
+      title: "React 21 beta preview",
+      summary: "The React team published a beta preview for testing before stable availability.",
+      versionText: "v21.0.0-beta.1",
+      changeKindHints: ["beta-preview"]
+    });
+    const packet = {
+      schemaVersion: "goviral-intelligence-packet/1",
+      topic: "React",
+      measuredAt: "2026-08-28T05:00:00.000Z",
+      expiresAt: "2026-08-29T05:00:00.000Z",
+      velocity: 100,
+      evidenceRefs: ["state/ventures/goviral/react.json"]
+    };
+    const result = decideWebDevEdition({
+      candidates: [beta],
+      pragueDate: "2026-08-28",
+      now: NOW,
+      config,
+      goviralPacket: packet,
+      goviralCapabilityDecision: "allowed"
+    });
+    const scored = result.selection.candidates[0]!;
+    expect(scored.components.find(({ name }) => name === "goviral-momentum")?.contribution).toBe(5);
+    expect(scored.baseScore).toBeLessThan(config.thresholds.minimumBaseScore);
+    expect(result.selection).toMatchObject({ outcome: "NO_EDITION", goviral: { status: "available-unused", contribution: 0, actorRerun: false, duplicateChargeUsd: 0 } });
+  });
+
+  it.each([
+    ["stale" as const, "allowed" as const, "2026-08-27T05:00:00.000Z"],
+    ["denied" as const, "denied" as const, "2026-08-29T05:00:00.000Z"]
+  ])("keeps %s GoVIRAL visible at zero", async (status, capabilityDecision, expiresAt) => {
+    const config = await loadWebDevSelectionConfig();
+    const result = decideWebDevEdition({
+      candidates: [candidate()],
+      pragueDate: "2026-08-28",
+      now: NOW,
+      config,
+      goviralPacket: {
+        schemaVersion: "goviral-intelligence-packet/1",
+        topic: "React",
+        measuredAt: "2026-08-26T05:00:00.000Z",
+        expiresAt,
+        velocity: 100,
+        evidenceRefs: ["state/ventures/goviral/react.json"]
+      },
+      goviralCapabilityDecision: capabilityDecision
+    });
+    expect(result.selection.goviral).toMatchObject({ status, contribution: 0, actorRerun: false, duplicateChargeUsd: 0 });
+    expect(result.selection.outcome).toBe("selected");
+  });
+
+  it("uses a stable tie break for ordering but records NO_EDITION below the winner margin", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const vue = candidate({
+      sourceId: "vue-blog",
+      sourceItemId: "vue-20",
+      targetUrl: "https://github.com/vuejs/core/releases/tag/v20.0.0",
+      canonicalProjectUrl: "https://github.com/vuejs/core",
+      title: "Vue 20.0.0 stable release",
+      summary: "The Vue team published a stable major release with an explicit migration guide for framework projects.",
+      project: "Vue"
+    });
+    const forward = decideWebDevEdition({ candidates: [candidate(), vue], pragueDate: "2026-08-28", now: NOW, config });
+    const reverse = decideWebDevEdition({ candidates: [vue, candidate()], pragueDate: "2026-08-28", now: NOW, config });
+    expect(forward.selection).toMatchObject({ outcome: "NO_EDITION", selectedRecordId: null });
+    expect(forward.selection.noEditionReason).toContain("winner margin");
+    expect(forward.selection.candidates).toEqual(reverse.selection.candidates);
+    expect(forward.selection.idempotencyHash).toBe(reverse.selection.idempotencyHash);
+  });
+
+  it("preserves owner correction and supersession references in deterministic history", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const base = decideWebDevEdition({ candidates: [candidate()], pragueDate: "2026-08-28", now: NOW, config });
+    const corrected = decideWebDevEdition({
+      candidates: [candidate()],
+      pragueDate: "2026-08-28",
+      now: NOW,
+      config,
+      ownerCorrectionRef: "owner-correction:2026-08-28",
+      supersedesRef: `selection:${base.selection.idempotencyHash}`
+    });
+    expect(corrected.selection).toMatchObject({ ownerCorrectionRef: "owner-correction:2026-08-28", supersedesRef: `selection:${base.selection.idempotencyHash}` });
+    expect(corrected.selection.idempotencyHash).not.toBe(base.selection.idempotencyHash);
+  });
+
+  it("records exact prefilter and gate metrics on a NO_EDITION day", async () => {
+    const config = await loadWebDevSelectionConfig();
+    const result = decideWebDevEdition({
+      candidates: [candidate({ sourceItemId: "promo", title: "Register now for our sponsored launch" })],
+      pragueDate: "2026-08-28",
+      now: NOW,
+      config,
+      cacheReused: 2,
+      callsAvoided: 3
+    });
+    expect(result.selection.outcome).toBe("NO_EDITION");
+    expect(result.metrics).toMatchObject({
+      fetchedCandidates: 1,
+      prefilterDrops: 1,
+      dropCounts: { promotional: 1 },
+      canonicalRecords: 0,
+      eligible: 0,
+      scored: 0,
+      cacheReused: 2,
+      callsAvoided: 3,
+      networkCalls: 0,
+      modelCalls: 0,
+      providerCostUsd: 0
+    });
   });
 });
