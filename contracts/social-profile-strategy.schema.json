@@ -1,0 +1,637 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-profile-strategy/1"
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 180,
+      "pattern": "^social-profile-strategy-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "profileId": {
+      "type": "string",
+      "maxLength": 140,
+      "pattern": "^social-profile-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "profileRole": {
+      "type": "string",
+      "enum": [
+        "venture-primary",
+        "company-umbrella",
+        "owned-amplifier"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "audience": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "languages": {
+      "minItems": 1,
+      "maxItems": 2,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "cs",
+          "en"
+        ]
+      }
+    },
+    "markets": {
+      "minItems": 1,
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z]{2}$"
+      }
+    },
+    "allowedCapabilities": {
+      "maxItems": 50,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "mapVersion": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$"
+          },
+          "source": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "target": {
+            "type": "string",
+            "const": "social-distribution"
+          },
+          "capability": {
+            "type": "string",
+            "const": "approved-publish-package"
+          },
+          "dataSchemaVersion": {
+            "type": "string",
+            "const": "approved-publish-package/1"
+          },
+          "decisionReference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "required": [
+          "mapVersion",
+          "source",
+          "target",
+          "capability",
+          "dataSchemaVersion",
+          "decisionReference"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "contentPillars": {
+      "minItems": 1,
+      "maxItems": 12,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "allowedSourceClasses": {
+            "minItems": 1,
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "strategy-owned",
+                "profile-owned",
+                "approved-package",
+                "goviral-intelligence",
+                "accepted-campaign"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "description",
+          "allowedSourceClasses"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "recurringFormats": {
+      "minItems": 3,
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "pillarId": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "candidateClass": {
+            "type": "string",
+            "enum": [
+              "original",
+              "reserve",
+              "recurring"
+            ]
+          },
+          "platforms": {
+            "minItems": 1,
+            "maxItems": 2,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "instagram",
+                "threads"
+              ]
+            }
+          },
+          "locales": {
+            "minItems": 1,
+            "maxItems": 2,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "cs",
+                "en"
+              ]
+            }
+          },
+          "evidenceRequirements": {
+            "minItems": 1,
+            "maxItems": 8,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          "sourceClasses": {
+            "minItems": 1,
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "strategy-owned",
+                "profile-owned",
+                "approved-package",
+                "goviral-intelligence",
+                "accepted-campaign"
+              ]
+            }
+          },
+          "assetRequirement": {
+            "type": "string",
+            "enum": [
+              "none",
+              "optional-design-lab",
+              "required-design-lab"
+            ]
+          },
+          "altTextRequired": {
+            "type": "boolean"
+          },
+          "deterministicBriefTemplate": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "pillarId",
+          "candidateClass",
+          "platforms",
+          "locales",
+          "evidenceRequirements",
+          "sourceClasses",
+          "assetRequirement",
+          "altTextRequired",
+          "deterministicBriefTemplate"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "prohibited": {
+      "type": "object",
+      "properties": {
+        "topics": {
+          "maxItems": 50,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "claims": {
+          "minItems": 1,
+          "maxItems": 50,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          }
+        },
+        "formats": {
+          "minItems": 1,
+          "maxItems": 30,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        }
+      },
+      "required": [
+        "topics",
+        "claims",
+        "formats"
+      ],
+      "additionalProperties": false
+    },
+    "cadence": {
+      "type": "object",
+      "properties": {
+        "minimumPerWeek": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 21
+        },
+        "targetPerWeek": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 21
+        },
+        "maximumPerWeek": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 35
+        },
+        "preferredWindows": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        },
+        "prohibitedWindows": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        }
+      },
+      "required": [
+        "minimumPerWeek",
+        "targetPerWeek",
+        "maximumPerWeek",
+        "preferredWindows",
+        "prohibitedWindows"
+      ],
+      "additionalProperties": false
+    },
+    "policyRefs": {
+      "type": "object",
+      "properties": {
+        "amplificationPolicyRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "launchRunwayRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "originalSupportRatioRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "sameSourceCooldownRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "supportCapRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "amplificationPolicyRef",
+        "launchRunwayRef",
+        "originalSupportRatioRef",
+        "sameSourceCooldownRef",
+        "supportCapRef"
+      ],
+      "additionalProperties": false
+    },
+    "platformCaps": {
+      "type": "object",
+      "properties": {
+        "instagram": {
+          "type": "object",
+          "properties": {
+            "perDay": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "perWeek": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 21
+            }
+          },
+          "required": [
+            "perDay",
+            "perWeek"
+          ],
+          "additionalProperties": false
+        },
+        "threads": {
+          "type": "object",
+          "properties": {
+            "perDay": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "perWeek": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 35
+            }
+          },
+          "required": [
+            "perDay",
+            "perWeek"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "instagram",
+        "threads"
+      ],
+      "additionalProperties": false
+    },
+    "assets": {
+      "type": "object",
+      "properties": {
+        "rendererRef": {
+          "type": "string",
+          "const": "Design Lab"
+        },
+        "allowedKinds": {
+          "minItems": 1,
+          "maxItems": 4,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "none",
+              "image",
+              "carousel",
+              "video-brief"
+            ]
+          }
+        },
+        "altTextRequiredForVisuals": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": [
+        "rendererRef",
+        "allowedKinds",
+        "altTextRequiredForVisuals"
+      ],
+      "additionalProperties": false
+    },
+    "localeToneGuidance": {
+      "minItems": 1,
+      "maxItems": 2,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "locale": {
+            "type": "string",
+            "enum": [
+              "cs",
+              "en"
+            ]
+          },
+          "guidance": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "locale",
+          "guidance"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "generationPolicy": {
+      "type": "object",
+      "properties": {
+        "deterministicFirst": {
+          "type": "boolean",
+          "const": true
+        },
+        "cacheByContentAndStrategyVersion": {
+          "type": "boolean",
+          "const": true
+        },
+        "modelRole": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "maximumModelCallsPerBuild": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "maximumCostUsdPerBuild": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "modelFailurePolicy": {
+          "type": "string",
+          "const": "preserve-deterministic-inventory"
+        }
+      },
+      "required": [
+        "deterministicFirst",
+        "cacheByContentAndStrategyVersion",
+        "modelRole",
+        "maximumModelCallsPerBuild",
+        "maximumCostUsdPerBuild",
+        "modelFailurePolicy"
+      ],
+      "additionalProperties": false
+    },
+    "ownerControls": {
+      "type": "object",
+      "properties": {
+        "vetoRefs": {
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "correctionRefs": {
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "stricterOnlyWithoutNewDecision": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "required": [
+        "vetoRefs",
+        "correctionRefs",
+        "stricterOnlyWithoutNewDecision"
+      ],
+      "additionalProperties": false
+    },
+    "reviewDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "stopConditions": {
+      "minItems": 1,
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240
+      }
+    },
+    "authorityGranted": {
+      "type": "boolean",
+      "const": false
+    },
+    "queueAuthorized": {
+      "type": "boolean",
+      "const": false
+    },
+    "publishingAuthorized": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "profileId",
+    "profileRole",
+    "version",
+    "purpose",
+    "audience",
+    "languages",
+    "markets",
+    "allowedCapabilities",
+    "contentPillars",
+    "recurringFormats",
+    "prohibited",
+    "cadence",
+    "policyRefs",
+    "platformCaps",
+    "assets",
+    "localeToneGuidance",
+    "generationPolicy",
+    "ownerControls",
+    "reviewDate",
+    "stopConditions",
+    "authorityGranted",
+    "queueAuthorized",
+    "publishingAuthorized"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/social-profile-strategy.schema.json"
+}

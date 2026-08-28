@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-inventory-build-receipt/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^social-inventory-build-receipt-[a-f0-9]{20}$"
+    },
+    "profileId": {
+      "type": "string",
+      "maxLength": 140,
+      "pattern": "^social-profile-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "strategyId": {
+      "type": "string",
+      "maxLength": 180,
+      "pattern": "^social-profile-strategy-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "weekly",
+        "refill"
+      ]
+    },
+    "capacityPlanRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "built",
+        "reused",
+        "low-runway",
+        "no-candidate",
+        "held"
+      ]
+    },
+    "inputHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "previousCandidateCount": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "resultingCandidateCount": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "reusedCandidates": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "generatedCandidates": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "expiredCandidates": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "supersededCandidates": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "actualCostUsd": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "providerCalls": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
+    },
+    "providerCallsAvoided": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "modelUnavailable": {
+      "type": "boolean"
+    },
+    "incidentRefs": {
+      "maxItems": 100,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "inventoryRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "authorityGranted": {
+      "type": "boolean",
+      "const": false
+    },
+    "queueAuthorized": {
+      "type": "boolean",
+      "const": false
+    },
+    "publishingAuthorized": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "profileId",
+    "strategyId",
+    "mode",
+    "capacityPlanRef",
+    "status",
+    "inputHash",
+    "previousCandidateCount",
+    "resultingCandidateCount",
+    "reusedCandidates",
+    "generatedCandidates",
+    "expiredCandidates",
+    "supersededCandidates",
+    "actualCostUsd",
+    "providerCalls",
+    "providerCallsAvoided",
+    "modelUnavailable",
+    "incidentRefs",
+    "inventoryRef",
+    "generatedAt",
+    "authorityGranted",
+    "queueAuthorized",
+    "publishingAuthorized"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/social-inventory-build-receipt.schema.json"
+}

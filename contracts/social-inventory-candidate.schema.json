@@ -1,0 +1,368 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-inventory-candidate/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^social-inventory-candidate-[a-f0-9]{20}$"
+    },
+    "profileId": {
+      "type": "string",
+      "maxLength": 140,
+      "pattern": "^social-profile-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "strategyId": {
+      "type": "string",
+      "maxLength": 180,
+      "pattern": "^social-profile-strategy-[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "strategyVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "candidateType": {
+      "type": "string",
+      "enum": [
+        "original",
+        "reserve",
+        "recurring",
+        "campaign"
+      ]
+    },
+    "pillarId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "formatId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "instagram",
+        "threads"
+      ]
+    },
+    "locale": {
+      "type": "string",
+      "enum": [
+        "cs",
+        "en"
+      ]
+    },
+    "contentRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "contentBrief": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "evidenceRefs": {
+      "minItems": 1,
+      "maxItems": 50,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "sourceRefs": {
+      "minItems": 1,
+      "maxItems": 50,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "sourceKind": {
+      "type": "string",
+      "enum": [
+        "strategy-owned",
+        "profile-owned",
+        "approved-package",
+        "goviral-intelligence",
+        "accepted-campaign"
+      ]
+    },
+    "sourceVentureId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 80,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "capabilityRef": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "mapVersion": {
+              "type": "string",
+              "pattern": "^\\d+\\.\\d+\\.\\d+$"
+            },
+            "source": {
+              "type": "string",
+              "maxLength": 80,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "target": {
+              "type": "string",
+              "const": "social-distribution"
+            },
+            "capability": {
+              "type": "string",
+              "const": "approved-publish-package"
+            },
+            "dataSchemaVersion": {
+              "type": "string",
+              "const": "approved-publish-package/1"
+            },
+            "decisionReference": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "required": [
+            "mapVersion",
+            "source",
+            "target",
+            "capability",
+            "dataSchemaVersion",
+            "decisionReference"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "approvedPackageRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "campaignRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "asset": {
+      "type": "object",
+      "properties": {
+        "readiness": {
+          "type": "string",
+          "enum": [
+            "not-required",
+            "ready",
+            "held",
+            "unavailable"
+          ]
+        },
+        "assetRefs": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "altTextReady": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "readiness",
+        "assetRefs",
+        "altTextReady"
+      ],
+      "additionalProperties": false
+    },
+    "usefulWindow": {
+      "type": "object",
+      "properties": {
+        "earliest": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        "latest": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        }
+      },
+      "required": [
+        "earliest",
+        "latest",
+        "expiresAt"
+      ],
+      "additionalProperties": false
+    },
+    "similarityHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "estimatedCostUsd": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "authorityClass": {
+      "type": "string",
+      "enum": [
+        "deterministic-plan",
+        "bounded-model-plan",
+        "campaign-reference"
+      ]
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "original",
+        "support"
+      ]
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "eligible",
+        "held",
+        "expired",
+        "superseded"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "finalCopy": {
+      "type": "boolean",
+      "const": false
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "generatorVersion": {
+      "type": "string",
+      "const": "social-inventory-builder/1"
+    },
+    "inputHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "supersedesCandidateRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correctedByRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "queueAuthorized": {
+      "type": "boolean",
+      "const": false
+    },
+    "publishingAuthorized": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "profileId",
+    "strategyId",
+    "strategyVersion",
+    "candidateType",
+    "pillarId",
+    "formatId",
+    "platform",
+    "locale",
+    "contentRef",
+    "contentBrief",
+    "evidenceRefs",
+    "sourceRefs",
+    "sourceKind",
+    "sourceVentureId",
+    "capabilityRef",
+    "approvedPackageRef",
+    "campaignRef",
+    "asset",
+    "usefulWindow",
+    "similarityHash",
+    "estimatedCostUsd",
+    "authorityClass",
+    "classification",
+    "state",
+    "reason",
+    "finalCopy",
+    "generatedAt",
+    "generatorVersion",
+    "inputHash",
+    "supersedesCandidateRef",
+    "correctedByRef",
+    "queueAuthorized",
+    "publishingAuthorized"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/social-inventory-candidate.schema.json"
+}

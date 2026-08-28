@@ -127,6 +127,12 @@ import {
   SocialProviderSchema
 } from "./social-provider.js";
 import {
+  SocialInventoryBuildReceiptSchema,
+  SocialInventoryCandidateSchema,
+  SocialProfileInventorySchema,
+  SocialProfileStrategySchema
+} from "./social-inventory.js";
+import {
   ArticleImageSchema,
   MetricsPlaceholderSchema,
   PriorityItemSchema,
@@ -252,7 +258,11 @@ export const ContractSchemas = {
   "social-provider": SocialProviderSchema,
   "provider-connection-binding": ProviderConnectionBindingSchema,
   "provider-delivery-receipt": ProviderDeliveryReceiptSchema,
-  "provider-health": ProviderHealthSchema
+  "provider-health": ProviderHealthSchema,
+  "social-profile-strategy": SocialProfileStrategySchema,
+  "social-inventory-candidate": SocialInventoryCandidateSchema,
+  "social-profile-inventory": SocialProfileInventorySchema,
+  "social-inventory-build-receipt": SocialInventoryBuildReceiptSchema
 } satisfies Record<string, ZodType>;
 
 export type ContractName = keyof typeof ContractSchemas;
