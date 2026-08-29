@@ -69,11 +69,28 @@ describe("reading the inbox", () => {
 
   it("keeps every new venture approval in the canonical inbox with owner-ready copy", async () => {
     const inbox = await readFile(path.resolve(process.cwd(), "../state/INBOX.md"), "utf8");
-    const approvals = parseInboxApprovals(inbox);
-    const byId = new Map(approvals.map((approval) => [approval.id, approval]));
 
+    /*
+     * Two separate claims, and they used to be tangled into one.
+     *
+     * The parser reports only unresolved approvals — `- [ ]` — so reading the real inbox and
+     * asserting each id came back also asserted that the owner had signed none of them. That held
+     * until the launch countersignatures landed and then failed for thirteen ids at once, which is
+     * a test going red because the product moved forward. Presence is checked against the file in
+     * either checkbox state; copy quality is checked through the parser on a synthetic inbox, so
+     * it measures the curated-copy registry rather than the owner's progress.
+     */
+    for (const id of NEW_VENTURE_APPROVALS) {
+      expect(new RegExp(`^- \\[[ x]\\] HUMAN_APPROVAL ${id}\\b`, "mu").test(inbox), id).toBe(true);
+    }
+
+    const pending = NEW_VENTURE_APPROVALS
+      .map((id) => `- [ ] HUMAN_APPROVAL ${id} — placeholder title for the copy check.`)
+      .join("\n");
+    const byId = new Map(parseInboxApprovals(pending).map((approval) => [approval.id, approval]));
     for (const id of NEW_VENTURE_APPROVALS) {
       expect(byId.get(id)?.id, id).toBe(id);
+      // Curated copy exists for this id, so the owner never meets a raw approval reference.
       expect(byId.get(id)?.needsPlainCopy, id).toBeUndefined();
     }
   });

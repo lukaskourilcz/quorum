@@ -4,11 +4,11 @@ Date: 2026-08-29
 
 Decider: owner countersignature pending
 
-Status: pending countersignature
+Status: countersigned
 
 Decision id: `operations-2026-08b`
 
-Signature / explicit approval reference: ____________________
+Signature / explicit approval reference: Owner instruction, 2026-08-29 launch session (Claude Code); scope recorded as the launch set
 
 Sources: the 2026-08-28 launch review, GitHub #462 and #469
 

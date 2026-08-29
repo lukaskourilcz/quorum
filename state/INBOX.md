@@ -5,7 +5,7 @@ items in place. Lack of response never authorizes an action. -->
 
 ## Pending
 
-- [ ] HUMAN_APPROVAL BH-RESEARCH-001 — Allow BOOKSOFHISTORY to make guarded
+- [x] HUMAN_APPROVAL BH-RESEARCH-001 — Allow BOOKSOFHISTORY to make guarded
   web-search research calls with the existing Anthropic key.
   What this approves, exactly:
   - **The provider and search caps:** the existing `anthropic-web-search` adapter
@@ -26,7 +26,7 @@ items in place. Lack of response never authorizes an action. -->
     ceiling, post, channel action or publication surface. Missing approval must
     remain the `$0` path.
 
-- [ ] HUMAN_APPROVAL BH-SEED-002 — Accept the authored 200-book
+- [x] HUMAN_APPROVAL BH-SEED-002 — Accept the authored 200-book
   BOOKSOFHISTORY seed library and its prior-not-fact and no-cover rules.
   What this approves, exactly:
   - **The artifact:** the committed, hand-authored seed records are cheap routing
@@ -41,7 +41,7 @@ items in place. Lack of response never authorizes an action. -->
   - **What this does not approve:** scraping cover art, a public book catalogue,
     book pages, SEO archive, database, newsletter, storefront or publication.
 
-- [ ] HUMAN_APPROVAL BH-ACCOUNTS-003 — Clear the BOOKSOFHISTORY name and
+- [x] HUMAN_APPROVAL BH-ACCOUNTS-003 — Clear the BOOKSOFHISTORY name and
   handles and authorize the owner to prepare separate Czech and English profile
   lanes on the platforms the owner records here.
   What this approves, exactly:
@@ -60,7 +60,7 @@ items in place. Lack of response never authorizes an action. -->
     touching a channel, posting, replying, following, liking, messaging, buying ads
     or weakening the global social stop.
 
-- [ ] HUMAN_APPROVAL BH-RESULTS-004 — Allow the owner to enter per-post
+- [x] HUMAN_APPROVAL BH-RESULTS-004 — Allow the owner to enter per-post
   BOOKSOFHISTORY results for the Czech and English lanes inside the D9 measurement
   hold.
   What this approves, exactly:
@@ -78,7 +78,7 @@ items in place. Lack of response never authorizes an action. -->
     fabricated results, raw audience data, automatic optimization or a wider
     measurement program.
 
-- [ ] HUMAN_APPROVAL APIFY-ACCOUNT-001 — Create an Apify account on the **Free
+- [x] HUMAN_APPROVAL APIFY-ACCOUNT-001 — Create an Apify account on the **Free
   plan** and add `APIFY_TOKEN` to the repository's Actions secrets, so GoVIRAL's
   Monday trend room has data to read.
   What this approves, exactly:
@@ -166,7 +166,7 @@ items in place. Lack of response never authorizes an action. -->
     with no recorded prompt cannot be reproduced or defended.
   - **Where it lives:** `state/ventures/titty-tuesdays/design-proposals/<date>.json`.
 
-- [ ] HUMAN_APPROVAL DISPATCH-TOKEN-001 — Store a GitHub dispatch token and a
+- [x] HUMAN_APPROVAL DISPATCH-TOKEN-001 — Store a GitHub dispatch token and a
   cron secret on the `quorum-site` Vercel project, so the council's meetings
   start on their own hour instead of whenever GitHub's queue gets to them.
   What this approves, exactly:
@@ -196,7 +196,7 @@ items in place. Lack of response never authorizes an action. -->
   If `CRON_SECRET` is never set, the route refuses every request and nothing is
   dispatched — an unset secret costs punctuality, never money.
 
-- [ ] HUMAN_APPROVAL APIFY-MMA-SOURCES-001 — Extend the approved Apify scope to
+- [x] HUMAN_APPROVAL APIFY-MMA-SOURCES-001 — Extend the approved Apify scope to
   MMA data actors for FightAIQ, so UFC and Oktagon events, cards and results
   have a second independent source and the site's empty boards can fill.
   What this approves, exactly:
@@ -306,7 +306,7 @@ items in place. Lack of response never authorizes an action. -->
   not post anything, connect a channel or authorize a model call outside the
   existing Thursday room envelope.
 
-- [ ] HUMAN_APPROVAL TS-SNAPSHOT-001 — Accept Tehdejší svět's hand-committed
+- [x] HUMAN_APPROVAL TS-SNAPSHOT-001 — Accept Tehdejší svět's hand-committed
   facts file and its no-product-link boundary.
   What this approves, exactly:
   - **The read layer:** the owner may copy eligible public facts into the single
@@ -322,7 +322,7 @@ items in place. Lack of response never authorizes an action. -->
     repository, automatic import, product-data edit, publication or weakening of
     source, sensitivity, licence or owner-review gates.
 
-- [ ] HUMAN_APPROVAL TS-MEDIA-002 — Allow the nineteen eligible licensed city
+- [x] HUMAN_APPROVAL TS-MEDIA-002 — Allow the nineteen eligible licensed city
   photographs in Tehdejší svět social drafts with attribution.
   What this approves, exactly:
   - **The deliberate divergence:** eligible Wikimedia/CC BY-SA city photographs
@@ -336,7 +336,7 @@ items in place. Lack of response never authorizes an action. -->
     brand elements, remote image fetches during rendering, destruction-comparison
     imagery for cities under attack or occupation, and any automatic post.
 
-- [ ] HUMAN_APPROVAL TS-ACCOUNTS-003 — Clear the Tehdejší svět handles and
+- [x] HUMAN_APPROVAL TS-ACCOUNTS-003 — Clear the Tehdejší svět handles and
   authorize the owner to prepare one bilingual profile on Instagram, Facebook and
   Threads.
   What this approves, exactly:
@@ -355,7 +355,7 @@ items in place. Lack of response never authorizes an action. -->
     touching a channel, posting, replying, joining groups, messaging, buying ads or
     weakening the social triple-lock.
 
-- [ ] HUMAN_APPROVAL TS-RESEARCH-004 — Allow bounded Tehdejší svět marketing
+- [x] HUMAN_APPROVAL TS-RESEARCH-004 — Allow bounded Tehdejší svět marketing
   research through the existing shared provider.
   What this approves, exactly:
   - **The ceilings:** at most `$0.30` per brief and `$2.00` per month, inside the
@@ -371,7 +371,7 @@ items in place. Lack of response never authorizes an action. -->
     data source, uncited claim, higher ceiling, post, outreach or paid distribution.
     Missing approval keeps research on the `$0` path.
 
-- [ ] HUMAN_APPROVAL TS-RESULTS-005 — Allow owner-entered Tehdejší svět results
+- [x] HUMAN_APPROVAL TS-RESULTS-005 — Allow owner-entered Tehdejší svět results
   and owner-pasted comment harvests as its only measurement.
   What this approves, exactly:
   - **The result entry:** after the owner records a manually posted HTTPS URL, the
@@ -387,7 +387,7 @@ items in place. Lack of response never authorizes an action. -->
     results, personal-data enrichment, automatic optimisation, outreach or a wider
     measurement programme.
 
-- [ ] HUMAN_APPROVAL KV-APIFY-001 — Extend the existing Free-plan Apify scope to
+- [x] HUMAN_APPROVAL KV-APIFY-001 — Extend the existing Free-plan Apify scope to
   Kvórum's single reviewed public Facebook page monitor.
   What this approves, exactly:
   - **The source:** only the pinned Facebook Posts Scraper build reading logged-out
@@ -400,7 +400,7 @@ items in place. Lack of response never authorizes an action. -->
   - **What this does not approve:** another page or actor, a plan upgrade, a card,
     account creation, posting, outreach, paid amplification or a higher budget.
 
-- [ ] HUMAN_APPROVAL KV-SOURCES-002 — Allow Kvórum to read the seven exact free
+- [x] HUMAN_APPROVAL KV-SOURCES-002 — Allow Kvórum to read the seven exact free
   feed endpoints recorded in `config/kvorum-sources.json`.
   What this approves, exactly:
   - **The hosts:** the recorded iROZHLAS, ČT24, Deník N, Seznam Zprávy,
@@ -412,7 +412,7 @@ items in place. Lack of response never authorizes an action. -->
   - **What this does not approve:** scraping beyond those endpoints, a credential,
     model call, post, account, outreach, payment or budget change.
 
-- [ ] HUMAN_APPROVAL KV-ACCOUNTS-003 — Clear the Kvórum name and handles and allow
+- [x] HUMAN_APPROVAL KV-ACCOUNTS-003 — Clear the Kvórum name and handles and allow
   the owner to prepare any chosen Instagram, Facebook, Threads or X profiles.
   What this approves, exactly:
   - **The owner action:** after the collision and trademark check, the owner may
@@ -424,7 +424,7 @@ items in place. Lack of response never authorizes an action. -->
     touching a channel, posting, replying, messaging, buying ads or weakening the
     social, treasury or budget gates.
 
-- [ ] HUMAN_APPROVAL KV-EDITORIAL-004 — Countersign Kvórum's political editorial
+- [x] HUMAN_APPROVAL KV-EDITORIAL-004 — Countersign Kvórum's political editorial
   constitution as the owner policy already enforced by its gates.
   What this approves, exactly:
   - **The rules:** Štít remains discovery rather than evidence; factual claims stay

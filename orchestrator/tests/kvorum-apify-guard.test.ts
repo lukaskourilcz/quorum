@@ -14,7 +14,6 @@ import {
 } from "../src/sources/apify.js";
 import { loadKvorumSourceRegistry } from "../src/ventures/kvorum/sources.js";
 import { atomicWriteJson } from "../src/state.js";
-import { stateRoot } from "../src/paths.js";
 
 const now = new Date("2026-08-12T21:00:00.000Z");
 const authority = { founding: true, budgetCapacity: true };
@@ -239,24 +238,62 @@ describe("the third-tenant Kvórum Apify guard", () => {
     }
   });
 
-  it("keeps the current repository fixture-only despite a token and synthetic checked approvals", async () => {
-    const runner = vi.fn();
-    const usageFetcher = vi.fn();
-    const result = await runKvorumApifySource({
-      root: stateRoot,
-      date: "2026-08-12",
-      now,
-      inbox: signedInbox,
-      token: "token-that-must-not-be-used",
-      registry: await loadKvorumSourceRegistry(),
-      usageFetcher,
-      actorRunner: runner
-    });
-    expect(result.results[0]?.reason).toContain("founding decision");
-    expect(result.results[0]?.reason).toContain("budget-capacity decision");
-    expect(usageFetcher).not.toHaveBeenCalled();
-    expect(runner).not.toHaveBeenCalled();
-    expect(result.artifactPaths).toEqual([]);
+  /*
+   * An unsigned decision blocks the actor even when everything else is ready.
+   *
+   * This used to read the repository's own decision files and assert that nothing ran, which was
+   * true only while the owner had signed nothing: the test proved the state of the repository on
+   * the day it was written rather than the behaviour of the guard, and it went red the moment the
+   * owner countersigned Kvórum's founding — a passing test turning red because the product moved
+   * forward correctly. Both decisions are injected now, so the guard is pinned to what it does and
+   * the owner can sign anything without touching this file.
+   */
+  const pendingDecision = [
+    "Status: pending countersignature",
+    "Signature / explicit approval reference: ____________________"
+  ].join("\n");
+
+  it("refuses while either decision is unsigned, whatever the token and approvals say", async () => {
+    // A temporary root, never the repository's own state. The previous version of this test
+    // passed `stateRoot`, which was harmless only while the guard refused before reaching a
+    // write: the moment the owner countersigned Kvorum's founding, the same test ran the mocked
+    // actor, treated its empty return as a failure, and conservatively recorded a full $0.151
+    // reservation into the real state/kvorum/source-quota/apify.json — a financial record of a
+    // run that never happened, eating 7.5% of the venture's monthly share. A test must not be
+    // able to spend the company's money by being run.
+    const root = await tempRoot("kvorum-unsigned-");
+    try {
+    for (const [label, founding, capacity] of [
+      ["neither", pendingDecision, pendingDecision],
+      ["only the founding", signedFounding, pendingDecision],
+      ["only the capacity", pendingDecision, signedCapacity]
+    ] as const) {
+      const runner = vi.fn();
+      const usageFetcher = vi.fn();
+      const result = await runKvorumApifySource({
+        root,
+        date: "2026-08-12",
+        now,
+        inbox: signedInbox,
+        token: "token-that-must-not-be-used",
+        registry: await loadKvorumSourceRegistry(),
+        foundingDecisionRaw: founding,
+        budgetCapacityDecisionRaw: capacity,
+        usageFetcher,
+        actorRunner: runner
+      });
+      const reason = result.results[0]?.reason ?? "";
+      expect(reason, label).toContain("countersigned");
+      if (founding === pendingDecision) expect(reason, label).toContain("founding decision");
+      if (capacity === pendingDecision) expect(reason, label).toContain("budget-capacity decision");
+      // Nothing reached the provider, so nothing was spent. That is the whole promise.
+      expect(usageFetcher, label).not.toHaveBeenCalled();
+      expect(runner, label).not.toHaveBeenCalled();
+      expect(result.artifactPaths, label).toEqual([]);
+    }
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 
   it("keeps estimates bounded by the actor ceiling and rolls quota at a month boundary", async () => {

@@ -6,11 +6,11 @@ Drafted: 2026-08-29, from the launch review
 
 Decider: owner countersignature pending
 
-Status: pending countersignature
+Status: countersigned
 
 Decision id: `budget-2026-08g`
 
-Signature / explicit approval reference: ____________________
+Signature / explicit approval reference: Owner instruction, 2026-08-29 launch session (Claude Code); scope recorded as the launch set
 
 Freed worst-day capacity USD: $0.08
 
