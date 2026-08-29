@@ -885,18 +885,45 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
     };
   }
   if (phase === "mag-editorial" || phase === "mag-desk") {
-    const [stylebook, bridge, slate, articles, events, trends] = await Promise.all([
+    const now = new Date(`${date}T12:00:00Z`);
+    const [stylebook, bridge, slate, articles, events, trends, published, bouts] = await Promise.all([
       canonicalStateText(root, "ventures/mma-files/STYLEBOOK.md"),
       readText(root, "mma/BRIDGE.md"),
       canonicalStateText(root, `ventures/mma-files/slates/${date}.json`),
       canonicalStateText(root, "ventures/mma-files/articles/INDEX.md"),
       loadEventCards(path.join(root, "mma", "events")),
-      newestTrendSnapshot(root, date)
+      newestTrendSnapshot(root, date),
+      loadArticlePackages(root),
+      loadBoutRecords(path.join(root, "mma", "bouts"))
     ]);
-    const focus = fightWeekFocus(events, new Date(`${date}T12:00:00Z`));
+    /*
+     * An event the desk has already written about never reaches the room.
+     *
+     * A card stays inside the three-day fight-week window for three days, and the window was the
+     * only thing deciding what the room was shown. So the desk wrote `hernandez-vs-rodrigues` on
+     * four consecutive mornings and `nurmagomedov-vs-song` twice, each time paying for the
+     * editorial call and the article, and each time the magazine refused the package because that
+     * slug and slot were already taken. Six packages sat parked on `hash_conflict`, which reads as
+     * a delivery jam and was a repeat loop upstream of it.
+     *
+     * The repeat rule already existed and both other selection paths consult it. This is the third
+     * caller: filtering here means the repeat costs nothing rather than being caught by AUDIT
+     * after the money is spent, and the `event:` evidence ref that the fight-week override reads
+     * further down cannot name a covered event either.
+     */
+    const covered = spentSubjectRefs({ articles: published, bouts, now });
+    const inWindow = fightWeekFocus(events, now);
+    const focus = inWindow.filter((event) => !covered.has(event.id));
     const trending = renderTrendTiebreaker(trends?.forMagazines.mma);
+    // An empty list because everything in the window is already written is a different fact from
+    // an empty window, and the room is told which one it is rather than shown a bare `[]`.
+    const focusPacket = focus.length > 0
+      ? JSON.stringify(focus)
+      : inWindow.length > 0
+        ? `[] — every card inside the three-day window has already been covered: ${inWindow.map((event) => event.id).join(", ")}. Do not write about these again.`
+        : "[]";
     return {
-      text: `${stylebook}\n\n${taste ?? ""}\n\n${bridge}\n\nFight-week event priority:\n${JSON.stringify(focus)}\n\n${slate}\n\n${articles}${trending}`.slice(0, 18_000),
+      text: `${stylebook}\n\n${taste ?? ""}\n\n${bridge}\n\nFight-week event priority:\n${focusPacket}\n\n${slate}\n\n${articles}${trending}`.slice(0, 18_000),
       evidenceRefs: [
         ...bridgeEvidenceRefs(bridge),
         ...focus.map((event) => `event:${event.id}`),
@@ -1604,7 +1631,23 @@ export async function runPortfolioCycle(input: {
         }
       }
 
-      const fightWeekSubject = context.evidenceRefs.find((reference) => reference.startsWith("event:"))?.slice("event:".length);
+      /*
+       * The fight-week override, which overwrites the am slot and stamps its subject `fresh`.
+       *
+       * The context builder no longer offers an `event:` ref for a covered event, so the common
+       * path cannot reach here with a repeat. This second check is for the refs that arrive by
+       * another route — `bridgeEvidenceRefs` also yields `event:` refs — because a path that
+       * writes the word "fresh" onto a subject must be the one that checked it.
+       */
+      const coveredSubjects = spentSubjectRefs({
+        articles: await loadArticlePackages(stateRoot),
+        bouts: await loadBoutRecords(path.join(stateRoot, "mma", "bouts")),
+        now: input.now
+      });
+      const fightWeekSubject = context.evidenceRefs
+        .filter((reference) => reference.startsWith("event:"))
+        .map((reference) => reference.slice("event:".length))
+        .find((subject) => !coveredSubjects.has(subject));
       if (fightWeekSubject && !editorialSlate.slots.some((slot) => slot.status === "assigned" && slot.subjectRefs.includes(fightWeekSubject))) {
         const fightWeekOrganization = mmaOrganizationFromRef(fightWeekSubject);
         if (!fightWeekOrganization) throw new Error(`Fight-week subject has no organization prefix: ${fightWeekSubject}`);
