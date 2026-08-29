@@ -2,9 +2,9 @@
   "schemaVersion": "mma-files-delivery-receipt/1",
   "kind": "article",
   "packageHash": "c62cca93898a6afbc578ac47525ea4501d5d2b627f26413164ba660d93063081",
-  "status": "needs_reconciliation",
-  "targetRepository": "lukaskourilcz/mma-files",
-  "code": "hash_conflict",
-  "detail": "> mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-06-am-ufc-event-ufc-fight-night-gamrot-vs-salkilld.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-06:am image path already contains different bytes",
-  "recordedAt": "2026-08-08T18:03:55.092Z"
+  "status": "retired",
+  "code": "superseded_slug",
+  "detail": "2026-08-06 reuses the slug of 2026-08-05, which the magazine already serves.",
+  "supersededBy": "c3daaa33b557f9a62014b9cb148f6dc2517c6f24d3e6fbb35bd34d345038290e",
+  "recordedAt": "2026-08-29T13:33:45.226Z"
 }
