@@ -65,7 +65,10 @@ function layerSvg(input: {
   const color = (name: string) => token(brand, name === "accent" && input.accentToken ? input.accentToken : name);
   if (layer.type === "shape") {
     const fill = layer.fillToken === "accent" && input.accentToken ? input.accentToken : layer.fillToken;
-    const stroke = layer.strokeToken ? ` stroke="${token(brand, layer.strokeToken)}" stroke-width="${layer.strokeWidth}"` : "";
+    // Strokes follow the variant's accent remap exactly as fills and inks do. They did not until
+    // the launch families ringed their portholes in the accent, and the B render kept variant A's
+    // colour on the one element that frames the photograph.
+    const stroke = layer.strokeToken ? ` stroke="${color(layer.strokeToken)}" stroke-width="${layer.strokeWidth}"` : "";
     // A panel that hugs its text is the declared frame trimmed to what the text actually needs.
     // The frame stays the maximum — it is what the contrast check measured — and the drawn
     // rectangle is never larger than it.

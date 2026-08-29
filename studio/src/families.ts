@@ -9,6 +9,7 @@ import { articleSlideSlot, deckFormats } from "./library.js";
 import { DECK_FAMILIES, type DeckFamily } from "./designs.js";
 import { RHYTHM, variantsFor, type FamilySpec, type Role } from "./family-kit.js";
 import { FOUNDING_FAMILIES } from "./families-founding.js";
+import { LAUNCH_FAMILY_SPECS } from "./families-launch.js";
 import { POSTER_FAMILIES } from "./families-poster.js";
 import { SYSTEM_FAMILIES } from "./families-system.js";
 import { PRINT_FAMILIES } from "./families-print.js";
@@ -80,7 +81,14 @@ export const FAMILY_SERVES: Readonly<Record<DeckFamily, "photo-forward" | "type-
   counterweight: "type-only",
   throughline: "type-only",
   quiet: "quiet",
-  offset: "type-only"
+  offset: "type-only",
+  // The launch collection. Three take the photograph, and each takes it differently: apex as a
+  // scrimmed band above the fold, vista as the whole slide, halo portholed inside its ring.
+  apex: "photo-forward",
+  rail: "type-only",
+  vista: "photo-forward",
+  fault: "type-only",
+  halo: "photo-forward"
 };
 
 /**
@@ -94,7 +102,8 @@ const families: Readonly<Record<DeckFamily, FamilySpec>> = {
   ...FOUNDING_FAMILIES,
   ...POSTER_FAMILIES,
   ...PRINT_FAMILIES,
-  ...SYSTEM_FAMILIES
+  ...SYSTEM_FAMILIES,
+  ...LAUNCH_FAMILY_SPECS
 };
 
 /** The reference a stored recipe or pack names for one family at one length. */
