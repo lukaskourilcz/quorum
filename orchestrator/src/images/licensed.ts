@@ -453,6 +453,33 @@ export function captionResidual(title: string, subjectWords: readonly string[]):
  * offering it twelve times out of twelve wastes the whole shortlist and, more to the point,
  * wastes the gate's one call on twelve views of the same frame.
  */
+/**
+ * How much of one shortlist each archive may fill, and in what order they are drawn.
+ *
+ * Measured across the thirty selection receipts each venture keeps under `image-selections`, which
+ * hold 184 judged candidates. Pexels: 74 seen, 38 accepted, and every one of the fifteen
+ * photographs the search rung has ever shipped. Pixabay: 66 seen, 64 vetoed, none shipped.
+ * Openverse: 6 seen, 6 vetoed, none shipped. The vetoes are not random either — they cluster on
+ * `ai-generated-look` and `dated-aesthetic`, which is the glowing-circuit-board stock the gate's
+ * own prompt is written to refuse, so those two archives were reliably spending a third of the
+ * shortlist on candidates that could not win.
+ *
+ * Capped rather than removed. A capped provider still appears in every receipt and can still win,
+ * so the measurement stays live and a cap can be lifted by evidence — removing it would end the
+ * evidence and freeze today's ranking as a fact. An uncapped provider may fill the shortlist.
+ */
+export const PROVIDER_SHORTLIST_CAP: Readonly<Record<string, number>> = {
+  pixabay: 2,
+  openverse: 2
+};
+
+const PROVIDER_DRAW_ORDER = ["pexels", "wikimedia", "openverse", "pixabay"];
+
+function providerRank(provider: string | undefined): number {
+  const rank = provider === undefined ? -1 : PROVIDER_DRAW_ORDER.indexOf(provider);
+  return rank === -1 ? PROVIDER_DRAW_ORDER.length : rank;
+}
+
 export async function discoverLicensedPhotos(input: {
   /** One phrase, for the callers that still have exactly one. */
   query?: string;
@@ -491,18 +518,37 @@ export async function discoverLicensedPhotos(input: {
 
   const maximum = input.maximum ?? 12;
   const candidates: LicensedPhotoCandidate[] = [];
+  const taken = new Map<string, number>();
   const depth = Math.max(0, ...lists.map((list) => list.length));
-  for (let round = 0; round < depth && candidates.length < maximum; round += 1) {
-    for (const list of lists) {
-      const candidate = list[round];
-      if (!candidate) continue;
-      if (!candidateHosted(candidate)) continue;
-      if (candidates.some((item) => item.sourceUrl === candidate.sourceUrl)) continue;
-      if (candidates.some((item) => item.title === candidate.title)) continue;
-      candidates.push(candidate);
-      if (candidates.length >= maximum) break;
+  // Best-yield provider first within each round, so a slot the shortlist can only fill once goes
+  // to the archive most likely to win it. Order and caps both come from PROVIDER_SHORTLIST_CAP.
+  const ordered = [...lists].sort((left, right) =>
+    providerRank(left[0]?.provider) - providerRank(right[0]?.provider));
+  const fill = (respectCaps: boolean): void => {
+    for (let round = 0; round < depth && candidates.length < maximum; round += 1) {
+      for (const list of ordered) {
+        const candidate = list[round];
+        if (!candidate) continue;
+        if (!candidateHosted(candidate)) continue;
+        if (candidates.some((item) => item.sourceUrl === candidate.sourceUrl)) continue;
+        if (candidates.some((item) => item.title === candidate.title)) continue;
+        if (respectCaps) {
+          const already = taken.get(candidate.provider) ?? 0;
+          if (already >= (PROVIDER_SHORTLIST_CAP[candidate.provider] ?? maximum)) continue;
+          taken.set(candidate.provider, already + 1);
+        }
+        candidates.push(candidate);
+        if (candidates.length >= maximum) break;
+      }
     }
-  }
+  };
+  fill(true);
+  // Then again without the caps, which is what makes them a share of a contested shortlist rather
+  // than a smaller shortlist. When the uncapped archives answered, the first pass has already
+  // spent the slots on them and this adds nothing. When they did not — no Pexels key, or a phrase
+  // only Openverse can answer — the keyless floor is all there is, and refusing to fill from it
+  // would hand the gate two candidates instead of twelve and call that discipline.
+  fill(false);
   return { candidates, skippedProviders };
 }
 

@@ -140,6 +140,58 @@ describe("retrieval across phrases and providers", () => {
     expect(found.candidates).toHaveLength(1);
   });
 
+  it("gives a contested shortlist to the archives that have actually won", async () => {
+    // Every provider answers with plenty. The measured yield says Pexels is the only archive that
+    // has ever produced a published hero and that Pixabay has never produced one in sixty-six
+    // looks, so the twelve slots must not come out evenly.
+    const pexelsMany = Array.from({ length: 8 }, (_, index) => ({
+      id: 5_000 + index,
+      photographer: "A photographer",
+      alt: `Pexels picture ${index}`,
+      width: 1_920,
+      height: 1_080,
+      url: `https://www.pexels.com/photo/${5_000 + index}/`,
+      src: { large2x: `https://images.pexels.com/photos/${5_000 + index}/large.jpg`, medium: `https://images.pexels.com/photos/${5_000 + index}/medium.jpg` }
+    }));
+    const found = await discoverLicensedPhotos({
+      queries: ["alpha"],
+      pexelsKey: "pexels-key",
+      pixabayKey: "pixabay-key",
+      fetchJson: fetcher([], {
+        "api.pexels.com:alpha": { photos: pexelsMany },
+        "api.openverse.org:alpha": {
+          results: Array.from({ length: 8 }, (_, index) => openverseHit(`ov-${index}`, `Openverse ${index}`))
+        },
+        "pixabay.com:alpha": {
+          hits: Array.from({ length: 8 }, (_, index) => pixabayHit(9_000 + index, `Pixabay ${index}`))
+        }
+      }),
+      cacheRoot: await root()
+    });
+
+    const share = (provider: string) =>
+      found.candidates.filter((candidate) => candidate.provider === provider).length;
+    expect(share("pixabay")).toBeLessThanOrEqual(2);
+    expect(share("openverse")).toBeLessThanOrEqual(2);
+    // The archive with every recorded win takes the slots the other two are no longer holding.
+    expect(share("pexels")).toBeGreaterThan(share("pixabay") + share("openverse"));
+  });
+
+  it("still fills from a capped archive when it is the only one answering", async () => {
+    // No Pexels or Pixabay key, and Commons has nothing for this phrase: the keyless floor is the
+    // whole of the shortlist. A share cap that shrank this to two would hand the gate ten fewer
+    // candidates and call it discipline.
+    const many = Array.from({ length: 20 }, (_, index) => openverseHit(`only-${index}`, `Only ${index}`));
+    const found = await discoverLicensedPhotos({
+      queries: ["alpha"],
+      fetchJson: fetcher([], { "api.openverse.org:alpha": { results: many } }),
+      cacheRoot: await root()
+    });
+
+    expect(found.candidates).toHaveLength(12);
+    expect(found.candidates.every((candidate) => candidate.provider === "openverse")).toBe(true);
+  });
+
   it("stops at twelve", async () => {
     const many = Array.from({ length: 20 }, (_, index) => openverseHit(`n${index}`, `Picture ${index}`));
     const found = await discoverLicensedPhotos({

@@ -38,6 +38,14 @@ export interface VisionProviderResponse {
   tokensOut: number;
   cachedTokensIn: number;
   cacheWriteTokensIn: number;
+  /**
+   * Whether the model ran out of output budget mid-answer.
+   *
+   * Reported rather than thrown because the provider has already billed for the tokens it did
+   * produce. A throw here would lose both the ledger row and the budget record, which is how a
+   * cut-off answer becomes a free call.
+   */
+  truncated: boolean;
 }
 
 /**
@@ -83,8 +91,28 @@ export class AnthropicVisionClient {
       tool_choice: { type: "tool", name: request.tool.name },
       messages: [{ role: "user", content }]
     });
+    // A cut-off tool call, reported as one.
+    //
+    // The text client already refuses to let truncation masquerade as malformed JSON, and the
+    // gate needed the same guard: a twelve-candidate verdict list runs to about 1,250 output
+    // tokens against a 1,200 ceiling, so the reply arrived with its `verdicts` array half
+    // written and the caller reported `unparsable`. Three DNESKAi editions fell to the plate
+    // that way — 14, 18 and 28 August, every one of them billed at exactly the ceiling — and
+    // the reason blamed the model for what was our own budget.
+    const truncated = response.stop_reason === "max_tokens";
     const toolUse = response.content.find((block) => block.type === "tool_use");
     if (!toolUse || toolUse.type !== "tool_use") {
+      if (truncated) {
+        return {
+          value: null,
+          model: response.model,
+          tokensIn: response.usage.input_tokens ?? 0,
+          tokensOut: response.usage.output_tokens ?? 0,
+          cachedTokensIn: response.usage.cache_read_input_tokens ?? 0,
+          cacheWriteTokensIn: response.usage.cache_creation_input_tokens ?? 0,
+          truncated
+        };
+      }
       throw new Error(`vision call did not return ${request.tool.name}`);
     }
     return {
@@ -93,7 +121,8 @@ export class AnthropicVisionClient {
       tokensIn: response.usage.input_tokens ?? 0,
       tokensOut: response.usage.output_tokens ?? 0,
       cachedTokensIn: response.usage.cache_read_input_tokens ?? 0,
-      cacheWriteTokensIn: response.usage.cache_creation_input_tokens ?? 0
+      cacheWriteTokensIn: response.usage.cache_creation_input_tokens ?? 0,
+      truncated
     };
   }
 }

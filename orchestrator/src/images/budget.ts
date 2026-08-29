@@ -19,6 +19,16 @@ export const IMAGE_PROGRAM_DAY_CAP_USD = 0.1;
 export const IMAGE_GENERATION_DAY_LIMIT = 2;
 
 /**
+ * What looking at one rendered illustration costs, reserved before the render is commissioned.
+ *
+ * Measured from the single-candidate `image_gate` rows in `state/budget/ledger.json`, which run
+ * $0.00212 to $0.00241; this is that range rounded up. It is a reservation rather than a bill —
+ * the measured cost is what reaches the ledger — and it exists so the render and its verdict are
+ * approved together or not at all.
+ */
+export const GENERATED_GATE_ESTIMATE_USD = 0.0025;
+
+/**
  * The ledger phases the image programme bills under.
  *
  * Two, because they answer different questions: one is a model looking at pictures and one is a
@@ -102,10 +112,25 @@ export class ImageProgramBudget {
     return null;
   }
 
-  /** Whether another image may be rendered today. Separate from money: it is a count. */
-  reserveGeneratedImage(estimateUsd: number): ImageBudgetRefusal | null {
+  /**
+   * Whether another image may be rendered today, and whether its verdict is still affordable.
+   *
+   * The count is the day limit, which is why this is separate from `reserve`. What it was missing
+   * is the article cap: a render is billed by the provider the instant it happens, and the gate
+   * that decides whether the render may ship is a second, later charge. Checking only the day
+   * figure let both halves be authorised independently, and on 21 August the first half was paid
+   * and the second refused — `cap:article-cap`, $0.004 spent, nothing shipped, the only fal render
+   * this system has ever made.
+   *
+   * So the whole sequence is reserved here or none of it is. `followOnUsd` is the verdict the
+   * render will need afterwards; refusing now costs a picture, and refusing after the render costs
+   * a picture and the money.
+   */
+  reserveGeneratedImage(estimateUsd: number, followOnUsd = 0): ImageBudgetRefusal | null {
     if (this.generatedToday >= IMAGE_GENERATION_DAY_LIMIT) return "generation-day-limit";
-    if (Number((this.dayUsd + estimateUsd).toFixed(8)) > IMAGE_PROGRAM_DAY_CAP_USD) return "day-cap";
+    const total = estimateUsd + followOnUsd;
+    if (Number((this.articleUsd + total).toFixed(8)) > IMAGE_GATE_ARTICLE_CAP_USD) return "article-cap";
+    if (Number((this.dayUsd + total).toFixed(8)) > IMAGE_PROGRAM_DAY_CAP_USD) return "day-cap";
     return null;
   }
 

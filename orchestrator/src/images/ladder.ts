@@ -24,7 +24,7 @@ import {
   illustrationPrompt,
   type IllustrationRenderer
 } from "./illustration.js";
-import { recordIllustrationSpend } from "./budget.js";
+import { GENERATED_GATE_ESTIMATE_USD, recordIllustrationSpend } from "./budget.js";
 import type { ArticleImage } from "../contracts/autonomy.js";
 import type { ImageProgramBudget } from "./budget.js";
 import type { VisualBrief } from "./visual-brief.js";
@@ -281,7 +281,8 @@ async function illustrationRung(
   if (!enabled()) return { image: null, verdict: null };
   const brief = context.brief;
   if (!brief || brief.phrases.length === 0) return { image: null, verdict: null };
-  if (context.budget.reserveGeneratedImage(ILLUSTRATION_USD_PER_IMAGE)) {
+  // The render and the verdict that judges it are reserved as one. See `reserveGeneratedImage`.
+  if (context.budget.reserveGeneratedImage(ILLUSTRATION_USD_PER_IMAGE, GENERATED_GATE_ESTIMATE_USD)) {
     return { image: null, verdict: null };
   }
   if (context.dry) return { image: null, verdict: null };

@@ -176,6 +176,35 @@ export const GATE_THUMBNAIL_MAX_EDGE = 512;
 /** The most candidates one call will look at. The retrieval rung stops at the same number. */
 export const GATE_MAX_CANDIDATES = 12;
 
+/**
+ * What one verdict costs to write, and what the whole answer is allowed to run to.
+ *
+ * Measured off the forty-eight `image_gate` rows in `state/budget/ledger.json`: a single-candidate
+ * verdict lands between 105 and 161 output tokens, and a twelve-candidate list between 1,035 and
+ * the ceiling. Per candidate that is a little over a hundred tokens, plus a small fixed wrapper.
+ *
+ * The ceiling was a flat 1,200 for every call, which is two things wrong at once. For twelve
+ * candidates it is under the real cost, so the answer was cut off mid-array and the run reported a
+ * malformed verdict — three DNESKAi editions, each billed at exactly 1,200. For one candidate it
+ * is nine times the real cost, and because the reservation charged the ceiling, the article cap
+ * closed before the ladder had finished descending.
+ *
+ * So both numbers now come from the shortlist: `EXPECTED` is what the reservation charges and
+ * `ceiling` is the headroom that stops a runaway. The gap between them is deliberate — a
+ * reservation that equals the ceiling is the bug this replaces.
+ */
+export const GATE_VERDICT_TOKENS_PER_CANDIDATE = 110;
+export const GATE_VERDICT_TOKENS_FIXED = 60;
+const GATE_CEILING_HEADROOM = 1.4;
+
+export function gateExpectedOutputTokens(candidates: number): number {
+  return GATE_VERDICT_TOKENS_FIXED + candidates * GATE_VERDICT_TOKENS_PER_CANDIDATE;
+}
+
+export function gateMaxOutputTokens(candidates: number): number {
+  return Math.ceil(gateExpectedOutputTokens(candidates) * GATE_CEILING_HEADROOM);
+}
+
 const MAGAZINE = {
   "caught-up": "a Czech daily briefing about technology and artificial intelligence",
   "mma-files": "a Czech magazine about mixed martial arts"
@@ -364,7 +393,8 @@ export async function assessCandidates<T extends GateCandidate>(
     system: systemPrompt(input.mode, input.venture),
     input: userPrompt(input, images.length),
     images,
-    maxOutputTokens: 1_200,
+    maxOutputTokens: gateMaxOutputTokens(images.length),
+    expectedOutputTokens: gateExpectedOutputTokens(images.length),
     tool: {
       name: "emit_image_verdicts",
       description: "One verdict per image, by its number.",

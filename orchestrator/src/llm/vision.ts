@@ -39,6 +39,17 @@ export interface VisionCallInput<T> {
   input: string;
   images: readonly VisionImageBlock[];
   maxOutputTokens: number;
+  /**
+   * What the answer is actually expected to cost in output tokens, for the reservation only.
+   *
+   * Separate from `maxOutputTokens`, which is the ceiling that stops a runaway answer. Reserving
+   * the ceiling charged every gate call for output it has never once used: 1,200 tokens at
+   * $5/MTok is $0.006, thirty per cent of a two-cent article cap, against a real one-candidate
+   * verdict of about 130 tokens. The article cap then refused the rungs below — on 21 August it
+   * refused the illustration gate for a render that had already been billed. Omit it and the
+   * ceiling is reserved, which is the old behaviour.
+   */
+  expectedOutputTokens?: number;
   tool: AnthropicVisionRequest["tool"];
   parse: (value: unknown) => T;
   budget: ImageProgramBudget;
@@ -96,7 +107,7 @@ export async function guardedVisionCall<T>(
     // into the estimator's own unit rather than given a second cost path to drift from.
     promptChars: request.system.length + request.input.length
       + request.images.length * VISION_TOKENS_PER_IMAGE * 3.5,
-    maxOutputTokens: request.maxOutputTokens
+    maxOutputTokens: request.expectedOutputTokens ?? request.maxOutputTokens
   });
   const refusal = request.budget.reserve(estimate.estimatedUsd);
   // Refused here, before any socket is opened. That is the whole of the guarantee: an over-cap
@@ -164,6 +175,18 @@ export async function guardedVisionCall<T>(
   // not it matches the contract, and a verdict that fails to parse must still close the budget
   // it consumed, or a malformed reply becomes a way to make free calls.
   request.budget.record(actual.estimatedUsd);
+
+  // Truncation is checked before parsing, because a half-written tool payload fails the contract
+  // for a reason the contract cannot express. Reported separately so the receipt says "the answer
+  // did not fit" rather than "the model broke its schema" — the first is ours to size, the second
+  // would be theirs to fix, and for three weeks the record claimed the wrong one.
+  if (response.truncated) {
+    return {
+      ok: false,
+      reason: `truncated:${response.tokensOut}-of-${request.maxOutputTokens}`,
+      usd: actual.estimatedUsd
+    };
+  }
 
   let value: T;
   try {
