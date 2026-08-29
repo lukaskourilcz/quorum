@@ -98,6 +98,11 @@ export const PhaseSchema = z.enum([
   "article-am",
   "article-pm",
   "studio",
+  // The venture days. A day writes no record of its own, but it is the phase a skip or a
+  // budget stop is filed under when the whole day is refused, so it needs a name here.
+  "cu-day",
+  "mma-day",
+  "dm-day",
   // The Monday retro. It has no cron of its own — the night shift runs it after the weekly
   // report is written — but it needs a name of its own for the ledger and the skip record.
   "weekly-retro"
@@ -126,7 +131,13 @@ export const RunnablePhaseSchema = z.enum([
   "article-am",
   "article-pm",
   "studio",
-  "night"
+  "night",
+  // The venture days. Each runs its venture's existing rooms in order inside one slot; the rooms
+  // above stay runnable so an owner can dispatch one, a replay can rebuild one, and the suite can
+  // exercise one on its own.
+  "cu-day",
+  "mma-day",
+  "dm-day"
 ]);
 export type RunnablePhase = z.infer<typeof RunnablePhaseSchema>;
 
@@ -151,7 +162,10 @@ export const ScheduledPhaseSchema = z.enum([
   "article-am",
   "article-pm",
   "studio",
-  "night"
+  "night",
+  "cu-day",
+  "mma-day",
+  "dm-day"
 ]);
 export type ScheduledPhase = z.infer<typeof ScheduledPhaseSchema>;
 

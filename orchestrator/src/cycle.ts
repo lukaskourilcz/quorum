@@ -160,6 +160,7 @@ export {
 } from "./cycle/types.js";
 import { hasDeliveredPublishedEdition } from "./cycle/types.js";
 import type { CycleOptions, CycleResult } from "./cycle/types.js";
+import { isVentureDayPhase, runVentureDay } from "./cycle/venture-day.js";
 import {
   runCaughtUpDryCycle,
   runCaughtUpLiveEditionCycle,
@@ -350,6 +351,13 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         alreadyRecordedAt: path.relative(repoRoot, path.join(stateRoot, recorded))
       };
     }
+  }
+  // A venture day is dispatched before every per-phase branch and takes no lock of its own: it is
+  // a sequence of the branches below, and each one locks and unlocks exactly as it does when it is
+  // dispatched alone. `withFileLock` is not re-entrant, so holding one here would deadlock the
+  // first step.
+  if (isVentureDayPhase(options.phase)) {
+    return runVentureDay(options.phase, { ...options, now }, runCycle);
   }
   // The quiet-day wrapper sits inside the lock, so the skip record and the calendar it rebuilds
   // are written under the same exclusion as the records of a room that ran.

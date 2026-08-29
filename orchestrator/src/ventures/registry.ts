@@ -73,6 +73,14 @@ export function publicVentures(registry: VentureRegistry): VentureRegistry["vent
  * None of those can be paused from Settings, so no phase of theirs resolves to a venture here.
  */
 export const PHASE_VENTURES: Readonly<Partial<Record<RunnablePhase, string>>> = {
+  // The venture days first, because they are what the schedule dispatches now. A paused venture's
+  // day ends before its first room, which is the same guarantee the individual phases below give
+  // an owner-dispatched run. `mma-day` is the one deliberate exception to "FightAIQ never pauses":
+  // its data checks are steps of the MMA Files day, so pausing that magazine stands them down with
+  // it — FightAIQ still cannot be paused on its own, and has no switch in Settings.
+  "cu-day": "caught-up",
+  "mma-day": "mma-files",
+  "dm-day": "door-money",
   "cu-edition": "caught-up",
   "cu-product": "caught-up",
   "tt-marketing": "titty-tuesdays",
