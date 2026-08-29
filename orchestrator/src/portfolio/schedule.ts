@@ -144,6 +144,15 @@ export function resolveEffectivePortfolioSchedule(input: {
   fightAiQFoundingRaw?: string;
   kvorumFoundingRaw?: string;
   kvorumBudgetCapacityRaw?: string;
+  /**
+   * The launch-period hold on the idea rooms, `operations-2026-08b`.
+   *
+   * Countersigned, `cu-product` and `tt-marketing` stop meeting and each scheduled slot records a
+   * `$0` skip naming the decision — the same shape `kv-desk` uses, and for the same reason: a room
+   * that should not meet is a decision the owner signs, not a switch a session flips. Unsigned or
+   * absent, both rooms meet exactly as before.
+   */
+  ideaRoomHoldRaw?: string;
   monthlyApiHeadroomUsd: number;
 }): EffectivePortfolioSchedule {
   if (!Number.isFinite(input.monthlyApiHeadroomUsd) || input.monthlyApiHeadroomUsd < 0) {
@@ -155,6 +164,7 @@ export function resolveEffectivePortfolioSchedule(input: {
   const fightAiQFoundingStatus = signedOwnerDecision(input.fightAiQFoundingRaw ?? "");
   const kvorumFoundingStatus = signedOwnerDecision(input.kvorumFoundingRaw ?? "");
   const kvorumBudgetCapacityStatus = kvorumBudgetCapacityDecision(input.kvorumBudgetCapacityRaw ?? "");
+  const ideaRoomHoldStatus = signedOwnerDecision(input.ideaRoomHoldRaw ?? "");
   const shape: BudgetShape = decisionStatus === "countersigned-shape-a" ? "A" : "B";
   // budget-2026-08d unlocks the full scheduled clock and is still the signal the runtime
   // reads. budget-2026-08f supersedes the later $30 all-in amount with $50 while preserving the
@@ -194,6 +204,14 @@ export function resolveEffectivePortfolioSchedule(input: {
   // countersignature and a separate owner record that identifies at least $0.08 of capacity.
   if (kvorumFoundingStatus !== "countersigned" || kvorumBudgetCapacityStatus !== "countersigned") {
     active.delete("kv-desk");
+  }
+  // The launch-period idea hold. Both rooms produce ideas nobody has acted on — nine Titty
+  // Tuesdays cards have sat unrated since they were written — so the owner held them while the
+  // finished work gets promoted instead. Holding tt-marketing is also where Kvorum's $0.08 of
+  // worst-day capacity comes from, which is why the two records are one story.
+  if (ideaRoomHoldStatus === "countersigned") {
+    active.delete("cu-product");
+    active.delete("tt-marketing");
   }
   let ttTranscriptMode: EffectivePortfolioSchedule["ttTranscriptMode"] = "full";
   // The content gate goes first of everything, because it is the only rung whose loss costs

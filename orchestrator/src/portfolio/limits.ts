@@ -43,7 +43,7 @@ export function environmentBudgetLimits(schedule: {
  */
 export async function loadRuntimeBudgetLimits(): Promise<BudgetLimits> {
   const decision = (name: string) => readFile(path.join(stateRoot, "decisions", name), "utf8");
-  const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw] = await Promise.all([
+  const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, ideaRoomHoldRaw] = await Promise.all([
     loadVentureRegistry(),
     decision("2026-08-01-budget-raise.md"),
     decision("2026-08-02-budget-mma.md"),
@@ -56,6 +56,10 @@ export async function loadRuntimeBudgetLimits(): Promise<BudgetLimits> {
     decision("2026-08-12-kvorum-budget-capacity.md").catch((error: NodeJS.ErrnoException) => {
       if (error.code === "ENOENT") return "";
       throw error;
+    }),
+    decision("2026-08-29-launch-idea-room-hold.md").catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return "";
+      throw error;
     })
   ]);
   return environmentBudgetLimits(resolveEffectivePortfolioSchedule({
@@ -66,6 +70,7 @@ export async function loadRuntimeBudgetLimits(): Promise<BudgetLimits> {
     fightAiQFoundingRaw,
     kvorumFoundingRaw,
     kvorumBudgetCapacityRaw,
+    ideaRoomHoldRaw,
     monthlyApiHeadroomUsd: 0
   }));
 }
@@ -82,7 +87,7 @@ export async function loadEffectivePortfolioSchedule(
   monthApiSpentUsd: number
 ): Promise<EffectivePortfolioSchedule> {
   const decision = (name: string) => readFile(path.join(stateRoot, "decisions", name), "utf8");
-  const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw] = await Promise.all([
+  const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, ideaRoomHoldRaw] = await Promise.all([
     loadVentureRegistry(),
     decision("2026-08-01-budget-raise.md"),
     decision("2026-08-02-budget-mma.md"),
@@ -95,9 +100,13 @@ export async function loadEffectivePortfolioSchedule(
     decision("2026-08-12-kvorum-budget-capacity.md").catch((error: NodeJS.ErrnoException) => {
       if (error.code === "ENOENT") return "";
       throw error;
+    }),
+    decision("2026-08-29-launch-idea-room-hold.md").catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return "";
+      throw error;
     })
   ]);
-  const shapeInput = { registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw };
+  const shapeInput = { registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, ideaRoomHoldRaw };
   const enforcedMonthlyApiUsd = environmentBudgetLimits(
     resolveEffectivePortfolioSchedule({ ...shapeInput, monthlyApiHeadroomUsd: 0 })
   ).monthlyApiUsd;

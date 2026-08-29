@@ -919,7 +919,7 @@ export async function runPortfolioCycle(input: {
   now: Date;
 }): Promise<PortfolioCycleResult> {
   const fixedMonthlyUsd = await loadFixedMonthlyUsd(configRoot, input.now);
-  const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, budgetLedger, stages, routing, agents, modelConfig, agentControls, meetingPolicy] = await Promise.all([
+  const [registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, ideaRoomHoldRaw, budgetLedger, stages, routing, agents, modelConfig, agentControls, meetingPolicy] = await Promise.all([
     loadVentureRegistry(),
     readFile(path.join(stateRoot, "decisions", "2026-08-01-budget-raise.md"), "utf8"),
     readFile(path.join(stateRoot, "decisions", "2026-08-02-budget-mma.md"), "utf8"),
@@ -930,6 +930,10 @@ export async function runPortfolioCycle(input: {
       throw error;
     }),
     readFile(path.join(stateRoot, "decisions", "2026-08-12-kvorum-budget-capacity.md"), "utf8").catch((error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return "";
+      throw error;
+    }),
+    readFile(path.join(stateRoot, "decisions", "2026-08-29-launch-idea-room-hold.md"), "utf8").catch((error: NodeJS.ErrnoException) => {
       if (error.code === "ENOENT") return "";
       throw error;
     }),
@@ -949,7 +953,7 @@ export async function runPortfolioCycle(input: {
   // superseded budget-2026-08d while enforcement held at $25, so computed headroom could
   // never fall below $17 and not one rung was reachable. A schedule's amounts depend only on
   // its shape flags, so the first pass can read the cap at any headroom.
-  const shapeInput = { registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw };
+  const shapeInput = { registry, budgetDecisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, ideaRoomHoldRaw };
   const enforcedMonthlyApiUsd = environmentBudgetLimits(
     resolveEffectivePortfolioSchedule({ ...shapeInput, monthlyApiHeadroomUsd: 0 })
   ).monthlyApiUsd;

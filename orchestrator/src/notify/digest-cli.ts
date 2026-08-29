@@ -29,7 +29,7 @@ const now = new Date(valueAfter(args, "--at") ?? Date.now());
 const date = valueAfter(args, "--date") ?? pragueClockParts(now).date;
 const dry = args.includes("--dry");
 const digestRoot = dry ? path.join(repoRoot, "tmp", "dry-run", "state") : stateRoot;
-const [registry, decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, ledgerRaw, nonModelRaw, allowlist, records] = await Promise.all([
+const [registry, decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, ideaRoomHoldRaw, ledgerRaw, nonModelRaw, allowlist, records] = await Promise.all([
   loadVentureRegistry(),
   readFile(path.join(stateRoot, "decisions", "2026-08-01-budget-raise.md"), "utf8"),
   readFile(path.join(stateRoot, "decisions", "2026-08-02-budget-mma.md"), "utf8"),
@@ -43,6 +43,10 @@ const [registry, decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw,
     if (error.code === "ENOENT") return "";
     throw error;
   }),
+  readFile(path.join(stateRoot, "decisions", "2026-08-29-launch-idea-room-hold.md"), "utf8").catch((error: NodeJS.ErrnoException) => {
+    if (error.code === "ENOENT") return "";
+    throw error;
+    }),
   readFile(path.join(stateRoot, "budget", "ledger.json"), "utf8"),
   readText(stateRoot, "budget/all-in.jsonl"),
   readFile(path.join(configRoot, "network-allowlist.json"), "utf8").then((raw) => JSON.parse(raw) as { runtimeHosts: string[] }),
@@ -61,6 +65,7 @@ const effective = resolveEffectivePortfolioSchedule({
   fightAiQFoundingRaw,
   kvorumFoundingRaw,
   kvorumBudgetCapacityRaw,
+  ideaRoomHoldRaw,
   monthlyApiHeadroomUsd: Math.max(0, provisionalCap - spent)
 });
 const schedule = resolveScheduledClock(registry).filter((slot) => effective.activePhases.includes(slot.phase));

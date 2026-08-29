@@ -20,7 +20,7 @@ function valueAfter(args: string[], flag: string): string | undefined {
 const args = process.argv.slice(2);
 const phase = ScheduledPhaseSchema.parse(valueAfter(args, "--phase"));
 const now = new Date(valueAfter(args, "--at") ?? Date.now());
-const [registry, decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, ledgerRaw] = await Promise.all([
+const [registry, decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, ideaRoomHoldRaw, ledgerRaw] = await Promise.all([
   loadVentureRegistry(),
   readFile(path.join(stateRoot, "decisions", "2026-08-01-budget-raise.md"), "utf8"),
   readFile(path.join(stateRoot, "decisions", "2026-08-02-budget-mma.md"), "utf8"),
@@ -34,6 +34,10 @@ const [registry, decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw,
     if (error.code === "ENOENT") return "";
     throw error;
   }),
+  readFile(path.join(stateRoot, "decisions", "2026-08-29-launch-idea-room-hold.md"), "utf8").catch((error: NodeJS.ErrnoException) => {
+    if (error.code === "ENOENT") return "";
+    throw error;
+    }),
   readFile(path.join(stateRoot, "budget", "ledger.json"), "utf8")
 ]);
 const month = new Intl.DateTimeFormat("en-CA", {
@@ -49,7 +53,7 @@ const spent = entries
 // The cap the runtime enforces, not the superseded $42 of budget-2026-08d. This gate runs
 // before the cycle and decides whether a phase opens at all, so a looser figure here than
 // the runtime holds would let a phase through that the runtime then refuses to fund.
-const shapeInput = { registry, budgetDecisionRaw: decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw };
+const shapeInput = { registry, budgetDecisionRaw: decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, ideaRoomHoldRaw };
 const enforcedMonthlyApiUsd = environmentBudgetLimits(
   resolveEffectivePortfolioSchedule({ ...shapeInput, monthlyApiHeadroomUsd: 0 })
 ).monthlyApiUsd;

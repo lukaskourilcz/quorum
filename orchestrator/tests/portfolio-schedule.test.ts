@@ -97,6 +97,37 @@ describe("portfolio schedule and budget gate", () => {
   it("extends the monthly-headroom degradation ladder without displacing Caught Up", async () => {
     const registry = await loadVentureRegistry();
     expect(ROOM_DEGRADATION_ORDER).toEqual(["dm-growth", "kv-desk", "dm-desk", "ts-desk", "bh-desk", "gv-brief", "tt-marketing"]);
+  });
+
+  it("holds the two idea rooms only once the owner has countersigned the hold", async () => {
+    const registry = await loadVentureRegistry();
+    const shapeA = await readFile(path.join(repoRoot, "state/decisions/2026-08-01-budget-raise.md"), "utf8");
+    const base = { registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 15 };
+    const signed = [
+      "Status: countersigned",
+      "Signature / explicit approval reference: owner-test"
+    ].join("\n");
+    const pending = [
+      "Status: pending countersignature",
+      "Signature / explicit approval reference: ____________________"
+    ].join("\n");
+
+    // Unsigned, absent and blank all mean the rooms meet. A hold is a decision the owner signs,
+    // never a default, and never something a session can switch on by writing a file.
+    for (const raw of [undefined, "", pending]) {
+      const open = resolveEffectivePortfolioSchedule({ ...base, ...(raw === undefined ? {} : { ideaRoomHoldRaw: raw }) });
+      expect(open.activePhases).toContain("cu-product");
+      expect(open.activePhases).toContain("tt-marketing");
+    }
+
+    const held = resolveEffectivePortfolioSchedule({ ...base, ideaRoomHoldRaw: signed });
+    expect(held.activePhases).not.toContain("cu-product");
+    expect(held.activePhases).not.toContain("tt-marketing");
+    // Exactly those two. The hold is about idea generation, and everything that publishes or
+    // produces has to keep meeting — the whole point was to promote finished work, not pause it.
+    const open = resolveEffectivePortfolioSchedule({ ...base, ideaRoomHoldRaw: pending });
+    expect(open.activePhases.filter((phase) => !held.activePhases.includes(phase)).sort())
+      .toEqual(["cu-product", "tt-marketing"]);
     const growthDropped = resolveEffectivePortfolioSchedule({ registry, budgetDecisionRaw: shapeA, monthlyApiHeadroomUsd: 2.74 });
     expect(growthDropped.activePhases).not.toContain("dm-growth");
     expect(growthDropped.activePhases).toEqual(expect.arrayContaining(["dm-desk", "gv-brief"]));
