@@ -751,11 +751,21 @@ jobs:
           # filed a skip over a published edition and failed the run on every good day.
           EDITION_RETRY: ${{ steps.mode.outputs.edition_retry }}
         run: |
+          # Everything the cycle may write down about itself. A path missing from this list is
+          # not an error anywhere: the phase writes the file into the runner's tree, nothing
+          # stages it, and the change dies with the container — so the admin keeps rendering
+          # whatever was last committed by some other route and looks merely stale rather than
+          # broken. That is exactly what happened to state/owner-attention.json, which the cycle
+          # rebuilds on every non-dry phase and had never once committed: the only commit that
+          # ever touched it was a hand-authored docs change, so the owner's approvals view spent
+          # over two weeks showing a fifteen-day-old picture of what was waiting on him. The
+          # operations and programs snapshots were absent for the same reason and had never been
+          # committed at all. When a phase starts writing a new artifact, its path belongs here.
           runtime_paths=(
             config/visual-weights config/ventures.json state/autonomy state/budget state/standups state/meetings
             state/scorecards state/decisions state/calendar state/edition state/ideas state/meeting-agendas state/priority-queue.json
             state/kpis state/money state/mma state/marketingshark state/notify state/social state/taste state/ventures state/INBOX.md
-            state/reports
+            state/reports state/owner-attention.json state/operations state/programs
             docs/NEEDED.md
             docs/ECOSYSTEM.md
             site/public/social

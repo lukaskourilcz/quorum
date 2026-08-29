@@ -144,6 +144,16 @@ describe("automation policy", () => {
     // absence would have re-served the same question every morning while the packages piled up.
     expect(cycle).toContain("state/marketingshark");
     expect(cycle).toContain("state/meeting-agendas state/priority-queue.json");
+    // The same class again, and the longest-lived instance of it. `collectOwnerAttention` runs on
+    // every non-dry phase and its path was never in this list, so the file was rebuilt in the
+    // runner's tree and thrown away with the container every time. The only commit that ever
+    // touched it was a hand-authored docs change, which is why the admin's approvals view spent
+    // fifteen days telling the owner about a picture of the portfolio that had already moved on.
+    // The operations and programs snapshots were absent for the same reason and had never been
+    // committed at all, so two more admin surfaces read nothing.
+    expect(cycle).toContain("state/owner-attention.json");
+    expect(cycle).toContain("state/operations");
+    expect(cycle).toContain("state/programs");
     expect(cycle).toContain(
       'test -e "$runtime_path" || git ls-files --error-unmatch -- "$runtime_path"'
     );
