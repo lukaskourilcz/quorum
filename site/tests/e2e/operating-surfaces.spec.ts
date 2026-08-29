@@ -5,6 +5,7 @@ import path from "node:path";
 import { expect, test } from "@playwright/test";
 import { CALENDAR_SLOTS } from "../../src/lib/calendar-feed-model";
 import { PUBLIC_VENTURE_SLUGS } from "../../src/data/public-venture-slugs";
+import registry from "../../../config/ventures.json" with { type: "json" };
 
 const axeRoutes = [
   "/",
@@ -1280,29 +1281,31 @@ const OPENABLE_ROOMS = [
   "kvorum"
 ] as const;
 
-test("the home walkthrough carries all eleven ventures at mobile width", async ({ page }) => {
+test("the home walkthrough carries every operating venture at mobile width", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/", { waitUntil: "networkidle" });
 
-  const ventures = [
-    "DNESKAi",
-    "Titty Tuesdays",
-    "GoVIRAL",
-    "BOOKSOFHISTORY",
-    "FightAIQ",
-    "Design Lab",
-    "marketingShark",
-    "MMA Files",
-    "Door Money",
-    "Tehdejší svět",
-    "Kvórum"
-  ];
-  await expect(page.locator("[data-proj-card]")).toHaveCount(11);
-  for (const venture of ventures) {
-    await expect(page.locator("[data-proj-card]", { hasText: venture })).toHaveCount(1);
+  /*
+   * Counted off the registry rather than pinned.
+   *
+   * A venture the owner pauses in Settings leaves the wall, its desk channel leaves the workspace
+   * view and its room leaves the workflows plan — all three together, which is the invariant worth
+   * guarding. Pinning eleven would have failed the day he paused Door Money and told us nothing
+   * about whether the three surfaces agreed.
+   */
+  const operating = (registry.ventures as Array<{ id: string; name: string; status?: string; visibility: string }>)
+    .filter((venture) => venture.visibility === "public" && venture.status !== "paused");
+  const displayName = (venture: { id: string; name: string }) =>
+    venture.id === "caught-up" ? "DNESKAi" : venture.name;
+  await expect(page.locator("[data-proj-card]")).toHaveCount(operating.length);
+  for (const venture of operating) {
+    await expect(page.locator("[data-proj-card]", { hasText: displayName(venture) })).toHaveCount(1);
   }
-  await expect(page.locator("[data-chat-list] button")).toHaveCount(12);
-  await expect(page.locator('[data-wf-place]:not([data-wf-place="dock"])')).toHaveCount(12);
+  // The company board has a channel and a room of its own, so both counts are the ventures plus
+  // one. FightAIQ keeps its own channel and room even though its data checks run inside the MMA
+  // Files day: the clock consolidated, the desks did not.
+  await expect(page.locator("[data-chat-list] button")).toHaveCount(operating.length + 1);
+  await expect(page.locator('[data-wf-place]:not([data-wf-place="dock"])')).toHaveCount(operating.length + 1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(1);
 });
 
