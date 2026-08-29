@@ -3,6 +3,18 @@
   "overrides": [
     {
       "venture": "caught-up",
+      "slug": "2026-08-26-openai-odchody-robotika-valuace",
+      "date": "2026-08-26",
+      "style": "terrace",
+      "family": "terrace",
+      "variant": "A",
+      "accentSwap": false,
+      "treatment": "mono",
+      "typeScale": 0.9,
+      "changedAt": "2026-08-29T18:05:27.051Z"
+    },
+    {
+      "venture": "caught-up",
       "slug": "2026-08-19-chatgpt-reklamy-evropa-ai-hardware",
       "date": "2026-08-19",
       "style": "marginalia",
@@ -62,5 +74,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-08-19T16:28:17.709Z"
+  "updatedAt": "2026-08-29T18:05:27.051Z"
 }
