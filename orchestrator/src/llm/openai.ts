@@ -35,7 +35,17 @@ export class ModelResponseTruncatedError extends Error {
     readonly cap: number,
     reason: string,
     /** The provider still bills a cut-off reply; carry its usage to the guarded ledger. */
-    readonly response?: TextProviderResponse
+    readonly response?: TextProviderResponse,
+    /**
+     * What the cut-off reply was billed, once the guarded call has priced it.
+     *
+     * `ModelOutputParseError` has carried this from the start and callers add it to their own
+     * spend; truncation did not, so a room that hit its output cap wrote the charge to the ledger
+     * and then reported spending nothing. marketingShark's 29 August record says
+     * `actualCycleUsd: 0` against $0.035154 in the same run's ledger entry, and had said so
+     * nineteen times. Optional because only the guarded path knows the price.
+     */
+    readonly usd?: number
   ) {
     super(`Response ${reason} at the ${cap}-token cap for ${model}; raise maxOutputTokens`);
     this.name = "ModelResponseTruncatedError";

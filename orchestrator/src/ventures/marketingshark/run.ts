@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { BudgetError, BudgetLedgerEntrySchema, type BudgetLedgerEntry } from "../../budget.js";
-import { ModelOutputParseError } from "../../llm/call.js";
+import { ModelOutputParseError, ModelResponseTruncatedError } from "../../llm/call.js";
 import { loadFixedMonthlyUsd } from "../../money/fixed-costs.js";
 import { MeetingSkipSchema } from "../../contracts/meeting-skip.js";
 import { guardedJsonCall } from "../../llm/call.js";
@@ -439,7 +439,10 @@ export async function runBrandDay(input: {
       if (error instanceof BudgetError) throw error;
       // guardedJsonCall writes the ledger entry before it throws, so an unparsable reply was
       // still billed. The amount rides on the error and the record has to carry it.
+      // Both carry what the provider billed for a reply that could not be used. Counting only the
+      // parse case left a truncated room reporting $0 against a real charge on the same ledger.
       if (error instanceof ModelOutputParseError) spendUsd += error.usd;
+      if (error instanceof ModelResponseTruncatedError) spendUsd += error.usd ?? 0;
       return {
         outcome: { status: "aborted", brandId: brand.id, reason: "model-output-invalid", detail: message(error), spendUsd },
         ledger: input.ledger,
@@ -766,7 +769,12 @@ export function buildMeetingRecord(input: {
   const times = Array.from({ length: 4 }, (_, index) => new Date(input.now.getTime() + index * 60_000).toISOString());
   const summary = drafted.length === 0
     ? aborted.length > 0
-      ? `No package was drafted. ${aborted.map((outcome) => `${outcome.brandId}: ${outcome.reason}`).join("; ")}.`
+      // The reason is a code and the detail is the sentence that explains it. Printing the code
+      // alone is how a truncated reply read as `model-output-invalid` in nineteen consecutive
+      // records while the error it came from already said "Response truncated at the 3000-token
+      // cap for <model>; raise maxOutputTokens" — the diagnosis was generated every day and
+      // dropped every day.
+      ? `No package was drafted. ${aborted.map((outcome) => `${outcome.brandId}: ${outcome.reason} — ${outcome.detail}`).join("; ")}.`
       : "Every enabled brand already had today's package; nothing was re-served."
     : `${drafted.length} draft ${drafted.length === 1 ? "package" : "packages"}: ${drafted.map((outcome) => `${outcome.brandId} (${outcome.hookA}/${outcome.hookB}${outcome.relaxed ? ", cooldown relaxed" : ""})`).join("; ")}.`;
 
