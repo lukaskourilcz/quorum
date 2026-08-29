@@ -15,6 +15,7 @@ import type { EditionModelGateway } from "./types.js";
 import type { EditionPackage } from "../contracts/edition-package.js";
 import { validateEditionForDelivery } from "../delivery/validate.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
+import { loadVentureCapabilityMap } from "../ventures/capabilities.js";
 import { loadRuntimeBudgetLimits } from "../portfolio/limits.js";
 import { newestTrendSnapshot } from "../portfolio/evidence.js";
 import { runScrapersDetailed, type ScrapeRunResult } from "../sources/run.js";
@@ -328,7 +329,14 @@ export async function runLiveEdition(input: {
       productionCap
     );
     const produce = input.dependencies?.produce ?? produceEdition;
-    const trending = (await newestTrendSnapshot(root, input.date))?.forMagazines.ai ?? [];
+    // A cross-venture read, resolved against the capability map like every other. An unreadable
+    // map or an unregistered venture leaves the edition without a tiebreaker, which is the same
+    // thing a week with no snapshot leaves it with.
+    const capabilityMap = await loadVentureCapabilityMap(configRoot).catch(() => null);
+    const snapshot = capabilityMap
+      ? await newestTrendSnapshot(root, input.date, { venture: "caught-up", capabilityMap })
+      : null;
+    const trending = snapshot?.forMagazines.ai ?? [];
     const productionInput: EditionProductionInput = {
       date: input.date,
       now: input.now,
