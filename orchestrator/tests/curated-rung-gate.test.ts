@@ -50,20 +50,26 @@ function verdict(mode: string, selected: string | null, reason: string): GateOut
   };
 }
 
-/** A gate that refuses the first `refusals` files it is shown and approves everything after. */
-function refusingGate(refusals: number, seen: Array<{ mode: string; title: string }>) {
-  let refused = 0;
+/**
+ * A gate that records every call and picks the file at `pick` in the shortlist it is shown.
+ *
+ * One call per rung now, not one per file, so `seen` is a list of calls and each entry carries
+ * the whole shortlist that call judged. `pick: null` refuses everything, which is how a rotation
+ * that is not answering today descends.
+ */
+function shortlistGate(
+  pick: number | null,
+  seen: Array<{ mode: string; titles: string[] }>
+) {
   return async (input: AssessCandidatesInput): Promise<GateOutcome> => {
-    const candidate = input.candidates[0]!;
-    seen.push({ mode: input.mode, title: candidate.title });
+    seen.push({ mode: input.mode, titles: input.candidates.map((candidate) => candidate.title) });
     if (input.mode === "identity-advisory") {
       return { selected: null, verdict: verdict(input.mode, null, "advisory-only") };
     }
-    if (refused < refusals) {
-      refused += 1;
-      return { selected: null, verdict: verdict(input.mode, null, "all-candidates-rejected") };
-    }
-    return { selected: candidate, verdict: verdict(input.mode, candidate.id, "Fine.") };
+    const chosen = pick === null ? undefined : input.candidates[pick];
+    return chosen
+      ? { selected: chosen, verdict: verdict(input.mode, chosen.id, "Fine.") }
+      : { selected: null, verdict: verdict(input.mode, null, "all-candidates-rejected") };
   };
 }
 
@@ -107,47 +113,51 @@ const IDENTITY: LicensedPhotoCandidate = {
 };
 
 describe("the gate on a curated rotation", () => {
-  it("moves to the next file when the one it was shown is refused", async () => {
-    // A curated file was reviewed once, by a person, at 640px. Commons files get relicensed,
-    // replaced and re-cropped after that, and this is how the ladder notices.
-    const seen: Array<{ mode: string; title: string }> = [];
+  it("judges the whole shortlist in one call and may pick any of it", async () => {
+    /*
+     * The rung used to ask about one file at a time, so three looks were three calls carrying
+     * three unrelated yes/no answers. The search rung has always batched — its own comment says
+     * why, that the scores mean something against each other — and this rung does now too.
+     */
+    const seen: Array<{ mode: string; titles: string[] }> = [];
     const rotation = illustrativeRotation("oktagon:gustavo-lopez");
     const chosen = await selectArticleHero(person(), {
       sportPhoto: (options) => illustrativeSportPhoto({ ...options, fetchJson: async (url) => commons(url) }),
-      gate: refusingGate(1, seen)
+      gate: shortlistGate(1, seen)
     });
 
-    expect(seen.map((entry) => entry.title)).toEqual([rotation[0]!.file, rotation[1]!.file]);
-    expect(seen.every((entry) => entry.mode === "curated")).toBe(true);
+    // One call, holding the first three of the rotation.
+    expect(seen).toHaveLength(1);
+    expect(seen[0]!.mode).toBe("curated");
+    expect(seen[0]!.titles).toEqual(rotation.slice(0, CURATED_GATE_ATTEMPTS).map((photo) => photo.file));
+    // And it may pick something other than the first, which is what comparing is for.
     expect(chosen.rung).toBe("curated");
     expect(chosen.candidate?.title).toBe(rotation[1]!.file);
-    // Both looks are on the record, the refusal included.
-    expect(chosen.verdicts.map((entry) => entry.reason))
-      .toEqual(["all-candidates-rejected", "Fine."]);
+    expect(chosen.verdicts.map((entry) => entry.reason)).toEqual(["Fine."]);
   });
 
-  it("descends to the plate when the rotation keeps being refused", async () => {
-    const seen: Array<{ mode: string; title: string }> = [];
+  it("descends to the plate when the whole shortlist is refused", async () => {
+    const seen: Array<{ mode: string; titles: string[] }> = [];
     const chosen = await selectArticleHero(person(), {
       sportPhoto: (options) => illustrativeSportPhoto({ ...options, fetchJson: async (url) => commons(url) }),
-      gate: refusingGate(Number.MAX_SAFE_INTEGER, seen)
+      gate: shortlistGate(null, seen)
     });
 
     expect(chosen.rung).toBe("plate");
     expect(chosen.candidate).toBeNull();
-    // Bounded on purpose. The rotation holds nine files at a gate call each, against a two-cent
-    // article cap; spending all of it here would leave nothing for the rung that needs the gate
-    // most, where nobody has reviewed anything.
-    expect(seen).toHaveLength(CURATED_GATE_ATTEMPTS);
-    expect(chosen.verdicts).toHaveLength(CURATED_GATE_ATTEMPTS);
+    // Still bounded, and still one call. Every candidate on a shortlist is a thumbnail the model
+    // reads, so the shortlist stays at three even though the calls no longer multiply.
+    expect(seen).toHaveLength(1);
+    expect(seen[0]!.titles).toHaveLength(CURATED_GATE_ATTEMPTS);
+    expect(chosen.verdicts).toHaveLength(1);
   });
 
   it("gates the edition's curated scenes the same way", async () => {
-    const seen: Array<{ mode: string; title: string }> = [];
+    const seen: Array<{ mode: string; titles: string[] }> = [];
     const chosen = await selectEditionHero(
       { ...context(), venture: "caught-up", seed: "2026-08-08", subjectQuery: "data centre" },
       {
-        scenePhoto: async ({ accept }) => {
+        scenePhoto: async ({ veto, choose }) => {
           const candidate: LicensedPhotoCandidate = {
             id: "scene:1",
             provider: "wikimedia",
@@ -162,14 +172,15 @@ describe("the gate on a curated rotation", () => {
             attributionHtml: "CERN · CC BY-SA · Wikimedia Commons",
             illustrative: true
           };
-          return (await accept?.(candidate)) === false ? null : candidate;
+          if (await veto?.(candidate)) return null;
+          return choose ? await choose([candidate]) : candidate;
         },
         search: async () => ({ candidates: [], skippedProviders: [] }),
-        gate: refusingGate(Number.MAX_SAFE_INTEGER, seen)
+        gate: shortlistGate(null, seen)
       }
     );
 
-    expect(seen).toEqual([{ mode: "curated", title: "CERN Server 03.jpg" }]);
+    expect(seen).toEqual([{ mode: "curated", titles: ["CERN Server 03.jpg"] }]);
     expect(chosen.rung).toBe("plate");
   });
 });
@@ -179,18 +190,18 @@ describe("the gate on the identity rung", () => {
     // The honesty law. An entity-linked photograph is used or the ladder descends; it is never
     // swapped for something that scored better, because "scored better" is about how a picture
     // looks and this rung is about who is in it.
-    const seen: Array<{ mode: string; title: string }> = [];
+    const seen: Array<{ mode: string; titles: string[] }> = [];
     const chosen = await selectArticleHero(
       person({ identityPhoto: async () => IDENTITY }),
       {
         sportPhoto: async () => {
           throw new Error("rung two must not be reached");
         },
-        gate: refusingGate(Number.MAX_SAFE_INTEGER, seen)
+        gate: shortlistGate(null, seen)
       }
     );
 
-    expect(seen).toEqual([{ mode: "identity-advisory", title: IDENTITY.title }]);
+    expect(seen).toEqual([{ mode: "identity-advisory", titles: [IDENTITY.title] }]);
     expect(chosen.rung).toBe("entity-linked");
     expect(chosen.candidate).toEqual(IDENTITY);
     // Its own alt text is untouched too: the gate never writes alt for a photograph of a person.
