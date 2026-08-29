@@ -55,6 +55,29 @@ function output(brand: Brand, overrides: Partial<ChumOutput> = {}): ChumOutput {
   });
 }
 
+describe("the shape CHUM must return", () => {
+  it("requires the five roles in the order the renderer assumes", async () => {
+    const brand = await devshark();
+    const valid = output(brand);
+    expect(ChumOutput.safeParse(valid).success).toBe(true);
+
+    // renderCarousel picks each slide's template with SLIDE_ROLES[index] and never reads the role
+    // the model wrote. Before this rule, `why` twice with no `footer` parsed cleanly and the
+    // fourth slide's copy was rendered through the footer's template — the brand's slide-5 line
+    // silently replaced by an explanation, with nothing reporting a problem.
+    const duplicated = structuredClone(valid) as typeof valid;
+    duplicated.carousels.en.slides[4] = { ...duplicated.carousels.en.slides[3]! };
+    expect(ChumOutput.safeParse(duplicated).success).toBe(false);
+
+    // Same five roles, wrong order: also refused, because position is what the renderer trusts.
+    const reordered = structuredClone(valid) as typeof valid;
+    const [first, second] = [reordered.carousels.cs.slides[0]!, reordered.carousels.cs.slides[1]!];
+    reordered.carousels.cs.slides[0] = second;
+    reordered.carousels.cs.slides[1] = first;
+    expect(ChumOutput.safeParse(reordered).success).toBe(false);
+  });
+});
+
 describe("marketingShark truth gates", () => {
   it("passes copy that is inside every cap and true of the question", async () => {
     const brand = await devshark();
