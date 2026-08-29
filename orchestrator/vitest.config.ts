@@ -11,6 +11,8 @@ export default defineConfig({
     testTimeout: 30_000,
     hookTimeout: 30_000,
     environment: "node",
+    // Every run starts without a provider credential. See the file for the outage this ends.
+    setupFiles: ["tests/setup/provider-env.ts"],
     include: ["tests/**/*.test.ts", "src/**/*.test.ts"]
   }
 });
