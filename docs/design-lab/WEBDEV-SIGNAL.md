@@ -21,7 +21,7 @@ The versioned `carousel-brand/1` skin is registered as `webdev-signal`:
 | surface-strong | `#1d2931` | dividers and quiet structure |
 | foreground | `#f2f7f5` | primary reading text |
 | muted | `#b9c8c5` | explanations and metadata |
-| stable / insertion | `#82e6c1` | stable state and semantically real additions |
+| stable / insertion | `#5ed3a8` | stable state and semantically real additions |
 | preview | `#f7c66a` | beta/preview state |
 | security / removal | `#ff9a9a` | security and semantically real removals |
 | breaking | `#d8b4fe` | breaking and deprecation state |
