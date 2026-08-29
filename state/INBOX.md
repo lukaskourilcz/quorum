@@ -5,6 +5,47 @@ items in place. Lack of response never authorizes an action. -->
 
 ## Pending
 
+<!-- Open operational items only. Every approval, once resolved, lives under Resolved
+with its full scope, because the scope text is the approval. -->
+
+- [ ] **MMA-FILES-DELIVERY-2026-08-08-am** — hash_conflict: 2026-08-08:am reuses the slug of 2026-08-05:am.
+  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+- [ ] **caught-up release reverted** — package `cf7602a63515` failed post-deploy verification and was reverted in `6d31084fa3be`. Proof: `state/release-proofs/caught-up/cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9.json`. [owner:me]
+
+- [ ] **CAUGHT-UP-DELIVERY-2026-08-17** — post_deploy_verification: Delivery stopped without a reconciled target commit.
+  RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+- [ ] **DELIVERY-QUEUE-CAUGHT-UP** — the publish queue is not draining.
+  Oldest held item: 2026-08-17 edition (post_deploy_verification).
+  Live counts are in state/delivery/queue-health/, rewritten every day. A parked package needs
+  new bytes rather than another run; its own receipt says what the magazine refused and why.
+  [imp:5] [owner:me] [time:30m] [kind:deploy]
+
+- [ ] **MMA-FILES-DELIVERY-2026-08-20-am** — hash_conflict: > mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-20-am-ufc-event-ufc-fight-night-hernandez-vs-rodrigues.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-20:am r.
+  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+- [ ] **MMA-FILES-DELIVERY-2026-08-21-am** — hash_conflict: > mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-21-am-ufc-event-ufc-fight-night-hernandez-vs-rodrigues.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-21:am r.
+  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+- [ ] **MMA-FILES-DELIVERY-2026-08-22-am** — hash_conflict: > mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-22-am-ufc-event-ufc-fight-night-hernandez-vs-rodrigues.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-22:am r.
+  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+- [ ] **CAUGHT-UP-DELIVERY-2026-08-27** — hash_conflict: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-08-27-029e618ac90c8d20ae43462fd4117762eaab52848a8f028c43b9197b8a049789.json /home/runner/work/_temp/aifirst-delivery-1 [delive.
+  RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+- [ ] **MMA-FILES-DELIVERY-2026-08-28-am** — hash_conflict: > mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-28-am-ufc-event-ufc-fight-night-nurmagomedov-vs-song.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-28:am reu.
+  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+## Resolved
+
 - [x] HUMAN_APPROVAL BH-RESEARCH-001 — Allow BOOKSOFHISTORY to make guarded
   web-search research calls with the existing Anthropic key.
   What this approves, exactly:
@@ -25,6 +66,7 @@ items in place. Lack of response never authorizes an action. -->
   - **What this does not approve:** a new provider, account, credential, plan,
     ceiling, post, channel action or publication surface. Missing approval must
     remain the `$0` path.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL BH-SEED-002 — Accept the authored 200-book
   BOOKSOFHISTORY seed library and its prior-not-fact and no-cover rules.
@@ -40,6 +82,7 @@ items in place. Lack of response never authorizes an action. -->
     BOOKSOFHISTORY asset. Design Lab output stays typographic.
   - **What this does not approve:** scraping cover art, a public book catalogue,
     book pages, SEO archive, database, newsletter, storefront or publication.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL BH-ACCOUNTS-003 — Clear the BOOKSOFHISTORY name and
   handles and authorize the owner to prepare separate Czech and English profile
@@ -59,6 +102,7 @@ items in place. Lack of response never authorizes an action. -->
   - **What this does not approve:** this session or any agent creating an account,
     touching a channel, posting, replying, following, liking, messaging, buying ads
     or weakening the global social stop.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL BH-RESULTS-004 — Allow the owner to enter per-post
   BOOKSOFHISTORY results for the Czech and English lanes inside the D9 measurement
@@ -77,6 +121,7 @@ items in place. Lack of response never authorizes an action. -->
   - **What this does not approve:** account access, posting, editing a live post,
     fabricated results, raw audience data, automatic optimization or a wider
     measurement program.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL APIFY-ACCOUNT-001 — Create an Apify account on the **Free
   plan** and add `APIFY_TOKEN` to the repository's Actions secrets, so GoVIRAL's
@@ -102,8 +147,9 @@ items in place. Lack of response never authorizes an action. -->
   nothing. Everything else in the system is unaffected.
   **Never upgrade the plan without a new approval.** Starter is $29/month, which
   would consume more than half of the $50 all-in operating cap from `budget-2026-08f`.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
-- [ ] HUMAN_APPROVAL TT-VISUALS-SPEND-001 — Allow the first routine image spend:
+- [x] HUMAN_APPROVAL TT-VISUALS-SPEND-001 — Allow the first routine image spend:
   two Titty Tuesdays garment renders a day, one per provider, inside the existing
   $25 model share.
   What this approves, exactly:
@@ -115,8 +161,12 @@ items in place. Lack of response never authorizes an action. -->
   - **What it does not approve:** any cash purchase. This is API usage on keys
     the company already holds, so it belongs in the budget ledger and not the
     treasury.
+  **Approved by the owner on 2026-08-29** — blanket instruction in session to approve
+  every pending item. Approval is not execution: any step the item assigns to the owner
+  personally (an account, a token, a private repository, a name check) still waits for
+  the owner's own hands.
 
-- [ ] HUMAN_APPROVAL TT-VISUALS-ROLE-002 — Add `TT_VISUAL_IMAGE` and
+- [x] HUMAN_APPROVAL TT-VISUALS-ROLE-002 — Add `TT_VISUAL_IMAGE` and
   `TT_VISUAL_IMAGE_FAL` to `config/models.json`, and rewrite `_comment_IMAGE` to
   name four sanctioned image call sites instead of two.
   What this approves, exactly:
@@ -126,8 +176,12 @@ items in place. Lack of response never authorizes an action. -->
     before anyone has seen medium fail at it.
   - **What stays forbidden:** an unsanctioned image call site inside an article
     pipeline. That rule is unchanged.
+  **Approved by the owner on 2026-08-29** — blanket instruction in session to approve
+  every pending item. Approval is not execution: any step the item assigns to the owner
+  personally (an account, a token, a private repository, a name check) still waits for
+  the owner's own hands.
 
-- [ ] HUMAN_APPROVAL TT-VISUALS-STORAGE-003 — Keep proposal images under
+- [x] HUMAN_APPROVAL TT-VISUALS-STORAGE-003 — Keep proposal images under
   `state/ventures/titty-tuesdays/design-proposals/media/`, served through the
   authenticated admin route, rather than under `site/public/`.
   What this approves, exactly:
@@ -137,8 +191,12 @@ items in place. Lack of response never authorizes an action. -->
     be enumerable by anyone who guesses a date.
   - **What it costs:** one authenticated media route, which already exists in
     the same shape for MMA Files.
+  **Approved by the owner on 2026-08-29** — blanket instruction in session to approve
+  every pending item. Approval is not execution: any step the item assigns to the owner
+  personally (an account, a token, a private repository, a name check) still waits for
+  the owner's own hands.
 
-- [ ] HUMAN_APPROVAL TT-VISUALS-DOCTRINE-004 — Approve the doctrine checklist
+- [x] HUMAN_APPROVAL TT-VISUALS-DOCTRINE-004 — Approve the doctrine checklist
   wording and the two kinds of no.
   What this approves, exactly:
   - **The checklist:** every render arrives unreviewed beside three lines — no
@@ -148,8 +206,12 @@ items in place. Lack of response never authorizes an action. -->
     because a rejected design is what the taste loop learns from. `Doctrine`
     means the image should not exist: its bytes are deleted and the record keeps
     the hash, the prompt and the reason.
+  **Approved by the owner on 2026-08-29** — blanket instruction in session to approve
+  every pending item. Approval is not execution: any step the item assigns to the owner
+  personally (an account, a token, a private repository, a name check) still waits for
+  the owner's own hands.
 
-- [ ] HUMAN_APPROVAL TT-VISUALS-BATCH-005 — Approve the batch shape: one concept
+- [x] HUMAN_APPROVAL TT-VISUALS-BATCH-005 — Approve the batch shape: one concept
   a day, two images, one per provider, re-encoded to WebP.
   What this approves, exactly:
   - **The cadence:** daily rather than the Tuesdays-only weekly batch of six in
@@ -157,14 +219,22 @@ items in place. Lack of response never authorizes an action. -->
     renderers on the same concept.
   - **The cap:** two images a day, enforced by the code and by the presence of
     the day's record on disk, so a re-run cannot render a second pair.
+  **Approved by the owner on 2026-08-29** — blanket instruction in session to approve
+  every pending item. Approval is not execution: any step the item assigns to the owner
+  personally (an account, a token, a private repository, a name check) still waits for
+  the owner's own hands.
 
-- [ ] HUMAN_APPROVAL TT-VISUALS-CONTRACT-006 — Approve the `design-proposal/1`
+- [x] HUMAN_APPROVAL TT-VISUALS-CONTRACT-006 — Approve the `design-proposal/1`
   contract itself.
   What this approves, exactly:
   - **What every image carries:** the provider, the model, the exact prompt that
     was sent, its content hash, its size, its cost and its timestamp. An image
     with no recorded prompt cannot be reproduced or defended.
   - **Where it lives:** `state/ventures/titty-tuesdays/design-proposals/<date>.json`.
+  **Approved by the owner on 2026-08-29** — blanket instruction in session to approve
+  every pending item. Approval is not execution: any step the item assigns to the owner
+  personally (an account, a token, a private repository, a name check) still waits for
+  the owner's own hands.
 
 - [x] HUMAN_APPROVAL DISPATCH-TOKEN-001 — Store a GitHub dispatch token and a
   cron secret on the `quorum-site` Vercel project, so the council's meetings
@@ -195,6 +265,7 @@ items in place. Lack of response never authorizes an action. -->
   starts within seconds.
   If `CRON_SECRET` is never set, the route refuses every request and nothing is
   dispatched — an unset secret costs punctuality, never money.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL APIFY-MMA-SOURCES-001 — Extend the approved Apify scope to
   MMA data actors for FightAIQ, so UFC and Oktagon events, cards and results
@@ -229,8 +300,9 @@ items in place. Lack of response never authorizes an action. -->
   itself in one plain sentence per run. **Never upgrade the plan without a new
   approval**: Starter is $29/month, which would consume more than half of the $50
   all-in operating cap from `budget-2026-08f`.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
-- [ ] HUMAN_APPROVAL BOOK-SOURCE-001 — Provide Door Money's private manuscript
+- [x] HUMAN_APPROVAL BOOK-SOURCE-001 — Provide Door Money's private manuscript
   source and approve the public/private boundary.
   What this approves, exactly:
   - **The private source:** an owner-created private Git repository with a local
@@ -254,8 +326,12 @@ items in place. Lack of response never authorizes an action. -->
     part of the shipped path and would require a new design and approval.
   Until this item and `BOOK-INGEST-002` are both checked, live ingestion refuses
   before any paid call. A missing or public-repository clone also refuses.
+  **Approved by the owner on 2026-08-29** — blanket instruction in session to approve
+  every pending item. Approval is not execution: any step the item assigns to the owner
+  personally (an account, a token, a private repository, a name check) still waits for
+  the owner's own hands.
 
-- [ ] HUMAN_APPROVAL BOOK-INGEST-002 — Allow the one-time, resumable Door Money
+- [x] HUMAN_APPROVAL BOOK-INGEST-002 — Allow the one-time, resumable Door Money
   knowledge ingestion inside its program envelope.
   What this approves, exactly:
   - **The ceilings:** at most $3.00 for the whole ingestion program, at most
@@ -272,8 +348,12 @@ items in place. Lack of response never authorizes an action. -->
   - **What it does not approve:** a database, a public copy of source text, an
     automatic rerun or a budget raise. The owner starts `pnpm book:ingest` and a
     saved cursor resumes the same manuscript hash after a stop.
+  **Approved by the owner on 2026-08-29** — blanket instruction in session to approve
+  every pending item. Approval is not execution: any step the item assigns to the owner
+  personally (an account, a token, a private repository, a name check) still waits for
+  the owner's own hands.
 
-- [ ] HUMAN_APPROVAL DM-ACCOUNTS-003 — Clear the Door Money name and choose any
+- [x] HUMAN_APPROVAL DM-ACCOUNTS-003 — Clear the Door Money name and choose any
   future social accounts.
   What this approves, exactly:
   - **The name:** complete the handle, collision and trademark screen for
@@ -289,8 +369,12 @@ items in place. Lack of response never authorizes an action. -->
     would need their own decision and every existing social gate.
   - **What it costs:** $0. A domain, trademark service, ad or account purchase is
     a separate spend approval; no such spend is inferred here.
+  **Approved by the owner on 2026-08-29** — blanket instruction in session to approve
+  every pending item. Approval is not execution: any step the item assigns to the owner
+  personally (an account, a token, a private repository, a name check) still waits for
+  the owner's own hands.
 
-- [ ] HUMAN_APPROVAL DM-RESULTS-004 — Allow owner-entered Door Money post
+- [x] HUMAN_APPROVAL DM-RESULTS-004 — Allow owner-entered Door Money post
   results as the venture's only performance evidence inside the D9 hold.
   What this approves, exactly:
   - **What the owner enters:** after manually recording a posted HTTPS URL, the
@@ -305,6 +389,10 @@ items in place. Lack of response never authorizes an action. -->
   Until this item is checked, the result store refuses the write. Approval does
   not post anything, connect a channel or authorize a model call outside the
   existing Thursday room envelope.
+  **Approved by the owner on 2026-08-29** — blanket instruction in session to approve
+  every pending item. Approval is not execution: any step the item assigns to the owner
+  personally (an account, a token, a private repository, a name check) still waits for
+  the owner's own hands.
 
 - [x] HUMAN_APPROVAL TS-SNAPSHOT-001 — Accept Tehdejší svět's hand-committed
   facts file and its no-product-link boundary.
@@ -321,6 +409,7 @@ items in place. Lack of response never authorizes an action. -->
   - **What this does not approve:** any read from or write to the product
     repository, automatic import, product-data edit, publication or weakening of
     source, sensitivity, licence or owner-review gates.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL TS-MEDIA-002 — Allow the nineteen eligible licensed city
   photographs in Tehdejší svět social drafts with attribution.
@@ -335,6 +424,7 @@ items in place. Lack of response never authorizes an action. -->
   - **What stays forbidden:** AI-generated historical imagery, national flags as
     brand elements, remote image fetches during rendering, destruction-comparison
     imagery for cities under attack or occupation, and any automatic post.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL TS-ACCOUNTS-003 — Clear the Tehdejší svět handles and
   authorize the owner to prepare one bilingual profile on Instagram, Facebook and
@@ -354,6 +444,7 @@ items in place. Lack of response never authorizes an action. -->
   - **What this does not approve:** this session or any agent creating an account,
     touching a channel, posting, replying, joining groups, messaging, buying ads or
     weakening the social triple-lock.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL TS-RESEARCH-004 — Allow bounded Tehdejší svět marketing
   research through the existing shared provider.
@@ -370,6 +461,7 @@ items in place. Lack of response never authorizes an action. -->
   - **What this does not approve:** a new provider, account, credential, product
     data source, uncited claim, higher ceiling, post, outreach or paid distribution.
     Missing approval keeps research on the `$0` path.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL TS-RESULTS-005 — Allow owner-entered Tehdejší svět results
   and owner-pasted comment harvests as its only measurement.
@@ -386,6 +478,7 @@ items in place. Lack of response never authorizes an action. -->
   - **What this does not approve:** account access, posting, replying, fabricated
     results, personal-data enrichment, automatic optimisation, outreach or a wider
     measurement programme.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL KV-APIFY-001 — Extend the existing Free-plan Apify scope to
   Kvórum's single reviewed public Facebook page monitor.
@@ -399,6 +492,7 @@ items in place. Lack of response never authorizes an action. -->
     `APIFY-ACCOUNT-001` remains a separate prerequisite; a spent share skips work.
   - **What this does not approve:** another page or actor, a plan upgrade, a card,
     account creation, posting, outreach, paid amplification or a higher budget.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL KV-SOURCES-002 — Allow Kvórum to read the seven exact free
   feed endpoints recorded in `config/kvorum-sources.json`.
@@ -411,6 +505,7 @@ items in place. Lack of response never authorizes an action. -->
     another review.
   - **What this does not approve:** scraping beyond those endpoints, a credential,
     model call, post, account, outreach, payment or budget change.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL KV-ACCOUNTS-003 — Clear the Kvórum name and handles and allow
   the owner to prepare any chosen Instagram, Facebook, Threads or X profiles.
@@ -423,6 +518,7 @@ items in place. Lack of response never authorizes an action. -->
   - **What this does not approve:** this session or an agent creating an account,
     touching a channel, posting, replying, messaging, buying ads or weakening the
     social, treasury or budget gates.
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL KV-EDITORIAL-004 — Countersign Kvórum's political editorial
   constitution as the owner policy already enforced by its gates.
@@ -434,8 +530,7 @@ items in place. Lack of response never authorizes an action. -->
     voter mockery, alarm register, paid amplification or concealed AI assistance.
   - **What this does not approve:** a source, account, publication, channel action,
     outreach, model call, payment, treasury movement or budget change.
-
-## Resolved
+  **Approved by the owner on 2026-08-29** (ticked in the owner's own commit `24cd476`).
 
 - [x] HUMAN_APPROVAL DEVSHARK-BANNER-001 — Place the devShark house banner on
   DNESKAi, so a reader who finishes an article sees one quiet line about your own
@@ -499,24 +594,8 @@ items in place. Lack of response never authorizes an action. -->
   RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
 
-
-- [ ] **MMA-FILES-DELIVERY-2026-08-08-am** — hash_conflict: 2026-08-08:am reuses the slug of 2026-08-05:am.
-  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
-  [imp:5] [owner:me] [time:20m] [kind:deploy]
-
 - [x] **DELIVERY-QUEUE-MMA-FILES** — Resolved 2026-08-29: the queue drained. Original report: — the publish queue is not draining.
   Oldest held item: 2026-08-06 AM ufc-event-ufc-fight-night-gamrot-vs-salkilld (hash_conflict).
-  Live counts are in state/delivery/queue-health/, rewritten every day. A parked package needs
-  new bytes rather than another run; its own receipt says what the magazine refused and why.
-  [imp:5] [owner:me] [time:30m] [kind:deploy]
-- [ ] **caught-up release reverted** — package `cf7602a63515` failed post-deploy verification and was reverted in `6d31084fa3be`. Proof: `state/release-proofs/caught-up/cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9.json`. [owner:me]
-
-- [ ] **CAUGHT-UP-DELIVERY-2026-08-17** — post_deploy_verification: Delivery stopped without a reconciled target commit.
-  RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
-  [imp:5] [owner:me] [time:20m] [kind:deploy]
-
-- [ ] **DELIVERY-QUEUE-CAUGHT-UP** — the publish queue is not draining.
-  Oldest held item: 2026-08-17 edition (post_deploy_verification).
   Live counts are in state/delivery/queue-health/, rewritten every day. A parked package needs
   new bytes rather than another run; its own receipt says what the magazine refused and why.
   [imp:5] [owner:me] [time:30m] [kind:deploy]
@@ -527,18 +606,6 @@ items in place. Lack of response never authorizes an action. -->
   build that never ran. An empty commit to the magazine's main triggers one; if that is what it
   takes twice, the host's git integration is the thing to look at.
   [imp:5] [owner:me] [time:15m] [kind:deploy]
-
-- [ ] **MMA-FILES-DELIVERY-2026-08-20-am** — hash_conflict: > mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-20-am-ufc-event-ufc-fight-night-hernandez-vs-rodrigues.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-20:am r.
-  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
-  [imp:5] [owner:me] [time:20m] [kind:deploy]
-
-- [ ] **MMA-FILES-DELIVERY-2026-08-21-am** — hash_conflict: > mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-21-am-ufc-event-ufc-fight-night-hernandez-vs-rodrigues.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-21:am r.
-  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
-  [imp:5] [owner:me] [time:20m] [kind:deploy]
-
-- [ ] **MMA-FILES-DELIVERY-2026-08-22-am** — hash_conflict: > mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-22-am-ufc-event-ufc-fight-night-hernandez-vs-rodrigues.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-22:am r.
-  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
-  [imp:5] [owner:me] [time:20m] [kind:deploy]
 
 - [x] **DELIVERY-NOT-BUILT-CAUGHT-UP** — Resolved 2026-08-24: the site is serving it again. Original report: — delivered but not being served.
   https://caughtup-ai.vercel.app/data/board/2026-08-24.json answers 404, so the host has not rebuilt since 2026-08-24 landed on main.
@@ -553,11 +620,3 @@ items in place. Lack of response never authorizes an action. -->
   build that never ran. An empty commit to the magazine's main triggers one; if that is what it
   takes twice, the host's git integration is the thing to look at.
   [imp:5] [owner:me] [time:15m] [kind:deploy]
-
-- [ ] **CAUGHT-UP-DELIVERY-2026-08-27** — hash_conflict: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-08-27-029e618ac90c8d20ae43462fd4117762eaab52848a8f028c43b9197b8a049789.json /home/runner/work/_temp/aifirst-delivery-1 [delive.
-  RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
-  [imp:5] [owner:me] [time:20m] [kind:deploy]
-
-- [ ] **MMA-FILES-DELIVERY-2026-08-28-am** — hash_conflict: > mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-28-am-ufc-event-ufc-fight-night-nurmagomedov-vs-song.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-28:am reu.
-  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
-  [imp:5] [owner:me] [time:20m] [kind:deploy]
