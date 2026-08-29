@@ -4,13 +4,13 @@ Date: 2026-08-12
 
 Decider: Lukas Kouril, owner
 
-Status: pending countersignature
+Status: countersigned
 
 Decision id: `kvorum-2026-08a`
 
 Supersedes: nothing. Extends the founding precedent set by goviral-2026-08a and marketingshark-2026-08a.
 
-Signature / explicit approval reference: ____________________
+Signature / explicit approval reference: Owner instruction, 2026-08-29 launch session (Claude Code); scope recorded as the launch set
 
 Owner-commissioned on 2026-08-12 through the Kvórum venture program. This decision
 authorizes implementation and dry proof. It does not authorize a live room, an external

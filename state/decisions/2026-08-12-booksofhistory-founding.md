@@ -4,7 +4,7 @@ Date: 2026-08-12
 
 Decider: Lukas Kouril, owner
 
-Status: pending owner countersignature
+Status: countersigned
 
 Decision id: `booksofhistory-2026-08a`
 
@@ -262,4 +262,4 @@ Name: ____________________
 
 Date: ____________________
 
-Signature / explicit approval reference: ____________________
+Signature / explicit approval reference: Owner instruction, 2026-08-29 launch session (Claude Code); scope recorded as the launch set
