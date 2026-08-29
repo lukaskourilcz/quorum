@@ -5,13 +5,13 @@
       "venture": "caught-up",
       "slug": "2026-08-26-openai-odchody-robotika-valuace",
       "date": "2026-08-26",
-      "style": "broadsheet",
-      "family": "broadsheet",
+      "style": "zurich",
+      "family": "zurich",
       "variant": "A",
       "accentSwap": false,
       "treatment": "mono",
       "typeScale": 0.9,
-      "changedAt": "2026-08-29T18:05:21.281Z"
+      "changedAt": "2026-08-29T18:05:23.550Z"
     },
     {
       "venture": "caught-up",
@@ -74,5 +74,5 @@
       "changedAt": "2026-08-08T23:36:32.910Z"
     }
   ],
-  "updatedAt": "2026-08-29T18:05:21.281Z"
+  "updatedAt": "2026-08-29T18:05:23.550Z"
 }
