@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { FAMILY_SERVES } from "../src/families.js";
 import {
   CAROUSEL_BRANDS,
   CarouselPresetFileSchema,
@@ -316,5 +317,44 @@ describe("presets", () => {
       pool: [{ family: preset.family, variant: "A", accentSwap: false, treatment: "duotone", typeScale: 1 }]
     });
     expect(drawn.treatment).toBe("none");
+  });
+});
+
+describe("which family an article with a photograph is dealt", () => {
+  /** The venture's memory, newest first, exactly as the dealer reads it. */
+  function sequence(hasHero: boolean, days = 30): string[] {
+    const history: Array<{ date: string; family: string }> = [];
+    const dealt: string[] = [];
+    for (let day = 0; day < days; day += 1) {
+      const date = `2026-08-${String((day % 28) + 1).padStart(2, "0")}`;
+      const recipe = deriveRecipe({ venture: "caught-up", slug: `story-${day}`, date, hasHero }, history);
+      history.unshift({ date, family: recipe.family });
+      dealt.push(recipe.family);
+    }
+    return dealt;
+  }
+
+  it("never deals a family that cannot draw the photograph the article won", () => {
+    // Only seven of the twenty-three compose for an image. Before this, an article that had won a
+    // licensed photograph, passed the vision gate and paid for it could be dealt `slab` or
+    // `terminal` — families with nowhere to put a picture — and the deck shipped as type with the
+    // photograph unused beside it. Nothing reported it: every check a deck faces is about the
+    // template, not about what the article brought to it.
+    const dealt = sequence(true);
+    const wrong = dealt.filter((family) => FAMILY_SERVES[family as keyof typeof FAMILY_SERVES] !== "photo-forward");
+    expect(wrong).toEqual([]);
+  });
+
+  it("still rotates, rather than settling on one photo-forward family", () => {
+    // Narrowing the pool must not cost the variety the anti-repeat exists to create.
+    expect(new Set(sequence(true)).size).toBeGreaterThanOrEqual(5);
+  });
+
+  it("keeps the whole library for an article with no photograph", () => {
+    // A type-only family is the right answer there, and photo-forward families degrade to type
+    // perfectly well, so the no-photo case must not narrow at all.
+    const dealt = new Set(sequence(false));
+    expect(dealt.size).toBeGreaterThan(15);
+    expect([...dealt].some((family) => FAMILY_SERVES[family as keyof typeof FAMILY_SERVES] !== "photo-forward")).toBe(true);
   });
 });

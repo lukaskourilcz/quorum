@@ -2,7 +2,7 @@ import { mkdtemp, mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { DECK_FAMILIES, DECK_STYLES, buildArticleDeck, deriveRecipe } from "@boardlessai/carousel-studio";
+import { DECK_FAMILIES, DECK_STYLES, FAMILY_SERVES, buildArticleDeck, deriveRecipe } from "@boardlessai/carousel-studio";
 import { effectiveRecipe } from "../src/social/deck-style.js";
 import { writeDeckReceipt } from "../src/social/deck-receipt.js";
 
@@ -250,6 +250,11 @@ describe("the recipe variety engine", () => {
     const withHero = deriveRecipe({ venture: "mma-files", slug: "gamrot", date: "2026-08-06", hasHero: true });
     const without = deriveRecipe({ venture: "mma-files", slug: "gamrot", date: "2026-08-06", hasHero: false });
     expect(without.treatment).toBe("none");
-    expect(withHero.family).toBe(without.family);
+    // This used to also require the two to land on the same family — that a photograph changed
+    // only how the image was treated and never which design was dealt. That assertion was the bug
+    // written down: only seven of the twenty-three families compose for an image, so an article
+    // that had won and paid for a photograph could be dealt one with nowhere to put it. A
+    // photograph now decides the pool as well as the treatment, so the two legitimately differ.
+    expect(FAMILY_SERVES[withHero.family as keyof typeof FAMILY_SERVES]).toBe("photo-forward");
   });
 });

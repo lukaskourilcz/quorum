@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { z } from "zod";
-import { familyDeckTemplate } from "./families.js";
+import { FAMILY_SERVES, familyDeckTemplate } from "./families.js";
 import { articleDeckTemplate } from "./library.js";
 import { DECK_DESIGNS, DECK_FAMILIES, isDeckStyle, type DeckDesign, type DeckFamily } from "./designs.js";
 import type { CarouselTemplate } from "./schema.js";
@@ -65,10 +65,31 @@ function seededIndex(seed: string, offset: number, length: number): number {
  * the venture's own receipts — recorded state, not a clock — so a replay of last Tuesday reads
  * last Tuesday's history and lands on last Tuesday's family.
  */
-export function chooseFamily(seed: string, history: readonly RecipeHistoryEntry[]): DeckFamily {
+export function chooseFamily(
+  seed: string,
+  history: readonly RecipeHistoryEntry[],
+  hasHero?: boolean
+): DeckFamily {
   const recent = new Set(history.slice(0, 2).map((entry) => entry.family));
-  const eligible = DECK_FAMILIES.filter((family) => !recent.has(family));
-  const pool = eligible.length > 0 ? eligible : [...DECK_FAMILIES];
+  /*
+   * A photograph decides which families are even in the draw.
+   *
+   * Only seven of the twenty-three compose for an image — `FAMILY_SERVES` has said so since the
+   * expansion — and this dealer never read it. So an article that had won a licensed photograph,
+   * passed the vision gate and paid for it could be dealt `slab` or `terminal`, which have nowhere
+   * to put a picture, and the deck went out as type with the photograph sitting unused beside it.
+   * Nothing reported that, because every check the deck faces is about the template rather than
+   * about what the article brought to it.
+   *
+   * Only the has-a-photograph direction narrows. An article without one keeps the whole library:
+   * a type-only family is the right answer there, and photo-forward families degrade to type
+   * perfectly well, so removing them would shrink the rotation for no gain.
+   */
+  const serves = hasHero === true
+    ? DECK_FAMILIES.filter((family) => FAMILY_SERVES[family] === "photo-forward")
+    : [...DECK_FAMILIES];
+  const eligible = serves.filter((family) => !recent.has(family));
+  const pool = eligible.length > 0 ? eligible : serves;
   // How long ago each family was last used: absent from the history is longest of all. Ties break
   // on the name, so the order is total and the choice is reproducible.
   const lastUsed = new Map<string, number>();
@@ -130,8 +151,17 @@ export function deriveRecipe(inputs: RecipeInputs, history: readonly RecipeHisto
     // Anti-repeat still applies, over the pool: the last two families the venture shipped are out
     // unless the pool has nothing else to offer.
     const recent = new Set(history.slice(0, 2).map((entry) => entry.family));
-    const eligible = pool.filter((preset) => !recent.has(preset.family));
-    const drawn = (eligible.length > 0 ? eligible : pool)[seededIndex(seed, 0, (eligible.length > 0 ? eligible : pool).length)]!;
+    // Inside the owner's pool, the same rule as the open library: an article that brought a
+    // photograph is drawn from the presets that can show one. It is a preference here rather than
+    // a filter, because the pool is an explicit choice — if the owner picked five type-only
+    // designs, that is the answer, and the photograph goes unused by their decision rather than
+    // by an oversight in the dealer.
+    const photoReady = inputs.hasHero === true
+      ? pool.filter((preset) => isDeckStyle(preset.family) || FAMILY_SERVES[preset.family] === "photo-forward")
+      : pool;
+    const drawable = photoReady.length > 0 ? photoReady : pool;
+    const eligible = drawable.filter((preset) => !recent.has(preset.family));
+    const drawn = (eligible.length > 0 ? eligible : drawable)[seededIndex(seed, 0, (eligible.length > 0 ? eligible : drawable).length)]!;
     return CarouselRecipeSchema.parse({
       ...base,
       family: drawn.family,
@@ -143,7 +173,7 @@ export function deriveRecipe(inputs: RecipeInputs, history: readonly RecipeHisto
   }
   return CarouselRecipeSchema.parse({
     ...base,
-    family: chooseFamily(seed, history),
+    family: chooseFamily(seed, history, inputs.hasHero),
     variant: "A",
     accentSwap: seededIndex(seed, 8, 2) === 1,
     treatment: treatments[seededIndex(seed, 16, treatments.length)]!,
