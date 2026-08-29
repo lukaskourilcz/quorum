@@ -48,7 +48,11 @@ describe("the five reviewed phase chains", () => {
       expect(composeMeetingRouteDefinition(registry, phase, "dry").ventureId).toBe(VENTURE_BY_PHASE[phase]);
       expect(dispatch.match(new RegExp(`^ {10}- ${phase}$`, "gmu"))).toHaveLength(1);
       expect(budgetGate, `${phase} is outside the workflow budget gate`).toContain(`test "$phase" = "${phase}"`);
-      expect(vercel.crons.filter(({ path: route }) => route === `/api/cron/${phase}`)).toHaveLength(2);
+      // A room a venture day dispatches has no cron of its own: its day carries the two firings
+      // and runs it inside the slot. Door Money's two rooms are the standing example.
+      const dispatchedBy = registry.ventures.find((venture) => venture.day?.steps.includes(phase))?.day;
+      const cronPhase = dispatchedBy?.kind ?? phase;
+      expect(vercel.crons.filter(({ path: route }) => route === `/api/cron/${cronPhase}`)).toHaveLength(2);
       expect(phaseHasStandingAgenda(policy, phase)).toBe(true);
       expect(slotRecordPath(phase, "2026-08-10")).toBe(`meetings/2026-08-10-${phase}.json`);
     }
@@ -60,7 +64,11 @@ describe("the five reviewed phase chains", () => {
     for (const phase of PHASES) {
       const root = await mkdtemp(path.join(os.tmpdir(), `review-sweep-${phase}-`));
       roots.push(root);
-      const target = clock.find((slot) => slot.phase === phase)!;
+      // The sweep reaches for slots on the clock, so a room a day dispatches is reached as its
+      // day. Everything else about the chain — schema, registry, workflow, agenda — is per room.
+      const dispatchedBy = registry.ventures.find((venture) => venture.day?.steps.includes(phase))?.day;
+      const sweepPhase = dispatchedBy?.kind ?? phase;
+      const target = clock.find((slot) => slot.phase === sweepPhase)!;
       for (const earlier of clock.filter((slot) => slot.hour < target.hour)) {
         await record(root, earlier.phase, "2026-08-10");
       }
@@ -70,7 +78,7 @@ describe("the five reviewed phase chains", () => {
         stateRoot: root,
         now: new Date(`2026-08-10T${String(utcHour).padStart(2, "0")}:00:00.000Z`)
       });
-      expect(outcome.phase, phase).toBe(phase);
+      expect(outcome.phase, phase).toBe(sweepPhase);
     }
   });
 

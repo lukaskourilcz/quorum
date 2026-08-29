@@ -13,7 +13,7 @@ import {
   resolveMeetingClock,
   ventureIdForPhase
 } from "../src/ventures/registry.js";
-import { RunnablePhaseSchema } from "../src/types.js";
+import { RunnablePhaseSchema, type ScheduledPhase } from "../src/types.js";
 
 describe("venture registry migration", () => {
   /*
@@ -32,7 +32,7 @@ describe("venture registry migration", () => {
     const dispatched = dayDispatchedKinds(registry);
     const defined = new Set(registry.ventures.flatMap((venture) => venture.meetings.map(({ kind }) => kind)));
     const shifts = new Set(["morning", "afternoon", "night"]);
-    for (const { phase } of legacy.clock) {
+    for (const { phase } of legacy.clock as ReadonlyArray<{ phase: ScheduledPhase }>) {
       if (shifts.has(phase)) continue;
       expect(defined.has(phase), `${phase} lost its definition`).toBe(true);
       if (clockPhases.has(phase)) continue;

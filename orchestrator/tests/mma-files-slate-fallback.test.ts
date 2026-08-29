@@ -370,7 +370,8 @@ describe("a throw after the article package is stored", () => {
       articleSlots: await loadArticleSlotOutcomes(liveStateRoot),
       now
     });
-    const slot = feed.slots.find((entry) => entry.kind === "article-am" && pragueDate(new Date(entry.at)) === date);
+    // The article slot is a step of the MMA Files day, so the day's row is where its run shows.
+    const slot = feed.slots.find((entry) => entry.kind === "mma-day" && pragueDate(new Date(entry.at)) === date);
     expect(slot?.status).toBe("held");
   });
 

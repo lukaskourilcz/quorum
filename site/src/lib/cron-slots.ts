@@ -13,6 +13,11 @@
 export const PRAGUE_TIME_ZONE = "Europe/Prague";
 
 export const SCHEDULED_PHASES = [
+  // The venture days the schedule dispatches, then every phase that can still be dispatched by
+  // hand. A room a day runs keeps its name here because an owner can still name it.
+  "cu-day",
+  "mma-day",
+  "dm-day",
   "cu-edition",
   "morning",
   "afternoon",
@@ -44,15 +49,14 @@ export interface CronSlot {
 }
 
 /**
- * The three portfolio board slots, which live in code rather than in the venture registry.
+ * The company's own meeting, which lives in code rather than in the venture registry.
  *
- * `PORTFOLIO_BOARD_SLOTS` in the orchestrator holds the same three hours for the same reason:
- * they are the company's own meetings and belong to no venture.
+ * `PORTFOLIO_BOARD_SLOTS` in the orchestrator holds the same hour for the same reason: it belongs
+ * to no venture. One slot since `operations-2026-08c` — the afternoon had no duty of its own and
+ * the night's checkpoint moved into the morning. Both stay dispatchable by hand.
  */
 const PORTFOLIO_BOARD_SLOTS: readonly CronSlot[] = [
-  { phase: "morning", hour: 6 },
-  { phase: "afternoon", hour: 14 },
-  { phase: "night", hour: 22 }
+  { phase: "morning", hour: 6 }
 ];
 
 function isScheduledPhase(value: string): value is ScheduledPhase {
@@ -99,20 +103,36 @@ export function resolveCronSlots(registry: unknown): CronSlot[] {
   if (raw?.schemaVersion !== "venture-registry/1" || !Array.isArray(raw.ventures)) {
     throw new Error("Invalid venture registry");
   }
+  // A venture with a day puts the day on the clock and runs its rooms inside it; those rooms keep
+  // their definitions in the registry and lose only an hour of their own.
+  const dispatched = new Set(raw.ventures.flatMap((venture) =>
+    (venture as { day?: { steps?: unknown } }).day?.steps as string[] ?? []));
   const ventureSlots = raw.ventures.flatMap((venture) => {
     const value = venture as {
+      day?: { kind?: unknown; cadence?: unknown };
       meetings?: Array<{ kind?: unknown; cadence?: unknown }>;
       productionJobs?: Array<{ kind?: unknown; cadence?: unknown }>;
     };
-    const meetings = (value.meetings ?? []).map((meeting) => {
-      const phase = parseScheduledPhase(String(meeting.kind));
-      if (!phase) throw new Error(`Unsupported venture meeting kind: ${String(meeting.kind)}`);
-      return { phase, hour: cadenceHour(String(meeting.cadence)) };
-    });
+    const day = value.day
+      ? (() => {
+          const phase = parseScheduledPhase(String(value.day!.kind));
+          if (!phase) throw new Error(`Unsupported venture day kind: ${String(value.day!.kind)}`);
+          return [{ phase, hour: cadenceHour(String(value.day!.cadence)) }];
+        })()
+      : [];
+    const meetings = (value.meetings ?? [])
+      .filter((meeting) => !dispatched.has(String(meeting.kind)))
+      .map((meeting) => {
+        const phase = parseScheduledPhase(String(meeting.kind));
+        if (!phase) throw new Error(`Unsupported venture meeting kind: ${String(meeting.kind)}`);
+        return { phase, hour: cadenceHour(String(meeting.cadence)) };
+      });
     const jobs = (value.productionJobs ?? []).flatMap((job) =>
-      productionSlots(String(job.kind), String(job.cadence))
+      dispatched.has("article-am") && String(job.kind) === "article-production"
+        ? []
+        : productionSlots(String(job.kind), String(job.cadence))
     );
-    return [...meetings, ...jobs];
+    return [...day, ...meetings, ...jobs];
   });
   const slots = [...PORTFOLIO_BOARD_SLOTS, ...ventureSlots].sort((left, right) => left.hour - right.hour);
   // Two meetings in one Prague hour would make the hour ambiguous, and this dispatcher decides

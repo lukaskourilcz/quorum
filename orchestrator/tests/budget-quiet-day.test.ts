@@ -197,7 +197,8 @@ describe("a room the cap stops ends the day quietly", () => {
       await readFile(path.join(root, "calendar", `${mondayOfWeek(DATE)}.json`), "utf8")
     ) as { slots: Array<{ at: string; kind: string; status: string; decisionOneLiner?: string }> };
     const slot = feed.slots.find(
-      (candidate) => candidate.kind === "mma-intake" && candidate.at.startsWith(DATE)
+      // The data check is a step of the MMA Files day, so the day's row carries its skip.
+      (candidate) => candidate.kind === "mma-day" && candidate.at.startsWith(DATE)
     );
     expect(slot?.status).toBe("skipped");
     expect(slot?.decisionOneLiner).toContain("day's spending limit was reached");
@@ -213,7 +214,8 @@ describe("a room the cap stops ends the day quietly", () => {
       now: new Date("2026-08-06T00:00:00.000Z")
     });
     expect(withoutTheRecord.slots.find(
-      (candidate) => candidate.kind === "mma-intake" && candidate.at.startsWith(DATE)
+      // The data check is a step of the MMA Files day, so the day's row carries its skip.
+      (candidate) => candidate.kind === "mma-day" && candidate.at.startsWith(DATE)
     )?.status).toBe("missed");
   });
 

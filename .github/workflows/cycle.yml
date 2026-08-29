@@ -18,7 +18,12 @@ on:
         required: true
         default: morning
         type: choice
+        # The venture days the schedule dispatches come first, then every room they run — an owner
+        # can still name a single room, which is how a replay or a one-off repair is done.
         options:
+          - cu-day
+          - mma-day
+          - dm-day
           - cu-edition
           - morning
           - afternoon
@@ -271,7 +276,10 @@ jobs:
             fi
             echo "$skip_reason"
           fi
-          if test "$dry" != "true" && { test "$phase" = "tt-marketing" || test "$phase" = "bh-desk" || test "$phase" = "dm-desk" || test "$phase" = "dm-growth" || test "$phase" = "ts-desk" || test "$phase" = "kv-desk" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "mag-desk"; }; then
+          # The venture days are here with the rooms they dispatch: a day is portfolio work and
+          # asks the same schedule question. The rooms stay listed because an owner can still
+          # dispatch one on its own, and the engine asks `phaseEnabled` per room inside the day.
+          if test "$dry" != "true" && { test "$phase" = "mma-day" || test "$phase" = "dm-day" || test "$phase" = "tt-marketing" || test "$phase" = "bh-desk" || test "$phase" = "dm-desk" || test "$phase" = "dm-growth" || test "$phase" = "ts-desk" || test "$phase" = "kv-desk" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "mag-desk"; }; then
             if test "$PORTFOLIO_LIVE_ENABLED" != "true"; then
               skip=true
               skip_reason="Portfolio meeting crons await explicit owner approval."
@@ -324,10 +332,10 @@ jobs:
               skip_reason="$1"
             fi
           }
-          if { test "$phase" = "cu-edition" || test "$phase" = "morning" || test "$phase" = "cu-product"; } && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then
+          if { test "$phase" = "cu-day" || test "$phase" = "cu-edition" || test "$phase" = "morning" || test "$phase" = "cu-product"; } && test "$CAUGHT_UP_LIVE_ENABLED" != "true"; then
             force_dry "Caught Up live mode awaits the explicit repository-variable approval gate."
           fi
-          if { test "$phase" = "cu-edition" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "article-am" || test "$phase" = "mag-desk"; } && { test "$HAS_DELIVERY_APP_ID" != "true" || test "$HAS_DELIVERY_APP_KEY" != "true"; }; then
+          if { test "$phase" = "cu-day" || test "$phase" = "mma-day" || test "$phase" = "cu-edition" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "article-am" || test "$phase" = "mag-desk"; } && { test "$HAS_DELIVERY_APP_ID" != "true" || test "$HAS_DELIVERY_APP_KEY" != "true"; }; then
             force_dry "Repository delivery credentials are missing, so this room could not deliver what it produced."
           fi
           if test "$delivery_only" != "true" && test "$phase" != "pg-desk" && { test "$HAS_ANTHROPIC_KEY" != "true" || test "$HAS_OPENAI_KEY" != "true"; }; then

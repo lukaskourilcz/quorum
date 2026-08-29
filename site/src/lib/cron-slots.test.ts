@@ -20,25 +20,20 @@ async function registry(): Promise<unknown> {
 describe("the slot table the cron route dispatches from", () => {
   it("reads every scheduled slot out of the venture registry", async () => {
     const slots = await resolveCronSlots(await registry());
+    // One slot per venture and one company meeting, per `operations-2026-08c`. The hours the
+    // consolidation vacated are simply empty; the rooms that lost them still exist and are still
+    // dispatchable by name.
     expect(slots.map((slot) => `${slot.hour}:${slot.phase}`)).toEqual([
-      "5:cu-edition",
+      "5:cu-day",
       "6:morning",
       "7:ms-daily",
-      "8:mma-intake",
-      "9:mag-editorial",
-      "10:article-am",
+      "8:mma-day",
       "11:tt-marketing",
       "12:bh-desk",
       "13:gv-brief",
-      "14:afternoon",
-      "15:dm-desk",
-      "16:dm-growth",
-      "17:cu-product",
+      "15:dm-day",
       "18:ts-desk",
-      "19:mma-analysis",
-      "20:mag-desk",
       "21:kv-desk",
-      "22:night",
       "23:pg-desk"
     ]);
   });
@@ -138,8 +133,10 @@ describe("the deployed vercel.json", () => {
     ) as { crons: Array<{ path: string; schedule: string }> };
     const key = (entry: { path: string; schedule: string }) => `${entry.path} ${entry.schedule}`;
     expect(deployed.crons.map(key).sort()).toEqual(expectedCronEntries(await registry()).map(key).sort());
-    // One entry per daylight-saving variant for every scheduled phase, plus the two the edition
-    // slot's same-day retry adds. The retry is a second dispatch of cu-edition, not a phase.
-    expect(deployed.crons).toHaveLength((SCHEDULED_PHASES.length + 1) * 2);
+    // One entry per daylight-saving variant for every slot the clock actually holds, plus the two
+    // the edition's same-day retry adds. Counted off the clock rather than off SCHEDULED_PHASES:
+    // that list also names every room a venture day dispatches, and those are dispatchable by
+    // hand without holding an hour or a cron of their own.
+    expect(deployed.crons).toHaveLength((resolveCronSlots(await registry()).length + 1) * 2);
   });
 });

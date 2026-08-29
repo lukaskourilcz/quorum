@@ -64,12 +64,13 @@ describe("the edition slot's same-day retry", () => {
   });
 
   it("is not a meeting slot, because the story meeting owns that Prague hour", () => {
-    const occupant = MEETING_CLOCK.find((slot) => slot.hour === EDITION_RETRY_HOUR);
-    expect(occupant).toBeDefined();
-    expect(occupant?.phase).not.toBe(EDITION_RETRY_PHASE);
-    // resolveScheduledPhase has to name exactly one phase for a Prague hour, so a retry added to
-    // the clock would take the story meeting's hour with it.
-    expect(MEETING_CLOCK.filter((slot) => slot.hour === EDITION_RETRY_HOUR)).toHaveLength(1);
+    // The story meeting used to own this hour; it is a step of the MMA Files day now and the hour
+    // is empty. Either way the invariant is the same and is what this protects:
+    // `resolveScheduledPhase` names at most one phase per Prague hour, and the retry is never it —
+    // the retry is a second attempt at the 05:00 slot, dispatched by name rather than by the clock.
+    expect(MEETING_CLOCK.filter((slot) => slot.hour === EDITION_RETRY_HOUR).map(({ phase }) => phase))
+      .not.toContain(EDITION_RETRY_PHASE);
+    expect(MEETING_CLOCK.filter((slot) => slot.hour === EDITION_RETRY_HOUR).length).toBeLessThanOrEqual(1);
   });
 
   it("gets past the double-fire guard and lets the delivery receipt decide", async () => {

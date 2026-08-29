@@ -131,20 +131,25 @@ async function liveEditionRecord(
 
 describe("Prague meeting clock", () => {
   it("maps both sides of DST and rejects wrong-variant firings", () => {
-    expect(resolveScheduledPhase(new Date("2026-01-15T04:00:00.000Z"))).toBe("cu-edition");
+    // 05:00 and 08:00 Prague are the DNESKAi and MMA Files days; the rooms they dispatch have no
+    // hour of their own any more.
+    expect(resolveScheduledPhase(new Date("2026-01-15T04:00:00.000Z"))).toBe("cu-day");
     expect(resolveScheduledPhase(new Date("2026-01-15T05:00:00.000Z"))).toBe("morning");
     expect(() => resolveScheduledPhase(new Date("2026-01-15T03:00:00.000Z"))).toThrow(/No scheduled phase/);
 
-    expect(resolveScheduledPhase(new Date("2026-07-15T03:00:00.000Z"))).toBe("cu-edition");
+    expect(resolveScheduledPhase(new Date("2026-07-15T03:00:00.000Z"))).toBe("cu-day");
     expect(resolveScheduledPhase(new Date("2026-07-15T04:00:00.000Z"))).toBe("morning");
-    expect(resolveScheduledPhase(new Date("2026-07-15T06:00:00.000Z"))).toBe("mma-intake");
+    expect(resolveScheduledPhase(new Date("2026-07-15T06:00:00.000Z"))).toBe("mma-day");
     expect(resolveScheduledPhase(new Date("2026-01-15T10:00:00.000Z"))).toBe("tt-marketing");
     expect(resolveScheduledPhase(new Date("2026-07-15T09:00:00.000Z"))).toBe("tt-marketing");
-    expect(resolveScheduledPhase(new Date("2026-01-15T19:00:00.000Z"))).toBe("mag-desk");
-    expect(resolveScheduledPhase(new Date("2026-07-15T18:00:00.000Z"))).toBe("mag-desk");
+    // 20:00 Prague was the evening desk review; it is a step of the MMA Files day now and the
+    // hour is empty, which `resolveScheduledPhase` reports rather than guessing a neighbour.
+    expect(() => resolveScheduledPhase(new Date("2026-01-15T19:00:00.000Z"))).toThrow(/No scheduled phase/);
+    expect(resolveScheduledPhase(new Date("2026-01-15T20:00:00.000Z"))).toBe("kv-desk");
+    expect(resolveScheduledPhase(new Date("2026-07-15T19:00:00.000Z"))).toBe("kv-desk");
 
-    expect(resolveScheduledPhase(new Date("2026-03-28T04:19:00.000Z"))).toBe("cu-edition");
-    expect(resolveScheduledPhase(new Date("2026-03-29T03:20:00.000Z"))).toBe("cu-edition");
+    expect(resolveScheduledPhase(new Date("2026-03-28T04:19:00.000Z"))).toBe("cu-day");
+    expect(resolveScheduledPhase(new Date("2026-03-29T03:20:00.000Z"))).toBe("cu-day");
     expect(() => resolveScheduledPhase(new Date("2026-03-29T03:21:00.000Z"))).toThrow(/No scheduled phase/);
   });
 
@@ -391,9 +396,11 @@ describe("meeting calendar", () => {
     // the calendar and this case together instead of failing on arithmetic.
     expect(feed.slots).toHaveLength(PUBLIC_MEETING_CLOCK.length * 7);
     expect(feed.slots.map(({ kind }) => String(kind))).not.toContain("pg-desk");
-    const edition = feed.slots.find((slot) => slot.kind === "cu-edition" && slot.status === "held");
-    expect(edition?.at).toBe("2026-08-04T03:00:00.000Z");
-    expect(edition?.meetingRef).toBe("meetings/2026-08-04-cu-edition");
+    // The edition room is a step of DNESKAi's day now, so the day is the row and the room's own
+    // record is what fills it. The record did not move; the row above it did.
+    const dneskai = feed.slots.find((slot) => slot.kind === "cu-day" && slot.status === "held");
+    expect(dneskai?.at).toBe("2026-08-04T03:00:00.000Z");
+    expect(dneskai?.meetingRef).toBe("meetings/2026-08-04-cu-edition");
     expect(feed.slots.some((slot) => slot.status === "missed")).toBe(true);
     expect(feed.slots.some((slot) => slot.status === "scheduled")).toBe(true);
     expect(pragueSlotInstant("2026-01-15", 5).toISOString()).toBe("2026-01-15T04:00:00.000Z");
@@ -406,7 +413,7 @@ describe("meeting calendar", () => {
       records: [{ ...record, status: "PAUSED" }],
       now: new Date("2026-08-04T16:00:00.000Z")
     }));
-    expect(feed.slots.find((slot) => slot.kind === "cu-product" && slot.meetingRef)?.status)
+    expect(feed.slots.find((slot) => slot.kind === "cu-day" && slot.meetingRef)?.status)
       .toBe("not-needed");
   });
 
@@ -462,7 +469,8 @@ describe("the calendar tells the truth about the article slots", () => {
     // the Shevchenko profile: article production writes a run file, and MeetingRecord has no
     // kind that can carry it.
     const feed = buildCalendarFeed({ ...base, articleSlots: [{ date: "2026-08-04", slot: "am", status: "published" }] });
-    expect(feed.slots.find((slot) => slot.at.startsWith("2026-08-04") && slot.kind === "article-am")?.status).toBe("held");
+    // The article slot is a step of the MMA Files day, so the day's row carries its outcome.
+    expect(feed.slots.find((slot) => slot.at.startsWith("2026-08-04") && slot.kind === "mma-day")?.status).toBe("held");
   });
 
   it("marks a killed slot skipped and carries the reason it was given", () => {
@@ -472,7 +480,7 @@ describe("the calendar tells the truth about the article slots", () => {
       ...base,
       articleSlots: [{ date: "2026-08-04", slot: "am", status: "killed", reason: "Missing fresh, source-backed subject." }]
     });
-    const slot = feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === "article-am");
+    const slot = feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === "mma-day");
     expect(slot?.status).toBe("skipped");
     expect(slot?.decisionOneLiner).toBe("Missing fresh, source-backed subject.");
   });
@@ -487,6 +495,6 @@ describe("the calendar tells the truth about the article slots", () => {
 
   it("leaves a slot with no run exactly as it was", () => {
     const feed = buildCalendarFeed({ ...base, articleSlots: [] });
-    expect(feed.slots.find((slot) => slot.at.startsWith("2026-08-04") && slot.kind === "article-am")?.status).toBe("missed");
+    expect(feed.slots.find((slot) => slot.at.startsWith("2026-08-04") && slot.kind === "mma-day")?.status).toBe("missed");
   });
 });

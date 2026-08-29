@@ -75,11 +75,11 @@ describe("a queued cron still runs the meeting it was scheduled for", () => {
   it("never answers a neighbouring meeting when a run is very late", () => {
     // The wall clock read a run that started at 11:58 UTC as the 14:00 Prague company
     // meeting, when the only cron that could have triggered it fired an hour earlier for a
-    // different one. Running the wrong meeting is worse than running none. The story meeting
-    // sits at 09:00 Prague and the article slot at 10:00, an hour apart, and each keeps its own
-    // firing however late it is delivered.
-    expect(resolveCronPhase("55 5 * * *", delivered("55 5 * * *", [2026, 7, 2], 118))).toBe("mag-editorial");
-    expect(resolveCronPhase("55 6 * * *", delivered("55 6 * * *", [2026, 7, 2], 65))).toBe("article-am");
+    // different one. Running the wrong meeting is worse than running none. The MMA Files day sits
+    // at 08:00 Prague and the Design Lab studio at 11:00, and each keeps its own firing however
+    // late it is delivered.
+    expect(resolveCronPhase("55 4 * * *", delivered("55 4 * * *", [2026, 7, 2], 118))).toBe("mma-day");
+    expect(resolveCronPhase("55 7 * * *", delivered("55 7 * * *", [2026, 7, 2], 65))).toBe("tt-marketing");
   });
 
   it("keeps the two daylight-saving variants apart", () => {
@@ -92,10 +92,10 @@ describe("a queued cron still runs the meeting it was scheduled for", () => {
     // the same firing as the schedule writes it today: one hour earlier in the expression, at :55,
     // carried back onto the same 03:00 hour. Same answer from both is the point.
     expect(resolveCronPhase("0 3 * * *", new Date("2026-08-02T03:00:00Z"))).toBe("morning");
-    expect(resolveCronPhase("0 3 * * *", new Date("2026-01-15T03:00:00Z"))).toBe("cu-edition");
+    expect(resolveCronPhase("0 3 * * *", new Date("2026-01-15T03:00:00Z"))).toBe("cu-day");
     const asDeployed = `${CRON_MINUTE} ${3 - CRON_HOUR_CARRY} * * *`;
     expect(resolveCronPhase(asDeployed, delivered(asDeployed, [2026, 7, 2]))).toBe("morning");
-    expect(resolveCronPhase(asDeployed, delivered(asDeployed, [2026, 0, 15]))).toBe("cu-edition");
+    expect(resolveCronPhase(asDeployed, delivered(asDeployed, [2026, 0, 15]))).toBe("cu-day");
     // The inactive variant of a slot has no meeting and must stay skipped.
     for (const cron of winterOnlyCrons()) {
       expect(
