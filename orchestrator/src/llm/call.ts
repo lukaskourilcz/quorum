@@ -245,7 +245,15 @@ export async function guardedJsonCall<T>(
   // A provider-reported cutoff is unusable, but it is not free. The adapters attach the
   // partial response's usage so the same durable ledger path records it before callers retry,
   // skip the seat or fail the room.
-  if (truncation) throw truncation;
+  if (truncation) {
+    throw new ModelResponseTruncatedError(
+      truncation.model,
+      truncation.cap,
+      truncation.message,
+      truncation.response,
+      actual.estimatedUsd
+    );
+  }
 
   // Parse AFTER the ledger entry is durable. The provider has already billed for this
   // response, so a malformed body must not make the spend disappear: parsing first meant a

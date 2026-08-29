@@ -26,13 +26,35 @@ half, ordered by what unblocks the most. Every referenced item already exists be
 - [x] **Create the launch issue program** — done 2026-08-29. #462 is the parent; #463–#473 are the
   eleven children, in working order. #463's outage half is already closed.
 
-- [ ] **Countersign the two drafted decision records** — both are written and waiting only for your
+- [x] **Countersign the two drafted decision records** — both are written and waiting only for your
   status line and signature. They are one story and should be signed together:
   `state/decisions/2026-08-29-launch-idea-room-hold.md` holds `cu-product` and `tt-marketing` for
   the launch period, and `state/decisions/2026-08-12-kvorum-budget-capacity.md` claims the `$0.08`
   that the second hold frees, which is exactly what Kvórum's capacity gate requires. Signing both
   stops the idea rooms you said aren't earning their keep and opens Kvórum's desk. Neither grants a
   source, account, credential or publishing authority. [imp:5] [owner:me] [time:20m] [kind:decision]
+
+**Owner setup completed 2026-08-29.** The Apify token, the `/admin` credentials,
+`PORTFOLIO_LIVE_ENABLED` and `CAUGHT_UP_STREAMS_ENABLED` are all set, the launch-set approvals are
+ticked and the five launch decisions countersigned. Two things follow from that and are worth
+knowing before reading the rest of this list:
+
+- **marketingShark spends about $0.035 a day and has never produced a package.** Nineteen paid
+  `ms-daily` calls since 8 August, seventeen of them billed at exactly 3,000 output tokens — CHUM's
+  `maxOutputTokens` in `config/models.json`. The reply is truncated mid-package and the room
+  recorded it as `model-output-invalid`, so the cause read as a bad model rather than a small cap.
+  The reporting is fixed; the cure is a cap raise, which is spend and therefore yours. See below.
+- **Titty Tuesdays and Door Money remain unsigned on purpose**, being outside the launch. Their ten
+  approvals are the ones still unticked in `state/INBOX.md`.
+
+- [ ] **Decide CHUM's output cap** — a bilingual five-slide package does not fit in 3,000 output
+  tokens and has never once fitted. Raising it is the only thing standing between marketingShark
+  and its first draft. At the measured rate for `claude-sonnet-5` (about $2/MTok in, $10/MTok out)
+  each 500 extra tokens costs about $0.005 a call, so 4,500 lands near $0.050 against the room's
+  `$0.10` daily envelope, which also has to cover the one retry. Either raise it in
+  `config/models.json` and accept roughly $1.50/month for a venture that currently returns nothing
+  for $1.05, or turn the room off until it is worth running. Doing neither keeps paying for
+  truncated replies every morning. [imp:4] [owner:me] [time:10m] [kind:decision]
 
 Then, in order, the existing items:
 
@@ -100,7 +122,7 @@ is the single thing standing between a proven path and a working one.
   before using the explicitly confirmed one-cloud-build fallback. [imp:5] [owner:me] [time:30m]
   [kind:deploy]
 
-- [ ] **Switch the DNESKAi streams on** — set the Actions variable
+- [x] **Switch the DNESKAi streams on** — set the Actions variable
   `CAUGHT_UP_STREAMS_ENABLED=true`. Until then `/o-cem-se-mluvi` and `/podcasty` render their
   honest empty states, which is the correct state and costs nothing. The delivery steps live
   inside the existing daily cycle, call no model and spend nothing from the model share; the
@@ -141,15 +163,26 @@ is the single thing standing between a proven path and a working one.
   and a test fails if an enabled host is missing from `config/network-allowlist.json`.
   [imp:3] [owner:me] [time:30m] [kind:decision]
 
-- [ ] **Set the `/admin` credentials in Vercel production** — several items on this list run
-  through a door that will not currently open: the idea ratings, the fixed-cost registry, the deck
-  design switcher. It needs `ADMIN_USER`, `ADMIN_PASSWORD` and a fine-grained
-  `BOARDLESSAI_GITHUB_TOKEN` with Contents read/write on this repository, plus
+- [x] **Set the `/admin` credentials in Vercel production** — done 2026-08-29. It needs
+  `ADMIN_USER`, `ADMIN_PASSWORD` and a fine-grained `BOARDLESSAI_GITHUB_TOKEN`, plus
   `BOARDLESSAI_GITHUB_REPOSITORY` and `BOARDLESSAI_GITHUB_BRANCH` if you are not using the
-  defaults. Until that token is provisioned, production deliberately stays read-only rather than
-  accepting a save that cannot become canonical. [imp:5] [owner:me] [time:10m] [kind:setup]
+  defaults, which are `lukaskourilcz/quorum` and `main`. All of them are read by the site alone
+  and belong on the Vercel project; no workflow references any of them, so putting them in Actions
+  secrets would leave the door shut.
 
-- [ ] **Create an Apify account on the Free plan and add `APIFY_TOKEN` to Actions secrets** — the
+  **The token needs two permissions, not one.** This entry used to name only Contents read/write,
+  which is what saves a record back. The same token also POSTs to
+  `actions/workflows/cycle.yml/dispatches` in `site/src/lib/mma-banner-delivery.ts`, so it needs
+  **Actions read and write** as well. A Contents-only token passes every check until the first
+  banner delivery, which then fails with a 403 — worth confirming on the token already issued.
+
+  `ADMIN_PASSWORD` is also a signing secret, not just a password: the admin session cookie is an
+  HMAC keyed on `boardlessai-admin\0<user>\0<password>`, so prefer something long and random over
+  something memorable. Changing either value invalidates every live session at once, which is the
+  way to log yourself out everywhere. Sessions last eight hours.
+  [imp:5] [owner:me] [time:10m] [kind:setup]
+
+- [x] **Create an Apify account on the Free plan and add `APIFY_TOKEN` to Actions secrets** — the
   single unblock for GoVIRAL's trend scouting. Free plan only: no card, and its $5 of monthly
   platform credit is the budget guard — when the credit is spent the actors stop, so an overspend
   is not possible. The weekly recipe uses about $1.03 of it and a month about $4.60, so the cash
@@ -161,7 +194,7 @@ is the single thing standing between a proven path and a working one.
   all-in cap. `state/INBOX.md` carries this as `APIFY-ACCOUNT-001`.
   [imp:4] [owner:me] [time:10m] [kind:setup]
 
-- [ ] **Approve the reviewed MMA scope for the same Apify token** — `APIFY-MMA-SOURCES-001` in
+- [x] **Approve the reviewed MMA scope for the same Apify token** — `APIFY-MMA-SOURCES-001` in
   `state/INBOX.md` authorizes only the terms-reviewed Tapology promotion-page reference step.
   UFCStats and ESPN remain disabled and Sherdog remains blocked; approval does not turn them on.
   The current runnable plan is $0 cash and at most $0.20/month of Free-plan credit, beneath a
@@ -169,7 +202,7 @@ is the single thing standing between a proven path and a working one.
   no-op. Read the shared-credit warning before approving this alongside GoVIRAL.
   [imp:4] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Approve Kvórum's one-page Apify scope** — read and countersign `KV-APIFY-001` in
+- [x] **Approve Kvórum's one-page Apify scope** — read and countersign `KV-APIFY-001` in
   `state/INBOX.md`. It covers only the pinned Facebook Posts Scraper build on the logged-out public
   page `facebook.com/stitdemokracie`, at most once a day and 30 rows, with a fixed-field mapper and
   30-day raw purge. The `$2.00` monthly venture share sits inside the existing Free-plan credit and
@@ -177,14 +210,14 @@ is the single thing standing between a proven path and a working one.
   days rather than fund a full month. No login, cookie, second page or plan upgrade is approved.
   [imp:4] [owner:me] [time:10m] [kind:decision]
 
-- [ ] **Approve Kvórum's seven free feed hosts** — `KV-SOURCES-002` in `state/INBOX.md` names the
+- [x] **Approve Kvórum's seven free feed hosts** — `KV-SOURCES-002` in `state/INBOX.md` names the
   exact iROZHLAS, ČT24, Deník N, Seznam Zprávy, Poslanecká sněmovna, Vláda ČR and Czech Google News
   endpoints and allowlist hosts. Check those URLs and countersign the registry, or leave it pending;
   without approval every live feed read fails closed and the committed fixture remains the `$0`
   source. A new host or endpoint is a new review.
   [imp:4] [owner:me] [time:15m] [kind:decision]
 
-- [ ] **Countersign Kvórum's editorial constitution** — `KV-EDITORIAL-004` in `state/INBOX.md`
+- [x] **Countersign Kvórum's editorial constitution** — `KV-EDITORIAL-004` in `state/INBOX.md`
   records the policy already enforced by the gates: Štít is discovery rather than evidence;
   factual claims are typed and referenced; public figures only; no vote call, endorsement,
   unsupported crime accusation, voter mockery, paid amplification or alarm register; election
@@ -230,7 +263,7 @@ Judgement calls. Nothing is blocked on code for any of these.
   source, model, account, OAuth, render or publishing authority. [imp:4] [owner:me] [time:20m]
   [kind:decision]
 
-- [ ] **Sign or decline `BH-RESEARCH-001`** — decide whether BOOKSOFHISTORY may use
+- [x] **Sign or decline `BH-RESEARCH-001`** — decide whether BOOKSOFHISTORY may use
   web search on the existing Anthropic key. The item in `state/INBOX.md` fixes gather
   calls at five searches, QUILL checks at one to three, research at no more than
   `$0.10` per call, `$0.50` per cycle and `$5.00` per month, and requires the ledger,
@@ -238,20 +271,20 @@ Judgement calls. Nothing is blocked on code for any of these.
   credential. Until signed, live research must remain `$0`.
   [imp:4] [owner:me] [time:10m] [kind:decision]
 
-- [ ] **Review and sign or decline `BH-SEED-002`** — inspect the authored 200-book
+- [x] **Review and sign or decline `BH-SEED-002`** — inspect the authored 200-book
   seed library and accept only if its scores and notes read as editorial priors, never
   facts. The same item keeps every `coverRef` in protected admin context: no cover
   artwork may be downloaded, rendered or delivered, and only dossier claims may enter
   feature copy. [imp:3] [owner:me] [time:30m] [kind:content]
 
-- [ ] **Clear the two lanes and sign or decline `BH-ACCOUNTS-003`** — record the
+- [x] **Clear the two lanes and sign or decline `BH-ACCOUNTS-003`** — record the
   chosen platforms and cleared handles for separate Czech and English profiles, then
   approve the Czech and English AI-disclosure bio lines in `state/INBOX.md`. Signing
   lets only you create or prepare those profiles; agents still cannot create an
   account, touch a channel or post, and every package remains a draft for manual
   posting. [imp:3] [owner:me] [time:30m] [kind:legal]
 
-- [ ] **Sign or decline `BH-RESULTS-004`** — decide whether the protected admin may
+- [x] **Sign or decline `BH-RESULTS-004`** — decide whether the protected admin may
   accept your manual per-lane post URL and any available views, likes, comments,
   shares, saves, follows or link taps. This is the only BOOKSOFHISTORY measurement
   source: D9 and `METRICS_INGESTION_ENABLED=false` stay in force, no platform is read,
@@ -266,14 +299,14 @@ Judgement calls. Nothing is blocked on code for any of these.
   needs a countersigned capacity reallocation that frees at least `$0.08` before a live desk.
   [imp:4] [owner:me] [time:75m] [kind:decision]
 
-- [ ] **Review the facts file and sign or decline `TS-SNAPSHOT-001`** — confirm that
+- [x] **Review the facts file and sign or decline `TS-SNAPSHOT-001`** — confirm that
   `state/ventures/tehdejsi-svet/facts.json` contains only facts copied by a
   human, structurally omits unsafe records and excluded media, and is the only daily
   read layer. Signing does not authorize a fetch, clone, sync or any connection to the
   product repository; a hash mismatch keeps the desk closed at `$0`.
   [imp:5] [owner:me] [time:20m] [kind:content]
 
-- [ ] **Sign or decline `TS-MEDIA-002`** — decide whether the nineteen eligible
+- [x] **Sign or decline `TS-MEDIA-002`** — decide whether the nineteen eligible
   Wikimedia/CC BY-SA city photographs may appear in Tehdejší svět social cards with
   creator/source/licence attribution on the card and in the caption. Excluded media,
   incomplete credits, AI-generated historical imagery and destruction comparisons
@@ -287,13 +320,13 @@ Judgement calls. Nothing is blocked on code for any of these.
   appear in a bio; no agent receives a credential or channel.
   [imp:5] [owner:me] [time:40m] [kind:setup]
 
-- [ ] **Sign or decline `TS-RESEARCH-004`** — decide whether the existing shared
+- [x] **Sign or decline `TS-RESEARCH-004`** — decide whether the existing shared
   provider may research the Ukrainian coverage gap, names and music at no more than
   `$0.30` per brief and `$2.00` per month. Research stays venture-side marketing data;
   product-worthy findings stop in the owner-controlled insight queue.
   [imp:3] [owner:me] [time:10m] [kind:decision]
 
-- [ ] **Sign or decline `TS-RESULTS-005`** — decide whether the protected admin may
+- [x] **Sign or decline `TS-RESULTS-005`** — decide whether the protected admin may
   accept owner-entered post results and owner-pasted comments as the venture's only
   measurement. D9 stays in force: no product analytics, platform API, scrape, pixel,
   cookie or automatic comment collection; recollections never become facts.
@@ -592,7 +625,7 @@ Judgement calls. Nothing is blocked on code for any of these.
 Roughly a month out. Nothing here is needed until a channel actually opens, and opening one is a
 `HUMAN_APPROVAL` in `state/INBOX.md`, not a switch a session may flip.
 
-- [ ] **Approve Kvórum's future accounts and AI-disclosure bio** — `KV-ACCOUNTS-003` in
+- [x] **Approve Kvórum's future accounts and AI-disclosure bio** — `KV-ACCOUNTS-003` in
   `state/INBOX.md` covers an owner-led Instagram, Facebook, Threads or X setup only after the name
   and handles are cleared, with a bio that says AI assists the drafts and a human approves every
   post. Countersigning creates nothing and grants no posting automation: until then the workspace
