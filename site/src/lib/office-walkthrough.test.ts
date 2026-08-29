@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import ventureRegistry from "../../../config/ventures.json";
+import { WORKSPACE_CHANNELS } from "./meeting-feed";
 import { projectForKind, readOfficeWalkthrough } from "./office-walkthrough";
 
 describe("the home-page venture registry projection", () => {
@@ -16,10 +17,18 @@ describe("the home-page venture registry projection", () => {
       "company",
       ...registered
     ]));
-    expect(data.channels).toHaveLength(12);
+    // A paused venture's desk channel and calendar rows leave with the venture. Computed from
+    // the registry so the assertion holds whichever way the owner's switches point today.
+    const paused = new Set(ventureRegistry.ventures
+      .filter((venture) => venture.status === "paused")
+      .map((venture) => venture.id));
+    const expectedChannels = WORKSPACE_CHANNELS
+      .filter((channel) => channel.venture === null || !paused.has(channel.venture));
+    expect(data.channels.map(({ id }) => id)).toEqual(expectedChannels.map(({ id }) => id));
     const rowKinds = new Set(data.weeks[data.currentWeek]?.rows.map((row) => row.kind));
-    for (const kind of ["bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk"]) {
-      expect(rowKinds.has(kind), `${kind} is missing from today's meeting rows`).toBe(true);
+    for (const kind of ["bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk"] as const) {
+      const expected = !paused.has(projectForKind(kind) ?? "");
+      expect(rowKinds.has(kind), `${kind} in today's meeting rows`).toBe(expected);
     }
   });
 

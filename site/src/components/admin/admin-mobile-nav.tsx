@@ -108,7 +108,7 @@ export function AdminMobileNav({
               {theme === "dark" ? <Sun aria-hidden="true" className="size-4" /> : <Moon aria-hidden="true" className="size-4" />}
               {theme === "dark" ? "Light" : "Dark"} theme
             </button>
-            <Link className="admin-focus-ring ml-auto flex min-h-[var(--admin-touch-target)] items-center rounded-[var(--admin-radius)] px-2.5 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)] hover:bg-[var(--admin-surface-hover)] hover:text-[var(--admin-foreground)]" href="/">Public</Link>
+            <Link className="admin-focus-ring ml-auto flex min-h-[var(--admin-touch-target)] items-center rounded-[var(--admin-radius)] px-2.5 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)] hover:bg-[var(--admin-surface-hover)] hover:text-[var(--admin-foreground)]" href="/admin/settings">Settings</Link>
             <form action="/admin/logout" method="post">
               <button aria-label="Sign out of Admin" className="admin-focus-ring grid min-h-[var(--admin-touch-target)] min-w-[var(--admin-touch-target)] place-items-center rounded-[var(--admin-radius)] text-[var(--admin-foreground-muted)] hover:bg-[var(--admin-surface-hover)] hover:text-[var(--admin-foreground)]" type="submit">
                 <LogOut aria-hidden="true" className="size-4" />

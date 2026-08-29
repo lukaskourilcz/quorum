@@ -407,19 +407,14 @@ test("the admin home answers what happened since yesterday for every new venture
   }
 });
 
-test("every new venture workspace exposes its configured meeting controls", async ({ page }) => {
-  const expected = {
-    booksofhistory: ["FOLIO", "PLOT", "QUILL", "HACEK", "AUDIT"],
-    "door-money": ["GHOST", "BOOKER", "PULSE", "AUDIT", "PALATE"],
-    "tehdejsi-svet": ["LETOPIS", "VERBA", "QUILL", "HACEK", "AUDIT"],
-    kvorum: ["TRIBUN", "HACEK", "AUDIT", "PALATE", "KEEPER"]
-  } as const;
-  for (const [ventureId, roles] of Object.entries(expected)) {
+test("a venture workspace carries no agent switches — the system runs itself", async ({ page }) => {
+  // The owner's 2026-08-29 instruction: the on/off meeting controls were complexity he never
+  // wanted to operate. `config/venture-agent-controls.json` still governs the runtime; the admin
+  // simply no longer offers to edit it, so a workspace is output to read rather than a console.
+  for (const ventureId of ["booksofhistory", "kvorum"]) {
     await page.goto(`/admin?venture=${ventureId}`, { waitUntil: "networkidle" });
-    const controls = page.getByRole("region", { name: "Choose who joins new work" });
-    await expect(controls).toBeVisible();
-    for (const role of roles) await expect(controls.getByText(role, { exact: true })).toBeVisible();
-    await expect(controls.getByRole("switch")).toHaveCount(roles.length);
+    await expect(page.getByRole("region", { name: "Choose who joins new work" })).toHaveCount(0);
+    await expect(page.getByRole("switch")).toHaveCount(0);
   }
 });
 

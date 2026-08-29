@@ -16,10 +16,11 @@ Updated: 2026-08-28.
 
 The owner set the launch set: DNESKAi, MMA Files, marketingShark, BOOKSOFHISTORY, Tehdejší
 svět, Kvórum, plus the owner-only Personal Growth desk. Titty Tuesdays, Door Money, WebDev
-Signal and Contest Radar wait until after launch. The implementation half lives in
-`docs/LAUNCH-BUILD-PROMPT.md` and becomes a GitHub issue program; this shortlist is the owner
-half, ordered by what unblocks the most. Every referenced item already exists below or in
-`state/INBOX.md` — tick it where it lives, not here.
+Signal and Contest Radar wait until after launch. The implementation half became GitHub issue
+program #462 (#463–#473, all worked); the one-shot build prompt that seeded it was deleted once
+the program completed, as it instructed. This shortlist is the owner half, ordered by what
+unblocks the most. Every referenced item already exists below or in `state/INBOX.md` — tick it
+where it lives, not here.
 
 - [x] **Merge the release-gate repair** — done 2026-08-29 in #460 and #461. The gate had been red
   since 28 August 15:00 UTC and every council room since had recorded a skip.

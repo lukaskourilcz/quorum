@@ -2,6 +2,7 @@ import "server-only";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import editionQuality from "../../../config/edition-quality.json";
+import ventureRegistry from "../../../config/ventures.json";
 import {
   CURRENT_EDITION_PRODUCTION_CAP_USD,
   CURRENT_MONTHLY_API_LIMIT_USD,
@@ -408,7 +409,13 @@ export async function resolveOfficeWorkflows(
       : null;
   };
 
-  const rooms: WorkflowsRoom[] = ROOM_ORDER.map(({ key, name, purpose, connects, operates }) => {
+  // A paused venture's room leaves the plan with the venture: the machinery drawing must not
+  // show a desk the owner switched off in Settings.
+  const pausedRooms = new Set(ventureRegistry.ventures
+    .filter((venture) => venture.status === "paused")
+    .map((venture) => venture.id));
+  const rooms: WorkflowsRoom[] = ROOM_ORDER.filter(({ key }) => !pausedRooms.has(key))
+    .map(({ key, name, purpose, connects, operates }) => {
     const own = slots
       .filter((slot) => slot.room === key)
       .sort((left, right) => left.hour - right.hour);

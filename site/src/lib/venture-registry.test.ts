@@ -1,3 +1,4 @@
+import { readFile } from "node:fs/promises";
 import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -13,20 +14,54 @@ vi.mock("server-only", () => ({}));
 afterEach(() => vi.unstubAllEnvs());
 
 describe("public project schedule", () => {
-  it("matches the live registry exactly, with one row per Prague hour", async () => {
+  it("matches the live registry exactly, minus the ventures the owner paused", async () => {
+    /*
+     * CALENDAR_SLOTS is the static mirror of the full clock; the live schedule is that mirror
+     * with every paused venture's rooms removed, because a paused venture's rooms will not sit.
+     * The expected set is computed from the registry itself so this holds whichever way the
+     * owner's Settings switches point on the day the suite runs.
+     */
+    const registry = JSON.parse(await readFile(
+      path.join(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), ".."), "config", "ventures.json"),
+      "utf8"
+    )) as { ventures: Array<{ status?: string; meetings: Array<{ kind: string }>; productionJobs?: Array<{ kind: string }> }> };
+    const pausedKinds = new Set(registry.ventures
+      .filter((venture) => venture.status === "paused")
+      .flatMap((venture) => [
+        ...venture.meetings.map(({ kind }) => kind),
+        ...(venture.productionJobs ?? []).flatMap(({ kind }) => kind === "article-production" ? ["article-am", "article-pm"] : [kind])
+      ]));
     const schedule = await getPublicCalendarSchedule();
-    expect(schedule.map(({ hour, kind, label }) => ({ hour, kind, label }))).toEqual(CALENDAR_SLOTS);
+    expect(schedule.map(({ hour, kind, label }) => ({ hour, kind, label })))
+      .toEqual(CALENDAR_SLOTS.filter(({ kind }) => !pausedKinds.has(kind)));
     expect(new Set(schedule.map(({ hour }) => hour)).size).toBe(schedule.length);
-    expect(schedule
-      .filter(({ kind }) => ["bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk"].includes(kind))
-      .map(({ hour, kind, label }) => ({ hour, kind, label })))
-      .toEqual([
-        { hour: 12, kind: "bh-desk", label: "BOOKSOFHISTORY editorial desk" },
-        { hour: 15, kind: "dm-desk", label: "Door Money daily storytelling desk" },
-        { hour: 16, kind: "dm-growth", label: "Door Money Thursday growth room" },
-        { hour: 18, kind: "ts-desk", label: "Tehdejší svět editorial desk" },
-        { hour: 21, kind: "kv-desk", label: "Kvórum daily political desk" }
-      ]);
+  });
+
+  it("drops a paused venture's rooms and keeps everyone else's", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "public-schedule-paused-"));
+    await mkdir(path.join(root, "config"), { recursive: true });
+    await writeFile(path.join(root, "config", "ventures.json"), JSON.stringify({
+      schemaVersion: "venture-registry/1",
+      ventures: [{
+        id: "magazine",
+        status: "operating",
+        visibility: "public",
+        meetings: [{ kind: "mag-editorial", label: "Story meeting", cadence: "daily@09:00" }]
+      }, {
+        id: "shelved",
+        status: "paused",
+        visibility: "public",
+        meetings: [{ kind: "dm-desk", label: "Paused desk", cadence: "daily@15:00" }]
+      }]
+    }));
+    const schedule = await getPublicCalendarSchedule(root);
+    expect(schedule.map(({ hour, kind }) => ({ hour, kind }))).toEqual([
+      { hour: 6, kind: "venture-morning" },
+      { hour: 9, kind: "mag-editorial" },
+      { hour: 14, kind: "venture-afternoon" },
+      { hour: 22, kind: "venture-night" }
+    ]);
+    expect(JSON.stringify(schedule)).not.toContain("Paused desk");
   });
 
   it("includes meeting and article-production times from the same registry", async () => {

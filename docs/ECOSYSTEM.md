@@ -41,7 +41,7 @@ builds and after a real 22:00 checkpoint. Never hand-edit the generated block.
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
 
-Refreshed from committed state: **2026-08-29T20:06:58.874Z**. This block is generated deterministically; edit the source state, not these lines.
+Refreshed from committed state: **2026-08-29T20:10:58.451Z**. This block is generated deterministically; edit the source state, not these lines.
 
 | Item | Current value |
 | --- | --- |
@@ -70,7 +70,7 @@ Refreshed from committed state: **2026-08-29T20:06:58.874Z**. This block is gene
 | Design Lab | operating | deterministic service only | none | not applicable |
 | marketingShark | operating | ms-daily 07:00 | none | not applicable |
 | MMA Files | operating | mag-editorial 09:00; mag-desk 20:00 | REACH | locked (10/10) |
-| Door Money | operating | dm-desk 15:00; dm-growth 16:00 | none | not applicable |
+| Door Money | paused | dm-desk 15:00; dm-growth 16:00 | none | not applicable |
 | Tehdejší svět | operating | ts-desk 18:00 | none | not applicable |
 | Kvórum | operating | kv-desk 21:00 | none | not applicable |
 

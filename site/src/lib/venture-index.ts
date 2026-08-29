@@ -180,7 +180,10 @@ async function metricCount(root: string, source: MetricSource): Promise<number |
 
 export async function readVentureIndex(root = repositoryRoot()): Promise<VentureIndexCard[]> {
   return Promise.all(ventureRegistry.ventures
-    .filter((venture) => venture.visibility === "public")
+    // A paused venture leaves the public index with the wall: the owner's Settings switch means
+    // the company is not working on it now. Its room page stays routable for anyone holding the
+    // link; the index simply stops offering it.
+    .filter((venture) => venture.visibility === "public" && venture.status !== "paused")
     .map(async (venture) => {
     const copy = COPY[venture.id];
     if (!copy) throw new Error(`Missing public venture-index copy for ${venture.id}`);

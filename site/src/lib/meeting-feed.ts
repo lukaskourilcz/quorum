@@ -16,19 +16,23 @@ import { publicKindLabel } from "@/lib/slot-labels";
  * `text` here is prose a reader can read. Refs, hashes and phase tokens live in `attachment.ref`,
  * where they are a machine address behind a labelled disclosure, and nowhere else.
  */
+/**
+ * Each channel names the venture whose desk it is (null for company-wide rooms), so a venture
+ * the owner paused in Settings takes its channel off the workspace view with it.
+ */
 export const WORKSPACE_CHANNELS = [
-  { id: "vydani-dneskai", label: "DNESKAi edition" },
-  { id: "ranni-porada", label: "Company board" },
-  { id: "kontrola-mma-dat", label: "Fight data checks" },
-  { id: "redakcni-porada-mma", label: "MMA Files story desk" },
-  { id: "vecerni-redakce", label: "MMA Files evening desk" },
-  { id: "titty-tuesdays-marketing", label: "Titty Tuesdays marketing" },
-  { id: "goviral-trend-room", label: "GoVIRAL trend room" },
-  { id: "marketingshark-carousel-room", label: "marketingShark carousel room" },
-  { id: "booksofhistory-editorial-desk", label: "BOOKSOFHISTORY editorial desk" },
-  { id: "door-money-story-room", label: "Door Money storytelling desk" },
-  { id: "tehdejsi-svet-editorial-desk", label: "Tehdejší svět editorial desk" },
-  { id: "kvorum-political-desk", label: "Kvórum political desk" }
+  { id: "vydani-dneskai", label: "DNESKAi edition", venture: "caught-up" },
+  { id: "ranni-porada", label: "Company board", venture: null },
+  { id: "kontrola-mma-dat", label: "Fight data checks", venture: "fightaiq" },
+  { id: "redakcni-porada-mma", label: "MMA Files story desk", venture: "mma-files" },
+  { id: "vecerni-redakce", label: "MMA Files evening desk", venture: "mma-files" },
+  { id: "titty-tuesdays-marketing", label: "Titty Tuesdays marketing", venture: "titty-tuesdays" },
+  { id: "goviral-trend-room", label: "GoVIRAL trend room", venture: "goviral" },
+  { id: "marketingshark-carousel-room", label: "marketingShark carousel room", venture: "marketingshark" },
+  { id: "booksofhistory-editorial-desk", label: "BOOKSOFHISTORY editorial desk", venture: "booksofhistory" },
+  { id: "door-money-story-room", label: "Door Money storytelling desk", venture: "door-money" },
+  { id: "tehdejsi-svet-editorial-desk", label: "Tehdejší svět editorial desk", venture: "tehdejsi-svet" },
+  { id: "kvorum-political-desk", label: "Kvórum political desk", venture: "kvorum" }
 ] as const;
 
 export type WorkspaceChannelId = (typeof WORKSPACE_CHANNELS)[number]["id"];

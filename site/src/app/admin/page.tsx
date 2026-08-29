@@ -4,9 +4,7 @@ import Link from "next/link";
 import { AdminFileBrowser } from "@/components/admin/admin-file-browser";
 import { AdminShell, type AdminSection, type AdminWorkspace } from "@/components/admin/admin-shell";
 import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
-import { AgentSwitches } from "@/components/admin/agent-switches";
 import { DesignLabSectionNav, DesignLabVentureSection } from "@/components/admin/design-lab-section";
-import { AutonomyPanel } from "@/components/admin/autonomy-panel";
 import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-panel";
 import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
 import { KvorumClaimsPanel } from "@/components/admin/kvorum-claims-panel";
@@ -15,6 +13,7 @@ import { KvorumRecommendationsPanel } from "@/components/admin/kvorum-recommenda
 import { ImplementationProgramCompactSummary } from "@/components/admin/implementation-plans";
 import { FightAiQAdminPanel } from "@/components/admin/fightaiq-admin-panel";
 import { GoViralProfilePanel } from "@/components/admin/goviral-profile-panel";
+import { GoViralTrendsPanel } from "@/components/admin/goviral-trends-panel";
 import { OwnerAttentionPanel } from "@/components/admin/owner-attention-panel";
 import { PersonalGrowthOverview, PersonalGrowthPanel } from "@/components/admin/personal-growth-panel";
 import { CaughtUpEventsPanel } from "@/components/admin/caught-up-events-panel";
@@ -46,7 +45,6 @@ import {
   CURRENT_MONTHLY_API_LIMIT_USD,
   CURRENT_MONTHLY_OPERATING_LIMIT_USD
 } from "@/data/operating-policy";
-import { readAdminAgentControls } from "@/lib/admin-agent-controls";
 import { buildAdminRecentActivity } from "@/lib/admin-recent-activity";
 import { readApprovedUndeliveredPayloads } from "@/lib/admin-owner-attention";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
@@ -71,6 +69,7 @@ import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio"
 import { readAdminSnapshot } from "@/lib/admin-state";
 import { readCarouselStudio } from "@/lib/carousel-studio";
 import { readGoViralProfile } from "@/lib/goviral-profile";
+import { readGoViralTrends } from "@/lib/goviral-trends";
 import { readHookBrain } from "@/lib/hook-brain";
 import { readMonetizationOptions } from "@/lib/monetization-options";
 import { readOwnerAttention } from "@/lib/owner-attention";
@@ -170,9 +169,9 @@ export default async function AdminPage({
     carouselStudio,
     hookBrain,
     goviralProfile,
+    goviralTrends,
     studioArticles,
     labSections,
-    agentControls,
     autonomy,
     fixedCosts,
     money,
@@ -201,9 +200,9 @@ export default async function AdminPage({
     readCarouselStudio(),
     readHookBrain(),
     readGoViralProfile(),
+    readGoViralTrends(),
     readStudioArticles(),
     readDesignLabSections(),
-    readAdminAgentControls(),
     readAdminAutonomy(),
     readAdminFixedCosts(),
     getPublicMoneySnapshot(),
@@ -655,7 +654,6 @@ export default async function AdminPage({
   const visibleCards = selectedVenture && selectedTab && cardKindByTab[selectedTab]
     ? selectedVenture.cards.filter((card) => card.kind === cardKindByTab[selectedTab])
     : [];
-  const selectedAgentControls = agentControls.find((control) => control.ventureId === selectedVenture?.id);
   const writesEnabled = adminWritesEnabled();
 
   /**
@@ -852,10 +850,10 @@ export default async function AdminPage({
       }
       lead={
         selectedVenture
-          ? `Everything ${ventureName(selectedVenture.id, selectedVenture.name)} has saved, and the switches that decide what it may do next.`
+          ? `The latest work ${ventureName(selectedVenture.id, selectedVenture.name)} has saved. The project runs itself; this page is for reading its output.`
           : selectedView
             ? SECTION_LEADS[selectedView]
-            : "Everything the owner alone can decide, in one protected view: what the company spends, which switches are open, the files the runtime writes, and every social draft waiting for a signature."
+            : "What the company shipped, what it spends, and the few things waiting on your signature. Everything else runs on its own."
       }
       sections={sections}
       title={
@@ -967,22 +965,10 @@ export default async function AdminPage({
             </Panel>
           </div>
 
-          {/* The panel used to be titled "Switches and priorities" and hold no switch: quality
-              tiles, the social-readiness grid and the priority form. The actual per-project
-              switches live inside each venture's workspace, so the title says what is here and
-              the note says where the other thing is. */}
-          <Panel note="Nothing here spends money" title="Company health and priorities">
-            <AutonomyPanel
-              initial={autonomy}
-              ventures={portfolio.ventures.map(({ id, name }) => ({ id, name }))}
-            />
-            <p className="mt-4 text-[length:var(--admin-type-control)] leading-[1.55] text-[var(--admin-foreground-muted)]">
-              The switches that decide what a project may do next are on that project&rsquo;s own
-              page — open a project in the list on the left. Nothing on this page approves spending,
-              logins or a new permission; those still need your signature.
-            </p>
-          </Panel>
-
+          {/* The "Company health and priorities" panel — quality tiles, the social-readiness
+              grid and a priority form — went on the owner's 2026-08-29 instruction: the system
+              runs autonomously, and the rail counters above already carry what still waits. The
+              snapshot behind it still feeds those counters and the launch board. */}
           <Panel note="The last three days" title="What shipped">
             <RenderedDeskPanel desk={renderedDesk} />
           </Panel>
@@ -1043,21 +1029,17 @@ export default async function AdminPage({
             />
           ) : null}
 
-          {/* GoVIRAL owns exactly one artefact and it is not a card, so the workspace leads with
-              it. Both tabs below say "nothing is stored", which is true and was the only thing
-              the venture had to say for itself. */}
-          {selectedVenture.id === "goviral" ? <GoViralProfilePanel profile={goviralProfile} /> : null}
+          {/* GoVIRAL leads with what the owner opens it for — what is viral this week — and the
+              writing-profile status follows. Both render honest empty states until the Monday
+              scout has data to write. */}
+          {selectedVenture.id === "goviral" ? (
+            <>
+              <GoViralTrendsPanel trends={goviralTrends} />
+              <GoViralProfilePanel profile={goviralProfile} />
+            </>
+          ) : null}
 
           <div className="min-w-0">{tabView.node}</div>
-
-          {selectedAgentControls ? (
-            <div className="min-w-0">
-              <AgentSwitches
-                initialAgents={selectedAgentControls.agents}
-                ventureId={selectedAgentControls.ventureId}
-              />
-            </div>
-          ) : null}
         </div>
       )}
       </AdminWriteProvider>
