@@ -373,6 +373,28 @@ test("Kvórum exposes three truthful owner-workspace tabs", async ({ page }) => 
   await expect(page.getByText("0 on this tab", { exact: true })).toBeVisible();
 });
 
+test("the launch board opens the admin with one row per launching venture", async ({ page }) => {
+  await page.goto("/admin", { waitUntil: "networkidle" });
+  const board = page.locator("[data-adm-launch-board]");
+  await expect(board).toBeVisible();
+  await expect(page.locator("[data-adm-launch-verdict]")).toBeVisible();
+
+  // The seven the owner is launching, and no row for the ones deliberately held.
+  for (const ventureId of [
+    "caught-up", "mma-files", "marketingshark", "booksofhistory", "tehdejsi-svet", "kvorum", "personal-growth"
+  ]) {
+    await expect(board.locator(`[data-adm-launch-row="${ventureId}"]`)).toBeVisible();
+  }
+  for (const heldId of ["titty-tuesdays", "door-money", "goviral", "webdev-signal"]) {
+    await expect(board.locator(`[data-adm-launch-row="${heldId}"]`)).toHaveCount(0);
+  }
+
+  // The picture column is the reason this board exists: both magazines record a rung per article,
+  // and a run that fell to the drawn plate must be legible here rather than only on disk.
+  const magazine = board.locator('[data-adm-launch-row="caught-up"]');
+  await expect(magazine).toContainText(/entity-linked|curated|search|illustration|plate/u);
+});
+
 test("the admin home answers what happened since yesterday for every new venture", async ({ page }) => {
   await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
   const panel = page.locator("[data-admin-recent-activity]");

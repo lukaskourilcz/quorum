@@ -83,6 +83,10 @@ import { getPublicMoneySnapshot } from "@/lib/money-records";
 import { getPublicStandups } from "@/lib/standup-records";
 import { formatUsd } from "@/lib/utils";
 import { ventureBrand } from "@/lib/venture-brand";
+import { readAdminImageRungs } from "@/lib/admin-image-rungs";
+import { buildLaunchBoard, HELD_VENTURES, LAUNCH_SET, shortTitle, ventureForApproval } from "@/lib/admin-launch-board";
+import { getVentureMeetingHours } from "@/lib/venture-registry";
+import { LaunchBoardPanel } from "@/components/admin/launch-board-panel";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -182,7 +186,9 @@ export default async function AdminPage({
     tehdejsiSvet,
     kvorum,
     implementationProgress,
-    personalGrowth
+    personalGrowth,
+    imageRungs,
+    meetingHours
   ] = await Promise.all([
     searchParams,
     readAdminSnapshot(),
@@ -211,7 +217,9 @@ export default async function AdminPage({
     readAdminTehdejsiSvet(),
     readAdminKvorum(),
     readAdminImplementationProgress(),
-    readAdminPersonalGrowth()
+    readAdminPersonalGrowth(),
+    readAdminImageRungs(LAUNCH_SET),
+    getVentureMeetingHours()
   ]);
   /*
    * `design-lab` is the name; `carousel-studio` is the id.
@@ -562,6 +570,60 @@ export default async function AdminPage({
     }
   ];
 
+  /*
+   * The launch board, folded from the snapshots that already own each field.
+   *
+   * Nothing here reads a file: every value arrives from a loader above, so the board cannot
+   * disagree with the panel it sits on top of. In particular the blocking column comes off
+   * `state/owner-attention.json` exactly like the rail counters and the two attention panels do:
+   * one source carrying its own age, rather than a second reading of the inbox that would drift
+   * away from them.
+   *
+   * Approvals only, not manual tasks. The two overlap, because the same countersignature is both an
+   * inbox line and a NEEDED entry, and a manual task's slugified id carries no venture to match on.
+   */
+  const blockingByVenture: Record<string, { title: string; href: string }> = {};
+  for (const item of ownerAttention.approvals) {
+    if (item.urgency !== "blocking") continue;
+    const ventureId = ventureForApproval(item.id);
+    if (!ventureId || blockingByVenture[ventureId]) continue;
+    blockingByVenture[ventureId] = { title: shortTitle(item.title), href: "/admin?view=approvals" };
+  }
+  // The newest delivery each venture has on file. The rendered desk keeps three days, which is the
+  // window it is built for; a venture that last shipped before it reads as no recent delivery
+  // rather than as never having shipped, and the column header says "Last delivery" for that
+  // reason.
+  const deliveriesByVenture: Record<string, { date: string; url: string | null }> = {};
+  for (const day of renderedDesk.days) {
+    for (const article of day.articles) {
+      deliveriesByVenture[article.ventureId] ??= { date: day.date, url: article.url };
+    }
+  }
+  const launchBoard = buildLaunchBoard({
+    // `ventureName` because the owner calls Caught Up "DNESKAi" everywhere else in this admin, and
+    // a board that renames a venture on its own first screen is a board he has to translate.
+    ventures: LAUNCH_SET.map((id) => ({
+      id,
+      name: ventureName(id, portfolio.ventures.find((venture) => venture.id === id)?.name ?? id)
+    })),
+    deliveries: deliveriesByVenture,
+    slots: Object.fromEntries(
+      LAUNCH_SET.map((id) => [id, meetingHours[id]?.[0]])
+    ),
+    images: imageRungs,
+    social: Object.fromEntries(
+      autonomy.social.map((entry) => [entry.venture, {
+        counter: entry.counter,
+        required: entry.required,
+        status: entry.status
+      }])
+    ),
+    blocking: blockingByVenture,
+    heldIds: HELD_VENTURES,
+    attentionAsOf: ownerAttention.generatedAt?.slice(0, 10) ?? null,
+    today: new Date().toISOString().slice(0, 10)
+  });
+
   const monthAllIn = money?.costs.totalMonthlyBurnUsd ?? 0;
   const monthApi = money?.costs.api.monthlyUsd ?? 0;
   const latestDay = dailyResults.at(-1) ?? null;
@@ -834,6 +896,7 @@ export default async function AdminPage({
         </div>
       ) : !selectedVenture ? (
         <div className="grid min-w-0 gap-4">
+          <LaunchBoardPanel board={launchBoard} />
           <PersonalGrowthOverview snapshot={personalGrowth} />
           <div
             className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] bg-[var(--admin-border)] lg:grid-cols-4"
