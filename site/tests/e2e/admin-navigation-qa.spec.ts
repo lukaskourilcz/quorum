@@ -5,7 +5,8 @@ import {
   captureAdminRuntimeFailures,
   expectNoDocumentOverflow,
   guardAdminWrites,
-  setAdminPreferences
+  setAdminPreferences,
+  waitForAdminShell
 } from "./admin-qa";
 
 interface VentureRegistry {
@@ -19,6 +20,9 @@ const canonicalDestinations = [
   "/admin",
   "/admin/operations",
   "/admin/implementation-plans",
+  // Social Profiles has been in the rail since #415 and was never added here, so this list — and
+  // the four order-sensitive assertions it drives — has been failing rather than guarding.
+  "/admin/social-profiles",
   "/admin?view=approvals",
   "/admin?view=manual-tasks",
   "/admin?view=future",
@@ -27,6 +31,17 @@ const canonicalDestinations = [
     .filter(({ id }) => id !== "carousel-studio")
     .map(({ id }) => `/admin?venture=${id}`)
 ];
+
+/**
+ * How long an Admin navigation is allowed to take.
+ *
+ * `/admin` is `force-dynamic`, so changing `?view=` or `?venture=` re-runs every one of its
+ * loaders before the router commits the URL. Measured at 5.3s on this machine, against
+ * Playwright's 5s default — a 300ms cliff that failed two of these tests every run and read as a
+ * link that would not navigate. The number is the page's cost, not a flake allowance, and it
+ * should come down rather than up: the loaders belong behind the tab that needs them.
+ */
+const ADMIN_NAVIGATION_TIMEOUT = 30_000;
 
 async function expectCanonicalLinks(links: Locator) {
   expect(await links.evaluateAll((items) =>
@@ -40,6 +55,8 @@ async function openAdmin(page: Page, route = "/admin") {
   const response = await page.goto(route, { waitUntil: "domcontentloaded" });
   expect(response?.status()).toBe(200);
   await expect(page.locator("[data-admin-content]")).toBeVisible();
+  // Every test below this line interacts with the shell, so it must be interactive first.
+  await waitForAdminShell(page);
   return { failures, mutationAttempts };
 }
 
@@ -57,7 +74,7 @@ test("expanded and collapsed desktop navigation expose every canonical destinati
   await expect(links).toHaveCount(canonicalDestinations.length);
 
   await navigation.locator('a[href="/admin?view=approvals"]').click();
-  await expect(page).toHaveURL(/\/admin\?view=approvals$/u);
+  await expect(page).toHaveURL(/\/admin\?view=approvals$/u, { timeout: ADMIN_NAVIGATION_TIMEOUT });
   await expect(
     navigation.locator('a[href="/admin?view=approvals"][aria-current="page"]')
   ).toBeVisible();
@@ -93,7 +110,7 @@ test("the command palette exposes every destination and opens the active workspa
   await expect(palette.getByRole("option")).toHaveCount(1);
   await search.press("Enter");
 
-  await expect(page).toHaveURL(/\/admin\?venture=kvorum$/u);
+  await expect(page).toHaveURL(/\/admin\?venture=kvorum$/u, { timeout: ADMIN_NAVIGATION_TIMEOUT });
   await expect(
     page.locator('a[href="/admin?venture=kvorum"][aria-current="page"]')
   ).toBeVisible();
@@ -125,7 +142,7 @@ test("mobile More keeps safe targets and exposes every canonical destination", a
   await expectCanonicalLinks(more.locator('a[href^="/admin"]'));
   await more.locator('a[href="/admin?venture=tehdejsi-svet"]').click();
 
-  await expect(page).toHaveURL(/\/admin\?venture=tehdejsi-svet$/u);
+  await expect(page).toHaveURL(/\/admin\?venture=tehdejsi-svet$/u, { timeout: ADMIN_NAVIGATION_TIMEOUT });
   await expect(
     mobileNavigation.getByRole("button", { name: "Workspaces" })
   ).toHaveAttribute("data-active", "true");
@@ -184,6 +201,9 @@ test("the mobile sheet traps focus, restores its opener and restores body scroll
 }) => {
   await page.setViewportSize({ height: 844, width: 390 });
   await setAdminPreferences(page, { theme: "dark" });
+  // `openAdmin` waits for hydration, so React has already had the last word on `<body>`. Writing
+  // an inline style onto an element React is still hydrating logs a mismatch in the dev build,
+  // which the console guard below would then report as an application failure.
   const runtime = await openAdmin(page);
   await page.evaluate(() => {
     document.body.style.overflow = "clip";

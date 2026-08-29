@@ -45,10 +45,37 @@ export async function setAdminPreferences(
   ]);
 }
 
+/**
+ * `guardAdminWrites` aborts every non-GET request with `blockedbyclient`, and the browser logs
+ * each abort as a console error. Counting those as application failures makes the guard report
+ * itself: the write is already recorded in `mutationAttempts`, which every caller asserts
+ * separately, so nothing is lost by not counting it twice. Only this exact signature is ignored.
+ */
+function isSelfInflicted(text: string): boolean {
+  return text.includes("net::ERR_BLOCKED_BY_CLIENT");
+}
+
+/**
+ * Wait until the Admin shell is interactive, not merely painted.
+ *
+ * `/admin` resolves around thirty loaders and ships a large RSC payload, so React attaches its
+ * handlers well after `domcontentloaded` and after `networkidle` too — measured at roughly a
+ * second past both on this machine. A test that clicks before then finds a button with no handler
+ * and reports it as a broken command palette or a link that will not navigate, which is what four
+ * navigation tests have been reporting.
+ *
+ * The shell already publishes the answer: `AdminShellClient` stamps `data-admin-hydrated` from
+ * `useAdminHydrated`, which is `false` on the server and `true` once React takes over. Waiting on
+ * the app's own signal beats sleeping, and it cannot drift from what the app means by ready.
+ */
+export async function waitForAdminShell(page: Page): Promise<void> {
+  await page.locator('[data-admin-hydrated="true"]').waitFor({ state: "attached" });
+}
+
 export function captureAdminRuntimeFailures(page: Page): string[] {
   const failures: string[] = [];
   page.on("console", (message) => {
-    if (message.type() === "error") {
+    if (message.type() === "error" && !isSelfInflicted(message.text())) {
       const source = message.location().url;
       failures.push(`console: ${message.text()}${source ? ` @ ${source}` : ""}`);
     }
