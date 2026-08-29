@@ -8,30 +8,39 @@ import { summarizeVentureSpend } from "../src/ventures/accounting.js";
 import {
   composeMeetingRouteDefinition,
   cronPayloads,
+  dayDispatchedKinds,
   loadVentureRegistry,
   resolveMeetingClock,
   ventureIdForPhase
 } from "../src/ventures/registry.js";
+import { RunnablePhaseSchema } from "../src/types.js";
 
 describe("venture registry migration", () => {
-  // The clock is the promise: Caught Up meets at 05, 06, 14, 17 and 22 Prague, exactly as it
-  // did before the venture registry existed. The cron hours are how early GitHub is asked to
-  // fire, and they moved deliberately by CRON_LEAD_HOURS after GitHub delivered them up to
-  // three hours late; they moved again by CRON_HOUR_CARRY when the minute went to CRON_MINUTE,
-  // which gets the whole schedule off minute 0 — the start-of-hour rush GitHub warns about — and
-  // buys five minutes of head start by firing just before the hour each meeting belongs to.
-  // No move touches a Prague hour, and the fixture carries the current pair so a drift still
-  // fails here.
-  it("keeps the Caught Up clock and cron payloads byte-equivalent", async () => {
+  /*
+   * The registry migration's promise, as it stands after `operations-2026-08c`.
+   *
+   * It used to be "Caught Up meets at 05, 06, 14, 17 and 22 Prague, exactly as it did before the
+   * venture registry existed" — a byte-equal clock. The owner consolidated that clock on
+   * 2026-08-29: DNESKAi keeps one slot at 05:00 and runs both its rooms inside it, and two of the
+   * three company shifts were retired. What the migration still may never do is lose a room, so
+   * that is what this proves now: every phase the legacy fixture named still has its definition,
+   * and each one that left the clock left it because a venture day dispatches it.
+   */
+  it("keeps every legacy room defined, and only loses a slot to the day that dispatches it", async () => {
     const registry = await loadVentureRegistry();
-    const legacyPhases = new Set(legacy.clock.map(({ phase }) => phase));
-    const clock = resolveMeetingClock(registry)
-      .filter(({ phase }) => legacyPhases.has(phase))
-      .map(({ phase, hour, label }) => ({ phase, hour, label }));
-    expect(JSON.stringify(clock)).toBe(JSON.stringify(legacy.clock));
-    expect(JSON.stringify(cronPayloads(registry).filter(({ phase }) => legacyPhases.has(phase)))).toBe(
-      JSON.stringify(legacy.cronPayloads)
-    );
+    const clockPhases = new Set(resolveMeetingClock(registry).map(({ phase }) => phase));
+    const dispatched = dayDispatchedKinds(registry);
+    const defined = new Set(registry.ventures.flatMap((venture) => venture.meetings.map(({ kind }) => kind)));
+    const shifts = new Set(["morning", "afternoon", "night"]);
+    for (const { phase } of legacy.clock) {
+      if (shifts.has(phase)) continue;
+      expect(defined.has(phase), `${phase} lost its definition`).toBe(true);
+      if (clockPhases.has(phase)) continue;
+      expect(dispatched.has(phase), `${phase} left the clock without a day to run it`).toBe(true);
+    }
+    // The retired shifts are a schedule decision, not a deletion: they stay runnable by hand.
+    expect(RunnablePhaseSchema.options).toEqual(expect.arrayContaining(["afternoon", "night"]));
+    expect(clockPhases.has("morning")).toBe(true);
   });
 
   it.each([

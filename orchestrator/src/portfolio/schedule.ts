@@ -1,7 +1,7 @@
 import { COUNTERSIGNED_MONTHLY_OPERATING_USD } from "../budget.js";
 import type { VentureRegistry } from "../contracts/venture-registry.js";
-import type { ScheduledPhase } from "../types.js";
-import { parseCadenceHour, resolveMeetingClock, resolveScheduledClock } from "../ventures/registry.js";
+import { ScheduledPhaseSchema, type ScheduledPhase } from "../types.js";
+import { dayDispatchedKinds, parseCadenceHour, resolveMeetingClock, resolveScheduledClock } from "../ventures/registry.js";
 
 export type BudgetShape = "A" | "B";
 
@@ -170,7 +170,12 @@ export function resolveEffectivePortfolioSchedule(input: {
   // reads. budget-2026-08f supersedes the later $30 all-in amount with $50 while preserving the
   // $25 model share and $1.00 daily pace. The flag is named for the clock it selects.
   const fullScheduleShape = fiftyDecisionStatus === "countersigned";
-  const active = new Set((fullScheduleShape ? resolveScheduledClock(input.registry) : resolveMeetingClock(input.registry)).map((slot) => slot.phase));
+  // The clock's own slots, plus every room a venture day dispatches: a consolidated room lost its
+  // hour, not its place in the schedule, and everything below asks about the room that meets.
+  const active = new Set<string>([
+    ...(fullScheduleShape ? resolveScheduledClock(input.registry) : resolveMeetingClock(input.registry)).map((slot) => slot.phase),
+    ...dayDispatchedKinds(input.registry)
+  ]);
   const envelopeByPhase: Partial<Record<ScheduledPhase, number>> = {};
   for (const venture of input.registry.ventures) {
     for (const meeting of venture.meetings) {
@@ -280,9 +285,20 @@ export function resolveEffectivePortfolioSchedule(input: {
     contentGateAffordable,
     booksofHistoryResearchCandidates,
     booksofHistoryStretch,
-    activePhases: (fullScheduleShape ? resolveScheduledClock(input.registry) : resolveMeetingClock(input.registry))
-      .map((slot) => slot.phase)
-      .filter((phase) => active.has(phase)),
+    activePhases: [
+      ...(fullScheduleShape ? resolveScheduledClock(input.registry) : resolveMeetingClock(input.registry))
+        .map((slot) => slot.phase),
+      /*
+       * The rooms a venture day dispatches are still rooms this schedule affords.
+       *
+       * The day holds the hour, so the clock above no longer lists them — but `phaseEnabled` is
+       * asked about the room that is actually about to meet, one step inside the day. Leaving
+       * them out told every consolidated room that the owner's budget did not pay for it.
+       */
+      ...[...dayDispatchedKinds(input.registry)]
+        .map((kind) => ScheduledPhaseSchema.safeParse(kind))
+        .flatMap((parsed) => parsed.success ? [parsed.data] : [])
+    ].filter((phase) => active.has(phase)),
     envelopeByPhase
   };
 }

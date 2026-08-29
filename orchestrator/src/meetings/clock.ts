@@ -15,6 +15,18 @@ export const PRAGUE_TIME_ZONE = "Europe/Prague";
 
 export const MEETING_CLOCK = resolveScheduledClock(readVentureRegistry());
 
+/**
+ * The rooms each venture day dispatches, keyed by the day's phase.
+ *
+ * A day writes no record of its own — its rooms write theirs — so anything that asks "did this
+ * slot happen" has to ask the rooms. Read from the registry beside the clock itself so the two
+ * cannot disagree about which rooms a day owns.
+ */
+export const DAY_STEPS: Readonly<Record<string, readonly string[]>> = Object.fromEntries(
+  readVentureRegistry().ventures.flatMap((venture) =>
+    venture.day ? [[venture.day.kind, venture.day.steps] as const] : [])
+);
+
 interface PragueClockParts {
   date: string;
   hour: number;

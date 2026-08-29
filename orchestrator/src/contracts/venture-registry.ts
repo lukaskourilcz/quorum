@@ -130,6 +130,24 @@ const VentureDefinitionSchema = openObject({
     cadence: z.string().regex(/^(?:2x-daily@\d{2}:00,\d{2}:00|daily@(?:0[5-9]|1\d|2[0-3]):00)$/),
     envelopeUsd: z.number().finite().positive().max(1)
   })).optional(),
+  /**
+   * The venture's one slot a day, and the rooms it dispatches inside it.
+   *
+   * The owner's 2026-08-29 instruction — one calendar slot per venture — consolidates the clock
+   * and nothing else. Every room named in `steps` keeps its full definition in `meetings` below,
+   * because that definition is its cast, its envelope and its agenda packet; what it loses is a
+   * cadence of its own. A room a day dispatches is dropped from the clock and the sixty-minute
+   * spacing check, and the day's own hour takes its place.
+   *
+   * `steps` may name a room another venture owns: FightAIQ's two data checks are steps of the MMA
+   * Files day, which is what "combine MMA Files and Fight Analysis into one meeting" means.
+   */
+  day: openObject({
+    kind: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*-day$/),
+    label: z.string().min(1),
+    cadence: z.string().regex(/^daily@(?:0[5-9]|1\d|2[0-3]):00$/),
+    steps: z.array(z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)).min(1)
+  }).optional(),
   meetings: z.array(VentureMeetingDefinitionSchema)
 });
 
@@ -179,19 +197,51 @@ export const VentureRegistrySchema = openObject({
       path: ["ventures"]
     });
   }
-  const starts = [
-    { kind: "venture-morning", hour: 6 },
-    { kind: "venture-afternoon", hour: 14 },
-    { kind: "venture-night", hour: 22 },
-    ...ventures.flatMap((venture) => venture.meetings.map((meeting) => ({
-      kind: meeting.kind,
-      hour: Number(meeting.cadence.slice(6, 8))
-    }))),
+  /*
+   * Every room a venture day dispatches, across the whole registry.
+   *
+   * Collected before the clock is built because a dispatched room has no hour of its own any
+   * more: its day holds the slot, and leaving both on the clock would double-book the venture and
+   * fail the spacing check against itself.
+   */
+  const dispatched = new Set(ventures.flatMap((venture) => venture.day?.steps ?? []));
+  const scheduledKinds = new Set([
+    ...ventures.flatMap((venture) => venture.meetings.map(({ kind }) => kind)),
+    // A production job schedules slots, not a room: `article-production` puts `article-am` on the
+    // clock (and `article-pm` when the cadence still promises two), which is the name the day's
+    // steps and the calendar both use.
     ...ventures.flatMap((venture) => (venture.productionJobs ?? []).flatMap((job) => {
+      const base = job.kind.replace(/-production$/u, "");
+      return /^2x-daily@/.test(job.cadence) ? [`${base}-am`, `${base}-pm`] : [`${base}-am`];
+    }))
+  ]);
+  for (const venture of ventures) {
+    for (const step of venture.day?.steps ?? []) {
+      if (scheduledKinds.has(step)) continue;
+      context.addIssue({
+        code: "custom",
+        message: `${venture.day?.kind} dispatches ${step}, which no venture defines`,
+        path: ["ventures", ventures.indexOf(venture), "day", "steps"]
+      });
+    }
+  }
+  const starts = [
+    // One company meeting a day, per `operations-2026-08c`. The afternoon and night shifts are
+    // retired from the schedule and no longer hold an hour against the ventures.
+    { kind: "venture-morning", hour: 6 },
+    ...ventures.flatMap((venture) => venture.day
+      ? [{ kind: venture.day.kind, hour: Number(venture.day.cadence.slice(6, 8)) }]
+      : []),
+    ...ventures.flatMap((venture) => venture.meetings
+      .filter((meeting) => !dispatched.has(meeting.kind))
+      .map((meeting) => ({ kind: meeting.kind, hour: Number(meeting.cadence.slice(6, 8)) }))),
+    ...ventures.flatMap((venture) => (venture.productionJobs ?? []).flatMap((job) => {
+      const base = job.kind.replace(/-production$/u, "");
       const match = /^2x-daily@(\d{2}):00,(\d{2}):00$/.exec(job.cadence);
-      return match
-        ? [{ kind: `${job.kind}-am`, hour: Number(match[1]) }, { kind: `${job.kind}-pm`, hour: Number(match[2]) }]
-        : [{ kind: job.kind, hour: Number(job.cadence.slice(6, 8)) }];
+      const slots = match
+        ? [{ kind: `${base}-am`, hour: Number(match[1]) }, { kind: `${base}-pm`, hour: Number(match[2]) }]
+        : [{ kind: `${base}-am`, hour: Number(job.cadence.slice(6, 8)) }];
+      return slots.filter((slot) => !dispatched.has(slot.kind));
     }))
   ].sort((left, right) => left.hour - right.hour);
   for (let index = 1; index < starts.length; index += 1) {

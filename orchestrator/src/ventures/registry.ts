@@ -13,10 +13,15 @@ import {
 } from "../types.js";
 import { configRoot } from "../paths.js";
 
+/**
+ * The company's meetings on the clock.
+ *
+ * One, since `operations-2026-08c`: the audit found the afternoon had no duty of its own and the
+ * night's checkpoint moved into the morning, which now reconciles a day that has finished. Both
+ * retired shifts stay runnable by hand — this is the schedule, not the list of what exists.
+ */
 export const PORTFOLIO_BOARD_SLOTS = [
-  { phase: "morning", hour: 6, label: "Venture morning" },
-  { phase: "afternoon", hour: 14, label: "Venture afternoon" },
-  { phase: "night", hour: 22, label: "Venture night" }
+  { phase: "morning", hour: 6, label: "Venture morning" }
 ] as const;
 
 export interface ResolvedMeetingSlot {
@@ -105,17 +110,35 @@ export function pausedVentureForPhase(registry: VentureRegistry, phase: Runnable
   return venture?.status === "paused" ? ventureId : null;
 }
 
+/** Every room a venture day dispatches, which therefore holds no hour of its own. */
+export function dayDispatchedKinds(registry: VentureRegistry): ReadonlySet<string> {
+  return new Set(registry.ventures.flatMap((venture) => venture.day?.steps ?? []));
+}
+
 export function resolveMeetingClock(
   registry: VentureRegistry
 ): ResolvedMeetingSlot[] {
-  const ventureSlots = registry.ventures.flatMap((venture) =>
-    venture.meetings.map((meeting) => ({
-      phase: ScheduledPhaseSchema.parse(meeting.kind),
-      hour: parseCadenceHour(meeting.cadence),
-      label: meeting.label,
-      ventureId: venture.id
-    }))
-  );
+  // A venture with a day puts the day on the clock and its rooms inside it. The rooms keep their
+  // definitions — cast, envelope, agenda packet — and lose only a cadence of their own.
+  const dispatched = dayDispatchedKinds(registry);
+  const ventureSlots = registry.ventures.flatMap((venture) => [
+    ...(venture.day
+      ? [{
+          phase: ScheduledPhaseSchema.parse(venture.day.kind),
+          hour: parseCadenceHour(venture.day.cadence),
+          label: venture.day.label,
+          ventureId: venture.id
+        }]
+      : []),
+    ...venture.meetings
+      .filter((meeting) => !dispatched.has(meeting.kind))
+      .map((meeting) => ({
+        phase: ScheduledPhaseSchema.parse(meeting.kind),
+        hour: parseCadenceHour(meeting.cadence),
+        label: meeting.label,
+        ventureId: venture.id
+      }))
+  ]);
   return [
     ...PORTFOLIO_BOARD_SLOTS.map((slot) => ({ ...slot, ventureId: null })),
     ...ventureSlots
@@ -123,7 +146,10 @@ export function resolveMeetingClock(
 }
 
 export function resolveProductionClock(registry: VentureRegistry): ResolvedMeetingSlot[] {
+  const dispatched = dayDispatchedKinds(registry);
   return registry.ventures.flatMap((venture) => (venture.productionJobs ?? []).flatMap((job) => {
+    // An article slot a day dispatches is produced inside that day, not on an hour of its own.
+    if (dispatched.has("article-am") && job.kind === "article-production") return [];
     if (job.kind === "article-production") {
       // One article a day is the contract now. The evening slot was killed every single day
       // since launch -- there was never a second subject that cleared the repeat rule -- so the

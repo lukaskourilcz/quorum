@@ -116,12 +116,12 @@ describe("WebDev Signal registration", () => {
     expect(cronPayloads(registry)).toEqual(cronPayloads(withoutWebDev));
     expect(registration.schedule).toMatchObject({
       pragueHour: 5,
-      dispatcherAnchorPhase: "cu-edition",
+      dispatcherAnchorPhase: "cu-day",
       position: "before-anchor",
       newCron: false,
       publicMeeting: false
     });
-    const anchorCrons = cronPayloads(registry).filter(({ phase }) => phase === "cu-edition");
+    const anchorCrons = cronPayloads(registry).filter(({ phase }) => phase === "cu-day");
     expect(anchorCrons).toHaveLength(2);
     expect(new Set(anchorCrons.map(({ cron }) => cron))).toHaveLength(2);
   });
@@ -129,7 +129,7 @@ describe("WebDev Signal registration", () => {
   it("returns an honest zero-cost fixture receipt and never creates a website or publisher path", async () => {
     const registration = await loadWebDevSignalRegistration();
     expect(dispatchWebDevSignalRegistration({ registration, dispatcherPhase: "morning", pragueDate: "2026-08-28", mode: "fixture" })).toBeNull();
-    const receipt = dispatchWebDevSignalRegistration({ registration, dispatcherPhase: "cu-edition", pragueDate: "2026-08-28", mode: "fixture" });
+    const receipt = dispatchWebDevSignalRegistration({ registration, dispatcherPhase: "cu-day", pragueDate: "2026-08-28", mode: "fixture" });
     expect(receipt).toMatchObject({
       schemaVersion: "webdev-run/1",
       phase: "webdev-signal-daily",

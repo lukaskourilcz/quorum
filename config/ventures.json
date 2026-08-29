@@ -21,6 +21,15 @@
         "events",
         "ideas"
       ],
+      "day": {
+        "kind": "cu-day",
+        "label": "DNESKAi daily desk",
+        "cadence": "daily@05:00",
+        "steps": [
+          "cu-edition",
+          "cu-product"
+        ]
+      },
       "meetings": [
         {
           "kind": "cu-edition",
@@ -347,6 +356,18 @@
         "calendar",
         "social-lab"
       ],
+      "day": {
+        "kind": "mma-day",
+        "label": "MMA Files daily desk",
+        "cadence": "daily@08:00",
+        "steps": [
+          "mma-intake",
+          "mag-editorial",
+          "article-am",
+          "mma-analysis",
+          "mag-desk"
+        ]
+      },
       "meetings": [
         {
           "kind": "mag-editorial",
@@ -417,6 +438,15 @@
         "actions",
         "knowledge"
       ],
+      "day": {
+        "kind": "dm-day",
+        "label": "Door Money daily desk",
+        "cadence": "daily@15:00",
+        "steps": [
+          "dm-desk",
+          "dm-growth"
+        ]
+      },
       "meetings": [
         {
           "kind": "dm-desk",

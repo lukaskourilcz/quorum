@@ -5,11 +5,11 @@
   },
   "crons": [
     {
-      "path": "/api/cron/cu-edition",
+      "path": "/api/cron/cu-day",
       "schedule": "0 3 * * *"
     },
     {
-      "path": "/api/cron/cu-edition",
+      "path": "/api/cron/cu-day",
       "schedule": "0 4 * * *"
     },
     {
@@ -29,28 +29,12 @@
       "schedule": "0 6 * * *"
     },
     {
-      "path": "/api/cron/mma-intake",
+      "path": "/api/cron/mma-day",
       "schedule": "0 6 * * *"
     },
     {
-      "path": "/api/cron/mma-intake",
+      "path": "/api/cron/mma-day",
       "schedule": "0 7 * * *"
-    },
-    {
-      "path": "/api/cron/mag-editorial",
-      "schedule": "0 7 * * *"
-    },
-    {
-      "path": "/api/cron/mag-editorial",
-      "schedule": "0 8 * * *"
-    },
-    {
-      "path": "/api/cron/article-am",
-      "schedule": "0 8 * * *"
-    },
-    {
-      "path": "/api/cron/article-am",
-      "schedule": "0 9 * * *"
     },
     {
       "path": "/api/cron/tt-marketing",
@@ -77,68 +61,28 @@
       "schedule": "0 12 * * *"
     },
     {
-      "path": "/api/cron/afternoon",
-      "schedule": "0 12 * * *"
-    },
-    {
-      "path": "/api/cron/afternoon",
+      "path": "/api/cron/dm-day",
       "schedule": "0 13 * * *"
     },
     {
-      "path": "/api/cron/dm-desk",
-      "schedule": "0 13 * * *"
-    },
-    {
-      "path": "/api/cron/dm-desk",
+      "path": "/api/cron/dm-day",
       "schedule": "0 14 * * *"
     },
     {
-      "path": "/api/cron/dm-growth",
-      "schedule": "0 14 * * *"
-    },
-    {
-      "path": "/api/cron/dm-growth",
-      "schedule": "0 15 * * *"
-    },
-    {
-      "path": "/api/cron/cu-product",
-      "schedule": "0 15 * * *"
-    },
-    {
-      "path": "/api/cron/cu-product",
+      "path": "/api/cron/ts-desk",
       "schedule": "0 16 * * *"
     },
     {
-      "path": "/api/cron/mma-analysis",
+      "path": "/api/cron/ts-desk",
       "schedule": "0 17 * * *"
     },
     {
-      "path": "/api/cron/mma-analysis",
-      "schedule": "0 18 * * *"
-    },
-    {
-      "path": "/api/cron/mag-desk",
-      "schedule": "0 18 * * *"
-    },
-    {
-      "path": "/api/cron/mag-desk",
-      "schedule": "0 19 * * *"
-    },
-    {
       "path": "/api/cron/kv-desk",
       "schedule": "0 19 * * *"
     },
     {
       "path": "/api/cron/kv-desk",
       "schedule": "0 20 * * *"
-    },
-    {
-      "path": "/api/cron/night",
-      "schedule": "0 20 * * *"
-    },
-    {
-      "path": "/api/cron/night",
-      "schedule": "0 21 * * *"
     },
     {
       "path": "/api/cron/pg-desk",
@@ -155,14 +99,6 @@
     {
       "path": "/api/cron/cu-edition",
       "schedule": "0 8 * * *"
-    },
-    {
-      "path": "/api/cron/ts-desk",
-      "schedule": "0 16 * * *"
-    },
-    {
-      "path": "/api/cron/ts-desk",
-      "schedule": "0 17 * * *"
     }
   ]
 }
