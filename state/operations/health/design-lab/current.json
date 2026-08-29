@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "venture-operation-health/1",
+  "nodeId": "design-lab",
+  "displayName": "Design Lab service",
+  "policyVersion": "1.0.0",
+  "generatedAt": "2026-08-29T20:06:58.874Z",
+  "observedAt": "2026-08-29T20:06:58.874Z",
+  "lifecycleStage": "operating",
+  "state": "unavailable",
+  "reason": "No valid live or recovery receipt is available.",
+  "lastAttemptedAt": null,
+  "lastValidAt": null,
+  "lastSuccessfulAt": null,
+  "lastNonEmptyAt": null,
+  "lastExternallyVerifiedAt": null,
+  "nextExpectedAt": null,
+  "dueWindow": "on bounded render request",
+  "latenessMinutes": null,
+  "rollingOutcomes": {
+    "considered": 0,
+    "satisfying": 0,
+    "failed": 0,
+    "quiet": 0,
+    "held": 0,
+    "consecutiveFailures": 0
+  },
+  "dependencyHealthRefs": [],
+  "queue": {
+    "state": "not-applicable",
+    "pending": null
+  },
+  "autonomyEligible": false,
+  "holds": {
+    "budget": [],
+    "provider": [],
+    "source": [],
+    "credential": [],
+    "owner": []
+  },
+  "freshness": {
+    "state": "unavailable",
+    "ageMinutes": null,
+    "lastKnownGoodRef": null
+  },
+  "unavailableReasons": [
+    "No common live receipt references canonical domain evidence."
+  ],
+  "ownerAttentionRefs": [],
+  "latestRunReceiptRefs": [],
+  "snapshotHash": "e13256b02346f3d8d2ed824db525481a88aad52ef713222c7fb888d2d485067d"
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "venture-operation-health/1",
+  "nodeId": "carousel-studio",
+  "displayName": "Design Lab renderer",
+  "policyVersion": "1.0.0",
+  "generatedAt": "2026-08-29T20:06:58.874Z",
+  "observedAt": "2026-08-29T20:06:58.874Z",
+  "lifecycleStage": "operating",
+  "state": "unavailable",
+  "reason": "No valid live or recovery receipt is available.",
+  "lastAttemptedAt": null,
+  "lastValidAt": null,
+  "lastSuccessfulAt": null,
+  "lastNonEmptyAt": null,
+  "lastExternallyVerifiedAt": null,
+  "nextExpectedAt": null,
+  "dueWindow": "on accepted render request",
+  "latenessMinutes": null,
+  "rollingOutcomes": {
+    "considered": 0,
+    "satisfying": 0,
+    "failed": 0,
+    "quiet": 0,
+    "held": 0,
+    "consecutiveFailures": 0
+  },
+  "dependencyHealthRefs": [],
+  "queue": {
+    "state": "not-applicable",
+    "pending": null
+  },
+  "autonomyEligible": false,
+  "holds": {
+    "budget": [],
+    "provider": [],
+    "source": [],
+    "credential": [],
+    "owner": []
+  },
+  "freshness": {
+    "state": "unavailable",
+    "ageMinutes": null,
+    "lastKnownGoodRef": null
+  },
+  "unavailableReasons": [
+    "No common live receipt references canonical domain evidence."
+  ],
+  "ownerAttentionRefs": [],
+  "latestRunReceiptRefs": [],
+  "snapshotHash": "f5b771acf516a094944b7bebcea955ef835a73e9252017f6e3ab0c13e17aa6e8"
+}

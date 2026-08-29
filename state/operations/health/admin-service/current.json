@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "venture-operation-health/1",
+  "nodeId": "admin-service",
+  "displayName": "Admin service",
+  "policyVersion": "1.0.0",
+  "generatedAt": "2026-08-29T20:06:58.874Z",
+  "observedAt": "2026-08-29T20:06:58.874Z",
+  "lifecycleStage": "setup-needed",
+  "state": "setup-needed",
+  "reason": "Owner setup is required before live operational evidence can exist.",
+  "lastAttemptedAt": null,
+  "lastValidAt": null,
+  "lastSuccessfulAt": null,
+  "lastNonEmptyAt": null,
+  "lastExternallyVerifiedAt": null,
+  "nextExpectedAt": null,
+  "dueWindow": "owner-authenticated request",
+  "latenessMinutes": null,
+  "rollingOutcomes": {
+    "considered": 0,
+    "satisfying": 0,
+    "failed": 0,
+    "quiet": 0,
+    "held": 0,
+    "consecutiveFailures": 0
+  },
+  "dependencyHealthRefs": [],
+  "queue": {
+    "state": "not-applicable",
+    "pending": null
+  },
+  "autonomyEligible": false,
+  "holds": {
+    "budget": [],
+    "provider": [],
+    "source": [],
+    "credential": [],
+    "owner": []
+  },
+  "freshness": {
+    "state": "unavailable",
+    "ageMinutes": null,
+    "lastKnownGoodRef": null
+  },
+  "unavailableReasons": [],
+  "ownerAttentionRefs": [],
+  "latestRunReceiptRefs": [],
+  "snapshotHash": "462e2ab62eb1f07f7083243392ab341b5a6449cf5f7a4f5cac0c8b037dc733d9"
+}

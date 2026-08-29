@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "venture-operation-health/1",
+  "nodeId": "mma-files",
+  "displayName": "MMA Files",
+  "policyVersion": "1.0.0",
+  "generatedAt": "2026-08-29T20:06:58.874Z",
+  "observedAt": "2026-08-29T20:06:58.874Z",
+  "lifecycleStage": "operating",
+  "state": "unavailable",
+  "reason": "No valid live or recovery receipt is available.",
+  "lastAttemptedAt": null,
+  "lastValidAt": null,
+  "lastSuccessfulAt": null,
+  "lastNonEmptyAt": null,
+  "lastExternallyVerifiedAt": null,
+  "nextExpectedAt": null,
+  "dueWindow": "10:00 article",
+  "latenessMinutes": null,
+  "rollingOutcomes": {
+    "considered": 0,
+    "satisfying": 0,
+    "failed": 0,
+    "quiet": 0,
+    "held": 0,
+    "consecutiveFailures": 0
+  },
+  "dependencyHealthRefs": [
+    "state/operations/health/fightaiq/current.json"
+  ],
+  "queue": {
+    "state": "not-applicable",
+    "pending": null
+  },
+  "autonomyEligible": false,
+  "holds": {
+    "budget": [],
+    "provider": [],
+    "source": [],
+    "credential": [],
+    "owner": []
+  },
+  "freshness": {
+    "state": "unavailable",
+    "ageMinutes": null,
+    "lastKnownGoodRef": null
+  },
+  "unavailableReasons": [
+    "No common live receipt references canonical domain evidence.",
+    "Dependency health unavailable or denied for fightaiq."
+  ],
+  "ownerAttentionRefs": [],
+  "latestRunReceiptRefs": [],
+  "snapshotHash": "1d1292b124a82e09a4f4c7dc70c817cf69f4fc0edf29d455612018281614e4d4"
+}

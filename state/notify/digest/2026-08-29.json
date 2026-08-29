@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "mode": "log",
+  "status": "sent",
+  "subject": "[BoardlessAI] Digest — 2026-08-29",
+  "digest": {
+    "schemaVersion": "daily-digest/1",
+    "date": "2026-08-29",
+    "meetings": [
+      {
+        "ventureId": "caught-up",
+        "kind": "cu-edition",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Caught Up edition room was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-24"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "morning",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Venture morning was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-24"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "ms-daily",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No package was drafted. devshark: model-output-invalid.",
+            "roomLink": "/meetings/2026-08-29-ms-daily"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "fightaiq",
+        "kind": "mma-intake",
+        "held": false,
+        "bullets": [
+          {
+            "text": "FightAIQ morning data check was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-24"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "mag-editorial",
+        "held": false,
+        "bullets": [
+          {
+            "text": "MMA Files morning story meeting was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-24"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "article-am",
+        "held": false,
+        "bullets": [
+          {
+            "text": "MMA Files daily article was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-24"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "bh-desk",
+        "held": false,
+        "bullets": [
+          {
+            "text": "The selection phase remains current. No provider was called, nothing was published and this day cost $0.",
+            "roomLink": "/meetings/2026-08-29-bh-desk"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "gv-brief",
+        "held": false,
+        "bullets": [
+          {
+            "text": "This room meets on Mondays. Nothing was spent.",
+            "roomLink": "/meetings/2026-08-29-gv-brief"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "afternoon",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No externally consequential action was approved.",
+            "roomLink": "/standups/20260829120555-afternoon/room"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "dm-desk",
+        "held": true,
+        "bullets": [
+          {
+            "text": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped.",
+            "roomLink": "/meetings/2026-08-29-dm-desk"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "dm-growth",
+        "held": false,
+        "bullets": [
+          {
+            "text": "$0 — this room meets on Thursdays. Nothing was spent and no action was taken.",
+            "roomLink": "/meetings/2026-08-29-dm-growth"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "ts-desk",
+        "held": false,
+        "bullets": [
+          {
+            "text": "The planning phase stopped and will resume. Response Response truncated at the 2500-token cap for claude-sonnet-5; raise maxOutputTokens at…",
+            "roomLink": "/meetings/2026-08-29-ts-desk"
+          }
+        ],
+        "costUsd": 0.0293035
+      },
+      {
+        "ventureId": "fightaiq",
+        "kind": "mma-analysis",
+        "held": false,
+        "bullets": [
+          {
+            "text": "No model run exists to review yet — waiting for the odds data key.",
+            "roomLink": "/meetings/2026-08-29-mma-analysis"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "mma-files",
+        "kind": "mag-desk",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent.",
+            "roomLink": "/meetings/2026-08-29-mag-desk"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "kv-desk",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Kvórum daily political desk was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-24"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "night",
+        "held": true,
+        "bullets": [
+          {
+            "text": "No externally consequential action was approved.",
+            "roomLink": "/standups/20260829200658-night/room"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "ventureId": "global",
+        "kind": "pg-desk",
+        "held": false,
+        "bullets": [
+          {
+            "text": "Lukáš personal growth desk was not held; inspect the public week schedule.",
+            "roomLink": "/calendar/2026-08-24"
+          }
+        ],
+        "costUsd": 0
+      }
+    ],
+    "operations": [
+      {
+        "ventureId": "global",
+        "type": "delivery",
+        "status": "none",
+        "text": "No delivery or release proof was recorded today.",
+        "ref": null
+      },
+      {
+        "ventureId": "global",
+        "type": "failure",
+        "status": "none",
+        "text": "No social publishing failure was recorded today.",
+        "ref": null
+      },
+      {
+        "ventureId": "caught-up",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "caught-up social check locked; ready count 9/7.",
+        "ref": "social/activation.json"
+      },
+      {
+        "ventureId": "mma-files",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "mma-files social check locked; ready count 10/10.",
+        "ref": "social/activation.json"
+      },
+      {
+        "ventureId": "titty-tuesdays",
+        "type": "social-gate",
+        "status": "locked",
+        "text": "titty-tuesdays social check locked; ready count 0/4.",
+        "ref": "social/activation.json"
+      }
+    ],
+    "portfolioLine": "Recorded API spend $0.0645 against the $1.00 daily budget.",
+    "bodyWordCount": 248
+  },
+  "bodyWordCount": 317,
+  "compressed": false,
+  "truncated": false,
+  "sentAt": "2026-08-29T20:07:00.142Z"
+}

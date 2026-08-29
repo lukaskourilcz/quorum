@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "venture-operation-health/1",
+  "nodeId": "marketingshark",
+  "displayName": "marketingShark",
+  "policyVersion": "1.0.0",
+  "generatedAt": "2026-08-29T20:06:58.874Z",
+  "observedAt": "2026-08-29T20:06:58.874Z",
+  "lifecycleStage": "operating",
+  "state": "unavailable",
+  "reason": "No valid live or recovery receipt is available.",
+  "lastAttemptedAt": null,
+  "lastValidAt": null,
+  "lastSuccessfulAt": null,
+  "lastNonEmptyAt": null,
+  "lastExternallyVerifiedAt": null,
+  "nextExpectedAt": null,
+  "dueWindow": "07:00 carousel room",
+  "latenessMinutes": null,
+  "rollingOutcomes": {
+    "considered": 0,
+    "satisfying": 0,
+    "failed": 0,
+    "quiet": 0,
+    "held": 0,
+    "consecutiveFailures": 0
+  },
+  "dependencyHealthRefs": [
+    "state/operations/health/carousel-studio/current.json"
+  ],
+  "queue": {
+    "state": "not-applicable",
+    "pending": null
+  },
+  "autonomyEligible": false,
+  "holds": {
+    "budget": [],
+    "provider": [],
+    "source": [],
+    "credential": [],
+    "owner": []
+  },
+  "freshness": {
+    "state": "unavailable",
+    "ageMinutes": null,
+    "lastKnownGoodRef": null
+  },
+  "unavailableReasons": [
+    "No common live receipt references canonical domain evidence.",
+    "Dependency health unavailable or denied for carousel-studio."
+  ],
+  "ownerAttentionRefs": [],
+  "latestRunReceiptRefs": [],
+  "snapshotHash": "89f4ad85d37b602d23bbe780ea957700a93c484f3d5464cb74da86262f016da2"
+}
