@@ -18,17 +18,25 @@ function markdownItem(source: string, marker: string): string {
 }
 
 describe("Door Money owner approvals", () => {
-  it("files each pending HUMAN_APPROVAL once in the house shape", async () => {
+  /*
+   * Originally these were asserted as pending: the items had just been filed and the test proved
+   * they existed, unsigned, in the house shape. The owner approved every pending item on
+   * 2026-08-29, so the same guarantee now reads off the resolved record — each item still appears
+   * exactly once, still carries its full scope text, and still binds the gates that grep for its
+   * ticked line. What must never pass is the item silently disappearing or losing its scope.
+   */
+  it("keeps each approved HUMAN_APPROVAL on file once, in the house shape", async () => {
     const inbox = await readFile(path.join(repoRoot, "state", "INBOX.md"), "utf8");
-    const pending = inbox.slice(inbox.indexOf("## Pending"), inbox.indexOf("## Resolved"));
+    const resolved = inbox.slice(inbox.indexOf("## Resolved"));
     for (const id of APPROVAL_IDS) {
-      expect(pending.match(new RegExp(`^- \\[ \\] HUMAN_APPROVAL ${id}\\b`, "gmu")))
+      expect(inbox.match(new RegExp(`^- \\[[xX ]\\] HUMAN_APPROVAL ${id}\\b`, "gmu")), id)
         .toHaveLength(1);
-      const item = markdownItem(pending, `- [ ] HUMAN_APPROVAL ${id}`);
-      expect(item).toContain("What this approves, exactly:");
+      const item = markdownItem(resolved, `- [x] HUMAN_APPROVAL ${id}`);
+      expect(item, id).toContain("What this approves, exactly:");
+      expect(item, id).toContain("Approved by the owner on 2026-08-29");
     }
 
-    const source = markdownItem(pending, "- [ ] HUMAN_APPROVAL BOOK-SOURCE-001");
+    const source = markdownItem(resolved, "- [x] HUMAN_APPROVAL BOOK-SOURCE-001");
     expect(source).toContain("BOOK_SOURCE_TOKEN");
     expect(source).toContain("BOOK_PRIVATE_CLONE_PATH");
     expect(source).toContain("600 characters");
@@ -36,14 +44,14 @@ describe("Door Money owner approvals", () => {
     expect(source).not.toContain("BOOK_DB_URL");
     expect(source).not.toContain("BOOK_DB_KEY");
 
-    const ingest = markdownItem(pending, "- [ ] HUMAN_APPROVAL BOOK-INGEST-002");
+    const ingest = markdownItem(resolved, "- [x] HUMAN_APPROVAL BOOK-INGEST-002");
     expect(ingest).toContain("$3.00");
     expect(ingest).toContain("$0.80");
     expect(ingest).toContain("BOOK_INGEST");
     expect(ingest).toContain("BOOK_STYLE");
     expect(ingest).toContain('kind: "embedding"');
 
-    const results = markdownItem(pending, "- [ ] HUMAN_APPROVAL DM-RESULTS-004");
+    const results = markdownItem(resolved, "- [x] HUMAN_APPROVAL DM-RESULTS-004");
     expect(results).toContain("METRICS_INGESTION_ENABLED=false");
     expect(results).toContain("D9");
   });

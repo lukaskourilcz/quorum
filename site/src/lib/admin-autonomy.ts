@@ -1,6 +1,5 @@
 import "server-only";
-import { createHash, randomUUID } from "node:crypto";
-import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
@@ -74,12 +73,6 @@ interface StoredQueue {
   updatedAt: string;
 }
 
-export class PriorityPersistenceError extends Error {
-  constructor(readonly code: "UNAVAILABLE" | "CONFLICT" | "CORRUPT" | "REMOTE", message: string) {
-    super(message);
-  }
-}
-
 function record(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : null;
 }
@@ -113,7 +106,7 @@ function validQueue(value: unknown): StoredQueue | null {
 async function readQueue(root = repositoryRoot): Promise<StoredQueue> {
   try {
     const queue = validQueue(JSON.parse(await readFile(path.join(root, queuePath), "utf8")));
-    if (!queue) throw new PriorityPersistenceError("CORRUPT", "The saved priority queue is malformed.");
+    if (!queue) throw new Error("The saved priority queue is malformed.");
     return queue;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
@@ -196,94 +189,8 @@ export async function readAdminAutonomy(root = repositoryRoot): Promise<AdminAut
   };
 }
 
-function updatedQueue(queue: StoredQueue, input: { action: "add"; venture: string; question: string; decisionAtStake: string; evidenceNeeded: string[] } | { action: "archive"; itemId: string }, now: Date): StoredQueue {
-  if (input.action === "archive") {
-    let found = false;
-    const items = queue.items.map((item) => {
-      if (item.id !== input.itemId) return item;
-      found = true;
-      if (item.status !== "open") throw new PriorityPersistenceError("CONFLICT", "Only an open priority can be archived.");
-      return { ...item, status: "archived" as const };
-    });
-    if (!found) throw new PriorityPersistenceError("CONFLICT", "That priority item no longer exists.");
-    return { ...queue, items, updatedAt: now.toISOString() };
-  }
-  const venture = input.venture.trim();
-  const question = input.question.trim();
-  const decisionAtStake = input.decisionAtStake.trim();
-  const evidenceNeeded = [...new Set(input.evidenceNeeded.map((entry) => entry.trim()).filter(Boolean))].slice(0, 12);
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(venture) || !question || question.length > 280 || !decisionAtStake || decisionAtStake.length > 280) {
-    throw new PriorityPersistenceError("CONFLICT", "Add a valid project, question and concrete decision at stake.");
-  }
-  const created = now.toISOString();
-  const id = `priority-${createHash("sha256").update(`${venture}\n${question}\n${decisionAtStake}\n${created}`).digest("hex").slice(0, 16)}`;
-  const expires = new Date(now.getTime() + 7 * 86_400_000).toISOString();
-  return {
-    ...queue,
-    items: [...queue.items, {
-      schemaVersion: "priority-item/1",
-      id,
-      venture,
-      question,
-      decision_at_stake: decisionAtStake,
-      evidence_needed: evidenceNeeded,
-      requested_by: "VIZE",
-      created,
-      expires,
-      status: "open",
-      why_not_reason: null,
-      consumed_by: null
-    }],
-    updatedAt: created
-  };
-}
-
-async function writeLocal(queue: StoredQueue, root = repositoryRoot): Promise<void> {
-  const target = path.join(root, queuePath);
-  await mkdir(path.dirname(target), { recursive: true });
-  const temporary = `${target}.${randomUUID()}.tmp`;
-  try {
-    await writeFile(temporary, `${JSON.stringify(queue, null, 2)}\n`, { encoding: "utf8", mode: 0o600 });
-    await rename(temporary, target);
-  } finally {
-    await rm(temporary, { force: true });
-  }
-}
-
-async function writeGitHub(input: Parameters<typeof updatedQueue>[1], token: string, now: Date): Promise<StoredQueue> {
-  const repository = process.env.BOARDLESSAI_GITHUB_REPOSITORY ?? "lukaskourilcz/quorum";
-  const branch = process.env.BOARDLESSAI_GITHUB_BRANCH ?? "main";
-  const endpoint = `https://api.github.com/repos/${repository}/contents/${queuePath}`;
-  const headers = { Accept: "application/vnd.github+json", Authorization: `Bearer ${token}`, "X-GitHub-Api-Version": "2026-03-10" };
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    const response = await fetch(`${endpoint}?ref=${encodeURIComponent(branch)}`, { headers, cache: "no-store" });
-    if (!response.ok) throw new PriorityPersistenceError("REMOTE", `GitHub priority read failed with ${response.status}.`);
-    const current = await response.json() as { content?: string; encoding?: string; sha?: string };
-    if (current.encoding !== "base64" || !current.content || !current.sha) throw new PriorityPersistenceError("REMOTE", "GitHub returned an invalid priority file.");
-    const queue = validQueue(JSON.parse(Buffer.from(current.content.replaceAll("\n", ""), "base64").toString("utf8")));
-    if (!queue) throw new PriorityPersistenceError("CORRUPT", "The saved priority queue is malformed.");
-    const next = updatedQueue(queue, input, now);
-    const update = await fetch(endpoint, {
-      method: "PUT",
-      headers: { ...headers, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: input.action === "add" ? `admin: add ${input.venture} priority` : `admin: archive ${input.itemId}`,
-        content: Buffer.from(`${JSON.stringify(next, null, 2)}\n`).toString("base64"),
-        branch,
-        sha: current.sha
-      })
-    });
-    if (update.ok) return next;
-    if (update.status !== 409) throw new PriorityPersistenceError("REMOTE", `GitHub priority write failed with ${update.status}.`);
-  }
-  throw new PriorityPersistenceError("CONFLICT", "The priority queue changed during every save attempt.");
-}
-
-export async function updatePriorityQueue(input: Parameters<typeof updatedQueue>[1], now = new Date()): Promise<AdminPriorityItem[]> {
-  const token = process.env.BOARDLESSAI_GITHUB_TOKEN;
-  if (token) return publicPriorities(await writeGitHub(input, token, now));
-  if (process.env.NODE_ENV === "production" || process.env.VERCEL) throw new PriorityPersistenceError("UNAVAILABLE", "GitHub writing is not configured for this admin.");
-  const next = updatedQueue(await readQueue(), input, now);
-  await writeLocal(next);
-  return publicPriorities(next);
-}
+/*
+ * The write half of this module — the add/archive form and its GitHub fallback — went with the
+ * owner's 2026-08-29 instruction to run the system autonomously: the council raises its own
+ * priorities through the runtime, and the admin reads the queue rather than editing it.
+ */
