@@ -318,7 +318,17 @@ function TrendRadar({ snapshot }: { snapshot: AdminPersonalGrowthSnapshot }) {
             <div><dt className="font-semibold">Sources</dt><dd className="m-0 break-all text-[var(--admin-foreground-muted)]">{trend.sourceRefs.join(", ")}</dd></div>
           </dl>
         </CoreCard>
-      )) : <AdminStateMessage description="The personal desk does not rerun collectors or invent a trend. Existing owner planning remains available." state={snapshot.trends.state === "unreadable" ? "malformed" : "unavailable"} title="GoVIRAL packet unavailable" />}
+      )) : snapshot.trends.state === "unreadable"
+        ? <AdminStateMessage description="The recorded packet could not be read, so nothing here is derived from it. The personal desk does not rerun collectors or invent a trend." state="malformed" title="GoVIRAL packet unreadable" />
+        /*
+         * Waiting on a dependency, not broken.
+         *
+         * An empty radar with no explanation reads as a fault, and this one has never had a packet
+         * to show: GoVIRAL's Monday room opens, finds no scout data and records that in one
+         * sentence, because it needs `APIFY_TOKEN` before it can gather anything. Naming that is
+         * the difference between a tab the owner reports as broken and one he can act on.
+         */
+        : <AdminStateMessage description="GoVIRAL has not produced a weekly brief yet — its Monday room needs the Apify token before it can gather anything, and records a $0 no-op until then. This desk shows a packet the week after the first brief lands. It does not rerun collectors or invent a trend, and existing owner planning remains available." state="unavailable" title="Waiting for GoVIRAL's first weekly brief" />}
       <AdminCallout tone="warning">GoVIRAL supplies expiring intelligence and evidence only. It never supplies the final Threads text, Instagram caption, Reel script or publishing action.</AdminCallout>
     </div>
   );
