@@ -5,7 +5,8 @@ import { describe, expect, it } from "vitest";
 import { parse } from "yaml";
 import { loadRoutingConfig, routeBoardroom } from "../src/boardroom/router.js";
 import { MeetingSkipSchema } from "../src/contracts/meeting-skip.js";
-import { pragueSlotInstant, PUBLIC_MEETING_CLOCK } from "../src/meetings/calendar.js";
+import { buildCalendarFeed, mondayOfWeek, pragueSlotInstant, PUBLIC_MEETING_CLOCK } from "../src/meetings/calendar.js";
+import { MEETING_CLOCK } from "../src/meetings/clock.js";
 import {
   NO_RECORD_REASON,
   previousPragueDate,
@@ -67,8 +68,8 @@ describe("a day with no record of its slots still gets one", () => {
     const root = await emptyRoot();
     const result = await reconcileMeetingDay(root, DATE, NOW);
     expect(PUBLIC_MEETING_CLOCK.length).toBeGreaterThan(0);
-    expect(result.recorded).toHaveLength(PUBLIC_MEETING_CLOCK.length);
-    for (const definition of PUBLIC_MEETING_CLOCK) {
+    expect(result.recorded).toHaveLength(MEETING_CLOCK.length);
+    for (const definition of MEETING_CLOCK) {
       const skip = MeetingSkipSchema.parse(
         JSON.parse(await readFile(skipPath(root, definition.phase), "utf8"))
       );
@@ -78,7 +79,36 @@ describe("a day with no record of its slots still gets one", () => {
       // cannot establish: nothing here distinguishes an undelivered cron from a cancelled run.
       expect(skip.reason).not.toMatch(/never started|cancel|GitHub/iu);
     }
-    expect(await exists(skipPath(root, "pg-desk"))).toBe(false);
+  });
+
+  it("accounts for the private desk the public calendar cannot show", async () => {
+    /*
+     * This used to assert the opposite, and that assertion was the defect.
+     *
+     * `PUBLIC_MEETING_CLOCK` exists so an owner-only venture never appears on the public calendar,
+     * and the reconciler walked it — which made the one desk nobody can see the one desk nobody
+     * accounts for. `pg-desk` was countersigned on 26 August and by the 29th had produced no
+     * meeting record and no skip record at all, so nothing anywhere said whether it had ever run.
+     *
+     * Off the public calendar and unaccounted for are different things, and only the first was
+     * ever intended.
+     */
+    const root = await emptyRoot();
+    await reconcileMeetingDay(root, DATE, NOW);
+
+    const skip = MeetingSkipSchema.parse(JSON.parse(await readFile(skipPath(root, "pg-desk"), "utf8")));
+    expect(skip).toMatchObject({ date: DATE, phase: "pg-desk", reason: NO_RECORD_REASON });
+
+    // And it still cannot reach the public calendar: the feed walks the public clock, so a skip
+    // on disk for a private phase has no slot to attach to.
+    const feed = buildCalendarFeed({
+      weekOf: mondayOfWeek(DATE),
+      records: [],
+      skips: [skip],
+      now: NOW
+    });
+    expect(feed.slots.some((slot) => JSON.stringify(slot).includes("pg-desk"))).toBe(false);
+    expect(PUBLIC_MEETING_CLOCK.some((definition) => definition.phase === "pg-desk")).toBe(false);
   });
 
   it("writes nothing on a second pass over the same day", async () => {
@@ -114,8 +144,8 @@ describe("a day with no record of its slots still gets one", () => {
     const result = await reconcileMeetingDay(root, DATE, NOW);
 
     // Every slot on the clock but the three this case already gave a record, a published
-    // article or an existing skip.
-    expect(result.recorded).toHaveLength(PUBLIC_MEETING_CLOCK.length - 3);
+    // article or an existing skip. The private desk is on the clock and counted too.
+    expect(result.recorded).toHaveLength(MEETING_CLOCK.length - 3);
     expect(await readFile(recordFile, "utf8")).toBe(recordBefore);
     expect(await exists(skipPath(root, "cu-edition"))).toBe(false);
     expect(await exists(skipPath(root, "article-am"))).toBe(false);
