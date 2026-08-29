@@ -97,6 +97,7 @@ export async function buildCurrentOperatingTruth(repoRoot: string): Promise<stri
     .map((status) => status.id);
   const refreshedAt = latestIso([activation.updatedAt, kpis.evaluatedAt, moneyState.generatedAt, latestStandup ?? ""]);
   const publicVentures = ventures.ventures.filter((venture) => venture.visibility === "public");
+  const ownerOnlyVentures = ventures.ventures.filter((venture) => venture.visibility === "owner-only");
   const meetingCount = publicVentures.reduce((sum, venture) => sum + venture.meetings.length, 0);
   const dailyMeetingEnvelope = publicVentures.reduce(
     (sum, venture) => sum + venture.meetings.reduce((ventureSum, meeting) => ventureSum + meeting.envelopeUsd, 0),
@@ -111,7 +112,7 @@ export async function buildCurrentOperatingTruth(repoRoot: string): Promise<stri
     "",
     "| Item | Current value |",
     "| --- | --- |",
-    `| Portfolio | ${publicVentures.length} public projects; ${ventures.ventures.filter((venture) => venture.visibility === "owner-only").length} owner-only workspace |`,
+    `| Portfolio | ${publicVentures.length} public projects; ${ownerOnlyVentures.length} owner-only ${ownerOnlyVentures.length === 1 ? "workspace" : "workspaces"} |`,
     `| Agent roster | ${activeAgents.length} active: ${providerCounts.get("Anthropic") ?? 0} Anthropic, ${providerCounts.get("OpenAI") ?? 0} OpenAI |`,
     `| Scheduled specialist/service rooms | ${meetingCount}; combined maximum room envelopes ${money(dailyMeetingEnvelope)} if every room is commissioned |`,
     // Read from the resolver rather than written here. This line was a literal carrying

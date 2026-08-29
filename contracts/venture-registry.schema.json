@@ -50,7 +50,7 @@
             "properties": {
               "product": {
                 "type": "string",
-                "const": "social-first"
+                "const": "instagram-threads"
               },
               "website": {
                 "type": "string",

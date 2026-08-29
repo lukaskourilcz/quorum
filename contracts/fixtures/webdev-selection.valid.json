@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "webdev-selection/1",
+  "pragueDate": "2026-08-28",
+  "inputSnapshotHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "scoringVersion": "1.0.0",
+  "candidates": [],
+  "outcome": "NO_EDITION",
+  "selectedRecordId": null,
+  "noEditionReason": "No official record cleared the materiality and confidence threshold.",
+  "urgencyOverride": {
+    "used": false,
+    "evidenceRefs": [],
+    "exactAffectedScope": null,
+    "exactFixedScope": null
+  },
+  "goviral": {
+    "status": "stale",
+    "packetRef": "state/ventures/goviral/briefs/fixture.json",
+    "packetHash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "observedAt": "2026-08-01T08:00:00+02:00",
+    "expiresAt": "2026-08-08T08:00:00+02:00",
+    "contribution": 0,
+    "actorRerun": false,
+    "duplicateChargeUsd": 0
+  },
+  "threshold": {
+    "minimumBaseScore": 62,
+    "minimumConfidence": 0.75,
+    "minimumWinnerMargin": 4,
+    "tieBreaker": "final-score-desc,published-at-desc,record-id-asc"
+  },
+  "idempotencyHash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "ownerCorrectionRef": null,
+  "supersedesRef": null
+}

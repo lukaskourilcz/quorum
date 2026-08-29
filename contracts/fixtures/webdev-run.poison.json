@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "webdev-run/1",
+  "phase": "webdev-signal-daily",
+  "pragueDate": "2026-08-28",
+  "mode": "fixture",
+  "idempotencyKey": "06ce2429df3b8465d2abc0e6ac0b155e837c7f58e71ae5b81b1707474ae1e4e3",
+  "sourceOutcomes": [],
+  "counts": {
+    "candidates": 0,
+    "new": 0,
+    "updated": 0,
+    "duplicate": 0,
+    "malformed": 0
+  },
+  "selectionOutcome": "held",
+  "selectionRef": null,
+  "briefRef": null,
+  "packageRefs": [],
+  "renderRefs": [],
+  "queueRefs": [],
+  "model": {
+    "reservations": 1,
+    "calls": 1,
+    "reservedUsd": 0.03,
+    "actualUsd": 0.03
+  },
+  "cache": {
+    "unchangedSources": 0,
+    "reusedArtifacts": 0,
+    "providerCallsAvoided": 0
+  },
+  "errors": [],
+  "nextSafeAction": "Keep live work held until founding and independent source authority exist."
+}

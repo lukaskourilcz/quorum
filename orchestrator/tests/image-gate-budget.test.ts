@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  GENERATED_GATE_ESTIMATE_USD,
   IMAGE_GATE_ARTICLE_CAP_USD,
   IMAGE_GATE_PHASE,
   IMAGE_PROGRAM_DAY_CAP_USD,
@@ -15,7 +16,11 @@ import type { AnthropicVisionRequest, VisionProviderResponse } from "../src/llm/
 
 const MODEL = "claude-haiku-4-5-20251001";
 
-function fakeClient(reply: unknown, calls: AnthropicVisionRequest[]) {
+function fakeClient(
+  reply: unknown,
+  calls: AnthropicVisionRequest[],
+  options: { truncated?: boolean; tokensOut?: number } = {}
+) {
   return {
     generate: async (request: AnthropicVisionRequest): Promise<VisionProviderResponse> => {
       calls.push(request);
@@ -23,9 +28,10 @@ function fakeClient(reply: unknown, calls: AnthropicVisionRequest[]) {
         value: reply,
         model: MODEL,
         tokensIn: 1_200,
-        tokensOut: 200,
+        tokensOut: options.tokensOut ?? 200,
         cachedTokensIn: 0,
-        cacheWriteTokensIn: 0
+        cacheWriteTokensIn: 0,
+        truncated: options.truncated ?? false
       };
     }
   };
@@ -219,5 +225,84 @@ describe("the image programme's caps", () => {
     const spend = await readImageProgramSpendToday(root, at);
     expect(spend.usd).toBe(0.007);
     expect(spend.generatedImages).toBe(1);
+  });
+});
+
+describe("a verdict that did not fit its output budget", () => {
+  it("reports truncation, records the spend, and does not call it malformed", async () => {
+    const root = await mkdtemp(path.join(tmpdir(), "gate-truncated-"));
+    const budget = new ImageProgramBudget({ usd: 0, generatedImages: 0 });
+    const calls: AnthropicVisionRequest[] = [];
+    // What the provider actually returns when a twelve-candidate list runs past the ceiling: a
+    // tool payload with its array half written, and stop_reason max_tokens. The three DNESKAi
+    // editions that fell to the plate on 14, 18 and 28 August each look exactly like this.
+    const result = await guardedVisionCall(
+      request(root, budget, fakeClient({}, calls, { truncated: true, tokensOut: 1_200 }))
+    );
+
+    expect(result.ok).toBe(false);
+    if (result.ok) throw new Error("a truncated verdict must not be accepted");
+    expect(result.reason).toMatch(/^truncated:1200-of-1200$/u);
+    // Not "unparsable". Blaming the schema for our own ceiling is what hid this for three weeks.
+    expect(result.reason).not.toContain("unparsable");
+    // The provider billed for the tokens it did produce, so the ledger and the budget must agree
+    // that they were spent. A cut-off answer is not a free call.
+    expect(result.usd).toBeGreaterThan(0);
+    expect(budget.articleSpent()).toBe(result.usd);
+    const ledger = JSON.parse(await readFile(path.join(root, "budget/ledger.json"), "utf8")) as {
+      entries: Array<{ phase: string; usd: number }>;
+    };
+    expect(ledger.entries.filter((entry) => entry.phase === IMAGE_GATE_PHASE)).toHaveLength(1);
+  });
+
+  it("reserves what the answer is expected to cost, not the ceiling that bounds it", async () => {
+    const root = await mkdtemp(path.join(tmpdir(), "gate-reserve-"));
+    const calls: AnthropicVisionRequest[] = [];
+    // A one-candidate curated look. Its real verdict is about 130 output tokens; the ceiling that
+    // stops a runaway is many times that, and charging the ceiling is what closed the article cap
+    // before the ladder had finished descending.
+    const generous = new ImageProgramBudget({ usd: 0, generatedImages: 0 });
+    const reserved = await guardedVisionCall({
+      ...request(root, generous, fakeClient({ verdicts: [] }, calls)),
+      maxOutputTokens: 1_200,
+      expectedOutputTokens: 170
+    });
+    expect(reserved.ok).toBe(true);
+
+    // The same call, against a budget with only enough room for the expected cost. Reserving the
+    // ceiling would refuse it; reserving the estimate lets the rung run.
+    const tight = new ImageProgramBudget({ usd: 0, generatedImages: 0 });
+    tight.record(IMAGE_GATE_ARTICLE_CAP_USD - 0.004);
+    const fitted = await guardedVisionCall({
+      ...request(await mkdtemp(path.join(tmpdir(), "gate-reserve-2-")), tight, fakeClient({ verdicts: [] }, calls)),
+      maxOutputTokens: 1_200,
+      expectedOutputTokens: 170
+    });
+    expect(fitted.ok).toBe(true);
+  });
+});
+
+describe("a render and the verdict that judges it", () => {
+  it("refuses both together rather than paying for one and refusing the other", () => {
+    const budget = new ImageProgramBudget({ usd: 0, generatedImages: 0 });
+    // The 21 August shape: the article has already spent most of its cap on a search and three
+    // curated looks, and what is left covers the render but not the verdict.
+    budget.record(0.0175);
+    expect(budget.reserveGeneratedImage(0.004, GENERATED_GATE_ESTIMATE_USD)).toBe("article-cap");
+    // The day figure alone is untouched and would still have allowed it — which is exactly what
+    // the old check consulted, and why the $0.004 was spent before the gate refused it. Exactly
+    // one fal render exists in the ledger and it shipped nothing.
+    expect(budget.spent().usd).toBeLessThan(IMAGE_PROGRAM_DAY_CAP_USD);
+  });
+
+  it("still allows the rung when the whole sequence fits", () => {
+    const budget = new ImageProgramBudget({ usd: 0, generatedImages: 0 });
+    budget.record(0.008);
+    expect(budget.reserveGeneratedImage(0.004, GENERATED_GATE_ESTIMATE_USD)).toBeNull();
+  });
+
+  it("keeps the day limit a count, whatever the money says", () => {
+    const budget = new ImageProgramBudget({ usd: 0.02, generatedImages: 2 });
+    expect(budget.reserveGeneratedImage(0.004, GENERATED_GATE_ESTIMATE_USD)).toBe("generation-day-limit");
   });
 });

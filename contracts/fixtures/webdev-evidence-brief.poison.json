@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "webdev-evidence-brief/1",
+  "id": "brief:invented-parser:4.2.1",
+  "selectedRecordId": "wds_aaaaaaaaaaaaaaaaaaaaaaaa",
+  "selectionRef": "state/ventures/webdev-signal/selections/2026-08-28.json",
+  "canonicalDevelopment": "Invented Parser 4.2.1 fixes a critical unsafe template handling flaw in earlier versions.",
+  "claims": [],
+  "whatChangedClaimIds": [
+    "claim:fix",
+    "claim:affected"
+  ],
+  "whyItMattersClaimIds": [
+    "claim:affected"
+  ],
+  "affectedAudienceIds": [
+    "audience:invented-parser-users"
+  ],
+  "safeActions": [
+    {
+      "id": "action:update",
+      "text": "Check the installed version and update to 4.2.1.",
+      "claimIds": [
+        "claim:action"
+      ]
+    }
+  ],
+  "affectedVersions": [
+    "<4.2.1"
+  ],
+  "fixedVersions": [
+    "4.2.1"
+  ],
+  "releaseStability": "stable",
+  "uncertainty": [],
+  "conflicts": [],
+  "sources": [
+    {
+      "url": "https://github.com/advisories/GHSA-invented-0001",
+      "label": "Official invented advisory",
+      "authority": "official-advisory"
+    }
+  ],
+  "prohibitedClaims": [
+    "Every web project is compromised."
+  ],
+  "prohibitedPhrases": [
+    "you won't believe",
+    "game changer"
+  ],
+  "expiresAt": "2026-09-04T23:59:59+02:00",
+  "updateConditions": [
+    "The upstream project revises the affected or fixed version range."
+  ],
+  "version": "1.0.0",
+  "contentHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
