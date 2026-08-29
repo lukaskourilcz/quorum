@@ -433,7 +433,8 @@
       "at": "2026-08-27T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-27T05:00:00.000Z",
@@ -455,7 +456,8 @@
       "at": "2026-08-27T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-27T08:00:00.000Z",
@@ -468,7 +470,8 @@
       "at": "2026-08-27T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-27T10:00:00.000Z",
@@ -654,85 +657,100 @@
       "at": "2026-08-28T15:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-product",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-28T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ts-desk",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-28T17:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-analysis",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-28T18:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-desk",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-28T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
       "at": "2026-08-28T20:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-night",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-29T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-edition",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-29T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-29T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ms-daily",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-29T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-intake",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-29T07:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mag-editorial",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-29T08:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "article-am",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-29T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
     {
       "at": "2026-08-29T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-29-bh-desk",
+      "decisionOneLiner": "The selection phase remains current. No provider was called, nothing was published and this day cost $0."
     },
     {
       "at": "2026-08-29T11:00:00.000Z",
