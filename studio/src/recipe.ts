@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { z } from "zod";
 import { FAMILY_SERVES, familyDeckTemplate } from "./families.js";
 import { articleDeckTemplate } from "./library.js";
-import { DECK_DESIGNS, DECK_FAMILIES, isDeckStyle, type DeckDesign, type DeckFamily } from "./designs.js";
+import { DECK_DESIGNS, LAUNCH_FAMILIES, isDeckStyle, type DeckDesign, type DeckFamily } from "./designs.js";
 import type { CarouselTemplate } from "./schema.js";
 import type { CarouselSummaryVenture } from "./summary.js";
 
@@ -61,7 +61,7 @@ function seededIndex(seed: string, offset: number, length: number): number {
  * Which family this article gets.
  *
  * Seeded, then adjusted against what the venture actually shipped: never one of the last two
- * families, and preferring the third of the library that has gone longest unused. The memory is
+ * families, and preferring the third of the rotation that has gone longest unused. The memory is
  * the venture's own receipts — recorded state, not a clock — so a replay of last Tuesday reads
  * last Tuesday's history and lands on last Tuesday's family.
  */
@@ -72,22 +72,23 @@ export function chooseFamily(
 ): DeckFamily {
   const recent = new Set(history.slice(0, 2).map((entry) => entry.family));
   /*
-   * A photograph decides which families are even in the draw.
+   * The dealer deals the launch rotation, and only the launch rotation.
    *
-   * Only seven of the twenty-three compose for an image — `FAMILY_SERVES` has said so since the
-   * expansion — and this dealer never read it. So an article that had won a licensed photograph,
-   * passed the vision gate and paid for it could be dealt `slab` or `terminal`, which have nowhere
-   * to put a picture, and the deck went out as type with the photograph sitting unused beside it.
-   * Nothing reported that, because every check the deck faces is about the template rather than
-   * about what the article brought to it.
+   * Twenty-three registered families read as one grey template with the numbers filed off — the
+   * owner's words on 2026-08-29 were "too basic". Five launch families replace them in the draw;
+   * everything else stays registered solely so a stored recipe keeps rendering. A live preset
+   * pool bypasses this function entirely, and there the owner may still name a legacy family —
+   * narrowing to an explicit choice is theirs to do, widening back to grey is not.
    *
-   * Only the has-a-photograph direction narrows. An article without one keeps the whole library:
-   * a type-only family is the right answer there, and photo-forward families degrade to type
-   * perfectly well, so removing them would shrink the rotation for no gain.
+   * A photograph then decides which of the five are in the draw. Three compose for an image —
+   * `FAMILY_SERVES` says so — and an article that won a licensed photograph, passed the vision
+   * gate and paid for it must never be dealt a family with nowhere to put it. Only the
+   * has-a-photograph direction narrows: an article without one keeps all five, because the
+   * photo-forward three degrade to type perfectly well.
    */
   const serves = hasHero === true
-    ? DECK_FAMILIES.filter((family) => FAMILY_SERVES[family] === "photo-forward")
-    : [...DECK_FAMILIES];
+    ? LAUNCH_FAMILIES.filter((family) => FAMILY_SERVES[family] === "photo-forward")
+    : [...LAUNCH_FAMILIES];
   const eligible = serves.filter((family) => !recent.has(family));
   const pool = eligible.length > 0 ? eligible : serves;
   // How long ago each family was last used: absent from the history is longest of all. Ties break

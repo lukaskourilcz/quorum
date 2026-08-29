@@ -5,6 +5,7 @@ import {
   CarouselPresetFileSchema,
   CarouselPresetSchema,
   DECK_FAMILIES,
+  LAUNCH_FAMILIES,
   MAX_RESOLVABLE_SLIDES,
   MIN_SLIDES,
   articleDeckTemplates,
@@ -43,7 +44,7 @@ const brands = Object.values(CAROUSEL_BRANDS);
  * This number moves in the commit that adds a family, which is the point at which somebody has to
  * notice that it did.
  */
-const FAMILY_COUNT = 23;
+const FAMILY_COUNT = 28;
 
 function payload(slideCount: number, variant?: string): CarouselPayload {
   return {
@@ -310,12 +311,10 @@ describe("presets", () => {
 
   it("deals only the owner's five, over a month of articles", () => {
     /*
-     * The launch answer to "I want five top designs, not twenty-three".
-     *
-     * Narrowing the rotation is a decision the owner makes by saving five presets and setting
-     * them live — `docs/NEEDED.md` walks him through it. This proves the half that is the
-     * engine's: once a pool exists, nothing outside it can ever be dealt, whatever the article,
-     * whatever the history, photograph or no photograph.
+     * A live pool overrides even the launch rotation — including back to legacy families, which
+     * is the one path that can still deal one. That is the owner narrowing to an explicit choice.
+     * This proves the half that is the engine's: once a pool exists, nothing outside it can ever
+     * be dealt, whatever the article, whatever the history, photograph or no photograph.
      */
     const five = ["masthead", "gutter", "bevel", "porthole", "tower"] as const;
     const pool = five.map((family) => ({
@@ -379,15 +378,30 @@ describe("which family an article with a photograph is dealt", () => {
   });
 
   it("still rotates, rather than settling on one photo-forward family", () => {
-    // Narrowing the pool must not cost the variety the anti-repeat exists to create.
-    expect(new Set(sequence(true)).size).toBeGreaterThanOrEqual(5);
+    // Narrowing the pool must not cost the variety the anti-repeat exists to create. Three of the
+    // launch five compose for a photograph, and a month walks through all three.
+    expect(new Set(sequence(true)).size).toBe(3);
   });
 
-  it("keeps the whole library for an article with no photograph", () => {
-    // A type-only family is the right answer there, and photo-forward families degrade to type
-    // perfectly well, so the no-photo case must not narrow at all.
+  it("deals every one of the launch five to a month without photographs, and nothing else", () => {
+    // A type-only family is the right answer there, and the photo-forward three degrade to type
+    // perfectly well, so the no-photo draw is the whole rotation — which is now the launch five,
+    // never the legacy library behind it.
     const dealt = new Set(sequence(false));
-    expect(dealt.size).toBeGreaterThan(15);
-    expect([...dealt].some((family) => FAMILY_SERVES[family as keyof typeof FAMILY_SERVES] !== "photo-forward")).toBe(true);
+    expect([...dealt].sort()).toEqual([...LAUNCH_FAMILIES].sort());
+  });
+
+  it("never deals outside the launch rotation unprompted, photograph or no photograph", () => {
+    /*
+     * The owner's 2026-08-29 instruction: always five ways to ship a carousel, not twenty-four.
+     * The twenty-three legacy families stay registered — a stored recipe must keep rendering —
+     * but the only way one is ever dealt again is a live preset naming it, which is the owner
+     * narrowing to an explicit choice rather than the engine reaching back into the grey.
+     */
+    for (const hasHero of [true, false]) {
+      for (const family of sequence(hasHero, 60)) {
+        expect(LAUNCH_FAMILIES as readonly string[], `dealt ${family} with hasHero=${String(hasHero)}`).toContain(family);
+      }
+    }
   });
 });

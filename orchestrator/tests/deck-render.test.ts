@@ -2,7 +2,7 @@ import { mkdtemp, mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { DECK_FAMILIES, DECK_STYLES, FAMILY_SERVES, buildArticleDeck, deriveRecipe } from "@boardlessai/carousel-studio";
+import { DECK_STYLES, FAMILY_SERVES, LAUNCH_FAMILIES, buildArticleDeck, deriveRecipe } from "@boardlessai/carousel-studio";
 import { effectiveRecipe } from "../src/social/deck-style.js";
 import { writeDeckReceipt } from "../src/social/deck-receipt.js";
 
@@ -47,8 +47,8 @@ describe("the deck design the owner picked", () => {
     const root = await stateRoot();
     const article = { root, venture: "mma-files" as const, slug: "oktagon-lopez", date: "2026-08-04" };
     expect(await effectiveRecipe(article)).toEqual(await effectiveRecipe(article));
-    // Nothing new derives one of the five original wallpapers.
-    expect(DECK_FAMILIES as readonly string[]).toContain((await effectiveRecipe(article)).family);
+    // Nothing new derives outside the launch rotation, wallpapers and legacy families included.
+    expect(LAUNCH_FAMILIES as readonly string[]).toContain((await effectiveRecipe(article)).family);
   });
 
   it("takes the recorded choice over the derived one", async () => {
@@ -243,7 +243,7 @@ describe("the recipe variety engine", () => {
       "utf8"
     );
     const recipe = await effectiveRecipe({ root, venture: "mma-files", slug: "gamrot", date: "2026-08-06" });
-    expect(DECK_FAMILIES as readonly string[]).toContain(recipe.family);
+    expect(LAUNCH_FAMILIES as readonly string[]).toContain(recipe.family);
   });
 
   it("asks for no treatment when there is no photograph to treat", () => {
