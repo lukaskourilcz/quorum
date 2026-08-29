@@ -221,13 +221,24 @@ describe("a picture the venture just used", () => {
     return root;
   }
 
-  /** A stand-in for the real rung, which walks its rotation and honours every refusal. */
+  /**
+   * A stand-in for the real rung: it gathers what the free veto allows, up to the limit, and then
+   * hands the whole shortlist to the judge exactly once — the shape both rotations now have.
+   */
   function rotation(...offered: LicensedPhotoCandidate[]) {
-    return async ({ accept }: { accept?: (value: LicensedPhotoCandidate) => Promise<boolean> }) => {
+    return async ({ veto, choose, limit }: {
+      veto?: (value: LicensedPhotoCandidate) => Promise<boolean>;
+      choose?: (values: readonly LicensedPhotoCandidate[]) => Promise<LicensedPhotoCandidate | null>;
+      limit?: number;
+    }) => {
+      const shortlist: LicensedPhotoCandidate[] = [];
       for (const value of offered) {
-        if (!accept || (await accept(value))) return value;
+        if (shortlist.length >= Math.max(1, limit ?? 1)) break;
+        if (veto && await veto(value)) continue;
+        shortlist.push(value);
       }
-      return null;
+      if (shortlist.length === 0) return null;
+      return choose ? await choose(shortlist) : shortlist[0]!;
     };
   }
 

@@ -226,20 +226,31 @@ export async function illustrativeScenePhoto(input: {
   seed: string;
   fetchJson?: SceneJsonFetcher;
   /**
-   * Whether this file may run above this article. A refusal moves to the next in the rotation.
+   * Files this article may not run, answered without spending anything. `true` means "not this
+   * one", and the rotation moves on without the judge ever seeing it.
+   */
+  veto?: (candidate: LicensedPhotoCandidate) => Promise<boolean>;
+  /**
+   * Pick one from the shortlist, or none.
    *
    * A curated file was reviewed once, by a person, at 640px — and Commons files get relicensed,
-   * replaced and quietly re-cropped afterwards. The rotation already treats an unfetchable file
-   * as one to skip rather than as a failure; a refused one is the same kind of answer.
+   * replaced and quietly re-cropped afterwards. Judging the shortlist in one go rather than file
+   * by file is what makes those scores comparable, and it is one call instead of three.
    */
-  accept?: (candidate: LicensedPhotoCandidate) => Promise<boolean>;
+  choose?: (candidates: readonly LicensedPhotoCandidate[]) => Promise<LicensedPhotoCandidate | null>;
+  /** How many resolvable files to gather before judging. Defaults to one — first fit. */
+  limit?: number;
 }): Promise<LicensedPhotoCandidate | null> {
   const fetchJson = input.fetchJson ?? defaultFetchJson;
+  const limit = Math.max(1, input.limit ?? 1);
+  const shortlist: LicensedPhotoCandidate[] = [];
   for (const scene of sceneRotation(input.subjectQuery, input.seed)) {
+    if (shortlist.length >= limit) break;
     const candidate = await resolve(scene, fetchJson).catch(() => null);
     if (!candidate) continue;
-    if (input.accept && !(await input.accept(candidate))) continue;
-    return candidate;
+    if (input.veto && await input.veto(candidate)) continue;
+    shortlist.push(candidate);
   }
-  return null;
+  if (shortlist.length === 0) return null;
+  return input.choose ? await input.choose(shortlist) : shortlist[0]!;
 }

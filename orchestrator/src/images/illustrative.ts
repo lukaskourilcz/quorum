@@ -212,22 +212,37 @@ export async function illustrativeSportPhoto(input: {
   seed: string;
   fetchJson?: IllustrativeJsonFetcher;
   /**
-   * Whether this file may run above this article. A refusal moves to the next in the rotation.
+   * Files this article may not run, answered without spending anything.
    *
-   * Each of these was reviewed once, by a person, at 640px, and a Commons file can be
-   * relicensed, replaced or re-cropped after that. The rotation already skips a file it cannot
-   * fetch; a refused one is the same kind of answer.
+   * A veto here moves to the next in the rotation and never reaches the judge, which is what
+   * keeps a known repeat free. `true` means "not this one".
    */
-  accept?: (candidate: LicensedPhotoCandidate) => Promise<boolean>;
+  veto?: (candidate: LicensedPhotoCandidate) => Promise<boolean>;
+  /**
+   * Pick one from the shortlist, or none.
+   *
+   * The rotation used to be a first-fit loop asking about one file at a time, so three curated
+   * looks were three unrelated yes/no answers and three separate calls. Gathering first and
+   * judging once is what the search rung already does, and for the same reason: the scores mean
+   * something against each other. Absent, the first resolvable file wins, which is the old
+   * behaviour and what an unjudged caller should get.
+   */
+  choose?: (candidates: readonly LicensedPhotoCandidate[]) => Promise<LicensedPhotoCandidate | null>;
+  /** How many resolvable files to gather before judging. Defaults to one — first fit. */
+  limit?: number;
 }): Promise<LicensedPhotoCandidate | null> {
   const fetchJson = input.fetchJson ?? defaultFetchJson;
+  const limit = Math.max(1, input.limit ?? 1);
+  const shortlist: LicensedPhotoCandidate[] = [];
   for (const photo of illustrativeRotation(input.seed)) {
+    if (shortlist.length >= limit) break;
     // One unreachable file must not cost the article its photograph, so a throw moves to the next
     // in the rotation rather than out of this function.
     const candidate = await resolve(photo, fetchJson).catch(() => null);
     if (!candidate) continue;
-    if (input.accept && !(await input.accept(candidate))) continue;
-    return candidate;
+    if (input.veto && await input.veto(candidate)) continue;
+    shortlist.push(candidate);
   }
-  return null;
+  if (shortlist.length === 0) return null;
+  return input.choose ? await input.choose(shortlist) : shortlist[0]!;
 }

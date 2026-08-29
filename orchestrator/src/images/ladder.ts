@@ -163,30 +163,36 @@ export async function gatedSearchRung(
 }
 
 /**
- * How many curated files one article will pay to look at before it moves on.
+ * How many curated files one article puts in front of the gate before it moves on.
  *
- * The rotation holds nine sport photographs and up to nine scenes, and each look is a gate call
- * against a two-cent article cap. Spending all of it here would leave nothing for the search
- * rung, which is the rung that needs the gate most: a curated file was reviewed by a person once
- * and a search result has been reviewed by nobody. Three refusals is enough to establish that
- * this rotation is not answering today.
+ * The rotation holds nine sport photographs and up to nine scenes, and the whole shortlist is one
+ * call now rather than one call each — but the shortlist still has to be bounded, because every
+ * candidate on it is a thumbnail the model reads, and reading nine of them would spend on this
+ * rung what the search rung needs. The search rung is the one that needs the gate most: a curated
+ * file was reviewed by a person once and a search result has been reviewed by nobody. Three is
+ * enough to establish whether this rotation is answering today.
  */
 export const CURATED_GATE_ATTEMPTS = 3;
 
 /**
- * The gate, wired for one curated file at a time, plus somewhere to keep what it said.
+ * The two halves of the curated rung: what is free to refuse, and the one call that judges.
  *
- * A veto here is not a failure. It means a file somebody reviewed at 640px no longer shows what
- * the note beside it says — relicensed, replaced, re-cropped — and the rotation's next entry is
- * the right answer, exactly as it is for a file that will not fetch.
+ * It used to be a single `accept(candidate)` the rotations drove one file at a time, so three
+ * looks were three separate calls carrying three unrelated yes/no answers. The search rung has
+ * always batched, and says why in its own comment — the scores mean something against each other.
+ * The curated rung now does the same, and the arithmetic is the point: three one-candidate looks
+ * cost about $0.0054 against about $0.0037 for one batched call, and that difference is what kept
+ * the illustration rung out of reach on the MMA event path against a two-cent article cap.
  */
-function curatedAcceptor(
+function curatedJudge(
   context: LadderContext,
   dependencies: LadderDependencies,
   verdicts: GateVerdict[]
-): (candidate: LicensedPhotoCandidate) => Promise<boolean> {
+): {
+  veto: (candidate: LicensedPhotoCandidate) => Promise<boolean>;
+  choose: (candidates: readonly LicensedPhotoCandidate[]) => Promise<LicensedPhotoCandidate | null>;
+} {
   const gate = dependencies.gate ?? assessCandidates;
-  let looked = 0;
   /*
    * What the venture's last few articles ran, resolved once and only if a candidate gets this far.
    *
@@ -195,37 +201,48 @@ function curatedAcceptor(
    * the gate considered exactly one candidate and DNESKAi published the same server-room
    * photograph as 8 August — two stories, byte-identical hero and thumbnail.
    *
-   * The check runs before the gate, so a repeat costs no model call. It is a veto like any other
-   * on this ladder: the rung descends, which is the same answer a file that will not fetch already
-   * gets, and the plate at the bottom is always available. So this can cost a photograph and can
-   * never cost a publication.
+   * The check runs before the gate and outside the batch, so a repeat still costs no model call.
+   * It is a veto like any other on this ladder: the rung descends, which is the same answer a file
+   * that will not fetch already gets, and the plate at the bottom is always available. So this can
+   * cost a photograph and can never cost a publication.
    */
   let recent: Promise<Set<string>> | null = null;
-  return async (candidate) => {
-    recent ??= recentHeroIds({
-      venture: context.venture,
-      stateRoot: context.stateRoot,
-      excludeSlug: context.illustrationSlug ?? context.seed
-    });
-    if ((await recent).has(candidate.id)) return false;
-    if (looked >= CURATED_GATE_ATTEMPTS) return false;
-    looked += 1;
-    const outcome = await gate({
-      venture: context.venture,
-      article: {
-        titleCs: context.article.titleCs,
-        dekCs: context.article.dekCs,
-        negatives: context.brief?.negatives ?? []
-      },
-      candidates: [candidate],
-      mode: "curated",
-      stateRoot: context.stateRoot,
-      cycleId: context.cycleId,
-      budget: context.budget,
-      ...(context.dry === undefined ? {} : { dry: context.dry })
-    });
-    verdicts.push(outcome.verdict);
-    return outcome.selected !== null;
+  return {
+    veto: async (candidate) => {
+      recent ??= recentHeroIds({
+        venture: context.venture,
+        stateRoot: context.stateRoot,
+        excludeSlug: context.illustrationSlug ?? context.seed
+      });
+      return (await recent).has(candidate.id);
+    },
+    /*
+     * One call, whatever the shortlist holds.
+     *
+     * A veto is not a failure. It means a file somebody reviewed at 640px no longer shows what the
+     * note beside it says — relicensed, replaced, re-cropped — and descending is the right answer,
+     * exactly as it is for a file that will not fetch. The difference now is that the gate refuses
+     * the whole shortlist at once rather than each file in ignorance of the others.
+     */
+    choose: async (candidates) => {
+      if (candidates.length === 0) return null;
+      const outcome = await gate({
+        venture: context.venture,
+        article: {
+          titleCs: context.article.titleCs,
+          dekCs: context.article.dekCs,
+          negatives: context.brief?.negatives ?? []
+        },
+        candidates: [...candidates],
+        mode: "curated",
+        stateRoot: context.stateRoot,
+        cycleId: context.cycleId,
+        budget: context.budget,
+        ...(context.dry === undefined ? {} : { dry: context.dry })
+      });
+      verdicts.push(outcome.verdict);
+      return outcome.selected ?? null;
+    }
   };
 }
 
@@ -359,7 +376,8 @@ export async function selectEditionHero(
     ? await scenePhoto({
         subjectQuery: conceptQuery,
         seed: context.seed,
-        accept: curatedAcceptor(context, dependencies, verdicts)
+        limit: CURATED_GATE_ATTEMPTS,
+        ...curatedJudge(context, dependencies, verdicts)
       }).catch(() => null)
     : null;
   if (scene) return { candidate: scene, rung: "curated", verdicts, skippedProviders: [] };
@@ -431,7 +449,8 @@ export async function selectArticleHero(
     }
     const curated = await sportPhoto({
       seed,
-      accept: curatedAcceptor(input, dependencies, verdicts)
+      limit: CURATED_GATE_ATTEMPTS,
+      ...curatedJudge(input, dependencies, verdicts)
     }).catch(() => null);
     return curated
       ? { candidate: curated, rung: "curated", verdicts, skippedProviders: [] }
@@ -469,7 +488,8 @@ export async function selectArticleHero(
   // for people does not arise: nothing about the subject is sent anywhere.
   const curated = await sportPhoto({
     seed,
-    accept: curatedAcceptor(input, dependencies, verdicts)
+    limit: CURATED_GATE_ATTEMPTS,
+    ...curatedJudge(input, dependencies, verdicts)
   }).catch(() => null);
   if (curated) {
     return { candidate: curated, rung: "curated", verdicts, skippedProviders: searched.skippedProviders };

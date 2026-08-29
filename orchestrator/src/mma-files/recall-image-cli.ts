@@ -4,7 +4,7 @@ import { pathToFileURL } from "node:url";
 import { ArticlePackageSchema, type ArticlePackage } from "../contracts/mma-files.js";
 import { heroAltCs } from "../images/alt.js";
 import { ILLUSTRATIVE_SPORT_PHOTOGRAPHS, illustrativeRotation, illustrativeSportPhoto } from "../images/illustrative.js";
-import { materializeLicensedPhoto } from "../images/licensed.js";
+import { materializeLicensedPhoto, type LicensedPhotoCandidate } from "../images/licensed.js";
 import { stateRoot } from "../paths.js";
 import { checkImageCorrection } from "./correction.js";
 import { articlePackageHash } from "./hash.js";
@@ -88,9 +88,11 @@ async function main(): Promise<void> {
 
   // Resolved through the curated rung's own code, so the licence, author, dimensions and the
   // no-name alt text all come from where they always come from.
+  // One named file, so the rotation's own veto does the picking: everything that is not the file
+  // the owner asked for is refused, and the shortlist that reaches the end holds only it.
   const candidate = await illustrativeSportPhoto({
     seed: article.fighterRefs.join("|"),
-    accept: async (resolved) => resolved.title === file
+    veto: async (resolved: LicensedPhotoCandidate) => resolved.title !== file
   });
   if (!candidate) throw new Error(`${file} could not be resolved on Commons`);
 
