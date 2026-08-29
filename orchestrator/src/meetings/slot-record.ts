@@ -17,6 +17,18 @@ import type { ScheduledPhase } from "../types.js";
  * be allowed to hold the meeting. Only a record of the slot actually happening stops a second run.
  */
 export function slotRecordPath(phase: ScheduledPhase, date: string): string {
+  /*
+   * A venture day has no record of its own, and must not acquire one.
+   *
+   * Its rooms each write theirs, and those are what a second firing reads: the day re-runs only
+   * the rooms that have not finished, which is how a half-finished day resumes and how the
+   * edition retry reaches the edition without re-opening the product room. A day-level record
+   * would stop the second firing before any of that could happen — it would convert a resumable
+   * day into a lost one. The path below is deliberately one nothing writes.
+   */
+  if (phase === "cu-day" || phase === "mma-day" || phase === "dm-day") {
+    return `meetings/${date}-${phase}.json`;
+  }
   if (phase === "morning" || phase === "afternoon" || phase === "night") {
     return `standups/${date}-${phase}.json`;
   }

@@ -8,7 +8,7 @@ import { MeetingRecordSchema, type MeetingRecord } from "../contracts/meeting-re
 import { MeetingSkipSchema, type MeetingSkip } from "../contracts/meeting-skip.js";
 import { atomicWriteJson } from "../state.js";
 import { StandupSchema } from "../standup/schema.js";
-import { CRON_DELIVERY_WINDOW_HOURS, MEETING_CLOCK, PRAGUE_TIME_ZONE } from "./clock.js";
+import { CRON_DELIVERY_WINDOW_HOURS, DAY_STEPS, MEETING_CLOCK, PRAGUE_TIME_ZONE } from "./clock.js";
 import { meetingRef } from "./record.js";
 import { CRON_LEAD_HOURS } from "../ventures/registry.js";
 
@@ -127,16 +127,31 @@ export function buildCalendarFeed(input: {
     for (const definition of PUBLIC_MEETING_CLOCK) {
       const kind = slotKind(definition.phase);
       const at = pragueSlotInstant(date, definition.hour);
-      const record = bySlot.get(`${date}:${kind}`);
+      /*
+       * A venture day is one row over the rooms it dispatched.
+       *
+       * The day itself writes nothing, so a row that looked only for its own record would report
+       * every consolidated day as missed. It reads its rooms instead: the first that met is what
+       * the day shows, and a day whose rooms all recorded a reason shows the reason. That also
+       * keeps finished weeks readable — the records the rooms wrote are the same files they
+       * always were, and the row simply groups them.
+       */
+      const stepKinds = DAY_STEPS[definition.phase] ?? [];
+      const isDay = stepKinds.length > 0;
+      const lookup = isDay ? stepKinds : [kind];
+      const record = lookup.map((entry) => bySlot.get(`${date}:${entry}`)).find(Boolean);
       // A slot a gate turned off is not the same as one nobody reached. Both used to read
       // "missed", which is how eleven meetings could fail to happen on 2 August with nothing
       // anywhere saying why. The recorded reason is what the calendar shows for a skip.
-      const skip = skipReasons.get(`${date}:${definition.phase}`);
+      const skip = lookup.map((entry) => skipReasons.get(`${date}:${entry}`)).find(Boolean)
+        ?? skipReasons.get(`${date}:${definition.phase}`);
       // The article slots keep their outcome in a run file rather than a meeting record, so
       // they are read from there; a published slot is held, and a killed or blocked one is a
       // skip carrying the reason it was given.
-      const article = articleOutcomes.get(`${date}:${kind}`);
-      if (article) {
+      const article = lookup.map((entry) => articleOutcomes.get(`${date}:${entry}`)).find(Boolean);
+      // A day prefers what its rooms decided; the article run is what it falls back to. A slot
+      // that is only an article slot keeps reading its run file first, exactly as it did.
+      if (article && !(isDay && (record || skip))) {
         slots.push({
           at: at.toISOString(),
           tz: PRAGUE_TIME_ZONE,

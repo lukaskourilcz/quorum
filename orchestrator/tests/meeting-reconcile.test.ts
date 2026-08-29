@@ -114,11 +114,13 @@ describe("a day with no record of its slots still gets one", () => {
   it("writes nothing on a second pass over the same day", async () => {
     const root = await emptyRoot();
     await reconcileMeetingDay(root, DATE, NOW);
-    const before = await readFile(skipPath(root, "night"), "utf8");
+    // The morning is the company's one meeting now; the night is retired from the clock and the
+    // reconciler only accounts for slots the clock keeps.
+    const before = await readFile(skipPath(root, "morning"), "utf8");
     const second = await reconcileMeetingDay(root, DATE, new Date("2026-08-03T09:00:00.000Z"));
     expect(second.recorded).toEqual([]);
     // Byte-identical, so a daily reconciler cannot keep rewriting decidedAt on a settled day.
-    expect(await readFile(skipPath(root, "night"), "utf8")).toBe(before);
+    expect(await readFile(skipPath(root, "morning"), "utf8")).toBe(before);
   });
 
   it("leaves a held meeting, a published article slot and an existing skip alone", async () => {
@@ -143,9 +145,10 @@ describe("a day with no record of its slots still gets one", () => {
 
     const result = await reconcileMeetingDay(root, DATE, NOW);
 
-    // Every slot on the clock but the three this case already gave a record, a published
-    // article or an existing skip. The private desk is on the clock and counted too.
-    expect(result.recorded).toHaveLength(MEETING_CLOCK.length - 3);
+    // Every slot on the clock but the two this case already accounted for. Three artifacts, two
+    // slots: the edition record settles DNESKAi's day, while the published article and the
+    // analysis skip both belong to the MMA Files day and settle the one row between them.
+    expect(result.recorded).toHaveLength(MEETING_CLOCK.length - 2);
     expect(await readFile(recordFile, "utf8")).toBe(recordBefore);
     expect(await exists(skipPath(root, "cu-edition"))).toBe(false);
     expect(await exists(skipPath(root, "article-am"))).toBe(false);

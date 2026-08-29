@@ -116,11 +116,21 @@ describe("standup records are dated by the Prague wall clock", () => {
       records: [record],
       now: new Date("2026-08-05T12:00:00.000Z")
     });
-    const nightSlots = feed.slots.filter((slot) => slot.kind === "venture-night");
-    const pragueNight = nightSlots.find((slot) => slot.at.startsWith("2026-08-04T20:00"));
-    const utcNight = nightSlots.find((slot) => slot.at.startsWith("2026-08-03T20:00"));
-
-    expect(pragueNight?.status).toBe("held");
-    expect(utcNight?.status).toBe("missed");
+    /*
+     * The night is no longer a scheduled row.
+     *
+     * `operations-2026-08c` retired it: the company meets once, in the morning, and the night's
+     * checkpoint moved there. It stays runnable by hand, so a record like this one can still be
+     * written — it simply has no cell on a calendar that only draws the slots the clock keeps.
+     * With it went the last public slot late enough for the Prague and UTC dates to differ, so
+     * the divergence this case was written for can no longer be shown through a row at all.
+     *
+     * The guard that actually caught the bug is the record's own date, asserted above and again
+     * here: `cycle.ts` names the file from it and the calendar keys its Prague grid on it, so a
+     * UTC date would file the record under the previous day and collide with that day's record.
+     */
+    expect(record.date).toBe(PRAGUE_DATE);
+    expect(feed.slots.some((slot) => slot.kind === "venture-night")).toBe(false);
+    expect(feed.slots.some((slot) => slot.at.startsWith(PRAGUE_DATE))).toBe(true);
   });
 });

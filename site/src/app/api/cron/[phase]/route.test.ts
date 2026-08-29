@@ -40,9 +40,10 @@ beforeEach(() => {
     });
     return new Response(githubStatus === 204 ? null : "rejected", { status: githubStatus });
   });
-  // 09:00 Prague on 4 August 2026 (CEST), the mag-editorial slot's own hour.
+  // 08:00 Prague on 4 August 2026 (CEST), the MMA Files day's own hour. It stands in for the
+  // story meeting this case used to name, which is a step of that day now.
   vi.useFakeTimers();
-  vi.setSystemTime(new Date("2026-08-04T07:00:00.000Z"));
+  vi.setSystemTime(new Date("2026-08-04T06:00:00.000Z"));
 });
 
 afterEach(() => {
@@ -66,34 +67,34 @@ describe("the cron route refuses anything that is not Vercel's cron", () => {
     ["the secret with something appended", `Bearer ${SECRET}x`],
     ["a lowercased bearer", `bearer ${SECRET}`]
   ])("refuses %s", async (_name, header) => {
-    const response = await call("mag-editorial", header);
+    const response = await call("mma-day", header);
     expect(response.status).toBe(401);
     expect(calls).toHaveLength(0);
   });
 
   it("refuses everything when CRON_SECRET is unset, rather than falling open", async () => {
     vi.stubEnv("CRON_SECRET", undefined);
-    expect((await call("mag-editorial", `Bearer ${SECRET}`)).status).toBe(401);
-    expect((await call("mag-editorial")).status).toBe(401);
+    expect((await call("mma-day", `Bearer ${SECRET}`)).status).toBe(401);
+    expect((await call("mma-day")).status).toBe(401);
     expect(calls).toHaveLength(0);
   });
 
   it("refuses everything when CRON_SECRET is set to an empty string", async () => {
     vi.stubEnv("CRON_SECRET", "");
     // An empty secret would otherwise make "Bearer " a valid credential.
-    expect((await call("mag-editorial", "Bearer ")).status).toBe(401);
+    expect((await call("mma-day", "Bearer ")).status).toBe(401);
     expect(calls).toHaveLength(0);
   });
 
   it("is not fooled by Vercel's own user agent without the secret", async () => {
-    const response = await call("mag-editorial", undefined, { "user-agent": "vercel-cron/1.0" });
+    const response = await call("mma-day", undefined, { "user-agent": "vercel-cron/1.0" });
     expect(response.status).toBe(401);
     expect(calls).toHaveLength(0);
   });
 
   it("says nothing about which part was wrong", async () => {
-    const missing = await call("mag-editorial");
-    const wrong = await call("mag-editorial", "Bearer nope");
+    const missing = await call("mma-day");
+    const wrong = await call("mma-day", "Bearer nope");
     expect(await missing.text()).toBe(await wrong.text());
     expect(missing.status).toBe(wrong.status);
   });
@@ -122,9 +123,9 @@ describe("the cron route refuses anything that is not Vercel's cron", () => {
 
 describe("the cron route dispatches the slot it was called for", () => {
   it("dispatches the phase in the path as a scheduled firing", async () => {
-    const response = await call("mag-editorial", `Bearer ${SECRET}`);
+    const response = await call("mma-day", `Bearer ${SECRET}`);
     expect(response.status).toBe(202);
-    expect(await response.json()).toEqual({ dispatched: true, phase: "mag-editorial" });
+    expect(await response.json()).toEqual({ dispatched: true, phase: "mma-day" });
     expect(calls).toHaveLength(1);
     expect(calls[0]!.url).toBe(
       "https://api.github.com/repos/lukaskourilcz/quorum/actions/workflows/cycle.yml/dispatches"
@@ -134,37 +135,38 @@ describe("the cron route dispatches the slot it was called for", () => {
     // this route cannot ask for a dry run or for the owner's delivery-only mode.
     expect(calls[0]!.body).toEqual({
       ref: "main",
-      inputs: { phase: "mag-editorial", trigger: "vercel-cron" }
+      inputs: { phase: "mma-day", trigger: "vercel-cron" }
     });
   });
 
   it("does nothing for the daylight-saving variant that is not in force", async () => {
-    // mag-editorial is the 09:00 Prague slot, so under CEST its live entry is 07:00 UTC. The
-    // 08:00 UTC entry exists for winter and fires today too; it must dispatch nothing.
-    vi.setSystemTime(new Date("2026-08-04T08:00:00.000Z"));
-    const response = await call("mag-editorial", `Bearer ${SECRET}`);
+    // mma-day is the 08:00 Prague slot, so under CEST its live entry is 06:00 UTC. The 07:00 UTC
+    // entry exists for winter and fires today too; it must dispatch nothing.
+    vi.setSystemTime(new Date("2026-08-04T07:00:00.000Z"));
+    const response = await call("mma-day", `Bearer ${SECRET}`);
     expect(response.status).toBe(200);
     expect(await response.json()).toMatchObject({ dispatched: false, reason: "inactive-dst-variant" });
     expect(calls).toHaveLength(0);
   });
 
   it("dispatches from the winter entry once the clocks have gone back", async () => {
-    // Same slot, same two entries; in January it is the 08:00 UTC one that is live.
-    vi.setSystemTime(new Date("2026-01-04T08:00:00.000Z"));
-    expect((await call("mag-editorial", `Bearer ${SECRET}`)).status).toBe(202);
+    // Same slot, same two entries; in January it is the 07:00 UTC one that is live.
+    vi.setSystemTime(new Date("2026-01-04T07:00:00.000Z"));
+    expect((await call("mma-day", `Bearer ${SECRET}`)).status).toBe(202);
     expect(calls).toHaveLength(1);
     calls = [];
-    vi.setSystemTime(new Date("2026-01-04T07:00:00.000Z"));
-    expect((await call("mag-editorial", `Bearer ${SECRET}`)).status).toBe(200);
+    vi.setSystemTime(new Date("2026-01-04T06:00:00.000Z"));
+    expect((await call("mma-day", `Bearer ${SECRET}`)).status).toBe(200);
     expect(calls).toHaveLength(0);
   });
 
   it("dispatches the edition slot at its own hour and again at the retry hour", async () => {
     // Every delivered edition except 6 August needed a second run, and every second run that ran
-    // succeeded. The retry is a second dispatch of cu-edition, not a slot: 09:00 Prague belongs
-    // to the story meeting, and the run itself decides whether there is anything left to do.
+    // succeeded. The 05:00 Prague slot is DNESKAi's whole day now; the retry is still a second
+    // dispatch of the edition room alone, which resumes the one thing the day may have left
+    // undone. The run itself decides whether there is anything left to do.
     vi.setSystemTime(new Date("2026-08-04T03:00:00.000Z"));
-    expect((await call("cu-edition", `Bearer ${SECRET}`)).status).toBe(202);
+    expect((await call("cu-day", `Bearer ${SECRET}`)).status).toBe(202);
     expect(calls).toHaveLength(1);
 
     calls = [];
@@ -176,9 +178,10 @@ describe("the cron route dispatches the slot it was called for", () => {
       inputs: { phase: "cu-edition", trigger: "vercel-cron" }
     });
 
-    // Neither retry entry's off-by-one variant fires, and no other hour does either.
+    // The edition room has no slot of its own any more, so its only live hour is the retry: the
+    // day's own 03:00 firing must not reach it, and neither variant's neighbour fires.
     calls = [];
-    vi.setSystemTime(new Date("2026-08-04T08:00:00.000Z"));
+    vi.setSystemTime(new Date("2026-08-04T03:00:00.000Z"));
     expect((await call("cu-edition", `Bearer ${SECRET}`)).status).toBe(200);
     vi.setSystemTime(new Date("2026-08-04T09:00:00.000Z"));
     expect((await call("cu-edition", `Bearer ${SECRET}`)).status).toBe(200);
@@ -199,13 +202,13 @@ describe("the cron route dispatches the slot it was called for", () => {
 
   it("refuses to fire when the dispatch token is missing", async () => {
     vi.stubEnv("QUORUM_DISPATCH_TOKEN", undefined);
-    expect((await call("mag-editorial", `Bearer ${SECRET}`)).status).toBe(503);
+    expect((await call("mma-day", `Bearer ${SECRET}`)).status).toBe(503);
     expect(calls).toHaveLength(0);
   });
 
   it("reports a dispatch GitHub rejected instead of claiming success", async () => {
     githubStatus = 422;
-    const response = await call("mag-editorial", `Bearer ${SECRET}`);
+    const response = await call("mma-day", `Bearer ${SECRET}`);
     expect(response.status).toBe(502);
     expect(await response.json()).toMatchObject({ dispatched: false, status: 422 });
   });

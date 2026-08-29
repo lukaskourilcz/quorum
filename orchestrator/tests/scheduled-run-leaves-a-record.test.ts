@@ -182,8 +182,9 @@ describe("a scheduled slot is never left unexplained", () => {
     expect(written, "the closed slot wrote a run record").toBeDefined();
     expect(written!.reason).toBe("budget_decision_not_countersigned");
 
-    // And the calendar reads it as an explained slot rather than a red one.
-    const at = pragueSlotInstant("2026-08-04", MEETING_CLOCK.find((slot) => slot.phase === "article-am")!.hour);
+    // And the calendar reads it as an explained slot rather than a red one. The article slot is a
+    // step of the MMA Files day now, so the day's hour is where its outcome is drawn.
+    const at = pragueSlotInstant("2026-08-04", MEETING_CLOCK.find((slot) => slot.phase === "mma-day")!.hour);
     const feed = buildCalendarFeed({
       weekOf: "2026-08-04",
       records: [],

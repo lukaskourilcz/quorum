@@ -16,17 +16,19 @@ interface VentureRegistry {
 const registry = JSON.parse(
   readFileSync(path.resolve(process.cwd(), "../config/ventures.json"), "utf8")
 ) as VentureRegistry;
+/*
+ * The whole navigation, after the 2026-08-29 reset.
+ *
+ * Three places and the projects: the Overview, what is waiting for the owner, and Settings —
+ * the one page that changes how the company runs. Operations, Implementation Plans, Social
+ * Profiles and the held idea list still render for a bookmark and are linked from the Overview's
+ * footer; none of them is something the owner has to check, which is the difference between a
+ * link and a destination.
+ */
 const canonicalDestinations = [
   "/admin",
-  "/admin/operations",
-  "/admin/implementation-plans",
-  // Social Profiles has been in the rail since #415 and was never added here, so this list — and
-  // the four order-sensitive assertions it drives — has been failing rather than guarding.
-  "/admin/social-profiles",
-  "/admin?view=approvals",
-  "/admin?view=manual-tasks",
-  // No "/admin?view=future": the idea rooms are held for the launch period, so the cross-venture
-  // idea list left the rail. The URL still renders — it is simply no longer a destination.
+  "/admin?view=waiting",
+  "/admin/settings",
   "/admin?venture=carousel-studio",
   ...registry.ventures
     .filter(({ id }) => id !== "carousel-studio")
@@ -74,10 +76,10 @@ test("expanded and collapsed desktop navigation expose every canonical destinati
   await expectCanonicalLinks(links);
   await expect(links).toHaveCount(canonicalDestinations.length);
 
-  await navigation.locator('a[href="/admin?view=approvals"]').click();
-  await expect(page).toHaveURL(/\/admin\?view=approvals$/u, { timeout: ADMIN_NAVIGATION_TIMEOUT });
+  await navigation.locator('a[href="/admin?view=waiting"]').click();
+  await expect(page).toHaveURL(/\/admin\?view=waiting$/u, { timeout: ADMIN_NAVIGATION_TIMEOUT });
   await expect(
-    navigation.locator('a[href="/admin?view=approvals"][aria-current="page"]')
+    navigation.locator('a[href="/admin?view=waiting"][aria-current="page"]')
   ).toBeVisible();
   expect(runtime.failures).toEqual([]);
   expect(runtime.mutationAttempts).toEqual([]);

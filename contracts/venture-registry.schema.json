@@ -247,6 +247,38 @@
               "additionalProperties": {}
             }
           },
+          "day": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*-day$"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cadence": {
+                "type": "string",
+                "pattern": "^daily@(?:0[5-9]|1\\d|2[0-3]):00$"
+              },
+              "steps": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                }
+              }
+            },
+            "required": [
+              "kind",
+              "label",
+              "cadence",
+              "steps"
+            ],
+            "additionalProperties": {}
+          },
           "meetings": {
             "type": "array",
             "items": {

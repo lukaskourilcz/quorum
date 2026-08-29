@@ -5,8 +5,18 @@
   "foundingDecisionRef": "state/decisions/2026-08-28-webdev-signal-founding.md",
   "foundingCountersigned": false,
   "editions": [
-    { "locale": "cs", "id": "webdev-signal-cs", "profileRef": "social-profile-webdev-signal-cs", "state": "held" },
-    { "locale": "en", "id": "webdev-signal-en", "profileRef": "social-profile-webdev-signal-en", "state": "held" }
+    {
+      "locale": "cs",
+      "id": "webdev-signal-cs",
+      "profileRef": "social-profile-webdev-signal-cs",
+      "state": "held"
+    },
+    {
+      "locale": "en",
+      "id": "webdev-signal-en",
+      "profileRef": "social-profile-webdev-signal-en",
+      "state": "held"
+    }
   ],
   "features": {
     "ventureRegistration": "enabled",
@@ -37,7 +47,7 @@
     "phase": "webdev-signal-daily",
     "timezone": "Europe/Prague",
     "pragueHour": 5,
-    "dispatcherAnchorPhase": "cu-edition",
+    "dispatcherAnchorPhase": "cu-day",
     "position": "before-anchor",
     "newCron": false,
     "publicMeeting": false,

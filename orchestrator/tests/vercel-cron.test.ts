@@ -62,11 +62,12 @@ describe("the deployed Vercel schedule matches the meeting clock", () => {
     expect([...actual].map(key).sort()).toEqual([...expected].map(key).sort());
     expect(MEETING_CLOCK.length).toBeGreaterThan(0);
     expect(actual).toHaveLength(dispatches.length * 2);
-    // The retry hour must stay off the meeting clock: resolveScheduledPhase has to be able to
-    // name exactly one phase for a Prague hour, and the story meeting owns this one.
-    expect(MEETING_CLOCK.some((slot) => slot.hour === EDITION_RETRY_HOUR)).toBe(true);
-    expect(MEETING_CLOCK.find((slot) => slot.hour === EDITION_RETRY_HOUR)?.phase)
-      .not.toBe(EDITION_RETRY_PHASE);
+    // The retry must stay off the meeting clock. `resolveScheduledPhase` has to name at most one
+    // phase for a Prague hour, so the retry cannot be a slot: it is a second attempt at the day's
+    // own slot, dispatched by name. Since the MMA day took the story meeting's hour, the retry
+    // hour is simply empty — which satisfies the same invariant more plainly than sharing it did.
+    expect(MEETING_CLOCK.filter((slot) => slot.hour === EDITION_RETRY_HOUR).map(({ phase }) => phase))
+      .not.toContain(EDITION_RETRY_PHASE);
   });
 
   it("stays inside Vercel's documented cron limits", async () => {

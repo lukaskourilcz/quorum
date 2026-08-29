@@ -49,7 +49,10 @@
               "mag-desk",
               "article-am",
               "article-pm",
-              "studio"
+              "studio",
+              "cu-day",
+              "mma-day",
+              "dm-day"
             ]
           },
           "status": {

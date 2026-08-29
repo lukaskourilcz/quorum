@@ -48,7 +48,10 @@ export const WebDevSignalRegistrationSchema = z.strictObject({
     phase: z.literal("webdev-signal-daily"),
     timezone: z.literal("Europe/Prague"),
     pragueHour: z.literal(5),
-    dispatcherAnchorPhase: z.literal("cu-edition"),
+    // The Prague 05:00 dispatcher, which is DNESKAi's day since `operations-2026-08c` folded the
+    // edition and product rooms into one slot. WebDev Signal still rides it and still adds no cron
+    // of its own; only the name of the dispatch it rides changed.
+    dispatcherAnchorPhase: z.literal("cu-day"),
     position: z.literal("before-anchor"),
     newCron: z.literal(false),
     publicMeeting: z.literal(false),

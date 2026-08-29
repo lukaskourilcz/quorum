@@ -37,10 +37,12 @@ describe("the backstop sweep", () => {
 
   it("rescues the oldest slot today that has no record", async () => {
     const root = await stateRoot();
-    // 10:00 Prague on 10 August: the 05:00, 06:00, 08:00, 09:00 and 10:00 slots have all passed
-    // and all are still inside the window a firing can name them in.
+    // 10:00 Prague on 10 August: the 05:00, 06:00, 07:00 and 08:00 slots have all passed and all
+    // are still inside the window a firing can name them in. The day's own record is what the
+    // sweep reads — DNESKAi's rooms write theirs inside `cu-day`, and the sweep asks about the
+    // slot on the clock.
     const now = new Date("2026-08-10T08:00:00.000Z");
-    await record(root, "cu-edition", "2026-08-10");
+    await record(root, "cu-day", "2026-08-10");
 
     const outcome = await resolveBackstopSweep({ registry, stateRoot: root, now });
 
@@ -64,14 +66,14 @@ describe("the backstop sweep", () => {
 
   it("never reaches for a slot whose hour has not come", async () => {
     const root = await stateRoot();
-    // 05:55 Prague: the 05:00 edition slot has passed and nothing else has.
+    // 05:55 Prague: the 05:00 DNESKAi day has passed and nothing else has.
     const outcome = await resolveBackstopSweep({
       registry,
       stateRoot: root,
       now: new Date("2026-08-10T03:55:00.000Z")
     });
 
-    expect(outcome.phase).toBe("cu-edition");
+    expect(outcome.phase).toBe("cu-day");
   });
 
   it("never opens a room the punctual path would have refused as too late", async () => {
@@ -85,9 +87,10 @@ describe("the backstop sweep", () => {
     });
 
     // The window is CRON_DELIVERY_WINDOW_HOURS minus the lead, so at 22:00 the oldest slot a
-    // firing can still name is 17:00 — the morning is long past reach.
-    expect(outcome.phase).not.toBe("cu-edition");
-    expect(outcome.phase).toBe("cu-product");
+    // firing can still name is 17:00 — the morning is long past reach. 17:00 emptied when the
+    // product room joined DNESKAi's day, so the oldest reachable slot is now the 18:00 desk.
+    expect(outcome.phase).not.toBe("cu-day");
+    expect(outcome.phase).toBe("ts-desk");
   });
 
   it("says so plainly before the day's first slot", async () => {

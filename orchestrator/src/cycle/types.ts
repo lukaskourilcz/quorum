@@ -3,6 +3,7 @@ import { readJson } from "../state.js";
 import { stateRoot } from "../paths.js";
 import type { ImageProgramReadiness } from "../images/readiness.js";
 import type { RunnablePhase } from "../types.js";
+import type { VentureDayStep } from "./venture-day.js";
 import { manualEditionOverride } from "./commissions.js";
 
 /**
@@ -59,6 +60,15 @@ export interface CycleResult {
   imageProgram?: ImageProgramReadiness;
   /** Set only on "already_recorded": the record that made this firing a no-op. */
   alreadyRecordedAt?: string;
+  /**
+   * Set only on a venture day: what each of its rooms did, in the order the day ran them.
+   *
+   * Deliberately reported rather than written to a state file of its own. Every room already
+   * writes its record and, when it does not meet, its reason record — those files are the account
+   * of the day, and a second summary beside them would be a second copy of one fact to keep in
+   * sync. This exists so the run log and the CLI can print the day without opening five files.
+   */
+  steps?: readonly VentureDayStep[];
 }
 
 /** A completed article is final for its date; a no-edition board status is provisional. */

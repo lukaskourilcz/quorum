@@ -44,16 +44,16 @@ Freed worst-day capacity USD: $0.08`;
 describe("portfolio schedule and budget gate", () => {
   it("keeps all venture meetings at collision-free Prague slots", async () => {
     const registry = await loadVentureRegistry();
-    // 21:00 left with the closed incubator. 13:00 came back: the studio room the venture no
-    // longer holds vacated it and GoVIRAL took it, which is why the hour is here and the studio
-    // phase is not. 07:00 came back the same way -- marketingShark took the hour the incubator
-    // vacated. 15:00 and 16:00 came with Door Money. 18:00 came back with Tehdejsi svet, which
-    // took the hour the evening article slot left; it sits exactly 60 minutes from mma-analysis
-    // on one side and the night shift's neighbour on the other. Kvórum uses the former
-    // incubator hour at 21:00. Personal Growth uses the final 23:00 owner-only slot.
-    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]);
+    // One slot per venture since `operations-2026-08c`, and one company meeting. 05:00 is
+    // DNESKAi's day, 08:00 the MMA Files day (which took the story meeting's hour and folded in
+    // the article slot, the evening review and FightAIQ's two data checks), 15:00 Door Money's.
+    // The hours the consolidation vacated — 09, 10, 14, 16, 17, 19, 20, 22 — are simply empty;
+    // 06:00 is the surviving council meeting and 23:00 the owner-only Personal Growth desk.
+    expect(resolveMeetingClock(registry).map((slot) => slot.hour)).toEqual([5, 6, 7, 8, 11, 12, 13, 15, 18, 21, 23]);
     const colliding = structuredClone(registry);
-    colliding.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!.cadence = "daily@09:00";
+    // Onto the MMA Files day's hour: a venture day holds its slot against a room exactly as a
+    // room holds it against another room.
+    colliding.ventures.find((venture) => venture.id === "titty-tuesdays")!.meetings[0]!.cadence = "daily@08:00";
     expect(() => parseVentureRegistry(colliding)).toThrow(/60 minutes apart/);
   });
 
@@ -255,7 +255,10 @@ describe("portfolio schedule and budget gate", () => {
     // back as github.event.schedule, so "0 11,12" could not say which hour had fired, and
     // 12:00 UTC is both the 13:00 slot's winter variant and the afternoon meeting's summer one.
     const expressions = scheduledCronExpressions(await loadVentureRegistry());
-    expect(expressions).toHaveLength(20);
+    // Two firings per slot, deduplicated: the consolidated clock has eleven slots, and two pairs
+    // of neighbouring hours share a firing expression between a summer and a winter variant.
+    expect(new Set(expressions).size).toBe(expressions.length);
+    expect(expressions.length).toBeLessThanOrEqual(resolveScheduledClock(await loadVentureRegistry()).length * 2);
     // Every firing sits on CRON_MINUTE, off the start-of-hour queue GitHub warns about, and the
     // generator emits the same strings the workflow deploys — otherwise the resolver is only
     // ever exercised on expressions github.event.schedule will never send it.
@@ -264,7 +267,8 @@ describe("portfolio schedule and budget gate", () => {
         new RegExp(`^${CRON_MINUTE} \\d{1,2} \\* \\* \\*$`, "u").test(expression)
       )
     ).toBe(true);
-    // The two hours the 13:00 slot's variants belong to, written as the firings that serve them.
+    // The two hours the 13:00 GoVIRAL slot's variants belong to, written as the firings that
+    // serve them.
     expect(expressions).toContain(`${CRON_MINUTE} ${11 - CRON_HOUR_CARRY} * * *`);
     expect(expressions).toContain(`${CRON_MINUTE} ${12 - CRON_HOUR_CARRY} * * *`);
   });

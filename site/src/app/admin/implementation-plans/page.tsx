@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { adminSections } from "@/lib/admin-sections";
 import { AdminShell, type AdminSection, type AdminWorkspace } from "@/components/admin/admin-shell";
 import { ImplementationRefreshButton } from "@/components/admin/implementation-plan-actions";
 import { ImplementationPlansView } from "@/components/admin/implementation-plans";
@@ -33,16 +34,7 @@ export default async function ImplementationPlansPage({
       active: false
     }))
   ];
-  const sections: AdminSection[] = [
-    { id: "operations", name: "Operations", href: "/admin/operations", active: false },
-    { id: "implementation-plans", name: "Implementation Plans", href: "/admin/implementation-plans", active: true, count: snapshot.state === "missing" ? null : snapshot.programs.length },
-    { id: "social-profiles", name: "Social Profiles", href: "/admin/social-profiles", active: false },
-    { id: "approvals", name: "Approvals", href: "/admin?view=approvals", active: false },
-    // No "Future" row. The idea rooms are held for the launch period by `operations-2026-08b`,
-    // so the cross-venture idea list is a frozen archive rather than a destination; `?view=future`
-    // still renders for anyone who has it bookmarked.
-    { id: "manual-tasks", name: "Only you can do", href: "/admin?view=manual-tasks", active: false }
-  ];
+  const sections: AdminSection[] = adminSections(null);
   const attention = [
     { label: "Owner actions", value: snapshot.items.filter((candidate) => candidate.state === "owner-action").length },
     { label: "Inconsistent items", value: snapshot.items.filter((candidate) => candidate.state === "inconsistent").length },
