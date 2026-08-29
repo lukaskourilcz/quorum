@@ -32,6 +32,10 @@ test("every tab in the live venture registry remains a reachable Admin destinati
 });
 
 const responsiveRoutes = [
+  // The bare overview, which the list used to skip. It is the first screen the owner sees and it
+  // now carries the launch board's eight-column table, so it is the surface most likely to widen
+  // the document on a phone.
+  "/admin",
   "/admin?venture=global",
   "/admin?venture=booksofhistory&tab=features",
   "/admin?venture=mma-files&tab=banners",

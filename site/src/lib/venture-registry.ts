@@ -94,6 +94,39 @@ async function getRegistry(root?: string): Promise<RawVentureRegistry> {
   return registry;
 }
 
+/**
+ * Each venture's own rooms, keyed by venture rather than flattened onto the clock.
+ *
+ * `getPublicCalendarSchedule` above answers "what happens today" and drops the venture id doing
+ * it, which is right for a calendar and useless for a board that reads down a venture column.
+ * Rather than parse the registry a second time somewhere else, the module that already owns it
+ * answers both questions. Owner-only ventures are included here — the launch board shows the
+ * Personal Growth desk, and the public calendar deliberately does not.
+ */
+export async function getVentureMeetingHours(
+  root?: string
+): Promise<Record<string, Array<{ phase: string; hour: number; label: string }>>> {
+  const registry = await getRegistry(root);
+  const byVenture: Record<string, Array<{ phase: string; hour: number; label: string }>> = {};
+  for (const venture of registry.ventures) {
+    const slots = [
+      ...venture.meetings.map((meeting) => ({
+        phase: meeting.kind,
+        hour: cadenceHour(meeting.cadence),
+        label: meeting.label
+      })),
+      // A production job has no label of its own in the registry, so its kind is the label.
+      ...(venture.productionJobs ?? []).map((job) => ({
+        phase: job.kind,
+        hour: cadenceHour(job.cadence),
+        label: job.kind
+      }))
+    ].sort((left, right) => left.hour - right.hour);
+    if (slots.length > 0) byVenture[venture.id] = slots;
+  }
+  return byVenture;
+}
+
 export async function getOwnerOnlyVentureIds(root?: string): Promise<ReadonlySet<string>> {
   const registry = await getRegistry(root);
   return new Set(registry.ventures
