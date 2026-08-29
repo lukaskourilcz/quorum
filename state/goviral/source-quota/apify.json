@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "goviral-apify-quota/1",
+  "month": "2026-08",
+  "estimatedUsedUsd": 0,
+  "reservedPerRun": 1.4,
+  "updatedAt": "2026-08-29T00:00:00.000Z",
+  "perActorCounts": {}
+}

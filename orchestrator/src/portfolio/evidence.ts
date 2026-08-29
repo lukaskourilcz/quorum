@@ -31,6 +31,8 @@ import {
   type GoViralSourceRegistry
 } from "../sources/apify.js";
 import { runRecipeStep } from "../sources/goviral-scout.js";
+import { resolveVentureCapabilityInMap } from "../ventures/capabilities.js";
+import type { VentureCapabilityMap } from "../contracts/venture-capability.js";
 import {
   AI_VOCABULARY,
   collectTrendingSignals,
@@ -780,8 +782,32 @@ export async function collectFreeTrendingSignals(input: {
   };
 }
 
-/** The newest stored snapshot at or before `date`, which is what a stale week works from. */
-export async function newestTrendSnapshot(root: string, date: string): Promise<GoViralTrends | null> {
+/**
+ * The newest stored snapshot at or before `date`, which is what a stale week works from.
+ *
+ * `reader` is the venture asking. GoVIRAL's intelligence is a cross-venture read like any other,
+ * and the five desks that consume its brief each have a registered edge — the two magazines read
+ * this snapshot on every editorial room and had none, so the one read nobody registered was the
+ * one running most often. Both are registered now and resolved here, which means an unregistered
+ * venture asking gets nothing rather than everything.
+ *
+ * Omitting `reader` keeps the unrouted behaviour for GoVIRAL's own tooling, which is reading its
+ * own output and is not a cross-venture read at all.
+ */
+export async function newestTrendSnapshot(
+  root: string,
+  date: string,
+  reader?: { venture: string; capabilityMap: VentureCapabilityMap }
+): Promise<GoViralTrends | null> {
+  if (reader) {
+    const resolution = resolveVentureCapabilityInMap(reader.capabilityMap, {
+      source: "goviral",
+      target: reader.venture,
+      capability: "intelligence-read",
+      schemaVersion: "goviral-trends/1"
+    });
+    if (resolution.decision !== "allowed") return null;
+  }
   let filenames: string[];
   try {
     filenames = await readdir(path.join(root, "goviral", "trends"));

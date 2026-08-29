@@ -22,6 +22,7 @@ import { MarketingPlanSchema, type MarketingPlan } from "../contracts/marketing-
 import { guardedJsonCall, ModelOutputParseError } from "../llm/call.js";
 import { loadAgentRegistry } from "../org/registry.js";
 import { configRoot, personaPromptPath, promptRoot, repoRoot, stateRoot } from "../paths.js";
+import { loadVentureCapabilityMap } from "../ventures/capabilities.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import { wrapUntrustedData } from "../security/content.js";
 import { trendEvidenceRefs } from "../sources/goviral-trends.js";
@@ -892,7 +893,12 @@ export async function composePortfolioContext(phase: PortfolioPhase, root: strin
       canonicalStateText(root, `ventures/mma-files/slates/${date}.json`),
       canonicalStateText(root, "ventures/mma-files/articles/INDEX.md"),
       loadEventCards(path.join(root, "mma", "events")),
-      newestTrendSnapshot(root, date),
+      // GoVIRAL's snapshot is a cross-venture read, resolved against the capability map like the
+      // five desks that consume its brief. Unreadable map, unregistered venture: no trends, and
+      // the room runs without a tiebreaker exactly as it does on a week with no snapshot.
+      loadVentureCapabilityMap(configRoot)
+        .then((capabilityMap) => newestTrendSnapshot(root, date, { venture: "mma-files", capabilityMap }))
+        .catch(() => null),
       loadArticlePackages(root),
       loadBoutRecords(path.join(root, "mma", "bouts"))
     ]);
