@@ -24,6 +24,15 @@ export const MIN_SLIDES = 5;
  * `deck-spotlight-10` and a stored pack must keep rendering — but nothing selects one any more.
  */
 export const MAX_SLIDES = 8;
+/**
+ * Seven, for anything built from here on, on the owner's launch instruction: five to seven.
+ *
+ * Separate from `MAX_SLIDES` on purpose. That eight is the rule a deck is *reviewed* against, and
+ * `state/social/packs/` holds eight-slide decks that must go on passing review; this is the
+ * narrower shape the builder now produces. Lowering the review bound instead would retroactively
+ * make already-approved work unpublishable, which is a different and worse change.
+ */
+export const QUEUE_MAX_SLIDES = 7;
 /** The longest deck the generator still builds a template for, so stored references resolve. */
 export const MAX_RESOLVABLE_SLIDES = 10;
 
@@ -168,12 +177,15 @@ function capped(value: string): string {
  * will not do is pad — if the text cannot fill five slides, the deck is short and the caller
  * decides whether that is publishable. Inventing a slide to reach a number is how a carousel
  * starts saying things the article does not.
+ *
+ * The ceiling is `QUEUE_MAX_SLIDES`, so a deck built today is five to seven slides. Cover, dek and
+ * outro are three of them, which leaves four for the article's own middle.
  */
 export function buildArticleDeck(input: ArticleDeckInput): Slide[] {
   const middle = input.points && input.points.length > 0
     ? input.points.flatMap((point) => packIntoSlides(point))
     : packIntoSlides(proseFromMdx(input.bodyMdx ?? ""));
-  const room = MAX_SLIDES - 3;
+  const room = QUEUE_MAX_SLIDES - 3;
   return [
     { kind: "cover" as const, text: capped(input.coverLine?.trim() || input.title) },
     { kind: "body" as const, text: capped(input.dek) },

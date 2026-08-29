@@ -308,6 +308,39 @@ describe("presets", () => {
     expect(drawn.family).toBe("dossier");
   });
 
+  it("deals only the owner's five, over a month of articles", () => {
+    /*
+     * The launch answer to "I want five top designs, not twenty-three".
+     *
+     * Narrowing the rotation is a decision the owner makes by saving five presets and setting
+     * them live — `docs/NEEDED.md` walks him through it. This proves the half that is the
+     * engine's: once a pool exists, nothing outside it can ever be dealt, whatever the article,
+     * whatever the history, photograph or no photograph.
+     */
+    const five = ["masthead", "gutter", "bevel", "porthole", "tower"] as const;
+    const pool = five.map((family) => ({
+      family: family as typeof preset.family,
+      variant: "A" as const,
+      accentSwap: false,
+      treatment: "none" as const,
+      typeScale: 1 as const
+    }));
+    const dealt = new Set<string>();
+    for (let day = 1; day <= 30; day += 1) {
+      const date = `2026-08-${String(day).padStart(2, "0")}`;
+      for (const hasHero of [true, false]) {
+        const drawn = deriveRecipe(
+          { venture: "caught-up", slug: `article-${day}-${String(hasHero)}`, date, hasHero, pool },
+          [{ date, family: "slab" }, { date, family: "billboard" }]
+        );
+        dealt.add(drawn.family);
+      }
+    }
+    expect([...dealt].every((family) => (five as readonly string[]).includes(family))).toBe(true);
+    // And it is a rotation, not one design sixty times.
+    expect(dealt.size).toBeGreaterThan(1);
+  });
+
   it("refuses a treatment on an article with no photograph, pool or no pool", () => {
     const drawn = deriveRecipe({
       venture: "mma-files",

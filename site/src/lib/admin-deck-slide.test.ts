@@ -120,8 +120,9 @@ describe("one deck's worth of slide requests", () => {
     } = await import("@boardlessai/carousel-studio");
 
     const [deck] = await readDesignLab(40);
-    // Eight, since the owner capped a deck there: ten swipes to reach a point that fits in six.
-    expect(deck!.slides).toHaveLength(8);
+    // Seven: the owner's launch bound, and the ceiling the builder works to. Eight is still what a
+    // deck is reviewed against, because stored packs hold eight-slide decks that must keep passing.
+    expect(deck!.slides).toHaveLength(7);
     expect(deck!.hasHero).toBe(true);
     const recipe = "masthead~a~none~10~0";
 
