@@ -713,8 +713,9 @@
       "at": "2026-08-29T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ms-daily",
-      "status": "skipped",
-      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      "status": "held",
+      "meetingRef": "meetings/2026-08-29-ms-daily",
+      "decisionOneLiner": "No package was drafted. devshark: model-output-invalid."
     },
     {
       "at": "2026-08-29T06:00:00.000Z",
@@ -756,7 +757,9 @@
       "at": "2026-08-29T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "gv-brief",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-29-gv-brief",
+      "decisionOneLiner": "This room meets on Mondays. Nothing was spent."
     },
     {
       "at": "2026-08-29T12:00:00.000Z",

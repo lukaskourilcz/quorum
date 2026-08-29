@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260829110524-gv-brief",
+  "date": "2026-08-29",
+  "phase": "gv-brief",
+  "fixture": false,
+  "status": "PAUSED",
+  "stage": "VALIDATION",
+  "operatingBrief": "This room meets on Mondays. Nothing was spent.",
+  "participantReasons": [
+    {
+      "agent": "PULSE",
+      "reason": "registered for this meeting but not asked anything, because this room meets on Mondays",
+      "participated": false
+    },
+    {
+      "agent": "SCOUT",
+      "reason": "registered for this meeting but not asked anything, because this room meets on Mondays",
+      "participated": false
+    },
+    {
+      "agent": "ANGLE",
+      "reason": "registered for this meeting but not asked anything, because this room meets on Mondays",
+      "participated": false
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "registered for this meeting but not asked anything, because this room meets on Mondays",
+      "participated": false
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 13.532629199999997,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "NO_ACTION",
+    "summary": "This room meets on Mondays. Nothing was spent.",
+    "evidenceRefs": []
+  },
+  "proposals": [
+    {
+      "agent": "PULSE",
+      "summary": "This room meets on Mondays. Nothing was spent.",
+      "evidenceRefs": []
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "PULSE",
+      "firstChoice": "NO_ACTION",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Nothing was decided and nothing was authorized: a room that did not open produces no work, spend, publishing or outreach.",
+  "eveningOutcome": null,
+  "generatedAt": "2026-08-29T11:05:24.951Z",
+  "kind": "gv-brief",
+  "roomTranscript": {
+    "openedAt": "2026-08-29T11:05:24.950Z",
+    "closedAt": "2026-08-29T11:05:24.951Z",
+    "gavel": "PULSE",
+    "setting": "This room meets on Mondays. Today is not Monday, so it did not open and nobody was asked anything.",
+    "turns": [
+      {
+        "agent": "PULSE",
+        "mode": "close",
+        "sentAt": "2026-08-29T11:05:24.951Z",
+        "text": "This room meets on Mondays. Nothing was spent."
+      }
+    ]
+  }
+}
