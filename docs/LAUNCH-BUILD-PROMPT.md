@@ -52,12 +52,16 @@ from state on that date.
    package. Run the repo's own gates before every push: `pnpm agents:validate && pnpm lint &&
    pnpm typecheck && pnpm test && pnpm build`.
 
-## Step 1 — create the issue program
+## Step 1 — create the issue program — DONE 2026-08-29
 
-Create one parent issue `PROGRAM — Launch the portfolio publicly` and the fourteen children
-below, titled `Launch NN — <title>`. Link every child to the parent. Then post one comment each
-on #435 (WebDev Signal) and #408 (Contest Radar): parked by owner direction until the Launch
-program completes; do not close them.
+The program exists: **#462** is the parent and **#463–#473** are its eleven children, in working
+order. #435 and #408 carry their parked comments. The numbered sections below are the source the
+issues were written from; where an issue and this file disagree, **the issue is current** — it is
+what a working session reads and what gets ticked.
+
+Progress so far: #463's outage half is closed (#460, #461), and its remaining items are the
+environment guard, the concurrency flake, the stale owner-attention snapshot and the finance
+drift. The two decision records #469 and #470 depend on are drafted and awaiting signature.
 
 ### Launch 01 — Repair the engine: release gate, stale records, finance drift
 

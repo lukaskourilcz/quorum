@@ -49,7 +49,7 @@
     "social:release-audit": "pnpm --filter @boardlessai/orchestrator social:release-audit",
     "sources:shadow": "pnpm --filter @boardlessai/orchestrator sources:shadow",
     "site:smoke": "node scripts/smoke-site.mjs",
-    "test": "pnpm --filter @boardlessai/carousel-studio build && pnpm -r --parallel exec vitest run --passWithNoTests",
+    "test": "pnpm --filter @boardlessai/carousel-studio build && pnpm -r --workspace-concurrency=1 exec vitest run --passWithNoTests",
     "typecheck": "pnpm -r typecheck",
     "fightaiq:roster-prune": "pnpm --filter @boardlessai/orchestrator fightaiq:roster-prune",
     "social:deck": "pnpm --filter @boardlessai/orchestrator run social:deck",

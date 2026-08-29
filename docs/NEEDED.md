@@ -21,19 +21,24 @@ Signal and Contest Radar wait until after launch. The implementation half lives 
 half, ordered by what unblocks the most. Every referenced item already exists below or in
 `state/INBOX.md` — tick it where it lives, not here.
 
-- [ ] **Merge branch `claude/venture-launch-review-7l5nkd`** — it carries the verified fix for
-  the 2026-08-28 release-gate outage (the webdev-signal contrast failure that has skipped every
-  council room since 15:00 UTC) plus this shortlist and the launch build prompt. Until it is on
-  `main`, no scheduled meeting runs. [imp:5] [owner:me] [time:5m] [kind:deploy]
-- [ ] **Run the launch build prompt** — open an Opus session on `docs/LAUNCH-BUILD-PROMPT.md`,
-  let it create the `PROGRAM — Launch` issues, review them once, and let it work them in order.
-  [imp:5] [owner:me] [time:30m] [kind:decision]
+- [x] **Merge the release-gate repair** — done 2026-08-29 in #460 and #461. The gate had been red
+  since 28 August 15:00 UTC and every council room since had recorded a skip.
+- [x] **Create the launch issue program** — done 2026-08-29. #462 is the parent; #463–#473 are the
+  eleven children, in working order. #463's outage half is already closed.
+
+- [ ] **Countersign the two drafted decision records** — both are written and waiting only for your
+  status line and signature. They are one story and should be signed together:
+  `state/decisions/2026-08-29-launch-idea-room-hold.md` holds `cu-product` and `tt-marketing` for
+  the launch period, and `state/decisions/2026-08-12-kvorum-budget-capacity.md` claims the `$0.08`
+  that the second hold frees, which is exactly what Kvórum's capacity gate requires. Signing both
+  stops the idea rooms you said aren't earning their keep and opens Kvórum's desk. Neither grants a
+  source, account, credential or publishing authority. [imp:5] [owner:me] [time:20m] [kind:decision]
 
 Then, in order, the existing items:
 
 1. **Countersign the launch foundings** — Kvórum, BOOKSOFHISTORY and Tehdejší svět from the
-   four 12 August founding decisions (Door Money can wait), plus `KV-EDITORIAL-004` and the
-   Kvórum capacity-reallocation record the program drafts.
+   four 12 August founding decisions (Door Money can wait), plus `KV-EDITORIAL-004`. The Kvórum
+   capacity record is drafted and listed above.
 2. **Create the Apify account** — `APIFY-ACCOUNT-001`, then `KV-APIFY-001` and
    `KV-SOURCES-002` (Kvórum's Facebook page + seven Czech feeds); `APIFY-MMA-SOURCES-001` is
    optional. Add the free Podcast Index key pair. Fill `state/ventures/goviral/profile.md` —
