@@ -401,7 +401,7 @@
     {
       "id": "door-money",
       "name": "Door Money",
-      "status": "operating",
+      "status": "paused",
       "visibility": "public",
       "taste": true,
       "ledgerNamespace": "door-money",

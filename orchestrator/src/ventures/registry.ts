@@ -8,6 +8,7 @@ import {
 import {
   FoundingAgentSchema,
   ScheduledPhaseSchema,
+  type RunnablePhase,
   type ScheduledPhase
 } from "../types.js";
 import { configRoot } from "../paths.js";
@@ -55,6 +56,45 @@ export async function loadVentureRegistry(
 
 export function publicVentures(registry: VentureRegistry): VentureRegistry["ventures"] {
   return registry.ventures.filter((venture) => venture.visibility === "public");
+}
+
+/**
+ * Which venture each runnable phase works for, where that venture can be paused at all.
+ *
+ * The owner's pause switch stops a venture's engine at one chokepoint: `runCycle` looks the
+ * phase up here and, when the registry says the owner paused that venture, the live run ends
+ * before any agenda, agent or provider is touched. Dry runs stay open on purpose — a dry run is
+ * a $0 fixture rehearsal into `tmp/dry-run`, which is how the suite proves room mechanics
+ * without depending on today's operational state.
+ *
+ * Absent phases are absent deliberately, not forgotten: the council shifts and `founding` are
+ * company-wide; `studio` is the Design Lab and `gv-brief` is GoVIRAL, both shared machinery the
+ * portfolio consumes; `mma-intake` and `mma-analysis` are FightAIQ, MMA Files' data supplier.
+ * None of those can be paused from Settings, so no phase of theirs resolves to a venture here.
+ */
+export const PHASE_VENTURES: Readonly<Partial<Record<RunnablePhase, string>>> = {
+  "cu-edition": "caught-up",
+  "cu-product": "caught-up",
+  "tt-marketing": "titty-tuesdays",
+  "ms-daily": "marketingshark",
+  "bh-desk": "booksofhistory",
+  "dm-desk": "door-money",
+  "dm-growth": "door-money",
+  "ts-desk": "tehdejsi-svet",
+  "kv-desk": "kvorum",
+  "pg-desk": "personal-growth",
+  "mag-editorial": "mma-files",
+  "mag-desk": "mma-files",
+  "article-am": "mma-files",
+  "article-pm": "mma-files"
+};
+
+/** The venture the owner paused that owns this phase, or null when the phase may run. */
+export function pausedVentureForPhase(registry: VentureRegistry, phase: RunnablePhase): string | null {
+  const ventureId = PHASE_VENTURES[phase];
+  if (!ventureId) return null;
+  const venture = registry.ventures.find((candidate) => candidate.id === ventureId);
+  return venture?.status === "paused" ? ventureId : null;
 }
 
 export function resolveMeetingClock(

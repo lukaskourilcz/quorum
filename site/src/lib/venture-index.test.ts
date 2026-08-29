@@ -17,10 +17,11 @@ describe("the public venture index", () => {
     const root = await mkdtemp(path.join(tmpdir(), "venture-index-empty-"));
     const cards = await readVentureIndex(root);
 
+    // Paused ventures leave the public index with the wall, so the expectation follows the
+    // registry rather than pinning a count that changes with the owner's Settings switches.
     expect(cards.map((card) => card.id)).toEqual(ventureRegistry.ventures
-      .filter((venture) => venture.visibility === "public")
+      .filter((venture) => venture.visibility === "public" && venture.status !== "paused")
       .map((venture) => venture.id));
-    expect(cards).toHaveLength(11);
     expect(cards.map((card) => card.id)).not.toContain("personal-growth");
     expect(cards.every((card) => card.status === "Operating")).toBe(true);
     expect(cards.every((card) => card.promise.length > 0 && card.boundary.length > 0)).toBe(true);
@@ -38,7 +39,9 @@ describe("the public venture index", () => {
     await put(root, "state/ideas/goviral/ledger.jsonl", `${JSON.stringify({ schemaVersion: "synthetic/1" })}\n`);
 
     const cards = await readVentureIndex(root);
-    expect(cards.find((card) => card.id === "door-money")?.metric.count).toBe(2);
+    // Door Money is paused in the committed registry, so its card is absent and its stored
+    // records stay untouched on disk; the other metrics still count only what they own.
+    expect(cards.find((card) => card.id === "door-money")).toBeUndefined();
     expect(cards.find((card) => card.id === "tehdejsi-svet")?.metric.count).toBe(0);
     expect(cards.find((card) => card.id === "carousel-studio")?.metric.count).toBe(1);
     expect(cards.find((card) => card.id === "goviral")?.metric.count).toBe(1);

@@ -10,6 +10,7 @@ interface RawVentureRegistry {
   schemaVersion: string;
   ventures: Array<{
     id: string;
+    status?: string;
     visibility: "public" | "owner-only";
     meetings: Array<{
       kind: string;
@@ -71,7 +72,9 @@ function productionDefinitions(kind: string, cadence: string): CalendarDefinitio
 export async function getPublicCalendarSchedule(root?: string): Promise<readonly CalendarDefinition[]> {
   const registry = await getRegistry(root);
   const ventureSlots = registry.ventures
-    .filter((venture) => venture.visibility === "public")
+    // A paused venture's rooms will not sit, so its slots come off the public calendar rather
+    // than promising meetings the engine refuses.
+    .filter((venture) => venture.visibility === "public" && venture.status !== "paused")
     .flatMap((venture) => [
       ...venture.meetings.map((meeting) => ({
         hour: cadenceHour(meeting.cadence),

@@ -97,6 +97,7 @@ import {
   getVentureMeetingDefinition,
   loadVentureRegistry,
   parseCadenceHour,
+  pausedVentureForPhase,
   ventureNamespace,
   type VentureMeetingDefinition
 } from "./ventures/registry.js";
@@ -271,6 +272,27 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   }
   if (!options.dry && options.phase === "founding") {
     throw new Error("A live founding cycle is not permitted; Caught Up was adopted by owner decision");
+  }
+  // The owner's per-venture pause, thrown in Settings and recorded as the registry's own
+  // `status: "paused"`. It ends a paused venture's live phase here — before any agenda, agent,
+  // provider or lock — exactly the way the repository-wide PAUSED file ends every phase above.
+  // Dry runs pass: a dry run is a $0 fixture rehearsal, which is how the suite proves room
+  // mechanics without depending on today's operational state.
+  if (!options.dry) {
+    const pausedVenture = pausedVentureForPhase(await loadVentureRegistry(), options.phase);
+    if (pausedVenture) {
+      return {
+        cycleId,
+        phase: options.phase,
+        dry: options.dry,
+        status: "paused",
+        decision: "PAUSED",
+        estimatedWorstCaseUsd: 0,
+        selectedAgents: [],
+        skippedAgents: [],
+        artifacts: []
+      };
+    }
   }
   // Two schedules now reach for the same slot: GitHub's `schedule` trigger and the Vercel cron
   // that dispatches this workflow punctually. Both will exist through the transition, so a slot

@@ -15,6 +15,7 @@ import {
   Moon,
   Palette,
   RadioTower,
+  Settings,
   ShieldAlert,
   Sparkles,
   Sun
@@ -222,9 +223,11 @@ export function AdminSidebar({
               {theme === "dark" ? <Sun aria-hidden="true" className="size-4" /> : <Moon aria-hidden="true" className="size-4" />}
             </button>
           </AdminTooltip>
-          <AdminTooltip content="Open the public site" label="Public" theme={theme}>
-            <Link aria-label="Open public site" className="admin-focus-ring grid size-9 place-items-center rounded-[var(--admin-radius)] text-[var(--admin-sidebar-muted)] hover:bg-[var(--admin-sidebar-hover)] hover:text-[var(--admin-sidebar-foreground)]" href="/">
-              <LayoutDashboard aria-hidden="true" className="size-4" />
+          {/* Settings took the public-site link's slot on the owner's 2026-08-29 instruction:
+              the site is one bookmark away, while the project switches had no home at all. */}
+          <AdminTooltip content="Settings — pause or resume projects" label="Settings" theme={theme}>
+            <Link aria-label="Open Settings" className="admin-focus-ring grid size-9 place-items-center rounded-[var(--admin-radius)] text-[var(--admin-sidebar-muted)] hover:bg-[var(--admin-sidebar-hover)] hover:text-[var(--admin-sidebar-foreground)]" href="/admin/settings">
+              <Settings aria-hidden="true" className="size-4" />
             </Link>
           </AdminTooltip>
           <form action="/admin/logout" method="post">

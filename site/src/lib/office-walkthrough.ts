@@ -433,8 +433,15 @@ const PROJECT_COPY: Record<string, { status: string; description: string; url: s
 };
 
 const PROJECT_ORDER = ventureRegistry.ventures
-  .filter((venture) => venture.visibility === "public")
+  // A paused venture leaves the wall entirely — the owner's Settings switch means "the company
+  // is not working on this now", and a visitor should not be told otherwise.
+  .filter((venture) => venture.visibility === "public" && venture.status !== "paused")
   .map((venture) => venture.id);
+
+/** Ventures the owner paused in Settings, for every section that lists venture rooms. */
+const PAUSED_VENTURES: ReadonlySet<string> = new Set(
+  ventureRegistry.ventures.filter((venture) => venture.status === "paused").map((venture) => venture.id)
+);
 
 /* ------------------------------------------------------------------ team */
 
@@ -695,7 +702,10 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
     })
   });
 
-  const channels: OfficeChannel[] = WORKSPACE_CHANNELS.map((channel) => {
+  // A paused venture's desk channel leaves the workspace view with the venture itself.
+  const channels: OfficeChannel[] = WORKSPACE_CHANNELS.filter(
+    (channel) => channel.venture === null || !PAUSED_VENTURES.has(channel.venture)
+  ).map((channel) => {
     const copy = CHANNEL_COPY[channel.id];
     const source = feed.find((entry) => entry.id === channel.id);
     const days: OfficeChannelDay[] = (source?.days ?? [])

@@ -2,6 +2,7 @@ import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
+import ventureRegistry from "../../../config/ventures.json";
 import type { CalendarDefinition, CalendarStatus } from "./calendar-feed-model";
 import {
   REPLAY_FIRST_HOUR,
@@ -149,7 +150,7 @@ describe("resolving against committed state", () => {
     expect(resolved.editionCap).toBe(0.5);
   });
 
-  it("builds the company room, all eleven venture rooms and today's slots from one calendar read", async () => {
+  it("builds the company room, every operating venture's room and today's slots from one calendar read", async () => {
     const now = new Date("2026-08-06T09:00:00Z");
     const [standups, meetings, skips, articleSlots, definitions] = await Promise.all([
       getPublicStandups(),
@@ -162,13 +163,19 @@ describe("resolving against committed state", () => {
       standups, meetings, skips, articleSlots, definitions
     });
 
-    expect(resolved.rooms).toHaveLength(12);
+    // One room per operating public venture plus the company room. A venture the owner paused
+    // in Settings leaves the plan and the calendar together, so its desk kinds must be absent —
+    // computed from the registry so this holds whichever way the switches point today.
+    const operating = ventureRegistry.ventures
+      .filter((venture) => venture.status === "operating" && venture.visibility === "public");
+    const pausedKinds = new Set(ventureRegistry.ventures
+      .filter((venture) => venture.status === "paused")
+      .flatMap((venture) => venture.meetings.map(({ kind }) => kind)));
+    expect(resolved.rooms).toHaveLength(operating.length + 1);
     expect(resolved.slots).toHaveLength(definitions.length);
-    expect(resolved.slots.some((slot) => slot.kind === "bh-desk")).toBe(true);
-    expect(resolved.slots.some((slot) => slot.kind === "dm-desk")).toBe(true);
-    expect(resolved.slots.some((slot) => slot.kind === "dm-growth")).toBe(true);
-    expect(resolved.slots.some((slot) => slot.kind === "ts-desk")).toBe(true);
-    expect(resolved.slots.some((slot) => slot.kind === "kv-desk")).toBe(true);
+    for (const kind of ["bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk"]) {
+      expect(resolved.slots.some((slot) => slot.kind === kind), kind).toBe(!pausedKinds.has(kind));
+    }
     // The workshop holds no session, so it hangs no note and appears with no slots at all.
     expect(resolved.rooms.find((room) => room.key === WORKSHOP_ROOM)?.slots).toEqual([]);
     // Every slot lands in a room the plan actually draws.
@@ -195,8 +202,10 @@ describe("resolving against an empty state root", () => {
     expect(resolved.hooks).toEqual({ quiz: null, quizTierB: null, news: null, mma: null });
     expect(resolved.slots).toEqual([]);
     // The rooms still draw. A plan with no records is a building with every light off, which is
-    // a true picture of a day nothing was recorded for.
-    expect(resolved.rooms).toHaveLength(12);
+    // a true picture of a day nothing was recorded for. Paused ventures' rooms are off the plan
+    // entirely, so the count follows the registry.
+    expect(resolved.rooms).toHaveLength(ventureRegistry.ventures
+      .filter((venture) => venture.status === "operating" && venture.visibility === "public").length + 1);
     expect(resolved.today).toBe("2026-08-06");
   });
 });
