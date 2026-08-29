@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   MAX_RESOLVABLE_SLIDES,
   MAX_SLIDES,
+  QUEUE_MAX_SLIDES,
   MAX_SLIDE_WORDS,
   MIN_SLIDES,
   buildArticleDeck,
@@ -115,15 +116,29 @@ describe("a deck the article cannot fill", () => {
     expect(review.problems.join(" ")).toMatch(/at least/u);
   });
 
-  it("caps a very long article at ten rather than running on", () => {
+  it("caps a very long article at seven rather than running on", () => {
     const review = reviewDeck(buildArticleDeck({
       title: "Titulek",
       dek: "Popis.",
       bodyMdx: Array.from({ length: 60 }, (_, index) => `Veta cislo ${index + 1} je zde.`).join(" "),
       outro: OUTRO
     }));
-    expect(review.slides).toHaveLength(MAX_SLIDES);
+    expect(review.slides).toHaveLength(QUEUE_MAX_SLIDES);
     expect(review.publishable).toBe(true);
+  });
+
+  it("builds five to seven slides for every article length that fills a deck", () => {
+    // The owner's launch bound. Five is the floor a deck must clear to be publishable at all, and
+    // seven is where the builder now stops; nothing in between needs a special case.
+    for (const sentences of [2, 5, 10, 20, 40, 80]) {
+      const slides = buildArticleDeck({
+        title: "Titulek",
+        dek: "Popis.",
+        bodyMdx: Array.from({ length: sentences }, (_, index) => `Veta cislo ${index + 1} je zde.`).join(" "),
+        outro: OUTRO
+      });
+      expect(slides.length, `${sentences} sentences`).toBeLessThanOrEqual(QUEUE_MAX_SLIDES);
+    }
   });
 });
 
@@ -135,6 +150,15 @@ describe("how long a deck may be", () => {
   it("caps selection at eight slides and keeps five as the floor", () => {
     expect(MIN_SLIDES).toBe(5);
     expect(MAX_SLIDES).toBe(8);
+  });
+
+  it("builds to seven while still reviewing against eight", () => {
+    // Two different bounds on purpose: `state/social/packs/` holds eight-slide decks that must go
+    // on passing review, so the builder narrowed and the rule did not.
+    expect(QUEUE_MAX_SLIDES).toBe(7);
+    expect(QUEUE_MAX_SLIDES).toBeLessThan(MAX_SLIDES);
+    expect(reviewDeck(Array.from({ length: MAX_SLIDES }, () => ({ kind: "body" as const, text: "Veta." }))).problems)
+      .toEqual([]);
   });
 
   it("still builds a nine- or ten-slide template a stored pack names", () => {

@@ -389,15 +389,17 @@ Judgement calls. Nothing is blocked on code for any of these.
   field, decided at founding, awkward to move later without a decision.
   [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Walk the thirteen new template families and say which ones you want in rotation** — open
-  `/admin?venture=design-lab&tab=studio`, pick a delivered article and click through the chips.
-  Thirteen of the twenty-three are new: billboard, broadsheet, zurich, concrete, terminal,
-  marginalia, memo, versus, tally, counterweight, throughline, quiet, offset. All of them are in
-  the pool already, because the engine deals from every registered family — so if one of them is
-  not something you want going out unattended, the way to take it out is to save presets for the
-  ones you do want and set them live, which narrows the pool to your list. Nothing here needs a
-  key, an account or a payment; the renderer calls no model and this whole expansion cost $0.
-  [imp:3] [owner:me] [time:20m] [kind:decision]
+- [ ] **Pick the five designs you want in rotation per brand** — you said five top designs, not
+  twenty-three, and the engine is ready for that answer: save five presets for a brand and set
+  them live, and nothing outside those five is ever dealt again. There is a test over a month of
+  articles proving exactly that. Until you pick, the rotation stays open across all twenty-three.
+  Open `/admin?venture=design-lab&tab=studio`, pick a delivered article and click through the
+  chips. Thirteen of the twenty-three are newer: billboard, broadsheet, zurich, concrete,
+  terminal, marginalia, memo, versus, tally, counterweight, throughline, quiet, offset. Two things
+  are already handled and do not need to weigh on the choice: an article that carries a
+  photograph is never dealt a family that cannot draw one, and every deck the builder makes is now
+  five to seven slides. Nothing here needs a key, an account or a payment; the renderer calls no
+  model and this whole expansion cost $0. [imp:3] [owner:me] [time:20m] [kind:decision]
 
 - [ ] **Decide what the carousel lockup says** — the kicker on every deck reads DNESKAi and the
   wordmark under it still reads CAUGHT UP, because `logoText` is the venture's registered mark and
