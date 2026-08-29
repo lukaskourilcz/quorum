@@ -1,6 +1,6 @@
 {
   "schemaVersion": "owner-attention/1",
-  "generatedAt": "2026-08-29T12:05:55.877Z",
+  "generatedAt": "2026-08-29T20:06:58.874Z",
   "approvals": [
     {
       "id": "BOOK-INGEST-002",
@@ -224,6 +224,18 @@
       "urgency": "soon"
     },
     {
+      "id": "add-the-instagram-and-threads-credentials",
+      "title": "Add the Instagram and Threads credentials",
+      "plain": "each brand needs its account ID and access token as GitHub Actions secrets before any channel can be considered. Missing now — caught-up: CAUGHT_UP_THREADS_ACCESS_TOKEN, CAUGHT_UP_THREADS_USER_ID, CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN, CAUGHT_UP_INSTAGRAM_USER_ID; mma-files: MMA_FILES_THREADS_ACCESS_TOKEN, MMA_FILES_THREADS_USER_ID, MMA_FILES_INSTAGRAM_ACCESS_TOKEN, MMA_FILES_INSTAGRAM_USER_ID; titty-t",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
       "id": "approve-and-run-the-bounded-ingestion-book-ingest-002",
       "title": "Approve and run the bounded ingestion (BOOK-INGEST-002)",
       "plain": "review the exact roles and ceilings in state/INBOX.md: $3.00 for the program, $0.80 per day and $0.10 per call, all still under the company caps. After both book approvals are checked, run pnpm book:ingest -- --manuscript <ignored-path> --private-root <private-clone> locally. A stop is resumable for the same manuscript hash; do not copy the source or private output into this repository to make a h",
@@ -406,6 +418,18 @@
       "urgency": "soon"
     },
     {
+      "id": "glance-at-the-launch-rotation-and-veto-anything-you-dislike",
+      "title": "Glance at the launch rotation and veto anything you dislike",
+      "plain": "you said five top designs, not twenty-three, and that \"they are all too basic\". Both answered on 2026-08-29 without a preset to pick: five new families built from viral-carousel research — apex (statement poster on mesh depth), rail (numbered list on a filling spine), vista (photo cover story), fault (diagonal split argument), halo (spotlight disc and ring) — and the dealer now deals nothing else,",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
       "id": "inspect-the-vercel-build-machine",
       "title": "Inspect the Vercel build machine",
       "plain": "confirm the assigned machine and remove an unjustified Enhanced or Turbo override; keep a larger machine only with a recorded reason.",
@@ -491,6 +515,18 @@
       "urgency": "soon"
     },
     {
+      "id": "run-the-admin-e2e-specs-on-every-pull-request-not-only-on-full-e2e",
+      "title": "Run the admin e2e specs on every pull request, not only on [full-e2e]",
+      "plain": "the site's Playwright job in .github/workflows/ci.yml runs only when a PR title or commit message contains [full-e2e], so nothing has run it for weeks. In that time the navigation guard drifted two destinations out of date, the visual guard was looking for baselines in a directory Playwright never writes to, a WCAG AA contrast failure went unseen and three assertions about the admin's privacy head",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
       "id": "sign-the-six-titty-tuesdays-image-approvals-or-decide-not-to",
       "title": "Sign the six Titty Tuesdays image approvals, or decide not to",
       "plain": "TT-VISUALS-SPEND-001 through TT-VISUALS-CONTRACT-006 in state/INBOX.md, all-or-nothing. They cover about $0.057 a day (roughly $1.70 a month, ceiling $2.00), the two renderer routes, keeping the images inside state/ rather than the public site, the doctrine checklist and the delete-on-doctrine rule, the daily two-image shape, and the design-proposal/1 contract. Nothing renders until all six are ti",
@@ -506,18 +542,6 @@
       "id": "vercel-production-settings",
       "title": "Vercel production settings",
       "plain": "BoardlessAI tracks main at https://boardless-ai.vercel.app; DNESKAi at https://caughtup-ai.vercel.app; MMA Files at https://mma-files.vercel.app with NEXT_PUBLIC_DEMO_MODE=false. The delivery step builds its clone with demo mode off (cycle.yml passes NEXT_PUBLIC_DEMO_MODE=false), so leaving production on demo makes a delivered article's route 404 and fails every page check. Keep NEXT_PUBLIC_ALLOW_",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
-      "id": "walk-the-thirteen-new-template-families-and-say-which-ones-you-want-in-rotation",
-      "title": "Walk the thirteen new template families and say which ones you want in rotation",
-      "plain": "open /admin?venture=design-lab&tab=studio, pick a delivered article and click through the chips. Thirteen of the twenty-three are new: billboard, broadsheet, zurich, concrete, terminal, marginalia, memo, versus, tally, counterweight, throughline, quiet, offset. All of them are in the pool already, because the engine deals from every registered family — so if one of them is not something you want g",
       "steps": [],
       "source": {
         "kind": "needed",
