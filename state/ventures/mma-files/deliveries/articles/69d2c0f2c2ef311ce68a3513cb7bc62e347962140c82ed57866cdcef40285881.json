@@ -2,9 +2,9 @@
   "schemaVersion": "mma-files-delivery-receipt/1",
   "kind": "article",
   "packageHash": "69d2c0f2c2ef311ce68a3513cb7bc62e347962140c82ed57866cdcef40285881",
-  "status": "needs_reconciliation",
-  "targetRepository": "lukaskourilcz/mma-files",
-  "code": "hash_conflict",
-  "detail": "> mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-28-am-ufc-event-ufc-fight-night-nurmagomedov-vs-song.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-28:am reuses the slug of 2026-08-26:am",
-  "recordedAt": "2026-08-28T08:06:28.817Z"
+  "status": "retired",
+  "code": "superseded_slug",
+  "detail": "2026-08-28 reuses the slug of 2026-08-26, which the magazine already serves.",
+  "supersededBy": "a0b8c6e3c98d336e22bbf2e8e0b9c794b136be4e5f7cd6d35ae813aaf38208ce",
+  "recordedAt": "2026-08-29T13:33:45.232Z"
 }

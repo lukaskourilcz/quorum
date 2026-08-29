@@ -6,7 +6,8 @@ import {
   captureAdminRuntimeFailures,
   expectNoDocumentOverflow,
   guardAdminWrites,
-  setAdminPreferences
+  setAdminPreferences,
+  waitForAdminShell
 } from "./admin-qa";
 
 interface VentureRegistry {
@@ -118,6 +119,7 @@ test("owner decisions, results and ratings stay reviewable while writes stay hel
   const mutationAttempts = await guardAdminWrites(page);
 
   await page.goto("/admin?view=approvals", { waitUntil: "domcontentloaded" });
+  await waitForAdminShell(page);
   await expect(page.getByRole("heading", { level: 1, name: "Approvals." }))
     .toBeVisible();
   await expect(page.getByText("Everything waiting for your yes.", {
@@ -280,6 +282,9 @@ for (const theme of ["light", "dark"] as const) {
   }) => {
     await setAdminPreferences(page, { theme });
     await page.goto("/admin", { waitUntil: "domcontentloaded" });
+    // Every dialog below is opened by a click, and a click before hydration opens nothing — axe
+    // then reports "no elements found for include" rather than an accessibility result.
+    await waitForAdminShell(page);
     await expectNoHighImpactAxeViolations(page, `${theme} Admin shell`, [
       "[data-admin-sidebar]",
       "[data-admin-toolbar]"

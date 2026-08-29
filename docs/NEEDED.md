@@ -685,18 +685,16 @@ Nothing here needs your hands. It is recorded so it is not lost.
   `RoomStayedShut` family. Keep the work behavior-neutral and one extracted module per commit.
   [imp:2] [owner:ai] [time:3h] [kind:deploy]
 
-- [ ] **Repair marketingShark's live response contract** — paid `ms-daily` calls on 8 and 12 August
-  both reached Anthropic and then closed `NO_ACTION` with `model-output-invalid`; the ledger records
-  `$0.035138` and `$0.035142`. Reproduce the returned shape without logging provider prose, align
-  CHUM's schema and prompt, and keep the fail-closed draft-only posture. Prove one synthetic valid
-  package and one malformed response; do not rerun the paid room merely to force output.
-  [imp:3] [owner:ai] [time:45m] [kind:deploy]
+- [x] **Repair marketingShark's live response contract** — done in #480. It was never the schema:
+  seventeen of the nineteen failures billed at exactly 3,000 output tokens, the cap, and the two
+  under it failed differently. CHUM's cap is 4,000, `describeReplyShape` records the shape of an
+  unparsable reply without logging provider prose, and the slide contract pins the five roles in
+  the order the renderer reads them by position. [imp:3] [owner:ai] [time:45m] [kind:deploy]
 
-- [ ] **Root `pnpm test` flakes under its own concurrency** — it runs three workspaces at once,
-  under which `orchestrator/tests/studio-lifecycle.test.ts` and `src/social/pack.test.ts` exceed
-  their timeouts; the same files pass in about a minute run alone, and
-  `pnpm -r --workspace-concurrency=1 test` passes every time. Raising those timeouts or serialising
-  the workspaces would both do it. [imp:1] [owner:ai] [time:15m] [kind:deploy]
+- [x] **Root `pnpm test` flakes under its own concurrency** — done in #474. The workspaces run
+  serially (`--workspace-concurrency=1`): about 123s against 81s, and deterministic. A gate that
+  closes rooms at random costs more than forty seconds.
+  [imp:1] [owner:ai] [time:15m] [kind:deploy]
 
 - [ ] **Scope the repo-root filesystem reads so Turbopack stops over-tracing** — about twenty
   modules in `site/src/lib/` open with `process.env.BOARDLESSAI_REPO_ROOT ??
@@ -712,15 +710,31 @@ Nothing here needs your hands. It is recorded so it is not lost.
   list, and a wrong entry is a route that 500s in production, so each one wants checking against a
   real deployment. [imp:2] [owner:ai] [time:2h] [kind:deploy]
 
-- [ ] **Stop a test from being able to read the cycle's live environment at all** — the council
-  held no meeting between 9 and 11 August because the release gate ran `pnpm test` with the cycle
-  job's own secrets in scope, so a test that reads `process.env` took the paid illustration rung
-  and failed on what that render returned. CI exported neither switch, never took the rung, and
-  reported green the whole time. The two switches are now blanked for both gate steps and the one
-  test injects the rung dark, but the shape survives: any test reading ambient env still behaves
-  differently under the gate than under CI, and the next one to do so closes the gate the same
-  way. A vitest setup file that clears the provider keys for every run would end the class rather
-  than the instance. [imp:3] [owner:ai] [time:30m] [kind:deploy]
+- [ ] **Run the admin e2e specs on every pull request, not only on `[full-e2e]`** — the site's
+  Playwright job in `.github/workflows/ci.yml` runs only when a PR title or commit message contains
+  `[full-e2e]`, so nothing has run it for weeks. In that time the navigation guard drifted two
+  destinations out of date, the visual guard was looking for baselines in a directory Playwright
+  never writes to, a WCAG AA contrast failure went unseen and three assertions about the admin's
+  privacy headers could never have passed against the dev server they run on. All are fixed, but
+  the reason they accumulated is that nobody was looking. The four admin specs take about four
+  minutes together; the venture-registry sweep is the slow one and could stay opt-in.
+  [imp:3] [owner:me] [time:20m] [kind:setup]
+
+- [ ] **Load the admin's panels behind the tab that needs them** — `/admin` is `force-dynamic` and
+  resolves around thirty loaders in one `Promise.all` before it renders anything, so changing
+  `?view=` or `?venture=` costs a measured 5.3 seconds before the URL even commits. Every workspace
+  pays for every other workspace's data. The launch board at the top of the overview needs the
+  portfolio-wide reads; the venture tabs do not, and moving them behind their own boundaries is
+  what turns a five-second tab change into an instant one.
+  [imp:3] [owner:ai] [time:2h] [kind:deploy]
+
+- [x] **Stop a test from being able to read the cycle's live environment at all** — done in #474.
+  `orchestrator/tests/setup/provider-env.ts` clears nineteen provider credentials before every
+  test, so no test can behave differently under the gate than under CI. This closed the class, not
+  one instance of it: the council held no meeting between 9 and 11 August because the release gate
+  ran `pnpm test` with the cycle job's own secrets in scope, a test read `process.env`, took the
+  paid illustration rung, and failed on what that render returned — while CI, which exported
+  neither switch, reported green throughout. [imp:3] [owner:ai] [time:30m] [kind:deploy]
 
 ---
 

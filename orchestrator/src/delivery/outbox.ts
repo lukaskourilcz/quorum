@@ -130,9 +130,6 @@ export async function oldestPendingDelivery(
     // Parked is keyed to the exact bytes. A regenerated package for the same date is different
     // bytes and gets its own attempt, which is how a reconciled edition ships without anybody
     // having to clear a flag.
-    if (receipt?.status === "needs_reconciliation" && sameBytes && !isRetryableFailure(receipt.code)) {
-      continue;
-    }
     // A "no edition today" notice is only true on its own day. Left in an oldest-first queue
     // that ships one package per run, a stale one holds every real edition behind it and
     // would publish yesterday's notice as though it were today's. Today's still ships.
@@ -141,8 +138,19 @@ export async function oldestPendingDelivery(
     // receipt, no INBOX item and no deletion, re-read and re-skipped by every run since, and the
     // magazine's 2 August has no board JSON at all. A stale notice now ends: it gets a terminal
     // receipt saying it was superseded, and its file is removed.
+    //
+    // This runs before the parked skip below, and that order is the whole point. A stale notice
+    // that also failed a delivery matched the parked rule first and `continue`d past its own
+    // ending, so the file stayed in the outbox and the venture read as stalled for as long as it
+    // sat there — 27 August did exactly that, twelve days after the day it described. Staleness
+    // does not depend on the verdict: a notice about a day that has passed is over either way,
+    // and `supersedeStaleNoEdition` keeps any receipt already written, so the honest record of
+    // the failed attempt survives.
     if (editionPackage.status === "no_edition" && editionPackage.date !== today) {
       await supersedeStaleNoEdition(root, file, editionPackage, today);
+      continue;
+    }
+    if (receipt?.status === "needs_reconciliation" && sameBytes && !isRetryableFailure(receipt.code)) {
       continue;
     }
     return {

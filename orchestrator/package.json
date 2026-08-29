@@ -47,7 +47,8 @@
     "social:deck": "tsx src/social/deck-cli.ts",
     "datasets:append": "tsx src/datasets/append-cli.ts",
     "streams:fetch": "tsx src/streams/fetch-cli.ts",
-    "finance:page": "tsx src/finance/finance-page-cli.ts"
+    "finance:page": "tsx src/finance/finance-page-cli.ts",
+    "mma:retire": "tsx src/mma-files/retire-cli.ts"
   },
   "dependencies": {
     "@boardlessai/carousel-studio": "workspace:*",

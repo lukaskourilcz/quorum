@@ -1,5 +1,23 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+
+interface VentureRegistry {
+  ventures: Array<{ id: string }>;
+}
+
+/**
+ * Read from the registry rather than typed out, like the navigation QA spec does.
+ *
+ * The hand-written list went stale the day WebDev Signal was founded, and this assertion has been
+ * failing on the missing row ever since. A list that has to be edited whenever a venture is added
+ * is a list that will be wrong again; deriving it means founding a venture cannot silently break
+ * the guard, and cannot silently pass one either.
+ */
+const registry = JSON.parse(
+  readFileSync(path.resolve(process.cwd(), "../config/ventures.json"), "utf8")
+) as VentureRegistry;
 
 const adminDestinations = [
   "/admin",
@@ -8,20 +26,13 @@ const adminDestinations = [
   "/admin/social-profiles",
   "/admin?view=approvals",
   "/admin?view=manual-tasks",
-  "/admin?view=future",
+  // No "/admin?view=future": the idea rooms are held for the launch period, so the cross-venture
+  // idea list left the rail. The URL still renders — it is simply no longer a destination.
   "/admin?venture=carousel-studio",
-  "/admin?venture=caught-up",
-  "/admin?venture=titty-tuesdays",
-  "/admin?venture=goviral",
-  "/admin?venture=booksofhistory",
-  "/admin?venture=fightaiq",
-  "/admin?venture=marketingshark",
-  "/admin?venture=mma-files",
-  "/admin?venture=door-money",
-  "/admin?venture=tehdejsi-svet",
-  "/admin?venture=kvorum",
-  "/admin?venture=personal-growth"
-] as const;
+  ...registry.ventures
+    .filter(({ id }) => id !== "carousel-studio")
+    .map(({ id }) => `/admin?venture=${id}`)
+];
 
 test("desktop Admin shell keeps its window, scroll, preferences and real command destinations", async ({ page }) => {
   await page.goto("/admin", { waitUntil: "networkidle" });

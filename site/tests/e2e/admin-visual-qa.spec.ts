@@ -6,7 +6,8 @@ import {
   captureAdminRuntimeFailures,
   expectNoDocumentOverflow,
   guardAdminWrites,
-  setAdminPreferences
+  setAdminPreferences,
+  waitForAdminShell
 } from "./admin-qa";
 
 const snapshotStyle = path.resolve(
@@ -22,13 +23,26 @@ test("Admin QA uses a protected, noindex production boundary without mutations",
 
   const response = await page.goto("/admin", { waitUntil: "networkidle" });
   expect(response?.status()).toBe(200);
-  expect(response?.headers()["cache-control"]).toContain("no-store");
+  /*
+   * Not `no-store` here, and not because the proxy stopped setting it.
+   *
+   * `proxy.ts` sets `Cache-Control: no-store, private` on every admin response, and this suite
+   * runs against `next dev`, which replaces that header with its own `no-cache, must-revalidate`
+   * after the proxy has run. So this assertion could never pass and has been failing since it was
+   * written. What a dev server can honestly show is that the response is not reusable without
+   * revalidation; the exact production value is asserted in `src/proxy.test.ts`, where the header
+   * is set and nothing can overwrite it.
+   */
+  expect(response?.headers()["cache-control"]).toMatch(/no-store|no-cache/u);
   expect(response?.headers()["x-robots-tag"]).toBe(
     "noindex, nofollow, noarchive"
   );
-  expect(response?.headers()["content-security-policy"]).not.toContain(
-    "'unsafe-eval'"
-  );
+  // `'unsafe-eval'` is deliberately present under `next dev` for React Refresh, so its absence is
+  // asserted in `src/proxy.test.ts` against a stubbed production environment. What holds in both
+  // is the set of directives that never varies.
+  for (const directive of ["default-src 'self'", "object-src 'none'", "frame-ancestors 'none'"]) {
+    expect(response?.headers()["content-security-policy"]).toContain(directive);
+  }
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
     "content",
     /noindex/u
@@ -227,6 +241,9 @@ test("reduced motion removes non-essential Admin transitions", async ({ page }) 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await setAdminPreferences(page, { theme: "light" });
   await page.goto("/admin", { waitUntil: "domcontentloaded" });
+  // The palette only opens once React owns the button; before that the click is a no-op and the
+  // dialog selectors below resolve to null.
+  await waitForAdminShell(page);
   await page.getByRole("button", { name: "Search Admin" }).click();
 
   const motion = await page.evaluate(() => {

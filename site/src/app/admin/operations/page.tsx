@@ -32,8 +32,10 @@ export default async function OperationsPage({
     { id: "implementation-plans", name: "Implementation Plans", href: "/admin/implementation-plans", active: false, count: snapshot.implementation.programs },
     { id: "social-profiles", name: "Social Profiles", href: "/admin/social-profiles", active: false },
     { id: "approvals", name: "Approvals", href: "/admin?view=approvals", active: false },
-    { id: "manual-tasks", name: "Only you can do", href: "/admin?view=manual-tasks", active: false },
-    { id: "future", name: "Future", href: "/admin?view=future", active: false }
+    // No "Future" row. The idea rooms are held for the launch period by `operations-2026-08b`,
+    // so the cross-venture idea list is a frozen archive rather than a destination; `?view=future`
+    // still renders for anyone who has it bookmarked.
+    { id: "manual-tasks", name: "Only you can do", href: "/admin?view=manual-tasks", active: false }
   ];
   const attention: AdminAttention[] = [
     { label: "Operational attention", value: snapshot.nodes.filter((candidate) => ["degraded", "stale", "failing", "setup-needed", "unavailable"].includes(candidate.health)).length },

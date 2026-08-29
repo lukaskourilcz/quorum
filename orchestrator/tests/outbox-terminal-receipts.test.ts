@@ -79,6 +79,45 @@ describe("a stale no-edition package ends instead of being skipped forever", () 
 
     expect((await oldestPendingDelivery(root, "2026-08-06"))?.packagePath).toBe(queued);
   });
+
+  it("ends a stale notice the magazine also refused, instead of parking it forever", async () => {
+    /*
+     * The parked rule used to be checked first, so a stale notice that had also failed a delivery
+     * matched it and `continue`d straight past its own ending. The file stayed in the outbox,
+     * queue-health counted it, and Caught Up read as stalled for twelve days over a notice about
+     * a day that was long gone. Staleness does not depend on the verdict.
+     */
+    const root = await outboxRoot();
+    const editionPackage = buildNoEditionPackage({
+      date: "2026-08-27",
+      meetingRef: "meetings/2026-08-27-cu-edition",
+      roomUrl: "https://boardless.example/meetings/2026-08-27-cu-edition",
+      reason: "budget_exhausted",
+      config: await loadEditionQualityConfig()
+    });
+    await writeFile(
+      path.join(root, "edition", "outbox", `2026-08-27-${editionPackage.idempotencyKey}.json`),
+      JSON.stringify(editionPackage),
+      "utf8"
+    );
+    await mkdir(path.join(root, "edition", "deliveries"), { recursive: true });
+    await writeFile(
+      path.join(root, "edition", "deliveries", "2026-08-27.json"),
+      JSON.stringify({
+        schemaVersion: 1, date: "2026-08-27", packageHash: editionPackage.idempotencyKey,
+        status: "needs_reconciliation", code: "hash_conflict"
+      }),
+      "utf8"
+    );
+
+    expect(await oldestPendingDelivery(root, "2026-08-29")).toBeNull();
+
+    expect(await readdir(path.join(root, "edition", "outbox"))).toEqual([]);
+    // The record of what actually happened survives: this ends the queue entry, not the history.
+    expect(await receipt(root, "2026-08-27")).toMatchObject({
+      status: "needs_reconciliation", code: "hash_conflict"
+    });
+  });
 });
 
 /**

@@ -119,7 +119,13 @@ const RETRYABLE_DELIVERY_CODES = new Set(["unreachable", "push_rejected"]);
  * refused them the same way, and the three articles written since never got a turn. A parked
  * package is not lost — its receipt says what happened and the queue health report counts it.
  */
-export type MmaDeliveryState = "pending" | "delivered" | "parked";
+/**
+ * `retired` is terminal like `delivered`, and means the opposite: these bytes never reached the
+ * magazine and never will, because an earlier package already serves their slug. It is its own
+ * state rather than a flavour of `delivered` so nothing that counts published work counts it, and
+ * its own state rather than `parked` so the queue stops asking a person about it.
+ */
+export type MmaDeliveryState = "pending" | "delivered" | "parked" | "retired";
 
 async function deliveryReceipt(
   root: string,
@@ -131,6 +137,7 @@ async function deliveryReceipt(
 
 function stateOfReceipt(receipt: { status?: unknown; code?: unknown } | null): MmaDeliveryState {
   if (receipt?.status === "delivered") return "delivered";
+  if (receipt?.status === "retired") return "retired";
   if (receipt?.status !== "needs_reconciliation") return "pending";
   return typeof receipt.code === "string" && RETRYABLE_DELIVERY_CODES.has(receipt.code)
     ? "pending"

@@ -168,8 +168,16 @@ img {
   /* Semantic state */
   --admin-information: #005fc7;
   --admin-information-soft: rgba(0, 100, 209, 0.1);
-  --admin-success: #1f7a35;
-  --admin-success-soft: rgba(31, 122, 53, 0.11);
+  /*
+   * Darkened from #1f7a35, which failed AA where it is most often used.
+   *
+   * A success badge puts this colour on its own soft tint, and on the Personal Growth surface that
+   * tint composites to #c9dbcf — 3.72:1 at 11px, against the 4.5:1 the release gate requires. The
+   * same hue at this lightness measures 4.55:1 there and improves every lighter background it sits
+   * on. The soft tint tracks it so the pair stays one colour.
+   */
+  --admin-success: #1b6b2f;
+  --admin-success-soft: rgba(27, 107, 47, 0.11);
   --admin-warning: #8a4b08;
   --admin-warning-soft: rgba(154, 85, 11, 0.12);
   --admin-risk: #963825;

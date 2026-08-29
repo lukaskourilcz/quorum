@@ -504,7 +504,7 @@ items in place. Lack of response never authorizes an action. -->
   A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
 
-- [ ] **DELIVERY-QUEUE-MMA-FILES** — the publish queue is not draining.
+- [x] **DELIVERY-QUEUE-MMA-FILES** — Resolved 2026-08-29: the queue drained. Original report: — the publish queue is not draining.
   Oldest held item: 2026-08-06 AM ufc-event-ufc-fight-night-gamrot-vs-salkilld (hash_conflict).
   Live counts are in state/delivery/queue-health/, rewritten every day. A parked package needs
   new bytes rather than another run; its own receipt says what the magazine refused and why.
