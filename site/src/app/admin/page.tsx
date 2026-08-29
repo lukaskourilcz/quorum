@@ -496,14 +496,16 @@ export default async function AdminPage({
       href: "/admin?view=manual-tasks",
       active: selectedView === "manual-tasks",
       count: ownerAttention.state === "present" ? ownerAttention.manualTasks.length : null
-    },
-    {
-      id: "future",
-      name: "Future",
-      href: "/admin?view=future",
-      active: selectedView === "future",
-      count: monetization.state === "present" ? monetization.total : null
     }
+    /*
+     * No "Future" row, and `"future"` deliberately still in COMPANY_VIEWS above.
+     *
+     * The idea rooms are held for the launch period by `operations-2026-08b`, so the
+     * cross-venture idea list is a frozen archive: a top-level destination with a count badge
+     * invited the owner into a queue nothing is adding to, on the screen he asked to have less
+     * on it. `/admin?view=future` renders exactly as before for anyone who has it bookmarked,
+     * and every ledger under `state/ideas/` is untouched — this removes a doorway, not a room.
+     */
   ];
 
   /*

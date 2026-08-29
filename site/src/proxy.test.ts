@@ -105,4 +105,67 @@ describe("admin session proxy", () => {
     );
     expect(response.headers.get("location")).toBe("https://boardless.example/admin");
   });
+
+  /*
+   * The admin's privacy headers, asserted where they are decided.
+   *
+   * `admin-visual-qa` checks these on a live response, but that suite runs against `next dev`,
+   * which replaces `Cache-Control` with its own `no-cache, must-revalidate` after the proxy has
+   * run — so the strictest half of the guarantee has never actually been proven, and that
+   * assertion has been failing for as long as it has existed. Here there is no dev server to
+   * overwrite anything: what the proxy sets is what is asserted.
+   */
+  it("marks every admin response uncacheable and unindexable", () => {
+    configure();
+    for (const response of [
+      proxy(authenticated()),
+      proxy(authenticated("/admin?venture=kvorum")),
+      // Signed out, and on the login page: both still admin, both still private.
+      proxy(new NextRequest("https://boardless.example/admin")),
+      proxy(new NextRequest("https://boardless.example/admin/login"))
+    ]) {
+      expect(response.headers.get("cache-control")).toBe("no-store, private");
+      expect(response.headers.get("x-robots-tag")).toBe("noindex, nofollow, noarchive");
+    }
+  });
+
+  /*
+   * `'unsafe-eval'` is added on purpose under `next dev`, because React Refresh needs it, and the
+   * e2e suite runs against a dev server — so the assertion that production does not carry it can
+   * only be made here, where NODE_ENV is a value the test chooses.
+   */
+  it("allows eval only in development", () => {
+    configure();
+    vi.stubEnv("NODE_ENV", "production");
+    expect(proxy(authenticated()).headers.get("content-security-policy"))
+      .not.toContain("'unsafe-eval'");
+
+    vi.stubEnv("NODE_ENV", "development");
+    expect(proxy(authenticated()).headers.get("content-security-policy"))
+      .toContain("'unsafe-eval'");
+  });
+
+  it("locks the directives that never vary by environment", () => {
+    configure();
+    vi.stubEnv("NODE_ENV", "development");
+    const policy = proxy(authenticated()).headers.get("content-security-policy") ?? "";
+    for (const directive of [
+      "default-src 'self'",
+      "base-uri 'self'",
+      "object-src 'none'",
+      "frame-ancestors 'none'",
+      "form-action 'self'"
+    ]) {
+      expect(policy).toContain(directive);
+    }
+  });
+
+  it("leaves a public page cacheable and indexable", () => {
+    configure();
+    const response = proxy(new NextRequest("https://boardless.example/ventures/caught-up"));
+    expect(response.headers.get("cache-control")).toBeNull();
+    expect(response.headers.get("x-robots-tag")).toBeNull();
+    // The security headers are not admin-only and must still be there.
+    expect(response.headers.get("x-frame-options")).toBe("DENY");
+  });
 });

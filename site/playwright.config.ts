@@ -31,6 +31,20 @@ export default defineConfig({
    * on a route that genuinely will not load — which is what a timeout is for.
    */
   timeout: 120_000,
+  /*
+   * Where `toHaveScreenshot` looks for its baselines.
+   *
+   * Without this it looks in `tests/e2e/admin-visual-qa.spec.ts-snapshots/`, and the three
+   * committed baselines live in `tests/e2e/snapshots/`. So the visual guard has never compared
+   * against them: it reported "a snapshot doesn't exist, writing actual", failed, wrote an
+   * untracked file, and did the same again on the next fresh checkout. Three shell screenshots
+   * that could not catch a regression if one happened.
+   *
+   * The names carry no project or platform suffix because the committed files carry none. One
+   * baseline per view is the intent; a rendering difference between platforms shows up as a diff
+   * to look at rather than as a missing file to ignore.
+   */
+  snapshotPathTemplate: "{testDir}/snapshots/{arg}{ext}",
   reporter: [["list"]],
   use: {
     baseURL: e2eBaseUrl,

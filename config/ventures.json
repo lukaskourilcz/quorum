@@ -16,10 +16,10 @@
         ]
       },
       "adminTabs": [
-        "ideas",
         "plans",
         "visuals",
-        "events"
+        "events",
+        "ideas"
       ],
       "meetings": [
         {

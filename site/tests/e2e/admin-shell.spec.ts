@@ -26,7 +26,8 @@ const adminDestinations = [
   "/admin/social-profiles",
   "/admin?view=approvals",
   "/admin?view=manual-tasks",
-  "/admin?view=future",
+  // No "/admin?view=future": the idea rooms are held for the launch period, so the cross-venture
+  // idea list left the rail. The URL still renders — it is simply no longer a destination.
   "/admin?venture=carousel-studio",
   ...registry.ventures
     .filter(({ id }) => id !== "carousel-studio")
