@@ -193,14 +193,20 @@ export async function auditOperationsRelease(repoRoot = defaultRepoRoot): Promis
   ));
   checks.push(check(
     "single-checkpoint-materialization",
-    cycleSource.includes("venturePhase === \"night\" || operationsRefreshRequested")
+    // The checkpoint is the company's one meeting a day now, not the night specifically — the
+    // three shifts were consolidated on 2026-08-29 and `dayCheckpoint` is the flag that survived.
+    // What this check is for is unchanged and unweakened: exactly one checkpoint materializes the
+    // snapshot, it is joined only by the bounded admin refresh request, and it reads no GitHub and
+    // starts no timer of its own.
+    cycleSource.includes("(dayCheckpoint || operationsRefreshRequested)")
+      && cycleSource.includes("const dayCheckpoint = venturePhase === \"morning\" || venturePhase === \"night\"")
       && cycleSource.includes("materializeOperationsState")
       && operationsService.includes("buildOperationsSnapshot")
       && operationsService.includes("buildIncidentSnapshot")
       && operationsService.includes("readOperationRunReceipts")
       && !operationsService.includes("api.github.com")
       && !operationsService.includes("setInterval"),
-    "The existing night checkpoint, or its bounded refresh request, materializes common receipt-backed health without a second scheduler or GitHub reader.",
+    "The company's one daily checkpoint, or its bounded refresh request, materializes common receipt-backed health without a second scheduler or GitHub reader.",
     ["orchestrator/src/cycle.ts", "orchestrator/src/operations/service.ts"]
   ));
   checks.push(check(

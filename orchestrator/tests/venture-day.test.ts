@@ -1,3 +1,4 @@
+import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
 import { slotRecordPath } from "../src/meetings/slot-record.js";
 import { PHASE_VENTURES, readVentureRegistry } from "../src/ventures/registry.js";
@@ -142,5 +143,42 @@ describe("a venture's day", () => {
     for (const phase of VENTURE_DAY_PHASES) {
       expect(slotRecordPath(phase, "2026-09-03")).toBe(`meetings/2026-09-03-${phase}.json`);
     }
+  });
+});
+
+describe("the company's one meeting a day", () => {
+  it("gives the surviving meeting the checkpoint the night used to run", async () => {
+    const source = await readFile(new URL("../src/cycle.ts", import.meta.url), "utf8");
+    // The audit behind `operations-2026-08c`: the afternoon had no duty of its own, the morning is
+    // the live council and the night was the checkpoint. Every block that read the night now reads
+    // this flag, so the morning does them and a dispatched night still does exactly what it did.
+    expect(source).toContain('const dayCheckpoint = venturePhase === "morning" || venturePhase === "night"');
+    for (const duty of [
+      "refreshEcosystemOperatingTruth",
+      "runContentGate",
+      "materializeOperationsState",
+      "synchronizeImplementationPrograms",
+      "writeWeeklyReportIfDue"
+    ]) {
+      expect(source, duty).toContain(duty);
+    }
+    // Nothing may still be gated on the night alone: that is what would strand a duty when the
+    // night stops being scheduled.
+    // Past the flag's own definition, which necessarily names the night.
+    const definition = 'const dayCheckpoint = venturePhase === "morning" || venturePhase === "night";';
+    const guarded = source.slice(source.indexOf(definition) + definition.length);
+    expect(guarded).not.toContain('venturePhase === "night"');
+  });
+
+  it("keeps the decision that retired the two shifts on file with its audit", async () => {
+    const decision = await readFile(
+      new URL("../../state/decisions/2026-08-29-one-meeting-per-day.md", import.meta.url),
+      "utf8"
+    );
+    expect(decision).toContain("operations-2026-08c");
+    // The owner asked what the retired shifts owned; a decision that does not answer that is not
+    // the record this change needs.
+    for (const shift of ["Morning", "Afternoon", "Night"]) expect(decision).toContain(shift);
+    expect(decision).toContain("stays individually runnable");
   });
 });

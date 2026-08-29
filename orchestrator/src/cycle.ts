@@ -569,6 +569,23 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   }
   const venturePhase = options.phase;
   const deterministicCheckpoint = venturePhase === "afternoon" || venturePhase === "night";
+  /*
+   * The company's one meeting a day, and the reconciling it inherited.
+   *
+   * The owner's 2026-08-29 instruction was to stop meeting three times and meet once, doing
+   * everything the three shifts were set up to do. The audit that answered it: the afternoon had
+   * no duty of its own — `deterministicCheckpoint` above is the whole of what distinguished it,
+   * and the night shared it. The morning is the live council. The night was the checkpoint: the
+   * ecosystem truth, the content gate over what the day published, the operations snapshot, the
+   * implementation-program sync, and the weekly and monthly reports with the retro behind them.
+   *
+   * So the morning keeps the council and takes the checkpoint, and it reconciles a day that has
+   * actually finished rather than one still running — at 22:00 the political desk had been closed
+   * for an hour and the evening review for two, but the day was not over. Every block below that
+   * used to read `venturePhase === "night"` reads this instead, which also leaves a manually
+   * dispatched night doing exactly what it always did.
+   */
+  const dayCheckpoint = venturePhase === "morning" || venturePhase === "night";
   const execute = async (): Promise<CycleResult> => {
     const modelConfig = JSON.parse(
       await readFile(path.join(configRoot, "models.json"), "utf8")
@@ -1203,7 +1220,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         generatedAt: now.toISOString()
       })
     ]);
-    const ecosystemArtifact = !options.dry && venturePhase === "night"
+    const ecosystemArtifact = !options.dry && dayCheckpoint
       ? (await refreshEcosystemOperatingTruth({ repoRoot })).path
       : null;
     /*
@@ -1213,7 +1230,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
      * every artifact above is written, so a gate that fails cannot take a delivery record with it,
      * and it swallows its own failures — the worst it can do is record a day as unscored.
      */
-    const contentGateArtifacts = !options.dry && venturePhase === "night" && contentGateEnabled()
+    const contentGateArtifacts = !options.dry && dayCheckpoint && contentGateEnabled()
       && (await loadEffectivePortfolioSchedule(
         ledgerSpend(await currentBudgetLedger(artifactRoot), (entry) => entry.ts.slice(0, 7) === now.toISOString().slice(0, 7))
       )).contentGateAffordable
@@ -1254,7 +1271,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     const operationsRefreshRequested = options.dry
       ? false
       : await operationsRefreshPending(artifactRoot, now);
-    const operationsResult = !options.dry && (venturePhase === "night" || operationsRefreshRequested)
+    const operationsResult = !options.dry && (dayCheckpoint || operationsRefreshRequested)
       ? await materializeOperationsState({ repoRoot, stateRoot: artifactRoot, now })
       : null;
     const operationsArtifacts = operationsResult
@@ -1268,11 +1285,11 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
     const programRefreshPending = !options.dry && programSyncConfigured()
       ? await implementationRefreshPending(artifactRoot, now)
       : false;
-    const programArtifacts = !options.dry && programSyncConfigured() && (venturePhase === "night" || programRefreshPending)
+    const programArtifacts = !options.dry && programSyncConfigured() && (dayCheckpoint || programRefreshPending)
       ? [(await synchronizeImplementationPrograms({ repoRoot, stateRoot: artifactRoot, now, force: programRefreshPending })).path]
       : [];
     const reportArtifacts: string[] = [];
-    if (!options.dry && venturePhase === "night") {
+    if (!options.dry && dayCheckpoint) {
       const today = pragueClockParts(now).date;
       const ledger = await currentBudgetLedger(artifactRoot);
       const capUsd = budgetLimitsFromEnvironment().monthlyOperatingUsd;
