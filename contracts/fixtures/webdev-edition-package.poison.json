@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "webdev-edition-package/1",
+  "id": "edition:invented-parser:cs",
+  "locale": "en",
+  "evidenceBriefRef": "state/ventures/webdev-signal/briefs/invented-parser-4.2.1.json",
+  "editionProfileRef": "webdev-signal:cs",
+  "headline": "Invented Parser opravuje kritickou chybu",
+  "deck": "Verze 4.2.1 uzavírá problém při zpracování šablon.",
+  "explanation": "Oficiální upozornění označuje verze před 4.2.1 za zranitelné. Správci projektů by měli ověřit používanou verzi a přejít na opravené vydání.",
+  "threads": {
+    "primary": "Používáte Invented Parser? Ověřte verzi. Oprava kritické chyby je ve vydání 4.2.1; starší verze jsou podle oficiálního upozornění zranitelné.",
+    "continuation": [
+      "Podrobnosti a přesný rozsah: oficiální upozornění projektu."
+    ]
+  },
+  "instagramPanels": [
+    {
+      "role": "cover",
+      "heading": "Kritická oprava",
+      "body": "Invented Parser 4.2.1"
+    },
+    {
+      "role": "impact",
+      "heading": "Koho se týká",
+      "body": "Projektů na verzích před 4.2.1."
+    },
+    {
+      "role": "action",
+      "heading": "Co zkontrolovat",
+      "body": "Ověřte verzi a aktualizujte na 4.2.1."
+    },
+    {
+      "role": "source",
+      "heading": "Zdroj",
+      "body": "Oficiální bezpečnostní upozornění."
+    }
+  ],
+  "cta": "check-affected-version",
+  "altTextInput": "Čtyři panely shrnují kritickou opravu Invented Parseru, dotčené verze a doporučenou aktualizaci.",
+  "sourceAttribution": [
+    {
+      "url": "https://github.com/advisories/GHSA-invented-0001",
+      "label": "Oficiální upozornění"
+    }
+  ],
+  "factualSentences": [
+    {
+      "text": "Verze 4.2.1 obsahuje opravu.",
+      "claimIds": [
+        "claim:fix"
+      ]
+    },
+    {
+      "text": "Verze před 4.2.1 jsou zranitelné.",
+      "claimIds": [
+        "claim:affected"
+      ]
+    },
+    {
+      "text": "Správci doporučují aktualizaci.",
+      "claimIds": [
+        "claim:action"
+      ]
+    }
+  ],
+  "claimIdsUsed": [
+    "claim:fix",
+    "claim:affected",
+    "claim:action"
+  ],
+  "affectedVersionRefsUsed": [
+    "<4.2.1",
+    "4.2.1"
+  ],
+  "affectedAudienceIdsUsed": [
+    "audience:invented-parser-users"
+  ],
+  "safeActionIdsUsed": [
+    "action:update"
+  ],
+  "languageChecks": {
+    "expectedLocale": "cs",
+    "nativeRegister": true,
+    "prohibitedPhraseHits": []
+  },
+  "parityChecks": {
+    "briefHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "coreClaimsPresent": true,
+    "uncertaintyPreserved": true,
+    "unsupportedFacts": []
+  },
+  "originalityChecks": {
+    "sourceCopyOverlapRatio": 0.05,
+    "literalTranslationRisk": false,
+    "comparedLocalePackageHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "status": "approved",
+  "heldReason": null,
+  "contentVersion": "1.0.0",
+  "contentHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "capabilityRefs": [
+    "webdev-signal-to-design-lab:bounded-render-summary:bounded-render-summary/1",
+    "webdev-signal-to-social-distribution:approved-publish-package:approved-publish-package/1"
+  ]
+}

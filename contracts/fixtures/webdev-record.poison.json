@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "webdev-record/1",
+  "id": "wds_aaaaaaaaaaaaaaaaaaaaaaaa",
+  "canonicalUrl": "https://example.org/releases/4.2.1",
+  "sourceIds": [
+    "official-advisory"
+  ],
+  "candidateIds": [
+    "candidate:one"
+  ],
+  "evidenceRefs": [
+    "fixture:advisory:one"
+  ],
+  "project": "Invented Parser",
+  "topic": "security",
+  "changeKind": "security-advisory",
+  "impactScope": "specific-version-configuration",
+  "authority": "secondary-discovery",
+  "title": "Invented Parser security update",
+  "sourceSummary": "An official advisory identifies the affected and fixed versions.",
+  "publishedAt": "2026-08-28T06:00:00+02:00",
+  "updatedAt": null,
+  "versionRefs": [
+    "4.2.1"
+  ],
+  "affectedVersions": [
+    "<4.2.1"
+  ],
+  "fixedVersions": [
+    "4.2.1"
+  ],
+  "affectedConfigurations": [],
+  "developerImpact": {
+    "summary": "Projects using an affected version should update.",
+    "audienceIds": [
+      "audience:invented-parser-users"
+    ],
+    "confidence": 1,
+    "evidenceRefs": [
+      "fixture:advisory:one"
+    ]
+  },
+  "safeActions": [
+    {
+      "id": "action:update",
+      "action": "Update to 4.2.1.",
+      "urgency": "act-now",
+      "evidenceRefs": [
+        "fixture:advisory:one"
+      ]
+    }
+  ],
+  "security": {
+    "severity": "critical",
+    "advisoryIds": [
+      "GHSA-invented-0001"
+    ]
+  },
+  "releaseStability": "stable",
+  "agreement": {
+    "status": "single-official",
+    "agreeingSourceIds": [
+      "official-advisory"
+    ],
+    "conflictRefs": []
+  },
+  "firstSeenAt": "2026-08-28T06:05:00+02:00",
+  "lastSeenAt": "2026-08-28T06:05:00+02:00",
+  "extractionVersion": "1.0.0",
+  "scoringVersion": "1.0.0",
+  "recentEditionSimilarity": 0,
+  "historyRefs": [],
+  "lifecycle": "new"
+}

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "webdev-source/1",
+  "id": "github-npm-advisories",
+  "name": "GitHub npm advisories",
+  "project": "GitHub Advisory Database",
+  "owner": "GitHub",
+  "canonicalHost": "api.github.com",
+  "sourceKind": "github-advisories",
+  "authority": "official-advisory",
+  "endpoint": "http://api.github.com/advisories?ecosystem=npm",
+  "repositoryRef": null,
+  "locale": "en",
+  "topics": [
+    "security",
+    "package-manager"
+  ],
+  "changeKinds": [
+    "security-advisory"
+  ],
+  "verifiedAt": "2026-08-28",
+  "verificationDueAt": "2026-11-26",
+  "access": {
+    "publicLoggedOut": true,
+    "authEnvironmentName": null,
+    "termsRef": "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service",
+    "robotsRef": null,
+    "license": "Advisory-specific; retain attribution and source links",
+    "attribution": "Link the GitHub advisory and the upstream official advisory when present."
+  },
+  "limits": {
+    "cadenceMinutes": 360,
+    "requestCapPerRun": 2,
+    "pageCapPerRun": 2,
+    "itemCapPerRun": 100,
+    "bodyBytes": 500000,
+    "timeoutMs": 10000,
+    "redirects": 1,
+    "concurrency": 1,
+    "spacingMs": 1000
+  },
+  "conditional": {
+    "etag": "supported-unverified",
+    "lastModified": "not-observed",
+    "contentHashFallback": true
+  },
+  "parser": {
+    "id": "github-advisories",
+    "version": "1.0.0",
+    "fixtureVersion": "1.0.0"
+  },
+  "healthPolicy": {
+    "failureThreshold": 3,
+    "layoutChangeHoldsSource": true,
+    "emptyIsHealthy": true,
+    "unchangedIsHealthy": true
+  },
+  "priority": 100,
+  "duplicateOverlap": [],
+  "state": "enabled",
+  "stateReason": "Retained official structured security authority from the dated audit.",
+  "sourceRefs": [
+    "docs/WEBDEV-SIGNAL-SOURCES.md#github-npm-advisories"
+  ],
+  "capabilityRefs": [
+    "official-source-to-webdev-signal:webdev-candidate/1"
+  ]
+}

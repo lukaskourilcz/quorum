@@ -48,8 +48,8 @@ Then, in order, the existing items:
    12-feature bank for Tehdejší svět; `BH-RESEARCH-001`, `BH-SEED-002` and the launch
    questions for BOOKSOFHISTORY.
 7. **Clear handles, then create the accounts yourself** — Instagram + Threads for DNESKAi and
-   MMA Files (the credential table in `SOCIAL-DISTRIBUTION-CONNECTION-001` is ready for
-   later API posting), `BH-ACCOUNTS-003`, `TS-ACCOUNTS-003` (domain first), `KV-ACCOUNTS-003`.
+   MMA Files (the credential table under "Only before social posting" below is ready for later
+   API posting), `BH-ACCOUNTS-003`, `TS-ACCOUNTS-003` (domain first), `KV-ACCOUNTS-003`.
    Personal Growth uses the existing `lukaskouril93`. Manual posting from the admin's packs is
    the launch mode; tokens and `SOCIAL_KILL_SWITCH=false` come only after the activation
    counters pass.
