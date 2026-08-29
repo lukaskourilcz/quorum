@@ -77,9 +77,39 @@ export interface GuardedCallDeps {
  * whole room, without having to guess what the failure cost. The ledger entry is already
  * written by the time this is thrown.
  */
+/**
+ * What a reply looked like, without saying what it said.
+ *
+ * A parse failure is only actionable if you know whether the model wrote prose, wrapped the
+ * object, stopped mid-object or answered a different shape entirely — and the one thing this
+ * system will not do is copy provider prose into a record. So the probe is structural: how long
+ * the reply was, what kind of character it opens with, whether it was fenced, and whether it
+ * looks like a complete object. None of that reproduces a sentence, and all of it separates
+ * "the ceiling was too small" from "the model ignored the contract".
+ *
+ * marketingShark needed exactly this and did not have it: nineteen consecutive failures recorded
+ * as `model-output-invalid`, and no way to tell from the record which of those two it was.
+ */
+export function describeReplyShape(text: string): string {
+  const trimmed = text.trim();
+  if (trimmed.length === 0) return "empty reply";
+  const fenced = trimmed.startsWith("```");
+  const body = unfenceModelJson(text).trim();
+  const opensObject = body.startsWith("{");
+  const closesObject = body.endsWith("}");
+  const braces = `${[...body].filter((c) => c === "{").length}/${[...body].filter((c) => c === "}").length}`;
+  return [
+    `${trimmed.length} chars`,
+    fenced ? "fenced" : "unfenced",
+    opensObject ? "opens with {" : `opens with ${JSON.stringify(body.slice(0, 1))}`,
+    closesObject ? "closes with }" : "does not close",
+    `braces ${braces}`
+  ].join(", ");
+}
+
 export class ModelOutputParseError extends Error {
-  constructor(readonly agent: string, readonly usd: number, readonly reason: unknown) {
-    super(`${agent} returned unparsable output (billed $${usd.toFixed(6)}): ${reason instanceof Error ? reason.message : String(reason)}`);
+  constructor(readonly agent: string, readonly usd: number, readonly reason: unknown, readonly shape?: string) {
+    super(`${agent} returned unparsable output (billed $${usd.toFixed(6)}${shape ? `; reply was ${shape}` : ""}): ${reason instanceof Error ? reason.message : String(reason)}`);
     this.name = "ModelOutputParseError";
   }
 }
@@ -264,7 +294,7 @@ export async function guardedJsonCall<T>(
   try {
     value = request.parse(unfenceModelJson(response.text));
   } catch (error) {
-    throw new ModelOutputParseError(request.agent, actual.estimatedUsd, error);
+    throw new ModelOutputParseError(request.agent, actual.estimatedUsd, error, describeReplyShape(response.text));
   }
 
   // Only a valid value is worth replaying.

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { unfenceModelJson } from "../src/llm/call.js";
+import { describeReplyShape } from "../src/llm/call.js";
 
 describe("a fenced reply is still a reply", () => {
   it("unwraps the fence a model adds around its JSON", () => {
@@ -21,5 +22,42 @@ describe("a fenced reply is still a reply", () => {
 
   it("does not rescue a reply that is genuinely malformed", () => {
     expect(() => JSON.parse(unfenceModelJson("```json\nnot json at all\n```"))).toThrow();
+  });
+});
+
+describe("what a reply looked like, without saying what it said", () => {
+  it("separates a ceiling that was too small from a contract that was ignored", () => {
+    // The two failures marketingShark could not tell apart for nineteen days. A cut-off reply
+    // opens correctly and never closes; a chatty one never opens.
+    const truncated = describeReplyShape('{"carousels":{"cs":{"slides":[{"role":"hook"');
+    expect(truncated).toContain("opens with {");
+    expect(truncated).toContain("does not close");
+
+    const chatty = describeReplyShape('Here is the package you asked for:\n\n{"a":1}');
+    expect(chatty).toContain('opens with "H"');
+
+    const clean = describeReplyShape('{"a":1}');
+    expect(clean).toContain("opens with {");
+    expect(clean).toContain("closes with }");
+  });
+
+  it("reports a fence without needing the caller to care", () => {
+    expect(describeReplyShape('```json\n{"a":1}\n```')).toContain("fenced");
+    expect(describeReplyShape('{"a":1}')).toContain("unfenced");
+  });
+
+  it("never reproduces the reply", () => {
+    // One opening character and a length. A record may say the model wrote prose; it may not say
+    // what the prose was, which is the rule the whole guarded path keeps.
+    const secret = "Absolutely! Here is the carousel copy you requested for devshark today.";
+    const shape = describeReplyShape(secret);
+    expect(shape).not.toContain("carousel");
+    expect(shape).not.toContain("devshark");
+    expect(shape).not.toContain("Absolutely");
+    expect(shape).toContain(`${secret.length} chars`);
+  });
+
+  it("says so when there is nothing at all", () => {
+    expect(describeReplyShape("   ")).toBe("empty reply");
   });
 });

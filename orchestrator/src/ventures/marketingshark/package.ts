@@ -60,20 +60,33 @@ export type MarketingSharkPackage = z.infer<typeof MarketingSharkPackage>;
  * What CHUM returns. The package is assembled from this plus everything code already knows --
  * template ids, spend, render paths, status -- so the model never states a fact about the run.
  */
+/**
+ * Five slides carrying the five roles, in the order the renderer assumes.
+ *
+ * `renderCarousel` picks each slide's template with `SLIDE_ROLES[index]`, by position, and never
+ * reads the `role` the model wrote. The schema only checked the count and that each role was one
+ * of the legal five, so a reply with `why` twice and no `footer` parsed cleanly and then rendered
+ * the fourth slide's copy through the footer's template — the brand's slide-5 line silently
+ * replaced by an explanation, with nothing anywhere reporting a problem. Requiring the canonical
+ * order makes the renderer's positional assumption true instead of hoped for, and turns a silent
+ * mislabel into a `model-output-invalid` the retry can act on.
+ */
+const slideDeck = () => z.object({
+  slides: z.array(z.object({
+    role: z.enum(SLIDE_ROLES),
+    headline: z.string(),
+    body: z.string().optional(),
+    alt: z.string()
+  })).length(5).refine(
+    (slides) => slides.every((slide, index) => slide.role === SLIDE_ROLES[index]),
+    { message: `slides must carry the roles ${SLIDE_ROLES.join(", ")} in that order` }
+  )
+});
+
 export const ChumOutput = z.object({
   carousels: z.object({
-    cs: z.object({ slides: z.array(z.object({
-      role: z.enum(SLIDE_ROLES),
-      headline: z.string(),
-      body: z.string().optional(),
-      alt: z.string()
-    })).length(5) }),
-    en: z.object({ slides: z.array(z.object({
-      role: z.enum(SLIDE_ROLES),
-      headline: z.string(),
-      body: z.string().optional(),
-      alt: z.string()
-    })).length(5) })
+    cs: slideDeck(),
+    en: slideDeck()
   }),
   descriptions: z.object({
     instagram: z.object({ cs: z.string(), en: z.string() }),
