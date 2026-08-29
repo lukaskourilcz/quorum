@@ -200,6 +200,17 @@ function initialActivation(now: Date): SocialActivation {
   });
 }
 
+/**
+ * The one owner item this file raises, in the shape every other item in that document has.
+ *
+ * It used to append a bare `## SOCIAL-PLATFORM-CREDENTIALS` heading with a paragraph under it,
+ * which is not a task: the document's contract is a checkbox with an importance, an owner, a time
+ * and a kind, and the checkup reads those fields. That went unnoticed while the only thing that
+ * called this lived in a workflow whose schedule is commented out. The daily cycle refreshes the
+ * counters now, so the item lands for real and has to be a real one.
+ *
+ * Still written once. The marker check is what keeps a daily run from growing a daily copy.
+ */
 async function recordMissingCredentials(repoRoot: string, missing: Record<SocialVenture, string[]>): Promise<void> {
   const names = Object.entries(missing)
     .filter(([, values]) => values.length > 0)
@@ -208,8 +219,15 @@ async function recordMissingCredentials(repoRoot: string, missing: Record<Social
   const marker = "SOCIAL-PLATFORM-CREDENTIALS";
   const current = await readText(repoRoot, "docs/NEEDED.md", "# Needs your help now\n");
   if (current.includes(marker)) return;
-  const item = `\n## ${marker}\n\nAdd the Instagram and Threads account IDs and access tokens as GitHub Actions secrets/variables for each brand. Missing now: ${names.join("; ")}. The per-venture gates remain locked and no post is attempted.\n`;
-  await atomicWriteText(repoRoot, "docs/NEEDED.md", `${current.trimEnd()}\n${item}`);
+  const item = [
+    "",
+    `- [ ] **Add the Instagram and Threads credentials** (\`${marker}\`) — each brand needs its`,
+    "  account ID and access token as GitHub Actions secrets before any channel can be considered.",
+    `  Missing now — ${names.join("; ")}.`,
+    "  Until they exist every per-venture gate stays locked and no post is attempted, whatever the",
+    "  readiness counters say. [imp:4] [owner:me] [time:45m] [kind:setup]"
+  ].join("\n");
+  await atomicWriteText(repoRoot, "docs/NEEDED.md", `${current.trimEnd()}\n${item}\n`);
 }
 
 export async function refreshSocialActivation(input: {
