@@ -1560,6 +1560,36 @@ jobs:
           done
           echo "The queue-health record could not be pushed; the report above is the copy of record."
 
+      # The counters that say how far each venture is from its own publishing gate were three
+      # weeks stale, and the reason was circular: only `runSocialPublisher` refreshed them, and
+      # that workflow's schedule is commented out because every channel is off. So the numbers
+      # gating the channels could only be refreshed by the thing the channels gate, and the admin
+      # showed DNESKAi at 2/7 while the magazine went on delivering — it is 9/7.
+      #
+      # This cannot publish anything. A post additionally needs `SOCIAL_KILL_SWITCH=false`, an
+      # approved channel and credentials that do not exist; this only counts delivery records off
+      # disk. No model call, no network, no credential.
+      - name: Recompute how far each venture is from its publishing gate
+        if: ${{ always() && steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
+        run: |
+          pnpm social:activation || exit 0
+          for activation_path in state/social/activation.json state/notify/social-unlocks docs/NEEDED.md; do
+            if test -e "$activation_path"; then git add -A -- "$activation_path"; fi
+          done
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "boardlessai-cycle[bot]"
+          git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+          git commit -m "social($(date -u +%Y-%m-%d)): recompute the activation counters"
+          for attempt in 1 2 3; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
+            git fetch origin "$GITHUB_REF_NAME"
+            if ! git rebase --autostash "origin/$GITHUB_REF_NAME"; then
+              git rebase --abort || true
+              break
+            fi
+          done
+          echo "The activation counters could not be pushed; the delivery records remain canonical."
+
       # `state/FINANCE.md` told its reader to regenerate its table from the ledger, and nothing
       # regenerated it: the block said $3.12 while the budget ledger held $13.55, three weeks on.
       # This runs beside the queue-health check and for the same reason — a day the council

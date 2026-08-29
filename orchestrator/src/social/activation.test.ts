@@ -131,6 +131,34 @@ describe("per-venture social activation", () => {
     expect(JSON.parse(await readFile(path.join(stateRoot, "notify", "social-unlocks", "caught-up.json"), "utf8"))).toMatchObject({ decisionReference: "D2-autonomy-build-2026-08-01" });
   });
 
+  it("raises one owner item for missing credentials, in the shape that document requires", async () => {
+    /*
+     * The daily cycle refreshes these counters now, so this item lands for real rather than never.
+     * It used to append a bare `## SOCIAL-PLATFORM-CREDENTIALS` heading with a paragraph under it,
+     * which `docs/NEEDED.md` does not consider a task at all: the contract is a checkbox with an
+     * importance, an owner, a time and a kind, and the checkup reads those fields.
+     */
+    const repoRoot = await root();
+    const stateRoot = path.join(repoRoot, "state");
+    await refreshSocialActivation({
+      repoRoot, stateRoot, environment: { SOCIAL_KILL_SWITCH: "false" },
+      now: new Date("2026-08-29T07:00:00.000Z"), safetyCheckerReady: true
+    });
+
+    const needed = await readFile(path.join(repoRoot, "docs", "NEEDED.md"), "utf8");
+    expect(needed).toMatch(/^- \[ \] \*\*Add the Instagram and Threads credentials\*\*/mu);
+    expect(needed).toContain("[imp:4] [owner:me] [time:45m] [kind:setup]");
+    expect(needed).toContain("CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN");
+
+    // Written once, however many times the cycle runs.
+    await refreshSocialActivation({
+      repoRoot, stateRoot, environment: { SOCIAL_KILL_SWITCH: "false" },
+      now: new Date("2026-08-30T07:00:00.000Z"), safetyCheckerReady: true
+    });
+    const again = await readFile(path.join(repoRoot, "docs", "NEEDED.md"), "utf8");
+    expect(again.match(/SOCIAL-PLATFORM-CREDENTIALS/gu)).toHaveLength(1);
+  });
+
   it("blocks unsafe TT wording and any non-brand visual", () => {
     const safe = QueueItemSchema.parse({
       ...queueItem(), venture: "titty-tuesdays", channel: "instagram", locale: "cs", utm: { ...queueItem().utm, source: "instagram" }, content: {

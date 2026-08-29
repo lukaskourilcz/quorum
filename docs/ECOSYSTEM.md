@@ -41,7 +41,7 @@ builds and after a real 22:00 checkpoint. Never hand-edit the generated block.
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
 
-Refreshed from committed state: **2026-08-29T12:05:55.877Z**. This block is generated deterministically; edit the source state, not these lines.
+Refreshed from committed state: **2026-08-29T14:39:55.921Z**. This block is generated deterministically; edit the source state, not these lines.
 
 | Item | Current value |
 | --- | --- |
@@ -62,14 +62,14 @@ Refreshed from committed state: **2026-08-29T12:05:55.877Z**. This block is gene
 
 | Project | Mode | Rooms | Disabled optional roles | Social readiness |
 | --- | --- | --- | --- | --- |
-| Caught Up | operating | cu-edition 05:00; cu-product 17:00 | THREADS, INSTAGRAM | locked (2/7) |
+| Caught Up | operating | cu-edition 05:00; cu-product 17:00 | THREADS, INSTAGRAM | locked (9/7) |
 | Titty Tuesdays | operating | tt-marketing 11:00 | QUILL, THREADS, INSTAGRAM | locked (0/4) |
 | GoVIRAL | operating | gv-brief 13:00 | none | not applicable |
 | BOOKSOFHISTORY | operating | bh-desk 12:00 | none | not applicable |
 | FightAIQ | operating | mma-intake 08:00; mma-analysis 19:00 | none | not applicable |
 | Design Lab | operating | deterministic service only | none | not applicable |
 | marketingShark | operating | ms-daily 07:00 | none | not applicable |
-| MMA Files | operating | mag-editorial 09:00; mag-desk 20:00 | REACH | locked (3/10) |
+| MMA Files | operating | mag-editorial 09:00; mag-desk 20:00 | REACH | locked (10/10) |
 | Door Money | operating | dm-desk 15:00; dm-growth 16:00 | none | not applicable |
 | Tehdejší svět | operating | ts-desk 18:00 | none | not applicable |
 | Kvórum | operating | kv-desk 21:00 | none | not applicable |

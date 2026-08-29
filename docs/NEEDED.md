@@ -1084,3 +1084,9 @@ One branch is open in a consumer repository and is waiting on you, not on code:
 `lukaskourilcz/mma-files` `claude/article-image-selection-61rs70`. Merging it is what lets the two
 corrected MMA heroes reach the magazine. The matching aifirst branch was merged into its `main` as
 `4bc270c8` on 2026-08-09 and then removed.
+
+- [ ] **Add the Instagram and Threads credentials** (`SOCIAL-PLATFORM-CREDENTIALS`) — each brand needs its
+  account ID and access token as GitHub Actions secrets before any channel can be considered.
+  Missing now — caught-up: CAUGHT_UP_THREADS_ACCESS_TOKEN, CAUGHT_UP_THREADS_USER_ID, CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN, CAUGHT_UP_INSTAGRAM_USER_ID; mma-files: MMA_FILES_THREADS_ACCESS_TOKEN, MMA_FILES_THREADS_USER_ID, MMA_FILES_INSTAGRAM_ACCESS_TOKEN, MMA_FILES_INSTAGRAM_USER_ID; titty-tuesdays: TITTY_TUESDAYS_THREADS_ACCESS_TOKEN, TITTY_TUESDAYS_THREADS_USER_ID, TITTY_TUESDAYS_INSTAGRAM_ACCESS_TOKEN, TITTY_TUESDAYS_INSTAGRAM_USER_ID.
+  Until they exist every per-venture gate stays locked and no post is attempted, whatever the
+  readiness counters say. [imp:4] [owner:me] [time:45m] [kind:setup]
