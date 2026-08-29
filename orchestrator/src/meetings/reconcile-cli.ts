@@ -11,9 +11,10 @@ import {
   loadMeetingSkips,
   mondayOfWeek,
   pragueSlotInstant,
-  PUBLIC_MEETING_CLOCK
+  PUBLIC_MEETING_CLOCK,
+  SLOT_DELIVERY_GRACE_MS
 } from "./calendar.js";
-import { pragueClockParts } from "./clock.js";
+import { MEETING_CLOCK, pragueClockParts } from "./clock.js";
 
 function valueAfter(args: string[], flag: string): string | undefined {
   const index = args.indexOf(flag);
@@ -93,10 +94,11 @@ export async function reconcileMeetingDay(
     // the record is what the calendar then shows.
     throw new Error(`Only a finished Prague day can be reconciled: ${date}`);
   }
+  const [records, skips] = await Promise.all([loadMeetingRecords(root), loadMeetingSkips(root)]);
   const feed = buildCalendarFeed({
     weekOf: mondayOfWeek(date),
-    records: await loadMeetingRecords(root),
-    skips: await loadMeetingSkips(root),
+    records,
+    skips,
     articleSlots: await loadArticleSlotOutcomes(root),
     now
   });
@@ -104,20 +106,51 @@ export async function reconcileMeetingDay(
     feed.slots.map((slot) => [`${slot.at}:${slotPhase(slot.kind)}`, slot.status])
   );
   const recorded: string[] = [];
+  const write = async (phase: string) => {
+    const relative = `meetings/skips/${date}-${phase}.json`;
+    await atomicWriteJson(root, relative, MeetingSkipSchema.parse({
+      schemaVersion: "meeting-skip/1",
+      date,
+      phase,
+      reason: NO_RECORD_REASON,
+      decidedAt: now.toISOString()
+    }));
+    recorded.push(`state/${relative}`);
+  };
+
+  /*
+   * The private desks, which the calendar feed cannot see.
+   *
+   * `PUBLIC_MEETING_CLOCK` exists so an owner-only venture never appears on the public calendar,
+   * and that is right for a calendar. Using it here made the one desk nobody can see the one desk
+   * nobody accounts for: `pg-desk` was countersigned on 26 August and has produced no meeting
+   * record and no skip record since, because the feed never emits a slot for it and this loop
+   * only ever wrote a skip for a slot the feed called "missed".
+   *
+   * Same rule, applied directly rather than through the feed: no record, no existing skip, and the
+   * delivery window closed. Nothing here reaches the public calendar — `buildCalendarFeed` walks
+   * the public clock, so a skip on disk for a private phase has no slot to attach to.
+   */
+  const privatePhases = MEETING_CLOCK.filter((definition) =>
+    !PUBLIC_MEETING_CLOCK.some((publicDefinition) => publicDefinition.phase === definition.phase));
+  // Both fields, because a record names its room in `kind` and a shift record names it in `phase`.
+  const heldPrivately = new Set<string>(records
+    .filter((record) => record.date === date)
+    .flatMap((record) => [record.kind, record.phase]));
+  const skippedPrivately = new Set<string>(skips.filter((skip) => skip.date === date).map((skip) => skip.phase));
+  for (const definition of privatePhases) {
+    if (heldPrivately.has(definition.phase) || skippedPrivately.has(definition.phase)) continue;
+    const elapsed = now.getTime() - pragueSlotInstant(date, definition.hour).getTime();
+    if (elapsed <= SLOT_DELIVERY_GRACE_MS) continue;
+    await write(definition.phase);
+  }
+
   for (const definition of PUBLIC_MEETING_CLOCK) {
     // Matched on the slot's own instant rather than on a date prefix of the UTC timestamp: a
     // Prague slot early enough in the day belongs to the previous UTC date.
     const at = pragueSlotInstant(date, definition.hour).toISOString();
     if (statuses.get(`${at}:${definition.phase}`) !== "missed") continue;
-    const relative = `meetings/skips/${date}-${definition.phase}.json`;
-    await atomicWriteJson(root, relative, MeetingSkipSchema.parse({
-      schemaVersion: "meeting-skip/1",
-      date,
-      phase: definition.phase,
-      reason: NO_RECORD_REASON,
-      decidedAt: now.toISOString()
-    }));
-    recorded.push(`state/${relative}`);
+    await write(definition.phase);
   }
   return { date, recorded };
 }
