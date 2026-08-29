@@ -19,15 +19,16 @@ const registry = JSON.parse(
   readFileSync(path.resolve(process.cwd(), "../config/ventures.json"), "utf8")
 ) as VentureRegistry;
 
+/*
+ * Three places and the projects, after the 2026-08-29 reset: the Overview, what is waiting for
+ * the owner, and Settings. Operations, Implementation Plans, Social Profiles and the held idea
+ * list still render for a bookmark and are linked from the Overview's footer — none of them is
+ * something the owner has to check, which is what separates a link from a destination.
+ */
 const adminDestinations = [
   "/admin",
-  "/admin/operations",
-  "/admin/implementation-plans",
-  "/admin/social-profiles",
-  "/admin?view=approvals",
-  "/admin?view=manual-tasks",
-  // No "/admin?view=future": the idea rooms are held for the launch period, so the cross-venture
-  // idea list left the rail. The URL still renders — it is simply no longer a destination.
+  "/admin?view=waiting",
+  "/admin/settings",
   "/admin?venture=carousel-studio",
   ...registry.ventures
     .filter(({ id }) => id !== "carousel-studio")
@@ -106,7 +107,10 @@ test("mobile Admin navigation has safe targets and exposes every live destinatio
   await expect(more).toBeVisible();
   expect(await more.locator('a[href^="/admin"]').evaluateAll((links) => links.map((link) => link.getAttribute("href")))).toEqual(adminDestinations);
   await expect(more.getByRole("button", { name: "Sign out of Admin" })).toBeVisible();
-  await expect(more.getByRole("link", { name: "Public" })).toHaveAttribute("href", "/");
+  // No link to the public site. The owner called that button useless on 2026-08-29 and Settings
+  // took its place in the sidebar; the sheet lost its copy for the same reason, and Settings is
+  // in the destination list above rather than duplicated in the footer.
+  await expect(more.getByRole("link", { name: "Public" })).toHaveCount(0);
 
   await more.getByRole("button", { name: "Close" }).click();
   await mobileNav.getByRole("button", { name: "Workspaces" }).click();

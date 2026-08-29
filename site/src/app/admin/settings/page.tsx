@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { adminSections } from "@/lib/admin-sections";
 import { AdminShell, type AdminSection, type AdminWorkspace } from "@/components/admin/admin-shell";
 import { AdminStateMessage } from "@/components/admin/admin-primitives";
 import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
@@ -31,13 +32,7 @@ export default async function SettingsPage() {
       active: false
     }))
   ];
-  const sections: AdminSection[] = [
-    { id: "operations", name: "Operations", href: "/admin/operations", active: false },
-    { id: "implementation-plans", name: "Implementation Plans", href: "/admin/implementation-plans", active: false },
-    { id: "social-profiles", name: "Social Profiles", href: "/admin/social-profiles", active: false },
-    { id: "approvals", name: "Approvals", href: "/admin?view=approvals", active: false },
-    { id: "manual-tasks", name: "Only you can do", href: "/admin?view=manual-tasks", active: false }
-  ];
+  const sections: AdminSection[] = adminSections("settings");
   return (
     <AdminShell
       attention={[{ label: "Paused projects", value: settings.ventures.filter((venture) => venture.paused).length }]}

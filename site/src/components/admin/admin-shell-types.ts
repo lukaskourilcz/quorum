@@ -1,5 +1,6 @@
 export type AdminDestinationIcon =
   | "approvals"
+  | "settings"
   | "future"
   | "manual"
   | "operations"

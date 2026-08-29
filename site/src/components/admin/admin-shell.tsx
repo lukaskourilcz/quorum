@@ -33,6 +33,8 @@ export interface AdminSection {
 }
 
 function sectionIcon(id: string): AdminDestination["icon"] {
+  if (id === "waiting") return "approvals";
+  if (id === "settings") return "settings";
   if (id === "operations") return "operations";
   if (id === "social-profiles") return "profiles";
   if (id === "approvals") return "approvals";

@@ -31,6 +31,7 @@ import type {
 
 const ICONS = {
   approvals: CheckCheck,
+  settings: Settings,
   future: Sparkles,
   manual: KeyRound,
   operations: Activity,

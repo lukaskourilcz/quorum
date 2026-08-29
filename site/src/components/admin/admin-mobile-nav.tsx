@@ -46,7 +46,9 @@ export function AdminMobileNav({
 }) {
   const [sheet, setSheet] = useState<"all" | "workspaces" | null>(null);
   const overview = findDestination(groups, "company-overview");
-  const approvals = findDestination(groups, "company-approvals");
+  // The one thing on the bottom bar besides the overview: what is waiting for the owner.
+  // Approvals and owner-only tasks became a single destination on 2026-08-29.
+  const approvals = findDestination(groups, "company-waiting");
   const workspaceGroups = groups.filter((group) => group.id === "workspaces");
   const hasActiveWorkspace = groups
     .filter((group) => group.id === "workspaces" || group.id === "production")
@@ -108,8 +110,7 @@ export function AdminMobileNav({
               {theme === "dark" ? <Sun aria-hidden="true" className="size-4" /> : <Moon aria-hidden="true" className="size-4" />}
               {theme === "dark" ? "Light" : "Dark"} theme
             </button>
-            <Link className="admin-focus-ring ml-auto flex min-h-[var(--admin-touch-target)] items-center rounded-[var(--admin-radius)] px-2.5 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)] hover:bg-[var(--admin-surface-hover)] hover:text-[var(--admin-foreground)]" href="/admin/settings">Settings</Link>
-            <form action="/admin/logout" method="post">
+            <form action="/admin/logout" className="ml-auto" method="post">
               <button aria-label="Sign out of Admin" className="admin-focus-ring grid min-h-[var(--admin-touch-target)] min-w-[var(--admin-touch-target)] place-items-center rounded-[var(--admin-radius)] text-[var(--admin-foreground-muted)] hover:bg-[var(--admin-surface-hover)] hover:text-[var(--admin-foreground)]" type="submit">
                 <LogOut aria-hidden="true" className="size-4" />
               </button>

@@ -45,6 +45,7 @@ import {
   CURRENT_MONTHLY_API_LIMIT_USD,
   CURRENT_MONTHLY_OPERATING_LIMIT_USD
 } from "@/data/operating-policy";
+import { adminSections } from "@/lib/admin-sections";
 import { buildAdminRecentActivity } from "@/lib/admin-recent-activity";
 import { readApprovedUndeliveredPayloads } from "@/lib/admin-owner-attention";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
@@ -116,18 +117,25 @@ function ventureName(id: string, name: string): string {
 }
 
 /** Company-level views: their heading and the one sentence that says what the page is for. */
-const COMPANY_VIEWS = ["approvals", "manual-tasks", "future"] as const;
+/*
+ * `approvals` and `manual-tasks` were two destinations for one question — what is waiting for me.
+ * They are one view now, in two groups. Both old ids still resolve, because they are in bookmarks
+ * and in the links the runtime writes into its own records.
+ */
+const COMPANY_VIEWS = ["waiting", "approvals", "manual-tasks", "future"] as const;
 type CompanyView = (typeof COMPANY_VIEWS)[number];
 
 const SECTION_TITLES: Readonly<Record<CompanyView, string>> = {
-  approvals: "Approvals",
-  "manual-tasks": "Only you can do",
+  waiting: "Waiting for you",
+  approvals: "Waiting for you",
+  "manual-tasks": "Waiting for you",
   future: "Future"
 };
 
 const SECTION_LEADS: Readonly<Record<CompanyView, string>> = {
-  approvals: "Everything waiting for your signature, with what each one approves and what it costs.",
-  "manual-tasks": "Keys, accounts and switches. These are the jobs the system cannot do for you.",
+  waiting: "Your signature, your keys, your accounts. Nothing here can be done without you.",
+  approvals: "Your signature, your keys, your accounts. Nothing here can be done without you.",
+  "manual-tasks": "Your signature, your keys, your accounts. Nothing here can be done without you.",
   future: "Ways this company could earn, and every idea the meetings have produced so far."
 };
 
@@ -462,50 +470,14 @@ export default async function AdminPage({
     }
   ], new Date());
 
-  const sections: AdminSection[] = [
+  const sections: AdminSection[] = adminSections(
+    selectedView && selectedView !== "future" ? "waiting" : null,
     {
-      id: "operations",
-      name: "Operations",
-      href: "/admin/operations",
-      active: false
-    },
-    {
-      id: "implementation-plans",
-      name: "Implementation Plans",
-      href: "/admin/implementation-plans",
-      active: false,
-      count: implementationProgress.state === "missing" ? null : implementationProgress.programs.length
-    },
-    {
-      id: "social-profiles",
-      name: "Social Profiles",
-      href: "/admin/social-profiles",
-      active: false
-    },
-    {
-      id: "approvals",
-      name: "Approvals",
-      href: "/admin?view=approvals",
-      active: selectedView === "approvals",
-      count: ownerAttention.state === "present" ? ownerAttention.approvals.length : null
-    },
-    {
-      id: "manual-tasks",
-      name: "Only you can do",
-      href: "/admin?view=manual-tasks",
-      active: selectedView === "manual-tasks",
-      count: ownerAttention.state === "present" ? ownerAttention.manualTasks.length : null
+      waiting: ownerAttention.state === "present"
+        ? ownerAttention.approvals.length + ownerAttention.manualTasks.length
+        : null
     }
-    /*
-     * No "Future" row, and `"future"` deliberately still in COMPANY_VIEWS above.
-     *
-     * The idea rooms are held for the launch period by `operations-2026-08b`, so the
-     * cross-venture idea list is a frozen archive: a top-level destination with a count badge
-     * invited the owner into a queue nothing is adding to, on the screen he asked to have less
-     * on it. `/admin?view=future` renders exactly as before for anyone who has it bookmarked,
-     * and every ledger under `state/ideas/` is untouched — this removes a doorway, not a room.
-     */
-  ];
+  );
 
   /*
    * Every idea from every project, newest first.
@@ -889,8 +861,11 @@ export default async function AdminPage({
       ) : selectedView ? (
         <div className="grid min-w-0 gap-4">
           <Panel title={SECTION_TITLES[selectedView]}>
-            {selectedView === "approvals" || selectedView === "manual-tasks" ? (
-              <OwnerAttentionPanel kind={selectedView} snapshot={ownerAttention} />
+            {selectedView === "waiting" || selectedView === "approvals" || selectedView === "manual-tasks" ? (
+              <div className="grid gap-6">
+                <OwnerAttentionPanel kind="approvals" snapshot={ownerAttention} />
+                <OwnerAttentionPanel kind="manual-tasks" snapshot={ownerAttention} />
+              </div>
             ) : null}
           </Panel>
         </div>
@@ -974,6 +949,16 @@ export default async function AdminPage({
           </Panel>
 
           <AdminFileBrowser files={files} />
+
+          {/* The three destinations that left the navigation on 2026-08-29. Each still works and
+              each is still occasionally worth opening; none is something the owner has to check,
+              which is the whole distinction between a link and a place. */}
+          <p className="m-0 flex flex-wrap gap-x-4 gap-y-1 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]" data-admin-secondary-links>
+            <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/operations">Operations</Link>
+            <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/implementation-plans">Implementation plans</Link>
+            <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/social-profiles">Social profiles</Link>
+            <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin?view=future">Ideas and monetization</Link>
+          </p>
 
           <Panel note="Nothing here posts by itself" title="Social drafts · DNESKAi">
             <SocialArchive {...state.socialArchive} />

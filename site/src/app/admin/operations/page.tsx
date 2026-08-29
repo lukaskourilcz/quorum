@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { adminSections } from "@/lib/admin-sections";
 import { AdminShell, type AdminAttention, type AdminSection, type AdminWorkspace } from "@/components/admin/admin-shell";
 import { OperationsControlCenter } from "@/components/admin/operations-control-center";
 import { OperationsRefreshButton } from "@/components/admin/operations-actions";
@@ -27,16 +28,7 @@ export default async function OperationsPage({
     { id: "global", name: "Company Overview", count: 0, href: "/admin", active: false },
     ...portfolio.ventures.map((venture) => ({ id: venture.id, name: venture.name, count: venture.cards.length, href: `/admin?venture=${venture.id}`, active: false }))
   ];
-  const sections: AdminSection[] = [
-    { id: "operations", name: "Operations", href: "/admin/operations", active: true, count: snapshot.nodes.length },
-    { id: "implementation-plans", name: "Implementation Plans", href: "/admin/implementation-plans", active: false, count: snapshot.implementation.programs },
-    { id: "social-profiles", name: "Social Profiles", href: "/admin/social-profiles", active: false },
-    { id: "approvals", name: "Approvals", href: "/admin?view=approvals", active: false },
-    // No "Future" row. The idea rooms are held for the launch period by `operations-2026-08b`,
-    // so the cross-venture idea list is a frozen archive rather than a destination; `?view=future`
-    // still renders for anyone who has it bookmarked.
-    { id: "manual-tasks", name: "Only you can do", href: "/admin?view=manual-tasks", active: false }
-  ];
+  const sections: AdminSection[] = adminSections(null);
   const attention: AdminAttention[] = [
     { label: "Operational attention", value: snapshot.nodes.filter((candidate) => ["degraded", "stale", "failing", "setup-needed", "unavailable"].includes(candidate.health)).length },
     ...(snapshot.incidents.activeCount === null ? [] : [{ label: "Active incidents", value: snapshot.incidents.activeCount }]),
