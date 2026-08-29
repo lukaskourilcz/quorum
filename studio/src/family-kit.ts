@@ -188,6 +188,71 @@ export const progress = (phase: number, fillToken = "muted"): CarouselLayerInput
   shape(RIGHT - 0.16, BOTTOM - 0.018, 0.02 + phase * 0.14, 0.008, { fillToken, radius: 0.5 });
 
 /**
+ * Which strokes each digit lights, in the seven-segment order a, b, c, d, e, f, g.
+ *
+ * A numeral has to be *drawn*, because a text layer can only set a string the article wrote. That
+ * limit is the point rather than a workaround: the moment a template can print its own characters
+ * it can print a statistic nobody measured, which is exactly what the content rules forbid. Seven
+ * rectangles can only ever say which slide this is. Promoted here from `families-poster.ts` when
+ * the launch families made the numeral shared vocabulary rather than one family's trick.
+ */
+const SEGMENTS: Readonly<Record<string, readonly string[]>> = {
+  "0": ["a", "b", "c", "d", "e", "f"],
+  "1": ["b", "c"],
+  "2": ["a", "b", "g", "e", "d"],
+  "3": ["a", "b", "g", "c", "d"],
+  "4": ["f", "g", "b", "c"],
+  "5": ["a", "f", "g", "c", "d"],
+  "6": ["a", "f", "g", "e", "c", "d"],
+  "7": ["a", "b", "c"],
+  "8": ["a", "b", "c", "d", "e", "f", "g"],
+  "9": ["a", "b", "c", "d", "f", "g"]
+};
+
+function segmentDigit(value: string, x: number, y: number, width: number, height: number, weight: number, fillToken: string): CarouselLayerInput[] {
+  const frames: Readonly<Record<string, [number, number, number, number]>> = {
+    a: [x, y, width, weight],
+    b: [x + width - weight, y, weight, height / 2],
+    c: [x + width - weight, y + height / 2, weight, height / 2],
+    d: [x, y + height - weight, width, weight],
+    e: [x, y + height / 2, weight, height / 2],
+    f: [x, y, weight, height / 2],
+    g: [x, y + height / 2 - weight / 2, width, weight]
+  };
+  return (SEGMENTS[value] ?? []).map((segment) => {
+    const [left, top, wide, tall] = frames[segment]!;
+    return shape(left, top, wide, tall, { fillToken });
+  });
+}
+
+/** The slide's position drawn as segments, one or two digits, in whatever token the ground needs. */
+export function drawnIndex(position: number, x: number, y: number, digitWidth: number, height: number, weight: number, fillToken = "accent"): CarouselLayerInput[] {
+  const characters = [...String(Math.max(0, Math.min(99, position)))];
+  return characters.flatMap((character, place) =>
+    segmentDigit(character, x + place * (digitWidth + digitWidth * 0.22), y, digitWidth, height, weight, fillToken));
+}
+
+/**
+ * The pager: one dot per slide, the current one in the accent, centred at the foot.
+ *
+ * The one affordance every platform reader already knows. The launch research kept returning to
+ * it — a cover that signals "there is more" outperforms one that leaves the swipe to be guessed —
+ * and none of the founding families carried it. Inactive dots sit one ground-step away from
+ * whatever the slide paints, so the row survives the B variant's ground inversion.
+ */
+export function pagerDots(index: number, slideCount: number, ground: string): CarouselLayerInput[] {
+  const size = 0.011;
+  const gap = 0.03;
+  const first = 0.5 - ((slideCount - 1) * gap) / 2 - size / 2;
+  const inactive = ground === "surface" ? "surface-strong" : "surface";
+  return Array.from({ length: slideCount }, (_, dot) =>
+    shape(first + dot * gap, BOTTOM + 0.005, size, size * (1_080 / 1_350), {
+      fillToken: dot === index ? "accent" : inactive,
+      radius: 0.5
+    }));
+}
+
+/**
  * The two renderings every family ships.
  *
  * B is not a relabelling: it swaps the accent for the secondary *and* inverts the ground, so the

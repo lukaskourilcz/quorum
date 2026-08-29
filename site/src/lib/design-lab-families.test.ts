@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { DECK_FAMILIES } from "@boardlessai/carousel-studio";
+import { DECK_FAMILIES, LAUNCH_FAMILIES } from "@boardlessai/carousel-studio";
 
 /**
  * The chip row and the library, held to the same list.
@@ -22,10 +22,15 @@ describe("the Design Lab's family chips", () => {
     "utf8"
   );
 
-  it("offers every family the engine registers, in the engine's own order", () => {
+  it("offers every family the engine registers, the launch rotation leading", () => {
     const declaration = /const FAMILIES = \[(.*?)\] as const;/su.exec(source)?.[1];
     expect(declaration, "FAMILIES is no longer a literal array in design-lab-workspace.tsx").toBeDefined();
     const chips = [...declaration!.matchAll(/"([a-z]+)"/gu)].map((match) => match[1]);
-    expect(chips).toEqual([...DECK_FAMILIES]);
+    // The five the dealer deals unprompted come first; the legacy library follows in the
+    // engine's own order, still reachable because stored recipes name it.
+    expect(chips).toEqual([
+      ...LAUNCH_FAMILIES,
+      ...DECK_FAMILIES.filter((family) => !(LAUNCH_FAMILIES as readonly string[]).includes(family))
+    ]);
   });
 });

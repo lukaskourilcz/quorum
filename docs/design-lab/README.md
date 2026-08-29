@@ -1,7 +1,8 @@
 # Design Lab — the template library
 
-Twenty-three template families for article decks, and the editor workspace the owner drives them
-from at `/admin?venture=design-lab&tab=studio`.
+Twenty-eight template families for article decks, and the editor workspace the owner drives them
+from at `/admin?venture=design-lab&tab=studio`. Only the five-family **launch rotation** is ever
+dealt unprompted; the other twenty-three stay registered so stored recipes keep rendering.
 
 This folder started as a delivery an engineering agent was to build from. It is now the other way
 round: the engine is built, and these pages are read out of it. `SPEC.md` remains the template
@@ -22,11 +23,31 @@ composer is what ships.
    with the checks and the measured type sizes printed underneath. Open them in a browser; they
    are self-contained and make no network requests.
 
-## The families
+## The launch rotation
+
+Five families built on 2026-08-29 from a study of what actually holds a swipe: a cover that stops
+the scroll with one oversized promise, one idea per slide, a drawn position and pager, and a
+closing slide that asks for exactly one thing. `LAUNCH_FAMILIES` names them and
+`chooseFamily` deals from nothing else; an article with a photograph draws from the photo-forward
+three. A live preset pool is the one override, and it may still name a legacy family — that is
+the owner narrowing to an explicit choice, not the engine reaching back.
+
+| # | Family | Serves | Thesis |
+|---|---|---|---|
+| 24 | [`apex`](families/apex.html) | photo-forward | A statement poster on mesh depth: one oversized promise, ghost numerals pacing the body. |
+| 25 | [`rail`](families/rail.html) | type-only | A numbered list on a literal spine: an accent rail whose notches fill as the reader advances. |
+| 26 | [`vista`](families/vista.html) | photo-forward | A photo cover story: the photograph full-bleed, mono and portholed as the deck's one thread. |
+| 27 | [`fault`](families/fault.html) | type-only | A split argument: a hard diagonal seam between two grounds that flips side on every beat. |
+| 28 | [`halo`](families/halo.html) | photo-forward | A spotlight: a solid accent disc and a thin ring that move around the canvas as the deck advances. |
+
+## The legacy library
 
 Ten from the founding delivery, thirteen added on 2026-08-10 from that year's typography-led
 design trends. Every one of them rides the same controls: the A/B variant, the photo treatment,
-type scale 0.9/1/1.1, the phase seed 0–3, and per-slide text.
+type scale 0.9/1/1.1, the phase seed 0–3, and per-slide text. None of them is dealt unprompted
+any more — the owner's 2026-08-29 instruction was five ways to ship a carousel, not twenty-four —
+but each remains registered and resolvable because a stored recipe or pack that names one must
+keep rendering forever.
 
 | # | Family | Serves | Thesis |
 |---|---|---|---|
@@ -54,11 +75,12 @@ type scale 0.9/1/1.1, the phase seed 0–3, and per-slide text.
 | 22 | [`quiet`](families/quiet.html) | quiet | One short block of type in a great deal of room, a mark the width of a fingernail, nothing else. |
 | 23 | [`offset`](families/offset.html) | type-only | The passage printed twice, the accent plate a few thousandths out of true under the foreground one. |
 
-These are the **23 shared article families** named by `DECK_FAMILIES`. Tehdejší svět also has a
-dedicated bilingual template kit in `studio/src/families-tehdejsi.ts`: Czech and Ukrainian are
-separate required slots on each slide, with Literata/Inter faces whose committed cmap coverage is
-tested. It is deliberately not a 24th shared family because the shared family contract has one
-passage slot per slide and the bilingual kit must fail if either language is missing.
+Together these are the **28 shared article families** named by `DECK_FAMILIES`. Tehdejší svět
+also has a dedicated bilingual template kit in `studio/src/families-tehdejsi.ts`: Czech and
+Ukrainian are separate required slots on each slide, with Literata/Inter faces whose committed
+cmap coverage is tested. It is deliberately not a shared family because the shared family
+contract has one passage slot per slide and the bilingual kit must fail if either language is
+missing.
 
 The current engine inventory is ten brand skins (the original five plus Kvórum,
 BOOKSOFHISTORY, Door Money, Tehdejší svět and WebDev Signal), four canvases (square, portrait, story and

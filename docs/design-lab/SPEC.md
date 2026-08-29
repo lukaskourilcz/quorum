@@ -17,13 +17,15 @@ rather than silently left standing:
 - **The specimen pages are generated, not ported.** `pnpm -C studio specimens` inlines the SVG
   `renderCarouselSvg` produced. A page cannot disagree with the engine because it *is* the
   engine's output — which is the opposite of the arrangement this file assumed.
-- **The library is twenty-three families, not ten.** The founding ten are specified below.
+- **The library is twenty-eight families, not ten.** The founding ten are specified below.
   Thirteen more landed on 2026-08-10 from that year's typography-led trends — `billboard`,
   `broadsheet`, `zurich`, `concrete`, `terminal`, `marginalia`, `memo`, `versus`, `tally`,
   `counterweight`, `throughline`, `quiet`, `offset` — and are specified by their composers and
   documented by their specimen pages. They introduced no schema field, no colour token, no font
   and no new check; they are compositions in the language this file defines, which is the strongest
-  statement available that the language was enough.
+  statement available that the language was enough. The five launch families of 2026-08-29 —
+  `apex`, `rail`, `vista`, `fault`, `halo` — are the same kind of composition, and they are the
+  only families `chooseFamily` deals unprompted; the rest of the library renders stored work.
 
 The engine gaps this file originally wrote against are fixed. **E1**: `contrastCheck` now walks
 the layer list and measures a text layer against the topmost opaque `shape`, gradient or duotone
@@ -49,7 +51,7 @@ and outro for that exact count.
 
 ## Checks
 
-All twenty-three families pass, at every resolvable deck length, in all four formats and all nine
+All twenty-eight families pass, at every resolvable deck length, in all four formats and all nine
 brand skins. Separate regression assertions prove that A/B, type scale 0.9/1/1.1 and phase seeds
 0–3 materially change the rendering:
 

@@ -80,9 +80,11 @@ Then, in order, the existing items:
    Personal Growth uses the existing `lukaskouril93`. Manual posting from the admin's packs is
    the launch mode; tokens and `SOCIAL_KILL_SWITCH=false` come only after the activation
    counters pass.
-8. **Pick the launch five in the Design Lab** — walk the template families, save presets for
-   the five you want per brand and set them live; decide the DNESKAi lockup line while you are
-   there.
+8. **Glance at the launch rotation in the Design Lab** — done for you on 2026-08-29: five new
+   families (`apex`, `rail`, `vista`, `fault`, `halo`) built from the viral-carousel research
+   replace the old look, and the dealer now deals nothing else — no preset-picking needed. The
+   chips lead with the five at `/admin?venture=design-lab&tab=studio`; presets remain the way to
+   narrow further or pin a legacy family. Decide the DNESKAi lockup line while you are there.
 9. **Review the curated scene proposals** — both magazines' queues; the curated rung is the
    cheapest cure for FRAME-plate covers and it only grows when you tick lines.
 10. **Leave analytics, monetization and Titty Tuesdays where they are** — deliberately parked;
@@ -389,17 +391,17 @@ Judgement calls. Nothing is blocked on code for any of these.
   field, decided at founding, awkward to move later without a decision.
   [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Pick the five designs you want in rotation per brand** — you said five top designs, not
-  twenty-three, and the engine is ready for that answer: save five presets for a brand and set
-  them live, and nothing outside those five is ever dealt again. There is a test over a month of
-  articles proving exactly that. Until you pick, the rotation stays open across all twenty-three.
-  Open `/admin?venture=design-lab&tab=studio`, pick a delivered article and click through the
-  chips. Thirteen of the twenty-three are newer: billboard, broadsheet, zurich, concrete,
-  terminal, marginalia, memo, versus, tally, counterweight, throughline, quiet, offset. Two things
-  are already handled and do not need to weigh on the choice: an article that carries a
-  photograph is never dealt a family that cannot draw one, and every deck the builder makes is now
-  five to seven slides. Nothing here needs a key, an account or a payment; the renderer calls no
-  model and this whole expansion cost $0. [imp:3] [owner:me] [time:20m] [kind:decision]
+- [ ] **Glance at the launch rotation and veto anything you dislike** — you said five top
+  designs, not twenty-three, and that "they are all too basic". Both answered on 2026-08-29
+  without a preset to pick: five new families built from viral-carousel research — `apex`
+  (statement poster on mesh depth), `rail` (numbered list on a filling spine), `vista` (photo
+  cover story), `fault` (diagonal split argument), `halo` (spotlight disc and ring) — and the
+  dealer now deals nothing else, proven by a test over sixty articles, photograph or no
+  photograph. The legacy twenty-three remain only to render stored work; a live preset is now the
+  way to narrow further or deliberately pin an old family. Open
+  `/admin?venture=design-lab&tab=studio` — the five lead the chip row — click through them on a
+  delivered article per brand, and say the word if one should be reworked. The renderer calls no
+  model and this whole reshape cost $0. [imp:3] [owner:me] [time:10m] [kind:decision]
 
 - [ ] **Decide what the carousel lockup says** — the kicker on every deck reads DNESKAi and the
   wordmark under it still reads CAUGHT UP, because `logoText` is the venture's registered mark and

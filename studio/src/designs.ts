@@ -50,9 +50,25 @@ export const DECK_FAMILIES = [
   "counterweight",
   "throughline",
   "quiet",
-  "offset"
+  "offset",
+  "apex",
+  "rail",
+  "vista",
+  "fault",
+  "halo"
 ] as const;
 export type DeckFamily = (typeof DECK_FAMILIES)[number];
+
+/**
+ * The rotation: the only families the dealer deals unprompted.
+ *
+ * The owner's 2026-08-29 instruction, verbatim in spirit: always five ways to ship a carousel,
+ * not twenty-four. The other families stay registered above because a stored recipe or pack that
+ * names one must keep rendering forever — retiring a family from the rotation and deleting it are
+ * different acts, and only the first is reversible. A live preset pool still overrides this list,
+ * because a pool is the owner narrowing further, not wider.
+ */
+export const LAUNCH_FAMILIES = ["apex", "rail", "vista", "fault", "halo"] as const satisfies readonly DeckFamily[];
 
 /** Everything a recipe's `family` field may name. */
 export const DECK_DESIGNS = [...DECK_FAMILIES, ...DECK_STYLES] as const;

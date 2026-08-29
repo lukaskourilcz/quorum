@@ -39,14 +39,16 @@ const FORMATS = [
 type FormatId = (typeof FORMATS)[number]["id"];
 
 /**
- * The families, in the order `DECK_FAMILIES` declares them.
+ * The families: the launch rotation first, the legacy library after it.
  *
  * Hard-coded rather than imported, because this is a client component and the studio package is
  * the render engine — pulling it across the boundary to read one array would ship the renderer to
- * the browser. A studio test holds the two lists to the same length; the order is the founding ten
- * followed by the 2026-08-10 expansion.
+ * the browser. A site test holds this row to the engine's registry, launch five leading. The five
+ * lead because they are the only families the dealer deals unprompted; everything after them
+ * renders stored work and is a deliberate reach back.
  */
 const FAMILIES = [
+  "apex", "rail", "vista", "fault", "halo",
   "masthead", "gutter", "bevel", "porthole", "slab",
   "terrace", "figure", "pull", "tower", "dossier",
   "billboard", "broadsheet", "zurich", "concrete", "terminal",
