@@ -26,7 +26,7 @@ describe("Social Profiles workspace", () => {
     expect(venture).not.toContain("Personal Growth");
     expect(venture).not.toContain("Kvórum");
     expect(amplification).toContain("Amplification Profiles · 0");
-    expect(amplification).toContain("intentionally empty");
+    expect(amplification).toContain("empty on purpose");
     expect(amplification).not.toContain("Simulation 01");
     expect(venture).toContain(">Campaigns<");
   });
@@ -82,7 +82,7 @@ describe("Social Profiles workspace", () => {
     const automation = renderToStaticMarkup(<SocialProfilesWorkspace section="automation-health" snapshot={snapshot} />);
     expect(learning).toContain("Weekly learning");
     expect(learning).toContain("No weekly learning checkpoint");
-    expect(learning).toContain("every hard gate stays frozen");
+    expect(learning).toContain("none of the gates move");
     expect(learning).not.toMatch(/apply now|publish now|retire account/iu);
     expect(automation).toContain("Automation health");
     expect(automation).toContain("Operations Recovery handoff");
@@ -95,7 +95,7 @@ describe("Social Profiles workspace", () => {
     const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
     const html = renderToStaticMarkup(<SocialProfilesWorkspace section="plan-progress" snapshot={snapshot} />);
     expect(html).toContain("Plan &amp; progress");
-    expect(html).toContain("#419/#431");
+    expect(html).toContain("Read-only progress for Social Distribution");
     expect(html).toContain("Implementation progress unavailable");
     expect(html).toContain("does not run a second issue reader");
     expect(html).not.toMatch(/complete.*0\/0/iu);
@@ -123,7 +123,7 @@ describe("Social Profiles workspace", () => {
     expect(html).toContain("No daily operation receipts");
     expect(html).toContain("No countersigned routine scopes");
     expect(html).toContain("Do not force filler");
-    expect(html).toContain("None bypasses #409 publishing");
+    expect(html).toContain("None bypasses the publishing gate");
     expect(snapshot.today).toMatchObject({ authorityGranted: false, publishingAuthorized: false });
   });
 

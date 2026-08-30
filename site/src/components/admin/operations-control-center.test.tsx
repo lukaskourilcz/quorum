@@ -63,7 +63,7 @@ describe("OperationsControlCenter", () => {
     expect(capabilities).toContain("goviral-intelligence-packet/1");
     expect(capabilities).toContain("Private data stays within its owning venture.");
     const plans = renderToStaticMarkup(<OperationsControlCenter selectedView="plans" snapshot={snapshot()} />);
-    expect(plans).toContain("same #419 snapshot");
+    expect(plans).toContain("A short version of one progress snapshot");
     expect(plans).toContain("Open Implementation Plans");
   });
 

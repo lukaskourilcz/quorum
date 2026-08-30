@@ -921,44 +921,24 @@ export default async function AdminPage({
           </Panel>
         </div>
       ) : !selectedVenture ? (
-        <div className="grid min-w-0 gap-4">
-          <LaunchBoardPanel board={launchBoard} />
-          <PersonalGrowthOverview snapshot={personalGrowth} />
-          <div
-            className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] bg-[var(--admin-border)] lg:grid-cols-4"
-            data-adm-tiles
-          >
-            <Tile
-              brand={brand}
-              foot={`of the ${formatUsd(CURRENT_MONTHLY_OPERATING_LIMIT_USD)} limit`}
-              label="Month to date"
-              percent={(monthAllIn / CURRENT_MONTHLY_OPERATING_LIMIT_USD) * 100}
-              value={tileUsd(monthAllIn)}
-            />
-            <Tile
-              brand={brand}
-              foot={latestDay ? `${latestDay.date} · of ${formatUsd(CURRENT_DAILY_OPERATING_PACE_USD)}` : "no day on record yet"}
-              label="Latest recorded day"
-              percent={latestDay ? (latestDay.totalCostUsd / CURRENT_DAILY_OPERATING_PACE_USD) * 100 : 0}
-              value={latestDay ? tileUsd(latestDay.totalCostUsd) : "—"}
-            />
-            <Tile
-              brand={brand}
-              foot={`of ${formatUsd(CURRENT_MONTHLY_API_LIMIT_USD)}`}
-              label="AI usage"
-              percent={(monthApi / CURRENT_MONTHLY_API_LIMIT_USD) * 100}
-              value={tileUsd(monthApi)}
-            />
-            <Tile
-              brand={brand}
-              foot="days with a recorded result"
-              label="Days on record"
-              percent={100}
-              value={String(dailyResults.length)}
-            />
-          </div>
-
-          <Panel note="The four newest ventures" title="What happened since yesterday">
+        /*
+         * Three questions, in the order the owner asks them.
+         *
+         * The overview stacked nine answers — launch board, Personal Growth, four money tiles,
+         * recent activity, a fixed-costs editor, a money panel, the shipping desk, a file browser
+         * and DNESKAi's social archive — to a question that has three parts: what happened, is
+         * anything waiting for me, what does it cost. Two of those nine were one venture's work
+         * and have moved to that venture's page; the rest are grouped under the question they
+         * answer, with everything a step below the answer behind a disclosure.
+         */
+        <div className="grid min-w-0 gap-6">
+          <section className="grid min-w-0 gap-4" data-admin-overview="what-happened">
+            <h2 className="m-0 text-[length:var(--admin-type-section)] font-semibold text-[var(--admin-foreground)]">What happened</h2>
+            <LaunchBoardPanel board={launchBoard} />
+            <Panel note="The last three days" title="What shipped">
+              <RenderedDeskPanel desk={renderedDesk} />
+            </Panel>
+            <Panel note="The four newest ventures" title="Since yesterday">
             <div className="grid gap-3 md:grid-cols-2" data-admin-recent-activity>
               {recentActivity.map((row) => (
                 <Link
@@ -980,40 +960,88 @@ export default async function AdminPage({
                 </Link>
               ))}
             </div>
-          </Panel>
-
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr_5fr]" data-adm-cols>
-            <Panel note="You are the only one who can change these" title="Fixed costs">
-              <FixedCostsEditor initialCosts={fixedCosts.costs} />
             </Panel>
-            <Panel note="This quarter" title="What could bring money in">
-              <AdminMoneyPanel snapshot={money} />
+          </section>
+
+          {/* The counts come from the same snapshot the rail counts, so the two cannot disagree.
+              The lists themselves live one click away, where acting on them belongs. */}
+          <section className="grid min-w-0 gap-4" data-admin-overview="waiting">
+            <h2 className="m-0 text-[length:var(--admin-type-section)] font-semibold text-[var(--admin-foreground)]">Waiting for you</h2>
+            <Panel note="Approvals, your own tasks, and anything approved but undelivered" title="What needs you">
+              <div className="grid gap-3 md:grid-cols-2">
+                <OwnerAttentionPanel kind="approvals" snapshot={ownerAttention} />
+                <OwnerAttentionPanel kind="manual-tasks" snapshot={ownerAttention} />
+              </div>
             </Panel>
-          </div>
+          </section>
 
-          {/* The "Company health and priorities" panel — quality tiles, the social-readiness
-              grid and a priority form — went on the owner's 2026-08-29 instruction: the system
-              runs autonomously, and the rail counters above already carry what still waits. The
-              snapshot behind it still feeds those counters and the launch board. */}
-          <Panel note="The last three days" title="What shipped">
-            <RenderedDeskPanel desk={renderedDesk} />
-          </Panel>
+          <section className="grid min-w-0 gap-4" data-admin-overview="money">
+            <h2 className="m-0 text-[length:var(--admin-type-section)] font-semibold text-[var(--admin-foreground)]">Money</h2>
+            <div
+              className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] bg-[var(--admin-border)] lg:grid-cols-4"
+              data-adm-tiles
+            >
+              <Tile
+                brand={brand}
+                foot={`of the ${formatUsd(CURRENT_MONTHLY_OPERATING_LIMIT_USD)} limit`}
+                label="Month to date"
+                percent={(monthAllIn / CURRENT_MONTHLY_OPERATING_LIMIT_USD) * 100}
+                value={tileUsd(monthAllIn)}
+              />
+              <Tile
+                brand={brand}
+                foot={latestDay ? `${latestDay.date} · of ${formatUsd(CURRENT_DAILY_OPERATING_PACE_USD)}` : "no day on record yet"}
+                label="Latest recorded day"
+                percent={latestDay ? (latestDay.totalCostUsd / CURRENT_DAILY_OPERATING_PACE_USD) * 100 : 0}
+                value={latestDay ? tileUsd(latestDay.totalCostUsd) : "—"}
+              />
+              <Tile
+                brand={brand}
+                foot={`of ${formatUsd(CURRENT_MONTHLY_API_LIMIT_USD)}`}
+                label="AI usage"
+                percent={(monthApi / CURRENT_MONTHLY_API_LIMIT_USD) * 100}
+                value={tileUsd(monthApi)}
+              />
+              <Tile
+                brand={brand}
+                foot="days with a recorded result"
+                label="Days on record"
+                percent={100}
+                value={String(dailyResults.length)}
+              />
+            </div>
+            <details className="rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] p-3">
+              <summary className="admin-focus-ring cursor-pointer text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">
+                Fixed costs and what could bring money in
+              </summary>
+              <div className="grid grid-cols-1 gap-4 pt-3 lg:grid-cols-[7fr_5fr]" data-adm-cols>
+                <Panel note="You are the only one who can change these" title="Fixed costs">
+                  <FixedCostsEditor initialCosts={fixedCosts.costs} />
+                </Panel>
+                <Panel note="This quarter" title="What could bring money in">
+                  <AdminMoneyPanel snapshot={money} />
+                </Panel>
+              </div>
+            </details>
+          </section>
 
-          <AdminFileBrowser files={files} />
-
-          {/* The three destinations that left the navigation on 2026-08-29. Each still works and
-              each is still occasionally worth opening; none is something the owner has to check,
-              which is the whole distinction between a link and a place. */}
-          <p className="m-0 flex flex-wrap gap-x-4 gap-y-1 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]" data-admin-secondary-links>
-            <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/operations">Operations</Link>
-            <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/implementation-plans">Implementation plans</Link>
-            <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/social-profiles">Social profiles</Link>
-            <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin?view=future">Ideas and monetization</Link>
-          </p>
-
-          <Panel note="Nothing here posts by itself" title="Social drafts · DNESKAi">
-            <SocialArchive {...state.socialArchive} />
-          </Panel>
+          {/* Everything that is occasionally worth opening and never something to check. The file
+              browser joined them: it is how a stored record is looked at, not a question the
+              overview answers. */}
+          <details className="rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] p-3">
+            <summary className="admin-focus-ring cursor-pointer text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">
+              Saved files and other places
+            </summary>
+            <div className="grid min-w-0 gap-4 pt-3">
+              <p className="m-0 flex flex-wrap gap-x-4 gap-y-1 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]" data-admin-secondary-links>
+                <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/operations">Operations</Link>
+                <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/implementation-plans">Implementation plans</Link>
+                <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/social-profiles">Social profiles</Link>
+                <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin?view=future">Ideas and monetization</Link>
+              </p>
+              <AdminFileBrowser files={files} />
+            </div>
+          </details>
         </div>
       ) : (
         <div className="grid min-w-0 gap-4">
@@ -1088,7 +1116,20 @@ export default async function AdminPage({
             </>
           ) : null}
 
+          {/* The owner's private desk keeps its own summary, on its own page. It used to sit on the
+              company overview, where it answered a question about one venture among the ones that
+              answered questions about all of them. */}
+          {selectedVenture.id === "personal-growth" ? <PersonalGrowthOverview snapshot={personalGrowth} /> : null}
+
           <div className="min-w-0">{tabView.node}</div>
+
+          {/* A venture's output, on that venture's page. The social-drafts archive is DNESKAi's
+              work, and it sat on the company overview only because that is where it was built. */}
+          {selectedVenture.id === "caught-up" ? (
+            <Panel note="Nothing here posts by itself" title="Social drafts">
+              <SocialArchive {...state.socialArchive} />
+            </Panel>
+          ) : null}
         </div>
       )}
       </AdminWriteProvider>
