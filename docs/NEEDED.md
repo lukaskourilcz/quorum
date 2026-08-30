@@ -105,9 +105,10 @@ Then, in order, the existing items:
 In the order that unblocks the most. Each of these is a switch, a key or an account, and each one
 is the single thing standing between a proven path and a working one.
 
-- [ ] **Delete the merged branch of PR #511** — press "Delete branch" on the merged pull request.
-  The overnight session merged it but could not remove the remote branch: the git relay in that
-  environment answers a branch deletion with 403. [imp:1] [owner:me] [time:1m] [kind:setup]
+- [ ] **Delete two merged remote branches** — `claude/venture-launch-review-7l5nkd` and the branch
+  of PR #511. Both are fully merged into `main`; the git relay in the agent environment refuses a
+  branch deletion, so the sessions that merged them could not remove them.
+  [imp:1] [owner:me] [time:1m] [kind:setup]
 
 - [ ] **Verify the linked Quorum Vercel project** — from the repository root run
   `pnpm exec vercel link`, select the existing Quorum team/project, and confirm in its settings
@@ -268,6 +269,23 @@ is the single thing standing between a proven path and a working one.
 ## Yours to decide
 
 Judgement calls. Nothing is blocked on code for any of these.
+
+- [ ] **Decide whether to open a Contest Radar social pilot lane** — the Instagram and TikTok slices
+  are built, fixture-backed and disabled. Opening one needs a countersigned budget-capacity decision
+  at `state/decisions/2026-08-30-contest-radar-budget-capacity.md` authorising the `$0.10/month`
+  Apify rung, GoVIRAL's reservation against the shared quota, and your authority for the specific
+  actors with their terms read at that time. Both lanes are `undecided`, which is the only honest
+  verdict for a lane that has not run — a fixture proves the classification and the arithmetic and
+  can prove nothing about yield. Leaving them shut is a legitimate answer.
+  `docs/CONTEST-RADAR-OPTIONAL.md` has the detail. [imp:2] [owner:me] [time:20m] [kind:decision]
+
+- [ ] **Decide whether a contest alert may ever be published** — the promotion candidate, its
+  eligibility gate and the sanitized profile projection are built, and the capability edge to Social
+  Distribution is registered `held` by
+  `state/decisions/2026-08-30-contest-radar-promotion-posture.md`. Moving it to `allowed` needs a
+  further countersigned decision naming the profile, the contest, the rule evidence and the
+  disclosure text. Nothing publishes meanwhile, and campaign generation refuses every Contest Radar
+  release independently of the edge. [imp:2] [owner:me] [time:20m] [kind:decision]
 
 - [ ] **Countersign or decline WebDev Signal's founding boundary** — review
   `state/decisions/2026-08-28-webdev-signal-founding.md`, check the working name and exact
