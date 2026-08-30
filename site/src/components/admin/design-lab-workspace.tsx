@@ -122,7 +122,7 @@ function slideUrl(article: LabArticle, recipe: Recipe, format: FormatId, slide: 
   return `/admin/api/carousel-studio/deck/${article.venture}/${encodeURIComponent(article.slug)}/${article.date}/${encodeURIComponent(token(recipe))}/${slide}?${query.toString()}`;
 }
 
-function SlideImage({ src, alt, ratio }: { src: string; alt: string; ratio: number }) {
+function SlideImage({ src, alt, ratio, canvas = true }: { src: string; alt: string; ratio: number; canvas?: boolean }) {
   const [attempt, setAttempt] = useState(0);
   const [loaded, setLoaded] = useState<string | null>(null);
   const [failed, setFailed] = useState<string | null>(null);
@@ -140,7 +140,10 @@ function SlideImage({ src, alt, ratio }: { src: string; alt: string; ratio: numb
     <img
       alt={alt}
       className={`w-full rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] transition-opacity ${pending ? "opacity-40" : "opacity-100"}`}
-      data-slide-canvas
+      // The canvas is the slide being worked on. The five look tiles are the same renderer at
+      // thumbnail size, and marking them as canvases too made `[data-slide-canvas]` resolve to
+      // six elements — a selector for "the slide" that names every picture on the page.
+      {...(canvas ? { "data-slide-canvas": true } : { "data-look-canvas": true })}
       onError={() => setFailed(url)}
       onLoad={() => setLoaded(url)}
       src={url}
@@ -259,6 +262,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
                 >
                   <SlideImage
                     alt={`${family}: titulní slide`}
+                    canvas={false}
                     ratio={canvas.ratio}
                     src={slideUrl(article, { ...recipe, family }, format, 1)}
                   />

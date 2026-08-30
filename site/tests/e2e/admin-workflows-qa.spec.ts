@@ -120,9 +120,11 @@ test("owner decisions, results and ratings stay reviewable while writes stay hel
 
   await page.goto("/admin?view=approvals", { waitUntil: "domcontentloaded" });
   await waitForAdminShell(page);
-  await expect(page.getByRole("heading", { level: 1, name: "Approvals." }))
+  // Approvals and owner-only tasks became one destination on 2026-08-29 (#496): two places were
+  // asking the owner for the same thing. `?view=approvals` still resolves, and lands here.
+  await expect(page.getByRole("heading", { level: 1, name: "Waiting for you" }))
     .toBeVisible();
-  await expect(page.getByText("Everything waiting for your yes.", {
+  await expect(page.getByText("Your signature, your keys, your accounts.", {
     exact: false
   })).toBeVisible();
   await expect(page.locator('[data-admin-state="write-disabled"]'))
@@ -202,6 +204,9 @@ test("money, fixed costs, file details and launch binder remain truthful and con
   const mutationAttempts = await guardAdminWrites(page);
 
   await page.goto("/admin", { waitUntil: "domcontentloaded" });
+  // One click deeper since #500. The overview answers what the money costs; the editor that
+  // changes it is a step below that answer, behind the Money section's disclosure.
+  await page.getByText("Fixed costs and what could bring money in").click();
   await expect(page.getByRole("heading", { name: "Fixed costs" }))
     .toBeVisible();
   await expect(page.getByText("$50.00", { exact: false }).first())
