@@ -396,6 +396,27 @@ export function purgeKvorumRawItems(
   });
 }
 
+/**
+ * How many clusters and ranks the receipt carries, and why it truncates rather than throwing.
+ *
+ * Seven enabled feeds at thirty items each is up to 210 candidates a day, and a day of distinct
+ * news makes very nearly that many clusters — the first live read of all seven produced 163 items
+ * on 2026-08-30 and blew straight past this bound. The bound is right: a receipt is a bounded
+ * record, and the desk selects one story, so nobody auditing the decision needs the 140th-ranked
+ * cluster.
+ *
+ * What was wrong was the failure mode. `KvorumMonitorReceiptSchema.parse` threw, which would have
+ * cost the whole run on the first ordinary day rather than the pathological one — a monitor that
+ * works on a quiet Sunday and dies on a Tuesday. So the receipt keeps the highest-ranked hundred
+ * and records how many it dropped, because a truncation nobody can see is the other way to be
+ * wrong here.
+ *
+ * Positions are renumbered, not carried over. A position is this receipt's own ordering, and the
+ * schema reads it as the array index; a kept rank that still called itself 137th would fail the
+ * contract for a reason that has nothing to do with the truncation.
+ */
+const RECEIPT_CLUSTER_LIMIT = 100;
+
 export function buildKvorumMonitorReceipt(input: {
   date: string;
   now: Date;
@@ -407,6 +428,20 @@ export function buildKvorumMonitorReceipt(input: {
   const cutoffPublishedAt = new Date(
     input.now.getTime() - KVORUM_RAW_RETENTION_DAYS * 86_400_000
   ).toISOString();
+
+  // Ranks first: they carry the score, so keeping the top hundred of them decides which clusters
+  // are worth carrying. Everything the desk acts on is at the top of this list by construction.
+  const rankedAll = [...(input.ranks ?? [])].sort((left, right) => right.score - left.score);
+  const ranks = rankedAll
+    .slice(0, RECEIPT_CLUSTER_LIMIT)
+    .map((rank, index) => ({ ...rank, position: index + 1 }));
+  const droppedRanks = rankedAll.length - ranks.length;
+  const allClusters = input.clusters ?? [];
+  const keptClusterIds = new Set(ranks.map((rank) => rank.clusterId));
+  const clusters = droppedRanks > 0
+    ? allClusters.filter((cluster) => keptClusterIds.has(cluster.id))
+    : allClusters;
+
   return purgeKvorumRawItems(KvorumMonitorReceiptSchema.parse({
     schemaVersion: "kvorum-monitor/1",
     date: input.date,
@@ -415,8 +450,12 @@ export function buildKvorumMonitorReceipt(input: {
     sourceResults: input.fetched.sourceResults,
     itemsKept: input.fetched.items.length,
     rawItems: input.fetched.items,
-    clusters: input.clusters ?? [],
-    ranks: input.ranks ?? [],
+    clusters,
+    ranks,
+    truncated: {
+      clusters: allClusters.length - clusters.length,
+      ranks: droppedRanks
+    },
     ...(input.trendContext ? { trendContext: input.trendContext } : {}),
     purge: {
       retentionDays: KVORUM_RAW_RETENTION_DAYS,

@@ -74,6 +74,82 @@ describe("kvorum-monitor/1 receipt", () => {
     expect(purged.purge.purged).toEqual([]);
   });
 
+  it("keeps the top hundred clusters on a loud day instead of throwing, and says how many it dropped", async () => {
+    const fixture = await validFixture();
+    const template = fixture.clusters[0]!;
+    const clusterId = (index: number) => index.toString(16).padStart(40, "0");
+
+    // 163 clusters is what the first live seven-feed read actually produced on 2026-08-30.
+    const clusters = Array.from({ length: 163 }, (_, index) => ({
+      ...template,
+      id: clusterId(index),
+      title: `Shluk ${index}`
+    }));
+    // Ascending score, so the hundred the receipt must keep are the *last* hundred built. The
+    // score is the factor product the contract cross-checks, so entityWeight carries it alone.
+    const ranks = clusters.map((cluster, index) => ({
+      clusterId: cluster.id,
+      position: index + 1,
+      score: index + 1,
+      factors: {
+        corroboration: 1,
+        entityWeight: index + 1,
+        engagementSalience: 1,
+        novelty: 1,
+        standingTopicContinuity: 1,
+        trendCrossover: 1
+      }
+    }));
+
+    const receipt = buildKvorumMonitorReceipt({
+      date: "2026-08-12",
+      now,
+      fetched: {
+        items: [],
+        sourceResults: [{
+          sourceId: "irozhlas",
+          kind: "feed",
+          attempted: true,
+          status: "success",
+          count: 163,
+          reason: null
+        }],
+        artifactPaths: [],
+        fixtureOnly: false
+      },
+      clusters,
+      ranks
+    });
+
+    expect(receipt.clusters).toHaveLength(100);
+    expect(receipt.ranks).toHaveLength(100);
+    expect(receipt.truncated).toEqual({ clusters: 63, ranks: 63 });
+    // Highest score first, renumbered from one, and the lowest-scoring clusters fell off.
+    expect(receipt.ranks[0]).toMatchObject({ clusterId: clusterId(162), position: 1, score: 163 });
+    expect(receipt.ranks.at(-1)).toMatchObject({ clusterId: clusterId(63), position: 100 });
+    expect(new Set(receipt.clusters.map((cluster) => cluster.id)))
+      .toEqual(new Set(receipt.ranks.map((rank) => rank.clusterId)));
+    expect(receipt.clusters.some((cluster) => cluster.id === clusterId(0))).toBe(false);
+  });
+
+  it("records no truncation on an ordinary day", async () => {
+    const fixture = await validFixture();
+    const receipt = buildKvorumMonitorReceipt({
+      date: "2026-08-12",
+      now,
+      fetched: {
+        items: [],
+        sourceResults: fixture.sourceResults,
+        artifactPaths: [],
+        fixtureOnly: fixture.fixtureOnly
+      },
+      clusters: fixture.clusters,
+      ranks: fixture.ranks
+    });
+    expect(receipt.truncated).toEqual({ clusters: 0, ranks: 0 });
+    expect(receipt.clusters).toEqual(fixture.clusters);
+  });
+
   it("uses one atomic writer for today's receipt and retention rewrites", async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), "kvorum-monitor-writer-"));
     try {

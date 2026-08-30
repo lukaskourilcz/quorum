@@ -211,6 +211,17 @@ export const KvorumMonitorReceiptSchema = z.strictObject({
   rawItems: z.array(KvorumMonitorItemSchema).max(5_000),
   clusters: z.array(KvorumMonitorClusterSchema).max(100),
   ranks: z.array(KvorumClusterRankSchema).max(100),
+  /**
+   * How much a busy day did not fit.
+   *
+   * The receipt is a bounded record and the desk picks one story, so the hundred highest-ranked
+   * clusters are the ones worth keeping. Saying how many were dropped is what stops that bound
+   * from quietly rewriting how busy the day looked.
+   */
+  truncated: z.strictObject({
+    clusters: z.number().int().nonnegative(),
+    ranks: z.number().int().nonnegative()
+  }).default({ clusters: 0, ranks: 0 }),
   trendContext: KvorumTrendContextSchema.default(EmptyKvorumTrendContext),
   purge: z.strictObject({
     retentionDays: z.literal(30),
