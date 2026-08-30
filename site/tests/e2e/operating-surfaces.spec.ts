@@ -948,7 +948,23 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
         await outcome.fill("The synthetic owner reviewed the fictional note.");
         return complete.isEnabled();
       }, { timeout: 30_000 }).toBe(true);
+      /*
+       * Read the server's answer, not just the count.
+       *
+       * This test passes alone and fails inside a complete run, and the only thing it recorded
+       * about the write was that one happened — so the failure arrived as "the confirmation never
+       * appeared" with nothing about why. The route answers 404 for UNAVAILABLE, 409 for CONFLICT
+       * and 503 otherwise; whichever it is, the next failure says so instead of leaving the next
+       * reader to guess.
+       */
+      const completion = page.waitForResponse((candidate) =>
+        candidate.request().method() === "POST" && candidate.url().endsWith("/admin/api/door-money/actions"));
       await complete.click();
+      const completionResponse = await completion;
+      expect(
+        completionResponse.status(),
+        `the completion route answered ${completionResponse.status()}: ${await completionResponse.text().catch(() => "no body")}`
+      ).toBe(201);
       await expect(task.getByText("Outcome recorded. The weekly room can now read this completion.")).toBeVisible();
       expect(actionPosts).toBe(1);
       await page.reload({ waitUntil: "networkidle" });

@@ -111,6 +111,18 @@ workspace channels. Everything it made stays readable in the admin, and one clic
 | #472 | marketingShark's cap (yours), and Personal Growth's first run | Decision 2, and a `pg-desk` run |
 | #462 | The program, closed when its children are | The five above |
 
+**One e2e test fails only inside a complete run.** `Door Money records a synthetic owner completion
+through the canonical route` passes on its own, every time, and fails in the full suite with the
+confirmation never appearing. Nothing in the server log accompanies it. It is the last unexplained
+failure of the twelve this branch worked through, and it is a cross-test dependency rather than
+anything the branch changed — the write-journeys project only runs in a complete suite, which had
+not completed once before tonight.
+
+The test now reads the completion route's response and reports its status and body, so the next run
+that hits this says what the server answered instead of only that the confirmation was missing. The
+route answers 404 for an unavailable store, 409 for a conflict and 503 otherwise; my guess is a
+conflict against a packet another journey touched, but it is a guess and the test will settle it.
+
 **#467 is the one that matters most.** It is the difference between "a delivered article" and
 "something you can post". Everything it needs is registered; none of it is built.
 
