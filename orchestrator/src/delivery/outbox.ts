@@ -12,7 +12,22 @@ export type DeliveryFailureCode =
   | "push_rejected"
   | "build_failed"
   | "hash_conflict"
-  | "unreachable";
+  | "unreachable"
+  | "post_deploy_verification";
+
+export const DELIVERY_FAILURE_CODES: readonly DeliveryFailureCode[] = [
+  "schema_invalid",
+  "content_invalid",
+  "push_rejected",
+  "build_failed",
+  "hash_conflict",
+  "unreachable",
+  "post_deploy_verification"
+];
+
+export function isDeliveryFailureCode(value: unknown): value is DeliveryFailureCode {
+  return typeof value === "string" && (DELIVERY_FAILURE_CODES as readonly string[]).includes(value);
+}
 
 export interface PendingDelivery {
   packagePath: string;
@@ -31,8 +46,32 @@ const RETRYABLE_FAILURE_CODES: ReadonlySet<string> = new Set<DeliveryFailureCode
   "push_rejected"
 ]);
 
-function isRetryableFailure(code: unknown): boolean {
-  return typeof code === "string" && RETRYABLE_FAILURE_CODES.has(code);
+/**
+ * How many times a reverted release may be re-sent before it becomes the owner's decision.
+ *
+ * `post_deploy_verification` is the one code that could be either thing. The bytes were accepted
+ * and pushed — the magazine did not refuse them — and then the live check failed and the release
+ * was rolled back. A host that failed to build once describes the road, and a byte-identical
+ * retry clears it. Content that breaks the target build describes the cargo, and a byte-identical
+ * retry breaks it again, forever, which is precisely the loop this issue exists to end.
+ *
+ * Nothing here can tell those apart, so it does not guess: one more attempt, and if that attempt
+ * fails the same way the package is terminal and says so. Two is the smallest number that can
+ * distinguish a flaky build from a broken edition.
+ */
+const POST_DEPLOY_ATTEMPT_CEILING = 2;
+
+function attemptsOn(receipt: { deliveryAttempts?: unknown } | null): number {
+  return typeof receipt?.deliveryAttempts === "number" && Number.isFinite(receipt.deliveryAttempts)
+    ? receipt.deliveryAttempts
+    : 1;
+}
+
+function isRetryableFailure(receipt: { code?: unknown; deliveryAttempts?: unknown } | null): boolean {
+  const code = receipt?.code;
+  if (typeof code !== "string") return false;
+  if (RETRYABLE_FAILURE_CODES.has(code)) return true;
+  return code === "post_deploy_verification" && attemptsOn(receipt) < POST_DEPLOY_ATTEMPT_CEILING;
 }
 
 /** `<date>-<idempotencyKey>.json`, which is the only handle on a package too broken to parse. */
@@ -114,7 +153,9 @@ export async function oldestPendingDelivery(
   for (const file of await packageFiles(root)) {
     const editionPackage = await readQueuedPackage(root, file, new Date());
     if (!editionPackage) continue;
-    const receipt = await readJson<{ status?: unknown; packageHash?: unknown; code?: unknown } | null>(
+    const receipt = await readJson<
+      { status?: unknown; packageHash?: unknown; code?: unknown; deliveryAttempts?: unknown } | null
+    >(
       root,
       `edition/deliveries/${editionPackage.date}.json`,
       null
@@ -150,7 +191,7 @@ export async function oldestPendingDelivery(
       await supersedeStaleNoEdition(root, file, editionPackage, today);
       continue;
     }
-    if (receipt?.status === "needs_reconciliation" && sameBytes && !isRetryableFailure(receipt.code)) {
+    if (receipt?.status === "needs_reconciliation" && sameBytes && !isRetryableFailure(receipt)) {
       continue;
     }
     return {
@@ -188,14 +229,16 @@ export async function editionQueue(root = stateRoot): Promise<EditionQueueEntry[
       continue;
     }
     const editionPackage = parsed;
-    const receipt = await readJson<{ status?: unknown; packageHash?: unknown; code?: unknown } | null>(
+    const receipt = await readJson<
+      { status?: unknown; packageHash?: unknown; code?: unknown; deliveryAttempts?: unknown } | null
+    >(
       root,
       `edition/deliveries/${editionPackage.date}.json`,
       null
     );
     const sameBytes = receipt?.packageHash === editionPackage.idempotencyKey;
     if (receipt?.status === "delivered" && sameBytes) continue;
-    const parked = receipt?.status === "needs_reconciliation" && sameBytes && !isRetryableFailure(receipt.code);
+    const parked = receipt?.status === "needs_reconciliation" && sameBytes && !isRetryableFailure(receipt);
     entries.push({
       date: editionPackage.date,
       packageHash: editionPackage.idempotencyKey,
@@ -254,8 +297,23 @@ const DELIVERY_FAILURE_SENTENCE: Record<DeliveryFailureCode, string> = {
   push_rejected: "The magazine repository refused the delivery, so the edition is not published yet.",
   build_failed: "The magazine could not build the delivered edition, so it is not published yet.",
   hash_conflict: "A different edition already holds this date in the magazine, so this one was held back.",
-  unreachable: "The magazine could not be reached, so the edition is waiting to be delivered."
+  unreachable: "The magazine could not be reached, so the edition is waiting to be delivered.",
+  post_deploy_verification: "The delivered edition did not verify on the live site, so the release was rolled back."
 };
+
+/**
+ * The sentence a reader gets, which can never be the word `undefined`.
+ *
+ * The cycle workflow has sent `post_deploy_verification` since it was written, and this map has
+ * never held it, so the lookup returned nothing and the meeting record for 17 August published
+ * `"undefined The owner has the technical report."` on a public page. A missing sentence is a
+ * gap in a map, and a reader should get the code rather than the gap.
+ */
+function failureSentence(code: string): string {
+  return isDeliveryFailureCode(code)
+    ? DELIVERY_FAILURE_SENTENCE[code]
+    : `The delivery stopped and recorded \`${code}\`.`;
+}
 
 function inboxItem(date: string, code: DeliveryFailureCode, detail: string): string {
   const oneLineDetail = detail.replace(/\s+/g, " ").trim();
@@ -400,6 +458,17 @@ export async function recordDelivery(input: {
   }
   const code = input.code ?? "push_rejected";
   const detail = input.detail ?? "Delivery stopped without a reconciled target commit";
+  // How many times these exact bytes have now stopped this way. A reverted release is allowed one
+  // more attempt and no more, and the count is what the queue reads to decide that; keeping it on
+  // the receipt rather than in a flag means the history says how many tries a package cost.
+  const previous = await readJson<{ packageHash?: unknown; deliveryAttempts?: unknown } | null>(
+    root,
+    receiptPath,
+    null
+  );
+  const deliveryAttempts = previous?.packageHash === editionPackage.idempotencyKey
+    ? attemptsOn(previous) + 1
+    : 1;
   const meetingPath = `meetings/${editionPackage.date}-cu-edition.json`;
   const meeting = MeetingRecordSchema.parse(
     JSON.parse(await readFile(resolveStatePath(root, meetingPath), "utf8"))
@@ -410,7 +479,7 @@ export async function recordDelivery(input: {
       status: "NEEDS_RECONCILIATION",
       decision: {
         ...meeting.decision,
-        summary: `${DELIVERY_FAILURE_SENTENCE[code]} The owner has the technical report.`
+        summary: `${failureSentence(code)} The owner has the technical report.`
       }
     }),
     // The failure used to leave no receipt at all, so the queue could not tell a package the
@@ -426,6 +495,7 @@ export async function recordDelivery(input: {
       targetRepository: "lukaskourilcz/aifirst",
       code,
       detail: detail.replace(/\s+/g, " ").trim().slice(0, 500),
+      deliveryAttempts,
       recordedAt: now.toISOString(),
       tags: []
     }),

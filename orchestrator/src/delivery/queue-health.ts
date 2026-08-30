@@ -1,5 +1,6 @@
 import { stateRoot } from "../paths.js";
 import { articleQueue } from "../mma-files/publish.js";
+import { surveyRetirableArticles } from "../mma-files/retire.js";
 import { atomicWriteJson, atomicWriteText, readText } from "../state.js";
 import { deployIsBehind, readDeployFreshness, type DeployFreshness, type DeployProbe } from "./deploy-freshness.js";
 import { editionQueue } from "./outbox.js";
@@ -20,12 +21,30 @@ import { editionQueue } from "./outbox.js";
 
 export type QueueVenture = "mma-files" | "caught-up";
 
+/**
+ * What a parked package is actually waiting for.
+ *
+ * "Parked" answered one question — the magazine refused these bytes — and left the useful one
+ * unasked: will anything ever clear it? A package the queue can still retry is never parked in
+ * the first place, so parked has exactly two answers. `retire` is superseded by a sibling that
+ * did reach readers, and a scheduled step ends it at $0 with a receipt. `owner` is the one that
+ * will still be here tomorrow whatever anybody runs.
+ *
+ * Raising the owner item on both is what made a queue that was about to drain itself look
+ * identical to a jammed one for the eight packages of #464.
+ */
+export type ParkedDisposition = "retire" | "owner";
+
 export interface QueueHealthEntry {
   label: string;
   packageHash: string;
   /** The day the piece was written for, which is what makes a stalled queue legible. */
   date: string;
   code?: string;
+  /** Set on parked entries only: what would have to happen for this one to leave the queue. */
+  disposition?: ParkedDisposition;
+  /** Present when the disposition is `retire`: the package that reached readers instead. */
+  supersededBy?: string;
 }
 
 export interface VentureQueueHealth {
@@ -36,6 +55,8 @@ export interface VentureQueueHealth {
   /** Whole days the oldest waiting package has been sitting there, or null when nothing waits. */
   stalledDays: number | null;
   stalled: boolean;
+  /** Parked packages that no run will ever clear. These, and only these, are the owner's. */
+  neverDrains: QueueHealthEntry[];
 }
 
 export interface QueueHealthReport {
@@ -78,29 +99,46 @@ function summarize(
 ): VentureQueueHealth {
   const oldestWaitingDate = waiting.map((entry) => entry.date).sort()[0] ?? null;
   const stalledDays = oldestWaitingDate ? wholeDaysBetween(oldestWaitingDate, today) : null;
+  const neverDrains = parked.filter((entry) => entry.disposition === "owner");
   return {
     venture,
     waiting,
     parked,
     oldestWaitingDate,
     stalledDays,
-    // Parked always needs a person: those bytes are never going to be accepted on their own.
-    stalled: parked.length > 0 || (stalledDays ?? 0) > STALLED_AFTER_DAYS
+    // Only a package nothing will clear is a stall. A retryable park drains on the next run and a
+    // superseded one ends at the next retirement step, and calling either a stall raised an owner
+    // item for work already scheduled — which is how six packages the retirement step was about to
+    // end read as a jam that needed a person.
+    stalled: neverDrains.length > 0 || (stalledDays ?? 0) > STALLED_AFTER_DAYS,
+    neverDrains
   };
 }
 
 async function mmaFilesHealth(root: string, today: string): Promise<VentureQueueHealth> {
-  const queue = await articleQueue(root);
+  const [queue, survey] = await Promise.all([articleQueue(root), surveyRetirableArticles(root)]);
+  // The retirement survey already answers "will this one ever be accepted", and it answers it the
+  // expensive way — by finding the delivered sibling that took the slug. Asking it here rather
+  // than re-deriving the same rule is what keeps the two from disagreeing about the same package.
+  const retirable = new Map(survey.retirable.map((item) => [item.packageHash, item]));
   const entry = (item: (typeof queue)[number]): QueueHealthEntry => ({
     label: item.label,
     packageHash: item.packageHash,
     date: item.publishAt.slice(0, 10),
     ...(item.code ? { code: item.code } : {})
   });
+  const parkedEntry = (item: (typeof queue)[number]): QueueHealthEntry => {
+    const superseding = retirable.get(item.packageHash);
+    return {
+      ...entry(item),
+      disposition: superseding ? "retire" : "owner",
+      ...(superseding ? { supersededBy: superseding.supersededBy.packageHash } : {})
+    };
+  };
   return summarize(
     "mma-files",
     queue.filter((item) => item.state === "pending").map(entry),
-    queue.filter((item) => item.state === "parked").map(entry),
+    queue.filter((item) => item.state === "parked").map(parkedEntry),
     today
   );
 }
@@ -113,10 +151,18 @@ async function caughtUpHealth(root: string, today: string): Promise<VentureQueue
     date: item.date,
     ...(item.code ? { code: item.code } : {})
   });
+  // A "no edition today" notice for a day that has passed ends on the next delivery run, whatever
+  // verdict it carries: `supersedeStaleNoEdition` writes its terminal receipt and removes the
+  // file. So it is already scheduled to leave, and counting it as a jam sends the owner to a
+  // package that will be gone before they open it.
+  const parkedEntry = (item: (typeof queue)[number]): QueueHealthEntry => ({
+    ...entry(item),
+    disposition: item.editionStatus === "no_edition" && item.date < today ? "retire" : "owner"
+  });
   return summarize(
     "caught-up",
     queue.filter((item) => item.state === "pending").map(entry),
-    queue.filter((item) => item.state === "parked").map(entry),
+    queue.filter((item) => item.state === "parked").map(parkedEntry),
     today
   );
 }
@@ -151,12 +197,13 @@ export async function buildQueueHealthReport(input: {
  * than one that sends you to the live figure.
  */
 function inboxItem(venture: VentureQueueHealth): string {
-  const oldest = venture.parked[0] ?? venture.waiting[0];
+  const oldest = venture.neverDrains[0] ?? venture.waiting[0];
   return [
     `- [ ] **DELIVERY-QUEUE-${venture.venture.toUpperCase()}** — the publish queue is not draining.`,
     `  Oldest held item: ${oldest?.label ?? "unknown"}${oldest?.code ? ` (${oldest.code})` : ""}.`,
-    "  Live counts are in state/delivery/queue-health/, rewritten every day. A parked package needs",
-    "  new bytes rather than another run; its own receipt says what the magazine refused and why.",
+    "  Live counts are in state/delivery/queue-health/, rewritten every day. Items listed under",
+    "  neverDrains need new bytes rather than another run; their own receipts say what the magazine",
+    "  refused and why. Anything parked and not listed there is already scheduled to end.",
     "  [imp:5] [owner:me] [time:30m] [kind:deploy]"
   ].join("\n");
 }

@@ -84,8 +84,68 @@ describe("the daily queue-drain check", () => {
     const mma = report.ventures.find((venture) => venture.venture === "mma-files")!;
     expect(mma.parked).toHaveLength(1);
     expect(mma.parked[0]?.code).toBe("hash_conflict");
+    // Nothing else in this magazine carries its slug, so no scheduled step will end it.
+    expect(mma.parked[0]?.disposition).toBe("owner");
+    expect(mma.neverDrains).toHaveLength(1);
     expect(mma.stalled).toBe(true);
     expect(report.needsOwner).toBe(true);
+  });
+
+  /*
+   * A package the retirement step is about to end is not the owner's problem.
+   *
+   * Six MMA packages sat parked on `hash_conflict` because the desk had written the same subject
+   * on consecutive mornings, and every one of them was superseded by a sibling that did reach
+   * readers. The check called all six a stall and raised an owner item for work that a scheduled
+   * $0 step was already going to do.
+   */
+  it("separates a package that will end itself from one that needs a person", async () => {
+    const { root, hashes } = await queueArticles(["2026-08-12", "2026-08-13"]);
+    // The first article reached the magazine; the second reuses its slug and never can.
+    await recordMmaDelivery({
+      kind: "article",
+      packageHash: hashes[0]!,
+      packagePath: path.join(root, "ventures/mma-files/articles/2026-08-12-am-preview-2026-08-12.json"),
+      status: "delivered",
+      root
+    });
+    await atomicWriteJson(
+      root,
+      "ventures/mma-files/articles/2026-08-13-am-preview-2026-08-12.json",
+      JSON.parse(await readFile(
+        path.join(root, "ventures/mma-files/articles/2026-08-13-am-preview-2026-08-13.json"),
+        "utf8"
+      ))
+    );
+
+    const duplicate = JSON.parse(await readFile(
+      path.join(root, "ventures/mma-files/articles/2026-08-13-am-preview-2026-08-12.json"),
+      "utf8"
+    )) as Record<string, unknown>;
+    const { packageHash: _old, ...content } = duplicate;
+    const republished = { ...content, slug: "preview-2026-08-12" };
+    const pkg = { ...republished, packageHash: articlePackageHash(republished) };
+    await atomicWriteJson(root, "ventures/mma-files/articles/2026-08-13-am-preview-2026-08-12.json", pkg);
+    await recordMmaDelivery({
+      kind: "article",
+      packageHash: pkg.packageHash,
+      packagePath: path.join(root, "ventures/mma-files/articles/2026-08-13-am-preview-2026-08-12.json"),
+      status: "needs_reconciliation",
+      code: "hash_conflict",
+      detail: "2026-08-13:am reuses the slug of 2026-08-12:am",
+      root
+    });
+
+    const { report } = await runQueueHealthCheck({ root, today: "2026-08-13", probe: async () => 200 });
+
+    const mma = report.ventures.find((venture) => venture.venture === "mma-files")!;
+    const superseded = mma.parked.find((entry) => entry.packageHash === pkg.packageHash);
+    expect(superseded?.disposition).toBe("retire");
+    expect(superseded?.supersededBy).toBe(hashes[0]);
+    // The queue holds a package it cannot deliver, and it is still not a stall: the retirement
+    // step ends it at $0 without anybody being asked.
+    expect(mma.neverDrains).toHaveLength(0);
+    expect(mma.stalled).toBe(false);
   });
 
   it("raises one owner item while a queue stays stuck and ticks it when the queue drains", async () => {
