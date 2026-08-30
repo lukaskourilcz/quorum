@@ -772,3 +772,174 @@ export type WebDevEditionPackage = z.infer<typeof WebDevEditionPackageSchema>;
 export type WebDevDesignPayload = z.infer<typeof WebDevDesignPayloadSchema>;
 export type WebDevRenderReceipt = z.infer<typeof WebDevRenderReceiptSchema>;
 export type WebDevRun = z.infer<typeof WebDevRunSchema>;
+
+/**
+ * What one WebDev Signal day looked like, in the shape a reader of the record can act on.
+ *
+ * The canonical records already exist and each one is owned elsewhere: source health belongs to
+ * the collector, selection metrics to the decision, package validity to the editor, render
+ * receipts to Design Lab, delivery to Social Distribution and audience metrics to the shared
+ * observation store. This record does not copy any of them. It is the domain layer that says
+ * which of those records belong to the same Prague edition day, plus the handful of measures no
+ * shared schema has a place for.
+ *
+ * Every value that could not be measured is `null` and carries a reason, and that distinction is
+ * the whole point. A NO_EDITION day is not a failed post and a setup-held day is not a zero: both
+ * are correct outcomes with their own denominators, and a baseline that averaged them into
+ * "publish reliability" would invent a problem the venture does not have.
+ */
+const UnavailableReasonSchema = z.enum([
+  "not-measured-yet",
+  "no-edition-day",
+  "setup-held",
+  "provider-unavailable",
+  "outside-window",
+  "denominator-empty"
+]);
+
+const MeasuredNumberSchema = z.strictObject({
+  value: z.number().nullable(),
+  unavailableReason: UnavailableReasonSchema.nullable()
+}).superRefine((measure, context) => {
+  if (measure.value === null && measure.unavailableReason === null) {
+    context.addIssue({ code: "custom", message: "A missing value must say why it is missing", path: ["unavailableReason"] });
+  }
+  if (measure.value !== null && measure.unavailableReason !== null) {
+    context.addIssue({ code: "custom", message: "A measured value cannot also be unavailable", path: ["value"] });
+  }
+});
+
+export const WebDevObservationSchema = z.strictObject({
+  schemaVersion: z.literal("webdev-observation/1"),
+  /** The Prague edition day this observation belongs to, which is the join key for everything. */
+  date: DateSchema,
+  recordedAt: DateTimeSchema,
+  provenance: z.enum(["fixture", "live"]),
+  /** Canonical records this day is assembled from. Referenced, never copied. */
+  refs: z.strictObject({
+    runRef: EvidenceRefSchema.nullable(),
+    selectionRef: EvidenceRefSchema.nullable(),
+    evidenceBriefRef: EvidenceRefSchema.nullable(),
+    packageRefs: z.array(EvidenceRefSchema).max(2),
+    renderReceiptRefs: z.array(EvidenceRefSchema).max(4),
+    profileRefs: z.array(EvidenceRefSchema).max(4),
+    sourceHealthRefs: z.array(EvidenceRefSchema).max(60)
+  }),
+  sources: z.strictObject({
+    configured: z.number().int().min(0).max(200),
+    attempted: z.number().int().min(0).max(200),
+    healthy: z.number().int().min(0).max(200),
+    failed: z.number().int().min(0).max(200),
+    /** Distinct authority classes that produced at least one kept item. */
+    authorityClassesCovered: z.number().int().min(0).max(20),
+    layoutChanges: z.number().int().min(0).max(200)
+  }),
+  candidates: z.strictObject({
+    fetched: z.number().int().min(0).max(10_000),
+    afterPrefilter: z.number().int().min(0).max(10_000),
+    duplicatesCollapsed: z.number().int().min(0).max(10_000),
+    held: z.number().int().min(0).max(10_000),
+    eligible: z.number().int().min(0).max(10_000)
+  }),
+  decision: z.strictObject({
+    outcome: z.enum(["selected", "NO_EDITION", "not-run"]),
+    reason: z.string().trim().min(1).max(500),
+    selectedRecordId: z.string().trim().min(1).max(200).nullable(),
+    scoreMargin: MeasuredNumberSchema,
+    confidence: MeasuredNumberSchema,
+    ownerOverride: z.boolean()
+  }),
+  goviral: z.strictObject({
+    status: z.enum(["unavailable", "available-unused", "used", "stale", "denied", "malformed"]),
+    /** Whether the overlay changed which record won, which is the only effect worth measuring. */
+    changedWinner: z.boolean()
+  }),
+  editions: z.array(z.strictObject({
+    locale: z.enum(["cs", "en"]),
+    state: z.enum(["valid", "held", "absent"]),
+    holdReasons: z.array(z.string().trim().min(1).max(240)).max(20),
+    claimParity: z.enum(["pass", "fail", "unavailable"]),
+    accessibility: z.enum(["pass", "fail", "unavailable"]),
+    renderState: z.enum(["rendered", "held", "absent"]),
+    deliveryState: z.enum(["queued", "held", "published", "absent", "needs-reconciliation"])
+  })).max(2),
+  corrections: z.strictObject({
+    opened: z.number().int().min(0).max(100),
+    resolved: z.number().int().min(0).max(100),
+    factualIncidents: z.number().int().min(0).max(100),
+    securityVersionIncidents: z.number().int().min(0).max(100)
+  }),
+  cost: z.strictObject({
+    modelCalls: z.number().int().min(0).max(1_000),
+    providerCostUsd: z.number().min(0).max(1_000),
+    cacheReused: z.number().int().min(0).max(10_000),
+    callsAvoided: z.number().int().min(0).max(10_000)
+  }),
+  /** Audience aggregates, by window. Absent windows stay unavailable rather than becoming zero. */
+  outcomes: z.array(z.strictObject({
+    window: z.enum(["24h", "72h", "7d", "28d"]),
+    observationRef: EvidenceRefSchema.nullable(),
+    reach: MeasuredNumberSchema,
+    nonFollowerReach: MeasuredNumberSchema,
+    profileActions: MeasuredNumberSchema
+  })).max(8),
+  snapshotHash: Sha256Schema
+});
+
+export type WebDevObservation = z.infer<typeof WebDevObservationSchema>;
+
+/**
+ * The first 28 valid days, reported without a target attached to any of it.
+ *
+ * Rates carry their own denominator because the interesting denominators are all different: a
+ * `NO_EDITION` rate is over days the scan ran, a publish reliability rate is over editions that
+ * were actually approved, and a parity rate is over days both locales produced a package. One
+ * shared denominator would be wrong for at least two of the three.
+ */
+const RateSchema = z.strictObject({
+  numerator: z.number().int().min(0),
+  denominator: z.number().int().min(0),
+  /** Null when the denominator is zero, which is a real answer and not a zero rate. */
+  rate: z.number().min(0).max(1).nullable()
+});
+
+export const WebDevBaselineSchema = z.strictObject({
+  schemaVersion: z.literal("webdev-baseline/1"),
+  startsOn: DateSchema,
+  endsOn: DateSchema,
+  observedDays: z.number().int().min(0).max(28),
+  /** 28 is the window; fewer valid days means the verdict stays INSUFFICIENT_DATA. */
+  windowDays: z.literal(28),
+  editorial: z.strictObject({
+    daysWithValidScan: z.number().int().min(0).max(28),
+    eligibleStoryRate: RateSchema,
+    noEditionRate: RateSchema,
+    noEditionReasons: z.record(z.string(), z.number().int().min(0)),
+    factualIncidents: z.number().int().min(0),
+    securityVersionIncidents: z.number().int().min(0),
+    duplicatesCollapsed: z.number().int().min(0),
+    selectionMargin: z.strictObject({ minimum: z.number().nullable(), median: z.number().nullable(), maximum: z.number().nullable() })
+  }),
+  bilingual: z.strictObject({
+    bothLocalesValidRate: RateSchema,
+    oneLocaleHeldRate: RateSchema,
+    holdReasons: z.record(z.string(), z.number().int().min(0)),
+    claimParityRate: RateSchema,
+    accessibilityRate: RateSchema
+  }),
+  publishing: z.strictObject({
+    verifiedPublishRate: RateSchema,
+    reach: MeasuredNumberSchema,
+    nonFollowerReach: MeasuredNumberSchema,
+    costPerAcceptedEditionUsd: MeasuredNumberSchema
+  }),
+  cost: z.strictObject({
+    modelCalls: z.number().int().min(0),
+    providerCostUsd: z.number().min(0),
+    cacheReuseRate: RateSchema
+  }),
+  verdict: z.enum(["CONTINUE", "NARROW", "PAUSE", "RETIRE", "INSUFFICIENT_DATA"]),
+  verdictReason: z.string().trim().min(1).max(600)
+});
+
+export type WebDevBaseline = z.infer<typeof WebDevBaselineSchema>;
