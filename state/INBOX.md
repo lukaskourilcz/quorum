@@ -627,3 +627,7 @@ with its full scope, because the scope text is the approval. -->
   build that never ran. An empty commit to the magazine's main triggers one; if that is what it
   takes twice, the host's git integration is the thing to look at.
   [imp:5] [owner:me] [time:15m] [kind:deploy]
+
+- [ ] **MMA-FILES-DELIVERY-2026-08-30-am** — hash_conflict: > mma-files@0.1.0 consume:boardless > node scripts/consume-boardless-package.mjs /home/runner/work/quorum/quorum/state/ventures/mma-files/articles/2026-08-30-am-ufc-alex-perez.json /home/runner/work/_temp/mma-files-delivery-1 [delivery:hash_conflict] 2026-08-30:am reuses the slug of 2026-08-18:am.
+  A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
