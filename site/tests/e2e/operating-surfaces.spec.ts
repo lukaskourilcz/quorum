@@ -725,11 +725,23 @@ test("FightAIQ hides reports until an analysis run produces them", async ({ page
 
 test("admin makes its deployment write capability explicit", async ({ page }) => {
   await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
-  const readOnly = Boolean(process.env.VERCEL) && !process.env.BOARDLESSAI_GITHUB_TOKEN;
+  /*
+   * Read the mode off the shell, not off this process's environment.
+   *
+   * `Boolean(process.env.VERCEL) && !process.env.BOARDLESSAI_GITHUB_TOKEN` asks the test runner
+   * what the *server* decided, and the two do not share an environment: the runner has neither
+   * variable, so this always took the writable branch whatever the server was doing. The shell
+   * states its own answer now.
+   */
+  const writable = await page.locator("[data-admin-writes]").getAttribute("data-admin-writes");
+  expect(writable, "the shell must say which write mode it is in").toMatch(/^(enabled|disabled)$/u);
   const warning = page.getByText("Read-only deployment — saving needs the GitHub token, see NEEDED.md.");
+  // The editor is behind the Money disclosure since #500: the overview answers what the money
+  // costs, and the control that changes it is a step below that answer.
+  await page.getByText("Fixed costs and what could bring money in").click();
   const addCost = page.getByRole("button", { name: "Add cost" });
 
-  if (readOnly) {
+  if (writable === "disabled") {
     await expect(warning).toBeVisible();
     await expect(addCost).toBeDisabled();
   } else {
