@@ -997,12 +997,36 @@ export default async function AdminPage({
               The lists themselves live one click away, where acting on them belongs. */}
           <section className="grid min-w-0 gap-4" data-admin-overview="waiting">
             <h2 className="m-0 text-[length:var(--admin-type-section)] font-semibold text-[var(--admin-foreground)]">Waiting for you</h2>
+            {/*
+              How much waits, and where to go — not the items themselves.
+              
+              The lists render each task's own words, and the owner's words are written for the
+              person doing the work: one of them names `METRICS_INGESTION_ENABLED`. This is the
+              page he reads first, and the reason it is guarded against contract tokens at all is
+              that he said he could not tell what half of them meant. The detail belongs one click
+              away, on the destination built for acting on it.
+              
+              The counts come off the same snapshot the rail counts, so the two cannot disagree.
+            */}
             <Panel note="Signatures and setup" title="What needs you">
-              {/* Stacked, not two up. These items carry whole sentences and a source path; in a
-                  half-width column at 768px the headings ran past their card. */}
               <div className="grid min-w-0 gap-3">
-                <OwnerAttentionPanel kind="approvals" snapshot={ownerAttention} />
-                <OwnerAttentionPanel kind="manual-tasks" snapshot={ownerAttention} />
+                <div className="flex flex-wrap gap-x-6 gap-y-2">
+                  {[
+                    { label: "waiting on your signature", value: ownerAttention.approvals.length },
+                    { label: "only you can do", value: ownerAttention.manualTasks.length },
+                    { label: "approved, not yet delivered", value: approvedUndelivered.length }
+                  ].map((entry) => (
+                    <p className="m-0 flex items-baseline gap-2" key={entry.label}>
+                      <span className="admin-tabular text-[length:var(--admin-type-section)] font-semibold text-[var(--admin-foreground)]">{entry.value}</span>
+                      <span className="text-[length:var(--admin-type-body)] text-[var(--admin-foreground-muted)]">{entry.label}</span>
+                    </p>
+                  ))}
+                </div>
+                <p className="m-0 text-[length:var(--admin-type-control)]">
+                  <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin?view=waiting">
+                    Open what is waiting
+                  </Link>
+                </p>
               </div>
             </Panel>
           </section>
