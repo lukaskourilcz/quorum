@@ -189,34 +189,25 @@ So the green CI check on a pull request means the root gate passed, not that the
 Worth deciding whether to make that job non-optional; it takes a couple of hours, which is probably
 why it is opt-in.
 
-**The e2e suite writes into the repository's own `state/`, and mostly does not clean up.** One
-write-journey test emptied `state/ratings/titty-tuesdays/ledger.jsonl` — thirteen of your own
-ratings. Another overwrites `state/ventures/booksofhistory/cycle.json` with `book-a`/`book-b`
-fixtures. A full run also leaves behind roughly fifteen untracked directories that look exactly
-like real runtime output:
+**An interrupted e2e run leaves state behind, and I was wrong about why.** The suite writes real
+fixtures into the repository's own `state/` — dossiers, shortlists, ratings ledgers, a marketingShark
+package — and I first read the leftovers as a harness that does not clean up. It does:
+`operating-surfaces.spec.ts` has a thorough `test.afterAll` that removes every fixture it created
+and restores every file it touched, including the ratings ledger.
+
+What leaves the mess is killing a run before teardown, which I did several times tonight while
+chasing failures, and which the previous session evidently did too. So the rule is narrower than I
+first wrote it: **let a run finish, or clean up after killing one.**
 
 ```
-state/ratings/{booksofhistory,door-money,kvorum,tehdejsi-svet}/
-state/ventures/booksofhistory/{briefs,dossiers,recommendations,shortlists}/
-state/ventures/booksofhistory/research-ledger.jsonl
-state/ventures/kvorum/{monitor,recommendations}/
-state/ventures/marketingshark/packages/
-state/ventures/tehdejsi-svet/{drafts,results}/
-state/ventures/titty-tuesdays/plans/e2e-launch-plan.json
+git status                       # tracked files a killed run left modified
+git checkout -- state/           # put them back
+git clean -fd state/             # remove the fixtures teardown never reached
 ```
 
-None of it can be gitignored, because those are the paths a real desk writes to. They are not
-harmless either: leftovers from an earlier run are why a BOOKSOFHISTORY "no paid research is
-recorded" test passed locally for the wrong reason, and why three regenerated screenshot baselines
-had to be regenerated again.
-
-**The fix is to give the suite its own repository root.** `adminE2EServerEnv` already sets
-`BOARDLESSAI_REPO_ROOT`; pointing it at a copy under the test-results directory would isolate every
-write in one change, instead of teaching a dozen tests to restore what they touched. Until then:
-run `git status` after any local e2e run, revert tracked files and `git clean -fd state/` before
-committing.
-
-Tehdejší svět's two result tests do clean up after themselves now, which is the pattern.
+The one hardening still worth considering: `adminE2EServerEnv` already sets
+`BOARDLESSAI_REPO_ROOT`, so pointing it at a copy of `state/` (35 MB) would make an interrupted run
+cost nothing at all. Not a defect, just a sharper edge than it needs to be.
 
 **`pnpm build` and a running dev server fight over `site/.next`.** Running the root gate while the
 e2e suite is up will stall the suite.
