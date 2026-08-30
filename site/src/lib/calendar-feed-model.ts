@@ -3,6 +3,10 @@ import type { PublicStandup } from "@/data/fixtures";
 import type { PublicMeetingRecord } from "@/lib/meeting-record-model";
 
 export type CalendarKind =
+  // The venture days, each one row over the rooms it dispatches.
+  | "cu-day"
+  | "mma-day"
+  | "dm-day"
   | "cu-edition"
   | "venture-morning"
   | "venture-afternoon"
@@ -67,6 +71,19 @@ export interface PublicCalendarFeed {
 }
 
 /**
+ * Which rooms a venture day dispatches, so a day's row can read what its rooms recorded.
+ *
+ * Mirrors `DAY_STEPS` in `orchestrator/src/meetings/clock.ts`, which derives the same map from
+ * `config/ventures.json`. The site does not import from that package; `calendar-feed-model.test.ts`
+ * fails when the two disagree.
+ */
+export const DAY_STEPS: Readonly<Record<string, readonly CalendarKind[]>> = {
+  "cu-day": ["cu-edition", "cu-product"],
+  "mma-day": ["mma-intake", "mag-editorial", "article-am", "mma-analysis", "mag-desk"],
+  "dm-day": ["dm-desk", "dm-growth"]
+};
+
+/**
  * The default room list, used when no caller supplies one.
  *
  * `getPublicCalendarFeed` always passes definitions derived from `config/ventures.json`, which
@@ -76,24 +93,43 @@ export interface PublicCalendarFeed {
  * records from those rooms still have to render.
  */
 export const CALENDAR_SLOTS: readonly CalendarDefinition[] = [
-  { hour: 5, kind: "cu-edition", label: "Caught Up edition room" },
+  { hour: 5, kind: "cu-day", label: "DNESKAi daily desk" },
   { hour: 6, kind: "venture-morning", label: "Morning shift" },
   { hour: 7, kind: "ms-daily", label: "marketingShark daily carousel room" },
-  { hour: 8, kind: "mma-intake", label: "FightAIQ morning data check" },
-  { hour: 9, kind: "mag-editorial", label: "MMA Files morning story meeting" },
-  { hour: 10, kind: "article-am", label: "MMA Files daily article" },
+  { hour: 8, kind: "mma-day", label: "MMA Files daily desk" },
   { hour: 11, kind: "tt-marketing", label: "Titty Tuesdays marketing room" },
   { hour: 12, kind: "bh-desk", label: "BOOKSOFHISTORY editorial desk" },
   { hour: 13, kind: "gv-brief", label: "GoVIRAL trend and marketing room" },
-  { hour: 14, kind: "venture-afternoon", label: "Afternoon shift" },
-  { hour: 15, kind: "dm-desk", label: "Door Money daily storytelling desk" },
-  { hour: 16, kind: "dm-growth", label: "Door Money Thursday growth room" },
-  { hour: 17, kind: "cu-product", label: "Caught Up product room" },
+  { hour: 15, kind: "dm-day", label: "Door Money daily desk" },
   { hour: 18, kind: "ts-desk", label: "Tehdejší svět editorial desk" },
-  { hour: 19, kind: "mma-analysis", label: "FightAIQ evening model check" },
-  { hour: 20, kind: "mag-desk", label: "MMA Files evening desk review" },
-  { hour: 21, kind: "kv-desk", label: "Kvórum daily political desk" },
-  { hour: 22, kind: "venture-night", label: "Night shift" }
+  { hour: 21, kind: "kv-desk", label: "Kvórum daily political desk" }
+] as const;
+
+/**
+ * The same clock read as rooms rather than as days, for the workflows plan.
+ *
+ * A venture day is one row on the calendar and several rooms on the plan: the story meeting hands
+ * a subject to the article slot, which hands a package to the desk review, and those journeys are
+ * what the plan draws. A room a day dispatches carries the day's hour, in the order the day runs
+ * it, because that is when it now sits.
+ *
+ * The static mirror of `getPublicRoomSchedule`; `venture-registry.test.ts` pins the two together.
+ */
+export const ROOM_SLOTS: readonly CalendarDefinition[] = [
+  { hour: 5, kind: "cu-edition", label: "Caught Up edition room" },
+  { hour: 5, kind: "cu-product", label: "Caught Up product room" },
+  { hour: 6, kind: "venture-morning", label: "Morning shift" },
+  { hour: 7, kind: "ms-daily", label: "marketingShark daily carousel room" },
+  { hour: 8, kind: "mma-intake", label: "FightAIQ morning data check" },
+  { hour: 8, kind: "mag-editorial", label: "MMA Files morning story meeting" },
+  { hour: 8, kind: "article-am", label: "MMA Files daily article" },
+  { hour: 8, kind: "mma-analysis", label: "FightAIQ evening model check" },
+  { hour: 8, kind: "mag-desk", label: "MMA Files evening desk review" },
+  { hour: 11, kind: "tt-marketing", label: "Titty Tuesdays marketing room" },
+  { hour: 12, kind: "bh-desk", label: "BOOKSOFHISTORY editorial desk" },
+  { hour: 13, kind: "gv-brief", label: "GoVIRAL trend and marketing room" },
+  { hour: 18, kind: "ts-desk", label: "Tehdejší svět editorial desk" },
+  { hour: 21, kind: "kv-desk", label: "Kvórum daily political desk" }
 ] as const;
 
 export function addCalendarDays(date: string, days: number): string {
@@ -289,10 +325,25 @@ export function buildPublicCalendarFeed(input: {
     const date = addCalendarDays(weekOf, day);
     for (const definition of definitions) {
       const at = pragueSlotInstant(date, definition.hour);
+      /*
+       * A venture day is one row over the rooms it dispatched.
+       *
+       * The day itself writes nothing, so a row that looked only for its own record would report
+       * every consolidated day as missed. It reads its rooms instead: the first that met is what
+       * the day shows. That also keeps finished weeks readable — the records the rooms wrote are
+       * the same files they always were, and the row simply groups them.
+       */
+      const stepKinds = DAY_STEPS[definition.kind] ?? [];
+      const isDay = stepKinds.length > 0;
+      const lookup: readonly string[] = isDay ? stepKinds : [definition.kind];
       // The article slots keep their outcome in a run file rather than a meeting record, so
       // both fell through to "missed" every day — including the day one of them published.
-      const article = articleOutcomes.get(`${date}:${definition.kind}`);
-      if (article) {
+      const article = lookup.map((entry) => articleOutcomes.get(`${date}:${entry}`)).find(Boolean);
+      const dayRecord = isDay ? lookup.map((entry) => records.get(`${date}:${entry}`)).find(Boolean) : undefined;
+      const daySkipKey = isDay ? lookup.find((entry) => skipReasons.has(`${date}:${entry}`)) : undefined;
+      // A day prefers what its rooms decided; the article run is what it falls back to. A slot
+      // that is only an article slot keeps reading its run file first, exactly as it did.
+      if (article && !(isDay && (dayRecord || daySkipKey))) {
         // A published article slot was a dead cell: it said an article existed and gave the
         // reader nowhere to go. The story meeting that chose the subject holds the package that
         // was delivered, so that is where the cell leads.
@@ -311,7 +362,8 @@ export function buildPublicCalendarFeed(input: {
         });
         continue;
       }
-      const record = records.get(`${date}:${definition.kind}`);
+      const record = isDay ? dayRecord : records.get(`${date}:${definition.kind}`);
+      const skipKey = isDay ? daySkipKey : (skipReasons.has(`${date}:${definition.kind}`) ? definition.kind : undefined);
       // A slot a gate turned off reads "skipped" and carries the reason, so it is no longer
       // indistinguishable from one nobody reached. Eleven slots on 2 August showed as plain
       // "Did not happen" with nothing anywhere explaining any of them.
@@ -329,7 +381,7 @@ export function buildPublicCalendarFeed(input: {
         ? "not-needed"
         : record
           ? "held"
-          : skipReasons.has(`${date}:${definition.kind}`)
+          : skipKey
             ? "skipped"
             : slotWithoutRecordStatus(at, input.now, ongoingCeilingMinutes);
       slots.push({
@@ -343,8 +395,8 @@ export function buildPublicCalendarFeed(input: {
           meetingHref: record.href,
           decisionOneLiner: record.summary,
           fixture: record.fixture
-        }) : skipReasons.has(`${date}:${definition.kind}`) ? {
-          decisionOneLiner: oneLiner(skipReasons.get(`${date}:${definition.kind}`)!)
+        }) : skipKey ? {
+          decisionOneLiner: oneLiner(skipReasons.get(`${date}:${skipKey}`)!)
         } : status === "late" ? {
           decisionOneLiner: LATE_SLOT_REASON
         } : status === "missed" ? {

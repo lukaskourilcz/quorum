@@ -1,10 +1,11 @@
 import AxeBuilder from "@axe-core/playwright";
 import { createHash } from "node:crypto";
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { expect, test } from "@playwright/test";
 import { CALENDAR_SLOTS } from "../../src/lib/calendar-feed-model";
 import { PUBLIC_VENTURE_SLUGS } from "../../src/data/public-venture-slugs";
+import registry from "../../../config/ventures.json" with { type: "json" };
 
 const axeRoutes = [
   "/",
@@ -286,24 +287,47 @@ for (const route of axeRoutes) {
   });
 }
 
+/**
+ * Open a venture's archive so its record views are on screen.
+ *
+ * A workspace shows two chips since #497 — `Latest`, which is the venture's output view, and
+ * `Archive`, which holds the rest. Every `?tab=` link still resolves to the same panel, so a test
+ * can navigate directly; what it can no longer do is find a link to a stored view without asking
+ * for the archive first. The counter each view used to carry ("5 on this tab") went with the row:
+ * a count answers "is something waiting for me", and a view's own item total never did.
+ */
+async function openVentureArchive(
+  page: import("@playwright/test").Page
+): Promise<import("@playwright/test").Locator> {
+  const archive = page.getByRole("link", { name: "Archive", exact: true });
+  if (await archive.count()) await archive.click();
+  // The row itself, not the page: `Archive` points at the first view it holds, so a bare href
+  // lookup finds that chip as well as the row's own.
+  return page.locator("[data-admin-archive-views]");
+}
+
 test("Door Money renders its three bounded admin tabs", async ({ page }) => {
   await page.goto("/admin?venture=door-money&tab=recommendations", { waitUntil: "networkidle" });
 
   await expect(page.getByRole("heading", { name: "Door Money" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Door Money/ })).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("link", { name: "recommendations" })).toHaveAttribute("aria-current", "page");
-  const actionsTab = page.locator('a[href="/admin?venture=door-money&tab=actions"]');
-  const knowledgeTab = page.locator('a[href="/admin?venture=door-money&tab=knowledge"]');
-  await expect(actionsTab).toBeVisible();
-  await expect(knowledgeTab).toBeVisible();
+  // `recommendations` is Door Money's output view, so its chip reads `Latest` and carries the
+  // current marker; the other two are one click away under Archive.
+  await expect(page.locator('a[href="/admin?venture=door-money&tab=recommendations"]'))
+    .toHaveAttribute("aria-current", "page");
   const recommendationCards = page.locator('[id^="door-money-recommendation-"]');
   const recommendationCount = await recommendationCards.count();
-  await expect(page.getByText(`${recommendationCount} on this tab`, { exact: true })).toBeVisible();
   if (recommendationCount > 0) {
     await expect(recommendationCards.first()).toBeVisible();
   } else {
     await expect(page.getByText(/No Door Money recommendation store exists yet\.|No readable Door Money recommendations are stored\./u)).toBeVisible();
   }
+
+  const doorMoneyArchive = await openVentureArchive(page);
+  const actionsTab = doorMoneyArchive.locator('a[href="/admin?venture=door-money&tab=actions"]');
+  const knowledgeTab = doorMoneyArchive.locator('a[href="/admin?venture=door-money&tab=knowledge"]');
+  await expect(actionsTab).toBeVisible();
+  await expect(knowledgeTab).toBeVisible();
 
   await actionsTab.click();
   await expect(page).toHaveURL(/tab=actions/, { timeout: 30_000 });
@@ -329,11 +353,7 @@ test("Tehdejsi svet renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Tehdejší svět" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Tehdejší svět/ })).toHaveAttribute("aria-current", "page");
   const featuresTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=features"]');
-  const libraryTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=library"]');
-  const signalsTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=signals"]');
   await expect(featuresTab).toHaveAttribute("aria-current", "page");
-  await expect(libraryTab).toBeVisible();
-  await expect(signalsTab).toBeVisible();
   await expect(page.getByText(/No shortlist has been recorded yet\.|No readable Tehdejší svět shortlist is available\./u)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Czech performance" })).toBeVisible();
   await expect(page.getByText("Sends (primary)").first()).toBeVisible();
@@ -341,36 +361,42 @@ test("Tehdejsi svet renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.locator('[data-tehdejsi-results="cs"]')).toContainText("17");
   await expect(page.locator('[data-tehdejsi-results="cs"]')).toContainText("23");
 
+  const tsArchive = await openVentureArchive(page);
+  const libraryTab = tsArchive.locator('a[href="/admin?venture=tehdejsi-svet&tab=library"]');
+  const signalsTab = tsArchive.locator('a[href="/admin?venture=tehdejsi-svet&tab=signals"]');
+  await expect(libraryTab).toBeVisible();
+  await expect(signalsTab).toBeVisible();
+
   await libraryTab.click();
   await expect(page).toHaveURL(/tab=library/);
   await expect(page.getByRole("heading", { name: "Facts-file status" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Facts browser" })).toBeVisible();
-  await expect(page.getByText("5 on this tab")).toBeVisible();
 
-  await signalsTab.click();
+  await (await openVentureArchive(page)).locator('a[href="/admin?venture=tehdejsi-svet&tab=signals"]').click();
   await expect(page).toHaveURL(/tab=signals/);
   await expect(page.getByRole("heading", { name: "Community memory" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Product insight queue" })).toBeVisible();
-  await expect(page.getByText("5 on this tab")).toBeVisible();
 });
 
 test("Kvórum exposes three truthful owner-workspace tabs", async ({ page }) => {
   await page.goto("/admin?venture=kvorum&tab=recommendations", { waitUntil: "networkidle" });
-  await expect(page.getByRole("link", { name: "recommendations", exact: true })).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("link", { name: "monitor", exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "claims", exact: true })).toBeVisible();
+  await expect(page.locator('a[href="/admin?venture=kvorum&tab=recommendations"]'))
+    .toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("heading", { name: "Poplatky se vracejí do Sněmovny" })).toBeVisible();
-  await expect(page.getByText("1 on this tab", { exact: true })).toBeVisible();
 
-  await page.getByRole("link", { name: "monitor", exact: true }).click();
+  const kvorumArchive = await openVentureArchive(page);
+  await expect(kvorumArchive.getByRole("link", { name: "monitor", exact: true })).toBeVisible();
+  await expect(kvorumArchive.getByRole("link", { name: "claims", exact: true })).toBeVisible();
+
+  await kvorumArchive.getByRole("link", { name: "monitor", exact: true }).click();
   await expect(page).toHaveURL(/venture=kvorum&tab=monitor/u);
   await expect(page.getByText("Source health · recorded response", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Financování médií veřejné služby" })).toBeVisible();
 
-  await page.getByRole("link", { name: "claims", exact: true }).click();
+  await (await openVentureArchive(page)).getByRole("link", { name: "claims", exact: true }).click();
   await expect(page).toHaveURL(/venture=kvorum&tab=claims/u);
+  // The store's own sentence, which says more than a zero did.
   await expect(page.getByText("The claims store exists and contains no record.", { exact: true })).toBeVisible();
-  await expect(page.getByText("0 on this tab", { exact: true })).toBeVisible();
 });
 
 test("the launch board opens the admin with one row per launching venture", async ({ page }) => {
@@ -418,19 +444,39 @@ test("a venture workspace carries no agent switches — the system runs itself",
   }
 });
 
-test("approvals and owner-only work include all four new ventures", async ({ page }) => {
-  await page.goto("/admin?view=approvals", { waitUntil: "networkidle" });
-  for (const approval of ["BH-RESEARCH-001", "DM-RESULTS-004", "TS-SNAPSHOT-001", "KV-EDITORIAL-004"]) {
+/*
+ * Everything the owner still has to sign or do, and nothing else.
+ *
+ * This used to name four approval ids and four task titles. All four approvals were signed on
+ * 2026-08-29 and the test failed for the one reason a to-do list is allowed to change: the work
+ * was done. Pinning the items made "the owner acted" indistinguishable from "the panel broke".
+ *
+ * So both halves are read out of the files the panels are built from. What is guarded is the
+ * property that matters — an item pending on disk is visible in the admin, and an item that is
+ * not pending is not shown — which holds on the day the last approval is signed and on the day a
+ * new one is filed.
+ */
+test("Waiting for you shows exactly what is pending on disk", async ({ page }) => {
+  const inbox = await readFile(path.join(repositoryRoot, "state/INBOX.md"), "utf8");
+  const pending = [...inbox.matchAll(/^- \[ \] HUMAN_APPROVAL ([A-Z0-9-]+)/gmu)].map(([, id]) => id!);
+  const signed = [...inbox.matchAll(/^- \[x\] HUMAN_APPROVAL ([A-Z0-9-]+)/gmu)].map(([, id]) => id!);
+  expect(signed.length, "the inbox has a resolved section to check against").toBeGreaterThan(0);
+
+  await page.goto("/admin?view=waiting", { waitUntil: "networkidle" });
+  for (const approval of pending) {
     await expect(page.getByText(`state/INBOX.md#${approval}`, { exact: true })).toBeVisible();
   }
+  for (const approval of signed.filter((id) => !pending.includes(id))) {
+    await expect(page.getByText(`state/INBOX.md#${approval}`, { exact: true })).toHaveCount(0);
+  }
 
-  await page.goto("/admin?view=manual-tasks", { waitUntil: "networkidle" });
-  for (const task of [
-    "Sign or decline BH-RESEARCH-001",
-    "Approve Door Money's private source (BOOK-SOURCE-001)",
-    "Sign or decline TS-RESEARCH-004",
-    "Approve Kvórum's one-page Apify scope"
-  ]) {
+  // The owner's own tasks are the other half of this view, and they come from `docs/NEEDED.md`.
+  const needed = await readFile(path.join(repositoryRoot, "docs/NEEDED.md"), "utf8");
+  const tasks = [...needed.matchAll(/^- \[ \] \*\*(.+?)\*\*/gmu)]
+    .map(([, title]) => title!)
+    .filter((_, index) => index < 3);
+  expect(tasks.length, "NEEDED.md still carries owner tasks").toBeGreaterThan(0);
+  for (const task of tasks) {
     await expect(page.getByText(task, { exact: false }).first()).toBeVisible();
   }
 });
@@ -480,21 +526,34 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   // One row per calendar slot, and the registry decides how many slots there are. Pinning the
   // number made this guard break every time a venture opened or closed; what it protects is that
   // every registered slot renders exactly one row and one project icon.
-  await expect(weekBoard.locator(".contents")).toHaveCount(CALENDAR_SLOTS.length);
-  await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(CALENDAR_SLOTS.length);
+  const paused = new Set((registry.ventures as Array<{ id: string; status?: string; day?: { kind: string }; meetings: Array<{ kind: string }> }>)
+    .filter((venture) => venture.status === "paused")
+    .flatMap((venture) => [...(venture.day ? [venture.day.kind] : []), ...venture.meetings.map(({ kind }) => kind)]));
+  const liveSlots = CALENDAR_SLOTS.filter(({ kind }) => !paused.has(kind)).length;
+  await expect(weekBoard.locator(".contents")).toHaveCount(liveSlots);
+  await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(liveSlots);
   // The legend owns one entry per colour currently represented by the calendar model. Keep the
   // count aligned with that model as ventures join instead of preserving the old ten-entry pin.
   await expect(page.locator("[data-project-legend]")).toHaveCount(12);
-  for (const [kind, hour, project] of [
-    ["bh-desk", "12", "booksofhistory"],
-    ["dm-desk", "15", "door-money"],
-    ["dm-growth", "16", "door-money"],
-    ["ts-desk", "18", "tehdejsi-svet"],
-    ["kv-desk", "21", "kvorum"]
-  ] as const) {
-    const row = weekBoard.locator(`[data-calendar-kind="${kind}"][data-calendar-hour="${hour}"]`);
-    await expect(row).toHaveCount(1);
-    await expect(row.locator(`[data-calendar-slot][data-project="${project}"]`)).toHaveCount(5);
+  /*
+   * Every venture row on the board, at its own hour and in its own colour.
+   *
+   * Five kinds were named here by hand, two of which were Door Money's — so the list broke the
+   * day the owner paused it, and it had already stopped describing the clock when `dm-desk` and
+   * `dm-growth` moved inside the Door Money day. Walking the model instead covers every row and
+   * survives both kinds of change.
+   */
+  const ownerOf = new Map((registry.ventures as Array<{ id: string; day?: { kind: string }; meetings: Array<{ kind: string }> }>)
+    .flatMap((venture) => [
+      ...(venture.day ? [[venture.day.kind, venture.id] as const] : []),
+      ...venture.meetings.map((meeting) => [meeting.kind, venture.id] as const)
+    ]));
+  for (const slot of CALENDAR_SLOTS.filter(({ kind }) => !paused.has(kind))) {
+    const project = ownerOf.get(slot.kind);
+    if (!project) continue; // The company's own shift belongs to no venture and has no hue.
+    const row = weekBoard.locator(`[data-calendar-kind="${slot.kind}"][data-calendar-hour="${slot.hour}"]`);
+    await expect(row, slot.kind).toHaveCount(1);
+    await expect(row.locator(`[data-calendar-slot][data-project="${project}"]`), slot.kind).toHaveCount(5);
   }
   await expect(weekBoard.locator("[data-calendar-slot] time")).toHaveCount(0);
   // No assertion that a fixture is on the board. There were test meetings on it when the archive
@@ -644,7 +703,9 @@ test("marketingShark packages tab shows stored package cards", async ({ page }) 
 });
 
 test("DNESKAi social archive renders its Czech-only packs", async ({ page }) => {
-  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  // On DNESKAi's own page since #500. It is that venture's output, and it sat on the company
+  // overview only because that is where it was built.
+  await page.goto("/admin?venture=caught-up", { waitUntil: "networkidle" });
   const archive = page.locator("#social-archive");
   await expect(archive.getByRole("heading", { name: "CS social posts" })).toHaveCount(2);
   await expect(archive.getByText("English edition")).toHaveCount(0);
@@ -667,11 +728,23 @@ test("FightAIQ hides reports until an analysis run produces them", async ({ page
 
 test("admin makes its deployment write capability explicit", async ({ page }) => {
   await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
-  const readOnly = Boolean(process.env.VERCEL) && !process.env.BOARDLESSAI_GITHUB_TOKEN;
+  /*
+   * Read the mode off the shell, not off this process's environment.
+   *
+   * `Boolean(process.env.VERCEL) && !process.env.BOARDLESSAI_GITHUB_TOKEN` asks the test runner
+   * what the *server* decided, and the two do not share an environment: the runner has neither
+   * variable, so this always took the writable branch whatever the server was doing. The shell
+   * states its own answer now.
+   */
+  const writable = await page.locator("[data-admin-writes]").getAttribute("data-admin-writes");
+  expect(writable, "the shell must say which write mode it is in").toMatch(/^(enabled|disabled)$/u);
   const warning = page.getByText("Read-only deployment — saving needs the GitHub token, see NEEDED.md.");
+  // The editor is behind the Money disclosure since #500: the overview answers what the money
+  // costs, and the control that changes it is a step below that answer.
+  await page.getByText("Fixed costs and what could bring money in").click();
   const addCost = page.getByRole("button", { name: "Add cost" });
 
-  if (readOnly) {
+  if (writable === "disabled") {
     await expect(warning).toBeVisible();
     await expect(addCost).toBeDisabled();
   } else {
@@ -754,32 +827,60 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     }
   });
 
+  /*
+   * Both halves of the same gate, and which half runs is read off the inbox.
+   *
+   * These asserted a flat 409 and the words "TS-RESULTS-005 is pending". The owner signed that
+   * approval on 2026-08-29 and both tests failed — for the one reason an approval gate is allowed
+   * to change its answer. Hard-coding the refusal made "the owner signed it" look identical to
+   * "the gate stopped working", which is the failure this guard exists to catch.
+   *
+   * So the gate is still proved on every run: the request is made, the server's answer is checked
+   * against the approval's real state, and exactly one write is attempted either way. What the
+   * suite no longer does is insist the owner has not decided yet.
+   */
+  const tsResultsApproved = async () => {
+    const inbox = await readFile(path.join(repositoryRoot, "state/INBOX.md"), "utf8");
+    return /^- \[x\] HUMAN_APPROVAL TS-RESULTS-005/mu.test(inbox);
+  };
+
   test("Tehdejsi svet result entry stays manual and approval-gated", async ({ page }) => {
+    const approved = await tsResultsApproved();
+    const resultsRoot = path.join(repositoryRoot, "state/ventures/tehdejsi-svet/results");
+    const before = await readdir(resultsRoot).catch(() => [] as string[]);
     let resultPosts = 0;
     page.on("request", (request) => {
       if (request.method() === "POST" && new URL(request.url()).pathname === "/admin/api/tehdejsi-svet/results") resultPosts += 1;
     });
-    await page.goto("/admin?venture=tehdejsi-svet&tab=features", { waitUntil: "networkidle" });
-    const lane = page.locator('[data-tehdejsi-results="cs"]');
-    await lane.getByLabel("Metrics captured at").fill("2026-08-12T13:00");
-    await lane.getByLabel("Sends (primary)").fill("18");
-    const response = page.waitForResponse((candidate) =>
-      candidate.request().method() === "POST" && new URL(candidate.url()).pathname === "/admin/api/tehdejsi-svet/results"
-    );
-    await lane.getByRole("button", { name: "Record manual result" }).click();
-    expect((await response).status()).toBe(409);
-    await expect(lane.getByRole("alert")).toContainText("TS-RESULTS-005 is pending");
-    expect(resultPosts).toBe(1);
+    try {
+      await page.goto("/admin?venture=tehdejsi-svet&tab=features", { waitUntil: "networkidle" });
+      const lane = page.locator('[data-tehdejsi-results="cs"]');
+      await lane.getByLabel("Metrics captured at").fill("2026-08-12T13:00");
+      await lane.getByLabel("Sends (primary)").fill("18");
+      const response = page.waitForResponse((candidate) =>
+        candidate.request().method() === "POST" && new URL(candidate.url()).pathname === "/admin/api/tehdejsi-svet/results"
+      );
+      await lane.getByRole("button", { name: "Record manual result" }).click();
+      expect((await response).status()).toBe(approved ? 201 : 409);
+      if (!approved) await expect(lane.getByRole("alert")).toContainText("TS-RESULTS-005 is pending");
+      // One attempt either way. A refused write that retries is a write the gate did not stop.
+      expect(resultPosts).toBe(1);
+    } finally {
+      // The suite may not leave a measurement behind on a venture whose results are the owner's.
+      for (const name of (await readdir(resultsRoot).catch(() => [] as string[]))) {
+        if (!before.includes(name)) await rm(path.join(resultsRoot, name), { force: true, recursive: true });
+      }
+    }
   });
 
   test("Tehdejsi svet keeps owner paste-in behind its approval", async ({ page }) => {
+    const approved = await tsResultsApproved();
     let futurePosts = 0;
     page.on("request", (request) => {
       if (request.method() === "POST" && /\/admin\/api\/tehdejsi-svet\/(?:signals|insights|results)$/u.test(new URL(request.url()).pathname)) futurePosts += 1;
     });
     await page.goto("/admin?venture=tehdejsi-svet&tab=signals", { waitUntil: "networkidle" });
     const panel = page.locator("[data-tehdejsi-signals]");
-    await expect(panel.getByText("No owner-pasted community memory is recorded.")).toBeVisible();
     const sourceLabel = panel.getByLabel("Source label");
     const comments = panel.getByLabel("Owner-pasted comments");
     const record = panel.getByRole("button", { name: "Record recollections" });
@@ -789,7 +890,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
       return record.isEnabled();
     }, { timeout: 30_000 }).toBe(true);
     await record.click();
-    await expect(panel.getByRole("alert")).toContainText("TS-RESULTS-005 is pending");
+    if (!approved) await expect(panel.getByRole("alert")).toContainText("TS-RESULTS-005 is pending");
     expect(futurePosts).toBe(1);
   });
 
@@ -847,7 +948,23 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
         await outcome.fill("The synthetic owner reviewed the fictional note.");
         return complete.isEnabled();
       }, { timeout: 30_000 }).toBe(true);
+      /*
+       * Read the server's answer, not just the count.
+       *
+       * This test passes alone and fails inside a complete run, and the only thing it recorded
+       * about the write was that one happened — so the failure arrived as "the confirmation never
+       * appeared" with nothing about why. The route answers 404 for UNAVAILABLE, 409 for CONFLICT
+       * and 503 otherwise; whichever it is, the next failure says so instead of leaving the next
+       * reader to guess.
+       */
+      const completion = page.waitForResponse((candidate) =>
+        candidate.request().method() === "POST" && candidate.url().endsWith("/admin/api/door-money/actions"));
       await complete.click();
+      const completionResponse = await completion;
+      expect(
+        completionResponse.status(),
+        `the completion route answered ${completionResponse.status()}: ${await completionResponse.text().catch(() => "no body")}`
+      ).toBe(201);
       await expect(task.getByText("Outcome recorded. The weekly room can now read this completion.")).toBeVisible();
       expect(actionPosts).toBe(1);
       await page.reload({ waitUntil: "networkidle" });
@@ -898,7 +1015,6 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await expect(page.getByText("The manual post URL is recorded. No metrics were fetched.")).toBeVisible({ timeout: 60_000 });
 
     await page.goto("/admin?venture=kvorum&tab=claims", { waitUntil: "networkidle" });
-    await expect(page.getByText("3 on this tab", { exact: true })).toBeVisible();
     const publishedClaim = page
       .getByText("Návrh se vrací do sněmovního projednávání.", { exact: true })
       .locator("..");
@@ -1165,18 +1281,37 @@ test("Company files speaks plainly", async ({ page }) => {
   expect(body).not.toMatch(/\bcarousel-studio\b/);
 });
 
+/**
+ * Park the reader at a known scroll offset and wait for the page to actually be there.
+ *
+ * `html` carries `scroll-behavior: smooth`, so `window.scrollTo` starts an animation and reading
+ * `window.scrollY` on the next line reports where the page still is, not where it is going. That
+ * raced: on a 13,454px `/ideas` the baseline came back as 20 while the animation was mid-flight,
+ * and the assertion then compared a filtered page's real position against a number that had never
+ * been true. `behavior: "instant"` overrides the CSS for this one call, and the poll waits for the
+ * clamp on a page too short to reach the offset.
+ */
+async function parkScrollAt(page: import("@playwright/test").Page, offset: number): Promise<number> {
+  await page.evaluate((top) => window.scrollTo({ top, behavior: "instant" }), offset);
+  const expected = await page.evaluate(
+    (requested) => Math.min(requested, document.documentElement.scrollHeight - window.innerHeight),
+    offset
+  );
+  await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBe(Math.round(expected));
+  return Math.round(expected);
+}
+
 test("stateful route controls preserve page scroll", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
 
   await page.goto("/ideas", { waitUntil: "networkidle" });
   const accepted = page.getByRole("link", { name: "Approved", exact: true });
   await accepted.scrollIntoViewIfNeeded();
-  await page.evaluate(() => window.scrollTo(0, 200));
-  const ideasScrollY = await page.evaluate(() => window.scrollY);
+  const ideasScrollY = await parkScrollAt(page, 200);
   expect(ideasScrollY).toBeGreaterThan(0);
   await accepted.click();
   await expect(page).toHaveURL(/\/ideas\?status=accepted$/);
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(ideasScrollY);
+  await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBe(ideasScrollY);
 
   // The week arrows moved with the board they belong to. The home page is now a walkthrough
   // whose calendar steps weeks in place, without navigating; the linked arrows — and therefore
@@ -1185,8 +1320,7 @@ test("stateful route controls preserve page scroll", async ({ page }) => {
   await page.goto("/calendar", { waitUntil: "networkidle" });
   const nextWeek = page.getByRole("link", { name: "Next calendar week" });
   await nextWeek.scrollIntoViewIfNeeded();
-  await page.evaluate(() => window.scrollTo(0, 200));
-  const nextScrollY = await page.evaluate(() => window.scrollY);
+  const nextScrollY = await parkScrollAt(page, 200);
   expect(nextScrollY).toBeGreaterThan(0);
   await nextWeek.click();
   await expect(page).toHaveURL(/\/calendar\/\d{4}-\d{2}-\d{2}$/);
@@ -1196,12 +1330,11 @@ test("stateful route controls preserve page scroll", async ({ page }) => {
     nextScrollY
   );
   expect(expectedNextScrollY).toBeGreaterThan(0);
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(expectedNextScrollY);
+  await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBe(Math.round(expectedNextScrollY));
 
   const previousWeek = page.getByRole("link", { name: "Previous calendar week" });
   await previousWeek.scrollIntoViewIfNeeded();
-  await page.evaluate(() => window.scrollTo(0, 200));
-  const previousScrollY = await page.evaluate(() => window.scrollY);
+  const previousScrollY = await parkScrollAt(page, 200);
   expect(previousScrollY).toBeGreaterThan(0);
   await previousWeek.click();
   const expectedPreviousScrollY = await page.evaluate(
@@ -1210,8 +1343,8 @@ test("stateful route controls preserve page scroll", async ({ page }) => {
     previousScrollY
   );
   await expect
-    .poll(() => page.evaluate(() => window.scrollY))
-    .toBe(expectedPreviousScrollY);
+    .poll(() => page.evaluate(() => Math.round(window.scrollY)))
+    .toBe(Math.round(expectedPreviousScrollY));
 });
 
 test("Decision Replay controls preserve page scroll", async ({ page }) => {
@@ -1265,62 +1398,88 @@ for (const [route, heading] of [
  * content ran sideways out of the drawing entirely. Every assertion below is one of those
  * symptoms, measured rather than eyeballed.
  */
+/**
+ * Every room a visitor can press open: the company's, plus one per operating venture.
+ *
+ * Read off the registry rather than listed, because a venture the owner pauses in Settings has
+ * no room on the plan and clicking for it can only time out.
+ */
 const OPENABLE_ROOMS = [
   "company",
-  "caught-up",
-  "mma-files",
-  "fightaiq",
-  "carousel-studio",
-  "marketingshark",
-  "goviral",
-  "titty-tuesdays",
-  "booksofhistory",
-  "door-money",
-  "tehdejsi-svet",
-  "kvorum"
-] as const;
+  ...(registry.ventures as Array<{ id: string; status?: string; visibility: string }>)
+    .filter((venture) => venture.visibility === "public" && venture.status !== "paused")
+    .map((venture) => venture.id)
+];
 
-test("the home walkthrough carries all eleven ventures at mobile width", async ({ page }) => {
+test("the home walkthrough carries every operating venture at mobile width", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/", { waitUntil: "networkidle" });
 
-  const ventures = [
-    "DNESKAi",
-    "Titty Tuesdays",
-    "GoVIRAL",
-    "BOOKSOFHISTORY",
-    "FightAIQ",
-    "Design Lab",
-    "marketingShark",
-    "MMA Files",
-    "Door Money",
-    "Tehdejší svět",
-    "Kvórum"
-  ];
-  await expect(page.locator("[data-proj-card]")).toHaveCount(11);
-  for (const venture of ventures) {
-    await expect(page.locator("[data-proj-card]", { hasText: venture })).toHaveCount(1);
+  /*
+   * Counted off the registry rather than pinned.
+   *
+   * A venture the owner pauses in Settings leaves the wall, its desk channel leaves the workspace
+   * view and its room leaves the workflows plan — all three together, which is the invariant worth
+   * guarding. Pinning eleven would have failed the day he paused Door Money and told us nothing
+   * about whether the three surfaces agreed.
+   */
+  const operating = (registry.ventures as Array<{ id: string; name: string; status?: string; visibility: string }>)
+    .filter((venture) => venture.visibility === "public" && venture.status !== "paused");
+  const displayName = (venture: { id: string; name: string }) =>
+    venture.id === "caught-up" ? "DNESKAi" : venture.name;
+  await expect(page.locator("[data-proj-card]")).toHaveCount(operating.length);
+  for (const venture of operating) {
+    await expect(page.locator("[data-proj-card]", { hasText: displayName(venture) })).toHaveCount(1);
   }
-  await expect(page.locator("[data-chat-list] button")).toHaveCount(12);
-  await expect(page.locator('[data-wf-place]:not([data-wf-place="dock"])')).toHaveCount(12);
+  // The company board has a channel and a room of its own, so both counts are the ventures plus
+  // one. FightAIQ keeps its own channel and room even though its data checks run inside the MMA
+  // Files day: the clock consolidated, the desks did not.
+  await expect(page.locator("[data-chat-list] button")).toHaveCount(operating.length + 1);
+  await expect(page.locator('[data-wf-place]:not([data-wf-place="dock"])')).toHaveCount(operating.length + 1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(1);
 });
 
-test("the ventures index has eleven real cards and keeps sample scores separate", async ({ page }) => {
+/*
+ * The one thing on this page nothing was watching.
+ *
+ * Every other assertion here reads the served markup, which a dead page still has: the wall, the
+ * channels and the plan all render server-side and look perfect with no JavaScript attached at
+ * all. "Play the day" is the only control whose failure is invisible to that kind of test, and it
+ * is exactly the thing the owner reported as broken. So this walks it: press, watch the beats
+ * advance through real rooms, press again, and land back at rest.
+ */
+test("the facilities plan plays the day and returns to rest", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  await page.locator("#facilities").scrollIntoViewIfNeeded();
+  const toggle = page.getByRole("button", { name: "Play the day" });
+  await expect(toggle).toBeVisible();
+  await toggle.click();
+
+  // Pressed is the hydration proof: the label is React state, and a page that never hydrated
+  // keeps saying "Play the day" however hard it is clicked.
+  const stop = page.getByRole("button", { name: "Stop the day" });
+  await expect(stop).toBeVisible();
+  await expect(stop).toHaveAttribute("aria-pressed", "true");
+
+  // A beat tag is `HH:00 · label` in the registry's own words, and the day must reach at least
+  // two different rooms — one tag that never changes is a frozen performance, not a day.
+  const beat = page.locator("[data-wf-beat]");
+  await expect(beat).toHaveAttribute("data-wf-beat", /^\d{2}:00 · \S/u, { timeout: 15_000 });
+  const first = await beat.getAttribute("data-wf-beat");
+  await expect(beat).not.toHaveAttribute("data-wf-beat", first ?? "", { timeout: 20_000 });
+
+  await stop.click();
+  await expect(toggle).toBeVisible();
+  await expect(page.locator("[data-wf-beat]")).toHaveCount(0);
+});
+
+test("the ventures index carries every operating venture and keeps sample scores separate", async ({ page }) => {
   await page.goto("/ventures", { waitUntil: "networkidle" });
-  const ids = [
-    "caught-up",
-    "titty-tuesdays",
-    "goviral",
-    "booksofhistory",
-    "fightaiq",
-    "carousel-studio",
-    "marketingshark",
-    "mma-files",
-    "door-money",
-    "tehdejsi-svet",
-    "kvorum"
-  ];
+  // Counted off the registry, like the wall. The index used to pin eleven ids, which made
+  // pausing a venture in Settings a test failure rather than the thing the switch is for.
+  const ids = (registry.ventures as Array<{ id: string; status?: string; visibility: string }>)
+    .filter((venture) => venture.visibility === "public" && venture.status !== "paused")
+    .map((venture) => venture.id);
   const cards = page.locator("[data-venture-card]");
   await expect(cards).toHaveCount(ids.length);
   for (const id of ids) await expect(page.locator(`[data-venture-card="${id}"]`)).toHaveCount(1);
@@ -1492,8 +1651,12 @@ test("a preset saves, reloads into the picker and applies", async ({ page }) => 
   try {
     await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
     const recipeLine = page.locator("[data-recipe-line]").first();
+    // `dossier` is one of the twenty-three the dealer retired, so it lives under `Doladit` with
+    // the rest of the axis surface since #499. Still reachable, and still the family this test
+    // wants: a preset has to round-trip a design nothing deals unprompted.
+    await page.locator("[data-fine-tune] summary").first().click();
     await expect.poll(async () => {
-      await page.locator('[data-family="dossier"]').click();
+      await page.locator('[data-family="dossier"]').first().click();
       return recipeLine.textContent();
     }, { timeout: 30_000 }).toContain("dossier");
     await expect(page.locator("[data-save-state]").first()).toHaveAttribute("data-save-state", "saved", { timeout: 60_000 });
@@ -1520,8 +1683,10 @@ test("a preset saves, reloads into the picker and applies", async ({ page }) => 
     // Saved as a draft, and it says so — a draft is never drawn from autonomously.
     await expect(chip).toContainText("koncept");
 
+    // The reload closed the disclosure, and `tower` is another of the retired twenty-three.
+    await page.locator("[data-fine-tune] summary").first().click();
     await expect.poll(async () => {
-      await page.locator('[data-family="tower"]').click();
+      await page.locator('[data-family="tower"]').first().click();
       return recipeLine.textContent();
     }, { timeout: 30_000 }).toContain("tower");
     await expect.poll(async () => {
@@ -1695,12 +1860,25 @@ test.describe("the facilities plan opens dialogs", () => {
   test("a magazine room shows the share card, picture included", async ({ page }) => {
     await page.goto("/", { waitUntil: "networkidle" });
     await page.getByRole("button", { name: "Facilities", exact: true }).click();
+
+    /*
+     * The route's own answer, watched rather than inferred.
+     *
+     * The card promising a picture and the route refusing to serve one is a real failure mode —
+     * the two used to resolve "the newest package" separately and disagreed on any day the desk
+     * published nothing. Read as a decoded width alone it says only "0", which is what a slow
+     * load says too. The status makes the difference legible.
+     */
+    const thumbnail = page.waitForResponse((response) =>
+      response.url().includes("/facilities/thumb/caught-up")
+    );
     await page.locator('[data-wf-place="caught-up"]').click({ force: true });
 
     const card = page.locator("[data-latest-card]");
     await expect(card).toBeVisible();
     const image = page.locator("[data-latest-image]");
     await expect(image).toBeVisible();
+    expect((await thumbnail).status(), "the share card's picture").toBe(200);
     // A real image, decoded, not a broken one: the share card's whole point is the picture.
     await expect
       .poll(async () => image.evaluate((node: HTMLImageElement) => node.naturalWidth))

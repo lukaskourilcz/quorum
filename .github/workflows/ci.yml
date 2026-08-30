@@ -100,7 +100,13 @@ jobs:
       (github.event_name == 'pull_request' && contains(github.event.pull_request.title, '[full-e2e]')) ||
       (github.event_name == 'push' && contains(github.event.head_commit.message, '[full-e2e]'))
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    # 35 minutes could not fit the suite this job runs, so every opt-in ended the same way: the
+    # runner cancelled it mid-test and left a red check that meant nothing about the code. Measured
+    # 2026-08-30 — a complete local run is 358 tests in 1.2 hours, and this job reached test 25 of
+    # 358 before its own deadline, every one of them passing. 90 gives the suite room and still
+    # fails loudly on a job that has genuinely hung. Opt-in, so the ceiling costs nothing until
+    # somebody asks for it with [full-e2e].
+    timeout-minutes: 90
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

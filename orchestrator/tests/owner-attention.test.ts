@@ -211,3 +211,27 @@ describe("the collected file", () => {
     expect(record.operationalIncidents?.[0]?.conditionKey).toBe("caught-up.delivery.token");
   });
 });
+
+/*
+ * The committed snapshot is what the admin renders, and it is recorded rather than re-derived —
+ * the same reason the Design Lab summary and the image ladder's verdict are. Recorded state can
+ * go stale, and this is the one way it goes stale in practice: the owner (or a session acting for
+ * him) ticks an approval in `state/INBOX.md` by hand and nothing regenerates the file, so
+ * "Waiting for you" keeps asking for a signature that was given.
+ *
+ * That is exactly what happened on 2026-08-29: ten signed approvals stayed on the panel until the
+ * next checkpoint would have cleared them. The daily checkpoint does regenerate this, so the fix
+ * is not to derive it live — it is to fail here, before the stale copy ships.
+ */
+describe("the committed owner-attention snapshot", () => {
+  const repositoryRoot = path.resolve(import.meta.dirname, "..", "..");
+
+  it("agrees with state/INBOX.md about what is still unsigned", async () => {
+    const inbox = await readFile(path.join(repositoryRoot, "state", "INBOX.md"), "utf8");
+    const snapshot = OwnerAttentionSchema.parse(JSON.parse(
+      await readFile(path.join(repositoryRoot, "state", "owner-attention.json"), "utf8")
+    ));
+    expect(snapshot.approvals.map((approval) => approval.id).sort())
+      .toEqual(parseInboxApprovals(inbox).map((approval) => approval.id).sort());
+  });
+});

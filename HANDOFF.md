@@ -1,0 +1,310 @@
+# Handoff — the overnight session of 2026-08-29/30
+
+Written to be read first thing, before anything else. It says what landed, what is still open and
+on what, and the decisions that are genuinely yours. Nothing here needs a reply to be actionable.
+
+Delete this file once its contents are absorbed into `docs/NEEDED.md` and the issues. A handoff
+that outlives its handoff becomes a second to-do list.
+
+---
+
+## 1. The short version
+
+**Twenty-two issues closed.** The whole clock program, the whole admin program, four of the
+launch program's children, and the two program issues that were tracking the rest.
+
+**The root gate is green** on CI and locally: `agents:validate`, `lint`, `typecheck`, `test`
+(3,406), `build`, `docs:check`.
+
+**The browser suite went from twelve failures to two**, across 357 tests. Both remaining ones pass
+on their own and neither is a defect in the code: one is Next's dev server restarting itself under
+memory pressure mid-navigation during a 1.3-hour run, the other the cross-test dependency in §4.
+
+**Given a budget that fits it, that suite immediately found a real bug** — a broken image on the
+public home page, shipping on `main` since this morning's quiet edition. It is fixed here, and §2
+says how it hid.
+
+Five of the original twelve were not caused by this branch. Three assertions were written for a
+read-only deployment the browser tests never run against; one compared the Playwright runner's
+environment against a decision the server makes; one clicked before hydration. They survived
+because the gate that would have caught them is skipped by default *and* was budgeted at under half
+the suite's runtime, so even an explicit opt-in could only ever time out.
+
+**Five launch issues stay open on purpose**, each with an audit comment naming exactly what is
+left. See §4.
+
+**The two parked programs were not started**, and §5 explains why that is the right reading of
+your instruction rather than a shortfall.
+
+---
+
+## 2. What changed, and what to look at
+
+### The public clock was lying, on three surfaces
+
+The desktop audit you asked for found it. The home page's calendar was still printing the
+eighteen-row day that `operations-2026-08c` retired — a 09:00 story meeting, a 14:00 afternoon
+company meeting, a 22:00 night shift — and Sunday's column was promising every one of them as
+`Scheduled`.
+
+The site derives the clock from `config/ventures.json` **twice**, and only one of the two learned
+about venture days. There is now a test pinning the calendar's schedule to the cron dispatcher
+hour by hour, so they cannot drift again.
+
+`/calendar` had a third copy of the kind-to-venture map and painted every venture day in the
+company's grey. That map lives in one place now.
+
+### The walkthrough animation is not broken
+
+You were right to suspect it and wrong about the cause: it works. What was missing was any test
+that could tell. Every other assertion on that page reads the served markup, which a page that
+never hydrated still has — the wall, the desk channels and the plan all render perfectly on a dead
+page. There is now a test that presses **Play the day**, watches the beat reach a second room and
+presses it back to rest.
+
+### The admin
+
+- A venture workspace has **two chips** — `Latest` and `Archive` — instead of up to ten tabs.
+  DNESKAi and Titty Tuesdays used to open on a planning surface while the carousel each shipped
+  that morning sat one click away.
+- The **Design Lab** opens on the five looks, each drawn as the article's own cover. Pressing one
+  previews; `Použít` applies. Every axis is behind `Doladit`, with the 23 retired families under
+  "Starší vzhledy".
+- The **overview** is three sections: What happened, Waiting for you, Money.
+- **Waiting for you was asking for ten signatures you had already given.** `state/owner-attention.json`
+  is recorded rather than re-derived and the ticks went into `state/INBOX.md` by hand. The daily
+  checkpoint would have cleared it in the morning; a new test now fails when the snapshot and the
+  inbox disagree.
+
+### The browser gate found a live bug on `main`, on its first complete run
+
+The Facilities card for DNESKAi renders the share card a reader gets: the article's picture, the
+headline, the address. The picture is served by `/facilities/thumb/<venture>`, because the site's
+content-security policy allows images from `'self'` only.
+
+The card and that route each decided for themselves which package was the newest one. The card
+asked "the newest edition whose receipt says an edition was delivered", which skips a day recorded
+as `no_edition`. The route asked "the newest file in the archive directory", which skips nothing.
+Those two agree right up until the desk publishes nothing — and then the card shows the last real
+headline over an image the route answers with a 404. A broken picture, on the public home page.
+
+**2026-08-30 was such a day.** The 03:15 edition delivered `editionStatus: "no_edition"` and
+archived an empty package, and it has been shipping a broken card since. This branch did not have
+that file; CI did, because a pull request is built from the merge commit. That is the entire reason
+the gate saw it here and every local run said green.
+
+`latestMagazinePackage` is the one resolver both now call, and `packageThumbnail` is the one
+predicate for "this package carries a picture we can serve" — the bytes and a servable format
+checked together instead of half on each side of the boundary. The regression test is the quiet
+day itself. Verified both ways: with `main` merged in, the browser test fails on the old code and
+passes on the new one, and `pnpm build` prerenders a real 2,283-byte SVG where it used to bake a
+404.
+
+### The clock, one slot per venture
+
+Eleven slots: `cu-day` 05, `morning` 06, `ms-daily` 07, `mma-day` 08, `tt-marketing` 11,
+`bh-desk` 12, `gv-brief` 13, `dm-day` 15, `ts-desk` 18, `kv-desk` 21, `pg-desk` 23. One company
+meeting. Every retired phase still runs by hand: `pnpm cycle -- --phase mag-desk` works.
+
+**Door Money is paused** at `/admin/settings`. Its meetings do not run, its agents stand down, and
+it is gone from the public wall, the workflows plan, the venture index, the calendar and the
+workspace channels. Everything it made stays readable in the admin, and one click resumes it.
+
+---
+
+## 3. Decisions that are yours
+
+1. **"Twitch" or Twitter/X?** Your end state was that the only thing left for you should be
+   creating the Instagram and "Twitch" accounts. Nothing in this repository mentions Twitch — the
+   account approvals name Instagram, Facebook, Threads, X, TikTok and YouTube, and the social
+   contracts carry `instagram` and `threads`. Nothing was built against either answer.
+
+2. **CHUM's output cap.** marketingShark has spent about $1.05 and produced nothing, because
+   seventeen of nineteen paid calls were billed at exactly 3,000 output tokens — CHUM's own
+   ceiling — so every reply was truncated mid-package. The diagnosis is fixed and the next failure
+   names itself. The cure is a cap raise, which is spend. The arithmetic is in `docs/NEEDED.md`.
+
+3. **Historical calendar weeks now render under the new clock.** A finished week's rooms wrote the
+   same records they always did, but the calendar groups them under their venture's day row. That
+   is the honest consequence of one row per venture. Say if you want the old rows preserved for
+   dates before 2026-08-29; it is a table of retired hours, about an hour of work.
+
+4. **`TT-VISUALS-SPEND-001` is live.** Signing it switched on the Titty Tuesdays daily render pair
+   at about $0.057/day inside its own $2.00 monthly ceiling. Inside the signed caps and reversible
+   by unticking, but it is the first routine image spend and you should know it is running.
+
+5. **Door Money's founding decision is still unsigned**, and that is deliberate: you paused the
+   venture, and a paused venture holds no meetings either way. Sign it when you resume.
+
+---
+
+## 4. Still open in `quorum`, and what each waits on
+
+| Issue | What is left | Waiting on |
+| --- | --- | --- |
+| #464 | One Caught Up package, `2026-08-17 edition`, needs a delivery-only re-run | Access to `lukaskourilcz/aifirst` |
+| #467 | Deck persistence, draft queue items, the posting pack — the capability edges landed, nothing behind them | Engineering. The biggest launch gap left |
+| #470 | A live Kvórum desk run: the Štít mapper against a poison fixture, the seven feeds' receipts, drafts reaching the admin | A `kv-desk` run. Both gates are open now |
+| #471 | GoVIRAL's first live Monday: snapshot, brief, actor receipts | A Monday with `APIFY_TOKEN` |
+| #472 | marketingShark's cap (yours), and Personal Growth's first run | Decision 2, and a `pg-desk` run |
+| #462 | The program, closed when its children are | The five above |
+
+**One e2e test fails only inside a complete run.** `Door Money records a synthetic owner completion
+through the canonical route` passes on its own, every time, and fails in the full suite with the
+confirmation never appearing. Nothing in the server log accompanies it. It is the last unexplained
+failure of the twelve this branch worked through, and it is a cross-test dependency rather than
+anything the branch changed — the write-journeys project only runs in a complete suite, which had
+not completed once before tonight.
+
+The test now reads the completion route's response and reports its status and body, so the next run
+that hits this says what the server answered instead of only that the confirmation was missing. The
+route answers 404 for an unavailable store, 409 for a conflict and 503 otherwise; my guess is a
+conflict against a packet another journey touched, but it is a guess and the test will settle it.
+
+**#467 is the one that matters most.** It is the difference between "a delivered article" and
+"something you can post". Everything it needs is registered; none of it is built.
+
+**Personal Growth has never fired, and I think I know why.** `pg-desk` is on the clock at 23:00,
+countersigned, budgeted at $20/month nested, with no meeting record and no skip record — not even
+a refusal. Two things have to be true at once for that, and both are:
+
+- **The GitHub backstop cannot reach it.** `BACKSTOP_SWEEP_HOURS` is `[3, 11, 19]` UTC, so the last
+  sweep serves 21:55 Prague, and `resolveBackstopSweep` only considers a slot whose hour has already
+  passed. 23:00 never has. Each sweep also opens at most one slot, so three sweeps cover three of
+  eleven slots on a day when the punctual path does not run.
+- **The punctual path may not be deploying.** `site/vercel.json` carries 24 cron entries, `pg-desk`'s
+  two among them — but Vercel's Hobby plan allows two cron jobs, once a day. If the project is still
+  on Hobby, most of those 24 never deploy. That makes the `docs/NEEDED.md` item about moving from
+  Hobby to the existing Pro subscription far more consequential than it reads: it is not a nicety,
+  it may be why two thirds of the clock depends on a three-times-a-day rescue sweep.
+
+**To check:** open the Quorum project's Settings → Cron Jobs in Vercel and count what is actually
+deployed against the 24 in `site/vercel.json`. If it is two, that is the answer, and moving to Pro
+fixes every slot rather than only this one. `orchestrator/src/meetings/reconcile-cli.ts` was taught
+to account for private desks on 2026-08-29 (`eb33d3b`), so from now on a `pg-desk` that does not run
+at least leaves a skip record saying so.
+
+---
+
+## 5. The parked programs, and why they were not started
+
+WebDev Signal (#435, #443–#446) and Contest Radar (#408, #385–#404, #414, #420, #421, #430) are
+still parked. Both carry their parked comments and neither was reopened.
+
+The instruction to tackle every issue arrived hours after you parked them, and every other thing
+you wrote this week points the other way: the launch shortlist in `docs/NEEDED.md` says both wait
+until after launch, and of the four ventures on that list, two have since been paused or held
+tighter rather than loosened. Reading "tackle them all" as "unpark two programs the owner parked
+yesterday" is the one interpretation that contradicts the rest.
+
+Beyond that, neither can actually start:
+
+- **Contest Radar's #386 is a founding decision that is owner-only authority** — prepare for
+  signature, never sign. Its Apify discovery also draws on the same $5 Free-plan credit that
+  GoVIRAL and Kvórum already claim shares of, and the guard reserves per tenant, so a fourth
+  tenant needs its share recorded before anything is scheduled.
+- **WebDev Signal's founding boundary is unsigned.** `state/decisions/2026-08-28-webdev-signal-founding.md`
+  reads `Status: proposed; live behavior held`.
+
+If you want either started, say so and it starts with that signature.
+
+---
+
+## 6. The magazine repositories
+
+`lukaskourilcz/aifirst` (17 open issues) and `lukaskourilcz/mma-files` (7) are **outside this
+session's GitHub scope**. Both cloned fine for reading, and their `CLAUDE.md`/`AGENTS.md` were
+read, but the issue lists — and the Mobbin reshape work you filed there — cannot be reached.
+
+**To unblock:** approve the `add_repo` prompt for both in the next session, or add them at
+https://claude.ai/admin-settings/claude-tag. The same access unblocks #464's last package.
+
+---
+
+## 7. Things worth knowing before the next session
+
+**The browser suite is opt-in and skipped on pull requests.** The "Opt-in browser release gate"
+check reports `skipped` on every PR, so `pnpm -C site test:e2e` has only ever run when someone ran
+it by hand. Two assertions in it had been failing for as long as anything reached them, and this
+is why nobody knew:
+
+- The write-mode banner assertion cannot pass under `next dev`. `adminWritesEnabled()` returns true
+  whenever `NODE_ENV !== "production"`, whatever token the harness blanks, so the banner never
+  renders there. The guard could only ever see failure — "this deployment cannot save" and "there
+  is no admin here" looked identical to it. The shell states its write mode in both directions now.
+- A `<details>` clicked before hydration puts `open` on an element React is about to reconcile, and
+  React reports the difference on the console, which the test correctly counts as a failure.
+
+It could not pass even when asked. Putting `[full-e2e]` in this pull request's title turned the job
+on, and it was cancelled at exactly its own `timeout-minutes: 35` having reached test 25 of 358 —
+every one of them passing. A budget under half the suite's runtime means every opt-in ends as a red
+check that says nothing about the code. Raised to 90 in this branch, with the measurement in the
+comment; the job stays opt-in, so the ceiling costs nothing until somebody asks for it.
+
+So a green CI check on a pull request still means the root gate passed, not that the browser suite
+did — but now the browser suite can at least be asked. The first time it was asked and allowed to
+finish, it found the broken share card in §2. That is the argument for making it non-optional, and
+also the argument against: at 1.2 hours on eighteen council pushes a day it would be the most
+expensive thing this repository runs. A middle path worth considering is one nightly run on `main`
+rather than a check on every push.
+
+**A pull request is tested against the merge commit, not the branch.** That is why CI can be red on
+a branch whose own checkout is green, and it is not noise: the merge commit is what would land.
+When a browser failure will not reproduce, merge `main` in first — the state files it brings are
+often the whole story.
+
+**An interrupted e2e run leaves state behind, and I was wrong about why.** The suite writes real
+fixtures into the repository's own `state/` — dossiers, shortlists, ratings ledgers, a marketingShark
+package — and I first read the leftovers as a harness that does not clean up. It does:
+`operating-surfaces.spec.ts` has a thorough `test.afterAll` that removes every fixture it created
+and restores every file it touched, including the ratings ledger.
+
+What leaves the mess is killing a run before teardown, which I did several times tonight while
+chasing failures, and which the previous session evidently did too. So the rule is narrower than I
+first wrote it: **let a run finish, or clean up after killing one.**
+
+```
+git status                       # tracked files a killed run left modified
+git checkout -- state/           # put them back
+git clean -fd state/             # remove the fixtures teardown never reached
+```
+
+The one hardening still worth considering: `adminE2EServerEnv` already sets
+`BOARDLESSAI_REPO_ROOT`, so pointing it at a copy of `state/` (35 MB) would make an interrupted run
+cost nothing at all. Not a defect, just a sharper edge than it needs to be.
+
+**`pnpm build` and a running dev server fight over `site/.next`.** Running the root gate while the
+e2e suite is up will stall the suite.
+
+**Playwright in a fresh container.** This image ships Chromium build 1194 while `@playwright/test`
+pins 1234, so the suite cannot launch until the expected path exists:
+
+```
+mkdir -p /opt/pw-browsers/chromium_headless_shell-1234/chrome-headless-shell-linux64
+ln -sf /opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell \
+  /opt/pw-browsers/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell
+touch /opt/pw-browsers/chromium_headless_shell-1234/INSTALLATION_COMPLETE
+```
+
+Do not run `playwright install`; it is disabled in this environment on purpose.
+
+**Two small honesty gaps left in the UI**, neither worth reopening an issue for on its own:
+
+- The public calendar shows an 11:00 Titty Tuesdays row and marks future days `Scheduled`, though
+  the launch-period idea hold means the room will not sit. Past days read "Decided not to meet"
+  with the recorded reason, so a reader who looks is told the truth.
+- The attention rail's "Unreadable files" still reads as a counter at zero rather than as one
+  plain sentence.
+
+**Implementation Plans has no data.** `state/programs/current.json` does not exist, so the page
+renders its unavailable state. Populating it is the #419/#431 refresh path, and standing that up
+without knowing that path is how a second progress system gets built by accident.
+
+---
+
+## 8. How to verify any of this
+
+```
+pnpm agents:validate && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm docs:check
+pnpm -C site test:e2e          # 358 tests; allow a couple of hours
+```

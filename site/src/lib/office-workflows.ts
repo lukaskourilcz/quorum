@@ -1,5 +1,5 @@
 import "server-only";
-import { readdir, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import editionQuality from "../../../config/edition-quality.json";
 import ventureRegistry from "../../../config/ventures.json";
@@ -9,6 +9,12 @@ import {
   CURRENT_MONTHLY_OPERATING_LIMIT_USD
 } from "@/data/operating-policy";
 import { agents } from "@/data/agents";
+import {
+  latestMagazinePackage,
+  newestDeliveredEdition,
+  packageThumbnail,
+  type MagazineVenture
+} from "@/lib/latest-magazine-package";
 import type { PublicStandup } from "@/data/fixtures";
 import {
   buildPublicCalendarFeed,
@@ -223,35 +229,6 @@ async function hookCount(file: string): Promise<number | null> {
   return Array.isArray(entries) ? entries.length : null;
 }
 
-/**
- * The newest date whose edition receipt says an edition was delivered.
- *
- * `no_edition` is a real and recorded outcome with nothing to put on a slide, so it is skipped
- * here rather than shown as an example of a delivery.
- */
-async function newestDeliveredEdition(): Promise<{ date: string; receipt: Record<string, unknown> } | null> {
-  let names: string[] = [];
-  try {
-    names = await readdir(path.join(stateRoot(), "edition", "deliveries"));
-  } catch {
-    return null;
-  }
-  const dates = names
-    .filter((name) => name.endsWith(".json"))
-    .map((name) => name.slice(0, -5))
-    .sort()
-    .reverse();
-  for (const date of dates) {
-    const receipt = await readJson(stateRoot(), "edition", "deliveries", `${date}.json`) as
-      | Record<string, unknown>
-      | null;
-    if (!receipt || receipt.status !== "delivered") continue;
-    if (receipt.editionStatus === "no_edition") continue;
-    return { date, receipt };
-  }
-  return null;
-}
-
 /** The 12-character disclosure form, or `null` when the receipt carries no hash at all. */
 function packageRef(hash: unknown): string | null {
   return typeof hash === "string" && /^[0-9a-f]{12,}$/u.test(hash)
@@ -261,15 +238,16 @@ function packageRef(hash: unknown): string | null {
 
 
 /**
- * Where the card gets its thumbnail from.
+ * The headline a package carries, in the shape its own magazine writes it.
  *
- * The magazine publishes the same bytes at its own address, but this site's content-security
- * policy allows images from `'self'` only — so the card is served the copy this repository already
- * holds, through a route of our own. An image is claimed only when the package actually carries
- * the bytes; otherwise the card renders without one.
+ * A package with no headline is not a publication this room can show, whichever magazine it came
+ * from, so both callers treat a missing one the same way.
  */
-function packagedThumbnail(venture: "caught-up" | "mma-files", encoded: unknown): string | null {
-  return typeof encoded === "string" && encoded.length > 0 ? `/facilities/thumb/${venture}` : null;
+function packageHeadline(venture: MagazineVenture, delivered: Record<string, unknown>): string | null {
+  const title = venture === "caught-up"
+    ? (delivered as { article?: { cs?: { frontmatter?: { title?: unknown } } } }).article?.cs?.frontmatter?.title
+    : (delivered as { localizations?: { cs?: { title?: unknown } } }).localizations?.cs?.title;
+  return typeof title === "string" ? title : null;
 }
 
 /**
@@ -279,55 +257,22 @@ function packagedThumbnail(venture: "caught-up" | "mma-files", encoded: unknown)
  * the worked example follows. MMA Files records no address today, so its room shows the title and
  * the date and no link at all — the honest form of "we published this and did not write down
  * where".
+ *
+ * The picture is claimed only when `packageThumbnail` finds one, which is the same call the route
+ * serving `/facilities/thumb/<venture>` makes against the same package. The card cannot promise a
+ * picture the route will answer with a 404.
  */
-async function latestArticle(
-  venture: "caught-up" | "mma-files"
-): Promise<WorkflowsOutput | null> {
-  if (venture === "caught-up") {
-    const newest = await newestDeliveredEdition();
-    if (!newest) return null;
-    const url = typeof newest.receipt.articleUrl === "string" ? newest.receipt.articleUrl : null;
-    const hash = typeof newest.receipt.packageHash === "string" ? newest.receipt.packageHash : null;
-    const archived = hash
-      ? await readJson(stateRoot(), "edition", "archive", `${newest.date}-${hash}.json`) as
-        { article?: { cs?: { frontmatter?: { title?: unknown } } }; image?: { thumb_bytes_base64?: unknown } } | null
-      : null;
-    const title = archived?.article?.cs?.frontmatter?.title;
-    if (typeof title !== "string") return null;
-    return {
-      kind: "article",
-      title,
-      date: newest.date,
-      url,
-      image: packagedThumbnail("caught-up", archived?.image?.thumb_bytes_base64)
-    };
-  }
-
-  let names: string[] = [];
-  try {
-    names = await readdir(path.join(stateRoot(), "ventures", "mma-files", "articles"));
-  } catch {
-    return null;
-  }
-  const file = names.filter((name) => name.endsWith(".json")).sort().reverse()[0];
-  if (!file) return null;
-  const article = await readJson(stateRoot(), "ventures", "mma-files", "articles", file) as
-    | { publishAt?: unknown; packageHash?: unknown; localizations?: { cs?: { title?: unknown } }; image?: { thumb_bytes_base64?: unknown } }
-    | null;
-  const title = article?.localizations?.cs?.title;
-  if (typeof title !== "string") return null;
-  const receipt = typeof article?.packageHash === "string"
-    ? await readJson(
-        stateRoot(), "ventures", "mma-files", "deliveries", "articles", `${article.packageHash}.json`
-      ) as { articleUrl?: unknown } | null
-    : null;
-  const url = typeof receipt?.articleUrl === "string" ? receipt.articleUrl : null;
+async function latestArticle(venture: MagazineVenture): Promise<WorkflowsOutput | null> {
+  const newest = await latestMagazinePackage(venture);
+  if (!newest) return null;
+  const title = packageHeadline(venture, newest.delivered);
+  if (title === null) return null;
   return {
     kind: "article",
     title,
-    date: typeof article?.publishAt === "string" ? article.publishAt.slice(0, 10) : file.slice(0, 10),
-    url,
-    image: packagedThumbnail("mma-files", article?.image?.thumb_bytes_base64)
+    date: newest.date,
+    url: newest.articleUrl,
+    image: packageThumbnail(newest.delivered) ? `/facilities/thumb/${venture}` : null
   };
 }
 

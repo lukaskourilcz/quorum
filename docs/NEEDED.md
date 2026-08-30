@@ -8,7 +8,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-08-28.
+Updated: 2026-08-30.
 
 ---
 
@@ -27,13 +27,20 @@ where it lives, not here.
 - [x] **Create the launch issue program** — done 2026-08-29. #462 is the parent; #463–#473 are the
   eleven children, in working order. #463's outage half is already closed.
 
-- [x] **Countersign the two drafted decision records** — both are written and waiting only for your
+- [x] **Countersign the two drafted decision records** — both signed 2026-08-29. They were written and waiting only for your
   status line and signature. They are one story and should be signed together:
   `state/decisions/2026-08-29-launch-idea-room-hold.md` holds `cu-product` and `tt-marketing` for
   the launch period, and `state/decisions/2026-08-12-kvorum-budget-capacity.md` claims the `$0.08`
   that the second hold frees, which is exactly what Kvórum's capacity gate requires. Signing both
   stops the idea rooms you said aren't earning their keep and opens Kvórum's desk. Neither grants a
   source, account, credential or publishing authority. [imp:5] [owner:me] [time:20m] [kind:decision]
+
+**What the 2026-08-29 overnight session took off this list.** Every pending `HUMAN_APPROVAL` in
+`state/INBOX.md` was signed on your instruction, so eight items below stopped being decisions and
+became either done or a plain setup step — an account to open, a repository to create, a domain to
+land. Three of the four 12 August founding decisions were countersigned; Door Money's was left,
+because you paused that venture and a paused venture holds no meetings either way. Nothing was
+deleted: every line still here says exactly what remains of it.
 
 **Owner setup completed 2026-08-29.** The Apify token, the `/admin` credentials,
 `PORTFOLIO_LIVE_ENABLED` and `CAUGHT_UP_STREAMS_ENABLED` are all set, the launch-set approvals are
@@ -145,7 +152,7 @@ is the single thing standing between a proven path and a working one.
   written summary, which is a complete report rather than a gap.
   [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Sign the six Titty Tuesdays image approvals, or decide not to** — `TT-VISUALS-SPEND-001`
+- [x] **Sign the six Titty Tuesdays image approvals, or decide not to** — signed 2026-08-29. `TT-VISUALS-SPEND-001`
   through `TT-VISUALS-CONTRACT-006` in `state/INBOX.md`, all-or-nothing. They cover about $0.057 a
   day (roughly $1.70 a month, ceiling $2.00), the two renderer routes, keeping the images inside
   `state/` rather than the public site, the doctrine checklist and the delete-on-doctrine rule, the
@@ -293,14 +300,12 @@ Judgement calls. Nothing is blocked on code for any of these.
   source: D9 and `METRICS_INGESTION_ENABLED=false` stay in force, no platform is read,
   and absent numbers remain unavailable. [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Review and countersign or decline the four 12 August founding decisions** — read
-  `state/decisions/2026-08-12-kvorum-founding.md`,
-  `state/decisions/2026-08-12-booksofhistory-founding.md`,
-  `state/decisions/2026-08-12-door-money-founding.md` and
-  `state/decisions/2026-08-12-tehdejsi-svet-founding.md`. Each implemented venture remains
-  fixture-only until its own countersignature and approvals are complete. Kvórum additionally
-  needs a countersigned capacity reallocation that frees at least `$0.08` before a live desk.
-  [imp:4] [owner:me] [time:75m] [kind:decision]
+- [ ] **Countersign or decline Door Money's founding decision** — Kvórum's, BOOKSOFHISTORY's and
+  Tehdejší svět's were signed on 2026-08-29, and Kvórum's capacity reallocation with them, so its
+  desk is open. `state/decisions/2026-08-12-door-money-founding.md` is the one left, and it is not
+  urgent: you paused Door Money in Settings, and a paused venture holds no meetings whether its
+  founding is signed or not. Sign it when you resume the venture.
+  [imp:2] [owner:me] [time:20m] [kind:decision]
 
 - [x] **Review the facts file and sign or decline `TS-SNAPSHOT-001`** — confirm that
   `state/ventures/tehdejsi-svet/facts.json` contains only facts copied by a
@@ -315,8 +320,8 @@ Judgement calls. Nothing is blocked on code for any of these.
   incomplete credits, AI-generated historical imagery and destruction comparisons
   remain blocked. [imp:4] [owner:me] [time:15m] [kind:legal]
 
-- [ ] **Land the production domain, clear the handle and sign or decline
-  `TS-ACCOUNTS-003`** — finish the product's existing `[imp:5]` domain task and
+- [ ] **Land the production domain and clear the handle** — `TS-ACCOUNTS-003` was signed on
+  2026-08-29; the domain and the handle are what remain. Finish the product's existing `[imp:5]` domain task and
   absolute OG URLs, then clear `@tehdejsisvet` (or record a fallback), approve the
   no-flags bilingual bio in `state/INBOX.md`, and personally create the Instagram,
   Facebook and Threads profiles if approved. `dontwannaknow.vercel.app` must never
@@ -353,8 +358,9 @@ Judgement calls. Nothing is blocked on code for any of these.
   design's "Open questions".
   [imp:2] [owner:me] [time:15m] [kind:decision]
 
-- [ ] **Approve Door Money's private source (`BOOK-SOURCE-001`)** — confirm that the English
-  manuscript exists, create its private Git repository and keep the working clone outside this
+- [ ] **Create Door Money's private source repository** — `BOOK-SOURCE-001` was signed on
+  2026-08-29, so what is left is yours to create rather than to decide: the English manuscript's
+  private Git repository, with the working clone outside this
   public checkout. Put the manuscript at the gitignored local path or pass it explicitly to the
   CLI; set `BOOK_PRIVATE_CLONE_PATH` for a local live desk. The optional fine-grained
   `BOOK_SOURCE_TOKEN` is only for the owner's read-only checkout step: the shipped runtime does not
@@ -364,32 +370,33 @@ Judgement calls. Nothing is blocked on code for any of these.
   English-edition launch date the growth room should plan backwards from.
   [imp:5] [owner:me] [time:20m] [kind:setup]
 
-- [ ] **Approve and run the bounded ingestion (`BOOK-INGEST-002`)** — review the exact roles and
-  ceilings in `state/INBOX.md`: $3.00 for the program, $0.80 per day and $0.10 per call, all still
-  under the company caps. After both book approvals are checked, run
+- [ ] **Run the bounded ingestion** — `BOOK-INGEST-002` was signed on 2026-08-29 at $3.00 for the
+  program, $0.80 per day and $0.10 per call, all inside the company caps. With the private
+  repository above in place, run
   `pnpm book:ingest -- --manuscript <ignored-path> --private-root <private-clone>` locally. A stop
   is resumable for the same manuscript hash; do not copy the source or private output into this
   repository to make a hosted run convenient.
   [imp:4] [owner:me] [time:20m] [kind:decision]
 
-- [ ] **Clear Door Money and choose future accounts (`DM-ACCOUNTS-003`)** — finish the shared
-  handle/collision/trademark screen for "Door Money", decide whether the account should instead
-  carry the English book title, and choose any of Instagram, TikTok, X, Threads or YouTube. Check
-  the matching item in `state/INBOX.md` before creating an account. You create and configure it;
+- [ ] **Clear the Door Money handle and create its accounts** — `DM-ACCOUNTS-003` was signed on
+  2026-08-29. What is left: the shared handle/collision/trademark screen for "Door Money", whether
+  the account should carry the English book title instead, and which of Instagram, TikTok, X,
+  Threads or YouTube to open. You create and configure it;
   BoardlessAI remains drafts-only and has no credential, publisher or autopublish permission.
   [imp:3] [owner:me] [time:20m] [kind:legal]
 
-- [ ] **Approve manual Door Money results (`DM-RESULTS-004`)** — decide whether views, likes,
+- [x] **Approve manual Door Money results (`DM-RESULTS-004`)** — signed 2026-08-29, so the admin
+  save is open. It covers whether views, likes,
   comments, shares, saves, follows and link taps typed from the platform's own screen may become
   `owner-result-entry/1` evidence. Check the matching item in `state/INBOX.md` to open that admin
   save; until then it fails closed. This remains inside D9: no analytics account, API, cookie,
   pixel, scrape or automated ingestion, and missing results remain unavailable rather than zero.
   [imp:3] [owner:me] [time:5m] [kind:decision]
 
-- [ ] **Pick Kvórum's desk hour** — the design defaults to 21:00 Prague (full-day
-  harvest, you review in the evening, posts go out next morning). If same-evening
-  posting matters more than a complete day, the slot is 12:00 instead. One registry
-  field, decided at founding, awkward to move later without a decision.
+- [x] **Pick Kvórum's desk hour** — 21:00 Prague, as the design defaulted: a full day is
+  harvested, you review in the evening and posts go out the next morning. Settled by the founding
+  countersignature on 2026-08-29 and on the clock as `kv-desk`. Moving it later is a registry
+  field and a decision record, not a config edit.
   [imp:2] [owner:me] [time:5m] [kind:decision]
 
 - [ ] **Glance at the launch rotation and veto anything you dislike** — you said five top

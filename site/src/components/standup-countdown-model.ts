@@ -1,40 +1,27 @@
 export const STANDUP_TIME_ZONE = "Europe/Prague";
 
+/**
+ * The meetings a visitor can be counted down to, in the order they sit.
+ *
+ * Two entries since `operations-2026-08c` and the venture-day consolidation: the company meets
+ * once, in the morning, and DNESKAi's edition and product rooms sit inside one daily desk. The
+ * phases this no longer lists are still dispatchable by hand and their finished records still
+ * render — `formatPhaseLabel` below is what names them.
+ */
 export const STANDUP_SCHEDULE = [
   {
     hour: 5,
     hours: "05:00 · daily",
-    label: "DNESKAi edition meeting",
+    label: "DNESKAi daily desk",
     minute: 0,
-    phase: "cu-edition"
+    phase: "cu-day"
   },
   {
     hour: 6,
-    hours: "06:00–14:00",
+    hours: "06:00 · daily",
     label: "Morning company meeting",
     minute: 0,
     phase: "morning"
-  },
-  {
-    hour: 14,
-    hours: "14:00–22:00",
-    label: "Afternoon company meeting",
-    minute: 0,
-    phase: "afternoon"
-  },
-  {
-    hour: 17,
-    hours: "17:00 · daily",
-    label: "DNESKAi product meeting",
-    minute: 0,
-    phase: "cu-product"
-  },
-  {
-    hour: 22,
-    hours: "22:00–06:00",
-    label: "Night company meeting",
-    minute: 0,
-    phase: "night"
   }
 ] as const;
 
@@ -211,14 +198,19 @@ export function formatStandupOccurrence(occurrence: StandupOccurrence) {
 }
 
 export function formatPhaseLabel(phase: string) {
+  // Retired phases keep their labels: the records those shifts wrote are still on file and still
+  // render, and a finished meeting named by its raw phase id is a meeting nobody can read.
   const phaseLabels: Record<string, string> = {
     afternoon: "Afternoon company meeting",
     am: "Morning meeting · old label",
     founding: "Founding",
     morning: "Morning company meeting",
     night: "Night company meeting",
+    "cu-day": "DNESKAi daily desk",
     "cu-edition": "DNESKAi edition production",
     "cu-product": "DNESKAi product meeting",
+    "mma-day": "MMA Files daily desk",
+    "dm-day": "Door Money daily desk",
     pm: "Afternoon meeting · old label"
   };
 

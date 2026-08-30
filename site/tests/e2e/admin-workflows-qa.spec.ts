@@ -120,13 +120,29 @@ test("owner decisions, results and ratings stay reviewable while writes stay hel
 
   await page.goto("/admin?view=approvals", { waitUntil: "domcontentloaded" });
   await waitForAdminShell(page);
-  await expect(page.getByRole("heading", { level: 1, name: "Approvals." }))
+  // Approvals and owner-only tasks became one destination on 2026-08-29 (#496): two places were
+  // asking the owner for the same thing. `?view=approvals` still resolves, and lands here.
+  await expect(page.getByRole("heading", { level: 1, name: "Waiting for you" }))
     .toBeVisible();
-  await expect(page.getByText("Everything waiting for your yes.", {
+  await expect(page.getByText("Your signature, your keys, your accounts.", {
     exact: false
   })).toBeVisible();
+  /*
+   * The banner appears exactly when the deployment cannot write, and this checks both directions.
+   *
+   * It used to assert the banner outright, which cannot hold here: `adminWritesEnabled` returns
+   * true under `next dev` whatever the token says, so the e2e server is always writable and the
+   * banner never renders. The assertion had been failing for as long as anything reached it, and
+   * nothing noticed because the browser suite is opt-in and skipped on pull requests.
+   */
+  const writable = await page.locator("[data-admin-writes]").getAttribute("data-admin-writes");
+  expect(writable, "the shell must say which write mode it is in").toMatch(/^(enabled|disabled)$/u);
   await expect(page.locator('[data-admin-state="write-disabled"]'))
-    .toContainText("This deployment cannot save changes");
+    .toHaveCount(writable === "disabled" ? 1 : 0);
+  if (writable === "disabled") {
+    await expect(page.locator('[data-admin-state="write-disabled"]'))
+      .toContainText("This deployment cannot save changes");
+  }
 
   await page.goto("/admin?venture=door-money&tab=recommendations", {
     waitUntil: "domcontentloaded"
@@ -202,13 +218,36 @@ test("money, fixed costs, file details and launch binder remain truthful and con
   const mutationAttempts = await guardAdminWrites(page);
 
   await page.goto("/admin", { waitUntil: "domcontentloaded" });
+  // One click deeper since #500. The overview answers what the money costs; the editor that
+  // changes it is a step below that answer, behind the Money section's disclosure.
+  //
+  // After hydration, not before: a `<details>` opened by a click that lands first puts `open` on
+  // an element React is about to reconcile, and React reports the difference as a hydration
+  // mismatch on the console — which this test collects as an application failure, correctly.
+  await waitForAdminShell(page);
+  await page.getByText("Fixed costs and what could bring money in").click();
   await expect(page.getByRole("heading", { name: "Fixed costs" }))
     .toBeVisible();
   await expect(page.getByText("$50.00", { exact: false }).first())
     .toBeVisible();
-  await expect(page.getByRole("button", { name: "Add cost" })).toBeDisabled();
-  await expect(page.getByRole("button", { name: "Save fixed costs" }))
-    .toBeDisabled();
+  /*
+   * The editor's controls follow the deployment's write mode, and this asks the shell which one
+   * it is in rather than assuming the read-only half. Both buttons were pinned disabled, which is
+   * only true where saving is impossible — the third assertion in this suite written for a
+   * deployment the browser tests never run against.
+   */
+  const writable = await page.locator("[data-admin-writes]").getAttribute("data-admin-writes");
+  const addCost = page.getByRole("button", { name: "Add cost" });
+  const saveCosts = page.getByRole("button", { name: "Save fixed costs" });
+  if (writable === "disabled") {
+    await expect(addCost).toBeDisabled();
+    await expect(saveCosts).toBeDisabled();
+  } else {
+    // Both are live where saving is possible: neither is gated on having edited something, and
+    // `guardAdminWrites` above is what stops this test from actually writing.
+    await expect(addCost).toBeEnabled();
+    await expect(saveCosts).toBeEnabled();
+  }
   await expect(page.getByRole("link", { name: "Public Money" }))
     .toHaveAttribute("href", "/results#money");
   await expectNoDocumentOverflow(page, "money and fixed costs");

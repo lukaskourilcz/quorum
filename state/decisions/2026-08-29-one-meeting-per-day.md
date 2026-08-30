@@ -2,7 +2,7 @@
 
 Date: 2026-08-29
 
-Decider: owner countersignature pending
+Decider: Lukas Kouril, owner
 
 Status: countersigned
 

@@ -46,6 +46,7 @@ import {
   CURRENT_MONTHLY_OPERATING_LIMIT_USD
 } from "@/data/operating-policy";
 import { adminSections } from "@/lib/admin-sections";
+import { adminVentureViews } from "@/lib/admin-venture-views";
 import { buildAdminRecentActivity } from "@/lib/admin-recent-activity";
 import { readApprovedUndeliveredPayloads } from "@/lib/admin-owner-attention";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
@@ -114,6 +115,55 @@ function tabLabel(tab: AdminVentureTab): string {
 
 function ventureName(id: string, name: string): string {
   return id === "caught-up" ? "DNESKAi" : name;
+}
+
+/**
+ * One chip in a workspace's view switcher.
+ *
+ * The tint resolves against the current Admin surface rather than the old near-black canvas, so
+ * the same brand signal reads in both themes while the shared foreground token keeps the label
+ * legible. `small` is the archive's second row, which is subordinate to the two above it.
+ */
+function VentureViewChip({
+  brand,
+  current,
+  href,
+  label,
+  on,
+  small = false
+}: {
+  brand: string;
+  /**
+   * Whether this chip is the page the reader is on.
+   *
+   * Separate from `on`, which is only the tint. `Archive` is lit while the reader is inside it and
+   * points at its first view, so marking it current put `aria-current="page"` on two links with
+   * the same href — the group's chip and the view's own. The view's is the true one.
+   */
+  current?: boolean;
+  href: string;
+  label: string;
+  on: boolean;
+  small?: boolean;
+}) {
+  return (
+    <Link
+      aria-current={(current ?? on) ? "page" : undefined}
+      className={`admin-focus-ring min-h-[var(--admin-touch-target)] rounded-[var(--admin-radius)] border px-3 py-2 font-semibold uppercase tracking-[var(--admin-tracking-label)] transition-colors duration-[var(--admin-motion-fast)] md:min-h-[var(--admin-control-height)] ${small ? "text-[length:var(--admin-type-micro)]" : "text-[length:var(--admin-type-label)]"}`}
+      data-admin-view-chip={label}
+      href={href}
+      scroll={false}
+      style={{
+        borderColor: on ? brand : "var(--admin-border-strong)",
+        background: on
+          ? `color-mix(in srgb, ${brand} 15%, var(--admin-surface-secondary))`
+          : "var(--admin-surface-secondary)",
+        color: "var(--admin-foreground)"
+      }}
+    >
+      {label}
+    </Link>
+  );
 }
 
 /** Company-level views: their heading and the one sentence that says what the page is for. */
@@ -249,11 +299,33 @@ export default async function AdminPage({
       ? requestedView as CompanyView
       : null;
   const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVentureId) ?? null;
+  /*
+   * The workspace opens on what the venture made, not on whichever view the registry listed first.
+   *
+   * `?tab=` still names any of the venture's views and still resolves to the same panel, so every
+   * link the owner or a test already holds keeps working. What it no longer does is decide the IA:
+   * the two chips above are `Latest` and `Archive`, and the archive's own views appear only once
+   * the owner asks for them.
+   */
+  const ventureViews = selectedVenture ? adminVentureViews(selectedVenture.id, selectedVenture.tabs) : null;
+  /*
+   * The one count that survived the tab row.
+   *
+   * `fighters` is FightAIQ's output view, so its chip now reads `Latest` — and the unresolved
+   * count rode on that chip's label. A count that answers "is something waiting for me" is
+   * exactly the kind #497 keeps, so it rides on `Latest` instead, and shows only when there is
+   * something unresolved to show.
+   */
+  const unresolvedFighterCount = fightaiq.fighters.reduce(
+    (count, fighter) => count + fighter.discrepancyDetails.filter((item) => item.status === "open").length,
+    0
+  );
   const selectedTab = selectedVenture
     ? selectedVenture.tabs.includes(requestedTab as AdminVentureTab)
       ? (requestedTab as AdminVentureTab)
-      : selectedVenture.tabs[0] ?? null
+      : ventureViews?.output ?? selectedVenture.tabs[0] ?? null
     : null;
+  const inArchive = Boolean(ventureViews && selectedTab && selectedTab !== ventureViews.output);
   /*
    * Which Design Lab section is open.
    *
@@ -838,6 +910,15 @@ export default async function AdminPage({
       workspaces={workspaces}
     >
       <AdminWriteProvider enabled={writesEnabled}>
+      {/*
+        Said in both states, not only the unhappy one.
+        
+        The banner is the whole signal today, so "no banner" and "no admin" look identical to
+        anything checking. A guard that can only see the failure cannot prove the success: the
+        e2e assertion for this has been unachievable under `next dev`, where `adminWritesEnabled`
+        returns true, and nothing noticed because the browser suite is opt-in and skipped on PRs.
+      */}
+      <div data-admin-writes={writesEnabled ? "enabled" : "disabled"} hidden />
       {!writesEnabled ? (
         <AdminStateMessage
           description="Saving needs the production GitHub token listed in NEEDED.md. Existing records remain available to review."
@@ -870,44 +951,24 @@ export default async function AdminPage({
           </Panel>
         </div>
       ) : !selectedVenture ? (
-        <div className="grid min-w-0 gap-4">
-          <LaunchBoardPanel board={launchBoard} />
-          <PersonalGrowthOverview snapshot={personalGrowth} />
-          <div
-            className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] bg-[var(--admin-border)] lg:grid-cols-4"
-            data-adm-tiles
-          >
-            <Tile
-              brand={brand}
-              foot={`of the ${formatUsd(CURRENT_MONTHLY_OPERATING_LIMIT_USD)} limit`}
-              label="Month to date"
-              percent={(monthAllIn / CURRENT_MONTHLY_OPERATING_LIMIT_USD) * 100}
-              value={tileUsd(monthAllIn)}
-            />
-            <Tile
-              brand={brand}
-              foot={latestDay ? `${latestDay.date} · of ${formatUsd(CURRENT_DAILY_OPERATING_PACE_USD)}` : "no day on record yet"}
-              label="Latest recorded day"
-              percent={latestDay ? (latestDay.totalCostUsd / CURRENT_DAILY_OPERATING_PACE_USD) * 100 : 0}
-              value={latestDay ? tileUsd(latestDay.totalCostUsd) : "—"}
-            />
-            <Tile
-              brand={brand}
-              foot={`of ${formatUsd(CURRENT_MONTHLY_API_LIMIT_USD)}`}
-              label="AI usage"
-              percent={(monthApi / CURRENT_MONTHLY_API_LIMIT_USD) * 100}
-              value={tileUsd(monthApi)}
-            />
-            <Tile
-              brand={brand}
-              foot="days with a recorded result"
-              label="Days on record"
-              percent={100}
-              value={String(dailyResults.length)}
-            />
-          </div>
-
-          <Panel note="The four newest ventures" title="What happened since yesterday">
+        /*
+         * Three questions, in the order the owner asks them.
+         *
+         * The overview stacked nine answers — launch board, Personal Growth, four money tiles,
+         * recent activity, a fixed-costs editor, a money panel, the shipping desk, a file browser
+         * and DNESKAi's social archive — to a question that has three parts: what happened, is
+         * anything waiting for me, what does it cost. Two of those nine were one venture's work
+         * and have moved to that venture's page; the rest are grouped under the question they
+         * answer, with everything a step below the answer behind a disclosure.
+         */
+        <div className="grid min-w-0 gap-6">
+          <section className="grid min-w-0 gap-4" data-admin-overview="what-happened">
+            <h2 className="m-0 text-[length:var(--admin-type-section)] font-semibold text-[var(--admin-foreground)]">What happened</h2>
+            <LaunchBoardPanel board={launchBoard} />
+            <Panel note="The last three days" title="What shipped">
+              <RenderedDeskPanel desk={renderedDesk} />
+            </Panel>
+            <Panel note="The four newest ventures" title="Since yesterday">
             <div className="grid gap-3 md:grid-cols-2" data-admin-recent-activity>
               {recentActivity.map((row) => (
                 <Link
@@ -929,74 +990,167 @@ export default async function AdminPage({
                 </Link>
               ))}
             </div>
-          </Panel>
-
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr_5fr]" data-adm-cols>
-            <Panel note="You are the only one who can change these" title="Fixed costs">
-              <FixedCostsEditor initialCosts={fixedCosts.costs} />
             </Panel>
-            <Panel note="This quarter" title="What could bring money in">
-              <AdminMoneyPanel snapshot={money} />
+          </section>
+
+          {/* The counts come from the same snapshot the rail counts, so the two cannot disagree.
+              The lists themselves live one click away, where acting on them belongs. */}
+          <section className="grid min-w-0 gap-4" data-admin-overview="waiting">
+            <h2 className="m-0 text-[length:var(--admin-type-section)] font-semibold text-[var(--admin-foreground)]">Waiting for you</h2>
+            {/*
+              How much waits, and where to go — not the items themselves.
+              
+              The lists render each task's own words, and the owner's words are written for the
+              person doing the work: one of them names `METRICS_INGESTION_ENABLED`. This is the
+              page he reads first, and the reason it is guarded against contract tokens at all is
+              that he said he could not tell what half of them meant. The detail belongs one click
+              away, on the destination built for acting on it.
+              
+              The counts come off the same snapshot the rail counts, so the two cannot disagree.
+            */}
+            <Panel note="Signatures and setup" title="What needs you">
+              <div className="grid min-w-0 gap-3">
+                <div className="flex flex-wrap gap-x-6 gap-y-2">
+                  {[
+                    { label: "waiting on your signature", value: ownerAttention.approvals.length },
+                    { label: "only you can do", value: ownerAttention.manualTasks.length },
+                    { label: "approved, not yet delivered", value: approvedUndelivered.length }
+                  ].map((entry) => (
+                    <p className="m-0 flex items-baseline gap-2" key={entry.label}>
+                      <span className="admin-tabular text-[length:var(--admin-type-section)] font-semibold text-[var(--admin-foreground)]">{entry.value}</span>
+                      <span className="text-[length:var(--admin-type-body)] text-[var(--admin-foreground-muted)]">{entry.label}</span>
+                    </p>
+                  ))}
+                </div>
+                <p className="m-0 text-[length:var(--admin-type-control)]">
+                  <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin?view=waiting">
+                    Open what is waiting
+                  </Link>
+                </p>
+              </div>
             </Panel>
-          </div>
+          </section>
 
-          {/* The "Company health and priorities" panel — quality tiles, the social-readiness
-              grid and a priority form — went on the owner's 2026-08-29 instruction: the system
-              runs autonomously, and the rail counters above already carry what still waits. The
-              snapshot behind it still feeds those counters and the launch board. */}
-          <Panel note="The last three days" title="What shipped">
-            <RenderedDeskPanel desk={renderedDesk} />
-          </Panel>
+          <section className="grid min-w-0 gap-4" data-admin-overview="money">
+            <h2 className="m-0 text-[length:var(--admin-type-section)] font-semibold text-[var(--admin-foreground)]">Money</h2>
+            <div
+              className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] bg-[var(--admin-border)] lg:grid-cols-4"
+              data-adm-tiles
+            >
+              <Tile
+                brand={brand}
+                foot={`of the ${formatUsd(CURRENT_MONTHLY_OPERATING_LIMIT_USD)} limit`}
+                label="Month to date"
+                percent={(monthAllIn / CURRENT_MONTHLY_OPERATING_LIMIT_USD) * 100}
+                value={tileUsd(monthAllIn)}
+              />
+              <Tile
+                brand={brand}
+                foot={latestDay ? `${latestDay.date} · of ${formatUsd(CURRENT_DAILY_OPERATING_PACE_USD)}` : "no day on record yet"}
+                label="Latest recorded day"
+                percent={latestDay ? (latestDay.totalCostUsd / CURRENT_DAILY_OPERATING_PACE_USD) * 100 : 0}
+                value={latestDay ? tileUsd(latestDay.totalCostUsd) : "—"}
+              />
+              <Tile
+                brand={brand}
+                foot={`of ${formatUsd(CURRENT_MONTHLY_API_LIMIT_USD)}`}
+                label="AI usage"
+                percent={(monthApi / CURRENT_MONTHLY_API_LIMIT_USD) * 100}
+                value={tileUsd(monthApi)}
+              />
+              <Tile
+                brand={brand}
+                foot="days with a recorded result"
+                label="Days on record"
+                percent={100}
+                value={String(dailyResults.length)}
+              />
+            </div>
+            <details className="rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] p-3">
+              <summary className="admin-focus-ring cursor-pointer text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">
+                Fixed costs and what could bring money in
+              </summary>
+              <div className="grid grid-cols-1 gap-4 pt-3 lg:grid-cols-[7fr_5fr]" data-adm-cols>
+                <Panel note="You are the only one who can change these" title="Fixed costs">
+                  <FixedCostsEditor initialCosts={fixedCosts.costs} />
+                </Panel>
+                <Panel note="This quarter" title="What could bring money in">
+                  <AdminMoneyPanel snapshot={money} />
+                </Panel>
+              </div>
+            </details>
+          </section>
 
-          <AdminFileBrowser files={files} />
-
-          {/* The three destinations that left the navigation on 2026-08-29. Each still works and
-              each is still occasionally worth opening; none is something the owner has to check,
-              which is the whole distinction between a link and a place. */}
-          <p className="m-0 flex flex-wrap gap-x-4 gap-y-1 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]" data-admin-secondary-links>
-            <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/operations">Operations</Link>
-            <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/implementation-plans">Implementation plans</Link>
-            <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/social-profiles">Social profiles</Link>
-            <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin?view=future">Ideas and monetization</Link>
-          </p>
-
-          <Panel note="Nothing here posts by itself" title="Social drafts · DNESKAi">
-            <SocialArchive {...state.socialArchive} />
-          </Panel>
+          {/* Everything that is occasionally worth opening and never something to check. The file
+              browser joined them: it is how a stored record is looked at, not a question the
+              overview answers. */}
+          <details className="rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] p-3">
+            <summary className="admin-focus-ring cursor-pointer text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">
+              Saved files and other places
+            </summary>
+            <div className="grid min-w-0 gap-4 pt-3">
+              <p className="m-0 flex flex-wrap gap-x-4 gap-y-1 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]" data-admin-secondary-links>
+                <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/operations">Operations</Link>
+                <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/implementation-plans">Implementation plans</Link>
+                <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin/social-profiles">Social profiles</Link>
+                <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin?view=future">Ideas and monetization</Link>
+              </p>
+              <AdminFileBrowser files={files} />
+            </div>
+          </details>
         </div>
       ) : (
         <div className="grid min-w-0 gap-4">
-          <div className="flex flex-wrap items-center gap-2">
-            {selectedVenture.tabs.map((tab) => {
-              const on = selectedTab === tab;
-              const label = selectedVenture.id === "fightaiq" && tab === "fighters"
-                ? `${tabLabel(tab)} · ${fightaiq.fighters.reduce((count, fighter) => count + fighter.discrepancyDetails.filter((item) => item.status === "open").length, 0)} unresolved`
-                : tabLabel(tab);
-              return (
-                <Link
-                  aria-current={on ? "page" : undefined}
-                  className="admin-focus-ring min-h-[var(--admin-touch-target)] rounded-[var(--admin-radius)] border px-3 py-2 text-[length:var(--admin-type-label)] font-semibold uppercase tracking-[var(--admin-tracking-label)] transition-colors duration-[var(--admin-motion-fast)] md:min-h-[var(--admin-control-height)]"
-                  href={`/admin?venture=${selectedVenture.id}&tab=${tab}`}
-                  key={tab}
-                  scroll={false}
-                  // Resolve the tint against the current Admin surface instead of the old
-                  // near-black canvas. This keeps the same brand signal in both themes while the
-                  // shared foreground token keeps the label readable.
-                  style={{
-                    borderColor: on ? brand : "var(--admin-border-strong)",
-                    background: on
-                      ? `color-mix(in srgb, ${brand} 15%, var(--admin-surface-secondary))`
-                      : "var(--admin-surface-secondary)",
-                    color: "var(--admin-foreground)"
-                  }}
-                >
-                  {label}
-                </Link>
-              );
-            })}
-            <span className="admin-tabular ml-auto text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">
-              {tabView.count} on this tab
-            </span>
+          {/*
+            Two chips, and the archive's own views only once the owner asks for them.
+
+            A workspace offered up to ten tabs — Personal Growth ten, MMA Files five — over stored
+            records, with the newest thing the venture made somewhere behind them. `Latest` is that
+            thing; `Archive` is everything the venture keeps. Nothing left the page: every view is
+            still here and every `?tab=` link still lands on the same panel.
+
+            The "N on this tab" counter went with them. A count answers "is something waiting for
+            me", and a tab's own item total never did.
+          */}
+          <div className="grid gap-2" data-admin-venture-views>
+            <div className="flex flex-wrap items-center gap-2">
+              {/* The output view's own address, not a bare `?venture=`. The workspace opens here
+                  either way; naming the tab keeps the URL self-describing and keeps every
+                  registered view a link something can point `aria-current` at. */}
+              <VentureViewChip
+                brand={brand}
+                href={`/admin?venture=${selectedVenture.id}&tab=${ventureViews?.output ?? selectedVenture.tabs[0]}`}
+                label={unresolvedFighterCount > 0 && selectedVenture.id === "fightaiq"
+                  ? `Latest · ${unresolvedFighterCount} unresolved`
+                  : "Latest"}
+                on={!inArchive}
+              />
+              {ventureViews?.archive.length ? (
+                <VentureViewChip
+                  brand={brand}
+                  current={false}
+                  href={`/admin?venture=${selectedVenture.id}&tab=${ventureViews.archive[0]}`}
+                  label="Archive"
+                  on={inArchive}
+                />
+              ) : null}
+            </div>
+            {inArchive && ventureViews ? (
+              <div className="flex flex-wrap items-center gap-2" data-admin-archive-views>
+                {ventureViews.archive.map((tab) => (
+                  <VentureViewChip
+                    brand={brand}
+                    href={`/admin?venture=${selectedVenture.id}&tab=${tab}`}
+                    key={tab}
+                    label={selectedVenture.id === "fightaiq" && tab === "fighters" && unresolvedFighterCount > 0
+                      ? `${tabLabel(tab)} · ${unresolvedFighterCount} unresolved`
+                      : tabLabel(tab)}
+                    on={selectedTab === tab}
+                    small
+                  />
+                ))}
+              </div>
+            ) : null}
           </div>
 
           {ventureUnreadable.length ? (
@@ -1024,7 +1178,20 @@ export default async function AdminPage({
             </>
           ) : null}
 
+          {/* The owner's private desk keeps its own summary, on its own page. It used to sit on the
+              company overview, where it answered a question about one venture among the ones that
+              answered questions about all of them. */}
+          {selectedVenture.id === "personal-growth" ? <PersonalGrowthOverview snapshot={personalGrowth} /> : null}
+
           <div className="min-w-0">{tabView.node}</div>
+
+          {/* A venture's output, on that venture's page. The social-drafts archive is DNESKAi's
+              work, and it sat on the company overview only because that is where it was built. */}
+          {selectedVenture.id === "caught-up" ? (
+            <Panel note="Nothing here posts by itself" title="Social drafts">
+              <SocialArchive {...state.socialArchive} />
+            </Panel>
+          ) : null}
         </div>
       )}
       </AdminWriteProvider>

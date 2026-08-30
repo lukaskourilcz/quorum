@@ -123,7 +123,7 @@ function Chip({ children, tone = "default" }: { children: React.ReactNode; tone?
 
 function CopyRail({ blocks }: { blocks: AdminKvorumCopyBlock[] }) {
   return (
-    <div className="overflow-x-auto pb-2" data-horizontal-scroll>
+    <div aria-label="Approved copy for this recommendation" className="admin-focus-ring overflow-x-auto pb-2" data-horizontal-scroll role="region" tabIndex={0}>
       <div className="flex min-w-max gap-3">
         {blocks.map((block) => (
           <AdminCard className="w-[min(78vw,380px)]" key={block.id}>

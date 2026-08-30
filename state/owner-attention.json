@@ -1,124 +1,7 @@
 {
   "schemaVersion": "owner-attention/1",
-  "generatedAt": "2026-08-29T20:06:58.874Z",
-  "approvals": [
-    {
-      "id": "BOOK-INGEST-002",
-      "title": "Allow the one-time, resumable Door Money knowledge ingestion inside its program envelope.",
-      "plain": "Door Money's one-time private ingestion stays off until you approve its $3.00 program cap, $0.80 daily cap and existing per-call ceiling.",
-      "source": {
-        "kind": "inbox",
-        "ref": "state/INBOX.md#BOOK-INGEST-002"
-      },
-      "since": null,
-      "urgency": "blocking"
-    },
-    {
-      "id": "BOOK-SOURCE-001",
-      "title": "Provide Door Money's private manuscript source and approve the public/private boundary.",
-      "plain": "Door Money cannot read the private source until you record its local path outside the public repository; the public checkout will retain only bounded derivatives.",
-      "source": {
-        "kind": "inbox",
-        "ref": "state/INBOX.md#BOOK-SOURCE-001"
-      },
-      "since": null,
-      "urgency": "blocking"
-    },
-    {
-      "id": "DM-ACCOUNTS-003",
-      "title": "Clear the Door Money name and choose any future social accounts.",
-      "plain": "Door Money has no public account until you clear its name and choose and create any channels yourself; signing grants no posting automation.",
-      "source": {
-        "kind": "inbox",
-        "ref": "state/INBOX.md#DM-ACCOUNTS-003"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
-      "id": "DM-RESULTS-004",
-      "title": "Allow owner-entered Door Money post results as the venture's only performance evidence inside the D9 hold.",
-      "plain": "Door Money result entry stays disabled until you allow owner-entered numbers after a manual post; automated analytics remains forbidden.",
-      "source": {
-        "kind": "inbox",
-        "ref": "state/INBOX.md#DM-RESULTS-004"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
-      "id": "TT-VISUALS-BATCH-005",
-      "title": "Approve the batch shape: one concept a day, two images, one per provider, re-encoded to WebP.",
-      "plain": "Approve the batch shape: one concept a day, two images, one per provider, re-encoded to WebP.",
-      "source": {
-        "kind": "inbox",
-        "ref": "state/INBOX.md#TT-VISUALS-BATCH-005"
-      },
-      "since": null,
-      "urgency": "soon",
-      "needsPlainCopy": true
-    },
-    {
-      "id": "TT-VISUALS-CONTRACT-006",
-      "title": "Approve the `design-proposal/1` contract itself.",
-      "plain": "Approve the `design-proposal/1` contract itself.",
-      "source": {
-        "kind": "inbox",
-        "ref": "state/INBOX.md#TT-VISUALS-CONTRACT-006"
-      },
-      "since": null,
-      "urgency": "soon",
-      "needsPlainCopy": true
-    },
-    {
-      "id": "TT-VISUALS-DOCTRINE-004",
-      "title": "Approve the doctrine checklist wording and the two kinds of no.",
-      "plain": "Approve the doctrine checklist wording and the two kinds of no.",
-      "source": {
-        "kind": "inbox",
-        "ref": "state/INBOX.md#TT-VISUALS-DOCTRINE-004"
-      },
-      "since": null,
-      "urgency": "soon",
-      "needsPlainCopy": true
-    },
-    {
-      "id": "TT-VISUALS-ROLE-002",
-      "title": "Add `TT_VISUAL_IMAGE` and `TT_VISUAL_IMAGE_FAL` to `config/models.json`, and rewrite `_comment_IMAGE` to name four sanctioned image call sites instead of two.",
-      "plain": "Add `TT_VISUAL_IMAGE` and `TT_VISUAL_IMAGE_FAL` to `config/models.json`, and rewrite `_comment_IMAGE` to name four sanctioned image call sites instead of two.",
-      "source": {
-        "kind": "inbox",
-        "ref": "state/INBOX.md#TT-VISUALS-ROLE-002"
-      },
-      "since": null,
-      "urgency": "soon",
-      "needsPlainCopy": true
-    },
-    {
-      "id": "TT-VISUALS-SPEND-001",
-      "title": "Allow the first routine image spend: two Titty Tuesdays garment renders a day, one per provider, inside the existing $25 model share.",
-      "plain": "Allow the first routine image spend: two Titty Tuesdays garment renders a day, one per provider, inside the existing $25 model share.",
-      "source": {
-        "kind": "inbox",
-        "ref": "state/INBOX.md#TT-VISUALS-SPEND-001"
-      },
-      "since": null,
-      "urgency": "soon",
-      "needsPlainCopy": true
-    },
-    {
-      "id": "TT-VISUALS-STORAGE-003",
-      "title": "Keep proposal images under `state/ventures/titty-tuesdays/design-proposals/media/`, served through the authenticated admin route, rather than under `site/public/`.",
-      "plain": "Keep proposal images under `state/ventures/titty-tuesdays/design-proposals/media/`, served through the authenticated admin route, rather than under `site/public/`.",
-      "source": {
-        "kind": "inbox",
-        "ref": "state/INBOX.md#TT-VISUALS-STORAGE-003"
-      },
-      "since": null,
-      "urgency": "soon",
-      "needsPlainCopy": true
-    }
-  ],
+  "generatedAt": "2026-08-30T00:16:53.747Z",
+  "approvals": [],
   "manualTasks": [
     {
       "id": "ADMIN_USER",
@@ -132,6 +15,22 @@
       "source": {
         "kind": "runtime",
         "ref": "ADMIN_USER"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "APIFY_TOKEN",
+      "title": "GoVIRAL has no trend data source",
+      "plain": "GoVIRAL's Monday meeting has no trend data until an Apify account exists on the free plan.",
+      "steps": [
+        "Sign up at apify.com on the Free plan — no card",
+        "Copy the API token",
+        "Add APIFY_TOKEN to the repository's Actions secrets"
+      ],
+      "source": {
+        "kind": "runtime",
+        "ref": "APIFY_TOKEN"
       },
       "since": null,
       "urgency": "blocking"
@@ -539,6 +438,21 @@
       "urgency": "soon"
     },
     {
+      "id": "THE_ODDS_API_KEY",
+      "title": "FightAIQ has no odds source",
+      "plain": "FightAIQ has no price source to check its model against, so its readiness files stay empty.",
+      "steps": [
+        "Get a free key at the-odds-api.com",
+        "Add THE_ODDS_API_KEY to the repository's Actions secrets"
+      ],
+      "source": {
+        "kind": "runtime",
+        "ref": "THE_ODDS_API_KEY"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
       "id": "vercel-production-settings",
       "title": "Vercel production settings",
       "plain": "BoardlessAI tracks main at https://boardless-ai.vercel.app; DNESKAi at https://caughtup-ai.vercel.app; MMA Files at https://mma-files.vercel.app with NEXT_PUBLIC_DEMO_MODE=false. The delivery step builds its clone with demo mode off (cycle.yml passes NEXT_PUBLIC_DEMO_MODE=false), so leaving production on demo makes a delivered article's route 404 and fails every page check. Keep NEXT_PUBLIC_ALLOW_",
@@ -726,6 +640,21 @@
       "source": {
         "kind": "needed",
         "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "whenever"
+    },
+    {
+      "id": "FAL_KEY",
+      "title": "No image rendering key is configured",
+      "plain": "Rendered illustrations and the Titty Tuesdays image pipeline stay off without this key.",
+      "steps": [
+        "Create a fal.ai key",
+        "Add FAL_KEY to the repository's Actions secrets"
+      ],
+      "source": {
+        "kind": "runtime",
+        "ref": "FAL_KEY"
       },
       "since": null,
       "urgency": "whenever"

@@ -182,7 +182,7 @@ function capabilityView(profile: SocialProfileRecord, map: ReturnType<typeof cap
   const decisions = sources.map((source) => {
     const reference = profile.capabilityRefs.find((candidate) => candidate.source === source);
     const edge = map.edges.find((candidate) => candidate.source === source);
-    if (!reference || !edge) return { decision: "denied" as const, reason: `No exact #424 approved-publish-package edge is recorded for ${source}.`, governingReference: "GitHub #424" };
+    if (!reference || !edge) return { decision: "denied" as const, reason: `No approved publish-package route is recorded for ${source}.`, governingReference: "GitHub #424" };
     if (reference.mapVersion !== map.version || reference.decisionReference !== edge.governingReference || edge.dataSchemaVersion !== reference.dataSchemaVersion) return { decision: "denied" as const, reason: `The #424 reference for ${source} is stale or mismatched.`, governingReference: edge.governingReference };
     return edge;
   });

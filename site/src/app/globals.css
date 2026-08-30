@@ -169,15 +169,20 @@ img {
   --admin-information: #005fc7;
   --admin-information-soft: rgba(0, 100, 209, 0.1);
   /*
-   * Darkened from #1f7a35, which failed AA where it is most often used.
+   * Darkened twice, and the second time with margin.
    *
-   * A success badge puts this colour on its own soft tint, and on the Personal Growth surface that
-   * tint composites to #c9dbcf — 3.72:1 at 11px, against the 4.5:1 the release gate requires. The
-   * same hue at this lightness measures 4.55:1 there and improves every lighter background it sits
-   * on. The soft tint tracks it so the pair stays one colour.
+   * A success badge puts this colour on its own soft tint. #1f7a35 measured 3.72:1 on the Personal
+   * Growth surface at 11px; #1b6b2f measured 4.55:1 there, which cleared the 4.5:1 the release gate
+   * requires by six hundredths — and then the surface underneath moved by one step of grey and the
+   * composite came out at 4.43:1. A ratio that close to the line is not a passing colour, it is a
+   * colour waiting for the next layout change.
+   *
+   * #175f27 measures 5.24:1 on that composite and better on every lighter ground, so the next
+   * change to what sits underneath cannot take it back under. The soft tint tracks it so the pair
+   * stays one colour.
    */
-  --admin-success: #1b6b2f;
-  --admin-success-soft: rgba(27, 107, 47, 0.11);
+  --admin-success: #175f27;
+  --admin-success-soft: rgba(23, 95, 39, 0.11);
   --admin-warning: #8a4b08;
   --admin-warning-soft: rgba(154, 85, 11, 0.12);
   --admin-risk: #963825;

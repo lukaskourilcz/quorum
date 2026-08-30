@@ -7,18 +7,18 @@ import {
 } from "./standup-countdown-model";
 
 describe("Standup countdown schedule", () => {
-  it("selects the edition room before 05:00 Prague time", () => {
+  it("selects the DNESKAi day before 05:00 Prague time", () => {
     expect(getNextStandup(new Date("2026-07-30T02:59:59.000Z"))).toEqual({
       hours: "05:00 · daily",
       iso: "2026-07-30T03:00:00.000Z",
-      label: "DNESKAi edition meeting",
-      phase: "cu-edition"
+      label: "DNESKAi daily desk",
+      phase: "cu-day"
     });
   });
 
-  it("selects the morning shift before 06:00 Prague time", () => {
+  it("selects the morning company meeting before 06:00 Prague time", () => {
     expect(getNextStandup(new Date("2026-07-30T03:59:59.000Z"))).toEqual({
-      hours: "06:00–14:00",
+      hours: "06:00 · daily",
       iso: "2026-07-30T04:00:00.000Z",
       label: "Morning company meeting",
       phase: "morning"
@@ -27,46 +27,25 @@ describe("Standup countdown schedule", () => {
 
   it("keeps the morning occurrence at its exact start time", () => {
     expect(getNextStandup(new Date("2026-07-30T04:00:00.000Z"))).toEqual({
-      hours: "06:00–14:00",
+      hours: "06:00 · daily",
       iso: "2026-07-30T04:00:00.000Z",
       label: "Morning company meeting",
       phase: "morning"
     });
   });
 
-  it("selects the afternoon shift after the morning slot", () => {
+  /*
+   * The afternoon, product and night slots used to sit between these two, and this is where their
+   * absence is proved rather than assumed. After the morning meeting the next thing on the clock
+   * is tomorrow's DNESKAi day: the company meets once, and the edition and product rooms sit
+   * inside that day rather than on hours of their own.
+   */
+  it("rolls to tomorrow's DNESKAi day once the morning meeting has started", () => {
     expect(getNextStandup(new Date("2026-07-30T04:00:01.000Z"))).toEqual({
-      hours: "14:00–22:00",
-      iso: "2026-07-30T12:00:00.000Z",
-      label: "Afternoon company meeting",
-      phase: "afternoon"
-    });
-  });
-
-  it("selects the product room after the afternoon slot", () => {
-    expect(getNextStandup(new Date("2026-07-30T12:00:01.000Z"))).toEqual({
-      hours: "17:00 · daily",
-      iso: "2026-07-30T15:00:00.000Z",
-      label: "DNESKAi product meeting",
-      phase: "cu-product"
-    });
-  });
-
-  it("selects the night shift after the product room", () => {
-    expect(getNextStandup(new Date("2026-07-30T15:00:01.000Z"))).toEqual({
-      hours: "22:00–06:00",
-      iso: "2026-07-30T20:00:00.000Z",
-      label: "Night company meeting",
-      phase: "night"
-    });
-  });
-
-  it("moves to tomorrow's edition room after the night shift starts", () => {
-    expect(getNextStandup(new Date("2026-07-30T20:00:01.000Z"))).toEqual({
       hours: "05:00 · daily",
       iso: "2026-07-31T03:00:00.000Z",
-      label: "DNESKAi edition meeting",
-      phase: "cu-edition"
+      label: "DNESKAi daily desk",
+      phase: "cu-day"
     });
   });
 
@@ -74,8 +53,8 @@ describe("Standup countdown schedule", () => {
     expect(getNextStandup(new Date("2026-12-15T21:00:01.000Z"))).toEqual({
       hours: "05:00 · daily",
       iso: "2026-12-16T04:00:00.000Z",
-      label: "DNESKAi edition meeting",
-      phase: "cu-edition"
+      label: "DNESKAi daily desk",
+      phase: "cu-day"
     });
   });
 
@@ -86,7 +65,7 @@ describe("Standup countdown schedule", () => {
     "keeps the morning slot at 06:00 through the %s clock change",
     (_, now, expected) => {
       expect(getNextStandup(new Date(now))).toEqual({
-        hours: "06:00–14:00",
+        hours: "06:00 · daily",
         iso: expected,
         label: "Morning company meeting",
         phase: "morning"
@@ -94,18 +73,9 @@ describe("Standup countdown schedule", () => {
     }
   );
 
-  it("keeps the night occurrence at its exact start time", () => {
-    expect(getNextStandup(new Date("2026-07-30T20:00:00.000Z"))).toEqual({
-      hours: "22:00–06:00",
-      iso: "2026-07-30T20:00:00.000Z",
-      label: "Night company meeting",
-      phase: "night"
-    });
-  });
-
   it("splits the remaining time into stable counter units", () => {
     const occurrence = {
-      hours: "06:00–14:00",
+      hours: "06:00 · daily",
       iso: "2026-08-01T10:03:04.000Z",
       label: "Morning company meeting",
       phase: "morning"
@@ -128,16 +98,20 @@ describe("Standup countdown schedule", () => {
   it("formats the target in the public Prague schedule", () => {
     expect(
       formatStandupOccurrence({
-        hours: "14:00–22:00",
-        iso: "2026-07-30T12:00:00.000Z",
-        label: "Afternoon company meeting",
-        phase: "afternoon"
+        hours: "05:00 · daily",
+        iso: "2026-07-30T03:00:00.000Z",
+        label: "DNESKAi daily desk",
+        phase: "cu-day"
       })
-    ).toBe("Jul 30, 2026 · 14:00 · Prague");
+    ).toBe("Jul 30, 2026 · 05:00 · Prague");
   });
 
-  it("labels current shifts and makes historical AM/PM records explicit", () => {
+  it("labels the days, the shifts that were retired and the historical AM/PM records", () => {
+    expect(formatPhaseLabel("cu-day")).toBe("DNESKAi daily desk");
+    expect(formatPhaseLabel("mma-day")).toBe("MMA Files daily desk");
+    expect(formatPhaseLabel("dm-day")).toBe("Door Money daily desk");
     expect(formatPhaseLabel("morning")).toBe("Morning company meeting");
+    // Retired, and still named: their records are on file and a reader still opens them.
     expect(formatPhaseLabel("afternoon")).toBe("Afternoon company meeting");
     expect(formatPhaseLabel("night")).toBe("Night company meeting");
     expect(formatPhaseLabel("cu-edition")).toBe("DNESKAi edition production");

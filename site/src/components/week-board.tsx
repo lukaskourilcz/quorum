@@ -40,7 +40,7 @@ import {
   type CalendarStatus,
   type PublicCalendarFeed
 } from "@/lib/calendar-feed-model";
-import { publicKindLabel, readableSlotReason } from "@/lib/slot-labels";
+import { publicKindLabel, readableSlotReason, ventureForKind } from "@/lib/slot-labels";
 
 const weekdayFormatter = new Intl.DateTimeFormat("en", {
   weekday: "short",
@@ -52,10 +52,6 @@ const dateFormatter = new Intl.DateTimeFormat("en", {
   month: "short",
   timeZone: "UTC"
 });
-
-function isCaughtUp(kind: CalendarKind) {
-  return kind === "cu-edition" || kind === "cu-product";
-}
 
 type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "goviral" | "marketingshark" | "booksofhistory" | "door-money" | "tehdejsi-svet" | "fightaiq" | "mma-files" | "kvorum" | "carousel-studio";
 type DisplayStatus = CalendarStatus | "test";
@@ -128,19 +124,10 @@ const projectDetails: Record<ProjectKey, { icon: LucideIcon; label: string; tone
   "carousel-studio": { icon: PanelsTopLeft, label: "Design Lab", tone: "text-[var(--accent)]", slotColor: "var(--accent)" }
 };
 
+// The shared map, not a fourth copy of it. This one had never learned the venture days, so every
+// consolidated day was painted in the company's grey on `/calendar`.
 function projectForKind(kind: CalendarKind): ProjectKey {
-  if (isCaughtUp(kind)) return "caught-up";
-  if (kind === "tt-marketing") return "titty-tuesdays";
-  if (kind === "gv-brief") return "goviral";
-  if (kind === "ms-daily") return "marketingshark";
-  if (kind === "bh-desk") return "booksofhistory";
-  if (kind === "dm-desk" || kind === "dm-growth") return "door-money";
-  if (kind === "ts-desk") return "tehdejsi-svet";
-  if (kind === "mma-intake" || kind === "mma-analysis") return "fightaiq";
-  if (kind === "mag-editorial" || kind === "mag-desk" || kind === "article-am" || kind === "article-pm") return "mma-files";
-  if (kind === "kv-desk") return "kvorum";
-  if (kind === "studio") return "carousel-studio";
-  return "company";
+  return ventureForKind(kind) as ProjectKey;
 }
 
 function displayStatus(status: CalendarStatus, fixture: boolean | undefined): DisplayStatus {
