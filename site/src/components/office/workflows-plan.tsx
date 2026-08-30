@@ -482,6 +482,18 @@ export function WorkflowsPlan({
 }) {
   const byKey = new Map(rooms.map((room) => [room.key, room]));
   const noteFor = (slot: WorkflowsSlot) => notes[slots.indexOf(slot)] ?? "none";
+  /**
+   * The rooms actually on the plan, and the west annex's share of them.
+   *
+   * `ROOMS` is the building — every bay that exists — while `rooms` is what the company is running
+   * today, which is one venture shorter for every one the owner paused in Settings. Everything
+   * drawn per room reads this, so a paused venture leaves no floor, no furniture and no name
+   * behind it.
+   */
+  const present = ROOMS.filter((geometry) => byKey.has(geometry.key));
+  const annexRooms = present
+    .filter((geometry) => geometry.x < 0)
+    .map((geometry) => ({ key: geometry.key, centreY: geometry.y + geometry.height / 2 }));
 
   /*
    * Occupancy, derived from what is actually inside a station rather than from the hour.
@@ -573,7 +585,7 @@ export function WorkflowsPlan({
       {/* ---- floors, and the halo behind the lit room ------------------------ */}
 
       <g style={animate ? entrance("wf-fade", 300, 420, "linear") : undefined}>
-        {ROOMS.map((geometry) => {
+        {present.map((geometry) => {
           const lit = litRoom === geometry.key;
           const workshop = geometry.key === "carousel-studio";
           // The beat's own room outranks every other state: it is the one thing happening now.
@@ -871,15 +883,22 @@ export function WorkflowsPlan({
           <path d={`M600 ${y} H770`} key={y} />
         ))}
 
-        {/* The four review-era rooms form the west annex. Each uses one bounded desk shape; the
-            room's own roles and slots carry the operational differences in its dialog. */}
-        {[195, 385, 575, 765].map((y) => (
-          <g key={y}>
-            <rect height={54} rx={9} width={250} x={-325} y={y - 27} />
-            <rect height={14} width={26} x={-292} y={y - 49} />
-            <rect height={14} width={26} x={-108} y={y - 49} />
-            <rect height={14} width={26} x={-292} y={y + 35} />
-            <rect height={14} width={26} x={-108} y={y + 35} />
+        {/*
+          The review-era rooms form the west annex. Each uses one bounded desk shape; the room's
+          own roles and slots carry the operational differences in its dialog.
+
+          Drawn off the annex's own geometry, filtered to the rooms that are here. The four rows
+          used to be four literal y values, so pausing Door Money in Settings left its bay
+          furnished and nameless — a desk in an empty room, which is worse than either an empty
+          bay or no bay at all.
+        */}
+        {annexRooms.map(({ key, centreY }) => (
+          <g key={key}>
+            <rect height={54} rx={9} width={250} x={-325} y={centreY - 27} />
+            <rect height={14} width={26} x={-292} y={centreY - 49} />
+            <rect height={14} width={26} x={-108} y={centreY - 49} />
+            <rect height={14} width={26} x={-292} y={centreY + 35} />
+            <rect height={14} width={26} x={-108} y={centreY + 35} />
           </g>
         ))}
 
@@ -1050,9 +1069,8 @@ export function WorkflowsPlan({
 
       {/* ---- rooms: outlines, names, door notes -------------------------------- */}
 
-      {ROOMS.map((geometry) => {
-        const room = byKey.get(geometry.key);
-        if (!room) return null;
+      {present.map((geometry) => {
+        const room = byKey.get(geometry.key)!;
         const lit = litRoom === geometry.key;
         const workshop = geometry.key === "carousel-studio";
         // Every room opens. Pressing one replaces the drawing with the room itself.
@@ -1148,7 +1166,7 @@ export function WorkflowsPlan({
               );
               const y = geometry.labelY + 16;
               return (
-                <g style={{ pointerEvents: "none", ...(animate ? entrance("wf-fade", 180, 80, E1) : {}) }}>
+                <g data-wf-beat={beat.tag} style={{ pointerEvents: "none", ...(animate ? entrance("wf-fade", 180, 80, E1) : {}) }}>
                   <rect
                     fill="#09090b"
                     fillOpacity={0.88}

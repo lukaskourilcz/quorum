@@ -1309,6 +1309,40 @@ test("the home walkthrough carries every operating venture at mobile width", asy
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(1);
 });
 
+/*
+ * The one thing on this page nothing was watching.
+ *
+ * Every other assertion here reads the served markup, which a dead page still has: the wall, the
+ * channels and the plan all render server-side and look perfect with no JavaScript attached at
+ * all. "Play the day" is the only control whose failure is invisible to that kind of test, and it
+ * is exactly the thing the owner reported as broken. So this walks it: press, watch the beats
+ * advance through real rooms, press again, and land back at rest.
+ */
+test("the facilities plan plays the day and returns to rest", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  await page.locator("#facilities").scrollIntoViewIfNeeded();
+  const toggle = page.getByRole("button", { name: "Play the day" });
+  await expect(toggle).toBeVisible();
+  await toggle.click();
+
+  // Pressed is the hydration proof: the label is React state, and a page that never hydrated
+  // keeps saying "Play the day" however hard it is clicked.
+  const stop = page.getByRole("button", { name: "Stop the day" });
+  await expect(stop).toBeVisible();
+  await expect(stop).toHaveAttribute("aria-pressed", "true");
+
+  // A beat tag is `HH:00 · label` in the registry's own words, and the day must reach at least
+  // two different rooms — one tag that never changes is a frozen performance, not a day.
+  const beat = page.locator("[data-wf-beat]");
+  await expect(beat).toHaveAttribute("data-wf-beat", /^\d{2}:00 · \S/u, { timeout: 15_000 });
+  const first = await beat.getAttribute("data-wf-beat");
+  await expect(beat).not.toHaveAttribute("data-wf-beat", first ?? "", { timeout: 20_000 });
+
+  await stop.click();
+  await expect(toggle).toBeVisible();
+  await expect(page.locator("[data-wf-beat]")).toHaveCount(0);
+});
+
 test("the ventures index has eleven real cards and keeps sample scores separate", async ({ page }) => {
   await page.goto("/ventures", { waitUntil: "networkidle" });
   const ids = [
