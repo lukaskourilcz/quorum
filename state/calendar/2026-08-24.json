@@ -460,7 +460,8 @@
       "at": "2026-08-29T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-08-30T03:00:00.000Z",
@@ -519,13 +520,16 @@
       "at": "2026-08-30T13:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "dm-day",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The run behind this meeting finished without writing anything down about it."
     },
     {
       "at": "2026-08-30T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ts-desk",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-30-ts-desk",
+      "decisionOneLiner": "The planning phase stopped and will resume. Response Response truncated at the 2500-token cap for claude-sonnet-5; raise maxOutputTokens at the 2500-token cap for claude-sonnet-5;"
     },
     {
       "at": "2026-08-30T19:00:00.000Z",
