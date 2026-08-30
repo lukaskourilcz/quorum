@@ -910,6 +910,15 @@ export default async function AdminPage({
       workspaces={workspaces}
     >
       <AdminWriteProvider enabled={writesEnabled}>
+      {/*
+        Said in both states, not only the unhappy one.
+        
+        The banner is the whole signal today, so "no banner" and "no admin" look identical to
+        anything checking. A guard that can only see the failure cannot prove the success: the
+        e2e assertion for this has been unachievable under `next dev`, where `adminWritesEnabled`
+        returns true, and nothing noticed because the browser suite is opt-in and skipped on PRs.
+      */}
+      <div data-admin-writes={writesEnabled ? "enabled" : "disabled"} hidden />
       {!writesEnabled ? (
         <AdminStateMessage
           description="Saving needs the production GitHub token listed in NEEDED.md. Existing records remain available to review."

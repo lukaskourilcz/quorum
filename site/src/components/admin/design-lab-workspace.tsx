@@ -140,10 +140,18 @@ function SlideImage({ src, alt, ratio, canvas = true }: { src: string; alt: stri
     <img
       alt={alt}
       className={`w-full rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] transition-opacity ${pending ? "opacity-40" : "opacity-100"}`}
-      // The canvas is the slide being worked on. The five look tiles are the same renderer at
-      // thumbnail size, and marking them as canvases too made `[data-slide-canvas]` resolve to
-      // six elements — a selector for "the slide" that names every picture on the page.
-      {...(canvas ? { "data-slide-canvas": true } : { "data-look-canvas": true })}
+      /*
+       * The canvas is the slide being worked on. The five look tiles are the same renderer at
+       * thumbnail size, and marking them as canvases too made `[data-slide-canvas]` resolve to
+       * six elements — a selector for "the slide" that names every picture on the page.
+       *
+       * They also compete for the same six connections, and every one of them is a server-side
+       * render rather than a file read. Without a stated order the browser starts all six at
+       * once and the slide the owner is actually looking at finishes last. The tiles wait.
+       */
+      {...(canvas
+        ? { "data-slide-canvas": true, fetchPriority: "high" as const }
+        : { "data-look-canvas": true, fetchPriority: "low" as const, loading: "lazy" as const })}
       onError={() => setFailed(url)}
       onLoad={() => setLoaded(url)}
       src={url}

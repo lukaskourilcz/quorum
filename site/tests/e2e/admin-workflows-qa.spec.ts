@@ -127,8 +127,22 @@ test("owner decisions, results and ratings stay reviewable while writes stay hel
   await expect(page.getByText("Your signature, your keys, your accounts.", {
     exact: false
   })).toBeVisible();
+  /*
+   * The banner appears exactly when the deployment cannot write, and this checks both directions.
+   *
+   * It used to assert the banner outright, which cannot hold here: `adminWritesEnabled` returns
+   * true under `next dev` whatever the token says, so the e2e server is always writable and the
+   * banner never renders. The assertion had been failing for as long as anything reached it, and
+   * nothing noticed because the browser suite is opt-in and skipped on pull requests.
+   */
+  const writable = await page.locator("[data-admin-writes]").getAttribute("data-admin-writes");
+  expect(writable, "the shell must say which write mode it is in").toMatch(/^(enabled|disabled)$/u);
   await expect(page.locator('[data-admin-state="write-disabled"]'))
-    .toContainText("This deployment cannot save changes");
+    .toHaveCount(writable === "disabled" ? 1 : 0);
+  if (writable === "disabled") {
+    await expect(page.locator('[data-admin-state="write-disabled"]'))
+      .toContainText("This deployment cannot save changes");
+  }
 
   await page.goto("/admin?venture=door-money&tab=recommendations", {
     waitUntil: "domcontentloaded"
@@ -206,6 +220,11 @@ test("money, fixed costs, file details and launch binder remain truthful and con
   await page.goto("/admin", { waitUntil: "domcontentloaded" });
   // One click deeper since #500. The overview answers what the money costs; the editor that
   // changes it is a step below that answer, behind the Money section's disclosure.
+  //
+  // After hydration, not before: a `<details>` opened by a click that lands first puts `open` on
+  // an element React is about to reconcile, and React reports the difference as a hydration
+  // mismatch on the console — which this test collects as an application failure, correctly.
+  await waitForAdminShell(page);
   await page.getByText("Fixed costs and what could bring money in").click();
   await expect(page.getByRole("heading", { name: "Fixed costs" }))
     .toBeVisible();
