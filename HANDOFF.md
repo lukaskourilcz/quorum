@@ -20,6 +20,10 @@ launch program's children, and the two program issues that were tracking the res
 on their own and neither is a defect in the code: one is Next's dev server restarting itself under
 memory pressure mid-navigation during a 1.3-hour run, the other the cross-test dependency in §4.
 
+**Given a budget that fits it, that suite immediately found a real bug** — a broken image on the
+public home page, shipping on `main` since this morning's quiet edition. It is fixed here, and §2
+says how it hid.
+
 Five of the original twelve were not caused by this branch. Three assertions were written for a
 read-only deployment the browser tests never run against; one compared the Playwright runner's
 environment against a decision the server makes; one clicked before hydration. They survived
@@ -71,6 +75,30 @@ presses it back to rest.
   is recorded rather than re-derived and the ticks went into `state/INBOX.md` by hand. The daily
   checkpoint would have cleared it in the morning; a new test now fails when the snapshot and the
   inbox disagree.
+
+### The browser gate found a live bug on `main`, on its first complete run
+
+The Facilities card for DNESKAi renders the share card a reader gets: the article's picture, the
+headline, the address. The picture is served by `/facilities/thumb/<venture>`, because the site's
+content-security policy allows images from `'self'` only.
+
+The card and that route each decided for themselves which package was the newest one. The card
+asked "the newest edition whose receipt says an edition was delivered", which skips a day recorded
+as `no_edition`. The route asked "the newest file in the archive directory", which skips nothing.
+Those two agree right up until the desk publishes nothing — and then the card shows the last real
+headline over an image the route answers with a 404. A broken picture, on the public home page.
+
+**2026-08-30 was such a day.** The 03:15 edition delivered `editionStatus: "no_edition"` and
+archived an empty package, and it has been shipping a broken card since. This branch did not have
+that file; CI did, because a pull request is built from the merge commit. That is the entire reason
+the gate saw it here and every local run said green.
+
+`latestMagazinePackage` is the one resolver both now call, and `packageThumbnail` is the one
+predicate for "this package carries a picture we can serve" — the bytes and a servable format
+checked together instead of half on each side of the boundary. The regression test is the quiet
+day itself. Verified both ways: with `main` merged in, the browser test fails on the old code and
+passes on the new one, and `pnpm build` prerenders a real 2,283-byte SVG where it used to bake a
+404.
 
 ### The clock, one slot per venture
 
@@ -214,7 +242,16 @@ check that says nothing about the code. Raised to 90 in this branch, with the me
 comment; the job stays opt-in, so the ceiling costs nothing until somebody asks for it.
 
 So a green CI check on a pull request still means the root gate passed, not that the browser suite
-did — but now the browser suite can at least be asked.
+did — but now the browser suite can at least be asked. The first time it was asked and allowed to
+finish, it found the broken share card in §2. That is the argument for making it non-optional, and
+also the argument against: at 1.2 hours on eighteen council pushes a day it would be the most
+expensive thing this repository runs. A middle path worth considering is one nightly run on `main`
+rather than a check on every push.
+
+**A pull request is tested against the merge commit, not the branch.** That is why CI can be red on
+a branch whose own checkout is green, and it is not noise: the merge commit is what would land.
+When a browser failure will not reproduce, merge `main` in first — the state files it brings are
+often the whole story.
 
 **An interrupted e2e run leaves state behind, and I was wrong about why.** The suite writes real
 fixtures into the repository's own `state/` — dossiers, shortlists, ratings ledgers, a marketingShark
