@@ -161,7 +161,7 @@
     {
       "id": "booksofhistory",
       "name": "BOOKSOFHISTORY",
-      "status": "operating",
+      "status": "paused",
       "visibility": "public",
       "taste": true,
       "ledgerNamespace": "booksofhistory",
