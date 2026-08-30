@@ -173,6 +173,22 @@ https://claude.ai/admin-settings/claude-tag. The same access unblocks #464's las
 
 ## 7. Things worth knowing before the next session
 
+**The browser suite is opt-in and skipped on pull requests.** The "Opt-in browser release gate"
+check reports `skipped` on every PR, so `pnpm -C site test:e2e` has only ever run when someone ran
+it by hand. Two assertions in it had been failing for as long as anything reached them, and this
+is why nobody knew:
+
+- The write-mode banner assertion cannot pass under `next dev`. `adminWritesEnabled()` returns true
+  whenever `NODE_ENV !== "production"`, whatever token the harness blanks, so the banner never
+  renders there. The guard could only ever see failure — "this deployment cannot save" and "there
+  is no admin here" looked identical to it. The shell states its write mode in both directions now.
+- A `<details>` clicked before hydration puts `open` on an element React is about to reconcile, and
+  React reports the difference on the console, which the test correctly counts as a failure.
+
+So the green CI check on a pull request means the root gate passed, not that the browser suite did.
+Worth deciding whether to make that job non-optional; it takes a couple of hours, which is probably
+why it is opt-in.
+
 **The e2e suite mutates committed state.** A write-journey test emptied
 `state/ratings/titty-tuesdays/ledger.jsonl` — thirteen of your own ratings — and did not restore
 it. It was caught and reverted before the push, but the next run will do it again. Tehdejší svět's
