@@ -9,6 +9,7 @@ import { CarouselStudioAdminPanel } from "@/components/admin/carousel-studio-pan
 import { HookBrainAdminPanel } from "@/components/admin/hook-brain-panel";
 import { KvorumClaimsPanel } from "@/components/admin/kvorum-claims-panel";
 import { WebDevSignalPanel, resolveWebDevTab } from "@/components/admin/webdev-signal-panel";
+import { ContestRadarPanel, resolveContestTab } from "@/components/admin/contest-radar-panel";
 import { KvorumMonitorPanel } from "@/components/admin/kvorum-monitor-panel";
 import { KvorumRecommendationsPanel } from "@/components/admin/kvorum-recommendations-panel";
 import { ImplementationProgramCompactSummary } from "@/components/admin/implementation-plans";
@@ -66,6 +67,7 @@ import { readAdminTehdejsiSvet } from "@/lib/admin-tehdejsi-svet";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { readAdminKvorum } from "@/lib/admin-kvorum";
 import { readAdminWebDevSignal } from "@/lib/admin-webdev-signal";
+import { readAdminContestRadar } from "@/lib/admin-contest-radar";
 import { readAdminImplementationProgress } from "@/lib/admin-implementation-plans";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPersonalGrowth, type PersonalGrowthCoreTab } from "@/lib/admin-personal-growth";
@@ -246,6 +248,7 @@ export default async function AdminPage({
     tehdejsiSvet,
     kvorum,
     webdevSignal,
+    contestRadar,
     implementationProgress,
     personalGrowth,
     imageRungs,
@@ -278,6 +281,7 @@ export default async function AdminPage({
     readAdminTehdejsiSvet(),
     readAdminKvorum(),
     readAdminWebDevSignal(),
+    readAdminContestRadar(),
     readAdminImplementationProgress(),
     readAdminPersonalGrowth(),
     readAdminImageRungs(LAUNCH_SET),
@@ -765,6 +769,14 @@ export default async function AdminPage({
     }
     if (id === "door-money" && selectedTab === "knowledge") {
       return { node: <DoorMoneyKnowledgePanel knowledge={doorMoney.knowledge} />, count: doorMoneyKnowledgeCount };
+    }
+    if (id === "contest-radar") {
+      // Owner-only, and the workspace is a reading surface: there is no enter action here and
+      // nothing behind one.
+      return {
+        node: <ContestRadarPanel snapshot={contestRadar} tab={resolveContestTab(selectedTab ?? undefined)} />,
+        count: contestRadar.records.length
+      };
     }
     if (id === "webdev-signal") {
       // One snapshot for the whole workspace: every tab is a different question about the same
