@@ -4,7 +4,7 @@ Date: 2026-08-12
 
 Drafted: 2026-08-29, from the launch review
 
-Decider: owner countersignature pending
+Decider: Lukas Kouril, owner
 
 Status: countersigned
 
