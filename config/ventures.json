@@ -493,7 +493,7 @@
     {
       "id": "tehdejsi-svet",
       "name": "Tehdejší svět",
-      "status": "operating",
+      "status": "paused",
       "visibility": "public",
       "taste": true,
       "ledgerNamespace": "tehdejsi-svet",
