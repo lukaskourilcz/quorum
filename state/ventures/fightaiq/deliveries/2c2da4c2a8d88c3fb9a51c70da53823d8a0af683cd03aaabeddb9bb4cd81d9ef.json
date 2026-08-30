@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "mma-files-delivery-receipt/1",
+  "kind": "fightaiq",
+  "packageHash": "2c2da4c2a8d88c3fb9a51c70da53823d8a0af683cd03aaabeddb9bb4cd81d9ef",
+  "status": "needs_reconciliation",
+  "targetRepository": "lukaskourilcz/mma-files",
+  "code": "target_gate_failed",
+  "detail": "> mma-files@0.1.0 test > tsx --test tests/*.test.mjs tests/*.test.ts TAP version 13 # Subtest: the shipped wordmarks use Anton outlines and the amended colourways ok 1 - the shipped wordmarks use Anton outlines and the amended colourways --- duration_ms: 7.549695 type: 'test' ... # Subtest: favicon exports have exact dimensions and preserve the coral bar ok 2 - favicon exports have exact dimensions and preserve the coral bar --- duration_ms: 9.292225 type: 'test' ... # Subtest: homepage and arti",
+  "recordedAt": "2026-08-30T06:06:03.442Z"
+}
