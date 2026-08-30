@@ -1,11 +1,22 @@
 {
   "schemaVersion": 1,
   "date": "2026-08-30",
-  "packageHash": "64fba5fa75959d6807b896d95fa4752269b8d9e0f9ba09189a08dd6f3be97b92",
+  "packageHash": "2aa54a65f81a2cb0bf7d74b0c7577858649bc3bf912d38bb8e60f4281041b19f",
   "status": "delivered",
-  "editionStatus": "no_edition",
+  "editionStatus": "edition",
   "targetRepository": "lukaskourilcz/aifirst",
-  "targetCommit": "9415c93406c06d9eb78cee5de7d27d241dbc6ec0",
-  "deliveredAt": "2026-08-30T03:15:33.149Z",
-  "tags": []
+  "targetCommit": "74e2c2a6581f75050574988c746b5bee962b8817",
+  "deliveredAt": "2026-08-30T07:17:29.659Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-08-30-sony-warner-anthropic-roman-teleskop-open-source",
+  "tags": [
+    "autorska-prava",
+    "umela-inteligence",
+    "kosmicky-teleskop",
+    "open-source",
+    "hudebni-prumysl",
+    "xbox"
+  ],
+  "supersededPackageHashes": [
+    "64fba5fa75959d6807b896d95fa4752269b8d9e0f9ba09189a08dd6f3be97b92"
+  ]
 }

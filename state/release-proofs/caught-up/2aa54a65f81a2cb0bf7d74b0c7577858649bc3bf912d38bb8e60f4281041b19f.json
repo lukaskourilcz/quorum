@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-63d0ed7459ded22e",
+  "venture": "caught-up",
+  "packageHash": "2aa54a65f81a2cb0bf7d74b0c7577858649bc3bf912d38bb8e60f4281041b19f",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "74e2c2a6581f75050574988c746b5bee962b8817",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 74e2c2a6581f75050574988c746b5bee962b8817 is readable",
+      "checkedAt": "2026-08-30T07:17:27.693Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-08-30T07:17:27.693Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-08-30T07:17:27.693Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-08-30-sony-warner-anthropic-roman-teleskop-open-source?boardless_verify=2aa54a65f81a-1788074247693",
+      "checkedAt": "2026-08-30T07:17:27.693Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-08-30-sony-warner-anthropic-roman-teleskop-open-source match",
+      "checkedAt": "2026-08-30T07:17:27.693Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 2aa54a65f81a2cb0bf7d74b0c7577858649bc3bf912d38bb8e60f4281041b19f",
+      "checkedAt": "2026-08-30T07:17:27.693Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-08-30-sony-warner-anthropic-roman-teleskop-open-source/hero.webp?boardless_verify=2aa54a65f81a-1788074247693",
+      "checkedAt": "2026-08-30T07:17:27.693Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-08-30T07:17:27.693Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Mikhail Nilov · Pexels License",
+      "checkedAt": "2026-08-30T07:17:27.693Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-08-30T07:16:25.841Z",
+  "completedAt": "2026-08-30T07:17:28.630Z"
+}
