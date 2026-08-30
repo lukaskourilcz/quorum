@@ -1860,12 +1860,25 @@ test.describe("the facilities plan opens dialogs", () => {
   test("a magazine room shows the share card, picture included", async ({ page }) => {
     await page.goto("/", { waitUntil: "networkidle" });
     await page.getByRole("button", { name: "Facilities", exact: true }).click();
+
+    /*
+     * The route's own answer, watched rather than inferred.
+     *
+     * The card promising a picture and the route refusing to serve one is a real failure mode —
+     * the two used to resolve "the newest package" separately and disagreed on any day the desk
+     * published nothing. Read as a decoded width alone it says only "0", which is what a slow
+     * load says too. The status makes the difference legible.
+     */
+    const thumbnail = page.waitForResponse((response) =>
+      response.url().includes("/facilities/thumb/caught-up")
+    );
     await page.locator('[data-wf-place="caught-up"]').click({ force: true });
 
     const card = page.locator("[data-latest-card]");
     await expect(card).toBeVisible();
     const image = page.locator("[data-latest-image]");
     await expect(image).toBeVisible();
+    expect((await thumbnail).status(), "the share card's picture").toBe(200);
     // A real image, decoded, not a broken one: the share card's whole point is the picture.
     await expect
       .poll(async () => image.evaluate((node: HTMLImageElement) => node.naturalWidth))
