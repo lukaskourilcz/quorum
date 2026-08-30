@@ -1,6 +1,9 @@
 import type { CalendarKind } from "@/lib/calendar-feed-model";
 
 const labels: Record<CalendarKind, string> = {
+  "cu-day": "DNESKAi daily desk",
+  "mma-day": "MMA Files daily desk",
+  "dm-day": "Door Money daily desk",
   "cu-edition": "DNESKAi edition production",
   "venture-morning": "Morning company meeting",
   "incubator-scan": "Magazine idea research",

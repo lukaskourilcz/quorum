@@ -12,7 +12,7 @@ import { meetingFixtures } from "../data/meeting-fixtures";
 import { parsePublicMeetingRecord } from "./meeting-record-model";
 
 describe("public CalendarFeed build model", () => {
-  it("generates eighteen Prague rooms and article slots for every day", () => {
+  it("generates one Prague row per venture day and one company meeting, for every day", () => {
     const feed = buildPublicCalendarFeed({
       weekOf: "2026-07-31",
       now: new Date("2026-07-31T10:00:00Z"),
@@ -20,29 +20,22 @@ describe("public CalendarFeed build model", () => {
       meetings: []
     });
     expect(feed.weekOf).toBe("2026-07-27");
-    expect(feed.slots).toHaveLength(126);
-    // The default definitions mirror the live clock. The incubator, the studio room and the
-    // evening article slot left it; `CalendarKind` still carries their kinds, because the
+    expect(feed.slots).toHaveLength(70);
+    // The default definitions mirror the live clock. The rooms a venture day dispatches are inside
+    // it rather than on hours of their own, and the afternoon and night shifts were retired with
+    // `operations-2026-08c`; `CalendarKind` still carries every one of those kinds, because the
     // committed records those rooms wrote still have to render.
-    expect(feed.slots.slice(0, 18).map((slot) => slot.kind)).toEqual([
-      "cu-edition",
+    expect(feed.slots.slice(0, 10).map((slot) => slot.kind)).toEqual([
+      "cu-day",
       "venture-morning",
       "ms-daily",
-      "mma-intake",
-      "mag-editorial",
-      "article-am",
+      "mma-day",
       "tt-marketing",
       "bh-desk",
       "gv-brief",
-      "venture-afternoon",
-      "dm-desk",
-      "dm-growth",
-      "cu-product",
+      "dm-day",
       "ts-desk",
-      "mma-analysis",
-      "mag-desk",
-      "kv-desk",
-      "venture-night"
+      "kv-desk"
     ]);
   });
 
@@ -59,6 +52,8 @@ describe("public CalendarFeed build model", () => {
   });
 
   it("shows a paused agenda window as not needed, with its reason and no page to open", () => {
+    // `meetingFixtures[1]` is the Caught Up product room, which sits inside the DNESKAi day. The
+    // day writes nothing itself, so what the row shows is whatever its rooms recorded.
     const parsed = parsePublicMeetingRecord(meetingFixtures[1]);
     expect(parsed).not.toBeNull();
     const meeting = {
@@ -73,7 +68,7 @@ describe("public CalendarFeed build model", () => {
       meetings: [meeting]
     });
     const slot = feed.slots.find(
-      (entry) => entry.kind === meeting.kind && entry.at.startsWith(meeting.date)
+      (entry) => entry.kind === "cu-day" && entry.at.startsWith(meeting.date)
     );
     expect(slot?.status).toBe("not-needed");
     // The room never convened, so there is nothing to open: the cell is the whole answer.
@@ -101,9 +96,33 @@ describe("public CalendarFeed build model", () => {
       standups: [],
       meetings: [meeting]
     });
-    const slot = feed.slots.find((entry) => entry.kind === "dm-growth" && entry.at.startsWith(meeting.date));
+    const slot = feed.slots.find((entry) => entry.kind === "dm-day" && entry.at.startsWith(meeting.date));
     expect(slot).toMatchObject({ status: "not-needed", decisionOneLiner: expect.stringContaining("Thursdays") });
     expect(slot?.meetingHref).toBeUndefined();
+  });
+
+  it("reads a day's rooms in order and shows the first that recorded anything", () => {
+    // The whole reason a day row can render at all: the day itself writes no record, so a row that
+    // looked only for its own would report every consolidated day as missed.
+    const parsed = parsePublicMeetingRecord(meetingFixtures[1]);
+    expect(parsed).not.toBeNull();
+    const edition = {
+      ...parsed!,
+      id: "2026-08-12-cu-edition",
+      date: "2026-08-12",
+      kind: "cu-edition" as const,
+      fixture: false
+    };
+    const feed = buildPublicCalendarFeed({
+      weekOf: "2026-08-12",
+      now: new Date("2026-08-12T22:00:00.000Z"),
+      standups: [],
+      meetings: [edition]
+    });
+    expect(feed.slots.find((slot) => slot.kind === "cu-day" && slot.at.startsWith("2026-08-12")))
+      .toMatchObject({ status: "held", meetingHref: "/meetings/2026-08-12-cu-edition" });
+    // And the day is genuinely one row: the rooms inside it do not get rows of their own.
+    expect(feed.slots.some((slot) => slot.kind === "cu-edition")).toBe(false);
   });
 
   it("links held BOOKSOFHISTORY and Tehdejší svět slots to their saved records", () => {
@@ -245,15 +264,16 @@ describe("the record, not the clock, ends the ongoing state", () => {
 });
 
 describe("the site calendar reports the article slots", () => {
+  // The article slot sits inside the MMA Files day now, so the day's row is where its outcome is
+  // read. The run file is still the only place the outcome exists — no meeting record is written
+  // for an article slot — which is what made both slots read "Did not happen" before this.
   const base = { weekOf: "2026-08-03", now: new Date("2026-08-04T23:00:00Z"), standups: [], meetings: [] };
   const slotOn = (feed: ReturnType<typeof buildPublicCalendarFeed>, kind: string) =>
     feed.slots.find((entry) => entry.at.startsWith("2026-08-04") && entry.kind === kind);
 
   it("marks a published slot held rather than missed", () => {
-    // The orchestrator learned this first, but the site builds its own feed and never got it,
-    // so both slots read "Did not happen" on the day one of them published.
     const feed = buildPublicCalendarFeed({ ...base, articleSlots: [{ date: "2026-08-04", slot: "am", status: "published" }] });
-    expect(slotOn(feed, "article-am")?.status).toBe("held");
+    expect(slotOn(feed, "mma-day")?.status).toBe("held");
   });
 
   it("marks a killed slot skipped and carries its reason", () => {
@@ -261,11 +281,27 @@ describe("the site calendar reports the article slots", () => {
       ...base,
       articleSlots: [{ date: "2026-08-04", slot: "am", status: "killed", reason: "Missing fresh, source-backed subject." }]
     });
-    expect(slotOn(feed, "article-am")?.status).toBe("skipped");
-    expect(slotOn(feed, "article-am")?.decisionOneLiner).toBe("Missing fresh, source-backed subject.");
+    expect(slotOn(feed, "mma-day")?.status).toBe("skipped");
+    expect(slotOn(feed, "mma-day")?.decisionOneLiner).toBe("Missing fresh, source-backed subject.");
+  });
+
+  it("prefers what a day's rooms decided over the article run", () => {
+    // A day is the desk's whole morning, and the story meeting's own record says more than the
+    // article slot's outcome token does. The article run is the fallback, not the headline.
+    const parsed = parsePublicMeetingRecord(meetingFixtures[1]);
+    expect(parsed).not.toBeNull();
+    const feed = buildPublicCalendarFeed({
+      ...base,
+      meetings: [{ ...parsed!, id: "2026-08-04-mag-editorial", date: "2026-08-04", kind: "mag-editorial" as const, fixture: false }],
+      articleSlots: [{ date: "2026-08-04", slot: "am", status: "published" }]
+    });
+    expect(slotOn(feed, "mma-day")).toMatchObject({
+      status: "held",
+      meetingHref: "/meetings/2026-08-04-mag-editorial"
+    });
   });
 
   it("leaves a slot with no run exactly as it was", () => {
-    expect(slotOn(buildPublicCalendarFeed({ ...base, articleSlots: [] }), "article-am")?.status).toBe("missed");
+    expect(slotOn(buildPublicCalendarFeed({ ...base, articleSlots: [] }), "mma-day")?.status).toBe("missed");
   });
 });

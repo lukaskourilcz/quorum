@@ -3,13 +3,13 @@ import {
   legStart,
   stationPoint
 } from "@/components/office/workflows-plan";
-import { CALENDAR_SLOTS } from "@/lib/calendar-feed-model";
+import { ROOM_SLOTS } from "@/lib/calendar-feed-model";
 import { PROJECT_COLOR, projectForKind } from "@/lib/office-walkthrough";
 import type { WorkflowsSlot } from "@/lib/office-workflows-model";
 import { buildTimeline } from "@/lib/office-workflows-timeline";
 
 describe("every journey joins up in space", () => {
-  const SLOTS: WorkflowsSlot[] = CALENDAR_SLOTS.map((definition) => ({
+  const SLOTS: WorkflowsSlot[] = ROOM_SLOTS.map((definition) => ({
     kind: definition.kind,
     hour: definition.hour,
     label: definition.label,

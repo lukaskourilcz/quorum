@@ -30,7 +30,7 @@ import { getPublicArticleSlots } from "@/lib/article-slots";
 import { publicKindLabel, readableSlotReason } from "@/lib/slot-labels";
 import { getPublicStandups } from "@/lib/standup-records";
 import { VENTURE_BRAND } from "@/lib/venture-brand";
-import { getPublicCalendarSchedule } from "@/lib/venture-registry";
+import { getPublicCalendarSchedule, getPublicRoomSchedule } from "@/lib/venture-registry";
 import { readFooterFacts } from "@/lib/footer-facts";
 import type { FooterFacts } from "@/components/footer-dialogs";
 
@@ -74,6 +74,11 @@ export type OfficeProjectKey =
 export const PROJECT_COLOR = VENTURE_BRAND as Record<OfficeProjectKey, string>;
 
 export function projectForKind(kind: string): OfficeProjectKey {
+  // A venture day belongs to the venture that holds it, even when the rooms inside it do not:
+  // `mma-day` runs FightAIQ's two checks, and the day is still MMA Files'.
+  if (kind === "cu-day") return "caught-up";
+  if (kind === "mma-day") return "mma-files";
+  if (kind === "dm-day") return "door-money";
   if (kind === "cu-edition" || kind === "cu-product") return "caught-up";
   if (kind === "tt-marketing") return "titty-tuesdays";
   if (kind === "gv-brief") return "goviral";
@@ -564,6 +569,7 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
     skips,
     articleSlots,
     definitions,
+    roomDefinitions,
     money,
     dailyResults,
     kpiStanding,
@@ -575,6 +581,9 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
     getPublicMeetingSkips(),
     getPublicArticleSlots(),
     getPublicCalendarSchedule(),
+    // The plan draws rooms, the calendar draws days. Section 05 gets the room list so the
+    // journeys between a venture's rooms survive the clock's consolidation.
+    getPublicRoomSchedule(),
     getPublicMoneySnapshot(),
     getDailyResults(),
     getVentureKpiStatuses(),
@@ -680,7 +689,7 @@ export async function readOfficeWalkthrough(now = new Date()): Promise<OfficeWal
         : await deliveredArticlePackage(date);
       if (pkg) deliveredPackages.set(key, { json: pkg.json, ...(pkg.note ? { note: pkg.note } : {}) });
     })),
-    resolveOfficeWorkflows(now, { standups, meetings, skips, articleSlots, definitions })
+    resolveOfficeWorkflows(now, { standups, meetings, skips, articleSlots, definitions: roomDefinitions })
   ]);
 
   const feed = buildMeetingFeed({

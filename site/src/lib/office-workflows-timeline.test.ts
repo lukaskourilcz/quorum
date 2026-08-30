@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CALENDAR_SLOTS } from "@/lib/calendar-feed-model";
+import { ROOM_SLOTS } from "@/lib/calendar-feed-model";
 import { PROJECT_COLOR, projectForKind } from "@/lib/office-walkthrough";
 import type { WorkflowsSlot } from "@/lib/office-workflows-model";
 import {
@@ -16,7 +16,7 @@ import {
 } from "@/lib/office-workflows-timeline";
 
 /** The standing day, built the way the resolver builds it, so the tests run on real hours. */
-const SLOTS: WorkflowsSlot[] = CALENDAR_SLOTS.map((definition) => ({
+const SLOTS: WorkflowsSlot[] = ROOM_SLOTS.map((definition) => ({
   kind: definition.kind,
   hour: definition.hour,
   label: definition.label,
@@ -35,7 +35,9 @@ describe("buildTimeline", () => {
     expect(timeline.beats).toHaveLength(SLOTS.length);
     const hours = timeline.beats.map((beat) => beat.hour);
     expect(hours).toEqual([...hours].sort((a, b) => a - b));
-    expect(hours).toEqual([5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]);
+    // Rooms, not days: DNESKAi's two sit at 05 and MMA Files' five at 08, inside their venture's
+    // day and in the order it runs them. Door Money's are absent because the owner paused it.
+    expect(hours).toEqual([5, 5, 6, 7, 8, 8, 8, 8, 8, 11, 12, 13, 18, 21]);
   });
 
   it("sorts the day itself, so the caller's order cannot change the story", () => {
@@ -70,8 +72,21 @@ describe("buildTimeline", () => {
     });
   });
 
-  it("lands the whole performance between 30 and 50 seconds", () => {
-    expect(timeline.duration).toBeGreaterThan(30_000);
+  /*
+   * What this protects is the pacing, and the pacing is per beat.
+   *
+   * It used to read `30_000 < duration < 50_000`, which was the eighteen-room clock's total in
+   * seconds. That pinned the room count: the venture-day consolidation took the day to fourteen
+   * rooms and the same unchanged pacing landed at 29.5s, failing a test about pacing for a reason
+   * that had nothing to do with pacing. Worse, it would have passed a real regression — halve the
+   * hold, double the rooms, and the total is untouched.
+   *
+   * So the floor is derived from the beats and the stride, which is the thing that must not
+   * shrink, and the ceiling stays absolute because a day nobody watches to the end is a day that
+   * outstayed its welcome however it got there.
+   */
+  it("paces the whole performance off its beats, and still ends inside a minute", () => {
+    expect(timeline.duration).toBeGreaterThanOrEqual(timeline.beats.length * BEAT_STRIDE_MS);
     expect(timeline.duration).toBeLessThan(50_000);
   });
 
@@ -105,11 +120,12 @@ describe("what leaves each room", () => {
   });
 
   it("sends the board a summary that fades along the corridor, and never ships", () => {
-    for (const kind of ["venture-morning", "venture-afternoon", "venture-night"]) {
-      const beat = timeline.beats.find((entry) => entry.kind === kind);
-      expect(beat?.legs.map((leg) => leg.station)).toEqual(["door", "corridor"]);
-      expect(beat?.legs.every((leg) => leg.room === "company")).toBe(true);
-    }
+    // One company meeting since `operations-2026-08c`. The afternoon and night shifts route the
+    // same way when a record from one of them is replayed — the routing is by kind, not by hour —
+    // but neither is on the standing day any more, so neither has a beat to look for here.
+    const beat = timeline.beats.find((entry) => entry.kind === "venture-morning");
+    expect(beat?.legs.map((leg) => leg.station)).toEqual(["door", "corridor"]);
+    expect(beat?.legs.every((leg) => leg.room === "company")).toBe(true);
   });
 
   it("keeps FightAIQ's slip off the corridor entirely", () => {
