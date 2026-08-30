@@ -53,10 +53,6 @@ const dateFormatter = new Intl.DateTimeFormat("en", {
   timeZone: "UTC"
 });
 
-function isCaughtUp(kind: CalendarKind) {
-  return kind === "cu-edition" || kind === "cu-product";
-}
-
 type ProjectKey = "company" | "caught-up" | "titty-tuesdays" | "goviral" | "marketingshark" | "booksofhistory" | "door-money" | "tehdejsi-svet" | "fightaiq" | "mma-files" | "kvorum" | "carousel-studio";
 type DisplayStatus = CalendarStatus | "test";
 

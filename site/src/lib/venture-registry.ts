@@ -158,7 +158,7 @@ export async function getPublicRoomSchedule(root?: string): Promise<readonly Cal
     ]);
   return [...portfolioBoardSlots.map((slot) => ({ ...slot, order: 0 })), ...rooms]
     .sort((left, right) => left.hour - right.hour || left.order - right.order)
-    .map(({ order: _order, ...definition }) => definition);
+    .map(({ order, ...definition }) => { void order; return definition; });
 }
 
 async function getRegistry(root?: string): Promise<RawVentureRegistry> {

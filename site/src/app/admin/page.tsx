@@ -46,6 +46,7 @@ import {
   CURRENT_MONTHLY_OPERATING_LIMIT_USD
 } from "@/data/operating-policy";
 import { adminSections } from "@/lib/admin-sections";
+import { adminVentureViews } from "@/lib/admin-venture-views";
 import { buildAdminRecentActivity } from "@/lib/admin-recent-activity";
 import { readApprovedUndeliveredPayloads } from "@/lib/admin-owner-attention";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
@@ -114,6 +115,46 @@ function tabLabel(tab: AdminVentureTab): string {
 
 function ventureName(id: string, name: string): string {
   return id === "caught-up" ? "DNESKAi" : name;
+}
+
+/**
+ * One chip in a workspace's view switcher.
+ *
+ * The tint resolves against the current Admin surface rather than the old near-black canvas, so
+ * the same brand signal reads in both themes while the shared foreground token keeps the label
+ * legible. `small` is the archive's second row, which is subordinate to the two above it.
+ */
+function VentureViewChip({
+  brand,
+  href,
+  label,
+  on,
+  small = false
+}: {
+  brand: string;
+  href: string;
+  label: string;
+  on: boolean;
+  small?: boolean;
+}) {
+  return (
+    <Link
+      aria-current={on ? "page" : undefined}
+      className={`admin-focus-ring min-h-[var(--admin-touch-target)] rounded-[var(--admin-radius)] border px-3 py-2 font-semibold uppercase tracking-[var(--admin-tracking-label)] transition-colors duration-[var(--admin-motion-fast)] md:min-h-[var(--admin-control-height)] ${small ? "text-[length:var(--admin-type-micro)]" : "text-[length:var(--admin-type-label)]"}`}
+      data-admin-view-chip={label}
+      href={href}
+      scroll={false}
+      style={{
+        borderColor: on ? brand : "var(--admin-border-strong)",
+        background: on
+          ? `color-mix(in srgb, ${brand} 15%, var(--admin-surface-secondary))`
+          : "var(--admin-surface-secondary)",
+        color: "var(--admin-foreground)"
+      }}
+    >
+      {label}
+    </Link>
+  );
 }
 
 /** Company-level views: their heading and the one sentence that says what the page is for. */
@@ -249,11 +290,21 @@ export default async function AdminPage({
       ? requestedView as CompanyView
       : null;
   const selectedVenture = portfolio.ventures.find((venture) => venture.id === requestedVentureId) ?? null;
+  /*
+   * The workspace opens on what the venture made, not on whichever view the registry listed first.
+   *
+   * `?tab=` still names any of the venture's views and still resolves to the same panel, so every
+   * link the owner or a test already holds keeps working. What it no longer does is decide the IA:
+   * the two chips above are `Latest` and `Archive`, and the archive's own views appear only once
+   * the owner asks for them.
+   */
+  const ventureViews = selectedVenture ? adminVentureViews(selectedVenture.id, selectedVenture.tabs) : null;
   const selectedTab = selectedVenture
     ? selectedVenture.tabs.includes(requestedTab as AdminVentureTab)
       ? (requestedTab as AdminVentureTab)
-      : selectedVenture.tabs[0] ?? null
+      : ventureViews?.output ?? selectedVenture.tabs[0] ?? null
     : null;
+  const inArchive = Boolean(ventureViews && selectedTab && selectedTab !== ventureViews.output);
   /*
    * Which Design Lab section is open.
    *
@@ -966,37 +1017,50 @@ export default async function AdminPage({
         </div>
       ) : (
         <div className="grid min-w-0 gap-4">
-          <div className="flex flex-wrap items-center gap-2">
-            {selectedVenture.tabs.map((tab) => {
-              const on = selectedTab === tab;
-              const label = selectedVenture.id === "fightaiq" && tab === "fighters"
-                ? `${tabLabel(tab)} · ${fightaiq.fighters.reduce((count, fighter) => count + fighter.discrepancyDetails.filter((item) => item.status === "open").length, 0)} unresolved`
-                : tabLabel(tab);
-              return (
-                <Link
-                  aria-current={on ? "page" : undefined}
-                  className="admin-focus-ring min-h-[var(--admin-touch-target)] rounded-[var(--admin-radius)] border px-3 py-2 text-[length:var(--admin-type-label)] font-semibold uppercase tracking-[var(--admin-tracking-label)] transition-colors duration-[var(--admin-motion-fast)] md:min-h-[var(--admin-control-height)]"
-                  href={`/admin?venture=${selectedVenture.id}&tab=${tab}`}
-                  key={tab}
-                  scroll={false}
-                  // Resolve the tint against the current Admin surface instead of the old
-                  // near-black canvas. This keeps the same brand signal in both themes while the
-                  // shared foreground token keeps the label readable.
-                  style={{
-                    borderColor: on ? brand : "var(--admin-border-strong)",
-                    background: on
-                      ? `color-mix(in srgb, ${brand} 15%, var(--admin-surface-secondary))`
-                      : "var(--admin-surface-secondary)",
-                    color: "var(--admin-foreground)"
-                  }}
-                >
-                  {label}
-                </Link>
-              );
-            })}
-            <span className="admin-tabular ml-auto text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">
-              {tabView.count} on this tab
-            </span>
+          {/*
+            Two chips, and the archive's own views only once the owner asks for them.
+
+            A workspace offered up to ten tabs — Personal Growth ten, MMA Files five — over stored
+            records, with the newest thing the venture made somewhere behind them. `Latest` is that
+            thing; `Archive` is everything the venture keeps. Nothing left the page: every view is
+            still here and every `?tab=` link still lands on the same panel.
+
+            The "N on this tab" counter went with them. A count answers "is something waiting for
+            me", and a tab's own item total never did.
+          */}
+          <div className="grid gap-2" data-admin-venture-views>
+            <div className="flex flex-wrap items-center gap-2">
+              <VentureViewChip
+                brand={brand}
+                href={`/admin?venture=${selectedVenture.id}`}
+                label="Latest"
+                on={!inArchive}
+              />
+              {ventureViews?.archive.length ? (
+                <VentureViewChip
+                  brand={brand}
+                  href={`/admin?venture=${selectedVenture.id}&tab=${ventureViews.archive[0]}`}
+                  label="Archive"
+                  on={inArchive}
+                />
+              ) : null}
+            </div>
+            {inArchive && ventureViews ? (
+              <div className="flex flex-wrap items-center gap-2" data-admin-archive-views>
+                {ventureViews.archive.map((tab) => (
+                  <VentureViewChip
+                    brand={brand}
+                    href={`/admin?venture=${selectedVenture.id}&tab=${tab}`}
+                    key={tab}
+                    label={selectedVenture.id === "fightaiq" && tab === "fighters"
+                      ? `${tabLabel(tab)} · ${fightaiq.fighters.reduce((count, fighter) => count + fighter.discrepancyDetails.filter((item) => item.status === "open").length, 0)} unresolved`
+                      : tabLabel(tab)}
+                    on={selectedTab === tab}
+                    small
+                  />
+                ))}
+              </div>
+            ) : null}
           </div>
 
           {ventureUnreadable.length ? (

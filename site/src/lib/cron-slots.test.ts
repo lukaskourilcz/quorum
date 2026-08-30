@@ -7,8 +7,7 @@ import {
   parseScheduledPhase,
   pragueHour,
   pragueUtcOffsetHours,
-  resolveCronSlots,
-  SCHEDULED_PHASES
+  resolveCronSlots
 } from "@/lib/cron-slots";
 
 const repoRoot = path.resolve(import.meta.dirname, "../../..");
