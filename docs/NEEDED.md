@@ -36,12 +36,11 @@ where it lives, not here.
   source, account, credential or publishing authority. [imp:5] [owner:me] [time:20m] [kind:decision]
 
 **What the 2026-08-29 overnight session took off this list.** Every pending `HUMAN_APPROVAL` in
-`state/INBOX.md` was signed on your instruction, so eight items here stopped being decisions and
-became either done or a plain setup step: the six Titty Tuesdays image approvals, Door Money's
-manual results, Kvórum's desk hour, and the approval halves of `BOOK-SOURCE-001`,
-`BOOK-INGEST-002`, `DM-ACCOUNTS-003` and `TS-ACCOUNTS-003`. Three of the four 12 August founding
-decisions were countersigned; Door Money's was left, because you paused that venture and a paused
-venture holds no meetings either way. Nothing was deleted — each line says what remains.
+`state/INBOX.md` was signed on your instruction, so eight items below stopped being decisions and
+became either done or a plain setup step — an account to open, a repository to create, a domain to
+land. Three of the four 12 August founding decisions were countersigned; Door Money's was left,
+because you paused that venture and a paused venture holds no meetings either way. Nothing was
+deleted: every line still here says exactly what remains of it.
 
 **Owner setup completed 2026-08-29.** The Apify token, the `/admin` credentials,
 `PORTFOLIO_LIVE_ENABLED` and `CAUGHT_UP_STREAMS_ENABLED` are all set, the launch-set approvals are
