@@ -296,9 +296,14 @@ for (const route of axeRoutes) {
  * for the archive first. The counter each view used to carry ("5 on this tab") went with the row:
  * a count answers "is something waiting for me", and a view's own item total never did.
  */
-async function openVentureArchive(page: import("@playwright/test").Page): Promise<void> {
+async function openVentureArchive(
+  page: import("@playwright/test").Page
+): Promise<import("@playwright/test").Locator> {
   const archive = page.getByRole("link", { name: "Archive", exact: true });
   if (await archive.count()) await archive.click();
+  // The row itself, not the page: `Archive` points at the first view it holds, so a bare href
+  // lookup finds that chip as well as the row's own.
+  return page.locator("[data-admin-archive-views]");
 }
 
 test("Door Money renders its three bounded admin tabs", async ({ page }) => {
@@ -318,9 +323,9 @@ test("Door Money renders its three bounded admin tabs", async ({ page }) => {
     await expect(page.getByText(/No Door Money recommendation store exists yet\.|No readable Door Money recommendations are stored\./u)).toBeVisible();
   }
 
-  await openVentureArchive(page);
-  const actionsTab = page.locator('a[href="/admin?venture=door-money&tab=actions"]');
-  const knowledgeTab = page.locator('a[href="/admin?venture=door-money&tab=knowledge"]');
+  const doorMoneyArchive = await openVentureArchive(page);
+  const actionsTab = doorMoneyArchive.locator('a[href="/admin?venture=door-money&tab=actions"]');
+  const knowledgeTab = doorMoneyArchive.locator('a[href="/admin?venture=door-money&tab=knowledge"]');
   await expect(actionsTab).toBeVisible();
   await expect(knowledgeTab).toBeVisible();
 
@@ -356,9 +361,9 @@ test("Tehdejsi svet renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.locator('[data-tehdejsi-results="cs"]')).toContainText("17");
   await expect(page.locator('[data-tehdejsi-results="cs"]')).toContainText("23");
 
-  await openVentureArchive(page);
-  const libraryTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=library"]');
-  const signalsTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=signals"]');
+  const tsArchive = await openVentureArchive(page);
+  const libraryTab = tsArchive.locator('a[href="/admin?venture=tehdejsi-svet&tab=library"]');
+  const signalsTab = tsArchive.locator('a[href="/admin?venture=tehdejsi-svet&tab=signals"]');
   await expect(libraryTab).toBeVisible();
   await expect(signalsTab).toBeVisible();
 
@@ -367,8 +372,7 @@ test("Tehdejsi svet renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Facts-file status" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Facts browser" })).toBeVisible();
 
-  await openVentureArchive(page);
-  await page.locator('a[href="/admin?venture=tehdejsi-svet&tab=signals"]').click();
+  await (await openVentureArchive(page)).locator('a[href="/admin?venture=tehdejsi-svet&tab=signals"]').click();
   await expect(page).toHaveURL(/tab=signals/);
   await expect(page.getByRole("heading", { name: "Community memory" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Product insight queue" })).toBeVisible();
@@ -380,17 +384,16 @@ test("Kvórum exposes three truthful owner-workspace tabs", async ({ page }) => 
     .toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("heading", { name: "Poplatky se vracejí do Sněmovny" })).toBeVisible();
 
-  await openVentureArchive(page);
-  await expect(page.getByRole("link", { name: "monitor", exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "claims", exact: true })).toBeVisible();
+  const kvorumArchive = await openVentureArchive(page);
+  await expect(kvorumArchive.getByRole("link", { name: "monitor", exact: true })).toBeVisible();
+  await expect(kvorumArchive.getByRole("link", { name: "claims", exact: true })).toBeVisible();
 
-  await page.getByRole("link", { name: "monitor", exact: true }).click();
+  await kvorumArchive.getByRole("link", { name: "monitor", exact: true }).click();
   await expect(page).toHaveURL(/venture=kvorum&tab=monitor/u);
   await expect(page.getByText("Source health · recorded response", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Financování médií veřejné služby" })).toBeVisible();
 
-  await openVentureArchive(page);
-  await page.getByRole("link", { name: "claims", exact: true }).click();
+  await (await openVentureArchive(page)).getByRole("link", { name: "claims", exact: true }).click();
   await expect(page).toHaveURL(/venture=kvorum&tab=claims/u);
   // The store's own sentence, which says more than a zero did.
   await expect(page.getByText("The claims store exists and contains no record.", { exact: true })).toBeVisible();
