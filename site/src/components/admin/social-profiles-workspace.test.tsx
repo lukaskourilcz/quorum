@@ -19,7 +19,8 @@ describe("Social Profiles workspace", () => {
     const venture = renderToStaticMarkup(<SocialProfilesWorkspace section="venture-profiles" snapshot={snapshot} />);
     const amplification = renderToStaticMarkup(<SocialProfilesWorkspace section="amplification-profiles" snapshot={snapshot} />);
 
-    expect(venture).toContain("Venture Profiles · 6");
+    // Eight: the six brands plus WebDev Signal's two locale editions.
+    expect(venture).toContain("Venture Profiles · 8");
     expect(venture).toContain("Operational results");
     expect(venture).toContain("Unavailable");
     expect(venture).toContain("Door Money");
@@ -49,7 +50,7 @@ describe("Social Profiles workspace", () => {
     expect(html).toContain("Synthetic visual QA · excluded from totals");
     expect(html.match(/>simulation</gu)).toHaveLength(50);
     expect(html).toContain("Venture Profiles</p><p class=\"admin-tabular");
-    expect(snapshot.ventureProfiles).toHaveLength(6);
+    expect(snapshot.ventureProfiles).toHaveLength(8);
   });
 
   it("renders an honest optional Network without turning the benchmark into progress", async () => {
@@ -105,14 +106,14 @@ describe("Social Profiles workspace", () => {
     const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
     const html = renderToStaticMarkup(<SocialProfilesWorkspace profileId="social-profile-caught-up" section="content-runway" snapshot={snapshot} />);
 
-    expect(html).toContain("Profile constitutions · 6");
+    expect(html).toContain("Profile constitutions · 8");
     expect(html).toContain("data-social-runway-detail=\"social-profile-caught-up\"");
     expect(html).toContain("Deterministic first");
     expect(html).toContain("Design Lab");
     expect(html).toContain("No inventory candidates");
     expect(html).toContain("No inventory build receipt");
     expect(html).toContain("exposes no queue, publish, account activation or routine-scope action");
-    expect(snapshot.contentRunway.summary).toEqual({ strategies: 6, healthy: 0, lowOrNoRunway: 0, unavailable: 6, actualCostUsd: 0 });
+    expect(snapshot.contentRunway.summary).toEqual({ strategies: 8, healthy: 0, lowOrNoRunway: 0, unavailable: 8, actualCostUsd: 0 });
     expect(snapshot.contentRunway).toMatchObject({ authorityGranted: false, queueAuthorized: false, publishingAuthorized: false });
   });
 

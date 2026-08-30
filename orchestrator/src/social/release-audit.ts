@@ -74,11 +74,15 @@ export async function auditSocialRelease(repoRoot = defaultRepoRoot): Promise<So
   const simulationModuleRef = ["orchestrator/src/social/fixtures", "profile-simulations.ts"].join("/");
   const forbiddenSimulationImport = ["fixtures", "profile-simulations"].join("/");
   const profileVentures = publisher.profiles.map(({ ventureRef }) => ventureRef).filter((value): value is string => value !== null).sort();
-  checks.push(check("owned-profile-topology", publisher.profiles.length === 6 && publisher.connections.length === 6 && publisher.legacyQueueMappings.length === 3
-    && canonicalJson(profileVentures) === canonicalJson(["booksofhistory", "caught-up", "door-money", "mma-files", "tehdejsi-svet", "titty-tuesdays"])
+  // Eight profiles across seven ventures: WebDev Signal is the one venture with two, because its
+  // Czech and English editions share a brand and an evidence brief but keep their own cadence,
+  // metrics and kill state. Every clause with teeth is unchanged — every profile is an owned brand
+  // that is not live-eligible, and only the three legacy brands have connections, all of them held.
+  checks.push(check("owned-profile-topology", publisher.profiles.length === 8 && publisher.connections.length === 6 && publisher.legacyQueueMappings.length === 3
+    && canonicalJson(profileVentures) === canonicalJson(["booksofhistory", "caught-up", "door-money", "mma-files", "tehdejsi-svet", "titty-tuesdays", "webdev-signal", "webdev-signal"])
     && publisher.profiles.every(({ kind, role, liveEligible }) => kind === "owned-brand" && role === "venture-primary" && !liveEligible)
     && publisher.connections.every(({ mode, enabledByHumanAt }) => mode === "held" && enabledByHumanAt === null),
-  "Six real venture-primary profiles remain distinct; only the three legacy brands have held connection references and none is live.", ["config/social-publisher-registry.json"]));
+  "Eight venture-primary profiles remain distinct, WebDev Signal holding one per locale edition; only the three legacy brands have held connection references and none is live.", ["config/social-publisher-registry.json"]));
 
   const socialAllowed = capabilities.edges.filter(({ target, decision, capability }) => target === "social-distribution" && decision === "allowed" && capability === "approved-publish-package").map(({ source }) => source).sort();
   const isolationIds = new Set(capabilities.isolationRules.map(({ id }) => id));
@@ -94,7 +98,7 @@ export async function auditSocialRelease(repoRoot = defaultRepoRoot): Promise<So
     && providerSource.includes("at most one active provider") && runnerSource.includes("findByIdempotencyKey") && runnerSource.includes("needs_reconciliation"),
   "Direct Meta is the sole held core binding; queue v2 permits original publishing only and ambiguity reconciles before any resend or failover.", ["config/social-providers.json", "orchestrator/src/social/queue.ts", "orchestrator/src/social/runner.ts"]));
 
-  checks.push(check("strategy-inventory-daily", strategies.strategies.length === 6 && strategies.strategies.every(({ authorityGranted, queueAuthorized, publishingAuthorized }) => !authorityGranted && !queueAuthorized && !publishingAuthorized)
+  checks.push(check("strategy-inventory-daily", strategies.strategies.length === 8 && strategies.strategies.every(({ authorityGranted, queueAuthorized, publishingAuthorized }) => !authorityGranted && !queueAuthorized && !publishingAuthorized)
     && routineScopes.defaultMode === "draft-only" && routineScopes.scopes.length === 0 && campaignSource.includes("inputHash: identity.idempotencyKey")
     && dailySource.includes('finish("NO_POST"') && dailySource.includes("ambiguousDelivery") && dailySource.includes("campaignCapacityAvailable"),
   "Every real profile has a held constitution; campaigns, runway and Prague-day selection preserve NO_POST, exact scope and ambiguity/capacity gates.", ["config/social-profile-strategies.json", "config/social-routine-scopes.json", "orchestrator/src/social/campaigns.ts", "orchestrator/src/social/daily.ts"]));
@@ -121,7 +125,7 @@ export async function auditSocialRelease(repoRoot = defaultRepoRoot): Promise<So
   checks.push(check("canonical-recovery-boundary", recovery?.pauseScope === "connection" && recovery.maximumIncrementalCostUsd === 0 && recovery.prohibitedActions.includes("account") && recovery.prohibitedActions.includes("oauth-or-secret")
     && socialSlo?.lifecycleStage === "operating" && socialSlo.cadence.kind === "daily", "#427 recovery can pause only the failing Social connection at $0 and cannot touch accounts, secrets, scope, content, budget or deployment.", ["config/operations-recovery.json", "config/venture-slos.json"]));
 
-  checks.push(check("idempotent-migration-rollback", Object.values(migration.invariants).every(Boolean) && migration.counts.migrated === 13 && migration.counts.unchanged === 3 && migration.counts.held === 14
+  checks.push(check("idempotent-migration-rollback", Object.values(migration.invariants).every(Boolean) && migration.counts.migrated === 13 && migration.counts.unchanged === 3 && migration.counts.held === 16
     && migration.counts.unavailable === 0 && migration.counts.dropped === 0 && migration.counts.malformed === 0 && !migration.rollback.sourceQueueMutated,
   "The compatibility audit preserves source history/readers, exact roles, hashes, attempts, receipts and held authority with explicit outcome counts.", ["orchestrator/src/social/migration-audit.ts", "docs/SOCIAL-PUBLISHER-MIGRATION.md"]));
 

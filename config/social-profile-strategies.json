@@ -1,7 +1,7 @@
 {
   "schemaVersion": "social-profile-strategy-registry/1",
-  "version": "1.0.0",
-  "updatedAt": "2026-08-27T00:00:00.000Z",
+  "version": "1.1.0",
+  "updatedAt": "2026-08-30T00:00:00.000Z",
   "ownerDecisionRef": "GitHub #418",
   "strategies": [
     {
@@ -12,25 +12,176 @@
       "version": "1.0.0",
       "purpose": "Publish owner-approved Caught Up editions from its own verified release history.",
       "audience": "Czech and English readers following bounded daily AI industry reporting.",
-      "languages": ["cs", "en"],
-      "markets": ["CZ", "US"],
-      "allowedCapabilities": [],
-      "contentPillars": [{ "id": "verified-ai-context", "label": "Verified AI context", "description": "Evidence-led operating context that stays useful without forcing a news claim.", "allowedSourceClasses": ["strategy-owned", "profile-owned", "accepted-campaign"] }],
-      "recurringFormats": [
-        { "id": "evidence-commentary", "label": "Evidence commentary plan", "pillarId": "verified-ai-context", "candidateClass": "original", "platforms": ["threads", "instagram"], "locales": ["cs", "en"], "evidenceRequirements": ["Use only verified edition or explicitly recorded owned evidence before final copy."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "none", "altTextRequired": false, "deterministicBriefTemplate": "Prepare a dated evidence-commentary brief; omit the candidate if no verified source exists." },
-        { "id": "change-watch", "label": "Change watch reserve", "pillarId": "verified-ai-context", "candidateClass": "reserve", "platforms": ["threads"], "locales": ["cs", "en"], "evidenceRequirements": ["Name the exact recorded change evidence before final copy."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "none", "altTextRequired": false, "deterministicBriefTemplate": "Hold a reserve brief for one verified change and state why it matters." },
-        { "id": "context-card", "label": "Context card slot", "pillarId": "verified-ai-context", "candidateClass": "recurring", "platforms": ["instagram"], "locales": ["cs", "en"], "evidenceRequirements": ["Visual facts require claim references and Design Lab output."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "optional-design-lab", "altTextRequired": true, "deterministicBriefTemplate": "Plan one source-bound context card; Design Lab remains the only renderer." }
+      "languages": [
+        "cs",
+        "en"
       ],
-      "prohibited": { "topics": ["unverified rumours", "private company material"], "claims": ["Invented quote, testimonial, personal experience or unsupported prediction."], "formats": ["Engagement bait, impersonation, automated reply or direct message."] },
-      "cadence": { "minimumPerWeek": 0, "targetPerWeek": 5, "maximumPerWeek": 7, "preferredWindows": ["Europe/Prague morning", "Europe/Prague late afternoon"], "prohibitedWindows": ["Outside an approved item window"] },
-      "policyRefs": { "amplificationPolicyRef": "config/social-amplification-policy.json", "launchRunwayRef": "GitHub #415", "originalSupportRatioRef": "GitHub #415", "sameSourceCooldownRef": "GitHub #415", "supportCapRef": "GitHub #415" },
-      "platformCaps": { "instagram": { "perDay": 1, "perWeek": 5 }, "threads": { "perDay": 2, "perWeek": 7 } },
-      "assets": { "rendererRef": "Design Lab", "allowedKinds": ["none", "image", "carousel"], "altTextRequiredForVisuals": true },
-      "localeToneGuidance": [{ "locale": "cs", "guidance": "Clear Czech context, short sentences and no translated hype." }, { "locale": "en", "guidance": "Concise operator context with explicit evidence boundaries." }],
-      "generationPolicy": { "deterministicFirst": true, "cacheByContentAndStrategyVersion": true, "modelRole": null, "maximumModelCallsPerBuild": 0, "maximumCostUsdPerBuild": 0, "modelFailurePolicy": "preserve-deterministic-inventory" },
-      "ownerControls": { "vetoRefs": [], "correctionRefs": [], "stricterOnlyWithoutNewDecision": true },
+      "markets": [
+        "CZ",
+        "US"
+      ],
+      "allowedCapabilities": [],
+      "contentPillars": [
+        {
+          "id": "verified-ai-context",
+          "label": "Verified AI context",
+          "description": "Evidence-led operating context that stays useful without forcing a news claim.",
+          "allowedSourceClasses": [
+            "strategy-owned",
+            "profile-owned",
+            "accepted-campaign"
+          ]
+        }
+      ],
+      "recurringFormats": [
+        {
+          "id": "evidence-commentary",
+          "label": "Evidence commentary plan",
+          "pillarId": "verified-ai-context",
+          "candidateClass": "original",
+          "platforms": [
+            "threads",
+            "instagram"
+          ],
+          "locales": [
+            "cs",
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Use only verified edition or explicitly recorded owned evidence before final copy."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Prepare a dated evidence-commentary brief; omit the candidate if no verified source exists."
+        },
+        {
+          "id": "change-watch",
+          "label": "Change watch reserve",
+          "pillarId": "verified-ai-context",
+          "candidateClass": "reserve",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "cs",
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Name the exact recorded change evidence before final copy."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Hold a reserve brief for one verified change and state why it matters."
+        },
+        {
+          "id": "context-card",
+          "label": "Context card slot",
+          "pillarId": "verified-ai-context",
+          "candidateClass": "recurring",
+          "platforms": [
+            "instagram"
+          ],
+          "locales": [
+            "cs",
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Visual facts require claim references and Design Lab output."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "optional-design-lab",
+          "altTextRequired": true,
+          "deterministicBriefTemplate": "Plan one source-bound context card; Design Lab remains the only renderer."
+        }
+      ],
+      "prohibited": {
+        "topics": [
+          "unverified rumours",
+          "private company material"
+        ],
+        "claims": [
+          "Invented quote, testimonial, personal experience or unsupported prediction."
+        ],
+        "formats": [
+          "Engagement bait, impersonation, automated reply or direct message."
+        ]
+      },
+      "cadence": {
+        "minimumPerWeek": 0,
+        "targetPerWeek": 5,
+        "maximumPerWeek": 7,
+        "preferredWindows": [
+          "Europe/Prague morning",
+          "Europe/Prague late afternoon"
+        ],
+        "prohibitedWindows": [
+          "Outside an approved item window"
+        ]
+      },
+      "policyRefs": {
+        "amplificationPolicyRef": "config/social-amplification-policy.json",
+        "launchRunwayRef": "GitHub #415",
+        "originalSupportRatioRef": "GitHub #415",
+        "sameSourceCooldownRef": "GitHub #415",
+        "supportCapRef": "GitHub #415"
+      },
+      "platformCaps": {
+        "instagram": {
+          "perDay": 1,
+          "perWeek": 5
+        },
+        "threads": {
+          "perDay": 2,
+          "perWeek": 7
+        }
+      },
+      "assets": {
+        "rendererRef": "Design Lab",
+        "allowedKinds": [
+          "none",
+          "image",
+          "carousel"
+        ],
+        "altTextRequiredForVisuals": true
+      },
+      "localeToneGuidance": [
+        {
+          "locale": "cs",
+          "guidance": "Clear Czech context, short sentences and no translated hype."
+        },
+        {
+          "locale": "en",
+          "guidance": "Concise operator context with explicit evidence boundaries."
+        }
+      ],
+      "generationPolicy": {
+        "deterministicFirst": true,
+        "cacheByContentAndStrategyVersion": true,
+        "modelRole": null,
+        "maximumModelCallsPerBuild": 0,
+        "maximumCostUsdPerBuild": 0,
+        "modelFailurePolicy": "preserve-deterministic-inventory"
+      },
+      "ownerControls": {
+        "vetoRefs": [],
+        "correctionRefs": [],
+        "stricterOnlyWithoutNewDecision": true
+      },
       "reviewDate": "2026-11-27",
-      "stopConditions": ["Stop when verified evidence is unavailable, duplicated, stale or outside the profile purpose."],
+      "stopConditions": [
+        "Stop when verified evidence is unavailable, duplicated, stale or outside the profile purpose."
+      ],
       "authorityGranted": false,
       "queueAuthorized": false,
       "publishingAuthorized": false
@@ -43,25 +194,166 @@
       "version": "1.0.0",
       "purpose": "Publish owner-approved MMA Files editorial releases from the venture's own evidence.",
       "audience": "Readers following factual MMA event and roster coverage.",
-      "languages": ["en"],
-      "markets": ["US"],
-      "allowedCapabilities": [],
-      "contentPillars": [{ "id": "fight-context", "label": "Fight context", "description": "Factual event, roster and matchup context from MMA Files owned evidence.", "allowedSourceClasses": ["strategy-owned", "profile-owned", "accepted-campaign"] }],
-      "recurringFormats": [
-        { "id": "event-context", "label": "Event context plan", "pillarId": "fight-context", "candidateClass": "original", "platforms": ["threads", "instagram"], "locales": ["en"], "evidenceRequirements": ["Require the exact MMA Files event or roster evidence before final copy."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "none", "altTextRequired": false, "deterministicBriefTemplate": "Prepare one factual event-context brief with no odds, pick or invented quote." },
-        { "id": "roster-watch", "label": "Roster watch reserve", "pillarId": "fight-context", "candidateClass": "reserve", "platforms": ["threads"], "locales": ["en"], "evidenceRequirements": ["Require a current roster source and record its freshness."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "none", "altTextRequired": false, "deterministicBriefTemplate": "Hold a reserve roster-update brief only when current evidence exists." },
-        { "id": "card-structure", "label": "Card structure slot", "pillarId": "fight-context", "candidateClass": "recurring", "platforms": ["instagram"], "locales": ["en"], "evidenceRequirements": ["Use Design Lab and evidence-backed event-card fields."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "optional-design-lab", "altTextRequired": true, "deterministicBriefTemplate": "Plan a source-bound event-card structure; do not render here." }
+      "languages": [
+        "en"
       ],
-      "prohibited": { "topics": ["betting picks", "unverified injury rumours"], "claims": ["Invented quote, insider access, guaranteed outcome or unsupported medical claim."], "formats": ["Automated reply, engagement bait, direct message or wagering slip."] },
-      "cadence": { "minimumPerWeek": 0, "targetPerWeek": 4, "maximumPerWeek": 7, "preferredWindows": ["Event-week evidence windows"], "prohibitedWindows": ["After evidence expiry"] },
-      "policyRefs": { "amplificationPolicyRef": "config/social-amplification-policy.json", "launchRunwayRef": "GitHub #415", "originalSupportRatioRef": "GitHub #415", "sameSourceCooldownRef": "GitHub #415", "supportCapRef": "GitHub #415" },
-      "platformCaps": { "instagram": { "perDay": 1, "perWeek": 5 }, "threads": { "perDay": 2, "perWeek": 7 } },
-      "assets": { "rendererRef": "Design Lab", "allowedKinds": ["none", "image", "carousel"], "altTextRequiredForVisuals": true },
-      "localeToneGuidance": [{ "locale": "en", "guidance": "Factual sports desk tone; separate evidence, context and uncertainty." }],
-      "generationPolicy": { "deterministicFirst": true, "cacheByContentAndStrategyVersion": true, "modelRole": null, "maximumModelCallsPerBuild": 0, "maximumCostUsdPerBuild": 0, "modelFailurePolicy": "preserve-deterministic-inventory" },
-      "ownerControls": { "vetoRefs": [], "correctionRefs": [], "stricterOnlyWithoutNewDecision": true },
+      "markets": [
+        "US"
+      ],
+      "allowedCapabilities": [],
+      "contentPillars": [
+        {
+          "id": "fight-context",
+          "label": "Fight context",
+          "description": "Factual event, roster and matchup context from MMA Files owned evidence.",
+          "allowedSourceClasses": [
+            "strategy-owned",
+            "profile-owned",
+            "accepted-campaign"
+          ]
+        }
+      ],
+      "recurringFormats": [
+        {
+          "id": "event-context",
+          "label": "Event context plan",
+          "pillarId": "fight-context",
+          "candidateClass": "original",
+          "platforms": [
+            "threads",
+            "instagram"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Require the exact MMA Files event or roster evidence before final copy."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Prepare one factual event-context brief with no odds, pick or invented quote."
+        },
+        {
+          "id": "roster-watch",
+          "label": "Roster watch reserve",
+          "pillarId": "fight-context",
+          "candidateClass": "reserve",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Require a current roster source and record its freshness."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Hold a reserve roster-update brief only when current evidence exists."
+        },
+        {
+          "id": "card-structure",
+          "label": "Card structure slot",
+          "pillarId": "fight-context",
+          "candidateClass": "recurring",
+          "platforms": [
+            "instagram"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Use Design Lab and evidence-backed event-card fields."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "optional-design-lab",
+          "altTextRequired": true,
+          "deterministicBriefTemplate": "Plan a source-bound event-card structure; do not render here."
+        }
+      ],
+      "prohibited": {
+        "topics": [
+          "betting picks",
+          "unverified injury rumours"
+        ],
+        "claims": [
+          "Invented quote, insider access, guaranteed outcome or unsupported medical claim."
+        ],
+        "formats": [
+          "Automated reply, engagement bait, direct message or wagering slip."
+        ]
+      },
+      "cadence": {
+        "minimumPerWeek": 0,
+        "targetPerWeek": 4,
+        "maximumPerWeek": 7,
+        "preferredWindows": [
+          "Event-week evidence windows"
+        ],
+        "prohibitedWindows": [
+          "After evidence expiry"
+        ]
+      },
+      "policyRefs": {
+        "amplificationPolicyRef": "config/social-amplification-policy.json",
+        "launchRunwayRef": "GitHub #415",
+        "originalSupportRatioRef": "GitHub #415",
+        "sameSourceCooldownRef": "GitHub #415",
+        "supportCapRef": "GitHub #415"
+      },
+      "platformCaps": {
+        "instagram": {
+          "perDay": 1,
+          "perWeek": 5
+        },
+        "threads": {
+          "perDay": 2,
+          "perWeek": 7
+        }
+      },
+      "assets": {
+        "rendererRef": "Design Lab",
+        "allowedKinds": [
+          "none",
+          "image",
+          "carousel"
+        ],
+        "altTextRequiredForVisuals": true
+      },
+      "localeToneGuidance": [
+        {
+          "locale": "en",
+          "guidance": "Factual sports desk tone; separate evidence, context and uncertainty."
+        }
+      ],
+      "generationPolicy": {
+        "deterministicFirst": true,
+        "cacheByContentAndStrategyVersion": true,
+        "modelRole": null,
+        "maximumModelCallsPerBuild": 0,
+        "maximumCostUsdPerBuild": 0,
+        "modelFailurePolicy": "preserve-deterministic-inventory"
+      },
+      "ownerControls": {
+        "vetoRefs": [],
+        "correctionRefs": [],
+        "stricterOnlyWithoutNewDecision": true
+      },
       "reviewDate": "2026-11-27",
-      "stopConditions": ["Stop for stale event data, unsupported injury claims, duplicate angles or betting content."],
+      "stopConditions": [
+        "Stop for stale event data, unsupported injury claims, duplicate angles or betting content."
+      ],
       "authorityGranted": false,
       "queueAuthorized": false,
       "publishingAuthorized": false
@@ -74,25 +366,175 @@
       "version": "1.0.0",
       "purpose": "Publish owner-approved Tuesday typographic campaign assets after the venture safety gate.",
       "audience": "Adults following the bounded owned-brand campaign concept.",
-      "languages": ["cs", "en"],
-      "markets": ["CZ", "US"],
-      "allowedCapabilities": [],
-      "contentPillars": [{ "id": "bounded-typography", "label": "Bounded typography", "description": "Adult-audience typographic concepts that remain non-explicit and safety-gated.", "allowedSourceClasses": ["strategy-owned", "profile-owned", "accepted-campaign"] }],
-      "recurringFormats": [
-        { "id": "typographic-concept", "label": "Typographic concept plan", "pillarId": "bounded-typography", "candidateClass": "original", "platforms": ["threads", "instagram"], "locales": ["cs", "en"], "evidenceRequirements": ["The dedicated Titty Tuesdays safety checker must pass before any final asset."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "none", "altTextRequired": false, "deterministicBriefTemplate": "Plan a non-explicit typographic concept and record the safety boundary." },
-        { "id": "copy-reserve", "label": "Copy reserve", "pillarId": "bounded-typography", "candidateClass": "reserve", "platforms": ["threads"], "locales": ["cs", "en"], "evidenceRequirements": ["Keep copy non-explicit and free of personal claims."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "none", "altTextRequired": false, "deterministicBriefTemplate": "Hold one non-explicit reserve angle; no body claim or personal experience." },
-        { "id": "design-lab-card", "label": "Design Lab card slot", "pillarId": "bounded-typography", "candidateClass": "recurring", "platforms": ["instagram"], "locales": ["cs", "en"], "evidenceRequirements": ["Use the current Design Lab boundary and safety checker."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "required-design-lab", "altTextRequired": true, "deterministicBriefTemplate": "Plan one typographic card for Design Lab; do not render or publish in inventory." }
+      "languages": [
+        "cs",
+        "en"
       ],
-      "prohibited": { "topics": ["minors", "non-consensual sexual content", "explicit nudity"], "claims": ["Invented testimonial, body claim, personal experience or medical claim."], "formats": ["Explicit image, automated reply, direct message or follower manipulation."] },
-      "cadence": { "minimumPerWeek": 0, "targetPerWeek": 1, "maximumPerWeek": 2, "preferredWindows": ["Owner-approved Tuesday window"], "prohibitedWindows": ["Any non-approved or safety-held window"] },
-      "policyRefs": { "amplificationPolicyRef": "config/social-amplification-policy.json", "launchRunwayRef": "GitHub #415", "originalSupportRatioRef": "GitHub #415", "sameSourceCooldownRef": "GitHub #415", "supportCapRef": "GitHub #415" },
-      "platformCaps": { "instagram": { "perDay": 1, "perWeek": 2 }, "threads": { "perDay": 1, "perWeek": 2 } },
-      "assets": { "rendererRef": "Design Lab", "allowedKinds": ["none", "image"], "altTextRequiredForVisuals": true },
-      "localeToneGuidance": [{ "locale": "cs", "guidance": "Playful but non-explicit Czech copy with no personal or body claims." }, { "locale": "en", "guidance": "Playful but non-explicit English copy with a clear adult-audience boundary." }],
-      "generationPolicy": { "deterministicFirst": true, "cacheByContentAndStrategyVersion": true, "modelRole": null, "maximumModelCallsPerBuild": 0, "maximumCostUsdPerBuild": 0, "modelFailurePolicy": "preserve-deterministic-inventory" },
-      "ownerControls": { "vetoRefs": [], "correctionRefs": [], "stricterOnlyWithoutNewDecision": true },
+      "markets": [
+        "CZ",
+        "US"
+      ],
+      "allowedCapabilities": [],
+      "contentPillars": [
+        {
+          "id": "bounded-typography",
+          "label": "Bounded typography",
+          "description": "Adult-audience typographic concepts that remain non-explicit and safety-gated.",
+          "allowedSourceClasses": [
+            "strategy-owned",
+            "profile-owned",
+            "accepted-campaign"
+          ]
+        }
+      ],
+      "recurringFormats": [
+        {
+          "id": "typographic-concept",
+          "label": "Typographic concept plan",
+          "pillarId": "bounded-typography",
+          "candidateClass": "original",
+          "platforms": [
+            "threads",
+            "instagram"
+          ],
+          "locales": [
+            "cs",
+            "en"
+          ],
+          "evidenceRequirements": [
+            "The dedicated Titty Tuesdays safety checker must pass before any final asset."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Plan a non-explicit typographic concept and record the safety boundary."
+        },
+        {
+          "id": "copy-reserve",
+          "label": "Copy reserve",
+          "pillarId": "bounded-typography",
+          "candidateClass": "reserve",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "cs",
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Keep copy non-explicit and free of personal claims."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Hold one non-explicit reserve angle; no body claim or personal experience."
+        },
+        {
+          "id": "design-lab-card",
+          "label": "Design Lab card slot",
+          "pillarId": "bounded-typography",
+          "candidateClass": "recurring",
+          "platforms": [
+            "instagram"
+          ],
+          "locales": [
+            "cs",
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Use the current Design Lab boundary and safety checker."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "required-design-lab",
+          "altTextRequired": true,
+          "deterministicBriefTemplate": "Plan one typographic card for Design Lab; do not render or publish in inventory."
+        }
+      ],
+      "prohibited": {
+        "topics": [
+          "minors",
+          "non-consensual sexual content",
+          "explicit nudity"
+        ],
+        "claims": [
+          "Invented testimonial, body claim, personal experience or medical claim."
+        ],
+        "formats": [
+          "Explicit image, automated reply, direct message or follower manipulation."
+        ]
+      },
+      "cadence": {
+        "minimumPerWeek": 0,
+        "targetPerWeek": 1,
+        "maximumPerWeek": 2,
+        "preferredWindows": [
+          "Owner-approved Tuesday window"
+        ],
+        "prohibitedWindows": [
+          "Any non-approved or safety-held window"
+        ]
+      },
+      "policyRefs": {
+        "amplificationPolicyRef": "config/social-amplification-policy.json",
+        "launchRunwayRef": "GitHub #415",
+        "originalSupportRatioRef": "GitHub #415",
+        "sameSourceCooldownRef": "GitHub #415",
+        "supportCapRef": "GitHub #415"
+      },
+      "platformCaps": {
+        "instagram": {
+          "perDay": 1,
+          "perWeek": 2
+        },
+        "threads": {
+          "perDay": 1,
+          "perWeek": 2
+        }
+      },
+      "assets": {
+        "rendererRef": "Design Lab",
+        "allowedKinds": [
+          "none",
+          "image"
+        ],
+        "altTextRequiredForVisuals": true
+      },
+      "localeToneGuidance": [
+        {
+          "locale": "cs",
+          "guidance": "Playful but non-explicit Czech copy with no personal or body claims."
+        },
+        {
+          "locale": "en",
+          "guidance": "Playful but non-explicit English copy with a clear adult-audience boundary."
+        }
+      ],
+      "generationPolicy": {
+        "deterministicFirst": true,
+        "cacheByContentAndStrategyVersion": true,
+        "modelRole": null,
+        "maximumModelCallsPerBuild": 0,
+        "maximumCostUsdPerBuild": 0,
+        "modelFailurePolicy": "preserve-deterministic-inventory"
+      },
+      "ownerControls": {
+        "vetoRefs": [],
+        "correctionRefs": [],
+        "stricterOnlyWithoutNewDecision": true
+      },
       "reviewDate": "2026-11-27",
-      "stopConditions": ["Stop on any safety-check failure, explicit concept, personal claim or owner veto."],
+      "stopConditions": [
+        "Stop on any safety-check failure, explicit concept, personal claim or owner veto."
+      ],
       "authorityGranted": false,
       "queueAuthorized": false,
       "publishingAuthorized": false
@@ -105,25 +547,175 @@
       "version": "1.0.0",
       "purpose": "Hold the internal proposal for a separate Door Money profile that can receive only immutable owner-approved package references.",
       "audience": "Readers interested in practical lessons from the separately protected Door Money book project.",
-      "languages": ["en"],
-      "markets": ["US"],
-      "allowedCapabilities": [{ "mapVersion": "1.2.0", "source": "door-money", "target": "social-distribution", "capability": "approved-publish-package", "dataSchemaVersion": "approved-publish-package/1", "decisionReference": "GitHub #424" }],
-      "contentPillars": [{ "id": "approved-book-lessons", "label": "Approved book lessons", "description": "Planning around bounded owner-approved package references without manuscript access.", "allowedSourceClasses": ["strategy-owned", "approved-package", "accepted-campaign"] }],
-      "recurringFormats": [
-        { "id": "lesson-brief", "label": "Lesson brief plan", "pillarId": "approved-book-lessons", "candidateClass": "original", "platforms": ["threads", "instagram"], "locales": ["en"], "evidenceRequirements": ["Final copy requires one immutable approved-publish-package/1 reference."], "sourceClasses": ["strategy-owned", "approved-package"], "assetRequirement": "none", "altTextRequired": false, "deterministicBriefTemplate": "Plan one bounded lesson brief; do not access or quote manuscript text." },
-        { "id": "decision-prompt", "label": "Decision prompt reserve", "pillarId": "approved-book-lessons", "candidateClass": "reserve", "platforms": ["threads"], "locales": ["en"], "evidenceRequirements": ["Use only an owner-approved package and never infer personal experience."], "sourceClasses": ["strategy-owned", "approved-package"], "assetRequirement": "none", "altTextRequired": false, "deterministicBriefTemplate": "Hold a reserve decision prompt tied to a future approved package reference." },
-        { "id": "one-number-card", "label": "One-number card slot", "pillarId": "approved-book-lessons", "candidateClass": "recurring", "platforms": ["instagram"], "locales": ["en"], "evidenceRequirements": ["Any number needs an approved package claim ref and Design Lab alt text."], "sourceClasses": ["strategy-owned", "approved-package"], "assetRequirement": "optional-design-lab", "altTextRequired": true, "deterministicBriefTemplate": "Plan a one-number visual slot; no number is invented or rendered here." }
+      "languages": [
+        "en"
       ],
-      "prohibited": { "topics": ["unpublished manuscript detail", "private financial record"], "claims": ["Invented personal experience, testimonial, quote, number or financial outcome."], "formats": ["Manuscript excerpt, private chunk, embedding, direct message or advice guarantee."] },
-      "cadence": { "minimumPerWeek": 0, "targetPerWeek": 3, "maximumPerWeek": 5, "preferredWindows": ["After owner-approved package evidence"], "prohibitedWindows": ["Before package approval"] },
-      "policyRefs": { "amplificationPolicyRef": "config/social-amplification-policy.json", "launchRunwayRef": "GitHub #415", "originalSupportRatioRef": "GitHub #415", "sameSourceCooldownRef": "GitHub #415", "supportCapRef": "GitHub #415" },
-      "platformCaps": { "instagram": { "perDay": 1, "perWeek": 3 }, "threads": { "perDay": 1, "perWeek": 5 } },
-      "assets": { "rendererRef": "Design Lab", "allowedKinds": ["none", "image", "carousel"], "altTextRequiredForVisuals": true },
-      "localeToneGuidance": [{ "locale": "en", "guidance": "Practical and specific while remaining bounded to approved evidence; never impersonate the author." }],
-      "generationPolicy": { "deterministicFirst": true, "cacheByContentAndStrategyVersion": true, "modelRole": null, "maximumModelCallsPerBuild": 0, "maximumCostUsdPerBuild": 0, "modelFailurePolicy": "preserve-deterministic-inventory" },
-      "ownerControls": { "vetoRefs": [], "correctionRefs": [], "stricterOnlyWithoutNewDecision": true },
+      "markets": [
+        "US"
+      ],
+      "allowedCapabilities": [
+        {
+          "mapVersion": "1.2.0",
+          "source": "door-money",
+          "target": "social-distribution",
+          "capability": "approved-publish-package",
+          "dataSchemaVersion": "approved-publish-package/1",
+          "decisionReference": "GitHub #424"
+        }
+      ],
+      "contentPillars": [
+        {
+          "id": "approved-book-lessons",
+          "label": "Approved book lessons",
+          "description": "Planning around bounded owner-approved package references without manuscript access.",
+          "allowedSourceClasses": [
+            "strategy-owned",
+            "approved-package",
+            "accepted-campaign"
+          ]
+        }
+      ],
+      "recurringFormats": [
+        {
+          "id": "lesson-brief",
+          "label": "Lesson brief plan",
+          "pillarId": "approved-book-lessons",
+          "candidateClass": "original",
+          "platforms": [
+            "threads",
+            "instagram"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Final copy requires one immutable approved-publish-package/1 reference."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Plan one bounded lesson brief; do not access or quote manuscript text."
+        },
+        {
+          "id": "decision-prompt",
+          "label": "Decision prompt reserve",
+          "pillarId": "approved-book-lessons",
+          "candidateClass": "reserve",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Use only an owner-approved package and never infer personal experience."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Hold a reserve decision prompt tied to a future approved package reference."
+        },
+        {
+          "id": "one-number-card",
+          "label": "One-number card slot",
+          "pillarId": "approved-book-lessons",
+          "candidateClass": "recurring",
+          "platforms": [
+            "instagram"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Any number needs an approved package claim ref and Design Lab alt text."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "optional-design-lab",
+          "altTextRequired": true,
+          "deterministicBriefTemplate": "Plan a one-number visual slot; no number is invented or rendered here."
+        }
+      ],
+      "prohibited": {
+        "topics": [
+          "unpublished manuscript detail",
+          "private financial record"
+        ],
+        "claims": [
+          "Invented personal experience, testimonial, quote, number or financial outcome."
+        ],
+        "formats": [
+          "Manuscript excerpt, private chunk, embedding, direct message or advice guarantee."
+        ]
+      },
+      "cadence": {
+        "minimumPerWeek": 0,
+        "targetPerWeek": 3,
+        "maximumPerWeek": 5,
+        "preferredWindows": [
+          "After owner-approved package evidence"
+        ],
+        "prohibitedWindows": [
+          "Before package approval"
+        ]
+      },
+      "policyRefs": {
+        "amplificationPolicyRef": "config/social-amplification-policy.json",
+        "launchRunwayRef": "GitHub #415",
+        "originalSupportRatioRef": "GitHub #415",
+        "sameSourceCooldownRef": "GitHub #415",
+        "supportCapRef": "GitHub #415"
+      },
+      "platformCaps": {
+        "instagram": {
+          "perDay": 1,
+          "perWeek": 3
+        },
+        "threads": {
+          "perDay": 1,
+          "perWeek": 5
+        }
+      },
+      "assets": {
+        "rendererRef": "Design Lab",
+        "allowedKinds": [
+          "none",
+          "image",
+          "carousel"
+        ],
+        "altTextRequiredForVisuals": true
+      },
+      "localeToneGuidance": [
+        {
+          "locale": "en",
+          "guidance": "Practical and specific while remaining bounded to approved evidence; never impersonate the author."
+        }
+      ],
+      "generationPolicy": {
+        "deterministicFirst": true,
+        "cacheByContentAndStrategyVersion": true,
+        "modelRole": null,
+        "maximumModelCallsPerBuild": 0,
+        "maximumCostUsdPerBuild": 0,
+        "modelFailurePolicy": "preserve-deterministic-inventory"
+      },
+      "ownerControls": {
+        "vetoRefs": [],
+        "correctionRefs": [],
+        "stricterOnlyWithoutNewDecision": true
+      },
       "reviewDate": "2026-11-27",
-      "stopConditions": ["Stop without an approved package, on private-data exposure, invented experience or owner veto."],
+      "stopConditions": [
+        "Stop without an approved package, on private-data exposure, invented experience or owner veto."
+      ],
       "authorityGranted": false,
       "queueAuthorized": false,
       "publishingAuthorized": false
@@ -136,25 +728,175 @@
       "version": "1.0.0",
       "purpose": "Hold a distinct internal profile proposal for BOOKSOFHISTORY feature packages reviewed by the owner.",
       "audience": "Czech and English readers of evidence-backed book and history features.",
-      "languages": ["cs", "en"],
-      "markets": ["CZ", "US"],
-      "allowedCapabilities": [],
-      "contentPillars": [{ "id": "book-history-context", "label": "Book and history context", "description": "Source-bound book context independent from Tehdejší svět state.", "allowedSourceClasses": ["strategy-owned", "profile-owned", "accepted-campaign"] }],
-      "recurringFormats": [
-        { "id": "book-context", "label": "Book context plan", "pillarId": "book-history-context", "candidateClass": "original", "platforms": ["threads", "instagram"], "locales": ["cs", "en"], "evidenceRequirements": ["Final copy requires BOOKSOFHISTORY-owned accepted evidence."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "none", "altTextRequired": false, "deterministicBriefTemplate": "Plan an evidence-backed book-context brief without importing Tehdejší svět state." },
-        { "id": "source-note", "label": "Source note reserve", "pillarId": "book-history-context", "candidateClass": "reserve", "platforms": ["threads"], "locales": ["cs", "en"], "evidenceRequirements": ["Record an independently accepted book source before final copy."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "none", "altTextRequired": false, "deterministicBriefTemplate": "Hold a reserve source-note brief and make uncertainty explicit." },
-        { "id": "book-feature-card", "label": "Book feature card slot", "pillarId": "book-history-context", "candidateClass": "recurring", "platforms": ["instagram"], "locales": ["cs", "en"], "evidenceRequirements": ["Use Design Lab only after book evidence and image rights are recorded."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "optional-design-lab", "altTextRequired": true, "deterministicBriefTemplate": "Plan a book-feature card slot; do not render or infer image rights here." }
+      "languages": [
+        "cs",
+        "en"
       ],
-      "prohibited": { "topics": ["Tehdejší svět private state", "unsupported historical certainty"], "claims": ["Invented quote, source, personal experience or historical fact."], "formats": ["Cross-targeted sister content, automated reply or unlicensed image."] },
-      "cadence": { "minimumPerWeek": 0, "targetPerWeek": 3, "maximumPerWeek": 5, "preferredWindows": ["After independent source acceptance"], "prohibitedWindows": ["Before source acceptance"] },
-      "policyRefs": { "amplificationPolicyRef": "config/social-amplification-policy.json", "launchRunwayRef": "GitHub #415", "originalSupportRatioRef": "GitHub #415", "sameSourceCooldownRef": "GitHub #415", "supportCapRef": "GitHub #415" },
-      "platformCaps": { "instagram": { "perDay": 1, "perWeek": 3 }, "threads": { "perDay": 1, "perWeek": 5 } },
-      "assets": { "rendererRef": "Design Lab", "allowedKinds": ["none", "image", "carousel"], "altTextRequiredForVisuals": true },
-      "localeToneGuidance": [{ "locale": "cs", "guidance": "Source-led Czech book context with uncertainty stated plainly." }, { "locale": "en", "guidance": "Source-led English book context without invented quotation or authority." }],
-      "generationPolicy": { "deterministicFirst": true, "cacheByContentAndStrategyVersion": true, "modelRole": null, "maximumModelCallsPerBuild": 0, "maximumCostUsdPerBuild": 0, "modelFailurePolicy": "preserve-deterministic-inventory" },
-      "ownerControls": { "vetoRefs": [], "correctionRefs": [], "stricterOnlyWithoutNewDecision": true },
+      "markets": [
+        "CZ",
+        "US"
+      ],
+      "allowedCapabilities": [],
+      "contentPillars": [
+        {
+          "id": "book-history-context",
+          "label": "Book and history context",
+          "description": "Source-bound book context independent from Tehdejší svět state.",
+          "allowedSourceClasses": [
+            "strategy-owned",
+            "profile-owned",
+            "accepted-campaign"
+          ]
+        }
+      ],
+      "recurringFormats": [
+        {
+          "id": "book-context",
+          "label": "Book context plan",
+          "pillarId": "book-history-context",
+          "candidateClass": "original",
+          "platforms": [
+            "threads",
+            "instagram"
+          ],
+          "locales": [
+            "cs",
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Final copy requires BOOKSOFHISTORY-owned accepted evidence."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Plan an evidence-backed book-context brief without importing Tehdejší svět state."
+        },
+        {
+          "id": "source-note",
+          "label": "Source note reserve",
+          "pillarId": "book-history-context",
+          "candidateClass": "reserve",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "cs",
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Record an independently accepted book source before final copy."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Hold a reserve source-note brief and make uncertainty explicit."
+        },
+        {
+          "id": "book-feature-card",
+          "label": "Book feature card slot",
+          "pillarId": "book-history-context",
+          "candidateClass": "recurring",
+          "platforms": [
+            "instagram"
+          ],
+          "locales": [
+            "cs",
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Use Design Lab only after book evidence and image rights are recorded."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "optional-design-lab",
+          "altTextRequired": true,
+          "deterministicBriefTemplate": "Plan a book-feature card slot; do not render or infer image rights here."
+        }
+      ],
+      "prohibited": {
+        "topics": [
+          "Tehdejší svět private state",
+          "unsupported historical certainty"
+        ],
+        "claims": [
+          "Invented quote, source, personal experience or historical fact."
+        ],
+        "formats": [
+          "Cross-targeted sister content, automated reply or unlicensed image."
+        ]
+      },
+      "cadence": {
+        "minimumPerWeek": 0,
+        "targetPerWeek": 3,
+        "maximumPerWeek": 5,
+        "preferredWindows": [
+          "After independent source acceptance"
+        ],
+        "prohibitedWindows": [
+          "Before source acceptance"
+        ]
+      },
+      "policyRefs": {
+        "amplificationPolicyRef": "config/social-amplification-policy.json",
+        "launchRunwayRef": "GitHub #415",
+        "originalSupportRatioRef": "GitHub #415",
+        "sameSourceCooldownRef": "GitHub #415",
+        "supportCapRef": "GitHub #415"
+      },
+      "platformCaps": {
+        "instagram": {
+          "perDay": 1,
+          "perWeek": 3
+        },
+        "threads": {
+          "perDay": 1,
+          "perWeek": 5
+        }
+      },
+      "assets": {
+        "rendererRef": "Design Lab",
+        "allowedKinds": [
+          "none",
+          "image",
+          "carousel"
+        ],
+        "altTextRequiredForVisuals": true
+      },
+      "localeToneGuidance": [
+        {
+          "locale": "cs",
+          "guidance": "Source-led Czech book context with uncertainty stated plainly."
+        },
+        {
+          "locale": "en",
+          "guidance": "Source-led English book context without invented quotation or authority."
+        }
+      ],
+      "generationPolicy": {
+        "deterministicFirst": true,
+        "cacheByContentAndStrategyVersion": true,
+        "modelRole": null,
+        "maximumModelCallsPerBuild": 0,
+        "maximumCostUsdPerBuild": 0,
+        "modelFailurePolicy": "preserve-deterministic-inventory"
+      },
+      "ownerControls": {
+        "vetoRefs": [],
+        "correctionRefs": [],
+        "stricterOnlyWithoutNewDecision": true
+      },
       "reviewDate": "2026-11-27",
-      "stopConditions": ["Stop for missing source evidence, image rights, cross-venture state or owner veto."],
+      "stopConditions": [
+        "Stop for missing source evidence, image rights, cross-venture state or owner veto."
+      ],
       "authorityGranted": false,
       "queueAuthorized": false,
       "publishingAuthorized": false
@@ -167,25 +909,545 @@
       "version": "1.0.0",
       "purpose": "Hold a distinct internal profile proposal for owner-reviewed Tehdejší svět bilingual features.",
       "audience": "Czech and English readers of source-bound historical city features.",
-      "languages": ["cs", "en"],
-      "markets": ["CZ", "US"],
-      "allowedCapabilities": [],
-      "contentPillars": [{ "id": "source-bound-cities", "label": "Source-bound cities", "description": "Bilingual city-history context independent from BOOKSOFHISTORY state.", "allowedSourceClasses": ["strategy-owned", "profile-owned", "accepted-campaign"] }],
-      "recurringFormats": [
-        { "id": "city-context", "label": "City context plan", "pillarId": "source-bound-cities", "candidateClass": "original", "platforms": ["threads", "instagram"], "locales": ["cs", "en"], "evidenceRequirements": ["Final copy requires Tehdejší svět-owned accepted historical evidence."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "none", "altTextRequired": false, "deterministicBriefTemplate": "Plan a bilingual city-context brief without importing BOOKSOFHISTORY state." },
-        { "id": "date-place-note", "label": "Date and place reserve", "pillarId": "source-bound-cities", "candidateClass": "reserve", "platforms": ["threads"], "locales": ["cs", "en"], "evidenceRequirements": ["Record source evidence for every date, place and named person."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "none", "altTextRequired": false, "deterministicBriefTemplate": "Hold a reserve date-and-place note with uncertainty explicit." },
-        { "id": "city-feature-card", "label": "City feature card slot", "pillarId": "source-bound-cities", "candidateClass": "recurring", "platforms": ["instagram"], "locales": ["cs", "en"], "evidenceRequirements": ["Use Design Lab only after evidence, licence and bilingual alt text are ready."], "sourceClasses": ["strategy-owned", "profile-owned"], "assetRequirement": "optional-design-lab", "altTextRequired": true, "deterministicBriefTemplate": "Plan a city-feature card slot; do not render or infer image rights here." }
+      "languages": [
+        "cs",
+        "en"
       ],
-      "prohibited": { "topics": ["BOOKSOFHISTORY private state", "unsupported historical certainty"], "claims": ["Invented quote, source, personal memory or historical fact."], "formats": ["Cross-targeted sister content, automated reply or unlicensed image."] },
-      "cadence": { "minimumPerWeek": 0, "targetPerWeek": 3, "maximumPerWeek": 5, "preferredWindows": ["After independent source acceptance"], "prohibitedWindows": ["Before source acceptance"] },
-      "policyRefs": { "amplificationPolicyRef": "config/social-amplification-policy.json", "launchRunwayRef": "GitHub #415", "originalSupportRatioRef": "GitHub #415", "sameSourceCooldownRef": "GitHub #415", "supportCapRef": "GitHub #415" },
-      "platformCaps": { "instagram": { "perDay": 1, "perWeek": 3 }, "threads": { "perDay": 1, "perWeek": 5 } },
-      "assets": { "rendererRef": "Design Lab", "allowedKinds": ["none", "image", "carousel"], "altTextRequiredForVisuals": true },
-      "localeToneGuidance": [{ "locale": "cs", "guidance": "Natural Czech historical context with evidence and uncertainty explicit." }, { "locale": "en", "guidance": "Clear English localization that does not overstate the Czech source." }],
-      "generationPolicy": { "deterministicFirst": true, "cacheByContentAndStrategyVersion": true, "modelRole": null, "maximumModelCallsPerBuild": 0, "maximumCostUsdPerBuild": 0, "modelFailurePolicy": "preserve-deterministic-inventory" },
-      "ownerControls": { "vetoRefs": [], "correctionRefs": [], "stricterOnlyWithoutNewDecision": true },
+      "markets": [
+        "CZ",
+        "US"
+      ],
+      "allowedCapabilities": [],
+      "contentPillars": [
+        {
+          "id": "source-bound-cities",
+          "label": "Source-bound cities",
+          "description": "Bilingual city-history context independent from BOOKSOFHISTORY state.",
+          "allowedSourceClasses": [
+            "strategy-owned",
+            "profile-owned",
+            "accepted-campaign"
+          ]
+        }
+      ],
+      "recurringFormats": [
+        {
+          "id": "city-context",
+          "label": "City context plan",
+          "pillarId": "source-bound-cities",
+          "candidateClass": "original",
+          "platforms": [
+            "threads",
+            "instagram"
+          ],
+          "locales": [
+            "cs",
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Final copy requires Tehdejší svět-owned accepted historical evidence."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Plan a bilingual city-context brief without importing BOOKSOFHISTORY state."
+        },
+        {
+          "id": "date-place-note",
+          "label": "Date and place reserve",
+          "pillarId": "source-bound-cities",
+          "candidateClass": "reserve",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "cs",
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Record source evidence for every date, place and named person."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Hold a reserve date-and-place note with uncertainty explicit."
+        },
+        {
+          "id": "city-feature-card",
+          "label": "City feature card slot",
+          "pillarId": "source-bound-cities",
+          "candidateClass": "recurring",
+          "platforms": [
+            "instagram"
+          ],
+          "locales": [
+            "cs",
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Use Design Lab only after evidence, licence and bilingual alt text are ready."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "profile-owned"
+          ],
+          "assetRequirement": "optional-design-lab",
+          "altTextRequired": true,
+          "deterministicBriefTemplate": "Plan a city-feature card slot; do not render or infer image rights here."
+        }
+      ],
+      "prohibited": {
+        "topics": [
+          "BOOKSOFHISTORY private state",
+          "unsupported historical certainty"
+        ],
+        "claims": [
+          "Invented quote, source, personal memory or historical fact."
+        ],
+        "formats": [
+          "Cross-targeted sister content, automated reply or unlicensed image."
+        ]
+      },
+      "cadence": {
+        "minimumPerWeek": 0,
+        "targetPerWeek": 3,
+        "maximumPerWeek": 5,
+        "preferredWindows": [
+          "After independent source acceptance"
+        ],
+        "prohibitedWindows": [
+          "Before source acceptance"
+        ]
+      },
+      "policyRefs": {
+        "amplificationPolicyRef": "config/social-amplification-policy.json",
+        "launchRunwayRef": "GitHub #415",
+        "originalSupportRatioRef": "GitHub #415",
+        "sameSourceCooldownRef": "GitHub #415",
+        "supportCapRef": "GitHub #415"
+      },
+      "platformCaps": {
+        "instagram": {
+          "perDay": 1,
+          "perWeek": 3
+        },
+        "threads": {
+          "perDay": 1,
+          "perWeek": 5
+        }
+      },
+      "assets": {
+        "rendererRef": "Design Lab",
+        "allowedKinds": [
+          "none",
+          "image",
+          "carousel"
+        ],
+        "altTextRequiredForVisuals": true
+      },
+      "localeToneGuidance": [
+        {
+          "locale": "cs",
+          "guidance": "Natural Czech historical context with evidence and uncertainty explicit."
+        },
+        {
+          "locale": "en",
+          "guidance": "Clear English localization that does not overstate the Czech source."
+        }
+      ],
+      "generationPolicy": {
+        "deterministicFirst": true,
+        "cacheByContentAndStrategyVersion": true,
+        "modelRole": null,
+        "maximumModelCallsPerBuild": 0,
+        "maximumCostUsdPerBuild": 0,
+        "modelFailurePolicy": "preserve-deterministic-inventory"
+      },
+      "ownerControls": {
+        "vetoRefs": [],
+        "correctionRefs": [],
+        "stricterOnlyWithoutNewDecision": true
+      },
       "reviewDate": "2026-11-27",
-      "stopConditions": ["Stop for missing source evidence, licence, bilingual quality, cross-venture state or owner veto."],
+      "stopConditions": [
+        "Stop for missing source evidence, licence, bilingual quality, cross-venture state or owner veto."
+      ],
+      "authorityGranted": false,
+      "queueAuthorized": false,
+      "publishingAuthorized": false
+    },
+    {
+      "schemaVersion": "social-profile-strategy/1",
+      "id": "social-profile-strategy-webdev-signal-cz",
+      "profileId": "social-profile-webdev-signal-cz",
+      "profileRole": "venture-primary",
+      "version": "1.0.0",
+      "purpose": "Carry the accepted Czech daily web-development edition to its own Instagram and Threads accounts once the owner creates them.",
+      "audience": "Czech and Slovak working and learning web developers.",
+      "languages": [
+        "cs"
+      ],
+      "markets": [
+        "CZ"
+      ],
+      "allowedCapabilities": [
+        {
+          "mapVersion": "1.2.0",
+          "source": "webdev-signal",
+          "target": "social-distribution",
+          "capability": "approved-publish-package",
+          "dataSchemaVersion": "approved-publish-package/1",
+          "decisionReference": "GitHub #424"
+        }
+      ],
+      "contentPillars": [
+        {
+          "id": "accepted-daily-edition",
+          "label": "Accepted daily edition",
+          "description": "The one story the desk selected for this Prague day, or nothing. Both editions carry the same accepted claims from one evidence brief; neither translates the other.",
+          "allowedSourceClasses": [
+            "strategy-owned",
+            "approved-package",
+            "accepted-campaign"
+          ]
+        }
+      ],
+      "recurringFormats": [
+        {
+          "id": "daily-edition-carousel",
+          "label": "Daily edition carousel",
+          "pillarId": "accepted-daily-edition",
+          "candidateClass": "original",
+          "platforms": [
+            "instagram"
+          ],
+          "locales": [
+            "cs"
+          ],
+          "evidenceRequirements": [
+            "Every claim needs the day's immutable evidence brief reference.",
+            "Design Lab supplies alt text for every rendered frame."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "optional-design-lab",
+          "altTextRequired": true,
+          "deterministicBriefTemplate": "Render the accepted edition for this locale through Design Lab; never draft copy here."
+        },
+        {
+          "id": "daily-edition-note",
+          "label": "Daily edition note",
+          "pillarId": "accepted-daily-edition",
+          "candidateClass": "original",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "cs"
+          ],
+          "evidenceRequirements": [
+            "Every claim needs the day's immutable evidence brief reference."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Prepare one Threads item from the accepted edition for this locale."
+        },
+        {
+          "id": "no-edition-hold",
+          "label": "No-edition hold",
+          "pillarId": "accepted-daily-edition",
+          "candidateClass": "reserve",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "cs"
+          ],
+          "evidenceRequirements": [
+            "A NO_EDITION receipt is the only evidence this slot ever carries."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "On a NO_EDITION day nothing is prepared. Silence is the record."
+        }
+      ],
+      "prohibited": {
+        "topics": [
+          "another venture's editorial state",
+          "unaudited secondary source as fact authority"
+        ],
+        "claims": [
+          "Any developer impact not carried by the day's accepted evidence brief.",
+          "A literal sentence-by-sentence translation presented as this locale's own edition."
+        ],
+        "formats": [
+          "Filler published to maintain a daily count.",
+          "Source article body text, screenshots of paywalled pages or another locale's copy."
+        ]
+      },
+      "cadence": {
+        "minimumPerWeek": 0,
+        "targetPerWeek": 5,
+        "maximumPerWeek": 7,
+        "preferredWindows": [
+          "After the day's edition is accepted"
+        ],
+        "prohibitedWindows": [
+          "Before the evidence brief is immutable",
+          "On a NO_EDITION day"
+        ]
+      },
+      "policyRefs": {
+        "amplificationPolicyRef": "config/social-amplification-policy.json",
+        "launchRunwayRef": "GitHub #415",
+        "originalSupportRatioRef": "GitHub #415",
+        "sameSourceCooldownRef": "GitHub #415",
+        "supportCapRef": "GitHub #415"
+      },
+      "platformCaps": {
+        "instagram": {
+          "perDay": 1,
+          "perWeek": 7
+        },
+        "threads": {
+          "perDay": 1,
+          "perWeek": 7
+        }
+      },
+      "assets": {
+        "rendererRef": "Design Lab",
+        "allowedKinds": [
+          "none",
+          "image",
+          "carousel"
+        ],
+        "altTextRequiredForVisuals": true
+      },
+      "localeToneGuidance": [
+        {
+          "locale": "cs",
+          "guidance": "Plain Czech written for this audience, not translated from the English edition. Name the practical impact first."
+        }
+      ],
+      "generationPolicy": {
+        "deterministicFirst": true,
+        "cacheByContentAndStrategyVersion": true,
+        "modelRole": null,
+        "maximumModelCallsPerBuild": 0,
+        "maximumCostUsdPerBuild": 0,
+        "modelFailurePolicy": "preserve-deterministic-inventory"
+      },
+      "ownerControls": {
+        "vetoRefs": [],
+        "correctionRefs": [],
+        "stricterOnlyWithoutNewDecision": true
+      },
+      "reviewDate": "2026-11-30",
+      "stopConditions": [
+        "Stop on a factual correction, a source losing its audited authority, or owner veto.",
+        "Stop rather than publish filler when no candidate crosses the threshold."
+      ],
+      "authorityGranted": false,
+      "queueAuthorized": false,
+      "publishingAuthorized": false
+    },
+    {
+      "schemaVersion": "social-profile-strategy/1",
+      "id": "social-profile-strategy-webdev-signal-en",
+      "profileId": "social-profile-webdev-signal-en",
+      "profileRole": "venture-primary",
+      "version": "1.0.0",
+      "purpose": "Carry the accepted English daily web-development edition to its own Instagram and Threads accounts once the owner creates them.",
+      "audience": "Working web developers who want one high-signal daily update.",
+      "languages": [
+        "en"
+      ],
+      "markets": [
+        "US"
+      ],
+      "allowedCapabilities": [
+        {
+          "mapVersion": "1.2.0",
+          "source": "webdev-signal",
+          "target": "social-distribution",
+          "capability": "approved-publish-package",
+          "dataSchemaVersion": "approved-publish-package/1",
+          "decisionReference": "GitHub #424"
+        }
+      ],
+      "contentPillars": [
+        {
+          "id": "accepted-daily-edition",
+          "label": "Accepted daily edition",
+          "description": "The one story the desk selected for this Prague day, or nothing. Both editions carry the same accepted claims from one evidence brief; neither translates the other.",
+          "allowedSourceClasses": [
+            "strategy-owned",
+            "approved-package",
+            "accepted-campaign"
+          ]
+        }
+      ],
+      "recurringFormats": [
+        {
+          "id": "daily-edition-carousel",
+          "label": "Daily edition carousel",
+          "pillarId": "accepted-daily-edition",
+          "candidateClass": "original",
+          "platforms": [
+            "instagram"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Every claim needs the day's immutable evidence brief reference.",
+            "Design Lab supplies alt text for every rendered frame."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "optional-design-lab",
+          "altTextRequired": true,
+          "deterministicBriefTemplate": "Render the accepted edition for this locale through Design Lab; never draft copy here."
+        },
+        {
+          "id": "daily-edition-note",
+          "label": "Daily edition note",
+          "pillarId": "accepted-daily-edition",
+          "candidateClass": "original",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Every claim needs the day's immutable evidence brief reference."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Prepare one Threads item from the accepted edition for this locale."
+        },
+        {
+          "id": "no-edition-hold",
+          "label": "No-edition hold",
+          "pillarId": "accepted-daily-edition",
+          "candidateClass": "reserve",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "A NO_EDITION receipt is the only evidence this slot ever carries."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "On a NO_EDITION day nothing is prepared. Silence is the record."
+        }
+      ],
+      "prohibited": {
+        "topics": [
+          "another venture's editorial state",
+          "unaudited secondary source as fact authority"
+        ],
+        "claims": [
+          "Any developer impact not carried by the day's accepted evidence brief.",
+          "A literal sentence-by-sentence translation presented as this locale's own edition."
+        ],
+        "formats": [
+          "Filler published to maintain a daily count.",
+          "Source article body text, screenshots of paywalled pages or another locale's copy."
+        ]
+      },
+      "cadence": {
+        "minimumPerWeek": 0,
+        "targetPerWeek": 5,
+        "maximumPerWeek": 7,
+        "preferredWindows": [
+          "After the day's edition is accepted"
+        ],
+        "prohibitedWindows": [
+          "Before the evidence brief is immutable",
+          "On a NO_EDITION day"
+        ]
+      },
+      "policyRefs": {
+        "amplificationPolicyRef": "config/social-amplification-policy.json",
+        "launchRunwayRef": "GitHub #415",
+        "originalSupportRatioRef": "GitHub #415",
+        "sameSourceCooldownRef": "GitHub #415",
+        "supportCapRef": "GitHub #415"
+      },
+      "platformCaps": {
+        "instagram": {
+          "perDay": 1,
+          "perWeek": 7
+        },
+        "threads": {
+          "perDay": 1,
+          "perWeek": 7
+        }
+      },
+      "assets": {
+        "rendererRef": "Design Lab",
+        "allowedKinds": [
+          "none",
+          "image",
+          "carousel"
+        ],
+        "altTextRequiredForVisuals": true
+      },
+      "localeToneGuidance": [
+        {
+          "locale": "en",
+          "guidance": "Direct international English. Name the practical impact first; no hype and no invented urgency."
+        }
+      ],
+      "generationPolicy": {
+        "deterministicFirst": true,
+        "cacheByContentAndStrategyVersion": true,
+        "modelRole": null,
+        "maximumModelCallsPerBuild": 0,
+        "maximumCostUsdPerBuild": 0,
+        "modelFailurePolicy": "preserve-deterministic-inventory"
+      },
+      "ownerControls": {
+        "vetoRefs": [],
+        "correctionRefs": [],
+        "stricterOnlyWithoutNewDecision": true
+      },
+      "reviewDate": "2026-11-30",
+      "stopConditions": [
+        "Stop on a factual correction, a source losing its audited authority, or owner veto.",
+        "Stop rather than publish filler when no candidate crosses the threshold."
+      ],
       "authorityGranted": false,
       "queueAuthorized": false,
       "publishingAuthorized": false

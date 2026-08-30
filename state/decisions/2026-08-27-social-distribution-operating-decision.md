@@ -2,9 +2,13 @@
 
 Date: 2026-08-27
 
-Decider: owner countersignature pending
+Decider: Lukas Kouril, owner
 
-Status: proposed; all external and live effects held
+Status: countersigned
+
+Held by this decision: all external and live effects held.
+
+Signature / explicit approval reference: Owner instruction, 2026-08-30 session (Claude Code): "Countersign everything thats left there for me". Live behaviour, account creation, credentials and spend stay held by this record's own boundaries.
 
 Decision id: `social-distribution-2026-08a`
 

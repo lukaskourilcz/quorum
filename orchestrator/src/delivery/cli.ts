@@ -2,7 +2,13 @@ import { appendFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { repoRoot } from "../paths.js";
-import { oldestPendingDelivery, recordDelivery, type DeliveryFailureCode } from "./outbox.js";
+import {
+  DELIVERY_FAILURE_CODES,
+  isDeliveryFailureCode,
+  oldestPendingDelivery,
+  recordDelivery,
+  type DeliveryFailureCode
+} from "./outbox.js";
 
 function valueAfter(args: string[], name: string): string | undefined {
   const index = args.indexOf(name);
@@ -13,6 +19,23 @@ function required(args: string[], name: string): string {
   const value = valueAfter(args, name);
   if (!value) throw new Error(`${name} is required`);
   return value;
+}
+
+/**
+ * A code this build does not know is refused here rather than written down.
+ *
+ * The cast this replaces let the cycle workflow send `post_deploy_verification` — a code the type
+ * never listed — straight into a receipt, and the sentence lookup for it returned nothing:
+ * 17 August's meeting page published "undefined The owner has the technical report." A failing
+ * delivery step is a bad moment to invent vocabulary, so an unknown code stops the step and names
+ * the ones that exist.
+ */
+export function failureCode(raw: string | undefined): DeliveryFailureCode | undefined {
+  if (raw === undefined) return undefined;
+  if (!isDeliveryFailureCode(raw)) {
+    throw new Error(`--code must be one of ${DELIVERY_FAILURE_CODES.join(", ")}; received ${raw}`);
+  }
+  return raw;
 }
 
 async function main(): Promise<void> {
@@ -52,10 +75,11 @@ async function main(): Promise<void> {
     }
     const detailFile = valueAfter(args, "--detail-file");
     const detail = detailFile ? await readFile(detailFile, "utf8") : valueAfter(args, "--detail");
+    const rawCode = failureCode(valueAfter(args, "--code"));
     const files = await recordDelivery({
       packagePath: required(args, "--package"),
       status,
-      ...(valueAfter(args, "--code") ? { code: valueAfter(args, "--code") as DeliveryFailureCode } : {}),
+      ...(rawCode ? { code: rawCode } : {}),
       ...(detail ? { detail: detail.trim() } : {}),
       ...(valueAfter(args, "--target-commit") ? { targetCommit: valueAfter(args, "--target-commit") } : {})
     });

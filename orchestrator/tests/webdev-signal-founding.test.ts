@@ -18,7 +18,15 @@ describe("WebDev Signal founding boundary", () => {
     expect(audit).toContain("### English edition");
     expect(audit).toContain("zero or one canonical record");
     expect(audit).toContain("`NO_EDITION`");
-    expect(decision).toContain("Status: proposed; live behavior held");
+    /*
+     * The owner countersigned this on 2026-08-30, which authorises the build and nothing else.
+     * What the guard is for survives that signature and is what it asserts: the record still has
+     * to say that live behaviour is held, because the founding grants no rendering, profile,
+     * connection, provider, queue or publishing authority and never did.
+     */
+    expect(decision).toContain("Status: countersigned");
+    expect(decision).toContain("Held by this decision: live behavior held.");
+    expect(decision).toContain("Those edges grant\nno rendering, profile, connection, provider, routine-scope, queue or publishing authority.");
     expect(decision).toContain("no new cron, meeting or public");
   });
 

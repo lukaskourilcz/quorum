@@ -34,8 +34,27 @@ export interface LaunchBoardRow {
   blocking: { title: string; href: string } | null;
 }
 
+/**
+ * The newest GoVIRAL brief, on the page the owner opens rather than in a tab nobody finds.
+ *
+ * Five desks parse `Trend call:` lines out of this plan and every one of them returned empty for
+ * as long as the room had no scout data. The brief is what the owner reads to decide a week of
+ * writing, so the board carries its date, its headline calls and where to read the rest — and,
+ * when there is none, says which of the two reasons it is, because "no brief" and "the room has
+ * never run" are different problems.
+ */
+export interface LaunchBriefSummary {
+  date: string;
+  title: string;
+  /** The trend calls, already stripped of their `Trend call:` prefix, newest brief only. */
+  calls: string[];
+  href: string;
+}
+
 export interface LaunchBoard {
   rows: LaunchBoardRow[];
+  /** The newest weekly brief, or the sentence explaining why there is not one. */
+  brief: LaunchBriefSummary | { unavailable: string };
   /** The single sentence the owner reads first. */
   verdict: { tone: "success" | "warning" | "risk"; headline: string; detail: string };
   blockingCount: number;
@@ -132,6 +151,13 @@ export interface LaunchBoardInputs {
    */
   attentionAsOf?: string | null;
   today?: string;
+  /** The newest approved GoVIRAL plan, already read by the caller that owns that directory. */
+  brief?: {
+    date: string;
+    title: string;
+    tactics: ReadonlyArray<{ description: string }>;
+    href: string;
+  } | null;
 }
 
 /** Whole days between two `YYYY-MM-DD` dates, or null when either is unusable. */
@@ -218,8 +244,29 @@ export function buildLaunchBoard(inputs: LaunchBoardInputs): LaunchBoard {
           detail: `${shippingCount} of ${rows.length} ventures have shipped.`
         };
 
+  /*
+   * The brief, or the reason there is not one.
+   *
+   * A missing plan directory and a room that met and found nothing are different facts, and the
+   * one the owner needs is which. The caller reads the directory; a null from it means no approved
+   * plan exists at all, which for this venture has been true since it was founded.
+   */
+  const brief: LaunchBoard["brief"] = inputs.brief
+    ? {
+        date: inputs.brief.date,
+        title: inputs.brief.title,
+        calls: inputs.brief.tactics
+          .map(({ description }) => description)
+          .filter((description) => description.startsWith("Trend call:"))
+          .map((description) => description.slice("Trend call:".length).trim())
+          .slice(0, 4),
+        href: inputs.brief.href
+      }
+    : { unavailable: "GoVIRAL has not produced a weekly brief yet. The Monday room opens, finds no scout data and spends nothing until its source quota has a token to spend." };
+
   return {
     rows,
+    brief,
     verdict,
     blockingCount,
     shippingCount,
