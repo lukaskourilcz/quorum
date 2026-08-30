@@ -257,7 +257,7 @@ export function buildWebDevBaseline(input: {
         maximum: margins.length > 0 ? Math.max(...margins) : null
       }
     },
-    bilingual: {
+    editionQuality: {
       // Denominator is days that selected a story: a NO_EDITION day had no package to hold.
       bothLocalesValidRate: rate(bothValid.length, selected.length),
       oneLocaleHeldRate: rate(oneHeld.length, selected.length),
@@ -366,7 +366,7 @@ export function evaluateWebDevLearning(input: {
     });
   }
 
-  const parity = input.baseline.bilingual.claimParityRate;
+  const parity = input.baseline.editionQuality.claimParityRate;
   if (parity.rate !== null && parity.rate < 1) {
     proposals.push({
       knob: "reserve-template-preference",

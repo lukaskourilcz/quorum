@@ -920,7 +920,7 @@ export const WebDevBaselineSchema = z.strictObject({
     duplicatesCollapsed: z.number().int().min(0),
     selectionMargin: z.strictObject({ minimum: z.number().nullable(), median: z.number().nullable(), maximum: z.number().nullable() })
   }),
-  bilingual: z.strictObject({
+  editionQuality: z.strictObject({
     bothLocalesValidRate: RateSchema,
     oneLocaleHeldRate: RateSchema,
     holdReasons: z.record(z.string(), z.number().int().min(0)),

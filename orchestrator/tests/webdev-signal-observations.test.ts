@@ -173,7 +173,7 @@ describe("the 28-day baseline", () => {
     // Eligible-story rate is over scanned days.
     expect(baseline.editorial.eligibleStoryRate).toMatchObject({ numerator: 20, denominator: 28 });
     // Parity is over judged editions, so the eight NO_EDITION days are not in it.
-    expect(baseline.bilingual.claimParityRate.denominator).toBe(40);
+    expect(baseline.editionQuality.claimParityRate.denominator).toBe(40);
     // Publish reliability is over editions that were valid, never over days.
     expect(baseline.publishing.verifiedPublishRate.denominator).toBe(40);
     expect(baseline.publishing.verifiedPublishRate.rate).toBe(0);
@@ -187,7 +187,7 @@ describe("the 28-day baseline", () => {
     });
 
     // Zero would say every edition failed to publish. None was ever offered.
-    expect(baseline.bilingual.claimParityRate.rate).toBeNull();
+    expect(baseline.editionQuality.claimParityRate.rate).toBeNull();
     expect(baseline.publishing.costPerAcceptedEditionUsd).toEqual({ value: null, unavailableReason: "denominator-empty" });
     expect(baseline.verdict).toBe("PAUSE");
   });

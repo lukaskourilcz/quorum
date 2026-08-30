@@ -193,7 +193,11 @@
                 "results",
                 "experiments",
                 "voice-strategy",
-                "budget"
+                "budget",
+                "decision",
+                "edition-cs",
+                "edition-en",
+                "delivery"
               ]
             }
           },

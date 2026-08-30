@@ -122,7 +122,14 @@ const VentureDefinitionSchema = openObject({
     "results",
     "experiments",
     "voice-strategy",
-    "budget"
+    "budget",
+    // WebDev Signal's workspace. `decision` is the tab that says why one story won or why there
+    // is none; the two edition tabs are separate because each locale has its own hold state, and
+    // one merged tab would hide a held Czech package behind a valid English one.
+    "decision",
+    "edition-cs",
+    "edition-en",
+    "delivery"
   ])),
   rendering: VentureRenderingSchema.optional(),
   productionJobs: z.array(openObject({

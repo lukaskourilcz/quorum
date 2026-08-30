@@ -664,7 +664,13 @@
         ]
       },
       "adminTabs": [
-        "sources"
+        "today",
+        "decision",
+        "sources",
+        "edition-cs",
+        "edition-en",
+        "delivery",
+        "results"
       ],
       "meetings": []
     }

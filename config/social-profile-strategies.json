@@ -1084,8 +1084,8 @@
     },
     {
       "schemaVersion": "social-profile-strategy/1",
-      "id": "social-profile-strategy-webdev-signal-cz",
-      "profileId": "social-profile-webdev-signal-cz",
+      "id": "social-profile-strategy-webdev-signal-cs",
+      "profileId": "social-profile-webdev-signal-cs",
       "profileRole": "venture-primary",
       "version": "1.0.0",
       "purpose": "Carry the accepted Czech daily web-development edition to its own Instagram and Threads accounts once the owner creates them.",
