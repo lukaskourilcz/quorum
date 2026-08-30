@@ -345,3 +345,31 @@ export type ContestRun = z.infer<typeof ContestRunSchema>;
 export type ContestOwnerEvent = z.infer<typeof ContestOwnerEventSchema>;
 export type ContestTrack = z.infer<typeof ContestTrackSchema>;
 export type ContestKind = z.infer<typeof ContestKindSchema>;
+
+/**
+ * A social lead as GoVIRAL would hand it over, bounded to what a lead may carry.
+ *
+ * The optional Instagram and TikTok pilot is held, and this contract exists so that the shape is
+ * settled before any of it runs rather than invented under time pressure afterwards. Everything
+ * about it is a ceiling: a URL, a clipped caption, a platform and when it was seen.
+ *
+ * What it deliberately cannot carry is the reason the pilot is safe to consider at all — no
+ * handle, no author, no follower count, no audience identity, no comment, no DM, no media bytes.
+ * A lead points at a page that might be a contest. Everything that makes it a contest comes from
+ * that page's own rules, read afterwards.
+ */
+export const SocialContestLeadSchema = z.strictObject({
+  schemaVersion: z.literal("social-contest-lead/1"),
+  /** GoVIRAL owns collection; this names the run its evidence came from. */
+  collectionRef: EvidenceRefSchema,
+  platform: z.enum(["instagram", "tiktok"]),
+  url: HttpsUrlSchema,
+  /** Untrusted text, clipped. Never an instruction and never a fact. */
+  caption: z.string().trim().max(280),
+  observedAt: DateTimeSchema,
+  /** When this lead stops being worth looking at, so nothing accumulates silently. */
+  expiresAt: DateTimeSchema,
+  language: z.enum(["cs", "sk", "en"]).nullable()
+});
+
+export type SocialContestLead = z.infer<typeof SocialContestLeadSchema>;
