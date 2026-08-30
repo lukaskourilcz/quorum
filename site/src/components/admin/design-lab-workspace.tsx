@@ -47,14 +47,22 @@ type FormatId = (typeof FORMATS)[number]["id"];
  * lead because they are the only families the dealer deals unprompted; everything after them
  * renders stored work and is a deliberate reach back.
  */
-const FAMILIES = [
-  "apex", "rail", "vista", "fault", "halo",
+const LAUNCH_FAMILIES = ["apex", "rail", "vista", "fault", "halo"] as const;
+
+/**
+ * The twenty-three the dealer no longer deals.
+ *
+ * They still render — a carousel built under one of them a month ago has to redraw exactly as it
+ * was sent — and they are still reachable. What they are not is a choice on the front door.
+ */
+const LEGACY_FAMILIES = [
   "masthead", "gutter", "bevel", "porthole", "slab",
   "terrace", "figure", "pull", "tower", "dossier",
   "billboard", "broadsheet", "zurich", "concrete", "terminal",
   "marginalia", "memo", "versus", "tally", "counterweight",
   "throughline", "quiet", "offset"
 ] as const;
+
 
 const TREATMENTS = [
   { id: "none", label: "bez úpravy" },
@@ -81,6 +89,17 @@ function token(recipe: Recipe): string {
 function line(recipe: Recipe): string {
   const treatment = TREATMENTS.find((entry) => entry.id === recipe.treatment)?.label ?? recipe.treatment;
   return `${recipe.family} · ${recipe.accentSwap ? "B" : recipe.variant} · ${treatment} · ${recipe.typeScale}× · fáze ${recipe.phaseSeed}`;
+}
+
+/** The five fields a recipe saves. The phase seed is a render choice and is not one of them. */
+function saveable(recipe: Recipe): Record<string, unknown> {
+  return {
+    family: recipe.family,
+    variant: recipe.variant,
+    accentSwap: recipe.accentSwap,
+    treatment: recipe.treatment,
+    typeScale: recipe.typeScale
+  };
 }
 
 function words(value: string): number {
@@ -172,17 +191,22 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
   function change(next: Partial<Recipe>): void {
     const merged = { ...recipe, ...next };
     setRecipe(merged);
-    if (writesEnabled) void post(
-      {
-        family: merged.family,
-        variant: merged.variant,
-        accentSwap: merged.accentSwap,
-        treatment: merged.treatment,
-        typeScale: merged.typeScale
-      },
-      line(merged)
-    );
+    if (writesEnabled) void post(saveable(merged), line(merged));
   }
+
+  /*
+   * Looking, without choosing.
+   *
+   * The five looks are how the owner picks, and picking is two separate acts: press one to see
+   * the whole deck in it, press the labelled button to make it this article's. The fine-tune
+   * controls below keep saving as they always did — an axis nudged is a decision already taken —
+   * but a row of looks is a place to browse, and browsing must not rewrite the record.
+   */
+  function previewFamily(family: string): void {
+    setRecipe((current) => ({ ...current, family }));
+  }
+
+  const applied = article.recipePinned && recipe.family === article.recipe.family;
 
   return (
     <article className="min-w-0" data-lab-article={`${article.venture}/${article.slug}/${article.date}`}>
@@ -203,6 +227,59 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
         </header>
 
       {article.problems.length > 0 ? <Callout tone="warning">{article.problems.join(" ")}</Callout> : null}
+
+      {/*
+        ---- the five looks -------------------------------------------------------
+
+        Choosing is looking. Each tile is this article's own cover drawn in one of the five
+        families the dealer deals, so the owner compares the real thing rather than a swatch: press
+        one to put the whole deck in it, press `Použít` to make it the article's.
+
+        Covers only. Ten renders would double the wait on a tab whose whole purpose is a glance,
+        and the deck below is one press away.
+      */}
+      <section className="grid min-w-0 gap-2" data-launch-looks>
+        <p className="m-0 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">
+          Pět vzhledů — vyber podle obrázku
+        </p>
+        <div className="w-full overflow-x-auto" data-horizontal-scroll>
+          <ol className="flex gap-3">
+            {LAUNCH_FAMILIES.map((family) => (
+              <li className="w-40 shrink-0" key={family}>
+                <button
+                  aria-pressed={recipe.family === family}
+                  className={`admin-focus-ring grid w-full gap-2 rounded-[var(--admin-radius-lg)] border p-2 text-left transition ${
+                    recipe.family === family
+                      ? "border-[var(--admin-section-accent)] bg-[var(--admin-surface-elevated)]"
+                      : "border-[var(--admin-border)] hover:border-[var(--admin-section-accent)]"
+                  }`}
+                  data-look={family}
+                  onClick={() => previewFamily(family)}
+                  type="button"
+                >
+                  <SlideImage
+                    alt={`${family}: titulní slide`}
+                    ratio={canvas.ratio}
+                    src={slideUrl(article, { ...recipe, family }, format, 1)}
+                  />
+                  <span className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground)]">{family}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            data-apply-look
+            disabled={!writesEnabled || applied}
+            onClick={() => { void post(saveable(recipe), recipe.family); }}
+            type="button"
+          >
+            {applied ? `Použito: ${recipe.family}` : `Použít vzhled ${recipe.family}`}
+          </Button>
+          <DeckSaveBadge save={save} />
+        </div>
+      </section>
 
       <div className="flex flex-wrap gap-2">
         {FORMATS.map((entry) => (
@@ -296,39 +373,60 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
                   {line(recipe)}{article.recipePinned ? " · vybráno" : " · odvozeno"}
                 </p>
                 {/*
-                  * Twenty-three chips wrap; ten fitted one row. A single non-wrapping row of
-                  * twenty-three would put two thirds of the library behind a horizontal scroll the
-                  * owner has no reason to expect, so the row becomes a block. The scroller stays
-                  * marked for the containment guard, which reads an unmarked overflowing element as a
-                  * layout bug rather than a scroller.
-                  */}
-                <div className="w-full overflow-x-auto" data-horizontal-scroll>
-                  <div className="flex flex-wrap gap-2">
-                    {FAMILIES.map((family) => (
-                      <button aria-pressed={recipe.family === family} className={chipClass(recipe.family === family)} data-family={family} key={family} onClick={() => change({ family })} type="button">
-                        {family}
+                  ---- everything else, behind one disclosure ------------------------
+
+                  Twenty-eight families, A/B, three treatments, three type scales and four phase
+                  seeds: the whole axis surface used to be the front door, and the owner's words
+                  were "I don't want a thousand options." None of it is removed — the engine still
+                  honours every axis and a stored deck still needs them to redraw — it simply stops
+                  being what a reader meets first.
+
+                  The scroller stays marked for the containment guard, which reads an unmarked
+                  overflowing element as a layout bug rather than as a scroller.
+                */}
+                <details className="rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] p-3" data-fine-tune>
+                  <summary className="admin-focus-ring cursor-pointer font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">
+                    Doladit
+                  </summary>
+                  <div className="grid min-w-0 gap-2 pt-3">
+                    <div className="flex flex-wrap gap-2">
+                      {LAUNCH_FAMILIES.map((family) => (
+                        <button aria-pressed={recipe.family === family} className={chipClass(recipe.family === family)} data-family={family} key={family} onClick={() => change({ family })} type="button">
+                          {family}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="m-0 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">
+                      Starší vzhledy — vykreslují uloženou práci, nové karusely už z nich nevznikají
+                    </p>
+                    <div className="w-full overflow-x-auto" data-horizontal-scroll>
+                      <div className="flex flex-wrap gap-2" data-legacy-families>
+                        {LEGACY_FAMILIES.map((family) => (
+                          <button aria-pressed={recipe.family === family} className={chipClass(recipe.family === family)} data-family={family} key={family} onClick={() => change({ family })} type="button">
+                            {family}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <button aria-pressed={!recipe.accentSwap} className={chipClass(!recipe.accentSwap)} onClick={() => change({ accentSwap: false, variant: "A" })} type="button">A</button>
+                      <button aria-pressed={recipe.accentSwap} className={chipClass(recipe.accentSwap)} onClick={() => change({ accentSwap: true, variant: "B" })} type="button">B</button>
+                      {TREATMENTS.map((entry) => (
+                        <button aria-pressed={recipe.treatment === entry.id} className={chipClass(recipe.treatment === entry.id)} key={entry.id} onClick={() => change({ treatment: entry.id })} type="button">
+                          {entry.label}
+                        </button>
+                      ))}
+                      {SCALES.map((scale) => (
+                        <button aria-pressed={recipe.typeScale === scale} className={chipClass(recipe.typeScale === scale)} key={scale} onClick={() => change({ typeScale: scale })} type="button">
+                          {scale}×
+                        </button>
+                      ))}
+                      <button className={chipClass(false)} onClick={() => change({ phaseSeed: (recipe.phaseSeed + 1) % 4 })} type="button">
+                        fáze ▸
                       </button>
-                    ))}
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <button aria-pressed={!recipe.accentSwap} className={chipClass(!recipe.accentSwap)} onClick={() => change({ accentSwap: false, variant: "A" })} type="button">A</button>
-                  <button aria-pressed={recipe.accentSwap} className={chipClass(recipe.accentSwap)} onClick={() => change({ accentSwap: true, variant: "B" })} type="button">B</button>
-                  {TREATMENTS.map((entry) => (
-                    <button aria-pressed={recipe.treatment === entry.id} className={chipClass(recipe.treatment === entry.id)} key={entry.id} onClick={() => change({ treatment: entry.id })} type="button">
-                      {entry.label}
-                    </button>
-                  ))}
-                  {SCALES.map((scale) => (
-                    <button aria-pressed={recipe.typeScale === scale} className={chipClass(recipe.typeScale === scale)} key={scale} onClick={() => change({ typeScale: scale })} type="button">
-                      {scale}×
-                    </button>
-                  ))}
-                  <button className={chipClass(false)} onClick={() => change({ phaseSeed: (recipe.phaseSeed + 1) % 4 })} type="button">
-                    fáze ▸
-                  </button>
-                  <DeckSaveBadge save={save} />
-                </div>
+                </details>
                 <div className="flex min-w-0 flex-wrap items-center gap-2" data-presets>
                   {presets.map((preset) => (
                     <button
