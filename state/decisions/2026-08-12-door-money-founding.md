@@ -4,7 +4,9 @@ Date: 2026-08-12
 
 Decider: Lukas Kouril, owner
 
-Status: pending countersignature
+Status: countersigned
+
+Signature / explicit approval reference: Owner instruction, 2026-08-30 session (Claude Code): "Countersign everything thats left there for me". Live behaviour, account creation, credentials and spend stay held by this record's own boundaries.
 
 Decision id: `door-money-2026-08a`
 

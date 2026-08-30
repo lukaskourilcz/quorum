@@ -2,9 +2,13 @@
 
 Date: 2026-08-28
 
-Decider: owner countersignature pending
+Decider: Lukas Kouril, owner
 
-Status: proposed; live behavior held
+Status: countersigned
+
+Held by this decision: live behavior held.
+
+Signature / explicit approval reference: Owner instruction, 2026-08-30 session (Claude Code): "Countersign everything thats left there for me". Live behaviour, account creation, credentials and spend stay held by this record's own boundaries.
 
 Decision id: `webdev-signal-2026-08a`
 

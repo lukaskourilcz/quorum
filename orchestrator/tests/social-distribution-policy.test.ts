@@ -28,7 +28,15 @@ describe("Social Distribution founding policy", () => {
       expect(design).toContain(provider);
       expect(decision).toMatch(new RegExp(provider, "iu"));
     }
-    expect(decision).toContain("Status: proposed; all external and live effects held");
+    /*
+     * Countersigned by the owner on 2026-08-30, which selects the connector posture and activates
+     * nothing. The guard keeps asserting the part that matters and that the signature does not
+     * touch: no provider is installed or paid for, and every external effect stays held. The
+     * separate draft-only channel test below is what proves nothing can post.
+     */
+    expect(decision).toContain("Status: countersigned");
+    expect(decision).toContain("Held by this decision: all external and live effects held.");
+    expect(decision.replace(/\s+/gu, " ")).toContain("None is installed, connected, purchased, subscribed or activated by this decision.");
     expect(decision).toContain("costs $0 in new provider subscriptions");
     expect(design).toContain("SOCIAL-DISTRIBUTION-CONNECTION-001");
   });
