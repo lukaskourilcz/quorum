@@ -620,3 +620,10 @@ with its full scope, because the scope text is the approval. -->
   build that never ran. An empty commit to the magazine's main triggers one; if that is what it
   takes twice, the host's git integration is the thing to look at.
   [imp:5] [owner:me] [time:15m] [kind:deploy]
+
+- [x] **DELIVERY-NOT-BUILT-CAUGHT-UP** — Resolved 2026-08-30: the site is serving it again. Original report: — delivered but not being served.
+  https://caughtup-ai.vercel.app/data/board/2026-08-30.json answers 404, so the host has not rebuilt since 2026-08-30 landed on main.
+  Nothing is wrong with the package: the commit is on main and its gate was green. This is the
+  build that never ran. An empty commit to the magazine's main triggers one; if that is what it
+  takes twice, the host's git integration is the thing to look at.
+  [imp:5] [owner:me] [time:15m] [kind:deploy]

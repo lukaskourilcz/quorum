@@ -5,7 +5,7 @@
     {
       "at": "2026-08-24T03:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "cu-edition",
+      "kind": "cu-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-24-cu-edition",
       "decisionOneLiner": "The article failed its own checks on every attempt the budget allowed, so nothing was published."
@@ -28,25 +28,10 @@
     {
       "at": "2026-08-24T06:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "mma-intake",
+      "kind": "mma-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-24-mma-intake",
       "decisionOneLiner": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
-    },
-    {
-      "at": "2026-08-24T07:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-editorial",
-      "status": "held",
-      "meetingRef": "meetings/2026-08-24-mag-editorial",
-      "decisionOneLiner": "AUDIT vetoed the room output: Nelze přiřadit článek: chybí konkrétní ověřený subjekt z dnešního jednání a dostupné záznamy potvrzují jen absenci modelového běhu. Slot zabít."
-    },
-    {
-      "at": "2026-08-24T08:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-am",
-      "status": "held",
-      "decisionOneLiner": "The desk published this slot's article."
     },
     {
       "at": "2026-08-24T09:00:00.000Z",
@@ -72,36 +57,12 @@
       "decisionOneLiner": "Trend scouting produced no data this week, so the meeting was not held."
     },
     {
-      "at": "2026-08-24T12:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-afternoon",
-      "status": "held",
-      "meetingRef": "standups/2026-08-24-afternoon",
-      "decisionOneLiner": "No externally consequential action was approved."
-    },
-    {
       "at": "2026-08-24T13:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "dm-desk",
+      "kind": "dm-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-24-dm-desk",
       "decisionOneLiner": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped."
-    },
-    {
-      "at": "2026-08-24T14:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "dm-growth",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-24-dm-growth",
-      "decisionOneLiner": "$0 — this room meets on Thursdays. Nothing was spent and no action was taken."
-    },
-    {
-      "at": "2026-08-24T15:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "cu-product",
-      "status": "held",
-      "meetingRef": "meetings/2026-08-24-cu-product",
-      "decisionOneLiner": "Defer. No screened Caught Up idea arrived from the morning meeting."
     },
     {
       "at": "2026-08-24T16:00:00.000Z",
@@ -112,22 +73,6 @@
       "decisionOneLiner": "The Tehdejsi svet desk remains behind its owner countersignature. The free shortlist may be recorded, but no brief, copy, render or publication was created and nothing was spent."
     },
     {
-      "at": "2026-08-24T17:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mma-analysis",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-24-mma-analysis",
-      "decisionOneLiner": "No model run exists to review yet — waiting for the odds data key."
-    },
-    {
-      "at": "2026-08-24T18:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-desk",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-24-mag-desk",
-      "decisionOneLiner": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent."
-    },
-    {
       "at": "2026-08-24T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
@@ -135,17 +80,9 @@
       "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
-      "at": "2026-08-24T20:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-night",
-      "status": "held",
-      "meetingRef": "standups/2026-08-24-night",
-      "decisionOneLiner": "No externally consequential action was approved."
-    },
-    {
       "at": "2026-08-25T03:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "cu-edition",
+      "kind": "cu-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-25-cu-edition",
       "decisionOneLiner": "longtime Arm ekosystém a mainframový svět se dosud rozcházely; IBM dual-ISA čip je první konkrétní konstrukce, která překlenuje obě platformy bez emulace a mění výpočet pro ISV i z"
@@ -168,25 +105,10 @@
     {
       "at": "2026-08-25T06:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "mma-intake",
+      "kind": "mma-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-25-mma-intake",
       "decisionOneLiner": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
-    },
-    {
-      "at": "2026-08-25T07:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-editorial",
-      "status": "held",
-      "meetingRef": "meetings/2026-08-25-mag-editorial",
-      "decisionOneLiner": "AUDIT vetoed the room output: Slot nelze přiřadit: chybí ověřený nový subjekt i modelová data a index uvádí, že existující témata nejsou čerstvá."
-    },
-    {
-      "at": "2026-08-25T08:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-am",
-      "status": "held",
-      "decisionOneLiner": "The desk published this slot's article."
     },
     {
       "at": "2026-08-25T09:00:00.000Z",
@@ -212,36 +134,12 @@
       "decisionOneLiner": "This room meets on Mondays. Nothing was spent."
     },
     {
-      "at": "2026-08-25T12:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-afternoon",
-      "status": "held",
-      "meetingRef": "standups/2026-08-25-afternoon",
-      "decisionOneLiner": "No externally consequential action was approved."
-    },
-    {
       "at": "2026-08-25T13:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "dm-desk",
+      "kind": "dm-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-25-dm-desk",
       "decisionOneLiner": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped."
-    },
-    {
-      "at": "2026-08-25T14:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "dm-growth",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-25-dm-growth",
-      "decisionOneLiner": "$0 — this room meets on Thursdays. Nothing was spent and no action was taken."
-    },
-    {
-      "at": "2026-08-25T15:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "cu-product",
-      "status": "held",
-      "meetingRef": "meetings/2026-08-25-cu-product",
-      "decisionOneLiner": "Defer. No screened Caught Up idea arrived from the morning meeting."
     },
     {
       "at": "2026-08-25T16:00:00.000Z",
@@ -252,22 +150,6 @@
       "decisionOneLiner": "The Tehdejsi svet desk remains behind its owner countersignature. The free shortlist may be recorded, but no brief, copy, render or publication was created and nothing was spent."
     },
     {
-      "at": "2026-08-25T17:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mma-analysis",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-25-mma-analysis",
-      "decisionOneLiner": "No model run exists to review yet — waiting for the odds data key."
-    },
-    {
-      "at": "2026-08-25T18:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-desk",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-25-mag-desk",
-      "decisionOneLiner": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent."
-    },
-    {
       "at": "2026-08-25T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
@@ -275,17 +157,9 @@
       "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
-      "at": "2026-08-25T20:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-night",
-      "status": "held",
-      "meetingRef": "standups/2026-08-25-night",
-      "decisionOneLiner": "No externally consequential action was approved."
-    },
-    {
       "at": "2026-08-26T03:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "cu-edition",
+      "kind": "cu-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-26-cu-edition",
       "decisionOneLiner": "Odchod klíčového manažera infrastruktury z OpenAI a zdvojnásobení valuace robotického startupu Generalist v řádu měsíců jsou dva konkrétní signály o tom, kde AI průmysl právě stojí"
@@ -307,25 +181,10 @@
     {
       "at": "2026-08-26T06:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "mma-intake",
+      "kind": "mma-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-26-mma-intake",
       "decisionOneLiner": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
-    },
-    {
-      "at": "2026-08-26T07:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-editorial",
-      "status": "held",
-      "meetingRef": "meetings/2026-08-26-mag-editorial",
-      "decisionOneLiner": "AM: assigned; PM: killed"
-    },
-    {
-      "at": "2026-08-26T08:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-am",
-      "status": "held",
-      "decisionOneLiner": "The desk published this slot's article."
     },
     {
       "at": "2026-08-26T09:00:00.000Z",
@@ -351,36 +210,12 @@
       "decisionOneLiner": "This room meets on Mondays. Nothing was spent."
     },
     {
-      "at": "2026-08-26T12:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-afternoon",
-      "status": "held",
-      "meetingRef": "standups/2026-08-26-afternoon",
-      "decisionOneLiner": "No externally consequential action was approved."
-    },
-    {
       "at": "2026-08-26T13:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "dm-desk",
+      "kind": "dm-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-26-dm-desk",
       "decisionOneLiner": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped."
-    },
-    {
-      "at": "2026-08-26T14:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "dm-growth",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-26-dm-growth",
-      "decisionOneLiner": "$0 — this room meets on Thursdays. Nothing was spent and no action was taken."
-    },
-    {
-      "at": "2026-08-26T15:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "cu-product",
-      "status": "held",
-      "meetingRef": "meetings/2026-08-26-cu-product",
-      "decisionOneLiner": "Defer. No screened Caught Up idea arrived from the morning meeting."
     },
     {
       "at": "2026-08-26T16:00:00.000Z",
@@ -391,22 +226,6 @@
       "decisionOneLiner": "The Tehdejsi svet desk remains behind its owner countersignature. The free shortlist may be recorded, but no brief, copy, render or publication was created and nothing was spent."
     },
     {
-      "at": "2026-08-26T17:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mma-analysis",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-26-mma-analysis",
-      "decisionOneLiner": "No model run exists to review yet — waiting for the odds data key."
-    },
-    {
-      "at": "2026-08-26T18:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-desk",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-26-mag-desk",
-      "decisionOneLiner": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent."
-    },
-    {
       "at": "2026-08-26T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
@@ -414,17 +233,9 @@
       "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
-      "at": "2026-08-26T20:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-night",
-      "status": "held",
-      "meetingRef": "standups/2026-08-26-night",
-      "decisionOneLiner": "No externally consequential action was approved."
-    },
-    {
       "at": "2026-08-27T03:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "cu-edition",
+      "kind": "cu-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-27-cu-edition",
       "decisionOneLiner": "A different edition already holds this date in the magazine, so this one was held back. The owner has the technical report."
@@ -447,24 +258,10 @@
     {
       "at": "2026-08-27T06:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "mma-intake",
+      "kind": "mma-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-27-mma-intake",
       "decisionOneLiner": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
-    },
-    {
-      "at": "2026-08-27T07:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-editorial",
-      "status": "skipped",
-      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
-    },
-    {
-      "at": "2026-08-27T08:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-am",
-      "status": "held",
-      "decisionOneLiner": "The desk published this slot's article."
     },
     {
       "at": "2026-08-27T09:00:00.000Z",
@@ -490,36 +287,12 @@
       "decisionOneLiner": "This room meets on Mondays. Nothing was spent."
     },
     {
-      "at": "2026-08-27T12:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-afternoon",
-      "status": "held",
-      "meetingRef": "standups/2026-08-27-afternoon",
-      "decisionOneLiner": "No externally consequential action was approved."
-    },
-    {
       "at": "2026-08-27T13:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "dm-desk",
+      "kind": "dm-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-27-dm-desk",
       "decisionOneLiner": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped."
-    },
-    {
-      "at": "2026-08-27T14:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "dm-growth",
-      "status": "held",
-      "meetingRef": "meetings/2026-08-27-dm-growth",
-      "decisionOneLiner": "Honest NO_ACTION: The scheduled topic is only a bounded question, and there are no allowed evidence references, playbooks, owner results, or completion records to support a concret"
-    },
-    {
-      "at": "2026-08-27T15:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "cu-product",
-      "status": "held",
-      "meetingRef": "meetings/2026-08-27-cu-product",
-      "decisionOneLiner": "Defer. No screened Caught Up idea arrived from the morning meeting."
     },
     {
       "at": "2026-08-27T16:00:00.000Z",
@@ -530,22 +303,6 @@
       "decisionOneLiner": "The Tehdejsi svet desk remains behind its owner countersignature. The free shortlist may be recorded, but no brief, copy, render or publication was created and nothing was spent."
     },
     {
-      "at": "2026-08-27T17:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mma-analysis",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-27-mma-analysis",
-      "decisionOneLiner": "No model run exists to review yet — waiting for the odds data key."
-    },
-    {
-      "at": "2026-08-27T18:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-desk",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-27-mag-desk",
-      "decisionOneLiner": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent."
-    },
-    {
       "at": "2026-08-27T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
@@ -553,17 +310,9 @@
       "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
-      "at": "2026-08-27T20:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-night",
-      "status": "held",
-      "meetingRef": "standups/2026-08-27-night",
-      "decisionOneLiner": "No externally consequential action was approved."
-    },
-    {
       "at": "2026-08-28T03:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "cu-edition",
+      "kind": "cu-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-28-cu-edition",
       "decisionOneLiner": "Soudní rozhodnutí o blacklistu mění to, jak může výkonná moc USA trestat AI společnosti – a zároveň bezpečnostní mezera v Claude Code ukazuje, že agenturní AI má vážné problémy dří"
@@ -587,25 +336,10 @@
     {
       "at": "2026-08-28T06:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "mma-intake",
+      "kind": "mma-day",
       "status": "not-needed",
       "meetingRef": "meetings/2026-08-28-mma-intake",
       "decisionOneLiner": "Nothing new arrived since the last check, so this meeting was not needed."
-    },
-    {
-      "at": "2026-08-28T07:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-editorial",
-      "status": "held",
-      "meetingRef": "meetings/2026-08-28-mag-editorial",
-      "decisionOneLiner": "AUDIT vetoed the room output: Zabijte slot: chybí ověřený FightAIQ modelový běh i nový zdrojový subjekt; event UFC je v indexu opakovaný. Bez čerstvého podkladu nelze napsat článek"
-    },
-    {
-      "at": "2026-08-28T08:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-am",
-      "status": "held",
-      "decisionOneLiner": "The desk published this slot's article."
     },
     {
       "at": "2026-08-28T09:00:00.000Z",
@@ -631,54 +365,17 @@
       "decisionOneLiner": "This room meets on Mondays. Nothing was spent."
     },
     {
-      "at": "2026-08-28T12:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-afternoon",
-      "status": "held",
-      "meetingRef": "standups/2026-08-28-afternoon",
-      "decisionOneLiner": "No externally consequential action was approved."
-    },
-    {
       "at": "2026-08-28T13:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "dm-desk",
+      "kind": "dm-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-28-dm-desk",
       "decisionOneLiner": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped."
     },
     {
-      "at": "2026-08-28T14:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "dm-growth",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-28-dm-growth",
-      "decisionOneLiner": "$0 — this room meets on Thursdays. Nothing was spent and no action was taken."
-    },
-    {
-      "at": "2026-08-28T15:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "cu-product",
-      "status": "skipped",
-      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
-    },
-    {
       "at": "2026-08-28T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ts-desk",
-      "status": "skipped",
-      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
-    },
-    {
-      "at": "2026-08-28T17:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mma-analysis",
-      "status": "skipped",
-      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
-    },
-    {
-      "at": "2026-08-28T18:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-desk",
       "status": "skipped",
       "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
     },
@@ -690,18 +387,12 @@
       "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
-      "at": "2026-08-28T20:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-night",
-      "status": "skipped",
-      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
-    },
-    {
       "at": "2026-08-29T03:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "cu-edition",
-      "status": "skipped",
-      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      "kind": "cu-day",
+      "status": "held",
+      "meetingRef": "meetings/2026-08-29-cu-product",
+      "decisionOneLiner": "Defer. No screened Caught Up idea arrived from the morning meeting."
     },
     {
       "at": "2026-08-29T04:00:00.000Z",
@@ -721,23 +412,10 @@
     {
       "at": "2026-08-29T06:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "mma-intake",
-      "status": "skipped",
-      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
-    },
-    {
-      "at": "2026-08-29T07:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-editorial",
-      "status": "skipped",
-      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
-    },
-    {
-      "at": "2026-08-29T08:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-am",
-      "status": "skipped",
-      "decisionOneLiner": "The checks on the code behind this meeting did not pass, so it did not meet and nothing was spent."
+      "kind": "mma-day",
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-08-29-mma-analysis",
+      "decisionOneLiner": "No model run exists to review yet — waiting for the odds data key."
     },
     {
       "at": "2026-08-29T09:00:00.000Z",
@@ -763,36 +441,12 @@
       "decisionOneLiner": "This room meets on Mondays. Nothing was spent."
     },
     {
-      "at": "2026-08-29T12:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-afternoon",
-      "status": "held",
-      "meetingRef": "standups/2026-08-29-afternoon",
-      "decisionOneLiner": "No externally consequential action was approved."
-    },
-    {
       "at": "2026-08-29T13:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "dm-desk",
+      "kind": "dm-day",
       "status": "held",
       "meetingRef": "meetings/2026-08-29-dm-desk",
       "decisionOneLiner": "1 gated fixture draft stored for owner review; 0 failed package(s) dropped."
-    },
-    {
-      "at": "2026-08-29T14:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "dm-growth",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-29-dm-growth",
-      "decisionOneLiner": "$0 — this room meets on Thursdays. Nothing was spent and no action was taken."
-    },
-    {
-      "at": "2026-08-29T15:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "cu-product",
-      "status": "held",
-      "meetingRef": "meetings/2026-08-29-cu-product",
-      "decisionOneLiner": "Defer. No screened Caught Up idea arrived from the morning meeting."
     },
     {
       "at": "2026-08-29T16:00:00.000Z",
@@ -803,38 +457,18 @@
       "decisionOneLiner": "The planning phase stopped and will resume. Response Response truncated at the 2500-token cap for claude-sonnet-5; raise maxOutputTokens at the 2500-token cap for claude-sonnet-5;"
     },
     {
-      "at": "2026-08-29T17:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mma-analysis",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-29-mma-analysis",
-      "decisionOneLiner": "No model run exists to review yet — waiting for the odds data key."
-    },
-    {
-      "at": "2026-08-29T18:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-desk",
-      "status": "not-needed",
-      "meetingRef": "meetings/2026-08-29-mag-desk",
-      "decisionOneLiner": "Nothing was queued for this meeting to decide, so it did not meet and nothing was spent."
-    },
-    {
       "at": "2026-08-29T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-29T20:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-night",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-08-30T03:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "cu-edition",
-      "status": "scheduled"
+      "kind": "cu-day",
+      "status": "held",
+      "meetingRef": "meetings/2026-08-30-cu-edition",
+      "decisionOneLiner": "The desk could not assemble a shortlist from today's sources, so nothing was written."
     },
     {
       "at": "2026-08-30T04:00:00.000Z",
@@ -851,19 +485,7 @@
     {
       "at": "2026-08-30T06:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "mma-intake",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-30T07:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-editorial",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-30T08:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "article-am",
+      "kind": "mma-day",
       "status": "scheduled"
     },
     {
@@ -885,27 +507,9 @@
       "status": "scheduled"
     },
     {
-      "at": "2026-08-30T12:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-afternoon",
-      "status": "scheduled"
-    },
-    {
       "at": "2026-08-30T13:00:00.000Z",
       "tz": "Europe/Prague",
-      "kind": "dm-desk",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-30T14:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "dm-growth",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-30T15:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "cu-product",
+      "kind": "dm-day",
       "status": "scheduled"
     },
     {
@@ -915,27 +519,9 @@
       "status": "scheduled"
     },
     {
-      "at": "2026-08-30T17:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mma-analysis",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-30T18:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "mag-desk",
-      "status": "scheduled"
-    },
-    {
       "at": "2026-08-30T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "scheduled"
-    },
-    {
-      "at": "2026-08-30T20:00:00.000Z",
-      "tz": "Europe/Prague",
-      "kind": "venture-night",
       "status": "scheduled"
     }
   ]
