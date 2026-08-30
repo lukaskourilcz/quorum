@@ -1,15 +1,22 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-08-30T07:17:54.603Z",
+  "checkedAt": "2026-08-30T08:13:13.354Z",
   "date": "2026-08-30",
   "ventures": [
     {
       "venture": "mma-files",
       "waiting": [],
-      "parked": [],
+      "parked": [
+        {
+          "label": "2026-08-30 AM ufc-alex-perez",
+          "packageHash": "8a99a79aa22aa5467700ba32709d422429c952cfd53f7fc08289a83095c1d87a",
+          "date": "2026-08-30",
+          "code": "hash_conflict"
+        }
+      ],
       "oldestWaitingDate": null,
       "stalledDays": null,
-      "stalled": false
+      "stalled": true
     },
     {
       "venture": "caught-up",
