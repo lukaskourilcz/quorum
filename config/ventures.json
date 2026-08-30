@@ -673,6 +673,27 @@
         "results"
       ],
       "meetings": []
+    },
+    {
+      "id": "contest-radar",
+      "name": "Contest Radar",
+      "status": "exploration",
+      "visibility": "owner-only",
+      "taste": false,
+      "ledgerNamespace": "contest-radar",
+      "growth_objective": {
+        "label": "Surface contests and challenges worth the owner's evening and prepare the entry work lawfully; the venture never enters anything",
+        "components": [
+          "source-coverage",
+          "action-completion"
+        ]
+      },
+      "adminTabs": [
+        "today",
+        "sources",
+        "results"
+      ],
+      "meetings": []
     }
   ]
 }

@@ -170,6 +170,13 @@
       "lockedOn": [],
       "switchable": [],
       "disabled": []
+    },
+    "contest-radar": {
+      "lockedOn": [
+        "AUDIT"
+      ],
+      "switchable": [],
+      "disabled": []
     }
   }
 }
