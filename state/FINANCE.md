@@ -12,17 +12,17 @@ company total and never expands the $25.00 model/API share or $1.00 daily model/
 
 <!-- BEGIN GENERATED: read from state/budget/ledger.json. Do not edit by hand. -->
 
-As of 2026-08-30 05:10 UTC.
+As of 2026-08-30 06:06 UTC.
 
 | Metric | Value |
 | --- | ---: |
 | Recognized revenue | unavailable |
 | Refunds | unavailable |
 | Payment fees | unavailable |
-| Text and image API spend | $13.78 |
+| Text and image API spend | $13.80 |
 | Treasury spend | $0.00 |
 | Other verified operating cost | $0.00 |
-| Total verified operating cost | $13.78 |
+| Total verified operating cost | $13.80 |
 | Gross profit | unavailable |
 
 By project:
@@ -34,7 +34,7 @@ By project:
 | MMA Files | $2.11 |
 | Titty Tuesdays | $0.83 |
 | marketingShark | $0.71 |
-| FightAIQ | $0.51 |
+| FightAIQ | $0.53 |
 | Magazine Incubator | $0.04 |
 | Tehdejší svět | $0.03 |
 | Door Money | <$0.01 |
