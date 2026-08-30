@@ -1635,8 +1635,12 @@ test("a preset saves, reloads into the picker and applies", async ({ page }) => 
   try {
     await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
     const recipeLine = page.locator("[data-recipe-line]").first();
+    // `dossier` is one of the twenty-three the dealer retired, so it lives under `Doladit` with
+    // the rest of the axis surface since #499. Still reachable, and still the family this test
+    // wants: a preset has to round-trip a design nothing deals unprompted.
+    await page.locator("[data-fine-tune] summary").first().click();
     await expect.poll(async () => {
-      await page.locator('[data-family="dossier"]').click();
+      await page.locator('[data-family="dossier"]').first().click();
       return recipeLine.textContent();
     }, { timeout: 30_000 }).toContain("dossier");
     await expect(page.locator("[data-save-state]").first()).toHaveAttribute("data-save-state", "saved", { timeout: 60_000 });
@@ -1663,8 +1667,10 @@ test("a preset saves, reloads into the picker and applies", async ({ page }) => 
     // Saved as a draft, and it says so — a draft is never drawn from autonomously.
     await expect(chip).toContainText("koncept");
 
+    // The reload closed the disclosure, and `tower` is another of the retired twenty-three.
+    await page.locator("[data-fine-tune] summary").first().click();
     await expect.poll(async () => {
-      await page.locator('[data-family="tower"]').click();
+      await page.locator('[data-family="tower"]').first().click();
       return recipeLine.textContent();
     }, { timeout: 30_000 }).toContain("tower");
     await expect.poll(async () => {
