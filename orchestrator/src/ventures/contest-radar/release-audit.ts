@@ -165,16 +165,24 @@ export async function auditContestRadarRelease(options: {
 
   const inbound = (capabilities.edges ?? []).filter((edge) => edge.target === "contest-radar");
   const outbound = (capabilities.edges ?? []).filter((edge) => edge.source === "contest-radar");
+  const isolationRules = capabilities.isolationRules ?? [];
   checks.push(check(
-    "one-inbound-edge-and-no-outbound",
+    "one-inbound-edge-and-one-held-outbound",
     inbound.length === 1
       && inbound[0]?.source === "goviral"
       && inbound[0]?.capability === "intelligence-read"
-      && outbound.length === 0
-      && (capabilities.isolationRules ?? []).some((rule) =>
-        rule.id === "contest-radar-outbound-isolation" && (rule.sources ?? []).includes("contest-radar")),
-    "Exactly one inbound edge — GoVIRAL's recorded scout evidence — and no outbound edge at all, with the isolation rule saying so.",
-    ["config/venture-capabilities.json"]
+      // One outbound edge, and it is held. `allowed` here would mean this venture can publish,
+      // which needs a countersigned decision this check is the reason nobody can skip.
+      && outbound.length === 1
+      && outbound[0]?.target === "social-distribution"
+      && outbound[0]?.capability === "approved-publish-package"
+      && outbound[0]?.decision === "held"
+      && isolationRules.some((rule) =>
+        rule.id === "contest-radar-outbound-isolation" && (rule.sources ?? []).includes("contest-radar"))
+      && isolationRules.some((rule) =>
+        rule.id === "contest-radar-publish-isolation" && (rule.sources ?? []).includes("contest-radar")),
+    "One inbound edge — GoVIRAL's recorded scout evidence — and one outbound edge, held: the contest-promotion-candidate/1 publish edge to Social Distribution. Every other outbound target and capability stays isolated by rule.",
+    ["config/venture-capabilities.json", "state/decisions/2026-08-30-contest-radar-promotion-posture.md"]
   ));
 
   checks.push(check(

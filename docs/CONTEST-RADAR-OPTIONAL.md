@@ -1,9 +1,13 @@
 # Contest Radar: the two optional extensions, and what each is waiting for
 
-Both extensions in the Contest Radar program are `held-optional`. Neither blocks the private core,
-neither blocks its release audit, and both may stay held indefinitely without making anything
-incomplete. This file records what each would be, what it would take to open it, and — for one of
-them — why opening it is a decision rather than a piece of work.
+Both extensions in the Contest Radar program are built and both are `held-optional`. Neither blocks
+the private core, neither blocks its release audit, and both may stay held indefinitely without
+making anything incomplete. This file records what each is, what holds it, and what it would take to
+open — which for both is an owner decision rather than a piece of work.
+
+Built and held is the point rather than a compromise. The shapes are settled while there is time to
+think about them, the refusals are structural rather than promised, and the day either becomes worth
+opening, the decision is about the venture and not about a schedule.
 
 ## #414 — GoVIRAL-owned Instagram and TikTok contest discovery
 
@@ -82,27 +86,86 @@ change with a test failing beside it.
 
 ## #430 — Rule-permitted referral promotion through Social Distribution
 
-**Held, and opening it is an owner decision rather than an implementation task.**
+**Built as a contract, a projection and a gate. The capability edge is registered `held`; nothing
+publishes.**
 
-The idea is that a verified Contest Radar opportunity could become a transparent contest alert on
-an owned social profile, but only where the contest's official rules explicitly permit public
-promotion or referral sharing, and only where the target profile has an independent editorial
-reason to publish it.
+A verified Contest Radar opportunity may become a transparent contest alert on an owned social
+profile — but only where the contest's official rules explicitly permit public promotion or referral
+sharing, and only where the target profile has an independent editorial reason to publish it.
 
-**This contradicts a rule the founding decision established**, and that is the honest blocker
-rather than a missing dependency. `config/venture-capabilities.json` carries
-`contest-radar-outbound-isolation`: Contest Radar has no outbound content edge to any venture,
-service or public surface. The release audit checks it. Implementing #430 means removing or
-narrowing that rule, which is a change to what the venture is — an owner-only tool becomes a
-content source — and no amount of evidence gathered inside the tool can authorise that.
+### The blocker that had to be resolved first, and how
 
-**To open it, in this order:**
+The founding says Contest Radar has no **mandatory-core** content edge to any other venture. The
+isolation rule written to enforce it said something stricter — no outbound content edge at all — and
+that was the implementation being more careful than the decision. Harmless in most places; not here,
+where it made #430 unimplementable without looking like a weakened guard, and hid the real boundary
+behind a stronger claim nobody had decided.
 
-1. An owner decision that amends the founding's outbound posture, naming exactly which capability
-   edge it grants and to which target.
-2. The Social Distribution foundations the issue lists, verified present rather than assumed.
-3. A rule-permission check that reads the contest's own rules and refuses by default: silence is
-   not permission to promote, exactly as silence is not evidence a contest is free.
+`state/decisions/2026-08-30-contest-radar-promotion-posture.md` states the boundary in the map's own
+terms and is countersigned. It splits the isolation in two:
+
+- `contest-radar-outbound-isolation` still denies `intelligence-read`,
+  `bounded-render-summary` and `owner-manual-reference-read` to every target, Social Distribution
+  included.
+- `contest-radar-publish-isolation` denies `approved-publish-package` to every target **except**
+  Social Distribution.
+- One edge is registered: `contest-radar → social-distribution`, `approved-publish-package`,
+  `contest-promotion-candidate/1`, decision **`held`**.
+
+A held edge is a relationship that has been named and refused, which is better than one that was
+never considered: `resolveVentureCapability` returns `held`, callers refuse, and the refusal is
+legible instead of arriving as "no exact directional capability edge is registered", which reads
+identically to a typo.
+
+### What is built
+
+| Piece | Where |
+| --- | --- |
+| Candidate, evidence and profile contracts | `orchestrator/src/contracts/contest-promotion.ts` |
+| Derivation, gate, projection, staleness | `orchestrator/src/ventures/contest-radar/promotion.ts` |
+| Posture decision | `state/decisions/2026-08-30-contest-radar-promotion-posture.md` |
+| Edge and isolation split | `config/venture-capabilities.json` |
+| Tests | `orchestrator/tests/contest-radar-promotion.test.ts` |
+
+### Silence is held
+
+Nine rule questions, each answered `permitted`, `prohibited` or `silent`. Six must be `permitted`
+before a candidate promotes at all; three more before it may carry a referral link. Silence holds,
+and so does ambiguity, which arrives as `silent` because nothing here is willing to read an
+ambiguous clause as a yes.
+
+The three values are not a boolean on purpose. A boolean collapses `silent` into `prohibited`, which
+sounds safe and is not: it invites a later reader to "correct" the false to true on the grounds that
+nothing actually forbade it.
+
+Four more refusals sit beside the rules:
+
+- **Several owned profiles are one entrant.** The projection carries an opaque beneficial-owner
+  alias — enough to tell that two profiles are the same person, and nothing about who. An eligible
+  candidate may name exactly one, in the gate and in the contract both.
+- **A simulation is rejected with a reason, never filtered away.** A refusal that is a value gets
+  looked at; an absence does not.
+- **No referral link is ever constructed.** There is no code path that assembles one from a pattern,
+  because a well-guessed pattern is still a fabrication. A link the rules do not establish comes off
+  the record entirely rather than sitting there held, so nobody copies it out of a table.
+- **A rules change expires the candidate.** `inputHash` covers the inputs and not the verdict, so a
+  contest whose terms move produces a different candidate rather than an edited one.
+
+### What eligibility still does not buy
+
+`createVerifiedReleaseCampaign` refuses every Contest Radar release with `contest-source-excluded`,
+on the source type and on the venture id, independently of anything decided here. A candidate
+reaching `social-campaign-eligible` produces no campaign, and a test asserts both refusals are still
+in the file — the regression the held edge makes possible for the first time is adding the edge and
+quietly deleting the gate that ignores it.
+
+There is no Admin surface for candidates and no candidate store, because nothing derives them on a
+schedule while the edge is held. A panel showing an empty table would be a surface for data that
+cannot exist yet.
+
+**To move the edge from held to allowed:** a further countersigned decision naming the profile, the
+contest, the rule evidence and the disclosure text. The posture decision says in its own words that
+it is not that one.
 
 Everything the issue rules out stays ruled out under any decision: no simulated profile as a
 participant, no counting several owner-controlled profiles as several people, no automated entry

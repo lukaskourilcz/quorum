@@ -13,6 +13,19 @@ function meetingsRoot() {
   return path.join(repoRoot, "state", "meetings");
 }
 
+/**
+ * Whether this file belongs to a room the public site does not show.
+ *
+ * An owner-only desk writes into the same directory and need not write a `meeting-record/2` — the
+ * Personal Growth desk writes its own daily brief — so without this the parser would drop it as
+ * unreadable. Dropping it is the right outcome and the wrong reason: a file excluded by policy and
+ * a file that failed to parse look identical afterwards, and only one of them is a bug.
+ */
+export function isOwnerOnlyMeetingFile(name: string, ownerOnlyKinds: ReadonlySet<string>): boolean {
+  const phase = /^\d{4}-\d{2}-\d{2}-(.+)\.json$/u.exec(name)?.[1];
+  return phase !== undefined && ownerOnlyKinds.has(phase);
+}
+
 export async function getPublicMeetingRecords(): Promise<readonly PublicMeetingRecord[]> {
   const ownerOnlyKinds = await getOwnerOnlyMeetingKinds();
   let names: string[] = [];
@@ -21,13 +34,15 @@ export async function getPublicMeetingRecords(): Promise<readonly PublicMeetingR
   } catch {
     // The public fixtures below keep the static routes testable before first live run.
   }
-  const live = await Promise.all(names.filter((name) => name.endsWith(".json")).map(async (name) => {
-    try {
-      return parsePublicMeetingRecord(JSON.parse(await readFile(path.join(meetingsRoot(), name), "utf8")));
-    } catch {
-      return null;
-    }
-  }));
+  const live = await Promise.all(names
+    .filter((name) => name.endsWith(".json") && !isOwnerOnlyMeetingFile(name, ownerOnlyKinds))
+    .map(async (name) => {
+      try {
+        return parsePublicMeetingRecord(JSON.parse(await readFile(path.join(meetingsRoot(), name), "utf8")));
+      } catch {
+        return null;
+      }
+    }));
   const records = live.filter((record): record is PublicMeetingRecord =>
     record !== null && !ownerOnlyKinds.has(record.kind));
   const fallbacks = meetingFixtures

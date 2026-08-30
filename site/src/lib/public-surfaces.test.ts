@@ -6,10 +6,11 @@ import { publicAgentText, publicDecisionLabel } from "@/components/agent-languag
 
 vi.mock("server-only", () => ({}));
 const { getPublicStandups } = await import("./standup-records");
-const { getPublicMeetingRecords } = await import("./meeting-records");
+const { getPublicMeetingRecords, isOwnerOnlyMeetingFile } = await import("./meeting-records");
 const { getDailyResults } = await import("./daily-results");
 const { getPublicMeetingSkips } = await import("./meeting-skips");
 const { buildPublicCalendarFeed } = await import("./calendar-feed-model");
+const { getOwnerOnlyMeetingKinds } = await import("./venture-registry");
 
 const stateRoot = path.resolve(process.cwd(), "..", "state");
 
@@ -115,9 +116,13 @@ describe("what the site would publish today", () => {
     for (const skip of parsed) expect(readsAsMachineText(skip.reason)).toBe(false);
   });
 
-  it("keeps every committed meeting and standup record readable", async () => {
-    const meetingFiles = (await readdir(path.join(stateRoot, "meetings")).catch(() => []))
+  it("keeps every committed public meeting and standup record readable", async () => {
+    const ownerOnlyKinds = await getOwnerOnlyMeetingKinds();
+    const allFiles = (await readdir(path.join(stateRoot, "meetings")).catch(() => []))
       .filter((name) => name.endsWith(".json") && /^\d{4}-\d{2}-\d{2}-/.test(name));
+    // An owner-only desk writes into the same directory and owns its own file format. Excluding it
+    // here is what lets the assertion below stay strict about everything that is public.
+    const meetingFiles = allFiles.filter((name) => !isOwnerOnlyMeetingFile(name, ownerOnlyKinds));
     const parsed = await getPublicMeetingRecords();
     const missing = meetingFiles
       .map((name) => name.replace(/\.json$/, ""))
@@ -125,5 +130,13 @@ describe("what the site would publish today", () => {
     // A record the parser drops disappears from the site and takes its calendar cell with it.
     expect(missing).toEqual([]);
     expect((await readFile(path.join(stateRoot, "meetings", meetingFiles[0]!), "utf8")).length).toBeGreaterThan(0);
+  });
+
+  it("keeps an owner-only desk's own record off the public site", async () => {
+    const ownerOnlyKinds = await getOwnerOnlyMeetingKinds();
+    expect(ownerOnlyKinds.has("pg-desk")).toBe(true);
+    expect(isOwnerOnlyMeetingFile("2026-08-30-pg-desk.json", ownerOnlyKinds)).toBe(true);
+    expect(isOwnerOnlyMeetingFile("2026-08-30-standup.json", ownerOnlyKinds)).toBe(false);
+    expect((await getPublicMeetingRecords()).some((record) => record.id.endsWith("-pg-desk"))).toBe(false);
   });
 });

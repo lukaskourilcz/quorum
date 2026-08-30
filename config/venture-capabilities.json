@@ -1,7 +1,7 @@
 {
   "schemaVersion": "venture-capability-map/1",
-  "mapVersion": "1.2.0",
-  "effectiveDate": "2026-08-26",
+  "mapVersion": "1.3.0",
+  "effectiveDate": "2026-08-30",
   "defaultVentureContentPosture": "deny",
   "decisionReference": "state/decisions/2026-08-26-autonomy-first-capabilities.md",
   "nodes": [
@@ -777,6 +777,19 @@
       "governingReference": "GitHub #394",
       "runtimeEnforcementPoint": "orchestrator/src/ventures/contest-radar/goviral.ts",
       "testProbeReference": "orchestrator/tests/contest-radar-bridge.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "contest-radar",
+      "target": "social-distribution",
+      "capability": "approved-publish-package",
+      "dataSchemaVersion": "contest-promotion-candidate/1",
+      "direction": "source-to-target",
+      "decision": "held",
+      "reason": "A verified contest whose own rules explicitly permit public promotion may one day become a transparent contest alert. Held: silence in the rules is not permission, no owner decision has moved this edge to allowed, and generateSocialCampaign refuses every Contest Radar release independently.",
+      "governingReference": "state/decisions/2026-08-30-contest-radar-promotion-posture.md",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/contest-radar/promotion.ts",
+      "testProbeReference": "orchestrator/tests/contest-radar-promotion.test.ts"
     }
   ],
   "isolationRules": [
@@ -1005,11 +1018,32 @@
       "capabilities": [
         "intelligence-read",
         "bounded-render-summary",
-        "approved-publish-package",
         "owner-manual-reference-read"
       ],
-      "reason": "Contest Radar is an owner-only tool with no outbound content edge. Nothing it discovers reaches another venture, a public surface or a social profile.",
+      "reason": "Contest Radar is an owner-only tool. Nothing it discovers reaches another venture, a public surface or a social profile as intelligence, a render summary or a manual reference.",
       "governingReference": "GitHub #408"
+    },
+    {
+      "id": "contest-radar-publish-isolation",
+      "sources": [
+        "contest-radar"
+      ],
+      "targets": [
+        "caught-up",
+        "mma-files",
+        "booksofhistory",
+        "tehdejsi-svet",
+        "kvorum",
+        "door-money",
+        "personal-growth",
+        "webdev-signal",
+        "design-lab"
+      ],
+      "capabilities": [
+        "approved-publish-package"
+      ],
+      "reason": "Contest Radar publishes nowhere. Its one registrable outbound edge is the held contest-promotion-candidate/1 edge to Social Distribution; every other publish target is permanently isolated.",
+      "governingReference": "state/decisions/2026-08-30-contest-radar-promotion-posture.md"
     }
   ],
   "supersessionHistory": [
@@ -1030,6 +1064,12 @@
       "effectiveAt": "2026-08-28T00:00:00.000Z",
       "decisionReference": "GitHub #438",
       "note": "Attaches the pre-declared WebDev Signal edges to its held registry identity without adding an edge or activation authority."
+    },
+    {
+      "mapVersion": "1.3.0",
+      "effectiveAt": "2026-08-30T00:00:00.000Z",
+      "decisionReference": "state/decisions/2026-08-30-contest-radar-promotion-posture.md",
+      "note": "Contest Radar's outbound isolation split in two: one held publish edge to Social Distribution, everything else still isolated."
     }
   ]
 }

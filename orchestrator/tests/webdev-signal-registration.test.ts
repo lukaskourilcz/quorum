@@ -86,7 +86,7 @@ describe("WebDev Signal registration", () => {
 
   it("uses only the exact #424 edges and permanently denies unrelated ventures", async () => {
     const map = await loadVentureCapabilityMap(configRoot);
-    expect(map.mapVersion).toBe("1.2.0");
+    expect(map.mapVersion).toBe("1.3.0");
     const relationships = map.edges
       .filter((edge) => (edge.source === "webdev-signal" || edge.target === "webdev-signal") && edge.decision !== "denied")
       .map(({ source, target, capability, dataSchemaVersion, decision }) => ({ source, target, capability, dataSchemaVersion, decision }));

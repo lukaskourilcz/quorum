@@ -187,7 +187,7 @@
       ],
       "capabilityRefs": [
         {
-          "mapVersion": "1.2.0",
+          "mapVersion": "1.3.0",
           "source": "door-money",
           "target": "social-distribution",
           "capability": "approved-publish-package",
@@ -355,7 +355,7 @@
       ],
       "capabilityRefs": [
         {
-          "mapVersion": "1.2.0",
+          "mapVersion": "1.3.0",
           "source": "webdev-signal",
           "target": "social-distribution",
           "capability": "approved-publish-package",
@@ -417,7 +417,7 @@
       ],
       "capabilityRefs": [
         {
-          "mapVersion": "1.2.0",
+          "mapVersion": "1.3.0",
           "source": "webdev-signal",
           "target": "social-distribution",
           "capability": "approved-publish-package",
