@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "carousel-recipe/1",
+  "venture": "mma-files",
+  "slug": "ufc-alex-perez",
+  "date": "2026-08-30",
+  "family": "apex",
+  "variant": "A",
+  "accentSwap": true,
+  "treatment": "none",
+  "typeScale": 0.9,
+  "phaseSeed": 1,
+  "summaryRef": "ventures/carousel-studio/summaries/mma-files/2026-08-30-ufc-alex-perez.json",
+  "copyRef": "ventures/carousel-studio/social-copy/mma-files/2026-08-30-ufc-alex-perez.json"
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "ufc-alex-perez",
+  "date": "2026-08-30",
+  "locale": "cs",
+  "kicker": "MMA Files · 30. srp",
+  "headline": "Alex Perez prohrál na UFC Fight Night: Nurmagomedov vs. Song",
+  "coverLine": "Perez prohrál na UFC Fight Night v Šanghaji",
+  "standfirst": "Americký bojovník muší váhy podlehl Su Mudaerjimu. Jde o druhou prohru v řadě.",
+  "passages": [
+    "Alex Perez prohrál na turnaji UFC Fight Night: Nurmagomedov vs. Song, který se odehrál 29. srpna 2026 v šanghajském SPD Bank Oriental Sports Center.",
+    "Jeho bilance klesla na 26 výher a 10 proher. Perez nastoupil v muší váze proti Su Mudaerjimu a zápas skončil ve prospěch domácího favorita.",
+    "Podrobnosti o metodě ukončení z dostupných podkladů nebyly potvrzeny. Jde o druhou prohru v řadě. V listopadu 2025 na UFC Fight Night: Tsarukyan vs.",
+    "Hooker podlehl Asu Almabayevovi submisí škrcením zezadu ve třetím kole. Pérezova cesta v UFC zahrnuje i dva ostré střety s bojovníky, kteří patří k nejlepším v divizi.",
+    "Na UFC 277 v červenci 2022 nestačil na Alexandrea Pantoju: ten zápas ukončil pákou na krk v prvním kole, po 91 sekundách.",
+    "O necelé dva roky dříve, na UFC 255 v listopadu 2020, bojoval Perez o titul muší váhy. Deiveson Figueiredo ho tehdy zastavil škrcením zepředu v prvním kole po 117 sekundách.",
+    "Perez, narozený 21. března 1992, měří 168 cm a trénuje v Team Oyama. V UFC je v současnosti aktivní."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "Coach Lewis · CC BY · Wikimedia Commons"
+}

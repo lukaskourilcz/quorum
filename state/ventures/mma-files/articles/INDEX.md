@@ -4,6 +4,7 @@
 
 | Published | Slot | Status | Format | Czech title | Subjects covered |
 | --- | --- | --- | --- | --- | --- |
+| 2026-08-30 | am | published | fighter-profile | Alex Perez prohrál na UFC Fight Night: Nurmagomedov vs. Song | ufc:alex-perez ufc:alexandre-pantoja ufc:asu-almabayev ufc:deiveson-figueiredo |
 | 2026-08-28 | am | published | fight-week-preview | UFC Fight Night: Nurmagomedov vs. Song se koná v Šanghaji, Aori Qilen… | ufc:event:ufc-fight-night-nurmagomedov-vs-song ufc:aori-qileng |
 | 2026-08-27 | am | published | fighter-profile | Amanda Nunes: co říkají čísla o kariéře brazilské šampionky UFC | ufc:amanda-nunes ufc:julianna-pena ufc:raquel-pennington |
 | 2026-08-26 | am | published | fight-week-preview | UFC Fight Night: Nurmagomedov vs. Song přivítá Aori Qilenga v bantamo… | ufc:event:ufc-fight-night-nurmagomedov-vs-song ufc:aori-qileng |
@@ -25,4 +26,4 @@
 | 2026-08-04 | am | published | fighter-profile | Gustavo Lopez: bantamová váha mezi UFC a evropskými promotéry | oktagon:gustavo-lopez |
 | 2026-08-02 | am | published | fighter-profile | Valentina Shevchenko: tři zápasy s Grasso tvoří závěrečnou kapitolu k… | ufc:alexa-grasso ufc:valentina-shevchenko |
 
-Articles on file: 20. Rows shown: 20.
+Articles on file: 21. Rows shown: 21.

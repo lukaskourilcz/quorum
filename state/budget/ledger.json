@@ -14646,6 +14646,40 @@
       "toolUses": 1,
       "usd": 0.1122015,
       "kind": "text"
+    },
+    {
+      "ts": "2026-08-30T08:08:16.407Z",
+      "cycleId": "20260830080816-article-am",
+      "requestHash": "ccc5d288fd7e103811f1aef061407fc0a9d5e3287258ef23dfc690ba1ae586f4",
+      "phase": "article-production",
+      "ventureId": "mma-files",
+      "agent": "JAB",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "serviceTier": "default",
+      "tokensIn": 13740,
+      "cachedTokensIn": 0,
+      "tokensOut": 894,
+      "toolUses": 0,
+      "usd": 0.05463,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-08-30T08:08:45.756Z",
+      "cycleId": "20260830080816-article-am",
+      "requestHash": "ede947ff10228d8e8f94909b8f7a7d5b00ff4cf6ccd64f6e741a6d886ae47ee4",
+      "phase": "image_gate",
+      "ventureId": "mma-files",
+      "agent": "IMAGE_GATE",
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "serviceTier": "default",
+      "tokensIn": 2057,
+      "cachedTokensIn": 0,
+      "tokensOut": 292,
+      "toolUses": 1,
+      "usd": 0.003517,
+      "kind": "text"
     }
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "cycleId": "20260830080816-article-am",
+  "date": "2026-08-30",
+  "slot": "am",
+  "status": "published",
+  "articleRef": "8a99a79aa22aa5467700ba32709d422429c952cfd53f7fc08289a83095c1d87a",
+  "slateSource": "derived",
+  "subjectRefs": [
+    "ufc:alex-perez"
+  ],
+  "spentUsd": null,
+  "generatedAt": "2026-08-30T08:08:16.407Z"
+}

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-alex-perez",
+  "date": "2026-08-30",
+  "rung": "curated",
+  "selected": "illustrative:40369860",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 3,
+      "selected": "illustrative:40369860",
+      "reason": "An octagon cage with fighters during an active match, clearly illustrating the sport of mixed martial arts in a professional arena setting.",
+      "candidates": [
+        {
+          "candidateId": "illustrative:37544651",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "This is a concert or music stage setup with dramatic lighting, completely unrelated to mixed martial arts.",
+          "sceneCs": "koncertní pódium s osvětlením"
+        },
+        {
+          "candidateId": "illustrative:40369860",
+          "provider": "wikimedia",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "An octagon cage with fighters during an active match, clearly illustrating the sport of mixed martial arts in a professional arena setting.",
+          "sceneCs": "zápas v oktagonu v hale"
+        },
+        {
+          "candidateId": "illustrative:39226871",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "logo-or-watermark"
+          ],
+          "reason": "While it shows an MMA setup, the image has prominent logos and branding burned into the frame, making it unsuitable for use as editorial lead art.",
+          "sceneCs": "prázdná klec se sponzorským znakem"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.003517
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-30T08:08:16.407Z"
+}
