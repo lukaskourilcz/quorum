@@ -17,7 +17,7 @@ describe("Social content inventory admin parsers", () => {
     const registry = JSON.parse(await readFile(path.join(repositoryRoot, "config/social-profile-strategies.json"), "utf8")) as { strategies: unknown[] };
     const fixture = JSON.parse(await readFile(path.join(repositoryRoot, "contracts/fixtures/social-inventory-contracts.valid.json"), "utf8")) as { candidate: unknown; inventory: unknown; receipt: unknown };
 
-    expect(registry.strategies.map(parseSocialProfileStrategy)).toHaveLength(6);
+    expect(registry.strategies.map(parseSocialProfileStrategy)).toHaveLength(8);
     expect(registry.strategies.map(parseSocialProfileStrategy).every(Boolean)).toBe(true);
     expect(parseSocialInventoryCandidate(fixture.candidate)).toMatchObject({ finalCopy: false, queueAuthorized: false, publishingAuthorized: false });
     expect(parseSocialProfileInventory(fixture.inventory)).toMatchObject({ state: "no-candidate", candidates: [], queueAuthorized: false, publishingAuthorized: false });

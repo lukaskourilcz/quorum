@@ -42,7 +42,7 @@ describe("Social Profiles server snapshot", () => {
       now: new Date("2026-08-27T12:00:00.000Z")
     });
 
-    expect(snapshot.ventureProfiles).toHaveLength(6);
+    expect(snapshot.ventureProfiles).toHaveLength(8);
     expect(snapshot.amplificationProfiles).toEqual([]);
     expect(snapshot.simulations).toEqual([]);
     expect(snapshot.campaigns).toEqual([]);
@@ -50,7 +50,7 @@ describe("Social Profiles server snapshot", () => {
     expect(snapshot.network).toMatchObject({ contacts: [], shareKits: [], benchmark: { target: 50, actual: 0, optedInOrActive: 0, fabricatedProgress: false } });
     expect(snapshot.dropped).toEqual({ profiles: 0, connections: 0, amplifierProposals: 0, events: 0, campaigns: 0, campaignDecisions: 0, campaignEvents: 0, networkContacts: 0, networkContactEvents: 0, networkShareKits: 0, networkShareKitEvents: 0, providerRecords: 0, providerBindings: 0, providerReceipts: 0, providerHealth: 0, inventoryStrategies: 0, inventories: 0, inventoryReceipts: 0, inventoryIncidents: 0, resultObservations: 0, attributionEvents: 0, resultBaselines: 0, resultExperiments: 0, boostProposals: 0, dailyOperations: 0, routineScopes: 0, learningRecords: 0, pauseRecords: 0 });
     expect(snapshot.providerControl).toMatchObject({ summary: { directCoreAvailable: true, activeBindings: 0, heldBindings: 6, ambiguousReceipts: 0 }, authorityGranted: false, purchaseAuthorized: false, automaticFailover: false });
-    expect(snapshot.contentRunway).toMatchObject({ summary: { strategies: 6, healthy: 0, lowOrNoRunway: 0, unavailable: 6, actualCostUsd: 0 }, authorityGranted: false, queueAuthorized: false, publishingAuthorized: false });
+    expect(snapshot.contentRunway).toMatchObject({ summary: { strategies: 8, healthy: 0, lowOrNoRunway: 0, unavailable: 8, actualCostUsd: 0 }, authorityGranted: false, queueAuthorized: false, publishingAuthorized: false });
     expect(snapshot.socialResults).toMatchObject({ summary: { observations: 0, measuredPosts: 0, unavailablePosts: 0, attributedEvents: 0, unattributedEvents: 0, activeExperiments: 0, actualCostUsd: null }, audienceIdentityExposed: false, privateMessagesExposed: false, authorityGranted: false, spendAuthorized: false });
     expect(snapshot.today).toMatchObject({ targetDate: "2026-08-27", operations: [], routineScopes: [], summary: { queued: 0, review: 0, held: 0, paused: 0, noPost: 0, attention: 0, actualCostUsd: 0 }, authorityGranted: false, publishingAuthorized: false });
     expect(snapshot.posture).toMatchObject({ globalKillSwitch: "engaged", liveAuthorityGranted: false });
@@ -74,7 +74,7 @@ describe("Social Profiles server snapshot", () => {
     expect(shared).toHaveLength(50);
     expect(preview.simulations).toHaveLength(50);
     expect(preview.simulationsIncluded).toBe(true);
-    expect(preview.ventureProfiles).toHaveLength(6);
+    expect(preview.ventureProfiles).toHaveLength(8);
     expect(preview.simulations[9]?.profile.displayLabel).toContain("extended multilingual");
     expect(preview.simulations.every(({ profile }) => profile.kind === "simulation" && !profile.liveEligible)).toBe(true);
     expect(production.simulations).toEqual([]);
@@ -160,7 +160,7 @@ describe("Social Profiles server snapshot", () => {
     await writeFile(path.join(root, "state/social/inventory-receipts/receipt.json"), `${JSON.stringify(fixture.receipt, null, 2)}\n`);
 
     const snapshot = await readAdminSocialProfiles(root, { environment: { NODE_ENV: "test" } });
-    expect(snapshot.contentRunway.summary).toEqual({ strategies: 6, healthy: 0, lowOrNoRunway: 1, unavailable: 5, actualCostUsd: 0 });
+    expect(snapshot.contentRunway.summary).toEqual({ strategies: 8, healthy: 0, lowOrNoRunway: 1, unavailable: 7, actualCostUsd: 0 });
     expect(snapshot.contentRunway.profiles.find(({ strategy }) => strategy.profileId === "social-profile-caught-up")).toMatchObject({
       state: "no-candidate",
       inventory: { candidates: [], coverageDays: 0, queueAuthorized: false, publishingAuthorized: false },

@@ -68,7 +68,11 @@ describe("capability-aware social publisher targets", () => {
       "social-profile-titty-tuesdays",
       "social-profile-door-money",
       "social-profile-booksofhistory",
-      "social-profile-tehdejsi-svet"
+      "social-profile-tehdejsi-svet",
+      // Two editions rather than one mixed-language feed: they share a brand and an evidence
+      // brief but have their own cadence, metrics and kill state, so they are two profiles.
+      "social-profile-webdev-signal-cz",
+      "social-profile-webdev-signal-en"
     ]);
     expect(registry.profiles.slice(3).every((profile) => profile.lifecycle === "proposed" && !profile.liveEligible)).toBe(true);
     expect(registry.connections).toHaveLength(6);
