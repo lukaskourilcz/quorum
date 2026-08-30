@@ -1,0 +1,217 @@
+{
+  "schemaVersion": "personal-growth-daily-brief/1",
+  "targetPragueDate": "2026-08-31",
+  "generatedAt": "2026-08-30T13:08:08.013Z",
+  "room": {
+    "kind": "pg-desk",
+    "result": "planned"
+  },
+  "inputHash": "159ae8e821d23fb64427ccf876e4ea5bcfd57a93df952063f35a23c95a1efe25",
+  "authority": {
+    "publishingAuthorized": false,
+    "ownerWritesAllContent": true
+  },
+  "budget": {
+    "dry": false,
+    "mainSyntheses": 0,
+    "deterministicValidations": 1,
+    "repairs": 0,
+    "estimatedUsd": 0,
+    "hardMaximumUsd": 0.15
+  },
+  "timelines": [
+    {
+      "occurrenceId": "pg-bbarak-2026-08-27",
+      "lane": "bbarak",
+      "originalDate": "2026-08-27",
+      "scheduledDate": "2026-08-27",
+      "status": "overdue",
+      "source": "recurrence",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    },
+    {
+      "occurrenceId": "pg-okraj-2026-08-27",
+      "lane": "okraj",
+      "originalDate": "2026-08-27",
+      "scheduledDate": "2026-08-27",
+      "status": "overdue",
+      "source": "recurrence",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    },
+    {
+      "occurrenceId": "pg-bbarak-2026-08-30",
+      "lane": "bbarak",
+      "originalDate": "2026-08-30",
+      "scheduledDate": "2026-08-30",
+      "status": "overdue",
+      "source": "recurrence",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    },
+    {
+      "occurrenceId": "pg-bbarak-2026-09-02",
+      "lane": "bbarak",
+      "originalDate": "2026-09-02",
+      "scheduledDate": "2026-09-02",
+      "status": "upcoming",
+      "source": "recurrence",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    },
+    {
+      "occurrenceId": "pg-bbarak-2026-09-05",
+      "lane": "bbarak",
+      "originalDate": "2026-09-05",
+      "scheduledDate": "2026-09-05",
+      "status": "upcoming",
+      "source": "recurrence",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    },
+    {
+      "occurrenceId": "pg-okraj-2026-09-06",
+      "lane": "okraj",
+      "originalDate": "2026-09-06",
+      "scheduledDate": "2026-09-06",
+      "status": "upcoming",
+      "source": "recurrence",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    },
+    {
+      "occurrenceId": "pg-bbarak-2026-09-08",
+      "lane": "bbarak",
+      "originalDate": "2026-09-08",
+      "scheduledDate": "2026-09-08",
+      "status": "upcoming",
+      "source": "recurrence",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    },
+    {
+      "occurrenceId": "pg-bbarak-2026-09-11",
+      "lane": "bbarak",
+      "originalDate": "2026-09-11",
+      "scheduledDate": "2026-09-11",
+      "status": "upcoming",
+      "source": "recurrence",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    },
+    {
+      "occurrenceId": "pg-bbarak-2026-09-14",
+      "lane": "bbarak",
+      "originalDate": "2026-09-14",
+      "scheduledDate": "2026-09-14",
+      "status": "upcoming",
+      "source": "recurrence",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    },
+    {
+      "occurrenceId": "pg-okraj-2026-09-16",
+      "lane": "okraj",
+      "originalDate": "2026-09-16",
+      "scheduledDate": "2026-09-16",
+      "status": "upcoming",
+      "source": "recurrence",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    },
+    {
+      "occurrenceId": "pg-bbarak-2026-09-17",
+      "lane": "bbarak",
+      "originalDate": "2026-09-17",
+      "scheduledDate": "2026-09-17",
+      "status": "upcoming",
+      "source": "recurrence",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    },
+    {
+      "occurrenceId": "pg-bbarak-2026-09-20",
+      "lane": "bbarak",
+      "originalDate": "2026-09-20",
+      "scheduledDate": "2026-09-20",
+      "status": "upcoming",
+      "source": "recurrence",
+      "finalUrl": null,
+      "articleUrl": null,
+      "collaborationUrl": null
+    }
+  ],
+  "deadlines": [
+    "2026-08-27",
+    "2026-08-30",
+    "2026-09-02",
+    "2026-09-05",
+    "2026-09-06",
+    "2026-09-08",
+    "2026-09-11",
+    "2026-09-14",
+    "2026-09-16",
+    "2026-09-17",
+    "2026-09-20"
+  ],
+  "primaryAction": {
+    "occurrenceId": "pg-bbarak-2026-08-27",
+    "decision": "ACTION",
+    "noActionReason": null
+  },
+  "platformPlaceholders": {
+    "threads": "owner-only-draft-placeholder",
+    "instagram": "owner-only-draft-placeholder",
+    "reel": "owner-only-draft-placeholder",
+    "noPostReason": "owner-only"
+  },
+  "optionalInputs": {
+    "goviral": "unavailable",
+    "ownerManualReference": "not-needed"
+  },
+  "contentMix": {
+    "okrajDue": 1,
+    "bbarakDue": 2,
+    "collision": true,
+    "overpromotion": false
+  },
+  "experiment": {
+    "id": null,
+    "status": "placeholder"
+  },
+  "kpi": {
+    "id": null,
+    "status": "placeholder"
+  },
+  "warnings": [
+    "collision",
+    "overdue",
+    "optional-input-unavailable"
+  ],
+  "unavailable": [
+    "goviral"
+  ],
+  "ownerOnlyActions": [
+    "write",
+    "edit",
+    "approve",
+    "publish",
+    "record-outcome"
+  ],
+  "correction": {
+    "revision": 0,
+    "correctedAt": null
+  }
+}

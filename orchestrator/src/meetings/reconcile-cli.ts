@@ -1,9 +1,10 @@
+import { access } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import type { CalendarFeed } from "../contracts/calendar.js";
 import { MeetingSkipSchema } from "../contracts/meeting-skip.js";
 import { stateRoot } from "../paths.js";
-import { atomicWriteJson } from "../state.js";
+import { atomicWriteJson, resolveStatePath } from "../state.js";
 import {
   buildCalendarFeed,
   loadArticleSlotOutcomes,
@@ -65,6 +66,22 @@ export function previousPragueDate(now: Date): string {
 export interface ReconcileResult {
   date: string;
   recorded: string[];
+}
+
+/**
+ * Whether a room left its own record for the day, whatever shape that record takes.
+ *
+ * Existence is the whole question. A private desk owns its file format — the Personal Growth brief
+ * is not a `meeting-record/2` and has no reason to be — so parsing it would only re-answer a
+ * question the filename already settles.
+ */
+async function recordFileExists(root: string, date: string, phase: string): Promise<boolean> {
+  try {
+    await access(resolveStatePath(root, `meetings/${date}-${phase}.json`));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -133,10 +150,22 @@ export async function reconcileMeetingDay(
    */
   const privatePhases = MEETING_CLOCK.filter((definition) =>
     !PUBLIC_MEETING_CLOCK.some((publicDefinition) => publicDefinition.phase === definition.phase));
-  // Both fields, because a record names its room in `kind` and a shift record names it in `phase`.
+  /*
+   * Both fields, because a record names its room in `kind` and a shift record names it in `phase`.
+   *
+   * And the file on disk, because a private desk need not write a `meeting-record/2` at all.
+   * `pg-desk` writes a `personal-growth-daily-brief/1` to `meetings/<date>-pg-desk.json`, which
+   * `loadMeetingRecords` parses and drops — so a desk that ran perfectly well was invisible here
+   * and this loop would file a skip saying it never opened. A skip that contradicts a record
+   * sitting beside it is worse than no accounting at all: the calendar then argues with the
+   * venture about a day both of them have evidence for.
+   */
   const heldPrivately = new Set<string>(records
     .filter((record) => record.date === date)
     .flatMap((record) => [record.kind, record.phase]));
+  for (const definition of MEETING_CLOCK) {
+    if (await recordFileExists(root, date, definition.phase)) heldPrivately.add(definition.phase);
+  }
   const skippedPrivately = new Set<string>(skips.filter((skip) => skip.date === date).map((skip) => skip.phase));
   for (const definition of privatePhases) {
     if (heldPrivately.has(definition.phase) || skippedPrivately.has(definition.phase)) continue;

@@ -111,6 +111,39 @@ describe("a day with no record of its slots still gets one", () => {
     expect(PUBLIC_MEETING_CLOCK.some((definition) => definition.phase === "pg-desk")).toBe(false);
   });
 
+  /*
+   * The other half of that defect, and the more embarrassing one.
+   *
+   * Teaching the reconciler to account for the private desk was right, but it looked for the desk
+   * in `loadMeetingRecords`, which parses `meeting-record/2` and drops everything else. `pg-desk`
+   * writes a `personal-growth-daily-brief/1`, so a desk that had run perfectly well was invisible
+   * and the loop filed a skip saying it never opened.
+   *
+   * A skip that contradicts a record sitting beside it in the same directory is worse than no
+   * accounting at all: the calendar then argues with the venture about a day both have evidence
+   * for, and whoever reads it has no way to tell which is lying.
+   */
+  it("does not file a skip for a private desk that left its own kind of record", async () => {
+    const root = await emptyRoot();
+    await mkdir(path.join(root, "meetings"), { recursive: true });
+    // Exactly what a live `pg-desk` writes: its own schema, not a meeting record.
+    await writeFile(
+      path.join(root, "meetings", `${DATE}-pg-desk.json`),
+      JSON.stringify({
+        schemaVersion: "personal-growth-daily-brief/1",
+        targetPragueDate: DATE,
+        room: { kind: "pg-desk", result: "planned" }
+      }),
+      "utf8"
+    );
+
+    await reconcileMeetingDay(root, DATE, NOW);
+
+    expect(await exists(skipPath(root, "pg-desk"))).toBe(false);
+    // The public rooms are still accounted for, so this is not a blanket exemption.
+    expect(await exists(skipPath(root, "morning"))).toBe(true);
+  });
+
   it("writes nothing on a second pass over the same day", async () => {
     const root = await emptyRoot();
     await reconcileMeetingDay(root, DATE, NOW);

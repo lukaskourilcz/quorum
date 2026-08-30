@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "personal-growth-instagram-recommendation/1",
+  "recommendationDate": "2026-08-31",
+  "generatedAt": "2026-08-30T13:08:08.013Z",
+  "actionType": "bbarak-distribution",
+  "format": "distribution-checklist",
+  "pillar": "writing-publishing",
+  "goal": "Distribute the finished owner-authored publication.",
+  "dueWindow": "2026-08-27",
+  "ownerSourceRefs": [
+    "ventures/personal-growth/briefs/2026-08-31.json#pg-bbarak-2026-08-27"
+  ],
+  "collaborator": "bbarak",
+  "assetChecklist": [
+    "Owner-confirmed final publication URL"
+  ],
+  "distributionChecklist": [
+    "Confirm the owner-authored artifact is already published"
+  ],
+  "storiesSupport": [],
+  "projectedPersonalRatio": null,
+  "goviralSignalId": null,
+  "activeExperimentId": null,
+  "reason": "The recorded publication recurrence is due.",
+  "noPostReason": null,
+  "reel": null,
+  "manualVentureReferenceId": null,
+  "ownerWritesArtifact": true,
+  "publishingAuthorized": false
+}
