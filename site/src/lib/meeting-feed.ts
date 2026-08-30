@@ -17,54 +17,112 @@ import { publicKindLabel } from "@/lib/slot-labels";
  * where they are a machine address behind a labelled disclosure, and nowhere else.
  */
 /**
- * Each channel names the venture whose desk it is (null for company-wide rooms), so a venture
- * the owner paused in Settings takes its channel off the workspace view with it.
+ * One channel per slot on the clock, and the rooms whose records read inside it.
+ *
+ * The list is the calendar's list. When the clock consolidated a venture's rooms into one daily
+ * desk, this did not follow, and the workspace kept advertising the old shape: three MMA channels
+ * for what is now one MMA day, a company board still promising three shifts, and `hour` labels
+ * naming times nobody holds a room at any more. A reader comparing the calendar with the channel
+ * list found two different companies.
+ *
+ * So `kinds` is part of the channel rather than a separate map. A room that reaches this file
+ * belongs to exactly one channel, and a room that belongs to none is a room whose records nobody
+ * can read — which is what happened to `cu-product` for sixteen days.
+ *
+ * `venture` names the venture whose desk it is (null for the company board), so a venture the
+ * owner paused in Settings takes its channel off the workspace view with it. `hour` is the day's
+ * Prague hour on the clock, not the room's retired one.
  */
 export const WORKSPACE_CHANNELS = [
-  { id: "vydani-dneskai", label: "DNESKAi edition", venture: "caught-up" },
-  { id: "ranni-porada", label: "Company board", venture: null },
-  { id: "kontrola-mma-dat", label: "Fight data checks", venture: "fightaiq" },
-  { id: "redakcni-porada-mma", label: "MMA Files story desk", venture: "mma-files" },
-  { id: "vecerni-redakce", label: "MMA Files evening desk", venture: "mma-files" },
-  { id: "titty-tuesdays-marketing", label: "Titty Tuesdays marketing", venture: "titty-tuesdays" },
-  { id: "goviral-trend-room", label: "GoVIRAL trend room", venture: "goviral" },
-  { id: "marketingshark-carousel-room", label: "marketingShark carousel room", venture: "marketingshark" },
-  { id: "booksofhistory-editorial-desk", label: "BOOKSOFHISTORY editorial desk", venture: "booksofhistory" },
-  { id: "door-money-story-room", label: "Door Money storytelling desk", venture: "door-money" },
-  { id: "tehdejsi-svet-editorial-desk", label: "Tehdejší svět editorial desk", venture: "tehdejsi-svet" },
-  { id: "kvorum-political-desk", label: "Kvórum political desk", venture: "kvorum" }
+  {
+    id: "vydani-dneskai",
+    label: "DNESKAi daily desk",
+    venture: "caught-up",
+    hour: 5,
+    kinds: ["cu-edition", "cu-product"]
+  },
+  {
+    id: "ranni-porada",
+    label: "Company board",
+    venture: null,
+    hour: 6,
+    // The afternoon and night shifts were retired by `operations-2026-08c`. Their records stay
+    // readable here — the archive is the point — and the topic copy no longer promises them.
+    kinds: ["morning", "afternoon", "night"]
+  },
+  {
+    id: "marketingshark-carousel-room",
+    label: "marketingShark carousel room",
+    venture: "marketingshark",
+    hour: 7,
+    kinds: ["ms-daily"]
+  },
+  {
+    id: "redakcni-porada-mma",
+    label: "MMA Files daily desk",
+    venture: "mma-files",
+    hour: 8,
+    // The whole MMA day, in the order it runs. FightAIQ's two checks sit inside it exactly as
+    // they sit inside the calendar's `mma-day` row: the day belongs to the venture that holds it.
+    kinds: ["mma-intake", "mag-editorial", "article-am", "article-pm", "mma-analysis", "mag-desk"]
+  },
+  {
+    id: "titty-tuesdays-marketing",
+    label: "Titty Tuesdays marketing",
+    venture: "titty-tuesdays",
+    hour: 11,
+    kinds: ["tt-marketing"]
+  },
+  {
+    id: "booksofhistory-editorial-desk",
+    label: "BOOKSOFHISTORY editorial desk",
+    venture: "booksofhistory",
+    hour: 12,
+    kinds: ["bh-desk"]
+  },
+  {
+    id: "goviral-trend-room",
+    label: "GoVIRAL trend room",
+    venture: "goviral",
+    hour: 13,
+    kinds: ["gv-brief"]
+  },
+  {
+    id: "door-money-story-room",
+    label: "Door Money daily desk",
+    venture: "door-money",
+    hour: 15,
+    kinds: ["dm-desk", "dm-growth"]
+  },
+  {
+    id: "tehdejsi-svet-editorial-desk",
+    label: "Tehdejší svět editorial desk",
+    venture: "tehdejsi-svet",
+    hour: 18,
+    kinds: ["ts-desk"]
+  },
+  {
+    id: "kvorum-political-desk",
+    label: "Kvórum political desk",
+    venture: "kvorum",
+    hour: 21,
+    kinds: ["kv-desk"]
+  }
 ] as const;
 
 export type WorkspaceChannelId = (typeof WORKSPACE_CHANNELS)[number]["id"];
 
 /**
- * Which channel a room's records belong to.
+ * Which channel a room's records belong to, built from the channels themselves.
  *
- * Channels are grouped by room rather than by cron entry:
- * the three board shifts are one conversation across a day, and the two fight-data rooms are one
- * running check. `article-am`/`article-pm` are not meetings at all — they are what the story desk
- * decided, so they land in that desk's channel as delivery or system lines.
+ * Derived rather than written out, because the hand-written version is what drifted: it named
+ * three retired channel ids and had no entry at all for `cu-product`, so that room's records were
+ * silently unreachable. A kind can now only go missing by being missing from every channel, which
+ * `meeting-feed.test.ts` checks against the registry.
  */
-const CHANNEL_BY_KIND: Record<string, WorkspaceChannelId> = {
-  "cu-edition": "vydani-dneskai",
-  morning: "ranni-porada",
-  afternoon: "ranni-porada",
-  night: "ranni-porada",
-  "mma-intake": "kontrola-mma-dat",
-  "mma-analysis": "kontrola-mma-dat",
-  "mag-editorial": "redakcni-porada-mma",
-  "article-am": "redakcni-porada-mma",
-  "article-pm": "redakcni-porada-mma",
-  "mag-desk": "vecerni-redakce",
-  "tt-marketing": "titty-tuesdays-marketing",
-  "gv-brief": "goviral-trend-room",
-  "ms-daily": "marketingshark-carousel-room",
-  "bh-desk": "booksofhistory-editorial-desk",
-  "dm-desk": "door-money-story-room",
-  "dm-growth": "door-money-story-room",
-  "ts-desk": "tehdejsi-svet-editorial-desk",
-  "kv-desk": "kvorum-political-desk"
-};
+const CHANNEL_BY_KIND: Record<string, WorkspaceChannelId> = Object.fromEntries(
+  WORKSPACE_CHANNELS.flatMap((channel) => channel.kinds.map((kind) => [kind, channel.id] as const))
+);
 
 export function channelForKind(kind: string): WorkspaceChannelId | null {
   return CHANNEL_BY_KIND[kind] ?? null;

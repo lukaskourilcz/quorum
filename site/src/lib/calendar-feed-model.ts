@@ -128,6 +128,11 @@ export const ROOM_SLOTS: readonly CalendarDefinition[] = [
   { hour: 11, kind: "tt-marketing", label: "Titty Tuesdays marketing room" },
   { hour: 12, kind: "bh-desk", label: "BOOKSOFHISTORY editorial desk" },
   { hour: 13, kind: "gv-brief", label: "GoVIRAL trend and marketing room" },
+  // Door Money's two rooms sit inside its 15:00 day. They were missing here entirely, so the
+  // mirror agreed with `getPublicRoomSchedule` only because the venture happens to be paused —
+  // an agreement that would have broken the moment the owner un-paused it.
+  { hour: 15, kind: "dm-desk", label: "Door Money recommendation room" },
+  { hour: 15, kind: "dm-growth", label: "Door Money growth room" },
   { hour: 18, kind: "ts-desk", label: "Tehdejší svět editorial desk" },
   { hour: 21, kind: "kv-desk", label: "Kvórum daily political desk" }
 ] as const;

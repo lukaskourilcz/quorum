@@ -199,11 +199,12 @@ export interface OfficeChannel {
 }
 
 /**
- * The English handle, room name, hour and topic for each of the eight channels.
+ * The English handle, room name, hour and topic for each channel.
  *
- * `meeting-feed.ts` owns the channel ids and the kinds that route into them; it deliberately makes
- * no language decision. This is that decision. The ids stay as the data layer named them so the
- * two never drift, and only what a reader sees is written here.
+ * `meeting-feed.ts` owns the channel ids, their hours and the rooms that route into them; it
+ * deliberately makes no language decision. This is that decision, and it names the same hour the
+ * channel does — a printed time is a promise that a room sits then, and the retired hours this
+ * table used to print were promises nobody was keeping.
  */
 const CHANNEL_COPY: Record<WorkspaceChannelId, {
   handle: string;
@@ -212,6 +213,20 @@ const CHANNEL_COPY: Record<WorkspaceChannelId, {
   topic: string;
   project: OfficeProjectKey;
 }> = {
+  "vydani-dneskai": {
+    handle: "dneskai-daily-desk",
+    room: "DNESKAi daily desk",
+    time: "05:00",
+    topic: "The day's one story, then what the magazine itself needs. Nothing goes out unsourced.",
+    project: "caught-up"
+  },
+  "ranni-porada": {
+    handle: "company-board",
+    room: "Company board",
+    time: "06:00",
+    topic: "One shift a day: what the company spends the day on, and what it reconciles from yesterday.",
+    project: "company"
+  },
   "marketingshark-carousel-room": {
     handle: "marketingshark-daily",
     room: "marketingShark carousel room",
@@ -219,39 +234,11 @@ const CHANNEL_COPY: Record<WorkspaceChannelId, {
     topic: "One quiz question, drawn as a Czech and an English carousel and left as a draft.",
     project: "marketingshark"
   },
-  "vydani-dneskai": {
-    handle: "dneskai-edition",
-    room: "DNESKAi edition",
-    time: "05:00",
-    topic: "One story of the day, or nothing goes out and the reason is recorded.",
-    project: "caught-up"
-  },
-  "ranni-porada": {
-    handle: "company-board",
-    room: "Company board",
-    time: "06:00 · 14:00 · 22:00",
-    topic: "Three shifts, one conversation: what the company spends its day on.",
-    project: "company"
-  },
-  "kontrola-mma-dat": {
-    handle: "fight-data-check",
-    room: "Fight data checks",
-    time: "08:00 · 19:00",
-    topic: "Cards, gaps in fighter files and source health. A value needs two sources that agree.",
-    project: "fightaiq"
-  },
   "redakcni-porada-mma": {
-    handle: "mma-story-desk",
-    room: "MMA Files story desk",
-    time: "09:00",
-    topic: "The day's article slot is assigned from verified files, or left empty.",
-    project: "mma-files"
-  },
-  "vecerni-redakce": {
-    handle: "mma-evening-desk",
-    room: "MMA Files evening desk",
-    time: "20:00",
-    topic: "What actually went out, what failed, and which sourced lead stays for tomorrow.",
+    handle: "mma-files-daily-desk",
+    room: "MMA Files daily desk",
+    time: "08:00",
+    topic: "Fight data, the day's article slot and the evening review, in the order the desk runs them.",
     project: "mma-files"
   },
   "titty-tuesdays-marketing": {
@@ -261,13 +248,6 @@ const CHANNEL_COPY: Record<WorkspaceChannelId, {
     topic: "Concrete marketing ideas for a shop that does not exist yet. No prices, no availability.",
     project: "titty-tuesdays"
   },
-  "goviral-trend-room": {
-    handle: "goviral-trend-room",
-    room: "GoVIRAL trend room",
-    time: "13:00 · Mondays",
-    topic: "What is rising this week, and at most one trend handed to another desk.",
-    project: "goviral"
-  },
   "booksofhistory-editorial-desk": {
     handle: "booksofhistory-desk",
     room: "BOOKSOFHISTORY editorial desk",
@@ -275,11 +255,18 @@ const CHANNEL_COPY: Record<WorkspaceChannelId, {
     topic: "Candidate books, verified claims and the next bounded research step.",
     project: "booksofhistory"
   },
+  "goviral-trend-room": {
+    handle: "goviral-trend-room",
+    room: "GoVIRAL trend room",
+    time: "13:00",
+    topic: "What is rising this week, and at most one trend handed to another desk.",
+    project: "goviral"
+  },
   "door-money-story-room": {
-    handle: "door-money-story-room",
-    room: "Door Money storytelling desk",
-    time: "15:00 · 16:00 Thursdays",
-    topic: "Story recommendations every day, with the bounded growth review on Thursdays.",
+    handle: "door-money-daily-desk",
+    room: "Door Money daily desk",
+    time: "15:00",
+    topic: "Story recommendations, and the bounded growth review that follows them.",
     project: "door-money"
   },
   "tehdejsi-svet-editorial-desk": {

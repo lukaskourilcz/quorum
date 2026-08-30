@@ -35,9 +35,10 @@ describe("buildTimeline", () => {
     expect(timeline.beats).toHaveLength(SLOTS.length);
     const hours = timeline.beats.map((beat) => beat.hour);
     expect(hours).toEqual([...hours].sort((a, b) => a - b));
-    // Rooms, not days: DNESKAi's two sit at 05 and MMA Files' five at 08, inside their venture's
-    // day and in the order it runs them. Door Money's are absent because the owner paused it.
-    expect(hours).toEqual([5, 5, 6, 7, 8, 8, 8, 8, 8, 11, 12, 13, 18, 21]);
+    // Rooms, not days: DNESKAi's two sit at 05, MMA Files' five at 08 and Door Money's two at 15,
+    // each inside its venture's day and in the order that day runs them. `ROOM_SLOTS` is the whole
+    // standing day; the owner's pause is applied by `getPublicRoomSchedule`, not by this list.
+    expect(hours).toEqual([5, 5, 6, 7, 8, 8, 8, 8, 8, 11, 12, 13, 15, 15, 18, 21]);
   });
 
   it("sorts the day itself, so the caller's order cannot change the story", () => {

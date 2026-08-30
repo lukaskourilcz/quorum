@@ -85,27 +85,49 @@ function messagesIn(channels: ReturnType<typeof buildMeetingFeed>, id: string): 
 
 describe("the workspace channel map", () => {
   it("routes every room a reader can open, and nothing else", () => {
-    expect(WORKSPACE_CHANNELS).toHaveLength(12);
-    expect(channelForKind("cu-edition")).toBe("vydani-dneskai");
+    expect(WORKSPACE_CHANNELS).toHaveLength(10);
     expect(channelForKind("gv-brief")).toBe("goviral-trend-room");
     expect(channelForKind("tt-marketing")).toBe("titty-tuesdays-marketing");
-    expect(channelForKind("mag-desk")).toBe("vecerni-redakce");
     expect(channelForKind("bh-desk")).toBe("booksofhistory-editorial-desk");
-    expect(channelForKind("dm-desk")).toBe("door-money-story-room");
-    expect(channelForKind("dm-growth")).toBe("door-money-story-room");
     expect(channelForKind("ts-desk")).toBe("tehdejsi-svet-editorial-desk");
     expect(channelForKind("kv-desk")).toBe("kvorum-political-desk");
-    // The three board shifts are one conversation, and the two fight-data rooms are one check.
+    expect(channelForKind("ms-daily")).toBe("marketingshark-carousel-room");
+    // A venture day is one channel, the way it is one calendar row. DNESKAi's two rooms, Door
+    // Money's two and the MMA day's six each read as one conversation.
+    expect(new Set(["cu-edition", "cu-product"].map(channelForKind))).toEqual(new Set(["vydani-dneskai"]));
+    expect(new Set(["dm-desk", "dm-growth"].map(channelForKind))).toEqual(new Set(["door-money-story-room"]));
+    expect(new Set(["mma-intake", "mag-editorial", "article-am", "article-pm", "mma-analysis", "mag-desk"]
+      .map(channelForKind))).toEqual(new Set(["redakcni-porada-mma"]));
+    // The board shifts are one conversation; two of the three are retired and still readable.
     expect(new Set(["morning", "afternoon", "night"].map(channelForKind))).toEqual(new Set(["ranni-porada"]));
-    expect(new Set(["mma-intake", "mma-analysis"].map(channelForKind))).toEqual(new Set(["kontrola-mma-dat"]));
-    // Article slots are what the story desk decided, so they land in the story desk's channel.
-    expect(channelForKind("article-am")).toBe("redakcni-porada-mma");
-    expect(channelForKind("mag-editorial")).toBe("redakcni-porada-mma");
     // No channel for rooms the design does not show. A missing kind is null, never a default.
-    expect(channelForKind("cu-product")).toBeNull();
     expect(channelForKind("studio")).toBeNull();
     expect(channelForKind("incubator-scan")).toBeNull();
     expect(channelForKind("")).toBeNull();
+  });
+
+  it("gives every clock slot one channel, at the hour the clock holds it", async () => {
+    const { getPublicCalendarSchedule } = await import("./venture-registry");
+    const { DAY_STEPS } = await import("./calendar-feed-model");
+    const schedule = await getPublicCalendarSchedule();
+
+    // Channels are the calendar's list. A venture with a row and no channel is a desk whose
+    // records nobody can read; a channel with no row advertises a room nobody holds.
+    const scheduleHours = schedule.map((slot) => slot.hour).sort((left, right) => left - right);
+    const channelHours = WORKSPACE_CHANNELS.map((channel) => channel.hour).sort((left, right) => left - right);
+    // Door Money is paused, so it keeps its channel and loses its calendar row until it resumes.
+    expect(channelHours.filter((hour) => hour !== 15)).toEqual(scheduleHours);
+
+    // Every room a venture day dispatches routes into that day's own channel.
+    for (const [day, steps] of Object.entries(DAY_STEPS)) {
+      const dayChannel = WORKSPACE_CHANNELS.find((channel) =>
+        steps.every((step) => channel.kinds.includes(step as never)));
+      expect({ day, found: Boolean(dayChannel) }).toEqual({ day, found: true });
+    }
+
+    // No kind reaches two channels, which is the failure a hand-written map used to allow.
+    const kinds = WORKSPACE_CHANNELS.flatMap((channel) => [...channel.kinds]);
+    expect(new Set(kinds).size).toBe(kinds.length);
   });
 
   it("returns every channel even when nothing has happened in them", () => {
