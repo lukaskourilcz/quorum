@@ -105,6 +105,15 @@ Then, in order, the existing items:
 In the order that unblocks the most. Each of these is a switch, a key or an account, and each one
 is the single thing standing between a proven path and a working one.
 
+- [ ] **Deploy the site — it is a schedule change behind** — `boardless-ai.vercel.app` still shows
+  the old calendar: eighteen rows, one per room per hour, with the DNESKAi edition at 05:00, the
+  MMA rooms spread across 08:00–20:00 and the afternoon and night company meetings that
+  `operations-2026-08c` retired. `main` has carried the consolidated nine-row calendar since
+  2026-08-29. Nothing is wrong with the code; nothing has deployed. `site/vercel.json` carries
+  `git.deploymentEnabled: false` on purpose, so a merge never redeploys, and an agent session has
+  no Vercel credentials to run the release itself. From a clean checkout of `main`:
+  `pnpm deploy:check` then `pnpm deploy:production`. [imp:5] [owner:me] [time:15m] [kind:deploy]
+
 - [ ] **Delete two merged remote branches** — `claude/venture-launch-review-7l5nkd` and the branch
   of PR #511. Both are fully merged into `main`; the git relay in the agent environment refuses a
   branch deletion, so the sessions that merged them could not remove them.

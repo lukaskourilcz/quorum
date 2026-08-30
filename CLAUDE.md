@@ -261,5 +261,13 @@ done; at session end, update it (finished + newly-needed owner items).
 ## Git workflow (every session)
 
 - **Commit frequently** in small, coherent steps — never batch a whole session into one commit.
-- **At the end of every session, push and merge to `main`** so the change redeploys immediately (this project auto-deploys from `main` on Vercel).
+- **At the end of every session, push and merge to `main`.**
+- **Merging to `main` does not deploy.** `site/vercel.json` carries `git.deploymentEnabled: false`,
+  a deliberate cost-control guard documented in `docs/ENGINEERING.md`: no push, branch or pull
+  request creates a Vercel deployment. The live site changes only when somebody runs
+  `pnpm deploy:check` on a clean commit and then `pnpm deploy:production`, and that needs Vercel
+  credentials an agent session does not have. So never tell the owner a merge will redeploy —
+  say the change is on `main` and name the deploy as the remaining step. This line used to claim
+  the opposite, and the site sat a full schedule change behind while three sessions reported it
+  shipped.
 - **Delete the merged / old branch** (local and remote) after merging, to keep the repo clean. Never leave stale branches behind.
