@@ -119,3 +119,40 @@ describe("launch board", () => {
     expect(board.verdict.detail).toBe("0 of 2 ventures have shipped.");
   });
 });
+
+/*
+ * The brief is what the owner reads to decide a week of writing, and it lived in a tab.
+ * "No brief" and "the room has never run" are different problems and the board says which.
+ */
+describe("the week's brief", () => {
+  it("carries the newest plan's trend calls, stripped of their prefix", () => {
+    const board = buildLaunchBoard(inputs({
+      brief: {
+        date: "2026-08-24",
+        title: "Weekly content brief — 2026-08-24",
+        tactics: [
+          { description: "Trend call: bantamweight rankings (mma-files, free rank, cs): 4." },
+          { description: "An idea the room had — not a trend call." },
+          { description: "Trend call: AI regulation (caught-up, free velocity, cs): 12.0 events/hour." }
+        ],
+        href: "/admin?venture=goviral"
+      }
+    }));
+
+    expect("unavailable" in board.brief).toBe(false);
+    if ("unavailable" in board.brief) return;
+    expect(board.brief.date).toBe("2026-08-24");
+    expect(board.brief.calls).toEqual([
+      "bantamweight rankings (mma-files, free rank, cs): 4.",
+      "AI regulation (caught-up, free velocity, cs): 12.0 events/hour."
+    ]);
+  });
+
+  it("says why there is none rather than showing an empty heading", () => {
+    const board = buildLaunchBoard(inputs());
+
+    expect("unavailable" in board.brief).toBe(true);
+    if (!("unavailable" in board.brief)) return;
+    expect(board.brief.unavailable).toContain("has not produced a weekly brief yet");
+  });
+});

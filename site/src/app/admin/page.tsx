@@ -86,6 +86,7 @@ import { formatUsd } from "@/lib/utils";
 import { ventureBrand } from "@/lib/venture-brand";
 import { readAdminImageRungs } from "@/lib/admin-image-rungs";
 import { buildLaunchBoard, HELD_VENTURES, LAUNCH_SET, shortTitle, ventureForApproval } from "@/lib/admin-launch-board";
+import { readNewestGoViralBrief } from "@/lib/admin-goviral-brief";
 import { getVentureMeetingHours } from "@/lib/venture-registry";
 import { LaunchBoardPanel } from "@/components/admin/launch-board-panel";
 
@@ -644,7 +645,9 @@ export default async function AdminPage({
       deliveriesByVenture[article.ventureId] ??= { date: day.date, url: article.url };
     }
   }
+  const goviralBrief = await readNewestGoViralBrief();
   const launchBoard = buildLaunchBoard({
+    brief: goviralBrief,
     // `ventureName` because the owner calls Caught Up "DNESKAi" everywhere else in this admin, and
     // a board that renames a venture on its own first screen is a board he has to translate.
     ventures: LAUNCH_SET.map((id) => ({

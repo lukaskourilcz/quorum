@@ -43,6 +43,40 @@ export function LaunchBoardPanel({ board }: { board: LaunchBoard }) {
           </p>
         </AdminCallout>
 
+        {/*
+          The week's brief, on the first screen.
+          Five desks read `Trend call:` lines out of this plan and the owner reads it to decide a
+          week of writing, and it lived in a tab. When there is none, the sentence says which of
+          the two reasons it is: a room that has never run reads differently from a quiet week.
+        */}
+        <section className="grid min-w-0 gap-2" data-adm-launch-brief>
+          <h3 className="text-[length:var(--admin-type-section)] font-semibold">This week&rsquo;s brief</h3>
+          {"unavailable" in board.brief ? (
+            <p className="text-[length:var(--admin-type-body)] text-[var(--admin-muted-foreground)]">
+              {board.brief.unavailable}
+            </p>
+          ) : (
+            <>
+              <p className="text-[length:var(--admin-type-body)]">
+                <Link className="admin-focus-ring font-medium underline-offset-2 hover:underline" href={board.brief.href}>
+                  {board.brief.title}
+                </Link>
+              </p>
+              {board.brief.calls.length > 0 ? (
+                <ul className="grid min-w-0 gap-1 text-[length:var(--admin-type-body)] text-[var(--admin-muted-foreground)]">
+                  {board.brief.calls.map((call) => (
+                    <li key={call}>{call}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-[length:var(--admin-type-body)] text-[var(--admin-muted-foreground)]">
+                  The room met and made no trend call this week.
+                </p>
+              )}
+            </>
+          )}
+        </section>
+
         <AdminTableRegion label="Launch board by venture">
           <AdminTable data-adm-launch-board>
             <thead>
