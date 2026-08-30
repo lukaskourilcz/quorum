@@ -185,9 +185,14 @@ is why nobody knew:
 - A `<details>` clicked before hydration puts `open` on an element React is about to reconcile, and
   React reports the difference on the console, which the test correctly counts as a failure.
 
-So the green CI check on a pull request means the root gate passed, not that the browser suite did.
-Worth deciding whether to make that job non-optional; it takes a couple of hours, which is probably
-why it is opt-in.
+It could not pass even when asked. Putting `[full-e2e]` in this pull request's title turned the job
+on, and it was cancelled at exactly its own `timeout-minutes: 35` having reached test 25 of 358 —
+every one of them passing. A budget under half the suite's runtime means every opt-in ends as a red
+check that says nothing about the code. Raised to 90 in this branch, with the measurement in the
+comment; the job stays opt-in, so the ceiling costs nothing until somebody asks for it.
+
+So a green CI check on a pull request still means the root gate passed, not that the browser suite
+did — but now the browser suite can at least be asked.
 
 **An interrupted e2e run leaves state behind, and I was wrong about why.** The suite writes real
 fixtures into the repository's own `state/` — dossiers, shortlists, ratings ledgers, a marketingShark
