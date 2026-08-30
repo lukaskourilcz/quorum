@@ -16,13 +16,17 @@ launch program's children, and the two program issues that were tracking the res
 **The root gate is green** on CI and locally: `agents:validate`, `lint`, `typecheck`, `test`
 (3,406), `build`, `docs:check`.
 
-**The browser suite went from twelve failures to two**, across 357 tests. Both remaining ones pass
-on their own and neither is a defect in the code: one is Next's dev server restarting itself under
-memory pressure mid-navigation during a 1.3-hour run, the other the cross-test dependency in §4.
+**The browser suite is green on CI**, all 358 tests in 43.9 minutes, write journeys included. That
+is the first complete passing run this gate has had; it began the night at twelve failures.
 
-**Given a budget that fits it, that suite immediately found a real bug** — a broken image on the
-public home page, shipping on `main` since this morning's quiet edition. It is fixed here, and §2
-says how it hid.
+**Given a budget that fits it, it immediately found a real bug** — a broken image on the public
+home page, shipping on `main` since this morning's quiet edition. Fixed and merged; §2 says how it
+hid.
+
+**PR #511 is merged to `main`**, so the site has redeployed. One thing is left on it that this
+environment cannot do: **press "Delete branch" on the merged pull request.** The git relay here
+answers a branch deletion with 403, so `claude/venture-launch-review-7l5nkd` is still on the
+remote.
 
 Five of the original twelve were not caused by this branch. Three assertions were written for a
 read-only deployment the browser tests never run against; one compared the Playwright runner's
@@ -149,17 +153,15 @@ workspace channels. Everything it made stays readable in the admin, and one clic
 | #472 | marketingShark's cap (yours), and Personal Growth's first run | Decision 2, and a `pg-desk` run |
 | #462 | The program, closed when its children are | The five above |
 
-**One e2e test fails only inside a complete run.** `Door Money records a synthetic owner completion
-through the canonical route` passes on its own, every time, and fails in the full suite with the
-confirmation never appearing. Nothing in the server log accompanies it. It is the last unexplained
-failure of the twelve this branch worked through, and it is a cross-test dependency rather than
-anything the branch changed — the write-journeys project only runs in a complete suite, which had
-not completed once before tonight.
+**The Door Money write journey settled itself.** `Door Money records a synthetic owner completion
+through the canonical route` failed twice inside a complete run and passed alone every time, which
+made it the last unexplained failure of the twelve. It passes now — in a clean local run of the
+write-journeys project and on CI's complete run — so what it was reacting to was the state my own
+killed runs kept leaving behind, not a defect and not a cross-test dependency.
 
-The test now reads the completion route's response and reports its status and body, so the next run
-that hits this says what the server answered instead of only that the confirmation was missing. The
-route answers 404 for an unavailable store, 409 for a conflict and 503 otherwise; my guess is a
-conflict against a packet another journey touched, but it is a guess and the test will settle it.
+It reads the completion route's response and reports its status and body either way, so if it ever
+returns the next run says what the server answered rather than only that the confirmation was
+missing: 404 for an unavailable store, 409 for a conflict, 503 otherwise.
 
 **#467 is the one that matters most.** It is the difference between "a delivered article" and
 "something you can post". Everything it needs is registered; none of it is built.
@@ -239,7 +241,8 @@ It could not pass even when asked. Putting `[full-e2e]` in this pull request's t
 on, and it was cancelled at exactly its own `timeout-minutes: 35` having reached test 25 of 358 —
 every one of them passing. A budget under half the suite's runtime means every opt-in ends as a red
 check that says nothing about the code. Raised to 90 in this branch, with the measurement in the
-comment; the job stays opt-in, so the ceiling costs nothing until somebody asks for it.
+comment; the job stays opt-in, so the ceiling costs nothing until somebody asks for it. It then ran
+to completion for the first time — 43.9 minutes, all 358 green.
 
 So a green CI check on a pull request still means the root gate passed, not that the browser suite
 did — but now the browser suite can at least be asked. The first time it was asked and allowed to
