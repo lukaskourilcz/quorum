@@ -105,6 +105,10 @@ Then, in order, the existing items:
 In the order that unblocks the most. Each of these is a switch, a key or an account, and each one
 is the single thing standing between a proven path and a working one.
 
+- [ ] **Delete the merged branch of PR #511** — press "Delete branch" on the merged pull request.
+  The overnight session merged it but could not remove the remote branch: the git relay in that
+  environment answers a branch deletion with 403. [imp:1] [owner:me] [time:1m] [kind:setup]
+
 - [ ] **Verify the linked Quorum Vercel project** — from the repository root run
   `pnpm exec vercel link`, select the existing Quorum team/project, and confirm in its settings
   that Root Directory is `site`. Do not create a duplicate project. [imp:5] [owner:me] [time:10m]
