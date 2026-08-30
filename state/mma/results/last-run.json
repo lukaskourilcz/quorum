@@ -4,12 +4,83 @@
   "windowDays": 10,
   "cards": [
     {
+      "name": "UFC Fight Night: Nurmagomedov vs. Song",
+      "startsAtUtc": "2026-08-29T00:00:00.000Z",
+      "results": 13
+    },
+    {
       "name": "UFC Fight Night: Hernandez vs. Rodrigues",
       "startsAtUtc": "2026-08-22T00:00:00.000Z",
       "results": 13
     }
   ],
-  "applied": [],
+  "applied": [
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-umar-nurmagomedov-vs-song-yadong-1",
+      "winner": "blue",
+      "method": "KO (punch)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-yan-xiaonan-vs-denise-gomes-2",
+      "winner": "blue",
+      "method": "KO (elbow and punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-aori-qileng-vs-kai-asakura-3",
+      "winner": "blue",
+      "method": "TKO (head kick and punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-su-mudaerji-vs-alex-perez-4",
+      "winner": "red",
+      "method": "Decision (unanimous)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-liu-ce-vs-levi-rodrigues-jr-5",
+      "winner": "red",
+      "method": "KO (punch)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-bilal-hasan-vs-nilson-rojas-6",
+      "winner": "red",
+      "method": "KO (punch)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-namsrai-batbayar-vs-andre-lima-7",
+      "winner": "blue",
+      "method": "Submission (guillotine choke)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-rei-tsuruya-vs-kevin-borjas-9",
+      "winner": "red",
+      "method": "Submission (rear-naked choke)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-jack-jenkins-vs-sean-woodson-8",
+      "winner": "blue",
+      "method": "Decision (split)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-xiao-long-vs-francesco-nuzzi-9",
+      "winner": "blue",
+      "method": "TKO (punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-lawrence-lui-vs-hector-santiago-11",
+      "winner": "blue",
+      "method": "KO (punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-xiong-jingnan-vs-julia-polastri-9",
+      "winner": "blue",
+      "method": "KO (head kick)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-ding-meng-vs-cameron-nelson-13",
+      "winner": "blue",
+      "method": "Decision (unanimous)"
+    }
+  ],
   "untracked": 13,
-  "generatedAt": "2026-08-28T06:01:45.174Z"
+  "generatedAt": "2026-08-30T06:01:50.158Z"
 }

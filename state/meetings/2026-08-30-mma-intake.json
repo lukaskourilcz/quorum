@@ -1,0 +1,205 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260830060150-mma-intake",
+  "date": "2026-08-30",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.01916,
+    "monthAllInUsd": 13.783711299999997,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-30",
+      "source:cito-ufc:2026-08-30",
+      "source:wikimedia:2026-08-30",
+      "source:wikipedia-schedule:2026-08-30"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "MMA intake sees 50 fighters across 8 scheduled cards; 50 lack critical fields (height, reach, stance). Apify-Tapology Oktagon source failed. No card in fight-week window. Continue async file work; no shippable decision or blockers for this meeting.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-30",
+        "source:cito-ufc:2026-08-30",
+        "source:wikimedia:2026-08-30",
+        "source:wikipedia-schedule:2026-08-30"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon source gap: approved Tapology actor failed with 0 items; 13 roster pages resolve, but all 50 fighters remain incomplete. No model use. Next: obtain independent regional or official confirmations.",
+      "evidenceRefs": [
+        "source:cito-ufc:2026-08-30",
+        "source:wikimedia:2026-08-30",
+        "source:wikipedia-schedule:2026-08-30"
+      ]
+    },
+    {
+      "agent": "TAPE",
+      "summary": "No verified card inside three-day window. UFC lead: 50 fighters on file, 0 complete on critical fields. Apify-Tapology failed; two independent sources still required before model use. Continue daily roster work.",
+      "evidenceRefs": [
+        "source:cito-ufc:2026-08-30",
+        "source:the-odds-api:2026-08-30",
+        "source:wikimedia:2026-08-30",
+        "source:wikipedia-schedule:2026-08-30"
+      ]
+    },
+    {
+      "agent": "SIGMA",
+      "summary": "UFC leads; Oktagon checked. Sources are healthy except failed Tapology, but 0/50 fighter files are complete and no ModelRun is valid. Pass probabilities; next safe action is independent field reconciliation.",
+      "evidenceRefs": [
+        "source:the-odds-api:2026-08-30",
+        "source:cito-ufc:2026-08-30",
+        "source:wikimedia:2026-08-30",
+        "source:wikipedia-schedule:2026-08-30"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SIGMA",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260830060150-MMA-INTAKE-03",
+      "owner": "TAPE",
+      "summary": "Resolve heightCm, reachCm, stance, division gaps for 50 fighters across UFC and Oktagon rosters using two independent sources before nearest event (Hooker vs. Parnasse, in 6 days).",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Data only. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "source:the-odds-api:2026-08-30",
+      "source:cito-ufc:2026-08-30",
+      "source:wikimedia:2026-08-30",
+      "source:wikipedia-schedule:2026-08-30"
+    ]
+  },
+  "generatedAt": "2026-08-30T06:06:50.158Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-08-30T06:01:50.158Z",
+    "closedAt": "2026-08-30T06:06:50.158Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-08-30T06:01:50.158Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "statement",
+        "sentAt": "2026-08-30T06:02:50.158Z",
+        "text": "MMA intake sees 50 fighters across 8 scheduled cards; 50 lack critical fields (height, reach, stance). Apify-Tapology Oktagon source failed. No card in fight-week window. Continue async file work; no shippable decision or blockers for this meeting.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-30",
+          "source:cito-ufc:2026-08-30",
+          "source:wikimedia:2026-08-30",
+          "source:wikipedia-schedule:2026-08-30"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "statement",
+        "sentAt": "2026-08-30T06:03:50.158Z",
+        "text": "Oktagon source gap: approved Tapology actor failed with 0 items; 13 roster pages resolve, but all 50 fighters remain incomplete. No model use. Next: obtain independent regional or official confirmations.",
+        "evidenceRefs": [
+          "source:cito-ufc:2026-08-30",
+          "source:wikimedia:2026-08-30",
+          "source:wikipedia-schedule:2026-08-30"
+        ]
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-08-30T06:04:50.158Z",
+        "text": "No verified card inside three-day window. UFC lead: 50 fighters on file, 0 complete on critical fields. Apify-Tapology failed; two independent sources still required before model use. Continue daily roster work.",
+        "evidenceRefs": [
+          "source:cito-ufc:2026-08-30",
+          "source:the-odds-api:2026-08-30",
+          "source:wikimedia:2026-08-30",
+          "source:wikipedia-schedule:2026-08-30"
+        ]
+      },
+      {
+        "agent": "SIGMA",
+        "mode": "statement",
+        "sentAt": "2026-08-30T06:05:50.158Z",
+        "text": "UFC leads; Oktagon checked. Sources are healthy except failed Tapology, but 0/50 fighter files are complete and no ModelRun is valid. Pass probabilities; next safe action is independent field reconciliation.",
+        "evidenceRefs": [
+          "source:the-odds-api:2026-08-30",
+          "source:cito-ufc:2026-08-30",
+          "source:wikimedia:2026-08-30",
+          "source:wikipedia-schedule:2026-08-30"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-08-30T06:06:50.158Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

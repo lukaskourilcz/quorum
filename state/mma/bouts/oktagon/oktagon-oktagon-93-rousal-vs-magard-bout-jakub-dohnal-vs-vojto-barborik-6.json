@@ -27,13 +27,14 @@
   ],
   "discovery": {
     "firstSeenAt": "2026-08-24T06:00:32.886Z",
-    "lastSeenAt": "2026-08-28T06:01:45.174Z",
+    "lastSeenAt": "2026-08-30T06:01:50.158Z",
     "sourceRefs": [
       "source:wikipedia:2026-08-24:2026 in Oktagon MMA",
       "source:wikipedia:2026-08-25:2026 in Oktagon MMA",
       "source:wikipedia:2026-08-26:2026 in Oktagon MMA",
       "source:wikipedia:2026-08-27:2026 in Oktagon MMA",
-      "source:wikipedia:2026-08-28:2026 in Oktagon MMA"
+      "source:wikipedia:2026-08-28:2026 in Oktagon MMA",
+      "source:wikipedia:2026-08-30:2026 in Oktagon MMA"
     ]
   },
   "sourceRefs": [
@@ -41,7 +42,8 @@
     "source:wikipedia:2026-08-25:2026 in Oktagon MMA",
     "source:wikipedia:2026-08-26:2026 in Oktagon MMA",
     "source:wikipedia:2026-08-27:2026 in Oktagon MMA",
-    "source:wikipedia:2026-08-28:2026 in Oktagon MMA"
+    "source:wikipedia:2026-08-28:2026 in Oktagon MMA",
+    "source:wikipedia:2026-08-30:2026 in Oktagon MMA"
   ],
   "result": null,
   "predictionRefs": [],

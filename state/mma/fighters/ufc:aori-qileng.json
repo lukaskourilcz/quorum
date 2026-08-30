@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Aori_Qileng",
       "publisher": "Wikipedia",
       "title": "Aori Qileng",
-      "retrievedAt": "2026-08-28T06:01:45.174Z",
+      "retrievedAt": "2026-08-30T06:01:50.158Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q111701050",
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-08-28T06:01:45.174Z",
+      "retrievedAt": "2026-08-30T06:01:50.158Z",
       "status": "verified",
       "corroborated": true
     },
@@ -464,6 +464,21 @@
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-aori-qileng-vs-kai-asakura-3",
+      "eventRef": "ufc:event:ufc-fight-night-nurmagomedov-vs-song",
+      "happenedAt": "2026-08-29T00:00:00.000Z",
+      "opponentRef": "ufc:kai-asakura",
+      "result": "loss",
+      "method": "TKO (head kick and punches)",
+      "round": 2,
+      "elapsedSeconds": 334,
+      "sourceRefs": [
+        "source:wikipedia:2026-08-30:UFC Fight Night: Nurmagomedov vs. Song"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
     }
   ],
   "statsProfiles": [
@@ -473,11 +488,11 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:aori-qileng:history",
-      "bouts": 22,
+      "bouts": 23,
       "values": {
-        "bouts": 22,
+        "bouts": 23,
         "wins": 12,
-        "losses": 9,
+        "losses": 10,
         "draws": 0,
         "noContests": 1,
         "finishRate": 0.416667,
@@ -487,23 +502,23 @@
         "koTkoWinShare": 0.416667,
         "submissionWinShare": 0,
         "decisionWinShare": 0.583333,
-        "averageElapsedSeconds": 552.590909,
+        "averageElapsedSeconds": 543.086957,
         "recentThreeWinRate": 0.333333,
-        "recentFiveWinRate": 0.5,
-        "fightsPerYear": 1.988101,
-        "layoffDays": 90
+        "recentFiveWinRate": 0.25,
+        "fightsPerYear": 2.034777,
+        "layoffDays": 1
       },
-      "updatedAt": "2026-08-28T06:01:45.174Z"
+      "updatedAt": "2026-08-30T06:01:50.158Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1572.12671835,
-    "deviation": 114.04328045,
-    "volatility": 0.06000016,
-    "boutCount": 21,
-    "asOfBoutRef": "ufc:bout:history-c2912bfff11319101525",
-    "updatedAt": "2026-08-28T06:01:45.174Z"
+    "rating": 1544.69487818,
+    "deviation": 111.8808799,
+    "volatility": 0.06000053,
+    "boutCount": 22,
+    "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-aori-qileng-vs-kai-asakura-3",
+    "updatedAt": "2026-08-30T06:01:50.158Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2509,11 +2524,28 @@
         "source:wikipedia:54051600"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-30T06:01:50.158Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178359",
+        "source:wikipedia:54051600",
+        "source:wikipedia:2026-08-30:UFC Fight Night: Nurmagomedov vs. Song"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-28T06:01:45.174Z"
+  "updatedAt": "2026-08-30T06:01:50.158Z"
 }

@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Sean_Strickland",
       "publisher": "Wikipedia",
       "title": "Sean Strickland",
-      "retrievedAt": "2026-08-28T06:01:45.174Z",
+      "retrievedAt": "2026-08-30T06:01:50.158Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q17180973",
         "source:wikipedia:42944791"
       ],
-      "retrievedAt": "2026-08-28T06:01:45.174Z",
+      "retrievedAt": "2026-08-30T06:01:50.158Z",
       "status": "verified",
       "corroborated": true
     },
@@ -373,9 +373,9 @@
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 1.465027,
-        "layoffDays": 188
+        "layoffDays": 190
       },
-      "updatedAt": "2026-08-28T06:01:45.174Z"
+      "updatedAt": "2026-08-30T06:01:50.158Z"
     }
   ],
   "rating": {
@@ -385,7 +385,7 @@
     "volatility": 0.05999915,
     "boutCount": 14,
     "asOfBoutRef": "ufc:bout:history-d8dd91d4fd4dc8a7d2c0",
-    "updatedAt": "2026-08-28T06:01:45.174Z"
+    "updatedAt": "2026-08-30T06:01:50.158Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2268,11 +2268,31 @@
         "source:wikipedia:64111674"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-30T06:01:50.158Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49620123",
+        "source:wikipedia:42944791",
+        "source:wikipedia:42031348",
+        "source:wikipedia:80563842",
+        "source:wikipedia:62595898",
+        "source:wikipedia:64111674"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": true,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-08-28T06:01:45.174Z"
+  "updatedAt": "2026-08-30T06:01:50.158Z"
 }

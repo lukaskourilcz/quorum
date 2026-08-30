@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "event-card/1",
+  "id": "oktagon:event:oktagon-94-the-biggest-comeback-ever",
+  "org": "oktagon",
+  "name": "Oktagon 94: The Biggest Comeback Ever",
+  "venue": "Deutsche Bank Park",
+  "startsAtLocal": "2026-09-26T00:00:00.000Z",
+  "timeZone": "UTC",
+  "startsAtUtc": "2026-09-26T00:00:00.000Z",
+  "sourceRefs": [
+    "source:wikipedia:2026-08-30:2026 in Oktagon MMA"
+  ],
+  "bouts": [
+    {
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:christian-eckerlin-vs-david-kozma-1",
+      "red": "oktagon:christian-eckerlin",
+      "blue": "oktagon:david-kozma",
+      "division": "welterweight",
+      "scheduledRounds": 5,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:frederic-vosgrone-vs-karlos-vemola-2",
+      "red": "oktagon:frederic-vosgrone",
+      "blue": "oktagon:karlos-vemola",
+      "division": "catchweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:max-coga-vs-christian-jungwirth-3",
+      "red": "oktagon:max-coga",
+      "blue": "oktagon:christian-jungwirth",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:jamie-cordero-vs-robert-pukac-4",
+      "red": "oktagon:jamie-cordero",
+      "blue": "oktagon:robert-pukac",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:fedor-duric-vs-marc-diakiese-5",
+      "red": "oktagon:fedor-duric",
+      "blue": "oktagon:marc-diakiese",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:hugo-vach-vs-deniz-ilbay-6",
+      "red": "oktagon:hugo-vach",
+      "blue": "oktagon:deniz-ilbay",
+      "division": "featherweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:raul-lemberanskij-vs-roman-paulas-7",
+      "red": "oktagon:raul-lemberanskij",
+      "blue": "oktagon:roman-paulas",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:edmon-avagyan-vs-dominic-schober-8",
+      "red": "oktagon:edmon-avagyan",
+      "blue": "oktagon:dominic-schober",
+      "division": "catchweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:michael-obodozie-vs-oskar-staszczak-9",
+      "red": "oktagon:michael-obodozie",
+      "blue": "oktagon:oskar-staszczak",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    }
+  ],
+  "updatedAt": "2026-08-30T06:01:50.158Z"
+}

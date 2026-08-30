@@ -293,7 +293,7 @@
       "requestedAt": "2026-08-24T06:00:32.886Z",
       "notBefore": "2026-08-24",
       "expiresAt": "2026-08-27T23:59:59.000Z",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "schemaVersion": "meeting-agenda/1",
@@ -311,7 +311,7 @@
       "requestedAt": "2026-08-25T06:03:07.316Z",
       "notBefore": "2026-08-25",
       "expiresAt": "2026-08-28T23:59:59.000Z",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "schemaVersion": "meeting-agenda/1",
@@ -329,7 +329,7 @@
       "requestedAt": "2026-08-26T06:01:51.845Z",
       "notBefore": "2026-08-26",
       "expiresAt": "2026-08-29T23:59:59.000Z",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "schemaVersion": "meeting-agenda/1",
@@ -347,7 +347,24 @@
       "notBefore": "2026-08-27",
       "expiresAt": "2026-08-30T23:59:59.000Z",
       "status": "pending"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-13c8eaf9845408a1",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-08-30-mma-intake",
+      "summary": "Decide: retry Apify-Tapology Oktagon or swap to secondary Oktagon roster source for Oktagon 93 weigh-in prep (in 13 days).",
+      "evidenceRefs": [
+        "source:cito-ufc:2026-08-30"
+      ],
+      "requestedAt": "2026-08-30T06:01:50.158Z",
+      "notBefore": "2026-08-30",
+      "expiresAt": "2026-09-02T23:59:59.000Z",
+      "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-27T06:00:56.984Z"
+  "updatedAt": "2026-08-30T06:01:50.158Z"
 }

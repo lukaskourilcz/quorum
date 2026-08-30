@@ -14,7 +14,7 @@
   },
   "division": "bantamweight",
   "scheduledRounds": 5,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-12:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-08-30T06:01:50.158Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-30:UFC Fight Night: Nurmagomedov vs. Song"
+      ],
+      "note": "Result read from the UFC Fight Night: Nurmagomedov vs. Song article after the event."
     }
   ],
   "discovery": {
@@ -65,9 +73,18 @@
     "source:wikipedia:2026-08-25:List of UFC events",
     "source:wikipedia:2026-08-26:List of UFC events",
     "source:wikipedia:2026-08-27:List of UFC events",
-    "source:wikipedia:2026-08-28:List of UFC events"
+    "source:wikipedia:2026-08-28:List of UFC events",
+    "source:wikipedia:2026-08-30:UFC Fight Night: Nurmagomedov vs. Song"
   ],
-  "result": null,
+  "result": {
+    "winner": "blue",
+    "method": "KO (punch)",
+    "round": 2,
+    "elapsedSeconds": 408,
+    "sourceRefs": [
+      "source:wikipedia:2026-08-30:UFC Fight Night: Nurmagomedov vs. Song"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -82,7 +99,19 @@
         "source:wikipedia:2026-08-12:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-08-30T06:01:50.158Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-30:UFC Fight Night: Nurmagomedov vs. Song"
+      ],
+      "note": "Song Yadong def. Umar Nurmagomedov by KO (punch)."
     }
   ],
-  "updatedAt": "2026-08-12T06:01:46.400Z"
+  "updatedAt": "2026-08-30T06:01:50.158Z"
 }

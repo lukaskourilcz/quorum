@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "oktagon:bout:oktagon-oktagon-94-the-biggest-comeback-ever-bout-raul-lemberanskij-vs-roman-paulas-7",
+  "org": "oktagon",
+  "event": {
+    "ref": "oktagon:event:oktagon-94-the-biggest-comeback-ever",
+    "name": "Oktagon 94: The Biggest Comeback Ever",
+    "startsAtUtc": "2026-09-26T00:00:00.000Z",
+    "venue": "Deutsche Bank Park"
+  },
+  "fighters": {
+    "red": "oktagon:raul-lemberanskij",
+    "blue": "oktagon:roman-paulas"
+  },
+  "division": "bantamweight",
+  "scheduledRounds": 3,
+  "status": "announced",
+  "statusHistory": [
+    {
+      "status": "announced",
+      "at": "2026-08-30T06:01:50.158Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-08-30:2026 in Oktagon MMA"
+      ],
+      "note": "Status imported from the Cito event listing."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-08-30T06:01:50.158Z",
+    "lastSeenAt": "2026-08-30T06:01:50.158Z",
+    "sourceRefs": [
+      "source:wikipedia:2026-08-30:2026 in Oktagon MMA"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:2026-08-30:2026 in Oktagon MMA"
+  ],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-08-30T06:01:50.158Z",
+      "kind": "created",
+      "fields": [
+        "event",
+        "fighters",
+        "status"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-30:2026 in Oktagon MMA"
+      ],
+      "note": "Discovered on the approved Cito free-tier intake."
+    }
+  ],
+  "updatedAt": "2026-08-30T06:01:50.158Z"
+}

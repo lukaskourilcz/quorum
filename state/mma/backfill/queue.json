@@ -1,6 +1,6 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-08-28T06:01:45.174Z",
+  "generatedAt": "2026-08-30T06:01:50.158Z",
   "items": [
     {
       "fighterRef": "ufc:joshua-van",
@@ -45,6 +45,20 @@
       "reviewedAt": "2026-08-15T06:01:47.325Z"
     },
     {
+      "fighterRef": "oktagon:karlos-vemola",
+      "priority": 1020,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "reachCm",
+        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-08-30T06:01:50.158Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
       "fighterRef": "ufc:alexandre-pantoja",
       "priority": 1020,
       "reason": "upcoming-bout",
@@ -52,7 +66,7 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-28T06:01:45.174Z",
+      "reviewedAt": "2026-08-30T06:01:50.158Z",
       "uncorroborated": [
         "division"
       ]
@@ -65,7 +79,7 @@
         "stance",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-28T06:01:45.174Z",
+      "reviewedAt": "2026-08-30T06:01:50.158Z",
       "uncorroborated": [
         "division",
         "record"
@@ -78,22 +92,10 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-08-28T06:01:45.174Z",
+      "reviewedAt": "2026-08-30T06:01:50.158Z",
       "uncorroborated": [
         "name",
         "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alex-perez",
-      "priority": 1010,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-08-28T06:01:45.174Z",
-      "uncorroborated": [
         "record"
       ]
     },
@@ -104,7 +106,7 @@
       "gaps": [
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-08-28T06:01:45.174Z",
+      "reviewedAt": "2026-08-30T06:01:50.158Z",
       "uncorroborated": [
         "division"
       ]
@@ -116,22 +118,9 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-28T06:01:45.174Z",
+      "reviewedAt": "2026-08-30T06:01:50.158Z",
       "uncorroborated": [
         "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:aori-qileng",
-      "priority": 1010,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-08-28T06:01:45.174Z",
-      "uncorroborated": [
-        "division",
-        "record"
       ]
     },
     {
@@ -141,7 +130,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-28T06:01:45.174Z",
+      "reviewedAt": "2026-08-30T06:01:50.158Z",
       "uncorroborated": [
         "division",
         "record"
@@ -152,17 +141,7 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-08-28T06:01:45.174Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:andre-lima",
-      "priority": 1000,
-      "reason": "upcoming-bout",
-      "gaps": [],
-      "reviewedAt": "2026-08-28T06:01:45.174Z",
+      "reviewedAt": "2026-08-30T06:01:50.158Z",
       "uncorroborated": [
         "division"
       ]
@@ -193,27 +172,7 @@
       "gaps": [
         "team"
       ],
-      "reviewedAt": "2026-08-28T06:01:45.174Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:conor-mcgregor",
-      "priority": 600,
-      "reason": "missing-history",
-      "gaps": [],
-      "reviewedAt": "2026-08-26T06:01:51.845Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:andre-petroski",
-      "priority": 600,
-      "reason": "missing-history",
-      "gaps": [],
-      "reviewedAt": "2026-08-27T06:00:56.984Z",
+      "reviewedAt": "2026-08-30T06:01:50.158Z",
       "uncorroborated": [
         "division"
       ]
@@ -224,6 +183,26 @@
       "reason": "missing-history",
       "gaps": [],
       "reviewedAt": "2026-08-28T06:01:45.174Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:andre-petroski",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-08-30T06:01:50.158Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:conor-mcgregor",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-08-30T06:01:50.158Z",
       "uncorroborated": [
         "division"
       ]
@@ -374,20 +353,6 @@
         "stance",
         "reachCm",
         "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-08-03T18:14:46.640Z",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "oktagon:karlos-vemola",
-      "priority": 470,
-      "reason": "uncorroborated",
-      "gaps": [
-        "reachCm",
-        "record-history-mismatch"
       ],
       "reviewedAt": "2026-08-03T18:14:46.640Z",
       "uncorroborated": [
@@ -882,6 +847,43 @@
       "uncorroborated": [
         "division",
         "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:alex-perez",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-28T06:01:45.174Z",
+      "uncorroborated": [
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:aori-qileng",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-28T06:01:45.174Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:andre-lima",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-30T06:01:50.158Z",
+      "uncorroborated": [
+        "division"
       ]
     },
     {

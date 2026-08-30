@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Ilia_Topuria",
       "publisher": "Wikipedia",
       "title": "Ilia Topuria",
-      "retrievedAt": "2026-08-28T06:01:45.174Z",
+      "retrievedAt": "2026-08-30T06:01:50.158Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q97185032",
         "source:wikipedia:66838633"
       ],
-      "retrievedAt": "2026-08-28T06:01:45.174Z",
+      "retrievedAt": "2026-08-30T06:01:50.158Z",
       "status": "verified",
       "corroborated": true
     },
@@ -282,9 +282,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 3.014973,
-        "layoffDays": 75
+        "layoffDays": 77
       },
-      "updatedAt": "2026-08-28T06:01:45.174Z"
+      "updatedAt": "2026-08-30T06:01:50.158Z"
     }
   ],
   "rating": {
@@ -294,7 +294,7 @@
     "volatility": 0.06001743,
     "boutCount": 8,
     "asOfBoutRef": "ufc:bout:history-bd885b3dbfdf7885bb2a",
-    "updatedAt": "2026-08-28T06:01:45.174Z"
+    "updatedAt": "2026-08-30T06:01:50.158Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2053,11 +2053,28 @@
         "source:wikipedia:49172283"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-08-30T06:01:50.158Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:66838633",
+        "source:wikipedia:27167974",
+        "source:wikipedia:49172283"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-28T06:01:45.174Z"
+  "updatedAt": "2026-08-30T06:01:50.158Z"
 }
