@@ -114,9 +114,25 @@ workspace channels. Everything it made stays readable in the admin, and one clic
 **#467 is the one that matters most.** It is the difference between "a delivered article" and
 "something you can post". Everything it needs is registered; none of it is built.
 
-**Personal Growth has never fired.** `pg-desk` is on the clock at 23:00, is countersigned, and has
-no meeting record and no skip record — not even a refusal. The absence of a *skip* is the odd part
-and is worth chasing: a phase that declines to run still writes down why.
+**Personal Growth has never fired, and I think I know why.** `pg-desk` is on the clock at 23:00,
+countersigned, budgeted at $20/month nested, with no meeting record and no skip record — not even
+a refusal. Two things have to be true at once for that, and both are:
+
+- **The GitHub backstop cannot reach it.** `BACKSTOP_SWEEP_HOURS` is `[3, 11, 19]` UTC, so the last
+  sweep serves 21:55 Prague, and `resolveBackstopSweep` only considers a slot whose hour has already
+  passed. 23:00 never has. Each sweep also opens at most one slot, so three sweeps cover three of
+  eleven slots on a day when the punctual path does not run.
+- **The punctual path may not be deploying.** `site/vercel.json` carries 24 cron entries, `pg-desk`'s
+  two among them — but Vercel's Hobby plan allows two cron jobs, once a day. If the project is still
+  on Hobby, most of those 24 never deploy. That makes the `docs/NEEDED.md` item about moving from
+  Hobby to the existing Pro subscription far more consequential than it reads: it is not a nicety,
+  it may be why two thirds of the clock depends on a three-times-a-day rescue sweep.
+
+**To check:** open the Quorum project's Settings → Cron Jobs in Vercel and count what is actually
+deployed against the 24 in `site/vercel.json`. If it is two, that is the answer, and moving to Pro
+fixes every slot rather than only this one. `orchestrator/src/meetings/reconcile-cli.ts` was taught
+to account for private desks on 2026-08-29 (`eb33d3b`), so from now on a `pg-desk` that does not run
+at least leaves a skip record saying so.
 
 ---
 
