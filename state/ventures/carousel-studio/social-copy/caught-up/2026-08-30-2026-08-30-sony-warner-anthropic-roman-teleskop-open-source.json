@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-08-30-sony-warner-anthropic-roman-teleskop-open-source",
+  "date": "2026-08-30",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Sony Music a Warner podaly žalobu na Anthropic za nelegální torrenting autorsky chráněných děl. Ve stejný den NASA vypouští dalekohled Roman – 4,3 miliardy dolarů a 300megapixelová kamera, která za měsíc snímá tolik co Hubble za 30 let. Kalifornie mezitím jednomyslně vyňala GPL, MIT a BSD software z věkové verifikace.",
+    "hashtags": [
+      "anthropic",
+      "autorskoprava",
+      "romanttelescope",
+      "nasa",
+      "opensource",
+      "llm",
+      "tencent",
+      "xbox",
+      "projecthelix",
+      "spaceflight"
+    ],
+    "threadsText": "Sony Music a Warner žalují Anthropic: prý nelegálně torrentoval autorsky chráněná díla k trénování Claude. Soud v kauze Bartz už letos laboratoři přiznal povinnost zaplatit 1,5 mld. $. Nová žaloba jde dál a míří i na způsob získávání dat. Anthropic tvrdí, že se bude bránit.",
+    "storyLine": "Hudební vydavatelé versus Anthropic: pirátství při trénování AI"
+  },
+  "heroCredit": "Photo by Mikhail Nilov on Pexels",
+  "origin": "desk"
+}

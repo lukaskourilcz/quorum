@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-08-30-sony-warner-anthropic-roman-teleskop-open-source",
+  "date": "2026-08-30",
+  "rung": "search",
+  "selected": "pexels:9242892",
+  "verdicts": [
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:9242892",
+      "reason": "Autentická fotografie manuální práce s elektronikou - zdařilá ilustrace technické práce a hardwaru s jasnou relevancí.",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Ilustruje techniku a práci s hardwarem, relevantní k tématu AI a technologií, ale bývá přeužívána; kvalita je přijatelná.",
+          "sceneCs": "člověk pracující se základní deskou"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Cliché vizualizace AI s modrými neonovými barvami a elektrotechnickými prvky - vypadá jako zmrazená vizuální metafora z doby, která už nepatří do seriozního médií.",
+          "sceneCs": "stylizovaná grafika mozku z elektrotechnických prvků"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 3,
+          "vetoes": [
+            "wrong-subject",
+            "low-quality"
+          ],
+          "reason": "Ukazuje expozici v galerii či muzeu, ne konkrétní téma článku; rozlišení a komponování není dostatečné pro leadový obsah.",
+          "sceneCs": "muzejní expozice s osobami a projekcí"
+        },
+        {
+          "candidateId": "pixabay:2528363",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "wrong-subject"
+          ],
+          "reason": "Abstraktní ilustrace, která nevykazuje jasnou souvislost s články - spíše vypadá jako autorská zcela nefotografická práce bez informační hodnoty.",
+          "sceneCs": "abstraktní grafika s tváří a obvody"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Kvalitní fotografie hardwaru, jasně ilustruje technologii, ale téma je příliš obecné a nezacílené k obsahu článku.",
+          "sceneCs": "chladič a deska plošného spoje s obvodem"
+        },
+        {
+          "candidateId": "pixabay:3963944",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "wrong-subject"
+          ],
+          "reason": "Stylizovaná grafika bez fotografické kvality - vypadá jako komerční stock ilustrace, nikoliv vhodná pro seriozní obsah.",
+          "sceneCs": "abstraktní grafika osob, grafů a digitálních prvků"
+        },
+        {
+          "candidateId": "pexels:9242892",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Autentická fotografie manuální práce s elektronikou - zdařilá ilustrace technické práce a hardwaru s jasnou relevancí.",
+          "sceneCs": "ruce spájející součástku na desku plošného spoje"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Počítačově vykreslenný čip s umělým neonovým osvětlením - typická vizuální cliché z 2010s science-fiction designu, nepatří do moderního technického tisku.",
+          "sceneCs": "renderovaný čip v neonově modrém a růžovém osvětlení"
+        },
+        {
+          "candidateId": "pexels:9242891",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Kvalitní fotografická dokumentace technické práce s hardwarem, ilustruje proces a techniku, relevantní k tématům AI a technologie.",
+          "sceneCs": "ruce při práci s konektory na desce plošného spoje"
+        },
+        {
+          "candidateId": "pexels:9242928",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Jasná fotografie práce s elektronikou a hardwarem, relevantní a kvalitní, ale není specificky zaměřena na konkrétní články.",
+          "sceneCs": "ruce pracující se součástkami na desce plošného spoje"
+        },
+        {
+          "candidateId": "pexels:9242886",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Autentická fotografie manipulace s hardwarem, dobré osvětlení a композиция, relevantní k technologickému obsahu.",
+          "sceneCs": "ruce demontující součást ze základní desky"
+        },
+        {
+          "candidateId": "pexels:9242275",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Fotografie osoby s jasně viditelnou tváří (a znaky osobnosti - brýle) - porušuje pravidlo o rozpoznatelných tvářích, i když není jmenován konkrétní člověk.",
+          "sceneCs": "osoba v brýlích drží desku plošného spoje"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.010676
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-08-30T07:06:05.526Z"
+}

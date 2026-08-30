@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-08-30-sony-warner-anthropic-roman-teleskop-open-source",
+  "date": "2026-08-30",
+  "locale": "cs",
+  "kicker": "DNESKAi · 30. srp",
+  "headline": "Hudební vydavatelé žalují Anthropic, Roman míří na oběžnou dráhu",
+  "coverLine": "Žaloba Sonyho a Warneru: Anthropic trénoval Claude na pirátských kopiích",
+  "standfirst": "Sony Music a Warner podaly v pátek jednu z nejširších autorsko-právních žalob proti frontierové laboratoři AI.",
+  "passages": [
+    "Sony Music Publishing, Warner Chappell a další vydavatelé podali žalobu na Anthropic za nelegální torrenting autorsky chráněných děl při trénování Claude.",
+    "NASA vypouští dalekohled Roman na misi za 4,3 miliardy dolarů; jde o nejsilnější širokozáběrový přístroj agentury.",
+    "Kalifornie jednomyslně vyňala software pod licencemi GPL, MIT, BSD a Apache z povinnosti věkové verifikace.",
+    "Tencent vydal otevřené váhy Hy4 Preview se 770 miliardami parametrů a kontextem 1 milionu tokenů.",
+    "Žaloba Sonyho a Warneru je jedním z nejširších autorsko-právních útoků na frontierovou AI laboratoř – výsledek sporu může určit, jak budou soudy posuzovat pirátské získávání trénovacích dat.",
+    "Roman Space Telescope bude snímat vesmír tisíckrát rychleji než Hubble a má přinést nová data o temné energii a obývatelných exoplanetách.",
+    "Jednomyslná výjimka Kalifornie pro open-source licence je prvním jasným legislativním signálem, že zákonodárci rozlišují mezi komerčními platformami a svobodným softwarem.",
+    "Rozsah nové žaloby vůči Anthropicu a konkrétní právní argumenty nad rámec předchozích případů nejsou ze zveřejněných informací plně zřejmé."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Photo by Mikhail Nilov on Pexels"
+}

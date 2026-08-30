@@ -1,0 +1,303 @@
+{
+  "schemaVersion": 1,
+  "runId": "f64b10b0-3ea1-4c04-b565-2cdf8da38700",
+  "date": "2026-08-30",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-08-30T07:06:10.715Z",
+  "completedAt": "2026-08-30T07:10:37.920Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-08-30T07:06:10.728Z",
+      "completedAt": "2026-08-30T07:06:30.195Z",
+      "durationMs": 19467
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-08-30T07:06:30.195Z",
+      "completedAt": "2026-08-30T07:08:42.912Z",
+      "durationMs": 132717,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected string to have <=6 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-08-30T07:08:42.912Z",
+      "completedAt": "2026-08-30T07:10:18.418Z",
+      "durationMs": 95506
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-08-30T07:10:18.419Z",
+      "completedAt": "2026-08-30T07:10:18.424Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_1",
+      "status": "success",
+      "startedAt": "2026-08-30T07:10:18.425Z",
+      "completedAt": "2026-08-30T07:10:18.425Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-08-30T07:10:18.425Z",
+      "completedAt": "2026-08-30T07:10:37.917Z",
+      "durationMs": 19492
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 1,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 13395,
+      "outputTokens": 803,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.05223
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 13373,
+      "outputTokens": 4556,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1176315
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 13373,
+      "outputTokens": 4159,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2586,
+      "costUsd": 0.1122015
+    }
+  ],
+  "measuredCostUsd": 0.282063,
+  "quality": {
+    "metrics": {
+      "successfulSources": 30,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 84,
+      "maximumSingleSourceShare": 0.2857142857142857,
+      "sourceDiversity": 0.8163265306122449,
+      "duplicateStorySimilarity": 0.11764705882352941,
+      "repeatedTopicFrequency": 0.16666666666666666,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.282063
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": false,
+    "score": 45,
+    "violations": [
+      {
+        "code": "bureaucratic_filler",
+        "locale": "cs",
+        "message": "Použij přímé sloveso místo úřednické konstrukce."
+      }
+    ]
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/bureaucratic_filler"
+    ]
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": "pexels:9242892",
+        "reason": "Autentická fotografie manuální práce s elektronikou - zdařilá ilustrace technické práce a hardwaru s jasnou relevancí.",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Ilustruje techniku a práci s hardwarem, relevantní k tématu AI a technologií, ale bývá přeužívána; kvalita je přijatelná.",
+            "sceneCs": "člověk pracující se základní deskou"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Cliché vizualizace AI s modrými neonovými barvami a elektrotechnickými prvky - vypadá jako zmrazená vizuální metafora z doby, která už nepatří do seriozního médií.",
+            "sceneCs": "stylizovaná grafika mozku z elektrotechnických prvků"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 3,
+            "vetoes": [
+              "wrong-subject",
+              "low-quality"
+            ],
+            "reason": "Ukazuje expozici v galerii či muzeu, ne konkrétní téma článku; rozlišení a komponování není dostatečné pro leadový obsah.",
+            "sceneCs": "muzejní expozice s osobami a projekcí"
+          },
+          {
+            "candidateId": "pixabay:2528363",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look",
+              "wrong-subject"
+            ],
+            "reason": "Abstraktní ilustrace, která nevykazuje jasnou souvislost s články - spíše vypadá jako autorská zcela nefotografická práce bez informační hodnoty.",
+            "sceneCs": "abstraktní grafika s tváří a obvody"
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [],
+            "reason": "Kvalitní fotografie hardwaru, jasně ilustruje technologii, ale téma je příliš obecné a nezacílené k obsahu článku.",
+            "sceneCs": "chladič a deska plošného spoje s obvodem"
+          },
+          {
+            "candidateId": "pixabay:3963944",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look",
+              "wrong-subject"
+            ],
+            "reason": "Stylizovaná grafika bez fotografické kvality - vypadá jako komerční stock ilustrace, nikoliv vhodná pro seriozní obsah.",
+            "sceneCs": "abstraktní grafika osob, grafů a digitálních prvků"
+          },
+          {
+            "candidateId": "pexels:9242892",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Autentická fotografie manuální práce s elektronikou - zdařilá ilustrace technické práce a hardwaru s jasnou relevancí.",
+            "sceneCs": "ruce spájející součástku na desku plošného spoje"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Počítačově vykreslenný čip s umělým neonovým osvětlením - typická vizuální cliché z 2010s science-fiction designu, nepatří do moderního technického tisku.",
+            "sceneCs": "renderovaný čip v neonově modrém a růžovém osvětlení"
+          },
+          {
+            "candidateId": "pexels:9242891",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Kvalitní fotografická dokumentace technické práce s hardwarem, ilustruje proces a techniku, relevantní k tématům AI a technologie.",
+            "sceneCs": "ruce při práci s konektory na desce plošného spoje"
+          },
+          {
+            "candidateId": "pexels:9242928",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Jasná fotografie práce s elektronikou a hardwarem, relevantní a kvalitní, ale není specificky zaměřena na konkrétní články.",
+            "sceneCs": "ruce pracující se součástkami na desce plošného spoje"
+          },
+          {
+            "candidateId": "pexels:9242886",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Autentická fotografie manipulace s hardwarem, dobré osvětlení a композиция, relevantní k technologickému obsahu.",
+            "sceneCs": "ruce demontující součást ze základní desky"
+          },
+          {
+            "candidateId": "pexels:9242275",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "Fotografie osoby s jasně viditelnou tváří (a znaky osobnosti - brýle) - porušuje pravidlo o rozpoznatelných tvářích, i když není jmenován konkrétní člověk.",
+            "sceneCs": "osoba v brýlích drží desku plošného spoje"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.010676
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected string to have <=6 characters\"\n  }\n]",
+    "stet:bureaucratic_filler",
+    "shipped_with_unresolved_review:stet:cs/bureaucratic_filler",
+    "image_rung:search",
+    "image_gate:search:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 30,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}

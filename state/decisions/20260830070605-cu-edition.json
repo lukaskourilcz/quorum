@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260830070605-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "\">Žaloba hudebních vydavatelů na Anthropic přichází po rozsudku v kauze Bartz a rozšiřuje právní tlak na celý sektor – výsledek ovlivní, jak mohou AI laboratoře legálně získávat trénovací data.",
+  "evidenceRefs": [
+    "source:techcrunch-ai",
+    "source:spaceflight-news",
+    "source:hn-frontpage",
+    "source:simonw",
+    "source:the-verge",
+    "source:tensorfeed"
+  ],
+  "editionRef": "2aa54a65f81a2cb0bf7d74b0c7577858649bc3bf912d38bb8e60f4281041b19f",
+  "generatedAt": "2026-08-30T07:06:10.526Z"
+}
