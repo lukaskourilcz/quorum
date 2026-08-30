@@ -77,7 +77,7 @@
     {
       "id": "titty-tuesdays",
       "name": "Titty Tuesdays",
-      "status": "operating",
+      "status": "paused",
       "visibility": "public",
       "taste": true,
       "ledgerNamespace": "titty-tuesdays",
