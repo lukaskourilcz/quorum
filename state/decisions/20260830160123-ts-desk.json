@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260830160123-ts-desk",
+  "phase": "ts-desk",
+  "outcome": "RESUME",
+  "summary": "The planning phase stopped and will resume. Response Response truncated at the 2500-token cap for claude-sonnet-5; raise maxOutputTokens at the 2500-token cap for claude-sonnet-5; raise maxOutputTokens",
+  "evidenceRefs": [
+    "decisions/2026-08-12-tehdejsi-svet-founding.md"
+  ],
+  "generatedAt": "2026-08-30T16:01:23.903Z"
+}
