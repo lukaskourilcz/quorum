@@ -287,24 +287,42 @@ for (const route of axeRoutes) {
   });
 }
 
+/**
+ * Open a venture's archive so its record views are on screen.
+ *
+ * A workspace shows two chips since #497 — `Latest`, which is the venture's output view, and
+ * `Archive`, which holds the rest. Every `?tab=` link still resolves to the same panel, so a test
+ * can navigate directly; what it can no longer do is find a link to a stored view without asking
+ * for the archive first. The counter each view used to carry ("5 on this tab") went with the row:
+ * a count answers "is something waiting for me", and a view's own item total never did.
+ */
+async function openVentureArchive(page: import("@playwright/test").Page): Promise<void> {
+  const archive = page.getByRole("link", { name: "Archive", exact: true });
+  if (await archive.count()) await archive.click();
+}
+
 test("Door Money renders its three bounded admin tabs", async ({ page }) => {
   await page.goto("/admin?venture=door-money&tab=recommendations", { waitUntil: "networkidle" });
 
   await expect(page.getByRole("heading", { name: "Door Money" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Door Money/ })).toHaveAttribute("aria-current", "page");
-  await expect(page.getByRole("link", { name: "recommendations" })).toHaveAttribute("aria-current", "page");
-  const actionsTab = page.locator('a[href="/admin?venture=door-money&tab=actions"]');
-  const knowledgeTab = page.locator('a[href="/admin?venture=door-money&tab=knowledge"]');
-  await expect(actionsTab).toBeVisible();
-  await expect(knowledgeTab).toBeVisible();
+  // `recommendations` is Door Money's output view, so its chip reads `Latest` and carries the
+  // current marker; the other two are one click away under Archive.
+  await expect(page.locator('a[href="/admin?venture=door-money&tab=recommendations"]'))
+    .toHaveAttribute("aria-current", "page");
   const recommendationCards = page.locator('[id^="door-money-recommendation-"]');
   const recommendationCount = await recommendationCards.count();
-  await expect(page.getByText(`${recommendationCount} on this tab`, { exact: true })).toBeVisible();
   if (recommendationCount > 0) {
     await expect(recommendationCards.first()).toBeVisible();
   } else {
     await expect(page.getByText(/No Door Money recommendation store exists yet\.|No readable Door Money recommendations are stored\./u)).toBeVisible();
   }
+
+  await openVentureArchive(page);
+  const actionsTab = page.locator('a[href="/admin?venture=door-money&tab=actions"]');
+  const knowledgeTab = page.locator('a[href="/admin?venture=door-money&tab=knowledge"]');
+  await expect(actionsTab).toBeVisible();
+  await expect(knowledgeTab).toBeVisible();
 
   await actionsTab.click();
   await expect(page).toHaveURL(/tab=actions/, { timeout: 30_000 });
@@ -330,11 +348,7 @@ test("Tehdejsi svet renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Tehdejší svět" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Tehdejší svět/ })).toHaveAttribute("aria-current", "page");
   const featuresTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=features"]');
-  const libraryTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=library"]');
-  const signalsTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=signals"]');
   await expect(featuresTab).toHaveAttribute("aria-current", "page");
-  await expect(libraryTab).toBeVisible();
-  await expect(signalsTab).toBeVisible();
   await expect(page.getByText(/No shortlist has been recorded yet\.|No readable Tehdejší svět shortlist is available\./u)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Czech performance" })).toBeVisible();
   await expect(page.getByText("Sends (primary)").first()).toBeVisible();
@@ -342,36 +356,44 @@ test("Tehdejsi svet renders its three bounded admin tabs", async ({ page }) => {
   await expect(page.locator('[data-tehdejsi-results="cs"]')).toContainText("17");
   await expect(page.locator('[data-tehdejsi-results="cs"]')).toContainText("23");
 
+  await openVentureArchive(page);
+  const libraryTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=library"]');
+  const signalsTab = page.locator('a[href="/admin?venture=tehdejsi-svet&tab=signals"]');
+  await expect(libraryTab).toBeVisible();
+  await expect(signalsTab).toBeVisible();
+
   await libraryTab.click();
   await expect(page).toHaveURL(/tab=library/);
   await expect(page.getByRole("heading", { name: "Facts-file status" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Facts browser" })).toBeVisible();
-  await expect(page.getByText("5 on this tab")).toBeVisible();
 
-  await signalsTab.click();
+  await openVentureArchive(page);
+  await page.locator('a[href="/admin?venture=tehdejsi-svet&tab=signals"]').click();
   await expect(page).toHaveURL(/tab=signals/);
   await expect(page.getByRole("heading", { name: "Community memory" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Product insight queue" })).toBeVisible();
-  await expect(page.getByText("5 on this tab")).toBeVisible();
 });
 
 test("Kvórum exposes three truthful owner-workspace tabs", async ({ page }) => {
   await page.goto("/admin?venture=kvorum&tab=recommendations", { waitUntil: "networkidle" });
-  await expect(page.getByRole("link", { name: "recommendations", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.locator('a[href="/admin?venture=kvorum&tab=recommendations"]'))
+    .toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("heading", { name: "Poplatky se vracejí do Sněmovny" })).toBeVisible();
+
+  await openVentureArchive(page);
   await expect(page.getByRole("link", { name: "monitor", exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "claims", exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Poplatky se vracejí do Sněmovny" })).toBeVisible();
-  await expect(page.getByText("1 on this tab", { exact: true })).toBeVisible();
 
   await page.getByRole("link", { name: "monitor", exact: true }).click();
   await expect(page).toHaveURL(/venture=kvorum&tab=monitor/u);
   await expect(page.getByText("Source health · recorded response", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Financování médií veřejné služby" })).toBeVisible();
 
+  await openVentureArchive(page);
   await page.getByRole("link", { name: "claims", exact: true }).click();
   await expect(page).toHaveURL(/venture=kvorum&tab=claims/u);
+  // The store's own sentence, which says more than a zero did.
   await expect(page.getByText("The claims store exists and contains no record.", { exact: true })).toBeVisible();
-  await expect(page.getByText("0 on this tab", { exact: true })).toBeVisible();
 });
 
 test("the launch board opens the admin with one row per launching venture", async ({ page }) => {
@@ -962,7 +984,6 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await expect(page.getByText("The manual post URL is recorded. No metrics were fetched.")).toBeVisible({ timeout: 60_000 });
 
     await page.goto("/admin?venture=kvorum&tab=claims", { waitUntil: "networkidle" });
-    await expect(page.getByText("3 on this tab", { exact: true })).toBeVisible();
     const publishedClaim = page
       .getByText("Návrh se vrací do sněmovního projednávání.", { exact: true })
       .locator("..");
