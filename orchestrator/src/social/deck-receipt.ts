@@ -1,3 +1,4 @@
+import type { CarouselSummaryVenture } from "@boardlessai/carousel-studio";
 import { atomicWriteJson } from "../state.js";
 
 /**
@@ -9,7 +10,14 @@ import { atomicWriteJson } from "../state.js";
  */
 export async function writeDeckReceipt(input: {
   root: string;
-  venture: "caught-up" | "mma-files";
+  /**
+   * Any venture that records a bounded summary.
+   *
+   * Two magazines wrote receipts because only two had a render path. The four newer desks now
+   * produce decks through the same module, and a receipt they cannot be written into is a deck
+   * whose design and hashes nothing remembers.
+   */
+  venture: CarouselSummaryVenture;
   date: string;
   slug: string;
   templateId: string;

@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { renderQueuedKvorumDecks } from "../../studio/deck-queue.js";
 import path from "node:path";
 import {
   BudgetError,
@@ -321,6 +322,19 @@ async function executeKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResu
  */
 export async function runKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskResult> {
   const root = input.root ?? (input.dry ? path.join(repoRoot, "tmp/dry-run/state") : stateRoot);
+
+  /*
+   * Draw whatever the owner has already approved, before asking whether the room may open.
+   *
+   * Approval happens in the admin and sets `designLab.status: "queued"`; the desk's gates govern
+   * whether new recommendations may be *produced*, not whether an approved one may be drawn. Left
+   * behind the pause, a deck the owner approved would wait on a countersignature that has nothing
+   * to do with it. It costs nothing, calls no model, and on a day with no queued approval it does
+   * nothing at all.
+   */
+  const deckRenders = input.dry ? [] : await renderQueuedKvorumDecks({ root, now: input.now });
+  const deckArtifacts = deckRenders.flatMap((outcome) => outcome.artifacts);
+
   let result: KvorumDeskResult;
   try {
     result = await executeKvorumDesk(input);
@@ -351,9 +365,9 @@ export async function runKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskR
         now: input.now,
         reason: `kv-desk did not open: ${result.reason ?? "a required gate was closed"}`
       });
-      return { ...result, artifacts: recorded.artifacts };
+      return { ...result, artifacts: [...recorded.artifacts, ...deckArtifacts] };
     }
-    return result;
+    return { ...result, artifacts: [...result.artifacts, ...deckArtifacts] };
   }
 
   let recommendationArtifacts: string[] = [];
@@ -416,7 +430,8 @@ export async function runKvorumDesk(input: KvorumDeskInput): Promise<KvorumDeskR
       ...result.artifacts,
       ...recommendationArtifacts,
       ...recordArtifacts,
-      ...agendaArtifacts
+      ...agendaArtifacts,
+      ...deckArtifacts
     ])]
   };
 }
