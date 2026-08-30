@@ -1,6 +1,6 @@
 {
   "schemaVersion": "owner-attention/1",
-  "generatedAt": "2026-08-30T00:16:53.747Z",
+  "generatedAt": "2026-08-30T12:01:11.113Z",
   "approvals": [],
   "manualTasks": [
     {
@@ -15,34 +15,6 @@
       "source": {
         "kind": "runtime",
         "ref": "ADMIN_USER"
-      },
-      "since": null,
-      "urgency": "blocking"
-    },
-    {
-      "id": "APIFY_TOKEN",
-      "title": "GoVIRAL has no trend data source",
-      "plain": "GoVIRAL's Monday meeting has no trend data until an Apify account exists on the free plan.",
-      "steps": [
-        "Sign up at apify.com on the Free plan — no card",
-        "Copy the API token",
-        "Add APIFY_TOKEN to the repository's Actions secrets"
-      ],
-      "source": {
-        "kind": "runtime",
-        "ref": "APIFY_TOKEN"
-      },
-      "since": null,
-      "urgency": "blocking"
-    },
-    {
-      "id": "approve-door-money-s-private-source-book-source-001",
-      "title": "Approve Door Money's private source (BOOK-SOURCE-001)",
-      "plain": "confirm that the English manuscript exists, create its private Git repository and keep the working clone outside this public checkout. Put the manuscript at the gitignored local path or pass it explicitly to the CLI; set BOOK_PRIVATE_CLONE_PATH for a local live desk. The optional fine-grained BOOK_SOURCE_TOKEN is only for the owner's read-only checkout step: the shipped runtime does not fetch a ho",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
       },
       "since": null,
       "urgency": "blocking"
@@ -63,9 +35,21 @@
       "urgency": "blocking"
     },
     {
-      "id": "land-the-production-domain-clear-the-handle-and-sign-or-decline-ts-accounts-003",
-      "title": "Land the production domain, clear the handle and sign or decline TS-ACCOUNTS-003",
-      "plain": "finish the product's existing",
+      "id": "create-door-money-s-private-source-repository",
+      "title": "Create Door Money's private source repository",
+      "plain": "BOOK-SOURCE-001 was signed on 2026-08-29, so what is left is yours to create rather than to decide: the English manuscript's private Git repository, with the working clone outside this public checkout. Put the manuscript at the gitignored local path or pass it explicitly to the CLI; set BOOK_PRIVATE_CLONE_PATH for a local live desk. The optional fine-grained BOOK_SOURCE_TOKEN is only for the owner",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "land-the-production-domain-and-clear-the-handle",
+      "title": "Land the production domain and clear the handle",
+      "plain": "TS-ACCOUNTS-003 was signed on 2026-08-29; the domain and the handle are what remain. Finish the product's existing",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -135,30 +119,6 @@
       "urgency": "soon"
     },
     {
-      "id": "approve-and-run-the-bounded-ingestion-book-ingest-002",
-      "title": "Approve and run the bounded ingestion (BOOK-INGEST-002)",
-      "plain": "review the exact roles and ceilings in state/INBOX.md: $3.00 for the program, $0.80 per day and $0.10 per call, all still under the company caps. After both book approvals are checked, run pnpm book:ingest -- --manuscript <ignored-path> --private-root <private-clone> locally. A stop is resumable for the same manuscript hash; do not copy the source or private output into this repository to make a h",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
-      "id": "approve-manual-door-money-results-dm-results-004",
-      "title": "Approve manual Door Money results (DM-RESULTS-004)",
-      "plain": "decide whether views, likes, comments, shares, saves, follows and link taps typed from the platform's own screen may become owner-result-entry/1 evidence. Check the matching item in state/INBOX.md to open that admin save; until then it fails closed. This remains inside D9: no analytics account, API, cookie, pixel, scrape or automated ingestion, and missing results remain unavailable rather than ze",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
       "id": "approve-tehdej-sv-t-s-first-12-feature-content-bank",
       "title": "Approve Tehdejší svět's first 12-feature content bank",
       "plain": "review both language packages, their source coverage, tier labels, licences, send-target questions and Design Lab previews before day 1. Approval of an individual feature still does not create an account or post it; the owner performs every external post by hand.",
@@ -185,9 +145,9 @@
       "urgency": "soon"
     },
     {
-      "id": "clear-door-money-and-choose-future-accounts-dm-accounts-003",
-      "title": "Clear Door Money and choose future accounts (DM-ACCOUNTS-003)",
-      "plain": "finish the shared handle/collision/trademark screen for \"Door Money\", decide whether the account should instead carry the English book title, and choose any of Instagram, TikTok, X, Threads or YouTube. Check the matching item in state/INBOX.md before creating an account. You create and configure it; BoardlessAI remains drafts-only and has no credential, publisher or autopublish permission.",
+      "id": "clear-the-door-money-handle-and-create-its-accounts",
+      "title": "Clear the Door Money handle and create its accounts",
+      "plain": "DM-ACCOUNTS-003 was signed on 2026-08-29. What is left: the shared handle/collision/trademark screen for \"Door Money\", whether the account should carry the English book title instead, and which of Instagram, TikTok, X, Threads or YouTube to open. You create and configure it; BoardlessAI remains drafts-only and has no credential, publisher or autopublish permission.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -402,18 +362,6 @@
       "urgency": "soon"
     },
     {
-      "id": "review-and-countersign-or-decline-the-four-12-august-founding-decisions",
-      "title": "Review and countersign or decline the four 12 August founding decisions",
-      "plain": "read state/decisions/2026-08-12-kvorum-founding.md, state/decisions/2026-08-12-booksofhistory-founding.md, state/decisions/2026-08-12-door-money-founding.md and state/decisions/2026-08-12-tehdejsi-svet-founding.md. Each implemented venture remains fixture-only until its own countersignature and approvals are complete. Kvórum additionally needs a countersigned capacity reallocation that frees at le",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
       "id": "run-the-admin-e2e-specs-on-every-pull-request-not-only-on-full-e2e",
       "title": "Run the admin e2e specs on every pull request, not only on [full-e2e]",
       "plain": "the site's Playwright job in .github/workflows/ci.yml runs only when a PR title or commit message contains [full-e2e], so nothing has run it for weeks. In that time the navigation guard drifted two destinations out of date, the visual guard was looking for baselines in a directory Playwright never writes to, a WCAG AA contrast failure went unseen and three assertions about the admin's privacy head",
@@ -426,28 +374,13 @@
       "urgency": "soon"
     },
     {
-      "id": "sign-the-six-titty-tuesdays-image-approvals-or-decide-not-to",
-      "title": "Sign the six Titty Tuesdays image approvals, or decide not to",
-      "plain": "TT-VISUALS-SPEND-001 through TT-VISUALS-CONTRACT-006 in state/INBOX.md, all-or-nothing. They cover about $0.057 a day (roughly $1.70 a month, ceiling $2.00), the two renderer routes, keeping the images inside state/ rather than the public site, the doctrine checklist and the delete-on-doctrine rule, the daily two-image shape, and the design-proposal/1 contract. Nothing renders until all six are ti",
+      "id": "run-the-bounded-ingestion",
+      "title": "Run the bounded ingestion",
+      "plain": "BOOK-INGEST-002 was signed on 2026-08-29 at $3.00 for the program, $0.80 per day and $0.10 per call, all inside the company caps. With the private repository above in place, run pnpm book:ingest -- --manuscript <ignored-path> --private-root <private-clone> locally. A stop is resumable for the same manuscript hash; do not copy the source or private output into this repository to make a hosted run c",
       "steps": [],
       "source": {
         "kind": "needed",
         "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "soon"
-    },
-    {
-      "id": "THE_ODDS_API_KEY",
-      "title": "FightAIQ has no odds source",
-      "plain": "FightAIQ has no price source to check its model against, so its readiness files stay empty.",
-      "steps": [
-        "Get a free key at the-odds-api.com",
-        "Add THE_ODDS_API_KEY to the repository's Actions secrets"
-      ],
-      "source": {
-        "kind": "runtime",
-        "ref": "THE_ODDS_API_KEY"
       },
       "since": null,
       "urgency": "soon"
@@ -516,6 +449,18 @@
       "id": "countersign-and-connect-social-distribution-social-distribution-connection-001",
       "title": "Countersign and connect Social Distribution (SOCIAL-DISTRIBUTION-CONNECTION-001).",
       "plain": "the runtime's own per-venture thresholds, which are not all ten. Keep SOCIAL_KILL_SWITCH=true; setting it to false removes only the owner stop, and each venture's counter, credentials, roles and safety checks still have to pass. Until a channel is enabled the composer no longer renders inventory nothing can consume.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "whenever"
+    },
+    {
+      "id": "countersign-or-decline-door-money-s-founding-decision",
+      "title": "Countersign or decline Door Money's founding decision",
+      "plain": "Kvórum's, BOOKSOFHISTORY's and Tehdejší svět's were signed on 2026-08-29, and Kvórum's capacity reallocation with them, so its desk is open. state/decisions/2026-08-12-door-money-founding.md is the one left, and it is not urgent: you paused Door Money in Settings, and a paused venture holds no meetings whether its founding is signed or not. Sign it when you resume the venture.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -633,9 +578,9 @@
       "urgency": "whenever"
     },
     {
-      "id": "enable-personal-growth-provider-flags-only-after-the-reviewed-connection-test",
-      "title": "Enable Personal Growth provider flags only after the reviewed connection test.",
-      "plain": "Once the exact read scopes, account ids, token storage and renewal path are verified, countersign the production change that enables only the required insight flags. Keep publishing false; Personal Growth has no posting authority.",
+      "id": "delete-the-merged-branch-of-pr-511",
+      "title": "Delete the merged branch of PR #511",
+      "plain": "press \"Delete branch\" on the merged pull request. The overnight session merged it but could not remove the remote branch: the git relay in that environment answers a branch deletion with 403.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -645,16 +590,13 @@
       "urgency": "whenever"
     },
     {
-      "id": "FAL_KEY",
-      "title": "No image rendering key is configured",
-      "plain": "Rendered illustrations and the Titty Tuesdays image pipeline stay off without this key.",
-      "steps": [
-        "Create a fal.ai key",
-        "Add FAL_KEY to the repository's Actions secrets"
-      ],
+      "id": "enable-personal-growth-provider-flags-only-after-the-reviewed-connection-test",
+      "title": "Enable Personal Growth provider flags only after the reviewed connection test.",
+      "plain": "Once the exact read scopes, account ids, token storage and renewal path are verified, countersign the production change that enables only the required insight flags. Keep publishing false; Personal Growth has no posting authority.",
+      "steps": [],
       "source": {
-        "kind": "runtime",
-        "ref": "FAL_KEY"
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
       },
       "since": null,
       "urgency": "whenever"
@@ -675,18 +617,6 @@
       "id": "optionally-apply-for-google-s-official-trends-api-alpha",
       "title": "Optionally apply for Google's official Trends API alpha",
       "plain": "free, application-gated. If granted it would replace the Trends RSS fetch with a supported endpoint. Nothing depends on it and nothing may be built assuming it — the RSS path is the design.",
-      "steps": [],
-      "source": {
-        "kind": "needed",
-        "ref": "docs/NEEDED.md"
-      },
-      "since": null,
-      "urgency": "whenever"
-    },
-    {
-      "id": "pick-kv-rum-s-desk-hour",
-      "title": "Pick Kvórum's desk hour",
-      "plain": "the design defaults to 21:00 Prague (full-day harvest, you review in the evening, posts go out next morning). If same-evening posting matters more than a complete day, the slot is 12:00 instead. One registry field, decided at founding, awkward to move later without a decision.",
       "steps": [],
       "source": {
         "kind": "needed",
