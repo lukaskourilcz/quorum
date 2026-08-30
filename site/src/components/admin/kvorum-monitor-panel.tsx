@@ -62,7 +62,7 @@ function Quota({ snapshot }: { snapshot: AdminKvorumSnapshot }) {
           <AdminMetric className="px-3 last:pr-0" label="Last recorded" value={<span className="break-all text-[length:var(--admin-type-control)]">{quota.updatedAt}</span>} />
         </div>
         {quota.perActorCounts.length ? (
-          <div className="mt-3 overflow-x-auto pb-1" data-horizontal-scroll>
+          <div aria-label="Runs and items per actor" className="admin-focus-ring mt-3 overflow-x-auto pb-1" data-horizontal-scroll role="region" tabIndex={0}>
             <div className="flex min-w-max gap-2">
               {quota.perActorCounts.map((actor) => (
                 <AdminEntityBadge className="py-2" key={actor.actorId}>
@@ -84,7 +84,7 @@ function SourceHealth({ day }: { day: AdminKvorumMonitorDay }) {
   return (
     <section className="grid min-w-0 gap-2">
       <h3 className="m-0 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Source health · recorded response</h3>
-      <div className="overflow-x-auto pb-1" data-horizontal-scroll>
+      <div aria-label="Source health for this day" className="admin-focus-ring overflow-x-auto pb-1" data-horizontal-scroll role="region" tabIndex={0}>
         <div className="flex min-w-max gap-2">
           {day.sourceResults.map((source) => (
             <article className="w-64 rounded-[var(--admin-radius)] border border-[var(--admin-border)] bg-[var(--admin-surface)] p-3" key={`${source.kind}-${source.sourceId}`}>

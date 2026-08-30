@@ -678,7 +678,9 @@ test("marketingShark packages tab shows stored package cards", async ({ page }) 
 });
 
 test("DNESKAi social archive renders its Czech-only packs", async ({ page }) => {
-  await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
+  // On DNESKAi's own page since #500. It is that venture's output, and it sat on the company
+  // overview only because that is where it was built.
+  await page.goto("/admin?venture=caught-up", { waitUntil: "networkidle" });
   const archive = page.locator("#social-archive");
   await expect(archive.getByRole("heading", { name: "CS social posts" })).toHaveCount(2);
   await expect(archive.getByText("English edition")).toHaveCount(0);

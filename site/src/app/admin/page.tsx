@@ -126,12 +126,21 @@ function ventureName(id: string, name: string): string {
  */
 function VentureViewChip({
   brand,
+  current,
   href,
   label,
   on,
   small = false
 }: {
   brand: string;
+  /**
+   * Whether this chip is the page the reader is on.
+   *
+   * Separate from `on`, which is only the tint. `Archive` is lit while the reader is inside it and
+   * points at its first view, so marking it current put `aria-current="page"` on two links with
+   * the same href — the group's chip and the view's own. The view's is the true one.
+   */
+  current?: boolean;
   href: string;
   label: string;
   on: boolean;
@@ -139,7 +148,7 @@ function VentureViewChip({
 }) {
   return (
     <Link
-      aria-current={on ? "page" : undefined}
+      aria-current={(current ?? on) ? "page" : undefined}
       className={`admin-focus-ring min-h-[var(--admin-touch-target)] rounded-[var(--admin-radius)] border px-3 py-2 font-semibold uppercase tracking-[var(--admin-tracking-label)] transition-colors duration-[var(--admin-motion-fast)] md:min-h-[var(--admin-control-height)] ${small ? "text-[length:var(--admin-type-micro)]" : "text-[length:var(--admin-type-label)]"}`}
       data-admin-view-chip={label}
       href={href}
@@ -299,6 +308,18 @@ export default async function AdminPage({
    * the owner asks for them.
    */
   const ventureViews = selectedVenture ? adminVentureViews(selectedVenture.id, selectedVenture.tabs) : null;
+  /*
+   * The one count that survived the tab row.
+   *
+   * `fighters` is FightAIQ's output view, so its chip now reads `Latest` — and the unresolved
+   * count rode on that chip's label. A count that answers "is something waiting for me" is
+   * exactly the kind #497 keeps, so it rides on `Latest` instead, and shows only when there is
+   * something unresolved to show.
+   */
+  const unresolvedFighterCount = fightaiq.fighters.reduce(
+    (count, fighter) => count + fighter.discrepancyDetails.filter((item) => item.status === "open").length,
+    0
+  );
   const selectedTab = selectedVenture
     ? selectedVenture.tabs.includes(requestedTab as AdminVentureTab)
       ? (requestedTab as AdminVentureTab)
@@ -967,8 +988,10 @@ export default async function AdminPage({
               The lists themselves live one click away, where acting on them belongs. */}
           <section className="grid min-w-0 gap-4" data-admin-overview="waiting">
             <h2 className="m-0 text-[length:var(--admin-type-section)] font-semibold text-[var(--admin-foreground)]">Waiting for you</h2>
-            <Panel note="Approvals, your own tasks, and anything approved but undelivered" title="What needs you">
-              <div className="grid gap-3 md:grid-cols-2">
+            <Panel note="Signatures and setup" title="What needs you">
+              {/* Stacked, not two up. These items carry whole sentences and a source path; in a
+                  half-width column at 768px the headings ran past their card. */}
+              <div className="grid min-w-0 gap-3">
                 <OwnerAttentionPanel kind="approvals" snapshot={ownerAttention} />
                 <OwnerAttentionPanel kind="manual-tasks" snapshot={ownerAttention} />
               </div>
@@ -1058,15 +1081,21 @@ export default async function AdminPage({
           */}
           <div className="grid gap-2" data-admin-venture-views>
             <div className="flex flex-wrap items-center gap-2">
+              {/* The output view's own address, not a bare `?venture=`. The workspace opens here
+                  either way; naming the tab keeps the URL self-describing and keeps every
+                  registered view a link something can point `aria-current` at. */}
               <VentureViewChip
                 brand={brand}
-                href={`/admin?venture=${selectedVenture.id}`}
-                label="Latest"
+                href={`/admin?venture=${selectedVenture.id}&tab=${ventureViews?.output ?? selectedVenture.tabs[0]}`}
+                label={unresolvedFighterCount > 0 && selectedVenture.id === "fightaiq"
+                  ? `Latest · ${unresolvedFighterCount} unresolved`
+                  : "Latest"}
                 on={!inArchive}
               />
               {ventureViews?.archive.length ? (
                 <VentureViewChip
                   brand={brand}
+                  current={false}
                   href={`/admin?venture=${selectedVenture.id}&tab=${ventureViews.archive[0]}`}
                   label="Archive"
                   on={inArchive}
@@ -1080,8 +1109,8 @@ export default async function AdminPage({
                     brand={brand}
                     href={`/admin?venture=${selectedVenture.id}&tab=${tab}`}
                     key={tab}
-                    label={selectedVenture.id === "fightaiq" && tab === "fighters"
-                      ? `${tabLabel(tab)} · ${fightaiq.fighters.reduce((count, fighter) => count + fighter.discrepancyDetails.filter((item) => item.status === "open").length, 0)} unresolved`
+                    label={selectedVenture.id === "fightaiq" && tab === "fighters" && unresolvedFighterCount > 0
+                      ? `${tabLabel(tab)} · ${unresolvedFighterCount} unresolved`
                       : tabLabel(tab)}
                     on={selectedTab === tab}
                     small
