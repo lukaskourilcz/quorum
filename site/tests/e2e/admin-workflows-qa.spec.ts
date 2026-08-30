@@ -230,9 +230,24 @@ test("money, fixed costs, file details and launch binder remain truthful and con
     .toBeVisible();
   await expect(page.getByText("$50.00", { exact: false }).first())
     .toBeVisible();
-  await expect(page.getByRole("button", { name: "Add cost" })).toBeDisabled();
-  await expect(page.getByRole("button", { name: "Save fixed costs" }))
-    .toBeDisabled();
+  /*
+   * The editor's controls follow the deployment's write mode, and this asks the shell which one
+   * it is in rather than assuming the read-only half. Both buttons were pinned disabled, which is
+   * only true where saving is impossible — the third assertion in this suite written for a
+   * deployment the browser tests never run against.
+   */
+  const writable = await page.locator("[data-admin-writes]").getAttribute("data-admin-writes");
+  const addCost = page.getByRole("button", { name: "Add cost" });
+  const saveCosts = page.getByRole("button", { name: "Save fixed costs" });
+  if (writable === "disabled") {
+    await expect(addCost).toBeDisabled();
+    await expect(saveCosts).toBeDisabled();
+  } else {
+    // Both are live where saving is possible: neither is gated on having edited something, and
+    // `guardAdminWrites` above is what stops this test from actually writing.
+    await expect(addCost).toBeEnabled();
+    await expect(saveCosts).toBeEnabled();
+  }
   await expect(page.getByRole("link", { name: "Public Money" }))
     .toHaveAttribute("href", "/results#money");
   await expectNoDocumentOverflow(page, "money and fixed costs");
