@@ -96,6 +96,31 @@ export interface ContestAdminSource {
   verificationDueOn: string;
 }
 
+/**
+ * One optional pilot lane, as the owner needs to see it.
+ *
+ * `verdict` and `heldReason` are both here because they answer different questions: the verdict is
+ * what the evidence says about the lane, and the held reason is why there is no evidence. A lane
+ * showing "undecided" with no explanation would look like an oversight rather than a decision.
+ */
+export interface ContestAdminPilotLane {
+  platform: string;
+  enabled: boolean;
+  heldReason: string;
+  queries: number;
+  maxResultsPerRun: number;
+  maxCostUsd: number;
+  /** From the newest receipt, when one exists. Nulls mean the lane has never run. */
+  outcome: string | null;
+  fetched: number | null;
+  unique: number | null;
+  entryReady: number | null;
+  costUsd: number | null;
+  costPerUniqueUsd: number | null;
+  verdict: string | null;
+  verdictReason: string | null;
+}
+
 export interface AdminContestRadarSnapshot {
   recordsState: ContestStoreState;
   records: ContestAdminRow[];
@@ -105,6 +130,10 @@ export interface AdminContestRadarSnapshot {
   ownerEvents: ContestAdminOwnerEvent[];
   sourcesState: ContestStoreState;
   sources: ContestAdminSource[];
+  pilotState: ContestStoreState;
+  pilotLanes: ContestAdminPilotLane[];
+  pilotDate: string | null;
+  pilotMode: string | null;
   /** Read from the countersigned founding rather than assumed. */
   authority: { foundingCountersigned: boolean; paidPathsHeld: boolean };
   unreadable: number;
@@ -337,6 +366,91 @@ async function readSources(): Promise<{ state: ContestStoreState; values: Contes
   }
 }
 
+/**
+ * The optional pilot's configured lanes, joined to the newest receipt if there is one.
+ *
+ * The configuration is the source of what a lane *is*; the receipt is the source of what it *did*.
+ * A lane with no receipt shows nulls rather than zeros, because "never ran" and "ran and found
+ * nothing" are the two answers the owner most needs to tell apart before deciding anything.
+ */
+async function readPilot(): Promise<{
+  state: ContestStoreState;
+  lanes: ContestAdminPilotLane[];
+  date: string | null;
+  mode: string | null;
+  unreadable: number;
+}> {
+  let configured: Array<Record<string, unknown>>;
+  try {
+    const raw = JSON.parse(await readFile(
+      path.join(repositoryRoot(), "config/contest-radar-social-pilot.json"),
+      "utf8"
+    )) as unknown;
+    const lanes = object(raw)?.lanes;
+    configured = Array.isArray(lanes) ? lanes.flatMap((lane) => object(lane) ? [object(lane)!] : []) : [];
+  } catch {
+    return { state: "unreadable", lanes: [], date: null, mode: null, unreadable: 1 };
+  }
+  if (configured.length === 0) return { state: "missing", lanes: [], date: null, mode: null, unreadable: 0 };
+
+  const receipt = await readNewestJson("state/ventures/contest-radar/social-pilot");
+  const measured = new Map<string, Record<string, unknown>>();
+  const receiptLanes = object(receipt?.body)?.lanes;
+  if (Array.isArray(receiptLanes)) {
+    for (const entry of receiptLanes) {
+      const lane = object(entry);
+      const platform = text(lane?.platform, 20);
+      if (lane && platform) measured.set(platform, lane);
+    }
+  }
+
+  const number = (value: unknown): number | null => typeof value === "number" && Number.isFinite(value) ? value : null;
+  const lanes = configured.flatMap((lane): ContestAdminPilotLane[] => {
+    const platform = text(lane.platform, 20);
+    if (!platform) return [];
+    const seen = measured.get(platform);
+    return [{
+      platform,
+      enabled: lane.enabled === true,
+      heldReason: text(lane.heldReason, 600) ?? "",
+      queries: Array.isArray(lane.queries) ? lane.queries.length : 0,
+      maxResultsPerRun: number(lane.maxResultsPerRun) ?? 0,
+      maxCostUsd: number(lane.maxCostUsd) ?? 0,
+      outcome: seen ? text(seen.outcome, 20) : null,
+      fetched: seen ? number(seen.fetched) : null,
+      unique: seen ? number(seen.unique) : null,
+      entryReady: seen ? number(seen.entryReady) : null,
+      costUsd: seen ? number(seen.costUsd) : null,
+      costPerUniqueUsd: seen ? number(seen.costPerUniqueUsd) : null,
+      verdict: seen ? text(seen.verdict, 20) : null,
+      verdictReason: seen ? text(seen.verdictReason, 400) : null
+    }];
+  });
+
+  return {
+    state: "present",
+    lanes,
+    date: receipt ? receipt.name.slice(0, 10) : null,
+    mode: receipt ? text(object(receipt.body)?.mode, 20) : null,
+    unreadable: 0
+  };
+}
+
+async function readNewestJson(relative: string): Promise<{ name: string; body: unknown } | null> {
+  try {
+    const directory = path.join(repositoryRoot(), relative);
+    const names = (await readdir(directory))
+      .filter((name) => /^\d{4}-\d{2}-\d{2}\.json$/u.test(name))
+      .sort()
+      .reverse();
+    const newest = names[0];
+    if (!newest) return null;
+    return { name: newest, body: JSON.parse(await readFile(path.join(directory, newest), "utf8")) as unknown };
+  } catch {
+    return null;
+  }
+}
+
 async function readAuthority(): Promise<AdminContestRadarSnapshot["authority"]> {
   try {
     const raw = await readFile(
@@ -353,11 +467,12 @@ async function readAuthority(): Promise<AdminContestRadarSnapshot["authority"]> 
 }
 
 export async function readAdminContestRadar(): Promise<AdminContestRadarSnapshot> {
-  const [records, runs, ownerEvents, sources, authority] = await Promise.all([
+  const [records, runs, ownerEvents, sources, pilot, authority] = await Promise.all([
     readDirectory("state/ventures/contest-radar/records", /\.json$/u, parseRecord),
     readDirectory("state/ventures/contest-radar/runs", /^\d{4}-\d{2}-\d{2}\.json$/u, parseRun),
     readOwnerEvents(),
     readSources(),
+    readPilot(),
     readAuthority()
   ]);
 
@@ -370,8 +485,12 @@ export async function readAdminContestRadar(): Promise<AdminContestRadarSnapshot
     ownerEvents: ownerEvents.values.sort((left, right) => right.recordedAt.localeCompare(left.recordedAt)),
     sourcesState: sources.state,
     sources: sources.values.sort((left, right) => left.id.localeCompare(right.id)),
+    pilotState: pilot.state,
+    pilotLanes: pilot.lanes.sort((left, right) => left.platform.localeCompare(right.platform)),
+    pilotDate: pilot.date,
+    pilotMode: pilot.mode,
     authority,
-    unreadable: records.unreadable + runs.unreadable + ownerEvents.unreadable + sources.unreadable
+    unreadable: records.unreadable + runs.unreadable + ownerEvents.unreadable + sources.unreadable + pilot.unreadable
   };
   return { ...body, snapshotHash: createHash("sha256").update(JSON.stringify(body)).digest("hex") };
 }

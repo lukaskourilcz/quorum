@@ -64,15 +64,17 @@ export async function auditContestRadarRelease(options: {
   const repoRoot = options.repoRoot ?? defaultRepoRoot;
   const configRoot = options.configRoot ?? defaultConfigRoot;
 
-  const [venturesRaw, sourcesRaw, capabilitiesRaw, allowlistRaw, founding, source, capacity] = await Promise.all([
-    readText(configRoot, "ventures.json"),
-    readText(configRoot, "contest-radar-sources.json"),
-    readText(configRoot, "venture-capabilities.json"),
-    readText(configRoot, "network-allowlist.json"),
-    readText(repoRoot, "state/decisions/2026-08-30-contest-radar-founding.md"),
-    ventureSource(repoRoot),
-    readText(repoRoot, "state/decisions/2026-08-30-contest-radar-budget-capacity.md")
-  ]);
+  const [venturesRaw, sourcesRaw, capabilitiesRaw, allowlistRaw, founding, source, capacity, pilotRaw] =
+    await Promise.all([
+      readText(configRoot, "ventures.json"),
+      readText(configRoot, "contest-radar-sources.json"),
+      readText(configRoot, "venture-capabilities.json"),
+      readText(configRoot, "network-allowlist.json"),
+      readText(repoRoot, "state/decisions/2026-08-30-contest-radar-founding.md"),
+      ventureSource(repoRoot),
+      readText(repoRoot, "state/decisions/2026-08-30-contest-radar-budget-capacity.md"),
+      readText(configRoot, "contest-radar-social-pilot.json")
+    ]);
 
   const ventures = JSON.parse(venturesRaw || "{}") as {
     ventures?: Array<{ id: string; visibility?: string; meetings?: unknown[]; ledgerNamespace?: string }>;
@@ -85,6 +87,10 @@ export async function auditContestRadarRelease(options: {
     isolationRules?: Array<{ id: string; sources?: string[] }>;
   };
   const allowlist = JSON.parse(allowlistRaw || "{}") as { runtimeHosts?: string[] };
+  const pilot = JSON.parse(pilotRaw || "{}") as {
+    collectionOwner?: string;
+    lanes?: Array<{ platform: string; enabled: boolean; heldReason?: string }>;
+  };
 
   const entries = (ventures.ventures ?? []).filter((venture) => venture.id === "contest-radar");
   const entry = entries[0];
@@ -176,6 +182,17 @@ export async function auditContestRadarRelease(options: {
     sources.every((entry) => !/instagram|tiktok|threads|facebook/iu.test(entry.host)),
     "GoVIRAL owns Instagram and TikTok collection; no Contest Radar source contacts a social host.",
     ["config/contest-radar-sources.json"]
+  ));
+
+  const lanes = pilot.lanes ?? [];
+  checks.push(check(
+    "optional-social-pilot-shut",
+    lanes.length === 2
+      && pilot.collectionOwner === "goviral"
+      && lanes.every((lane) => lane.enabled === false && (lane.heldReason ?? "").length > 0)
+      && lanes.every((lane) => ["instagram", "tiktok"].includes(lane.platform)),
+    "The optional pilot exists as a fixture-backed slice with both lanes disabled and a reason each. GoVIRAL owns collection, and Facebook is not a lane the contract can express.",
+    ["config/contest-radar-social-pilot.json", "orchestrator/src/ventures/contest-radar/social-pilot.ts"]
   ));
 
   return {

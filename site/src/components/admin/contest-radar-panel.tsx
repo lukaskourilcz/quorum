@@ -193,11 +193,90 @@ function Sources({ snapshot }: { snapshot: AdminContestRadarSnapshot }) {
           </AdminTable>
         </AdminTableRegion>
       </Card>
+      <SocialPilot snapshot={snapshot} />
       <AdminCallout tone="information">
         A discovery-only source can open an investigation and never establish a fact. A rejected
         one refused a plain request; nothing here works around a login page or a bot check.
       </AdminCallout>
     </div>
+  );
+}
+
+/**
+ * The optional Instagram and TikTok lanes, held.
+ *
+ * Yield and cost show as an em dash rather than a zero when a lane has never run. A held lane
+ * reading "0 unique leads at $0.00" would look like a lane that tried and failed, which is the one
+ * thing this table must not say.
+ */
+function SocialPilot({ snapshot }: { snapshot: AdminContestRadarSnapshot }) {
+  if (snapshot.pilotState === "unreadable") {
+    return (
+      <AdminStateMessage
+        description="The optional pilot configuration could not be read."
+        state="unavailable"
+        title="Pilot configuration unavailable"
+      />
+    );
+  }
+  if (snapshot.pilotLanes.length === 0) return null;
+
+  const money = (value: number | null) => value === null ? "—" : `$${value.toFixed(4)}`;
+  const count = (value: number | null) => value === null ? "—" : String(value);
+
+  return (
+    <Card
+      note={snapshot.pilotDate ? `${snapshot.pilotMode ?? "fixture"} · ${snapshot.pilotDate}` : "never run"}
+      title="Optional social pilot"
+    >
+      <AdminTableRegion label="Optional social discovery lanes">
+        <AdminTable>
+          <thead>
+            <tr>
+              <AdminTableHead scope="col">Lane</AdminTableHead>
+              <AdminTableHead scope="col">State</AdminTableHead>
+              <AdminTableHead scope="col">Fetched</AdminTableHead>
+              <AdminTableHead scope="col">Unique</AdminTableHead>
+              <AdminTableHead scope="col">Entry-ready</AdminTableHead>
+              <AdminTableHead scope="col">Cost</AdminTableHead>
+              <AdminTableHead scope="col">Verdict</AdminTableHead>
+            </tr>
+          </thead>
+          <tbody>
+            {snapshot.pilotLanes.map((lane) => (
+              <tr key={lane.platform} data-contest-pilot-lane={lane.platform}>
+                <AdminTableCell className="whitespace-nowrap">
+                  {lane.platform === "instagram" ? "Instagram" : "TikTok"}
+                </AdminTableCell>
+                <AdminTableCell className="whitespace-nowrap">
+                  <AdminStatusBadge tone={lane.enabled ? "success" : "information"}>
+                    {lane.enabled ? "enabled" : "held"}
+                  </AdminStatusBadge>
+                </AdminTableCell>
+                <AdminTableCell className="admin-tabular">{count(lane.fetched)}</AdminTableCell>
+                <AdminTableCell className="admin-tabular">{count(lane.unique)}</AdminTableCell>
+                <AdminTableCell className="admin-tabular">{count(lane.entryReady)}</AdminTableCell>
+                <AdminTableCell className="admin-tabular">{money(lane.costUsd)}</AdminTableCell>
+                <AdminTableCell>{lane.verdict ?? "undecided"}</AdminTableCell>
+              </tr>
+            ))}
+          </tbody>
+        </AdminTable>
+      </AdminTableRegion>
+      <div className="mt-4 grid gap-3">
+        {snapshot.pilotLanes.map((lane) => (
+          <p
+            className="text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]"
+            key={`${lane.platform}-reason`}
+          >
+            <strong className="text-[var(--admin-foreground)]">
+              {lane.platform === "instagram" ? "Instagram" : "TikTok"}:
+            </strong>{" "}
+            {lane.verdictReason ?? lane.heldReason}
+          </p>
+        ))}
+      </div>
+    </Card>
   );
 }
 

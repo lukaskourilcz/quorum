@@ -470,6 +470,30 @@
         "additionalProperties": false
       }
     },
+    "truncated": {
+      "default": {
+        "clusters": 0,
+        "ranks": 0
+      },
+      "type": "object",
+      "properties": {
+        "clusters": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "ranks": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "clusters",
+        "ranks"
+      ],
+      "additionalProperties": false
+    },
     "trendContext": {
       "default": {
         "topicSet": "kvorum",
@@ -653,6 +677,7 @@
     "rawItems",
     "clusters",
     "ranks",
+    "truncated",
     "trendContext",
     "purge"
   ],

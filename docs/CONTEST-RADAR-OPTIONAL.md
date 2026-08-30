@@ -7,22 +7,63 @@ them — why opening it is a decision rather than a piece of work.
 
 ## #414 — GoVIRAL-owned Instagram and TikTok contest discovery
 
-**Held.** The contract is settled; nothing collects.
+**Built as a fixture-backed slice. Both lanes disabled; nothing collects.**
 
-The idea is to test whether bounded public Instagram and TikTok discovery finds enough unique,
-entry-ready Czech and Slovak contests to justify its share of the existing GoVIRAL Apify capacity.
-The ownership split is already decided and is the reason the pilot can be considered at all:
-GoVIRAL owns actor selection, queries, scheduling, retries, the shared quota and source health;
-Contest Radar consumes recorded accepted leads and nothing else.
+The pilot exists to answer one question: does bounded public Instagram and TikTok discovery find
+unique, entry-ready Czech and Slovak contests the four free structured sources miss, at a cost worth
+its share of the existing GoVIRAL Apify capacity? Everything below is arranged to answer that with a
+fixture and to refuse to answer it with money.
 
-`social-contest-lead/1` exists in `orchestrator/src/contracts/contest-radar.ts` and is the shape a
-lead would arrive in. It is a ceiling rather than a description: a URL, a caption clipped to 280
-characters, a platform, when it was seen and when it stops mattering. It carries no handle, no
-author, no follower count, no audience identity, no comment and no media. A lead points at a page
-that might be a contest; everything that makes it one comes from that page's own rules, read
-afterwards.
+The ownership split is what makes the pilot considerable at all. GoVIRAL owns actor selection,
+queries, scheduling, retries, the shared quota reservation, the actual cost and source health.
+Contest Radar owns the shape of a lead, the arithmetic of the yield and the gate; it instantiates no
+actor, holds no token and reruns no collection.
 
-**To open it, all of these:**
+### What is built
+
+| Piece | Where |
+| --- | --- |
+| Lane configuration, queries, envelopes | `config/contest-radar-social-pilot.json` |
+| Lead, lane and receipt contracts | `orchestrator/src/contracts/contest-radar.ts` |
+| Gate, lane run, verdicts | `orchestrator/src/ventures/contest-radar/social-pilot.ts` |
+| Intake, deduplication, lead-only rule | `orchestrator/src/ventures/contest-radar/social-leads.ts` |
+| Fixtures and tests | `orchestrator/tests/contest-radar-social-pilot.test.ts` |
+| Lane health, yield, cost and verdict | Admin → Soutěžní radar → Zdroje |
+
+`social-contest-lead/1` is a ceiling rather than a description: a URL, a caption clipped to 280
+characters, a platform, the query that found it, quoted source-stated snippets, aggregate like and
+comment counts, when it was seen and when it stops mattering. It carries no handle, no author, no
+follower count, no audience identity, no comment text and no media, and `strictObject` is what keeps
+it that way — a field for an author cannot be added quietly.
+
+The caption's quoted snippets stay on the lead and never reach the candidate. A candidate crosses
+with `rulesUrl: null`, no deadline hint and no prize hint, because a caption is marketing copy: its
+"do 31. 8." arriving in the same field a WordPress listing's structured date arrives in is how
+nobody could later tell which one the owner was planning around.
+
+### The three refusals
+
+1. **A lead is never entry-ready.** `contestReadinessForLead` returns `needs-detail` and has no
+   other branch. The seven pieces of evidence entry-readiness needs — open state, mechanics,
+   deadline, eligibility, organizer legitimacy, purchase risk, official rules URL — all live on the
+   rules page.
+2. **A live pilot is unrepresentable without three authorities.** `contest-social-pilot/1` refuses
+   to parse a `live` receipt missing a countersigned capacity decision, owner source authority for
+   the specific actors, or a GoVIRAL quota reservation. A fixture receipt whose cost is above zero
+   is refused the same way. Flipping a config flag does not produce a live pilot; it produces a
+   receipt that will not parse.
+3. **A failure costs one query.** A failed actor costs its query and a line in the receipt; a
+   malformed item costs one item and is recorded as `malformed` rather than dropped, because a lane
+   that returned nothing useful and a lane that returned nothing at all deserve different verdicts.
+
+### Verdicts, on today's evidence
+
+Both lanes are **undecided**, which is the only honest verdict for a lane that has not run. The
+fixture proves the classification, the deduplication, the arithmetic and the gate; it proves nothing
+about yield, because a fixture cannot. `decideLaneVerdict` decides each lane on its own evidence:
+Instagram producing nothing would disable Instagram and say nothing about TikTok.
+
+**To open a lane, all of these:**
 
 1. The private core is complete and its release audit passes. *(Done.)*
 2. Current shared-capacity evidence shows the GoVIRAL Apify quota can absorb the pilot's share.
@@ -31,8 +72,13 @@ afterwards.
 4. Owner source authority for the specific actors, with their terms read at that time. Provisional
    actor names in the original brief are not authority.
 
+The gate reports every unmet condition at once rather than stopping at the first, so satisfying one
+does not look like progress while the answer stays no.
+
 Facebook is out of scope, along with private groups, login cookies, owner sessions, DMs, comment
-collection, browser automation and any account interaction.
+collection, browser automation and any account interaction. It is excluded by a closed enum rather
+than by configuration: a Facebook lane cannot be parsed, so adding one would be a visible contract
+change with a test failing beside it.
 
 ## #430 — Rule-permitted referral promotion through Social Distribution
 

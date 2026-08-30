@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "contest-social-pilot-config/1",
+  "version": "2026-08-30a",
+  "decisionRef": "state/decisions/2026-08-30-contest-radar-founding.md",
+  "issueRef": "GitHub #414",
+  "collectionOwner": "goviral",
+  "ceilingUsd": 0.1,
+  "heldReason": "The pilot is held-optional. GoVIRAL owns every actor, query and quota decision; Contest Radar reads accepted leads and schedules nothing. Enabling a lane additionally requires a countersigned budget-capacity decision, owner authority for the specific actors with their terms read at that time, and a GoVIRAL reservation against the shared Apify quota.",
+  "lanes": [
+    {
+      "platform": "instagram",
+      "enabled": false,
+      "heldReason": "Public logged-out Instagram discovery is hashtag and profile shaped. Arbitrary caption-keyword search is not something the retained actor is known to provide, so the lane is sized for hashtags and stays shut until GoVIRAL's own audit says otherwise.",
+      "maxResultsPerQuery": 40,
+      "maxResultsPerRun": 120,
+      "maxCostUsd": 0.05,
+      "leadTtlDays": 14,
+      "queries": [
+        { "id": "ig-cs-soutez-tag", "term": "#soutez", "language": "cs", "shape": "hashtag" },
+        { "id": "ig-cs-vyhraj-tag", "term": "#vyhraj", "language": "cs", "shape": "hashtag" },
+        { "id": "ig-sk-sutaz-tag", "term": "#sutaz", "language": "sk", "shape": "hashtag" }
+      ]
+    },
+    {
+      "platform": "tiktok",
+      "enabled": false,
+      "heldReason": "Public TikTok keyword search offers bounded region, date and sort controls, which is the shape this pilot needs. It stays shut for the same three reasons as Instagram, and its verdict is decided on its own evidence rather than Instagram's.",
+      "maxResultsPerQuery": 40,
+      "maxResultsPerRun": 120,
+      "maxCostUsd": 0.05,
+      "leadTtlDays": 14,
+      "queries": [
+        { "id": "tt-cs-soutez", "term": "soutěž", "language": "cs", "shape": "keyword" },
+        { "id": "tt-cs-hrajeme-o", "term": "hrajeme o", "language": "cs", "shape": "keyword" },
+        { "id": "tt-sk-sutaz", "term": "súťaž", "language": "sk", "shape": "keyword" }
+      ]
+    }
+  ],
+  "terminalHints": [
+    "vyhercem se stal",
+    "výherce",
+    "vyhrali",
+    "výsledky soutěže",
+    "soutěž skončila",
+    "sutaz ukoncena",
+    "winner announced",
+    "congratulations to the winner",
+    "giveaway closed",
+    "giveaway ended"
+  ],
+  "noiseHints": [
+    "soutěžní ročník",
+    "soutěž ve fotbale",
+    "závod",
+    "liga",
+    "turnaj",
+    "competition results",
+    "league table"
+  ],
+  "excludedPlatforms": [
+    "facebook"
+  ],
+  "excludedPlatformsReason": "Facebook is out of scope for this pilot at the issue's own instruction, along with private groups, login cookies, owner sessions, DMs, comment collection, browser automation and any account interaction."
+}

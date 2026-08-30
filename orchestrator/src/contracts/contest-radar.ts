@@ -347,29 +347,208 @@ export type ContestTrack = z.infer<typeof ContestTrackSchema>;
 export type ContestKind = z.infer<typeof ContestKindSchema>;
 
 /**
+ * The two platforms the optional pilot may ever consider.
+ *
+ * Facebook is absent by construction rather than by configuration. A closed enum is the difference
+ * between a scope decision anybody can read and a default somebody can flip: adding Facebook here
+ * would be a visible contract change with a test failing beside it, which is what a scope boundary
+ * should cost.
+ */
+export const SocialContestPlatformSchema = z.enum(["instagram", "tiktok"]);
+
+/**
+ * What became of one lead, and why.
+ *
+ * `held` is the interesting one. It is neither acceptance nor rejection: the lead looks like a
+ * contest and nothing about it has been established, which is the normal resting state for social
+ * evidence and the state the bridge refuses to promote out of.
+ */
+export const SocialContestLeadStatusSchema = z.enum([
+  "accepted",
+  "held",
+  "expired",
+  "rejected",
+  "malformed"
+]);
+
+/**
  * A social lead as GoVIRAL would hand it over, bounded to what a lead may carry.
  *
  * The optional Instagram and TikTok pilot is held, and this contract exists so that the shape is
  * settled before any of it runs rather than invented under time pressure afterwards. Everything
- * about it is a ceiling: a URL, a clipped caption, a platform and when it was seen.
+ * about it is a ceiling: a URL, a clipped caption, a platform, when it was seen, and quoted
+ * snippets the post itself stated.
  *
  * What it deliberately cannot carry is the reason the pilot is safe to consider at all — no
  * handle, no author, no follower count, no audience identity, no comment, no DM, no media bytes.
  * A lead points at a page that might be a contest. Everything that makes it a contest comes from
- * that page's own rules, read afterwards.
+ * that page's own rules, read afterwards. `strictObject` is what enforces that: a field for an
+ * author cannot be added quietly, it has to be added here, in the open.
  */
 export const SocialContestLeadSchema = z.strictObject({
   schemaVersion: z.literal("social-contest-lead/1"),
+  /** Identity is the content hash, so the same post collected twice is the same lead. */
+  leadId: Sha256Schema,
   /** GoVIRAL owns collection; this names the run its evidence came from. */
   collectionRef: EvidenceRefSchema,
-  platform: z.enum(["instagram", "tiktok"]),
+  platform: SocialContestPlatformSchema,
+  /** Which configured query found it, so a query can be disabled on its own evidence. */
+  queryId: StableId,
   url: HttpsUrlSchema,
+  /** Where the caption points, when it points anywhere. A pointer, still not a fact. */
+  targetUrl: HttpsUrlSchema.nullable(),
   /** Untrusted text, clipped. Never an instruction and never a fact. */
   caption: z.string().trim().max(280),
+  /**
+   * Snippets the post stated, quoted rather than parsed.
+   *
+   * A caption saying "do 31. 8." is evidence that a date was mentioned. It is not a deadline, and
+   * the difference is why these live in their own object with `Text` in every name: nothing
+   * downstream can mistake one of them for the record's `dates.deadline`.
+   */
+  stated: z.strictObject({
+    deadlineText: z.string().trim().min(1).max(120).nullable(),
+    prizeText: z.string().trim().min(1).max(200).nullable(),
+    eligibilityText: z.string().trim().min(1).max(200).nullable()
+  }),
+  /** Aggregate counts only. Never a liker, a commenter, a follower or anyone's identity. */
+  engagement: z.strictObject({
+    likes: z.number().int().min(0).max(1_000_000_000).nullable(),
+    comments: z.number().int().min(0).max(1_000_000_000).nullable()
+  }),
   observedAt: DateTimeSchema,
   /** When this lead stops being worth looking at, so nothing accumulates silently. */
   expiresAt: DateTimeSchema,
-  language: z.enum(["cs", "sk", "en"]).nullable()
+  language: z.enum(["cs", "sk", "en"]).nullable(),
+  status: SocialContestLeadStatusSchema,
+  statusReason: z.string().trim().min(1).max(300),
+  /** What collecting this one item cost, attributed rather than averaged across a run. */
+  costUsd: z.number().min(0).max(1),
+  contentHash: Sha256Schema,
+  evidenceRefs: z.array(EvidenceRefSchema).max(10)
+}).superRefine((lead, context) => {
+  if (Date.parse(lead.expiresAt) <= Date.parse(lead.observedAt)) {
+    context.addIssue({ code: "custom", message: "A lead expires after it was observed", path: ["expiresAt"] });
+  }
+  if (lead.leadId !== lead.contentHash) {
+    context.addIssue({ code: "custom", message: "A lead is identified by its content hash", path: ["leadId"] });
+  }
+  // A malformed item is one this system could not read. Claiming to have read a deadline out of it
+  // is the contradiction worth catching, because that is how unparseable input becomes a fact.
+  if (lead.status === "malformed"
+    && (lead.stated.deadlineText !== null || lead.stated.prizeText !== null || lead.stated.eligibilityText !== null)) {
+    context.addIssue({ code: "custom", message: "A malformed lead states nothing", path: ["stated"] });
+  }
 });
 
 export type SocialContestLead = z.infer<typeof SocialContestLeadSchema>;
+export type SocialContestPlatform = z.infer<typeof SocialContestPlatformSchema>;
+
+/**
+ * One pilot lane's yield, cost and verdict for a day.
+ *
+ * The costs-per-record are nullable rather than zero, and that is the whole point of the shape. A
+ * lane that produced nothing has no cost per unique record; writing `0` there would make the
+ * cheapest lane look like the best one, which is exactly backwards.
+ */
+export const ContestSocialPilotLaneSchema = z.strictObject({
+  platform: SocialContestPlatformSchema,
+  enabled: z.boolean(),
+  outcome: z.enum(["ran", "held", "disabled", "failed"]),
+  reason: z.string().trim().min(1).max(400),
+  queries: z.array(z.strictObject({
+    queryId: StableId,
+    fetched: z.number().int().min(0).max(10_000),
+    kept: z.number().int().min(0).max(10_000),
+    unique: z.number().int().min(0).max(10_000),
+    noise: z.number().int().min(0).max(10_000)
+  })).max(20),
+  fetched: z.number().int().min(0).max(10_000),
+  contestLike: z.number().int().min(0).max(10_000),
+  unique: z.number().int().min(0).max(10_000),
+  entryReady: z.number().int().min(0).max(10_000),
+  expired: z.number().int().min(0).max(10_000),
+  announcement: z.number().int().min(0).max(10_000),
+  noise: z.number().int().min(0).max(10_000),
+  malformed: z.number().int().min(0).max(10_000),
+  duplicates: z.number().int().min(0).max(10_000),
+  costUsd: z.number().min(0).max(1),
+  costPerUniqueUsd: z.number().min(0).max(1).nullable(),
+  costPerEntryReadyUsd: z.number().min(0).max(1).nullable(),
+  actorFailures: z.number().int().min(0).max(1_000),
+  failureRate: z.number().min(0).max(1).nullable(),
+  verdict: z.enum(["retain", "disable", "undecided"]),
+  verdictReason: z.string().trim().min(1).max(400)
+}).superRefine((lane, context) => {
+  if ((lane.unique === 0) !== (lane.costPerUniqueUsd === null)) {
+    context.addIssue({ code: "custom", message: "Cost per unique record exists exactly when a unique record does", path: ["costPerUniqueUsd"] });
+  }
+  if ((lane.entryReady === 0) !== (lane.costPerEntryReadyUsd === null)) {
+    context.addIssue({ code: "custom", message: "Cost per entry-ready record exists exactly when an entry-ready record does", path: ["costPerEntryReadyUsd"] });
+  }
+  if (lane.unique > lane.contestLike) {
+    context.addIssue({ code: "custom", message: "Deduplication cannot create records", path: ["unique"] });
+  }
+  if (lane.entryReady > lane.unique) {
+    context.addIssue({ code: "custom", message: "Verification cannot create records", path: ["entryReady"] });
+  }
+  if (lane.outcome !== "ran" && lane.costUsd > 0) {
+    context.addIssue({ code: "custom", message: "A lane that did not run spent nothing", path: ["costUsd"] });
+  }
+});
+
+/**
+ * A pilot run, and the three authorities a live one cannot exist without.
+ *
+ * The `superRefine` below is the gate, not a validation nicety. A fixture run costs exactly zero
+ * and a live run is unrepresentable without a countersigned capacity decision, owner source
+ * authority and a GoVIRAL quota reservation. Somebody flipping a config flag does not get a live
+ * pilot; they get a receipt that will not parse.
+ */
+export const ContestSocialPilotReceiptSchema = z.strictObject({
+  schemaVersion: z.literal("contest-social-pilot/1"),
+  date: DateSchema,
+  generatedAt: DateTimeSchema,
+  mode: z.enum(["fixture", "live"]),
+  lanes: z.array(ContestSocialPilotLaneSchema).min(1).max(2),
+  totalCostUsd: z.number().min(0).max(1),
+  ceilingUsd: z.number().min(0).max(1),
+  authority: z.strictObject({
+    /** The countersigned budget-capacity decision. Its absence is why the pilot is held. */
+    capacityDecisionRef: EvidenceRefSchema.nullable(),
+    /** Owner authority for these specific actors, with their terms read at that time. */
+    ownerSourceAuthorityRef: EvidenceRefSchema.nullable(),
+    /** GoVIRAL's reservation against the shared Apify quota. Never a second allowance. */
+    quotaReservationRef: EvidenceRefSchema.nullable()
+  }),
+  heldReasons: z.array(z.string().trim().min(1).max(300)).max(20)
+}).superRefine((receipt, context) => {
+  const laneCost = receipt.lanes.reduce((total, lane) => total + lane.costUsd, 0);
+  if (Math.abs(receipt.totalCostUsd - laneCost) > 0.000001) {
+    context.addIssue({ code: "custom", message: "The total is the sum of the lanes", path: ["totalCostUsd"] });
+  }
+  if (receipt.totalCostUsd > receipt.ceilingUsd) {
+    context.addIssue({ code: "custom", message: "A pilot cannot spend past its own ceiling", path: ["totalCostUsd"] });
+  }
+  if (receipt.mode === "fixture" && receipt.totalCostUsd > 0) {
+    context.addIssue({ code: "custom", message: "A fixture pilot costs nothing", path: ["totalCostUsd"] });
+  }
+  if (receipt.mode === "live") {
+    const missing = Object.entries(receipt.authority)
+      .filter(([, value]) => value === null)
+      .map(([name]) => name);
+    if (missing.length > 0) {
+      context.addIssue({
+        code: "custom",
+        message: `A live pilot requires every authority; missing ${missing.join(", ")}`,
+        path: ["authority"]
+      });
+    }
+  }
+  if (receipt.mode === "fixture" && receipt.lanes.some((lane) => lane.outcome === "ran" && lane.enabled)) {
+    context.addIssue({ code: "custom", message: "A fixture run has no enabled live lane", path: ["lanes"] });
+  }
+});
+
+export type ContestSocialPilotLane = z.infer<typeof ContestSocialPilotLaneSchema>;
+export type ContestSocialPilotReceipt = z.infer<typeof ContestSocialPilotReceiptSchema>;

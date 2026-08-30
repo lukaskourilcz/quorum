@@ -1,0 +1,66 @@
+{
+  "note": "Hand-written fixture. No real post, handle or media is reproduced here; the captions are written to exercise each classification the pilot must make.",
+  "collectionRef": "state/ventures/goviral/collections/2026-08-30-instagram.json",
+  "itemsByQuery": {
+    "ig-cs-soutez-tag": [
+      {
+        "url": "https://www.instagram.com/p/FIXTUREaaa1/",
+        "caption": "Soutěž o týdenní zásobu kávy! Stačí sledovat a napsat do komentáře svoji oblíbenou. Uzávěrka: 15. 9. Pravidla https://priklad-kavovar.cz/pravidla-souteze",
+        "targetUrl": "https://priklad-kavovar.cz/pravidla-souteze",
+        "observedAt": "2026-08-30T08:00:00.000Z",
+        "likes": 412,
+        "comments": 88,
+        "language": "cs"
+      },
+      {
+        "url": "https://www.instagram.com/p/FIXTUREaaa2/",
+        "caption": "Výherce soutěže o kávovar je vylosován, gratulujeme! Sledujte nás, další soutěž chystáme.",
+        "targetUrl": null,
+        "observedAt": "2026-08-29T09:30:00.000Z",
+        "likes": 121,
+        "comments": 14,
+        "language": "cs"
+      },
+      {
+        "url": "https://www.instagram.com/p/FIXTUREaaa1/",
+        "caption": "Soutěž o týdenní zásobu kávy! Stačí sledovat a napsat do komentáře svoji oblíbenou. Uzávěrka: 15. 9. Pravidla https://priklad-kavovar.cz/pravidla-souteze",
+        "targetUrl": "https://priklad-kavovar.cz/pravidla-souteze",
+        "observedAt": "2026-08-30T08:00:00.000Z",
+        "likes": 412,
+        "comments": 88,
+        "language": "cs"
+      }
+    ],
+    "ig-cs-vyhraj-tag": [
+      {
+        "url": "https://www.instagram.com/p/FIXTUREbbb1/",
+        "caption": "Soutěžní ročník krajské ligy začíná v sobotu, přijďte fandit.",
+        "targetUrl": null,
+        "observedAt": "2026-08-30T06:15:00.000Z",
+        "likes": 33,
+        "comments": 2,
+        "language": "cs"
+      },
+      {
+        "url": "not-a-url",
+        "caption": "",
+        "targetUrl": null,
+        "observedAt": "nonsense",
+        "likes": "many",
+        "comments": null,
+        "language": 7
+      }
+    ],
+    "ig-sk-sutaz-tag": [
+      {
+        "url": "https://www.instagram.com/p/FIXTUREccc1/",
+        "caption": "Súťaž o vstupenky na festival. Len pre obyvateľov SR, 18+. Vyhraj dva lístky, uzavierka 10. 9.",
+        "targetUrl": null,
+        "observedAt": "2026-08-30T07:45:00.000Z",
+        "likes": 96,
+        "comments": 21,
+        "language": "sk"
+      }
+    ]
+  }
+}

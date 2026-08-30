@@ -68,6 +68,25 @@ const SNAPSHOT: AdminContestRadarSnapshot = {
     lastVerifiedOn: "2026-08-30",
     verificationDueOn: "2026-11-30"
   }],
+  pilotState: "present",
+  pilotLanes: [{
+    platform: "instagram",
+    enabled: false,
+    heldReason: "GoVIRAL owns collection and no capacity decision authorises the Apify rung.",
+    queries: 3,
+    maxResultsPerRun: 120,
+    maxCostUsd: 0.05,
+    outcome: null,
+    fetched: null,
+    unique: null,
+    entryReady: null,
+    costUsd: null,
+    costPerUniqueUsd: null,
+    verdict: null,
+    verdictReason: null
+  }],
+  pilotDate: null,
+  pilotMode: null,
   authority: { foundingCountersigned: true, paidPathsHeld: true },
   unreadable: 0,
   snapshotHash: "a".repeat(64)
@@ -155,5 +174,36 @@ describe("the Soutěžní radar workspace", () => {
     expect(resolveContestTab(undefined)).toBe("today");
     expect(resolveContestTab("nonsense")).toBe("today");
     expect(resolveContestTab("sources")).toBe("sources");
+  });
+
+  it("shows a never-run pilot lane as a dash and its held reason, not as a zero", () => {
+    const html = render(SNAPSHOT, "sources");
+
+    expect(html).toContain("Optional social pilot");
+    expect(html).toContain("never run");
+    expect(html).toContain("no capacity decision authorises the Apify rung");
+    expect(html).not.toContain("$0.0000");
+  });
+
+  it("shows a lane that ran with its own numbers and verdict", () => {
+    const html = render({
+      ...SNAPSHOT,
+      pilotDate: "2026-08-30",
+      pilotMode: "fixture",
+      pilotLanes: [{
+        ...SNAPSHOT.pilotLanes[0]!,
+        outcome: "ran",
+        fetched: 6,
+        unique: 2,
+        entryReady: 0,
+        costUsd: 0,
+        costPerUniqueUsd: 0,
+        verdict: "undecided",
+        verdictReason: "2 unique leads and none verified to entry-ready yet."
+      }]
+    }, "sources");
+
+    expect(html).toContain("2 unique leads and none verified");
+    expect(html).toContain("undecided");
   });
 });

@@ -1,0 +1,48 @@
+{
+  "note": "Hand-written fixture. No real video, handle or media is reproduced here; the captions are written to exercise each classification the pilot must make.",
+  "collectionRef": "state/ventures/goviral/collections/2026-08-30-tiktok.json",
+  "itemsByQuery": {
+    "tt-cs-soutez": [
+      {
+        "url": "https://www.tiktok.com/@fixture/video/7000000000000000001",
+        "caption": "Hrajeme o novou sadu sluchátek. Pravidla i uzávěrka na webu: https://priklad-sluchatka.cz/soutez",
+        "targetUrl": "https://priklad-sluchatka.cz/soutez",
+        "observedAt": "2026-08-30T10:20:00.000Z",
+        "likes": 2140,
+        "comments": 310,
+        "language": "cs"
+      },
+      {
+        "url": "https://www.tiktok.com/@fixture/video/7000000000000000002",
+        "caption": "Recept na rychlou večeři za deset minut.",
+        "targetUrl": null,
+        "observedAt": "2026-08-30T10:25:00.000Z",
+        "likes": 88,
+        "comments": 4,
+        "language": "cs"
+      }
+    ],
+    "tt-cs-hrajeme-o": [
+      {
+        "url": "https://www.tiktok.com/@fixture/video/7000000000000000003",
+        "caption": "Soutěž skončila, děkujeme všem zúčastněným.",
+        "targetUrl": null,
+        "observedAt": "2026-08-28T18:00:00.000Z",
+        "likes": 410,
+        "comments": 40,
+        "language": "cs"
+      }
+    ],
+    "tt-sk-sutaz": [
+      {
+        "url": "https://www.tiktok.com/@fixture/video/7000000000000000004",
+        "caption": "Súťaž o poukážku do kníhkupectva. Vyhraj 50 eur, deadline: 5. 9.",
+        "targetUrl": null,
+        "observedAt": "2026-08-30T11:00:00.000Z",
+        "likes": 640,
+        "comments": 77,
+        "language": "sk"
+      }
+    ]
+  }
+}
