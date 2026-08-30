@@ -419,19 +419,39 @@ test("a venture workspace carries no agent switches — the system runs itself",
   }
 });
 
-test("approvals and owner-only work include all four new ventures", async ({ page }) => {
-  await page.goto("/admin?view=approvals", { waitUntil: "networkidle" });
-  for (const approval of ["BH-RESEARCH-001", "DM-RESULTS-004", "TS-SNAPSHOT-001", "KV-EDITORIAL-004"]) {
+/*
+ * Everything the owner still has to sign or do, and nothing else.
+ *
+ * This used to name four approval ids and four task titles. All four approvals were signed on
+ * 2026-08-29 and the test failed for the one reason a to-do list is allowed to change: the work
+ * was done. Pinning the items made "the owner acted" indistinguishable from "the panel broke".
+ *
+ * So both halves are read out of the files the panels are built from. What is guarded is the
+ * property that matters — an item pending on disk is visible in the admin, and an item that is
+ * not pending is not shown — which holds on the day the last approval is signed and on the day a
+ * new one is filed.
+ */
+test("Waiting for you shows exactly what is pending on disk", async ({ page }) => {
+  const inbox = await readFile(path.join(repositoryRoot, "state/INBOX.md"), "utf8");
+  const pending = [...inbox.matchAll(/^- \[ \] HUMAN_APPROVAL ([A-Z0-9-]+)/gmu)].map(([, id]) => id!);
+  const signed = [...inbox.matchAll(/^- \[x\] HUMAN_APPROVAL ([A-Z0-9-]+)/gmu)].map(([, id]) => id!);
+  expect(signed.length, "the inbox has a resolved section to check against").toBeGreaterThan(0);
+
+  await page.goto("/admin?view=waiting", { waitUntil: "networkidle" });
+  for (const approval of pending) {
     await expect(page.getByText(`state/INBOX.md#${approval}`, { exact: true })).toBeVisible();
   }
+  for (const approval of signed.filter((id) => !pending.includes(id))) {
+    await expect(page.getByText(`state/INBOX.md#${approval}`, { exact: true })).toHaveCount(0);
+  }
 
-  await page.goto("/admin?view=manual-tasks", { waitUntil: "networkidle" });
-  for (const task of [
-    "Sign or decline BH-RESEARCH-001",
-    "Approve Door Money's private source (BOOK-SOURCE-001)",
-    "Sign or decline TS-RESEARCH-004",
-    "Approve Kvórum's one-page Apify scope"
-  ]) {
+  // The owner's own tasks are the other half of this view, and they come from `docs/NEEDED.md`.
+  const needed = await readFile(path.join(repositoryRoot, "docs/NEEDED.md"), "utf8");
+  const tasks = [...needed.matchAll(/^- \[ \] \*\*(.+?)\*\*/gmu)]
+    .map(([, title]) => title!)
+    .filter((_, index) => index < 3);
+  expect(tasks.length, "NEEDED.md still carries owner tasks").toBeGreaterThan(0);
+  for (const task of tasks) {
     await expect(page.getByText(task, { exact: false }).first()).toBeVisible();
   }
 });
@@ -1343,21 +1363,13 @@ test("the facilities plan plays the day and returns to rest", async ({ page }) =
   await expect(page.locator("[data-wf-beat]")).toHaveCount(0);
 });
 
-test("the ventures index has eleven real cards and keeps sample scores separate", async ({ page }) => {
+test("the ventures index carries every operating venture and keeps sample scores separate", async ({ page }) => {
   await page.goto("/ventures", { waitUntil: "networkidle" });
-  const ids = [
-    "caught-up",
-    "titty-tuesdays",
-    "goviral",
-    "booksofhistory",
-    "fightaiq",
-    "carousel-studio",
-    "marketingshark",
-    "mma-files",
-    "door-money",
-    "tehdejsi-svet",
-    "kvorum"
-  ];
+  // Counted off the registry, like the wall. The index used to pin eleven ids, which made
+  // pausing a venture in Settings a test failure rather than the thing the switch is for.
+  const ids = (registry.ventures as Array<{ id: string; status?: string; visibility: string }>)
+    .filter((venture) => venture.visibility === "public" && venture.status !== "paused")
+    .map((venture) => venture.id);
   const cards = page.locator("[data-venture-card]");
   await expect(cards).toHaveCount(ids.length);
   for (const id of ids) await expect(page.locator(`[data-venture-card="${id}"]`)).toHaveCount(1);
