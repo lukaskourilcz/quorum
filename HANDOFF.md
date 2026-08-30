@@ -13,8 +13,18 @@ that outlives its handoff becomes a second to-do list.
 **Twenty-two issues closed.** The whole clock program, the whole admin program, four of the
 launch program's children, and the two program issues that were tracking the rest.
 
-**Nothing is red.** `pnpm agents:validate && pnpm lint && pnpm typecheck && pnpm test && pnpm build`
-is green at root: 3,406 tests, 0 lint warnings. `pnpm docs:check` reports current.
+**The root gate is green** on CI and locally: `agents:validate`, `lint`, `typecheck`, `test`
+(3,406), `build`, `docs:check`.
+
+**The browser suite went from twelve failures to two**, across 357 tests. Both remaining ones pass
+on their own and neither is a defect in the code: one is Next's dev server restarting itself under
+memory pressure mid-navigation during a 1.3-hour run, the other the cross-test dependency in §4.
+
+Five of the original twelve were not caused by this branch. Three assertions were written for a
+read-only deployment the browser tests never run against; one compared the Playwright runner's
+environment against a decision the server makes; one clicked before hydration. They survived
+because the gate that would have caught them is skipped by default *and* was budgeted at under half
+the suite's runtime, so even an explicit opt-in could only ever time out.
 
 **Five launch issues stay open on purpose**, each with an audit comment naming exactly what is
 left. See §4.
