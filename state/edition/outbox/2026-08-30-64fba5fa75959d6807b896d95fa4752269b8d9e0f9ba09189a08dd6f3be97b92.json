@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "edition-package/1",
+  "date": "2026-08-30",
+  "idempotencyKey": "64fba5fa75959d6807b896d95fa4752269b8d9e0f9ba09189a08dd6f3be97b92",
+  "generation": {
+    "models": {
+      "curation": "claude-sonnet-4-6",
+      "writing": "claude-sonnet-4-6"
+    },
+    "costUsd": 0.057699
+  },
+  "reason": "cu-edition decision meetings/2026-08-30-cu-edition",
+  "status": "no_edition",
+  "board": {
+    "meetingRef": "meetings/2026-08-30-cu-edition",
+    "roomUrl": "https://boardless-ai.vercel.app/meetings/2026-08-30-cu-edition",
+    "noEditionReason": "The desk could not assemble a shortlist from today's sources, so nothing was written."
+  }
+}

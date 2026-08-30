@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "runId": "58fcab6c-3d4b-4950-b96c-3da55a98fb1a",
+  "date": "2026-08-30",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-08-30T03:09:17.959Z",
+  "completedAt": "2026-08-30T03:09:44.640Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "failed",
+      "startedAt": "2026-08-30T03:09:17.981Z",
+      "completedAt": "2026-08-30T03:09:44.638Z",
+      "durationMs": 26657,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "curate: pick index 57 is outside the source pool"
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 13553,
+      "outputTokens": 1136,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.057699
+    }
+  ],
+  "measuredCostUsd": 0.057699,
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "verdicts": []
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "curation_failed:curate: pick index 57 is outside the source pool"
+  ],
+  "sourceSummary": {
+    "successfulSources": 28,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects",
+      "source:meta-ai"
+    ]
+  }
+}
