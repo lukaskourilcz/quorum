@@ -5,74 +5,1031 @@
   "defaultVentureContentPosture": "deny",
   "decisionReference": "state/decisions/2026-08-26-autonomy-first-capabilities.md",
   "nodes": [
-    { "id": "caught-up", "classification": "content-venture", "canonicalOwner": "caught-up", "dataActionClasses": ["content"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "public", "maximumPayloadClass": "accepted-edition-artifact", "evidenceReferences": ["config/ventures.json"], "reviewAt": null },
-    { "id": "titty-tuesdays", "classification": "content-venture", "canonicalOwner": "titty-tuesdays", "dataActionClasses": ["content"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "internal", "maximumPayloadClass": "accepted-campaign-artifact", "evidenceReferences": ["config/ventures.json"], "reviewAt": null },
-    { "id": "goviral", "classification": "intelligence-service", "canonicalOwner": "goviral", "dataActionClasses": ["intelligence"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "internal", "maximumPayloadClass": "goviral-intelligence-packet/1", "evidenceReferences": ["config/ventures.json", "GitHub #424"], "reviewAt": null },
-    { "id": "booksofhistory", "classification": "content-venture", "canonicalOwner": "booksofhistory", "dataActionClasses": ["content", "private-data"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "internal", "maximumPayloadClass": "accepted-book-feature-artifact", "evidenceReferences": ["config/ventures.json", "GitHub #424"], "reviewAt": null },
-    { "id": "fightaiq", "classification": "data-venture", "canonicalOwner": "fightaiq", "dataActionClasses": ["content", "private-data"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "public", "maximumPayloadClass": "verified-fight-analysis", "evidenceReferences": ["config/ventures.json", "GitHub #424"], "reviewAt": null },
-    { "id": "carousel-studio", "classification": "rendering-service", "canonicalOwner": "carousel-studio", "dataActionClasses": ["rendering"], "authorityRequirement": "service-policy", "privacyClassification": "internal", "maximumPayloadClass": "deterministic-render-receipt", "evidenceReferences": ["config/ventures.json"], "reviewAt": null },
-    { "id": "marketingshark", "classification": "intelligence-service", "canonicalOwner": "marketingshark", "dataActionClasses": ["intelligence", "rendering"], "authorityRequirement": "service-policy", "privacyClassification": "internal", "maximumPayloadClass": "internal-marketing-artifact", "evidenceReferences": ["config/ventures.json"], "reviewAt": null },
-    { "id": "mma-files", "classification": "content-venture", "canonicalOwner": "mma-files", "dataActionClasses": ["content"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "public", "maximumPayloadClass": "accepted-article-package", "evidenceReferences": ["config/ventures.json"], "reviewAt": null },
-    { "id": "door-money", "classification": "content-venture", "canonicalOwner": "door-money", "dataActionClasses": ["content", "private-data"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "private-source", "maximumPayloadClass": "approved-reference-only", "evidenceReferences": ["config/ventures.json", "GitHub #424"], "reviewAt": null },
-    { "id": "tehdejsi-svet", "classification": "content-venture", "canonicalOwner": "tehdejsi-svet", "dataActionClasses": ["content", "private-data"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "internal", "maximumPayloadClass": "accepted-bilingual-feature", "evidenceReferences": ["config/ventures.json", "GitHub #424"], "reviewAt": null },
-    { "id": "kvorum", "classification": "content-venture", "canonicalOwner": "kvorum", "dataActionClasses": ["content", "private-data"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "internal", "maximumPayloadClass": "kvorum-internal-only", "evidenceReferences": ["config/ventures.json", "GitHub #424"], "reviewAt": null },
-    { "id": "personal-growth", "classification": "private-owner-workspace", "canonicalOwner": "personal-growth", "dataActionClasses": ["content", "private-data", "metrics"], "authorityRequirement": "owner-manual-only", "privacyClassification": "owner-only", "maximumPayloadClass": "personal-growth-goviral-packet/1", "evidenceReferences": ["config/ventures.json", "GitHub #372", "GitHub #373", "GitHub #424"], "reviewAt": null },
-    { "id": "webdev-signal", "classification": "content-venture", "canonicalOwner": "webdev-signal", "dataActionClasses": ["content", "metrics"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "internal", "maximumPayloadClass": "accepted-bilingual-package-reference", "evidenceReferences": ["config/ventures.json", "state/decisions/2026-08-28-webdev-signal-founding.md", "GitHub #424", "GitHub #438"], "reviewAt": "2026-11-26" },
-    { "id": "contest-radar", "classification": "data-venture", "canonicalOwner": "contest-radar", "dataActionClasses": ["private-data", "intelligence"], "authorityRequirement": "owner-manual-only", "privacyClassification": "owner-only", "maximumPayloadClass": "contest-record-reference", "evidenceReferences": ["GitHub #408", "GitHub #424"], "reviewAt": null },
-    { "id": "boardlessai-umbrella", "classification": "content-venture", "canonicalOwner": "boardlessai-umbrella", "dataActionClasses": ["content"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "public", "maximumPayloadClass": "approved-company-artifact-reference", "evidenceReferences": ["GitHub #403", "GitHub #424"], "reviewAt": null },
-    { "id": "devshark", "classification": "content-venture", "canonicalOwner": "devshark", "dataActionClasses": ["content"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "internal", "maximumPayloadClass": "none", "evidenceReferences": ["GitHub #424"], "reviewAt": null },
-    { "id": "design-lab", "classification": "rendering-service", "canonicalOwner": "carousel-studio", "dataActionClasses": ["rendering"], "authorityRequirement": "service-policy", "privacyClassification": "internal", "maximumPayloadClass": "bounded-render-summary/1", "evidenceReferences": ["GitHub #423", "GitHub #424"], "reviewAt": null },
-    { "id": "social-distribution", "classification": "distribution-service", "canonicalOwner": "social-distribution", "dataActionClasses": ["distribution"], "authorityRequirement": "decision-and-runtime-gates", "privacyClassification": "owner-only", "maximumPayloadClass": "approved-publish-package/1", "evidenceReferences": ["GitHub #403", "GitHub #424"], "reviewAt": null },
-    { "id": "metrics-service", "classification": "system-service", "canonicalOwner": "boardlessai-umbrella", "dataActionClasses": ["metrics"], "authorityRequirement": "service-policy", "privacyClassification": "internal", "maximumPayloadClass": "own-metrics-summary/1", "evidenceReferences": ["GitHub #423", "GitHub #424"], "reviewAt": null },
-    { "id": "implementation-plans", "classification": "system-service", "canonicalOwner": "boardlessai-umbrella", "dataActionClasses": ["progress"], "authorityRequirement": "service-policy", "privacyClassification": "owner-only", "maximumPayloadClass": "implementation-progress-summary/1", "evidenceReferences": ["GitHub #419", "GitHub #424"], "reviewAt": null },
-    { "id": "health-service", "classification": "system-service", "canonicalOwner": "boardlessai-umbrella", "dataActionClasses": ["health"], "authorityRequirement": "service-policy", "privacyClassification": "owner-only", "maximumPayloadClass": "venture-health-summary/1", "evidenceReferences": ["GitHub #423", "GitHub #424"], "reviewAt": null },
-    { "id": "owner-attention", "classification": "system-service", "canonicalOwner": "boardlessai-umbrella", "dataActionClasses": ["owner-attention"], "authorityRequirement": "service-policy", "privacyClassification": "owner-only", "maximumPayloadClass": "owner-attention/1", "evidenceReferences": ["GitHub #423", "GitHub #424"], "reviewAt": null },
-    { "id": "budget-service", "classification": "system-service", "canonicalOwner": "boardlessai-umbrella", "dataActionClasses": ["system-control"], "authorityRequirement": "service-policy", "privacyClassification": "internal", "maximumPayloadClass": "budget-decision-reference", "evidenceReferences": ["GOVERNANCE.md"], "reviewAt": null },
-    { "id": "scheduler-service", "classification": "system-service", "canonicalOwner": "boardlessai-umbrella", "dataActionClasses": ["system-control"], "authorityRequirement": "service-policy", "privacyClassification": "internal", "maximumPayloadClass": "schedule-record-reference", "evidenceReferences": ["GitHub #423"], "reviewAt": null },
-    { "id": "admin-service", "classification": "system-service", "canonicalOwner": "boardlessai-umbrella", "dataActionClasses": ["system-control", "private-data"], "authorityRequirement": "owner-manual-only", "privacyClassification": "owner-only", "maximumPayloadClass": "owner-manual-reference/1", "evidenceReferences": ["GitHub #382", "GitHub #424"], "reviewAt": null }
+    {
+      "id": "caught-up",
+      "classification": "content-venture",
+      "canonicalOwner": "caught-up",
+      "dataActionClasses": [
+        "content"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "public",
+      "maximumPayloadClass": "accepted-edition-artifact",
+      "evidenceReferences": [
+        "config/ventures.json"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "titty-tuesdays",
+      "classification": "content-venture",
+      "canonicalOwner": "titty-tuesdays",
+      "dataActionClasses": [
+        "content"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "accepted-campaign-artifact",
+      "evidenceReferences": [
+        "config/ventures.json"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "goviral",
+      "classification": "intelligence-service",
+      "canonicalOwner": "goviral",
+      "dataActionClasses": [
+        "intelligence"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "goviral-intelligence-packet/1",
+      "evidenceReferences": [
+        "config/ventures.json",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "booksofhistory",
+      "classification": "content-venture",
+      "canonicalOwner": "booksofhistory",
+      "dataActionClasses": [
+        "content",
+        "private-data"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "accepted-book-feature-artifact",
+      "evidenceReferences": [
+        "config/ventures.json",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "fightaiq",
+      "classification": "data-venture",
+      "canonicalOwner": "fightaiq",
+      "dataActionClasses": [
+        "content",
+        "private-data"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "public",
+      "maximumPayloadClass": "verified-fight-analysis",
+      "evidenceReferences": [
+        "config/ventures.json",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "carousel-studio",
+      "classification": "rendering-service",
+      "canonicalOwner": "carousel-studio",
+      "dataActionClasses": [
+        "rendering"
+      ],
+      "authorityRequirement": "service-policy",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "deterministic-render-receipt",
+      "evidenceReferences": [
+        "config/ventures.json"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "marketingshark",
+      "classification": "intelligence-service",
+      "canonicalOwner": "marketingshark",
+      "dataActionClasses": [
+        "intelligence",
+        "rendering"
+      ],
+      "authorityRequirement": "service-policy",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "internal-marketing-artifact",
+      "evidenceReferences": [
+        "config/ventures.json"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "mma-files",
+      "classification": "content-venture",
+      "canonicalOwner": "mma-files",
+      "dataActionClasses": [
+        "content"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "public",
+      "maximumPayloadClass": "accepted-article-package",
+      "evidenceReferences": [
+        "config/ventures.json"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "door-money",
+      "classification": "content-venture",
+      "canonicalOwner": "door-money",
+      "dataActionClasses": [
+        "content",
+        "private-data"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "private-source",
+      "maximumPayloadClass": "approved-reference-only",
+      "evidenceReferences": [
+        "config/ventures.json",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "tehdejsi-svet",
+      "classification": "content-venture",
+      "canonicalOwner": "tehdejsi-svet",
+      "dataActionClasses": [
+        "content",
+        "private-data"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "accepted-bilingual-feature",
+      "evidenceReferences": [
+        "config/ventures.json",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "kvorum",
+      "classification": "content-venture",
+      "canonicalOwner": "kvorum",
+      "dataActionClasses": [
+        "content",
+        "private-data"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "kvorum-internal-only",
+      "evidenceReferences": [
+        "config/ventures.json",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "personal-growth",
+      "classification": "private-owner-workspace",
+      "canonicalOwner": "personal-growth",
+      "dataActionClasses": [
+        "content",
+        "private-data",
+        "metrics"
+      ],
+      "authorityRequirement": "owner-manual-only",
+      "privacyClassification": "owner-only",
+      "maximumPayloadClass": "personal-growth-goviral-packet/1",
+      "evidenceReferences": [
+        "config/ventures.json",
+        "GitHub #372",
+        "GitHub #373",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "webdev-signal",
+      "classification": "content-venture",
+      "canonicalOwner": "webdev-signal",
+      "dataActionClasses": [
+        "content",
+        "metrics"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "accepted-bilingual-package-reference",
+      "evidenceReferences": [
+        "config/ventures.json",
+        "state/decisions/2026-08-28-webdev-signal-founding.md",
+        "GitHub #424",
+        "GitHub #438"
+      ],
+      "reviewAt": "2026-11-26"
+    },
+    {
+      "id": "contest-radar",
+      "classification": "data-venture",
+      "canonicalOwner": "contest-radar",
+      "dataActionClasses": [
+        "private-data",
+        "intelligence"
+      ],
+      "authorityRequirement": "owner-manual-only",
+      "privacyClassification": "owner-only",
+      "maximumPayloadClass": "contest-record-reference",
+      "evidenceReferences": [
+        "GitHub #408",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "boardlessai-umbrella",
+      "classification": "content-venture",
+      "canonicalOwner": "boardlessai-umbrella",
+      "dataActionClasses": [
+        "content"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "public",
+      "maximumPayloadClass": "approved-company-artifact-reference",
+      "evidenceReferences": [
+        "GitHub #403",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "devshark",
+      "classification": "content-venture",
+      "canonicalOwner": "devshark",
+      "dataActionClasses": [
+        "content"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "none",
+      "evidenceReferences": [
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "design-lab",
+      "classification": "rendering-service",
+      "canonicalOwner": "carousel-studio",
+      "dataActionClasses": [
+        "rendering"
+      ],
+      "authorityRequirement": "service-policy",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "bounded-render-summary/1",
+      "evidenceReferences": [
+        "GitHub #423",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "social-distribution",
+      "classification": "distribution-service",
+      "canonicalOwner": "social-distribution",
+      "dataActionClasses": [
+        "distribution"
+      ],
+      "authorityRequirement": "decision-and-runtime-gates",
+      "privacyClassification": "owner-only",
+      "maximumPayloadClass": "approved-publish-package/1",
+      "evidenceReferences": [
+        "GitHub #403",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "metrics-service",
+      "classification": "system-service",
+      "canonicalOwner": "boardlessai-umbrella",
+      "dataActionClasses": [
+        "metrics"
+      ],
+      "authorityRequirement": "service-policy",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "own-metrics-summary/1",
+      "evidenceReferences": [
+        "GitHub #423",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "implementation-plans",
+      "classification": "system-service",
+      "canonicalOwner": "boardlessai-umbrella",
+      "dataActionClasses": [
+        "progress"
+      ],
+      "authorityRequirement": "service-policy",
+      "privacyClassification": "owner-only",
+      "maximumPayloadClass": "implementation-progress-summary/1",
+      "evidenceReferences": [
+        "GitHub #419",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "health-service",
+      "classification": "system-service",
+      "canonicalOwner": "boardlessai-umbrella",
+      "dataActionClasses": [
+        "health"
+      ],
+      "authorityRequirement": "service-policy",
+      "privacyClassification": "owner-only",
+      "maximumPayloadClass": "venture-health-summary/1",
+      "evidenceReferences": [
+        "GitHub #423",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "owner-attention",
+      "classification": "system-service",
+      "canonicalOwner": "boardlessai-umbrella",
+      "dataActionClasses": [
+        "owner-attention"
+      ],
+      "authorityRequirement": "service-policy",
+      "privacyClassification": "owner-only",
+      "maximumPayloadClass": "owner-attention/1",
+      "evidenceReferences": [
+        "GitHub #423",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "budget-service",
+      "classification": "system-service",
+      "canonicalOwner": "boardlessai-umbrella",
+      "dataActionClasses": [
+        "system-control"
+      ],
+      "authorityRequirement": "service-policy",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "budget-decision-reference",
+      "evidenceReferences": [
+        "GOVERNANCE.md"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "scheduler-service",
+      "classification": "system-service",
+      "canonicalOwner": "boardlessai-umbrella",
+      "dataActionClasses": [
+        "system-control"
+      ],
+      "authorityRequirement": "service-policy",
+      "privacyClassification": "internal",
+      "maximumPayloadClass": "schedule-record-reference",
+      "evidenceReferences": [
+        "GitHub #423"
+      ],
+      "reviewAt": null
+    },
+    {
+      "id": "admin-service",
+      "classification": "system-service",
+      "canonicalOwner": "boardlessai-umbrella",
+      "dataActionClasses": [
+        "system-control",
+        "private-data"
+      ],
+      "authorityRequirement": "owner-manual-only",
+      "privacyClassification": "owner-only",
+      "maximumPayloadClass": "owner-manual-reference/1",
+      "evidenceReferences": [
+        "GitHub #382",
+        "GitHub #424"
+      ],
+      "reviewAt": null
+    }
   ],
   "edges": [
-    { "schemaVersion": "venture-capability-edge/1", "source": "carousel-studio", "target": "marketingshark", "capability": "health-read", "dataSchemaVersion": "venture-operation-health/1", "direction": "source-to-target", "decision": "allowed", "reason": "marketingShark may use only Design Lab operational health when deciding whether an approved render can proceed.", "governingReference": "GitHub #425", "runtimeEnforcementPoint": "orchestrator/src/operations/health.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "fightaiq", "target": "mma-files", "capability": "health-read", "dataSchemaVersion": "venture-operation-health/1", "direction": "source-to-target", "decision": "allowed", "reason": "MMA Files may read bounded FightAIQ service health without reading FightAIQ analysis or monetization state.", "governingReference": "GitHub #425", "runtimeEnforcementPoint": "orchestrator/src/operations/health.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "design-lab", "target": "door-money", "capability": "health-read", "dataSchemaVersion": "venture-operation-health/1", "direction": "source-to-target", "decision": "allowed", "reason": "Door Money may read bounded renderer health without exposing private book data.", "governingReference": "GitHub #425", "runtimeEnforcementPoint": "orchestrator/src/operations/health.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "social-distribution", "target": "door-money", "capability": "health-read", "dataSchemaVersion": "venture-operation-health/1", "direction": "source-to-target", "decision": "allowed", "reason": "Door Money may read bounded distribution-service health without exposing an unpublished package.", "governingReference": "GitHub #425", "runtimeEnforcementPoint": "orchestrator/src/operations/health.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "design-lab", "target": "kvorum", "capability": "health-read", "dataSchemaVersion": "venture-operation-health/1", "direction": "source-to-target", "decision": "allowed", "reason": "Kvórum may read bounded renderer health; this cannot export Kvórum content or political output.", "governingReference": "GitHub #425", "runtimeEnforcementPoint": "orchestrator/src/operations/health.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "goviral", "target": "door-money", "capability": "intelligence-read", "dataSchemaVersion": "goviral-intelligence-packet/1", "direction": "source-to-target", "decision": "held", "reason": "Existing Door Money authority decides whether an accepted weekly intelligence packet may be read.", "governingReference": "GitHub #424", "runtimeEnforcementPoint": "orchestrator/src/ventures/door-money/goviral-brief.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "goviral", "target": "booksofhistory", "capability": "intelligence-read", "dataSchemaVersion": "goviral-intelligence-packet/1", "direction": "source-to-target", "decision": "allowed", "reason": "BOOKSOFHISTORY may independently consume bounded generic intelligence, never Tehdejší svět state.", "governingReference": "GitHub #424", "runtimeEnforcementPoint": "orchestrator/src/ventures/booksofhistory/goviral.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "goviral", "target": "tehdejsi-svet", "capability": "intelligence-read", "dataSchemaVersion": "goviral-intelligence-packet/1", "direction": "source-to-target", "decision": "allowed", "reason": "Tehdejší svět may independently consume bounded generic intelligence, never BOOKSOFHISTORY state.", "governingReference": "GitHub #424", "runtimeEnforcementPoint": "orchestrator/src/ventures/tehdejsi-svet/goviral.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "goviral", "target": "kvorum", "capability": "intelligence-read", "dataSchemaVersion": "goviral-intelligence-packet/1", "direction": "source-to-target", "decision": "allowed", "reason": "Kvórum may read bounded generic intelligence; this creates no outbound political edge.", "governingReference": "GitHub #424", "runtimeEnforcementPoint": "orchestrator/src/ventures/kvorum/goviral.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "goviral", "target": "personal-growth", "capability": "intelligence-read", "dataSchemaVersion": "personal-growth-goviral-packet/1", "direction": "source-to-target", "decision": "allowed", "reason": "Personal Growth may read only the accepted bounded packet derived from the saved weekly GoVIRAL brief; this grants no scraper, spend or publishing authority.", "governingReference": "GitHub #373", "runtimeEnforcementPoint": "orchestrator/src/ventures/personal-growth/goviral.ts", "testProbeReference": "orchestrator/tests/personal-growth-goviral.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "goviral", "target": "webdev-signal", "capability": "intelligence-read", "dataSchemaVersion": "goviral-intelligence-packet/1", "direction": "source-to-target", "decision": "held", "reason": "The planned venture may later reuse a recorded bounded packet without rerunning a GoVIRAL actor.", "governingReference": "GitHub #424", "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "goviral", "target": "caught-up", "capability": "intelligence-read", "dataSchemaVersion": "goviral-trends/1", "direction": "source-to-target", "decision": "allowed", "reason": "DNESKAi's rooms may read the weekly trend snapshot as a tiebreaker. Bounded expiring intelligence only: signals, never copy, captions or handles.", "governingReference": "GitHub #471", "runtimeEnforcementPoint": "orchestrator/src/portfolio/evidence.ts", "testProbeReference": "orchestrator/tests/goviral-magazine-edges.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "goviral", "target": "mma-files", "capability": "intelligence-read", "dataSchemaVersion": "goviral-trends/1", "direction": "source-to-target", "decision": "allowed", "reason": "MMA Files' rooms may read the weekly trend snapshot as a tiebreaker. Bounded expiring intelligence only: signals, never copy, captions or handles.", "governingReference": "GitHub #471", "runtimeEnforcementPoint": "orchestrator/src/portfolio/evidence.ts", "testProbeReference": "orchestrator/tests/goviral-magazine-edges.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "door-money", "target": "design-lab", "capability": "bounded-render-summary", "dataSchemaVersion": "bounded-render-summary/1", "direction": "source-to-target", "decision": "allowed", "reason": "Design Lab may render an approved bounded summary but never own strategy or read the manuscript store.", "governingReference": "GitHub #424", "runtimeEnforcementPoint": "orchestrator/src/ventures/door-money/capabilities.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "door-money", "target": "social-distribution", "capability": "approved-publish-package", "dataSchemaVersion": "approved-publish-package/1", "direction": "source-to-target", "decision": "allowed", "reason": "Only immutable owner-approved package and asset references may reach the separately gated distribution service.", "governingReference": "GitHub #424", "runtimeEnforcementPoint": "orchestrator/src/ventures/door-money/capabilities.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "webdev-signal", "target": "design-lab", "capability": "bounded-render-summary", "dataSchemaVersion": "bounded-render-summary/1", "direction": "source-to-target", "decision": "allowed", "reason": "Only an accepted locale render summary may reach the deterministic renderer.", "governingReference": "GitHub #424", "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "caught-up", "target": "design-lab", "capability": "bounded-render-summary", "dataSchemaVersion": "bounded-render-summary/1", "direction": "source-to-target", "decision": "allowed", "reason": "Design Lab may render a bounded summary of a delivered DNESKAi edition. The summary carries headline, dek and slide text; the renderer never reads the edition store.", "governingReference": "GitHub #467", "runtimeEnforcementPoint": "orchestrator/src/studio/render-access.ts", "testProbeReference": "orchestrator/tests/render-summary-edges.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "mma-files", "target": "design-lab", "capability": "bounded-render-summary", "dataSchemaVersion": "bounded-render-summary/1", "direction": "source-to-target", "decision": "allowed", "reason": "Design Lab may render a bounded summary of a delivered MMA Files article. The renderer never reads the article store or any fighter record.", "governingReference": "GitHub #467", "runtimeEnforcementPoint": "orchestrator/src/studio/render-access.ts", "testProbeReference": "orchestrator/tests/render-summary-edges.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "booksofhistory", "target": "design-lab", "capability": "bounded-render-summary", "dataSchemaVersion": "bounded-render-summary/1", "direction": "source-to-target", "decision": "allowed", "reason": "Design Lab may render a bounded BOOKSOFHISTORY summary, typographic only per its founding decision, and never reads the dossier or shortlist store.", "governingReference": "GitHub #467", "runtimeEnforcementPoint": "orchestrator/src/studio/render-access.ts", "testProbeReference": "orchestrator/tests/render-summary-edges.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "tehdejsi-svet", "target": "design-lab", "capability": "bounded-render-summary", "dataSchemaVersion": "bounded-render-summary/1", "direction": "source-to-target", "decision": "allowed", "reason": "Design Lab may render a bounded Tehdejší svět summary. Photographs come only from its own committed media behind TS-MEDIA-002; the renderer reads no product state.", "governingReference": "GitHub #467", "runtimeEnforcementPoint": "orchestrator/src/studio/render-access.ts", "testProbeReference": "orchestrator/tests/render-summary-edges.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "kvorum", "target": "design-lab", "capability": "bounded-render-summary", "dataSchemaVersion": "bounded-render-summary/1", "direction": "source-to-target", "decision": "allowed", "reason": "Design Lab may render a bounded Kvórum summary, typographic only because the registry sets imageGeneration false, and never reads claims or recommendations.", "governingReference": "GitHub #467", "runtimeEnforcementPoint": "orchestrator/src/studio/render-access.ts", "testProbeReference": "orchestrator/tests/render-summary-edges.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "webdev-signal", "target": "social-distribution", "capability": "approved-publish-package", "dataSchemaVersion": "approved-publish-package/1", "direction": "source-to-target", "decision": "allowed", "reason": "Only immutable Czech or English package and asset references may reach independently gated distribution.", "governingReference": "GitHub #424", "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "admin-service", "target": "personal-growth", "capability": "owner-manual-reference-read", "dataSchemaVersion": "owner-manual-reference/1", "direction": "source-to-target", "decision": "allowed", "reason": "The owner may manually supply or select one bounded reference; no automatic portfolio enumeration is permitted.", "governingReference": "GitHub #382", "runtimeEnforcementPoint": "orchestrator/src/ventures/personal-growth/capabilities.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "metrics-service", "target": "webdev-signal", "capability": "own-metrics-read", "dataSchemaVersion": "own-metrics-summary/1", "direction": "source-to-target", "decision": "held", "reason": "Only official metrics for WebDev Signal's own profiles may be exposed after separate authority.", "governingReference": "GitHub #424", "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "implementation-plans", "target": "webdev-signal", "capability": "implementation-progress-read", "dataSchemaVersion": "implementation-progress-summary/1", "direction": "source-to-target", "decision": "held", "reason": "A bounded progress summary may be read after the shared progress service exists.", "governingReference": "GitHub #419", "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "health-service", "target": "webdev-signal", "capability": "health-read", "dataSchemaVersion": "venture-health-summary/1", "direction": "source-to-target", "decision": "held", "reason": "A bounded own-health summary may be read after the shared health service exists.", "governingReference": "GitHub #423", "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" },
-    { "schemaVersion": "venture-capability-edge/1", "source": "webdev-signal", "target": "owner-attention", "capability": "owner-attention-write", "dataSchemaVersion": "owner-attention/1", "direction": "source-to-target", "decision": "held", "reason": "Only a bounded owner-attention item may be submitted after the shared service exists.", "governingReference": "GitHub #423", "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts", "testProbeReference": "orchestrator/tests/venture-capability.test.ts" }
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "carousel-studio",
+      "target": "marketingshark",
+      "capability": "health-read",
+      "dataSchemaVersion": "venture-operation-health/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "marketingShark may use only Design Lab operational health when deciding whether an approved render can proceed.",
+      "governingReference": "GitHub #425",
+      "runtimeEnforcementPoint": "orchestrator/src/operations/health.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "fightaiq",
+      "target": "mma-files",
+      "capability": "health-read",
+      "dataSchemaVersion": "venture-operation-health/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "MMA Files may read bounded FightAIQ service health without reading FightAIQ analysis or monetization state.",
+      "governingReference": "GitHub #425",
+      "runtimeEnforcementPoint": "orchestrator/src/operations/health.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "design-lab",
+      "target": "door-money",
+      "capability": "health-read",
+      "dataSchemaVersion": "venture-operation-health/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Door Money may read bounded renderer health without exposing private book data.",
+      "governingReference": "GitHub #425",
+      "runtimeEnforcementPoint": "orchestrator/src/operations/health.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "social-distribution",
+      "target": "door-money",
+      "capability": "health-read",
+      "dataSchemaVersion": "venture-operation-health/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Door Money may read bounded distribution-service health without exposing an unpublished package.",
+      "governingReference": "GitHub #425",
+      "runtimeEnforcementPoint": "orchestrator/src/operations/health.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "design-lab",
+      "target": "kvorum",
+      "capability": "health-read",
+      "dataSchemaVersion": "venture-operation-health/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Kvórum may read bounded renderer health; this cannot export Kvórum content or political output.",
+      "governingReference": "GitHub #425",
+      "runtimeEnforcementPoint": "orchestrator/src/operations/health.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "goviral",
+      "target": "door-money",
+      "capability": "intelligence-read",
+      "dataSchemaVersion": "goviral-intelligence-packet/1",
+      "direction": "source-to-target",
+      "decision": "held",
+      "reason": "Existing Door Money authority decides whether an accepted weekly intelligence packet may be read.",
+      "governingReference": "GitHub #424",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/door-money/goviral-brief.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "goviral",
+      "target": "booksofhistory",
+      "capability": "intelligence-read",
+      "dataSchemaVersion": "goviral-intelligence-packet/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "BOOKSOFHISTORY may independently consume bounded generic intelligence, never Tehdejší svět state.",
+      "governingReference": "GitHub #424",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/booksofhistory/goviral.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "goviral",
+      "target": "tehdejsi-svet",
+      "capability": "intelligence-read",
+      "dataSchemaVersion": "goviral-intelligence-packet/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Tehdejší svět may independently consume bounded generic intelligence, never BOOKSOFHISTORY state.",
+      "governingReference": "GitHub #424",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/tehdejsi-svet/goviral.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "goviral",
+      "target": "kvorum",
+      "capability": "intelligence-read",
+      "dataSchemaVersion": "goviral-intelligence-packet/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Kvórum may read bounded generic intelligence; this creates no outbound political edge.",
+      "governingReference": "GitHub #424",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/kvorum/goviral.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "goviral",
+      "target": "personal-growth",
+      "capability": "intelligence-read",
+      "dataSchemaVersion": "personal-growth-goviral-packet/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Personal Growth may read only the accepted bounded packet derived from the saved weekly GoVIRAL brief; this grants no scraper, spend or publishing authority.",
+      "governingReference": "GitHub #373",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/personal-growth/goviral.ts",
+      "testProbeReference": "orchestrator/tests/personal-growth-goviral.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "goviral",
+      "target": "webdev-signal",
+      "capability": "intelligence-read",
+      "dataSchemaVersion": "goviral-intelligence-packet/1",
+      "direction": "source-to-target",
+      "decision": "held",
+      "reason": "The planned venture may later reuse a recorded bounded packet without rerunning a GoVIRAL actor.",
+      "governingReference": "GitHub #424",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "goviral",
+      "target": "caught-up",
+      "capability": "intelligence-read",
+      "dataSchemaVersion": "goviral-trends/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "DNESKAi's rooms may read the weekly trend snapshot as a tiebreaker. Bounded expiring intelligence only: signals, never copy, captions or handles.",
+      "governingReference": "GitHub #471",
+      "runtimeEnforcementPoint": "orchestrator/src/portfolio/evidence.ts",
+      "testProbeReference": "orchestrator/tests/goviral-magazine-edges.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "goviral",
+      "target": "mma-files",
+      "capability": "intelligence-read",
+      "dataSchemaVersion": "goviral-trends/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "MMA Files' rooms may read the weekly trend snapshot as a tiebreaker. Bounded expiring intelligence only: signals, never copy, captions or handles.",
+      "governingReference": "GitHub #471",
+      "runtimeEnforcementPoint": "orchestrator/src/portfolio/evidence.ts",
+      "testProbeReference": "orchestrator/tests/goviral-magazine-edges.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "door-money",
+      "target": "design-lab",
+      "capability": "bounded-render-summary",
+      "dataSchemaVersion": "bounded-render-summary/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Design Lab may render an approved bounded summary but never own strategy or read the manuscript store.",
+      "governingReference": "GitHub #424",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/door-money/capabilities.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "door-money",
+      "target": "social-distribution",
+      "capability": "approved-publish-package",
+      "dataSchemaVersion": "approved-publish-package/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Only immutable owner-approved package and asset references may reach the separately gated distribution service.",
+      "governingReference": "GitHub #424",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/door-money/capabilities.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "webdev-signal",
+      "target": "design-lab",
+      "capability": "bounded-render-summary",
+      "dataSchemaVersion": "bounded-render-summary/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Only an accepted locale render summary may reach the deterministic renderer.",
+      "governingReference": "GitHub #424",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "caught-up",
+      "target": "design-lab",
+      "capability": "bounded-render-summary",
+      "dataSchemaVersion": "bounded-render-summary/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Design Lab may render a bounded summary of a delivered DNESKAi edition. The summary carries headline, dek and slide text; the renderer never reads the edition store.",
+      "governingReference": "GitHub #467",
+      "runtimeEnforcementPoint": "orchestrator/src/studio/render-access.ts",
+      "testProbeReference": "orchestrator/tests/render-summary-edges.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "mma-files",
+      "target": "design-lab",
+      "capability": "bounded-render-summary",
+      "dataSchemaVersion": "bounded-render-summary/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Design Lab may render a bounded summary of a delivered MMA Files article. The renderer never reads the article store or any fighter record.",
+      "governingReference": "GitHub #467",
+      "runtimeEnforcementPoint": "orchestrator/src/studio/render-access.ts",
+      "testProbeReference": "orchestrator/tests/render-summary-edges.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "booksofhistory",
+      "target": "design-lab",
+      "capability": "bounded-render-summary",
+      "dataSchemaVersion": "bounded-render-summary/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Design Lab may render a bounded BOOKSOFHISTORY summary, typographic only per its founding decision, and never reads the dossier or shortlist store.",
+      "governingReference": "GitHub #467",
+      "runtimeEnforcementPoint": "orchestrator/src/studio/render-access.ts",
+      "testProbeReference": "orchestrator/tests/render-summary-edges.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "tehdejsi-svet",
+      "target": "design-lab",
+      "capability": "bounded-render-summary",
+      "dataSchemaVersion": "bounded-render-summary/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Design Lab may render a bounded Tehdejší svět summary. Photographs come only from its own committed media behind TS-MEDIA-002; the renderer reads no product state.",
+      "governingReference": "GitHub #467",
+      "runtimeEnforcementPoint": "orchestrator/src/studio/render-access.ts",
+      "testProbeReference": "orchestrator/tests/render-summary-edges.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "kvorum",
+      "target": "design-lab",
+      "capability": "bounded-render-summary",
+      "dataSchemaVersion": "bounded-render-summary/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Design Lab may render a bounded Kvórum summary, typographic only because the registry sets imageGeneration false, and never reads claims or recommendations.",
+      "governingReference": "GitHub #467",
+      "runtimeEnforcementPoint": "orchestrator/src/studio/render-access.ts",
+      "testProbeReference": "orchestrator/tests/render-summary-edges.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "webdev-signal",
+      "target": "social-distribution",
+      "capability": "approved-publish-package",
+      "dataSchemaVersion": "approved-publish-package/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Only immutable Czech or English package and asset references may reach independently gated distribution.",
+      "governingReference": "GitHub #424",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "admin-service",
+      "target": "personal-growth",
+      "capability": "owner-manual-reference-read",
+      "dataSchemaVersion": "owner-manual-reference/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "The owner may manually supply or select one bounded reference; no automatic portfolio enumeration is permitted.",
+      "governingReference": "GitHub #382",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/personal-growth/capabilities.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "metrics-service",
+      "target": "webdev-signal",
+      "capability": "own-metrics-read",
+      "dataSchemaVersion": "own-metrics-summary/1",
+      "direction": "source-to-target",
+      "decision": "held",
+      "reason": "Only official metrics for WebDev Signal's own profiles may be exposed after separate authority.",
+      "governingReference": "GitHub #424",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "implementation-plans",
+      "target": "webdev-signal",
+      "capability": "implementation-progress-read",
+      "dataSchemaVersion": "implementation-progress-summary/1",
+      "direction": "source-to-target",
+      "decision": "held",
+      "reason": "A bounded progress summary may be read after the shared progress service exists.",
+      "governingReference": "GitHub #419",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "health-service",
+      "target": "webdev-signal",
+      "capability": "health-read",
+      "dataSchemaVersion": "venture-health-summary/1",
+      "direction": "source-to-target",
+      "decision": "held",
+      "reason": "A bounded own-health summary may be read after the shared health service exists.",
+      "governingReference": "GitHub #423",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "webdev-signal",
+      "target": "owner-attention",
+      "capability": "owner-attention-write",
+      "dataSchemaVersion": "owner-attention/1",
+      "direction": "source-to-target",
+      "decision": "held",
+      "reason": "Only a bounded owner-attention item may be submitted after the shared service exists.",
+      "governingReference": "GitHub #423",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/webdev-signal/capabilities.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "goviral",
+      "target": "contest-radar",
+      "capability": "intelligence-read",
+      "dataSchemaVersion": "goviral-intelligence-packet/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "Contest Radar may read recorded GoVIRAL scout evidence as a discovery-only lead at zero incremental cost. It schedules no Instagram or TikTok collection of its own, and a lead may open an investigation but never establish a fact.",
+      "governingReference": "GitHub #394",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/contest-radar/goviral.ts",
+      "testProbeReference": "orchestrator/tests/contest-radar-bridge.test.ts"
+    }
   ],
   "isolationRules": [
-    { "id": "booksofhistory-to-tehdejsi", "sources": ["booksofhistory"], "targets": ["tehdejsi-svet"], "capabilities": ["intelligence-read", "bounded-render-summary", "approved-publish-package", "owner-manual-reference-read"], "reason": "The two history ventures exchange no content, research, evidence, priors or campaign material.", "governingReference": "GitHub #424" },
-    { "id": "tehdejsi-to-booksofhistory", "sources": ["tehdejsi-svet"], "targets": ["booksofhistory"], "capabilities": ["intelligence-read", "bounded-render-summary", "approved-publish-package", "owner-manual-reference-read"], "reason": "The two history ventures exchange no content, research, evidence, priors or campaign material.", "governingReference": "GitHub #424" },
-    { "id": "personal-growth-no-portfolio", "sources": ["caught-up", "titty-tuesdays", "booksofhistory", "fightaiq", "marketingshark", "mma-files", "door-money", "tehdejsi-svet", "kvorum", "contest-radar", "webdev-signal", "boardlessai-umbrella", "devshark", "social-distribution"], "targets": ["personal-growth"], "capabilities": ["intelligence-read", "bounded-render-summary", "approved-publish-package", "owner-manual-reference-read"], "reason": "Personal Growth has no automatic portfolio, campaign, political or venture nomination input.", "governingReference": "GitHub #382" },
-    { "id": "kvorum-outbound-isolation", "sources": ["kvorum"], "targets": ["personal-growth", "caught-up", "titty-tuesdays", "booksofhistory", "fightaiq", "mma-files", "door-money", "tehdejsi-svet", "contest-radar", "webdev-signal", "boardlessai-umbrella", "devshark", "social-distribution"], "capabilities": ["intelligence-read", "bounded-render-summary", "approved-publish-package", "owner-manual-reference-read"], "reason": "Kvórum recommendations, claims and political output remain inside Kvórum.", "governingReference": "GitHub #424" },
-    { "id": "door-money-outbound-isolation", "sources": ["door-money"], "targets": ["personal-growth", "caught-up", "titty-tuesdays", "goviral", "booksofhistory", "fightaiq", "mma-files", "tehdejsi-svet", "kvorum", "contest-radar", "webdev-signal", "boardlessai-umbrella", "devshark"], "capabilities": ["intelligence-read", "bounded-render-summary", "approved-publish-package", "owner-manual-reference-read"], "reason": "Door Money has only the separately registered Design Lab and Social Distribution output relationships.", "governingReference": "GitHub #424" },
-    { "id": "door-money-inbound-isolation", "sources": ["personal-growth", "caught-up", "titty-tuesdays", "booksofhistory", "fightaiq", "mma-files", "tehdejsi-svet", "kvorum", "contest-radar", "webdev-signal", "boardlessai-umbrella", "devshark", "social-distribution"], "targets": ["door-money"], "capabilities": ["intelligence-read", "bounded-render-summary", "approved-publish-package", "owner-manual-reference-read"], "reason": "Only the separately registered accepted GoVIRAL intelligence packet may enter Door Money.", "governingReference": "GitHub #424" },
-    { "id": "webdev-signal-outbound-isolation", "sources": ["webdev-signal"], "targets": ["caught-up", "devshark", "personal-growth", "kvorum", "door-money", "booksofhistory", "tehdejsi-svet", "mma-files", "fightaiq", "contest-radar", "boardlessai-umbrella"], "capabilities": ["intelligence-read", "bounded-render-summary", "approved-publish-package", "owner-manual-reference-read"], "reason": "WebDev Signal core has only its registered renderer and distribution output relationships.", "governingReference": "GitHub #424" },
-    { "id": "webdev-signal-inbound-isolation", "sources": ["caught-up", "devshark", "personal-growth", "kvorum", "door-money", "booksofhistory", "tehdejsi-svet", "mma-files", "fightaiq", "contest-radar", "boardlessai-umbrella"], "targets": ["webdev-signal"], "capabilities": ["intelligence-read", "bounded-render-summary", "approved-publish-package", "owner-manual-reference-read"], "reason": "Only the separately registered held GoVIRAL intelligence packet may enter WebDev Signal core.", "governingReference": "GitHub #424" }
+    {
+      "id": "booksofhistory-to-tehdejsi",
+      "sources": [
+        "booksofhistory"
+      ],
+      "targets": [
+        "tehdejsi-svet"
+      ],
+      "capabilities": [
+        "intelligence-read",
+        "bounded-render-summary",
+        "approved-publish-package",
+        "owner-manual-reference-read"
+      ],
+      "reason": "The two history ventures exchange no content, research, evidence, priors or campaign material.",
+      "governingReference": "GitHub #424"
+    },
+    {
+      "id": "tehdejsi-to-booksofhistory",
+      "sources": [
+        "tehdejsi-svet"
+      ],
+      "targets": [
+        "booksofhistory"
+      ],
+      "capabilities": [
+        "intelligence-read",
+        "bounded-render-summary",
+        "approved-publish-package",
+        "owner-manual-reference-read"
+      ],
+      "reason": "The two history ventures exchange no content, research, evidence, priors or campaign material.",
+      "governingReference": "GitHub #424"
+    },
+    {
+      "id": "personal-growth-no-portfolio",
+      "sources": [
+        "caught-up",
+        "titty-tuesdays",
+        "booksofhistory",
+        "fightaiq",
+        "marketingshark",
+        "mma-files",
+        "door-money",
+        "tehdejsi-svet",
+        "kvorum",
+        "contest-radar",
+        "webdev-signal",
+        "boardlessai-umbrella",
+        "devshark",
+        "social-distribution"
+      ],
+      "targets": [
+        "personal-growth"
+      ],
+      "capabilities": [
+        "intelligence-read",
+        "bounded-render-summary",
+        "approved-publish-package",
+        "owner-manual-reference-read"
+      ],
+      "reason": "Personal Growth has no automatic portfolio, campaign, political or venture nomination input.",
+      "governingReference": "GitHub #382"
+    },
+    {
+      "id": "kvorum-outbound-isolation",
+      "sources": [
+        "kvorum"
+      ],
+      "targets": [
+        "personal-growth",
+        "caught-up",
+        "titty-tuesdays",
+        "booksofhistory",
+        "fightaiq",
+        "mma-files",
+        "door-money",
+        "tehdejsi-svet",
+        "contest-radar",
+        "webdev-signal",
+        "boardlessai-umbrella",
+        "devshark",
+        "social-distribution"
+      ],
+      "capabilities": [
+        "intelligence-read",
+        "bounded-render-summary",
+        "approved-publish-package",
+        "owner-manual-reference-read"
+      ],
+      "reason": "Kvórum recommendations, claims and political output remain inside Kvórum.",
+      "governingReference": "GitHub #424"
+    },
+    {
+      "id": "door-money-outbound-isolation",
+      "sources": [
+        "door-money"
+      ],
+      "targets": [
+        "personal-growth",
+        "caught-up",
+        "titty-tuesdays",
+        "goviral",
+        "booksofhistory",
+        "fightaiq",
+        "mma-files",
+        "tehdejsi-svet",
+        "kvorum",
+        "contest-radar",
+        "webdev-signal",
+        "boardlessai-umbrella",
+        "devshark"
+      ],
+      "capabilities": [
+        "intelligence-read",
+        "bounded-render-summary",
+        "approved-publish-package",
+        "owner-manual-reference-read"
+      ],
+      "reason": "Door Money has only the separately registered Design Lab and Social Distribution output relationships.",
+      "governingReference": "GitHub #424"
+    },
+    {
+      "id": "door-money-inbound-isolation",
+      "sources": [
+        "personal-growth",
+        "caught-up",
+        "titty-tuesdays",
+        "booksofhistory",
+        "fightaiq",
+        "mma-files",
+        "tehdejsi-svet",
+        "kvorum",
+        "contest-radar",
+        "webdev-signal",
+        "boardlessai-umbrella",
+        "devshark",
+        "social-distribution"
+      ],
+      "targets": [
+        "door-money"
+      ],
+      "capabilities": [
+        "intelligence-read",
+        "bounded-render-summary",
+        "approved-publish-package",
+        "owner-manual-reference-read"
+      ],
+      "reason": "Only the separately registered accepted GoVIRAL intelligence packet may enter Door Money.",
+      "governingReference": "GitHub #424"
+    },
+    {
+      "id": "webdev-signal-outbound-isolation",
+      "sources": [
+        "webdev-signal"
+      ],
+      "targets": [
+        "caught-up",
+        "devshark",
+        "personal-growth",
+        "kvorum",
+        "door-money",
+        "booksofhistory",
+        "tehdejsi-svet",
+        "mma-files",
+        "fightaiq",
+        "contest-radar",
+        "boardlessai-umbrella"
+      ],
+      "capabilities": [
+        "intelligence-read",
+        "bounded-render-summary",
+        "approved-publish-package",
+        "owner-manual-reference-read"
+      ],
+      "reason": "WebDev Signal core has only its registered renderer and distribution output relationships.",
+      "governingReference": "GitHub #424"
+    },
+    {
+      "id": "webdev-signal-inbound-isolation",
+      "sources": [
+        "caught-up",
+        "devshark",
+        "personal-growth",
+        "kvorum",
+        "door-money",
+        "booksofhistory",
+        "tehdejsi-svet",
+        "mma-files",
+        "fightaiq",
+        "contest-radar",
+        "boardlessai-umbrella"
+      ],
+      "targets": [
+        "webdev-signal"
+      ],
+      "capabilities": [
+        "intelligence-read",
+        "bounded-render-summary",
+        "approved-publish-package",
+        "owner-manual-reference-read"
+      ],
+      "reason": "Only the separately registered held GoVIRAL intelligence packet may enter WebDev Signal core.",
+      "governingReference": "GitHub #424"
+    },
+    {
+      "id": "contest-radar-outbound-isolation",
+      "sources": [
+        "contest-radar"
+      ],
+      "targets": [
+        "caught-up",
+        "mma-files",
+        "booksofhistory",
+        "tehdejsi-svet",
+        "kvorum",
+        "door-money",
+        "personal-growth",
+        "webdev-signal",
+        "social-distribution",
+        "design-lab"
+      ],
+      "capabilities": [
+        "intelligence-read",
+        "bounded-render-summary",
+        "approved-publish-package",
+        "owner-manual-reference-read"
+      ],
+      "reason": "Contest Radar is an owner-only tool with no outbound content edge. Nothing it discovers reaches another venture, a public surface or a social profile.",
+      "governingReference": "GitHub #408"
+    }
   ],
   "supersessionHistory": [
-    { "mapVersion": "1.0.0", "effectiveAt": "2026-08-26T00:00:00.000Z", "decisionReference": "state/decisions/2026-08-26-autonomy-first-capabilities.md", "note": "Founding deny-by-default map including the WebDev Signal owner amendment." },
-    { "mapVersion": "1.1.0", "effectiveAt": "2026-08-26T12:30:00.000Z", "decisionReference": "GitHub #425", "note": "Adds exact health-only dependency edges for declared operational consumers; no content or authority edge is added." },
-    { "mapVersion": "1.2.0", "effectiveAt": "2026-08-28T00:00:00.000Z", "decisionReference": "GitHub #438", "note": "Attaches the pre-declared WebDev Signal edges to its held registry identity without adding an edge or activation authority." }
+    {
+      "mapVersion": "1.0.0",
+      "effectiveAt": "2026-08-26T00:00:00.000Z",
+      "decisionReference": "state/decisions/2026-08-26-autonomy-first-capabilities.md",
+      "note": "Founding deny-by-default map including the WebDev Signal owner amendment."
+    },
+    {
+      "mapVersion": "1.1.0",
+      "effectiveAt": "2026-08-26T12:30:00.000Z",
+      "decisionReference": "GitHub #425",
+      "note": "Adds exact health-only dependency edges for declared operational consumers; no content or authority edge is added."
+    },
+    {
+      "mapVersion": "1.2.0",
+      "effectiveAt": "2026-08-28T00:00:00.000Z",
+      "decisionReference": "GitHub #438",
+      "note": "Attaches the pre-declared WebDev Signal edges to its held registry identity without adding an edge or activation authority."
+    }
   ]
 }
