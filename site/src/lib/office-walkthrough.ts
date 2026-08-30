@@ -27,7 +27,7 @@ import { getPublicMoneySnapshot } from "@/lib/money-records";
 import { resolveOfficeWorkflows } from "@/lib/office-workflows";
 import type { OfficeWorkflows } from "@/lib/office-workflows-model";
 import { getPublicArticleSlots } from "@/lib/article-slots";
-import { publicKindLabel, readableSlotReason } from "@/lib/slot-labels";
+import { publicKindLabel, readableSlotReason, ventureForKind } from "@/lib/slot-labels";
 import { getPublicStandups } from "@/lib/standup-records";
 import { VENTURE_BRAND } from "@/lib/venture-brand";
 import { getPublicCalendarSchedule, getPublicRoomSchedule } from "@/lib/venture-registry";
@@ -74,23 +74,7 @@ export type OfficeProjectKey =
 export const PROJECT_COLOR = VENTURE_BRAND as Record<OfficeProjectKey, string>;
 
 export function projectForKind(kind: string): OfficeProjectKey {
-  // A venture day belongs to the venture that holds it, even when the rooms inside it do not:
-  // `mma-day` runs FightAIQ's two checks, and the day is still MMA Files'.
-  if (kind === "cu-day") return "caught-up";
-  if (kind === "mma-day") return "mma-files";
-  if (kind === "dm-day") return "door-money";
-  if (kind === "cu-edition" || kind === "cu-product") return "caught-up";
-  if (kind === "tt-marketing") return "titty-tuesdays";
-  if (kind === "gv-brief") return "goviral";
-  if (kind === "bh-desk") return "booksofhistory";
-  if (kind === "dm-desk" || kind === "dm-growth") return "door-money";
-  if (kind === "ts-desk") return "tehdejsi-svet";
-  if (kind === "kv-desk") return "kvorum";
-  if (kind === "ms-daily") return "marketingshark";
-  if (kind === "mma-intake" || kind === "mma-analysis") return "fightaiq";
-  if (kind === "mag-editorial" || kind === "mag-desk" || kind === "article-am" || kind === "article-pm") return "mma-files";
-  if (kind === "studio") return "carousel-studio";
-  return "company";
+  return ventureForKind(kind) as OfficeProjectKey;
 }
 
 /** Calendar-only ventures can keep their own hue without acquiring a public project room. */

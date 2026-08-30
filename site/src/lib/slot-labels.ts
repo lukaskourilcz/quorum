@@ -44,6 +44,46 @@ export function publicKindLabel(kind: string): string {
 }
 
 /**
+ * Which venture a slot belongs to, everywhere a slot is coloured or filed.
+ *
+ * The same map lives beside `publicKindLabel` for the same reason: it was written three times —
+ * here as `projectForKind` in the walkthrough, again inside `week-board.tsx`, and a third time in
+ * the workflows model — and the copies drifted. When the venture days landed, the walkthrough
+ * learned `cu-day`, `mma-day` and `dm-day` and the week board did not, so `/calendar` painted
+ * every consolidated day in the company's grey.
+ *
+ * A venture day belongs to the venture that holds it even when the rooms inside it do not:
+ * `mma-day` runs FightAIQ's two checks and is still MMA Files'.
+ */
+const ventures: Record<string, string> = {
+  "cu-day": "caught-up",
+  "cu-edition": "caught-up",
+  "cu-product": "caught-up",
+  "mma-day": "mma-files",
+  "mag-editorial": "mma-files",
+  "mag-desk": "mma-files",
+  "article-am": "mma-files",
+  "article-pm": "mma-files",
+  "dm-day": "door-money",
+  "dm-desk": "door-money",
+  "dm-growth": "door-money",
+  "mma-intake": "fightaiq",
+  "mma-analysis": "fightaiq",
+  "tt-marketing": "titty-tuesdays",
+  "gv-brief": "goviral",
+  "ms-daily": "marketingshark",
+  "bh-desk": "booksofhistory",
+  "ts-desk": "tehdejsi-svet",
+  "kv-desk": "kvorum",
+  studio: "carousel-studio"
+};
+
+/** The venture a slot kind belongs to, or `"company"` for the board's own shifts. */
+export function ventureForKind(kind: string): string {
+  return ventures[kind] ?? "company";
+}
+
+/**
  * An article run states why its slot died as a machine token. `buildCalendarFeed` copies that
  * token into `decisionOneLiner` unchanged, and every board that prints one is where an owner
  * reads it, so each token gets a sentence here. A reason absent from this map is printed

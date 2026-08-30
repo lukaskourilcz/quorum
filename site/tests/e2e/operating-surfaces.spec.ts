@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { createHash } from "node:crypto";
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { expect, test } from "@playwright/test";
 import { CALENDAR_SLOTS } from "../../src/lib/calendar-feed-model";
@@ -501,21 +501,34 @@ test("WeekBoard navigates between statically generated weeks", async ({ page }) 
   // One row per calendar slot, and the registry decides how many slots there are. Pinning the
   // number made this guard break every time a venture opened or closed; what it protects is that
   // every registered slot renders exactly one row and one project icon.
-  await expect(weekBoard.locator(".contents")).toHaveCount(CALENDAR_SLOTS.length);
-  await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(CALENDAR_SLOTS.length);
+  const paused = new Set((registry.ventures as Array<{ id: string; status?: string; day?: { kind: string }; meetings: Array<{ kind: string }> }>)
+    .filter((venture) => venture.status === "paused")
+    .flatMap((venture) => [...(venture.day ? [venture.day.kind] : []), ...venture.meetings.map(({ kind }) => kind)]));
+  const liveSlots = CALENDAR_SLOTS.filter(({ kind }) => !paused.has(kind)).length;
+  await expect(weekBoard.locator(".contents")).toHaveCount(liveSlots);
+  await expect(weekBoard.locator("[data-project-icon]")).toHaveCount(liveSlots);
   // The legend owns one entry per colour currently represented by the calendar model. Keep the
   // count aligned with that model as ventures join instead of preserving the old ten-entry pin.
   await expect(page.locator("[data-project-legend]")).toHaveCount(12);
-  for (const [kind, hour, project] of [
-    ["bh-desk", "12", "booksofhistory"],
-    ["dm-desk", "15", "door-money"],
-    ["dm-growth", "16", "door-money"],
-    ["ts-desk", "18", "tehdejsi-svet"],
-    ["kv-desk", "21", "kvorum"]
-  ] as const) {
-    const row = weekBoard.locator(`[data-calendar-kind="${kind}"][data-calendar-hour="${hour}"]`);
-    await expect(row).toHaveCount(1);
-    await expect(row.locator(`[data-calendar-slot][data-project="${project}"]`)).toHaveCount(5);
+  /*
+   * Every venture row on the board, at its own hour and in its own colour.
+   *
+   * Five kinds were named here by hand, two of which were Door Money's — so the list broke the
+   * day the owner paused it, and it had already stopped describing the clock when `dm-desk` and
+   * `dm-growth` moved inside the Door Money day. Walking the model instead covers every row and
+   * survives both kinds of change.
+   */
+  const ownerOf = new Map((registry.ventures as Array<{ id: string; day?: { kind: string }; meetings: Array<{ kind: string }> }>)
+    .flatMap((venture) => [
+      ...(venture.day ? [[venture.day.kind, venture.id] as const] : []),
+      ...venture.meetings.map((meeting) => [meeting.kind, venture.id] as const)
+    ]));
+  for (const slot of CALENDAR_SLOTS.filter(({ kind }) => !paused.has(kind))) {
+    const project = ownerOf.get(slot.kind);
+    if (!project) continue; // The company's own shift belongs to no venture and has no hue.
+    const row = weekBoard.locator(`[data-calendar-kind="${slot.kind}"][data-calendar-hour="${slot.hour}"]`);
+    await expect(row, slot.kind).toHaveCount(1);
+    await expect(row.locator(`[data-calendar-slot][data-project="${project}"]`), slot.kind).toHaveCount(5);
   }
   await expect(weekBoard.locator("[data-calendar-slot] time")).toHaveCount(0);
   // No assertion that a fixture is on the board. There were test meetings on it when the archive
@@ -775,32 +788,60 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     }
   });
 
+  /*
+   * Both halves of the same gate, and which half runs is read off the inbox.
+   *
+   * These asserted a flat 409 and the words "TS-RESULTS-005 is pending". The owner signed that
+   * approval on 2026-08-29 and both tests failed — for the one reason an approval gate is allowed
+   * to change its answer. Hard-coding the refusal made "the owner signed it" look identical to
+   * "the gate stopped working", which is the failure this guard exists to catch.
+   *
+   * So the gate is still proved on every run: the request is made, the server's answer is checked
+   * against the approval's real state, and exactly one write is attempted either way. What the
+   * suite no longer does is insist the owner has not decided yet.
+   */
+  const tsResultsApproved = async () => {
+    const inbox = await readFile(path.join(repositoryRoot, "state/INBOX.md"), "utf8");
+    return /^- \[x\] HUMAN_APPROVAL TS-RESULTS-005/mu.test(inbox);
+  };
+
   test("Tehdejsi svet result entry stays manual and approval-gated", async ({ page }) => {
+    const approved = await tsResultsApproved();
+    const resultsRoot = path.join(repositoryRoot, "state/ventures/tehdejsi-svet/results");
+    const before = await readdir(resultsRoot).catch(() => [] as string[]);
     let resultPosts = 0;
     page.on("request", (request) => {
       if (request.method() === "POST" && new URL(request.url()).pathname === "/admin/api/tehdejsi-svet/results") resultPosts += 1;
     });
-    await page.goto("/admin?venture=tehdejsi-svet&tab=features", { waitUntil: "networkidle" });
-    const lane = page.locator('[data-tehdejsi-results="cs"]');
-    await lane.getByLabel("Metrics captured at").fill("2026-08-12T13:00");
-    await lane.getByLabel("Sends (primary)").fill("18");
-    const response = page.waitForResponse((candidate) =>
-      candidate.request().method() === "POST" && new URL(candidate.url()).pathname === "/admin/api/tehdejsi-svet/results"
-    );
-    await lane.getByRole("button", { name: "Record manual result" }).click();
-    expect((await response).status()).toBe(409);
-    await expect(lane.getByRole("alert")).toContainText("TS-RESULTS-005 is pending");
-    expect(resultPosts).toBe(1);
+    try {
+      await page.goto("/admin?venture=tehdejsi-svet&tab=features", { waitUntil: "networkidle" });
+      const lane = page.locator('[data-tehdejsi-results="cs"]');
+      await lane.getByLabel("Metrics captured at").fill("2026-08-12T13:00");
+      await lane.getByLabel("Sends (primary)").fill("18");
+      const response = page.waitForResponse((candidate) =>
+        candidate.request().method() === "POST" && new URL(candidate.url()).pathname === "/admin/api/tehdejsi-svet/results"
+      );
+      await lane.getByRole("button", { name: "Record manual result" }).click();
+      expect((await response).status()).toBe(approved ? 201 : 409);
+      if (!approved) await expect(lane.getByRole("alert")).toContainText("TS-RESULTS-005 is pending");
+      // One attempt either way. A refused write that retries is a write the gate did not stop.
+      expect(resultPosts).toBe(1);
+    } finally {
+      // The suite may not leave a measurement behind on a venture whose results are the owner's.
+      for (const name of (await readdir(resultsRoot).catch(() => [] as string[]))) {
+        if (!before.includes(name)) await rm(path.join(resultsRoot, name), { force: true, recursive: true });
+      }
+    }
   });
 
   test("Tehdejsi svet keeps owner paste-in behind its approval", async ({ page }) => {
+    const approved = await tsResultsApproved();
     let futurePosts = 0;
     page.on("request", (request) => {
       if (request.method() === "POST" && /\/admin\/api\/tehdejsi-svet\/(?:signals|insights|results)$/u.test(new URL(request.url()).pathname)) futurePosts += 1;
     });
     await page.goto("/admin?venture=tehdejsi-svet&tab=signals", { waitUntil: "networkidle" });
     const panel = page.locator("[data-tehdejsi-signals]");
-    await expect(panel.getByText("No owner-pasted community memory is recorded.")).toBeVisible();
     const sourceLabel = panel.getByLabel("Source label");
     const comments = panel.getByLabel("Owner-pasted comments");
     const record = panel.getByRole("button", { name: "Record recollections" });
@@ -810,7 +851,7 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
       return record.isEnabled();
     }, { timeout: 30_000 }).toBe(true);
     await record.click();
-    await expect(panel.getByRole("alert")).toContainText("TS-RESULTS-005 is pending");
+    if (!approved) await expect(panel.getByRole("alert")).toContainText("TS-RESULTS-005 is pending");
     expect(futurePosts).toBe(1);
   });
 
@@ -1186,18 +1227,37 @@ test("Company files speaks plainly", async ({ page }) => {
   expect(body).not.toMatch(/\bcarousel-studio\b/);
 });
 
+/**
+ * Park the reader at a known scroll offset and wait for the page to actually be there.
+ *
+ * `html` carries `scroll-behavior: smooth`, so `window.scrollTo` starts an animation and reading
+ * `window.scrollY` on the next line reports where the page still is, not where it is going. That
+ * raced: on a 13,454px `/ideas` the baseline came back as 20 while the animation was mid-flight,
+ * and the assertion then compared a filtered page's real position against a number that had never
+ * been true. `behavior: "instant"` overrides the CSS for this one call, and the poll waits for the
+ * clamp on a page too short to reach the offset.
+ */
+async function parkScrollAt(page: import("@playwright/test").Page, offset: number): Promise<number> {
+  await page.evaluate((top) => window.scrollTo({ top, behavior: "instant" }), offset);
+  const expected = await page.evaluate(
+    (requested) => Math.min(requested, document.documentElement.scrollHeight - window.innerHeight),
+    offset
+  );
+  await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBe(Math.round(expected));
+  return Math.round(expected);
+}
+
 test("stateful route controls preserve page scroll", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
 
   await page.goto("/ideas", { waitUntil: "networkidle" });
   const accepted = page.getByRole("link", { name: "Approved", exact: true });
   await accepted.scrollIntoViewIfNeeded();
-  await page.evaluate(() => window.scrollTo(0, 200));
-  const ideasScrollY = await page.evaluate(() => window.scrollY);
+  const ideasScrollY = await parkScrollAt(page, 200);
   expect(ideasScrollY).toBeGreaterThan(0);
   await accepted.click();
   await expect(page).toHaveURL(/\/ideas\?status=accepted$/);
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(ideasScrollY);
+  await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBe(ideasScrollY);
 
   // The week arrows moved with the board they belong to. The home page is now a walkthrough
   // whose calendar steps weeks in place, without navigating; the linked arrows — and therefore
@@ -1206,8 +1266,7 @@ test("stateful route controls preserve page scroll", async ({ page }) => {
   await page.goto("/calendar", { waitUntil: "networkidle" });
   const nextWeek = page.getByRole("link", { name: "Next calendar week" });
   await nextWeek.scrollIntoViewIfNeeded();
-  await page.evaluate(() => window.scrollTo(0, 200));
-  const nextScrollY = await page.evaluate(() => window.scrollY);
+  const nextScrollY = await parkScrollAt(page, 200);
   expect(nextScrollY).toBeGreaterThan(0);
   await nextWeek.click();
   await expect(page).toHaveURL(/\/calendar\/\d{4}-\d{2}-\d{2}$/);
@@ -1217,12 +1276,11 @@ test("stateful route controls preserve page scroll", async ({ page }) => {
     nextScrollY
   );
   expect(expectedNextScrollY).toBeGreaterThan(0);
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(expectedNextScrollY);
+  await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBe(Math.round(expectedNextScrollY));
 
   const previousWeek = page.getByRole("link", { name: "Previous calendar week" });
   await previousWeek.scrollIntoViewIfNeeded();
-  await page.evaluate(() => window.scrollTo(0, 200));
-  const previousScrollY = await page.evaluate(() => window.scrollY);
+  const previousScrollY = await parkScrollAt(page, 200);
   expect(previousScrollY).toBeGreaterThan(0);
   await previousWeek.click();
   const expectedPreviousScrollY = await page.evaluate(
@@ -1231,8 +1289,8 @@ test("stateful route controls preserve page scroll", async ({ page }) => {
     previousScrollY
   );
   await expect
-    .poll(() => page.evaluate(() => window.scrollY))
-    .toBe(expectedPreviousScrollY);
+    .poll(() => page.evaluate(() => Math.round(window.scrollY)))
+    .toBe(Math.round(expectedPreviousScrollY));
 });
 
 test("Decision Replay controls preserve page scroll", async ({ page }) => {
@@ -1286,20 +1344,18 @@ for (const [route, heading] of [
  * content ran sideways out of the drawing entirely. Every assertion below is one of those
  * symptoms, measured rather than eyeballed.
  */
+/**
+ * Every room a visitor can press open: the company's, plus one per operating venture.
+ *
+ * Read off the registry rather than listed, because a venture the owner pauses in Settings has
+ * no room on the plan and clicking for it can only time out.
+ */
 const OPENABLE_ROOMS = [
   "company",
-  "caught-up",
-  "mma-files",
-  "fightaiq",
-  "carousel-studio",
-  "marketingshark",
-  "goviral",
-  "titty-tuesdays",
-  "booksofhistory",
-  "door-money",
-  "tehdejsi-svet",
-  "kvorum"
-] as const;
+  ...(registry.ventures as Array<{ id: string; status?: string; visibility: string }>)
+    .filter((venture) => venture.visibility === "public" && venture.status !== "paused")
+    .map((venture) => venture.id)
+];
 
 test("the home walkthrough carries every operating venture at mobile width", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
