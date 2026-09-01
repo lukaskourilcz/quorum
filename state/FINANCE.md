@@ -12,7 +12,7 @@ company total and never expands the $25.00 model/API share or $1.00 daily model/
 
 <!-- BEGIN GENERATED: read from state/budget/ledger.json. Do not edit by hand. -->
 
-As of 2026-09-01 06:07 UTC.
+As of 2026-09-01 07:04 UTC.
 
 | Metric | Value |
 | --- | ---: |
