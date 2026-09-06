@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "delivery-queue-health/1",
+  "checkedAt": "2026-09-06T03:03:44.664Z",
+  "date": "2026-09-06",
+  "ventures": [
+    {
+      "venture": "mma-files",
+      "waiting": [],
+      "parked": [
+        {
+          "label": "2026-08-30 AM ufc-alex-perez",
+          "packageHash": "8a99a79aa22aa5467700ba32709d422429c952cfd53f7fc08289a83095c1d87a",
+          "date": "2026-08-30",
+          "code": "hash_conflict",
+          "disposition": "retire",
+          "supersededBy": "0120bb5445c80a73fb95e6a1836541d19b07c99d09c591d3573db01c0e4ac698"
+        }
+      ],
+      "oldestWaitingDate": null,
+      "stalledDays": null,
+      "stalled": false,
+      "neverDrains": []
+    },
+    {
+      "venture": "caught-up",
+      "waiting": [
+        {
+          "label": "2026-08-17 edition",
+          "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
+          "date": "2026-08-17"
+        }
+      ],
+      "parked": [],
+      "oldestWaitingDate": "2026-08-17",
+      "stalledDays": 20,
+      "stalled": true,
+      "neverDrains": []
+    }
+  ],
+  "deploys": [
+    {
+      "venture": "caught-up",
+      "url": "https://caughtup-ai.vercel.app/data/board/2026-08-30.json",
+      "expected": "2026-08-30",
+      "status": 200,
+      "live": true
+    },
+    {
+      "venture": "mma-files",
+      "url": "https://mma-files.vercel.app/cs/articles/ufc-amanda-nunes",
+      "expected": "ufc-amanda-nunes",
+      "status": 200,
+      "live": true
+    }
+  ],
+  "needsOwner": true
+}
