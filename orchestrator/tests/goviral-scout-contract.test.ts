@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import * as apify from "../src/sources/apify.js";
-import { mapDatasetRow, runRecipeStep, stepPayload } from "../src/sources/goviral-scout.js";
+import { mapDatasetRow, runRecipeStep, stepPayload, stepTopicSets } from "../src/sources/goviral-scout.js";
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -50,4 +50,9 @@ describe("GoVIRAL provider contracts", () => {
       posted_at: "2026-09-07T06:00:00Z"
     } })).toMatchObject({ likes: 12, comments: 3, reshares: 2, postedAt: "2026-09-07T06:00:00.000Z" });
   });
+});
+
+it("spends discovery allowance only on the three launch products", async () => {
+  const registry = await apify.loadGoViralSourceRegistry();
+  expect(stepTopicSets(registry.recipe[0]!, registry).sort()).toEqual(["devshark", "dneskai", "mma"]);
 });

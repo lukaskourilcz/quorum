@@ -1,3 +1,4 @@
+import ventureRegistry from "../../../config/ventures.json";
 import { describe, expect, it } from "vitest";
 import {
   WORKSPACE_CHANNELS,
@@ -114,9 +115,11 @@ describe("the workspace channel map", () => {
     // Channels are the calendar's list. A venture with a row and no channel is a desk whose
     // records nobody can read; a channel with no row advertises a room nobody holds.
     const scheduleHours = schedule.map((slot) => slot.hour).sort((left, right) => left - right);
-    const channelHours = WORKSPACE_CHANNELS.map((channel) => channel.hour).sort((left, right) => left - right);
-    // Door Money is paused, so it keeps its channel and loses its calendar row until it resumes.
-    expect(channelHours.filter((hour) => hour !== 15)).toEqual(scheduleHours);
+    const paused = new Set(ventureRegistry.ventures.filter(venture => venture.status === "paused").map(venture => venture.id));
+    const channelHours = WORKSPACE_CHANNELS.filter(channel => (!channel.venture || !paused.has(channel.venture)))
+      .map(channel => channel.hour).sort((left, right) => left - right);
+    // Paused rooms retain their archive channels but have no promised calendar slot.
+    expect(channelHours).toEqual(scheduleHours);
 
     // Every room a venture day dispatches routes into that day's own channel.
     for (const [day, steps] of Object.entries(DAY_STEPS)) {

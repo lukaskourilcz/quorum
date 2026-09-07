@@ -801,10 +801,22 @@ export async function write(
   // Injectable so a test never reaches the network; production uses the keyless reader.
   read: (url: string, at: Date) => Promise<string | null> = defaultReadBody
 ): Promise<CzechArticle> {
-  const byId = new Map(items.map((item) => [item.externalId, item]));
-  const pickedItems = brief.picks
-    .map((pick) => byId.get(pick.itemId))
-    .filter((item): item is SourceItem => Boolean(item));
+  const byId = new Map<string, SourceItem>();
+  for (const item of items) {
+    const previous = byId.get(item.externalId);
+    if (previous && (previous.url !== item.url || previous.sourceId !== item.sourceId)) {
+      throw new Error(`write: ambiguous source id ${item.externalId}`);
+    }
+    byId.set(item.externalId, item);
+  }
+  const seenPicks = new Set<string>();
+  const pickedItems = brief.picks.map((pick) => {
+    if (seenPicks.has(pick.itemId)) throw new Error(`write: duplicate selected source ${pick.itemId}`);
+    seenPicks.add(pick.itemId);
+    const item = byId.get(pick.itemId);
+    if (!item) throw new Error(`write: selected source ${pick.itemId} is absent from the source pool`);
+    return item;
+  });
   if (pickedItems.length < 3) {
     throw new Error(`write: only ${pickedItems.length} selected items exist in the source pool`);
   }

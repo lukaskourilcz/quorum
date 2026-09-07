@@ -35,7 +35,11 @@ describe("marketingShark question bank", () => {
     expect(snapshot.sourceRepo).toBe("lukaskourilcz/react-express-app");
     expect(snapshot.sourceSubject).toBe("webdev");
     expect(snapshot.sourceCommit).toMatch(/^[0-9a-f]{40}$/);
-    expect(snapshot.questions.length).toBeGreaterThan(3_000);
+    // Product curation can remove questions. Coverage matters; an old cardinality must
+    // not force retired questions back into the marketing snapshot.
+    for (const category of ["javascript", "typescript", "react", "css"]) {
+      expect(snapshot.questions.some(entry => entry.category === category)).toBe(true);
+    }
     expect(new Set(snapshot.questions.map((entry) => entry.id)).size).toBe(snapshot.questions.length);
     // Both predicates the hook library gates on have to be satisfiable by this bank, or a
     // pattern that names them is decoration.

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "goviral-sources/1",
-  "verifiedAt": "2026-08-06",
-  "$comment": "Apify actors GoVIRAL may run, and the topic sets it runs them on. The Free plan's $5 monthly platform credit is the budget guard: when it is spent the actors stop, so overspend is impossible and no cash is at risk. Upgrading the plan needs a new owner approval. Starter is $29/mo and would consume more than half of the $50 all-in cap.",
+  "verifiedAt": "2026-09-07",
+  "$comment": "Actor input contracts reviewed 2026-09-07. One APIFY_TOKEN is shared by approved actors. Keep the existing $5 scout allowance and account-level spending limit; token presence does not establish the account plan or remaining credit. Paid upgrades need an explicit budget decision.",
   "actors": [
     {
       "id": "instagram-popular-reels",
@@ -43,7 +43,7 @@
       "pricePer1000Usd": 0.6,
       "freeLimit": "$5 Apify platform credit per month, shared account-wide",
       "termsVerdict": "allowed",
-      "termsNote": "Same logged-out posture as the primary. Runs only when the primary fails.",
+      "termsNote": "Not wired as an automatic fallback and not scheduled. Recheck its current pay-per-usage pricing, contract and reliability before enabling.",
       "evidenceUrl": "https://apify.com/magicfingers/threads-scraper",
       "scheduled": false
     },
@@ -71,7 +71,7 @@
       "scheduled": false
     }
   ],
-  "$recipeComment": "The weekly scout, priced against the $5 credit with margin. maxResults is a hard cap, not a target — the guard drops steps in reverse order when the month is running hot, so the last step listed is the first to go. Weekly is about $1.03 and a month about $4.60.",
+  "$recipeComment": "maxResults caps the entire step across launch topic sets. Each request receives a charge ceiling. Profile monitoring skips while trackedAccounts is empty. Prices are conservative estimates; reconcile with provider usage.",
   "recipe": [
     {
       "step": 1,
@@ -148,7 +148,7 @@
       "why": "$3.40/1k would take most of GoVIRAL's monthly credit. Left documented as a future owner decision, deliberately not pre-built."
     }
   ],
-  "$topicComment": "Owner-editable, deliberately JSON rather than prompt text. `writer` is seeded from state/ventures/goviral/profile.md and should be rewritten once the owner fills that file in.",
+  "$topicComment": "Paid scouting focuses on DNESKAi, MMA FILES and devShark. Writer is excluded from paid steps; archived free-source settings remain unchanged.",
   "topicSets": {
     "writer": {
       "label": "The owner's own writing",
@@ -161,7 +161,8 @@
         "#buildinpublic",
         "#indiehackers",
         "#AItools"
-      ]
+      ],
+      "apify": false
     },
     "dneskai": {
       "label": "DNESKAi (AI and technology)",
@@ -269,6 +270,22 @@
         "#dezinformace"
       ],
       "apify": false
+    },
+    "devshark": {
+      "label": "devShark (programming and interview practice)",
+      "sourceMode": "apify",
+      "keywords": [
+        "JavaScript",
+        "TypeScript",
+        "React interview",
+        "web development"
+      ],
+      "hashtags": [
+        "#javascript",
+        "#typescript",
+        "#reactjs",
+        "#programovani"
+      ]
     }
   }
 }
