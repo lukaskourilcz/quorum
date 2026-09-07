@@ -724,9 +724,11 @@ export function recordActorUsage(
   quota: ApifyQuota,
   actor: GoViralActor,
   items: number,
-  now: Date
+  now: Date,
+  chargedUsd = estimateActorUsd(actor, items),
+  requests = 1
 ): ApifyQuota {
-  const usd = estimateActorUsd(actor, items);
+  const usd = chargedUsd;
   const prior = quota.perActorCounts[actor.id] ?? { runs: 0, items: 0, estimatedUsd: 0 };
   return {
     ...quota,
@@ -735,7 +737,7 @@ export function recordActorUsage(
     perActorCounts: {
       ...quota.perActorCounts,
       [actor.id]: {
-        runs: prior.runs + 1,
+        runs: prior.runs + requests,
         items: prior.items + items,
         estimatedUsd: Number((prior.estimatedUsd + usd).toFixed(6))
       }

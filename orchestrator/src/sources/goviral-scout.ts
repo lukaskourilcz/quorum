@@ -1,5 +1,5 @@
 import type { GoViralActor, GoViralRecipeStep, GoViralSourceRegistry } from "./apify.js";
-import { runApifyActor } from "./apify.js";
+import { estimateActorUsd, runApifyActor } from "./apify.js";
 import type { TrendItem } from "./goviral-trends.js";
 
 /**
@@ -68,10 +68,10 @@ export function mapDatasetRow(input: {
     kind,
     topicSet: input.topicSet,
     text: caption ?? "",
-    likes: count(first(row, ["likesCount", "likeCount", "likes"])),
-    comments: count(first(row, ["commentsCount", "commentCount", "replies", "repliesCount"])),
-    reshares: count(first(row, ["resharesCount", "repostCount", "reposts", "sharesCount"])),
-    postedAt: timestamp(first(row, ["timestamp", "takenAt", "publishedAt", "createdAt", "postedAt"])),
+    likes: count(first(row, ["likesCount", "likeCount", "likes", "like_count"])),
+    comments: count(first(row, ["commentsCount", "commentCount", "replies", "repliesCount", "reply_count"])),
+    reshares: count(first(row, ["resharesCount", "repostCount", "reposts", "sharesCount", "repost_count"])),
+    postedAt: timestamp(first(row, ["timestamp", "takenAt", "publishedAt", "createdAt", "postedAt", "posted_at"])),
     url,
     hashtags: hashtags(row, caption),
     audioTitle: music ? text(first(music, ["song_name", "songName", "title"]), 160) : null,
@@ -95,35 +95,33 @@ export function stepPayload(input: {
   const { step, registry } = input;
   const set = input.topicSet ? registry.topicSets[input.topicSet] : null;
   if (set?.sourceMode === "free" || set?.apify === false) return null;
-  switch (step.inputs) {
-    case "keyword": {
-      if (!set || set.keywords.length === 0) return null;
+  // Actor-owned contracts: see each actor's input-schema page, reviewed 2026-09-07.
+  const limit = step.maxResults;
+  switch (step.actorId) {
+    case "instagram-popular-reels": {
+      if (!set?.keywords.length) return null;
+      const terms = set.keywords.slice(0, Math.min(4, limit));
       return {
-        search: set.keywords.slice(0, 4),
-        searchType: step.mode === "reels" ? "reels" : "top",
-        resultsLimit: step.perInput,
-        maxResults: step.maxResults
+        search: terms.join(", "),
+        searchType: "popular",
+        searchLimit: Math.min(step.perInput, Math.floor(limit / terms.length)),
+        enhanceUserSearchWithFacebookPage: false
       };
     }
-    case "hashtag": {
-      if (!set || set.hashtags.length === 0) return null;
-      return {
-        hashtags: set.hashtags.map((tag) => tag.replace(/^#/u, "")).slice(0, 4),
-        resultsLimit: step.perInput,
-        maxResults: step.maxResults
-      };
+    case "instagram-hashtags": {
+      if (!set?.hashtags.length) return null;
+      const tags = set.hashtags.slice(0, Math.min(4, limit)).map((tag) => tag.replace(/^#/u, ""));
+      return { hashtags: tags, maxResultsPerHashtag: Math.min(step.perInput, Math.floor(limit / tags.length)) };
     }
-    case "account": {
-      if (registry.trackedAccounts.length === 0) return null;
-      return {
-        profiles: registry.trackedAccounts,
-        monitorMode: true,
-        resultsLimit: step.perInput,
-        maxResults: step.maxResults
-      };
-    }
-    case "none":
-      return { maxResults: step.maxResults };
+    case "threads-primary":
+      if (step.inputs === "account") {
+        if (!registry.trackedAccounts.length) return null;
+        return { mode: "profile", profileUsernames: registry.trackedAccounts, maxPosts: limit, includeReplies: false, includeReposts: false };
+      }
+      if (!set?.keywords.length) return null;
+      return { mode: "search", searchQuery: set.keywords[0], resultType: "top", maxPosts: limit, includeReplies: false, includeReposts: false };
+    case "instagram-explore":
+      return { max_results: limit, country: "United States" };
     default:
       return null;
   }
@@ -142,14 +140,15 @@ export interface StepOutcome {
   items: TrendItem[];
   count: number;
   failure: string | null;
+  estimatedUsd: number;
+  requests: number;
 }
 
 /**
  * One recipe step, over every topic set it applies to.
  *
- * A step that throws is reported and the run continues. That is the §2.3 contract in code: a
- * refused or failed scout is a $0 stale-data outcome, never an error, because a room that cannot
- * meet is a better answer than a cycle that crashes.
+ * A failed step reports stale data and keeps its charge allowance. A request that timed out
+ * may still be running at the provider; only a preflight refusal is a known zero-cost outcome.
  */
 export async function runRecipeStep(input: {
   step: GoViralRecipeStep;
@@ -160,23 +159,41 @@ export async function runRecipeStep(input: {
 }): Promise<StepOutcome> {
   const items: TrendItem[] = [];
   let failure: string | null = null;
-  for (const topicSet of stepTopicSets(input.step, input.registry)) {
-    const payload = stepPayload({ step: input.step, registry: input.registry, topicSet });
+  let estimatedUsd = 0;
+  let requests = 0;
+  if (!input.actor.scheduled || input.actor.termsVerdict !== "allowed") {
+    return { items, count: 0, failure: "The actor is not scheduled and approved.", estimatedUsd, requests };
+  }
+  const topics = stepTopicSets(input.step, input.registry);
+  for (const [index, topicSet] of topics.entries()) {
+    // Divide the step's total allowance, not a fresh allowance for every venture.
+    const limit = Math.floor(input.step.maxResults / topics.length)
+      + (index < input.step.maxResults % topics.length ? 1 : 0);
+    if (limit < 1) continue;
+    const step = { ...input.step, maxResults: limit };
+    const payload = stepPayload({ step, registry: input.registry, topicSet });
     if (!payload) continue;
+    const reservation = estimateActorUsd(input.actor, limit);
+    requests += 1;
     try {
       const rows = await runApifyActor({
         actor: input.actor,
         token: input.token,
         payload,
+        maxTotalChargeUsd: reservation,
         ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
       });
-      for (const row of rows.slice(0, input.step.maxResults)) {
-        const mapped = mapDatasetRow({ row, step: input.step, topicSet: topicSet ?? "writer" });
+      // A malformed row may still have been billed. Charge raw returned rows, not usable signals.
+      estimatedUsd += estimateActorUsd(input.actor, Math.min(rows.length, limit));
+      for (const row of rows.slice(0, limit)) {
+        if (!row || typeof row !== "object" || Array.isArray(row)) continue;
+        const mapped = mapDatasetRow({ row, step, topicSet: topicSet ?? "writer" });
         if (mapped) items.push(mapped);
       }
-    } catch (error) {
-      failure = error instanceof Error ? error.message.slice(0, 300) : "The actor call failed.";
+    } catch {
+      estimatedUsd += reservation;
+      failure = "An actor request failed; its full allowance remains reserved because billing is unknown.";
     }
   }
-  return { items, count: items.length, failure };
+  return { items, count: items.length, failure, estimatedUsd: Number(estimatedUsd.toFixed(6)), requests };
 }

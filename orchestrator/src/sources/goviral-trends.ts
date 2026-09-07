@@ -312,7 +312,7 @@ export function plannedRecipeSteps(input: {
     if (step.cadence === "monthly" && !input.isFirstScoutOfMonth) continue;
     if (step.inputs === "account" && input.registry.trackedAccounts.length === 0) continue;
     const actor = actorsById.get(step.actorId);
-    if (!actor) continue;
+    if (!actor || !actor.scheduled || actor.termsVerdict !== "allowed") continue;
     const perResult = actor.pricePerResultUsd ?? (actor.pricePer1000Usd ?? 0) / 1000;
     planned.push({ step, actor, estimatedUsd: Number(((actor.startUsd ?? 0) + perResult * step.maxResults).toFixed(6)) });
   }

@@ -351,7 +351,7 @@ describe("the scraped-row boundary", () => {
     const registry = await loadGoViralSourceRegistry();
     const step = registry.recipe.find((entry) => entry.inputs === "hashtag")!;
     const payload = stepPayload({ step, registry, topicSet: "mma" });
-    expect(payload).toMatchObject({ resultsLimit: step.perInput, maxResults: step.maxResults });
+    expect(payload).toMatchObject({ maxResultsPerHashtag: step.perInput, hashtags: ["MMA", "UFC", "oktagonmma"] });
     // A step with no inputs to work from produces no call at all, rather than an unbounded one.
     expect(stepPayload({ step, registry, topicSet: "nope" })).toBeNull();
     const accountStep = registry.recipe.find((entry) => entry.inputs === "account")!;
