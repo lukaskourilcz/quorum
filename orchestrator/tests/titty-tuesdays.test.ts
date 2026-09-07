@@ -26,7 +26,6 @@ describe("Titty Tuesdays bootstrap", () => {
     const registry = await loadVentureRegistry();
     const venture = registry.ventures.find((candidate) => candidate.id === "titty-tuesdays");
     expect(venture).toMatchObject({
-      status: "operating",
       taste: true,
       ledgerNamespace: "titty-tuesdays",
       // "visuals" is real now. It used to be excluded because `visualCards()` hardcodes

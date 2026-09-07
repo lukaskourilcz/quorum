@@ -37,11 +37,17 @@ describe("the venture pause switch", () => {
 
   it("resolves a paused venture's phases and leaves an operating venture's alone", () => {
     const registry = readVentureRegistry();
-    // Door Money is paused in the committed registry — the owner's 2026-08-29 call.
+    // Exercise both states without making today's owner settings a release prerequisite.
+    for (const venture of registry.ventures) {
+      venture.status = venture.id === "door-money" ? "paused" : "operating";
+    }
     expect(pausedVentureForPhase(registry, "dm-desk")).toBe("door-money");
     expect(pausedVentureForPhase(registry, "dm-growth")).toBe("door-money");
     expect(pausedVentureForPhase(registry, "cu-edition")).toBeNull();
     expect(pausedVentureForPhase(registry, "bh-desk")).toBeNull();
+    const books = registry.ventures.find((venture) => venture.id === "booksofhistory")!;
+    books.status = "paused";
+    expect(pausedVentureForPhase(registry, "bh-desk")).toBe("booksofhistory");
   });
 
   it("ends a paused venture's live phase before anything runs, at zero dollars", async () => {
