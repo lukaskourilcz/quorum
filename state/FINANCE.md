@@ -12,17 +12,17 @@ company total and never expands the $25.00 model/API share or $1.00 daily model/
 
 <!-- BEGIN GENERATED: read from state/budget/ledger.json. Do not edit by hand. -->
 
-As of 2026-09-07 16:06 UTC.
+As of 2026-09-07 16:51 UTC.
 
 | Metric | Value |
 | --- | ---: |
 | Recognized revenue | unavailable |
 | Refunds | unavailable |
 | Payment fees | unavailable |
-| Text and image API spend | $14.28 |
+| Text and image API spend | $14.30 |
 | Treasury spend | $0.00 |
 | Other verified operating cost | $0.00 |
-| Total verified operating cost | $14.28 |
+| Total verified operating cost | $14.30 |
 | Gross profit | unavailable |
 
 By project:
@@ -37,6 +37,7 @@ By project:
 | FightAIQ | $0.53 |
 | Tehdejší svět | $0.06 |
 | Magazine Incubator | $0.04 |
+| GoVIRAL | $0.02 |
 | Door Money | <$0.01 |
 
 <!-- END GENERATED -->
