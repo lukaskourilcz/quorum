@@ -474,6 +474,22 @@ export const SEED_TEMPLATES: readonly CarouselTemplate[] = [
     }))
   }),
   template({
+    id: "quiz-question-context",
+    name: "Quiz question and answers",
+    description: "A non-code quiz question with four separately typeset answers and no empty code panel.",
+    requiredSlots: ["question-line", "option-a", "option-b", "option-c", "option-d"],
+    slides: [{
+      id: "slide-quiz-question",
+      backgroundToken: "background",
+      variants: [],
+      layers: [
+        logo(),
+        text("question-line", 0.08, 0.23, 0.84, 0.16, { fontToken: "headline", fontWeight: 800, minFontSize: 28, maxFontSize: 54, maxChars: 120, maxLines: 4 }),
+        ...["a", "b", "c", "d"].map((letter, index) => text(`option-${letter}`, 0.1, 0.42 + index * 0.115, 0.8, 0.09, { fontWeight: 600, minFontSize: 24, maxFontSize: 42, maxChars: 100, maxLines: 3 }))
+      ]
+    }]
+  }),
+  template({
     id: "quiz-code-context",
     name: "Quiz code context",
     description: "A question, a monospaced code block at readable size, and its lettered answer options.",
@@ -483,7 +499,7 @@ export const SEED_TEMPLATES: readonly CarouselTemplate[] = [
       backgroundToken: "background",
       variants: [{ id: "A" }, { id: "B", backgroundToken: "surface" }],
       layers: [
-        logo(),
+        logo(0.07),
         text("question-line", 0.08, 0.18, 0.84, 0.16, { fontToken: "headline", fontWeight: 800, minFontSize: 28, maxFontSize: 52, maxChars: 160, maxLines: 4 }),
         shape(0.08, 0.36, 0.84, 0.38, "surface-strong", 0.03),
         // The reason this template exists. Every other live layout tops out at a 100-character
@@ -768,6 +784,7 @@ const fixtures: Record<string, Record<string, string>> = {
   "cover-cta": { "cover-title": "One layout, three distinct brands", "cover-dek": "Tokens change the voice. The reading order stays dependable.", cta: "Read the sourced story", destination: "boardless-ai.vercel.app" },
   "five-slide-story": { "story-title": "Why the studio lives inside the pipeline", "story-one": "The content packet selects a live template.", "story-two": "Brand tokens skin the layout at render time.", "story-three": "The same bytes can be reproduced from saved inputs.", "story-takeaway": "No image model and no extra service are required." },
   "minimal-text-poster": { "poster-line": "DESIGN THE SYSTEM ONCE.", "poster-note": "Original layout · deterministic render" },
+  "quiz-question-context": { "question-line": "When does cleanup run?", "option-a": "A. Only on mount", "option-b": "B. Before the next effect and on unmount", "option-c": "C. Only on unmount", "option-d": "D. Never" },
   "quiz-code-context": { "question-line": "What does this hook return?", "code-block": "const [value, setValue] = useState(0);\n// two elements, always in this order", options: "A. A single value\nB. An array with value and setter\nC. An object\nD. A promise" }
 };
 
@@ -775,6 +792,7 @@ const czechFixtureOverrides: Partial<Record<string, Record<string, string>>> = {
   "quote-card": { quote: "Nejsilnější tvrzení unese zdroj, ne efektní formulace.", attribution: "AUDIT · testovací meeting" },
   "headline-three-bullets": { headline: "Carousel musí obhájit každý slide", "bullet-one": "Jeden fakt na obrazovku", "bullet-two": "Čitelné i na telefonu", "bullet-three": "Zdroj zůstává nablízku" },
   "minimal-text-poster": { "poster-line": "NEJNEOBHOSPODAŘOVÁVATELNĚJŠÍ SLOVO SE VEJDE.", "poster-note": "Česká diakritika · automatické zmenšení" },
+  "quiz-question-context": { "question-line": "Kdy se spouští cleanup?", "option-a": "A. Jen při mountu", "option-b": "B. Před dalším efektem a při unmountu", "option-c": "C. Jen při unmountu", "option-d": "D. Nikdy" },
   "quiz-code-context": { "question-line": "Co vrací tenhle hook?", "code-block": "const [value, setValue] = useState(0);\n// dva prvky, vždy v tomhle pořadí", options: "A. Jednu hodnotu\nB. Pole s hodnotou a setterem\nC. Objekt\nD. Promise" }
 };
 

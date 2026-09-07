@@ -206,7 +206,7 @@ export function assemblePackage(input: {
   const slides = (locale: "cs" | "en") =>
     input.output.carousels[locale].slides.map((slide, index) => ({
       role: SLIDE_ROLES[index]!,
-      templateId: input.brand.templateMap[SLIDE_ROLES[index]!],
+      templateId: input.rendered[locale][index]!.templateId,
       // Slide 1 is the library's line, not the model's. The assignment is deterministic $0 code and
       // the copy it assigns is the copy that was linted, length-budgeted and gate-licensed; a
       // paraphrase would be none of those. On the `no-hook` fallback the template's own headline —

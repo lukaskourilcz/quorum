@@ -11,9 +11,9 @@ const temporaryRoots: string[] = [];
 afterEach(async () => Promise.all(temporaryRoots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
 
 describe("Carousel Studio gallery and showcase", () => {
-  it("exposes twelve checked live seed templates across all brands and formats", async () => {
+  it("exposes thirteen checked live seed templates across all brands and formats", async () => {
     const snapshot = await readCarouselStudio();
-    expect(snapshot.templates).toHaveLength(12);
+    expect(snapshot.templates).toHaveLength(13);
     expect(snapshot.templates.every((entry) => entry.template.status === "live" && entry.allChecksPass)).toBe(true);
     expect(snapshot.brands.map((brand) => brand.id)).toEqual([
       "caught-up", "mma-files", "titty-tuesdays", "devshark", "geoshark", "kvorum", "booksofhistory", "door-money",

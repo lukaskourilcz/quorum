@@ -51,7 +51,7 @@ describe("the Kvórum brand", () => {
 });
 
 describe("carousel-template/1", () => {
-  it("ships twelve live, original seed layouts", () => {
+  it("ships thirteen live, original seed layouts", () => {
     // The eleventh is quiz-code-context, added for marketingShark and justified by a gap rather
     // than by a preference: every other live layout tops out at a 100-character mono slot over
     // two lines, which is a source label and not a program, so a quiz question carrying a fenced
@@ -60,8 +60,8 @@ describe("carousel-template/1", () => {
     // The twelfth is story-quote, and it is here for the same kind of reason: the 9:16 canvas
     // reserves roughly a seventh of its height at each end for the platform's own chrome, and
     // every layout composed for 4:5 puts its logo and its closing line inside those bands.
-    expect(SEED_TEMPLATES).toHaveLength(12);
-    expect(new Set(SEED_TEMPLATES.map((template) => template.id)).size).toBe(12);
+    expect(SEED_TEMPLATES).toHaveLength(13);
+    expect(new Set(SEED_TEMPLATES.map((template) => template.id)).size).toBe(13);
     expect(SEED_TEMPLATES.every((template) => CarouselTemplateSchema.parse(template).status === "live")).toBe(true);
   });
 

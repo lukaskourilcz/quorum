@@ -153,6 +153,22 @@ export async function previewPayloadForBrand(
   return { ...base, strings: { ...base.strings, [slot]: resolved.line[locale] } };
 }
 
+// Cache only pure, content-addressed validation. Owner overrides, ratings and proposals
+// are still read on every request. A changed template cannot reuse an old verdict.
+const checkCache = new Map<string, CarouselStudioTemplate["checks"]>();
+function templateChecks(template: CarouselTemplate): CarouselStudioTemplate["checks"] {
+  const key = createHash("sha256").update(JSON.stringify(template)).digest("hex");
+  const cached = checkCache.get(key);
+  if (cached) return structuredClone(cached);
+  const checks = Object.values(CAROUSEL_BRANDS).flatMap((brand) => previewFormats(template).map((format) => {
+    const details = validateTemplateForBrand(template, brand, format);
+    return { brand: brand.id, format, passed: details.every((check) => check.status === "pass"), details };
+  }));
+  if (checkCache.size >= 128) checkCache.delete(checkCache.keys().next().value!);
+  checkCache.set(key, structuredClone(checks));
+  return checks;
+}
+
 /**
  * The public gallery is a closed, filesystem-free projection of committed seed templates.
  *
@@ -163,10 +179,7 @@ export async function previewPayloadForBrand(
  */
 export function readPublicCarouselStudio(): CarouselStudioSnapshot {
   const templates = SEED_TEMPLATES.map((template): CarouselStudioTemplate => {
-    const checks = Object.values(CAROUSEL_BRANDS).flatMap((brand) => previewFormats(template).map((format) => {
-      const details = validateTemplateForBrand(template, brand, format);
-      return { brand: brand.id, format, passed: details.every((check) => check.status === "pass"), details };
-    }));
+    const checks = templateChecks(template);
     return {
       template,
       source: "seed",
@@ -191,6 +204,18 @@ export function findPublicCarouselTemplate(id: string, version: string): Carouse
   )?.template ?? null;
 }
 
+/** Navigation counts require neither ratings nor the all-brand validation pass. */
+export async function readCarouselStudioCounts(root = repositoryRoot): Promise<{ templateCount: number; inspirationCount: number }> {
+  const [proposals, inspiration] = await Promise.all([
+    proposalTemplates(root),
+    optionalJson(path.join(root, "state", "ventures", "carousel-studio", "inspiration", "owner-links.json"))
+  ]);
+  return {
+    templateCount: new Set([...SEED_TEMPLATES, ...proposals].map(template => `${template.id}@${template.version}`)).size,
+    inspirationCount: parseInspiration(inspiration).length
+  };
+}
+
 export async function readCarouselStudio(root = repositoryRoot): Promise<CarouselStudioSnapshot> {
   const [proposals, overrideValue, inspirationValue, ratings] = await Promise.all([
     proposalTemplates(root),
@@ -209,10 +234,7 @@ export async function readCarouselStudio(root = repositoryRoot): Promise<Carouse
       return true;
     })
     .map(({ template: raw, source }): CarouselStudioTemplate => {
-      const checks = Object.values(CAROUSEL_BRANDS).flatMap((brand) => previewFormats(raw).map((format) => {
-        const details = validateTemplateForBrand(raw, brand, format);
-        return { brand: brand.id, format, passed: details.every((check) => check.status === "pass"), details };
-      }));
+      const checks = templateChecks(raw);
       const ownerOverride = overrides.find((override) => override.templateId === raw.id && override.version === raw.version)?.status;
       const template = CarouselTemplateSchema.parse({
         ...raw,
