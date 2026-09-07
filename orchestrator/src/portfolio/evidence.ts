@@ -22,7 +22,6 @@ import { enrichWikimediaBackfill } from "../fightaiq/wikimedia-backfill.js";
 import {
   APIFY_MONTHLY_CREDIT_USD,
   currentMonthQuota,
-  estimateActorUsd,
   fetchApifyMonthlyUsageUsd,
   loadGoViralSourceRegistry,
   mayRunApify,
@@ -624,6 +623,10 @@ export async function refreshGoViralTrends(input: {
   const sourceResults: TrendSourceResult[] = [];
   const fresh: TrendItem[] = [];
   for (const entry of planned) {
+    // Persist the worst case before launching. A killed process cannot lose its reservation.
+    const before = quota;
+    quota = recordActorUsage(before, entry.actor, 0, input.now, entry.estimatedUsd, 0);
+    await atomicWriteJson(input.root, quotaPath, quota);
     const outcome = await runRecipeStep({
       step: entry.step,
       actor: entry.actor,
@@ -632,14 +635,15 @@ export async function refreshGoViralTrends(input: {
       ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {})
     });
     fresh.push(...outcome.items);
-    quota = recordActorUsage(quota, entry.actor, outcome.count, input.now);
+    quota = recordActorUsage(before, entry.actor, outcome.count, input.now, outcome.estimatedUsd, outcome.requests);
+    await atomicWriteJson(input.root, quotaPath, quota);
     sourceResults.push({
       actorId: entry.actor.id,
       step: entry.step.step,
       status: outcome.failure ? "failed" : outcome.count > 0 ? "success" : "skipped",
       reason: outcome.failure ?? (outcome.count > 0 ? null : "The actor returned no items."),
       count: outcome.count,
-      estimatedUsd: estimateActorUsd(entry.actor, outcome.count)
+      estimatedUsd: outcome.estimatedUsd
     });
   }
 

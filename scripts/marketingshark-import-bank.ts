@@ -9,7 +9,7 @@
  * checks its hash, which is what makes the whole selection path deterministic and $0.
  */
 import { execFileSync } from "node:child_process";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { loadMarketingSharkConfig } from "../orchestrator/src/ventures/marketingshark/config.js";
 import { contentHashOf, QuestionBankSnapshotSchema } from "../orchestrator/src/ventures/marketingshark/bank.js";
@@ -43,6 +43,9 @@ async function main(): Promise<void> {
   if (!brand) throw new Error(`${brandId} is not a brand in config/marketingshark.json`);
 
   const localPath = path.resolve(source);
+  if (execFileSync("git", ["-C", localPath, "status", "--porcelain", "--", "lib", "shared"], { encoding: "utf8" }).trim()) {
+    throw new Error("Commit the source bank changes before importing: the recorded commit must reproduce the content.");
+  }
   const commit = sourceCommit(localPath);
   const questions = await reactExpressAppAdapter.load({
     repo: brand.questionBank.sourceRepo,
@@ -65,6 +68,14 @@ async function main(): Promise<void> {
   });
 
   const target = path.join(repoRoot, brand.questionBank.snapshotPath);
+  if (args.includes("--check")) {
+    const existing = QuestionBankSnapshotSchema.parse(JSON.parse(await readFile(target, "utf8")));
+    if (existing.contentHash !== snapshot.contentHash || existing.sourceRepo !== snapshot.sourceRepo || existing.sourceSubject !== snapshot.sourceSubject) {
+      throw new Error(`Stale ${brand.id} snapshot: re-import the committed source bank.`);
+    }
+    console.log(JSON.stringify({ brand: brand.id, status: "current", sourceCommit: commit, questions: questions.length }));
+    return;
+  }
   await mkdir(path.dirname(target), { recursive: true });
   await writeFile(target, `${JSON.stringify(snapshot, null, 2)}\n`, "utf8");
 

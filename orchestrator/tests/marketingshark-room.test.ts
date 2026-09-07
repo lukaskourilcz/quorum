@@ -100,6 +100,18 @@ describe("marketingShark carousel rendering", () => {
     expect(first[0]!.svgHash).not.toBe(first[4]!.svgHash);
   });
 
+  it("gives a plain question four separate answer slots and no empty code panel", async () => {
+    const brand = await devshark();
+    const question = { ...codeQuestion, hasCode: false, en: { ...codeQuestion.en, question: "When does cleanup run?" } };
+    const output = fixtureChumOutput({ brand, question, hookA: "Check your React knowledge", hookACs: "Znáte React?" });
+    const copy = { slides: output.carousels.en.slides.map(slide => ({ ...slide, templateId: "" })) };
+    const rendered = renderCarousel({ brand, question, copy, locale: "en" });
+    expect(rendered[1]!.templateId).toBe("quiz-question-context");
+    expect(rendered[1]!.truncatedSlots).toEqual([]);
+    for (const letter of ["A.", "B.", "C.", "D."]) expect(rendered[1]!.svg).toContain(letter);
+    expect(rendered[1]!.svg).not.toContain("code-block");
+  });
+
   it("keeps the code monospaced and the options out of the code slot", () => {
     expect(splitContextBody(`${CODE}\nA. One\nB. Two`)).toEqual({ code: CODE, options: "A. One\nB. Two" });
     expect(splitContextBody(CODE)).toEqual({ code: CODE, options: "" });

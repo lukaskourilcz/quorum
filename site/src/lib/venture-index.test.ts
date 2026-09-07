@@ -42,7 +42,9 @@ describe("the public venture index", () => {
     // Door Money is paused in the committed registry, so its card is absent and its stored
     // records stay untouched on disk; the other metrics still count only what they own.
     expect(cards.find((card) => card.id === "door-money")).toBeUndefined();
-    expect(cards.find((card) => card.id === "tehdejsi-svet")?.metric.count).toBe(0);
+    for (const venture of ventureRegistry.ventures.filter(venture => venture.status === "paused")) {
+      expect(cards.find(card => card.id === venture.id)).toBeUndefined();
+    }
     expect(cards.find((card) => card.id === "carousel-studio")?.metric.count).toBe(1);
     expect(cards.find((card) => card.id === "goviral")?.metric.count).toBe(1);
   });

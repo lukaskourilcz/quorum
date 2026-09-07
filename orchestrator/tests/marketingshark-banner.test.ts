@@ -186,9 +186,10 @@ describe("devShark house banner", () => {
     expect(geo.success).toBe(false);
   });
 
-  it("keeps geoShark's banner flag off in the shipped config", async () => {
+  it("keeps magazine placements reserved for reciprocal promotions", async () => {
     const config = await loadMarketingSharkConfig();
     expect(config.brands.find((brand) => brand.id === "geoshark")!.banner).toBe(false);
-    expect(config.brands.find((brand) => brand.id === "devshark")!.banner).toBe(true);
+    expect(config.brands.find((brand) => brand.id === "devshark")!.banner).toBe(false);
+    expect(config.brands.find((brand) => brand.id === "devshark")!.enabled).toBe(true);
   });
 });

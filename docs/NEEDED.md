@@ -1,5 +1,16 @@
 # NEEDED — what the owner has to do
 
+## Production review · 2026-09-07
+
+The current findings, exact configuration matrix, Mobbin references, paid-tool
+comparisons and release checklist are in
+[production-review-2026-09-07.md](production-review-2026-09-07.md).
+Tracked in #514–#518 and PR #519. Before launch, verify the Vercel environment,
+deploy the final build, and confirm fresh cu-day, mma-day and ms-daily receipts.
+GitHub Actions keys were present in the inspected run; Vercel returned no
+accessible teams in this session.
+
+
 **This is the only owner document.** It replaces `NEEDED.md`, `NEEDS_YOUR_HELP_NOW.md` and
 `MANUAL STEPS.md`, which were three views of one list. Git cannot inspect a secret's value or an
 external account's settings, so an item stays unchecked until you have seen it in the provider's

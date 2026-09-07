@@ -351,7 +351,7 @@ describe("the scraped-row boundary", () => {
     const registry = await loadGoViralSourceRegistry();
     const step = registry.recipe.find((entry) => entry.inputs === "hashtag")!;
     const payload = stepPayload({ step, registry, topicSet: "mma" });
-    expect(payload).toMatchObject({ resultsLimit: step.perInput, maxResults: step.maxResults });
+    expect(payload).toMatchObject({ maxResultsPerHashtag: step.perInput, hashtags: ["MMA", "UFC", "oktagonmma"] });
     // A step with no inputs to work from produces no call at all, rather than an unbounded one.
     expect(stepPayload({ step, registry, topicSet: "nope" })).toBeNull();
     const accountStep = registry.recipe.find((entry) => entry.inputs === "account")!;
@@ -401,7 +401,7 @@ describe("the scraped-row boundary", () => {
       recipe: unknown;
     };
     const digest = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
-    expect(digest(raw.actors)).toBe("87e3a34b10ea0ae47c85f759247c386faea8f08c7e7bca0e95e1c5a0108e0354");
+    expect(digest(raw.actors)).toBe("f747cbd70c0a61a8c06a114a00ed0ca2e58c1a37943a757608991986f95ea4ce");
     expect(digest(raw.recipe)).toBe("cef3895290673880c9c27658212a892a9341943feef5526733a01cae365f78f5");
     expect(APIFY_MONTHLY_CREDIT_USD).toBe(5);
     expect(APIFY_RUN_RESERVATION_USD).toBe(1.4);

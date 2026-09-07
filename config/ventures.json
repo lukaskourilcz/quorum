@@ -539,7 +539,7 @@
     {
       "id": "kvorum",
       "name": "Kvórum",
-      "status": "operating",
+      "status": "paused",
       "visibility": "public",
       "taste": true,
       "ledgerNamespace": "kvorum",
@@ -587,7 +587,7 @@
     {
       "id": "personal-growth",
       "name": "Lukáš Growth Desk",
-      "status": "operating",
+      "status": "paused",
       "visibility": "owner-only",
       "taste": false,
       "ledgerNamespace": "personal-growth",

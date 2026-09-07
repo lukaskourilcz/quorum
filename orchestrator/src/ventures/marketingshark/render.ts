@@ -91,6 +91,12 @@ export function slotsForRole(input: {
           ? input.brand.productUrl.replace(/^https:\/\//u, "")
           : body || input.brand.displayName
       };
+    case "quiz-question-context": {
+      const options = input.locale === "cs" && input.question.cs?.options ? input.question.cs.options : input.question.en.options;
+      return { "question-line": headline, ...Object.fromEntries(["a", "b", "c", "d"].map((letter, index) => [
+        `option-${letter}`, options[index] ? `${letter.toUpperCase()}. ${options[index]}` : ""
+      ])) };
+    }
     case "quiz-code-context": {
       const { code, options } = splitContextBody(body);
       return {
@@ -124,7 +130,7 @@ export function variantForRole(role: SlideRole, template: CarouselTemplate): str
  * Every required slot the mapping did not fill, filled with an empty string.
  *
  * The renderer throws on a missing slot, and an empty slot is a legitimate slide -- an answer
- * reveal with no sub-label, a code slide whose question carries no code. Undefined is the
+ * reveal with no sub-label, an optional subtitle left blank. Plain questions use their own layout. Undefined is the
  * failure; empty is a design choice.
  */
 function completeSlots(template: CarouselTemplate, slots: Record<string, string>): Record<string, string> {
@@ -152,7 +158,8 @@ export function renderCarousel(input: {
 
   return input.copy.slides.map((slide, index) => {
     const role = SLIDE_ROLES[index]!;
-    const templateId = input.brand.templateMap[role];
+    const templateId = role === "context" && input.brand.id === "devshark" && !input.question.hasCode && input.question.en.options.length <= 4
+      ? "quiz-question-context" : input.brand.templateMap[role];
     const template = liveTemplateByReference(templateId, liveVersionOf(templateId));
     const variant = variantForRole(role, template);
     const rendered = renderCarouselSlideSvg({

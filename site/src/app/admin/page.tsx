@@ -73,7 +73,7 @@ import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPersonalGrowth, type PersonalGrowthCoreTab } from "@/lib/admin-personal-growth";
 import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
 import { readAdminSnapshot } from "@/lib/admin-state";
-import { readCarouselStudio } from "@/lib/carousel-studio";
+import { readCarouselStudio, readCarouselStudioCounts } from "@/lib/carousel-studio";
 import { readGoViralProfile } from "@/lib/goviral-profile";
 import { readGoViralTrends } from "@/lib/goviral-trends";
 import { readHookBrain } from "@/lib/hook-brain";
@@ -220,8 +220,9 @@ export default async function AdminPage({
 }: {
   searchParams: Promise<{ venture?: string; tab?: string; view?: string; brand?: string }>;
 }) {
+  const { venture: requestedVenture, tab: requestedTab, view: requestedView, brand: requestedBrand } = await searchParams;
+  const wantsStudio = ((requestedVenture ? VENTURE_ALIASES[requestedVenture] : undefined) ?? requestedVenture) === "carousel-studio";
   const [
-    { venture: requestedVenture, tab: requestedTab, view: requestedView, brand: requestedBrand },
     state,
     portfolio,
     standups,
@@ -254,7 +255,6 @@ export default async function AdminPage({
     imageRungs,
     meetingHours
   ] = await Promise.all([
-    searchParams,
     readAdminSnapshot(),
     readAdminPortfolio(),
     getPublicStandups(),
@@ -262,7 +262,9 @@ export default async function AdminPage({
     readAdminCaughtUp(),
     readAdminMmaFiles(),
     readAdminBooksofhistory(),
-    readCarouselStudio(),
+    wantsStudio
+      ? readCarouselStudio().then(snapshot => ({ snapshot, templateCount: snapshot.templates.length, inspirationCount: snapshot.inspirationLinks.length }))
+      : readCarouselStudioCounts().then(counts => ({ ...counts, snapshot: null })),
     readHookBrain(),
     readGoViralProfile(),
     readGoViralTrends(),
@@ -346,7 +348,7 @@ export default async function AdminPage({
   const labVentureId: DesignLabVentureId = isDesignLabVenture(requestedBrand)
     ? requestedBrand
     : labSections[0]!.id;
-  const labVenture = await readDesignLabVenture(labVentureId);
+  const labVenture = wantsStudio ? await readDesignLabVenture(labVentureId) : null;
   const brandId = selectedVenture?.id ?? "global";
   const brand = ventureBrand(brandId);
   const doorMoneyActionCount = doorMoney.actions.packets.reduce((sum, packet) => sum + packet.tasks.length, 0) +
@@ -432,7 +434,7 @@ export default async function AdminPage({
         : ventureId === "kvorum"
           ? kvorum.recommendations.length + kvorum.monitor.length + kvorum.claims.length + kvorum.results.length
         : ventureId === "carousel-studio"
-          ? carouselStudio.templates.length + carouselStudio.inspirationLinks.length + studioArticles.length
+          ? carouselStudio.templateCount + carouselStudio.inspirationCount + studioArticles.length
           : ventureId === "booksofhistory"
             ? (booksofhistory.shortlist ? 1 : 0)
               + (booksofhistory.brief ? 1 : 0)
@@ -729,7 +731,7 @@ export default async function AdminPage({
         count: hookBrain.surfaces.length + hookBrain.channels.length + hookBrain.recent.length
       };
     }
-    if (id === "carousel-studio" && selectedTab === "studio") {
+    if (id === "carousel-studio" && selectedTab === "studio" && labVenture) {
       return {
         node: (
           <div className="grid min-w-0 gap-4">
@@ -742,14 +744,14 @@ export default async function AdminPage({
     }
     if (id === "carousel-studio" && selectedTab === "templates") {
       return {
-        node: <CarouselStudioAdminPanel snapshot={carouselStudio} tab="templates" />,
-        count: carouselStudio.templates.length
+        node: carouselStudio.snapshot ? <CarouselStudioAdminPanel snapshot={carouselStudio.snapshot} tab="templates" /> : null,
+        count: carouselStudio.templateCount
       };
     }
     if (id === "carousel-studio" && selectedTab === "inspiration") {
       return {
-        node: <CarouselStudioAdminPanel snapshot={carouselStudio} tab="inspiration" />,
-        count: carouselStudio.inspirationLinks.length
+        node: carouselStudio.snapshot ? <CarouselStudioAdminPanel snapshot={carouselStudio.snapshot} tab="inspiration" /> : null,
+        count: carouselStudio.inspirationCount
       };
     }
     if (id === "titty-tuesdays" && selectedTab === "visuals") {
