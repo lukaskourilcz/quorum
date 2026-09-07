@@ -597,7 +597,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
   }),
   // The two shark brands take their palettes from the product's own Deep End ocean-ink tokens
   // (client/src/styles/astryx-theme.css) and their accents from its subject registry: webdev's
-  // green and geography's orange, at the bright variants those files pair with a dark surface.
+  // ocean blue and geography's orange, at the bright variants those files pair with a dark surface.
   // Every token combination the templates use clears 4.5:1, which the studio checks anyway.
   devshark: BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
@@ -610,7 +610,7 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       "surface-strong": "#16242d",
       foreground: "#e8eef0",
       muted: "#9db3bc",
-      accent: "#4caf50",
+      accent: "#60a5fa",
       secondary: "#67e8f9"
     },
     fonts: { headline: "Figtree", body: "Public Sans", mono: "IBM Plex Mono" }

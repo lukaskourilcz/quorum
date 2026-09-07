@@ -27,29 +27,11 @@ interface SourceTranslation {
   explanation?: string;
 }
 
-/**
- * Which modules a subject's bank is assembled from.
- *
- * Mirrors `lib/question-bank-loader.ts` rather than importing it: that module also pulls
- * `product-scope` and `shared/subject-catalog`, which drag deployment-scope logic this import has
- * no business evaluating. The entry points are pinned here and the subject key is the same one the
- * loader uses, so a bank that moves in the source shows up as a missing export rather than as a
- * quietly smaller import.
- */
+/** Legacy subjects keep explicit modules; webdev uses the product-owned shared loader. */
 const SUBJECT_MODULES: Record<string, {
   questions: Array<{ file: string; exportName: string }>;
   translations: Array<{ file: string; exportName: string }>;
 }> = {
-  webdev: {
-    questions: [
-      { file: "lib/quiz-data.ts", exportName: "questions" },
-      { file: "lib/roadmap-questions-fix-the-test.ts", exportName: "fixTheTestQuestions" }
-    ],
-    translations: [
-      { file: "lib/quiz-data.cs.ts", exportName: "questionTranslationsCs" },
-      { file: "lib/roadmap-questions-fix-the-test.cs.ts", exportName: "fixTheTestTranslationsCs" }
-    ]
-  },
   geography: {
     questions: [
       { file: "lib/roadmap-questions.geography.ts", exportName: "allRoadmapGeographyQuestions" }
@@ -88,20 +70,29 @@ export const reactExpressAppAdapter: QuestionBankAdapter = {
   sourceId: "react-express-app",
   async load(source): Promise<NormalizedQuestion[]> {
     const modules = SUBJECT_MODULES[source.subject];
-    if (!modules) {
+    if (!modules && source.subject !== "webdev") {
       throw new Error(`No react-express-app entry points for subject ${source.subject}`);
     }
 
-    const questionGroups = await Promise.all(modules.questions.map(({ file, exportName }) =>
-      importNamed<SourceQuestion[]>(source.localPath, file, exportName)));
-    const translationGroups = await Promise.all(modules.translations.map(({ file, exportName }) =>
-      importNamed<Record<string, SourceTranslation>>(source.localPath, file, exportName)));
+    let questions: SourceQuestion[];
+    let translations: Record<string, SourceTranslation>;
+    if (source.subject === "webdev") {
+      const loadQuestions = await importNamed<() => Promise<SourceQuestion[]>>(source.localPath, "lib/webdev-bank.ts", "loadWebdevQuestions");
+      const loadTranslations = await importNamed<() => Promise<Record<string, SourceTranslation>>>(source.localPath, "lib/webdev-bank.ts", "loadWebdevTranslations");
+      [questions, translations] = await Promise.all([loadQuestions(), loadTranslations()]);
+    } else {
+      const questionGroups = await Promise.all(modules!.questions.map(({ file, exportName }) =>
+        importNamed<SourceQuestion[]>(source.localPath, file, exportName)));
+      const translationGroups = await Promise.all(modules!.translations.map(({ file, exportName }) =>
+        importNamed<Record<string, SourceTranslation>>(source.localPath, file, exportName)));
+      questions = questionGroups.flat();
+      translations = Object.assign({}, ...translationGroups);
+    }
 
-    const translations: Record<string, SourceTranslation> = Object.assign({}, ...translationGroups);
     const seen = new Set<string>();
     const normalized: NormalizedQuestion[] = [];
 
-    for (const question of questionGroups.flat()) {
+    for (const question of questions) {
       // The source concatenates several banks and a duplicate id would make the ledger's
       // served-once guarantee a lie -- two different questions under one id, one of which can
       // never be reached. First occurrence wins and the count difference is reported.
@@ -131,4 +122,4 @@ export const reactExpressAppAdapter: QuestionBankAdapter = {
   }
 };
 
-export const SUPPORTED_SUBJECTS = Object.keys(SUBJECT_MODULES);
+export const SUPPORTED_SUBJECTS = ["webdev", ...Object.keys(SUBJECT_MODULES)];

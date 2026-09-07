@@ -115,8 +115,15 @@ function layerSvg(input: {
     const face = resolveFace(brand.fonts[layer.fontToken], LOGO_WEIGHT);
     const tracked = (size: number) => (measureEm(face, brand.logoText) + LOGO_TRACKING * [...brand.logoText].length) * size;
     const byHeight = h * 0.72;
-    const size = Math.max(18, Math.min(byHeight, tracked(byHeight) > w ? (w / tracked(1)) : byHeight));
-    return `<text x="${x}" y="${y + size}" fill="${color(layer.colorToken)}" font-family="${escapeXml(face.familyName)}" font-size="${round(size)}" font-weight="${LOGO_WEIGHT}" letter-spacing="${round(LOGO_TRACKING * size)}">${escapeXml(brand.logoText)}</text>`;
+    const hasFin = brand.id === "devshark";
+    const markUnits = hasFin ? 1.35 : 0;
+    const size = hasFin ? Math.min(byHeight, w / (tracked(1) + markUnits))
+      : Math.max(18, Math.min(byHeight, tracked(byHeight) > w ? (w / tracked(1)) : byHeight));
+    // Reuse the product's SharkFin path; the mark and wordmark share the declared frame.
+    const fin = hasFin
+      ? `<g transform="translate(${x},${y + size * 0.12}) scale(${size / 24})" fill="${color(layer.colorToken)}"><path d="M3 18 Q6 6 15 3 Q17 11 21 18 Z"/><path d="M15 3 Q17 11 21 18 L16 18 Q14 10 15 3 Z" fill="black" opacity="0.12"/></g>`
+      : "";
+    return `${fin}<text x="${x + markUnits * size}" y="${y + size}" fill="${color(layer.colorToken)}" font-family="${escapeXml(face.familyName)}" font-size="${round(size)}" font-weight="${LOGO_WEIGHT}" letter-spacing="${round(LOGO_TRACKING * size)}">${escapeXml(brand.logoText)}</text>`;
   }
   if (layer.type === "mesh") {
     // Several wide, blurred colour fields that overlap into a mesh. Built from radial gradients
