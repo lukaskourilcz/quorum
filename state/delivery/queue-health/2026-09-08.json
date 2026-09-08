@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-09-08T06:07:03.626Z",
+  "checkedAt": "2026-09-08T07:21:47.515Z",
   "date": "2026-09-08",
   "ventures": [
     {
@@ -31,9 +31,9 @@
       "venture": "caught-up",
       "waiting": [
         {
-          "label": "2026-08-17 edition",
-          "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
-          "date": "2026-08-17"
+          "label": "2026-09-08 edition",
+          "packageHash": "192fbdf95bb883e488c92760c6b8ec95d403da356c0f7d196a280ec19d25cbea",
+          "date": "2026-09-08"
         },
         {
           "label": "2026-09-08 no_edition",
@@ -41,11 +41,27 @@
           "date": "2026-09-08"
         }
       ],
-      "parked": [],
-      "oldestWaitingDate": "2026-08-17",
-      "stalledDays": 22,
+      "parked": [
+        {
+          "label": "2026-08-17 edition",
+          "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
+          "date": "2026-08-17",
+          "code": "post_deploy_verification",
+          "disposition": "owner"
+        }
+      ],
+      "oldestWaitingDate": "2026-09-08",
+      "stalledDays": 0,
       "stalled": true,
-      "neverDrains": []
+      "neverDrains": [
+        {
+          "label": "2026-08-17 edition",
+          "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
+          "date": "2026-08-17",
+          "code": "post_deploy_verification",
+          "disposition": "owner"
+        }
+      ]
     }
   ],
   "deploys": [
