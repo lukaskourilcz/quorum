@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "mma-files",
+  "slug": "ufc-amanda-ribas",
+  "date": "2026-09-08",
+  "rung": "entity-linked",
+  "selected": "wikidata:Q85868632",
+  "verdicts": [
+    {
+      "mode": "identity-advisory",
+      "considered": 0,
+      "selected": null,
+      "reason": "no-thumbnail-could-be-read",
+      "candidates": [],
+      "skipped": [
+        {
+          "candidateId": "wikidata:Q85868632",
+          "reason": "thumbnail-host-not-allowed"
+        }
+      ],
+      "costUsd": 0
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-09-08T06:01:01.803Z"
+}

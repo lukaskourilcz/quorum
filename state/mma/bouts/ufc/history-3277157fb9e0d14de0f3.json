@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:history-3277157fb9e0d14de0f3",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:history-ufc-fight-night-yan-vs-figueiredo",
+    "name": "UFC Fight Night: Yan vs. Figueiredo",
+    "startsAtUtc": "2024-11-23T00:00:00.000Z",
+    "venue": null
+  },
+  "fighters": {
+    "red": "ufc:deiveson-figueiredo",
+    "blue": "ufc:petr-yan"
+  },
+  "division": null,
+  "scheduledRounds": null,
+  "status": "completed",
+  "statusHistory": [
+    {
+      "status": "completed",
+      "at": "2024-11-23T00:00:00.000Z",
+      "sourceRefs": [
+        "source:wikipedia:56637932"
+      ],
+      "note": "Historical result imported from a cited Wikipedia record table."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-09-08T06:01:01.803Z",
+    "lastSeenAt": "2026-09-08T06:01:01.803Z",
+    "sourceRefs": [
+      "source:wikipedia:56637932"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:56637932"
+  ],
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 5,
+    "elapsedSeconds": 1500,
+    "sourceRefs": [
+      "source:wikipedia:56637932"
+    ]
+  },
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "created",
+      "fields": [
+        "fighters",
+        "event",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:56637932"
+      ],
+      "note": "Created from a single-source historical row; confidence remains provisional."
+    }
+  ],
+  "updatedAt": "2026-09-08T06:01:01.803Z"
+}

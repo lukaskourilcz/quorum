@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "mma-files",
+  "slug": "ufc-amanda-ribas",
+  "date": "2026-09-08",
+  "locale": "cs",
+  "kicker": "MMA Files · 8. zář",
+  "headline": "Amanda Ribas: profil bojovnice UFC se záznamem 13-7",
+  "coverLine": "Amanda Ribas: třináct výher, sedm proher v UFC",
+  "standfirst": "Brazilská slaměná váha prošla v kariéře výhrami přes submissions i porážkou od Rose Namajunas.",
+  "passages": [
+    "Amanda Ribas nastupuje v UFC se záznamem 13-7. Brazilská bojovnice, narozená 26. srpna 1993, závodí ve slaměné váze a od roku 2016 trénuje v American Top Team.",
+    "Do povědomí širší veřejnosti se dostala submisemi. Jednou z prvních zaznamenaných výher bylo vítězství nad Ariane Carnelossi na akci Pentagon Combat 20 dne 27. září 2014.",
+    "Ribas tehdy ukončila soupeřku kneebarem v prvním kole, přičemž zápas trval 254 sekund. Její nejznámější zápas přišel v březnu 2024. Na turnaji UFC on ESPN: Ribas vs.",
+    "Namajunas se střetla s Rose Namajunas. Pětikolový souboj skončil jednomyslným rozhodnutím rozhodčích ve prospěch Namajunas.",
+    "Carnelossi má aktuálně záznam 15-5, Namajunas pak disponuje v naší databázi pěti výhrami a dvěma prohrami. Ribas zůstává podle vyjádření UFC aktivní bojovnicí organizace."
+  ],
+  "closing": "Celý ozdrojovaný text najdete v MMA Files.",
+  "sources": [
+    {
+      "kind": "internal",
+      "label": "BoardlessAI verified record"
+    }
+  ],
+  "hasHero": true,
+  "heroCredit": "Web Summit Rio from Rio de Janeiro, Brazil · CC BY · Wikimedia Commons"
+}

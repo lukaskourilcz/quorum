@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Merab_Dvalishvili",
       "publisher": "Wikipedia",
       "title": "Merab Dvalishvili",
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q48471377",
         "source:wikipedia:56012380"
       ],
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "verified",
       "corroborated": true
     },
@@ -273,19 +273,19 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.6,
         "fightsPerYear": 2.554143,
-        "layoffDays": 267
+        "layoffDays": 276
       },
-      "updatedAt": "2026-08-30T06:01:50.158Z"
+      "updatedAt": "2026-09-08T06:01:01.803Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1703.77529808,
-    "deviation": 168.74975319,
-    "volatility": 0.06001052,
+    "rating": 1721.12609204,
+    "deviation": 164.49098918,
+    "volatility": 0.06000834,
     "boutCount": 8,
     "asOfBoutRef": "ufc:bout:history-3cc5b009f859a0ec0f48",
-    "updatedAt": "2026-08-30T06:01:50.158Z"
+    "updatedAt": "2026-09-08T06:01:01.803Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1984,11 +1984,26 @@
         "source:wikipedia:56012380"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:56012380"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-30T06:01:50.158Z"
+  "updatedAt": "2026-09-08T06:01:01.803Z"
 }

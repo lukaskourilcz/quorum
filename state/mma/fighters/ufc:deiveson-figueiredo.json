@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Deiveson_Figueiredo",
       "publisher": "Wikipedia",
       "title": "Deiveson Figueiredo",
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,45 +68,49 @@
         "source:wikidata:Q48122905",
         "source:wikipedia:56637932"
       ],
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "verified",
       "corroborated": true
     },
     "dateOfBirth": {
       "value": "1987-12-18",
       "sourceRefs": [
-        "source:wikidata:Q48122905"
+        "source:wikidata:Q48122905",
+        "source:wikipedia:56637932"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 165,
       "sourceRefs": [
-        "source:wikidata:Q48122905"
+        "source:wikidata:Q48122905",
+        "source:wikipedia:56637932"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
+      "status": "verified",
+      "corroborated": true
     },
     "division": {
       "value": "bantamweight",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-22:fighter:8ed740c3-5fa4-4b36-ae20-7b1ceb437129"
+        "source:cito-ufc:2026-08-22:fighter:8ed740c3-5fa4-4b36-ae20-7b1ceb437129",
+        "source:wikipedia:56637932"
       ],
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
+      "status": "verified",
+      "corroborated": true
     },
     "record": {
       "value": "25-7-1",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-22:fighter:8ed740c3-5fa4-4b36-ae20-7b1ceb437129"
+        "source:cito-ufc:2026-08-22:fighter:8ed740c3-5fa4-4b36-ae20-7b1ceb437129",
+        "source:wikipedia:56637932"
       ],
-      "retrievedAt": "2026-08-22T06:01:28.960Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
+      "status": "verified",
+      "corroborated": true
     },
     "stance": {
       "value": "orthodox",
@@ -114,6 +118,15 @@
         "source:cito-ufc:2026-08-22:fighter:8ed740c3-5fa4-4b36-ae20-7b1ceb437129"
       ],
       "retrievedAt": "2026-08-22T06:01:28.960Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Team Alpha Male (2018–2019) Team Figueiredo (2019–2021) Fight Ready (2021–present) Chute Boxe Diego Lima (2022)",
+      "sourceRefs": [
+        "source:wikipedia:56637932"
+      ],
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -274,6 +287,21 @@
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-3277157fb9e0d14de0f3",
+      "eventRef": "ufc:event:history-ufc-fight-night-yan-vs-figueiredo",
+      "happenedAt": "2024-11-23T00:00:00.000Z",
+      "opponentRef": "ufc:petr-yan",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 5,
+      "elapsedSeconds": 1500,
+      "sourceRefs": [
+        "source:wikipedia:56637932"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
     }
   ],
   "statsProfiles": [
@@ -283,11 +311,11 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:deiveson-figueiredo:history",
-      "bouts": 10,
+      "bouts": 11,
       "values": {
-        "bouts": 10,
+        "bouts": 11,
         "wins": 6,
-        "losses": 3,
+        "losses": 4,
         "draws": 1,
         "noContests": 0,
         "finishRate": 0.5,
@@ -297,32 +325,31 @@
         "koTkoWinShare": 0,
         "submissionWinShare": 0.5,
         "decisionWinShare": 0.5,
-        "averageElapsedSeconds": 914.7,
-        "recentThreeWinRate": 0.666667,
-        "recentFiveWinRate": 0.6,
-        "fightsPerYear": 1.6892,
-        "layoffDays": 645
+        "averageElapsedSeconds": 967.909091,
+        "recentThreeWinRate": 0.333333,
+        "recentFiveWinRate": 0.4,
+        "fightsPerYear": 1.876888,
+        "layoffDays": 654
       },
-      "updatedAt": "2026-08-30T06:01:50.158Z"
+      "updatedAt": "2026-09-08T06:01:01.803Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1573.14302145,
-    "deviation": 167.37608257,
-    "volatility": 0.06001601,
-    "boutCount": 9,
-    "asOfBoutRef": "ufc:bout:history-1a491f49349fa4b20a30",
-    "updatedAt": "2026-08-30T06:01:50.158Z"
+    "rating": 1474.20651947,
+    "deviation": 159.12759713,
+    "volatility": 0.06001961,
+    "boutCount": 10,
+    "asOfBoutRef": "ufc:bout:history-3277157fb9e0d14de0f3",
+    "updatedAt": "2026-09-08T06:01:01.803Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "reachCm",
-      "team",
       "record-history-incomplete"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-09-08T06:01:01.803Z"
   },
   "changeLog": [
     {
@@ -2011,11 +2038,48 @@
         "source:wikipedia:57503647"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:56637932"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 33 historical fight rows."
+    },
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:58085526",
+        "source:wikipedia:52475971",
+        "source:wikipedia:47163936",
+        "source:wikipedia:57503647",
+        "source:wikipedia:56637932"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.75,
-  "corroboration": 0.125,
-  "modelEligible": false,
+  "completeness": 0.875,
+  "corroboration": 0.625,
+  "modelEligible": true,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-30T06:01:50.158Z"
+  "updatedAt": "2026-09-08T06:01:01.803Z"
 }

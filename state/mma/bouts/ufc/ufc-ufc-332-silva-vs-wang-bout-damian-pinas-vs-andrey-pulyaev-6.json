@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:ufc-ufc-332-silva-vs-wang-bout-damian-pinas-vs-andrey-pulyaev-6",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:ufc-332-silva-vs-wang",
+    "name": "UFC 332: Silva vs. Wang",
+    "startsAtUtc": "2026-10-03T00:00:00.000Z",
+    "venue": "Delta Center"
+  },
+  "fighters": {
+    "red": "ufc:damian-pinas",
+    "blue": "ufc:andrey-pulyaev"
+  },
+  "division": "middleweight",
+  "scheduledRounds": 3,
+  "status": "announced",
+  "statusHistory": [
+    {
+      "status": "announced",
+      "at": "2026-09-08T06:01:01.803Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-09-08:List of UFC events"
+      ],
+      "note": "Status imported from the Cito event listing."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-09-08T06:01:01.803Z",
+    "lastSeenAt": "2026-09-08T06:01:01.803Z",
+    "sourceRefs": [
+      "source:wikipedia:2026-09-08:List of UFC events"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:2026-09-08:List of UFC events"
+  ],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "created",
+      "fields": [
+        "event",
+        "fighters",
+        "status"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-09-08:List of UFC events"
+      ],
+      "note": "Discovered on the approved Cito free-tier intake."
+    }
+  ],
+  "updatedAt": "2026-09-08T06:01:01.803Z"
+}

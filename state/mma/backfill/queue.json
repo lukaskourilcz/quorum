@@ -1,18 +1,7 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-08-30T06:01:50.158Z",
+  "generatedAt": "2026-09-08T06:01:01.803Z",
   "items": [
-    {
-      "fighterRef": "ufc:joshua-van",
-      "priority": 1030,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "heightCm",
-        "reachCm",
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-08-03T18:02:46.021Z"
-    },
     {
       "fighterRef": "oktagon:niamh-kinehan",
       "priority": 1030,
@@ -52,7 +41,7 @@
         "reachCm",
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-08-30T06:01:50.158Z",
+      "reviewedAt": "2026-09-08T06:01:01.803Z",
       "uncorroborated": [
         "division",
         "record"
@@ -66,9 +55,43 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-30T06:01:50.158Z",
+      "reviewedAt": "2026-09-08T06:01:01.803Z",
       "uncorroborated": [
         "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:deiveson-figueiredo",
+      "priority": 1020,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-09-08T06:01:01.803Z"
+    },
+    {
+      "fighterRef": "ufc:joshua-van",
+      "priority": 1020,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-09-08T06:01:01.803Z"
+    },
+    {
+      "fighterRef": "ufc:rafael-dos-anjos",
+      "priority": 1020,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-09-08T06:01:01.803Z",
+      "uncorroborated": [
+        "division",
+        "record"
       ]
     },
     {
@@ -79,48 +102,10 @@
         "stance",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-08-30T06:01:50.158Z",
+      "reviewedAt": "2026-09-08T06:01:01.803Z",
       "uncorroborated": [
         "division",
         "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alateng-heili",
-      "priority": 1010,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "stance"
-      ],
-      "reviewedAt": "2026-08-30T06:01:50.158Z",
-      "uncorroborated": [
-        "name",
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alexa-grasso",
-      "priority": 1010,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "record-history-mismatch"
-      ],
-      "reviewedAt": "2026-08-30T06:01:50.158Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alonzo-menifield",
-      "priority": 1010,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-08-30T06:01:50.158Z",
-      "uncorroborated": [
-        "division"
       ]
     },
     {
@@ -137,11 +122,68 @@
       ]
     },
     {
+      "fighterRef": "ufc:alateng-heili",
+      "priority": 1010,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "stance"
+      ],
+      "reviewedAt": "2026-09-08T06:01:01.803Z",
+      "uncorroborated": [
+        "name",
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:alexa-grasso",
+      "priority": 1010,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-09-08T06:01:01.803Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:alexander-hernandez",
+      "priority": 1010,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-09-08T06:01:01.803Z"
+    },
+    {
+      "fighterRef": "ufc:alonzo-menifield",
+      "priority": 1010,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-09-08T06:01:01.803Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
       "fighterRef": "ufc:ailin-perez",
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-08-30T06:01:50.158Z",
+      "reviewedAt": "2026-09-08T06:01:01.803Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:ateba-gautier",
+      "priority": 1000,
+      "reason": "upcoming-bout",
+      "gaps": [],
+      "reviewedAt": "2026-09-08T06:01:01.803Z",
       "uncorroborated": [
         "division"
       ]
@@ -303,21 +345,6 @@
     },
     {
       "fighterRef": "ufc:ciryl-gane",
-      "priority": 480,
-      "reason": "uncorroborated",
-      "gaps": [
-        "reachCm",
-        "team",
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:deiveson-figueiredo",
       "priority": 480,
       "reason": "uncorroborated",
       "gaps": [
@@ -887,16 +914,6 @@
       ]
     },
     {
-      "fighterRef": "ufc:ateba-gautier",
-      "priority": 450,
-      "reason": "uncorroborated",
-      "gaps": [],
-      "reviewedAt": "2026-08-02T15:43:59.798Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
       "fighterRef": "oktagon:viktor-pesta",
       "priority": 450,
       "reason": "uncorroborated",
@@ -987,19 +1004,6 @@
     },
     {
       "fighterRef": "ufc:miesha-tate",
-      "priority": 350,
-      "reason": "missing-profile",
-      "gaps": [
-        "division",
-        "record",
-        "stance",
-        "reachCm",
-        "team"
-      ],
-      "reviewedAt": ""
-    },
-    {
-      "fighterRef": "ufc:rafael-dos-anjos",
       "priority": 350,
       "reason": "missing-profile",
       "gaps": [
@@ -1142,15 +1146,6 @@
         "record-history-incomplete"
       ],
       "reviewedAt": "2026-08-03T18:11:44.232Z"
-    },
-    {
-      "fighterRef": "ufc:alexander-hernandez",
-      "priority": 310,
-      "reason": "missing-profile",
-      "gaps": [
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-08-04T07:29:35.203Z"
     },
     {
       "fighterRef": "ufc:azamat-murzakanov",

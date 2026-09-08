@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Brandon_Royval",
       "publisher": "Wikipedia",
       "title": "Brandon Royval",
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q102225197",
         "source:wikipedia:64578559"
       ],
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "verified",
       "corroborated": true
     },
@@ -207,6 +207,21 @@
       "status": "provisional"
     },
     {
+      "boutRef": "ufc:bout:history-60d72f5e1d8377946191",
+      "eventRef": "ufc:event:history-ufc-317",
+      "happenedAt": "2025-06-28T00:00:00.000Z",
+      "opponentRef": "ufc:joshua-van",
+      "result": "loss",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:78781693"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "ufc:bout:history-9d4c3d3779706c981aa7",
       "eventRef": "ufc:event:history-ufc-317",
       "happenedAt": "2025-06-28T00:00:00.000Z",
@@ -229,11 +244,11 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:brandon-royval:history",
-      "bouts": 7,
+      "bouts": 8,
       "values": {
-        "bouts": 7,
+        "bouts": 8,
         "wins": 1,
-        "losses": 6,
+        "losses": 7,
         "draws": 0,
         "noContests": 0,
         "finishRate": 0,
@@ -243,23 +258,23 @@
         "koTkoWinShare": 0,
         "submissionWinShare": 0,
         "decisionWinShare": 1,
-        "averageElapsedSeconds": 930.142857,
+        "averageElapsedSeconds": 926.375,
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.2,
-        "fightsPerYear": 1.304438,
-        "layoffDays": 428
+        "fightsPerYear": 1.521844,
+        "layoffDays": 437
       },
-      "updatedAt": "2026-08-30T06:01:50.158Z"
+      "updatedAt": "2026-09-08T06:01:01.803Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1275.54562987,
-    "deviation": 207.96002095,
-    "volatility": 0.06000504,
-    "boutCount": 7,
+    "rating": 1244.17565226,
+    "deviation": 196.45860734,
+    "volatility": 0.06000422,
+    "boutCount": 8,
     "asOfBoutRef": "ufc:bout:history-9d4c3d3779706c981aa7",
-    "updatedAt": "2026-08-30T06:01:50.158Z"
+    "updatedAt": "2026-09-08T06:01:01.803Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1827,11 +1842,28 @@
         "source:wikipedia:78781693"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:52475971",
+        "source:wikipedia:54180928",
+        "source:wikipedia:78781693"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.625,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-30T06:01:50.158Z"
+  "updatedAt": "2026-09-08T06:01:01.803Z"
 }

@@ -4,83 +4,78 @@
   "windowDays": 10,
   "cards": [
     {
-      "name": "UFC Fight Night: Nurmagomedov vs. Song",
-      "startsAtUtc": "2026-08-29T00:00:00.000Z",
-      "results": 13
-    },
-    {
-      "name": "UFC Fight Night: Hernandez vs. Rodrigues",
-      "startsAtUtc": "2026-08-22T00:00:00.000Z",
-      "results": 13
+      "name": "UFC Fight Night: Hooker vs. Parnasse",
+      "startsAtUtc": "2026-09-05T00:00:00.000Z",
+      "results": 14
     }
   ],
   "applied": [
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-umar-nurmagomedov-vs-song-yadong-1",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-dan-hooker-vs-salahdine-parnasse-1",
+      "winner": "blue",
+      "method": "TKO (body kick and punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-fares-ziam-vs-axel-sola-2",
       "winner": "blue",
       "method": "KO (punch)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-yan-xiaonan-vs-denise-gomes-2",
-      "winner": "blue",
-      "method": "KO (elbow and punches)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-aori-qileng-vs-kai-asakura-3",
-      "winner": "blue",
-      "method": "TKO (head kick and punches)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-su-mudaerji-vs-alex-perez-4",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-michael-page-vs-nursulton-ruziboev-3",
       "winner": "red",
       "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-liu-ce-vs-levi-rodrigues-jr-5",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-daniil-donchenko-vs-punahele-soriano-4",
       "winner": "red",
-      "method": "KO (punch)"
+      "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-bilal-hasan-vs-nilson-rojas-6",
-      "winner": "red",
-      "method": "KO (punch)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-namsrai-batbayar-vs-andre-lima-7",
-      "winner": "blue",
-      "method": "Submission (guillotine choke)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-rei-tsuruya-vs-kevin-borjas-9",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-kurtis-campbell-vs-trevor-peek-8",
       "winner": "red",
       "method": "Submission (rear-naked choke)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-jack-jenkins-vs-sean-woodson-8",
-      "winner": "blue",
-      "method": "Decision (split)"
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-losene-keita-vs-muhammad-naimov-6",
+      "winner": "red",
+      "method": "KO (punch)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-xiao-long-vs-francesco-nuzzi-9",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-morgan-charriere-vs-felipe-lima-5",
       "winner": "blue",
+      "method": "Decision (unanimous)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-mario-pinto-vs-ryan-spann-7",
+      "winner": "red",
       "method": "TKO (punches)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-lawrence-lui-vs-hector-santiago-11",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-oumar-sy-vs-modestas-bukauskas-9",
       "winner": "blue",
-      "method": "KO (punches)"
+      "method": "TKO (knee and punches)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-xiong-jingnan-vs-julia-polastri-9",
-      "winner": "blue",
-      "method": "KO (head kick)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-ding-meng-vs-cameron-nelson-13",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-michael-aljarouj-vs-fabia-sintes-11",
       "winner": "blue",
       "method": "Decision (unanimous)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-nora-cornolle-vs-klaudia-sygu-a-12",
+      "winner": "red",
+      "method": "Decision (unanimous)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-matthieu-letho-duclos-vs-luis-felipe-dias-7",
+      "winner": "red",
+      "method": "TKO (punches)"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-delphine-benouaich-vs-sofia-montenegro-14",
+      "winner": "red",
+      "method": "Technical Submission (rear-naked choke)"
     }
   ],
-  "untracked": 13,
-  "generatedAt": "2026-08-30T06:01:50.158Z"
+  "untracked": 1,
+  "generatedAt": "2026-09-08T06:01:01.803Z"
 }

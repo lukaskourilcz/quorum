@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "event-card/1",
+  "id": "ufc:event:ufc-332-silva-vs-wang",
+  "org": "ufc",
+  "name": "UFC 332: Silva vs. Wang",
+  "venue": "Delta Center",
+  "startsAtLocal": "2026-10-03T00:00:00.000Z",
+  "timeZone": "UTC",
+  "startsAtUtc": "2026-10-03T00:00:00.000Z",
+  "sourceRefs": [
+    "source:wikipedia:2026-09-08:List of UFC events"
+  ],
+  "bouts": [
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:natalia-silva-vs-wang-cong-1",
+      "red": "ufc:natalia-silva",
+      "blue": "ufc:wang-cong",
+      "division": "womens-flyweight",
+      "scheduledRounds": 5,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:deiveson-figueiredo-vs-payton-talbott-2",
+      "red": "ufc:deiveson-figueiredo",
+      "blue": "ufc:payton-talbott",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:khaos-williams-vs-roberto-soldic-3",
+      "red": "ufc:khaos-williams",
+      "blue": "ufc:roberto-soldic",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:ateba-gautier-vs-roman-kopylov-4",
+      "red": "ufc:ateba-gautier",
+      "blue": "ufc:roman-kopylov",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:imanol-rodriguez-vs-alden-coria-5",
+      "red": "ufc:imanol-rodriguez",
+      "blue": "ufc:alden-coria",
+      "division": "flyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:damian-pinas-vs-andrey-pulyaev-6",
+      "red": "ufc:damian-pinas",
+      "blue": "ufc:andrey-pulyaev",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:marcus-mcghee-vs-bernardo-sopaj-7",
+      "red": "ufc:marcus-mcghee",
+      "blue": "ufc:bernardo-sopaj",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:king-green-vs-esteban-ribovics-8",
+      "red": "ufc:king-green",
+      "blue": "ufc:esteban-ribovics",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:johnny-walker-vs-mick-parkin-9",
+      "red": "ufc:johnny-walker",
+      "blue": "ufc:mick-parkin",
+      "division": "heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:rafael-dos-anjos-vs-alexander-hernandez-10",
+      "red": "ufc:rafael-dos-anjos",
+      "blue": "ufc:alexander-hernandez",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:marvin-vettori-vs-ismail-naurdiev-11",
+      "red": "ufc:marvin-vettori",
+      "blue": "ufc:ismail-naurdiev",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:court-mcgee-vs-eric-nolan-12",
+      "red": "ufc:court-mcgee",
+      "blue": "ufc:eric-nolan",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    }
+  ],
+  "updatedAt": "2026-09-08T06:01:01.803Z"
+}

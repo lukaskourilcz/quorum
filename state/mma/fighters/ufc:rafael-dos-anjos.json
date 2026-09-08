@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Rafael_dos_Anjos",
       "publisher": "Wikipedia",
       "title": "Rafael dos Anjos",
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,25 +59,63 @@
         "source:wikidata:Q5961540",
         "source:wikipedia:18427840"
       ],
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "verified",
       "corroborated": true
     },
     "dateOfBirth": {
       "value": "1984-10-26",
       "sourceRefs": [
-        "source:wikidata:Q5961540"
+        "source:wikidata:Q5961540",
+        "source:wikipedia:18427840"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 175,
       "sourceRefs": [
-        "source:wikidata:Q5961540"
+        "source:wikidata:Q5961540",
+        "source:wikipedia:18427840"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "division": {
+      "value": "welterweight",
+      "sourceRefs": [
+        "source:wikipedia:18427840"
+      ],
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "southpaw",
+      "sourceRefs": [
+        "source:wikipedia:18427840"
+      ],
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Evolve MMA (2009–present) RDA Academy RVCA Training Center Kings MMA (2012–2016) Nova União (2020–present)",
+      "sourceRefs": [
+        "source:wikipedia:18427840"
+      ],
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "32-17-0",
+      "sourceRefs": [
+        "source:wikipedia:18427840"
+      ],
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -175,9 +213,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 4.722963,
-        "layoffDays": 2598
+        "layoffDays": 2607
       },
-      "updatedAt": "2026-08-30T06:01:50.158Z"
+      "updatedAt": "2026-09-08T06:01:01.803Z"
     }
   ],
   "rating": {
@@ -187,18 +225,15 @@
     "volatility": 0.05999781,
     "boutCount": 4,
     "asOfBoutRef": "ufc:bout:history-ba7412e69c56d30fd379",
-    "updatedAt": "2026-08-30T06:01:50.158Z"
+    "updatedAt": "2026-09-08T06:01:01.803Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
-      "stance",
       "reachCm",
-      "team"
+      "record-history-incomplete"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-09-08T06:01:01.803Z"
   },
   "changeLog": [
     {
@@ -1754,11 +1789,45 @@
         "source:wikipedia:46384799"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:18427840"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 48 historical fight rows."
+    },
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49620123",
+        "source:wikipedia:46384799"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.375,
-  "corroboration": 0.125,
+  "completeness": 0.875,
+  "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-30T06:01:50.158Z"
+  "updatedAt": "2026-09-08T06:01:01.803Z"
 }

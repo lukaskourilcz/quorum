@@ -346,7 +346,7 @@
       "requestedAt": "2026-08-27T06:00:56.984Z",
       "notBefore": "2026-08-27",
       "expiresAt": "2026-08-30T23:59:59.000Z",
-      "status": "pending"
+      "status": "expired"
     },
     {
       "schemaVersion": "meeting-agenda/1",
@@ -363,8 +363,26 @@
       "requestedAt": "2026-08-30T06:01:50.158Z",
       "notBefore": "2026-08-30",
       "expiresAt": "2026-09-02T23:59:59.000Z",
+      "status": "expired"
+    },
+    {
+      "schemaVersion": "meeting-agenda/1",
+      "id": "agenda-2f40548e425fd904",
+      "ventureId": "fightaiq",
+      "phase": "mma-analysis",
+      "requestedBy": "FORGE",
+      "sourcePhase": "mma-intake",
+      "sourceMeetingRef": "meetings/2026-09-08-mma-intake",
+      "summary": "Decide: run probability model once odds key unlocks and two-source critical-field gaps close for fighters on four nearest cards (Oktagon 93, UFC FN 288, UFC FN Rodriguez, UFC FN Silva).",
+      "evidenceRefs": [
+        "meeting:2026-08-30-mma-analysis",
+        "meeting:2026-08-29-mag-desk"
+      ],
+      "requestedAt": "2026-09-08T06:01:01.803Z",
+      "notBefore": "2026-09-08",
+      "expiresAt": "2026-09-11T23:59:59.000Z",
       "status": "pending"
     }
   ],
-  "updatedAt": "2026-08-30T06:01:50.158Z"
+  "updatedAt": "2026-09-08T06:01:01.803Z"
 }

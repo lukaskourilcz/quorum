@@ -64,7 +64,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexander_Hernandez",
       "publisher": "Wikipedia",
       "title": "Alexander Hernandez",
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -78,7 +78,7 @@
         "source:wikipedia:43536705",
         "source:wikipedia:58018549"
       ],
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "verified",
       "corroborated": true
     },
@@ -88,7 +88,7 @@
         "source:wikidata:Q51883206",
         "source:wikipedia:58018549"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "verified",
       "corroborated": true
     },
@@ -98,7 +98,7 @@
         "source:cito-ufc:2026-08-04:fighter:5f409bb9-bc39-4b6c-82ab-f78bf626a786",
         "source:wikipedia:58018549"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "verified",
       "corroborated": true
     },
@@ -108,7 +108,7 @@
         "source:cito-ufc:2026-08-04:fighter:5f409bb9-bc39-4b6c-82ab-f78bf626a786",
         "source:wikipedia:58018549"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "verified",
       "corroborated": true
     },
@@ -126,7 +126,7 @@
       "sourceRefs": [
         "source:wikipedia:58018549"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -135,7 +135,7 @@
       "sourceRefs": [
         "source:wikipedia:58018549"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -144,7 +144,7 @@
       "sourceRefs": [
         "source:wikipedia:58018549"
       ],
-      "retrievedAt": "2026-08-04T07:29:35.203Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -242,9 +242,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.5,
         "fightsPerYear": 0.628645,
-        "layoffDays": 1359
+        "layoffDays": 1368
       },
-      "updatedAt": "2026-08-30T06:01:50.158Z"
+      "updatedAt": "2026-09-08T06:01:01.803Z"
     }
   ],
   "rating": {
@@ -254,14 +254,14 @@
     "volatility": 0.06000423,
     "boutCount": 4,
     "asOfBoutRef": "ufc:bout:history-a8b92532ddfd860fcedf",
-    "updatedAt": "2026-08-30T06:01:50.158Z"
+    "updatedAt": "2026-09-08T06:01:01.803Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
       "record-history-incomplete"
     ],
-    "lastReviewedAt": "2026-08-04T07:29:35.203Z"
+    "lastReviewedAt": "2026-09-08T06:01:01.803Z"
   },
   "changeLog": [
     {
@@ -1844,11 +1844,45 @@
         "source:wikipedia:64857899"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:58018549"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 27 historical fight rows."
+    },
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:43536705",
+        "source:wikipedia:64857899"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": true,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-30T06:01:50.158Z"
+  "updatedAt": "2026-09-08T06:01:01.803Z"
 }

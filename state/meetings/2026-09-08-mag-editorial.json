@@ -1,0 +1,143 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260908060101-mag-editorial",
+  "date": "2026-09-08",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.022798,
+    "monthAllInUsd": 0.3290718000000001,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "VETO",
+    "summary": "AUDIT vetoed the room output: Zabít slot: chybí ověřený subjekt i dnešní zadání, modelová data nejsou k dispozici a index neukazuje novou událost. Publikace by porušila pravidlo zdrojového článku.",
+    "evidenceRefs": [
+      "meeting:2026-08-30-mma-analysis",
+      "meeting:2026-08-29-mag-desk"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "JAB",
+      "summary": "Nelze přiřadit článek: packet neobsahuje ověřený nový subjekt, fighter file, událost ani obrazový podklad. Poslední publikované téma Alexe Pereze je navíc čerstvé a opakování je zakázané.",
+      "evidenceRefs": [
+        "meeting:2026-08-30-mma-analysis"
+      ]
+    },
+    {
+      "agent": "QUILL",
+      "summary": "No article slot assignment possible. Bridge confirms no model run queued for odds-dependent analysis (2026-08-30), prior meeting assigned nothing (2026-08-29). Index shows 21 published pieces; no fresh verified subject ready. Kill the slot.",
+      "evidenceRefs": [
+        "meeting:2026-08-30-mma-analysis",
+        "meeting:2026-08-29-mag-desk"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Zabít slot: chybí ověřený subjekt i dnešní zadání, modelová data nejsou k dispozici a index neukazuje novou událost. Publikace by porušila pravidlo zdrojového článku.",
+      "evidenceRefs": [
+        "meeting:2026-08-30-mma-analysis",
+        "meeting:2026-08-29-mag-desk"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "JAB",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "veto",
+      "veto": true
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-09-08.json",
+  "generatedAt": "2026-09-08T06:05:01.803Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-09-08T06:01:01.803Z",
+    "closedAt": "2026-09-08T06:05:01.803Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-09-08T06:01:01.803Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "JAB",
+        "mode": "statement",
+        "sentAt": "2026-09-08T06:02:01.803Z",
+        "text": "Nelze přiřadit článek: packet neobsahuje ověřený nový subjekt, fighter file, událost ani obrazový podklad. Poslední publikované téma Alexe Pereze je navíc čerstvé a opakování je zakázané.",
+        "evidenceRefs": [
+          "meeting:2026-08-30-mma-analysis"
+        ]
+      },
+      {
+        "agent": "QUILL",
+        "mode": "statement",
+        "sentAt": "2026-09-08T06:03:01.803Z",
+        "text": "No article slot assignment possible. Bridge confirms no model run queued for odds-dependent analysis (2026-08-30), prior meeting assigned nothing (2026-08-29). Index shows 21 published pieces; no fresh verified subject ready. Kill the slot.",
+        "evidenceRefs": [
+          "meeting:2026-08-30-mma-analysis",
+          "meeting:2026-08-29-mag-desk"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "veto",
+        "sentAt": "2026-09-08T06:04:01.803Z",
+        "text": "Zabít slot: chybí ověřený subjekt i dnešní zadání, modelová data nejsou k dispozici a index neukazuje novou událost. Publikace by porušila pravidlo zdrojového článku.",
+        "evidenceRefs": [
+          "meeting:2026-08-30-mma-analysis",
+          "meeting:2026-08-29-mag-desk"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-09-08T06:05:01.803Z",
+        "text": "AUDIT vetoed the room output: Zabít slot: chybí ověřený subjekt i dnešní zadání, modelová data nejsou k dispozici a index neukazuje novou událost. Publikace by porušila pravidlo zdrojového článku."
+      }
+    ]
+  }
+}

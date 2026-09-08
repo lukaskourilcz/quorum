@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-12T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-08-30:List of UFC events"
+    "source:wikipedia:2026-09-08:List of UFC events"
   ],
   "bouts": [
     {
@@ -84,10 +84,10 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-silva-vs-delgado:bout:ramiro-jimenez-vs-rodrigo-vera-10",
-      "red": "ufc:ramiro-jimenez",
-      "blue": "ufc:rodrigo-vera",
-      "division": "featherweight",
+      "id": "ufc:ufc-fight-night-silva-vs-delgado:bout:drakkar-klose-vs-thomas-gantt-10",
+      "red": "ufc:drakkar-klose",
+      "blue": "ufc:thomas-gantt",
+      "division": "lightweight",
       "scheduledRounds": 3,
       "status": "announced"
     },
@@ -100,7 +100,15 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-silva-vs-delgado:bout:jj-aldrich-vs-regina-tarin-12",
+      "id": "ufc:ufc-fight-night-silva-vs-delgado:bout:sean-king-vs-jessie-rosas-12",
+      "red": "ufc:sean-king",
+      "blue": "ufc:jessie-rosas",
+      "division": "featherweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-silva-vs-delgado:bout:jj-aldrich-vs-regina-tarin-13",
       "red": "ufc:jj-aldrich",
       "blue": "ufc:regina-tarin",
       "division": "womens-flyweight",
@@ -108,5 +116,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-08-30T06:01:50.158Z"
+  "updatedAt": "2026-09-08T06:01:01.803Z"
 }

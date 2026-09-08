@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "carousel-recipe/1",
+  "venture": "mma-files",
+  "slug": "ufc-amanda-ribas",
+  "date": "2026-09-08",
+  "family": "apex",
+  "variant": "A",
+  "accentSwap": false,
+  "treatment": "none",
+  "typeScale": 1.1,
+  "phaseSeed": 0,
+  "summaryRef": "ventures/carousel-studio/summaries/mma-files/2026-09-08-ufc-amanda-ribas.json",
+  "copyRef": "ventures/carousel-studio/social-copy/mma-files/2026-09-08-ufc-amanda-ribas.json"
+}

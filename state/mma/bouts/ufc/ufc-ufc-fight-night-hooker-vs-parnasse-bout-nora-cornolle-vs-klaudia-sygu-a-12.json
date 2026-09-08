@@ -14,7 +14,7 @@
   },
   "division": "womens-bantamweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-27:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-09-08T06:01:01.803Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-09-08:UFC Fight Night: Hooker vs. Parnasse"
+      ],
+      "note": "Result read from the UFC Fight Night: Hooker vs. Parnasse article after the event."
     }
   ],
   "discovery": {
@@ -37,9 +45,18 @@
   "sourceRefs": [
     "source:wikipedia:2026-08-27:List of UFC events",
     "source:wikipedia:2026-08-28:List of UFC events",
-    "source:wikipedia:2026-08-30:List of UFC events"
+    "source:wikipedia:2026-08-30:List of UFC events",
+    "source:wikipedia:2026-09-08:UFC Fight Night: Hooker vs. Parnasse"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:2026-09-08:UFC Fight Night: Hooker vs. Parnasse"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -54,7 +71,19 @@
         "source:wikipedia:2026-08-27:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-09-08:UFC Fight Night: Hooker vs. Parnasse"
+      ],
+      "note": "Nora Cornolle def. Klaudia Syguła by Decision (unanimous)."
     }
   ],
-  "updatedAt": "2026-08-27T06:00:56.984Z"
+  "updatedAt": "2026-09-08T06:01:01.803Z"
 }

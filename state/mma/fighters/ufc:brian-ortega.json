@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Brian_Ortega",
       "publisher": "Wikipedia",
       "title": "Brian Ortega",
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q4964959",
         "source:wikipedia:32815938"
       ],
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "verified",
       "corroborated": true
     },
@@ -318,9 +318,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.2,
         "fightsPerYear": 0.894471,
-        "layoffDays": 372
+        "layoffDays": 381
       },
-      "updatedAt": "2026-08-30T06:01:50.158Z"
+      "updatedAt": "2026-09-08T06:01:01.803Z"
     }
   ],
   "rating": {
@@ -330,7 +330,7 @@
     "volatility": 0.06000278,
     "boutCount": 7,
     "asOfBoutRef": "ufc:bout:history-9e76bacdf60736d621e7",
-    "updatedAt": "2026-08-30T06:01:50.158Z"
+    "updatedAt": "2026-09-08T06:01:01.803Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2219,11 +2219,29 @@
         "source:wikipedia:43320208"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:32815938",
+        "source:wikipedia:54197580",
+        "source:wikipedia:45514815",
+        "source:wikipedia:43320208"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-30T06:01:50.158Z"
+  "updatedAt": "2026-09-08T06:01:01.803Z"
 }

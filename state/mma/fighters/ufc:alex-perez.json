@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alex_Perez_(fighter)",
       "publisher": "Wikipedia",
       "title": "Alex Perez (fighter)",
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -78,7 +78,7 @@
         "source:wikipedia:58085526",
         "source:wikipedia:77593874"
       ],
-      "retrievedAt": "2026-08-30T06:01:50.158Z",
+      "retrievedAt": "2026-09-08T06:01:01.803Z",
       "status": "verified",
       "corroborated": true
     },
@@ -287,9 +287,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 0.866736,
-        "layoffDays": 1
+        "layoffDays": 10
       },
-      "updatedAt": "2026-08-30T06:01:50.158Z"
+      "updatedAt": "2026-09-08T06:01:01.803Z"
     }
   ],
   "rating": {
@@ -299,7 +299,7 @@
     "volatility": 0.05999592,
     "boutCount": 6,
     "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-su-mudaerji-vs-alex-perez-4",
-    "updatedAt": "2026-08-30T06:01:50.158Z"
+    "updatedAt": "2026-09-08T06:01:01.803Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2239,11 +2239,29 @@
         "source:wikipedia:2026-08-30:UFC Fight Night: Nurmagomedov vs. Song"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-08T06:01:01.803Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:58085526",
+        "source:wikipedia:54180928",
+        "source:wikipedia:77593874",
+        "source:wikipedia:2026-08-30:UFC Fight Night: Nurmagomedov vs. Song"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-08-30T06:01:50.158Z"
+  "updatedAt": "2026-09-08T06:01:01.803Z"
 }
