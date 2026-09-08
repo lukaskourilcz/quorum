@@ -102,6 +102,25 @@ export async function verifyReleaseSnapshot(snapshot: ReleaseSnapshot, now = new
 
 export type CiState = "success" | "failure" | "pending" | "missing" | "unavailable";
 
+export interface ReleaseCiPolicy {
+  statusContexts: readonly string[];
+  checkRunNames: readonly string[];
+  checkRunApp: string;
+}
+
+const TARGET_RELEASE_CI: Record<"lukaskourilcz/aifirst" | "lukaskourilcz/mma-files", ReleaseCiPolicy> = {
+  "lukaskourilcz/aifirst": {
+    statusContexts: ["Vercel"],
+    checkRunNames: ["verify"],
+    checkRunApp: "github-actions"
+  },
+  "lukaskourilcz/mma-files": {
+    statusContexts: ["Vercel"],
+    checkRunNames: ["Test and build"],
+    checkRunApp: "github-actions"
+  }
+};
+
 /**
  * Decide a commit's CI state from whichever of the two GitHub signals could be read.
  *
@@ -110,26 +129,47 @@ export type CiState = "success" | "failure" | "pending" | "missing" | "unavailab
  * Only affirmative success passes, so an unreadable half never invents a green.
  */
 export function resolveCiState(
-  status: { state?: unknown; statuses?: unknown[] } | null,
-  checks: { check_runs?: Array<{ status?: unknown; conclusion?: unknown }> } | null
+  status: { state?: unknown; statuses?: Array<{ context?: unknown; state?: unknown }> } | null,
+  checks: { check_runs?: Array<{ name?: unknown; status?: unknown; conclusion?: unknown; app?: { slug?: unknown } }> } | null,
+  policy?: ReleaseCiPolicy
 ): CiState {
   if (status === null && checks === null) return "unavailable";
-  const runs = checks?.check_runs ?? [];
+
+  const statuses = status?.statuses ?? [];
+  const matchingStatuses = policy
+    ? statuses.filter((entry) => policy.statusContexts.includes(String(entry.context)))
+    : statuses;
+  const statusState = status === null
+    ? "unavailable"
+    : policy
+      ? matchingStatuses.some((entry) => entry.state === "failure" || entry.state === "error")
+        ? "failure"
+        : matchingStatuses.some((entry) => entry.state === "pending")
+          ? "pending"
+          : matchingStatuses.length > 0 && matchingStatuses.every((entry) => entry.state === "success")
+            ? "success"
+            : "pending"
+      : status.state;
+
+  const runs = (checks?.check_runs ?? []).filter((run) => !policy || (
+    policy.checkRunNames.includes(String(run.name)) && run.app?.slug === policy.checkRunApp
+  ));
   const passedConclusions = ["success", "neutral", "skipped"];
   const runPassed = (run: { status?: unknown; conclusion?: unknown }) =>
     run.status === "completed" && passedConclusions.includes(String(run.conclusion));
-  // Failure is decided first, because the two endpoints report different systems: /status is
-  // the legacy commit-status API that Vercel writes to, /check-runs is where GitHub Actions
-  // reports. Answering success on the first green signal let a deployed preview outvote a
-  // red test suite on the same commit.
-  if (status?.state === "failure" || status?.state === "error") return "failure";
+
+  // These endpoints contain every integration and workflow attached to the commit. A scheduled
+  // sentinel failure on Caught Up once reverted an otherwise healthy article deployment, so a
+  // target policy names the release signals rather than treating unrelated checks as release CI.
+  if (statusState === "failure") return "failure";
   if (runs.some((run) => run.status === "completed" && !runPassed(run))) return "failure";
-  if (status?.state === "success" || (runs.length > 0 && runs.every(runPassed))) return "success";
-  const statusesPresent = Array.isArray(status?.statuses) && status.statuses.length > 0;
-  return statusesPresent || runs.length > 0 ? "pending" : "missing";
+  if ((statusState === "pending" && (policy !== undefined || matchingStatuses.length > 0))
+    || runs.some((run) => run.status !== "completed")) return "pending";
+  if (statusState === "success" || (runs.length > 0 && runs.every(runPassed))) return "success";
+  return matchingStatuses.length > 0 || runs.length > 0 ? "pending" : "missing";
 }
 
-async function githubChecks(input: { repository: string; commit: string; token: string; now: Date }): Promise<ReleaseCheck[]> {
+async function githubChecks(input: { repository: keyof typeof TARGET_RELEASE_CI; commit: string; token: string; now: Date }): Promise<ReleaseCheck[]> {
   const headers = {
     Authorization: `Bearer ${input.token}`,
     Accept: "application/vnd.github+json",
@@ -163,10 +203,11 @@ async function githubChecks(input: { repository: string; commit: string; token: 
   };
   const base = `https://api.github.com/repos/${input.repository}/commits/${input.commit}`;
   const [status, checks] = await Promise.all([
-    readJson<{ state?: unknown; statuses?: unknown[] }>(`${base}/status`),
-    readJson<{ check_runs?: Array<{ status?: unknown; conclusion?: unknown }> }>(`${base}/check-runs`)
+    readJson<{ state?: unknown; statuses?: Array<{ context?: unknown; state?: unknown }> }>(`${base}/status`),
+    readJson<{ check_runs?: Array<{ name?: unknown; status?: unknown; conclusion?: unknown; app?: { slug?: unknown } }> }>(`${base}/check-runs`)
   ]);
-  const ciState = resolveCiState(status.value, checks.value);
+  const policy = TARGET_RELEASE_CI[input.repository];
+  const ciState = resolveCiState(status.value, checks.value, policy);
   // Name the endpoint that would not answer. "Target CI state: unavailable" on its own cost
   // two full delivery runs and an hour of wall clock to attribute to a missing installation
   // permission, because the line said the signal was absent without saying which one, or why.

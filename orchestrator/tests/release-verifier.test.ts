@@ -105,6 +105,63 @@ describe("a failing signal is not outvoted by a passing one", () => {
   });
 });
 
+describe("target release CI policy", () => {
+  const caughtUpPolicy = {
+    statusContexts: ["Vercel"],
+    checkRunNames: ["verify"],
+    checkRunApp: "github-actions"
+  } as const;
+
+  const vercelSuccess = {
+    state: "failure",
+    statuses: [
+      { context: "Vercel", state: "success" },
+      { context: "unrelated-status", state: "failure" }
+    ]
+  };
+
+  it("ignores an unrelated scheduled failure beside the passing release job", () => {
+    expect(resolveCiState(vercelSuccess, {
+      check_runs: [
+        { name: "sentinel", status: "completed", conclusion: "failure", app: { slug: "github-actions" } },
+        { name: "verify", status: "completed", conclusion: "success", app: { slug: "github-actions" } }
+      ]
+    }, caughtUpPolicy)).toBe("success");
+  });
+
+  it("accepts Vercel when content-only delivery intentionally skips the release workflow", () => {
+    expect(resolveCiState(vercelSuccess, {
+      check_runs: [
+        { name: "sentinel", status: "completed", conclusion: "failure", app: { slug: "github-actions" } }
+      ]
+    }, caughtUpPolicy)).toBe("success");
+  });
+
+  it("fails when the named release job fails", () => {
+    expect(resolveCiState(vercelSuccess, {
+      check_runs: [
+        { name: "verify", status: "completed", conclusion: "failure", app: { slug: "github-actions" } }
+      ]
+    }, caughtUpPolicy)).toBe("failure");
+  });
+
+  it("waits for the expected Vercel status", () => {
+    expect(resolveCiState({ state: "success", statuses: [] }, {
+      check_runs: [
+        { name: "verify", status: "completed", conclusion: "success", app: { slug: "github-actions" } }
+      ]
+    }, caughtUpPolicy)).toBe("pending");
+  });
+
+  it("uses the release job when commit statuses cannot be read", () => {
+    expect(resolveCiState(null, {
+      check_runs: [
+        { name: "verify", status: "completed", conclusion: "success", app: { slug: "github-actions" } }
+      ]
+    }, caughtUpPolicy)).toBe("success");
+  });
+});
+
 describe("the Czech page lives at a different path on each site", () => {
   it("is the root on Caught Up and the /cs segment on MMA Files", () => {
     // Caught Up moved Czech onto the URLs English used to hold, so /cs there is a 308.
