@@ -1,11 +1,17 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-09-08T05:06:08.570Z",
+  "checkedAt": "2026-09-08T06:07:03.626Z",
   "date": "2026-09-08",
   "ventures": [
     {
       "venture": "mma-files",
-      "waiting": [],
+      "waiting": [
+        {
+          "label": "2026-09-08 AM ufc-amanda-ribas",
+          "packageHash": "a8bfb00c5f837ae072f0fa7338d8b9d225f690a41226bef07367099cedee3582",
+          "date": "2026-09-08"
+        }
+      ],
       "parked": [
         {
           "label": "2026-08-30 AM ufc-alex-perez",
@@ -16,8 +22,8 @@
           "supersededBy": "0120bb5445c80a73fb95e6a1836541d19b07c99d09c591d3573db01c0e4ac698"
         }
       ],
-      "oldestWaitingDate": null,
-      "stalledDays": null,
+      "oldestWaitingDate": "2026-09-08",
+      "stalledDays": 0,
       "stalled": false,
       "neverDrains": []
     },
