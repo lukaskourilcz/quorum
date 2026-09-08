@@ -262,7 +262,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "undefined The owner has the technical report.",
+    "summary": "The delivered edition did not verify on the live site, so the release was rolled back. The owner has the technical report.",
     "evidenceRefs": [
       "source:the-verge",
       "source:techcrunch-ai",

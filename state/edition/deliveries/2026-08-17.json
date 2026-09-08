@@ -7,6 +7,7 @@
   "targetRepository": "lukaskourilcz/aifirst",
   "code": "post_deploy_verification",
   "detail": "Delivery stopped without a reconciled target commit",
-  "recordedAt": "2026-08-17T03:19:56.848Z",
+  "deliveryAttempts": 2,
+  "recordedAt": "2026-09-08T07:21:44.677Z",
   "tags": []
 }
