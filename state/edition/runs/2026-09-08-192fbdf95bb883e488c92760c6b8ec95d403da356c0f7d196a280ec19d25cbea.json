@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 1,
+  "runId": "d8dd9e42-b049-489d-a057-b4389f46fc34",
+  "date": "2026-09-08",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-09-08T07:00:56.974Z",
+  "completedAt": "2026-09-08T07:05:36.616Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-08T07:00:56.994Z",
+      "completedAt": "2026-09-08T07:01:19.295Z",
+      "durationMs": 22301
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-09-08T07:01:19.295Z",
+      "completedAt": "2026-09-08T07:03:23.459Z",
+      "durationMs": 124164,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-09-08T07:03:23.460Z",
+      "completedAt": "2026-09-08T07:05:17.772Z",
+      "durationMs": 114312
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-09-08T07:05:17.773Z",
+      "completedAt": "2026-09-08T07:05:17.779Z",
+      "durationMs": 6
+    },
+    {
+      "name": "quality_1",
+      "status": "success",
+      "startedAt": "2026-09-08T07:05:17.780Z",
+      "completedAt": "2026-09-08T07:05:17.780Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-09-08T07:05:17.780Z",
+      "completedAt": "2026-09-08T07:05:36.613Z",
+      "durationMs": 18833
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11380,
+      "outputTokens": 949,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.048375
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 10087,
+      "outputTokens": 4750,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1106835
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 10091,
+      "outputTokens": 4766,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2586,
+      "costUsd": 0.1114605
+    }
+  ],
+  "measuredCostUsd": 0.270519,
+  "quality": {
+    "metrics": {
+      "successfulSources": 30,
+      "candidateItems": 80,
+      "citedSources": 7,
+      "signalStrength": 77,
+      "maximumSingleSourceShare": 0.42857142857142855,
+      "sourceDiversity": 0.6938775510204083,
+      "duplicateStorySimilarity": 0.09090909090909091,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.270519
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 0,
+        "selected": null,
+        "reason": "no-thumbnail-could-be-read",
+        "candidates": [],
+        "skipped": [
+          {
+            "candidateId": "scene:20348454",
+            "reason": "thumbnail-host-not-allowed"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": "pexels:17489152",
+        "reason": "Multiple server towers in data center with blue ambient lighting: directly illustrates AI infrastructure and computational investment without dated styling or embedded text.",
+        "candidates": [
+          {
+            "candidateId": "pexels:37730212",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Server hardware with glowing status indicators: relevant to AI infrastructure and investment, but the teal-cyan lighting and bokeh effect evokes dated mid-2000s aesthetic.",
+            "sceneCs": "servery s indikátory"
+          },
+          {
+            "candidateId": "pexels:37999307",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "off-brief"
+            ],
+            "reason": "Hungarian Parliament building: architecturally striking but completely unrelated to the article about AI funding and algorithmic regulation.",
+            "sceneCs": "budova parlamentu"
+          },
+          {
+            "candidateId": "pexels:19022735",
+            "provider": "pexels",
+            "fit": 3,
+            "vetoes": [
+              "embedded-text"
+            ],
+            "reason": "Smartphone photographing flowers: tangential to technology but shows status bar and time display with embedded text burned into the frame.",
+            "sceneCs": "telefon a květiny"
+          },
+          {
+            "candidateId": "pixabay:8118377",
+            "provider": "pixabay",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Hand inserting blade into server slot: strong illustration of infrastructure investment and technological deployment, clean composition, though somewhat generic.",
+            "sceneCs": "ruka a serverový rack"
+          },
+          {
+            "candidateId": "pixabay:2463236",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "off-brief",
+              "dated-aesthetic"
+            ],
+            "reason": "Government building with dramatic sky: visually arresting but unrelated to AI or tech; the HDR-like processing and golden-hour cinematography feels dated.",
+            "sceneCs": "budova s dramatickou oblohou"
+          },
+          {
+            "candidateId": "pexels:37730211",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Server hardware with bright blue monochromatic lighting and glowing network symbol: relevant to AI infrastructure, but the intense synthetic blue neon aesthetic strongly evokes early-2010s tech clichés.",
+            "sceneCs": "serverový hardware s modrým osvětlením"
+          },
+          {
+            "candidateId": "pexels:7328",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "off-brief"
+            ],
+            "reason": "Canadian Parliament building: iconic architecture but completely disconnected from the article's focus on AI funding and algorithmic governance.",
+            "sceneCs": "parlamentní budova"
+          },
+          {
+            "candidateId": "pexels:4716356",
+            "provider": "pexels",
+            "fit": 4,
+            "vetoes": [
+              "low-quality"
+            ],
+            "reason": "Foldable smartphone being held at event: shows modern consumer tech but composition is busy, background is cluttered and compressed, somewhat awkwardly framed.",
+            "sceneCs": "sklopný telefon v ruce"
+          },
+          {
+            "candidateId": "pexels:17489152",
+            "provider": "pexels",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Multiple server towers in data center with blue ambient lighting: directly illustrates AI infrastructure and computational investment without dated styling or embedded text.",
+            "sceneCs": "servery v datovém centru"
+          },
+          {
+            "candidateId": "pexels:32863809",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "off-brief"
+            ],
+            "reason": "Historic stone building detail: architecturally interesting but entirely unrelated to AI, tech investment, or algorithmic regulation.",
+            "sceneCs": "historická architektura"
+          },
+          {
+            "candidateId": "pexels:9784240",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Hand over glowing green devices: suggests tech control and digital systems, relevant thematically, but the unnaturally vivid green screens and theatrical composition have a distinctly artificial, AI-generated appearance.",
+            "sceneCs": "ruka a zařízení se zeleným osvětlením"
+          },
+          {
+            "candidateId": "pexels:17489151",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Data center servers in red and blue lighting: directly relevant to infrastructure investment, good technical composition, though the color-coding feels somewhat stylized.",
+            "sceneCs": "servery s barevným osvětlením"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.009133
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  }\n]",
+    "image_rung:search",
+    "image_gate:curated:no-thumbnail-could-be-read",
+    "image_gate:search:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 30,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}

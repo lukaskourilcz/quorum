@@ -1,0 +1,151 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-09-08-mistral-tri-miliardy-otevrene-modely-australie-algoritmy",
+  "date": "2026-09-08",
+  "rung": "search",
+  "selected": "pexels:17489152",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 0,
+      "selected": null,
+      "reason": "no-thumbnail-could-be-read",
+      "candidates": [],
+      "skipped": [
+        {
+          "candidateId": "scene:20348454",
+          "reason": "thumbnail-host-not-allowed"
+        }
+      ],
+      "costUsd": 0
+    },
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:17489152",
+      "reason": "Multiple server towers in data center with blue ambient lighting: directly illustrates AI infrastructure and computational investment without dated styling or embedded text.",
+      "candidates": [
+        {
+          "candidateId": "pexels:37730212",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Server hardware with glowing status indicators: relevant to AI infrastructure and investment, but the teal-cyan lighting and bokeh effect evokes dated mid-2000s aesthetic.",
+          "sceneCs": "servery s indikátory"
+        },
+        {
+          "candidateId": "pexels:37999307",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "off-brief"
+          ],
+          "reason": "Hungarian Parliament building: architecturally striking but completely unrelated to the article about AI funding and algorithmic regulation.",
+          "sceneCs": "budova parlamentu"
+        },
+        {
+          "candidateId": "pexels:19022735",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [
+            "embedded-text"
+          ],
+          "reason": "Smartphone photographing flowers: tangential to technology but shows status bar and time display with embedded text burned into the frame.",
+          "sceneCs": "telefon a květiny"
+        },
+        {
+          "candidateId": "pixabay:8118377",
+          "provider": "pixabay",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Hand inserting blade into server slot: strong illustration of infrastructure investment and technological deployment, clean composition, though somewhat generic.",
+          "sceneCs": "ruka a serverový rack"
+        },
+        {
+          "candidateId": "pixabay:2463236",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "off-brief",
+            "dated-aesthetic"
+          ],
+          "reason": "Government building with dramatic sky: visually arresting but unrelated to AI or tech; the HDR-like processing and golden-hour cinematography feels dated.",
+          "sceneCs": "budova s dramatickou oblohou"
+        },
+        {
+          "candidateId": "pexels:37730211",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Server hardware with bright blue monochromatic lighting and glowing network symbol: relevant to AI infrastructure, but the intense synthetic blue neon aesthetic strongly evokes early-2010s tech clichés.",
+          "sceneCs": "serverový hardware s modrým osvětlením"
+        },
+        {
+          "candidateId": "pexels:7328",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "off-brief"
+          ],
+          "reason": "Canadian Parliament building: iconic architecture but completely disconnected from the article's focus on AI funding and algorithmic governance.",
+          "sceneCs": "parlamentní budova"
+        },
+        {
+          "candidateId": "pexels:4716356",
+          "provider": "pexels",
+          "fit": 4,
+          "vetoes": [
+            "low-quality"
+          ],
+          "reason": "Foldable smartphone being held at event: shows modern consumer tech but composition is busy, background is cluttered and compressed, somewhat awkwardly framed.",
+          "sceneCs": "sklopný telefon v ruce"
+        },
+        {
+          "candidateId": "pexels:17489152",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Multiple server towers in data center with blue ambient lighting: directly illustrates AI infrastructure and computational investment without dated styling or embedded text.",
+          "sceneCs": "servery v datovém centru"
+        },
+        {
+          "candidateId": "pexels:32863809",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "off-brief"
+          ],
+          "reason": "Historic stone building detail: architecturally interesting but entirely unrelated to AI, tech investment, or algorithmic regulation.",
+          "sceneCs": "historická architektura"
+        },
+        {
+          "candidateId": "pexels:9784240",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Hand over glowing green devices: suggests tech control and digital systems, relevant thematically, but the unnaturally vivid green screens and theatrical composition have a distinctly artificial, AI-generated appearance.",
+          "sceneCs": "ruka a zařízení se zeleným osvětlením"
+        },
+        {
+          "candidateId": "pexels:17489151",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Data center servers in red and blue lighting: directly relevant to infrastructure investment, good technical composition, though the color-coding feels somewhat stylized.",
+          "sceneCs": "servery s barevným osvětlením"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.009133
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-09-08T07:00:49.262Z"
+}
