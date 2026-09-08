@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "runId": "c76d36fa-b15c-4abb-a893-7eb41e00809a",
+  "date": "2026-09-08",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-09-08T03:00:46.806Z",
+  "completedAt": "2026-09-08T03:01:05.305Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "failed",
+      "startedAt": "2026-09-08T03:00:46.825Z",
+      "completedAt": "2026-09-08T03:01:05.303Z",
+      "durationMs": 18478,
+      "errorCode": "CurationGateError",
+      "errorMessage": "curation gate: maximum_single_source_share"
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11435,
+      "outputTokens": 706,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.044895
+    }
+  ],
+  "measuredCostUsd": 0.044895,
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "verdicts": []
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "quality:maximum_single_source_share",
+    "curation_gate_failed_before_write:maximum_single_source_share"
+  ],
+  "sourceSummary": {
+    "successfulSources": 29,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects"
+    ]
+  }
+}
