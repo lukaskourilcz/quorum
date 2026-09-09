@@ -637,3 +637,10 @@ with its full scope, because the scope text is the approval. -->
   Live counts are in state/delivery/queue-health/, rewritten every day. A parked package needs
   new bytes rather than another run; its own receipt says what the magazine refused and why.
   [imp:5] [owner:me] [time:30m] [kind:deploy]
+
+- [ ] **DELIVERY-QUEUE-MMA-FILES** — the publish queue is not draining.
+  Oldest held item: 2026-09-08 AM ufc-amanda-ribas.
+  Live counts are in state/delivery/queue-health/, rewritten every day. Items listed under
+  neverDrains need new bytes rather than another run; their own receipts say what the magazine
+  refused and why. Anything parked and not listed there is already scheduled to end.
+  [imp:5] [owner:me] [time:30m] [kind:deploy]
