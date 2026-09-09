@@ -1,6 +1,6 @@
 {
   "schemaVersion": "owner-attention/1",
-  "generatedAt": "2026-08-30T12:01:11.113Z",
+  "generatedAt": "2026-09-09T04:00:49.998Z",
   "approvals": [],
   "manualTasks": [
     {
@@ -38,6 +38,18 @@
       "id": "create-door-money-s-private-source-repository",
       "title": "Create Door Money's private source repository",
       "plain": "BOOK-SOURCE-001 was signed on 2026-08-29, so what is left is yours to create rather than to decide: the English manuscript's private Git repository, with the working clone outside this public checkout. Put the manuscript at the gitignored local path or pass it explicitly to the CLI; set BOOK_PRIVATE_CLONE_PATH for a local live desk. The optional fine-grained BOOK_SOURCE_TOKEN is only for the owner",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "deploy-the-site-it-is-a-schedule-change-behind",
+      "title": "Deploy the site — it is a schedule change behind",
+      "plain": "boardless-ai.vercel.app still shows the old calendar: eighteen rows, one per room per hour, with the DNESKAi edition at 05:00, the MMA rooms spread across 08:00–20:00 and the afternoon and night company meetings that operations-2026-08c retired. main has carried the consolidated nine-row calendar since 2026-08-29. Nothing is wrong with the code; nothing has deployed. site/vercel.json carries git.d",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -542,6 +554,18 @@
       "urgency": "whenever"
     },
     {
+      "id": "decide-whether-a-contest-alert-may-ever-be-published",
+      "title": "Decide whether a contest alert may ever be published",
+      "plain": "the promotion candidate, its eligibility gate and the sanitized profile projection are built, and the capability edge to Social Distribution is registered held by state/decisions/2026-08-30-contest-radar-promotion-posture.md. Moving it to allowed needs a further countersigned decision naming the profile, the contest, the rule evidence and the disclosure text. Nothing publishes meanwhile, and campa",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "whenever"
+    },
+    {
       "id": "decide-whether-personal-growth-should-ever-use-buffer",
       "title": "Decide whether Personal Growth should ever use Buffer.",
       "plain": "The adapter, queue, purchase and publishing authorities are all held. If scheduling becomes useful, approve the exact plan, account and queue scope first; do not enable bufferQueue or select the buffer allocation merely because the seam exists.",
@@ -578,9 +602,21 @@
       "urgency": "whenever"
     },
     {
-      "id": "delete-the-merged-branch-of-pr-511",
-      "title": "Delete the merged branch of PR #511",
-      "plain": "press \"Delete branch\" on the merged pull request. The overnight session merged it but could not remove the remote branch: the git relay in that environment answers a branch deletion with 403.",
+      "id": "decide-whether-to-open-a-contest-radar-social-pilot-lane",
+      "title": "Decide whether to open a Contest Radar social pilot lane",
+      "plain": "the Instagram and TikTok slices are built, fixture-backed and disabled. Opening one needs a countersigned budget-capacity decision at state/decisions/2026-08-30-contest-radar-budget-capacity.md authorising the $0.10/month Apify rung, GoVIRAL's reservation against the shared quota, and your authority for the specific actors with their terms read at that time. Both lanes are undecided, which is the ",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "whenever"
+    },
+    {
+      "id": "delete-two-merged-remote-branches",
+      "title": "Delete two merged remote branches",
+      "plain": "claude/venture-launch-review-7l5nkd and the branch of PR #511. Both are fully merged into main; the git relay in the agent environment refuses a branch deletion, so the sessions that merged them could not remove them.",
       "steps": [],
       "source": {
         "kind": "needed",

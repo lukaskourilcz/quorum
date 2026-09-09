@@ -41,7 +41,7 @@ builds and after a real 22:00 checkpoint. Never hand-edit the generated block.
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
 
-Refreshed from committed state: **2026-09-08T21:04:19.358Z**. This block is generated deterministically; edit the source state, not these lines.
+Refreshed from committed state: **2026-09-09T04:01:47.334Z**. This block is generated deterministically; edit the source state, not these lines.
 
 | Item | Current value |
 | --- | --- |
@@ -49,11 +49,11 @@ Refreshed from committed state: **2026-09-08T21:04:19.358Z**. This block is gene
 | Agent roster | 40 active: 25 Anthropic, 15 OpenAI |
 | Scheduled specialist/service rooms | 14; combined maximum room envelopes $1.61 if every room is commissioned |
 | Approved spend boundary | $50.00 all-in monthly; $25.00 model/API share; $1.00 daily model/API pace |
-| Recorded API spend | $13.27 this month; $13.28 cumulative |
+| Recorded API spend | $0.84 this month; $15.12 cumulative |
 | Entered fixed costs | $0.00 monthly |
 | Recognized revenue | $0.00 |
-| KPI quarter | 2026-Q1; open; 33 on track, 6 at risk, 24 off track, 28 unavailable |
-| Critical KPI gaps | company.monthly-api-usd, marketingshark.package-completeness, marketingshark.truth-gate-violations, door-money.desk-reliability, door-money.cash-spend, tehdejsi-svet.cycle-reliability, tehdejsi-svet.language-parity, tehdejsi-svet.research-spend-usd, kvorum.desk-reliability, kvorum.published-claim-reference-rate, personal-growth.desk-valid-result-rate, personal-growth.brief-availability-rate, personal-growth.provenance-completeness-rate, personal-growth.unavailable-honesty-rate |
+| KPI quarter | 2026-Q1; open; 32 on track, 6 at risk, 27 off track, 26 unavailable |
+| Critical KPI gaps | company.monthly-api-usd, marketingshark.package-completeness, marketingshark.truth-gate-violations, door-money.desk-reliability, door-money.cash-spend, tehdejsi-svet.cycle-reliability, tehdejsi-svet.language-parity, tehdejsi-svet.research-spend-usd, kvorum.desk-reliability, kvorum.published-claim-reference-rate, kvorum.apify-monthly-usd, personal-growth.unavailable-honesty-rate |
 | FightAIQ analysis | approved by D8; production still requires `FIGHTAIQ_ANALYSIS_ENABLED=true` plus live and evidence gates |
 | Visitor/engagement measurement | disabled (`METRICS_INGESTION_ENABLED=false`) |
 | Global social posting | stopped while `SOCIAL_KILL_SWITCH=true`; project counters and credentials remain separate gates |

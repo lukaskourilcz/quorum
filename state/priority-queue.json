@@ -3,7 +3,7 @@
   "items": [
     {
       "schemaVersion": "priority-item/1",
-      "id": "priority-1fb923c0d706aac1",
+      "id": "priority-7c753d607aaa568f",
       "venture": "fightaiq",
       "question": "What is currently blocking this objective: Improve verified fight coverage and build readiness dossiers?",
       "decision_at_stake": "Which next bounded action moves event-fighter-coverage, two-source-agreement, readiness-dossiers for FightAIQ.",
@@ -13,8 +13,8 @@
         "readiness-dossiers"
       ],
       "requested_by": "VIZE",
-      "created": "2026-08-20T04:03:53.732Z",
-      "expires": "2026-08-27T04:03:53.732Z",
+      "created": "2026-09-09T04:00:49.998Z",
+      "expires": "2026-09-16T04:00:49.998Z",
       "status": "why-not",
       "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; a room was requested. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
       "consumed_by": null,
@@ -23,7 +23,7 @@
     },
     {
       "schemaVersion": "priority-item/1",
-      "id": "priority-466e5281935d9eb5",
+      "id": "priority-8df0917211edf303",
       "venture": "mma-files",
       "question": "What is currently blocking this objective: Fill evidenced article slots and render verified FightAIQ coverage?",
       "decision_at_stake": "Which next bounded action moves slot-fill, rendered-fightaiq-coverage for MMA Files.",
@@ -32,8 +32,8 @@
         "rendered-fightaiq-coverage"
       ],
       "requested_by": "VIZE",
-      "created": "2026-08-20T04:03:53.732Z",
-      "expires": "2026-08-27T04:03:53.732Z",
+      "created": "2026-09-09T04:00:49.998Z",
+      "expires": "2026-09-16T04:00:49.998Z",
       "status": "why-not",
       "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; a room was requested. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
       "consumed_by": null,
@@ -41,5 +41,5 @@
       "proposal": null
     }
   ],
-  "updatedAt": "2026-08-28T04:01:06.060Z"
+  "updatedAt": "2026-09-09T04:00:49.998Z"
 }
