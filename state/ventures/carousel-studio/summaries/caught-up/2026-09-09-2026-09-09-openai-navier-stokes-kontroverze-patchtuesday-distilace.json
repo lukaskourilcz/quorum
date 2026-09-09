@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-09-09-openai-navier-stokes-kontroverze-patchtuesday-distilace",
+  "date": "2026-09-09",
+  "locale": "cs",
+  "kicker": "DNESKAi · 9. zář",
+  "headline": "Tisíce agentů, jeden problém a nezodpovězená otázka",
+  "coverLine": "OpenAI, Navier-Stokes a otázka, na kterou nikdo neodpověděl",
+  "standfirst": "OpenAI tvrdí, že vyřešila jeden z Millenniálních matematických problémů. Matematik, jehož práce mohla poskytnout klíčový impuls, se ptá, zda jeho drafty neposloužily jako trénovací data. Odpověď nedostal.",
+  "passages": [
+    "OpenAI oznámila vyřešení Navier-Stokesova Millenniálního problému pomocí nezveřejněného modelu a GPT-6 Astra; Tristan Buckmaster veřejně zpochybnil, zda jeho drafty v Codexu nesloužily jako trénovací data.",
+    "Terence Tao varoval, že AI průmyslovou silou vytěžuje otevřené matematické problémy a hrozí zhroucení norem otevřené vědy.",
+    "Microsoft vydal záplaty pro rekordních 974 CVE; Adobe potvrdilo aktivní zneužívání zranitelnosti StyleSmuggler v Magentu a Adobe Commerce.",
+    "NSA, FBI a CISA obvinily DeepSeek, Alibaba a další čínské AI firmy z průmyslové distilace amerických frontier modelů.",
+    "Spor o Navier-Stokes otevírá otázku, zda AI laboratoře mohou trénovací procesy svých modelů dostatečně oddělit od dat, která do nich vkládají platící uživatelé –",
+    "a zda jsou ochotny na tuto otázku transparentně odpovědět.",
+    "Tao pojmenoval systémový problém: pokud pouhý únik informace o rozeznané výzkumné stopě stačí k tomu, aby ji korporátní AI projekt předběhl, mění se ekonomika otevřeného bádání pro každého,",
+    "kdo nemá přístup k ekvivalentnímu výpočetnímu výkonu."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Ilustrace: BoardlessAI FRAME"
+}

@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 1,
+  "runId": "52d694c2-6ad4-4b21-96d8-4de1ce9ad481",
+  "date": "2026-09-09",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-09-09T03:00:44.179Z",
+  "completedAt": "2026-09-09T03:03:40.227Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-09T03:00:44.191Z",
+      "completedAt": "2026-09-09T03:01:04.262Z",
+      "durationMs": 20071
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-09-09T03:01:04.263Z",
+      "completedAt": "2026-09-09T03:03:18.416Z",
+      "durationMs": 134153
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-09-09T03:03:18.417Z",
+      "completedAt": "2026-09-09T03:03:18.423Z",
+      "durationMs": 6
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-09-09T03:03:18.424Z",
+      "completedAt": "2026-09-09T03:03:18.424Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-09-09T03:03:18.424Z",
+      "completedAt": "2026-09-09T03:03:40.225Z",
+      "durationMs": 21801
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 10835,
+      "outputTokens": 867,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.04551
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14516,
+      "outputTokens": 4998,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1276905
+    }
+  ],
+  "measuredCostUsd": 0.1732005,
+  "quality": {
+    "metrics": {
+      "successfulSources": 29,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 86,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.78125,
+      "duplicateStorySimilarity": 0.16666666666666666,
+      "repeatedTopicFrequency": 0.3333333333333333,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1732005
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "illustration",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "pexels:39191018",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "Shows a specific person's back at a chalkboard; while the math context fits, the recognisable individual makes this unsuitable for editorial use.",
+            "sceneCs": "osoba píšící formule na tabuli"
+          },
+          {
+            "candidateId": "pexels:167682",
+            "provider": "pexels",
+            "fit": 4,
+            "vetoes": [
+              "embedded-text"
+            ],
+            "reason": "Open textbook with visible equations and a pen suggest mathematics/study, but the legible embedded text on the pages violates the guidelines.",
+            "sceneCs": "otevřená kniha s poznámkami a pero"
+          },
+          {
+            "candidateId": "pixabay:2775447",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "wrong-subject"
+            ],
+            "reason": "A microphone is unrelated to mathematics, AI research, or the core topic of the article.",
+            "sceneCs": "mikrofon na podiu"
+          },
+          {
+            "candidateId": "pixabay:5673901",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Glowing neon abstract image with synthetic appearance; this is exactly the kind of dated clip-art styling that should be avoided.",
+            "sceneCs": "abstraktní barevné světelné efekty"
+          },
+          {
+            "candidateId": "pexels:39190881",
+            "provider": "pexels",
+            "fit": 3,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "Person in white shirt writing on chalkboard with mathematical content is thematically apt, but the recognisable face is disqualifying.",
+            "sceneCs": "osoba píšící vědecké formule na tabuli"
+          },
+          {
+            "candidateId": "pexels:39191022",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "Posed portrait of a specific person at a desk with glasses; despite the educational setting, the clear facial recognition makes this unsuitable.",
+            "sceneCs": "osoba v kanceláři s notebookem a tužkami"
+          },
+          {
+            "candidateId": "pexels:39190843",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [],
+            "reason": "Back view of a person studying mathematical formulas on a chalkboard; no recognisable face, good thematic fit for mathematics and problem-solving, neutral professional context.",
+            "sceneCs": "osoba zezadu pohledu na tabuli s rovnicemi"
+          },
+          {
+            "candidateId": "pexels:5184956",
+            "provider": "pexels",
+            "fit": 3,
+            "vetoes": [
+              "embedded-text"
+            ],
+            "reason": "Flat-lay of study materials with visible handwritten equations and text on papers; the legible mathematical notes are embedded text that violates guidelines.",
+            "sceneCs": "studijní materiály a zápisky na tkanině"
+          },
+          {
+            "candidateId": "pexels:39190846",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [],
+            "reason": "Close-up of hand pointing at mathematical equation on chalkboard; no face visible, clean professional context, directly relevant to mathematics and problem-solving.",
+            "sceneCs": "ruka ukazující na matematickou rovnici"
+          },
+          {
+            "candidateId": "pexels:4237505",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "embedded-text",
+              "low-quality"
+            ],
+            "reason": "Blurred close-up of a textbook page with visible heading 'AN EQUATION'; the text is embedded and the image is out of focus.",
+            "sceneCs": "rozmazaná kniha s matematickými rovnicemi"
+          },
+          {
+            "candidateId": "pexels:39190851",
+            "provider": "pexels",
+            "fit": 4,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "Back view emphasizes anonymity but the side profile of face is partially visible; combined with the arm and hand writing equations, the facial recognition risk is present.",
+            "sceneCs": "osoba zezadu píšící na tabuli"
+          },
+          {
+            "candidateId": "pexels:38891320",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Generic study setup with blank notebook, pencil, calculator and clean workspace on blue background; perfectly generic and thematically appropriate for mathematics/problem-solving without any faces or text.",
+            "sceneCs": "prázdný zápisník s tužkou a kalkulačkou"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.009343
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": "illustration:2026-09-09",
+        "reason": "The image clearly illustrates the mathematical topic of the article—complex equations on a board with an open book—though it is generic rather than directly tied to the specific problem or OpenAI's claim.",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-09-09",
+            "provider": "boardlessai",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "The image clearly illustrates the mathematical topic of the article—complex equations on a board with an open book—though it is generic rather than directly tied to the specific problem or OpenAI's claim.",
+            "sceneCs": "matematické rovnice na modré tabuli a otevřená kniha"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002265
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "image_rung:illustration",
+    "image_gate:search:all-candidates-rejected",
+    "image_gate:generated:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 29,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260909030035-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Spor o autorství matematického objevu odhaluje mezeru v tom, jak AI laboratoře nakládají s daty uživatelů – a Terence Tao naznačuje, že jde o hrozbu pro otevřenou vědu jako celek.",
+  "evidenceRefs": [
+    "source:simonw",
+    "source:the-register",
+    "source:platformer",
+    "source:techcrunch-ai",
+    "source:wired-ai"
+  ],
+  "editionRef": "8cf065aa82bebfb1e8350b7e19f506d1b573bfa67e5b9649e5f45899a9b49ea9",
+  "generatedAt": "2026-09-09T03:00:40.828Z"
+}

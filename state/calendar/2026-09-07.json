@@ -55,19 +55,22 @@
       "at": "2026-09-07T13:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "dm-day",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-07T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ts-desk",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-07T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-08T03:00:00.000Z",
@@ -110,8 +113,7 @@
       "at": "2026-09-08T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
     },
     {
       "at": "2026-09-08T11:00:00.000Z",
@@ -125,25 +127,27 @@
       "at": "2026-09-08T13:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "dm-day",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-09-08T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ts-desk",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-09-08T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-09-09T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-day",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-09-09-cu-edition",
+      "decisionOneLiner": "Spor o autorství matematického objevu odhaluje mezeru v tom, jak AI laboratoře nakládají s daty uživatelů – a Terence Tao naznačuje, že jde o hrozbu pro otevřenou vědu jako celek."
     },
     {
       "at": "2026-09-09T04:00:00.000Z",

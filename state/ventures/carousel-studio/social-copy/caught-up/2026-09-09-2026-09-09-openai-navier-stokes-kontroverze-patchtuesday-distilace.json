@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-09-09-openai-navier-stokes-kontroverze-patchtuesday-distilace",
+  "date": "2026-09-09",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "OpenAI tvrdí, že vyřešila Navier-Stokesovy rovnice – jeden z matematických problémů za milion dolarů. Profesor Tristan Buckmaster se pak zeptal, zda jeho roční práce v Codexu nesloužila jako trénovací data. Odpovědi se nedočkal. Terence Tao varuje: AI těží otevřené problémy průmyslovou silou a může změnit samotné základy vědecké spolupráce.",
+    "hashtags": [
+      "navierstokes",
+      "openai",
+      "matematika",
+      "umelainteligence",
+      "aiethics",
+      "patchtuesday",
+      "deepseek",
+      "distilace",
+      "kybernetickabezpecnost",
+      "otevrenveda"
+    ],
+    "threadsText": "OpenAI vyřešila Navier-Stokesovy rovnice – ale matematik, jehož práce na problému trvala rok, se zeptal, zda jeho drafty v Codexu nesloužily jako trénovací data. Odpovědi se nedočkal. Terence Tao dodává: AI průmyslovou silou vytěžuje otevřené problémy a badatelé brzy přestanou sdílet výzkumné směry. Věda bez sdílení je jiná věda.",
+    "storyLine": "OpenAI vyřešila Navier-Stokes. Ale jak přesně?"
+  },
+  "heroCredit": "Ilustrace: BoardlessAI FRAME",
+  "origin": "desk"
+}
