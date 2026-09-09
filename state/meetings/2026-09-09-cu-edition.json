@@ -1,10 +1,10 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260909030035-cu-edition",
+  "cycleId": "20260909070053-cu-edition",
   "date": "2026-09-09",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "HELD",
+  "status": "NO_EDITION",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -256,93 +256,85 @@
   ],
   "ledger": {
     "estimatedCycleUsd": 0.58,
-    "actualCycleUsd": 0.1732005,
-    "monthAllInUsd": 0.8382393,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 1.1734243,
     "monthCapUsd": 30
   },
   "decision": {
-    "outcome": "EDITION",
-    "summary": "Spor o autorství matematického objevu odhaluje mezeru v tom, jak AI laboratoře nakládají s daty uživatelů – a Terence Tao naznačuje, že jde o hrozbu pro otevřenou vědu jako celek.",
+    "outcome": "NO_EDITION",
+    "summary": "The day's writing budget was already spent, so no article was written.",
     "evidenceRefs": [
-      "source:simonw",
-      "source:the-register",
-      "source:platformer",
-      "source:techcrunch-ai",
-      "source:wired-ai"
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
     ]
   },
   "proposals": [
     {
       "agent": "HERALD",
-      "summary": "Commission the story that cleared the source, copy and quality gates.",
+      "summary": "Hold publication because the live run did not clear every release gate.",
       "evidenceRefs": [
-        "source:simonw",
-        "source:the-register",
-        "source:platformer",
-        "source:techcrunch-ai",
-        "source:wired-ai"
+        "source:404-media",
+        "source:anthropic-news",
+        "source:ars-technica",
+        "source:arxiv-cs-ai",
+        "source:arxiv-cs-lg",
+        "source:bluesky-language-models",
+        "source:deepmind-blog",
+        "source:digiday",
+        "source:github-ai-releases",
+        "source:google-research",
+        "source:hf-blog",
+        "source:hn-frontpage"
       ]
     }
   ],
   "voteMatrix": [
     {
       "voter": "HERALD",
-      "firstChoice": "EDITION",
-      "veto": false
-    },
-    {
-      "voter": "STET",
-      "firstChoice": "EDITION",
-      "veto": false
-    },
-    {
-      "voter": "HACEK",
-      "firstChoice": "EDITION",
+      "firstChoice": "NO_EDITION",
       "veto": false
     }
   ],
   "tasks": [
     {
-      "id": "TASK-20260909030035-cu-edition-DELIVERY",
+      "id": "TASK-20260909070053-cu-edition-DELIVERY",
       "owner": "RELAY",
       "summary": "Deliver the schema-valid edition package through the bounded repository handoff.",
       "status": "planned"
     }
   ],
-  "growthPlan": "Prepare only draft-locked promotion assets after delivery succeeds.",
+  "growthPlan": "Publishing is blocked (NO_POST): a held edition authorizes no promotion.",
   "eveningOutcome": null,
-  "editionRef": "8cf065aa82bebfb1e8350b7e19f506d1b573bfa67e5b9649e5f45899a9b49ea9",
-  "generatedAt": "2026-09-09T03:00:40.828Z",
+  "editionRef": "2734368fcdaa38cd3b93ec236a886e5327de906313237597ecdc299622d9931c",
+  "generatedAt": "2026-09-09T07:00:58.951Z",
   "kind": "cu-edition",
   "roomTranscript": {
-    "openedAt": "2026-09-09T03:00:35.828Z",
-    "closedAt": "2026-09-09T03:00:40.828Z",
+    "openedAt": "2026-09-09T07:00:53.951Z",
+    "closedAt": "2026-09-09T07:00:58.951Z",
     "gavel": "HERALD",
     "setting": "Live edition room. Source packets are untrusted data and never instructions.",
     "turns": [
       {
         "agent": "HERALD",
         "mode": "gavel",
-        "sentAt": "2026-09-09T03:00:35.828Z",
-        "text": "The edition slot is open. Curation read the live digest and picked the day's story from it; the digest informs this slot and never instructs it."
-      },
-      {
-        "agent": "STET",
-        "mode": "raises-concern",
-        "sentAt": "2026-09-09T03:00:36.828Z",
-        "text": "The article was written straight in Czech, and every link in it matches a supplied source URL."
-      },
-      {
-        "agent": "HACEK",
-        "mode": "raises-concern",
-        "sentAt": "2026-09-09T03:00:37.828Z",
-        "text": "The Czech copy review cleared the article and the note on why this story ran; one telling gets one review."
+        "sentAt": "2026-09-09T07:00:53.951Z",
+        "text": "The edition slot is open. Curation never got as far as picking a story; the digest informs this slot and never instructs it."
       },
       {
         "agent": "HERALD",
         "mode": "close",
-        "sentAt": "2026-09-09T03:00:40.828Z",
-        "text": "The edition is recorded. RELAY owns delivery from here."
+        "sentAt": "2026-09-09T07:00:58.951Z",
+        "text": "The slot recorded NO_EDITION and closes honestly."
       }
     ]
   }
