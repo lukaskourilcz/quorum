@@ -1,0 +1,241 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260909060107-mma-intake",
+  "date": "2026-09-09",
+  "phase": "mma-intake",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon",
+  "participantReasons": [
+    {
+      "agent": "FORGE",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "CORNER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SPOTTER",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "TAPE",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "SIGMA",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.06,
+    "actualCycleUsd": 0.043359999999999996,
+    "monthAllInUsd": 1.0884653000000004,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-fight-night-288",
+      "event:ufc:event:ufc-fight-night-rodriguez-vs-silva",
+      "event:ufc:event:ufc-fight-night-silva-vs-delgado",
+      "source:wikipedia-schedule:2026-09-09",
+      "source:cito-ufc:2026-09-09",
+      "meeting:2026-09-08-mma-intake",
+      "event:oktagon:event:oktagon-93-rousal-vs-magard",
+      "source:the-odds-api:2026-09-09",
+      "source:wikimedia:2026-09-09"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "FORGE",
+      "summary": "Three UFC events share identical venue, date and overlapping rosters (Moreno–Morales, McMillen–Rahiki, Fiorot–Grasso, Cortes–Blaydes, Martinez–Ige, Elliott–Chairez, Bahamondes–Salikhov recur). Source conflict blocks model use. Oktagon card clean. Resolve UFC duplication before in",
+      "evidenceRefs": [
+        "event:ufc:event:ufc-fight-night-288",
+        "event:ufc:event:ufc-fight-night-rodriguez-vs-silva",
+        "event:ufc:event:ufc-fight-night-silva-vs-delgado",
+        "source:wikipedia-schedule:2026-09-09",
+        "source:cito-ufc:2026-09-09"
+      ]
+    },
+    {
+      "agent": "SPOTTER",
+      "summary": "Oktagon leads, but no bout or critical fighter field is confirmed by two independent providers; approved Oktagon actor failed. Keep all modeling and publication blocked.",
+      "evidenceRefs": [
+        "meeting:2026-09-08-mma-intake",
+        "event:oktagon:event:oktagon-93-rousal-vs-magard",
+        "source:the-odds-api:2026-09-09",
+        "source:wikimedia:2026-09-09"
+      ]
+    },
+    {
+      "agent": "TAPE",
+      "summary": "Four UFC events scheduled same day, same venue creates card-stack anomaly. Two Wikipedia sources conflict on event identity (Rodriguez vs. Silva vs. Silva vs. Delgado). Cannot propose adjustments without confirmed bout roster. Recommend source reconciliation before fight week.",
+      "evidenceRefs": [
+        "source:wikipedia-schedule:2026-09-09",
+        "source:wikimedia:2026-09-09",
+        "event:ufc:event:ufc-fight-night-288",
+        "event:ufc:event:ufc-fight-night-rodriguez-vs-silva",
+        "event:ufc:event:ufc-fight-night-silva-vs-delgado"
+      ]
+    },
+    {
+      "agent": "SIGMA",
+      "summary": "Both UFC and Oktagon are checked, but 0/50 fighter files pass critical-field completeness; no confirmed bouts or ModelRun support probability use.",
+      "evidenceRefs": [
+        "meeting:2026-09-08-mma-intake",
+        "source:the-odds-api:2026-09-09",
+        "source:cito-ufc:2026-09-09",
+        "source:wikimedia:2026-09-09",
+        "source:wikipedia-schedule:2026-09-09"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "FORGE",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "SPOTTER",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "TAPE",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "SIGMA",
+      "firstChoice": "veto",
+      "veto": true
+    }
+  ],
+  "tasks": [
+    {
+      "id": "TASK-20260909060107-MMA-INTAKE-01",
+      "owner": "FORGE",
+      "summary": "Cross-check UFC Fight Night 288, Rodríguez vs. Silva, Silva vs. Delgado with both Wikipedia and CITO; resolve duplication or cancellation. Return clean card state.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260909060107-MMA-INTAKE-02",
+      "owner": "SPOTTER",
+      "summary": "Obtain a second independent Oktagon card source and complete critical fighter fields before intake proceeds.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260909060107-MMA-INTAKE-03",
+      "owner": "TAPE",
+      "summary": "Verify which UFC Fight Night event(s) actually run 2026-09-12. Three event records share same venue, time, overlapping bout IDs. Wikipedia sources dated 2026-08-19, 2026-08-25, 2026-09-09 disagree on card composition.",
+      "status": "planned"
+    },
+    {
+      "id": "TASK-20260909060107-MMA-INTAKE-04",
+      "owner": "SIGMA",
+      "summary": "Confirm each nearest-card bout with two independent providers and fill critical fighter fields before any ModelRun.",
+      "status": "planned"
+    }
+  ],
+  "growthPlan": "Data only. No probability, bookmaker link, account action or bet placement is authorized.",
+  "eveningOutcome": null,
+  "sharperData": {
+    "outcome": "nothing-new",
+    "summary": "The room found no new source-backed change that cleared the proposal bar today.",
+    "evidenceRefs": [
+      "event:ufc:event:ufc-fight-night-288",
+      "event:ufc:event:ufc-fight-night-rodriguez-vs-silva",
+      "event:ufc:event:ufc-fight-night-silva-vs-delgado",
+      "source:wikipedia-schedule:2026-09-09",
+      "source:cito-ufc:2026-09-09",
+      "meeting:2026-09-08-mma-intake",
+      "event:oktagon:event:oktagon-93-rousal-vs-magard",
+      "source:the-odds-api:2026-09-09",
+      "source:wikimedia:2026-09-09"
+    ]
+  },
+  "generatedAt": "2026-09-09T06:06:07.556Z",
+  "kind": "mma-intake",
+  "roomTranscript": {
+    "openedAt": "2026-09-09T06:01:07.556Z",
+    "closedAt": "2026-09-09T06:06:07.556Z",
+    "gavel": "FORGE",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "FORGE",
+        "mode": "gavel",
+        "sentAt": "2026-09-09T06:01:07.556Z",
+        "text": "Check changed cards, fighter-file gaps, discrepancies and source health across UFC and Oktagon"
+      },
+      {
+        "agent": "FORGE",
+        "mode": "veto",
+        "sentAt": "2026-09-09T06:02:07.556Z",
+        "text": "Three UFC events share identical venue, date and overlapping rosters (Moreno–Morales, McMillen–Rahiki, Fiorot–Grasso, Cortes–Blaydes, Martinez–Ige, Elliott–Chairez, Bahamondes–Salikhov recur). Source conflict blocks model use. Oktagon card clean. Resolve UFC duplication before in",
+        "evidenceRefs": [
+          "event:ufc:event:ufc-fight-night-288",
+          "event:ufc:event:ufc-fight-night-rodriguez-vs-silva",
+          "event:ufc:event:ufc-fight-night-silva-vs-delgado",
+          "source:wikipedia-schedule:2026-09-09",
+          "source:cito-ufc:2026-09-09"
+        ]
+      },
+      {
+        "agent": "SPOTTER",
+        "mode": "veto",
+        "sentAt": "2026-09-09T06:03:07.556Z",
+        "text": "Oktagon leads, but no bout or critical fighter field is confirmed by two independent providers; approved Oktagon actor failed. Keep all modeling and publication blocked.",
+        "evidenceRefs": [
+          "meeting:2026-09-08-mma-intake",
+          "event:oktagon:event:oktagon-93-rousal-vs-magard",
+          "source:the-odds-api:2026-09-09",
+          "source:wikimedia:2026-09-09"
+        ]
+      },
+      {
+        "agent": "TAPE",
+        "mode": "statement",
+        "sentAt": "2026-09-09T06:04:07.556Z",
+        "text": "Four UFC events scheduled same day, same venue creates card-stack anomaly. Two Wikipedia sources conflict on event identity (Rodriguez vs. Silva vs. Silva vs. Delgado). Cannot propose adjustments without confirmed bout roster. Recommend source reconciliation before fight week.",
+        "evidenceRefs": [
+          "source:wikipedia-schedule:2026-09-09",
+          "source:wikimedia:2026-09-09",
+          "event:ufc:event:ufc-fight-night-288",
+          "event:ufc:event:ufc-fight-night-rodriguez-vs-silva",
+          "event:ufc:event:ufc-fight-night-silva-vs-delgado"
+        ]
+      },
+      {
+        "agent": "SIGMA",
+        "mode": "veto",
+        "sentAt": "2026-09-09T06:05:07.556Z",
+        "text": "Both UFC and Oktagon are checked, but 0/50 fighter files pass critical-field completeness; no confirmed bouts or ModelRun support probability use.",
+        "evidenceRefs": [
+          "meeting:2026-09-08-mma-intake",
+          "source:the-odds-api:2026-09-09",
+          "source:cito-ufc:2026-09-09",
+          "source:wikimedia:2026-09-09",
+          "source:wikipedia-schedule:2026-09-09"
+        ]
+      },
+      {
+        "agent": "FORGE",
+        "mode": "close",
+        "sentAt": "2026-09-09T06:06:07.556Z",
+        "text": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability."
+      }
+    ]
+  }
+}

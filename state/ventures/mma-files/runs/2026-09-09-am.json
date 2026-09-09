@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "cycleId": "20260909060107-article-am",
+  "date": "2026-09-09",
+  "slot": "am",
+  "status": "killed",
+  "reason": "article_production_failed",
+  "detail": "JAB returned unparsable output (billed $0.045495; reply was 2781 chars, unfenced, opens with \"L\", does not close, braces 1/1): Unexpected token 'L', \"Looking at\"... is not valid JSON",
+  "spentUsd": null,
+  "generatedAt": "2026-09-09T06:01:07.556Z"
+}

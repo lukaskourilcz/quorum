@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260909060107-mma-analysis",
+  "phase": "mma-analysis",
+  "estimatedWorstCaseUsd": 0,
+  "actualUsd": 0,
+  "participants": [],
+  "schedulerOutcome": "not-needed",
+  "generatedAt": "2026-09-09T06:01:07.557Z"
+}

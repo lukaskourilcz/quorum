@@ -1,4 +1,4 @@
 # MMA portfolio bridge
 
-- For the magazine: No model run exists to review yet — waiting for the odds data key. [source:meeting:2026-08-30-mma-analysis]
-- For FightAIQ: Nothing was queued for this meeting to decide, so it did not meet and nothing was spent. [source:meeting:2026-08-29-mag-desk]
+- For the magazine: Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability. [source:meeting:2026-09-08-mma-intake]
+- For FightAIQ: AUDIT vetoed the room output: Zabít slot: chybí ověřený subjekt i dnešní zadání, modelová data nejsou k dispozici a index neukazuje novou událost. Publikace by porušila pravidlo zdrojového článku. [source:meeting:2026-09-08-mag-editorial]

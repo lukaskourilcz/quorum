@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-12T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-09-08:2026 in Oktagon MMA"
+    "source:wikipedia:2026-09-09:2026 in Oktagon MMA"
   ],
   "bouts": [
     {
@@ -52,7 +52,15 @@
       "status": "announced"
     },
     {
-      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:jakub-dohnal-vs-vojto-barborik-6",
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:vojtech-garba-vs-robert-lau-6",
+      "red": "oktagon:vojtech-garba",
+      "blue": "oktagon:robert-lau",
+      "division": "light-heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:jakub-dohnal-vs-vojto-barborik-7",
       "red": "oktagon:jakub-dohnal",
       "blue": "oktagon:vojto-barborik",
       "division": "lightweight",
@@ -60,25 +68,17 @@
       "status": "announced"
     },
     {
-      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:tomas-ciganik-vs-murat-tuysuz-7",
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:tomas-ciganik-vs-berkan-badur-8",
       "red": "oktagon:tomas-ciganik",
-      "blue": "oktagon:murat-tuysuz",
-      "division": "lightweight",
+      "blue": "oktagon:berkan-badur",
+      "division": "catchweight",
       "scheduledRounds": 3,
       "status": "announced"
     },
     {
-      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:niamh-kinehan-vs-alana-cook-8",
-      "red": "oktagon:niamh-kinehan",
-      "blue": "oktagon:alana-cook",
-      "division": "womens-bantamweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:vojtech-garba-vs-robert-lau-9",
-      "red": "oktagon:vojtech-garba",
-      "blue": "oktagon:robert-lau",
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:robin-fosum-vs-dustin-rabiega-9",
+      "red": "oktagon:robin-fosum",
+      "blue": "oktagon:dustin-rabiega",
       "division": "light-heavyweight",
       "scheduledRounds": 3,
       "status": "announced"
@@ -92,7 +92,15 @@
       "status": "announced"
     },
     {
-      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:ali-gunduz-vs-david-daniel-komar-11",
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:niamh-kinehan-vs-alana-cook-11",
+      "red": "oktagon:niamh-kinehan",
+      "blue": "oktagon:alana-cook",
+      "division": "womens-bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-93-rousal-vs-magard:bout:ali-gunduz-vs-david-daniel-komar-12",
       "red": "oktagon:ali-gunduz",
       "blue": "oktagon:david-daniel-komar",
       "division": "bantamweight",
@@ -100,5 +108,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-09-08T06:01:01.803Z"
+  "updatedAt": "2026-09-09T06:01:07.556Z"
 }

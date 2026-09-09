@@ -14,7 +14,7 @@
   },
   "division": "featherweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-14:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-09-09T06:01:07.556Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-09-09:UFC Fight Night: Hooker vs. Parnasse"
+      ],
+      "note": "Result read from the UFC Fight Night: Hooker vs. Parnasse article after the event."
     }
   ],
   "discovery": {
@@ -57,9 +65,18 @@
     "source:wikipedia:2026-08-23:List of UFC events",
     "source:wikipedia:2026-08-24:List of UFC events",
     "source:wikipedia:2026-08-25:List of UFC events",
-    "source:wikipedia:2026-08-26:List of UFC events"
+    "source:wikipedia:2026-08-26:List of UFC events",
+    "source:wikipedia:2026-09-09:UFC Fight Night: Hooker vs. Parnasse"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "KO (punch)",
+    "round": 1,
+    "elapsedSeconds": 174,
+    "sourceRefs": [
+      "source:wikipedia:2026-09-09:UFC Fight Night: Hooker vs. Parnasse"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -74,7 +91,19 @@
         "source:wikipedia:2026-08-14:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-09-09T06:01:07.556Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-09-09:UFC Fight Night: Hooker vs. Parnasse"
+      ],
+      "note": "Losene Keita def. Muhammad Naimov by KO (punch)."
     }
   ],
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-09-09T06:01:07.556Z"
 }
