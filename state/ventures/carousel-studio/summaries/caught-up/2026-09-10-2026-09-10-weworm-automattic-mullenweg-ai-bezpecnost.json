@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-09-10-weworm-automattic-mullenweg-ai-bezpecnost",
+  "date": "2026-09-10",
+  "locale": "cs",
+  "kicker": "DNESKAi · 10. zář",
+  "headline": "Červ postavený s AI za dva týdny. WordPress bez svého zakladatele. A zákony, které průmysl podpořil.",
+  "coverLine": "WeWorm ukazuje, co umí AI ve špatných rukou: červ za dva týdny, žádný klik nepotřeba",
+  "standfirst": "Výzkumný tým zveřejnil zero-click červa šířícího se přes hovory na WeChatu – a přiznal, že by to bez AI trvalo měsíce.",
+  "passages": [
+    "Calif Research zveřejnila funkční demo zero-click červa WeWorm šířícího se přes hovory na WeChatu a přiznala, že jeho vývoj s AI trval přibližně devět dní.",
+    "Automattic odvolalo Matta Mullenwega, zakladatele WordPressu, na placenou dovolenou; Mullenweg tvrdí, že šlo o spiknutí CFO s členy správní rady.",
+    "Newsom podepsal dva bezpečnostní zákony pro AI, které explicitně podpořily Anthropic a OpenAI.",
+    "Apple, Google a Samsung shodně zdražily vlajkové telefony o 100 dolarů, čímž se stodolarový nárůst stal letošním odvětvovým standardem.",
+    "WeWorm jako funkční demo prokazuje, že AI snižuje čas i náklady na vývoj kybernetických zbraní – nikoli teoreticky, ale s konkrétní časovou osou zveřejněnou samotným týmem.",
+    "Odvolání Mullenwega ohrožuje kontinuitu vedení platformy, na níž běží přibližně 40 % webu, v okamžiku, kdy je WordPress zapletený do sporů o ochranné známky i open-source správu.",
+    "Podpora průmyslových lídrů pro kalifornské bezpečnostní zákony naznačuje, že frontier laboratoře vsázejí na spoluautorství pravidel místo jejich blokování.",
+    "Není potvrzeno, zda WeChat zranitelnost využitou WeWormem opravil, ani kdy Calif Research provedla zodpovědné nahlášení chyby."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Photo by Mikhail Nilov on Pexels"
+}

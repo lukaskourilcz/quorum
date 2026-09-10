@@ -1,0 +1,279 @@
+{
+  "schemaVersion": 1,
+  "runId": "6ab97b11-d20b-4125-9f0c-a7a0b16ddf3c",
+  "date": "2026-09-10",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-09-10T03:00:48.927Z",
+  "completedAt": "2026-09-10T03:03:35.477Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-10T03:00:48.934Z",
+      "completedAt": "2026-09-10T03:01:13.953Z",
+      "durationMs": 25019
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-09-10T03:01:13.953Z",
+      "completedAt": "2026-09-10T03:03:17.159Z",
+      "durationMs": 123206
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-09-10T03:03:17.160Z",
+      "completedAt": "2026-09-10T03:03:17.163Z",
+      "durationMs": 3
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-09-10T03:03:17.164Z",
+      "completedAt": "2026-09-10T03:03:17.164Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-09-10T03:03:17.164Z",
+      "completedAt": "2026-09-10T03:03:35.476Z",
+      "durationMs": 18312
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 10505,
+      "outputTokens": 848,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.044235
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 15850,
+      "outputTokens": 5041,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1323375
+    }
+  ],
+  "measuredCostUsd": 0.1765725,
+  "quality": {
+    "metrics": {
+      "successfulSources": 29,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 86,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.84375,
+      "duplicateStorySimilarity": 0.625,
+      "repeatedTopicFrequency": 0.16666666666666666,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1765725
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 0,
+        "selected": null,
+        "reason": "no-thumbnail-could-be-read",
+        "candidates": [],
+        "skipped": [
+          {
+            "candidateId": "scene:20348454",
+            "reason": "thumbnail-host-not-allowed"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": "pexels:9242886",
+        "reason": "Hands with tools removing or installing component on green board; authentic, well-lit technical work that clearly illustrates security research, debugging, or hardware modification without clichés or faces.",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Shows hands working with actual circuit board hardware, which illustrates the technical hands-on nature of security research and AI work, though the red cable and specific board model risk dating the image.",
+            "sceneCs": "ruce pracující s deskou plošného spoje"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "This is a textbook example of the tired 'circuit board brain' cliché that has dominated AI imagery since the mid-2010s; it looks synthetic and actively misleads about the topic.",
+            "sceneCs": "lebka z elektronických obvodů"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 3,
+            "vetoes": [],
+            "reason": "Museum display of circuit boards with visitors; tangentially relates to technology but too indirect and documentary in nature for an abstract tech briefing about malware and AI.",
+            "sceneCs": "lidé v muzeu před obrazovkou"
+          },
+          {
+            "candidateId": "pixabay:2528363",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Heavily stylized faces merged with circuit boards; this is exactly the kind of synthetic-looking visual that misleads readers about AI topics and looks machine-generated.",
+            "sceneCs": "obličeje a elektronické obvody"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Glowing circuit board with mid-2000s neon pink/blue aesthetic; this is the definitive dated cliché for AI and hardware coverage and looks artificial.",
+            "sceneCs": "počítačový čip s neonovým osvětlením"
+          },
+          {
+            "candidateId": "pixabay:3963944",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Abstract blue/digital visualization of business/data with synthetic appearance; too vague and computer-generated-looking for a specific briefing about security threats.",
+            "sceneCs": "abstraktní digitální vizualizace"
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [],
+            "reason": "Clear, well-lit shot of real hardware with heatsinks and components; illustrates technical work but the close-up feels somewhat generic and could apply to any hardware topic.",
+            "sceneCs": "komponenty počítače se žlutými chladiči"
+          },
+          {
+            "candidateId": "pexels:9242892",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands soldering or working with green circuit board; authentic, well-lit technical work that clearly illustrates hardware-level security and development without clichés.",
+            "sceneCs": "ruce pracující s deskou plošného spoje"
+          },
+          {
+            "candidateId": "pexels:9242891",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands assembling or modifying green circuit board with cables; shows practical technical work in good light, directly relevant to security research and hardware without dated aesthetics.",
+            "sceneCs": "ruce pracující s deskou a kabely"
+          },
+          {
+            "candidateId": "pexels:9242928",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Hands working on motherboard in professional setting; illustrates practical technical work and could represent development or security research, though somewhat generic.",
+            "sceneCs": "ruce instalující součástky na základní desku"
+          },
+          {
+            "candidateId": "pexels:9242275",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "Person's face is clearly visible and recognisable despite the red glasses; this is a fatal veto regardless of what they're holding.",
+            "sceneCs": "osoba držící desku plošného spoje"
+          },
+          {
+            "candidateId": "pexels:9242886",
+            "provider": "pexels",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Hands with tools removing or installing component on green board; authentic, well-lit technical work that clearly illustrates security research, debugging, or hardware modification without clichés or faces.",
+            "sceneCs": "ruce s nástrojem pracující na desce plošného spoje"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.009808
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "image_rung:search",
+    "image_gate:curated:no-thumbnail-could-be-read",
+    "image_gate:search:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 29,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects"
+    ]
+  }
+}

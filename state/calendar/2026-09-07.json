@@ -84,7 +84,8 @@
       "at": "2026-09-08T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-08T05:00:00.000Z",
@@ -113,7 +114,8 @@
       "at": "2026-09-08T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-08T11:00:00.000Z",
@@ -127,19 +129,22 @@
       "at": "2026-09-08T13:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "dm-day",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-08T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ts-desk",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-08T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-09T03:00:00.000Z",
@@ -184,8 +189,7 @@
       "at": "2026-09-09T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
     },
     {
       "at": "2026-09-09T11:00:00.000Z",
@@ -199,25 +203,27 @@
       "at": "2026-09-09T13:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "dm-day",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-09-09T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ts-desk",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-09-09T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-09-10T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-day",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-09-10-cu-edition",
+      "decisionOneLiner": "WeWorm je první veřejně doložené demo, kde konkrétní tým uvedl přesnou časovou osu vývoje kybernetické zbraně s pomocí AI – to mění debatu o bezpečnostních rizicích z abstraktní na"
     },
     {
       "at": "2026-09-10T04:00:00.000Z",

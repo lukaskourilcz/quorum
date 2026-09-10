@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260910030042-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "WeWorm je první veřejně doložené demo, kde konkrétní tým uvedl přesnou časovou osu vývoje kybernetické zbraně s pomocí AI – to mění debatu o bezpečnostních rizicích z abstraktní na měřitelnou.",
+  "evidenceRefs": [
+    "source:the-verge",
+    "source:techcrunch-ai",
+    "source:the-register",
+    "source:simonw",
+    "source:tensorfeed",
+    "source:variety",
+    "source:404-media"
+  ],
+  "editionRef": "81fef2247f7ad69fe3e0998486241f2a264cf894fdea515a94967ea0b9b6c859",
+  "generatedAt": "2026-09-10T03:00:47.193Z"
+}

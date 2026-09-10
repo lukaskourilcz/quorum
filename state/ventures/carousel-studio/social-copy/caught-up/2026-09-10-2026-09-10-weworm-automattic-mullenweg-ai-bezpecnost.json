@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-09-10-weworm-automattic-mullenweg-ai-bezpecnost",
+  "date": "2026-09-10",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Zero-click červ WeWorm se šíří přes hovory na WeChatu – oběť nemusí přijmout ani se dotknout telefonu. Tým Calif Research tvrdí, že ho s pomocí AI postavil za devět dní. Co dřív trvalo měsíce, dnes trvá týden. Celý příběh + Mullenweg, Newsom a zdražování smartphonů v dnešním Caught Up.",
+    "hashtags": [
+      "weworm",
+      "kybernetickabezpecnost",
+      "artificialintelligence",
+      "wordpress",
+      "wechat",
+      "iphone18",
+      "newsom",
+      "airegulation",
+      "automattic",
+      "zerodayexploit"
+    ],
+    "threadsText": "Výzkumný tým Calif Research zveřejnil demo červa WeWorm: šíří se přes hovory na WeChatu, oběť nemusí nic udělat, exploit funguje i bez přijmutí hovoru. Bug našli za 2 dny, červ hotový za týden. „AI teď zvládne většinu práce,\" přiznávají sami. To je nová vstupní laťka pro kybernetické zbraně.",
+    "storyLine": "Červ za 9 dní. WordPress bez šéfa. AI zákony s průmyslovou pečetí."
+  },
+  "heroCredit": "Photo by Mikhail Nilov on Pexels",
+  "origin": "desk"
+}
