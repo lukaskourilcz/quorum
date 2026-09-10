@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-26T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-09-09:List of UFC events"
+    "source:wikipedia:2026-09-10:List of UFC events"
   ],
   "bouts": [
     {
@@ -20,39 +20,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:melissa-amaya-vs-valesca-machado-2",
-      "red": "ufc:melissa-amaya",
-      "blue": "ufc:valesca-machado",
-      "division": "womens-strawweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:mehemmedeli-osmanli-vs-ilimbek-akylbek-uulu-3",
-      "red": "ufc:mehemmedeli-osmanli",
-      "blue": "ufc:ilimbek-akylbek-uulu",
-      "division": "bantamweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:montel-jackson-vs-ricky-simon-4",
-      "red": "ufc:montel-jackson",
-      "blue": "ufc:ricky-simon",
-      "division": "bantamweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:rodolfo-bellato-vs-christian-edwards-5",
-      "red": "ufc:rodolfo-bellato",
-      "blue": "ufc:christian-edwards",
-      "division": "light-heavyweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:rodolfo-vieira-vs-robert-bryczek-6",
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:rodolfo-vieira-vs-robert-bryczek-2",
       "red": "ufc:rodolfo-vieira",
       "blue": "ufc:robert-bryczek",
       "division": "middleweight",
@@ -60,7 +28,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:brady-hiestand-vs-rinya-nakamura-7",
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:brady-hiestand-vs-rinya-nakamura-3",
       "red": "ufc:brady-hiestand",
       "blue": "ufc:rinya-nakamura",
       "division": "bantamweight",
@@ -68,18 +36,50 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:john-castaneda-vs-alateng-heili-8",
-      "red": "ufc:john-castaneda",
-      "blue": "ufc:alateng-heili",
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:mehemmedeli-osmanli-vs-ilimbek-akylbek-uulu-4",
+      "red": "ufc:mehemmedeli-osmanli",
+      "blue": "ufc:ilimbek-akylbek-uulu",
       "division": "bantamweight",
       "scheduledRounds": 3,
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:josiah-harrell-vs-elves-brener-9",
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:melissa-amaya-vs-valesca-machado-5",
+      "red": "ufc:melissa-amaya",
+      "blue": "ufc:valesca-machado",
+      "division": "womens-strawweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:josiah-harrell-vs-elves-brener-6",
       "red": "ufc:josiah-harrell",
       "blue": "ufc:elves-brener",
       "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:rodolfo-bellato-vs-christian-edwards-7",
+      "red": "ufc:rodolfo-bellato",
+      "blue": "ufc:christian-edwards",
+      "division": "light-heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:montel-jackson-vs-ricky-simon-8",
+      "red": "ufc:montel-jackson",
+      "blue": "ufc:ricky-simon",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-rosas-jr-vs-barcelos:bout:john-castaneda-vs-alateng-heili-9",
+      "red": "ufc:john-castaneda",
+      "blue": "ufc:alateng-heili",
+      "division": "bantamweight",
       "scheduledRounds": 3,
       "status": "announced"
     },
@@ -100,5 +100,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-09-09T06:01:07.556Z"
+  "updatedAt": "2026-09-10T06:00:54.426Z"
 }

@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Andr%C3%A9_Lima_(fighter)",
       "publisher": "Wikipedia",
       "title": "André Lima (fighter)",
-      "retrievedAt": "2026-09-09T06:01:07.556Z",
+      "retrievedAt": "2026-09-10T06:00:54.426Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -67,7 +67,7 @@
         "source:wikidata:Q134458124",
         "source:wikipedia:83018693"
       ],
-      "retrievedAt": "2026-09-09T06:01:07.556Z",
+      "retrievedAt": "2026-09-10T06:00:54.426Z",
       "status": "verified",
       "corroborated": true
     },
@@ -228,9 +228,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 365.25,
-        "layoffDays": 11
+        "layoffDays": 12
       },
-      "updatedAt": "2026-09-09T06:01:07.556Z"
+      "updatedAt": "2026-09-10T06:00:54.426Z"
     }
   ],
   "rating": {
@@ -240,7 +240,7 @@
     "volatility": 0.05999968,
     "boutCount": 1,
     "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-namsrai-batbayar-vs-andre-lima-7",
-    "updatedAt": "2026-09-09T06:01:07.556Z"
+    "updatedAt": "2026-09-10T06:00:54.426Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2644,11 +2644,26 @@
         "source:wikipedia:2026-08-30:UFC Fight Night: Nurmagomedov vs. Song"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-10T06:00:54.426Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-08-30:UFC Fight Night: Nurmagomedov vs. Song"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-09T06:01:07.556Z"
+  "updatedAt": "2026-09-10T06:00:54.426Z"
 }

@@ -14,7 +14,7 @@
   },
   "division": "middleweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-14:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-09-10T06:00:54.426Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-09-10:UFC Fight Night: Hooker vs. Parnasse"
+      ],
+      "note": "Result read from the UFC Fight Night: Hooker vs. Parnasse article after the event."
     }
   ],
   "discovery": {
@@ -57,9 +65,18 @@
     "source:wikipedia:2026-08-23:List of UFC events",
     "source:wikipedia:2026-08-24:List of UFC events",
     "source:wikipedia:2026-08-25:List of UFC events",
-    "source:wikipedia:2026-08-26:List of UFC events"
+    "source:wikipedia:2026-08-26:List of UFC events",
+    "source:wikipedia:2026-09-10:UFC Fight Night: Hooker vs. Parnasse"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "TKO (punches)",
+    "round": 1,
+    "elapsedSeconds": 275,
+    "sourceRefs": [
+      "source:wikipedia:2026-09-10:UFC Fight Night: Hooker vs. Parnasse"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -74,7 +91,19 @@
         "source:wikipedia:2026-08-14:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-09-10T06:00:54.426Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-09-10:UFC Fight Night: Hooker vs. Parnasse"
+      ],
+      "note": "Matthieu Letho Duclos def. Luis Felipe Dias by TKO (punches)."
     }
   ],
-  "updatedAt": "2026-08-14T06:02:00.810Z"
+  "updatedAt": "2026-09-10T06:00:54.426Z"
 }

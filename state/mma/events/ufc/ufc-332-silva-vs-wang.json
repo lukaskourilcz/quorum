@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-10-03T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-09-09:List of UFC events"
+    "source:wikipedia:2026-09-10:List of UFC events"
   ],
   "bouts": [
     {
@@ -28,15 +28,23 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-332-silva-vs-wang:bout:khaos-williams-vs-roberto-soldic-3",
-      "red": "ufc:khaos-williams",
-      "blue": "ufc:roberto-soldic",
+      "id": "ufc:ufc-332-silva-vs-wang:bout:king-green-vs-esteban-ribovics-3",
+      "red": "ufc:king-green",
+      "blue": "ufc:esteban-ribovics",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-332-silva-vs-wang:bout:roberto-soldic-vs-khaos-williams-4",
+      "red": "ufc:roberto-soldic",
+      "blue": "ufc:khaos-williams",
       "division": "welterweight",
       "scheduledRounds": 3,
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-332-silva-vs-wang:bout:ateba-gautier-vs-roman-kopylov-4",
+      "id": "ufc:ufc-332-silva-vs-wang:bout:ateba-gautier-vs-roman-kopylov-5",
       "red": "ufc:ateba-gautier",
       "blue": "ufc:roman-kopylov",
       "division": "middleweight",
@@ -44,7 +52,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-332-silva-vs-wang:bout:imanol-rodriguez-vs-alden-coria-5",
+      "id": "ufc:ufc-332-silva-vs-wang:bout:imanol-rodriguez-vs-alden-coria-6",
       "red": "ufc:imanol-rodriguez",
       "blue": "ufc:alden-coria",
       "division": "flyweight",
@@ -52,7 +60,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-332-silva-vs-wang:bout:damian-pinas-vs-andrey-pulyaev-6",
+      "id": "ufc:ufc-332-silva-vs-wang:bout:damian-pinas-vs-andrey-pulyaev-7",
       "red": "ufc:damian-pinas",
       "blue": "ufc:andrey-pulyaev",
       "division": "middleweight",
@@ -60,18 +68,10 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-332-silva-vs-wang:bout:marcus-mcghee-vs-bernardo-sopaj-7",
+      "id": "ufc:ufc-332-silva-vs-wang:bout:marcus-mcghee-vs-bernardo-sopaj-8",
       "red": "ufc:marcus-mcghee",
       "blue": "ufc:bernardo-sopaj",
       "division": "bantamweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-332-silva-vs-wang:bout:king-green-vs-esteban-ribovics-8",
-      "red": "ufc:king-green",
-      "blue": "ufc:esteban-ribovics",
-      "division": "lightweight",
       "scheduledRounds": 3,
       "status": "announced"
     },
@@ -108,5 +108,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-09-09T06:01:07.556Z"
+  "updatedAt": "2026-09-10T06:00:54.426Z"
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-09-09T06:01:07.556Z",
+  "generatedAt": "2026-09-10T06:00:54.426Z",
   "items": [
     {
       "fighterRef": "oktagon:niamh-kinehan",
@@ -61,7 +61,7 @@
         "reachCm",
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-09-09T06:01:07.556Z",
+      "reviewedAt": "2026-09-10T06:00:54.426Z",
       "uncorroborated": [
         "division",
         "record"
@@ -75,7 +75,7 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-09T06:01:07.556Z",
+      "reviewedAt": "2026-09-10T06:00:54.426Z",
       "uncorroborated": [
         "division"
       ]
@@ -88,7 +88,7 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-09T06:01:07.556Z",
+      "reviewedAt": "2026-09-10T06:00:54.426Z",
       "uncorroborated": [
         "division",
         "record"
@@ -102,7 +102,7 @@
         "stance",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-09T06:01:07.556Z",
+      "reviewedAt": "2026-09-10T06:00:54.426Z",
       "uncorroborated": [
         "division",
         "record"
@@ -124,7 +124,7 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-09-09T06:01:07.556Z",
+      "reviewedAt": "2026-09-10T06:00:54.426Z",
       "uncorroborated": [
         "name",
         "division",
@@ -138,7 +138,7 @@
       "gaps": [
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-09-09T06:01:07.556Z",
+      "reviewedAt": "2026-09-10T06:00:54.426Z",
       "uncorroborated": [
         "division"
       ]
@@ -150,7 +150,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-09T06:01:07.556Z",
+      "reviewedAt": "2026-09-10T06:00:54.426Z",
       "uncorroborated": [
         "division"
       ]
@@ -162,7 +162,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-09T06:01:07.556Z",
+      "reviewedAt": "2026-09-10T06:00:54.426Z",
       "uncorroborated": [
         "division",
         "record"
@@ -173,7 +173,7 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-09-09T06:01:07.556Z",
+      "reviewedAt": "2026-09-10T06:00:54.426Z",
       "uncorroborated": [
         "division"
       ]
@@ -183,7 +183,7 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-09-09T06:01:07.556Z",
+      "reviewedAt": "2026-09-10T06:00:54.426Z",
       "uncorroborated": [
         "division"
       ]
@@ -197,28 +197,6 @@
         "reachCm"
       ],
       "reviewedAt": "2026-09-09T06:01:07.556Z"
-    },
-    {
-      "fighterRef": "ufc:brando-pericic",
-      "priority": 610,
-      "reason": "missing-history",
-      "gaps": [
-        "team"
-      ],
-      "reviewedAt": "2026-08-30T06:01:50.158Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:anshul-jubli",
-      "priority": 600,
-      "reason": "missing-history",
-      "gaps": [],
-      "reviewedAt": "2026-08-28T06:01:45.174Z",
-      "uncorroborated": [
-        "division"
-      ]
     },
     {
       "fighterRef": "ufc:andre-petroski",
@@ -246,6 +224,26 @@
       "reason": "missing-history",
       "gaps": [],
       "reviewedAt": "2026-09-09T06:01:07.556Z"
+    },
+    {
+      "fighterRef": "ufc:anshul-jubli",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-09-10T06:00:54.426Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:brando-pericic",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-09-10T06:00:54.426Z",
+      "uncorroborated": [
+        "division"
+      ]
     },
     {
       "fighterRef": "ufc:benoit-saint-denis",

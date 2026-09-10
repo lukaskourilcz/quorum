@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-26T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-09-09:2026 in Oktagon MMA"
+    "source:wikipedia:2026-09-10:2026 in Oktagon MMA"
   ],
   "bouts": [
     {
@@ -20,15 +20,7 @@
       "status": "announced"
     },
     {
-      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:frederic-vosgrone-vs-karlos-vemola-2",
-      "red": "oktagon:frederic-vosgrone",
-      "blue": "oktagon:karlos-vemola",
-      "division": "catchweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:max-coga-vs-christian-jungwirth-3",
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:max-coga-vs-christian-jungwirth-2",
       "red": "oktagon:max-coga",
       "blue": "oktagon:christian-jungwirth",
       "division": "welterweight",
@@ -36,10 +28,18 @@
       "status": "announced"
     },
     {
-      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:jamie-cordero-vs-robert-pukac-4",
-      "red": "oktagon:jamie-cordero",
-      "blue": "oktagon:robert-pukac",
-      "division": "middleweight",
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:frederic-vosgrone-vs-karlos-vemola-3",
+      "red": "oktagon:frederic-vosgrone",
+      "blue": "oktagon:karlos-vemola",
+      "division": "catchweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:edmon-avagyan-vs-dominic-schober-4",
+      "red": "oktagon:edmon-avagyan",
+      "blue": "oktagon:dominic-schober",
+      "division": "catchweight",
       "scheduledRounds": 3,
       "status": "announced"
     },
@@ -60,7 +60,23 @@
       "status": "announced"
     },
     {
-      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:raul-lemberanskij-vs-roman-paulas-7",
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:jamie-cordero-vs-robert-pukac-7",
+      "red": "oktagon:jamie-cordero",
+      "blue": "oktagon:robert-pukac",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:tamerlan-dulatov-vs-nikola-jankovic-8",
+      "red": "oktagon:tamerlan-dulatov",
+      "blue": "oktagon:nikola-jankovic",
+      "division": "welterweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:raul-lemberanskij-vs-roman-paulas-9",
       "red": "oktagon:raul-lemberanskij",
       "blue": "oktagon:roman-paulas",
       "division": "bantamweight",
@@ -68,15 +84,7 @@
       "status": "announced"
     },
     {
-      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:edmon-avagyan-vs-dominic-schober-8",
-      "red": "oktagon:edmon-avagyan",
-      "blue": "oktagon:dominic-schober",
-      "division": "catchweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:michael-obodozie-vs-oskar-staszczak-9",
+      "id": "oktagon:oktagon-94-the-biggest-comeback-ever:bout:michael-obodozie-vs-oskar-staszczak-10",
       "red": "oktagon:michael-obodozie",
       "blue": "oktagon:oskar-staszczak",
       "division": "welterweight",
@@ -84,5 +92,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-09-09T06:01:07.556Z"
+  "updatedAt": "2026-09-10T06:00:54.426Z"
 }

@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Aori_Qileng",
       "publisher": "Wikipedia",
       "title": "Aori Qileng",
-      "retrievedAt": "2026-09-09T06:01:07.556Z",
+      "retrievedAt": "2026-09-10T06:00:54.426Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q111701050",
         "source:wikipedia:70178359"
       ],
-      "retrievedAt": "2026-09-09T06:01:07.556Z",
+      "retrievedAt": "2026-09-10T06:00:54.426Z",
       "status": "verified",
       "corroborated": true
     },
@@ -506,9 +506,9 @@
         "recentThreeWinRate": 0.333333,
         "recentFiveWinRate": 0.25,
         "fightsPerYear": 2.034777,
-        "layoffDays": 11
+        "layoffDays": 12
       },
-      "updatedAt": "2026-09-09T06:01:07.556Z"
+      "updatedAt": "2026-09-10T06:00:54.426Z"
     }
   ],
   "rating": {
@@ -518,7 +518,7 @@
     "volatility": 0.06000053,
     "boutCount": 22,
     "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-nurmagomedov-vs-song-bout-aori-qileng-vs-kai-asakura-3",
-    "updatedAt": "2026-09-09T06:01:07.556Z"
+    "updatedAt": "2026-09-10T06:00:54.426Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2575,11 +2575,28 @@
         "source:wikipedia:2026-08-30:UFC Fight Night: Nurmagomedov vs. Song"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-10T06:00:54.426Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:70178359",
+        "source:wikipedia:54051600",
+        "source:wikipedia:2026-08-30:UFC Fight Night: Nurmagomedov vs. Song"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-09T06:01:07.556Z"
+  "updatedAt": "2026-09-10T06:00:54.426Z"
 }

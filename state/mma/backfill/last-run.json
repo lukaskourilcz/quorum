@@ -4,17 +4,17 @@
   "processed": 12,
   "artifacts": [
     "mma/fighters/oktagon:karlos-vemola.json",
-    "mma/fighters/ufc:aaron-pico.json",
     "mma/fighters/ufc:ailin-perez.json",
     "mma/fighters/ufc:alateng-heili.json",
-    "mma/fighters/ufc:aleksandre-topuria.json",
     "mma/fighters/ufc:alexa-grasso.json",
     "mma/fighters/ufc:alexandre-pantoja.json",
     "mma/fighters/ufc:alonzo-menifield.json",
+    "mma/fighters/ufc:anshul-jubli.json",
     "mma/fighters/ufc:ateba-gautier.json",
+    "mma/fighters/ufc:brando-pericic.json",
     "mma/fighters/ufc:brian-ortega.json",
     "mma/fighters/ufc:rafael-dos-anjos.json",
     "mma/fighters/ufc:yair-rodriguez.json"
   ],
-  "generatedAt": "2026-09-09T06:01:07.556Z"
+  "generatedAt": "2026-09-10T06:00:54.426Z"
 }
