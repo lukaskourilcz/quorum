@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260910070052-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Tři příběhy, které dnes souběžně uzavírají roky nejistoty – ceny telefonů, osud Googlu v reklamním řízení a vedení největší CMS firmy – se dotýkají stovek milionů uživatelů a miliardových investičních rozhodnutí najednou.",
+  "evidenceRefs": [
+    "source:social-media-today",
+    "source:stackexchange-ml",
+    "source:the-verge",
+    "source:techcrunch-ai",
+    "source:digiday"
+  ],
+  "editionRef": "a5ac50cac988bf0e27eeaf199473c5c777028a8a7efeffbed6aac991bae84872",
+  "generatedAt": "2026-09-10T07:00:57.505Z"
+}

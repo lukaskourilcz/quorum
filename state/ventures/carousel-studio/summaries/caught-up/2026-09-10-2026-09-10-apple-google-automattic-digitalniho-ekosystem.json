@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-09-10-apple-google-automattic-digitalniho-ekosystem",
+  "date": "2026-09-10",
+  "locale": "cs",
+  "kicker": "DNESKAi · 10. zář",
+  "headline": "IPhone zdražuje, Google se vyhnul rozdělení a Mullenweg opustil vedení Automattic",
+  "coverLine": "Smartphony za 1 199 dolarů, Google bez rozpadu a WordPress bez šéfa",
+  "standfirst": "Tři souběžné příběhy mění pravidla digitálního světa: vlajkové smartphony překračují hranici luxusního zboží, soud ponechal Google pohromadě a vydavatelé přestavují redakce pro éru bez vyhledávacích odkazů.",
+  "passages": [
+    "IPhone 18 Pro začíná na 1 199 dolarech, o 100 dolarů více než předchůdce; Apple zdražil i starší modely.",
+    "Soudkyně Brinkema odmítla nucené oddělení AdX a DFP; Google čelí behaviorálním omezením, jejichž finální podoba se upřesní do 30 dní.",
+    "Matt Mullenweg byl hlasováním představenstva Automattic přesunut na placenou dovolenou.",
+    "X přidalo do podmínek výslovný zákaz porotního soudu a hromadných žalob.",
+    "Koordinované zdražení telefonů o 100 dolarů u Applu, Googlu i Samsungu mění kalkul upgradu pro stovky milionů zákazníků.",
+    "Antitrust bez strukturálního rozdělení zachovává Googlu integrovaný reklamní zásobník, ale pod behaviorálním dohledem, jehož přesný rozsah se teprve vyjednává.",
+    "Přestavba redakcí USA Today a NYT odráží ekonomický tlak, který přestane být sektorovou novinkou a stane se normou.",
+    "Přesný rozsah behaviorálních omezení Googlu závisí na konečném textu rozsudku, který strany teprve předloží."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Photo by Jeremy Waterhouse on Pexels"
+}

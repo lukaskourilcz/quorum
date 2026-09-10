@@ -1,0 +1,300 @@
+{
+  "schemaVersion": 1,
+  "runId": "3068e896-2c64-4489-bcd1-82d3f35f9c59",
+  "date": "2026-09-10",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-09-10T07:00:58.160Z",
+  "completedAt": "2026-09-10T07:05:47.594Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-10T07:00:58.167Z",
+      "completedAt": "2026-09-10T07:01:21.187Z",
+      "durationMs": 23020
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-09-10T07:01:21.187Z",
+      "completedAt": "2026-09-10T07:03:39.905Z",
+      "durationMs": 138718,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-09-10T07:03:39.905Z",
+      "completedAt": "2026-09-10T07:05:34.893Z",
+      "durationMs": 114988
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-09-10T07:05:34.893Z",
+      "completedAt": "2026-09-10T07:05:34.896Z",
+      "durationMs": 3
+    },
+    {
+      "name": "quality_1",
+      "status": "success",
+      "startedAt": "2026-09-10T07:05:34.896Z",
+      "completedAt": "2026-09-10T07:05:34.896Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-09-10T07:05:34.896Z",
+      "completedAt": "2026-09-10T07:05:47.593Z",
+      "durationMs": 12697
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 1,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 9970,
+      "outputTokens": 975,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.044535
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 15096,
+      "outputTokens": 4778,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1261305
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 16670,
+      "outputTokens": 4669,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2586,
+      "costUsd": 0.1297425
+    }
+  ],
+  "measuredCostUsd": 0.300408,
+  "quality": {
+    "metrics": {
+      "successfulSources": 31,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 81,
+      "maximumSingleSourceShare": 0.375,
+      "sourceDiversity": 0.75,
+      "duplicateStorySimilarity": 0.1111111111111111,
+      "repeatedTopicFrequency": 0,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.300408
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": false,
+    "score": 45,
+    "violations": [
+      {
+        "code": "bureaucratic_filler",
+        "locale": "cs",
+        "message": "Použij přímé sloveso místo úřednické konstrukce."
+      }
+    ]
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/bureaucratic_filler"
+    ]
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0.009808,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": "pexels:3665442",
+        "reason": "Excellent close-up of a CPU chip on a modern motherboard with shallow focus; represents contemporary computing hardware clearly and professionally.",
+        "candidates": [
+          {
+            "candidateId": "pexels:36673239",
+            "provider": "pexels",
+            "fit": 3,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "A vintage computer expansion card is too specific to retro-tech history and looks dated; the article concerns current digital world changes.",
+            "sceneCs": "žlutá počítačová destička"
+          },
+          {
+            "candidateId": "pixabay:430619",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "recognisable-face",
+              "ai-generated-look"
+            ],
+            "reason": "Shows a recognisable human face holding a camera, and the background has a synthetic AI-rendered appearance with glowing circuit overlays.",
+            "sceneCs": "fotograf s kamerou"
+          },
+          {
+            "candidateId": "pexels:28675583",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [],
+            "reason": "Close-up of circuit board components is generic enough to represent technology, though the shallow depth of field and mixed focus are slightly distracting.",
+            "sceneCs": "součástky na počítačové desce"
+          },
+          {
+            "candidateId": "pixabay:453758",
+            "provider": "pixabay",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Clean overhead shot of a circuit board showing electronic pathways in green; appropriately illustrates the technological infrastructure of the digital world.",
+            "sceneCs": "zelená počítačová deska"
+          },
+          {
+            "candidateId": "pexels:36673237",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Vintage brown and gold circuit board clearly from the 1980s-90s era; too visually dated to represent current digital industry changes.",
+            "sceneCs": "hnědá historická počítačová deska"
+          },
+          {
+            "candidateId": "pexels:14844846",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Well-lit motherboard with recognisable processor and cooling components represents computing hardware appropriately without being overly stylised.",
+            "sceneCs": "počítačová základní deska"
+          },
+          {
+            "candidateId": "pexels:2588756",
+            "provider": "pexels",
+            "fit": 4,
+            "vetoes": [
+              "low-quality"
+            ],
+            "reason": "Motherboard with expansion slots and components, but shallow depth of field and motion blur significantly degrade visual clarity.",
+            "sceneCs": "počítačová základní deska se sloty"
+          },
+          {
+            "candidateId": "pexels:14844841",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Clear, well-composed shot of motherboard with recognisable CPU and memory components; illustrates digital infrastructure without being overly specific or dated.",
+            "sceneCs": "počítačová základní deska"
+          },
+          {
+            "candidateId": "pexels:3665442",
+            "provider": "pexels",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Excellent close-up of a CPU chip on a modern motherboard with shallow focus; represents contemporary computing hardware clearly and professionally.",
+            "sceneCs": "procesor na počítačové desce"
+          },
+          {
+            "candidateId": "pexels:8108715",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Neon purple and magenta motherboards with heavy digital colouring appear synthetically generated; styled as sci-fi pastiche that dates immediately.",
+            "sceneCs": "neon fialové počítačové desky"
+          },
+          {
+            "candidateId": "pixabay:6979572",
+            "provider": "pixabay",
+            "fit": 3,
+            "vetoes": [
+              "low-quality"
+            ],
+            "reason": "Heavily compressed, low-contrast circuit board image with barely readable text and poor definition; unsuitable for a news publication.",
+            "sceneCs": "počítačová deska"
+          },
+          {
+            "candidateId": "pixabay:973311",
+            "provider": "pixabay",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Shallow-focus shot of multiple coloured components and circuit boards; appropriately illustrates computing hardware, though composition is slightly chaotic.",
+            "sceneCs": "počítačové komponenty s barevnými součástkami"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.00871
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 3,\n    \"inclusive\": true,\n    \"path\": [\n      \"uncertainty\"\n    ],\n    \"message\": \"Too big: expected string to have <=3 characters\"\n  }\n]",
+    "stet:bureaucratic_filler",
+    "shipped_with_unresolved_review:stet:cs/bureaucratic_filler",
+    "image_rung:search",
+    "image_gate:search:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}
