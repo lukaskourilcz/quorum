@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "delivery-queue-health/1",
+  "checkedAt": "2026-09-10T22:02:10.996Z",
+  "date": "2026-09-11",
+  "ventures": [
+    {
+      "venture": "mma-files",
+      "waiting": [
+        {
+          "label": "2026-09-08 AM ufc-amanda-ribas",
+          "packageHash": "a8bfb00c5f837ae072f0fa7338d8b9d225f690a41226bef07367099cedee3582",
+          "date": "2026-09-08"
+        }
+      ],
+      "parked": [
+        {
+          "label": "2026-08-30 AM ufc-alex-perez",
+          "packageHash": "8a99a79aa22aa5467700ba32709d422429c952cfd53f7fc08289a83095c1d87a",
+          "date": "2026-08-30",
+          "code": "hash_conflict",
+          "disposition": "retire",
+          "supersededBy": "0120bb5445c80a73fb95e6a1836541d19b07c99d09c591d3573db01c0e4ac698"
+        }
+      ],
+      "oldestWaitingDate": "2026-09-08",
+      "stalledDays": 3,
+      "stalled": true,
+      "neverDrains": []
+    },
+    {
+      "venture": "caught-up",
+      "waiting": [
+        {
+          "label": "2026-09-10 edition",
+          "packageHash": "81fef2247f7ad69fe3e0998486241f2a264cf894fdea515a94967ea0b9b6c859",
+          "date": "2026-09-10"
+        },
+        {
+          "label": "2026-09-10 edition",
+          "packageHash": "a5ac50cac988bf0e27eeaf199473c5c777028a8a7efeffbed6aac991bae84872",
+          "date": "2026-09-10"
+        }
+      ],
+      "parked": [
+        {
+          "label": "2026-08-17 edition",
+          "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
+          "date": "2026-08-17",
+          "code": "post_deploy_verification",
+          "disposition": "owner"
+        }
+      ],
+      "oldestWaitingDate": "2026-09-10",
+      "stalledDays": 1,
+      "stalled": true,
+      "neverDrains": [
+        {
+          "label": "2026-08-17 edition",
+          "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
+          "date": "2026-08-17",
+          "code": "post_deploy_verification",
+          "disposition": "owner"
+        }
+      ]
+    }
+  ],
+  "deploys": [
+    {
+      "venture": "caught-up",
+      "url": "https://caughtup-ai.vercel.app/data/board/2026-09-09.json",
+      "expected": "2026-09-09",
+      "status": 200,
+      "live": true
+    },
+    {
+      "venture": "mma-files",
+      "url": "https://mma-files.vercel.app/cs/articles/ufc-amanda-nunes",
+      "expected": "ufc-amanda-nunes",
+      "status": 200,
+      "live": true
+    }
+  ],
+  "needsOwner": true
+}
