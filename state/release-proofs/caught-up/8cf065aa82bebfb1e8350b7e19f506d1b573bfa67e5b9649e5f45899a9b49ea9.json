@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-39c0d4616c7d0530",
+  "venture": "caught-up",
+  "packageHash": "8cf065aa82bebfb1e8350b7e19f506d1b573bfa67e5b9649e5f45899a9b49ea9",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "3c94180c26542113f4e581e78511efaf46ab180e",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 3c94180c26542113f4e581e78511efaf46ab180e is readable",
+      "checkedAt": "2026-09-10T07:10:17.403Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-09-10T07:10:17.403Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-09-10T07:10:17.403Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-09-09-openai-navier-stokes-kontroverze-patchtuesday-distilace?boardless_verify=8cf065aa82be-1789024217403",
+      "checkedAt": "2026-09-10T07:10:17.403Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-09-09-openai-navier-stokes-kontroverze-patchtuesday-distilace match",
+      "checkedAt": "2026-09-10T07:10:17.403Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 8cf065aa82bebfb1e8350b7e19f506d1b573bfa67e5b9649e5f45899a9b49ea9",
+      "checkedAt": "2026-09-10T07:10:17.403Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-09-09-openai-navier-stokes-kontroverze-patchtuesday-distilace/hero.webp?boardless_verify=8cf065aa82be-1789024217403",
+      "checkedAt": "2026-09-10T07:10:17.403Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-09-10T07:10:17.403Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "BoardlessAI FRAME · BoardlessAI illustration",
+      "checkedAt": "2026-09-10T07:10:17.403Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-09-10T07:09:14.927Z",
+  "completedAt": "2026-09-10T07:10:18.156Z"
+}

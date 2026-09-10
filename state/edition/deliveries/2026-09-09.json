@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-09",
+  "packageHash": "8cf065aa82bebfb1e8350b7e19f506d1b573bfa67e5b9649e5f45899a9b49ea9",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "3c94180c26542113f4e581e78511efaf46ab180e",
+  "deliveredAt": "2026-09-10T07:10:18.715Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-09-openai-navier-stokes-kontroverze-patchtuesday-distilace",
+  "tags": [
+    "umela-inteligence",
+    "matematika",
+    "kyberneticka-bezpecnost",
+    "exportni-kontrola",
+    "otevrena-veda",
+    "ai-etika"
+  ],
+  "supersededPackageHashes": [
+    "2734368fcdaa38cd3b93ec236a886e5327de906313237597ecdc299622d9931c"
+  ]
+}
