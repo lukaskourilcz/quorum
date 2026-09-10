@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-09-10T06:05:56.685Z",
+  "checkedAt": "2026-09-10T07:10:36.848Z",
   "date": "2026-09-10",
   "ventures": [
     {
@@ -31,23 +31,13 @@
       "venture": "caught-up",
       "waiting": [
         {
-          "label": "2026-09-08 no_edition",
-          "packageHash": "73464e5704f73c0274f737615f205534272721e7cbeda1c06e259f99c0e92fd7",
-          "date": "2026-09-08"
-        },
-        {
-          "label": "2026-09-09 no_edition",
-          "packageHash": "2734368fcdaa38cd3b93ec236a886e5327de906313237597ecdc299622d9931c",
-          "date": "2026-09-09"
-        },
-        {
-          "label": "2026-09-09 edition",
-          "packageHash": "8cf065aa82bebfb1e8350b7e19f506d1b573bfa67e5b9649e5f45899a9b49ea9",
-          "date": "2026-09-09"
+          "label": "2026-09-10 edition",
+          "packageHash": "81fef2247f7ad69fe3e0998486241f2a264cf894fdea515a94967ea0b9b6c859",
+          "date": "2026-09-10"
         },
         {
           "label": "2026-09-10 edition",
-          "packageHash": "81fef2247f7ad69fe3e0998486241f2a264cf894fdea515a94967ea0b9b6c859",
+          "packageHash": "a5ac50cac988bf0e27eeaf199473c5c777028a8a7efeffbed6aac991bae84872",
           "date": "2026-09-10"
         }
       ],
@@ -60,8 +50,8 @@
           "disposition": "owner"
         }
       ],
-      "oldestWaitingDate": "2026-09-08",
-      "stalledDays": 2,
+      "oldestWaitingDate": "2026-09-10",
+      "stalledDays": 0,
       "stalled": true,
       "neverDrains": [
         {
@@ -77,8 +67,8 @@
   "deploys": [
     {
       "venture": "caught-up",
-      "url": "https://caughtup-ai.vercel.app/data/board/2026-09-08.json",
-      "expected": "2026-09-08",
+      "url": "https://caughtup-ai.vercel.app/data/board/2026-09-09.json",
+      "expected": "2026-09-09",
       "status": 200,
       "live": true
     },
