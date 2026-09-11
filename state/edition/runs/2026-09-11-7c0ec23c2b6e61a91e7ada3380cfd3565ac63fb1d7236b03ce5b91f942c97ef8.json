@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 1,
+  "runId": "527c4c20-8ee2-4609-8958-0686dc9e821b",
+  "date": "2026-09-11",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-09-11T03:00:51.249Z",
+  "completedAt": "2026-09-11T03:03:27.050Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-11T03:00:51.262Z",
+      "completedAt": "2026-09-11T03:01:13.986Z",
+      "durationMs": 22724
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-09-11T03:01:13.987Z",
+      "completedAt": "2026-09-11T03:03:10.035Z",
+      "durationMs": 116048
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-09-11T03:03:10.036Z",
+      "completedAt": "2026-09-11T03:03:10.042Z",
+      "durationMs": 6
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-09-11T03:03:10.042Z",
+      "completedAt": "2026-09-11T03:03:10.042Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-09-11T03:03:10.042Z",
+      "completedAt": "2026-09-11T03:03:27.050Z",
+      "durationMs": 17008
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 10023,
+      "outputTokens": 871,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.043134
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14433,
+      "outputTokens": 4783,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1242165
+    }
+  ],
+  "measuredCostUsd": 0.1673505,
+  "quality": {
+    "metrics": {
+      "successfulSources": 28,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 85,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.84375,
+      "duplicateStorySimilarity": 0.11764705882352941,
+      "repeatedTopicFrequency": 0.16666666666666666,
+      "primarySourceRelevant": true,
+      "primarySourcePresent": true,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1673505
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "plate",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 0,
+        "selected": null,
+        "reason": "no-thumbnail-could-be-read",
+        "candidates": [],
+        "skipped": [
+          {
+            "candidateId": "scene:20348454",
+            "reason": "thumbnail-host-not-allowed"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 3,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Vintage computer hardware (ISA slots, 1990s motherboard) does not illustrate current AI research or safety concerns; the red cable and dated aesthetic feel historically specific rather than topically relevant.",
+            "sceneCs": "ruka a retro základní deska"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "This is the quintessential cliché for 'AI' – a stylized brain made of circuit board. It has no basis in how AI safety research actually looks or operates, and its synthetic appearance screams stock imagery.",
+            "sceneCs": "stylizovaný mozek z elektroniky"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 2,
+            "vetoes": [
+              "wrong-subject"
+            ],
+            "reason": "A museum or educational display of circuit boards is not related to AI safety research departures, military misuse, or model theft; it documents a specific exhibition rather than illustrating the article's themes.",
+            "sceneCs": "muzejní expozice s deskou na stěně"
+          },
+          {
+            "candidateId": "pixabay:2528363",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "unsafe-content"
+            ],
+            "reason": "Distorted faces composited with circuit patterns is dystopian visual cliché that evokes AI horror tropes rather than honestly illustrating AI safety concerns. Also troubling for a news briefing.",
+            "sceneCs": "deformované tváře a elektronika"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Glowing blue-and-pink chip with cinematic lighting is pure stock-AI imagery from mid-2020s design trends. Overly stylized and does not represent actual research infrastructure.",
+            "sceneCs": "stylizovaný mikroprocesor s neonovým osvětlením"
+          },
+          {
+            "candidateId": "pixabay:3963944",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Holographic globe with abstract charts and figures has the synthetic look of corporate AI marketing. While it touches on AI themes generally, it feels machine-rendered and clichéd.",
+            "sceneCs": "abstraktní vizualizace s gejší a čísly"
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 4,
+            "vetoes": [],
+            "reason": "A real photograph of a motherboard with heatsinks and power connectors. Honest representation of computer hardware, though generic and not specific to the safety/misuse angle of the article.",
+            "sceneCs": "základní deska s chladičem"
+          },
+          {
+            "candidateId": "pexels:9242892",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [],
+            "reason": "Hands performing soldering or installation work on a green PCB. Authentic workshop practice that suggests hands-on technical research without being overly styled or dated.",
+            "sceneCs": "ruce pracující na zeleném desce"
+          },
+          {
+            "candidateId": "pexels:9242891",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Hands manipulating circuit connections and components on a green board. Genuine technical work that illustrates hands-on AI/computing research without stylization, though still generic.",
+            "sceneCs": "ruce připojující kabely a komponenty"
+          },
+          {
+            "candidateId": "pexels:9242928",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [],
+            "reason": "Hands assembling or servicing a green motherboard in realistic lighting. Authentic technical work that suggests serious hardware and research practice without dated clichés.",
+            "sceneCs": "ruce instalující součástky na základní desku"
+          },
+          {
+            "candidateId": "pexels:9242275",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "A clearly identifiable person wearing distinctive red sunglasses holds a board. The recognizable face of a specific individual is fatal even if not naming the person.",
+            "sceneCs": "osoba v brýlích držící desku"
+          },
+          {
+            "candidateId": "pexels:9242886",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Hands using a wrench or tool to work on a green PCB. Direct, honest documentation of technical repair or assembly work that illustrates hands-on research without stylization or recognizable subjects.",
+            "sceneCs": "ruce s nástrojem pracující na desce"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.010097
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "image_rung:plate",
+    "image_gate:curated:no-thumbnail-could-be-read",
+    "image_gate:search:all-candidates-rejected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 28,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects",
+      "source:meta-ai"
+    ]
+  }
+}

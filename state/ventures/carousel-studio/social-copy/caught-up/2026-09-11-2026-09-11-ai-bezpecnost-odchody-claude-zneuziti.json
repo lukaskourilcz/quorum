@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-09-11-ai-bezpecnost-odchody-claude-zneuziti",
+  "date": "2026-09-11",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Výzkumníci z Anthropicu a Google DeepMind veřejně popsali, proč odešli. Anthropic zároveň zveřejnil zprávu: 151 milionů výměn s Claudem sloužilo ke krádeži jeho schopností, další dotazy mířily na drony a biozbrane. Google mezitím podepisuje 22letou smlouvu na jadernou elektřinu ve Finsku. Bezpečnostní debata je teď mainstream. Výstavba infrastruktury pokračuje.",
+    "hashtags": [
+      "aisafety",
+      "anthropic",
+      "artificialintelligence",
+      "aigovernance",
+      "deepseek",
+      "alibaba",
+      "nuclearenergy",
+      "airesearch",
+      "machinelearning",
+      "techindustry"
+    ],
+    "threadsText": "Výzkumníci z Anthropicu a Google DeepMind říkají, že odešli, protože „v místnosti nejsou žádní dospělí\". Anthropic zároveň sám dokumentuje 151 milionů výměn, při nichž Alibaba systematicky kradla schopnosti Claudea. Další kampaně přisuzuje Moonshot AI a DeepSeeku. OpenAI zkoumá, zda je koordinované zpomalení vůbec legální. Google staví datová centra ve Finsku a kupuje jadernou elektřinu na 22 let.",
+    "storyLine": "Odchody, zneužití, destilace. Obor zrychluje."
+  },
+  "heroCredit": "Artwork by BoardlessAI FRAME",
+  "origin": "desk"
+}

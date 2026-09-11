@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260911030040-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Odchody výzkumníků a Anthropicova zpráva jsou první kombinací interního svědectví a primárního dokumentu o zneužití, která dává bezpečnostní debatě konkrétní obsah místo abstraktních varování.",
+  "evidenceRefs": [
+    "source:platformer",
+    "source:tensorfeed",
+    "source:spaceflight-news",
+    "source:google-research",
+    "source:variety",
+    "source:techcrunch-ai",
+    "source:hn-frontpage"
+  ],
+  "editionRef": "7c0ec23c2b6e61a91e7ada3380cfd3565ac63fb1d7236b03ce5b91f942c97ef8",
+  "generatedAt": "2026-09-11T03:00:45.179Z"
+}

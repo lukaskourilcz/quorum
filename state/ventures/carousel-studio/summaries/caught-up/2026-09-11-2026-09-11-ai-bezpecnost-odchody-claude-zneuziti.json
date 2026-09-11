@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-09-11-ai-bezpecnost-odchody-claude-zneuziti",
+  "date": "2026-09-11",
+  "locale": "cs",
+  "kicker": "DNESKAi · 11. zář",
+  "headline": "Výzkumníci odcházejí, Claude sloužil ke dronům a biosekci. Obor jede dál.",
+  "coverLine": "Výzkumníci z Anthropicu a Googlu odešli. Říkají, že v místnosti nejsou žádní dospělí.",
+  "standfirst": "Vlna veřejných výpovědí ze dvou nejvýznamnějších bezpečnostních laboratoří se sešla s Anthropicovou zprávou o zneužití modelu k vojenským účelům a systematické krádeži jeho schopností. Přesto žádné zpomalení nepřichází.",
+  "passages": [
+    "Dva seniorní výzkumníci z Anthropicu a Google DeepMind veřejně popsali důvody odchodu a použili formulaci 'v místnosti nejsou žádní dospělí'.",
+    "Anthropic zveřejnil zprávu dokumentující 151 milionů výměn spojených s destilační kampaní přisuzovanou Alibabě a další kampaně přisuzované Moonshot AI a DeepSeeku.",
+    "Google podepsal 22letou smlouvu na odběr až 50 % výkonu finské jaderné elektrárny Loviisa jako součást investice 13 miliard eur do datové infrastruktury.",
+    "OpenAI interně zkoumá, zda by koordinované zpomalení vývoje AI bylo legální z hlediska antitrustového práva.",
+    "Výzkumníci s přímou zkušeností z laboratoří poprvé hromadně a veřejně pojmenovávají selhání interních bezpečnostních kultur, nikoli abstraktní riziko.",
+    "Anthropicova vlastní zpráva dokazuje, že reálné zneužití modelu – drony, biozbrane, krádež schopností – neprobíhá v teorii, ale ve stovkách milionů dokumentovaných výměn.",
+    "Otázka legality koordinovaného zpomalení ukazuje, že bezpečnostní rámce narážejí na strukturální právní překážky ještě dříve, než se politické vůle dostanou ke slovu.",
+    "Tvrzení Anthropicu o původu destilačních kampaní (Alibaba, Moonshot AI, DeepSeek) jsou firemní atribucí bez nezávislého ověření."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Artwork by BoardlessAI FRAME"
+}
