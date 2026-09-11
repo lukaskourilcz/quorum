@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-10",
+  "packageHash": "81fef2247f7ad69fe3e0998486241f2a264cf894fdea515a94967ea0b9b6c859",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "6a6ec4e2c2226309a8ee5d807a37ee2d22591e1f",
+  "deliveredAt": "2026-09-11T07:11:05.907Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-10-weworm-automattic-mullenweg-ai-bezpecnost",
+  "tags": [
+    "kybernetska-bezpecnost",
+    "umela-inteligence",
+    "wordpress",
+    "regulace-ai",
+    "smartphony",
+    "wechat"
+  ]
+}

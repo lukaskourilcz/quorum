@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-e235a02685ce2cef",
+  "venture": "caught-up",
+  "packageHash": "81fef2247f7ad69fe3e0998486241f2a264cf894fdea515a94967ea0b9b6c859",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "6a6ec4e2c2226309a8ee5d807a37ee2d22591e1f",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 6a6ec4e2c2226309a8ee5d807a37ee2d22591e1f is readable",
+      "checkedAt": "2026-09-11T07:11:04.223Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-09-11T07:11:04.223Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-09-11T07:11:04.223Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-09-10-weworm-automattic-mullenweg-ai-bezpecnost?boardless_verify=81fef2247f7a-1789110664223",
+      "checkedAt": "2026-09-11T07:11:04.223Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-09-10-weworm-automattic-mullenweg-ai-bezpecnost match",
+      "checkedAt": "2026-09-11T07:11:04.223Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 81fef2247f7ad69fe3e0998486241f2a264cf894fdea515a94967ea0b9b6c859",
+      "checkedAt": "2026-09-11T07:11:04.223Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-09-10-weworm-automattic-mullenweg-ai-bezpecnost/hero.webp?boardless_verify=81fef2247f7a-1789110664223",
+      "checkedAt": "2026-09-11T07:11:04.223Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-09-11T07:11:04.223Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Mikhail Nilov · Pexels License",
+      "checkedAt": "2026-09-11T07:11:04.223Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-09-11T07:10:02.242Z",
+  "completedAt": "2026-09-11T07:11:04.842Z"
+}
