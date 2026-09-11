@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-09-11-microsoft-rust-anthropic-bezpecnost-ai",
+  "date": "2026-09-11",
+  "locale": "cs",
+  "kicker": "DNESKAi · 11. zář",
+  "headline": "Microsoft povýšil Rust, Anthropic zveřejnil zprávu o zneužití a Nvidia vidí 70% růst",
+  "coverLine": "Rust je teď v Microsoftu jazyk první volby – a za tím stojí bezpečnostní dluh Windows",
+  "standfirst": "Jazyk Rust se stal na Microsoftu první volbou po boku C++ a C#, Anthropic popisuje, jak jeho modely sloužily ke stavbě dronů a výzkumu biologických zbraní,",
+  "passages": [
+    "Microsoft formálně zařadil Rust mezi jazyky Tier 1 pro interní vývoj, na úroveň C++, C# a TypeScriptu.",
+    "Anthropic zveřejnil zprávu o zneužití modelů Claude ke kyberútokům, stavbě dronů a biologickému výzkumu.",
+    "Jensen Huang znovu potvrdil výhled 70% meziročního růstu tržeb Nvidie pro příští fiskální rok.",
+    "Meta spustila testování Community Notes v 16 zemích Latinské Ameriky.",
+    "Povýšení Rustu na Microsoftu přepisuje pravidla náboru a investic do nástrojů pro největšího světového dodavatele softwaru a urychluje odklon od C a C++ v kritické infrastruktuře.",
+    "Zpráva Anthropicu o zneužití modelů a Hubing­erovo veřejné přiznání o 10% pravděpodobnosti katastrofy ukazují, jak hluboce se otázka existenčního rizika AI přesunula do mainstreamu – s přímými dopady na regulaci.",
+    "Meta testuje komunitní moderování ve španělsky mluvící Latinské Americe ve chvíli, kdy je tlak regulátorů na platformy v celém regionu silnější než kdy dřív.",
+    "Microsoft neoznámil konkrétní harmonogram ani rozsah migrace kódu Windows z C/C++ do Rustu."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Photo by Mikhail Nilov on Pexels"
+}

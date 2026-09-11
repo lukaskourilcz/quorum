@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "runId": "5d5f75c9-302e-4ca8-b5f6-f5394cffba14",
+  "date": "2026-09-11",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-09-11T07:01:04.531Z",
+  "completedAt": "2026-09-11T07:03:54.351Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-11T07:01:04.550Z",
+      "completedAt": "2026-09-11T07:01:35.257Z",
+      "durationMs": 30707
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-09-11T07:01:35.257Z",
+      "completedAt": "2026-09-11T07:03:36.249Z",
+      "durationMs": 120992
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-09-11T07:03:36.249Z",
+      "completedAt": "2026-09-11T07:03:36.255Z",
+      "durationMs": 6
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-09-11T07:03:36.255Z",
+      "completedAt": "2026-09-11T07:03:36.255Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-09-11T07:03:36.255Z",
+      "completedAt": "2026-09-11T07:03:54.348Z",
+      "durationMs": 18093
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11430,
+      "outputTokens": 1028,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.04971
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14795,
+      "outputTokens": 4736,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1245975
+    }
+  ],
+  "measuredCostUsd": 0.1743075,
+  "quality": {
+    "metrics": {
+      "successfulSources": 31,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 86,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.84375,
+      "duplicateStorySimilarity": 0.058823529411764705,
+      "repeatedTopicFrequency": 0.16666666666666666,
+      "primarySourceRelevant": true,
+      "primarySourcePresent": true,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1743075
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0.010097,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 0,
+        "selected": null,
+        "reason": "no-thumbnail-could-be-read",
+        "candidates": [],
+        "skipped": [
+          {
+            "candidateId": "scene:20348454",
+            "reason": "thumbnail-host-not-allowed"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": "pexels:9242892",
+        "reason": "Professional hands inserting a component on green PCB captures hands-on tech work authentically, well-lit and sharp; strong choice for a hardware-related briefing.",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Realistic hands soldering a circuit board illustrates technology work competently, though the warm lighting and specific moment feel somewhat staged for a generic tech briefing.",
+            "sceneCs": "ruce letující součástku na desce s plošnými spoji"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "The synthetic blue circuit-board brain is an obvious AI-generated stock image that screams mid-2000s tech cliché; completely unsuitable for a modern briefing.",
+            "sceneCs": "ilustrační mozek z obvodů"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 2,
+            "vetoes": [
+              "low-quality"
+            ],
+            "reason": "The museum display is blurry, poorly composed, and unclear in purpose; fails to illustrate any of the three distinct article topics meaningfully.",
+            "sceneCs": "expozice v muzeu s obrazovkou a návštěvníky"
+          },
+          {
+            "candidateId": "pixabay:2528363",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look",
+              "low-quality"
+            ],
+            "reason": "Heavily compressed, poorly rendered faces on a circuit board—this is synthetic clip-art that looks machine-generated and fails quality standards.",
+            "sceneCs": "obličeje na desce s plošnými spoji"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "The neon-pink-and-blue glowing microchip is a quintessential dated stock render with an artificial look; exemplifies the exact visual cliché to avoid.",
+            "sceneCs": "zářící mikroprocesor s neonovou osvětlením"
+          },
+          {
+            "candidateId": "pixabay:3963944",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "The holographic charts and glowing digital interface is a synthetic, AI-generated style visualization with no grounding in reality.",
+            "sceneCs": "holografické grafy a digitální rozhraní"
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Clear, well-lit close-up of real heat sinks on a motherboard illustrates hardware competently without dated aesthetics or obvious artifice.",
+            "sceneCs": "chladicí prvky na matičce počítače"
+          },
+          {
+            "candidateId": "pexels:9242892",
+            "provider": "pexels",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Professional hands inserting a component on green PCB captures hands-on tech work authentically, well-lit and sharp; strong choice for a hardware-related briefing.",
+            "sceneCs": "ruce instalující součástku na zelenou desku s plošnými spoji"
+          },
+          {
+            "candidateId": "pexels:9242891",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Clear action shot of hands working on internal electronics with cables—real, professional, and illustrative of hands-on technology work without artifice.",
+            "sceneCs": "ruce připojující kabely na desku s plošnými spoji"
+          },
+          {
+            "candidateId": "pexels:9242928",
+            "provider": "pexels",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Sharp, well-lit close-up of hands installing a component on a motherboard—authentic, professional, and clearly illustrates hardware assembly or repair.",
+            "sceneCs": "ruce instalující součástku na matičku"
+          },
+          {
+            "candidateId": "pexels:9242275",
+            "provider": "pexels",
+            "fit": 0,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "A person's face is clearly visible and recognizable despite the red glasses—this violates the rule against photographs of recognizable faces, regardless of context.",
+            "sceneCs": "osoba v červených brýlích drží matičku"
+          },
+          {
+            "candidateId": "pexels:9242886",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands using a tool to work on a green circuit board—authentic, well-composed, and neutral enough to illustrate general technology work or repair.",
+            "sceneCs": "ruce se zvedákem pracují na zelené desce s plošnými spoji"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.009903
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "image_rung:search",
+    "image_gate:curated:no-thumbnail-could-be-read",
+    "image_gate:search:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

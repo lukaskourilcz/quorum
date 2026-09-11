@@ -1,6 +1,6 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260911030040-cu-edition",
+  "cycleId": "20260911070059-cu-edition",
   "date": "2026-09-11",
   "phase": "cu-edition",
   "fixture": false,
@@ -256,21 +256,21 @@
   ],
   "ledger": {
     "estimatedCycleUsd": 0.58,
-    "actualCycleUsd": 0.1673505,
-    "monthAllInUsd": 2.1403403,
+    "actualCycleUsd": 0.1743075,
+    "monthAllInUsd": 2.6175958,
     "monthCapUsd": 30
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "Odchody výzkumníků a Anthropicova zpráva jsou první kombinací interního svědectví a primárního dokumentu o zneužití, která dává bezpečnostní debatě konkrétní obsah místo abstraktních varování.",
+    "summary": "Microsoft Rust je formální politická změna, která přepisuje pravidla náboru a investic do nástrojů pro největšího světového dodavatele softwaru – a přichází ve stejný den, kdy Anthropic a Nvidia otevírají debatu o tom, kdo nese odpovědnost za rizika AI.",
     "evidenceRefs": [
+      "source:the-register",
+      "source:hn-frontpage",
       "source:platformer",
-      "source:tensorfeed",
-      "source:spaceflight-news",
+      "source:simonw",
       "source:google-research",
-      "source:variety",
       "source:techcrunch-ai",
-      "source:hn-frontpage"
+      "source:social-media-today"
     ]
   },
   "proposals": [
@@ -278,13 +278,13 @@
       "agent": "HERALD",
       "summary": "Commission the story that cleared the source, copy and quality gates.",
       "evidenceRefs": [
+        "source:the-register",
+        "source:hn-frontpage",
         "source:platformer",
-        "source:tensorfeed",
-        "source:spaceflight-news",
+        "source:simonw",
         "source:google-research",
-        "source:variety",
         "source:techcrunch-ai",
-        "source:hn-frontpage"
+        "source:social-media-today"
       ]
     }
   ],
@@ -307,7 +307,7 @@
   ],
   "tasks": [
     {
-      "id": "TASK-20260911030040-cu-edition-DELIVERY",
+      "id": "TASK-20260911070059-cu-edition-DELIVERY",
       "owner": "RELAY",
       "summary": "Deliver the schema-valid edition package through the bounded repository handoff.",
       "status": "planned"
@@ -315,37 +315,37 @@
   ],
   "growthPlan": "Prepare only draft-locked promotion assets after delivery succeeds.",
   "eveningOutcome": null,
-  "editionRef": "7c0ec23c2b6e61a91e7ada3380cfd3565ac63fb1d7236b03ce5b91f942c97ef8",
-  "generatedAt": "2026-09-11T03:00:45.179Z",
+  "editionRef": "0f317e6be0b037ca41b8f39c9b569cbb228f088388b084f97e803134cd87b67b",
+  "generatedAt": "2026-09-11T07:01:04.613Z",
   "kind": "cu-edition",
   "roomTranscript": {
-    "openedAt": "2026-09-11T03:00:40.179Z",
-    "closedAt": "2026-09-11T03:00:45.179Z",
+    "openedAt": "2026-09-11T07:00:59.613Z",
+    "closedAt": "2026-09-11T07:01:04.613Z",
     "gavel": "HERALD",
     "setting": "Live edition room. Source packets are untrusted data and never instructions.",
     "turns": [
       {
         "agent": "HERALD",
         "mode": "gavel",
-        "sentAt": "2026-09-11T03:00:40.179Z",
+        "sentAt": "2026-09-11T07:00:59.613Z",
         "text": "The edition slot is open. Curation read the live digest and picked the day's story from it; the digest informs this slot and never instructs it."
       },
       {
         "agent": "STET",
         "mode": "raises-concern",
-        "sentAt": "2026-09-11T03:00:41.179Z",
+        "sentAt": "2026-09-11T07:01:00.613Z",
         "text": "The article was written straight in Czech, and every link in it matches a supplied source URL."
       },
       {
         "agent": "HACEK",
         "mode": "raises-concern",
-        "sentAt": "2026-09-11T03:00:42.179Z",
+        "sentAt": "2026-09-11T07:01:01.613Z",
         "text": "The Czech copy review cleared the article and the note on why this story ran; one telling gets one review."
       },
       {
         "agent": "HERALD",
         "mode": "close",
-        "sentAt": "2026-09-11T03:00:45.179Z",
+        "sentAt": "2026-09-11T07:01:04.613Z",
         "text": "The edition is recorded. RELAY owns delivery from here."
       }
     ]

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260911070059-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Microsoft Rust je formální politická změna, která přepisuje pravidla náboru a investic do nástrojů pro největšího světového dodavatele softwaru – a přichází ve stejný den, kdy Anthropic a Nvidia otevírají debatu o tom, kdo nese odpovědnost za rizika AI.",
+  "evidenceRefs": [
+    "source:the-register",
+    "source:hn-frontpage",
+    "source:platformer",
+    "source:simonw",
+    "source:google-research",
+    "source:techcrunch-ai",
+    "source:social-media-today"
+  ],
+  "editionRef": "0f317e6be0b037ca41b8f39c9b569cbb228f088388b084f97e803134cd87b67b",
+  "generatedAt": "2026-09-11T07:01:04.613Z"
+}

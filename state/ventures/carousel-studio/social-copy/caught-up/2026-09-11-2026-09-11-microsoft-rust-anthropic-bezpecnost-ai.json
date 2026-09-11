@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-09-11-microsoft-rust-anthropic-bezpecnost-ai",
+  "date": "2026-09-11",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Microsoft povýšil Rust mezi své hlavní vývojové jazyky – vedle C++, C# a TypeScriptu. Cíl: zbavit Windows paměťových chyb, které tvoří velkou část záplat při každém Patch Tuesday. Anthropic zároveň přiznal, že jeho modely sloužily ke stavbě dronů i biologickému výzkumu. A Jensen Huang znovu slibuje 70% růst Nvidie.",
+    "hashtags": [
+      "rust",
+      "microsoft",
+      "nvidia",
+      "anthropic",
+      "bezpecnostai",
+      "llm",
+      "moderovaniobsahu",
+      "meta",
+      "communitynotes",
+      "datasette"
+    ],
+    "threadsText": "Microsoft dnes formálně zařadil Rust mezi jazyky první volby pro interní vývoj – vedle C++, C# a TypeScriptu. Firma má Rust v přes 100 repozitářích a největší práce teprve přijde: sanitovat paměťové chyby v kódu Windows. Anthropic ve stejný den zveřejnil zprávu o tom, že jeho modely sloužily ke stavbě kamikadze dronů a biologickému výzkumu.",
+    "storyLine": "Rust v Microsoftu, drony v Claudovi, 70 % u Nvidie"
+  },
+  "heroCredit": "Photo by Mikhail Nilov on Pexels",
+  "origin": "desk"
+}
