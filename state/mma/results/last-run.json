@@ -9,28 +9,7 @@
       "results": 14
     }
   ],
-  "applied": [
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-kurtis-campbell-vs-trevor-peek-5",
-      "winner": "red",
-      "method": "Submission (rear-naked choke)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-morgan-charriere-vs-felipe-lima-3",
-      "winner": "blue",
-      "method": "Decision (unanimous)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-mario-pinto-vs-ryan-spann-4",
-      "winner": "red",
-      "method": "TKO (punches)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-hooker-vs-parnasse-bout-matthieu-letho-duclos-vs-luis-felipe-dias-11",
-      "winner": "red",
-      "method": "TKO (punches)"
-    }
-  ],
-  "untracked": 10,
-  "generatedAt": "2026-09-10T06:00:54.426Z"
+  "applied": [],
+  "untracked": 14,
+  "generatedAt": "2026-09-11T06:00:57.397Z"
 }

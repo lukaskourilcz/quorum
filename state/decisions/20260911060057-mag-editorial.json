@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260911060057-mag-editorial",
+  "phase": "mag-editorial",
+  "outcome": "PLAN",
+  "summary": "AM: assigned; PM: killed",
+  "evidenceRefs": [
+    "meeting:2026-09-10-mma-intake",
+    "meeting:2026-09-10-mag-desk",
+    "event:oktagon:event:oktagon-93-rousal-vs-magard",
+    "event:ufc:event:ufc-fight-night-288",
+    "event:ufc:event:ufc-fight-night-rodriguez-vs-silva",
+    "event:ufc:event:ufc-fight-night-silva-vs-delgado"
+  ],
+  "generatedAt": "2026-09-11T06:04:57.397Z"
+}

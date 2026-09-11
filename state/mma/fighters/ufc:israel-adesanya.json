@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Israel_Adesanya",
       "publisher": "Wikipedia",
       "title": "Israel Adesanya",
-      "retrievedAt": "2026-09-10T06:00:54.426Z",
+      "retrievedAt": "2026-09-11T06:00:57.397Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q27050195",
         "source:wikipedia:51774563"
       ],
-      "retrievedAt": "2026-09-10T06:00:54.426Z",
+      "retrievedAt": "2026-09-11T06:00:57.397Z",
       "status": "verified",
       "corroborated": true
     },
@@ -286,9 +286,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0.4,
         "fightsPerYear": 1.307356,
-        "layoffDays": 753
+        "layoffDays": 754
       },
-      "updatedAt": "2026-09-10T06:00:54.426Z"
+      "updatedAt": "2026-09-11T06:00:57.397Z"
     }
   ],
   "rating": {
@@ -298,7 +298,7 @@
     "volatility": 0.0600025,
     "boutCount": 9,
     "asOfBoutRef": "ufc:bout:history-ba49e7d375873bd25b10",
-    "updatedAt": "2026-09-10T06:00:54.426Z"
+    "updatedAt": "2026-09-11T06:00:57.397Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2064,11 +2064,29 @@
         "source:wikipedia:62595898"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-11T06:00:57.397Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:26689399",
+        "source:wikipedia:42031348",
+        "source:wikipedia:42944791",
+        "source:wikipedia:62595898"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.75,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-10T06:00:54.426Z"
+  "updatedAt": "2026-09-11T06:00:57.397Z"
 }

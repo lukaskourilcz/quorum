@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "editorial-slate/1",
+  "date": "2026-09-11",
+  "slots": [
+    {
+      "slot": "am",
+      "organization": "oktagon",
+      "format": "fight-week-preview",
+      "subjectRefs": [
+        "oktagon:event:oktagon-93-rousal-vs-magard"
+      ],
+      "rationale": "The nearest verified card is inside the three-day window and takes one daily slot.",
+      "assignedWriter": "JAB",
+      "status": "assigned"
+    },
+    {
+      "slot": "pm",
+      "format": "desk-notes",
+      "subjectRefs": [
+        "missing:2026-09-11:pm"
+      ],
+      "rationale": "The desk publishes one article a day; this slot is not scheduled.",
+      "assignedWriter": "QUILL",
+      "status": "killed",
+      "killedReason": "single-slot cadence"
+    }
+  ],
+  "vaultVerdicts": [
+    {
+      "subjectRef": "missing:2026-09-11:pm",
+      "verdict": "repeat",
+      "evidenceRef": "meeting:2026-09-11-mag-editorial"
+    },
+    {
+      "subjectRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+      "verdict": "fresh",
+      "evidenceRef": "event:oktagon:event:oktagon-93-rousal-vs-magard"
+    }
+  ]
+}

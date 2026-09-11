@@ -9,7 +9,8 @@
     "wikidataId": "Q97171293",
     "wikipediaTitle": "Jamahal Hill",
     "externalIds": {
-      "wikipediaPageId": "65645016"
+      "wikipediaPageId": "65645016",
+      "cito": "388c56de-6a22-4cb2-a56b-59683a83510b"
     }
   },
   "organizationHistory": [
@@ -34,6 +35,13 @@
   ],
   "sources": [
     {
+      "id": "source:cito-ufc:2026-09-11:fighter:388c56de-6a22-4cb2-a56b-59683a83510b",
+      "publisher": "Cito API",
+      "title": "UFC fighter record for Jamahal Hill",
+      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "evidenceTier": "secondary"
+    },
+    {
       "id": "source:wikidata:Q97171293",
       "url": "https://www.wikidata.org/wiki/Q97171293",
       "publisher": "Wikidata",
@@ -47,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Jamahal_Hill",
       "publisher": "Wikipedia",
       "title": "Jamahal Hill",
-      "retrievedAt": "2026-09-10T06:00:54.426Z",
+      "retrievedAt": "2026-09-11T06:00:57.397Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -56,10 +64,11 @@
     "name": {
       "value": "Jamahal Hill",
       "sourceRefs": [
+        "source:cito-ufc:2026-09-11:fighter:388c56de-6a22-4cb2-a56b-59683a83510b",
         "source:wikidata:Q97171293",
         "source:wikipedia:65645016"
       ],
-      "retrievedAt": "2026-09-10T06:00:54.426Z",
+      "retrievedAt": "2026-09-11T06:00:57.397Z",
       "status": "verified",
       "corroborated": true
     },
@@ -78,6 +87,33 @@
         "source:wikidata:Q97171293"
       ],
       "retrievedAt": "2026-08-03T18:14:46.640Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "division": {
+      "value": "light-heavyweight",
+      "sourceRefs": [
+        "source:cito-ufc:2026-09-11:fighter:388c56de-6a22-4cb2-a56b-59683a83510b"
+      ],
+      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "record": {
+      "value": "12-4-0",
+      "sourceRefs": [
+        "source:cito-ufc:2026-09-11:fighter:388c56de-6a22-4cb2-a56b-59683a83510b"
+      ],
+      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "stance": {
+      "value": "southpaw",
+      "sourceRefs": [
+        "source:cito-ufc:2026-09-11:fighter:388c56de-6a22-4cb2-a56b-59683a83510b"
+      ],
+      "retrievedAt": "2026-09-11T06:00:57.397Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -145,9 +181,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 365.25,
-        "layoffDays": 880
+        "layoffDays": 881
       },
-      "updatedAt": "2026-09-10T06:00:54.426Z"
+      "updatedAt": "2026-09-11T06:00:57.397Z"
     }
   ],
   "rating": {
@@ -157,16 +193,14 @@
     "volatility": 0.05999815,
     "boutCount": 2,
     "asOfBoutRef": "ufc:bout:history-c0ddb8a7ae79b4641b9f",
-    "updatedAt": "2026-09-10T06:00:54.426Z"
+    "updatedAt": "2026-09-11T06:00:57.397Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "division",
-      "record",
-      "stance",
       "reachCm",
-      "team"
+      "team",
+      "record-history-incomplete"
     ],
     "lastReviewedAt": null
   },
@@ -1675,11 +1709,40 @@
         "source:wikipedia:42031348"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-11T06:00:57.397Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "division",
+        "record",
+        "stance"
+      ],
+      "sourceRefs": [
+        "source:cito-ufc:2026-09-11:fighter:388c56de-6a22-4cb2-a56b-59683a83510b"
+      ],
+      "note": "Updated fields returned by the Cito intake."
+    },
+    {
+      "at": "2026-09-11T06:00:57.397Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.375,
+  "completeness": 0.75,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-10T06:00:54.426Z"
+  "updatedAt": "2026-09-11T06:00:57.397Z"
 }
