@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Joshua_Van",
       "publisher": "Wikipedia",
       "title": "Joshua Van",
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q131411649",
         "source:wikipedia:78781693"
       ],
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "status": "verified",
       "corroborated": true
     },
@@ -214,9 +214,9 @@
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
         "fightsPerYear": 6.805761,
-        "layoffDays": 279
+        "layoffDays": 280
       },
-      "updatedAt": "2026-09-11T06:00:57.397Z"
+      "updatedAt": "2026-09-12T06:01:01.827Z"
     }
   ],
   "rating": {
@@ -226,7 +226,7 @@
     "volatility": 0.05999787,
     "boutCount": 4,
     "asOfBoutRef": "ufc:bout:history-7d2dc31751ccb0197a31",
-    "updatedAt": "2026-09-11T06:00:57.397Z"
+    "updatedAt": "2026-09-12T06:01:01.827Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1933,11 +1933,27 @@
         "source:wikipedia:54180928"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-12T06:01:01.827Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:78781693",
+        "source:wikipedia:54180928"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.5,
   "modelEligible": true,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-09-11T06:00:57.397Z"
+  "updatedAt": "2026-09-12T06:01:01.827Z"
 }

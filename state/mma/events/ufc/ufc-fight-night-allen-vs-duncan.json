@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "event-card/1",
+  "id": "ufc:event:ufc-fight-night-allen-vs-duncan",
+  "org": "ufc",
+  "name": "UFC Fight Night: Allen vs. Duncan",
+  "venue": "Meta Apex",
+  "startsAtLocal": "2026-10-10T00:00:00.000Z",
+  "timeZone": "UTC",
+  "startsAtUtc": "2026-10-10T00:00:00.000Z",
+  "sourceRefs": [
+    "source:wikipedia:2026-09-12:List of UFC events"
+  ],
+  "bouts": [
+    {
+      "id": "ufc:ufc-fight-night-allen-vs-duncan:bout:brendan-allen-vs-christian-leroy-duncan-1",
+      "red": "ufc:brendan-allen",
+      "blue": "ufc:christian-leroy-duncan",
+      "division": "middleweight",
+      "scheduledRounds": 5,
+      "status": "announced"
+    }
+  ],
+  "updatedAt": "2026-09-12T06:01:01.827Z"
+}

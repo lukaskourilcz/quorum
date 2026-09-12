@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "bout/1",
+  "id": "ufc:bout:ufc-ufc-fight-night-buckley-vs-malott-bout-louis-jourdain-vs-timothy-cuamba-10",
+  "org": "ufc",
+  "event": {
+    "ref": "ufc:event:ufc-fight-night-buckley-vs-malott",
+    "name": "UFC Fight Night: Buckley vs. Malott",
+    "startsAtUtc": "2026-10-17T00:00:00.000Z",
+    "venue": "Rogers Place"
+  },
+  "fighters": {
+    "red": "ufc:louis-jourdain",
+    "blue": "ufc:timothy-cuamba"
+  },
+  "division": "bantamweight",
+  "scheduledRounds": 3,
+  "status": "announced",
+  "statusHistory": [
+    {
+      "status": "announced",
+      "at": "2026-09-12T06:01:01.827Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-09-12:List of UFC events"
+      ],
+      "note": "Status imported from the Cito event listing."
+    }
+  ],
+  "discovery": {
+    "firstSeenAt": "2026-09-12T06:01:01.827Z",
+    "lastSeenAt": "2026-09-12T06:01:01.827Z",
+    "sourceRefs": [
+      "source:wikipedia:2026-09-12:List of UFC events"
+    ]
+  },
+  "sourceRefs": [
+    "source:wikipedia:2026-09-12:List of UFC events"
+  ],
+  "result": null,
+  "predictionRefs": [],
+  "changeLog": [
+    {
+      "at": "2026-09-12T06:01:01.827Z",
+      "kind": "created",
+      "fields": [
+        "event",
+        "fighters",
+        "status"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-09-12:List of UFC events"
+      ],
+      "note": "Discovered on the approved Cito free-tier intake."
+    }
+  ],
+  "updatedAt": "2026-09-12T06:01:01.827Z"
+}

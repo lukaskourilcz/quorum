@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-10-03T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-09-11:List of UFC events"
+    "source:wikipedia:2026-09-12:List of UFC events"
   ],
   "bouts": [
     {
@@ -108,5 +108,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-09-11T06:00:57.397Z"
+  "updatedAt": "2026-09-12T06:01:01.827Z"
 }

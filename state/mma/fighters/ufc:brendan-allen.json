@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Brendan_Allen",
       "publisher": "Wikipedia",
       "title": "Brendan Allen",
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,52 +68,75 @@
         "source:wikidata:Q96694248",
         "source:wikipedia:64400223"
       ],
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "status": "verified",
       "corroborated": true
     },
     "dateOfBirth": {
       "value": "1995-12-28",
       "sourceRefs": [
-        "source:wikidata:Q96694248"
+        "source:wikidata:Q96694248",
+        "source:wikipedia:64400223"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
+      "status": "verified",
+      "corroborated": true
     },
     "heightCm": {
       "value": 188,
       "sourceRefs": [
-        "source:wikidata:Q96694248"
+        "source:wikidata:Q96694248",
+        "source:wikipedia:64400223"
       ],
-      "retrievedAt": "2026-08-03T18:14:46.640Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
+      "status": "verified",
+      "corroborated": true
     },
     "division": {
       "value": "middleweight",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-14:fighter:0c660fe0-f87c-4efe-a45f-51ee2e9bef45"
+        "source:cito-ufc:2026-08-14:fighter:0c660fe0-f87c-4efe-a45f-51ee2e9bef45",
+        "source:wikipedia:64400223"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
+      "status": "verified",
+      "corroborated": true
     },
     "record": {
       "value": "27-7-0",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-14:fighter:0c660fe0-f87c-4efe-a45f-51ee2e9bef45"
+        "source:cito-ufc:2026-08-14:fighter:0c660fe0-f87c-4efe-a45f-51ee2e9bef45",
+        "source:wikipedia:64400223"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
-      "status": "provisional",
-      "corroborated": false
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
+      "status": "verified",
+      "corroborated": true
     },
     "stance": {
       "value": "orthodox",
       "sourceRefs": [
-        "source:cito-ufc:2026-08-14:fighter:0c660fe0-f87c-4efe-a45f-51ee2e9bef45"
+        "source:cito-ufc:2026-08-14:fighter:0c660fe0-f87c-4efe-a45f-51ee2e9bef45",
+        "source:wikipedia:64400223"
       ],
-      "retrievedAt": "2026-08-14T06:02:00.810Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
+      "status": "verified",
+      "corroborated": true
+    },
+    "reachCm": {
+      "value": 190.5,
+      "sourceRefs": [
+        "source:wikipedia:64400223"
+      ],
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
+      "status": "provisional",
+      "corroborated": false
+    },
+    "team": {
+      "value": "Clementi's Gladiator Academy (until 2017) Kill Cliff FC (2020–2025) VFS Academy (2025-present)",
+      "sourceRefs": [
+        "source:wikipedia:64400223"
+      ],
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "status": "provisional",
       "corroborated": false
     }
@@ -151,6 +174,21 @@
       "elapsedSeconds": 1500,
       "sourceRefs": [
         "source:wikipedia:64111674"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-659a6dbd3d06c66b8919",
+      "eventRef": "ufc:event:history-ufc-fight-night-felder-vs-dos-anjos",
+      "happenedAt": "2020-11-14T00:00:00.000Z",
+      "opponentRef": "ufc:sean-strickland",
+      "result": "loss",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 392,
+      "sourceRefs": [
+        "source:wikipedia:64400223"
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
@@ -208,11 +246,11 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:brendan-allen:history",
-      "bouts": 5,
+      "bouts": 6,
       "values": {
-        "bouts": 5,
+        "bouts": 6,
         "wins": 0,
-        "losses": 5,
+        "losses": 6,
         "draws": 0,
         "noContests": 0,
         "finishRate": null,
@@ -222,32 +260,30 @@
         "koTkoWinShare": null,
         "submissionWinShare": null,
         "decisionWinShare": null,
-        "averageElapsedSeconds": 1038.4,
+        "averageElapsedSeconds": 930.666667,
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
-        "fightsPerYear": 0.565391,
-        "layoffDays": 566
+        "fightsPerYear": 0.706739,
+        "layoffDays": 567
       },
-      "updatedAt": "2026-09-11T06:00:57.397Z"
+      "updatedAt": "2026-09-12T06:01:01.827Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1152.57543688,
-    "deviation": 211.99966416,
-    "volatility": 0.05999726,
-    "boutCount": 5,
+    "rating": 1116.05307144,
+    "deviation": 197.75948624,
+    "volatility": 0.0599964,
+    "boutCount": 6,
     "asOfBoutRef": "ufc:bout:history-f0bb243a3af386789155",
-    "updatedAt": "2026-09-11T06:00:57.397Z"
+    "updatedAt": "2026-09-12T06:01:01.827Z"
   },
   "quality": {
     "evidenceTier": "secondary",
     "gaps": [
-      "reachCm",
-      "team",
       "record-history-incomplete"
     ],
-    "lastReviewedAt": null
+    "lastReviewedAt": "2026-09-12T06:01:01.827Z"
   },
   "changeLog": [
     {
@@ -1912,11 +1948,47 @@
         "source:wikipedia:42944791"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-12T06:01:01.827Z",
+      "kind": "source-refresh",
+      "fields": [
+        "name",
+        "dateOfBirth",
+        "heightCm",
+        "reachCm",
+        "division",
+        "stance",
+        "team",
+        "record",
+        "history"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64400223"
+      ],
+      "note": "Reviewed the Wikipedia profile and found 34 historical fight rows."
+    },
+    {
+      "at": "2026-09-12T06:01:01.827Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64111674",
+        "source:wikipedia:64400223",
+        "source:wikipedia:42944791"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
-  "completeness": 0.75,
-  "corroboration": 0.125,
-  "modelEligible": false,
+  "completeness": 1,
+  "corroboration": 0.75,
+  "modelEligible": true,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-11T06:00:57.397Z"
+  "updatedAt": "2026-09-12T06:01:01.827Z"
 }

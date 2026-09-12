@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260912060101-mma-intake",
+  "phase": "mma-intake",
+  "outcome": "PLAN",
+  "summary": "Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability.",
+  "evidenceRefs": [
+    "event:oktagon:event:oktagon-93-rousal-vs-magard",
+    "source:wikipedia-schedule:2026-09-12"
+  ],
+  "generatedAt": "2026-09-12T06:03:01.827Z"
+}

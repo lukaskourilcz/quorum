@@ -56,7 +56,7 @@
       "url": "https://en.wikipedia.org/wiki/Yair_Rodr%C3%ADguez",
       "publisher": "Wikipedia",
       "title": "Yair Rodríguez",
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -69,7 +69,7 @@
         "source:wikipedia:40814604",
         "source:wikipedia:45514815"
       ],
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "status": "verified",
       "corroborated": true
     },
@@ -268,9 +268,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0.2,
         "fightsPerYear": 0.76544,
-        "layoffDays": 930
+        "layoffDays": 931
       },
-      "updatedAt": "2026-09-11T06:00:57.397Z"
+      "updatedAt": "2026-09-12T06:01:01.827Z"
     }
   ],
   "rating": {
@@ -280,7 +280,7 @@
     "volatility": 0.06000266,
     "boutCount": 7,
     "asOfBoutRef": "ufc:bout:history-58a318e18d2d1942068b",
-    "updatedAt": "2026-09-11T06:00:57.397Z"
+    "updatedAt": "2026-09-12T06:01:01.827Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2352,11 +2352,28 @@
         "source:wikipedia:54197580"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-12T06:01:01.827Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:40814604",
+        "source:wikipedia:45514815",
+        "source:wikipedia:54197580"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-11T06:00:57.397Z"
+  "updatedAt": "2026-09-12T06:01:01.827Z"
 }

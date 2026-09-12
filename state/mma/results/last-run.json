@@ -4,6 +4,11 @@
   "windowDays": 10,
   "cards": [
     {
+      "name": "Oktagon 93: Roušal vs. Mågård",
+      "startsAtUtc": "2026-09-12T00:00:00.000Z",
+      "results": 0
+    },
+    {
       "name": "UFC Fight Night: Hooker vs. Parnasse",
       "startsAtUtc": "2026-09-05T00:00:00.000Z",
       "results": 14
@@ -11,5 +16,5 @@
   ],
   "applied": [],
   "untracked": 14,
-  "generatedAt": "2026-09-11T06:00:57.397Z"
+  "generatedAt": "2026-09-12T06:01:01.827Z"
 }

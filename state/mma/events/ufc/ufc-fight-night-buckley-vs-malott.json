@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "event-card/1",
+  "id": "ufc:event:ufc-fight-night-buckley-vs-malott",
+  "org": "ufc",
+  "name": "UFC Fight Night: Buckley vs. Malott",
+  "venue": "Rogers Place",
+  "startsAtLocal": "2026-10-17T00:00:00.000Z",
+  "timeZone": "UTC",
+  "startsAtUtc": "2026-10-17T00:00:00.000Z",
+  "sourceRefs": [
+    "source:wikipedia:2026-09-12:List of UFC events"
+  ],
+  "bouts": [
+    {
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:joaquin-buckley-vs-mike-malott-1",
+      "red": "ufc:joaquin-buckley",
+      "blue": "ufc:mike-malott",
+      "division": "welterweight",
+      "scheduledRounds": 5,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:erin-blanchfield-vs-jasmine-jasudavicius-2",
+      "red": "ufc:erin-blanchfield",
+      "blue": "ufc:jasmine-jasudavicius",
+      "division": "womens-flyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:javad-mahjoub-vs-louie-sutherland-3",
+      "red": "ufc:javad-mahjoub",
+      "blue": "ufc:louie-sutherland",
+      "division": "heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:chad-anheliger-vs-steven-koslow-4",
+      "red": "ufc:chad-anheliger",
+      "blue": "ufc:steven-koslow",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:marc-andre-barriault-vs-kyle-daukaus-5",
+      "red": "ufc:marc-andre-barriault",
+      "blue": "ufc:kyle-daukaus",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:jamey-lyn-horth-vs-katlyn-cerminara-6",
+      "red": "ufc:jamey-lyn-horth",
+      "blue": "ufc:katlyn-cerminara",
+      "division": "womens-flyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:tanner-boser-vs-jhonata-diniz-7",
+      "red": "ufc:tanner-boser",
+      "blue": "ufc:jhonata-diniz",
+      "division": "heavyweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:mandel-nallo-vs-nate-landwehr-8",
+      "red": "ufc:mandel-nallo",
+      "blue": "ufc:nate-landwehr",
+      "division": "lightweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:melissa-croden-vs-chelsea-chandler-9",
+      "red": "ufc:melissa-croden",
+      "blue": "ufc:chelsea-chandler",
+      "division": "womens-bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:louis-jourdain-vs-timothy-cuamba-10",
+      "red": "ufc:louis-jourdain",
+      "blue": "ufc:timothy-cuamba",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:julien-leblanc-vs-gilbert-urbina-11",
+      "red": "ufc:julien-leblanc",
+      "blue": "ufc:gilbert-urbina",
+      "division": "middleweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    }
+  ],
+  "updatedAt": "2026-09-12T06:01:01.827Z"
+}

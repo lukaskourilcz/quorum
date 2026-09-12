@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Jamahal_Hill",
       "publisher": "Wikipedia",
       "title": "Jamahal Hill",
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q97171293",
         "source:wikipedia:65645016"
       ],
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "status": "verified",
       "corroborated": true
     },
@@ -181,19 +181,19 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 365.25,
-        "layoffDays": 881
+        "layoffDays": 882
       },
-      "updatedAt": "2026-09-11T06:00:57.397Z"
+      "updatedAt": "2026-09-12T06:01:01.827Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1375.15410365,
-    "deviation": 253.76794946,
-    "volatility": 0.05999815,
+    "rating": 1378.26291757,
+    "deviation": 255.41363454,
+    "volatility": 0.05999818,
     "boutCount": 2,
     "asOfBoutRef": "ufc:bout:history-c0ddb8a7ae79b4641b9f",
-    "updatedAt": "2026-09-11T06:00:57.397Z"
+    "updatedAt": "2026-09-12T06:01:01.827Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -1738,11 +1738,26 @@
         "source:wikipedia:42031348"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-12T06:01:01.827Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42031348"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.75,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-11T06:00:57.397Z"
+  "updatedAt": "2026-09-12T06:01:01.827Z"
 }

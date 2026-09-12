@@ -1,28 +1,7 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-09-11T06:00:57.397Z",
+  "generatedAt": "2026-09-12T06:01:01.827Z",
   "items": [
-    {
-      "fighterRef": "oktagon:niamh-kinehan",
-      "priority": 1030,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "division",
-        "record",
-        "reachCm"
-      ],
-      "reviewedAt": "2026-08-12T06:01:46.400Z"
-    },
-    {
-      "fighterRef": "ufc:brandon-moreno",
-      "priority": 1020,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "reachCm",
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-08-12T06:01:46.400Z"
-    },
     {
       "fighterRef": "ufc:arman-tsarukyan",
       "priority": 1020,
@@ -61,7 +40,7 @@
         "reachCm",
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-09-11T06:00:57.397Z",
+      "reviewedAt": "2026-09-12T06:01:01.827Z",
       "uncorroborated": [
         "division",
         "record"
@@ -75,7 +54,7 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-11T06:00:57.397Z",
+      "reviewedAt": "2026-09-12T06:01:01.827Z",
       "uncorroborated": [
         "division"
       ]
@@ -88,21 +67,7 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-11T06:00:57.397Z",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:yair-rodriguez",
-      "priority": 1020,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "stance",
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-09-11T06:00:57.397Z",
+      "reviewedAt": "2026-09-12T06:01:01.827Z",
       "uncorroborated": [
         "division",
         "record"
@@ -124,23 +89,11 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-09-11T06:00:57.397Z",
+      "reviewedAt": "2026-09-12T06:01:01.827Z",
       "uncorroborated": [
         "name",
         "division",
         "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:alexa-grasso",
-      "priority": 1010,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "record-history-mismatch"
-      ],
-      "reviewedAt": "2026-09-11T06:00:57.397Z",
-      "uncorroborated": [
-        "division"
       ]
     },
     {
@@ -150,10 +103,19 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-11T06:00:57.397Z",
+      "reviewedAt": "2026-09-12T06:01:01.827Z",
       "uncorroborated": [
         "division"
       ]
+    },
+    {
+      "fighterRef": "ufc:brendan-allen",
+      "priority": 1010,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-09-12T06:01:01.827Z"
     },
     {
       "fighterRef": "ufc:brian-ortega",
@@ -162,7 +124,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-11T06:00:57.397Z",
+      "reviewedAt": "2026-09-12T06:01:01.827Z",
       "uncorroborated": [
         "division",
         "record"
@@ -173,7 +135,7 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-09-11T06:00:57.397Z",
+      "reviewedAt": "2026-09-12T06:01:01.827Z",
       "uncorroborated": [
         "division"
       ]
@@ -183,10 +145,21 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-09-11T06:00:57.397Z",
+      "reviewedAt": "2026-09-12T06:01:01.827Z",
       "uncorroborated": [
         "division"
       ]
+    },
+    {
+      "fighterRef": "oktagon:niamh-kinehan",
+      "priority": 630,
+      "reason": "missing-history",
+      "gaps": [
+        "division",
+        "record",
+        "reachCm"
+      ],
+      "reviewedAt": "2026-09-12T06:01:01.827Z"
     },
     {
       "fighterRef": "ufc:aaron-pico",
@@ -206,26 +179,6 @@
       "reviewedAt": "2026-09-09T06:01:07.556Z"
     },
     {
-      "fighterRef": "ufc:anshul-jubli",
-      "priority": 600,
-      "reason": "missing-history",
-      "gaps": [],
-      "reviewedAt": "2026-09-10T06:00:54.426Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:brando-pericic",
-      "priority": 600,
-      "reason": "missing-history",
-      "gaps": [],
-      "reviewedAt": "2026-09-10T06:00:54.426Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
       "fighterRef": "ufc:andre-petroski",
       "priority": 600,
       "reason": "missing-history",
@@ -241,6 +194,26 @@
       "reason": "missing-history",
       "gaps": [],
       "reviewedAt": "2026-09-11T06:00:57.397Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:anshul-jubli",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-09-12T06:01:01.827Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:brando-pericic",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-09-12T06:01:01.827Z",
       "uncorroborated": [
         "division"
       ]
@@ -319,21 +292,6 @@
         "record-history-mismatch"
       ],
       "reviewedAt": "2026-08-08T06:01:41.482Z",
-      "uncorroborated": [
-        "division",
-        "record"
-      ]
-    },
-    {
-      "fighterRef": "ufc:brendan-allen",
-      "priority": 480,
-      "reason": "uncorroborated",
-      "gaps": [
-        "reachCm",
-        "team",
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "",
       "uncorroborated": [
         "division",
         "record"
@@ -587,6 +545,20 @@
         "record-history-incomplete"
       ],
       "reviewedAt": "2026-08-06T06:00:43.585Z",
+      "uncorroborated": [
+        "division",
+        "record"
+      ]
+    },
+    {
+      "fighterRef": "ufc:yair-rodriguez",
+      "priority": 470,
+      "reason": "uncorroborated",
+      "gaps": [
+        "stance",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-09-11T06:00:57.397Z",
       "uncorroborated": [
         "division",
         "record"
@@ -939,6 +911,18 @@
       ]
     },
     {
+      "fighterRef": "ufc:alexa-grasso",
+      "priority": 460,
+      "reason": "uncorroborated",
+      "gaps": [
+        "record-history-mismatch"
+      ],
+      "reviewedAt": "2026-09-11T06:00:57.397Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
       "fighterRef": "oktagon:viktor-pesta",
       "priority": 450,
       "reason": "uncorroborated",
@@ -1109,6 +1093,16 @@
         "record-history-incomplete"
       ],
       "reviewedAt": "2026-08-03T18:02:51.598Z"
+    },
+    {
+      "fighterRef": "ufc:brandon-moreno",
+      "priority": 320,
+      "reason": "missing-profile",
+      "gaps": [
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-08-12T06:01:46.400Z"
     },
     {
       "fighterRef": "ufc:islam-makhachev",

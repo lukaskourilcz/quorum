@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Kamaru_Usman",
       "publisher": "Wikipedia",
       "title": "Kamaru Usman",
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q21290332",
         "source:wikipedia:49620123"
       ],
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "status": "verified",
       "corroborated": true
     },
@@ -342,19 +342,19 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 1.039769,
-        "layoffDays": 55
+        "layoffDays": 56
       },
-      "updatedAt": "2026-09-11T06:00:57.397Z"
+      "updatedAt": "2026-09-12T06:01:01.827Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1534.47746508,
-    "deviation": 143.99725363,
-    "volatility": 0.05999777,
+    "rating": 1534.98109962,
+    "deviation": 144.13717059,
+    "volatility": 0.05999779,
     "boutCount": 12,
     "asOfBoutRef": "ufc:bout:history-de7ea506536dccdb23ea",
-    "updatedAt": "2026-09-11T06:00:57.397Z"
+    "updatedAt": "2026-09-12T06:01:01.827Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2230,11 +2230,28 @@
         "source:wikipedia:62595898"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-12T06:01:01.827Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49620123",
+        "source:wikipedia:46384799",
+        "source:wikipedia:62595898"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-11T06:00:57.397Z"
+  "updatedAt": "2026-09-12T06:01:01.827Z"
 }

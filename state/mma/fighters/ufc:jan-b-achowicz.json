@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Jan_B%C5%82achowicz",
       "publisher": "Wikipedia",
       "title": "Jan Błachowicz",
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q11717161",
         "source:wikipedia:28667675"
       ],
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "status": "verified",
       "corroborated": true
     },
@@ -235,19 +235,19 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 1.963669,
-        "layoffDays": 279
+        "layoffDays": 280
       },
-      "updatedAt": "2026-09-11T06:00:57.397Z"
+      "updatedAt": "2026-09-12T06:01:01.827Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1436.32116285,
-    "deviation": 172.31570988,
-    "volatility": 0.05999623,
+    "rating": 1441.99501708,
+    "deviation": 171.87629676,
+    "volatility": 0.05999605,
     "boutCount": 6,
     "asOfBoutRef": "ufc:bout:history-ad11fa27831b22661f51",
-    "updatedAt": "2026-09-11T06:00:57.397Z"
+    "updatedAt": "2026-09-12T06:01:01.827Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2013,11 +2013,27 @@
         "source:wikipedia:76773370"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-12T06:01:01.827Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:56012518",
+        "source:wikipedia:42031348",
+        "source:wikipedia:66657574",
+        "source:wikipedia:76773370"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.375,
   "corroboration": 0.125,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-11T06:00:57.397Z"
+  "updatedAt": "2026-09-12T06:01:01.827Z"
 }

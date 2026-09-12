@@ -46,7 +46,7 @@
       "url": "https://en.wikipedia.org/wiki/Sean_Strickland",
       "publisher": "Wikipedia",
       "title": "Sean Strickland",
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -59,7 +59,7 @@
         "source:wikidata:Q17180973",
         "source:wikipedia:42944791"
       ],
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "status": "verified",
       "corroborated": true
     },
@@ -163,6 +163,21 @@
       "elapsedSeconds": 900,
       "sourceRefs": [
         "source:wikipedia:49620123"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:history-659a6dbd3d06c66b8919",
+      "eventRef": "ufc:event:history-ufc-fight-night-felder-vs-dos-anjos",
+      "happenedAt": "2020-11-14T00:00:00.000Z",
+      "opponentRef": "ufc:brendan-allen",
+      "result": "win",
+      "method": "TKO (punches)",
+      "round": 2,
+      "elapsedSeconds": 392,
+      "sourceRefs": [
+        "source:wikipedia:64400223"
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
@@ -355,37 +370,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:sean-strickland:history",
-      "bouts": 14,
+      "bouts": 15,
       "values": {
-        "bouts": 14,
-        "wins": 6,
+        "bouts": 15,
+        "wins": 7,
         "losses": 8,
         "draws": 0,
         "noContests": 0,
-        "finishRate": 0.833333,
-        "koTkoWins": 5,
+        "finishRate": 0.857143,
+        "koTkoWins": 6,
         "submissionWins": 0,
         "decisionWins": 1,
-        "koTkoWinShare": 0.833333,
+        "koTkoWinShare": 0.857143,
         "submissionWinShare": 0,
-        "decisionWinShare": 0.166667,
-        "averageElapsedSeconds": 900.714286,
+        "decisionWinShare": 0.142857,
+        "averageElapsedSeconds": 866.8,
         "recentThreeWinRate": 0.666667,
         "recentFiveWinRate": 0.4,
-        "fightsPerYear": 1.465027,
-        "layoffDays": 202
+        "fightsPerYear": 1.577721,
+        "layoffDays": 203
       },
-      "updatedAt": "2026-09-11T06:00:57.397Z"
+      "updatedAt": "2026-09-12T06:01:01.827Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1610.78485337,
-    "deviation": 131.43230621,
-    "volatility": 0.05999915,
-    "boutCount": 14,
+    "rating": 1617.43143289,
+    "deviation": 126.17649692,
+    "volatility": 0.05999709,
+    "boutCount": 15,
     "asOfBoutRef": "ufc:bout:history-d8dd91d4fd4dc8a7d2c0",
-    "updatedAt": "2026-09-11T06:00:57.397Z"
+    "updatedAt": "2026-09-12T06:01:01.827Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2368,11 +2383,32 @@
         "source:wikipedia:64111674"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-12T06:01:01.827Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:49620123",
+        "source:wikipedia:64400223",
+        "source:wikipedia:42944791",
+        "source:wikipedia:42031348",
+        "source:wikipedia:80563842",
+        "source:wikipedia:62595898",
+        "source:wikipedia:64111674"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.5,
   "modelEligible": true,
   "modelVersion": "mma-1.0.0+f2e370f0",
-  "updatedAt": "2026-09-11T06:00:57.397Z"
+  "updatedAt": "2026-09-12T06:01:01.827Z"
 }

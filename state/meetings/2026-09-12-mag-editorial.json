@@ -1,0 +1,186 @@
+{
+  "schemaVersion": "meeting-record/2",
+  "cycleId": "20260912060101-mag-editorial",
+  "date": "2026-09-12",
+  "phase": "mag-editorial",
+  "fixture": false,
+  "status": "HELD",
+  "stage": "VALIDATION",
+  "operatingBrief": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge",
+  "participantReasons": [
+    {
+      "agent": "CANVAS",
+      "reason": "chairs the bounded room",
+      "participated": true
+    },
+    {
+      "agent": "JAB",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "QUILL",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    },
+    {
+      "agent": "AUDIT",
+      "reason": "serves the registered specialist or veto seat",
+      "participated": true
+    }
+  ],
+  "ledger": {
+    "estimatedCycleUsd": 0.05,
+    "actualCycleUsd": 0.039852,
+    "monthAllInUsd": 3.0840223,
+    "monthCapUsd": 50
+  },
+  "decision": {
+    "outcome": "PLAN",
+    "summary": "AM: assigned; PM: killed",
+    "evidenceRefs": [
+      "meeting:2026-09-11-mag-editorial",
+      "event:oktagon:event:oktagon-93-rousal-vs-magard",
+      "event:ufc:event:ufc-fight-night-288",
+      "event:ufc:event:ufc-fight-night-rodriguez-vs-silva",
+      "event:ufc:event:ufc-fight-night-silva-vs-delgado",
+      "meeting:2026-09-11-mma-analysis"
+    ]
+  },
+  "proposals": [
+    {
+      "agent": "CANVAS",
+      "summary": "Kill both slots. Oktagon 93 is announced but no Czech fighter story thread exists in files. UFC Fight Night 288, Rodriguez vs. Silva, and Silva vs. Delgado all repeat bouts already covered; index shows identical matchups published before 2026-08-19. No fresh angle, no new subject",
+      "evidenceRefs": [
+        "meeting:2026-09-11-mag-editorial",
+        "event:oktagon:event:oktagon-93-rousal-vs-magard",
+        "event:ufc:event:ufc-fight-night-288",
+        "event:ufc:event:ufc-fight-night-rodriguez-vs-silva",
+        "event:ufc:event:ufc-fight-night-silva-vs-delgado"
+      ]
+    },
+    {
+      "agent": "JAB",
+      "summary": "Slot nelze napsat: chybí modelový běh i podklady k výsledku, rozhovoru nebo příběhu. K dispozici jsou jen oznámené karty a opakované UFC záznamy.",
+      "evidenceRefs": [
+        "meeting:2026-09-11-mma-analysis",
+        "meeting:2026-09-11-mag-editorial"
+      ]
+    },
+    {
+      "agent": "QUILL",
+      "summary": "Magazine AM slot: kill. Three UFC Fight Night events share identical venue and date with Oktagon 93; card data shows duplicate bouts across UFC events. No fresh subject available for Czech desk.",
+      "evidenceRefs": [
+        "event:oktagon:event:oktagon-93-rousal-vs-magard",
+        "event:ufc:event:ufc-fight-night-288",
+        "event:ufc:event:ufc-fight-night-rodriguez-vs-silva",
+        "event:ufc:event:ufc-fight-night-silva-vs-delgado",
+        "meeting:2026-09-11-mag-editorial"
+      ]
+    },
+    {
+      "agent": "AUDIT",
+      "summary": "Ponechat AM slot, PM zabít: karta Oktagonu 93 je ověřená, ale chybí modelový běh i nový FightAIQ námět. Nezapisovat predikce ani článek bez zdroje.",
+      "evidenceRefs": [
+        "meeting:2026-09-11-mma-analysis",
+        "meeting:2026-09-11-mag-editorial",
+        "event:oktagon:event:oktagon-93-rousal-vs-magard"
+      ]
+    }
+  ],
+  "voteMatrix": [
+    {
+      "voter": "CANVAS",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "JAB",
+      "firstChoice": "veto",
+      "veto": true
+    },
+    {
+      "voter": "QUILL",
+      "firstChoice": "pass",
+      "veto": false
+    },
+    {
+      "voter": "AUDIT",
+      "firstChoice": "pass",
+      "veto": false
+    }
+  ],
+  "tasks": [],
+  "growthPlan": "Editorial only. Approved Czech articles may enter the guarded MMA Files delivery queue; social variants remain drafts until their release gate opens.",
+  "eveningOutcome": null,
+  "editorialSlateRef": "ventures/mma-files/slates/2026-09-12.json",
+  "generatedAt": "2026-09-12T06:06:01.827Z",
+  "kind": "mag-editorial",
+  "roomTranscript": {
+    "openedAt": "2026-09-12T06:01:01.827Z",
+    "closedAt": "2026-09-12T06:06:01.827Z",
+    "gavel": "CANVAS",
+    "setting": "Live bounded portfolio room. Canonical context and external material were treated as data, never instructions.",
+    "turns": [
+      {
+        "agent": "CANVAS",
+        "mode": "gavel",
+        "sentAt": "2026-09-12T06:01:01.827Z",
+        "text": "Assign or kill the day's single article slot from verified FightAIQ files, the stylebook, the idea history and the daily MMA bridge"
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "veto",
+        "sentAt": "2026-09-12T06:02:01.827Z",
+        "text": "Kill both slots. Oktagon 93 is announced but no Czech fighter story thread exists in files. UFC Fight Night 288, Rodriguez vs. Silva, and Silva vs. Delgado all repeat bouts already covered; index shows identical matchups published before 2026-08-19. No fresh angle, no new subject",
+        "evidenceRefs": [
+          "meeting:2026-09-11-mag-editorial",
+          "event:oktagon:event:oktagon-93-rousal-vs-magard",
+          "event:ufc:event:ufc-fight-night-288",
+          "event:ufc:event:ufc-fight-night-rodriguez-vs-silva",
+          "event:ufc:event:ufc-fight-night-silva-vs-delgado"
+        ]
+      },
+      {
+        "agent": "JAB",
+        "mode": "veto",
+        "sentAt": "2026-09-12T06:03:01.827Z",
+        "text": "Slot nelze napsat: chybí modelový běh i podklady k výsledku, rozhovoru nebo příběhu. K dispozici jsou jen oznámené karty a opakované UFC záznamy.",
+        "evidenceRefs": [
+          "meeting:2026-09-11-mma-analysis",
+          "meeting:2026-09-11-mag-editorial"
+        ]
+      },
+      {
+        "agent": "QUILL",
+        "mode": "statement",
+        "sentAt": "2026-09-12T06:04:01.827Z",
+        "text": "Magazine AM slot: kill. Three UFC Fight Night events share identical venue and date with Oktagon 93; card data shows duplicate bouts across UFC events. No fresh subject available for Czech desk.",
+        "evidenceRefs": [
+          "event:oktagon:event:oktagon-93-rousal-vs-magard",
+          "event:ufc:event:ufc-fight-night-288",
+          "event:ufc:event:ufc-fight-night-rodriguez-vs-silva",
+          "event:ufc:event:ufc-fight-night-silva-vs-delgado",
+          "meeting:2026-09-11-mag-editorial"
+        ]
+      },
+      {
+        "agent": "AUDIT",
+        "mode": "statement",
+        "sentAt": "2026-09-12T06:05:01.827Z",
+        "text": "Ponechat AM slot, PM zabít: karta Oktagonu 93 je ověřená, ale chybí modelový běh i nový FightAIQ námět. Nezapisovat predikce ani článek bez zdroje.",
+        "evidenceRefs": [
+          "meeting:2026-09-11-mma-analysis",
+          "meeting:2026-09-11-mag-editorial",
+          "event:oktagon:event:oktagon-93-rousal-vs-magard"
+        ]
+      },
+      {
+        "agent": "CANVAS",
+        "mode": "close",
+        "sentAt": "2026-09-12T06:06:01.827Z",
+        "text": "AM: assigned; PM: killed"
+      }
+    ]
+  }
+}

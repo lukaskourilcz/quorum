@@ -47,7 +47,7 @@
       "url": "https://en.wikipedia.org/wiki/Abusupiyan_Magomedov",
       "publisher": "Wikipedia",
       "title": "Abusupiyan Magomedov",
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -58,7 +58,7 @@
       "sourceRefs": [
         "source:wikipedia:80563842"
       ],
-      "retrievedAt": "2026-09-11T06:00:57.397Z",
+      "retrievedAt": "2026-09-12T06:01:01.827Z",
       "status": "provisional",
       "corroborated": false
     },
@@ -197,19 +197,19 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 365.25,
-        "layoffDays": 1168
+        "layoffDays": 1169
       },
-      "updatedAt": "2026-09-11T06:00:57.397Z"
+      "updatedAt": "2026-09-12T06:01:01.827Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1165.81882272,
-    "deviation": 233.10550679,
-    "volatility": 0.05999942,
+    "rating": 1196.72591133,
+    "deviation": 229.03174137,
+    "volatility": 0.05999894,
     "boutCount": 2,
     "asOfBoutRef": "ufc:bout:history-84e86d43bcced5fc714e",
-    "updatedAt": "2026-09-11T06:00:57.397Z"
+    "updatedAt": "2026-09-12T06:01:01.827Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2023,11 +2023,27 @@
         "source:wikipedia:80563842"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-12T06:01:01.827Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:42944791",
+        "source:wikipedia:80563842"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-11T06:00:57.397Z"
+  "updatedAt": "2026-09-12T06:01:01.827Z"
 }
