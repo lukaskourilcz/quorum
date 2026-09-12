@@ -3,8 +3,8 @@
   "nodeId": "webdev-signal",
   "displayName": "WebDev Signal",
   "policyVersion": "1.0.0",
-  "generatedAt": "2026-09-09T04:00:49.998Z",
-  "observedAt": "2026-09-09T04:00:49.998Z",
+  "generatedAt": "2026-09-12T04:00:54.961Z",
+  "observedAt": "2026-09-12T04:00:54.961Z",
   "lifecycleStage": "planned",
   "state": "held",
   "reason": "The node is not yet scheduled for live operation.",
@@ -45,5 +45,5 @@
   "unavailableReasons": [],
   "ownerAttentionRefs": [],
   "latestRunReceiptRefs": [],
-  "snapshotHash": "26e0f8c7d5ce6eed8a84f063229a80148d638570cb370b6610084bf3eed439ab"
+  "snapshotHash": "ebc517502b7217a39e1848465817373842f7c97edc6f97edbda2d820a85cfee7"
 }

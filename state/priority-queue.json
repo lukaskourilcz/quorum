@@ -16,7 +16,7 @@
       "created": "2026-09-09T04:00:49.998Z",
       "expires": "2026-09-16T04:00:49.998Z",
       "status": "why-not",
-      "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; a room was requested. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
+      "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; no seat requested a room. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
       "consumed_by": null,
       "origin": "seeded",
       "proposal": null
@@ -35,11 +35,11 @@
       "created": "2026-09-09T04:00:49.998Z",
       "expires": "2026-09-16T04:00:49.998Z",
       "status": "why-not",
-      "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; a room was requested. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
+      "why_not_reason": "2 of 4 board members gave an opinion; 0 said yes; the member who checks the records did not agree; no seat requested a room. A meeting opens only when three of the four agree and the member who checks the records is one of them.",
       "consumed_by": null,
       "origin": "seeded",
       "proposal": null
     }
   ],
-  "updatedAt": "2026-09-09T04:00:49.998Z"
+  "updatedAt": "2026-09-12T04:00:54.961Z"
 }
