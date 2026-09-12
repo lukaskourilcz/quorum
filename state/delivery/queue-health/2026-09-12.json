@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-09-12T06:07:39.520Z",
+  "checkedAt": "2026-09-12T07:05:39.925Z",
   "date": "2026-09-12",
   "ventures": [
     {
@@ -31,11 +31,6 @@
       "venture": "caught-up",
       "waiting": [
         {
-          "label": "2026-09-10 edition",
-          "packageHash": "a5ac50cac988bf0e27eeaf199473c5c777028a8a7efeffbed6aac991bae84872",
-          "date": "2026-09-10"
-        },
-        {
           "label": "2026-09-11 edition",
           "packageHash": "0f317e6be0b037ca41b8f39c9b569cbb228f088388b084f97e803134cd87b67b",
           "date": "2026-09-11"
@@ -49,6 +44,11 @@
           "label": "2026-09-12 edition",
           "packageHash": "832df46f370b8dbe20f6999f2f763d18d8018d9625368e6dd8f2e67d6394d2ef",
           "date": "2026-09-12"
+        },
+        {
+          "label": "2026-09-12 no_edition",
+          "packageHash": "8e7f0cabb8ba55e35b6fb42a7987f3a184dfed5f8cecba84b3a3ca081a253694",
+          "date": "2026-09-12"
         }
       ],
       "parked": [
@@ -58,10 +58,17 @@
           "date": "2026-08-17",
           "code": "post_deploy_verification",
           "disposition": "owner"
+        },
+        {
+          "label": "2026-09-10 edition",
+          "packageHash": "a5ac50cac988bf0e27eeaf199473c5c777028a8a7efeffbed6aac991bae84872",
+          "date": "2026-09-10",
+          "code": "hash_conflict",
+          "disposition": "owner"
         }
       ],
-      "oldestWaitingDate": "2026-09-10",
-      "stalledDays": 2,
+      "oldestWaitingDate": "2026-09-11",
+      "stalledDays": 1,
       "stalled": true,
       "neverDrains": [
         {
@@ -70,6 +77,13 @@
           "date": "2026-08-17",
           "code": "post_deploy_verification",
           "disposition": "owner"
+        },
+        {
+          "label": "2026-09-10 edition",
+          "packageHash": "a5ac50cac988bf0e27eeaf199473c5c777028a8a7efeffbed6aac991bae84872",
+          "date": "2026-09-10",
+          "code": "hash_conflict",
+          "disposition": "owner"
         }
       ]
     }
@@ -77,8 +91,8 @@
   "deploys": [
     {
       "venture": "caught-up",
-      "url": "https://caughtup-ai.vercel.app/data/board/2026-09-10.json",
-      "expected": "2026-09-10",
+      "url": "https://caughtup-ai.vercel.app/data/board/2026-09-09.json",
+      "expected": "2026-09-09",
       "status": 200,
       "live": true
     },
