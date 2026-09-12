@@ -4,7 +4,7 @@
   "date": "2026-09-10",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "HELD",
+  "status": "NEEDS_RECONCILIATION",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -262,7 +262,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "Tři příběhy, které dnes souběžně uzavírají roky nejistoty – ceny telefonů, osud Googlu v reklamním řízení a vedení největší CMS firmy – se dotýkají stovek milionů uživatelů a miliardových investičních rozhodnutí najednou.",
+    "summary": "A different edition already holds this date in the magazine, so this one was held back. The owner has the technical report.",
     "evidenceRefs": [
       "source:social-media-today",
       "source:stackexchange-ml",

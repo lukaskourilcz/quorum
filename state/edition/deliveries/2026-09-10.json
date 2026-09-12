@@ -1,19 +1,13 @@
 {
   "schemaVersion": 1,
   "date": "2026-09-10",
-  "packageHash": "81fef2247f7ad69fe3e0998486241f2a264cf894fdea515a94967ea0b9b6c859",
-  "status": "delivered",
+  "packageHash": "a5ac50cac988bf0e27eeaf199473c5c777028a8a7efeffbed6aac991bae84872",
+  "status": "needs_reconciliation",
   "editionStatus": "edition",
   "targetRepository": "lukaskourilcz/aifirst",
-  "targetCommit": "6a6ec4e2c2226309a8ee5d807a37ee2d22591e1f",
-  "deliveredAt": "2026-09-11T07:11:05.907Z",
-  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-10-weworm-automattic-mullenweg-ai-bezpecnost",
-  "tags": [
-    "kybernetska-bezpecnost",
-    "umela-inteligence",
-    "wordpress",
-    "regulace-ai",
-    "smartphony",
-    "wechat"
-  ]
+  "code": "hash_conflict",
+  "detail": "> aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-09-10-a5ac50cac988bf0e27eeaf199473c5c777028a8a7efeffbed6aac991bae84872.json /home/runner/work/_temp/aifirst-delivery-1 [delivery:hash_conflict] public/data/board/2026-09-10.json is missing or differs from the immutable delivered bytes ELIFECYCLE Command failed with exit code 1.",
+  "deliveryAttempts": 1,
+  "recordedAt": "2026-09-12T07:05:37.169Z",
+  "tags": []
 }

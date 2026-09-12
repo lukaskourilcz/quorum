@@ -644,3 +644,7 @@ with its full scope, because the scope text is the approval. -->
   neverDrains need new bytes rather than another run; their own receipts say what the magazine
   refused and why. Anything parked and not listed there is already scheduled to end.
   [imp:5] [owner:me] [time:30m] [kind:deploy]
+
+- [ ] **CAUGHT-UP-DELIVERY-2026-09-10** — hash_conflict: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-09-10-a5ac50cac988bf0e27eeaf199473c5c777028a8a7efeffbed6aac991bae84872.json /home/runner/work/_temp/aifirst-delivery-1 [delive.
+  RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
+  [imp:5] [owner:me] [time:20m] [kind:deploy]
