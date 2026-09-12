@@ -16448,6 +16448,57 @@
       "toolUses": 1,
       "usd": 0.1245975,
       "kind": "text"
+    },
+    {
+      "ts": "2026-09-12T03:03:11.634Z",
+      "cycleId": "20260912030033-cu-edition",
+      "requestHash": "e11b76972ff4a450049c90b7238a2c478524da6cbf8fea4f0131e2b7032b9ad7",
+      "phase": "image_gate",
+      "ventureId": "caught-up",
+      "agent": "IMAGE_GATE",
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "serviceTier": "default",
+      "tokensIn": 4010,
+      "cachedTokensIn": 0,
+      "tokensOut": 1181,
+      "toolUses": 1,
+      "usd": 0.009915,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-09-12T03:00:33.705Z",
+      "cycleId": "20260912030033-cu-edition",
+      "requestHash": "e67799b86f35bf2ec26cd514bd8ea7b475e92d4d3147a57c76802133cd8087e2",
+      "phase": "cu-edition",
+      "ventureId": "caught-up",
+      "agent": "HERALD",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "serviceTier": "default",
+      "tokensIn": 11308,
+      "cachedTokensIn": 0,
+      "tokensOut": 973,
+      "toolUses": 1,
+      "usd": 0.048519,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-09-12T03:00:33.705Z",
+      "cycleId": "20260912030033-cu-edition",
+      "requestHash": "ab222b84c7df3fedba37db6cbe8c940a695d09a407ab6bee0a6705b4fd537af5",
+      "phase": "cu-edition",
+      "ventureId": "caught-up",
+      "agent": "STET",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "serviceTier": "default",
+      "tokensIn": 14352,
+      "cachedTokensIn": 0,
+      "tokensOut": 4890,
+      "toolUses": 1,
+      "usd": 0.1255785,
+      "kind": "text"
     }
   ]
 }

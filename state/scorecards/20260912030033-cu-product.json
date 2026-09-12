@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260912030033-cu-product",
+  "phase": "cu-product",
+  "estimatedWorstCaseUsd": 0.03,
+  "actualUsd": 0,
+  "participants": [
+    "HERALD",
+    "SPARK",
+    "VAULT",
+    "AUDIT"
+  ],
+  "ideaId": null,
+  "vaultScreening": "missing_morning_handoff",
+  "growthIdeaNovelty": null,
+  "yesterdayOutcome": "Yesterday's delivery outcome is unavailable in committed Quorum state; no sentinel flag is recorded here.",
+  "generatedAt": "2026-09-12T03:00:37.705Z"
+}

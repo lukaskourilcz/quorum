@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-09-12-ai-agenti-rubygems-utok-dohled",
+  "date": "2026-09-12",
+  "rung": "search",
+  "selected": "pexels:9242928",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 0,
+      "selected": null,
+      "reason": "no-thumbnail-could-be-read",
+      "candidates": [],
+      "skipped": [
+        {
+          "candidateId": "scene:20348454",
+          "reason": "thumbnail-host-not-allowed"
+        }
+      ],
+      "costUsd": 0
+    },
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:9242928",
+      "reason": "Excellent: hands performing precise component work on a circuit board; genuine, high-quality photography that illustrates 'hardware autonomy' without stock imagery or dramatization.",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Genuine hands-on work with circuit board hardware; relevant to tech autonomy topic but feels like documentation of a specific moment rather than illustration of the broader theme.",
+          "sceneCs": "ruce manipulující s deskami plošných spojů"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "The blue holographic circuit-board-brain is a textbook forbidden cliché—exactly the mid-2010s AI stock imagery that codes 'corporate AI department PowerPoint' rather than serious journalism.",
+          "sceneCs": "abstraktní mozek z okruhů"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Museum or exhibition display of circuit boards and tech history; thematically loose and doesn't convey the urgency or autonomy angle of the article.",
+          "sceneCs": "muzejní vitrína s elektrickými součástkami"
+        },
+        {
+          "candidateId": "pixabay:2528363",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "low-quality"
+          ],
+          "reason": "Appears heavily manipulated or AI-generated with glowing faces over circuitry; clearly violates the dated-aesthetic rule and looks unsafe for reader trust.",
+          "sceneCs": "zmodifikované tváře nad okruhy"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Neon-pink-and-blue hyperrealistic chip renders are quintessential mid-2020s AI-art aesthetic; screams artificial generation rather than photography.",
+          "sceneCs": "vykreslený procesor v neonových barvách"
+        },
+        {
+          "candidateId": "pixabay:3963944",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Abstract glowing graphs and wireframe figures are generic corporate AI imagery that doesn't illustrate any real story; likely AI-generated or heavy CGI.",
+          "sceneCs": "abstraktní holografická vizualizace"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 4,
+          "vetoes": [],
+          "reason": "Real close-up photography of hardware with heat sinks and visible components; solid technical imagery but somewhat generic and doesn't convey the 'unmonitored agents' concept.",
+          "sceneCs": "deska plošného spoje se žlutými chladiči"
+        },
+        {
+          "candidateId": "pexels:9242892",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Authentic hands working on circuit board with soldering iron or repair tool; conveys human engagement with hardware and carries slight hands-on autonomy implication without being clichéd.",
+          "sceneCs": "ruce pracující na zelené desce plošného spoje"
+        },
+        {
+          "candidateId": "pexels:9242891",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Clear, well-lit shot of hands working with electronic connectors and wiring on actual hardware; genuine craft work that illustrates the technical substrate of AI systems without cliché.",
+          "sceneCs": "ruce zapojující kabely do desky plošného spoje"
+        },
+        {
+          "candidateId": "pexels:9242928",
+          "provider": "pexels",
+          "fit": 9,
+          "vetoes": [],
+          "reason": "Excellent: hands performing precise component work on a circuit board; genuine, high-quality photography that illustrates 'hardware autonomy' without stock imagery or dramatization.",
+          "sceneCs": "ruce montující součástky na elektronickou desku"
+        },
+        {
+          "candidateId": "pexels:9242275",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Clear face visible; person is identifiable and dressed stylistically; violates core rule regardless of how well the circuit board is shown.",
+          "sceneCs": "osoba držící desku plošného spoje"
+        },
+        {
+          "candidateId": "pexels:9242886",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Hands with wrench working on green circuit board; strong technical authenticity and slightly edgy 'disassembly' framing that hints at autonomy without overreaching.",
+          "sceneCs": "ruce s nástrojem rozebírající elektronickou desku"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.009915
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-09-12T03:00:33.705Z"
+}

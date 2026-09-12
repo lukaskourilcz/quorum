@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260912030033-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Útok na RubyGems, húsíjské střely přes Claude a GPT-6 bez dozoru v produkci se odehrály ve stejném týdnu – a dohromady mění, jak se bude diskutovat o odpovědnosti za autonomní AI systémy.",
+  "evidenceRefs": [
+    "source:openai-blog",
+    "source:simonw",
+    "source:hn-frontpage",
+    "source:tensorfeed",
+    "source:the-verge",
+    "source:techcrunch-ai"
+  ],
+  "editionRef": "832df46f370b8dbe20f6999f2f763d18d8018d9625368e6dd8f2e67d6394d2ef",
+  "generatedAt": "2026-09-12T03:00:38.705Z"
+}
