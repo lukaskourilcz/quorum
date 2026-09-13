@@ -14,7 +14,7 @@
   },
   "division": "bantamweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-09-09:2026 in Oktagon MMA"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-09-13T06:00:56.837Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-09-13:Oktagon 93: Roušal vs. Mågård"
+      ],
+      "note": "Result read from the Oktagon 93: Roušal vs. Mågård article after the event."
     }
   ],
   "discovery": {
@@ -37,9 +45,18 @@
   "sourceRefs": [
     "source:wikipedia:2026-09-09:2026 in Oktagon MMA",
     "source:wikipedia:2026-09-10:2026 in Oktagon MMA",
-    "source:wikipedia:2026-09-11:2026 in Oktagon MMA"
+    "source:wikipedia:2026-09-11:2026 in Oktagon MMA",
+    "source:wikipedia:2026-09-13:Oktagon 93: Roušal vs. Mågård"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "Decision (split)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:2026-09-13:Oktagon 93: Roušal vs. Mågård"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -54,7 +71,19 @@
         "source:wikipedia:2026-09-09:2026 in Oktagon MMA"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-09-13T06:00:56.837Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-09-13:Oktagon 93: Roušal vs. Mågård"
+      ],
+      "note": "Ali Gündüz def. Dávid Dániel Komár by Decision (split)."
     }
   ],
-  "updatedAt": "2026-09-09T06:01:07.556Z"
+  "updatedAt": "2026-09-13T06:00:56.837Z"
 }

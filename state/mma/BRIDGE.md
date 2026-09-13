@@ -1,4 +1,4 @@
 # MMA portfolio bridge
 
-- For the magazine: No model run exists to review yet — waiting for the odds data key. [source:meeting:2026-09-11-mma-analysis]
-- For FightAIQ: AM: assigned; PM: killed [source:meeting:2026-09-11-mag-editorial]
+- For the magazine: Checked UFC and Oktagon and recorded the fighter-file, card and source state without publishing a probability. [source:meeting:2026-09-12-mma-intake]
+- For FightAIQ: AM: assigned; PM: killed [source:meeting:2026-09-12-mag-editorial]

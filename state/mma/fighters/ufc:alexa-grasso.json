@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexa_Grasso",
       "publisher": "Wikipedia",
       "title": "Alexa Grasso",
-      "retrievedAt": "2026-09-12T06:01:01.827Z",
+      "retrievedAt": "2026-09-13T06:00:56.837Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q19560601",
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-09-12T06:01:01.827Z",
+      "retrievedAt": "2026-09-13T06:00:56.837Z",
       "status": "verified",
       "corroborated": true
     },
@@ -548,6 +548,21 @@
       ],
       "evidenceTier": "secondary",
       "status": "provisional"
+    },
+    {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-silva-vs-delgado-bout-manon-fiorot-vs-alexa-grasso-4",
+      "eventRef": "ufc:event:ufc-fight-night-silva-vs-delgado",
+      "happenedAt": "2026-09-12T00:00:00.000Z",
+      "opponentRef": "ufc:manon-fiorot",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:2026-09-13:UFC Fight Night: Silva vs. Delgado"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
     }
   ],
   "statsProfiles": [
@@ -557,37 +572,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:alexa-grasso:history",
-      "bouts": 25,
+      "bouts": 26,
       "values": {
-        "bouts": 25,
-        "wins": 17,
+        "bouts": 26,
+        "wins": 18,
         "losses": 6,
         "draws": 2,
         "noContests": 0,
-        "finishRate": 0.411765,
+        "finishRate": 0.388889,
         "koTkoWins": 4,
         "submissionWins": 3,
-        "decisionWins": 10,
-        "koTkoWinShare": 0.235294,
-        "submissionWinShare": 0.176471,
-        "decisionWinShare": 0.588235,
-        "averageElapsedSeconds": 849,
-        "recentThreeWinRate": 0.333333,
-        "recentFiveWinRate": 0.2,
-        "fightsPerYear": 1.808504,
-        "layoffDays": 168
+        "decisionWins": 11,
+        "koTkoWinShare": 0.222222,
+        "submissionWinShare": 0.166667,
+        "decisionWinShare": 0.611111,
+        "averageElapsedSeconds": 850.961538,
+        "recentThreeWinRate": 0.666667,
+        "recentFiveWinRate": 0.4,
+        "fightsPerYear": 1.82075,
+        "layoffDays": 1
       },
-      "updatedAt": "2026-09-12T06:01:01.827Z"
+      "updatedAt": "2026-09-13T06:00:56.837Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1732.98849434,
-    "deviation": 116.68968024,
-    "volatility": 0.06000634,
-    "boutCount": 23,
-    "asOfBoutRef": "ufc:bout:history-003f7730458fdcb19f97",
-    "updatedAt": "2026-09-12T06:01:01.827Z"
+    "rating": 1747.68166425,
+    "deviation": 114.77527416,
+    "volatility": 0.06000561,
+    "boutCount": 24,
+    "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-silva-vs-delgado-bout-manon-fiorot-vs-alexa-grasso-4",
+    "updatedAt": "2026-09-13T06:00:56.837Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2757,11 +2772,27 @@
         "source:wikipedia:45441761"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-13T06:00:56.837Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:45441761",
+        "source:wikipedia:2026-09-13:UFC Fight Night: Silva vs. Delgado"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-12T06:01:01.827Z"
+  "updatedAt": "2026-09-13T06:00:56.837Z"
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-09-12T06:01:01.827Z",
+  "generatedAt": "2026-09-13T06:00:56.837Z",
   "items": [
     {
       "fighterRef": "ufc:arman-tsarukyan",
@@ -40,7 +40,7 @@
         "reachCm",
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-09-12T06:01:01.827Z",
+      "reviewedAt": "2026-09-13T06:00:56.837Z",
       "uncorroborated": [
         "division",
         "record"
@@ -54,7 +54,7 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-12T06:01:01.827Z",
+      "reviewedAt": "2026-09-13T06:00:56.837Z",
       "uncorroborated": [
         "division"
       ]
@@ -67,7 +67,7 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-12T06:01:01.827Z",
+      "reviewedAt": "2026-09-13T06:00:56.837Z",
       "uncorroborated": [
         "division",
         "record"
@@ -83,13 +83,22 @@
       "reviewedAt": "2026-09-08T06:01:01.803Z"
     },
     {
+      "fighterRef": "ufc:brendan-allen",
+      "priority": 1010,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-09-12T06:01:01.827Z"
+    },
+    {
       "fighterRef": "ufc:alateng-heili",
       "priority": 1010,
       "reason": "upcoming-bout",
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-09-12T06:01:01.827Z",
+      "reviewedAt": "2026-09-13T06:00:56.837Z",
       "uncorroborated": [
         "name",
         "division",
@@ -103,19 +112,10 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-12T06:01:01.827Z",
+      "reviewedAt": "2026-09-13T06:00:56.837Z",
       "uncorroborated": [
         "division"
       ]
-    },
-    {
-      "fighterRef": "ufc:brendan-allen",
-      "priority": 1010,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-09-12T06:01:01.827Z"
     },
     {
       "fighterRef": "ufc:brian-ortega",
@@ -124,7 +124,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-12T06:01:01.827Z",
+      "reviewedAt": "2026-09-13T06:00:56.837Z",
       "uncorroborated": [
         "division",
         "record"
@@ -135,7 +135,7 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-09-12T06:01:01.827Z",
+      "reviewedAt": "2026-09-13T06:00:56.837Z",
       "uncorroborated": [
         "division"
       ]
@@ -145,21 +145,10 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-09-12T06:01:01.827Z",
+      "reviewedAt": "2026-09-13T06:00:56.837Z",
       "uncorroborated": [
         "division"
       ]
-    },
-    {
-      "fighterRef": "oktagon:niamh-kinehan",
-      "priority": 630,
-      "reason": "missing-history",
-      "gaps": [
-        "division",
-        "record",
-        "reachCm"
-      ],
-      "reviewedAt": "2026-09-12T06:01:01.827Z"
     },
     {
       "fighterRef": "ufc:aaron-pico",
@@ -183,17 +172,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-09-11T06:00:57.397Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:conor-mcgregor",
-      "priority": 600,
-      "reason": "missing-history",
-      "gaps": [],
-      "reviewedAt": "2026-09-11T06:00:57.397Z",
+      "reviewedAt": "2026-09-13T06:00:56.837Z",
       "uncorroborated": [
         "division"
       ]
@@ -203,7 +182,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-09-12T06:01:01.827Z",
+      "reviewedAt": "2026-09-13T06:00:56.837Z",
       "uncorroborated": [
         "division"
       ]
@@ -213,7 +192,17 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-09-12T06:01:01.827Z",
+      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:conor-mcgregor",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-09-13T06:00:56.837Z",
       "uncorroborated": [
         "division"
       ]
@@ -1073,6 +1062,17 @@
         "record-history-incomplete"
       ],
       "reviewedAt": "2026-08-03T18:02:51.598Z"
+    },
+    {
+      "fighterRef": "oktagon:niamh-kinehan",
+      "priority": 330,
+      "reason": "missing-profile",
+      "gaps": [
+        "division",
+        "record",
+        "reachCm"
+      ],
+      "reviewedAt": "2026-09-12T06:01:01.827Z"
     },
     {
       "fighterRef": "ufc:adrian-yanez",

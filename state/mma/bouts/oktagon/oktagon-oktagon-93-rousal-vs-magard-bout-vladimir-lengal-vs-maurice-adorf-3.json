@@ -14,7 +14,7 @@
   },
   "division": "lightweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-12:2026 in Oktagon MMA"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-09-13T06:00:56.837Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-09-13:Oktagon 93: Roušal vs. Mågård"
+      ],
+      "note": "Result read from the Oktagon 93: Roušal vs. Mågård article after the event."
     }
   ],
   "discovery": {
@@ -75,9 +83,18 @@
     "source:wikipedia:2026-09-08:2026 in Oktagon MMA",
     "source:wikipedia:2026-09-09:2026 in Oktagon MMA",
     "source:wikipedia:2026-09-10:2026 in Oktagon MMA",
-    "source:wikipedia:2026-09-11:2026 in Oktagon MMA"
+    "source:wikipedia:2026-09-11:2026 in Oktagon MMA",
+    "source:wikipedia:2026-09-13:Oktagon 93: Roušal vs. Mågård"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "KO (punches)",
+    "round": 1,
+    "elapsedSeconds": 182,
+    "sourceRefs": [
+      "source:wikipedia:2026-09-13:Oktagon 93: Roušal vs. Mågård"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -92,7 +109,19 @@
         "source:wikipedia:2026-08-12:2026 in Oktagon MMA"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-09-13T06:00:56.837Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-09-13:Oktagon 93: Roušal vs. Mågård"
+      ],
+      "note": "Vladimír Lengál def. Maurice Adorf by KO (punches)."
     }
   ],
-  "updatedAt": "2026-08-12T06:01:46.400Z"
+  "updatedAt": "2026-09-13T06:00:56.837Z"
 }
