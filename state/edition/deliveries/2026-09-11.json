@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-11",
+  "packageHash": "0f317e6be0b037ca41b8f39c9b569cbb228f088388b084f97e803134cd87b67b",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "acd39052d96891aa466df4b44388548e5e01d6bb",
+  "deliveredAt": "2026-09-13T07:07:34.269Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-11-microsoft-rust-anthropic-bezpecnost-ai",
+  "tags": [
+    "programovaci-jazyky",
+    "bezpecnost-softwaru",
+    "umela-inteligence",
+    "microsoft",
+    "nvidia",
+    "moderovani-obsahu"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-02461fe0f3edf7e3",
+  "venture": "caught-up",
+  "packageHash": "0f317e6be0b037ca41b8f39c9b569cbb228f088388b084f97e803134cd87b67b",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "acd39052d96891aa466df4b44388548e5e01d6bb",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit acd39052d96891aa466df4b44388548e5e01d6bb is readable",
+      "checkedAt": "2026-09-13T07:07:32.601Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-09-13T07:07:32.601Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-09-13T07:07:32.601Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-09-11-microsoft-rust-anthropic-bezpecnost-ai?boardless_verify=0f317e6be0b0-1789283252601",
+      "checkedAt": "2026-09-13T07:07:32.601Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-09-11-microsoft-rust-anthropic-bezpecnost-ai match",
+      "checkedAt": "2026-09-13T07:07:32.601Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 0f317e6be0b037ca41b8f39c9b569cbb228f088388b084f97e803134cd87b67b",
+      "checkedAt": "2026-09-13T07:07:32.601Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-09-11-microsoft-rust-anthropic-bezpecnost-ai/hero.webp?boardless_verify=0f317e6be0b0-1789283252601",
+      "checkedAt": "2026-09-13T07:07:32.601Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-09-13T07:07:32.601Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Mikhail Nilov · Pexels License",
+      "checkedAt": "2026-09-13T07:07:32.601Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-09-13T07:06:09.474Z",
+  "completedAt": "2026-09-13T07:07:33.385Z"
+}
