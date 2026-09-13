@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-09-13-gpt6-astra-autonomie-rubygems-amodei",
+  "date": "2026-09-13",
+  "rung": "search",
+  "selected": "pexels:1181675",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 0,
+      "selected": null,
+      "reason": "no-thumbnail-could-be-read",
+      "candidates": [],
+      "skipped": [
+        {
+          "candidateId": "scene:20348454",
+          "reason": "thumbnail-host-not-allowed"
+        }
+      ],
+      "costUsd": 0
+    },
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:1181675",
+      "reason": "A real workspace with multiple monitors showing code and development work directly illustrates AI system operation and autonomy; the recognisable hands are incidental to the technical setup and do not constitute a face portrait.",
+      "candidates": [
+        {
+          "candidateId": "pexels:37730212",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Server infrastructure with glowing indicator lights fits the AI autonomy/systems theme, but the cyan-tinted, soft-focus aesthetic feels like dated tech stock imagery from the 2010s.",
+          "sceneCs": "serverové basy se zelenými indikátory"
+        },
+        {
+          "candidateId": "pexels:32026165",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "wrong-subject",
+            "ai-generated-look"
+          ],
+          "reason": "This is a museum or exhibition control room display, not relevant to AI agents and production systems; the theatrical lighting and composition feel more like a constructed scene than documentation.",
+          "sceneCs": "osvětlená panelová instalace v tmavé místnosti"
+        },
+        {
+          "candidateId": "pexels:1181675",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "A real workspace with multiple monitors showing code and development work directly illustrates AI system operation and autonomy; the recognisable hands are incidental to the technical setup and do not constitute a face portrait.",
+          "sceneCs": "pracovní stůl se třemi monitory a notebookem"
+        },
+        {
+          "candidateId": "pixabay:8118377",
+          "provider": "pixabay",
+          "fit": 3,
+          "vetoes": [
+            "wrong-subject",
+            "ai-generated-look"
+          ],
+          "reason": "Generic hand-touching-server imagery feels like a stock photo illustration rather than authentic documentation of AI systems or agent autonomy.",
+          "sceneCs": "ruka dotýkající se serveru"
+        },
+        {
+          "candidateId": "pixabay:767776",
+          "provider": "pixabay",
+          "fit": 4,
+          "vetoes": [
+            "low-quality"
+          ],
+          "reason": "Shows a laptop screen but is too small, poorly lit, and lacks enough detail or context to meaningfully illustrate the article's themes about AI autonomy and production systems.",
+          "sceneCs": "drobný notebook se schematem na obrazovce"
+        },
+        {
+          "candidateId": "pexels:37730211",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Server hardware with stylised blue lighting and glowing details reads as a dated tech cliché rather than authentic infrastructure; the glow effects suggest synthetic construction.",
+          "sceneCs": "serverový box s modrým osvětlením"
+        },
+        {
+          "candidateId": "pexels:5380618",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [
+            "ai-generated-look",
+            "embedded-text"
+          ],
+          "reason": "Blurry screen with green overlays and embedded characters/numbers looks artificially generated or heavily stylised; unclear what system or context is being shown.",
+          "sceneCs": "monitor se zeleným textem a grafikou"
+        },
+        {
+          "candidateId": "pexels:7988114",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Two laptops with code visible on screens authentically show development and system work; hands are incidental to the technical demonstration and do not constitute a person portrait.",
+          "sceneCs": "dva notebooky s kódem na pracovním stole"
+        },
+        {
+          "candidateId": "pexels:17489152",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Server hardware row with dramatic blue theatrical lighting illustrates infrastructure but feels more like a promotional/exhibition photo than authentic production environment documentation.",
+          "sceneCs": "řada serverů s modrým osvětlením"
+        },
+        {
+          "candidateId": "pexels:5380664",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Multiple monitors with terminal windows and code exemplify AI system monitoring, but the dramatic red-and-green hacker-movie aesthetic feels staged and clichéd rather than genuine.",
+          "sceneCs": "obrazovka se třemi okny terminálu a kódem"
+        },
+        {
+          "candidateId": "pexels:5473298",
+          "provider": "pexels",
+          "fit": 4,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Shows a person working at a desk with multiple monitors; the back of the person's head is visible and somewhat recognisable in silhouette, which violates the no-face rule even though it is not a frontal portrait.",
+          "sceneCs": "osoba u stolu s monitory"
+        },
+        {
+          "candidateId": "pexels:17489151",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Clean, well-lit row of server hardware in blue and red lighting authentically represents infrastructure and production systems; the professional presentation suggests real data center rather than artificial styling.",
+          "sceneCs": "serverové basy v datovém centru"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.009951
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-09-13T03:00:38.163Z"
+}

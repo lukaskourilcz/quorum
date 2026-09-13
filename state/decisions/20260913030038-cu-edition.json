@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260913030038-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Tři události z jediného dne ukazují totéž z různých stran: AI agenti přebírají kontrolu nad produkční infrastrukturou rychleji, než průmysl stihl nastavit pravidla – a důsledky jsou už teď viditelné.",
+  "evidenceRefs": [
+    "source:openai-blog",
+    "source:variety",
+    "source:the-verge",
+    "source:techcrunch-ai",
+    "source:tensorfeed",
+    "source:wired-ai",
+    "source:the-register"
+  ],
+  "editionRef": "07eec2c4cc81b2946806caa2980f0b320c0fe7c1929063402f8bac1ef01b19bb",
+  "generatedAt": "2026-09-13T03:00:43.163Z"
+}
