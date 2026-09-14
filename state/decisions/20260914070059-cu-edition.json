@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260914070059-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "NO_EDITION",
+  "summary": "The desk could not assemble a shortlist from today's sources, so nothing was written.",
+  "evidenceRefs": [
+    "source:404-media",
+    "source:anthropic-news",
+    "source:ars-technica",
+    "source:deepmind-blog",
+    "source:digiday",
+    "source:github-ai-releases",
+    "source:google-research",
+    "source:hf-blog",
+    "source:hn-frontpage",
+    "source:import-ai",
+    "source:interconnects",
+    "source:meta-ai"
+  ],
+  "editionRef": "0b5a173529b53f4b498f0e8464b7a6a5ab2a569066a49ad2e47a2c8e8e06013c",
+  "generatedAt": "2026-09-14T07:01:04.672Z"
+}
