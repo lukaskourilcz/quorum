@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "runId": "c56c0692-c8d3-42e8-a4e4-7355b8834c6b",
+  "date": "2026-09-14",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-09-14T03:00:53.269Z",
+  "completedAt": "2026-09-14T03:00:53.583Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "failed",
+      "startedAt": "2026-09-14T03:00:53.289Z",
+      "completedAt": "2026-09-14T03:00:53.581Z",
+      "durationMs": 292,
+      "errorCode": "Error",
+      "errorMessage": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cf2avcRAwxFLN8YaxxoaB\"}"
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [],
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "verdicts": []
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "curation_failed:400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cf2avcRAwxFLN8YaxxoaB\"}"
+  ],
+  "sourceSummary": {
+    "successfulSources": 29,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects"
+    ]
+  }
+}
