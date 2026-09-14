@@ -16992,6 +16992,40 @@
       "toolUses": 0,
       "usd": 0.000451,
       "kind": "text"
+    },
+    {
+      "ts": "2026-09-14T11:00:46.725Z",
+      "cycleId": "20260914110046-gv-brief",
+      "requestHash": "396fb15cad3c224bd66cf389d5b56e0fdc16228f61929e46b0b66ce4c9cb14e4",
+      "phase": "gv-brief",
+      "ventureId": "goviral",
+      "agent": "PULSE",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "serviceTier": "default",
+      "tokensIn": 4116,
+      "cachedTokensIn": 0,
+      "tokensOut": 236,
+      "toolUses": 0,
+      "usd": 0.005532,
+      "kind": "text"
+    },
+    {
+      "ts": "2026-09-14T11:00:46.725Z",
+      "cycleId": "20260914110046-gv-brief",
+      "requestHash": "801734100fe559b335886f97bee4b0f41f0390771d2ec23fbb1d314add14252d",
+      "phase": "gv-brief",
+      "ventureId": "goviral",
+      "agent": "SCOUT",
+      "provider": "openai",
+      "model": "gpt-5.6-luna",
+      "serviceTier": "default",
+      "tokensIn": 4321,
+      "cachedTokensIn": 1477,
+      "tokensOut": 203,
+      "toolUses": 0,
+      "usd": 0.0056867,
+      "kind": "text"
     }
   ]
 }
