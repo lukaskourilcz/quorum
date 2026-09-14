@@ -4,7 +4,7 @@
   "date": "2026-09-11",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "HELD",
+  "status": "NEEDS_RECONCILIATION",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -262,7 +262,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "Microsoft Rust je formální politická změna, která přepisuje pravidla náboru a investic do nástrojů pro největšího světového dodavatele softwaru – a přichází ve stejný den, kdy Anthropic a Nvidia otevírají debatu o tom, kdo nese odpovědnost za rizika AI.",
+    "summary": "A different edition already holds this date in the magazine, so this one was held back. The owner has the technical report.",
     "evidenceRefs": [
       "source:the-register",
       "source:hn-frontpage",
