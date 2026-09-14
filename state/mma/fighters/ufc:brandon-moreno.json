@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Brandon_Moreno",
       "publisher": "Wikipedia",
       "title": "Brandon Moreno",
-      "retrievedAt": "2026-09-13T06:00:56.837Z",
+      "retrievedAt": "2026-09-14T06:01:33.899Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -78,7 +78,7 @@
         "source:wikipedia:52475971",
         "source:wikipedia:64585580"
       ],
-      "retrievedAt": "2026-09-13T06:00:56.837Z",
+      "retrievedAt": "2026-09-14T06:01:33.899Z",
       "status": "verified",
       "corroborated": true
     },
@@ -374,6 +374,21 @@
       "status": "provisional"
     },
     {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-rodriguez-vs-silva-bout-brandon-moreno-vs-joseph-morales-2",
+      "eventRef": "ufc:event:ufc-fight-night-rodriguez-vs-silva",
+      "happenedAt": "2026-09-12T00:00:00.000Z",
+      "opponentRef": "ufc:joseph-morales",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:2026-09-14:UFC Fight Night: Silva vs. Delgado"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "ufc:bout:ufc-ufc-fight-night-silva-vs-delgado-bout-brandon-moreno-vs-joseph-morales-2",
       "eventRef": "ufc:event:ufc-fight-night-silva-vs-delgado",
       "happenedAt": "2026-09-12T00:00:00.000Z",
@@ -396,37 +411,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:brandon-moreno:history",
-      "bouts": 16,
+      "bouts": 17,
       "values": {
-        "bouts": 16,
-        "wins": 6,
+        "bouts": 17,
+        "wins": 7,
         "losses": 9,
         "draws": 1,
         "noContests": 0,
-        "finishRate": 0.5,
+        "finishRate": 0.428571,
         "koTkoWins": 2,
         "submissionWins": 1,
-        "decisionWins": 3,
-        "koTkoWinShare": 0.333333,
-        "submissionWinShare": 0.166667,
-        "decisionWinShare": 0.5,
-        "averageElapsedSeconds": 1165,
+        "decisionWins": 4,
+        "koTkoWinShare": 0.285714,
+        "submissionWinShare": 0.142857,
+        "decisionWinShare": 0.571429,
+        "averageElapsedSeconds": 1146.071429,
         "recentThreeWinRate": 1,
-        "recentFiveWinRate": 0.6,
-        "fightsPerYear": 0.585697,
-        "layoffDays": 1
+        "recentFiveWinRate": 0.8,
+        "fightsPerYear": 0.624744,
+        "layoffDays": 2
       },
-      "updatedAt": "2026-09-13T06:00:56.837Z"
+      "updatedAt": "2026-09-14T06:01:33.899Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1657.50663211,
-    "deviation": 138.82737135,
-    "volatility": 0.06002543,
-    "boutCount": 15,
+    "rating": 1675.52154054,
+    "deviation": 134.86408869,
+    "volatility": 0.06002449,
+    "boutCount": 16,
     "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-silva-vs-delgado-bout-brandon-moreno-vs-joseph-morales-2",
-    "updatedAt": "2026-09-13T06:00:56.837Z"
+    "updatedAt": "2026-09-14T06:01:33.899Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2172,11 +2187,30 @@
         "source:wikipedia:2026-09-13:UFC Fight Night: Silva vs. Delgado"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-14T06:01:33.899Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:52475971",
+        "source:wikipedia:64585580",
+        "source:wikipedia:2026-09-14:UFC Fight Night: Silva vs. Delgado",
+        "source:wikipedia:2026-09-13:UFC Fight Night: Silva vs. Delgado"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.625,
   "modelEligible": true,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-13T06:00:56.837Z"
+  "updatedAt": "2026-09-14T06:01:33.899Z"
 }

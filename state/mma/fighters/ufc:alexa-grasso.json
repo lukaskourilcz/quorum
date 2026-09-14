@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Alexa_Grasso",
       "publisher": "Wikipedia",
       "title": "Alexa Grasso",
-      "retrievedAt": "2026-09-13T06:00:56.837Z",
+      "retrievedAt": "2026-09-14T06:01:33.899Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q19560601",
         "source:wikipedia:45441761"
       ],
-      "retrievedAt": "2026-09-13T06:00:56.837Z",
+      "retrievedAt": "2026-09-14T06:01:33.899Z",
       "status": "verified",
       "corroborated": true
     },
@@ -550,6 +550,21 @@
       "status": "provisional"
     },
     {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-rodriguez-vs-silva-bout-manon-fiorot-vs-alexa-grasso-4",
+      "eventRef": "ufc:event:ufc-fight-night-rodriguez-vs-silva",
+      "happenedAt": "2026-09-12T00:00:00.000Z",
+      "opponentRef": "ufc:manon-fiorot",
+      "result": "win",
+      "method": "Decision (unanimous)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:2026-09-14:UFC Fight Night: Silva vs. Delgado"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "ufc:bout:ufc-ufc-fight-night-silva-vs-delgado-bout-manon-fiorot-vs-alexa-grasso-4",
       "eventRef": "ufc:event:ufc-fight-night-silva-vs-delgado",
       "happenedAt": "2026-09-12T00:00:00.000Z",
@@ -572,37 +587,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:alexa-grasso:history",
-      "bouts": 26,
+      "bouts": 27,
       "values": {
-        "bouts": 26,
-        "wins": 18,
+        "bouts": 27,
+        "wins": 19,
         "losses": 6,
         "draws": 2,
         "noContests": 0,
-        "finishRate": 0.388889,
+        "finishRate": 0.368421,
         "koTkoWins": 4,
         "submissionWins": 3,
-        "decisionWins": 11,
-        "koTkoWinShare": 0.222222,
-        "submissionWinShare": 0.166667,
-        "decisionWinShare": 0.611111,
-        "averageElapsedSeconds": 850.961538,
-        "recentThreeWinRate": 0.666667,
-        "recentFiveWinRate": 0.4,
-        "fightsPerYear": 1.82075,
-        "layoffDays": 1
+        "decisionWins": 12,
+        "koTkoWinShare": 0.210526,
+        "submissionWinShare": 0.157895,
+        "decisionWinShare": 0.631579,
+        "averageElapsedSeconds": 852.777778,
+        "recentThreeWinRate": 1,
+        "recentFiveWinRate": 0.6,
+        "fightsPerYear": 1.89358,
+        "layoffDays": 2
       },
-      "updatedAt": "2026-09-13T06:00:56.837Z"
+      "updatedAt": "2026-09-14T06:01:33.899Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1747.68166425,
-    "deviation": 114.77527416,
-    "volatility": 0.06000561,
-    "boutCount": 24,
+    "rating": 1758.07904333,
+    "deviation": 113.11826693,
+    "volatility": 0.06000474,
+    "boutCount": 25,
     "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-silva-vs-delgado-bout-manon-fiorot-vs-alexa-grasso-4",
-    "updatedAt": "2026-09-13T06:00:56.837Z"
+    "updatedAt": "2026-09-14T06:01:33.899Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2788,11 +2803,28 @@
         "source:wikipedia:2026-09-13:UFC Fight Night: Silva vs. Delgado"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-14T06:01:33.899Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:45441761",
+        "source:wikipedia:2026-09-14:UFC Fight Night: Silva vs. Delgado",
+        "source:wikipedia:2026-09-13:UFC Fight Night: Silva vs. Delgado"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.375,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-13T06:00:56.837Z"
+  "updatedAt": "2026-09-14T06:01:33.899Z"
 }

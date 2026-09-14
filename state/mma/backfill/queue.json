@@ -1,6 +1,6 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-09-13T06:00:56.837Z",
+  "generatedAt": "2026-09-14T06:01:33.899Z",
   "items": [
     {
       "fighterRef": "ufc:arman-tsarukyan",
@@ -40,7 +40,7 @@
         "reachCm",
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "reviewedAt": "2026-09-14T06:01:33.899Z",
       "uncorroborated": [
         "division",
         "record"
@@ -54,7 +54,7 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "reviewedAt": "2026-09-14T06:01:33.899Z",
       "uncorroborated": [
         "division"
       ]
@@ -67,7 +67,7 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "reviewedAt": "2026-09-14T06:01:33.899Z",
       "uncorroborated": [
         "division",
         "record"
@@ -98,7 +98,7 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "reviewedAt": "2026-09-14T06:01:33.899Z",
       "uncorroborated": [
         "name",
         "division",
@@ -112,7 +112,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "reviewedAt": "2026-09-14T06:01:33.899Z",
       "uncorroborated": [
         "division"
       ]
@@ -124,7 +124,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "reviewedAt": "2026-09-14T06:01:33.899Z",
       "uncorroborated": [
         "division",
         "record"
@@ -135,7 +135,7 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "reviewedAt": "2026-09-14T06:01:33.899Z",
       "uncorroborated": [
         "division"
       ]
@@ -145,7 +145,7 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "reviewedAt": "2026-09-14T06:01:33.899Z",
       "uncorroborated": [
         "division"
       ]
@@ -172,7 +172,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "reviewedAt": "2026-09-14T06:01:33.899Z",
       "uncorroborated": [
         "division"
       ]
@@ -182,7 +182,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "reviewedAt": "2026-09-14T06:01:33.899Z",
       "uncorroborated": [
         "division"
       ]
@@ -192,7 +192,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "reviewedAt": "2026-09-14T06:01:33.899Z",
       "uncorroborated": [
         "division"
       ]
@@ -202,7 +202,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-09-13T06:00:56.837Z",
+      "reviewedAt": "2026-09-14T06:01:33.899Z",
       "uncorroborated": [
         "division"
       ]

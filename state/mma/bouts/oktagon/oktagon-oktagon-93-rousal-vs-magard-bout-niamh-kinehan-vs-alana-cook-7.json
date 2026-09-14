@@ -14,7 +14,7 @@
   },
   "division": "womens-bantamweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-12:2026 in Oktagon MMA"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-09-14T06:01:33.899Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-09-14:Oktagon 93: Roušal vs. Mågård"
+      ],
+      "note": "Result read from the Oktagon 93: Roušal vs. Mågård article after the event."
     }
   ],
   "discovery": {
@@ -55,9 +63,18 @@
     "source:wikipedia:2026-08-20:2026 in Oktagon MMA",
     "source:wikipedia:2026-08-21:2026 in Oktagon MMA",
     "source:wikipedia:2026-08-22:2026 in Oktagon MMA",
-    "source:wikipedia:2026-08-23:2026 in Oktagon MMA"
+    "source:wikipedia:2026-08-23:2026 in Oktagon MMA",
+    "source:wikipedia:2026-09-14:Oktagon 93: Roušal vs. Mågård"
   ],
-  "result": null,
+  "result": {
+    "winner": "red",
+    "method": "KO (punches)",
+    "round": 2,
+    "elapsedSeconds": 348,
+    "sourceRefs": [
+      "source:wikipedia:2026-09-14:Oktagon 93: Roušal vs. Mågård"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -72,7 +89,19 @@
         "source:wikipedia:2026-08-12:2026 in Oktagon MMA"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-09-14T06:01:33.899Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-09-14:Oktagon 93: Roušal vs. Mågård"
+      ],
+      "note": "Niamh Kinehan def. Alana Cook by KO (punches)."
     }
   ],
-  "updatedAt": "2026-08-12T06:01:46.400Z"
+  "updatedAt": "2026-09-14T06:01:33.899Z"
 }

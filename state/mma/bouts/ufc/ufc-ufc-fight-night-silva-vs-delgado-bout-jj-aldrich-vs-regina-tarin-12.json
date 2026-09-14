@@ -14,7 +14,7 @@
   },
   "division": "womens-flyweight",
   "scheduledRounds": 3,
-  "status": "announced",
+  "status": "completed",
   "statusHistory": [
     {
       "status": "announced",
@@ -23,6 +23,14 @@
         "source:wikipedia:2026-08-26:List of UFC events"
       ],
       "note": "Status imported from the Cito event listing."
+    },
+    {
+      "status": "completed",
+      "at": "2026-09-14T06:01:33.899Z",
+      "sourceRefs": [
+        "source:wikipedia:2026-09-14:UFC Fight Night: Silva vs. Delgado"
+      ],
+      "note": "Result read from the UFC Fight Night: Silva vs. Delgado article after the event."
     }
   ],
   "discovery": {
@@ -39,9 +47,18 @@
     "source:wikipedia:2026-08-26:List of UFC events",
     "source:wikipedia:2026-08-27:List of UFC events",
     "source:wikipedia:2026-08-28:List of UFC events",
-    "source:wikipedia:2026-08-30:List of UFC events"
+    "source:wikipedia:2026-08-30:List of UFC events",
+    "source:wikipedia:2026-09-14:UFC Fight Night: Silva vs. Delgado"
   ],
-  "result": null,
+  "result": {
+    "winner": "blue",
+    "method": "Decision (unanimous)",
+    "round": 3,
+    "elapsedSeconds": 900,
+    "sourceRefs": [
+      "source:wikipedia:2026-09-14:UFC Fight Night: Silva vs. Delgado"
+    ]
+  },
   "predictionRefs": [],
   "changeLog": [
     {
@@ -56,7 +73,19 @@
         "source:wikipedia:2026-08-26:List of UFC events"
       ],
       "note": "Discovered on the approved Cito free-tier intake."
+    },
+    {
+      "at": "2026-09-14T06:01:33.899Z",
+      "kind": "status-change",
+      "fields": [
+        "status",
+        "result"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-09-14:UFC Fight Night: Silva vs. Delgado"
+      ],
+      "note": "Regina Tarín def. JJ Aldrich by Decision (unanimous)."
     }
   ],
-  "updatedAt": "2026-08-26T06:01:51.845Z"
+  "updatedAt": "2026-09-14T06:01:33.899Z"
 }
