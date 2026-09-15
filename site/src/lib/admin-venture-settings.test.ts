@@ -12,9 +12,9 @@ import {
 } from "./admin-venture-settings";
 
 /**
- * The pause switches against a scratch registry: the four ventures others depend on never
+ * The pause switches against a scratch registry: the three ventures others depend on never
  * appear and can never be flipped, an operating venture flips both ways with a one-field diff,
- * and anything else is refused with a sentence the owner can read.
+ * an exploration never appears, and anything else is refused with a sentence the owner can read.
  */
 
 function registry() {
@@ -26,7 +26,8 @@ function registry() {
       { id: "carousel-studio", name: "Design Lab", status: "operating" },
       { id: "goviral", name: "GoVIRAL", status: "operating" },
       { id: "fightaiq", name: "FightAIQ", status: "operating" },
-      { id: "webdev-signal", name: "WebDev Signal", status: "exploration" }
+      { id: "webdev-signal", name: "WebDev Signal", status: "operating" },
+      { id: "contest-radar", name: "Contest Radar", status: "exploration" }
     ]
   };
 }
@@ -42,8 +43,10 @@ describe("the owner's project switches", () => {
   it("lists only the ventures whose pause breaks nothing else", async () => {
     const root = await scratchRoot();
     const settings = await readAdminVentureSettings(root);
-    expect(settings.ventures.map(({ id }) => id)).toEqual(["caught-up", "door-money"]);
+    expect(settings.ventures.map(({ id }) => id)).toEqual(["caught-up", "door-money", "webdev-signal"]);
     expect(settings.ventures).toContainEqual({ id: "door-money", name: "Door Money", paused: true });
+    // WebDev Signal runs a daily scan inside the Caught Up day now, so its switch is the owner's.
+    expect(settings.ventures).toContainEqual({ id: "webdev-signal", name: "WebDev Signal", paused: false });
     for (const id of Object.keys(UNPAUSABLE_VENTURES)) {
       expect(settings.ventures.some((venture) => venture.id === id), id).toBe(false);
     }
@@ -60,12 +63,14 @@ describe("the owner's project switches", () => {
     expect(after).toBe(before);
   });
 
-  it("refuses the shared machinery, an unknown venture and an unfounded one", async () => {
+  it("refuses the shared machinery, an unknown venture and an exploration", async () => {
     const root = await scratchRoot();
     for (const id of ["carousel-studio", "goviral", "fightaiq"]) {
       await expect(setVenturePaused(id, true, root), id).rejects.toThrowError(VentureSettingsPersistenceError);
     }
     await expect(setVenturePaused("not-a-venture", true, root)).rejects.toThrowError(/does not exist/u);
-    await expect(setVenturePaused("webdev-signal", true, root)).rejects.toThrowError(VentureSettingsPersistenceError);
+    await expect(setVenturePaused("contest-radar", true, root)).rejects.toThrowError(/Only an operating project/u);
+    const paused = await setVenturePaused("webdev-signal", true, root);
+    expect(paused.ventures).toContainEqual({ id: "webdev-signal", name: "WebDev Signal", paused: true });
   });
 });
