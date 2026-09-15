@@ -3,7 +3,7 @@
   "ventureId": "webdev-signal",
   "ledgerNamespace": "webdev-signal",
   "foundingDecisionRef": "state/decisions/2026-08-28-webdev-signal-founding.md",
-  "foundingCountersigned": false,
+  "foundingCountersigned": true,
   "editions": [
     {
       "locale": "cs",
@@ -24,7 +24,7 @@
     "secondaryDiscovery": "held",
     "goviralOverlay": "held",
     "bilingualSynthesis": "held",
-    "designLabRendering": "held",
+    "designLabRendering": "enabled",
     "czechProfileDelivery": "held",
     "englishProfileDelivery": "held",
     "instagramPublishing": "disabled",

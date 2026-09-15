@@ -12,12 +12,14 @@ import {
 } from "../src/ventures/webdev-signal/registration.js";
 
 describe("WebDev Signal registration", () => {
-  it("registers one held Instagram-and-Threads venture, one ledger and two locale editions", async () => {
+  it("registers one owner-only Instagram-and-Threads venture, one ledger and two held locale editions", async () => {
     const registry = await loadVentureRegistry();
     const matches = registry.ventures.filter(({ id }) => id === "webdev-signal");
     expect(matches).toHaveLength(1);
+    // `operating` is what gives the owner a pause switch for the daily scan; the editions stay
+    // held because no account, connection or publishing authority exists.
     expect(matches[0]).toMatchObject({
-      status: "exploration",
+      status: "operating",
       visibility: "owner-only",
       taste: false,
       ledgerNamespace: "webdev-signal",
@@ -34,23 +36,30 @@ describe("WebDev Signal registration", () => {
 
   it("keeps direct collection, model, renderer, locale, platform and site gates independent", async () => {
     const registration = await loadWebDevSignalRegistration();
+    // The owner's 2026-09-15 instruction opened exactly two gates: direct collection and the
+    // deterministic render. Synthesis stays held and both platforms stay disabled, so no model is
+    // called and nothing is published; the daily runner only drafts.
+    expect(registration.foundingCountersigned).toBe(true);
     expect(registration.features).toMatchObject({
       directSources: "enabled",
       secondaryDiscovery: "held",
       goviralOverlay: "held",
       bilingualSynthesis: "held",
-      designLabRendering: "held",
+      designLabRendering: "enabled",
       czechProfileDelivery: "held",
       englishProfileDelivery: "held",
       instagramPublishing: "disabled",
       threadsPublishing: "disabled",
       metricsCollection: "held"
     });
-    expect(resolveWebDevSignalFeature({ registration, feature: "directSources", authorityAvailable: true })).toMatchObject({ decision: "held" });
-    const countersigned = { ...registration, foundingCountersigned: true };
-    expect(resolveWebDevSignalFeature({ registration: countersigned, feature: "directSources", authorityAvailable: true })).toMatchObject({ decision: "allowed", authorityGranted: false });
-    expect(resolveWebDevSignalFeature({ registration: countersigned, feature: "bilingualSynthesis", authorityAvailable: true }).decision).toBe("held");
-    expect(resolveWebDevSignalFeature({ registration: countersigned, feature: "instagramPublishing", authorityAvailable: true }).decision).toBe("denied");
+    expect(resolveWebDevSignalFeature({ registration, feature: "directSources", authorityAvailable: true })).toMatchObject({ decision: "allowed", authorityGranted: false });
+    // An open gate is still nothing without the independent authority behind it.
+    expect(resolveWebDevSignalFeature({ registration, feature: "directSources", authorityAvailable: false })).toMatchObject({ decision: "held", reason: "founding-or-independent-authority-missing" });
+    const unsigned = { ...registration, foundingCountersigned: false };
+    expect(resolveWebDevSignalFeature({ registration: unsigned, feature: "directSources", authorityAvailable: true })).toMatchObject({ decision: "held" });
+    expect(resolveWebDevSignalFeature({ registration, feature: "bilingualSynthesis", authorityAvailable: true }).decision).toBe("held");
+    expect(resolveWebDevSignalFeature({ registration, feature: "instagramPublishing", authorityAvailable: true }).decision).toBe("denied");
+    expect(resolveWebDevSignalFeature({ registration, feature: "threadsPublishing", authorityAvailable: true }).decision).toBe("denied");
   });
 
   it("reserves only the lower nested synthesis ceiling and never borrows", async () => {
@@ -126,19 +135,31 @@ describe("WebDev Signal registration", () => {
     expect(new Set(anchorCrons.map(({ cron }) => cron))).toHaveLength(2);
   });
 
-  it("returns an honest zero-cost fixture receipt and never creates a website or publisher path", async () => {
+  it("dispatches only from its anchor, runs only with source authority, and holds with an honest zero-cost receipt", async () => {
     const registration = await loadWebDevSignalRegistration();
-    expect(dispatchWebDevSignalRegistration({ registration, dispatcherPhase: "morning", pragueDate: "2026-08-28", mode: "fixture" })).toBeNull();
-    const receipt = dispatchWebDevSignalRegistration({ registration, dispatcherPhase: "cu-day", pragueDate: "2026-08-28", mode: "fixture" });
-    expect(receipt).toMatchObject({
+    expect(dispatchWebDevSignalRegistration({ registration, dispatcherPhase: "morning", pragueDate: "2026-08-28", mode: "fixture", sourceAuthorityAvailable: true })).toBeNull();
+    const held = dispatchWebDevSignalRegistration({ registration, dispatcherPhase: "cu-day", pragueDate: "2026-08-28", mode: "live" });
+    expect(held).toMatchObject({ decision: "held", reason: "founding-or-independent-authority-missing" });
+    if (held?.decision !== "held") throw new Error("unreachable");
+    expect(held.run).toMatchObject({
       schemaVersion: "webdev-run/1",
       phase: "webdev-signal-daily",
-      mode: "fixture",
+      mode: "live",
       selectionOutcome: "held",
+      sourceOutcomes: [],
       model: { reservations: 0, calls: 0, reservedUsd: 0, actualUsd: 0 },
       queueRefs: [],
-      renderRefs: []
+      renderRefs: [],
+      errors: [{ code: "held", sourceId: null, message: "founding-or-independent-authority-missing" }]
     });
+    const unsigned = { ...registration, foundingCountersigned: false };
+    expect(dispatchWebDevSignalRegistration({ registration: unsigned, dispatcherPhase: "cu-day", pragueDate: "2026-08-28", mode: "fixture", sourceAuthorityAvailable: true })).toMatchObject({ decision: "held" });
+    const run = dispatchWebDevSignalRegistration({ registration, dispatcherPhase: "cu-day", pragueDate: "2026-08-28", mode: "fixture", sourceAuthorityAvailable: true });
+    expect(run).toMatchObject({ decision: "run" });
+    // One key per Prague day and mode, the same whether the day ran or was held.
+    const heldFixture = dispatchWebDevSignalRegistration({ registration: unsigned, dispatcherPhase: "cu-day", pragueDate: "2026-08-28", mode: "fixture" });
+    expect(run?.decision === "run" ? run.idempotencyKey : null).toBe(heldFixture?.decision === "held" ? heldFixture.run.idempotencyKey : undefined);
+    expect(held.run.idempotencyKey).not.toBe(run?.decision === "run" ? run.idempotencyKey : null);
     const siteFiles = await readFile(path.join(repoRoot, "site", "vercel.json"), "utf8");
     expect(siteFiles).not.toContain("webdev-signal");
     expect(JSON.stringify(registration)).not.toMatch(/secret|credential|publishAuthorized/iu);

@@ -634,7 +634,7 @@
     {
       "id": "webdev-signal",
       "name": "WebDev Signal",
-      "status": "exploration",
+      "status": "operating",
       "visibility": "owner-only",
       "taste": false,
       "ledgerNamespace": "webdev-signal",
