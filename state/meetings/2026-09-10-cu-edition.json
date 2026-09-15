@@ -262,7 +262,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "The edition 2026-09-10-weworm-automattic-mullenweg-ai-bezpecnost was delivered on 2026-09-11 and verified live (proof-e235a02685ce2cef). The 09:00 retry had produced a second edition for the same date while the first was still queued; the magazine refused that duplicate and it was retired on 2026-09-15. The delivery receipt for this date records the edition that reached readers.",
+    "summary": "The edition on WordPress, Automattic and AI security was delivered on 11 September and verified live. The 09:00 retry had produced a second edition for the same date while the first was still queued; the magazine refused that duplicate and it was retired on 15 September. The delivery receipt for this date records the edition that reached readers.",
     "evidenceRefs": [
       "source:social-media-today",
       "source:stackexchange-ml",

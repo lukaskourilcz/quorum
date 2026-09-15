@@ -262,7 +262,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "The edition 2026-09-11-microsoft-rust-anthropic-bezpecnost-ai was delivered on 2026-09-13 and verified live (proof-02461fe0f3edf7e3). The 09:00 retry had produced a second edition for the same date while the first was still queued; the magazine refused that duplicate and it was retired on 2026-09-15. The delivery receipt for this date records the edition that reached readers.",
+    "summary": "The edition on Microsoft, Rust, Anthropic and AI security was delivered on 13 September and verified live. The 09:00 retry had produced a second edition for the same date while the first was still queued; the magazine refused that duplicate and it was retired on 15 September. The delivery receipt for this date records the edition that reached readers.",
     "evidenceRefs": [
       "source:the-register",
       "source:hn-frontpage",
