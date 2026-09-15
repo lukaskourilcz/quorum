@@ -93,10 +93,14 @@ export interface VentureDayStep {
   note: string | null;
 }
 
-/** One prerequisite's outcome inside a day. `failed` means it threw and the day went on. */
+/**
+ * One prerequisite's outcome inside a day. `skipped` means the runner decided the firing was not
+ * its to act on and wrote nothing; `paused` means the owner's switch stopped it; `failed` means it
+ * threw and the day went on.
+ */
 export interface VentureDayPreStepOutcome {
   id: VentureDayPreStepId;
-  status: "recorded" | "already_recorded" | "paused" | "failed";
+  status: "recorded" | "already_recorded" | "skipped" | "paused" | "failed";
   /** The receipt it wrote or found, when there is one. */
   recordRef: string | null;
   note: string | null;

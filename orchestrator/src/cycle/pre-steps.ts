@@ -37,7 +37,7 @@ export interface VentureDayPreStepDependencies {
 
 function outcomeFor(id: VentureDayPreStepId, result: WebDevSignalDailyResult): VentureDayPreStepOutcome {
   if (result.status === "not-anchored") {
-    return { id, status: "paused", recordRef: null, note: "The dispatcher is not the phase the registration anchors to.", artifacts: [] };
+    return { id, status: "skipped", recordRef: null, note: "The dispatcher is not the phase the registration anchors to.", artifacts: [] };
   }
   return {
     id,

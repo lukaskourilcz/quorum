@@ -232,6 +232,15 @@ describe("the production prerequisite runner", () => {
     expect(outcome.note).toContain("paused");
   });
 
+  it("reports a firing the registration does not anchor to as skipped, not paused", async () => {
+    const outcome = await runVentureDayPreStep("webdev-signal-daily", options, {
+      loadRegistry: registryWith("operating"),
+      runDaily: async () => ({ status: "not-anchored", pragueDate: "2026-09-03", run: null, runRef: null, artifacts: [] })
+    });
+    expect(outcome).toMatchObject({ status: "skipped", recordRef: null, artifacts: [] });
+    expect(outcome.note).toContain("not the phase");
+  });
+
   it("hands a dry firing to the runner as a fixture day with no lock and no fetch", async () => {
     const seen: RunWebDevSignalDailyInput[] = [];
     const outcome = await runVentureDayPreStep("webdev-signal-daily", options, {
