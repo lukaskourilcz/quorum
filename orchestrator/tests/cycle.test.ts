@@ -35,6 +35,28 @@ async function dateForRotationTarget(ventureId: string): Promise<string> {
   throw new Error(`No rotation date found for ${ventureId}`);
 }
 
+/**
+ * The first morning in August whose rotation names a venture other than Caught Up, and which one.
+ *
+ * Asked of the rotation rather than pinned to one magazine: the rotation skips a venture the
+ * owner has paused in Settings, so a case that named MMA Files broke the moment that magazine
+ * was paused — an operational state, not a rule about the morning idea.
+ */
+async function dateForRotationAwayFromCaughtUp(): Promise<{ date: string; ventureId: string }> {
+  for (let offset = 0; offset < 30; offset += 1) {
+    const at = new Date("2026-08-01T04:00:00.000Z");
+    at.setUTCDate(at.getUTCDate() + offset);
+    const target = await resolveRotationTarget({
+      stateRoot: path.join(repoRoot, "tmp", "dry-run", "state"),
+      now: at
+    });
+    if (target && target.ventureId !== "caught-up") {
+      return { date: at.toISOString().slice(0, 10), ventureId: target.ventureId };
+    }
+  }
+  throw new Error("No rotation date found away from Caught Up");
+}
+
 describe("cycle preflight", () => {
   it("runs one decision room and two zero-model checkpoints inside the daily budget", async () => {
     const results = await Promise.all(
@@ -346,7 +368,7 @@ describe("cycle preflight", () => {
     // Caught Up used to receive every morning idea because the namespace was a constant at the
     // call site. On a day the rotation names another venture, the idea lands in that venture's
     // ledger and the Caught Up product room has nothing to adopt — a normal day, not a gap.
-    const date = await dateForRotationTarget("mma-files");
+    const { date, ventureId } = await dateForRotationAwayFromCaughtUp();
     const morning = await runCycle({
       phase: "morning",
       dry: true,
@@ -355,7 +377,7 @@ describe("cycle preflight", () => {
       now: new Date(`${date}T04:00:00.000Z`)
     });
     expect(morning.artifacts).toEqual(expect.arrayContaining([
-      "tmp/dry-run/state/ideas/mma-files/ledger.jsonl"
+      `tmp/dry-run/state/ideas/${ventureId}/ledger.jsonl`
     ]));
     expect(morning.artifacts).not.toContain("tmp/dry-run/state/ideas/caught-up/ledger.jsonl");
 
@@ -363,7 +385,7 @@ describe("cycle preflight", () => {
       path.join(repoRoot, `tmp/dry-run/state/standups/${date}-morning.json`),
       "utf8"
     )) as { morningIdeaNamespace?: string; caughtUpIdeaRef?: string };
-    expect(standup.morningIdeaNamespace).toBe("mma-files");
+    expect(standup.morningIdeaNamespace).toBe(ventureId);
 
     await runCycle({
       phase: "cu-product",

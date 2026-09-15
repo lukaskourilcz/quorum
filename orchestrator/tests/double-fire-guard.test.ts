@@ -15,6 +15,24 @@ vi.mock("../src/paths.js", async (importOriginal) => {
   return { ...actual, stateRoot: root };
 });
 
+// The article slots belong to MMA Files, and whether the owner has that magazine paused today is
+// operational state, not this guard's subject. The registry is read with the venture operating so
+// the cases below hold whatever Settings says.
+vi.mock("../src/ventures/registry.js", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../src/ventures/registry.js")>();
+  return {
+    ...actual,
+    loadVentureRegistry: async (...args: Parameters<typeof actual.loadVentureRegistry>) => {
+      const registry = await actual.loadVentureRegistry(...args);
+      return {
+        ...registry,
+        ventures: registry.ventures.map((venture) =>
+          venture.id === "mma-files" ? { ...venture, status: "operating" as const } : venture)
+      };
+    }
+  };
+});
+
 const { runCycle } = await import("../src/cycle.js");
 
 const testStateRoot = process.env.DOUBLE_FIRE_TEST_STATE_ROOT!;
