@@ -121,7 +121,7 @@ describe("the third-tenant Kvórum Apify guard", () => {
         actorRunner: runner
       });
       expect(result.sharedUsageSource).toBe("provider");
-      expect(result.results[0]?.reason).toContain("shared Apify Free-plan credit");
+      expect(result.results[0]?.reason).toContain("shared Apify plan credit");
       expect(usageFetcher).toHaveBeenCalledOnce();
       expect(runner).not.toHaveBeenCalled();
       expect(result.artifactPaths).toEqual([]);
@@ -134,7 +134,9 @@ describe("the third-tenant Kvórum Apify guard", () => {
     const root = await tempRoot("kvorum-apify-local-");
     const runner = vi.fn();
     try {
-      await atomicWriteJson(root, "goviral/source-quota/apify.json", { estimatedUsedUsd: 2.5 });
+      // The two sibling ledgers together leave less than Kvórum's $0.151 reservation of the
+      // plan credit, so the fallback must refuse exactly as the provider figure would have.
+      await atomicWriteJson(root, "goviral/source-quota/apify.json", { estimatedUsedUsd: APIFY_MONTHLY_CREDIT_USD - 2.5 });
       await atomicWriteJson(root, "mma/source-quota/apify.json", { estimatedUsedUsd: 2.4 });
       const result = await runKvorumApifySource({
         root,
@@ -149,7 +151,7 @@ describe("the third-tenant Kvórum Apify guard", () => {
         actorRunner: runner
       });
       expect(result.sharedUsageSource).toBe("local-estimate");
-      expect(result.results[0]?.reason).toContain("shared Apify Free-plan credit");
+      expect(result.results[0]?.reason).toContain("shared Apify plan credit");
       expect(runner).not.toHaveBeenCalled();
     } finally {
       await rm(root, { recursive: true, force: true });

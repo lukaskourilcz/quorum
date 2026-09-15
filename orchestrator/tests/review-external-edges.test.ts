@@ -113,7 +113,7 @@ describe("REV-11 external edges", () => {
     const mma = emptyMmaApifyQuota("2026-08", now);
     const kvorum = emptyKvorumApifyQuota("2026-08", now);
 
-    expect(APIFY_MONTHLY_CREDIT_USD).toBe(5);
+    expect(APIFY_MONTHLY_CREDIT_USD).toBe(19);
     expect(APIFY_RUN_RESERVATION_USD).toBe(1.4);
     expect(MMA_APIFY_MONTHLY_SHARE_USD).toBe(3);
     expect(MMA_APIFY_RUN_RESERVATION_USD).toBe(0.75);

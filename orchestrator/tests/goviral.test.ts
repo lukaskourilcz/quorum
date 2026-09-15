@@ -66,8 +66,8 @@ describe("the Apify quota guard", () => {
     expect(mayRunApify(empty, "  ").allowed).toBe(false);
     expect(mayRunApify(empty, "apify_api_test").allowed).toBe(true);
 
-    // The Free plan's $5 is the budget guard, not a preference: a run reserves its worst case
-    // up front so it can never start work the credit cannot finish. This is the boundary.
+    // The plan's monthly credit is the budget guard, not a preference: a run reserves its worst
+    // case up front so it can never start work the credit cannot finish. This is the boundary.
     const nearlySpent = { ...empty, estimatedUsedUsd: APIFY_MONTHLY_CREDIT_USD - APIFY_RUN_RESERVATION_USD + 0.01 };
     const verdict = mayRunApify(nearlySpent, "apify_api_test");
     expect(verdict.allowed).toBe(false);
@@ -403,7 +403,8 @@ describe("the scraped-row boundary", () => {
     const digest = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
     expect(digest(raw.actors)).toBe("f747cbd70c0a61a8c06a114a00ed0ca2e58c1a37943a757608991986f95ea4ce");
     expect(digest(raw.recipe)).toBe("cef3895290673880c9c27658212a892a9341943feef5526733a01cae365f78f5");
-    expect(APIFY_MONTHLY_CREDIT_USD).toBe(5);
+    // Starter, the cheapest paid tier, since the owner's subscription of 15 September 2026.
+    expect(APIFY_MONTHLY_CREDIT_USD).toBe(19);
     expect(APIFY_RUN_RESERVATION_USD).toBe(1.4);
   });
 });

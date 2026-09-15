@@ -36,14 +36,25 @@ const kpiSet: KpiSet = {
 };
 
 describe("fixed-cost registry", () => {
-  it("keeps the committed seed empty and excludes comment metadata from burn", async () => {
+  it("carries the owner's subscriptions from the month they started and excludes comment metadata from burn", async () => {
+    // The committed registry is the real one: Apify Starter since the owner's subscription of
+    // 15 September 2026, the only fixed cost. Before that month it counts nothing, so August's
+    // all-in figure stays what it was; from September it is $19 a month, cumulatively.
     const raw = JSON.parse(await readFile(path.join(repoRoot, "config/fixed-costs.json"), "utf8")) as unknown;
     const registry = normalizeFixedCostRegistry(raw);
-    expect(registry.costs).toEqual([]);
+    expect(registry.costs).toEqual([
+      { name: "Apify Starter", monthly_usd: 19, category: "software", since: "2026-09-15" }
+    ]);
+    expect(registry.confirmedNoFixedCosts).toBeUndefined();
     expect(fixedCostTotals(raw, new Date("2026-08-15T12:00:00.000Z"))).toEqual({
       monthlyUsd: 0,
       cumulativeUsd: 0,
       byCategory: []
+    });
+    expect(fixedCostTotals(raw, new Date("2026-10-15T12:00:00.000Z"))).toEqual({
+      monthlyUsd: 19,
+      cumulativeUsd: 38,
+      byCategory: [{ category: "software", monthlyUsd: 19, cumulativeUsd: 38 }]
     });
   });
 

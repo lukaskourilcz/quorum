@@ -20,11 +20,13 @@ import {
 /**
  * The Apify side of GoVIRAL's trend scouting.
  *
- * Everything here is Free-plan only, and that is the budget control rather than a preference:
- * the Free plan carries $5 of platform credit a month, actors simply stop when it is spent, and
- * no card is on file, so an overspend is not possible. Starter is $29/mo, which would consume
- * more than half of the $50 all-in operating cap. Upgrading is an owner decision with its own approval, and
- * nothing in this file or its config may assume a paid plan.
+ * The account was on the Free plan until 15 September 2026, when the owner paid for a
+ * subscription: the guard now assumes Apify's cheapest paid tier, Starter, with $19 of platform
+ * credit a month for $19, until the owner names another plan (docs/NEEDED.md). The plan changes
+ * what the guard is for. On the Free plan actors simply stopped when the credit was spent and no
+ * card was on file; on a paid plan usage past the credit is billed to the card as overage, so the
+ * reservation below is the only thing between a runaway actor and the $50 all-in operating cap.
+ * A plan change is an owner decision with its own approval; nothing here may assume a wider one.
  *
  * The guard below is the same shape as the Cito one in portfolio/evidence.ts: a counter file,
  * a per-run reservation, and a refusal *before* the first request rather than an apology after
@@ -33,13 +35,16 @@ import {
  */
 export const APIFY_HOST = "api.apify.com";
 
-/** The Free plan's monthly platform credit. Not a limit we chose; a limit the plan enforces. */
-export const APIFY_MONTHLY_CREDIT_USD = 5.0;
+/**
+ * The plan's monthly platform credit, the Starter tier's $19. Not a limit we chose; the amount
+ * the subscription pays for, and past it every dollar is overage on the owner's card.
+ */
+export const APIFY_MONTHLY_CREDIT_USD = 19.0;
 
 /** One weekly recipe's worst case, reserved up front so a run can never start what it cannot finish. */
 export const APIFY_RUN_RESERVATION_USD = 1.4;
 
-/** FightAIQ's share of the same account-wide Free-plan credit. This is a ceiling, not spend authority. */
+/** FightAIQ's share of the same account-wide plan credit. This is a ceiling, not spend authority. */
 export const MMA_APIFY_MONTHLY_SHARE_USD = 3.0;
 
 /** Four bounded source steps may reserve at most this much before the first actor request. */
@@ -240,7 +245,7 @@ export interface MmaApifyRunResult {
  *
  * The preliminary verdict happens before the platform usage request, so a pending approval or
  * missing token is a literal $0 path. The provider's account-wide usage then guards the shared
- * $5 credit, the local ledger guards FightAIQ's $3 share, and every actor request carries its own
+ * plan credit, the local ledger guards FightAIQ's $3 share, and every actor request carries its own
  * max charge. No one layer substitutes for another.
  */
 export async function runMmaApifySources(input: {
@@ -390,7 +395,7 @@ export function mayRunKvorumApify(input: {
     return { allowed: false, reason: "The Kvórum Apify share is exhausted, so no actor ran and nothing was spent." };
   }
   if (block === "shared-credit") {
-    return { allowed: false, reason: "The shared Apify Free-plan credit cannot cover the Kvórum reservation, so no actor ran and nothing was spent." };
+    return { allowed: false, reason: "The shared Apify plan credit cannot cover the Kvórum reservation, so no actor ran and nothing was spent." };
   }
   return { allowed: true, reason: "The authority, approval, account, shared-credit and Kvórum-share guards allow this run." };
 }

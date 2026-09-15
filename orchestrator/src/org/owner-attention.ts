@@ -33,8 +33,8 @@ type Urgency = OwnerAttention["approvals"][number]["urgency"];
  */
 const PLAIN_COPY: Readonly<Record<string, { plain: string; steps?: string[]; urgency?: Urgency }>> = {
   "APIFY-ACCOUNT-001": {
-    plain: "GoVIRAL's Monday meeting has no trend data until an Apify account exists on the free plan.",
-    steps: ["Sign up at apify.com on the Free plan — no card", "Copy the API token", "Add APIFY_TOKEN to the repository's Actions secrets"],
+    plain: "GoVIRAL's Monday meeting has no trend data until the Apify API token is in the repository's Actions secrets.",
+    steps: ["Sign in at apify.com and open Settings, then API & Integrations", "Copy the API token", "Add APIFY_TOKEN to the repository's Actions secrets"],
     urgency: "blocking"
   },
   "DISPATCH-TOKEN-001": {
@@ -143,8 +143,8 @@ const PLAIN_COPY: Readonly<Record<string, { plain: string; steps?: string[]; urg
     urgency: "blocking"
   },
   APIFY_TOKEN: {
-    plain: "GoVIRAL's Monday meeting has no trend data until an Apify account exists on the free plan.",
-    steps: ["Sign up at apify.com on the Free plan — no card", "Copy the API token", "Add APIFY_TOKEN to the repository's Actions secrets"],
+    plain: "GoVIRAL's Monday meeting has no trend data until the Apify API token is in the repository's Actions secrets.",
+    steps: ["Sign in at apify.com and open Settings, then API & Integrations", "Copy the API token", "Add APIFY_TOKEN to the repository's Actions secrets"],
     urgency: "blocking"
   },
   THE_ODDS_API_KEY: {

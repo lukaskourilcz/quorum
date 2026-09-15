@@ -6,7 +6,7 @@ Technický přehled je v `about-project.md`; účetnictví je v `state/finance/`
 
 ## Peníze teď
 
-- Zaznamenané náklady se počítají z uložené historie API volání. Podepsané rozhodnutí `budget-2026-08f` nastavuje společný limit **$50 / měsíc**, z toho $25 pro modely a $1.00 denně. Personal Growth má v tomto limitu vlastní strop $20. Při 80 % systém varuje; při 100 % nebo po třech vyčerpaných dnech další náklady zastaví. Soubor fixních nákladů nyní uvádí $0, ale předplacený kredit fal.ai ještě není smířený, takže nejde o úplně odsouhlasený all-in účet.
+- Zaznamenané náklady se počítají z uložené historie API volání. Podepsané rozhodnutí `budget-2026-08f` nastavuje společný limit **$50 / měsíc**, z toho $25 pro modely a $1.00 denně. Personal Growth má v tomto limitu vlastní strop $20. Při 80 % systém varuje; při 100 % nebo po třech vyčerpaných dnech další náklady zastaví. Soubor fixních nákladů uvádí od 15. září 2026 předplatné Apify Starter za $19 měsíčně (nejlevnější placený plán; majitel plán zaplatil a repozitář ho předpokládá, dokud nepotvrdí jiný), takže z limitu $50 zbývá po modelovém podílu $25 šest dolarů na vše ostatní. Předplacený kredit fal.ai ještě není smířený, takže nejde o úplně odsouhlasený all-in účet.
 - Každý externí výdaj schvaluje člověk (položka `HUMAN_APPROVAL` / `SPEND`); agent nedrží platební údaje.
 - Obrázky vytvářené přímo v kódu mají plánovaný náklad $0. Denní souhrn se nikam
   neposílá e-mailem — čte se na webu v sekci **Results**, takže nevyžaduje žádného
@@ -33,15 +33,15 @@ podílu `$25` a tempu `$1.00` denně. Obálka je nejvyšší povolená částka,
 | --- | --- |
 | **DNESKAi / Caught Up** | Rejstřík vyhrazuje `$0.08` pro vydání v 05:00 a `$0.08` pro produktovou kontrolu v 17:00. Kvalitativní kroky používají stávající modely a společný ledger. |
 | **MMA Files** | Redakce má `$0.05`, jeden denní článek `$0.16` a desk s povinnou agendou `$0.05`. Chybějící důkazy článek ukončí před voláním. |
-| **FightAIQ** | Intake i analýza mají po `$0.06`; predikce samotná je deterministický kód. Zdrojová vrstva má `$3` podíl na společném Apify Free kreditu, ale povolené keyless a free-tier zdroje nesmějí vytvořit hotovostní náklad. |
+| **FightAIQ** | Intake i analýza mají po `$0.06`; predikce samotná je deterministický kód. Zdrojová vrstva má `$3` podíl na společném Apify kreditu (plán Starter, `$19` měsíčně), ale povolené keyless a free-tier zdroje nesmějí vytvořit hotovostní náklad. |
 | **Design Lab** | Šablony, písma, SVG, PNG, recepty a exporty běží lokálně za `$0`; není tu modelový, výzkumný ani hostingový příplatek. |
 | **marketingShark** | Jedno volání za zapnutou značku má obálku `$0.10`; jedna aktivní značka vychází přibližně na `$1.50` měsíčně. |
-| **GoVIRAL** | Pondělní modelová porada má `$0.06`, ostatní dny `$0`. Apify recept je odhadnutý na `$4.60` měsíčně, ale tvrdě jej zastaví sdílený `$5` Free kredit; Door Money a Tehdejší svět používají bezklíčové měření za `$0`. |
+| **GoVIRAL** | Pondělní modelová porada má `$0.06`, ostatní dny `$0`. Apify recept je odhadnutý na `$4.60` měsíčně a tvrdě jej zastaví sdílený kredit plánu Starter (`$19`), který je na placeném plánu jedinou hranicí před přečerpáním na kartu; Door Money a Tehdejší svět používají bezklíčové měření za `$0`. |
 | **Titty Tuesdays** | Denní pre-commerce porada má `$0.08`. Volitelná úterní vizuální cesta je vypnutá bez šesti podpisů, obou klíčů a přepínače; po otevření má vlastní strop `$2.00` měsíčně. |
 | **BOOKSOFHISTORY** | Desk smí utratit nejvýše `$0.50` za cyklus; výzkum `$0.10` za volání a `$5.00` měsíčně. Celkový modelový plán je `$6–8` měsíčně, ale živá cesta čeká na zakládající podpis a do té doby stojí `$0`. |
 | **Door Money** | Jednorázová ingestace má strop `$3.00` celkem. Denní desk má `$0.08`, čtvrteční BOOKER `$0.06`; běžný modelový odhad je přibližně `$2.50` měsíčně. GoVIRAL termíny používají bezklíčový zdroj za `$0`. |
 | **Tehdejší svět** | Běh sdílí obálku `$0.25`; výzkum má `$0.30` za brief a `$2.00` měsíčně, modelový cíl nejvýše `$4.00` měsíčně. Zakládající rozhodnutí je nepodepsané, takže live náklad je zatím `$0`. |
-| **Kvórum** | Deklarovaná denní obálka je `$0.10`, modelový KPI strop `$3.00` měsíčně a Apify podíl `$2.00` uvnitř stejného `$5` Free kreditu. Zakládající i kapacitní rozhodnutí chybí, takže externí a modelová cesta stojí `$0`. |
+| **Kvórum** | Deklarovaná denní obálka je `$0.10`, modelový KPI strop `$3.00` měsíčně a Apify podíl `$2.00` uvnitř stejného `$19` kreditu plánu Starter. Zakládající i kapacitní rozhodnutí chybí, takže externí a modelová cesta stojí `$0`. |
 
 ## Kontrola nákladů
 
@@ -76,11 +76,14 @@ podílu `$25` a tempu `$1.00` denně. Obálka je nejvyšší povolená částka,
   běží jen s `FAL_KEY` a `ARTICLE_ILLUSTRATION_ENABLED`, majitel ji zapnul 8. srpna 2026 a
   platí ji z předplaceného kreditu, ne z předplatného. Vyčerpaný strop nikdy nezastaví
   vydání — obrázek klesne o příčku níž, v krajním případě na kreslenou desku za $0.
-- GoVIRAL čte trendová data přes Apify na **Free plánu**. Jeho měsíční kredit 5 dolarů
-  *je* limit: aktory se zastaví, jakmile dojde, žádná karta v systému není a přečerpání
-  není možné. Zapsaný recept stojí zhruba $1.03 týdně a $4.60 měsíčně; když měsíc běží
-  horko, hlídač ubírá kroky od konce, ne od začátku. Starter za $29/měsíc by sám snědl
-  celý třicetidolarový limit, takže nic zde nesmí předpokládat placený plán.
+- GoVIRAL čte trendová data přes Apify na plánu **Starter** (od 15. září 2026; majitel
+  zaplatil placený plán a repozitář předpokládá nejlevnější stupeň, $19 měsíčně za $19
+  kreditu, dokud nepotvrdí jiný). Na placeném plánu se aktory při vyčerpání kreditu
+  nezastaví — přečerpání jde na kartu — takže rezervace v `orchestrator/src/sources/apify.ts`
+  je jediná hranice a měsíční kredit plánu je její strop; majitel má v konzoli nastavit
+  měsíční limit útraty na stejnou částku. Zapsaný recept stojí zhruba $1.03 týdně a $4.60
+  měsíčně; když měsíc běží horko, hlídač ubírá kroky od konce, ne od začátku. Předplatné je
+  zapsané v `config/fixed-costs.json` a počítá se do limitu $50.
   Door Money do tohoto receptu nepřidává aktor ani kvótu: jeho čtyři anglické termíny
   rotují po třech přes bezklíčový Google News sběr a brief smí označit jen skutečně
   změřený termín.
@@ -119,7 +122,7 @@ podílu `$25` a tempu `$1.00` denně. Obálka je nejvyšší povolená částka,
   repozitáři. Existující produkt zůstává v samostatném repozitáři bez runtime spojení,
   takže nevzniká nový hosting, databáze, analytika ani placený kanál.
 - Kvórum má deklarovanou obálku **$0.10 na den**, modelový KPI strop **$3.00 měsíčně**
-  a vlastní **$2.00 měsíční podíl** uvnitř stejného Apify Free kreditu. Odhadovaný
+  a vlastní **$2.00 měsíční podíl** uvnitř stejného Apify kreditu plánu Starter. Odhadovaný
   modelový běh je přibližně $2.20 měsíčně. Zakládající rozhodnutí i oddělený přesun
   nejméně $0.08 denní kapacity jsou nepodepsané, takže monitor zůstává fixture-only,
   nevolá Apify ani model a stojí $0. Kvórum nesmí samo upgradovat tarif ani přesunout
