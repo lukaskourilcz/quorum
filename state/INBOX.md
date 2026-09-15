@@ -12,9 +12,9 @@ with its full scope, because the scope text is the approval. -->
   A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
 
-- [ ] **caught-up release reverted** — package `cf7602a63515` failed post-deploy verification and was reverted in `6d31084fa3be`. Proof: `state/release-proofs/caught-up/cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9.json`. [owner:me]
+- [x] **caught-up release reverted** — Resolved 2026-09-15: the article is live at the proof's target commit and every content check in the proof passed; only the magazine's own CI state was red on 8 September, and the delivery is recorded as delivered. Original report: package `cf7602a63515` failed post-deploy verification and was reverted in `6d31084fa3be`. Proof: `state/release-proofs/caught-up/cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9.json`. [owner:me]
 
-- [ ] **CAUGHT-UP-DELIVERY-2026-08-17** — post_deploy_verification: Delivery stopped without a reconciled target commit.
+- [x] **CAUGHT-UP-DELIVERY-2026-08-17** — Resolved 2026-09-15: the edition for this date delivered on a later run. Original report: — post_deploy_verification: Delivery stopped without a reconciled target commit.
   RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
 

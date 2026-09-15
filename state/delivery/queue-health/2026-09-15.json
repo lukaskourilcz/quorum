@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-09-15T21:28:47.091Z",
+  "checkedAt": "2026-09-15T21:55:28.924Z",
   "date": "2026-09-15",
   "ventures": [
     {
@@ -56,27 +56,11 @@
           "date": "2026-09-15"
         }
       ],
-      "parked": [
-        {
-          "label": "2026-08-17 edition",
-          "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
-          "date": "2026-08-17",
-          "code": "post_deploy_verification",
-          "disposition": "owner"
-        }
-      ],
+      "parked": [],
       "oldestWaitingDate": "2026-09-12",
       "stalledDays": 3,
       "stalled": true,
-      "neverDrains": [
-        {
-          "label": "2026-08-17 edition",
-          "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
-          "date": "2026-08-17",
-          "code": "post_deploy_verification",
-          "disposition": "owner"
-        }
-      ]
+      "neverDrains": []
     }
   ],
   "deploys": [
