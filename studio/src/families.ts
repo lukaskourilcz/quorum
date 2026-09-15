@@ -13,6 +13,7 @@ import { LAUNCH_FAMILY_SPECS } from "./families-launch.js";
 import { POSTER_FAMILIES } from "./families-poster.js";
 import { SYSTEM_FAMILIES } from "./families-system.js";
 import { PRINT_FAMILIES } from "./families-print.js";
+import { EDITORIAL_FAMILIES } from "./families-editorial.js";
 
 /**
  * The template family library: what it contains, and how one family becomes a deck.
@@ -88,7 +89,9 @@ export const FAMILY_SERVES: Readonly<Record<DeckFamily, "photo-forward" | "type-
   rail: "type-only",
   vista: "photo-forward",
   fault: "type-only",
-  halo: "photo-forward"
+  halo: "photo-forward",
+  folio: "photo-forward",
+  press: "photo-forward"
 };
 
 /**
@@ -103,7 +106,8 @@ const families: Readonly<Record<DeckFamily, FamilySpec>> = {
   ...POSTER_FAMILIES,
   ...PRINT_FAMILIES,
   ...SYSTEM_FAMILIES,
-  ...LAUNCH_FAMILY_SPECS
+  ...LAUNCH_FAMILY_SPECS,
+  ...EDITORIAL_FAMILIES
 };
 
 /** The reference a stored recipe or pack names for one family at one length. */

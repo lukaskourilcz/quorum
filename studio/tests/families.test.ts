@@ -44,7 +44,7 @@ const brands = Object.values(CAROUSEL_BRANDS);
  * This number moves in the commit that adds a family, which is the point at which somebody has to
  * notice that it did.
  */
-const FAMILY_COUNT = 28;
+const FAMILY_COUNT = 30;
 
 function payload(slideCount: number, variant?: string): CarouselPayload {
   return {
