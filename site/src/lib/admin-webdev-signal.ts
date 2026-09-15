@@ -96,6 +96,35 @@ export interface WebDevAdminBaseline {
   modelCalls: number;
 }
 
+export interface WebDevAdminDraftPanel {
+  role: string;
+  heading: string;
+  body: string;
+}
+
+/**
+ * One locale package as the owner posts it by hand: the copy, the panel text and, when the Design
+ * Lab rendered it, the paths of the panel files. The package is the editor's own writing, so its
+ * text crosses this boundary; a source body never does.
+ */
+export interface WebDevAdminDraft {
+  date: string;
+  locale: "cs" | "en";
+  status: "draft" | "held" | "approved";
+  heldReason: string | null;
+  headline: string;
+  deck: string;
+  instagramCaption: string | null;
+  threadsPrimary: string;
+  panels: WebDevAdminDraftPanel[];
+  sourceUrls: string[];
+  render: {
+    outcome: "success" | "held" | "failed" | "absent";
+    reason: string | null;
+    assetRefs: string[];
+  };
+}
+
 export interface AdminWebDevSignalSnapshot {
   observationsState: WebDevStoreState;
   days: WebDevAdminDay[];
@@ -103,6 +132,9 @@ export interface AdminWebDevSignalSnapshot {
   baseline: WebDevAdminBaseline | null;
   profilesState: WebDevStoreState;
   profiles: WebDevAdminProfile[];
+  draftsState: WebDevStoreState;
+  /** Newest day first, Czech before English; bounded to the last fortnight of packages. */
+  drafts: WebDevAdminDraft[];
   /** The venture's own posture, read from the countersigned founding rather than assumed. */
   authority: {
     foundingCountersigned: boolean;
@@ -351,12 +383,96 @@ async function readAuthority(): Promise<AdminWebDevSignalSnapshot["authority"]> 
   }
 }
 
+const DRAFT_LIMIT = 28;
+const ASSET_PREFIX = "state/ventures/webdev-signal/design-lab/assets/";
+
+function parseDraft(value: unknown): WebDevAdminDraft | null {
+  const record = object(value);
+  if (!record || record.schemaVersion !== "webdev-edition-package/1") return null;
+  const locale = text(record.locale, 2);
+  const status = text(record.status, 10);
+  // The day is read from the brief the package cites, not from a filename.
+  const date = text(record.evidenceBriefRef, 300)?.match(/\/briefs\/(\d{4}-\d{2}-\d{2})\.json$/u)?.[1] ?? null;
+  const headline = text(record.headline, 160);
+  const deck = text(record.deck, 280);
+  const threadsPrimary = text(object(record.threads)?.primary, 500);
+  if (!date || (locale !== "cs" && locale !== "en") || !headline || !deck || !threadsPrimary) return null;
+  if (status !== "draft" && status !== "held" && status !== "approved") return null;
+  const panels = Array.isArray(record.instagramPanels)
+    ? record.instagramPanels.flatMap((entry): WebDevAdminDraftPanel[] => {
+      const panel = object(entry);
+      const role = text(panel?.role, 20);
+      const heading = text(panel?.heading, 120);
+      const body = text(panel?.body, 500);
+      return role && heading && body ? [{ role, heading, body }] : [];
+    }).slice(0, 8)
+    : [];
+  const sourceUrls = Array.isArray(record.sourceAttribution)
+    ? record.sourceAttribution.flatMap((entry) => {
+      const url = text(object(entry)?.url, 300);
+      return url?.startsWith("https://") ? [url] : [];
+    }).slice(0, 20)
+    : [];
+  return {
+    date,
+    locale,
+    status,
+    heldReason: text(record.heldReason, 500),
+    headline,
+    deck,
+    instagramCaption: text(record.instagramCaption, 2_200),
+    threadsPrimary,
+    panels,
+    sourceUrls,
+    render: { outcome: "absent", reason: null, assetRefs: [] }
+  };
+}
+
+interface DraftRender {
+  packageRef: string;
+  outcome: "success" | "held" | "failed";
+  reason: string | null;
+  assetRefs: string[];
+}
+
+function parseRender(value: unknown): DraftRender | null {
+  const record = object(value);
+  if (!record || record.schemaVersion !== "webdev-render-receipt/1") return null;
+  const packageRef = text(record.packageRef, 300);
+  const outcome = text(record.outcome, 10);
+  if (!packageRef || (outcome !== "success" && outcome !== "held" && outcome !== "failed")) return null;
+  const assetRefs = Array.isArray(record.outputs)
+    ? record.outputs.flatMap((entry) => {
+      const ref = text(object(entry)?.assetRef, 300);
+      return ref?.startsWith(ASSET_PREFIX) && !ref.includes("..") ? [ref] : [];
+    }).slice(0, 8)
+    : [];
+  return { packageRef, outcome, reason: text(record.reason, 500), assetRefs };
+}
+
+/** A package meets the receipt that rendered it; a successful render wins over a held retry. */
+function joinRenders(drafts: readonly WebDevAdminDraft[], renders: readonly DraftRender[]): WebDevAdminDraft[] {
+  return drafts
+    .map((draft) => {
+      const packageRef = `state/ventures/webdev-signal/packages/${draft.date}-${draft.locale}.json`;
+      const matching = renders.filter((render) => render.packageRef === packageRef);
+      const render = matching.find((candidate) => candidate.outcome === "success") ?? matching[0];
+      return render
+        ? { ...draft, render: { outcome: render.outcome, reason: render.reason, assetRefs: render.assetRefs } }
+        : draft;
+    })
+    .sort((left, right) => right.date.localeCompare(left.date) || left.locale.localeCompare(right.locale))
+    .slice(0, DRAFT_LIMIT);
+}
+
 export async function readAdminWebDevSignal(): Promise<AdminWebDevSignalSnapshot> {
-  const [observations, baselines, profiles, authority] = await Promise.all([
+  const [observations, baselines, profiles, authority, packages, renders] = await Promise.all([
     readDirectory("state/ventures/webdev-signal/observations", /^\d{4}-\d{2}-\d{2}\.json$/u, parseDay),
     readDirectory("state/ventures/webdev-signal/baselines", /^\d{4}-\d{2}-\d{2}\.json$/u, parseBaseline),
     readProfiles(),
-    readAuthority()
+    readAuthority(),
+    readDirectory("state/ventures/webdev-signal/packages", /^\d{4}-\d{2}-\d{2}-(?:cs|en)\.json$/u, parseDraft),
+    readDirectory("state/ventures/webdev-signal/design-lab/receipts", /\.json$/u, parseRender)
   ]);
 
   const days = observations.values.sort((left, right) => right.date.localeCompare(left.date));
@@ -368,8 +484,10 @@ export async function readAdminWebDevSignal(): Promise<AdminWebDevSignalSnapshot
     baseline,
     profilesState: profiles.state,
     profiles: profiles.values.sort((left, right) => left.id.localeCompare(right.id)),
+    draftsState: packages.state,
+    drafts: joinRenders(packages.values, renders.values),
     authority,
-    unreadable: observations.unreadable + baselines.unreadable + profiles.unreadable
+    unreadable: observations.unreadable + baselines.unreadable + profiles.unreadable + packages.unreadable + renders.unreadable
   };
   return {
     ...body,

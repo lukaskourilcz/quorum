@@ -18,15 +18,14 @@ the day, and the run receipt under `state/ventures/webdev-signal/runs/` names wh
   one Threads account per edition, `cs` and `en`, created by you in the platforms' own UIs. Nothing
   in the repository can create them, and no delivery feature is reconsidered before the handles
   exist. Never paste a credential into Git. [imp:4] [owner:me] [time:1h] [kind:setup]
-- [ ] **Post the first rendered drafts by hand** — on a day whose receipt says both carousels are
-  rendered, take the panel PNGs from `state/ventures/webdev-signal/design-lab/assets/` and the
-  caption and Threads text from the day's package files, and post them from the accounts above.
-  The admin lists the receipts but has no preview or download route yet; that route is the next
-  build item. [imp:3] [owner:me] [time:20m] [kind:content]
-- [ ] **Add an admin preview and download route for the rendered panels** — the Design & delivery
-  tab lists render receipts without a way to open the PNGs; manual posting needs one. Server-only
-  read under the existing `/admin` auth boundary, no new state writer. [imp:3] [owner:ai]
-  [time:2h] [kind:content]
+- [ ] **Post the first rendered drafts by hand** — on a day the Design & delivery tab shows as
+  rendered, copy the caption and Threads text from the draft card, take the panel PNGs from the
+  repository paths the card lists under `state/ventures/webdev-signal/design-lab/assets/`, and
+  post them from the accounts above. [imp:3] [owner:me] [time:20m] [kind:content]
+- [ ] **Add an admin preview and download route for the rendered panels** — the draft card names
+  the PNG paths but cannot show or serve them; manual posting still means opening the repository.
+  Server-only read under the existing `/admin` auth boundary, no new state writer. [imp:3]
+  [owner:ai] [time:2h] [kind:content]
 
 ## Design Lab · 2026-09-15
 

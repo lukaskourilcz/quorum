@@ -16,6 +16,7 @@ import {
 import type {
   AdminWebDevSignalSnapshot,
   WebDevAdminDay,
+  WebDevAdminDraft,
   WebDevAdminEdition,
   WebDevAdminMeasure
 } from "@/lib/admin-webdev-signal";
@@ -258,9 +259,97 @@ function Edition({ snapshot, locale }: { snapshot: AdminWebDevSignalSnapshot; lo
   );
 }
 
+function DraftText({ label, text }: { label: string; text: string }) {
+  return (
+    <div className="mt-3">
+      <p className="font-mono text-[9.5px] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">{label}</p>
+      <pre className="m-0 mt-1 max-w-full whitespace-pre-wrap break-words font-sans text-[length:var(--admin-type-control)] leading-5 text-[var(--admin-foreground)]">{text}</pre>
+    </div>
+  );
+}
+
+function renderLabel(render: WebDevAdminDraft["render"]): string {
+  if (render.outcome === "success") return `rendered · ${render.assetRefs.length} ${render.assetRefs.length === 1 ? "panel" : "panels"}`;
+  return render.outcome === "absent" ? "not rendered" : `render ${render.outcome}`;
+}
+
+/**
+ * The packages as the owner posts them. Nothing here is a queue: the runner writes the copy and
+ * the panel files, and the owner carries them to the accounts by hand until publishing is granted.
+ */
+function Drafts({ snapshot }: { snapshot: AdminWebDevSignalSnapshot }) {
+  if (snapshot.drafts.length === 0) {
+    return (
+      <Card note="manual posting" title="Drafts to post by hand">
+        <AdminStateMessage
+          description={snapshot.draftsState === "unreadable"
+            ? "The package files could not be read; the unreadable count says how many."
+            : "No day has selected a story yet. A selected day leaves a Czech and an English package here; a NO_EDITION day leaves nothing, on purpose."}
+          state="unavailable"
+          title="No drafts yet"
+        />
+      </Card>
+    );
+  }
+  return (
+    <Card note={`${snapshot.drafts.length} packages`} title="Drafts to post by hand">
+      <p className="text-[length:var(--admin-type-body)] text-[var(--admin-foreground-muted)]">
+        Each package is the deterministic editor&apos;s copy for one locale and one day. Nothing here is queued or posted:
+        copy the caption, take the rendered panel files from the paths named, and post from the accounts you own.
+      </p>
+      <ol className="mt-4 grid gap-4">
+        {snapshot.drafts.map((draft) => (
+          <li
+            className="rounded-[8px] border border-[var(--admin-border)] bg-[var(--admin-surface-inset)] p-4"
+            data-webdev-draft={`${draft.date}-${draft.locale}`}
+            key={`${draft.date}-${draft.locale}`}
+          >
+            <div className="flex flex-wrap items-center gap-2">
+              <AdminEntityBadge>{draft.date}</AdminEntityBadge>
+              <AdminEntityBadge>{draft.locale === "cs" ? "Czech" : "English"}</AdminEntityBadge>
+              <AdminStatusBadge tone={draft.status === "approved" ? "success" : draft.status === "held" ? "warning" : "neutral"}>
+                {draft.status}
+              </AdminStatusBadge>
+              <AdminStatusBadge tone={draft.render.outcome === "success" ? "success" : draft.render.outcome === "absent" ? "neutral" : "warning"}>
+                {renderLabel(draft.render)}
+              </AdminStatusBadge>
+            </div>
+            {draft.heldReason ? <p className="mt-2 text-[length:var(--admin-type-body)]">Held: {draft.heldReason}</p> : null}
+            {draft.render.reason ? <p className="mt-2 text-[length:var(--admin-type-body)]">Render: {draft.render.reason}</p> : null}
+            <p className="mt-3 font-medium text-[var(--admin-foreground)]">{draft.headline}</p>
+            <p className="mt-1 text-[length:var(--admin-type-body)]">{draft.deck}</p>
+            <DraftText label="Instagram caption" text={draft.instagramCaption ?? "This package carries no caption."} />
+            <DraftText label="Threads" text={draft.threadsPrimary} />
+            <p className="mt-3 font-mono text-[9.5px] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">Panels</p>
+            <ol className="mt-1 grid gap-1 text-[length:var(--admin-type-body)]">
+              {draft.panels.map((panel, index) => (
+                <li key={`${draft.date}-${draft.locale}-${index}`}>
+                  <span className="font-medium">{index + 1}. {panel.heading}</span> — {panel.body}
+                </li>
+              ))}
+            </ol>
+            {draft.render.assetRefs.length > 0 ? (
+              <>
+                <p className="mt-3 font-mono text-[9.5px] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">Rendered panel files</p>
+                <ul className="mt-1 grid gap-1 font-mono text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">
+                  {draft.render.assetRefs.map((ref) => <li key={ref}>{ref}</li>)}
+                </ul>
+              </>
+            ) : null}
+            {draft.sourceUrls.length > 0 ? (
+              <p className="mt-3 text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">Source: {draft.sourceUrls.join(", ")}</p>
+            ) : null}
+          </li>
+        ))}
+      </ol>
+    </Card>
+  );
+}
+
 function Delivery({ snapshot }: { snapshot: AdminWebDevSignalSnapshot }) {
   return (
     <div className="grid min-w-0 gap-4" data-webdev-tab="delivery">
+      <Drafts snapshot={snapshot} />
       <Card note={`${snapshot.profiles.length} profiles`} title="Destinations">
         {snapshot.profiles.length === 0 ? (
           <AdminStateMessage
