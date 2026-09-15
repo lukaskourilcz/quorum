@@ -115,6 +115,7 @@ import {
   PersonalGrowthJournalMetadataSchema,
   PersonalGrowthLeakAuditSchema,
   PersonalGrowthPlannerConfigSchema,
+  PersonalGrowthPublicationsSchema,
   PersonalGrowthRollingPlanSchema
 } from "./personal-growth.js";
 import { AnyVentureRecommendationSchema } from "./venture-recommendation.js";
@@ -264,6 +265,7 @@ export const ContractSchemas = {
   "personal-growth-provider-observation": PersonalGrowthProviderObservationSchema,
   "personal-growth-result": PersonalGrowthResultSchema,
   "personal-growth-baseline": PersonalGrowthBaselineSchema,
+  "personal-growth-publications": PersonalGrowthPublicationsSchema,
   "personal-growth-experiment-register": PersonalGrowthExperimentRegisterSchema,
   "personal-growth-feedback": PersonalGrowthFeedbackSchema,
   "personal-growth-planner-config": PersonalGrowthPlannerConfigSchema,

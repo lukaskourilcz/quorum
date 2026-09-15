@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "personal-growth-publications/1",
+  "ventureId": "personal-growth",
+  "ownerAuthored": true,
+  "recordedAt": "2026-09-15",
+  "sourceUrl": "https://example.com/shop/collections/author",
+  "promotion": {
+    "anchorDate": "2026-09-16",
+    "everyNthDay": 3
+  },
+  "publications": [
+    {
+      "id": "fixture-book",
+      "kind": "book",
+      "title": "Fixture Book",
+      "author": "Fixture Author",
+      "publisher": "Fixture Press",
+      "language": "cs",
+      "pillar": "writing-publishing",
+      "url": "https://example.com/shop/products/fixture-book",
+      "sampleUrl": "https://example.com/shop/products/fixture-book-sample",
+      "priceCzk": 490,
+      "narrator": null,
+      "lengthHours": null,
+      "chapters": null,
+      "coverImageUrls": ["https://example.com/cdn/fixture-book-cover.jpg"],
+      "facts": ["A printed book of invented chapters.", "Sold by an invented press."]
+    },
+    {
+      "id": "fixture-audiobook",
+      "kind": "audiobook",
+      "title": "Fixture Book, read aloud",
+      "author": "Fixture Author",
+      "publisher": "Fixture Press",
+      "language": "cs",
+      "pillar": "books-reading",
+      "url": "https://example.com/shop/products/fixture-audiobook",
+      "sampleUrl": null,
+      "priceCzk": 349,
+      "narrator": "Fixture Narrator",
+      "lengthHours": 7,
+      "chapters": 21,
+      "coverImageUrls": [],
+      "facts": ["Seven hours in twenty-one chapters."]
+    }
+  ]
+}

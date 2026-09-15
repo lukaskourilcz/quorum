@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DateSchema, DateTimeSchema, EvidenceRefSchema, Sha256Schema } from "./common.js";
+import { DateSchema, DateTimeSchema, EvidenceRefSchema, HttpsUrlSchema, Sha256Schema } from "./common.js";
 
 const SlugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(80);
 const OptionalUrlSchema = z.string().url().max(500).nullable();
@@ -290,6 +290,54 @@ export const PersonalGrowthLeakAuditSchema = z.strictObject({
 export type PersonalGrowthPlannerConfig = z.infer<typeof PersonalGrowthPlannerConfigSchema>;
 export type PersonalGrowthHistoryEvent = z.infer<typeof PersonalGrowthHistoryEventSchema>;
 export type PersonalGrowthRollingPlan = z.infer<typeof PersonalGrowthRollingPlanSchema>;
+/**
+ * The owner's own publications, copied by hand from the publisher's shop page.
+ *
+ * Facts, never copy: a title, a price as the shop shows it, the links, a narrator, a length. The
+ * desk reads them to put a publication on the Instagram rotation and hands the owner the frame;
+ * every word that reaches a reader is still the owner's. The pillars allowed here are the four
+ * personal ones a book of his can honestly sit under, and a test pins them to the pillar
+ * registry so the two lists cannot drift apart.
+ */
+export const PersonalGrowthPublicationSchema = z.strictObject({
+  id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(80),
+  kind: z.enum(["book", "audiobook"]),
+  title: z.string().trim().min(1).max(160),
+  author: z.string().trim().min(1).max(120),
+  publisher: z.string().trim().min(1).max(120),
+  language: z.enum(["cs", "en"]),
+  pillar: z.enum(["rapovej-denik", "writing-publishing", "books-reading", "hip-hop"]),
+  url: HttpsUrlSchema.max(500),
+  sampleUrl: HttpsUrlSchema.max(500).nullable(),
+  priceCzk: z.number().int().nonnegative().nullable(),
+  narrator: z.string().trim().min(1).max(120).nullable(),
+  lengthHours: z.number().finite().positive().nullable(),
+  chapters: z.number().int().positive().nullable(),
+  coverImageUrls: z.array(HttpsUrlSchema.max(500)).max(4),
+  facts: z.array(z.string().trim().min(1).max(160)).min(1).max(8)
+});
+
+export const PersonalGrowthPublicationsSchema = z.strictObject({
+  schemaVersion: z.literal("personal-growth-publications/1"),
+  ventureId: z.literal("personal-growth"),
+  ownerAuthored: z.literal(true),
+  recordedAt: DateSchema,
+  sourceUrl: HttpsUrlSchema.max(500),
+  promotion: z.strictObject({
+    anchorDate: DateSchema,
+    everyNthDay: z.number().int().min(1).max(30)
+  }),
+  publications: z.array(PersonalGrowthPublicationSchema).min(1).max(12)
+}).superRefine((file, context) => {
+  const ids = file.publications.map(({ id }) => id);
+  if (new Set(ids).size !== ids.length) {
+    context.addIssue({ code: "custom", path: ["publications"], message: "Publication ids must be unique" });
+  }
+});
+
+export type PersonalGrowthPublication = z.infer<typeof PersonalGrowthPublicationSchema>;
+export type PersonalGrowthPublications = z.infer<typeof PersonalGrowthPublicationsSchema>;
+
 export type PersonalGrowthDailyBrief = z.infer<typeof PersonalGrowthDailyBriefSchema>;
 export type PersonalGrowthGoViralPacket = z.infer<typeof PersonalGrowthGoViralPacketSchema>;
 export type PersonalGrowthGoViralOpportunity = z.infer<typeof PersonalGrowthGoViralOpportunitySchema>;

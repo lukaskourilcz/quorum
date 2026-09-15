@@ -20,6 +20,7 @@ import {
   loadPersonalGrowthContentConfig
 } from "./recommendations.js";
 import { readPersonalGrowthResultInputs } from "./results.js";
+import { choosePublicationPromotion, publicationRecommendationInput, readPersonalGrowthPublications } from "./publications.js";
 
 const HistoryFileSchema = z.strictObject({
   schemaVersion: z.literal("personal-growth-history/1"),
@@ -108,7 +109,17 @@ export async function runPersonalGrowthDesk(input: {
     const occurrence = brief.primaryAction.occurrenceId === null
       ? null
       : plan.occurrences.find(({ occurrenceId }) => occurrenceId === brief.primaryAction.occurrenceId) ?? null;
-    const instagram = buildPersonalGrowthInstagramRecommendation({
+    // A promotion day takes the Instagram slot whatever the lanes owe: the lane checklist stays
+    // in the brief's timeline, and the owner's own book is what the rotation is for.
+    const publications = await readPersonalGrowthPublications(root);
+    const promotion = publications === null ? null : choosePublicationPromotion({ publications, targetPragueDate });
+    const instagram = promotion ? buildPersonalGrowthInstagramRecommendation({
+      recommendationDate: targetPragueDate,
+      generatedAt: input.now,
+      ...publicationRecommendationInput(promotion, targetPragueDate),
+      englishProfileAvailable: contentConfig.englishProfileAvailable,
+      recommendationAuthority: !held
+    }) : buildPersonalGrowthInstagramRecommendation({
       recommendationDate: targetPragueDate,
       generatedAt: input.now,
       actionType: occurrence?.lane === "okraj" ? "okraj-distribution"

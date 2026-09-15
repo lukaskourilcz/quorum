@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "personal-growth-publications/1",
+  "ventureId": "personal-growth",
+  "ownerAuthored": false,
+  "recordedAt": "2026-09-15",
+  "sourceUrl": "http://example.com/shop/collections/author",
+  "promotion": {
+    "anchorDate": "2026-09-16",
+    "everyNthDay": 0
+  },
+  "publications": [
+    {
+      "id": "fixture-book",
+      "kind": "manuscript",
+      "title": "Fixture Book",
+      "author": "Fixture Author",
+      "publisher": "Fixture Press",
+      "language": "cs",
+      "pillar": "kvorum",
+      "url": "https://example.com/shop/products/fixture-book",
+      "sampleUrl": null,
+      "priceCzk": -1,
+      "narrator": null,
+      "lengthHours": null,
+      "chapters": null,
+      "coverImageUrls": [],
+      "facts": [],
+      "draftCaption": "Buy my book today!"
+    },
+    {
+      "id": "fixture-book",
+      "kind": "book",
+      "title": "Duplicate id",
+      "author": "Fixture Author",
+      "publisher": "Fixture Press",
+      "language": "cs",
+      "pillar": "writing-publishing",
+      "url": "https://example.com/shop/products/fixture-book-2",
+      "sampleUrl": null,
+      "priceCzk": null,
+      "narrator": null,
+      "lengthHours": null,
+      "chapters": null,
+      "coverImageUrls": [],
+      "facts": ["Same id as the first entry."]
+    }
+  ]
+}

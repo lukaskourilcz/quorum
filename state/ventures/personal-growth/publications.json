@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "personal-growth-publications/1",
+  "ventureId": "personal-growth",
+  "ownerAuthored": true,
+  "recordedAt": "2026-09-15",
+  "sourceUrl": "https://okraj.shop/collections/lukas-kouril",
+  "promotion": {
+    "anchorDate": "2026-09-16",
+    "everyNthDay": 3
+  },
+  "publications": [
+    {
+      "id": "rapovej-denik-kniha",
+      "kind": "book",
+      "title": "Rapovej deník Lukáše Kouřila",
+      "author": "Lukáš Kouřil",
+      "publisher": "OKRAJ Media s.r.o.",
+      "language": "cs",
+      "pillar": "rapovej-denik",
+      "url": "https://okraj.shop/products/rapovej-denik-lukase-kourila",
+      "sampleUrl": "https://okraj.shop/products/kniha-rapovej-denik-lukase-kourila-zdarma-pdf-hip-hop-4-elements",
+      "priceCzk": 490,
+      "narrator": null,
+      "lengthHours": null,
+      "chapters": null,
+      "coverImageUrls": [
+        "https://okraj.shop/cdn/shop/files/rapovej-denik-lukase-kourila.png"
+      ],
+      "facts": [
+        "Kniha zachycuje šestnáct let kariéry promotéra hiphopových koncertů, od začátků v roce 2007 po cestu do Kolumbie v roce 2023.",
+        "Autentické přepisy historek ze zákulisí hudebního prostředí, včetně finančních přešlapů a slepých uliček na cestě.",
+        "Vydal OKRAJ Media s.r.o.; tištěná kniha za 490 Kč na okraj.shop.",
+        "Kapitola HIP HOP 4 ELEMENTS je zdarma ke stažení jako PDF.",
+        "Autor pořádal první koncert v roce 2008 v Hodoníně a po roce v Manchesteru propadl cestování."
+      ]
+    },
+    {
+      "id": "rapovej-denik-audiokniha",
+      "kind": "audiobook",
+      "title": "Audiokniha Rapovej deník",
+      "author": "Lukáš Kouřil",
+      "publisher": "OKRAJ Media s.r.o.",
+      "language": "cs",
+      "pillar": "rapovej-denik",
+      "url": "https://okraj.shop/products/audiokniha-rapovej-denik-namluvil-petr-stn-purmensky",
+      "sampleUrl": "https://okraj.shop/products/audiokniha-rapovej-denik-hip-hop-4-elements-kapitola-z-audioknihy-zdarma-mp3",
+      "priceCzk": 349,
+      "narrator": "Petr STN Purmenský",
+      "lengthHours": 7,
+      "chapters": 21,
+      "coverImageUrls": [
+        "https://okraj.shop/cdn/shop/files/audiokniha-lukas-kouril-rapovej-denik-cover-front.jpg",
+        "https://okraj.shop/cdn/shop/files/audiokniha-lukas-kouril-rapovej-denik-cover-back.jpg"
+      ],
+      "facts": [
+        "Audioknihu namluvil Petr STN Purmenský; dílčí pasáže čtou Petr PEŤANGAMES Esterka a Mikoláš BIGDADDYMIKKY Trkal.",
+        "Sedm hodin poslechu ve 21 kapitolách, od HIP HOP 4 ELEMENTS po Kolumbie, kokain & konec.",
+        "Vydal OKRAJ Media s.r.o.; 349 Kč na okraj.shop.",
+        "Kapitola HIP HOP 4 ELEMENTS je zdarma jako MP3."
+      ]
+    }
+  ]
+}
