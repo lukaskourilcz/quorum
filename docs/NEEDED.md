@@ -14,10 +14,12 @@ sweeps reach the 23:00 desk. Each owner step is one GitHub issue:
 - [ ] **Deploy `main` to Vercel and count the deployed cron jobs** — #527. The Design Lab update and the calendar are still undeployed; if the Hobby plan deploys two crons, decide the Pro move. [imp:5] [owner:me] [time:30m] [kind:deploy]
 - [ ] **Check the Apify Free-plan credit and fill GoVIRAL's profile** — #528. [imp:4] [owner:me] [time:30m] [kind:content]
 - [ ] **Add the free Podcast Index key pair** — #529. [imp:2] [owner:me] [time:15m] [kind:setup]
-- [ ] **Give Personal Growth the book and audiobook facts** — #530. The desk knows no title, link or date and cannot plan a launch it has never been told about. [imp:4] [owner:me] [time:20m] [kind:content]
-- [ ] **Write the devShark fact sheet for marketingShark** — #531. Today's copy claims a shipped product. [imp:3] [owner:me] [time:20m] [kind:content]
-- [ ] **Clear WebDev Signal's name and handles** — #532. [imp:3] [owner:me] [time:20m] [kind:legal]
-- [ ] **Reconcile the duplicate editions of 10 and 11 September** — #533. Both articles are live; the records say otherwise, and a session may not rewrite those records. [imp:3] [owner:me] [time:20m] [kind:decision]
+- [x] **Give Personal Growth the book and audiobook facts** — done 2026-09-15 from okraj.shop on the owner's instruction (#530): `state/ventures/personal-growth/publications.json` holds the book and the audiobook as facts, and every third day from 16 September the desk's Instagram recommendation frames one of them. [imp:4] [owner:me] [time:20m] [kind:content]
+- [x] **Write the devShark fact sheet for marketingShark** — done 2026-09-15 (#531): `config/marketingshark.json` carries the maturity, the call to action and the claims allowed and forbidden, and CHUM's packet states them. Correct it there if the app's state changes. [imp:3] [owner:me] [time:20m] [kind:content]
+- [x] **Clear WebDev Signal's name and handles** — done 2026-09-15 as product research (#532): `WebDev Signal` is the public name, `@webdevsignal` and `@webdevsignal.cz` are the proposed handles. Availability could not be verified without a login; the trademark check and the accounts are still yours. [imp:3] [owner:me] [time:20m] [kind:legal]
+- [x] **Reconcile the duplicate editions of 10 and 11 September** — done 2026-09-15 on the owner's instruction (#533): receipts restored, duplicates retired, meeting records repaired, inbox items closed. [imp:3] [owner:me] [time:20m] [kind:decision]
+- [ ] **Create the two WebDev Signal Instagram accounts** — `@webdevsignal` and `@webdevsignal.cz`, each with its Threads profile; do the trademark check first. Nothing in the repository can create them. [imp:3] [owner:me] [time:40m] [kind:setup]
+- [ ] **Tell the repository the new Apify plan's numbers** — the guard still assumes the Free plan's $5 credit (`APIFY_MONTHLY_CREDIT_USD` in `orchestrator/src/sources/apify.ts`) and the fixed-cost registry has no Apify subscription. Send the plan name, its monthly price and its monthly platform credit, and a session updates both; the subscription counts against the $50 all-in cap. [imp:4] [owner:me] [time:5m] [kind:decision]
 
 ## WebDev Signal · 2026-09-15
 

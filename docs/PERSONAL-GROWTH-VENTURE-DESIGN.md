@@ -96,6 +96,15 @@ first subject. BBARAK is a three-day hip-hop article rhythm. Their anchors, owne
 URLs are typed metadata; no config or plan field can hold draft content. The owner writes and
 publishes every word.
 
+The owner's publications are a third owner-authored input, added 2026-09-15:
+`state/ventures/personal-growth/publications.json` (`personal-growth-publications/1`) holds the
+book and the audiobook as facts copied from the publisher's shop page: title, price as the shop
+shows it, links, cover, narrator, length, a handful of recorded facts. Every Nth day from the
+file's anchor date the desk's Instagram recommendation is a story sequence framed around one of
+them, alternating through the list, with the links and facts as the asset and story checklists.
+The file holds no copy and the rotation grants nothing: the owner writes the words and posts by
+hand, exactly as for the lanes.
+
 ## Private journal
 
 `pnpm --filter @boardlessai/orchestrator personal-growth:ingest -- --file <path> --language cs|en --title <title>`
