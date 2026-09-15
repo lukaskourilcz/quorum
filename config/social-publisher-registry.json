@@ -388,7 +388,7 @@
         ],
         "fixtureKey": null
       },
-      "notes": "Internal proposal only. The owner creates and authorizes the Instagram and Threads accounts; no handle, connection, credential or publishing authority exists for this edition."
+      "notes": "Internal proposal only. The owner creates and authorizes the Instagram and Threads accounts; no connection, credential or publishing authority exists for this edition. Public name cleared as WebDev Signal on 2026-09-15 (docs/WEBDEV-SIGNAL-FOUNDING.md); proposed handles, unverified without a login: Instagram @webdevsignal for the English edition and @webdevsignal.cz for the Czech edition, each with its Threads profile under the same handle."
     },
     {
       "schemaVersion": "social-profile/1",
@@ -450,7 +450,7 @@
         ],
         "fixtureKey": null
       },
-      "notes": "Internal proposal only. The owner creates and authorizes the Instagram and Threads accounts; no handle, connection, credential or publishing authority exists for this edition."
+      "notes": "Internal proposal only. The owner creates and authorizes the Instagram and Threads accounts; no connection, credential or publishing authority exists for this edition. Public name cleared as WebDev Signal on 2026-09-15 (docs/WEBDEV-SIGNAL-FOUNDING.md); proposed handles, unverified without a login: Instagram @webdevsignal for the English edition and @webdevsignal.cz for the Czech edition, each with its Threads profile under the same handle."
     }
   ],
   "connections": [

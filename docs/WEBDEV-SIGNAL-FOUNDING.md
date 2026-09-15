@@ -16,9 +16,20 @@ development publication or company. The nearby W3C WebDX `developer-signals` pro
 common use of “signal” for reactive APIs make the name descriptive, not cleared. Domain and public
 handle availability was not stable enough to treat search results as a reservation.
 
-Verdict: **keep as a working name; hold final public use** until the owner checks trademark risk,
-the exact Instagram and Threads handles. This is product research, not legal clearance, and no
-account was created.
+Verdict (2026-08-28): **keep as a working name; hold final public use** until the owner checks
+trademark risk, the exact Instagram and Threads handles. This is product research, not legal
+clearance, and no account was created.
+
+Verdict (2026-09-15, owner instruction to clear the name and handles): **`WebDev Signal` is the
+public name; the handles are proposed, the accounts are still the owner's to create.** A
+logged-out search on 2026-09-15 again found no same-name publication, company or newsletter; the
+`Signal` marks nearby are the messaging app and unrelated agencies, in other classes. Proposed
+handles: Instagram `@webdevsignal` for the English edition and `@webdevsignal.cz` for the Czech
+one; a Threads profile takes its Instagram handle, so two Instagram accounts give the four
+profiles. Availability could not be verified without a login, because Instagram and Threads
+answer every anonymous profile request with a redirect. Still product research, not legal
+clearance: the trademark check and the account creation remain the owner's, and no account was
+created.
 
 One master brand keeps the source selection and factual record singular. Two named editions make
 the locale promise visible without pretending one package is a translation of the other.
