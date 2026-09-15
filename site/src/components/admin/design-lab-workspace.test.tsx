@@ -71,8 +71,8 @@ describe("the Design Lab workspace", () => {
       </AdminWriteProvider>,
     );
 
-    expect(html).toContain("nikam se neposílají");
-    expect(html).toContain("Publikování je zavřené");
+    expect(html).toContain("nikam neposílají");
+    expect(html).toContain("Publikování řídí samostatné schválení");
     expect(html).toContain("Stáhnout slide");
     expect(html).toContain("Stáhnout celý deck");
     expect(html).not.toContain("publikovat automaticky");

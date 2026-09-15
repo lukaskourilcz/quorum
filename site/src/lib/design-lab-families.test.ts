@@ -6,7 +6,7 @@ import { DECK_FAMILIES, LAUNCH_FAMILIES } from "@boardlessai/carousel-studio";
 /**
  * The two chip rows and the library, held to the same list.
  *
- * `design-lab-workspace.tsx` is a client component and the studio package is the render engine, so
+ * `design-lab-model.ts` is a client component and the studio package is the render engine, so
  * importing `DECK_FAMILIES` there to build the rows would ship the renderer to the browser. The
  * copy is deliberate; what is not acceptable is that it drifts. A family registered in the engine
  * and missing from both rows is a design the owner cannot reach and nothing says so — no error, no
@@ -18,12 +18,12 @@ import { DECK_FAMILIES, LAUNCH_FAMILIES } from "@boardlessai/carousel-studio";
  */
 describe("the Design Lab's family chips", () => {
   const source = readFileSync(
-    path.join(process.cwd(), "src", "components", "admin", "design-lab-workspace.tsx"),
+    path.join(process.cwd(), "src", "components", "admin", "design-lab-model.ts"),
     "utf8"
   );
   const literal = (name: string): string[] => {
     const declaration = new RegExp(`const ${name} = \\[(.*?)\\] as const;`, "su").exec(source)?.[1];
-    expect(declaration, `${name} is no longer a literal array in design-lab-workspace.tsx`).toBeDefined();
+    expect(declaration, `${name} is no longer a literal array in design-lab-model.ts`).toBeDefined();
     return [...declaration!.matchAll(/"([a-z]+)"/gu)].map((match) => match[1]!);
   };
 
