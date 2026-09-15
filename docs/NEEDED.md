@@ -19,6 +19,35 @@ sweeps reach the 23:00 desk. Each owner step is one GitHub issue:
 - [ ] **Clear WebDev Signal's name and handles** — #532. [imp:3] [owner:me] [time:20m] [kind:legal]
 - [ ] **Reconcile the duplicate editions of 10 and 11 September** — #533. Both articles are live; the records say otherwise, and a session may not rewrite those records. [imp:3] [owner:me] [time:20m] [kind:decision]
 
+## WebDev Signal · 2026-09-15
+
+The daily scan runs inside the Caught Up day from the next 05:00 Prague firing, at `$0`, with no
+model call and nothing published. Each day it either records `NO_EDITION` or leaves a Czech and an
+English package under `state/ventures/webdev-signal/packages/` with the rendered carousel panels
+under `state/ventures/webdev-signal/design-lab/assets/`; the admin WebDev Signal workspace shows
+the day, and the run receipt under `state/ventures/webdev-signal/runs/` names what to do next.
+
+- [ ] **Confirm or reverse the daily-runner activation** — read
+  `state/decisions/2026-09-15-webdev-signal-daily-runner.md`. It is recorded as countersigned on
+  your 2026-09-15 instruction: it matches the config to the founding you countersigned on
+  2026-08-30, enables the deterministic render and makes the venture `operating` so it has a pause
+  switch in Settings. Reversing means reverting those three config lines; the runner then records
+  honest held receipts. [imp:4] [owner:me] [time:15m] [kind:decision]
+- [ ] **Create the four Instagram and Threads accounts and record the handles** — one Instagram and
+  one Threads account per edition, `cs` and `en`, created by you in the platforms' own UIs. Nothing
+  in the repository can create them, and no delivery feature is reconsidered before the handles
+  exist. Never paste a credential into Git. [imp:4] [owner:me] [time:1h] [kind:setup]
+- [ ] **Post the first rendered drafts by hand** — on a day the Design & delivery tab shows as
+  rendered, copy the caption and Threads text from the draft card, take the panel PNGs from the
+  repository paths the card lists under `state/ventures/webdev-signal/design-lab/assets/`, and
+  post them from the accounts above. [imp:3] [owner:me] [time:20m] [kind:content]
+- [ ] **Add an admin preview and download route for the rendered panels, with retention** — the
+  draft card names the PNG paths but cannot show or serve them; until then the panels are read
+  from the public repository on GitHub. Server-only read under the existing `/admin` auth
+  boundary, no new state writer, and a retention rule that keeps only the last weeks of panels,
+  since every panel is regenerable from its payload and a selected day adds one to two megabytes
+  to a checkout that Vercel traces into its functions. [imp:3] [owner:ai] [time:2h] [kind:content]
+
 ## Design Lab · 2026-09-15
 
 - [x] **Modernize the studio and create Canva examples** — canvas-focused editor, Folio/Press families, article-based Canva briefs and editable examples. Press follows the owner's @technology reference. [Research and links](design-lab/CANVA-RESEARCH.md). [imp:4] [owner:ai] [time:3h] [kind:content]
@@ -333,13 +362,10 @@ Judgement calls. Nothing is blocked on code for any of these.
   disclosure text. Nothing publishes meanwhile, and campaign generation refuses every Contest Radar
   release independently of the edge. [imp:2] [owner:me] [time:20m] [kind:decision]
 
-- [ ] **Countersign or decline WebDev Signal's founding boundary** — review
-  `state/decisions/2026-08-28-webdev-signal-founding.md`, check the working name and exact
-  Instagram/Threads handles without creating an account, and accept or reject
-  `WEBDEV-SIGNAL-FOUNDING-001`. Approval confirms the two-edition evidence policy, proposed
-  `$0.03` selected-day / `$0.75` monthly ceiling and shared 05:00 Prague checkpoint; it grants no
-  source, model, account, OAuth, render or publishing authority. [imp:4] [owner:me] [time:20m]
-  [kind:decision]
+- [x] **Countersign or decline WebDev Signal's founding boundary** — countersigned on 2026-08-30
+  ("Countersign everything thats left there for me"); the decision file records it and, since
+  2026-09-15, `config/webdev-signal.json` matches. The working name and exact handles are still
+  unresolved and belong to the account item above. [imp:4] [owner:me] [time:20m] [kind:decision]
 
 - [x] **Sign or decline `BH-RESEARCH-001`** — decide whether BOOKSOFHISTORY may use
   web search on the existing Anthropic key. The item in `state/INBOX.md` fixes gather

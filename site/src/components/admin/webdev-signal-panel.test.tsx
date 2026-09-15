@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { WEBDEV_TABS, WebDevSignalPanel, resolveWebDevTab, webDevTabLabel } from "./webdev-signal-panel";
-import type { AdminWebDevSignalSnapshot, WebDevAdminDay } from "@/lib/admin-webdev-signal";
+import type { AdminWebDevSignalSnapshot, WebDevAdminDay, WebDevAdminDraft } from "@/lib/admin-webdev-signal";
 
 const DAY: WebDevAdminDay = {
   date: "2026-08-12",
@@ -34,9 +34,28 @@ const SNAPSHOT: AdminWebDevSignalSnapshot = {
   profiles: [
     { id: "social-profile-webdev-signal-cs", displayLabel: "WebDev Signal CZ", locale: "cs", lifecycle: "proposed", liveEligible: false, connections: [] }
   ],
+  draftsState: "missing",
+  drafts: [],
   authority: { foundingCountersigned: true, liveBehaviourHeld: true, accountsCreated: false },
   unreadable: 0,
   snapshotHash: "b".repeat(64)
+};
+
+const DRAFT: WebDevAdminDraft = {
+  date: "2026-08-12",
+  locale: "cs",
+  status: "approved",
+  heldReason: null,
+  headline: "Chrome 141: co se mění",
+  deck: "Nové vydání mění práci webových vývojářů v rozsahu popsaném oficiálním zdrojem.",
+  instagramCaption: "Chrome 141: co se mění\n\nZdroj: https://developer.chrome.com/blog/x/",
+  threadsPrimary: "Chrome 141: co se mění. https://developer.chrome.com/blog/x/",
+  panels: [
+    { role: "cover", heading: "Chrome 141: co se mění", body: "141" },
+    { role: "source", heading: "Zdroj", body: "Oficiální zdroj: Chrome official source" }
+  ],
+  sourceUrls: ["https://developer.chrome.com/blog/x/"],
+  render: { outcome: "success", reason: null, assetRefs: ["state/ventures/webdev-signal/design-lab/assets/abc/cs/01.png"] }
 };
 
 function render(snapshot: AdminWebDevSignalSnapshot, tab: (typeof WEBDEV_TABS)[number]): string {
@@ -44,6 +63,26 @@ function render(snapshot: AdminWebDevSignalSnapshot, tab: (typeof WEBDEV_TABS)[n
 }
 
 describe("the WebDev Signal workspace", () => {
+  it("lays each draft out for manual posting: caption, Threads text, panels and rendered files", () => {
+    const html = render({ ...SNAPSHOT, draftsState: "present", drafts: [DRAFT, { ...DRAFT, locale: "en", status: "held", heldReason: "cs:missing-source-attribution", render: { outcome: "absent", reason: null, assetRefs: [] } }] }, "delivery");
+
+    expect(html).toContain("Drafts to post by hand");
+    expect(html).toContain("Zdroj: https://developer.chrome.com/blog/x/");
+    expect(html).toContain("design-lab/assets/abc/cs/01.png");
+    expect(html).toContain("rendered · 1 panel");
+    expect(html).toContain("Held: cs:missing-source-attribution");
+    expect(html).toContain("not rendered");
+    // Still nothing that posts: the same warning sits under the drafts.
+    expect(html).toContain("Nothing in this workspace posts");
+  });
+
+  it("says a venture with no selected day has no drafts, on purpose", () => {
+    const html = render(SNAPSHOT, "delivery");
+
+    expect(html).toContain("No drafts yet");
+    expect(html).toContain("leaves nothing, on purpose");
+  });
+
   it("answers the operational question on the tab that leads", () => {
     const html = render(SNAPSHOT, "today");
 

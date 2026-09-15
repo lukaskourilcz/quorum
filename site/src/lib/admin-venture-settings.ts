@@ -16,14 +16,15 @@ import path from "node:path";
  * Some ventures are not the owner's to pause, by his own rule: a venture others depend on cannot
  * be switched off without switching them off too. The Design Lab renders every venture's decks,
  * GoVIRAL supplies both magazines' trend intelligence, and FightAIQ is MMA Files' data supplier.
- * WebDev Signal is not founded, so there is nothing running to pause. None of the four appears
- * in Settings at all, and the writer refuses them independently of the page.
+ * None of the three appears in Settings at all, and the writer refuses them independently of the
+ * page. WebDev Signal was on this list while nothing of it ran; since its daily scan rides the
+ * Caught Up day (2026-09-15) it is an operating venture with a switch like any other, and the
+ * scan's own runner honours that switch before it reads a feed.
  */
 export const UNPAUSABLE_VENTURES: Readonly<Record<string, string>> = {
   "carousel-studio": "The Design Lab renders every venture's decks.",
   goviral: "GoVIRAL supplies the magazines' trend intelligence.",
-  fightaiq: "FightAIQ is MMA Files' data supplier.",
-  "webdev-signal": "Not founded; nothing runs."
+  fightaiq: "FightAIQ is MMA Files' data supplier."
 };
 
 export interface AdminVentureSwitch {

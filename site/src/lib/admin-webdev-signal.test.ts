@@ -51,11 +51,72 @@ async function observation(root: string, date: string, over: Record<string, unkn
   }), "utf8");
 }
 
+async function packageFile(root: string, date: string, locale: "cs" | "en", over: Record<string, unknown> = {}): Promise<void> {
+  const directory = path.join(root, "state/ventures/webdev-signal/packages");
+  await mkdir(directory, { recursive: true });
+  await writeFile(path.join(directory, `${date}-${locale}.json`), JSON.stringify({
+    schemaVersion: "webdev-edition-package/1",
+    id: `edition:abc:${locale}`,
+    locale,
+    evidenceBriefRef: `state/ventures/webdev-signal/briefs/${date}.json`,
+    headline: locale === "cs" ? "Chrome 141: co se mění" : "Chrome 141: what changed",
+    deck: "A deck.",
+    explanation: "An explanation.",
+    threads: { primary: "Threads text https://developer.chrome.com/blog/x/", continuation: [] },
+    instagramCaption: "Caption\n\nSource: https://developer.chrome.com/blog/x/",
+    instagramPanels: [{ role: "cover", heading: "Cover", body: "141" }, { role: "source", heading: "Source", body: "Official source" }],
+    sourceAttribution: [{ url: "https://developer.chrome.com/blog/x/", label: "Chrome official source" }, { url: "http://insecure.example/", label: "dropped" }],
+    status: "approved",
+    heldReason: null,
+    ...over
+  }), "utf8");
+}
+
+async function receiptFile(root: string, name: string, over: Record<string, unknown> = {}): Promise<void> {
+  const directory = path.join(root, "state/ventures/webdev-signal/design-lab/receipts");
+  await mkdir(directory, { recursive: true });
+  await writeFile(path.join(directory, name), JSON.stringify({
+    schemaVersion: "webdev-render-receipt/1",
+    packageRef: "state/ventures/webdev-signal/packages/2026-08-12-cs.json",
+    outcome: "success",
+    reason: null,
+    outputs: [
+      { panelId: "panel-01", assetRef: "state/ventures/webdev-signal/design-lab/assets/abc/cs/01.png" },
+      { panelId: "panel-02", assetRef: "state/ventures/webdev-signal/design-lab/assets/../escape.png" }
+    ],
+    ...over
+  }), "utf8");
+}
+
 /**
  * One loader, not one per tab. Every tab asks a different question about the same Prague day, and
  * answering each from its own reader is how two tabs come to disagree about that day.
  */
 describe("the WebDev Signal admin snapshot", () => {
+  it("joins each package with the receipt that rendered it and lists drafts newest first, Czech before English", async () => {
+    const root = await repository();
+    await packageFile(root, "2026-08-12", "cs");
+    await packageFile(root, "2026-08-12", "en", { status: "held", heldReason: "en:missing-source-attribution" });
+    await packageFile(root, "2026-08-13", "en");
+    await receiptFile(root, "aaa-cs.json");
+    await receiptFile(root, "bbb-cs.json", { outcome: "held", reason: "textFit: panel-02-body", outputs: [] });
+    await writeFile(path.join(root, "state/ventures/webdev-signal/packages/2026-08-14-cs.json"), "{ not json", "utf8");
+
+    const snapshot = await readAdminWebDevSignal();
+
+    expect(snapshot.draftsState).toBe("present");
+    expect(snapshot.drafts.map(({ date, locale }) => `${date}-${locale}`)).toEqual(["2026-08-13-en", "2026-08-12-cs", "2026-08-12-en"]);
+    const czech = snapshot.drafts.find(({ locale, date }) => locale === "cs" && date === "2026-08-12");
+    // The successful render wins over the held retry, and an escaping asset ref is dropped.
+    expect(czech?.render).toEqual({ outcome: "success", reason: null, assetRefs: ["state/ventures/webdev-signal/design-lab/assets/abc/cs/01.png"] });
+    expect(czech?.sourceUrls).toEqual(["https://developer.chrome.com/blog/x/"]);
+    expect(czech?.instagramCaption).toContain("Source: https://");
+    expect(snapshot.drafts.find(({ date }) => date === "2026-08-13")?.render.outcome).toBe("absent");
+    expect(snapshot.drafts.find(({ locale, date }) => locale === "en" && date === "2026-08-12")).toMatchObject({ status: "held", heldReason: "en:missing-source-attribution" });
+    expect(snapshot.unreadable).toBe(1);
+    expect(JSON.stringify(snapshot)).not.toContain("2026-08-14-cs.json");
+  });
+
   it("reads a venture that has never run as absent rather than broken", async () => {
     await repository();
 

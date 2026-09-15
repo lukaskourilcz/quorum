@@ -16,6 +16,24 @@ import {
 
 const VersionSchema = z.string().regex(/^\d+\.\d+\.\d+$/);
 
+/**
+ * The platform limits the deterministic editor writes to. The panel bounds are 4 to 6 because
+ * those are the only carousel lengths the Design Lab has a WebDev Signal template for; a package
+ * outside them would pass the editor and be refused at the render.
+ */
+export const WebDevSocialContentLimitsSchema = z.strictObject({
+  threadsPrimaryMaxChars: z.number().int().min(1).max(500),
+  threadsContinuationMaxItems: z.number().int().min(0).max(3),
+  threadsContinuationMaxChars: z.number().int().min(1).max(500),
+  instagramCaptionMaxChars: z.number().int().min(1).max(2_200),
+  instagramPanelsMin: z.number().int().min(4).max(6),
+  instagramPanelsMax: z.number().int().min(4).max(6)
+}).superRefine((limits, context) => {
+  if (limits.instagramPanelsMin > limits.instagramPanelsMax) {
+    context.addIssue({ code: "custom", path: ["instagramPanelsMin"], message: "panel minimum cannot exceed the maximum" });
+  }
+}) satisfies z.ZodType<WebDevSocialContentLimits>;
+
 export const WebDevEditorConfigSchema = z.strictObject({
   schemaVersion: z.literal("webdev-editor-config/1"),
   modelRole: z.literal("WEBDEV_SIGNAL_EDITOR"),
@@ -27,7 +45,8 @@ export const WebDevEditorConfigSchema = z.strictObject({
   maximumSynthesisCalls: z.literal(1),
   maximumRepairCalls: z.literal(1),
   maximumSelectedDayUsd: z.literal(0.03),
-  persistRawProviderOutput: z.literal(false)
+  persistRawProviderOutput: z.literal(false),
+  limits: WebDevSocialContentLimitsSchema
 });
 
 export type WebDevEditorConfig = z.infer<typeof WebDevEditorConfigSchema>;

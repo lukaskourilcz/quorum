@@ -224,6 +224,31 @@ describe("WebDev Signal prefilter, clustering and source-backed records", () => 
       changeKindHints: ["security-advisory"]
     });
     expect(buildWebDevRecords({ candidates: [scoped], now: NOW, config, history }).records[0]).toMatchObject({ gateHint: "eligible" });
+
+    // The exemption is for a new advisory about a cooled-down project, never for the record that
+    // already won: yesterday's advisory is a duplicate however critical it still is.
+    const won = buildWebDevRecords({ candidates: [scoped], now: NOW, config }).records[0]!.record;
+    const repeated = buildWebDevRecords({
+      candidates: [scoped],
+      now: NOW,
+      config,
+      history: [{ recordId: won.id, canonicalUrl: won.canonicalUrl, project: won.project, topic: won.topic, selectedAt: "2026-08-27T06:00:00.000Z" }]
+    }).records[0];
+    expect(repeated).toMatchObject({ gateHint: "duplicate-recent-edition", gateReasons: ["record-already-selected-on-an-earlier-day"] });
+  });
+
+  it("gives a single-source cluster its source's first topic rather than the alphabetical one", async () => {
+    const config = await loadWebDevSelectionConfig();
+    // Every item of a source carries the source's whole topic list, in the source's own order.
+    const browser = candidate({
+      sourceId: "chrome-developers",
+      sourceItemId: "chrome-141",
+      targetUrl: "https://developer.chrome.com/blog/chrome-141",
+      title: "Chrome 141 ships a CSS capability to stable",
+      topicHints: ["browsers-web-platform", "html-css", "javascript", "performance", "accessibility"]
+    });
+    const result = buildWebDevRecords({ candidates: [browser], now: NOW, config });
+    expect(result.records[0]?.record).toMatchObject({ topic: "browsers-web-platform", impactScope: "broad-web-platform" });
   });
 });
 

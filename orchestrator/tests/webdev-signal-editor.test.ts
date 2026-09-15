@@ -102,6 +102,10 @@ describe("WebDev Signal native social packages", () => {
     expect(packages.cs.claimIdsUsed).toEqual(packages.en.claimIdsUsed);
     expect(packages.cs.instagramCaption).toContain(brief.sources[0]!.url);
     expect(packages.en.threads.primary).toContain(brief.sources[0]!.url);
+    // The Czech package says the safe action in Czech, with the same exact versions.
+    expect(packages.cs.instagramCaption).toContain("Ověřte, zda projekt používá <4.2.1, a aktualizujte na 4.2.1.");
+    expect(packages.cs.instagramCaption).not.toContain("Check whether");
+    expect(packages.en.instagramCaption).toContain(brief.safeActions[0]!.text);
     expect(packages.cs).toMatchObject({ status: "draft", editorialProvenance: { modelRole: "WEBDEV_SIGNAL_EDITOR", deterministic: true, provider: null, model: null } });
     expect(validateGeneratedWebDevPackages({ brief, record, packages, limits: LIMITS })).toEqual({ cs: [], en: [], pair: [] });
   });

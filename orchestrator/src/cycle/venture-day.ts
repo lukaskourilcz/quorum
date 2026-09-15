@@ -32,9 +32,19 @@ import type { CycleOptions, CycleResult } from "./types.js";
  * where it was before.
  */
 
+/**
+ * An internal prerequisite of a day: not a room, not a phase. It holds no seat, writes no meeting
+ * record and never decides the day's headline. The one there is, WebDev Signal's daily scan, is
+ * placed `before-anchor` on `cu-day` by `config/webdev-signal.json` — which is how it shares the
+ * 05:00 Prague dispatcher without a cron, a meeting or a calendar row of its own.
+ */
+export type VentureDayPreStepId = "webdev-signal-daily";
+
 export interface VentureDayDefinition {
   /** The venture whose pause switch silences this day, and whose registry slot names its hour. */
   venture: string;
+  /** The prerequisites, run before the first room. */
+  preSteps?: readonly VentureDayPreStepId[];
   /** The rooms, in the order the day works through them. */
   steps: readonly RunnablePhase[];
 }
@@ -51,6 +61,7 @@ export interface VentureDayDefinition {
 export const VENTURE_DAYS = {
   "cu-day": {
     venture: "caught-up",
+    preSteps: ["webdev-signal-daily"],
     steps: ["cu-edition", "cu-product"]
   },
   "mma-day": {
@@ -81,6 +92,22 @@ export interface VentureDayStep {
   /** Why, when the outcome needs one: the record that made it a no-op, or the error. */
   note: string | null;
 }
+
+/**
+ * One prerequisite's outcome inside a day. `skipped` means the runner decided the firing was not
+ * its to act on and wrote nothing; `paused` means the owner's switch stopped it; `failed` means it
+ * threw and the day went on.
+ */
+export interface VentureDayPreStepOutcome {
+  id: VentureDayPreStepId;
+  status: "recorded" | "already_recorded" | "skipped" | "paused" | "failed";
+  /** The receipt it wrote or found, when there is one. */
+  recordRef: string | null;
+  note: string | null;
+  artifacts: string[];
+}
+
+export type VentureDayPreStepRunner = (id: VentureDayPreStepId, options: CycleOptions) => Promise<VentureDayPreStepOutcome>;
 
 function unique(values: readonly string[]): string[] {
   return [...new Set(values)];
@@ -120,21 +147,45 @@ function summarise(steps: readonly VentureDayStep[], dry: boolean): Pick<CycleRe
  * six separate dispatches has always required of them. The failures travel back on the result so
  * the caller can commit the work that did land before it fails the run; swallowing them here and
  * reporting a clean day is the one thing this must never do.
+ *
+ * `runPreStep` is injected for the same reason as `runStep`, and because the prerequisite runner
+ * takes the state lock and reads the registry — things a test of this driver has no business
+ * doing. A prerequisite that throws is recorded the same way a room is, and the first room runs
+ * regardless: the scan was placed before the Caught Up day, never in its way.
  */
 export async function runVentureDay(
   phase: VentureDayPhase,
   options: CycleOptions,
-  runStep: (options: CycleOptions) => Promise<CycleResult>
+  runStep: (options: CycleOptions) => Promise<CycleResult>,
+  runPreStep: VentureDayPreStepRunner
 ): Promise<CycleResult> {
   const now = options.now ?? new Date();
   const cycleId = `${now.toISOString().replaceAll(/[-:.TZ]/gu, "").slice(0, 14)}-${phase}`;
+  const preSteps: VentureDayPreStepOutcome[] = [];
   const steps: VentureDayStep[] = [];
   const artifacts: string[] = [];
   const selected: string[] = [];
   const skipped: string[] = [];
   let estimatedWorstCaseUsd = 0;
 
-  for (const step of VENTURE_DAYS[phase].steps) {
+  const day: VentureDayDefinition = VENTURE_DAYS[phase];
+  for (const id of day.preSteps ?? []) {
+    try {
+      const outcome = await runPreStep(id, { ...options, now });
+      preSteps.push(outcome);
+      artifacts.push(...outcome.artifacts);
+    } catch (error) {
+      preSteps.push({
+        id,
+        status: "failed",
+        recordRef: null,
+        note: error instanceof Error ? error.message.slice(0, 300) : String(error).slice(0, 300),
+        artifacts: []
+      });
+    }
+  }
+
+  for (const step of day.steps) {
     try {
       // The day's own `now`, not the room's old hour: it is what makes the retry hour reach
       // `cu-edition` and what keeps a Thursday a Thursday for the growth room.
@@ -172,6 +223,7 @@ export async function runVentureDay(
     // A room that stood one seat down while another seated it did not skip the day.
     skippedAgents: unique(skipped).filter((agent) => !selectedAgents.includes(agent)),
     artifacts,
+    ...(preSteps.length > 0 ? { preSteps } : {}),
     steps
   };
 }

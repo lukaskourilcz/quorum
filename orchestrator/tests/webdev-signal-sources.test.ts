@@ -48,7 +48,10 @@ describe("WebDev Signal official adapters", () => {
     expect(result).toMatchObject({ itemsSeen: 2, malformedItems: 1, filteredItems: 0 });
     expect(result.candidates[0]).toMatchObject({
       sourceItemId: "GHSA-xxxx-yyyy-zzzz",
-      changeKindHints: ["security-advisory"]
+      changeKindHints: ["security-advisory"],
+      // The advisory is about its package, not about the database that lists it.
+      project: "fixture-package",
+      author: "GitHub Advisory Database"
     });
     expect(result.candidates[0]?.versionText).toContain("fixture-package affected >= 1.0.0, < 1.2.3 fixed 1.2.3");
     expect(result.candidates[0]?.securityText).toContain("severity high");
@@ -59,6 +62,31 @@ describe("WebDev Signal official adapters", () => {
     const empty = await parseWebDevSource(source, new TextEncoder().encode("[]"), { fetchedAt: NOW, fixture: true });
     expect(empty).toMatchObject({ empty: true, itemsSeen: 0, malformedItems: 0 });
     await expect(parseWebDevSource(source, new TextEncoder().encode('{"unexpected":true}'), { fetchedAt: NOW, fixture: true })).rejects.toThrow(/layout-invalid/);
+  });
+
+  it("reads each item's change kind from the item and never beyond what the source declares", async () => {
+    const registry = await loadWebDevSourceRegistry();
+    const chrome = registry.sources.find(({ id }) => id === "chrome-developers")!;
+    const item = (title: string, description: string) => new TextEncoder().encode([
+      '<?xml version="1.0"?><rss version="2.0"><channel><title>t</title><link>https://developer.chrome.com/</link>',
+      `<item><guid>${title}</guid><title>${title}</title><link>https://developer.chrome.com/blog/x/</link>`,
+      `<description>${description}</description><pubDate>Thu, 27 Aug 2026 12:00:00 GMT</pubDate></item></channel></rss>`
+    ].join(""));
+    const hintsOf = async (title: string, description: string) =>
+      (await parseWebDevSource(chrome, item(title, description), { fetchedAt: NOW, fixture: true })).candidates[0]?.changeKindHints;
+    // A stable feature post is one kind, not the source's whole list of six.
+    expect(await hintsOf("Chrome 141 ships a CSS capability to stable", "A stable capability.")).toEqual(["stable-release"]);
+    expect(await hintsOf("Chrome 142 beta", "What is new in the beta.")).toEqual(["beta-preview"]);
+    expect(await hintsOf("Deprecating an old API", "The API is deprecated and will be removed.")).toEqual(["deprecation"]);
+    expect(await hintsOf("A breaking change to cookies", "Sites relying on the old behaviour break.")).toEqual(["breaking-change"]);
+    // Chrome's registry entry declares no security-advisory kind, so the word cannot add one.
+    expect(await hintsOf("Security release", "A security fix shipped.")).not.toContain("security-advisory");
+    const releases = registry.sources.find(({ id }) => id === "react-releases")!;
+    const parsed = await parseWebDevSource(releases, await readFile(path.join(fixtureRoot, "releases.json")), { fetchedAt: NOW, fixture: true });
+    expect(parsed.candidates[0]?.changeKindHints).toEqual(["stable-release"]);
+    const advisories = registry.sources.find(({ id }) => id === "github-npm-advisories")!;
+    const advisory = await parseWebDevSource(advisories, await readFile(path.join(fixtureRoot, "advisories.json")), { fetchedAt: NOW, fixture: true });
+    expect(advisory.candidates[0]?.changeKindHints).toEqual(["security-advisory"]);
   });
 
   it("keeps secondary editorial input lead-only", async () => {

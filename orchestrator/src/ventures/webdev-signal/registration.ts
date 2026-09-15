@@ -123,23 +123,27 @@ function sha256(value: string): string {
   return createHash("sha256").update(value).digest("hex");
 }
 
-export function dispatchWebDevSignalRegistration(input: {
-  registration: WebDevSignalRegistration;
-  dispatcherPhase: string;
+/** One run per Prague day and mode; a second firing on the same key finds the first receipt. */
+export function webDevRunIdempotencyKey(pragueDate: string, mode: "fixture" | "live"): string {
+  return sha256(`${pragueDate}:webdev-signal-daily:${mode}`);
+}
+
+/** A receipt for a day that did no work: nothing fetched, judged, written or spent. */
+export function webDevZeroRun(input: {
   pragueDate: string;
   mode: "fixture" | "live";
-}): WebDevRun | null {
-  if (input.dispatcherPhase !== input.registration.schedule.dispatcherAnchorPhase) return null;
-  const held = input.mode === "live" || !input.registration.foundingCountersigned;
+  errors: WebDevRun["errors"];
+  nextSafeAction: string;
+}): WebDevRun {
   return WebDevRunSchema.parse({
     schemaVersion: "webdev-run/1",
     phase: "webdev-signal-daily",
     pragueDate: input.pragueDate,
     mode: input.mode,
-    idempotencyKey: sha256(`${input.pragueDate}:webdev-signal-daily:${input.mode}:registration`),
+    idempotencyKey: webDevRunIdempotencyKey(input.pragueDate, input.mode),
     sourceOutcomes: [],
     counts: { candidates: 0, new: 0, updated: 0, duplicate: 0, malformed: 0 },
-    selectionOutcome: held ? "held" : "NO_EDITION",
+    selectionOutcome: "held",
     selectionRef: null,
     briefRef: null,
     packageRefs: [],
@@ -147,9 +151,50 @@ export function dispatchWebDevSignalRegistration(input: {
     queueRefs: [],
     model: { reservations: 0, calls: 0, provider: null, model: null, reservedUsd: 0, actualUsd: 0 },
     cache: { unchangedSources: 0, reusedArtifacts: 0, providerCallsAvoided: 0 },
-    errors: [],
-    nextSafeAction: held
-      ? "Keep live work held until founding and independent source authority exist."
-      : "Implement an approved fixture source before selecting a story."
+    errors: input.errors,
+    nextSafeAction: input.nextSafeAction
   });
+}
+
+export type WebDevSignalDispatch =
+  /** Direct collection is not authorised; `run` is the honest zero-cost receipt for the day. */
+  | { decision: "held"; reason: string; run: WebDevRun }
+  /** The registration authorises the daily chain, which writes its own receipt under this key. */
+  | { decision: "run"; idempotencyKey: string };
+
+/**
+ * Whether this dispatcher firing is WebDev Signal's, and whether the day may do live work.
+ *
+ * `null` means the phase is not the anchor the registration names, so the caller is not this
+ * venture's dispatcher at all. Otherwise the answer is the `directSources` gate: the founding
+ * countersignature and an audited source registry with at least one enabled source, supplied by
+ * the caller as `sourceAuthorityAvailable` because the registration cannot see the registry.
+ */
+export function dispatchWebDevSignalRegistration(input: {
+  registration: WebDevSignalRegistration;
+  dispatcherPhase: string;
+  pragueDate: string;
+  mode: "fixture" | "live";
+  sourceAuthorityAvailable?: boolean;
+}): WebDevSignalDispatch | null {
+  if (input.dispatcherPhase !== input.registration.schedule.dispatcherAnchorPhase) return null;
+  const sources = resolveWebDevSignalFeature({
+    registration: input.registration,
+    feature: "directSources",
+    authorityAvailable: input.sourceAuthorityAvailable === true
+  });
+  const idempotencyKey = webDevRunIdempotencyKey(input.pragueDate, input.mode);
+  if (sources.decision === "allowed") return { decision: "run", idempotencyKey };
+  return {
+    decision: "held",
+    reason: sources.reason,
+    run: webDevZeroRun({
+      pragueDate: input.pragueDate,
+      mode: input.mode,
+      errors: [{ code: "held", sourceId: null, message: sources.reason }],
+      nextSafeAction: sources.reason === "founding-or-independent-authority-missing"
+        ? "Keep live work held until founding and independent source authority exist."
+        : "Direct sources are switched off in config/webdev-signal.json; enable them once the source audit allows it."
+    })
+  };
 }

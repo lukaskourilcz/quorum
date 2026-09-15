@@ -180,12 +180,17 @@ export interface WebDevRenderedDesign {
   assets: Array<{ ref: string; png: Buffer }>;
 }
 
-/** Render through Carousel Studio only; a failed fit is recorded as held, never rewritten. */
+/**
+ * Render through Carousel Studio only; a failed fit is recorded as held, never rewritten.
+ *
+ * `completedAt` is optional because the caller cannot know it before the render returns; left
+ * out, the receipt is stamped with the clock as the export finishes.
+ */
 export async function renderWebDevSignalDesign(input: {
   payload: unknown;
   payloadRef: string;
   startedAt: string;
-  completedAt: string;
+  completedAt?: string;
   configRoot?: string;
   existingReceipt?: WebDevRenderReceipt | null;
   existingReceiptRef?: string | null;
@@ -212,7 +217,7 @@ export async function renderWebDevSignalDesign(input: {
       receipt: WebDevRenderReceiptSchema.parse({
         ...input.existingReceipt,
         cache: { key: cacheKey, status: "reused", reusedReceiptRef: input.existingReceiptRef ?? receiptRef },
-        export: { startedAt: input.startedAt, completedAt: input.completedAt, durationMs: 0 }
+        export: { startedAt: input.startedAt, completedAt: input.completedAt ?? input.startedAt, durationMs: 0 }
       }),
       assets: []
     };
@@ -256,7 +261,8 @@ export async function renderWebDevSignalDesign(input: {
     ref: `state/ventures/webdev-signal/design-lab/assets/${payload.contentHash}/${payload.locale}/${String(index + 1).padStart(2, "0")}.png`,
     png: slide.png
   }));
-  const durationMs = Math.max(0, Date.parse(input.completedAt) - Date.parse(input.startedAt));
+  const completedAt = input.completedAt ?? new Date().toISOString();
+  const durationMs = Math.max(0, Date.parse(completedAt) - Date.parse(input.startedAt));
   const receipt = WebDevRenderReceiptSchema.parse({
     schemaVersion: "webdev-render-receipt/1",
     payloadRef: input.payloadRef,
@@ -284,7 +290,7 @@ export async function renderWebDevSignalDesign(input: {
     panelCount: payload.panels.length,
     checks,
     cache: { key: cacheKey, status: "new", reusedReceiptRef: null },
-    export: { startedAt: input.startedAt, completedAt: input.completedAt, durationMs },
+    export: { startedAt: input.startedAt, completedAt, durationMs },
     outcome: failed.length === 0 ? "success" : "held",
     reason: failed.length === 0 ? null : `${failed.join(", ")}${fitFailures.length ? `: ${fitFailures.join(", ")}` : ""}`,
     correctionSequence: payload.correction.sequence,

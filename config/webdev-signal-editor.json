@@ -9,5 +9,13 @@
   "maximumSynthesisCalls": 1,
   "maximumRepairCalls": 1,
   "maximumSelectedDayUsd": 0.03,
-  "persistRawProviderOutput": false
+  "persistRawProviderOutput": false,
+  "limits": {
+    "threadsPrimaryMaxChars": 500,
+    "threadsContinuationMaxItems": 1,
+    "threadsContinuationMaxChars": 500,
+    "instagramCaptionMaxChars": 2200,
+    "instagramPanelsMin": 4,
+    "instagramPanelsMax": 6
+  }
 }
