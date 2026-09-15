@@ -1,11 +1,26 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { ModelResponseTruncatedError, type TextProviderResponse } from "./openai.js";
 
+/** The effort levels the provider accepts as `output_config.effort`. */
+export type AnthropicEffort = "low" | "medium" | "high" | "xhigh" | "max";
+
 export interface AnthropicTextRequest {
   model: string;
   system: string;
   input: string;
   maxOutputTokens: number;
+  /**
+   * Whether the model may think before it answers.
+   *
+   * Sonnet 5 and its successors think adaptively unless told not to, and the thinking is billed
+   * inside `maxOutputTokens`. A role with a small exact cap and a fixed JSON shape then has that
+   * cap spent on reasoning nobody asked for: CHUM's bilingual carousel fits in about 1,500 output
+   * tokens and was cut off at the 4,000 cap every morning from 8 to 12 September, billed in full
+   * each time. Omit to keep the provider's default.
+   */
+  thinking?: "adaptive" | "disabled";
+  /** Forwarded as `output_config.effort`. Omit to keep the provider's default. */
+  effort?: AnthropicEffort;
   /** Server-side web-search calls permitted for this request. Omit to expose no tool. */
   webSearchUses?: number;
 }
@@ -160,6 +175,10 @@ export class AnthropicTextClient {
       messages: [{ role: "user", content: request.input }],
       model: request.model,
       system: [{ type: "text", text: request.system, cache_control: { type: "ephemeral" } }],
+      ...(request.thinking === undefined ? {} : {
+        thinking: request.thinking === "disabled" ? { type: "disabled" as const } : { type: "adaptive" as const }
+      }),
+      ...(request.effort === undefined ? {} : { output_config: { effort: request.effort } }),
       ...(request.webSearchUses === undefined ? {} : {
         // Verified against @anthropic-ai/sdk@0.113.0's WebSearchTool20260318.
         tools: [{

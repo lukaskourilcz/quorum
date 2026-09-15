@@ -38,7 +38,7 @@
       "reasoningEffort": "none",
       "serviceTier": "default"
     },
-    "_comment_MARKETINGSHARK": "Both marketingShark roles take the same claude-sonnet-5 the council seats above take; the entries exist for their token caps, not for a different model. CHUM's is the venture's only quality-critical call -- native-register Czech plus English creative in one pass, where Haiku-class output is not acceptable for a public brand voice -- and at ~$0.05 the quality tier costs almost nothing. Switching either is PEOPLE's process, not a config edit.",
+    "_comment_MARKETINGSHARK": "Both marketingShark roles take the same claude-sonnet-5 the council seats above take; the entries exist for their token caps, not for a different model. CHUM's is the venture's only quality-critical call -- native-register Czech plus English creative in one pass, where Haiku-class output is not acceptable for a public brand voice -- and at ~$0.05 the quality tier costs almost nothing. Switching either is PEOPLE's process, not a config edit. CHUM's thinking is disabled on purpose: Sonnet 5 thinks adaptively by default and bills that thinking inside maxOutputTokens, so the 4,000 cap was spent on reasoning and every reply from 8 to 12 September 2026 was cut off before the JSON closed. The package itself fits in about 1,500 output tokens.",
     "MAKO": {
       "provider": "anthropic",
       "model": "claude-sonnet-5",
@@ -49,7 +49,8 @@
       "provider": "anthropic",
       "model": "claude-sonnet-5",
       "maxInputTokens": 6000,
-      "maxOutputTokens": 4000
+      "maxOutputTokens": 4000,
+      "thinking": "disabled"
     },
     "_comment_BOOKSOFHISTORY": "FOLIO and PLOT use Sonnet for editorial judgment and native story craft. The three research roles use Haiku. RESEARCH_GATHER permits five searches, below the design's eight-search ceiling: five $0.01 tools plus 4k prompt, 20k search-content and 4k output tokens reserve about $0.094. Reserving all eight with that content window would exceed the immutable $0.10 per-call cap, so the configured call tightens rather than raises the guard.",
     "FOLIO": {

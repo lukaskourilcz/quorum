@@ -12,7 +12,7 @@ import {
   requestHash,
   writeCachedResponse
 } from "./cache.js";
-import { AnthropicTextClient } from "./anthropic.js";
+import { AnthropicTextClient, type AnthropicEffort } from "./anthropic.js";
 import { ModelResponseTruncatedError, OpenAiTextClient, type TextProviderResponse } from "./openai.js";
 
 export { ModelResponseTruncatedError };
@@ -35,6 +35,10 @@ export interface GuardedCallInput<T> {
   system: string;
   input: string;
   maxOutputTokens: number;
+  /** Anthropic only: whether the reply may spend part of `maxOutputTokens` thinking first. */
+  thinking?: "adaptive" | "disabled";
+  /** Anthropic only: forwarded as `output_config.effort`. */
+  effort?: AnthropicEffort;
   webSearch?: {
     maxUses: number;
     maxSearchContentTokens: number;
@@ -67,6 +71,8 @@ export interface GuardedCallDeps {
     system: string;
     input: string;
     maxOutputTokens: number;
+    thinking?: "adaptive" | "disabled";
+    effort?: AnthropicEffort;
   }) => Promise<TextProviderResponse>;
 }
 
@@ -204,7 +210,9 @@ export async function guardedJsonCall<T>(
           model: request.model,
           system: request.system,
           input: request.input,
-          maxOutputTokens: request.maxOutputTokens
+          maxOutputTokens: request.maxOutputTokens,
+          ...(request.thinking === undefined ? {} : { thinking: request.thinking }),
+          ...(request.effort === undefined ? {} : { effort: request.effort })
         })
       : request.provider === "openai"
       ? await new OpenAiTextClient().generate({
@@ -218,6 +226,8 @@ export async function guardedJsonCall<T>(
           system: request.system,
           input: request.input,
           maxOutputTokens: request.maxOutputTokens,
+          ...(request.thinking === undefined ? {} : { thinking: request.thinking }),
+          ...(request.effort === undefined ? {} : { effort: request.effort }),
           webSearchUses: request.webSearch?.maxUses
         });
   } catch (error) {

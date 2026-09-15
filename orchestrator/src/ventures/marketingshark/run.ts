@@ -641,7 +641,13 @@ export async function runMarketingSharkCycle(input: {
     .filter((entry) => entry.ts.slice(0, 7) === input.date.slice(0, 7))
     .reduce((sum, entry) => sum + entry.usd, 0);
   const models = JSON.parse(await readFile(path.join(configRoot, "models.json"), "utf8")) as {
-    roles: Record<string, { provider: "openai" | "anthropic"; model: string; maxOutputTokens: number }>;
+    roles: Record<string, {
+      provider: "openai" | "anthropic";
+      model: string;
+      maxOutputTokens: number;
+      thinking?: "adaptive" | "disabled";
+      effort?: "low" | "medium" | "high" | "xhigh" | "max";
+    }>;
   };
   const chum = models.roles.CHUM;
   if (!chum) throw new Error("config/models.json has no CHUM route");
@@ -682,6 +688,11 @@ export async function runMarketingSharkCycle(input: {
           system: "You are CHUM, the marketingShark bilingual carousel copywriter. Return only the JSON object you were asked for.",
           input: packet,
           maxOutputTokens: chum.maxOutputTokens,
+          // The route says whether the cap may be spent thinking. It is the reason the
+          // package fits: five September mornings in a row were cut off at the cap with
+          // nothing usable, because adaptive thinking was billed against it first.
+          ...(chum.thinking === undefined ? {} : { thinking: chum.thinking }),
+          ...(chum.effort === undefined ? {} : { effort: chum.effort }),
           budgetContext: {
             now: input.now,
             cycleId: input.cycleId,
