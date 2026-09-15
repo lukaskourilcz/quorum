@@ -1,5 +1,24 @@
 # NEEDED — what the owner has to do
 
+## Focus and outage · 2026-09-15
+
+The owner set a new scope: DNESKAi, GoVIRAL, the Design Lab, marketingShark, WebDev Signal and
+Personal Growth run; everything else is paused (`state/decisions/2026-09-15-focus-six-ventures.md`).
+The same evening found why nothing had produced anything since 13 September: the Anthropic API
+credit is exhausted, so every model call fails at its first seat. The repository side is fixed on
+`main`: the 09:00 retry no longer writes a second edition while the morning's is queued, GoVIRAL's
+snapshots are committed with the cycle, CHUM's cap is no longer spent on thinking, and two evening
+sweeps reach the 23:00 desk. Each owner step is one GitHub issue:
+
+- [ ] **Buy Anthropic API credit** — #526. Nothing model-backed runs until then; DNESKAi has had no edition for three days. [imp:5] [owner:me] [time:10m] [kind:setup]
+- [ ] **Deploy `main` to Vercel and count the deployed cron jobs** — #527. The Design Lab update and the calendar are still undeployed; if the Hobby plan deploys two crons, decide the Pro move. [imp:5] [owner:me] [time:30m] [kind:deploy]
+- [ ] **Check the Apify Free-plan credit and fill GoVIRAL's profile** — #528. [imp:4] [owner:me] [time:30m] [kind:content]
+- [ ] **Add the free Podcast Index key pair** — #529. [imp:2] [owner:me] [time:15m] [kind:setup]
+- [ ] **Give Personal Growth the book and audiobook facts** — #530. The desk knows no title, link or date and cannot plan a launch it has never been told about. [imp:4] [owner:me] [time:20m] [kind:content]
+- [ ] **Write the devShark fact sheet for marketingShark** — #531. Today's copy claims a shipped product. [imp:3] [owner:me] [time:20m] [kind:content]
+- [ ] **Clear WebDev Signal's name and handles** — #532. [imp:3] [owner:me] [time:20m] [kind:legal]
+- [ ] **Reconcile the duplicate editions of 10 and 11 September** — #533. Both articles are live; the records say otherwise, and a session may not rewrite those records. [imp:3] [owner:me] [time:20m] [kind:decision]
+
 ## Design Lab · 2026-09-15
 
 - [x] **Modernize the studio and create Canva examples** — canvas-focused editor, Folio/Press families, article-based Canva briefs and editable examples. Press follows the owner's @technology reference. [Research and links](design-lab/CANVA-RESEARCH.md). [imp:4] [owner:ai] [time:3h] [kind:content]
@@ -24,7 +43,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-08-30.
+Updated: 2026-09-15.
 
 ---
 
@@ -71,14 +90,12 @@ knowing before reading the rest of this list:
 - **Titty Tuesdays and Door Money remain unsigned on purpose**, being outside the launch. Their ten
   approvals are the ones still unticked in `state/INBOX.md`.
 
-- [ ] **Decide CHUM's output cap** — a bilingual five-slide package does not fit in 3,000 output
-  tokens and has never once fitted. Raising it is the only thing standing between marketingShark
-  and its first draft. At the measured rate for `claude-sonnet-5` (about $2/MTok in, $10/MTok out)
-  each 500 extra tokens costs about $0.005 a call, so 4,500 lands near $0.050 against the room's
-  `$0.10` daily envelope, which also has to cover the one retry. Either raise it in
-  `config/models.json` and accept roughly $1.50/month for a venture that currently returns nothing
-  for $1.05, or turn the room off until it is worth running. Doing neither keeps paying for
-  truncated replies every morning. [imp:4] [owner:me] [time:10m] [kind:decision]
+- [x] **Decide CHUM's output cap** — settled 2026-09-15 without a raise. The cap was never the
+  cause: Sonnet 5 thinks adaptively by default and bills that thinking inside `maxOutputTokens`,
+  so the 4,000 cap was spent before the JSON began, five mornings in a row at $0.069 each. CHUM's
+  route in `config/models.json` now says `thinking: disabled` and the text client forwards it.
+  If the first package after the credit top-up still truncates, reopen this with the reply shape
+  from the meeting record (#531). [imp:4] [owner:me] [time:10m] [kind:decision]
 
 Then, in order, the existing items:
 
@@ -89,8 +106,9 @@ Then, in order, the existing items:
    `KV-SOURCES-002` (Kvórum's Facebook page + seven Czech feeds); `APIFY-MMA-SOURCES-001` is
    optional. Add the free Podcast Index key pair. Fill `state/ventures/goviral/profile.md` —
    GoVIRAL has never run for want of exactly these.
-3. **Flip the switches** — `PORTFOLIO_LIVE_ENABLED=true` (opens the venture rooms including
-   the Personal Growth desk) and `CAUGHT_UP_STREAMS_ENABLED=true`.
+3. **Flip the switches** — `PORTFOLIO_LIVE_ENABLED=true` (opens the venture rooms) and
+   `CAUGHT_UP_STREAMS_ENABLED=true`. The Personal Growth desk reads neither: its only switch
+   is the registry pause, resumed on 2026-09-15.
 4. **Set the `/admin` production credentials** — `ADMIN_USER`, `ADMIN_PASSWORD`,
    `BOARDLESSAI_GITHUB_TOKEN`; without them every admin write stays read-only.
 5. **Merge the mma-files hero-correction branch** — `claude/article-image-selection-61rs70`
@@ -128,7 +146,9 @@ is the single thing standing between a proven path and a working one.
   2026-08-29. Nothing is wrong with the code; nothing has deployed. `site/vercel.json` carries
   `git.deploymentEnabled: false` on purpose, so a merge never redeploys, and an agent session has
   no Vercel credentials to run the release itself. From a clean checkout of `main`:
-  `pnpm deploy:check` then `pnpm deploy:production`. [imp:5] [owner:me] [time:15m] [kind:deploy]
+  `pnpm deploy:check` then `pnpm deploy:production`. Since 2026-09-15 the same release also
+  carries the Design Lab modernisation and the venture pauses; the steps are in #527.
+  [imp:5] [owner:me] [time:15m] [kind:deploy]
 
 - [ ] **Delete two merged remote branches** — `claude/venture-launch-review-7l5nkd` and the branch
   of PR #511. Both are fully merged into `main`; the git relay in the agent environment refuses a
@@ -269,7 +289,8 @@ is the single thing standing between a proven path and a working one.
   niches, your voice, your audiences, and what you never write about. Nothing in it is generated
   and nothing should be; until you fill it in the room leans on the two magazine niches and says so
   plainly in the brief rather than inventing a voice for you. Half-thoughts and bullets are fine;
-  it is read as data, never as instructions. [imp:4] [owner:me] [time:20m] [kind:content]
+  it is read as data, never as instructions. Tracked with the Apify credit check in #528.
+  [imp:4] [owner:me] [time:20m] [kind:content]
 
 - [ ] **Rate the Titty Tuesdays idea cards in `/admin`** — the marketing room writes concrete
   campaign ideas every day and nothing has ever rated one, so the taste loop that turns your
@@ -648,6 +669,16 @@ Judgement calls. Nothing is blocked on code for any of these.
 
 ## Personal Growth owner actions
 
+The desk was resumed on 2026-09-15 for the book and audiobook promotion on `lukaskouril93`. It
+plans and measures; it never drafts the book copy and never posts. Manual posting from the
+admin's recommendations is the launch mode.
+
+- [ ] **Give the desk the book and audiobook facts.** The state tree holds no title, retail link,
+  release date, narrator or publisher, so no plan can mention the launch. Put a `finalUrl` or
+  `articleUrl` on the OKRAJ and BBARAK occurrences in the admin Timeline, and send the facts in
+  #530; a dedicated "book launch" action type is a contract change a session can make once they
+  exist. [imp:4] [owner:me] [time:20m] [kind:content]
+
 - [ ] **Configure the separate Personal Growth private clone and ingest owner-selected journals.**
   Set `PERSONAL_GROWTH_PRIVATE_CLONE_PATH` to a private clone that does not overlap this
   repository, then run the documented ingestion command separately for the Czech and optional
@@ -983,7 +1014,8 @@ production, 11:00 Titty Tuesdays marketing, 12:00 BOOKSOFHISTORY desk, 13:00 GoV
 (Mondays only — the other six days cost $0), 14:00 checkpoint, 15:00 Door Money desk, 16:00 Door
 Money growth room (Thursdays only), 17:00 DNESKAi product room, 18:00 Tehdejší svět desk, 19:00
 model check, 20:00 desk review, 21:00 Kvórum desk and 22:00 checkpoint. Vercel carries paired UTC
-cron entries for Prague daylight-saving time; `cycle.yml` keeps three backstop sweeps. No full day
+cron entries for Prague daylight-saving time; `cycle.yml` keeps five backstop sweeps, the last
+two of them for the 23:00 desk. No full day
 under this clock has been measured: 6 August came to $0.363 across six slots and 4 August to $0.412
 across seven, both against a $1.00 daily pace and the $30 all-in monthly cap from `budget-2026-08e`.
 marketingShark adds about 6c to a day. BOOKSOFHISTORY advances one phase per working
