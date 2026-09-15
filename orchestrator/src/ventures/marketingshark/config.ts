@@ -17,6 +17,25 @@ import { configRoot } from "../../paths.js";
  * What stays here is what is genuinely per brand: the category lists a `categoryIn` gate resolves
  * against, the slide-5 line, the templates and the hashtags.
  */
+/**
+ * What is true about the product beyond its name and address, in the owner's words.
+ *
+ * CHUM used to see only the brand block, and every shipped string spoke of a live product. The
+ * owner said on 2026-09-15 that devShark is nearly finished and in testing, so the packet has to
+ * say what the product is today and what may never be claimed about it. The gates cannot catch a
+ * false premise handed in as config; this is where the premise is kept true.
+ */
+export const FactSheet = z.object({
+  recordedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/u),
+  source: z.string().min(1).max(240),
+  maturity: z.string().min(1).max(240),
+  whatVisitorsCanDo: z.string().min(1).max(400),
+  callToAction: z.string().min(1).max(200),
+  allowedClaims: z.array(z.string().min(1).max(200)).min(1).max(8),
+  neverClaim: z.array(z.string().min(1).max(200)).min(1).max(10)
+});
+export type FactSheet = z.infer<typeof FactSheet>;
+
 export const Brand = z.object({
   id: z.enum(["devshark", "geoshark"]),
   enabled: z.boolean(),
@@ -41,7 +60,9 @@ export const Brand = z.object({
     instagram: z.object({ en: z.array(z.string()).max(4), cs: z.array(z.string()).max(4) }),
     threadsTopic: z.object({ en: z.string(), cs: z.string() })
   }),
-  banner: z.boolean()
+  banner: z.boolean(),
+  /** Absent for a brand nobody has described yet; the packet then carries the brand block alone. */
+  factSheet: FactSheet.optional()
 });
 export type Brand = z.infer<typeof Brand>;
 

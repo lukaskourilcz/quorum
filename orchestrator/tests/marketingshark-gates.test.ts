@@ -218,6 +218,22 @@ describe("marketingShark CHUM packet", () => {
     expect(retry).toContain("[hook-length] en: 81 characters, cap is 80");
   });
 
+  it("hands the writer the owner's product facts and the claims it may never make", async () => {
+    // Every shipped string used to speak of a live product. The owner said on 2026-09-15 that
+    // devShark is in testing, and the packet is where that premise reaches the writer.
+    const brand = await devshark();
+    const packet = buildChumPacket({ brand, question, hookLines: HOOK_LINES, hookId: "spot-it", date: "2026-09-16" });
+    expect(brand.factSheet?.maturity).toContain("in testing");
+    expect(packet).toContain("## Product facts (recorded by the owner 2026-09-15");
+    expect(packet).toContain(brand.factSheet!.maturity);
+    expect(packet).toContain("never say:");
+    for (const claim of brand.factSheet!.neverClaim) expect(packet).toContain(`- ${claim}`);
+    // A brand nobody has described yet carries no facts section rather than an empty one.
+    const { factSheet: _dropped, ...undescribed } = brand;
+    expect(buildChumPacket({ brand: undescribed, question, hookLines: HOOK_LINES, hookId: "spot-it", date: "2026-09-16" }))
+      .not.toContain("## Product facts");
+  });
+
   it("states in the packet every cap the gates enforce", async () => {
     const brand = await devshark();
     const packet = buildChumPacket({ brand, question, hookLines: null, hookId: null, date: "2026-08-08" });

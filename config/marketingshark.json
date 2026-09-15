@@ -71,7 +71,28 @@
           "cs": "programování"
         }
       },
-      "banner": false
+      "banner": false,
+      "factSheet": {
+        "recordedAt": "2026-09-15",
+        "source": "The owner's statement of 2026-09-15 and the public page at https://devshark.app on the same day.",
+        "maturity": "Nearly finished and in testing by the owner. Not publicly launched; no launch date is public.",
+        "whatVisitorsCanDo": "The public page describes devShark as developer learning and practice: build durable developer knowledge across frontend, backend, databases, DevOps, testing, security, system design and AI, with worked topics such as JavaScript closures, TypeScript narrowing, React Hooks, SQL joins and Git rebasing.",
+        "callToAction": "Visit devshark.app. Promise no sign-up, download, app-store listing or launch date.",
+        "allowedClaims": [
+          "devShark is a quiz-style learning game for developers, in testing before launch.",
+          "Its address is devshark.app.",
+          "It covers frontend, backend, databases, DevOps, testing, security, system design and AI, as the site says.",
+          "Every question comes with an explanation of the correct answer."
+        ],
+        "neverClaim": [
+          "User counts, rankings, ratings, testimonials or awards.",
+          "A price, a free tier or a paid plan; none is public.",
+          "That it is launched, finished or available in an app store.",
+          "A launch date.",
+          "Whether an account is required; the owner has not said.",
+          "An interface language beyond the two carousel languages."
+        ]
+      }
     },
     {
       "id": "geoshark",

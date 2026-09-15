@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { repoRoot } from "../../paths.js";
 import type { NormalizedQuestion } from "./bank.js";
-import type { Brand } from "./config.js";
+import type { Brand, FactSheet } from "./config.js";
 import { LIMITS, violationReport, type GateViolation } from "./gates.js";
 import { SLIDE_ROLES } from "./package.js";
 
@@ -34,6 +34,23 @@ export const OUTPUT_SHAPE = `{
     "threads":   { "cs": ["topic"], "en": ["topic"] }
   }
 }`;
+
+/**
+ * The product as it stands, stated to the writer so the copy cannot outrun it.
+ *
+ * Everything CHUM knew about devShark was a name, an address and two footer lines, all in the
+ * present tense of a shipped product. The fact sheet is the owner's own description: what is true
+ * today, what may be said, what may never be said. It is data the writer obeys, not a claim it may
+ * embellish.
+ */
+function productFacts(facts: FactSheet): string {
+  return `## Product facts (recorded by the owner ${facts.recordedAt}; write nothing beyond them)\n`
+    + `maturity: ${facts.maturity}\n`
+    + `what a visitor can do today: ${facts.whatVisitorsCanDo}\n`
+    + `call to action: ${facts.callToAction}\n`
+    + `you may say:\n${facts.allowedClaims.map((claim) => `- ${claim}`).join("\n")}\n`
+    + `never say:\n${facts.neverClaim.map((claim) => `- ${claim}`).join("\n")}`;
+}
 
 function optionLines(options: readonly string[]): string {
   return options.map((option, index) => `${String.fromCharCode(65 + index)}. ${option}`).join("\n");
@@ -71,6 +88,8 @@ export function buildChumPacket(input: {
     + `base Instagram hashtags CS: ${brand.hashtags.instagram.cs.join(" ")}\n`
     + `Threads topic tag EN: ${brand.hashtags.threadsTopic.en}\n`
     + `Threads topic tag CS: ${brand.hashtags.threadsTopic.cs}`,
+
+    ...(brand.factSheet ? [productFacts(brand.factSheet)] : []),
 
     `## The question (already selected — do not choose another)\n`
     + `id: ${question.id}\n`
