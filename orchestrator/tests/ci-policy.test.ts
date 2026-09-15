@@ -143,6 +143,12 @@ describe("automation policy", () => {
     // nothing committed. marketingShark's dedupe ledger lives outside state/ventures, so its
     // absence would have re-served the same question every morning while the packages piled up.
     expect(cycle).toContain("state/marketingshark");
+    // GoVIRAL's trend snapshots and its Apify quota counter live in state/goviral, which was never
+    // on this list: the Monday room ran live with the scout on 7 and 14 September, paid for its
+    // seats, and every snapshot it wrote died with the runner. Without a committed snapshot the
+    // admin panel says the token is missing, week-over-week deltas stay null and the stale-week
+    // fallback can never fire. Kvórum's desk writes state/kvorum the same way.
+    expect(cycle).toContain("state/goviral state/kvorum");
     expect(cycle).toContain("state/meeting-agendas state/priority-queue.json");
     // The same class again, and the longest-lived instance of it. `collectOwnerAttention` runs on
     // every non-dry phase and its path was never in this list, so the file was rebuilt in the
