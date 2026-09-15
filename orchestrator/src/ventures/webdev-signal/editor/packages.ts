@@ -48,6 +48,21 @@ function affectedLabel(record: WebDevRecord, locale: "cs" | "en"): string {
   return value || (locale === "cs" ? "rozsah uvedený ve zdroji" : "the scope stated by the source");
 }
 
+/**
+ * The safe action in the reader's language. The record builder writes the one action it knows how
+ * to derive in English; the Czech package used to quote that sentence verbatim, so a Czech caption
+ * carried "Check whether the project uses ..." in the middle of it. The action's id says what it
+ * is, and its scope is on the record, so the Czech sentence is built from the same facts.
+ */
+function actionText(locale: "cs" | "en", brief: WebDevEvidenceBrief, record: WebDevRecord): string | null {
+  const action = brief.safeActions[0];
+  if (!action) return null;
+  if (locale === "en" || record.safeActions[0]?.id !== "action:check-and-update") return action.text;
+  const affected = [...record.affectedVersions, ...record.affectedConfigurations].join(", ");
+  const fixed = record.fixedVersions.join(", ");
+  return `Ověřte, zda projekt používá ${affected}, a aktualizujte na ${fixed}.`;
+}
+
 function editorial(locale: "cs" | "en", brief: WebDevEvidenceBrief, record: WebDevRecord) {
   const security = record.changeKind === "security-advisory";
   const breaking = record.changeKind === "breaking-change";
@@ -55,7 +70,7 @@ function editorial(locale: "cs" | "en", brief: WebDevEvidenceBrief, record: WebD
   const preview = brief.releaseStability === "beta" || brief.releaseStability === "preview";
   const version = versionLabel(record);
   const affected = affectedLabel(record, locale);
-  const action = brief.safeActions[0]?.text ?? null;
+  const action = actionText(locale, brief, record);
   if (locale === "cs") {
     const headline = security
       ? `${record.project}: oprava v ${version}`

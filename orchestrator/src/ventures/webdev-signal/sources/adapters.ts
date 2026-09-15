@@ -116,6 +116,8 @@ function candidate(input: {
   updatedAt: string | null;
   versionText: string | null;
   securityText: string | null;
+  /** The project the item is about when it is not the source's own, as an advisory's package is. */
+  project?: string;
 }): WebDevCandidate {
   const evidenceRef = `source:${input.source.id}:${hash(`${input.sourceItemId}:${input.targetUrl}`).slice(0, 24)}`;
   const contentHash = hash(JSON.stringify({
@@ -138,7 +140,7 @@ function candidate(input: {
     title: input.title,
     summary: input.summary,
     author: input.author,
-    project: input.source.project,
+    project: input.project ?? input.source.project,
     publishedAt: input.publishedAt,
     updatedAt: input.updatedAt,
     versionText: input.versionText,
@@ -257,9 +259,15 @@ function parseReleases(source: WebDevSource, body: Uint8Array, context: AdapterC
   return finish(source, items, candidates, malformedItems, filteredItems);
 }
 
-function advisoryVersionText(item: Record<string, unknown>): string | null {
-  if (!Array.isArray(item.vulnerabilities)) return null;
+/**
+ * The npm packages an advisory names, with their ranges. An advisory is about its package, not
+ * about the database that lists it, so the first package is also the candidate's project: a
+ * headline that read "GitHub Advisory Database: fix available in 1.2.3" told the reader nothing.
+ */
+function advisoryScope(item: Record<string, unknown>): { versionText: string | null; project: string | null } {
+  if (!Array.isArray(item.vulnerabilities)) return { versionText: null, project: null };
   const scopes: string[] = [];
+  let project: string | null = null;
   for (const value of item.vulnerabilities) {
     if (!value || typeof value !== "object" || Array.isArray(value)) continue;
     const vulnerability = value as Record<string, unknown>;
@@ -270,9 +278,12 @@ function advisoryVersionText(item: Record<string, unknown>): string | null {
     const name = bounded(pkg.name, 80);
     const affected = bounded(vulnerability.vulnerable_version_range, 100);
     const fixed = bounded(vulnerability.first_patched_version, 100);
-    if (name && affected) scopes.push(`${name} affected ${affected}${fixed ? ` fixed ${fixed}` : ""}`);
+    if (name && affected) {
+      scopes.push(`${name} affected ${affected}${fixed ? ` fixed ${fixed}` : ""}`);
+      project ??= name;
+    }
   }
-  return scopes.length > 0 ? scopes.join("; ").slice(0, 160) : null;
+  return { versionText: scopes.length > 0 ? scopes.join("; ").slice(0, 160) : null, project };
 }
 
 function parseAdvisories(source: WebDevSource, body: Uint8Array, context: AdapterContext): WebDevAdapterResult {
@@ -289,7 +300,8 @@ function parseAdvisories(source: WebDevSource, body: Uint8Array, context: Adapte
       const title = bounded(item.summary, 240);
       const description = bounded(item.description ?? item.summary, 800);
       const publishedAt = iso(item.published_at);
-      const versionText = advisoryVersionText(item);
+      const scope = advisoryScope(item);
+      const versionText = scope.versionText;
       if (!targetUrl || !targetUrl.includes("github.com/advisories/") || !ghsa || !title || !description || !publishedAt || !versionText) {
         throw new Error("required advisory fields missing");
       }
@@ -311,7 +323,8 @@ function parseAdvisories(source: WebDevSource, body: Uint8Array, context: Adapte
         publishedAt,
         updatedAt: iso(item.updated_at),
         versionText,
-        securityText: bounded(`${ghsa}; severity ${severity}; ${versionText}`, 500)
+        securityText: bounded(`${ghsa}; severity ${severity}; ${versionText}`, 500),
+        ...(scope.project ? { project: scope.project } : {})
       }));
     } catch {
       malformedItems += 1;

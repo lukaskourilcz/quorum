@@ -48,7 +48,10 @@ describe("WebDev Signal official adapters", () => {
     expect(result).toMatchObject({ itemsSeen: 2, malformedItems: 1, filteredItems: 0 });
     expect(result.candidates[0]).toMatchObject({
       sourceItemId: "GHSA-xxxx-yyyy-zzzz",
-      changeKindHints: ["security-advisory"]
+      changeKindHints: ["security-advisory"],
+      // The advisory is about its package, not about the database that lists it.
+      project: "fixture-package",
+      author: "GitHub Advisory Database"
     });
     expect(result.candidates[0]?.versionText).toContain("fixture-package affected >= 1.0.0, < 1.2.3 fixed 1.2.3");
     expect(result.candidates[0]?.securityText).toContain("severity high");
