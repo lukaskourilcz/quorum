@@ -4,7 +4,7 @@
   "date": "2026-09-10",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "NEEDS_RECONCILIATION",
+  "status": "HELD",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -262,7 +262,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "A different edition already holds this date in the magazine, so this one was held back. The owner has the technical report.",
+    "summary": "The edition 2026-09-10-weworm-automattic-mullenweg-ai-bezpecnost was delivered on 2026-09-11 and verified live (proof-e235a02685ce2cef). The 09:00 retry had produced a second edition for the same date while the first was still queued; the magazine refused that duplicate and it was retired on 2026-09-15. The delivery receipt for this date records the edition that reached readers.",
     "evidenceRefs": [
       "source:social-media-today",
       "source:stackexchange-ml",

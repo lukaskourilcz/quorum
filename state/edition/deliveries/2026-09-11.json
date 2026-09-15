@@ -1,13 +1,21 @@
 {
   "schemaVersion": 1,
   "date": "2026-09-11",
-  "packageHash": "7c0ec23c2b6e61a91e7ada3380cfd3565ac63fb1d7236b03ce5b91f942c97ef8",
-  "status": "needs_reconciliation",
+  "packageHash": "0f317e6be0b037ca41b8f39c9b569cbb228f088388b084f97e803134cd87b67b",
+  "status": "delivered",
   "editionStatus": "edition",
   "targetRepository": "lukaskourilcz/aifirst",
-  "code": "hash_conflict",
-  "detail": "> aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-09-11-7c0ec23c2b6e61a91e7ada3380cfd3565ac63fb1d7236b03ce5b91f942c97ef8.json /home/runner/work/_temp/aifirst-delivery-1 [delivery:hash_conflict] public/data/board/2026-09-11.json is missing or differs from the immutable delivered bytes ELIFECYCLE Command failed with exit code 1.",
-  "deliveryAttempts": 1,
-  "recordedAt": "2026-09-14T07:05:01.606Z",
-  "tags": []
+  "targetCommit": "acd39052d96891aa466df4b44388548e5e01d6bb",
+  "deliveredAt": "2026-09-13T07:07:32.601Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-11-microsoft-rust-anthropic-bezpecnost-ai",
+  "tags": [
+    "programovaci-jazyky",
+    "bezpecnost-softwaru",
+    "umela-inteligence",
+    "microsoft",
+    "nvidia",
+    "moderovani-obsahu"
+  ],
+  "reconciledAt": "2026-09-15T21:00:00.000Z",
+  "reconciliation": "The 09:00 retry wrote a second edition for this date (7c0ec23c2b6e, 2026-09-11-ai-bezpecnost-odchody-claude-zneuziti) while this one was still queued. The magazine refused it as hash_conflict and its failure receipt overwrote this delivered one. Restored on 2026-09-15 from the archived package and release proof proof-02461fe0f3edf7e3; the duplicate is retired under edition/retired."
 }

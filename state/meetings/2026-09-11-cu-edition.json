@@ -4,7 +4,7 @@
   "date": "2026-09-11",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "NEEDS_RECONCILIATION",
+  "status": "HELD",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -262,7 +262,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "A different edition already holds this date in the magazine, so this one was held back. The owner has the technical report.",
+    "summary": "The edition 2026-09-11-microsoft-rust-anthropic-bezpecnost-ai was delivered on 2026-09-13 and verified live (proof-02461fe0f3edf7e3). The 09:00 retry had produced a second edition for the same date while the first was still queued; the magazine refused that duplicate and it was retired on 2026-09-15. The delivery receipt for this date records the edition that reached readers.",
     "evidenceRefs": [
       "source:the-register",
       "source:hn-frontpage",

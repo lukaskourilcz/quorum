@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-09-15T19:05:30.688Z",
+  "checkedAt": "2026-09-15T21:14:15.890Z",
   "date": "2026-09-15",
   "ventures": [
     {
@@ -63,20 +63,6 @@
           "date": "2026-08-17",
           "code": "post_deploy_verification",
           "disposition": "owner"
-        },
-        {
-          "label": "2026-09-10 edition",
-          "packageHash": "a5ac50cac988bf0e27eeaf199473c5c777028a8a7efeffbed6aac991bae84872",
-          "date": "2026-09-10",
-          "code": "hash_conflict",
-          "disposition": "owner"
-        },
-        {
-          "label": "2026-09-11 edition",
-          "packageHash": "7c0ec23c2b6e61a91e7ada3380cfd3565ac63fb1d7236b03ce5b91f942c97ef8",
-          "date": "2026-09-11",
-          "code": "hash_conflict",
-          "disposition": "owner"
         }
       ],
       "oldestWaitingDate": "2026-09-12",
@@ -88,20 +74,6 @@
           "packageHash": "cf7602a6351592e247c28c5bc957d64e7a5f7e60809de1b81f84074657c121b9",
           "date": "2026-08-17",
           "code": "post_deploy_verification",
-          "disposition": "owner"
-        },
-        {
-          "label": "2026-09-10 edition",
-          "packageHash": "a5ac50cac988bf0e27eeaf199473c5c777028a8a7efeffbed6aac991bae84872",
-          "date": "2026-09-10",
-          "code": "hash_conflict",
-          "disposition": "owner"
-        },
-        {
-          "label": "2026-09-11 edition",
-          "packageHash": "7c0ec23c2b6e61a91e7ada3380cfd3565ac63fb1d7236b03ce5b91f942c97ef8",
-          "date": "2026-09-11",
-          "code": "hash_conflict",
           "disposition": "owner"
         }
       ]
