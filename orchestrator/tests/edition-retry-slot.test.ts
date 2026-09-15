@@ -1,5 +1,5 @@
 import { mkdtempSync } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -36,6 +36,20 @@ async function seedDelivery(date: string): Promise<void> {
     JSON.stringify({ status: "delivered", editionStatus: "edition", tags: ["ai-agenti"] }),
     "utf8"
   );
+}
+
+async function seedQueuedEdition(date: string): Promise<string> {
+  // The golden package is a complete, hash-valid edition for 4 August: the same bytes the
+  // delivery tests queue, so the outbox reads it exactly as it reads a package the 05:00 run wrote.
+  const golden = JSON.parse(await readFile(
+    path.join(repoRoot, "orchestrator", "tests", "fixtures", "edition", "golden-package.json"),
+    "utf8"
+  )) as { date: string; idempotencyKey: string };
+  if (golden.date !== date) throw new Error(`golden package is dated ${golden.date}, not ${date}`);
+  await mkdir(path.join(testStateRoot, "edition", "outbox"), { recursive: true });
+  const file = `edition/outbox/${date}-${golden.idempotencyKey}.json`;
+  await writeFile(path.join(testStateRoot, file), JSON.stringify(golden), "utf8");
+  return file;
 }
 
 function runEdition(now: Date) {
@@ -87,6 +101,25 @@ describe("the edition slot's same-day retry", () => {
     expect(result.decision).toBe("NO_ACTION");
     expect(result.selectedAgents).toEqual([]);
     expect(result.artifacts).toEqual(["state/edition/deliveries/2026-08-04.json"]);
+  });
+
+  it("does not write a second edition while the morning's edition is still queued", async () => {
+    // The 05:00 run wrote its edition and the delivery queue has not reached it yet — the queue
+    // ships one package per run, oldest first, so on a day with a backlog the morning's package
+    // is still in the outbox at 09:00. That package settles the day: 10 and 11 September each
+    // paid for a second edition here, and the magazine refused the loser as a hash conflict.
+    await seedRecordFor("2026-08-04");
+    // The state root is shared across this file and the case above delivered 4 August; the queue
+    // is what has to settle the day here, so the receipt goes.
+    await rm(path.join(testStateRoot, "edition", "deliveries", "2026-08-04.json"), { force: true });
+    const queued = await seedQueuedEdition("2026-08-04");
+
+    const result = await runEdition(AT_RETRY);
+
+    expect(result.status).toBe("preflight_complete");
+    expect(result.decision).toBe("NO_ACTION");
+    expect(result.selectedAgents).toEqual([]);
+    expect(result.artifacts).toEqual([`state/${queued}`]);
   });
 
   it("still stops a second firing at the slot's own hour", async () => {

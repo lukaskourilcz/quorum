@@ -32,7 +32,7 @@ import { caughtUpSocialProductionEnabled, disabledAgentsForVenture, loadVentureA
 import { type Stage } from "../types.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 
-import { hasDeliveredPublishedEdition } from "./types.js";
+import { editionRecordForDay } from "./types.js";
 import type { CycleOptions, CycleResult } from "./types.js";
 import {
   budgetLimitsFromEnvironment,
@@ -250,7 +250,10 @@ export async function runCaughtUpLiveEditionCycle(
   const productionBudgetUsd = budgetLimitsFromEnvironment().editionProductionUsd;
   const estimatedWorstCaseUsd = Number((meetingBudgetUsd + productionBudgetUsd).toFixed(8));
   const date = pragueClockParts(now).date;
-  if (await hasDeliveredPublishedEdition(date)) {
+  // A day that already has its edition — delivered, or written and waiting in the outbox — is
+  // not produced again. This is what makes the 09:00 retry a retry rather than a second edition.
+  const settled = await editionRecordForDay(date);
+  if (settled) {
     return {
       cycleId,
       phase: "cu-edition",
@@ -260,7 +263,7 @@ export async function runCaughtUpLiveEditionCycle(
       estimatedWorstCaseUsd,
       selectedAgents: [],
       skippedAgents: [],
-      artifacts: [`state/edition/deliveries/${date}.json`]
+      artifacts: [`state/${settled}`]
     };
   }
   const reference = meetingRef(date, "cu-edition");

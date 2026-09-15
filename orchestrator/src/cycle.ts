@@ -154,6 +154,7 @@ import { materializeOperationsState, operationsRefreshPending } from "./operatio
  * have made a pure move look like a rewrite.
  */
 export {
+  editionRecordForDay,
   hasDeliveredPublishedEdition,
   type CycleOptions,
   type CycleResult
