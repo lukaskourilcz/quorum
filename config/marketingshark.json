@@ -74,23 +74,28 @@
       "banner": false,
       "factSheet": {
         "recordedAt": "2026-09-15",
-        "source": "The owner's statement of 2026-09-15 and the public page at https://devshark.app on the same day.",
-        "maturity": "Nearly finished and in testing by the owner. Not publicly launched; no launch date is public.",
-        "whatVisitorsCanDo": "The public page describes devShark as developer learning and practice: build durable developer knowledge across frontend, backend, databases, DevOps, testing, security, system design and AI, with worked topics such as JavaScript closures, TypeScript narrowing, React Hooks, SQL joins and Git rebasing.",
-        "callToAction": "Visit devshark.app. Promise no sign-up, download, app-store listing or launch date.",
+        "source": "The owner's statement of 2026-09-15, devshark.app the same day, and the product repository lukaskourilcz/react-express-app (README, about-project.md, docs/launch-audit-2026-09-15.md).",
+        "maturity": "Live at devshark.app and in testing by the owner: nearly finished, not publicly launched, no launch date public. Its content is reviewed item by item by a model, not yet by a person.",
+        "whatVisitorsCanDo": "Learn web development free, in English or Czech, in the browser: guided Learn paths with spaced mastery, a daily Today queue, quizzes with an explanation on every answer, a daily challenge, multiplayer rooms, flashcards, a typing racer and server-graded coding tasks in JavaScript, TypeScript, React and system design. Google sign-in saves progress; without it nothing is saved.",
+        "callToAction": "Try one question at devshark.app. Promise no download, app-store listing, launch date or price; learning is free.",
         "allowedClaims": [
-          "devShark is a quiz-style learning game for developers, in testing before launch.",
-          "Its address is devshark.app.",
-          "It covers frontend, backend, databases, DevOps, testing, security, system design and AI, as the site says.",
-          "Every question comes with an explanation of the correct answer."
+          "devShark is a free, bilingual (English and Czech) web-development learning platform at devshark.app, live and in testing before its public launch.",
+          "Its questions cover JavaScript, TypeScript, HTML, CSS, React, Node.js, Git, databases, testing, security, DSA and algorithms, system design and how the internet works.",
+          "Every question comes with an explanation of the right answer, and guided Learn paths, a daily challenge, quizzes, flashcards, multiplayer rooms and a typing racer all run in the browser.",
+          "The Coding section grades JavaScript, TypeScript, React and system-design tasks on the server, with hint ladders that end in documentation.",
+          "Learning is free; a Google sign-in saves progress across devices, and the optional support shop is cosmetic only and never changes access.",
+          "The bank holds more than 3,600 authored web-development questions, the repository's own count on 15 September 2026."
         ],
         "neverClaim": [
-          "User counts, rankings, ratings, testimonials or awards.",
-          "A price, a free tier or a paid plan; none is public.",
-          "That it is launched, finished or available in an app store.",
-          "A launch date.",
-          "Whether an account is required; the owner has not said.",
-          "An interface language beyond the two carousel languages."
+          "That it is launched, finished, out of testing or available in an app store, or any launch date.",
+          "User counts, rankings, ratings, testimonials, awards or press.",
+          "A price, subscription, paid tier or discount; the product is free and has no paid plan.",
+          "Any AI feature: devShark has no AI tutor, hint coach or generated content. Sharkira and AI explanations belong to StudyShark only.",
+          "A certificate, certification, job guarantee or interview-pass promise; the learning paths state that they certify nothing.",
+          "That the content was reviewed by a person; the item-by-item review is by a model and the product says so.",
+          "That grading is abuse-resistant or tamper-proof; that boundary is still being hardened.",
+          "StudyShark subjects (geography, maths, history, biology, chess, poker) as devShark content; devShark is the web-development product only.",
+          "A mobile app, an offline mode, or an interface language beyond English and Czech."
         ]
       }
     },
