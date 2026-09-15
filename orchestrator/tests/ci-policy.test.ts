@@ -47,13 +47,13 @@ describe("automation policy", () => {
     );
     const health = await readFile(path.join(workflowRoot, "health.yml"), "utf8");
 
-    // Three backstop sweeps, not one cron per slot. The Vercel dispatch is the punctual path
-    // that names a slot; GitHub's schedule is the backup that arrives hours late, and eighteen
-    // of them were being billed like primaries. deployedCronExpressions is the generator, and
-    // the workflow must hold exactly what it produces and nothing else.
+    // A handful of backstop sweeps, not one cron per slot. The Vercel dispatch is the punctual
+    // path that names a slot; GitHub's schedule is the backup that arrives hours late, and
+    // eighteen of them were being billed like primaries. deployedCronExpressions is the
+    // generator, and the workflow must hold exactly what it produces and nothing else.
     expect(
       cycle.match(new RegExp(`- cron: "${CRON_MINUTE} \\d{1,2} \\* \\* \\*"`, "g"))
-    ).toHaveLength(3);
+    ).toHaveLength(deployedCronExpressions().length);
     for (const expression of deployedCronExpressions()) {
       expect(cycle.match(new RegExp(`- cron: "${expression.replace(/\*/gu, "\\*")}"`, "g")), expression)
         .toHaveLength(1);
@@ -279,9 +279,10 @@ describe("automation policy", () => {
     }
     // 18, not 19: the hourly social publisher is commented out until a channel exists, so its
     // twenty-four daily firings no longer confirm there is nothing to publish.
-    // Three backstop sweeps in cycle.yml, one daily health run, and nothing else: the social
+    // The backstop sweeps in cycle.yml, one daily health run, and nothing else: the social
     // publisher's hourly schedule is commented out until a channel exists.
-    expect(schedules.length, "no schedules found; the cron guard is asserting nothing").toBe(4);
+    expect(schedules.length, "no schedules found; the cron guard is asserting nothing")
+      .toBe(deployedCronExpressions().length + 1);
 
     for (const { file, expression } of schedules) {
       const minute = expression.trim().split(/\s+/u)[0]!;

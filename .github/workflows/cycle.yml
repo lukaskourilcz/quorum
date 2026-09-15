@@ -2,15 +2,21 @@ name: Guarded council cycle
 
 on:
   schedule:
-    # Three backstop sweeps, not eighteen per-slot crons. The Vercel dispatch is the punctual
+    # Five backstop sweeps, not eighteen per-slot crons. The Vercel dispatch is the punctual
     # primary — it arrives on the slot's own hour and does the work — and GitHub's schedule is the
     # backup that arrives hours late. Measured 5-6 August: a dispatch run averages 5.8 billable
     # minutes of real work, a schedule run 0.9 minutes of guard exit, about 600 minutes a month
     # spent duplicating a path that had already run. A sweep asks one question instead: is there a
     # slot today with no record that can still be opened? See orchestrator/src/meetings/sweep.ts.
+    # The two late sweeps exist for the 23:00 Prague desk, which no earlier sweep can reach; one
+    # of the pair serves each season and the other exits its guard just after midnight. The hours
+    # are BACKSTOP_SWEEP_HOURS in orchestrator/src/ventures/registry.ts, and a test keeps the two
+    # lists equal.
     - cron: "55 3 * * *"
     - cron: "55 11 * * *"
     - cron: "55 19 * * *"
+    - cron: "55 21 * * *"
+    - cron: "55 22 * * *"
   workflow_dispatch:
     inputs:
       phase:

@@ -341,12 +341,18 @@ export function scheduledCronExpressions(registry: VentureRegistry): string[] {
 }
 
 /**
- * The UTC hours the three backstop sweeps fire at.
+ * The UTC hours the backstop sweeps fire at.
  *
  * Here rather than beside the sweep itself because a cron is the registry's business and
  * meetings/sweep.ts imports this module: the other direction is a cycle.
+ *
+ * Three sweeps covered the day to 21:55 Prague and no later, so the 23:00 Personal Growth desk
+ * was the one slot no sweep could ever reach: it ran once, on 30 August, and left sixteen
+ * skip records after that. The two late sweeps close the evening in both seasons — 21:55 UTC is
+ * 23:55 Prague in summer and 22:55 UTC is 23:55 Prague in winter; the other of the pair lands
+ * just after midnight Prague, finds no slot of the new day passed and exits its guard.
  */
-export const BACKSTOP_SWEEP_HOURS = [3, 11, 19] as const;
+export const BACKSTOP_SWEEP_HOURS = [3, 11, 19, 21, 22] as const;
 
 /**
  * What cycle.yml actually deploys as `on.schedule`.
@@ -354,8 +360,8 @@ export const BACKSTOP_SWEEP_HOURS = [3, 11, 19] as const;
  * The per-slot crons were the backup path being billed like a primary. Measured over
  * 5-6 August: a Vercel dispatch arrives on the slot's own hour and does 5.8 minutes of real
  * work, a GitHub cron arrives hours late and spends 0.9 minutes exiting a guard — about 600
- * billable minutes a month to duplicate a path that had already run. Three sweeps replace them,
- * each looking for a slot today that has no record and can still be opened.
+ * billable minutes a month to duplicate a path that had already run. A handful of sweeps
+ * replace them, each looking for a slot today that has no record and can still be opened.
  */
 export function deployedCronExpressions(): string[] {
   return BACKSTOP_SWEEP_HOURS.map((hour) => `${CRON_MINUTE} ${hour} * * *`);
