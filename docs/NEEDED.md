@@ -1,5 +1,33 @@
 # NEEDED — what the owner has to do
 
+## WebDev Signal · 2026-09-15
+
+The daily scan runs inside the Caught Up day from the next 05:00 Prague firing, at `$0`, with no
+model call and nothing published. Each day it either records `NO_EDITION` or leaves a Czech and an
+English package under `state/ventures/webdev-signal/packages/` with the rendered carousel panels
+under `state/ventures/webdev-signal/design-lab/assets/`; the admin WebDev Signal workspace shows
+the day, and the run receipt under `state/ventures/webdev-signal/runs/` names what to do next.
+
+- [ ] **Countersign or decline the daily-runner record** — read
+  `state/decisions/2026-09-15-webdev-signal-daily-runner.md`. It matches the config to the
+  founding you countersigned on 2026-08-30, enables the deterministic render and makes the venture
+  `operating` so it has a pause switch in Settings. Declining means reverting those three config
+  lines; the runner then records honest held receipts. [imp:4] [owner:me] [time:15m]
+  [kind:decision]
+- [ ] **Create the four Instagram and Threads accounts and record the handles** — one Instagram and
+  one Threads account per edition, `cs` and `en`, created by you in the platforms' own UIs. Nothing
+  in the repository can create them, and no delivery feature is reconsidered before the handles
+  exist. Never paste a credential into Git. [imp:4] [owner:me] [time:1h] [kind:setup]
+- [ ] **Post the first rendered drafts by hand** — on a day whose receipt says both carousels are
+  rendered, take the panel PNGs from `state/ventures/webdev-signal/design-lab/assets/` and the
+  caption and Threads text from the day's package files, and post them from the accounts above.
+  The admin lists the receipts but has no preview or download route yet; that route is the next
+  build item. [imp:3] [owner:me] [time:20m] [kind:content]
+- [ ] **Add an admin preview and download route for the rendered panels** — the Design & delivery
+  tab lists render receipts without a way to open the PNGs; manual posting needs one. Server-only
+  read under the existing `/admin` auth boundary, no new state writer. [imp:3] [owner:ai]
+  [time:2h] [kind:content]
+
 ## Design Lab · 2026-09-15
 
 - [x] **Modernize the studio and create Canva examples** — canvas-focused editor, Folio/Press families, article-based Canva briefs and editable examples. Press follows the owner's @technology reference. [Research and links](design-lab/CANVA-RESEARCH.md). [imp:4] [owner:ai] [time:3h] [kind:content]
@@ -24,7 +52,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-08-30.
+Updated: 2026-09-15.
 
 ---
 
@@ -312,13 +340,10 @@ Judgement calls. Nothing is blocked on code for any of these.
   disclosure text. Nothing publishes meanwhile, and campaign generation refuses every Contest Radar
   release independently of the edge. [imp:2] [owner:me] [time:20m] [kind:decision]
 
-- [ ] **Countersign or decline WebDev Signal's founding boundary** — review
-  `state/decisions/2026-08-28-webdev-signal-founding.md`, check the working name and exact
-  Instagram/Threads handles without creating an account, and accept or reject
-  `WEBDEV-SIGNAL-FOUNDING-001`. Approval confirms the two-edition evidence policy, proposed
-  `$0.03` selected-day / `$0.75` monthly ceiling and shared 05:00 Prague checkpoint; it grants no
-  source, model, account, OAuth, render or publishing authority. [imp:4] [owner:me] [time:20m]
-  [kind:decision]
+- [x] **Countersign or decline WebDev Signal's founding boundary** — countersigned on 2026-08-30
+  ("Countersign everything thats left there for me"); the decision file records it and, since
+  2026-09-15, `config/webdev-signal.json` matches. The working name and exact handles are still
+  unresolved and belong to the account item above. [imp:4] [owner:me] [time:20m] [kind:decision]
 
 - [x] **Sign or decline `BH-RESEARCH-001`** — decide whether BOOKSOFHISTORY may use
   web search on the existing Anthropic key. The item in `state/INBOX.md` fixes gather
