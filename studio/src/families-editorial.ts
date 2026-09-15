@@ -37,14 +37,15 @@ const folio: Composer = ({ slot, index, slideCount, role, beat, ground }) => {
 const press: Composer = ({ slot, index, slideCount, role, beat, ground }) => {
   const footer = pagerDots(index, slideCount, ground);
   if (role === "cover") return [
-    shape(0, 0, 1, 0.47, { fillToken: "surface-strong" }),
-    hero(0, 0, 1, 0.47, { treatment: "mono", scrim: "none" }),
-    // The masthead has an opaque ground, so photo luminance cannot erase the brand.
-    shape(LEFT - 0.015, TOP - 0.013, 0.59, 0.058, { fillToken: "background" }),
-    { type: "logo", x: LEFT, y: TOP, width: 0.55, height: 0.028, colorToken: "foreground", fontToken: "mono" },
-    rule(LEFT, 0.495, 0.2, { thickness: 12 }),
-    text(slot, LEFT, 0.54, MEASURE, 0.25, {
-      fontWeight: 900, minFontSize: 32, maxFontSize: 124, maxChars: 140, maxLines: 5, uppercase: true, tracking: -0.02
+    // Owner reference: @technology's photograph-led covers and dense lower headlines.
+    // The image fades into a solid text ground; retain each venture's own type and palette.
+    shape(0, 0, 1, 0.53, { fillToken: "surface-strong" }),
+    hero(0, 0, 1, 0.53, { scrim: "bottom" }),
+    shape(0, 0.53, 1, 0.3, { fillToken: "background" }),
+    { type: "logo", x: 0.32, y: 0.535, width: 0.36, height: 0.018, colorToken: "foreground", fontToken: "mono" },
+    rule(0.46, 0.569, 0.08, { thickness: 5 }),
+    text(slot, LEFT, 0.59, MEASURE, 0.20, {
+      fontWeight: 900, minFontSize: 28, maxFontSize: 124, maxChars: 140, maxLines: 5, uppercase: true, tracking: -0.025, align: "middle"
     }),
     ...footer
   ];
@@ -67,5 +68,5 @@ const press: Composer = ({ slot, index, slideCount, role, beat, ground }) => {
 
 export const EDITORIAL_FAMILIES: Readonly<Record<"folio" | "press", FamilySpec>> = {
   folio: { description: "Editorial folio: precise masthead, generous headline and a framed photograph; numbered reading pages.", compose: folio },
-  press: { description: "Sports press: monochrome image band, compact display headline and strong numbered body pages.", compose: press }
+  press: { description: "Photo-led news: edge-to-edge hero, small branding and a dense centered headline; numbered body pages.", compose: press }
 };

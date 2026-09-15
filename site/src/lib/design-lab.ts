@@ -3,6 +3,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import {
   CarouselRecipeSchema,
+  CAROUSEL_BRANDS,
   DECK_FAMILIES,
   MAX_SLIDE_WORDS,
   SocialCopyPackSchema,
@@ -95,6 +96,7 @@ export interface LabArticle {
   copy: SocialCopyPack;
   /** The caption as it ships: the desk's words with the licence credit appended by code. */
   caption: string;
+  designTokens?: { colors: Record<string, string>; fonts: { headline: string; body: string; mono: string } };
   /** The approved two-language package used by the dedicated TS renderer and caption buttons. */
   dualLanguage: TehdejsiDesignLabPack | null;
 }
@@ -254,6 +256,7 @@ export async function readDesignLab(limit = 40, venture?: string): Promise<LabAr
       // shows it as part of a caption it cannot edit out. A carousel reaching a feed without it is
       // a licence breach.
       caption: renderCaption(copy.copy.igCaption, copy.heroCredit),
+      designTokens: { colors: CAROUSEL_BRANDS[venture].colors, fonts: CAROUSEL_BRANDS[venture].fonts },
       dualLanguage
     });
   }

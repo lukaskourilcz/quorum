@@ -126,3 +126,7 @@ the real files. Composition, line breaks and type size are honest; the letterfor
 - No invented statistics, no fake interface elements, no fabricated quotes, no engagement
   ornament. The one family built around a number, Figure, says in its own spec that the slot
   takes an honest figure from the article or the family is not used.
+
+## Canva workflow
+
+See [Canva research and studio modernization](CANVA-RESEARCH.md) for the current workflow, editable examples and integration limits.

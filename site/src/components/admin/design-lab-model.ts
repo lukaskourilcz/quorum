@@ -17,7 +17,7 @@ export const LEGACY_FAMILIES = [
 ] as const;
 export const LOOKS: Record<string, { name: string; detail: string }> = {
   folio: { name: "Folio", detail: "Časopis · fotografie v rámu" },
-  press: { name: "Press", detail: "Výrazný titulek · sportovní editorial" },
+  press: { name: "Press", detail: "Velká fotografie · výrazný zpravodajský titulek" },
   rail: { name: "Rail", detail: "Průvodce · číslované kroky" },
   fault: { name: "Fault", detail: "Kontrast · ostrá geometrie" },
   halo: { name: "Halo", detail: "Portrét · kruhový výřez" }
@@ -58,6 +58,11 @@ export function canvaBrief(article: LabArticle, recipe: Recipe, format: FormatId
     `Article: ${article.headline}\nDate: ${article.date}\nSource: ${article.venture}/${article.slug}/${article.date}`,
     `Format: ${canvas.width} × ${canvas.height} px. ${texts.length} pages. Language: ${article.locale}.`,
     `Direction: ${LOOKS[recipe.family]?.detail ?? recipe.family}. Preserve this venture's brand identity.`,
+    "Visual reference: https://www.instagram.com/technology/ — photo-led covers, dense bold headlines, restrained branding and strong contrast. Use the composition as inspiration with our own assets, fonts and palette.",
+    ...(article.designTokens ? [
+      `Brand palette: ${Object.entries(article.designTokens.colors).map(([name, value]) => `${name}: ${value}`).join(", ")}`,
+      `Typefaces: headline ${article.designTokens.fonts.headline}; body ${article.designTokens.fonts.body}; labels ${article.designTokens.fonts.mono}.`
+    ] : []),
     "Use a strong typographic hierarchy, deliberate spacing and one idea per page. Keep Czech accents. Do not add claims, statistics, quotes or decorative AI imagery.",
     format === "instagram-story" ? "Keep essential text clear of the top 14% and bottom 16% story overlays." : "Keep essential text inside generous page margins.",
     ...texts.map((text, index) => `PAGE ${index + 1}\n${text}`),

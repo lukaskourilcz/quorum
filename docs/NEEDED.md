@@ -1,5 +1,10 @@
 # NEEDED — what the owner has to do
 
+## Design Lab · 2026-09-15
+
+- [x] **Modernize the studio and create Canva examples** — canvas-focused editor, Folio/Press families, article-based Canva briefs and editable examples. Press follows the owner's @technology reference. [Research and links](design-lab/CANVA-RESEARCH.md). [imp:4] [owner:ai] [time:3h] [kind:content]
+- [ ] **Review and deploy the Design Lab update** — inspect the editor on desktop/mobile and compare Canva exports with reference PNGs; then use the existing production release gate. Local browser acceptance was blocked in this session. Git merge does not deploy. [imp:4] [owner:me] [time:30m] [kind:deploy]
+
 ## Production review · 2026-09-07
 
 The current findings, exact configuration matrix, Mobbin references, paid-tool

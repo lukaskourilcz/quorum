@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, Download, Image as ImageIcon, Layers, Search } from "lucide-react";
 import { CopySocialText } from "./copy-social-text";
 import { DeckSaveBadge, warningFor, type SaveState } from "./deck-save-badge";
@@ -14,6 +15,7 @@ import type { LabArticle, LabPreset } from "@/lib/design-lab";
 
 function Workspace({ article, presets }: { article: LabArticle; presets: LabPreset[] }) {
   const writesEnabled = useAdminWritesEnabled();
+  const router = useRouter();
   const [recipe, setRecipe] = useState<Recipe>(article.recipe);
   const [persistedRecipe, setPersistedRecipe] = useState<Recipe | null>(article.recipePinned ? article.recipe : null);
   const [format, setFormat] = useState<FormatId>("instagram-portrait");
@@ -45,6 +47,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
         return false;
       }
       setSave({ kind: "saved", style: label, commit: payload.commit ?? null });
+      router.refresh();
       return true;
     } catch {
       setSave({ kind: "warning", style: label, cause: "network", message: warningFor("network", "Server neodpověděl.") });
@@ -66,7 +69,8 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
     const text = current;
     if (await post({ slide: index, text }, `slide ${index + 1}`)) {
       setSavedTexts((values) => values.map((value, position) => position === index ? text : value));
-      setRevision((value) => String(Number(value || 0) + 1));
+      // A fresh cache key prevents stale previews even after article switches and remounts.
+      setRevision(crypto.randomUUID());
     }
   }
 

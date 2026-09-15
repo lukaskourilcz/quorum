@@ -1,8 +1,11 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { AdminWriteProvider } from "./admin-write-mode";
 import { DesignLabWorkspace } from "./design-lab-workspace";
+import { canvaBrief } from "./design-lab-model";
 import type { LabArticle } from "@/lib/design-lab";
+
+vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }) }));
 
 const ARTICLE = {
   id: "caught-up/2026-08-19/synthetic-evidence",
@@ -57,6 +60,16 @@ const ARTICLE = {
 } satisfies LabArticle;
 
 describe("the Design Lab workspace", () => {
+  it("carries source copy, brand and photo credit into the Canva handoff", () => {
+    const article = { ...ARTICLE, heroCredit: "Foto: Žaneta · CC BY 4.0", designTokens: {
+      colors: { accent: "#EF4770" }, fonts: { headline: "Inter", body: "Inter", mono: "IBM Plex Mono" }
+    } };
+    const copy = ["Příliš žluťoučký kůň", "Zdroj uvádí nejistý odhad, nikoli výsledek."];
+    const brief = canvaBrief(article, article.recipe, "instagram-story", copy);
+    for (const value of [...copy, article.caption, article.heroCredit, article.slug, "1080 × 1920", "#EF4770", "IBM Plex Mono"])
+      expect(brief).toContain(value);
+    expect(brief).toContain("https://www.instagram.com/technology/");
+  });
   it("names the initial-empty state instead of presenting a blank rail", () => {
     const html = renderToStaticMarkup(<DesignLabWorkspace articles={[]} presets={[]} />);
 
