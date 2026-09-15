@@ -160,6 +160,7 @@ export {
 } from "./cycle/types.js";
 import { hasDeliveredPublishedEdition } from "./cycle/types.js";
 import type { CycleOptions, CycleResult } from "./cycle/types.js";
+import { runVentureDayPreStep } from "./cycle/pre-steps.js";
 import { isVentureDayPhase, runVentureDay } from "./cycle/venture-day.js";
 import {
   runCaughtUpDryCycle,
@@ -357,7 +358,7 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
   // dispatched alone. `withFileLock` is not re-entrant, so holding one here would deadlock the
   // first step.
   if (isVentureDayPhase(options.phase)) {
-    return runVentureDay(options.phase, { ...options, now }, runCycle);
+    return runVentureDay(options.phase, { ...options, now }, runCycle, runVentureDayPreStep);
   }
   // The quiet-day wrapper sits inside the lock, so the skip record and the calendar it rebuilds
   // are written under the same exclusion as the records of a room that ran.

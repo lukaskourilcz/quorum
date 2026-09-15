@@ -3,7 +3,7 @@ import { readJson } from "../state.js";
 import { stateRoot } from "../paths.js";
 import type { ImageProgramReadiness } from "../images/readiness.js";
 import type { RunnablePhase } from "../types.js";
-import type { VentureDayStep } from "./venture-day.js";
+import type { VentureDayPreStepOutcome, VentureDayStep } from "./venture-day.js";
 import { manualEditionOverride } from "./commissions.js";
 
 /**
@@ -69,6 +69,12 @@ export interface CycleResult {
    * sync. This exists so the run log and the CLI can print the day without opening five files.
    */
   steps?: readonly VentureDayStep[];
+  /**
+   * Set only on a venture day with internal prerequisites: what each did before the first room.
+   * Kept apart from `steps` because a prerequisite is not a room — it holds no seat and writes no
+   * meeting record, and its outcome never decides whether the day was already recorded.
+   */
+  preSteps?: readonly VentureDayPreStepOutcome[];
 }
 
 /** A completed article is final for its date; a no-edition board status is provisional. */
