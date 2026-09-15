@@ -55,7 +55,9 @@ export const DECK_FAMILIES = [
   "rail",
   "vista",
   "fault",
-  "halo"
+  "halo",
+  "folio",
+  "press"
 ] as const;
 export type DeckFamily = (typeof DECK_FAMILIES)[number];
 
@@ -68,7 +70,7 @@ export type DeckFamily = (typeof DECK_FAMILIES)[number];
  * different acts, and only the first is reversible. A live preset pool still overrides this list,
  * because a pool is the owner narrowing further, not wider.
  */
-export const LAUNCH_FAMILIES = ["apex", "rail", "vista", "fault", "halo"] as const satisfies readonly DeckFamily[];
+export const LAUNCH_FAMILIES = ["folio", "press", "rail", "fault", "halo"] as const satisfies readonly DeckFamily[];
 
 /** Everything a recipe's `family` field may name. */
 export const DECK_DESIGNS = [...DECK_FAMILIES, ...DECK_STYLES] as const;

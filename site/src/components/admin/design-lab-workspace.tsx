@@ -1,569 +1,190 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CopySocialText } from "@/components/admin/copy-social-text";
-import { DeckSaveBadge, warningFor, type SaveState } from "@/components/admin/deck-save-badge";
-import { DesignLabBilingualSlide } from "@/components/admin/design-lab-bilingual-slide";
-import { useAdminWritesEnabled } from "@/components/admin/admin-write-mode";
-import {
-  AdminButton as Button,
-  AdminCallout as Callout,
-  AdminCard,
-  AdminCardContent,
-  AdminEntityBadge,
-  AdminInput,
-  AdminLabel,
-  AdminStateMessage,
-  AdminStatusBadge as Badge,
-  AdminTextarea,
-} from "./admin-primitives";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, ArrowRight, Download, Image as ImageIcon, Layers, Search } from "lucide-react";
+import { CopySocialText } from "./copy-social-text";
+import { DeckSaveBadge, warningFor, type SaveState } from "./deck-save-badge";
+import { DesignLabBilingualSlide } from "./design-lab-bilingual-slide";
+import { DesignLabInspector } from "./design-lab-inspector";
+import { SlideImage } from "./design-lab-image";
+import { useAdminWritesEnabled } from "./admin-write-mode";
+import { FORMATS, LAUNCH_FAMILIES, LOOKS, chipClass, saveable, slideUrl, token, type FormatId, type Recipe } from "./design-lab-model";
+import { AdminButton as Button, AdminCallout as Callout, AdminEntityBadge, AdminInput, AdminLabel, AdminStateMessage, AdminStatusBadge as Badge } from "./admin-primitives";
 import type { LabArticle, LabPreset } from "@/lib/design-lab";
-
-/**
- * One workspace where two tabs used to be.
- *
- * `templates` showed CSS mock-ups that never reached the renderer; `decks` showed real renders and
- * offered a five-way style chip and nothing else. Neither could answer the question the owner
- * actually has — *what does this article's carousel look like, and can I change it* — because each
- * held half the answer. The rail, the canvas, the controls and the output are that question in
- * four parts, and the recipe line under the controls is the whole design in one sentence.
- */
-
-const FORMATS = [
-  { id: "instagram-portrait", label: "4:5", ratio: 1_080 / 1_350 },
-  { id: "instagram-square", label: "1:1", ratio: 1 },
-  { id: "instagram-story", label: "9:16", ratio: 1_080 / 1_920 },
-  { id: "threads", label: "Threads", ratio: 1 }
-] as const;
-
-type FormatId = (typeof FORMATS)[number]["id"];
-
-/**
- * The families: the launch rotation first, the legacy library after it.
- *
- * Hard-coded rather than imported, because this is a client component and the studio package is
- * the render engine — pulling it across the boundary to read one array would ship the renderer to
- * the browser. A site test holds this row to the engine's registry, launch five leading. The five
- * lead because they are the only families the dealer deals unprompted; everything after them
- * renders stored work and is a deliberate reach back.
- */
-const LAUNCH_FAMILIES = ["apex", "rail", "vista", "fault", "halo"] as const;
-
-/**
- * The twenty-three the dealer no longer deals.
- *
- * They still render — a carousel built under one of them a month ago has to redraw exactly as it
- * was sent — and they are still reachable. What they are not is a choice on the front door.
- */
-const LEGACY_FAMILIES = [
-  "masthead", "gutter", "bevel", "porthole", "slab",
-  "terrace", "figure", "pull", "tower", "dossier",
-  "billboard", "broadsheet", "zurich", "concrete", "terminal",
-  "marginalia", "memo", "versus", "tally", "counterweight",
-  "throughline", "quiet", "offset"
-] as const;
-
-
-const TREATMENTS = [
-  { id: "none", label: "bez úpravy" },
-  { id: "mono", label: "černobíle" },
-  { id: "duotone", label: "duotón" }
-] as const;
-
-const SCALES = [0.9, 1, 1.1] as const;
-const MAX_WORDS = 30;
-
-interface Recipe {
-  family: string;
-  variant: "A" | "B";
-  accentSwap: boolean;
-  treatment: "none" | "mono" | "duotone";
-  typeScale: number;
-  phaseSeed: number;
-}
-
-function token(recipe: Recipe): string {
-  return `${recipe.family}~${recipe.accentSwap ? "b" : recipe.variant.toLowerCase()}~${recipe.treatment}~${Math.round(recipe.typeScale * 10)}~${recipe.phaseSeed}`;
-}
-
-function line(recipe: Recipe): string {
-  const treatment = TREATMENTS.find((entry) => entry.id === recipe.treatment)?.label ?? recipe.treatment;
-  return `${recipe.family} · ${recipe.accentSwap ? "B" : recipe.variant} · ${treatment} · ${recipe.typeScale}× · fáze ${recipe.phaseSeed}`;
-}
-
-/** The five fields a recipe saves. The phase seed is a render choice and is not one of them. */
-function saveable(recipe: Recipe): Record<string, unknown> {
-  return {
-    family: recipe.family,
-    variant: recipe.variant,
-    accentSwap: recipe.accentSwap,
-    treatment: recipe.treatment,
-    typeScale: recipe.typeScale
-  };
-}
-
-function words(value: string): number {
-  return value.trim().split(/\s+/u).filter(Boolean).length;
-}
-
-function chipClass(on: boolean): string {
-  // Brand text on a brand tint measures 1.00:1 — the two are the same hue. An active chip uses
-  // the primary fill and its paired foreground token so both the selection and its label remain
-  // legible in every Admin theme.
-  return `admin-focus-ring inline-flex min-h-[var(--admin-touch-target)] items-center rounded-full border px-3 text-[length:var(--admin-type-label)] font-semibold uppercase tracking-[var(--admin-tracking-label)] transition md:min-h-[var(--admin-control-height)] ${
-    on
-      ? "border-[var(--admin-primary)] bg-[var(--admin-primary)] text-[var(--admin-primary-foreground)]"
-      : "border-[var(--admin-border)] text-[var(--admin-foreground-muted)] hover:border-[var(--admin-section-accent)] hover:text-[var(--admin-foreground)]"
-  }`;
-}
-
-function slideUrl(article: LabArticle, recipe: Recipe, format: FormatId, slide: number, download = false): string {
-  const query = new URLSearchParams({ format, ...(download ? { download: "1" } : {}) });
-  return `/admin/api/carousel-studio/deck/${article.venture}/${encodeURIComponent(article.slug)}/${article.date}/${encodeURIComponent(token(recipe))}/${slide}?${query.toString()}`;
-}
-
-function SlideImage({ src, alt, ratio, canvas = true }: { src: string; alt: string; ratio: number; canvas?: boolean }) {
-  const [attempt, setAttempt] = useState(0);
-  const [loaded, setLoaded] = useState<string | null>(null);
-  const [failed, setFailed] = useState<string | null>(null);
-  const url = `${src}${src.includes("?") ? "&" : "?"}attempt=${attempt}`;
-  // Derived during render rather than in an effect: a new source is a new render, and until it
-  // arrives the previous frame stays on screen dimmed. A blank rectangle for every chip click
-  // reads as a broken tool.
-  const pending = loaded !== url;
-
-  if (failed === url) {
-    return <AdminStateMessage state="error" title="Slide se nevykreslil." action={<Button onClick={() => setAttempt((value) => value + 1)}>Zkusit znovu</Button>} />;
-  }
-  return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      alt={alt}
-      className={`w-full rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] transition-opacity ${pending ? "opacity-40" : "opacity-100"}`}
-      /*
-       * The canvas is the slide being worked on. The five look tiles are the same renderer at
-       * thumbnail size, and marking them as canvases too made `[data-slide-canvas]` resolve to
-       * six elements — a selector for "the slide" that names every picture on the page.
-       *
-       * They also compete for the same six connections, and every one of them is a server-side
-       * render rather than a file read. Without a stated order the browser starts all six at
-       * once and the slide the owner is actually looking at finishes last. The tiles wait.
-       */
-      {...(canvas
-        ? { "data-slide-canvas": true, fetchPriority: "high" as const }
-        : { "data-look-canvas": true, fetchPriority: "low" as const, loading: "lazy" as const })}
-      onError={() => setFailed(url)}
-      onLoad={() => setLoaded(url)}
-      src={url}
-      style={{ aspectRatio: String(ratio) }}
-    />
-  );
-}
 
 function Workspace({ article, presets }: { article: LabArticle; presets: LabPreset[] }) {
   const writesEnabled = useAdminWritesEnabled();
+  const router = useRouter();
   const [recipe, setRecipe] = useState<Recipe>(article.recipe);
+  const [persistedRecipe, setPersistedRecipe] = useState<Recipe | null>(article.recipePinned ? article.recipe : null);
   const [format, setFormat] = useState<FormatId>("instagram-portrait");
-  const [safeArea, setSafeArea] = useState(false);
+  const [safeArea, setSafeArea] = useState(true);
   const [slide, setSlide] = useState(0);
-  const [texts, setTexts] = useState<string[]>(article.slides.map((entry) => entry.text));
+  const [texts, setTexts] = useState(article.slides.map((entry) => entry.text));
+  const [savedTexts, setSavedTexts] = useState(article.slides.map((entry) => entry.text));
+  const [revision, setRevision] = useState("");
   const [save, setSave] = useState<SaveState>({ kind: "rest", style: article.recipe.family });
-  const [presetName, setPresetName] = useState("");
-
   const canvas = FORMATS.find((entry) => entry.id === format)!;
-  const current = texts[slide] ?? "";
-  const overLimit = words(current) > MAX_WORDS;
-  const changed = current.trim() !== (article.slides[slide]?.text ?? "").trim();
   const dedicatedBilingual = article.venture === "tehdejsi-svet";
+  const busy = save.kind === "saving";
+  const applied = persistedRecipe !== null && JSON.stringify(saveable(recipe)) === JSON.stringify(saveable(persistedRecipe));
+  const current = texts[slide] ?? "";
+  const changed = texts.some((text, index) => text !== savedTexts[index]);
 
-  async function post(body: Record<string, unknown>, label: string): Promise<void> {
-    if (!writesEnabled) return;
+  async function post(body: Record<string, unknown>, label: string): Promise<boolean> {
+    if (!writesEnabled || busy) return false;
     setSave({ kind: "saving", style: label });
     try {
       const response = await fetch("/admin/api/carousel-studio/recipe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ venture: article.venture, slug: article.slug, date: article.date, ...body })
       });
-      const payload = await response.json().catch(() => ({})) as { error?: string; cause?: string; commit?: string | null };
-      if (!response.ok) {
+      const payload = await response.json().catch(() => ({})) as { error?: string; cause?: string; commit?: string | null; ok?: boolean };
+      if (!response.ok || payload.ok !== true) {
         const cause = payload.cause ?? "unknown";
         setSave({ kind: "warning", style: label, cause, message: warningFor(cause, payload.error) });
-        return;
+        return false;
       }
       setSave({ kind: "saved", style: label, commit: payload.commit ?? null });
+      router.refresh();
+      return true;
     } catch {
       setSave({ kind: "warning", style: label, cause: "network", message: warningFor("network", "Server neodpověděl.") });
+      return false;
     }
   }
 
-  // Changing a control re-renders the preview immediately and saves alongside it. Viewing is a
-  // render and cannot fail; only the badge moves when a save does.
+  async function applyRecipe(next: Recipe): Promise<void> {
+    if (await post(saveable(next), next.family)) setPersistedRecipe(next);
+  }
   function change(next: Partial<Recipe>): void {
+    if (busy) return;
     const merged = { ...recipe, ...next };
     setRecipe(merged);
-    if (writesEnabled) void post(saveable(merged), line(merged));
+    if (writesEnabled) void applyRecipe(merged);
+  }
+  async function saveText(): Promise<void> {
+    const index = slide;
+    const text = current;
+    if (await post({ slide: index, text }, `slide ${index + 1}`)) {
+      setSavedTexts((values) => values.map((value, position) => position === index ? text : value));
+      // A fresh cache key prevents stale previews even after article switches and remounts.
+      setRevision(crypto.randomUUID());
+    }
   }
 
-  /*
-   * Looking, without choosing.
-   *
-   * The five looks are how the owner picks, and picking is two separate acts: press one to see
-   * the whole deck in it, press the labelled button to make it this article's. The fine-tune
-   * controls below keep saving as they always did — an axis nudged is a decision already taken —
-   * but a row of looks is a place to browse, and browsing must not rewrite the record.
-   */
-  function previewFamily(family: string): void {
-    setRecipe((current) => ({ ...current, family }));
-  }
-
-  const applied = article.recipePinned && recipe.family === article.recipe.family;
-
-  return (
-    <article className="min-w-0" data-lab-article={`${article.venture}/${article.slug}/${article.date}`}>
-      <AdminCard>
-        <AdminCardContent className="grid min-w-0 gap-5">
-        <header className="flex min-w-0 flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <p className="break-words font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">
-              {article.ventureLabel} · {article.date} · {article.slides.length} slidů
-            </p>
-            <h3 className="mt-1 truncate text-base font-semibold text-[var(--admin-foreground)]">{article.headline}</h3>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {article.hasHero ? null : <Badge tone="warning">bez obrázku</Badge>}
-            <Badge tone={article.renderable ? "success" : "destructive"}>{article.renderable ? "připraveno" : "neúplné"}</Badge>
-            <AdminEntityBadge>{article.origin === "recorded" ? "zaznamenáno" : "odvozeno"}</AdminEntityBadge>
-          </div>
-        </header>
-
-      {article.problems.length > 0 ? <Callout tone="warning">{article.problems.join(" ")}</Callout> : null}
-
-      {/*
-        ---- the five looks -------------------------------------------------------
-
-        Choosing is looking. Each tile is this article's own cover drawn in one of the five
-        families the dealer deals, so the owner compares the real thing rather than a swatch: press
-        one to put the whole deck in it, press `Použít` to make it the article's.
-
-        Covers only. Ten renders would double the wait on a tab whose whole purpose is a glance,
-        and the deck below is one press away.
-      */}
-      <section className="grid min-w-0 gap-2" data-launch-looks>
-        <p className="m-0 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">
-          Pět vzhledů — vyber podle obrázku
-        </p>
-        <div className="w-full overflow-x-auto" data-horizontal-scroll>
-          <ol className="flex gap-3">
-            {LAUNCH_FAMILIES.map((family) => (
-              <li className="w-40 shrink-0" key={family}>
-                <button
-                  aria-pressed={recipe.family === family}
-                  className={`admin-focus-ring grid w-full gap-2 rounded-[var(--admin-radius-lg)] border p-2 text-left transition ${
-                    recipe.family === family
-                      ? "border-[var(--admin-section-accent)] bg-[var(--admin-surface-elevated)]"
-                      : "border-[var(--admin-border)] hover:border-[var(--admin-section-accent)]"
-                  }`}
-                  data-look={family}
-                  onClick={() => previewFamily(family)}
-                  type="button"
-                >
-                  <SlideImage
-                    alt={`${family}: titulní slide`}
-                    canvas={false}
-                    ratio={canvas.ratio}
-                    src={slideUrl(article, { ...recipe, family }, format, 1)}
-                  />
-                  <span className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground)]">{family}</span>
-                </button>
-              </li>
-            ))}
-          </ol>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Button
-            data-apply-look
-            disabled={!writesEnabled || applied}
-            onClick={() => { void post(saveable(recipe), recipe.family); }}
-            type="button"
-          >
-            {applied ? `Použito: ${recipe.family}` : `Použít vzhled ${recipe.family}`}
-          </Button>
-          <DeckSaveBadge save={save} />
-        </div>
-      </section>
-
-      <div className="flex flex-wrap gap-2">
-        {FORMATS.map((entry) => (
-          <button aria-pressed={format === entry.id} className={chipClass(format === entry.id)} key={entry.id} onClick={() => setFormat(entry.id)} type="button">
-            {entry.label}
-          </button>
-        ))}
-        {format === "instagram-story" ? (
-          <button aria-pressed={safeArea} className={chipClass(safeArea)} onClick={() => setSafeArea((value) => !value)} type="button">
-            bezpečná zóna
-          </button>
-        ) : null}
+  return <article className="min-w-0 overflow-hidden rounded-2xl border border-[var(--admin-border)] bg-[var(--admin-surface)]" data-lab-article={`${article.venture}/${article.slug}/${article.date}`}>
+    <header className="flex min-w-0 flex-wrap items-start justify-between gap-4 border-b border-[var(--admin-border)] p-4 md:p-5">
+      <div className="min-w-0 flex-1">
+        <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-[var(--admin-foreground-muted)]"><Layers aria-hidden="true" className="size-3.5" />{article.ventureLabel} · {article.date}<AdminEntityBadge>{article.slides.length === 1 ? "Příspěvek" : `${article.slides.length} slidů`}</AdminEntityBadge></div>
+        <h3 className="max-w-3xl text-lg font-semibold leading-snug text-[var(--admin-foreground)]">{article.headline}</h3>
       </div>
+      <div className="flex flex-wrap gap-2"><Badge tone={article.renderable ? "success" : "destructive"}>{article.renderable ? "připraveno" : "neúplné"}</Badge>{!article.hasHero ? <Badge tone="warning">bez obrázku</Badge> : null}</div>
+    </header>
+    {article.problems.length ? <div className="p-4"><Callout tone="warning">{article.problems.join(" ")}</Callout></div> : null}
 
-      <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
-        <div className="relative">
-          <SlideImage
-            alt={`Slide ${slide + 1}: ${current}`}
-            ratio={canvas.ratio}
-            src={slideUrl(article, recipe, format, slide + 1)}
-          />
-          {safeArea && format === "instagram-story" ? (
-            // The platform's own chrome, drawn over the canvas: a profile row along the top and a
-            // reply bar along the bottom cover roughly a seventh of the frame at each end.
-            <div aria-hidden="true" className="pointer-events-none absolute inset-0" data-safe-area>
-              <div className="absolute inset-x-0 top-0 h-[14%] bg-[var(--admin-destructive-soft)] opacity-60" />
-              <div className="absolute inset-x-0 bottom-0 h-[16%] bg-[var(--admin-destructive-soft)] opacity-60" />
-            </div>
-          ) : null}
+    <div className="grid min-w-0 gap-5 p-3 md:p-5 xl:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="grid min-w-0 content-start gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-1.5" aria-label="Formát návrhu">{FORMATS.map((entry) => <button key={entry.id} type="button" className={chipClass(format === entry.id)} aria-pressed={format === entry.id} onClick={() => setFormat(entry.id)}>{entry.label}</button>)}</div>
+          {format === "instagram-story" ? <button type="button" className={chipClass(safeArea)} aria-pressed={safeArea} onClick={() => setSafeArea((value) => !value)}>Bezpečná zóna</button> : null}
         </div>
-
-        <div className="grid min-w-0 gap-4">
-          <div className="w-full overflow-x-auto" data-horizontal-scroll>
-            <ol className="flex gap-2">
-              {article.slides.map((entry) => (
-                <li key={entry.index}>
-                  <button
-                    aria-pressed={slide === entry.index}
-                    className={chipClass(slide === entry.index)}
-                    onClick={() => setSlide(entry.index)}
-                    type="button"
-                  >
-                    {entry.index + 1}
-                  </button>
-                </li>
-              ))}
-            </ol>
+        <div className="grid min-w-0 place-items-center rounded-xl border border-[var(--admin-border)] bg-[var(--admin-surface-elevated)] px-3 py-6 md:px-6" data-design-stage>
+          <div className="relative w-full shadow-xl" style={{ maxWidth: `${Math.min(520, 600 * canvas.ratio)}px` }}>
+            <SlideImage alt={`Slide ${slide + 1}: ${savedTexts[slide] ?? ""}`} ratio={canvas.ratio} src={slideUrl(article, recipe, format, slide + 1, false, revision)} />
+            {safeArea && format === "instagram-story" ? <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg" data-safe-area>
+              <div className="absolute inset-x-0 top-0 flex h-[14%] items-center justify-center border-b border-dashed border-white/70 bg-black/55 text-xs text-white">Profil a ovládání</div>
+              <div className="absolute inset-x-0 bottom-0 flex h-[16%] items-center justify-center border-t border-dashed border-white/70 bg-black/55 text-xs text-white">Odpověď a reakce</div>
+            </div> : null}
           </div>
-
-          {dedicatedBilingual ? (
-            <DesignLabBilingualSlide pack={article.dualLanguage} slide={slide} />
-          ) : (
-            <div className="grid min-w-0 gap-4">
-              <div className="grid min-w-0 gap-2">
-                <AdminLabel htmlFor={`slide-${article.id}`}>
-                  Text slidu {slide + 1}
-                </AdminLabel>
-                <AdminTextarea
-                  disabled={!writesEnabled}
-                  id={`slide-${article.id}`}
-                  onChange={(event) => {
-                    const next = [...texts];
-                    next[slide] = event.target.value;
-                    setTexts(next);
-                  }}
-                  value={current}
-                />
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className={`font-mono text-[0.65625rem] uppercase tracking-[0.12em] ${overLimit ? "text-[var(--admin-destructive)]" : "text-[var(--admin-foreground-muted)]"}`} data-word-count>
-                    {words(current)}/{MAX_WORDS} slov
-                  </span>
-                  <Button
-                    data-save-slide
-                    disabled={!writesEnabled || overLimit || !changed}
-                    onClick={() => { void post({ slide, text: current }, `slide ${slide + 1}`); }}
-                    type="button"
-                    variant="secondary"
-                  >
-                    Uložit slide
-                  </Button>
-                  {overLimit ? (
-                    <span className="text-xs text-[var(--admin-destructive)]">
-                      Slide {slide + 1} má {words(current)} slov, přes limit {MAX_WORDS} slov.
-                    </span>
-                  ) : null}
-                </div>
-              </div>
-
-              <div className="grid min-w-0 gap-2">
-                <p className="break-words font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]" data-recipe-line>
-                  {line(recipe)}{article.recipePinned ? " · vybráno" : " · odvozeno"}
-                </p>
-                {/*
-                  ---- everything else, behind one disclosure ------------------------
-
-                  Twenty-eight families, A/B, three treatments, three type scales and four phase
-                  seeds: the whole axis surface used to be the front door, and the owner's words
-                  were "I don't want a thousand options." None of it is removed — the engine still
-                  honours every axis and a stored deck still needs them to redraw — it simply stops
-                  being what a reader meets first.
-
-                  The scroller stays marked for the containment guard, which reads an unmarked
-                  overflowing element as a layout bug rather than as a scroller.
-                */}
-                <details className="rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] p-3" data-fine-tune>
-                  <summary className="admin-focus-ring cursor-pointer font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">
-                    Doladit
-                  </summary>
-                  <div className="grid min-w-0 gap-2 pt-3">
-                    <div className="flex flex-wrap gap-2">
-                      {LAUNCH_FAMILIES.map((family) => (
-                        <button aria-pressed={recipe.family === family} className={chipClass(recipe.family === family)} data-family={family} key={family} onClick={() => change({ family })} type="button">
-                          {family}
-                        </button>
-                      ))}
-                    </div>
-                    <p className="m-0 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">
-                      Starší vzhledy — vykreslují uloženou práci, nové karusely už z nich nevznikají
-                    </p>
-                    <div className="w-full overflow-x-auto" data-horizontal-scroll>
-                      <div className="flex flex-wrap gap-2" data-legacy-families>
-                        {LEGACY_FAMILIES.map((family) => (
-                          <button aria-pressed={recipe.family === family} className={chipClass(recipe.family === family)} data-family={family} key={family} onClick={() => change({ family })} type="button">
-                            {family}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <button aria-pressed={!recipe.accentSwap} className={chipClass(!recipe.accentSwap)} onClick={() => change({ accentSwap: false, variant: "A" })} type="button">A</button>
-                      <button aria-pressed={recipe.accentSwap} className={chipClass(recipe.accentSwap)} onClick={() => change({ accentSwap: true, variant: "B" })} type="button">B</button>
-                      {TREATMENTS.map((entry) => (
-                        <button aria-pressed={recipe.treatment === entry.id} className={chipClass(recipe.treatment === entry.id)} key={entry.id} onClick={() => change({ treatment: entry.id })} type="button">
-                          {entry.label}
-                        </button>
-                      ))}
-                      {SCALES.map((scale) => (
-                        <button aria-pressed={recipe.typeScale === scale} className={chipClass(recipe.typeScale === scale)} key={scale} onClick={() => change({ typeScale: scale })} type="button">
-                          {scale}×
-                        </button>
-                      ))}
-                      <button className={chipClass(false)} onClick={() => change({ phaseSeed: (recipe.phaseSeed + 1) % 4 })} type="button">
-                        fáze ▸
-                      </button>
-                    </div>
-                  </div>
-                </details>
-                <div className="flex min-w-0 flex-wrap items-center gap-2" data-presets>
-                  {presets.map((preset) => (
-                    <button
-                      className={chipClass(false)}
-                      key={preset.id}
-                      onClick={() => change({
-                        family: preset.family,
-                        variant: preset.variant,
-                        accentSwap: preset.accentSwap,
-                        treatment: preset.treatment,
-                        typeScale: preset.typeScale
-                      })}
-                      type="button"
-                    >
-                      {preset.name}{preset.status === "draft" ? " · koncept" : ""}
-                    </button>
-                  ))}
-                  <AdminLabel className="sr-only" htmlFor={`preset-${article.id}`}>Název presetu</AdminLabel>
-                  <AdminInput
-                    className="w-auto min-w-44"
-                    disabled={!writesEnabled}
-                    id={`preset-${article.id}`}
-                    onChange={(event) => setPresetName(event.target.value)}
-                    placeholder="Uložit jako preset"
-                    value={presetName}
-                  />
-                  <Button
-                    data-save-preset
-                    disabled={!writesEnabled || presetName.trim().length < 2}
-                    onClick={() => { void post({ ...recipe, presetName, presetStatus: "draft" }, presetName); }}
-                    type="button"
-                    variant="secondary"
-                  >
-                    Uložit preset
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
+        </div>
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs text-[var(--admin-foreground-muted)]">{canvas.width} × {canvas.height} px</span>
+          <div className="flex items-center gap-3">
+            <Button type="button" variant="secondary" aria-label="Předchozí slide" disabled={slide === 0} onClick={() => setSlide((value) => value - 1)}><ArrowLeft aria-hidden="true" className="size-4" /></Button>
+            <span aria-live="polite" className="text-xs tabular-nums">{slide + 1} / {article.slides.length}</span>
+            <Button type="button" variant="secondary" aria-label="Další slide" disabled={slide === article.slides.length - 1} onClick={() => setSlide((value) => value + 1)}><ArrowRight aria-hidden="true" className="size-4" /></Button>
+          </div>
+        </div>
+        <div className="w-full overflow-x-auto pb-2" data-horizontal-scroll>
+          <ol className="flex gap-2" aria-label="Slidy karuselu" data-slide-strip>{article.slides.map((entry) => <li key={entry.index} className="w-[72px] shrink-0">
+            <button type="button" aria-label={`Otevřít slide ${entry.index + 1}`} aria-pressed={slide === entry.index} className={`admin-focus-ring grid w-full gap-1 rounded-lg border p-1 ${slide === entry.index ? "border-[var(--admin-primary)] bg-[var(--admin-surface-elevated)]" : "border-transparent"}`} onClick={() => setSlide(entry.index)}>
+              <SlideImage canvas={false} alt="" ratio={canvas.ratio} src={slideUrl(article, recipe, format, entry.index + 1, false, revision)} />
+              <span className="text-[10px] tabular-nums text-[var(--admin-foreground-muted)]">{entry.index + 1}{texts[entry.index] !== savedTexts[entry.index] ? " •" : ""}</span>
+            </button>
+          </li>)}</ol>
         </div>
       </div>
-
-      <div className="grid min-w-0 gap-3 border-t border-[var(--admin-border)] pt-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">Popisek</span>
-          <CopySocialText text={article.caption} />
-          <span className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">Threads</span>
-          <CopySocialText text={article.copy.copy.threadsText} />
-          <span className="font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">Story</span>
-          <CopySocialText text={article.copy.copy.storyLine} />
-          <a
-            className="admin-focus-ring inline-flex min-h-[var(--admin-touch-target)] items-center rounded-full border border-[var(--admin-border)] px-3 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)] hover:border-[var(--admin-section-accent)] hover:text-[var(--admin-foreground)] md:min-h-[var(--admin-control-height)]"
-            download
-            href={slideUrl(article, recipe, format, slide + 1, true)}
-          >
-            Stáhnout slide
-          </a>
-          <a
-            className="admin-focus-ring inline-flex min-h-[var(--admin-touch-target)] items-center rounded-full border border-[var(--admin-border)] px-3 font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)] hover:border-[var(--admin-section-accent)] hover:text-[var(--admin-foreground)] md:min-h-[var(--admin-control-height)]"
-            download
-            href={`/admin/api/carousel-studio/export/${article.venture}/${encodeURIComponent(article.slug)}/${article.date}/${encodeURIComponent(token(recipe))}?format=${format}`}
-          >
-            Stáhnout celý deck
-          </a>
-        </div>
-        <p className="whitespace-pre-wrap break-words text-sm text-[var(--admin-foreground)]" data-caption>{article.caption}</p>
-        <p className="break-words font-mono text-[0.65625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">
-          {article.copy.copy.hashtags.map((tag) => `#${tag}`).join(" ")}
-        </p>
-        {article.heroCredit ? (
-          // Not removable, and not the model's to forget: the credit is appended by code, and most
-          // of these photographs are CC BY.
-          <p className="text-xs text-[var(--admin-foreground-muted)]">Kredit fotografie je součástí popisku: {article.heroCredit}</p>
-        ) : null}
+      <div className="grid min-w-0 content-start gap-3">
+        {dedicatedBilingual ? <DesignLabBilingualSlide pack={article.dualLanguage} slide={slide} /> : <DesignLabInspector
+          article={article} recipe={recipe} format={format} texts={texts} slide={slide} savedText={savedTexts[slide] ?? ""}
+          writable={writesEnabled} busy={busy} presets={presets} change={change}
+          editText={(text) => setTexts((values) => values.map((value, index) => index === slide ? text : value))}
+          saveText={() => { void saveText(); }} savePreset={(name) => { void post({ ...saveable(recipe), presetName: name, presetStatus: "draft" }, name); }}
+        />}
+        <DeckSaveBadge save={save} />
+        <p className="break-words text-xs text-[var(--admin-foreground-muted)]" data-recipe-line>{recipe.family} · {recipe.accentSwap ? "B" : recipe.variant} · {recipe.treatment} · {recipe.typeScale}×{applied ? " · vybráno" : " · náhled"}</p>
       </div>
-        </AdminCardContent>
-      </AdminCard>
-    </article>
-  );
+    </div>
+
+    {!dedicatedBilingual ? <section className="grid min-w-0 gap-3 border-t border-[var(--admin-border)] p-4 md:p-5" data-launch-looks>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div><h4 className="text-sm font-semibold">Vyberte vzhled</h4><p className="mt-1 text-xs text-[var(--admin-foreground-muted)]">Pět kompozic s vaším obsahem. Kliknutím zobrazíte náhled.</p></div>
+        <Button data-apply-look disabled={!writesEnabled || busy || applied} onClick={() => { void applyRecipe(recipe); }} type="button">{applied ? `Použito: ${recipe.family}` : `Použít vzhled ${recipe.family}`}</Button>
+      </div>
+      <div className="w-full overflow-x-auto" data-horizontal-scroll><ol className="flex gap-3 pb-1">{LAUNCH_FAMILIES.map((family) => <li className="w-36 shrink-0 md:w-40" key={family}>
+        <button type="button" data-look={family} disabled={busy} aria-pressed={recipe.family === family} className={`admin-focus-ring grid w-full gap-2 rounded-xl border p-2 text-left transition ${recipe.family === family ? "border-[var(--admin-primary)] bg-[var(--admin-surface-elevated)]" : "border-[var(--admin-border)] hover:border-[var(--admin-section-accent)]"}`} onClick={() => setRecipe((value) => ({ ...value, family }))}>
+          <SlideImage alt={`${family}: titulní slide`} canvas={false} ratio={1080 / 1350} src={slideUrl(article, { ...recipe, family }, "instagram-portrait", 1, false, revision)} />
+          <span className="text-sm font-semibold">{LOOKS[family]!.name}</span><span className="text-[11px] leading-relaxed text-[var(--admin-foreground-muted)]">{LOOKS[family]!.detail}</span>
+        </button>
+      </li>)}</ol></div>
+    </section> : null}
+
+    <footer className="grid min-w-0 gap-4 border-t border-[var(--admin-border)] p-4 md:p-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <span className="flex items-center gap-2 text-sm font-semibold"><ImageIcon aria-hidden="true" className="size-4" />Export návrhu</span>
+        <div className="flex flex-wrap gap-2">
+          <a className={chipClass(false)} download href={slideUrl(article, recipe, format, slide + 1, true, revision)}><Download aria-hidden="true" className="mr-2 size-3.5" />Stáhnout slide</a>
+          <a className={chipClass(true)} download href={`/admin/api/carousel-studio/export/${article.venture}/${encodeURIComponent(article.slug)}/${article.date}/${encodeURIComponent(token(recipe))}?format=${format}`}><Download aria-hidden="true" className="mr-2 size-3.5" />Stáhnout celý deck</a>
+        </div>
+      </div>
+      {changed ? <Callout tone="warning">Export obsahuje uložené texty. Před stažením uložte upravené slidy.</Callout> : null}
+      <details><summary className="admin-focus-ring cursor-pointer py-2 text-sm text-[var(--admin-foreground-muted)]">Popisek a texty pro sociální sítě</summary>
+        <div className="mt-3 grid gap-3">
+          <div className="flex flex-wrap items-center gap-2 text-xs"><span>Popisek</span><CopySocialText text={article.caption} /><span>Threads</span><CopySocialText text={article.copy.copy.threadsText} /><span>Story</span><CopySocialText text={article.copy.copy.storyLine} /></div>
+          <p className="whitespace-pre-wrap break-words text-sm" data-caption>{article.caption}</p>
+          <p className="break-words text-xs text-[var(--admin-foreground-muted)]">{article.copy.copy.hashtags.map((tag) => `#${tag}`).join(" ")}</p>
+          {article.heroCredit ? <p className="text-xs text-[var(--admin-foreground-muted)]">Kredit fotografie je součástí popisku: {article.heroCredit}</p> : null}
+        </div>
+      </details>
+    </footer>
+  </article>;
 }
 
 export function DesignLabWorkspace({ articles, presets }: { articles: LabArticle[]; presets: LabPreset[] }) {
   const [selected, setSelected] = useState<string | null>(articles[0]?.id ?? null);
+  const [search, setSearch] = useState("");
   const article = useMemo(() => articles.find((entry) => entry.id === selected) ?? articles[0], [articles, selected]);
-
-  if (articles.length === 0) {
-    return <AdminStateMessage state="initial-empty" title="Zatím tu není žádný článek, ze kterého by šel karusel postavit." />;
-  }
-
-  return (
-    <div className="grid min-w-0 gap-4">
-      <Callout tone="information">
-        Karusely se skládají ke každému článku a nikam se neposílají. Publikování je zavřené
-        rozhodnutím social-2026-08a, dokud každý magazín nevydá deset článků.
-      </Callout>
-
-      <div className="w-full overflow-x-auto" data-horizontal-scroll>
-        <ol className="flex gap-2" data-article-rail>
-          {articles.map((entry) => (
-            <li key={entry.id}>
-              <button
-                aria-pressed={entry.id === article?.id}
-                className={`admin-focus-ring flex min-h-[var(--admin-touch-target)] min-w-56 flex-col gap-1 rounded-[var(--admin-radius-lg)] border px-4 py-3 text-left transition ${
-                  entry.id === article?.id
-                    ? "border-[var(--admin-section-accent)] bg-[var(--admin-surface-elevated)]"
-                    : "border-[var(--admin-border)] hover:border-[var(--admin-section-accent)]"
-                }`}
-                onClick={() => setSelected(entry.id)}
-                type="button"
-              >
-                <span className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-[var(--admin-foreground-muted)]">
-                  {entry.ventureLabel} · {entry.date} · {entry.slides.length} slidů
-                </span>
-                <span className="line-clamp-2 text-sm text-[var(--admin-foreground)]">{entry.headline}</span>
-                <span className="flex gap-1">
-                  {entry.hasHero ? null : <Badge tone="warning">bez obrázku</Badge>}
-                  {entry.renderable ? null : <Badge tone="destructive">neúplné</Badge>}
-                </span>
-              </button>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      {article ? <Workspace article={article} key={article.id} presets={presets} /> : null}
+  const filtered = useMemo(() => {
+    const normalize = (text: string) => text.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLocaleLowerCase("cs");
+    const query = normalize(search.trim());
+    return articles.filter((entry) => normalize(`${entry.headline} ${entry.ventureLabel} ${entry.date}`).includes(query));
+  }, [articles, search]);
+  if (!articles.length) return <AdminStateMessage state="initial-empty" title="Zatím tu není žádný článek, ze kterého by šel karusel postavit." />;
+  return <div className="grid min-w-0 gap-4">
+    <div className="flex flex-wrap items-end justify-between gap-4">
+      <div><p className="text-xs font-medium uppercase tracking-widest text-[var(--admin-foreground-muted)]">Design Lab / Studio</p><h2 className="mt-2 text-2xl font-semibold tracking-tight">Z článku do vašeho feedu.</h2><p className="mt-2 text-sm text-[var(--admin-foreground-muted)]">Vyberte článek, dolaďte kompozici a stáhněte hotovou grafiku.</p></div>
+      <div className="w-full sm:max-w-72"><AdminLabel className="sr-only" htmlFor="lab-search">Hledat článek</AdminLabel><div className="relative"><Search aria-hidden="true" className="pointer-events-none absolute left-3 top-3 size-4 text-[var(--admin-foreground-muted)]" /><AdminInput id="lab-search" type="search" className="pl-9" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Hledat článek…" /></div></div>
     </div>
-  );
+    <div className="w-full overflow-x-auto" data-horizontal-scroll><ol className="flex gap-2 pb-1" data-article-rail>{filtered.map((entry) => <li className="w-64 shrink-0" key={entry.id}>
+      <button type="button" aria-pressed={entry.id === article?.id} className={`admin-focus-ring flex h-full w-full flex-col gap-2 rounded-xl border p-3 text-left ${entry.id === article?.id ? "border-[var(--admin-primary)] bg-[var(--admin-surface-elevated)]" : "border-[var(--admin-border)] hover:border-[var(--admin-section-accent)]"}`} onClick={() => setSelected(entry.id)}>
+        <span className="text-[11px] text-[var(--admin-foreground-muted)]">{entry.ventureLabel} · {entry.date}</span><span className="line-clamp-2 text-sm font-medium">{entry.headline}</span>
+        {!entry.renderable ? <Badge tone="destructive">neúplné</Badge> : null}
+      </button>
+    </li>)}</ol></div>
+    {!filtered.length ? <AdminStateMessage state="filtered-empty" title="Žádný článek neodpovídá hledání." /> : null}
+    {article ? <Workspace article={article} key={article.id} presets={presets} /> : null}
+    <p className="text-xs leading-relaxed text-[var(--admin-foreground-muted)]">Karusely se odsud nikam neposílají. Publikování řídí samostatné schválení a nastavení sociálních profilů.</p>
+  </div>;
 }
