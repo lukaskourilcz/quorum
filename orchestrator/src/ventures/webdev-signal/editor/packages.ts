@@ -227,6 +227,23 @@ export function validateGeneratedWebDevPackages(input: {
   };
 }
 
+export class WebDevPackageAcceptanceError extends Error {}
+
+/**
+ * Promote a draft that passed every editorial gate to `approved`.
+ *
+ * Approval is the deterministic editorial gate, not publishing authority. The package schema
+ * refuses `approved` on any package whose language, parity or originality checks failed, so this
+ * cannot approve what the validator held; and nothing downstream reads `approved` as permission
+ * to post — the Design Lab renders it, and publishing stays disabled in the registration and in
+ * both profile constitutions until the owner grants it there.
+ */
+export function acceptWebDevPackage(pack: WebDevEditionPackage): WebDevEditionPackage {
+  if (pack.status !== "draft") throw new WebDevPackageAcceptanceError(`package-not-draft:${pack.status}`);
+  const { contentHash: _oldHash, ...withoutHash } = pack;
+  return finalize({ ...withoutHash, status: "approved", heldReason: null });
+}
+
 export function holdWebDevPackage(pack: WebDevEditionPackage, reasons: readonly string[]): WebDevEditionPackage {
   const { contentHash: _oldHash, ...withoutHash } = pack;
   return finalize({
