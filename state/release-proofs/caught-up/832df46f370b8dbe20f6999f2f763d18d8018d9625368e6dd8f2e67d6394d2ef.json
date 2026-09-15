@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-30f8dcc2bbebbb02",
+  "venture": "caught-up",
+  "packageHash": "832df46f370b8dbe20f6999f2f763d18d8018d9625368e6dd8f2e67d6394d2ef",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "9ad2d3f450c919658c22a701730d95b962c0113c",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 9ad2d3f450c919658c22a701730d95b962c0113c is readable",
+      "checkedAt": "2026-09-15T07:05:45.727Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-09-15T07:05:45.727Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-09-15T07:05:45.727Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-09-12-ai-agenti-rubygems-utok-dohled?boardless_verify=832df46f370b-1789455945727",
+      "checkedAt": "2026-09-15T07:05:45.727Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-09-12-ai-agenti-rubygems-utok-dohled match",
+      "checkedAt": "2026-09-15T07:05:45.727Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 832df46f370b8dbe20f6999f2f763d18d8018d9625368e6dd8f2e67d6394d2ef",
+      "checkedAt": "2026-09-15T07:05:45.727Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-09-12-ai-agenti-rubygems-utok-dohled/hero.webp?boardless_verify=832df46f370b-1789455945727",
+      "checkedAt": "2026-09-15T07:05:45.727Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-09-15T07:05:45.727Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Mikhail Nilov · Pexels License",
+      "checkedAt": "2026-09-15T07:05:45.727Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-09-15T07:04:43.737Z",
+  "completedAt": "2026-09-15T07:05:46.446Z"
+}

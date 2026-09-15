@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-12",
+  "packageHash": "832df46f370b8dbe20f6999f2f763d18d8018d9625368e6dd8f2e67d6394d2ef",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "9ad2d3f450c919658c22a701730d95b962c0113c",
+  "deliveredAt": "2026-09-15T07:05:47.033Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-12-ai-agenti-rubygems-utok-dohled",
+  "tags": [
+    "umela-inteligence",
+    "ai-agenti",
+    "kyberneticka-bezpecnost",
+    "pravo",
+    "robotika",
+    "open-source"
+  ]
+}
