@@ -101,7 +101,7 @@ export async function waitForSite(
 }
 
 export function startSite(cwd = repoRoot) {
-  return spawn(pnpmExecutable, ["--filter", "@boardlessai/site", "start"], {
+  return spawn(pnpmExecutable, ["--filter", "@boardlessai/site", "start", "--hostname", "127.0.0.1"], {
     cwd,
     env: process.env,
     stdio: "inherit",

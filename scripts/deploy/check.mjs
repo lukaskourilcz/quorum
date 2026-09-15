@@ -20,7 +20,7 @@ export async function runReleaseCheck({
 } = {}) {
   const startedAt = now().toISOString();
   const commands = releaseSteps.map(([command, args]) => printableCommand(command, args));
-  commands.push("pnpm --filter @boardlessai/site start", "pnpm site:smoke");
+  commands.push("pnpm --filter @boardlessai/site start --hostname 127.0.0.1", "pnpm site:smoke");
   let initial;
 
   try {
