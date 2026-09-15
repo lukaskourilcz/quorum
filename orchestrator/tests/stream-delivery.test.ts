@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { repoRoot } from "../src/paths.js";
+import { deployedCronExpressions } from "../src/ventures/registry.js";
 
 const workflow = readFileSync(path.join(repoRoot, ".github/workflows/cycle.yml"), "utf8");
 
@@ -65,10 +66,10 @@ describe("how the sync steps are gated", () => {
   });
 
   it("adds no new cron entry and no new council phase", () => {
-    // The steps live inside the existing daily cycle. The three crons are the
-    // cycle's own morning, afternoon and night slots and this work added none.
+    // The steps live inside the existing daily cycle. Every cron in the workflow is one of the
+    // backstop sweeps the registry generates, and this work added none.
     const schedules = [...workflow.matchAll(/- cron:/gu)].length;
-    expect(schedules).toBe(3);
+    expect(schedules).toBe(deployedCronExpressions().length);
     expect(workflow).not.toContain("phase == 'cu-streams'");
     expect(workflow).not.toContain("phase == 'cu-events'");
   });
