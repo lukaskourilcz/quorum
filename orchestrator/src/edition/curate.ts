@@ -30,6 +30,9 @@ const ToolOutputSchema = z.object({
   angle: z.string().trim().min(1),
   picks: z.array(z.object({
     index: z.number().int().nonnegative(),
+    // Optional here so a fixture reply without it still parses; the tool schema the provider
+    // enforces requires it, so a live pick always carries the url it was written about.
+    url: z.string().trim().min(1).optional(),
     why: z.string().trim().min(1),
     evidence: EvidenceClassSchema,
     topic: z.string().trim().min(1).optional()
@@ -49,6 +52,7 @@ const toolInputSchema = {
         type: "object",
         properties: {
           index: { type: "integer", minimum: 0 },
+          url: { type: "string" },
           why: { type: "string" },
           evidence: {
             type: "string",
@@ -62,7 +66,7 @@ const toolInputSchema = {
           },
           topic: { type: "string" }
         },
-        required: ["index", "why", "evidence"],
+        required: ["index", "url", "why", "evidence"],
         additionalProperties: false
       }
     }
@@ -139,7 +143,7 @@ export async function curate(
     model: config.models.curation,
     stage: "curate",
     maxOutputTokens: 1_500,
-    system: `${CURATE_SYSTEM}\n\nThe packet holds ${pool.length} items, numbered 0 to ${pool.length - 1}. An index outside that range kills the edition after this call is billed.`,
+    system: `${CURATE_SYSTEM}\n\nThe packet holds ${pool.length} items, numbered 0 to ${pool.length - 1}; each carries its index. Name every pick by that index and by its url copied exactly from the packet. The url is the pick's identity: a url the packet does not hold kills the edition after this call is billed, and so does an index outside the range.`,
     user: `Publication date: ${date}\n\n${renderDigestDataBlock(pool)}${renderTrendingCandidates(trending)}`,
     tool: {
       name: "emit_brief",
@@ -150,18 +154,42 @@ export async function curate(
     },
     parse: (value) => ToolOutputSchema.parse(value)
   });
+  // The url is a pick's identity and the index is the cross-check. The packet is one minified
+  // JSON array and counting positions in it is exactly what the editor got wrong: on 10, 11, 12
+  // and 13 September the `why` beside a pick described a different article than its index
+  // resolved to, so the delivered ledgers tied a Variety television review to a RubyGems attack
+  // and a Wired security column to a Millennium Prize claim. A url is copied from the item the
+  // sentence was written about; a count is not. When the two disagree the url wins and the
+  // repair is recorded, so the run says how often the editor still miscounts.
+  const indexByUrl = new Map<string, number>();
+  pool.forEach((item, index) => {
+    if (!indexByUrl.has(item.url)) indexByUrl.set(item.url, index);
+  });
+  const repairs: string[] = [];
   const seen = new Set<number>();
-  // Both rejections below describe a payload the provider already billed us for, so they are
+  // The rejections below describe a payload the provider already billed us for, so they are
   // thrown as InvalidModelOutputError with that call's usage attached rather than as a bare Error.
   // produceEdition records usage only from the two error types that carry it; a plain Error meant
   // the curation call vanished from the ledger and the day's finance line under-reported a
   // failure that had been paid for. This happened on 3 August, when the editor answered index 54
-  // for a fifty-item pool. The checks themselves are unchanged — only what they throw.
+  // for a fifty-item pool.
   const picks = response.value.picks.map((pick) => {
-    const item = pool[pick.index];
-    if (!item) throw new InvalidModelOutputError(`curate: pick index ${pick.index} is outside the source pool`, response.usage);
-    if (seen.has(pick.index)) throw new InvalidModelOutputError(`curate: duplicate pick index ${pick.index}`, response.usage);
-    seen.add(pick.index);
+    const indexed = pool[pick.index];
+    if (!indexed) throw new InvalidModelOutputError(`curate: pick index ${pick.index} is outside the source pool`, response.usage);
+    let resolved = pick.index;
+    if (pick.url !== undefined) {
+      const byUrl = indexByUrl.get(pick.url);
+      if (byUrl === undefined) {
+        throw new InvalidModelOutputError(`curate: pick ${pick.index} names a url the packet does not hold: ${pick.url}`, response.usage);
+      }
+      if (indexed.url !== pick.url) {
+        repairs.push(`${pick.index}->${byUrl}`);
+        resolved = byUrl;
+      }
+    }
+    if (seen.has(resolved)) throw new InvalidModelOutputError(`curate: duplicate pick index ${resolved}`, response.usage);
+    seen.add(resolved);
+    const item = pool[resolved]!;
     return {
       itemId: item.externalId,
       why: pick.why,
@@ -198,6 +226,7 @@ export async function curate(
     headline: response.value.headline,
     angle: response.value.angle,
     picks,
+    ...(repairs.length > 0 ? { repairs } : {}),
     usage: response.usage
   };
 }

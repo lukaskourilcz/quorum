@@ -53,6 +53,8 @@ export interface CuratedBrief {
     evidence: EvidenceClass;
     topic?: string;
   }>;
+  /** Picks whose index and url disagreed, as `index->resolved`; the url won. Absent when none did. */
+  repairs?: string[];
   usage: EditionUsage;
 }
 

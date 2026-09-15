@@ -252,6 +252,8 @@ export async function produceEdition(
     return noEdition(input, reporter, "curation_failed");
   }
   reporter.addUsage(brief.usage);
+  // A pick the editor numbered wrong and named right is repaired, not refused; the record says so.
+  for (const repair of brief.repairs ?? []) reporter.warn(`curate_pick_resolved_by_url:${repair}`);
 
   // The picked story's tags, in the order the editor picked them. An item the pool no longer
   // holds is skipped rather than guessed at, and an empty list falls through to the digest.

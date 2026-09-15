@@ -562,6 +562,69 @@ describe("the editor's index means what the editor was shown", () => {
     expect(urls).toEqual(shown.map((item) => item.url));
   });
 
+  it("numbers every packet item so the editor reads its index instead of counting", async () => {
+    // The block is one minified JSON array. Without an index on each item the editor counted
+    // positions, and in September it counted wrong in four editions out of four.
+    const items = await fixtureJson<SourceItem[]>("source-items.json");
+    const shown = createDigest(items, items.length);
+    const packet = renderDigestDataBlock(items);
+    const rendered = JSON.parse(packet.slice(packet.indexOf("["), packet.lastIndexOf("]") + 1)) as Array<{
+      index: number;
+      url: string;
+    }>;
+    expect(rendered.map((entry) => entry.index)).toEqual(shown.map((_, index) => index));
+    expect(rendered.map((entry) => entry.url)).toEqual(shown.map((item) => item.url));
+  });
+
+  it("resolves a pick by its url when the index counts to another item, and records the repair", async () => {
+    // 13 September: the editor's sentence about a RubyGems attack sat beside the index of a
+    // Variety television review, and the delivered ledger said the review supported the attack.
+    // The url is copied from the item the sentence was written about; the count is not.
+    const config = await loadEditionQualityConfig();
+    const items = await fixtureJson<SourceItem[]>("source-items.json");
+    const pool = createDigest(items, items.length).slice(0, config.article.maximumCurationCandidates);
+    const primary = pool.findIndex((item) => item.tags.includes("primary-source"));
+    const [second, third] = pool.map((_, index) => index).filter((index) => index !== primary);
+    const miscounted = pool.map((_, index) => index).find((index) => ![primary, second, third].includes(index))!;
+    const brief = await curate(items, "2026-09-13", config, {
+      invoke: async (request: { parse: (value: unknown) => unknown }) => ({
+        value: request.parse({
+          headline: "Named right, numbered wrong",
+          angle: "One pick counts to another item.",
+          picks: [
+            { index: primary, url: pool[primary]!.url, why: "primary", evidence: "confirmed_fact" },
+            { index: miscounted, url: pool[second!]!.url, why: "miscounted", evidence: "analysis" },
+            { index: third, url: pool[third!]!.url, why: "third", evidence: "analysis" }
+          ]
+        }),
+        usage: { provider: "anthropic", model: "fixture", stage: "curate", inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0, costUsd: 0 }
+      })
+    } as never);
+    expect(brief.picks.map((pick) => pick.itemId)).toEqual([pool[primary]!, pool[second!]!, pool[third!]!].map((item) => item.externalId));
+    expect(brief.repairs).toEqual([`${miscounted}->${second}`]);
+  });
+
+  it("kills the edition when a pick names a url the packet does not hold", async () => {
+    const config = await loadEditionQualityConfig();
+    const items = await fixtureJson<SourceItem[]>("source-items.json");
+    const pool = createDigest(items, items.length);
+    await expect(curate(items, "2026-09-13", config, {
+      invoke: async (request: { parse: (value: unknown) => unknown }) => ({
+        value: request.parse({
+          headline: "Unknown url",
+          angle: "A pick names an address the packet never showed.",
+          picks: [0, 1, 2].map((index) => ({
+            index,
+            url: index === 1 ? "https://example.com/not-in-the-packet" : pool[index]!.url,
+            why: "reason",
+            evidence: "confirmed_fact"
+          }))
+        }),
+        usage: { provider: "anthropic", model: "fixture", stage: "curate", inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0, costUsd: 0 }
+      })
+    } as never)).rejects.toThrow(/does not hold/u);
+  });
+
   it("bounds the pick index to the pool so an out-of-range answer cannot reach the parse", async () => {
     // On 3 August the editor answered index 54 for a 50-item pool and the whole edition died
     // after the call was billed. The provider enforces the bound now.
