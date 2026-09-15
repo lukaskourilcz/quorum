@@ -1,17 +1,7 @@
 {
   "schemaVersion": "mma-backfill-queue/1",
-  "generatedAt": "2026-09-14T06:01:33.899Z",
+  "generatedAt": "2026-09-15T06:00:56.088Z",
   "items": [
-    {
-      "fighterRef": "ufc:arman-tsarukyan",
-      "priority": 1020,
-      "reason": "upcoming-bout",
-      "gaps": [
-        "reachCm",
-        "record-history-incomplete"
-      ],
-      "reviewedAt": "2026-08-15T06:01:47.325Z"
-    },
     {
       "fighterRef": "ufc:deiveson-figueiredo",
       "priority": 1020,
@@ -40,7 +30,7 @@
         "reachCm",
         "record-history-mismatch"
       ],
-      "reviewedAt": "2026-09-14T06:01:33.899Z",
+      "reviewedAt": "2026-09-15T06:00:56.088Z",
       "uncorroborated": [
         "division",
         "record"
@@ -54,10 +44,20 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-14T06:01:33.899Z",
+      "reviewedAt": "2026-09-15T06:00:56.088Z",
       "uncorroborated": [
         "division"
       ]
+    },
+    {
+      "fighterRef": "ufc:arman-tsarukyan",
+      "priority": 1020,
+      "reason": "upcoming-bout",
+      "gaps": [
+        "reachCm",
+        "record-history-incomplete"
+      ],
+      "reviewedAt": "2026-09-15T06:00:56.088Z"
     },
     {
       "fighterRef": "ufc:rafael-dos-anjos",
@@ -67,7 +67,7 @@
         "reachCm",
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-14T06:01:33.899Z",
+      "reviewedAt": "2026-09-15T06:00:56.088Z",
       "uncorroborated": [
         "division",
         "record"
@@ -98,7 +98,7 @@
       "gaps": [
         "stance"
       ],
-      "reviewedAt": "2026-09-14T06:01:33.899Z",
+      "reviewedAt": "2026-09-15T06:00:56.088Z",
       "uncorroborated": [
         "name",
         "division",
@@ -112,7 +112,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-14T06:01:33.899Z",
+      "reviewedAt": "2026-09-15T06:00:56.088Z",
       "uncorroborated": [
         "division"
       ]
@@ -124,7 +124,7 @@
       "gaps": [
         "record-history-incomplete"
       ],
-      "reviewedAt": "2026-09-14T06:01:33.899Z",
+      "reviewedAt": "2026-09-15T06:00:56.088Z",
       "uncorroborated": [
         "division",
         "record"
@@ -135,7 +135,7 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-09-14T06:01:33.899Z",
+      "reviewedAt": "2026-09-15T06:00:56.088Z",
       "uncorroborated": [
         "division"
       ]
@@ -145,7 +145,7 @@
       "priority": 1000,
       "reason": "upcoming-bout",
       "gaps": [],
-      "reviewedAt": "2026-09-14T06:01:33.899Z",
+      "reviewedAt": "2026-09-15T06:00:56.088Z",
       "uncorroborated": [
         "division"
       ]
@@ -168,11 +168,21 @@
       "reviewedAt": "2026-09-09T06:01:07.556Z"
     },
     {
-      "fighterRef": "ufc:andre-petroski",
+      "fighterRef": "ufc:conor-mcgregor",
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
       "reviewedAt": "2026-09-14T06:01:33.899Z",
+      "uncorroborated": [
+        "division"
+      ]
+    },
+    {
+      "fighterRef": "ufc:andre-petroski",
+      "priority": 600,
+      "reason": "missing-history",
+      "gaps": [],
+      "reviewedAt": "2026-09-15T06:00:56.088Z",
       "uncorroborated": [
         "division"
       ]
@@ -182,7 +192,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-09-14T06:01:33.899Z",
+      "reviewedAt": "2026-09-15T06:00:56.088Z",
       "uncorroborated": [
         "division"
       ]
@@ -192,17 +202,7 @@
       "priority": 600,
       "reason": "missing-history",
       "gaps": [],
-      "reviewedAt": "2026-09-14T06:01:33.899Z",
-      "uncorroborated": [
-        "division"
-      ]
-    },
-    {
-      "fighterRef": "ufc:conor-mcgregor",
-      "priority": 600,
-      "reason": "missing-history",
-      "gaps": [],
-      "reviewedAt": "2026-09-14T06:01:33.899Z",
+      "reviewedAt": "2026-09-15T06:00:56.088Z",
       "uncorroborated": [
         "division"
       ]

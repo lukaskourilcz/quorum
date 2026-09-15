@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-09-19T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-09-14:List of UFC events"
+    "source:wikipedia:2026-09-15:List of UFC events"
   ],
   "bouts": [
     {
@@ -36,15 +36,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:renato-moicano-vs-brian-ortega-4",
-      "red": "ufc:renato-moicano",
-      "blue": "ufc:brian-ortega",
-      "division": "lightweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:alonzo-menifield-vs-iwo-baraniewski-5",
+      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:alonzo-menifield-vs-iwo-baraniewski-4",
       "red": "ufc:alonzo-menifield",
       "blue": "ufc:iwo-baraniewski",
       "division": "light-heavyweight",
@@ -52,7 +44,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:gable-steveson-vs-sean-sharaf-6",
+      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:gable-steveson-vs-sean-sharaf-5",
       "red": "ufc:gable-steveson",
       "blue": "ufc:sean-sharaf",
       "division": "heavyweight",
@@ -60,7 +52,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:marlon-vera-vs-charles-jourdain-7",
+      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:marlon-vera-vs-charles-jourdain-6",
       "red": "ufc:marlon-vera",
       "blue": "ufc:charles-jourdain",
       "division": "bantamweight",
@@ -68,7 +60,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:tai-tuivasa-vs-robelis-despaigne-8",
+      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:tai-tuivasa-vs-robelis-despaigne-7",
       "red": "ufc:tai-tuivasa",
       "blue": "ufc:robelis-despaigne",
       "division": "heavyweight",
@@ -76,18 +68,26 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:edmen-shahbazyan-vs-brunno-ferreira-9",
-      "red": "ufc:edmen-shahbazyan",
-      "blue": "ufc:brunno-ferreira",
+      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:michael-aswell-jr-vs-yoo-joo-sang-8",
+      "red": "ufc:michael-aswell-jr",
+      "blue": "ufc:yoo-joo-sang",
+      "division": "featherweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:ryan-gandra-vs-osman-diaz-9",
+      "red": "ufc:ryan-gandra",
+      "blue": "ufc:osman-diaz",
       "division": "middleweight",
       "scheduledRounds": 3,
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:giga-chikadze-vs-joanderson-brito-10",
-      "red": "ufc:giga-chikadze",
-      "blue": "ufc:joanderson-brito",
-      "division": "featherweight",
+      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:edmen-shahbazyan-vs-brunno-ferreira-10",
+      "red": "ufc:edmen-shahbazyan",
+      "blue": "ufc:brunno-ferreira",
+      "division": "middleweight",
       "scheduledRounds": 3,
       "status": "announced"
     },
@@ -100,21 +100,13 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:ryan-gandra-vs-osman-diaz-12",
-      "red": "ufc:ryan-gandra",
-      "blue": "ufc:osman-diaz",
-      "division": "middleweight",
-      "scheduledRounds": 3,
-      "status": "announced"
-    },
-    {
-      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:michael-aswell-jr-vs-yoo-joo-sang-13",
-      "red": "ufc:michael-aswell-jr",
-      "blue": "ufc:yoo-joo-sang",
+      "id": "ufc:ufc-331-van-vs-pantoja-2:bout:giga-chikadze-vs-joanderson-brito-12",
+      "red": "ufc:giga-chikadze",
+      "blue": "ufc:joanderson-brito",
       "division": "featherweight",
       "scheduledRounds": 3,
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-09-14T06:01:33.899Z"
+  "updatedAt": "2026-09-15T06:00:56.088Z"
 }

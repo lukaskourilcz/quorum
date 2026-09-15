@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Brendan_Allen",
       "publisher": "Wikipedia",
       "title": "Brendan Allen",
-      "retrievedAt": "2026-09-14T06:01:33.899Z",
+      "retrievedAt": "2026-09-15T06:00:56.088Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -68,7 +68,7 @@
         "source:wikidata:Q96694248",
         "source:wikipedia:64400223"
       ],
-      "retrievedAt": "2026-09-14T06:01:33.899Z",
+      "retrievedAt": "2026-09-15T06:00:56.088Z",
       "status": "verified",
       "corroborated": true
     },
@@ -264,9 +264,9 @@
         "recentThreeWinRate": 0,
         "recentFiveWinRate": 0,
         "fightsPerYear": 0.706739,
-        "layoffDays": 569
+        "layoffDays": 570
       },
-      "updatedAt": "2026-09-14T06:01:33.899Z"
+      "updatedAt": "2026-09-15T06:00:56.088Z"
     }
   ],
   "rating": {
@@ -276,7 +276,7 @@
     "volatility": 0.0599964,
     "boutCount": 6,
     "asOfBoutRef": "ufc:bout:history-f0bb243a3af386789155",
-    "updatedAt": "2026-09-14T06:01:33.899Z"
+    "updatedAt": "2026-09-15T06:00:56.088Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2018,11 +2018,28 @@
         "source:wikipedia:42944791"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-15T06:00:56.088Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:64111674",
+        "source:wikipedia:64400223",
+        "source:wikipedia:42944791"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 1,
   "corroboration": 0.75,
   "modelEligible": true,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-14T06:01:33.899Z"
+  "updatedAt": "2026-09-15T06:00:56.088Z"
 }

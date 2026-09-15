@@ -55,7 +55,7 @@
       "url": "https://en.wikipedia.org/wiki/Brandon_Moreno",
       "publisher": "Wikipedia",
       "title": "Brandon Moreno",
-      "retrievedAt": "2026-09-14T06:01:33.899Z",
+      "retrievedAt": "2026-09-15T06:00:56.088Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     },
@@ -78,7 +78,7 @@
         "source:wikipedia:52475971",
         "source:wikipedia:64585580"
       ],
-      "retrievedAt": "2026-09-14T06:01:33.899Z",
+      "retrievedAt": "2026-09-15T06:00:56.088Z",
       "status": "verified",
       "corroborated": true
     },
@@ -374,6 +374,21 @@
       "status": "provisional"
     },
     {
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-288-bout-brandon-moreno-vs-joseph-morales-1",
+      "eventRef": "ufc:event:ufc-fight-night-288",
+      "happenedAt": "2026-09-12T00:00:00.000Z",
+      "opponentRef": "ufc:joseph-morales",
+      "result": "win",
+      "method": "Decision (split)",
+      "round": 3,
+      "elapsedSeconds": 900,
+      "sourceRefs": [
+        "source:wikipedia:2026-09-15:UFC Fight Night: Silva vs. Delgado"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "ufc:bout:ufc-ufc-fight-night-rodriguez-vs-silva-bout-brandon-moreno-vs-joseph-morales-2",
       "eventRef": "ufc:event:ufc-fight-night-rodriguez-vs-silva",
       "happenedAt": "2026-09-12T00:00:00.000Z",
@@ -411,37 +426,37 @@
       "scope": "career",
       "organization": "ufc",
       "sourceRef": "derived:ufc:brandon-moreno:history",
-      "bouts": 17,
+      "bouts": 18,
       "values": {
-        "bouts": 17,
-        "wins": 7,
+        "bouts": 18,
+        "wins": 8,
         "losses": 9,
         "draws": 1,
         "noContests": 0,
-        "finishRate": 0.428571,
+        "finishRate": 0.375,
         "koTkoWins": 2,
         "submissionWins": 1,
-        "decisionWins": 4,
-        "koTkoWinShare": 0.285714,
-        "submissionWinShare": 0.142857,
-        "decisionWinShare": 0.571429,
-        "averageElapsedSeconds": 1146.071429,
+        "decisionWins": 5,
+        "koTkoWinShare": 0.25,
+        "submissionWinShare": 0.125,
+        "decisionWinShare": 0.625,
+        "averageElapsedSeconds": 1129.666667,
         "recentThreeWinRate": 1,
-        "recentFiveWinRate": 0.8,
-        "fightsPerYear": 0.624744,
-        "layoffDays": 2
+        "recentFiveWinRate": 1,
+        "fightsPerYear": 0.66379,
+        "layoffDays": 3
       },
-      "updatedAt": "2026-09-14T06:01:33.899Z"
+      "updatedAt": "2026-09-15T06:00:56.088Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1675.52154054,
-    "deviation": 134.86408869,
-    "volatility": 0.06002449,
-    "boutCount": 16,
+    "rating": 1688.69989972,
+    "deviation": 131.77113997,
+    "volatility": 0.06002356,
+    "boutCount": 17,
     "asOfBoutRef": "ufc:bout:ufc-ufc-fight-night-silva-vs-delgado-bout-brandon-moreno-vs-joseph-morales-2",
-    "updatedAt": "2026-09-14T06:01:33.899Z"
+    "updatedAt": "2026-09-15T06:00:56.088Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -2206,11 +2221,31 @@
         "source:wikipedia:2026-09-13:UFC Fight Night: Silva vs. Delgado"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-15T06:00:56.088Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating",
+        "discrepancies",
+        "quality"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:54180928",
+        "source:wikipedia:52475971",
+        "source:wikipedia:64585580",
+        "source:wikipedia:2026-09-15:UFC Fight Night: Silva vs. Delgado",
+        "source:wikipedia:2026-09-14:UFC Fight Night: Silva vs. Delgado",
+        "source:wikipedia:2026-09-13:UFC Fight Night: Silva vs. Delgado"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.875,
   "corroboration": 0.625,
   "modelEligible": true,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-14T06:01:33.899Z"
+  "updatedAt": "2026-09-15T06:00:56.088Z"
 }

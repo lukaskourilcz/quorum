@@ -38,7 +38,7 @@
       "url": "https://en.wikipedia.org/wiki/Niamh_Kinehan",
       "publisher": "Wikipedia",
       "title": "Niamh Kinehan",
-      "retrievedAt": "2026-09-14T06:01:33.899Z",
+      "retrievedAt": "2026-09-15T06:00:56.088Z",
       "evidenceTier": "secondary",
       "license": "CC BY-SA"
     }
@@ -50,7 +50,7 @@
         "source:wikidata:Q131175807",
         "source:wikipedia:78356806"
       ],
-      "retrievedAt": "2026-09-14T06:01:33.899Z",
+      "retrievedAt": "2026-09-15T06:00:56.088Z",
       "status": "verified",
       "corroborated": true
     },
@@ -100,6 +100,21 @@
   "discrepancies": [],
   "history": [
     {
+      "boutRef": "oktagon:bout:oktagon-oktagon-93-rousal-vs-magard-bout-niamh-kinehan-vs-alana-cook-11",
+      "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
+      "happenedAt": "2026-09-12T00:00:00.000Z",
+      "opponentRef": "oktagon:alana-cook",
+      "result": "win",
+      "method": "KO (punches)",
+      "round": 2,
+      "elapsedSeconds": 348,
+      "sourceRefs": [
+        "source:wikipedia:2026-09-15:Oktagon 93: Roušal vs. Mågård"
+      ],
+      "evidenceTier": "secondary",
+      "status": "provisional"
+    },
+    {
       "boutRef": "oktagon:bout:oktagon-oktagon-93-rousal-vs-magard-bout-niamh-kinehan-vs-alana-cook-7",
       "eventRef": "oktagon:event:oktagon-93-rousal-vs-magard",
       "happenedAt": "2026-09-12T00:00:00.000Z",
@@ -137,15 +152,15 @@
       "scope": "career",
       "organization": "oktagon",
       "sourceRef": "derived:oktagon:niamh-kinehan:history",
-      "bouts": 2,
+      "bouts": 3,
       "values": {
-        "bouts": 2,
-        "wins": 2,
+        "bouts": 3,
+        "wins": 3,
         "losses": 0,
         "draws": 0,
         "noContests": 0,
         "finishRate": 1,
-        "koTkoWins": 2,
+        "koTkoWins": 3,
         "submissionWins": 0,
         "decisionWins": 0,
         "koTkoWinShare": 1,
@@ -154,20 +169,20 @@
         "averageElapsedSeconds": 348,
         "recentThreeWinRate": 1,
         "recentFiveWinRate": 1,
-        "fightsPerYear": 365.25,
-        "layoffDays": 2
+        "fightsPerYear": 730.5,
+        "layoffDays": 3
       },
-      "updatedAt": "2026-09-14T06:01:33.899Z"
+      "updatedAt": "2026-09-15T06:00:56.088Z"
     }
   ],
   "rating": {
     "system": "glicko2",
-    "rating": 1720.31719844,
-    "deviation": 260.48876257,
-    "volatility": 0.05999893,
-    "boutCount": 2,
+    "rating": 1752.96650541,
+    "deviation": 243.59648856,
+    "volatility": 0.05999826,
+    "boutCount": 3,
     "asOfBoutRef": "oktagon:bout:oktagon-oktagon-93-rousal-vs-magard-bout-niamh-kinehan-vs-alana-cook-8",
-    "updatedAt": "2026-09-14T06:01:33.899Z"
+    "updatedAt": "2026-09-15T06:00:56.088Z"
   },
   "quality": {
     "evidenceTier": "secondary",
@@ -261,11 +276,26 @@
         "source:wikipedia:2026-09-13:Oktagon 93: Roušal vs. Mågård"
       ],
       "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
+    },
+    {
+      "at": "2026-09-15T06:00:56.088Z",
+      "kind": "rating-rebuild",
+      "fields": [
+        "history",
+        "statsProfiles",
+        "rating"
+      ],
+      "sourceRefs": [
+        "source:wikipedia:2026-09-15:Oktagon 93: Roušal vs. Mågård",
+        "source:wikipedia:2026-09-14:Oktagon 93: Roušal vs. Mågård",
+        "source:wikipedia:2026-09-13:Oktagon 93: Roušal vs. Mågård"
+      ],
+      "note": "Rebuilt career totals and Glicko state from canonical completed bouts."
     }
   ],
   "completeness": 0.625,
   "corroboration": 0.25,
   "modelEligible": false,
   "modelVersion": "mma-0.1.0+00000000",
-  "updatedAt": "2026-09-14T06:01:33.899Z"
+  "updatedAt": "2026-09-15T06:00:56.088Z"
 }

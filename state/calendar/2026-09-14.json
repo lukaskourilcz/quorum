@@ -81,19 +81,23 @@
       "at": "2026-09-15T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The run behind this meeting failed before it finished."
     },
     {
       "at": "2026-09-15T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ms-daily",
-      "status": "scheduled"
+      "status": "late",
+      "decisionOneLiner": "The run for this slot has not arrived yet."
     },
     {
       "at": "2026-09-15T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-day",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-09-15-mma-analysis",
+      "decisionOneLiner": "No model run exists to review yet — waiting for the odds data key."
     },
     {
       "at": "2026-09-15T09:00:00.000Z",

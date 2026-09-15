@@ -12,85 +12,60 @@
       "name": "UFC Fight Night: Silva vs. Delgado",
       "startsAtUtc": "2026-09-12T00:00:00.000Z",
       "results": 13
-    },
-    {
-      "name": "UFC Fight Night: Hooker vs. Parnasse",
-      "startsAtUtc": "2026-09-05T00:00:00.000Z",
-      "results": 14
     }
   ],
   "applied": [
     {
-      "boutRef": "oktagon:bout:oktagon-oktagon-93-rousal-vs-magard-bout-vojtech-garba-vs-robert-lau-6",
-      "winner": "blue",
-      "method": "KO (punches)"
-    },
-    {
-      "boutRef": "oktagon:bout:oktagon-oktagon-93-rousal-vs-magard-bout-jakub-dohnal-vs-vojto-barborik-6",
+      "boutRef": "oktagon:bout:oktagon-oktagon-93-rousal-vs-magard-bout-jakub-dohnal-vs-vojto-barborik-5",
       "winner": "red",
       "method": "KO (spinning wheel kick and punches)"
     },
     {
-      "boutRef": "oktagon:bout:oktagon-oktagon-93-rousal-vs-magard-bout-simon-bruknar-vs-nathan-haywood-10",
-      "winner": "red",
-      "method": "Decision (unanimous)"
-    },
-    {
-      "boutRef": "oktagon:bout:oktagon-oktagon-93-rousal-vs-magard-bout-niamh-kinehan-vs-alana-cook-7",
+      "boutRef": "oktagon:bout:oktagon-oktagon-93-rousal-vs-magard-bout-niamh-kinehan-vs-alana-cook-11",
       "winner": "red",
       "method": "KO (punches)"
     },
     {
-      "boutRef": "oktagon:bout:oktagon-oktagon-93-rousal-vs-magard-bout-ali-gunduz-vs-david-daniel-komar-11",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-288-bout-brandon-moreno-vs-joseph-morales-1",
       "winner": "red",
       "method": "Decision (split)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-rodriguez-vs-silva-bout-brandon-moreno-vs-joseph-morales-2",
-      "winner": "red",
-      "method": "Decision (split)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-rodriguez-vs-silva-bout-tommy-mcmillen-vs-marwan-rahiki-3",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-288-bout-tommy-mcmillen-vs-marwan-rahiki-2",
       "winner": "red",
       "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-rodriguez-vs-silva-bout-manon-fiorot-vs-alexa-grasso-4",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-288-bout-manon-fiorot-vs-alexa-grasso-3",
       "winner": "blue",
       "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-rodriguez-vs-silva-bout-waldo-cortes-acosta-vs-curtis-blaydes-5",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-288-bout-waldo-cortes-acosta-vs-curtis-blaydes-4",
       "winner": "blue",
       "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-rodriguez-vs-silva-bout-david-martinez-vs-dan-ige-6",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-288-bout-david-martinez-vs-dan-ige-5",
       "winner": "red",
       "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-rodriguez-vs-silva-bout-tim-elliott-vs-edgar-chairez-7",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-288-bout-tim-elliott-vs-edgar-chairez-6",
       "winner": "red",
       "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-rodriguez-vs-silva-bout-ignacio-bahamondes-vs-muslim-salikhov-8",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-288-bout-ignacio-bahamondes-vs-muslim-salikhov-7",
       "winner": "red",
       "method": "Decision (unanimous)"
     },
     {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-288-bout-rafa-garcia-vs-rong-zhu-9",
-      "winner": "blue",
-      "method": "Decision (unanimous)"
-    },
-    {
-      "boutRef": "ufc:bout:ufc-ufc-fight-night-silva-vs-delgado-bout-jj-aldrich-vs-regina-tarin-12",
+      "boutRef": "ufc:bout:ufc-ufc-fight-night-rodriguez-vs-silva-bout-jj-aldrich-vs-regina-tarin-9",
       "winner": "blue",
       "method": "Decision (unanimous)"
     }
   ],
-  "untracked": 25,
-  "generatedAt": "2026-09-14T06:01:33.899Z"
+  "untracked": 15,
+  "generatedAt": "2026-09-15T06:00:56.088Z"
 }

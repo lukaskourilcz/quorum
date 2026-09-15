@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "cycleId": "20260915060056-article-am",
+  "date": "2026-09-15",
+  "slot": "am",
+  "status": "killed",
+  "reason": "article_production_failed",
+  "detail": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cf4iUdPB1yt25DUCWP2am\"}",
+  "slateSource": "derived",
+  "spentUsd": null,
+  "generatedAt": "2026-09-15T06:00:56.088Z"
+}

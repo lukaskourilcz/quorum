@@ -8,7 +8,7 @@
   "timeZone": "UTC",
   "startsAtUtc": "2026-10-17T00:00:00.000Z",
   "sourceRefs": [
-    "source:wikipedia:2026-09-14:List of UFC events"
+    "source:wikipedia:2026-09-15:List of UFC events"
   ],
   "bouts": [
     {
@@ -20,7 +20,15 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:erin-blanchfield-vs-jasmine-jasudavicius-2",
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:cody-chovancek-vs-you-su-young-2",
+      "red": "ufc:cody-chovancek",
+      "blue": "ufc:you-su-young",
+      "division": "bantamweight",
+      "scheduledRounds": 3,
+      "status": "announced"
+    },
+    {
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:erin-blanchfield-vs-jasmine-jasudavicius-3",
       "red": "ufc:erin-blanchfield",
       "blue": "ufc:jasmine-jasudavicius",
       "division": "womens-flyweight",
@@ -28,7 +36,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:javad-mahjoub-vs-louie-sutherland-3",
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:javad-mahjoub-vs-louie-sutherland-4",
       "red": "ufc:javad-mahjoub",
       "blue": "ufc:louie-sutherland",
       "division": "heavyweight",
@@ -36,7 +44,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:chad-anheliger-vs-steven-koslow-4",
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:chad-anheliger-vs-steven-koslow-5",
       "red": "ufc:chad-anheliger",
       "blue": "ufc:steven-koslow",
       "division": "bantamweight",
@@ -44,7 +52,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:marc-andre-barriault-vs-kyle-daukaus-5",
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:marc-andre-barriault-vs-kyle-daukaus-6",
       "red": "ufc:marc-andre-barriault",
       "blue": "ufc:kyle-daukaus",
       "division": "middleweight",
@@ -52,7 +60,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:jamey-lyn-horth-vs-katlyn-cerminara-6",
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:jamey-lyn-horth-vs-katlyn-cerminara-7",
       "red": "ufc:jamey-lyn-horth",
       "blue": "ufc:katlyn-cerminara",
       "division": "womens-flyweight",
@@ -60,7 +68,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:tanner-boser-vs-jhonata-diniz-7",
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:tanner-boser-vs-jhonata-diniz-8",
       "red": "ufc:tanner-boser",
       "blue": "ufc:jhonata-diniz",
       "division": "heavyweight",
@@ -68,7 +76,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:mandel-nallo-vs-nate-landwehr-8",
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:mandel-nallo-vs-nate-landwehr-9",
       "red": "ufc:mandel-nallo",
       "blue": "ufc:nate-landwehr",
       "division": "lightweight",
@@ -76,7 +84,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:melissa-croden-vs-chelsea-chandler-9",
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:melissa-croden-vs-chelsea-chandler-10",
       "red": "ufc:melissa-croden",
       "blue": "ufc:chelsea-chandler",
       "division": "womens-bantamweight",
@@ -84,7 +92,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:louis-jourdain-vs-timothy-cuamba-10",
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:louis-jourdain-vs-timothy-cuamba-11",
       "red": "ufc:louis-jourdain",
       "blue": "ufc:timothy-cuamba",
       "division": "bantamweight",
@@ -92,7 +100,7 @@
       "status": "announced"
     },
     {
-      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:julien-leblanc-vs-gilbert-urbina-11",
+      "id": "ufc:ufc-fight-night-buckley-vs-malott:bout:julien-leblanc-vs-gilbert-urbina-12",
       "red": "ufc:julien-leblanc",
       "blue": "ufc:gilbert-urbina",
       "division": "middleweight",
@@ -100,5 +108,5 @@
       "status": "announced"
     }
   ],
-  "updatedAt": "2026-09-14T06:01:33.899Z"
+  "updatedAt": "2026-09-15T06:00:56.088Z"
 }
