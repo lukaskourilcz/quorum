@@ -1,0 +1,274 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260915070046-cu-edition",
+  "phase": "cu-edition",
+  "estimatedWorstCaseUsd": 0.58,
+  "actualUsd": 0,
+  "participants": [
+    "HERALD",
+    "STET",
+    "HACEK"
+  ],
+  "sourceResults": [
+    {
+      "sourceId": "404-media",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 275,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "anthropic-news",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 413,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "ars-technica",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 251,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "arxiv-cs-ai",
+      "status": "failed",
+      "candidateItems": 0,
+      "durationMs": 353,
+      "errorCode": "Error",
+      "errorMessage": "Source returned HTTP 429"
+    },
+    {
+      "sourceId": "arxiv-cs-lg",
+      "status": "failed",
+      "candidateItems": 0,
+      "durationMs": 345,
+      "errorCode": "Error",
+      "errorMessage": "Source returned HTTP 429"
+    },
+    {
+      "sourceId": "bluesky-language-models",
+      "status": "failed",
+      "candidateItems": 0,
+      "durationMs": 468,
+      "errorCode": "Error",
+      "errorMessage": "Source returned HTTP 403"
+    },
+    {
+      "sourceId": "deepmind-blog",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 435,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "digiday",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 372,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "github-ai-releases",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 602,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "google-research",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 443,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "hf-blog",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 267,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "hn-frontpage",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 539,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "import-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 256,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "interconnects",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 247,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "meta-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 1757,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "mit-tech-review",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 226,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "nieman-lab",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 1197,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "openai-blog",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 173,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "platformer",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 541,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "rest-of-world",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 454,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "simonw",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 431,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "social-media-today",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 375,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "spaceflight-news",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 592,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "stackexchange-ml",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 296,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "stratechery",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 468,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "techcrunch-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 215,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "tensorfeed",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 474,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "the-register",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 448,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "the-verge",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 144,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "tubefilter",
+      "status": "failed",
+      "candidateItems": 0,
+      "durationMs": 10987,
+      "errorCode": "empty",
+      "errorMessage": "fetch succeeded but yielded no candidate items"
+    },
+    {
+      "sourceId": "variety",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 124,
+      "errorCode": null,
+      "errorMessage": null
+    },
+    {
+      "sourceId": "wired-ai",
+      "status": "success",
+      "candidateItems": 10,
+      "durationMs": 197,
+      "errorCode": null,
+      "errorMessage": null
+    }
+  ],
+  "editionStatus": "no_edition",
+  "packageHash": "ab8d1d0dc8e3f10f43cf32521a2afa710152cf2ad87be72f3135ab5412451349",
+  "generatedAt": "2026-09-15T07:00:51.908Z"
+}

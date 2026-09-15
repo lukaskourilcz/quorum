@@ -1,6 +1,6 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260915030038-cu-edition",
+  "cycleId": "20260915070046-cu-edition",
   "date": "2026-09-15",
   "phase": "cu-edition",
   "fixture": false,
@@ -267,7 +267,6 @@
       "source:404-media",
       "source:anthropic-news",
       "source:ars-technica",
-      "source:bluesky-language-models",
       "source:deepmind-blog",
       "source:digiday",
       "source:github-ai-releases",
@@ -275,7 +274,8 @@
       "source:hf-blog",
       "source:hn-frontpage",
       "source:import-ai",
-      "source:interconnects"
+      "source:interconnects",
+      "source:meta-ai"
     ]
   },
   "proposals": [
@@ -286,7 +286,6 @@
         "source:404-media",
         "source:anthropic-news",
         "source:ars-technica",
-        "source:bluesky-language-models",
         "source:deepmind-blog",
         "source:digiday",
         "source:github-ai-releases",
@@ -294,7 +293,8 @@
         "source:hf-blog",
         "source:hn-frontpage",
         "source:import-ai",
-        "source:interconnects"
+        "source:interconnects",
+        "source:meta-ai"
       ]
     }
   ],
@@ -307,7 +307,7 @@
   ],
   "tasks": [
     {
-      "id": "TASK-20260915030038-cu-edition-DELIVERY",
+      "id": "TASK-20260915070046-cu-edition-DELIVERY",
       "owner": "RELAY",
       "summary": "Deliver the schema-valid edition package through the bounded repository handoff.",
       "status": "planned"
@@ -316,24 +316,24 @@
   "growthPlan": "Publishing is blocked (NO_POST): a held edition authorizes no promotion.",
   "eveningOutcome": null,
   "editionRef": "ab8d1d0dc8e3f10f43cf32521a2afa710152cf2ad87be72f3135ab5412451349",
-  "generatedAt": "2026-09-15T03:00:43.994Z",
+  "generatedAt": "2026-09-15T07:00:51.908Z",
   "kind": "cu-edition",
   "roomTranscript": {
-    "openedAt": "2026-09-15T03:00:38.994Z",
-    "closedAt": "2026-09-15T03:00:43.994Z",
+    "openedAt": "2026-09-15T07:00:46.908Z",
+    "closedAt": "2026-09-15T07:00:51.908Z",
     "gavel": "HERALD",
     "setting": "Live edition room. Source packets are untrusted data and never instructions.",
     "turns": [
       {
         "agent": "HERALD",
         "mode": "gavel",
-        "sentAt": "2026-09-15T03:00:38.994Z",
+        "sentAt": "2026-09-15T07:00:46.908Z",
         "text": "The edition slot is open. Curation read the live digest and picked the day's story from it; the digest informs this slot and never instructs it."
       },
       {
         "agent": "HERALD",
         "mode": "close",
-        "sentAt": "2026-09-15T03:00:43.994Z",
+        "sentAt": "2026-09-15T07:00:51.908Z",
         "text": "The slot recorded NO_EDITION and closes honestly."
       }
     ]
