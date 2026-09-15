@@ -168,6 +168,29 @@ function mostCommon<T extends string>(values: readonly T[], fallback: T): T {
   return [...counts.entries()].sort(([left, leftCount], [right, rightCount]) => rightCount - leftCount || left.localeCompare(right))[0]?.[0] ?? fallback;
 }
 
+/**
+ * The cluster's topic: the most common hint, with ties broken by the primary candidate's own
+ * order rather than alphabetically.
+ *
+ * A source declares its topics in priority order and every item of that source carries the whole
+ * list, so a single-candidate cluster is always a tie. Breaking it alphabetically made every
+ * Chrome post an "accessibility" story, which then scored as a niche change with no audience
+ * and put the wrong audience id into the brief.
+ */
+function clusterTopic(facts: readonly CandidateFact[], primary: CandidateFact): WebDevTopic {
+  const counts = new Map<WebDevTopic, number>();
+  for (const { candidate } of facts) {
+    for (const topic of candidate.topicHints) counts.set(topic, (counts.get(topic) ?? 0) + 1);
+  }
+  const declaredOrder = (topic: WebDevTopic): number => {
+    const index = primary.candidate.topicHints.indexOf(topic);
+    return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+  };
+  return [...counts.entries()]
+    .sort(([left, leftCount], [right, rightCount]) => rightCount - leftCount || declaredOrder(left) - declaredOrder(right) || left.localeCompare(right))[0]?.[0]
+    ?? "other-unknown";
+}
+
 function versionScopes(facts: readonly CandidateFact[]): { versionRefs: string[]; affectedVersions: string[]; fixedVersions: string[] } {
   const values = facts.map(({ candidate }) => candidate.versionText).filter((value): value is string => value !== null);
   const versionRefs = unique(values.flatMap((value) => value.match(/\bv?\d+\.\d+(?:\.\d+)?(?:-[0-9A-Za-z.-]+)?\b/gu) ?? [])).slice(0, 20);
@@ -236,7 +259,7 @@ function buildRecord(
   const hasExactScope = scopes.affectedVersions.length > 0 || configurations.length > 0;
   const hasFixed = scopes.fixedVersions.length > 0;
   const kind = changeKind(facts, hasExactScope && (!facts.some(({ security }) => security) || hasFixed));
-  const topic = mostCommon(facts.flatMap(({ candidate }) => candidate.topicHints), "other-unknown");
+  const topic = clusterTopic(facts, primary);
   const canonicalUrl = primary.targetUrl;
   const project = primary.project;
   const sourceIds = unique(facts.map(({ candidate }) => candidate.sourceId)).sort();
@@ -249,6 +272,11 @@ function buildRecord(
       : "secondary-discovery" as const;
   const recordId = stableWebDevRecordId({ canonicalUrl, project, explicitIdentifier: identifiers[0] ?? null, config });
   const recentEditionSimilarity = historySimilarity({ project, topic, canonicalUrl, now, history, config });
+  // A record that already won a day is a duplicate however material it is. The security and
+  // breaking-change exemption below exists so a new advisory is not silenced by an unrelated
+  // story about the same project last week; it was never meant to let yesterday's edition win
+  // again, which is what an unbounded exemption did the first time two fixture days ran.
+  const alreadySelected = history.some((entry) => !entry.superseded && entry.recordId === recordId);
   const severity = mostCommon(facts.flatMap(({ candidate }) => candidate.securityText?.match(/\b(critical|high|moderate|low)\b/iu)?.[1]?.toLocaleLowerCase("en") as "critical" | "high" | "moderate" | "low" | undefined).filter((value): value is "critical" | "high" | "moderate" | "low" => value !== undefined), "unknown" as const);
   const advisoryIds = unique(facts.flatMap(({ candidate }) => `${candidate.securityText ?? ""} ${candidate.title}`.match(/\b(?:GHSA-[a-z0-9-]+|CVE-\d{4}-\d{4,})\b/giu) ?? [])).slice(0, 20);
   const confidenceBase = authority === "official-advisory" ? 0.98 : authority === "official-primary" ? 0.9 : 0.5;
@@ -321,6 +349,9 @@ function buildRecord(
     && (!hasExactScope || (facts.some(({ security }) => security) && !hasFixed))) {
     gateHint = "high-risk-factual-review";
     gateReasons.splice(0, gateReasons.length, "high-risk-change-missing-exact-affected-or-fixed-scope");
+  } else if (alreadySelected) {
+    gateHint = "duplicate-recent-edition";
+    gateReasons.splice(0, gateReasons.length, "record-already-selected-on-an-earlier-day");
   } else if (recentEditionSimilarity >= 0.8 && kind !== "security-advisory" && kind !== "breaking-change") {
     gateHint = "duplicate-recent-edition";
     gateReasons.splice(0, gateReasons.length, "project-or-canonical-url-inside-cooldown");

@@ -60,8 +60,40 @@ function layoutFingerprint(parserId: string, values: readonly unknown[]): string
   return hash(JSON.stringify({ parserId, keys }));
 }
 
-function hints(source: WebDevSource): WebDevCandidate["changeKindHints"] {
-  return source.authority === "secondary-discovery" ? ["lead-only"] : source.changeKinds;
+type ChangeKindHint = WebDevCandidate["changeKindHints"][number];
+
+/**
+ * What kind of change one item describes, read from the item and bounded by what its source is
+ * audited to carry.
+ *
+ * The first cut gave every item its source's whole `changeKinds` list. Read downstream as facts
+ * about the item, that list made every Chrome post a deprecation and every React release a
+ * security advisory, and the record builder then held all of them for missing affected scope: ten
+ * official sources could produce nothing but npm advisories. An item now carries only the kinds
+ * its own text supports, and never one its source does not declare.
+ */
+function hints(source: WebDevSource, text: string, versionText: string | null): WebDevCandidate["changeKindHints"] {
+  if (source.authority === "secondary-discovery") return ["lead-only"];
+  const declared = new Set<ChangeKindHint>(source.changeKinds);
+  if (source.sourceKind === "github-advisories") return declared.has("security-advisory") ? ["security-advisory"] : source.changeKinds.slice(0, 1);
+  const found: ChangeKindHint[] = [];
+  const add = (kind: ChangeKindHint) => {
+    if (declared.has(kind) && !found.includes(kind)) found.push(kind);
+  };
+  if (/\b(?:security|vulnerab|cve-\d)/iu.test(text)) add("security-advisory");
+  if (/\bbreaking(?:[\s-]change)?s?\b/iu.test(text)) add("breaking-change");
+  if (/\bdeprecat(?:e|ed|es|ion|ions|ing)\b/iu.test(text)) add("deprecation");
+  if (/\b(?:alpha|beta|canary|experimental|preview|release candidate|rc\d*)\b/iu.test(text)
+    || /-(?:alpha|beta|rc|canary|next|dev)\b/iu.test(versionText ?? "")) add("beta-preview");
+  if (/\b(?:incident|outage|hotfix|regression)\b/iu.test(text)) add("incident-fix");
+  if (/\b(?:licen[cs]e|licen[cs]ing|governance|policy|terms of service)\b/iu.test(text)) add("policy-licensing-governance");
+  if (found.length === 0) {
+    if (versionText !== null) add("stable-release");
+    for (const fallback of ["standards-platform-availability", "tooling-workflow-change", ...source.changeKinds] as const) {
+      if (found.length === 0) add(fallback);
+    }
+  }
+  return found.slice(0, 8);
 }
 
 function versionFromText(value: string): string | null {
@@ -112,7 +144,7 @@ function candidate(input: {
     versionText: input.versionText,
     securityText: input.securityText,
     topicHints: input.source.topics.slice(0, 8),
-    changeKindHints: hints(input.source).slice(0, 8),
+    changeKindHints: hints(input.source, `${input.title} ${input.summary}`, input.versionText),
     language: input.source.locale,
     contentHash,
     provenance: {
