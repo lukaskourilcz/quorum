@@ -52,13 +52,13 @@
     "social:activation": "tsx src/social/activation-cli.ts"
   },
   "dependencies": {
-    "@boardlessai/carousel-studio": "workspace:*",
     "@anthropic-ai/sdk": "0.113.0",
+    "@boardlessai/carousel-studio": "workspace:*",
     "cheerio": "^1.2.0",
     "dotenv": "^17.4.2",
     "openai": "6.48.0",
     "rss-parser": "^3.13.0",
-    "sharp": "0.35.3",
+    "sharp": "0.35.4",
     "yaml": "^2.9.0",
     "zod": "4.4.3"
   },
@@ -66,6 +66,6 @@
     "@types/node": "22.20.1",
     "tsx": "4.23.1",
     "typescript": "5.9.3",
-    "vitest": "4.1.10"
+    "vitest": "4.1.11"
   }
 }
