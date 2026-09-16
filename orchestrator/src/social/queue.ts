@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { z } from "zod";
+import { CONNECTOR_MAX_SLIDES } from "@boardlessai/carousel-studio";
 import { EvidenceRefSchema, Sha256Schema, VentureIdSchema } from "../contracts/common.js";
 import { SocialCapabilityRefSchema } from "../contracts/social-distribution.js";
 
@@ -317,8 +318,10 @@ export function assertQueueItemPublishable(item: RuntimeQueueItem): void {
   if (parsed.channel === "threads" && parsed.content.assetPaths.length > 0) {
     throw new Error("The guarded Threads connector currently supports text only");
   }
-  if (parsed.channel === "instagram" && (parsed.content.assetPaths.length < 1 || parsed.content.assetPaths.length > 10)) {
-    throw new Error("The guarded Instagram connector requires one to ten hosted images");
+  if (parsed.channel === "instagram" && (parsed.content.assetPaths.length < 1 || parsed.content.assetPaths.length > CONNECTOR_MAX_SLIDES)) {
+    // The connector's cap, which is narrower than the platform's twenty. Named rather than typed
+    // so nobody widens it to match Instagram: an item over this is one the connector cannot send.
+    throw new Error(`The guarded Instagram connector requires one to ${CONNECTOR_MAX_SLIDES} hosted images`);
   }
   if (parsed.channel === "instagram" && !parsed.content.altText) {
     throw new Error("Instagram media requires alt text in the immutable receipt");

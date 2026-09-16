@@ -3,6 +3,7 @@ import {
   CAROUSEL_BRANDS,
   CarouselFormatSchema,
   articleSlideSlot,
+  declaredCanvases,
   decodeRecipe,
   recipeTemplate,
   recipeVariant,
@@ -63,10 +64,20 @@ export async function GET(
     // slide, so serving ten of them one request at a time rasterised a hundred images and threw
     // ninety away — a page of thumbnails that took ten seconds to fill. Same renderer, same
     // checks, same bytes: the index is all a slide borrows from its neighbours.
+    const template = deck.dualLanguage
+      ? tehdejsiRenderInput(deck.dualLanguage, format.data, hero).template
+      : recipeTemplate(recipe, deck.slides.length);
+    // The same rule the export applies, at the same boundary: a slide is only ever shown at a
+    // canvas its own design declares, and a canvas it does not is named rather than 500'd.
+    if (!declaredCanvases(template).includes(format.data)) {
+      return Response.json({
+        error: `This design is composed for ${template.canvas.master} and does not offer ${format.data}.`
+      }, { status: 422 });
+    }
     const render = deck.dualLanguage
       ? await renderCarouselSlidePng({ ...tehdejsiRenderInput(deck.dualLanguage, format.data, hero), index: slideIndex })
       : await renderCarouselSlidePng({
-          template: recipeTemplate(recipe, deck.slides.length),
+          template,
           payload: {
             locale: deck.locale,
             strings: Object.fromEntries(deck.slides.map((entry, index) => [articleSlideSlot(index), entry.text])),

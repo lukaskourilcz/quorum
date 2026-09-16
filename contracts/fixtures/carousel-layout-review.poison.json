@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "carousel-layout-review/1",
+  "family": "rail",
+  "templateVersion": "latest",
+  "checklistVersion": "layout-gate/1",
+  "composer": "studio/src/families-launch.ts",
+  "specimen": "docs/design-lab/families/rail.html",
+  "gatedAt": "yesterday",
+  "signOff": {
+    "reviewer": "easel",
+    "reviewedAt": "2026-09-16",
+    "note": "An agent may not sign a layout off, and a version is not a word."
+  }
+}

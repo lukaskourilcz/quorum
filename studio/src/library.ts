@@ -8,8 +8,9 @@ import {
   type CarouselTemplate,
   type CarouselTemplateInput
 } from "./schema.js";
+import { CANVAS_ORDER, MASTER_FORMAT } from "./canvas.js";
 import { MAX_RESOLVABLE_SLIDES, MIN_SLIDES } from "./slides.js";
-import { fitsSafeArea } from "./validation.js";
+import { declaredCanvases, fitsSafeArea } from "./validation.js";
 import { familyDeckTemplate, familyDeckTemplates } from "./families.js";
 import { DECK_STYLES, isDeckStyle, type DeckStyle } from "./designs.js";
 import { parseRecipeTemplateId } from "./recipe.js";
@@ -26,6 +27,19 @@ export const deckFormats = {
   "instagram-story": { width: 1_080, height: 1_920, safeArea: { top: 0.14, right: 0.07, bottom: 0.16, left: 0.07 } },
   threads: { width: 1_200, height: 1_200, safeArea: { top: 0.07, right: 0.07, bottom: 0.09, left: 0.07 } }
 } as const;
+
+/**
+ * What every generated deck declares: 4:5 master, the other three by derivation.
+ *
+ * Honest rather than generous. These compositions place every text and logo frame inside the union
+ * of the four safe areas — the story's, which is the widest — which is the constraint
+ * `families.ts` describes and `SAFE_TOP`/`SAFE_BOTTOM` below enforce. A layout composed that way
+ * really does hold at 1:1 and 9:16, so it may say so; one composed for 4:5 alone may not, and gets
+ * the schema's default, which is the master and nothing else.
+ */
+export function deckCanvas(): { master: CarouselFormat; derive: CarouselFormat[] } {
+  return { master: MASTER_FORMAT, derive: ["instagram-square", "instagram-story", "threads"] };
+}
 
 const text = (
   slot: string,
@@ -119,6 +133,7 @@ const template = (input: Omit<CarouselTemplateInput, "schemaVersion" | "version"
   version: "1.0.0",
   status: "live",
   formats: deckFormats,
+  canvas: deckCanvas(),
   citedObservationRefs: input.citedObservationRefs ?? [],
   ...input
 });
@@ -831,12 +846,7 @@ export function fixturePayload(template: CarouselTemplate, locale: "en" | "cs" =
 }
 
 /** Every canvas the studio can render. The preview route's own enum, and nothing narrower. */
-const ALL_FORMATS: CarouselFormat[] = [
-  "instagram-square",
-  "instagram-portrait",
-  "instagram-story",
-  "threads"
-];
+const ALL_FORMATS: readonly CarouselFormat[] = CANVAS_ORDER;
 
 /**
  * The canvases a template should be offered in.
@@ -847,6 +857,11 @@ const ALL_FORMATS: CarouselFormat[] = [
  * platform's own chrome, and a layout designed for 4:5 places its logo and its closing line
  * squarely inside those bands.
  *
+ * Two gates now, in this order. The template's own `canvas` declaration decides what it is willing
+ * to be derived to — a template that declares nothing is offered its master alone — and the story
+ * keeps its geometric check on top, because declaring 9:16 and composing for it are still two
+ * different claims and only the second can be measured.
+ *
  * That distinction is load-bearing rather than cosmetic. The lifecycle's checks run over these
  * formats and `resolveLifecycleStatus` reads the result, so offering every template the story
  * would have demoted every existing live template to draft the moment the format was added —
@@ -855,5 +870,7 @@ const ALL_FORMATS: CarouselFormat[] = [
  */
 export function previewFormats(template?: CarouselTemplate): CarouselFormat[] {
   if (!template) return [...ALL_FORMATS];
-  return ALL_FORMATS.filter((format) => format !== "instagram-story" || fitsSafeArea(template, format));
+  const declared = new Set(declaredCanvases(template));
+  return ALL_FORMATS.filter((format) =>
+    declared.has(format) && (format !== "instagram-story" || fitsSafeArea(template, format)));
 }

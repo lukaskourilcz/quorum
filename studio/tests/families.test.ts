@@ -13,8 +13,9 @@ import {
   familyDeckTemplate,
   familyDeckTemplates,
   familyTemplateId,
-  fitsSafeArea,
+  declaredCanvases,
   deriveRecipe,
+  fitsSafeArea,
   livePresetsFor,
   liveTemplates,
   mayGoLive,
@@ -74,11 +75,14 @@ describe("the family library", () => {
     expect(familyDeckTemplates()).toHaveLength(FAMILY_COUNT * (MAX_RESOLVABLE_SLIDES - MIN_SLIDES + 1));
   });
 
-  it("passes all six checks for every family, brand and offered format", () => {
+  it("passes every check for every family, brand and offered format", () => {
     for (const family of DECK_FAMILIES) {
       for (let slideCount = MIN_SLIDES; slideCount <= MAX_RESOLVABLE_SLIDES; slideCount += 1) {
         const template = familyDeckTemplate(family, slideCount);
-        // Every family composes inside the union of the four safe areas, so all four are offered.
+        // Every family composes inside the union of the four safe areas, so all four are offered —
+        // and now says so in its own record rather than inheriting it. `declaredCanvases` is what
+        // the offer is read from; the length here is the claim that the declaration is complete.
+        expect(declaredCanvases(template), `${family}/${slideCount}`).toHaveLength(4);
         expect(previewFormats(template), `${family}/${slideCount}`).toHaveLength(4);
         for (const brand of brands) {
           for (const format of previewFormats(template)) {

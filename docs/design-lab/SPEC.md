@@ -17,7 +17,7 @@ rather than silently left standing:
 - **The specimen pages are generated, not ported.** `pnpm -C studio specimens` inlines the SVG
   `renderCarouselSvg` produced. A page cannot disagree with the engine because it *is* the
   engine's output — which is the opposite of the arrangement this file assumed.
-- **The library is twenty-eight families, not ten.** The founding ten are specified below.
+- **The library is thirty families, not ten.** The founding ten are specified below.
   Thirteen more landed on 2026-08-10 from that year's typography-led trends — `billboard`,
   `broadsheet`, `zurich`, `concrete`, `terminal`, `marginalia`, `memo`, `versus`, `tally`,
   `counterweight`, `throughline`, `quiet`, `offset` — and are specified by their composers and
@@ -26,6 +26,12 @@ rather than silently left standing:
   statement available that the language was enough. The five launch families of 2026-08-29 —
   `apex`, `rail`, `vista`, `fault`, `halo` — are the same kind of composition, and they are the
   only families `chooseFamily` deals unprompted; the rest of the library renders stored work.
+  `folio` and `press` joined them on 2026-09-15 and replaced `apex` and `vista` in the rotation.
+  The five dealt families are also the only ones that give slide two its own `hook` role: Instagram
+  re-serves an unfinished carousel opening on a slide the reader has not seen, so slide two is a
+  second entry point and is composed as one. Every other family keeps `body` there and therefore
+  renders the bytes a stored recipe was recorded with — `studio/tests/fixtures/legacy-family-hashes.json`
+  is the receipt.
 
 The engine gaps this file originally wrote against are fixed. **E1**: `contrastCheck` now walks
 the layer list and measures a text layer against the topmost opaque `shape`, gradient or duotone
@@ -44,6 +50,18 @@ so one generated family template is valid on square, portrait, story and Threads
 template is named `deck-<family>-<slideCount>`; non-canonical type scale and phase axes are encoded
 in the id and rebuilt on lookup rather than expanding the eager library into a lookup table.
 
+**One master, derivations by declaration.** `formats` says what each canvas measures; the
+`canvas` block says which of them the composition was made for. 1080 × 1350 is the master —
+`MASTER_FORMAT` and `MASTER_CANVAS` in `studio/src/canvas.ts` — because Instagram applies one
+orientation to every item of a post and 4:5 is the tallest frame the feed shows uncropped. The
+schema refuses a template whose portrait canvas is a different shape, within the one-percent
+tolerance Meta's own carousel guidance states. Every other canvas is a derivation the template
+lists in `canvas.derive`; `deckCanvas()` gives every generated deck all three, which is honest
+precisely because these compositions live inside the union of the four safe areas. A template
+that declares nothing gets the master and nothing else, which is what a stored `carousel-template/1`
+document written before the field existed now receives: it parses unchanged, renders the
+byte-identical slides it always did, and no longer claims three canvases nobody composed it for.
+
 The JSON documents below are the founding delivery's per-format design notation, not the objects
 the current composer emits. Real decks contain 5–8 selected passages (older stored references up
 to 10 still resolve), and `familyDeckTemplate` builds the cover, alternating/rotated body rhythm,
@@ -51,10 +69,12 @@ and outro for that exact count.
 
 ## Checks
 
-All twenty-eight families pass, at every resolvable deck length, in all four formats and all nine
+All thirty families pass, at every resolvable deck length, in all four formats and all ten
 brand skins. Separate regression assertions prove that A/B, type scale 0.9/1/1.1 and phase seeds
 0–3 materially change the rendering:
 
+- **canvas** — the requested format is the template's master or one of its declared derivations;
+  a render at any other canvas throws rather than being re-proportioned (`declaredCanvases`)
 - **safe area** — every `text` and `logo` frame inside the format's safe box (`fitsSafeArea`)
 - **overflow** — the resolved face's committed average advance plus tracking proves the declared
   character limit can fit at minimum size

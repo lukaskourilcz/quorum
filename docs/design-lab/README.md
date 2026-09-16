@@ -1,8 +1,8 @@
 # Design Lab — the template library
 
-Twenty-eight template families for article decks, and the editor workspace the owner drives them
+Thirty template families for article decks, and the editor workspace the owner drives them
 from at `/admin?venture=design-lab&tab=studio`. Only the five-family **launch rotation** is ever
-dealt unprompted; the other twenty-three stay registered so stored recipes keep rendering.
+dealt unprompted; the other twenty-five stay registered so stored recipes keep rendering.
 
 This folder started as a delivery an engineering agent was to build from. It is now the other way
 round: the engine is built, and these pages are read out of it. `SPEC.md` remains the template
@@ -25,26 +25,32 @@ composer is what ships.
 
 ## The launch rotation
 
-Five families built on 2026-08-29 from a study of what actually holds a swipe: a cover that stops
+Five families, built on 2026-08-29 from a study of what actually holds a swipe: a cover that stops
 the scroll with one oversized promise, one idea per slide, a drawn position and pager, and a
 closing slide that asks for exactly one thing. `LAUNCH_FAMILIES` names them and
 `chooseFamily` deals from nothing else; an article with a photograph draws from the photo-forward
 three. A live preset pool is the one override, and it may still name a legacy family — that is
 the owner narrowing to an explicit choice, not the engine reaching back.
 
+Five is the fixed size, not a fixed list. `folio` and `press` replaced `apex` and `vista` in the
+rotation on 2026-09-15 (`state/decisions/2026-09-15-design-lab-canva.md`); the two that stepped
+out stay registered and resolvable, like every other family that is no longer dealt. The numbers
+below are positions in `DECK_FAMILIES`, which is why they are not consecutive.
+
 | # | Family | Serves | Thesis |
 |---|---|---|---|
-| 24 | [`apex`](families/apex.html) | photo-forward | A statement poster on mesh depth: one oversized promise, ghost numerals pacing the body. |
+| 29 | [`folio`](families/folio.html) | photo-forward | An editorial folio: a precise masthead, a generous headline and a framed photograph, over numbered reading pages. |
+| 30 | [`press`](families/press.html) | photo-forward | Photo-led news: an edge-to-edge hero, small branding and a dense centred headline, over numbered body pages. |
 | 25 | [`rail`](families/rail.html) | type-only | A numbered list on a literal spine: an accent rail whose notches fill as the reader advances. |
-| 26 | [`vista`](families/vista.html) | photo-forward | A photo cover story: the photograph full-bleed, mono and portholed as the deck's one thread. |
 | 27 | [`fault`](families/fault.html) | type-only | A split argument: a hard diagonal seam between two grounds that flips side on every beat. |
 | 28 | [`halo`](families/halo.html) | photo-forward | A spotlight: a solid accent disc and a thin ring that move around the canvas as the deck advances. |
 
 ## The legacy library
 
 Ten from the founding delivery, thirteen added on 2026-08-10 from that year's typography-led
-design trends. Every one of them rides the same controls: the A/B variant, the photo treatment,
-type scale 0.9/1/1.1, the phase seed 0–3, and per-slide text. None of them is dealt unprompted
+design trends, and the two that stepped out of the rotation on 2026-09-15. Every one of them rides
+the same controls: the A/B variant, the photo treatment, type scale 0.9/1/1.1, the phase seed 0–3,
+and per-slide text. None of them is dealt unprompted
 any more — the owner's 2026-08-29 instruction was five ways to ship a carousel, not twenty-four —
 but each remains registered and resolvable because a stored recipe or pack that names one must
 keep rendering forever.
@@ -74,8 +80,10 @@ keep rendering forever.
 | 21 | [`throughline`](families/throughline.html) | type-only | A single line that enters, dips under the passage and leaves at the height the next slide begins on. |
 | 22 | [`quiet`](families/quiet.html) | quiet | One short block of type in a great deal of room, a mark the width of a fingernail, nothing else. |
 | 23 | [`offset`](families/offset.html) | type-only | The passage printed twice, the accent plate a few thousandths out of true under the foreground one. |
+| 24 | [`apex`](families/apex.html) | photo-forward | A statement poster on mesh depth: one oversized promise, ghost numerals pacing the body. Dealt until 2026-09-15. |
+| 26 | [`vista`](families/vista.html) | photo-forward | A photo cover story: the photograph full-bleed, mono and portholed as the deck's one thread. Dealt until 2026-09-15. |
 
-Together these are the **28 shared article families** named by `DECK_FAMILIES`. Tehdejší svět
+With the launch rotation above, these are the **30 shared article families** named by `DECK_FAMILIES`. Tehdejší svět
 also has a dedicated bilingual template kit in `studio/src/families-tehdejsi.ts`: Czech and
 Ukrainian are separate required slots on each slide, with Literata/Inter faces whose committed
 cmap coverage is tested. It is deliberately not a shared family because the shared family
@@ -88,7 +96,15 @@ Threads), and one recorded `carousel-recipe/1` per social set. A recipe chooses 
 accent swap, photo treatment, type scale and phase seed deterministically, while excluding the
 venture's two most recently used families when the pool allows it.
 
-WebDev Signal also has a dedicated `studio/src/families-webdev.ts` kit. It is not a 24th shared
+One of those four canvases is the master. Every recipe is rendered at 1080 × 1350, because
+Instagram gives one post one orientation and 4:5 is the tallest frame the feed shows uncropped;
+the other three are derivations, and a template says in its own `canvas` block which of them it
+was composed for. A render at a canvas the template does not declare is refused by the `canvas`
+check rather than re-proportioned, and a template that declares nothing is offered the master
+alone. The shared families declare all four, because they compose inside the union of the four
+safe areas.
+
+WebDev Signal also has a dedicated `studio/src/families-webdev.ts` kit. It is not a thirty-first shared
 article family: it consumes already accepted 4–6 panel social packages and fixes their semantic
 change/impact/action/source order without exposing the article recipe controls.
 
@@ -126,6 +142,47 @@ the real files. Composition, line breaks and type size are honest; the letterfor
 - No invented statistics, no fake interface elements, no fabricated quotes, no engagement
   ornament. The one family built around a number, Figure, says in its own spec that the slot
   takes an honest figure from the article or the family is not used.
+
+## The layout gate
+
+"Every layout is original and reviewed" is a promise until something enforces it. Five things do,
+and all five run in CI through `pnpm test`.
+
+**Nine checks, on every family, brand and canvas.** `validateTemplateForBrand` answers schema,
+canvas, platform limits, safe area, contrast, APCA, brand-token binding, overflow and originality,
+and `renderCarouselSvg` refuses a template that fails one — so an ungated layout cannot be drawn,
+previewed or exported. `studio/tests/families.test.ts` runs the set across 30 families × every
+deck length the splitter resolves × 10 brands × every offered format.
+
+**Two readability floors, measured over one set of grounds.** WCAG 2.x at 4.5:1 and APCA at
+Lc 40, both reading `textGroundPairs` so they cannot disagree about what sits behind a line of
+type. `TOKENS.md` carries the measurement that set the APCA floor and the gap to its published
+body-text level.
+
+**Platform limits on the template.** At most 20 slides, at most 10 through the guarded connector,
+and every declared canvas is a shape the feed shows uncropped. The PDF size and page limits in the
+source idea are recorded as not applicable: this repository produces a ZIP of PNGs and no PDF.
+
+**A committed golden render per family.** `studio/golden/manifest.json` holds a sha256 per slide
+and per deck for all 30 families at 1080 × 1350, one brand, one frozen Czech payload, every recipe
+axis pinned. `pnpm studio:golden:check` re-rasterises and fails on any drift; `studio/tests/golden.test.ts`
+is the same check inside the suite. Hashes rather than PNGs, and no pixel differ: resvg runs with
+`loadSystemFonts: false` against the thirty committed faces, so the bytes are identical rather
+than approximately identical, and a hash comparison is strictly stronger than a tolerance. Record
+a new baseline with `pnpm studio:golden -- --date YYYY-MM-DD` in the commit that changed the
+composition, never to make a red check green. That is also the cross-platform check: any second
+machine that runs `pnpm studio:golden:check` is verifying the same hashes. CI runs one operating
+system, because a second runner triples that job's minutes to re-prove a fact the renderer already
+engineers; adding one is an owner call recorded in `docs/NEEDED.md`.
+
+**A review record per family.** `studio/src/family-review.ts` holds a `Record<DeckFamily, …>`, so a
+new family fails `pnpm typecheck` until somebody writes its record. Each record pins the template
+version it covers, the composer module, the specimen page and the day the automated gate first
+covered it. `signOff` is `null` on all thirty, and that is the truthful state: no per-family owner
+review has been recorded here, and the gate does not invent one. `requireSignOff` is the switch to
+throw once the first layouts have been signed. The stored-template path has the same rule —
+`processStudioContribution` will not mark a `carousel-template/1` record `live` without an owner
+review beside its passing checks, whatever the room approved.
 
 ## Canva workflow
 

@@ -4,7 +4,7 @@ import {
   type CarouselTemplate,
   type CarouselTemplateInput
 } from "./schema.js";
-import { deckFormats } from "./library.js";
+import { deckCanvas, deckFormats } from "./library.js";
 import { BOTTOM, LEFT, MEASURE, RIGHT, TOP, rule, shape, text } from "./family-kit.js";
 
 /**
@@ -246,6 +246,7 @@ export function tehdejsiDeckTemplate(slideCount: number): CarouselTemplate {
       + "share-image grammar.",
     citedObservationRefs: [],
     formats: deckFormats,
+    canvas: deckCanvas(),
     // Both languages of every slide, plus the chrome. A package that lost half of itself fails
     // the render rather than drawing a card with a blank lower half.
     requiredSlots: [

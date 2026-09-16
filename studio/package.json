@@ -13,7 +13,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "golden"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
@@ -21,6 +22,8 @@
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "fonts:metrics": "tsx scripts/generate-font-metrics.ts",
+    "golden": "tsx scripts/golden.ts",
+    "golden:check": "tsx scripts/golden.ts --check",
     "specimens": "tsx scripts/specimens.ts"
   },
   "dependencies": {

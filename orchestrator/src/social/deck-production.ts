@@ -1,6 +1,7 @@
 import {
   ARTICLE_HERO_SLOT,
   CAROUSEL_BRANDS,
+  CONNECTOR_MAX_SLIDES,
   articleSlideSlot,
   buildArticleDeck,
   encodeRecipe,
@@ -37,9 +38,6 @@ import { recipePath } from "../studio/carousel-summary-store.js";
  * was registered for the five launch ventures precisely so this could run; an unregistered venture
  * is refused here and writes nothing at all, rather than rendering and being refused later.
  */
-
-/** How many frames a queue item may carry, which is the platform's own carousel limit. */
-const MAX_SLIDES = 10;
 
 export interface DeckRefusal {
   produced: false;
@@ -180,13 +178,16 @@ export async function produceDeck(input: {
   const brand = CAROUSEL_BRANDS[summary.venture as keyof typeof CAROUSEL_BRANDS];
   if (!brand) return { produced: false, reason: `${summary.venture} has no brand in the studio.` };
 
+  // Cut to the guarded Graph connector's cap, not the platform's: Instagram itself takes twenty.
+  // This was a local `MAX_SLIDES = 10` whose comment called ten "the platform's own carousel
+  // limit", which is how the two numbers came to be treated as one.
   const slides = buildArticleDeck({
     title: summary.headline,
     ...(summary.coverLine ? { coverLine: summary.coverLine } : {}),
     dek: summary.standfirst,
     points: [...summary.passages],
     outro: summary.closing
-  }).slice(0, MAX_SLIDES);
+  }).slice(0, CONNECTOR_MAX_SLIDES);
   const review = reviewDeck(slides);
   // A deck the studio's own review calls unpublishable is not queued for the owner to find out.
   if (!review.publishable) {

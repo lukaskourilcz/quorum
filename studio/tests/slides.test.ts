@@ -3,6 +3,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
+  INSTAGRAM_MAX_SLIDES,
+  INSTAGRAM_MIN_SLIDES,
   MAX_RESOLVABLE_SLIDES,
   MAX_SLIDES,
   QUEUE_MAX_SLIDES,
@@ -90,6 +92,11 @@ describe("a deck built from the one published article", () => {
     expect(review.slides.length).toBeGreaterThanOrEqual(MIN_SLIDES);
     expect(review.slides.length).toBeLessThanOrEqual(MAX_SLIDES);
     expect(review.slides[0]!.kind).toBe("cover");
+    // Slide two is the dek, and it now says it is the deck's second entry point. Instagram
+    // re-serves an unfinished carousel opening on a slide the reader has not seen, so a returning
+    // reader starts here; a family that knows that can compose it as an opening.
+    expect(review.slides[1]!.kind).toBe("hook");
+    expect(review.slides.filter((slide) => slide.kind === "hook")).toHaveLength(1);
     expect(review.slides.at(-1)!.kind).toBe("outro");
   });
 });
@@ -169,6 +176,25 @@ describe("how long a deck may be", () => {
     for (const slideCount of [9, 10]) {
       expect(built).toContain(`deck-spotlight-${slideCount}`);
     }
+  });
+
+  it("reports the platform's own bounds separately from the owner's band", () => {
+    /*
+     * Three limits, none of which is the others. Instagram accepts two to twenty items; the
+     * guarded Graph connector this repository publishes through carries at most ten; the band
+     * above is the owner's and is narrower than both. A deck outside the platform's range says so
+     * in the platform's words, so nobody reads "a deck may not exceed eight" as a platform fact
+     * again — that confusion is what put a connector limit in a comment calling it the platform's.
+     */
+    expect([INSTAGRAM_MIN_SLIDES, INSTAGRAM_MAX_SLIDES]).toEqual([2, 20]);
+    const single = [{ kind: "cover" as const, text: "Jedna věta." }];
+    expect(reviewDeck(single).problems[0]).toContain("Instagram needs at least 2 items");
+    const long = Array.from({ length: INSTAGRAM_MAX_SLIDES + 1 }, () => ({ kind: "body" as const, text: "Veta." }));
+    expect(reviewDeck(long).problems).toContain(
+      `Instagram accepts at most ${INSTAGRAM_MAX_SLIDES} items in one post; this deck has ${long.length}.`
+    );
+    // The owner's ceiling still fires too, and it is a different sentence.
+    expect(reviewDeck(long).problems.some((problem) => problem.startsWith("A deck may not exceed"))).toBe(true);
   });
 
   it("builds no deck template longer than the cap for anything to select", () => {

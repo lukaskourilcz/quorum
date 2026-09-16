@@ -9,7 +9,7 @@ import { DesignLabBilingualSlide } from "./design-lab-bilingual-slide";
 import { DesignLabInspector } from "./design-lab-inspector";
 import { SlideImage } from "./design-lab-image";
 import { useAdminWritesEnabled } from "./admin-write-mode";
-import { FORMATS, LAUNCH_FAMILIES, LOOKS, chipClass, saveable, slideUrl, token, type FormatId, type Recipe } from "./design-lab-model";
+import { FORMATS, LAUNCH_FAMILIES, LOOKS, MASTER_FORMAT_ID, chipClass, saveable, slideUrl, token, type FormatId, type Recipe } from "./design-lab-model";
 import { AdminButton as Button, AdminCallout as Callout, AdminEntityBadge, AdminInput, AdminLabel, AdminStateMessage, AdminStatusBadge as Badge } from "./admin-primitives";
 import type { LabArticle, LabPreset } from "@/lib/design-lab";
 
@@ -18,7 +18,9 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
   const router = useRouter();
   const [recipe, setRecipe] = useState<Recipe>(article.recipe);
   const [persistedRecipe, setPersistedRecipe] = useState<Recipe | null>(article.recipePinned ? article.recipe : null);
-  const [format, setFormat] = useState<FormatId>("instagram-portrait");
+  // The master canvas, and the default for the same reason it is the master: every recipe is
+  // rendered at 1080 × 1350 and the other canvases are derivations of it.
+  const [format, setFormat] = useState<FormatId>(MASTER_FORMAT_ID);
   const [safeArea, setSafeArea] = useState(true);
   const [slide, setSlide] = useState(0);
   const [texts, setTexts] = useState(article.slides.map((entry) => entry.text));
@@ -87,7 +89,7 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
     <div className="grid min-w-0 gap-5 p-3 md:p-5 xl:grid-cols-[minmax(0,1fr)_300px]">
       <div className="grid min-w-0 content-start gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap gap-1.5" aria-label="Formát návrhu">{FORMATS.map((entry) => <button key={entry.id} type="button" className={chipClass(format === entry.id)} aria-pressed={format === entry.id} onClick={() => setFormat(entry.id)}>{entry.label}</button>)}</div>
+          <div className="flex flex-wrap gap-1.5" aria-label="Formát návrhu">{FORMATS.map((entry) => <button key={entry.id} type="button" className={chipClass(format === entry.id)} aria-pressed={format === entry.id} title={entry.master ? "Hlavní plátno: 1080 × 1350" : "Odvozeno z hlavního plátna 1080 × 1350"} onClick={() => setFormat(entry.id)}>{entry.label}{entry.master ? " · hlavní" : ""}</button>)}</div>
           {format === "instagram-story" ? <button type="button" className={chipClass(safeArea)} aria-pressed={safeArea} onClick={() => setSafeArea((value) => !value)}>Bezpečná zóna</button> : null}
         </div>
         <div className="grid min-w-0 place-items-center rounded-xl border border-[var(--admin-border)] bg-[var(--admin-surface-elevated)] px-3 py-6 md:px-6" data-design-stage>

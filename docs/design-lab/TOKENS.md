@@ -63,6 +63,11 @@ positions inside the safe box use these ranges:
 | block | 0.070–0.090 | one text block to the next |
 | band | 0.11–0.16 | major zone change |
 
+A frame is a fraction of the canvas, so a square needs the canvas's own aspect to come out square:
+`MASTER_RATIO` in `studio/src/canvas.ts` is that number, and every disc, ring, notch and pager dot
+multiplies its width by it. Written as `1080 / 1350` it was an unnamed assumption in five
+composers; named, it is the master canvas.
+
 Common frame heights keep the same role at the same visual scale:
 
 | Element | Height | Notes |
@@ -93,13 +98,28 @@ accents, but every state also prints a textual label; the extra tokens never car
 
 The canonical receipt is executable rather than a hand-maintained ratio table:
 
-- `studio/tests/families.test.ts` pins **23** families and validates every deck length the
+- `studio/tests/families.test.ts` pins **30** families and validates every deck length the
   splitter can resolve, all **10** brands and all **4** formats. The dedicated WebDev Signal suite
   checks its 4–6 panel family only against its own brand and Instagram portrait export.
-- `validateTemplateForBrand` checks schema, safe area, contrast, brand-token binding, overflow
-  and originality; `renderCarouselSvg` refuses a failing template.
+- `validateTemplateForBrand` runs nine checks — schema, canvas, platform limits, safe area,
+  contrast, APCA, brand-token binding, overflow and originality; `renderCarouselSvg` refuses a
+  failing template.
 - Contrast walks the actual layer order. It measures text/logo colour against the slide ground
   and the topmost containing shape, gradient or duotone image, plus composited mesh colours.
+  `textGroundPairs` in `studio/src/grounds.ts` resolves that ground once, and both readability
+  measures read it, so the two can never disagree about what sits behind a line of type.
+- **APCA is the second floor, at `Lc 40`.** WCAG 2.x's ratio is polarity-blind and eight of the
+  ten skins are dark, which is where the ratio is weakest. The floor is measured rather than
+  borrowed: across 30 families × every resolvable deck length × 10 brands × every rendering —
+  78,750 pairs — the worst reads **Lc 41.2**, Door Money's `#ff4d3d` on `#24191c`, which clears
+  WCAG at 5.18:1. 14% of pairs sit below APCA's published body-text level of Lc 60 and 30% below
+  Lc 75; closing that is design work on the dark skins' quiet accents, and the floor rises when
+  the library does. The arithmetic is implemented in `studio/src/contrast-apca.ts` from the
+  published APCA-W3 `0.98G-4g` constants rather than taken from a package, and is an internal
+  quality floor, not an APCA conformance claim.
+- **Platform limits** are checked on the template, not only on the deck: at most 20 slides
+  (Instagram), at most 10 (the guarded connector), and every declared canvas is 1:1, 4:5 or 9:16.
+  This repository produces no PDF, so the PDF size and page limits in the source idea do not apply.
 - Untreated photographs are the honest limit: their article pixels are not known at template
   validation time, so photo-bearing designs rely on the declared scrim.
 - Overflow uses the resolved face's committed average advance and the layer's tracking. Runtime

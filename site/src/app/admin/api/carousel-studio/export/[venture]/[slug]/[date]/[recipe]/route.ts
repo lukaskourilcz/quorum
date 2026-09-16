@@ -4,6 +4,7 @@ import {
   CAROUSEL_BRANDS,
   CarouselFormatSchema,
   articleSlideSlot,
+  declaredCanvases,
   decodeRecipe,
   recipeTemplate,
   recipeTemplateId,
@@ -62,6 +63,19 @@ export async function GET(
     const template = deck.dualLanguage
       ? tehdejsiRenderInput(deck.dualLanguage, format.data, hero).template
       : recipeTemplate(recipe, deck.slides.length);
+    /*
+     * One deck, one canvas.
+     *
+     * Instagram gives a post one orientation, so a ZIP of slides rendered at a shape the layout
+     * was never composed for is not an export, it is a crop nobody asked for. The renderer would
+     * refuse this too — the canvas check runs on every render — but it would come back 500 with
+     * "Deck could not be exported", which tells the owner nothing they can act on.
+     */
+    if (!declaredCanvases(template).includes(format.data)) {
+      return Response.json({
+        error: `This design is composed for ${template.canvas.master} and does not offer ${format.data}.`
+      }, { status: 422 });
+    }
     // The owner's edits, exactly as the preview shows them. An export that disagreed with the
     // screen would be worse than no export.
     const strings = Object.fromEntries(deck.slides.map((entry, index) => [articleSlideSlot(index), entry.text]));
@@ -97,6 +111,10 @@ export async function GET(
         slug,
         date,
         format: format.data,
+        // Which canvas these bytes are, and which canvas the design calls its own. A manifest that
+        // recorded only the requested format could not say whether it was the master or a
+        // derivation of it.
+        canvas: { master: template.canvas.master, rendered: format.data, declared: declaredCanvases(template) },
         template: { template_id: deck.dualLanguage ? template.id : recipeTemplateId(recipe, deck.slides.length), version: template.version },
         recipe,
         storyLine: deck.copy.copy.storyLine,

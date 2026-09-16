@@ -1,12 +1,23 @@
 import type { LabArticle } from "@/lib/design-lab";
 
+/**
+ * The canvases the Lab offers, with the master marked.
+ *
+ * 4:5 is the master and the others are derivations: Instagram applies one orientation to every
+ * item of a post, so a deck is rendered at one canvas and the rest are variants of it. Which
+ * derivations a given design actually offers is the template's own declaration, and the render
+ * routes are the authority on it — a canvas a template does not declare comes back 422 rather
+ * than rendered at a shape nobody composed. It is not restated here, because a second copy of
+ * that list in a client component is a list that will disagree with the engine.
+ */
 export const FORMATS = [
-  { id: "instagram-portrait", label: "Příspěvek 4:5", ratio: 1080 / 1350, width: 1080, height: 1350 },
-  { id: "instagram-square", label: "Čtverec 1:1", ratio: 1, width: 1080, height: 1080 },
-  { id: "instagram-story", label: "Story 9:16", ratio: 1080 / 1920, width: 1080, height: 1920 },
-  { id: "threads", label: "Threads", ratio: 1, width: 1080, height: 1080 }
+  { id: "instagram-portrait", label: "Příspěvek 4:5", ratio: 1080 / 1350, width: 1080, height: 1350, master: true },
+  { id: "instagram-square", label: "Čtverec 1:1", ratio: 1, width: 1080, height: 1080, master: false },
+  { id: "instagram-story", label: "Story 9:16", ratio: 1080 / 1920, width: 1080, height: 1920, master: false },
+  { id: "threads", label: "Threads", ratio: 1, width: 1080, height: 1080, master: false }
 ] as const;
 export type FormatId = (typeof FORMATS)[number]["id"];
+export const MASTER_FORMAT_ID: FormatId = "instagram-portrait";
 
 // Kept browser-only; the registry parity test prevents drift without bundling the renderer.
 export const LAUNCH_FAMILIES = ["folio", "press", "rail", "fault", "halo"] as const;

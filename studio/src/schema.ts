@@ -1,11 +1,7 @@
 import { z } from "zod";
+import { CANVAS_ORDER, CANVAS_RATIO_TOLERANCE, MASTER_FORMAT, MASTER_RATIO, canvasRatio, ratiosAgree } from "./canvas.js";
 
-export const CarouselFormatSchema = z.enum([
-  "instagram-square",
-  "instagram-portrait",
-  "instagram-story",
-  "threads"
-]);
+export const CarouselFormatSchema = z.enum(CANVAS_ORDER);
 
 export const TemplateStatusSchema = z.enum(["draft", "live", "deprecated"]);
 
@@ -196,6 +192,34 @@ const FormatSpecSchema = z.object({
   })
 });
 
+/**
+ * Which canvas this layout is drawn for, and which others it declares itself derivable to.
+ *
+ * `formats` says what each canvas measures; this says which of them the composition was actually
+ * made for. They are different questions and conflating them is how a 4:5 deck came to be offered
+ * as a square: every template carried four canvas declarations because the record had nowhere to
+ * say "this one, and these by derivation".
+ *
+ * Defaulted, and the default is the master alone. A stored document written before this field
+ * existed still parses and still renders the byte-identical slides it always did — what it no
+ * longer does is claim three canvases nobody composed it for. Narrowing is the safe direction:
+ * `resolveLifecycleStatus` reads the checks run over the offered formats, so offering fewer can
+ * never demote a template, while offering more is exactly what demoted the gallery when the story
+ * canvas arrived.
+ */
+const CanvasSchema = z.object({
+  master: CarouselFormatSchema.default(MASTER_FORMAT),
+  /** Other canvases this composition is honest at. The master is implied and may not repeat here. */
+  derive: z.array(CarouselFormatSchema).max(3).default([])
+}).superRefine((canvas, context) => {
+  if (canvas.derive.includes(canvas.master)) {
+    context.addIssue({ code: "custom", message: "The master canvas is implied and may not be repeated in derive", path: ["derive"] });
+  }
+  if (new Set(canvas.derive).size !== canvas.derive.length) {
+    context.addIssue({ code: "custom", message: "A derived canvas may be declared only once", path: ["derive"] });
+  }
+});
+
 export const CarouselTemplateSchema = z.object({
   schemaVersion: z.literal("carousel-template/1"),
   id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -223,9 +247,26 @@ export const CarouselTemplateSchema = z.object({
     }),
     threads: FormatSpecSchema
   }),
+  canvas: CanvasSchema.default({ master: MASTER_FORMAT, derive: [] }),
   requiredSlots: z.array(SlotNameSchema).min(1).max(30),
   slides: z.array(SlideSchema).min(1).max(10)
 }).superRefine((template, context) => {
+  /*
+   * The master canvas has to be the shape it claims.
+   *
+   * 4:5 is not a preference here, it is the frame Meta's carousel guidance recommends and the
+   * one every delivered deck is rendered at. A template whose portrait canvas is some other
+   * shape would render at a size the feed crops, and nothing downstream would say so — the
+   * renderer reads `formats[format]` and draws whatever it finds.
+   */
+  const portrait = template.formats["instagram-portrait"];
+  if (!ratiosAgree(canvasRatio(portrait), MASTER_RATIO)) {
+    context.addIssue({
+      code: "custom",
+      message: `The portrait canvas must hold the ${MASTER_RATIO.toFixed(2)} master ratio within ${CANVAS_RATIO_TOLERANCE * 100}%`,
+      path: ["formats", "instagram-portrait"]
+    });
+  }
   const slideIds = template.slides.map((slide) => slide.id);
   if (new Set(slideIds).size !== slideIds.length) {
     context.addIssue({ code: "custom", message: "Slide ids must be unique", path: ["slides"] });

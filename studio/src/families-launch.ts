@@ -6,6 +6,7 @@ import {
   bodyTop,
   drawnIndex,
   hero,
+  hookMark,
   pagerDots,
   rule,
   shape,
@@ -15,6 +16,7 @@ import {
   type Context,
   type FamilySpec
 } from "./family-kit.js";
+import { MASTER_RATIO } from "./canvas.js";
 import type { CarouselLayerInput } from "./schema.js";
 import type { DeckFamily } from "./designs.js";
 
@@ -54,7 +56,7 @@ function ghostOn(ground: Context["ground"]): string {
  */
 function crest(colorToken = "muted", fontToken: "headline" | "mono" = "mono"): CarouselLayerInput[] {
   return [
-    shape(LEFT, TOP + 0.004, 0.012, 0.012 * (1_080 / 1_350), { fillToken: "accent", radius: 0.5 }),
+    shape(LEFT, TOP + 0.004, 0.012, 0.012 * MASTER_RATIO, { fillToken: "accent", radius: 0.5 }),
     { type: "logo", x: LEFT + 0.026, y: TOP, width: 0.32, height: 0.022, colorToken, fontToken }
   ];
 }
@@ -145,7 +147,7 @@ const apex: Composer = ({ slot, index, slideCount, role, beat, ground }) => {
  */
 const rail: Composer = ({ slot, index, slideCount, role, beat, ground }) => {
   const spineNotches = Array.from({ length: slideCount }, (_, notch) =>
-    shape(0.021, 0.2 + notch * 0.052, 0.018, 0.018 * (1_080 / 1_350), {
+    shape(0.021, 0.2 + notch * 0.052, 0.018, 0.018 * MASTER_RATIO, {
       fillToken: notch <= index ? "accent" : ghostOn(ground),
       radius: 0.5
     }));
@@ -168,6 +170,22 @@ const rail: Composer = ({ slot, index, slideCount, role, beat, ground }) => {
   }
   if (role === "outro") {
     return [...spine, ...crest(), ...ctaCard(slot, 0.32, 0.42), wordmark("accent", "mono")];
+  }
+  if (role === "hook") {
+    // The list's first point, set as an opening rather than as item one: the entry mark instead
+    // of the numeral, the frame starting where the cover's headline does, and a ceiling between
+    // the cover's and the body's. Same column, same floor, so the reading measure never moves.
+    return [
+      ...spine,
+      ...hookMark(LEFT + 0.02, TOP + 0.02, ground),
+      text(slot, LEFT + 0.06, bodyTop(0.14), MEASURE - 0.1, 0.44, {
+        fontWeight: 700,
+        minFontSize: 32,
+        maxFontSize: 112,
+        maxChars: 220,
+        maxLines: 7
+      })
+    ];
   }
   return [
     ...spine,
@@ -222,8 +240,8 @@ const vista: Composer = ({ slot, index, slideCount, role, beat, ground }) => {
   }
   if (role === "outro") {
     return [
-      shape(0.62, 0.16, 0.26, 0.26 * (1_080 / 1_350), { fillToken: ghostOn(ground), radius: 0.5, strokeToken: "accent", strokeWidth: 5 }),
-      hero(0.63, 0.168, 0.24, 0.24 * (1_080 / 1_350), { clip: "circle", reprise: true, treatment: "mono", scrim: "none" }),
+      shape(0.62, 0.16, 0.26, 0.26 * MASTER_RATIO, { fillToken: ghostOn(ground), radius: 0.5, strokeToken: "accent", strokeWidth: 5 }),
+      hero(0.63, 0.168, 0.24, 0.24 * MASTER_RATIO, { clip: "circle", reprise: true, treatment: "mono", scrim: "none" }),
       ...crest(),
       ...ctaCard(slot, 0.44, 0.34),
       wordmark("accent", "mono"),
@@ -248,8 +266,8 @@ const vista: Composer = ({ slot, index, slideCount, role, beat, ground }) => {
   }
   if (beat.step === 1) {
     return [
-      shape(0.5, 0.17, 0.4, 0.4 * (1_080 / 1_350), { fillToken: ghostOn(ground), radius: 0.5, strokeToken: "accent", strokeWidth: 5 }),
-      hero(0.512, 0.178, 0.376, 0.376 * (1_080 / 1_350), { clip: "circle", treatment: "mono", scrim: "none" }),
+      shape(0.5, 0.17, 0.4, 0.4 * MASTER_RATIO, { fillToken: ghostOn(ground), radius: 0.5, strokeToken: "accent", strokeWidth: 5 }),
+      hero(0.512, 0.178, 0.376, 0.376 * MASTER_RATIO, { clip: "circle", treatment: "mono", scrim: "none" }),
       ...crest(),
       text(slot, LEFT, bodyTop(0.24), 0.4, 0.46, {
         fontWeight: 700,
@@ -292,7 +310,7 @@ const fault: Composer = ({ slot, index, slideCount, role, beat, ground, phase })
       { colorToken: "background", offset }
     ]
   });
-  const pivot = shape(0.14 + phase * 0.66, 0.7 - phase * 0.42, 0.026, 0.026 * (1_080 / 1_350), { fillToken: "accent", radius: 0.5 });
+  const pivot = shape(0.14 + phase * 0.66, 0.7 - phase * 0.42, 0.026, 0.026 * MASTER_RATIO, { fillToken: "accent", radius: 0.5 });
   if (role === "cover") {
     return [
       seam(206, 0.42),
@@ -314,6 +332,24 @@ const fault: Composer = ({ slot, index, slideCount, role, beat, ground, phase })
   }
   if (role === "outro") {
     return [seam(180, 0.46), ...crest(), ...ctaCard(slot, 0.48, 0.24), pivot, wordmark("muted", "mono"), ...pagerDots(index, slideCount, ground)];
+  }
+  if (role === "hook") {
+    // A level seam rather than a diagonal: the zigzag is the body's rhythm and a re-served reader
+    // has no previous slide to zigzag from. The mark takes the numeral's place at the head of the
+    // column and the type ceiling rises toward the cover's.
+    return [
+      seam(180, 0.5),
+      ...hookMark(LEFT, TOP + 0.02, ground),
+      text(slot, LEFT, bodyTop(0.16), 0.66, 0.42, {
+        fontWeight: 800,
+        minFontSize: 32,
+        maxFontSize: 116,
+        maxChars: 220,
+        maxLines: 7
+      }),
+      pivot,
+      ...pagerDots(index, slideCount, ground)
+    ];
   }
   const leftward = beat.side === "left";
   return [
@@ -343,9 +379,9 @@ const fault: Composer = ({ slot, index, slideCount, role, beat, ground, phase })
  */
 const halo: Composer = ({ slot, index, slideCount, role, beat, ground }) => {
   const disc = (x: number, y: number, size: number, fillToken = "accent"): CarouselLayerInput =>
-    shape(x, y, size, size * (1_080 / 1_350), { fillToken, radius: 0.5 });
+    shape(x, y, size, size * MASTER_RATIO, { fillToken, radius: 0.5 });
   const ring = (x: number, y: number, size: number): CarouselLayerInput =>
-    shape(x, y, size, size * (1_080 / 1_350), { fillToken: ghostOn(ground), radius: 0.5, strokeToken: "accent", strokeWidth: 4 });
+    shape(x, y, size, size * MASTER_RATIO, { fillToken: ghostOn(ground), radius: 0.5, strokeToken: "accent", strokeWidth: 4 });
   if (role === "cover") {
     return [
       disc(0.7, 0.755, 0.3),
@@ -380,10 +416,29 @@ const halo: Composer = ({ slot, index, slideCount, role, beat, ground }) => {
     { discX: 0.72, discY: 0.7, size: 0.2, ringX: 0.72, ringY: 0.06, ringSize: 0.24 },
     { discX: 0.78, discY: 0.08, size: 0.14, ringX: 0.7, ringY: 0.56, ringSize: 0.3 }
   ][beat.step]!;
+  if (role === "hook") {
+    // The seat still moves with the beat, so the spotlight keeps travelling; what changes is the
+    // head of the column — the entry mark rather than a position — and a taller frame with the
+    // ceiling raised toward the cover's.
+    return [
+      disc(seat.discX, seat.discY, seat.size),
+      ring(seat.ringX, seat.ringY, seat.ringSize),
+      hero(seat.ringX + 0.012, seat.ringY + 0.008, seat.ringSize - 0.024, (seat.ringSize - 0.024) * MASTER_RATIO, { clip: "circle", treatment: "mono", scrim: "none" }),
+      ...hookMark(LEFT, TOP + 0.02, ground),
+      text(slot, LEFT, bodyTop(0.14), 0.6, 0.46, {
+        fontWeight: 800,
+        minFontSize: 28,
+        maxFontSize: 116,
+        maxChars: 200,
+        maxLines: 9
+      }),
+      ...pagerDots(index, slideCount, ground)
+    ];
+  }
   return [
     disc(seat.discX, seat.discY, seat.size),
     ring(seat.ringX, seat.ringY, seat.ringSize),
-    hero(seat.ringX + 0.012, seat.ringY + 0.008, seat.ringSize - 0.024, (seat.ringSize - 0.024) * (1_080 / 1_350), { clip: "circle", treatment: "mono", scrim: "none" }),
+    hero(seat.ringX + 0.012, seat.ringY + 0.008, seat.ringSize - 0.024, (seat.ringSize - 0.024) * MASTER_RATIO, { clip: "circle", treatment: "mono", scrim: "none" }),
     ...drawnIndex(index + 1, LEFT, TOP, 0.055, 0.1, 0.015, "accent"),
     text(slot, LEFT, bodyTop(0.22), 0.6, 0.42, {
       fontWeight: 800,
