@@ -2,11 +2,13 @@ import { atomicWriteJson, readJson } from "../state.js";
 import {
   assertTextReservation,
   BudgetLedgerEntrySchema,
+  DEFAULT_BUDGET_LIMITS,
   estimateTextCall,
   hasLedgerEntry,
   type BudgetLedgerEntry,
   type ReserveContext
 } from "../budget.js";
+import { recordDailyPaceNotice } from "../finance/budget-alert.js";
 import {
   readCachedResponse,
   requestHash,
@@ -276,9 +278,19 @@ export async function guardedJsonCall<T>(
       usd: actual.estimatedUsd,
       kind: "text"
     });
+    const entries = [...ledger.entries, entry];
     await atomicWriteJson(request.stateRoot, "budget/ledger.json", {
       schemaVersion: 1,
-      entries: [...ledger.entries, entry]
+      entries
+    });
+    // The pace notice reads the ledger this write just extended, against the same resolved cap
+    // the reservation was checked with, so "first reached 80 percent" is decided at the moment
+    // the entry that crossed it becomes durable and never from a stale copy.
+    await recordDailyPaceNotice({
+      root: request.stateRoot,
+      ledger: entries,
+      now: request.budgetContext.now,
+      limits: request.budgetContext.limits ?? DEFAULT_BUDGET_LIMITS
     });
   }
 

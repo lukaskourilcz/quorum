@@ -1,3 +1,4 @@
+import { dailyBudgetStatus, type BudgetLedgerEntry, type BudgetLimits, type DailyBudgetStatus } from "../budget.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 
 export interface AllInCostEntry {
@@ -60,14 +61,66 @@ function breakdown(status: AllInBudgetStatus): string {
   return Object.entries(status.byVenture).sort(([left], [right]) => left.localeCompare(right)).map(([venture, usd]) => `${venture}: $${usd.toFixed(2)}`).join(", ") || "no tagged costs";
 }
 
-async function addInboxOnce(root: string, id: string, detail: string): Promise<void> {
+/**
+ * The two kinds of item the orchestrator appends to `state/INBOX.md`: an approval the owner has
+ * to countersign, and a notice the owner only has to read. The owner-attention collector picks
+ * up HUMAN_APPROVAL lines and nothing else, so a notice never shows up as something to sign.
+ */
+export type InboxItemKind = "HUMAN_APPROVAL" | "INBOX";
+
+/**
+ * Append one stable item to the inbox, once. A second call with the same id writes nothing,
+ * which is what lets a cycle that runs three times a day raise a condition exactly once.
+ */
+export async function addInboxOnce(root: string, id: string, detail: string, kind: InboxItemKind = "HUMAN_APPROVAL"): Promise<boolean> {
   const current = await readText(root, "INBOX.md", "# Human approval queue\n\n## Pending\n\nNone.\n\n## Resolved\n");
-  if (current.includes(id)) return;
-  const item = `- [ ] HUMAN_APPROVAL ${id} — ${detail}`;
+  if (current.includes(id)) return false;
+  const item = `- [ ] ${kind} ${id} — ${detail}`;
   const next = current.includes("## Pending\n\nNone.")
     ? current.replace("## Pending\n\nNone.", `## Pending\n\n${item}`)
     : current.replace("## Resolved", `${item}\n\n## Resolved`);
   await atomicWriteText(root, "INBOX.md", next);
+  return true;
+}
+
+/** The share of the daily cap at which the owner is told the day is running hot. */
+export const DAILY_PACE_NOTICE_RATIO = 0.8;
+
+/**
+ * Whether the day's recorded model spend has reached the notice share of the cap.
+ *
+ * Compared with a tolerance because the cap and the share are decimal: 0.7 × 0.8 is
+ * 0.5599999999999999 in binary, and a ledger that holds exactly $0.56 must count as reaching it.
+ */
+export function dailyPaceReached(status: Pick<DailyBudgetStatus, "spentUsd" | "capUsd">): boolean {
+  if (!(status.capUsd > 0)) return false;
+  return status.spentUsd / status.capUsd >= DAILY_PACE_NOTICE_RATIO - 1e-9;
+}
+
+export function dailyPaceNoticeId(date: string): string {
+  return `BUDGET-PACE-${date}`;
+}
+
+/**
+ * Tell the owner, once per calendar day, that model spend has reached 80 percent of the daily cap.
+ *
+ * A notice, not an approval: the cap still refuses at 100 percent, nothing here raises or moves
+ * it, and the owner-attention collector does not list it as something to sign. The day is the
+ * cap's own day — the UTC day `daySpendUsd` slices the ledger on — so the notice can never name a
+ * day the cap is not counting.
+ */
+export async function recordDailyPaceNotice(input: {
+  root: string;
+  ledger: readonly BudgetLedgerEntry[];
+  now: Date;
+  limits: BudgetLimits;
+}): Promise<"not-reached" | "recorded" | "already-recorded"> {
+  const status = dailyBudgetStatus(input.ledger, input.now, input.limits);
+  if (!dailyPaceReached(status)) return "not-reached";
+  const date = input.now.toISOString().slice(0, 10);
+  const detail = `Model spend reached ${Math.round(DAILY_PACE_NOTICE_RATIO * 100)} % of the $${status.capUsd.toFixed(2)} daily cap: $${status.spentUsd.toFixed(4)} recorded by ${input.now.toISOString().slice(11, 16)} UTC. A notice, not an approval — the cap still refuses at 100 % and nothing here raises it.`;
+  const written = await addInboxOnce(input.root, dailyPaceNoticeId(date), detail, "INBOX");
+  return written ? "recorded" : "already-recorded";
 }
 
 export async function sendBudgetAlert(input: {

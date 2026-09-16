@@ -7,8 +7,8 @@ import {
 import type { MeetingRecord } from "../contracts/meeting-record.js";
 import type { ResolvedMeetingSlot } from "../ventures/registry.js";
 import { safeFetch } from "../security/url.js";
-import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
-import { budgetWarningLine, type AllInBudgetStatus } from "../finance/budget-alert.js";
+import { atomicWriteJson, readJson } from "../state.js";
+import { addInboxOnce, budgetWarningLine, type AllInBudgetStatus } from "../finance/budget-alert.js";
 import type { DigestOperation } from "../contracts/daily-digest.js";
 
 const REQUIRED_DIGESTS_PER_MONTH = 31;
@@ -239,16 +239,6 @@ export function dailyDigestSinkFromEnvironment(input: {
   });
 }
 
-async function addInboxOnce(root: string, id: string, detail: string): Promise<void> {
-  const current = await readText(root, "INBOX.md", "# Human approval queue\n\n## Pending\n\nNone.\n\n## Resolved\n");
-  if (current.includes(id)) return;
-  const item = `- [ ] INBOX ${id} — ${detail}`;
-  const next = current.includes("## Pending\n\nNone.")
-    ? current.replace("## Pending\n\nNone.", `## Pending\n\n${item}`)
-    : current.replace("## Resolved", `${item}\n\n## Resolved`);
-  await atomicWriteText(root, "INBOX.md", next);
-}
-
 export async function sendDailyDigest(input: {
   digest: DailyDigest;
   sink: DailyDigestSink;
@@ -278,7 +268,7 @@ export async function sendDailyDigest(input: {
     return "sent";
   } catch (error) {
     if (error instanceof DigestTierError) {
-      await addInboxOnce(input.stateRoot, "DAILY-DIGEST-TIER-UNVERIFIED", "Configured Resend limits do not cover one daily digest. No paid tier is authorized.");
+      await addInboxOnce(input.stateRoot, "DAILY-DIGEST-TIER-UNVERIFIED", "Configured Resend limits do not cover one daily digest. No paid tier is authorized.", "INBOX");
     }
     await atomicWriteJson(input.stateRoot, relative, {
       schemaVersion: 1,
