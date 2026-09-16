@@ -3,6 +3,7 @@ export * from "./fonts.js";
 export * from "./font-metrics.generated.js";
 export * from "./text.js";
 export * from "./validation.js";
+export * from "./platform-limits.js";
 export * from "./renderer.js";
 export * from "./lifecycle.js";
 export * from "./designs.js";

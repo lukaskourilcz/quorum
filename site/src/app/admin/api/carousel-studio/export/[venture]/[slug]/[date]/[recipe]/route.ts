@@ -4,12 +4,14 @@ import {
   CAROUSEL_BRANDS,
   CarouselFormatSchema,
   articleSlideSlot,
+  deckLimitFailures,
   decodeRecipe,
   recipeTemplate,
   recipeTemplateId,
   recipeVariant,
   renderCaption,
-  renderCarouselPng
+  renderCarouselPng,
+  validateDeckLimits
 } from "@boardlessai/carousel-studio";
 import { adminAuthorizationError, verifyAdminRequest } from "@/lib/admin-request-auth";
 import { readDesignLab } from "@/lib/design-lab";
@@ -79,6 +81,14 @@ export async function GET(
           ...(hero ? { images: { [ARTICLE_HERO_SLOT]: hero } } : {})
         });
 
+    // The deck-level gate, on the bytes that would ship: a deck the platforms would refuse is
+    // refused here, with the check's own detail as the reason, rather than handed to a phone.
+    const platformLimits = validateDeckLimits(slides.map((slide) => ({ format: slide.format, pngBytes: slide.png.byteLength })));
+    const refused = deckLimitFailures(platformLimits);
+    if (refused.length > 0) {
+      return Response.json({ error: refused.map((check) => check.detail).join(" ") }, { status: 422 });
+    }
+
     const encoder = new TextEncoder();
     const caption = deck.dualLanguage
       ? `CS\n${deck.dualLanguage.captionCs}\n\nUA\n${deck.dualLanguage.captionUa}`
@@ -101,6 +111,7 @@ export async function GET(
         recipe,
         storyLine: deck.copy.copy.storyLine,
         attribution: deck.heroCredit,
+        platformLimits,
         slides: slides.map((slide) => ({
           index: slide.index + 1,
           file: `${venture}-${date}-slide-${String(slide.index + 1).padStart(2, "0")}.png`,

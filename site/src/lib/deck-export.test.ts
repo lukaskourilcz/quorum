@@ -29,6 +29,7 @@ describe("the whole-deck export", () => {
     await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
     vi.resetModules();
     vi.unstubAllEnvs();
+    vi.doUnmock("@boardlessai/carousel-studio");
   });
 
   async function fixture(): Promise<string> {
@@ -284,4 +285,35 @@ describe("the whole-deck export", () => {
     expect(new TextDecoder().decode(files["manifest.json"])).toContain("Photo by J. Novák, CC BY-SA 4.0");
     expect(Object.keys(files).filter((name) => name.endsWith(".png"))).toHaveLength(3);
   }, 180_000);
+
+  it("refuses a deck the platforms would refuse, with the check's own detail as the reason", async () => {
+    const root = await fixture();
+    vi.resetModules();
+    vi.stubEnv("BOARDLESSAI_REPO_ROOT", root);
+    vi.stubEnv("ADMIN_USER", "owner");
+    vi.stubEnv("ADMIN_PASSWORD", "secret");
+    // The renderer, with its first slide reporting a different canvas: the one thing the
+    // deck-level gate exists to catch and the one thing a real recipe cannot produce.
+    vi.doMock("@boardlessai/carousel-studio", async (importOriginal) => {
+      const actual = await importOriginal<typeof import("@boardlessai/carousel-studio")>();
+      return {
+        ...actual,
+        renderCarouselPng: async (input: Parameters<typeof actual.renderCarouselPng>[0]) => (await actual.renderCarouselPng(input))
+          .map((slide, index) => index === 0 ? { ...slide, format: "instagram-square" as const } : slide)
+      };
+    });
+
+    const { createAdminSessionToken, ADMIN_SESSION_COOKIE } = await import("./admin-session");
+    const { GET } = await import("@/app/admin/api/carousel-studio/export/[venture]/[slug]/[date]/[recipe]/route");
+    const response = await GET(
+      new Request("https://example.test/x?format=instagram-portrait", {
+        headers: { cookie: `${ADMIN_SESSION_COOKIE}=${createAdminSessionToken("owner", "secret")}` }
+      }),
+      { params: Promise.resolve({ venture: "mma-files", slug: "fixture-article", date: "2026-08-04", recipe: RECIPE }) }
+    );
+    expect(response.status).toBe(422);
+    const body = await response.json() as { error: string };
+    expect(body.error).toContain("Instagram applies one canvas to every item");
+    expect(body.error).toContain("instagram-square");
+  });
 });
