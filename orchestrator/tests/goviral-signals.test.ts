@@ -14,6 +14,7 @@ import {
   computeHashtagSignals,
   type TrendItem
 } from "../src/sources/goviral-trends.js";
+import { buildGoViralWeeklyBrief, readingMinutes, summaryWithReadingTime } from "../src/portfolio/goviral-brief.js";
 
 const now = new Date("2026-09-14T12:00:00.000Z");
 
@@ -170,5 +171,37 @@ describe("a snapshot stored before the vocabulary existed", () => {
     expect(parsed.signals.topHashtags[0]).toMatchObject({ window: "7d", status: "active", breadth: 1, label: null });
     expect(parsed.freeSignals[0]?.signals[0]).toMatchObject({ window: "24h", status: "active", breadth: 1, label: null });
     expect(parsed.forMagazines.ai[0]).toMatchObject({ window: "7d", status: "active", breadth: 1, label: null });
+  });
+});
+
+describe("the brief's counter-case and reading time", () => {
+  const contributions = [
+    { agent: "PULSE", summary: "Two calls this week and one skip.", evidenceRefs: [], idea: { title: "Owner: the cost piece", summary: "Write the piece about what an agent day actually costs." }, stance: "plan" as const },
+    { agent: "SCOUT", summary: "Skipped #celebfeud: a peaked tragedy outside every pillar.", evidenceRefs: [], idea: null, stance: "pass" as const },
+    { agent: "AUDIT", summary: "No posting or spend proposed; the celebrity item stays out.", evidenceRefs: [], idea: null, stance: "pass" as const }
+  ];
+
+  it("renders one Haters tactic from AUDIT's seat and the trends the room passed on", () => {
+    const brief = buildGoViralWeeklyBrief({ date: "2026-09-14", trends: null, contributions, vetoed: false });
+    const haters = brief.tactics.filter((tactic) => tactic.description.startsWith("Haters: "));
+    expect(haters).toHaveLength(1);
+    expect(haters[0]?.description).toBe("Haters: AUDIT reviewed — No posting or spend proposed; the celebrity item stays out. SCOUT passed: Skipped #celebfeud: a peaked tragedy outside every pillar.");
+    const vetoed = buildGoViralWeeklyBrief({ date: "2026-09-14", trends: null, contributions: contributions.map((contribution) => contribution.agent === "AUDIT" ? { ...contribution, stance: "veto" as const } : contribution), vetoed: true });
+    expect(vetoed.tactics.find((tactic) => tactic.description.startsWith("Haters: "))?.description).toContain("AUDIT vetoed —");
+  });
+
+  it("never invents a Haters line for a room without an AUDIT contribution", () => {
+    const brief = buildGoViralWeeklyBrief({ date: "2026-09-14", trends: null, contributions: contributions.filter((contribution) => contribution.agent !== "AUDIT"), vetoed: false });
+    expect(brief.tactics.some((tactic) => tactic.description.startsWith("Haters: "))).toBe(false);
+  });
+
+  it("puts the reading time on the summary and keeps the contract's cap", () => {
+    expect(readingMinutes([{ description: "one two three" }])).toBe(1);
+    expect(readingMinutes([{ description: Array.from({ length: 201 }, () => "word").join(" ") }])).toBe(2);
+    const brief = buildGoViralWeeklyBrief({ date: "2026-09-14", trends: null, contributions, vetoed: false });
+    expect(brief.summary).toBe("Two calls this week and one skip. · ~1 min");
+    const long = summaryWithReadingTime("x".repeat(400), 3);
+    expect(long.length).toBe(280);
+    expect(long.endsWith(" · ~3 min")).toBe(true);
   });
 });

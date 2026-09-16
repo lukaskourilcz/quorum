@@ -19,7 +19,14 @@ export interface BriefContribution {
   summary: string;
   evidenceRefs: readonly string[];
   idea: { title: string; summary: string } | null;
+  /** The seat's stance, when the room recorded one. A pass is the record of a skipped trend. */
+  stance?: "plan" | "pass" | "veto";
 }
+
+type Tactic = MarketingPlan["tactics"][number];
+
+/** The owner reads at about this pace; the brief says how long it takes before it starts. */
+export const READING_WORDS_PER_MINUTE = 200;
 
 export function goViralBriefId(date: string): string {
   return `plan-${date}-weekly-brief`;
@@ -60,6 +67,40 @@ function trendCalls(trends: GoViralTrends | null): string[] {
   return [...paid, ...scopedFree, ...doorMoneyFree.slice(0, 5)];
 }
 
+/**
+ * The counter-case, as one tactic: what AUDIT said, and every trend a seat passed on with its
+ * reason. Rendered only from contributions the room actually recorded; a room without an AUDIT
+ * seat has no haters line, and nothing is written to fill the gap.
+ */
+function hatersTactic(contributions: readonly BriefContribution[]): Tactic | null {
+  const audit = contributions.find((contribution) => contribution.agent === "AUDIT");
+  if (!audit || audit.summary.trim().length === 0) return null;
+  const skipped = contributions
+    .filter((contribution) => contribution.agent !== "AUDIT" && contribution.stance === "pass" && contribution.summary.trim().length > 0)
+    .map((contribution) => `${contribution.agent} passed: ${contribution.summary.trim()}`);
+  return {
+    type: "content",
+    description: [
+      `Haters: AUDIT ${audit.stance === "veto" ? "vetoed" : "reviewed"} — ${audit.summary.trim()}`,
+      ...skipped
+    ].join(" ").slice(0, 800),
+    assetsNeeded: [],
+    platformPolicyNote: "The counter-case. A veto or a skipped trend is a real output of the room, not a publishing instruction."
+  };
+}
+
+/** Whole minutes at the reading pace, never below one: a brief that exists takes time to read. */
+export function readingMinutes(tactics: readonly Pick<Tactic, "description">[]): number {
+  const words = tactics.reduce((sum, tactic) => sum + tactic.description.split(/\s+/u).filter(Boolean).length, 0);
+  return Math.max(1, Math.ceil(words / READING_WORDS_PER_MINUTE));
+}
+
+/** The chair's summary with the reading time on it, inside the plan contract's 280 characters. */
+export function summaryWithReadingTime(summary: string, minutes: number, cap = 280): string {
+  const suffix = ` · ~${minutes} min`;
+  return `${summary.trim().slice(0, cap - suffix.length).trimEnd()}${suffix}`;
+}
+
 export function buildGoViralWeeklyBrief(input: {
   date: string;
   trends: GoViralTrends | null;
@@ -69,6 +110,7 @@ export function buildGoViralWeeklyBrief(input: {
   const chair = input.contributions.find((contribution) => contribution.agent === "PULSE");
   const calls = trendCalls(input.trends);
   const ideas = input.contributions.filter((contribution) => contribution.idea);
+  const haters = hatersTactic(input.contributions);
   const evidenceRefs = [...new Set(input.contributions.flatMap((contribution) => contribution.evidenceRefs))];
   const snapshotNote = input.trends
     ? input.trends.date === input.date
@@ -76,37 +118,41 @@ export function buildGoViralWeeklyBrief(input: {
       : `No fresh scout this week — working from the ${input.trends.date} snapshot.`
     : "No scout data was available this week.";
 
+  // One tactic per trend call, one per seat idea, then the counter-case, which is what the room
+  // actually produced. `type: "content"` throughout — "paid" would misdescribe a room that
+  // cannot spend.
+  const tactics: Tactic[] = [
+    ...calls.map((call) => ({
+      type: "content" as const,
+      description: `Trend call: ${call}`,
+      assetsNeeded: [],
+      platformPolicyNote: "A trend call, not a publishing instruction. Nothing is posted or scheduled from this line."
+    })),
+    ...ideas.map((contribution) => ({
+      type: "content" as const,
+      description: `${contribution.idea!.title} — ${contribution.idea!.summary}`,
+      assetsNeeded: ["owner review"],
+      platformPolicyNote: "Draft only. No posting, scheduling, advertising or outreach is authorized."
+    })),
+    ...(haters ? [haters] : []),
+    ...(calls.length === 0 && ideas.length === 0
+      ? [{
+          type: "content" as const,
+          description: `${snapshotNote} The room produced no trend call it could support with a number, which is a correct answer to a quiet week.`,
+          assetsNeeded: [],
+          platformPolicyNote: "Nothing to publish, and nothing invented to fill the gap."
+        }]
+      : [])
+  ];
+
   return MarketingPlanSchema.parse({
     schemaVersion: "marketing-plan/1",
     id: goViralBriefId(input.date),
     ventureId: "goviral",
     title: `Weekly content brief — ${input.date}`,
-    summary: (chair?.summary ?? "The room recorded no chair contribution this week.").slice(0, 280),
+    summary: summaryWithReadingTime(chair?.summary ?? "The room recorded no chair contribution this week.", readingMinutes(tactics)),
     objective: "Give the owner a week of things to write, and the magazine desks the trends worth acting on. Drafts and plans only: nothing here publishes, schedules, buys or opens an account.",
-    // One tactic per seat contribution plus one per trend call, which is what the room actually
-    // produced. `type: "content"` throughout — "paid" would misdescribe a room that cannot spend.
-    tactics: [
-      ...calls.map((call) => ({
-        type: "content" as const,
-        description: `Trend call: ${call}`,
-        assetsNeeded: [],
-        platformPolicyNote: "A trend call, not a publishing instruction. Nothing is posted or scheduled from this line."
-      })),
-      ...ideas.map((contribution) => ({
-        type: "content" as const,
-        description: `${contribution.idea!.title} — ${contribution.idea!.summary}`,
-        assetsNeeded: ["owner review"],
-        platformPolicyNote: "Draft only. No posting, scheduling, advertising or outreach is authorized."
-      })),
-      ...(calls.length === 0 && ideas.length === 0
-        ? [{
-            type: "content" as const,
-            description: `${snapshotNote} The room produced no trend call it could support with a number, which is a correct answer to a quiet week.`,
-            assetsNeeded: [],
-            platformPolicyNote: "Nothing to publish, and nothing invented to fill the gap."
-          }]
-        : [])
-    ],
+    tactics,
     // A seven-day skeleton, not a schedule: the owner decides what lands where, and nothing in
     // this system can post to a day even if it wanted to.
     calendar: [
