@@ -21,6 +21,7 @@
     "test": "vitest run --passWithNoTests",
     "typecheck": "tsc --noEmit",
     "fonts:metrics": "tsx scripts/generate-font-metrics.ts",
+    "golden:update": "tsx scripts/golden.ts",
     "specimens": "tsx scripts/specimens.ts"
   },
   "dependencies": {

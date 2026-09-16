@@ -127,6 +127,20 @@ the real files. Composition, line breaks and type size are honest; the letterfor
   ornament. The one family built around a number, Figure, says in its own spec that the slot
   takes an honest figure from the article or the family is not used.
 
+## Golden images
+
+`studio/tests/golden.test.ts` renders one fixed slide per launch family (`apex`, `rail`, `vista`,
+`fault`, `halo`, `folio` and `press`: the first body slide of a seven-slide MMA Files deck at the
+`instagram-portrait` canvas, the payload `families.test.ts` already uses) through the real
+renderer and resvg, and compares it pixel by pixel with the PNG committed under
+`studio/tests/fixtures/golden/`. A family fails by name when more than 0.5 % of its pixels differ
+by more than 16 in any channel. The renderer is deterministic because its fonts are committed
+build inputs, so the goldens are the same bytes on every machine.
+
+A deliberate composition change regenerates the goldens in the same commit as the composer:
+`pnpm -C studio golden:update`, then commit the PNGs beside the change. The tolerance is never the
+thing to loosen; a drift the test reports is either a change to commit or a bug to fix.
+
 ## Canva workflow
 
 See [Canva research and studio modernization](CANVA-RESEARCH.md) for the current workflow, editable examples and integration limits.
