@@ -1,5 +1,56 @@
 {
   "schemaVersion": "carousel-inspiration-links/1",
-  "links": [],
-  "updatedAt": "2026-08-02T10:00:00.000Z"
+  "links": [
+    {
+      "url": "https://buffer.com/resources/linkedin-carousel-examples/",
+      "label": "Buffer: 11 LinkedIn carousel examples; 6–9 slides, one idea per slide, a cover that makes a promise",
+      "addedAt": "2026-09-16T18:23:27.000Z"
+    },
+    {
+      "url": "https://www.morphica.studio/blog/linkedin-carousel-best-practices-2026",
+      "label": "Morphica 2026: 7–10 slides, drop-off after 12, 3–8 word headlines at 40 px+, two text blocks per slide",
+      "addedAt": "2026-09-16T18:23:27.000Z"
+    },
+    {
+      "url": "https://www.socialinsider.io/social-media-benchmarks/instagram",
+      "label": "Socialinsider: carousels lead engagement and saves; unseen slides get re-served, so slide 2 is a second cover",
+      "addedAt": "2026-09-16T18:23:27.000Z"
+    },
+    {
+      "url": "https://metricool.com/press-release-instagram-study-2026/",
+      "label": "Metricool 2026 study (24.4M posts): carousels earn about nine times the saves of single images",
+      "addedAt": "2026-09-16T18:23:27.000Z"
+    },
+    {
+      "url": "https://carousels-generator.com/blog/linkedin-carousel-hooks-2026",
+      "label": "Ten cover hook families: curiosity, contrarian, listicle, data, story, question, problem, promise, negative, authority",
+      "addedAt": "2026-09-16T18:23:27.000Z"
+    },
+    {
+      "url": "https://www.facebook.com/business/ads-guide/carousel/instagram-feed",
+      "label": "Meta spec: 4:5 master canvas, 1080 px minimum, 2–10 cards, 1 percent aspect-ratio tolerance",
+      "addedAt": "2026-09-16T18:23:27.000Z"
+    },
+    {
+      "url": "https://www.facebook.com/help/instagram/269314186824048",
+      "label": "Instagram Help: up to 20 items per post and one orientation for the whole deck",
+      "addedAt": "2026-09-16T18:23:27.000Z"
+    },
+    {
+      "url": "https://www.linkedin.com/help/linkedin/answer/a518909",
+      "label": "LinkedIn document posts: PDF up to 100 MB and 300 pages; embedded motion renders as a still",
+      "addedAt": "2026-09-16T18:23:27.000Z"
+    },
+    {
+      "url": "https://buffer.com/resources/state-of-social-media-engagement-2026/",
+      "label": "Buffer engagement study 2026 (52M posts): LinkedIn carousels outperform text posts by 585 percent",
+      "addedAt": "2026-09-16T18:23:27.000Z"
+    },
+    {
+      "url": "https://www.aicarousels.com/blog/linkedin-carousel-templates-inspiration",
+      "label": "aiCarousels: inspiration posts that funnel to the editor; the gallery-marketing pattern for a public recipe library",
+      "addedAt": "2026-09-16T18:23:27.000Z"
+    }
+  ],
+  "updatedAt": "2026-09-16T18:23:27.000Z"
 }
