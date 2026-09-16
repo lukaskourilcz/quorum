@@ -1,25 +1,51 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { FONTS_DIRECTORY, measureEm, resolveFace } from "../src/fonts.js";
+import { FONTS_DIRECTORY, FONT_FAMILIES, measureEm, missingCommittedGlyphs, resolveFace } from "../src/fonts.js";
 import { FONT_METRICS } from "../src/font-metrics.generated.js";
+import { CAROUSEL_BRANDS } from "../src/library.js";
+import { familiesOf, lettersFor, publishingLocalesFor, requiredCharacters } from "../src/locales.js";
+import type { PublishingLocale } from "../src/schema.js";
 
 /**
- * The alphabets the engine has to be able to set.
+ * The alphabets the engine has to be able to set, derived rather than listed.
  *
  * A missing glyph does not fail anything at render time — it draws a notdef box, which is the one
  * rendering failure that looks deliberate. So coverage is asserted here, where a font that cannot
- * set Ukrainian is a red test rather than a shipped card with squares in it.
+ * set a language one of its brands publishes in is a red test rather than a shipped card with
+ * squares in it.
  *
- * `Ї ї Є є Ґ ґ І і` are called out because they are the four pairs that separate Ukrainian from
- * Russian: a font subset for "Cyrillic" routinely covers the Russian alphabet and stops.
+ * This gate used to name two families and one alphabet. Two families is the number that happened
+ * to need Cyrillic; thirteen is the number of families the engine ships, and every one of them
+ * sets Czech. So the requirement is read off each brand's declared publishing locales instead: a
+ * new family, a new brand or a new language extends the gate by itself, and nobody has to remember
+ * that this file exists.
  */
-const UKRAINIAN = "АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюя";
-const UKRAINIAN_DISTINCT = "ЇїЄєҐґІі";
-const CZECH = "ÁáČčĎďÉéĚěÍíŇňÓóŘřŠšŤťÚúÝýŽžŮů";
 
-/** The venture's two faces. Every other committed family is Latin-only in practice. */
-const CYRILLIC_FAMILIES = ["Literata", "Inter"] as const;
+/** Every family a brand binds, with every language the brands that bind it publish in. */
+const FAMILY_LOCALES = (() => {
+  const grouped = new Map<string, Set<PublishingLocale>>();
+  for (const brand of Object.values(CAROUSEL_BRANDS)) {
+    for (const family of familiesOf(brand)) {
+      const locales = grouped.get(family) ?? new Set<PublishingLocale>();
+      for (const locale of publishingLocalesFor(brand.id)) locales.add(locale);
+      grouped.set(family, locales);
+    }
+  }
+  return grouped;
+})();
+
+const BOUND_FAMILIES = [...FAMILY_LOCALES.keys()].sort();
+
+function localesOf(family: string): PublishingLocale[] {
+  return [...(FAMILY_LOCALES.get(family) ?? new Set<PublishingLocale>())].sort();
+}
+
+/**
+ * `Ї ї Є є Ґ ґ І і` are the four pairs that separate Ukrainian from Russian: a font subset
+ * labelled "Cyrillic" routinely covers the Russian alphabet and stops right here.
+ */
+const UKRAINIAN_DISTINCT = "ЇїЄєҐґІі";
 
 /**
  * Read a font's own cmap rather than trusting the generated table.
@@ -85,35 +111,80 @@ function facesOf(family: string): Array<{ key: string; file: string; weight: num
     .map(([key, face]) => ({ key, file: face.file, weight: face.weight }));
 }
 
-describe("Cyrillic coverage", () => {
-  it.each(CYRILLIC_FAMILIES)("%s ships at least three weights", (family) => {
-    expect(facesOf(family).length).toBeGreaterThanOrEqual(3);
+describe("alphabet coverage", () => {
+  it("gates every family the engine ships, because every family is bound by a brand", () => {
+    // A family no brand binds would receive no gate at all: there would be no publishing locale
+    // to derive a requirement from, and the loop below would silently skip it.
+    expect(BOUND_FAMILIES).toEqual([...FONT_FAMILIES].sort());
+    expect(BOUND_FAMILIES).toHaveLength(13);
   });
 
-  it.each(CYRILLIC_FAMILIES)("%s draws the whole Ukrainian alphabet in every weight", (family) => {
-    for (const face of facesOf(family)) {
-      expect(missing(face.file, UKRAINIAN), `${face.key} missing`).toBe("");
+  it("derives Cyrillic for exactly the faces the Ukrainian brand binds", () => {
+    // The derivation has to be able to fail. If every family resolved to Latin the suite below
+    // would pass on thirteen Latin-only faces and prove nothing about the venture that publishes
+    // in Ukrainian; if every family resolved to Cyrillic it would be a list, not a derivation.
+    const cyrillic = BOUND_FAMILIES.filter((family) => localesOf(family).includes("uk"));
+    expect(cyrillic).toEqual(familiesOf(CAROUSEL_BRANDS["tehdejsi-svet"]).sort());
+    expect(localesOf("Anton")).toEqual(["cs"]);
+    expect(localesOf("Literata")).toEqual(["cs", "uk"]);
+  });
+
+  it.each(BOUND_FAMILIES)("%s ships at least one committed face", (family) => {
+    // A family named in `fonts.ts` with no file under `studio/fonts/` resolves to nothing and
+    // every assertion below it would loop zero times.
+    expect(facesOf(family).length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("ships three weights of each Cyrillic identity face", () => {
+    // Anton ships one weight and the mono faces ship two; these two carry the bilingual card's
+    // whole type hierarchy, so a missing weight there is a silent substitution.
+    for (const family of ["Literata", "Inter"]) {
+      expect(facesOf(family).length, family).toBeGreaterThanOrEqual(3);
     }
   });
 
-  it.each(CYRILLIC_FAMILIES)("%s draws the letters that separate Ukrainian from Russian", (family) => {
-    // A subset labelled "Cyrillic" routinely covers the Russian alphabet and stops here.
+  it.each(BOUND_FAMILIES)("%s draws every character its brands' languages need, in every weight", (family) => {
+    const required = requiredCharacters(localesOf(family));
     for (const face of facesOf(family)) {
-      expect(missing(face.file, UKRAINIAN_DISTINCT), `${face.key} missing`).toBe("");
+      expect(missing(face.file, required), `${face.key} missing for ${localesOf(family).join(", ")}`).toBe("");
     }
   });
 
-  it.each(CYRILLIC_FAMILIES)("%s draws Czech diacritics, since one kit sets both languages", (family) => {
+  it.each(BOUND_FAMILIES)("%s measures every one of those characters rather than charging a fallback", (family) => {
+    const required = requiredCharacters(localesOf(family));
     for (const face of facesOf(family)) {
-      expect(missing(face.file, CZECH), `${face.key} missing`).toBe("");
+      // Coverage in the file is not enough: a character absent from the width table is charged the
+      // fallback average, so a whole alphabet would measure at one flat width and fit wrongly.
+      expect(missingCommittedGlyphs(resolveFace(family, face.weight), required), `${face.key} unmeasured`).toEqual([]);
     }
   });
 
-  it.each(CYRILLIC_FAMILIES)("%s measures Cyrillic from the table rather than from the fallback", (family) => {
+  it.each(BOUND_FAMILIES.filter((family) => localesOf(family).includes("uk")))(
+    "%s draws the letters that separate Ukrainian from Russian",
+    (family) => {
+      for (const face of facesOf(family)) {
+        expect(missing(face.file, UKRAINIAN_DISTINCT), `${face.key} missing`).toBe("");
+      }
+    }
+  );
+});
+
+describe("Cyrillic measurement", () => {
+  const ukrainianFamilies = BOUND_FAMILIES.filter((family) => localesOf(family).includes("uk"));
+  /** A face whose whole table is one advance is monospaced, which changes what counts as proof. */
+  const proportional = ukrainianFamilies
+    .filter((family) => Object.keys(resolveFace(family, 400).widths).length > 1);
+
+  it.each(ukrainianFamilies)("%s has a committed advance for every Cyrillic character", (family) => {
+    expect(missingCommittedGlyphs(resolveFace(family, 400), lettersFor("uk"))).toEqual([]);
+  });
+
+  it.each(proportional)("%s measures Cyrillic from the table rather than from the fallback", (family) => {
     const face = resolveFace(family, 400);
-    // Coverage in the file is not enough: a character absent from the width table falls back to
-    // an average, and a whole alphabet measured at one width would fit wrongly on every card.
-    const widths = new Set([...UKRAINIAN].map((character) => measureEm(face, character)));
+    // A proportional face proves it by disagreeing with itself: a fallback-only measurement would
+    // put the whole alphabet on one width. IBM Plex Mono puts it on one width by design, so the
+    // evidence for the mono face is the committed entries above and not this spread.
+    const widths = new Set([...lettersFor("uk")].map((character) => measureEm(face, character)));
     expect(widths.size).toBeGreaterThan(5);
     expect(measureEm(face, "і")).toBeLessThan(measureEm(face, "ш"));
   });
