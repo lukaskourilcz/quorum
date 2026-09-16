@@ -487,7 +487,7 @@ describe("the weekly brief", () => {
         date: "2026-08-10",
         generatedAt: "2026-08-10T11:00:00.000Z",
         sourceResults: [],
-        freeSignals: [{ provider: "google-news", status: "success", reason: null, signals: [{ kind: "volume", topic: "publishing history", value: 8, scope: "topic-set:booksofhistory:en", topicSets: [], ref: "source:trending:google-news:2026-08-10" }] }],
+        freeSignals: [{ provider: "google-news", status: "success", reason: null, signals: [{ kind: "volume", topic: "publishing history", value: 8, scope: "topic-set:booksofhistory:en", topicSets: [], ref: "source:trending:google-news:2026-08-10", window: "48h", status: "active", breadth: 1, label: null }] }],
         items: [],
         signals: { topHashtags: [], topFormats: [], topAudio: [], exploreSections: [], perTopicSet: [] },
         forMagazines: { ai: [], mma: [] }
@@ -496,7 +496,7 @@ describe("the weekly brief", () => {
       vetoed: false
     });
     expect(brief.tactics.map(({ description }) => description)).toContain(
-      "Trend call: publishing history (booksofhistory, free volume, en): 8."
+      "Trend call: publishing history (booksofhistory, free volume, en): 8. active · 48h window · seen on 1 provider."
     );
   });
 });

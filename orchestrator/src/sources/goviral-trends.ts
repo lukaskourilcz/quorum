@@ -1,5 +1,17 @@
 import { z } from "zod";
 import type { GoViralActor, GoViralRecipeStep, GoViralSourceRegistry, GoViralTopicSet } from "./apify.js";
+import {
+  FREE_SIGNAL_WINDOW,
+  HASHTAG_WINDOW,
+  SignalLabelSchema,
+  SignalStatusSchema,
+  SignalWindowSchema,
+  breadthOf,
+  buildBreadthIndex,
+  signalLabel,
+  signalStatus,
+  type FreeSignalReadingResult
+} from "./goviral-signals.js";
 
 /**
  * The weekly trend snapshot GoVIRAL reads, and the arithmetic that turns scraped posts into it.
@@ -32,6 +44,18 @@ export const TrendItemSchema = z.object({
   exploreSection: z.string().max(80).nullable()
 });
 
+/**
+ * The annotation every signal carries beside its number, defaulted so a snapshot stored before
+ * it existed still parses: a hashtag from the weekly scout lives on a seven-day clock, a reading
+ * with no prior is active, breadth is never below the one provider that produced it, and a label
+ * nobody could compute is null rather than "regular".
+ */
+const SignalAnnotationSchema = {
+  status: SignalStatusSchema.default("active"),
+  breadth: z.number().int().min(1).default(1),
+  label: SignalLabelSchema.default(null)
+};
+
 export const TrendHashtagSignalSchema = z.object({
   hashtag: z.string().max(80),
   topicSet: z.string().min(1),
@@ -39,7 +63,9 @@ export const TrendHashtagSignalSchema = z.object({
   /** Likes per hour since posting, summed over the posts carrying the tag. Zero when no post is timestamped. */
   engagementPerHour: z.number().finite().nonnegative(),
   /** Change against the previous snapshot's figure. Null when there is nothing to compare against. */
-  weekOverWeekDelta: z.number().finite().nullable()
+  weekOverWeekDelta: z.number().finite().nullable(),
+  window: SignalWindowSchema.default(HASHTAG_WINDOW),
+  ...SignalAnnotationSchema
 });
 
 export const TrendAudioSignalSchema = z.object({
@@ -57,19 +83,18 @@ export const TrendTopicSummarySchema = z.object({
 });
 
 /** What the magazine desks get: topics with numbers, and nothing they have to trust blindly. */
+const MagazineLeadSchema = z.object({
+  topic: z.string().max(120),
+  engagementPerHour: z.number().finite().nonnegative(),
+  weekOverWeekDelta: z.number().finite().nullable(),
+  window: SignalWindowSchema.default(HASHTAG_WINDOW),
+  ...SignalAnnotationSchema,
+  refs: z.array(z.string().max(160)).max(6)
+});
+
 export const ForMagazinesSchema = z.object({
-  ai: z.array(z.object({
-    topic: z.string().max(120),
-    engagementPerHour: z.number().finite().nonnegative(),
-    weekOverWeekDelta: z.number().finite().nullable(),
-    refs: z.array(z.string().max(160)).max(6)
-  })).max(8),
-  mma: z.array(z.object({
-    topic: z.string().max(120),
-    engagementPerHour: z.number().finite().nonnegative(),
-    weekOverWeekDelta: z.number().finite().nullable(),
-    refs: z.array(z.string().max(160)).max(6)
-  })).max(8)
+  ai: z.array(MagazineLeadSchema).max(8),
+  mma: z.array(MagazineLeadSchema).max(8)
 });
 
 export const TrendSourceResultSchema = z.object({
@@ -98,9 +123,16 @@ export const FreeSignalResultSchema = z.object({
     value: z.number().finite(),
     scope: z.string().max(80).optional(),
     topicSets: z.array(z.string().min(1).max(80)).max(8).default([]),
-    ref: z.string().max(160)
+    ref: z.string().max(160),
+    window: SignalWindowSchema.optional(),
+    ...SignalAnnotationSchema
   })).max(40)
-});
+  // A free reading's window is a property of its provider, so a stored reading without one
+  // gets the provider's rather than a guess shared across all four.
+}).transform((result) => ({
+  ...result,
+  signals: result.signals.map((signal) => ({ ...signal, window: signal.window ?? FREE_SIGNAL_WINDOW[result.provider] }))
+}));
 
 export const GoViralTrendsSchema = z.object({
   schemaVersion: z.literal("goviral-trends/1"),
@@ -124,6 +156,7 @@ export const GoViralTrendsSchema = z.object({
 
 export type TrendItem = z.infer<typeof TrendItemSchema>;
 export type TrendHashtagSignal = z.infer<typeof TrendHashtagSignalSchema>;
+export type FreeSignalResult = z.infer<typeof FreeSignalResultSchema>;
 export type TrendSourceResult = z.infer<typeof TrendSourceResultSchema>;
 export type GoViralTrends = z.infer<typeof GoViralTrendsSchema>;
 export type ForMagazines = z.infer<typeof ForMagazinesSchema>;
@@ -178,10 +211,16 @@ function round(value: number): number {
   return Number(value.toFixed(4));
 }
 
+/**
+ * `freeSignals` is this week's keyless readings, used only for breadth: a hashtag that a free
+ * provider also names is seen on more than one provider. The readings' own numbers stay on
+ * their own lines — a rank and a velocity are different measurements and are never added.
+ */
 export function computeHashtagSignals(input: {
   items: readonly TrendItem[];
   previous: readonly TrendHashtagSignal[];
   now: Date;
+  freeSignals?: readonly Pick<FreeSignalReadingResult, "provider" | "status" | "signals">[];
 }): TrendHashtagSignal[] {
   const buckets = new Map<string, { hashtag: string; topicSet: string; posts: number; velocity: number }>();
   for (const item of input.items) {
@@ -196,15 +235,23 @@ export function computeHashtagSignals(input: {
     }
   }
   const priorByKey = new Map(input.previous.map((signal) => [`${signal.topicSet}:${signal.hashtag}`, signal]));
+  const breadthIndex = buildBreadthIndex({ items: input.items, freeSignals: input.freeSignals ?? [] });
   return [...buckets.entries()]
     .map(([key, bucket]) => {
       const prior = priorByKey.get(key);
+      const velocity = round(bucket.velocity);
+      const delta = prior ? round(velocity - prior.engagementPerHour) : null;
+      const breadth = breadthOf(breadthIndex, bucket.hashtag);
       return {
         hashtag: bucket.hashtag,
         topicSet: bucket.topicSet,
         posts: bucket.posts,
-        engagementPerHour: round(bucket.velocity),
-        weekOverWeekDelta: prior ? round(bucket.velocity - prior.engagementPerHour) : null
+        engagementPerHour: velocity,
+        weekOverWeekDelta: delta,
+        window: HASHTAG_WINDOW,
+        status: signalStatus(delta),
+        breadth,
+        label: signalLabel({ delta, doubled: prior !== undefined && velocity >= 2 * prior.engagementPerHour, breadth })
       };
     })
     .sort((left, right) => right.engagementPerHour - left.engagementPerHour || left.hashtag.localeCompare(right.hashtag))
@@ -272,6 +319,10 @@ export function buildForMagazines(input: {
       topic: signal.hashtag,
       engagementPerHour: signal.engagementPerHour,
       weekOverWeekDelta: signal.weekOverWeekDelta,
+      window: signal.window,
+      status: signal.status,
+      breadth: signal.breadth,
+      label: signal.label,
       refs: [...input.refs].slice(0, 6)
     }));
   return { ai: forSet("dneskai"), mma: forSet("mma") };

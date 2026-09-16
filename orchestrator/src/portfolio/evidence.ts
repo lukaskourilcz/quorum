@@ -56,6 +56,7 @@ import {
   type TrendItem,
   type TrendSourceResult
 } from "../sources/goviral-trends.js";
+import { annotateFreeSignals, buildBreadthIndex } from "../sources/goviral-signals.js";
 
 /** How far back the results reader looks for a card whose outcome is not on file yet. */
 const RESULT_WINDOW_DAYS = 10;
@@ -570,7 +571,7 @@ export async function refreshGoViralTrends(input: {
       .filter((result) => result.status === "success")
       .map((result) => `source:trending:${result.provider}:${input.date}`)
   )];
-  const freeSignals = free.results.map((result) => ({
+  const readings = free.results.map((result) => ({
     provider: result.provider,
     status: result.status,
     reason: result.reason,
@@ -583,6 +584,15 @@ export async function refreshGoViralTrends(input: {
       ref: signal.ref
     }))
   }));
+  // Window, status, breadth and label are arithmetic over the previous snapshot's readings and
+  // the posts on disk. Breadth counts the scraped platforms too, so it is recomputed below once
+  // a fresh scout has added this week's posts; until then the previous snapshot's posts stand in.
+  const annotate = (items: readonly TrendItem[]) => annotateFreeSignals({
+    results: readings,
+    previous: previous?.freeSignals ?? [],
+    index: buildBreadthIndex({ items, freeSignals: readings })
+  });
+  const freeSignals = annotate(previous?.items ?? []);
 
   const fallback = (reason: string) => {
     if (!previous || snapshotAgeDays(previous.date, input.date) > TREND_SNAPSHOT_MAX_AGE_DAYS) {
@@ -658,10 +668,12 @@ export async function refreshGoViralTrends(input: {
   // Raw items are transient and aggregates are not: the previous snapshot's posts are pruned at
   // 30 days, while its hashtag velocities stay as the week-over-week baseline.
   const items = pruneItems([...fresh, ...(previous?.items ?? [])], input.now).slice(0, 2_000);
+  const weekFreeSignals = annotate(items);
   const topHashtags = computeHashtagSignals({
     items,
     previous: previous?.signals.topHashtags ?? [],
-    now: input.now
+    now: input.now,
+    freeSignals: weekFreeSignals
   });
   const evidenceRefs = [...trendEvidenceRefs(input.date, sourceResults), ...freeRefs];
   const trends = GoViralTrendsSchema.parse({
@@ -669,7 +681,7 @@ export async function refreshGoViralTrends(input: {
     date: input.date,
     generatedAt: input.now.toISOString(),
     sourceResults,
-    freeSignals,
+    freeSignals: weekFreeSignals,
     items,
     signals: {
       topHashtags,

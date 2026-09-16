@@ -1,5 +1,6 @@
 import { MarketingPlanSchema, type MarketingPlan } from "../contracts/marketing-plan.js";
 import type { GoViralTrends } from "../sources/goviral-trends.js";
+import { signalPhrase } from "../sources/goviral-signals.js";
 
 /**
  * The owner's weekly content brief, written as a marketing-plan/1.
@@ -31,7 +32,7 @@ function trendCalls(trends: GoViralTrends | null): string[] {
     const delta = signal.weekOverWeekDelta === null
       ? "no prior week to compare against"
       : `${signal.weekOverWeekDelta >= 0 ? "up" : "down"} ${Math.abs(signal.weekOverWeekDelta).toFixed(1)} on last week`;
-    return `${signal.hashtag} (${signal.topicSet}): ${signal.engagementPerHour.toFixed(1)} engagements/hour across ${signal.posts} post${signal.posts === 1 ? "" : "s"}, ${delta}.`;
+    return `${signal.hashtag} (${signal.topicSet}): ${signal.engagementPerHour.toFixed(1)} engagements/hour across ${signal.posts} post${signal.posts === 1 ? "" : "s"}, ${delta}. ${signalPhrase(signal)}.`;
   });
   const scopedFree = trends.freeSignals
     .flatMap((result) => result.status === "success" ? result.signals : [])
@@ -40,7 +41,7 @@ function trendCalls(trends: GoViralTrends | null): string[] {
     .slice(0, 12)
     .map((signal) => {
       const [, topicSet = "unknown", locale = "unknown"] = signal.scope!.split(":");
-      return `${signal.topic} (${topicSet}, free ${signal.kind}, ${locale}): ${signal.value}.`;
+      return `${signal.topic} (${topicSet}, free ${signal.kind}, ${locale}): ${signal.value}. ${signalPhrase(signal)}.`;
     });
   const doorMoneyFree = trends.freeSignals.flatMap((result) => result.status === "success"
     ? result.signals
@@ -53,7 +54,7 @@ function trendCalls(trends: GoViralTrends | null): string[] {
             : result.provider === "google-news"
               ? `${signal.value} article${signal.value === 1 ? "" : "s"} in the keyless news reading`
               : `${signal.value} in the keyless search-volume reading`;
-        return `${signal.topic} (door-money, free ${result.provider} signal): ${measurement}.`;
+        return `${signal.topic} (door-money, free ${result.provider} signal): ${measurement}. ${signalPhrase(signal)}.`;
       })
     : []);
   return [...paid, ...scopedFree, ...doorMoneyFree.slice(0, 5)];

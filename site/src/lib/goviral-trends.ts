@@ -22,7 +22,23 @@ export interface AdminGoViralTopic {
   topHashtags: string[];
 }
 
-export interface AdminGoViralHashtag {
+/**
+ * The signal vocabulary a snapshot written after 2026-09-16 carries on every reading. Each field
+ * is null when the stored snapshot predates it or holds something outside the vocabulary: the
+ * panel says "not recorded" rather than guessing a window or calling an unknown trend regular.
+ */
+export interface AdminGoViralSignal {
+  /** The half-life of the source that produced the reading: 24h, 48h, 7d or 30d. */
+  window: string | null;
+  /** Active while the reading holds or climbs; lasted once it fell below the prior one. */
+  status: "active" | "lasted" | null;
+  /** Independent providers showing the topic this week. */
+  breadth: number | null;
+  /** Exploding, regular or peaked; null when there was nothing to compare against. */
+  label: "exploding" | "regular" | "peaked" | null;
+}
+
+export interface AdminGoViralHashtag extends AdminGoViralSignal {
   hashtag: string;
   topicSet: string;
   posts: number;
@@ -31,7 +47,7 @@ export interface AdminGoViralHashtag {
   weekOverWeekDelta: number | null;
 }
 
-export interface AdminGoViralMagazineLead {
+export interface AdminGoViralMagazineLead extends AdminGoViralSignal {
   topic: string;
   engagementPerHour: number;
   weekOverWeekDelta: number | null;
@@ -64,13 +80,32 @@ function words(value: unknown, cap: number): string[] {
   return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === "string").slice(0, cap) : [];
 }
 
+const SIGNAL_WINDOWS = new Set(["24h", "48h", "7d", "30d"]);
+const SIGNAL_STATUSES = new Set(["active", "lasted"]);
+const SIGNAL_LABELS = new Set(["exploding", "regular", "peaked"]);
+
+function oneOf<T extends string>(value: unknown, allowed: ReadonlySet<string>): T | null {
+  return typeof value === "string" && allowed.has(value) ? value as T : null;
+}
+
+/** Parse-or-null per field: a snapshot from before the vocabulary shows every field as not recorded. */
+function signal(source: Record<string, unknown> | null): AdminGoViralSignal {
+  const breadth = finite(source?.breadth);
+  return {
+    window: oneOf(source?.window, SIGNAL_WINDOWS),
+    status: oneOf<"active" | "lasted">(source?.status, SIGNAL_STATUSES),
+    breadth: breadth !== null && Number.isInteger(breadth) && breadth >= 1 ? breadth : null,
+    label: oneOf<"exploding" | "regular" | "peaked">(source?.label, SIGNAL_LABELS)
+  };
+}
+
 function magazineLeads(value: unknown): AdminGoViralMagazineLead[] {
   if (!Array.isArray(value)) return [];
   return value.flatMap((entry) => {
     const lead = record(entry);
     const engagement = finite(lead?.engagementPerHour);
     return typeof lead?.topic === "string" && engagement !== null
-      ? [{ topic: lead.topic, engagementPerHour: engagement, weekOverWeekDelta: finite(lead.weekOverWeekDelta) }]
+      ? [{ topic: lead.topic, engagementPerHour: engagement, weekOverWeekDelta: finite(lead.weekOverWeekDelta), ...signal(lead) }]
       : [];
   });
 }
@@ -94,7 +129,7 @@ function parseSnapshot(raw: string): Omit<AdminGoViralTrends, "state" | "dropped
         const tag = record(entry);
         const engagement = finite(tag?.engagementPerHour);
         return typeof tag?.hashtag === "string" && typeof tag?.topicSet === "string" && typeof tag.posts === "number" && engagement !== null
-          ? [{ hashtag: tag.hashtag, topicSet: tag.topicSet, posts: tag.posts, engagementPerHour: engagement, weekOverWeekDelta: finite(tag.weekOverWeekDelta) }]
+          ? [{ hashtag: tag.hashtag, topicSet: tag.topicSet, posts: tag.posts, engagementPerHour: engagement, weekOverWeekDelta: finite(tag.weekOverWeekDelta), ...signal(tag) }]
           : [];
       }).slice(0, 12)
     : [];

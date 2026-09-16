@@ -24,6 +24,20 @@ function perHour(value: number): string {
   return `${value.toFixed(1)}/h`;
 }
 
+/**
+ * "active · 7d · 2 providers · exploding", or "not recorded" for a snapshot written before the
+ * vocabulary existed. A field the snapshot lacks is left out rather than filled in.
+ */
+function signal(entry: { window: string | null; status: string | null; breadth: number | null; label: string | null }): string {
+  const parts = [
+    entry.status,
+    entry.window,
+    entry.breadth === null ? null : `${entry.breadth} ${entry.breadth === 1 ? "provider" : "providers"}`,
+    entry.label
+  ].filter((part): part is string => part !== null);
+  return parts.length > 0 ? parts.join(" · ") : "not recorded";
+}
+
 export function GoViralTrendsPanel({ trends }: { trends: AdminGoViralTrends }) {
   if (trends.state === "missing") {
     return (
@@ -78,7 +92,8 @@ export function GoViralTrendsPanel({ trends }: { trends: AdminGoViralTrends }) {
                 <th className="py-1 pr-3 font-semibold">Topic</th>
                 <th className="py-1 pr-3 text-right font-semibold">Posts</th>
                 <th className="py-1 pr-3 text-right font-semibold">Engagement</th>
-                <th className="py-1 text-right font-semibold">Week over week</th>
+                <th className="py-1 pr-3 text-right font-semibold">Week over week</th>
+                <th className="py-1 font-semibold">Signal</th>
               </tr>
             </thead>
             <tbody>
@@ -88,7 +103,8 @@ export function GoViralTrendsPanel({ trends }: { trends: AdminGoViralTrends }) {
                   <td className="py-1.5 pr-3 text-[var(--admin-foreground-muted)]">{tag.topicSet}</td>
                   <td className="admin-tabular py-1.5 pr-3 text-right">{tag.posts}</td>
                   <td className="admin-tabular py-1.5 pr-3 text-right">{perHour(tag.engagementPerHour)}</td>
-                  <td className="admin-tabular py-1.5 text-right">{delta(tag.weekOverWeekDelta)}</td>
+                  <td className="admin-tabular py-1.5 pr-3 text-right">{delta(tag.weekOverWeekDelta)}</td>
+                  <td className="py-1.5 text-[var(--admin-foreground-muted)]">{signal(tag)}</td>
                 </tr>
               ))}
             </tbody>
@@ -104,7 +120,7 @@ export function GoViralTrendsPanel({ trends }: { trends: AdminGoViralTrends }) {
           trends.forMagazines[magazine].length > 0 ? (
             <p className="m-0 text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]" key={magazine}>
               <span className="font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground)]">{magazine === "ai" ? "For DNESKAi: " : "For MMA Files: "}</span>
-              {trends.forMagazines[magazine].map((lead) => `${lead.topic} (${perHour(lead.engagementPerHour)}, ${delta(lead.weekOverWeekDelta)})`).join(" · ")}
+              {trends.forMagazines[magazine].map((lead) => `${lead.topic} (${perHour(lead.engagementPerHour)}, ${delta(lead.weekOverWeekDelta)}; ${signal(lead)})`).join(" · ")}
             </p>
           ) : null
         )}
