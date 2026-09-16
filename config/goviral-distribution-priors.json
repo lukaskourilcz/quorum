@@ -1,0 +1,276 @@
+{
+  "schemaVersion": "goviral-distribution-priors/1",
+  "priorsVersion": "1.0.0",
+  "verifiedAt": "2026-09-16",
+  "$comment": "What GoVIRAL is allowed to assume about a platform, and who said it. Every figure here was published by somebody and carries the URL that published it; every ordering that nobody published is labelled house-assumption and says what it was derived from. Nothing in this file is measured by this repository, so nothing in it may be presented to a room as our own reading.",
+  "$claimKindComment": "The whole point of the file. platform-documented means the operator publishes the mechanism itself; platform-stated means the operator said it and we could only reach trade press quoting it; representative-survey means a named survey with a sample size; industry-estimate means a third party with no operator confirmation; house-assumption means we inferred it and it is ours to defend.",
+  "audienceStudy": {
+    "id": "ami-digital-index-2026",
+    "title": "AMI Digital Index 2026",
+    "publisher": "AMI Digital",
+    "fieldwork": "STEM/MARK, May 2026",
+    "sampleSize": 1013,
+    "population": "Czech internet users aged 15 and over",
+    "claimKind": "representative-survey",
+    "evidenceUrl": "https://www.mediar.cz/ami-digital-index-2026-socialni-site-jsou-digitalni-gauc-cesi-je-konzumuji-pasivne/",
+    "corroboratingUrls": [
+      "https://www.mediaguru.cz/ami-digital-index-cesi-jsou-na-socialnich-sitich-pasivnejsi-cas-straveny-snizuji",
+      "https://www.mam.cz/novinky/analyzy-a-data/2026-06/socialni-site-jako-digitalni-gauc-ami-digital-index-2026-ukazuje-nejvetsi-zmeny-v-chovani-cechu-na-sitich/"
+    ],
+    "$note": "The only current representative Czech dataset we have a source for. It measures how many people use a network and what they do there. It does not measure reach, impressions or what a post of ours would earn, and no figure from it may be restated as one.",
+    "readings": [
+      {
+        "id": "daily-minutes",
+        "label": "Average daily minutes on social networks",
+        "value": 137,
+        "unit": "minutes",
+        "priorValue": 143,
+        "direction": "declining",
+        "note": "Lowest of the last five years; 164 minutes in 2022."
+      },
+      {
+        "id": "passive-relaxation",
+        "label": "Use social networks mainly for aimless relaxation",
+        "value": 74,
+        "unit": "percent",
+        "priorValue": null,
+        "direction": "unknown",
+        "note": "The study's own framing: the networks are a digital sofa."
+      },
+      {
+        "id": "never-react-publicly",
+        "label": "Never react publicly to content that engages them",
+        "value": 48,
+        "unit": "percent",
+        "priorValue": null,
+        "direction": "unknown",
+        "note": "Half the audience is unreachable by any play whose whole plan is to collect public engagement."
+      },
+      {
+        "id": "share-privately",
+        "label": "Share content privately with friends instead",
+        "value": 42,
+        "unit": "percent",
+        "priorValue": null,
+        "direction": "unknown",
+        "note": "The demand side of the send signal, measured on Czech users rather than assumed from platform documentation."
+      },
+      {
+        "id": "forward-in-direct-messages",
+        "label": "Forward it through Instagram Direct or WhatsApp",
+        "value": 34,
+        "unit": "percent",
+        "priorValue": null,
+        "direction": "unknown",
+        "note": "Names the exact surface a send travels on in this market."
+      }
+    ]
+  },
+  "$signalComment": "One ordering for how a play earns distribution, and the weights are ours. Meta documents that it predicts sends, time spent, replies and likes; it publishes no coefficients, so any number claiming one would be invented. What this file encodes instead is the ordering the documented mechanics and the Czech survey agree on: in a market where 48 % never react publicly and 42 % pass things on privately, a play designed for a send beats a play designed for a like.",
+  "signals": [
+    {
+      "id": "send",
+      "label": "Shared into a direct message",
+      "weight": 0.3,
+      "claimKind": "platform-documented",
+      "evidenceUrl": "https://transparency.meta.com/features/explaining-ranking/ig-feed/",
+      "note": "\"How likely you are to share a post with someone in a direct message\" is one of the ten predictions Meta names for the Instagram Feed. The Czech survey's 42 % private-share and 34 % Direct/WhatsApp readings are the demand side of the same behaviour."
+    },
+    {
+      "id": "save",
+      "label": "Saved for later",
+      "weight": 0.18,
+      "claimKind": "industry-estimate",
+      "evidenceUrl": "https://www.eclincher.com/articles/how-the-instagram-algorithm-works-in-2026",
+      "note": "Rated below sends on purpose. Meta's Feed ranking page names sends and time spent and does not name saves; the save is an industry reading of what carousels and photos reward. Kept because the issue asks plays to be rated by sends and saves, labelled so nobody quotes it as Meta's."
+    },
+    {
+      "id": "watch-time",
+      "label": "Time spent on the post",
+      "weight": 0.2,
+      "claimKind": "platform-documented",
+      "evidenceUrl": "https://transparency.meta.com/features/explaining-ranking/ig-feed/",
+      "note": "\"How much time you're likely to spend on this post\" and \"how likely you are to spend more than 10 seconds on the first post\" are both named predictions, and the Threads page names time-viewing signals across the past day, week and month."
+    },
+    {
+      "id": "reply",
+      "label": "Replied to, or read as part of a conversation",
+      "weight": 0.15,
+      "claimKind": "platform-documented",
+      "evidenceUrl": "https://transparency.meta.com/features/explaining-ranking/ig-threads-feed/",
+      "note": "\"Likelihood to create a reply\" is a named Threads prediction and several others read \"engagement of descendants (e.g. replies, likes)\". This is why a Threads post written as a reply to a live conversation travels and a broadcast does not."
+    },
+    {
+      "id": "like",
+      "label": "Liked",
+      "weight": 0.1,
+      "claimKind": "platform-documented",
+      "evidenceUrl": "https://transparency.meta.com/features/explaining-ranking/ig-feed/",
+      "note": "Documented and real, and deliberately last among the documented signals. The widely repeated \"sends are worth three to five times a like\" is an industry estimate with no operator source, so the ordering is encoded and the multiple is not."
+    },
+    {
+      "id": "comment",
+      "label": "Commented on",
+      "weight": 0.07,
+      "claimKind": "platform-documented",
+      "evidenceUrl": "https://transparency.meta.com/features/explaining-ranking/ig-feed/",
+      "note": "Listed among the engagement signals on the Feed page. Weighted low for this market because 48 % of Czech users say they never react publicly at all."
+    }
+  ],
+  "$platformComment": "posture is the only field the scorer acts on, and it is a decision rather than a reading. plan-only means a play may be written for the surface and may never be executed there, because no channel, credential or approved scope exists in this repository.",
+  "undocumentedSignalFactor": 0.5,
+  "$playRatingComment": "The three things a play is rated on and what each is worth. Audience and signal fit come out of this file; loop fit comes out of config/goviral-growth-loops.json. They are close to equal on purpose: a play on the biggest network that feeds nothing is as useless as a play that would turn the whole loop in front of seven percent of the country. leadScore is the only threshold, and it is a house line rather than a measured one.",
+  "playRating": {
+    "weights": {
+      "czech-audience": 0.35,
+      "signal-fit": 0.35,
+      "loop-fit": 0.3
+    },
+    "leadScore": 55
+  },
+  "platforms": [
+    {
+      "id": "facebook",
+      "label": "Facebook",
+      "czechRegularUsePercent": 67,
+      "czechReadingNote": "The largest Czech audience in the study, recovered after years of decline.",
+      "reachTrend": "recovering",
+      "posture": "plan-only",
+      "postureReason": "The largest measured Czech audience, so it stays in the MMA Files and companion-surface plans; no channel, credential or approved scope exists here, so nothing may execute on it.",
+      "documentedSignals": ["send", "like", "comment"],
+      "claims": [
+        {
+          "statement": "67 % of Czech internet users are regular Facebook users.",
+          "claimKind": "representative-survey",
+          "evidenceUrl": "https://www.mediar.cz/ami-digital-index-2026-socialni-site-jsou-digitalni-gauc-cesi-je-konzumuji-pasivne/"
+        }
+      ]
+    },
+    {
+      "id": "instagram",
+      "label": "Instagram",
+      "czechRegularUsePercent": 47,
+      "czechReadingNote": "Stabilised at 47 %; the third most used network in Czechia after Facebook and YouTube.",
+      "reachTrend": "stable",
+      "posture": "primary",
+      "postureReason": "An enabled draft channel with a documented ranking surface and the second largest measured Czech audience.",
+      "documentedSignals": ["send", "watch-time", "like", "comment"],
+      "claims": [
+        {
+          "statement": "47 % of Czech internet users are regular Instagram users.",
+          "claimKind": "representative-survey",
+          "evidenceUrl": "https://www.mediar.cz/ami-digital-index-2026-socialni-site-jsou-digitalni-gauc-cesi-je-konzumuji-pasivne/"
+        },
+        {
+          "statement": "Feed ranking runs on ten named predictions, among them time spent on a post, the likelihood of a direct-message share and carousel completion.",
+          "claimKind": "platform-documented",
+          "evidenceUrl": "https://transparency.meta.com/features/explaining-ranking/ig-feed/"
+        },
+        {
+          "statement": "From 30 April 2026 an account that primarily posts unoriginal reels, photos or carousels may not be shown in recommendations to new audiences; the rule previously covered reels only.",
+          "claimKind": "platform-stated",
+          "evidenceUrl": "https://www.engadget.com/2160560/instagrams-recommendation-algorithm-will-penalize-unoriginal-photo-and-carousel-posts/",
+          "note": "Instagram's own wording, reported by trade press. No first-party URL was reachable when this file was verified, which is why it is platform-stated rather than platform-documented."
+        },
+        {
+          "statement": "Original creators gained 40-60 % more distribution after the originality change.",
+          "claimKind": "industry-estimate",
+          "evidenceUrl": "https://www.eclincher.com/articles/how-the-instagram-algorithm-works-in-2026",
+          "note": "Recorded so the room recognises the figure when it meets it, and excluded from every calculation in this repository. No operator published it."
+        }
+      ]
+    },
+    {
+      "id": "threads",
+      "label": "Threads",
+      "czechRegularUsePercent": null,
+      "czechReadingNote": "AMI Digital Index 2026 published no Threads figure. This is an absence, not a zero, and no Czech reach may be assumed for it.",
+      "reachTrend": "unknown",
+      "posture": "primary",
+      "postureReason": "An enabled draft channel whose ranking Meta documents in detail; primary on the mechanics and on nothing about Czech audience size, which nobody published.",
+      "documentedSignals": ["reply", "watch-time", "like"],
+      "claims": [
+        {
+          "statement": "Ranking predicts replies, time viewing a post and its permalink, and engagement of a post's descendants; the feed blends followed accounts with recommendations.",
+          "claimKind": "platform-documented",
+          "evidenceUrl": "https://transparency.meta.com/features/explaining-ranking/ig-threads-feed/"
+        }
+      ]
+    },
+    {
+      "id": "youtube",
+      "label": "YouTube",
+      "czechRegularUsePercent": null,
+      "czechReadingNote": "Reported as the most used network in Czechia, with no percentage published. Ranked above Facebook in the study's own ordering and still an absence as a number.",
+      "reachTrend": "unknown",
+      "posture": "plan-only",
+      "postureReason": "No channel, credential or approved scope, and no venture here produces video.",
+      "documentedSignals": [],
+      "claims": [
+        {
+          "statement": "YouTube leads the Czech ranking of most used networks; Instagram is third after Facebook and YouTube.",
+          "claimKind": "representative-survey",
+          "evidenceUrl": "https://www.mediaguru.cz/ami-digital-index-cesi-jsou-na-socialnich-sitich-pasivnejsi-cas-straveny-snizuji"
+        }
+      ]
+    },
+    {
+      "id": "tiktok",
+      "label": "TikTok",
+      "czechRegularUsePercent": 18,
+      "czechReadingNote": "Down from 20 % after a period of growth.",
+      "reachTrend": "declining",
+      "posture": "secondary",
+      "postureReason": "A real but shrinking Czech audience and no channel here; expect less of it each year until a reading says otherwise.",
+      "documentedSignals": [],
+      "claims": [
+        {
+          "statement": "18 % of Czech internet users are regular TikTok users, down from 20 %.",
+          "claimKind": "representative-survey",
+          "evidenceUrl": "https://www.mam.cz/novinky/analyzy-a-data/2026-06/socialni-site-jako-digitalni-gauc-ami-digital-index-2026-ukazuje-nejvetsi-zmeny-v-chovani-cechu-na-sitich/"
+        },
+        {
+          "statement": "Expect the audience a TikTok play can reach in Czechia to keep shrinking through 2026.",
+          "claimKind": "house-assumption",
+          "evidenceUrl": "https://www.mam.cz/novinky/analyzy-a-data/2026-06/socialni-site-jako-digitalni-gauc-ami-digital-index-2026-ukazuje-nejvetsi-zmeny-v-chovani-cechu-na-sitich/",
+          "note": "Ours, extrapolated from one year of measured decline in user share. User share is not reach; nobody published a Czech TikTok reach figure and this is not one."
+        }
+      ]
+    },
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "czechRegularUsePercent": null,
+      "czechReadingNote": "AMI Digital Index 2026 published no LinkedIn figure.",
+      "reachTrend": "unknown",
+      "posture": "unmeasured",
+      "postureReason": "Every dwell-time rule circulating for it is a third-party estimate; assume nothing until it is tested on one of the ventures' own accounts, and none has one.",
+      "documentedSignals": [],
+      "claims": [
+        {
+          "statement": "Dwell time drives LinkedIn distribution.",
+          "claimKind": "industry-estimate",
+          "evidenceUrl": null,
+          "note": "No URL, on purpose: no operator documentation for this was found when the file was verified, and citing a marketing blog that repeats it would dress an estimate as a source. Recorded as the first assumption to test if a LinkedIn account is ever opened, never as a fact to plan on."
+        }
+      ]
+    },
+    {
+      "id": "x",
+      "label": "X",
+      "czechRegularUsePercent": 7,
+      "czechReadingNote": "7 % of Czech internet users, on a long-term decline.",
+      "reachTrend": "declining",
+      "posture": "negligible",
+      "postureReason": "The smallest measured Czech audience of the named networks and still falling; a play for it is recorded and skipped rather than ranked.",
+      "documentedSignals": [],
+      "claims": [
+        {
+          "statement": "7 % of Czech internet users are regular X users, continuing a long-term decline.",
+          "claimKind": "representative-survey",
+          "evidenceUrl": "https://www.mediaguru.cz/ami-digital-index-cesi-jsou-na-socialnich-sitich-pasivnejsi-cas-straveny-snizuji"
+        }
+      ]
+    }
+  ]
+}

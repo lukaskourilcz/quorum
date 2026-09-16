@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "goviral-signal-scoring/1",
+  "scoringVersion": "1.0.0",
+  "$comment": "Every number GoVIRAL's signal score depends on lives here and nowhere else. The three components are deliberately incomparable readings kept apart until the last step: relative growth is a ratio, absolute volume is normalized inside its own source kind, and breadth counts operators rather than adding their units together.",
+  "weights": {
+    "relative-growth": 0.45,
+    "absolute-volume": 0.25,
+    "source-breadth": 0.3
+  },
+  "$statusComment": "explodingScore is reached on the renormalized 0-100 score; peakedGrowth is the decline at which a signal is called peaked whatever its score; breakoutPercent is Google Trends' own Breakout marker, above which relative growth is pinned to its ceiling.",
+  "statusThresholds": {
+    "explodingScore": 70,
+    "peakedGrowth": -0.3,
+    "breakoutPercent": 5000
+  },
+  "$providerComment": "sourceKinds picks the half-life band; independenceGroups is what makes breadth mean independent sources. Two Google surfaces are one operator, and Instagram and Threads are one operator, so neither pair can manufacture breadth on its own.",
+  "sourceKinds": {
+    "hn": "viral-post",
+    "google-trends": "search-spike",
+    "google-news": "news-volume",
+    "reddit": "viral-post",
+    "apify-social": "social-tag"
+  },
+  "independenceGroups": {
+    "hn": "hn",
+    "google-trends": "google",
+    "google-news": "google",
+    "reddit": "reddit",
+    "apify-social": "meta"
+  },
+  "$windowComment": "halfLifeHours is the window a reading is good for; maximumHours is how long storm re-triggers may keep one alive since it was first flagged. format-shift is configured for the 30-90 day band the brief names; nothing in this repository feeds it beyond the scout's own format counts.",
+  "windows": {
+    "search-spike": { "halfLifeHours": 48, "maximumHours": 168 },
+    "viral-post": { "halfLifeHours": 24, "maximumHours": 72 },
+    "news-volume": { "halfLifeHours": 72, "maximumHours": 336 },
+    "social-tag": { "halfLifeHours": 168, "maximumHours": 720 },
+    "format-shift": { "halfLifeHours": 720, "maximumHours": 2160 }
+  },
+  "$volumeComment": "One ceiling per source kind, because a search-traffic estimate, an article count and a hashtag's post count are different units. A single shared ceiling would be the merged number the founding decision refuses.",
+  "volumeCeilings": {
+    "search-spike": 50000,
+    "viral-post": 500,
+    "news-volume": 40,
+    "social-tag": 400,
+    "format-shift": 60
+  },
+  "stormRule": {
+    "minimumMultiplier": 2,
+    "lookbackDays": 14
+  },
+  "registerCap": 400,
+  "lastedBucketsHours": [4, 24, 48, 168]
+}

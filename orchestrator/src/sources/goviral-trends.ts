@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { GoViralActor, GoViralRecipeStep, GoViralSourceRegistry, GoViralTopicSet } from "./apify.js";
+import { ScoredSignalSchema } from "./goviral-signal-score.js";
 
 /**
  * The weekly trend snapshot GoVIRAL reads, and the arithmetic that turns scraped posts into it.
@@ -108,6 +109,16 @@ export const GoViralTrendsSchema = z.object({
   generatedAt: z.string(),
   sourceResults: z.array(TrendSourceResultSchema),
   freeSignals: z.array(FreeSignalResultSchema).max(24).default([]),
+  /**
+   * The rated inventory: one score, one status word and one expiry window per signal.
+   *
+   * `.default([])` rather than required, and that is load-bearing. `newestTrendSnapshot` re-parses
+   * *last* week's file with this same schema to recover the week-over-week baseline, so a required
+   * field would make every snapshot written before scoring existed unreadable — and the baseline
+   * is the input the relative-growth component depends on. A required field here would break the
+   * thing it is trying to measure.
+   */
+  scoredSignals: z.array(ScoredSignalSchema).max(40).default([]),
   items: z.array(TrendItemSchema).max(2_000),
   signals: z.object({
     topHashtags: z.array(TrendHashtagSignalSchema).max(24),

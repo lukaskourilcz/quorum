@@ -1,5 +1,7 @@
 import { MarketingPlanSchema, type MarketingPlan } from "../contracts/marketing-plan.js";
 import type { GoViralTrends } from "../sources/goviral-trends.js";
+import { normalizeTopic, type ScoredSignal } from "../sources/goviral-signal-score.js";
+import type { RetiredSignal } from "../sources/goviral-signal-register.js";
 
 /**
  * The owner's weekly content brief, written as a marketing-plan/1.
@@ -24,8 +26,30 @@ export function goViralBriefId(date: string): string {
   return `plan-${date}-weekly-brief`;
 }
 
+/** How fresh the week's data is, said the same way wherever it is said. */
+export function snapshotNoteFor(date: string, trends: GoViralTrends | null): string {
+  if (!trends) return "No scout data was available this week.";
+  return trends.date === date
+    ? `Scout data from ${trends.date}.`
+    : `No fresh scout this week — working from the ${trends.date} snapshot.`;
+}
+
+/**
+ * The seven-day skeleton, not a schedule: the owner decides what lands where, and nothing in this
+ * system can post to a day even if it wanted to. Shared with the brief document so the plan and
+ * the brief cannot describe two different weeks.
+ */
+export function weeklyRhythm(snapshotNote: string): string[] {
+  return [
+    `Mon–Tue: the strongest trend call from this week's data. ${snapshotNote}`,
+    "Wed–Thu: the searchable piece — something that answers a question people type, and earns for months rather than days.",
+    "Fri: the shareable piece — rides the moment, dies in days, and that is fine as long as it is not the whole week.",
+    "Sat–Sun: nothing scheduled. A quiet weekend is a real editorial choice."
+  ];
+}
+
 /** The trends worth naming, in the order the scout ranked them. */
-function trendCalls(trends: GoViralTrends | null): string[] {
+export function trendCalls(trends: GoViralTrends | null): string[] {
   if (!trends) return [];
   const paid = trends.signals.topHashtags.slice(0, 5).map((signal) => {
     const delta = signal.weekOverWeekDelta === null
@@ -59,21 +83,56 @@ function trendCalls(trends: GoViralTrends | null): string[] {
   return [...paid, ...scopedFree, ...doorMoneyFree.slice(0, 5)];
 }
 
+/**
+ * Whether AUDIT's veto named this signal.
+ *
+ * The fad veto has always existed as a whole-room verdict: an AUDIT veto drops the plan to draft.
+ * What it could not do was name one call, so the room either kept everything or downgraded
+ * everything. This reads AUDIT's own words for the signals it mentioned, and it fires only when
+ * AUDIT actually voted veto — the room's verdict stays the gate, and this only says which calls it
+ * was about. A vetoed signal is printed with its reason rather than quietly dropped.
+ */
+function vetoedByAudit(topic: string, auditSummary: string): boolean {
+  const named = normalizeTopic(topic);
+  return named.length >= 4 && normalizeTopic(auditSummary).includes(named);
+}
+
+/** The status word, the window and the first-flagged date, on lines of their own. */
+function signalStatusLines(signals: readonly ScoredSignal[]): string[] {
+  return signals.slice(0, 8).map((signal) => {
+    const breadth = signal.breadthProviders.length;
+    const lasted = signal.lastedHours > 0 ? `, lasted over ${signal.lastedHours}h` : "";
+    const breakout = signal.breakout ? ", breakout growth" : "";
+    // The source kind is part of the name, not decoration: one subject can be measured as a search
+    // spike and as a viral post at once, and those are two readings with two different windows.
+    return `Signal status: ${signal.topic} (${signal.sourceKind}) — ${signal.status}, ${signal.window}${lasted}${breakout}, first flagged ${signal.firstFlaggedOn}, breadth ${breadth} independent ${breadth === 1 ? "source" : "sources"}, score ${signal.score}, expires ${signal.expiresAt.slice(0, 10)}.`;
+  });
+}
+
 export function buildGoViralWeeklyBrief(input: {
   date: string;
   trends: GoViralTrends | null;
   contributions: readonly BriefContribution[];
   vetoed: boolean;
+  /** What PULSE let go this week, each with the reason it went. */
+  retired?: readonly RetiredSignal[];
 }): MarketingPlan {
   const chair = input.contributions.find((contribution) => contribution.agent === "PULSE");
   const calls = trendCalls(input.trends);
+  const auditSummary = input.vetoed
+    ? input.contributions.find((contribution) => contribution.agent === "AUDIT")?.summary ?? ""
+    : "";
+  const scored = input.trends?.scoredSignals ?? [];
+  const vetoedSignals = scored.filter((signal) => vetoedByAudit(signal.topic, auditSummary));
+  const survivingSignals = scored.filter((signal) => !vetoedSignals.includes(signal));
+  const statusLines = signalStatusLines(survivingSignals);
+  const vetoLines = vetoedSignals.slice(0, 5).map((signal) =>
+    `Signal vetoed: ${signal.topic} — named in AUDIT's fad veto and dropped from this week's calls. It scored ${signal.score} as ${signal.status} before the veto; the number is recorded, the call is not made.`);
+  const retiredLines = (input.retired ?? []).slice(0, 5).map((signal) =>
+    `Signal retired: ${signal.topic} — ${signal.reason} First flagged ${signal.firstFlaggedOn}, last scored ${signal.lastScore} as ${signal.lastStatus}.`);
   const ideas = input.contributions.filter((contribution) => contribution.idea);
   const evidenceRefs = [...new Set(input.contributions.flatMap((contribution) => contribution.evidenceRefs))];
-  const snapshotNote = input.trends
-    ? input.trends.date === input.date
-      ? `Scout data from ${input.trends.date}.`
-      : `No fresh scout this week — working from the ${input.trends.date} snapshot.`
-    : "No scout data was available this week.";
+  const snapshotNote = snapshotNoteFor(input.date, input.trends);
 
   return MarketingPlanSchema.parse({
     schemaVersion: "marketing-plan/1",
@@ -91,13 +150,23 @@ export function buildGoViralWeeklyBrief(input: {
         assetsNeeded: [],
         platformPolicyNote: "A trend call, not a publishing instruction. Nothing is posted or scheduled from this line."
       })),
+      // Ratings live on their own lines rather than inside the `Trend call:` text. Three ventures
+      // parse those calls with anchored regexes — BOOKSOFHISTORY, Tehdejší svět and Kvórum — and
+      // two of them end at `$`, so appending a status word would not throw, it would silently
+      // return zero trend signals and cost those desks their GoVIRAL crossover.
+      ...[...statusLines, ...vetoLines, ...retiredLines].map((line) => ({
+        type: "content" as const,
+        description: line,
+        assetsNeeded: [],
+        platformPolicyNote: "A rating, a veto or a retirement. It ranks and expires inventory; it publishes nothing."
+      })),
       ...ideas.map((contribution) => ({
         type: "content" as const,
         description: `${contribution.idea!.title} — ${contribution.idea!.summary}`,
         assetsNeeded: ["owner review"],
         platformPolicyNote: "Draft only. No posting, scheduling, advertising or outreach is authorized."
       })),
-      ...(calls.length === 0 && ideas.length === 0
+      ...(calls.length === 0 && ideas.length === 0 && statusLines.length === 0 && vetoLines.length === 0 && retiredLines.length === 0
         ? [{
             type: "content" as const,
             description: `${snapshotNote} The room produced no trend call it could support with a number, which is a correct answer to a quiet week.`,
@@ -106,14 +175,7 @@ export function buildGoViralWeeklyBrief(input: {
           }]
         : [])
     ],
-    // A seven-day skeleton, not a schedule: the owner decides what lands where, and nothing in
-    // this system can post to a day even if it wanted to.
-    calendar: [
-      { week: 1, focus: `Mon–Tue: the strongest trend call from this week's data. ${snapshotNote}` },
-      { week: 2, focus: "Wed–Thu: the searchable piece — something that answers a question people type, and earns for months rather than days." },
-      { week: 3, focus: "Fri: the shareable piece — rides the moment, dies in days, and that is fine as long as it is not the whole week." },
-      { week: 4, focus: "Sat–Sun: nothing scheduled. A quiet weekend is a real editorial choice." }
-    ],
+    calendar: weeklyRhythm(snapshotNote).map((focus, index) => ({ week: index + 1, focus })),
     audienceRefs: [],
     // Readings that exist on disk. Nothing here is a target the room can talk itself into
     // having met.

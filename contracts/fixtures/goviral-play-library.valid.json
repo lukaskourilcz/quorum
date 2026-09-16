@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "goviral-play-library/1",
+  "ventureId": "goviral",
+  "reachScale": "reach-band/1",
+  "updatedAt": "2026-08-24",
+  "plays": [
+    {
+      "id": "play-fixture-open-loop-first-line",
+      "title": "Fixture: open the piece on the unresolved number",
+      "category": "hook",
+      "ventureId": "caught-up",
+      "summary": "Fixture play. The first line states the figure the piece does not yet explain, so the reader has to keep going to close it.",
+      "readTimeMinutes": 3,
+      "reach": {
+        "band": 6,
+        "basis": "estimate",
+        "note": "Fixture estimate. No reading behind it."
+      },
+      "impact": 2,
+      "confidence": 0.8,
+      "effortPersonWeeks": 0.5,
+      "benchmark": {
+        "metric": "fixture completion rate",
+        "unit": "%",
+        "direction": "higher-is-better",
+        "baseline": 41,
+        "achieved": 58,
+        "measuredOver": "a synthetic fixture window",
+        "sourceRef": "fixture:goviral-play-library"
+      },
+      "screenshot": {
+        "path": "state/ventures/goviral/plays/screenshots/fixture-open-loop.png",
+        "alt": "Fixture screenshot reference; no file ships with the fixture.",
+        "capturedAt": "2026-08-20",
+        "subject": "own-surface",
+        "visibility": "admin-only"
+      },
+      "evidenceRefs": [
+        "fixture:goviral-play-library"
+      ],
+      "recordedAt": "2026-08-24"
+    },
+    {
+      "id": "play-fixture-weekly-quiet-day",
+      "title": "Fixture: leave one day of the week empty",
+      "category": "cadence",
+      "ventureId": null,
+      "summary": "Fixture play. Nothing is scheduled at the weekend, so the week has somewhere to put an unexpected piece.",
+      "readTimeMinutes": 1,
+      "reach": {
+        "band": 2,
+        "basis": "estimate",
+        "note": "Fixture estimate. No reading behind it."
+      },
+      "impact": 0.5,
+      "confidence": 0.5,
+      "effortPersonWeeks": 0.25,
+      "benchmark": null,
+      "screenshot": null,
+      "evidenceRefs": [],
+      "recordedAt": "2026-08-24"
+    }
+  ]
+}

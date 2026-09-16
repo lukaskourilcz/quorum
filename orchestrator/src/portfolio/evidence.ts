@@ -30,6 +30,7 @@ import {
   type GoViralSourceRegistry
 } from "../sources/apify.js";
 import { runRecipeStep } from "../sources/goviral-scout.js";
+import { scoreAndRegisterSignals } from "../sources/goviral-signal-register.js";
 import { resolveVentureCapabilityInMap } from "../ventures/capabilities.js";
 import type { VentureCapabilityMap } from "../contracts/venture-capability.js";
 import {
@@ -584,27 +585,50 @@ export async function refreshGoViralTrends(input: {
     }))
   }));
 
-  const fallback = (reason: string) => {
+  /*
+   * Scoring runs on whichever path this call takes, and it runs exactly once.
+   *
+   * The register is the durable half: it is where "first flagged on" lives and the only place the
+   * keyless free signals' previous reading survives, since they carry no week-over-week delta of
+   * their own. So it is written even on a day with no snapshot at all — that is the day it is most
+   * worth accumulating, because it is what gives the growth component a baseline the first time a
+   * real scout runs. `scoredSignals` on the snapshot is the convenience copy for readers.
+   *
+   * Zero network calls, zero model calls, zero Apify credit: every input is a reading this run
+   * already has.
+   */
+  const fallback = async (reason: string) => {
     if (!previous || snapshotAgeDays(previous.date, input.date) > TREND_SNAPSHOT_MAX_AGE_DAYS) {
       // No usable snapshot: the room still does not meet, because four seats reasoning about a
       // velocity reading and nothing else is not a room worth opening. The refs are returned
       // regardless — the collection happened and saying so is cheaper than pretending it did not.
+      //
+      // The signal register is deliberately not written here either. This branch writes no
+      // artifact at all — `goviral-trends-gate.test.ts` holds that line — and a week the room does
+      // not meet is not a week worth flagging signals for.
       return { artifactPaths: [], evidenceRefs: freeRefs, trends: null, snapshotDate: null, stale: true, reason };
     }
+    const scoring = await scoreAndRegisterSignals({
+      root: input.root,
+      date: input.date,
+      now: input.now,
+      trends: { signals: previous.signals, freeSignals },
+      refs: freeRefs
+    });
     // The snapshot carries forward, with *today's* free signals written onto it. `stale` stays
     // true because it is the paid scout that did not run, which is what stale has always meant
     // here — and the day's trends output now carries a reading taken today either way.
     return {
-      artifactPaths: [],
+      artifactPaths: scoring.artifactPaths,
       evidenceRefs: [...trendEvidenceRefs(previous.date, previous.sourceResults), ...freeRefs],
-      trends: { ...previous, freeSignals },
+      trends: { ...previous, freeSignals, scoredSignals: scoring.scoredSignals },
       snapshotDate: previous.date,
       stale: true,
       reason: `${reason} No fresh scout this week — working from the ${previous.date} snapshot.`
     };
   };
 
-  if (!verdict.allowed) return fallback(verdict.reason);
+  if (!verdict.allowed) return await fallback(verdict.reason);
 
   // The platform's own figure beats our arithmetic when it will give one, the same way the Odds
   // API's quota headers beat a local counter. A usage endpoint that is down is not a reason to
@@ -618,7 +642,7 @@ export async function refreshGoViralTrends(input: {
   const remaining = Math.max(APIFY_MONTHLY_CREDIT_USD - quota.estimatedUsedUsd, 0);
   const isFirstScoutOfMonth = !previous || previous.date.slice(0, 7) !== month;
   const planned = plannedRecipeSteps({ registry, remainingUsd: remaining, isFirstScoutOfMonth });
-  if (planned.length === 0) return fallback("Every recipe step was priced out of this month's remaining Apify credit.");
+  if (planned.length === 0) return await fallback("Every recipe step was priced out of this month's remaining Apify credit.");
 
   const sourceResults: TrendSourceResult[] = [];
   const fresh: TrendItem[] = [];
@@ -650,7 +674,7 @@ export async function refreshGoViralTrends(input: {
   await atomicWriteJson(input.root, quotaPath, quota);
   if (fresh.length === 0) {
     return {
-      ...fallback("The scout ran and returned nothing."),
+      ...(await fallback("The scout ran and returned nothing.")),
       artifactPaths: [quotaPath]
     };
   }
@@ -664,26 +688,35 @@ export async function refreshGoViralTrends(input: {
     now: input.now
   });
   const evidenceRefs = [...trendEvidenceRefs(input.date, sourceResults), ...freeRefs];
+  const signals = {
+    topHashtags,
+    topFormats: computeFormatSignals(items),
+    topAudio: computeAudioSignals(items),
+    exploreSections: [...new Set(items.map((item) => item.exploreSection).filter((section): section is string => Boolean(section)))].slice(0, 20),
+    perTopicSet: computeTopicSummaries({ items, hashtags: topHashtags, topicSets: registry.topicSets, now: input.now })
+  };
+  const scoring = await scoreAndRegisterSignals({
+    root: input.root,
+    date: input.date,
+    now: input.now,
+    trends: { signals, freeSignals },
+    refs: evidenceRefs
+  });
   const trends = GoViralTrendsSchema.parse({
     schemaVersion: "goviral-trends/1",
     date: input.date,
     generatedAt: input.now.toISOString(),
     sourceResults,
     freeSignals,
+    scoredSignals: scoring.scoredSignals,
     items,
-    signals: {
-      topHashtags,
-      topFormats: computeFormatSignals(items),
-      topAudio: computeAudioSignals(items),
-      exploreSections: [...new Set(items.map((item) => item.exploreSection).filter((section): section is string => Boolean(section)))].slice(0, 20),
-      perTopicSet: computeTopicSummaries({ items, hashtags: topHashtags, topicSets: registry.topicSets, now: input.now })
-    },
+    signals,
     forMagazines: buildForMagazines({ hashtags: topHashtags, refs: evidenceRefs })
   });
   const artifactPath = trendsPath(input.date);
   await atomicWriteJson(input.root, artifactPath, trends);
   return {
-    artifactPaths: [artifactPath, quotaPath],
+    artifactPaths: [artifactPath, quotaPath, ...scoring.artifactPaths],
     evidenceRefs,
     trends,
     snapshotDate: input.date,

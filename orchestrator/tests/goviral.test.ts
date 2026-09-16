@@ -28,6 +28,7 @@ import {
   computeAudioSignals,
   computeHashtagSignals,
   engagementPerHour,
+  GoViralTrendsSchema,
   plannedRecipeSteps,
   pruneItems,
   trendEvidenceRefs,
@@ -469,6 +470,7 @@ describe("the weekly brief", () => {
         generatedAt: "2026-08-10T11:00:00.000Z",
         sourceResults: [],
         freeSignals: [],
+        scoredSignals: [],
         items: [],
         signals: { topHashtags: [], topFormats: [], topAudio: [], exploreSections: [], perTopicSet: [] },
         forMagazines: { ai: [], mma: [] }
@@ -488,6 +490,7 @@ describe("the weekly brief", () => {
         generatedAt: "2026-08-10T11:00:00.000Z",
         sourceResults: [],
         freeSignals: [{ provider: "google-news", status: "success", reason: null, signals: [{ kind: "volume", topic: "publishing history", value: 8, scope: "topic-set:booksofhistory:en", topicSets: [], ref: "source:trending:google-news:2026-08-10" }] }],
+        scoredSignals: [],
         items: [],
         signals: { topHashtags: [], topFormats: [], topAudio: [], exploreSections: [], perTopicSet: [] },
         forMagazines: { ai: [], mma: [] }
@@ -515,5 +518,140 @@ describe("trend injection into the magazines", () => {
     expect(editor).toContain("12.0 engagements/hour");
     expect(editor).not.toContain("on last week");
     expect(editor).toContain("never a reason to pick a story the packet does not support");
+  });
+});
+
+describe("the rated inventory in the weekly brief", () => {
+  const contributions = [
+    { agent: "PULSE", summary: "Two calls this week and one skip.", evidenceRefs: [], idea: null },
+    { agent: "AUDIT", summary: "Vetoing the ice bucket revival as a fad with nothing behind it.", evidenceRefs: [], idea: null }
+  ];
+
+  const scored = (overrides: Record<string, unknown> = {}) => ({
+    key: "search-spike:model release day",
+    topic: "model release day",
+    topicSet: "dneskai",
+    provider: "google-trends",
+    sourceKind: "search-spike",
+    measurement: "volume",
+    value: 20_000,
+    components: [
+      { name: "relative-growth", rawValue: 0.8, weight: 0.45, contribution: 36, note: "Against last week's 11000." },
+      { name: "absolute-volume", rawValue: 0.9, weight: 0.25, contribution: 22.5, note: "Normalized inside search-spike." },
+      { name: "source-breadth", rawValue: 0.66, weight: 0.3, contribution: 19.8, note: "2 of 3 answering operators." }
+    ],
+    score: 78.3,
+    status: "exploding",
+    window: "active",
+    breakout: false,
+    firstFlaggedOn: "2026-08-03",
+    measuredAt: "2026-08-10T11:00:00.000Z",
+    expiresAt: "2026-08-12T11:00:00.000Z",
+    lastedHours: 168,
+    breadthProviders: ["google", "hn"],
+    evidenceRefs: ["source:trending:google-trends:2026-08-10"],
+    ...overrides
+  });
+
+  const trends = (scoredSignals: unknown[]) => GoViralTrendsSchema.parse({
+    schemaVersion: "goviral-trends/1",
+    date: "2026-08-10",
+    generatedAt: "2026-08-10T11:00:00.000Z",
+    sourceResults: [],
+    freeSignals: [{
+      provider: "google-news",
+      status: "success",
+      reason: null,
+      signals: [{ kind: "volume", topic: "publishing history", value: 8, scope: "topic-set:booksofhistory:en", topicSets: [], ref: "source:trending:google-news:2026-08-10" }]
+    }],
+    scoredSignals,
+    items: [],
+    signals: { topHashtags: [], topFormats: [], topAudio: [], exploreSections: [], perTopicSet: [] },
+    forMagazines: { ai: [], mma: [] }
+  });
+
+  it("parses a snapshot written before scoring existed, because last week's file is the baseline", () => {
+    const legacy = GoViralTrendsSchema.parse({
+      schemaVersion: "goviral-trends/1",
+      date: "2026-08-03",
+      generatedAt: "2026-08-03T11:00:00.000Z",
+      sourceResults: [],
+      items: [],
+      signals: { topHashtags: [], topFormats: [], topAudio: [], exploreSections: [], perTopicSet: [] },
+      forMagazines: { ai: [], mma: [] }
+    });
+    expect(legacy.scoredSignals).toEqual([]);
+    expect(legacy.freeSignals).toEqual([]);
+  });
+
+  it("puts the status on its own line and leaves the trend call byte-identical", () => {
+    const brief = buildGoViralWeeklyBrief({
+      date: "2026-08-10",
+      trends: trends([scored()]),
+      contributions: [contributions[0]!],
+      vetoed: false
+    });
+    const descriptions = brief.tactics.map(({ description }) => description);
+    // Three ventures parse this exact string with anchored regexes. It does not move.
+    expect(descriptions).toContain("Trend call: publishing history (booksofhistory, free volume, en): 8.");
+    const status = descriptions.find((entry) => entry.startsWith("Signal status:"));
+    expect(status).toContain("model release day (search-spike)");
+    expect(status).toContain("exploding, active");
+    expect(status).toContain("first flagged 2026-08-03");
+    expect(status).toContain("breadth 2 independent sources");
+    expect(status).toContain("score 78.3");
+  });
+
+  it("names a signal AUDIT vetoed with its number, rather than dropping it silently", () => {
+    const brief = buildGoViralWeeklyBrief({
+      date: "2026-08-10",
+      trends: trends([scored(), scored({ key: "viral-post:ice bucket revival", topic: "ice bucket revival", sourceKind: "viral-post", score: 51 })]),
+      contributions,
+      vetoed: true
+    });
+    const descriptions = brief.tactics.map(({ description }) => description);
+    expect(descriptions.some((entry) => entry.startsWith("Signal vetoed: ice bucket revival"))).toBe(true);
+    expect(descriptions.some((entry) => entry.startsWith("Signal status: ice bucket revival"))).toBe(false);
+    // The un-named signal keeps its rating; a veto is about one call, not the whole table.
+    expect(descriptions.some((entry) => entry.startsWith("Signal status: model release day"))).toBe(true);
+    expect(brief.status).toBe("draft");
+  });
+
+  it("does not read a veto into a room that did not vote one", () => {
+    const brief = buildGoViralWeeklyBrief({
+      date: "2026-08-10",
+      trends: trends([scored({ key: "viral-post:ice bucket revival", topic: "ice bucket revival", sourceKind: "viral-post" })]),
+      contributions,
+      vetoed: false
+    });
+    expect(brief.tactics.some(({ description }) => description.startsWith("Signal vetoed:"))).toBe(false);
+    expect(brief.status).toBe("approved");
+  });
+
+  it("names what PULSE retired and why", () => {
+    const brief = buildGoViralWeeklyBrief({
+      date: "2026-08-10",
+      trends: trends([]),
+      contributions: [contributions[0]!],
+      vetoed: false,
+      retired: [{
+        key: "viral-post:a spent thread",
+        topic: "a spent thread",
+        sourceKind: "viral-post",
+        reason: "Nothing measured it this week and its 24h viral-post window has closed.",
+        retiredOn: "2026-08-10",
+        firstFlaggedOn: "2026-08-04",
+        lastScore: 44,
+        lastStatus: "regular",
+        window: "lasted",
+        lastedHours: 168
+      }]
+    });
+    const retired = brief.tactics.map(({ description }) => description).find((entry) => entry.startsWith("Signal retired:"));
+    expect(retired).toContain("a spent thread");
+    expect(retired).toContain("24h viral-post window has closed");
+    expect(retired).toContain("First flagged 2026-08-04");
+    // A week with a retirement and nothing else is not a quiet week with nothing to say.
+    expect(brief.tactics.some(({ description }) => description.includes("no trend call"))).toBe(false);
   });
 });
