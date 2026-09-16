@@ -23,7 +23,8 @@
     "briefsMaximum": 4,
     "watchlistMaximum": 6,
     "maximumOutputTokens": 7100,
-    "maximumCurationCandidates": 50
+    "maximumCurationCandidates": 50,
+    "practicalItem": false
   },
   "models": {
     "curation": "claude-sonnet-4-6",

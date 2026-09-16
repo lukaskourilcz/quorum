@@ -111,6 +111,7 @@ function frontmatter(
     translation_of: article.slug,
     dispatches: localized.dispatches,
     wire: article.wire,
+    ...(article.practical ? { practical: article.practical } : {}),
     type: "daily"
   };
 }

@@ -42,6 +42,14 @@ By project:
 
 <!-- END GENERATED -->
 
+`state/money/cost-report.json` answers the two questions this table cannot: what each edition
+cost and what each decision cost. It is written by `pnpm cost:report` from the same ledger, joined
+on `cycleId`, and it also compares each room's month against the envelope its own scorecard
+reserved. Every figure in it is metered — this company's arithmetic over its own calls. What the
+provider actually billed is a different number and it reads `unavailable`, because reading it
+needs an Anthropic Admin API key that only an organization owner can create. That column stays
+unavailable rather than `$0.00` until the key exists, for the same reason revenue does.
+
 `state/budget/ledger.json` is canonical: every model call is appended to it with its
 provider, model, token counts and price, and every number above is a sum over that file.
 This page was hand-written until 2026-08-06 and had drifted to $0.52 against a ledger

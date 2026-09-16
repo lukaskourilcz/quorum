@@ -111,7 +111,18 @@
           },
           "package_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         },
-        "translation_of": "2026-08-04-measured-model-price-cut"
+        "translation_of": "2026-08-04-measured-model-price-cut",
+        "practical": {
+          "variant": "daily",
+          "items": [
+            {
+              "kind": "prompt",
+              "title": "Prompt na přepočet ceny za tisíc tokenů",
+              "body": "Vlož modelu svůj měsíční objem vstupních a výstupních tokenů a nech si spočítat, o kolik se účet mění po nové sazbě. Výsledek porovnej s fakturou za minulý měsíc.",
+              "source_url": "https://example.com/source"
+            }
+          ]
+        }
       },
       "body": "## Změna\n\nPoskytovatel zveřejnil nový ceník."
     }

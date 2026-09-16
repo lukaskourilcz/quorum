@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "event-candidates/1",
+  "date": "2026-09-16",
+  "windowDays": 240,
+  "candidates": [
+    {
+      "id": "e021406e397e63fae8ef8988c4172cdcad59fec8",
+      "source": "aiakce",
+      "sourceName": "AI Akce.cz",
+      "scope": "cz",
+      "suggestedId": "cyber-attacks-2026",
+      "title": "Cyber Attacks",
+      "starts": "2026-09-23",
+      "ends": "2026-09-22",
+      "online": false,
+      "url": "https://cyberattacks.konference.cz/"
+    },
+    {
+      "id": "not-a-digest",
+      "source": "aiakce",
+      "sourceName": "AI Akce.cz",
+      "scope": "prague",
+      "suggestedId": "AI Transformace",
+      "title": "AI transformace zdravotnictví 2026",
+      "starts": "14. 10. 2026",
+      "online": "no",
+      "url": "http://asociace.ai/ai-transformace-zdravotnictvi/"
+    }
+  ],
+  "sources": [
+    {
+      "id": "aiakce",
+      "name": "AI Akce.cz",
+      "kind": "ical",
+      "host": "www.aiakce.cz",
+      "read": 5,
+      "accepted": -1,
+      "dropped": 2,
+      "known": 1
+    }
+  ]
+}

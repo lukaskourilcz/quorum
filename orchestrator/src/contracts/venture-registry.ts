@@ -131,6 +131,18 @@ const VentureDefinitionSchema = openObject({
     "edition-en",
     "delivery"
   ])),
+  /**
+   * The venture's own monthly allowance inside the signed company limits.
+   *
+   * Absent for every venture that the owner has not allocated one, and absent is not zero — it
+   * means no desk rung applies, exactly as it did before this field existed. The number is an
+   * owner decision the way `personal-growth`'s nested $20 is in `budget-2026-08f`; nothing in
+   * this repository may derive, raise or redistribute it. `max(50)` is the company all-in
+   * limit, so a desk allowance can never be declared larger than the whole company's.
+   */
+  budget: openObject({
+    monthlyDeskUsd: z.number().finite().positive().max(50)
+  }).optional(),
   rendering: VentureRenderingSchema.optional(),
   productionJobs: z.array(openObject({
     kind: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),

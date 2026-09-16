@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "portfolio-rice-ranking/1",
+  "quarterId": "2026-Q1",
+  "generatedAt": "2026-09-16T12:00:00.000Z",
+  "method": "reach x impact x confidence / effort-usd-per-month",
+  "posture": "information-only",
+  "enforcement": "information-only",
+  "enforcementHeldBecause": [
+    "config/portfolio-rice.json sets rankingEnforced to false"
+  ],
+  "rows": [
+    {
+      "id": "fixture-venture-a",
+      "kind": "venture",
+      "label": "Fixture venture A",
+      "reach": 400,
+      "impact": 2,
+      "confidence": 0.75,
+      "confidenceBasis": {
+        "measuredKpis": 3,
+        "totalKpis": 4
+      },
+      "effortUsdPerMonth": 4.8,
+      "effortBasis": [
+        {
+          "phase": "fixture-edition",
+          "envelopeUsd": 0.08,
+          "runsPerMonth": 30
+        },
+        {
+          "phase": "fixture-product",
+          "envelopeUsd": 0.08,
+          "runsPerMonth": 30
+        }
+      ],
+      "score": 125,
+      "status": "scored",
+      "missingInputs": [],
+      "source": "Fixture figures. They prove the contract, not the portfolio."
+    },
+    {
+      "id": "fixture-venture-b",
+      "kind": "experiment",
+      "label": "Fixture experiment B",
+      "reach": null,
+      "impact": null,
+      "confidence": null,
+      "confidenceBasis": {
+        "measuredKpis": 0,
+        "totalKpis": 0
+      },
+      "effortUsdPerMonth": 0,
+      "effortBasis": [],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact",
+        "confidence",
+        "effort"
+      ],
+      "source": "Fixture row with nothing entered, which is what every real row reads today."
+    }
+  ],
+  "declaredDegradationOrder": [
+    "dm-growth",
+    "kv-desk",
+    "dm-desk",
+    "ts-desk",
+    "bh-desk",
+    "gv-brief",
+    "tt-marketing"
+  ],
+  "declaredVentureOrder": [
+    "door-money",
+    "kvorum",
+    "tehdejsi-svet",
+    "booksofhistory",
+    "goviral",
+    "titty-tuesdays"
+  ],
+  "agreesWithDeclaredOrder": null,
+  "comparison": {
+    "comparableVentures": [],
+    "scoredAscending": [],
+    "unavailableVentures": [
+      "door-money",
+      "kvorum",
+      "tehdejsi-svet",
+      "booksofhistory",
+      "goviral",
+      "titty-tuesdays"
+    ]
+  }
+}

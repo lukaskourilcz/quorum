@@ -4,6 +4,7 @@ import { ActionPacketSchema } from "./action-packet.js";
 import { BoardlessDatasetSchema } from "./boardless-dataset.js";
 import { BoardlessStreamSchema, StreamSyncReceiptSchema } from "./boardless-stream.js";
 import { BoardlessEventsSchema } from "./boardless-events.js";
+import { EventCandidateFileSchema } from "./event-candidates.js";
 import { BhCycleSchema } from "./bh-cycle.js";
 import { BhSeedLibrarySchema } from "./bh-seed.js";
 import { BhShortlistSchema } from "./bh-shortlist.js";
@@ -17,7 +18,9 @@ import { BhDossierSchema, BhResearchLedgerEntrySchema } from "./bh-dossier.js";
 import { CalendarFeedSchema } from "./calendar.js";
 import { BookKbIndexSchema } from "./book-kb-index.js";
 import { CampaignBriefSchema } from "./campaign-brief.js";
+import { CarouselLayoutReviewSchema } from "./carousel-layout-review.js";
 import { CarouselTemplateSchema } from "./carousel-template.js";
+import { CostReportSchema } from "./cost-report.js";
 import { DailyDigestSchema } from "./daily-digest.js";
 import { DesignProposalSchema } from "./design-proposal.js";
 import { DoorMoneyPlaybookSchema } from "./door-money-playbook.js";
@@ -59,6 +62,8 @@ import {
   TrackRecordSchema
 } from "./mma.js";
 import { ArticlePackageSchema, EditorialSlateSchema, SocialVariantPackSchema } from "./mma-files.js";
+import { GoViralPlayLibrarySchema } from "./goviral-play-library.js";
+import { GoViralWeeklyBriefSchema } from "./goviral-weekly-brief.js";
 import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
 import { SocialPackSchema } from "./social-pack.js";
@@ -90,6 +95,7 @@ import {
   OperationsEfficiencyObservationSchema,
   SharedResourceLeaseSchema
 } from "./operations-coordination.js";
+import { PortfolioRiceRankingSchema } from "./portfolio-rice.js";
 import { PersonalGrowthFoundationSchema } from "./personal-growth-foundation.js";
 import {
   PersonalGrowthContentConfigSchema,
@@ -177,6 +183,7 @@ export const ContractSchemas = {
   "boardless-dataset": BoardlessDatasetSchema,
   "boardless-stream": BoardlessStreamSchema,
   "boardless-events": BoardlessEventsSchema,
+  "event-candidates": EventCandidateFileSchema,
   "bh-cycle": BhCycleSchema,
   "bh-seed": BhSeedLibrarySchema,
   "bh-shortlist": BhShortlistSchema,
@@ -192,7 +199,9 @@ export const ContractSchemas = {
   "stream-sync": StreamSyncReceiptSchema,
   "calendar": CalendarFeedSchema,
   "campaign-brief": CampaignBriefSchema,
+  "carousel-layout-review": CarouselLayoutReviewSchema,
   "carousel-template": CarouselTemplateSchema,
+  "cost-report": CostReportSchema,
   "daily-digest": DailyDigestSchema,
   "design-proposal": DesignProposalSchema,
   "door-money-playbook": DoorMoneyPlaybookSchema,
@@ -241,6 +250,8 @@ export const ContractSchemas = {
   "venture-capability-map": VentureCapabilityMapSchema,
   "venture-capability-edge": VentureCapabilityEdgeSchema,
   "goviral-intelligence-packet": GoViralIntelligencePacketSchema,
+  "goviral-weekly-brief": GoViralWeeklyBriefSchema,
+  "goviral-play-library": GoViralPlayLibrarySchema,
   "bounded-render-summary": BoundedRenderSummarySchema,
   "approved-publish-package": ApprovedPublishPackageRefSchema,
   "venture-operation-health": VentureOperationHealthSchema,
@@ -276,6 +287,7 @@ export const ContractSchemas = {
   "personal-growth-goviral-feedback": PersonalGrowthGoViralFeedbackSchema,
   "personal-growth-journal-metadata": PersonalGrowthJournalMetadataSchema,
   "personal-growth-leak-audit": PersonalGrowthLeakAuditSchema,
+  "portfolio-rice": PortfolioRiceRankingSchema,
   "venture-recommendation": AnyVentureRecommendationSchema,
   "visual-weights": VisualWeightsSchema,
   "article-image": ArticleImageSchema,

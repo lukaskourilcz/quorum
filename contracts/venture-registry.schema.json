@@ -201,6 +201,20 @@
               ]
             }
           },
+          "budget": {
+            "type": "object",
+            "properties": {
+              "monthlyDeskUsd": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 50
+              }
+            },
+            "required": [
+              "monthlyDeskUsd"
+            ],
+            "additionalProperties": {}
+          },
           "rendering": {
             "type": "object",
             "properties": {

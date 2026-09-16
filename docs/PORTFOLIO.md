@@ -147,9 +147,20 @@ resolved table.
 The owner countersigned one `$50` monthly all-in limit in `budget-2026-08f`. No more
 than `$25` is reserved for model/API calls, with a `$1.00` daily pace. Personal Growth
 has a nested `$20` all-in limit and cannot borrow beyond either ceiling. At 80% the
-summary warns with a project breakdown. At 100%, or after three consecutive exhausted
-days, new paid work stops and one approval item opens. The runtime cannot borrow from
-next month or raise its own limit. Payments remain human-only.
+summary warns with a project breakdown and one standing notice opens in the inbox for
+that month, which blocks nothing and approves nothing. At 100%, or after three
+consecutive exhausted days, new paid work stops and one approval item opens. Reaching
+`$50` also records `state/budget/office-mode.json` as read-only for that month, so a
+run stops at its first step with a stated reason instead of inside a room; every
+ledger, record and page stays readable, and the next month opens the office with no
+manual step. The runtime cannot borrow from next month or raise its own limit.
+Payments remain human-only.
+
+Each run is also bounded by the room envelope its own meeting record publishes, and a
+venture may carry an owner-allocated `budget.monthlyDeskUsd` in `config/ventures.json`.
+No venture carries one today: splitting the `$25` model share between desks is an owner
+decision of the same kind as Personal Growth's nested `$20`, and nothing in the runtime
+derives it.
 
 The meeting redesign saves cost by avoiding unnecessary calls, not by lowering the
 models that determine publication quality. Static cron wake-ups and `not-needed`
@@ -182,6 +193,19 @@ and no Titty Tuesdays below `$0.50`. A date whose due room envelopes still excee
 `$1.00` daily pace drops rooms in this order: Door Money growth, Kvórum, Door Money
 desk, Tehdejší svět, BOOKSOFHISTORY, GoVIRAL, Titty Tuesdays. Neither ladder raises a
 ceiling or overrides an authority gate.
+
+That order is hand-written and stays hand-written. What is new is that it is now also scored:
+`orchestrator/src/portfolio/rice.ts` ranks every registered venture on Reach x Impact x
+Confidence / Effort, writes `state/kpis/rice/<quarter>.json` at quarter end and on demand through
+`pnpm portfolio:rice`, and records whether the scores put those seven rooms' ventures in the same
+sequence the schedule drops them in. Effort is the venture's declared room and production
+envelopes per thirty-day month, so GoVIRAL's Monday brief is billed weekly rather than daily.
+Confidence is the measured share of that venture's quarterly KPIs. Reach and Impact are owner
+entries in `config/portfolio-rice.json` and are absent, so every row currently reads
+`unavailable` and the agreement verdict is `null`. The governing record is
+`state/decisions/2026-09-16-portfolio-rice.md`; until it is countersigned and the config switch is
+set, the ranking gates nothing, and no score can stand in for the founding, capacity or budget
+signature a held venture is waiting on.
 
 ## Money and quarterly targets
 

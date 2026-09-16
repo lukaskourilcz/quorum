@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "caught-up-promotion-deck/1",
+  "id": "caught-up-2026-09-16-2026-09-16-ai-spam-datova-centra-nepopularita-modely-promotion",
+  "venture": "caught-up",
+  "date": "2026-09-16",
+  "slug": "2026-09-16-ai-spam-datova-centra-nepopularita-modely",
+  "channel": {
+    "id": "linkedin",
+    "status": "held",
+    "reason": "No channel \"linkedin\" is registered in config/channels.json, so this deck has nowhere to go. Opening one is an owner decision: state/INBOX.md CAUGHT-UP-LINKEDIN-CHANNEL."
+  },
+  "approvals": {
+    "owner": "pending",
+    "posting": "manual-only"
+  },
+  "recipe": {
+    "schemaVersion": "carousel-recipe/1",
+    "venture": "caught-up",
+    "slug": "2026-09-16-ai-spam-datova-centra-nepopularita-modely",
+    "date": "2026-09-16",
+    "family": "folio",
+    "variant": "A",
+    "accentSwap": true,
+    "treatment": "mono",
+    "typeScale": 1.1,
+    "phaseSeed": 0
+  },
+  "createdAt": "2026-09-16T14:21:59.968Z",
+  "status": "held",
+  "reason": "No channel \"linkedin\" is registered in config/channels.json, so this deck has nowhere to go. Opening one is an owner decision: state/INBOX.md CAUGHT-UP-LINKEDIN-CHANNEL.",
+  "cta": {
+    "line": "Nové vydání každý den",
+    "slideText": "Nové vydání každý den · caughtup-ai.vercel.app",
+    "destination": "https://caughtup-ai.vercel.app/articles/2026-09-16-ai-spam-datova-centra-nepopularita-modely",
+    "origin": "edition"
+  },
+  "slides": [
+    {
+      "kind": "cover",
+      "text": "Průzkum: 61 % voličů je proti datovým centrům pro AI. Huang říká, trh to vyřeší sám"
+    },
+    {
+      "kind": "hook",
+      "text": "Agentní AI je schopna generovat spam, který obchází tradiční filtry – a děje se to teď, ne v budoucnosti."
+    },
+    {
+      "kind": "body",
+      "text": "ILands jako první zdokumentovaný případ agentního spamu ve velkém měřítku. Průzkum NYT/Siena ukázal 61% odpor pravděpodobných voličů k výstavbě datových center pro AI."
+    },
+    {
+      "kind": "body",
+      "text": "Cloudflare: crawleři AI musí být zodpovědní · TypeSafe AI: model, který hraje Doom"
+    },
+    {
+      "kind": "outro",
+      "text": "Nové vydání každý den · caughtup-ai.vercel.app"
+    }
+  ],
+  "coverage": {
+    "whyItMatters": {
+      "text": "Agentní AI je schopna generovat spam, který obchází tradiční filtry – a děje se to teď, ne v budoucnosti.",
+      "carried": 1,
+      "available": 3
+    },
+    "whatChanged": {
+      "text": "ILands jako první zdokumentovaný případ agentního spamu ve velkém měřítku. Průzkum NYT/Siena ukázal 61% odpor pravděpodobných voličů k výstavbě datových center pro AI.",
+      "carried": 2,
+      "available": 4
+    },
+    "briefs": {
+      "text": "Cloudflare: crawleři AI musí být zodpovědní · TypeSafe AI: model, který hraje Doom",
+      "carried": 2,
+      "available": 4
+    }
+  },
+  "caption": "Platforma iLands ukázala, že agentní AI zvládá posílat spam světu dřív, než regulátoři stihli zareagovat. Průzkum NYT/Siena přidal číslo: 61 % amerických voličů je proti výstavbě datových center pro AI. Jensen Huang říká, trh si poradí sám. Dnešní vydání Caught Up popisuje, co se změnilo.\n\nArtwork by BoardlessAI FRAME\n\nNové vydání každý den: https://caughtup-ai.vercel.app/articles/2026-09-16-ai-spam-datova-centra-nepopularita-modely\n\n#umelainteligence #spam #datacentra #regulace #geminilive #nvidia #apple #microsoft #agenti #llm",
+  "altText": "Slide 1: Průzkum: 61 % voličů je proti datovým centrům pro AI. Huang říká, trh to vyřeší sám Slide 2: Agentní AI je schopna generovat spam, který obchází tradiční filtry – a děje se to teď, ne v budoucnosti. Slide 3: ILands jako první zdokumentovaný případ agentního spamu ve velkém měřítku. Průzkum NYT/Siena ukázal 61% odpor pravděpodobných voličů k výstavbě datových center pro AI. Slide 4: Cloudflare: crawleři AI musí být zodpovědní · TypeSafe AI: model, který hraje Doom Slide 5: Nové vydání každý den · caughtup-ai.vercel.app",
+  "render": {
+    "status": "not-rendered",
+    "reason": "Composed only. The frames are drawn on request while the channel is held.",
+    "format": "instagram-portrait",
+    "canvas": null,
+    "assetPaths": [],
+    "frameHashes": []
+  },
+  "contentHash": "6fe0bf11fd37482f3e99ec87ccd4c17901d63eb3028527b95d01cf5e9b27f173"
+}

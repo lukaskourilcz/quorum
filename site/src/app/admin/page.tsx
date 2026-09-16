@@ -35,6 +35,7 @@ import {
 import { FixedCostsEditor } from "@/components/admin/fixed-costs-editor";
 import { MmaFilesAdminPanel } from "@/components/admin/mma-files-admin-panel";
 import { AdminMoneyPanel } from "@/components/admin/money-panel";
+import { CostPanel } from "@/components/admin/cost-panel";
 import { IdeasPanel, MonetizationPanel, type FutureIdeaRow } from "@/components/admin/future-panels";
 import { Panel, Tile } from "@/components/admin/panel";
 import { AdminCallout, AdminStateMessage } from "@/components/admin/admin-primitives";
@@ -64,6 +65,7 @@ import { readAdminFightAiQ } from "@/lib/admin-fightaiq";
 import { readAdminCaughtUp } from "@/lib/admin-caught-up";
 import { readAdminDoorMoney } from "@/lib/admin-door-money";
 import { readAdminTehdejsiSvet } from "@/lib/admin-tehdejsi-svet";
+import { readAdminCost } from "@/lib/admin-cost";
 import { readAdminFixedCosts } from "@/lib/admin-fixed-costs";
 import { readAdminKvorum } from "@/lib/admin-kvorum";
 import { readAdminWebDevSignal } from "@/lib/admin-webdev-signal";
@@ -238,6 +240,7 @@ export default async function AdminPage({
     labSections,
     autonomy,
     fixedCosts,
+    costReport,
     money,
     dailyResults,
     ownerAttention,
@@ -272,6 +275,7 @@ export default async function AdminPage({
     readDesignLabSections(),
     readAdminAutonomy(),
     readAdminFixedCosts(),
+    readAdminCost(),
     getPublicMoneySnapshot(),
     getDailyResults(),
     readOwnerAttention(),
@@ -1106,6 +1110,17 @@ export default async function AdminPage({
                 <Panel note="This quarter" title="What could bring money in">
                   <AdminMoneyPanel snapshot={money} />
                 </Panel>
+              </div>
+            </details>
+            {/* Its own disclosure rather than a fifth tile: the four above answer "how much is
+                left", and these three tables answer "on what". Two different questions, and the
+                tile row is deliberately four. */}
+            <details className="rounded-[var(--admin-radius-lg)] border border-[var(--admin-border)] p-3">
+              <summary className="admin-focus-ring cursor-pointer text-[length:var(--admin-type-control)] text-[var(--admin-foreground-muted)]">
+                What each edition and each decision cost
+              </summary>
+              <div className="grid min-w-0 gap-4 pt-3">
+                <CostPanel snapshot={costReport} />
               </div>
             </details>
           </section>

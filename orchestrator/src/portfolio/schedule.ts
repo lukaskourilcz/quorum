@@ -35,6 +35,17 @@ export interface EffectivePortfolioSchedule {
   booksofHistoryStretch: boolean;
   activePhases: ScheduledPhase[];
   envelopeByPhase: Partial<Record<ScheduledPhase, number>>;
+  /**
+   * Each venture's own monthly allowance, for the ventures the owner has allocated one.
+   *
+   * Empty is the correct and current answer. A desk cap is an allocation of the signed $25
+   * model share between ventures, and nothing here may invent that split — the registry is
+   * read, never extrapolated from. An earlier draft of this derived a default from the sum of
+   * a venture's room envelopes times thirty-one days; the ledger says that would have refused
+   * DNESKAi in August, when the desk billed $6.82 against a derived $4.96, because the daily
+   * edition pipeline spends outside the room envelopes the rooms declare.
+   */
+  deskMonthlyUsdByVenture: Partial<Record<string, number>>;
 }
 
 /** Lowest-priority room first. A daily plan removes entries only in this order. */
@@ -59,7 +70,15 @@ export interface DailyEnvelopePlan {
   reservedUsd: number;
 }
 
-function weekdayRoomIsDue(phase: ScheduledPhase, date: string): boolean {
+/**
+ * Exported because the RICE scorer has to bill a weekly room as weekly.
+ *
+ * The registry's cadence string says `daily@16:00` for Door Money's Thursday growth room and
+ * `daily@13:00` for GoVIRAL's Monday brief, because their off-day firings write truthful $0
+ * records. This function is the only place that knows which of those days actually cost money,
+ * and a second copy of that list in `portfolio/rice.ts` would be a second answer to one question.
+ */
+export function weekdayRoomIsDue(phase: ScheduledPhase, date: string): boolean {
   const weekday = new Date(`${date}T12:00:00.000Z`).getUTCDay();
   if (phase === "gv-brief") return weekday === 1;
   if (phase === "dm-growth") return weekday === 4;
@@ -177,7 +196,9 @@ export function resolveEffectivePortfolioSchedule(input: {
     ...dayDispatchedKinds(input.registry)
   ]);
   const envelopeByPhase: Partial<Record<ScheduledPhase, number>> = {};
+  const deskMonthlyUsdByVenture: Partial<Record<string, number>> = {};
   for (const venture of input.registry.ventures) {
+    if (venture.budget) deskMonthlyUsdByVenture[venture.id] = venture.budget.monthlyDeskUsd;
     for (const meeting of venture.meetings) {
       envelopeByPhase[meeting.kind as ScheduledPhase] = meeting.envelopeUsd;
     }
@@ -299,7 +320,8 @@ export function resolveEffectivePortfolioSchedule(input: {
         .map((kind) => ScheduledPhaseSchema.safeParse(kind))
         .flatMap((parsed) => parsed.success ? [parsed.data] : [])
     ].filter((phase) => active.has(phase)),
-    envelopeByPhase
+    envelopeByPhase,
+    deskMonthlyUsdByVenture
   };
 }
 

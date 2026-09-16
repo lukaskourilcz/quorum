@@ -1,0 +1,434 @@
+{
+  "schemaVersion": "portfolio-rice-ranking/1",
+  "quarterId": "2026-Q1",
+  "generatedAt": "2026-09-16T13:56:23.524Z",
+  "method": "reach x impact x confidence / effort-usd-per-month",
+  "posture": "information-only",
+  "enforcement": "information-only",
+  "enforcementHeldBecause": [
+    "config/portfolio-rice.json sets rankingEnforced to false",
+    "state/decisions/2026-09-16-portfolio-rice.md is not countersigned"
+  ],
+  "rows": [
+    {
+      "id": "booksofhistory",
+      "kind": "venture",
+      "label": "BOOKSOFHISTORY",
+      "reach": null,
+      "impact": null,
+      "confidence": 0.33333333,
+      "confidenceBasis": {
+        "measuredKpis": 2,
+        "totalKpis": 6
+      },
+      "effortUsdPerMonth": 15,
+      "effortBasis": [
+        {
+          "phase": "bh-desk",
+          "envelopeUsd": 0.5,
+          "runsPerMonth": 30
+        }
+      ],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "carousel-studio",
+      "kind": "venture",
+      "label": "Design Lab",
+      "reach": null,
+      "impact": null,
+      "confidence": 0.75,
+      "confidenceBasis": {
+        "measuredKpis": 3,
+        "totalKpis": 4
+      },
+      "effortUsdPerMonth": 0,
+      "effortBasis": [],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact",
+        "effort"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "caught-up",
+      "kind": "venture",
+      "label": "Caught Up",
+      "reach": null,
+      "impact": null,
+      "confidence": 1,
+      "confidenceBasis": {
+        "measuredKpis": 16,
+        "totalKpis": 16
+      },
+      "effortUsdPerMonth": 4.8,
+      "effortBasis": [
+        {
+          "phase": "cu-edition",
+          "envelopeUsd": 0.08,
+          "runsPerMonth": 30
+        },
+        {
+          "phase": "cu-product",
+          "envelopeUsd": 0.08,
+          "runsPerMonth": 30
+        }
+      ],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "contest-radar",
+      "kind": "venture",
+      "label": "Contest Radar",
+      "reach": null,
+      "impact": null,
+      "confidence": null,
+      "confidenceBasis": {
+        "measuredKpis": 0,
+        "totalKpis": 0
+      },
+      "effortUsdPerMonth": 0,
+      "effortBasis": [],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact",
+        "confidence",
+        "effort"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "door-money",
+      "kind": "venture",
+      "label": "Door Money",
+      "reach": null,
+      "impact": null,
+      "confidence": 0.71428571,
+      "confidenceBasis": {
+        "measuredKpis": 5,
+        "totalKpis": 7
+      },
+      "effortUsdPerMonth": 2.65714286,
+      "effortBasis": [
+        {
+          "phase": "dm-desk",
+          "envelopeUsd": 0.08,
+          "runsPerMonth": 30
+        },
+        {
+          "phase": "dm-growth",
+          "envelopeUsd": 0.06,
+          "runsPerMonth": 4.28571429
+        }
+      ],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "fightaiq",
+      "kind": "venture",
+      "label": "FightAIQ",
+      "reach": null,
+      "impact": null,
+      "confidence": 0.83333333,
+      "confidenceBasis": {
+        "measuredKpis": 5,
+        "totalKpis": 6
+      },
+      "effortUsdPerMonth": 3.6,
+      "effortBasis": [
+        {
+          "phase": "mma-analysis",
+          "envelopeUsd": 0.06,
+          "runsPerMonth": 30
+        },
+        {
+          "phase": "mma-intake",
+          "envelopeUsd": 0.06,
+          "runsPerMonth": 30
+        }
+      ],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "goviral",
+      "kind": "venture",
+      "label": "GoVIRAL",
+      "reach": null,
+      "impact": null,
+      "confidence": 1,
+      "confidenceBasis": {
+        "measuredKpis": 4,
+        "totalKpis": 4
+      },
+      "effortUsdPerMonth": 0.25714286,
+      "effortBasis": [
+        {
+          "phase": "gv-brief",
+          "envelopeUsd": 0.06,
+          "runsPerMonth": 4.28571429
+        }
+      ],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "kvorum",
+      "kind": "venture",
+      "label": "Kvórum",
+      "reach": null,
+      "impact": null,
+      "confidence": 0.28571429,
+      "confidenceBasis": {
+        "measuredKpis": 2,
+        "totalKpis": 7
+      },
+      "effortUsdPerMonth": 3,
+      "effortBasis": [
+        {
+          "phase": "kv-desk",
+          "envelopeUsd": 0.1,
+          "runsPerMonth": 30
+        }
+      ],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "marketingshark",
+      "kind": "venture",
+      "label": "marketingShark",
+      "reach": null,
+      "impact": null,
+      "confidence": 0,
+      "confidenceBasis": {
+        "measuredKpis": 0,
+        "totalKpis": 5
+      },
+      "effortUsdPerMonth": 3,
+      "effortBasis": [
+        {
+          "phase": "ms-daily",
+          "envelopeUsd": 0.1,
+          "runsPerMonth": 30
+        }
+      ],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "mma-files",
+      "kind": "venture",
+      "label": "MMA Files",
+      "reach": null,
+      "impact": null,
+      "confidence": 1,
+      "confidenceBasis": {
+        "measuredKpis": 5,
+        "totalKpis": 5
+      },
+      "effortUsdPerMonth": 7.8,
+      "effortBasis": [
+        {
+          "phase": "article-production",
+          "envelopeUsd": 0.16,
+          "runsPerMonth": 30
+        },
+        {
+          "phase": "mag-desk",
+          "envelopeUsd": 0.05,
+          "runsPerMonth": 30
+        },
+        {
+          "phase": "mag-editorial",
+          "envelopeUsd": 0.05,
+          "runsPerMonth": 30
+        }
+      ],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "personal-growth",
+      "kind": "venture",
+      "label": "Lukáš Growth Desk",
+      "reach": null,
+      "impact": null,
+      "confidence": 0.66666667,
+      "confidenceBasis": {
+        "measuredKpis": 8,
+        "totalKpis": 12
+      },
+      "effortUsdPerMonth": 4.5,
+      "effortBasis": [
+        {
+          "phase": "pg-desk",
+          "envelopeUsd": 0.15,
+          "runsPerMonth": 30
+        }
+      ],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "tehdejsi-svet",
+      "kind": "venture",
+      "label": "Tehdejší svět",
+      "reach": null,
+      "impact": null,
+      "confidence": 0.33333333,
+      "confidenceBasis": {
+        "measuredKpis": 2,
+        "totalKpis": 6
+      },
+      "effortUsdPerMonth": 7.5,
+      "effortBasis": [
+        {
+          "phase": "ts-desk",
+          "envelopeUsd": 0.25,
+          "runsPerMonth": 30
+        }
+      ],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "titty-tuesdays",
+      "kind": "venture",
+      "label": "Titty Tuesdays",
+      "reach": null,
+      "impact": null,
+      "confidence": 1,
+      "confidenceBasis": {
+        "measuredKpis": 3,
+        "totalKpis": 3
+      },
+      "effortUsdPerMonth": 2.4,
+      "effortBasis": [
+        {
+          "phase": "tt-marketing",
+          "envelopeUsd": 0.08,
+          "runsPerMonth": 30
+        }
+      ],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "webdev-signal",
+      "kind": "venture",
+      "label": "WebDev Signal",
+      "reach": null,
+      "impact": null,
+      "confidence": null,
+      "confidenceBasis": {
+        "measuredKpis": 0,
+        "totalKpis": 0
+      },
+      "effortUsdPerMonth": 0,
+      "effortBasis": [],
+      "score": null,
+      "status": "unavailable",
+      "missingInputs": [
+        "reach",
+        "impact",
+        "confidence",
+        "effort"
+      ],
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    }
+  ],
+  "declaredDegradationOrder": [
+    "dm-growth",
+    "kv-desk",
+    "dm-desk",
+    "ts-desk",
+    "bh-desk",
+    "gv-brief",
+    "tt-marketing"
+  ],
+  "declaredVentureOrder": [
+    "door-money",
+    "kvorum",
+    "tehdejsi-svet",
+    "booksofhistory",
+    "goviral",
+    "titty-tuesdays"
+  ],
+  "agreesWithDeclaredOrder": null,
+  "comparison": {
+    "comparableVentures": [],
+    "scoredAscending": [],
+    "unavailableVentures": [
+      "door-money",
+      "kvorum",
+      "tehdejsi-svet",
+      "booksofhistory",
+      "goviral",
+      "titty-tuesdays"
+    ]
+  }
+}

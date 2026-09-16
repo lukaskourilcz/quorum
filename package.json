@@ -49,6 +49,8 @@
     "social:release-audit": "pnpm --filter @boardlessai/orchestrator social:release-audit",
     "sources:shadow": "pnpm --filter @boardlessai/orchestrator sources:shadow",
     "site:smoke": "node scripts/smoke-site.mjs",
+    "studio:golden": "pnpm --filter @boardlessai/carousel-studio golden",
+    "studio:golden:check": "pnpm --filter @boardlessai/carousel-studio golden:check",
     "test": "pnpm --filter @boardlessai/carousel-studio build && pnpm -r --workspace-concurrency=1 exec vitest run --passWithNoTests",
     "typecheck": "pnpm -r typecheck",
     "fightaiq:roster-prune": "pnpm --filter @boardlessai/orchestrator fightaiq:roster-prune",
@@ -56,8 +58,11 @@
     "datasets:append": "pnpm --filter @boardlessai/orchestrator datasets:append",
     "streams:fetch": "pnpm --filter @boardlessai/orchestrator streams:fetch",
     "finance:page": "pnpm --filter @boardlessai/orchestrator finance:page",
+    "cost:report": "pnpm --filter @boardlessai/orchestrator cost:report",
+    "portfolio:rice": "pnpm --filter @boardlessai/orchestrator portfolio:rice",
     "mma:retire": "pnpm --filter @boardlessai/orchestrator mma:retire",
-    "social:activation": "pnpm --filter @boardlessai/orchestrator social:activation"
+    "social:activation": "pnpm --filter @boardlessai/orchestrator social:activation",
+    "caught-up:promotion": "pnpm --filter @boardlessai/orchestrator caught-up:promotion"
   },
   "devDependencies": {
     "vercel": "58.4.4"

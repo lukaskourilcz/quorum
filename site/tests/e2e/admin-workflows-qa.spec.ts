@@ -252,6 +252,22 @@ test("money, fixed costs, file details and launch binder remain truthful and con
     .toHaveAttribute("href", "/results#money");
   await expectNoDocumentOverflow(page, "money and fixed costs");
 
+  /*
+   * The cost tables, one disclosure below the tiles.
+   *
+   * The billed column is the assertion that matters. It is what the provider invoiced, reading it
+   * needs an admin key nobody has created, and the failure this guards against is it quietly
+   * becoming `$0.00` — a confident zero beside a real metered figure that an owner would act on.
+   * Three tables at 430px also make this the widest thing in the Money section, so the overflow
+   * check runs again after they are open.
+   */
+  await page.getByText("What each edition and each decision cost").click();
+  await expect(page.getByRole("heading", { name: "What the work cost" }))
+    .toBeVisible();
+  await expect(page.locator("[data-adm-cost-unavailable]").first()).toBeVisible();
+  await expect(page.locator("[data-adm-cost-reconciliation]")).toBeVisible();
+  await expectNoDocumentOverflow(page, "cost per edition and per decision");
+
   const fileResponse = await page.goto(
     "/admin/files/ideas/titty-tuesdays/details/idea-2026-08-05-415cf2b0.md",
     { waitUntil: "domcontentloaded" }

@@ -1605,6 +1605,31 @@ jobs:
           done
           echo "The activation counters could not be pushed; the delivery records remain canonical."
 
+      # What each edition and each decision cost, joined by cycle id and written to
+      # state/money/cost-report.json. It reads committed records only; its one outbound call is
+      # the provider-billing read, which stays off unless PROVIDER_BILLING_ENABLED and
+      # ANTHROPIC_ADMIN_API_KEY are both set, makes no model call and costs nothing either way.
+      # It runs beside the finance page and never fails the job, for the same reason: a missing
+      # cost table is a smaller problem than a red run that buries the day's real result.
+      - name: Record what each edition and each decision cost
+        if: ${{ always() && steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
+        run: |
+          pnpm cost:report || exit 0
+          if test -e state/money/cost-report.json; then git add -A -- state/money/cost-report.json; fi
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "boardlessai-cycle[bot]"
+          git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
+          git commit -m "cost($(date -u +%Y-%m-%d)): record cost per edition and per decision"
+          for attempt in 1 2 3; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then exit 0; fi
+            git fetch origin "$GITHUB_REF_NAME"
+            if ! git rebase --autostash "origin/$GITHUB_REF_NAME"; then
+              git rebase --abort || true
+              break
+            fi
+          done
+          echo "The cost report could not be pushed; the budget ledger remains canonical either way."
+
       # `state/FINANCE.md` told its reader to regenerate its table from the ledger, and nothing
       # regenerated it: the block said $3.12 while the budget ledger held $13.55, three weeks on.
       # This runs beside the queue-health check and for the same reason — a day the council

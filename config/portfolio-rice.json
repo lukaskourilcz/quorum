@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "portfolio-rice/1",
+  "updatedAt": "2026-09-16",
+  "posture": "information-only",
+  "rankingEnforced": false,
+  "decisionRef": "state/decisions/2026-09-16-portfolio-rice.md",
+  "subjects": [
+    {
+      "id": "caught-up",
+      "kind": "venture",
+      "label": "Caught Up",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "titty-tuesdays",
+      "kind": "venture",
+      "label": "Titty Tuesdays",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "goviral",
+      "kind": "venture",
+      "label": "GoVIRAL",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "booksofhistory",
+      "kind": "venture",
+      "label": "BOOKSOFHISTORY",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "fightaiq",
+      "kind": "venture",
+      "label": "FightAIQ",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "carousel-studio",
+      "kind": "venture",
+      "label": "Design Lab",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "marketingshark",
+      "kind": "venture",
+      "label": "marketingShark",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "mma-files",
+      "kind": "venture",
+      "label": "MMA Files",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "door-money",
+      "kind": "venture",
+      "label": "Door Money",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "tehdejsi-svet",
+      "kind": "venture",
+      "label": "Tehdejší svět",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "kvorum",
+      "kind": "venture",
+      "label": "Kvórum",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "personal-growth",
+      "kind": "venture",
+      "label": "Lukáš Growth Desk",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "webdev-signal",
+      "kind": "venture",
+      "label": "WebDev Signal",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    },
+    {
+      "id": "contest-radar",
+      "kind": "venture",
+      "label": "Contest Radar",
+      "reach": null,
+      "impact": null,
+      "source": "Owner has not entered a figure. No visitor, reader or engagement number exists for any venture while METRICS_INGESTION_ENABLED is false, so Reach cannot be derived here and Impact is the owner's judgement."
+    }
+  ]
+}

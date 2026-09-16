@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "portfolio-rice-ranking/1"
+    },
+    "quarterId": {
+      "type": "string",
+      "pattern": "^\\d{4}-Q[1-4]$"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "method": {
+      "type": "string",
+      "const": "reach x impact x confidence / effort-usd-per-month"
+    },
+    "posture": {
+      "type": "string",
+      "enum": [
+        "information-only",
+        "owner-enforced"
+      ]
+    },
+    "enforcement": {
+      "type": "string",
+      "enum": [
+        "information-only",
+        "owner-enforced"
+      ]
+    },
+    "enforcementHeldBecause": {
+      "maxItems": 4,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      }
+    },
+    "rows": {
+      "maxItems": 60,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "venture",
+              "experiment"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "reach": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "impact": {
+            "anyOf": [
+              {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "const": 0.25
+                  },
+                  {
+                    "type": "number",
+                    "const": 0.5
+                  },
+                  {
+                    "type": "number",
+                    "const": 1
+                  },
+                  {
+                    "type": "number",
+                    "const": 2
+                  },
+                  {
+                    "type": "number",
+                    "const": 3
+                  }
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "confidenceBasis": {
+            "type": "object",
+            "properties": {
+              "measuredKpis": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "totalKpis": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "measuredKpis",
+              "totalKpis"
+            ],
+            "additionalProperties": {}
+          },
+          "effortUsdPerMonth": {
+            "type": "number",
+            "minimum": 0
+          },
+          "effortBasis": {
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "phase": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 60
+                },
+                "envelopeUsd": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "runsPerMonth": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "phase",
+                "envelopeUsd",
+                "runsPerMonth"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "scored",
+              "unavailable"
+            ]
+          },
+          "missingInputs": {
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "reach",
+                "impact",
+                "confidence",
+                "effort"
+              ]
+            }
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 400
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "label",
+          "reach",
+          "impact",
+          "confidence",
+          "confidenceBasis",
+          "effortUsdPerMonth",
+          "effortBasis",
+          "score",
+          "status",
+          "missingInputs",
+          "source"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "declaredDegradationOrder": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 60
+      }
+    },
+    "declaredVentureOrder": {
+      "maxItems": 20,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 80,
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "agreesWithDeclaredOrder": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "comparison": {
+      "type": "object",
+      "properties": {
+        "comparableVentures": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          }
+        },
+        "scoredAscending": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          }
+        },
+        "unavailableVentures": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          }
+        }
+      },
+      "required": [
+        "comparableVentures",
+        "scoredAscending",
+        "unavailableVentures"
+      ],
+      "additionalProperties": {}
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "quarterId",
+    "generatedAt",
+    "method",
+    "posture",
+    "enforcement",
+    "enforcementHeldBecause",
+    "rows",
+    "declaredDegradationOrder",
+    "declaredVentureOrder",
+    "agreesWithDeclaredOrder",
+    "comparison"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/portfolio-rice.schema.json"
+}

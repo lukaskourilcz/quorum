@@ -1,0 +1,1059 @@
+{
+  "schemaVersion": "cost-report/1",
+  "generatedAt": "2026-09-16T14:24:20.749Z",
+  "month": "2026-09",
+  "currency": "USD",
+  "metered": {
+    "total": {
+      "totalUsd": 3.958637,
+      "modelUsd": 3.950637,
+      "mediaUsd": 0.008,
+      "calls": 144
+    },
+    "editions": [
+      {
+        "date": "2026-09-13",
+        "ventureId": "caught-up",
+        "phase": "cu-edition",
+        "cycleIds": [
+          "20260913030038-cu-edition"
+        ],
+        "status": "delivered",
+        "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-13-gpt6-astra-autonomie-rubygems-amodei",
+        "packageHash": "07eec2c4cc81b2946806caa2980f0b320c0fe7c1929063402f8bac1ef01b19bb",
+        "cost": {
+          "totalUsd": 0.1814085,
+          "modelUsd": 0.1814085,
+          "mediaUsd": 0,
+          "calls": 3
+        },
+        "note": null
+      },
+      {
+        "date": "2026-09-12",
+        "ventureId": "caught-up",
+        "phase": "cu-edition",
+        "cycleIds": [
+          "20260912030033-cu-edition"
+        ],
+        "status": "delivered",
+        "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-12-ai-agenti-rubygems-utok-dohled",
+        "packageHash": "832df46f370b8dbe20f6999f2f763d18d8018d9625368e6dd8f2e67d6394d2ef",
+        "cost": {
+          "totalUsd": 0.1840125,
+          "modelUsd": 0.1840125,
+          "mediaUsd": 0,
+          "calls": 3
+        },
+        "note": null
+      },
+      {
+        "date": "2026-09-11",
+        "ventureId": "caught-up",
+        "phase": "cu-edition",
+        "cycleIds": [
+          "20260911030040-cu-edition",
+          "20260911070059-cu-edition"
+        ],
+        "status": "delivered",
+        "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-11-microsoft-rust-anthropic-bezpecnost-ai",
+        "packageHash": "0f317e6be0b037ca41b8f39c9b569cbb228f088388b084f97e803134cd87b67b",
+        "cost": {
+          "totalUsd": 0.361658,
+          "modelUsd": 0.361658,
+          "mediaUsd": 0,
+          "calls": 6
+        },
+        "note": null
+      },
+      {
+        "date": "2026-09-10",
+        "ventureId": "caught-up",
+        "phase": "cu-edition",
+        "cycleIds": [
+          "20260910030042-cu-edition",
+          "20260910070052-cu-edition"
+        ],
+        "status": "delivered",
+        "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-10-weworm-automattic-mullenweg-ai-bezpecnost",
+        "packageHash": "81fef2247f7ad69fe3e0998486241f2a264cf894fdea515a94967ea0b9b6c859",
+        "cost": {
+          "totalUsd": 0.4954985,
+          "modelUsd": 0.4954985,
+          "mediaUsd": 0,
+          "calls": 7
+        },
+        "note": null
+      },
+      {
+        "date": "2026-09-09",
+        "ventureId": "caught-up",
+        "phase": "cu-edition",
+        "cycleIds": [
+          "20260909030035-cu-edition"
+        ],
+        "status": "delivered",
+        "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-09-openai-navier-stokes-kontroverze-patchtuesday-distilace",
+        "packageHash": "8cf065aa82bebfb1e8350b7e19f506d1b573bfa67e5b9649e5f45899a9b49ea9",
+        "cost": {
+          "totalUsd": 0.1888085,
+          "modelUsd": 0.1848085,
+          "mediaUsd": 0.004,
+          "calls": 5
+        },
+        "note": null
+      },
+      {
+        "date": "2026-09-08",
+        "ventureId": "caught-up",
+        "phase": "cu-edition",
+        "cycleIds": [
+          "20260908030038-cu-edition",
+          "20260908070049-cu-edition"
+        ],
+        "status": "delivered",
+        "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-08-mistral-tri-miliardy-otevrene-modely-australie-algoritmy",
+        "packageHash": "192fbdf95bb883e488c92760c6b8ec95d403da356c0f7d196a280ec19d25cbea",
+        "cost": {
+          "totalUsd": 0.324547,
+          "modelUsd": 0.324547,
+          "mediaUsd": 0,
+          "calls": 5
+        },
+        "note": null
+      }
+    ],
+    "decisions": [
+      {
+        "cycleId": "20260916030610-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-09-16T03:06:14.886Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260916030610-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-09-16T03:06:15.886Z",
+        "cost": {
+          "totalUsd": 0.3197995,
+          "modelUsd": 0.3157995,
+          "mediaUsd": 0.004,
+          "calls": 6
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260915110053-gv-brief",
+        "phase": "gv-brief",
+        "ventureId": "goviral",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-15T11:00:53.018Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260915070046-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "NO_EDITION",
+        "decidedAt": "2026-09-15T07:00:51.908Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260915060056-mma-analysis",
+        "phase": "mma-analysis",
+        "ventureId": "fightaiq",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-15T06:00:56.089Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260915060056-mag-desk",
+        "phase": "mag-desk",
+        "ventureId": "mma-files",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-15T06:00:56.089Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260915030038-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-09-15T03:00:42.994Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260915030038-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "NO_EDITION",
+        "decidedAt": "2026-09-15T03:00:43.994Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260914070059-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "NO_EDITION",
+        "decidedAt": "2026-09-14T07:01:04.672Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260914060133-mma-intake",
+        "phase": "mma-intake",
+        "ventureId": "fightaiq",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-14T06:01:33.900Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260914060133-mma-analysis",
+        "phase": "mma-analysis",
+        "ventureId": "fightaiq",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-14T06:01:33.900Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260914060133-mag-desk",
+        "phase": "mag-desk",
+        "ventureId": "mma-files",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-14T06:01:33.900Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260914030046-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-09-14T03:00:50.670Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260914030046-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "NO_EDITION",
+        "decidedAt": "2026-09-14T03:00:51.670Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260913110041-gv-brief",
+        "phase": "gv-brief",
+        "ventureId": "goviral",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-13T11:00:41.831Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260913070054-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "NO_EDITION",
+        "decidedAt": "2026-09-13T07:00:59.408Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260913060056-mma-intake",
+        "phase": "mma-intake",
+        "ventureId": "fightaiq",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-13T06:00:56.838Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260913060056-mma-analysis",
+        "phase": "mma-analysis",
+        "ventureId": "fightaiq",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-13T06:00:56.838Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260913060056-mag-desk",
+        "phase": "mag-desk",
+        "ventureId": "mma-files",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-13T06:00:56.838Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260913030038-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-09-13T03:00:42.163Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260913030038-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-09-13T03:00:43.163Z",
+        "cost": {
+          "totalUsd": 0.1814085,
+          "modelUsd": 0.1814085,
+          "mediaUsd": 0,
+          "calls": 3
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260912110051-gv-brief",
+        "phase": "gv-brief",
+        "ventureId": "goviral",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-12T11:00:51.517Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260912070048-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "NO_EDITION",
+        "decidedAt": "2026-09-12T07:00:53.476Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260912060101-mma-intake",
+        "phase": "mma-intake",
+        "ventureId": "fightaiq",
+        "outcome": "PLAN",
+        "decidedAt": "2026-09-12T06:03:01.827Z",
+        "cost": {
+          "totalUsd": 0.037666,
+          "modelUsd": 0.037666,
+          "mediaUsd": 0,
+          "calls": 4
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260912060101-mma-analysis",
+        "phase": "mma-analysis",
+        "ventureId": "fightaiq",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-12T06:01:01.828Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260912060101-mag-editorial",
+        "phase": "mag-editorial",
+        "ventureId": "mma-files",
+        "outcome": "PLAN",
+        "decidedAt": "2026-09-12T06:06:01.827Z",
+        "cost": {
+          "totalUsd": 0.039852,
+          "modelUsd": 0.039852,
+          "mediaUsd": 0,
+          "calls": 4
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260912060101-mag-desk",
+        "phase": "mag-desk",
+        "ventureId": "mma-files",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-12T06:01:01.828Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260912030033-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-09-12T03:00:37.705Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260912030033-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-09-12T03:00:38.705Z",
+        "cost": {
+          "totalUsd": 0.1840125,
+          "modelUsd": 0.1840125,
+          "mediaUsd": 0,
+          "calls": 3
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260911110045-gv-brief",
+        "phase": "gv-brief",
+        "ventureId": "goviral",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-11T11:00:45.561Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260911070059-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-09-11T07:01:04.613Z",
+        "cost": {
+          "totalUsd": 0.1842105,
+          "modelUsd": 0.1842105,
+          "mediaUsd": 0,
+          "calls": 3
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260911060057-mma-intake",
+        "phase": "mma-intake",
+        "ventureId": "fightaiq",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-11T06:00:57.398Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260911060057-mma-analysis",
+        "phase": "mma-analysis",
+        "ventureId": "fightaiq",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-11T06:00:57.398Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260911060057-mag-editorial",
+        "phase": "mag-editorial",
+        "ventureId": "mma-files",
+        "outcome": "PLAN",
+        "decidedAt": "2026-09-11T06:04:57.397Z",
+        "cost": {
+          "totalUsd": 0.041521,
+          "modelUsd": 0.041521,
+          "mediaUsd": 0,
+          "calls": 4
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260911060057-mag-desk",
+        "phase": "mag-desk",
+        "ventureId": "mma-files",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-11T06:00:57.398Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260911030040-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-09-11T03:00:44.179Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260911030040-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-09-11T03:00:45.179Z",
+        "cost": {
+          "totalUsd": 0.1774475,
+          "modelUsd": 0.1774475,
+          "mediaUsd": 0,
+          "calls": 3
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260910110048-gv-brief",
+        "phase": "gv-brief",
+        "ventureId": "goviral",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-10T11:00:48.053Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260910070052-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-09-10T07:00:57.505Z",
+        "cost": {
+          "totalUsd": 0.309118,
+          "modelUsd": 0.309118,
+          "mediaUsd": 0,
+          "calls": 4
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260910060054-mma-intake",
+        "phase": "mma-intake",
+        "ventureId": "fightaiq",
+        "outcome": "PLAN",
+        "decidedAt": "2026-09-10T06:02:54.426Z",
+        "cost": {
+          "totalUsd": 0.039279,
+          "modelUsd": 0.039279,
+          "mediaUsd": 0,
+          "calls": 4
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260910060054-mma-analysis",
+        "phase": "mma-analysis",
+        "ventureId": "fightaiq",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-10T06:00:54.427Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260910060054-mag-desk",
+        "phase": "mag-desk",
+        "ventureId": "mma-files",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-10T06:00:54.427Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260910030042-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-09-10T03:00:46.193Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260910030042-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-09-10T03:00:47.193Z",
+        "cost": {
+          "totalUsd": 0.1863805,
+          "modelUsd": 0.1863805,
+          "mediaUsd": 0,
+          "calls": 3
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260909110050-gv-brief",
+        "phase": "gv-brief",
+        "ventureId": "goviral",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-09T11:00:50.628Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260909070053-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "NO_EDITION",
+        "decidedAt": "2026-09-09T07:00:58.951Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260909060107-mma-intake",
+        "phase": "mma-intake",
+        "ventureId": "fightaiq",
+        "outcome": "PLAN",
+        "decidedAt": "2026-09-09T06:06:07.556Z",
+        "cost": {
+          "totalUsd": 0.04336,
+          "modelUsd": 0.04336,
+          "mediaUsd": 0,
+          "calls": 5
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260909060107-mma-analysis",
+        "phase": "mma-analysis",
+        "ventureId": "fightaiq",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-09T06:01:07.557Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260909060107-mag-editorial",
+        "phase": "mag-editorial",
+        "ventureId": "mma-files",
+        "outcome": "VETO",
+        "decidedAt": "2026-09-09T06:05:07.556Z",
+        "cost": {
+          "totalUsd": 0.039464,
+          "modelUsd": 0.039464,
+          "mediaUsd": 0,
+          "calls": 4
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260909060107-mag-desk",
+        "phase": "mag-desk",
+        "ventureId": "mma-files",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-09T06:01:07.557Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260909030035-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-09-09T03:00:39.828Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260909030035-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-09-09T03:00:40.828Z",
+        "cost": {
+          "totalUsd": 0.1888085,
+          "modelUsd": 0.1848085,
+          "mediaUsd": 0.004,
+          "calls": 5
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260908110045-gv-brief",
+        "phase": "gv-brief",
+        "ventureId": "goviral",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-08T11:00:45.067Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260908070049-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-09-08T07:00:54.262Z",
+        "cost": {
+          "totalUsd": 0.279652,
+          "modelUsd": 0.279652,
+          "mediaUsd": 0,
+          "calls": 4
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260908060101-mma-intake",
+        "phase": "mma-intake",
+        "ventureId": "fightaiq",
+        "outcome": "PLAN",
+        "decidedAt": "2026-09-08T06:04:01.803Z",
+        "cost": {
+          "totalUsd": 0.021259,
+          "modelUsd": 0.021259,
+          "mediaUsd": 0,
+          "calls": 5
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260908060101-mma-analysis",
+        "phase": "mma-analysis",
+        "ventureId": "fightaiq",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-08T06:01:01.804Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260908060101-mag-editorial",
+        "phase": "mag-editorial",
+        "ventureId": "mma-files",
+        "outcome": "VETO",
+        "decidedAt": "2026-09-08T06:05:01.803Z",
+        "cost": {
+          "totalUsd": 0.022798,
+          "modelUsd": 0.022798,
+          "mediaUsd": 0,
+          "calls": 4
+        },
+        "note": null
+      },
+      {
+        "cycleId": "20260908060101-mag-desk",
+        "phase": "mag-desk",
+        "ventureId": "mma-files",
+        "outcome": "NO_ACTION",
+        "decidedAt": "2026-09-08T06:01:01.804Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260908030038-cu-product",
+        "phase": "cu-product",
+        "ventureId": "caught-up",
+        "outcome": "defer",
+        "decidedAt": "2026-09-08T03:00:42.531Z",
+        "cost": {
+          "totalUsd": 0,
+          "modelUsd": 0,
+          "mediaUsd": 0,
+          "calls": 0
+        },
+        "note": "No ledger row carries this cycle id; the room decided without billing a call."
+      },
+      {
+        "cycleId": "20260908030038-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "NO_EDITION",
+        "decidedAt": "2026-09-08T03:00:43.531Z",
+        "cost": {
+          "totalUsd": 0.044895,
+          "modelUsd": 0.044895,
+          "mediaUsd": 0,
+          "calls": 1
+        },
+        "note": null
+      }
+    ],
+    "envelopes": [
+      {
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "cycles": 10,
+        "meteredUsd": 2.0557325,
+        "comparable": {
+          "cycles": 10,
+          "envelopeUsd": 5.8,
+          "meteredUsd": 2.0557325,
+          "varianceUsd": -3.7442675,
+          "overspentCycles": 0
+        }
+      },
+      {
+        "phase": "morning",
+        "ventureId": "global",
+        "cycles": 7,
+        "meteredUsd": 0.9704474,
+        "comparable": {
+          "cycles": 2,
+          "envelopeUsd": 0.089652,
+          "meteredUsd": 0.274104,
+          "varianceUsd": 0.184452,
+          "overspentCycles": 2
+        }
+      },
+      {
+        "phase": "ms-daily",
+        "ventureId": "marketingshark",
+        "cycles": 6,
+        "meteredUsd": 0.384906,
+        "comparable": null
+      },
+      {
+        "phase": "article-am",
+        "ventureId": "mma-files",
+        "cycles": 5,
+        "meteredUsd": 0.22848,
+        "comparable": null
+      },
+      {
+        "phase": "mag-editorial",
+        "ventureId": "mma-files",
+        "cycles": 4,
+        "meteredUsd": 0.143635,
+        "comparable": {
+          "cycles": 4,
+          "envelopeUsd": 0.178656,
+          "meteredUsd": 0.143635,
+          "varianceUsd": -0.035021,
+          "overspentCycles": 0
+        }
+      },
+      {
+        "phase": "mma-intake",
+        "ventureId": "fightaiq",
+        "cycles": 4,
+        "meteredUsd": 0.141564,
+        "comparable": {
+          "cycles": 4,
+          "envelopeUsd": 0.168764,
+          "meteredUsd": 0.141564,
+          "varianceUsd": -0.0272,
+          "overspentCycles": 0
+        }
+      },
+      {
+        "phase": "gv-brief",
+        "ventureId": "goviral",
+        "cycles": 2,
+        "meteredUsd": 0.0338721,
+        "comparable": null
+      }
+    ]
+  },
+  "billed": null,
+  "reconciliation": {
+    "status": "unavailable",
+    "meteredUsd": 3.958637,
+    "billedUsd": null,
+    "differenceUsd": null,
+    "toleranceUsd": 0.01,
+    "note": "PROVIDER_BILLING_ENABLED is not set, so no billing request was made."
+  },
+  "unreadable": {
+    "decisions": 2,
+    "deliveries": 0,
+    "envelopes": 0,
+    "ledgerRows": 0
+  }
+}

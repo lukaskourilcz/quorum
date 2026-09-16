@@ -14,6 +14,7 @@ sweeps reach the 23:00 desk. Each owner step is one GitHub issue:
 - [ ] **Deploy `main` to Vercel and count the deployed cron jobs** — #527. The Design Lab update and the calendar are still undeployed; if the Hobby plan deploys two crons, decide the Pro move. [imp:5] [owner:me] [time:30m] [kind:deploy]
 - [ ] **Confirm the Apify plan, set its spending limit and fill GoVIRAL's profile** — #528. The account is on a paid tier since 2026-09-15; the repository assumes Starter ($19 a month, $19 of credit). Confirm or correct the plan in `config/fixed-costs.json` and `APIFY_MONTHLY_CREDIT_USD`, set the console's monthly spending limit to the plan credit so overage can never reach the card, record the payment in the treasury ledger, and write `state/ventures/goviral/profile.md`. [imp:4] [owner:me] [time:30m] [kind:content]
 - [ ] **Add the free Podcast Index key pair** — #529. [imp:2] [owner:me] [time:15m] [kind:setup]
+- [ ] **Decide whether GoVIRAL's signal score gets its two missing breadth inputs** — #548 shipped the scorer with the sources this repository can already reach. Two the issue names it cannot: Seznam search statistics needs a Seznam/Sklik account and token that does not exist, and TikTok sounds and hashtags have no source at all — `config/goviral-sources.json` closed every social actor beyond Instagram and Threads on cost grounds, and its own note says re-opening one needs a decision record rather than a code change. The `social-tag` half-life is already configured for the 7–30 day band; nothing will feed it until you decide. [imp:2] [owner:me] [time:20m] [kind:decision]
 - [x] **Give Personal Growth the book and audiobook facts** — done 2026-09-15 from okraj.shop on the owner's instruction (#530): `state/ventures/personal-growth/publications.json` holds the book and the audiobook as facts, and every third day from 16 September the desk's Instagram recommendation frames one of them. [imp:4] [owner:me] [time:20m] [kind:content]
 - [x] **Write the devShark fact sheet for marketingShark** — done 2026-09-15 (#531): `config/marketingshark.json` carries the maturity, the call to action and the claims allowed and forbidden, and CHUM's packet states them. Correct it there if the app's state changes. [imp:3] [owner:me] [time:20m] [kind:content]
 - [x] **Clear WebDev Signal's name and handles** — done 2026-09-15 as product research (#532): `WebDev Signal` is the public name, `@webdevsignal` and `@webdevsignal.cz` are the proposed handles. Availability could not be verified without a login; the trademark check and the accounts are still yours. [imp:3] [owner:me] [time:20m] [kind:legal]
@@ -21,6 +22,46 @@ sweeps reach the 23:00 desk. Each owner step is one GitHub issue:
 - [ ] **Lift the `smol-toml` pin Dependabot cannot** — the Vercel CLI's packages pin `smol-toml` 1.5.2 exactly and the fixed version is 1.7.1, so Dependabot's security update on `main` ends in `security_update_not_possible`. Add `"smol-toml@<1.7.1": 1.7.1` to the overrides in `pnpm-workspace.yaml`, run the full gate, and have the owner run `pnpm deploy:check` once before the next deploy; or take a newer Vercel CLI that lifts the pin. Deploy-time tooling only, not runtime. [imp:2] [owner:ai] [time:30m] [kind:setup]
 - [ ] **Create the two WebDev Signal Instagram accounts** — `@webdevsignal` and `@webdevsignal.cz`, each with its Threads profile; do the trademark check first. Nothing in the repository can create them. [imp:3] [owner:me] [time:40m] [kind:setup]
 - [x] **Tell the repository the new Apify plan's numbers** — done 2026-09-15 on the owner's note that the account is on a paid tier: the guard and the fixed-cost registry now assume Starter, $19 a month for $19 of platform credit, the cheapest paid plan. With the $25 model share that leaves $6 of the $50 all-in cap for everything else. If the plan is another, the correction is one line in each of `config/fixed-costs.json` and `orchestrator/src/sources/apify.ts` (#528). [imp:4] [owner:me] [time:5m] [kind:decision]
+
+## GoVIRAL distribution priors · 2026-09-16
+
+`config/goviral-distribution-priors.json` now holds what GoVIRAL may assume about a platform and
+who published it; `config/goviral-growth-loops.json` holds one closed growth loop per venture and
+names every stage that cannot run. The Monday room reads both. Four stages are dark for reasons
+only you can clear, and each one is one decision (#551).
+
+- [ ] **Decide the DNESKAi newsletter, or decide there is not one** — the `capture` stage of the
+  DNESKAi loop is blocked: readers can find an edition and can send one to a friend, but nothing
+  brings them back except the Atom feeds. A free-tier provider would unblock it; so would deciding
+  the feeds are enough, which closes the question instead of leaving it open. Nothing here may
+  register or pay. #552 now waits on the same answer: the edition repost's fifth slide is a call to
+  action, and until a subscribe surface exists it points at the edition and says so. One field —
+  `cta.subscribeUrl` in `config/caught-up-promotion.json` — turns it into a subscribe ask.
+  [imp:4] [owner:me] [time:30m] [kind:decision]
+- [ ] **Decide how a play's measured result gets back into the priors** — GoVIRAL's own loop is an
+  efficiency loop and its last stage is blocked: nothing in the repository reads back what a post
+  earned, and no analytics scope is approved or requested. Either you report a result by hand after
+  running a play, or the loop turns on nothing and the priors never improve.
+  [imp:3] [owner:me] [time:20m] [kind:decision]
+- [ ] **Decide the MMA Files Facebook page** — Facebook is 67 % of Czech internet users, the
+  largest measured audience of any network in the study, and the venture's loop keeps it as a
+  planned stage that nothing can execute: no page, no channel entry, no credential, no approved
+  scope. MMA Files is paused, so this is only worth doing when it resumes.
+  [imp:2] [owner:me] [time:20m] [kind:decision]
+- [ ] **Name the companion app the priors mention, or drop the phrase** — #551 asks that Facebook
+  stay in "the MMA and companion-app plans". Nothing in this repository is a companion app, so the
+  priors say "companion-surface plans" and the loop covers MMA Files only. Tell me what the
+  companion app is and it gets its own loop; say there is none and the phrase comes out.
+  [imp:2] [owner:me] [time:10m] [kind:decision]
+- [ ] **Test LinkedIn on an account a venture owns before anything plans on it** — every dwell-time
+  and reach rule circulating for LinkedIn is a third-party estimate with no operator documentation,
+  so the priors record its posture as `unmeasured` and the scorer answers `test-first` for any play
+  aimed there. No venture has a LinkedIn account and nothing here can open one.
+  [imp:2] [owner:me] [time:30m] [kind:setup]
+- [ ] **Re-verify the Czech priors when the next AMI Digital Index publishes** — the 2026 edition
+  was fielded by STEM/MARK in May 2026 on 1,013 internet users aged 15 and over, and the file
+  records `verifiedAt: 2026-09-16`. A new edition means new percentages, a new `priorsVersion` and
+  a fresh look at whether TikTok kept falling. [imp:2] [owner:ai] [time:30m] [kind:content]
 
 ## WebDev Signal · 2026-09-15
 
@@ -55,6 +96,32 @@ the day, and the run receipt under `state/ventures/webdev-signal/runs/` names wh
 
 - [x] **Modernize the studio and create Canva examples** — canvas-focused editor, Folio/Press families, article-based Canva briefs and editable examples. Press follows the owner's @technology reference. [Research and links](design-lab/CANVA-RESEARCH.md). [imp:4] [owner:ai] [time:3h] [kind:content]
 - [ ] **Review and deploy the Design Lab update** — inspect the editor on desktop/mobile and compare Canva exports with reference PNGs; then use the existing production release gate. Local browser acceptance was blocked in this session. Git merge does not deploy. [imp:4] [owner:me] [time:30m] [kind:deploy]
+- [ ] **Decide whether the deck band moves to six to ten slides** — #542 asks for it; `studio/src/slides.ts` records your own instruction for the current five/seven/eight, and lowering the review ceiling would make the eight-slide decks already in `state/social/packs/` unpublishable. The master-canvas and slide-two work from that issue shipped without touching these three numbers. One line each in `MIN_SLIDES`, `QUEUE_MAX_SLIDES` and `MAX_SLIDES` once you say which band you want. [imp:2] [owner:me] [time:10m] [kind:decision]
+- [ ] **Decide whether LinkedIn is a channel this repository serves** — #542 also asks for a LinkedIn PDF export gate. Nothing here writes a PDF, no venture envelope names LinkedIn, `config/network-allowlist.json` has no LinkedIn host, and the renderer emits PNG only, so the gate's "flattened video" clause has nothing to apply to. Building it means a new dependency and a channel decision, neither of which an agent may take. #552 now waits on the same decision from the other side: the DNESKAi repost deck is built and held, and `state/INBOX.md` carries `CAUGHT-UP-LINKEDIN-CHANNEL` with the exact scope each answer would approve. [imp:2] [owner:me] [time:15m] [kind:decision]
+- [ ] **Sign off the layouts you have actually looked at** — #543 shipped the review registry in `studio/src/family-review.ts`, and every one of the thirty records says `signOff: null`, because no per-family owner review exists and an agent may not invent one. Open the specimen pages in `docs/design-lab/families/`, and for each family you accept add `signOff: { reviewer: "owner", reviewedAt, note }` to its entry in `RECORDED`. When enough are signed, `requireSignOff` is the one-line switch that makes a sign-off a condition of dealing a family. [imp:3] [owner:me] [time:45m] [kind:content]
+- [ ] **Decide whether the dark skins' quiet accents get fixed or the APCA floor stays at 40** — #543 measured every text and ground pair in the library: the worst reads Lc 41.2 (Door Money's `#ff4d3d` on `#24191c`, which clears WCAG at 5.18:1), 14% sit below APCA's published body-text level of Lc 60 and 30% below Lc 75. The floor is set at the level the library actually clears, so it refuses anything worse and admits everything shipped. Raising it means changing accent or surface tokens in `studio/src/library.ts` for the dark brands; leaving it means the gate catches regressions and not the existing gap. [imp:2] [owner:me] [time:20m] [kind:decision]
+- [ ] **Decide whether CI gets a second runner OS for the golden renders** — #543 asks for a cross-platform reproducibility run. `pnpm studio:golden:check` proves byte-identity on any machine that runs it, and `.github/workflows/ci.yml` runs it through `pnpm test` on `ubuntu-latest` only. Adding `macos-latest` or `windows-latest` to that job roughly triples its runner minutes for a fact resvg's `loadSystemFonts: false` already engineers, which is a cost call rather than an engineering one. [imp:1] [owner:me] [time:10m] [kind:decision]
+
+## Portfolio ranking · 2026-09-16
+
+The RICE scorer from #539 is built and records `state/kpis/rice/<quarter>.json` at quarter end and
+on demand through `pnpm portfolio:rice`. It derives Effort from the room envelopes and Confidence
+from the measured share of each venture's quarterly KPIs. It gates nothing, and all fourteen rows
+read `unavailable` because the two owner inputs are absent.
+
+- [ ] **Enter Reach and Impact per venture** — `config/portfolio-rice.json` has one row per venture with `reach: null` and `impact: null`. Reach is a per-quarter audience figure; there is none in this repository while `METRICS_INGESTION_ENABLED` is false, so it is yours or it stays absent. Impact is a step on 0.25 / 0.5 / 1 / 2 / 3. Nothing scores until both are set on a row. [imp:2] [owner:me] [time:30m] [kind:decision]
+- [ ] **Decide whether the ranking may ever gate a room** — `state/decisions/2026-09-16-portfolio-rice.md` is unsigned, which is what holds the ranking to information only. Countersigning it plus setting `posture: "owner-enforced"` and `rankingEnforced: true` is what the mechanism waits for; even then a further change to `ROOM_DEGRADATION_ORDER` would be needed, because that hand-written order is still the only list the daily envelope plan reads. [imp:2] [owner:me] [time:15m] [kind:decision]
+
+## Cost per edition and per decision · 2026-09-16
+
+`pnpm cost:report` from #534 writes `state/money/cost-report.json` on every non-dry cycle: what
+each edition and each decision cost, joined on `cycleId`, and each room's month against the
+envelope its own scorecard reserved. The Admin Money section shows all three. Every figure is
+metered — this company's own arithmetic over its own calls. What Anthropic actually invoiced reads
+`unavailable`, and will until the two items below are done.
+
+- [ ] **Create an Anthropic Admin API key** — an `sk-ant-admin…` key from the Console, which only an organization owner can make. `ANTHROPIC_API_KEY` cannot call `/v1/organizations/*`. Put it in `ANTHROPIC_ADMIN_API_KEY` and set `PROVIDER_BILLING_ENABLED=true` beside it; both are required and both are empty in `.env.example`. The key is read-only, never makes a model call and spends nothing from the $25 model share. Until then the billed column stays `unavailable` rather than `$0.00`, which is the honest state, not a defect. [imp:3] [owner:me] [time:15m] [kind:setup]
+- [ ] **Decide where a provider-billed figure gets recorded** — the issue asks for it in `state/treasury/ledger.json`, and `TreasuryEntrySchema` only models request, approval, commitment, payment and release, each needing an `approvalRef`. An agent writing a `payment` row off a billing feed is exactly the thing golden rule 5 forbids. Three ways out: a new non-payment entry kind, a separate reconciliation file, or an INBOX `HUMAN_APPROVAL` item per month. Nothing writes the treasury until you pick one; `state/money/cost-report.json` is the honest surface meanwhile. [imp:2] [owner:me] [time:20m] [kind:decision]
 
 ## Production review · 2026-09-07
 
@@ -324,6 +391,15 @@ is the single thing standing between a proven path and a working one.
   it is read as data, never as instructions. Tracked with the Apify credit check in #528.
   [imp:4] [owner:me] [time:20m] [kind:content]
 
+- [ ] **Record the first plays in GoVIRAL's library** — #550. `state/ventures/goviral/plays/library.json`
+  is on file and empty, so the weekly brief's Key Lessons section prints a line saying so instead of
+  two plays. A play is a move that has already run: a screenshot in
+  `state/ventures/goviral/plays/screenshots/`, a category, a read time, the benchmark it beat and a
+  RICE rating. No room can write one — nothing here measures a marketing result, so an agent-recorded
+  play would be an invented number. `state/ventures/goviral/plays/README.md` has the scales and the
+  rules; the contract refuses a benchmark the play did not beat and caps an unbenchmarked play at 50%
+  confidence. [imp:3] [owner:me] [time:40m] [kind:content]
+
 - [ ] **Rate the Titty Tuesdays idea cards in `/admin`** — the marketing room writes concrete
   campaign ideas every day and nothing has ever rated one, so the taste loop that turns your
   ratings into written style rules has no input and PALATE has nothing to work from. Nine cards sit
@@ -347,6 +423,18 @@ is the single thing standing between a proven path and a working one.
 ## Yours to decide
 
 Judgement calls. Nothing is blocked on code for any of these.
+
+- [ ] **Allocate per-desk monthly spending allowances, or leave every desk uncapped** — the rung is
+  built and armed, and no venture has one: `config/ventures.json` takes an optional
+  `budget.monthlyDeskUsd` per venture, `assertSharedReservation` refuses the call that would pass it,
+  and with the field absent nothing changes. What an agent cannot do is invent the split of the
+  signed `$25` model share between ventures — that is the same kind of number as
+  `personal-growth`'s nested `$20` in `state/decisions/2026-08-26-budget-personal-growth.md`, which
+  you signed. A derived default was tried and rejected on evidence: the sum of a venture's declared
+  room envelopes across a month would have put DNESKAi at `$4.96` in a month it legitimately billed
+  `$6.82`, because the daily edition pipeline spends outside the envelopes its rooms declare. Leaving
+  every desk uncapped is a legitimate answer; the company limits still bind. [imp:2] [owner:me]
+  [time:15m] [kind:decision]
 
 - [ ] **Decide whether to open a Contest Radar social pilot lane** — the Instagram and TikTok slices
   are built, fixture-backed and disabled. Opening one needs a countersigned budget-capacity decision
@@ -1188,6 +1276,48 @@ month, while a shelf or stretched day may cost `$0`.
   doubled caps are back to `MAX_CYCLE_BUDGET_USD` 0.20, `CU_MEETING_BUDGET_USD` 0.08 and
   `DAILY_BUDGET_USD` 1.00, with the edition per-run cap at 0.50. `MONTHLY_BUDGET_USD` stays 25 and
   `MONTHLY_OPERATING_CAP_USD` stays 30.
+
+## DNESKAi promotion · 2026-09-16
+
+#552 asks for each edition to be reposted as a five-slide carousel ending in one subscribe call to
+action. The deck is built and free: every edition the cycle publishes now writes
+`state/ventures/caught-up/promotion/<date>-<slug>.json` with the five slides — the lead, why it
+matters, what changed, two Briefs, the call to action — plus the caption, the alt text and the
+design it would render with. `pnpm caught-up:promotion -- --render` draws the 4:5 frames beside it.
+Nothing posts: LinkedIn is not a channel here and the record says so in its own words.
+
+- [ ] **Post one rendered deck by hand, or decide DNESKAi gets a LinkedIn account** — posting by
+  hand needs no channel, no credential and no approval, and it is the only way to find out whether
+  the format earns anything before anybody pays for an account. Run
+  `pnpm caught-up:promotion -- --render`, look at the five frames and the caption in the record,
+  and post them yourself. If they work, `state/INBOX.md` `CAUGHT-UP-LINKEDIN-CHANNEL` sets out
+  exactly what an account would commit you to. [imp:3] [owner:me] [time:30m] [kind:decision]
+
+## DNESKAi practical item · 2026-09-16
+
+#553 asks each edition to carry one thing a reader can use, and Friday to carry three tools and a
+prompt. The producer half ships. `practical` is an optional block in the article frontmatter,
+`contracts/edition-package.schema.json` carries it, and the delivery boundary holds every item to
+the edition's own evidence: a source it cites has to be a URL the same frontmatter already carries
+as a source or on the Watchlist, and only a Friday may carry the tools shape. A block that fails
+any of that is dropped whole and the edition publishes without it, because an extra may not cost
+an edition.
+
+The desk is not asked for it yet. `config/edition-quality.json` has `article.practicalItem: false`,
+and while it is false the writing tool never shows the provider the field, so the run costs exactly
+what it costs today.
+
+- [ ] **Turn on the practical item once DNESKAi renders it** — one line:
+  `article.practicalItem` to `true` in `config/edition-quality.json`. At the capped sizes and the
+  $15-per-million output price in `orchestrator/src/llm/prices.ts`, a month of daily items plus
+  four Friday issues is under $0.20 of the existing model share, and no new call is made either
+  way. Turning it on before the reader renders the field buys nothing, which is why it is off.
+  [imp:2] [owner:me] [time:5m] [kind:decision]
+- [ ] **Render `practical` in the DNESKAi reader** — the aifirst repository ignores frontmatter it
+  does not render, so the field is inert there until a rail widget beside `DailyLesson` and
+  `DidYouKnow` reads it. That work belongs to that repository and cannot be done from here; this
+  side is finished and its shape is fixed in `orchestrator/src/contracts/practical.ts`.
+  [imp:3] [owner:ai] [time:60m] [kind:setup]
 
 ---
 

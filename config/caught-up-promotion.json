@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "caught-up-promotion/1",
+  "$comment": "What DNESKAi's edition repost asks the reader to do, and where it is cut for. The deck itself is built and rendered from the edition package; nothing here posts, and nothing here can enable a channel — config/channels.json is the only channel registry and a human enables a channel in it. GitHub #552.",
+  "$channelComment": "The issue asks for LinkedIn. No venture owns a LinkedIn account, no connector exists, config/network-allowlist.json has no LinkedIn host and config/channels.json holds exactly two channels, so the deck is composed and held. state/INBOX.md carries CAUGHT-UP-LINKEDIN-CHANNEL as the owner decision; changing this id without that decision changes nothing, because the resolver reads the channel registry rather than this line.",
+  "channelId": "linkedin",
+  "$ctaComment": "subscribeUrl is null because DNESKAi has no subscribe surface: config/goviral-growth-loops.json records the capture stage as blocked with 'No email provider, list or subscribe form exists'. Until one does, the single call-to-action slide points at the edition itself and says so in its own record (cta.origin: 'edition'). Set subscribeUrl to the real form and every deck from that day forward asks for the subscription instead — that is the whole change.",
+  "cta": {
+    "line": null,
+    "subscribeUrl": null
+  }
+}

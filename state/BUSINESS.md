@@ -75,6 +75,24 @@ any critical target, receives a mandatory `continue / pivot / stop` reassessment
 company miss makes the board review its own operating pattern. Only the owner may
 approve a stage change after reading that evidence.
 
+## Portfolio ranking
+
+Method: RICE — Reach x Impact x Confidence / Effort — recorded per venture at quarter end in
+`state/kpis/rice/<quarter>.json` and on demand through `pnpm portfolio:rice`.
+
+Effort is the venture's declared room and production envelopes from `config/ventures.json`, billed
+per thirty-day month, so a weekly room costs a weekly amount. Confidence is the share of that
+venture's quarterly KPIs carrying a real measurement. Reach and Impact are the owner's, entered in
+`config/portfolio-rice.json`.
+
+Current ranking: **unavailable**. Every row names its missing inputs, and every row is missing
+Reach and Impact, because the Phase 3 measurement hold below means no audience figure exists and
+Impact is a judgement. The governing record is
+`state/decisions/2026-09-16-portfolio-rice.md`, which is unsigned and holds the ranking to
+information only. `ROOM_DEGRADATION_ORDER` in `orchestrator/src/portfolio/schedule.ts` remains the
+enforced answer to which room is dropped when a day exceeds the `$1.00` pace; the ranking records
+whether it agrees with that order and changes nothing.
+
 ## Thesis
 
 Caught Up pairs a Czech daily AI briefing with BoardlessAI's public decision

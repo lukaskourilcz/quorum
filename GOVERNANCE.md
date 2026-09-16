@@ -43,6 +43,12 @@ countersigned `$50` all-in monthly limit. No more than `$25` is reserved for mod
 use. At a hard limit the runtime stops rather than borrowing or quietly reducing
 accounting accuracy.
 
+The portfolio RICE ranking in `state/kpis/rice/<quarter>.json` is evidence for a room decision and
+never the authority for one. It scores ventures on Reach x Impact x Confidence / Effort, records
+whether its order agrees with the enforced room degradation order, and gates nothing. Enforcing it
+needs both the switch in `config/portfolio-rice.json` and a countersigned record; a score never
+substitutes for a founding, capacity or budget signature a venture is already held by.
+
 The 06:00 decision room may assign one specialist agenda. Agenda-gated rooms open
 only for a due request; FightAIQ intake can also open for a material source change.
 Afternoon and night are deterministic checkpoints. Manual live runs remain explicit

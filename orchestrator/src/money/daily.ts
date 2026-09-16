@@ -12,6 +12,7 @@ import {
   type QuarterlyKpiSnapshot
 } from "../metrics/quarterly.js";
 import { collectQuarterlyMeasurements, loadCurrentKpiSet } from "../metrics/quarterly-collector.js";
+import { writeQuarterlyRiceRanking } from "../portfolio/rice.js";
 import { atomicWriteJson, readJson } from "../state.js";
 import { FixedCostRegistrySchema } from "./fixed-costs.js";
 import {
@@ -173,6 +174,21 @@ export async function runDailyMoneyAndKpis(input: {
       ...quarterEnd.reassessmentPaths,
       "priority-queue.json"
     );
+    // The portfolio RICE ranking rides the quarter-end protocol rather than getting a job of its
+    // own: it is a quarterly reading of the same snapshot, it reads four files, and it calls
+    // nothing. A ranking that cannot be produced — an unreadable or malformed input file — costs
+    // the ranking and not the quarter-end packet the owner is waiting on.
+    const ricePath = await writeQuarterlyRiceRanking({
+      repoRoot: input.repoRoot,
+      stateRoot: input.stateRoot,
+      registry: VentureRegistrySchema.parse(
+        JSON.parse(await readFile(path.join(input.repoRoot, "config", "ventures.json"), "utf8"))
+      ),
+      kpiStatuses: snapshot.statuses,
+      quarterId: snapshot.quarterId,
+      now: input.now
+    });
+    if (ricePath) artifacts.push(ricePath);
   }
 
   const previousStates = await readMonetizationStates(input.stateRoot);

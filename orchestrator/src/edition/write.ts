@@ -13,6 +13,18 @@ import type {
   StructuredToolRequest,
 } from "./types.js";
 import { DispatchSchema, WireItemSchema } from "./types.js";
+import {
+  FRIDAY_PROMPTS,
+  FRIDAY_TOOLS,
+  PRACTICAL_BODY_MAXIMUM,
+  PRACTICAL_BODY_MINIMUM,
+  PRACTICAL_ITEMS_MAXIMUM,
+  PRACTICAL_KINDS,
+  PRACTICAL_TITLE_MAXIMUM,
+  PracticalItemSchema,
+  isFridayEdition
+} from "../contracts/practical.js";
+import { checkPractical } from "./practical.js";
 import { CZECH_EDITORIAL_REGISTER } from "./registers.js";
 import { removeEmptyCzechAdverbs } from "./localize.js";
 import { InvalidModelOutputError } from "./models.js";
@@ -78,6 +90,15 @@ const ToolOutputSchema = z.object({
   visual_concept: z.string().trim().min(1).optional(),
   image_negatives: z.array(z.string().trim().min(1)).max(5).optional(),
   wire: z.array(WireItemSchema).min(4).max(6),
+  /*
+   * The thing a reader can use today, and on Friday the tools issue.
+   *
+   * Optional here and optional in the frontmatter: a day whose sources documented nothing
+   * usable ships without it. The variant is not in this payload, because the day decides it,
+   * not the desk. `checkPractical` assembles the block and drops it whole if any part of it
+   * fails, so an unusable item costs the extra and never the edition.
+   */
+  practical: z.array(PracticalItemSchema).max(PRACTICAL_ITEMS_MAXIMUM).optional(),
   ...LocalizedOutputSchema.shape
 });
 
@@ -188,6 +209,26 @@ export const WRITE_TOOL_INPUT_SCHEMA = {
         additionalProperties: false
       }
     },
+    practical: {
+      type: "array",
+      minItems: 1,
+      maxItems: PRACTICAL_ITEMS_MAXIMUM,
+      items: {
+        type: "object",
+        properties: {
+          kind: { type: "string", enum: [...PRACTICAL_KINDS] },
+          title: { type: "string", maxLength: PRACTICAL_TITLE_MAXIMUM },
+          body: {
+            type: "string",
+            minLength: PRACTICAL_BODY_MINIMUM,
+            maxLength: PRACTICAL_BODY_MAXIMUM
+          },
+          source_url: { type: "string" }
+        },
+        required: ["kind", "title", "body", "source_url"],
+        additionalProperties: false
+      }
+    },
     ...localeSchema.properties
   },
   // DNESKAi is Czech-only. Keeping the article inside a redundant `cs` object made the model
@@ -201,6 +242,43 @@ export const WRITE_TOOL_INPUT_SCHEMA = {
   ],
   additionalProperties: false
 } as const;
+
+/**
+ * The tool contract this run offers the provider.
+ *
+ * With the practical item switched off the field is removed rather than left optional, so the
+ * desk is never shown a question it is not being asked and never bills output tokens for one.
+ * Everything else about the contract is identical, and `ToolOutputSchema` keeps the field
+ * optional either way, so a payload that carries it while the switch is off parses and is then
+ * ignored instead of failing an article that is otherwise fine.
+ */
+export function writeToolInputSchema(askForPractical: boolean): Record<string, unknown> {
+  if (askForPractical) return WRITE_TOOL_INPUT_SCHEMA;
+  const { practical: _withheld, ...properties } = WRITE_TOOL_INPUT_SCHEMA.properties;
+  return { ...WRITE_TOOL_INPUT_SCHEMA, properties };
+}
+
+/**
+ * What the desk is told about the practical item on this particular day.
+ *
+ * Friday is the tools issue and every other day carries one item. The day decides, from the
+ * publication date the run was given, so the instruction and the block that comes back are
+ * describing the same calendar and `practicalBlockErrors` can hold them to it.
+ */
+export function practicalInstruction(date: string): string {
+  const common = `\n\nYou also file the practical block: the part of today's edition a reader can act on
+rather than only read. Each entry has \`kind\` ("prompt", "tool" or "howto"), a Czech \`title\` of
+at most ${PRACTICAL_TITLE_MAXIMUM} characters, a Czech \`body\` of ${PRACTICAL_BODY_MINIMUM} to
+${PRACTICAL_BODY_MAXIMUM} characters and a \`source_url\` copied character for character from the
+approved list. The body says what to do, not why it is interesting: a prompt is the text to
+paste, a tool is what it does and who it is for, a how-to is the steps in order. Never write a
+link inside the title or the body; \`source_url\` is the only URL. File nothing the approved
+sources do not document. Omit the field entirely and the edition publishes without it, which is
+a normal edition and costs nothing.`;
+  return isFridayEdition(date)
+    ? `${common} Today is Friday, the tools issue: \`practical\` is exactly ${FRIDAY_TOOLS + FRIDAY_PROMPTS} entries, ${FRIDAY_TOOLS} of kind "tool" and ${FRIDAY_PROMPTS} of kind "prompt", each with its own title.`
+    : `${common} \`practical\` is exactly one entry today.`;
+}
 
 export const WRITE_SYSTEM = `You are STET's Czech writing desk at Caught Up.
 
@@ -653,8 +731,16 @@ function everyHttpsUrl(value: unknown): string[] {
   );
 }
 
+/**
+ * Every URL the payload emitted has to be one the packet supplied, or the article is refused.
+ *
+ * The practical block is deliberately not in the value handed here. `everyHttpsUrl` walks the
+ * whole object, so a tool tip pointing at a vendor's own homepage would fail the article that
+ * was written around it. `checkPractical` holds the block to the same supplied-URL rule on its
+ * own and drops it when it breaks it, which is the cost this extra is allowed to have.
+ */
 function assertSuppliedLinks(
-  output: z.infer<typeof ToolOutputSchema>,
+  output: Omit<z.infer<typeof ToolOutputSchema>, "practical">,
   supplied: ReadonlySet<string>
 ): void {
   const emittedUrls = [
@@ -829,12 +915,16 @@ export async function write(
   const revision = feedback.length
     ? `\n\nTrusted revision requirements:\n${feedback.map((item) => `- ${item}`).join("\n")}`
     : "";
+  // Off by default. The field costs output tokens on a paid call and DNESKAi does not render it
+  // yet, so the desk is asked for it only once config/edition-quality.json says so.
+  const askForPractical = config.article.practicalItem;
+  const practicalAsked = askForPractical ? practicalInstruction(brief.date) : "";
   const repairs: ContractRepair[] = [];
   const request: StructuredToolRequest<z.infer<typeof ToolOutputSchema>> = {
     model: config.models.writing,
     stage: feedback.length ? "rewrite" : "write",
     maxOutputTokens: config.article.maximumOutputTokens,
-    system: `${WRITE_SYSTEM}\nTarget about ${config.article.targetWords} Czech words. The slug must use lowercase ASCII words joined with hyphens and begin exactly with ${brief.date}-.${revision}`,
+    system: `${WRITE_SYSTEM}\nTarget about ${config.article.targetWords} Czech words. The slug must use lowercase ASCII words joined with hyphens and begin exactly with ${brief.date}-.${practicalAsked}${revision}`,
     user: `Publication date: ${brief.date}
 
 Trusted output rules:
@@ -852,7 +942,7 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, bodies)}`,
     tool: {
       name: "emit_article",
       description: "Emit the Czech Caught Up feature and supplied-source watchlist.",
-      inputSchema: WRITE_TOOL_INPUT_SCHEMA
+      inputSchema: writeToolInputSchema(askForPractical)
     },
     parse: (value: unknown) => ToolOutputSchema.parse(repairToolOutput(value, repairs))
   };
@@ -867,11 +957,15 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, bodies)}`,
     throw error;
   }
   recordRepairs(response.usage, repairs);
+  // Separated before anything else reads the payload: the link assertion below must not see the
+  // practical block, and a payload that carries one while the switch is off is ignored rather
+  // than published.
+  const { practical: filedPractical, ...articleOutput } = response.value;
   let slug: string;
   let wire: z.infer<typeof ToolOutputSchema>["wire"];
   try {
     slug = normalizeArticleSlug(response.value.slug, brief.date);
-    assertSuppliedLinks(response.value, suppliedUrls);
+    assertSuppliedLinks(articleOutput, suppliedUrls);
     wire = verifiedWire(response.value.wire, runnerUpItems);
   } catch (error) {
     throw new InvalidArticleError(
@@ -879,6 +973,18 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, bodies)}`,
       response.usage
     );
   }
+  // Grounded in exactly what the package will carry — the cited sources and the verified
+  // Watchlist — and not in the wider supplied set. The delivery boundary can only see the
+  // frontmatter, so it judges the block against those two lists; checking here against the
+  // twelve runner-ups the packet offered would let a block through that delivery then refuses,
+  // and a refused package is a lost edition rather than a lost extra.
+  const groundedUrls = new Set([
+    ...pickedItems.map((item) => item.url),
+    ...wire.map((item) => item.url)
+  ]);
+  const practical = askForPractical
+    ? checkPractical({ items: filedPractical, date: brief.date, groundedUrls })
+    : { block: null, problems: [] };
   return {
     slug,
     date: brief.date,
@@ -900,6 +1006,8 @@ ${sourcePacket(brief, pickedItems, runnerUpItems, bodies)}`,
         ...(pick?.why ? { supports: [pick.why] } : {})
       };
     }),
+    ...(practical.block ? { practical: practical.block } : {}),
+    ...(practical.problems.length > 0 ? { practicalProblems: practical.problems } : {}),
     // Checked, not trusted, and dropped whole if any part of it fails. The tags are in the name
     // sources because a Czech tag is the shortest route a company or a person has into a phrase.
     ...(visualBrief({

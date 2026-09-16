@@ -55,7 +55,17 @@ export const EditionQualityConfigSchema = z.object({
     briefsMaximum: z.number().int().min(2).max(4),
     watchlistMaximum: z.number().int().min(4).max(6),
     maximumOutputTokens: z.number().int().positive(),
-    maximumCurationCandidates: z.number().int().positive()
+    maximumCurationCandidates: z.number().int().positive(),
+    /**
+     * Whether the write call is asked for the practical item at all.
+     *
+     * The whole path around it ships either way: the package schema accepts the block, the
+     * delivery boundary checks it against the edition's own date and sources, and a package
+     * that carries one is published. This switch decides only whether the desk is asked, which
+     * is the one part of it that costs output tokens on a paid call. It is off until DNESKAi
+     * renders the field, because paying for words no reader is shown is not a saving anywhere.
+     */
+    practicalItem: z.boolean()
   }),
   models: z.object({
     curation: z.literal("claude-sonnet-4-6"),

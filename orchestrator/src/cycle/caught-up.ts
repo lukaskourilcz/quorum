@@ -26,6 +26,7 @@ import {
   recordSocialPackFailure
 } from "../social/pack.js";
 import { socialChannelsEnabled, socialContentGenerationEnabled } from "../social/activation.js";
+import { storeEditionPromotion } from "../social/edition-promotion.js";
 import { StandupSchema } from "../standup/schema.js";
 import { composeMeetingRouteDefinition, loadVentureRegistry } from "../ventures/registry.js";
 import { caughtUpSocialProductionEnabled, disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
@@ -385,6 +386,34 @@ export async function runCaughtUpLiveEditionCycle(
         console.warn(`Caught Up social pack failed: ${detail}`);
         await recordSocialPackFailure(stateRoot, detail);
       }
+    }
+  }
+  /*
+   * The repost record, written whether or not a channel is open.
+   *
+   * Inventory rather than composition, in the same sense as the recipe and the copy pack recorded
+   * at delivery: five short strings, a caption and a hash. It renders no frame, queues nothing and
+   * costs nothing, so it sits outside `socialContentEnabled` — that gate exists to stop megabytes
+   * of PNG being committed for a channel that cannot consume them, and this writes none. The
+   * frames come from `pnpm caught-up:promotion -- --render` when somebody wants to look at them.
+   */
+  if (produced.package.status === "edition" && process.env.CAUGHT_UP_SITE_URL) {
+    try {
+      const promotionUrl = new URL(
+        `/articles/${produced.package.article.cs.frontmatter.slug}`,
+        process.env.CAUGHT_UP_SITE_URL
+      ).toString();
+      const promotion = await storeEditionPromotion({
+        stateRoot,
+        configRoot,
+        editionPackage: produced.package,
+        editionUrl: promotionUrl,
+        now
+      });
+      if (promotion) socialArtifacts.push(promotion.path);
+    } catch (error) {
+      // A repost nobody can post yet must never cost the edition its run.
+      console.warn(`Caught Up promotion record skipped: ${error instanceof Error ? error.message : "unknown failure"}`);
     }
   }
   if (options.explainBudget) {

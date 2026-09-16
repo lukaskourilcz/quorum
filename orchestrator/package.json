@@ -48,8 +48,11 @@
     "datasets:append": "tsx src/datasets/append-cli.ts",
     "streams:fetch": "tsx src/streams/fetch-cli.ts",
     "finance:page": "tsx src/finance/finance-page-cli.ts",
+    "cost:report": "tsx src/finance/cost-report-cli.ts",
+    "portfolio:rice": "tsx src/portfolio/rice-cli.ts",
     "mma:retire": "tsx src/mma-files/retire-cli.ts",
-    "social:activation": "tsx src/social/activation-cli.ts"
+    "social:activation": "tsx src/social/activation-cli.ts",
+    "caught-up:promotion": "tsx src/social/promotion-cli.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.113.0",

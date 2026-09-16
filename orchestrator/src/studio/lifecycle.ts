@@ -5,6 +5,7 @@ import { z } from "zod";
 import {
   CAROUSEL_BRANDS,
   CarouselTemplateSchema,
+  LAYOUT_CHECKLIST_VERSION,
   previewFormats,
   renderCarouselPng,
   validateTemplateForBrand,
@@ -27,6 +28,26 @@ export const StudioObservationSchema = z.object({
 });
 
 export type StudioObservation = z.infer<typeof StudioObservationSchema>;
+
+/**
+ * Who reviewed a stored template, against which checklist, and when.
+ *
+ * The stored-template half of the layout gate. `studio/src/family-review.ts` gates the composed
+ * families — the ones a new layout is actually written as today — and this gates the other door:
+ * a `carousel-template/1` record proposed into `state/ventures/carousel-studio/templates/`.
+ *
+ * Only the owner reviews. EASEL, the template designer this path was built for, is `retired` in
+ * `config/agents.json`, and an agent marking its own work reviewed is the failure this record
+ * exists to prevent.
+ */
+export const StudioTemplateReviewSchema = z.object({
+  reviewer: z.literal("owner"),
+  reviewedAt: z.iso.datetime({ offset: true }),
+  checklistVersion: z.literal(LAYOUT_CHECKLIST_VERSION),
+  note: z.string().trim().min(3).max(240)
+});
+
+export type StudioTemplateReview = z.infer<typeof StudioTemplateReviewSchema>;
 
 export interface StudioLifecycleResult {
   artifacts: string[];
@@ -60,6 +81,14 @@ export async function processStudioContribution(input: {
   templateProposal: unknown;
   allowedEvidenceRefs: readonly string[];
   allowLive: boolean;
+  /**
+   * The owner's review of this exact version, or nothing.
+   *
+   * Nothing is the default and nothing means draft. `allowLive` says the room was permitted to
+   * accept a layout; this says a person looked at it. Both are required, because a passing check
+   * list is a statement about arithmetic and "reviewed" is a statement about a human.
+   */
+  review?: unknown;
 }): Promise<StudioLifecycleResult> {
   const observations = input.observations.map((value) => StudioObservationSchema.parse(value));
   for (const observation of observations) {
@@ -102,9 +131,12 @@ export async function processStudioContribution(input: {
     }))
   );
   const passes = checks.every((entry) => entry.checks.every((check) => check.status === "pass"));
+  const review = input.review === undefined || input.review === null
+    ? null
+    : StudioTemplateReviewSchema.parse(input.review);
   const template = CarouselTemplateSchema.parse({
     ...candidate,
-    status: input.allowLive && passes ? "live" : "draft"
+    status: input.allowLive && passes && review !== null ? "live" : "draft"
   });
   const templatePath = `ventures/carousel-studio/templates/${template.id}/${template.version}.json`;
   const checksPath = `ventures/carousel-studio/templates/${template.id}/${template.version}.checks.json`;
@@ -114,6 +146,8 @@ export async function processStudioContribution(input: {
     templateId: template.id,
     version: template.version,
     status: template.status,
+    checklistVersion: LAYOUT_CHECKLIST_VERSION,
+    review,
     checks
   });
   artifacts.push(templatePath, checksPath);

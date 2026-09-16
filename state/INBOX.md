@@ -44,6 +44,28 @@ with its full scope, because the scope text is the approval. -->
   A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
 
+- [ ] **HUMAN_APPROVAL CAUGHT-UP-LINKEDIN-CHANNEL** — Open a LinkedIn channel for DNESKAi, or decide there is not one.
+  What is waiting on this, exactly:
+  - **The deck already exists.** #552 built the repost: every edition the cycle publishes writes
+    `state/ventures/caught-up/promotion/<date>-<slug>.json` with five slides — the lead, why it
+    matters, what changed, two Briefs and one call to action — plus the caption, the alt text and
+    the design. `pnpm caught-up:promotion -- --render` draws the 4:5 frames beside it. It costs
+    nothing: no model call anywhere in that path.
+  - **What this repository cannot do.** No venture owns a LinkedIn account; `config/channels.json`
+    holds Threads and Instagram only and both are still `draft` with `enabledByHumanAt: null`;
+    `config/network-allowlist.json` has no LinkedIn host; and `social-distribution-2026-08a`
+    reserves account creation, OAuth, credentials and live activation to you. So the record reads
+    `status: "held"` and posting reads `manual-only`. Nothing has been queued and nothing can be.
+  - **What you are approving, if you approve anything.** Either (a) nothing — you post a rendered
+    deck by hand, which needs no channel, no credential and no approval at all; or (b) a LinkedIn
+    account, its app, its scopes and its credentials, which is a new connector, a new allowlist
+    host, a new channel record and a new budget line, and a separate `HUMAN_APPROVAL` each.
+  - **The other half of the ask.** The issue says "subscribe CTA". DNESKAi has no subscribe
+    surface, so the fifth slide currently points at the edition and the record says so
+    (`cta.origin: "edition"`). Set `cta.subscribeUrl` in `config/caught-up-promotion.json` once a
+    form exists and every deck from that day asks for the subscription instead.
+  [imp:3] [owner:me] [time:30m] [kind:decision]
+
 ## Resolved
 
 - [x] HUMAN_APPROVAL BH-RESEARCH-001 — Allow BOOKSOFHISTORY to make guarded
