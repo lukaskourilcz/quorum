@@ -5,7 +5,7 @@ import { configRoot, stateRoot } from "../paths.js";
 import { signedOwnerDecision } from "../portfolio/schedule.js";
 import { readJson, readText } from "../state.js";
 import { dailyDigestSinkFromEnvironment } from "../notify/digest.js";
-import { allInBudgetStatus, sendBudgetAlert, type AllInCostEntry } from "./budget-alert.js";
+import { allInBudgetStatus, sendBudgetAlert, sendBudgetPaceWarning, type AllInCostEntry } from "./budget-alert.js";
 
 const now = new Date();
 const month = now.toISOString().slice(0, 7);
@@ -29,4 +29,7 @@ const result = await sendBudgetAlert({
   sink: dailyDigestSinkFromEnvironment({ allowHosts: allowlist.runtimeHosts }),
   now
 });
-console.log(JSON.stringify({ result, month, spentUsd: status.spentUsd, capUsd: status.capUsd }));
+// After the alert, so a month that is already over gets one item rather than two: the pace
+// notice stands down at 100% and the alert is the voice the owner hears.
+const pace = await sendBudgetPaceWarning({ root: stateRoot, status, now });
+console.log(JSON.stringify({ result, pace, month, spentUsd: status.spentUsd, capUsd: status.capUsd }));

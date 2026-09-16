@@ -3,7 +3,9 @@ import path from "node:path";
 import {
   BudgetError,
   DEFAULT_BUDGET_LIMITS,
+  budgetStopCode,
   budgetStopReason,
+  officeReadOnlyReason,
   dailyBudgetStatus,
   estimateTextCall,
   type BudgetLedgerEntry,
@@ -130,6 +132,7 @@ import {
   type ClosedArticleSlotReason
 } from "./mma-files/live.js";
 import { signedOwnerDecision } from "./portfolio/schedule.js";
+import { OFFICE_MODE_PATH, officeIsReadOnly } from "./finance/budget-alert.js";
 import { AUTONOMY_SNAPSHOT_PATH, refreshAutonomySnapshot } from "./autonomy/signals.js";
 import { ensurePriorityItem, livePriorityItems, openPriorityItems, proposePriorityItem, readPriorityQueue, selectPriorityItem, skipPriorityItem, PriorityProposalRefused, PRIORITY_QUEUE_PATH } from "./priority/queue.js";
 import { runDailyMoneyAndKpis } from "./money/daily.js";
@@ -241,7 +244,8 @@ export async function quietWhenBudgetStops(
         reservationUsd: null,
         code: error.code
       }),
-      dailyCapReached: error.code === "DAILY_CAP"
+      dailyCapReached: error.code === "DAILY_CAP",
+      stopReason: budgetStopCode(error.code)
     });
     return {
       cycleId: input.cycleId,
@@ -271,6 +275,42 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       selectedAgents: [],
       skippedAgents: [],
       artifacts: []
+    };
+  }
+  // The month's limit, read before the day does anything.
+  //
+  // Once the all-in cap is spent every paid call is refused anyway, so this buys no new
+  // safety — it buys an answer. A room used to open, read its agenda, build its packet and
+  // then stop at its first seat, and the slot said only that a cap had refused something. The
+  // office is read-only, not closed: every ledger, record, calendar and page stays exactly as
+  // readable as it was, and this stops only the part that would have tried to spend.
+  //
+  // Dry runs pass. A dry run is a $0 fixture rehearsal, and the suite proves room mechanics
+  // with it; making the month's spend decide whether the tests run would be a new kind of
+  // flake. The record is month-keyed, so the next month opens the office with no manual step.
+  if (!options.dry && officeIsReadOnly(
+    await readJson<unknown>(stateRoot, OFFICE_MODE_PATH, null),
+    pragueClockParts(now).date.slice(0, 7)
+  )) {
+    const artifacts = await recordBudgetStop({
+      phase: options.phase,
+      date: pragueClockParts(now).date,
+      now,
+      root: stateRoot,
+      reason: officeReadOnlyReason(),
+      dailyCapReached: false,
+      stopReason: "budget_reached"
+    });
+    return {
+      cycleId,
+      phase: options.phase,
+      dry: options.dry,
+      status: "paused",
+      decision: "NO_ACTION",
+      estimatedWorstCaseUsd: 0,
+      selectedAgents: [],
+      skippedAgents: [],
+      artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(stateRoot, artifact)))
     };
   }
   if (!options.dry && options.phase === "founding") {

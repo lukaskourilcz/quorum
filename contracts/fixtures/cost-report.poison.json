@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "cost-report/1",
+  "generatedAt": "2026-09-16T12:00:00.000Z",
+  "month": "2026-09",
+  "currency": "USD",
+  "metered": {
+    "total": {
+      "totalUsd": 0.19,
+      "modelUsd": 0.18,
+      "mediaUsd": 0.01,
+      "calls": 2
+    },
+    "editions": [
+      {
+        "date": "2026-09-13",
+        "ventureId": "caught-up",
+        "phase": "cu-edition",
+        "cycleIds": [
+          "20260913030038-cu-edition"
+        ],
+        "status": "delivered",
+        "articleUrl": "https://example.invalid/synthetic-edition",
+        "packageHash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "cost": {
+          "totalUsd": 0.19,
+          "modelUsd": 0.18,
+          "mediaUsd": 0.01,
+          "calls": 2
+        },
+        "note": null
+      }
+    ],
+    "decisions": [
+      {
+        "cycleId": "20260913030038-cu-edition",
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "outcome": "EDITION",
+        "decidedAt": "2026-09-13T03:01:00.000Z",
+        "cost": {
+          "totalUsd": 0.19,
+          "modelUsd": 0.18,
+          "mediaUsd": 0.01,
+          "calls": 2
+        },
+        "note": null
+      }
+    ],
+    "envelopes": [
+      {
+        "phase": "cu-edition",
+        "ventureId": "caught-up",
+        "cycles": 1,
+        "meteredUsd": 0.19,
+        "comparable": {
+          "cycles": 1,
+          "envelopeUsd": 0.58,
+          "meteredUsd": 0.19,
+          "varianceUsd": -0.39,
+          "overspentCycles": 0
+        }
+      }
+    ]
+  },
+  "billed": null,
+  "reconciliation": {
+    "status": "reconciled",
+    "meteredUsd": 0.19,
+    "billedUsd": 0.0,
+    "differenceUsd": null,
+    "toleranceUsd": 0.01,
+    "note": "PROVIDER_BILLING_ENABLED is not set, so no billing request was made."
+  },
+  "unreadable": {
+    "decisions": 0,
+    "deliveries": 0,
+    "envelopes": 0,
+    "ledgerRows": 0
+  }
+}

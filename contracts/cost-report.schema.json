@@ -1,0 +1,543 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "cost-report/1"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "month": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}$"
+    },
+    "currency": {
+      "type": "string",
+      "const": "USD"
+    },
+    "metered": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "object",
+          "properties": {
+            "totalUsd": {
+              "type": "number",
+              "minimum": 0
+            },
+            "modelUsd": {
+              "type": "number",
+              "minimum": 0
+            },
+            "mediaUsd": {
+              "type": "number",
+              "minimum": 0
+            },
+            "calls": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "totalUsd",
+            "modelUsd",
+            "mediaUsd",
+            "calls"
+          ],
+          "additionalProperties": {}
+        },
+        "editions": {
+          "maxItems": 400,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "ventureId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 80,
+                    "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                  },
+                  {
+                    "type": "string",
+                    "const": "global"
+                  }
+                ]
+              },
+              "phase": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "cycleIds": {
+                "maxItems": 24,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                }
+              },
+              "status": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "articleUrl": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "packageHash": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 64
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "cost": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "totalUsd": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "modelUsd": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "mediaUsd": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "calls": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "totalUsd",
+                      "modelUsd",
+                      "mediaUsd",
+                      "calls"
+                    ],
+                    "additionalProperties": {}
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "note": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "date",
+              "ventureId",
+              "phase",
+              "cycleIds",
+              "status",
+              "articleUrl",
+              "packageHash",
+              "cost",
+              "note"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "decisions": {
+          "maxItems": 1000,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "cycleId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "phase": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "ventureId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 80,
+                    "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                  },
+                  {
+                    "type": "string",
+                    "const": "global"
+                  }
+                ]
+              },
+              "outcome": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60
+              },
+              "decidedAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+              },
+              "cost": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "totalUsd": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "modelUsd": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "mediaUsd": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "calls": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "totalUsd",
+                      "modelUsd",
+                      "mediaUsd",
+                      "calls"
+                    ],
+                    "additionalProperties": {}
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "note": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "cycleId",
+              "phase",
+              "ventureId",
+              "outcome",
+              "decidedAt",
+              "cost",
+              "note"
+            ],
+            "additionalProperties": {}
+          }
+        },
+        "envelopes": {
+          "maxItems": 200,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "phase": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "ventureId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 80,
+                    "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                  },
+                  {
+                    "type": "string",
+                    "const": "global"
+                  }
+                ]
+              },
+              "cycles": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "meteredUsd": {
+                "type": "number",
+                "minimum": 0
+              },
+              "comparable": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "cycles": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "envelopeUsd": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "meteredUsd": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "varianceUsd": {
+                        "type": "number"
+                      },
+                      "overspentCycles": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "cycles",
+                      "envelopeUsd",
+                      "meteredUsd",
+                      "varianceUsd",
+                      "overspentCycles"
+                    ],
+                    "additionalProperties": {}
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "phase",
+              "ventureId",
+              "cycles",
+              "meteredUsd",
+              "comparable"
+            ],
+            "additionalProperties": {}
+          }
+        }
+      },
+      "required": [
+        "total",
+        "editions",
+        "decisions",
+        "envelopes"
+      ],
+      "additionalProperties": {}
+    },
+    "billed": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "const": "anthropic-cost-report"
+            },
+            "fetchedAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            "month": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}$"
+            },
+            "currency": {
+              "type": "string",
+              "const": "USD"
+            },
+            "totalUsd": {
+              "type": "number",
+              "minimum": 0
+            },
+            "days": {
+              "maxItems": 62,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                  },
+                  "usd": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "date",
+                  "usd"
+                ],
+                "additionalProperties": {}
+              }
+            }
+          },
+          "required": [
+            "source",
+            "fetchedAt",
+            "month",
+            "currency",
+            "totalUsd",
+            "days"
+          ],
+          "additionalProperties": {}
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reconciliation": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "unavailable",
+            "reconciled",
+            "mismatch"
+          ]
+        },
+        "meteredUsd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "billedUsd": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "differenceUsd": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "toleranceUsd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 400
+        }
+      },
+      "required": [
+        "status",
+        "meteredUsd",
+        "billedUsd",
+        "differenceUsd",
+        "toleranceUsd",
+        "note"
+      ],
+      "additionalProperties": {}
+    },
+    "unreadable": {
+      "type": "object",
+      "properties": {
+        "decisions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "deliveries": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "envelopes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "ledgerRows": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "decisions",
+        "deliveries",
+        "envelopes",
+        "ledgerRows"
+      ],
+      "additionalProperties": {}
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "month",
+    "currency",
+    "metered",
+    "billed",
+    "reconciliation",
+    "unreadable"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/cost-report.schema.json"
+}

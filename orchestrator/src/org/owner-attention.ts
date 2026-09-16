@@ -32,6 +32,20 @@ type Urgency = OwnerAttention["approvals"][number]["urgency"];
  * An unknown ref keeps its own title and is flagged, so the retro room can see the gap.
  */
 const PLAIN_COPY: Readonly<Record<string, { plain: string; steps?: string[]; urgency?: Urgency }>> = {
+  /*
+   * Two prefix entries, for the only ids this system mints itself. The trailing hyphen is what
+   * marks a key as a prefix; every other key here is an exact ref and stays one.
+   */
+  "BUDGET-PACE-": {
+    plain: "The month's all-in spending has passed 80% of the $50 limit. Nothing is blocked and no approval is needed — this is the early notice, and spending stops on its own at the limit.",
+    steps: ["Read the per-project breakdown in the item", "Decide now if any project should slow down, or do nothing and let the limit stop it"],
+    urgency: "soon"
+  },
+  "BUDGET-EXHAUSTED-": {
+    plain: "The month's all-in limit is spent, so the office is read-only: everything stays readable and nothing further will be paid for until the next month.",
+    steps: ["Read the per-project breakdown in the item", "Review state/decisions/2026-08-04-budget-fifty.md before changing any number", "Countersign a new limit, or leave the work paused until the month turns"],
+    urgency: "blocking"
+  },
   "APIFY-ACCOUNT-001": {
     plain: "GoVIRAL's Monday meeting has no trend data until the Apify API token is in the repository's Actions secrets.",
     steps: ["Sign in at apify.com and open Settings, then API & Integrations", "Copy the API token", "Add APIFY_TOKEN to the repository's Actions secrets"],
@@ -187,6 +201,27 @@ function isoDay(value: string | undefined): string | null {
 }
 
 /**
+ * The curated sentence for a ref, by exact id first and then by the longest matching prefix.
+ *
+ * Every entry in PLAIN_COPY is a fixed id, which is right for the approvals a human writes by
+ * hand. It is wrong for the ones this system opens itself: the budget items carry the month in
+ * their id, `BUDGET-EXHAUSTED-2026-08`, so the exact lookup could never match and the one item
+ * that says the company has stopped spending reached the owner's admin flagged "no plain
+ * description yet" — the only item on the page with no explanation of what to do about it.
+ * Longest match wins so a future exact id always beats a prefix.
+ */
+function curatedCopy(ref: string): (typeof PLAIN_COPY)[string] | undefined {
+  const exact = PLAIN_COPY[ref];
+  if (exact) return exact;
+  let best: { key: string; value: (typeof PLAIN_COPY)[string] } | undefined;
+  for (const [key, value] of Object.entries(PLAIN_COPY)) {
+    if (!key.endsWith("-") || !ref.startsWith(key)) continue;
+    if (!best || key.length > best.key.length) best = { key, value };
+  }
+  return best?.value;
+}
+
+/**
  * Unchecked HUMAN_APPROVAL entries.
  *
  * The inbox is markdown a human writes, so the parse is deliberately narrow: a `- [ ]` line whose
@@ -207,7 +242,7 @@ export function parseInboxApprovals(markdown: string): OwnerAttention["approvals
       if (!next || next.startsWith("- ") || next.startsWith("#") || next.startsWith("What this approves")) break;
       title = `${title} ${next}`.trim();
     }
-    const known = PLAIN_COPY[ref];
+    const known = curatedCopy(ref);
     approvals.push({
       id: ref,
       title: title.slice(0, 280) || ref,

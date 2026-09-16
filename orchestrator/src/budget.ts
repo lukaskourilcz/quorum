@@ -9,6 +9,7 @@ import {
 } from "./llm/prices.js";
 import type { Stage } from "./types.js";
 import { VentureIdSchema } from "./contracts/common.js";
+import type { MeetingStopReason } from "./contracts/meeting-skip.js";
 
 export const BudgetLedgerKindSchema = z.enum(["text", "image", "embedding"]);
 export type BudgetLedgerKind = z.infer<typeof BudgetLedgerKindSchema>;
@@ -101,6 +102,25 @@ export type BudgetErrorCode =
   | "MEDIA_ASSET_CAP"
   | "DAILY_MEDIA_CAP"
   | "MONTHLY_MEDIA_CAP"
+  /**
+   * The room spent its own declared envelope before it finished.
+   *
+   * CYCLE_CAP is $0.20 and STAGE_CAP is the stage's share of it; a room's envelope in
+   * config/ventures.json is $0.05 to $0.25. So a room could bill four times what its own
+   * meeting record publishes as its envelope and no rung would notice, because the pre-check
+   * at portfolio/run.ts compares the worst-case *estimate* against the envelope once, before
+   * the first seat is called, and never looks again. This is that comparison made against the
+   * ledger, each time a seat reserves.
+   */
+  | "ROOM_CAP"
+  /**
+   * The venture spent its own monthly allowance.
+   *
+   * Only a venture whose registry entry declares `budget.monthlyDeskUsd` has one. That number
+   * is an owner allocation of the signed model share, so the runtime enforces it and never
+   * derives it.
+   */
+  | "DESK_MONTHLY_CAP"
   | "PACING";
 
 export class BudgetError extends Error {
@@ -322,10 +342,69 @@ export function budgetStopReason(input: {
   reservationUsd: number | null;
   code?: BudgetErrorCode;
 }): string {
+  // The day's figures are the right ones for a day's cap and the wrong ones for anything else.
+  // A room that spent its own envelope on a quiet morning would otherwise have announced that
+  // $0.06 of the day's $1.00 is gone, which reads as a system refusing work it can afford.
+  if (input.code === "ROOM_CAP") {
+    return input.reservationUsd !== null
+      ? `This meeting's own spending limit was reached, so it was postponed. It needs ${money(input.reservationUsd)}. Nothing was spent and the day's other meetings are unaffected.`
+      : `This meeting reached its own spending limit part-way through, so it stopped early. Nobody left to speak was asked and the day's other meetings are unaffected.`;
+  }
+  if (isMonthlyBudgetCode(input.code)) {
+    return input.reservationUsd !== null
+      ? `The month's spending limit was reached, so this meeting was postponed. Ledgers and past meetings stay readable. Nothing was spent; spending resumes next month.`
+      : `The month's spending limit was reached part-way through, so this meeting stopped early. Nobody left to speak was asked; spending resumes next month.`;
+  }
   if (input.reservationUsd !== null) {
     return `The day's spending limit was reached, so this meeting was postponed. ${money(input.status.remainingUsd)} of the day's ${money(input.status.capUsd)} limit is left and it needs ${money(input.reservationUsd)}. Nothing was spent; spending resumes tomorrow.`;
   }
   return `The day's spending limit was reached part-way through, so this meeting stopped early. ${money(input.status.spentUsd)} of the day's ${money(input.status.capUsd)} limit is spent; nobody left to speak was asked.`;
+}
+
+function isMonthlyBudgetCode(code: BudgetErrorCode | undefined): boolean {
+  return code === "MONTHLY_API_CAP" ||
+    code === "MONTHLY_OPERATING_CAP" ||
+    code === "MONTHLY_MEDIA_CAP" ||
+    code === "DESK_MONTHLY_CAP";
+}
+
+/**
+ * What a room says when the month's limit had already closed the office before the run started.
+ *
+ * Separate from budgetStopReason on purpose: that function answers "a cap refused a call I was
+ * about to make", and this one answers "no call was attempted, because the month is over". The
+ * distinction is the difference between a refusal and a closed door, and the owner reads both.
+ */
+export function officeReadOnlyReason(): string {
+  return "The month's spending limit is reached, so this meeting was postponed. Ledgers and past meetings stay readable. Nothing was spent; spending resumes next month.";
+}
+
+/**
+ * The stop code a refusal is recorded under, or nothing when none of the four describes it.
+ *
+ * Returning undefined is the point. A PER_CALL_CAP or an UNKNOWN_PRICE is a refusal, but it is
+ * not "the budget is reached" in any sense the owner would recognise, and labelling it as one
+ * would make the counts on the calendar wrong in the direction that hides real breakage.
+ */
+export function budgetStopCode(code: BudgetErrorCode): MeetingStopReason | undefined {
+  switch (code) {
+    case "ROOM_CAP":
+    case "CYCLE_CAP":
+    case "STAGE_CAP":
+      return "room_cap";
+    case "DAILY_CAP":
+    case "DAILY_MEDIA_CAP":
+      return "daily_pace";
+    case "PACING":
+      return "pacing";
+    case "MONTHLY_API_CAP":
+    case "MONTHLY_OPERATING_CAP":
+    case "MONTHLY_MEDIA_CAP":
+    case "DESK_MONTHLY_CAP":
+      return "budget_reached";
+    default:
+      return undefined;
+  }
 }
 
 function isSameUtcMonth(left: Date, right: Date): boolean {
@@ -342,6 +421,19 @@ export interface ReserveContext {
   knownMonthlyForecastUsd: number;
   remainingScheduledCycles: number;
   limits?: BudgetLimits;
+  /**
+   * This run's own ceiling: the room's declared envelope, checked against what the run has
+   * already billed.
+   *
+   * Optional because a caller that does not know its envelope must not be given one — a wrong
+   * number here refuses work the owner paid for. Every caller that sets it is passing the same
+   * figure its meeting record publishes, so the cap and the published envelope cannot drift.
+   */
+  roomCapUsd?: number;
+  /** Whose month this call is billed to. Set it to the id the ledger row will carry. */
+  ventureId?: string;
+  /** The venture's own monthly allowance, when the owner has allocated it one. */
+  deskMonthlyUsd?: number;
 }
 
 export function assertTextReservation(
@@ -386,6 +478,16 @@ export function assertImageReservation(
     );
   }
   if (avatar) {
+    // The avatar branch returns without calling assertSharedReservation, so the two scoped
+    // rungs have to be asked here too or a venture's avatar spend would be the one kind of
+    // spend its own allowance never saw.
+    assertScopedReservation(
+      estimate.estimatedUsd,
+      context.ledger
+        .filter((entry) => entry.cycleId === context.cycleId)
+        .reduce((sum, entry) => sum + entry.usd, 0),
+      context
+    );
     const monthSpend = context.ledger
       .filter((entry) => isSameUtcMonth(new Date(entry.ts), context.now))
       .reduce((sum, entry) => sum + entry.usd, 0);
@@ -447,6 +549,41 @@ export function assertAvatarSetReservation(
   return total;
 }
 
+/**
+ * The two rungs that are scoped to one room and one desk rather than to the whole company.
+ *
+ * Both are opt-in and both only ever refuse: with neither field set this function is a no-op,
+ * which is why adding it to the shared path could not change what any existing caller is
+ * allowed to spend. It runs before the day and month rungs because a room that has spent its
+ * own envelope should say so in its own terms, not report the company's limit as the reason.
+ */
+function assertScopedReservation(
+  usd: number,
+  cycleSpend: number,
+  context: ReserveContext
+): void {
+  if (context.roomCapUsd !== undefined && cycleSpend + usd > context.roomCapUsd) {
+    throw new BudgetError(
+      "ROOM_CAP",
+      `Room reserved ${Number((cycleSpend + usd).toFixed(8))} against its ${context.roomCapUsd} envelope`
+    );
+  }
+  const { ventureId, deskMonthlyUsd } = context;
+  if (ventureId === undefined || deskMonthlyUsd === undefined) return;
+  const deskMonthSpend = context.ledger
+    .filter((entry) =>
+      entry.ventureId === ventureId &&
+      isSameUtcMonth(new Date(entry.ts), context.now)
+    )
+    .reduce((sum, entry) => sum + entry.usd, 0);
+  if (deskMonthSpend + usd > deskMonthlyUsd) {
+    throw new BudgetError(
+      "DESK_MONTHLY_CAP",
+      `${ventureId} reserved ${Number((deskMonthSpend + usd).toFixed(8))} against its ${deskMonthlyUsd} monthly allowance`
+    );
+  }
+}
+
 function assertSharedReservation(
   usd: number,
   image: boolean,
@@ -456,6 +593,7 @@ function assertSharedReservation(
   const cycleSpend = context.ledger
     .filter((entry) => entry.cycleId === context.cycleId)
     .reduce((sum, entry) => sum + entry.usd, 0);
+  assertScopedReservation(usd, cycleSpend, context);
   const monthSpend = context.ledger
     .filter((entry) => isSameUtcMonth(new Date(entry.ts), context.now))
     .reduce((sum, entry) => sum + entry.usd, 0);

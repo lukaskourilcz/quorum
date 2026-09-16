@@ -183,6 +183,9 @@ describe("a room the cap stops ends the day quietly", () => {
     expect(skip.reason).toContain(`$${limits.dailyUsd.toFixed(2)}`);
     expect(skip.reason).not.toMatch(/fail/i);
     expect(skip.reason).not.toContain("mma-intake");
+    // The same fact as the sentence, in a word a program can branch on. The site, the digest
+    // and the admin used to have to match on prose to tell these apart.
+    expect(skip.stopReason).toBe("daily_pace");
 
     // The finance alert and the daily digest count exhausted days from this file. index.ts used
     // to write it on the way out with exit 1; catching the error must not lose the signal.
@@ -237,6 +240,29 @@ describe("a room the cap stops ends the day quietly", () => {
         reason,
         decidedAt: NOW.toISOString()
       }).reason).toBe(reason);
+    }
+  });
+
+  it("records which limit stopped it, in a word and in the right sentence", async () => {
+    for (const [code, stopReason, phrase] of [
+      ["ROOM_CAP", "room_cap", "own spending limit"],
+      ["MONTHLY_OPERATING_CAP", "budget_reached", "month's spending limit"],
+      ["PACING", "pacing", "day's spending limit"]
+    ] as const) {
+      const phase = `probe-${stopReason}`;
+      await quietWhenBudgetStops(
+        { phase: phase as never, cycleId: `20260805080000-${phase}`, now: NOW, root },
+        () => {
+          throw new BudgetError(code, `${code} refused the seat`);
+        }
+      );
+      const skip = MeetingSkipSchema.parse(JSON.parse(
+        await readFile(path.join(root, "meetings", "skips", `${DATE}-${phase}.json`), "utf8")
+      ));
+      expect(skip.stopReason).toBe(stopReason);
+      expect(skip.reason).toContain(phrase);
+      // A room or a month is not a day, so neither may claim the day's limit stopped it.
+      if (code !== "PACING") expect(skip.reason).not.toContain("day's spending limit");
     }
   });
 

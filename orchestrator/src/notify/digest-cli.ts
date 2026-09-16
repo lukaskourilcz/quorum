@@ -10,7 +10,7 @@ import {
   signedOwnerDecision
 } from "../portfolio/schedule.js";
 import { loadVentureRegistry, resolveScheduledClock } from "../ventures/registry.js";
-import { allInBudgetStatus, sendBudgetAlert, type AllInCostEntry } from "../finance/budget-alert.js";
+import { allInBudgetStatus, sendBudgetAlert, sendBudgetPaceWarning, type AllInCostEntry } from "../finance/budget-alert.js";
 import { readJson, readText } from "../state.js";
 import {
   buildDailyDigest,
@@ -107,4 +107,5 @@ const alertStatus = await sendBudgetAlert({
   sink,
   now
 });
-console.log(JSON.stringify({ date, status, alertStatus, shape: effective.shape, meetings: digest.meetings.length, bodyWordCount: digest.bodyWordCount }));
+const paceStatus = await sendBudgetPaceWarning({ root: digestRoot, status: allIn, now });
+console.log(JSON.stringify({ date, status, alertStatus, paceStatus, shape: effective.shape, meetings: digest.meetings.length, bodyWordCount: digest.bodyWordCount }));

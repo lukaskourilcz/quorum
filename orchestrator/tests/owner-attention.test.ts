@@ -67,6 +67,33 @@ describe("reading the inbox", () => {
     expect(approvals[1]?.needsPlainCopy).toBe(true);
   });
 
+  it("gives the month-stamped budget items the copy written for them", () => {
+    /*
+     * The ids this system mints itself carry the month, so an exact-ref lookup could never
+     * match them. The one item that says the company has stopped spending reached the owner's
+     * admin flagged "no plain description yet" — the only item on the page with no explanation
+     * of what to do about it. The prefix lookup answers both budget items, and only those.
+     */
+    const approvals = parseInboxApprovals([
+      "- [ ] HUMAN_APPROVAL BUDGET-PACE-2026-09 — All-in warning: $40.00 of $50.00 used.",
+      "- [ ] HUMAN_APPROVAL BUDGET-EXHAUSTED-2026-09 — BoardlessAI spending has stopped.",
+      "- [ ] HUMAN_APPROVAL BUDGET-SOMETHING-ELSE — Not a curated prefix."
+    ].join("\n\n"));
+    expect(approvals.map((entry) => entry.id)).toEqual([
+      "BUDGET-PACE-2026-09",
+      "BUDGET-EXHAUSTED-2026-09",
+      "BUDGET-SOMETHING-ELSE"
+    ]);
+    expect(approvals[0]?.needsPlainCopy).toBeUndefined();
+    expect(approvals[0]?.urgency).toBe("soon");
+    expect(approvals[0]?.plain).toContain("no approval is needed");
+    expect(approvals[1]?.needsPlainCopy).toBeUndefined();
+    expect(approvals[1]?.urgency).toBe("blocking");
+    expect(approvals[1]?.plain).toContain("read-only");
+    // A prefix that nobody curated stays uncurated. Longest match wins, and no match is fine.
+    expect(approvals[2]?.needsPlainCopy).toBe(true);
+  });
+
   it("keeps every new venture approval in the canonical inbox with owner-ready copy", async () => {
     const inbox = await readFile(path.resolve(process.cwd(), "../state/INBOX.md"), "utf8");
 
