@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { budgetLedgerCostCategory, BudgetLedgerEntrySchema } from "../budget.js";
+import { previousPragueDate } from "../cycle/ledger.js";
 import { loadArticleSlotOutcomes, loadMeetingRecords, mondayOfWeek } from "../meetings/calendar.js";
 import { pragueClockParts } from "../meetings/clock.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
@@ -26,7 +27,22 @@ function valueAfter(args: string[], flag: string): string | undefined {
 
 const args = process.argv.slice(2);
 const now = new Date(valueAfter(args, "--at") ?? Date.now());
-const date = valueAfter(args, "--date") ?? pragueClockParts(now).date;
+const today = pragueClockParts(now).date;
+/*
+ * The day the digest is about, which is no longer the day it runs on.
+ *
+ * `operations-2026-08c` retired the night shift and moved its duties into the 06:00 morning,
+ * which reconciles a day that has finished. The digest was one of those duties and its workflow
+ * step still asked for `night`, so it stopped being invoked on 2026-08-29 — the date of the last
+ * committed receipt under state/notify/digest. A 06:00 run digesting its own date would summarise
+ * a day six hours old, so the caller says which day it means instead.
+ *
+ * previousPragueDate is the one that already answers this for the reconciler, anchored at noon so
+ * the arithmetic survives a daylight-saving switch.
+ */
+const date = args.includes("--previous-day")
+  ? previousPragueDate(today)
+  : valueAfter(args, "--date") ?? today;
 const dry = args.includes("--dry");
 const digestRoot = dry ? path.join(repoRoot, "tmp", "dry-run", "state") : stateRoot;
 const [registry, decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, ideaRoomHoldRaw, ledgerRaw, nonModelRaw, allowlist, records] = await Promise.all([
@@ -54,7 +70,16 @@ const [registry, decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw,
 ]);
 const entries = ((JSON.parse(ledgerRaw) as { entries?: unknown[] }).entries ?? [])
   .map((entry) => BudgetLedgerEntrySchema.parse(entry));
-const month = date.slice(0, 7);
+/*
+ * The month the caps are read against: the one the run is in, not the one the digested day is in.
+ *
+ * They are the same date on 30 or 31 days out of 31. On the first of a month they are not, and
+ * everything downstream of this line is about the present rather than about the digested day:
+ * `allIn` decides the headroom the schedule is resolved with, and sendBudgetAlert writes
+ * state/autonomy/office-mode.json from it. A closed month that ended exhausted would have shut
+ * the office on the first morning of the new one.
+ */
+const month = today.slice(0, 7);
 const spent = entries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
 const provisionalCap = signedOwnerDecision(budgetFiftyRaw) === "countersigned" ? 25 : budgetDecisionStatus(decisionRaw) === "countersigned-shape-a" ? 18 : 15;
 const effective = resolveEffectivePortfolioSchedule({

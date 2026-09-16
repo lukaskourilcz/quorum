@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DailyResultBody } from "@/components/daily-result-body";
 import { PageIntro } from "@/components/page-intro";
 import { PageShell } from "@/components/page-shell";
 import { MeasuresSection } from "@/components/sections/metrics-section";
@@ -9,8 +10,7 @@ import { Table, TableCell, TableHead } from "@/components/ui/table";
 import {
   getDailyResults,
   getVentureKpiStatuses,
-  withMissingDays,
-  type DailyResultRow
+  withMissingDays
 } from "@/lib/daily-results";
 import { readOperationsReports } from "@/lib/operations-reports";
 import { formatDate, formatUsd } from "@/lib/utils";
@@ -36,32 +36,6 @@ const VIEW_LABEL: Readonly<Record<ReportView, string>> = {
   daily: "Daily",
   weekly: "Weekly",
   monthly: "Monthly"
-};
-
-const STATUS_LABEL: Record<DailyResultRow["status"], string> = {
-  produced: "Produced",
-  "no-output": "No output",
-  failed: "Failed",
-  "not-held": "Not held"
-};
-
-/**
- * Status colours that can actually be read on this page.
- *
- * `--success` is `#166534` and `--destructive` is `#b91c1c`: both are chosen to sit *behind*
- * light type, and both were used here as type on `#09090b`, which measures 2.79:1 against a 4.5:1
- * gate. The `-soft` variants are the same states rendered for a dark surface, and they are what
- * the wallboard already uses for On track / Off track.
- *
- * `--danger` was worse than low contrast: no such token exists, so the class resolved to nothing
- * and a failed row was rendered in the inherited body colour — indistinguishable from a row that
- * produced something.
- */
-const STATUS_TONE: Record<DailyResultRow["status"], string> = {
-  produced: "text-[var(--success-soft)]",
-  "no-output": "text-[var(--ash)]",
-  failed: "text-[var(--destructive-soft)]",
-  "not-held": "text-[var(--fog)]"
 };
 
 export default async function ResultsPage({
@@ -191,74 +165,29 @@ export default async function ResultsPage({
 
         {days.length === 0 ? (
           <p className="text-[var(--muted-foreground)]">
-            No day has been recorded yet. Each night cycle writes one summary, and it appears here the
-            following morning.
+            No day has been recorded yet. The morning cycle writes one summary of the day before
+            it, and that summary appears here.
           </p>
         ) : (
           <div className="flex flex-col gap-16">
             {days.map((day) => (
               <article key={day.date}>
                 <div className="mb-4 flex flex-wrap items-baseline justify-between gap-4">
-                  <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">{formatDate(day.date)}</h2>
+                  <h2 className="text-[1.625rem] font-semibold tracking-[-0.04em]">
+                    {/* Each day is its own URL, so a single day can be linked to and read on its
+                        own. A day with no summary has nothing to open, so it stays plain text. */}
+                    {day.missing ? formatDate(day.date) : (
+                      <Link className="underline decoration-[var(--steel)] underline-offset-[0.35em] hover:decoration-[var(--accent)]" href={`/results/${day.date}`}>
+                        {formatDate(day.date)}
+                      </Link>
+                    )}
+                  </h2>
                   <p className="font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--ash)]">
                     {day.missing ? "No summary recorded" : `Day total ${formatUsd(day.totalCostUsd)}`}
                   </p>
                 </div>
 
-                {day.missing ? (
-                  <p className="max-w-3xl text-[var(--muted-foreground)]">
-                    No summary was recorded for this day. The work still happened; the night cycle
-                    did not write down what it was.
-                  </p>
-                ) : null}
-
-                {day.portfolioLine ? (
-                  <p className="mb-5 max-w-3xl text-[var(--muted-foreground)]">{day.portfolioLine}</p>
-                ) : null}
-
-                {day.missing ? null : (
-                <div className="overflow-x-auto">
-                  <Table>
-                    <thead>
-                      <tr>
-                        <TableHead>Project</TableHead>
-                        <TableHead>Output</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Cost</TableHead>
-                        <TableHead>Why it failed</TableHead>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {day.rows.map((row) => (
-                        <tr key={`${day.date}-${row.ventureId}-${row.kind}`}>
-                          <TableCell>
-                            <span className="font-semibold">{row.ventureLabel}</span>
-                            <span className="mt-0.5 block font-mono text-[0.625rem] uppercase tracking-[0.1em] text-[var(--fog)]">
-                              {row.kind}
-                            </span>
-                          </TableCell>
-                          <TableCell>
-                            {row.roomLink ? (
-                              <Link className="underline underline-offset-4" href={row.roomLink}>
-                                {row.output}
-                              </Link>
-                            ) : (
-                              row.output
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <span className={STATUS_TONE[row.status]}>{STATUS_LABEL[row.status]}</span>
-                          </TableCell>
-                          <TableCell>{formatUsd(row.costUsd)}</TableCell>
-                          <TableCell>
-                            {row.failureReason ?? <span className="text-[var(--fog)]">—</span>}
-                          </TableCell>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </div>
-                )}
+                <DailyResultBody day={day} />
               </article>
             ))}
           </div>

@@ -642,15 +642,28 @@ jobs:
             echo "failed=true" >> "$GITHUB_OUTPUT"
           fi
 
+      # On the morning, about the day before it.
+      #
+      # This step asked for `night` until 2026-09-16, and `operations-2026-08c` had stopped
+      # scheduling that phase on 2026-08-29. The condition was therefore unreachable on every
+      # scheduled run from that day on, and the last committed receipt under
+      # state/notify/digest is 2026-08-29 — eighteen days of the public /results ledger with no
+      # source. The retiring decision moved the night's duties into the 06:00 morning and listed
+      # them one by one; the digest was a workflow step rather than a block in cycle.ts, so it
+      # was not on that list and nothing failed when it went quiet.
+      #
+      # `--previous-day` because the morning reconciles a day that has finished. It does not pass
+      # `--final-failed`: that flag marks the last slot of the digested day as failed, and this
+      # run's own outcome says nothing about a day that ended seven hours ago. A slot that really
+      # failed already carries a FAILED record, and the reconcile job in health.yml writes a skip
+      # for one that left no record at all.
       - name: Send the one daily portfolio digest
-        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.phase == 'night' }}
+        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.phase == 'morning' }}
         env:
-          CYCLE_FAILED: ${{ steps.run.outputs.failed }}
           DRY: ${{ steps.mode.outputs.dry }}
         run: |
-          args=()
+          args=(--previous-day)
           if test "$DRY" = "true"; then args+=(--dry); fi
-          if test "$CYCLE_FAILED" = "true"; then args+=(--final-failed); fi
           pnpm digest:daily -- "${args[@]}"
 
       - name: Send a one-time hard-limit alert when needed

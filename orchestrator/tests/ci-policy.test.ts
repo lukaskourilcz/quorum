@@ -9,6 +9,7 @@ import {
   cronSlotHour,
   readVentureRegistry,
   deployedCronExpressions,
+  resolveScheduledClock,
   scheduledCronExpressions
 } from "../src/ventures/registry.js";
 
@@ -107,6 +108,22 @@ describe("automation policy", () => {
     expect(cycle).toContain("schedule-cli.ts");
     expect(cycle).toContain("pnpm digest:daily");
     expect(cycle).toContain("DAILY_DIGEST_EMAIL_MODE");
+    // The digest step is gated on a phase name, and the phase it named — `night` — stopped being
+    // scheduled when `operations-2026-08c` retired the shift. The condition became unreachable,
+    // the receipts under state/notify/digest stopped on 2026-08-29, and no test noticed because
+    // every assertion here was a substring of a step nobody ran. So the gate is checked against
+    // the registry's own clock rather than against a literal: a phase this workflow waits for
+    // has to be a phase that actually arrives.
+    const digestStepStart = cycle.indexOf("      - name: Send the one daily portfolio digest\n");
+    expect(digestStepStart).toBeGreaterThan(-1);
+    const digestStep = cycle.slice(digestStepStart, cycle.indexOf("\n      - name: ", digestStepStart + 1));
+    const digestPhase = /steps\.mode\.outputs\.phase == '([a-z-]+)'/u.exec(digestStep)?.[1];
+    expect(digestPhase).toBeDefined();
+    expect(resolveScheduledClock(readVentureRegistry()).map((slot) => slot.phase as string))
+      .toContain(digestPhase);
+    // The morning digests the finished day, and this run's own outcome is no evidence about it.
+    expect(digestStep).toContain("args=(--previous-day)");
+    expect(digestStep).not.toContain("--final-failed");
     expect(cycle).not.toContain("MEETING_EMAIL_MODE");
     expect(cycle).toContain('test "$phase" = "morning"');
     expect(cycle).toContain("actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1");

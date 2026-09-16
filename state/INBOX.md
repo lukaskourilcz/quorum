@@ -66,6 +66,28 @@ with its full scope, because the scope text is the approval. -->
     form exists and every deck from that day asks for the subscription instead.
   [imp:3] [owner:me] [time:30m] [kind:decision]
 
+- [ ] **HUMAN_APPROVAL OFFICE-DIGEST-REPOSTING** — Decide whether the daily office digest is reposted anywhere, or stays a page.
+  What ships without you, and already has:
+  - **The digest writer runs again.** Its workflow step asked for the `night` phase, which
+    `operations-2026-08c` stopped scheduling on 2026-08-29, so nothing invoked it for eighteen
+    days. It now runs on the 06:00 morning about the day before it, reads committed records only
+    and calls no model.
+  - **Each recorded day has its own URL.** `/results/<date>` renders one day's rooms, output,
+    cost and recorded failure reason, from the same digest receipts and behind the same
+    sanitising boundary as `/results`. The days are in the sitemap, so they are linkable and
+    indexable without anything being posted.
+  What is held, and why this repository cannot decide it:
+  - `config/channels.json` holds Threads and Instagram only, both `draft` with
+    `enabledByHumanAt: null`, and `social-distribution-2026-08a` reserves account creation,
+    OAuth, credentials and live activation to you. No queue item exists and none can be created.
+  - A repost would also be the first time the office record leaves this site. The pages are
+    already public, so nothing new is disclosed by linking them; what a channel adds is a
+    schedule, a credential and a budget line.
+  What you would be approving, if anything: either nothing — you link a day by hand, which needs
+  no channel and no approval — or a channel for the digest, which is a separate `HUMAN_APPROVAL`
+  per account, scope, allowlist host and budget line.
+  [imp:2] [owner:me] [time:20m] [kind:decision]
+
 ## Resolved
 
 - [x] HUMAN_APPROVAL BH-RESEARCH-001 — Allow BOOKSOFHISTORY to make guarded

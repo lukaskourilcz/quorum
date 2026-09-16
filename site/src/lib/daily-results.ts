@@ -6,12 +6,15 @@ import { publicKindLabel } from "@/lib/slot-labels";
 import { getOwnerOnlyVentureIds } from "@/lib/venture-registry";
 
 /**
- * The daily results ledger, read from the digest receipts the night cycle already writes.
+ * The daily results ledger, read from the digest receipts the morning cycle already writes.
  *
  * These receipts were built to be emailed. The email path is dropped, but the data is the
  * honest record of what each venture produced in a day and what it cost, so it is rendered
  * here instead. Nothing new is computed: a row is one meeting a venture held, and the
  * failure column is the digest's own failure operations for that venture.
+ *
+ * The writer was the night shift until `operations-2026-08c` retired it; it is now the 06:00
+ * morning, digesting the day before it.
  */
 export interface DailyResultRow {
   ventureId: string;
@@ -33,8 +36,8 @@ export interface DailyResult {
    * True when no digest exists for this date at all.
    *
    * A day with no digest is not a day with nothing on it — 4 and 6 August both produced work —
-   * it is a night cycle that did not write its summary. The page said nothing about either, so
-   * the gaps read as days the company did nothing.
+   * it is a cycle that did not write its summary. The page said nothing about either, so the
+   * gaps read as days the company did nothing.
    */
   missing?: boolean;
 }
