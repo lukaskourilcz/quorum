@@ -1,0 +1,281 @@
+{
+  "schemaVersion": "edition-package/1",
+  "date": "2026-09-16",
+  "idempotencyKey": "521fa057a26ab8c122de17b5e106fca17bca49667002f122a04563bb1f2a05ec",
+  "generation": {
+    "models": {
+      "curation": "claude-sonnet-4-6",
+      "writing": "claude-sonnet-4-6"
+    },
+    "costUsd": 0.3047775
+  },
+  "reason": "cu-edition decision meetings/2026-09-16-cu-edition",
+  "status": "edition",
+  "article": {
+    "cs": {
+      "frontmatter": {
+        "schema_version": 2,
+        "title": "Spam se vrátil, tentokrát s agenty. A šedesát procent Američanů nechce datová centra",
+        "slug": "2026-09-16-ai-spam-datova-centra-nepopularita-modely",
+        "date": "2026-09-16",
+        "lang": "cs",
+        "dek": "Tento týden přinesl trojici signálů o tom, jak se veřejnost a průmysl rozcházejí: agentní AI zásobuje novináře bezcennou poštou, průzkum NYT/Siena ukázal rekordní odpor k datovým centrům a Jensen Huang přesvědčuje Washington, že regulace není potřeba.",
+        "alternative_headlines": [
+          "Průzkum: 61 % voličů je proti datovým centrům pro AI. Huang říká, trh to vyřeší sám",
+          "ILands posílá spam světu, Gemini mluví a Apple fotí s kryptografickým důkazem"
+        ],
+        "social_copy": {
+          "igCaption": "Platforma iLands ukázala, že agentní AI zvládá posílat spam světu dřív, než regulátoři stihli zareagovat. Průzkum NYT/Siena přidal číslo: 61 % amerických voličů je proti výstavbě datových center pro AI. Jensen Huang říká, trh si poradí sám. Dnešní vydání Caught Up popisuje, co se změnilo.",
+          "hashtags": [
+            "umelainteligence",
+            "spam",
+            "datacentra",
+            "regulace",
+            "geminilive",
+            "nvidia",
+            "apple",
+            "microsoft",
+            "agenti",
+            "llm"
+          ],
+          "threadsText": "Platforma iLands posílá světu e-maily od AI agentů, kteří nabízejí služby, o které nikdo nežádal, a žádají peníze na vlastní provoz. Průzkum NYT/Siena zároveň ukázal, že 61 % amerických voličů se staví proti datovým centrům pro AI. Jensen Huang na to odpovídá: regulace není potřeba, trh si poradí. Dnešní Caught Up sleduje, kde se tyto tři příběhy kříží.",
+          "storyLine": "Agentní spam je tady. A 61 % voličů chce méně datových center."
+        },
+        "tags": [
+          "umela-inteligence",
+          "datova-centra",
+          "regulace",
+          "spam",
+          "hlasove-modely",
+          "verejne-mineni"
+        ],
+        "sources": [
+          {
+            "id": "https://research.google/blog/bypassing-inference-bottlenecks-accelerating-complex-ai-search-with-retrieve-for-train/",
+            "url": "https://research.google/blog/bypassing-inference-bottlenecks-accelerating-complex-ai-search-with-retrieve-for-train/",
+            "title": "Bypassing inference bottlenecks: Accelerating complex AI search with Retrieve-for-Train",
+            "source_id": "google-research",
+            "classification": "primary",
+            "published_at": "2026-09-15T20:00:35.000Z",
+            "supports": [
+              "Google Research publishes a first-party technical post on Retrieve-for-Train, a method to cut inference costs for complex AI search — directly relevant to anyone building or running RAG-heavy applications."
+            ]
+          },
+          {
+            "id": "6aa9a45cd4d103000152b90b",
+            "url": "https://www.404media.co/ai-agent-platform-reinvents-spam-floods-inboxes-worldwide/",
+            "title": "AI Agent Platform Reinvents Spam, Floods Inboxes Worldwide",
+            "source_id": "404-media",
+            "classification": "secondary",
+            "published_at": "2026-09-15T20:08:56.000Z",
+            "supports": [
+              "404 Media's investigative report exposes iLands, an AI agent platform generating useless tasks and begging recipients for money at scale — concrete evidence that agentic AI is already being weaponised for spam."
+            ]
+          },
+          {
+            "id": "https://www.theverge.com/?p=995917",
+            "url": "https://www.theverge.com/ai-artificial-intelligence/995917/data-center-nyt-midterm-poll-september",
+            "title": "AI and data centers are incredibly unpopular in every poll",
+            "source_id": "the-verge",
+            "classification": "secondary",
+            "published_at": "2026-09-15T23:34:25.000Z",
+            "supports": [
+              "A NYT/Siena poll of 1,503 likely voters finds 61% oppose AI data-center construction — the hardest polling number yet on public sentiment, with midterm implications for tech-friendly incumbents."
+            ]
+          },
+          {
+            "id": "https://simonwillison.net/2026/Sep/15/gemini-live/",
+            "url": "https://simonwillison.net/2026/Sep/15/gemini-live/",
+            "title": "Gemini Live audio",
+            "source_id": "simonw",
+            "classification": "secondary",
+            "published_at": "2026-09-15T22:47:07.000Z",
+            "supports": [
+              "Google's Gemini 3.8 Live and Live Extended Thinking drop as speech-to-speech models competing directly with OpenAI's GPT-Live family; Simon Willison's hands-on walkthrough is the clearest first look available."
+            ]
+          },
+          {
+            "id": "https://techcrunch.com/?p=3164495",
+            "url": "https://techcrunch.com/2026/09/15/we-dont-need-ai-regulation-leave-safety-to-us-nvidias-jensen-huang-says/",
+            "title": "We don’t need AI regulation — leave safety to us, Nvidia’s Jensen Huang says",
+            "source_id": "techcrunch-ai",
+            "classification": "secondary",
+            "published_at": "2026-09-16T00:20:39.000Z",
+            "supports": [
+              "Jensen Huang publicly argues against AI regulation at Dreamforce, calling AI 'just hardware and software' — a significant lobbying signal from the industry's most powerful chip supplier ahead of midterm debates on AI governance."
+            ]
+          },
+          {
+            "id": "49721322",
+            "url": "https://security.apple.com/blog/apple-reference-image/",
+            "title": "Apple Reference Image: A New Approach for Verified Photography",
+            "source_id": "hn-frontpage",
+            "classification": "secondary",
+            "published_at": "2026-09-16T02:07:31.000Z",
+            "supports": [
+              "Apple's security team announces Reference Image, a cryptographic framework for verified photography — a direct response to AI-generated deepfake concerns, published as a first-party technical brief."
+            ]
+          },
+          {
+            "id": "39960",
+            "url": "https://spacepolicyonline.com/news/starship-to-attempt-first-orbital-flight-next-week/",
+            "title": "Starship to Attempt First Orbital Flight Next Week",
+            "source_id": "spaceflight-news",
+            "classification": "secondary",
+            "published_at": "2026-09-16T01:09:54.000Z",
+            "supports": [
+              "SpaceX has set a target date for Starship's first full orbital flight (IFT-14), pending regulatory sign-off — the highest-stakes near-term milestone in commercial spaceflight."
+            ]
+          },
+          {
+            "id": "https://www.theverge.com/?p=994714",
+            "url": "https://www.theverge.com/news/994714/microsoft-windows-surface-event-october-7-san-francisco",
+            "title": "Microsoft announces Windows and Surface event for October 7th",
+            "source_id": "the-verge",
+            "classification": "secondary",
+            "published_at": "2026-09-15T20:36:59.000Z",
+            "supports": [
+              "Microsoft schedules an October 7 Windows + Surface event with Jensen Huang on stage, strongly telegraphing RTX Spark / local-AI PC announcements — the first major Windows hardware event in over two years."
+            ]
+          }
+        ],
+        "illustration": {
+          "path": "/images/editions/2026-09-16-ai-spam-datova-centra-nepopularita-modely/hero.svg",
+          "thumbnail_path": "/images/editions/2026-09-16-ai-spam-datova-centra-nepopularita-modely/thumb.svg",
+          "alt": "Obálka DNESKAi k 2026-09-16, témata Umela Inteligence, Datova Centra, Regulace. Generovaný panel barevných sloupců, bez fotografie.",
+          "width": 1600,
+          "height": 900,
+          "origin": "svg",
+          "attribution": {
+            "license": "BoardlessAI deterministic",
+            "author": "BoardlessAI FRAME",
+            "source_url": "https://boardless-ai.vercel.app/",
+            "text": "Artwork by BoardlessAI FRAME"
+          }
+        },
+        "signal_strength": 86,
+        "why_it_matters": [
+          "Agentní AI je schopna generovat spam, který obchází tradiční filtry – a děje se to teď, ne v budoucnosti.",
+          "Průzkum s 61% odporem k datovým centrům je dosud nejtvrdší číslo o veřejné náladě a může ovlivnit volby v listopadu.",
+          "Huangova rétorika o samoregulaci průmyslu přichází přesně v době, kdy Kongres hledá pozici k AI governance."
+        ],
+        "what_changed": [
+          "ILands jako první zdokumentovaný případ agentního spamu ve velkém měřítku.",
+          "Průzkum NYT/Siena ukázal 61% odpor pravděpodobných voličů k výstavbě datových center pro AI.",
+          "Google vydal modely Gemini 3.8 Live a Live Extended Thinking jako přímou konkurenci GPT-Live.",
+          "Apple oznámil Reference Image, kryptografický systém ověřování fotografií debutující na iPhonu 18 Pro."
+        ],
+        "uncertainty": [
+          "Apple Reference Image zatím neprošlo nezávislým bezpečnostním auditem; tvrzení o odolnosti vůči kompromitaci pochází výhradně od Applu.",
+          "Průzkum NYT/Siena byl pořízen před nedávnými debatami o zpomalení vývoje AI, takže aktuální nálada voličů může být jiná.",
+          "Starship IFT-14 čeká na regulační souhlas; datum startu příští týden je cíl, nikoli potvrzený termín."
+        ],
+        "generation": {
+          "generated_at": "2026-09-16T03:06:10.886Z",
+          "human_reviewed": false,
+          "models": {
+            "curation": "claude-sonnet-4-6",
+            "writing": "claude-sonnet-4-6"
+          },
+          "source_candidates": 80,
+          "cited_sources": 8,
+          "image_provider": "BoardlessAI FRAME",
+          "cost": {
+            "amount": 0.3047775,
+            "currency": "USD"
+          },
+          "package_hash": "521fa057a26ab8c122de17b5e106fca17bca49667002f122a04563bb1f2a05ec"
+        },
+        "translation_of": "2026-09-16-ai-spam-datova-centra-nepopularita-modely",
+        "dispatches": [
+          {
+            "title": "Cloudflare: crawleři AI musí být zodpovědní",
+            "body": "Cloudflare publikoval přístup k takzvaným smíšeným AI crawlerům – robotům, kteří sbírají data jak pro trénink, tak pro vyhledávání. Webmasteři mají nově možnost odlišit, co povolují pro jaký účel. Jde o přímou reakci na poptávku správců stránek, kteří chtějí zůstat dohledatelní ve vyhledávání, ale nechtějí přispívat k trénovacím datům.",
+            "source_url": "https://blog.cloudflare.com/accountable-mixed-use-ai-crawlers/",
+            "topic": "AI infrastruktura"
+          },
+          {
+            "title": "TypeSafe AI: model, který hraje Doom",
+            "body": "TypeSafe AI představilo model navržený pro ovládání strojů – a jako demonstraci zvolilo Doom. The Register píše, že jde o model orientovaný na deterministické prostředí s jasně definovanými pravidly, nikoli na obecné uvažování. Doom slouží jako testovací prostředí, nikoli jako cíl.",
+            "source_url": "https://www.theregister.com/ai-and-ml/2026/09/16/typesafe-ai-debuts-model-for-machines-that-plays-doom/5296711",
+            "topic": "AI modely"
+          },
+          {
+            "title": "Llama.cpp vydal build b10991",
+            "body": "Projekt llama.cpp vydal novou verzi b10991. Jde o průběžné vydání open-source inference enginu, který umožňuje spouštět velké jazykové modely lokálně. Podrobnosti o změnách jsou k dispozici na GitHubu.",
+            "source_url": "https://github.com/ggml-org/llama.cpp/releases/tag/b10991",
+            "topic": "Open source AI"
+          },
+          {
+            "title": "Boox Palma 3 přichází s podporou stylusu",
+            "body": "Čtečka Boox Palma 3 ve formátu telefonu dostala nový design a podporu stylusu. Běží na Androidu 16. The Verge ji popisuje jako zařízení na pomezí e-ink čtečky a kapesního počítače – přístroj pro čtenáře, kteří nechtějí displej se zpětným podsvícením.",
+            "source_url": "https://www.theverge.com/tech/995826/boox-palma-3-e-ink-reader-pocket-smartphone-android-16",
+            "topic": "Hardware"
+          }
+        ],
+        "wire": [
+          {
+            "title": "Negativland, Culture Jamming, and the Art of Making Something New",
+            "url": "https://blog.archive.org/2026/09/11/negativland-culture-jamming-and-the-art-of-making-something-new/",
+            "source": "hn-frontpage"
+          },
+          {
+            "title": "Stay discoverable in search while disallowing AI training",
+            "url": "https://blog.cloudflare.com/accountable-mixed-use-ai-crawlers/",
+            "source": "hn-frontpage"
+          },
+          {
+            "title": "Progress MS-35 poised to launch cargo to ISS from Kazakhstan",
+            "url": "https://www.nasaspaceflight.com/2026/09/progress-ms-35-launch/",
+            "source": "spaceflight-news"
+          },
+          {
+            "title": "The Boox Palma 3 gets stylus support and a sleek redesign",
+            "url": "https://www.theverge.com/tech/995826/boox-palma-3-e-ink-reader-pocket-smartphone-android-16",
+            "source": "the-verge"
+          },
+          {
+            "title": "As ‘American Idol’ Leaves Los Angeles for Atlanta, More Concerns Emerge About the State of Local Production",
+            "url": "https://variety.com/2026/tv/news/american-idol-leaves-los-angeles-for-atlanta-production-1236863758/",
+            "source": "variety"
+          },
+          {
+            "title": "TypeSafe AI debuts model for machines that plays Doom",
+            "url": "https://www.theregister.com/ai-and-ml/2026/09/16/typesafe-ai-debuts-model-for-machines-that-plays-doom/5296711",
+            "source": "the-register"
+          }
+        ],
+        "type": "daily"
+      },
+      "body": "Platforma iLands funguje : uživatel spustí agenta, ten si sám hledá práci na internetu, posílá nabídky cizím lidem a doufá, že někdo zaplatí. Výsledkem je, podle investigativního reportu 404 Media, záplava e-mailů, které novináři, právníci a akademici dostávají bez jakékoli předchozí žádosti. Nabídky jsou různorodé – ověření článku za 20 dolarů, popis záběrů z veřejných bezpečnostních kamer, vysvětlení, co to vůbec agentní AI je. Redakce 404 Media zaznamenala za dobu psaní jednoho článku tři nové zprávy. Platforma přitom nepůsobí jako podvod v tradičním slova smyslu; agenti podle reportu neprodávají nic, co by existovalo. Pouze žádají o peníze na provoz vlastních tokenů.\n\nJde o první zdokumentovaný případ, kdy agentní AI ve velkém obchází tradiční spamové filtry – ty jsou totiž stavěné na rozpoznávání vzorců, nikoli na rozhovory vedené přirozeným jazykem. Co bylo donedávna teoretickým rizikem, je nyní v provozu. [404 Media](https://www.404media.co/ai-agent-platform-reinvents-spam-floods-inboxes-worldwide/)\n\n---\n\nPrůzkum, který zveřejnil The New York Times společně s Siena University, oslovil 1 503 pravděpodobných voličů na začátku září. Výsledek: 61 % z nich se staví proti výstavbě datových center určených pro provoz AI. Jen 14 % ji silně podporuje. Pozoruhodné je rozložení podle stranické příslušnosti – mezi voliči Donalda Trumpa z roku 2024 byl poměr přibližně 49 ku 45 ve prospěch podpory, zatímco voliči Kamaly Harrisové a ti, kteří nešli k volbám, se přidali k odpůrcům výrazněji.\n\nData pocházejí z doby před nedávnými debatami o zpomalení vývoje AI z bezpečnostních důvodů, takže aktuální nálada může být ještě o něco chladnější. Pro technologické firmy lobbující za rychlou výstavbu infrastruktury to jsou nepříjemná čísla: ani jedna velká strana nemá v tomto tématu jasnou převahu, což politikům z obou táborů dává prostor zatočit s datovými centry bez volebního rizika. [The Verge](https://www.theverge.com/ai-artificial-intelligence/995917/data-center-nyt-midterm-poll-september)\n\n---\n\nJensen Huang vystoupil na konferenci Dreamforce se stanoviskem, které je pro Nvidii obchodně výhodné, ale dává mu i jistou vnitřní logiku. AI není „cizí mysl\", řekl – je to hardware a software, složitý, ale nakonec inženýrský produkt. Bezpečnost je tedy inženýrský problém, ne legislativní. Firmy, které si nejsou jisté svým produktem, ho nemají vydat. Tržní tlak podle něj stačí.\n\n„Nepotřebujeme nové zákony. Nepotřebujeme nové regulace,\" řekl Huang přímo. „Jen potřebujeme, aby se firmy rozhodly, kdy jet naplno.\"\n\nTechCrunch k tomu dodává zřejmé: Nvidia vydělala na boomu AI více než kdokoli jiný a Huang má přímý zájem na tom, aby regulace nezpomalila poptávku po čipech. Jeho slova jsou zároveň lobbistickým signálem těsně před volbami do Kongresu, kde se otázka AI governance teprve formuje. [TechCrunch](https://techcrunch.com/2026/09/15/we-dont-need-ai-regulation-leave-safety-to-us-nvidias-jensen-huang-says/)\n\n---\n\nNa technické frontě Google vydal dva nové modely řady Gemini 3.8 Live a Live Extended Thinking. Jde o modely typu speech-to-speech, tedy přijímají mluvený vstup a odpovídají rovněž hlasem, bez mezikroku textového přepisu. Tvarově připomínají rodinu GPT-Live od OpenAI. Simon Willison sestavil z dokumentace funkční webové rozhraní – bez externích knihoven, přes WebSocket endpoint a Web Audio API – a zdokumentoval, jak modely zvládají přerušení uprostřed odpovědi. Jeho zápisek je zatím nejkonkrétnější veřejně dostupnou ukázkou chování nových modelů v praxi. [Simon Willison's Weblog](https://simonwillison.net/2026/Sep/15/gemini-live/)\n\n---\n\nApple zveřejnil technický popis systému Apple Reference Image, který debutuje na hlavním snímači fotoaparátu iPhonu 18 Pro a 18 Pro Max. Jde o volitelný režim snímání, v němž iPhone vytvoří kryptograficky ověřený referenční snímek: časové razítko, ochrana integrity přes dedikovaný bezpečnostní hardware a zpracování přes Private Cloud Compute bez přístupu Applu k obsahu. Cílem je odlišit skutečné fotografie od upravených nebo generovaných obrazů v době, kdy to jinak nelze spolehlivě poznat.\n\nApple uvádí, že stávající průmyslový standard C2PA připojuje metadata až po pořízení snímku a je zranitelný kompromitací v libovolném bodě editačního řetězce. Reference Image má tento řetězec zkrátit na samotný senzor. Tvrzení pochází přímo od Applu, nezávislé ověření zatím neproběhlo. [Apple Security Research](https://security.apple.com/blog/apple-reference-image/)\n\n---\n\nMicrosoft oznámil akci na 7. října v San Francisku, zaměřenou na Windows a Surface. Na pódiu budou Satya Nadella, šéf Windows a Surface Pavan Davuluri a Jensen Huang. Přítomnost Huanga silně naznačuje, že centrem bude linie RTX Spark – počítače s lokálním zpracováním AI. Microsoft naposledy uspořádal srovnatelnou akci v květnu 2024. Ceny a dostupnost Surface Laptop Ultra zatím nejsou zveřejněny; to je podle The Verge pravděpodobné téma akce. [The Verge](https://www.theverge.com/news/994714/microsoft-windows-surface-event-october-7-san-francisco)\n\n---\n\nNa pozadí všech těchto zpráv je Google Research vydal technický příspěvek o metodě Retrieve-for-Train, která má snižovat náklady na inferenci u složitých AI vyhledávacích úloh. Jde o firemní sdělení bez externího recenzního řízení, ale pro vývojáře pracující s RAG architekturami (retrieval-augmented generation) je to konkrétní technický popis přístupu, který Google interně využívá. [Google Research](https://research.google/blog/bypassing-inference-bottlenecks-accelerating-complex-ai-search-with-retrieve-for-train/)\n\n---\n\nDnešní zprávy nestojí vedle sebe náhodně. iLands ukazuje, že agentní AI není jen konferenční téma – je to nástroj, který kdokoli může nasadit k obtěžování lidí ve velkém. Průzkum NYT/Siena ukazuje, že veřejnost to vnímá, i když ne vždy konkrétně: odpor k datovým centrům je v jádru odporem k tomu, co AI spotřebovává a produkuje. Huangův výstup na Dreamforce je pokusem přesvědčit zákonodárce, že průmysl si poradí sám – ve chvíli, kdy data říkají opak. A Apple Reference Image, Gemini Live a chystaná akce Microsoftu připomínají, že technologické firmy mezitím pokračují v zavádění dalších vrstev, bez ohledu na to, jak rychle se veřejný konsensus formuje."
+    }
+  },
+  "image": {
+    "hero_path": "public/images/editions/2026-09-16-ai-spam-datova-centra-nepopularita-modely/hero.svg",
+    "thumb_path": "public/images/editions/2026-09-16-ai-spam-datova-centra-nepopularita-modely/thumb.svg",
+    "width": 1600,
+    "height": 900,
+    "alt_en": "DNESKAi cover for 2026-09-16, marked Umela Inteligence, Datova Centra, Regulace. A generated panel of coloured bars, carrying no photograph.",
+    "alt_cs": "Obálka DNESKAi k 2026-09-16, témata Umela Inteligence, Datova Centra, Regulace. Generovaný panel barevných sloupců, bez fotografie.",
+    "license": {
+      "name": "BoardlessAI deterministic",
+      "author": "BoardlessAI FRAME",
+      "source_url": "https://boardless-ai.vercel.app/",
+      "attribution_html": "Artwork by BoardlessAI FRAME"
+    },
+    "origin": "svg",
+    "hero_bytes_base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+PHRpdGxlIGlkPSJ0aXRsZSI+RE5FU0tBaSBjb3ZlcjwvdGl0bGU+PGRlc2MgaWQ9ImRlc2MiPkEgZ2VuZXJhdGVkIERORVNLQWkgY292ZXI7IHRoZSBhcnRpY2xlJ3Mgb3duIHdvcmRzIGFyZSBub3QgcmVwZWF0ZWQgaGVyZS48L2Rlc2M+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzEwMTExNiIvPjxyZWN0IHg9IjYwIiB5PSI2MCIgd2lkdGg9IjE0ODAiIGhlaWdodD0iNzgwIiByeD0iMzUiIGZpbGw9IiMxODFhMjAiIHN0cm9rZT0iIzc5ZjJjMCIgc3Ryb2tlLXdpZHRoPSI0LjUiLz48cmVjdCB4PSIxMDAuMCIgeT0iNTIwLjEiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjIyOS45IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjQ3Ii8+PHJlY3QgeD0iMTg3LjUiIHk9IjUwNS4xIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIyNDQuOSIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC43NiIvPjxyZWN0IHg9IjI3NS4wIiB5PSI3MDAuNSIgd2lkdGg9IjU1LjAiIGhlaWdodD0iNDkuNSIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC43MiIvPjxyZWN0IHg9IjM2Mi41IiB5PSI2NTUuNCIgd2lkdGg9IjU1LjAiIGhlaWdodD0iOTQuNiIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4yNiIvPjxyZWN0IHg9IjQ1MC4wIiB5PSI1MDUuMSIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMjQ0LjkiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNTUiLz48cmVjdCB4PSI1MzcuNSIgeT0iNzAwLjUiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjQ5LjUiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNDMiLz48cmVjdCB4PSI2MjUuMCIgeT0iNjg1LjUiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjY0LjUiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNDciLz48cmVjdCB4PSI3MTIuNSIgeT0iNTk1LjMiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjE1NC43IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjM5Ii8+PHJlY3QgeD0iODAwLjAiIHk9IjQ5MC4wIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIyNjAuMCIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC40NyIvPjxyZWN0IHg9Ijg4Ny41IiB5PSI1MDUuMSIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMjQ0LjkiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNjgiLz48cmVjdCB4PSI5NzUuMCIgeT0iNjcwLjQiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9Ijc5LjYiIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNzIiLz48cmVjdCB4PSIxMDYyLjUiIHk9IjU2NS4yIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxODQuOCIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4xOCIvPjxyZWN0IHg9IjExNTAuMCIgeT0iNjEwLjMiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjEzOS43IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjMwIi8+PHJlY3QgeD0iMTIzNy41IiB5PSI1OTUuMyIgd2lkdGg9IjU1LjAiIGhlaWdodD0iMTU0LjciIHJ4PSI5LjAiIGZpbGw9IiM3OWYyYzAiIG9wYWNpdHk9IjAuNzIiLz48cmVjdCB4PSIxMzI1LjAiIHk9IjYyNS4zIiB3aWR0aD0iNTUuMCIgaGVpZ2h0PSIxMjQuNyIgcng9IjkuMCIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4xOCIvPjxyZWN0IHg9IjE0MTIuNSIgeT0iNTk1LjMiIHdpZHRoPSI1NS4wIiBoZWlnaHQ9IjE1NC43IiByeD0iOS4wIiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjIyIi8+PHRleHQgeD0iMTAwIiB5PSIyMDAiIGZpbGw9IiM3OWYyYzAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzNSIgZm9udC13ZWlnaHQ9IjcwMCIgbGV0dGVyLXNwYWNpbmc9IjUuNiI+RE5FU0tBaTwvdGV4dD48dGV4dCB4PSIxMDAiIHk9IjMwMCIgZmlsbD0iI2Y3ZjRlYyIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIzNyI+MjAyNi0wOS0xNjwvdGV4dD48dGV4dCB4PSIxMDAiIHk9IjM4NSIgZmlsbD0iIzlkYTFhYSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIyOSIgbGV0dGVyLXNwYWNpbmc9IjMuNSI+VW1lbGEgSW50ZWxpZ2VuY2UgwrcgRGF0b3ZhIENlbnRyYSDCtyBSZWd1bGFjZTwvdGV4dD48L3N2Zz4=",
+    "thumb_bytes_base64": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iMzYwIiB2aWV3Qm94PSIwIDAgNjQwIDM2MCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIGRlc2MiPjx0aXRsZSBpZD0idGl0bGUiPkRORVNLQWkgY292ZXI8L3RpdGxlPjxkZXNjIGlkPSJkZXNjIj5BIGdlbmVyYXRlZCBETkVTS0FpIGNvdmVyOyB0aGUgYXJ0aWNsZSdzIG93biB3b3JkcyBhcmUgbm90IHJlcGVhdGVkIGhlcmUuPC9kZXNjPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxMDExMTYiLz48cmVjdCB4PSIyNCIgeT0iMjQiIHdpZHRoPSI1OTIiIGhlaWdodD0iMzEyIiByeD0iMTQiIGZpbGw9IiMxODFhMjAiIHN0cm9rZT0iIzc5ZjJjMCIgc3Ryb2tlLXdpZHRoPSIyLjAiLz48cmVjdCB4PSI0MC4wIiB5PSIyMDguMCIgd2lkdGg9IjIyLjAiIGhlaWdodD0iOTIuMCIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC40NyIvPjxyZWN0IHg9Ijc1LjAiIHk9IjIwMi4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI5OC4wIiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjc2Ii8+PHJlY3QgeD0iMTEwLjAiIHk9IjI4MC4yIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIxOS44IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjcyIi8+PHJlY3QgeD0iMTQ1LjAiIHk9IjI2Mi4yIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIzNy44IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjI2Ii8+PHJlY3QgeD0iMTgwLjAiIHk9IjIwMi4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI5OC4wIiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjU1Ii8+PHJlY3QgeD0iMjE1LjAiIHk9IjI4MC4yIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIxOS44IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjQzIi8+PHJlY3QgeD0iMjUwLjAiIHk9IjI3NC4yIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIyNS44IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjQ3Ii8+PHJlY3QgeD0iMjg1LjAiIHk9IjIzOC4xIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSI2MS45IiByeD0iMy42IiBmaWxsPSIjNzlmMmMwIiBvcGFjaXR5PSIwLjM5Ii8+PHJlY3QgeD0iMzIwLjAiIHk9IjE5Ni4wIiB3aWR0aD0iMjIuMCIgaGVpZ2h0PSIxMDQuMCIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC40NyIvPjxyZWN0IHg9IjM1NS4wIiB5PSIyMDIuMCIgd2lkdGg9IjIyLjAiIGhlaWdodD0iOTguMCIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC42OCIvPjxyZWN0IHg9IjM5MC4wIiB5PSIyNjguMiIgd2lkdGg9IjIyLjAiIGhlaWdodD0iMzEuOCIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC43MiIvPjxyZWN0IHg9IjQyNS4wIiB5PSIyMjYuMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNzMuOSIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4xOCIvPjxyZWN0IHg9IjQ2MC4wIiB5PSIyNDQuMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNTUuOSIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4zMCIvPjxyZWN0IHg9IjQ5NS4wIiB5PSIyMzguMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNjEuOSIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC43MiIvPjxyZWN0IHg9IjUzMC4wIiB5PSIyNTAuMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNDkuOSIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4xOCIvPjxyZWN0IHg9IjU2NS4wIiB5PSIyMzguMSIgd2lkdGg9IjIyLjAiIGhlaWdodD0iNjEuOSIgcng9IjMuNiIgZmlsbD0iIzc5ZjJjMCIgb3BhY2l0eT0iMC4yMiIvPjx0ZXh0IHg9IjQwIiB5PSI4MCIgZmlsbD0iIzc5ZjJjMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNzAwIiBsZXR0ZXItc3BhY2luZz0iMi4yIj5ETkVTS0FpPC90ZXh0Pjx0ZXh0IHg9IjQwIiB5PSIxMjAiIGZpbGw9IiNmN2Y0ZWMiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTUiPjIwMjYtMDktMTY8L3RleHQ+PHRleHQgeD0iNDAiIHk9IjE1NCIgZmlsbD0iIzlkYTFhYSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIxMSIgbGV0dGVyLXNwYWNpbmc9IjEuNCI+VW1lbGEgSW50ZWxpZ2VuY2UgwrcgRGF0b3ZhIENlbnRyYSDCtyBSZWd1bGFjZTwvdGV4dD48L3N2Zz4="
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/empty_adverb"
+    ]
+  },
+  "board": {
+    "meetingRef": "meetings/2026-09-16-cu-edition",
+    "roomUrl": "https://boardless-ai.vercel.app/meetings/2026-09-16-cu-edition",
+    "whyThisStory": "Agentní spam od iLands jako první zdokumentovaný případ ve velkém měřítku a průzkum s 61% odporem k datovým centrům spolu tvoří nejkonkrétnější obraz propasti mezi průmyslovými ambicemi AI a tím, co veřejnost skutečně toleruje."
+  }
+}

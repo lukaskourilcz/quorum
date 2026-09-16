@@ -1,0 +1,336 @@
+{
+  "schemaVersion": 1,
+  "runId": "66e13ac9-cb10-444b-90ab-dc2a5097506b",
+  "date": "2026-09-16",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-09-16T03:06:31.682Z",
+  "completedAt": "2026-09-16T03:11:08.463Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-16T03:06:31.701Z",
+      "completedAt": "2026-09-16T03:06:52.867Z",
+      "durationMs": 21166
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-09-16T03:06:52.868Z",
+      "completedAt": "2026-09-16T03:08:59.554Z",
+      "durationMs": 126686,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected array to have <=6 items\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-09-16T03:08:59.554Z",
+      "completedAt": "2026-09-16T03:10:48.006Z",
+      "durationMs": 108452
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-09-16T03:10:48.006Z",
+      "completedAt": "2026-09-16T03:10:48.012Z",
+      "durationMs": 6
+    },
+    {
+      "name": "quality_1",
+      "status": "success",
+      "startedAt": "2026-09-16T03:10:48.012Z",
+      "completedAt": "2026-09-16T03:10:48.012Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-09-16T03:10:48.012Z",
+      "completedAt": "2026-09-16T03:11:08.463Z",
+      "durationMs": 20451
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 1,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12539,
+      "outputTokens": 1018,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.052887
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14293,
+      "outputTokens": 5048,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1277715
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 14293,
+      "outputTokens": 4779,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2548,
+      "costUsd": 0.124119
+    }
+  ],
+  "measuredCostUsd": 0.3047775,
+  "quality": {
+    "metrics": {
+      "successfulSources": 29,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 86,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.84375,
+      "duplicateStorySimilarity": 0.0625,
+      "repeatedTopicFrequency": 0.16666666666666666,
+      "primarySourceRelevant": true,
+      "primarySourcePresent": true,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.3047775
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": false,
+    "score": 45,
+    "violations": [
+      {
+        "code": "empty_adverb",
+        "locale": "cs",
+        "message": "Odstraň prázdný přívlastek nebo jej nahraď důkazem."
+      }
+    ]
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/empty_adverb"
+    ]
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "plate",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 0,
+        "selected": null,
+        "reason": "no-thumbnail-could-be-read",
+        "candidates": [],
+        "skipped": [
+          {
+            "candidateId": "scene:6212692",
+            "reason": "thumbnail-host-not-allowed"
+          },
+          {
+            "candidateId": "scene:20348454",
+            "reason": "thumbnail-host-not-allowed"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "mode": "search",
+        "considered": 10,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "pexels:5744249",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Ilustruje digitální komunikaci a aplikace, kterou agenti AI používají, ale je poněkud obecná a zbytečně stylizovaná siluetou.",
+            "sceneCs": "ruka s chytrým telefonem na zeleném pozadí"
+          },
+          {
+            "candidateId": "pexels:37730212",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Má příliš dramatické osvětlení a neonový vzhled, který připomíná typické AI vizualizace datových center; vypadá generovaně.",
+            "sceneCs": "datové centrum se servery a modrým osvětlením"
+          },
+          {
+            "candidateId": "pexels:8252733",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "off-brief"
+            ],
+            "reason": "Nezpracovává témataArticlu; je to fotografie konkrétního protestu, nikoli ilustrace odporu k datovým centrům.",
+            "sceneCs": "protest s transparenty v městské ulici"
+          },
+          {
+            "candidateId": "openverse:edf1016a-e06f-457e-ae15-c60431c71685",
+            "provider": "openverse",
+            "fit": 1,
+            "vetoes": [
+              "off-brief"
+            ],
+            "reason": "Opět konkrétní politický protest, nikoli ilustrace obecného veřejného odporu nebo technologických témat článku.",
+            "sceneCs": "protest s transparenty a národ. vlaječkou"
+          },
+          {
+            "candidateId": "pixabay:1050964",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "wrong-subject"
+            ],
+            "reason": "Zcela mimo téma; žádný vztah k AI, spamu, datovým centrům nebo technologiím.",
+            "sceneCs": "vejce v hnízdu na oranžovém pozadí"
+          },
+          {
+            "candidateId": "pixabay:8118377",
+            "provider": "pixabay",
+            "fit": 4,
+            "vetoes": [],
+            "reason": "Ilustruje práci s datovými centry, ale je dost obecná a neobsahuje konkrétní problematiku spamu nebo veřejného odporu.",
+            "sceneCs": "ruka vsunuta do serverové skříně"
+          },
+          {
+            "candidateId": "pexels:7568298",
+            "provider": "pexels",
+            "fit": 3,
+            "vetoes": [
+              "logo-or-watermark",
+              "embedded-text"
+            ],
+            "reason": "Viditelné jsou loga aplikací (Mail, Photos) a vestavěný text, což veto vylučuje; obecně by byla relevantní, ale porušuje pravidla.",
+            "sceneCs": "obrazovka telefonu s ikonami aplikací"
+          },
+          {
+            "candidateId": "pexels:17489151",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [],
+            "reason": "Realistické a relevantní k tématu datových center, ale poměrně běžná stock fotografie bez silnějšího vizuálního dopadu.",
+            "sceneCs": "řada barevných serverů v datovém centru"
+          },
+          {
+            "candidateId": "pexels:1464213",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "off-brief"
+            ],
+            "reason": "Konkrétní politický protest, ne ilustrace veřejného mínění o technologiích či datových centrech; neodpovídá tématu.",
+            "sceneCs": "protest s transparenty a voláním hlasů"
+          },
+          {
+            "candidateId": "pexels:5426403",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [
+              "logo-or-watermark",
+              "embedded-text"
+            ],
+            "reason": "Relevantní pro spam a komunikační aplikace, ale viditelná loga (Instagram, News360, Mail) a vestavěný text porušují pravidla.",
+            "sceneCs": "obrazovka telefonu s ikonami aplikací včetně mailu"
+          }
+        ],
+        "skipped": [
+          {
+            "candidateId": "wikimedia:88900912",
+            "reason": "thumbnail-host-not-allowed"
+          },
+          {
+            "candidateId": "wikimedia:115094172",
+            "reason": "thumbnail-host-not-allowed"
+          }
+        ],
+        "costUsd": 0.008594
+      },
+      {
+        "mode": "generated",
+        "considered": 1,
+        "selected": null,
+        "reason": "all-candidates-rejected",
+        "candidates": [
+          {
+            "candidateId": "illustration:2026-09-16",
+            "provider": "boardlessai",
+            "fit": 3,
+            "vetoes": [
+              "embedded-text"
+            ],
+            "reason": "While the neon aesthetic fits AI topic discussion, the image is overly stylized with embedded UI elements (clock, toolbar icons, data visualization) that read as text in the frame, and the generic tech-conference look doesn't meaningfully illustrate the specific article about spam, AI agents, data center backlash, and regulatory debates.",
+            "sceneCs": "futuristická přednášková místnost s neonovým osvětlením"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.002428
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected array to have <=6 items\"\n  }\n]",
+    "stet:empty_adverb",
+    "shipped_with_unresolved_review:stet:cs/empty_adverb",
+    "image_rung:plate",
+    "image_gate:curated:no-thumbnail-could-be-read",
+    "image_gate:search:all-candidates-rejected",
+    "image_gate:generated:all-candidates-rejected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 29,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects"
+    ]
+  }
+}

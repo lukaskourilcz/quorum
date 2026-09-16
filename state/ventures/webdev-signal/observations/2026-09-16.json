@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "webdev-observation/1",
+  "date": "2026-09-16",
+  "recordedAt": "2026-09-16T03:06:10.886Z",
+  "provenance": "live",
+  "refs": {
+    "runRef": "state/ventures/webdev-signal/runs/2026-09-16.json",
+    "selectionRef": null,
+    "evidenceBriefRef": null,
+    "packageRefs": [],
+    "renderReceiptRefs": [],
+    "profileRefs": [
+      "social-profile-webdev-signal-cs",
+      "social-profile-webdev-signal-en"
+    ],
+    "sourceHealthRefs": []
+  },
+  "sources": {
+    "configured": 12,
+    "attempted": 10,
+    "healthy": 6,
+    "failed": 4,
+    "authorityClassesCovered": 1,
+    "layoutChanges": 0
+  },
+  "candidates": {
+    "fetched": 0,
+    "afterPrefilter": 0,
+    "duplicatesCollapsed": 0,
+    "held": 0,
+    "eligible": 0
+  },
+  "decision": {
+    "outcome": "not-run",
+    "reason": "The daily scan did not run for this Prague day.",
+    "selectedRecordId": null,
+    "scoreMargin": {
+      "value": null,
+      "unavailableReason": "not-measured-yet"
+    },
+    "confidence": {
+      "value": null,
+      "unavailableReason": "not-measured-yet"
+    },
+    "ownerOverride": false
+  },
+  "goviral": {
+    "status": "unavailable",
+    "changedWinner": false
+  },
+  "editions": [],
+  "corrections": {
+    "opened": 0,
+    "resolved": 0,
+    "factualIncidents": 0,
+    "securityVersionIncidents": 0
+  },
+  "cost": {
+    "modelCalls": 0,
+    "providerCostUsd": 0,
+    "cacheReused": 0,
+    "callsAvoided": 0
+  },
+  "outcomes": [
+    {
+      "window": "24h",
+      "observationRef": null,
+      "reach": {
+        "value": null,
+        "unavailableReason": "not-measured-yet"
+      },
+      "nonFollowerReach": {
+        "value": null,
+        "unavailableReason": "not-measured-yet"
+      },
+      "profileActions": {
+        "value": null,
+        "unavailableReason": "not-measured-yet"
+      }
+    },
+    {
+      "window": "72h",
+      "observationRef": null,
+      "reach": {
+        "value": null,
+        "unavailableReason": "not-measured-yet"
+      },
+      "nonFollowerReach": {
+        "value": null,
+        "unavailableReason": "not-measured-yet"
+      },
+      "profileActions": {
+        "value": null,
+        "unavailableReason": "not-measured-yet"
+      }
+    },
+    {
+      "window": "7d",
+      "observationRef": null,
+      "reach": {
+        "value": null,
+        "unavailableReason": "not-measured-yet"
+      },
+      "nonFollowerReach": {
+        "value": null,
+        "unavailableReason": "not-measured-yet"
+      },
+      "profileActions": {
+        "value": null,
+        "unavailableReason": "not-measured-yet"
+      }
+    },
+    {
+      "window": "28d",
+      "observationRef": null,
+      "reach": {
+        "value": null,
+        "unavailableReason": "not-measured-yet"
+      },
+      "nonFollowerReach": {
+        "value": null,
+        "unavailableReason": "not-measured-yet"
+      },
+      "profileActions": {
+        "value": null,
+        "unavailableReason": "not-measured-yet"
+      }
+    }
+  ],
+  "snapshotHash": "e5087a72ec9ee408cd802fb5c45a778225097b83308690fd3b0b487b7ea102b8"
+}

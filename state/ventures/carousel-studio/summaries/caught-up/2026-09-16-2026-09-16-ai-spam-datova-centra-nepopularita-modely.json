@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-09-16-ai-spam-datova-centra-nepopularita-modely",
+  "date": "2026-09-16",
+  "locale": "cs",
+  "kicker": "DNESKAi · 16. zář",
+  "headline": "Spam se vrátil, tentokrát s agenty. A šedesát procent Američanů nechce datová centra",
+  "coverLine": "Průzkum: 61 % voličů je proti datovým centrům pro AI. Huang říká, trh to vyřeší sám",
+  "standfirst": "Tento týden přinesl trojici signálů o tom, jak se veřejnost a průmysl rozcházejí: agentní AI zásobuje novináře bezcennou poštou,",
+  "passages": [
+    "ILands jako první zdokumentovaný případ agentního spamu ve velkém měřítku.",
+    "Průzkum NYT/Siena ukázal 61% odpor pravděpodobných voličů k výstavbě datových center pro AI.",
+    "Google vydal modely Gemini 3.8 Live a Live Extended Thinking jako přímou konkurenci GPT-Live.",
+    "Apple oznámil Reference Image, kryptografický systém ověřování fotografií debutující na iPhonu 18 Pro.",
+    "Agentní AI je schopna generovat spam, který obchází tradiční filtry – a děje se to teď, ne v budoucnosti.",
+    "Průzkum s 61% odporem k datovým centrům je dosud nejtvrdší číslo o veřejné náladě a může ovlivnit volby v listopadu.",
+    "Huangova rétorika o samoregulaci průmyslu přichází přesně v době, kdy Kongres hledá pozici k AI governance.",
+    "Apple Reference Image zatím neprošlo nezávislým bezpečnostním auditem; tvrzení o odolnosti vůči kompromitaci pochází výhradně od Applu."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Artwork by BoardlessAI FRAME"
+}

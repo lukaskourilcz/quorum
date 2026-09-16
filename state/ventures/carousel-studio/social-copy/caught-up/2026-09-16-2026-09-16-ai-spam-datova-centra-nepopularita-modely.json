@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-09-16-ai-spam-datova-centra-nepopularita-modely",
+  "date": "2026-09-16",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Platforma iLands ukázala, že agentní AI zvládá posílat spam světu dřív, než regulátoři stihli zareagovat. Průzkum NYT/Siena přidal číslo: 61 % amerických voličů je proti výstavbě datových center pro AI. Jensen Huang říká, trh si poradí sám. Dnešní vydání Caught Up popisuje, co se změnilo.",
+    "hashtags": [
+      "umelainteligence",
+      "spam",
+      "datacentra",
+      "regulace",
+      "geminilive",
+      "nvidia",
+      "apple",
+      "microsoft",
+      "agenti",
+      "llm"
+    ],
+    "threadsText": "Platforma iLands posílá světu e-maily od AI agentů, kteří nabízejí služby, o které nikdo nežádal, a žádají peníze na vlastní provoz. Průzkum NYT/Siena zároveň ukázal, že 61 % amerických voličů se staví proti datovým centrům pro AI. Jensen Huang na to odpovídá: regulace není potřeba, trh si poradí. Dnešní Caught Up sleduje, kde se tyto tři příběhy kříží.",
+    "storyLine": "Agentní spam je tady. A 61 % voličů chce méně datových center."
+  },
+  "heroCredit": "Artwork by BoardlessAI FRAME",
+  "origin": "desk"
+}

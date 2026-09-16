@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260916030610-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Agentní spam od iLands jako první zdokumentovaný případ ve velkém měřítku a průzkum s 61% odporem k datovým centrům spolu tvoří nejkonkrétnější obraz propasti mezi průmyslovými ambicemi AI a tím, co veřejnost skutečně toleruje.",
+  "evidenceRefs": [
+    "source:google-research",
+    "source:404-media",
+    "source:the-verge",
+    "source:simonw",
+    "source:techcrunch-ai",
+    "source:hn-frontpage",
+    "source:spaceflight-news"
+  ],
+  "editionRef": "521fa057a26ab8c122de17b5e106fca17bca49667002f122a04563bb1f2a05ec",
+  "generatedAt": "2026-09-16T03:06:15.886Z"
+}

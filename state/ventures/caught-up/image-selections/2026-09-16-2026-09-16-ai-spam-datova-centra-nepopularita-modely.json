@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-09-16-ai-spam-datova-centra-nepopularita-modely",
+  "date": "2026-09-16",
+  "rung": "plate",
+  "selected": null,
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 0,
+      "selected": null,
+      "reason": "no-thumbnail-could-be-read",
+      "candidates": [],
+      "skipped": [
+        {
+          "candidateId": "scene:6212692",
+          "reason": "thumbnail-host-not-allowed"
+        },
+        {
+          "candidateId": "scene:20348454",
+          "reason": "thumbnail-host-not-allowed"
+        }
+      ],
+      "costUsd": 0
+    },
+    {
+      "mode": "search",
+      "considered": 10,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "pexels:5744249",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Ilustruje digitální komunikaci a aplikace, kterou agenti AI používají, ale je poněkud obecná a zbytečně stylizovaná siluetou.",
+          "sceneCs": "ruka s chytrým telefonem na zeleném pozadí"
+        },
+        {
+          "candidateId": "pexels:37730212",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Má příliš dramatické osvětlení a neonový vzhled, který připomíná typické AI vizualizace datových center; vypadá generovaně.",
+          "sceneCs": "datové centrum se servery a modrým osvětlením"
+        },
+        {
+          "candidateId": "pexels:8252733",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "off-brief"
+          ],
+          "reason": "Nezpracovává témataArticlu; je to fotografie konkrétního protestu, nikoli ilustrace odporu k datovým centrům.",
+          "sceneCs": "protest s transparenty v městské ulici"
+        },
+        {
+          "candidateId": "openverse:edf1016a-e06f-457e-ae15-c60431c71685",
+          "provider": "openverse",
+          "fit": 1,
+          "vetoes": [
+            "off-brief"
+          ],
+          "reason": "Opět konkrétní politický protest, nikoli ilustrace obecného veřejného odporu nebo technologických témat článku.",
+          "sceneCs": "protest s transparenty a národ. vlaječkou"
+        },
+        {
+          "candidateId": "pixabay:1050964",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Zcela mimo téma; žádný vztah k AI, spamu, datovým centrům nebo technologiím.",
+          "sceneCs": "vejce v hnízdu na oranžovém pozadí"
+        },
+        {
+          "candidateId": "pixabay:8118377",
+          "provider": "pixabay",
+          "fit": 4,
+          "vetoes": [],
+          "reason": "Ilustruje práci s datovými centry, ale je dost obecná a neobsahuje konkrétní problematiku spamu nebo veřejného odporu.",
+          "sceneCs": "ruka vsunuta do serverové skříně"
+        },
+        {
+          "candidateId": "pexels:7568298",
+          "provider": "pexels",
+          "fit": 3,
+          "vetoes": [
+            "logo-or-watermark",
+            "embedded-text"
+          ],
+          "reason": "Viditelné jsou loga aplikací (Mail, Photos) a vestavěný text, což veto vylučuje; obecně by byla relevantní, ale porušuje pravidla.",
+          "sceneCs": "obrazovka telefonu s ikonami aplikací"
+        },
+        {
+          "candidateId": "pexels:17489151",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Realistické a relevantní k tématu datových center, ale poměrně běžná stock fotografie bez silnějšího vizuálního dopadu.",
+          "sceneCs": "řada barevných serverů v datovém centru"
+        },
+        {
+          "candidateId": "pexels:1464213",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "off-brief"
+          ],
+          "reason": "Konkrétní politický protest, ne ilustrace veřejného mínění o technologiích či datových centrech; neodpovídá tématu.",
+          "sceneCs": "protest s transparenty a voláním hlasů"
+        },
+        {
+          "candidateId": "pexels:5426403",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [
+            "logo-or-watermark",
+            "embedded-text"
+          ],
+          "reason": "Relevantní pro spam a komunikační aplikace, ale viditelná loga (Instagram, News360, Mail) a vestavěný text porušují pravidla.",
+          "sceneCs": "obrazovka telefonu s ikonami aplikací včetně mailu"
+        }
+      ],
+      "skipped": [
+        {
+          "candidateId": "wikimedia:88900912",
+          "reason": "thumbnail-host-not-allowed"
+        },
+        {
+          "candidateId": "wikimedia:115094172",
+          "reason": "thumbnail-host-not-allowed"
+        }
+      ],
+      "costUsd": 0.008594
+    },
+    {
+      "mode": "generated",
+      "considered": 1,
+      "selected": null,
+      "reason": "all-candidates-rejected",
+      "candidates": [
+        {
+          "candidateId": "illustration:2026-09-16",
+          "provider": "boardlessai",
+          "fit": 3,
+          "vetoes": [
+            "embedded-text"
+          ],
+          "reason": "While the neon aesthetic fits AI topic discussion, the image is overly stylized with embedded UI elements (clock, toolbar icons, data visualization) that read as text in the frame, and the generic tech-conference look doesn't meaningfully illustrate the specific article about spam, AI agents, data center backlash, and regulatory debates.",
+          "sceneCs": "futuristická přednášková místnost s neonovým osvětlením"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.002428
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-09-16T03:06:10.886Z"
+}
