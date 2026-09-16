@@ -101,9 +101,20 @@ The canonical receipt is executable rather than a hand-maintained ratio table:
 - `studio/tests/families.test.ts` pins **30** families and validates every deck length the
   splitter can resolve, all **10** brands and all **4** formats. The dedicated WebDev Signal suite
   checks its 4–6 panel family only against its own brand and Instagram portrait export.
-- `validateTemplateForBrand` runs nine checks — schema, canvas, platform limits, safe area,
-  contrast, APCA, brand-token binding, overflow and originality; `renderCarouselSvg` refuses a
-  failing template.
+- `validateTemplateForBrand` runs ten checks — schema, canvas, platform limits, safe area,
+  contrast, APCA, brand-token binding, overflow, script and originality; `renderCarouselSvg`
+  refuses a failing template.
+- **Overflow and script are measured per language.** A brand declares what it publishes in
+  (`studio/src/locales.ts`), a text layer declares `lang` where that is not the brand's primary,
+  and the capacity arithmetic charges that language's mean advance. Literata sets Cyrillic about
+  8% wider than Latin, so the bilingual card's Ukrainian bands were previously told they hold
+  about a dozen characters they cannot. The Latin mean stays the floor: Czech measures marginally
+  narrower and charging that would loosen every Czech slot's limit.
+- **Alphabet coverage is derived, not listed.** `studio/tests/glyph-coverage.test.ts` requires
+  every committed face of every one of the 13 families to draw every character the languages of
+  the brands that bind it need, read from the font's own cmap and from the committed width table.
+  All 37 faces carry the full Czech alphabet; the 3 faces Tehdejší svět binds carry Ukrainian,
+  including `Ї ї Є є Ґ ґ І і` and the U+02BC apostrophe.
 - Contrast walks the actual layer order. It measures text/logo colour against the slide ground
   and the topmost containing shape, gradient or duotone image, plus composited mesh colours.
   `textGroundPairs` in `studio/src/grounds.ts` resolves that ground once, and both readability

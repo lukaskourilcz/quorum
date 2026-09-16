@@ -1,5 +1,6 @@
 export * from "./canvas.js";
 export * from "./schema.js";
+export * from "./locales.js";
 export * from "./fonts.js";
 export * from "./font-metrics.generated.js";
 export * from "./text.js";

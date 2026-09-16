@@ -148,11 +148,19 @@ the real files. Composition, line breaks and type size are honest; the letterfor
 "Every layout is original and reviewed" is a promise until something enforces it. Five things do,
 and all five run in CI through `pnpm test`.
 
-**Nine checks, on every family, brand and canvas.** `validateTemplateForBrand` answers schema,
-canvas, platform limits, safe area, contrast, APCA, brand-token binding, overflow and originality,
-and `renderCarouselSvg` refuses a template that fails one — so an ungated layout cannot be drawn,
-previewed or exported. `studio/tests/families.test.ts` runs the set across 30 families × every
-deck length the splitter resolves × 10 brands × every offered format.
+**Ten checks, on every family, brand and canvas.** `validateTemplateForBrand` answers schema,
+canvas, platform limits, safe area, contrast, APCA, brand-token binding, overflow, script and
+originality, and `renderCarouselSvg` refuses a template that fails one — so an ungated layout
+cannot be drawn, previewed or exported. `studio/tests/families.test.ts` runs the set across 30
+families × every deck length the splitter resolves × 10 brands × every offered format.
+
+**Type is gated per language, not per script the engine happens to have met.** Each brand
+declares the languages it publishes in; a text layer declares `lang` where it sets something other
+than its brand's primary. Coverage is then derived from those declarations — every face of all 13
+families has to draw every character its brands' languages need — and so is capacity, because a
+Cyrillic line costs about 8% more per character than a Latin one in the same face. The `script`
+check refuses a slot set in a language its brand does not publish, which is the case that would
+otherwise draw notdef boxes through every other green check.
 
 **Two readability floors, measured over one set of grounds.** WCAG 2.x at 4.5:1 and APCA at
 Lc 40, both reading `textGroundPairs` so they cannot disagree about what sits behind a line of

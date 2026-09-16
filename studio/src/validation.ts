@@ -2,6 +2,7 @@ import { CANVAS_ORDER, canvasRatio, ratiosAgree } from "./canvas.js";
 import { apcaCheck } from "./contrast-apca.js";
 import { textGroundPairs } from "./grounds.js";
 import { platformLimitCheck } from "./platform-limits.js";
+import { primaryLocaleFor, publishingLocalesFor } from "./locales.js";
 import type { BrandTokens, CarouselFormat, CarouselTemplate } from "./schema.js";
 import { charactersPerLine } from "./text.js";
 
@@ -15,6 +16,7 @@ export interface TemplateCheck {
     | "apca"
     | "brand-tokens"
     | "overflow"
+    | "script"
     | "originality";
   status: "pass" | "fail";
   detail: string;
@@ -163,23 +165,47 @@ function contrastCheck(template: CarouselTemplate, brand: BrandTokens): Template
 }
 
 function overflowCheck(template: CarouselTemplate, brand: BrandTokens): TemplateCheck {
+  const primary = primaryLocaleFor(brand.id);
   const failures = template.slides.flatMap((slide) => slide.layers.flatMap((layer) => {
     if (layer.type !== "text") return [];
-    // Measured in the face the layer will actually be drawn in, and with its tracking. A flat
-    // per-character estimate charged a condensed headline what a grotesque costs and charged a
-    // tracked kicker nothing for its tracking — so a slot passed the check and ran off the canvas.
-    const minimumCapacity = charactersPerLine(
-      layer.width * 1_080,
-      layer.minFontSize,
-      brand.fonts[layer.fontToken],
-      layer.fontWeight,
-      layer.tracking
-    ) * layer.maxLines;
-    return minimumCapacity < layer.maxChars ? [`${slide.id}:${layer.slot}`] : [];
+    // Measured in the face the layer will actually be drawn in, with its tracking, and in the
+    // language it is set in. A flat per-character estimate charged a condensed headline what a
+    // grotesque costs and charged a tracked kicker nothing for its tracking — so a slot passed the
+    // check and ran off the canvas. A Latin-only estimate did the same to a Cyrillic slot.
+    const locale = layer.lang ?? primary;
+    const minimumCapacity = charactersPerLine({
+      widthPx: layer.width * 1_080,
+      fontSize: layer.minFontSize,
+      family: brand.fonts[layer.fontToken],
+      weight: layer.fontWeight,
+      tracking: layer.tracking,
+      locale
+    }) * layer.maxLines;
+    return minimumCapacity < layer.maxChars ? [`${slide.id}:${layer.slot} (${locale})`] : [];
   }));
   return failures.length
     ? { id: "overflow", status: "fail", detail: `Slot limit cannot fit at minimum size: ${failures.join(", ")}` }
-    : { id: "overflow", status: "pass", detail: "Every slot limit fits at its minimum font size" };
+    : { id: "overflow", status: "pass", detail: "Every slot limit fits at its minimum font size in the language it is set in" };
+}
+
+/**
+ * Whether this brand publishes the languages this template's slots are set in.
+ *
+ * The third link in the chain that keeps a notdef box off a card. The coverage gate proves every
+ * face a brand binds can draw every language that brand publishes; this proves no slot asks for a
+ * language the brand does not publish, and therefore no slot asks for glyphs nothing required.
+ * Without it a bilingual layout rendered in the wrong brand would pass every check and draw
+ * squares where the second language should be.
+ */
+function scriptCheck(template: CarouselTemplate, brand: BrandTokens): TemplateCheck {
+  const locales = publishingLocalesFor(brand.id);
+  const failures = template.slides.flatMap((slide) => slide.layers.flatMap((layer) => {
+    if (layer.type !== "text" || layer.lang === undefined) return [];
+    return locales.includes(layer.lang) ? [] : [`${slide.id}:${layer.slot} (${layer.lang})`];
+  }));
+  return failures.length
+    ? { id: "script", status: "fail", detail: `${brand.name} does not publish the language of ${failures.join(", ")}` }
+    : { id: "script", status: "pass", detail: `Every declared slot language is one ${brand.name} publishes: ${locales.join(", ")}` };
 }
 
 export function validateTemplateForBrand(
@@ -196,6 +222,7 @@ export function validateTemplateForBrand(
     apcaCheck(template, brand),
     brandTokenCheck(template, brand),
     overflowCheck(template, brand),
+    scriptCheck(template, brand),
     { id: "originality", status: "pass", detail: "Template data contains no external image bytes" }
   ];
 }

@@ -16,6 +16,7 @@
  * looking at rendered slides, and a second copy would drift away from them.
  */
 
+import { primaryLocaleFor } from "./locales.js";
 import { MAX_SLIDE_WORDS, packIntoSlides, proseFromMdx, wordCount } from "./slides.js";
 
 /** Fewer than this and no template has enough passages for its slide plan. */
@@ -45,20 +46,17 @@ export function isCarouselSummaryVenture(value: unknown): value is CarouselSumma
   return typeof value === "string" && (CAROUSEL_SUMMARY_VENTURES as readonly string[]).includes(value);
 }
 
-const VENTURE_LOCALE: Readonly<Record<CarouselSummaryVenture, CarouselSummaryLocale>> = {
-  "caught-up": "cs",
-  "mma-files": "cs",
-  kvorum: "cs",
-  booksofhistory: "cs",
-  "door-money": "en",
-  // Czech is the primary record; the Ukrainian half travels in the package beside it rather than
-  // as a second summary, because one feature published twice is not two features.
-  "tehdejsi-svet": "cs"
-};
-
-/** The language a venture publishes in. The locale is then recorded on every summary. */
+/**
+ * The language a venture publishes in. The locale is then recorded on every summary.
+ *
+ * Read from the brand's own declaration rather than kept here a second time. Every summary
+ * venture is also a studio brand, and the brand map's primary is this same fact — the one the
+ * type and layout gates measure against. Tehdejší svět is the case that shows why one copy
+ * matters: Czech is its primary record and the Ukrainian half travels in declared slots inside
+ * the package beside it, because one feature published twice is not two features.
+ */
 export function localeForCarouselVenture(venture: CarouselSummaryVenture): CarouselSummaryLocale {
-  return VENTURE_LOCALE[venture];
+  return primaryLocaleFor(venture);
 }
 
 export interface CarouselSummarySource {

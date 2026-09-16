@@ -5,6 +5,17 @@ export const CarouselFormatSchema = z.enum(CANVAS_ORDER);
 
 export const TemplateStatusSchema = z.enum(["draft", "live", "deprecated"]);
 
+/**
+ * The languages this engine sets type in.
+ *
+ * Not the same enum as a payload's `locale`, which is the language of a *delivered record* and
+ * has only ever been Czech or English. This one is the language of a *frame*: the bilingual
+ * Tehdejší svět card sets Ukrainian in half of its slots while the record around it stays Czech.
+ */
+export const PublishingLocaleSchema = z.enum(["cs", "en", "uk"]);
+export const PUBLISHING_LOCALES = PublishingLocaleSchema.options;
+export type PublishingLocale = z.infer<typeof PublishingLocaleSchema>;
+
 const UnitSchema = z.number().finite().min(0).max(1);
 const TokenNameSchema = z.string().regex(/^[a-z][a-z0-9-]*$/);
 const SlotNameSchema = z.string().regex(/^[a-z][a-z0-9-]*$/);
@@ -50,7 +61,21 @@ const TextLayerSchema = FrameSchema.extend({
    */
   tracking: z.number().finite().min(-0.05).max(0.4).default(0),
   /** A soft shadow in the slide's accent, for text that has to hold over busy ground. */
-  glow: z.boolean().default(false)
+  glow: z.boolean().default(false),
+  /**
+   * The language this frame is set in, where it is not the brand's primary.
+   *
+   * Optional and with no default, unlike everything else below the line above, because the
+   * default is a property of the brand rather than of the template: one layout renders in ten
+   * brands and each of them has its own primary language. Absent therefore means "whatever this
+   * brand publishes in", and only a frame that deliberately sets something else — the Ukrainian
+   * half of a bilingual card — names it.
+   *
+   * It is a layout input, not a rendering one. The fitter measures the real string against real
+   * advance widths and needs no hint; the capacity arithmetic has no string to measure and would
+   * otherwise charge a Cyrillic line the Latin average.
+   */
+  lang: PublishingLocaleSchema.optional()
 }).superRefine((layer, context) => {
   if (layer.minFontSize > layer.maxFontSize) {
     context.addIssue({ code: "custom", message: "minFontSize cannot exceed maxFontSize" });
