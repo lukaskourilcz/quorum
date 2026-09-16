@@ -14,8 +14,11 @@ import {
   requestHash,
   writeCachedResponse
 } from "./cache.js";
-import { AnthropicTextClient, type AnthropicEffort } from "./anthropic.js";
+import { AnthropicTextClient, type AnthropicBatchOptions, type AnthropicEffort } from "./anthropic.js";
 import { ModelResponseTruncatedError, OpenAiTextClient, type TextProviderResponse } from "./openai.js";
+
+/** The tiers a guarded call can actually be made at. `flex` and `priority` have no adapter. */
+type GuardedServiceTier = "default" | "batch";
 
 export { ModelResponseTruncatedError };
 import {
@@ -41,6 +44,12 @@ export interface GuardedCallInput<T> {
   thinking?: "adaptive" | "disabled";
   /** Anthropic only: forwarded as `output_config.effort`. */
   effort?: AnthropicEffort;
+  /**
+   * The price tier the call is reserved, made and recorded at. `batch` is Anthropic only and
+   * needs `batch.deadlineAt`; the ledger row carries the tier so the batch rate is what it prices.
+   */
+  serviceTier?: GuardedServiceTier;
+  batch?: AnthropicBatchOptions;
   webSearch?: {
     maxUses: number;
     maxSearchContentTokens: number;
@@ -75,6 +84,7 @@ export interface GuardedCallDeps {
     maxOutputTokens: number;
     thinking?: "adaptive" | "disabled";
     effort?: AnthropicEffort;
+    serviceTier?: GuardedServiceTier;
   }) => Promise<TextProviderResponse>;
 }
 
@@ -150,6 +160,10 @@ export async function guardedJsonCall<T>(
   if (request.webSearch && request.provider !== "anthropic") {
     throw new Error("Guarded web search is available only through the registered Anthropic adapter");
   }
+  if (request.serviceTier === "batch" && request.provider !== "anthropic") {
+    throw new Error("The batch service tier is available only through the registered Anthropic adapter");
+  }
+  const serviceTier: GuardedServiceTier = request.serviceTier ?? "default";
   assertAgentPacketPresentationBarrier({
     input: request.input,
     system: request.system
@@ -194,6 +208,7 @@ export async function guardedJsonCall<T>(
   const estimate = estimateTextCall({
     provider: request.provider,
     model: request.model,
+    serviceTier,
     promptChars: request.system.length + request.input.length,
     maxOutputTokens: request.maxOutputTokens,
     webSearchUses: request.webSearch?.maxUses,
@@ -214,7 +229,8 @@ export async function guardedJsonCall<T>(
           input: request.input,
           maxOutputTokens: request.maxOutputTokens,
           ...(request.thinking === undefined ? {} : { thinking: request.thinking }),
-          ...(request.effort === undefined ? {} : { effort: request.effort })
+          ...(request.effort === undefined ? {} : { effort: request.effort }),
+          serviceTier
         })
       : request.provider === "openai"
       ? await new OpenAiTextClient().generate({
@@ -230,7 +246,9 @@ export async function guardedJsonCall<T>(
           maxOutputTokens: request.maxOutputTokens,
           ...(request.thinking === undefined ? {} : { thinking: request.thinking }),
           ...(request.effort === undefined ? {} : { effort: request.effort }),
-          webSearchUses: request.webSearch?.maxUses
+          webSearchUses: request.webSearch?.maxUses,
+          serviceTier,
+          ...(request.batch === undefined ? {} : { batch: request.batch })
         });
   } catch (error) {
     if (!(error instanceof ModelResponseTruncatedError) || !error.response) throw error;
@@ -245,6 +263,7 @@ export async function guardedJsonCall<T>(
   const actual = estimateTextCall({
     provider: request.provider,
     model: request.model,
+    serviceTier,
     promptChars: promptTokens * 3.5,
     maxOutputTokens: response.tokensOut,
     cachedInputTokens: response.cachedTokensIn,
@@ -270,7 +289,7 @@ export async function guardedJsonCall<T>(
       agent: request.agent,
       provider: request.provider,
       model: response.model,
-      serviceTier: "default",
+      serviceTier,
       tokensIn: response.tokensIn,
       cachedTokensIn: response.cachedTokensIn,
       tokensOut: response.tokensOut,

@@ -37,6 +37,8 @@ export interface EmbeddingPrice {
 const OPENAI_PRICING = "https://developers.openai.com/api/docs/pricing";
 const ANTHROPIC_PRICING =
   "https://platform.claude.com/docs/en/about-claude/pricing";
+const ANTHROPIC_BATCH_PRICING =
+  "https://platform.claude.com/docs/en/build-with-claude/batch-processing";
 
 export const TEXT_PRICES: readonly TextPrice[] = [
   {
@@ -146,8 +148,38 @@ export const TEXT_PRICES: readonly TextPrice[] = [
     outputUsdPerMillion: 5,
     sourceUrl: ANTHROPIC_PRICING,
     verifiedAt: "2026-07-23"
-  }
+  },
+  // The Message Batches API bills every token at half the default rate for the same model, so
+  // each batch row is its default row halved and dated the same way. A room configured for the
+  // tier must find a row here or estimateTextCall refuses the call as UNKNOWN_PRICE.
+  ...batchRows("claude-opus-4-7", "2026-07-21", null, 5, 0.5, 25),
+  ...batchRows("claude-sonnet-4-6", "2026-07-21", null, 3, 0.3, 15),
+  ...batchRows("claude-sonnet-5", "2026-06-09", "2026-09-01", 2, 0.2, 10),
+  ...batchRows("claude-sonnet-5", "2026-09-01", null, 3, 0.3, 15),
+  ...batchRows("claude-haiku-4-5-20251001", "2025-10-01", null, 1, 0.1, 5)
 ] as const;
+
+function batchRows(
+  model: string,
+  effectiveFrom: string,
+  effectiveTo: string | null,
+  inputUsdPerMillion: number,
+  cachedInputUsdPerMillion: number,
+  outputUsdPerMillion: number
+): readonly TextPrice[] {
+  return [{
+    provider: "anthropic",
+    model,
+    serviceTier: "batch",
+    effectiveFrom,
+    effectiveTo,
+    inputUsdPerMillion: inputUsdPerMillion / 2,
+    cachedInputUsdPerMillion: cachedInputUsdPerMillion / 2,
+    outputUsdPerMillion: outputUsdPerMillion / 2,
+    sourceUrl: ANTHROPIC_BATCH_PRICING,
+    verifiedAt: "2026-09-16"
+  }];
+}
 
 export const EMBEDDING_PRICES: readonly EmbeddingPrice[] = [
   {

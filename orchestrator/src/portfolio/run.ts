@@ -20,6 +20,7 @@ import { MeetingSkipSchema } from "../contracts/meeting-skip.js";
 import { EditorialSlateSchema, mmaOrganizationFromRef, type EditorialSlate } from "../contracts/mma-files.js";
 import { MarketingPlanSchema, type MarketingPlan } from "../contracts/marketing-plan.js";
 import { guardedJsonCall, ModelOutputParseError } from "../llm/call.js";
+import { AnthropicBatchDeadlineError } from "../llm/anthropic.js";
 import { loadAgentRegistry } from "../org/registry.js";
 import { configRoot, personaPromptPath, promptRoot, repoRoot, stateRoot } from "../paths.js";
 import { loadVentureCapabilityMap } from "../ventures/capabilities.js";
@@ -327,6 +328,8 @@ function buildRecord(input: {
   fixture: boolean;
   editorialSlate: EditorialSlate | null;
   agenda: MeetingAgenda | null;
+  /** Seats that were called and never heard, with the reason, so the record says so. */
+  seatSkips?: ReadonlyMap<FoundingAgent, string>;
 }): MeetingRecord {
   const isFightDesk = input.phase === "mma-intake" || input.phase === "mma-analysis";
   const isMagazine = input.phase === "mag-editorial" || input.phase === "mag-desk";
@@ -352,7 +355,12 @@ function buildRecord(input: {
     status: input.fixture ? "PLAN" : "HELD",
     stage: input.stage,
     operatingBrief: input.objective,
-    participantReasons: input.cast.map((agent) => ({ agent, reason: agent === chair ? "chairs the bounded room" : "serves the registered specialist or veto seat", participated: true })),
+    participantReasons: input.cast.map((agent) => {
+      const skip = input.seatSkips?.get(agent);
+      return skip
+        ? { agent, reason: skip, participated: false }
+        : { agent, reason: agent === chair ? "chairs the bounded room" : "serves the registered specialist or veto seat", participated: true };
+    }),
     ledger: { estimatedCycleUsd: input.envelopeUsd, actualCycleUsd: input.actualCycleUsd, monthAllInUsd: input.monthAllInUsd, monthCapUsd: input.monthCapUsd },
     decision: { outcome: veto ? "VETO" : "PLAN", summary, evidenceRefs: [...new Set(input.contributions.flatMap((contribution) => contribution.evidenceRefs))] },
     proposals: input.contributions.map((contribution) => ({ agent: contribution.agent, summary: contribution.summary, evidenceRefs: contribution.evidenceRefs })),
@@ -1305,6 +1313,8 @@ export async function runPortfolioCycle(input: {
   const context = await composePortfolioContext(input.phase, root, date, registry, input.now);
   let contributions: Contribution[];
   let estimatedWorstCaseUsd = 0;
+  /** Seats whose batch missed the room's deadline: recorded, not heard. */
+  const seatSkips = new Map<FoundingAgent, string>();
   /** Set when a cap refused a seat, so the room closes on the seats it already paid for. */
   let budgetStop: BudgetError | null = null;
   if (input.dry) {
@@ -1350,9 +1360,15 @@ export async function runPortfolioCycle(input: {
       // intention the provider was never told about, and sixty ledger entries showed one
       // cache read between them.
       const prompt = `${packet}\n\nROLE BOUNDARY:\n${profile.mission}\n\n${personas.get(agent) ?? ""}`;
-      const estimate = estimateTextCall({ provider: model.provider, model: model.model, promptChars: system.length + prompt.length, maxOutputTokens: model.maxOutputTokens, at: input.now });
-      return { agent, model, system, prompt, estimate };
+      // The room's tier applies to the seats that have an adapter for it. An OpenAI seat in a
+      // batch room is priced and called at the default tier rather than refused.
+      const serviceTier = model.provider === "anthropic" ? definition.serviceTier : "default";
+      const estimate = estimateTextCall({ provider: model.provider, model: model.model, serviceTier, promptChars: system.length + prompt.length, maxOutputTokens: model.maxOutputTokens, at: input.now });
+      return { agent, model, system, prompt, estimate, serviceTier };
     });
+    // One clock for every seat: the deadline is measured from the room's start, not per seat,
+    // because the hosting job's time limit is per run.
+    const batchDeadlineAt = new Date(input.now.getTime() + definition.batchDeadlineMinutes * 60_000);
     estimatedWorstCaseUsd = Number(calls.reduce((sum, call) => sum + call.estimate.estimatedUsd, 0).toFixed(8));
     const envelope = schedule.envelopeByPhase[input.phase] ?? definition.envelopeUsd;
     if (estimatedWorstCaseUsd > envelope) throw new Error(`Portfolio call graph ${estimatedWorstCaseUsd} exceeds ${envelope} envelope`);
@@ -1371,9 +1387,24 @@ export async function runPortfolioCycle(input: {
         system: call.system,
         input: call.prompt,
         maxOutputTokens: call.model.maxOutputTokens,
+        serviceTier: call.serviceTier,
+        ...(call.serviceTier === "batch" ? { batch: { deadlineAt: batchDeadlineAt } } : {}),
         budgetContext: { now: input.now, cycleId: input.cycleId, stage: stages.current, ledger: currentLedger, allInNonApiSpentUsd: fixedMonthlyUsd, allInCommittedUsd: 0, knownMonthlyForecastUsd: 0, remainingScheduledCycles: 60, limits },
         parse: (text) => parsePortfolioContribution({ phase: input.phase, agent: call.agent, text })
       }).catch((error: unknown) => {
+        // A batch that missed the room's deadline costs that seat, not the room. The batch was
+        // cancelled and nothing reached the ledger, so the skip and its reason are the record.
+        if (error instanceof AnthropicBatchDeadlineError) {
+          seatSkips.set(call.agent, `not heard: ${error.message}`);
+          console.warn(JSON.stringify({
+            event: "contribution_batch_deadline",
+            agent: call.agent,
+            phase: input.phase,
+            batchId: error.batchId,
+            reason: error.message
+          }));
+          return null;
+        }
         // One seat returning unparsable JSON must cost that seat, not the room. A live
         // mma-intake run died on "Expected double-quoted property name in JSON at position
         // 824" and took every other agent's work with it. The spend is already recorded by
@@ -1422,6 +1453,19 @@ export async function runPortfolioCycle(input: {
       // the cap refused the next one is on the ledger already, and the reason quotes the day's
       // spend from that ledger, so nothing goes unaccounted for.
       return stoppedByBudget({ reservationUsd: null, code: budgetStop.code, cast: selected });
+    }
+    if (contributions.length === 0 && seatSkips.size === selected.length) {
+      // Every seat's batch missed the deadline. Nothing was heard and nothing was billed, so
+      // the day gets a skip record with the reason rather than a failed run.
+      const artifacts = await recordBudgetStop({
+        phase: input.phase,
+        date,
+        now: input.now,
+        root,
+        reason: `Every seat's batch missed the ${definition.batchDeadlineMinutes}-minute deadline; the batches were cancelled and no seat was heard.`,
+        dailyCapReached: false
+      });
+      return { cycleId: input.cycleId, phase: input.phase, dry: false, status: "paused", decision: "NO_ACTION", estimatedWorstCaseUsd: 0, selectedAgents: [], skippedAgents: [...selected], artifacts: artifacts.map((artifact) => path.relative(repoRoot, path.join(root, artifact))) };
     }
     if (contributions.length === 0) {
       throw new Error(`Every seat in ${input.phase} returned unparsable output; the room produced nothing`);
@@ -1695,7 +1739,7 @@ export async function runPortfolioCycle(input: {
   const actualEntries = input.dry ? [] : (await readJson<{ entries: BudgetLedgerEntry[] }>(stateRoot, "budget/ledger.json", { entries: [] })).entries;
   const actualCycleUsd = actualEntries.filter((entry) => entry.cycleId === input.cycleId).reduce((sum, entry) => sum + entry.usd, 0);
   const monthAllInUsd = fixedMonthlyUsd + actualEntries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
-  const record = buildRecord({ phase: input.phase, cycleId: input.cycleId, date, now: input.now, stage: stages.current, cast: selected, objective: effectiveObjective, envelopeUsd: schedule.envelopeByPhase[input.phase] ?? definition.envelopeUsd, actualCycleUsd, monthAllInUsd, monthCapUsd: schedule.monthlyOperatingUsd, contributions, fixture: input.dry, editorialSlate, agenda });
+  const record = buildRecord({ phase: input.phase, cycleId: input.cycleId, date, now: input.now, stage: stages.current, cast: selected, objective: effectiveObjective, envelopeUsd: schedule.envelopeByPhase[input.phase] ?? definition.envelopeUsd, actualCycleUsd, monthAllInUsd, monthCapUsd: schedule.monthlyOperatingUsd, contributions, fixture: input.dry, editorialSlate, agenda, seatSkips });
   const meetingPath = `meetings/${date}-${input.phase}.json`;
   const decisionPath = `decisions/${input.cycleId}.json`;
   const scorecardPath = `scorecards/${input.cycleId}.json`;

@@ -7,6 +7,14 @@ const VentureMeetingDefinitionSchema = openObject({
   cadence: z.string().regex(/^daily@(?:0[5-9]|1\d|2[0-3]):00$/),
   cast: z.array(ContractAgentIdSchema).min(1),
   envelopeUsd: z.number().finite().positive().max(1),
+  /**
+   * The price tier the room's Anthropic seats call at. `batch` goes through the Message Batches
+   * API at half the token price and waits under `batchDeadlineMinutes` from the room's start;
+   * seats on a provider without a batch adapter stay on the default tier whatever this says.
+   * The deadline ceiling is the hosting job's own time limit.
+   */
+  serviceTier: z.enum(["default", "batch"]).default("default"),
+  batchDeadlineMinutes: z.number().int().min(1).max(60).default(50),
   packet: openObject({
     topicType: z.enum([
       "growth",

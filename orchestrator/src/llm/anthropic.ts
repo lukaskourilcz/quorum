@@ -4,11 +4,62 @@ import { ModelResponseTruncatedError, type TextProviderResponse } from "./openai
 /** The effort levels the provider accepts as `output_config.effort`. */
 export type AnthropicEffort = "low" | "medium" | "high" | "xhigh" | "max";
 
+/**
+ * How a batch-tier call waits.
+ *
+ * `deadlineAt` is absolute rather than a duration so every seat in one room shares the room's
+ * clock: the GitHub Actions job that hosts a cycle has a time limit, and four seats each waiting
+ * their own fifty minutes would run past it. `clock` and `sleep` are test seams; the defaults are
+ * the wall clock and a real timer.
+ */
+export interface AnthropicBatchOptions {
+  deadlineAt: Date;
+  /** How often to ask whether the batch ended. Batches are documented to take up to an hour. */
+  pollIntervalMs?: number;
+  clock?: () => number;
+  sleep?: (ms: number) => Promise<void>;
+}
+
+export const DEFAULT_BATCH_POLL_INTERVAL_MS = 60_000;
+
+/** The batch did not end before the room's deadline. The room records the seat as a skip. */
+export class AnthropicBatchDeadlineError extends Error {
+  constructor(
+    readonly batchId: string,
+    readonly model: string,
+    readonly deadlineAt: Date,
+    /** Whether the provider accepted the cancel; a refused cancel is still a deadline. */
+    readonly cancelled: boolean
+  ) {
+    super(`Batch ${batchId} for ${model} did not end before ${deadlineAt.toISOString()}; ${cancelled ? "cancelled" : "the cancel request failed"}`);
+    this.name = "AnthropicBatchDeadlineError";
+  }
+}
+
+/** The batch ended without a usable reply for the one request it carried. */
+export class AnthropicBatchResultError extends Error {
+  constructor(
+    readonly batchId: string,
+    readonly model: string,
+    readonly resultType: "errored" | "canceled" | "expired" | "missing",
+    detail: string | null
+  ) {
+    super(`Batch ${batchId} for ${model} ended ${resultType}${detail ? `: ${detail}` : ""}`);
+    this.name = "AnthropicBatchResultError";
+  }
+}
+
 export interface AnthropicTextRequest {
   model: string;
   system: string;
   input: string;
   maxOutputTokens: number;
+  /**
+   * `batch` submits the same request through the Message Batches API at the batch price and
+   * waits for it under `batch.deadlineAt`. Omit for the default tier.
+   */
+  serviceTier?: "default" | "batch";
+  batch?: AnthropicBatchOptions;
   /**
    * Whether the model may think before it answers.
    *
@@ -142,6 +193,62 @@ export class AnthropicVisionClient {
   }
 }
 
+/**
+ * The request as the provider sees it, shared by the immediate and the batch path so the two
+ * tiers can never drift apart in what they send.
+ *
+ * The system prompt is marked cacheable, not merely stable. A room sends the same system text
+ * once per seat, and the code that builds it says so: it keeps `system` byte-identical for every
+ * agent "so the room prompt and the shared packet form one cacheable prefix". That was true of
+ * the text and false of the request — nothing ever asked for the cache, so every seat paid full
+ * input price for the same bytes. Sixty ledger entries, one with a cache read.
+ *
+ * Marked on the system block only. The user turn carries the per-agent packet and differs every
+ * call, so caching it would pay the write premium for a prefix nothing re-reads.
+ */
+function messageParams(request: AnthropicTextRequest): Anthropic.MessageCreateParamsNonStreaming {
+  return {
+    max_tokens: request.maxOutputTokens,
+    messages: [{ role: "user", content: request.input }],
+    model: request.model,
+    system: [{ type: "text", text: request.system, cache_control: { type: "ephemeral" } }],
+    ...(request.thinking === undefined ? {} : {
+      thinking: request.thinking === "disabled" ? { type: "disabled" as const } : { type: "adaptive" as const }
+    }),
+    ...(request.effort === undefined ? {} : { output_config: { effort: request.effort } }),
+    ...(request.webSearchUses === undefined ? {} : {
+      // Verified against @anthropic-ai/sdk@0.113.0's WebSearchTool20260318.
+      tools: [{
+        type: "web_search_20260318" as const,
+        name: "web_search" as const,
+        max_uses: request.webSearchUses
+      }]
+    })
+  };
+}
+
+function textResponse(request: AnthropicTextRequest, response: Anthropic.Message): TextProviderResponse {
+  const result: TextProviderResponse = {
+    text: response.content
+      .filter((block) => block.type === "text")
+      .map((block) => block.text)
+      .join(""),
+    model: response.model,
+    tokensIn: response.usage.input_tokens ?? 0,
+    tokensOut: response.usage.output_tokens ?? 0,
+    cachedTokensIn: response.usage.cache_read_input_tokens ?? 0,
+    cacheWriteTokensIn: response.usage.cache_creation_input_tokens ?? 0,
+    toolUses: response.usage.server_tool_use?.web_search_requests ?? 0
+  };
+  // A cut-off body is not a model mistake, it is our cap being too small, and it must not
+  // masquerade as malformed JSON. Reporting it plainly is the difference between "raise the
+  // cap" and hours spent hunting a syntax error at some byte offset.
+  if (response.stop_reason === "max_tokens") {
+    throw new ModelResponseTruncatedError(request.model, request.maxOutputTokens, "truncated", result);
+  }
+  return result;
+}
+
 export class AnthropicTextClient {
   private readonly client: Anthropic;
 
@@ -160,52 +267,53 @@ export class AnthropicTextClient {
     )) {
       throw new Error(`Anthropic web search uses must be an integer from 1 to ${MAX_ANTHROPIC_WEB_SEARCH_USES}`);
     }
-    // The system prompt is marked cacheable, not merely stable.
-    //
-    // A room sends the same system text once per seat, and the code that builds it says so:
-    // it keeps `system` byte-identical for every agent "so the room prompt and the shared
-    // packet form one cacheable prefix". That was true of the text and false of the request —
-    // nothing ever asked for the cache, so every seat paid full input price for the same
-    // bytes. Sixty ledger entries, one with a cache read.
-    //
-    // Marked on the system block only. The user turn carries the per-agent packet and differs
-    // every call, so caching it would pay the write premium for a prefix nothing re-reads.
-    const response = await this.client.messages.create({
-      max_tokens: request.maxOutputTokens,
-      messages: [{ role: "user", content: request.input }],
-      model: request.model,
-      system: [{ type: "text", text: request.system, cache_control: { type: "ephemeral" } }],
-      ...(request.thinking === undefined ? {} : {
-        thinking: request.thinking === "disabled" ? { type: "disabled" as const } : { type: "adaptive" as const }
-      }),
-      ...(request.effort === undefined ? {} : { output_config: { effort: request.effort } }),
-      ...(request.webSearchUses === undefined ? {} : {
-        // Verified against @anthropic-ai/sdk@0.113.0's WebSearchTool20260318.
-        tools: [{
-          type: "web_search_20260318" as const,
-          name: "web_search" as const,
-          max_uses: request.webSearchUses
-        }]
-      })
-    });
-    const result: TextProviderResponse = {
-      text: response.content
-        .filter((block) => block.type === "text")
-        .map((block) => block.text)
-        .join(""),
-      model: response.model,
-      tokensIn: response.usage.input_tokens ?? 0,
-      tokensOut: response.usage.output_tokens ?? 0,
-      cachedTokensIn: response.usage.cache_read_input_tokens ?? 0,
-      cacheWriteTokensIn: response.usage.cache_creation_input_tokens ?? 0,
-      toolUses: response.usage.server_tool_use?.web_search_requests ?? 0
-    };
-    // A cut-off body is not a model mistake, it is our cap being too small, and it must not
-    // masquerade as malformed JSON. Reporting it plainly is the difference between "raise the
-    // cap" and hours spent hunting a syntax error at some byte offset.
-    if (response.stop_reason === "max_tokens") {
-      throw new ModelResponseTruncatedError(request.model, request.maxOutputTokens, "truncated", result);
+    const params = messageParams(request);
+    const response = request.serviceTier === "batch"
+      ? await this.generateThroughBatch(request, params)
+      : await this.client.messages.create(params);
+    return textResponse(request, response);
+  }
+
+  /**
+   * One request through the Message Batches API: create, poll until the batch ends, read the
+   * one result back. Same params, same cacheable system block, half the token price.
+   *
+   * On the deadline the batch is cancelled and the call fails typed. A request that finished
+   * inside the provider between the last poll and the cancel is billed and never read; that is
+   * the bounded price of a hard deadline, and the room's skip record is what accounts for it.
+   */
+  private async generateThroughBatch(
+    request: AnthropicTextRequest,
+    params: Anthropic.MessageCreateParamsNonStreaming
+  ): Promise<Anthropic.Message> {
+    const options = request.batch;
+    if (!options) throw new Error("A batch-tier call needs a deadline and none was configured");
+    const clock = options.clock ?? Date.now;
+    const sleep = options.sleep ?? ((ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)));
+    const pollIntervalMs = options.pollIntervalMs ?? DEFAULT_BATCH_POLL_INTERVAL_MS;
+    const customId = "seat";
+    const batches = this.client.messages.batches;
+    const created = await batches.create({ requests: [{ custom_id: customId, params }] });
+    let current = created;
+    while (current.processing_status !== "ended") {
+      const remainingMs = options.deadlineAt.getTime() - clock();
+      if (remainingMs <= 0) {
+        const cancelled = await batches.cancel(created.id).then(() => true, () => false);
+        throw new AnthropicBatchDeadlineError(created.id, request.model, options.deadlineAt, cancelled);
+      }
+      await sleep(Math.min(pollIntervalMs, remainingMs));
+      current = await batches.retrieve(created.id);
     }
-    return result;
+    for await (const entry of await batches.results(created.id)) {
+      if (entry.custom_id !== customId) continue;
+      if (entry.result.type === "succeeded") return entry.result.message;
+      throw new AnthropicBatchResultError(
+        created.id,
+        request.model,
+        entry.result.type,
+        entry.result.type === "errored" ? entry.result.error.error.message : null
+      );
+    }
+    throw new AnthropicBatchResultError(created.id, request.model, "missing", null);
   }
 }

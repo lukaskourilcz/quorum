@@ -203,6 +203,8 @@ export function composeMeetingRouteDefinition(
   return {
     ventureId,
     envelopeUsd: meeting.envelopeUsd,
+    serviceTier: meeting.serviceTier,
+    batchDeadlineMinutes: meeting.batchDeadlineMinutes,
     topicType: meeting.packet.topicType,
     objective: meeting.packet.objectives[mode],
     decisionNeeded: meeting.packet.decisionNeeded,

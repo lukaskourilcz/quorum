@@ -146,6 +146,9 @@
             "AUDIT"
           ],
           "envelopeUsd": 0.06,
+          "serviceTier": "batch",
+          "batchDeadlineMinutes": 50,
+          "$serviceTierComment": "The Monday room is the one meeting nobody is waiting on, so its Anthropic seats go through the Message Batches API at half the token price. The deadline is 50 minutes from the room's start because cycle.yml gives the job 65; a seat whose batch has not ended by then is cancelled and recorded as a skip with the reason. Seats on OpenAI stay on the default tier: there is no OpenAI batch adapter and this setting never invents one.",
           "packet": {
             "topicType": "growth",
             "decisionNeeded": "PLAN",
