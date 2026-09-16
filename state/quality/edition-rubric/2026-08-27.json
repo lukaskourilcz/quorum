@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "edition-rubric-receipt/1",
+  "date": "2026-08-27",
+  "rubric": {
+    "version": "edition-rubric/1",
+    "revision": 1
+  },
+  "runs": [
+    {
+      "runId": "d843f6fd-3c64-4b0a-8ae3-3ee4af155f8f",
+      "reportRef": "edition/runs/2026-08-27-029e618ac90c8d20ae43462fd4117762eaab52848a8f028c43b9197b8a049789.json",
+      "status": "no_edition",
+      "grade": null,
+      "ungraded": "This run ended before the quality gate was reached, so it recorded no metrics to grade."
+    },
+    {
+      "runId": "7ae0f2a6-0adf-43c1-8bd0-43eb21c835b2",
+      "reportRef": "edition/runs/2026-08-27-89ec048fa408e94402b660b9c79c75d44f54fff79397470cbe863cda7d13f3bf.json",
+      "status": "no_edition",
+      "grade": null,
+      "ungraded": "This run ended before the quality gate was reached, so it recorded no metrics to grade."
+    }
+  ],
+  "summary": {
+    "runs": 2,
+    "graded": 0,
+    "ungraded": 2,
+    "passed": 0,
+    "failed": 0,
+    "diverged": 0
+  }
+}

@@ -45,5 +45,138 @@
   "hacek": {
     "maximumRewriteAttempts": 1,
     "minimumScore": 35
+  },
+  "rubric": {
+    "version": "edition-rubric/1",
+    "revision": 1,
+    "criteria": [
+      {
+        "code": "minimum_successful_sources",
+        "category": "evidence",
+        "metrics": [
+          "successfulSources"
+        ],
+        "thresholdKey": "quality.minimumSuccessfulSources",
+        "asserts": "Enough of the registered sources answered for the day's reading to be a survey rather than a sample."
+      },
+      {
+        "code": "minimum_candidate_items",
+        "category": "evidence",
+        "metrics": [
+          "candidateItems"
+        ],
+        "thresholdKey": "quality.minimumCandidateItems",
+        "asserts": "The editor chose from a real field of stories instead of from whatever one feed happened to carry."
+      },
+      {
+        "code": "minimum_cited_sources",
+        "category": "evidence",
+        "metrics": [
+          "citedSources"
+        ],
+        "thresholdKey": "quality.minimumCitedSources",
+        "asserts": "The article cites enough distinct sources that a reader can check it against more than one account."
+      },
+      {
+        "code": "minimum_signal_strength",
+        "category": "evidence",
+        "metrics": [
+          "signalStrength"
+        ],
+        "thresholdKey": "quality.minimumSignalStrength",
+        "asserts": "The cited sources are weighted well enough in the registry to carry the story."
+      },
+      {
+        "code": "maximum_single_source_share",
+        "category": "independence",
+        "metrics": [
+          "maximumSingleSourceShare"
+        ],
+        "thresholdKey": "quality.maximumSingleSourceShare",
+        "asserts": "No single source supplies more than its share of the citations, so the edition is not one outlet retold."
+      },
+      {
+        "code": "minimum_source_diversity",
+        "category": "independence",
+        "metrics": [
+          "sourceDiversity"
+        ],
+        "thresholdKey": "quality.minimumSourceDiversity",
+        "asserts": "The citations are spread across sources rather than concentrated in a few."
+      },
+      {
+        "code": "maximum_duplicate_story_similarity",
+        "category": "originality",
+        "metrics": [
+          "duplicateStorySimilarity"
+        ],
+        "thresholdKey": "quality.maximumDuplicateStorySimilarity",
+        "asserts": "No two picked items are the same story under two headlines."
+      },
+      {
+        "code": "maximum_repeated_topic_frequency",
+        "category": "originality",
+        "metrics": [
+          "repeatedTopicFrequency"
+        ],
+        "thresholdKey": "quality.maximumRepeatedTopicFrequency",
+        "asserts": "Enough of the article's topic set is new that the edition is not a rerun of recent days."
+      },
+      {
+        "code": "primary_source_required",
+        "category": "evidence",
+        "metrics": [
+          "primarySourceRelevant",
+          "primarySourcePresent"
+        ],
+        "thresholdKey": "quality.requirePrimarySourceWhenRelevant",
+        "asserts": "Where a primary source was available among the candidates, the article cites one."
+      },
+      {
+        "code": "maximum_unsupported_watchlist_items",
+        "category": "evidence",
+        "metrics": [
+          "unsupportedWatchlistItems"
+        ],
+        "thresholdKey": "quality.maximumUnsupportedWatchlistItems",
+        "asserts": "Every Watchlist line rests on a source the edition actually carries."
+      },
+      {
+        "code": "hard_cost_unavailable",
+        "category": "cost",
+        "metrics": [
+          "costPerRun"
+        ],
+        "thresholdKey": null,
+        "asserts": "The run measured what it spent. An unmeasured cost is not a cheap run, so it fails rather than passing quietly."
+      },
+      {
+        "code": "edition_production_budget",
+        "category": "cost",
+        "metrics": [
+          "costPerRun"
+        ],
+        "thresholdKey": "budgets.editionProductionUsd",
+        "asserts": "The run stayed inside the edition production envelope the budget decision set."
+      },
+      {
+        "code": "warning_cost_per_run",
+        "category": "cost",
+        "metrics": [
+          "costPerRun"
+        ],
+        "thresholdKey": "budgets.warningCostPerRun",
+        "asserts": "The run stayed under the per-run figure above which a day's spend is worth looking at."
+      },
+      {
+        "code": "hard_cost_per_run",
+        "category": "cost",
+        "metrics": [
+          "costPerRun"
+        ],
+        "thresholdKey": "budgets.hardCostPerRun",
+        "asserts": "The run stayed under the hard per-run ceiling no edition may cross."
+      }
+    ]
   }
 }

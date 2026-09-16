@@ -155,7 +155,12 @@ describe("automation policy", () => {
     }
     expect(cycle).toContain("contents: write");
     expect(cycle).toContain("runtime_paths=(");
-    expect(cycle).toContain("state/kpis state/money state/mma state/marketingshark state/notify state/social");
+    expect(cycle).toContain("state/kpis state/money state/mma state/marketingshark state/notify state/quality state/social");
+    // The edition rubric receipt is written beside the run report it grades, inside the edition
+    // path, so the two land in the same commit. Left off this list the report would be committed
+    // without its receipt and `pnpm edition:rubric -- --check` would fail on the next unrelated
+    // push, naming a day nobody had touched.
+    expect(cycle).toContain("state/quality");
     // Every directory a scheduled phase writes has to be in this list or the run ends green with
     // nothing committed. marketingShark's dedupe ledger lives outside state/ventures, so its
     // absence would have re-served the same question every morning while the packages piled up.

@@ -16,6 +16,33 @@ export interface QualityMetrics {
   costPerRun: number | undefined;
 }
 
+/**
+ * Every metric name a rubric criterion in `config/edition-quality.json` may cite.
+ *
+ * `satisfies` refuses a name that is not a metric, and the type below refuses a metric that is not
+ * named here, so the compiler holds both directions. A criterion citing a metric that does not
+ * exist would grade nothing while reading as complete, and the rubric's whole purpose is that a
+ * criterion states what it reads.
+ */
+export const QUALITY_METRIC_KEYS = [
+  "candidateItems",
+  "citedSources",
+  "costPerRun",
+  "duplicateStorySimilarity",
+  "maximumSingleSourceShare",
+  "primarySourcePresent",
+  "primarySourceRelevant",
+  "repeatedTopicFrequency",
+  "signalStrength",
+  "sourceDiversity",
+  "successfulSources",
+  "unsupportedWatchlistItems"
+] as const satisfies readonly (keyof QualityMetrics)[];
+
+/** Fails to compile if a metric is added to `QualityMetrics` and not to the list above. */
+export type EveryQualityMetricIsNamed =
+  Exclude<keyof QualityMetrics, (typeof QUALITY_METRIC_KEYS)[number]> extends never ? true : never;
+
 export interface QualityResult {
   passed: boolean;
   enforced: true;

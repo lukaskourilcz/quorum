@@ -112,6 +112,27 @@ read `unavailable` because the two owner inputs are absent.
 - [ ] **Enter Reach and Impact per venture** — `config/portfolio-rice.json` has one row per venture with `reach: null` and `impact: null`. Reach is a per-quarter audience figure; there is none in this repository while `METRICS_INGESTION_ENABLED` is false, so it is yours or it stays absent. Impact is a step on 0.25 / 0.5 / 1 / 2 / 3. Nothing scores until both are set on a row. [imp:2] [owner:me] [time:30m] [kind:decision]
 - [ ] **Decide whether the ranking may ever gate a room** — `state/decisions/2026-09-16-portfolio-rice.md` is unsigned, which is what holds the ranking to information only. Countersigning it plus setting `posture: "owner-enforced"` and `rankingEnforced: true` is what the mechanism waits for; even then a further change to `ROOM_DEGRADATION_ORDER` would be needed, because that hand-written order is still the only list the daily envelope plan reads. [imp:2] [owner:me] [time:15m] [kind:decision]
 
+## Edition rubric eval · 2026-09-16
+
+`pnpm edition:rubric` from #535 regrades every committed edition run against the versioned rubric
+in `config/edition-quality.json` and writes one receipt per date under
+`state/quality/edition-rubric/`. `pnpm edition:rubric -- --check` is a CI step. It costs nothing:
+two file reads and a pure function, no model call anywhere in the path. All 31 gradable runs
+currently regrade to the verdict they recorded; the other 18 ended before the gate and are marked
+`ungraded` with the reason rather than counted as passes.
+
+- [ ] **Decide whether a judged eval over edition prose is wanted** — #535 also asked for promptfoo
+  or DeepEval faithfulness checks. Those need a model credential in CI, which the job deliberately
+  does not hold: `orchestrator/tests/setup/provider-env.ts` deletes both provider keys before every
+  test, a guard added after a three-day outage caused by exactly that divergence. So it would be a
+  budget and a security decision with its own record, and it would not be a per-push gate — a gate
+  that calls a model on every push spends on every push. Nothing is built for it and nothing is
+  waiting on a key. [imp:2] [owner:me] [time:15m] [kind:decision]
+- [ ] **Countersign or leave `edition-rubric-2026-09a` unsigned** —
+  `state/decisions/2026-09-16-edition-rubric-eval.md`. The rubric and its CI step work either way;
+  nothing reads the signature. Signing records that the method is the one you want.
+  [imp:1] [owner:me] [time:10m] [kind:decision]
+
 ## Cost per edition and per decision · 2026-09-16
 
 `pnpm cost:report` from #534 writes `state/money/cost-report.json` on every non-dry cycle: what

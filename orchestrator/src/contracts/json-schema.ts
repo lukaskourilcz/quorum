@@ -25,6 +25,7 @@ import { DailyDigestSchema } from "./daily-digest.js";
 import { DesignProposalSchema } from "./design-proposal.js";
 import { DoorMoneyPlaybookSchema } from "./door-money-playbook.js";
 import { EditionPackageSchema } from "./edition-package.js";
+import { EditionRubricReceiptSchema } from "./edition-rubric-receipt.js";
 import { HookAssignmentSchema } from "./hook-assignment.js";
 import { IdeaLedgerEntrySchema } from "./idea-ledger.js";
 import {
@@ -206,6 +207,7 @@ export const ContractSchemas = {
   "design-proposal": DesignProposalSchema,
   "door-money-playbook": DoorMoneyPlaybookSchema,
   "edition-package": EditionPackageSchema,
+  "edition-rubric-receipt": EditionRubricReceiptSchema,
   "hook-assignment": HookAssignmentSchema,
   "idea-ledger": IdeaLedgerEntrySchema,
   "implementation-program": ImplementationProgramSchema,

@@ -32,6 +32,7 @@ import { imageProgramReadiness } from "../images/readiness.js";
 import { storeImageSelection } from "../images/verdict-store.js";
 import { loadFixedMonthlyUsd } from "../money/fixed-costs.js";
 import { storeEditionCarouselSummary } from "../studio/carousel-summary-store.js";
+import { recordEditionRubricReceipt } from "./rubric.js";
 
 interface NetworkAllowlist {
   runtimeHosts: string[];
@@ -71,6 +72,8 @@ export interface LiveEditionResult {
   sourceRun: ScrapeRunResult;
   outboxPath: string | null;
   reportPath: string;
+  /** The day's rubric receipt, or null when it could not be written. */
+  rubricReceiptPath: string | null;
   monthApiUsd: number;
 }
 
@@ -456,10 +459,29 @@ export async function runLiveEdition(input: {
     }
   });
   if (outboxPath) await atomicWriteJson(root, outboxPath, editionPackage);
+  /*
+   * The day's rubric receipt, regraded from the reports on disk including the one just written.
+   *
+   * Beside the report and not on a later checkpoint, because the CI gate compares the committed
+   * receipts against a fresh build: a report committed without its receipt turns the gate red on
+   * the next unrelated push. It reads two files and calls a pure function, so it costs nothing
+   * and cannot fail the run — a receipt this cannot write leaves the report intact and the gate
+   * says so, which is the failure posture every derived record here follows.
+   */
+  const rubricReceiptPath = await recordEditionRubricReceipt({ root, date: input.date, config })
+    .catch(() => null);
   // The edition also reaches Carousel Studio, as a summary rather than as the edition: the
   // headline, the standfirst and the editor's own points, in the order they made them. A
   // `no_edition` package writes nothing, because an edition that did not go out has nothing to
   // put on a slide, and its reason is already recorded above.
   await storeEditionCarouselSummary(root, editionPackage);
-  return { package: editionPackage, report, sourceRun, outboxPath, reportPath, monthApiUsd };
+  return {
+    package: editionPackage,
+    report,
+    sourceRun,
+    outboxPath,
+    reportPath,
+    rubricReceiptPath,
+    monthApiUsd
+  };
 }

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "edition-rubric-receipt/1",
+  "date": "2026-08-01",
+  "rubric": {
+    "version": "edition-rubric/1",
+    "revision": 1
+  },
+  "runs": [
+    {
+      "runId": "6a7f8441-2859-4139-8105-0a31451a1746",
+      "reportRef": "edition/runs/2026-08-01-25acba160c67de433f382b28a51d0ed33843c46e788ea3d6eccb83e2d3252f48.json",
+      "status": "no_edition",
+      "grade": null,
+      "ungraded": "This run ended before the quality gate was reached, so it recorded no metrics to grade."
+    },
+    {
+      "runId": "b066abf4-7001-4b33-9625-91ce1c86bd86",
+      "reportRef": "edition/runs/2026-08-01-9e0e66f2b181626f3e2dcecc1475fb9b56b95ba5364fde94aeac0958f9dd26f7.json",
+      "status": "no_edition",
+      "grade": null,
+      "ungraded": "This run ended before the quality gate was reached, so it recorded no metrics to grade."
+    },
+    {
+      "runId": "173e7706-7cca-4c1d-9297-e552a72dae0e",
+      "reportRef": "edition/runs/2026-08-01-a11dd361157354d20fd9d46deae329ceb7ffdae0d07db01ab5e0027557b6aed3.json",
+      "status": "no_edition",
+      "grade": null,
+      "ungraded": "This run ended before the quality gate was reached, so it recorded no metrics to grade."
+    },
+    {
+      "runId": "f2cb8944-7ad4-438f-8ce5-0796ee141b98",
+      "reportRef": "edition/runs/2026-08-01-ac4a08fea9cc69b219a48ae2421e8eccc0fa35d1ea14ef58165e86529c323315.json",
+      "status": "no_edition",
+      "grade": null,
+      "ungraded": "This run ended before the quality gate was reached, so it recorded no metrics to grade."
+    }
+  ],
+  "summary": {
+    "runs": 4,
+    "graded": 0,
+    "ungraded": 4,
+    "passed": 0,
+    "failed": 0,
+    "diverged": 0
+  }
+}

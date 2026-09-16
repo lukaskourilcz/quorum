@@ -442,6 +442,7 @@ export async function runCaughtUpLiveEditionCycle(
     calendarPath,
     ...(produced.outboxPath ? [produced.outboxPath] : []),
     produced.reportPath,
+    ...(produced.rubricReceiptPath ? [produced.rubricReceiptPath] : []),
     "budget/ledger.json",
     ...socialArtifacts
   ];

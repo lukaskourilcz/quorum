@@ -2,8 +2,74 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 import { configRoot } from "../paths.js";
+import { QUALITY_METRIC_KEYS } from "./quality.js";
 
 const UnitIntervalSchema = z.number().min(0).max(1);
+
+/**
+ * The rubric: the gate's violation codes written down as independently gradeable criteria.
+ *
+ * It carries no threshold of its own. `thresholdKey` is a dotted path into the same config object
+ * the evaluator reads, so a criterion and the gate can never disagree about the number — the
+ * mistake `orchestrator/src/portfolio/limits.ts` records, where a copied budget figure went on
+ * being spent against after the decision behind it had been superseded.
+ *
+ * It also carries no grading logic. `evaluateEditionQuality` is the only implementation of these
+ * rules and the regrade calls it; a rubric that re-derived the comparisons from `metrics` and
+ * `thresholdKey` would be a second gate, and two gates over one decision disagree the first time
+ * either moves.
+ *
+ * `version` is the shape and `revision` is the content. A criterion added, removed or reworded
+ * bumps `revision`, which appears in every receipt, so a receipt says which rubric graded it.
+ */
+export const EditionRubricCriterionSchema = z.object({
+  /** The violation code `evaluateEditionQuality` pushes. A test keeps the two lists equal. */
+  code: z.string().regex(/^[a-z][a-z0-9_]*$/u).max(60),
+  category: z.enum(["evidence", "independence", "originality", "cost"]),
+  /** Which recorded metrics decide this criterion. */
+  metrics: z.array(z.enum(QUALITY_METRIC_KEYS)).min(1).max(3),
+  /** A dotted path in this config, or null for a criterion that reads no threshold. */
+  thresholdKey: z.string().regex(/^[a-z][A-Za-z]*\.[a-z][A-Za-z]*$/u).max(80).nullable(),
+  /** What passing this criterion asserts about the edition, in one sentence. */
+  asserts: z.string().min(20).max(300)
+});
+
+export type EditionRubricCriterion = z.infer<typeof EditionRubricCriterionSchema>;
+
+export const EditionRubricSchema = z.object({
+  version: z.literal("edition-rubric/1"),
+  revision: z.number().int().positive(),
+  criteria: z.array(EditionRubricCriterionSchema).min(1).max(40)
+});
+
+export type EditionRubric = z.infer<typeof EditionRubricSchema>;
+
+/**
+ * The config groups a rubric criterion may point into.
+ *
+ * Structural rather than `EditionQualityConfig`, so the schema's own `superRefine` and every
+ * later caller resolve a `thresholdKey` through this one function. Two resolvers would be two
+ * answers about whether a criterion's threshold exists.
+ */
+export interface RubricThresholdSource {
+  quality: Record<string, unknown>;
+  budgets: Record<string, unknown>;
+  article: Record<string, unknown>;
+  stet: Record<string, unknown>;
+  hacek: Record<string, unknown>;
+}
+
+/** The value a rubric `thresholdKey` names, or undefined when it names nothing. */
+export function rubricThreshold(
+  source: RubricThresholdSource,
+  key: string
+): number | boolean | undefined {
+  const [group, field] = key.split(".");
+  const value = group && group in source
+    ? source[group as keyof RubricThresholdSource][field ?? ""]
+    : undefined;
+  return typeof value === "number" || typeof value === "boolean" ? value : undefined;
+}
 
 export const EditionQualityConfigSchema = z.object({
   schemaVersion: z.literal(1),
@@ -88,7 +154,30 @@ export const EditionQualityConfigSchema = z.object({
   hacek: z.object({
     maximumRewriteAttempts: z.literal(1),
     minimumScore: z.number().int().min(0).max(50)
-  })
+  }),
+  rubric: EditionRubricSchema
+}).superRefine((config, ctx) => {
+  const seen = new Set<string>();
+  for (const [index, criterion] of config.rubric.criteria.entries()) {
+    if (seen.has(criterion.code)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["rubric", "criteria", index, "code"],
+        message: `${criterion.code} appears twice; a criterion graded twice is two grades for one code.`
+      });
+    }
+    seen.add(criterion.code);
+    if (criterion.thresholdKey === null) continue;
+    // Checked at load, not at grade time. A criterion pointing at a threshold that does not
+    // exist would silently grade against `undefined` and read as met on every edition.
+    if (rubricThreshold(config, criterion.thresholdKey) === undefined) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["rubric", "criteria", index, "thresholdKey"],
+        message: `${criterion.thresholdKey} resolves to no threshold in this config.`
+      });
+    }
+  }
 });
 
 export type EditionQualityConfig = z.infer<typeof EditionQualityConfigSchema>;

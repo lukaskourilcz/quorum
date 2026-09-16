@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "edition-rubric-receipt/1",
+  "date": "2026-09-14",
+  "rubric": {
+    "version": "edition-rubric/1",
+    "revision": 1
+  },
+  "runs": [
+    {
+      "runId": "e35f1341-18a0-4891-92e0-5afba90b5ab2",
+      "reportRef": "edition/runs/2026-09-14-0b5a173529b53f4b498f0e8464b7a6a5ab2a569066a49ad2e47a2c8e8e06013c.json",
+      "status": "no_edition",
+      "grade": null,
+      "ungraded": "This run ended before the quality gate was reached, so it recorded no metrics to grade."
+    }
+  ],
+  "summary": {
+    "runs": 1,
+    "graded": 0,
+    "ungraded": 1,
+    "passed": 0,
+    "failed": 0,
+    "diverged": 0
+  }
+}

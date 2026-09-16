@@ -62,7 +62,8 @@
     "portfolio:rice": "pnpm --filter @boardlessai/orchestrator portfolio:rice",
     "mma:retire": "pnpm --filter @boardlessai/orchestrator mma:retire",
     "social:activation": "pnpm --filter @boardlessai/orchestrator social:activation",
-    "caught-up:promotion": "pnpm --filter @boardlessai/orchestrator caught-up:promotion"
+    "caught-up:promotion": "pnpm --filter @boardlessai/orchestrator caught-up:promotion",
+    "edition:rubric": "pnpm --filter @boardlessai/orchestrator edition:rubric"
   },
   "devDependencies": {
     "vercel": "58.4.4"

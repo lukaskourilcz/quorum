@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "edition-rubric-receipt/1",
+  "date": "2026-08-03",
+  "rubric": {
+    "version": "edition-rubric/1",
+    "revision": 1
+  },
+  "runs": [
+    {
+      "runId": "f0d88313-86fa-4a7c-be37-9b8d85bb90f8",
+      "reportRef": "edition/runs/2026-08-03-e56faf72c183771ebeae2e2ff3ba170f8c8aa55e80d5bedffd8775e5148b9ddd.json",
+      "status": "no_edition",
+      "grade": null,
+      "ungraded": "This run ended before the quality gate was reached, so it recorded no metrics to grade."
+    },
+    {
+      "runId": "9de5332d-250d-4311-99f4-a178178a2ff6",
+      "reportRef": "edition/runs/2026-08-03-fb3c9b691e99c9f3eb193b3d234b6c8d09df5170686c1d87b83acfe04fa913b3.json",
+      "status": "edition",
+      "grade": {
+        "criteria": [
+          {
+            "code": "minimum_successful_sources",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_candidate_items",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_cited_sources",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_signal_strength",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_single_source_share",
+            "category": "independence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_source_diversity",
+            "category": "independence",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_duplicate_story_similarity",
+            "category": "originality",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_repeated_topic_frequency",
+            "category": "originality",
+            "outcome": "met"
+          },
+          {
+            "code": "primary_source_required",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_unsupported_watchlist_items",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "hard_cost_unavailable",
+            "category": "cost",
+            "outcome": "met"
+          },
+          {
+            "code": "edition_production_budget",
+            "category": "cost",
+            "outcome": "met"
+          },
+          {
+            "code": "warning_cost_per_run",
+            "category": "cost",
+            "outcome": "met"
+          },
+          {
+            "code": "hard_cost_per_run",
+            "category": "cost",
+            "outcome": "met"
+          }
+        ],
+        "recorded": [],
+        "regraded": [],
+        "divergence": []
+      },
+      "ungraded": null
+    }
+  ],
+  "summary": {
+    "runs": 2,
+    "graded": 1,
+    "ungraded": 1,
+    "passed": 1,
+    "failed": 0,
+    "diverged": 0
+  }
+}

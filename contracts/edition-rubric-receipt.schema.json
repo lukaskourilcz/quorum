@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "edition-rubric-receipt/1"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+    },
+    "rubric": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "const": "edition-rubric/1"
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "version",
+        "revision"
+      ],
+      "additionalProperties": {}
+    },
+    "runs": {
+      "minItems": 1,
+      "maxItems": 24,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "reportRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "edition",
+              "no_edition",
+              "failed"
+            ]
+          },
+          "grade": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "criteria": {
+                    "minItems": 1,
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "maxLength": 60,
+                          "pattern": "^[a-z][a-z0-9_]*$"
+                        },
+                        "category": {
+                          "type": "string",
+                          "enum": [
+                            "evidence",
+                            "independence",
+                            "originality",
+                            "cost"
+                          ]
+                        },
+                        "outcome": {
+                          "type": "string",
+                          "enum": [
+                            "met",
+                            "failed"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "category",
+                        "outcome"
+                      ],
+                      "additionalProperties": {}
+                    }
+                  },
+                  "recorded": {
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 60
+                    }
+                  },
+                  "regraded": {
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 60
+                    }
+                  },
+                  "divergence": {
+                    "maxItems": 40,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 60
+                    }
+                  }
+                },
+                "required": [
+                  "criteria",
+                  "recorded",
+                  "regraded",
+                  "divergence"
+                ],
+                "additionalProperties": {}
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ungraded": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 10,
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "runId",
+          "reportRef",
+          "status",
+          "grade",
+          "ungraded"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "runs": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "graded": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "ungraded": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "passed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "failed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "diverged": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "runs",
+        "graded",
+        "ungraded",
+        "passed",
+        "failed",
+        "diverged"
+      ],
+      "additionalProperties": {}
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "date",
+    "rubric",
+    "runs",
+    "summary"
+  ],
+  "additionalProperties": {},
+  "$id": "https://boardless.ai/contracts/edition-rubric-receipt.schema.json"
+}

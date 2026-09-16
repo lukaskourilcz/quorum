@@ -52,7 +52,8 @@
     "portfolio:rice": "tsx src/portfolio/rice-cli.ts",
     "mma:retire": "tsx src/mma-files/retire-cli.ts",
     "social:activation": "tsx src/social/activation-cli.ts",
-    "caught-up:promotion": "tsx src/social/promotion-cli.ts"
+    "caught-up:promotion": "tsx src/social/promotion-cli.ts",
+    "edition:rubric": "tsx src/edition/rubric-cli.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.113.0",

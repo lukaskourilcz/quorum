@@ -85,6 +85,20 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
   storage shape or neighboring package. BOOKSOFHISTORY and Tehdejší svět are mutually isolated;
   Personal Growth cannot enumerate the portfolio; Kvórum cannot export political content; and
   GoVIRAL supplies only bounded expiring intelligence, never final copy.
+- **Every edition is regraded, and the regrade costs nothing.** The fourteen violation codes in
+  `orchestrator/src/edition/quality.ts` are written down as a versioned rubric in
+  `config/edition-quality.json`, and `orchestrator/src/edition/rubric.ts` regrades every committed
+  run report under `state/edition/runs/` against it into one receipt per date under
+  `state/quality/edition-rubric/`. The rubric holds no threshold and no grading logic of its own:
+  `thresholdKey` points into the same config the gate reads and the regrade calls
+  `evaluateEditionQuality`, because a rubric that re-derived the comparisons would be a second
+  gate. `pnpm edition:rubric -- --check` is a CI step and cannot become a judged eval: the job
+  holds no provider credential and `orchestrator/tests/setup/provider-env.ts` deletes both keys
+  before every test by design. Three things the receipt does deliberately, each explained in
+  `orchestrator/src/contracts/edition-rubric-receipt.ts`: it carries no `generatedAt`, because the
+  gate compares committed bytes; it grades no `action`, because a report records a run's final
+  regeneration count rather than the one each gate call saw; and a run that ended before the gate
+  is `ungraded` with a reason rather than a pass.
 - **The monetization catalog is reference material, not a queue.** Its v2 posture is
   `information-only`, `executionEnabled` is false and every runtime method remains locked even
   when a readiness KPI is met. Catalog reads must never create a proposal, experiment, agenda,
@@ -121,7 +135,8 @@ Council runs via API in `orchestrator/`; you are the human-invoked engineer.
 `pnpm test` · `pnpm build` · `pnpm docs:check` ·
 `pnpm cycle -- --phase <registered-phase> [--dry]` ·
 `pnpm -C site dev|build|typecheck|test:e2e` ·
-`pnpm datasets:append -- --dataset <name> --current <file> --entries <file>`
+`pnpm datasets:append -- --dataset <name> --current <file> --entries <file>` ·
+`pnpm edition:rubric [-- --check]`
 
 ## Magazine datasets
 

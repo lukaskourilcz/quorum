@@ -1,0 +1,184 @@
+{
+  "schemaVersion": "edition-rubric-receipt/1",
+  "date": "2026-09-11",
+  "rubric": {
+    "version": "edition-rubric/1",
+    "revision": 1
+  },
+  "runs": [
+    {
+      "runId": "5d5f75c9-302e-4ca8-b5f6-f5394cffba14",
+      "reportRef": "edition/runs/2026-09-11-0f317e6be0b037ca41b8f39c9b569cbb228f088388b084f97e803134cd87b67b.json",
+      "status": "edition",
+      "grade": {
+        "criteria": [
+          {
+            "code": "minimum_successful_sources",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_candidate_items",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_cited_sources",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_signal_strength",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_single_source_share",
+            "category": "independence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_source_diversity",
+            "category": "independence",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_duplicate_story_similarity",
+            "category": "originality",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_repeated_topic_frequency",
+            "category": "originality",
+            "outcome": "met"
+          },
+          {
+            "code": "primary_source_required",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_unsupported_watchlist_items",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "hard_cost_unavailable",
+            "category": "cost",
+            "outcome": "met"
+          },
+          {
+            "code": "edition_production_budget",
+            "category": "cost",
+            "outcome": "met"
+          },
+          {
+            "code": "warning_cost_per_run",
+            "category": "cost",
+            "outcome": "met"
+          },
+          {
+            "code": "hard_cost_per_run",
+            "category": "cost",
+            "outcome": "met"
+          }
+        ],
+        "recorded": [],
+        "regraded": [],
+        "divergence": []
+      },
+      "ungraded": null
+    },
+    {
+      "runId": "527c4c20-8ee2-4609-8958-0686dc9e821b",
+      "reportRef": "edition/runs/2026-09-11-7c0ec23c2b6e61a91e7ada3380cfd3565ac63fb1d7236b03ce5b91f942c97ef8.json",
+      "status": "edition",
+      "grade": {
+        "criteria": [
+          {
+            "code": "minimum_successful_sources",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_candidate_items",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_cited_sources",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_signal_strength",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_single_source_share",
+            "category": "independence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_source_diversity",
+            "category": "independence",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_duplicate_story_similarity",
+            "category": "originality",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_repeated_topic_frequency",
+            "category": "originality",
+            "outcome": "met"
+          },
+          {
+            "code": "primary_source_required",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_unsupported_watchlist_items",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "hard_cost_unavailable",
+            "category": "cost",
+            "outcome": "met"
+          },
+          {
+            "code": "edition_production_budget",
+            "category": "cost",
+            "outcome": "met"
+          },
+          {
+            "code": "warning_cost_per_run",
+            "category": "cost",
+            "outcome": "met"
+          },
+          {
+            "code": "hard_cost_per_run",
+            "category": "cost",
+            "outcome": "met"
+          }
+        ],
+        "recorded": [],
+        "regraded": [],
+        "divergence": []
+      },
+      "ungraded": null
+    }
+  ],
+  "summary": {
+    "runs": 2,
+    "graded": 2,
+    "ungraded": 0,
+    "passed": 2,
+    "failed": 0,
+    "diverged": 0
+  }
+}

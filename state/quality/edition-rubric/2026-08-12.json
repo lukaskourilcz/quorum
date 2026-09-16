@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "edition-rubric-receipt/1",
+  "date": "2026-08-12",
+  "rubric": {
+    "version": "edition-rubric/1",
+    "revision": 1
+  },
+  "runs": [
+    {
+      "runId": "95c920c0-adb6-4abb-83be-bbd0d4ec7306",
+      "reportRef": "edition/runs/2026-08-12-336d8fec3a4ecd75ed2a0557f415e0676c953261106b453a5bf9729534b03827.json",
+      "status": "edition",
+      "grade": {
+        "criteria": [
+          {
+            "code": "minimum_successful_sources",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_candidate_items",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_cited_sources",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_signal_strength",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_single_source_share",
+            "category": "independence",
+            "outcome": "met"
+          },
+          {
+            "code": "minimum_source_diversity",
+            "category": "independence",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_duplicate_story_similarity",
+            "category": "originality",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_repeated_topic_frequency",
+            "category": "originality",
+            "outcome": "met"
+          },
+          {
+            "code": "primary_source_required",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "maximum_unsupported_watchlist_items",
+            "category": "evidence",
+            "outcome": "met"
+          },
+          {
+            "code": "hard_cost_unavailable",
+            "category": "cost",
+            "outcome": "met"
+          },
+          {
+            "code": "edition_production_budget",
+            "category": "cost",
+            "outcome": "met"
+          },
+          {
+            "code": "warning_cost_per_run",
+            "category": "cost",
+            "outcome": "met"
+          },
+          {
+            "code": "hard_cost_per_run",
+            "category": "cost",
+            "outcome": "met"
+          }
+        ],
+        "recorded": [],
+        "regraded": [],
+        "divergence": []
+      },
+      "ungraded": null
+    }
+  ],
+  "summary": {
+    "runs": 1,
+    "graded": 1,
+    "ungraded": 0,
+    "passed": 1,
+    "failed": 0,
+    "diverged": 0
+  }
+}

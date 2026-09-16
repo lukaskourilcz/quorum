@@ -71,6 +71,15 @@ jobs:
       - name: Check hook conformance vectors
         run: pnpm hooks:vectors -- --check
 
+      # Every delivered edition regraded against the committed rubric, at $0: the run reports and
+      # the thresholds are already on disk and the regrade is a pure function of the two. A stale
+      # or missing receipt means the rubric, a threshold or the evaluator moved without the record
+      # following, and a divergence means a run's own recorded verdict and the rubric disagree.
+      # This cannot run a judge model: the CI job holds no provider credential and
+      # orchestrator/tests/setup/provider-env.ts deletes both keys before every test by design.
+      - name: Check edition rubric receipts
+        run: pnpm edition:rubric -- --check
+
       - name: Typecheck
         run: pnpm typecheck
 
