@@ -126,6 +126,13 @@ the real files. Composition, line breaks and type size are honest; the letterfor
 - No invented statistics, no fake interface elements, no fabricated quotes, no engagement
   ornament. The one family built around a number, Figure, says in its own spec that the slot
   takes an honest figure from the article or the family is not used.
+- **Slide 2 is a second cover.** Instagram re-serves a carousel to people who saw it and did
+  not finish it, starting from the first slide they have not seen — Socialinsider's carousel
+  study is the finding — so the second slide is met cold by a large share of readers, without
+  the cover's promise above it. Recipe authors write slide 2 to stand on its own: a line that
+  opens the argument, not one that continues a sentence the cover started. Guidance for the
+  copy only; no composer changes for it, because a stored recipe must keep rendering exactly as
+  it did.
 
 ## Golden images
 

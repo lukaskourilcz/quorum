@@ -172,9 +172,31 @@ export const RawLibrarySchema = z.array(RawHookSchema);
  */
 export const CITATION_CONFIDENCES = ["verified", "recalled", "practitioner", "mechanism-only", "measured"] as const;
 
+/**
+ * The ten cover-hook families, the coarse vocabulary a cover line is planned in.
+ *
+ * An archetype names a mechanism; a family names the shape the reader meets on slide one. Every
+ * archetype maps to exactly one family, and the table is in `docs/hooks/04-schema-and-gates.md`
+ * so a new archetype is placed on purpose rather than left unclassified.
+ */
+export const HOOK_FAMILIES = [
+  "curiosity",
+  "contrarian",
+  "listicle",
+  "data",
+  "story",
+  "question",
+  "problem",
+  "promise",
+  "negative",
+  "authority"
+] as const;
+export type HookFamily = (typeof HOOK_FAMILIES)[number];
+
 export const HookResearchSchema = z.object({
   id: z.string().min(1),
   archetype: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  family: z.enum(HOOK_FAMILIES).optional(),
   mechanism: z.string().min(1),
   citation: z.string().min(1),
   citationConfidence: z.enum(CITATION_CONFIDENCES),

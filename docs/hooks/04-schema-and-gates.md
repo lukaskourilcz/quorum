@@ -22,6 +22,28 @@
 - `cooldownDays` is authored intensity metadata. Social assignment enforces it per channel as
   `max(2 × cooldownDays, 14)`; exhaustion records `no-hook` rather than relaxing the rule.
 
+### Research entry: `archetype` and `family`
+
+Every hook has a parallel entry in `<surface>.research.json`. Its `archetype` names the
+mechanism the line runs on (one of the thirty below); its optional `family` names which of the
+ten cover-hook families the line belongs to — the coarse vocabulary a slide-one line is planned
+and rotated in. `HOOK_FAMILIES` in `studio/src/hooks/schema.ts` is the enum and this table is the
+mapping. Every archetype maps to exactly one family; a new archetype is placed here before its
+first hook ships, so nothing is left unclassified.
+
+| Family | Archetypes | Why |
+|---|---|---|
+| `curiosity` | `anticipation`, `open-loop`, `omission`, `partial-knowledge` | An open loop, a named unknown, an unresolved event or a gap the reader half-knows they have. |
+| `contrarian` | `contrast`, `plain-speech` | A named opposition, or the desk set against the commentary and the timeline the reader already avoids. |
+| `listicle` | `strategy` | A counted, stepwise move: kill three options, four branches and one merges. |
+| `data` | `precision`, `scale`, `stat-gap` | A specific figure, a score the desk assigns, or an honest gate-derived number. |
+| `story` | `resolution`, `orientation` | A settled past — what happened, one career from the record up. |
+| `question` | `self-test`, `stakes-probe`, `explain-gap`, `look-here` | A wager, an intuition to commit, an "explain it", a direct challenge. |
+| `problem` | `time-cost`, `consequence` | The price the reader pays for the alternative, or what real work relies on. |
+| `promise` | `payoff-promise`, `filter`, `habit`, `reassurance`, `progress`, `durability` | A certain payoff: the fact without the noise, the cadence, the durable why, the practice that pays. |
+| `negative` | `honesty`, `loss-frame`, `trap-exists` | A stated no — no tips, what is not known, what you lose, the trap in the lineup. |
+| `authority` | `verifiable`, `identity`, `social-proof` | Standing: a checkable record, what seniors just know, written in Czech not translated, a third party's endorsement. |
+
 ## Tier A predicate semantics
 
 | Predicate | Meaning | Licenses e.g. |
