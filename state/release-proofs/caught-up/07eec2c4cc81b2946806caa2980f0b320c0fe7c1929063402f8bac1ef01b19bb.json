@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-289958d7b63960dc",
+  "venture": "caught-up",
+  "packageHash": "07eec2c4cc81b2946806caa2980f0b320c0fe7c1929063402f8bac1ef01b19bb",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "4450c9f6fc12246421106939c90819f23df584c0",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 4450c9f6fc12246421106939c90819f23df584c0 is readable",
+      "checkedAt": "2026-09-16T07:08:07.087Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-09-16T07:08:07.087Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-09-16T07:08:07.087Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-09-13-gpt6-astra-autonomie-rubygems-amodei?boardless_verify=07eec2c4cc81-1789542487087",
+      "checkedAt": "2026-09-16T07:08:07.087Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-09-13-gpt6-astra-autonomie-rubygems-amodei match",
+      "checkedAt": "2026-09-16T07:08:07.087Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 07eec2c4cc81b2946806caa2980f0b320c0fe7c1929063402f8bac1ef01b19bb",
+      "checkedAt": "2026-09-16T07:08:07.087Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-09-13-gpt6-astra-autonomie-rubygems-amodei/hero.webp?boardless_verify=07eec2c4cc81-1789542487087",
+      "checkedAt": "2026-09-16T07:08:07.087Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-09-16T07:08:07.087Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Christina Morillo · Pexels License",
+      "checkedAt": "2026-09-16T07:08:07.087Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-09-16T07:07:04.979Z",
+  "completedAt": "2026-09-16T07:08:07.747Z"
+}

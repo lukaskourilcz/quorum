@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-13",
+  "packageHash": "07eec2c4cc81b2946806caa2980f0b320c0fe7c1929063402f8bac1ef01b19bb",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "4450c9f6fc12246421106939c90819f23df584c0",
+  "deliveredAt": "2026-09-16T07:08:08.802Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-13-gpt6-astra-autonomie-rubygems-amodei",
+  "tags": [
+    "umela-inteligence",
+    "openai",
+    "anthropic",
+    "bezpecnost-ai",
+    "autonomni-agenti",
+    "regulace"
+  ]
+}
