@@ -1,8 +1,9 @@
 # Handoff — issues #534 to #554
 
 Written at the end of the session of 2026-09-16. Branch: `claude/elegant-cori-h9cdgb`.
-Eight of the twenty-one issues were implemented; the rest were not started and
-are listed below with what is already known about them.
+Ten of the twenty-one issues were implemented, #543 has its contract and nothing
+that consumes it, and the rest were not started and are listed below with what is
+already known about them.
 
 ## What landed
 
@@ -12,12 +13,18 @@ are listed below with what is already known about them.
 | `87e773c` | #537 | Per-room and per-desk caps, an 80% INBOX notice, a read-only office |
 | `ee801cb` | #548, #550, #551 | GoVIRAL signal scoring, weekly brief skeleton, RICE-rated play library |
 | `ba79dd7` | #539, #552, #553, #554 | Portfolio RICE, DNESKAi practical items, promotion recipe, event candidates |
+| `ef1936b`, `7a875a4` | #546 | Capacity charged per publishing language; alphabet coverage derived for all 13 families |
 
 ## Validation
 
 On the committed tree: `pnpm -C studio build` 0, `pnpm typecheck` 0,
 `pnpm lint` 0, `pnpm test` 0 — **3,926 tests** (studio 225, orchestrator 2,865,
 site 836) — `pnpm agents:validate` 0, `pnpm docs:check` 0.
+
+Re-run after #546: the same six gates at 0, plus `pnpm studio:golden:check` 0 —
+**4,017 tests** (studio 316, orchestrator 2,865, site 836). The 30 families still
+match the committed golden manifest, so nothing in the language work changed a
+rendered byte.
 
 `docs:check` was **failing before this session started** (`docs/ECOSYSTEM.md
 operating truth is stale`). `pnpm docs:refresh` was run and the regenerated file
@@ -37,9 +44,9 @@ No new host, no new paid dependency, no posting path. The `$50` all-in cap, the
 in the registry, and every host the new event collector contacts is registered in
 `config/network-allowlist.json`.
 
-## Not started — 13 issues
+## Not started — 11 issues
 
-#534, #535, #536, #538, #540, #541, #543, #544, #545, #546, #547, #549.
+#534, #535, #536, #538, #540, #541, #543, #544, #545, #547, #549.
 
 Two of them have partial groundwork already committed, which is the cheapest
 place for the next session to start:
