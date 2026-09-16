@@ -364,6 +364,20 @@
                   "exclusiveMinimum": 0,
                   "maximum": 1
                 },
+                "serviceTier": {
+                  "default": "default",
+                  "type": "string",
+                  "enum": [
+                    "default",
+                    "batch"
+                  ]
+                },
+                "batchDeadlineMinutes": {
+                  "default": 50,
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 60
+                },
                 "packet": {
                   "type": "object",
                   "properties": {
@@ -433,6 +447,8 @@
                 "cadence",
                 "cast",
                 "envelopeUsd",
+                "serviceTier",
+                "batchDeadlineMinutes",
                 "packet"
               ],
               "additionalProperties": {}
