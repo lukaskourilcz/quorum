@@ -1,5 +1,25 @@
 # NEEDED — what the owner has to do
 
+## GoVIRAL signals, batch tier and Design Lab guards · 2026-09-16
+
+Branch `claude/busy-carson-lc5ise` carries nine commits: every GoVIRAL trend signal now has a
+window, a status, a breadth count and a week-over-week label, the brief carries a Haters tactic
+and a reading time, the Monday GoVIRAL room sends its Anthropic seats through the Batches API
+at half price with a 50-minute deadline, the ledger writes one `BUDGET-PACE-<day>` inbox item
+when the day reaches 80 percent of its cap, the Design Lab refuses a deck the platforms would
+refuse at export, seven launch families are pinned to golden images, and all 78 research hooks
+sit in one of ten cover-hook families. Every gate is green on the branch; nothing is merged.
+
+- [ ] **Merge the branch and watch the first Monday GoVIRAL room** — the batch path is tested
+  against a mocked SDK only. On the first real run read `state/INBOX.md` and the room record:
+  a seat skipped with a deadline reason means the 50-minute window is too short for the batch
+  queue that day and `batchDeadlineMinutes` on `gv-brief` should move up (the job limit in
+  `.github/workflows/cycle.yml` is 65 minutes, so 55 is the ceiling). [imp:4] [owner:me] [time:20m] [kind:deploy]
+- [ ] **Run the golden-image test on a second machine** — `pnpm -C studio test` on your own
+  laptop. Three consecutive generations here were byte-identical; a pass elsewhere is the proof
+  that the resvg output does not drift by platform. If it fails, `pnpm -C studio golden:update`
+  regenerates the fixtures and the diff shows the drift. [imp:2] [owner:me] [time:15m] [kind:deploy]
+
 ## Focus and outage · 2026-09-15
 
 The owner set a new scope: DNESKAi, GoVIRAL, the Design Lab, marketingShark, WebDev Signal and
@@ -1055,6 +1075,13 @@ month, while a shelf or stretched day may cost `$0`.
 
 ## Recently finished
 
+- **GoVIRAL, budget pace, batch tier and Design Lab guards landed on one branch**, 2026-09-16
+  (`claude/busy-carson-lc5ise`, 233eed1..d22ce49). Signal vocabulary in
+  `orchestrator/src/sources/goviral-signals.ts`, the pace notice in
+  `orchestrator/src/finance/budget-alert.ts`, the batch path in `orchestrator/src/llm/anthropic.ts`
+  with `serviceTier` and `batchDeadlineMinutes` on the meeting definition, platform limits in
+  `studio/src/platform-limits.ts`, goldens under `studio/tests/fixtures/golden/`, and hook
+  families in `studio/src/hooks/schema.ts`. Owner steps are the two items at the top.
 - **The 2026-08-28 release-gate outage was root-caused and fixed**, same day, on branch
   `claude/venture-launch-review-7l5nkd`. The webdev-signal brand's mint accent failed the
   studio's 4.5:1 contrast floor once the legacy mesh cover composited it over the surface at
