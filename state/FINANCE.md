@@ -12,17 +12,17 @@ company total and never expands the $25.00 model/API share or $1.00 daily model/
 
 <!-- BEGIN GENERATED: read from state/budget/ledger.json. Do not edit by hand. -->
 
-As of 2026-09-16 04:04 UTC.
+As of 2026-09-16 05:06 UTC.
 
 | Metric | Value |
 | --- | ---: |
 | Recognized revenue | unavailable |
 | Refunds | unavailable |
 | Payment fees | unavailable |
-| Text and image API spend | $18.20 |
+| Text and image API spend | $18.24 |
 | Treasury spend | $0.00 |
 | Other verified operating cost | $0.00 |
-| Total verified operating cost | $18.20 |
+| Total verified operating cost | $18.24 |
 | Gross profit | unavailable |
 
 By project:
@@ -32,7 +32,7 @@ By project:
 | DNESKAi (`caught-up`) | $8.88 |
 | Company-wide | $4.09 |
 | MMA Files | $2.54 |
-| marketingShark | $1.05 |
+| marketingShark | $1.10 |
 | Titty Tuesdays | $0.83 |
 | FightAIQ | $0.67 |
 | Tehdejší svět | $0.06 |
