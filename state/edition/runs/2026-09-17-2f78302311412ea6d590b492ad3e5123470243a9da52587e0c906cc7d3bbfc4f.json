@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "runId": "80087edd-a3fa-42e0-8b80-1c831f338c17",
+  "date": "2026-09-17",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-09-17T07:00:59.290Z",
+  "completedAt": "2026-09-17T07:00:59.290Z",
+  "stages": [],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [],
+  "packageStatus": "no_edition",
+  "warnings": [
+    "budget_exhausted"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage"
+    ]
+  }
+}

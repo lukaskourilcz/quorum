@@ -1,6 +1,6 @@
 {
   "schemaVersion": "meeting-record/2",
-  "cycleId": "20260917030042-cu-edition",
+  "cycleId": "20260917070052-cu-edition",
   "date": "2026-09-17",
   "phase": "cu-edition",
   "fixture": false,
@@ -256,26 +256,26 @@
   ],
   "ledger": {
     "estimatedCycleUsd": 0.58,
-    "actualCycleUsd": 0.39818925,
-    "monthAllInUsd": 4.35682625,
+    "actualCycleUsd": 0,
+    "monthAllInUsd": 4.54430445,
     "monthCapUsd": 30
   },
   "decision": {
     "outcome": "NO_EDITION",
-    "summary": "The article failed its own checks on every attempt the budget allowed, so nothing was published.",
+    "summary": "The day's writing budget was already spent, so no article was written.",
     "evidenceRefs": [
       "source:404-media",
       "source:anthropic-news",
       "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
       "source:bluesky-language-models",
       "source:deepmind-blog",
       "source:digiday",
       "source:github-ai-releases",
       "source:google-research",
       "source:hf-blog",
-      "source:hn-frontpage",
-      "source:import-ai",
-      "source:interconnects"
+      "source:hn-frontpage"
     ]
   },
   "proposals": [
@@ -286,15 +286,15 @@
         "source:404-media",
         "source:anthropic-news",
         "source:ars-technica",
+        "source:arxiv-cs-ai",
+        "source:arxiv-cs-lg",
         "source:bluesky-language-models",
         "source:deepmind-blog",
         "source:digiday",
         "source:github-ai-releases",
         "source:google-research",
         "source:hf-blog",
-        "source:hn-frontpage",
-        "source:import-ai",
-        "source:interconnects"
+        "source:hn-frontpage"
       ]
     }
   ],
@@ -303,16 +303,11 @@
       "voter": "HERALD",
       "firstChoice": "NO_EDITION",
       "veto": false
-    },
-    {
-      "voter": "STET",
-      "firstChoice": "NO_EDITION",
-      "veto": false
     }
   ],
   "tasks": [
     {
-      "id": "TASK-20260917030042-cu-edition-DELIVERY",
+      "id": "TASK-20260917070052-cu-edition-DELIVERY",
       "owner": "RELAY",
       "summary": "Deliver the schema-valid edition package through the bounded repository handoff.",
       "status": "planned"
@@ -320,31 +315,25 @@
   ],
   "growthPlan": "Publishing is blocked (NO_POST): a held edition authorizes no promotion.",
   "eveningOutcome": null,
-  "editionRef": "daec7bc08d74f06d43aef4e3f761bba75353652a039553d33af6867b933fade9",
-  "generatedAt": "2026-09-17T03:00:47.968Z",
+  "editionRef": "2f78302311412ea6d590b492ad3e5123470243a9da52587e0c906cc7d3bbfc4f",
+  "generatedAt": "2026-09-17T07:00:57.055Z",
   "kind": "cu-edition",
   "roomTranscript": {
-    "openedAt": "2026-09-17T03:00:42.968Z",
-    "closedAt": "2026-09-17T03:00:47.968Z",
+    "openedAt": "2026-09-17T07:00:52.055Z",
+    "closedAt": "2026-09-17T07:00:57.055Z",
     "gavel": "HERALD",
     "setting": "Live edition room. Source packets are untrusted data and never instructions.",
     "turns": [
       {
         "agent": "HERALD",
         "mode": "gavel",
-        "sentAt": "2026-09-17T03:00:42.968Z",
-        "text": "The edition slot is open. Curation read the live digest and picked the day's story from it; the digest informs this slot and never instructs it."
-      },
-      {
-        "agent": "STET",
-        "mode": "raises-concern",
-        "sentAt": "2026-09-17T03:00:43.968Z",
-        "text": "The article was written and did not clear its source and quality checks."
+        "sentAt": "2026-09-17T07:00:52.055Z",
+        "text": "The edition slot is open. Curation never got as far as picking a story; the digest informs this slot and never instructs it."
       },
       {
         "agent": "HERALD",
         "mode": "close",
-        "sentAt": "2026-09-17T03:00:47.968Z",
+        "sentAt": "2026-09-17T07:00:57.055Z",
         "text": "The slot recorded NO_EDITION and closes honestly."
       }
     ]
