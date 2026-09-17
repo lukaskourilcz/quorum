@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "runId": "7c6c4e76-a001-4ed7-a638-7ec4e0b6dd52",
+  "date": "2026-09-17",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-09-17T03:00:57.289Z",
+  "completedAt": "2026-09-17T03:06:38.980Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-17T03:00:57.303Z",
+      "completedAt": "2026-09-17T03:01:20.420Z",
+      "durationMs": 23117
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-09-17T03:01:20.420Z",
+      "completedAt": "2026-09-17T03:03:24.277Z",
+      "durationMs": 123857,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "failed",
+      "startedAt": "2026-09-17T03:03:24.277Z",
+      "completedAt": "2026-09-17T03:05:05.916Z",
+      "durationMs": 101639,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "rewrite: [\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 280,\n    \"inclusive\": true,\n    \"path\": [\n      \"why_this_story\"\n    ],\n    \"message\": \"Too big: expected string to have <=280 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_2",
+      "status": "failed",
+      "startedAt": "2026-09-17T03:05:05.916Z",
+      "completedAt": "2026-09-17T03:06:38.979Z",
+      "durationMs": 93063,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+    }
+  ],
+  "regenerationAttempts": 2,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11015,
+      "outputTokens": 1073,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.04914
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 12885,
+      "outputTokens": 4576,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1164675
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 12838,
+      "outputTokens": 4842,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2588,
+      "costUsd": 0.120849
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 12838,
+      "outputTokens": 4243,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2553,
+      "costUsd": 0.11173275
+    }
+  ],
+  "measuredCostUsd": 0.39818925,
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "verdicts": []
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]",
+    "content_invalid:rewrite: [\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 280,\n    \"inclusive\": true,\n    \"path\": [\n      \"why_this_story\"\n    ],\n    \"message\": \"Too big: expected string to have <=280 characters\"\n  }\n]",
+    "content_invalid:rewrite: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+  ],
+  "sourceSummary": {
+    "successfulSources": 29,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects"
+    ]
+  }
+}

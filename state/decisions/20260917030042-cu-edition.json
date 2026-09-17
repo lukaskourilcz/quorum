@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260917030042-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "NO_EDITION",
+  "summary": "The article failed its own checks on every attempt the budget allowed, so nothing was published.",
+  "evidenceRefs": [
+    "source:404-media",
+    "source:anthropic-news",
+    "source:ars-technica",
+    "source:bluesky-language-models",
+    "source:deepmind-blog",
+    "source:digiday",
+    "source:github-ai-releases",
+    "source:google-research",
+    "source:hf-blog",
+    "source:hn-frontpage",
+    "source:import-ai",
+    "source:interconnects"
+  ],
+  "editionRef": "daec7bc08d74f06d43aef4e3f761bba75353652a039553d33af6867b933fade9",
+  "generatedAt": "2026-09-17T03:00:47.968Z"
+}
