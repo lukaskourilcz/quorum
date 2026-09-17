@@ -100,7 +100,11 @@ the day, and the run receipt under `state/ventures/webdev-signal/runs/` names wh
 - [ ] **Decide whether LinkedIn is a channel this repository serves** — #542 also asks for a LinkedIn PDF export gate. Nothing here writes a PDF, no venture envelope names LinkedIn, `config/network-allowlist.json` has no LinkedIn host, and the renderer emits PNG only, so the gate's "flattened video" clause has nothing to apply to. Building it means a new dependency and a channel decision, neither of which an agent may take. #552 now waits on the same decision from the other side: the DNESKAi repost deck is built and held, and `state/INBOX.md` carries `CAUGHT-UP-LINKEDIN-CHANNEL` with the exact scope each answer would approve. [imp:2] [owner:me] [time:15m] [kind:decision]
 - [ ] **Sign off the layouts you have actually looked at** — #543 shipped the review registry in `studio/src/family-review.ts`, and every one of the thirty records says `signOff: null`, because no per-family owner review exists and an agent may not invent one. Open the specimen pages in `docs/design-lab/families/`, and for each family you accept add `signOff: { reviewer: "owner", reviewedAt, note }` to its entry in `RECORDED`. When enough are signed, `requireSignOff` is the one-line switch that makes a sign-off a condition of dealing a family. [imp:3] [owner:me] [time:45m] [kind:content]
 - [ ] **Decide whether the dark skins' quiet accents get fixed or the APCA floor stays at 40** — #543 measured every text and ground pair in the library: the worst reads Lc 41.2 (Door Money's `#ff4d3d` on `#24191c`, which clears WCAG at 5.18:1), 14% sit below APCA's published body-text level of Lc 60 and 30% below Lc 75. The floor is set at the level the library actually clears, so it refuses anything worse and admits everything shipped. Raising it means changing accent or surface tokens in `studio/src/library.ts` for the dark brands; leaving it means the gate catches regressions and not the existing gap. [imp:2] [owner:me] [time:20m] [kind:decision]
+- [x] **The APCA licence precondition is discharged — there is no dependency to license** — #543 named `apca-w3` as the package to read a licence for before using it. It is not installed and appears in no `package.json`, so there was nothing to read. `studio/src/contrast-apca.ts` implements the arithmetic in this repository from the published APCA-W3 0.1.9 (`0.98G-4g`) constant set, and its own header states the two consequences rather than leaving them assumed: the file is not Myndex's code and carries none of its licence, and it is not an APCA conformance implementation, so nothing here may be published as a conformance claim. Recorded because the answer lived only in that source comment and was re-derived every time the question came up. [imp:1] [owner:ai] [time:0m] [kind:legal]
 - [ ] **Decide whether CI gets a second runner OS for the golden renders** — #543 asks for a cross-platform reproducibility run. `pnpm studio:golden:check` proves byte-identity on any machine that runs it, and `.github/workflows/ci.yml` runs it through `pnpm test` on `ubuntu-latest` only. Adding `macos-latest` or `windows-latest` to that job roughly triples its runner minutes for a fact resvg's `loadSystemFonts: false` already engineers, which is a cost call rather than an engineering one. [imp:1] [owner:me] [time:10m] [kind:decision]
+- [x] **Czech and Cyrillic coverage is proved per face, and capacity is charged per language** — #546, done 2026-09-17 in `ef1936b` and `7a875a4`. Coverage is derived from each brand's own publishing locales instead of a hardcoded list for two families, so all thirteen families are checked, and each face is checked twice: against the font's own `cmap` and against the committed width table. The second check is the one that was missing. A character the rasteriser can draw but the width table does not carry is charged the fallback average and measures at a flat width, so it passes a cmap-only test and still overflows its slot. The capacity arithmetic is now charged the language a slot is set in. The thirty golden renders still match, so nothing rendered moved. Nothing to switch on, no new dependency and no cost. [imp:2] [owner:ai] [time:0m] [kind:content]
+- [ ] **Decide what a pinned recipe does to a row that already recorded one** — #545 asks for a bulk mode that renders one deck per data row from one recipe. `readRecordedRecipe` in `orchestrator/src/social/deck-style.ts` exists precisely so composition reads what inventory wrote, so a pin that silently overrode a recorded recipe would defeat the reason it is there. The recommendation is skip-and-report: a row carrying its own recorded recipe is left alone and named in the receipt, with override available only behind an explicit flag whose receipt records how many recorded recipes it overrode. Nothing is built either way; your answer is the contract the entry point gets written against. [imp:2] [owner:me] [time:15m] [kind:decision]
+- [ ] **Decide whether a public recipe gallery may show a paused venture's archive** — #547 asks for a gallery of real magazine decks, yearly carousel spec pages and an optional watermarked preview. Seventeen of the 42 recorded recipes under `state/ventures/carousel-studio/recipes/` are MMA Files', and `operations-2026-09a` preserves that venture's archive without authorising a new public page for it. So the gallery is DNESKAi-only at 25 recipes, or it waits for MMA Files to resume, or you say a paused venture's archive may be shown. The spec pages and the watermark are independent of all three and need no answer. [imp:2] [owner:me] [time:15m] [kind:decision]
 
 ## Portfolio ranking · 2026-09-16
 
@@ -111,6 +115,7 @@ read `unavailable` because the two owner inputs are absent.
 
 - [ ] **Enter Reach and Impact per venture** — `config/portfolio-rice.json` has one row per venture with `reach: null` and `impact: null`. Reach is a per-quarter audience figure; there is none in this repository while `METRICS_INGESTION_ENABLED` is false, so it is yours or it stays absent. Impact is a step on 0.25 / 0.5 / 1 / 2 / 3. Nothing scores until both are set on a row. [imp:2] [owner:me] [time:30m] [kind:decision]
 - [ ] **Decide whether the ranking may ever gate a room** — `state/decisions/2026-09-16-portfolio-rice.md` is unsigned, which is what holds the ranking to information only. Countersigning it plus setting `posture: "owner-enforced"` and `rankingEnforced: true` is what the mechanism waits for; even then a further change to `ROOM_DEGRADATION_ORDER` would be needed, because that hand-written order is still the only list the daily envelope plan reads. [imp:2] [owner:me] [time:15m] [kind:decision]
+- [ ] **Realign that degradation order with the ventures that operate, or record that it stays** — `ROOM_DEGRADATION_ORDER` in `orchestrator/src/portfolio/schedule.ts` lists seven rooms, lowest priority first, and six of them (`dm-growth`, `kv-desk`, `dm-desk`, `ts-desk`, `bh-desk`, `tt-marketing`) belong to five ventures `operations-2026-09a` records as paused. Only `gv-brief` belongs to an operating one. Nothing is overspending — a paused venture's room ends at $0 before any agenda — but the order describes a portfolio that stopped existing on 2026-09-15: the five rooms it sheds first are already free, so the first drop that changes anything takes `gv-brief`, the one operating room on the list, while paused `tt-marketing` sits at the protected end. True whether or not the RICE rows are ever filled in. [imp:2] [owner:me] [time:15m] [kind:decision]
 
 ## Edition rubric eval · 2026-09-16
 
@@ -126,12 +131,15 @@ currently regrade to the verdict they recorded; the other 18 ended before the ga
   does not hold: `orchestrator/tests/setup/provider-env.ts` deletes both provider keys before every
   test, a guard added after a three-day outage caused by exactly that divergence. So it would be a
   budget and a security decision with its own record, and it would not be a per-push gate — a gate
-  that calls a model on every push spends on every push. Nothing is built for it and nothing is
+  that calls a model on every push spends on every push. That record has to name three things the
+  deterministic rubric needed none of: which model judges, the per-run and monthly ceiling, and
+  where the credential lives given that CI may not hold one. Nothing is built for it and nothing is
   waiting on a key. [imp:2] [owner:me] [time:15m] [kind:decision]
 - [ ] **Countersign or leave `edition-rubric-2026-09a` unsigned** —
-  `state/decisions/2026-09-16-edition-rubric-eval.md`. The rubric and its CI step work either way;
-  nothing reads the signature. Signing records that the method is the one you want.
-  [imp:1] [owner:me] [time:10m] [kind:decision]
+  `state/decisions/2026-09-16-edition-rubric-eval.md`, whose status line reads `pending owner
+  countersignature` deliberately rather than by oversight. The rubric decides nothing and its CI
+  step works either way; nothing reads the signature. Signing records that the method is the one
+  you want. [imp:1] [owner:me] [time:10m] [kind:decision]
 
 ## Cost per edition and per decision · 2026-09-16
 
@@ -142,7 +150,28 @@ metered — this company's own arithmetic over its own calls. What Anthropic act
 `unavailable`, and will until the two items below are done.
 
 - [ ] **Create an Anthropic Admin API key** — an `sk-ant-admin…` key from the Console, which only an organization owner can make. `ANTHROPIC_API_KEY` cannot call `/v1/organizations/*`. Put it in `ANTHROPIC_ADMIN_API_KEY` and set `PROVIDER_BILLING_ENABLED=true` beside it; both are required and both are empty in `.env.example`. The key is read-only, never makes a model call and spends nothing from the $25 model share. Until then the billed column stays `unavailable` rather than `$0.00`, which is the honest state, not a defect. [imp:3] [owner:me] [time:15m] [kind:setup]
-- [ ] **Decide where a provider-billed figure gets recorded** — the issue asks for it in `state/treasury/ledger.json`, and `TreasuryEntrySchema` only models request, approval, commitment, payment and release, each needing an `approvalRef`. An agent writing a `payment` row off a billing feed is exactly the thing golden rule 5 forbids. Three ways out: a new non-payment entry kind, a separate reconciliation file, or an INBOX `HUMAN_APPROVAL` item per month. Nothing writes the treasury until you pick one; `state/money/cost-report.json` is the honest surface meanwhile. [imp:2] [owner:me] [time:20m] [kind:decision]
+- [ ] **Decide where a provider-billed figure gets recorded** — the issue asks for it in `state/treasury/ledger.json`, and `TreasuryEntrySchema` only models request, approval, commitment, payment and release, each needing an `approvalRef`. An agent writing a `payment` row off a billing feed is exactly the thing golden rule 5 forbids. Three ways out: a new non-payment entry kind, a separate reconciliation file, or an INBOX `HUMAN_APPROVAL` item per month. Nothing writes the treasury until you pick one; `state/money/cost-report.json` is the honest surface meanwhile. **This also gates #540**, which would remodel the ledger as balanced double-entry postings: that reshape would choose the taxonomy for you, so it must not be started before this answer exists. [imp:2] [owner:me] [time:20m] [kind:decision]
+
+## Office digest and the day's permalinks · 2026-09-17
+
+The daily digest writer had been dead since 2026-08-29 and nothing failed. Its workflow step asked
+for the `night` phase, and `operations-2026-08c` stopped scheduling night on that same date, so the
+condition was unreachable on every scheduled run after it. The newest receipt in
+`state/notify/digest/` is still 2026-08-29: every day between that one and the repair reached the
+public `/results` ledger with no digest behind it, and every `ci-policy` assertion about the writer
+was a substring check against a step nobody ran. It runs on the 06:00 morning now, about the day
+before, reading committed receipts through the existing sanitising boundary with no model call at
+`$0`; the guard resolves the real schedule, so a step waiting on a phase the schedule does not
+produce fails a test instead of going quiet. Each recorded day also has its own statically
+generated URL at `/results/<date>`, in the sitemap.
+
+- [ ] **Decide whether the digest is reposted anywhere, or stays a page** — `state/INBOX.md` carries
+  this as `HUMAN_APPROVAL OFFICE-DIGEST-REPOSTING` with the exact scope each answer would approve;
+  read it there rather than here, so there is one copy of the scope. Nothing is waiting on a key:
+  the pages are public and in the sitemap, so linking a day by hand needs no channel, no credential
+  and no approval. A repost through a channel is the harder half — it would be the first time the
+  office record left this site, and `config/channels.json` holds Threads and Instagram only, both
+  `draft` with `enabledByHumanAt: null`. [imp:2] [owner:me] [time:15m] [kind:decision]
 
 ## Production review · 2026-09-07
 
@@ -163,7 +192,7 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-09-15.
+Updated: 2026-09-17.
 
 ---
 
@@ -456,6 +485,31 @@ Judgement calls. Nothing is blocked on code for any of these.
   `$6.82`, because the daily edition pipeline spends outside the envelopes its rooms declare. Leaving
   every desk uncapped is a legitimate answer; the company limits still bind. [imp:2] [owner:me]
   [time:15m] [kind:decision]
+
+- [ ] **Close #536 as declined, or write the decision record that would open it** — the issue wants
+  non-urgent rooms moved to the Batch API with stable cached prefixes, stacking the two discounts.
+  Half of it already ships and needs nothing: every text call sends `cache_control: { type:
+  "ephemeral" }` on its system block, and each seat's system prompt is byte-identical between runs,
+  which is the condition the cached read rate needs. The Batch half is the part that is refused, and
+  not on engineering grounds. `operations-2026-08c` has each room run and write its own record
+  inside one slot, and a batch reply that arrives an hour later lands outside it. Underneath that
+  sits a budget-integrity hole: `TreasuryEntrySchema` models request, approval, commitment, payment
+  and release, none of which can represent a call that has been paid for and whose output was never
+  collected, so golden rule 5 has no answer for an expired batch. Weigh that against the prize,
+  which is halving two rooms whose declared envelopes are `$0.06` and `$0.05`. Declining is the
+  cheaper answer and the recommendation; opening it needs its own record.
+  [imp:2] [owner:me] [time:15m] [kind:decision]
+
+- [ ] **Decide whether a sponsor media kit is written now or waits for MMA Files** — #541 asks for a
+  kit per magazine (audience, Atom and JSON reach, the sponsor block rules, the cap on placements
+  per edition) and a listing on a newsletter marketplace. Two things sit in front of it.
+  `operations-2026-09a` paused MMA Files, so a kit for it would sell a venture that is not
+  publishing. And the reach half has no source while `METRICS_INGESTION_ENABLED` is false, so a kit
+  written today either quotes no audience figure or quotes one nobody measured. The issue's own
+  research already rules out Paved, whose scheduled ads need 50k subscribers, and leaves
+  Passionfroot, whose publisher fees it could not verify. Nothing here may apply, register or accept
+  terms, and this stays inside the monetization park above until you move it.
+  [imp:2] [owner:me] [time:20m] [kind:decision]
 
 - [ ] **Decide whether to open a Contest Radar social pilot lane** — the Instagram and TikTok slices
   are built, fixture-backed and disabled. Opening one needs a countersigned budget-capacity decision
