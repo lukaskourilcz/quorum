@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-16",
+  "packageHash": "521fa057a26ab8c122de17b5e106fca17bca49667002f122a04563bb1f2a05ec",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "02bb3c412676fc96cf003e8f54efcdb635f5981e",
+  "deliveredAt": "2026-09-17T07:05:44.518Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-16-ai-spam-datova-centra-nepopularita-modely",
+  "tags": [
+    "umela-inteligence",
+    "datova-centra",
+    "regulace",
+    "spam",
+    "hlasove-modely",
+    "verejne-mineni"
+  ]
+}
