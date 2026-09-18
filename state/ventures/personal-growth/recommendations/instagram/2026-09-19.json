@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "personal-growth-instagram-recommendation/1",
+  "recommendationDate": "2026-09-19",
+  "generatedAt": "2026-09-18T21:01:13.916Z",
+  "actionType": "story-sequence",
+  "format": "story",
+  "pillar": "rapovej-denik",
+  "goal": "Promote Audiokniha Rapovej deník (the audiobook) in the owner's own words.",
+  "dueWindow": "2026-09-19",
+  "ownerSourceRefs": [
+    "ventures/personal-growth/publications.json#rapovej-denik-audiokniha"
+  ],
+  "collaborator": "OKRAJ Media s.r.o.",
+  "assetChecklist": [
+    "Cover image: https://okraj.shop/cdn/shop/files/audiokniha-lukas-kouril-rapovej-denik-cover-front.jpg",
+    "Shop page: https://okraj.shop/products/audiokniha-rapovej-denik-namluvil-petr-stn-purmensky",
+    "Free sample: https://okraj.shop/products/audiokniha-rapovej-denik-hip-hop-4-elements-kapitola-z-audioknihy-zdarma-mp3",
+    "One line in the owner's words on why this chapter matters today"
+  ],
+  "distributionChecklist": [
+    "Link sticker to the shop page",
+    "Price only as the shop page shows it",
+    "No claim beyond the recorded facts"
+  ],
+  "storiesSupport": [
+    "Audioknihu namluvil Petr STN Purmenský; dílčí pasáže čtou Petr PEŤANGAMES Esterka a Mikoláš BIGDADDYMIKKY Trkal.",
+    "Sedm hodin poslechu ve 21 kapitolách, od HIP HOP 4 ELEMENTS po Kolumbie, kokain & konec.",
+    "Vydal OKRAJ Media s.r.o.; 349 Kč na okraj.shop.",
+    "Kapitola HIP HOP 4 ELEMENTS je zdarma jako MP3."
+  ],
+  "projectedPersonalRatio": null,
+  "goviralSignalId": null,
+  "activeExperimentId": null,
+  "reason": "Promotion day 1 of the owner's publication rotation: Audiokniha Rapovej deník. The desk suggests the frame; the owner writes every word.",
+  "noPostReason": null,
+  "reel": null,
+  "manualVentureReferenceId": null,
+  "ownerWritesArtifact": true,
+  "publishingAuthorized": false
+}
