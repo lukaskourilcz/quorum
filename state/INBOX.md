@@ -652,3 +652,10 @@ with its full scope, because the scope text is the approval. -->
 - [x] **CAUGHT-UP-DELIVERY-2026-09-11** — Resolved 2026-09-15: this package was a second edition for a date the magazine already held (the 09:00 retry ran while the morning's edition was still queued); it was retired and the delivered receipt restored. Original report: hash_conflict: > aifirst@0.1.0 consume:edition /home/runner/work/_temp/aifirst-delivery-1 > tsx scripts/consume-edition-package.ts /home/runner/work/quorum/quorum/state/edition/outbox/2026-09-11-7c0ec23c2b6e61a91e7ada3380cfd3565ac63fb1d7236b03ce5b91f942c97ef8.json /home/runner/work/_temp/aifirst-delivery-1 [delive.
   RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+- [ ] **DELIVERY-NOT-BUILT-CAUGHT-UP** — delivered but not being served.
+  https://caughtup-ai.vercel.app/data/board/2026-09-18.json answers 404, so the host has not rebuilt since 2026-09-18 landed on main.
+  Nothing is wrong with the package: the commit is on main and its gate was green. This is the
+  build that never ran. An empty commit to the magazine's main triggers one; if that is what it
+  takes twice, the host's git integration is the thing to look at.
+  [imp:5] [owner:me] [time:15m] [kind:deploy]
