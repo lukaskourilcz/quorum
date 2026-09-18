@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "delivery-queue-health/1",
+  "checkedAt": "2026-09-18T22:00:27.686Z",
+  "date": "2026-09-19",
+  "ventures": [
+    {
+      "venture": "mma-files",
+      "waiting": [
+        {
+          "label": "2026-09-08 AM ufc-amanda-ribas",
+          "packageHash": "a8bfb00c5f837ae072f0fa7338d8b9d225f690a41226bef07367099cedee3582",
+          "date": "2026-09-08"
+        }
+      ],
+      "parked": [
+        {
+          "label": "2026-08-30 AM ufc-alex-perez",
+          "packageHash": "8a99a79aa22aa5467700ba32709d422429c952cfd53f7fc08289a83095c1d87a",
+          "date": "2026-08-30",
+          "code": "hash_conflict",
+          "disposition": "retire",
+          "supersededBy": "0120bb5445c80a73fb95e6a1836541d19b07c99d09c591d3573db01c0e4ac698"
+        }
+      ],
+      "oldestWaitingDate": "2026-09-08",
+      "stalledDays": 11,
+      "stalled": true,
+      "neverDrains": []
+    },
+    {
+      "venture": "caught-up",
+      "waiting": [
+        {
+          "label": "2026-09-18 no_edition",
+          "packageHash": "fe6c9e25aef1f3dfaaf771d9690cc4ddac4d6d86ca2271a06c9196e51fd11c55",
+          "date": "2026-09-18"
+        }
+      ],
+      "parked": [],
+      "oldestWaitingDate": "2026-09-18",
+      "stalledDays": 1,
+      "stalled": false,
+      "neverDrains": []
+    }
+  ],
+  "deploys": [
+    {
+      "venture": "caught-up",
+      "url": "https://caughtup-ai.vercel.app/data/board/2026-09-18.json",
+      "expected": "2026-09-18",
+      "status": 200,
+      "live": true
+    },
+    {
+      "venture": "mma-files",
+      "url": "https://mma-files.vercel.app/cs/articles/ufc-amanda-nunes",
+      "expected": "ufc-amanda-nunes",
+      "status": 200,
+      "live": true
+    }
+  ],
+  "needsOwner": true
+}
