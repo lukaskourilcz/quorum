@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-970083297a7d88c7",
+  "venture": "caught-up",
+  "packageHash": "48f58992025927b54184e02354e5de2b3e13482534e0e86f34a7f0f4410652a4",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "4d8d1ecd3b094787ab893cf6ff375c76c8edd72e",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 4d8d1ecd3b094787ab893cf6ff375c76c8edd72e is readable",
+      "checkedAt": "2026-09-19T07:08:12.788Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-09-19T07:08:12.788Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-09-19T07:08:12.788Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-09-19-gemini-hackl-ai-halucinace-vojenska-operace?boardless_verify=48f589920259-1789801692788",
+      "checkedAt": "2026-09-19T07:08:12.788Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-09-19-gemini-hackl-ai-halucinace-vojenska-operace match",
+      "checkedAt": "2026-09-19T07:08:12.788Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 48f58992025927b54184e02354e5de2b3e13482534e0e86f34a7f0f4410652a4",
+      "checkedAt": "2026-09-19T07:08:12.788Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-09-19-gemini-hackl-ai-halucinace-vojenska-operace/hero.webp?boardless_verify=48f589920259-1789801692788",
+      "checkedAt": "2026-09-19T07:08:12.788Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-09-19T07:08:12.788Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Mikhail Nilov · Pexels License",
+      "checkedAt": "2026-09-19T07:08:12.788Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-09-19T07:07:10.428Z",
+  "completedAt": "2026-09-19T07:08:13.597Z"
+}

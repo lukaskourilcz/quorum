@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-19",
+  "packageHash": "48f58992025927b54184e02354e5de2b3e13482534e0e86f34a7f0f4410652a4",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "4d8d1ecd3b094787ab893cf6ff375c76c8edd72e",
+  "deliveredAt": "2026-09-19T07:08:14.658Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-19-gemini-hackl-ai-halucinace-vojenska-operace",
+  "tags": [
+    "kyberneticka-bezpecnost",
+    "umela-inteligence",
+    "vojenstvi",
+    "google-gemini",
+    "openai",
+    "pravo-a-regulace"
+  ]
+}
