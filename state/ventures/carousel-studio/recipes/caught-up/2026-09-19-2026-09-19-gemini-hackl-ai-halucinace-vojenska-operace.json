@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "carousel-recipe/1",
+  "venture": "caught-up",
+  "slug": "2026-09-19-gemini-hackl-ai-halucinace-vojenska-operace",
+  "date": "2026-09-19",
+  "family": "folio",
+  "variant": "A",
+  "accentSwap": true,
+  "treatment": "none",
+  "typeScale": 1.1,
+  "phaseSeed": 0,
+  "summaryRef": "ventures/carousel-studio/summaries/caught-up/2026-09-19-2026-09-19-gemini-hackl-ai-halucinace-vojenska-operace.json",
+  "copyRef": "ventures/carousel-studio/social-copy/caught-up/2026-09-19-2026-09-19-gemini-hackl-ai-halucinace-vojenska-operace.json"
+}

@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "runId": "31cc9177-2568-4ca2-adc7-fc68b815198d",
+  "date": "2026-09-19",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-09-19T03:01:00.303Z",
+  "completedAt": "2026-09-19T03:05:49.011Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-19T03:01:00.317Z",
+      "completedAt": "2026-09-19T03:01:24.633Z",
+      "durationMs": 24316
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-09-19T03:01:24.633Z",
+      "completedAt": "2026-09-19T03:03:36.800Z",
+      "durationMs": 132167,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]"
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-09-19T03:03:36.800Z",
+      "completedAt": "2026-09-19T03:05:31.446Z",
+      "durationMs": 114646
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-09-19T03:05:31.447Z",
+      "completedAt": "2026-09-19T03:05:31.453Z",
+      "durationMs": 6
+    },
+    {
+      "name": "quality_1",
+      "status": "success",
+      "startedAt": "2026-09-19T03:05:31.453Z",
+      "completedAt": "2026-09-19T03:05:31.453Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-09-19T03:05:31.453Z",
+      "completedAt": "2026-09-19T03:05:49.009Z",
+      "durationMs": 17556
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 1,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12059,
+      "outputTokens": 1200,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.054177
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14705,
+      "outputTokens": 4922,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1271175
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 14731,
+      "outputTokens": 4891,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2588,
+      "costUsd": 0.127263
+    }
+  ],
+  "measuredCostUsd": 0.3085575,
+  "quality": {
+    "metrics": {
+      "successfulSources": 30,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 85,
+      "maximumSingleSourceShare": 0.25,
+      "sourceDiversity": 0.78125,
+      "duplicateStorySimilarity": 0.18181818181818182,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.3085575
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": false,
+    "score": 45,
+    "violations": [
+      {
+        "code": "bureaucratic_filler",
+        "locale": "cs",
+        "message": "Použij přímé sloveso místo úřednické konstrukce."
+      }
+    ]
+  },
+  "unresolvedReview": {
+    "notice": "Published with unresolved editorial review findings, listed below. The review ran and recorded them; since 2026-08-04 a stylistic or topical finding does not stop publication. The checks that the article is accurate still do: supplied source links, cited sources, source diversity, primary sourcing, watchlist support and the cost caps.",
+    "findings": [
+      "stet:cs/bureaucratic_filler"
+    ]
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 0,
+        "selected": null,
+        "reason": "no-thumbnail-could-be-read",
+        "candidates": [],
+        "skipped": [
+          {
+            "candidateId": "scene:20348454",
+            "reason": "thumbnail-host-not-allowed"
+          },
+          {
+            "candidateId": "scene:6212692",
+            "reason": "thumbnail-host-not-allowed"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": "pexels:9242886",
+        "reason": "Hands using a specialized tool to work on a green PCB; genuine, well-composed technical work that feels authentic and illustrates the hardware and troubleshooting dimension of AI infrastructure.",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 4,
+            "vetoes": [
+              "dated-aesthetic"
+            ],
+            "reason": "Shows hands soldering electronics, which references hardware/AI infrastructure, but the mid-2000s composition and warm color cast feel aesthetically dated and specific to a repair moment rather than illustrating AI system failures.",
+            "sceneCs": "ruce pájející elektroniku"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "A circuit-board-shaped brain is a clichéd, heavily styled stock illustration that screams 'AI art' and fails the freshness test entirely.",
+            "sceneCs": "mozek ze součástek"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 3,
+            "vetoes": [
+              "wrong-subject"
+            ],
+            "reason": "Museum or exhibition display of circuit boards is interesting but illustrates electronics history or education, not AI failures or system malfunctions.",
+            "sceneCs": "expozice elektroniky v muzeu"
+          },
+          {
+            "candidateId": "pixabay:2528363",
+            "provider": "pixabay",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Overlaid glowing faces on circuit board is a stock visualization trope from circa 2015–2018 and looks digitally constructed rather than documentary.",
+            "sceneCs": "obličeje promítnuté přes desku plošných spojů"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Neon-lit, heavily stylized chip shot with blue and magenta gradients is a hallmark of mid-to-late 2010s AI marketing imagery and feels overwrought and artificial.",
+            "sceneCs": "čip s umělým neonovým osvětlením"
+          },
+          {
+            "candidateId": "pixabay:3963944",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Abstract infographic of figures and charts with holographic/digital overlays feels like a generic 'data' stock image and lacks concrete connection to the failure scenarios described.",
+            "sceneCs": "abstraktní infografika s figurami a daty"
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [
+              "low-quality"
+            ],
+            "reason": "Real motherboard with heat sinks shows genuine hardware but is slightly out of focus and the composition is generic—relevant to infrastructure but not specifically illustrative of AI failure.",
+            "sceneCs": "deska plošných spojů s chladiči"
+          },
+          {
+            "candidateId": "pexels:9242892",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Hands working on a green PCB with a soldering tool; realistic, well-lit, and shows hands-on hardware work that can legitimately represent AI system maintenance or troubleshooting.",
+            "sceneCs": "ruce pájející na zelené desce"
+          },
+          {
+            "candidateId": "pexels:9242891",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands assembling or repairing a blue-green motherboard with visible connectors; clean, well-lit, and shows actual technical work on hardware that underpins AI systems.",
+            "sceneCs": "ruce pracující s deskou plošných spojů"
+          },
+          {
+            "candidateId": "pexels:9242928",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands inserting or removing a component on a green motherboard in good light; realistic, competent-looking technical work that illustrates the infrastructure layer of AI systems.",
+            "sceneCs": "ruce instalující součástku na desku"
+          },
+          {
+            "candidateId": "pexels:9242886",
+            "provider": "pexels",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Hands using a specialized tool to work on a green PCB; genuine, well-composed technical work that feels authentic and illustrates the hardware and troubleshooting dimension of AI infrastructure.",
+            "sceneCs": "ruce s nástrojem na desce plošných spojů"
+          },
+          {
+            "candidateId": "pexels:9242275",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "A person with a recognisable face (red glasses, visible identity) holding a motherboard is a fatal veto: the article is not about this individual, and the image presents them as a subject or expert rather than illustrating the topic abstractly.",
+            "sceneCs": "osoba se zvýrazněnou tváří drží desku"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.010072
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]",
+    "stet:bureaucratic_filler",
+    "shipped_with_unresolved_review:stet:cs/bureaucratic_filler",
+    "image_rung:search",
+    "image_gate:curated:no-thumbnail-could-be-read",
+    "image_gate:search:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 30,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-lg",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}

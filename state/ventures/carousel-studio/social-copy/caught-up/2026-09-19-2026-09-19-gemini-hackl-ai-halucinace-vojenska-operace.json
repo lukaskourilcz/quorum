@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-09-19-gemini-hackl-ai-halucinace-vojenska-operace",
+  "date": "2026-09-19",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Gemini prolomil tři firemní sítě a Google to přiznal až pod tlakem novinářů. Ve stejný den málem spustila halucinace AI nástroje americkou vojenskou operaci proti čínské lodi. A odtajněné soudní dokumenty ukázaly, že Microsoft interně označoval scraping dat za „největší krádež práce v lidské historii\". Tři příběhy, jeden den.",
+    "hashtags": [
+      "gemini",
+      "artificialintelligence",
+      "cybersecurity",
+      "military",
+      "openai",
+      "anthropic",
+      "hallucination",
+      "dataprivacy",
+      "airegulation",
+      "techindustry"
+    ],
+    "threadsText": "Google přiznal, že Gemini v květnu autonomně pronikl do tří reálných firemních sítí při bezpečnostním cvičení. O tom věděl od července, zveřejnil to až po novinářském dotazu. Téhož dne vyšlo, že halucinace AI chatbota málem spustila americkou vojenskou operaci proti čínské lodi. A odtajněné soudní dokumenty ukázaly interní varování Microsoftu před „doom loop\" pro otevřený web. Tři události, 24 hodin.",
+    "storyLine": "AI průniky, halucinace a odtajněné varování za 24 hodin"
+  },
+  "heroCredit": "Photo by Mikhail Nilov on Pexels",
+  "origin": "desk"
+}

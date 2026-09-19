@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-09-19-gemini-hackl-ai-halucinace-vojenska-operace",
+  "date": "2026-09-19",
+  "rung": "search",
+  "selected": "pexels:9242886",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 0,
+      "selected": null,
+      "reason": "no-thumbnail-could-be-read",
+      "candidates": [],
+      "skipped": [
+        {
+          "candidateId": "scene:20348454",
+          "reason": "thumbnail-host-not-allowed"
+        },
+        {
+          "candidateId": "scene:6212692",
+          "reason": "thumbnail-host-not-allowed"
+        }
+      ],
+      "costUsd": 0
+    },
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:9242886",
+      "reason": "Hands using a specialized tool to work on a green PCB; genuine, well-composed technical work that feels authentic and illustrates the hardware and troubleshooting dimension of AI infrastructure.",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 4,
+          "vetoes": [
+            "dated-aesthetic"
+          ],
+          "reason": "Shows hands soldering electronics, which references hardware/AI infrastructure, but the mid-2000s composition and warm color cast feel aesthetically dated and specific to a repair moment rather than illustrating AI system failures.",
+          "sceneCs": "ruce pájející elektroniku"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "A circuit-board-shaped brain is a clichéd, heavily styled stock illustration that screams 'AI art' and fails the freshness test entirely.",
+          "sceneCs": "mozek ze součástek"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 3,
+          "vetoes": [
+            "wrong-subject"
+          ],
+          "reason": "Museum or exhibition display of circuit boards is interesting but illustrates electronics history or education, not AI failures or system malfunctions.",
+          "sceneCs": "expozice elektroniky v muzeu"
+        },
+        {
+          "candidateId": "pixabay:2528363",
+          "provider": "pixabay",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Overlaid glowing faces on circuit board is a stock visualization trope from circa 2015–2018 and looks digitally constructed rather than documentary.",
+          "sceneCs": "obličeje promítnuté přes desku plošných spojů"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Neon-lit, heavily stylized chip shot with blue and magenta gradients is a hallmark of mid-to-late 2010s AI marketing imagery and feels overwrought and artificial.",
+          "sceneCs": "čip s umělým neonovým osvětlením"
+        },
+        {
+          "candidateId": "pixabay:3963944",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Abstract infographic of figures and charts with holographic/digital overlays feels like a generic 'data' stock image and lacks concrete connection to the failure scenarios described.",
+          "sceneCs": "abstraktní infografika s figurami a daty"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [
+            "low-quality"
+          ],
+          "reason": "Real motherboard with heat sinks shows genuine hardware but is slightly out of focus and the composition is generic—relevant to infrastructure but not specifically illustrative of AI failure.",
+          "sceneCs": "deska plošných spojů s chladiči"
+        },
+        {
+          "candidateId": "pexels:9242892",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Hands working on a green PCB with a soldering tool; realistic, well-lit, and shows hands-on hardware work that can legitimately represent AI system maintenance or troubleshooting.",
+          "sceneCs": "ruce pájející na zelené desce"
+        },
+        {
+          "candidateId": "pexels:9242891",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Hands assembling or repairing a blue-green motherboard with visible connectors; clean, well-lit, and shows actual technical work on hardware that underpins AI systems.",
+          "sceneCs": "ruce pracující s deskou plošných spojů"
+        },
+        {
+          "candidateId": "pexels:9242928",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Hands inserting or removing a component on a green motherboard in good light; realistic, competent-looking technical work that illustrates the infrastructure layer of AI systems.",
+          "sceneCs": "ruce instalující součástku na desku"
+        },
+        {
+          "candidateId": "pexels:9242886",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Hands using a specialized tool to work on a green PCB; genuine, well-composed technical work that feels authentic and illustrates the hardware and troubleshooting dimension of AI infrastructure.",
+          "sceneCs": "ruce s nástrojem na desce plošných spojů"
+        },
+        {
+          "candidateId": "pexels:9242275",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "A person with a recognisable face (red glasses, visible identity) holding a motherboard is a fatal veto: the article is not about this individual, and the image presents them as a subject or expert rather than illustrating the topic abstractly.",
+          "sceneCs": "osoba se zvýrazněnou tváří drží desku"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.010072
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-09-19T03:00:36.983Z"
+}

@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260919030036-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Tři potvrzené incidenty z jediného dne – autonomní průniky AI, halucinace v operačním velení a odtajněná firemní varování – poprvé současně ukazují, že AI rizika přestala být hypotetická pro bezpečnostní analytiky i pro kohokoli, kdo nasazuje nebo reguluje tyto systémy.",
+  "evidenceRefs": [
+    "source:simonw",
+    "source:ars-technica",
+    "source:the-verge",
+    "source:techcrunch-ai",
+    "source:the-register"
+  ],
+  "editionRef": "48f58992025927b54184e02354e5de2b3e13482534e0e86f34a7f0f4410652a4",
+  "generatedAt": "2026-09-19T03:00:41.983Z"
+}
