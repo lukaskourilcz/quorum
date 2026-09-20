@@ -320,7 +320,8 @@
       "at": "2026-09-18T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-day",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-18T09:00:00.000Z",
@@ -333,7 +334,8 @@
       "at": "2026-09-18T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-18T11:00:00.000Z",
@@ -347,19 +349,22 @@
       "at": "2026-09-18T13:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "dm-day",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-18T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ts-desk",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-18T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "missed"
+      "status": "skipped",
+      "decisionOneLiner": "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent."
     },
     {
       "at": "2026-09-19T03:00:00.000Z",
@@ -400,8 +405,7 @@
       "at": "2026-09-19T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
     },
     {
       "at": "2026-09-19T11:00:00.000Z",
@@ -415,25 +419,27 @@
       "at": "2026-09-19T13:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "dm-day",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-09-19T16:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ts-desk",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-09-19T19:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "kv-desk",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-09-20T03:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "cu-day",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-09-20-cu-edition",
+      "decisionOneLiner": "The article failed its own checks on every attempt the budget allowed, so nothing was published."
     },
     {
       "at": "2026-09-20T04:00:00.000Z",
