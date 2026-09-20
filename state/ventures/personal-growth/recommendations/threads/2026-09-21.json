@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "personal-growth-threads-recommendation/1",
+  "recommendationDate": "2026-09-21",
+  "generatedAt": "2026-09-20T21:01:11.135Z",
+  "inputHash": "70eff0c5a0bb4544510c5d29d629ce922bde5bb451fca9133d17d5976cbe9ffa",
+  "decision": "NO_POST",
+  "noPostReason": "no-useful-candidate",
+  "primary": null,
+  "alternatives": [],
+  "conversationStatus": "unavailable",
+  "conversationOpportunities": [],
+  "publishingAuthorized": false,
+  "repliesAuthorized": false,
+  "rejectedCounts": {}
+}
