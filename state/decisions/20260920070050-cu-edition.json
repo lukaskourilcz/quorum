@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260920070050-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "NO_EDITION",
+  "summary": "The day's writing budget was already spent, so no article was written.",
+  "evidenceRefs": [
+    "source:404-media",
+    "source:anthropic-news",
+    "source:ars-technica",
+    "source:arxiv-cs-ai",
+    "source:arxiv-cs-lg",
+    "source:deepmind-blog",
+    "source:digiday",
+    "source:github-ai-releases",
+    "source:google-research",
+    "source:hf-blog",
+    "source:hn-frontpage",
+    "source:import-ai"
+  ],
+  "editionRef": "7a8593787872fab5f588e238abe1957152f39ad2228df095e8e3bd559830b8fb",
+  "generatedAt": "2026-09-20T07:00:55.741Z"
+}
