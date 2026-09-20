@@ -1,6 +1,6 @@
 {
   "schemaVersion": "owner-attention/1",
-  "generatedAt": "2026-09-12T04:00:54.961Z",
+  "generatedAt": "2026-09-20T04:00:51.291Z",
   "approvals": [],
   "manualTasks": [
     {
@@ -38,6 +38,18 @@
       "id": "create-door-money-s-private-source-repository",
       "title": "Create Door Money's private source repository",
       "plain": "BOOK-SOURCE-001 was signed on 2026-08-29, so what is left is yours to create rather than to decide: the English manuscript's private Git repository, with the working clone outside this public checkout. Put the manuscript at the gitignored local path or pass it explicitly to the CLI; set BOOK_PRIVATE_CLONE_PATH for a local live desk. The optional fine-grained BOOK_SOURCE_TOKEN is only for the owner",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "blocking"
+    },
+    {
+      "id": "deploy-main-to-vercel-and-count-the-deployed-cron-jobs",
+      "title": "Deploy main to Vercel and count the deployed cron jobs",
+      "plain": "#527. The Design Lab update and the calendar are still undeployed; if the Hobby plan deploys two crons, decide the Pro move.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -193,6 +205,30 @@
       "urgency": "soon"
     },
     {
+      "id": "confirm-or-reverse-the-daily-runner-activation",
+      "title": "Confirm or reverse the daily-runner activation",
+      "plain": "read state/decisions/2026-09-15-webdev-signal-daily-runner.md. It is recorded as countersigned on your 2026-09-15 instruction: it matches the config to the founding you countersigned on 2026-08-30, enables the deterministic render and makes the venture operating so it has a pause switch in Settings. Reversing means reverting those three config lines; the runner then records honest held receipts.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "confirm-the-apify-plan-set-its-spending-limit-and-fill-goviral-s-profile",
+      "title": "Confirm the Apify plan, set its spending limit and fill GoVIRAL's profile",
+      "plain": "#528. The account is on a paid tier since 2026-09-15; the repository assumes Starter ($19 a month, $19 of credit). Confirm or correct the plan in config/fixed-costs.json and APIFY_MONTHLY_CREDIT_USD, set the console's monthly spending limit to the plan credit so overage can never reach the card, record the payment in the treasury ledger, and write state/ventures/goviral/profile.md.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
       "id": "confirm-the-curated-source-registry",
       "title": "Confirm the curated source registry",
       "plain": "config/caught-up-streams.json seeds three Medium tags, nine Substacks and eight podcast shows. Eight shows ship enabled: false with a note because their channel id could not be resolved without guessing, and two empty slots wait for the Czech AI shows you pick. Approve, edit or fill; every entry must carry its exact hostname, and a test fails if an enabled host is missing from config/network-allow",
@@ -205,9 +241,9 @@
       "urgency": "soon"
     },
     {
-      "id": "countersign-or-decline-webdev-signal-s-founding-boundary",
-      "title": "Countersign or decline WebDev Signal's founding boundary",
-      "plain": "review state/decisions/2026-08-28-webdev-signal-founding.md, check the working name and exact Instagram/Threads handles without creating an account, and accept or reject WEBDEV-SIGNAL-FOUNDING-001. Approval confirms the two-edition evidence policy, proposed $0.03 selected-day / $0.75 monthly ceiling and shared 05:00 Prague checkpoint; it grants no source, model, account, OAuth, render or publishin",
+      "id": "create-the-four-instagram-and-threads-accounts-and-record-the-handles",
+      "title": "Create the four Instagram and Threads accounts and record the handles",
+      "plain": "one Instagram and one Threads account per edition, cs and en, created by you in the platforms' own UIs. Nothing in the repository can create them, and no delivery feature is reconsidered before the handles exist. Never paste a credential into Git.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -217,9 +253,9 @@
       "urgency": "soon"
     },
     {
-      "id": "decide-chum-s-output-cap",
-      "title": "Decide CHUM's output cap",
-      "plain": "a bilingual five-slide package does not fit in 3,000 output tokens and has never once fitted. Raising it is the only thing standing between marketingShark and its first draft. At the measured rate for claude-sonnet-5 (about $2/MTok in, $10/MTok out) each 500 extra tokens costs about $0.005 a call, so 4,500 lands near $0.050 against the room's $0.10 daily envelope, which also has to cover the one r",
+      "id": "create-the-two-webdev-signal-instagram-accounts",
+      "title": "Create the two WebDev Signal Instagram accounts",
+      "plain": "@webdevsignal and @webdevsignal.cz, each with its Threads profile; do the trademark check first. Nothing in the repository can create them.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -267,7 +303,7 @@
     {
       "id": "fill-in-state-ventures-goviral-profile-md",
       "title": "Fill in state/ventures/goviral/profile.md",
-      "plain": "the writer half of the weekly brief: your niches, your voice, your audiences, and what you never write about. Nothing in it is generated and nothing should be; until you fill it in the room leans on the two magazine niches and says so plainly in the brief rather than inventing a voice for you. Half-thoughts and bullets are fine; it is read as data, never as instructions.",
+      "plain": "the writer half of the weekly brief: your niches, your voice, your audiences, and what you never write about. Nothing in it is generated and nothing should be; until you fill it in the room leans on the two magazine niches and says so plainly in the brief rather than inventing a voice for you. Half-thoughts and bullets are fine; it is read as data, never as instructions. Tracked with the Apify cre",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -280,6 +316,18 @@
       "id": "finish-the-vercel-half-of-the-aifirst-credential-audit",
       "title": "Finish the Vercel half of the aifirst credential audit",
       "plain": "the retired ANTHROPIC_API_KEY Actions secret is deleted; old source, image, promotion, heartbeat and generation-report credentials in the aifirst Vercel project are still open, and keys pasted into chat still want rotating. Tracked in aifirst/NEEDED.md.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "give-the-desk-the-book-and-audiobook-facts",
+      "title": "Give the desk the book and audiobook facts.",
+      "plain": "The state tree holds no title, retail link, release date, narrator or publisher, so no plan can mention the launch. Put a finalUrl or articleUrl on the OKRAJ and BBARAK occurrences in the admin Timeline, and send the facts in #530; a dedicated \"book launch\" action type is a contract change a session can make once they exist.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -338,6 +386,18 @@
       "needsPlainCopy": true
     },
     {
+      "id": "post-the-first-rendered-drafts-by-hand",
+      "title": "Post the first rendered drafts by hand",
+      "plain": "on a day the Design & delivery tab shows as rendered, copy the caption and Threads text from the draft card, take the panel PNGs from the repository paths the card lists under state/ventures/webdev-signal/design-lab/assets/, and post them from the accounts above.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
       "id": "rate-the-titty-tuesdays-idea-cards-in-admin",
       "title": "Rate the Titty Tuesdays idea cards in /admin",
       "plain": "the marketing room writes concrete campaign ideas every day and nothing has ever rated one, so the taste loop that turns your ratings into written style rules has no input and PALATE has nothing to work from. Nine cards sit unrated under the venture's ideas tab, every one still proposed (state/ideas/titty-tuesdays/ledger.jsonl); the count grows by roughly one a day until you rate them. Rating them",
@@ -365,6 +425,18 @@
       "id": "rename-the-dneskai-vercel-project-and-decide-on-a-domain",
       "title": "Rename the DNESKAi Vercel project and decide on a domain",
       "plain": "DNESKAi is the wordmark in the navigation, the footer and print; the page title, the social cards, the structured data and the Atom feed still say \"Caught Up\", which was your call and is not a bug. The deployment is still at caughtup-ai.vercel.app, the repository is still aifirst, and the venture is still caught-up in every contract and Actions variable — all deliberate, so that sealed package has",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "review-and-deploy-the-design-lab-update",
+      "title": "Review and deploy the Design Lab update",
+      "plain": "inspect the editor on desktop/mobile and compare Canva exports with reference PNGs; then use the existing production release gate. Local browser acceptance was blocked in this session. Git merge does not deploy.",
       "steps": [],
       "source": {
         "kind": "needed",
@@ -408,6 +480,18 @@
       },
       "since": null,
       "urgency": "soon"
+    },
+    {
+      "id": "add-the-free-podcast-index-key-pair",
+      "title": "Add the free Podcast Index key pair",
+      "plain": "#529.",
+      "steps": [],
+      "source": {
+        "kind": "needed",
+        "ref": "docs/NEEDED.md"
+      },
+      "since": null,
+      "urgency": "whenever"
     },
     {
       "id": "analytics-deliberately-deferred",

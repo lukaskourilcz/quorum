@@ -1,6 +1,6 @@
 {
   "schemaVersion": "autonomy-snapshot/1",
-  "generatedAt": "2026-09-12T04:00:54.961Z",
+  "generatedAt": "2026-09-20T04:00:51.291Z",
   "metricsIngestionEnabled": false,
   "growth": [
     {
@@ -10,9 +10,9 @@
         {
           "id": "edition-cadence",
           "label": "Edition cadence",
-          "value": 0.9167,
+          "value": 0.9655,
           "unit": "ratio",
-          "detail": "22 delivered, 2 failed; NO_EDITION is neutral."
+          "detail": "28 delivered, 1 failed; NO_EDITION is neutral."
         },
         {
           "id": "source-coverage",
@@ -83,9 +83,9 @@
         {
           "id": "two-source-agreement",
           "label": "Two-source agreement",
-          "value": 0.4085,
+          "value": 0.4151,
           "unit": "ratio",
-          "detail": "259 of 634 fighter fields are corroborated."
+          "detail": "264 of 636 fighter fields are corroborated."
         },
         {
           "id": "readiness-dossiers",
@@ -129,9 +129,9 @@
         {
           "id": "slot-fill",
           "label": "Evidenced slot fill",
-          "value": 0.8462,
+          "value": 0.8148,
           "unit": "ratio",
-          "detail": "22 published articles for 26 assigned slots."
+          "detail": "22 published articles for 27 assigned slots."
         },
         {
           "id": "rendered-fightaiq-coverage",
@@ -222,9 +222,9 @@
         {
           "id": "edition-cadence",
           "label": "Edition cadence",
-          "value": 0.9167,
+          "value": 0.9655,
           "unit": "ratio",
-          "detail": "22 delivered, 2 failed; NO_EDITION is neutral."
+          "detail": "28 delivered, 1 failed; NO_EDITION is neutral."
         },
         {
           "id": "source-coverage",
@@ -259,17 +259,17 @@
   "quality": {
     "killedSlotReasons": {
       "evidence": 4,
-      "other": 20
+      "other": 21
     },
-    "vetoRate": 0.0928,
+    "vetoRate": 0.0846,
     "firstPassRate": 0,
     "retryRate": 0,
-    "sourceAgreementRate": 0.4085,
+    "sourceAgreementRate": 0.4151,
     "verifierPassRate": 0,
     "denominators": {
-      "meetings": 291,
+      "meetings": 331,
       "proofs": 0,
-      "fighterFields": 634
+      "fighterFields": 636
     }
   }
 }

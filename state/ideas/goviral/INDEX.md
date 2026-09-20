@@ -15,6 +15,7 @@ Collapsed superseded entries: 0.
 
 | ID | Title (≤8 words) | Current status | Last reason |
 | --- | --- | --- | --- |
+| idea-2026-09-20-97f0b93f | Add Owner Ratings to Trend Brief Plays | vetoed | VAULT hard stop: Proposal matches existing candidate in core mechanism (owner rating gate before finalization), scope (… |
 | idea-2026-09-12-d86dce9c | Add a Rating Gate to the Trend Brief | vetoed | VAULT hard stop: Identical core mechanism: owner rating gate before weekly trend brief finalization with flagging of un… |
 
 Omitted older kill-list entries: 0.
