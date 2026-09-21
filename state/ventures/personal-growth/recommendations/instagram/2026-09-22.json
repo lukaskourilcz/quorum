@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "personal-growth-instagram-recommendation/1",
+  "recommendationDate": "2026-09-22",
+  "generatedAt": "2026-09-21T21:01:21.208Z",
+  "actionType": "story-sequence",
+  "format": "story",
+  "pillar": "rapovej-denik",
+  "goal": "Promote Rapovej deník Lukáše Kouřila (the book) in the owner's own words.",
+  "dueWindow": "2026-09-22",
+  "ownerSourceRefs": [
+    "ventures/personal-growth/publications.json#rapovej-denik-kniha"
+  ],
+  "collaborator": "OKRAJ Media s.r.o.",
+  "assetChecklist": [
+    "Cover image: https://okraj.shop/cdn/shop/files/rapovej-denik-lukase-kourila.png",
+    "Shop page: https://okraj.shop/products/rapovej-denik-lukase-kourila",
+    "Free sample: https://okraj.shop/products/kniha-rapovej-denik-lukase-kourila-zdarma-pdf-hip-hop-4-elements",
+    "One line in the owner's words on why this chapter matters today"
+  ],
+  "distributionChecklist": [
+    "Link sticker to the shop page",
+    "Price only as the shop page shows it",
+    "No claim beyond the recorded facts"
+  ],
+  "storiesSupport": [
+    "Kniha zachycuje šestnáct let kariéry promotéra hiphopových koncertů, od začátků v roce 2007 po cestu do Kolumbie v roce 2023.",
+    "Autentické přepisy historek ze zákulisí hudebního prostředí, včetně finančních přešlapů a slepých uliček na cestě.",
+    "Vydal OKRAJ Media s.r.o.; tištěná kniha za 490 Kč na okraj.shop.",
+    "Kapitola HIP HOP 4 ELEMENTS je zdarma ke stažení jako PDF.",
+    "Autor pořádal první koncert v roce 2008 v Hodoníně a po roce v Manchesteru propadl cestování."
+  ],
+  "projectedPersonalRatio": null,
+  "goviralSignalId": null,
+  "activeExperimentId": null,
+  "reason": "Promotion day 2 of the owner's publication rotation: Rapovej deník Lukáše Kouřila. The desk suggests the frame; the owner writes every word.",
+  "noPostReason": null,
+  "reel": null,
+  "manualVentureReferenceId": null,
+  "ownerWritesArtifact": true,
+  "publishingAuthorized": false
+}
