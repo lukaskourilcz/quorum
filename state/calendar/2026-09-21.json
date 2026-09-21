@@ -1,0 +1,428 @@
+{
+  "schemaVersion": "calendar/1",
+  "weekOf": "2026-09-21",
+  "slots": [
+    {
+      "at": "2026-09-21T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "held",
+      "meetingRef": "meetings/2026-09-21-cu-edition",
+      "decisionOneLiner": "The article failed its own checks on every attempt the budget allowed, so nothing was published."
+    },
+    {
+      "at": "2026-09-21T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-21T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-21T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-21T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-21T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-21T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-21T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-21T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-21T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-22T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-22T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-22T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-22T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-22T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-22T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-22T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-22T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-22T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-22T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-23T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-23T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-23T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-23T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-23T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-23T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-23T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-23T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-23T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-23T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-24T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-24T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-24T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-24T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-24T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-24T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-24T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-24T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-24T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-24T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-25T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-25T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-25T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-25T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-25T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-25T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-25T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-25T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-25T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-25T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-26T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-26T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-26T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-26T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-26T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-26T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-26T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-26T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-26T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-26T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-27T03:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "cu-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-27T04:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "venture-morning",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-27T05:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ms-daily",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-27T06:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "mma-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-27T09:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "tt-marketing",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-27T10:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "bh-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-27T11:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "gv-brief",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-27T13:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "dm-day",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-27T16:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "ts-desk",
+      "status": "scheduled"
+    },
+    {
+      "at": "2026-09-27T19:00:00.000Z",
+      "tz": "Europe/Prague",
+      "kind": "kv-desk",
+      "status": "scheduled"
+    }
+  ]
+}
