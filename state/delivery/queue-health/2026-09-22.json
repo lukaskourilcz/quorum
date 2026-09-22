@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-09-22T06:06:00.459Z",
+  "checkedAt": "2026-09-22T07:17:47.756Z",
   "date": "2026-09-22",
   "ventures": [
     {
@@ -31,19 +31,14 @@
       "venture": "caught-up",
       "waiting": [
         {
-          "label": "2026-09-21 no_edition",
-          "packageHash": "b8be507eec6b0b352ff3f581bd6a82095c157df2fd234d3fca2dd298acd34b34",
-          "date": "2026-09-21"
-        },
-        {
           "label": "2026-09-22 edition",
           "packageHash": "8884957fa90a5af5234cc32e8f43dfc30e91f701d4025717afe918bd594401dc",
           "date": "2026-09-22"
         }
       ],
       "parked": [],
-      "oldestWaitingDate": "2026-09-21",
-      "stalledDays": 1,
+      "oldestWaitingDate": "2026-09-22",
+      "stalledDays": 0,
       "stalled": false,
       "neverDrains": []
     }
