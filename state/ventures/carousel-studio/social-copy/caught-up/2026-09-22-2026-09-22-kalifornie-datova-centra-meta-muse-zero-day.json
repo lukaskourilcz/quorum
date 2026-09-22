@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-09-22-kalifornie-datova-centra-meta-muse-zero-day",
+  "date": "2026-09-22",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Guvernér Newsom podepsal 7 zákonů: datová centra v Kalifornii budou nově platit za rozšíření sítě a vody samy. Ve stejný den výzkumník odhalil zero-day v AI asistentu Muse od Mety – lokální útočník může přesměrovat veškerý hlasový provoz aplikace na vlastní server. Zranitelnost zatím není opravena.",
+    "hashtags": [
+      "kalifornie",
+      "datovecentrum",
+      "kybernetickabezpecnost",
+      "metaai",
+      "amd",
+      "openai",
+      "regulaceai",
+      "zeroday",
+      "umelainteligence",
+      "infrastruktura"
+    ],
+    "threadsText": "Kalifornie přijala 7 zákonů: datová centra teď platí za rozšíření energetiky a vody sama, místo aby náklady šly na běžné odběratele. Zároveň výzkumník Patrick Wardle odhalil zero-day v macOS aplikaci Muse od Mety – lokální malware může přesměrovat celý hlasový provoz asistenta. Oprava zatím neexistuje.",
+    "storyLine": "Kalifornie a bezpečnostní díra v Muse stlačují AI infrastrukturu"
+  },
+  "heroCredit": "Photo by Mikhail Nilov on Pexels",
+  "origin": "desk"
+}

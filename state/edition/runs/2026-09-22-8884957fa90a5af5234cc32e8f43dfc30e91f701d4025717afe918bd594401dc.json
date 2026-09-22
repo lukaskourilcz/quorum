@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "runId": "c07124fd-7038-49fd-a6d6-5b54dabb84a0",
+  "date": "2026-09-22",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-09-22T03:01:00.732Z",
+  "completedAt": "2026-09-22T03:03:34.114Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-22T03:01:00.746Z",
+      "completedAt": "2026-09-22T03:01:28.792Z",
+      "durationMs": 28046
+    },
+    {
+      "name": "write",
+      "status": "success",
+      "startedAt": "2026-09-22T03:01:28.793Z",
+      "completedAt": "2026-09-22T03:03:20.470Z",
+      "durationMs": 111677
+    },
+    {
+      "name": "stet_0",
+      "status": "success",
+      "startedAt": "2026-09-22T03:03:20.471Z",
+      "completedAt": "2026-09-22T03:03:20.476Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_0",
+      "status": "success",
+      "startedAt": "2026-09-22T03:03:20.477Z",
+      "completedAt": "2026-09-22T03:03:20.477Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-09-22T03:03:20.477Z",
+      "completedAt": "2026-09-22T03:03:34.111Z",
+      "durationMs": 13634
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12269,
+      "outputTokens": 1142,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.053937
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 13384,
+      "outputTokens": 4786,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1211145
+    }
+  ],
+  "measuredCostUsd": 0.1750515,
+  "quality": {
+    "metrics": {
+      "successfulSources": 30,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 85,
+      "maximumSingleSourceShare": 0.375,
+      "sourceDiversity": 0.78125,
+      "duplicateStorySimilarity": 0.125,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": false,
+      "primarySourcePresent": false,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.1750515
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 0,
+        "selected": null,
+        "reason": "no-thumbnail-could-be-read",
+        "candidates": [],
+        "skipped": [
+          {
+            "candidateId": "scene:20348454",
+            "reason": "thumbnail-host-not-allowed"
+          },
+          {
+            "candidateId": "scene:6212692",
+            "reason": "thumbnail-host-not-allowed"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": "pexels:9242892",
+        "reason": "Hands soldering or working on green circuit board in close detail is authentic, well-lit hardware work that clearly illustrates the infrastructure topic.",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Real hands working on motherboard hardware clearly illustrates the data center / AI infrastructure topic without dated aesthetics or recognisable faces.",
+            "sceneCs": "Ruce pracující se základní deskou"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "The blue holographic circuit brain shape is the textbook cliché stock image for AI and looks synthetically generated; forbidden by the rules."
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 4,
+            "vetoes": [
+              "low-quality"
+            ],
+            "reason": "Museum or exhibition display of circuit board on screen is relevant but the image is dimly lit, blurry, and poorly composed; subjects' faces partially visible."
+          },
+          {
+            "candidateId": "pixabay:2528363",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "recognisable-face",
+              "ai-generated-look"
+            ],
+            "reason": "Glowing red wireframe faces overlaid on circuit board is an instantly recognisable AI cliché that appears synthetically generated."
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Close-up of real motherboard with gold heatsinks and power connectors is clear hardware illustration without faces or dated styling.",
+            "sceneCs": "Zlatý chladič a konektory na desce"
+          },
+          {
+            "candidateId": "pixabay:3963944",
+            "provider": "pixabay",
+            "fit": 2,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Holographic interface with floating figures and graphs has a distinctly artificial, render-like quality typical of mid-2010s stock AI imagery."
+          },
+          {
+            "candidateId": "pexels:9242892",
+            "provider": "pexels",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Hands soldering or working on green circuit board in close detail is authentic, well-lit hardware work that clearly illustrates the infrastructure topic.",
+            "sceneCs": "Ruce pracující s pájkou na zelené desce"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Neon pink and blue glowing chip in dark space is quintessential synthetically-generated AI stock imagery with heavy mid-2000s gradient aesthetic."
+          },
+          {
+            "candidateId": "pexels:9242891",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands working with cables and components on green motherboard is authentic, relevant hardware illustration without faces or problematic styling.",
+            "sceneCs": "Ruce manipulující s kabely na základní desce"
+          },
+          {
+            "candidateId": "pexels:9242928",
+            "provider": "pexels",
+            "fit": 8,
+            "vetoes": [],
+            "reason": "Clear, well-lit photo of hands working on green circuit board assembly is direct, honest illustration of hardware and infrastructure work.",
+            "sceneCs": "Ruce montující součástky na desku"
+          },
+          {
+            "candidateId": "pexels:9242886",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands using spanner tool on green motherboard is authentic hardware work illustration with no faces, clear lighting, and relevant to data centre infrastructure.",
+            "sceneCs": "Ruce držící klíč na základní desce"
+          },
+          {
+            "candidateId": "pexels:9242275",
+            "provider": "pexels",
+            "fit": 0,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "Person wearing distinctive red sunglasses holding a circuit board creates a portrait-like photograph of a specific individual, which violates the fundamental rule."
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.008953
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "image_rung:search",
+    "image_gate:curated:no-thumbnail-could-be-read",
+    "image_gate:search:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 30,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}

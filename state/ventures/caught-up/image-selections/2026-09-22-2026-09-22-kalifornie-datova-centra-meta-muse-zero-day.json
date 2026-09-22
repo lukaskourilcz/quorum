@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-09-22-kalifornie-datova-centra-meta-muse-zero-day",
+  "date": "2026-09-22",
+  "rung": "search",
+  "selected": "pexels:9242892",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 0,
+      "selected": null,
+      "reason": "no-thumbnail-could-be-read",
+      "candidates": [],
+      "skipped": [
+        {
+          "candidateId": "scene:20348454",
+          "reason": "thumbnail-host-not-allowed"
+        },
+        {
+          "candidateId": "scene:6212692",
+          "reason": "thumbnail-host-not-allowed"
+        }
+      ],
+      "costUsd": 0
+    },
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:9242892",
+      "reason": "Hands soldering or working on green circuit board in close detail is authentic, well-lit hardware work that clearly illustrates the infrastructure topic.",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Real hands working on motherboard hardware clearly illustrates the data center / AI infrastructure topic without dated aesthetics or recognisable faces.",
+          "sceneCs": "Ruce pracující se základní deskou"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "The blue holographic circuit brain shape is the textbook cliché stock image for AI and looks synthetically generated; forbidden by the rules."
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 4,
+          "vetoes": [
+            "low-quality"
+          ],
+          "reason": "Museum or exhibition display of circuit board on screen is relevant but the image is dimly lit, blurry, and poorly composed; subjects' faces partially visible."
+        },
+        {
+          "candidateId": "pixabay:2528363",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "recognisable-face",
+            "ai-generated-look"
+          ],
+          "reason": "Glowing red wireframe faces overlaid on circuit board is an instantly recognisable AI cliché that appears synthetically generated."
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Close-up of real motherboard with gold heatsinks and power connectors is clear hardware illustration without faces or dated styling.",
+          "sceneCs": "Zlatý chladič a konektory na desce"
+        },
+        {
+          "candidateId": "pixabay:3963944",
+          "provider": "pixabay",
+          "fit": 2,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Holographic interface with floating figures and graphs has a distinctly artificial, render-like quality typical of mid-2010s stock AI imagery."
+        },
+        {
+          "candidateId": "pexels:9242892",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Hands soldering or working on green circuit board in close detail is authentic, well-lit hardware work that clearly illustrates the infrastructure topic.",
+          "sceneCs": "Ruce pracující s pájkou na zelené desce"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Neon pink and blue glowing chip in dark space is quintessential synthetically-generated AI stock imagery with heavy mid-2000s gradient aesthetic."
+        },
+        {
+          "candidateId": "pexels:9242891",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Hands working with cables and components on green motherboard is authentic, relevant hardware illustration without faces or problematic styling.",
+          "sceneCs": "Ruce manipulující s kabely na základní desce"
+        },
+        {
+          "candidateId": "pexels:9242928",
+          "provider": "pexels",
+          "fit": 8,
+          "vetoes": [],
+          "reason": "Clear, well-lit photo of hands working on green circuit board assembly is direct, honest illustration of hardware and infrastructure work.",
+          "sceneCs": "Ruce montující součástky na desku"
+        },
+        {
+          "candidateId": "pexels:9242886",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Hands using spanner tool on green motherboard is authentic hardware work illustration with no faces, clear lighting, and relevant to data centre infrastructure.",
+          "sceneCs": "Ruce držící klíč na základní desce"
+        },
+        {
+          "candidateId": "pexels:9242275",
+          "provider": "pexels",
+          "fit": 0,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Person wearing distinctive red sunglasses holding a circuit board creates a portrait-like photograph of a specific individual, which violates the fundamental rule."
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.008953
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-09-22T03:00:45.261Z"
+}

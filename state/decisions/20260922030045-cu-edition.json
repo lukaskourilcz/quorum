@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "fixture": false,
+  "cycleId": "20260922030045-cu-edition",
+  "phase": "cu-edition",
+  "outcome": "EDITION",
+  "summary": "Dva souběžné pohyby – zákonodárný a bezpečnostní – ukazují, že AI infrastruktura čelí regulaci i zneužití zároveň, a to způsoby, které se přímo dotýkají firemních nákladů i ochrany uživatelů.",
+  "evidenceRefs": [
+    "source:the-verge",
+    "source:ars-technica",
+    "source:the-register",
+    "source:techcrunch-ai",
+    "source:simonw",
+    "source:github-ai-releases"
+  ],
+  "editionRef": "8884957fa90a5af5234cc32e8f43dfc30e91f701d4025717afe918bd594401dc",
+  "generatedAt": "2026-09-22T03:00:50.261Z"
+}

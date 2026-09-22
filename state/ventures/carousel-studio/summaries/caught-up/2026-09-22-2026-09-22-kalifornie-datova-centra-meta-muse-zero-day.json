@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-09-22-kalifornie-datova-centra-meta-muse-zero-day",
+  "date": "2026-09-22",
+  "locale": "cs",
+  "kicker": "DNESKAi · 22. zář",
+  "headline": "Kalifornie zkrotila spotřebu datových center a Muse od Mety má vážnou bezpečnostní díru",
+  "coverLine": "Kalifornie nutí datová centra platit za síť a vodu, Muse od Mety nechává dveře dokořán",
+  "standfirst": "Guvernér Newsom podepsal sedm zákonů přenášejících náklady na energii a vodu z obyvatel na datová centra.",
+  "passages": [
+    "Californský guvernér podepsal sedm zákonů ukládajících datovým centrům nové povinnosti ohledně energetiky, vody a transparentnosti.",
+    "Výzkumník zveřejnil neopravený zero-day v macOS aplikaci Muse od Mety, který umožňuje přesměrování hlasového provozu lokálním malwarem.",
+    "Tržní kapitalizace AMD krátce překročila 1 bilion dolarů, čímž se společnost zařadila do velmi úzkého klubu polovodičových firem.",
+    "OpenAI vydala verzi 3.17.0 SDK s bezpečnostními webhooky a správou externího úložiště.",
+    "Kalifornské zákony přesouvají finanční zátěž za rozšiřování energetické a vodní infrastruktury přímo na provozovatele datových center, což konkrétně prodražuje plánované projekty AI infrastruktury.",
+    "Zero-day v Muse ukazuje, že AI agenti s rozsáhlými systémovými oprávněními jsou nová kategorie útočných cílů – čím víc přístupu uživatel asistentovi dá, tím hodnotnější se stane pro útočníka.",
+    "AMD na bilion dolarů a prognóza odchodu od VMware pro více než polovinu zákazníků signalizují strukturální přeuspořádání trhu s hardware i cloudovou virtualizací.",
+    "Meta nesdělila, zda zero-day v Muse opraví, ani v jakém časovém horizontu."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Photo by Mikhail Nilov on Pexels"
+}
