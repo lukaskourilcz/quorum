@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-fcbbdc73f2145eb5",
+  "venture": "caught-up",
+  "packageHash": "8884957fa90a5af5234cc32e8f43dfc30e91f701d4025717afe918bd594401dc",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "b7253182b835d9f134b8da4a6b231c4337a3f59a",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit b7253182b835d9f134b8da4a6b231c4337a3f59a is readable",
+      "checkedAt": "2026-09-22T07:17:38.224Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "fail",
+      "detail": "Target CI state: pending",
+      "checkedAt": "2026-09-22T07:17:38.224Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-09-22T07:17:38.224Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "fail",
+      "detail": "0 https://caughtup-ai.vercel.app/articles/2026-09-22-kalifornie-datova-centra-meta-muse-zero-day?boardless_verify=8884957fa90a-1790061458224",
+      "checkedAt": "2026-09-22T07:17:38.224Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "fail",
+      "detail": "A locale title or slug does not match",
+      "checkedAt": "2026-09-22T07:17:38.224Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "fail",
+      "detail": "A locale is missing the package hash marker",
+      "checkedAt": "2026-09-22T07:17:38.224Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "fail",
+      "detail": "0 https://caughtup-ai.vercel.app/images/editions/2026-09-22-kalifornie-datova-centra-meta-muse-zero-day/hero.webp?boardless_verify=8884957fa90a-1790061458224",
+      "checkedAt": "2026-09-22T07:17:38.224Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "fail",
+      "detail": "0x0; expected 1600x900",
+      "checkedAt": "2026-09-22T07:17:38.224Z"
+    },
+    {
+      "name": "attribution",
+      "status": "fail",
+      "detail": "Mikhail Nilov · Pexels License",
+      "checkedAt": "2026-09-22T07:17:38.224Z"
+    }
+  ],
+  "retryCount": 1,
+  "status": "reverted",
+  "startedAt": "2026-09-22T07:12:27.464Z",
+  "completedAt": "2026-09-22T07:17:38.965Z",
+  "revertCommit": "9a1c8e107eea73034c9b430fac0f788d212a12d8"
+}
