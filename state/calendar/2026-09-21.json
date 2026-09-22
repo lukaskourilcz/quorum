@@ -73,43 +73,49 @@
       "kind": "cu-day",
       "status": "held",
       "meetingRef": "meetings/2026-09-22-cu-edition",
-      "decisionOneLiner": "Dva souběžné pohyby – zákonodárný a bezpečnostní – ukazují, že AI infrastruktura čelí regulaci i zneužití zároveň, a to způsoby, které se přímo dotýkají firemních nákladů i ochrany"
+      "decisionOneLiner": "The delivered edition did not verify on the live site, so the release was rolled back. The owner has the technical report."
     },
     {
       "at": "2026-09-22T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-09-22T05:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "ms-daily",
-      "status": "scheduled"
+      "status": "held",
+      "meetingRef": "meetings/2026-09-22-ms-daily",
+      "decisionOneLiner": "No package was drafted. devshark: render-failed — slides were clipped to fit: cs/reveal:stat, en/reveal:stat."
     },
     {
       "at": "2026-09-22T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-day",
-      "status": "scheduled"
+      "status": "missed"
     },
     {
       "at": "2026-09-22T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
       "at": "2026-09-22T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "scheduled"
+      "status": "late",
+      "decisionOneLiner": "The run for this slot has not arrived yet."
     },
     {
       "at": "2026-09-22T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "gv-brief",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-09-22-gv-brief",
+      "decisionOneLiner": "This room meets on Mondays. Nothing was spent."
     },
     {
       "at": "2026-09-22T13:00:00.000Z",
