@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "webdev-run/1",
+  "phase": "webdev-signal-daily",
+  "pragueDate": "2026-09-23",
+  "mode": "live",
+  "idempotencyKey": "a94fd0bf4f178f6ec3b6eb7796919d9f1e173b0a0c79a6868c430c510fbec8f6",
+  "sourceOutcomes": [
+    {
+      "sourceId": "chrome-developers",
+      "outcome": "unchanged",
+      "fetched": 0,
+      "kept": 0,
+      "dropped": 0
+    },
+    {
+      "sourceId": "cloudflare-developer-platform",
+      "outcome": "held",
+      "fetched": 0,
+      "kept": 0,
+      "dropped": 0
+    },
+    {
+      "sourceId": "github-npm-advisories",
+      "outcome": "success",
+      "fetched": 30,
+      "kept": 30,
+      "dropped": 0
+    },
+    {
+      "sourceId": "next-releases",
+      "outcome": "success",
+      "fetched": 30,
+      "kept": 30,
+      "dropped": 0
+    },
+    {
+      "sourceId": "node-releases",
+      "outcome": "held",
+      "fetched": 0,
+      "kept": 0,
+      "dropped": 0
+    },
+    {
+      "sourceId": "react-releases",
+      "outcome": "malformed",
+      "fetched": 30,
+      "kept": 0,
+      "dropped": 30
+    },
+    {
+      "sourceId": "typescript-blog",
+      "outcome": "unchanged",
+      "fetched": 0,
+      "kept": 0,
+      "dropped": 0
+    },
+    {
+      "sourceId": "vite-releases",
+      "outcome": "unchanged",
+      "fetched": 0,
+      "kept": 0,
+      "dropped": 0
+    },
+    {
+      "sourceId": "vue-blog",
+      "outcome": "unchanged",
+      "fetched": 0,
+      "kept": 0,
+      "dropped": 0
+    },
+    {
+      "sourceId": "webdev",
+      "outcome": "unchanged",
+      "fetched": 0,
+      "kept": 0,
+      "dropped": 0
+    }
+  ],
+  "counts": {
+    "candidates": 181,
+    "new": 21,
+    "updated": 0,
+    "duplicate": 39,
+    "malformed": 30
+  },
+  "selectionOutcome": "NO_EDITION",
+  "selectionRef": null,
+  "briefRef": null,
+  "packageRefs": [],
+  "renderRefs": [],
+  "queueRefs": [],
+  "model": {
+    "reservations": 0,
+    "calls": 0,
+    "provider": null,
+    "model": null,
+    "reservedUsd": 0,
+    "actualUsd": 0
+  },
+  "cache": {
+    "unchangedSources": 5,
+    "reusedArtifacts": 0,
+    "providerCallsAvoided": 0
+  },
+  "errors": [
+    {
+      "code": "source-held",
+      "sourceId": "cloudflare-developer-platform",
+      "message": "Decompressed response is too large"
+    },
+    {
+      "code": "source-held",
+      "sourceId": "node-releases",
+      "message": "Decompressed response is too large"
+    },
+    {
+      "code": "source-items-dropped",
+      "sourceId": "react-releases",
+      "message": "30 malformed items were isolated."
+    },
+    {
+      "code": "select-failed",
+      "sourceId": null,
+      "message": "[ { \"origin\": \"string\", \"code\": \"too_big\", \"maximum\": 500, \"inclusive\": true, \"path\": [ \"developerImpact\", \"summary\" ], \"message\": \"Too big: expected string to have <=500 characters\" } ]"
+    }
+  ],
+  "nextSafeAction": "The select stage failed and the day recorded no edition past it; read the error line before the next firing."
+}
