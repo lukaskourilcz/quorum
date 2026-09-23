@@ -2,12 +2,18 @@
   "schemaVersion": 1,
   "date": "2026-09-22",
   "packageHash": "8884957fa90a5af5234cc32e8f43dfc30e91f701d4025717afe918bd594401dc",
-  "status": "needs_reconciliation",
+  "status": "delivered",
   "editionStatus": "edition",
   "targetRepository": "lukaskourilcz/aifirst",
-  "code": "post_deploy_verification",
-  "detail": "Delivery stopped without a reconciled target commit",
-  "deliveryAttempts": 1,
-  "recordedAt": "2026-09-22T07:17:43.933Z",
-  "tags": []
+  "targetCommit": "d06235bc5430afcfb82f3e70cfdc60db7e50b2c3",
+  "deliveredAt": "2026-09-23T07:08:27.936Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-22-kalifornie-datova-centra-meta-muse-zero-day",
+  "tags": [
+    "regulace-ai",
+    "kyberneticka-bezpecnost",
+    "datova-centra",
+    "amd-nvidia",
+    "openai-matematika",
+    "umela-inteligence"
+  ]
 }

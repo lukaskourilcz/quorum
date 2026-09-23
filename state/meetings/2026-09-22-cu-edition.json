@@ -4,7 +4,7 @@
   "date": "2026-09-22",
   "phase": "cu-edition",
   "fixture": false,
-  "status": "NEEDS_RECONCILIATION",
+  "status": "HELD",
   "stage": "VALIDATION",
   "operatingBrief": "Review the live digest, commission one supported story or record NO_EDITION.",
   "participantReasons": [
@@ -262,7 +262,7 @@
   },
   "decision": {
     "outcome": "EDITION",
-    "summary": "The delivered edition did not verify on the live site, so the release was rolled back. The owner has the technical report.",
+    "summary": "This edition was delivered on a later run, on 2026-09-23. It was held back at first; the delivery receipt for this date records what the magazine refused and when it accepted it.",
     "evidenceRefs": [
       "source:the-verge",
       "source:ars-technica",

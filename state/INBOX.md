@@ -675,6 +675,6 @@ with its full scope, because the scope text is the approval. -->
   [imp:5] [owner:me] [time:15m] [kind:deploy]
 - [ ] **caught-up release reverted** — package `8884957fa90a` failed post-deploy verification and was reverted in `9a1c8e107eea`. Proof: `state/release-proofs/caught-up/8884957fa90a5af5234cc32e8f43dfc30e91f701d4025717afe918bd594401dc.json`. [owner:me]
 
-- [ ] **CAUGHT-UP-DELIVERY-2026-09-22** — post_deploy_verification: Delivery stopped without a reconciled target commit.
+- [x] **CAUGHT-UP-DELIVERY-2026-09-22** — Resolved 2026-09-23: the edition for this date delivered on a later run. Original report: — post_deploy_verification: Delivery stopped without a reconciled target commit.
   RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
