@@ -80,7 +80,7 @@
       "kind": "cu-day",
       "status": "held",
       "meetingRef": "meetings/2026-09-22-cu-edition",
-      "decisionOneLiner": "The delivered edition did not verify on the live site, so the release was rolled back. The owner has the technical report."
+      "decisionOneLiner": "This edition was delivered on a later run, on 2026-09-23. It was held back at first; the delivery receipt for this date records what the magazine refused and when it accepted it."
     },
     {
       "at": "2026-09-22T04:00:00.000Z",
@@ -153,8 +153,7 @@
       "at": "2026-09-23T04:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "venture-morning",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
     },
     {
       "at": "2026-09-23T05:00:00.000Z",
@@ -168,26 +167,29 @@
       "at": "2026-09-23T06:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "mma-day",
-      "status": "late",
-      "decisionOneLiner": "The run for this slot has not arrived yet."
+      "status": "missed"
     },
     {
       "at": "2026-09-23T09:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "tt-marketing",
-      "status": "scheduled"
+      "status": "skipped",
+      "decisionOneLiner": "The countersign-aware budget shape disabled this phase."
     },
     {
       "at": "2026-09-23T10:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "bh-desk",
-      "status": "scheduled"
+      "status": "late",
+      "decisionOneLiner": "The run for this slot has not arrived yet."
     },
     {
       "at": "2026-09-23T11:00:00.000Z",
       "tz": "Europe/Prague",
       "kind": "gv-brief",
-      "status": "scheduled"
+      "status": "not-needed",
+      "meetingRef": "meetings/2026-09-23-gv-brief",
+      "decisionOneLiner": "This room meets on Mondays. Nothing was spent."
     },
     {
       "at": "2026-09-23T13:00:00.000Z",
