@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "runId": "27905d08-6a4b-4822-9a9a-588638da17cd",
+  "date": "2026-09-24",
+  "mode": "production",
+  "status": "no_edition",
+  "startedAt": "2026-09-24T07:01:00.585Z",
+  "completedAt": "2026-09-24T07:01:20.804Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "failed",
+      "startedAt": "2026-09-24T07:01:00.600Z",
+      "completedAt": "2026-09-24T07:01:20.804Z",
+      "durationMs": 20204,
+      "errorCode": "CurationGateError",
+      "errorMessage": "curation gate: maximum_single_source_share"
+    }
+  ],
+  "regenerationAttempts": 0,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 11213,
+      "outputTokens": 912,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.047319
+    }
+  ],
+  "measuredCostUsd": 0.047319,
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "verdicts": []
+  },
+  "packageStatus": "no_edition",
+  "warnings": [
+    "quality:maximum_single_source_share",
+    "curation_gate_failed_before_write:maximum_single_source_share"
+  ],
+  "sourceSummary": {
+    "successfulSources": 31,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:arxiv-cs-ai",
+      "source:arxiv-cs-lg",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai"
+    ]
+  }
+}
