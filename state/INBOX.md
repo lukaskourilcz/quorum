@@ -678,3 +678,10 @@ with its full scope, because the scope text is the approval. -->
 - [x] **CAUGHT-UP-DELIVERY-2026-09-22** — Resolved 2026-09-23: the edition for this date delivered on a later run. Original report: — post_deploy_verification: Delivery stopped without a reconciled target commit.
   RELAY marked the delivery `needs_reconciliation`; same-date content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
+
+- [ ] **DELIVERY-NOT-BUILT-CAUGHT-UP** — delivered but not being served.
+  https://caughtup-ai.vercel.app/data/board/2026-09-24.json answers 404, so the host has not rebuilt since 2026-09-24 landed on main.
+  Nothing is wrong with the package: the commit is on main and its gate was green. This is the
+  build that never ran. An empty commit to the magazine's main triggers one; if that is what it
+  takes twice, the host's git integration is the thing to look at.
+  [imp:5] [owner:me] [time:15m] [kind:deploy]
