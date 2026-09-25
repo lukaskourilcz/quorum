@@ -9,7 +9,13 @@ LinkedIn, Instagram and Threads, each bound to devShark's own profile and carryi
 
 The lifecycle is `draft` → `approved` → `queued` → `publishing`, followed by
 `published`, `failed`, `expired`, or `needs_reconciliation`. A human may also
-set `cancelled`. Every deterministic check must pass, and the SHA-256
+set `cancelled`.
+
+The owner acts on these files only through the Admin Queue (`/admin/queue`, #573,
+`docs/SOCIAL-QUEUE.md`). Each action first appends a `social-queue-event/1` under
+`../queue-events/`. An approval sets `queued`, passes every check and writes the event id
+into `approvalProvenance.approvalRef`. An edit writes a new `<id>-r<n>` draft and cancels
+the original. A hold or a rejection cancels with a reason. Every deterministic check must pass, and the SHA-256
 `content.contentHash` covers the source release/campaign, exact profile/connection target,
 capability/policy/approval provenance, audience, destination, UTM data, factual claims, assets,
 publication window and copy.

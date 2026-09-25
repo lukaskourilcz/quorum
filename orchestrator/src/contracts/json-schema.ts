@@ -121,6 +121,7 @@ import {
   PersonalGrowthRollingPlanSchema
 } from "./personal-growth.js";
 import { AnyVentureRecommendationSchema } from "./venture-recommendation.js";
+import { SocialQueueEventSchema } from "./social-queue-event.js";
 import { VisualWeightsSchema } from "./visual-weights.js";
 import { VentureRecommendationSchema } from "./venture-recommendation.js";
 import {
@@ -311,6 +312,7 @@ export const ContractSchemas = {
   "social-strategy-adjustment": SocialStrategyAdjustmentSchema,
   "social-continuation-proposal": SocialContinuationProposalSchema,
   "social-learning-checkpoint": SocialLearningCheckpointSchema,
+  "social-queue-event": SocialQueueEventSchema,
   "webdev-source": WebDevSourceSchema,
   "webdev-candidate": WebDevCandidateSchema,
   "webdev-record": WebDevRecordSchema,

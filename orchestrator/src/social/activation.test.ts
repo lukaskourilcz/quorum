@@ -2,10 +2,10 @@ import { mkdtemp, readFile, readdir, rm, writeFile, mkdir } from "node:fs/promis
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { SocialPostReceiptSchema } from "../contracts/autonomy.js";
+import { SocialActivationSchema, SocialPostReceiptSchema } from "../contracts/autonomy.js";
 import { MarketingPlanSchema } from "../contracts/marketing-plan.js";
 import { atomicWriteJson } from "../state.js";
-import { caughtUpUnlockCounter, mmaFilesUnlockCounter, refreshSocialActivation } from "./activation.js";
+import { caughtUpUnlockCounter, isPublishingVenture, mmaFilesUnlockCounter, refreshSocialActivation } from "./activation.js";
 import { QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
 import { runSocialPublisher } from "./runner.js";
 import { loadSocialPublisherRegistry } from "./publisher-targets.js";
@@ -131,6 +131,56 @@ describe("per-venture social activation", () => {
     expect(JSON.parse(await readFile(path.join(stateRoot, "notify", "social-unlocks", "caught-up.json"), "utf8"))).toMatchObject({ decisionReference: "D2-autonomy-build-2026-08-01" });
   });
 
+  it("counts drafted devShark packages for marketingShark and holds it below three or without its references", async () => {
+    // quorum#569: marketingShark's record mirrors the ten-article rule of social-2026-08a with three
+    // drafted packages. Only a drafted devShark package counts; another brand's or an unreadable
+    // file does not.
+    const repoRoot = await root();
+    const stateRoot = path.join(repoRoot, "state");
+    const draft = (brandId: string) => ({ schemaVersion: "marketingshark-package/1", brandId, status: "draft" });
+    await atomicWriteJson(stateRoot, "ventures/marketingshark/packages/2026-09-26/devshark/package.json", draft("devshark"));
+    await atomicWriteJson(stateRoot, "ventures/marketingshark/packages/2026-09-27/devshark/package.json", draft("devshark"));
+    await atomicWriteJson(stateRoot, "ventures/marketingshark/packages/2026-09-27/geoshark/package.json", draft("geoshark"));
+    await mkdir(path.join(stateRoot, "ventures/marketingshark/packages/2026-09-28/devshark"), { recursive: true });
+    await writeFile(path.join(stateRoot, "ventures/marketingshark/packages/2026-09-28/devshark/package.json"), "{ not json", "utf8");
+    const references = {
+      BUFFER_API_KEY: "fixture", BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN: "fixture",
+      DEVSHARK_INSTAGRAM_ACCESS_TOKEN: "fixture", DEVSHARK_INSTAGRAM_USER_ID: "fixture",
+      DEVSHARK_THREADS_ACCESS_TOKEN: "fixture", DEVSHARK_THREADS_USER_ID: "fixture"
+    };
+
+    const two = await refreshSocialActivation({ repoRoot, stateRoot, environment: references, now: new Date("2026-09-28T07:00:00.000Z") });
+    expect(two.ventures.marketingshark).toMatchObject({ status: "locked", counter: 2, required: 3, reason: "Drafted packages 2/3.", decisionReference: "devshark-social-2026-09a" });
+
+    await atomicWriteJson(stateRoot, "ventures/marketingshark/packages/2026-09-29/devshark/package.json", draft("devshark"));
+    const withoutReferences = await refreshSocialActivation({ repoRoot, stateRoot, environment: {}, now: new Date("2026-09-29T07:00:00.000Z") });
+    expect(withoutReferences.ventures.marketingshark).toMatchObject({ status: "locked", counter: 3 });
+    expect(withoutReferences.ventures.marketingshark?.reason).toContain("BUFFER_API_KEY, BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN, DEVSHARK_INSTAGRAM_ACCESS_TOKEN");
+
+    const ready = await refreshSocialActivation({ repoRoot, stateRoot, environment: references, now: new Date("2026-09-29T08:00:00.000Z") });
+    expect(ready.ventures.marketingshark).toMatchObject({ status: "enabled", counter: 3, unlockedAt: "2026-09-29T08:00:00.000Z" });
+    expect(JSON.parse(await readFile(path.join(stateRoot, "notify", "social-unlocks", "marketingshark.json"), "utf8")))
+      .toMatchObject({ venture: "marketingshark", decisionReference: "devshark-social-2026-09a", counter: 3 });
+    // Readiness is not a publisher: that switch moves only with the countersigned decision.
+    expect(isPublishingVenture("marketingshark")).toBe(false);
+
+    const paused = await refreshSocialActivation({ repoRoot, stateRoot, environment: references, now: new Date("2026-09-29T09:00:00.000Z"), pausedVentures: new Set(["marketingshark"]) });
+    expect(paused.ventures.marketingshark).toMatchObject({ status: "paused", counter: 3 });
+  });
+
+  it("reads an activation file written before marketingShark had a record, and adds it on refresh", async () => {
+    const repoRoot = await root();
+    const stateRoot = path.join(repoRoot, "state");
+    const now = new Date("2026-09-25T07:00:00.000Z");
+    const record = { status: "locked", counter: 0, required: 7, reason: "Ready count 0/7.", updatedAt: now.toISOString(), unlockedAt: null, decisionReference: "D2-autonomy-build-2026-08-01" };
+    const legacy = { schemaVersion: "social-activation/1", ventures: { "caught-up": record, "mma-files": { ...record, required: 10 }, "titty-tuesdays": { ...record, required: 4 } }, updatedAt: now.toISOString() };
+    expect(SocialActivationSchema.safeParse(legacy).success).toBe(true);
+    expect(SocialActivationSchema.safeParse({ ...legacy, ventures: { ...legacy.ventures, marketingshark: { ...record, required: 2, decisionReference: "devshark-social-2026-09a" } } }).success).toBe(false);
+    await atomicWriteJson(stateRoot, "social/activation.json", legacy);
+    const refreshed = await refreshSocialActivation({ repoRoot, stateRoot, environment: {}, now });
+    expect(refreshed.ventures.marketingshark).toMatchObject({ status: "locked", counter: 0, required: 3 });
+  });
+
   it("raises one owner item for missing credentials, in the shape that document requires", async () => {
     /*
      * The daily cycle refreshes these counters now, so this item lands for real rather than never.
@@ -199,7 +249,8 @@ describe("per-venture social activation", () => {
     await mkdir(configRoot, { recursive: true });
     await writeFile(path.join(configRoot, "channels.json"), JSON.stringify({ schemaVersion: 1, channels: [
       { id: "threads", specialist: "THREADS", mode: "autopublish", connector: "meta_threads", credentialRef: "unused", approvedScopes: ["threads_basic", "threads_content_publish"], nativeFormats: ["text"], maxOrganicPostsPerDay: 2, minHoursBetweenPosts: 6, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" },
-      { id: "instagram", specialist: "INSTAGRAM", mode: "autopublish", connector: "meta_instagram", credentialRef: "unused", approvedScopes: ["instagram_basic", "instagram_content_publish"], nativeFormats: ["image"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 12, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" }
+      { id: "instagram", specialist: "INSTAGRAM", mode: "autopublish", connector: "meta_instagram", credentialRef: "unused", approvedScopes: ["instagram_basic", "instagram_content_publish"], nativeFormats: ["image"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 12, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" },
+      { id: "linkedin", specialist: null, mode: "draft", connector: "buffer_linkedin", credentialRef: "unused", approvedScopes: ["provider-managed"], nativeFormats: ["text"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 20, timezone: "Europe/Prague", enabledByHumanAt: null }
     ] }));
     await writeActivePublisherConfig(configRoot);
     for (let index = 1; index <= 7; index += 1) await atomicWriteJson(stateRoot, `release-proofs/caught-up/${index}.json`, proof(index));
@@ -222,7 +273,8 @@ describe("per-venture social activation", () => {
     await mkdir(configRoot, { recursive: true });
     await writeFile(path.join(configRoot, "channels.json"), JSON.stringify({ schemaVersion: 1, channels: [
       { id: "threads", specialist: "THREADS", mode: "autopublish", connector: "meta_threads", credentialRef: "unused", approvedScopes: ["threads_basic", "threads_content_publish"], nativeFormats: ["text"], maxOrganicPostsPerDay: 2, minHoursBetweenPosts: 6, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" },
-      { id: "instagram", specialist: "INSTAGRAM", mode: "autopublish", connector: "meta_instagram", credentialRef: "unused", approvedScopes: ["instagram_basic", "instagram_content_publish"], nativeFormats: ["image"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 12, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" }
+      { id: "instagram", specialist: "INSTAGRAM", mode: "autopublish", connector: "meta_instagram", credentialRef: "unused", approvedScopes: ["instagram_basic", "instagram_content_publish"], nativeFormats: ["image"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 12, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" },
+      { id: "linkedin", specialist: null, mode: "draft", connector: "buffer_linkedin", credentialRef: "unused", approvedScopes: ["provider-managed"], nativeFormats: ["text"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 20, timezone: "Europe/Prague", enabledByHumanAt: null }
     ] }));
     await writeActivePublisherConfig(configRoot);
     for (let index = 1; index <= 7; index += 1) await atomicWriteJson(stateRoot, `release-proofs/caught-up/${index}.json`, proof(index));

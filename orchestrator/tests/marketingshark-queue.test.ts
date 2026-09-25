@@ -61,6 +61,8 @@ beforeAll(async () => {
 
 /** A registry with devShark's Instagram and Threads profiles and connections, cloned from DNESKAi's. */
 function withDevShark(committed: SocialPublisherRegistry): SocialPublisherRegistry {
+  // #569 registers devShark's profiles and connections in the committed registry; use them as they are.
+  if (committed.profiles.some((candidate) => candidate.id === DEVSHARK_SOCIAL_TARGETS.instagram.profileId)) return committed;
   const profile = committed.profiles.find((candidate) => candidate.id === "social-profile-caught-up")!;
   const profiles = (["instagram", "threads"] as const).map((platform) => ({
     ...structuredClone(profile),
@@ -234,7 +236,7 @@ describe("marketingShark's queue drafts", () => {
 describe("marketingShark in the legacy queue mapping", () => {
   it("maps a v1 marketingShark item onto devShark's per-platform profiles once they are registered", async () => {
     const registered = withDevShark(await loadSocialPublisherRegistry(configRoot));
-    const mapped = SocialPublisherRegistrySchema.parse({
+    const mapped = registered.legacyQueueMappings.some((mapping) => mapping.venture === "marketingshark") ? registered : SocialPublisherRegistrySchema.parse({
       ...registered,
       legacyQueueMappings: [...registered.legacyQueueMappings, {
         venture: "marketingshark",

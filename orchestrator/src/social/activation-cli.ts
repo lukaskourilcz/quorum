@@ -33,7 +33,7 @@ async function main(): Promise<void> {
     safetyCheckerReady: TT_SAFETY_CHECKER_VERSION === "keeper-tt-1",
     pausedVentures: pausedVentureIds(registry)
   });
-  for (const venture of SOCIAL_VENTURES) {
+  for (const venture of [...SOCIAL_VENTURES, "marketingshark"] as const) {
     const entry = activation.ventures[venture];
     if (!entry) continue;
     console.log(`${venture}: ${entry.counter}/${entry.required} ${entry.status} — ${entry.reason}`);

@@ -3,7 +3,8 @@
   "ventures": {
     "caught-up": { "status": "locked", "counter": 3, "required": 7, "reason": "Health counter 3/7.", "updatedAt": "2026-08-01T10:00:00.000Z", "unlockedAt": null, "decisionReference": "D2-autonomy-build-2026-08-01" },
     "mma-files": { "status": "enabled", "counter": 10, "required": 10, "reason": "Automatic social gate passed under the owner decision.", "updatedAt": "2026-08-01T10:00:00.000Z", "unlockedAt": "2026-08-01T10:00:00.000Z", "decisionReference": "D2-autonomy-build-2026-08-01" },
-    "titty-tuesdays": { "status": "paused", "counter": 4, "required": 4, "reason": "A post failed twice and needs repair.", "updatedAt": "2026-08-01T10:00:00.000Z", "unlockedAt": "2026-08-01T09:00:00.000Z", "decisionReference": "D2-autonomy-build-2026-08-01" }
+    "titty-tuesdays": { "status": "paused", "counter": 4, "required": 4, "reason": "A post failed twice and needs repair.", "updatedAt": "2026-08-01T10:00:00.000Z", "unlockedAt": "2026-08-01T09:00:00.000Z", "decisionReference": "D2-autonomy-build-2026-08-01" },
+    "marketingshark": { "status": "locked", "counter": 1, "required": 3, "reason": "Drafted packages 1/3.", "updatedAt": "2026-08-01T10:00:00.000Z", "unlockedAt": null, "decisionReference": "devshark-social-2026-09a" }
   },
   "updatedAt": "2026-08-01T10:00:00.000Z"
 }

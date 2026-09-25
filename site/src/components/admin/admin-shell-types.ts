@@ -7,6 +7,7 @@ export type AdminDestinationIcon =
   | "overview"
   | "production"
   | "profiles"
+  | "queue"
   | "workspace";
 
 export interface AdminDestination {

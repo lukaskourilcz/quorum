@@ -1,8 +1,8 @@
 {
   "schemaVersion": "social-publisher-registry/1",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "providerApiVersion": "v26.0",
-  "updatedAt": "2026-08-30T00:00:00.000Z",
+  "updatedAt": "2026-09-25T00:00:00.000Z",
   "ownerDecisionRef": "GitHub #409",
   "profiles": [
     {
@@ -451,6 +451,162 @@
         "fixtureKey": null
       },
       "notes": "Internal proposal only. The owner creates and authorizes the Instagram and Threads accounts; no connection, credential or publishing authority exists for this edition. Public name cleared as WebDev Signal on 2026-09-15 (docs/WEBDEV-SIGNAL-FOUNDING.md); proposed handles, unverified without a login: Instagram @webdevsignal for the English edition and @webdevsignal.cz for the Czech edition, each with its Threads profile under the same handle."
+    },
+    {
+      "schemaVersion": "social-profile/1",
+      "id": "social-profile-devshark-linkedin",
+      "displayLabel": "devShark on LinkedIn",
+      "kind": "owned-brand",
+      "role": "venture-primary",
+      "ownerRef": "boardlessai",
+      "ventureRef": "marketingshark",
+      "brandRef": "devshark",
+      "purpose": "Publish owner-approved devShark posts that marketingShark drafts to devShark's LinkedIn Company Page, reached through Buffer.",
+      "audience": "People learning web development in English, from their first HTML, CSS and JavaScript to working developers.",
+      "languages": [
+        "en"
+      ],
+      "markets": [
+        "US"
+      ],
+      "supportedTopics": [
+        "web-development",
+        "developer-learning"
+      ],
+      "supportedVentures": [
+        "marketingshark"
+      ],
+      "capabilityRefs": [],
+      "amplifierArchetype": null,
+      "amplifierEligibility": null,
+      "originalContentPromise": "Only marketingShark's devShark packages that the owner approves in the Queue. No other venture's copy, and no reward for following, liking, sharing or commenting.",
+      "recurringFormatRefs": [
+        "devshark-quiz-carousel"
+      ],
+      "avatar": {
+        "kind": "descriptor",
+        "descriptor": "devShark brand mark",
+        "reference": null
+      },
+      "lifecycle": "proposed",
+      "liveEligible": false,
+      "createdAt": "2026-09-25T00:00:00.000Z",
+      "updatedAt": "2026-09-25T00:00:00.000Z",
+      "provenance": {
+        "source": "owner",
+        "recordedBy": "owner",
+        "evidenceRefs": [
+          "GitHub #569",
+          "SECOND-HANDOFF-25-9-2026.md",
+          "state/decisions/2026-09-26-devshark-social-queue.md"
+        ],
+        "fixtureKey": null
+      },
+      "notes": "Internal proposal only. The owner creates the LinkedIn Company Page and connects it in Buffer; the connection stays held until the owner countersigns state/decisions/2026-09-26-devshark-social-queue.md."
+    },
+    {
+      "schemaVersion": "social-profile/1",
+      "id": "social-profile-devshark-instagram",
+      "displayLabel": "devShark on Instagram",
+      "kind": "owned-brand",
+      "role": "venture-primary",
+      "ownerRef": "boardlessai",
+      "ventureRef": "marketingshark",
+      "brandRef": "devshark",
+      "purpose": "Publish owner-approved devShark quiz carousels that marketingShark drafts to devShark's own Instagram professional account.",
+      "audience": "People learning web development in English, from their first HTML, CSS and JavaScript to working developers.",
+      "languages": [
+        "en"
+      ],
+      "markets": [
+        "US"
+      ],
+      "supportedTopics": [
+        "web-development",
+        "developer-learning"
+      ],
+      "supportedVentures": [
+        "marketingshark"
+      ],
+      "capabilityRefs": [],
+      "amplifierArchetype": null,
+      "amplifierEligibility": null,
+      "originalContentPromise": "Only marketingShark's devShark packages that the owner approves in the Queue. No other venture's copy, and no reward for following, liking, sharing or commenting.",
+      "recurringFormatRefs": [
+        "devshark-quiz-carousel"
+      ],
+      "avatar": {
+        "kind": "descriptor",
+        "descriptor": "devShark brand mark",
+        "reference": null
+      },
+      "lifecycle": "proposed",
+      "liveEligible": false,
+      "createdAt": "2026-09-25T00:00:00.000Z",
+      "updatedAt": "2026-09-25T00:00:00.000Z",
+      "provenance": {
+        "source": "owner",
+        "recordedBy": "owner",
+        "evidenceRefs": [
+          "GitHub #569",
+          "SECOND-HANDOFF-25-9-2026.md",
+          "state/decisions/2026-09-26-devshark-social-queue.md"
+        ],
+        "fixtureKey": null
+      },
+      "notes": "Internal proposal only. The owner creates the Instagram professional account and connects it through Instagram Login; the connection stays held until the owner countersigns state/decisions/2026-09-26-devshark-social-queue.md."
+    },
+    {
+      "schemaVersion": "social-profile/1",
+      "id": "social-profile-devshark-threads",
+      "displayLabel": "devShark on Threads",
+      "kind": "owned-brand",
+      "role": "venture-primary",
+      "ownerRef": "boardlessai",
+      "ventureRef": "marketingshark",
+      "brandRef": "devshark",
+      "purpose": "Publish owner-approved devShark posts that marketingShark drafts to devShark's own Threads profile.",
+      "audience": "People learning web development in English, from their first HTML, CSS and JavaScript to working developers.",
+      "languages": [
+        "en"
+      ],
+      "markets": [
+        "US"
+      ],
+      "supportedTopics": [
+        "web-development",
+        "developer-learning"
+      ],
+      "supportedVentures": [
+        "marketingshark"
+      ],
+      "capabilityRefs": [],
+      "amplifierArchetype": null,
+      "amplifierEligibility": null,
+      "originalContentPromise": "Only marketingShark's devShark packages that the owner approves in the Queue. No other venture's copy, and no reward for following, liking, sharing or commenting.",
+      "recurringFormatRefs": [
+        "devshark-quiz-carousel"
+      ],
+      "avatar": {
+        "kind": "descriptor",
+        "descriptor": "devShark brand mark",
+        "reference": null
+      },
+      "lifecycle": "proposed",
+      "liveEligible": false,
+      "createdAt": "2026-09-25T00:00:00.000Z",
+      "updatedAt": "2026-09-25T00:00:00.000Z",
+      "provenance": {
+        "source": "owner",
+        "recordedBy": "owner",
+        "evidenceRefs": [
+          "GitHub #569",
+          "SECOND-HANDOFF-25-9-2026.md",
+          "state/decisions/2026-09-26-devshark-social-queue.md"
+        ],
+        "fixtureKey": null
+      },
+      "notes": "Internal proposal only. The owner creates the Threads profile through the devShark Instagram account; the connection stays held until the owner countersigns state/decisions/2026-09-26-devshark-social-queue.md."
     }
   ],
   "connections": [
@@ -687,6 +843,119 @@
         "timezone": "Europe/Prague"
       },
       "lastVerified": null
+    },
+    {
+      "schemaVersion": "social-connection/1",
+      "id": "social-connection-devshark-linkedin",
+      "profileId": "social-profile-devshark-linkedin",
+      "platform": "linkedin",
+      "publicHandle": null,
+      "nativeAccountId": null,
+      "connector": {
+        "id": "buffer-linkedin",
+        "version": "1.0.0",
+        "providerId": "buffer",
+        "apiVersion": "graphql-current",
+        "loginMode": "provider-oauth"
+      },
+      "credentialRef": "BUFFER_API_KEY",
+      "nativeAccountIdRef": "BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN",
+      "approvedScopes": [
+        "provider-managed"
+      ],
+      "supportedCapabilities": [
+        "publish-original"
+      ],
+      "mode": "held",
+      "health": {
+        "status": "unverified",
+        "unavailableReason": "human-activation-required"
+      },
+      "tokenExpiresAt": null,
+      "appReviewExpiresAt": null,
+      "enabledByHumanAt": null,
+      "cadence": {
+        "maxOrganicPostsPerDay": 1,
+        "minHoursBetweenPosts": 20,
+        "timezone": "Europe/Prague"
+      },
+      "lastVerified": null
+    },
+    {
+      "schemaVersion": "social-connection/1",
+      "id": "social-connection-devshark-instagram",
+      "profileId": "social-profile-devshark-instagram",
+      "platform": "instagram",
+      "publicHandle": null,
+      "nativeAccountId": null,
+      "connector": {
+        "id": "meta-instagram",
+        "version": "1.0.0",
+        "providerId": "direct-meta",
+        "apiVersion": "v26.0",
+        "loginMode": "instagram-login"
+      },
+      "credentialRef": "DEVSHARK_INSTAGRAM_ACCESS_TOKEN",
+      "nativeAccountIdRef": "DEVSHARK_INSTAGRAM_USER_ID",
+      "approvedScopes": [
+        "instagram_business_basic",
+        "instagram_business_content_publish"
+      ],
+      "supportedCapabilities": [
+        "publish-original"
+      ],
+      "mode": "held",
+      "health": {
+        "status": "unverified",
+        "unavailableReason": "human-activation-required"
+      },
+      "tokenExpiresAt": null,
+      "appReviewExpiresAt": null,
+      "enabledByHumanAt": null,
+      "cadence": {
+        "maxOrganicPostsPerDay": 1,
+        "minHoursBetweenPosts": 20,
+        "timezone": "Europe/Prague"
+      },
+      "lastVerified": null
+    },
+    {
+      "schemaVersion": "social-connection/1",
+      "id": "social-connection-devshark-threads",
+      "profileId": "social-profile-devshark-threads",
+      "platform": "threads",
+      "publicHandle": null,
+      "nativeAccountId": null,
+      "connector": {
+        "id": "meta-threads",
+        "version": "1.0.0",
+        "providerId": "direct-meta",
+        "apiVersion": "v26.0",
+        "loginMode": "threads-oauth"
+      },
+      "credentialRef": "DEVSHARK_THREADS_ACCESS_TOKEN",
+      "nativeAccountIdRef": "DEVSHARK_THREADS_USER_ID",
+      "approvedScopes": [
+        "threads_basic",
+        "threads_content_publish"
+      ],
+      "supportedCapabilities": [
+        "publish-original"
+      ],
+      "mode": "held",
+      "health": {
+        "status": "unverified",
+        "unavailableReason": "human-activation-required"
+      },
+      "tokenExpiresAt": null,
+      "appReviewExpiresAt": null,
+      "enabledByHumanAt": null,
+      "cadence": {
+        "maxOrganicPostsPerDay": 1,
+        "minHoursBetweenPosts": 20,
+        "timezone": "Europe/Prague"
+      },
+      "lastVerified": null
     }
   ],
   "legacyQueueMappings": [
@@ -716,6 +985,15 @@
         "instagram": "social-connection-titty-tuesdays-instagram"
       },
       "mappingRef": "GitHub #409"
+    },
+    {
+      "venture": "marketingshark",
+      "profileId": "social-profile-devshark-instagram",
+      "connections": {
+        "threads": "social-connection-devshark-threads",
+        "instagram": "social-connection-devshark-instagram"
+      },
+      "mappingRef": "GitHub #568"
     }
   ]
 }

@@ -38,10 +38,12 @@ Authority: GitHub #406, using the provider/authority decision in #405 and capabi
 | `social-distribution-experiment/1` | #412 experiment domain | One changed variable, metric, guardrail, scope, sample, stop condition, frozen hard gates and append-only evidence. | Manipulation, weakened policy/privacy/authority or publishing. |
 | `social-boost-proposal/1` | #412 held proposal domain | Versioned organic threshold/sample plus content, destination and budget-authority evidence for owner review. | An ad call, purchase, plan upgrade, spend or publishing authority. |
 | `social-profile-event/1` | Profile/connection lifecycle ledger | Append-only proposal, setup, connection, activation, pause, reauthorisation, disconnect, retire, reject and correction evidence. | Engagement actions; the enum deliberately contains none. |
+| `social-queue-event/1` | #573 Queue workspace | One owner decision on one queue item: approve, edit, hold, reject or re-render, bound to the content hash the owner was shown, with the approved window, the superseding item or the reason and taste note. | Sending: an approval moves an item to `queued`, and the publisher still applies every lock. |
 | `amplification-policy/1` | #415 amplifier policy domain | One central original/support ratio, runway, cooldown, campaign, duplicate, audience-angle and stagger policy plus stricter profile/platform overrides and history. | A live amplifier, loosened capability or copied UI/runtime literals. |
 
 Schemas and inferred TypeScript types live in
-`orchestrator/src/contracts/social-distribution.ts`. `parseSocialDistributionRecords` parses or
+`orchestrator/src/contracts/social-distribution.ts`; `social-queue-event/1` has its own module,
+`orchestrator/src/contracts/social-queue-event.ts`, documented in `docs/SOCIAL-QUEUE.md`. `parseSocialDistributionRecords` parses or
 drops each record independently and exposes bounded drop reasons. Unknown fields fail because the
 contracts are strict; credential values, sessions, private audience data and prohibited action
 fields cannot hide in an open object.

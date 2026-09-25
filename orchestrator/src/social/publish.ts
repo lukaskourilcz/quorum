@@ -29,6 +29,28 @@ export class SocialPublishHoldError extends Error {
   }
 }
 
+/**
+ * A provider refused the request outright, so nothing was created on its side.
+ *
+ * An adapter throws this only when the provider's answer proves the post does not exist: a 429,
+ * an authentication or permission refusal, or a typed validation or plan-limit error returned
+ * instead of a post. The item then fails for owner review instead of waiting on reconciliation.
+ * A timeout, a server error or an unreadable answer is never this: the post may exist, so it stays
+ * ambiguous and nothing resends it.
+ */
+export class ProviderRejectedError extends Error {
+  readonly definite = true as const;
+
+  constructor(
+    readonly reason: "rate-limited" | "plan-limit" | "invalid-input" | "unauthorized" | "not-found" | "channel-unavailable",
+    message: string,
+    readonly retryAfterSeconds: number | null = null
+  ) {
+    super(message);
+    this.name = "ProviderRejectedError";
+  }
+}
+
 export interface PublishAdapter {
   /**
    * Send the item. May throw `SocialPublishHoldError` before its first write request (a publishing
@@ -96,7 +118,7 @@ export async function publishQueueItem(
     });
   } catch (error) {
     return reconcileQueueItem(claimed, {
-      outcome: "ambiguous",
+      outcome: error instanceof ProviderRejectedError ? "failed" : "ambiguous",
       error: error instanceof Error ? error.message : String(error)
     });
   }

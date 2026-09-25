@@ -2,7 +2,13 @@ import { cp, mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { isPublishingVenture, SOCIAL_VENTURES } from "../src/social/activation.js";
+import { SocialActivationSchema } from "../src/contracts/autonomy.js";
+import {
+  isPublishingVenture,
+  MARKETINGSHARK_REQUIRED_PACKAGES,
+  MARKETINGSHARK_SOCIAL_DECISION_REFERENCE,
+  SOCIAL_VENTURES
+} from "../src/social/activation.js";
 import { runSocialPublisher } from "../src/social/runner.js";
 import { configRoot } from "../src/paths.js";
 import { assertQueueItemPublishable, CapabilityAwareQueueItemSchema } from "../src/social/queue.js";
@@ -47,8 +53,20 @@ describe("marketingShark cannot post", () => {
     const environment = await readFile(path.join(repoRoot, ".env.example"), "utf8");
     expect(environment).toMatch(/^SOCIAL_KILL_SWITCH=true$/mu);
     expect(environment).toMatch(/^METRICS_INGESTION_ENABLED=false$/mu);
-    // The venture added no channel, no token and no user id of its own.
-    expect(environment).not.toMatch(/MARKETINGSHARK|DEVSHARK|GEOSHARK/iu);
+    // The venture itself adds no channel, token or user id of its own, and geoShark has none.
+    expect(environment).not.toMatch(/MARKETINGSHARK|GEOSHARK/iu);
+    // devShark's three connections are named here since devshark-social-2026-09a (quorum#569):
+    // reference names only, never values. Every DEVSHARK and Buffer line is a bare name.
+    const references = environment.split("\n").filter((line) => /DEVSHARK|BUFFER/iu.test(line) && !line.startsWith("#"));
+    expect(references.map((line) => line.split("=")[0])).toEqual([
+      "DEVSHARK_INSTAGRAM_USER_ID",
+      "DEVSHARK_INSTAGRAM_ACCESS_TOKEN",
+      "DEVSHARK_THREADS_USER_ID",
+      "DEVSHARK_THREADS_ACCESS_TOKEN",
+      "BUFFER_API_KEY",
+      "BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN"
+    ]);
+    for (const line of references) expect(line).toMatch(/^[A-Z][A-Z0-9_]*=$/u);
   });
 
   it("writes every queue item as a draft the publisher refuses", async () => {
@@ -115,13 +133,16 @@ describe("marketingShark cannot post", () => {
       // for want of an activation record and the test passes even with the other locks deleted --
       // it would prove nothing. Here the locks on the items themselves stand in the way: devShark's
       // targets resolve to no eligible connection, every check is pending, and marketingShark is
-      // not a publishing venture.
+      // not a publishing venture. Its record has its own decision and a floor of three (quorum#569);
+      // a record that broke either would fail to parse, and the runner would quietly recompute a
+      // locked world.
       ventures: Object.fromEntries([...SOCIAL_VENTURES, "marketingshark"].map((venture) => [venture, {
-        status: "enabled", counter: 99, required: 1, reason: "test",
+        status: "enabled", counter: 99, required: venture === "marketingshark" ? MARKETINGSHARK_REQUIRED_PACKAGES : 1, reason: "test",
         updatedAt: now.toISOString(), unlockedAt: now.toISOString(),
-        decisionReference: "D2-autonomy-build-2026-08-01"
+        decisionReference: venture === "marketingshark" ? MARKETINGSHARK_SOCIAL_DECISION_REFERENCE : "D2-autonomy-build-2026-08-01"
       }]))
     }), "utf8");
+    expect(SocialActivationSchema.safeParse(JSON.parse(await readFile(path.join(root, "social", "activation.json"), "utf8"))).success).toBe(true);
 
     let fetched = 0;
     const report = await runSocialPublisher({
@@ -138,8 +159,8 @@ describe("marketingShark cannot post", () => {
     });
 
     // Three items on disk, and not one of them sent: every check is pending, devShark's profiles
-    // are unknown or held, and LinkedIn has no transport. Nothing was published and nothing touched
-    // the network.
+    // are held, and LinkedIn has no transport. Nothing was published and nothing touched the
+    // network.
     expect(report.queueItems).toBe(3);
     expect(report.published).toBe(0);
     expect(fetched).toBe(0);

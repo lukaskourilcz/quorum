@@ -40,6 +40,26 @@
       "minHoursBetweenPosts": 12,
       "timezone": "Europe/Prague",
       "enabledByHumanAt": null
+    },
+    {
+      "id": "linkedin",
+      "specialist": null,
+      "mode": "draft",
+      "connector": "buffer_linkedin",
+      "credentialRef": "BUFFER_API_KEY",
+      "approvedScopes": [
+        "provider-managed"
+      ],
+      "nativeFormats": [
+        "text",
+        "image",
+        "multi-image",
+        "document"
+      ],
+      "maxOrganicPostsPerDay": 1,
+      "minHoursBetweenPosts": 20,
+      "timezone": "Europe/Prague",
+      "enabledByHumanAt": null
     }
   ]
 }

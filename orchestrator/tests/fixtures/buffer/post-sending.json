@@ -1,0 +1,21 @@
+{
+  "source": "https://developers.buffer.com/reference.md (Channel, Post, PostStatus, PostActionPayload), read 2026-09-25",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "ratelimit": "\"100-in-15min\"; r=98; t=897, \"250-in-1day\"; r=248; t=86397, \"3000-in-30days\"; r=2969; t=696980"
+  },
+  "body": {
+    "data": {
+      "post": {
+        "id": "fixture-post-0001",
+        "channelId": "fixture-channel-devshark-linkedin",
+        "channelService": "linkedin",
+        "status": "sending",
+        "sentAt": null,
+        "externalLink": null,
+        "error": null
+      }
+    }
+  }
+}

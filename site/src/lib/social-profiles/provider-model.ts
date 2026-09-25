@@ -8,7 +8,7 @@ export interface SocialProviderRecord {
   id: "direct-meta" | "buffer" | "metricool" | "n8n" | "make" | "ayrshare";
   name: string;
   role: "direct-official" | "managed-scheduler" | "notification-webhook";
-  supportedPlatforms: Array<"instagram" | "threads">;
+  supportedPlatforms: Array<"instagram" | "threads" | "linkedin">;
   capabilities: string[];
   implementationVersion: string;
   apiVersion: string | null;
@@ -118,9 +118,9 @@ function stringArray(value: unknown, max = 100): string[] | null {
 
 export function parseSocialProvider(value: unknown): SocialProviderRecord | null {
   const item = rawRecord(value); const cost = rawRecord(item?.cost); const healthPolicy = rawRecord(item?.healthPolicy);
-  const platforms = stringArray(item?.supportedPlatforms, 2); const capabilities = stringArray(item?.capabilities, 8);
+  const platforms = stringArray(item?.supportedPlatforms, 3); const capabilities = stringArray(item?.capabilities, 8);
   if (item?.schemaVersion !== "social-provider/1" || !oneOf(item.id, providerIds) || !text(item.name, 100) || !oneOf(item.role, providerRoles)
-    || !platforms || !platforms.every((platform) => platform === "instagram" || platform === "threads") || !capabilities
+    || !platforms || !platforms.every((platform) => platform === "instagram" || platform === "threads" || platform === "linkedin") || !capabilities
     || !text(item.implementationVersion, 80) || !nullableText(item.apiVersion, 80) || !oneOf(item.verdict, providerVerdicts)
     || !text(item.lastVerifiedDate, 20) || !text(item.decisionRef, 160) || !cost || !healthPolicy || !text(healthPolicy.reverifyBy, 20)
     || !text(cost.plan, 120) || !text(cost.monthlyCostPosture, 160) || !text(cost.exitPath, 300) || cost.purchaseAuthorized !== false

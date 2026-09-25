@@ -41,18 +41,25 @@ describe("Social Distribution founding policy", () => {
     expect(design).toContain("SOCIAL-DISTRIBUTION-CONNECTION-001");
   });
 
-  it("keeps both channels draft-only with posting scopes and no human activation", async () => {
+  it("keeps every channel draft-only with posting scopes and no human activation", async () => {
     const registry = JSON.parse(await text("config/channels.json")) as {
-      channels: Array<{ id: string; mode: string; enabledByHumanAt: string | null; approvedScopes: string[] }>;
+      channels: Array<{ id: string; mode: string; enabledByHumanAt: string | null; approvedScopes: string[]; connector: string }>;
     };
 
-    expect(registry.channels.map((channel) => channel.id)).toEqual(["threads", "instagram"]);
+    // quorum#569 adds LinkedIn as the third channel, reached through Buffer. Its connection holds
+    // no LinkedIn scope of its own: Buffer does, and the channel records only that marker.
+    expect(registry.channels.map((channel) => channel.id)).toEqual(["threads", "instagram", "linkedin"]);
     for (const channel of registry.channels) {
       expect(channel.mode).toBe("draft");
       expect(channel.enabledByHumanAt).toBeNull();
-      expect(channel.approvedScopes.every((scope) => /(?:basic|content_publish)$/u.test(scope))).toBe(true);
       expect(channel.approvedScopes.join(" ")).not.toMatch(/manage_replies|read_replies|manage_comments|manage_messages|keyword_search|ads_management/iu);
     }
+    for (const channel of registry.channels.filter(({ id }) => id !== "linkedin")) {
+      expect(channel.approvedScopes.every((scope) => /(?:basic|content_publish)$/u.test(scope))).toBe(true);
+    }
+    const linkedin = registry.channels.find(({ id }) => id === "linkedin")!;
+    expect(linkedin.connector).toBe("buffer_linkedin");
+    expect(linkedin.approvedScopes).toEqual(["provider-managed"]);
   });
 
   it("pins current capability inputs and permanent isolation instead of inventing portfolio edges", async () => {

@@ -29,6 +29,7 @@ const registry = JSON.parse(
 const canonicalDestinations = [
   "/admin",
   "/admin?view=waiting",
+  "/admin/queue",
   "/admin/settings",
   "/admin?venture=carousel-studio",
   ...registry.ventures

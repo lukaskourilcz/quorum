@@ -70,6 +70,88 @@ the graphic. Approving a post publishes it without another manual step.
 - One paid call per brand per day inside the $0.10 envelope; `maxOutputTokens` is not raised.
   Frames, gates and queue items cost nothing.
 
+## What #569 registers
+
+- Three `venture-primary` profiles for the devShark brand under the marketingShark venture,
+  `proposed` and not live-eligible, each with one held connection. The repository holds
+  reference names only: `BUFFER_API_KEY` and `BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN` for the
+  LinkedIn Page through Buffer, `DEVSHARK_INSTAGRAM_USER_ID` and `DEVSHARK_INSTAGRAM_ACCESS_TOKEN`
+  through Instagram Login, `DEVSHARK_THREADS_USER_ID` and `DEVSHARK_THREADS_ACCESS_TOKEN`. The
+  values exist only as GitHub Actions secrets the owner sets.
+- Held provider bindings: Direct Meta for Instagram and Threads, Buffer for LinkedIn. A
+  connection on any transport other than Direct Meta resolves `held` with
+  `provider-adapter-unavailable` until #571 builds the Buffer adapter.
+- `linkedin` joins the platform enum, with LinkedIn's organization scopes for a later direct
+  adapter and a `provider-managed` marker for aggregator connections. `config/channels.json`
+  gains a third channel, `linkedin`, in `draft`: one organic post a day, at least 20 hours apart.
+- One held, model-free strategy per devShark profile, because every real profile has exactly one.
+- `state/social/activation.json` gains a `marketingshark` record: drafted devShark packages
+  against a floor of three before any live send, under this decision's id.
+- `marketingshark` in `legacyQueueMappings`, so a v1 item it left behind migrates to the profile
+  that owns its channel's connection.
+- `.env.example` names the six references and `LINKEDIN_API_VERSION`, all with empty values.
+  `marketingshark-nothing-posts.test.ts` banned the word `DEVSHARK` there; it now requires every
+  `DEVSHARK` and `BUFFER` line to be a bare name with no value.
+- `config/network-allowlist.json` gains `api.buffer.com`, `cdn.jsdelivr.net` (checking that an
+  asset URL resolves before a send) and `api.linkedin.com` (reserved; nothing calls it).
+- Stop condition for the new network: stop on a factual correction a package cannot absorb, a
+  platform warning or an owner veto, then roll back as below.
+
+## What #571 builds
+
+- `orchestrator/src/social/buffer.ts`, the LinkedIn transport over Buffer's GraphQL API: a
+  read-only channel check (a connected LinkedIn Page, never a personal profile, with requests left
+  for a whole post), `createPost` with `shareNow` inside the item's own window, and a read-back that
+  verifies only a post Buffer reports sent with its LinkedIn link. Buffer never chooses copy,
+  window, profile or experiment.
+- A refusal that proves nothing was created (a 429, a refused key, a typed validation or plan-limit
+  error) fails the item for owner review; a timeout or an unexplained error holds it for
+  reconciliation, as with Direct Meta. Neither resends.
+- Until the live test, a carousel goes to LinkedIn as slide one with the caption and the tracked
+  devShark link. The test decides whether Buffer carries all five slides as one multi-image post.
+- Buffer's provider record: LinkedIn only, the free plan's limits, $0, and the exit (revoke the API
+  key). `orchestrator/src/social/provider-platforms.ts` keeps Direct Meta the only transport for
+  Instagram and Threads.
+- The refusals by name that waited for this transport are gone: the queue item check, the channel
+  check and the target resolver's `provider-adapter-unavailable` hold for Buffer. Buffer's verdict
+  and its held binding hold LinkedIn instead.
+- The direct LinkedIn adapter is documented in `docs/SOCIAL-PROVIDERS.md` as the later path and not
+  built.
+
+## What #573 builds
+
+- `/admin/queue`, the Queue workspace, behind one server-only read boundary
+  (`site/src/lib/admin-queue.ts`). It lists every queue item, v1 through the registry mapping and
+  v2 directly, grouped waiting, scheduled, sending, sent, failed and held, with unreadable and
+  dropped counts. No file name, credential reference, token or provider payload reaches the
+  browser. "Queue" is in the navigation with the waiting count as its badge, and the Overview
+  says how many posts wait there.
+- `POST /admin/api/queue/actions`: approve, edit, hold and reject, each bound to the content hash
+  the owner was shown, with 409 on a mismatch. Each action appends one `social-queue-event/1`
+  under `state/social/queue-events/` before it changes the item. An approval reruns the six
+  deterministic checks, records the owner as the evidence for brand, claims, quill, keeper and
+  policy, writes the event id as `approvalRef` and sets `queued`. An edit writes `<id>-r<n>` and
+  cancels the original, so an approved item never changes in place. Re-render waits for #575.
+- The approval stops at `queued`. Dispatching the publisher is #574, and every lock below still
+  decides whether anything sends.
+
+## What #574 builds
+
+- `site/src/lib/queue-dispatch.ts`: once an approval is saved on GitHub, the Queue dispatches
+  `social-publisher.yml` with `validate_only` off, using `BOARDLESSAI_GITHUB_TOKEN`. The token
+  needs Actions write, an owner item. The dispatch is a wake-up and grants nothing: the run applies
+  every lock below. Hold, reject and edit dispatch nothing.
+- A wake-up that fails keeps the approval. The item stays `queued`, the action response names the
+  failure, and approving the same copy again, or a run started from GitHub Actions, retries it
+  inside the window.
+- The workflow's checkout names `github.ref`. Two approvals a minute apart queue two runs, and the
+  second must start from the branch the first left, or it would send the first post again.
+- The hourly schedule stays commented out, and `ci-policy.test.ts` is unchanged. An hourly run for
+  windowed items is a later decision (`docs/SOCIAL-DAILY-OPERATIONS.md`).
+- The workflow does not hand devShark's six credential references to the job yet. marketingShark
+  is not a publishing venture, so those `env:` lines belong to the activation commit, beside the
+  channel flip, as the paused ventures' lines left the job with their pause.
+
 ## What stays held
 
 Building every step of the programme sends nothing. Until this record is countersigned, and
@@ -80,7 +162,8 @@ beyond it until the owner performs each activation step below:
 - Every devShark connection stays `held`; no credential value exists in the repository, only
   reference names.
 - marketingShark is not a publishing venture; its items are drafts with every check pending.
-- A LinkedIn item is refused by name at publish time until the LinkedIn transport exists.
+- Buffer's provider verdict stays `held` until the owner records the live test (#571), so the
+  LinkedIn transport cannot send before then, whatever the binding says.
 
 These tests pin that posture and change only in the commit that records this decision as
 countersigned: `orchestrator/tests/ci-policy.test.ts` (channels draft, publisher schedule
@@ -109,12 +192,13 @@ drafts in queue v1, which the publisher never considered.
 ## Implementation
 
 - [x] B1: packages, frames, LinkedIn caption, queue v2 drafts, capability edges (#568)
-- [ ] B2: devShark profiles, held connections, the LinkedIn platform and channel (#569); register
+- [x] B2: devShark profiles, held connections, the LinkedIn platform and channel (#569); register
   `marketingshark` in the registry's `legacyQueueMappings` with those profiles
 - [x] B3: public image URLs through jsDelivr, 90-day retention (#570)
-- [ ] B4: LinkedIn through Buffer (#571)
+- [ ] B4: LinkedIn through Buffer (#571). The adapter is built and held; this ticks when the owner
+  records the live test in `docs/SOCIAL-PROVIDERS.md`
 - [x] B5: Threads images and Instagram JPEG carousels in the Direct Meta adapter (#572)
-- [ ] B6: the Queue workspace (#573)
-- [ ] B7: approval dispatches the publisher (#574)
+- [x] B6: the Queue workspace (#573)
+- [x] B7: approval dispatches the publisher (#574)
 - [ ] B8: Design Lab editing and re-render for devShark packages (#575)
 - [ ] B9: more post kinds and the GoVIRAL packet edge (#576)

@@ -12,6 +12,7 @@ import type { VentureCapabilityMap } from "../contracts/venture-capability.js";
 import { configRoot as defaultConfigRoot } from "../paths.js";
 import { resolveVentureCapabilityInMap } from "../ventures/capabilities.js";
 import type { AmplifierEligibility } from "./amplifiers.js";
+import { providerMaySend, type PublishProviderId } from "./provider-platforms.js";
 import {
   CapabilityAwareQueueItemSchema,
   QueueItemSchema,
@@ -50,7 +51,14 @@ export const SocialPublisherRegistrySchema = z.strictObject({
     const key = `${connection.profileId}:${connection.platform}`;
     if (profilePlatforms.has(key)) context.addIssue({ code: "custom", message: "A profile can have at most one binding per platform", path: ["connections", index] });
     profilePlatforms.add(key);
-    if (connection.connector.providerId !== "direct-meta" || connection.connector.apiVersion !== registry.providerApiVersion) {
+    // Instagram and Threads go through Direct Meta at the registry's pinned version. LinkedIn goes
+    // through Buffer, the one LinkedIn transport a decision names (quorum#569); its version is
+    // pinned by the provider registry, which every binding has to match.
+    if (connection.platform === "linkedin") {
+      if (connection.connector.providerId !== "buffer") {
+        context.addIssue({ code: "custom", message: "A LinkedIn connection is reached only through Buffer", path: ["connections", index, "connector"] });
+      }
+    } else if (connection.connector.providerId !== "direct-meta" || connection.connector.apiVersion !== registry.providerApiVersion) {
       context.addIssue({ code: "custom", message: "Core registry accepts only its explicit Direct Meta API version", path: ["connections", index, "connector"] });
     }
     if (connection.credentialRef === null || connection.nativeAccountIdRef === null || connection.nativeAccountId !== null) {
@@ -85,7 +93,7 @@ export interface ResolvedPublisherTarget {
   connection: SocialConnection;
   credentialRef: string;
   nativeAccountIdRef: string;
-  providerId: "direct-meta";
+  providerId: PublishProviderId;
   apiVersion: string;
   providerBindingId?: string;
 }
@@ -267,15 +275,23 @@ export function resolvePublisherTarget(input: {
   if (!connection.credentialRef || !connection.nativeAccountIdRef) return resolution("denied", ["connection-reference-missing"]);
   if (!input.environment[connection.credentialRef]?.trim()) holds.push("credential-unavailable");
   if (!input.environment[connection.nativeAccountIdRef]?.trim()) holds.push("native-account-id-unavailable");
-  if (holds.length > 0) return resolution("held", holds);
+  // A transport needs an adapter that sends to this platform: Direct Meta for Instagram and
+  // Threads, Buffer for LinkedIn since quorum#571. A connection on anything else is held here
+  // however far its activation has gone. The provider registry holds Buffer again on its own
+  // verdict and binding, which is what keeps LinkedIn held until the owner's live test.
+  const providerId = connection.connector.providerId;
+  if (!providerMaySend(providerId, connection.platform)) holds.push("provider-adapter-unavailable");
+  if (holds.length > 0 || !providerMaySend(providerId, connection.platform)) return resolution("held", holds);
 
   return resolution("eligible", ["independent-runtime-gates-still-required"], {
     profile,
     connection,
     credentialRef: connection.credentialRef,
     nativeAccountIdRef: connection.nativeAccountIdRef,
-    providerId: "direct-meta",
-    apiVersion: registry.data.providerApiVersion
+    providerId,
+    // Direct Meta runs at the registry's pinned Graph version; Buffer's connector names its own,
+    // which the provider registry pins for every binding.
+    apiVersion: providerId === "direct-meta" ? registry.data.providerApiVersion : connection.connector.apiVersion
   });
 }
 

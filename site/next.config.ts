@@ -33,6 +33,10 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/admin": adminRuntimeFiles,
     "/admin/**": adminRuntimeFiles,
+    // The Queue's frame strip serves committed frames from the site's own public folder, which a
+    // function otherwise never sees: Vercel serves `public/` from its CDN, not from the bundle.
+    // Only this route carries them, so the other admin functions stay their size.
+    "/admin/api/queue/frame/**": ["./public/social/**/*"],
     "/api/carousel-studio/preview/[templateId]/[version]/[brand]/[format]/[slide]": [...hookLibraryFiles, ...fontFiles],
     "/money": ["../state/money/public.json"],
     "/results": ["../state/notify/digest/**/*", "../state/reports/**/*"],

@@ -9,6 +9,7 @@ import {
   ChevronRight,
   CircleUserRound,
   FolderKanban,
+  Inbox,
   KeyRound,
   LayoutDashboard,
   LogOut,
@@ -38,6 +39,7 @@ const ICONS = {
   overview: LayoutDashboard,
   production: Palette,
   profiles: RadioTower,
+  queue: Inbox,
   workspace: FolderKanban
 } satisfies Record<AdminDestinationIcon, typeof LayoutDashboard>;
 

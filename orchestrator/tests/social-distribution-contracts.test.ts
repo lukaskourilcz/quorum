@@ -160,6 +160,33 @@ describe("Social Distribution contracts", () => {
     expect(sources.join("\n")).not.toContain("fixtures/profile-simulations");
   });
 
+  it("keeps LinkedIn authority on LinkedIn connections and the aggregator marker on aggregator connections", async () => {
+    // quorum#569. Buffer holds devShark's LinkedIn grant, so its connection records only the
+    // provider-managed marker; LinkedIn's own organization scopes belong to a later direct adapter.
+    const valid = await fixture("valid");
+    const base = valid.connection as Record<string, unknown> & { connector: Record<string, unknown> };
+    const connection = (platform: string, loginMode: string, approvedScopes: string[]) => ({
+      ...base,
+      platform,
+      connector: { ...base.connector, loginMode },
+      approvedScopes
+    });
+    const accepts = (value: unknown) => SocialConnectionSchema.safeParse(value).success;
+
+    expect(accepts(connection("linkedin", "provider-oauth", ["provider-managed"]))).toBe(true);
+    expect(accepts(connection("linkedin", "linkedin-oauth", ["w_organization_social", "r_organization_social"]))).toBe(true);
+    // An aggregator connection claims no platform scope, and only an aggregator connection may carry the marker.
+    expect(accepts(connection("linkedin", "provider-oauth", ["w_organization_social"]))).toBe(false);
+    expect(accepts(connection("linkedin", "provider-oauth", ["provider-managed", "w_organization_social"]))).toBe(false);
+    expect(accepts(connection("linkedin", "linkedin-oauth", ["provider-managed"]))).toBe(false);
+    expect(accepts(connection("instagram", "instagram-facebook-login", ["provider-managed"]))).toBe(false);
+    // Neither platform borrows the other's login or scopes.
+    expect(accepts(connection("linkedin", "threads-oauth", ["threads_basic"]))).toBe(false);
+    expect(accepts(connection("linkedin", "linkedin-oauth", ["instagram_business_basic"]))).toBe(false);
+    expect(accepts(connection("instagram", "linkedin-oauth", ["w_organization_social"]))).toBe(false);
+    expect(accepts(connection("threads", "threads-oauth", ["threads_basic", "w_organization_social"]))).toBe(false);
+  });
+
   it("has no structural fields or actions for secrets, impersonation or engagement", async () => {
     const valid = await fixture("valid");
 

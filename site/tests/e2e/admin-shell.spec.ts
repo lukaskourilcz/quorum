@@ -20,14 +20,15 @@ const registry = JSON.parse(
 ) as VentureRegistry;
 
 /*
- * Three places and the projects, after the 2026-08-29 reset: the Overview, what is waiting for
- * the owner, and Settings. Operations, Implementation Plans, Social Profiles and the held idea
- * list still render for a bookmark and are linked from the Overview's footer — none of them is
- * something the owner has to check, which is what separates a link from a destination.
+ * Four places and the projects: the Overview, what is waiting for the owner, the Queue of social
+ * posts (quorum#573) and Settings. Operations, Implementation Plans, Social Profiles and the held
+ * idea list still render for a bookmark and are linked from the Overview's footer — none of them
+ * is something the owner has to check, which is what separates a link from a destination.
  */
 const adminDestinations = [
   "/admin",
   "/admin?view=waiting",
+  "/admin/queue",
   "/admin/settings",
   "/admin?venture=carousel-studio",
   // A paused venture leaves the navigation (operations-2026-09b); Settings lists it instead.

@@ -48,6 +48,7 @@ import {
   CURRENT_MONTHLY_OPERATING_LIMIT_USD
 } from "@/data/operating-policy";
 import { adminSections } from "@/lib/admin-sections";
+import { readAdminQueueWaitingCount } from "@/lib/admin-queue";
 import { adminVentureViews } from "@/lib/admin-venture-views";
 import { buildAdminRecentActivity } from "@/lib/admin-recent-activity";
 import { readApprovedUndeliveredPayloads } from "@/lib/admin-owner-attention";
@@ -255,7 +256,8 @@ export default async function AdminPage({
     implementationProgress,
     personalGrowth,
     imageRungs,
-    meetingHours
+    meetingHours,
+    queueWaiting
   ] = await Promise.all([
     readAdminSnapshot(),
     readAdminPortfolio(),
@@ -289,7 +291,8 @@ export default async function AdminPage({
     readAdminImplementationProgress(),
     readAdminPersonalGrowth(),
     readAdminImageRungs(LAUNCH_SET),
-    getVentureMeetingHours()
+    getVentureMeetingHours(),
+    readAdminQueueWaitingCount()
   ]);
   /*
    * `design-lab` is the name; `carousel-studio` is the id.
@@ -565,7 +568,8 @@ export default async function AdminPage({
     {
       waiting: ownerAttention.state === "present"
         ? ownerAttention.approvals.length + ownerAttention.manualTasks.length
-        : null
+        : null,
+      queue: queueWaiting
     }
   );
 
@@ -1079,9 +1083,15 @@ export default async function AdminPage({
                     </p>
                   ))}
                 </div>
-                <p className="m-0 text-[length:var(--admin-type-control)]">
+                <p className="m-0 flex flex-wrap gap-x-6 gap-y-2 text-[length:var(--admin-type-control)]">
                   <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" href="/admin?view=waiting">
                     Open what is waiting
+                  </Link>
+                  {/* The social posts have their own destination, so this names it rather than folding them into the count above. */}
+                  <Link className="admin-focus-ring rounded-sm underline-offset-4 hover:underline" data-admin-overview-queue href="/admin/queue">
+                    {queueWaiting === null
+                      ? "The Queue could not be read"
+                      : `${queueWaiting} ${queueWaiting === 1 ? "post waits" : "posts wait"} in the Queue`}
                   </Link>
                 </p>
               </div>

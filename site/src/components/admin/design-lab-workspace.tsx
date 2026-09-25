@@ -94,8 +94,8 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
           <div className="relative w-full shadow-xl" style={{ maxWidth: `${Math.min(520, 600 * canvas.ratio)}px` }}>
             <SlideImage alt={`Slide ${slide + 1}: ${savedTexts[slide] ?? ""}`} ratio={canvas.ratio} src={slideUrl(article, recipe, format, slide + 1, false, revision)} />
             {safeArea && format === "instagram-story" ? <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg" data-safe-area>
-              <div className="absolute inset-x-0 top-0 flex h-[14%] items-center justify-center border-b border-dashed border-white/70 bg-black/55 text-xs text-white">Profil a ovládání</div>
-              <div className="absolute inset-x-0 bottom-0 flex h-[16%] items-center justify-center border-t border-dashed border-white/70 bg-black/55 text-xs text-white">Odpověď a reakce</div>
+              <div className="absolute inset-x-0 top-0 flex h-[14%] items-center justify-center border-b border-dashed border-[color-mix(in_srgb,var(--admin-swatch-on-dark)_70%,transparent)] bg-[color-mix(in_srgb,var(--admin-swatch-on-light)_55%,transparent)] text-xs text-[var(--admin-swatch-on-dark)]">Profil a ovládání</div>
+              <div className="absolute inset-x-0 bottom-0 flex h-[16%] items-center justify-center border-t border-dashed border-[color-mix(in_srgb,var(--admin-swatch-on-dark)_70%,transparent)] bg-[color-mix(in_srgb,var(--admin-swatch-on-light)_55%,transparent)] text-xs text-[var(--admin-swatch-on-dark)]">Odpověď a reakce</div>
             </div> : null}
           </div>
         </div>

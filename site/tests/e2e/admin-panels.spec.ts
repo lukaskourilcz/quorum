@@ -47,6 +47,9 @@ const responsiveRoutes = [
   "/admin?venture=carousel-studio&tab=hooks",
   "/admin?venture=carousel-studio&tab=studio",
   "/admin?venture=kvorum&tab=recommendations",
+  // The Queue's empty default and its held list, which carries the legacy DNESKAi cards and frames.
+  "/admin/queue",
+  "/admin/queue?status=held",
 ] as const;
 
 for (const route of responsiveRoutes) {

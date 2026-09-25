@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 2,
+  "id": "ms-2026-09-26-devshark-en-linkedin",
+  "sourceVentureId": "marketingshark",
+  "releaseId": "marketingshark-2026-09-26-devshark",
+  "campaignId": "marketingshark-2026-09-26-devshark",
+  "experimentId": null,
+  "target": {
+    "profileId": "social-profile-devshark-linkedin",
+    "profileRole": "venture-primary",
+    "role": "primary",
+    "connectionBindingRef": "social-connection-devshark-linkedin",
+    "capabilityRef": {
+      "mapVersion": "1.4.0",
+      "source": "marketingshark",
+      "target": "social-distribution",
+      "capability": "approved-publish-package",
+      "dataSchemaVersion": "approved-publish-package/1",
+      "decisionReference": "state/decisions/2026-09-26-devshark-social-queue.md"
+    },
+    "amplifierEligibilityRef": null,
+    "campaignApprovalRef": null
+  },
+  "action": "publish-original",
+  "sourcePackage": {
+    "schemaVersion": "approved-publish-package/1",
+    "artifactRef": "state/ventures/marketingshark/packages/2026-09-26/devshark/package.json",
+    "packageHash": "4f5b0c6e1d2a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4"
+  },
+  "locale": "en",
+  "variant": "A",
+  "channel": "linkedin",
+  "objective": "value_action",
+  "audience": "Working developers who want one real question a day",
+  "destination": "https://devshark.app",
+  "utm": {
+    "source": "linkedin",
+    "medium": "organic_social",
+    "campaign": "marketingshark-devshark",
+    "content": "2026-09-26-en-css-specificity-01"
+  },
+  "content": {
+    "text": "Which selector wins: .card p or p.note?\n\nFive slides, one answer, and the rule behind it. Specificity is counted, not guessed.\n\n#css #webdevelopment #frontend",
+    "altText": "Slide 1: the question, which selector wins. Slide 2: two selectors side by side. Slide 3: counting specificity. Slide 4: the answer, .card p. Slide 5: try it on devShark.",
+    "assetPaths": [
+      "/social/devshark/2026-09-26/en/slide-01.png",
+      "/social/devshark/2026-09-26/en/slide-02.png",
+      "/social/devshark/2026-09-26/en/slide-03.png",
+      "/social/devshark/2026-09-26/en/slide-04.png",
+      "/social/devshark/2026-09-26/en/slide-05.png"
+    ],
+    "factualClaimRefs": [
+      "marketingshark:question:css-specificity-01"
+    ],
+    "rendererVersion": "carousel-studio-1",
+    "contentHash": "0c2d1b9bbda007b55e743976c849928de85e0ad50fd3c9f476dd5a138bac2555"
+  },
+  "publishWindow": {
+    "notBefore": "2026-09-26T06:00:00.000Z",
+    "notAfter": "2026-09-26T21:00:00.000Z"
+  },
+  "status": "queued",
+  "checks": {
+    "schema": "pass",
+    "brand": "pass",
+    "claims": "pass",
+    "quill": "pass",
+    "keeper": "pass",
+    "duplicate": "pass",
+    "accessibility": "pass",
+    "budget": "pass",
+    "capability": "pass",
+    "authority": "pass",
+    "policy": "pass"
+  },
+  "approvalProvenance": {
+    "approvalRef": "social-queue-event-ff9d4f04a61deb866971f2bf",
+    "selectionRef": "state/meetings/2026-09-26-ms-daily.json",
+    "policyRef": "state/decisions/2026-09-26-devshark-social-queue.md"
+  },
+  "selectedBy": "MAKO",
+  "createdAt": "2026-09-26T05:10:00.000Z",
+  "attempt": null,
+  "receiptId": null,
+  "migration": null
+}

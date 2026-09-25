@@ -18,11 +18,11 @@ afterEach(async () => Promise.all(roots.splice(0).map((root) => rm(root, { recur
 describe("Social Distribution compatibility migration audit", () => {
   it("retains legacy accounts, queue evidence and held provider boundaries", async () => {
     const audit = await auditSocialDistributionMigration({ repoRoot });
-    // Two more held future profiles than before: WebDev Signal's Czech and English editions.
-    // Held is the point — they are proposals with no connection, so nothing migrated and nothing
-    // became publishable by their existing.
-    expect(audit.counts).toEqual({ migrated: 13, unchanged: 3, held: 16, unavailable: 0, dropped: 0, malformed: 0 });
-    expect(audit.breakdown).toEqual({ migratedLegacyProfiles: 3, migratedConnectionReferences: 6, migratedLegacyQueueItems: 4, unchangedActivationRecords: 3, heldFutureProfiles: 5, heldProviderBindings: 6, heldOptionalProviders: 5 });
+    // Held future profiles: WebDev Signal's Czech and English editions, and devShark's LinkedIn,
+    // Instagram and Threads profiles with their three held bindings (quorum#569). Held is the
+    // point — nothing migrated and nothing became publishable by their existing.
+    expect(audit.counts).toEqual({ migrated: 13, unchanged: 3, held: 22, unavailable: 0, dropped: 0, malformed: 0 });
+    expect(audit.breakdown).toEqual({ migratedLegacyProfiles: 3, migratedConnectionReferences: 6, migratedLegacyQueueItems: 4, unchangedActivationRecords: 3, heldFutureProfiles: 8, heldProviderBindings: 9, heldOptionalProviders: 5 });
     // Four queue v1 items. A queue v2 item in the same directory is read directly and counted as
     // itself, not as legacy (see the marketingShark case below), so the pin is on v1 alone.
     expect(audit.legacyQueue.filter(({ sourceSchemaVersion }) => sourceSchemaVersion === 1)).toHaveLength(4);

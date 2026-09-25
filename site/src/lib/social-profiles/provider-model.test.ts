@@ -19,7 +19,8 @@ describe("Social Profiles provider model", () => {
     expect(providers.every(Boolean)).toBe(true);
     expect(bindings.every(Boolean)).toBe(true);
     expect(providers.map((provider) => provider?.verdict)).toEqual(["enabled", "held", "held", "held", "disabled", "rejected"]);
-    expect(bindings).toHaveLength(6);
+    // Six legacy Direct Meta bindings plus devShark's three, one of them Buffer's (quorum#569).
+    expect(bindings).toHaveLength(9);
     expect(bindings.every((binding) => binding?.mode === "held" && binding.authorityGranted === false && binding.publishingAuthorized === false)).toBe(true);
     expect(JSON.stringify(bindings)).not.toContain("secret-value");
   });

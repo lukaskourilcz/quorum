@@ -16,6 +16,7 @@ import {
 } from "../contracts/social-provider.js";
 import { DateTimeSchema, EvidenceRefSchema } from "../contracts/common.js";
 import { configRoot as defaultConfigRoot } from "../paths.js";
+import { PROVIDER_SEND_PLATFORMS, hasPublishAdapter, providerMaySend } from "./provider-platforms.js";
 import {
   SocialPublisherRegistrySchema,
   type SocialPublisherRegistry
@@ -40,6 +41,15 @@ export const SocialProviderRegistrySchema = z.strictObject({
   }
   if (registry.providers.filter(({ id }) => id === "direct-meta").length !== 1) {
     context.addIssue({ code: "custom", message: "The registry needs exactly one Direct Meta core provider", path: ["providers"] });
+  }
+  // A provider with a publish adapter serves only what its adapter sends: Buffer is LinkedIn only,
+  // so it can never become a second transport for Instagram or Threads (quorum#571).
+  for (const [index, provider] of registry.providers.entries()) {
+    if (!hasPublishAdapter(provider.id)) continue;
+    const allowed: readonly string[] = PROVIDER_SEND_PLATFORMS[provider.id];
+    if (provider.supportedPlatforms.some((platform) => !allowed.includes(platform))) {
+      context.addIssue({ code: "custom", message: "A provider cannot serve a platform its adapter does not send to", path: ["providers", index, "supportedPlatforms"] });
+    }
   }
   for (const [index, binding] of registry.bindings.entries()) {
     const provider = registry.providers.find(({ id }) => id === binding.providerId);
@@ -105,8 +115,20 @@ export function validateProviderRegistryConnections(
   const connections = new Set(publisherRegistry.connections.map(({ id }) => id));
   for (const binding of providerRegistry.bindings) {
     if (!connections.has(binding.connectionId)) throw new Error(`Provider binding ${binding.id} references an unknown social connection`);
+    const connection = publisherRegistry.connections.find(({ id }) => id === binding.connectionId)!;
+    const provider = providerRegistry.providers.find(({ id }) => id === binding.providerId)!;
+    if (!provider.supportedPlatforms.includes(connection.platform)) {
+      throw new Error(`Provider binding ${binding.id} names a platform its provider does not serve`);
+    }
   }
   for (const connection of publisherRegistry.connections) {
+    // Meta has no LinkedIn API, so a LinkedIn connection keeps its retained binding with the provider
+    // its connector names (Buffer) instead. Instagram and Threads keep their Direct Meta core.
+    if (connection.platform === "linkedin") {
+      const own = providerRegistry.bindings.filter((binding) => binding.connectionId === connection.id && binding.providerId === connection.connector.providerId && binding.mode !== "retired");
+      if (own.length !== 1) throw new Error(`Social connection ${connection.id} needs exactly one retained ${connection.connector.providerId} binding`);
+      continue;
+    }
     const direct = providerRegistry.bindings.filter((binding) => binding.connectionId === connection.id && binding.providerId === "direct-meta" && binding.mode !== "retired");
     if (direct.length !== 1) throw new Error(`Social connection ${connection.id} needs exactly one retained Direct Meta binding`);
   }
@@ -141,6 +163,9 @@ export function resolveProviderBinding(input: {
   if (provider.role === "notification-webhook") return bindingResolution("denied", ["notification-provider-cannot-publish"], target);
   if (!provider.supportedPlatforms.includes(connection.platform) || !provider.capabilities.includes(capability) || !binding.capabilities.includes(capability)) {
     return bindingResolution("denied", ["provider-binding-capability-mismatch"], target);
+  }
+  if (capability === "publish-original" && !providerMaySend(provider.id, connection.platform)) {
+    return bindingResolution("denied", ["provider-adapter-does-not-send-to-platform"], target);
   }
   if (binding.providerId !== connection.connector.providerId || binding.providerApiVersion !== connection.connector.apiVersion) {
     return bindingResolution("denied", ["connection-provider-version-mismatch"], target);
@@ -249,7 +274,9 @@ export function createProviderDeliveryReceipt(input: {
     error: input.error?.slice(0, 500) ?? null,
     providerImplementationVersion: input.provider.implementationVersion,
     providerApiVersion: input.provider.apiVersion,
-    actualCostUsd: input.provider.id === "direct-meta" ? 0 : null,
+    // Both transports run at $0: Direct Meta is the official API and Buffer is on its free plan,
+    // with no purchase authorized. A provider without an adapter never writes a receipt.
+    actualCostUsd: hasPublishAdapter(input.provider.id) ? 0 : null,
     usageRef: null,
     retryOfReceiptRef: null,
     reconciliationRef: input.reconciliationRef ?? null,
@@ -268,6 +295,8 @@ export function createProviderHealthSnapshot(input: {
   lastAttemptedOperationAt?: string | null;
   lastReconciledOperationAt?: string | null;
   incidentRefs?: string[];
+  /** A limit the provider reported on this attempt, which the binding's own record cannot know. */
+  observedLimit?: "rate-limited" | "plan-limit" | null;
 }): ProviderHealth {
   const base = {
     schemaVersion: "provider-health/1" as const,
@@ -281,8 +310,8 @@ export function createProviderHealthSnapshot(input: {
     lastReconciledOperationAt: input.lastReconciledOperationAt ?? null,
     tokenStatus: input.binding.health.unavailableReason === "token-expired" ? "expired" as const : input.binding.health.lastVerifiedAt ? "healthy" as const : "unknown" as const,
     appReviewStatus: input.binding.health.unavailableReason === "app-review-expired" ? "expired" as const : input.binding.health.lastVerifiedAt ? "healthy" as const : "unknown" as const,
-    planLimitStatus: input.binding.health.unavailableReason === "plan-limit" ? "limited" as const : "healthy" as const,
-    rateLimitStatus: input.binding.health.unavailableReason === "rate-limited" ? "limited" as const : "healthy" as const,
+    planLimitStatus: input.binding.health.unavailableReason === "plan-limit" || input.observedLimit === "plan-limit" ? "limited" as const : "healthy" as const,
+    rateLimitStatus: input.binding.health.unavailableReason === "rate-limited" || input.observedLimit === "rate-limited" ? "limited" as const : "healthy" as const,
     webhookFreshness: input.provider.evidenceCapabilities.webhooks ? "unknown" as const : "not-applicable" as const,
     incidentRefs: input.incidentRefs ?? [],
     ownerAttentionRefs: input.binding.mode === "active" ? [] : ["docs/NEEDED.md#social-distribution-connection-001"],

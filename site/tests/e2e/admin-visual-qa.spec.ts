@@ -150,6 +150,13 @@ for (const viewport of ADMIN_VIEWPORTS) {
       await expect(page.getByRole("navigation", { name: "Operations views" })).toBeVisible();
       await expect(page.getByLabel("Health")).toBeVisible();
       await expectNoDocumentOverflow(page, `${theme} Operations at ${viewport.width}px`);
+
+      const queueResponse = await page.goto("/admin/queue?status=held", {
+        waitUntil: "domcontentloaded"
+      });
+      expect(queueResponse?.status()).toBe(200);
+      await expect(page.getByRole("navigation", { name: "Queue status" })).toBeVisible();
+      await expectNoDocumentOverflow(page, `${theme} Queue at ${viewport.width}px`);
       expect(failures).toEqual([]);
       expect(mutationAttempts).toEqual([]);
     });

@@ -18,10 +18,11 @@ describe("weekly Social Distribution learning checkpoint", () => {
     const now = new Date("2026-08-31T21:00:00.000Z");
     const first = await runSocialLearningCheckpoint({ repoRoot, stateRoot, now });
     const second = await runSocialLearningCheckpoint({ repoRoot, stateRoot, now: new Date("2026-08-31T21:30:00.000Z") });
-    // Eight, because WebDev Signal's two editions each get their own record. That is the point of
-    // separate profiles: one checkpoint per edition rather than one averaged over both languages.
-    expect(first).toMatchObject({ profiles: 8, corrections: 0, droppedObservations: 0 });
-    expect(second).toMatchObject({ profiles: 8, corrections: 0, droppedObservations: 0 });
+    // Eleven, because WebDev Signal's two editions and devShark's three platforms (quorum#569) each
+    // get their own record. That is the point of separate profiles: one checkpoint per edition or
+    // platform rather than one averaged over all of them.
+    expect(first).toMatchObject({ profiles: 11, corrections: 0, droppedObservations: 0 });
+    expect(second).toMatchObject({ profiles: 11, corrections: 0, droppedObservations: 0 });
     const manifest = SocialLearningCheckpointSchema.parse(JSON.parse(await readFile(path.join(stateRoot, "social/learning/checkpoints/social-profile-caught-up/2026-08-31.json"), "utf8")) as unknown);
     expect(manifest).toMatchObject({ correctionCount: 0, authorityGranted: false, publishingAuthorized: false });
     expect(manifest.evaluationRefs).toHaveLength(1);

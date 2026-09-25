@@ -13,7 +13,8 @@ import {
 } from "../src/social/queue.js";
 
 // quorum#568 (B1): marketingShark drafts one devShark item per platform, and LinkedIn is one of
-// them. The queue has to be able to hold that item; nothing may be able to send it yet.
+// them. The queue has to be able to hold that item; only the Buffer transport (#571) can send it,
+// and only once every gate before it has opened.
 
 async function v2Item(): Promise<CapabilityAwareQueueItem> {
   const legacy = JSON.parse(await readFile(path.join(repoRoot, "state/social/queue/2026-08-05-cs-threads.json"), "utf8")) as unknown;
@@ -45,11 +46,19 @@ describe("queue v2 channels", () => {
     expect(CapabilityAwareQueueItemSchema.safeParse({ ...item, utm: { ...item.utm, source: "instagram" } }).success).toBe(false);
   });
 
-  it("refuses to publish a LinkedIn item even with every check passed and a matching hash", async () => {
-    const item = CapabilityAwareQueueItemSchema.parse(onChannel(await v2Item(), "linkedin"));
-    const queued = { ...item, status: "queued" as const };
-    expect(Object.values(queued.checks).every((status) => status === "pass")).toBe(true);
-    expect(() => assertQueueItemPublishable(queued)).toThrow(/No LinkedIn transport exists yet/u);
+  // quorum#571 built the LinkedIn transport (Buffer), so the item-level refusal by name is gone.
+  // What an item carries still has to be something Buffer can send: JPEG or PNG, with alt text.
+  it("passes a checked LinkedIn item only with JPEG or PNG images that carry alt text", async () => {
+    const base = onChannel(await v2Item(), "linkedin");
+    const queued = (content: Partial<CapabilityAwareQueueItem["content"]>) => {
+      const next = { ...base, status: "queued" as const, content: { ...base.content, ...content } };
+      return CapabilityAwareQueueItemSchema.parse({ ...next, content: { ...next.content, contentHash: capabilityAwareQueuePayloadHash(next) } });
+    };
+    expect(Object.values(base.checks).every((status) => status === "pass")).toBe(true);
+    expect(() => assertQueueItemPublishable(queued({ assetPaths: [] }))).not.toThrow();
+    expect(() => assertQueueItemPublishable(queued({ assetPaths: ["/social/devshark/2026-09-26/en/1.jpg"], altText: "Slide one" }))).not.toThrow();
+    expect(() => assertQueueItemPublishable(queued({ assetPaths: ["/social/devshark/2026-09-26/en/1.jpg"], altText: null }))).toThrow(/alt text/u);
+    expect(() => assertQueueItemPublishable(queued({ assetPaths: ["/social/devshark/2026-09-26/en/1.svg"], altText: "Slide one" }))).toThrow(/JPEG or PNG/u);
   });
 
   it("leaves LinkedIn out of the v1 schema, which cannot name a target profile", async () => {

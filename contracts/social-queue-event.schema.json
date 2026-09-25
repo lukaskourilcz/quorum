@@ -1,0 +1,281 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "social-queue-event/1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^social-queue-event-[a-f0-9]{24}$"
+    },
+    "at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+    },
+    "actor": {
+      "type": "string",
+      "const": "owner"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "approve",
+        "edit",
+        "hold",
+        "reject",
+        "rerender"
+      ]
+    },
+    "itemId": {
+      "type": "string",
+      "maxLength": 160,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "sourceVentureId": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "instagram",
+        "threads",
+        "linkedin"
+      ]
+    },
+    "expectedContentHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "previousStatus": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "approved",
+        "queued",
+        "publishing",
+        "published",
+        "failed",
+        "expired",
+        "needs_reconciliation",
+        "cancelled"
+      ]
+    },
+    "nextStatus": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "approved",
+        "queued",
+        "publishing",
+        "published",
+        "failed",
+        "expired",
+        "needs_reconciliation",
+        "cancelled"
+      ]
+    },
+    "resultingContentHash": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "mode": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "now",
+            "window"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "publishWindow": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "notBefore": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            },
+            "notAfter": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+            }
+          },
+          "required": [
+            "notBefore",
+            "notAfter"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "deterministicChecks": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schema": {
+              "type": "string",
+              "const": "pass"
+            },
+            "duplicate": {
+              "type": "string",
+              "const": "pass"
+            },
+            "accessibility": {
+              "type": "string",
+              "const": "pass"
+            },
+            "budget": {
+              "type": "string",
+              "const": "pass"
+            },
+            "capability": {
+              "type": "string",
+              "const": "pass"
+            },
+            "authority": {
+              "type": "string",
+              "const": "pass"
+            }
+          },
+          "required": [
+            "schema",
+            "duplicate",
+            "accessibility",
+            "budget",
+            "capability",
+            "authority"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "ownerEvidenceFor": {
+      "maxItems": 5,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "brand",
+          "claims",
+          "quill",
+          "keeper",
+          "policy"
+        ]
+      }
+    },
+    "supersedingItemId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "maxLength": 160,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "changedFields": {
+      "maxItems": 3,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "caption",
+          "altText",
+          "frames"
+        ]
+      }
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tasteNote": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "releaseId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "note": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            }
+          },
+          "required": [
+            "releaseId",
+            "note"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "at",
+    "actor",
+    "action",
+    "itemId",
+    "sourceVentureId",
+    "channel",
+    "expectedContentHash",
+    "previousStatus",
+    "nextStatus",
+    "resultingContentHash",
+    "mode",
+    "publishWindow",
+    "deterministicChecks",
+    "ownerEvidenceFor",
+    "supersedingItemId",
+    "changedFields",
+    "reason",
+    "tasteNote"
+  ],
+  "additionalProperties": false,
+  "$id": "https://boardless.ai/contracts/social-queue-event.schema.json"
+}
