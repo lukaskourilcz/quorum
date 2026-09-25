@@ -1256,9 +1256,13 @@ jobs:
         if: ${{ always() && steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' }}
         run: |
           pnpm queue:health || exit 0
-          for queue_path in state/delivery/queue-health state/INBOX.md; do
+          for queue_path in state/delivery/queue-health state/INBOX.md state/social/asset-retention; do
             if test -e "$queue_path"; then git add -A -- "$queue_path"; fi
           done
+          # The same command prunes social frames older than 90 days (quorum#570). Only deletions
+          # are staged: this step also runs after a failed cycle, and a frame that cycle wrote has
+          # not passed the post-cycle gate, so nothing new under site/public/social may ride along.
+          git ls-files --deleted -z -- site/public/social | xargs -0 -r git rm --cached --quiet --
           if git diff --cached --quiet; then exit 0; fi
           git config user.name "boardlessai-cycle[bot]"
           git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"

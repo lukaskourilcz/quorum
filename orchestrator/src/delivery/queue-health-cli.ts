@@ -1,5 +1,7 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { repoRoot, stateRoot } from "../paths.js";
+import { pruneSocialAssets } from "../social/media/retention.js";
 import { runQueueHealthCheck } from "./queue-health.js";
 
 function valueAfter(args: string[], name: string): string | undefined {
@@ -19,7 +21,15 @@ function pragueToday(): string {
 async function main(): Promise<void> {
   const raw = process.argv.slice(2);
   const args = raw[0] === "--" ? raw.slice(1) : raw;
-  const { report, artifacts } = await runQueueHealthCheck({ today: valueAfter(args, "--today") ?? pragueToday() });
+  const today = valueAfter(args, "--today") ?? pragueToday();
+  const { report, artifacts } = await runQueueHealthCheck({ today });
+  // The same daily step ends social frames past their retention window (quorum#570). It sits here
+  // because this step already runs on every non-dry cycle and commits what it writes. A failed
+  // prune costs its own line and never the queue record above it.
+  const retention = await pruneSocialAssets({ repoRoot, stateRoot, today }).catch((error: unknown) => {
+    console.error(`social frame retention failed: ${error instanceof Error ? error.message : String(error)}`);
+    return null;
+  });
   for (const venture of report.ventures) {
     const line = `${venture.venture}: ${venture.waiting.length} waiting, ${venture.parked.length} parked`;
     console.log(venture.stalled ? `${line} — NOT DRAINING` : line);
@@ -28,7 +38,10 @@ async function main(): Promise<void> {
     const state = entry.live === null ? "not checked" : entry.live ? "serving" : `NOT BUILT (${entry.status ?? "unreachable"})`;
     console.log(`${entry.venture}: ${state}${entry.expected ? ` — newest delivered ${entry.expected}` : ""}`);
   }
-  console.log(JSON.stringify({ needsOwner: report.needsOwner, artifacts }));
+  if (retention) {
+    console.log(`social frames: ${retention.record.removed.length} pruned before ${retention.record.keepFrom}, ${retention.record.keptCount} kept`);
+  }
+  console.log(JSON.stringify({ needsOwner: report.needsOwner, artifacts: [...artifacts, ...(retention?.artifacts ?? [])] }));
 }
 
 const invoked = process.argv[1] ? pathToFileURL(path.resolve(process.argv[1])).href : "";
