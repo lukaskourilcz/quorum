@@ -150,7 +150,9 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
         malformed += 1;
       }
     }
-    const channels = new Map(channelRegistry.channels.map((channel) => [channel.id, channel]));
+    // Keyed by string: a queue item may name a platform (LinkedIn) that has no global channel yet,
+    // and the lookup below refuses it by name instead of the types pretending it cannot happen.
+    const channels = new Map<string, (typeof channelRegistry.channels)[number]>(channelRegistry.channels.map((channel) => [channel.id, channel]));
     const due = entries.filter(({ item }) =>
       ["draft", "queued"].includes(item.status) &&
       new Date(item.publishWindow.notBefore).getTime() <= now.getTime() &&
