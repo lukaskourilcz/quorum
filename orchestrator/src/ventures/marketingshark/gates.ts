@@ -1,7 +1,7 @@
 import { fencedBlocks, type NormalizedQuestion } from "./bank.js";
 import type { Brand } from "./config.js";
 import { SLIDE_ROLES, type ChumOutput } from "./package.js";
-import { correctLetter, fitViolations } from "./render.js";
+import { correctLetter, fitViolations, type FitViolation } from "./render.js";
 
 /**
  * The caps the craft rules state, restated here as numbers a check can apply.
@@ -226,9 +226,25 @@ export function runFitGate(input: {
       gate: "slot-fit",
       locale: violation.locale,
       detail: violation.field === "code"
-        ? `${violation.role}: the ${violation.slot} slot cannot hold this question's code or options at the smallest size; shorten the headline so the slide has room`
+        ? codeSlotAdvice(violation)
         : `${violation.role} ${violation.field} does not fit the ${violation.slot} slot: at most ${violation.maxChars} characters on ${violation.maxLines} line${violation.maxLines === 1 ? "" : "s"}`
     }));
+}
+
+/**
+ * What the writer can change when a slot that code fills from the context body overflows.
+ *
+ * Every slot is fitted in its own frame, so a shorter headline gives the code or the options no
+ * room; the retry used to say exactly that and sent the model after the one field that could not
+ * help. Selection already skips a question whose own code and options overflow, so an overflow
+ * here is something the writer added to the body: commentary beside the code, or restated options
+ * longer than the bank's.
+ */
+function codeSlotAdvice(violation: FitViolation): string {
+  const room = `at most ${violation.maxChars} characters on ${violation.maxLines} lines`;
+  return violation.slot === "code-block"
+    ? `${violation.role}: the code-block slot holds ${room}; the context body carries the question's code byte for byte and nothing else`
+    : `${violation.role}: the restated options do not fit the ${violation.slot} slot (${room}); leave them out of the context body and code prints the question's own`;
 }
 
 /** One line per violation, in the shape the single retry appends to the packet. */

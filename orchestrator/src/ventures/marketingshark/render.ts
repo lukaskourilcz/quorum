@@ -257,6 +257,14 @@ export function writerLimits(brand: Brand, question: NormalizedQuestion): string
   if (context === "quiz-code-context" || context === "quiz-question-context") {
     lines.push(`context headline (the question line) ≤ ${slotBudget(context, "question-line").maxChars} characters`);
   }
+  if (context === "quiz-code-context") {
+    // The one context slot the writer can fill: options restated in the body as "A. …" lines
+    // replace the bank's. Without a number here the writer learned the limit only from a retry.
+    const options = slotBudget(context, "options");
+    lines.push(
+      `context body is the question's code byte for byte; options restated as "A. …" lines after it ≤ ${options.maxChars} characters on ${options.maxLines} lines together, or leave them out and code prints the question's own`
+    );
+  }
   if (templateIdFor("reveal", brand, question) === "stat-highlight") {
     lines.push(
       `reveal headline is the correct letter alone ("${correctLetter(question)}"); code prints it large`,

@@ -131,6 +131,54 @@ describe("the fit gate", () => {
   });
 });
 
+describe("a context slide that carries code", () => {
+  const CODE = "const [value, setValue] = useState(0);";
+  const coded: NormalizedQuestion = NormalizedQuestionSchema.parse({
+    ...question,
+    id: "q-code",
+    hasCode: true,
+    en: { ...question.en, question: `What does this return?\n\n\`\`\`jsx\n${CODE}\n\`\`\`` }
+  });
+
+  function withContextBody(output: ChumOutput, body: string): ChumOutput {
+    const carousel = (locale: "cs" | "en") => ({
+      slides: output.carousels[locale].slides.map((slide) => (slide.role === "context" ? { ...slide, body } : slide))
+    });
+    return ChumOutput.parse({ ...output, carousels: { cs: carousel("cs"), en: carousel("en") } });
+  }
+
+  it("sends commentary beside the code back with advice about the body, not the headline", async () => {
+    const brand = await devshark();
+    const commentary = Array.from({ length: 12 }, (_, index) => `// note ${index}: the setter schedules a render`).join("\n");
+    const output = withContextBody(reply(brand, { headline: "B", body: "An array" }), `${CODE}\n${commentary}`);
+    const violations = runFitGate({ output, brand, question: coded });
+    expect(violations.length).toBeGreaterThan(0);
+    for (const violation of violations) {
+      expect(violation.detail).toContain("code-block slot holds at most");
+      expect(violation.detail).toContain("byte for byte and nothing else");
+      expect(violation.detail).not.toContain("headline");
+    }
+  });
+
+  it("sends over-long restated options back with the slot's limit and the way out", async () => {
+    const brand = await devshark();
+    const long = (letter: string) => `${letter}. An option restated at far greater length than the question bank ever wrote it`;
+    const output = withContextBody(reply(brand, { headline: "B", body: "An array" }), `${CODE}\n${["A", "B", "C", "D"].map(long).join("\n")}`);
+    const details = runFitGate({ output, brand, question: coded }).map((violation) => violation.detail);
+    const options = slotBudget("quiz-code-context", "options");
+    expect(details.length).toBeGreaterThan(0);
+    expect(details.every((detail) => detail.includes(`(at most ${options.maxChars} characters on ${options.maxLines} lines)`))).toBe(true);
+    expect(details.every((detail) => detail.includes("leave them out of the context body"))).toBe(true);
+  });
+
+  it("passes the code alone, and states the options slot's limit in the packet", async () => {
+    const brand = await devshark();
+    expect(runFitGate({ output: withContextBody(reply(brand, { headline: "B", body: "An array" }), CODE), brand, question: coded })).toEqual([]);
+    const packet = buildChumPacket({ brand, question: coded, hookLines: HOOK, hookId: "hook-1", date: "2026-09-25" });
+    expect(packet).toContain(`≤ ${slotBudget("quiz-code-context", "options").maxChars} characters on ${slotBudget("quiz-code-context", "options").maxLines} lines together`);
+  });
+});
+
 describe("the question bank", () => {
   it("offers only questions whose own options fit the context slide, and most of them", async () => {
     const brand = await devshark();
