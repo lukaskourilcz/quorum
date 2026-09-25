@@ -1,4 +1,3 @@
-import sharp from "sharp";
 import { renderCarouselSlideSvg, type CarouselRenderInput } from "./renderer.js";
 import type { BrandTokens, CarouselFormat, CarouselTemplate } from "./schema.js";
 
@@ -194,6 +193,9 @@ export const QUIZ_FRAME_JPEG_QUALITY = 90;
  * One encoder, so the room's copy and a Design Lab re-render of the same slide are the same bytes.
  */
 export async function quizFrameJpeg(png: Buffer, background: string): Promise<Buffer> {
+  // Loaded on use, like the renderer's own rasteriser: the web preview imports this package and
+  // must never load the native image runtime.
+  const { default: sharp } = await import("sharp");
   return sharp(png)
     .flatten({ background })
     .toColourspace("srgb")
