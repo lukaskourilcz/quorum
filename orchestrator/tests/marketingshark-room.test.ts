@@ -1,6 +1,8 @@
-import { mkdtemp, readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { mkdtemp, readdir, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import { CAROUSEL_BRANDS, liveTemplates, SEED_TEMPLATES } from "@boardlessai/carousel-studio";
 import { NormalizedQuestionSchema, type NormalizedQuestion } from "../src/ventures/marketingshark/bank.js";
@@ -10,6 +12,7 @@ import { historyFor, HOOK_CHANNELS_PATH, readHookChannels } from "../src/studio/
 import { MarketingSharkPackage } from "../src/ventures/marketingshark/package.js";
 import {
   letteredOptions,
+  rasteriseCarousel,
   renderCarousel,
   slotsForRole,
   splitContextBody,
@@ -101,6 +104,30 @@ describe("marketingShark carousel rendering", () => {
     expect(first[0]!.svgHash).not.toBe(first[4]!.svgHash);
   });
 
+  it("rasterises the reviewed slides into the same PNG and JPEG bytes every time, and refuses a different slide", async () => {
+    const brand = await devshark();
+    const copy = {
+      slides: [
+        { role: "hook" as const, templateId: "", headline: "Would you bet a code review on this?", alt: "1" },
+        { role: "context" as const, templateId: "", headline: "What does useState return?", body: CODE, alt: "2" },
+        { role: "reveal" as const, templateId: "", headline: "B", body: "An array with value and setter", alt: "3" },
+        { role: "why" as const, templateId: "", headline: "Two elements", body: "The value and its setter, always in that order.", alt: "4" },
+        { role: "footer" as const, templateId: "", headline: brand.slide5.en, alt: "5" }
+      ]
+    };
+    const reviewed = renderCarousel({ brand, locale: "en", copy, question: codeQuestion });
+    const first = await rasteriseCarousel({ brand, locale: "en", copy, question: codeQuestion, date: "2026-09-26", reviewed });
+    const second = await rasteriseCarousel({ brand, locale: "en", copy, question: codeQuestion, date: "2026-09-26", reviewed });
+    expect(first.map((frame) => [frame.png.sha256, frame.jpeg.sha256])).toEqual(second.map((frame) => [frame.png.sha256, frame.jpeg.sha256]));
+    expect(first.map((frame) => frame.jpeg.path)).toEqual([1, 2, 3, 4, 5].map((slide) => `/social/devshark/2026-09-26/en/slide-0${slide}.jpg`));
+    expect(first.map((frame) => frame.svgHash)).toEqual(reviewed.map((slide) => slide.svgHash));
+
+    // A frame that is not the slide the gates passed is an error, never a quiet substitute.
+    const edited = { slides: copy.slides.map((slide, index) => (index === 3 ? { ...slide, body: "Something else entirely." } : slide)) };
+    await expect(rasteriseCarousel({ brand, locale: "en", copy: edited, question: codeQuestion, date: "2026-09-26", reviewed }))
+      .rejects.toThrow(/does not reproduce the slide the gates passed/u);
+  });
+
   it("gives a plain question four separate answer slots and no empty code panel", async () => {
     const brand = await devshark();
     const question = { ...codeQuestion, hasCode: false, en: { ...codeQuestion.en, question: "When does cleanup run?" } };
@@ -145,7 +172,7 @@ describe("marketingShark room", () => {
     const brand = enabledBrands(config)[0]!;
 
     const result = await runBrandDay({
-      config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "test-cycle", root, dry: true,
+      config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "test-cycle", root, publicRoot: path.join(root, "public"), dry: true,
       call: async () => {
         const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
         return {
@@ -178,8 +205,33 @@ describe("marketingShark room", () => {
     const ledger = await readLedger(root);
     expect(ledger.brands.devshark!.served).toHaveLength(1);
     expect(ledger.brands.devshark!.served[0]!.questionId).toBe(built.question.id);
-    expect(result.artifacts).toHaveLength(6);
     expect(result.artifacts.filter((artifact) => artifact.startsWith("social/queue/"))).toHaveLength(2);
+    // Six state artifacts and ten frame files: a PNG and its JPEG copy for each of the five slides.
+    expect(result.artifacts).toHaveLength(16);
+    expect(result.artifacts.filter((artifact) => artifact.startsWith("public/social/devshark/2026-08-08/en/")).sort()).toEqual(
+      [1, 2, 3, 4, 5].flatMap((slide) => [`slide-0${slide}.jpg`, `slide-0${slide}.png`]).map((name) => `public/social/devshark/2026-08-08/en/${name}`).sort()
+    );
+
+    // Every frame on disk is the one the package records, at Instagram's portrait canvas, and the
+    // Instagram copy is an sRGB JPEG.
+    expect(built.id).toBe("marketingshark-2026-08-08-devshark");
+    expect(built.render.frames.map((frame) => [frame.locale, frame.role, frame.slide])).toEqual(
+      ["hook", "context", "reveal", "why", "footer"].map((role, index) => ["en", role, index + 1])
+    );
+    for (const frame of built.render.frames) {
+      for (const file of [frame.png, frame.jpeg]) {
+        const bytes = await readFile(path.join(root, "public", file.path));
+        expect(createHash("sha256").update(bytes).digest("hex"), file.path).toBe(file.sha256);
+        expect(bytes.length).toBe(file.bytes);
+        const meta = await sharp(bytes).metadata();
+        expect([meta.width, meta.height], file.path).toEqual([1080, 1350]);
+      }
+      const jpeg = await sharp(await readFile(path.join(root, "public", frame.jpeg.path))).metadata();
+      expect([jpeg.format, jpeg.space]).toEqual(["jpeg", "srgb"]);
+    }
+    // The frames are the reviewed slides: each carries the SVG hash of its render summary slide.
+    const summary = JSON.parse(await readFile(path.join(root, "ventures/marketingshark/packages/2026-08-08/devshark/render-en.json"), "utf8")) as { slides: Array<{ svgHash: string }> };
+    expect(built.render.frames.map((frame) => frame.svgHash)).toEqual(summary.slides.map((slide) => slide.svgHash));
     expect(result.artifacts).toContain(HOOK_CHANNELS_PATH);
 
     // Slide 1 is the assigned library line, and the assignment that licensed it travels with the
@@ -203,7 +255,7 @@ describe("marketingShark room", () => {
     const brand = enabledBrands(config)[0]!;
 
     const result = await runBrandDay({
-      config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "test-cycle", root, dry: true,
+      config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "test-cycle", root, publicRoot: path.join(root, "public"), dry: true,
       call: async () => {
         const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
         const output = fixtureChumOutput({
@@ -221,6 +273,7 @@ describe("marketingShark room", () => {
     // A day that fails leaves no partial artifacts: no package, no summary, no ledger entry --
     // and the ledger untouched means tomorrow serves this question rather than skipping it.
     expect(result.artifacts).toEqual([]);
+    await expect(readdir(path.join(root, "public"))).rejects.toThrow();
     const ledger = await readLedger(root);
     expect(ledger.brands.devshark).toBeUndefined();
     await expect(readFile(path.join(root, "ventures/marketingshark/packages/2026-08-08/devshark/package.json"), "utf8"))
@@ -234,7 +287,7 @@ describe("marketingShark room", () => {
     const packets: string[] = [];
 
     const result = await runBrandDay({
-      config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "test-cycle", root, dry: true,
+      config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "test-cycle", root, publicRoot: path.join(root, "public"), dry: true,
       call: async (packet, attempt) => {
         packets.push(packet);
         const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
@@ -271,10 +324,10 @@ describe("marketingShark room", () => {
       };
     };
 
-    const first = await runBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "c1", root, dry: true, call });
+    const first = await runBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "c1", root, publicRoot: path.join(root, "public"), dry: true, call });
     let calls = 0;
     const second = await runBrandDay({
-      config, brand, ledger: first.ledger, date: "2026-08-08", cycleId: "c2", root, dry: true,
+      config, brand, ledger: first.ledger, date: "2026-08-08", cycleId: "c2", root, publicRoot: path.join(root, "public"), dry: true,
       call: async (packet, attempt) => { calls += 1; return call(); }
     });
 

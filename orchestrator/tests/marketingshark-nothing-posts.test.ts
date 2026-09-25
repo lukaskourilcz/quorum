@@ -18,7 +18,7 @@ async function draftedPackage(): Promise<{ built: MarketingSharkPackage; root: s
   const config = await loadMarketingSharkConfig();
   const brand = enabledBrands(config)[0]!;
   await runBrandDay({
-    config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "c", root, dry: true,
+    config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "c", root, publicRoot: path.join(root, "public"), dry: true,
     call: async () => {
       const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
       return {

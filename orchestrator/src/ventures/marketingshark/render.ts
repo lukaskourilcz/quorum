@@ -1,10 +1,14 @@
+import { createHash } from "node:crypto";
+import sharp from "sharp";
 import {
   CAROUSEL_BRANDS,
   liveTemplateByReference,
   liveTemplates,
+  renderCarouselSlidePng,
   renderCarouselSlideSvg,
   type BrandTokens,
   type CarouselFormat,
+  type CarouselRenderInput,
   type CarouselTemplate
 } from "@boardlessai/carousel-studio";
 import { fencedBlocks, type NormalizedQuestion } from "./bank.js";
@@ -16,7 +20,7 @@ export const MARKETINGSHARK_FORMAT: CarouselFormat = "instagram-portrait";
 
 export interface RenderedRoleSlide {
   role: SlideRole;
-  locale: "cs" | "en";
+  locale: MarketingSharkLocale;
   templateId: string;
   version: string;
   slideId: string;
@@ -333,40 +337,62 @@ export function fitViolations(input: {
  * stable hash. The truth gates run before this, so a render is never spent on copy that was never
  * going to ship.
  */
-export function renderCarousel(input: {
+/**
+ * What the studio is handed for each of the five slides: the role's template and its filled slots.
+ *
+ * One function builds it for the SVG render and for the PNG frames, so a frame is the slide that
+ * passed the clip check and not a second rendering of the same copy that might differ from it.
+ */
+function slideInputs(input: {
   brand: Brand;
-  locale: "cs" | "en";
+  locale: MarketingSharkLocale;
   copy: CarouselCopy;
   question: NormalizedQuestion;
   format?: CarouselFormat;
-}): RenderedRoleSlide[] {
+}): Array<{ role: SlideRole; templateId: string; template: CarouselTemplate; render: CarouselRenderInput & { index: number } }> {
   const tokens = brandTokensFor(input.brand);
   const format = input.format ?? MARKETINGSHARK_FORMAT;
-
   return input.copy.slides.map((slide, index) => {
     const role = SLIDE_ROLES[index]!;
     const templateId = templateIdFor(role, input.brand, input.question);
     const template = liveTemplateByReference(templateId, liveVersionOf(templateId));
     const variant = variantForRole(role, template);
-    const rendered = renderCarouselSlideSvg({
+    return {
+      role,
+      templateId,
       template,
-      brand: tokens,
-      format,
-      index: 0,
-      payload: {
-        locale: input.locale,
-        strings: completeSlots(template, slotsForRole({
-          role,
-          template,
-          headline: slide.headline,
-          body: slide.body ?? "",
-          brand: input.brand,
-          question: input.question,
-          locale: input.locale
-        })),
-        ...(variant ? { variant } : {})
+      render: {
+        template,
+        brand: tokens,
+        format,
+        index: 0,
+        payload: {
+          locale: input.locale,
+          strings: completeSlots(template, slotsForRole({
+            role,
+            template,
+            headline: slide.headline,
+            body: slide.body ?? "",
+            brand: input.brand,
+            question: input.question,
+            locale: input.locale
+          })),
+          ...(variant ? { variant } : {})
+        }
       }
-    });
+    };
+  });
+}
+
+export function renderCarousel(input: {
+  brand: Brand;
+  locale: MarketingSharkLocale;
+  copy: CarouselCopy;
+  question: NormalizedQuestion;
+  format?: CarouselFormat;
+}): RenderedRoleSlide[] {
+  return slideInputs(input).map(({ role, templateId, template, render }) => {
+    const rendered = renderCarouselSlideSvg(render);
     if (!rendered) throw new Error(`${templateId} produced no slide for role ${role}`);
     return {
       role,
@@ -379,6 +405,105 @@ export function renderCarousel(input: {
       truncatedSlots: rendered.truncatedSlots
     };
   });
+}
+
+/** The quality the Instagram copies are encoded at. Instagram accepts JPEG only. */
+export const FRAME_JPEG_QUALITY = 90;
+
+export interface FrameFile {
+  /** The path a channel fetches it at, under the site's public root: `/social/<brand>/<date>/<locale>/slide-01.png`. */
+  path: string;
+  sha256: string;
+  bytes: number;
+}
+
+export interface RenderedFrame {
+  locale: MarketingSharkLocale;
+  role: SlideRole;
+  /** 1 to 5, the slide's position in the carousel. */
+  slide: number;
+  svgHash: string;
+  width: number;
+  height: number;
+  png: FrameFile;
+  jpeg: FrameFile;
+}
+
+/** Where a slide's frames live, relative to the site's public root. */
+export function framePublicPath(input: { brandId: string; date: string; locale: MarketingSharkLocale; slide: number; extension: "png" | "jpg" }): string {
+  return `/social/${input.brandId}/${input.date}/${input.locale}/slide-${String(input.slide).padStart(2, "0")}.${input.extension}`;
+}
+
+const sha256Of = (bytes: Uint8Array): string => createHash("sha256").update(bytes).digest("hex");
+
+/**
+ * One language's five slides as PNG frames and their JPEG copies, with the bytes to write.
+ *
+ * $0, and deterministic: the studio rasterises with the repository's own fonts and no system ones,
+ * and the JPEG is encoded from those bytes at a fixed quality. Each frame is checked against the SVG
+ * slide that passed the clip gate by its SVG hash, and against the canvas size, before it is
+ * returned. A frame that differs from the reviewed slide is an error, never a quiet substitute.
+ */
+export async function rasteriseCarousel(input: {
+  brand: Brand;
+  locale: MarketingSharkLocale;
+  copy: CarouselCopy;
+  question: NormalizedQuestion;
+  date: string;
+  /** The SVG slides the gates passed, which the frames must reproduce. */
+  reviewed: readonly RenderedRoleSlide[];
+}): Promise<Array<RenderedFrame & { pngBytes: Buffer; jpegBytes: Buffer }>> {
+  const background = brandTokensFor(input.brand).colors.background ?? "#000000";
+  const frames: Array<RenderedFrame & { pngBytes: Buffer; jpegBytes: Buffer }> = [];
+  for (const [index, entry] of slideInputs(input).entries()) {
+    const rendered = await renderCarouselSlidePng(entry.render);
+    if (!rendered) throw new Error(`${entry.templateId} produced no frame for role ${entry.role}`);
+    const reviewed = input.reviewed[index];
+    if (!reviewed || reviewed.svgHash !== rendered.svgHash) {
+      throw new Error(`${input.locale}/${entry.role}: the frame does not reproduce the slide the gates passed`);
+    }
+    if (rendered.truncatedSlots.length > 0) {
+      throw new Error(`${input.locale}/${entry.role}: the frame clipped ${rendered.truncatedSlots.join(", ")}`);
+    }
+    const expected = entry.template.formats[entry.render.format];
+    const jpegBytes = await sharp(rendered.png)
+      .flatten({ background })
+      .toColourspace("srgb")
+      .jpeg({ quality: FRAME_JPEG_QUALITY })
+      .withIccProfile("srgb")
+      .toBuffer();
+    const [pngMeta, jpegMeta] = await Promise.all([sharp(rendered.png).metadata(), sharp(jpegBytes).metadata()]);
+    for (const [name, meta] of [["png", pngMeta], ["jpeg", jpegMeta]] as const) {
+      if (meta.width !== expected.width || meta.height !== expected.height) {
+        throw new Error(`${input.locale}/${entry.role}: the ${name} frame is ${meta.width}x${meta.height}, the canvas is ${expected.width}x${expected.height}`);
+      }
+    }
+    if (jpegMeta.format !== "jpeg" || jpegMeta.space !== "srgb") {
+      throw new Error(`${input.locale}/${entry.role}: the Instagram copy is not an sRGB JPEG`);
+    }
+    const slide = index + 1;
+    frames.push({
+      locale: input.locale,
+      role: entry.role,
+      slide,
+      svgHash: rendered.svgHash,
+      width: expected.width,
+      height: expected.height,
+      png: {
+        path: framePublicPath({ brandId: input.brand.id, date: input.date, locale: input.locale, slide, extension: "png" }),
+        sha256: rendered.pngHash,
+        bytes: rendered.png.length
+      },
+      jpeg: {
+        path: framePublicPath({ brandId: input.brand.id, date: input.date, locale: input.locale, slide, extension: "jpg" }),
+        sha256: sha256Of(jpegBytes),
+        bytes: jpegBytes.length
+      },
+      pngBytes: rendered.png,
+      jpegBytes
+    });
+  }
+  return frames;
 }
 
 /** The engine identity recorded in every package, so a render can be traced to its code. */

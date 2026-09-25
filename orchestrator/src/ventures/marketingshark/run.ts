@@ -8,7 +8,7 @@ import { guardedJsonCall } from "../../llm/call.js";
 import { configRoot, repoRoot, stateRoot } from "../../paths.js";
 import { loadRuntimeBudgetLimits } from "../../portfolio/limits.js";
 import type { Stage } from "../../types.js";
-import { atomicWriteJson, readJson } from "../../state.js";
+import { atomicWriteBuffer, atomicWriteJson, readJson } from "../../state.js";
 import { loadQuestionBankSnapshot, truthSubjectOf, type NormalizedQuestion } from "./bank.js";
 import { brandLocales, enabledBrands, loadMarketingSharkConfig, type Brand, type MarketingSharkConfig, type MarketingSharkLocale } from "./config.js";
 import { runFitGate, runTruthGates, type GateViolation, type HookLines } from "./gates.js";
@@ -23,11 +23,20 @@ import { assertHookAssignmentValid, assignPackHook, channelRecordFor, hookLineFo
 import { recordPost, writeHookChannels, type HookChannels } from "../../studio/hook-channels.js";
 import type { HookAssignment } from "../../contracts/hook-assignment.js";
 import type { Hook } from "@boardlessai/carousel-studio";
-import { ChumOutput, inLocale, MarketingSharkPackage, packagePath, SLIDE_ROLES } from "./package.js";
+import { ChumOutput, inLocale, MarketingSharkPackage, packageId, packagePath, SLIDE_ROLES } from "./package.js";
 import { buildChumPacket, readCraftRules } from "./packet.js";
 import { readBrandTrendLines } from "./trends.js";
 import { buildQueueItems } from "./queue.js";
-import { codeOwnedSlotsFit, engineVersion, MARKETINGSHARK_FORMAT, renderCarousel, slotBudget, type RenderedRoleSlide } from "./render.js";
+import {
+  codeOwnedSlotsFit,
+  engineVersion,
+  MARKETINGSHARK_FORMAT,
+  rasteriseCarousel,
+  renderCarousel,
+  slotBudget,
+  type RenderedFrame,
+  type RenderedRoleSlide
+} from "./render.js";
 import { MeetingRecordSchema } from "../../contracts/meeting-record.js";
 
 export const LEDGER_PATH = "marketingshark/ledger.json";
@@ -199,6 +208,7 @@ export function assemblePackage(input: {
   output: ChumOutput;
   rendered: RenderedByLocale;
   summaryPaths: string[];
+  frames: readonly RenderedFrame[];
   spendUsd: number;
 }): MarketingSharkPackage {
   // The last place the bound is checked before the assignment becomes a file. An override that
@@ -229,6 +239,7 @@ export function assemblePackage(input: {
   const writesCzech = locales.includes("cs");
   return MarketingSharkPackage.parse({
     schemaVersion: "marketingshark-package/2",
+    id: packageId(input.date, input.brand.id),
     date: input.date,
     brandId: input.brand.id,
     locales,
@@ -257,7 +268,13 @@ export function assemblePackage(input: {
       threads: pick(input.output.hashtags.threads),
       linkedin: { en: input.output.hashtags.linkedin.en }
     },
-    render: { engineVersion: engineVersion(), summaryPaths: input.summaryPaths },
+    render: {
+      engineVersion: engineVersion(),
+      format: MARKETINGSHARK_FORMAT,
+      summaryPaths: input.summaryPaths,
+      frames: input.frames.map(({ locale, role, slide, svgHash, width, height, png, jpeg }) =>
+        ({ locale, role, slide, svgHash, width, height, png, jpeg }))
+    },
     status: "draft",
     abRecord: {
       measured: false,
@@ -324,10 +341,14 @@ export async function writeSkip(input: { date: string; reason: string; now: Date
  */
 export async function commitBrandDay(input: {
   root: string;
+  /** The site's public root; frames land under its `social/` directory. */
+  publicRoot: string;
   date: string;
   brand: Brand;
   built: MarketingSharkPackage;
   summaries: Array<{ relative: string; body: unknown }>;
+  /** Each frame file's bytes, by its public path. */
+  frameFiles: ReadonlyArray<{ path: string; bytes: Uint8Array }>;
   ledger: MarketingSharkLedger;
   selection: ReturnType<typeof selectQuestion>;
   assignment: HookAssignment;
@@ -336,6 +357,10 @@ export async function commitBrandDay(input: {
   queueItems: ReturnType<typeof buildQueueItems>;
 }): Promise<string[]> {
   const relative = packagePath(input.date, input.brand.id);
+  // Frames first: a package or a queue item never points at a frame that was not written.
+  for (const frame of input.frameFiles) {
+    await atomicWriteBuffer(input.publicRoot, frame.path.replace(/^\//u, ""), frame.bytes);
+  }
   await mkdir(path.join(input.root, path.dirname(relative)), { recursive: true });
   for (const summary of input.summaries) {
     await mkdir(path.join(input.root, path.dirname(summary.relative)), { recursive: true });
@@ -374,7 +399,9 @@ export async function commitBrandDay(input: {
     ...input.summaries.map((summary) => summary.relative),
     ...input.queueItems.map((entry) => entry.relative),
     LEDGER_PATH,
-    channelsPath
+    channelsPath,
+    // Relative to the state root like every other artifact, so the cycle resolves them the same way.
+    ...input.frameFiles.map((frame) => path.relative(input.root, path.join(input.publicRoot, frame.path.replace(/^\//u, ""))))
   ];
 }
 
@@ -397,6 +424,12 @@ export async function runBrandDay(input: {
   date: string;
   cycleId: string;
   root: string;
+  /**
+   * The site's public root the frames are written under: `site/public` live, its dry-run twin in a
+   * dry run. Required rather than defaulted, so no caller can write frames into the real site by
+   * forgetting to say where.
+   */
+  publicRoot: string;
   dry: boolean;
   now?: Date;
   call: (packet: string, attempt: number) => Promise<{ output: ChumOutput; usd: number }>;
@@ -541,6 +574,26 @@ export async function runBrandDay(input: {
     };
   }
 
+  // The PNG frames and their JPEG copies, rasterised from the slides the clip check just passed.
+  let frames: Awaited<ReturnType<typeof rasteriseCarousel>>;
+  try {
+    const written = output;
+    frames = (await Promise.all(locales.map((locale) => rasteriseCarousel({
+      brand,
+      locale,
+      copy: { slides: inLocale(written.carousels, locale).slides.map(withRole) },
+      question: plan.question,
+      date,
+      reviewed: inLocale(rendered, locale)
+    })))).flat();
+  } catch (error) {
+    return {
+      outcome: { status: "aborted", brandId: brand.id, reason: "render-failed", detail: message(error), spendUsd },
+      ledger: input.ledger,
+      artifacts: []
+    };
+  }
+
   const summaries = locales.map((locale) => ({
     relative: summaryPathFor(date, brand.id, locale),
     body: buildRenderSummary({ date, brand, locale, rendered: inLocale(rendered, locale) })
@@ -555,15 +608,21 @@ export async function runBrandDay(input: {
     output,
     rendered,
     summaryPaths: summaries.map((summary) => `state/${summary.relative}`),
+    frames,
     spendUsd
   });
 
   const artifacts = await commitBrandDay({
     root: input.root,
+    publicRoot: input.publicRoot,
     date,
     brand,
     built,
     summaries,
+    frameFiles: frames.flatMap((frame) => [
+      { path: frame.png.path, bytes: frame.pngBytes },
+      { path: frame.jpeg.path, bytes: frame.jpegBytes }
+    ]),
     ledger: input.ledger,
     selection: plan.selection,
     assignment: plan.assignment,
@@ -672,6 +731,8 @@ export async function runMarketingSharkCycle(input: {
   stage: Stage;
 }): Promise<MarketingSharkRunResult> {
   const root = input.dry ? path.join(repoRoot, "tmp", "dry-run", "state") : stateRoot;
+  // Frames go where the site serves them from, or to the dry run's own copy of that tree.
+  const publicRoot = input.dry ? path.join(repoRoot, "tmp", "dry-run", "site", "public") : path.join(repoRoot, "site", "public");
   const config = await loadMarketingSharkConfig();
   const brands = enabledBrands(config);
 
@@ -718,6 +779,7 @@ export async function runMarketingSharkCycle(input: {
       date: input.date,
       cycleId: input.cycleId,
       root,
+      publicRoot,
       dry: input.dry,
       call: async (packet, attempt) => {
         if (input.dry) {

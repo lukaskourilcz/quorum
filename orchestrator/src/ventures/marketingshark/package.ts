@@ -35,7 +35,35 @@ export function inLocale<T>(values: { en: T; cs?: T | undefined }, locale: Marke
   return value;
 }
 
+const Sha256 = z.string().regex(/^[a-f0-9]{64}$/u);
+
+/** One hosted frame file: where a channel fetches it, and what its bytes hash to. */
+const FrameFile = (extension: "png" | "jpg") => z.object({
+  path: z.string().regex(new RegExp(`^/social/[a-z0-9-]+/\\d{4}-\\d{2}-\\d{2}/(?:cs|en)/slide-0[1-5]\\.${extension}$`, "u")),
+  sha256: Sha256,
+  bytes: z.number().int().positive()
+});
+
+/**
+ * A slide's frames: the PNG the studio rasterised and the JPEG copy Instagram accepts.
+ *
+ * Every file's hash is recorded here, beside the SVG hash of the slide the gates passed, so a
+ * reviewer, a publisher or a later re-render can prove the bytes on disk are the bytes reviewed.
+ */
+export const RenderedFrameSchema = z.object({
+  locale: MarketingSharkLocaleSchema,
+  role: z.enum(SLIDE_ROLES),
+  slide: z.number().int().min(1).max(5),
+  svgHash: Sha256,
+  width: z.literal(1080),
+  height: z.literal(1350),
+  png: FrameFile("png"),
+  jpeg: FrameFile("jpg")
+});
+
 export const MarketingSharkPackage = z.object({
+  /** `marketingshark-<date>-<brand>`, the release id every queue item built from it carries. */
+  id: z.string().regex(/^marketingshark-\d{4}-\d{2}-\d{2}-[a-z0-9-]+$/u),
   schemaVersion: z.literal("marketingshark-package/2"),
   date: z.string(),
   brandId: z.string(),
@@ -69,7 +97,12 @@ export const MarketingSharkPackage = z.object({
     threads: perLocale(z.array(z.string()).length(1)),
     linkedin: z.object({ en: z.array(z.string()).max(3) })
   }),
-  render: z.object({ engineVersion: z.string(), summaryPaths: z.array(z.string()) }),
+  render: z.object({
+    engineVersion: z.string(),
+    format: z.literal("instagram-portrait"),
+    summaryPaths: z.array(z.string()),
+    frames: z.array(RenderedFrameSchema).min(5)
+  }),
   status: z.literal("draft"),
   /**
    * SPLIT-compatible and permanently unmeasured.
@@ -129,6 +162,10 @@ export const ChumOutput = z.object({
   // copy at all.
 });
 export type ChumOutput = z.infer<typeof ChumOutput>;
+
+export function packageId(date: string, brandId: string): string {
+  return `marketingshark-${date}-${brandId}`;
+}
 
 export function packagePath(date: string, brandId: string): string {
   return `ventures/marketingshark/packages/${date}/${brandId}/package.json`;
