@@ -160,7 +160,9 @@ most fourteen requests to `https://api.buffer.com`, each with the `BUFFER_API_KE
 2. **Create.** `createPost` with `schedulingType: automatic` and `mode: shareNow`. Buffer never
    gets `addToQueue`, which would let it pick the time slot, or `customScheduled`: the queue owns
    the window and the runner calls the adapter only inside it. Images go by public HTTPS URL, each
-   with the item's alt text.
+   with the alt text of its own slide from the frame the runner proved. The item's alt text, which
+   describes the whole carousel, stands in only for a lone frame no record pairs with a slide; slide
+   one of five without its own alt text is refused rather than sent with all five slides' text.
 3. **Verify.** `post(input: { id })` up to six times per verify call, waiting 5, 10, 20, 30 and
    40 seconds between reads (1 minute 45 seconds in all); the runner verifies at most twice. Buffer
    queues a `shareNow` image post and uploads the image before it reports `sent`, and 40 seconds of

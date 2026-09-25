@@ -48,9 +48,10 @@ export interface BufferAdapterOptions {
 
 /**
  * A frame the runner proved for this run (quorum#570): the exact URL that answered for the asset
- * path. It is the part of `VerifiedSocialAsset` the adapter reads.
+ * path, and the reviewed alt text of that one slide. It is the part of `VerifiedSocialAsset` the
+ * adapter reads.
  */
-export type BufferVerifiedFrame = Pick<VerifiedSocialAsset, "path" | "url">;
+export type BufferVerifiedFrame = Pick<VerifiedSocialAsset, "path" | "url" | "altText">;
 
 /** The Buffer adapter also takes the frames the runner proved for the item it is sending. */
 export interface BufferPublishAdapter extends PublishAdapter {
@@ -65,9 +66,9 @@ export interface BufferPublishAdapter extends PublishAdapter {
 
 export interface BufferPostPlan {
   text: string;
-  imageUrls: string[];
+  /** Each image with the alt text of the slide it shows. */
+  images: Array<{ url: string; altText: string }>;
   format: "text" | "single-image" | "multi-image";
-  altText: string | null;
 }
 
 function requiredEnvironment(environment: NodeJS.ProcessEnv, name: string): string {
@@ -101,13 +102,14 @@ function bufferCredentials(
 }
 
 /**
- * Only the URL the runner proved for this exact path. There is no fallback: a frame without a proof,
- * or a caller that hands no frames at all, stops the send before any request. Text alone needs none.
+ * Only the frame the runner proved for this exact path. There is no fallback: a frame without a
+ * proof, or a caller that hands no frames at all, stops the send before any request. Text alone
+ * needs none.
  */
-function verifiedFrameUrl(frames: readonly BufferVerifiedFrame[] | undefined, assetPath: string): string {
+function verifiedFrame(frames: readonly BufferVerifiedFrame[] | undefined, assetPath: string): Pick<BufferVerifiedFrame, "url" | "altText"> {
   const frame = frames?.find((candidate) => candidate.path === assetPath);
   if (!frame) throw new ProviderRejectedError("invalid-input", "Every LinkedIn frame needs a URL verified before the send");
-  return frame.url;
+  return { url: frame.url, altText: frame.altText };
 }
 
 /** The item's own destination with its own UTM fields, so attribution reads LinkedIn traffic. */
@@ -125,7 +127,7 @@ export const bufferTrackedLink = linkedinTrackedLink;
 export function planBufferLinkedInPost(
   item: RuntimeQueueItem,
   format: BufferLinkedInFormat,
-  assetUrl: (assetPath: string) => string
+  frameFor: (assetPath: string) => Pick<BufferVerifiedFrame, "url" | "altText">
 ): BufferPostPlan {
   const content = item.content;
   if (content.assetPaths.some((asset) => !/\.(?:jpe?g|png)$/iu.test(asset))) {
@@ -140,16 +142,20 @@ export function planBufferLinkedInPost(
   if (assets.length > 0 && !content.altText) {
     throw new ProviderRejectedError("invalid-input", "LinkedIn media requires alt text");
   }
-  const imageUrls = assets.map((asset) => {
-    const url = assetUrl(asset);
-    if (!url.startsWith("https://")) throw new ProviderRejectedError("invalid-input", "LinkedIn media must be served over HTTPS");
-    return url;
+  const images = assets.map((asset) => {
+    const frame = frameFor(asset);
+    if (!frame.url.startsWith("https://")) throw new ProviderRejectedError("invalid-input", "LinkedIn media must be served over HTTPS");
+    // Each image says what that slide shows. The item's alt text describes the whole carousel, so
+    // it stands in only for a lone frame no record pairs with a slide, as the Meta adapter does:
+    // slide one alone must not read the question's answer out to a screen reader.
+    const altText = frame.altText ?? (content.assetPaths.length === 1 ? content.altText : null);
+    if (!altText) throw new ProviderRejectedError("invalid-input", "LinkedIn media requires alt text for every image it posts");
+    return { url: frame.url, altText };
   });
   return {
     text,
-    imageUrls,
-    format: imageUrls.length === 0 ? "text" : multi ? "multi-image" : "single-image",
-    altText: content.altText
+    images,
+    format: images.length === 0 ? "text" : multi ? "multi-image" : "single-image"
   };
 }
 
@@ -177,12 +183,12 @@ export function createBufferPublishAdapter(
       const { apiKey, channelId } = bufferCredentials(environment, target, channel);
       const existing = publishedByKey.get(idempotencyKey);
       if (existing) return { remoteId: existing };
-      const plan = planBufferLinkedInPost(item, format, (asset) => verifiedFrameUrl(frames, asset));
+      const plan = planBufferLinkedInPost(item, format, (asset) => verifiedFrame(frames, asset));
       const probe = await probeBufferLinkedInChannel({ apiKey, channelId, fetchImpl });
       if (probe.state !== "healthy") {
         throw new ProviderRejectedError(probe.state === "rate-limited" ? "rate-limited" : "channel-unavailable", `${probe.reason}; nothing was created`);
       }
-      const { postId } = await createBufferPost({ fetchImpl, apiKey, channelId, text: plan.text, imageUrls: plan.imageUrls, altText: plan.altText });
+      const { postId } = await createBufferPost({ fetchImpl, apiKey, channelId, text: plan.text, images: plan.images });
       publishedByKey.set(idempotencyKey, postId);
       return { remoteId: postId };
     },

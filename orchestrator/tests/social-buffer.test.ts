@@ -23,8 +23,10 @@ const environment = {
 };
 const slides = [1, 2, 3, 4, 5].map((slide) => `/social/devshark/2026-09-26/en/${slide}.png`);
 const COMMIT = "0123456789abcdef0123456789abcdef01234567";
-/** What the runner's asset gate hands the adapter (quorum#570): each slide's commit-pinned URL. */
-const proved = slides.map((slide) => ({ path: slide, url: `https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@${COMMIT}/site/public${slide}` }));
+/** The reviewed alt text of each slide, as the package records it. */
+const slideAlts = ["The question: which element holds a page's main content?", "Four options, A to D.", "The answer is B, main.", "Why: main marks the dominant content once per page.", "Try the next one on devShark."];
+/** What the runner's asset gate hands the adapter (quorum#570): each slide's commit-pinned URL and its own alt text. */
+const proved = slides.map((slide, index) => ({ path: slide, url: `https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@${COMMIT}/site/public${slide}`, altText: slideAlts[index]! }));
 const caption = "Which HTML element carries a page's main content?\n\nFive slides, one answer.";
 
 async function linkedInChannel(): Promise<Channel> {
@@ -103,7 +105,8 @@ describe("Buffer LinkedIn adapter: create", () => {
         channelId: CHANNEL_ID,
         schedulingType: "automatic",
         mode: "shareNow",
-        assets: [{ image: { url: proved[0]!.url, metadata: { altText: "Five slides of a devShark HTML question and its answer." } } }]
+        // Slide one's own alt text, never the carousel's: the other slides are not in this post.
+        assets: [{ image: { url: proved[0]!.url, metadata: { altText: slideAlts[0] } } }]
       }
     });
     // Buffer never picks the time: no queue slot, no custom schedule.
@@ -139,15 +142,27 @@ describe("Buffer LinkedIn adapter: create", () => {
   });
 
   it("sends every slide with the caption as approved once multi-image is confirmed", async () => {
-    const plan = planBufferLinkedInPost(await item(), "multi-image", (asset) => `https://cdn.example${asset}`);
+    const plan = planBufferLinkedInPost(await item(), "multi-image", (asset) => ({ url: `https://cdn.example${asset}`, altText: `alt for ${asset}` }));
     expect(plan).toMatchObject({ format: "multi-image", text: caption });
-    expect(plan.imageUrls).toEqual(slides.map((slide) => `https://cdn.example${slide}`));
+    expect(plan.images).toEqual(slides.map((slide) => ({ url: `https://cdn.example${slide}`, altText: `alt for ${slide}` })));
+  });
+
+  it("gives each image its own slide's alt text, and the item's only for a lone frame with no record", async () => {
+    const multi = planBufferLinkedInPost(await item(), "multi-image", (asset) => proved.find(({ path: framePath }) => framePath === asset)!);
+    expect(multi.images.map(({ altText }) => altText)).toEqual(slideAlts);
+    // One frame, no per-slide record: the item's alt text describes exactly that frame.
+    const lone = planBufferLinkedInPost(await item({ assetPaths: [slides[0]!] }), "single-image", (asset) => ({ url: `https://cdn.example${asset}`, altText: null }));
+    expect(lone.images).toEqual([{ url: `https://cdn.example${slides[0]}`, altText: "Five slides of a devShark HTML question and its answer." }]);
+    // Slide one of five with no record of its own: refused, rather than reading all five slides out.
+    const carousel = await item();
+    expect(() => planBufferLinkedInPost(carousel, "single-image", (asset) => ({ url: `https://cdn.example${asset}`, altText: null })))
+      .toThrow(/alt text for every image/u);
   });
 
   it("adds no second link to a caption that already carries the destination, and posts text alone", async () => {
     const linked = `${caption}\n\nhttps://devshark.app`;
-    expect(planBufferLinkedInPost(await item({ text: linked, assetPaths: [] }), "single-image", String)).toEqual({
-      text: linked, imageUrls: [], format: "text", altText: "Five slides of a devShark HTML question and its answer."
+    expect(planBufferLinkedInPost(await item({ text: linked, assetPaths: [] }), "single-image", (asset) => ({ url: asset, altText: null }))).toEqual({
+      text: linked, images: [], format: "text"
     });
   });
 
@@ -156,7 +171,7 @@ describe("Buffer LinkedIn adapter: create", () => {
     const budget = linkedinCaptionLimit(await item());
     expect(budget).toBe(LINKEDIN_TEXT_LIMIT - `\n\n${trackedLink}`.length);
     // At the budget the composed post is exactly LinkedIn's 3,000.
-    const fits = planBufferLinkedInPost(await item({ text: "x".repeat(budget) }), "single-image", (asset) => proved.find(({ path: framePath }) => framePath === asset)!.url);
+    const fits = planBufferLinkedInPost(await item({ text: "x".repeat(budget) }), "single-image", (asset) => proved.find(({ path: framePath }) => framePath === asset)!);
     expect(fits.text).toHaveLength(LINKEDIN_TEXT_LIMIT);
 
     // One more and it is a hold: nothing was sent, nothing pauses, and an edit can fix it. It used

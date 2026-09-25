@@ -243,8 +243,7 @@ export async function createBufferPost(input: {
   apiKey: string;
   channelId: string;
   text: string;
-  imageUrls: readonly string[];
-  altText: string | null;
+  images: ReadonlyArray<{ url: string; altText: string }>;
 }): Promise<{ postId: string }> {
   const result = await graphql(input.fetchImpl, input.apiKey, CREATE_POST_MUTATION, {
     input: {
@@ -252,7 +251,7 @@ export async function createBufferPost(input: {
       channelId: input.channelId,
       schedulingType: "automatic",
       mode: "shareNow",
-      assets: input.imageUrls.map((url) => ({ image: { url, metadata: { altText: input.altText } } }))
+      assets: input.images.map(({ url, altText }) => ({ image: { url, metadata: { altText } } }))
     }
   }, "create");
   const parsed = CreatePostAnswerSchema.safeParse(result.data);
