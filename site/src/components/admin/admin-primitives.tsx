@@ -26,6 +26,7 @@ export type AdminStateKind =
   | "success"
   | "error"
   | "held"
+  | "paused"
   | "archived";
 
 type AdminTone = "neutral" | "information" | "success" | "warning" | "risk" | "destructive";
@@ -41,6 +42,7 @@ const adminStatePresentation: Readonly<Record<AdminStateKind, { label: string; t
   success: { label: "Saved", tone: "success" },
   error: { label: "Action failed", tone: "destructive" },
   held: { label: "Held", tone: "warning" },
+  paused: { label: "Paused", tone: "neutral" },
   archived: { label: "Archived", tone: "neutral" },
 };
 

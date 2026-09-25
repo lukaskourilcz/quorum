@@ -1,6 +1,6 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
-import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 /**
@@ -33,8 +33,30 @@ export interface AdminVentureSwitch {
   paused: boolean;
 }
 
+/**
+ * One row of the "Paused ventures" table (`operations-2026-09b`).
+ *
+ * A paused venture leaves the workspace navigation and the Design Lab; this table is where it is
+ * still listed. FightAIQ appears here too, without a switch, because it resumes with MMA Files.
+ */
+export interface AdminPausedVenture {
+  id: string;
+  name: string;
+  /** The Prague day it was paused, or null when the registry has no date for it. */
+  pausedOn: string | null;
+  /** The newest day any of its own rooms actually met, read from `state/meetings/`. */
+  lastMeetingOn: string | null;
+  /** Whether Settings can resume it on its own; false for a venture another one depends on. */
+  resumable: boolean;
+  /** Why it has no switch, when it has none. */
+  note: string | null;
+}
+
 export interface AdminVentureSettings {
+  /** The running ventures the owner can pause. */
   ventures: AdminVentureSwitch[];
+  /** Every paused venture, newest pause first. */
+  paused: AdminPausedVenture[];
 }
 
 export class VentureSettingsPersistenceError extends Error {
@@ -48,7 +70,7 @@ const registryPath = "config/ventures.json";
 
 interface StoredRegistry {
   schemaVersion: "venture-registry/1";
-  ventures: Array<{ id: string; name: string; status: string } & Record<string, unknown>>;
+  ventures: Array<{ id: string; name: string; status: string; pausedOn?: string } & Record<string, unknown>>;
 }
 
 function validRegistry(value: unknown): StoredRegistry | null {
@@ -69,12 +91,63 @@ async function readRegistry(root = repositoryRoot): Promise<StoredRegistry> {
 
 function switches(registry: StoredRegistry): AdminVentureSwitch[] {
   return registry.ventures
-    .filter((venture) => !(venture.id in UNPAUSABLE_VENTURES) && venture.status !== "exploration")
-    .map((venture) => ({ id: venture.id, name: venture.name, paused: venture.status === "paused" }));
+    .filter((venture) => !(venture.id in UNPAUSABLE_VENTURES) && venture.status === "operating")
+    .map((venture) => ({ id: venture.id, name: venture.name, paused: false }));
+}
+
+/** The kinds of room a venture owns: its day and its own meetings. */
+function roomKinds(venture: StoredRegistry["ventures"][number]): string[] {
+  const day = venture.day && typeof venture.day === "object" ? (venture.day as { kind?: unknown }).kind : undefined;
+  const meetings = Array.isArray(venture.meetings) ? venture.meetings as Array<{ kind?: unknown }> : [];
+  return [
+    ...(typeof day === "string" ? [day] : []),
+    ...meetings.map((meeting) => meeting.kind).filter((kind): kind is string => typeof kind === "string")
+  ];
+}
+
+/** Meeting record files are `<YYYY-MM-DD>-<kind>.json`; the newest date per kind is the last sitting. */
+async function lastMeetings(root: string): Promise<Map<string, string>> {
+  const newest = new Map<string, string>();
+  const files = await readdir(path.join(root, "state", "meetings")).catch(() => [] as string[]);
+  for (const file of files) {
+    const match = /^(\d{4}-\d{2}-\d{2})-([a-z0-9-]+)\.json$/u.exec(file);
+    if (!match) continue;
+    const [, date, kind] = match as unknown as [string, string, string];
+    if ((newest.get(kind) ?? "") < date) newest.set(kind, date);
+  }
+  return newest;
+}
+
+async function pausedRows(registry: StoredRegistry, root: string): Promise<AdminPausedVenture[]> {
+  const meetings = await lastMeetings(root);
+  return registry.ventures
+    .filter((venture) => venture.status === "paused")
+    .map((venture) => {
+      const dates = roomKinds(venture).map((kind) => meetings.get(kind)).filter((date): date is string => Boolean(date));
+      const resumable = !(venture.id in UNPAUSABLE_VENTURES);
+      return {
+        id: venture.id,
+        name: venture.name,
+        pausedOn: typeof venture.pausedOn === "string" ? venture.pausedOn : null,
+        lastMeetingOn: dates.sort().at(-1) ?? null,
+        resumable,
+        note: resumable ? null : UNPAUSABLE_VENTURES[venture.id] ?? null
+      };
+    })
+    .sort((left, right) => (right.pausedOn ?? "").localeCompare(left.pausedOn ?? "") || left.name.localeCompare(right.name));
+}
+
+async function settingsOf(registry: StoredRegistry, root: string): Promise<AdminVentureSettings> {
+  return { ventures: switches(registry), paused: await pausedRows(registry, root) };
 }
 
 export async function readAdminVentureSettings(root = repositoryRoot): Promise<AdminVentureSettings> {
-  return { ventures: switches(await readRegistry(root)) };
+  return settingsOf(await readRegistry(root), root);
+}
+
+/** Today in Prague, the day a pause is recorded under. */
+function pragueToday(): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Prague" }).format(new Date());
 }
 
 function flipped(registry: StoredRegistry, ventureId: string, paused: boolean): StoredRegistry {
@@ -88,8 +161,15 @@ function flipped(registry: StoredRegistry, ventureId: string, paused: boolean): 
   }
   return {
     ...registry,
-    ventures: registry.ventures.map((candidate) =>
-      candidate.id === ventureId ? { ...candidate, status: paused ? "paused" : "operating" } : candidate)
+    ventures: registry.ventures.map((candidate) => {
+      if (candidate.id !== ventureId) return candidate;
+      // The pause date travels with the status: written on pause, removed on resume, so the
+      // registry never claims a running venture was paused on some day.
+      const next: typeof candidate = { ...candidate, status: paused ? "paused" : "operating" };
+      if (paused) next.pausedOn = pragueToday();
+      else delete next.pausedOn;
+      return next;
+    })
   };
 }
 
@@ -139,11 +219,11 @@ export async function setVenturePaused(ventureId: string, paused: boolean, root 
     throw new VentureSettingsPersistenceError("CONFLICT", "Send a project id and whether it is paused.");
   }
   const token = process.env.BOARDLESSAI_GITHUB_TOKEN;
-  if (token) return { ventures: switches(await writeGitHub(ventureId, paused, token)) };
+  if (token) return settingsOf(await writeGitHub(ventureId, paused, token), root);
   if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
     throw new VentureSettingsPersistenceError("UNAVAILABLE", "GitHub writing is not configured for this admin.");
   }
   const next = flipped(await readRegistry(root), ventureId, paused);
   await writeLocal(next, root);
-  return { ventures: switches(next) };
+  return settingsOf(next, root);
 }

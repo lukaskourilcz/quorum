@@ -53,6 +53,11 @@ const VentureDefinitionSchema = openObject({
   id: VentureIdSchema,
   name: z.string().trim().min(1).max(100),
   status: z.enum(["exploration", "operating", "paused"]),
+  /**
+   * The Prague day the owner paused the venture, which Settings shows in its "Paused ventures"
+   * table. Written by the admin switch, removed on resume, and allowed only on a paused venture.
+   */
+  pausedOn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/u).optional(),
   visibility: z.enum(["public", "owner-only"]),
   taste: z.boolean(),
   ledgerNamespace: VentureIdSchema,
@@ -162,6 +167,15 @@ export const VentureRegistrySchema = openObject({
   schemaVersion: z.literal("venture-registry/1"),
   ventures: z.array(VentureDefinitionSchema).min(1)
 }).superRefine(({ ventures }, context) => {
+  ventures.forEach((venture, index) => {
+    if (venture.pausedOn !== undefined && venture.status !== "paused") {
+      context.addIssue({
+        code: "custom",
+        message: `${venture.id} records pausedOn but is ${venture.status}`,
+        path: ["ventures", index, "pausedOn"]
+      });
+    }
+  });
   for (const key of ["id", "ledgerNamespace"] as const) {
     const values = ventures.map((venture) => venture[key]);
     if (new Set(values).size !== values.length) {

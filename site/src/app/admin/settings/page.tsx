@@ -4,7 +4,7 @@ import { AdminShell, type AdminSection, type AdminWorkspace } from "@/components
 import { AdminStateMessage } from "@/components/admin/admin-primitives";
 import { AdminWriteProvider } from "@/components/admin/admin-write-mode";
 import { VenturePauseSwitches } from "@/components/admin/venture-pause-switches";
-import { readAdminPortfolio } from "@/lib/admin-portfolio";
+import { navigableVentures, readAdminPortfolio } from "@/lib/admin-portfolio";
 import { readAdminVentureSettings } from "@/lib/admin-venture-settings";
 import { adminWritesEnabled } from "@/lib/admin-write-permission";
 
@@ -24,7 +24,7 @@ export default async function SettingsPage() {
   const writesEnabled = adminWritesEnabled();
   const workspaces: AdminWorkspace[] = [
     { id: "global", name: "Company Overview", count: 0, href: "/admin", active: false },
-    ...portfolio.ventures.map((venture) => ({
+    ...navigableVentures(portfolio).map((venture) => ({
       id: venture.id,
       name: venture.name,
       count: venture.cards.length,
@@ -35,10 +35,10 @@ export default async function SettingsPage() {
   const sections: AdminSection[] = adminSections("settings");
   return (
     <AdminShell
-      attention={[{ label: "Paused projects", value: settings.ventures.filter((venture) => venture.paused).length }]}
+      attention={[{ label: "Paused projects", value: settings.paused.length }]}
       brandId="global"
       breadcrumb="Settings"
-      lead="The one page that changes how the company runs: which projects are on. Everything else runs itself."
+      lead="The one page that changes how the company runs: which projects are on, and the paused ones, which are listed only here. Everything else runs itself."
       sections={sections}
       title="Settings"
       workspaces={workspaces}
@@ -52,7 +52,7 @@ export default async function SettingsPage() {
               title="This deployment cannot save changes"
             />
           ) : null}
-          <VenturePauseSwitches initialVentures={settings.ventures} />
+          <VenturePauseSwitches initialSettings={settings} />
         </div>
       </AdminWriteProvider>
     </AdminShell>

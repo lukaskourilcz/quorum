@@ -65,6 +65,17 @@ export interface AdminPortfolio {
   ventures: AdminVenture[];
 }
 
+/**
+ * The ventures the admin navigation offers.
+ *
+ * A paused venture leaves the workspace navigation and the command palette
+ * (`operations-2026-09b`); Settings lists it under "Paused ventures", and its archive stays at
+ * `/admin?venture=<id>`. Every page that builds the navigation goes through this one filter.
+ */
+export function navigableVentures(portfolio: AdminPortfolio): AdminVenture[] {
+  return portfolio.ventures.filter((venture) => venture.status !== "paused");
+}
+
 export interface AdminPlanDetail {
   id: string;
   ventureId: string;

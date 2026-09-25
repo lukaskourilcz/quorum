@@ -74,11 +74,14 @@ test("desktop Admin shell keeps its window, scroll, preferences and real command
     await page.keyboard.press("ControlOrMeta+K");
     return palette.isVisible();
   }, { timeout: 30_000 }).toBe(true);
+  // Kvórum is paused (operations-2026-09b), so the palette no longer offers it.
   await palette.getByRole("searchbox", { name: "Search Admin destinations" }).fill("kvorum");
+  await expect(palette.getByRole("option")).toHaveCount(0);
+  await palette.getByRole("searchbox", { name: "Search Admin destinations" }).fill("marketingshark");
   await expect(palette.getByRole("option")).toHaveCount(1);
   await palette.getByRole("searchbox", { name: "Search Admin destinations" }).press("Enter");
-  await expect(page).toHaveURL(/\/admin\?venture=kvorum$/);
-  await expect(page.getByRole("link", { name: "Kvórum", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page).toHaveURL(/\/admin\?venture=marketingshark$/);
+  await expect(page.getByRole("link", { name: "marketingShark", exact: true })).toHaveAttribute("aria-current", "page");
 });
 
 test("mobile Admin navigation has safe targets and exposes every live destination", async ({ page }) => {
@@ -137,4 +140,24 @@ test("new Admin shell chrome and mobile sheet pass the accessibility gate", asyn
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
   expect(mobile.violations).toEqual([]);
+});
+
+test("Settings lists every paused venture in its own table, and the navigation lists none", async ({ page }) => {
+  // operations-2026-09b: a paused venture leaves the navigation and is listed only here.
+  const paused = (registry.ventures as Array<{ id: string; status?: string }>)
+    .filter(({ status }) => status === "paused")
+    .map(({ id }) => id);
+  await page.goto("/admin/settings", { waitUntil: "networkidle" });
+  const table = page.locator("[data-admin-paused-ventures]");
+  await expect(table.getByRole("heading", { name: "Paused ventures" })).toBeVisible();
+  for (const id of paused) {
+    await expect(table.locator(`[data-paused-venture="${id}"]`), id).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Admin destinations" }).locator(`a[href="/admin?venture=${id}"]`), id)
+      .toHaveCount(0);
+  }
+  if (paused.length > 0) {
+    // The archive stays readable at its own address and says it is paused.
+    await page.goto(`/admin?venture=${paused[0]}`, { waitUntil: "networkidle" });
+    await expect(page.locator(`[data-admin-paused-venture="${paused[0]}"]`)).toBeVisible();
+  }
 });

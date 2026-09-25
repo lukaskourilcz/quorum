@@ -71,7 +71,7 @@ import { readAdminContestRadar } from "@/lib/admin-contest-radar";
 import { readAdminImplementationProgress } from "@/lib/admin-implementation-plans";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPersonalGrowth, type PersonalGrowthCoreTab } from "@/lib/admin-personal-growth";
-import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
+import { navigableVentures, readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
 import { readAdminSnapshot } from "@/lib/admin-state";
 import { readCarouselStudio, readCarouselStudioCounts } from "@/lib/carousel-studio";
 import { readGoViralProfile } from "@/lib/goviral-profile";
@@ -471,7 +471,7 @@ export default async function AdminPage({
       href: "/admin",
       active: !selectedVenture && !selectedView
     },
-    ...portfolio.ventures.map((venture) => ({
+    ...navigableVentures(portfolio).map((venture) => ({
       id: venture.id,
       name: ventureName(venture.id, venture.name),
       count: savedItemCount(venture.id, venture.cards.length),
@@ -956,6 +956,16 @@ export default async function AdminPage({
           state="write-disabled"
           title="This deployment cannot save changes"
         />
+      ) : null}
+      {selectedVenture?.status === "paused" ? (
+        <div data-admin-paused-venture={selectedVenture.id}>
+          <AdminStateMessage
+            action={<Link className="admin-focus-ring font-semibold text-[var(--admin-link)]" href="/admin/settings">Open Settings</Link>}
+            description="Nothing runs for it and it is not in the navigation. What it made is below; Settings lists it under Paused ventures, where Resume puts it back on the schedule."
+            state="paused"
+            title={`${ventureName(selectedVenture.id, selectedVenture.name)} is paused`}
+          />
+        </div>
       ) : null}
       {selectedView === "future" ? (
         <div className="grid min-w-0 gap-4">
