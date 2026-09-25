@@ -13,7 +13,7 @@ import {
 import { sha256 } from "../../hashing.js";
 import { safeFetch } from "../../security/url.js";
 import type { CapabilityAwareQueueItem } from "../queue.js";
-import { checkHostedSocialImage, hostedImageType } from "./validate.js";
+import { checkHostedSocialImage, checkPlatformImage, hostedImageType, isImagePlatform, platformAcceptsExtension } from "./validate.js";
 import type { RecordedAssetHashes } from "./recorded-hashes.js";
 
 const execFileAsync = promisify(execFile);
@@ -116,6 +116,11 @@ export interface VerifiedSocialAsset {
   sha256: string;
   contentType: "image/png" | "image/jpeg";
   commit: string | null;
+  /**
+   * The reviewed alt text of this one frame, from the same verified package as its hash; null when
+   * no record pairs the frame with a slide. The item's own `altText` describes the whole carousel.
+   */
+  altText: string | null;
 }
 
 export type SocialAssetVerification =
@@ -134,12 +139,20 @@ export interface SocialAssetCheckOptions {
 }
 
 type Checked = SocialAssetCheck & { verified?: VerifiedSocialAsset };
+type Channel = CapabilityAwareQueueItem["channel"];
 
 function check(assetPath: string, fields: Partial<SocialAssetCheck> & Pick<SocialAssetCheck, "outcome">): Checked {
   return { path: assetPath, url: null, commit: null, recordedSha256: null, detail: null, ...fields };
 }
 
-async function checkJsDelivr(assetPath: string, recorded: string, options: SocialAssetCheckOptions): Promise<Checked> {
+/** The proved bytes against the channel's own image rules; null when they pass or the channel has none. */
+async function platformRefusal(assetPath: string, bytes: Uint8Array, channel: Channel, fields: Partial<SocialAssetCheck>): Promise<Checked | null> {
+  if (!isImagePlatform(channel)) return null;
+  const answer = await checkPlatformImage(bytes, channel);
+  return answer.ok ? null : check(assetPath, { ...fields, outcome: "platform-unsupported", detail: answer.detail });
+}
+
+async function checkJsDelivr(assetPath: string, recorded: string, channel: Channel, options: SocialAssetCheckOptions): Promise<Checked> {
   const repositoryPath = socialAssetRepositoryPath(assetPath);
   const commit = await options.commits.latestCommit(repositoryPath);
   if (!commit) return check(assetPath, { recordedSha256: recorded, outcome: "uncommitted", detail: `no commit carries ${repositoryPath}` });
@@ -150,6 +163,8 @@ async function checkJsDelivr(assetPath: string, recorded: string, options: Socia
   if (actual !== recorded) {
     return check(assetPath, { url, commit, recordedSha256: recorded, outcome: "hash-mismatch", detail: `committed bytes hash to ${actual}` });
   }
+  const refused = await platformRefusal(assetPath, bytes, channel, { url, commit, recordedSha256: recorded });
+  if (refused) return refused;
   const answer = await checkHostedSocialImage(url, {
     assetPath,
     allowHosts: options.allowHosts,
@@ -159,7 +174,7 @@ async function checkJsDelivr(assetPath: string, recorded: string, options: Socia
   if (!answer.ok) return check(assetPath, { url, commit, recordedSha256: recorded, outcome: answer.outcome, detail: answer.detail });
   return {
     ...check(assetPath, { url, commit, recordedSha256: recorded, outcome: "ready" }),
-    verified: { path: assetPath, url, sha256: actual, contentType: answer.contentType, commit }
+    verified: { path: assetPath, url, sha256: actual, contentType: answer.contentType, commit, altText: options.recorded.altTexts.get(assetPath) ?? null }
   };
 }
 
@@ -169,7 +184,7 @@ async function checkJsDelivr(assetPath: string, recorded: string, options: Socia
  * Nothing in git proves what a deployed site serves, so this base downloads the frame and hashes
  * what came back. Its host is the one the owner configured, which is the allowlist for this base.
  */
-async function checkSite(assetPath: string, recorded: string, options: SocialAssetCheckOptions): Promise<Checked> {
+async function checkSite(assetPath: string, recorded: string, channel: Channel, options: SocialAssetCheckOptions): Promise<Checked> {
   const site = options.environment.PUBLIC_SITE_URL?.trim() ?? "";
   if (!site.startsWith("https://")) {
     return check(assetPath, { recordedSha256: recorded, outcome: "unreachable", detail: "PUBLIC_SITE_URL is not an HTTPS URL" });
@@ -197,9 +212,11 @@ async function checkSite(assetPath: string, recorded: string, options: SocialAss
     }
     const actual = sha256(response.body);
     if (actual !== recorded) return check(assetPath, { url, recordedSha256: recorded, outcome: "hash-mismatch", detail: `served bytes hash to ${actual}` });
+    const refused = await platformRefusal(assetPath, response.body, channel, { url, recordedSha256: recorded });
+    if (refused) return refused;
     return {
       ...check(assetPath, { url, recordedSha256: recorded, outcome: "ready" }),
-      verified: { path: assetPath, url, sha256: actual, contentType: expected, commit: null }
+      verified: { path: assetPath, url, sha256: actual, contentType: expected, commit: null, altText: options.recorded.altTexts.get(assetPath) ?? null }
     };
   } catch (error) {
     const detail = (error instanceof Error ? error.message : String(error)).slice(0, 300) || "no detail";
@@ -210,16 +227,17 @@ async function checkSite(assetPath: string, recorded: string, options: SocialAss
 function holdReason(checks: readonly SocialAssetCheck[]): SocialAssetHoldReason {
   if (checks.some((entry) => entry.outcome === "hash-mismatch")) return "asset-hash-mismatch";
   if (checks.some((entry) => entry.outcome === "hash-unrecorded")) return "asset-hash-unrecorded";
+  if (checks.some((entry) => entry.outcome === "platform-unsupported")) return "asset-unsupported";
   return "asset-unreachable";
 }
 
 /**
  * Prove every frame an item names before a platform is asked to fetch it.
  *
- * In order, for each frame: its hash must be recorded; for jsDelivr, a commit must carry it and the
- * bytes in that commit must hash to the record, and only then is the commit-pinned URL asked with
- * a `HEAD` for a 200 and the right image type. Local proofs come first so a frame that could never
- * pass costs no request. Any miss holds the whole item: a carousel with one frame missing is not
+ * In order, for each frame: its format must be one the platform takes; its hash must be recorded;
+ * for jsDelivr, a commit must carry it and the bytes in that commit must hash to the record and meet
+ * the platform's image rules, and only then is the commit-pinned URL asked with a `HEAD` for a 200
+ * and the right image type. Local proofs come first so a frame that could never pass costs no request. Any miss holds the whole item: a carousel with one frame missing is not
  * the carousel that was approved, and no other URL is ever tried in its place.
  */
 export async function verifySocialAssets(
@@ -232,6 +250,8 @@ export async function verifySocialAssets(
     const recorded = options.recorded.hashes.get(assetPath) ?? null;
     if (!/\.(?:png|jpe?g)$/iu.test(assetPath)) {
       checks.push(check(assetPath, { recordedSha256: recorded, outcome: "wrong-type", detail: "only PNG and JPEG frames are hosted for Instagram and Threads" }));
+    } else if (isImagePlatform(item.channel) && !platformAcceptsExtension(item.channel, assetPath)) {
+      checks.push(check(assetPath, { recordedSha256: recorded, outcome: "platform-unsupported", detail: "Instagram takes JPEG only; the JPEG copy is the frame to send" }));
     } else if (selected.base === null) {
       checks.push(check(assetPath, { recordedSha256: recorded, outcome: "base-invalid", detail: selected.error }));
     } else if (selected.base === "blob") {
@@ -242,8 +262,8 @@ export async function verifySocialAssets(
       checks.push(check(assetPath, { outcome: "hash-unrecorded", detail: options.recorded.sourcePackage === "unreadable" ? "the source package could not be read" : "no record names this frame's hash" }));
     } else {
       checks.push(selected.base === "jsdelivr"
-        ? await checkJsDelivr(assetPath, recorded, options)
-        : await checkSite(assetPath, recorded, options));
+        ? await checkJsDelivr(assetPath, recorded, item.channel, options)
+        : await checkSite(assetPath, recorded, item.channel, options));
     }
     // One failed frame already holds the item; asking the network about the rest would only spend requests.
     if (checks.at(-1)!.outcome !== "ready") break;

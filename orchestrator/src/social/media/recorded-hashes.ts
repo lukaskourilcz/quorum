@@ -20,6 +20,11 @@ import type { CapabilityAwareQueueItem } from "../queue.js";
  */
 export interface RecordedAssetHashes {
   hashes: ReadonlyMap<string, string>;
+  /**
+   * Each frame's reviewed alt text, where a verified package pairs frames with slides. Read from the
+   * same package, under the same hash check, as the frame hashes, so an approval binds both.
+   */
+  altTexts: ReadonlyMap<string, string>;
   sourcePackage: "verified" | "mismatch" | "unreadable" | "none";
   /** Records that failed to parse and were left out, so the hold can say why a hash is missing. */
   dropped: number;
@@ -30,6 +35,35 @@ const AssetRecordSchema = z.looseObject({
 });
 
 const DATED_ASSET = /^\/social\/(\d{4}-\d{2}-\d{2})\//u;
+
+/**
+ * A package that renders slides into frames: `render.frames[]` names each frame's locale and slide
+ * number, and `carousels.<locale>.slides[]` holds each slide's alt text. marketingShark's packages
+ * have this shape. Anything else simply pairs no frame with alt text.
+ */
+const SlideFramesSchema = z.looseObject({
+  carousels: z.record(z.string(), z.looseObject({
+    slides: z.array(z.looseObject({ alt: z.string().trim().min(1).max(1_000) }))
+  })),
+  render: z.looseObject({
+    frames: z.array(z.looseObject({
+      locale: z.string(),
+      slide: z.number().int().min(1),
+      png: z.looseObject({ path: z.string() }).optional(),
+      jpeg: z.looseObject({ path: z.string() }).optional()
+    }))
+  })
+});
+
+function collectFrameAltTexts(value: unknown, into: Map<string, string>): void {
+  const parsed = SlideFramesSchema.safeParse(value);
+  if (!parsed.success) return;
+  for (const frame of parsed.data.render.frames) {
+    const alt = parsed.data.carousels[frame.locale]?.slides[frame.slide - 1]?.alt;
+    if (!alt) continue;
+    for (const file of [frame.png, frame.jpeg]) if (file?.path.startsWith("/social/")) into.set(file.path, alt);
+  }
+}
 
 async function readJson(file: string): Promise<unknown> {
   return JSON.parse(await readFile(file, "utf8")) as unknown;
@@ -70,6 +104,7 @@ export async function readRecordedAssetHashes(input: {
   stateRoot: string;
 }): Promise<RecordedAssetHashes> {
   const entries: Array<[string, string]> = [];
+  const altTexts = new Map<string, string>();
   let dropped = 0;
   let sourcePackage: RecordedAssetHashes["sourcePackage"] = "none";
 
@@ -85,6 +120,7 @@ export async function readRecordedAssetHashes(input: {
     } else {
       sourcePackage = "verified";
       collectFrameRecords(raw, entries);
+      collectFrameAltTexts(raw, altTexts);
     }
   }
 
@@ -108,5 +144,5 @@ export async function readRecordedAssetHashes(input: {
     hashes.set(assetPath, hash);
   }
   for (const assetPath of conflicts) hashes.delete(assetPath);
-  return { hashes, sourcePackage, dropped: dropped + conflicts.size };
+  return { hashes, altTexts, sourcePackage, dropped: dropped + conflicts.size };
 }

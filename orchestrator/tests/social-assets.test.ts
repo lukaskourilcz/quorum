@@ -3,6 +3,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
+import sharp from "sharp";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { canonicalJson, sha256 } from "../src/hashing.js";
 import { configRoot, repoRoot } from "../src/paths.js";
@@ -18,6 +19,7 @@ import {
 } from "../src/social/media/assets.js";
 import { readRecordedAssetHashes, type RecordedAssetHashes } from "../src/social/media/recorded-hashes.js";
 import { gateSocialAssets } from "../src/social/media/gate.js";
+import { checkPlatformImage } from "../src/social/media/validate.js";
 import { createMetaPublishAdapter } from "../src/social/meta.js";
 import type { Channel } from "../src/social/channel-registry.js";
 import type { ResolvedPublisherTarget } from "../src/social/publisher-targets.js";
@@ -37,7 +39,9 @@ async function tempRoot(prefix: string): Promise<string> {
 
 const COMMIT = "81dced6d1d06ab4c82b4b87f5ee66867cc52215a";
 const FRAME = "/social/devshark/2026-09-26/en/slide-01.png";
-const FRAME_BYTES = Buffer.from("devShark slide one, as committed");
+/** A real 1080 x 1350 PNG: since #572 the proved bytes must also be an image the platform takes. */
+const FRAME_BYTES = await sharp({ create: { width: 1080, height: 1350, channels: 3, background: "#0b2233" } }).png().toBuffer();
+const JPEG_FRAME = "/social/devshark/2026-09-26/en/slide-01.jpg";
 const publicDns = async () => ["104.16.85.20"];
 
 type RecordedAnswer = { status: number; headers: Record<string, string> };
@@ -58,14 +62,15 @@ function fakeCommits(files: Record<string, { commit: string; bytes: Buffer | nul
 }
 
 function hashesFor(entries: Record<string, string>, sourcePackage: RecordedAssetHashes["sourcePackage"] = "verified"): RecordedAssetHashes {
-  return { hashes: new Map(Object.entries(entries)), sourcePackage, dropped: 0 };
+  return { hashes: new Map(Object.entries(entries)), altTexts: new Map(), sourcePackage, dropped: 0 };
 }
 
+/** A Threads item: Threads takes the PNG frames these tests commit, and Instagram would refuse them. */
 function item(assetPaths: string[] = [FRAME]): Pick<CapabilityAwareQueueItem, "id" | "sourceVentureId" | "channel" | "content"> {
   return {
-    id: "ms-2026-09-26-devshark-en-instagram",
+    id: "ms-2026-09-26-devshark-en-threads",
     sourceVentureId: "marketingshark",
-    channel: "instagram",
+    channel: "threads",
     content: {
       text: "One question a day.",
       altText: "Slide one of five.",
@@ -117,7 +122,7 @@ describe("commit-pinned jsDelivr URLs", () => {
     expect(result).toEqual({
       status: "ready",
       base: "jsdelivr",
-      assets: [{ path: FRAME, url, sha256: sha256(FRAME_BYTES), contentType: "image/png", commit: COMMIT }]
+      assets: [{ path: FRAME, url, sha256: sha256(FRAME_BYTES), contentType: "image/png", commit: COMMIT, altText: null }]
     });
     expect(fetchImpl).toHaveBeenCalledTimes(1);
     expect(String(fetchImpl.mock.calls[0]?.[0])).toBe(url);
@@ -201,6 +206,92 @@ describe("commit-pinned jsDelivr URLs", () => {
     expect(blob).toMatchObject({ status: "held", hold: { base: "blob", reason: "asset-unreachable", assets: [{ outcome: "base-unbuilt" }] } });
     expect(typo).toMatchObject({ status: "held", hold: { base: null, reason: "asset-unreachable", assets: [{ outcome: "base-invalid" }] } });
     expect(fetchImpl).not.toHaveBeenCalled();
+  });
+});
+
+describe("each platform's own image rules (quorum#572)", () => {
+  const jpeg = (width: number, height: number) => sharp({ create: { width, height, channels: 3, background: "#f4efe6" } }).jpeg({ quality: 90 }).toBuffer();
+  const png = (width: number, height: number) => sharp({ create: { width, height, channels: 3, background: "#f4efe6" } }).png().toBuffer();
+
+  it("holds a PNG for Instagram before reading git or the network", async () => {
+    const fetchImpl = recordedFetch(recorded.answers.committed);
+    const latestCommit = vi.fn(async () => COMMIT);
+    const result = await verifySocialAssets({ ...item(), channel: "instagram" }, options({ fetchImpl, commits: { latestCommit, committedBytes: async () => FRAME_BYTES } }));
+
+    expect(result).toMatchObject({ status: "held", hold: { reason: "asset-unsupported", assets: [{ outcome: "platform-unsupported", detail: expect.stringContaining("JPEG only") }] } });
+    expect(latestCommit).not.toHaveBeenCalled();
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it("proves an Instagram JPEG and holds committed bytes the platform would refuse, before any request", async () => {
+    const good = await jpeg(1080, 1350);
+    const wide = await png(1600, 1000);
+    const instagram = { ...item([JPEG_FRAME]), channel: "instagram" as const };
+    const jpegAnswer = recordedFetch({ status: 200, headers: { ...recorded.answers.committed.headers, "content-type": "image/jpeg" } });
+    const ready = await verifySocialAssets(instagram, options({
+      fetchImpl: jpegAnswer,
+      recorded: hashesFor({ [JPEG_FRAME]: sha256(good) }),
+      commits: fakeCommits({ [`site/public${JPEG_FRAME}`]: { commit: COMMIT, bytes: good } })
+    }));
+    const quiet = recordedFetch(recorded.answers.committed);
+    const tooWide = await verifySocialAssets(item(), options({
+      fetchImpl: quiet,
+      recorded: hashesFor({ [FRAME]: sha256(wide) }),
+      commits: fakeCommits({ [`site/public${FRAME}`]: { commit: COMMIT, bytes: wide } })
+    }));
+
+    expect(ready).toMatchObject({ status: "ready", assets: [{ path: JPEG_FRAME, contentType: "image/jpeg" }] });
+    expect(tooWide).toMatchObject({ status: "held", hold: { reason: "asset-unsupported", assets: [{ outcome: "platform-unsupported", detail: expect.stringContaining("width 1600") }] } });
+    expect(quiet).not.toHaveBeenCalled();
+  });
+
+  it("applies Meta's published limits to the bytes themselves", async () => {
+    const cmyk = await sharp({ create: { width: 1080, height: 1350, channels: 3, background: "#336699" } }).toColourspace("cmyk").jpeg().toBuffer();
+    const cases: Array<[string, Buffer, "instagram" | "threads", boolean]> = [
+      ["Instagram 4:5 JPEG", await jpeg(1080, 1350), "instagram", true],
+      ["Instagram 1.91:1 JPEG (1080 x 566)", await jpeg(1080, 566), "instagram", true],
+      ["Instagram 1:1 JPEG", await jpeg(1080, 1080), "instagram", true],
+      ["Instagram 9:16 JPEG, taller than 4:5", await jpeg(1080, 1920), "instagram", false],
+      ["Instagram 3:1 JPEG, wider than 1.91:1", await jpeg(1350, 450), "instagram", false],
+      ["Instagram PNG", await png(1080, 1350), "instagram", false],
+      ["Instagram CMYK JPEG", cmyk, "instagram", false],
+      ["Instagram narrower than 320", await jpeg(300, 375), "instagram", false],
+      ["Threads 4:5 PNG", await png(1080, 1350), "threads", true],
+      ["Threads 9:16 JPEG", await jpeg(1080, 1920), "threads", true],
+      ["Threads wider than 1440", await png(1600, 1000), "threads", false],
+      ["Threads over 8 MB", Buffer.alloc(8_000_001), "threads", false],
+      ["not an image", Buffer.from("devShark slide one, as committed"), "threads", false]
+    ];
+    for (const [label, bytes, channel, accepted] of cases) {
+      expect((await checkPlatformImage(bytes, channel)).ok, label).toBe(accepted);
+    }
+  });
+
+  it("carries each frame's own reviewed alt text from the verified package", async () => {
+    const root = await tempRoot("social-assets-alt-");
+    const packagePath = "state/ventures/marketingshark/packages/2026-09-26/devshark/package.json";
+    const built = {
+      carousels: { en: { slides: [{ alt: "Slide 1 of 5: the question." }, { alt: "Slide 2 of 5: the options." }] } },
+      render: { frames: [1, 2].map((slide) => ({
+        locale: "en",
+        slide,
+        png: { path: `/social/devshark/2026-09-26/en/slide-0${slide}.png`, sha256: sha256(FRAME_BYTES) },
+        jpeg: { path: `/social/devshark/2026-09-26/en/slide-0${slide}.jpg`, sha256: "c".repeat(64) }
+      })) }
+    };
+    await mkdir(path.join(root, path.dirname(packagePath)), { recursive: true });
+    await writeFile(path.join(root, packagePath), JSON.stringify(built));
+    const reference = { schemaVersion: "approved-publish-package/1" as const, artifactRef: packagePath, packageHash: sha256(canonicalJson(built)) };
+
+    const recordedHashes = await readRecordedAssetHashes({ item: { sourcePackage: reference, content: item().content }, repoRoot: root, stateRoot: path.join(root, "state") });
+    expect(Object.fromEntries(recordedHashes.altTexts)).toEqual({
+      "/social/devshark/2026-09-26/en/slide-01.png": "Slide 1 of 5: the question.",
+      "/social/devshark/2026-09-26/en/slide-01.jpg": "Slide 1 of 5: the question.",
+      "/social/devshark/2026-09-26/en/slide-02.png": "Slide 2 of 5: the options.",
+      "/social/devshark/2026-09-26/en/slide-02.jpg": "Slide 2 of 5: the options."
+    });
+    const result = await verifySocialAssets(item(), options({ recorded: recordedHashes }));
+    expect(result).toMatchObject({ status: "ready", assets: [{ path: FRAME, altText: "Slide 1 of 5: the question." }] });
   });
 });
 
@@ -379,7 +470,7 @@ describe("the Meta adapter fetches only verified URLs", () => {
     const adapter = createMetaPublishAdapter({ META_GRAPH_API_VERSION: "v26.0", FIXTURE_TOKEN: "token", FIXTURE_USER: "user" }, fetchImpl);
     const url = jsDelivrAssetUrl(COMMIT, FRAME);
 
-    await adapter.publish(instagram, queued(), "1".repeat(64), target, [{ path: FRAME, url, sha256: sha256(FRAME_BYTES), contentType: "image/png", commit: COMMIT }]);
+    await adapter.publish(instagram, queued(), "1".repeat(64), target, [{ path: FRAME, url, sha256: sha256(FRAME_BYTES), contentType: "image/png", commit: COMMIT, altText: null }]);
     const body = fetchImpl.mock.calls[0]?.[1]?.body as URLSearchParams;
     expect(body.get("image_url")).toBe(url);
   });

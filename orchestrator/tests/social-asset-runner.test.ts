@@ -3,6 +3,7 @@ import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
+import sharp from "sharp";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SocialAssetHoldSchema } from "../src/contracts/social-assets.js";
 import { ProviderConnectionBindingSchema, providerBindingHash } from "../src/contracts/social-provider.js";
@@ -19,8 +20,9 @@ const execFileAsync = promisify(execFile);
 const roots: string[] = [];
 afterEach(async () => Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
 
-const FRAME = "/social/2026-08-27/cs/instagram/frame-01.png";
-const FRAME_BYTES = Buffer.from("DNESKAi frame one, as committed");
+// Instagram takes JPEG only, and since #572 the committed bytes must be one it accepts.
+const FRAME = "/social/2026-08-27/cs/instagram/frame-01.jpg";
+const FRAME_BYTES = await sharp({ create: { width: 1080, height: 1350, channels: 3, background: "#12324a" } }).jpeg({ quality: 90 }).toBuffer();
 const NOW = new Date("2026-08-27T10:00:00.000Z");
 
 async function json(file: string): Promise<unknown> {
@@ -135,14 +137,15 @@ function fakeAdapter() {
   return { publish, verify, findByIdempotencyKey: vi.fn(async () => null) } satisfies PublishAdapter;
 }
 
-const pngAnswer = () => vi.fn<typeof fetch>(async () => new Response(null, { status: 200, headers: recorded.answers.committed.headers }));
+/** jsDelivr's recorded 200 for a committed file, with the JPEG content type this frame's extension promises. */
+const jpegAnswer = () => vi.fn<typeof fetch>(async () => new Response(null, { status: 200, headers: { ...recorded.answers.committed.headers, "content-type": "image/jpeg" } }));
 
 describe("the publisher proves every frame before a platform fetches it", () => {
   it("holds an uncommitted frame, records why, and leaves the item exactly as it was", async () => {
     const root = await instagramFixture();
     const before = await readFile(path.join(root, "state/social/queue/item.json"), "utf8");
     const adapter = fakeAdapter();
-    const fetchImpl = pngAnswer();
+    const fetchImpl = jpegAnswer();
 
     const report = await run(root, adapter, fetchImpl);
 
@@ -161,12 +164,12 @@ describe("the publisher proves every frame before a platform fetches it", () => 
 
   it("sends a committed frame by the commit-pinned URL that answered 200, and clears the hold", async () => {
     const root = await instagramFixture();
-    await run(root, fakeAdapter(), pngAnswer());
+    await run(root, fakeAdapter(), jpegAnswer());
     await git(root, "add", "--", `site/public${FRAME}`);
     await git(root, "commit", "--quiet", "-m", "cycle: frames");
     const commit = await git(root, "rev-parse", "HEAD");
     const adapter = fakeAdapter();
-    const fetchImpl = pngAnswer();
+    const fetchImpl = jpegAnswer();
 
     const report = await run(root, adapter, fetchImpl);
 
@@ -175,7 +178,7 @@ describe("the publisher proves every frame before a platform fetches it", () => 
     expect(fetchImpl).toHaveBeenCalledTimes(1);
     expect(String(fetchImpl.mock.calls[0]?.[0])).toBe(url);
     expect(fetchImpl.mock.calls[0]?.[1]).toMatchObject({ method: "HEAD" });
-    expect(adapter.publish.mock.calls[0]?.[4]).toEqual([{ path: FRAME, url, sha256: sha256(FRAME_BYTES), contentType: "image/png", commit }]);
+    expect(adapter.publish.mock.calls[0]?.[4]).toEqual([{ path: FRAME, url, sha256: sha256(FRAME_BYTES), contentType: "image/jpeg", commit, altText: null }]);
     await expect(readFile(path.join(root, "state/social/asset-holds/item.json"))).rejects.toMatchObject({ code: "ENOENT" });
   });
 
@@ -201,7 +204,7 @@ describe("the publisher proves every frame before a platform fetches it", () => 
     await git(root, "add", "--", `site/public${FRAME}`);
     await git(root, "commit", "--quiet", "-m", "cycle: frames");
     const adapter = fakeAdapter();
-    const fetchImpl = pngAnswer();
+    const fetchImpl = jpegAnswer();
 
     const report = await run(root, adapter, fetchImpl);
 
