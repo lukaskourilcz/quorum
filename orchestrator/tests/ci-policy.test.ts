@@ -15,6 +15,34 @@ import {
 const workflowRoot = path.join(repoRoot, ".github", "workflows");
 
 describe("automation policy", () => {
+  it("delivers DNESKAi from the scheduled day run as well as the retry", async () => {
+    // quorum#555: the 05:00 Prague dispatch is `cu-day`. Delivery keyed on `cu-edition` alone
+    // reached the magazine only when the 09:00 retry ran to the end, and four September days whose
+    // retry failed were never delivered.
+    const cycle = await readFile(path.join(workflowRoot, "cycle.yml"), "utf8");
+    const decision = cycle.slice(
+      cycle.indexOf("          caught_up_delivery=false"),
+      cycle.indexOf('echo "caught_up_delivery=$caught_up_delivery" >> "$GITHUB_OUTPUT"')
+    );
+    expect(decision).toContain('test "$phase" = "cu-day"');
+    expect(decision).toContain('test "$phase" = "cu-edition"');
+    const step = (name: string) => {
+      const start = cycle.indexOf(`      - name: ${name}\n`);
+      expect(start, `${name} is missing`).toBeGreaterThan(-1);
+      return cycle.slice(start, cycle.indexOf("\n      - name: ", start + 1));
+    };
+    for (const name of ["Select the oldest Caught Up delivery", "Mint bounded aifirst token for the stream and event sync"]) {
+      const gate = step(name);
+      expect(gate, name).toContain("steps.mode.outputs.caught_up_delivery == 'true'");
+      expect(gate, name).not.toContain("steps.mode.outputs.phase == 'cu-edition'");
+    }
+    const deliveryOnlyGate = cycle.slice(
+      cycle.indexOf('          if test "$delivery_only" = "true"; then'),
+      cycle.indexOf("          # The double-fire guard")
+    );
+    expect(deliveryOnlyGate).toContain('test "$phase" = "cu-day" || test "$phase" = "cu-edition"');
+  });
+
   it("pins every third-party action to an immutable commit", async () => {
     const names = (await readdir(workflowRoot)).filter((name) => name.endsWith(".yml"));
     expect(names.sort()).toEqual([
