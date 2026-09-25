@@ -17,6 +17,7 @@ import {
   type SocialAssetCommits
 } from "../src/social/media/assets.js";
 import { readRecordedAssetHashes, type RecordedAssetHashes } from "../src/social/media/recorded-hashes.js";
+import { gateSocialAssets } from "../src/social/media/gate.js";
 import { createMetaPublishAdapter } from "../src/social/meta.js";
 import type { Channel } from "../src/social/channel-registry.js";
 import type { ResolvedPublisherTarget } from "../src/social/publisher-targets.js";
@@ -200,6 +201,24 @@ describe("commit-pinned jsDelivr URLs", () => {
     expect(blob).toMatchObject({ status: "held", hold: { base: "blob", reason: "asset-unreachable", assets: [{ outcome: "base-unbuilt" }] } });
     expect(typo).toMatchObject({ status: "held", hold: { base: null, reason: "asset-unreachable", assets: [{ outcome: "base-invalid" }] } });
     expect(fetchImpl).not.toHaveBeenCalled();
+  });
+});
+
+describe("the asset gate", () => {
+  it("costs one item and never the run when a check throws", async () => {
+    const stateRoot = await tempRoot("social-assets-gate-");
+    const unholdable = CapabilityAwareQueueItemSchema.shape.content.safeParse({
+      ...item().content,
+      assetPaths: [`/social/${"a".repeat(440)}.png`]
+    });
+    expect(unholdable.success).toBe(true);
+    const entry = { name: "item.json", item: { ...item(), content: unholdable.data! } as unknown as CapabilityAwareQueueItem };
+    const plain = { name: "text.json", item: { ...item(), content: { ...item().content, assetPaths: [] } } as unknown as CapabilityAwareQueueItem };
+
+    const result = await gateSocialAssets({ entries: [entry, plain], environment: {}, repoRoot: stateRoot, stateRoot, configRoot, now: new Date("2026-09-26T07:00:00.000Z") });
+
+    expect(result).toMatchObject({ ready: [plain], held: 1 });
+    await expect(readFile(path.join(stateRoot, "social/asset-holds/item.json"))).rejects.toMatchObject({ code: "ENOENT" });
   });
 });
 

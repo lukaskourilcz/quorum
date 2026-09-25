@@ -48,16 +48,23 @@ export async function gateSocialAssets<T extends { name: string; item: Capabilit
       ready.push(entry);
       continue;
     }
-    const recorded = await readRecordedAssetHashes({ item: entry.item, repoRoot: input.repoRoot, stateRoot: input.stateRoot });
-    const verification = await verifySocialAssets(entry.item, {
-      environment: input.environment,
-      recorded,
-      commits,
-      allowHosts,
-      now: input.now,
-      ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {}),
-      ...(input.resolveImpl ? { resolveImpl: input.resolveImpl } : {})
-    });
+    // A check that throws (a record the hold contract cannot hold, say) costs this item and never
+    // the run: the item is simply not sent, exactly as a hold would leave it.
+    const verification = await readRecordedAssetHashes({ item: entry.item, repoRoot: input.repoRoot, stateRoot: input.stateRoot })
+      .then((recorded) => verifySocialAssets(entry.item, {
+        environment: input.environment,
+        recorded,
+        commits,
+        allowHosts,
+        now: input.now,
+        ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {}),
+        ...(input.resolveImpl ? { resolveImpl: input.resolveImpl } : {})
+      }))
+      .catch(() => null);
+    if (verification === null) {
+      held += 1;
+      continue;
+    }
     if (verification.status === "held") {
       await atomicWriteJson(input.stateRoot, socialAssetHoldPath(entry.name), verification.hold);
       held += 1;

@@ -56,14 +56,14 @@
         "properties": {
           "path": {
             "type": "string",
-            "maxLength": 240,
+            "maxLength": 400,
             "pattern": "^\\/social\\/[a-zA-Z0-9/_-]+\\.[a-zA-Z0-9]+$"
           },
           "url": {
             "anyOf": [
               {
                 "type": "string",
-                "maxLength": 400,
+                "maxLength": 800,
                 "pattern": "^https:\\/\\/"
               },
               {

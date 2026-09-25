@@ -18,7 +18,7 @@ export type SocialAssetBase = z.infer<typeof SocialAssetBaseSchema>;
  * A public asset path exactly as a queue item may carry it: `/social/...` with one extension and no
  * dot segments. The extension is not narrowed here, so a hold can name a WebP frame it refused.
  */
-export const SocialAssetPathSchema = z.string().max(240).regex(/^\/social\/[a-zA-Z0-9/_-]+\.[a-zA-Z0-9]+$/u);
+export const SocialAssetPathSchema = z.string().max(400).regex(/^\/social\/[a-zA-Z0-9/_-]+\.[a-zA-Z0-9]+$/u);
 
 /**
  * Why one asset could not be handed to a platform.
@@ -55,7 +55,7 @@ const CommitSchema = z.string().regex(/^[a-f0-9]{40}$/u);
 export const SocialAssetCheckSchema = z.strictObject({
   path: SocialAssetPathSchema,
   /** The URL that was (or would have been) checked; null when no URL could be built at all. */
-  url: z.string().max(400).regex(/^https:\/\//u).nullable(),
+  url: z.string().max(800).regex(/^https:\/\//u).nullable(),
   /** The commit a jsDelivr URL is pinned to; null for the site base and for an uncommitted frame. */
   commit: CommitSchema.nullable(),
   recordedSha256: Sha256Schema.nullable(),
