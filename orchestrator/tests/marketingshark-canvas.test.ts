@@ -193,7 +193,7 @@ describe.each([
       // Through the brand's live template map: the roles land where the room puts them.
       const templates = renderCarousel({ brand, locale: "en", copy: copyOf(output, "en"), question }).map((slide) => slide.templateId);
       expect(templates).toEqual(SLIDE_ROLES.map((role) => templateIdFor(role, brand, question)));
-      expect(templates.slice(2, 4)).toEqual([brand.templateMap.reveal, brand.templateMap.why]);
+      expect(templates.slice(2, 4)).toEqual([brand.postKinds.quiz.templateMap.reveal, brand.postKinds.quiz.templateMap.why]);
 
       expect({ category, id: question.id, clipped: clippedSlots(output, question) }).toEqual({ category, id: question.id, clipped: [] });
       // The fit gate agrees with the canvas, so the retry is never spent on copy that would fit.

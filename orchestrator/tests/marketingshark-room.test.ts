@@ -29,6 +29,7 @@ import {
   topicLabel
 } from "../src/ventures/marketingshark/run.js";
 import { buildChumPacket } from "../src/ventures/marketingshark/packet.js";
+import { POST_KIND_ROLES, type PostKind } from "../src/ventures/marketingshark/kinds.js";
 
 const CODE = "const [value, setValue] = useState(0);";
 
@@ -53,14 +54,18 @@ async function devshark(): Promise<Brand> {
 }
 
 describe("marketingShark carousel rendering", () => {
-  it("has brand tokens and a live template for every role of every brand", async () => {
+  it("has brand tokens and a live template for every role of every post kind of every brand", async () => {
     const config = await loadMarketingSharkConfig();
     const live = new Set(liveTemplates().filter((template) => template.status === "live").map((template) => template.id));
 
     for (const brand of config.brands) {
       expect(CAROUSEL_BRANDS[brand.id], `${brand.id} has no brand tokens`).toBeDefined();
-      for (const [role, templateId] of Object.entries(brand.templateMap)) {
-        expect(live, `${brand.id}/${role} points at ${templateId}, which is not live`).toContain(templateId);
+      for (const [kind, settings] of Object.entries(brand.postKinds)) {
+        // Every role of the kind, in its order, and no template for a role the kind does not have.
+        expect(Object.keys(settings.templateMap), `${brand.id}/${kind}`).toEqual([...POST_KIND_ROLES[kind as PostKind]]);
+        for (const [role, templateId] of Object.entries(settings.templateMap)) {
+          expect(live, `${brand.id}/${kind}/${role} points at ${templateId}, which is not live`).toContain(templateId);
+        }
       }
     }
   });

@@ -49,12 +49,139 @@
         "en": "One question from devShark — the game that makes you a better developer. devshark.app",
         "cs": "Jedna otázka z devSharku — hry, se kterou budeš lepší vývojář. devshark.app"
       },
-      "templateMap": {
-        "hook": "minimal-text-poster",
-        "context": "quiz-code-context",
-        "reveal": "stat-highlight",
-        "why": "quote-card",
-        "footer": "minimal-text-poster"
+      "rotation": {
+        "monday": "quiz",
+        "tuesday": "feature-spotlight",
+        "wednesday": "challenge-teaser",
+        "thursday": "quiz",
+        "friday": "this-week",
+        "saturday": null,
+        "sunday": null
+      },
+      "postKinds": {
+        "quiz": {
+          "hookPattern": {
+            "source": "library"
+          },
+          "templateMap": {
+            "hook": "minimal-text-poster",
+            "context": "quiz-code-context",
+            "reveal": "stat-highlight",
+            "why": "quote-card",
+            "footer": "minimal-text-poster"
+          }
+        },
+        "feature-spotlight": {
+          "hookPattern": {
+            "source": "pattern",
+            "id": "spotlight-inside",
+            "en": "Inside {displayName}: {screen}"
+          },
+          "templateMap": {
+            "hook": "minimal-text-poster",
+            "what": "quote-card",
+            "how": "story-quote",
+            "why": "quote-card",
+            "footer": "minimal-text-poster"
+          },
+          "footer": {
+            "en": "One part of devShark, the web-development learning platform. devshark.app"
+          },
+          "screens": [
+            {
+              "id": "learn-paths",
+              "name": "Learn paths",
+              "factTerm": "Learn paths"
+            },
+            {
+              "id": "today",
+              "name": "the Today queue",
+              "factTerm": "Today queue"
+            },
+            {
+              "id": "coding",
+              "name": "the Coding section",
+              "factTerm": "Coding section"
+            },
+            {
+              "id": "daily-challenge",
+              "name": "the daily challenge",
+              "factTerm": "daily challenge"
+            },
+            {
+              "id": "quizzes",
+              "name": "quizzes",
+              "factTerm": "quizzes"
+            },
+            {
+              "id": "multiplayer",
+              "name": "multiplayer rooms",
+              "factTerm": "multiplayer rooms"
+            },
+            {
+              "id": "flashcards",
+              "name": "flashcards",
+              "factTerm": "flashcards"
+            },
+            {
+              "id": "typing-racer",
+              "name": "the typing racer",
+              "factTerm": "typing racer"
+            }
+          ]
+        },
+        "challenge-teaser": {
+          "hookPattern": {
+            "source": "pattern",
+            "id": "challenge-label",
+            "en": "{difficulty} challenge: {title}"
+          },
+          "templateMap": {
+            "hook": "minimal-text-poster",
+            "prompt": "quote-card",
+            "hint": "stat-highlight",
+            "try": "story-quote",
+            "footer": "minimal-text-poster"
+          },
+          "footer": {
+            "en": "One coding challenge from devShark, solved in the browser. devshark.app"
+          },
+          "challengeBank": {
+            "snapshotPath": "state/marketingshark/challenge-banks/devshark.json",
+            "sourceRepo": "lukaskourilcz/react-express-app",
+            "difficulty": "easy"
+          }
+        },
+        "this-week": {
+          "hookPattern": {
+            "source": "pattern",
+            "id": "week-on",
+            "en": "This week on {displayName}"
+          },
+          "templateMap": {
+            "hook": "minimal-text-poster",
+            "theme": "stat-highlight",
+            "recap": "quiz-question-context",
+            "pick": "quote-card",
+            "footer": "minimal-text-poster"
+          },
+          "footer": {
+            "en": "A week of devShark, one post a day. devshark.app"
+          },
+          "themeFallback": "Web development"
+        },
+        "announcement": {
+          "hookPattern": {
+            "source": "owner"
+          },
+          "templateMap": {
+            "hook": "minimal-text-poster",
+            "news": "quote-card",
+            "detail": "stat-highlight",
+            "next": "story-quote",
+            "footer": "minimal-text-poster"
+          }
+        }
       },
       "hashtags": {
         "instagram": {

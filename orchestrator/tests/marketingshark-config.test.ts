@@ -2,9 +2,12 @@ import { readLibrary } from "@boardlessai/carousel-studio";
 import { describe, expect, it } from "vitest";
 import {
   enabledBrands,
+  factSheetFor,
   loadMarketingSharkConfig,
-  MarketingSharkConfig
+  MarketingSharkConfig,
+  scheduledKind
 } from "../src/ventures/marketingshark/config.js";
+import { weekdayOf } from "../src/ventures/marketingshark/kinds.js";
 
 describe("marketingShark configuration", () => {
   it("ships exactly one brand, devShark, and it is enabled", async () => {
@@ -31,6 +34,58 @@ describe("marketingShark configuration", () => {
     // against a card with no timer, which the craft rules ban outright.
     const raw = JSON.parse(JSON.stringify(await loadMarketingSharkConfig()));
     expect(raw).not.toHaveProperty("hookLibrary");
+  });
+
+  it("rotates the post kind by weekday: quiz Monday and Thursday, then spotlight, challenge and the week's note, no weekend room (#576)", async () => {
+    const brand = enabledBrands(await loadMarketingSharkConfig())[0]!;
+    expect(brand.rotation).toEqual({
+      monday: "quiz",
+      tuesday: "feature-spotlight",
+      wednesday: "challenge-teaser",
+      thursday: "quiz",
+      friday: "this-week",
+      saturday: null,
+      sunday: null
+    });
+    // The week of 28 September 2026, Monday to Sunday, read as calendar dates.
+    const week = ["2026-09-28", "2026-09-29", "2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03", "2026-10-04"];
+    expect(week.map(weekdayOf)).toEqual(["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]);
+    expect(week.map((date) => scheduledKind(brand, date)))
+      .toEqual(["quiz", "feature-spotlight", "challenge-teaser", "quiz", "this-week", null, null]);
+  });
+
+  it("gives every kind a slide-1 pattern that names only facts code fills", async () => {
+    const shipped = JSON.parse(JSON.stringify(await loadMarketingSharkConfig())) as { brands: Array<Record<string, unknown>> };
+    const brand = shipped.brands[0] as { postKinds: Record<string, { hookPattern: Record<string, unknown> }> };
+    expect(brand.postKinds.quiz!.hookPattern).toEqual({ source: "library" });
+    expect(brand.postKinds.announcement!.hookPattern).toEqual({ source: "owner" });
+    expect(brand.postKinds["feature-spotlight"]!.hookPattern.en).toBe("Inside {displayName}: {screen}");
+    // A pattern that reaches for a slot its kind does not fill is refused: no config edit can make
+    // slide 1 claim a price, a date or a count.
+    const reaching = structuredClone(brand);
+    reaching.postKinds["this-week"]!.hookPattern.en = "This week on {displayName}: {price}";
+    expect(MarketingSharkConfig.safeParse({ ...shipped, brands: [reaching] }).success).toBe(false);
+  });
+
+  it("refuses a rotation day that names a kind with no configuration", async () => {
+    const shipped = JSON.parse(JSON.stringify(await loadMarketingSharkConfig())) as { brands: Array<Record<string, unknown>> };
+    const brand = structuredClone(shipped.brands[0]!) as { postKinds: Record<string, unknown>; rotation: Record<string, unknown> };
+    delete brand.postKinds["challenge-teaser"];
+    expect(MarketingSharkConfig.safeParse({ ...shipped, brands: [brand] }).success).toBe(false);
+    brand.rotation.wednesday = "quiz";
+    expect(MarketingSharkConfig.safeParse({ ...shipped, brands: [brand] }).success).toBe(true);
+    // The announcement is the owner's, never a weekday's.
+    brand.rotation.saturday = "announcement";
+    expect(MarketingSharkConfig.safeParse({ ...shipped, brands: [brand] }).success).toBe(false);
+  });
+
+  it("names only spotlight screens the fact sheet in effect names", async () => {
+    const brand = enabledBrands(await loadMarketingSharkConfig())[0]!;
+    const facts = factSheetFor(brand, "2026-09-29")!;
+    const text = [facts.whatVisitorsCanDo, ...facts.allowedClaims].join("\n").toLowerCase();
+    for (const screen of brand.postKinds["feature-spotlight"]!.screens) {
+      expect(text, screen.id).toContain(screen.factTerm.toLowerCase());
+    }
   });
 
   it("refuses a second brand, a retired one, or a second devShark", async () => {

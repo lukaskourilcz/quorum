@@ -126,7 +126,7 @@ export function variantForRole(role: SlideRole, template: CarouselTemplate): str
 export function templateIdFor(role: SlideRole, brand: Brand, question: NormalizedQuestion): string {
   return role === "context" && brand.id === "devshark" && !question.hasCode && question.en.options.length <= 4
     ? "quiz-question-context"
-    : brand.templateMap[role];
+    : brand.postKinds.quiz.templateMap[role];
 }
 
 /**
