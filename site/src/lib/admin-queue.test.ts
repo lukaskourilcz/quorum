@@ -40,6 +40,19 @@ describe("readAdminQueue", () => {
     expect(snapshot.items.map(({ id }) => id)).toEqual(["ms-2026-09-26-devshark-en-linkedin"]);
   });
 
+  it("keeps the newest 2,000 queue files when there are more, and says how many it left out", async () => {
+    const base = await root();
+    // Two thousand older files, named by date the way queue items are, sort before today's draft.
+    await Promise.all(Array.from({ length: 2_000 }, (_, index) =>
+      writeFile(path.join(base, `state/social/queue/2025-01-01-old-${String(index).padStart(4, "0")}.json`), "{}\n")));
+    const snapshot = await readAdminQueue(base, { now });
+    // The first 2,000 by name were the oldest: today's draft was cut and nothing read as waiting.
+    expect(snapshot.items.map(({ id }) => id)).toEqual(["ms-2026-09-26-devshark-en-linkedin"]);
+    expect(snapshot.counts.waiting).toBe(1);
+    expect(snapshot.dropped.items).toBe(1_999);
+    expect(snapshot.unavailable).toEqual(["state/social/queue holds 1 more file than the Queue reads; the oldest by name is not shown"]);
+  });
+
   it("reads a marketingShark v2 draft as devShark's, with its checks run now", async () => {
     const snapshot = await readAdminQueue(await root(), { now });
     const [item] = snapshot.items;

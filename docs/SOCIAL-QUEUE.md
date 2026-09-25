@@ -18,7 +18,10 @@ provider verdict, the per-venture activation and the cadence before it touches a
 `legacyQueueMappings`. Alongside the items it reads the post receipts under `state/social/posts/`,
 provider health, the pause and kill-switch files, and the owner's events under
 `state/social/queue-events/`. It returns bounded view models and two counts: `unreadable` (not
-JSON) and `dropped` (JSON that is not a queue item, event or receipt).
+JSON) and `dropped` (JSON that is not a queue item, event or receipt). It reads at most 2,000 files a
+directory, the last by name: queue items are named by date and events by timestamp, so those are the
+newest. A directory with more says how many it left out under `unavailable`. Nothing prunes closed
+items or events yet; `docs/NEEDED.md` carries that.
 
 | Group | Items |
 | --- | --- |

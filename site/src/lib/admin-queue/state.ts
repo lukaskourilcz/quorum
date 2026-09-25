@@ -55,21 +55,33 @@ export function queueRepositoryRoot(): string {
   return process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
 }
 
-async function jsonFiles(directory: string): Promise<{ files: Array<{ file: string; value: unknown | undefined }>; state: "present" | "missing" | "unavailable" }> {
+/**
+ * The JSON files of one directory, at most `MAX_FILES` of them. When there are more, the ones kept
+ * are the last by name, not the first: queue items are named by date (and a supersession's `-rN`
+ * sorts after its original), and events by timestamp, so the first 2,000 were the oldest and a year
+ * in the Queue would have shown nothing waiting. `excluded` says how many were left out.
+ */
+async function jsonFiles(directory: string): Promise<{ files: Array<{ file: string; value: unknown | undefined }>; state: "present" | "missing" | "unavailable"; excluded: number }> {
   let names: string[];
   try {
     names = await readdir(directory);
   } catch (error) {
-    return { files: [], state: (error as NodeJS.ErrnoException).code === "ENOENT" ? "missing" : "unavailable" };
+    return { files: [], state: (error as NodeJS.ErrnoException).code === "ENOENT" ? "missing" : "unavailable", excluded: 0 };
   }
-  const files = await Promise.all(names.filter((name) => name.endsWith(".json") && !name.startsWith(".")).sort().slice(0, MAX_FILES).map(async (file) => {
+  const candidates = names.filter((name) => name.endsWith(".json") && !name.startsWith(".")).sort();
+  const excluded = Math.max(0, candidates.length - MAX_FILES);
+  const files = await Promise.all(candidates.slice(excluded).map(async (file) => {
     try {
       return { file, value: JSON.parse(await readFile(path.join(directory, file), "utf8")) as unknown };
     } catch {
       return { file, value: undefined };
     }
   }));
-  return { files, state: "present" };
+  return { files, state: "present", excluded };
+}
+
+function excludedNote(relative: string, excluded: number): string[] {
+  return excluded > 0 ? [`${relative} holds ${excluded.toLocaleString("en-GB")} more ${excluded === 1 ? "file" : "files"} than the Queue reads; the oldest by name ${excluded === 1 ? "is" : "are"} not shown`] : [];
 }
 
 async function jsonConfig(root: string, relative: string, unavailable: string[]): Promise<Record<string, unknown> | null> {
@@ -133,7 +145,7 @@ function registryContext(registry: Record<string, unknown> | null, capabilities:
 }
 
 /** Only the queue items, for a caller that needs one item's frames and nothing around it. */
-export async function readQueueEntries(root = queueRepositoryRoot()): Promise<{ entries: QueueEntry[]; unreadable: number; dropped: number; listing: "present" | "missing" | "unavailable" }> {
+export async function readQueueEntries(root = queueRepositoryRoot()): Promise<{ entries: QueueEntry[]; unreadable: number; dropped: number; excluded: number; listing: "present" | "missing" | "unavailable" }> {
   const queue = await jsonFiles(path.join(root, "state", "social", "queue"));
   let unreadable = 0;
   let dropped = 0;
@@ -148,7 +160,7 @@ export async function readQueueEntries(root = queueRepositoryRoot()): Promise<{ 
     seen.add(item.id);
     entries.push({ file, raw, item });
   }
-  return { entries, unreadable, dropped, listing: queue.state };
+  return { entries, unreadable, dropped, excluded: queue.excluded, listing: queue.state };
 }
 
 export async function readQueueState(root = queueRepositoryRoot()): Promise<QueueState> {
@@ -172,6 +184,12 @@ export async function readQueueState(root = queueRepositoryRoot()): Promise<Queu
   ]);
   if (queue.listing === "unavailable") unavailable.push("state/social/queue could not be listed");
   if (events.state === "unavailable") unavailable.push("state/social/queue-events could not be listed");
+  unavailable.push(
+    ...excludedNote("state/social/queue", queue.excluded),
+    ...excludedNote("state/social/queue-events", events.excluded),
+    ...excludedNote("state/social/posts", receipts.excluded),
+    ...excludedNote("state/social/provider-health", health.excluded)
+  );
 
   const unreadable = queue.unreadable;
   const dropped = { items: queue.dropped, events: 0, receipts: 0, health: 0 };
