@@ -15,3 +15,4 @@ export * from "./slides.js";
 export * from "./copy.js";
 export * from "./summary.js";
 export * from "./hooks/index.js";
+export * from "./quiz-deck.js";

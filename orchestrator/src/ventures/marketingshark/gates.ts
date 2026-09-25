@@ -1,3 +1,4 @@
+import { QUIZ_SLIDE_LIMITS } from "@boardlessai/carousel-studio";
 import { fencedBlocks, type NormalizedQuestion } from "./bank.js";
 import { brandLocales, type Brand, type MarketingSharkLocale } from "./config.js";
 import { SLIDE_ROLES, type CarouselCopy, type ChumOutput } from "./package.js";
@@ -11,16 +12,18 @@ import { correctLetter, fitViolations, type FitViolation } from "./render.js";
  * mentions is a retry the model cannot learn its way out of.
  */
 export const LIMITS = {
-  hookChars: 80,
-  whyWords: 40,
+  /**
+   * The per-slide caps (hook, why, headline, body and alt text, alone and together) live in the
+   * render package, because the Design Lab holds an owner's edit to the same numbers (quorum#575).
+   */
+  ...QUIZ_SLIDE_LIMITS,
   instagramBeforeHashtags: 500,
   threadsChars: 300,
-  altChars: 200,
   instagramHashtagsMin: 3,
   instagramHashtagsMax: 5,
   /**
    * The package schema's own caps, restated so the gates can catch a breach as a violation the
-   * retry can act on.
+   * retry can act on. The headline and body caps arrive through the spread above.
    *
    * They were not here, and the consequence was a crash rather than a retry: the craft caps bound
    * the hook, the why slide, the descriptions and the alt text, but nothing bound a context or
@@ -29,8 +32,6 @@ export const LIMITS = {
    * uncaught ZodError inside assemblePackage, after the call was paid for and both carousels were
    * rendered.
    */
-  headlineChars: 120,
-  bodyChars: 600,
   instagramTotalChars: 2_200,
   threadsTotalChars: 500,
   /** LinkedIn's post limit, measured on the caption with its hashtags appended, as it is queued. */
@@ -40,9 +41,7 @@ export const LIMITS = {
    * the first line has to stand alone within that.
    */
   linkedinFirstLineChars: 140,
-  linkedinHashtagsMax: 3,
-  /** The queue item carries one alt text for the whole carousel, and the queue caps it at 1,000. */
-  altTotalChars: 1_000
+  linkedinHashtagsMax: 3
 } as const;
 
 /** The first non-empty line of a caption, trimmed: what a feed shows before it truncates. */

@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 2,
+  "id": "ms-2026-09-26-devshark-en-linkedin",
+  "sourceVentureId": "marketingshark",
+  "releaseId": "marketingshark-2026-09-26-devshark",
+  "campaignId": "marketingshark-2026-09-26-devshark",
+  "experimentId": null,
+  "target": {
+    "profileId": "social-profile-devshark-linkedin",
+    "profileRole": "venture-primary",
+    "role": "primary",
+    "connectionBindingRef": "social-connection-devshark-linkedin",
+    "capabilityRef": {
+      "mapVersion": "1.4.0",
+      "source": "marketingshark",
+      "target": "social-distribution",
+      "capability": "approved-publish-package",
+      "dataSchemaVersion": "approved-publish-package/1",
+      "decisionReference": "state/decisions/2026-09-26-devshark-social-queue.md"
+    },
+    "amplifierEligibilityRef": null,
+    "campaignApprovalRef": null
+  },
+  "action": "publish-original",
+  "sourcePackage": {
+    "schemaVersion": "approved-publish-package/1",
+    "artifactRef": "state/ventures/marketingshark/packages/2026-09-26/devshark/package.json",
+    "packageHash": "1ecf8f1dc0b720c0f693c20a670309254d997a05bbc942961d2fcfedbb5c3f45"
+  },
+  "locale": "en",
+  "variant": "A",
+  "channel": "linkedin",
+  "objective": "value_action",
+  "audience": "Working developers who want one real question a day",
+  "destination": "https://devshark.app",
+  "utm": {
+    "source": "linkedin",
+    "medium": "organic_social",
+    "campaign": "marketingshark-devshark",
+    "content": "2026-09-26-en-rm-abbr-19"
+  },
+  "content": {
+    "text": "Fixture. One devShark question for working developers, written for LinkedIn.\n\nThe carousel walks through the question, the answer and why it holds.\n\nhttps://devshark.app\n\n#webdev #programming #codingquiz",
+    "altText": "Slide 1: fixture hook (en) Slide 2: fixture question (en) Slide 3: fixture reveal (en) Slide 4: fixture explanation (en) Slide 5: fixture footer (en)",
+    "assetPaths": [
+      "/social/devshark/2026-09-26/en/slide-01.png",
+      "/social/devshark/2026-09-26/en/slide-02.png",
+      "/social/devshark/2026-09-26/en/slide-03.png",
+      "/social/devshark/2026-09-26/en/slide-04.png",
+      "/social/devshark/2026-09-26/en/slide-05.png"
+    ],
+    "factualClaimRefs": [
+      "marketingshark:question:rm-abbr-19"
+    ],
+    "rendererVersion": "carousel-studio-1",
+    "contentHash": "d38459ffb7c5ae983e20b03e5d6e4b53d926e81bc73b304953c82d0e1efb2e69"
+  },
+  "publishWindow": {
+    "notBefore": "2026-09-26T06:00:00.000Z",
+    "notAfter": "2026-09-26T21:00:00.000Z"
+  },
+  "status": "draft",
+  "checks": {
+    "schema": "pending",
+    "brand": "pending",
+    "claims": "pending",
+    "quill": "pending",
+    "keeper": "pending",
+    "duplicate": "pending",
+    "accessibility": "pending",
+    "budget": "pending",
+    "capability": "pending",
+    "authority": "pending",
+    "policy": "pending"
+  },
+  "approvalProvenance": {
+    "approvalRef": "awaiting-owner-approval",
+    "selectionRef": "state/meetings/2026-09-26-ms-daily.json",
+    "policyRef": "state/decisions/2026-09-26-devshark-social-queue.md"
+  },
+  "selectedBy": "MAKO",
+  "createdAt": "2026-09-26T07:00:00.000Z",
+  "attempt": null,
+  "receiptId": null,
+  "migration": null
+}

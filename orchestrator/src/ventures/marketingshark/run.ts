@@ -32,6 +32,7 @@ import {
   codeOwnedSlotsFit,
   engineVersion,
   MARKETINGSHARK_FORMAT,
+  quizFacts,
   rasteriseCarousel,
   renderCarousel,
   slotBudget,
@@ -297,6 +298,7 @@ export function assemblePackage(input: {
 export function buildRenderSummary(input: {
   date: string;
   brand: Brand;
+  question: NormalizedQuestion;
   locale: MarketingSharkLocale;
   rendered: RenderedRoleSlide[];
 }) {
@@ -307,6 +309,12 @@ export function buildRenderSummary(input: {
     locale: input.locale,
     format: MARKETINGSHARK_FORMAT,
     engineVersion: engineVersion(),
+    /**
+     * What code put on the slides: the brand's name and link, the correct letter, the options and
+     * the question's code. With these and the package's own copy, the Design Lab renders this deck
+     * again through the same studio functions (quorum#575), without the question bank it cannot read.
+     */
+    facts: quizFacts(input.brand, input.question, input.locale),
     slides: input.rendered.map((slide) => ({
       role: slide.role,
       templateId: slide.templateId,
@@ -618,7 +626,7 @@ export async function runBrandDay(input: {
 
   const summaries = locales.map((locale) => ({
     relative: summaryPathFor(date, brand.id, locale),
-    body: buildRenderSummary({ date, brand, locale, rendered: inLocale(rendered, locale) })
+    body: buildRenderSummary({ date, brand, question: plan.question, locale, rendered: inLocale(rendered, locale) })
   }));
   const built = assemblePackage({
     date,

@@ -1,3 +1,4 @@
+import { QUIZ_SLIDE_LIMITS } from "@boardlessai/carousel-studio";
 import { z } from "zod";
 import { HookAssignmentSchema } from "../../contracts/hook-assignment.js";
 import { MarketingSharkLocaleSchema, type MarketingSharkLocale } from "./config.js";
@@ -8,10 +9,10 @@ export type SlideRole = (typeof SLIDE_ROLES)[number];
 export const SlideCopy = z.object({
   role: z.enum(SLIDE_ROLES),
   templateId: z.string(),
-  headline: z.string().max(120),
-  body: z.string().max(600).optional(),
+  headline: z.string().max(QUIZ_SLIDE_LIMITS.headlineChars),
+  body: z.string().max(QUIZ_SLIDE_LIMITS.bodyChars).optional(),
   /** Required and never empty: every queue item carries it, and Instagram refuses media without it. */
-  alt: z.string().trim().min(1).max(200)
+  alt: z.string().trim().min(1).max(QUIZ_SLIDE_LIMITS.altChars)
 });
 export type SlideCopy = z.infer<typeof SlideCopy>;
 

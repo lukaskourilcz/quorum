@@ -2,15 +2,26 @@ import { createHash } from "node:crypto";
 import sharp from "sharp";
 import {
   CAROUSEL_BRANDS,
+  QUIZ_CODE_OWNED_SLOTS,
+  QUIZ_FRAME_JPEG_QUALITY,
   carouselCanvas,
+  completeQuizSlots,
+  letteredQuizOptions,
   liveTemplateByReference,
   liveTemplates,
+  quizFrameJpeg,
+  quizSlideRenderInput,
+  quizSlideSlots,
+  quizSlideVariant,
+  quizSlotBudget,
+  quizSlotField,
   renderCarouselSlidePng,
   renderCarouselSlideSvg,
   type BrandTokens,
   type CarouselFormat,
   type CarouselRenderInput,
-  type CarouselTemplate
+  type CarouselTemplate,
+  type QuizDeckFacts
 } from "@boardlessai/carousel-studio";
 import { fencedBlocks, type NormalizedQuestion } from "./bank.js";
 import { brandLocales, type Brand, type MarketingSharkLocale } from "./config.js";
@@ -47,34 +58,35 @@ export function correctLetter(question: NormalizedQuestion): string {
   return String.fromCharCode(65 + question.correctIndex);
 }
 
-/** "B. an array" and "B) an array" read as "an array"; the letter is printed beside it by code. */
-export function stripAnswerLetter(value: string): string {
-  return value.replace(/^\s*[A-D]\s*[.):\u2013\u2014-]\s*/u, "").trim();
+/** The question's options in the carousel's own language, unlettered. */
+function optionsIn(question: NormalizedQuestion, locale: "cs" | "en"): string[] {
+  return locale === "cs" && question.cs?.options ? question.cs.options : question.en.options;
 }
 
 /** The answer options as the reader sees them, lettered, in the carousel's own language. */
 export function letteredOptions(question: NormalizedQuestion, locale: "cs" | "en"): string {
-  const options = locale === "cs" && question.cs?.options ? question.cs.options : question.en.options;
-  return options.map((option, index) => `${String.fromCharCode(65 + index)}. ${option}`).join("\n");
+  return letteredQuizOptions(optionsIn(question, locale));
 }
 
 /**
- * Split the context slide's body into the code that must stay monospaced and the rest.
+ * What code puts on the slides, read from the brand and the question bank.
  *
- * CHUM is asked to put the question's code on the context slide byte for byte, and it may also
- * restate the options there. The code slot is monospaced and the options slot is not, so the two
- * are separated deterministically rather than by asking the model for two fields: a line that
- * opens with a bare answer letter is an option, everything else is code.
+ * The package's render summary records these beside the slides, so the Design Lab can render the
+ * same deck again (quorum#575) without the bank, which it cannot reach.
  */
-export function splitContextBody(body: string): { code: string; options: string } {
-  const lines = body.split("\n");
-  const optionLines = lines.filter((line) => /^\s*[A-D][.):]\s/u.test(line));
-  const codeLines = lines.filter((line) => !/^\s*[A-D][.):]\s/u.test(line));
+export function quizFacts(brand: Brand, question: NormalizedQuestion, locale: "cs" | "en"): QuizDeckFacts {
   return {
-    code: codeLines.join("\n").replace(/^\n+|\n+$/gu, ""),
-    options: optionLines.join("\n").trim()
+    displayName: brand.displayName,
+    productUrl: brand.productUrl,
+    correctLetter: correctLetter(question),
+    options: optionsIn(question, locale),
+    codeBlocks: fencedBlocks(`${question.en.introduction ?? ""}\n${question.en.question}`)
   };
 }
+
+// The slot mapping moved into the render package so the Design Lab renders a package through the
+// same code (quorum#575). The names stay importable from here, where the room and its tests use them.
+export { splitContextBody, stripAnswerLetter } from "@boardlessai/carousel-studio";
 
 /**
  * Map one slide's copy onto the slots its host template requires.
@@ -97,47 +109,7 @@ export function slotsForRole(input: {
   question: NormalizedQuestion;
   locale: "cs" | "en";
 }): Record<string, string> {
-  const { headline, body } = input;
-  switch (input.template.id) {
-    case "minimal-text-poster":
-      return {
-        "poster-line": headline,
-        "poster-note": input.role === "footer"
-          ? input.brand.productUrl.replace(/^https:\/\//u, "")
-          : body || input.brand.displayName
-      };
-    case "quiz-question-context": {
-      const options = input.locale === "cs" && input.question.cs?.options ? input.question.cs.options : input.question.en.options;
-      return { "question-line": headline, ...Object.fromEntries(["a", "b", "c", "d"].map((letter, index) => [
-        `option-${letter}`, options[index] ? `${letter.toUpperCase()}. ${options[index]}` : ""
-      ])) };
-    }
-    case "quiz-code-context": {
-      const { code, options } = splitContextBody(body);
-      return {
-        "question-line": headline,
-        "code-block": code,
-        options: options || letteredOptions(input.question, input.locale)
-      };
-    }
-    case "stat-highlight":
-      // The big figure on the reveal is the correct letter, and code owns it: the bank already
-      // holds the answer, and an 18-character one-line slot is no place for the model's sentence.
-      // Every devShark package from 16 to 24 September 2026 died here, with the answer's full
-      // text clipped out of `stat`. The model's words go to the label, without a repeated letter.
-      if (input.role === "reveal") {
-        return {
-          stat: correctLetter(input.question),
-          "stat-label": stripAnswerLetter(body.trim() || headline),
-          source: input.brand.displayName
-        };
-      }
-      return { stat: headline, "stat-label": body, source: input.brand.displayName };
-    case "quote-card":
-      return { quote: body || headline, attribution: body ? headline : input.brand.displayName };
-    default:
-      throw new Error(`No slot mapping for template ${input.template.id}`);
-  }
+  return quizSlideSlots({ ...input, facts: quizFacts(input.brand, input.question, input.locale) });
 }
 
 /**
@@ -147,22 +119,7 @@ export function slotsForRole(input: {
  * close on the same background and read as a duplicated slide.
  */
 export function variantForRole(role: SlideRole, template: CarouselTemplate): string | undefined {
-  const available = template.slides[0]?.variants ?? [];
-  if (available.length === 0) return undefined;
-  return role === "footer" ? available.at(-1)?.id : available[0]?.id;
-}
-
-/**
- * Every required slot the mapping did not fill, filled with an empty string.
- *
- * The renderer throws on a missing slot, and an empty slot is a legitimate slide -- an answer
- * reveal with no sub-label, an optional subtitle left blank. Plain questions use their own layout. Undefined is the
- * failure; empty is a design choice.
- */
-function completeSlots(template: CarouselTemplate, slots: Record<string, string>): Record<string, string> {
-  const complete: Record<string, string> = {};
-  for (const slot of template.requiredSlots) complete[slot] = slots[slot] ?? "";
-  return complete;
+  return quizSlideVariant(role, template);
 }
 
 /** The template a role renders in: the brand's map, with the plain-question layout for devShark. */
@@ -179,36 +136,8 @@ export function templateIdFor(role: SlideRole, brand: Brand, question: Normalize
  * writer is given instead of leaving a stale constant that the canvas no longer honours.
  */
 export function slotBudget(templateId: string, slot: string): { maxChars: number; maxLines: number } {
-  const template = liveTemplateByReference(templateId, liveVersionOf(templateId));
-  for (const slide of template.slides) {
-    for (const layer of slide.layers) {
-      if (layer.type === "text" && layer.slot === slot) return { maxChars: layer.maxChars, maxLines: layer.maxLines };
-    }
-  }
-  throw new Error(`${templateId} has no text slot ${slot}`);
+  return quizSlotBudget(liveTemplateByReference(templateId, liveVersionOf(templateId)), slot);
 }
-
-/** Which of the model's two fields fills a slot, so a fit failure can name the field to shorten. */
-function copyFieldFor(templateId: string, slot: string, hasBody: boolean): "headline" | "body" | "code" {
-  switch (`${templateId}/${slot}`) {
-    case "stat-highlight/stat-label":
-    case "quote-card/quote":
-    case "minimal-text-poster/poster-note":
-      return hasBody ? "body" : "headline";
-    case "quiz-code-context/code-block":
-    case "quiz-code-context/options":
-    case "quiz-question-context/option-a":
-    case "quiz-question-context/option-b":
-    case "quiz-question-context/option-c":
-    case "quiz-question-context/option-d":
-      return "code";
-    default:
-      return "headline";
-  }
-}
-
-/** The context-slide slots code fills from the bank; the writer cannot shorten them. */
-const CODE_OWNED_SLOTS: ReadonlySet<string> = new Set(["code-block", "options", "option-a", "option-b", "option-c", "option-d"]);
 
 /**
  * Whether the question's own code and options fit the context slide in both languages.
@@ -233,7 +162,7 @@ const codeOwnedFit = new Map<string, boolean>();
 
 function codeOwnedSlotsFitUncached(brand: Brand, question: NormalizedQuestion, templateId: string): boolean {
   const template = liveTemplateByReference(templateId, liveVersionOf(templateId));
-  const code = fencedBlocks(`${question.en.introduction ?? ""}\n${question.en.question}`).join("\n\n");
+  const code = quizFacts(brand, question, "en").codeBlocks.join("\n\n");
   // Only the languages the brand writes: an overflowing Czech option is no reason to skip a
   // question for a brand that never renders Czech.
   for (const locale of brandLocales(brand)) {
@@ -244,10 +173,10 @@ function codeOwnedSlotsFitUncached(brand: Brand, question: NormalizedQuestion, t
       index: 0,
       payload: {
         locale,
-        strings: completeSlots(template, slotsForRole({ role: "context", template, headline: "", body: code, brand, question, locale }))
+        strings: completeQuizSlots(template, slotsForRole({ role: "context", template, headline: "", body: code, brand, question, locale }))
       }
     });
-    if (!rendered || rendered.truncatedSlots.some((slot) => CODE_OWNED_SLOTS.has(slot))) return false;
+    if (!rendered || rendered.truncatedSlots.some((slot) => QUIZ_CODE_OWNED_SLOTS.has(slot))) return false;
   }
   return true;
 }
@@ -322,7 +251,7 @@ export function fitViolations(input: {
           locale,
           templateId: slide.templateId,
           slot,
-          field: copyFieldFor(slide.templateId, slot, Boolean(copy?.body?.trim())),
+          field: quizSlotField(slide.templateId, slot, Boolean(copy?.body?.trim())),
           ...slotBudget(slide.templateId, slot)
         });
       }
@@ -353,34 +282,16 @@ function slideInputs(input: {
 }): Array<{ role: SlideRole; templateId: string; template: CarouselTemplate; render: CarouselRenderInput & { index: number } }> {
   const tokens = brandTokensFor(input.brand);
   const format = input.format ?? MARKETINGSHARK_FORMAT;
+  const facts = quizFacts(input.brand, input.question, input.locale);
   return input.copy.slides.map((slide, index) => {
     const role = SLIDE_ROLES[index]!;
     const templateId = templateIdFor(role, input.brand, input.question);
     const template = liveTemplateByReference(templateId, liveVersionOf(templateId));
-    const variant = variantForRole(role, template);
     return {
       role,
       templateId,
       template,
-      render: {
-        template,
-        brand: tokens,
-        format,
-        index: 0,
-        payload: {
-          locale: input.locale,
-          strings: completeSlots(template, slotsForRole({
-            role,
-            template,
-            headline: slide.headline,
-            body: slide.body ?? "",
-            brand: input.brand,
-            question: input.question,
-            locale: input.locale
-          })),
-          ...(variant ? { variant } : {})
-        }
-      }
+      render: quizSlideRenderInput({ role, template, headline: slide.headline, body: slide.body ?? "", facts, locale: input.locale, brand: tokens, format })
     };
   });
 }
@@ -409,7 +320,7 @@ export function renderCarousel(input: {
 }
 
 /** The quality the Instagram copies are encoded at. Instagram accepts JPEG only. */
-export const FRAME_JPEG_QUALITY = 90;
+export const FRAME_JPEG_QUALITY = QUIZ_FRAME_JPEG_QUALITY;
 
 export interface FrameFile {
   /** The path a channel fetches it at, under the site's public root: `/social/<brand>/<date>/<locale>/slide-01.png`. */
@@ -467,12 +378,7 @@ export async function rasteriseCarousel(input: {
       throw new Error(`${input.locale}/${entry.role}: the frame clipped ${rendered.truncatedSlots.join(", ")}`);
     }
     const expected = entry.template.formats[carouselCanvas(entry.render.format)];
-    const jpegBytes = await sharp(rendered.png)
-      .flatten({ background })
-      .toColourspace("srgb")
-      .jpeg({ quality: FRAME_JPEG_QUALITY })
-      .withIccProfile("srgb")
-      .toBuffer();
+    const jpegBytes = await quizFrameJpeg(rendered.png, background);
     const [pngMeta, jpegMeta] = await Promise.all([sharp(rendered.png).metadata(), sharp(jpegBytes).metadata()]);
     for (const [name, meta] of [["png", pngMeta], ["jpeg", jpegMeta]] as const) {
       if (meta.width !== expected.width || meta.height !== expected.height) {

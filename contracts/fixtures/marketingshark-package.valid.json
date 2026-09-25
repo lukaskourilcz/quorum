@@ -1,0 +1,251 @@
+{
+  "id": "marketingshark-2026-09-26-devshark",
+  "schemaVersion": "marketingshark-package/2",
+  "date": "2026-09-26",
+  "brandId": "devshark",
+  "locales": [
+    "en"
+  ],
+  "question": {
+    "id": "rm-abbr-19",
+    "category": "abbreviations",
+    "difficulty": 1
+  },
+  "hooks": {
+    "a": {
+      "patternId": "payoff-explainer",
+      "en": "Miss it and the explanation still pays off."
+    },
+    "b": {
+      "patternId": "guess-first",
+      "en": "Guess first. Being wrong here is useful."
+    }
+  },
+  "hookAssignment": {
+    "schemaVersion": "hook-assignment/1",
+    "surface": "quiz",
+    "vertical": "dev",
+    "channel": "devshark-carousel",
+    "date": "2026-09-26",
+    "itemId": "rm-abbr-19",
+    "seed": "e223c82fa9764cbd905ea2c558f45f66ae664f51419d60b5be4e353a40d7f6ca",
+    "languages": [
+      "en"
+    ],
+    "eligibleSetHash": "8ef94306f21018b103091045b85c5880c00c6e16840525aa289712a75d8faff0",
+    "eligibleIds": [
+      "payoff-explainer",
+      "guess-first",
+      "no-google",
+      "daily-rep",
+      "gut-check",
+      "calibration",
+      "keep-the-why",
+      "topic-audit",
+      "explain-it",
+      "bet-on-it",
+      "streak-cold",
+      "tagalong",
+      "eliminate-three",
+      "blind-odds",
+      "four-doors"
+    ],
+    "availableIds": [
+      "payoff-explainer",
+      "guess-first",
+      "no-google",
+      "daily-rep",
+      "gut-check",
+      "calibration",
+      "keep-the-why",
+      "topic-audit",
+      "explain-it",
+      "bet-on-it",
+      "streak-cold",
+      "tagalong",
+      "eliminate-three",
+      "blind-odds",
+      "four-doors"
+    ],
+    "cooldownSnapshot": [],
+    "hookId": "payoff-explainer",
+    "overriddenFrom": null,
+    "overrideMeetingRef": null,
+    "noHookReason": null
+  },
+  "carousels": {
+    "en": {
+      "slides": [
+        {
+          "role": "hook",
+          "templateId": "minimal-text-poster",
+          "headline": "Miss it and the explanation still pays off.",
+          "alt": "Slide 1: fixture hook (en)"
+        },
+        {
+          "role": "context",
+          "templateId": "quiz-question-context",
+          "headline": "An API response must carry a small text object that browser code can parse without an XML parser. Which format",
+          "alt": "Slide 2: fixture question (en)"
+        },
+        {
+          "role": "reveal",
+          "templateId": "stat-highlight",
+          "headline": "A",
+          "body": "JSON",
+          "alt": "Slide 3: fixture reveal (en)"
+        },
+        {
+          "role": "why",
+          "templateId": "quote-card",
+          "headline": "Fixture",
+          "body": "JSON means JavaScript Object Notation. It is a compact text format for objects, arrays, and primitive values.",
+          "alt": "Slide 4: fixture explanation (en)"
+        },
+        {
+          "role": "footer",
+          "templateId": "minimal-text-poster",
+          "headline": "One question from devShark — the game that makes you a better developer. devshark.app",
+          "alt": "Slide 5: fixture footer (en)"
+        }
+      ]
+    }
+  },
+  "descriptions": {
+    "instagram": {
+      "en": "Fixture. Question of the day from devShark. The answer is in the carousel."
+    },
+    "threads": {
+      "en": "Fixture. Question of the day."
+    },
+    "linkedin": {
+      "en": "Fixture. One devShark question for working developers, written for LinkedIn.\n\nThe carousel walks through the question, the answer and why it holds.\n\nhttps://devshark.app"
+    }
+  },
+  "hashtags": {
+    "instagram": {
+      "en": [
+        "#webdev",
+        "#programming",
+        "#codingquiz"
+      ]
+    },
+    "threads": {
+      "en": [
+        "webdev"
+      ]
+    },
+    "linkedin": {
+      "en": [
+        "#webdev",
+        "#programming",
+        "#codingquiz"
+      ]
+    }
+  },
+  "render": {
+    "engineVersion": "carousel-studio/223-live",
+    "format": "instagram-portrait",
+    "summaryPaths": [
+      "state/ventures/marketingshark/packages/2026-09-26/devshark/render-en.json"
+    ],
+    "frames": [
+      {
+        "locale": "en",
+        "role": "hook",
+        "slide": 1,
+        "svgHash": "8767ec1749c698baa9bac7d0a51909a21cacd851ca3df083d64d18e1fea333db",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-26/en/slide-01.png",
+          "sha256": "79968f47fa443fa15902e47aac9b48a6866ac6b46c46af67d47f19ec39bafeb0",
+          "bytes": 42020
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-26/en/slide-01.jpg",
+          "sha256": "5336ab89f8ab8ede915b0934c500f0747d268b043f00ab3ad0c6e396b85199a7",
+          "bytes": 58105
+        }
+      },
+      {
+        "locale": "en",
+        "role": "context",
+        "slide": 2,
+        "svgHash": "3ec77c07708258bbf1883702eccc440f844e5ee4cf3232ea78ae496e7e446bbf",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-26/en/slide-02.png",
+          "sha256": "3fb6dca1321f2e70dcf6016dd12c657535def036fc3743f9a4813a983420e6cd",
+          "bytes": 55296
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-26/en/slide-02.jpg",
+          "sha256": "91d74ab9b4d9d8c60ec0cf97ed109fed331719446c8161ccf2198b6839f475d3",
+          "bytes": 75660
+        }
+      },
+      {
+        "locale": "en",
+        "role": "reveal",
+        "slide": 3,
+        "svgHash": "1cc240167d74efa6c7576a9084b804654e70fe0333540eae24afa3971ea94125",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-26/en/slide-03.png",
+          "sha256": "2dff65778c560b38520b045b56986fc0e53849a2748c766c1efc2d423c31c248",
+          "bytes": 25205
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-26/en/slide-03.jpg",
+          "sha256": "8257782e1d11efd79a0a435095e6d5da5f5d79c62501c9d210a0e4b7cf9870b9",
+          "bytes": 26826
+        }
+      },
+      {
+        "locale": "en",
+        "role": "why",
+        "slide": 4,
+        "svgHash": "8c96de5fd8ee7493c3a80336bb9530bf3037eb124084bc379cd9a9f955881a44",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-26/en/slide-04.png",
+          "sha256": "edfcbbd885e2dc1d5e3574ed5d4f47881b0746407c4194346c0c11bcda7f8ad1",
+          "bytes": 67467
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-26/en/slide-04.jpg",
+          "sha256": "c2a1e43a85f1a59e9fea1798ed79cb8958853749f8e516fe9726bb7a4f6cfbbd",
+          "bytes": 97808
+        }
+      },
+      {
+        "locale": "en",
+        "role": "footer",
+        "slide": 5,
+        "svgHash": "c0da78ec04da993b8300ab0c171e007157e30e3b12d6cf6fcca05e291b03ad6c",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-26/en/slide-05.png",
+          "sha256": "01aaa71b87322924f6353548fcf67d8cbed74c08dad8e1eed3f3ecbb9b1225ac",
+          "bytes": 58346
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-26/en/slide-05.jpg",
+          "sha256": "811b1880512d971cfa9519b7b9d4c46489e310c0c2c1fc0ccc26865d4996e378",
+          "bytes": 79510
+        }
+      }
+    ]
+  },
+  "status": "draft",
+  "abRecord": {
+    "measured": false,
+    "note": "Both hook variants met the truth rule. SPLIT is retired and METRICS_INGESTION_ENABLED is false, so neither is ranked."
+  },
+  "spendUsd": 0
+}
