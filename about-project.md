@@ -85,10 +85,10 @@ modelům ani do podkladů porad.
   denně v 07:00 vezme jednu otázku z kvízu devSharku a udělá z ní jeden český a jeden
   anglický pětislidový karusel. Vykreslí ho Design Lab a hotový balíček skončí jako
   koncept ve frontě ke schválení; marketingShark nemá sociální účet ani přihlašovací
-  údaje, takže zveřejnit nic neumí. devShark je zatím jediná zapnutá značka — jeho banku
-  3 633 otázek o webovém vývoji systém jen čte z připnutého otisku a v jeho repozitáři nic
-  nemění. geoShark je v konfiguraci od začátku a vypnutý; zapnout ho znamená jeden import
-  a jednu změnu `false` na `true`.
+  údaje, takže zveřejnit nic neumí. devShark je jediná značka — jeho banku 3 633 otázek
+  o webovém vývoji systém jen čte z připnutého otisku a v jeho repozitáři nic nemění.
+  Vypnutá značka geoShark pro zeměpisnou banku StudyShark skončila spolu se StudyShark
+  a z konfigurace zmizela.
 - **FightAIQ** spravuje zdrojovaná data o UFC a Oktagonu a počítá analýzy v kódu.
   Analýzy smí spustit jen pro ověřené zápasy a karty: neumí sázet, otevírat sázkové
   účty ani slibovat výhru.

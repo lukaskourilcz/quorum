@@ -56,7 +56,7 @@ export type NormalizedQuestion = z.infer<typeof NormalizedQuestionSchema>;
 
 export const QuestionBankSnapshotSchema = z.object({
   schemaVersion: z.literal("marketingshark-bank/1"),
-  brandId: z.enum(["devshark", "geoshark"]),
+  brandId: z.literal("devshark"),
   sourceRepo: z.string().min(1),
   sourceCommit: z.string().min(7),
   sourceSubject: z.string().min(1),

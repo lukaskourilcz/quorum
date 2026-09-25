@@ -167,14 +167,16 @@ describe("marketingShark selection ledger", () => {
       expect(index).toBeGreaterThanOrEqual(0);
     }
 
-    const geo = selectQuestion({ ledger, brandId: "geoshark", date: "2026-08-10", questionIds: ids, contentHash });
-    expect(geo.epoch).toBe(1);
-    expect(geo.alreadyServed).toBeNull();
+    // The ledger is keyed by brand id, not by the one brand the config accepts today, so a node
+    // under any other key starts its own epoch.
+    const other = selectQuestion({ ledger, brandId: "second-brand", date: "2026-08-10", questionIds: ids, contentHash });
+    expect(other.epoch).toBe(1);
+    expect(other.alreadyServed).toBeNull();
     expect(ledger.brands.devshark!.epoch).toBe(1);
   });
 
   it("creates a brand node on first sight without touching the ledger it was read from", () => {
-    const node = brandLedgerFor(EMPTY_LEDGER, "geoshark", "a".repeat(64));
+    const node = brandLedgerFor(EMPTY_LEDGER, "devshark", "a".repeat(64));
     expect(node.epoch).toBe(1);
     expect(node.served).toEqual([]);
     expect(node.orderSeed).toBe(orderSeedFor(1, "a".repeat(64)));

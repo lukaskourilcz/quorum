@@ -98,68 +98,6 @@
           "A mobile app, an offline mode, or an interface language beyond English and Czech."
         ]
       }
-    },
-    {
-      "id": "geoshark",
-      "enabled": false,
-      "displayName": "geoShark",
-      "productUrl": "https://studyshark-app.vercel.app",
-      "tone": "geo",
-      "questionBank": {
-        "snapshotPath": "state/marketingshark/question-banks/geoshark.json",
-        "sourceRepo": "lukaskourilcz/react-express-app",
-        "sourceSubject": "geography"
-      },
-      "categoryLists": {
-        "commonUse": [
-          "capitals",
-          "flags",
-          "continents",
-          "earth"
-        ],
-        "interview": [
-          "capitals",
-          "flags",
-          "political",
-          "geopolitics"
-        ],
-        "core": [
-          "cartography",
-          "earth",
-          "climate",
-          "landforms"
-        ]
-      },
-      "slide5": {
-        "en": "One question from geoShark — for people who love geography. studyshark-app.vercel.app",
-        "cs": "Jedna otázka z geoSharku — pro lidi, které baví zeměpis. studyshark-app.vercel.app"
-      },
-      "templateMap": {
-        "hook": "minimal-text-poster",
-        "context": "quiz-code-context",
-        "reveal": "stat-highlight",
-        "why": "quote-card",
-        "footer": "minimal-text-poster"
-      },
-      "hashtags": {
-        "instagram": {
-          "en": [
-            "#geography",
-            "#maps",
-            "#quiz"
-          ],
-          "cs": [
-            "#zemepis",
-            "#mapy",
-            "#kviz"
-          ]
-        },
-        "threadsTopic": {
-          "en": "geography",
-          "cs": "zeměpis"
-        }
-      },
-      "banner": false
     }
   ]
 }

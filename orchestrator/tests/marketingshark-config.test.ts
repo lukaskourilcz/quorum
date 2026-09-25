@@ -7,12 +7,21 @@ import {
 } from "../src/ventures/marketingshark/config.js";
 
 describe("marketingShark configuration", () => {
-  it("ships one enabled brand and geoShark present and off", async () => {
+  it("ships exactly one brand, devShark, and it is enabled", async () => {
     const config = await loadMarketingSharkConfig();
 
-    expect(config.brands.map((brand) => brand.id)).toEqual(["devshark", "geoshark"]);
+    expect(config.brands.map((brand) => brand.id)).toEqual(["devshark"]);
     expect(enabledBrands(config).map((brand) => brand.id)).toEqual(["devshark"]);
-    expect(config.brands.find((brand) => brand.id === "geoshark")?.enabled).toBe(false);
+    expect(config.brands[0]!.tone).toBe("dev");
+  });
+
+  it("carries devShark's address as its only product link", async () => {
+    // The owner's direction: marketingShark promotes devShark and nothing else. Every carousel,
+    // queue item and banner takes its destination from a brand's productUrl, so the set of those
+    // is the set of places this venture can send a reader.
+    const config = await loadMarketingSharkConfig();
+    expect([...new Set(config.brands.map((brand) => brand.productUrl))]).toEqual(["https://devshark.app"]);
+    expect(JSON.stringify(config)).not.toMatch(/https?:\/\/(?!devshark\.app\b)[^"\s]*shark/iu);
   });
 
   it("no longer carries hook copy at all", async () => {
@@ -24,31 +33,24 @@ describe("marketingShark configuration", () => {
     expect(raw).not.toHaveProperty("hookLibrary");
   });
 
-  it("refuses any config that gives geoShark a banner", () => {
-    const withBanner = {
-      schemaVersion: "marketingshark-config/1",
-      meetingPhase: "ms-daily",
-      pragueHour: 7,
-      abVariants: 2,
-      minEligibleBeforeRelax: 2,
-      brands: [{
-        id: "geoshark",
-        enabled: false,
-        displayName: "geoShark",
-        productUrl: "https://studyshark-app.vercel.app",
-        tone: "geo",
-        questionBank: { snapshotPath: "x", sourceRepo: "y", sourceSubject: "geography" },
-        categoryLists: {},
-        slide5: { en: "a", cs: "b" },
-        templateMap: { hook: "a", context: "b", reveal: "c", why: "d", footer: "e" },
-        hashtags: { instagram: { en: [], cs: [] }, threadsTopic: { en: "a", cs: "b" } },
-        banner: true
-      }]
+  it("refuses a second brand, a retired one, or a second devShark", async () => {
+    // geoShark left with StudyShark. Its entry coming back, as a new tone or as a copy of devShark,
+    // is a config edit reviving a product with no code change to notice it.
+    const shipped = JSON.parse(JSON.stringify(await loadMarketingSharkConfig())) as { brands: Array<Record<string, unknown>> };
+    const devshark = shipped.brands[0]!;
+    const retired = {
+      ...devshark,
+      id: "geoshark",
+      enabled: false,
+      displayName: "geoShark",
+      productUrl: "https://studyshark-app.vercel.app",
+      tone: "geo"
     };
 
-    const result = MarketingSharkConfig.safeParse(withBanner);
-    expect(result.success).toBe(false);
-    expect(JSON.stringify(result.error?.issues)).toContain("geoShark never gets a banner");
+    for (const brands of [[devshark, retired], [retired], [{ ...devshark, tone: "geo" }], [devshark, devshark]]) {
+      expect(MarketingSharkConfig.safeParse({ ...shipped, brands }).success).toBe(false);
+    }
+    expect(MarketingSharkConfig.safeParse(shipped).success).toBe(true);
   });
 
   it("keeps every brand's category lists reachable from the gates that name them", async () => {

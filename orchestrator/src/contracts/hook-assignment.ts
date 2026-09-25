@@ -2,7 +2,7 @@ import { z } from "zod";
 import { openObject } from "./common.js";
 
 export const HookSurfaceSchema = z.enum(["quiz", "news", "mma"]);
-export const HookVerticalSchema = z.enum(["dev", "geo"]);
+export const HookVerticalSchema = z.enum(["dev"]);
 export const HookLanguageSchema = z.enum(["en", "cs"]);
 
 /**

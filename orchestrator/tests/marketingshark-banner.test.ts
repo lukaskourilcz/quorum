@@ -171,25 +171,28 @@ describe("devShark house banner", () => {
   });
 
   it("refuses a banner contract for any brand but devShark", () => {
-    const geo = MarketingSharkBannerContract.safeParse({
+    const contract = (brandId: string) => MarketingSharkBannerContract.safeParse({
       schemaVersion: "marketingshark-banner/1",
-      brandId: "geoshark",
+      brandId,
       targetRepo: "lukaskourilcz/aifirst",
       fallbackSpec: true,
-      files: [{ path: "public/banners/geoshark.svg", sha256: "a".repeat(64), bytes: 10 }],
+      files: [{ path: `public/banners/${brandId}.svg`, sha256: "a".repeat(64), bytes: 10 }],
       payloadHash: "b".repeat(64),
       humanApprovalRef: "INBOX:x",
       preparedAt: "2026-08-07T00:00:00.000Z",
       status: "staged",
       receiptRef: null
     });
-    expect(geo.success).toBe(false);
+    // The same contract passes for devShark, so the brand is the one thing each refusal is about.
+    expect(contract("devshark").success).toBe(true);
+    for (const brandId of ["geoshark", "webdev-signal", "mma-files"]) {
+      expect(contract(brandId).success, brandId).toBe(false);
+    }
   });
 
   it("keeps magazine placements reserved for reciprocal promotions", async () => {
     const config = await loadMarketingSharkConfig();
-    expect(config.brands.find((brand) => brand.id === "geoshark")!.banner).toBe(false);
-    expect(config.brands.find((brand) => brand.id === "devshark")!.banner).toBe(false);
+    expect(config.brands.map((brand) => brand.banner)).toEqual([false]);
     expect(config.brands.find((brand) => brand.id === "devshark")!.enabled).toBe(true);
   });
 });

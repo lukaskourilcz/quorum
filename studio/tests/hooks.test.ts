@@ -52,7 +52,7 @@ function hook(overrides: Partial<RawHook> = {}): RawHook {
     id: "fixture-hook",
     cooldownDays: 10,
     truthRequires: ["always"],
-    variants: { dev: { en: "A short dev line.", cs: "Krátká dev věta." }, geo: { en: "A short geo line.", cs: "Krátká geo věta." } },
+    variants: { dev: { en: "A short dev line.", cs: "Krátká dev věta." } },
     ...overrides
   };
 }
@@ -92,22 +92,9 @@ describe("the shipped quiz library", () => {
     expect(hasErrors(findings)).toBe(false);
   });
 
-  it("warns on exactly the three geo variants their gate makes unreachable", async () => {
+  it("reports nothing at all, not even a warning", async () => {
     const { hooks, research: entries } = await shippedQuiz();
-    const findings = lintLibrary({ surface: "quiz", hooks, research: entries });
-    expect(findings.map((finding) => `${finding.rule}:${finding.hookId}`)).toEqual([
-      "unreachable-variant:spot-it",
-      "unreachable-variant:half-in-the-snippet",
-      "unreachable-variant:runtime-eyes"
-    ]);
-  });
-
-  it("carries exactly the two intentional byte-identical pairs", async () => {
-    const { hooks } = await shippedQuiz();
-    const identical = hooks
-      .filter((entry) => entry.variants.dev!.en === entry.variants.geo!.en && entry.variants.dev!.cs === entry.variants.geo!.cs)
-      .map((entry) => entry.id);
-    expect(identical).toEqual(["streak-cold", "streak-breaker"]);
+    expect(lintLibrary({ surface: "quiz", hooks, research: entries })).toEqual([]);
   });
 
   it("loads all three surfaces, each against its own confirmed vocabulary", async () => {
@@ -118,13 +105,17 @@ describe("the shipped quiz library", () => {
     expect(news.hooks.length).toBe(12);
     expect(mma.hooks.length).toBe(16);
 
-    // The magazines have one vertical, so their hooks carry a dev line and no geo line. An
-    // exhaustive variants record would have forced an invented geo line for a magazine with no
-    // geo vertical, which is how dead copy gets written.
-    for (const hook of [...news.hooks, ...mma.hooks]) {
-      expect(hook.variants.dev, hook.id).toBeDefined();
-      expect(hook.variants.geo, hook.id).toBeUndefined();
+    // Every surface serves the one vertical there is, so every hook carries exactly that line.
+    for (const hook of [...quiz.hooks, ...news.hooks, ...mma.hooks]) {
+      expect(Object.keys(hook.variants), hook.id).toEqual(["dev"]);
     }
+  });
+
+  it("refuses a hook that still carries a line for the retired geo vertical", () => {
+    // geoShark left with StudyShark. A geo line copied back from an old library would load as
+    // copy that looks shipped and that no brand can ever render, so it fails the load instead.
+    const stale = { ...hook({ id: "stale" }), variants: { dev: { en: "A line.", cs: "Věta." }, geo: { en: "A line.", cs: "Věta." } } };
+    expect(rules(lintLibrary({ surface: "quiz", hooks: [stale], research: [research("stale")] }))).toContain("load");
   });
 
   it("keeps the surfaces' vocabularies apart", async () => {
@@ -177,33 +168,25 @@ describe("predicate parsing", () => {
 
 describe("each lint rule bites", () => {
   it("fails an EN line over 58 characters", () => {
-    const input = padded([hook({ variants: { dev: { en: "x".repeat(59), cs: "Krátká." }, geo: { en: "ok", cs: "ok" } } })]);
+    const input = padded([hook({ variants: { dev: { en: "x".repeat(59), cs: "Krátká." } } })]);
     expect(rules(lintLibrary({ surface: "quiz", ...input }))).toContain("char-budget-en");
   });
 
   it("fails a CS line over 66 characters", () => {
-    const input = padded([hook({ variants: { dev: { en: "x".repeat(58), cs: "á".repeat(67) }, geo: { en: "ok", cs: "ok" } } })]);
+    const input = padded([hook({ variants: { dev: { en: "x".repeat(58), cs: "á".repeat(67) } } })]);
     expect(rules(lintLibrary({ surface: "quiz", ...input }))).toContain("char-budget-cs");
   });
 
   it("counts Czech diacritics as one character each", () => {
     // 66 accented code points is at the cap, not over it: a UTF-16 length would read 66 and a
     // byte length would read 132.
-    const input = padded([hook({ variants: { dev: { en: "x".repeat(58), cs: "á".repeat(66) }, geo: { en: "ok", cs: "ok" } } })]);
+    const input = padded([hook({ variants: { dev: { en: "x".repeat(58), cs: "á".repeat(66) } } })]);
     expect(rules(lintLibrary({ surface: "quiz", ...input }))).not.toContain("char-budget-cs");
   });
 
   it("fails a CS line more than 1.25x its EN sibling", () => {
-    const input = padded([hook({ variants: { dev: { en: "x".repeat(20), cs: "á".repeat(26) }, geo: { en: "ok", cs: "ok" } } })]);
+    const input = padded([hook({ variants: { dev: { en: "x".repeat(20), cs: "á".repeat(26) } } })]);
     expect(rules(lintLibrary({ surface: "quiz", ...input }))).toContain("char-budget-ratio");
-  });
-
-  it("fails a third byte-identical dev/geo pair", () => {
-    const twin = (id: string) => hook({ id, variants: { dev: { en: "Same line.", cs: "Stejná věta." }, geo: { en: "Same line.", cs: "Stejná věta." } } });
-    const two = padded([twin("a"), twin("b")]);
-    expect(rules(lintLibrary({ surface: "quiz", ...two }))).not.toContain("identical-pair-budget");
-    const three = padded([twin("a"), twin("b"), twin("c")]);
-    expect(rules(lintLibrary({ surface: "quiz", ...three }))).toContain("identical-pair-budget");
   });
 
   it("fails a duplicate id", () => {
@@ -244,16 +227,16 @@ describe("each lint rule bites", () => {
   });
 
   it("fails {topic} in a declension-hostile Czech slot and allows the safe ones", () => {
-    const unsafe = padded([hook({ variants: { dev: { en: "Audit {topic} today.", cs: "Dnes koukni na {topic}." }, geo: { en: "ok", cs: "ok" } } })]);
+    const unsafe = padded([hook({ variants: { dev: { en: "Audit {topic} today.", cs: "Dnes koukni na {topic}." } } })]);
     expect(rules(lintLibrary({ surface: "quiz", ...unsafe }))).toContain("declension-slot");
 
-    const afterColon = padded([hook({ variants: { dev: { en: "Quick audit: {topic}.", cs: "Rychlý audit: {topic}." }, geo: { en: "ok", cs: "ok" } } })]);
+    const afterColon = padded([hook({ variants: { dev: { en: "Quick audit: {topic}.", cs: "Rychlý audit: {topic}." } } })]);
     expect(rules(lintLibrary({ surface: "quiz", ...afterColon }))).not.toContain("declension-slot");
 
-    const asSubject = padded([hook({ variants: { dev: { en: "{topic} is everywhere.", cs: "{topic} je všude." }, geo: { en: "ok", cs: "ok" } } })]);
+    const asSubject = padded([hook({ variants: { dev: { en: "{topic} is everywhere.", cs: "{topic} je všude." } } })]);
     expect(rules(lintLibrary({ surface: "quiz", ...asSubject }))).not.toContain("declension-slot");
 
-    const newSentence = padded([hook({ variants: { dev: { en: "Look. {topic} again.", cs: "Podívej. {topic} zase." }, geo: { en: "ok", cs: "ok" } } })]);
+    const newSentence = padded([hook({ variants: { dev: { en: "Look. {topic} again.", cs: "Podívej. {topic} zase." } } })]);
     expect(rules(lintLibrary({ surface: "quiz", ...newSentence }))).not.toContain("declension-slot");
   });
 
@@ -504,7 +487,7 @@ describe("assignment", () => {
 
     const broken = loadLibrary({
       surface: "quiz",
-      hooks: [hook({ id: "leaky", variants: { dev: { en: "Day {streak} of this.", cs: "Den {streak}." }, geo: { en: "ok", cs: "ok" } } })],
+      hooks: [hook({ id: "leaky", variants: { dev: { en: "Day {streak} of this.", cs: "Den {streak}." } } })],
       research: [research("leaky")]
     });
     expect(() => renderHookText({ hook: broken.hooks[0]!, vertical: "dev", language: "en", topic: "x" }))

@@ -129,10 +129,10 @@ export function slideOneTextSlot(template: CarouselTemplate): string | null {
 /**
  * A preview payload whose slide 1 carries a real assigned hook.
  *
- * The two shark brands are quiz verticals, so their previews run the real assignment against a
- * fixture item carrying real quiz metadata and render whatever it returns. That makes the gallery
- * show the thing the studio actually publishes rather than lorem for the one slot that has to earn
- * the next interaction.
+ * devShark is the quiz brand, so its previews run the real assignment against a fixture item
+ * carrying real quiz metadata and render whatever it returns. That makes the gallery show the
+ * thing the studio actually publishes rather than lorem for the one slot that has to earn the next
+ * interaction.
  *
  * Every other brand keeps its fixture headline. Their libraries are unwritten, so a preview that
  * invented a hook for them would be showing something the pipeline would never produce.
@@ -143,11 +143,10 @@ export async function previewPayloadForBrand(
   brandId: keyof typeof CAROUSEL_BRANDS
 ): Promise<CarouselPayload> {
   const base = previewPayload(template, locale);
-  const vertical = brandId === "devshark" ? "dev" : brandId === "geoshark" ? "geo" : null;
   const slot = slideOneTextSlot(template);
-  if (!vertical || !slot) return base;
+  if (brandId !== "devshark" || !slot) return base;
 
-  const resolved = fixtureAssignment(await readLibrary("quiz"), fixtureItem(vertical));
+  const resolved = fixtureAssignment(await readLibrary("quiz"), fixtureItem("dev"));
   // No line means the fallback fired, which is exactly when the template's own headline renders.
   if (!resolved.line) return base;
 

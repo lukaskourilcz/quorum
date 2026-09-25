@@ -11,12 +11,11 @@ change or second-guess them. Return JSON matching the schema you were given, not
   buzzwords, no filler.
 - Simple words: "use", not "utilize". Numbers and proper nouns from the question stay.
 - Never invent a statistic, user count, or claim. Honest beats sensational, every time.
-- Czech is written, not translated: natural register, the way a Czech developer or
-  geography fan actually talks. Dev jargon that Czech developers keep in English
+- Czech is written, not translated: natural register, the way a Czech developer
+  actually talks. Dev jargon that Czech developers keep in English
   (commit, deploy, code review, streak) stays in English inside Czech copy.
-- Brand tone comes with the input: `dev` = one developer to another, dry humor allowed;
-  `geo` = curious and concrete, wonder without kitsch. Insider language is welcome;
-  gatekeeping is not.
+- Brand tone comes with the input: `dev` = one developer to another, dry humor allowed.
+  Insider language is welcome; gatekeeping is not.
 
 ## The five slides (fixed, per language)
 

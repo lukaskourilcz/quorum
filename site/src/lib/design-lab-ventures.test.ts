@@ -26,11 +26,17 @@ describe("the Design Lab's venture sections", () => {
   });
 
   it("covers every venture the owner named, whether or not it publishes articles", () => {
-    // devShark, geoShark and Titty Tuesdays deliver no articles. They still have a palette and
-    // three typefaces, which is exactly what their section is for.
-    for (const id of ["caught-up", "mma-files", "devshark", "geoshark", "titty-tuesdays", "tehdejsi-svet"]) {
+    // devShark and Titty Tuesdays deliver no articles. They still have a palette and three
+    // typefaces, which is exactly what their section is for.
+    for (const id of ["caught-up", "mma-files", "devshark", "titty-tuesdays", "tehdejsi-svet"]) {
       expect(designLabVentureIds()).toContain(id);
     }
+  });
+
+  it("keeps devShark as the only shark section", () => {
+    // The geography brand retired with StudyShark. A section for it would offer the owner a
+    // palette for a product nothing promotes any more.
+    expect(designLabVentureIds().filter((id) => id.endsWith("shark"))).toEqual(["devshark"]);
   });
 
   it("opens article rails for every summary-producing venture", async () => {
