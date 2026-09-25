@@ -221,9 +221,9 @@ function recordedDay(day: string): string {
 export default async function AdminPage({
   searchParams
 }: {
-  searchParams: Promise<{ venture?: string; tab?: string; view?: string; brand?: string }>;
+  searchParams: Promise<{ venture?: string; tab?: string; view?: string; brand?: string; article?: string }>;
 }) {
-  const { venture: requestedVenture, tab: requestedTab, view: requestedView, brand: requestedBrand } = await searchParams;
+  const { venture: requestedVenture, tab: requestedTab, view: requestedView, brand: requestedBrand, article: requestedArticle } = await searchParams;
   const wantsStudio = ((requestedVenture ? VENTURE_ALIASES[requestedVenture] : undefined) ?? requestedVenture) === "carousel-studio";
   const [
     state,
@@ -756,7 +756,8 @@ export default async function AdminPage({
                 />
               </div>
             )}
-            <DesignLabVentureSection venture={labVenture} />
+            {/* `article=<venture:slug:date>` opens that article (quorum#575); the Queue links here per post. */}
+            <DesignLabVentureSection selectedArticle={typeof requestedArticle === "string" ? requestedArticle : null} venture={labVenture} />
           </div>
         ),
         count: labVenture.publishesArticles ? labVenture.articleCount : labVenture.presetCount

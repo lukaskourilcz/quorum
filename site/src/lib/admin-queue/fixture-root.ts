@@ -50,3 +50,33 @@ export async function queueFixtureRoot(options: { capabilityEdge?: boolean; draf
   if (options.draft !== false) await writeJson(root, `state/social/queue/${DRAFT_FILE}`, await readQueueFixture());
   return root;
 }
+
+export const PACKAGE_DATE = "2026-09-26";
+export const PACKAGE_SLUG = "marketingshark-2026-09-26-devshark";
+export const PACKAGE_CHANNELS = ["linkedin", "instagram", "threads"] as const;
+
+/**
+ * A root holding the devShark package the orchestrator drafts for 2026-09-26 (quorum#575): the
+ * committed handshake fixtures `marketingshark-{package,render,queue-*}.valid.json`, which
+ * `orchestrator/tests/marketingshark-rerender.test.ts` regenerates and compares, so the site's
+ * tests render the room's own package rather than a hand-made one.
+ */
+export async function packageFixtureRoot(options: { designLabEdge?: boolean; facts?: boolean; queue?: boolean } = {}): Promise<string> {
+  const root = await queueFixtureRoot({ draft: false });
+  const directory = `state/ventures/marketingshark/packages/${PACKAGE_DATE}/devshark`;
+  await writeJson(root, `${directory}/package.json`, await readQueueFixture("marketingshark-package.valid.json"));
+  const render = await readQueueFixture("marketingshark-render.valid.json");
+  if (options.facts === false) delete render.facts;
+  await writeJson(root, `${directory}/render-en.json`, render);
+  if (options.queue !== false) {
+    for (const channel of PACKAGE_CHANNELS) {
+      await writeJson(root, `state/social/queue/${PACKAGE_DATE}-devshark-en-${channel}.json`, await readQueueFixture(`marketingshark-queue-${channel}.valid.json`));
+    }
+  }
+  if (options.designLabEdge === false) {
+    const map = JSON.parse(await readFile(path.join(root, "config", "venture-capabilities.json"), "utf8")) as { edges: Array<Record<string, unknown>> };
+    map.edges = map.edges.filter((edge) => !(edge.source === "marketingshark" && edge.target === "design-lab"));
+    await writeJson(root, "config/venture-capabilities.json", map);
+  }
+  return root;
+}

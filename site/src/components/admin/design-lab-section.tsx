@@ -54,14 +54,19 @@ export function DesignLabSectionNav({
   );
 }
 
-export function DesignLabVentureSection({ venture }: { venture: DesignLabVenture }) {
+export function DesignLabVentureSection({ venture, selectedArticle = null }: { venture: DesignLabVenture; selectedArticle?: string | null }) {
   return (
     <div className="grid min-w-0 gap-4">
       <DesignLabIdentity venture={venture} />
       {venture.webDevRenders ? (
         <WebDevSignalDesignLab snapshot={venture.webDevRenders} />
       ) : venture.publishesArticles ? (
-        <DesignLabWorkspace articles={venture.articles} presets={venture.presets} />
+        <DesignLabWorkspace
+          articles={venture.articles}
+          emptyTitle={venture.id === "devshark" ? "marketingShark has not drafted a devShark package yet. Its next room sits at 07:00." : undefined}
+          initialArticleId={selectedArticle}
+          presets={venture.presets}
+        />
       ) : (
         // Three ventures do not deliver articles at all, and the workspace's own empty state would
         // read as "nothing has been written yet" — which is a different, fixable thing. Saying

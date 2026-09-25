@@ -75,6 +75,8 @@ export interface LabSlide {
 }
 
 export interface LabArticle {
+  /** A family deck built from a carousel summary; a devShark package is `design-lab-package.ts`'s kind. */
+  kind: "summary";
   id: string;
   venture: CarouselSummaryVenture;
   locale: CarouselSummaryLocale;
@@ -238,6 +240,7 @@ export async function readDesignLab(limit = 40, venture?: string): Promise<LabAr
       heroCredit: article.summary.heroCredit
     });
     lab.push({
+      kind: "summary",
       id: article.id,
       venture,
       locale: article.summary.locale,

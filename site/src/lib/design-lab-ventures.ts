@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { CAROUSEL_BRANDS, CAROUSEL_SUMMARY_VENTURES, type BrandTokens } from "@boardlessai/carousel-studio";
 import { readDesignLab, readDesignLabPresets, type LabArticle, type LabPreset } from "@/lib/design-lab";
+import { readDesignLabPackages, type LabPackageArticle } from "@/lib/design-lab-package";
 import { readWebDevDesignLabSnapshot, type WebDevDesignLabSnapshot } from "@/lib/webdev-signal-design-lab";
 
 /**
@@ -24,11 +25,20 @@ import { readWebDevDesignLabSnapshot, type WebDevDesignLabSnapshot } from "@/lib
 export type DesignLabVentureId = BrandTokens["id"];
 
 /**
- * The two magazines deliver articles and Tehdejší svět delivers recorded features. The other
- * brands have identity-only sections. A section says which kind it is so the content area can
- * explain an empty workspace.
+ * The two magazines deliver articles, Tehdejší svět delivers recorded features and marketingShark
+ * delivers a devShark package a day. The other brands have identity-only sections. A section says
+ * which kind it is so the content area can explain an empty workspace.
  */
 const PUBLISHES_ARTICLES: ReadonlySet<string> = new Set(CAROUSEL_SUMMARY_VENTURES);
+
+/** A family deck from a summary, or a devShark package rendered through the quiz templates. */
+export type DesignLabArticle = LabArticle | LabPackageArticle;
+
+/** One section's articles, from the reader that owns its kind. */
+function readArticles(id: DesignLabVentureId): Promise<DesignLabArticle[]> {
+  if (!PUBLISHES_ARTICLES.has(id)) return Promise.resolve([]);
+  return id === "devshark" ? readDesignLabPackages(40) : readDesignLab(40, id);
+}
 
 /** The name the owner uses. The id addresses state and never changes; the surface speaks. */
 const DISPLAY_NAME: Readonly<Record<string, string>> = {
@@ -55,7 +65,7 @@ export interface DesignLabVenture extends DesignLabSection {
   swatches: DesignLabSwatch[];
   fonts: BrandTokens["fonts"];
   presets: LabPreset[];
-  articles: LabArticle[];
+  articles: DesignLabArticle[];
   webDevRenders: WebDevDesignLabSnapshot | null;
 }
 
@@ -131,7 +141,7 @@ export async function readDesignLabSections(): Promise<DesignLabSection[]> {
     const brand = CAROUSEL_BRANDS[id];
     const publishesArticles = PUBLISHES_ARTICLES.has(id);
     const [articles, presets, webDevRenders] = await Promise.all([
-      publishesArticles ? readDesignLab(40, id) : Promise.resolve([]),
+      readArticles(id),
       readDesignLabPresets(id),
       id === "webdev-signal" ? readWebDevDesignLabSnapshot(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")) : Promise.resolve(null)
     ]);
@@ -159,7 +169,7 @@ export async function readDesignLabVenture(id: DesignLabVentureId): Promise<Desi
   const brand = CAROUSEL_BRANDS[id];
   const publishesArticles = PUBLISHES_ARTICLES.has(id);
   const [articles, presets, webDevRenders] = await Promise.all([
-    publishesArticles ? readDesignLab(40, id) : Promise.resolve([]),
+    readArticles(id),
     readDesignLabPresets(id),
     id === "webdev-signal" ? readWebDevDesignLabSnapshot(process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")) : Promise.resolve(null)
   ]);

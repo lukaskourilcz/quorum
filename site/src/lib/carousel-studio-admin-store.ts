@@ -138,6 +138,68 @@ async function persist(relative: string, value: unknown, message: string, root =
   return writeLocal(relative, value, root);
 }
 
+/**
+ * Read-modify-write one Studio state file against its latest version.
+ *
+ * `persist` writes a value the caller built from the deployment's own copy of the file, which is as
+ * old as the last deploy: a second slide edit saved from a deployed Admin rebuilt the file without
+ * the first and quietly undid it. This reads the file where the write will land (GitHub's current
+ * blob, or the checkout), hands it to `update`, and writes against that blob's sha, retrying when
+ * the file moves in between. `update` may throw to refuse the write; nothing is written then.
+ */
+export async function updateStudioJson(
+  relative: string,
+  update: (current: unknown | null) => unknown,
+  message: string,
+  root = repositoryRoot
+): Promise<CarouselStudioWrite> {
+  const token = process.env[GITHUB_TOKEN_ENV];
+  if (!token) {
+    if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
+      throw new CarouselStudioPersistenceError("UNCONFIGURED", `${GITHUB_TOKEN_ENV} is not set on this deployment, so nothing the admin changes can be written down.`);
+    }
+    const current = await readJson(relative, root).catch((error: unknown) => {
+      if (error instanceof CarouselStudioPersistenceError && error.code === "UNAVAILABLE") return null;
+      throw error;
+    });
+    return writeLocal(relative, update(current), root);
+  }
+  const repository = process.env.BOARDLESSAI_GITHUB_REPOSITORY ?? "lukaskourilcz/quorum";
+  const branch = process.env.BOARDLESSAI_GITHUB_BRANCH ?? "main";
+  const endpoint = `https://api.github.com/repos/${repository}/contents/${relative.split("/").map(encodeURIComponent).join("/")}`;
+  const headers = { Accept: "application/vnd.github+json", Authorization: `Bearer ${token}`, "X-GitHub-Api-Version": "2026-03-10" };
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const response = await fetch(`${endpoint}?ref=${encodeURIComponent(branch)}`, { headers, cache: "no-store" });
+    let sha: string | undefined;
+    let current: unknown | null = null;
+    if (response.status !== 404) {
+      if (!response.ok) throw githubFailure(response.status, "read");
+      const body = await response.json() as { sha?: unknown; content?: unknown; encoding?: unknown };
+      if (typeof body.sha !== "string" || typeof body.content !== "string" || body.encoding !== "base64") {
+        throw new CarouselStudioPersistenceError("REMOTE", "GitHub returned an invalid Studio file.");
+      }
+      sha = body.sha;
+      try {
+        current = JSON.parse(Buffer.from(body.content.replaceAll("\n", ""), "base64").toString("utf8")) as unknown;
+      } catch {
+        throw new CarouselStudioPersistenceError("CORRUPT", `${relative} on GitHub is not valid JSON.`);
+      }
+    }
+    const next = update(current);
+    const write = await fetch(endpoint, {
+      method: "PUT",
+      headers: { ...headers, "Content-Type": "application/json" },
+      body: JSON.stringify({ message, content: Buffer.from(`${JSON.stringify(next, null, 2)}\n`).toString("base64"), branch, ...(sha ? { sha } : {}) })
+    });
+    if (write.ok) {
+      const body = await write.json().catch(() => ({})) as { commit?: { sha?: unknown } };
+      return { commit: typeof body.commit?.sha === "string" ? body.commit.sha.slice(0, 7) : null };
+    }
+    if (write.status !== 409 && !(write.status === 422 && sha === undefined)) throw githubFailure(write.status, "write");
+  }
+  throw new CarouselStudioPersistenceError("CONFLICT", "Studio state changed during every save attempt.");
+}
+
 function parseLinks(value: unknown): CarouselInspirationLink[] {
   if (!value || typeof value !== "object" || !Array.isArray((value as { links?: unknown }).links)) {
     throw new CarouselStudioPersistenceError("CORRUPT", "The Studio inspiration list is malformed.");
@@ -289,7 +351,8 @@ export async function setDeckStyleOverride(
   return { overrides, commit: write.commit };
 }
 
-const slideOverridesPath = "state/ventures/carousel-studio/slide-overrides.json";
+export const SLIDE_OVERRIDES_PATH = "state/ventures/carousel-studio/slide-overrides.json";
+const slideOverridesPath = SLIDE_OVERRIDES_PATH;
 
 /**
  * One slide's words, as the owner edited them.
@@ -368,13 +431,20 @@ export async function setSlideTextOverride(
     throw new CarouselStudioPersistenceError("CONFLICT", `Slide je delší než ${MAX_SLIDE_WORDS} slov.`);
   }
   const changedAt = (input.now ?? new Date()).toISOString();
-  const kept = (await readSlideTextOverrides(root)).filter(
-    (entry) => entry.venture !== input.venture || entry.slug !== input.slug || entry.date !== input.date || entry.slide !== input.slide
-  );
-  const overrides = (text ? [{ ...input, text, changedAt }, ...kept] : kept).slice(0, 400);
-  const write = await persist(
+  let overrides: SlideTextOverride[] = [];
+  const write = await updateStudioJson(
     slideOverridesPath,
-    { schemaVersion: "carousel-slide-overrides/1", overrides, updatedAt: changedAt },
+    (current) => {
+      const entries = Array.isArray((current as { overrides?: unknown } | null)?.overrides) ? (current as { overrides: unknown[] }).overrides : [];
+      const kept = entries.filter(isSlideOverride).filter(
+        (entry) => entry.venture !== input.venture || entry.slug !== input.slug || entry.date !== input.date || entry.slide !== input.slide
+      );
+      overrides = (text ? [{ ...input, text, changedAt }, ...kept] : kept).slice(0, 400);
+      // A devShark package's slide edits live in the same file (quorum#575). They are not this
+      // writer's to parse, so they are carried over as they are.
+      const packageEdits = entries.filter((entry) => (entry as { kind?: unknown } | null)?.kind === "package-slide");
+      return { schemaVersion: "carousel-slide-overrides/1", overrides: [...overrides, ...packageEdits], updatedAt: changedAt };
+    },
     `admin: edit ${input.venture} slide ${input.slide + 1} for ${input.date} ${input.slug}`,
     root
   );

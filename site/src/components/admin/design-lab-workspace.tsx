@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, Download, Image as ImageIcon, Layers, Search } from "lucide-react";
 import { CopySocialText } from "./copy-social-text";
@@ -12,6 +12,8 @@ import { useAdminWritesEnabled } from "./admin-write-mode";
 import { FORMATS, LAUNCH_FAMILIES, LOOKS, chipClass, saveable, slideUrl, token, type FormatId, type Recipe } from "./design-lab-model";
 import { AdminButton as Button, AdminCallout as Callout, AdminEntityBadge, AdminInput, AdminLabel, AdminStateMessage, AdminStatusBadge as Badge } from "./admin-primitives";
 import type { LabArticle, LabPreset } from "@/lib/design-lab";
+import type { DesignLabArticle } from "@/lib/design-lab-ventures";
+import { DesignLabPackageWorkspace } from "./design-lab-package-workspace";
 
 function Workspace({ article, presets }: { article: LabArticle; presets: LabPreset[] }) {
   const writesEnabled = useAdminWritesEnabled();
@@ -162,29 +164,65 @@ function Workspace({ article, presets }: { article: LabArticle; presets: LabPres
   </article>;
 }
 
-export function DesignLabWorkspace({ articles, presets }: { articles: LabArticle[]; presets: LabPreset[] }) {
-  const [selected, setSelected] = useState<string | null>(articles[0]?.id ?? null);
+/**
+ * The `article=` parameter the page was opened with, kept in step with the selection.
+ *
+ * Replaced in place rather than pushed: choosing another article is not a navigation, and the back
+ * button should leave the Lab rather than walk the rail. The address then always names what is on
+ * screen, so a reload or a copied link reopens the same article.
+ */
+function rememberArticle(id: string): void {
+  try {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("article") === id) return;
+    url.searchParams.set("article", id);
+    window.history.replaceState(window.history.state, "", url);
+  } catch {
+    // An address that cannot be rewritten costs the deep link, never the selection.
+  }
+}
+
+export function DesignLabWorkspace({ articles, presets, emptyTitle, initialArticleId = null }: {
+  articles: DesignLabArticle[];
+  presets: LabPreset[];
+  emptyTitle?: string;
+  /** From `article=<venture:slug:date>`: the article to open on load (quorum#575). */
+  initialArticleId?: string | null;
+}) {
+  const linked = initialArticleId && articles.some((entry) => entry.id === initialArticleId) ? initialArticleId : null;
+  const [selected, setSelected] = useState<string | null>(linked ?? articles[0]?.id ?? null);
   const [search, setSearch] = useState("");
+  const selectedButton = useRef<HTMLButtonElement | null>(null);
   const article = useMemo(() => articles.find((entry) => entry.id === selected) ?? articles[0], [articles, selected]);
   const filtered = useMemo(() => {
     const normalize = (text: string) => text.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLocaleLowerCase("cs");
     const query = normalize(search.trim());
     return articles.filter((entry) => normalize(`${entry.headline} ${entry.ventureLabel} ${entry.date}`).includes(query));
   }, [articles, search]);
-  if (!articles.length) return <AdminStateMessage state="initial-empty" title="Zatím tu není žádný článek, ze kterého by šel karusel postavit." />;
+  // A linked article may sit far along the rail; bring it into view once, without animating it.
+  useEffect(() => {
+    if (linked) selectedButton.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [linked]);
+  const choose = (id: string) => {
+    setSelected(id);
+    rememberArticle(id);
+  };
+  if (!articles.length) return <AdminStateMessage state="initial-empty" title={emptyTitle ?? "Zatím tu není žádný článek, ze kterého by šel karusel postavit."} />;
   return <div className="grid min-w-0 gap-4">
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div><p className="text-xs font-medium uppercase tracking-widest text-[var(--admin-foreground-muted)]">Design Lab / Studio</p><h2 className="mt-2 text-2xl font-semibold tracking-tight">Z článku do vašeho feedu.</h2><p className="mt-2 text-sm text-[var(--admin-foreground-muted)]">Vyberte článek, dolaďte kompozici a stáhněte hotovou grafiku.</p></div>
       <div className="w-full sm:max-w-72"><AdminLabel className="sr-only" htmlFor="lab-search">Hledat článek</AdminLabel><div className="relative"><Search aria-hidden="true" className="pointer-events-none absolute left-3 top-3 size-4 text-[var(--admin-foreground-muted)]" /><AdminInput id="lab-search" type="search" className="pl-9" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Hledat článek…" /></div></div>
     </div>
+    {initialArticleId && !linked ? <Callout data-article-link-missing tone="warning">The linked article is not in this section, so the newest one is open instead.</Callout> : null}
     <div className="w-full overflow-x-auto" data-horizontal-scroll><ol className="flex gap-2 pb-1" data-article-rail>{filtered.map((entry) => <li className="w-64 shrink-0" key={entry.id}>
-      <button type="button" aria-pressed={entry.id === article?.id} className={`admin-focus-ring flex h-full w-full flex-col gap-2 rounded-xl border p-3 text-left ${entry.id === article?.id ? "border-[var(--admin-primary)] bg-[var(--admin-surface-elevated)]" : "border-[var(--admin-border)] hover:border-[var(--admin-section-accent)]"}`} onClick={() => setSelected(entry.id)}>
+      <button type="button" aria-pressed={entry.id === article?.id} className={`admin-focus-ring flex h-full w-full flex-col gap-2 rounded-xl border p-3 text-left ${entry.id === article?.id ? "border-[var(--admin-primary)] bg-[var(--admin-surface-elevated)]" : "border-[var(--admin-border)] hover:border-[var(--admin-section-accent)]"}`} data-article-id={entry.id} onClick={() => choose(entry.id)} ref={entry.id === linked ? selectedButton : undefined}>
         <span className="text-[11px] text-[var(--admin-foreground-muted)]">{entry.ventureLabel} · {entry.date}</span><span className="line-clamp-2 text-sm font-medium">{entry.headline}</span>
         {!entry.renderable ? <Badge tone="destructive">neúplné</Badge> : null}
       </button>
     </li>)}</ol></div>
     {!filtered.length ? <AdminStateMessage state="filtered-empty" title="Žádný článek neodpovídá hledání." /> : null}
-    {article ? <Workspace article={article} key={article.id} presets={presets} /> : null}
-    <p className="text-xs leading-relaxed text-[var(--admin-foreground-muted)]">Karusely se odsud nikam neposílají. Publikování řídí samostatné schválení a nastavení sociálních profilů.</p>
+    {article?.kind === "package" ? <DesignLabPackageWorkspace article={article} key={article.id} /> : article ? <Workspace article={article} key={article.id} presets={presets} /> : null}
+    {/* A package's Send to Queue drafts posts for approval; its own footer says so in its place. */}
+    {article?.kind !== "package" ? <p className="text-xs leading-relaxed text-[var(--admin-foreground-muted)]">Karusely se odsud nikam neposílají. Publikování řídí samostatné schválení a nastavení sociálních profilů.</p> : null}
   </div>;
 }

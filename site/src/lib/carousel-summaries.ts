@@ -8,9 +8,10 @@ import {
   type CarouselSummary,
   type CarouselSummarySource
 } from "@boardlessai/carousel-studio";
+import { PACKAGE_BRAND, designLabPackagesAllowed, quizPackageDates, readQuizPackage } from "@/lib/devshark-package";
 
 /**
- * Every recorded DNESKAi, MMA Files or Door Money item the Design Lab can render.
+ * Every recorded DNESKAi, MMA Files, Door Money or devShark item the Design Lab can render.
  *
  * Recorded and derived sources, in that order. Delivery writes a summary beside the package it sent, and that
  * file is the record: it is what the desk actually handed over. Where no such file exists — every
@@ -192,6 +193,36 @@ async function dneskaiSummaries(root: string): Promise<CarouselSummary[]> {
 }
 
 /**
+ * devShark's packages, derived from what the marketingShark room committed (quorum#575).
+ *
+ * The room writes no summary of its own; the package is the record, and this is the same
+ * deterministic builder every other venture's summary goes through. The question is the headline,
+ * the hook the standfirst, and the reveal, the explanation and the footer the passages. Only under
+ * the `marketingshark -> design-lab` edge: without it the Lab lists nothing for devShark.
+ */
+async function devsharkSummaries(root: string): Promise<CarouselSummary[]> {
+  if (!(await designLabPackagesAllowed(root))) return [];
+  const summaries: CarouselSummary[] = [];
+  for (const date of (await quizPackageDates(root)).slice(0, 60)) {
+    const record = await readQuizPackage(date, PACKAGE_BRAND, root);
+    if (!record) continue;
+    const [hook, context, reveal, why, footer] = record.slides;
+    summaries.push(buildCarouselSummary({
+      venture: "devshark",
+      slug: record.slug,
+      date: record.date,
+      title: context!.headline,
+      dek: hook!.headline,
+      points: [reveal!.body || reveal!.headline, why!.body || why!.headline, footer!.headline],
+      sources: [{ kind: "record", label: "devShark question bank" }],
+      hasHero: false,
+      heroCredit: null
+    }));
+  }
+  return summaries;
+}
+
+/**
  * Every article the studio can render, newest first.
  *
  * A recorded summary always wins over a derived one for the same article: if delivery wrote a
@@ -199,10 +230,11 @@ async function dneskaiSummaries(root: string): Promise<CarouselSummary[]> {
  * corrected would show the owner something that never left the building.
  */
 export async function readStudioArticles(root = repositoryRoot()): Promise<StudioArticle[]> {
-  const [recorded, mmaFiles, dneskai] = await Promise.all([
+  const [recorded, mmaFiles, dneskai, devshark] = await Promise.all([
     recordedSummaries(root),
     mmaFilesSummaries(root),
-    dneskaiSummaries(root)
+    dneskaiSummaries(root),
+    devsharkSummaries(root)
   ]);
   const byId = new Map<string, StudioArticle>();
   const add = (summary: CarouselSummary, origin: StudioArticle["origin"]) => {
@@ -221,7 +253,7 @@ export async function readStudioArticles(root = repositoryRoot()): Promise<Studi
     });
   };
   for (const summary of recorded.values()) add(summary, "recorded");
-  for (const summary of [...dneskai, ...mmaFiles]) add(summary, "derived");
+  for (const summary of [...dneskai, ...mmaFiles, ...devshark]) add(summary, "derived");
   return [...byId.values()].sort((left, right) =>
     right.summary.date.localeCompare(left.summary.date) || left.id.localeCompare(right.id));
 }
