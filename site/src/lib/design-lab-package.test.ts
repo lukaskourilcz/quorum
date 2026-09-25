@@ -3,6 +3,7 @@ import { readFile, rm } from "node:fs/promises";
 import path from "node:path";
 import { CAROUSEL_BRANDS, quizFrameJpeg, quizSlideRenderInput, renderCarouselSlidePng } from "@boardlessai/carousel-studio";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { fakeGitHub } from "@/lib/admin-queue/fake-github";
 import { PACKAGE_DATE, PACKAGE_SLUG, packageFixtureRoot, readQueueFixture, writeJson } from "@/lib/admin-queue/fixture-root";
 import { readDesignLabPackages } from "@/lib/design-lab-package";
 import { packageHash, quizSlideCopies, readQuizPackage } from "@/lib/devshark-package";
@@ -30,6 +31,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
   vi.unstubAllEnvs();
+  vi.unstubAllGlobals();
   await Promise.all(roots.splice(0).map((entry) => rm(entry, { recursive: true, force: true })));
 });
 
@@ -135,5 +137,22 @@ describe("saving a package slide", () => {
     await save(4, { headline: "One question from devShark.", body: "", alt: "Slide 5: devShark" });
     const again = JSON.parse(await readFile(path.join(root, "state/ventures/carousel-studio/slide-overrides.json"), "utf8")) as { overrides: Array<{ venture: string }> };
     expect(again.overrides.map((entry) => entry.venture).sort()).toEqual(["caught-up", "devshark", "devshark"]);
+  });
+
+  it("in a deployment, edits the file on GitHub as it is now, not the deployment's older copy", async () => {
+    // GitHub already holds an edit the deployment's copy has never seen.
+    const github = await fresh({});
+    await writeJson(github, "state/ventures/carousel-studio/slide-overrides.json", { schemaVersion: "carousel-slide-overrides/1", updatedAt: "2026-09-26T07:00:00.000Z", overrides: [
+      { venture: "caught-up", slug: "synthetic", date: "2026-09-20", slide: 1, text: "Kratší věta.", changedAt: "2026-09-26T07:00:00.000Z" }
+    ] });
+    vi.stubGlobal("fetch", fakeGitHub(github).fetch);
+    vi.stubEnv("BOARDLESSAI_GITHUB_TOKEN", "test-token");
+    vi.stubEnv("BOARDLESSAI_GITHUB_REPOSITORY", "lukaskourilcz/quorum");
+    vi.stubEnv("BOARDLESSAI_GITHUB_BRANCH", "main");
+    vi.stubEnv("NODE_ENV", "production");
+    await save(3, { headline: "Why JSON", body: "Browsers parse JSON natively.", alt: "Slide 4: why JSON" });
+    const file = JSON.parse(await readFile(path.join(github, "state/ventures/carousel-studio/slide-overrides.json"), "utf8")) as { overrides: Array<{ venture: string }> };
+    expect(file.overrides.map((entry) => entry.venture).sort()).toEqual(["caught-up", "devshark"]);
+    await expect(readFile(path.join(root, "state/ventures/carousel-studio/slide-overrides.json"), "utf8")).rejects.toMatchObject({ code: "ENOENT" });
   });
 });
