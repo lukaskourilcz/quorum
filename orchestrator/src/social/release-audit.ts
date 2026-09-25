@@ -39,6 +39,21 @@ function inspectPrivateKeys(value: unknown, ref: string, findings: SocialPrivacy
   }
 }
 
+/**
+ * The publisher's runner, which the claim-before-send change split into three modules: the phases,
+ * what they read and select, and one delivery with its receipts. The checks below read them as one
+ * source, so each still has to find the same code it found in the single file.
+ */
+const RUNNER_MODULES = [
+  "orchestrator/src/social/runner.ts",
+  "orchestrator/src/social/runner-context.ts",
+  "orchestrator/src/social/runner-delivery.ts"
+] as const;
+
+async function readRunnerSource(repoRoot: string): Promise<string> {
+  return (await Promise.all(RUNNER_MODULES.map((file) => readFile(path.join(repoRoot, file), "utf8")))).join("\n");
+}
+
 export async function auditSocialPrivacy(repoRoot = defaultRepoRoot): Promise<SocialPrivacyAudit> {
   const configFiles = (await readdir(path.join(repoRoot, "config"), { withFileTypes: true }))
     .filter((entry) => entry.isFile() && entry.name.startsWith("social-") && entry.name.endsWith(".json"))
@@ -63,7 +78,7 @@ export async function auditSocialRelease(repoRoot = defaultRepoRoot): Promise<So
     loadVentureCapabilityMap(configRoot), loadVentureSloRegistry(configRoot), loadOperationsRecoveryRegistry(configRoot), readImplementationManifestRegistry(repoRoot),
     auditSocialDistributionMigration({ repoRoot }), auditSocialPrivacy(repoRoot),
     readFile(path.join(repoRoot, "orchestrator/src/social/queue.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/social/publisher-targets.ts"), "utf8"),
-    readFile(path.join(repoRoot, "orchestrator/src/social/providers.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/social/runner.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/social/index.ts"), "utf8"),
+    readFile(path.join(repoRoot, "orchestrator/src/social/providers.ts"), "utf8"), readRunnerSource(repoRoot), readFile(path.join(repoRoot, "orchestrator/src/social/index.ts"), "utf8"),
     readFile(path.join(repoRoot, "orchestrator/src/social/campaigns.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/social/daily.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/social/results.ts"), "utf8"),
     readFile(path.join(repoRoot, "orchestrator/src/social/learning.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/social/health.ts"), "utf8"), readFile(path.join(repoRoot, "orchestrator/src/cycle.ts"), "utf8"),
     readFile(path.join(repoRoot, "site/src/lib/social-profiles/model.ts"), "utf8"), readFile(path.join(repoRoot, "site/src/lib/social-profiles/snapshot.ts"), "utf8"), readFile(path.join(repoRoot, "site/src/components/admin/social-profiles-workspace.tsx"), "utf8"),
@@ -100,7 +115,7 @@ export async function auditSocialRelease(repoRoot = defaultRepoRoot): Promise<So
       providerId === (linkedInConnections.has(connectionId) ? "buffer" : "direct-meta") && mode === "held" && !authorityGranted && !publishingAuthorized)
     && queueSource.includes('action: z.literal("publish-original")') && !queueSource.includes('z.literal("sister")')
     && providerSource.includes("at most one active provider") && runnerSource.includes("findByIdempotencyKey") && runnerSource.includes("needs_reconciliation"),
-  "Direct Meta is the held core binding of every Instagram and Threads connection and Buffer holds the one LinkedIn connection; queue v2 permits original publishing only and ambiguity reconciles before any resend or failover.", ["config/social-providers.json", "orchestrator/src/social/queue.ts", "orchestrator/src/social/runner.ts"]));
+  "Direct Meta is the held core binding of every Instagram and Threads connection and Buffer holds the one LinkedIn connection; queue v2 permits original publishing only and ambiguity reconciles before any resend or failover.", ["config/social-providers.json", "orchestrator/src/social/queue.ts", ...RUNNER_MODULES]));
 
   checks.push(check("strategy-inventory-daily", strategies.strategies.length === 11 && strategies.strategies.every(({ authorityGranted, queueAuthorized, publishingAuthorized }) => !authorityGranted && !queueAuthorized && !publishingAuthorized)
     && routineScopes.defaultMode === "draft-only" && routineScopes.scopes.length === 0 && campaignSource.includes("inputHash: identity.idempotencyKey")
@@ -137,7 +152,7 @@ export async function auditSocialRelease(repoRoot = defaultRepoRoot): Promise<So
     && !targetSource.includes(forbiddenSimulationImport), "Exactly 50 deterministic visual-QA simulations remain labelled, non-live and absent from production target resolution.", [simulationModuleRef, "contracts/fixtures/social-profile-simulation-matrix.json"]));
 
   checks.push(check("privacy-and-redaction", privacy.passed && runnerSource.includes("redactSocialError") && runnerSource.includes("[REDACTED]") && indexSource.includes("redactSocialError(error)")
-    && adminWorkspace.includes("secret values and native account values never cross the server boundary"), "Production Social config/state contains no credential values, private messages, audience identities or token-shaped values; CLI and connector errors are redacted.", ["orchestrator/src/social/runner.ts", "orchestrator/src/social/index.ts", "site/src/lib/social-profiles/snapshot.ts"]));
+    && adminWorkspace.includes("secret values and native account values never cross the server boundary"), "Production Social config/state contains no credential values, private messages, audience identities or token-shaped values; CLI and connector errors are redacted.", [...RUNNER_MODULES, "orchestrator/src/social/index.ts", "site/src/lib/social-profiles/snapshot.ts"]));
 
   checks.push(check("staged-release-and-owner-actions", ["Stage 0", "Stage 1", "Stage 2", "Stage 3", "Stage 4", "Rollback", "no live credentials", "zero live connections"].every((value) => releaseDoc.includes(value))
     && neededDoc.includes("SOCIAL-DISTRIBUTION-CONNECTION-001") && neededDoc.includes("countersign") && releaseDoc.includes("#430 remains held"),
