@@ -6,6 +6,9 @@
  *
  *   pnpm marketingshark:import-challenges -- --brand devshark --source ../react-express-app
  *
+ * `--source` is read from the directory the command is typed in (pnpm's `INIT_CWD`), so run it from
+ * the quorum clone with devShark cloned beside it.
+ *
  * The room never runs this and never fetches anything. Until the snapshot exists, a Wednesday
  * drafts the quiz carousel instead and says why. `--check` compares a fresh import with the
  * committed snapshot and fails when it is stale.
@@ -14,6 +17,7 @@ import { execFileSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { loadMarketingSharkConfig } from "../orchestrator/src/ventures/marketingshark/config.js";
+import { resolveSourcePath } from "../orchestrator/src/ventures/marketingshark/source-path.js";
 import {
   CHALLENGE_LABEL_SOURCE,
   ChallengeBankSnapshotSchema,
@@ -40,7 +44,7 @@ async function main(): Promise<void> {
   const teaser = brand?.postKinds["challenge-teaser"];
   if (!brand || !teaser) throw new Error(`${brandId} has no challenge-teaser kind in config/marketingshark.json`);
 
-  const localPath = path.resolve(source);
+  const localPath = resolveSourcePath(source);
   if (execFileSync("git", ["-C", localPath, "status", "--porcelain", "--", "lib", "shared"], { encoding: "utf8" }).trim()) {
     throw new Error("Commit the source changes before importing: the recorded commit must reproduce the challenges.");
   }

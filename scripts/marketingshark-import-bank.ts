@@ -5,6 +5,9 @@
  *
  *   pnpm marketingshark:import-bank -- --brand devshark --source ../react-express-app
  *
+ * `--source` is read from the directory the command is typed in (pnpm's `INIT_CWD`), so run it from
+ * the quorum clone with devShark cloned beside it.
+ *
  * The daily room never runs this and never fetches anything. It reads the committed snapshot and
  * checks its hash, which is what makes the whole selection path deterministic and $0.
  */
@@ -12,6 +15,7 @@ import { execFileSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { loadMarketingSharkConfig } from "../orchestrator/src/ventures/marketingshark/config.js";
+import { resolveSourcePath } from "../orchestrator/src/ventures/marketingshark/source-path.js";
 import { contentHashOf, QuestionBankSnapshotSchema } from "../orchestrator/src/ventures/marketingshark/bank.js";
 import { reactExpressAppAdapter } from "../orchestrator/src/ventures/marketingshark/react-express-app-adapter.js";
 
@@ -42,7 +46,7 @@ async function main(): Promise<void> {
   const brand = config.brands.find((candidate) => candidate.id === brandId);
   if (!brand) throw new Error(`${brandId} is not a brand in config/marketingshark.json`);
 
-  const localPath = path.resolve(source);
+  const localPath = resolveSourcePath(source);
   if (execFileSync("git", ["-C", localPath, "status", "--porcelain", "--", "lib", "shared"], { encoding: "utf8" }).trim()) {
     throw new Error("Commit the source bank changes before importing: the recorded commit must reproduce the content.");
   }
