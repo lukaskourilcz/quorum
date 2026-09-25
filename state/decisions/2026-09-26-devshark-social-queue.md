@@ -135,6 +135,23 @@ the graphic. Approving a post publishes it without another manual step.
 - The approval stops at `queued`. Dispatching the publisher is #574, and every lock below still
   decides whether anything sends.
 
+## What #574 builds
+
+- `site/src/lib/queue-dispatch.ts`: once an approval is saved on GitHub, the Queue dispatches
+  `social-publisher.yml` with `validate_only` off, using `BOARDLESSAI_GITHUB_TOKEN`. The token
+  needs Actions write, an owner item. The dispatch is a wake-up and grants nothing: the run applies
+  every lock below. Hold, reject and edit dispatch nothing.
+- A wake-up that fails keeps the approval. The item stays `queued`, the action response names the
+  failure, and approving the same copy again, or a run started from GitHub Actions, retries it
+  inside the window.
+- The workflow's checkout names `github.ref`. Two approvals a minute apart queue two runs, and the
+  second must start from the branch the first left, or it would send the first post again.
+- The hourly schedule stays commented out, and `ci-policy.test.ts` is unchanged. An hourly run for
+  windowed items is a later decision (`docs/SOCIAL-DAILY-OPERATIONS.md`).
+- The workflow does not hand devShark's six credential references to the job yet. marketingShark
+  is not a publishing venture, so those `env:` lines belong to the activation commit, beside the
+  channel flip, as the paused ventures' lines left the job with their pause.
+
 ## What stays held
 
 Building every step of the programme sends nothing. Until this record is countersigned, and
@@ -182,6 +199,6 @@ drafts in queue v1, which the publisher never considered.
   records the live test in `docs/SOCIAL-PROVIDERS.md`
 - [ ] B5: Threads images and Instagram JPEG carousels in the Direct Meta adapter (#572)
 - [x] B6: the Queue workspace (#573)
-- [ ] B7: approval dispatches the publisher (#574)
+- [x] B7: approval dispatches the publisher (#574)
 - [ ] B8: Design Lab editing and re-render for devShark packages (#575)
 - [ ] B9: more post kinds and the GoVIRAL packet edge (#576)
