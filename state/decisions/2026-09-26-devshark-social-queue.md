@@ -152,6 +152,28 @@ the graphic. Approving a post publishes it without another manual step.
   is not a publishing venture, so those `env:` lines belong to the activation commit, beside the
   channel flip, as the paused ventures' lines left the job with their pause.
 
+## What #575 builds
+
+- `devshark` is a carousel summary venture. The site derives a `carousel-summary/1` from each
+  marketingShark package with `buildCarouselSummary`, so the Design Lab's devShark section lists the
+  packages, and only under the `marketingshark -> design-lab` edge.
+- marketingShark's quiz render path moved into `studio/src/quiz-deck.ts`: the slot mapping, the
+  per-slide caps the gates spread into `LIMITS`, and the JPEG encoder. The render summary records
+  the facts code puts on the slides, so the Lab renders a package again without the question bank,
+  byte for byte the room's frames.
+- The Lab's package-backed article kind: the owner edits a slide's headline, body and alt text.
+  Save runs the caps and the clip gate, names any slot that would clip, and writes
+  `slide-overrides.json`. The package never changes.
+- `article=<venture:slug:date>` opens one article in the Lab. The Queue's "Open in Design Lab" uses
+  it for every marketingShark draft.
+- The Queue's `rerender` renders the saved slides into PNG and JPEG frames and a package revision
+  that records their hashes, then supersedes the draft like an edit. The new draft is bound to the
+  revision's hash, so the asset gate proves its frames as it proves the room's. "Send to Queue" in
+  the Lab runs it for each live draft of the package. A re-render wakes no publisher and approves
+  nothing.
+- `CarouselFormatSchema` gains `linkedin-square` (1080 × 1080), drawn on the Instagram square's
+  canvas; the four composed ratios are unchanged.
+
 ## What stays held
 
 Building every step of the programme sends nothing. Until this record is countersigned, and
@@ -200,5 +222,5 @@ drafts in queue v1, which the publisher never considered.
 - [x] B5: Threads images and Instagram JPEG carousels in the Direct Meta adapter (#572)
 - [x] B6: the Queue workspace (#573)
 - [x] B7: approval dispatches the publisher (#574)
-- [ ] B8: Design Lab editing and re-render for devShark packages (#575)
+- [x] B8: Design Lab editing and re-render for devShark packages (#575)
 - [ ] B9: more post kinds and the GoVIRAL packet edge (#576)

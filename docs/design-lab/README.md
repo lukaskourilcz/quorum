@@ -85,7 +85,10 @@ missing.
 The current engine inventory is nine brand skins (four of the original five, geoShark having
 retired with StudyShark, plus Kvórum, BOOKSOFHISTORY, Door Money, Tehdejší svět and WebDev
 Signal), four canvases (square, portrait, story and
-Threads), and one recorded `carousel-recipe/1` per social set. A recipe chooses a family, A/B,
+Threads), and one recorded `carousel-recipe/1` per social set. `linkedin-square` (1080 × 1080, for
+LinkedIn's multi-image post) is a fifth format on the square's canvas: `carouselCanvas` maps it, so
+templates are still composed and checked for four ratios and a LinkedIn slide is the Instagram
+square byte for byte. A recipe chooses a family, A/B,
 accent swap, photo treatment, type scale and phase seed deterministically, while excluding the
 venture's two most recently used families when the pool allows it.
 
@@ -97,6 +100,33 @@ Coverage the brief asked for: photo-forward — masthead, gutter, bevel, porthol
 Type-only, which is to say families that never need a photograph — slab, terrace, figure.
 Number-led — figure. Quote-capable — pull, porthole. Hardest in 9:16 — tower. Quiet and
 record-keeping — dossier.
+
+## devShark packages
+
+The devShark section lists marketingShark's daily packages (#575), not family decks. Each package
+reaches the rail through a `carousel-summary/1` the site derives from it with
+`buildCarouselSummary`, and only under the `marketingshark -> design-lab` edge in
+`config/venture-capabilities.json`. The five slides render through marketingShark's quiz
+templates at the versions the room recorded. The slot mapping, the per-slide caps and the JPEG
+encoder live in `studio/src/quiz-deck.ts`, which the room and the Lab both call, and the render
+summary records the facts code puts on the slides (the brand's name and link, the correct letter,
+the options and the question's code). An unedited slide is the room's frame byte for byte;
+`orchestrator/tests/marketingshark-rerender.test.ts` proves it and keeps the committed fixtures
+the site's tests render from.
+
+You can change a slide's headline, body and alt text. The preview follows the typing. Save checks
+the whole deck against the room's caps and the clip gate, names any slot that would clip with its
+budget, and writes `slide-overrides.json`; the package never changes. "Send to Queue" runs the
+Queue's `rerender` on each live draft of the package (`docs/SOCIAL-QUEUE.md`): new PNG and JPEG
+frames, a package revision and a superseding draft that waits for your approval. There is no look,
+recipe or deck export for a package.
+
+## Deep links
+
+`/admin?venture=design-lab&tab=studio&brand=<brand>&article=<venture:slug:date>` opens that article
+selected, and the address follows the selection, so a reload or a copied link reopens it. A link to
+an article the section does not hold opens the newest and says so. The Queue's "Open in Design Lab"
+uses it for every marketingShark draft.
 
 ## How the specimens are made
 

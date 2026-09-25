@@ -45,7 +45,7 @@ function slideSrc(article: LabPackageArticle, index: number, copy: SlideCopy, re
 function Counter({ id, length, limit }: { id: string; length: number; limit: number }) {
   const over = length > limit;
   return <p className={cn("m-0 mt-1 text-right text-[length:var(--admin-type-label)] admin-tabular", over ? "font-semibold text-[var(--admin-destructive)]" : "text-[var(--admin-foreground-muted)]")} id={id}>
-    {length} / {limit}{over ? " — over the limit" : ""}
+    {length} / {limit}{over ? ", over the limit" : ""}
   </p>;
 }
 

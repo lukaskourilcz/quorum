@@ -50,6 +50,12 @@ and before any provider call. For each frame, in this order:
 5. For `site`, nothing in git proves what a deployed site serves, so the publisher downloads the
    frame from the configured host, hashes it and applies the same image rules.
 
+A re-render from the Design Lab (#575) writes its own frames under
+`site/public/social/<brand>/<date>/<locale>/<revision>/` and a package revision under
+`state/ventures/marketingshark/packages/<date>/<brand>/revisions/<revision>.json` that records
+their hashes. The new item's `packageHash` names that revision, so step 2 counts its records exactly
+as it counts the room's, and retention prunes the frames by the same date segment.
+
 The adapter receives the URLs that passed and never builds one, together with each frame's alt text
 when the approved package pairs frames with slides. `meta.ts` refuses a frame without a proved URL
 before it makes any request.

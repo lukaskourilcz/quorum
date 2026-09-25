@@ -2,7 +2,7 @@
 
 Version: 2026-09-26
 
-Authority: GitHub #573 and #574 (steps B6 and B7 of `SECOND-HANDOFF-25-9-2026.md`), under the
+Authority: GitHub #573, #574 and #575 (steps B6, B7 and B8 of `SECOND-HANDOFF-25-9-2026.md`), under the
 proposed decision `state/decisions/2026-09-26-devshark-social-queue.md` (`devshark-social-2026-09a`).
 
 `/admin/queue` lists every social post that waits for the owner, and what became of the ones that
@@ -64,7 +64,13 @@ never points at evidence that was not written.
 | `edit` | v2 `draft`, `approved`, `queued` or `failed`, window open | Writes `<id>-r<n>` as a fresh draft with the edited caption or alt text, pending checks and its own hash. The original becomes `cancelled`. An approved item is never changed in place. |
 | `hold` | `draft`, `approved`, `queued` (v1 too) | `cancelled`, with the owner's reason. |
 | `reject` | as hold, plus `failed` and `expired` | `cancelled`, with the reason recorded as a `tasteNote` addressed to the venture that drafted the item. |
-| `rerender` | none yet | Answers 501. The Design Lab's devShark editing (#575, B8) builds it and then behaves like `edit`. |
+| `rerender` | a marketingShark v2 carousel (`draft`, `approved`, `queued` or `failed`), window open, under the `marketingshark -> design-lab` edge | Reads the Design Lab's saved slide edits, runs marketingShark's caps and the clip gate, and renders the package through the studio's quiz path: a PNG and a JPEG per slide. It writes the frames and a package revision that records their hashes, then behaves like `edit`: `<id>-r<n>` as a fresh draft bound to the revision, with the joined slide alt text, and the original `cancelled`. The event's `changedFields` name `frames`, and `altText` when it changed. Slides that read as the package does send the draft back to the package's own frames. It refuses when nothing changed. It wakes no publisher. |
+
+A revision's name is the first twelve hex of the hash of the base package's hash and the five
+slides' words. The LinkedIn, Instagram and Threads drafts of one package therefore share one set of
+frames: the first re-render writes them and the next two find the same bytes already there.
+Instagram gets the JPEG copies and the other two the PNGs, as the room assigns them. The Design
+Lab's "Send to Queue" runs this action for every live draft of the package, one after another.
 
 The caption editor holds each platform to what it accepts: LinkedIn 3,000 characters, Instagram
 2,200, Threads 500. The queue v2 schema lets Threads store 2,200, the old v1 limit, but Threads
@@ -75,8 +81,12 @@ itself refuses more than 500.
 Writes go through the GitHub Contents API when `BOARDLESSAI_GITHUB_TOKEN` is set and to the local
 checkout in development, as `caught-up-events-store.ts` does. A deployment without the token shows
 the write-disabled banner, keeps every control inert and answers 503 without writing. The store
-writes only JSON files under `state/social/queue/` and `state/social/queue-events/`. It creates an
-event or a superseding item only if the path is new, and replaces an item only against the version
+writes JSON files under `state/social/queue/` and `state/social/queue-events/`, and for a
+re-render a package revision under `state/ventures/marketingshark/packages/<date>/<brand>/revisions/`
+and frames under `site/public/social/<brand>/<date>/<locale>/<revision>/`. The one other file it
+reads is the Design Lab's `state/ventures/carousel-studio/slide-overrides.json`, which it never
+writes. It creates an event, a superseding item, a revision or a frame only if the path is new (a
+frame or revision already there must hold the same bytes), and replaces an item only against the version
 it read: the blob sha on GitHub, the bytes on disk. A publisher claim made in between turns the
 owner's action into a conflict instead of being overwritten. Both directories sit inside the
 cycle's `runtime_paths` through `state/social`.
@@ -129,10 +139,20 @@ follows the post through the run link. The target is under five minutes from cli
 The first live run measures it and `docs/NEEDED.md` records the result. Before it publishes, the run
 installs dependencies and runs the orchestrator's typecheck and tests.
 
+## The Design Lab link
+
+"Open in Design Lab" opens the brand's section. For a marketingShark draft it opens the package the
+draft was built from, selected:
+`/admin?venture=design-lab&tab=studio&brand=devshark&article=devshark:<package id>:<date>`. The
+card's Re-render button runs `rerender` on that one draft; the Design Lab's "Send to Queue" runs it
+on every live draft of the package.
+
+A deployed Admin reads the repository as of its deploy, so a draft a re-render wrote on GitHub, and
+its frames, show in the Queue only after the next deploy. The action reads the saved slide edits
+from GitHub, not from the deployment's copy.
+
 ## Not built here
 
-- **Re-render and per-item Design Lab links (#575, B8).** "Open in Design Lab" opens the brand's
-  section. The article-level deep link arrives with B8.
 - **The marketingShark ledger reading taste notes.** Reject events carry them now; the room reads
   them in a later step.
 
@@ -144,6 +164,13 @@ installs dependencies and runs the orchestrator's typecheck and tests.
 - `site/src/lib/admin-queue/actions.test.ts` and `site/src/app/admin/api/queue/actions/route.test.ts`:
   the hash guard, approval, the supersede chain, event shape, hold and reject, v1 handling, and the
   write-disabled refusal. The route test also shows a failed wake-up answered as a saved 201.
+- `site/src/lib/admin-queue/rerender.test.ts`: the re-render on the package the room drafts for
+  2026-09-26 (the committed `contracts/fixtures/marketingshark-*.valid.json`). Frames and the
+  revision are written before the event, the draft and the cancellation; the revision hashes to the
+  draft's `packageHash`; Instagram gets the JPEGs of the same revision; the new draft can be approved;
+  slides edited back point at the package again; nothing changed, a clipping slide, a closed window
+  and a missing edge are refused with nothing written; in a deployment the saved slides are read
+  from GitHub and every write goes there.
 - `site/src/lib/admin-queue/dispatch-on-approve.test.ts`: the deployed path against a fake GitHub
   (`fake-github.ts`, the Contents API and the dispatch endpoint). One dispatch after the approved
   item is written; none on hold, reject, edit, refusal or conflict; a failed wake-up named in the
