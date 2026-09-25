@@ -19,7 +19,7 @@ no slot on the clock, and the admin lists it in Settings rather than in its navi
 | GoVIRAL | Operating, Mondays only | Weekly trend brief for the owner and rated plays for configured project topic sets | Existing sets use the `$5`-guarded Apify Free recipe; Door Money and Tehdejší svět terms use keyless Google News; each current room emits at most one agenda |
 | FightAIQ | Operating, guarded analysis | UFC and Oktagon fighter cards, discovered bouts, historical backfill and deterministic predictions | Two-source bout/card gates; no bet placement, affiliate links or bookmaker automation |
 | Design Lab | Operating internal engine | Original template library and deterministic social-carousel rendering for every brand | No accounts, marketing, analytics, external inspiration bytes or image-model calls |
-| marketingShark | Operating internal agency | Turns one devShark quiz question a day into one English five-slide carousel, rendered as PNG frames and JPEG copies, with a LinkedIn, an Instagram and a Threads caption | No live social account or credentials; each package waits as three queue v2 drafts with every check pending behind held connections |
+| marketingShark | Operating internal agency | One English five-slide devShark carousel each weekday, by rotation: a quiz question on Monday and Thursday, a feature spotlight on Tuesday, a challenge teaser on Wednesday, the week's note on Friday; rendered as PNG frames and JPEG copies, with a LinkedIn, an Instagram and a Threads caption. No weekend room | No live social account or credentials; each package waits as three queue v2 drafts with every check pending behind held connections |
 | BOOKSOFHISTORY | Implementation complete, pending countersignature | Turns a deterministic shortlist and reusable source dossiers into independent Czech and English social-story drafts | No public surface, account, channel or posting path; no cover artwork; quotes are attributed and capped at 300 characters |
 | MMA Files | Operating public magazine | One daily Czech article slot and the sole reader-facing FightAIQ home | Content-only delivery; no article spend without a verified source packet |
 | Door Money | Implementation complete, pending countersignature | Evidence-linked English book-storytelling recommendations and a Thursday owner action packet | Manuscript/full chunks/embeddings stay private; no posting, account, channel or outreach; results are owner-entered only |
@@ -92,8 +92,8 @@ Not every clock entry is a meeting:
 - **Decision:** the 06:00 board decides company priorities and may commission a room.
 - **Service:** Caught Up production, Caught Up product review, MMA Files story
   assignment and article production retain their fixed reader promise. The 07:00
-  marketingShark room is fixed the same way, except that what it owes each day is a
-  draft package rather than a published one.
+  marketingShark room is fixed the same way, except that what it owes each weekday is a
+  draft package rather than a published one, and a weekend day is a rest day it records.
 - **Persistent cycle:** the 12:00 BOOKSOFHISTORY desk resumes one recorded selection,
   research or production phase, and the 18:00 Tehdejší svět desk resumes planning or
   bilingual production. A missed day stretches either cycle instead of skipping work
@@ -122,7 +122,7 @@ credentials, evidence, cost limits or safety rules.
 | ---: | --- | --- |
 | 05:00 | Caught Up edition | fixed service |
 | 06:00 | Board morning | decision room |
-| 07:00 | marketingShark carousel room | fixed daily service; one paid copy call per enabled brand |
+| 07:00 | marketingShark carousel room | fixed weekday service, kind by weekday; one paid copy call per enabled brand, none at the weekend |
 | 08:00 | FightAIQ data check | material change or agenda |
 | 09:00 | MMA Files story meeting | fixed service |
 | 10:00 | MMA Files daily article | assigned slot and evidence only |

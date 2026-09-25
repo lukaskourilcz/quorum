@@ -64,7 +64,7 @@ never points at evidence that was not written.
 | `edit` | v2 `draft`, `approved`, `queued` or `failed`, window open | Writes `<id>-r<n>` as a fresh draft with the edited caption or alt text, pending checks and its own hash. The original becomes `cancelled`. An approved item is never changed in place. |
 | `hold` | `draft`, `approved`, `queued` (v1 too) | `cancelled`, with the owner's reason. |
 | `reject` | as hold, plus `failed` and `expired` | `cancelled`, with the reason recorded as a `tasteNote` addressed to the venture that drafted the item. |
-| `rerender` | a marketingShark v2 carousel (`draft`, `approved`, `queued` or `failed`), window open, under the `marketingshark -> design-lab` edge | Reads the Design Lab's saved slide edits, runs marketingShark's caps and the clip gate, and renders the package through the studio's quiz path: a PNG and a JPEG per slide. It writes the frames and a package revision that records their hashes, then behaves like `edit`: `<id>-r<n>` as a fresh draft bound to the revision, with the joined slide alt text, and the original `cancelled`. The event's `changedFields` name `frames`, and `altText` when it changed. Slides that read as the package does send the draft back to the package's own frames. It refuses when nothing changed. It wakes no publisher. |
+| `rerender` | a marketingShark v2 quiz carousel (`draft`, `approved`, `queued` or `failed`), window open, under the `marketingshark -> design-lab` edge | Reads the Design Lab's saved slide edits, runs marketingShark's caps and the clip gate, and renders the package through the studio's quiz path: a PNG and a JPEG per slide. It writes the frames and a package revision that records their hashes, then behaves like `edit`: `<id>-r<n>` as a fresh draft bound to the revision, with the joined slide alt text, and the original `cancelled`. The event's `changedFields` name `frames`, and `altText` when it changed. Slides that read as the package does send the draft back to the package's own frames. It refuses when nothing changed. It wakes no publisher. |
 
 A revision's name is the first twelve hex of the hash of the base package's hash and the five
 slides' words. The LinkedIn, Instagram and Threads drafts of one package therefore share one set of
@@ -141,11 +141,20 @@ installs dependencies and runs the orchestrator's typecheck and tests.
 
 ## The Design Lab link
 
-"Open in Design Lab" opens the brand's section. For a marketingShark draft it opens the package the
-draft was built from, selected:
+"Open in Design Lab" opens the brand's section. For a marketingShark quiz draft it opens the package
+the draft was built from, selected:
 `/admin?venture=design-lab&tab=studio&brand=devshark&article=devshark:<package id>:<date>`. The
 card's Re-render button runs `rerender` on that one draft; the Design Lab's "Send to Queue" runs it
 on every live draft of the package.
+
+The room drafts other kinds on other weekdays (#576): a feature spotlight, a challenge teaser, the
+weekly note and the owner's launch announcement. Most of their slides are code's facts, laid out by
+the studio's post-deck mapping, so neither the Lab's slide editor nor `rerender` applies to them.
+Their captions are edited here with `edit`. A draft is a quiz when it cites a
+`marketingshark:question:` ref; the others cite their own subject (`marketingshark:feature:`,
+`marketingshark:challenge:`, `marketingshark:week:`, `marketingshark:announcement:`). Their "Open in
+Design Lab" link opens the brand's section, Re-render stays disabled, and a `rerender` request is
+refused with the reason.
 
 A deployed Admin reads the repository as of its deploy, so a draft a re-render wrote on GitHub, and
 its frames, show in the Queue only after the next deploy. The action reads the saved slide edits
@@ -168,9 +177,9 @@ from GitHub, not from the deployment's copy.
   2026-09-26 (the committed `contracts/fixtures/marketingshark-*.valid.json`). Frames and the
   revision are written before the event, the draft and the cancellation; the revision hashes to the
   draft's `packageHash`; Instagram gets the JPEGs of the same revision; the new draft can be approved;
-  slides edited back point at the package again; nothing changed, a clipping slide, a closed window
-  and a missing edge are refused with nothing written; in a deployment the saved slides are read
-  from GitHub and every write goes there.
+  slides edited back point at the package again; nothing changed, a clipping slide, a closed window,
+  a missing edge and a draft of another kind are refused with nothing written; in a deployment the
+  saved slides are read from GitHub and every write goes there.
 - `site/src/lib/admin-queue/dispatch-on-approve.test.ts`: the deployed path against a fake GitHub
   (`fake-github.ts`, the Contents API and the dispatch endpoint). One dispatch after the approved
   item is written; none on hold, reject, edit, refusal or conflict; a failed wake-up named in the

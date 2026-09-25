@@ -121,12 +121,18 @@ Queue's `rerender` on each live draft of the package (`docs/SOCIAL-QUEUE.md`): n
 frames, a package revision and a superseding draft that waits for your approval. There is no look,
 recipe or deck export for a package.
 
+The section lists the quiz carousels only. The room's other weekday kinds (#576) — the feature
+spotlight, the challenge teaser, the weekly note and the owner's announcement — render through
+`studio/src/post-deck.ts`, a smaller mapping with no quiz facts, and most of their slides are
+code's facts. The render test reproduces their frames from the package and its render summary the
+same way, but the Lab does not list or edit them; their captions are edited in the Queue.
+
 ## Deep links
 
 `/admin?venture=design-lab&tab=studio&brand=<brand>&article=<venture:slug:date>` opens that article
 selected, and the address follows the selection, so a reload or a copied link reopens it. A link to
 an article the section does not hold opens the newest and says so. The Queue's "Open in Design Lab"
-uses it for every marketingShark draft.
+uses it for every marketingShark quiz draft.
 
 ## How the specimens are made
 

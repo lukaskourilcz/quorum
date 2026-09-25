@@ -205,31 +205,48 @@ selection priors but cannot weaken the factual or sensitivity gates.
 
 ### marketingShark
 
-Promise: one quiz question a day, written up honestly enough that a reader gets value from
-the carousel whether or not they ever open the product. CHUM writes the day's copy in English,
-the language devShark ships in, with one caption each for LinkedIn, Instagram and Threads, and
-AUDIT holds the veto seat. Each brand names its languages in `config/marketingshark.json`; the
-Czech path stays for a brand that lists it. MAKO's weekly review is specified — its
-instructions are `orchestrator/prompts/marketingshark/strategy.md` — and is not yet wired to a
-room, so no weekly call runs and none is billed.
+Promise: one post each weekday, written up honestly enough that a reader gets value from the
+carousel whether or not they ever open the product. The kind rotates by weekday inside the same
+envelope (#576): a quiz question on Monday and Thursday, a feature spotlight on Tuesday, a
+challenge teaser on Wednesday and the week's note on Friday. Saturday and Sunday have no room.
+CHUM writes the day's copy in English, the language devShark ships in, with one caption each for
+LinkedIn, Instagram and Threads, and AUDIT holds the veto seat. Each brand names its languages in
+`config/marketingshark.json`; the Czech path stays for a brand that lists it, and the kinds beyond
+the quiz are English only. MAKO's weekly review is specified — its instructions are
+`orchestrator/prompts/marketingshark/strategy.md` — and is not yet wired to a room, so no weekly
+call runs and none is billed.
 
-devShark is the only brand: its 3,633-question webdev bank is consumed read-only as a
-committed snapshot pinned to a source commit, and nothing is written back to that repository.
-geoShark, the disabled brand that pointed at StudyShark's geography bank, was removed when
-StudyShark was retired in September 2026, together with its `geo` hook lines.
+devShark is the only brand: its webdev bank is consumed read-only as a committed snapshot pinned
+to a source commit, and nothing is written back to that repository. geoShark, the disabled brand
+that pointed at StudyShark's geography bank, was removed when StudyShark was retired in September
+2026, together with its `geo` hook lines.
 
-Everything except one model call per brand per day is deterministic and costs nothing. Which
-question runs comes from a seeded order over the bank, so every question is served once before
-any repeats and the same date always produces the same question. Which opening line fronts it
-is decided by the Design Lab's hook brain, not by the model and no longer from a library
-inline in this venture's config: the studio evaluates the central library's gates against the
-question's own metadata — "Two answers look right. One is." may only run on a question that
-actually has four options and is not trivial — and slide 1 renders that line verbatim. CHUM
-writes slides 2 to 5 to cash the promise slide 1 makes, and there is no field left in its
-output through which it could author hook copy at all. After CHUM answers, deterministic gates
-check that the assigned hook line is unchanged, that the brand's closing line is verbatim, that
-any code block reached the slide byte for byte, and that no number in the hook appears in
-neither the question nor the assigned line. A failure aborts the brand and leaves nothing behind.
+Everything except one model call per brand per day is deterministic and costs nothing. The day's
+plan is made first, at `$0`. On a quiz day, which question runs comes from a seeded order over the
+bank, so every question is served once before any repeats and the same date always produces the
+same question. Which opening line fronts it is decided by the Design Lab's hook brain, not by the
+model and no longer from a library inline in this venture's config: the studio evaluates the
+central library's gates against the question's own metadata — "Two answers look right. One is."
+may only run on a question that actually has four options and is not trivial — and slide 1 renders
+that line verbatim. CHUM writes slides 2 to 5 to cash the promise slide 1 makes, and there is no
+field left in its output through which it could author hook copy at all. After CHUM answers,
+deterministic gates check that the assigned hook line is unchanged, that the brand's closing line
+is verbatim, that any code block reached the slide byte for byte, and that no number in the hook
+appears in neither the question nor the assigned line. A failure aborts the brand and leaves
+nothing behind.
+
+The other kinds take their facts from code, and CHUM writes only the fields code leaves it. The
+spotlight shows one screen the fact sheet in effect names, a new one each week. The teaser shows
+an Easy challenge's prompt and first hint from a committed snapshot of devShark's challenges,
+labelled by devShark's own difficulty step, and never a solution; until that snapshot is imported,
+Wednesday drafts the quiz and says why. The weekly note recaps the week's own packages. GoVIRAL's
+trend hook, read through its own `goviral-intelligence-packet/1` edge, may choose which of the
+bank's category labels leads the week; the tag itself never reaches a slide or the writer. A kind
+whose source is missing falls back to the quiz, and the package records which kind it stood in
+for. On launch day the owner's own announcement copy, saved under
+`state/ventures/marketingshark/announcements/`, takes the day with no model call. Every kind runs
+the caption rules, the clip gate, a no-invented-numbers gate against its own sources and the
+reward-for-engagement gate.
 
 The five reviewed slides are rasterised to PNG frames and JPEG copies under
 `site/public/social/devshark/<date>/en/`, and the package records every file's hash beside the
@@ -396,7 +413,7 @@ collisions and the public calendar uses the same source.
 | ---: | --- | --- | ---: |
 | 05:00 | Caught Up edition | fixed service; evidence and live gates | room `$0.08` |
 | 06:00 | Morning board | decision room; one specialist commission | cycle cap `$0.20` |
-| 07:00 | marketingShark carousel | standing daily; one paid call per enabled brand | `$0.10` per enabled brand |
+| 07:00 | marketingShark carousel | weekdays, kind by weekday; one paid call per enabled brand, none at the weekend | `$0.10` per enabled brand |
 | 08:00 | FightAIQ intake | material change or due agenda | `$0.06` |
 | 09:00 | MMA Files editorial | fixed assignment service | `$0.05` |
 | 10:00 | MMA Files article | assigned slot and evidence only | production cap `$0.16` |

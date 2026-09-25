@@ -174,6 +174,38 @@ the graphic. Approving a post publishes it without another manual step.
 - `CarouselFormatSchema` gains `linkedin-square` (1080 × 1080), drawn on the Instagram square's
   canvas; the four composed ratios are unchanged.
 
+## What #576 builds
+
+- **A weekday rotation inside the same envelope.** `config/marketingshark.json` names a kind per
+  weekday, each a slide-1 pattern and a template per slide: the quiz carousel on Monday and
+  Thursday, a feature spotlight on Tuesday, a challenge teaser on Wednesday, the week's note on
+  Friday, and no room on Saturday or Sunday. One paid call and one retry per brand per day, as
+  before; a weekend spends nothing and a scheduled wake-up records a rest day.
+- **Code owns the facts.** The spotlight shows one screen whose term the fact sheet in effect names,
+  a new one each week. The teaser shows an Easy challenge's prompt and first hint from
+  `state/marketingshark/challenge-banks/devshark.json`, which
+  `pnpm marketingshark:import-challenges` builds from devShark's issuable challenges with devShark's
+  own `difficultyOf` (its step D5) and never a solution field. The weekly note recaps the week's
+  own packages. CHUM writes only the fields code leaves it; every kind runs the caption rules, the
+  clip gate, a no-invented-numbers gate against the day's sources and the reward-for-engagement
+  gate, and the teaser a no-code gate. A kind whose source is missing drafts the quiz instead and
+  records why. Until the challenge snapshot is imported, Wednesday does.
+- **Capability map 1.5.0** adds `goviral -> marketingshark` on `goviral-intelligence-packet/1`,
+  enforced in `orchestrator/src/ventures/marketingshark/intelligence.ts`. The Friday note takes one
+  trend hook: the devShark topic set's strongest rising or new tag, its velocity and evidence refs,
+  expiring with the 14-day trends window. It only chooses which of the bank's own category labels
+  leads the week; the tag never reaches a slide or the writer. The `goviral-trends/1` edge from #562
+  stays for the carousel's hashtag signals. The social references that pin the map version were
+  re-affirmed at 1.5.0.
+- **The launch announcement** is the owner's: copy saved at
+  `state/ventures/marketingshark/announcements/<date>-devshark.json` takes that day's room with no
+  model call and passes the same gates, so a price or a date ships only once the fact sheet states
+  it. `contracts/fixtures/marketingshark-announcement.fixture.json` is its placeholder shape; the
+  gates refuse it as it stands.
+- The Design Lab and the Queue's `rerender` stay with the quiz carousel; the other kinds' captions
+  are edited in the Queue. `pnpm cycle -- --phase ms-daily --dry --now <instant>` rehearses a given
+  morning; `--now` is refused without `--dry`.
+
 ## What stays held
 
 Building every step of the programme sends nothing. Until this record is countersigned, and
@@ -223,4 +255,5 @@ drafts in queue v1, which the publisher never considered.
 - [x] B6: the Queue workspace (#573)
 - [x] B7: approval dispatches the publisher (#574)
 - [x] B8: Design Lab editing and re-render for devShark packages (#575)
-- [ ] B9: more post kinds and the GoVIRAL packet edge (#576)
+- [x] B9: more post kinds and the GoVIRAL packet edge (#576). The Wednesday teaser drafts once the
+  challenge snapshot is imported after devShark's D5; until then Wednesday drafts the quiz
