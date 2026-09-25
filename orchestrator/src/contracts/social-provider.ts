@@ -17,7 +17,7 @@ const ProviderCapabilitySchema = z.enum([
   "webhook-normalize",
   "notify-incident"
 ]);
-const SocialPlatformSchema = z.enum(["instagram", "threads"]);
+const SocialPlatformSchema = z.enum(["instagram", "threads", "linkedin"]);
 const EnvironmentReferenceSchema = z.string().regex(/^[A-Z][A-Z0-9_]{2,100}$/u);
 
 export const SocialProviderSchema = z.strictObject({
@@ -25,7 +25,7 @@ export const SocialProviderSchema = z.strictObject({
   id: ProviderIdSchema,
   name: z.string().trim().min(1).max(100),
   role: z.enum(["direct-official", "managed-scheduler", "notification-webhook"]),
-  supportedPlatforms: z.array(SocialPlatformSchema).max(2),
+  supportedPlatforms: z.array(SocialPlatformSchema).max(3),
   capabilities: z.array(ProviderCapabilitySchema).max(8),
   implementationVersion: z.string().trim().min(1).max(80),
   apiVersion: z.string().trim().min(1).max(80).nullable(),

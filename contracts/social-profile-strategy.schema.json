@@ -187,13 +187,14 @@
           },
           "platforms": {
             "minItems": 1,
-            "maxItems": 2,
+            "maxItems": 3,
             "type": "array",
             "items": {
               "type": "string",
               "enum": [
                 "instagram",
-                "threads"
+                "threads",
+                "linkedin"
               ]
             }
           },
@@ -426,6 +427,26 @@
               "type": "integer",
               "minimum": 0,
               "maximum": 35
+            }
+          },
+          "required": [
+            "perDay",
+            "perWeek"
+          ],
+          "additionalProperties": false
+        },
+        "linkedin": {
+          "type": "object",
+          "properties": {
+            "perDay": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "perWeek": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 21
             }
           },
           "required": [

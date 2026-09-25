@@ -150,6 +150,8 @@ export class OfficialSocialInsightsAdapter {
       droppedMetricCount: 0
     });
     if (!connection || !provider || resolution.decision !== "eligible" || !binding) return unavailable(unavailableFromReasons(resolution.reasons));
+    // No LinkedIn insights reader exists; the Buffer connection is publish-only (quorum#569).
+    if (connection.platform === "linkedin") return unavailable("unsupported-account");
     const insightScope = connection.platform === "threads"
       ? "threads_manage_insights"
       : connection.connector.loginMode === "instagram-login" ? "instagram_business_manage_insights" : "instagram_manage_insights";

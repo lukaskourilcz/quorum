@@ -94,7 +94,8 @@ export const AmplifierProposalSchema = z.strictObject({
     collisionWarnings: z.array(z.string().trim().min(1).max(240)).max(24)
   }),
   platformDirection: z.strictObject({
-    platforms: z.array(SocialPlatformSchema).min(1).max(2),
+    // Amplifiers stay on the two Meta platforms: LinkedIn has no amplifier setup path or policy yet.
+    platforms: z.array(SocialPlatformSchema.exclude(["linkedin"])).min(1).max(2),
     markets: z.array(z.string().regex(/^[A-Z]{2}$/u)).min(1).max(12),
     verdict: z.enum(["pending", "approved", "rejected"]),
     ownerEvidenceRef: EvidenceRefSchema.nullable()

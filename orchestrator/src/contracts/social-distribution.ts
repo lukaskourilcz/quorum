@@ -11,7 +11,7 @@ import {
 const SlugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(100);
 const BoundedTextSchema = z.string().trim().min(1).max(500);
 const LocaleSchema = z.enum(["cs", "en"]);
-export const SocialPlatformSchema = z.enum(["instagram", "threads"]);
+export const SocialPlatformSchema = z.enum(["instagram", "threads", "linkedin"]);
 export const AmplifierArchetypeSchema = z.enum([
   "topic-editorial",
   "language-market",
@@ -154,7 +154,13 @@ export const ApprovedSocialScopeSchema = z.enum([
   "instagram_manage_insights",
   "instagram_business_basic",
   "instagram_business_content_publish",
-  "instagram_business_manage_insights"
+  "instagram_business_manage_insights",
+  // LinkedIn's Community Management API, for a later direct adapter: post as the Page, read its posts.
+  "w_organization_social",
+  "r_organization_social",
+  // Not a platform scope. An aggregator (Buffer) holds the platform grant; the connection records
+  // that it holds none of its own.
+  "provider-managed"
 ]);
 
 const ConnectionUnavailableReasonSchema = z.enum([
@@ -183,7 +189,7 @@ export const SocialConnectionSchema = z.strictObject({
     version: z.string().regex(/^\d+\.\d+\.\d+$/u),
     providerId: SlugSchema,
     apiVersion: z.string().trim().min(1).max(40),
-    loginMode: z.enum(["threads-oauth", "instagram-facebook-login", "instagram-login", "provider-oauth"])
+    loginMode: z.enum(["threads-oauth", "instagram-facebook-login", "instagram-login", "provider-oauth", "linkedin-oauth"])
   }),
   credentialRef: z.string().regex(/^[A-Z][A-Z0-9_]{2,119}$/u).nullable(),
   nativeAccountIdRef: z.string().regex(/^[A-Z][A-Z0-9_]{2,119}$/u).nullable(),
@@ -205,7 +211,17 @@ export const SocialConnectionSchema = z.strictObject({
   lastVerified: z.strictObject({ at: DateTimeSchema, evidenceRefs: z.array(EvidenceRefSchema).min(1).max(8) }).nullable()
 }).superRefine((connection, context) => {
   const joinedScopes = connection.approvedScopes.join(" ");
-  if (connection.platform === "threads") {
+  const providerManaged = connection.approvedScopes.length === 1 && connection.approvedScopes[0] === "provider-managed";
+  if ((connection.connector.loginMode === "provider-oauth") !== providerManaged || (connection.approvedScopes.includes("provider-managed") && !providerManaged)) {
+    context.addIssue({ code: "custom", message: "An aggregator connection records only the provider-managed marker, and only an aggregator connection may", path: ["approvedScopes"] });
+  }
+  if (connection.platform === "linkedin") {
+    if (!["linkedin-oauth", "provider-oauth"].includes(connection.connector.loginMode) || /instagram|threads_|pages_/u.test(joinedScopes)) {
+      context.addIssue({ code: "custom", message: "A LinkedIn connection accepts only LinkedIn's own OAuth or an aggregator's, with organization scopes" });
+    }
+  } else if (connection.connector.loginMode === "linkedin-oauth" || /organization_social/u.test(joinedScopes)) {
+    context.addIssue({ code: "custom", message: "An Instagram or Threads connection cannot carry LinkedIn authority" });
+  } else if (connection.platform === "threads") {
     if (connection.connector.loginMode !== "threads-oauth" || /instagram|pages_/u.test(joinedScopes)) {
       context.addIssue({ code: "custom", message: "A Threads connection accepts only its explicit OAuth path and scopes" });
     }
@@ -255,7 +271,7 @@ export const DistributionContactSchema = z.strictObject({
   type: DistributionContactTypeSchema,
   topics: z.array(SlugSchema).max(24),
   ventures: z.array(VentureIdSchema).max(24),
-  platforms: z.array(SocialPlatformSchema).max(2),
+  platforms: z.array(SocialPlatformSchema).max(3),
   languages: z.array(LocaleSchema).min(1).max(2),
   markets: z.array(z.string().regex(/^[A-Z]{2}$/u)).min(1).max(12),
   publicContactRefs: z.array(z.strictObject({
@@ -694,7 +710,7 @@ export const AmplificationPolicySchema = z.strictObject({
   })).max(100),
   platformOverrides: z.array(AmplificationPolicyOverrideSchema.extend({
     platform: SocialPlatformSchema
-  })).max(2),
+  })).max(3),
   ownerDecisionRef: EvidenceRefSchema,
   history: z.array(PolicyHistorySchema).min(1).max(100)
 }).superRefine((policy, context) => {

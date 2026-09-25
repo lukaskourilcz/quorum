@@ -38,7 +38,8 @@
       "type": "string",
       "enum": [
         "instagram",
-        "threads"
+        "threads",
+        "linkedin"
       ]
     },
     "locales": {

@@ -14,7 +14,7 @@ export const SOCIAL_PROFILE_SECTIONS = [
 ] as const;
 
 export type SocialProfileSectionId = (typeof SOCIAL_PROFILE_SECTIONS)[number]["id"];
-export type SocialPlatform = "instagram" | "threads";
+export type SocialPlatform = "instagram" | "threads" | "linkedin";
 export type SocialProfileLifecycle = "idea" | "proposed" | "setup-needed" | "active" | "paused" | "retired" | "rejected" | "simulation";
 
 export interface SocialCapabilityReference {
@@ -238,7 +238,7 @@ export function parseSocialProfile(value: unknown): SocialProfileRecord | null {
 
 export function parseSocialConnection(value: unknown): SocialConnectionRecord | null {
   const item = rawRecord(value); const connector = rawRecord(item?.connector); const health = rawRecord(item?.health); const cadence = rawRecord(item?.cadence);
-  const id = text(item?.id, 140); const targetProfile = text(item?.profileId, 120); const platform = enumValue(item?.platform, ["instagram", "threads"] as const);
+  const id = text(item?.id, 140); const targetProfile = text(item?.profileId, 120); const platform = enumValue(item?.platform, ["instagram", "threads", "linkedin"] as const);
   const mode = enumValue(item?.mode, ["draft", "held", "autopublish"] as const); const healthStatus = enumValue(health?.status, ["healthy", "unavailable", "expired", "reauthorisation-required", "unverified", "paused"] as const);
   const scopes = textArray(item?.approvedScopes, 12); const supported = textArray(item?.supportedCapabilities, 2); const publicHandle = nullableText(item?.publicHandle, 61);
   const credentialRef = nullableText(item?.credentialRef, 120); const nativeAccountIdRef = nullableText(item?.nativeAccountIdRef, 120); const unavailableReason = nullableText(health?.unavailableReason, 100);

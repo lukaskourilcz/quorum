@@ -11,7 +11,7 @@ const ProfileIdSchema = z.string().regex(/^social-profile-[a-z0-9]+(?:-[a-z0-9]+
 const StrategyIdSchema = z.string().regex(/^social-profile-strategy-[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(180);
 const PillarIdSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(80);
 const FormatIdSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(80);
-const PlatformSchema = z.enum(["instagram", "threads"]);
+const PlatformSchema = z.enum(["instagram", "threads", "linkedin"]);
 const LocaleSchema = z.enum(["cs", "en"]);
 const InventoryCapabilityRefSchema = z.strictObject({
   mapVersion: z.string().regex(/^\d+\.\d+\.\d+$/u),
@@ -27,7 +27,7 @@ const StrategyFormatSchema = z.strictObject({
   label: z.string().trim().min(1).max(120),
   pillarId: PillarIdSchema,
   candidateClass: z.enum(["original", "reserve", "recurring"]),
-  platforms: z.array(PlatformSchema).min(1).max(2),
+  platforms: z.array(PlatformSchema).min(1).max(3),
   locales: z.array(LocaleSchema).min(1).max(2),
   evidenceRequirements: z.array(z.string().trim().min(1).max(200)).min(1).max(8),
   sourceClasses: z.array(z.enum(["strategy-owned", "profile-owned", "approved-package", "goviral-intelligence", "accepted-campaign"])).min(1).max(5),
@@ -75,7 +75,9 @@ export const SocialProfileStrategySchema = z.strictObject({
   }),
   platformCaps: z.strictObject({
     instagram: z.strictObject({ perDay: z.number().int().min(0).max(5), perWeek: z.number().int().min(0).max(21) }),
-    threads: z.strictObject({ perDay: z.number().int().min(0).max(10), perWeek: z.number().int().min(0).max(35) })
+    threads: z.strictObject({ perDay: z.number().int().min(0).max(10), perWeek: z.number().int().min(0).max(35) }),
+    // Optional so the Meta-only strategies written before LinkedIn existed stay valid unchanged.
+    linkedin: z.strictObject({ perDay: z.number().int().min(0).max(5), perWeek: z.number().int().min(0).max(21) }).optional()
   }),
   assets: z.strictObject({
     rendererRef: z.literal("Design Lab"),

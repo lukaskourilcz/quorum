@@ -31,13 +31,14 @@
       ]
     },
     "supportedPlatforms": {
-      "maxItems": 2,
+      "maxItems": 3,
       "type": "array",
       "items": {
         "type": "string",
         "enum": [
           "instagram",
-          "threads"
+          "threads",
+          "linkedin"
         ]
       }
     },

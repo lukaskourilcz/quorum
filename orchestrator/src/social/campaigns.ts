@@ -611,7 +611,7 @@ export interface CampaignInventoryCandidate {
   targetId: string;
   targetRole: "primary" | "umbrella" | "amplifier";
   profileId: string;
-  channel: "instagram" | "threads";
+  channel: Item["channel"];
   locale: "cs" | "en";
   objective: SocialCampaign["objective"];
   audience: string;
