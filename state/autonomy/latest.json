@@ -1,6 +1,6 @@
 {
   "schemaVersion": "autonomy-snapshot/1",
-  "generatedAt": "2026-09-20T04:00:51.291Z",
+  "generatedAt": "2026-09-25T09:07:15.398Z",
   "metricsIngestionEnabled": false,
   "growth": [
     {
@@ -10,9 +10,9 @@
         {
           "id": "edition-cadence",
           "label": "Edition cadence",
-          "value": 0.9655,
+          "value": 0.9677,
           "unit": "ratio",
-          "detail": "28 delivered, 1 failed; NO_EDITION is neutral."
+          "detail": "30 delivered, 1 failed; NO_EDITION is neutral."
         },
         {
           "id": "source-coverage",
@@ -222,9 +222,9 @@
         {
           "id": "edition-cadence",
           "label": "Edition cadence",
-          "value": 0.9655,
+          "value": 0.9677,
           "unit": "ratio",
-          "detail": "28 delivered, 1 failed; NO_EDITION is neutral."
+          "detail": "30 delivered, 1 failed; NO_EDITION is neutral."
         },
         {
           "id": "source-coverage",
@@ -261,13 +261,13 @@
       "evidence": 4,
       "other": 21
     },
-    "vetoRate": 0.0846,
+    "vetoRate": 0.0798,
     "firstPassRate": 0,
     "retryRate": 0,
     "sourceAgreementRate": 0.4151,
     "verifierPassRate": 0,
     "denominators": {
-      "meetings": 331,
+      "meetings": 351,
       "proofs": 0,
       "fighterFields": 636
     }
