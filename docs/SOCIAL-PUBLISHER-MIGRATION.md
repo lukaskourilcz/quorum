@@ -48,8 +48,11 @@ switch gates run again before any queue handoff.
 `migrateLegacyQueueItem` reads DNESKAi, MMA Files and Titty Tuesdays queue v1 through explicit
 registry mappings. It preserves source venture, campaign, locale, variant, content, checks, window,
 attempt and receipt meaning, records the old content hash and recalculates the v2 target hash. It
-does not rewrite the committed history. An unmapped legacy producer such as marketingShark stays a
-manual draft and cannot silently become a publisher.
+does not rewrite the committed history. marketingShark no longer writes queue v1: since #568 its
+devShark drafts are queue v2 items read directly, and a mapping for any v1 item it left behind
+waits for devShark's own profiles (#569). A mapped connection must belong to one of the venture's
+own primary profiles, which lets a venture keep one profile per platform. An unmapped legacy
+producer stays a manual draft and cannot silently become a publisher.
 
 `pnpm social:migration-audit` is the deterministic, read-only release check for that compatibility
 path. `--write` may persist its one hash-addressed receipt at

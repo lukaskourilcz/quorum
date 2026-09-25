@@ -206,8 +206,10 @@ selection priors but cannot weaken the factual or sensitivity gates.
 ### marketingShark
 
 Promise: one quiz question a day, written up honestly enough that a reader gets value from
-the carousel whether or not they ever open the product. CHUM writes the day's copy in Czech and
-again in English, and AUDIT holds the veto seat. MAKO's weekly review is specified — its
+the carousel whether or not they ever open the product. CHUM writes the day's copy in English,
+the language devShark ships in, with one caption each for LinkedIn, Instagram and Threads, and
+AUDIT holds the veto seat. Each brand names its languages in `config/marketingshark.json`; the
+Czech path stays for a brand that lists it. MAKO's weekly review is specified — its
 instructions are `orchestrator/prompts/marketingshark/strategy.md` — and is not yet wired to a
 room, so no weekly call runs and none is billed.
 
@@ -229,9 +231,17 @@ check that the assigned hook line is unchanged, that the brand's closing line is
 any code block reached the slide byte for byte, and that no number in the hook appears in
 neither the question nor the assigned line. A failure aborts the brand and leaves nothing behind.
 
-Nothing it writes can post. marketingShark owns no social account and no credentials, every
-package is written with `status: "draft"` and every approval check pending, and it is not a
-publishing venture at all — the publisher refuses it by name rather than by an absent switch.
+The five reviewed slides are rasterised to PNG frames and JPEG copies under
+`site/public/social/devshark/<date>/en/`, and the package records every file's hash beside the
+SVG hash of the slide the gates passed. Each package becomes three queue v2 drafts, one per
+platform, bound to devShark's own profiles and carrying the package hash, under the two
+capability edges `state/decisions/2026-09-26-devshark-social-queue.md` proposes. No post may
+promise a reward for following, liking, sharing or commenting; a gate enforces it.
+
+Nothing it writes can post. Every draft has all eleven checks pending, devShark's connections
+are held, both channels are drafts, a LinkedIn item is refused by name until its transport
+exists, and marketingShark is not a publishing venture — the publisher refuses it by name
+rather than by an absent switch.
 
 ### BOOKSOFHISTORY
 

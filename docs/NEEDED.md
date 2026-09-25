@@ -4,13 +4,13 @@
 
 `SECOND-HANDOFF-25-9-2026.md` at the repository root designs the Queue workspace, the devShark profiles on LinkedIn, Instagram and Threads, the LinkedIn transport and the approval-to-publish path. The implementation issues are #568 to #576 (label `second-handoff-25-9-2026`); #556, #561 and #562 come first. Building it sends nothing; these are the steps only you can take, in order:
 
-- [ ] **Countersign `state/decisions/2026-09-26-devshark-social-queue.md`** once #568 has written it. [imp:5] [owner:me] [time:20m] [kind:decision]
+- [ ] **Countersign `state/decisions/2026-09-26-devshark-social-queue.md`** — #568 wrote it with status `proposed`; set `countersigned` and name your approval on its signature line. [imp:5] [owner:me] [time:20m] [kind:decision]
 - [ ] **Create the devShark profiles** — a LinkedIn Company Page (desktop or iOS), an Instagram professional account (Instagram Login, no Facebook Page needed) and its Threads profile; record the URLs here and in devShark's `client/product-catalog.ts`. [imp:5] [owner:me] [time:1h] [kind:setup]
 - [ ] **Buffer Free account** — connect the LinkedIn Page, create the API key, store `BUFFER_API_KEY` and `BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN` as Actions secrets, run one multi-image test post from the API and record the result for #571. [imp:4] [owner:me] [time:45m] [kind:setup]
 - [ ] **Meta developer app** with the Instagram and Threads use cases, the devShark accounts as testers, and the four `DEVSHARK_*` secrets; calendar the 60-day token refresh. [imp:4] [owner:me] [time:45m] [kind:setup]
 - [ ] **Give `BOARDLESSAI_GITHUB_TOKEN` the `actions: write` permission** so an approval can dispatch the publisher (#574). [imp:4] [owner:me] [time:5m] [kind:setup]
 - [ ] **Tick `HUMAN_APPROVAL DEVSHARK-SOCIAL-001` and `-002` in `state/INBOX.md`** when the connections are live and three drafted packages exist. [imp:5] [owner:me] [time:10m] [kind:decision]
-- [ ] **Confirm devShark's live facts for `config/marketingshark.json`** (free tier contents, Premium at 3.99 a month, English only) once the devShark handoff ships. [imp:3] [owner:me] [time:15m] [kind:content]
+- [ ] **Confirm devShark's live facts for `config/marketingshark.json`** (free tier contents, Premium at 3.99 a month, English only) once the devShark handoff ships: append one block to `factSheets`, dated `effectiveFrom` the day the facts become true. Until then the 2026-09-15 block still says "free" and "bilingual". [imp:3] [owner:me] [time:15m] [kind:content]
 
 ## Kickoff 2026-09-25 · DNESKAi and devShark only
 

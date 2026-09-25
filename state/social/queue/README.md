@@ -4,6 +4,8 @@ Validated queue items are immutable JSON files. The publisher ignores this docum
 processes only schema-valid `.json` items. The four committed records remain queue v1 evidence and
 are migrated in memory through the explicit mapping in `config/social-publisher-registry.json`;
 their source hash and mapping reference are preserved. New writers use capability-aware queue v2.
+marketingShark writes three v2 drafts per devShark package, `<date>-devshark-en-<platform>.json` for
+LinkedIn, Instagram and Threads, each bound to devShark's own profile and carrying the package hash.
 
 The lifecycle is `draft` → `approved` → `queued` → `publishing`, followed by
 `published`, `failed`, `expired`, or `needs_reconciliation`. A human may also
