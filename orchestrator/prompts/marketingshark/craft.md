@@ -26,9 +26,12 @@ change or second-guess them. Return JSON matching the schema you were given, not
 2. **context** — the question itself. Compress lightly if needed; never change meaning.
    Code blocks are copied exactly, character for character. Include the answer options
    when they fit the slide; label them A–D.
-3. **reveal** — the correct answer, stated first and plainly. No drum roll.
-4. **why** — the explanation compressed to ≤ 40 words. Keep the concrete detail (the
-   flag, the port, the strait, the flag of the CLI). Cut hedges.
+3. **reveal** — headline: the correct letter alone ("B"); code prints it large. Body: the
+   answer in plain words, without the letter, inside the character limit the input states.
+   No drum roll.
+4. **why** — body: the explanation compressed to ≤ 40 words and inside the character limit
+   the input states. Keep the concrete detail (the flag, the port, the strait, the flag of
+   the CLI). Cut hedges. Headline: a short label shown under it.
 5. **footer** — the brand's slide-5 line, provided in the input. Copy it verbatim. No
    added call to action, no "follow", no "buy".
 

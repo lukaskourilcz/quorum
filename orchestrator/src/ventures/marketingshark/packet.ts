@@ -5,6 +5,7 @@ import type { NormalizedQuestion } from "./bank.js";
 import type { Brand, FactSheet } from "./config.js";
 import { LIMITS, violationReport, type GateViolation } from "./gates.js";
 import { SLIDE_ROLES } from "./package.js";
+import { writerLimits } from "./render.js";
 
 export const CRAFT_PROMPT_PATH = "orchestrator/prompts/marketingshark/craft.md";
 export const STRATEGY_PROMPT_PATH = "orchestrator/prompts/marketingshark/strategy.md";
@@ -127,6 +128,8 @@ export function buildChumPacket(input: {
       ? `- the hook slide carries the assigned hook line above, unchanged\n`
       : `- hook headline ≤ ${LIMITS.hookChars} characters, both languages\n`)
     + `- why slide ≤ ${LIMITS.whyWords} words\n`
+    + writerLimits(brand, question).map((line) => `- ${line}\n`).join("")
+    + `- every slide is rendered before anything is kept; text that would be clipped on the canvas fails the check\n`
     + `- Instagram ≤ ${LIMITS.instagramBeforeHashtags} characters before hashtags\n`
     + `- Threads ≤ ${LIMITS.threadsChars} characters\n`
     + `- alt text ≤ ${LIMITS.altChars} characters per slide\n`

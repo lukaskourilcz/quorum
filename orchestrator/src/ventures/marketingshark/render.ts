@@ -7,7 +7,7 @@ import {
   type CarouselFormat,
   type CarouselTemplate
 } from "@boardlessai/carousel-studio";
-import type { NormalizedQuestion } from "./bank.js";
+import { fencedBlocks, type NormalizedQuestion } from "./bank.js";
 import type { Brand } from "./config.js";
 import { SLIDE_ROLES, type CarouselCopy, type SlideRole } from "./package.js";
 
@@ -35,6 +35,16 @@ export function liveVersionOf(templateId: string): string {
   const template = liveTemplates().find((candidate) => candidate.id === templateId && candidate.status === "live");
   if (!template) throw new Error(`${templateId} is not a live Carousel Studio template`);
   return template.version;
+}
+
+/** The correct option's letter, A for the first option. */
+export function correctLetter(question: NormalizedQuestion): string {
+  return String.fromCharCode(65 + question.correctIndex);
+}
+
+/** "B. an array" and "B) an array" read as "an array"; the letter is printed beside it by code. */
+export function stripAnswerLetter(value: string): string {
+  return value.replace(/^\s*[A-D]\s*[.):\u2013\u2014-]\s*/u, "").trim();
 }
 
 /** The answer options as the reader sees them, lettered, in the carousel's own language. */
@@ -106,6 +116,17 @@ export function slotsForRole(input: {
       };
     }
     case "stat-highlight":
+      // The big figure on the reveal is the correct letter, and code owns it: the bank already
+      // holds the answer, and an 18-character one-line slot is no place for the model's sentence.
+      // Every devShark package from 16 to 24 September 2026 died here, with the answer's full
+      // text clipped out of `stat`. The model's words go to the label, without a repeated letter.
+      if (input.role === "reveal") {
+        return {
+          stat: correctLetter(input.question),
+          "stat-label": stripAnswerLetter(body.trim() || headline),
+          source: input.brand.displayName
+        };
+      }
       return { stat: headline, "stat-label": body, source: input.brand.displayName };
     case "quote-card":
       return { quote: body || headline, attribution: body ? headline : input.brand.displayName };
@@ -139,6 +160,160 @@ function completeSlots(template: CarouselTemplate, slots: Record<string, string>
   return complete;
 }
 
+/** The template a role renders in: the brand's map, with the plain-question layout for devShark. */
+export function templateIdFor(role: SlideRole, brand: Brand, question: NormalizedQuestion): string {
+  return role === "context" && brand.id === "devshark" && !question.hasCode && question.en.options.length <= 4
+    ? "quiz-question-context"
+    : brand.templateMap[role];
+}
+
+/**
+ * How much text one slot of a live template holds, read from the template itself.
+ *
+ * The packet and the fit gate quote these numbers, so a template change moves the limit the
+ * writer is given instead of leaving a stale constant that the canvas no longer honours.
+ */
+export function slotBudget(templateId: string, slot: string): { maxChars: number; maxLines: number } {
+  const template = liveTemplateByReference(templateId, liveVersionOf(templateId));
+  for (const slide of template.slides) {
+    for (const layer of slide.layers) {
+      if (layer.type === "text" && layer.slot === slot) return { maxChars: layer.maxChars, maxLines: layer.maxLines };
+    }
+  }
+  throw new Error(`${templateId} has no text slot ${slot}`);
+}
+
+/** Which of the model's two fields fills a slot, so a fit failure can name the field to shorten. */
+function copyFieldFor(templateId: string, slot: string, hasBody: boolean): "headline" | "body" | "code" {
+  switch (`${templateId}/${slot}`) {
+    case "stat-highlight/stat-label":
+    case "quote-card/quote":
+    case "minimal-text-poster/poster-note":
+      return hasBody ? "body" : "headline";
+    case "quiz-code-context/code-block":
+    case "quiz-code-context/options":
+    case "quiz-question-context/option-a":
+    case "quiz-question-context/option-b":
+    case "quiz-question-context/option-c":
+    case "quiz-question-context/option-d":
+      return "code";
+    default:
+      return "headline";
+  }
+}
+
+/** The context-slide slots code fills from the bank; the writer cannot shorten them. */
+const CODE_OWNED_SLOTS: ReadonlySet<string> = new Set(["code-block", "options", "option-a", "option-b", "option-c", "option-d"]);
+
+/**
+ * Whether the question's own code and options fit the context slide in both languages.
+ *
+ * Those slots are filled by code from the bank, so a question whose options overflow them fails
+ * at render whatever the writer does, and a retry only spends the envelope twice. Measured on
+ * the 2,511-question snapshot of 7 September 2026: about one question in twenty-five has an
+ * option too long for its slot. Such a question is not selected; it costs nothing to skip.
+ */
+export function codeOwnedSlotsFit(brand: Brand, question: NormalizedQuestion): boolean {
+  const templateId = templateIdFor("context", brand, question);
+  // Pure in the brand, the question and the template, so one process answers each question once.
+  const key = `${brand.id}\u0000${templateId}\u0000${question.id}\u0000${question.en.options.join("\u0001")}\u0000${question.cs?.options?.join("\u0001") ?? ""}`;
+  const known = codeOwnedFit.get(key);
+  if (known !== undefined) return known;
+  const fits = codeOwnedSlotsFitUncached(brand, question, templateId);
+  codeOwnedFit.set(key, fits);
+  return fits;
+}
+
+const codeOwnedFit = new Map<string, boolean>();
+
+function codeOwnedSlotsFitUncached(brand: Brand, question: NormalizedQuestion, templateId: string): boolean {
+  const template = liveTemplateByReference(templateId, liveVersionOf(templateId));
+  const code = fencedBlocks(`${question.en.introduction ?? ""}\n${question.en.question}`).join("\n\n");
+  for (const locale of ["cs", "en"] as const) {
+    const rendered = renderCarouselSlideSvg({
+      template,
+      brand: brandTokensFor(brand),
+      format: MARKETINGSHARK_FORMAT,
+      index: 0,
+      payload: {
+        locale,
+        strings: completeSlots(template, slotsForRole({ role: "context", template, headline: "", body: code, brand, question, locale }))
+      }
+    });
+    if (!rendered || rendered.truncatedSlots.some((slot) => CODE_OWNED_SLOTS.has(slot))) return false;
+  }
+  return true;
+}
+
+/**
+ * The per-slide text limits the writer is given, in words it can act on.
+ *
+ * Only the slots the model fills are listed, and each number is the template's own. A role whose
+ * template is not one of these gets no line rather than a guessed one; the fit gate still holds it.
+ */
+export function writerLimits(brand: Brand, question: NormalizedQuestion): string[] {
+  const lines: string[] = [];
+  const context = templateIdFor("context", brand, question);
+  if (context === "quiz-code-context" || context === "quiz-question-context") {
+    lines.push(`context headline (the question line) ≤ ${slotBudget(context, "question-line").maxChars} characters`);
+  }
+  if (templateIdFor("reveal", brand, question) === "stat-highlight") {
+    lines.push(
+      `reveal headline is the correct letter alone ("${correctLetter(question)}"); code prints it large`,
+      `reveal body is the answer in plain words, without the letter, ≤ ${slotBudget("stat-highlight", "stat-label").maxChars} characters`
+    );
+  }
+  if (templateIdFor("why", brand, question) === "quote-card") {
+    lines.push(
+      `why body is the explanation, ≤ ${slotBudget("quote-card", "quote").maxChars} characters`,
+      `why headline is a short label under it, ≤ ${slotBudget("quote-card", "attribution").maxChars} characters`
+    );
+  }
+  return lines;
+}
+
+export interface FitViolation {
+  role: SlideRole;
+  locale: "cs" | "en";
+  templateId: string;
+  slot: string;
+  field: "headline" | "body" | "code";
+  maxChars: number;
+  maxLines: number;
+}
+
+/**
+ * Every slot the canvas would have to clip, found before anything is committed.
+ *
+ * Rendering is the studio's pure pipeline and costs nothing, so the check that used to run after
+ * the retry budget was spent now runs beside the truth gates, where a violation can still go back
+ * to the writer with the exact limit. The post-render check stays as the last word.
+ */
+export function fitViolations(input: {
+  brand: Brand;
+  question: NormalizedQuestion;
+  copy: Record<"cs" | "en", CarouselCopy>;
+}): FitViolation[] {
+  const violations: FitViolation[] = [];
+  for (const locale of ["cs", "en"] as const) {
+    const rendered = renderCarousel({ brand: input.brand, locale, copy: input.copy[locale], question: input.question });
+    for (const slide of rendered) {
+      const copy = input.copy[locale].slides[SLIDE_ROLES.indexOf(slide.role)];
+      for (const slot of slide.truncatedSlots) {
+        violations.push({
+          role: slide.role,
+          locale,
+          templateId: slide.templateId,
+          slot,
+          field: copyFieldFor(slide.templateId, slot, Boolean(copy?.body?.trim())),
+          ...slotBudget(slide.templateId, slot)
+        });
+      }
+    }
+  }
+  return violations;
+}
+
 /**
  * Render one language's five slides, or throw.
  *
@@ -158,8 +333,7 @@ export function renderCarousel(input: {
 
   return input.copy.slides.map((slide, index) => {
     const role = SLIDE_ROLES[index]!;
-    const templateId = role === "context" && input.brand.id === "devshark" && !input.question.hasCode && input.question.en.options.length <= 4
-      ? "quiz-question-context" : input.brand.templateMap[role];
+    const templateId = templateIdFor(role, input.brand, input.question);
     const template = liveTemplateByReference(templateId, liveVersionOf(templateId));
     const variant = variantForRole(role, template);
     const rendered = renderCarouselSlideSvg({
