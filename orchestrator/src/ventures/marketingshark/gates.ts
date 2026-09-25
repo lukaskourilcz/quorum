@@ -79,7 +79,7 @@ export interface GateViolation {
 const words = (value: string): number => value.trim().split(/\s+/u).filter(Boolean).length;
 
 /** Numerals in a string, as whole tokens: "10" from "10 seconds", nothing from "v8". */
-function numerals(value: string): string[] {
+export function numerals(value: string): string[] {
   return [...value.matchAll(/\d+(?:[.,]\d+)?/gu)].map((match) => match[0]);
 }
 
@@ -216,32 +216,7 @@ export function runTruthGates(input: {
     }
 
     const description = instagramText;
-    const beforeHashtags = description.split(/(?=#)/u)[0] ?? description;
-    if (beforeHashtags.length > LIMITS.instagramBeforeHashtags) {
-      add("instagram-length", locale, `${beforeHashtags.length} characters before hashtags, cap is ${LIMITS.instagramBeforeHashtags}`);
-    }
-    if (threadsText.length > LIMITS.threadsChars) {
-      add("threads-length", locale, `${threadsText.length} characters, cap is ${LIMITS.threadsChars}`);
-    }
-    // The schema caps the stored field, and the stored Instagram field is the description with its
-    // hashtags appended -- so the cap has to be measured on that, not on the description alone.
-    const instagramStored = `${description}\n\n${instagramTags.join(" ")}`;
-    if (instagramStored.length > LIMITS.instagramTotalChars) {
-      add("instagram-total", locale, `${instagramStored.length} characters with hashtags, schema cap is ${LIMITS.instagramTotalChars}`);
-    }
-    if (threadsText.length > LIMITS.threadsTotalChars) {
-      add("threads-total", locale, `${threadsText.length} characters, schema cap is ${LIMITS.threadsTotalChars}`);
-    }
-
-    if (instagramTags.length < LIMITS.instagramHashtagsMin || instagramTags.length > LIMITS.instagramHashtagsMax) {
-      add("instagram-hashtags", locale, `${instagramTags.length} hashtags, allowed ${LIMITS.instagramHashtagsMin}-${LIMITS.instagramHashtagsMax}`);
-    }
-    if (instagramTags.some((tag) => !tag.startsWith("#"))) {
-      add("instagram-hashtags", locale, "every Instagram hashtag must start with #");
-    }
-    if (threadsTags.length !== 1) {
-      add("threads-topic", locale, `Threads carries one topic tag, received ${threadsTags.length}`);
-    }
+    violations.push(...captionViolations({ locale, instagram: description, threads: threadsText, instagramTags, threadsTags }));
 
     const written = [
       ...slides.flatMap((slide) => [slide.headline, slide.body ?? "", slide.alt]),
@@ -255,37 +230,91 @@ export function runTruthGates(input: {
   }
 
   // LinkedIn is English only: one caption, written for LinkedIn, never another channel's text.
-  const linkedin = output.descriptions.linkedin.en;
-  const linkedinTags = output.hashtags.linkedin.en;
-  const linkedinStored = linkedinTags.length > 0 ? `${linkedin}\n\n${linkedinTags.join(" ")}` : linkedin;
-  if (linkedin.trim().length === 0) {
-    add("linkedin-present", "en", "the LinkedIn caption is empty");
-  }
-  if (linkedinStored.length > LIMITS.linkedinTotalChars) {
-    add("linkedin-length", "en", `${linkedinStored.length} characters with hashtags, cap is ${LIMITS.linkedinTotalChars}`);
-  }
-  const opening = firstLine(linkedin);
-  if (opening.length > LIMITS.linkedinFirstLineChars) {
-    add("linkedin-first-line", "en", `the first line is ${opening.length} characters; LinkedIn shows about ${LIMITS.linkedinFirstLineChars} before "see more", so it must stand alone within that`);
-  }
-  if (linkedinTags.length > LIMITS.linkedinHashtagsMax || linkedinTags.some((tag) => !tag.startsWith("#"))) {
-    add("linkedin-hashtags", "en", `LinkedIn carries at most ${LIMITS.linkedinHashtagsMax} hashtags, each starting with #; received ${linkedinTags.length}`);
-  }
-  if (/(?:^|\s)#[\p{L}\p{N}_]+/u.test(linkedin)) {
-    add("linkedin-hashtags", "en", "hashtags go in the LinkedIn hashtag list, not inside the caption");
-  }
-  const instagramEn = output.descriptions.instagram.en;
-  const threadsEn = output.descriptions.threads.en;
-  if ([instagramEn, threadsEn].some((other) => comparable(other) === comparable(linkedin))) {
-    add("linkedin-distinct", "en", "the LinkedIn caption repeats another channel's text; write it for LinkedIn");
-  } else if (opening && [instagramEn, threadsEn].some((other) => comparable(firstLine(other)) === comparable(opening))) {
-    add("linkedin-distinct", "en", "the LinkedIn first line repeats another channel's first line; write its own hook");
-  }
+  violations.push(...linkedinViolations({
+    linkedin: output.descriptions.linkedin.en,
+    linkedinTags: output.hashtags.linkedin.en,
+    instagram: output.descriptions.instagram.en,
+    threads: output.descriptions.threads.en
+  }));
 
   // The `ab-record` gate is gone with the field it checked. Both hook lines now come from the
   // central library, so neither can be empty, over-long or invented — the hook lint proved that
   // before either was eligible to be assigned.
 
+  return violations;
+}
+
+/**
+ * The Instagram and Threads rules for one language, shared by every post kind. The checks and their
+ * order are the quiz's own, moved here unchanged so a weekly note cannot pass a caption the quiz
+ * would have sent back.
+ */
+export function captionViolations(input: {
+  locale: GateViolation["locale"];
+  instagram: string;
+  threads: string;
+  instagramTags: readonly string[];
+  threadsTags: readonly string[];
+}): GateViolation[] {
+  const violations: GateViolation[] = [];
+  const add = (gate: string, detail: string) => violations.push({ gate, locale: input.locale, detail });
+  const description = input.instagram;
+  const beforeHashtags = description.split(/(?=#)/u)[0] ?? description;
+  if (beforeHashtags.length > LIMITS.instagramBeforeHashtags) {
+    add("instagram-length", `${beforeHashtags.length} characters before hashtags, cap is ${LIMITS.instagramBeforeHashtags}`);
+  }
+  if (input.threads.length > LIMITS.threadsChars) {
+    add("threads-length", `${input.threads.length} characters, cap is ${LIMITS.threadsChars}`);
+  }
+  // The schema caps the stored field, and the stored Instagram field is the description with its
+  // hashtags appended -- so the cap has to be measured on that, not on the description alone.
+  const instagramStored = `${description}\n\n${input.instagramTags.join(" ")}`;
+  if (instagramStored.length > LIMITS.instagramTotalChars) {
+    add("instagram-total", `${instagramStored.length} characters with hashtags, schema cap is ${LIMITS.instagramTotalChars}`);
+  }
+  if (input.threads.length > LIMITS.threadsTotalChars) {
+    add("threads-total", `${input.threads.length} characters, schema cap is ${LIMITS.threadsTotalChars}`);
+  }
+
+  if (input.instagramTags.length < LIMITS.instagramHashtagsMin || input.instagramTags.length > LIMITS.instagramHashtagsMax) {
+    add("instagram-hashtags", `${input.instagramTags.length} hashtags, allowed ${LIMITS.instagramHashtagsMin}-${LIMITS.instagramHashtagsMax}`);
+  }
+  if (input.instagramTags.some((tag) => !tag.startsWith("#"))) {
+    add("instagram-hashtags", "every Instagram hashtag must start with #");
+  }
+  if (input.threadsTags.length !== 1) {
+    add("threads-topic", `Threads carries one topic tag, received ${input.threadsTags.length}`);
+  }
+  return violations;
+}
+
+/** LinkedIn's rules: its own caption, its first line, its few hashtags, and never another channel's text. */
+export function linkedinViolations(input: { linkedin: string; linkedinTags: readonly string[]; instagram: string; threads: string }): GateViolation[] {
+  const violations: GateViolation[] = [];
+  const add = (gate: string, detail: string) => violations.push({ gate, locale: "en", detail });
+  const { linkedin, linkedinTags } = input;
+  const linkedinStored = linkedinTags.length > 0 ? `${linkedin}\n\n${linkedinTags.join(" ")}` : linkedin;
+  if (linkedin.trim().length === 0) {
+    add("linkedin-present", "the LinkedIn caption is empty");
+  }
+  if (linkedinStored.length > LIMITS.linkedinTotalChars) {
+    add("linkedin-length", `${linkedinStored.length} characters with hashtags, cap is ${LIMITS.linkedinTotalChars}`);
+  }
+  const opening = firstLine(linkedin);
+  if (opening.length > LIMITS.linkedinFirstLineChars) {
+    add("linkedin-first-line", `the first line is ${opening.length} characters; LinkedIn shows about ${LIMITS.linkedinFirstLineChars} before "see more", so it must stand alone within that`);
+  }
+  if (linkedinTags.length > LIMITS.linkedinHashtagsMax || linkedinTags.some((tag) => !tag.startsWith("#"))) {
+    add("linkedin-hashtags", `LinkedIn carries at most ${LIMITS.linkedinHashtagsMax} hashtags, each starting with #; received ${linkedinTags.length}`);
+  }
+  if (/(?:^|\s)#[\p{L}\p{N}_]+/u.test(linkedin)) {
+    add("linkedin-hashtags", "hashtags go in the LinkedIn hashtag list, not inside the caption");
+  }
+  if ([input.instagram, input.threads].some((other) => comparable(other) === comparable(linkedin))) {
+    add("linkedin-distinct", "the LinkedIn caption repeats another channel's text; write it for LinkedIn");
+  } else if (opening && [input.instagram, input.threads].some((other) => comparable(firstLine(other)) === comparable(opening))) {
+    add("linkedin-distinct", "the LinkedIn first line repeats another channel's first line; write its own hook");
+  }
   return violations;
 }
 

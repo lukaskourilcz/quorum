@@ -204,6 +204,11 @@ export function factSheetFor(brand: Pick<Brand, "factSheets">, date: string): Fa
   return sheets.filter((sheet) => sheet.effectiveFrom <= date).at(-1) ?? sheets[0] ?? null;
 }
 
+/** Everything a fact sheet allows, as one text a number check can read. `neverClaim` is not in it. */
+export function factSheetText(facts: FactSheet | null): string {
+  return facts ? [facts.maturity, facts.whatVisitorsCanDo, facts.callToAction, ...facts.allowedClaims].join("\n") : "";
+}
+
 /** The kind the rotation schedules for a run date, or null on a day with no room. */
 export function scheduledKind(brand: Pick<Brand, "rotation">, date: string): RotationKind | null {
   return brand.rotation[weekdayOf(date)];

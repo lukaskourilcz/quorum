@@ -113,7 +113,7 @@ import { ScheduledPhaseSchema, type RunnablePhase, type Stage } from "./types.js
 import { runPersonalGrowthDesk } from "./ventures/personal-growth/room.js";
 import { findSlotRecord } from "./meetings/slot-record.js";
 import { recordBudgetStop, runPortfolioCycle } from "./portfolio/run.js";
-import { runMarketingSharkCycle } from "./ventures/marketingshark/run.js";
+import { runMarketingSharkCycle } from "./ventures/marketingshark/room.js";
 import { runKvorumDesk } from "./ventures/kvorum/run.js";
 import { KVORUM_REGISTER_GATE_IDS } from "./ventures/kvorum/content-gates.js";
 import { runBooksofHistoryCycle } from "./ventures/booksofhistory/run.js";
@@ -484,8 +484,9 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
         cycleId,
         phase: options.phase,
         dry: options.dry,
-        status: options.dry ? "dry_complete" : result.skipped ? "paused" : "live_complete",
-        decision: result.skipped ? "PAUSED" : drafted > 0 ? "PLAN" : "NO_ACTION",
+        // A weekend is a rest day in the rotation (quorum#576), not a paused room.
+        status: options.dry ? "dry_complete" : result.skipped && !result.skipped.rest ? "paused" : "live_complete",
+        decision: result.skipped ? (result.skipped.rest ? "NO_ACTION" : "PAUSED") : drafted > 0 ? "PLAN" : "NO_ACTION",
         estimatedWorstCaseUsd: result.spendUsd,
         // A brand that aborted is a seat that produced nothing, and the record says so rather
         // than reporting a room that ran clean.

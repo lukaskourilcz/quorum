@@ -365,9 +365,27 @@ export async function rasteriseCarousel(input: {
   /** The SVG slides the gates passed, which the frames must reproduce. */
   reviewed: readonly RenderedRoleSlide[];
 }): Promise<Array<RenderedFrame & { pngBytes: Buffer; jpegBytes: Buffer }>> {
+  return await rasteriseSlides({ ...input, entries: slideInputs(input) }) as Array<RenderedFrame & { pngBytes: Buffer; jpegBytes: Buffer }>;
+}
+
+/** One frame of any post kind: its role is the kind's, not only the quiz's. */
+export type RasterisedFrame = Omit<RenderedFrame, "role"> & { role: string; pngBytes: Buffer; jpegBytes: Buffer };
+
+/**
+ * Rasterise already-built slide inputs into PNG frames and JPEG copies, each checked against the
+ * reviewed SVG slide at its position and against its canvas. The quiz and every other post kind
+ * go through this one path, so a frame is proved the same way whatever built the slide.
+ */
+export async function rasteriseSlides(input: {
+  brand: Brand;
+  locale: MarketingSharkLocale;
+  date: string;
+  entries: ReadonlyArray<{ role: string; templateId: string; template: CarouselTemplate; render: CarouselRenderInput & { index: number } }>;
+  reviewed: ReadonlyArray<{ svgHash: string }>;
+}): Promise<RasterisedFrame[]> {
   const background = brandTokensFor(input.brand).colors.background ?? "#000000";
-  const frames: Array<RenderedFrame & { pngBytes: Buffer; jpegBytes: Buffer }> = [];
-  for (const [index, entry] of slideInputs(input).entries()) {
+  const frames: RasterisedFrame[] = [];
+  for (const [index, entry] of input.entries.entries()) {
     const rendered = await renderCarouselSlidePng(entry.render);
     if (!rendered) throw new Error(`${entry.templateId} produced no frame for role ${entry.role}`);
     const reviewed = input.reviewed[index];

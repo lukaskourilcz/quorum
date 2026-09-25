@@ -1,13 +1,8 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { BudgetError, BudgetLedgerEntrySchema, type BudgetLedgerEntry } from "../../budget.js";
-import { ModelOutputParseError, ModelResponseTruncatedError } from "../../llm/call.js";
-import { loadFixedMonthlyUsd } from "../../money/fixed-costs.js";
-import { MeetingSkipSchema } from "../../contracts/meeting-skip.js";
-import { guardedJsonCall } from "../../llm/call.js";
+import { BudgetError } from "../../budget.js";
+import { guardedJsonCall, ModelOutputParseError, ModelResponseTruncatedError } from "../../llm/call.js";
 import { configRoot, repoRoot, stateRoot } from "../../paths.js";
-import { loadRuntimeBudgetLimits } from "../../portfolio/limits.js";
-import type { Stage } from "../../types.js";
 import { atomicWriteBuffer, atomicWriteJson, readJson } from "../../state.js";
 import { loadQuestionBankSnapshot, truthSubjectOf, type NormalizedQuestion } from "./bank.js";
 import { brandLocales, enabledBrands, loadMarketingSharkConfig, type Brand, type MarketingSharkConfig, type MarketingSharkLocale } from "./config.js";
@@ -24,8 +19,11 @@ import { recordPost, writeHookChannels, type HookChannels } from "../../studio/h
 import type { HookAssignment } from "../../contracts/hook-assignment.js";
 import type { Hook } from "@boardlessai/carousel-studio";
 import { ChumOutput, inLocale, MarketingSharkPackage, packageId, packagePath, SLIDE_ROLES } from "./package.js";
-import { buildChumPacket, readCraftRules } from "./packet.js";
+import { buildChumPacket, craftRulesFor, readCraftRules } from "./packet.js";
+import type { BrandOutcome } from "./outcome.js";
+import type { RotationKind } from "./kinds.js";
 import { readBrandTrendLines } from "./trends.js";
+import { topicLabel } from "./topics.js";
 import { buildQueueItems, marketingSharkCapabilityRef } from "./queue.js";
 import { loadVentureCapabilityMap } from "../capabilities.js";
 import {
@@ -39,24 +37,20 @@ import {
   type RenderedFrame,
   type RenderedRoleSlide
 } from "./render.js";
-import { MeetingRecordSchema } from "../../contracts/meeting-record.js";
 import { mayRenderDeck, resolveDeckRender } from "../../studio/render-access.js";
 
 export const LEDGER_PATH = "marketingshark/ledger.json";
 export const MS_DAILY_PHASE = "ms-daily";
 
-/** Why a brand produced nothing, in the vocabulary the meeting record and the calendar use. */
-export type BrandOutcome =
-  | { status: "drafted"; brandId: string; questionId: string; packagePath: string; spendUsd: number; hookA: string; hookB: string; relaxed: boolean }
-  | { status: "already-served"; brandId: string; questionId: string; packagePath: string }
-  | { status: "aborted"; brandId: string; reason: "config-invalid" | "bank-invalid" | "selection-failed" | "hook-assignment-failed" | "model-output-invalid" | "truth-gate-failed" | "render-failed"; detail: string; spendUsd: number };
+export type { BrandOutcome } from "./outcome.js";
 
 export interface MarketingSharkRunResult {
   date: string;
   dry: boolean;
   brands: BrandOutcome[];
   spendUsd: number;
-  skipped: { reason: string } | null;
+  /** Why the room did not open. `rest` marks a day the rotation gives no room, not a closed gate. */
+  skipped: { reason: string; rest?: boolean } | null;
   artifacts: string[];
 }
 
@@ -80,23 +74,6 @@ export async function readLedger(root = stateRoot): Promise<MarketingSharkLedger
  */
 export function hookChannelFor(brandId: string): string {
   return `${brandId}-carousel`;
-}
-
-/**
- * `{topic}` values, in the register the copy expects.
- *
- * Category slugs are what the bank actually carries, and they are the honest topic: a hook filled
- * from anything else would be claiming something the payload does not say. Only the presentation is
- * mapped, and only for the slugs whose display form is not their capitalisation.
- */
-const TOPIC_LABELS: Readonly<Record<string, string>> = {
-  javascript: "JavaScript", typescript: "TypeScript", nodejs: "Node.js", css: "CSS", html: "HTML",
-  dsa: "DSA", "system-design": "system design", react: "React", git: "Git", databases: "databases",
-  testing: "testing", security: "security", internet: "the internet", algorithms: "algorithms"
-};
-
-export function topicLabel(category: string): string {
-  return TOPIC_LABELS[category] ?? `${category.charAt(0).toUpperCase()}${category.slice(1)}`;
 }
 
 export interface BrandDayPlan {
@@ -213,6 +190,8 @@ export function assemblePackage(input: {
   summaryPaths: string[];
   frames: readonly RenderedFrame[];
   spendUsd: number;
+  /** The kind the rotation wanted when this quiz ran in its place (quorum#576). */
+  rotation?: { scheduled: RotationKind; reason: string } | null;
 }): MarketingSharkPackage {
   // The last place the bound is checked before the assignment becomes a file. An override that
   // reached outside its eligible set, or a set edited after it was evaluated, stops here.
@@ -283,6 +262,7 @@ export function assemblePackage(input: {
       measured: false,
       note: "Both hook variants met the truth rule. SPLIT is retired and METRICS_INGESTION_ENABLED is false, so neither is ranked."
     },
+    ...(input.rotation ? { rotation: input.rotation } : {}),
     spendUsd: input.spendUsd
   });
 }
@@ -327,20 +307,6 @@ export function buildRenderSummary(input: {
   };
 }
 
-export async function writeSkip(input: { date: string; reason: string; now: Date; root?: string }): Promise<string> {
-  const root = input.root ?? stateRoot;
-  const relative = `meetings/skips/${input.date}-${MS_DAILY_PHASE}.json`;
-  const skip = MeetingSkipSchema.parse({
-    schemaVersion: "meeting-skip/1",
-    date: input.date,
-    phase: MS_DAILY_PHASE,
-    reason: input.reason,
-    decidedAt: input.now.toISOString()
-  });
-  await mkdir(path.join(root, "meetings", "skips"), { recursive: true });
-  await atomicWriteJson(root, relative, skip);
-  return relative;
-}
 
 /**
  * Write the package, its two render summaries and the ledger entry, or write none of them.
@@ -444,6 +410,11 @@ export async function runBrandDay(input: {
   configRoot?: string;
   dry: boolean;
   now?: Date;
+  /**
+   * The kind the rotation scheduled when the quiz runs in its place, and why (quorum#576). Recorded
+   * on the package and in the meeting record; absent on a quiz day.
+   */
+  rotation?: { scheduled: RotationKind; reason: string } | null;
   call: (packet: string, attempt: number) => Promise<{ output: ChumOutput; usd: number }>;
 }): Promise<{ outcome: BrandOutcome; ledger: MarketingSharkLedger; artifacts: string[] }> {
   const { brand, date } = input;
@@ -458,7 +429,7 @@ export async function runBrandDay(input: {
     plan = await planBrandDay({ config: input.config, brand, ledger: input.ledger, date, root: repoRoot, stateRoot: input.root });
   } catch (error) {
     return {
-      outcome: { status: "aborted", brandId: brand.id, reason: "bank-invalid", detail: message(error), spendUsd: 0 },
+      outcome: { status: "aborted", brandId: brand.id, kind: "quiz", reason: "bank-invalid", detail: message(error), spendUsd: 0 },
       ledger: input.ledger,
       artifacts: []
     };
@@ -469,6 +440,8 @@ export async function runBrandDay(input: {
       outcome: {
         status: "already-served",
         brandId: brand.id,
+        kind: "quiz",
+        subject: `marketingshark:question:${plan.selection.questionId}`,
         questionId: plan.selection.questionId,
         packagePath: plan.selection.alreadyServed.package
       },
@@ -486,6 +459,7 @@ export async function runBrandDay(input: {
       outcome: {
         status: "aborted",
         brandId: brand.id,
+        kind: "quiz",
         reason: "render-failed",
         detail: `the marketingshark -> design-lab render edge is ${renderAccess.decision}: ${renderAccess.reason}`,
         spendUsd: 0
@@ -495,7 +469,7 @@ export async function runBrandDay(input: {
     };
   }
 
-  const craft = await readCraftRules(repoRoot);
+  const craft = craftRulesFor(await readCraftRules(repoRoot), "quiz");
   // Read from the real state root in a dry run too: the snapshot is committed data and costs $0.
   const trendLines = await readBrandTrendLines({ stateRoot, configRoot, brandId: brand.id, date });
   let violations: GateViolation[] = [];
@@ -530,7 +504,7 @@ export async function runBrandDay(input: {
       if (error instanceof ModelOutputParseError) spendUsd += error.usd;
       if (error instanceof ModelResponseTruncatedError) spendUsd += error.usd ?? 0;
       return {
-        outcome: { status: "aborted", brandId: brand.id, reason: "model-output-invalid", detail: message(error), spendUsd },
+        outcome: { status: "aborted", brandId: brand.id, kind: "quiz", reason: "model-output-invalid", detail: message(error), spendUsd },
         ledger: input.ledger,
         artifacts: []
       };
@@ -546,7 +520,7 @@ export async function runBrandDay(input: {
         violations = runFitGate({ output: candidate, brand, question: plan.question });
       } catch (error) {
         return {
-          outcome: { status: "aborted", brandId: brand.id, reason: "render-failed", detail: message(error), spendUsd },
+          outcome: { status: "aborted", brandId: brand.id, kind: "quiz", reason: "render-failed", detail: message(error), spendUsd },
           ledger: input.ledger,
           artifacts: []
         };
@@ -560,6 +534,7 @@ export async function runBrandDay(input: {
       outcome: {
         status: "aborted",
         brandId: brand.id,
+        kind: "quiz",
         reason: "truth-gate-failed",
         detail: violations.map((violation) => `${violation.gate}/${violation.locale}`).join(", "),
         spendUsd
@@ -578,7 +553,7 @@ export async function runBrandDay(input: {
     rendered = { en: draw("en"), ...(locales.includes("cs") ? { cs: draw("cs") } : {}) };
   } catch (error) {
     return {
-      outcome: { status: "aborted", brandId: brand.id, reason: "render-failed", detail: message(error), spendUsd },
+      outcome: { status: "aborted", brandId: brand.id, kind: "quiz", reason: "render-failed", detail: message(error), spendUsd },
       ledger: input.ledger,
       artifacts: []
     };
@@ -595,6 +570,7 @@ export async function runBrandDay(input: {
       outcome: {
         status: "aborted",
         brandId: brand.id,
+        kind: "quiz",
         reason: "render-failed",
         detail: `slides were clipped to fit: ${clipped.join(", ")}`,
         spendUsd
@@ -618,7 +594,7 @@ export async function runBrandDay(input: {
     })))).flat();
   } catch (error) {
     return {
-      outcome: { status: "aborted", brandId: brand.id, reason: "render-failed", detail: message(error), spendUsd },
+      outcome: { status: "aborted", brandId: brand.id, kind: "quiz", reason: "render-failed", detail: message(error), spendUsd },
       ledger: input.ledger,
       artifacts: []
     };
@@ -639,7 +615,8 @@ export async function runBrandDay(input: {
     rendered,
     summaryPaths: summaries.map((summary) => `state/${summary.relative}`),
     frames,
-    spendUsd
+    spendUsd,
+    rotation: input.rotation ?? null
   });
 
   // The queue drafts cross into Social Distribution, so they exist only under that exact edge. A map
@@ -670,7 +647,10 @@ export async function runBrandDay(input: {
     outcome: {
       status: "drafted",
       brandId: brand.id,
+      kind: "quiz",
+      subject: `marketingshark:question:${plan.question.id}`,
       questionId: plan.question.id,
+      fallback: input.rotation ?? null,
       packagePath: `state/${packagePath(date, brand.id)}`,
       spendUsd,
       hookA: plan.assignment.hookId ?? "no-hook",
@@ -751,243 +731,4 @@ export function fixtureChumOutput(input: { brand: Brand; question: NormalizedQue
   });
 }
 
-/**
- * The whole `ms-daily` slot: gates, then one brand at a time, then the record.
- *
- * Everything except step 6 is $0, and every abort path leaves the ledger and the package
- * directory exactly as it found them. A closed gate writes a MeetingSkip so the calendar can say
- * which gate closed rather than showing an hour nobody reached.
- */
-export async function runMarketingSharkCycle(input: {
-  cycleId: string;
-  dry: boolean;
-  now: Date;
-  date: string;
-  stage: Stage;
-}): Promise<MarketingSharkRunResult> {
-  const root = input.dry ? path.join(repoRoot, "tmp", "dry-run", "state") : stateRoot;
-  // Frames go where the site serves them from, or to the dry run's own copy of that tree.
-  const publicRoot = input.dry ? path.join(repoRoot, "tmp", "dry-run", "site", "public") : path.join(repoRoot, "site", "public");
-  const config = await loadMarketingSharkConfig();
-  const brands = enabledBrands(config);
-
-  if (!input.dry) {
-    const closed = process.env.PORTFOLIO_LIVE_ENABLED !== "true" ? "the portfolio live switch is off" : null;
-    if (closed) {
-      // Only a scheduled wake-up leaves a skip. A manual or local invocation of a closed slot is
-      // not a missed meeting and must not write one onto the calendar.
-      const artifacts = process.env.MEETING_TRIGGER === "schedule"
-        ? [await writeSkip({ date: input.date, reason: `ms-daily did not open: ${closed}.`, now: input.now, root })]
-        : [];
-      return { date: input.date, dry: false, brands: [], spendUsd: 0, skipped: { reason: closed }, artifacts };
-    }
-  }
-
-  const limits = await loadRuntimeBudgetLimits();
-  const fixedMonthlyUsd = await loadFixedMonthlyUsd(configRoot, input.now);
-  const monthToDateUsd = (await readJson<{ entries: BudgetLedgerEntry[] }>(root, "budget/ledger.json", { entries: [] }))
-    .entries.map((entry) => BudgetLedgerEntrySchema.parse(entry))
-    .filter((entry) => entry.ts.slice(0, 7) === input.date.slice(0, 7))
-    .reduce((sum, entry) => sum + entry.usd, 0);
-  const models = JSON.parse(await readFile(path.join(configRoot, "models.json"), "utf8")) as {
-    roles: Record<string, {
-      provider: "openai" | "anthropic";
-      model: string;
-      maxOutputTokens: number;
-      thinking?: "adaptive" | "disabled";
-      effort?: "low" | "medium" | "high" | "xhigh" | "max";
-    }>;
-  };
-  const chum = models.roles.CHUM;
-  if (!chum) throw new Error("config/models.json has no CHUM route");
-
-  let ledger = await readLedger(root);
-  const outcomes: BrandOutcome[] = [];
-  const artifacts: string[] = [];
-  let spendUsd = 0;
-
-  for (const brand of brands) {
-    const result = await runBrandDay({
-      config,
-      brand,
-      ledger,
-      date: input.date,
-      cycleId: input.cycleId,
-      root,
-      publicRoot,
-      dry: input.dry,
-      call: async (packet, attempt) => {
-        if (input.dry) {
-          // A dry run proves the wiring and never contacts a provider. The fixture reply runs
-          // through the same gates, the same render and the same packaging as a paid one.
-          const plan = await planBrandDay({ config, brand, ledger, date: input.date, root: repoRoot, stateRoot: root });
-          return {
-            usd: 0,
-            output: fixtureChumOutput({ brand, question: plan.question, ...fixtureHookLines(plan, brand) })
-          };
-        }
-        const call = await guardedJsonCall<ChumOutput>({
-          stateRoot: root,
-          cycleId: input.cycleId,
-          phase: MS_DAILY_PHASE,
-          attempt,
-          ventureId: "marketingshark",
-          agent: "CHUM",
-          provider: chum.provider,
-          model: chum.model,
-          system: "You are CHUM, the marketingShark carousel copywriter. Return only the JSON object you were asked for.",
-          input: packet,
-          maxOutputTokens: chum.maxOutputTokens,
-          // The route says whether the cap may be spent thinking. It is the reason the
-          // package fits: five September mornings in a row were cut off at the cap with
-          // nothing usable, because adaptive thinking was billed against it first.
-          ...(chum.thinking === undefined ? {} : { thinking: chum.thinking }),
-          ...(chum.effort === undefined ? {} : { effort: chum.effort }),
-          budgetContext: {
-            now: input.now,
-            cycleId: input.cycleId,
-            stage: input.stage,
-            // Read per call rather than once before the brand loop. assertSharedReservation
-            // derives the cycle, daily and monthly spend entirely from this array, so a frozen
-            // snapshot made every reservation in the run see a world where nothing had been spent
-            // yet -- the second brand's call could not see the first brand's.
-            ledger: (await readJson<{ entries: BudgetLedgerEntry[] }>(root, "budget/ledger.json", { entries: [] }))
-              .entries.map((entry) => BudgetLedgerEntrySchema.parse(entry)),
-            // The $50 all-in limb of the cap sums this with the model spend. Every other live call
-            // site supplies the real figure; passing zero here made this the one paid path that
-            // could not see the company's fixed costs.
-            allInNonApiSpentUsd: fixedMonthlyUsd,
-            allInCommittedUsd: 0,
-            knownMonthlyForecastUsd: 0,
-            remainingScheduledCycles: 60,
-            limits
-          },
-          parse: (text) => ChumOutput.parse(JSON.parse(text))
-        });
-        return { output: call.value, usd: call.usd };
-      }
-    });
-    if (result.outcome.status === "aborted") {
-      // An abort that only shows up as an empty artifact list is indistinguishable from a room
-      // nobody reached. The reason is the whole point of recording one.
-      console.warn(JSON.stringify({
-        event: "marketingshark_brand_aborted",
-        brand: result.outcome.brandId,
-        reason: result.outcome.reason,
-        detail: result.outcome.detail,
-        usd: result.outcome.spendUsd
-      }));
-    }
-    outcomes.push(result.outcome);
-    ledger = result.ledger;
-    artifacts.push(...result.artifacts);
-    // An aborted brand still spent whatever its call cost before the gate refused it, and the
-    // record has to carry that. Only an already-served brand costs nothing.
-    if (result.outcome.status !== "already-served") spendUsd += result.outcome.spendUsd;
-  }
-
-  const recordPath = `meetings/${input.date}-${MS_DAILY_PHASE}.json`;
-  await atomicWriteJson(root, recordPath, buildMeetingRecord({
-    cycleId: input.cycleId,
-    date: input.date,
-    now: input.now,
-    stage: input.stage,
-    dry: input.dry,
-    outcomes,
-    spendUsd,
-    envelopeUsd: 0.1 * brands.length,
-    // The published figures every other room computes. They were literals here, so a reader of an
-    // ms-daily record saw "$0.00 of $30.00" on a day the company had spent real money.
-    monthAllInUsd: fixedMonthlyUsd + monthToDateUsd + spendUsd,
-    monthCapUsd: limits.monthlyOperatingUsd
-  }));
-  artifacts.push(recordPath);
-
-  return { date: input.date, dry: input.dry, brands: outcomes, spendUsd, skipped: null, artifacts };
-}
-
-/**
- * The room's record, in the same shape and with the same sanitising as every other room.
- *
- * The transcript is three deterministic turns rather than a conversation, because that is what
- * happened: MAKO opens with the day's objective, CHUM reports what it drafted, AUDIT states the
- * locks that held. Writing it as a debate would be a nicer record of a meeting that did not occur.
- */
-export function buildMeetingRecord(input: {
-  cycleId: string;
-  date: string;
-  now: Date;
-  stage: Stage;
-  dry: boolean;
-  outcomes: readonly BrandOutcome[];
-  spendUsd: number;
-  envelopeUsd: number;
-  monthAllInUsd: number;
-  monthCapUsd: number;
-}) {
-  const drafted = input.outcomes.filter((outcome) => outcome.status === "drafted");
-  const aborted = input.outcomes.filter((outcome) => outcome.status === "aborted");
-  const times = Array.from({ length: 4 }, (_, index) => new Date(input.now.getTime() + index * 60_000).toISOString());
-  const summary = drafted.length === 0
-    ? aborted.length > 0
-      // The reason is a code and the detail is the sentence that explains it. Printing the code
-      // alone is how a truncated reply read as `model-output-invalid` in nineteen consecutive
-      // records while the error it came from already said "Response truncated at the 3000-token
-      // cap for <model>; raise maxOutputTokens" — the diagnosis was generated every day and
-      // dropped every day.
-      ? `No package was drafted. ${aborted.map((outcome) => `${outcome.brandId}: ${outcome.reason} — ${outcome.detail}`).join("; ")}.`
-      : "Every enabled brand already had today's package; nothing was re-served."
-    : `${drafted.length} draft ${drafted.length === 1 ? "package" : "packages"}: ${drafted.map((outcome) => `${outcome.brandId} (${outcome.hookA}/${outcome.hookB}${outcome.relaxed ? ", cooldown relaxed" : ""})`).join("; ")}.`;
-
-  return MeetingRecordSchema.parse({
-    schemaVersion: "meeting-record/2",
-    cycleId: input.cycleId,
-    date: input.date,
-    phase: MS_DAILY_PHASE,
-    kind: MS_DAILY_PHASE,
-    fixture: input.dry,
-    status: input.dry ? "PLAN" : "HELD",
-    stage: input.stage,
-    operatingBrief: "Turn one selected question into one five-slide carousel per language each enabled brand writes, as a draft behind the approval queue.",
-    participantReasons: [
-      { agent: "MAKO", reason: "directs the venture and chairs the bounded room", participated: true },
-      { agent: "CHUM", reason: "writes the day's copy in each brand's languages", participated: drafted.length > 0 },
-      { agent: "AUDIT", reason: "serves the veto seat", participated: true }
-    ],
-    ledger: { estimatedCycleUsd: input.envelopeUsd, actualCycleUsd: input.spendUsd, monthAllInUsd: input.monthAllInUsd, monthCapUsd: input.monthCapUsd },
-    decision: {
-      outcome: drafted.length > 0 ? "PLAN" : "NO_ACTION",
-      summary,
-      evidenceRefs: drafted.map((outcome) => `marketingshark:question:${outcome.questionId}`)
-    },
-    proposals: drafted.map((outcome) => ({
-      agent: "CHUM",
-      summary: `${outcome.brandId}: question ${outcome.questionId}, hook ${outcome.hookA}, alternate ${outcome.hookB}.`,
-      evidenceRefs: [`marketingshark:question:${outcome.questionId}`]
-    })),
-    voteMatrix: [
-      { voter: "MAKO", firstChoice: drafted.length > 0 ? "approve" : "abstain", veto: false },
-      { voter: "AUDIT", firstChoice: "approve", veto: false }
-    ],
-    tasks: [],
-    growthPlan: "Drafts only. Nothing here posts, schedules, buys or opens an account: SOCIAL_KILL_SWITCH is the supreme stop, marketingShark owns no channel or credentials, and every queue item is written as a draft with all approval checks pending.",
-    eveningOutcome: null,
-    roomTranscript: {
-      openedAt: times[0],
-      closedAt: times[3],
-      gavel: "MAKO",
-      setting: input.dry
-        ? "Deterministic dry room. The reply is a labeled fixture and no provider was contacted."
-        : "Live bounded room. One model call per enabled brand, and the question, hooks, templates and slide-5 line were all decided in code before it.",
-      turns: [
-        { agent: "MAKO", mode: "gavel", sentAt: times[0], text: "One question, one carousel per language each enabled brand writes." },
-        { agent: "CHUM", mode: "statement", sentAt: times[1], text: summary },
-        { agent: "AUDIT", mode: "statement", sentAt: times[2], text: "Truth gates ran on every returned draft. Nothing was published, queued or scheduled." },
-        { agent: "MAKO", mode: "close", sentAt: times[3], text: summary }
-      ]
-    },
-    generatedAt: times[3]
-  });
-}
-
-export { enabledBrands, loadMarketingSharkConfig, guardedJsonCall, readFile, writeFile };
+export { enabledBrands, loadMarketingSharkConfig, guardedJsonCall, readFile, writeFile, topicLabel };

@@ -6,12 +6,38 @@ import { brandLocales, ENGAGEMENT_NEVER_CLAIM, factSheetFor, type Brand, type Fa
 import { LIMITS, violationReport, type GateViolation, type HookLines } from "./gates.js";
 import { SLIDE_ROLES } from "./package.js";
 import { writerLimits } from "./render.js";
+import { POST_KINDS, type PostKind } from "./kinds.js";
 
 export const CRAFT_PROMPT_PATH = "orchestrator/prompts/marketingshark/craft.md";
 export const STRATEGY_PROMPT_PATH = "orchestrator/prompts/marketingshark/strategy.md";
 
 export async function readCraftRules(root = repoRoot): Promise<string> {
   return readFile(path.join(root, CRAFT_PROMPT_PATH), "utf8");
+}
+
+/** The kind ids a `###` heading names in backticks: `### Challenge teaser (`challenge-teaser`, Wednesday)`. */
+function headingKinds(line: string): string[] {
+  return [...line.matchAll(/`([a-z-]+)`/gu)].map((match) => match[1]!).filter((id) => (POST_KINDS as readonly string[]).includes(id));
+}
+
+/**
+ * The craft rules one day's kind needs: every shared section, and of the kind-specific `###`
+ * subsections only that kind's (quorum#576). A subsection whose heading names no kind is shared.
+ * Four kinds' rules in every packet would be paid input telling the writer about three posts it is
+ * not writing; this keeps each day's input the size of one kind's rules.
+ */
+export function craftRulesFor(markdown: string, kind: PostKind): string {
+  const kept: string[] = [];
+  let skipping = false;
+  for (const line of markdown.split("\n")) {
+    if (line.startsWith("## ") || line.startsWith("# ")) skipping = false;
+    if (line.startsWith("### ")) {
+      const kinds = headingKinds(line);
+      skipping = kinds.length > 0 && !kinds.includes(kind);
+    }
+    if (!skipping) kept.push(line);
+  }
+  return kept.join("\n");
 }
 
 /**
@@ -51,7 +77,7 @@ ${carousels}
  * today, what may be said, what may never be said. It is data the writer obeys, not a claim it may
  * embellish.
  */
-function productFacts(facts: FactSheet): string {
+export function productFacts(facts: FactSheet): string {
   // The engagement rule rides on every block, including one written later without it.
   const neverClaim = [...new Set([...facts.neverClaim, ENGAGEMENT_NEVER_CLAIM])];
   return `## Product facts (recorded by the owner ${facts.recordedAt}; write nothing beyond them)\n`
@@ -64,6 +90,32 @@ function productFacts(facts: FactSheet): string {
 
 function optionLines(options: readonly string[]): string {
   return options.map((option, index) => `${String.fromCharCode(65 + index)}. ${option}`).join("\n");
+}
+
+/**
+ * The caption, alt-text and engagement limits every post kind shares, one line each, in the order
+ * the quiz packet has always stated them. The post kinds' packet states the same lines.
+ */
+export function captionLimitLines(): string {
+  return `- Instagram ≤ ${LIMITS.instagramBeforeHashtags} characters before hashtags\n`
+    + `- Threads ≤ ${LIMITS.threadsChars} characters\n`
+    + `- LinkedIn (English only) ≤ ${LIMITS.linkedinTotalChars.toLocaleString("en-US")} characters with its hashtags; its first line ≤ ${LIMITS.linkedinFirstLineChars} characters and works alone, because LinkedIn cuts the post there\n`
+    + `- LinkedIn at most ${LIMITS.linkedinHashtagsMax} hashtags, in its hashtag list and none inside the caption\n`
+    + `- three captions, one carousel: the LinkedIn, Instagram and Threads texts differ, and so do their first lines\n`
+    + `- alt text ≤ ${LIMITS.altChars} characters per slide, never empty, all five together ≤ ${LIMITS.altTotalChars.toLocaleString("en-US")}\n`
+    + `- Instagram ${LIMITS.instagramHashtagsMin}–${LIMITS.instagramHashtagsMax} hashtags, Threads exactly one topic tag\n`
+    + `- no slide, caption or hashtag promises coins, discounts, access or any reward for following, liking, sharing or commenting\n`;
+}
+
+/** The section that hands CHUM GoVIRAL's measured hashtags, when the snapshot has any for the brand. */
+export function trendSection(displayName: string, trendLines: readonly string[] | undefined, subject = "this question"): string[] {
+  return trendLines?.length
+    ? [`## This week's measured hashtags for ${displayName} (GoVIRAL, expiring)\n`
+      + `Ranked by engagement per hour in the latest scout. They are signals, not copy: use one to`
+      + ` choose between equally true angles, or as an Instagram hashtag when it fits ${subject}.`
+      + ` Never mention trends, reach or engagement in the post.\n`
+      + trendLines.map((line) => `- ${line}`).join("\n")]
+    : [];
 }
 
 /**
@@ -139,13 +191,7 @@ export function buildChumPacket(input: {
         + ` concrete headline about the question. Claim nothing about the reader, the difficulty`
         + ` or any statistic. Keep it under ${LIMITS.hookChars} characters${locales.length > 1 ? " in both languages" : ""}.`,
 
-    ...(input.trendLines?.length
-      ? [`## This week's measured hashtags for ${brand.displayName} (GoVIRAL, expiring)\n`
-        + `Ranked by engagement per hour in the latest scout. They are signals, not copy: use one to`
-        + ` choose between equally true angles, or as an Instagram hashtag when it fits this question.`
-        + ` Never mention trends, reach or engagement in the post.\n`
-        + input.trendLines.map((line) => `- ${line}`).join("\n")]
-      : []),
+    ...trendSection(brand.displayName, input.trendLines),
 
     `## Hard limits, checked in code after you answer\n`
     + (input.hookLines
@@ -154,14 +200,7 @@ export function buildChumPacket(input: {
     + `- why slide ≤ ${LIMITS.whyWords} words\n`
     + writerLimits(brand, question).map((line) => `- ${line}\n`).join("")
     + `- every slide is rendered before anything is kept; text that would be clipped on the canvas fails the check\n`
-    + `- Instagram ≤ ${LIMITS.instagramBeforeHashtags} characters before hashtags\n`
-    + `- Threads ≤ ${LIMITS.threadsChars} characters\n`
-    + `- LinkedIn (English only) ≤ ${LIMITS.linkedinTotalChars.toLocaleString("en-US")} characters with its hashtags; its first line ≤ ${LIMITS.linkedinFirstLineChars} characters and works alone, because LinkedIn cuts the post there\n`
-    + `- LinkedIn at most ${LIMITS.linkedinHashtagsMax} hashtags, in its hashtag list and none inside the caption\n`
-    + `- three captions, one carousel: the LinkedIn, Instagram and Threads texts differ, and so do their first lines\n`
-    + `- alt text ≤ ${LIMITS.altChars} characters per slide, never empty, all five together ≤ ${LIMITS.altTotalChars.toLocaleString("en-US")}\n`
-    + `- Instagram ${LIMITS.instagramHashtagsMin}–${LIMITS.instagramHashtagsMax} hashtags, Threads exactly one topic tag\n`
-    + `- no slide, caption or hashtag promises coins, discounts, access or any reward for following, liking, sharing or commenting\n`
+    + captionLimitLines()
     + `- the footer slide carries the brand's slide-5 line unchanged\n`
     + `- any fenced code block in the question appears on the context slide byte for byte\n`
     + `- no number in a hook that is not in the question or in the pattern's own wording\n`

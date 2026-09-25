@@ -8,7 +8,7 @@ import {
 } from "../../social/queue.js";
 import { resolveVentureCapabilityInMap } from "../capabilities.js";
 import type { Brand } from "./config.js";
-import { packagePath, type MarketingSharkPackage } from "./package.js";
+import { isPostPackage, packagePath, type AnyMarketingSharkPackage } from "./package.js";
 
 /**
  * Stands in `approvalProvenance.approvalRef` until the owner approves an item in the Queue
@@ -39,7 +39,7 @@ export function queueItemPath(date: string, brandId: string, locale: "cs" | "en"
 }
 
 /** The hash a queue item binds to: the committed package, canonically serialised. */
-export function marketingSharkPackageHash(built: MarketingSharkPackage): string {
+export function marketingSharkPackageHash(built: AnyMarketingSharkPackage): string {
   return sha256(canonicalJson(built));
 }
 
@@ -65,7 +65,7 @@ export function marketingSharkCapabilityRef(map: VentureCapabilityMap): SocialCa
   };
 }
 
-function captionFor(built: MarketingSharkPackage, platform: MarketingSharkPlatform): string {
+function captionFor(built: AnyMarketingSharkPackage, platform: MarketingSharkPlatform): string {
   const withTags = (text: string, tags: readonly string[]) => (tags.length > 0 ? `${text}\n\n${tags.join(" ")}` : text);
   switch (platform) {
     case "linkedin":
@@ -84,7 +84,7 @@ function captionFor(built: MarketingSharkPackage, platform: MarketingSharkPlatfo
  * gates reviewed: Threads takes JPEG or PNG, and the Direct Meta adapter posts them as a Threads
  * carousel since quorum#572.
  */
-function assetPathsFor(built: MarketingSharkPackage, platform: MarketingSharkPlatform): string[] {
+function assetPathsFor(built: AnyMarketingSharkPackage, platform: MarketingSharkPlatform): string[] {
   const english = built.render.frames.filter((frame) => frame.locale === "en").sort((a, b) => a.slide - b.slide);
   return platform === "instagram" ? english.map((frame) => frame.jpeg.path) : english.map((frame) => frame.png.path);
 }
@@ -109,8 +109,29 @@ function assetPathsFor(built: MarketingSharkPackage, platform: MarketingSharkPla
  * writes Czech keeps its Czech carousel in the package for review; nothing queues it until a Czech
  * profile exists to receive it.
  */
+/** Who a kind's post is for, as the queue records it. The quiz's line predates the rotation. */
+const AUDIENCES = {
+  quiz: "Working developers who want one real question a day",
+  "feature-spotlight": "Working developers choosing where to practise web development",
+  "challenge-teaser": "Working developers who want a small coding challenge",
+  "this-week": "Working developers who follow devShark through the week",
+  announcement: "Working developers who follow devShark"
+} as const;
+
+/**
+ * What a package's post is about, as the queue cites it: the question for the quiz, the subject
+ * the other kinds record. The Queue offers Design Lab editing only for a question-cited post.
+ */
+export function queueSubject(built: AnyMarketingSharkPackage): { claimRef: string; utmContent: string; audience: string } {
+  if (!isPostPackage(built)) {
+    return { claimRef: `marketingshark:question:${built.question.id}`, utmContent: `${built.date}-en-${built.question.id}`, audience: AUDIENCES.quiz };
+  }
+  const subjectId = built.subject.ref.split(":").at(-1) ?? built.kind;
+  return { claimRef: built.subject.ref, utmContent: `${built.date}-en-${built.kind}-${subjectId}`.slice(0, 200), audience: AUDIENCES[built.kind] };
+}
+
 export function buildQueueItems(input: {
-  built: MarketingSharkPackage;
+  built: AnyMarketingSharkPackage;
   brand: Brand;
   now: Date;
   /** From `marketingSharkCapabilityRef`; the caller writes no items when it is null. */
@@ -123,6 +144,7 @@ export function buildQueueItems(input: {
   const notAfter = new Date(`${built.date}T21:00:00.000Z`).toISOString();
   const english = built.carousels.en;
   const packageHash = marketingSharkPackageHash(built);
+  const subject = queueSubject(built);
 
   return MARKETINGSHARK_PLATFORMS.map((channel) => {
     const target = DEVSHARK_SOCIAL_TARGETS[channel];
@@ -154,20 +176,20 @@ export function buildQueueItems(input: {
       variant: "A" as const,
       channel,
       objective: "value_action" as const,
-      audience: "Working developers who want one real question a day",
+      audience: subject.audience,
       destination: brand.productUrl,
       utm: {
         source: channel,
         medium: "organic_social" as const,
         campaign: `marketingshark-${brand.id}`,
-        content: `${built.date}-${locale}-${built.question.id}`
+        content: subject.utmContent
       },
       content: {
         text: captionFor(built, channel),
         // The five slides' alt text, joined the way the alt-total gate measured it.
         altText: english.slides.map((slide) => slide.alt).join(" "),
         assetPaths: assetPathsFor(built, channel),
-        factualClaimRefs: [`marketingshark:question:${built.question.id}`],
+        factualClaimRefs: [subject.claimRef],
         rendererVersion: "carousel-studio-1" as const,
         contentHash: "0".repeat(64)
       },

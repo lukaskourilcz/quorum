@@ -46,11 +46,11 @@ export const WRITER_FIELDS: { readonly [K in PostDeckKind]: Partial<Record<PostR
   "challenge-teaser": { try: ["headline", "body"] },
   "this-week": { theme: ["body"], pick: ["headline", "body"] },
   announcement: {
-    hook: ["headline", "body"],
+    hook: ["headline"],
     news: ["headline", "body"],
     detail: ["headline", "body"],
     next: ["headline", "body"],
-    footer: ["headline", "body"]
+    footer: ["headline"]
   }
 };
 
@@ -86,4 +86,29 @@ export function weekIndexOf(date: string): number {
 /** Fill `{slot}` placeholders; an unknown slot stays visible so a gate can name it. */
 export function fillPattern(pattern: string, values: Readonly<Record<string, string>>): string {
   return pattern.replace(/\{([a-zA-Z]+)\}/gu, (whole, slot: string) => values[slot] ?? whole);
+}
+
+/** Whole words from the start of a text within a character count, with an ellipsis when cut. */
+export function clipToWords(text: string, maxChars: number): string {
+  const clean = text.replace(/\s+/gu, " ").trim();
+  if (clean.length <= maxChars) return clean;
+  let kept = "";
+  for (const word of clean.split(" ")) {
+    const next = kept ? `${kept} ${word}` : word;
+    if (next.length > maxChars - 1) break;
+    kept = next;
+  }
+  return `${(kept || clean.slice(0, maxChars - 1)).replace(/[\s,;:.–—-]+$/u, "")}…`;
+}
+
+const DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] as const;
+
+/** "Monday", as a recap names a day. */
+export function dayName(date: string): string {
+  return DAY_NAMES[WEEKDAYS.indexOf(weekdayOf(date))]!;
+}
+
+/** "Mon", as a recap line opens. */
+export function dayShort(date: string): string {
+  return dayName(date).slice(0, 3);
 }
