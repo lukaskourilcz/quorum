@@ -33,8 +33,9 @@ export class SocialPublishHoldError extends Error {
  * A provider refused the request outright, so nothing was created on its side.
  *
  * An adapter throws this only when the provider's answer proves the post does not exist: a 429,
- * an authentication or permission refusal, or a typed validation or plan-limit error returned
- * instead of a post. The item then fails for owner review instead of waiting on reconciliation.
+ * an authentication or permission refusal, a typed validation or plan-limit error returned
+ * instead of a post, or a Meta container that ended `ERROR` or `EXPIRED` before the publish request
+ * (`container-failed`). The item then fails for owner review instead of waiting on reconciliation.
  * A timeout, a server error or an unreadable answer is never this: the post may exist, so it stays
  * ambiguous and nothing resends it.
  */
@@ -42,7 +43,7 @@ export class ProviderRejectedError extends Error {
   readonly definite = true as const;
 
   constructor(
-    readonly reason: "rate-limited" | "plan-limit" | "invalid-input" | "unauthorized" | "not-found" | "channel-unavailable",
+    readonly reason: "rate-limited" | "plan-limit" | "invalid-input" | "unauthorized" | "not-found" | "channel-unavailable" | "container-failed",
     message: string,
     readonly retryAfterSeconds: number | null = null
   ) {
@@ -54,7 +55,8 @@ export class ProviderRejectedError extends Error {
 export interface PublishAdapter {
   /**
    * Send the item. May throw `SocialPublishHoldError` before its first write request (a publishing
-   * limit with no room, text the platform refuses); any error after that point is ambiguous.
+   * limit with no room, text the platform refuses), and `ProviderRejectedError` when the provider's
+   * own answer proves no post exists. Any other error is ambiguous.
    */
   publish(
     channel: Channel,

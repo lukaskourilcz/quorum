@@ -1,6 +1,6 @@
 # Social Distribution provider control plane
 
-Status: implemented and held. Authority: GitHub #405, #409, #417 and #571.
+Status: implemented and held. Authority: GitHub #405, #409, #417, #570, #571 and #572.
 
 The provider control plane transports an exact item that already passed profile, connection,
 capability, campaign, approval, policy, cadence, budget and kill-switch gates. It does not choose a
@@ -94,8 +94,8 @@ A send goes in this order, all on the connection's own host:
 4. For an image or carousel, the adapter waits for the container: on Threads it waits the
    30 seconds Meta recommends, then reads `status,error_message` every 30 seconds, five times at
    most; on Instagram it reads `status_code` at once and then once a minute, for no more than
-   five minutes. `ERROR`, `EXPIRED` or a container still `IN_PROGRESS` stops the send before the
-   publish request, with Meta's `error_message` in the error.
+   five minutes. `ERROR`, `EXPIRED`, an unreadable status or a container still `IN_PROGRESS`
+   stops the send before the publish request, with Meta's `error_message` in the error.
 5. `threads_publish` or `media_publish`, then the live check reads `id,permalink`.
 
 A refusal in steps 1 or 2 is a **publish hold**: the runner writes
@@ -112,11 +112,18 @@ live send after activation is the first real recording.
 
 The runtime looks for an already known idempotency key before publication, sends at most once, and
 may retry the read-only live-verification request twice. A timeout or inconclusive result during
-publication becomes `ambiguous`, and so does a container that fails before the publish request,
-because Meta already holds it: the error then says that nothing was published, so reconciliation
-is a check rather than a search; the queue item becomes `needs_reconciliation`, the exact
+publication becomes `ambiguous`: the queue item becomes `needs_reconciliation`, the exact
 connection and source venture pause, and no subsequent run considers that item due. This prevents
-an uncertain provider acceptance from becoming a duplicate send.
+an uncertain provider acceptance from becoming a duplicate send. An unreadable container status and
+a container still `IN_PROGRESS` after the last read are ambiguous too, because Meta has not given a
+final answer; the error says that nothing was published, so reconciliation is a check rather than
+a search.
+
+A container that ends `ERROR` or `EXPIRED` is Meta's final answer that it will never publish. The
+adapter throws `ProviderRejectedError` (`container-failed`), as Buffer does for a refused post: the
+item becomes `failed` for owner review, the provider receipt `failed`, the canonical receipt
+`failed`, and the report counts it as `rejected`. The connection and venture pause as for an
+ambiguous outcome, and nothing resends the item; a corrected post is a new item.
 
 An ambiguous provider receipt always returns `resendAuthorized: false` and
 `automaticFailover: false`. Reconciliation must record remote evidence or an owner-reviewed

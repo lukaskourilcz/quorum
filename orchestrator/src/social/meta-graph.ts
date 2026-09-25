@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { PublishingQuota } from "../contracts/social-publish-hold.js";
+import { ProviderRejectedError } from "./publish.js";
 
 /**
  * The HTTP half of the Direct Meta adapter: one form POST, one JSON GET, the publishing-limit read
@@ -99,9 +100,12 @@ function bounded(text: string | undefined): string | null {
 /**
  * Wait until a container is `FINISHED`, or throw.
  *
- * Every throw here happens before the publish request, so nothing reached a feed. The runner still
- * records it as ambiguous, which is the conservative reading of a container Meta accepted; the error
- * text says that nothing was published so reconciliation is a check, not a hunt.
+ * Every throw here happens before the publish request, so nothing reached a feed. `ERROR` and
+ * `EXPIRED` are Meta's final answer that the container will never publish, so they throw
+ * `ProviderRejectedError` and the item fails for owner review. An unreadable status, `PUBLISHED`
+ * before the request, or a container still `IN_PROGRESS` after the last read is not a final answer:
+ * the runner records it as ambiguous, and the error text says that nothing was published so
+ * reconciliation is a check, not a hunt.
  */
 export async function awaitContainer(fetchImpl: FetchLike, sleep: Sleep, statusUrl: URL, wait: ContainerWait): Promise<void> {
   if (wait.firstWaitMs > 0) await sleep(wait.firstWaitMs);
@@ -112,9 +116,9 @@ export async function awaitContainer(fetchImpl: FetchLike, sleep: Sleep, statusU
     if (state === "FINISHED") return;
     if (state === null) throw new Error(`${wait.platform} container status is unreadable; nothing was published`);
     if (state === "PUBLISHED") throw new Error(`${wait.platform} container reports PUBLISHED before the publish request`);
-    if (state !== "IN_PROGRESS") {
+    if (state === "ERROR" || state === "EXPIRED") {
       const reason = bounded(parsed.success ? (parsed.data.error_message ?? (wait.field === "status_code" ? parsed.data.status : undefined)) : undefined);
-      throw new Error(`${wait.platform} container is ${state}${reason ? ` (${reason})` : ""} before publish; nothing was published`);
+      throw new ProviderRejectedError("container-failed", `${wait.platform} container is ${state}${reason ? ` (${reason})` : ""} before publish; nothing was published`);
     }
     if (read < wait.maxReads) await sleep(wait.retryWaitMs);
   }

@@ -6,7 +6,7 @@ import { SocialConnectionSchema, type SocialConnection } from "../src/contracts/
 import type { Channel } from "../src/social/channel-registry.js";
 import type { VerifiedSocialAsset } from "../src/social/media/assets.js";
 import { createMetaPublishAdapter, threadsTextLength } from "../src/social/meta.js";
-import { SocialPublishHoldError } from "../src/social/publish.js";
+import { ProviderRejectedError, SocialPublishHoldError } from "../src/social/publish.js";
 import type { ResolvedPublisherTarget } from "../src/social/publisher-targets.js";
 import { CapabilityAwareQueueItemSchema, capabilityAwareQueuePayloadHash, type CapabilityAwareQueueItem } from "../src/social/queue.js";
 import instagramFixture from "./fixtures/social-meta/instagram.json" with { type: "json" };
@@ -278,14 +278,46 @@ describe("Direct Meta reads the publishing limit before any send (quorum#572)", 
   });
 });
 
-describe("Direct Meta outcomes the publisher must treat as ambiguous (quorum#572)", () => {
-  it("stops at a container ERROR with Meta's error_message, and never calls threads_publish", async () => {
+describe("Direct Meta containers that Meta says will never publish (quorum#572, #571)", () => {
+  it("refuses at a container ERROR with Meta's error_message, and never calls threads_publish", async () => {
     const run = adapterFor(scenario(threadsFixture, "container-error"));
     const failed = run.adapter.publish(channel("threads"), approved("threads", 1), "1".repeat(64), target("threads", "threads-oauth"), proved("threads", 1));
 
     await expect(failed).rejects.toThrow(/Threads container is ERROR \(UNKNOWN\) before publish; nothing was published/u);
-    await expect(failed).rejects.not.toBeInstanceOf(SocialPublishHoldError);
+    await expect(failed).rejects.toBeInstanceOf(ProviderRejectedError);
+    await expect(failed).rejects.toMatchObject({ reason: "container-failed" });
     expect(run.seen.some((request) => request.url.endsWith("/threads_publish"))).toBe(false);
+    expect(run.remaining()).toBe(0);
+  });
+
+  it("refuses at an Instagram container that EXPIRED, and never calls media_publish", async () => {
+    const [quota, create] = scenario(instagramFixture, "image") as [MetaExchange, MetaExchange];
+    const expired: MetaExchange = {
+      request: { method: "GET", url: "https://graph.facebook.com/v26.0/17900000000000011", params: { fields: "status_code,status" } },
+      response: { status: 200, body: { status_code: "EXPIRED", id: "17900000000000011" } }
+    };
+    const run = adapterFor([quota, create, expired]);
+    const failed = run.adapter.publish(channel("instagram"), approved("instagram", 1), "1".repeat(64), target("instagram", "instagram-facebook-login"), proved("instagram", 1));
+
+    await expect(failed).rejects.toThrow(/Instagram container is EXPIRED before publish; nothing was published/u);
+    await expect(failed).rejects.toMatchObject({ name: "ProviderRejectedError", reason: "container-failed" });
+    expect(run.seen.some((request) => request.url.endsWith("/media_publish"))).toBe(false);
+    expect(run.remaining()).toBe(0);
+  });
+});
+
+describe("Direct Meta outcomes the publisher must treat as ambiguous (quorum#572)", () => {
+  it("keeps an unreadable container status ambiguous, because it is not Meta's final answer", async () => {
+    const [quota, create] = scenario(threadsFixture, "image") as [MetaExchange, MetaExchange];
+    const unreadable: MetaExchange = {
+      request: { method: "GET", url: "https://graph.threads.net/v26.0/17890000000000011", params: { fields: "status,error_message" } },
+      response: { status: 200, body: { id: "17890000000000011" } }
+    };
+    const run = adapterFor([quota, create, unreadable]);
+    const failed = run.adapter.publish(channel("threads"), approved("threads", 1), "1".repeat(64), target("threads", "threads-oauth"), proved("threads", 1));
+
+    await expect(failed).rejects.toThrow(/Threads container status is unreadable; nothing was published/u);
+    await expect(failed).rejects.not.toBeInstanceOf(ProviderRejectedError);
     expect(run.remaining()).toBe(0);
   });
 
@@ -296,9 +328,10 @@ describe("Direct Meta outcomes the publisher must treat as ambiguous (quorum#572
       response: { status: 200, body: { status: "IN_PROGRESS", id: "17890000000000011" } }
     };
     const run = adapterFor([quota, create, pending, pending, pending, pending, pending]);
+    const failed = run.adapter.publish(channel("threads"), approved("threads", 1), "1".repeat(64), target("threads", "threads-oauth"), proved("threads", 1));
 
-    await expect(run.adapter.publish(channel("threads"), approved("threads", 1), "1".repeat(64), target("threads", "threads-oauth"), proved("threads", 1)))
-      .rejects.toThrow(/still IN_PROGRESS after 5 reads; nothing was published/u);
+    await expect(failed).rejects.toThrow(/still IN_PROGRESS after 5 reads; nothing was published/u);
+    await expect(failed).rejects.not.toBeInstanceOf(ProviderRejectedError);
     expect(run.sleep.mock.calls).toEqual([[30_000], [30_000], [30_000], [30_000], [30_000]]);
     expect(run.remaining()).toBe(0);
   });
@@ -309,6 +342,7 @@ describe("Direct Meta outcomes the publisher must treat as ambiguous (quorum#572
 
     await expect(failed).rejects.toThrow(/aborted due to timeout/u);
     await expect(failed).rejects.not.toBeInstanceOf(SocialPublishHoldError);
+    await expect(failed).rejects.not.toBeInstanceOf(ProviderRejectedError);
     expect(run.remaining()).toBe(0);
   });
 });

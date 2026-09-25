@@ -280,17 +280,31 @@ describe("an ambiguous Meta outcome is reconciled, never resent", () => {
     expect(again).toMatchObject({ published: 0, ambiguous: 0 });
     expect(second.fetchImpl).not.toHaveBeenCalled();
   });
+});
 
-  it("treats a container ERROR the same way: nothing is published, and the item waits for reconciliation", async () => {
+describe("a Meta container that ends ERROR fails the item, because Meta has said nothing will publish", () => {
+  it("records a refusal: the item fails for owner review, the connection pauses, and nothing resends", async () => {
     const { root, commit } = await unlockedCheckout(1);
     const { fetchImpl, meta } = network(scenario("container-error"), commit);
 
     const report = await publish(root, fetchImpl);
 
-    expect(report).toMatchObject({ published: 0, ambiguous: 1 });
+    expect(report).toMatchObject({ status: "complete", published: 0, ambiguous: 0, rejected: 1, publishHeld: 0 });
     expect(meta.seen.some((request) => request.url.endsWith("/threads_publish"))).toBe(false);
+    expect(meta.remaining()).toBe(0);
     const item = CapabilityAwareQueueItemSchema.parse(await json(path.join(root, "state/social/queue/item.json")));
-    expect(item).toMatchObject({ status: "needs_reconciliation", attempt: { lastError: expect.stringContaining("ERROR (UNKNOWN)") } });
+    expect(item).toMatchObject({ status: "failed", attempt: { lastError: expect.stringContaining("ERROR (UNKNOWN) before publish; nothing was published") } });
+    const [providerReceipt] = await readdir(path.join(root, "state/social/provider-receipts"));
+    expect(await json(path.join(root, "state/social/provider-receipts", providerReceipt!))).toMatchObject({ state: "failed", remoteId: null, reconciliationRef: null });
+    const [receipt] = await readdir(path.join(root, "state/social/posts"));
+    expect(await json(path.join(root, "state/social/posts", receipt!))).toMatchObject({ outcome: "failed", verifiedLive: false, remoteId: null });
+    expect(await exists(path.join(root, "state/social/pauses/connections/social-connection-caught-up-threads.json"))).toBe(true);
+    expect(await exists(path.join(root, "state/social/publish-holds/item.json"))).toBe(false);
+
+    const second = network([], commit);
+    const again = await publish(root, second.fetchImpl);
+    expect(again).toMatchObject({ published: 0, ambiguous: 0, rejected: 0 });
+    expect(second.fetchImpl).not.toHaveBeenCalled();
   });
 });
 
