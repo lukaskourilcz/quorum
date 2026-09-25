@@ -13,6 +13,7 @@ import {
   type QueueCheckState,
   type QueueGroup
 } from "@/lib/admin-queue/types";
+import { queueActionFailure, queueActionNotice, type QueueActionNotice } from "@/lib/admin-queue/notice";
 import { cn } from "@/lib/utils";
 import { AdminButton, AdminCallout, AdminCard, AdminEntityBadge, AdminLabel, AdminStatusBadge, AdminTextarea, adminButtonVariants } from "./admin-primitives";
 import { useAdminWritesEnabled } from "./admin-write-mode";
@@ -32,6 +33,11 @@ const CHECK_PRESENTATION: Readonly<Record<QueueCheckState, { icon: typeof Check;
   fail: { icon: X, tone: "destructive", label: "fails" }
 };
 const FRAMES_SHOWN = 3;
+const NOTICE_TONES: Readonly<Record<QueueActionNotice["tone"], string>> = {
+  success: "text-[var(--admin-success)]",
+  warning: "text-[var(--admin-warning)]",
+  destructive: "text-[var(--admin-destructive)]"
+};
 
 const dateTime = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Prague" });
 const time = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Prague" });
@@ -75,7 +81,7 @@ export function QueueCard({ item }: { item: AdminQueueItemView }) {
   const [altText, setAltText] = useState(item.altText ?? "");
   const [reason, setReason] = useState("");
   const [pending, setPending] = useState<QueueActionName | null>(null);
-  const [message, setMessage] = useState<{ tone: "success" | "destructive"; text: string } | null>(null);
+  const [message, setMessage] = useState<QueueActionNotice | null>(null);
   const [allFrames, setAllFrames] = useState(false);
   const PlatformIcon = PLATFORM_ICONS[item.platform];
   const frames = allFrames ? item.frameHrefs : item.frameHrefs.slice(0, FRAMES_SHOWN);
@@ -94,14 +100,15 @@ export function QueueCard({ item }: { item: AdminQueueItemView }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, itemId: item.id, expectedContentHash: item.contentHash, ...extra })
       });
-      const body = await response.json().catch(() => ({})) as { error?: string; message?: string };
-      if (!response.ok) throw new Error(body.error ?? "The queue action was not saved.");
-      setMessage({ tone: "success", text: body.message ?? "Saved." });
-      setMode("view");
-      setReason("");
-      router.refresh();
-    } catch (error) {
-      setMessage({ tone: "destructive", text: error instanceof Error ? error.message : "The queue action was not saved." });
+      const body = await response.json().catch(() => ({})) as unknown;
+      setMessage(queueActionNotice(response.ok, body));
+      if (response.ok) {
+        setMode("view");
+        setReason("");
+        router.refresh();
+      }
+    } catch {
+      setMessage(queueActionFailure());
     } finally {
       setPending(null);
     }
@@ -251,9 +258,14 @@ export function QueueCard({ item }: { item: AdminQueueItemView }) {
       ) : null}
 
       {/* Rendered empty from the start: a live region that appears with its message is often not announced. */}
-      <p aria-live="polite" className={cn("m-0 text-[length:var(--admin-type-control)] empty:hidden", message?.tone === "destructive" ? "text-[var(--admin-destructive)]" : "text-[var(--admin-success)]")} role="status">
+      <p aria-live="polite" className={cn("m-0 text-[length:var(--admin-type-control)] empty:hidden", NOTICE_TONES[message?.tone ?? "success"])} role="status">
         {message?.text}
       </p>
+      {message?.runUrl ? (
+        <a className="admin-focus-ring inline-flex w-fit items-center gap-1.5 rounded-sm text-[length:var(--admin-type-control)] text-[var(--admin-link)] underline-offset-4 hover:underline" href={message.runUrl} rel="noreferrer" target="_blank">
+          Follow the publisher run on GitHub <ExternalLink aria-hidden className="size-3.5" />
+        </a>
+      ) : null}
     </AdminCard>
   );
 }

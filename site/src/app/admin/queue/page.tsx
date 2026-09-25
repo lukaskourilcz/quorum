@@ -49,7 +49,7 @@ export default async function QueuePage({
       ]}
       brandId="global"
       breadcrumb="Queue"
-      lead="Every social post that waits for your approval. Edit the text here, open the graphic in the Design Lab, and approve it for its window or for the next hour. An approval queues the post; the publisher sends it only while every lock is open."
+      lead="Every social post that waits for your approval. Edit the text here, open the graphic in the Design Lab, and approve it for its window or for the next hour. An approval queues the post and starts the publisher, which sends it only while every lock is open."
       sections={adminSections("queue", { queue: snapshot.counts.waiting })}
       title="Queue"
       workspaces={workspaces}
