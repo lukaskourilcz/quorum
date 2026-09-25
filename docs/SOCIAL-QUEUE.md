@@ -81,6 +81,12 @@ it read: the blob sha on GitHub, the bytes on disk. A publisher claim made in be
 owner's action into a conflict instead of being overwritten. Both directories sit inside the
 cycle's `runtime_paths` through `state/social`.
 
+A deployment reads the repository as it stood when it was deployed, like every Admin page. An
+action is saved to GitHub at once and the publisher sees it on its next run, but the list shows it
+only after the next deploy. Until then the item still reads as it did. Approving it again answers
+that the approval is already recorded; any other action on it is refused as a conflict, because the
+version on GitHub has moved on. An edit skips any revision id already written on GitHub.
+
 ## Not built here
 
 - **Dispatch on approval (#574, B7).** An approved item waits for the next publisher run.
