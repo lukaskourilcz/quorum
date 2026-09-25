@@ -33,7 +33,11 @@ jobs:
     # run's answer either way. The Queue's dispatch is a wake-up; this run decides what sends.
     if: ${{ github.event_name != 'schedule' || vars.SOCIAL_KILL_SWITCH != 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Two orchestrator suites, the claim push, Direct Meta's container waits and Buffer's read-back
+    # (up to about three and a half minutes when LinkedIn is slow) leave fifteen minutes no margin.
+    # A timeout during the send cancels the steps that commit its receipts; the pushed claim still
+    # keeps the item from being sent again, but the owner then has to reconcile it by hand.
+    timeout-minutes: 20
     env:
       SOCIAL_KILL_SWITCH: ${{ vars.SOCIAL_KILL_SWITCH }}
       META_GRAPH_API_VERSION: ${{ vars.META_GRAPH_API_VERSION }}
@@ -82,32 +86,75 @@ jobs:
           pnpm --filter @boardlessai/orchestrator typecheck
           pnpm --filter @boardlessai/orchestrator test
 
-      - name: Run two-phase publisher
-        id: publish
+      # The run is two phases with a push between them (quorum#574 review). The claim phase marks
+      # each item it will send `publishing` and contacts no provider; the claims reach the branch
+      # before the send starts. The Queue replaces an item only against the version it read, so an
+      # owner's hold, edit or reject that lands first makes the claim push conflict and nothing is
+      # sent, and one that lands after it finds `publishing` and is refused.
+      - name: Claim due posts
+        id: claim
         env:
           EVENT_NAME: ${{ github.event_name }}
           VALIDATE_ONLY: ${{ inputs.validate_only }}
         run: |
-          args=(--dry-if-disabled)
+          claims_file="$RUNNER_TEMP/social-claims.json"
+          args=(--dry-if-disabled --phase claim --claims-file "$claims_file")
           if test "$EVENT_NAME" = "workflow_dispatch" && test "$VALIDATE_ONLY" = "true"; then
             args+=(--validate-only)
           fi
-          # The exit code is recorded, not raised here. An ambiguous or refused post exits 2, and a
-          # failed step made GitHub skip the two below, so its needs_reconciliation status, receipts
-          # and pauses never reached the branch and the next run sent the post again. The last step
-          # fails the job once they are pushed.
+          pnpm social:publish -- "${args[@]}"
+          if test -s "$claims_file"; then
+            echo "claimed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "claimed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Push the claims before anything is sent
+        id: push-claims
+        if: steps.claim.outputs.claimed == 'true'
+        run: |
+          git config user.name "boardlessai-social[bot]"
+          git config user.email "boardlessai-social[bot]@users.noreply.github.com"
+          git add state/social/queue
+          git commit -m "social(${GITHUB_RUN_NUMBER}): claim"
+          for attempt in 1 2 3; do
+            git fetch origin "${GITHUB_REF_NAME}"
+            # A conflict here means a claimed item changed on the branch since checkout, most likely
+            # the owner's hold or edit. That change wins: stop before any send.
+            if ! git rebase --autostash "origin/${GITHUB_REF_NAME}"; then
+              git rebase --abort
+              echo "::error title=Claim refused::A claimed queue item changed on ${GITHUB_REF_NAME} since checkout; nothing was sent."
+              exit 1
+            fi
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              exit 0
+            fi
+          done
+          echo "::error title=Claim not pushed::The claims could not be pushed after three rebase-first attempts; nothing was sent."
+          exit 1
+
+      - name: Send the claimed posts
+        id: send
+        if: steps.claim.outputs.claimed == 'true'
+        run: |
+          # The exit code is recorded, not raised here: whatever happened, the next two steps
+          # validate and commit the receipts, statuses and pauses this run wrote, and the last step
+          # fails the job afterwards. A send that exits 2 still has state that must reach the branch.
           status=0
-          pnpm social:publish -- "${args[@]}" || status=$?
+          pnpm social:publish -- --phase send --claims-file "$RUNNER_TEMP/social-claims.json" || status=$?
           echo "exit_code=$status" >> "$GITHUB_OUTPUT"
 
+      # From here on every step runs after a failed send too. It is skipped only when the claim
+      # itself failed or its push was refused: then nothing was sent and the local claims must not
+      # reach the branch.
       - name: Validate publisher state
-        if: ${{ !cancelled() && steps.publish.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.claim.outcome == 'success' && steps.push-claims.outcome != 'failure' }}
         run: |
           pnpm --filter @boardlessai/orchestrator test
           git diff --check
 
       - name: Commit immutable queue state and receipts
-        if: ${{ !cancelled() && steps.publish.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.claim.outcome == 'success' && steps.push-claims.outcome != 'failure' }}
         run: |
           git add state/social state/notify docs/NEEDED.md
           if git diff --cached --quiet; then
@@ -119,18 +166,24 @@ jobs:
           git commit -m "social(${GITHUB_RUN_NUMBER})"
           for attempt in 1 2 3; do
             git fetch origin "${GITHUB_REF_NAME}"
-            git rebase --autostash "origin/${GITHUB_REF_NAME}"
+            # -X theirs keeps this run's side of a conflicting hunk: in a rebase "theirs" is the
+            # commit being replayed. A receipt of a post that is live must never be dropped for a
+            # queue file someone else touched in between.
+            if ! git rebase --autostash -X theirs "origin/${GITHUB_REF_NAME}"; then
+              git rebase --abort
+              continue
+            fi
             if git push origin "HEAD:${GITHUB_REF_NAME}"; then
               exit 0
             fi
           done
-          echo "Social state could not be pushed after three rebase-first attempts."
+          echo "::error title=Receipts not pushed::Social state could not be pushed after three rebase-first attempts."
           exit 1
 
       - name: Fail when a post needs the owner
-        if: ${{ !cancelled() && steps.publish.outputs.exit_code != '' && steps.publish.outputs.exit_code != '0' }}
+        if: ${{ !cancelled() && steps.send.outputs.exit_code != '' && steps.send.outputs.exit_code != '0' }}
         env:
-          PUBLISH_EXIT_CODE: ${{ steps.publish.outputs.exit_code }}
+          SEND_EXIT_CODE: ${{ steps.send.outputs.exit_code }}
         run: |
-          echo "::error title=Publisher needs the owner::A post was refused or its outcome is ambiguous (exit $PUBLISH_EXIT_CODE). Its state is committed; see the Queue and state/social/posts."
-          exit "$PUBLISH_EXIT_CODE"
+          echo "::error title=Publisher needs the owner::A post was refused or its outcome is ambiguous (exit $SEND_EXIT_CODE). Its state is committed; see the Queue and state/social/posts."
+          exit "$SEND_EXIT_CODE"

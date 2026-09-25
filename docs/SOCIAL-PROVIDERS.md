@@ -100,15 +100,27 @@ A send goes in this order, all on the connection's own host:
 
 A refusal in steps 1 or 2 is a **publish hold**: the runner writes
 `state/social/publish-holds/<queue-file>.json` (`social-publish-hold/1`, reasons
-`publishing-quota-exhausted`, `publishing-quota-unreadable` and `platform-text-limit`), leaves
-the queue file as it was and pauses nothing. The item stays due and the next run reads the limit
-again; the record goes once the item gets past these checks. The report counts it as
-`publishHeld`.
+`publishing-quota-exhausted`, `publishing-quota-unreadable` and `platform-text-limit`), puts the
+claimed queue file back byte for byte and pauses nothing. The item stays due and the next run reads
+the limit again; the record goes once the item gets past these checks. The report counts it as
+`publishHeld`. The runner's own publishable check, before the claim, writes the same record with
+reason `not-publishable` for the one item that fails it.
 
 The tests replay Meta exchanges from `orchestrator/tests/fixtures/social-meta/`. The Threads and
 Instagram flows use the answer shapes Meta documents, because no devShark connection exists to
 record from; the unreadable-limit case replays live answers recorded without a token. The first
 live send after activation is the first real recording.
+
+**The claim reaches the branch first.** A run has two phases with a push between them. The claim
+phase (`pnpm social:publish -- --phase claim`) decides what is due and eligible, proves the frames,
+and writes each item it will send as `publishing` with its idempotency key and `claimedAt`. It calls
+no provider. The workflow commits those queue files and pushes them; a rebase conflict there means
+the owner changed a claimed item on the branch since checkout, and the run stops before any send.
+The send phase (`--phase send`) acts only on the claims the claim phase listed in the runner's
+temporary claims file, and only while the branch still carries each claim. It checks every lock
+again, because a pause or a channel change may have reached the branch in between; a claim that no
+longer passes goes back to its earlier bytes unsent. A claim that never finished stays
+`publishing`: nothing resends it, and cadence counts it as if it went out.
 
 The runtime looks for an already known idempotency key before publication, sends at most once, and
 may retry the read-only live-verification request twice. A timeout or inconclusive result during
@@ -170,7 +182,9 @@ key, so the provider record says `remote-id-only`.
 
 A refused post (`ProviderRejectedError`) fails for owner review: nothing resends it, and
 `providerReceiptResendDecision` answers `owner-review`. Either way the runner pauses the connection
-and the venture, and the publisher exits with code 2 so the owner sees it. Error text is one bounded
+and the venture, and the send phase exits with code 2. The workflow records that code, validates and
+commits the run's statuses, receipts and pauses, and only then fails the job, so the owner sees it
+and the state that stops a resend is on the branch. Error text is one bounded
 line of Buffer's message; the key and the channel id are redacted, and no request or response body
 is stored.
 

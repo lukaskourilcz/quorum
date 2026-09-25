@@ -1,44 +1,51 @@
-import { createHash } from "node:crypto";
-import { access, readFile, readdir } from "node:fs/promises";
+import { access } from "node:fs/promises";
 import path from "node:path";
-import { SocialActivationSchema, SocialPostReceiptSchema, type SocialActivation } from "../contracts/autonomy.js";
+import { SocialActivationSchema, type SocialActivation } from "../contracts/autonomy.js";
 import { atomicWriteJson, readJson, withFileLock } from "../state.js";
 import { configRoot as defaultConfigRoot, repoRoot as defaultRepoRoot, stateRoot as defaultStateRoot } from "../paths.js";
 import { pragueClockParts } from "../meetings/clock.js";
-import { refreshSocialActivation, pauseVentureSocial, isPublishingVenture, type SocialVenture } from "./activation.js";
-import { ChannelRegistrySchema, assertLiveChannel } from "./channel-registry.js";
+import { refreshSocialActivation } from "./activation.js";
 import { createBufferPublishAdapter } from "./buffer.js";
 import { createMetaPublishAdapter } from "./meta.js";
 import type { SocialAssetCommits } from "./media/assets.js";
 import { gateSocialAssets } from "./media/gate.js";
-import { providerMaySend, type PublishProviderId } from "./provider-platforms.js";
-import { ProviderRejectedError, SocialPublishHoldError, type PublishAdapter } from "./publish.js";
-import { clearPublishHold, recordPublishHold } from "./publish-holds.js";
-import { loadVentureCapabilityMap } from "../ventures/capabilities.js";
-import {
-  loadSocialPublisherRegistry,
-  resolveCapabilityAwareQueueItem,
-  resolvePublisherTarget,
-  type ResolvedPublisherTarget
-} from "./publisher-targets.js";
-import {
-  assertQueueItemPublishable,
-  CapabilityAwareQueueItemSchema,
-  type CapabilityAwareQueueItem
-} from "./queue.js";
+import type { PublishProviderId } from "./provider-platforms.js";
+import { SocialPublishHoldError, type PublishAdapter } from "./publish.js";
+import { recordPublishHold } from "./publish-holds.js";
+import { claimedQueueItem, claimStands, type SocialPublishClaim } from "./publish-claims.js";
+import { CapabilityAwareQueueItemSchema } from "./queue.js";
 import { checkTittyTuesdaysPost, TT_SAFETY_CHECKER_VERSION } from "./tt-safety.js";
-import { loadSocialLifecycleHolds } from "./profile-lifecycle.js";
 import {
-  createProviderDeliveryReceipt,
-  createProviderHealthSnapshot,
-  loadSocialProviderRegistry,
-  resolveProviderBinding,
-  type ResolvedProviderBinding
-} from "./providers.js";
+  insideWindow,
+  isDue,
+  loadPublisherContext,
+  selectEligible,
+  type PublisherContext,
+  type QueueEntry,
+  type RefusedEntry
+} from "./runner-context.js";
+import { deliverClaimedItem, idempotencyKey, redactedConnectorError, releaseClaim } from "./runner-delivery.js";
+
+export { redactSocialError } from "./runner-delivery.js";
+
+/**
+ * Which half of a publisher run to do.
+ *
+ * - `claim` decides what is due and eligible, proves its frames, and writes each item it will send
+ *   as `publishing`. It contacts no provider. The workflow pushes those claims to the branch before
+ *   the send starts, so the Queue can no longer change an item a run is about to send.
+ * - `send` sends only the claims the claim phase named, and only while the branch still carries
+ *   them, after checking every lock again against the branch as it now stands.
+ * - `all` does both in one process, with no push between: a local run and the tests.
+ */
+export type SocialPublisherPhase = "claim" | "send" | "all";
 
 export interface SocialPublisherOptions {
   validateOnly: boolean;
   dryIfDisabled: boolean;
+  phase?: SocialPublisherPhase;
+  /** The send phase's input: what the claim phase of the same run claimed. */
+  claims?: readonly SocialPublishClaim[];
   now?: Date;
   environment?: NodeJS.ProcessEnv;
   fetchImpl?: typeof fetch;
@@ -53,239 +60,203 @@ export interface SocialPublisherOptions {
 }
 
 export interface SocialPublisherReport {
-  status: "paused" | "draft_only" | "validated" | "complete";
+  status: "paused" | "draft_only" | "validated" | "claimed" | "complete";
   queueItems: number;
   due: number;
+  /** Items this run marked `publishing` before any provider was called. */
+  claimed: number;
   published: number;
   ambiguous: number;
   /** Refused by the provider before anything was created (quorum#571); failed for owner review. */
   rejected: number;
   skipped: number;
+  /** Claims put back as they were without a send: a hold, a pause or a lock that closed in between. */
+  released: number;
   /** Items whose frames could not be proved this run; each has a `social-asset-hold/1` record. */
   assetHeld: number;
   /** Items held before any write (a full publishing limit, a failed publishable check); each has a `social-publish-hold/1` record. */
   publishHeld: number;
+  /** What the claim phase claimed, for the send phase. Empty on every other report. */
+  claims: SocialPublishClaim[];
 }
 
+function report(status: SocialPublisherReport["status"], fields: Partial<Omit<SocialPublisherReport, "status">> = {}): SocialPublisherReport {
+  return {
+    status,
+    queueItems: 0,
+    due: 0,
+    claimed: 0,
+    published: 0,
+    ambiguous: 0,
+    rejected: 0,
+    skipped: 0,
+    released: 0,
+    assetHeld: 0,
+    publishHeld: 0,
+    claims: [],
+    ...fields
+  };
+}
 
 async function exists(filePath: string): Promise<boolean> {
   try { await access(filePath); return true; } catch { return false; }
 }
 
-async function pauseIds(directory: string): Promise<Set<string>> {
-  const files = await readdir(directory).catch((error: NodeJS.ErrnoException) => error.code === "ENOENT" ? [] : Promise.reject(error));
-  return new Set(files.filter((name) => name.endsWith(".json") || name.endsWith(".pause")).map((name) => name.replace(/\.(?:json|pause)$/u, "")));
+interface Roots {
+  now: Date;
+  environment: NodeJS.ProcessEnv;
+  repoRoot: string;
+  stateRoot: string;
+  configRoot: string;
 }
 
-function mergedIds(...sets: ReadonlySet<string>[]): Set<string> {
-  return new Set(sets.flatMap((set) => [...set]));
+function roots(options: SocialPublisherOptions): Roots {
+  return {
+    now: options.now ?? new Date(),
+    environment: options.environment ?? process.env,
+    repoRoot: options.repoRoot ?? defaultRepoRoot,
+    stateRoot: options.stateRoot ?? defaultStateRoot,
+    configRoot: options.configRoot ?? defaultConfigRoot
+  };
 }
 
-export function redactSocialError(error: unknown, sensitiveValues: readonly string[] = []): string {
-  let message = error instanceof Error ? error.message : String(error);
-  for (const value of sensitiveValues) {
-    if (value) message = message.split(value).join("[REDACTED]").split(encodeURIComponent(value)).join("[REDACTED]");
-  }
-  return message
-    .replace(/(access[_-]?token|authorization|cookie|client[_-]?secret)\s*[=:]\s*[^\s&]+/giu, "$1=[REDACTED]")
-    .replace(/bearer\s+[a-z0-9._~+\/-]+/giu, "Bearer [REDACTED]")
-    .slice(0, 500);
+async function currentActivation({ repoRoot, stateRoot, configRoot, environment, now }: Roots): Promise<SocialActivation> {
+  const current = SocialActivationSchema.safeParse(await readJson<unknown>(stateRoot, "social/activation.json", null));
+  const checkedToday = current.success && pragueClockParts(new Date(current.data.updatedAt)).date === pragueClockParts(now).date;
+  return checkedToday ? current.data : refreshSocialActivation({
+    repoRoot,
+    stateRoot,
+    configRoot,
+    environment,
+    now,
+    safetyCheckerReady: TT_SAFETY_CHECKER_VERSION === "keeper-tt-1"
+  });
 }
 
-function redactedConnectorError(error: unknown, environment: NodeJS.ProcessEnv, target: ResolvedPublisherTarget): string {
-  return redactSocialError(error, [environment[target.credentialRef] ?? "", environment[target.nativeAccountIdRef] ?? ""]);
+async function killSwitched({ environment, stateRoot }: Roots): Promise<boolean> {
+  return environment.SOCIAL_KILL_SWITCH !== "false" || await exists(path.join(stateRoot, "SOCIAL_PAUSED"));
 }
 
-function sourceVentureActive(item: CapabilityAwareQueueItem, activation: SocialActivation): boolean {
-  return isPublishingVenture(item.sourceVentureId)
-    && activation.ventures[item.sourceVentureId].status === "enabled";
-}
-
-/**
- * Whether the canonical receipt can name this item's venture and channel. Checked before a send,
- * because a receipt that fails to parse after the provider accepted a post would leave the item
- * queued and the next run would send it again.
- */
-function receiptRecordable(item: CapabilityAwareQueueItem): boolean {
-  return SocialPostReceiptSchema.shape.venture.safeParse(item.sourceVentureId).success
-    && SocialPostReceiptSchema.shape.channel.safeParse(item.channel).success;
-}
-
-const PROVIDER_LABELS: Readonly<Record<PublishProviderId, string>> = {
-  "direct-meta": "Official Meta item verified live.",
-  buffer: "Buffer post verified sent to LinkedIn."
-};
-
-function receiptId(item: CapabilityAwareQueueItem): string {
-  return `social-receipt-${createHash("sha256").update(`${item.sourceVentureId}:${item.target.profileId}:${item.id}:${item.content.contentHash}`).digest("hex").slice(0, 16)}`;
-}
-
-function idempotencyKey(item: CapabilityAwareQueueItem): string {
-  return createHash("sha256").update(`${item.sourceVentureId}:${item.target.profileId}:${item.target.connectionBindingRef}:${item.channel}:${item.id}:${item.content.contentHash}`).digest("hex");
-}
-
-export async function runSocialPublisher(options: SocialPublisherOptions): Promise<SocialPublisherReport> {
-  const now = options.now ?? new Date();
-  const environment = options.environment ?? process.env;
-  const repoRoot = options.repoRoot ?? defaultRepoRoot;
-  const stateRoot = options.stateRoot ?? defaultStateRoot;
-  const configRoot = options.configRoot ?? defaultConfigRoot;
-  if (await exists(path.join(stateRoot, "PAUSED"))) {
-    return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, rejected: 0, skipped: 0, assetHeld: 0, publishHeld: 0 };
-  }
-
-  return withFileLock(stateRoot, ".social-lock", async () => {
-    const current = SocialActivationSchema.safeParse(await readJson<unknown>(stateRoot, "social/activation.json", null));
-    const checkedToday = current.success && pragueClockParts(new Date(current.data.updatedAt)).date === pragueClockParts(now).date;
-    const activation = checkedToday ? current.data : await refreshSocialActivation({
-      repoRoot,
-      stateRoot,
-      configRoot,
-      environment,
-      now,
-      safetyCheckerReady: TT_SAFETY_CHECKER_VERSION === "keeper-tt-1"
+async function holdRefused(context: PublisherContext, refused: readonly RefusedEntry[]): Promise<void> {
+  for (const entry of refused) {
+    await recordPublishHold({
+      stateRoot: context.stateRoot,
+      queueFileName: entry.name,
+      item: entry.item,
+      providerId: entry.providerId,
+      hold: new SocialPublishHoldError("not-publishable", entry.reason),
+      detail: entry.reason,
+      now: context.now
     });
-    if (environment.SOCIAL_KILL_SWITCH !== "false" || await exists(path.join(stateRoot, "SOCIAL_PAUSED"))) {
-      return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, rejected: 0, skipped: 0, assetHeld: 0, publishHeld: 0 };
-    }
-    const channelRegistry = ChannelRegistrySchema.parse(JSON.parse(await readFile(path.join(configRoot, "channels.json"), "utf8")) as unknown);
-    const queueDirectory = path.join(stateRoot, "social", "queue");
-    const files = await readdir(queueDirectory).catch((error: NodeJS.ErrnoException) => error.code === "ENOENT" ? [] : Promise.reject(error));
-    const queueFiles = files.filter((name) => name.endsWith(".json")).sort();
-    const [publisherRegistry, providerRegistry, capabilityMap, profilePauseSets, connectionPauseSets, lifecycleHolds] = await Promise.all([
-      loadSocialPublisherRegistry(configRoot),
-      loadSocialProviderRegistry(configRoot),
-      loadVentureCapabilityMap(configRoot),
-      Promise.all([
-        pauseIds(path.join(stateRoot, "social", "pauses", "profiles")),
-        pauseIds(path.join(stateRoot, "social", "kill-switches", "profiles"))
-      ]),
-      Promise.all([
-        pauseIds(path.join(stateRoot, "social", "pauses", "connections")),
-        pauseIds(path.join(stateRoot, "social", "kill-switches", "connections"))
-      ]),
-      loadSocialLifecycleHolds(stateRoot)
-    ]);
-    const pausedProfileIds = mergedIds(...profilePauseSets, lifecycleHolds.pausedProfileIds);
-    const pausedConnectionIds = mergedIds(...connectionPauseSets, lifecycleHolds.pausedConnectionIds);
-    const rawEntries = await Promise.all(queueFiles.map(async (name) => ({
-      name,
-      raw: JSON.parse(await readFile(path.join(queueDirectory, name), "utf8")) as unknown
-    })));
-    const entries: Array<{ name: string; item: CapabilityAwareQueueItem }> = [];
-    let malformed = lifecycleHolds.malformed;
-    for (const entry of rawEntries) {
-      try {
-        entries.push({ name: entry.name, item: resolveCapabilityAwareQueueItem(entry.raw, publisherRegistry) });
-      } catch {
-        malformed += 1;
-      }
-    }
-    // Keyed by string: a queue item may name a platform (LinkedIn) that has no global channel yet,
-    // and the lookup below refuses it by name instead of the types pretending it cannot happen.
-    const channels = new Map<string, (typeof channelRegistry.channels)[number]>(channelRegistry.channels.map((channel) => [channel.id, channel]));
-    // Due means approved: `queued` (the Queue's approval, quorum#573), or a legacy v1 draft. A v2
-    // draft waits for the owner and is never promoted by the runner itself. A v1 draft (DNESKAi's
-    // pack writes every check `pass`) predates the Queue and sends once its connection is live.
-    const due = entries.filter(({ item }) =>
-      (item.status === "queued" || (item.status === "draft" && item.migration !== null)) &&
-      new Date(item.publishWindow.notBefore).getTime() <= now.getTime() &&
-      new Date(item.publishWindow.notAfter).getTime() >= now.getTime()
-    );
-    const targetResolved = due.map((entry) => {
-      const resolution = resolvePublisherTarget({
-        item: entry.item,
-        registry: publisherRegistry,
-        capabilityMap,
-        environment,
-        now,
-        pausedProfileIds,
-        pausedConnectionIds
-      });
-      const providerResolution = resolution.target
-        ? resolveProviderBinding({
-            registry: providerRegistry,
-            publisherRegistry,
-            connectionId: resolution.target.connection.id,
-            environment,
-            requiredCapability: "publish-original"
-          })
-        : null;
-      return { ...entry, resolution, providerResolution };
-    });
-    const eligibleDue: Array<{ name: string; item: CapabilityAwareQueueItem; target: ResolvedPublisherTarget; provider: ResolvedProviderBinding }> = [];
-    let refusedBeforeSend = 0;
-    const cadenceTimes = new Map<string, Date[]>();
-    for (const { item } of entries) {
-      if (item.status !== "published" || !item.attempt) continue;
-      const values = cadenceTimes.get(item.target.connectionBindingRef) ?? [];
-      values.push(new Date(item.attempt.claimedAt));
-      cadenceTimes.set(item.target.connectionBindingRef, values);
-    }
-    for (const entry of targetResolved) {
-      if (entry.resolution.decision !== "eligible"
-        || !entry.resolution.target
-        || entry.providerResolution?.decision !== "eligible"
-        || !entry.providerResolution.target
-        || !sourceVentureActive(entry.item, activation)
-        || !receiptRecordable(entry.item)) continue;
-      const provider = entry.providerResolution.target;
-      const providerId = provider.provider.id;
-      // Direct Meta sends Instagram and Threads; Buffer sends LinkedIn and nothing else (quorum#571).
-      if (!providerMaySend(providerId, entry.item.channel) || providerId !== entry.resolution.target.providerId || provider.provider.apiVersion === null) continue;
-      // Each of these costs its own item, never the run: a channel still in draft skips it, and an
-      // item that fails the publishable check is held with the reason written down.
-      const channel = channels.get(entry.item.channel);
-      if (!channel) continue;
-      try {
-        assertLiveChannel(channel, environment);
-      } catch {
-        continue;
-      }
-      try {
-        assertQueueItemPublishable(entry.item.status === "draft" ? { ...entry.item, status: "queued" as const } : entry.item);
-      } catch (error) {
-        const detail = error instanceof Error ? error.message : String(error);
-        await recordPublishHold({ stateRoot, queueFileName: entry.name, item: entry.item, providerId, hold: new SocialPublishHoldError("not-publishable", detail), detail, now });
-        refusedBeforeSend += 1;
-        continue;
-      }
-      const target: ResolvedPublisherTarget = {
-        ...entry.resolution.target,
-        providerId,
-        apiVersion: provider.provider.apiVersion,
-        providerBindingId: provider.binding.id
-      };
-      const times = cadenceTimes.get(target.connection.id) ?? [];
-      const today = pragueClockParts(now).date;
-      if (times.filter((time) => pragueClockParts(time).date === today).length >= target.connection.cadence.maxOrganicPostsPerDay) continue;
-      const last = times.sort((a, b) => b.getTime() - a.getTime())[0];
-      if (last && now.getTime() - last.getTime() < target.connection.cadence.minHoursBetweenPosts * 3_600_000) continue;
-      eligibleDue.push({ name: entry.name, item: entry.item, target, provider });
-      times.push(now);
-      cadenceTimes.set(target.connection.id, times);
-    }
+  }
+}
 
+/** The claim phase. It never calls a provider; the asset gate's HEAD requests are its only network. */
+async function claimDuePosts(options: SocialPublisherOptions, base: Roots): Promise<SocialPublisherReport> {
+  if (await exists(path.join(base.stateRoot, "PAUSED"))) return report("paused");
+  return withFileLock(base.stateRoot, ".social-lock", async () => {
+    const activation = await currentActivation(base);
+    if (await killSwitched(base)) return report("paused");
+    const context = await loadPublisherContext({ ...base, activation });
+    const due = context.entries.filter(({ item }) => isDue(item, base.now));
+    const { eligible, refused } = selectEligible(context, due);
+    await holdRefused(context, refused);
     // Last gate before any provider: every frame must be committed, hash to its record and answer
     // 200 at the exact URL the platform will fetch. A miss holds the one item and writes why.
     const assetGate = await gateSocialAssets({
-      entries: eligibleDue,
-      environment,
-      repoRoot,
-      stateRoot,
-      configRoot,
-      now,
+      entries: eligible,
+      environment: base.environment,
+      repoRoot: base.repoRoot,
+      stateRoot: base.stateRoot,
+      configRoot: base.configRoot,
+      now: base.now,
       ...(options.assetCommits ? { commits: options.assetCommits } : {}),
       ...(options.fetchImpl ? { fetchImpl: options.fetchImpl } : {}),
       ...(options.resolveImpl ? { resolveImpl: options.resolveImpl } : {})
     });
-    eligibleDue.splice(0, eligibleDue.length, ...assetGate.ready);
-    const assetHeld = assetGate.held;
-    if (eligibleDue.length === 0) {
-      return { status: "draft_only", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, rejected: 0, skipped: due.length + malformed, assetHeld, publishHeld: refusedBeforeSend };
+    const counts = { queueItems: context.queueFiles.length, due: due.length, assetHeld: assetGate.held, publishHeld: refused.length };
+    const unsent = due.length - assetGate.ready.length + context.malformed;
+    if (assetGate.ready.length === 0) return report("draft_only", { ...counts, skipped: unsent });
+    if (options.validateOnly) return report("validated", { ...counts, skipped: unsent });
+
+    const claims: SocialPublishClaim[] = [];
+    let safetyKilled = 0;
+    for (const { name, text, item } of assetGate.ready) {
+      const queued = CapabilityAwareQueueItemSchema.parse(item.status === "draft" ? { ...item, status: "queued" } : item);
+      const safety = checkTittyTuesdaysPost(queued);
+      if (!safety.passed) {
+        await Promise.all([
+          atomicWriteJson(base.stateRoot, `social/queue/${name}`, CapabilityAwareQueueItemSchema.parse({ ...queued, status: "cancelled" })),
+          atomicWriteJson(base.stateRoot, `social/safety-kills/${queued.id}.json`, {
+            schemaVersion: "social-safety-kill/1",
+            venture: queued.sourceVentureId,
+            profileId: queued.target.profileId,
+            connectionId: queued.target.connectionBindingRef,
+            queueItemId: queued.id,
+            checkerVersion: safety.version,
+            reasons: safety.reasons,
+            killedAt: base.now.toISOString()
+          })
+        ]);
+        safetyKilled += 1;
+        continue;
+      }
+      const key = idempotencyKey(queued);
+      const claimed = claimedQueueItem(queued, key, base.now);
+      await atomicWriteJson(base.stateRoot, `social/queue/${name}`, claimed);
+      claims.push({
+        queueFile: name,
+        itemId: claimed.id,
+        idempotencyKey: key,
+        claimedAt: claimed.attempt!.claimedAt,
+        contentHash: claimed.content.contentHash,
+        before: text,
+        frames: (assetGate.verified.get(name) ?? []).map(({ path: framePath, url, sha256, contentType, commit, altText }) => ({ path: framePath, url, sha256, contentType, commit, altText }))
+      });
     }
-    if (options.validateOnly) {
-      return { status: "validated", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, rejected: 0, skipped: due.length - eligibleDue.length + malformed, assetHeld, publishHeld: refusedBeforeSend };
+    return report(claims.length > 0 ? "claimed" : "draft_only", { ...counts, claimed: claims.length, skipped: unsent + safetyKilled, claims });
+  });
+}
+
+/** Put back every claim that still stands on the branch; nothing was sent for any of them. */
+async function releaseStanding(context: PublisherContext, claims: readonly SocialPublishClaim[]): Promise<number> {
+  let released = 0;
+  for (const claim of claims) {
+    const entry = context.entries.find(({ name }) => name === claim.queueFile);
+    if (!entry || !claimStands(entry.item, claim)) continue;
+    await releaseClaim(context.stateRoot, claim);
+    released += 1;
+  }
+  return released;
+}
+
+/** The send phase: only this run's claims, re-checked against the branch as it stands now. */
+async function sendClaimedPosts(options: SocialPublisherOptions, base: Roots, claims: readonly SocialPublishClaim[]): Promise<SocialPublisherReport> {
+  if (claims.length === 0) return report("draft_only");
+  return withFileLock(base.stateRoot, ".social-lock", async () => {
+    const activation = await currentActivation(base);
+    const context = await loadPublisherContext({ ...base, activation });
+    // A pause that reached the branch between the claim and the send wins: nothing is sent, and
+    // every claim still standing goes back to what it was.
+    if (await exists(path.join(base.stateRoot, "PAUSED")) || await killSwitched(base)) {
+      return report("paused", { released: await releaseStanding(context, claims) });
+    }
+
+    const byName = new Map(claims.map((claim) => [claim.queueFile, claim]));
+    // A claim the branch no longer carries was overtaken; it is not this run's to send or release.
+    const standing: QueueEntry[] = context.entries.filter(({ name, item }) => {
+      const claim = byName.get(name);
+      return claim !== undefined && claimStands(item, claim) && idempotencyKey(item) === claim.idempotencyKey;
+    });
+    const open = standing.filter(({ item }) => insideWindow(item, base.now));
+    const { eligible, refused } = selectEligible(context, open);
+    await holdRefused(context, refused);
+    const sendable = new Set(eligible.map(({ name }) => name));
+    let released = 0;
+    for (const { name } of standing) {
+      if (sendable.has(name)) continue;
+      await releaseClaim(base.stateRoot, byName.get(name)!);
+      released += 1;
     }
 
     const adapters = new Map<PublishProviderId, PublishAdapter>();
@@ -294,167 +265,56 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       const known = adapters.get(providerId);
       if (known) return known;
       const created = providerId === "buffer"
-        ? createBufferPublishAdapter(environment, options.fetchImpl)
-        : createMetaPublishAdapter(environment, options.fetchImpl);
+        ? createBufferPublishAdapter(base.environment, options.fetchImpl)
+        : createMetaPublishAdapter(base.environment, options.fetchImpl);
       adapters.set(providerId, created);
       return created;
     };
-    let published = 0;
-    let ambiguous = 0;
-    let rejected = 0;
-    let safetyKilled = 0;
-    let publishHeld = refusedBeforeSend;
-    for (const { name, item, target, provider } of eligibleDue) {
-      const channel = channels.get(item.channel)!;
-      const key = idempotencyKey(item);
-      const queued = CapabilityAwareQueueItemSchema.parse(item.status === "draft" ? { ...item, status: "queued" } : item);
-      const safety = checkTittyTuesdaysPost(queued);
-      if (!safety.passed) {
-        const killed = CapabilityAwareQueueItemSchema.parse({ ...queued, status: "cancelled" });
-        await Promise.all([
-          atomicWriteJson(stateRoot, `social/queue/${name}`, killed),
-          atomicWriteJson(stateRoot, `social/safety-kills/${queued.id}.json`, {
-            schemaVersion: "social-safety-kill/1",
-            venture: queued.sourceVentureId,
-            profileId: queued.target.profileId,
-            connectionId: queued.target.connectionBindingRef,
-            queueItemId: queued.id,
-            checkerVersion: safety.version,
-            reasons: safety.reasons,
-            killedAt: now.toISOString()
-          })
-        ]);
-        safetyKilled += 1;
-        continue;
-      }
-      const adapter = adapterFor(target.providerId);
-      let remoteId: string | null = null;
-      let remoteUrl: string | null = null;
-      let errorMessage: string | null = null;
-      // Set only when the provider refused before creating anything: the item fails for owner
-      // review instead of waiting on reconciliation, and still never resends by itself.
-      let rejection: ProviderRejectedError | null = null;
-      let verificationAttempts = 0;
-      let hold: SocialPublishHoldError | null = null;
-      try {
-        const existing = await adapter.findByIdempotencyKey?.(channel, key, target);
-        remoteId = existing?.remoteId ?? (await adapter.publish(channel, queued, key, target, assetGate.verified.get(name) ?? [])).remoteId;
-        for (let attempt = 1; attempt <= 2; attempt += 1) {
-          verificationAttempts = attempt;
-          try {
-          const verified = await adapter.verify(channel, queued, remoteId, target);
-          remoteUrl = verified.remoteUrl;
-          errorMessage = null;
-          break;
-          } catch (error) {
-            errorMessage = redactedConnectorError(error, environment, target);
-          }
-        }
-      } catch (error) {
-        // Hold first (refused before any write, the item stays as it was), then a definite refusal
-        // (nothing created, the item fails), and anything else is ambiguous.
-        if (error instanceof SocialPublishHoldError) hold = error;
-        else {
-          errorMessage = redactedConnectorError(error, environment, target);
-          if (remoteId === null && error instanceof ProviderRejectedError) rejection = error;
-        }
-      }
-      // Refused before any write: the item stays exactly as it was and stays due, like an asset
-      // hold. No receipt, no pause; the record says why and goes once the item gets past the check.
-      if (hold) {
-        await recordPublishHold({ stateRoot, queueFileName: name, item: queued, providerId: target.providerId, hold, detail: redactedConnectorError(hold, environment, target), now });
-        publishHeld += 1;
-        continue;
-      }
-      await clearPublishHold(stateRoot, name);
-      const succeeded = remoteId !== null && remoteUrl !== null && errorMessage === null;
-      const deliveryState = succeeded ? "published" as const : rejection ? "failed" as const : "ambiguous" as const;
-      const id = receiptId(queued);
-      const providerReceipt = createProviderDeliveryReceipt({
-        item: queued,
-        provider: provider.provider,
-        binding: provider.binding,
-        canonicalReceiptId: id,
-        idempotencyHash: key,
-        state: deliveryState,
-        remoteId,
-        publicUrl: remoteUrl,
-        requestedAt: now,
-        respondedAt: succeeded || remoteId !== null || rejection ? now : null,
-        status: succeeded
-          ? PROVIDER_LABELS[target.providerId]
-          : rejection
-            ? "Provider refused the request and created nothing; owner review before any new attempt."
-            : "Provider outcome is ambiguous and requires reconciliation before any resend.",
-        error: succeeded ? null : (errorMessage ?? "Post did not verify live")
+    const outcomes = { published: 0, ambiguous: 0, rejected: 0, held: 0 };
+    for (const entry of eligible) {
+      const outcome = await deliverClaimedItem({
+        entry,
+        claim: byName.get(entry.name)!,
+        adapter: adapterFor(entry.target.providerId as PublishProviderId),
+        environment: base.environment,
+        stateRoot: base.stateRoot,
+        now: base.now
+      }).catch(async (error: unknown) => {
+        // Nothing past the adapter may cost the other claims. The item keeps its claim, so it is
+        // never resent by itself, and the error says why in the run's log.
+        console.error(redactedConnectorError(error, base.environment, entry.target));
+        return "ambiguous" as const;
       });
-      const providerHealth = createProviderHealthSnapshot({
-        provider: provider.provider,
-        binding: provider.binding,
-        generatedAt: now,
-        lastSuccessfulOperationAt: succeeded ? now.toISOString() : null,
-        lastAttemptedOperationAt: now.toISOString(),
-        incidentRefs: succeeded ? [] : [`state/social/provider-receipts/${providerReceipt.id}.json`],
-        observedLimit: rejection?.reason === "rate-limited" || rejection?.reason === "plan-limit" ? rejection.reason : null
-      });
-      const attemptCount = Math.max(1, verificationAttempts) as 1 | 2;
-      const receipt = SocialPostReceiptSchema.parse({
-        schemaVersion: "social-post-receipt/1",
-        id,
-        venture: queued.sourceVentureId,
-        queueItemId: queued.id,
-        profileId: queued.target.profileId,
-        connectionId: queued.target.connectionBindingRef,
-        providerId: target.providerId,
-        providerApiVersion: target.apiVersion,
-        providerBindingId: provider.binding.id,
-        providerDeliveryReceiptRef: `state/social/provider-receipts/${providerReceipt.id}.json`,
-        targetRole: queued.target.role,
-        channel: queued.channel,
-        variant: queued.variant,
-        idempotencyKey: key,
-        contentHash: queued.content.contentHash,
-        rendererVersion: queued.content.rendererVersion,
-        outcome: succeeded ? "published" : rejection ? "failed" : "paused",
-        remoteId,
-        remoteUrl,
-        verifiedLive: succeeded,
-        attemptCount,
-        attemptedAt: now.toISOString(),
-        verifiedAt: succeeded ? now.toISOString() : null,
-        error: succeeded ? null : (errorMessage ?? "Post did not verify live").slice(0, 500)
-      });
-      const updated = CapabilityAwareQueueItemSchema.parse({
-        ...queued,
-        status: succeeded ? "published" : rejection ? "failed" : "needs_reconciliation",
-        attempt: { idempotencyKey: key, claimedAt: now.toISOString(), attemptCount, lastError: receipt.error },
-        receiptId: id
-      });
-      await Promise.all([
-        atomicWriteJson(stateRoot, `social/queue/${name}`, updated),
-        atomicWriteJson(stateRoot, `social/posts/${id}.json`, receipt),
-        atomicWriteJson(stateRoot, `social/provider-receipts/${providerReceipt.id}.json`, providerReceipt),
-        atomicWriteJson(stateRoot, `social/provider-health/${providerHealth.id}.json`, providerHealth)
-      ]);
-      if (succeeded) published += 1;
-      else {
-        if (rejection) rejected += 1;
-        else ambiguous += 1;
-        const reason = rejection
-          ? `Post ${queued.id} was refused by its provider: ${receipt.error}`
-          : `Post ${queued.id} has an ambiguous provider outcome: ${receipt.error}`;
-        await Promise.all([
-          atomicWriteJson(stateRoot, `social/pauses/connections/${target.connection.id}.json`, {
-            schemaVersion: "social-connection-pause/1",
-            connectionId: target.connection.id,
-            profileId: target.profile.id,
-            reason,
-            pausedAt: now.toISOString()
-          }),
-          pauseVentureSocial({ stateRoot, venture: queued.sourceVentureId as SocialVenture, reason, now })
-        ]);
-      }
+      outcomes[outcome] += 1;
     }
-    return { status: "complete", queueItems: queueFiles.length, due: due.length, published, ambiguous, rejected, skipped: due.length - eligibleDue.length + safetyKilled + malformed, assetHeld, publishHeld };
+    return report("complete", {
+      queueItems: context.queueFiles.length,
+      due: claims.length,
+      claimed: claims.length,
+      published: outcomes.published,
+      ambiguous: outcomes.ambiguous,
+      rejected: outcomes.rejected,
+      skipped: claims.length - standing.length,
+      released: released + outcomes.held,
+      publishHeld: refused.length + outcomes.held
+    });
   });
+}
+
+export async function runSocialPublisher(options: SocialPublisherOptions): Promise<SocialPublisherReport> {
+  const base = roots(options);
+  const phase = options.phase ?? "all";
+  if (phase === "send") return sendClaimedPosts(options, base, options.claims ?? []);
+  const claimed = await claimDuePosts(options, base);
+  if (phase === "claim" || claimed.status !== "claimed") return claimed;
+  const sent = await sendClaimedPosts(options, base, claimed.claims);
+  return {
+    ...sent,
+    queueItems: claimed.queueItems,
+    due: claimed.due,
+    skipped: claimed.skipped + sent.skipped,
+    assetHeld: claimed.assetHeld,
+    publishHeld: claimed.publishHeld + sent.publishHeld,
+    claims: []
+  };
 }

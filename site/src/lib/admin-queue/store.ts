@@ -11,9 +11,10 @@ import path from "node:path";
  * (quorum#575), a devShark package revision. Bytes are written only as a re-render's frames under
  * `site/public/social/<brand>/<date>/<locale>/<revision>/`, and never over a file that is there.
  * The Design Lab's saved slide edits are the one file read and never written here. An item is
- * replaced only against the version that was read (the blob sha on GitHub, the bytes on disk),
- * so a publisher run that claimed the item in between turns the owner's action into a conflict
- * instead of overwriting the claim.
+ * replaced only against the version that was read (the blob sha on GitHub, the bytes on disk).
+ * The publisher pushes its claim (`publishing`) before it sends anything, so a claim pushed after
+ * the owner's read turns the owner's action into a conflict, and an action saved before the claim
+ * push makes the claim's rebase conflict and the run stop unsent.
  */
 export type QueueActionCode = "INVALID" | "NOT_FOUND" | "REFUSED" | "CONFLICT" | "UNCONFIGURED" | "REMOTE" | "UNAVAILABLE" | "CORRUPT";
 

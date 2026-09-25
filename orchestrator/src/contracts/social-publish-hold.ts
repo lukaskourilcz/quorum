@@ -36,8 +36,8 @@ export type PublishingQuota = z.infer<typeof PublishingQuotaSchema>;
  *
  * Written by the social runner alone, one file per queue item under `state/social/publish-holds/`,
  * and removed once the item gets past its adapter's checks. Like an asset hold, the queue item is
- * left exactly as it was: nothing reached the platform, so this is not a failure and not an
- * ambiguous delivery, and it pauses no connection and no venture. An adapter may raise a hold only
+ * left exactly as it was (a claim is put back byte for byte): nothing reached the platform, so this
+ * is not a failure and not an ambiguous delivery, and it pauses no connection and no venture. An adapter may raise a hold only
  * before its first write request; anything later is an ambiguous outcome.
  */
 export const SocialPublishHoldSchema = z.strictObject({

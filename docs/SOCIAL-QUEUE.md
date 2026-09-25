@@ -92,8 +92,11 @@ and frames under `site/public/social/<brand>/<date>/<locale>/<revision>/`. The o
 reads is the Design Lab's `state/ventures/carousel-studio/slide-overrides.json`, which it never
 writes. It creates an event, a superseding item, a revision or a frame only if the path is new (a
 frame or revision already there must hold the same bytes), and replaces an item only against the version
-it read: the blob sha on GitHub, the bytes on disk. A publisher claim made in between turns the
-owner's action into a conflict instead of being overwritten. Both directories sit inside the
+it read: the blob sha on GitHub, the bytes on disk. The publisher pushes its claim before it sends
+(`publishing`, see `docs/SOCIAL-PROVIDERS.md`). An owner action saved before that push makes the
+claim's rebase conflict, and the run stops without sending. One that reads the item after the push
+finds it `publishing`, which no action accepts, and one that read it before the push and saves after
+it no longer matches the blob sha and is answered as a conflict. Both directories sit inside the
 cycle's `runtime_paths` through `state/social`.
 
 A deployment reads the repository as it stood when it was deployed, like every Admin page. An
@@ -142,7 +145,9 @@ The card shows `sending` and then `sent` once the publisher's commits are in the
 reads: in a local checkout after a pull, and in production at the next deploy. Until then the owner
 follows the post through the run link. The target is under five minutes from click to permalink.
 The first live run measures it and `docs/NEEDED.md` records the result. Before it publishes, the run
-installs dependencies and runs the orchestrator's typecheck and tests.
+installs dependencies, runs the orchestrator's typecheck and tests, and pushes its claim. A run that
+ends with a refused or ambiguous post still commits the item's status, its receipts and the pauses
+before the job goes red.
 
 ## The Design Lab link
 

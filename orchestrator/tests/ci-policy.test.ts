@@ -490,13 +490,15 @@ describe("automation policy", () => {
   // An ambiguous or refused post exits 2. When that exit failed the publish step, GitHub skipped the
   // validate and commit steps, so the run's needs_reconciliation status, its receipts and its
   // pauses died with the runner, and the next approval's dispatch found the post still queued and
-  // sent it again (quorum#574 review). The exit code is recorded, the state is validated and
-  // committed, and only the last step fails the job.
-  it("commits the publisher's state before it fails the job for a post that needs the owner", async () => {
+  // sent it again (quorum#574 review). The claim now reaches the branch before any send, the send's
+  // exit code is recorded, and only the last step fails the job, after the state is pushed.
+  it("pushes the claim before any send and commits the run's state before it fails the job", async () => {
     const social = await readFile(path.join(workflowRoot, "social-publisher.yml"), "utf8");
     const stepNames = [...social.matchAll(/^ {6}- name: (.+)$/gmu)].map(([, name]) => name!);
     const order = [
-      "Run two-phase publisher",
+      "Claim due posts",
+      "Push the claims before anything is sent",
+      "Send the claimed posts",
       "Validate publisher state",
       "Commit immutable queue state and receipts",
       "Fail when a post needs the owner"
@@ -513,17 +515,40 @@ describe("automation policy", () => {
     };
     const condition = (name: string): string => step(name).match(/^ {8}if: (.*)$/mu)?.[1] ?? "";
 
-    const publish = step("Run two-phase publisher");
-    expect(publish).toContain("|| status=$?");
-    expect(publish).toContain('echo "exit_code=$status" >> "$GITHUB_OUTPUT"');
-    expect(publish).not.toMatch(/^\s+exit /mu);
+    // The claim contacts no provider and says whether it claimed anything.
+    expect(step("Claim due posts")).toContain("--phase claim");
+    expect(step("Claim due posts")).toContain('echo "claimed=true" >> "$GITHUB_OUTPUT"');
+    // The one send, after the push, and only when something was claimed.
+    expect(social.match(/--phase send/gu)).toHaveLength(1);
+    expect(social.indexOf("--phase send")).toBeGreaterThan(social.indexOf("- name: Push the claims before anything is sent"));
+    expect(condition("Push the claims before anything is sent")).toBe("steps.claim.outputs.claimed == 'true'");
+    expect(condition("Send the claimed posts")).toBe("steps.claim.outputs.claimed == 'true'");
+    // A claim that cannot land stops the run before the send: the owner's change on the branch wins.
+    const push = step("Push the claims before anything is sent");
+    expect(push).toContain("git add state/social/queue");
+    expect(push).toMatch(/if ! git rebase --autostash "origin\/\$\{GITHUB_REF_NAME\}"; then\n\s+git rebase --abort\n(?:.*\n)*?\s+exit 1/u);
+
+    // The send's exit code is recorded, never raised in its own step.
+    const send = step("Send the claimed posts");
+    expect(send).toContain("|| status=$?");
+    expect(send).toContain('echo "exit_code=$status" >> "$GITHUB_OUTPUT"');
+    expect(send).not.toMatch(/^\s+exit /mu);
+
+    // Validation and the commit run after a failed send. Skipped only when nothing was sent: the
+    // claim failed, or its push was refused and the local claims must not reach the branch.
     for (const name of ["Validate publisher state", "Commit immutable queue state and receipts"]) {
       const gate = condition(name);
-      expect(gate, `${name} must run after the publisher reported a post that needs the owner`).toContain("!cancelled()");
+      expect(gate, `${name} must run after a failed send`).toContain("!cancelled()");
+      expect(gate).toContain("steps.claim.outcome == 'success'");
+      expect(gate).toContain("steps.push-claims.outcome != 'failure'");
       expect(gate, `${name} would be skipped by the failure it has to record`).not.toMatch(/(?<![!\w])success\(\)/u);
     }
-    expect(condition("Fail when a post needs the owner")).toContain("steps.publish.outputs.exit_code != '0'");
-    expect(step("Fail when a post needs the owner")).toContain('exit "$PUBLISH_EXIT_CODE"');
+    // Receipts win a conflicting hunk: in a rebase, "theirs" is the run's own replayed commit.
+    expect(step("Commit immutable queue state and receipts")).toContain("git rebase --autostash -X theirs");
+
+    // And the job still goes red for the owner, with the send's own exit code.
+    expect(condition("Fail when a post needs the owner")).toContain("steps.send.outputs.exit_code != '0'");
+    expect(step("Fail when a post needs the owner")).toContain('exit "$SEND_EXIT_CODE"');
   });
 
   // The 2026-08-04 doubling is reverted, with one correction the owner made when it came due:
