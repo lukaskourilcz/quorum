@@ -23,7 +23,15 @@ export async function writeJson(root: string, relative: string, value: unknown):
   await writeFile(path.join(root, relative), `${JSON.stringify(value, null, 2)}\n`);
 }
 
-export async function queueFixtureRoot(options: { capabilityEdge?: boolean; draft?: boolean } = {}): Promise<string> {
+/** The map version a fixture's capability reference names, which the fixture root's map must carry. */
+async function fixtureMapVersion(name: string): Promise<string> {
+  const target = (await readQueueFixture(name)).target as { capabilityRef?: { mapVersion?: unknown } } | undefined;
+  const version = target?.capabilityRef?.mapVersion;
+  if (typeof version !== "string") throw new Error(`${name} names no capability map version`);
+  return version;
+}
+
+export async function queueFixtureRoot(options: { capabilityEdge?: boolean; draft?: boolean; mapVersionOf?: string } = {}): Promise<string> {
   const root = await mkdtemp(path.join(os.tmpdir(), "admin-queue-"));
   await mkdir(path.join(root, "config"), { recursive: true });
   for (const file of ["social-publisher-registry.json", "channels.json", "ventures.json", "marketingshark.json"]) {
@@ -46,7 +54,9 @@ export async function queueFixtureRoot(options: { capabilityEdge?: boolean; draf
       testProbeReference: "orchestrator/tests/venture-capability.test.ts"
     });
   }
-  await writeJson(root, "config/venture-capabilities.json", { ...map, mapVersion: "1.4.0", edges });
+  // Each fixture was drafted under the map of its day; a bump since then must not make it stale here.
+  const mapVersion = await fixtureMapVersion(options.mapVersionOf ?? "social-queue-item-v2.valid.json");
+  await writeJson(root, "config/venture-capabilities.json", { ...map, mapVersion, edges });
   if (options.draft !== false) await writeJson(root, `state/social/queue/${DRAFT_FILE}`, await readQueueFixture());
   return root;
 }
@@ -62,7 +72,7 @@ export const PACKAGE_CHANNELS = ["linkedin", "instagram", "threads"] as const;
  * tests render the room's own package rather than a hand-made one.
  */
 export async function packageFixtureRoot(options: { designLabEdge?: boolean; facts?: boolean; queue?: boolean } = {}): Promise<string> {
-  const root = await queueFixtureRoot({ draft: false });
+  const root = await queueFixtureRoot({ draft: false, mapVersionOf: "marketingshark-queue-linkedin.valid.json" });
   const directory = `state/ventures/marketingshark/packages/${PACKAGE_DATE}/devshark`;
   await writeJson(root, `${directory}/package.json`, await readQueueFixture("marketingshark-package.valid.json"));
   const render = await readQueueFixture("marketingshark-render.valid.json");

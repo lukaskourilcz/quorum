@@ -1,6 +1,6 @@
 {
   "schemaVersion": "venture-capability-map/1",
-  "mapVersion": "1.4.0",
+  "mapVersion": "1.5.0",
   "effectiveDate": "2026-09-26",
   "defaultVentureContentPosture": "deny",
   "decisionReference": "state/decisions/2026-08-26-autonomy-first-capabilities.md",
@@ -599,6 +599,19 @@
     },
     {
       "schemaVersion": "venture-capability-edge/1",
+      "source": "goviral",
+      "target": "marketingshark",
+      "capability": "intelligence-read",
+      "dataSchemaVersion": "goviral-intelligence-packet/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "marketingShark's Friday note may take one trend hook for devShark: a topic, its velocity and evidence refs, derived from GoVIRAL's newest devShark snapshot and expiring with it. The hook only chooses which of devShark's own topic labels leads the week; no GoVIRAL text, figure or claim about reach reaches a slide or a caption.",
+      "governingReference": "state/decisions/2026-09-26-devshark-social-queue.md",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/marketingshark/intelligence.ts",
+      "testProbeReference": "orchestrator/tests/marketingshark-intelligence.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
       "source": "marketingshark",
       "target": "design-lab",
       "capability": "bounded-render-summary",
@@ -1122,6 +1135,12 @@
       "effectiveAt": "2026-09-26T00:00:00.000Z",
       "decisionReference": "state/decisions/2026-09-26-devshark-social-queue.md",
       "note": "Completes 1.4.0 as #568 specifies it: marketingShark to the Design Lab (render) and to Social Distribution (draft devShark queue items). The devShark node's payload class becomes internal-marketing-artifact."
+    },
+    {
+      "mapVersion": "1.5.0",
+      "effectiveAt": "2026-09-26T12:00:00.000Z",
+      "decisionReference": "state/decisions/2026-09-26-devshark-social-queue.md",
+      "note": "GitHub #576: GoVIRAL to marketingShark intelligence-read on goviral-intelligence-packet/1, the Friday note's trend hook. The goviral-trends/1 edge stays for the carousel's hashtag signals."
     }
   ]
 }

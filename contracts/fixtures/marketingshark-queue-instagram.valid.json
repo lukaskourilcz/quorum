@@ -11,7 +11,7 @@
     "role": "primary",
     "connectionBindingRef": "social-connection-devshark-instagram",
     "capabilityRef": {
-      "mapVersion": "1.4.0",
+      "mapVersion": "1.5.0",
       "source": "marketingshark",
       "target": "social-distribution",
       "capability": "approved-publish-package",
@@ -53,7 +53,7 @@
       "marketingshark:question:rm-abbr-19"
     ],
     "rendererVersion": "carousel-studio-1",
-    "contentHash": "d42b4108d1e6dc03a6daf645bff927eb38b157bfef9d3cb4cbc5d25c15c0b5ba"
+    "contentHash": "a423d5ba208362978ca0921d41eab59144e1d8a3e5f52dbe0a6e0a0a02756d9a"
   },
   "publishWindow": {
     "notBefore": "2026-09-26T06:00:00.000Z",

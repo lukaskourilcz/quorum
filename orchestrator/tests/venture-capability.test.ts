@@ -48,7 +48,7 @@ describe("venture capability map", () => {
     for (const venture of registry.ventures) expect(nodeIds.has(venture.id)).toBe(true);
     expect(nodeIds.has("webdev-signal")).toBe(true);
     expect(map.defaultVentureContentPosture).toBe("deny");
-    expect(map.mapVersion).toBe("1.4.0");
+    expect(map.mapVersion).toBe("1.5.0");
     expect(map.nodes.find((node) => node.id === "design-lab")).toMatchObject({
       classification: "rendering-service",
       canonicalOwner: "carousel-studio",
@@ -81,18 +81,26 @@ describe("venture capability map", () => {
     await expect(resolveVentureCapability(probes[4]!, { configRoot: absent })).resolves.toMatchObject({ decision: "denied", edge: null });
   });
 
-  it("lets marketingShark read GoVIRAL's trend snapshot and nothing broader (operations-2026-09b)", async () => {
+  it("lets marketingShark read GoVIRAL's trend snapshot and its trend hook, and nothing broader (#562, #576)", async () => {
     const map = await loadVentureCapabilityMap(configRoot);
-    expect(request(map, "goviral", "marketingshark", "intelligence-read", "goviral-trends/1")).toMatchObject({
-      decision: "allowed",
-      authorityGranted: false,
-      publishingAuthorized: false,
-      spendAuthorized: false
-    });
-    // The edge is exact: another schema, another capability or the reverse direction stays closed.
-    expect(request(map, "goviral", "marketingshark", "intelligence-read", "goviral-intelligence-packet/1").decision).toBe("denied");
+    // #562 registered the snapshot read; #576 (B9) the Friday note's trend hook, as its own packet.
+    for (const schemaVersion of ["goviral-trends/1", "goviral-intelligence-packet/1"]) {
+      expect(request(map, "goviral", "marketingshark", "intelligence-read", schemaVersion)).toMatchObject({
+        decision: "allowed",
+        authorityGranted: false,
+        publishingAuthorized: false,
+        spendAuthorized: false
+      });
+    }
+    // The edges are exact: another schema, another capability or the reverse direction stays closed.
+    expect(request(map, "goviral", "marketingshark", "intelligence-read", "goviral-intelligence-packet/2").decision).toBe("denied");
+    expect(request(map, "goviral", "marketingshark", "intelligence-read", "personal-growth-goviral-packet/1").decision).toBe("denied");
     expect(request(map, "goviral", "marketingshark", "approved-publish-package", "approved-publish-package/1").decision).toBe("denied");
+    expect(request(map, "goviral", "marketingshark", "bounded-render-summary", "bounded-render-summary/1").decision).toBe("denied");
     expect(request(map, "marketingshark", "goviral", "intelligence-read", "goviral-trends/1").decision).toBe("denied");
+    expect(request(map, "marketingshark", "goviral", "intelligence-read", "goviral-intelligence-packet/1").decision).toBe("denied");
+    // devShark is the product, not a reader: GoVIRAL has no edge into it.
+    expect(request(map, "goviral", "devshark", "intelligence-read", "goviral-intelligence-packet/1").decision).toBe("denied");
   });
 
   it("lets marketingShark hand devShark packages to the Design Lab and Social Distribution, exactly (#568)", async () => {
