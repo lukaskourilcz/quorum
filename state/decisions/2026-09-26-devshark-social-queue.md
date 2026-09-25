@@ -113,7 +113,7 @@ record. No rollback deletes audit history or turns an ambiguous remote outcome i
 ## Implementation
 
 - [ ] B1: marketingShark writes queue-ready packages; capability edges (#568)
-- [ ] B2: devShark profiles, held connections, the LinkedIn channel and platform (#569)
+- [x] B2: devShark profiles, held connections, the LinkedIn channel and platform (#569)
 - [ ] B3: public image URLs for Meta fetches (#570)
 - [ ] B4: LinkedIn transport through Buffer (#571)
 - [ ] B5: Threads images and Instagram JPEG in the Direct Meta adapter (#572)

@@ -13,8 +13,9 @@ so collection records `missing-permission` and makes no provider request. See
 `docs/SOCIAL-RESULTS.md`.
 
 No account, OAuth flow, credential value, provider plan, purchase, live connection or routine
-publishing authority is created by the implementation. All six retained Direct Meta bindings in
-`config/social-providers.json` remain `held`.
+publishing authority is created by the implementation. All nine bindings in
+`config/social-providers.json` remain `held`: eight Direct Meta bindings for the Instagram and
+Threads connections, and one Buffer binding for devShark's LinkedIn Page (#569).
 
 ## Contract and state family
 
@@ -42,7 +43,7 @@ persisted in this domain.
 | Provider | Role | Verdict | Release effect |
 | --- | --- | --- | --- |
 | Direct Meta | Direct official Instagram and Threads transport | Enabled implementation; every connection held | Mandatory core when owner setup and authority exist. No scheduler subscription. |
-| Buffer | Managed scheduler | Held optional | A dated verdict is sufficient. No adapter, token, account change or plan upgrade blocks core release. |
+| Buffer | Managed scheduler; the LinkedIn transport | Held | Holds the one binding of devShark's LinkedIn connection (`devshark-social-2026-09a`, proposed). No adapter exists until #571, so that connection stays held however far its activation goes. No token, account change or plan upgrade blocks core release. |
 | Metricool | Managed scheduler and reporting | Held managed-scale only | Its API plan remains outside the current budget; no adapter or purchase exists. |
 | n8n | Notification/webhook boundary | Held peripheral only | Can normalize a committed webhook or notify an incident. Cannot publish or own strategy, calendar, approval, failover or outreach. |
 | Make | Notification/webhook prototype | Disabled/deferred | No adapter exists without a new owner decision. |
@@ -51,6 +52,11 @@ persisted in this domain.
 The registry structurally rejects `publish-original` on a notification-only provider. Optional
 providers cannot silently become a connection's transport because the publisher requires the
 connection's exact provider id/version and one active binding.
+
+Every Instagram and Threads connection keeps exactly one retained Direct Meta binding. Meta has no
+LinkedIn API, so a LinkedIn connection keeps exactly one binding with the provider its connector
+names, and the publisher registry allows only Buffer there. A binding on a provider whose
+`supportedPlatforms` do not include its connection's platform is refused.
 
 ## Direct Meta delivery and reconciliation
 

@@ -7,8 +7,10 @@ Authority: GitHub #409, consuming #405, #406, #415 and the exact capability/isol
 ## Runtime truth
 
 `config/social-publisher-registry.json` is the versioned profile/connection registry used by the
-publisher. It records three legacy primary profiles, three connectionless internal proposals and
-six separate Instagram/Threads bindings. Door Money has the one exact #424 package edge;
+publisher. It records three legacy primary profiles with six Instagram/Threads bindings, five
+connectionless internal proposals (Door Money, BOOKSOFHISTORY, Tehdejší svět and WebDev Signal's
+two editions) and, since #569, devShark's three proposed profiles under marketingShark with one
+binding each: LinkedIn, Instagram and Threads. Door Money has the one exact #424 package edge;
 BOOKSOFHISTORY and Tehdejší svět remain independently proposed and capability-denied. Every
 committed binding is held, unverified and has null human activation. Credential
 and native-account identifiers are environment **reference names** only; values are neither stored
@@ -20,10 +22,10 @@ The connection supplies provider/API version, official scopes, profile-specific 
 Prague-time spacing. Multiple profiles may use one platform without sharing credentials, caps,
 health or pause state.
 
-#417 resolves that connection through `config/social-providers.json`. Every retained connection
-has one held Direct Meta binding, and the registry rejects more than one active provider for the
-same connection. Optional Buffer, Metricool and n8n postures are explicit but create no live
-binding. Make remains deferred and Ayrshare rejected. See `docs/SOCIAL-PROVIDERS.md` for the exact
+#417 resolves that connection through `config/social-providers.json`. Every Instagram and Threads
+connection has one held Direct Meta binding, devShark's LinkedIn connection has one held Buffer
+binding, and the registry rejects more than one active provider for the same connection. Optional
+Metricool and n8n postures are explicit but create no binding. Make remains deferred and Ayrshare rejected. See `docs/SOCIAL-PROVIDERS.md` for the exact
 migration, ambiguity and rollback procedure.
 
 ## Queue v2 and legacy compatibility
@@ -56,10 +58,11 @@ path. `--write` may persist its one hash-addressed receipt at
 `state/social/migrations/social-distribution-core-v1.json`; rerunning the same inputs does not write
 a duplicate. The report classifies the current repository as 13 migrated records (three legacy
 profiles, six explicit connection references and four queue-v1 compatibility projections), three
-unchanged activation records and 14 held records (three future profiles, six Direct Meta bindings
-and five optional-provider postures). Unavailable, dropped and malformed counts remain explicit.
-The categories describe migration evidence, not live authority: all profiles, connections and
-bindings remain held. Rollback keeps the original queue files and the `QueueItemSchema` and
+unchanged activation records and 22 held records (eight future profiles, nine provider bindings
+and five optional-provider postures). Unchanged activation records are those of the migrated
+ventures; marketingShark's record (#569) is new, not migration evidence. Unavailable, dropped and
+malformed counts remain explicit. The categories describe migration evidence, not live
+authority: all profiles, connections and bindings remain held. Rollback keeps the original queue files and the `QueueItemSchema` and
 `SocialActivationSchema` readers intact.
 
 ## Deny-by-default target resolution
@@ -67,14 +70,17 @@ bindings remain held. Rollback keeps the original queue files and the `QueueItem
 `resolvePublisherTarget` returns `eligible | held | denied`, never authority. In order, it checks:
 
 1. strict queue and registry contracts;
-2. exact real profile, role, platform connection and Direct Meta version;
+2. exact real profile, role and platform connection; Instagram and Threads on Direct Meta at the
+   registry's version, LinkedIn on Buffer;
 3. simulation/contact/owner-personal and permanent source isolation;
 4. own-primary relationship or exact current #424 cross-boundary edge;
 5. bounded Door Money/WebDev Signal package input;
 6. #415 support eligibility and exact campaign approval for an amplifier;
 7. active/live profile and separately human-activated healthy connection;
 8. token/App Review expiry, allowlisted credential/native-id reference availability;
-9. profile and connection pause/kill files.
+9. profile and connection pause/kill files;
+10. a transport with an adapter: a connection on anything but Direct Meta is held with
+    `provider-adapter-unavailable` (LinkedIn until #571).
 
 The runner then preserves venture release activation, the global kill switch, all immutable content
 checks, Titty Tuesdays safety, per-connection cadence, idempotency, remote verification and durable
