@@ -189,13 +189,38 @@ export function resolveScheduledClock(registry: VentureRegistry): ResolvedMeetin
 }
 
 /**
- * The idea ledger a venture writes into, or null when the id belongs to no venture.
+ * Whether a venture's admin workspace can show an idea card, which is whether it declares `ideas`.
  *
- * Null rather than a throw: the caller is recording what a model named, and a model naming a
- * venture that does not exist is a refused proposal, not a broken run.
+ * Every path that files an idea under a venture asks this first. The admin's real-state test
+ * (site/src/lib/admin-portfolio.test.ts, "gives every stored card kind a tab") runs in the
+ * post-cycle release gate and fails on any stored card that no declared tab can show. An idea
+ * filed anywhere else therefore cost the whole run that wrote it, after the run had paid. Between
+ * 2026-09-08 and 09-24, eleven mornings whose rotation named a venture without the tab billed
+ * their council and left no standup. The one run log kept, from 09-24, shows this test rejecting
+ * `carousel-studio/idea`. Adding `ideas` to a venture's `adminTabs` is the one switch that lets it
+ * receive ideas.
  */
-export function ventureNamespace(registry: VentureRegistry, ventureId: string): string | null {
-  return registry.ventures.find((venture) => venture.id === ventureId)?.ledgerNamespace ?? null;
+export function ventureShowsIdeas(venture: Pick<VentureRegistry["ventures"][number], "adminTabs">): boolean {
+  return venture.adminTabs.includes("ideas");
+}
+
+/**
+ * The idea ledger an idea named for `ventureId` may be filed in, or why it may not be filed.
+ *
+ * A refusal rather than a throw: the caller is recording what a model named, and a model naming a
+ * venture that does not exist, or one whose workspace cannot show the idea, is a refused proposal,
+ * not a broken run.
+ */
+export function ideaDestination(
+  registry: VentureRegistry,
+  ventureId: string
+): { namespace: string } | { refused: string } {
+  const venture = registry.ventures.find((candidate) => candidate.id === ventureId);
+  if (!venture) return { refused: `No idea ledger belongs to ${ventureId}.` };
+  if (!ventureShowsIdeas(venture)) {
+    return { refused: `The ${ventureId} workspace has no ideas tab, so an idea filed there could not be seen.` };
+  }
+  return { namespace: venture.ledgerNamespace };
 }
 
 export function getVentureMeetingDefinition(

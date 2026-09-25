@@ -7,6 +7,7 @@ import { MAX_FIX_TASKS, MAX_GROWTH_IDEAS, resolveOperationsReview, writeOperatio
 import { resolveRotationTarget } from "../src/operations/rotation.js";
 import { roleSystem } from "../src/standup/live.js";
 import { repoRoot } from "../src/paths.js";
+import { ideaDestination, readVentureRegistry, ventureShowsIdeas } from "../src/ventures/registry.js";
 
 async function json(file: string, value: unknown) {
   await mkdir(path.dirname(file), { recursive: true });
@@ -210,17 +211,39 @@ describe("the ideation rotation", () => {
     expect(monday?.growthObjective.length).toBeGreaterThan(0);
   });
 
-  it("covers every active venture across one full turn of the ring", async () => {
+  /*
+   * quorum#577. The ring used to hold every running venture, and only DNESKAi and GoVIRAL declare
+   * an `ideas` tab. On every other day the morning filed a card that the admin's real-state test
+   * rejects. That test runs in the post-cycle gate, so the gate discarded the paid morning: eleven
+   * of them between 2026-09-08 and 09-24, and the 09-24 log shows `carousel-studio/idea`. The
+   * registry here is the real one, which still has running ventures without the tab.
+   */
+  it("names only a venture whose workspace can show the idea, and every such venture in turn", async () => {
     const stateRoot = path.join(repoRoot, "state");
+    const registry = readVentureRegistry();
+    const running = registry.ventures.filter((venture) => venture.status !== "paused");
+    expect(running.some((venture) => !ventureShowsIdeas(venture)), "the real registry no longer tests the rule").toBe(true);
     const seen = new Set<string>();
-    for (let day = 0; day < 14; day += 1) {
-      const at = new Date("2026-08-03T04:00:00.000Z");
+    for (let day = 0; day < 60; day += 1) {
+      const at = new Date("2026-09-01T04:00:00.000Z");
       at.setUTCDate(at.getUTCDate() + day);
       const target = await resolveRotationTarget({ stateRoot, now: at });
-      if (target) seen.add(target.ventureId);
+      if (!target) continue;
+      const venture = registry.ventures.find((candidate) => candidate.id === target.ventureId)!;
+      expect(ventureShowsIdeas(venture), `${at.toISOString().slice(0, 10)} names ${venture.id}`).toBe(true);
+      seen.add(target.ventureId);
     }
-    expect(seen.size).toBeGreaterThanOrEqual(5);
+    expect([...seen].sort()).toEqual(running.filter(ventureShowsIdeas).map((venture) => venture.id).sort());
     expect(seen.has("caught-up")).toBe(true);
+  });
+
+  it("refuses a growth idea for a workspace that cannot show it, and files one that can", () => {
+    const registry = readVentureRegistry();
+    expect(ideaDestination(registry, "carousel-studio")).toEqual({
+      refused: "The carousel-studio workspace has no ideas tab, so an idea filed there could not be seen."
+    });
+    expect(ideaDestination(registry, "no-such-venture")).toEqual({ refused: "No idea ledger belongs to no-such-venture." });
+    expect(ideaDestination(registry, "goviral")).toEqual({ namespace: "goviral" });
   });
 });
 

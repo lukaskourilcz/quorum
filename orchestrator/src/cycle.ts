@@ -95,10 +95,10 @@ import {
 import {
   composeMeetingRouteDefinition,
   getVentureMeetingDefinition,
+  ideaDestination,
   loadVentureRegistry,
   parseCadenceHour,
   pausedVentureForPhase,
-  ventureNamespace,
   type VentureMeetingDefinition
 } from "./ventures/registry.js";
 import type { VentureRegistry } from "./contracts/venture-registry.js";
@@ -1034,17 +1034,16 @@ export async function runCycle(options: CycleOptions): Promise<CycleResult> {
       const local = pragueClockParts(now);
       const recordedIdeas: NonNullable<Standup["operationsReview"]>["growthIdeas"] = [];
 
+      const registry = await loadVentureRegistry();
       for (const idea of resolved.growthIdeas) {
-        const namespace = ventureNamespace(await loadVentureRegistry(), idea.ventureId);
-        if (!namespace) {
-          recordedIdeas.push({
-            ...idea,
-            outcome: "refused",
-            ideaId: null,
-            reason: `No idea ledger belongs to ${idea.ventureId}.`
-          });
+        // Refused, not filed, when no workspace tab could show it: the post-cycle gate discards a
+        // morning that stores such a card, and the morning is worth more than the idea.
+        const destination = ideaDestination(registry, idea.ventureId);
+        if ("refused" in destination) {
+          recordedIdeas.push({ ...idea, outcome: "refused", ideaId: null, reason: destination.refused });
           continue;
         }
+        const namespace = destination.namespace;
         const screened = await screenAndRecordIdea({
           root: artifactRoot,
           namespace,

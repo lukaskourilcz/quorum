@@ -32,7 +32,8 @@ import {
   getVentureMeetingDefinition,
   pausedVentureIds,
   loadVentureRegistry,
-  parseCadenceHour
+  parseCadenceHour,
+  ventureShowsIdeas
 } from "../ventures/registry.js";
 import { disabledAgentsForVenture, loadVentureAgentControls } from "../ventures/agent-controls.js";
 import { buildCalendarFeed, loadArticleSlotOutcomes, loadMeetingRecords, loadMeetingSkips, mondayOfWeek, writeCalendarFeed } from "../meetings/calendar.js";
@@ -1450,10 +1451,23 @@ export async function runPortfolioCycle(input: {
   // already been paid for, and a failure here never discards the room's real output.
   const savedIdeaIds: string[] = [];
   const ideaArtifacts: string[] = [];
+  // Only into a workspace that can show it. The post-cycle gate discards a run that stores a card
+  // no declared tab can show, so a captured idea would cost the room's own record (quorum#577).
+  const ventureTakesIdeas = registry.ventures.some((venture) =>
+    venture.id === definition.ventureId && ventureShowsIdeas(venture));
   if (!input.dry) {
     const roomMeetingRef = `${date}-${input.phase}`;
     for (const contribution of contributions) {
       if (!contribution.idea) continue;
+      if (!ventureTakesIdeas) {
+        console.warn(JSON.stringify({
+          event: "idea_capture_skipped",
+          agent: contribution.agent,
+          phase: input.phase,
+          reason: `The ${definition.ventureId} workspace has no ideas tab.`
+        }));
+        continue;
+      }
       try {
         const screened = await screenAndRecordIdea({
           root: stateRoot,

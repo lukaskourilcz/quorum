@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { kvorumBudgetCapacityDecision, signedOwnerDecision } from "../portfolio/schedule.js";
-import { loadVentureRegistry } from "../ventures/registry.js";
+import { loadVentureRegistry, ventureShowsIdeas } from "../ventures/registry.js";
 
 /**
  * Which venture the morning's ideation is for today.
@@ -13,7 +13,9 @@ import { loadVentureRegistry } from "../ventures/registry.js";
  * The rotation is a modulo over the ISO day number, which makes it deterministic: the same date
  * always picks the same venture, a re-run proposes for the same one, and a dry run can assert it
  * without a clock. Paused ventures drop out of the ring — an idea for a venture nobody is running
- * is work that cannot be taken.
+ * is work that cannot be taken. So do ventures whose workspace has no `ideas` tab
+ * (`ventureShowsIdeas`). Nobody can see an idea filed there, and the post-cycle gate discards
+ * the whole morning that filed it.
  */
 export interface RotationTarget {
   ventureId: string;
@@ -53,6 +55,7 @@ export async function resolveRotationTarget(input: {
     // describes the commissioned implementation, while these two owner records decide whether
     // its live room can act; until both exist, adding it must not perturb sibling rotations.
     .filter((venture) => venture.status !== "paused" && (venture.id !== "kvorum" || kvorumMayAct))
+    .filter(ventureShowsIdeas)
     .sort((left, right) => left.id.localeCompare(right.id));
   if (active.length === 0) return null;
 
