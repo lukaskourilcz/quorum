@@ -61,10 +61,11 @@ describe("readAdminQueue", () => {
       ownerChecks: "pending",
       supersedes: null,
       supersededBy: null,
-      designLabHref: "/admin?venture=design-lab&tab=studio&brand=devshark",
+      // The package the draft was built from, opened selected in the Design Lab (quorum#575).
+      designLabHref: "/admin?venture=design-lab&tab=studio&brand=devshark&article=devshark%3Amarketingshark-2026-09-26-devshark%3A2026-09-26",
       permalink: null,
       schemaVersion: 2,
-      actions: { approve: true, edit: true, hold: true, reject: true, rerender: false }
+      actions: { approve: true, edit: true, hold: true, reject: true, rerender: true }
     });
     expect(item!.frameHrefs[0]).toBe("/admin/api/queue/frame/ms-2026-09-26-devshark-en-linkedin/1");
     expect(item!.checks.map(({ id, state }) => `${id}:${state}`)).toEqual([

@@ -2,7 +2,7 @@ import { readFile, readdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fakeGitHub } from "@/lib/admin-queue/fake-github";
-import { DRAFT_FILE, queueFixtureRoot, readQueueFixture } from "@/lib/admin-queue/fixture-root";
+import { DRAFT_FILE, packageFixtureRoot, queueFixtureRoot, readQueueFixture, writeJson } from "@/lib/admin-queue/fixture-root";
 import { ADMIN_SESSION_COOKIE, createAdminSessionToken } from "@/lib/admin-session";
 import { POST } from "./route";
 
@@ -61,8 +61,8 @@ describe("POST /admin/api/queue/actions", () => {
     expect(await readdir(path.join(root, "state/social/queue-events")).catch(() => [])).toEqual([]);
   });
 
-  it("answers re-render as not built yet and a deployment without the token as unconfigured", async () => {
-    expect((await POST(request({ action: "rerender", itemId: "ms-2026-09-26-devshark-en-linkedin", expectedContentHash: hash }))).status).toBe(501);
+  it("answers a re-render whose package is missing as not found, and a deployment without the token as unconfigured", async () => {
+    expect((await POST(request({ action: "rerender", itemId: "ms-2026-09-26-devshark-en-linkedin", expectedContentHash: hash }))).status).toBe(404);
     vi.stubEnv("NODE_ENV", "production");
     const refused = await POST(request({ action: "hold", itemId: "ms-2026-09-26-devshark-en-linkedin", expectedContentHash: hash, reason: "Not this week." }));
     expect(refused.status).toBe(503);
@@ -82,5 +82,24 @@ describe("POST /admin/api/queue/actions", () => {
     expect(JSON.stringify(body)).not.toContain("test-token");
     expect(github.dispatches()).toHaveLength(1);
     expect(JSON.parse(await readFile(path.join(root, `state/social/queue/${DRAFT_FILE}`), "utf8"))).toMatchObject({ status: "queued" });
+  });
+
+  it("re-renders a package-built draft from the Design Lab's saved slides (quorum#575)", async () => {
+    const packaged = await packageFixtureRoot();
+    roots.push(packaged);
+    vi.stubEnv("BOARDLESSAI_REPO_ROOT", packaged);
+    await writeJson(packaged, "state/ventures/carousel-studio/slide-overrides.json", { schemaVersion: "carousel-slide-overrides/1", updatedAt: "2026-09-26T07:30:00.000Z", overrides: [{
+      kind: "package-slide", venture: "devshark", slug: "marketingshark-2026-09-26-devshark", date: "2026-09-26", slide: 3, changedAt: "2026-09-26T07:30:00.000Z",
+      headline: "Why JSON", body: "Browsers parse JSON natively.", alt: "Slide 4: why JSON"
+    }] });
+    const draft = await readQueueFixture("marketingshark-queue-linkedin.valid.json");
+    vi.setSystemTime(new Date("2026-09-26T08:00:00.000Z"));
+    try {
+      const response = await POST(request({ action: "rerender", itemId: draft.id, expectedContentHash: (draft.content as { contentHash: string }).contentHash }));
+      expect(response.status).toBe(201);
+      expect(await response.json()).toMatchObject({ ok: true, changed: true, supersedingItemId: `${String(draft.id)}-r1`, event: { action: "rerender" }, dispatch: null });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

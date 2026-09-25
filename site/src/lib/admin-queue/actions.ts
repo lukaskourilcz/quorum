@@ -1,14 +1,16 @@
 import "server-only";
 import { runDeterministicChecks, type QueueSibling } from "./checks";
-import { isQueueItemId, parseSocialQueueEvent, socialQueueEventId, socialQueueEventPath, type SocialQueueEventRecord } from "./event";
-import { approveQueueItem, nextRevisionId, parseQueueItem, parseQueueItemV2, queueItemV2Hash, rawObject, supersedingQueueItem, type QueueItem, type QueueItemV2 } from "./item";
+import { isQueueItemId, socialQueueEventId, type SocialQueueEventRecord } from "./event";
+import { approveQueueItem, parseQueueItem, parseQueueItemV2, queueItemV2Hash, rawObject, supersedingQueueItem, type QueueItem, type QueueItemV2 } from "./item";
 import { queueItemTarget, queueRepositoryRoot, readQueueState, type QueueState } from "./state";
+import { rerenderQueueItem } from "./rerender";
 import { QueueActionError, queueStore } from "./store";
+import { freeRevisionId, validated, writeEvent } from "./writes";
 import { QUEUE_ALT_TEXT_LIMIT, QUEUE_CAPTION_LIMITS, QUEUE_OWNER_CHECKS, QUEUE_PLATFORM_LABELS, type QueueActionName, type QueueDispatchView, type QueueStatus } from "./types";
 import { dispatchSocialPublisher, type QueueDispatchOutcome } from "@/lib/queue-dispatch";
 
 /**
- * The owner's five Queue actions, applied to one item (quorum#573).
+ * The owner's five Queue actions, applied to one item (quorum#573, re-render quorum#575).
  *
  * Each accepted action appends one `social-queue-event/1` and then changes the item. The event
  * goes first, because it is the evidence the change stands on: an approval writes the event's id
@@ -120,12 +122,6 @@ function baseEvent(request: QueueActionRequest, item: QueueItem, now: Date): Soc
   };
 }
 
-function validated(event: SocialQueueEventRecord): SocialQueueEventRecord {
-  const parsed = parseSocialQueueEvent(JSON.parse(JSON.stringify(event)) as unknown);
-  if (!parsed) throw new QueueActionError("CORRUPT", "The queue event could not be validated against social-queue-event/1.");
-  return parsed;
-}
-
 function requireV2(item: QueueItem, what: string): QueueItemV2 {
   if (item.schemaVersion !== 2) throw new QueueActionError("REFUSED", `A legacy v1 item cannot be ${what}; only hold and reject apply to it.`);
   return item;
@@ -139,9 +135,6 @@ function refuseSuperseded(state: QueueState, itemId: string): void {
 export async function applyQueueAction(value: unknown, options: { root?: string; now?: Date } = {}): Promise<QueueActionResult> {
   const request = parseQueueActionRequest(value);
   if (!request) throw new QueueActionError("INVALID", "The queue action is incomplete, malformed or carries an unsafe field.");
-  if (request.action === "rerender") {
-    throw new QueueActionError("UNAVAILABLE", "Re-render arrives with the Design Lab's devShark editing (quorum#575). Edit the text here, or change the graphic in the Design Lab.");
-  }
   const root = options.root ?? queueRepositoryRoot();
   const now = options.now ?? new Date();
   const store = queueStore(root);
@@ -208,6 +201,12 @@ export async function applyQueueAction(value: unknown, options: { root?: string;
     };
   }
 
+  if (request.action === "rerender") {
+    const current = requireV2(item, "re-rendered here");
+    if (!windowOpen) throw new QueueActionError("REFUSED", "The publish window has closed, so a re-rendered copy could not be sent.");
+    return rerenderQueueItem({ request, current, state, store, stored, relative, root, now, event });
+  }
+
   if (request.action === "edit") {
     const current = requireV2(item, "edited here");
     if (!["draft", "approved", "queued", "failed"].includes(current.status)) throw new QueueActionError("REFUSED", `A ${current.status} item cannot be edited.`);
@@ -222,15 +221,7 @@ export async function applyQueueAction(value: unknown, options: { root?: string;
       ...(altText !== current.content.altText ? ["altText" as const] : [])
     ];
     if (changedFields.length === 0) throw new QueueActionError("INVALID", "The edit changes nothing.");
-    // The Queue names its own revisions `<id>-r<n>.json`, so a revision written since this
-    // snapshot was taken (on GitHub, after the last deploy) is found by its file and skipped.
-    const known = state.entries.map(({ item: entry }) => entry.id);
-    let supersedingId = nextRevisionId(current.id, known);
-    for (let probe = 0; probe < 10 && await store.read(`state/social/queue/${supersedingId}.json`) !== null; probe += 1) {
-      known.push(supersedingId);
-      supersedingId = nextRevisionId(current.id, known);
-    }
-    if (supersedingId.length > 160) throw new QueueActionError("REFUSED", "This item has been revised too often to take another revision id.");
+    const supersedingId = await freeRevisionId(state, store, current.id);
     const successor = supersedingQueueItem(current, { id: supersedingId, text: caption, altText, now });
     if (!parseQueueItemV2(JSON.parse(JSON.stringify(successor)) as unknown) || queueItemV2Hash(successor) !== successor.content.contentHash) {
       throw new QueueActionError("CORRUPT", "The edited copy did not validate as a queue v2 item.");
@@ -299,10 +290,4 @@ function approvalMessage(lead: string, dispatch: QueueDispatchOutcome, platform:
 function entryCampaign(value: unknown): string | null {
   const campaign = rawObject(value)?.campaignId;
   return typeof campaign === "string" && campaign.trim().length > 0 && campaign.length <= 200 ? campaign.trim() : null;
-}
-
-async function writeEvent(store: ReturnType<typeof queueStore>, event: SocialQueueEventRecord): Promise<void> {
-  if (!await store.create(socialQueueEventPath(event), event, `admin(queue): record ${event.action} for ${event.itemId}`)) {
-    throw new QueueActionError("CONFLICT", "An event with this time and action already exists for the item; reload and decide again.");
-  }
 }

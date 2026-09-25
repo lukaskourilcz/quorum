@@ -87,12 +87,19 @@ describe("the Queue panel", () => {
       expect(html, label).toContain(`>${label}<`);
     }
     expect(html).toContain('href="/admin?venture=design-lab&amp;tab=studio&amp;brand=devshark"');
-    expect(html).toContain("Re-render opens once the Design Lab can edit devShark packages.");
+    expect(html).toContain("Re-render redraws a marketingShark carousel from its Design Lab slides; this post has none.");
     expect(html).toContain('data-check="capability" data-state="fail"');
     expect(html).toContain(": fails</span>");
     expect(html).toContain(": not run yet</span>");
     expect(html).toContain("The LinkedIn connection is not activated yet");
     expect(html).toContain('aria-current="page"');
+  });
+
+  it("links a package-built post to its own article in the Design Lab and offers its re-render (quorum#575)", () => {
+    const href = "/admin?venture=design-lab&tab=studio&brand=devshark&article=devshark%3Amarketingshark-2026-09-26-devshark%3A2026-09-26";
+    const html = render(snapshot([item({ designLabHref: href, actions: { approve: true, edit: true, hold: true, reject: true, rerender: true } })]));
+    expect(html).toContain(`href="${href.replaceAll("&", "&amp;")}"`);
+    expect(html).toContain("Re-render draws the slides saved in the Design Lab into new frames");
   });
 
   it("keeps every write control inert and says why when the deployment cannot save", () => {

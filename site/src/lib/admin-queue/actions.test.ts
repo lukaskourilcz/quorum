@@ -161,9 +161,10 @@ describe("the Queue's refusals", () => {
     expect(await events()).toEqual([]);
   });
 
-  it("names re-render as the Design Lab's step and does nothing", async () => {
+  it("refuses a re-render whose package is not in the repository, and writes nothing", async () => {
+    // The contract fixture names a package this root does not hold; rerender.test.ts drafts one.
     const error = await refusal({ action: "rerender", itemId: "ms-2026-09-26-devshark-en-linkedin", expectedContentHash: hash });
-    expect(error.code).toBe("UNAVAILABLE");
+    expect(error.code).toBe("NOT_FOUND");
     expect(await events()).toEqual([]);
   });
 

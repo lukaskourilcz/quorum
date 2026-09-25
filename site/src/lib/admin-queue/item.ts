@@ -407,12 +407,24 @@ export function approveQueueItem(item: QueueItemV2, input: { eventId: string; pu
   });
 }
 
-/** A new draft that replaces `item`: fresh checks, no approval, its own hash. The original is never touched here. */
-export function supersedingQueueItem(item: QueueItemV2, input: { id: string; text: string; altText: string | null; now: Date }): QueueItemV2 {
+/**
+ * A new draft that replaces `item`: fresh checks, no approval, its own hash. The original is never
+ * touched here. A re-render (quorum#575) also hands it new frames and the package revision that
+ * records them.
+ */
+export function supersedingQueueItem(item: QueueItemV2, input: {
+  id: string;
+  text: string;
+  altText: string | null;
+  now: Date;
+  assetPaths?: string[];
+  sourcePackage?: NonNullable<QueueItemV2["sourcePackage"]>;
+}): QueueItemV2 {
   return withHash({
     ...item,
     id: input.id,
-    content: { ...item.content, text: input.text, altText: input.altText },
+    ...(input.sourcePackage ? { sourcePackage: { ...input.sourcePackage } } : {}),
+    content: { ...item.content, text: input.text, altText: input.altText, ...(input.assetPaths ? { assetPaths: [...input.assetPaths] } : {}) },
     status: "draft",
     checks: allChecks("pending"),
     approvalProvenance: { ...item.approvalProvenance, approvalRef: AWAITING_OWNER_APPROVAL },

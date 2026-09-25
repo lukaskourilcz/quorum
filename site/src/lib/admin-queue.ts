@@ -1,5 +1,6 @@
 import "server-only";
 import { designLabVentureIds } from "@/lib/design-lab-ventures";
+import { packageAddress, packageArticleId } from "@/lib/devshark-package";
 import { runDeterministicChecks, type QueueSibling } from "@/lib/admin-queue/checks";
 import type { SocialQueueEventRecord } from "@/lib/admin-queue/event";
 import type { QueueItem } from "@/lib/admin-queue/item";
@@ -121,6 +122,21 @@ function nextSafeAction(item: QueueItem, supersededBy: string | null): string | 
   return null;
 }
 
+/** The devShark package a marketingShark draft was built from, when it names one. */
+function packageOf(item: QueueItem): { slug: string; date: string } | null {
+  return item.schemaVersion === 2 && item.sourceVentureId === "marketingshark" ? packageAddress(item.releaseId) : null;
+}
+
+/**
+ * The brand's Design Lab section, and for a package-built post the package itself: the
+ * `article=` deep link opens it selected (quorum#575).
+ */
+function designLabHref(brand: string, pkg: { slug: string; date: string } | null): string {
+  const query = new URLSearchParams({ venture: "design-lab", tab: "studio", brand });
+  if (pkg) query.set("article", packageArticleId(pkg.slug, pkg.date));
+  return `/admin?${query}`;
+}
+
 function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: QueueState, labLabels: ReadonlySet<string>, now: Date): AdminQueueItemView {
   const { item } = entry;
   const target = queueItemTarget(item, state);
@@ -161,7 +177,7 @@ function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: Q
     contentHash: item.content.contentHash,
     supersedes,
     supersededBy,
-    designLabHref: labLabels.has(ventureKey) ? `/admin?venture=design-lab&tab=studio&brand=${encodeURIComponent(ventureKey)}` : null,
+    designLabHref: labLabels.has(ventureKey) ? designLabHref(ventureKey, packageOf(item)) : null,
     permalink: receipt?.remoteUrl ?? null,
     reason: reasonFor(item, state, gate, group, now),
     nextSafeAction: nextSafeAction(item, supersededBy),
@@ -173,8 +189,8 @@ function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: Q
       edit: item.schemaVersion === 2 && (reviewable || item.status === "queued" || item.status === "failed") && open,
       hold: (reviewable || item.status === "queued") && !supersededBy,
       reject: (reviewable || ["queued", "failed", "expired"].includes(item.status)) && !supersededBy,
-      // The Design Lab's re-render for a queue item arrives with quorum#575 (B8).
-      rerender: false
+      // A marketingShark carousel is redrawn from the slides saved in the Design Lab (quorum#575).
+      rerender: packageOf(item) !== null && assets.length > 0 && (reviewable || item.status === "queued" || item.status === "failed") && open
     }
   };
 }

@@ -247,8 +247,12 @@ export function QueueCard({ item }: { item: AdminQueueItemView }) {
           {item.designLabHref ? <Link className={adminButtonVariants({ variant: "ghost" })} href={item.designLabHref}>Open in Design Lab</Link> : null}
           {rerenderShown ? (
             <>
-              <AdminButton aria-describedby={`${ids}-rerender`} disabled={!item.actions.rerender || busy} variant="ghost">Re-render</AdminButton>
-              {!item.actions.rerender ? <p className="m-0 basis-full text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]" id={`${ids}-rerender`}>Re-render opens once the Design Lab can edit devShark packages.</p> : null}
+              <AdminButton aria-describedby={`${ids}-rerender`} disabled={!item.actions.rerender || busy} onClick={() => send("rerender")} variant="ghost">{pending === "rerender" ? "Re-rendering…" : "Re-render"}</AdminButton>
+              <p className="m-0 basis-full text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]" id={`${ids}-rerender`}>
+                {item.actions.rerender
+                  ? "Re-render draws the slides saved in the Design Lab into new frames and a new draft that replaces this one."
+                  : "Re-render redraws a marketingShark carousel from its Design Lab slides; this post has none."}
+              </p>
             </>
           ) : null}
           {item.schemaVersion === 1 && (item.group === "waiting" || item.group === "scheduled") ? (
