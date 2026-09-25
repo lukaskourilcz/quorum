@@ -169,7 +169,7 @@ export function DesignLabPackageWorkspace({ article }: { article: LabPackageArti
           <span className="text-xs text-[var(--admin-foreground-muted)]">1080 × 1350 px · {current.templateId}</span>
           <div className="flex items-center gap-3">
             <AdminButton aria-label="Previous slide" disabled={slide === 0} onClick={() => open(slide - 1)}><ArrowLeft aria-hidden="true" className="size-4" /></AdminButton>
-            <span aria-live="polite" className="text-xs tabular-nums">{slide + 1} / {article.slides.length}</span>
+            <span aria-live="polite" className="whitespace-nowrap text-xs tabular-nums">{slide + 1} / {article.slides.length}</span>
             <AdminButton aria-label="Next slide" disabled={slide === article.slides.length - 1} onClick={() => open(slide + 1)}><ArrowRight aria-hidden="true" className="size-4" /></AdminButton>
           </div>
         </div>
