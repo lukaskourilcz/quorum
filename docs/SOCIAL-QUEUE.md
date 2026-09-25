@@ -77,9 +77,10 @@ frames: the first re-render writes them and the next two find the same bytes alr
 Instagram gets the JPEG copies and the other two the PNGs, as the room assigns them. The Design
 Lab's "Send to Queue" runs this action for every live draft of the package, one after another.
 
-The caption editor holds each platform to what it accepts: LinkedIn 3,000 characters, Instagram
-2,200, Threads 500. The queue v2 schema lets Threads store 2,200, the old v1 limit, but Threads
-itself refuses more than 500.
+The caption editor holds each platform to what it accepts: Instagram 2,200 and Threads 500. LinkedIn
+takes 3,000, and a single-image LinkedIn post also carries a blank line and the item's tracked link,
+so a LinkedIn caption holds 3,000 less that link (2,849 for the fixture draft). The queue v2 schema
+lets Threads store 2,200, the old v1 limit, but Threads itself refuses more than 500.
 
 ## Persistence
 

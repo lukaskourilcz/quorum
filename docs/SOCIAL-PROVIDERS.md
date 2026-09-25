@@ -195,7 +195,12 @@ the item's destination with its own UTM fields appended, unless the caption alre
 full destination link. A bare `devshark.app` in a signature does not count, because it carries no
 UTM fields. After the live test confirms that Buffer hands LinkedIn several images from the API,
 the constant becomes `multi-image`: every slide (LinkedIn allows two to twenty) with the caption as
-approved. A text over 3,000 characters is refused before any request. Images must be JPEG or PNG.
+approved. A composed text over 3,000 characters is a publish hold (`platform-text-limit`) before any
+request: it fails nothing and pauses nothing, and an edit that supersedes the item fixes it. Every
+place that bounds a LinkedIn caption counts the blank line and tracked link first
+(`orchestrator/src/social/linkedin-text.ts`, mirrored in `site/src/lib/admin-queue/linkedin.ts`):
+the marketingShark room keeps 400 characters free (`LIMITS.linkedinTotalChars` is 2,600), and the
+Queue's editor allows 3,000 less that item's own link. Images must be JPEG or PNG.
 
 Image URLs come from the frames the runner proved for the run (#570 hands them to `publish` as its
 fifth argument): the adapter uses exactly those URLs and refuses, before any request, a frame the

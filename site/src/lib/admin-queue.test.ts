@@ -53,7 +53,8 @@ describe("readAdminQueue", () => {
       handle: null,
       locale: "en",
       contentKind: "carousel",
-      captionLimit: 3_000,
+      // LinkedIn's 3,000 less a blank line and this draft's 149-character tracked link.
+      captionLimit: 2_849,
       hashtags: ["#css", "#webdevelopment", "#frontend"],
       frameCount: 5,
       group: "waiting",

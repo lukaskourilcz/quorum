@@ -91,7 +91,8 @@ export const MarketingSharkPackage = z.object({
     threads: perLocale(z.string().max(500)),
     /**
      * LinkedIn's own caption, never another channel's text. English only: the one LinkedIn Page is
-     * devShark's, and devShark writes English. 3,000 is LinkedIn's limit including the hashtags.
+     * devShark's, and devShark writes English. 3,000 is LinkedIn's limit including the hashtags;
+     * the room's gate keeps room below it for the tracked link Buffer appends.
      */
     linkedin: z.object({ en: z.string().min(1).max(3000) })
   }),

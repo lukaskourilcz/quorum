@@ -3,6 +3,7 @@ import { fencedBlocks, type NormalizedQuestion } from "./bank.js";
 import { brandLocales, type Brand, type MarketingSharkLocale } from "./config.js";
 import { SLIDE_ROLES, type CarouselCopy, type ChumOutput } from "./package.js";
 import { correctLetter, fitViolations, type FitViolation } from "./render.js";
+import { LINKEDIN_LINK_RESERVE, LINKEDIN_TEXT_LIMIT } from "../../social/linkedin-text.js";
 
 /**
  * The caps the craft rules state, restated here as numbers a check can apply.
@@ -34,8 +35,12 @@ export const LIMITS = {
    */
   instagramTotalChars: 2_200,
   threadsTotalChars: 500,
-  /** LinkedIn's post limit, measured on the caption with its hashtags appended, as it is queued. */
-  linkedinTotalChars: 3_000,
+  /**
+   * The caption with its hashtags appended, as it is queued. LinkedIn allows 3,000, and a
+   * single-image post through Buffer adds a blank line and the tracked link, so the room keeps
+   * `LINKEDIN_LINK_RESERVE` of it free: a caption that passed here was otherwise held at send time.
+   */
+  linkedinTotalChars: LINKEDIN_TEXT_LIMIT - LINKEDIN_LINK_RESERVE,
   /**
    * LinkedIn cuts a post after roughly the first 140 characters on a phone, behind "…see more", so
    * the first line has to stand alone within that.

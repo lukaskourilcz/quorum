@@ -4,9 +4,9 @@ import { isQuizDraft, packageAddress, packageArticleId } from "@/lib/devshark-pa
 import { runDeterministicChecks, type QueueSibling } from "@/lib/admin-queue/checks";
 import type { SocialQueueEventRecord } from "@/lib/admin-queue/event";
 import type { QueueItem } from "@/lib/admin-queue/item";
+import { queueCaptionLimit } from "@/lib/admin-queue/linkedin";
 import { queueItemTarget, queueRepositoryRoot, readQueueState, type QueueEntry, type QueueState } from "@/lib/admin-queue/state";
 import {
-  QUEUE_CAPTION_LIMITS,
   QUEUE_CHECK_LABELS,
   QUEUE_DETERMINISTIC_CHECKS,
   QUEUE_GROUPS,
@@ -190,7 +190,7 @@ function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: Q
     locale: item.locale,
     contentKind: assets.length > 1 ? "carousel" : assets.length === 1 ? "image" : "text",
     caption: item.content.text,
-    captionLimit: QUEUE_CAPTION_LIMITS[item.channel],
+    captionLimit: queueCaptionLimit(item),
     altText: item.content.altText,
     hashtags: [...new Set(item.content.text.match(/#[\p{L}\p{N}_]+/gu) ?? [])],
     frameCount: assets.length,

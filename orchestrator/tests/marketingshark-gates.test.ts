@@ -1,7 +1,11 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { repoRoot } from "../src/paths.js";
 import { NormalizedQuestionSchema, type NormalizedQuestion } from "../src/ventures/marketingshark/bank.js";
-import { ENGAGEMENT_NEVER_CLAIM, factSheetFor, loadMarketingSharkConfig, MarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
+import { enabledBrands, ENGAGEMENT_NEVER_CLAIM, factSheetFor, loadMarketingSharkConfig, MarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
 import { fencedBlocks, LIMITS, promisesEngagementReward, runTruthGates, violationReport } from "../src/ventures/marketingshark/gates.js";
+import { LINKEDIN_LINK_RESERVE, LINKEDIN_TEXT_LIMIT, LINKEDIN_UTM_CONTENT_MAX, linkedinTrackedLink } from "../src/social/linkedin-text.js";
 import { buildChumPacket, craftRulesFor, outputShape, readCraftRules } from "../src/ventures/marketingshark/packet.js";
 import { POST_KINDS } from "../src/ventures/marketingshark/kinds.js";
 import { ChumOutput } from "../src/ventures/marketingshark/package.js";
@@ -191,6 +195,23 @@ describe("marketingShark truth gates", () => {
     expect(gates((reply) => { reply.descriptions.linkedin.en = ""; })).toContain("linkedin-present");
   });
 
+  it("keeps room below LinkedIn's 3,000 for the tracked link every LinkedIn draft carries", async () => {
+    // The queue item's link: the brand's product URL with the room's UTM fields, and the longest
+    // `utm_content` a queue item can hold. Buffer appends it, after a blank line, to a single-image
+    // post, so a caption that used the whole 3,000 passed here and was held at send time.
+    const drafted = JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/marketingshark-queue-linkedin.valid.json"), "utf8")) as { destination: string; utm: { source: "linkedin"; medium: "organic_social"; campaign: string; content: string } };
+    const config = await loadMarketingSharkConfig();
+    for (const brand of enabledBrands(config)) {
+      const longest = linkedinTrackedLink({
+        destination: brand.productUrl,
+        utm: { ...drafted.utm, campaign: `marketingshark-${brand.id}`, content: "x".repeat(LINKEDIN_UTM_CONTENT_MAX) }
+      });
+      expect(`\n\n${longest}`.length, brand.id).toBeLessThanOrEqual(LINKEDIN_LINK_RESERVE);
+    }
+    expect(drafted.utm.campaign).toBe("marketingshark-devshark");
+    expect(LIMITS.linkedinTotalChars).toBe(LINKEDIN_TEXT_LIMIT - LINKEDIN_LINK_RESERVE);
+  });
+
   it("refuses a LinkedIn caption copied from another channel, whole or by its first line", async () => {
     const brand = await devshark();
     const copied = output(brand);
@@ -356,7 +377,7 @@ describe("marketingShark CHUM packet", () => {
     // its way out of.
     for (const cap of [
       "≤ 80 characters", "≤ 40 words", "≤ 500 characters", "≤ 300 characters", "≤ 200 characters", "3–5 hashtags",
-      "≤ 3,000 characters with its hashtags", "first line ≤ 140 characters", "at most 3 hashtags", "all five together ≤ 1,000",
+      "≤ 2,600 characters with its hashtags", "first line ≤ 140 characters", "at most 3 hashtags", "all five together ≤ 1,000",
       "texts differ, and so do their first lines", "any reward for following, liking, sharing or commenting"
     ]) {
       expect(packet, `${cap} is enforced but not stated`).toContain(cap);

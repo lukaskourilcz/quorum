@@ -127,6 +127,10 @@ describe("the Queue's edit", () => {
   it("holds an edit to what the platform accepts and refuses an edit that changes nothing", async () => {
     const tooLong = await refusal({ action: "edit", itemId: "ms-2026-09-26-devshark-en-linkedin", expectedContentHash: hash, edits: { caption: "x".repeat(3_001), altText: null } });
     expect(tooLong.code).toBe("INVALID");
+    // Inside LinkedIn's 3,000 but not once the tracked link is appended: refused here, not held at send time.
+    const withoutLink = await refusal({ action: "edit", itemId: "ms-2026-09-26-devshark-en-linkedin", expectedContentHash: hash, edits: { caption: "x".repeat(2_850), altText: null } });
+    expect(withoutLink).toMatchObject({ code: "INVALID", message: "A LinkedIn caption holds at most 2,849 characters here, because the post also carries its tracked link." });
+    expect(await events()).toEqual([]);
     const draft = parseQueueItemV2(await readQueueFixture())!;
     const unchanged = await refusal({ action: "edit", itemId: draft.id, expectedContentHash: hash, edits: { caption: draft.content.text, altText: draft.content.altText } });
     expect(unchanged.message).toMatch(/changes nothing/u);

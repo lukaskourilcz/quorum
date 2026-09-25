@@ -8,8 +8,9 @@ import {
   readBufferPost,
   type FetchLike
 } from "./buffer-api.js";
+import { LINKEDIN_TEXT_LIMIT, linkedinCaptionCarriesLink, linkedinTrackedLink } from "./linkedin-text.js";
 import type { VerifiedSocialAsset } from "./media/assets.js";
-import { ProviderRejectedError, type PublishAdapter } from "./publish.js";
+import { ProviderRejectedError, SocialPublishHoldError, type PublishAdapter } from "./publish.js";
 import type { ResolvedPublisherTarget } from "./publisher-targets.js";
 import { assertQueueItemPublishable, type RuntimeQueueItem } from "./queue.js";
 
@@ -36,7 +37,6 @@ export type BufferLinkedInFormat = "single-image" | "multi-image";
  */
 export const BUFFER_LINKEDIN_FORMAT: BufferLinkedInFormat = "single-image";
 
-const LINKEDIN_TEXT_LIMIT = 3_000;
 const LINKEDIN_MAX_IMAGES = 20;
 const VERIFY_INTERVAL_MS = 5_000;
 
@@ -111,22 +111,16 @@ function verifiedFrameUrl(frames: readonly BufferVerifiedFrame[] | undefined, as
 }
 
 /** The item's own destination with its own UTM fields, so attribution reads LinkedIn traffic. */
-export function bufferTrackedLink(item: Pick<RuntimeQueueItem, "destination" | "utm">): string {
-  const url = new URL(item.destination);
-  url.searchParams.set("utm_source", item.utm.source);
-  url.searchParams.set("utm_medium", item.utm.medium);
-  url.searchParams.set("utm_campaign", item.utm.campaign);
-  url.searchParams.set("utm_content", item.utm.content);
-  return url.toString();
-}
+export const bufferTrackedLink = linkedinTrackedLink;
 
 /**
  * The exact post Buffer receives, decided here and nowhere else.
  *
  * Multi-image, once confirmed, sends every slide with the approved caption. Otherwise the post is
  * slide one (or text alone) with the caption and the tracked devShark link, because a reader who
- * sees one slide needs the way to the rest. A composed text over LinkedIn's 3,000 characters is
- * refused before anything is sent; Buffer counts UTF-16 units, which is what `length` counts.
+ * sees one slide needs the way to the rest. A composed text over LinkedIn's 3,000 characters is held
+ * before anything is sent (`platform-text-limit`): it pauses nothing, and an edit that supersedes the
+ * item can fix it. Buffer counts UTF-16 units, which is what `length` counts.
  */
 export function planBufferLinkedInPost(
   item: RuntimeQueueItem,
@@ -139,13 +133,9 @@ export function planBufferLinkedInPost(
   }
   const multi = format === "multi-image" && content.assetPaths.length > 1;
   const assets = multi ? content.assetPaths.slice(0, LINKEDIN_MAX_IMAGES) : content.assetPaths.slice(0, 1);
-  const destination = new URL(item.destination);
-  // A full link to the destination counts; a bare "devshark.app" in a signature does not, because
-  // it carries no UTM fields and attribution would lose the post.
-  const alreadyLinked = content.text.includes(`${destination.origin}${destination.pathname}`.replace(/\/$/u, ""));
-  const text = multi || alreadyLinked ? content.text : `${content.text}\n\n${bufferTrackedLink(item)}`;
+  const text = multi || linkedinCaptionCarriesLink(content.text, item.destination) ? content.text : `${content.text}\n\n${linkedinTrackedLink(item)}`;
   if (text.length > LINKEDIN_TEXT_LIMIT) {
-    throw new ProviderRejectedError("invalid-input", `The LinkedIn post would be ${text.length} characters and LinkedIn allows ${LINKEDIN_TEXT_LIMIT}`);
+    throw new SocialPublishHoldError("platform-text-limit", `The LinkedIn post would be ${text.length} characters with its tracked link and LinkedIn allows ${LINKEDIN_TEXT_LIMIT}; nothing was sent`);
   }
   if (assets.length > 0 && !content.altText) {
     throw new ProviderRejectedError("invalid-input", "LinkedIn media requires alt text");

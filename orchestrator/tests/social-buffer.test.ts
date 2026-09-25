@@ -6,7 +6,8 @@ import { BUFFER_API_URL, BUFFER_API_VERSION, BUFFER_REQUESTS_PER_POST } from "..
 import { BUFFER_LINKEDIN_FORMAT, createBufferPublishAdapter, planBufferLinkedInPost } from "../src/social/buffer.js";
 import { ChannelRegistrySchema, type Channel } from "../src/social/channel-registry.js";
 import { SocialProviderRegistrySchema, loadSocialProviderRegistry } from "../src/social/providers.js";
-import { ProviderRejectedError } from "../src/social/publish.js";
+import { LINKEDIN_TEXT_LIMIT, linkedinCaptionLimit, linkedinTrackedLink } from "../src/social/linkedin-text.js";
+import { ProviderRejectedError, SocialPublishHoldError } from "../src/social/publish.js";
 import { loadSocialPublisherRegistry, migrateLegacyQueueItem, type ResolvedPublisherTarget } from "../src/social/publisher-targets.js";
 import { CapabilityAwareQueueItemSchema, capabilityAwareQueuePayloadHash, type CapabilityAwareQueueItem } from "../src/social/queue.js";
 import { replayBuffer } from "./fixtures/buffer-replay.js";
@@ -127,6 +128,12 @@ describe("Buffer LinkedIn adapter: create", () => {
     expect(JSON.stringify(calls)).not.toContain("boardlessai.example");
   });
 
+  it("builds the committed LinkedIn fixture's tracked link, the literal the site's mirror also pins", async () => {
+    const drafted = CapabilityAwareQueueItemSchema.parse(JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures/marketingshark-queue-linkedin.valid.json"), "utf8")) as unknown);
+    expect(linkedinTrackedLink(drafted)).toBe("https://devshark.app/?utm_source=linkedin&utm_medium=organic_social&utm_campaign=marketingshark-devshark&utm_content=2026-09-26-en-rm-abbr-19");
+    expect(linkedinCaptionLimit(drafted)).toBe(2_857);
+  });
+
   it("keeps the committed format at single-image until the owner's live test is recorded", () => {
     expect(BUFFER_LINKEDIN_FORMAT).toBe("single-image");
   });
@@ -142,6 +149,25 @@ describe("Buffer LinkedIn adapter: create", () => {
     expect(planBufferLinkedInPost(await item({ text: linked, assetPaths: [] }), "single-image", String)).toEqual({
       text: linked, imageUrls: [], format: "text", altText: "Five slides of a devShark HTML question and its answer."
     });
+  });
+
+  it("holds a caption that fits LinkedIn only without its tracked link, before any request", async () => {
+    const [channel, resolved] = await Promise.all([linkedInChannel(), target()]);
+    const budget = linkedinCaptionLimit(await item());
+    expect(budget).toBe(LINKEDIN_TEXT_LIMIT - `\n\n${trackedLink}`.length);
+    // At the budget the composed post is exactly LinkedIn's 3,000.
+    const fits = planBufferLinkedInPost(await item({ text: "x".repeat(budget) }), "single-image", (asset) => proved.find(({ path: framePath }) => framePath === asset)!.url);
+    expect(fits.text).toHaveLength(LINKEDIN_TEXT_LIMIT);
+
+    // One more and it is a hold: nothing was sent, nothing pauses, and an edit can fix it. It used
+    // to be a refusal, which failed the item and paused every devShark platform.
+    const { fetchImpl, calls } = replayBuffer({});
+    const error = await createBufferPublishAdapter(environment, fetchImpl)
+      .publish(channel, await item({ text: "x".repeat(budget + 1) }), "7".repeat(64), resolved, proved)
+      .then(() => null, (reason: unknown) => reason);
+    expect(error).toBeInstanceOf(SocialPublishHoldError);
+    expect(error).toMatchObject({ reason: "platform-text-limit", message: expect.stringContaining("3001 characters with its tracked link") });
+    expect(calls).toHaveLength(0);
   });
 
   it("returns the first post for a repeated idempotency key without a second create", async () => {
@@ -234,7 +260,7 @@ describe("Buffer LinkedIn adapter: ambiguous and refused answers", () => {
     }
   });
 
-  it("refuses anything but its own LinkedIn binding, and an over-long post, before any request", async () => {
+  it("refuses anything but its own LinkedIn binding before any request", async () => {
     const [channel, queued, resolved] = await Promise.all([linkedInChannel(), item(), target()]);
     const cases: Array<[string, Parameters<ReturnType<typeof createBufferPublishAdapter>["publish"]>, NodeJS.ProcessEnv]> = [
       ["no target", [channel, queued, "0".repeat(64), undefined], environment],
@@ -242,9 +268,9 @@ describe("Buffer LinkedIn adapter: ambiguous and refused answers", () => {
       ["Instagram channel", [{ ...channel, id: "instagram", connector: "meta_instagram" }, queued, "0".repeat(64), resolved], environment],
       ["stale API version", [channel, queued, "0".repeat(64), { ...resolved, apiVersion: "v1" }], environment],
       ["no Buffer grant", [channel, queued, "0".repeat(64), { ...resolved, connection: { ...resolved.connection, approvedScopes: [] } }], environment],
-      ["no channel reference", [channel, queued, "0".repeat(64), resolved], { ...environment, BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN: "" }],
-      ["over-long", [channel, await item({ text: "x".repeat(2_990) }), "0".repeat(64), resolved, proved], environment]
+      ["no channel reference", [channel, queued, "0".repeat(64), resolved], { ...environment, BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN: "" }]
     ];
+    // An over-long post is a hold, not a refusal: "holds a caption that fits LinkedIn only without its tracked link".
     for (const [name, args, env] of cases) {
       const { fetchImpl, calls } = replayBuffer({});
       await rejection(createBufferPublishAdapter(env, fetchImpl).publish(...args));

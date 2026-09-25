@@ -3,6 +3,7 @@ import { runDeterministicChecks, type QueueSibling } from "./checks";
 import { isQueueItemId, socialQueueEventId, type SocialQueueEventRecord } from "./event";
 import { approveQueueItem, parseQueueItem, parseQueueItemV2, queueItemV2Hash, rawObject, supersedingQueueItem, type QueueItem, type QueueItemV2 } from "./item";
 import { queueItemTarget, queueRepositoryRoot, readQueueState, type QueueState } from "./state";
+import { queueCaptionLimit } from "./linkedin";
 import { rerenderQueueItem } from "./rerender";
 import { QueueActionError, queueStore } from "./store";
 import { freeRevisionId, validated, writeEvent } from "./writes";
@@ -214,7 +215,11 @@ export async function applyQueueAction(value: unknown, options: { root?: string;
     // A field the owner left empty keeps its current text; an edit never clears alt text.
     const caption = request.edits!.caption ?? current.content.text;
     const altText = request.edits!.altText ?? current.content.altText;
-    if (caption.length > QUEUE_CAPTION_LIMITS[current.channel]) throw new QueueActionError("INVALID", `A ${QUEUE_PLATFORM_LABELS[current.channel]} caption holds at most ${QUEUE_CAPTION_LIMITS[current.channel]} characters.`);
+    const captionLimit = queueCaptionLimit(current);
+    if (caption.length > captionLimit) {
+      const link = current.channel === "linkedin" ? " here, because the post also carries its tracked link" : "";
+      throw new QueueActionError("INVALID", `A ${QUEUE_PLATFORM_LABELS[current.channel]} caption holds at most ${captionLimit.toLocaleString("en-GB")} characters${link}.`);
+    }
     if (current.content.assetPaths.length > 0 && !altText) throw new QueueActionError("INVALID", "A post with images keeps its alt text.");
     const changedFields = [
       ...(caption !== current.content.text ? ["caption" as const] : []),

@@ -9,7 +9,8 @@ import { DateTimeSchema, VentureIdSchema } from "./common.js";
  *   counts once on both; the adapter reads the live figure rather than trusting those numbers.
  * - `publishing-quota-unreadable`: the limit could not be read, so nothing proves there is room.
  * - `platform-text-limit`: the text is longer than the platform accepts (Threads: 500, counting an
- *   emoji as its UTF-8 bytes). Waiting cannot fix it; an edit that supersedes the item can.
+ *   emoji as its UTF-8 bytes; LinkedIn: 3,000 with the tracked link Buffer appends). Waiting cannot
+ *   fix it; an edit that supersedes the item can.
  * - `not-publishable`: the runner's own last check before a send refused the item (a check not
  *   passing, a content hash that no longer matches, frames without alt text). It costs that item
  *   alone, never the run, and the detail names the check.

@@ -254,6 +254,26 @@ describe("the runner and the Buffer LinkedIn transport", () => {
     expect(JSON.stringify(calls)).not.toContain(environment.PUBLIC_SITE_URL);
   });
 
+  it("holds a caption too long once its tracked link is added, and pauses nothing", async () => {
+    const root = await linkedInRoot("active");
+    const file = path.join(root, "state/social/queue/item.json");
+    const item = CapabilityAwareQueueItemSchema.parse(await json(file));
+    // Inside the queue's 3,000, but not once Buffer appends a blank line and the tracked link.
+    const long = { ...item, content: { ...item.content, text: "x".repeat(2_990) } };
+    await writeJson(file, CapabilityAwareQueueItemSchema.parse({ ...long, content: { ...long.content, contentHash: capabilityAwareQueuePayloadHash(long) } }));
+    const before = await readFile(file, "utf8");
+
+    const { report, calls } = await run(root, {});
+
+    expect(report).toMatchObject({ status: "complete", published: 0, ambiguous: 0, rejected: 0, publishHeld: 1 });
+    expect(calls).toHaveLength(0);
+    expect(await readFile(file, "utf8")).toBe(before);
+    expect(await json(path.join(root, "state/social/publish-holds/item.json"))).toMatchObject({ reason: "platform-text-limit", channel: "linkedin", providerId: "buffer" });
+    await expect(readdir(path.join(root, "state/social/pauses"))).rejects.toMatchObject({ code: "ENOENT" });
+    const activation = await json(path.join(root, "state/social/activation.json")) as { ventures: Record<string, { status: string }> };
+    expect(activation.ventures["caught-up"]?.status).toBe("enabled");
+  });
+
   it("fails a rate-limited item for owner review, records the limit and never resends it", async () => {
     const root = await linkedInRoot("active");
     const { report } = await run(root, { BoardlessBufferChannel: ["channel-linkedin-page"], BoardlessBufferCreatePost: ["rate-limited"] });
