@@ -185,9 +185,9 @@ approved. A text over 3,000 characters is refused before any request. Images mus
 
 Image URLs come from the frames the runner proved for the run (#570 hands them to `publish` as its
 fifth argument): the adapter uses exactly those URLs and refuses, before any request, a frame the
-runner did not prove. A caller that hands it no frames falls back to `PUBLIC_SITE_URL` plus the
-asset path, which is what the Meta adapter did before #570. Buffer fetches an image when the post
-goes out, so a URL must stay reachable; a jsDelivr URL pinned to a commit does.
+runner did not prove. There is no fallback: a caller that hands no frames can send text alone, and
+an image item from it is refused. Buffer fetches an image when the post goes out, so a URL must
+stay reachable; a jsDelivr URL pinned to a commit does.
 
 ### Limits, cost and exit
 

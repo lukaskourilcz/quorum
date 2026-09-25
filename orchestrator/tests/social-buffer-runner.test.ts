@@ -1,8 +1,12 @@
+import { execFile } from "node:child_process";
 import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { promisify } from "node:util";
+import sharp from "sharp";
 import { afterEach, describe, expect, it } from "vitest";
 import { ProviderConnectionBindingSchema, providerBindingHash } from "../src/contracts/social-provider.js";
+import { canonicalJson, sha256 } from "../src/hashing.js";
 import { repoRoot } from "../src/paths.js";
 import { SocialProviderRegistrySchema } from "../src/social/providers.js";
 import { SocialPublisherRegistrySchema, migrateLegacyQueueItem } from "../src/social/publisher-targets.js";
@@ -46,7 +50,7 @@ async function linkedInRoot(bindingMode: "held" | "active"): Promise<string> {
   roots.push(root);
   const config = path.join(root, "config");
   await mkdir(config, { recursive: true });
-  for (const name of ["channels.json", "venture-capabilities.json", "social-publisher-registry.json", "social-providers.json"]) {
+  for (const name of ["channels.json", "venture-capabilities.json", "social-publisher-registry.json", "social-providers.json", "network-allowlist.json"]) {
     await cp(path.join(repoRoot, "config", name), path.join(config, name));
   }
 
@@ -100,7 +104,7 @@ async function linkedInRoot(bindingMode: "held" | "active"): Promise<string> {
     channel: "linkedin" as const,
     utm: { ...migrated.utm, source: "linkedin" as const },
     target: { ...migrated.target, connectionBindingRef: "social-connection-caught-up-linkedin" },
-    // Text only: frames are the adapter tests' concern, and #570's runner gate proves them first.
+    // Text only; `withCommittedFrame` gives the item a committed frame where a test needs one.
     content: { ...migrated.content, assetPaths: [] },
     publishWindow: { notBefore: "2026-09-26T08:00:00.000Z", notAfter: "2026-09-26T12:00:00.000Z" }
   };
@@ -124,19 +128,66 @@ async function linkedInRoot(bindingMode: "held" | "active"): Promise<string> {
   return root;
 }
 
+const execFileAsync = promisify(execFile);
+
+async function git(root: string, ...args: string[]): Promise<string> {
+  const { stdout } = await execFileAsync("git", ["-c", "user.name=fixture", "-c", "user.email=fixture@example.invalid", "-c", "commit.gpgsign=false", ...args], { cwd: root });
+  return stdout.trim();
+}
+
+/**
+ * Give the item one committed PNG frame, recorded by hash in an approved package, as a cycle leaves
+ * a devShark frame. Returns the commit-pinned jsDelivr URL the runner's asset gate proves for it.
+ */
+async function withCommittedFrame(root: string): Promise<string> {
+  const frame = "/social/caught-up/2026-09-26/cs/slide-01.png";
+  const bytes = await sharp({ create: { width: 1080, height: 1350, channels: 3, background: "#0b2233" } }).png().toBuffer();
+  await mkdir(path.join(root, "site/public", path.dirname(frame)), { recursive: true });
+  await writeFile(path.join(root, "site/public", frame), bytes);
+  await git(root, "init", "--quiet");
+  await git(root, "add", "--", "site/public/social");
+  await git(root, "commit", "--quiet", "-m", "cycle: frames");
+  const commit = await git(root, "rev-parse", "HEAD");
+
+  const artifactRef = "state/social/packages/fixture-linkedin.json";
+  const built = { id: "fixture-linkedin-package", render: { frames: [{ png: { path: frame, sha256: sha256(bytes), bytes: bytes.byteLength } }] } };
+  await writeJson(path.join(root, artifactRef), built);
+  const item = CapabilityAwareQueueItemSchema.parse(await json(path.join(root, "state/social/queue/item.json")));
+  const framed = {
+    ...item,
+    sourcePackage: { schemaVersion: "approved-publish-package/1" as const, artifactRef, packageHash: sha256(canonicalJson(built)) },
+    content: { ...item.content, assetPaths: [frame], altText: "Slide one of a DNESKAi carousel." }
+  };
+  await writeJson(path.join(root, "state/social/queue/item.json"), CapabilityAwareQueueItemSchema.parse({
+    ...framed,
+    content: { ...framed.content, contentHash: capabilityAwareQueuePayloadHash(framed) }
+  }));
+  return `https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@${commit}/site/public${frame}`;
+}
+
 async function run(root: string, script: Partial<Record<BufferOperation, Array<string | Error>>>) {
   const replay = replayBuffer(script);
+  const heads: string[] = [];
+  // jsDelivr answers the asset gate's HEAD for a committed frame; everything else is Buffer's replay.
+  const fetchImpl = (async (input: string | URL | Request, init?: RequestInit) => {
+    if (new URL(String(input)).hostname === "cdn.jsdelivr.net") {
+      heads.push(String(input));
+      return new Response(null, { status: 200, headers: { "content-type": "image/png", "cache-control": "public, max-age=31536000, s-maxage=31536000, immutable" } });
+    }
+    return replay.fetchImpl(input, init);
+  }) as typeof fetch;
   const report = await runSocialPublisher({
     validateOnly: false,
     dryIfDisabled: false,
     now: NOW,
     environment,
-    fetchImpl: replay.fetchImpl,
+    fetchImpl,
+    resolveImpl: async () => ["104.16.85.20"],
     repoRoot: root,
     configRoot: path.join(root, "config"),
     stateRoot: path.join(root, "state")
   });
-  return { report, calls: replay.calls };
+  return { report, calls: replay.calls, heads };
 }
 
 async function everythingWritten(root: string): Promise<string> {
@@ -186,6 +237,21 @@ describe("the runner and the Buffer LinkedIn transport", () => {
 
     const again = await run(root, {});
     expect(again.calls).toHaveLength(0);
+  });
+
+  it("hands Buffer the commit-pinned frame URL the runner proved, never PUBLIC_SITE_URL", async () => {
+    const root = await linkedInRoot("active");
+    const proved = await withCommittedFrame(root);
+    const { report, calls, heads } = await run(root, {
+      BoardlessBufferChannel: ["channel-linkedin-page"],
+      BoardlessBufferCreatePost: ["create-post-success"],
+      BoardlessBufferPost: ["post-sent"]
+    });
+    expect(report).toMatchObject({ status: "complete", published: 1, ambiguous: 0, rejected: 0, assetHeld: 0 });
+    expect(heads).toEqual([proved]);
+    const create = calls.find(({ operation }) => operation === "BoardlessBufferCreatePost")!;
+    expect(create.variables).toMatchObject({ input: { assets: [{ image: { url: proved, metadata: { altText: "Slide one of a DNESKAi carousel." } } }] } });
+    expect(JSON.stringify(calls)).not.toContain(environment.PUBLIC_SITE_URL);
   });
 
   it("fails a rate-limited item for owner review, records the limit and never resends it", async () => {

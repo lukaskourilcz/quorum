@@ -18,10 +18,12 @@ const API_KEY = "fixture-buffer-key-never-logged";
 const CHANNEL_ID = "fixture-channel-devshark-linkedin";
 const environment = {
   BUFFER_API_KEY: API_KEY,
-  BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN: CHANNEL_ID,
-  PUBLIC_SITE_URL: "https://boardlessai.example"
+  BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN: CHANNEL_ID
 };
 const slides = [1, 2, 3, 4, 5].map((slide) => `/social/devshark/2026-09-26/en/${slide}.png`);
+const COMMIT = "0123456789abcdef0123456789abcdef01234567";
+/** What the runner's asset gate hands the adapter (quorum#570): each slide's commit-pinned URL. */
+const proved = slides.map((slide) => ({ path: slide, url: `https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@${COMMIT}/site/public${slide}` }));
 const caption = "Which HTML element carries a page's main content?\n\nFive slides, one answer.";
 
 async function linkedInChannel(): Promise<Channel> {
@@ -87,7 +89,7 @@ describe("Buffer LinkedIn adapter: create", () => {
   it("checks the Page channel, then creates one shareNow post with slide one, the caption and the tracked link", async () => {
     const { fetchImpl, calls } = replayBuffer({ BoardlessBufferChannel: ["channel-linkedin-page"], BoardlessBufferCreatePost: ["create-post-success"] });
     const adapter = createBufferPublishAdapter(environment, fetchImpl);
-    const result = await adapter.publish(await linkedInChannel(), await item(), "a".repeat(64), await target());
+    const result = await adapter.publish(await linkedInChannel(), await item(), "a".repeat(64), await target(), proved);
 
     expect(result).toEqual({ remoteId: "fixture-post-0001" });
     expect(calls.map(({ url, operation, authorization }) => [url, operation, authorization])).toEqual([
@@ -100,24 +102,29 @@ describe("Buffer LinkedIn adapter: create", () => {
         channelId: CHANNEL_ID,
         schedulingType: "automatic",
         mode: "shareNow",
-        assets: [{ image: { url: "https://boardlessai.example/social/devshark/2026-09-26/en/1.png", metadata: { altText: "Five slides of a devShark HTML question and its answer." } } }]
+        assets: [{ image: { url: proved[0]!.url, metadata: { altText: "Five slides of a devShark HTML question and its answer." } } }]
       }
     });
     // Buffer never picks the time: no queue slot, no custom schedule.
     expect(JSON.stringify(calls[1]!.variables)).not.toMatch(/addToQueue|customScheduled|dueAt/u);
   });
 
-  it("uses the frame URLs the runner proved, and refuses a frame it did not prove", async () => {
+  it("sends only frame URLs the runner proved, and never falls back to PUBLIC_SITE_URL", async () => {
     const [channel, queued, resolved] = await Promise.all([linkedInChannel(), item(), target()]);
-    const proved = [{ path: slides[0]!, url: "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@0123456789abcdef0123456789abcdef01234567/site/public/social/devshark/2026-09-26/en/1.png" }];
-    const { fetchImpl, calls } = replayBuffer({ BoardlessBufferChannel: ["channel-linkedin-page"], BoardlessBufferCreatePost: ["create-post-success"] });
-    await createBufferPublishAdapter({ ...environment, PUBLIC_SITE_URL: "" }, fetchImpl).publish(channel, queued, "9".repeat(64), resolved, proved);
-    expect(calls[1]!.variables).toMatchObject({ input: { assets: [{ image: { url: proved[0]!.url } }] } });
+    const site = { ...environment, PUBLIC_SITE_URL: "https://boardlessai.example" };
+    // No frames handed, none proved, or a proof for another slide: refused before any request.
+    for (const frames of [undefined, [], proved.slice(1)]) {
+      const unproved = replayBuffer({});
+      const error = await rejection(createBufferPublishAdapter(site, unproved.fetchImpl).publish(channel, queued, "8".repeat(64), resolved, frames));
+      expect(error.message, String(frames?.length)).toMatch(/verified before the send/u);
+      expect(unproved.calls, String(frames?.length)).toHaveLength(0);
+    }
 
-    const unproved = replayBuffer({});
-    const error = await rejection(createBufferPublishAdapter(environment, unproved.fetchImpl).publish(channel, queued, "8".repeat(64), resolved, []));
-    expect(error.message).toMatch(/verified before the send/u);
-    expect(unproved.calls).toHaveLength(0);
+    // Text alone needs no frame.
+    const { fetchImpl, calls } = replayBuffer({ BoardlessBufferChannel: ["channel-linkedin-page"], BoardlessBufferCreatePost: ["create-post-success"] });
+    await createBufferPublishAdapter(site, fetchImpl).publish(channel, await item({ assetPaths: [] }), "9".repeat(64), resolved);
+    expect(calls[1]!.variables).toMatchObject({ input: { assets: [] } });
+    expect(JSON.stringify(calls)).not.toContain("boardlessai.example");
   });
 
   it("keeps the committed format at single-image until the owner's live test is recorded", () => {
@@ -141,8 +148,8 @@ describe("Buffer LinkedIn adapter: create", () => {
     const { fetchImpl, calls } = replayBuffer({ BoardlessBufferChannel: ["channel-linkedin-page"], BoardlessBufferCreatePost: ["create-post-success"] });
     const adapter = createBufferPublishAdapter(environment, fetchImpl);
     const [channel, queued, resolved] = await Promise.all([linkedInChannel(), item(), target()]);
-    await adapter.publish(channel, queued, "b".repeat(64), resolved);
-    expect(await adapter.publish(channel, queued, "b".repeat(64), resolved)).toEqual({ remoteId: "fixture-post-0001" });
+    await adapter.publish(channel, queued, "b".repeat(64), resolved, proved);
+    expect(await adapter.publish(channel, queued, "b".repeat(64), resolved, proved)).toEqual({ remoteId: "fixture-post-0001" });
     expect(await adapter.findByIdempotencyKey!(channel, "b".repeat(64), resolved)).toEqual({ remoteId: "fixture-post-0001" });
     expect(calls.filter(({ operation }) => operation === "BoardlessBufferCreatePost")).toHaveLength(1);
   });
@@ -188,7 +195,7 @@ describe("Buffer LinkedIn adapter: ambiguous and refused answers", () => {
     const timeout = Object.assign(new Error("The operation was aborted due to timeout"), { name: "TimeoutError" });
     for (const answer of [timeout, "create-post-unexpected"]) {
       const { fetchImpl } = replayBuffer({ BoardlessBufferChannel: ["channel-linkedin-page"], BoardlessBufferCreatePost: [answer] });
-      const error = await createBufferPublishAdapter(environment, fetchImpl).publish(channel, queued, "c".repeat(64), resolved).catch((reason: unknown) => reason);
+      const error = await createBufferPublishAdapter(environment, fetchImpl).publish(channel, queued, "c".repeat(64), resolved, proved).catch((reason: unknown) => reason);
       expect(error, String(answer)).toBeInstanceOf(Error);
       expect(error, String(answer)).not.toBeInstanceOf(ProviderRejectedError);
     }
@@ -196,7 +203,7 @@ describe("Buffer LinkedIn adapter: ambiguous and refused answers", () => {
 
   it("refuses a rate-limited create as certain to have created nothing, with Buffer's wait", async () => {
     const { fetchImpl } = replayBuffer({ BoardlessBufferChannel: ["channel-linkedin-page"], BoardlessBufferCreatePost: ["rate-limited"] });
-    const error = await rejection(createBufferPublishAdapter(environment, fetchImpl).publish(await linkedInChannel(), await item(), "d".repeat(64), await target()));
+    const error = await rejection(createBufferPublishAdapter(environment, fetchImpl).publish(await linkedInChannel(), await item(), "d".repeat(64), await target(), proved));
     expect(error).toMatchObject({ reason: "rate-limited", retryAfterSeconds: 753 });
     expect(error.message).toBe("Buffer rate limit reached on the 15m window; nothing was created; retry after 753 s");
   });
@@ -210,7 +217,7 @@ describe("Buffer LinkedIn adapter: ambiguous and refused answers", () => {
       ["unauthorized", "channel-unavailable", /UNAUTHORIZED/u]
     ] as const) {
       const { fetchImpl, calls } = replayBuffer({ BoardlessBufferChannel: [answer] });
-      const error = await rejection(createBufferPublishAdapter(environment, fetchImpl).publish(channel, queued, "e".repeat(64), resolved));
+      const error = await rejection(createBufferPublishAdapter(environment, fetchImpl).publish(channel, queued, "e".repeat(64), resolved, proved));
       expect(error.reason, answer).toBe(reason);
       expect(error.message, answer).toMatch(message);
       expect(calls.map(({ operation }) => operation), answer).toEqual(["BoardlessBufferChannel"]);
@@ -221,7 +228,7 @@ describe("Buffer LinkedIn adapter: ambiguous and refused answers", () => {
     const [channel, queued, resolved] = await Promise.all([linkedInChannel(), item(), target()]);
     for (const [answer, reason] of [["create-post-invalid-input", "invalid-input"], ["create-post-limit-reached", "plan-limit"], ["unauthorized", "unauthorized"]] as const) {
       const { fetchImpl } = replayBuffer({ BoardlessBufferChannel: ["channel-linkedin-page"], BoardlessBufferCreatePost: [answer] });
-      const error = await rejection(createBufferPublishAdapter(environment, fetchImpl).publish(channel, queued, "f".repeat(64), resolved));
+      const error = await rejection(createBufferPublishAdapter(environment, fetchImpl).publish(channel, queued, "f".repeat(64), resolved, proved));
       expect(error.reason, answer).toBe(reason);
       expect(error.message, answer).not.toContain(API_KEY);
     }
@@ -236,7 +243,7 @@ describe("Buffer LinkedIn adapter: ambiguous and refused answers", () => {
       ["stale API version", [channel, queued, "0".repeat(64), { ...resolved, apiVersion: "v1" }], environment],
       ["no Buffer grant", [channel, queued, "0".repeat(64), { ...resolved, connection: { ...resolved.connection, approvedScopes: [] } }], environment],
       ["no channel reference", [channel, queued, "0".repeat(64), resolved], { ...environment, BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN: "" }],
-      ["over-long", [channel, await item({ text: "x".repeat(2_990) }), "0".repeat(64), resolved], environment]
+      ["over-long", [channel, await item({ text: "x".repeat(2_990) }), "0".repeat(64), resolved, proved], environment]
     ];
     for (const [name, args, env] of cases) {
       const { fetchImpl, calls } = replayBuffer({});

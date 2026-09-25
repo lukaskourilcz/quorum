@@ -8,6 +8,7 @@ import {
   readBufferPost,
   type FetchLike
 } from "./buffer-api.js";
+import type { VerifiedSocialAsset } from "./media/assets.js";
 import { ProviderRejectedError, type PublishAdapter } from "./publish.js";
 import type { ResolvedPublisherTarget } from "./publisher-targets.js";
 import { assertQueueItemPublishable, type RuntimeQueueItem } from "./queue.js";
@@ -42,23 +43,14 @@ const VERIFY_INTERVAL_MS = 5_000;
 export interface BufferAdapterOptions {
   /** How a carousel goes to LinkedIn; the committed rule unless a test says otherwise. */
   linkedInFormat?: BufferLinkedInFormat;
-  /**
-   * Turns a queue asset path (`/social/...`) into the public HTTPS URL Buffer fetches, for a caller
-   * that hands the adapter no verified frames. The default joins it to `PUBLIC_SITE_URL`, as the
-   * Meta adapter does on this branch. Frames the runner has already proved (quorum#570) always win.
-   */
-  resolveAssetUrl?: (assetPath: string, environment: NodeJS.ProcessEnv) => string;
   sleep?: (milliseconds: number) => Promise<void>;
 }
 
 /**
- * A frame the runner proved for this run: the exact URL that answered for the asset path. The shape
- * is the part of #570's `VerifiedSocialAsset` the adapter reads.
+ * A frame the runner proved for this run (quorum#570): the exact URL that answered for the asset
+ * path. It is the part of `VerifiedSocialAsset` the adapter reads.
  */
-export interface BufferVerifiedFrame {
-  path: string;
-  url: string;
-}
+export type BufferVerifiedFrame = Pick<VerifiedSocialAsset, "path" | "url">;
 
 /** The Buffer adapter also takes the frames the runner proved for the item it is sending. */
 export interface BufferPublishAdapter extends PublishAdapter {
@@ -108,19 +100,14 @@ function bufferCredentials(
   };
 }
 
-/** Only the URL proved for this exact path; a frame without one stops the send before any request. */
-function verifiedFrameUrl(frames: readonly BufferVerifiedFrame[], assetPath: string): string {
-  const frame = frames.find((candidate) => candidate.path === assetPath);
+/**
+ * Only the URL the runner proved for this exact path. There is no fallback: a frame without a proof,
+ * or a caller that hands no frames at all, stops the send before any request. Text alone needs none.
+ */
+function verifiedFrameUrl(frames: readonly BufferVerifiedFrame[] | undefined, assetPath: string): string {
+  const frame = frames?.find((candidate) => candidate.path === assetPath);
   if (!frame) throw new ProviderRejectedError("invalid-input", "Every LinkedIn frame needs a URL verified before the send");
   return frame.url;
-}
-
-function defaultAssetUrl(assetPath: string, environment: NodeJS.ProcessEnv): string {
-  const base = environment.PUBLIC_SITE_URL?.trim();
-  if (!base?.startsWith("https://")) {
-    throw new ProviderRejectedError("invalid-input", "PUBLIC_SITE_URL must use HTTPS for LinkedIn media");
-  }
-  return new URL(assetPath, base).toString();
 }
 
 /** The item's own destination with its own UTM fields, so attribution reads LinkedIn traffic. */
@@ -192,7 +179,6 @@ export function createBufferPublishAdapter(
   options: BufferAdapterOptions = {}
 ): BufferPublishAdapter {
   const format = options.linkedInFormat ?? BUFFER_LINKEDIN_FORMAT;
-  const resolveAssetUrl = options.resolveAssetUrl ?? defaultAssetUrl;
   const sleep = options.sleep ?? ((milliseconds: number) => new Promise<void>((resolve) => setTimeout(resolve, milliseconds)));
   const publishedByKey = new Map<string, string>();
   return {
@@ -201,7 +187,7 @@ export function createBufferPublishAdapter(
       const { apiKey, channelId } = bufferCredentials(environment, target, channel);
       const existing = publishedByKey.get(idempotencyKey);
       if (existing) return { remoteId: existing };
-      const plan = planBufferLinkedInPost(item, format, (asset) => frames ? verifiedFrameUrl(frames, asset) : resolveAssetUrl(asset, environment));
+      const plan = planBufferLinkedInPost(item, format, (asset) => verifiedFrameUrl(frames, asset));
       const probe = await probeBufferLinkedInChannel({ apiKey, channelId, fetchImpl });
       if (probe.state !== "healthy") {
         throw new ProviderRejectedError(probe.state === "rate-limited" ? "rate-limited" : "channel-unavailable", `${probe.reason}; nothing was created`);
