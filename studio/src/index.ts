@@ -13,6 +13,7 @@ export * from "./families-webdev.js";
 export * from "./recipe.js";
 export * from "./slides.js";
 export * from "./copy.js";
+export * from "./engagement.js";
 export * from "./summary.js";
 export * from "./hooks/index.js";
 export * from "./quiz-deck.js";

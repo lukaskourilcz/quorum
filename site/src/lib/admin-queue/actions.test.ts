@@ -1,4 +1,4 @@
-import { copyFile, readFile, readdir, rm } from "node:fs/promises";
+import { copyFile, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { applyQueueAction, parseQueueActionRequest } from "./actions";
@@ -91,6 +91,16 @@ describe("the Queue's approval", () => {
     expect(await events()).toEqual([]);
   });
 
+  it("refuses to approve copy that promises a reward for engagement, however it got there", async () => {
+    const draft = parseQueueItemV2(await readQueueFixture())!;
+    const bait = { ...draft, content: { ...draft.content, text: `${draft.content.text}\n\nFollow devShark this week and get 50 coins.` } };
+    const baitHash = queueItemV2Hash(bait);
+    await writeFile(path.join(root, `state/social/queue/${DRAFT_FILE}`), `${JSON.stringify({ ...bait, content: { ...bait.content, contentHash: baitHash } }, null, 2)}\n`);
+    const error = await refusal({ action: "approve", itemId: draft.id, expectedContentHash: baitHash, mode: "window" });
+    expect(error).toMatchObject({ code: "REFUSED", message: expect.stringContaining("promises a reward for following, liking, sharing or commenting") });
+    expect(await events()).toEqual([]);
+  });
+
   it("refuses an approval after the window closed", async () => {
     const error = await refusal({ action: "approve", itemId: "ms-2026-09-26-devshark-en-linkedin", expectedContentHash: hash, mode: "window" }, new Date("2026-09-27T08:00:00.000Z"));
     expect(error).toMatchObject({ code: "REFUSED" });
@@ -134,6 +144,12 @@ describe("the Queue's edit", () => {
     const draft = parseQueueItemV2(await readQueueFixture())!;
     const unchanged = await refusal({ action: "edit", itemId: draft.id, expectedContentHash: hash, edits: { caption: draft.content.text, altText: draft.content.altText } });
     expect(unchanged.message).toMatch(/changes nothing/u);
+    // Meta and LinkedIn forbid a reward for engagement; the owner's edit is held to it like the room's copy.
+    for (const edits of [{ caption: "Follow devShark this week and get 50 coins.", altText: null }, { caption: null, altText: "Like this post to unlock premium." }]) {
+      const bait = await refusal({ action: "edit", itemId: draft.id, expectedContentHash: hash, edits });
+      expect(bait).toMatchObject({ code: "INVALID", message: expect.stringContaining("promises a reward for following, liking, sharing or commenting") });
+    }
+    expect(await events()).toEqual([]);
   });
 });
 

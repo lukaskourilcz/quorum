@@ -1,5 +1,6 @@
 import { renderCarouselSlideSvg, type CarouselRenderInput } from "./renderer.js";
 import type { BrandTokens, CarouselFormat, CarouselTemplate } from "./schema.js";
+import { ENGAGEMENT_REWARD_REFUSAL, promisesEngagementReward } from "./engagement.js";
 
 /**
  * marketingShark's quiz carousel as one render path (quorum#575).
@@ -228,9 +229,10 @@ const words = (value: string): number => value.trim().split(/\s+/u).filter(Boole
  * Every reason a deck of edited slides cannot be written, found before anything is.
  *
  * The caps are the room's own (`QUIZ_SLIDE_LIMITS`). The clip gate renders each slide and names
- * any slot the canvas would have to cut, with the field that fills it and the slot's budget. Two
- * truth rules the room also applies hold here: the reveal may not name a letter other than the
- * correct one, and the context slide keeps the question's code byte for byte.
+ * any slot the canvas would have to cut, with the field that fills it and the slot's budget. Three
+ * rules the room also applies hold here: the reveal may not name a letter other than the correct
+ * one, the context slide keeps the question's code byte for byte, and no field promises a reward
+ * for engagement.
  */
 export function reviewQuizSlides(input: {
   slides: readonly QuizSlideCopy[];
@@ -248,6 +250,9 @@ export function reviewQuizSlides(input: {
     const headlineCap = slide.role === "hook" ? limits.hookChars : limits.headlineChars;
     if (slide.headline.length > headlineCap) add("headline", `the headline is ${slide.headline.length} characters; it holds ${headlineCap}.`);
     if (slide.body.length > limits.bodyChars) add("body", `the body is ${slide.body.length} characters; it holds ${limits.bodyChars}.`);
+    for (const [field, value] of [["headline", slide.headline], ["body", slide.body], ["alt", slide.alt]] as const) {
+      if (promisesEngagementReward(value)) add(field, `${ENGAGEMENT_REWARD_REFUSAL}.`);
+    }
     if (slide.alt.trim().length === 0) add("alt", "the alt text is empty; every slide needs one.");
     if (slide.alt.length > limits.altChars) add("alt", `the alt text is ${slide.alt.length} characters; it holds ${limits.altChars}.`);
     if (slide.role === "why" && words(`${slide.headline} ${slide.body}`) > limits.whyWords) {

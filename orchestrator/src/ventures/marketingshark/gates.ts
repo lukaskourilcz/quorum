@@ -1,4 +1,4 @@
-import { QUIZ_SLIDE_LIMITS } from "@boardlessai/carousel-studio";
+import { promisesEngagementReward, QUIZ_SLIDE_LIMITS } from "@boardlessai/carousel-studio";
 import { fencedBlocks, type NormalizedQuestion } from "./bank.js";
 import { brandLocales, type Brand, type MarketingSharkLocale } from "./config.js";
 import { SLIDE_ROLES, type CarouselCopy, type ChumOutput } from "./package.js";
@@ -56,18 +56,11 @@ export function firstLine(text: string): string {
 
 const comparable = (text: string): string => text.toLowerCase().replace(/\s+/gu, " ").trim();
 
-/*
- * Engagement bait, in the one form a check can recognise without flagging ordinary developer copy:
- * a call to follow, like, share, comment on or tag the brand or the post, in the same sentence as a
- * reward. "Share this with a friend who still uses var" passes; "Follow us for 50 coins" does not.
+/**
+ * The reward-for-engagement rule is the studio's, so the Admin's Queue and Design Lab read an owner's
+ * edit with exactly the function the room's gates use (quorum#573 review).
  */
-const ENGAGEMENT_CALL = /\b(?:follow|like|share|comment(?:\s+on)?|repost|tag|subscribe(?:\s+to)?|save)\s+(?:us|this|it|our|devshark|the\s+(?:page|post|carousel|profile)|a\s+friend|below)\b|\bfor\s+(?:following|liking|sharing|commenting|reposting|tagging|subscribing)\b|(?:^|\s)(?:sleduj(?:te)?|lajkni(?:te)?|sdílej(?:te)?|okomentuj(?:te)?)(?=\s|$)/iu;
-const ENGAGEMENT_REWARD = /\b(?:coins?|discounts?|rewards?|giveaways?|prizes?|promo\s+codes?|unlock(?:s|ed)?|premium|free\s+(?:access|months?|trial))\b|\d+\s*%\s*off\b|(?:^|\s)(?:minc\p{L}*|slev\p{L}*|odměn\p{L}*)/iu;
-
-/** Whether any sentence of a text promises a reward for engagement. */
-export function promisesEngagementReward(text: string): boolean {
-  return text.split(/[.!?\n]+/u).some((sentence) => ENGAGEMENT_CALL.test(sentence) && ENGAGEMENT_REWARD.test(sentence));
-}
+export { promisesEngagementReward };
 
 /** The assigned slide-1 line per language: English always, Czech for a brand that writes it. */
 export interface HookLines {

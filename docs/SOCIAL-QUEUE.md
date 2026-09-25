@@ -65,7 +65,7 @@ never points at evidence that was not written.
 
 | Action | Applies to | Effect |
 | --- | --- | --- |
-| `approve` | v2 `draft` or `approved`, window open | Reruns the six deterministic checks: `schema` (the hash matches), `duplicate` (the caption is not already live on the profile), `accessibility` (alt text wherever there are images), `budget` (an approval spends nothing), `capability` (the exact edge in `config/venture-capabilities.json`) and `authority` (the profile and connection belong to the venture and platform). Any failure refuses the approval and names it. The owner's approval is the evidence for `brand`, `claims`, `quill`, `keeper` and `policy`. The event id becomes `approvalProvenance.approvalRef`, the status becomes `queued` and the hash is recomputed. `mode: "now"` narrows the window to the next hour, never past its end. |
+| `approve` | v2 `draft` or `approved`, window open | Reruns the six deterministic checks: `schema` (the hash matches), `duplicate` (the caption is not already live on the profile), `accessibility` (alt text wherever there are images), `budget` (an approval spends nothing), `capability` (the exact edge in `config/venture-capabilities.json`) and `authority` (the profile and connection belong to the venture and platform). Any failure refuses the approval and names it. So does copy that promises a reward for engagement (below). The owner's approval is the evidence for `brand`, `claims`, `quill`, `keeper` and `policy`. The event id becomes `approvalProvenance.approvalRef`, the status becomes `queued` and the hash is recomputed. `mode: "now"` narrows the window to the next hour, never past its end. |
 | `edit` | v2 `draft`, `approved`, `queued` or `failed`, window open | Writes `<id>-r<n>` as a fresh draft with the edited caption or alt text, pending checks and its own hash. The original becomes `cancelled`. An approved item is never changed in place. |
 | `hold` | `draft`, `approved`, `queued` (v1 too) | `cancelled`, with the owner's reason. |
 | `reject` | as hold, plus `failed` and `expired` | `cancelled`, with the reason recorded as a `tasteNote` addressed to the venture that drafted the item. |
@@ -76,6 +76,15 @@ slides' words. The LinkedIn, Instagram and Threads drafts of one package therefo
 frames: the first re-render writes them and the next two find the same bytes already there.
 Instagram gets the JPEG copies and the other two the PNGs, as the room assigns them. The Design
 Lab's "Send to Queue" runs this action for every live draft of the package, one after another.
+
+No approval waives one copy rule. Meta and LinkedIn forbid a reward for engagement, so an edit
+whose caption or alt text promises coins, discounts, access or any reward for following, liking,
+sharing or commenting is refused, and so is its approval, whatever wrote the copy. The Design Lab's
+slide save and `rerender` refuse such a slide too. All of them use `promisesEngagementReward` from the
+studio package, the function the marketingShark room's `engagement-reward` gate runs, so the two
+cannot disagree. A card whose copy breaks the rule says so before the owner tries to approve it. The
+fact sheet's other `neverClaim` entries are judgments rather than patterns; the owner's approval is
+the evidence for `claims`.
 
 The caption editor holds each platform to what it accepts: Instagram 2,200 and Threads 500. LinkedIn
 takes 3,000, and a single-image LinkedIn post also carries a blank line and the item's tracked link,

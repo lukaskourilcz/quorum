@@ -61,6 +61,16 @@ describe("POST /admin/api/carousel-studio/package-slide", () => {
     await expect(readFile(path.join(root, "state/ventures/carousel-studio/slide-overrides.json"), "utf8")).rejects.toMatchObject({ code: "ENOENT" });
   });
 
+  it("refuses a slide that promises a reward for engagement, and writes nothing", async () => {
+    const { root, POST, cookie } = await route();
+    const response = await POST(save(cookie, { ...address, slide: 4, headline: "Follow devShark this week and get 50 coins", body: "", alt: "Slide 5" }));
+    expect(response.status).toBe(422);
+    const body = await response.json() as { cause: string; problems: Array<{ field: string; message: string }> };
+    expect(body.cause).toBe("refused");
+    expect(body.problems).toEqual([expect.objectContaining({ field: "headline", message: expect.stringContaining("any reward for following, liking, sharing or commenting") })]);
+    await expect(readFile(path.join(root, "state/ventures/carousel-studio/slide-overrides.json"), "utf8")).rejects.toMatchObject({ code: "ENOENT" });
+  });
+
   it("saves an edit that fits and the slide route renders it", async () => {
     const { root, POST, GET, cookie } = await route();
     const before = await GET(slide(4).request(cookie), slide(4).params);

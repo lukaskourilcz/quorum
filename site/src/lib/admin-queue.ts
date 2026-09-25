@@ -176,7 +176,8 @@ function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: Q
   const supersedes = state.events.find((event) => event.supersedingItemId === item.id)?.itemId ?? null;
   const open = Date.parse(item.publishWindow.notAfter) > now.getTime() && !supersededBy;
   const reviewable = item.status === "draft" || item.status === "approved";
-  const computed = item.schemaVersion === 2 && reviewable ? runDeterministicChecks(item, siblings, state.registry).results : null;
+  const review = item.schemaVersion === 2 && reviewable ? runDeterministicChecks(item, siblings, state.registry) : null;
+  const computed = review?.results ?? null;
   const receipt = [...state.receipts].reverse().find((candidate) => candidate.queueItemId === item.id && candidate.outcome === "published");
   const assets = item.content.assetPaths;
   return {
@@ -205,7 +206,8 @@ function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: Q
     supersededBy,
     designLabHref: labLabels.has(ventureKey) ? designLabHref(ventureKey, packageOf(item)) : null,
     permalink: receipt?.remoteUrl ?? null,
-    reason: reasonFor(item, state, gate, group, now),
+    // Copy an approval would refuse is named before the owner tries: no approval waives this rule.
+    reason: review?.copyFailure ? `Not approvable as written: ${review.copyFailure}. Edit it first.` : reasonFor(item, state, gate, group, now),
     nextSafeAction: nextSafeAction(item, supersededBy),
     gate: group === "waiting" || group === "scheduled" ? gateNote(item, gate) : null,
     schemaVersion: item.schemaVersion,

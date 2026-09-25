@@ -63,7 +63,9 @@ the graphic. Approving a post publishes it without another manual step.
 - No slide, caption or hashtag may promise coins, discounts, access or any reward for following,
   liking, sharing or commenting. Meta's spam standards forbid value in exchange for engagement and
   LinkedIn forbids artificial engagement. The rule is in the craft rules, in the fact sheet's
-  `neverClaim`, in every CHUM packet, and in the `engagement-reward` gate.
+  `neverClaim`, in every CHUM packet, and in the `engagement-reward` gate. The same function
+  (`promisesEngagementReward`, in the studio package) refuses an owner's Queue edit, an approval,
+  a Design Lab slide save and a re-render that break it.
 - Facts come only from the fact sheet block in effect on the run date. No launch date, price or
   user count until the owner adds a block that states one.
 - Three captions, one carousel: no channel's text or first line is another channel's.

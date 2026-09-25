@@ -1,8 +1,10 @@
+import { promisesEngagementReward } from "@boardlessai/carousel-studio";
 import { queueItemV2Hash, type QueueItemV2 } from "./item";
 import type { QueueCheckState, QueueDeterministicCheck } from "./types";
 
 /**
- * The six checks the Queue can decide by itself, run again at the moment of approval.
+ * The six checks the Queue can decide by itself, run again at the moment of approval, and the one
+ * copy rule no approval can waive.
  *
  * The five others (brand, claims, quill, keeper, policy) are judgements a model cannot pass for
  * itself, and the owner's approval is recorded as their evidence. These six are facts about the
@@ -17,7 +19,23 @@ export interface QueueRegistryContext {
   capabilityMapVersion: string | null;
 }
 
-export type DeterministicCheckResult = { results: Record<QueueDeterministicCheck, QueueCheckState>; failures: string[] };
+export type DeterministicCheckResult = {
+  results: Record<QueueDeterministicCheck, QueueCheckState>;
+  failures: string[];
+  /** The copy rule no approval can waive, when the caption or alt text breaks it; null when it holds. */
+  copyFailure: string | null;
+};
+
+/**
+ * Meta and LinkedIn forbid a reward for engagement, and no owner check stands in for that: the rule
+ * is the studio's, the same function the marketingShark room's gates run, so copy that reached the
+ * item by an edit, a re-render or anything else is refused at approval all the same.
+ */
+export const ENGAGEMENT_REWARD_FAILURE = "the copy promises a reward for following, liking, sharing or commenting, which Meta and LinkedIn forbid";
+
+export function copyBreaksEngagementRule(copy: { text: string; altText: string | null }): boolean {
+  return [copy.text, copy.altText ?? ""].some(promisesEngagementReward);
+}
 
 const LIVE_STATUSES = new Set(["draft", "approved", "queued", "publishing", "published"]);
 
@@ -77,8 +95,10 @@ export function runDeterministicChecks(item: QueueItemV2, others: readonly Queue
     capability: "the capability map does not allow this venture to hand posts to Social Distribution",
     authority: "the profile or its connection does not belong to this venture and platform"
   };
-  const failures = (Object.keys(results) as QueueDeterministicCheck[])
-    .filter((id) => results[id] === "fail")
-    .map((id) => messages[id]);
-  return { results, failures };
+  const copyFailure = copyBreaksEngagementRule(item.content) ? ENGAGEMENT_REWARD_FAILURE : null;
+  const failures = [
+    ...(Object.keys(results) as QueueDeterministicCheck[]).filter((id) => results[id] === "fail").map((id) => messages[id]),
+    ...(copyFailure ? [copyFailure] : [])
+  ];
+  return { results, failures, copyFailure };
 }

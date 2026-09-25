@@ -1,5 +1,5 @@
 import "server-only";
-import { runDeterministicChecks, type QueueSibling } from "./checks";
+import { copyBreaksEngagementRule, ENGAGEMENT_REWARD_FAILURE, runDeterministicChecks, type QueueSibling } from "./checks";
 import { isQueueItemId, socialQueueEventId, type SocialQueueEventRecord } from "./event";
 import { approveQueueItem, parseQueueItem, parseQueueItemV2, queueItemV2Hash, rawObject, supersedingQueueItem, type QueueItem, type QueueItemV2 } from "./item";
 import { queueItemTarget, queueRepositoryRoot, readQueueState, type QueueState } from "./state";
@@ -221,6 +221,7 @@ export async function applyQueueAction(value: unknown, options: { root?: string;
       throw new QueueActionError("INVALID", `A ${QUEUE_PLATFORM_LABELS[current.channel]} caption holds at most ${captionLimit.toLocaleString("en-GB")} characters${link}.`);
     }
     if (current.content.assetPaths.length > 0 && !altText) throw new QueueActionError("INVALID", "A post with images keeps its alt text.");
+    if (copyBreaksEngagementRule({ text: caption, altText })) throw new QueueActionError("INVALID", `Not saved: ${ENGAGEMENT_REWARD_FAILURE}.`);
     const changedFields = [
       ...(caption !== current.content.text ? ["caption" as const] : []),
       ...(altText !== current.content.altText ? ["altText" as const] : [])

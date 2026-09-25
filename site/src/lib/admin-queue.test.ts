@@ -90,6 +90,15 @@ describe("readAdminQueue", () => {
     });
   });
 
+  it("names copy that promises a reward for engagement on the card, before the owner tries to approve", async () => {
+    const base = await root({ draft: false });
+    const quiz = parseQueueItemV2(await readQueueFixture())!;
+    const bait = { ...quiz, content: { ...quiz.content, text: `${quiz.content.text}\n\nComment below to unlock a discount.` } };
+    await writeJson(base, `state/social/queue/${DRAFT_FILE}`, { ...bait, content: { ...bait.content, contentHash: queueItemV2Hash(bait) } });
+    const [item] = (await readAdminQueue(base, { now })).items;
+    expect(item!.reason).toBe("Not approvable as written: the copy promises a reward for following, liking, sharing or commenting, which Meta and LinkedIn forbid. Edit it first.");
+  });
+
   it("shows a missing capability edge as a failing check before the owner tries to approve", async () => {
     const snapshot = await readAdminQueue(await root({ capabilityEdge: false }), { now });
     expect(snapshot.items[0]!.checks.find(({ id }) => id === "capability")?.state).toBe("fail");

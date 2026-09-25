@@ -1,6 +1,7 @@
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import {
+  promisesEngagementReward,
   CAROUSEL_BRANDS,
   QUIZ_SLIDE_LIMITS,
   liveTemplates,
@@ -94,6 +95,15 @@ describe("the review an owner's edit has to pass", () => {
     expect(problems.map((problem) => [problem.slide, problem.field])).toEqual(expect.arrayContaining([[1, "headline"], [4, "body"], [5, "alt"]]));
     expect(review(deck(Object.fromEntries([0, 1, 2, 3, 4].map((index) => [index, { alt: "a".repeat(QUIZ_SLIDE_LIMITS.altChars) }])))))
       .toEqual([expect.objectContaining({ slide: 0, field: "alt", message: "The five alt texts are 1004 characters together; they hold 1000." })]);
+  });
+
+  it("refuses a slide that promises a reward for engagement, in any field", () => {
+    const problems = review(deck({ 4: { headline: "Follow devShark this week and get 50 coins" }, 3: { alt: "Share this post for a free month of premium" } }));
+    expect(problems.map(({ slide, field }) => [slide, field])).toEqual([[4, "alt"], [5, "headline"]]);
+    expect(problems[0]!.message).toBe("Slide 4 (why): no slide, caption or hashtag may promise coins, discounts, access or any reward for following, liking, sharing or commenting.");
+    // A plain invitation is not bait: nothing is promised for it.
+    expect(review(deck({ 4: { headline: "Share this with a friend who still uses var" } }))).toEqual([]);
+    expect(promisesEngagementReward("Follow us for 50 coins")).toBe(true);
   });
 
   it("keeps the two truth rules: the right letter on the reveal and the question's code on the context slide", () => {
