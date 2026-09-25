@@ -4,6 +4,7 @@ import path from "node:path";
 import { MarketingSharkActivationSchema, SocialActivationSchema, type SocialActivation } from "../contracts/autonomy.js";
 import { MarketingPlanSchema } from "../contracts/marketing-plan.js";
 import { ReleaseProofSchema } from "../contracts/autonomy.js";
+import { MARKETINGSHARK_PACKAGE_VERSIONS } from "../ventures/marketingshark/package-version.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
 import {
   loadSocialPublisherRegistry,
@@ -189,7 +190,7 @@ async function caughtUpEvents(stateRoot: string): Promise<DeliveryHealth[]> {
 }
 
 const DraftedDevSharkPackageSchema = z.looseObject({
-  schemaVersion: z.literal("marketingshark-package/1"),
+  schemaVersion: z.enum(MARKETINGSHARK_PACKAGE_VERSIONS),
   brandId: z.literal("devshark"),
   status: z.literal("draft")
 });
@@ -197,8 +198,9 @@ const DraftedDevSharkPackageSchema = z.looseObject({
 /**
  * How many devShark packages marketingShark has drafted, counted off disk.
  *
- * Only the fields that make a file a drafted devShark package are read, so a package-schema change
- * elsewhere cannot silently reset the count; an unreadable file is not a draft.
+ * Only the fields that make a file a drafted devShark package are read, so a change to the rest of
+ * the package leaves the count alone; an unreadable file is not a draft. The version comes from the
+ * package module's own constant: when this matched `/1` alone, B1's move to `/2` held the count at 0.
  */
 export async function draftedDevSharkPackages(stateRoot: string): Promise<number> {
   let count = 0;

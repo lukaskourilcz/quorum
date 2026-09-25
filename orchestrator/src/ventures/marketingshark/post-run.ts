@@ -18,6 +18,7 @@ import type { PostDayPlan } from "./post-plan.js";
 import { buildPostRenderSummary, rasterisePostDeck, renderPostDeck } from "./post-render.js";
 import { buildQueueItems, marketingSharkCapabilityRef } from "./queue.js";
 import { engineVersion, MARKETINGSHARK_FORMAT, type RasterisedFrame } from "./render.js";
+import { MARKETINGSHARK_PACKAGE_VERSION } from "./package-version.js";
 
 /**
  * One brand's morning for a kind beyond the quiz (quorum#576): the plan code already made, one paid
@@ -97,7 +98,7 @@ export function assemblePostPackage(input: {
   const slides = assemblePostSlides(input.plan, input.output);
   return PostPackageSchema.parse({
     id: packageId(input.date, input.brand.id),
-    schemaVersion: "marketingshark-package/2",
+    schemaVersion: MARKETINGSHARK_PACKAGE_VERSION,
     kind: input.plan.kind,
     date: input.date,
     brandId: input.brand.id,

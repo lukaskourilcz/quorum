@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { SocialActivationSchema, SocialPostReceiptSchema } from "../contracts/autonomy.js";
 import { MarketingPlanSchema } from "../contracts/marketing-plan.js";
 import { atomicWriteJson } from "../state.js";
+import { AnyMarketingSharkPackage } from "../ventures/marketingshark/package.js";
 import { caughtUpUnlockCounter, isPublishingVenture, mmaFilesUnlockCounter, refreshSocialActivation } from "./activation.js";
 import { QueueItemSchema, queuePayloadHash, type QueueItem } from "./queue.js";
 import { runSocialPublisher } from "./runner.js";
@@ -15,7 +16,7 @@ import { checkTittyTuesdaysPost } from "./tt-safety.js";
 import { composeTittyTuesdaysSocialQueue } from "./venture-packs.js";
 import marketingPlanFixture from "../../../contracts/fixtures/marketing-plan.valid.json" with { type: "json" };
 import sharp from "sharp";
-import { configRoot as canonicalConfigRoot } from "../paths.js";
+import { configRoot as canonicalConfigRoot, repoRoot as committedRepoRoot } from "../paths.js";
 
 const roots: string[] = [];
 afterEach(async () => Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true }))));
@@ -134,13 +135,19 @@ describe("per-venture social activation", () => {
   it("counts drafted devShark packages for marketingShark and holds it below three or without its references", async () => {
     // quorum#569: marketingShark's record mirrors the ten-article rule of social-2026-08a with three
     // drafted packages. Only a drafted devShark package counts; another brand's or an unreadable
-    // file does not.
+    // file does not. The packages are the committed contract fixtures, the room's own output: a
+    // hand-written stub pinned to `/1` kept this green while every real package counted 0.
     const repoRoot = await root();
     const stateRoot = path.join(repoRoot, "state");
-    const draft = (brandId: string) => ({ schemaVersion: "marketingshark-package/1", brandId, status: "draft" });
-    await atomicWriteJson(stateRoot, "ventures/marketingshark/packages/2026-09-26/devshark/package.json", draft("devshark"));
-    await atomicWriteJson(stateRoot, "ventures/marketingshark/packages/2026-09-27/devshark/package.json", draft("devshark"));
-    await atomicWriteJson(stateRoot, "ventures/marketingshark/packages/2026-09-27/geoshark/package.json", draft("geoshark"));
+    const fixture = async (name: string) => JSON.parse(await readFile(path.join(committedRepoRoot, "contracts", "fixtures", `${name}.valid.json`), "utf8")) as { date: string; brandId: string };
+    const place = async (built: { date: string; brandId: string }) =>
+      atomicWriteJson(stateRoot, `ventures/marketingshark/packages/${built.date}/${built.brandId}/package.json`, built);
+    const quiz = await fixture("marketingshark-package");
+    const spotlight = await fixture("marketingshark-package-feature-spotlight");
+    expect([quiz, spotlight].map((built) => AnyMarketingSharkPackage.safeParse(built).success)).toEqual([true, true]);
+    await place(quiz);
+    await place(spotlight);
+    await place({ ...quiz, brandId: "geoshark", date: "2026-09-27" });
     await mkdir(path.join(stateRoot, "ventures/marketingshark/packages/2026-09-28/devshark"), { recursive: true });
     await writeFile(path.join(stateRoot, "ventures/marketingshark/packages/2026-09-28/devshark/package.json"), "{ not json", "utf8");
     const references = {
@@ -152,7 +159,7 @@ describe("per-venture social activation", () => {
     const two = await refreshSocialActivation({ repoRoot, stateRoot, environment: references, now: new Date("2026-09-28T07:00:00.000Z") });
     expect(two.ventures.marketingshark).toMatchObject({ status: "locked", counter: 2, required: 3, reason: "Drafted packages 2/3.", decisionReference: "devshark-social-2026-09a" });
 
-    await atomicWriteJson(stateRoot, "ventures/marketingshark/packages/2026-09-29/devshark/package.json", draft("devshark"));
+    await place(await fixture("marketingshark-package-challenge-teaser"));
     const withoutReferences = await refreshSocialActivation({ repoRoot, stateRoot, environment: {}, now: new Date("2026-09-29T07:00:00.000Z") });
     expect(withoutReferences.ventures.marketingshark).toMatchObject({ status: "locked", counter: 3 });
     expect(withoutReferences.ventures.marketingshark?.reason).toContain("BUFFER_API_KEY, BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN, DEVSHARK_INSTAGRAM_ACCESS_TOKEN");

@@ -38,6 +38,7 @@ import {
   type RenderedRoleSlide
 } from "./render.js";
 import { mayRenderDeck, resolveDeckRender } from "../../studio/render-access.js";
+import { MARKETINGSHARK_PACKAGE_VERSION } from "./package-version.js";
 
 export const LEDGER_PATH = "marketingshark/ledger.json";
 export const MS_DAILY_PHASE = "ms-daily";
@@ -220,7 +221,7 @@ export function assemblePackage(input: {
     Object.fromEntries(locales.map((locale) => [locale, inLocale(values, locale)])) as { en: T; cs?: T };
   const writesCzech = locales.includes("cs");
   return MarketingSharkPackage.parse({
-    schemaVersion: "marketingshark-package/2",
+    schemaVersion: MARKETINGSHARK_PACKAGE_VERSION,
     id: packageId(input.date, input.brand.id),
     date: input.date,
     brandId: input.brand.id,

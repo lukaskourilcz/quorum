@@ -3,6 +3,7 @@ import { z } from "zod";
 import { HookAssignmentSchema } from "../../contracts/hook-assignment.js";
 import { MarketingSharkLocaleSchema, type MarketingSharkLocale } from "./config.js";
 import { POST_KIND_ROLES, ROTATION_KINDS } from "./kinds.js";
+import { MARKETINGSHARK_PACKAGE_VERSION } from "./package-version.js";
 
 export const SLIDE_ROLES = ["hook", "context", "reveal", "why", "footer"] as const;
 export type SlideRole = (typeof SLIDE_ROLES)[number];
@@ -66,7 +67,7 @@ export const RenderedFrameSchema = z.object({
 export const MarketingSharkPackage = z.object({
   /** `marketingshark-<date>-<brand>`, the release id every queue item built from it carries. */
   id: z.string().regex(/^marketingshark-\d{4}-\d{2}-\d{2}-[a-z0-9-]+$/u),
-  schemaVersion: z.literal("marketingshark-package/2"),
+  schemaVersion: z.literal(MARKETINGSHARK_PACKAGE_VERSION),
   date: z.string(),
   brandId: z.string(),
   /** The languages this package was written in; the queue and the renderer read nothing else. */
@@ -162,7 +163,7 @@ const TrendHookRecord = z.object({
  */
 export const PostPackageSchema = z.object({
   id: z.string().regex(/^marketingshark-\d{4}-\d{2}-\d{2}-[a-z0-9-]+$/u),
-  schemaVersion: z.literal("marketingshark-package/2"),
+  schemaVersion: z.literal(MARKETINGSHARK_PACKAGE_VERSION),
   kind: z.enum(["feature-spotlight", "challenge-teaser", "this-week", "announcement"]),
   date: z.string(),
   brandId: z.string(),
