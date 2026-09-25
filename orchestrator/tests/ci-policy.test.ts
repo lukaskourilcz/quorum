@@ -479,6 +479,20 @@ describe("automation policy", () => {
     expect(calendarIf, "outcome is always 'success' here; it can gate nothing").not.toContain(
       "steps.run.outcome"
     );
+    // A cycle that finished and then failed the post-cycle gate or the smoke test lost its record
+    // before the atomic commit. The note stayed silent, and health.yml later filed "nothing was
+    // spent" over eleven paid mornings (quorum#577). Both checks now reach it, with a reason of
+    // their own.
+    expect(calendarIf).toContain(
+      "(steps.run.outputs.failed != 'false' || steps.post-gate.outcome == 'failure' || steps.smoke.outcome == 'failure')"
+    );
+    for (const [name, id] of [["Post-cycle release gate", "post-gate"], ["Production route and link smoke", "smoke"]] as const) {
+      expect(cycle, `${name} needs id ${id}`).toContain(`      - name: ${name}\n        id: ${id}\n`);
+    }
+    const calendarStep = cycle.slice(cycle.indexOf("- name: Say on the calendar why this run did not finish\n"));
+    expect(calendarStep).toMatch(
+      /if test "\$CYCLE_FAILED" = "false"; then\n\s+reason="The meeting ran, but what it wrote failed the checks/u
+    );
 
     // The ledger commit is a failure path. Under always() it fired on healthy runs too and
     // pushed state to main before the post-cycle gate had passed on it.

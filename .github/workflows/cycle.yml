@@ -652,6 +652,7 @@ jobs:
         run: exit 1
 
       - name: Post-cycle release gate
+        id: post-gate
         if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' }}
         env:
           GATE_BASE: ${{ github.sha }}
@@ -688,6 +689,7 @@ jobs:
           git diff --check
 
       - name: Production route and link smoke
+        id: smoke
         if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' }}
         run: |
           pnpm --filter @boardlessai/site start &
@@ -1344,24 +1346,29 @@ jobs:
           echo "The finance page could not be pushed; the ledger remains canonical either way."
 
       # A red slot on the calendar with nothing anywhere saying why is the thing the owner keeps
-      # having to ask about. The release gate has its own recorder above; this covers the two
-      # other ways a meeting never happens — the cycle itself failed, or a step before it did,
-      # so the room never opened — and the slot reads "Skipped" with the reason instead of
-      # "Did not happen" with silence.
+      # having to ask about. The release gate has its own recorder above; this covers the other
+      # ways a meeting leaves no record: the cycle itself failed, a step before it did so the room
+      # never opened, or the meeting ran and what it wrote failed the checks before the commit.
+      # The slot reads "Skipped" with the reason instead of "Did not happen" with silence.
       - name: Say on the calendar why this run did not finish
         # Read the output "Run cycle" writes, not its outcome. That step captures the cycle's
         # exit status and returns 0 on every path, so steps.run.outcome is 'success' even for a
         # cycle that failed and the old `outcome != 'success'` clause could never be true once
         # the step had run. `failed` is written on both of its branches: 'true' for a cycle that
         # failed, 'false' for one that finished, and empty when an earlier step failed and this
-        # one was skipped — so != 'false' is exactly the two cases worth a note. It stays quiet
-        # for a meeting that ran: a delivery step failing after that is a delivery problem, and
-        # calling it "the meeting never finished" is the opposite of what happened.
-        if: ${{ steps.guard.outputs.proceed == 'true' && failure() && steps.mode.outputs.scheduled == 'true' && steps.mode.outputs.skip != 'true' && steps.gate.outputs.failed != 'true' && steps.run.outputs.failed != 'false' }}
+        # one was skipped — so != 'false' is exactly the two cases worth a note.
+        #
+        # A meeting that finished is covered only when the post-cycle gate or the smoke test then
+        # failed. Both stand before the atomic commit, so the meeting's record never reached the
+        # branch. From 2026-09-08 to 09-24 eleven paid mornings ended that way with nothing said,
+        # and health.yml's reconciler later filed each one as "nothing was spent" (quorum#577). A
+        # delivery step failing after the commit is a delivery problem, and this stays quiet then.
+        if: ${{ steps.guard.outputs.proceed == 'true' && failure() && steps.mode.outputs.scheduled == 'true' && steps.mode.outputs.skip != 'true' && steps.gate.outputs.failed != 'true' && (steps.run.outputs.failed != 'false' || steps.post-gate.outcome == 'failure' || steps.smoke.outcome == 'failure') }}
         env:
           PHASE: ${{ steps.mode.outputs.phase }}
           EVENT_NAME: ${{ github.event_name }}
           INPUT_PHASE: ${{ inputs.phase }}
+          CYCLE_FAILED: ${{ steps.run.outputs.failed }}
         run: |
           git fetch origin "$GITHUB_REF_NAME"
           git checkout -- . 2>/dev/null || true
@@ -1391,13 +1398,18 @@ jobs:
           fi
           test -n "$PHASE" && test "$PHASE" != "skip" || exit 0
           reason="The run behind this meeting failed before it finished."
+          subject="the run failed before the meeting finished"
+          if test "$CYCLE_FAILED" = "false"; then
+            reason="The meeting ran, but what it wrote failed the checks that come before it is saved, so its record was not kept."
+            subject="the meeting's record failed the post-cycle checks"
+          fi
           pnpm --filter @boardlessai/orchestrator exec tsx src/meetings/skip-cli.ts \
             --phase "$PHASE" --reason "$reason" || exit 0
           if test -n "$(git status --porcelain --untracked-files=all -- state/meetings/skips)"; then
             git config user.name "boardlessai-cycle[bot]"
             git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
             git add -A -- state/meetings/skips
-            git commit -m "skip(${PHASE}): the run failed before the meeting finished"
+            git commit -m "skip(${PHASE}): ${subject}"
             # Checked, like the skip recorder at the top of the job. Three failed pushes used to
             # drop this record silently, leaving the run red and the slot unexplained — the one
             # outcome this step exists to prevent. The run has already failed, so the exit only

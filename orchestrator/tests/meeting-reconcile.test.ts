@@ -9,6 +9,7 @@ import { buildCalendarFeed, mondayOfWeek, pragueSlotInstant, PUBLIC_MEETING_CLOC
 import { MEETING_CLOCK } from "../src/meetings/clock.js";
 import {
   NO_RECORD_REASON,
+  PAID_NO_RECORD_REASON,
   previousPragueDate,
   reconcileMeetingDay
 } from "../src/meetings/reconcile-cli.js";
@@ -147,6 +148,46 @@ describe("a day with no record of its slots still gets one", () => {
     expect(await exists(skipPath(root, "pg-desk"))).toBe(false);
     // The public rooms are still accounted for, so this is not a blanket exemption.
     expect(await exists(skipPath(root, "morning"))).toBe(true);
+  });
+
+  it("says a slot's run was paid for when the budget ledger shows it was", async () => {
+    // quorum#577: eleven mornings between 2026-09-08 and 09-24 billed their council, lost their
+    // record to the post-cycle gate, and were then filed here as "nothing was spent".
+    const root = await emptyRoot();
+    const billed = (cycleId: string, ts: string) => ({
+      ts,
+      cycleId,
+      requestHash: "0123456789abcdef",
+      phase: "board",
+      agent: "VIZE",
+      provider: "anthropic",
+      model: "claude-sonnet-5",
+      serviceTier: "default",
+      tokensIn: 10,
+      tokensOut: 10,
+      usd: 0.02,
+      kind: "text"
+    });
+    await mkdir(path.join(root, "budget"), { recursive: true });
+    await writeFile(path.join(root, "budget", "ledger.json"), JSON.stringify({
+      entries: [
+        billed(`${DATE.replaceAll("-", "")}040057-morning`, `${DATE}T04:00:57.000Z`),
+        // A venture day bills under its rooms' phases.
+        billed(`${DATE.replaceAll("-", "")}030036-cu-product`, `${DATE}T03:00:36.000Z`),
+        // Billed on the Prague day before, so it proves nothing about this one.
+        billed("20260801110046-gv-brief", "2026-08-01T11:00:46.000Z"),
+        { cycleId: "an unreadable row proves nothing" }
+      ]
+    }), "utf8");
+
+    await reconcileMeetingDay(root, DATE, NOW);
+
+    const reason = async (phase: string) =>
+      MeetingSkipSchema.parse(JSON.parse(await readFile(skipPath(root, phase), "utf8"))).reason;
+    expect(await reason("morning")).toBe(PAID_NO_RECORD_REASON);
+    expect(await reason("cu-day")).toBe(PAID_NO_RECORD_REASON);
+    expect(await reason("gv-brief")).toBe(NO_RECORD_REASON);
+    expect(PAID_NO_RECORD_REASON).not.toContain("nothing was spent");
   });
 
   it("writes nothing on a second pass over the same day", async () => {

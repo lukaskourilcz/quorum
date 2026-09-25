@@ -1,10 +1,12 @@
 import { access } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { BudgetLedgerEntrySchema } from "../budget.js";
 import type { CalendarFeed } from "../contracts/calendar.js";
 import { MeetingSkipSchema } from "../contracts/meeting-skip.js";
 import { stateRoot } from "../paths.js";
-import { atomicWriteJson, resolveStatePath } from "../state.js";
+import { atomicWriteJson, readJson, resolveStatePath } from "../state.js";
+import { readVentureRegistry } from "../ventures/registry.js";
 import {
   buildCalendarFeed,
   loadArticleSlotOutcomes,
@@ -43,6 +45,41 @@ function valueAfter(args: string[], flag: string): string | undefined {
  */
 export const NO_RECORD_REASON =
   "No run arrived for this slot. Nothing was written down about why, nobody was asked anything and nothing was spent.";
+
+/**
+ * What a slot gets instead when the budget ledger shows that a run for it was paid for.
+ *
+ * NO_RECORD_REASON says nothing was spent, and between 2026-09-08 and 09-24 that was false on
+ * eleven mornings (quorum#577). Each one billed its council, the post-cycle gate discarded what it
+ * wrote, and this job then told the public calendar that nobody had been asked anything. The
+ * ledger reaches the branch on that path through "Record spend from a failed cycle", so it can
+ * tell a run that never came from one whose work was lost.
+ */
+export const PAID_NO_RECORD_REASON =
+  "A run for this slot was paid for but left no record of the meeting, so what it produced was not kept.";
+
+/**
+ * The slot phases a paid run was billed under on this Prague day.
+ *
+ * A cycle id ends in the phase it ran (`20260924040124-morning`). A venture day bills under its
+ * rooms' phases, so a day counts as paid when any of its steps does. An unreadable ledger row is
+ * dropped. It proves no spend, so the slot keeps the older reason.
+ */
+async function paidPhases(root: string, date: string): Promise<Set<string>> {
+  const ledger = await readJson<{ entries?: unknown[] }>(root, "budget/ledger.json", { entries: [] });
+  const paid = new Set<string>();
+  for (const raw of ledger.entries ?? []) {
+    const entry = BudgetLedgerEntrySchema.safeParse(raw);
+    if (!entry.success || entry.data.usd <= 0) continue;
+    if (pragueClockParts(new Date(entry.data.ts)).date !== date) continue;
+    const phase = /^\d{14}-(.+)$/u.exec(entry.data.cycleId)?.[1];
+    if (phase) paid.add(phase);
+  }
+  for (const venture of readVentureRegistry().ventures) {
+    if (venture.day?.steps.some((step) => paid.has(step))) paid.add(venture.day.kind);
+  }
+  return paid;
+}
 
 type SlotKind = CalendarFeed["slots"][number]["kind"];
 
@@ -123,13 +160,14 @@ export async function reconcileMeetingDay(
     feed.slots.map((slot) => [`${slot.at}:${slotPhase(slot.kind)}`, slot.status])
   );
   const recorded: string[] = [];
+  const paid = await paidPhases(root, date);
   const write = async (phase: string) => {
     const relative = `meetings/skips/${date}-${phase}.json`;
     await atomicWriteJson(root, relative, MeetingSkipSchema.parse({
       schemaVersion: "meeting-skip/1",
       date,
       phase,
-      reason: NO_RECORD_REASON,
+      reason: paid.has(phase) ? PAID_NO_RECORD_REASON : NO_RECORD_REASON,
       decidedAt: now.toISOString()
     }));
     recorded.push(`state/${relative}`);
