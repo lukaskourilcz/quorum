@@ -49,8 +49,7 @@ describe("REV-11 external edges", () => {
   it("keeps the two delivery installations and package kinds isolated", async () => {
     const cycle = await text(".github/workflows/cycle.yml");
     const doctor = await text(".github/workflows/delivery-doctor.yml");
-    const caughtUp = workflowStep(cycle, "Mint bounded aifirst installation token", "Select pending MMA Files delivery");
-    const mma = workflowStep(cycle, "Mint bounded MMA Files installation token", "Verify MMA Files production article");
+    const caughtUp = workflowStep(cycle, "Mint bounded aifirst installation token", "Check both publish queues are draining");
 
     expect(caughtUp.match(/^\s+repositories: aifirst$/gmu)).toHaveLength(2);
     expect(caughtUp).not.toContain("repositories: mma-files");
@@ -59,20 +58,16 @@ describe("REV-11 external edges", () => {
     expect(caughtUp).toContain("^data/(ai-facts|ai-lessons)\\.json$");
     expect(caughtUp).toContain("grep -Ev \"$allowed\"");
 
-    expect(mma.match(/^\s+repositories: mma-files$/gmu)).toHaveLength(1);
-    expect(mma).not.toContain("repositories: aifirst");
-    expect(mma).toContain("lukaskourilcz/mma-files.git");
-    expect(mma).toContain("^data/boardless/fightaiq\\.json$");
-    expect(mma).toContain("^src/data/mma-facts\\.json$");
-    expect(mma).toContain("^((data/boardless/ads\\.json)|(public/ads/[a-z0-9-]+-\\d+x\\d+\\.webp))$");
-    expect(mma).toContain("grep -Ev \"$allowed\"");
+    // The MMA Files delivery block left with that magazine (operations-2026-09b); no step of this
+    // workflow can mint a token for it or write to it.
+    expect(cycle).not.toMatch(/^\s+repositories: mma-files$/gmu);
+    expect(cycle).not.toContain("lukaskourilcz/mma-files.git");
 
     for (const venture of NEW_VENTURES) {
       expect(caughtUp, `${venture} entered the aifirst delivery block`).not.toContain(venture);
-      expect(mma, `${venture} entered the mma-files delivery block`).not.toContain(venture);
     }
     expect(doctor.match(/^\s+repositories: aifirst$/gmu)).toHaveLength(1);
-    expect(doctor.match(/^\s+repositories: mma-files$/gmu)).toHaveLength(1);
+    expect(doctor).not.toMatch(/^\s+repositories: mma-files$/gmu);
     expect(doctor).toContain("Read-only. It mints the same bounded token");
   });
 

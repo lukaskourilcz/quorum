@@ -29,6 +29,15 @@ export function isPublishingVenture(venture: string): venture is SocialVenture {
 
 export const SOCIAL_DECISION_REFERENCE = "D2-autonomy-build-2026-08-01" as const;
 
+/**
+ * The reason written on a venture the registry has paused (`operations-2026-09b`).
+ *
+ * The activation record's own "paused" is the owner turning a venture's social off, and a refresh
+ * leaves it alone. A registry pause writes the same status with this reason, so the refresh can
+ * tell the two apart and release only its own pause when the venture runs again.
+ */
+export const REGISTRY_PAUSE_REASON = "The venture is paused in the registry (operations-2026-09b); nothing is composed or sent.";
+
 export function caughtUpUnlockCounter(events: readonly DeliveryHealth[]): number {
   let count = 0;
   for (const event of events) {
@@ -238,9 +247,12 @@ export async function refreshSocialActivation(input: {
   environment?: NodeJS.ProcessEnv;
   now?: Date;
   safetyCheckerReady?: boolean;
+  /** Ventures the registry marks paused. The daily CLI passes them; absent, none is. */
+  pausedVentures?: ReadonlySet<string>;
 }): Promise<SocialActivation> {
   const now = input.now ?? new Date();
   const environment = input.environment ?? process.env;
+  const registryPaused = input.pausedVentures ?? new Set<string>();
   const previousRaw = await readJson<unknown>(input.stateRoot, "social/activation.json", null);
   const previousParsed = SocialActivationSchema.safeParse(previousRaw);
   const previous = previousParsed.success ? previousParsed.data : initialActivation(now);
@@ -256,11 +268,14 @@ export async function refreshSocialActivation(input: {
   };
   const publisherRegistry = input.publisherRegistry
     ?? await loadSocialPublisherRegistry(input.configRoot).catch(() => null);
+  // A paused venture asks the owner for no credentials: it will not post whatever it holds.
   const missing = Object.fromEntries(SOCIAL_VENTURES.map((venture) => [
     venture,
-    publisherRegistry
-      ? missingSocialCredentials(venture, environment, publisherRegistry)
-      : ["SOCIAL_PUBLISHER_REGISTRY_UNAVAILABLE"]
+    registryPaused.has(venture)
+      ? []
+      : publisherRegistry
+        ? missingSocialCredentials(venture, environment, publisherRegistry)
+        : ["SOCIAL_PUBLISHER_REGISTRY_UNAVAILABLE"]
   ])) as Record<SocialVenture, string[]>;
   const gateReady: Record<SocialVenture, boolean> = {
     "caught-up": counters["caught-up"]! >= 7,
@@ -270,7 +285,13 @@ export async function refreshSocialActivation(input: {
   const requirements: Record<SocialVenture, number> = { "caught-up": 7, "mma-files": 10, "titty-tuesdays": 4 };
   const ventures = Object.fromEntries((Object.keys(requirements) as SocialVenture[]).map((venture) => {
     const prior = previous.ventures[venture]!;
-    if (prior.status === "paused") return [venture, { ...prior, counter: counters[venture]!, updatedAt: now.toISOString() }];
+    if (registryPaused.has(venture)) {
+      return [venture, { ...prior, status: "paused" as const, reason: REGISTRY_PAUSE_REASON, counter: counters[venture]!, updatedAt: now.toISOString() }];
+    }
+    // The owner's own social pause stays; a registry pause ends when the venture runs again.
+    if (prior.status === "paused" && prior.reason !== REGISTRY_PAUSE_REASON) {
+      return [venture, { ...prior, counter: counters[venture]!, updatedAt: now.toISOString() }];
+    }
     const enabled = gateReady[venture]! && missing[venture]!.length === 0;
     const status = enabled ? "enabled" as const : "locked" as const;
     const reason = enabled

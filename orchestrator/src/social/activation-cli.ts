@@ -1,6 +1,7 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
+import { loadVentureRegistry } from "../ventures/registry.js";
 import { refreshSocialActivation, SOCIAL_VENTURES } from "./activation.js";
 import { TT_SAFETY_CHECKER_VERSION } from "./tt-safety.js";
 
@@ -24,11 +25,13 @@ import { TT_SAFETY_CHECKER_VERSION } from "./tt-safety.js";
  * and nothing more.
  */
 async function main(): Promise<void> {
+  const registry = await loadVentureRegistry();
   const activation = await refreshSocialActivation({
     repoRoot,
     stateRoot,
     configRoot,
-    safetyCheckerReady: TT_SAFETY_CHECKER_VERSION === "keeper-tt-1"
+    safetyCheckerReady: TT_SAFETY_CHECKER_VERSION === "keeper-tt-1",
+    pausedVentures: new Set(registry.ventures.filter((venture) => venture.status === "paused").map((venture) => venture.id))
   });
   for (const venture of SOCIAL_VENTURES) {
     const entry = activation.ventures[venture];

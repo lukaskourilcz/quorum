@@ -58,7 +58,7 @@ on:
         default: true
         type: boolean
       delivery_only:
-        description: Deliver pending content for the selected Caught Up or MMA phase without paid model calls
+        description: Deliver pending DNESKAi content for the selected Caught Up phase without paid model calls
         required: true
         default: false
         type: boolean
@@ -101,11 +101,13 @@ jobs:
       # returned status "paused" with zero agents. cycle.ts:847 re-checks the MMA switch the
       # same way. That silently blocked every portfolio phase — tt-marketing, mma-intake,
       # mma-analysis, mag-editorial and mag-desk.
+      #
+      # MMA Files and FightAIQ are paused (operations-2026-09b). Their three live switches, the
+      # MMA site and indexing variables, their mode gates and the whole MMA Files delivery block
+      # were removed with them; without the switches their code fails closed. Resuming them
+      # restores all of it from history in the same change that flips the registry.
       CAUGHT_UP_LIVE_ENABLED: ${{ vars.CAUGHT_UP_LIVE_ENABLED }}
       PORTFOLIO_LIVE_ENABLED: ${{ vars.PORTFOLIO_LIVE_ENABLED }}
-      FIGHTAIQ_LIVE_ENABLED: ${{ vars.FIGHTAIQ_LIVE_ENABLED }}
-      FIGHTAIQ_ANALYSIS_ENABLED: ${{ vars.FIGHTAIQ_ANALYSIS_ENABLED }}
-      MMA_FILES_LIVE_ENABLED: ${{ vars.MMA_FILES_LIVE_ENABLED }}
       # TEMPORARY, 2026-08-04 to 2026-08-09. The owner doubled the four caps below because
       # testing, not production work, was consuming them, and a cap hit was stopping articles
       # from shipping. On 2026-08-04 the edition run billed three calls for about $0.25 and
@@ -137,8 +139,6 @@ jobs:
       MONTHLY_BUDGET_USD: "25"
       PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
       CAUGHT_UP_SITE_URL: ${{ vars.CAUGHT_UP_SITE_URL }}
-      MMA_FILES_SITE_URL: ${{ vars.MMA_FILES_SITE_URL }}
-      MMA_FILES_INDEXING_ENABLED: ${{ vars.MMA_FILES_INDEXING_ENABLED }}
       DAILY_DIGEST_EMAIL_MODE: ${{ vars.DAILY_DIGEST_EMAIL_MODE }}
       DAILY_DIGEST_EMAIL_FROM: ${{ vars.DAILY_DIGEST_EMAIL_FROM }}
       DAILY_DIGEST_EMAIL_TO: ${{ secrets.DAILY_DIGEST_EMAIL_TO }}
@@ -206,9 +206,6 @@ jobs:
           HAS_DELIVERY_APP_KEY: ${{ secrets.DELIVERY_APP_PRIVATE_KEY != '' }}
           CAUGHT_UP_LIVE_ENABLED: ${{ vars.CAUGHT_UP_LIVE_ENABLED }}
           PORTFOLIO_LIVE_ENABLED: ${{ vars.PORTFOLIO_LIVE_ENABLED }}
-          FIGHTAIQ_LIVE_ENABLED: ${{ vars.FIGHTAIQ_LIVE_ENABLED }}
-          FIGHTAIQ_ANALYSIS_ENABLED: ${{ vars.FIGHTAIQ_ANALYSIS_ENABLED }}
-          MMA_FILES_LIVE_ENABLED: ${{ vars.MMA_FILES_LIVE_ENABLED }}
         run: |
           phase="${INPUT_PHASE:-morning}"
           dry="${INPUT_DRY:-true}"
@@ -292,23 +289,6 @@ jobs:
               fi
             fi
           fi
-          if test "$dry" != "true" && { test "$phase" = "mag-editorial" || test "$phase" = "article-am" || test "$phase" = "mag-desk"; } && test "$MMA_FILES_LIVE_ENABLED" != "true"; then
-            skip=true
-            skip_reason="MMA Files awaits the 08d countersign and explicit live gate."
-            echo "$skip_reason"
-          fi
-          if test "$dry" != "true" && test "$phase" = "mma-intake" && test "$FIGHTAIQ_LIVE_ENABLED" != "true"; then
-            skip=true
-            skip_reason="FightAIQ intake awaits the signed founding decision and live gate."
-            echo "$skip_reason"
-          fi
-          if test "$dry" != "true" && test "$phase" = "mma-analysis"; then
-            if test "$FIGHTAIQ_LIVE_ENABLED" != "true" || test "$FIGHTAIQ_ANALYSIS_ENABLED" != "true"; then
-              skip=true
-              skip_reason="FightAIQ analysis awaits the founding and budget approval gates."
-              echo "$skip_reason"
-            fi
-          fi
           # A scheduled run forced into dry mode leaves nothing at all behind. The dry cycle writes
           # to tmp/dry-run/state, which dies with the runner; the skip recorder below needs
           # skip=true and never saw it; the commit step is gated on dry != true. The job then ends
@@ -341,12 +321,8 @@ jobs:
               echo "Delivery-only mode requires a manual dispatch with dry=false and all matching gates open." >&2
               exit 1
             fi
-            if ! { test "$phase" = "cu-day" || test "$phase" = "cu-edition" || test "$phase" = "mma-intake" || test "$phase" = "mma-analysis" || test "$phase" = "article-am" || test "$phase" = "article-pm" || test "$phase" = "mag-desk"; }; then
+            if ! { test "$phase" = "cu-day" || test "$phase" = "cu-edition"; }; then
               echo "The selected phase has no repository delivery queue." >&2
-              exit 1
-            fi
-            if test "$phase" != "cu-day" && test "$phase" != "cu-edition" && test "$MMA_FILES_LIVE_ENABLED" != "true"; then
-              echo "MMA Files delivery-only mode requires MMA_FILES_LIVE_ENABLED=true." >&2
               exit 1
             fi
           fi
@@ -1269,282 +1245,6 @@ jobs:
           echo "Event push was rejected after one refetch and retry." >&2
           exit 1
 
-      - name: Select pending MMA Files delivery
-        id: mma-delivery
-        if: ${{ steps.guard.outputs.proceed == 'true' && steps.mode.outputs.skip != 'true' && steps.mode.outputs.dry != 'true' && vars.MMA_FILES_LIVE_ENABLED == 'true' && (steps.mode.outputs.phase == 'mma-intake' || steps.mode.outputs.phase == 'mma-analysis' || steps.mode.outputs.phase == 'article-am' || steps.mode.outputs.phase == 'article-pm' || steps.mode.outputs.phase == 'mag-desk') }}
-        env:
-          PHASE: ${{ steps.mode.outputs.phase }}
-          DELIVERY_ONLY: ${{ steps.mode.outputs.delivery_only }}
-        run: |
-          package_kind=article
-          if test "$PHASE" = "mma-intake" || test "$PHASE" = "mma-analysis"; then
-            package_kind=fightaiq
-          fi
-          # Banner placement is an owner action from the admin, never a side effect of a
-          # scheduled editorial room. Q6 dispatches mag-desk with delivery_only=true after
-          # upload, crop and stage have produced the contract this path verifies.
-          if test "$PHASE" = "mag-desk" && test "$DELIVERY_ONLY" = "true"; then
-            package_kind=banner
-          fi
-          pnpm mma:delivery -- next --kind "$package_kind" --github-output "$GITHUB_OUTPUT"
-
-      - name: Mint bounded MMA Files installation token
-        id: mma-delivery-token
-        if: ${{ steps.mma-delivery.outputs.has_package == 'true' }}
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.0.0
-        with:
-          client-id: ${{ secrets.DELIVERY_APP_ID }}
-          private-key: ${{ secrets.DELIVERY_APP_PRIVATE_KEY }}
-          owner: lukaskourilcz
-          repositories: mma-files
-
-      # Same as the aifirst cache above: a delivery clone builds from cold and recompiles every
-      # page for content that changed on one route.
-      - name: Restore the MMA Files build cache
-        if: ${{ steps.mma-delivery.outputs.has_package == 'true' }}
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ${{ runner.temp }}/next-cache/mma-files
-          key: mma-files-next-cache-${{ github.run_id }}
-          restore-keys: |
-            mma-files-next-cache-
-
-      - name: Deliver package to MMA Files main
-        id: mma-target
-        if: ${{ steps.mma-delivery.outputs.has_package == 'true' }}
-        env:
-          DELIVERY_TOKEN: ${{ steps.mma-delivery-token.outputs.token }}
-          PACKAGE_KIND: ${{ steps.mma-delivery.outputs.package_kind }}
-          PACKAGE_PATH: ${{ steps.mma-delivery.outputs.package_path }}
-          PACKAGE_HASH12: ${{ steps.mma-delivery.outputs.package_hash12 }}
-          PACKAGE_LABEL: ${{ steps.mma-delivery.outputs.package_label }}
-          PACKAGE_SLUG: ${{ steps.mma-delivery.outputs.package_slug }}
-          IMAGE_HERO_PATH: ${{ steps.mma-delivery.outputs.image_hero_path }}
-          IMAGE_THUMB_PATH: ${{ steps.mma-delivery.outputs.image_thumb_path }}
-        run: |
-          clone_root=""
-          for attempt in 1 2; do
-            candidate="$RUNNER_TEMP/mma-files-delivery-$attempt"
-            if git clone --depth 1 "https://x-access-token:${DELIVERY_TOKEN}@github.com/lukaskourilcz/mma-files.git" "$candidate"; then
-              clone_root="$candidate"
-              break
-            fi
-          done
-          if test -z "$clone_root"; then
-            printf '%s\n' "GitHub was unreachable after one retry." > "$RUNNER_TEMP/mma-delivery-error.log"
-            echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
-            echo "failure_code=unreachable" >> "$GITHUB_OUTPUT"
-            echo "detail_file=$RUNNER_TEMP/mma-delivery-error.log" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          npm --prefix "$clone_root" ci
-          set +e
-          npm --prefix "$clone_root" run consume:boardless -- "$PACKAGE_PATH" "$clone_root" > "$RUNNER_TEMP/mma-consumer.log" 2>&1
-          consumer_status=$?
-          set -e
-          if test "$consumer_status" -ne 0; then
-            cat "$RUNNER_TEMP/mma-consumer.log"
-            echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
-            if grep -q '\[delivery:hash_conflict\]' "$RUNNER_TEMP/mma-consumer.log"; then
-              echo "failure_code=hash_conflict" >> "$GITHUB_OUTPUT"
-            elif grep -q '\[delivery:content_invalid\]' "$RUNNER_TEMP/mma-consumer.log"; then
-              echo "failure_code=content_invalid" >> "$GITHUB_OUTPUT"
-            else
-              echo "failure_code=schema_invalid" >> "$GITHUB_OUTPUT"
-            fi
-            echo "detail_file=$RUNNER_TEMP/mma-consumer.log" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          allowed="^((data/boardless/articles\.json)|(public/images/articles/${PACKAGE_SLUG}/(hero|thumb)\.(webp|png|svg)))$"
-          if test "$PACKAGE_KIND" = "fightaiq"; then
-            allowed='^data/boardless/fightaiq\.json$'
-          fi
-          # The verified-facts dataset behind the "Víte, že…" belt. Its own kind, so
-          # an article delivery can never rewrite it and an append can never touch
-          # data/boardless/ — which stays delivery-only in the other direction too.
-          if test "$PACKAGE_KIND" = "dataset"; then
-            allowed='^src/data/mma-facts\.json$'
-          fi
-          if test "$PACKAGE_KIND" = "banner"; then
-            allowed='^((data/boardless/ads\.json)|(public/ads/[a-z0-9-]+-\d+x\d+\.webp))$'
-          fi
-          unexpected="$(git -C "$clone_root" status --porcelain --untracked-files=all | sed -E 's/^.. //' | grep -Ev "$allowed" || true)"
-          if test -n "$unexpected"; then
-            printf '%s\n%s\n' "Consumer touched unauthorized paths:" "$unexpected" > "$RUNNER_TEMP/mma-delivery-error.log"
-            echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
-            echo "failure_code=content_invalid" >> "$GITHUB_OUTPUT"
-            echo "detail_file=$RUNNER_TEMP/mma-delivery-error.log" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          # The target repository's own gates, captured like every other failure in this step.
-          # Uncaptured they abort before any status= line is written, so the receipt step and
-          # the fail-closed step both silently skip and the incident leaves no durable record.
-          mkdir -p "$clone_root/.next" "$RUNNER_TEMP/next-cache/mma-files"
-          cp -r "$RUNNER_TEMP/next-cache/mma-files" "$clone_root/.next/cache" 2> /dev/null || true
-          set +e
-          {
-            npm --prefix "$clone_root" run test \
-              && npm --prefix "$clone_root" run typecheck \
-              && NEXT_PUBLIC_SITE_URL=https://mma-files.vercel.app NEXT_PUBLIC_DEMO_MODE=false npm --prefix "$clone_root" run build
-          } > "$RUNNER_TEMP/mma-target-gate.log" 2>&1
-          gate_status=$?
-          rm -rf "$RUNNER_TEMP/next-cache/mma-files"
-          cp -r "$clone_root/.next/cache" "$RUNNER_TEMP/next-cache/mma-files" 2> /dev/null || true
-          set -e
-          if test "$gate_status" -ne 0; then
-            tail -40 "$RUNNER_TEMP/mma-target-gate.log" >&2
-            echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
-            echo "failure_code=target_gate_failed" >> "$GITHUB_OUTPUT"
-            echo "detail_file=$RUNNER_TEMP/mma-target-gate.log" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          if test "$PACKAGE_KIND" = "article"; then
-            git -C "$clone_root" add data/boardless/articles.json "$IMAGE_HERO_PATH" "$IMAGE_THUMB_PATH"
-          elif test "$PACKAGE_KIND" = "dataset"; then
-            git -C "$clone_root" add src/data/mma-facts.json
-          elif test "$PACKAGE_KIND" = "banner"; then
-            git -C "$clone_root" add data/boardless/ads.json
-            if test -d "$clone_root/public/ads"; then
-              git -C "$clone_root" add -A -- public/ads
-            fi
-          else
-            git -C "$clone_root" add data/boardless/fightaiq.json
-          fi
-          echo "created_commit=false" >> "$GITHUB_OUTPUT"
-          if ! git -C "$clone_root" diff --cached --quiet; then
-            git -C "$clone_root" config user.name "boardlessai-delivery[bot]"
-            git -C "$clone_root" config user.email "boardlessai-delivery[bot]@users.noreply.github.com"
-            git -C "$clone_root" commit -m "delivery(${PACKAGE_KIND}): ${PACKAGE_LABEL} [package:${PACKAGE_HASH12}]"
-            echo "created_commit=true" >> "$GITHUB_OUTPUT"
-            pushed=false
-            for attempt in 1 2; do
-              if git -C "$clone_root" push origin HEAD:main; then
-                pushed=true
-                break
-              fi
-              git -C "$clone_root" fetch --depth 1 origin main
-              if ! git -C "$clone_root" rebase --autostash origin/main; then
-                git -C "$clone_root" rebase --abort || true
-                break
-              fi
-            done
-            if test "$pushed" != "true"; then
-              printf '%s\n' "Target push was rejected after one refetch/retry." > "$RUNNER_TEMP/mma-delivery-error.log"
-              echo "status=needs_reconciliation" >> "$GITHUB_OUTPUT"
-              echo "failure_code=push_rejected" >> "$GITHUB_OUTPUT"
-              echo "detail_file=$RUNNER_TEMP/mma-delivery-error.log" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-          fi
-          echo "status=delivered" >> "$GITHUB_OUTPUT"
-          echo "target_commit=$(git -C "$clone_root" rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
-      - name: Verify MMA Files production article
-        id: mma-proof
-        if: ${{ steps.mma-delivery.outputs.has_package == 'true' && steps.mma-delivery.outputs.package_kind == 'article' && steps.mma-target.outputs.status == 'delivered' }}
-        env:
-          DELIVERY_TOKEN: ${{ steps.mma-delivery-token.outputs.token }}
-          PACKAGE_PATH: ${{ steps.mma-delivery.outputs.package_path }}
-          PACKAGE_HASH: ${{ steps.mma-delivery.outputs.package_hash }}
-          TARGET_COMMIT: ${{ steps.mma-target.outputs.target_commit }}
-          CREATED_COMMIT: ${{ steps.mma-target.outputs.created_commit }}
-        run: |
-          proof_status=failed
-          for retry in 0 1; do
-            set +e
-            pnpm release:verify -- \
-              --venture mma-files \
-              --package "$PACKAGE_PATH" \
-              --target-commit "$TARGET_COMMIT" \
-              --deployment-url "${MMA_FILES_SITE_URL:-https://mma-files.vercel.app}" \
-              --github-token "$DELIVERY_TOKEN" \
-              --retry-count "$retry" \
-              --timeout-ms 300000
-            verifier_status=$?
-            set -e
-            if test "$verifier_status" -eq 0; then
-              proof_status=passed
-              break
-            fi
-            if test "$retry" -eq 0; then
-              retry_root="$RUNNER_TEMP/mma-files-idempotent-retry"
-              git clone --depth 1 "https://x-access-token:${DELIVERY_TOKEN}@github.com/lukaskourilcz/mma-files.git" "$retry_root"
-              npm --prefix "$retry_root" ci
-              npm --prefix "$retry_root" run consume:boardless -- "$PACKAGE_PATH" "$retry_root"
-            fi
-          done
-          revert_commit=""
-          if test "$proof_status" != "passed"; then
-            if test "$CREATED_COMMIT" = "true"; then
-              revert_root="$RUNNER_TEMP/mma-files-release-revert"
-              git clone "https://x-access-token:${DELIVERY_TOKEN}@github.com/lukaskourilcz/mma-files.git" "$revert_root"
-              git -C "$revert_root" config user.name "boardlessai-delivery[bot]"
-              git -C "$revert_root" config user.email "boardlessai-delivery[bot]@users.noreply.github.com"
-              if git -C "$revert_root" revert --no-edit "$TARGET_COMMIT" && git -C "$revert_root" push origin HEAD:main; then
-                revert_commit="$(git -C "$revert_root" rev-parse HEAD)"
-              fi
-            fi
-            fail_args=(fail-closed --venture mma-files --package-hash "$PACKAGE_HASH")
-            if test -n "$revert_commit"; then fail_args+=(--revert-commit "$revert_commit"); fi
-            pnpm release:verify -- "${fail_args[@]}"
-          fi
-          echo "status=$proof_status" >> "$GITHUB_OUTPUT"
-          echo "revert_commit=$revert_commit" >> "$GITHUB_OUTPUT"
-
-      - name: Record MMA Files delivery transaction
-        if: ${{ steps.mma-delivery.outputs.has_package == 'true' && steps.mma-target.outputs.status != '' }}
-        env:
-          DELIVERY_STATUS: ${{ steps.mma-target.outputs.status }}
-          FAILURE_CODE: ${{ steps.mma-target.outputs.failure_code }}
-          DETAIL_FILE: ${{ steps.mma-target.outputs.detail_file }}
-          PACKAGE_KIND: ${{ steps.mma-delivery.outputs.package_kind }}
-          PACKAGE_PATH: ${{ steps.mma-delivery.outputs.package_path }}
-          PACKAGE_HASH: ${{ steps.mma-delivery.outputs.package_hash }}
-          PACKAGE_HASH12: ${{ steps.mma-delivery.outputs.package_hash12 }}
-          TARGET_COMMIT: ${{ steps.mma-target.outputs.target_commit }}
-          PROOF_STATUS: ${{ steps.mma-proof.outputs.status }}
-        run: |
-          if test "$PROOF_STATUS" = "failed"; then
-            DELIVERY_STATUS=needs_reconciliation
-            FAILURE_CODE=post_deploy_verification
-          fi
-          args=(record --kind "$PACKAGE_KIND" --package "$PACKAGE_PATH" --hash "$PACKAGE_HASH" --status "$DELIVERY_STATUS")
-          if test -n "$FAILURE_CODE"; then args+=(--code "$FAILURE_CODE"); fi
-          if test -n "$DETAIL_FILE"; then args+=(--detail-file "$DETAIL_FILE"); fi
-          if test -n "$TARGET_COMMIT"; then args+=(--target-commit "$TARGET_COMMIT"); fi
-          pnpm mma:delivery -- "${args[@]}"
-          receipt_paths=(state/ventures/mma-files/deliveries state/ventures/mma-files/banners/contract.json state/ventures/mma-files/banners/delivered.json state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)
-          for receipt_path in "${receipt_paths[@]}"; do
-            if test -e "$receipt_path" || git ls-files --error-unmatch -- "$receipt_path" > /dev/null 2>&1; then
-              git add -A -- "$receipt_path"
-            fi
-          done
-          if ! git diff --cached --quiet; then
-            git config user.name "boardlessai-cycle[bot]"
-            git config user.email "boardlessai-cycle[bot]@users.noreply.github.com"
-            git commit -m "delivery(mma-files): ${DELIVERY_STATUS} [package:${PACKAGE_HASH12}]"
-            pushed=false
-            for attempt in 1 2 3; do
-              if git push origin "HEAD:${GITHUB_REF_NAME}"; then
-                pushed=true
-                break
-              fi
-              git fetch origin "$GITHUB_REF_NAME"
-              # --autostash, because the cycle commits only its allowlisted paths and anything else
-              # the run touched stays unstaged. Without it the rebase refuses outright with "cannot
-              # rebase: You have unstaged changes", both retries fail the same way, and a meeting that
-              # already ran and already cost money is thrown away with its records.
-              if ! git rebase --autostash "origin/$GITHUB_REF_NAME"; then
-                git rebase --abort || true
-                break
-              fi
-            done
-            if test "$pushed" != "true"; then
-              echo "MMA Files delivery receipt could not be pushed after two refetches."
-              exit 1
-            fi
-          fi
-
       # Both magazines stopped publishing in the same week and neither queue said so. Each jam
       # left a receipt explaining itself and nothing read the queue as a whole, so a week of
       # failed deliveries looked exactly like a quiet week. This runs whatever the council
@@ -1626,10 +1326,6 @@ jobs:
             fi
           done
           echo "The finance page could not be pushed; the ledger remains canonical either way."
-
-      - name: Fail closed on MMA Files delivery reconciliation
-        if: ${{ steps.mma-target.outputs.status == 'needs_reconciliation' || steps.mma-proof.outputs.status == 'failed' }}
-        run: exit 1
 
       # A red slot on the calendar with nothing anywhere saying why is the thing the owner keeps
       # having to ask about. The release gate has its own recorder above; this covers the two

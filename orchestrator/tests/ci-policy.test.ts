@@ -133,10 +133,12 @@ describe("automation policy", () => {
       cycle.indexOf("          # The double-fire guard")
     );
     expect(deliveryOnlyGate).not.toMatch(/(?:bh|dm|ts|kv)-(?:desk|growth)/u);
-    expect(cycle).toContain("FIGHTAIQ_LIVE_ENABLED");
-    expect(cycle).toContain("FIGHTAIQ_ANALYSIS_ENABLED");
-    expect(cycle).toContain("MMA_FILES_LIVE_ENABLED");
-    expect(cycle).toContain("MMA_FILES_INDEXING_ENABLED: ${{ vars.MMA_FILES_INDEXING_ENABLED }}");
+    // MMA Files and FightAIQ are paused (operations-2026-09b): their live switches, their site and
+    // indexing variables and their delivery block left the workflow with them, so nothing in this
+    // job can reach that magazine. Resuming them restores all of it from history.
+    for (const gone of ["FIGHTAIQ_LIVE_ENABLED", "FIGHTAIQ_ANALYSIS_ENABLED", "MMA_FILES_LIVE_ENABLED", "MMA_FILES_INDEXING_ENABLED", "MMA_FILES_SITE_URL"]) {
+      expect(cycle, gone).not.toContain(`${gone}: \${{`);
+    }
     const editionOverride =
       "CYCLE_FORCE_NEW_EDITION: ${{ github.event_name == 'workflow_dispatch' && inputs.phase == 'cu-edition' && inputs.dry == false && inputs.trigger != 'vercel-cron' }}";
     expect(cycle.split(editionOverride)).toHaveLength(2);
@@ -150,12 +152,8 @@ describe("automation policy", () => {
     expect(cycle).toContain('test "$phase" = "morning"');
     expect(cycle).toContain("actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1");
     expect(cycle).toContain("lukaskourilcz/aifirst.git");
-    expect(cycle).toContain("lukaskourilcz/mma-files.git");
-    expect(cycle).toContain("pnpm mma:delivery");
-    expect(cycle).toContain("data/boardless/articles.json");
-    expect(cycle).toContain("data/boardless/fightaiq.json");
-    expect(cycle).toContain("package_kind=banner");
-    expect(cycle).toContain("^((data/boardless/ads\\.json)|(public/ads/[a-z0-9-]+-\\d+x\\d+\\.webp))$");
+    expect(cycle).not.toContain("lukaskourilcz/mma-files.git");
+    expect(cycle).not.toContain("pnpm mma:delivery");
     // Every gate that forces dry mode goes through force_dry, which on a schedule also raises
     // skip so the reason is recorded. A scheduled dry run writes only to tmp/dry-run/state and
     // is never committed, so a gate that only set dry=true ended the job green having left
@@ -203,16 +201,15 @@ describe("automation policy", () => {
       'test -e "$runtime_path" || git ls-files --error-unmatch -- "$runtime_path"'
     );
     expect(cycle).toContain('git add -A -- "$runtime_path"');
-    // state/INBOX.md is on both receipt lists. The shared fail-closed writer appends an owner
-    // line for either venture, and the MMA step used to leave it unstaged, so a reverted
-    // article's inbox item died with the runner.
-    expect(cycle).toContain("receipt_paths=(state/ventures/mma-files/deliveries state/ventures/mma-files/banners/contract.json state/ventures/mma-files/banners/delivered.json state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)");
+    // state/INBOX.md is on every receipt list. The shared fail-closed writer appends an owner
+    // line, and the MMA step used to leave it unstaged, so a reverted article's inbox item died
+    // with the runner. That step left with MMA Files (operations-2026-09b); the rule stays.
     for (const list of cycle.match(/receipt_paths=\([^)]*\)/gu) ?? []) {
       expect(list, "every fail-closed receipt list stages the inbox").toContain("state/INBOX.md");
     }
     expect(cycle).toContain('git add -A -- "$receipt_path"');
     expect(cycle).not.toContain("git add state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries");
-    expect(cycle).toContain("MMA Files delivery-only mode requires MMA_FILES_LIVE_ENABLED=true.");
+    expect(cycle).not.toContain("MMA Files delivery-only mode");
     expect(cycle).toContain("status --porcelain --untracked-files=all");
     // Every push retry rebases with --autostash. The cycle commits only its allowlisted paths,
     // so anything else the run touched is left unstaged, and a plain rebase refuses to start —

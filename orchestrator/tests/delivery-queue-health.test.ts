@@ -8,6 +8,9 @@ import { recordMmaDelivery } from "../src/mma-files/publish.js";
 import { repoRoot } from "../src/paths.js";
 import { atomicWriteJson } from "../src/state.js";
 
+/** These cases test the queue mechanics, so no venture is paused whatever the registry says today. */
+const RUNNING: ReadonlySet<string> = new Set();
+
 /**
  * Both magazines stopped publishing in the same week and neither queue said so. Every jam had a
  * receipt explaining itself; nothing looked at the queue as a whole and noticed it had stopped
@@ -38,11 +41,33 @@ async function queueArticles(dates: readonly string[]): Promise<{ root: string; 
   return { root, hashes };
 }
 
+describe("a paused venture's queue", () => {
+  it("is listed but stands still: no owner item and no needsOwner", async () => {
+    const { root } = await queueArticles(["2026-08-05", "2026-08-12"]);
+
+    const { report } = await runQueueHealthCheck({
+      root,
+      pausedVentures: new Set(["mma-files"]),
+      today: "2026-08-12",
+      probe: async () => 404
+    });
+
+    const mma = report.ventures.find((venture) => venture.venture === "mma-files")!;
+    expect(mma.paused).toBe(true);
+    expect(mma.stalled).toBe(true);
+    expect(mma.waiting).toHaveLength(2);
+    expect(report.needsOwner).toBe(false);
+    const inbox = await readFile(path.join(root, "INBOX.md"), "utf8").catch(() => "");
+    expect(inbox).not.toContain("DELIVERY-QUEUE-MMA-FILES");
+    expect(inbox).not.toContain("DELIVERY-NOT-BUILT-MMA-FILES");
+  });
+});
+
 describe("the daily queue-drain check", () => {
   it("reads a queue that is moving as healthy and still leaves the day's record", async () => {
     const { root } = await queueArticles(["2026-08-12"]);
 
-    const { report, artifacts } = await runQueueHealthCheck({ root, today: "2026-08-12", probe: async () => 200 });
+    const { report, artifacts } = await runQueueHealthCheck({ root, pausedVentures: RUNNING, today: "2026-08-12", probe: async () => 200 });
 
     const mma = report.ventures.find((venture) => venture.venture === "mma-files")!;
     expect(mma.waiting).toHaveLength(1);
@@ -58,7 +83,7 @@ describe("the daily queue-drain check", () => {
   it("calls a queue stalled when its oldest package has missed more than a day of runs", async () => {
     const { root } = await queueArticles(["2026-08-05", "2026-08-12"]);
 
-    const { report } = await runQueueHealthCheck({ root, today: "2026-08-12", probe: async () => 200 });
+    const { report } = await runQueueHealthCheck({ root, pausedVentures: RUNNING, today: "2026-08-12", probe: async () => 200 });
 
     const mma = report.ventures.find((venture) => venture.venture === "mma-files")!;
     expect(mma.oldestWaitingDate).toBe("2026-08-05");
@@ -79,7 +104,7 @@ describe("the daily queue-drain check", () => {
       root
     });
 
-    const { report } = await runQueueHealthCheck({ root, today: "2026-08-12", probe: async () => 200 });
+    const { report } = await runQueueHealthCheck({ root, pausedVentures: RUNNING, today: "2026-08-12", probe: async () => 200 });
 
     const mma = report.ventures.find((venture) => venture.venture === "mma-files")!;
     expect(mma.parked).toHaveLength(1);
@@ -136,7 +161,7 @@ describe("the daily queue-drain check", () => {
       root
     });
 
-    const { report } = await runQueueHealthCheck({ root, today: "2026-08-13", probe: async () => 200 });
+    const { report } = await runQueueHealthCheck({ root, pausedVentures: RUNNING, today: "2026-08-13", probe: async () => 200 });
 
     const mma = report.ventures.find((venture) => venture.venture === "mma-files")!;
     const superseded = mma.parked.find((entry) => entry.packageHash === pkg.packageHash);
@@ -152,8 +177,8 @@ describe("the daily queue-drain check", () => {
     const { root, hashes } = await queueArticles(["2026-08-05"]);
     const packagePath = path.join(root, "ventures/mma-files/articles/2026-08-05-am-preview-2026-08-05.json");
 
-    await runQueueHealthCheck({ root, today: "2026-08-12", probe: async () => 200 });
-    await runQueueHealthCheck({ root, today: "2026-08-12", probe: async () => 200 });
+    await runQueueHealthCheck({ root, pausedVentures: RUNNING, today: "2026-08-12", probe: async () => 200 });
+    await runQueueHealthCheck({ root, pausedVentures: RUNNING, today: "2026-08-12", probe: async () => 200 });
     const raised = await readFile(path.join(root, "INBOX.md"), "utf8");
     expect(raised.match(/DELIVERY-QUEUE-MMA-FILES/gu)).toHaveLength(1);
 
@@ -165,7 +190,7 @@ describe("the daily queue-drain check", () => {
       targetCommit: "abc123",
       root
     });
-    const { report } = await runQueueHealthCheck({ root, today: "2026-08-12", probe: async () => 200 });
+    const { report } = await runQueueHealthCheck({ root, pausedVentures: RUNNING, today: "2026-08-12", probe: async () => 200 });
     expect(report.needsOwner).toBe(false);
     expect(await readFile(path.join(root, "INBOX.md"), "utf8")).toContain("- [x] **DELIVERY-QUEUE-MMA-FILES**");
   });
@@ -190,7 +215,7 @@ describe("a delivery nobody built", () => {
   it("raises an owner item when the site does not serve the newest delivered edition", async () => {
     const root = await deliveredEdition("2026-08-12");
 
-    const { report } = await runQueueHealthCheck({ root, today: "2026-08-12", probe: async () => 404 });
+    const { report } = await runQueueHealthCheck({ root, pausedVentures: RUNNING, today: "2026-08-12", probe: async () => 404 });
 
     const caughtUp = report.deploys.find((entry) => entry.venture === "caught-up")!;
     expect(caughtUp.live).toBe(false);
@@ -203,9 +228,9 @@ describe("a delivery nobody built", () => {
 
   it("ticks the item once the site serves it again", async () => {
     const root = await deliveredEdition("2026-08-12");
-    await runQueueHealthCheck({ root, today: "2026-08-12", probe: async () => 404 });
+    await runQueueHealthCheck({ root, pausedVentures: RUNNING, today: "2026-08-12", probe: async () => 404 });
 
-    await runQueueHealthCheck({ root, today: "2026-08-13", probe: async () => 200 });
+    await runQueueHealthCheck({ root, pausedVentures: RUNNING, today: "2026-08-13", probe: async () => 200 });
 
     expect(await readFile(path.join(root, "INBOX.md"), "utf8")).toContain("- [x] **DELIVERY-NOT-BUILT-CAUGHT-UP**");
   });
@@ -214,7 +239,7 @@ describe("a delivery nobody built", () => {
     // Not knowing is not the same as being fine, and this is the one check whose point is that
     // silence lies. An unreachable host must not read as a clean bill of health.
     const root = await deliveredEdition("2026-08-12");
-    await runQueueHealthCheck({ root, today: "2026-08-12", probe: async () => 404 });
+    await runQueueHealthCheck({ root, pausedVentures: RUNNING, today: "2026-08-12", probe: async () => 404 });
 
     const { report } = await runQueueHealthCheck({
       root,
