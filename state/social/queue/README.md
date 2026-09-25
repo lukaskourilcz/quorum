@@ -1,7 +1,10 @@
 # Social queue
 
-Validated queue items are immutable JSON files. The publisher ignores this documentation file and
-processes only schema-valid `.json` items. The four committed records remain queue v1 evidence and
+A queue item's content is immutable: `content.contentHash` binds it, and a change of copy, frames or
+target is a new item that supersedes the old one. Its status and approval provenance do change in
+place, through the owner's events in `../queue-events/` and through the publisher's claim and
+receipts. The publisher ignores this documentation file and processes only schema-valid `.json`
+items. The four committed records remain queue v1 evidence and
 are migrated in memory through the explicit mapping in `config/social-publisher-registry.json`;
 their source hash and mapping reference are preserved. New writers use capability-aware queue v2.
 marketingShark writes three v2 drafts per devShark package, `<date>-devshark-en-<platform>.json` for
@@ -9,13 +12,16 @@ LinkedIn, Instagram and Threads, each bound to devShark's own profile and carryi
 
 The lifecycle is `draft` → `approved` → `queued` → `publishing`, followed by
 `published`, `failed`, `expired`, or `needs_reconciliation`. A human may also
-set `cancelled`.
+set `cancelled`. Only a `queued` item is due, plus a legacy v1 draft whose checks all pass. The
+publisher's claim phase writes `publishing` with its attempt and pushes it before any provider is
+called; a claim that never finished stays `publishing` and is never sent again by itself.
 
 The owner acts on these files only through the Admin Queue (`/admin/queue`, #573,
-`docs/SOCIAL-QUEUE.md`). Each action first appends a `social-queue-event/1` under
-`../queue-events/`. An approval sets `queued`, passes every check and writes the event id
-into `approvalProvenance.approvalRef`. An edit writes a new `<id>-r<n>` draft and cancels
-the original. A hold or a rejection cancels with a reason. Every deterministic check must pass, and the SHA-256
+`docs/SOCIAL-QUEUE.md`). Each action appends a `social-queue-event/1` under `../queue-events/`.
+An approval sets `queued`, passes every check and writes the event id into
+`approvalProvenance.approvalRef`. An edit or a re-render writes a new `<id>-r<n>` draft and cancels
+the original in the same commit. A hold or a rejection cancels with a reason. No action accepts a
+`publishing` item. Every deterministic check must pass, and the SHA-256
 `content.contentHash` covers the source release/campaign, exact profile/connection target,
 capability/policy/approval provenance, audience, destination, UTM data, factual claims, assets,
 publication window and copy.
