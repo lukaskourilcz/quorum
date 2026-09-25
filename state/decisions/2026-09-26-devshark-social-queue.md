@@ -260,9 +260,20 @@ in an unlocked world; that assertion stays, because it is about the code path), 
 
 ## Rollback
 
-Set the two marketingShark edges to `held`: the publisher then denies every marketingShark item,
-and the room still drafts for review. Reverting the B1 commits returns the room to Czech and English
-drafts in queue v1, which the publisher never considered.
+Two stops, and what each leaves running:
+
+- **Stop publishing, keep drafting.** Set `SOCIAL_KILL_SWITCH` back to `true`, or flip the three
+  devShark connections (and, if nothing else uses them, the channels) back to `held`/`draft` with
+  `enabledByHumanAt: null`. The room keeps drafting packages and queue drafts; nothing sends.
+- **Stop marketingShark's queue drafts.** Set `marketingshark -> social-distribution` to `held` in
+  `config/venture-capabilities.json`: `marketingSharkCapabilityRef` then returns null, the room still
+  drafts its packages, and it writes no queue item. Holding `marketingshark -> design-lab` as well
+  stops the room outright: every `ms-daily` record then reads "No package was drafted …
+  render-failed" at $0, which is the edge doing its job, not the #556 render bug.
+
+Reverting B1 is not a rollback path. B8 and B9 build on its package `/2` and quiz deck, and a new
+queue v1 marketingShark item would break the pinned `migratedLegacyQueueItems: 4` and `migrated: 13`
+in the migration and release audits. Any change to the edges needs a new capability map version.
 
 ## Implementation
 
