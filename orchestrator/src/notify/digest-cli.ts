@@ -2,7 +2,6 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { budgetLedgerCostCategory, BudgetLedgerEntrySchema } from "../budget.js";
 import { loadArticleSlotOutcomes, loadMeetingRecords, mondayOfWeek } from "../meetings/calendar.js";
-import { pragueClockParts } from "../meetings/clock.js";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
 import {
   budgetDecisionStatus,
@@ -17,6 +16,7 @@ import {
   dailyDigestSinkFromEnvironment,
   sendDailyDigest
 } from "./digest.js";
+import { resolveDigestDay } from "./digest-day.js";
 import { collectDigestOperations } from "./operations.js";
 
 function valueAfter(args: string[], flag: string): string | undefined {
@@ -26,7 +26,7 @@ function valueAfter(args: string[], flag: string): string | undefined {
 
 const args = process.argv.slice(2);
 const now = new Date(valueAfter(args, "--at") ?? Date.now());
-const date = valueAfter(args, "--date") ?? pragueClockParts(now).date;
+const { date, month } = resolveDigestDay(args, now);
 const dry = args.includes("--dry");
 const digestRoot = dry ? path.join(repoRoot, "tmp", "dry-run", "state") : stateRoot;
 const [registry, decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw, kvorumFoundingRaw, kvorumBudgetCapacityRaw, ideaRoomHoldRaw, ledgerRaw, nonModelRaw, allowlist, records] = await Promise.all([
@@ -54,7 +54,6 @@ const [registry, decisionRaw, budgetMmaRaw, budgetFiftyRaw, fightAiQFoundingRaw,
 ]);
 const entries = ((JSON.parse(ledgerRaw) as { entries?: unknown[] }).entries ?? [])
   .map((entry) => BudgetLedgerEntrySchema.parse(entry));
-const month = date.slice(0, 7);
 const spent = entries.filter((entry) => entry.ts.slice(0, 7) === month).reduce((sum, entry) => sum + entry.usd, 0);
 const provisionalCap = signedOwnerDecision(budgetFiftyRaw) === "countersigned" ? 25 : budgetDecisionStatus(decisionRaw) === "countersigned-shape-a" ? 18 : 15;
 const effective = resolveEffectivePortfolioSchedule({

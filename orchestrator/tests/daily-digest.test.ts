@@ -15,6 +15,7 @@ import {
   sendDailyDigest,
   type DailyDigestSink
 } from "../src/notify/digest.js";
+import { resolveDigestDay } from "../src/notify/digest-day.js";
 import { repoRoot } from "../src/paths.js";
 import { loadVentureRegistry, resolveScheduledClock } from "../src/ventures/registry.js";
 import { DigestOperationSchema } from "../src/contracts/daily-digest.js";
@@ -150,5 +151,25 @@ describe("one daily portfolio digest", () => {
     expect(await sendDailyDigest({ digest: await fixtureDigest(), sink, stateRoot: root, roomsLink: "https://boardless.example/calendar/2026-07-27" })).toBe("failed");
     expect(fetchImpl).not.toHaveBeenCalled();
     expect(await readFile(path.join(root, "INBOX.md"), "utf8")).toContain("DAILY-DIGEST-TIER-UNVERIFIED");
+  });
+});
+
+describe("the day a digest run is about", () => {
+  it("digests the finished Prague day and reads the caps against the run's own month", () => {
+    // The 06:00 morning on the first of a month digests the last day of the closed one, while the
+    // caps and the office mode it writes belong to the month the run is in (90f175c0).
+    expect(resolveDigestDay(["--previous-day"], new Date("2026-10-01T04:05:00.000Z")))
+      .toEqual({ date: "2026-09-30", month: "2026-10" });
+    // 00:30 Prague is still the previous UTC date; the day boundary is Prague's.
+    expect(resolveDigestDay(["--", "--previous-day", "--dry"], new Date("2026-09-24T22:30:00.000Z")))
+      .toEqual({ date: "2026-09-24", month: "2026-09" });
+    // The morning after daylight saving ends is 25 hours from the one before it.
+    expect(resolveDigestDay(["--previous-day"], new Date("2026-10-26T05:00:00.000Z")))
+      .toEqual({ date: "2026-10-25", month: "2026-10" });
+    // A hand-run replay names its day; without a flag the run digests its own date.
+    expect(resolveDigestDay(["--date", "2026-08-15"], new Date("2026-09-25T04:00:00.000Z")))
+      .toEqual({ date: "2026-08-15", month: "2026-09" });
+    expect(resolveDigestDay([], new Date("2026-09-25T04:00:00.000Z")))
+      .toEqual({ date: "2026-09-25", month: "2026-09" });
   });
 });

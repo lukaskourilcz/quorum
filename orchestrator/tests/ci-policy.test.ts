@@ -1,6 +1,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { EDITION_RETRY_PHASE, MEETING_CLOCK } from "../src/meetings/clock.js";
 import { repoRoot } from "../src/paths.js";
 import {
   CRON_HOUR_CARRY,
@@ -41,6 +42,29 @@ describe("automation policy", () => {
       cycle.indexOf("          # The double-fire guard")
     );
     expect(deliveryOnlyGate).toContain('test "$phase" = "cu-day" || test "$phase" = "cu-edition"');
+  });
+
+  it("gates no step on a phase the schedule no longer dispatches", async () => {
+    // The digest step waited for `night` from 2026-08-29, when `operations-2026-08c` stopped
+    // scheduling it, until 2026-09-25 (quorum#577). Every assertion here was a substring of a step
+    // nobody ran, so none of them noticed. Each phase gate is now checked against the phases that
+    // arrive: the meeting clock the Vercel crons are generated from, plus the edition retry it
+    // dispatches by name (vercel-cron.test.ts pins site/vercel.json to exactly those two).
+    const cycle = await readFile(path.join(workflowRoot, "cycle.yml"), "utf8");
+    const dispatched = [...new Set<string>([...MEETING_CLOCK.map((slot) => slot.phase), EDITION_RETRY_PHASE])];
+    const gated = [...cycle.matchAll(/steps\.mode\.outputs\.phase == '([a-z-]+)'/gu)].map(([, phase]) => phase!);
+    expect(gated.length).toBeGreaterThan(0);
+    for (const phase of gated) {
+      expect(dispatched, `a step waits for "${phase}", which nothing schedules`).toContain(phase);
+    }
+
+    const start = cycle.indexOf("      - name: Send the one daily portfolio digest\n");
+    expect(start).toBeGreaterThan(-1);
+    const digest = cycle.slice(start, cycle.indexOf("\n      - name: ", start + 1));
+    expect(digest).toContain("steps.mode.outputs.phase == 'morning'");
+    // The morning digests the finished day, and this run's own outcome is no evidence about it.
+    expect(digest).toContain("args=(--previous-day)");
+    expect(digest).not.toContain("--final-failed");
   });
 
   it("pins every third-party action to an immutable commit", async () => {

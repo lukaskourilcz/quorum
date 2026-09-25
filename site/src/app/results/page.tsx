@@ -191,8 +191,8 @@ export default async function ResultsPage({
 
         {days.length === 0 ? (
           <p className="text-[var(--muted-foreground)]">
-            No day has been recorded yet. Each night cycle writes one summary, and it appears here the
-            following morning.
+            No day has been recorded yet. The morning cycle writes one summary of the day before
+            it, and that summary appears here.
           </p>
         ) : (
           <div className="flex flex-col gap-16">
@@ -207,7 +207,7 @@ export default async function ResultsPage({
 
                 {day.missing ? (
                   <p className="max-w-3xl text-[var(--muted-foreground)]">
-                    No summary was recorded for this day. The work still happened; the night cycle
+                    No summary was recorded for this day. The work still happened; the morning cycle
                     did not write down what it was.
                   </p>
                 ) : null}
