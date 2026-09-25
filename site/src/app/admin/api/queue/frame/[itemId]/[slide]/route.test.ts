@@ -43,6 +43,19 @@ describe("GET /admin/api/queue/frame/[itemId]/[slide]", () => {
     expect((await frame("..%2Fqueue", "1")).status).toBe(404);
   });
 
+  it("has the committed frames traced into its deployed bundle", async () => {
+    const { default: config } = await import("../../../../../../../../next.config");
+    const { normalizeAppPath } = await import("next/dist/shared/lib/router/utils/app-paths.js") as { normalizeAppPath: (route: string) => string };
+    // Next's own matcher, as the cron route's test does: the key is a glob, not a path.
+    const vendored = "next/dist/compiled/picomatch";
+    const picomatch = ((await import(vendored)) as { default: unknown }).default as (glob: string, options: object) => (value: string) => boolean;
+    const route = normalizeAppPath("app/admin/api/queue/frame/[itemId]/[slide]/route");
+    const traced = Object.entries(config.outputFileTracingIncludes ?? {})
+      .filter(([key]) => picomatch(key, { dot: true, contains: true })(route))
+      .flatMap(([, files]) => files);
+    expect(traced).toContain("./public/social/**/*");
+  });
+
   it("is behind the admin session", async () => {
     expect((await frame("ms-2026-09-26-devshark-en-linkedin", "1", false)).status).toBe(401);
   });
