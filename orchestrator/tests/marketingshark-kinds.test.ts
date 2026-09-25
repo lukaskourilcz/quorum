@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { copyFile, mkdir, mkdtemp, readFile, readdir, rm } from "node:fs/promises";
+import { copyFile, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -307,5 +307,70 @@ describe("the craft rules per kind", () => {
     // The owner writes the announcement: no model section exists for it.
     expect(craft).not.toContain("`announcement`");
     expect(craftRulesFor(craft, "quiz" satisfies PostKind)).toContain("Code blocks are copied exactly, character for character.");
+  });
+});
+
+describe("the owner's launch announcement", () => {
+  const FIXTURE = "contracts/fixtures/marketingshark-announcement.fixture.json";
+
+  async function withCopy(copy: unknown, date = "2026-10-03"): Promise<Rooms> {
+    const where = await rooms();
+    await mkdir(path.join(where.facts, "ventures/marketingshark/announcements"), { recursive: true });
+    await writeFile(path.join(where.facts, `ventures/marketingshark/announcements/${date}-devshark.json`), JSON.stringify(copy));
+    return where;
+  }
+
+  async function fixture(): Promise<Record<string, unknown>> {
+    return JSON.parse(await readFile(path.join(repoRoot, FIXTURE), "utf8")) as Record<string, unknown>;
+  }
+
+  it("ships as a placeholder fixture the gates refuse, at $0 and without a call", async () => {
+    const brand = await devshark();
+    const where = await withCopy({ ...await fixture(), date: "2026-10-03" });
+    const { day, outcome, calls } = await draft(brand, "2026-10-03", where);
+    // A Saturday: the owner's date wins over the rotation's rest day.
+    expect(day.kind).toBe("announcement");
+    expect(calls).toBe(0);
+    expect(outcome).toMatchObject({ status: "aborted", kind: "announcement", reason: "truth-gate-failed", spendUsd: 0 });
+    expect(outcome?.status === "aborted" && outcome.detail).toContain("owner-copy");
+  });
+
+  it("drafts the owner's words unchanged, at $0, through every gate", async () => {
+    const brand = await devshark();
+    const base = await fixture();
+    // Test copy, not announcement copy: the words are the owner's to write.
+    const slides = ["hook", "news", "detail", "next", "footer"].map((role) => ({
+      role,
+      headline: role === "detail" ? "Test" : `Test ${role} headline`,
+      body: role === "hook" || role === "footer" ? "" : `Test ${role} body.`,
+      alt: `Slide: test ${role}`
+    }));
+    const copy = {
+      ...base,
+      date: "2026-10-03",
+      slides,
+      descriptions: {
+        instagram: { en: "Test Instagram caption. devshark.app" },
+        threads: { en: "Test Threads caption." },
+        linkedin: { en: "Test LinkedIn first line.\n\nTest LinkedIn paragraph.\n\nhttps://devshark.app" }
+      },
+      hashtags: { instagram: { en: ["#webdev", "#programming", "#codingquiz"] }, threads: { en: ["webdev"] }, linkedin: { en: ["#webdev"] } }
+    };
+    const where = await withCopy(copy);
+    const { outcome, calls } = await draft(brand, "2026-10-03", where);
+    expect(calls).toBe(0);
+    expect(outcome).toMatchObject({ status: "drafted", kind: "announcement", spendUsd: 0 });
+    const built = PostPackageSchema.parse(await packageOn(where, "2026-10-03"));
+    expect(built.carousels.en.slides.map((slide) => slide.headline)).toEqual(slides.map((slide) => slide.headline));
+    expect(built.announcement!.copyRef).toBe("state/ventures/marketingshark/announcements/2026-10-03-devshark.json");
+    // A price the fact sheet in effect does not state is refused, whoever wrote it.
+    const priced = await withCopy({ ...copy, slides: slides.map((slide, index) => (index === 1 ? { ...slide, body: "Premium costs 3.99 a month." } : slide)) });
+    expect((await draft(brand, "2026-10-03", priced)).outcome).toMatchObject({ status: "aborted", reason: "truth-gate-failed", detail: expect.stringContaining("no-invented-numbers") });
+  });
+
+  it("reports a copy file it cannot use instead of drafting the rotation's post", async () => {
+    const brand = await devshark();
+    const where = await withCopy({ schemaVersion: "marketingshark-announcement/1", date: "2026-10-01" }, "2026-10-01");
+    expect(await plan(brand, "2026-10-01", where)).toMatchObject({ kind: "invalid", reason: expect.stringContaining("was not drafted") });
   });
 });

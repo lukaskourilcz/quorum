@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "marketingshark-announcement/1",
+  "date": "2026-10-01",
+  "brandId": "devshark",
+  "author": "owner",
+  "slides": [
+    {
+      "role": "hook",
+      "headline": "OWNER COPY: the opening line, at most 80 characters",
+      "body": "",
+      "alt": "OWNER COPY: what the first slide shows"
+    },
+    {
+      "role": "news",
+      "headline": "OWNER COPY: a short label",
+      "body": "OWNER COPY: the news, in the words of the fact sheet in effect",
+      "alt": "OWNER COPY: what the second slide shows"
+    },
+    {
+      "role": "detail",
+      "headline": "OWNER COPY",
+      "body": "OWNER COPY: the one detail under it",
+      "alt": "OWNER COPY: what the third slide shows"
+    },
+    {
+      "role": "next",
+      "headline": "OWNER COPY: a short label",
+      "body": "OWNER COPY: what a reader does next",
+      "alt": "OWNER COPY: what the fourth slide shows"
+    },
+    {
+      "role": "footer",
+      "headline": "OWNER COPY: the closing line",
+      "body": "",
+      "alt": "OWNER COPY: what the last slide shows"
+    }
+  ],
+  "descriptions": {
+    "instagram": { "en": "OWNER COPY: the Instagram caption" },
+    "threads": { "en": "OWNER COPY: the Threads caption" },
+    "linkedin": { "en": "OWNER COPY: the LinkedIn caption" }
+  },
+  "hashtags": {
+    "instagram": { "en": ["#OWNER_COPY_A", "#OWNER_COPY_B", "#OWNER_COPY_C"] },
+    "threads": { "en": ["OWNER COPY topic"] },
+    "linkedin": { "en": ["#OWNER_COPY_A"] }
+  }
+}
