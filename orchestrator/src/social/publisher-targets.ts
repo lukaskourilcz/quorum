@@ -12,6 +12,7 @@ import type { VentureCapabilityMap } from "../contracts/venture-capability.js";
 import { configRoot as defaultConfigRoot } from "../paths.js";
 import { resolveVentureCapabilityInMap } from "../ventures/capabilities.js";
 import type { AmplifierEligibility } from "./amplifiers.js";
+import type { PublishProviderId } from "./provider-platforms.js";
 import {
   CapabilityAwareQueueItemSchema,
   QueueItemSchema,
@@ -92,7 +93,7 @@ export interface ResolvedPublisherTarget {
   connection: SocialConnection;
   credentialRef: string;
   nativeAccountIdRef: string;
-  providerId: "direct-meta";
+  providerId: PublishProviderId;
   apiVersion: string;
   providerBindingId?: string;
 }
