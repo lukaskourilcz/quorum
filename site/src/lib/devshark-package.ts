@@ -114,6 +114,18 @@ export function packageAddress(releaseId: string): { slug: string; date: string;
 }
 
 /**
+ * Whether a marketingShark draft is a quiz carousel, the one kind the Design Lab edits (quorum#575).
+ *
+ * The room also drafts a feature spotlight, a challenge teaser, a weekly note and the owner's
+ * announcement (quorum#576). Their slides are code's facts and the writer's few fields, laid out by a
+ * different mapping, so the Lab's slide editor and the Queue's re-render do not apply to them; their
+ * captions are edited in the Queue. A quiz draft cites its question, the others their own subject.
+ */
+export function isQuizDraft(factualClaimRefs: readonly string[]): boolean {
+  return factualClaimRefs.some((ref) => ref.startsWith("marketingshark:question:"));
+}
+
+/**
  * The Design Lab edge a devShark package needs: `marketingshark -> design-lab`,
  * `bounded-render-summary/1`, allowed. Without it the Lab renders nothing for marketingShark,
  * exactly as it renders nothing for any venture without an edge.

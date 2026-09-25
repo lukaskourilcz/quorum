@@ -4,6 +4,7 @@ import { CAROUSEL_BRANDS, quizFrameJpeg, quizSlideRenderInput, renderCarouselSli
 import {
   canonicalJson,
   designLabPackagesAllowed,
+  isQuizDraft,
   packageAddress,
   packageHash,
   quizSlideCopies,
@@ -123,6 +124,9 @@ export async function rerenderQueueItem(input: {
   const address = packageAddress(current.releaseId);
   if (current.sourceVentureId !== "marketingshark" || current.content.assetPaths.length === 0 || !address) {
     throw new QueueActionError("REFUSED", "Only a marketingShark carousel is re-rendered from the Design Lab.");
+  }
+  if (!isQuizDraft(current.content.factualClaimRefs)) {
+    throw new QueueActionError("REFUSED", "Only a quiz carousel is re-rendered from the Design Lab. Edit this post's captions here in the Queue.");
   }
   if (!await designLabPackagesAllowed(input.root)) throw new QueueActionError("REFUSED", "marketingShark has no Design Lab edge in the capability map, so nothing is re-rendered for it.");
   const record = await readQuizPackage(address.date, address.brand, input.root);

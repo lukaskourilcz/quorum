@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { readAdminQueue } from "@/lib/admin-queue";
 import { socialQueueEventId } from "@/lib/admin-queue/event";
 import { DRAFT_FILE, queueFixtureRoot, readQueueFixture, writeJson } from "@/lib/admin-queue/fixture-root";
-import { supersedingQueueItem, parseQueueItemV2 } from "@/lib/admin-queue/item";
+import { supersedingQueueItem, parseQueueItemV2, queueItemV2Hash } from "@/lib/admin-queue/item";
 
 const roots: string[] = [];
 const now = new Date("2026-09-26T08:00:00.000Z");
@@ -74,6 +74,19 @@ describe("readAdminQueue", () => {
     expect(item!.gate).toMatch(/LinkedIn connection is not activated yet/u);
     expect(snapshot.counts.waiting).toBe(1);
     expect(snapshot.ventures).toEqual([{ id: "devshark", label: "devShark", count: 1 }]);
+  });
+
+  it("offers Design Lab editing only for a quiz carousel, not for the rotation's other kinds (#576)", async () => {
+    const base = await root({ draft: false });
+    const quiz = parseQueueItemV2(await readQueueFixture())!;
+    // A Tuesday spotlight cites its screen, not a question; everything else about the draft is the same.
+    const spotlight = { ...quiz, content: { ...quiz.content, factualClaimRefs: ["marketingshark:feature:today"] } };
+    await writeJson(base, `state/social/queue/${DRAFT_FILE}`, { ...spotlight, content: { ...spotlight.content, contentHash: queueItemV2Hash(spotlight) } });
+    const [item] = (await readAdminQueue(base, { now })).items;
+    expect(item).toMatchObject({
+      designLabHref: "/admin?venture=design-lab&tab=studio&brand=devshark",
+      actions: { approve: true, edit: true, hold: true, reject: true, rerender: false }
+    });
   });
 
   it("shows a missing capability edge as a failing check before the owner tries to approve", async () => {

@@ -160,6 +160,16 @@ describe("re-rendering a devShark draft from the Design Lab", () => {
     expect((await queueItem(root, LINKEDIN)).status).toBe("draft");
   });
 
+  it("refuses a draft of the rotation's other kinds, which are edited in the Queue (#576)", async () => {
+    const item = await queueItem(root, LINKEDIN);
+    const teaser = { ...item, content: { ...item.content, factualClaimRefs: ["marketingshark:challenge:js-count-vowels"] } };
+    await writeJson(root, `state/social/queue/${LINKEDIN.replace(/^ms-/u, "")}.json`, { ...teaser, content: { ...teaser.content, contentHash: queueItemV2Hash(teaser) } });
+    const refused = await refusal(root, LINKEDIN);
+    expect(refused.code).toBe("REFUSED");
+    expect(refused.message).toBe("Only a quiz carousel is re-rendered from the Design Lab. Edit this post's captions here in the Queue.");
+    expect(await events(root)).toEqual([]);
+  });
+
   it("refuses without the Design Lab edge", async () => {
     const closed = await packageFixtureRoot({ designLabEdge: false });
     roots.push(closed);

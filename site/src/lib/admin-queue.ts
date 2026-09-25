@@ -1,6 +1,6 @@
 import "server-only";
 import { designLabVentureIds } from "@/lib/design-lab-ventures";
-import { packageAddress, packageArticleId } from "@/lib/devshark-package";
+import { isQuizDraft, packageAddress, packageArticleId } from "@/lib/devshark-package";
 import { runDeterministicChecks, type QueueSibling } from "@/lib/admin-queue/checks";
 import type { SocialQueueEventRecord } from "@/lib/admin-queue/event";
 import type { QueueItem } from "@/lib/admin-queue/item";
@@ -122,9 +122,14 @@ function nextSafeAction(item: QueueItem, supersededBy: string | null): string | 
   return null;
 }
 
-/** The devShark package a marketingShark draft was built from, when it names one. */
+/**
+ * The devShark package a marketingShark quiz draft was built from, when it names one. The other
+ * post kinds link to the brand's Design Lab section and are not re-rendered from it.
+ */
 function packageOf(item: QueueItem): { slug: string; date: string } | null {
-  return item.schemaVersion === 2 && item.sourceVentureId === "marketingshark" ? packageAddress(item.releaseId) : null;
+  return item.schemaVersion === 2 && item.sourceVentureId === "marketingshark" && isQuizDraft(item.content.factualClaimRefs)
+    ? packageAddress(item.releaseId)
+    : null;
 }
 
 /**
