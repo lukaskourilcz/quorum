@@ -13,6 +13,7 @@ import type { Brand } from "./config.js";
  */
 export const MarketingSharkBannerContract = z.object({
   schemaVersion: z.literal("marketingshark-banner/1"),
+  /** Only devShark has a banner, and this is the contract that would actually place one. */
   brandId: z.literal("devshark"),
   targetRepo: z.literal("lukaskourilcz/aifirst"),
   /**
@@ -37,12 +38,6 @@ export const MarketingSharkBannerContract = z.object({
   preparedAt: z.iso.datetime({ offset: true }),
   status: z.enum(["staged", "delivered"]),
   receiptRef: z.string().nullable()
-}).superRefine((contract, context) => {
-  // geoShark never gets a banner anywhere. Pinned by the venture config schema and again here,
-  // because this is the file that would actually place one.
-  if (contract.brandId !== "devshark") {
-    context.addIssue({ code: "custom", message: "Only devShark has a banner", path: ["brandId"] });
-  }
 });
 export type MarketingSharkBannerContract = z.infer<typeof MarketingSharkBannerContract>;
 

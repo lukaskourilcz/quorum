@@ -66,23 +66,18 @@ export interface LaunchBoard {
 /**
  * The launch set, in the order the owner named it.
  *
- * A list rather than a registry query, deliberately. `config/ventures.json` marks twelve ventures
- * `operating` and one `exploration`, so nothing in it distinguishes the seven being launched from
- * the ones deferred — that is an owner decision from 2026-08-28, and writing it down here is
- * honest about which kind of fact it is. FightAIQ is absent because it supplies MMA Files rather
- * than publishing itself.
+ * A list rather than a registry query, deliberately: the registry says which ventures run, and
+ * this says which of them the owner is launching to readers. Since `operations-2026-09b`
+ * (2026-09-25) that is DNESKAi and devShark, which marketingShark markets. GoVIRAL and the Design
+ * Lab run as shared machinery behind both, and WebDev Signal runs with its editions held, so
+ * none of the three has a launch row. A paused venture has no row either.
  */
 export const LAUNCH_SET = [
   "caught-up",
-  "mma-files",
-  "marketingshark",
-  "booksofhistory",
-  "tehdejsi-svet",
-  "kvorum",
-  "personal-growth"
+  "marketingshark"
 ] as const;
 
-export const HELD_VENTURES = ["titty-tuesdays", "door-money", "goviral", "webdev-signal"] as const;
+export const HELD_VENTURES = ["goviral", "carousel-studio", "webdev-signal"] as const;
 
 /**
  * Which venture an inbox approval belongs to.

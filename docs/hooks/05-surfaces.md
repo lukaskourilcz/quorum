@@ -8,7 +8,7 @@ against the content it sits on, and different ventures have different content.
 
 | Surface | Library | Content shape | Gate vocabulary |
 |---|---|---|---|
-| devShark/geoShark carousels | `quiz.hooks.json` (50 hooks) | slide 1 hook, slide 2 question, 3–4 reveal | options, difficulty, category, hasCode, canonical English opening |
+| devShark carousels | `quiz.hooks.json` (50 hooks) | slide 1 hook, slide 2 question, 3–4 reveal | options, difficulty, category, hasCode, canonical English opening |
 | DNESKAi / Caught Up | `news.hooks.json` (12 hooks) | daily AI briefing item | source count, primary-source count, signal strength, topic, numbers present |
 | MMA Files | `mma.hooks.json` (16 hooks) | sourced Czech magazine article | format, fighter count, event reference, source count |
 

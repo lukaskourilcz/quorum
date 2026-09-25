@@ -141,11 +141,8 @@ export function evaluateMmaPredicate(predicate: MmaPredicate, context: MmaContex
 /**
  * `truthRequires` is a conjunction: every predicate must hold.
  *
- * There is no per-vertical substitution. An earlier build rewrote `hasCode` to `optionsAtLeast:4`
- * for the geo vertical so the geo variant would not be permanently dead; with this library that
- * would be a lie, because the shipped geo line under `hasCode` reads "There's code on a geography
- * card. Start there." and there is usually no code. The unreachable-variant lint warns instead —
- * an honest silence beats a rendered falsehood.
+ * There is no per-vertical substitution. A gate is a claim about the item in front of it, so
+ * rewriting one to make a line reachable more often would render that line where it is untrue.
  */
 export function hookIsEligible(hook: Hook, context: SurfaceContext): boolean {
   return hook.truthRequires.every((predicate) => {

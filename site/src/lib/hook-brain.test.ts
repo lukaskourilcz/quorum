@@ -1,4 +1,4 @@
-import { SEED_TEMPLATES } from "@boardlessai/carousel-studio";
+import { fixtureAssignment, fixtureItem, readLibrary, SEED_TEMPLATES } from "@boardlessai/carousel-studio";
 import { describe, expect, it, vi } from "vitest";
 import { previewPayload, previewPayloadForBrand, slideOneTextSlot } from "./carousel-studio";
 import { readHookBrain, RECENT_ASSIGNMENT_LIMIT } from "./hook-brain";
@@ -42,9 +42,12 @@ describe("the hook brain snapshot", () => {
     }
   });
 
-  it("shows both verticals, because the split is the point of two variants", async () => {
+  it("previews the dev vertical on more than one part of the gate space", async () => {
+    // One vertical is left, so the previews earn their place by showing different gates at work
+    // rather than the same always-pool line three times.
     const snapshot = await readHookBrain();
-    expect(new Set(snapshot.previews.map((preview) => preview.vertical))).toEqual(new Set(["dev", "geo"]));
+    expect(new Set(snapshot.previews.map((preview) => preview.vertical))).toEqual(new Set(["dev"]));
+    expect(new Set(snapshot.previews.map((preview) => preview.hookId)).size).toBeGreaterThan(1);
   });
 
   it("caps the recent feed and counts logged fallbacks", async () => {
@@ -55,26 +58,27 @@ describe("the hook brain snapshot", () => {
 });
 
 describe("brand-aware preview payloads", () => {
-  it("puts a real assigned hook in slide 1 for the quiz brands", async () => {
+  it("puts a real assigned hook in slide 1 for devShark", async () => {
     const slot = slideOneTextSlot(poster)!;
     const generic = previewPayload(poster, "en");
 
-    for (const brand of ["devshark", "geoshark"] as const) {
-      const payload = await previewPayloadForBrand(poster, "en", brand);
-      expect(payload.strings[slot]).not.toBe(generic.strings[slot]);
-      expect(payload.strings[slot]!.length).toBeLessThanOrEqual(58);
-      // Every other slot keeps its fixture text: only slide 1 is the studio's to assign.
-      for (const [key, value] of Object.entries(generic.strings)) {
-        if (key !== slot) expect(payload.strings[key]).toBe(value);
-      }
+    const payload = await previewPayloadForBrand(poster, "en", "devshark");
+    expect(payload.strings[slot]).not.toBe(generic.strings[slot]);
+    expect(payload.strings[slot]!.length).toBeLessThanOrEqual(58);
+    // Every other slot keeps its fixture text: only slide 1 is the studio's to assign.
+    for (const [key, value] of Object.entries(generic.strings)) {
+      if (key !== slot) expect(payload.strings[key]).toBe(value);
     }
   });
 
-  it("gives the two verticals different lines", async () => {
+  it("takes devShark's line from the dev variant of the hook it was assigned", async () => {
     const slot = slideOneTextSlot(poster)!;
+    const item = fixtureItem("dev");
+    const { assignment } = fixtureAssignment(await readLibrary("quiz"), item);
+    expect(assignment).not.toBeNull();
+
     const dev = await previewPayloadForBrand(poster, "en", "devshark");
-    const geo = await previewPayloadForBrand(poster, "en", "geoshark");
-    expect(dev.strings[slot]).not.toBe(geo.strings[slot]);
+    expect(dev.strings[slot]).toBe(assignment!.hook.variants.dev.en.replaceAll("{topic}", item.topic));
   });
 
   it("renders Czech from the Czech variant, within its own budget", async () => {

@@ -55,7 +55,7 @@ export function buildQueueItems(input: {
         experimentId: null,
         channel,
         objective: "value_action" as const,
-        audience: brand.tone === "dev" ? "Working developers who want one real question a day" : "People who enjoy geography",
+        audience: "Working developers who want one real question a day",
         destination: brand.productUrl,
         utm: {
           source: channel,

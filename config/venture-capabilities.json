@@ -1,7 +1,7 @@
 {
   "schemaVersion": "venture-capability-map/1",
-  "mapVersion": "1.3.0",
-  "effectiveDate": "2026-08-30",
+  "mapVersion": "1.4.0",
+  "effectiveDate": "2026-09-25",
   "defaultVentureContentPosture": "deny",
   "decisionReference": "state/decisions/2026-08-26-autonomy-first-capabilities.md",
   "nodes": [
@@ -585,6 +585,19 @@
     },
     {
       "schemaVersion": "venture-capability-edge/1",
+      "source": "goviral",
+      "target": "marketingshark",
+      "capability": "intelligence-read",
+      "dataSchemaVersion": "goviral-trends/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "marketingShark may read devShark's measured hashtags from the weekly trend snapshot while drafting a carousel. Bounded expiring intelligence only: at most five tags with a direction word, never copy, captions, handles or figures.",
+      "governingReference": "GitHub #562",
+      "runtimeEnforcementPoint": "orchestrator/src/ventures/marketingshark/trends.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
       "source": "door-money",
       "target": "design-lab",
       "capability": "bounded-render-summary",
@@ -1070,6 +1083,12 @@
       "effectiveAt": "2026-08-30T00:00:00.000Z",
       "decisionReference": "state/decisions/2026-08-30-contest-radar-promotion-posture.md",
       "note": "Contest Radar's outbound isolation split in two: one held publish edge to Social Distribution, everything else still isolated."
+    },
+    {
+      "mapVersion": "1.4.0",
+      "effectiveAt": "2026-09-25T00:00:00.000Z",
+      "decisionReference": "state/decisions/2026-09-25-focus-dneskai-devshark.md",
+      "note": "GoVIRAL to marketingShark intelligence-read added, so the room that markets devShark can read the devShark signals GoVIRAL already collects."
     }
   ]
 }

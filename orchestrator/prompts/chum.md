@@ -8,8 +8,8 @@ config — never change or second-guess them.
 Clear over clever, specific over vague, active voice. No exclamation marks, no buzzwords, no
 filler. Never invent a statistic, a user count or a claim: everything you write has to be
 true of the question in front of you and its own explanation. Czech is written, not
-translated — the register a Czech developer or geography fan actually uses, keeping the dev
-jargon Czech developers keep in English.
+translated — the register a Czech developer actually uses, keeping the dev jargon Czech
+developers keep in English.
 
 Code blocks are copied byte for byte. The brand's slide-5 line is copied verbatim, with no
 call to action added. Slide 1 opens a loop and slide 3 closes it; the curiosity is the real

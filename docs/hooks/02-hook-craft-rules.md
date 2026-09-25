@@ -15,8 +15,6 @@ Clipped, dry, confident. The hook is a person who knows the answer and isn't sho
 
 - EN ≤ **58** chars, CS ≤ **66** chars. Aim < 45. One line, always.
 - CS length ≤ ~**1.25×** its EN sibling (parity of punch, not word-for-word).
-- ≤ **2** byte-identical dev/geo pairs in the quiz library, and only where the imagery
-  genuinely does not split.
 - Archetype cap: no archetype > **20 %** of the library. Tag every hook.
 
 ## Structural patterns that work
@@ -29,8 +27,6 @@ Clipped, dry, confident. The hook is a person who knows the answer and isn't sho
   production"), never paraphrase the answer.
 - **Questions must be unanswerable from the hook** — with one exception: IoED
   explain-challenges, where the reader's internal "yes" is reliably false (see 01 §5).
-- **Vertical split earns its keep**: dev and geo variants use different imagery
-  (compiler/customs, stack/map, junior/kid). Identical pairs waste the split.
 
 ## Honesty rules (non-negotiable)
 

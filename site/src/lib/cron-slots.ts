@@ -107,7 +107,12 @@ export function resolveCronSlots(registry: unknown): CronSlot[] {
   // their definitions in the registry and lose only an hour of their own.
   const dispatched = new Set(raw.ventures.flatMap((venture) =>
     (venture as { day?: { steps?: unknown } }).day?.steps as string[] ?? []));
-  const ventureSlots = raw.ventures.flatMap((venture) => {
+  // A paused venture holds no slot (operations-2026-09b), exactly as in the orchestrator's
+  // `scheduledVentures`. Its day's rooms still count as dispatched above, so resuming it restores
+  // the same slots rather than giving each room an hour of its own.
+  const ventureSlots = raw.ventures
+    .filter((venture) => (venture as { status?: unknown }).status !== "paused")
+    .flatMap((venture) => {
     const value = venture as {
       day?: { kind?: unknown; cadence?: unknown };
       meetings?: Array<{ kind?: unknown; cadence?: unknown }>;

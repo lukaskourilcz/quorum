@@ -36,12 +36,21 @@ export const FactSheet = z.object({
 });
 export type FactSheet = z.infer<typeof FactSheet>;
 
+/**
+ * devShark is the one brand.
+ *
+ * A second, disabled brand sat here from the founding, pointed at StudyShark's geography bank.
+ * StudyShark moved out of react-express-app on 2026-09-24 and its deployment is paused, so there is
+ * no product left for a second brand to promote. A schema that still accepted one would let a
+ * config edit revive a retired product without any code noticing.
+ */
 export const Brand = z.object({
-  id: z.enum(["devshark", "geoshark"]),
+  id: z.literal("devshark"),
   enabled: z.boolean(),
   displayName: z.string(),
   productUrl: z.string().url(),
-  tone: z.enum(["dev", "geo"]),
+  /** The hook vertical the studio serves this brand's slide-1 lines from. */
+  tone: z.literal("dev"),
   questionBank: z.object({
     snapshotPath: z.string(),
     sourceRepo: z.string(),
@@ -72,27 +81,10 @@ export const MarketingSharkConfig = z.object({
   pragueHour: z.literal(7),
   abVariants: z.literal(2),
   minEligibleBeforeRelax: z.literal(2),
-  brands: z.array(Brand).min(1)
-}).superRefine((cfg, ctx) => {
-  if (cfg.brands.some((b) => b.id === "geoshark" && b.banner))
-    ctx.addIssue({ code: "custom", message: "geoShark never gets a banner" });
+  brands: z.array(Brand).length(1)
 });
 export type MarketingSharkConfig = z.infer<typeof MarketingSharkConfig>;
 
-/**
- * The per-tone override that used to live here, and why it is gone.
- *
- * `requirementsForTone` rewrote `hasCode` to `optionsAtLeast:4` for the geo tone, so the geo
- * variant of a code-gated hook would not be permanently dead. Against the central library that
- * rewrite would publish a falsehood: the shipped geo line under `hasCode` reads "There's code on a
- * geography card. Start there.", and substituting the gate would render it on any four-option
- * geography question, where there is no code at all.
- *
- * `docs/hooks/04-schema-and-gates.md` calls this out as a known bug class and prescribes the other
- * handling — write the variant to be honest if it ever fires, and lint for the unreachability. The
- * `unreachable-variant` warning in `lint:hooks` is that check, and it names exactly these three
- * hooks. An honest silence beats a rendered falsehood.
- */
 export function enabledBrands(config: MarketingSharkConfig): Brand[] {
   return config.brands.filter((brand) => brand.enabled);
 }

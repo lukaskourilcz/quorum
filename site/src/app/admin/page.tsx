@@ -71,7 +71,7 @@ import { readAdminContestRadar } from "@/lib/admin-contest-radar";
 import { readAdminImplementationProgress } from "@/lib/admin-implementation-plans";
 import { readAdminMmaFiles } from "@/lib/admin-mma-files";
 import { readAdminPersonalGrowth, type PersonalGrowthCoreTab } from "@/lib/admin-personal-growth";
-import { readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
+import { navigableVentures, readAdminPortfolio, type AdminVentureTab } from "@/lib/admin-portfolio";
 import { readAdminSnapshot } from "@/lib/admin-state";
 import { readCarouselStudio, readCarouselStudioCounts } from "@/lib/carousel-studio";
 import { readGoViralProfile } from "@/lib/goviral-profile";
@@ -115,6 +115,8 @@ function tabLabel(tab: AdminVentureTab): string {
   if (tab === "social-lab") return "social drafts";
   if (tab === "trend-radar") return "trend radar";
   if (tab === "voice-strategy") return "voice & strategy";
+  if (tab === "edition-cs") return "czech edition";
+  if (tab === "edition-en") return "english edition";
   return tab;
 }
 
@@ -345,9 +347,12 @@ export default async function AdminPage({
    * to a venture's first. Only the selected section is resolved in full: reading every venture's
    * articles and presets to render one of them is work the page would throw away.
    */
+  // A paused venture's brand is not in the section list (operations-2026-09b) but still opens by
+  // its own address, as an archive, with a notice above it.
   const labVentureId: DesignLabVentureId = isDesignLabVenture(requestedBrand)
     ? requestedBrand
-    : labSections[0]!.id;
+    : labSections[0]?.id ?? "caught-up";
+  const labVentureListed = labSections.some((section) => section.id === labVentureId);
   const labVenture = wantsStudio ? await readDesignLabVenture(labVentureId) : null;
   const brandId = selectedVenture?.id ?? "global";
   const brand = ventureBrand(brandId);
@@ -471,7 +476,7 @@ export default async function AdminPage({
       href: "/admin",
       active: !selectedVenture && !selectedView
     },
-    ...portfolio.ventures.map((venture) => ({
+    ...navigableVentures(portfolio).map((venture) => ({
       id: venture.id,
       name: ventureName(venture.id, venture.name),
       count: savedItemCount(venture.id, venture.cards.length),
@@ -551,7 +556,9 @@ export default async function AdminPage({
         ...(kvorum.quota ? [{ at: kvorum.quota.updatedAt, singular: "quota receipt", plural: "quota receipts" }] : [])
       ]
     }
-  ], new Date());
+  ], new Date())
+    // A paused venture's archive stays at its own URL; it is not news on the home page.
+    .filter((row) => portfolio.ventures.find((venture) => venture.id === row.ventureId)?.status !== "paused");
 
   const sections: AdminSection[] = adminSections(
     selectedView && selectedView !== "future" ? "waiting" : null,
@@ -736,6 +743,15 @@ export default async function AdminPage({
         node: (
           <div className="grid min-w-0 gap-4">
             <DesignLabSectionNav sections={labSections} selected={labVenture.id} />
+            {labVentureListed ? null : (
+              <div data-design-lab-paused={labVenture.id}>
+                <AdminStateMessage
+                  description="Its venture is paused, so the Design Lab no longer lists it. Its tokens and recorded decks are kept, and this page shows them as they were."
+                  state="paused"
+                  title={`${labVenture.name} is not a running brand`}
+                />
+              </div>
+            )}
             <DesignLabVentureSection venture={labVenture} />
           </div>
         ),
@@ -955,6 +971,16 @@ export default async function AdminPage({
           title="This deployment cannot save changes"
         />
       ) : null}
+      {selectedVenture?.status === "paused" ? (
+        <div data-admin-paused-venture={selectedVenture.id}>
+          <AdminStateMessage
+            action={<Link className="admin-focus-ring font-semibold text-[var(--admin-link)]" href="/admin/settings">Open Settings</Link>}
+            description="Nothing runs for it and it is not in the navigation. What it made is below; Settings lists it under Paused ventures, where Resume puts it back on the schedule."
+            state="paused"
+            title={`${ventureName(selectedVenture.id, selectedVenture.name)} is paused`}
+          />
+        </div>
+      ) : null}
       {selectedView === "future" ? (
         <div className="grid min-w-0 gap-4">
           <Panel note="Read-only" title="Ways this could earn">
@@ -997,7 +1023,8 @@ export default async function AdminPage({
             <Panel note="The last three days" title="What shipped">
               <RenderedDeskPanel desk={renderedDesk} />
             </Panel>
-            <Panel note="The four newest ventures" title="Since yesterday">
+            {recentActivity.length > 0 ? (
+            <Panel note="The newest ventures that are running" title="Since yesterday">
             <div className="grid gap-3 md:grid-cols-2" data-admin-recent-activity>
               {recentActivity.map((row) => (
                 <Link
@@ -1020,6 +1047,7 @@ export default async function AdminPage({
               ))}
             </div>
             </Panel>
+            ) : null}
           </section>
 
           {/* The counts come from the same snapshot the rail counts, so the two cannot disagree.

@@ -6,11 +6,14 @@ three things, in this order of priority:
 1. **The owner's weekly content brief.** What to post, where, and why this week.
    This is the product; the other two are useful, this one is the reason the room
    exists.
-2. **Marketing ideas and analysis for DNESKAi and MMA Files** (and Titty Tuesdays or
-   Door Money when a measured trend actually touches one). Name the venture in the idea
-   title: "DNESKAi: …", "MMA Files: …", "Door Money: …".
-3. **At most one trend worth handing to another desk** as its next agenda. A Door Money
-   handoff targets `dm-growth`; it asks for one decision and never authorizes outreach.
+2. **Marketing ideas and analysis for DNESKAi and devShark.** Name the product in the
+   idea title: "DNESKAi: …" or "devShark: …". devShark's carousels are drafted by
+   marketingShark, which reads this room's packet as bounded, expiring intelligence and
+   writes its own copy; an idea here is a direction, never the final post. Every other
+   venture is paused (`operations-2026-09b`) and gets no ideas.
+3. **At most one trend worth handing to another desk** as its next agenda, and only to a
+   room whose venture is running. A handoff to a paused venture is dropped. It asks for
+   one decision and never authorizes outreach.
 
 ## Working method
 

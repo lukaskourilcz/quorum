@@ -15,6 +15,34 @@ import {
 const workflowRoot = path.join(repoRoot, ".github", "workflows");
 
 describe("automation policy", () => {
+  it("delivers DNESKAi from the scheduled day run as well as the retry", async () => {
+    // quorum#555: the 05:00 Prague dispatch is `cu-day`. Delivery keyed on `cu-edition` alone
+    // reached the magazine only when the 09:00 retry ran to the end, and four September days whose
+    // retry failed were never delivered.
+    const cycle = await readFile(path.join(workflowRoot, "cycle.yml"), "utf8");
+    const decision = cycle.slice(
+      cycle.indexOf("          caught_up_delivery=false"),
+      cycle.indexOf('echo "caught_up_delivery=$caught_up_delivery" >> "$GITHUB_OUTPUT"')
+    );
+    expect(decision).toContain('test "$phase" = "cu-day"');
+    expect(decision).toContain('test "$phase" = "cu-edition"');
+    const step = (name: string) => {
+      const start = cycle.indexOf(`      - name: ${name}\n`);
+      expect(start, `${name} is missing`).toBeGreaterThan(-1);
+      return cycle.slice(start, cycle.indexOf("\n      - name: ", start + 1));
+    };
+    for (const name of ["Select the oldest Caught Up delivery", "Mint bounded aifirst token for the stream and event sync"]) {
+      const gate = step(name);
+      expect(gate, name).toContain("steps.mode.outputs.caught_up_delivery == 'true'");
+      expect(gate, name).not.toContain("steps.mode.outputs.phase == 'cu-edition'");
+    }
+    const deliveryOnlyGate = cycle.slice(
+      cycle.indexOf('          if test "$delivery_only" = "true"; then'),
+      cycle.indexOf("          # The double-fire guard")
+    );
+    expect(deliveryOnlyGate).toContain('test "$phase" = "cu-day" || test "$phase" = "cu-edition"');
+  });
+
   it("pins every third-party action to an immutable commit", async () => {
     const names = (await readdir(workflowRoot)).filter((name) => name.endsWith(".yml"));
     expect(names.sort()).toEqual([
@@ -69,7 +97,6 @@ describe("automation policy", () => {
     expect(cycle).toContain("INPUT_DELIVERY_ONLY");
     expect(cycle).toContain("Delivery-only mode requires a manual dispatch");
     expect(cycle).toContain("PORTFOLIO_LIVE_ENABLED");
-    expect(cycle).toMatch(/options:\n(?:\s+- [a-z-]+\n)*\s+- bh-desk\n/u);
     const portfolioModeGate = cycle.split("\n").find((line) =>
       line.includes('test "$PORTFOLIO_LIVE_ENABLED" != "true"')
     );
@@ -85,8 +112,20 @@ describe("automation policy", () => {
       line.includes('test "$dry" != "true"') && line.includes('test "$phase" = "bh-desk"')
     );
     expect(portfolioGateLine).toBeDefined();
+    // The dispatch options follow the registry (operations-2026-09b): every running venture's day
+    // and rooms are offered, a paused venture's are not, and the company's own shifts always are.
+    // The portfolio budget gate keeps naming paused rooms, so a resumed room is gated at once.
+    const offered = [...dispatchOptions.matchAll(/^ {10}- ([a-z-]+)$/gmu)].map(([, phase]) => phase!);
+    const registry = readVentureRegistry();
+    const phasesOf = (venture: (typeof registry.ventures)[number]) => [
+      ...(venture.day ? [venture.day.kind, ...venture.day.steps] : []),
+      ...venture.meetings.map((meeting) => meeting.kind)
+    ];
+    const running = new Set(registry.ventures.filter((venture) => venture.status !== "paused").flatMap(phasesOf));
+    const paused = new Set(registry.ventures.filter((venture) => venture.status === "paused").flatMap(phasesOf));
+    expect(new Set(offered)).toEqual(new Set([...running, "morning", "afternoon", "night"]));
+    for (const phase of paused) expect(offered, `${phase} belongs to a paused venture`).not.toContain(phase);
     for (const phase of ["bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk"]) {
-      expect(dispatchOptions.match(new RegExp(`^ {10}- ${phase}$`, "gmu"))).toHaveLength(1);
       expect(portfolioGateLine).toContain(`test "$phase" = "${phase}"`);
     }
     const deliveryOnlyGate = cycle.slice(
@@ -94,10 +133,12 @@ describe("automation policy", () => {
       cycle.indexOf("          # The double-fire guard")
     );
     expect(deliveryOnlyGate).not.toMatch(/(?:bh|dm|ts|kv)-(?:desk|growth)/u);
-    expect(cycle).toContain("FIGHTAIQ_LIVE_ENABLED");
-    expect(cycle).toContain("FIGHTAIQ_ANALYSIS_ENABLED");
-    expect(cycle).toContain("MMA_FILES_LIVE_ENABLED");
-    expect(cycle).toContain("MMA_FILES_INDEXING_ENABLED: ${{ vars.MMA_FILES_INDEXING_ENABLED }}");
+    // MMA Files and FightAIQ are paused (operations-2026-09b): their live switches, their site and
+    // indexing variables and their delivery block left the workflow with them, so nothing in this
+    // job can reach that magazine. Resuming them restores all of it from history.
+    for (const gone of ["FIGHTAIQ_LIVE_ENABLED", "FIGHTAIQ_ANALYSIS_ENABLED", "MMA_FILES_LIVE_ENABLED", "MMA_FILES_INDEXING_ENABLED", "MMA_FILES_SITE_URL"]) {
+      expect(cycle, gone).not.toContain(`${gone}: \${{`);
+    }
     const editionOverride =
       "CYCLE_FORCE_NEW_EDITION: ${{ github.event_name == 'workflow_dispatch' && inputs.phase == 'cu-edition' && inputs.dry == false && inputs.trigger != 'vercel-cron' }}";
     expect(cycle.split(editionOverride)).toHaveLength(2);
@@ -111,12 +152,8 @@ describe("automation policy", () => {
     expect(cycle).toContain('test "$phase" = "morning"');
     expect(cycle).toContain("actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1");
     expect(cycle).toContain("lukaskourilcz/aifirst.git");
-    expect(cycle).toContain("lukaskourilcz/mma-files.git");
-    expect(cycle).toContain("pnpm mma:delivery");
-    expect(cycle).toContain("data/boardless/articles.json");
-    expect(cycle).toContain("data/boardless/fightaiq.json");
-    expect(cycle).toContain("package_kind=banner");
-    expect(cycle).toContain("^((data/boardless/ads\\.json)|(public/ads/[a-z0-9-]+-\\d+x\\d+\\.webp))$");
+    expect(cycle).not.toContain("lukaskourilcz/mma-files.git");
+    expect(cycle).not.toContain("pnpm mma:delivery");
     // Every gate that forces dry mode goes through force_dry, which on a schedule also raises
     // skip so the reason is recorded. A scheduled dry run writes only to tmp/dry-run/state and
     // is never committed, so a gate that only set dry=true ended the job green having left
@@ -164,16 +201,15 @@ describe("automation policy", () => {
       'test -e "$runtime_path" || git ls-files --error-unmatch -- "$runtime_path"'
     );
     expect(cycle).toContain('git add -A -- "$runtime_path"');
-    // state/INBOX.md is on both receipt lists. The shared fail-closed writer appends an owner
-    // line for either venture, and the MMA step used to leave it unstaged, so a reverted
-    // article's inbox item died with the runner.
-    expect(cycle).toContain("receipt_paths=(state/ventures/mma-files/deliveries state/ventures/mma-files/banners/contract.json state/ventures/mma-files/banners/delivered.json state/ventures/fightaiq/deliveries state/release-proofs state/notify state/ventures/mma-files/PAUSED state/INBOX.md)");
+    // state/INBOX.md is on every receipt list. The shared fail-closed writer appends an owner
+    // line, and the MMA step used to leave it unstaged, so a reverted article's inbox item died
+    // with the runner. That step left with MMA Files (operations-2026-09b); the rule stays.
     for (const list of cycle.match(/receipt_paths=\([^)]*\)/gu) ?? []) {
       expect(list, "every fail-closed receipt list stages the inbox").toContain("state/INBOX.md");
     }
     expect(cycle).toContain('git add -A -- "$receipt_path"');
     expect(cycle).not.toContain("git add state/ventures/mma-files/deliveries state/ventures/fightaiq/deliveries");
-    expect(cycle).toContain("MMA Files delivery-only mode requires MMA_FILES_LIVE_ENABLED=true.");
+    expect(cycle).not.toContain("MMA Files delivery-only mode");
     expect(cycle).toContain("status --porcelain --untracked-files=all");
     // Every push retry rebases with --autostash. The cycle commits only its allowlisted paths,
     // so anything else the run touched is left unstaged, and a plain rebase refuses to start —

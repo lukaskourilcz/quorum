@@ -18,6 +18,7 @@ import {
   type CarouselPayload,
   type CarouselTemplate
 } from "@boardlessai/carousel-studio";
+import { activeDesignLabVentureIds } from "./design-lab-ventures";
 import { parseRatingLedger, type RatingRecord } from "./rating-model";
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
@@ -128,10 +129,10 @@ export function slideOneTextSlot(template: CarouselTemplate): string | null {
 /**
  * A preview payload whose slide 1 carries a real assigned hook.
  *
- * The two shark brands are quiz verticals, so their previews run the real assignment against a
- * fixture item carrying real quiz metadata and render whatever it returns. That makes the gallery
- * show the thing the studio actually publishes rather than lorem for the one slot that has to earn
- * the next interaction.
+ * devShark is the quiz brand, so its previews run the real assignment against a fixture item
+ * carrying real quiz metadata and render whatever it returns. That makes the gallery show the
+ * thing the studio actually publishes rather than lorem for the one slot that has to earn the next
+ * interaction.
  *
  * Every other brand keeps its fixture headline. Their libraries are unwritten, so a preview that
  * invented a hook for them would be showing something the pipeline would never produce.
@@ -142,11 +143,10 @@ export async function previewPayloadForBrand(
   brandId: keyof typeof CAROUSEL_BRANDS
 ): Promise<CarouselPayload> {
   const base = previewPayload(template, locale);
-  const vertical = brandId === "devshark" ? "dev" : brandId === "geoshark" ? "geo" : null;
   const slot = slideOneTextSlot(template);
-  if (!vertical || !slot) return base;
+  if (brandId !== "devshark" || !slot) return base;
 
-  const resolved = fixtureAssignment(await readLibrary("quiz"), fixtureItem(vertical));
+  const resolved = fixtureAssignment(await readLibrary("quiz"), fixtureItem("dev"));
   // No line means the fallback fired, which is exactly when the template's own headline renders.
   if (!resolved.line) return base;
 
@@ -250,9 +250,13 @@ export async function readCarouselStudio(root = repositoryRoot): Promise<Carouse
       };
     })
     .sort((left, right) => left.template.id.localeCompare(right.template.id) || right.template.version.localeCompare(left.template.version));
+  // The gallery offers the brands of running ventures only (operations-2026-09b).
+  const activeBrands = new Set<string>(await activeDesignLabVentureIds(root));
   return {
     templates,
-    brands: Object.values(CAROUSEL_BRANDS).map((brand) => ({ id: brand.id, name: brand.name })),
+    brands: Object.values(CAROUSEL_BRANDS)
+      .filter((brand) => activeBrands.has(brand.id))
+      .map((brand) => ({ id: brand.id, name: brand.name })),
     // The gallery's own picker: every canvas the studio renders. Which of them a given template
     // is offered is per-template and rides on its `checks` above.
     formats: previewFormats(),

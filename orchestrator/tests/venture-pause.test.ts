@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { runCycle } from "../src/cycle.js";
-import { PHASE_VENTURES, pausedVentureForPhase, readVentureRegistry } from "../src/ventures/registry.js";
+import { PHASE_VENTURES, parseVentureRegistry, pausedVentureForPhase, readVentureRegistry } from "../src/ventures/registry.js";
 import { RunnablePhaseSchema } from "../src/types.js";
 
 /**
@@ -67,5 +67,24 @@ describe("the venture pause switch", () => {
         artifacts: []
       });
     }
+  });
+});
+
+describe("the pause date", () => {
+  it("is recorded on every paused venture and on nothing else", () => {
+    const registry = readVentureRegistry();
+    for (const venture of registry.ventures) {
+      if (venture.status === "paused") expect(venture.pausedOn, venture.id).toMatch(/^\d{4}-\d{2}-\d{2}$/u);
+      else expect(venture.pausedOn, venture.id).toBeUndefined();
+    }
+  });
+
+  it("is refused on a venture that is not paused", () => {
+    const registry = readVentureRegistry();
+    const running = registry.ventures.find((venture) => venture.status === "operating")!;
+    expect(() => parseVentureRegistry({
+      ...registry,
+      ventures: registry.ventures.map((venture) => venture.id === running.id ? { ...venture, pausedOn: "2026-09-25" } : venture)
+    })).toThrow(/records pausedOn but is operating/u);
   });
 });

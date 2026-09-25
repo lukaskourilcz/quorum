@@ -369,6 +369,7 @@ describe("the scraped-row boundary", () => {
     }
     expect(registry.topicSets["door-money"]).toEqual({
       label: "Door Money (book and music stories)",
+      ventureId: "door-money",
       sourceMode: "free",
       keywords: ["BookTok", "author marketing", "hip-hop culture", "music industry stories"],
       hashtags: ["#BookTok", "#AuthorMarketing", "#HipHopCulture", "#MusicIndustryStories"]
@@ -379,6 +380,7 @@ describe("the scraped-row boundary", () => {
     }
     expect(registry.topicSets["tehdejsi-svet"]).toEqual({
       label: "Tehdejsi svet (Czech and Ukrainian lived memory)",
+      ventureId: "tehdejsi-svet",
       sourceMode: "free",
       keywords: ["česká nostalgie", "українська ностальгія", "rodinná historie", "сімейна історія", "paměť města", "пам'ять міста"],
       hashtags: ["#ČeskáNostalgie", "#УкраїнськаНостальгія", "#RodinnáHistorie", "#СімейнаІсторія", "#PaměťMěsta", "#ПамятьМіста"]

@@ -16,14 +16,14 @@ new pre-signed content-project template now permits tightly fenced founding:
 - Recognized revenue is measured at $0 until a real revenue event is accepted.
 - Only the human owner may accept money or execute a payment.
 
-The registry now holds eleven projects. Caught Up and MMA Files are the two public Czech
-magazines. Titty Tuesdays remains pre-commerce. FightAIQ is a sourced UFC and Oktagon
-analysis desk with no betting action. GoVIRAL and marketingShark produce bounded internal
-briefs and draft packages. Design Lab is the deterministic shared renderer. BOOKSOFHISTORY,
-Door Money, Kvórum and Tehdejší svět are implemented venture programmes whose live work
-still waits behind their own founding countersignatures and named approvals. None of the
-four may create an account, publish, contact a channel or infer authority from its
-`operating` registry status.
+The registry holds fourteen ventures, and since `operations-2026-09b` (2026-09-25) four of
+them run. Caught Up (DNESKAi) is the Czech AI magazine: one article, its image and its social
+pack a day. marketingShark drafts devShark carousels. GoVIRAL and the Design Lab are shared
+machinery behind both. WebDev Signal runs as a $0 pre-step of the DNESKAi day with its editions
+held. MMA Files, FightAIQ, Titty Tuesdays, BOOKSOFHISTORY, Door Money, Tehdejší svět, Kvórum and
+Personal Growth are paused: they keep their code, state and archives, run nothing and hold no
+slot on the clock. Contest Radar is an unfounded exploration. No venture may create an account,
+publish, contact a channel or infer authority from its registry status.
 
 ## Owner and roles
 
@@ -157,6 +157,9 @@ written cost, loss, evidence and stop threshold. Template-compliant content-proj
 founding does not imply market validation or a stage change.
 
 ## Solution and scope
+
+Only the Caught Up, marketingShark, GoVIRAL, Design Lab and WebDev Signal parts below run since
+`operations-2026-09b`. The rest describes paused ventures and applies again only when one resumes.
 
 BoardlessAI runs the shared project list and public calendar. For Caught Up it
 owns source collection, edition and product rooms, guarded production, delivery

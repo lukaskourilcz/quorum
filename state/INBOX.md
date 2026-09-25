@@ -46,6 +46,23 @@ with its full scope, because the scope text is the approval. -->
 
 ## Resolved
 
+- [x] HUMAN_APPROVAL place-devshark-house-banner-on-dneskai — Let devShark fill
+  DNESKAi's banner slots now that MMA FILES is paused (aifirst #97, option A).
+  What this approves, exactly:
+  - **The placement:** both slots, `today-partner-belt` (728×90 and 320×100) and
+    `rail-square` (300×250), show local devShark SVG creatives labelled
+    "devShark (vlastní projekt)", linking to `https://devshark.app` with no tracking
+    parameters.
+  - **The flag:** `banner: true` on the devShark brand in `config/marketingshark.json`.
+  - **The delivery:** made directly in aifirst (`50fce31`), not from the staged
+    payload. The payload's `config/banner.json` holds one slot and would have blanked
+    `rail-square`, which the target added after staging. The two staged creatives
+    were used byte for byte; the 300×250 square was drawn to match.
+  - **What this does not approve:** paid placements, ad scripts, third-party hosts,
+    tracking, or any posting.
+  **Approved by the owner on 2026-09-25** (chosen in the Claude Code session that
+  implemented the kickoff).
+
 - [x] HUMAN_APPROVAL BH-RESEARCH-001 — Allow BOOKSOFHISTORY to make guarded
   web-search research calls with the existing Anthropic key.
   What this approves, exactly:

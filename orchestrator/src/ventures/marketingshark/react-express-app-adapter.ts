@@ -27,21 +27,6 @@ interface SourceTranslation {
   explanation?: string;
 }
 
-/** Legacy subjects keep explicit modules; webdev uses the product-owned shared loader. */
-const SUBJECT_MODULES: Record<string, {
-  questions: Array<{ file: string; exportName: string }>;
-  translations: Array<{ file: string; exportName: string }>;
-}> = {
-  geography: {
-    questions: [
-      { file: "lib/roadmap-questions.geography.ts", exportName: "allRoadmapGeographyQuestions" }
-    ],
-    translations: [
-      { file: "lib/roadmap-questions.geography.cs.ts", exportName: "geographyTranslationsCs" }
-    ]
-  }
-};
-
 async function importNamed<T>(localPath: string, file: string, exportName: string): Promise<T> {
   const absolute = path.join(localPath, file);
   const module = await import(pathToFileURL(absolute).href) as Record<string, unknown>;
@@ -69,25 +54,16 @@ function normalizeCzech(translation: SourceTranslation | undefined, optionCount:
 export const reactExpressAppAdapter: QuestionBankAdapter = {
   sourceId: "react-express-app",
   async load(source): Promise<NormalizedQuestion[]> {
-    const modules = SUBJECT_MODULES[source.subject];
-    if (!modules && source.subject !== "webdev") {
+    // webdev is the only subject left in react-express-app, and it ships its own loader. The
+    // geography entry points left with StudyShark, so any other subject fails here instead of
+    // importing a file that no longer exists.
+    if (source.subject !== "webdev") {
       throw new Error(`No react-express-app entry points for subject ${source.subject}`);
     }
 
-    let questions: SourceQuestion[];
-    let translations: Record<string, SourceTranslation>;
-    if (source.subject === "webdev") {
-      const loadQuestions = await importNamed<() => Promise<SourceQuestion[]>>(source.localPath, "lib/webdev-bank.ts", "loadWebdevQuestions");
-      const loadTranslations = await importNamed<() => Promise<Record<string, SourceTranslation>>>(source.localPath, "lib/webdev-bank.ts", "loadWebdevTranslations");
-      [questions, translations] = await Promise.all([loadQuestions(), loadTranslations()]);
-    } else {
-      const questionGroups = await Promise.all(modules!.questions.map(({ file, exportName }) =>
-        importNamed<SourceQuestion[]>(source.localPath, file, exportName)));
-      const translationGroups = await Promise.all(modules!.translations.map(({ file, exportName }) =>
-        importNamed<Record<string, SourceTranslation>>(source.localPath, file, exportName)));
-      questions = questionGroups.flat();
-      translations = Object.assign({}, ...translationGroups);
-    }
+    const loadQuestions = await importNamed<() => Promise<SourceQuestion[]>>(source.localPath, "lib/webdev-bank.ts", "loadWebdevQuestions");
+    const loadTranslations = await importNamed<() => Promise<Record<string, SourceTranslation>>>(source.localPath, "lib/webdev-bank.ts", "loadWebdevTranslations");
+    const [questions, translations] = await Promise.all([loadQuestions(), loadTranslations()]);
 
     const seen = new Set<string>();
     const normalized: NormalizedQuestion[] = [];
@@ -121,5 +97,3 @@ export const reactExpressAppAdapter: QuestionBankAdapter = {
     return normalized.sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
   }
 };
-
-export const SUPPORTED_SUBJECTS = ["webdev", ...Object.keys(SUBJECT_MODULES)];

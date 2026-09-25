@@ -104,3 +104,38 @@ describe("the free trending signals reach the day's output on every path", () =>
     expect(result.snapshotDate).toBeNull();
   });
 });
+
+describe("the free collection asks only about running ventures (operations-2026-09b)", () => {
+  async function requestedUrls(pausedVentures?: ReadonlySet<string>): Promise<string[]> {
+    delete process.env.APIFY_TOKEN;
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-trends-"));
+    const urls: string[] = [];
+    const stub = stubFetch();
+    await refreshGoViralTrends({
+      root,
+      date: "2026-08-10",
+      now: new Date("2026-08-10T11:00:00.000Z"),
+      fetchImpl: (async (input: RequestInfo | URL, init?: RequestInit) => {
+        urls.push(decodeURIComponent(String(input)));
+        return stub(input, init);
+      }) as typeof fetch,
+      resolveImpl: async () => ["93.184.216.34"],
+      ...(pausedVentures ? { pausedVentures } : {})
+    });
+    return urls;
+  }
+
+  it("sends no query for a paused venture's set, and none for MMA fight weeks", async () => {
+    const urls = await requestedUrls();
+    expect(urls.length).toBeGreaterThan(0);
+    for (const term of ["BookTok", "book history", "česká nostalgie", "r/MMA", "r/ufc"]) {
+      expect(urls.filter((url) => url.includes(term)), term).toEqual([]);
+    }
+  });
+
+  it("queries a free set again once the registry no longer pauses its venture", async () => {
+    const urls = await requestedUrls(new Set());
+    expect(urls.some((url) => url.includes("news.google") && /BookTok|author marketing|hip-hop culture|music industry stories/u.test(url)))
+      .toBe(true);
+  });
+});

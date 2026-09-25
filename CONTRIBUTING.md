@@ -12,7 +12,7 @@ fails if the two disagree. This file contains only repository-specific contribut
 ## Hook and viral-copy knowledge lives here, and only here
 
 `docs/hooks/` is the canonical knowledge base for hooks and short-form viral copy across the
-whole repository family: the devShark and geoShark in-app hooks, marketingShark's carousel
+whole repository family: the devShark in-app hooks, marketingShark's carousel
 slide-1 lines, and social copy generally. The libraries sit beside the Design Lab's engine in
 `studio/hooks/`, one library per surface — quiz, news and mma. They front the carousels this
 repository posts; the quiz apps deliberately receive no hook copy (see
@@ -47,9 +47,8 @@ venture's code is a lesson the next surface's author will never find.
 ### Before a hook library ships
 
 `pnpm lint:hooks` must pass. It enforces the craft caps from `02-hook-craft-rules.md` as checks —
-character budgets, the identical-pair budget, the archetype cap, the declension rule for `{topic}`
-in Czech, the pool floor per gate. Warnings do not block — the three unreachable geo variants are
-a standing, deliberate state — but read them rather than skipping past them.
+character budgets, the archetype cap, the declension rule for `{topic}` in Czech, the pool floor
+per gate. Warnings do not block, but read them rather than skipping past them.
 
 If a lint rule fails on a shipped string, **report it — do not rewrite the line.** The copy is
 final and length-budgeted, and a rule that disagrees with a deliberate exception is a rule to

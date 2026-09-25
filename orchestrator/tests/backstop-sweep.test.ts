@@ -6,8 +6,12 @@ import { deployedCronExpressions, readVentureRegistry, resolveScheduledClock } f
 import { CRON_MINUTE } from "../src/ventures/registry.js";
 import { resolveBackstopSweep } from "../src/meetings/sweep.js";
 import { slotRecordPath } from "../src/meetings/slot-record.js";
+import { allOperating } from "./fixtures/all-operating-registry.js";
 
-const registry = readVentureRegistry();
+/** The registry the repository deploys, for what the schedule actually is. */
+const liveRegistry = readVentureRegistry();
+/** Every room running, for how a sweep behaves whichever ventures the owner runs today. */
+const registry = allOperating(liveRegistry);
 
 async function stateRoot(): Promise<string> {
   return mkdtemp(path.join(os.tmpdir(), "backstop-sweep-"));
@@ -25,20 +29,25 @@ async function record(root: string, phase: Parameters<typeof slotRecordPath>[0],
  * never a second opinion: it opens only a slot that has no record and can still be opened.
  */
 describe("the backstop sweep", () => {
-  it("deploys five crons on the house minute, and two of them after the last desk", () => {
+  it("deploys three crons on the house minute", () => {
     const deployed = deployedCronExpressions();
-    expect(deployed).toHaveLength(5);
-    // 21:55 UTC is 23:55 Prague in summer and 22:55 UTC is 23:55 Prague in winter. Without the
-    // pair the 23:00 Personal Growth desk was the one slot no sweep could reach: its Vercel
-    // dispatch is the only path to it, and the desk ran once in August and then left sixteen
-    // skip records in a row.
-    expect(deployed).toContain(`${CRON_MINUTE} 21 * * *`);
-    expect(deployed).toContain(`${CRON_MINUTE} 22 * * *`);
+    expect(deployed).toHaveLength(3);
+    // Two late sweeps (21 and 22 UTC) existed only for the 23:00 Personal Growth desk and left
+    // with it when it was paused (operations-2026-09b).
+    expect(deployed).not.toContain(`${CRON_MINUTE} 21 * * *`);
+    expect(deployed).not.toContain(`${CRON_MINUTE} 22 * * *`);
     for (const expression of deployed) {
       expect(expression).toMatch(new RegExp(`^${CRON_MINUTE} \\d{1,2} \\* \\* \\*$`, "u"));
     }
     // Far fewer than the per-slot expressions the Vercel side still uses.
-    expect(deployed.length).toBeLessThan(resolveScheduledClock(registry).length);
+    expect(deployed.length).toBeLessThanOrEqual(resolveScheduledClock(liveRegistry).length);
+  });
+
+  it("has no running slot after 21:00 Prague, which only the removed late sweeps could reach", () => {
+    // 19:55 UTC is the last sweep: 21:55 Prague in summer, 20:55 in winter. A venture resumed with
+    // a later slot needs 21 and 22 back in BACKSTOP_SWEEP_HOURS and in cycle.yml.
+    const late = resolveScheduledClock(liveRegistry).filter((slot) => slot.hour >= 21);
+    expect(late.map((slot) => slot.phase), "restore the 21:55 and 22:55 UTC sweeps").toEqual([]);
   });
 
   it("rescues the oldest slot today that has no record", async () => {
@@ -109,32 +118,5 @@ describe("the backstop sweep", () => {
 
     expect(outcome.phase).toBeNull();
     expect(outcome.reason).toContain("has passed its hour yet");
-  });
-});
-
-describe("the evening sweeps", () => {
-  it("reach the 23:00 desk in summer from the 21:55 UTC sweep", async () => {
-    const root = await stateRoot();
-    // 23:55 Prague on 15 September (CEST): every slot of the day has passed. Everything but the
-    // 23:00 desk has a record, so the desk is what the sweep opens.
-    const now = new Date("2026-09-15T21:55:00.000Z");
-    for (const slot of resolveScheduledClock(registry)) {
-      if (slot.phase !== "pg-desk") await record(root, slot.phase, "2026-09-15");
-    }
-    expect((await resolveBackstopSweep({ registry, stateRoot: root, now })).phase).toBe("pg-desk");
-  });
-
-  it("reach the 23:00 desk in winter from the 22:55 UTC sweep, and never yesterday's", async () => {
-    const root = await stateRoot();
-    // 23:55 Prague on 15 December (CET) from the later sweep of the pair.
-    const winter = new Date("2026-12-15T22:55:00.000Z");
-    for (const slot of resolveScheduledClock(registry)) {
-      if (slot.phase !== "pg-desk") await record(root, slot.phase, "2026-12-15");
-    }
-    expect((await resolveBackstopSweep({ registry, stateRoot: root, now: winter })).phase).toBe("pg-desk");
-    // The same 22:55 UTC sweep in summer is 00:55 Prague on the 16th: nothing of that day has
-    // passed, and the 15th's desk is not reopened across midnight.
-    const summerAfterMidnight = new Date("2026-09-15T22:55:00.000Z");
-    expect((await resolveBackstopSweep({ registry, stateRoot: root, now: summerAfterMidnight })).phase).toBeNull();
   });
 });

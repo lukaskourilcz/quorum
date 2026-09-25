@@ -154,9 +154,9 @@ export async function MarketingSharkVenturePage() {
             <Callout>
               <strong>The bank is read, never changed.</strong> devShark&apos;s questions are
               consumed as a pinned snapshot with its source commit recorded.{" "}
-              {brandsEnabled.length === 1
-                ? `${brandsEnabled[0]} is the only brand running today.`
-                : `${brandsEnabled.join(" and ")} are running today.`}{" "}
+              {brandsEnabled[0]
+                ? `${brandsEnabled[0]} is the only product it promotes.`
+                : "No brand is switched on today."}{" "}
               Nothing is written back to the product.
             </Callout>
           </div>

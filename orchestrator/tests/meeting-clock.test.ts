@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { MEETING_CLOCK, resolveCronPhase } from "../src/meetings/clock.js";
 import {
   CRON_HOUR_CARRY,
@@ -6,6 +6,11 @@ import {
   readVentureRegistry,
   scheduledCronExpressions
 } from "../src/ventures/registry.js";
+
+// Schedule mechanics are tested on every room, whichever ventures the owner runs today.
+vi.mock("../src/ventures/registry.js", (importOriginal) =>
+  import("./fixtures/all-operating-registry.js").then(({ registryModuleWithEveryVentureRunning }) =>
+    registryModuleWithEveryVentureRunning(importOriginal as never)));
 
 /**
  * The instant a cron fires, plus however many minutes GitHub delivered it late.

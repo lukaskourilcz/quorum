@@ -629,8 +629,16 @@ export const GoViralActorSchema = z.object({
   scheduled: z.boolean()
 });
 
+/** The set that serves the owner's own writing belongs to no venture, so no registry pause reaches it. */
+export const OWNER_TOPIC_SET_VENTURE = "owner";
+
 export const GoViralTopicSetSchema = z.object({
   label: z.string().min(1),
+  /**
+   * The venture the set serves, or `owner`. The registry is the switch: a set whose venture is
+   * paused is skipped by every step, paid and free (`operations-2026-09b`), with no second list.
+   */
+  ventureId: z.string().regex(/^[a-z0-9-]+$/u),
   /** Free-only sets are consumed by keyless sources and are never expanded into actor calls. */
   sourceMode: z.enum(["apify", "free"]).default("apify"),
   keywords: z.array(z.string().min(1)).max(12),
@@ -667,6 +675,23 @@ export type GoViralActor = z.infer<typeof GoViralActorSchema>;
 export type GoViralRecipeStep = z.infer<typeof GoViralRecipeStepSchema>;
 export type GoViralTopicSet = z.infer<typeof GoViralTopicSetSchema>;
 export type GoViralSourceRegistry = z.infer<typeof GoViralSourceRegistrySchema>;
+
+/**
+ * The registry with every topic set whose venture is paused removed.
+ *
+ * Applied once where a run loads its sources, so the paid recipe, the free collection and the
+ * per-set summaries all see the same sets and none of them needs to know why one is missing.
+ */
+export function runningTopicSets(
+  registry: GoViralSourceRegistry,
+  pausedVentures: ReadonlySet<string>
+): GoViralSourceRegistry {
+  return {
+    ...registry,
+    topicSets: Object.fromEntries(Object.entries(registry.topicSets)
+      .filter(([, topicSet]) => !pausedVentures.has(topicSet.ventureId)))
+  };
+}
 
 export async function loadGoViralSourceRegistry(root = repoRoot): Promise<GoViralSourceRegistry> {
   const raw = await readText(root, "config/goviral-sources.json");

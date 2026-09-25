@@ -5,6 +5,7 @@ import type { NormalizedQuestion } from "./bank.js";
 import type { Brand, FactSheet } from "./config.js";
 import { LIMITS, violationReport, type GateViolation } from "./gates.js";
 import { SLIDE_ROLES } from "./package.js";
+import { writerLimits } from "./render.js";
 
 export const CRAFT_PROMPT_PATH = "orchestrator/prompts/marketingshark/craft.md";
 export const STRATEGY_PROMPT_PATH = "orchestrator/prompts/marketingshark/strategy.md";
@@ -70,6 +71,8 @@ export function buildChumPacket(input: {
   hookLines: { cs: string; en: string } | null;
   hookId: string | null;
   date: string;
+  /** The brand's measured hashtags from GoVIRAL's snapshot; empty when none is current. */
+  trendLines?: readonly string[];
   violations?: readonly GateViolation[];
 }): string {
   const { brand, question } = input;
@@ -122,11 +125,21 @@ export function buildChumPacket(input: {
         + ` concrete headline about the question. Claim nothing about the reader, the difficulty`
         + ` or any statistic. Keep it under ${LIMITS.hookChars} characters in both languages.`,
 
+    ...(input.trendLines?.length
+      ? [`## This week's measured hashtags for ${brand.displayName} (GoVIRAL, expiring)\n`
+        + `Ranked by engagement per hour in the latest scout. They are signals, not copy: use one to`
+        + ` choose between equally true angles, or as an Instagram hashtag when it fits this question.`
+        + ` Never mention trends, reach or engagement in the post.\n`
+        + input.trendLines.map((line) => `- ${line}`).join("\n")]
+      : []),
+
     `## Hard limits, checked in code after you answer\n`
     + (input.hookLines
       ? `- the hook slide carries the assigned hook line above, unchanged\n`
       : `- hook headline ≤ ${LIMITS.hookChars} characters, both languages\n`)
     + `- why slide ≤ ${LIMITS.whyWords} words\n`
+    + writerLimits(brand, question).map((line) => `- ${line}\n`).join("")
+    + `- every slide is rendered before anything is kept; text that would be clipped on the canvas fails the check\n`
     + `- Instagram ≤ ${LIMITS.instagramBeforeHashtags} characters before hashtags\n`
     + `- Threads ≤ ${LIMITS.threadsChars} characters\n`
     + `- alt text ≤ ${LIMITS.altChars} characters per slide\n`

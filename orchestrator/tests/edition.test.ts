@@ -340,6 +340,31 @@ describe("edition configuration and quality", () => {
     expect(written.contractRepairs).toBeUndefined();
   });
 
+  it("records what an undecodable list field held, and still rejects it (quorum#564)", async () => {
+    // Six September days were lost to list fields that arrived as strings the repair could not
+    // decode; the run report named the field and nothing else. The value still fails the parse —
+    // this is a record, not a repair — but the next failure says what the model actually sent.
+    const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
+    const broken = structuredClone(base[1]!);
+    (broken.value as Record<string, unknown>).wire = "[{\"title\": \"Ohlášeno \"dnes\"\", \"url\": \"https://example.test\"}]";
+    const rewrite = structuredClone(base[1]!);
+    rewrite.usage.stage = "rewrite";
+    const result = await produceEdition(await productionInput([base[0]!, broken, rewrite]));
+    expect(result.report.warnings.some((warning) => warning.startsWith("content_invalid:write: ["))).toBe(true);
+    const written = result.report.usage.find((usage) => usage.stage === "write") as
+      EditionUsage & { contractRepairs?: ContractRepair[] };
+    expect(written.contractRepairs).toEqual([
+      expect.objectContaining({
+        field: "wire",
+        received: expect.stringContaining("Ohlášeno"),
+        reason: "json_string_undecodable",
+        detail: expect.stringMatching(/position \d+.*«.*dnes/u)
+      })
+    ]);
+    // The rewrite that follows is valid, so the day still publishes.
+    expect(result.package.status).toBe("edition");
+  });
+
   it("replaces a repeated lead source in Watchlist with a verified runner-up", async () => {
     const base = await fixtureJson<FixtureModelResponse[]>("model-responses.json");
     const writer = structuredClone(base[1]!);

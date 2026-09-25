@@ -102,7 +102,10 @@ describe("Door Money's free GoVIRAL spine", () => {
     const configured = topicSet!.keywords;
     const measured = free.results.flatMap((result) => result.signals)
       .filter((signal) => signal.topicSets?.includes("door-money"));
-    expect(measured).toHaveLength(3);
+    // The generic free path: three rotating terms, each read in English and in Czech. Door Money's
+    // own branch went with the pause (operations-2026-09b); a resumed set comes back through here.
+    expect(measured).toHaveLength(6);
+    expect(new Set(measured.map(({ topic }) => topic)).size).toBe(3);
     expect(measured.every((signal) => configured.includes(signal.topic))).toBe(true);
     const unmeasured = configured.filter((term) => !measured.some(({ topic }) => topic === term));
     expect(unmeasured).toHaveLength(1);

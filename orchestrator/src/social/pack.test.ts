@@ -1,4 +1,4 @@
-import { readFile, mkdtemp, rm } from "node:fs/promises";
+import { readdir, readFile, mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import sharp from "sharp";
@@ -259,6 +259,47 @@ describe("every composed queue item survives the publisher's own gate", () => {
       else expect(item.content.assetPaths.length).toBeGreaterThan(0);
       // The real gate, not a restatement of it: whatever the composer emits must pass here.
       expect(() => assertQueueItemPublishable({ ...item, status: "queued" })).not.toThrow();
+    }
+  }, RENDER_TIMEOUT_MS);
+});
+
+describe("composition without an enabled channel (quorum#563)", () => {
+  it("writes the pack and two drafts, hosts no frame, and leaves nothing publishable on Instagram", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-unhosted-"));
+    roots.push(root);
+    const czechOnly = structuredClone(editionFixture) as Record<string, unknown>;
+    delete (czechOnly.article as Record<string, unknown>).en;
+    const stateRoot = path.join(root, "state");
+    const result = await composeEditionSocialPack({
+      editionPackage: EditionPackageSchema.parse(czechOnly),
+      meeting: caughtUpMeetingFixture,
+      destinations: { cs: "https://caught-up.example/articles/2026-08-04-measured-model-price-cut" },
+      repoRoot: root,
+      stateRoot,
+      now: new Date("2026-08-04T04:00:00.000Z"),
+      hostFrames: false
+    });
+    expect(result).not.toBeNull();
+    // The pack is complete: its frame manifest, its alt text and the visual the admin renders from.
+    const pack = SocialPackSchema.parse(JSON.parse(await readFile(path.join(stateRoot, "social/packs/2026-08-04.json"), "utf8")));
+    expect(pack.byLocale.cs.instagram.frames.length).toBeGreaterThan(0);
+    expect(pack.byLocale.cs.instagram.visual.template_id).toBeTruthy();
+    expect(result!.queueItems).toHaveLength(2);
+    // Nothing under site/public/social: not a frame, not the quote card.
+    await expect(readdir(path.join(root, "site"))).rejects.toMatchObject({ code: "ENOENT" });
+    expect(result!.artifactPaths.some((artifact) => artifact.includes("public/social"))).toBe(false);
+    const assets = JSON.parse(await readFile(path.join(stateRoot, "social/assets/2026-08-04.json"), "utf8")) as { hosted: boolean };
+    expect(assets.hosted).toBe(false);
+    for (const item of result!.queueItems) {
+      expect(item.status).toBe("draft");
+      expect(item.content.assetPaths).toEqual([]);
+      QueueItemSchema.parse(item);
+      if (item.channel === "threads") {
+        expect(() => assertQueueItemPublishable({ ...item, status: "queued" })).not.toThrow();
+      } else {
+        // Reviewable and copyable, never sendable: the publisher's own gate refuses it.
+        expect(() => assertQueueItemPublishable({ ...item, status: "queued" })).toThrow(/hosted images/u);
+      }
     }
   }, RENDER_TIMEOUT_MS);
 });
