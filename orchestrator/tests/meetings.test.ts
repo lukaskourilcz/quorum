@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { loadRoutingConfig, routeBoardroom } from "../src/boardroom/router.js";
 import { CalendarFeedSchema } from "../src/contracts/calendar.js";
 import { EditionPackageSchema, type EditionPackage } from "../src/contracts/edition-package.js";
@@ -33,6 +33,11 @@ import {
   transcriptViolations
 } from "../src/meetings/transcript.js";
 import { configRoot, repoRoot } from "../src/paths.js";
+
+// Schedule mechanics are tested on every room, whichever ventures the owner runs today.
+vi.mock("../src/ventures/registry.js", (importOriginal) =>
+  import("./fixtures/all-operating-registry.js").then(({ registryModuleWithEveryVentureRunning }) =>
+    registryModuleWithEveryVentureRunning(importOriginal as never)));
 
 async function caughtUpRecord(
   phase: "cu-edition" | "cu-product" = "cu-edition"

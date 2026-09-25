@@ -110,6 +110,17 @@ export function pausedVentureForPhase(registry: VentureRegistry, phase: Runnable
   return venture?.status === "paused" ? ventureId : null;
 }
 
+/**
+ * The ventures that hold slots on the clock.
+ *
+ * A paused venture leaves the schedule (`operations-2026-09b`): no punctual cron, no sweep and no
+ * calendar slot, so being paused no longer costs a runner. Its phases can still be dispatched by
+ * hand, and the pause chokepoint in `runCycle` still ends a live one at $0.
+ */
+export function scheduledVentures(registry: VentureRegistry): VentureRegistry["ventures"] {
+  return registry.ventures.filter((venture) => venture.status !== "paused");
+}
+
 /** Every room a venture day dispatches, which therefore holds no hour of its own. */
 export function dayDispatchedKinds(registry: VentureRegistry): ReadonlySet<string> {
   return new Set(registry.ventures.flatMap((venture) => venture.day?.steps ?? []));
@@ -121,7 +132,7 @@ export function resolveMeetingClock(
   // A venture with a day puts the day on the clock and its rooms inside it. The rooms keep their
   // definitions — cast, envelope, agenda packet — and lose only a cadence of their own.
   const dispatched = dayDispatchedKinds(registry);
-  const ventureSlots = registry.ventures.flatMap((venture) => [
+  const ventureSlots = scheduledVentures(registry).flatMap((venture) => [
     ...(venture.day
       ? [{
           phase: ScheduledPhaseSchema.parse(venture.day.kind),
@@ -147,7 +158,7 @@ export function resolveMeetingClock(
 
 export function resolveProductionClock(registry: VentureRegistry): ResolvedMeetingSlot[] {
   const dispatched = dayDispatchedKinds(registry);
-  return registry.ventures.flatMap((venture) => (venture.productionJobs ?? []).flatMap((job) => {
+  return scheduledVentures(registry).flatMap((venture) => (venture.productionJobs ?? []).flatMap((job) => {
     // An article slot a day dispatches is produced inside that day, not on an hour of its own.
     if (dispatched.has("article-am") && job.kind === "article-production") return [];
     if (job.kind === "article-production") {
@@ -346,13 +357,12 @@ export function scheduledCronExpressions(registry: VentureRegistry): string[] {
  * Here rather than beside the sweep itself because a cron is the registry's business and
  * meetings/sweep.ts imports this module: the other direction is a cycle.
  *
- * Three sweeps covered the day to 21:55 Prague and no later, so the 23:00 Personal Growth desk
- * was the one slot no sweep could ever reach: it ran once, on 30 August, and left sixteen
- * skip records after that. The two late sweeps close the evening in both seasons — 21:55 UTC is
- * 23:55 Prague in summer and 22:55 UTC is 23:55 Prague in winter; the other of the pair lands
- * just after midnight Prague, finds no slot of the new day passed and exits its guard.
+ * Three sweeps, evenly spread. Two late ones (21:55 and 22:55 UTC) existed only for the 23:00
+ * Personal Growth desk, which no earlier sweep could reach; they left with that desk when it was
+ * paused (`operations-2026-09b`). Resuming a venture with a slot after 21:00 Prague needs them
+ * back, and the coverage test in backstop-sweep.test.ts says so.
  */
-export const BACKSTOP_SWEEP_HOURS = [3, 11, 19, 21, 22] as const;
+export const BACKSTOP_SWEEP_HOURS = [3, 11, 19] as const;
 
 /**
  * What cycle.yml actually deploys as `on.schedule`.

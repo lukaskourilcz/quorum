@@ -97,7 +97,6 @@ describe("automation policy", () => {
     expect(cycle).toContain("INPUT_DELIVERY_ONLY");
     expect(cycle).toContain("Delivery-only mode requires a manual dispatch");
     expect(cycle).toContain("PORTFOLIO_LIVE_ENABLED");
-    expect(cycle).toMatch(/options:\n(?:\s+- [a-z-]+\n)*\s+- bh-desk\n/u);
     const portfolioModeGate = cycle.split("\n").find((line) =>
       line.includes('test "$PORTFOLIO_LIVE_ENABLED" != "true"')
     );
@@ -113,8 +112,20 @@ describe("automation policy", () => {
       line.includes('test "$dry" != "true"') && line.includes('test "$phase" = "bh-desk"')
     );
     expect(portfolioGateLine).toBeDefined();
+    // The dispatch options follow the registry (operations-2026-09b): every running venture's day
+    // and rooms are offered, a paused venture's are not, and the company's own shifts always are.
+    // The portfolio budget gate keeps naming paused rooms, so a resumed room is gated at once.
+    const offered = [...dispatchOptions.matchAll(/^ {10}- ([a-z-]+)$/gmu)].map(([, phase]) => phase!);
+    const registry = readVentureRegistry();
+    const phasesOf = (venture: (typeof registry.ventures)[number]) => [
+      ...(venture.day ? [venture.day.kind, ...venture.day.steps] : []),
+      ...venture.meetings.map((meeting) => meeting.kind)
+    ];
+    const running = new Set(registry.ventures.filter((venture) => venture.status !== "paused").flatMap(phasesOf));
+    const paused = new Set(registry.ventures.filter((venture) => venture.status === "paused").flatMap(phasesOf));
+    expect(new Set(offered)).toEqual(new Set([...running, "morning", "afternoon", "night"]));
+    for (const phase of paused) expect(offered, `${phase} belongs to a paused venture`).not.toContain(phase);
     for (const phase of ["bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk"]) {
-      expect(dispatchOptions.match(new RegExp(`^ {10}- ${phase}$`, "gmu"))).toHaveLength(1);
       expect(portfolioGateLine).toContain(`test "$phase" = "${phase}"`);
     }
     const deliveryOnlyGate = cycle.slice(

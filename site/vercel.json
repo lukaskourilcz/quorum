@@ -29,68 +29,12 @@
       "schedule": "0 6 * * *"
     },
     {
-      "path": "/api/cron/mma-day",
-      "schedule": "0 6 * * *"
-    },
-    {
-      "path": "/api/cron/mma-day",
-      "schedule": "0 7 * * *"
-    },
-    {
-      "path": "/api/cron/tt-marketing",
-      "schedule": "0 9 * * *"
-    },
-    {
-      "path": "/api/cron/tt-marketing",
-      "schedule": "0 10 * * *"
-    },
-    {
-      "path": "/api/cron/bh-desk",
-      "schedule": "0 10 * * *"
-    },
-    {
-      "path": "/api/cron/bh-desk",
-      "schedule": "0 11 * * *"
-    },
-    {
       "path": "/api/cron/gv-brief",
       "schedule": "0 11 * * *"
     },
     {
       "path": "/api/cron/gv-brief",
       "schedule": "0 12 * * *"
-    },
-    {
-      "path": "/api/cron/dm-day",
-      "schedule": "0 13 * * *"
-    },
-    {
-      "path": "/api/cron/dm-day",
-      "schedule": "0 14 * * *"
-    },
-    {
-      "path": "/api/cron/ts-desk",
-      "schedule": "0 16 * * *"
-    },
-    {
-      "path": "/api/cron/ts-desk",
-      "schedule": "0 17 * * *"
-    },
-    {
-      "path": "/api/cron/kv-desk",
-      "schedule": "0 19 * * *"
-    },
-    {
-      "path": "/api/cron/kv-desk",
-      "schedule": "0 20 * * *"
-    },
-    {
-      "path": "/api/cron/pg-desk",
-      "schedule": "0 21 * * *"
-    },
-    {
-      "path": "/api/cron/pg-desk",
-      "schedule": "0 22 * * *"
     },
     {
       "path": "/api/cron/cu-edition",

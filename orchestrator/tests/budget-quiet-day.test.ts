@@ -1,7 +1,7 @@
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import {
   BudgetError,
   assertTextReservation,
@@ -17,6 +17,11 @@ import { quietWhenBudgetStops } from "../src/cycle.js";
 import { buildCalendarFeed, mondayOfWeek } from "../src/meetings/calendar.js";
 import { loadRuntimeBudgetLimits } from "../src/portfolio/limits.js";
 import { atomicWriteJson } from "../src/state.js";
+
+// Schedule mechanics are tested on every room, whichever ventures the owner runs today.
+vi.mock("../src/ventures/registry.js", (importOriginal) =>
+  import("./fixtures/all-operating-registry.js").then(({ registryModuleWithEveryVentureRunning }) =>
+    registryModuleWithEveryVentureRunning(importOriginal as never)));
 
 const NOW = new Date("2026-08-05T06:00:00.000Z");
 const DATE = "2026-08-05";

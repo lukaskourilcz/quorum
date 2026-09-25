@@ -18,18 +18,21 @@ vi.mock("../src/paths.js", async (importOriginal) => {
 // The article slots belong to MMA Files, and whether the owner has that magazine paused today is
 // operational state, not this guard's subject. The registry is read with the venture operating so
 // the cases below hold whatever Settings says.
+// Since operations-2026-09b a paused venture also leaves the clock, so the synchronous read that
+// builds MEETING_CLOCK is served the same way.
 vi.mock("../src/ventures/registry.js", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../src/ventures/registry.js")>();
+  const withMmaRunning = (registry: ReturnType<typeof actual.readVentureRegistry>) => ({
+    ...registry,
+    ventures: registry.ventures.map((venture) =>
+      venture.id === "mma-files" ? { ...venture, status: "operating" as const } : venture)
+  });
   return {
     ...actual,
-    loadVentureRegistry: async (...args: Parameters<typeof actual.loadVentureRegistry>) => {
-      const registry = await actual.loadVentureRegistry(...args);
-      return {
-        ...registry,
-        ventures: registry.ventures.map((venture) =>
-          venture.id === "mma-files" ? { ...venture, status: "operating" as const } : venture)
-      };
-    }
+    readVentureRegistry: (...args: Parameters<typeof actual.readVentureRegistry>) =>
+      withMmaRunning(actual.readVentureRegistry(...args)),
+    loadVentureRegistry: async (...args: Parameters<typeof actual.loadVentureRegistry>) =>
+      withMmaRunning(await actual.loadVentureRegistry(...args))
   };
 });
 

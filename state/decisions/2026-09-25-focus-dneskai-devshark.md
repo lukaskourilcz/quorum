@@ -68,7 +68,7 @@ site is deployed; the cron test fails until that is done. MMA Files and FightAIQ
 ## Implementation
 
 - [x] Registry: Personal Growth paused (#557)
-- [ ] Clock: crons, dispatch options and sweep follow the status (#558)
+- [x] Clock: crons, dispatch options and sweep follow the status (#558)
 - [ ] Workflows: MMA Files delivery block and paused switches removed (#559)
 - [ ] Admin: workspace nav and Settings "Paused ventures" table (#560)
 - [ ] Design Lab: operating ventures only (#561)
