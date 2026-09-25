@@ -1067,6 +1067,84 @@ test.describe("admin journeys that write", { tag: "@write-journey" }, () => {
     await expect(page.getByText(/^\d+ ready plans$/)).toBeVisible();
   });
 
+  /*
+   * The Queue's owner journey on a synthetic devShark draft (quorum#573): edit it into a new draft,
+   * approve that, then reject it. The approval's answer is read off the capability map, like the
+   * Tehdejší svět gate above: until marketingShark's Social Distribution edge is registered
+   * (quorum#568) the Queue must refuse the approval by name, and after it must queue the item.
+   * Either way nothing is sent, and every file the journey wrote is removed afterwards.
+   */
+  test("the Queue edits a draft into a new one, approves it and rejects it", async ({ page }) => {
+    const { parseQueueItemV2, queueItemV2Hash } = await import("../../src/lib/admin-queue/item");
+    const queueRoot = path.join(repositoryRoot, "state/social/queue");
+    const eventRoot = path.join(repositoryRoot, "state/social/queue-events");
+    const beforeQueue = await readdir(queueRoot).catch(() => [] as string[]);
+    const beforeEvents = await readdir(eventRoot).catch(() => null);
+    const fixture = parseQueueItemV2(JSON.parse(await readFile(path.join(repositoryRoot, "contracts/fixtures/social-queue-item-v2.valid.json"), "utf8")) as unknown)!;
+    const now = Date.now();
+    const draft = {
+      ...fixture,
+      id: "e2e-queue-devshark-linkedin",
+      content: { ...fixture.content, text: `An e2e Queue draft written at ${new Date(now).toISOString()}.` },
+      publishWindow: { notBefore: new Date(now - 3_600_000).toISOString(), notAfter: new Date(now + 6 * 3_600_000).toISOString() }
+    };
+    const item = { ...draft, content: { ...draft.content, contentHash: queueItemV2Hash(draft) } };
+    const map = JSON.parse(await readFile(path.join(repositoryRoot, "config/venture-capabilities.json"), "utf8")) as { mapVersion: string; edges: Array<Record<string, unknown>> };
+    const edge = map.edges.find((candidate) => candidate.source === "marketingshark" && candidate.target === "social-distribution" && candidate.decision === "allowed");
+    const approvable = map.mapVersion === item.target.capabilityRef?.mapVersion && edge?.governingReference === item.target.capabilityRef?.decisionReference;
+    try {
+      await mkdir(queueRoot, { recursive: true });
+      await writeFile(path.join(queueRoot, "e2e-queue-devshark-linkedin.json"), `${JSON.stringify(item, null, 2)}\n`);
+      await page.goto("/admin/queue?venture=devshark&platform=linkedin", { waitUntil: "networkidle" });
+      const original = page.locator('[data-queue-item="e2e-queue-devshark-linkedin"]');
+      await expect(original).toBeVisible();
+
+      await expect.poll(async () => {
+        await original.getByRole("button", { name: "Edit", exact: true }).click();
+        return original.getByLabel("Caption for LinkedIn").isVisible();
+      }, { timeout: 30_000 }).toBe(true);
+      await original.getByLabel("Caption for LinkedIn").fill("Which selector wins: .card p or p.note? Count it, then check slide four.");
+      await original.getByRole("button", { name: "Save as new draft" }).click();
+      const successor = page.locator('[data-queue-item="e2e-queue-devshark-linkedin-r1"]');
+      await expect(successor).toBeVisible({ timeout: 60_000 });
+      await expect(original).toHaveCount(0);
+      const cancelled = JSON.parse(await readFile(path.join(queueRoot, "e2e-queue-devshark-linkedin.json"), "utf8")) as { status: string; content: { contentHash: string } };
+      expect(cancelled).toMatchObject({ status: "cancelled", content: { contentHash: item.content.contentHash } });
+
+      await successor.getByRole("button", { name: "Approve for the window" }).click();
+      if (approvable) {
+        // An approved post leaves Waiting for Scheduled; nothing sends while its connection is held.
+        await expect(successor).toHaveCount(0, { timeout: 60_000 });
+        await page.goto("/admin/queue?status=scheduled&venture=devshark", { waitUntil: "networkidle" });
+        await expect(successor).toHaveAttribute("data-queue-group", "scheduled");
+      } else {
+        await expect(successor.getByRole("status")).toContainText("capability map does not allow", { timeout: 60_000 });
+      }
+      await successor.getByRole("button", { name: "Reject", exact: true }).click();
+      await successor.getByLabel(/Why reject it/u).fill("The e2e journey rejects its own draft.");
+      await successor.getByRole("button", { name: "Reject this post" }).click();
+      await expect(successor).toHaveCount(0, { timeout: 60_000 });
+
+      const revised = JSON.parse(await readFile(path.join(queueRoot, "e2e-queue-devshark-linkedin-r1.json"), "utf8")) as { status: string; checks: Record<string, string> };
+      expect(revised.status).toBe("cancelled");
+      expect(Object.values(revised.checks).every((state) => state === (approvable ? "pass" : "pending"))).toBe(true);
+      const written = ((await readdir(eventRoot)).filter((name) => !(beforeEvents ?? []).includes(name))).sort();
+      expect(written.map((name) => name.replace(/^.*?Z-/u, ""))).toEqual(
+        approvable
+          ? ["e2e-queue-devshark-linkedin-edit.json", "e2e-queue-devshark-linkedin-r1-approve.json", "e2e-queue-devshark-linkedin-r1-reject.json"]
+          : ["e2e-queue-devshark-linkedin-edit.json", "e2e-queue-devshark-linkedin-r1-reject.json"]
+      );
+    } finally {
+      for (const name of await readdir(queueRoot).catch(() => [] as string[])) {
+        if (!beforeQueue.includes(name)) await rm(path.join(queueRoot, name), { force: true });
+      }
+      if (beforeEvents === null) await rm(eventRoot, { force: true, recursive: true });
+      else for (const name of await readdir(eventRoot).catch(() => [] as string[])) {
+        if (!beforeEvents.includes(name)) await rm(path.join(eventRoot, name), { force: true });
+      }
+    }
+  });
+
   test("admin login explains errors, starts a session and signs out", async ({ page }) => {
     const expectLoginError = async (error: "expired" | "invalid") => {
       await expect.poll(() => {
