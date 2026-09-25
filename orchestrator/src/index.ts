@@ -1,6 +1,7 @@
 import "./env.js";
 import { BudgetError } from "./budget.js";
 import { runCycle } from "./cycle.js";
+import { dryRunClock } from "./cycle/clock-arg.js";
 import { pragueClockParts } from "./meetings/clock.js";
 import { stateRoot } from "./paths.js";
 import { atomicWriteJson, readJson } from "./state.js";
@@ -15,18 +16,20 @@ async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (args.includes("--help")) {
     console.log(
-      `Usage: pnpm cycle -- --phase ${RunnablePhaseSchema.options.join("|")} [--dry] [--explain-budget] [--explain-routing]`
+      `Usage: pnpm cycle -- --phase ${RunnablePhaseSchema.options.join("|")} [--dry [--now <ISO instant>]] [--explain-budget] [--explain-routing]`
     );
     return;
   }
   const phase = RunnablePhaseSchema.parse(
     (valueAfter(args, "--phase") ?? "morning") as RunnablePhase
   );
+  const now = dryRunClock(args);
   const result = await runCycle({
     phase,
     dry: args.includes("--dry"),
     explainBudget: args.includes("--explain-budget"),
-    explainRouting: args.includes("--explain-routing")
+    explainRouting: args.includes("--explain-routing"),
+    ...(now ? { now } : {})
   });
   console.log(JSON.stringify(result, null, 2));
 }
