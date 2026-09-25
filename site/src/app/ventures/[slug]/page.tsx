@@ -63,7 +63,7 @@ export async function generateMetadata({
     };
   }
   if (slug === "goviral") return { title: "GoVIRAL", description: "The weekly room that reads public trend data and turns it into things to write." };
-  if (slug === "marketingshark") return { title: "marketingShark", description: "The daily room that turns one devShark quiz question into a Czech and an English carousel." };
+  if (slug === "marketingshark") return { title: "marketingShark", description: "The weekday room that drafts one English devShark post a day for the owner to approve." };
   if (slug === "fightaiq") return { title: "FightAIQ", description: "The UFC and Oktagon data layer that delivers checked fight files to MMA Files." };
   if (slug === "carousel-studio") return { title: "Design Lab", description: "BoardlessAI's deterministic template engine and live layout gallery." };
   if (slug in reviewedMetadata) return reviewedMetadata[slug as ReviewedVentureSlug];

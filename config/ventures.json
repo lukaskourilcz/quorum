@@ -306,7 +306,7 @@
       "$tasteComment": "false on purpose. taste:true adds a PALATE pre-step to the venture's first meeting, which is a second model call; this room is designed around exactly one paid call per brand per day.",
       "ledgerNamespace": "marketingshark",
       "growth_objective": {
-        "label": "Draft one complete bilingual carousel package per active brand per day",
+        "label": "Draft one complete English post package per active brand each weekday",
         "components": [
           "package-cadence"
         ]
@@ -331,8 +331,8 @@
             "decisionNeeded": "PLAN",
             "preset": "ms-daily-room",
             "objectives": {
-              "dry": "Select the day's question from the fixture bank and assemble one package without any provider call or spend",
-              "live": "Turn today's selected question into one Czech and one English five-slide carousel per enabled brand, rendered and stored as a draft behind the approval queue"
+              "dry": "Plan the weekday's post kind from fixture sources and assemble one package without any provider call or spend",
+              "live": "Draft the weekday's post for each enabled brand (the quiz on Monday and Thursday, a feature spotlight on Tuesday, a challenge teaser on Wednesday, the week's note on Friday) as one English five-slide carousel with a caption per platform, rendered and stored as queue drafts that wait for the owner's approval"
             }
           }
         }

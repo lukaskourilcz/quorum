@@ -231,7 +231,7 @@ const CHANNEL_COPY: Record<WorkspaceChannelId, {
     handle: "marketingshark-daily",
     room: "marketingShark carousel room",
     time: "07:00",
-    topic: "One quiz question, drawn as a Czech and an English carousel and left as a draft.",
+    topic: "One English devShark post each weekday, drafted for LinkedIn, Instagram and Threads and left for the owner's approval.",
     project: "marketingshark"
   },
   "redakcni-porada-mma": {
@@ -395,8 +395,8 @@ const PROJECT_COPY: Record<string, { status: string; description: string; url: s
     daily: false
   },
   marketingshark: {
-    status: "Publishes daily",
-    description: "One quiz question a day, drawn as a Czech and an English carousel and left as a draft for review.",
+    status: "Drafts daily",
+    description: "One English devShark post each weekday (a quiz, a product screen, a coding challenge or the week's recap), left as drafts for the owner's approval.",
     url: null,
     daily: true
   },

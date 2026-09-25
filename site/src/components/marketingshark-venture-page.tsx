@@ -82,7 +82,7 @@ export async function MarketingSharkVenturePage() {
             <div className="min-w-0 md:col-span-8">
               <div className="flex flex-wrap gap-2">
                 <Badge>Project 008</Badge>
-                <Badge>Drafts only</Badge>
+                <Badge>Drafts for approval</Badge>
               </div>
               <h1 className="mt-7 text-[clamp(3.5rem,9vw,8rem)] font-semibold leading-[0.84] tracking-[-0.075em]">
                 marketing<span className="sm:inline"><br className="sm:hidden" />Shark</span><span className="text-[var(--accent)]">.</span>
@@ -90,9 +90,10 @@ export async function MarketingSharkVenturePage() {
             </div>
             <div className="md:col-span-4">
               <p className="text-lg leading-8 text-[var(--muted-foreground)]">
-                One meeting every morning takes a single question out of devShark&apos;s own quiz
-                bank and writes it up as a Czech and an English carousel — the real question, the
-                real answer, and the product mentioned once at the end.
+                One meeting every weekday morning drafts one devShark post in English: a quiz
+                question on Monday and Thursday, one screen of the product on Tuesday, an Easy
+                coding challenge on Wednesday and the week&apos;s recap on Friday. Each is five
+                slides with its own caption for LinkedIn, Instagram and Threads.
               </p>
             </div>
           </div>
@@ -103,7 +104,7 @@ export async function MarketingSharkVenturePage() {
             {[
               ["Packages drafted", latest ? `${days.length} drafted · latest ${formatDate(latest)}` : "None drafted yet."],
               ["Questions in the bank", bankSize > 0 ? `${bankSize.toLocaleString("en-GB")} imported, served one a day.` : "No bank imported yet."],
-              ["Hook patterns used", rotation > 0 ? `${rotation} of 16 so far.` : "None used yet."]
+              ["Hook patterns used", rotation > 0 ? `${rotation} so far.` : "None used yet."]
             ].map(([title, body]) => (
               <div className="bg-[var(--card)] p-7 md:p-9" key={title}>
                 <CheckCircle2 aria-hidden="true" className="size-5 text-[var(--accent)]" />
@@ -122,17 +123,17 @@ export async function MarketingSharkVenturePage() {
                 One paid step, and eleven that cost nothing.
               </h2>
               <p className="mt-5 text-sm leading-6 text-[var(--muted-foreground)]">
-                Which question runs, which opening line it may carry, whether that line is true of
-                it, how it is drawn and where it is stored are all decided in code. The only thing
-                bought from a model is the writing itself, once per brand per day.
+                Which post runs, which facts it may state, which opening line it may carry, how it
+                is drawn and where it is stored are all decided in code. The only thing bought from
+                a model is the writing itself, once per brand per weekday. The weekend has no room.
               </p>
             </div>
             <div className="grid gap-5 md:col-span-7">
               {[
                 ["The question is chosen, not generated", "Every question is served once before any repeats. The order comes from the bank itself, so the same day always produces the same question."],
-                ["An opening line has to be true", "Each hook carries conditions — four options, a hard question, real code — and a line whose conditions do not hold is not offered that day."],
-                ["Czech is written, not translated", "The product's own Czech is reference material. The carousel is written in Czech, in the register a Czech developer actually uses."],
-                ["Nothing leaves as a post", "The day ends with a draft, its two carousels drawn and checked, waiting for a person."]
+                ["An opening line has to be true", "Each hook carries conditions: four options, a hard question, real code. A line whose conditions do not hold is not offered that day."],
+                ["Code owns the facts", "The screen, the challenge and the week's numbers come from devShark's own records and the fact sheet in effect. The writer fills in the words around them, and a number the facts do not state is refused."],
+                ["Nothing is sent without the owner", "The day ends with three drafts in the Admin Queue, one per platform, each drawn and checked. None is sent until the owner approves it."]
               ].map(([title, body]) => (
                 <section className="rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] p-6" key={title}>
                   <h3 className="text-xl font-semibold">{title}</h3>
@@ -147,13 +148,14 @@ export async function MarketingSharkVenturePage() {
           <div className="grid gap-6 md:grid-cols-2">
             <Callout tone="accent">
               <LockKeyhole aria-hidden="true" className="mb-4 size-5" />
-              <strong>Nothing here posts.</strong> marketingShark owns no social account, no
-              credentials and no publishing path. Every carousel it writes is stored as a draft for
-              a person to review.
+              <strong>Nothing posts without an approval.</strong> A publishing path to devShark&apos;s
+              LinkedIn, Instagram and Threads profiles is registered and held. It opens only once
+              the owner countersigns the decision and connects the profiles, and then only for a
+              post the owner approves in the Queue. The kill switch stops all of it.
             </Callout>
             <Callout>
-              <strong>The bank is read, never changed.</strong> devShark&apos;s questions are
-              consumed as a pinned snapshot with its source commit recorded.{" "}
+              <strong>The product is read, never changed.</strong> devShark&apos;s questions and
+              challenges are consumed as pinned snapshots with their source commit recorded.{" "}
               {brandsEnabled[0]
                 ? `${brandsEnabled[0]} is the only product it promotes.`
                 : "No brand is switched on today."}{" "}

@@ -136,8 +136,8 @@ const ROOM_ORDER: ReadonlyArray<{
   {
     key: "marketingshark",
     name: "marketingShark",
-    purpose: "One quiz question a day, drawn as a Czech and an English carousel and left as a draft for review.",
-    connects: "It draws from a fixed bank of questions handed over once. Nothing is sent back to the app that supplied them.",
+    purpose: "One English devShark post each weekday (a quiz, a product screen, a coding challenge or the week's recap), left as drafts for the owner's approval.",
+    connects: "It draws from pinned snapshots of devShark's questions and challenges. Nothing is sent back to the app that supplied them.",
     operates: "It draws from a pinned bank of questions. The app that supplied them is standalone, and nothing goes back the other way."
   },
   {
