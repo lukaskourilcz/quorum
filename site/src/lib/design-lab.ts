@@ -171,8 +171,11 @@ export async function readDesignLab(limit = 40, venture?: string): Promise<LabAr
   const histories = new Map<string, Array<{ date: string; family: string }>>();
   const lab: LabArticle[] = [];
 
-  for (const article of articles.slice(0, limit)) {
+  // devShark's articles are marketingShark packages: their slides render through the quiz
+  // templates and have no recipe, so `design-lab-package.ts` resolves them instead of this loop.
+  for (const article of articles.filter((entry) => entry.venture !== "devshark").slice(0, limit)) {
     const venture = article.venture;
+    if (venture === "devshark") continue;
     const date = article.summary.date;
     // Summary records share the feature slug by design. The locale-qualified Studio address
     // keeps recipes, edits, previews and exports from treating the twins as one deck.

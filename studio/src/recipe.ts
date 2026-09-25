@@ -318,5 +318,7 @@ export type CarouselPresetFile = z.infer<typeof CarouselPresetFileSchema>;
  */
 export function livePresetsFor(presets: readonly CarouselPreset[], venture: CarouselSummaryVenture): CarouselPreset[] {
   return presets.filter((preset) =>
-    preset.status === "live" && (preset.ventureScope.length === 0 || preset.ventureScope.includes(venture)));
+    // A preset can be scoped only to a venture that renders through the family system, so a
+    // devShark package (quiz templates, no recipe) matches unscoped presets alone.
+    preset.status === "live" && (preset.ventureScope.length === 0 || (preset.ventureScope as readonly string[]).includes(venture)));
 }

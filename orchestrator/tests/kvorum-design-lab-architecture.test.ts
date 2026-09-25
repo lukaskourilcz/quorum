@@ -40,7 +40,7 @@ describe("Kvórum's Design Lab boundary", () => {
     expect(handoff).toContain('venture: "kvorum"');
 
     const reader = await readFile(path.join(repoRoot, "site/src/lib/carousel-summaries.ts"), "utf8");
-    expect(reader).toContain('["caught-up", "mma-files", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet"]');
+    expect(reader).toContain('["caught-up", "mma-files", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet", "devshark"]');
     expect(reader).toContain('path.join(root, "state", "ventures", "carousel-studio", "summaries", venture)');
   });
 });

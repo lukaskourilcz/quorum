@@ -216,6 +216,21 @@ describe("buildCarouselSummary", () => {
   });
 });
 
+describe("a devShark package summary (quorum#575)", () => {
+  it("is an English record with devShark's kicker, and needs no locale from its caller", () => {
+    const summary = buildCarouselSummary({
+      venture: "devshark",
+      slug: "marketingshark-2026-09-26-devshark",
+      date: "2026-09-26",
+      title: "Which format can browser code parse without an XML parser?",
+      dek: "Memory only. The docs will still be there after.",
+      points: ["A. JSON", "JSON is a compact text format for objects, arrays and primitive values.", "One question from devShark."]
+    });
+    expect(summary).toMatchObject({ venture: "devshark", locale: "en", kicker: "devShark · 26 Sep", closing: "One question a day on devShark." });
+    expect(reviewCarouselSummary(summary).renderable).toBe(true);
+  });
+});
+
 describe("reviewCarouselSummary", () => {
   it("refuses a summary with too little to say rather than padding it", () => {
     const thin = buildCarouselSummary({

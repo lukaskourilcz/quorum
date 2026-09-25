@@ -86,7 +86,8 @@ const HASHTAG_BASE: Readonly<Record<CarouselSummaryVenture, readonly string[]>> 
   "door-money": ["hiphop", "musicbusiness", "tourstories", "behindthescenes", "doormoney"],
   // Latin-only by the rule below, which is why the Ukrainian side contributes none of its own:
   // a transliterated Cyrillic tag is a tag nobody follows.
-  "tehdejsi-svet": ["tehdejsisvet", "retro", "nostalgie", "historie", "ceskoslovensko"]
+  "tehdejsi-svet": ["tehdejsisvet", "retro", "nostalgie", "historie", "ceskoslovensko"],
+  devshark: ["devshark", "webdev", "javascript", "programming", "codingquiz"]
 };
 
 /** Latin letters and digits only: Instagram matches a diacritic tag as a different tag. */

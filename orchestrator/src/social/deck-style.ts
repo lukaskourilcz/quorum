@@ -162,6 +162,9 @@ export async function effectiveRecipe(input: {
   date: string;
   hasHero?: boolean;
 }): Promise<CarouselRecipe> {
+  // A devShark package renders through marketingShark's quiz templates (quorum#575) and has no
+  // family, so no recipe can describe it; asking for one is a caller's mistake, not a fallback.
+  if (input.venture === "devshark") throw new Error("A devShark package has no family recipe; it renders through the quiz templates");
   const [overrides, history, recorded, pool] = await Promise.all([
     readOverrides(input.root),
     readRecipeHistory(input.root, input.venture),

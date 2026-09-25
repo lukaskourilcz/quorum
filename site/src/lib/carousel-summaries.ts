@@ -45,7 +45,8 @@ const VENTURE_LABEL: Record<StudioArticle["venture"], string> = {
   kvorum: "Kvórum",
   booksofhistory: "BOOKSOFHISTORY",
   "door-money": "Door Money",
-  "tehdejsi-svet": "Tehdejší svět"
+  "tehdejsi-svet": "Tehdejší svět",
+  devshark: "devShark"
 };
 
 /**
@@ -100,7 +101,7 @@ async function readJsonFiles(directory: string): Promise<Array<{ name: string; v
 /** Summaries delivery or approval wrote. One directory per venture, one file per artifact. */
 async function recordedSummaries(root: string): Promise<Map<string, CarouselSummary>> {
   const recorded = new Map<string, CarouselSummary>();
-  for (const venture of ["caught-up", "mma-files", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet"] as const) {
+  for (const venture of ["caught-up", "mma-files", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet", "devshark"] as const) {
     const directory = path.join(root, "state", "ventures", "carousel-studio", "summaries", venture);
     for (const { value } of await readJsonFiles(directory)) {
       const summary = value as Partial<CarouselSummary>;

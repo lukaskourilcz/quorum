@@ -34,7 +34,10 @@ export const CAROUSEL_SUMMARY_VENTURES = [
   "kvorum",
   "booksofhistory",
   "door-money",
-  "tehdejsi-svet"
+  "tehdejsi-svet",
+  // marketingShark's devShark packages (quorum#575). Their slides render through marketingShark's
+  // own quiz templates, not the family system; the summary is what lists them in the Design Lab.
+  "devshark"
 ] as const;
 
 export type CarouselSummaryVenture = (typeof CAROUSEL_SUMMARY_VENTURES)[number];
@@ -53,7 +56,8 @@ const VENTURE_LOCALE: Readonly<Record<CarouselSummaryVenture, CarouselSummaryLoc
   "door-money": "en",
   // Czech is the primary record; the Ukrainian half travels in the package beside it rather than
   // as a second summary, because one feature published twice is not two features.
-  "tehdejsi-svet": "cs"
+  "tehdejsi-svet": "cs",
+  devshark: "en"
 };
 
 /** The language a venture publishes in. The locale is then recorded on every summary. */
@@ -126,6 +130,7 @@ export type CarouselSummaryInput = CarouselSummaryContentInput & (
   | { venture: "booksofhistory"; locale: CarouselSummaryLocale }
   | { venture: "door-money"; locale?: "en" }
   | { venture: "tehdejsi-svet"; locale?: "cs" }
+  | { venture: "devshark"; locale?: "en" }
 );
 
 const KICKER: Record<CarouselSummaryVenture, string> = {
@@ -134,7 +139,8 @@ const KICKER: Record<CarouselSummaryVenture, string> = {
   kvorum: "KVÓRUM",
   booksofhistory: "BOOKSOFHISTORY",
   "door-money": "Door Money",
-  "tehdejsi-svet": "Tehdejší svět"
+  "tehdejsi-svet": "Tehdejší svět",
+  devshark: "devShark"
 };
 
 const CLOSING: Record<CarouselSummaryVenture, Record<CarouselSummaryLocale, string>> = {
@@ -143,7 +149,10 @@ const CLOSING: Record<CarouselSummaryVenture, Record<CarouselSummaryLocale, stri
   kvorum: { cs: "Celý kontext a zdroje najdete v Kvóru.", en: "Read the full context and sources in Kvórum." },
   booksofhistory: { cs: "Příběh knihy pokračuje v pramenech.", en: "The book's story continues in the sources." },
   "door-money": { cs: "Zbytek příběhu žije v Door Money.", en: "The rest of the story lives in Door Money." },
-  "tehdejsi-svet": { cs: "Zeptejte se někoho, kdo to zažil.", en: "Ask someone who was there." }
+  "tehdejsi-svet": { cs: "Zeptejte se někoho, kdo to zažil.", en: "Ask someone who was there." },
+  // devShark ships English only. The table is total over both locales, so its Czech cell repeats
+  // the English line rather than inventing Czech copy for a product that has none.
+  devshark: { cs: "One question a day on devShark.", en: "One question a day on devShark." }
 };
 
 const MONTHS_CS = [

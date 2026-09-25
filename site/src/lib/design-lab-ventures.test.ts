@@ -26,8 +26,8 @@ describe("the Design Lab's venture sections", () => {
   });
 
   it("covers every venture the owner named, whether or not it publishes articles", () => {
-    // devShark and Titty Tuesdays deliver no articles. They still have a palette and three
-    // typefaces, which is exactly what their section is for.
+    // Titty Tuesdays delivers no articles. It still has a palette and three typefaces, which is
+    // exactly what its section is for. devShark's section lists marketingShark's packages.
     for (const id of ["caught-up", "mma-files", "devshark", "titty-tuesdays", "tehdejsi-svet"]) {
       expect(designLabVentureIds()).toContain(id);
     }
@@ -40,7 +40,7 @@ describe("the Design Lab's venture sections", () => {
   });
 
   it("opens article rails for every summary-producing venture", async () => {
-    for (const id of ["caught-up", "mma-files", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet"] as const) {
+    for (const id of ["caught-up", "mma-files", "kvorum", "booksofhistory", "door-money", "tehdejsi-svet", "devshark"] as const) {
       expect((await readDesignLabVenture(id)).publishesArticles, id).toBe(true);
     }
   });

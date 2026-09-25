@@ -74,4 +74,17 @@ describe("the expanded Design Lab recipe route", () => {
     expect(response.status).toBe(422);
     await expect(readFile(path.join(root, "state/ventures/carousel-studio/deck-style-overrides.json"), "utf8")).rejects.toMatchObject({ code: "ENOENT" });
   });
+
+  it("refuses a family recipe or a one-slot text edit for a devShark package", async () => {
+    const { root, POST, cookie } = await route();
+    for (const body of [
+      { venture: "devshark", slug: "marketingshark-2026-09-26-devshark", date: "2026-09-26", family: "masthead" },
+      { venture: "devshark", slug: "marketingshark-2026-09-26-devshark", date: "2026-09-26", slide: 1, text: "A family slide" }
+    ]) {
+      const response = await POST(request(cookie, body));
+      expect(response.status).toBe(422);
+    }
+    await expect(readFile(path.join(root, "state/ventures/carousel-studio/deck-style-overrides.json"), "utf8")).rejects.toMatchObject({ code: "ENOENT" });
+    await expect(readFile(path.join(root, "state/ventures/carousel-studio/slide-overrides.json"), "utf8")).rejects.toMatchObject({ code: "ENOENT" });
+  });
 });

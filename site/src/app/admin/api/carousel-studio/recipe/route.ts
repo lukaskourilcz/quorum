@@ -70,6 +70,9 @@ export async function POST(request: Request): Promise<Response> {
   if (body.venture === "tehdejsi-svet") {
     return Response.json({ error: "The bilingual Tehdejší svět family is fixed at the venture desk.", cause: "rejected" }, { status: 422 });
   }
+  if (body.venture === "devshark") {
+    return Response.json({ error: "A devShark package keeps marketingShark's quiz templates; edit its slides in the package workspace.", cause: "rejected" }, { status: 422 });
+  }
   const article = { venture: body.venture, slug: body.slug, date: body.date };
 
   // A slide edit names a slide; a recipe change names a family. Nothing sends both.
