@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "release-proof/1",
+  "id": "proof-c568975af9605c7a",
+  "venture": "caught-up",
+  "packageHash": "6166221acf61c6dbeccc1b78234fd96579fc341cd3ff16d413ad9578a02ff2bb",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "3fe394c7d0de45161a041d6124406ccbe9b7fb07",
+  "deploymentUrl": "https://caughtup-ai.vercel.app",
+  "checks": [
+    {
+      "name": "target-commit",
+      "status": "pass",
+      "detail": "Target commit 3fe394c7d0de45161a041d6124406ccbe9b7fb07 is readable",
+      "checkedAt": "2026-09-25T07:06:48.105Z"
+    },
+    {
+      "name": "target-ci",
+      "status": "pass",
+      "detail": "Target CI state: success",
+      "checkedAt": "2026-09-25T07:06:48.105Z"
+    },
+    {
+      "name": "english-absent",
+      "status": "pass",
+      "detail": "This package has no English locale",
+      "checkedAt": "2026-09-25T07:06:48.105Z"
+    },
+    {
+      "name": "czech-route",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/articles/2026-09-25-ai-agenti-zlocin-google-avatar-microsoft-copilot?boardless_verify=6166221acf61-1790320008105",
+      "checkedAt": "2026-09-25T07:06:48.105Z"
+    },
+    {
+      "name": "title-slug",
+      "status": "pass",
+      "detail": "The Czech page and 2026-09-25-ai-agenti-zlocin-google-avatar-microsoft-copilot match",
+      "checkedAt": "2026-09-25T07:06:48.105Z"
+    },
+    {
+      "name": "content-hash",
+      "status": "pass",
+      "detail": "The Czech page expose 6166221acf61c6dbeccc1b78234fd96579fc341cd3ff16d413ad9578a02ff2bb",
+      "checkedAt": "2026-09-25T07:06:48.105Z"
+    },
+    {
+      "name": "hero-image",
+      "status": "pass",
+      "detail": "200 https://caughtup-ai.vercel.app/images/editions/2026-09-25-ai-agenti-zlocin-google-avatar-microsoft-copilot/hero.webp?boardless_verify=6166221acf61-1790320008105",
+      "checkedAt": "2026-09-25T07:06:48.105Z"
+    },
+    {
+      "name": "image-dimensions",
+      "status": "pass",
+      "detail": "1600x900; expected 1600x900",
+      "checkedAt": "2026-09-25T07:06:48.105Z"
+    },
+    {
+      "name": "attribution",
+      "status": "pass",
+      "detail": "Mikhail Nilov · Pexels License",
+      "checkedAt": "2026-09-25T07:06:48.105Z"
+    }
+  ],
+  "retryCount": 0,
+  "status": "passed",
+  "startedAt": "2026-09-25T07:05:45.646Z",
+  "completedAt": "2026-09-25T07:06:48.831Z"
+}

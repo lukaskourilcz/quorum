@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-25",
+  "packageHash": "6166221acf61c6dbeccc1b78234fd96579fc341cd3ff16d413ad9578a02ff2bb",
+  "status": "delivered",
+  "editionStatus": "edition",
+  "targetRepository": "lukaskourilcz/aifirst",
+  "targetCommit": "3fe394c7d0de45161a041d6124406ccbe9b7fb07",
+  "deliveredAt": "2026-09-25T07:06:49.619Z",
+  "articleUrl": "https://caughtup-ai.vercel.app/articles/2026-09-25-ai-agenti-zlocin-google-avatar-microsoft-copilot",
+  "tags": [
+    "umela-inteligence",
+    "kyberneticka-bezpecnost",
+    "google-gemini",
+    "microsoft",
+    "ai-agenti",
+    "meta"
+  ]
+}
