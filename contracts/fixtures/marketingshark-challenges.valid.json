@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "marketingshark-challenges/1",
+  "brandId": "devshark",
+  "sourceRepo": "lukaskourilcz/react-express-app",
+  "sourceCommit": "e668c67c520270d968049566934ff80b4de3a4b5",
+  "importedAt": "2026-09-25T12:00:00.000Z",
+  "labelSource": "shared/coding-catalog.ts#difficultyOf",
+  "contentHash": "58ad50e344b1b8638993a4847f951a833394983ca2af4adc0660a90a2d96538c",
+  "challenges": [
+    {
+      "id": "js-count-vowels",
+      "track": "javascript",
+      "title": "Count vowels",
+      "difficulty": "easy",
+      "prompt": "Write `countVowels(text)`, returning how many vowels (a, e, i, o, u) the string holds. Uppercase vowels count too; a string with none, or an empty string, gives 0.",
+      "firstHint": "Loop through lowercase letters and check \"aeiou\"."
+    },
+    {
+      "id": "js-double-numbers",
+      "track": "javascript",
+      "title": "Double numbers",
+      "difficulty": "easy",
+      "prompt": "Write `double(numbers)`, returning a new array with every number multiplied by two. An empty array gives an empty array; negatives, zero and decimals all double normally.",
+      "firstHint": "Map returns one new value for every input value."
+    },
+    {
+      "id": "js-even-numbers",
+      "track": "javascript",
+      "title": "Even numbers",
+      "difficulty": "easy",
+      "prompt": "Write `evens(numbers)`, returning a new array of only the even values, in their original order. Zero counts as even, negatives are judged the same way, and an array with no even values gives an empty array.",
+      "firstHint": "Even numbers have a remainder of 0 when divided by 2."
+    },
+    {
+      "id": "js-flatten-arrays",
+      "track": "javascript",
+      "title": "Flatten arrays",
+      "difficulty": "medium",
+      "prompt": "Write `flatten(arrays)`, returning one array holding the items of each inner array, in order. Flatten a single level only, and do it without `Array.prototype.flat`.",
+      "firstHint": "Reduce by concatenating each inner array."
+    },
+    {
+      "id": "js-sum-array",
+      "track": "javascript",
+      "title": "Sum array",
+      "difficulty": "easy",
+      "prompt": "Write `sum(numbers)`, returning the total of every value. An empty array totals 0, and negatives and decimals add up like anything else.",
+      "firstHint": "You are collapsing many values into one, so reach for the method built for exactly that — and give it a starting total, or an empty array has no answer to return."
+    },
+    {
+      "id": "ts-top-three-scores",
+      "track": "typescript",
+      "title": "Top three scores",
+      "difficulty": "easy",
+      "prompt": "Write `topThree(scores: number[]): number[]`, returning the three highest values, largest first. Fewer than three values gives back all of them in order, and the array you were handed must not be reordered in place.",
+      "firstHint": "Sort reorders the array it is given, so copy first — and without a comparator it orders numbers as if they were words."
+    }
+  ]
+}

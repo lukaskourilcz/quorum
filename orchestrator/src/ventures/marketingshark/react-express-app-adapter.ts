@@ -6,6 +6,7 @@ import {
   type NormalizedQuestion,
   type QuestionBankAdapter
 } from "./bank.js";
+import { ChallengeSchema, type Challenge } from "./challenges.js";
 
 /** The shape react-express-app's `lib/quiz-data.ts` exports, narrowed to what the import reads. */
 interface SourceQuestion {
@@ -97,3 +98,60 @@ export const reactExpressAppAdapter: QuestionBankAdapter = {
     return normalized.sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
   }
 };
+
+/** The fields of react-express-app's `CodingTask` the challenge import reads, and nothing else. */
+interface SourceCodingTask {
+  id: string;
+  track: string;
+  tier: number;
+  title: { en: string };
+  prompt: { en: string };
+  hints: { en: string[] };
+  verify: string;
+  format?: string;
+}
+
+const TEASER_TRACKS: ReadonlySet<string> = new Set(["javascript", "typescript", "react", "algorithms"]);
+
+/**
+ * devShark's issuable standalone coding challenges, each with devShark's own difficulty label
+ * (quorum#576).
+ *
+ * The label comes from `difficultyOf` in `shared/coding-catalog.ts`, which devShark's step D5 adds.
+ * A checkout without it is refused rather than labelled here from the tier: the product may
+ * override a label, and a copy of its rule in this repository would not see that. Only what a
+ * teaser shows is read — title, prompt and the first hint — from the gated list the product issues
+ * (`lib/coding/active.ts`). Evolving stages, checklists, guided designs and drills are left out:
+ * a teaser is a task a reader can take on its own, and its prompt has to stand alone.
+ */
+export async function loadDevSharkChallenges(localPath: string): Promise<{ challenges: Challenge[]; dropped: string[] }> {
+  const catalog = await import(pathToFileURL(path.join(localPath, "shared/coding-catalog.ts")).href) as Record<string, unknown>;
+  const difficultyOf = catalog.difficultyOf;
+  if (typeof difficultyOf !== "function") {
+    throw new Error("devShark has not shipped its difficulty labels (step D5): shared/coding-catalog.ts exports no difficultyOf, so no challenge can be labelled.");
+  }
+  const tasks = await importNamed<readonly SourceCodingTask[]>(localPath, "lib/coding/active.ts", "ACTIVE_CODING_TASKS");
+  const summarize = await importNamed<(task: SourceCodingTask) => unknown>(localPath, "lib/coding/catalog.ts", "summarize");
+  const evolvingStage = await importNamed<(id: string) => unknown>(localPath, "shared/evolving.ts", "evolvingStage");
+
+  const challenges: Challenge[] = [];
+  // A task that is a teaser candidate but does not fit the snapshot's bounds is named, not lost.
+  const dropped: string[] = [];
+  for (const task of tasks) {
+    if (!TEASER_TRACKS.has(task.track) || evolvingStage(task.id) || task.verify !== "tests" || (task.format ?? "implement") !== "implement") continue;
+    const parsed = ChallengeSchema.safeParse({
+      id: task.id,
+      track: task.track,
+      title: task.title.en.trim(),
+      difficulty: (difficultyOf as (summary: unknown) => unknown)(summarize(task)),
+      prompt: task.prompt.en.trim(),
+      firstHint: task.hints.en[0]?.trim() ?? ""
+    });
+    if (parsed.success) challenges.push(parsed.data);
+    else dropped.push(task.id);
+  }
+  return {
+    challenges: challenges.sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0)),
+    dropped: dropped.sort()
+  };
+}
