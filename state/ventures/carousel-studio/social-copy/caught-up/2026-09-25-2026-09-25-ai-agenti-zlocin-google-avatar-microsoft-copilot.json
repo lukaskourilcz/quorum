@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "social-copy/1",
+  "venture": "caught-up",
+  "slug": "2026-09-25-ai-agenti-zlocin-google-avatar-microsoft-copilot",
+  "date": "2026-09-25",
+  "locale": "cs",
+  "copy": {
+    "igCaption": "Útočník sestavil tři volně dostupné AI nástroje, napadl přes 27 firem včetně aerolinek a hotelového řetězce z Fortune 500 a zaplatil průměrně 25 dolarů za cíl. Téhož dne Google ukázal animovaný obličej svého asistenta a Microsoft tiše ukončil značku Copilot Plus PC.",
+    "hashtags": [
+      "umelainteligence",
+      "kybernetickabezpecnost",
+      "aiagenti",
+      "googlegemini",
+      "microsoft",
+      "opensource",
+      "docker",
+      "meta",
+      "bezpecnost",
+      "technoloie"
+    ],
+    "threadsText": "Útočník propojil tři open-source AI agenty a pronikl do nejméně 27 firem – Fortune 500 hotely, aerolinky, e-shopy. Průměrná cena průzkumu: 25 dolarů. Žádné hluboké technické znalosti nebyly potřeba. Téhož dne Docker oznámil cloudové sandboxy, které mají agenty zadržet. Otázka, zda to stačí, zatím zůstává bez odpovědi.",
+    "storyLine": "AI agenti jako útočný nástroj: 27 firem, 25 dolarů za cíl"
+  },
+  "heroCredit": "Photo by Mikhail Nilov on Pexels",
+  "origin": "desk"
+}

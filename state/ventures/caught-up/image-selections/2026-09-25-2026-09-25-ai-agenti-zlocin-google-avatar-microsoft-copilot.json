@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "image-selection/1",
+  "venture": "caught-up",
+  "slug": "2026-09-25-ai-agenti-zlocin-google-avatar-microsoft-copilot",
+  "date": "2026-09-25",
+  "rung": "search",
+  "selected": "pexels:9242892",
+  "verdicts": [
+    {
+      "mode": "curated",
+      "considered": 0,
+      "selected": null,
+      "reason": "no-thumbnail-could-be-read",
+      "candidates": [],
+      "skipped": [
+        {
+          "candidateId": "scene:20348454",
+          "reason": "thumbnail-host-not-allowed"
+        },
+        {
+          "candidateId": "scene:6212692",
+          "reason": "thumbnail-host-not-allowed"
+        }
+      ],
+      "costUsd": 0
+    },
+    {
+      "mode": "search",
+      "considered": 12,
+      "selected": "pexels:9242892",
+      "reason": "Hands working on green motherboard with soldering tools—authentic technical action, cleanly shot, illustrates human expertise in hardware/security work without naming specific people or events.",
+      "candidates": [
+        {
+          "candidateId": "pexels:9242888",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Real motherboard with hands performing repair/assembly—authentic technical work, but depicts actual hardware assembly rather than illustrating abstract cybersecurity threats or AI concepts.",
+          "sceneCs": "rukou instalovaná deska s konektory"
+        },
+        {
+          "candidateId": "wikimedia:179520469",
+          "provider": "wikimedia",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Blue circuit-board brain is the clichéd visual shorthand for AI that screams mid-2000s stock imagery; it both dates the piece and misleads about the serious real-world security topic.",
+          "sceneCs": "modrný mozek s obvody"
+        },
+        {
+          "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+          "provider": "openverse",
+          "fit": 4,
+          "vetoes": [],
+          "reason": "Museum or exhibition display of circuit boards—technically relevant but confused framing makes it unclear if this documents a specific event rather than illustrating the topic.",
+          "sceneCs": "výstava s deskou a obrazovkou"
+        },
+        {
+          "candidateId": "pixabay:3963945",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "ai-generated-look"
+          ],
+          "reason": "Wholly synthetic 3D rendering with glowing effects and stylized particles; machine-generated aesthetic unsuitable for serious reporting on actual cyberattacks.",
+          "sceneCs": "syntetický 3D model"
+        },
+        {
+          "candidateId": "pexels:4316",
+          "provider": "pexels",
+          "fit": 5,
+          "vetoes": [],
+          "reason": "Real motherboard detail with heatsinks in sharp focus—authentic hardware relevant to computing, but still depicts specific physical assembly rather than the abstract AI/threat concept.",
+          "sceneCs": "zlatý chladič na desce"
+        },
+        {
+          "candidateId": "pixabay:3435575",
+          "provider": "pixabay",
+          "fit": 0,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Recognisable human face in frame is fatal veto regardless of intent; person's identity compromises the picture for use in this article.",
+          "sceneCs": "osoba drží světelné střepy"
+        },
+        {
+          "candidateId": "pexels:9242892",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Hands working on green motherboard with soldering tools—authentic technical action, cleanly shot, illustrates human expertise in hardware/security work without naming specific people or events.",
+          "sceneCs": "páječka na desce v rukou"
+        },
+        {
+          "candidateId": "pexels:28767589",
+          "provider": "pexels",
+          "fit": 1,
+          "vetoes": [
+            "ai-generated-look",
+            "dated-aesthetic"
+          ],
+          "reason": "Neon-lit hypergloss rendering of a chip with pink-and-blue vaporwave styling; machine-generated and aesthetically dated, inappropriate for serious security reporting.",
+          "sceneCs": "synteticky osvětlený čip"
+        },
+        {
+          "candidateId": "pexels:9242891",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Hands assembling or troubleshooting green circuit board in natural light—authentic technical work, well-lit and clear, illustrates the skill and care required in hardware contexts.",
+          "sceneCs": "rukou manipulovaná deska v dílně"
+        },
+        {
+          "candidateId": "pexels:9242928",
+          "provider": "pexels",
+          "fit": 6,
+          "vetoes": [],
+          "reason": "Hands working on motherboard in tidy workspace—honest technical action and good quality, but again depicts specific assembly rather than the AI-driven threat narrative.",
+          "sceneCs": "rukou nasazovaný konektor na desku"
+        },
+        {
+          "candidateId": "pexels:9242886",
+          "provider": "pexels",
+          "fit": 7,
+          "vetoes": [],
+          "reason": "Hands using tool to work on green motherboard—authentic, well-lit technical work, no face visibility, clear illustration of hands-on expertise without dating the image.",
+          "sceneCs": "nářadím pracující ruce nad deskou"
+        },
+        {
+          "candidateId": "pexels:9242275",
+          "provider": "pexels",
+          "fit": 2,
+          "vetoes": [
+            "recognisable-face"
+          ],
+          "reason": "Person with distinctive red glasses holding a motherboard for the camera—recognisable face is fatal; picture reads as portrait rather than illustration of a concept.",
+          "sceneCs": "osoba v brýlích drží desku"
+        }
+      ],
+      "skipped": [],
+      "costUsd": 0.009707
+    }
+  ],
+  "skippedProviders": [],
+  "recordedAt": "2026-09-25T03:00:34.733Z"
+}

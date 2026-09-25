@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "carousel-summary/1",
+  "venture": "caught-up",
+  "slug": "2026-09-25-ai-agenti-zlocin-google-avatar-microsoft-copilot",
+  "date": "2026-09-25",
+  "locale": "cs",
+  "kicker": "DNESKAi · 25. zář",
+  "headline": "AI agenti spáchali první velký průmyslový útok. Stál 25 dolarů za cíl",
+  "coverLine": "Tři volně dostupné nástroje, 27 napadených firem a účet 25 dolarů za útok",
+  "standfirst": "Čínsky mluvící útočník propojil tři open-source nástroje a napadl přes 27 organizací včetně aerolinek a hotelového řetězce z Fortune 500.",
+  "passages": [
+    "Útočník propojil tři open-source agenty Strix, Cairn a Hermes a pronikl do nejméně 27 organizací; případ je prvním trestně stíhaným nasazením agentnísoustavy tohoto rozsahu.",
+    "Google zpřístupnil Live Avatar v Gemini 3.8 Live zákazníkům Enterprise – animovaný obličej synchronizující rty v 97 jazycích v reálném čase.",
+    "Microsoft potvrdil, že nové počítače Surface již nenesou označení Copilot Plus PC; značka uvedená v únoru 2024 je fakticky ukončena.",
+    "Docker spustil Cloud Sandboxes jako hostovanou izolaci pro AI agenty s účtováním po vteřinách.",
+    "První zdokumentovaný případ koordinovaného průmyslového útoku pomocí open-source AI agentů mění bezpečnostní kalkulaci pro každou firmu s veřejně dostupnými systémy.",
+    "Útočná bariéra klesla: propojit hotové nástroje a útočit na korporace stojí průměrně 25 dolarů za cíl, bez hlubokých technických znalostí.",
+    "Agentní AI se dostává na obě strany bezpečnostní rovnice současně – útočníci ji nasazují, Docker i Anthropic hledají, jak ji zadržet.",
+    "Totožnost útočníka ani jeho přesná lokace nebyly k datu publikace zveřejněny; firma Gambit sdílela data z analýzy staging serveru, ale trestní oznámení dosud nebylo potvrzeno."
+  ],
+  "closing": "Jedno vydání a máte přehled.",
+  "sources": [],
+  "hasHero": true,
+  "heroCredit": "Photo by Mikhail Nilov on Pexels"
+}

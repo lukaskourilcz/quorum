@@ -1,0 +1,303 @@
+{
+  "schemaVersion": 1,
+  "runId": "9e79aff7-e925-4e34-b8c5-f777b5cb2074",
+  "date": "2026-09-25",
+  "mode": "production",
+  "status": "edition",
+  "startedAt": "2026-09-25T03:00:50.417Z",
+  "completedAt": "2026-09-25T03:05:10.515Z",
+  "stages": [
+    {
+      "name": "curate",
+      "status": "success",
+      "startedAt": "2026-09-25T03:00:50.434Z",
+      "completedAt": "2026-09-25T03:01:15.114Z",
+      "durationMs": 24680
+    },
+    {
+      "name": "write",
+      "status": "failed",
+      "startedAt": "2026-09-25T03:01:15.114Z",
+      "completedAt": "2026-09-25T03:03:02.243Z",
+      "durationMs": 107129,
+      "errorCode": "InvalidModelOutputError",
+      "errorMessage": "write: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected array to have <=6 items\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    "
+    },
+    {
+      "name": "rewrite_1",
+      "status": "success",
+      "startedAt": "2026-09-25T03:03:02.243Z",
+      "completedAt": "2026-09-25T03:04:54.293Z",
+      "durationMs": 112050
+    },
+    {
+      "name": "stet_1",
+      "status": "success",
+      "startedAt": "2026-09-25T03:04:54.293Z",
+      "completedAt": "2026-09-25T03:04:54.298Z",
+      "durationMs": 5
+    },
+    {
+      "name": "quality_1",
+      "status": "success",
+      "startedAt": "2026-09-25T03:04:54.298Z",
+      "completedAt": "2026-09-25T03:04:54.298Z",
+      "durationMs": 0
+    },
+    {
+      "name": "assemble_package",
+      "status": "success",
+      "startedAt": "2026-09-25T03:04:54.298Z",
+      "completedAt": "2026-09-25T03:05:10.513Z",
+      "durationMs": 16215
+    }
+  ],
+  "regenerationAttempts": 1,
+  "stetBlocks": 0,
+  "hacekBlocks": 0,
+  "usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "curate",
+      "inputTokens": 12029,
+      "outputTokens": 1248,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "costUsd": 0.054807
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "write",
+      "inputTokens": 14297,
+      "outputTokens": 4543,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2446,
+      "costUsd": 0.1202085
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-6",
+      "stage": "rewrite",
+      "inputTokens": 14292,
+      "outputTokens": 4744,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 2624,
+      "costUsd": 0.123876
+    }
+  ],
+  "measuredCostUsd": 0.2988915,
+  "quality": {
+    "metrics": {
+      "successfulSources": 30,
+      "candidateItems": 80,
+      "citedSources": 8,
+      "signalStrength": 89,
+      "maximumSingleSourceShare": 0.375,
+      "sourceDiversity": 0.75,
+      "duplicateStorySimilarity": 0.08333333333333333,
+      "repeatedTopicFrequency": 0.5,
+      "primarySourceRelevant": true,
+      "primarySourcePresent": true,
+      "unsupportedWatchlistItems": 0,
+      "costPerRun": 0.2988915
+    },
+    "result": {
+      "passed": true,
+      "enforced": true,
+      "violations": [],
+      "action": "publish"
+    }
+  },
+  "stet": {
+    "passed": true,
+    "score": 50,
+    "violations": []
+  },
+  "imageProgram": {
+    "readiness": {
+      "providers": {
+        "openverse": "keyless",
+        "wikimedia": "keyless",
+        "pexels": "present",
+        "pixabay": "present"
+      },
+      "gateModelConfigured": true,
+      "caps": {
+        "perArticleUsd": 0.02,
+        "perDayUsd": 0.1,
+        "generatedImagesPerDay": 2
+      },
+      "spentToday": {
+        "usd": 0,
+        "generatedImages": 0
+      },
+      "illustrationRung": "armed"
+    },
+    "rung": "search",
+    "verdicts": [
+      {
+        "mode": "curated",
+        "considered": 0,
+        "selected": null,
+        "reason": "no-thumbnail-could-be-read",
+        "candidates": [],
+        "skipped": [
+          {
+            "candidateId": "scene:20348454",
+            "reason": "thumbnail-host-not-allowed"
+          },
+          {
+            "candidateId": "scene:6212692",
+            "reason": "thumbnail-host-not-allowed"
+          }
+        ],
+        "costUsd": 0
+      },
+      {
+        "mode": "search",
+        "considered": 12,
+        "selected": "pexels:9242892",
+        "reason": "Hands working on green motherboard with soldering tools—authentic technical action, cleanly shot, illustrates human expertise in hardware/security work without naming specific people or events.",
+        "candidates": [
+          {
+            "candidateId": "pexels:9242888",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Real motherboard with hands performing repair/assembly—authentic technical work, but depicts actual hardware assembly rather than illustrating abstract cybersecurity threats or AI concepts.",
+            "sceneCs": "rukou instalovaná deska s konektory"
+          },
+          {
+            "candidateId": "wikimedia:179520469",
+            "provider": "wikimedia",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Blue circuit-board brain is the clichéd visual shorthand for AI that screams mid-2000s stock imagery; it both dates the piece and misleads about the serious real-world security topic.",
+            "sceneCs": "modrný mozek s obvody"
+          },
+          {
+            "candidateId": "openverse:00de4c50-7cec-4609-9f6d-e605679a28a8",
+            "provider": "openverse",
+            "fit": 4,
+            "vetoes": [],
+            "reason": "Museum or exhibition display of circuit boards—technically relevant but confused framing makes it unclear if this documents a specific event rather than illustrating the topic.",
+            "sceneCs": "výstava s deskou a obrazovkou"
+          },
+          {
+            "candidateId": "pixabay:3963945",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "ai-generated-look"
+            ],
+            "reason": "Wholly synthetic 3D rendering with glowing effects and stylized particles; machine-generated aesthetic unsuitable for serious reporting on actual cyberattacks.",
+            "sceneCs": "syntetický 3D model"
+          },
+          {
+            "candidateId": "pexels:4316",
+            "provider": "pexels",
+            "fit": 5,
+            "vetoes": [],
+            "reason": "Real motherboard detail with heatsinks in sharp focus—authentic hardware relevant to computing, but still depicts specific physical assembly rather than the abstract AI/threat concept.",
+            "sceneCs": "zlatý chladič na desce"
+          },
+          {
+            "candidateId": "pixabay:3435575",
+            "provider": "pixabay",
+            "fit": 0,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "Recognisable human face in frame is fatal veto regardless of intent; person's identity compromises the picture for use in this article.",
+            "sceneCs": "osoba drží světelné střepy"
+          },
+          {
+            "candidateId": "pexels:9242892",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands working on green motherboard with soldering tools—authentic technical action, cleanly shot, illustrates human expertise in hardware/security work without naming specific people or events.",
+            "sceneCs": "páječka na desce v rukou"
+          },
+          {
+            "candidateId": "pexels:28767589",
+            "provider": "pexels",
+            "fit": 1,
+            "vetoes": [
+              "ai-generated-look",
+              "dated-aesthetic"
+            ],
+            "reason": "Neon-lit hypergloss rendering of a chip with pink-and-blue vaporwave styling; machine-generated and aesthetically dated, inappropriate for serious security reporting.",
+            "sceneCs": "synteticky osvětlený čip"
+          },
+          {
+            "candidateId": "pexels:9242891",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands assembling or troubleshooting green circuit board in natural light—authentic technical work, well-lit and clear, illustrates the skill and care required in hardware contexts.",
+            "sceneCs": "rukou manipulovaná deska v dílně"
+          },
+          {
+            "candidateId": "pexels:9242928",
+            "provider": "pexels",
+            "fit": 6,
+            "vetoes": [],
+            "reason": "Hands working on motherboard in tidy workspace—honest technical action and good quality, but again depicts specific assembly rather than the AI-driven threat narrative.",
+            "sceneCs": "rukou nasazovaný konektor na desku"
+          },
+          {
+            "candidateId": "pexels:9242886",
+            "provider": "pexels",
+            "fit": 7,
+            "vetoes": [],
+            "reason": "Hands using tool to work on green motherboard—authentic, well-lit technical work, no face visibility, clear illustration of hands-on expertise without dating the image.",
+            "sceneCs": "nářadím pracující ruce nad deskou"
+          },
+          {
+            "candidateId": "pexels:9242275",
+            "provider": "pexels",
+            "fit": 2,
+            "vetoes": [
+              "recognisable-face"
+            ],
+            "reason": "Person with distinctive red glasses holding a motherboard for the camera—recognisable face is fatal; picture reads as portrait rather than illustration of a concept.",
+            "sceneCs": "osoba v brýlích drží desku"
+          }
+        ],
+        "skipped": [],
+        "costUsd": 0.009707
+      }
+    ]
+  },
+  "packageStatus": "edition",
+  "warnings": [
+    "content_invalid:write: [\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 6,\n    \"inclusive\": true,\n    \"path\": [\n      \"wire\"\n    ],\n    \"message\": \"Too big: expected array to have <=6 items\"\n  },\n  {\n    \"expected\": \"array\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Invalid input: expected array, received string\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"dispatches\"\n    ],\n    \"message\": \"Too big: expected string to have <=4 characters\"\n  }\n]",
+    "image_rung:search",
+    "image_gate:curated:no-thumbnail-could-be-read",
+    "image_gate:search:selected"
+  ],
+  "sourceSummary": {
+    "successfulSources": 30,
+    "candidateItems": 80,
+    "evidenceRefs": [
+      "source:404-media",
+      "source:anthropic-news",
+      "source:ars-technica",
+      "source:bluesky-language-models",
+      "source:deepmind-blog",
+      "source:digiday",
+      "source:github-ai-releases",
+      "source:google-research",
+      "source:hf-blog",
+      "source:hn-frontpage",
+      "source:import-ai",
+      "source:interconnects"
+    ]
+  }
+}
