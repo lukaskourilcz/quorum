@@ -111,7 +111,7 @@ drafts in queue v1, which the publisher never considered.
 - [x] B1: packages, frames, LinkedIn caption, queue v2 drafts, capability edges (#568)
 - [ ] B2: devShark profiles, held connections, the LinkedIn platform and channel (#569); register
   `marketingshark` in the registry's `legacyQueueMappings` with those profiles
-- [ ] B3: public image URLs through jsDelivr, 90-day retention (#570)
+- [x] B3: public image URLs through jsDelivr, 90-day retention (#570)
 - [ ] B4: LinkedIn through Buffer (#571)
 - [ ] B5: Threads images and Instagram JPEG carousels in the Direct Meta adapter (#572)
 - [ ] B6: the Queue workspace (#573)

@@ -57,8 +57,11 @@ connection's exact provider id/version and one active binding.
 The retained adapter supports only current verified formats:
 
 - Threads: exact approved text, official publish scopes and live permalink verification;
-- Instagram: one to ten approved JPEG, PNG or WebP image assets, caption text, official publish
+- Instagram: one to ten approved JPEG or PNG image assets, caption text, official publish
   scopes and live permalink verification.
+
+Meta fetches each image from a URL the publisher proved in the same run. `docs/SOCIAL-ASSET-HOSTING.md`
+covers the commit-pinned jsDelivr URLs, the pre-send check, held items and the 90-day retention.
 
 The runtime looks for an already known idempotency key before publication, sends at most once, and
 may retry the read-only live-verification request twice. A timeout or inconclusive result during

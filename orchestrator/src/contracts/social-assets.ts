@@ -101,8 +101,8 @@ const RetainedFileSchema = z.strictObject({
  * `social-asset-retention/1`: what the daily retention step removed from `site/public/social/`.
  *
  * A file is dated by the first `YYYY-MM-DD` segment of its path and removed once that date falls
- * before `keepFrom`, which is `retentionDays` before `date`. The packages, asset records and post
- * receipts keep the hashes of everything that was queued; this record keeps the hashes of what was
+ * before `keepFrom`, which is `retentionDays` before `date`. The packages and asset records keep the
+ * hash of every frame an item named; this record keeps the hashes of what was
  * pruned, so a removal is evidence rather than a silent disappearance. A file the step does not
  * manage (no date segment, a name outside the safe set, or a link) is never removed; it is named.
  */
