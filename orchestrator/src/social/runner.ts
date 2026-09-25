@@ -7,8 +7,10 @@ import { configRoot as defaultConfigRoot, repoRoot as defaultRepoRoot, stateRoot
 import { pragueClockParts } from "../meetings/clock.js";
 import { refreshSocialActivation, pauseVentureSocial, isPublishingVenture, type SocialVenture } from "./activation.js";
 import { ChannelRegistrySchema, assertLiveChannel } from "./channel-registry.js";
+import { createBufferPublishAdapter } from "./buffer.js";
 import { createMetaPublishAdapter } from "./meta.js";
-import type { PublishAdapter } from "./publish.js";
+import { providerMaySend, type PublishProviderId } from "./provider-platforms.js";
+import { ProviderRejectedError, type PublishAdapter } from "./publish.js";
 import { loadVentureCapabilityMap } from "../ventures/capabilities.js";
 import {
   loadSocialPublisherRegistry,
@@ -49,6 +51,8 @@ export interface SocialPublisherReport {
   due: number;
   published: number;
   ambiguous: number;
+  /** Refused by the provider before anything was created (quorum#571); failed for owner review. */
+  rejected: number;
   skipped: number;
 }
 
@@ -85,6 +89,21 @@ function sourceVentureActive(item: CapabilityAwareQueueItem, activation: SocialA
     && activation.ventures[item.sourceVentureId].status === "enabled";
 }
 
+/**
+ * Whether the canonical receipt can name this item's venture and channel. Checked before a send,
+ * because a receipt that fails to parse after the provider accepted a post would leave the item
+ * queued and the next run would send it again.
+ */
+function receiptRecordable(item: CapabilityAwareQueueItem): boolean {
+  return SocialPostReceiptSchema.shape.venture.safeParse(item.sourceVentureId).success
+    && SocialPostReceiptSchema.shape.channel.safeParse(item.channel).success;
+}
+
+const PROVIDER_LABELS: Readonly<Record<PublishProviderId, string>> = {
+  "direct-meta": "Official Meta item verified live.",
+  buffer: "Buffer post verified sent to LinkedIn."
+};
+
 function receiptId(item: CapabilityAwareQueueItem): string {
   return `social-receipt-${createHash("sha256").update(`${item.sourceVentureId}:${item.target.profileId}:${item.id}:${item.content.contentHash}`).digest("hex").slice(0, 16)}`;
 }
@@ -100,7 +119,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
   const stateRoot = options.stateRoot ?? defaultStateRoot;
   const configRoot = options.configRoot ?? defaultConfigRoot;
   if (await exists(path.join(stateRoot, "PAUSED"))) {
-    return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0 };
+    return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, rejected: 0, skipped: 0 };
   }
 
   return withFileLock(stateRoot, ".social-lock", async () => {
@@ -115,7 +134,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       safetyCheckerReady: TT_SAFETY_CHECKER_VERSION === "keeper-tt-1"
     });
     if (environment.SOCIAL_KILL_SWITCH !== "false" || await exists(path.join(stateRoot, "SOCIAL_PAUSED"))) {
-      return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0 };
+      return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, rejected: 0, skipped: 0 };
     }
     const channelRegistry = ChannelRegistrySchema.parse(JSON.parse(await readFile(path.join(configRoot, "channels.json"), "utf8")) as unknown);
     const queueDirectory = path.join(stateRoot, "social", "queue");
@@ -192,12 +211,15 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
         || !entry.resolution.target
         || entry.providerResolution?.decision !== "eligible"
         || !entry.providerResolution.target
-        || !sourceVentureActive(entry.item, activation)) continue;
+        || !sourceVentureActive(entry.item, activation)
+        || !receiptRecordable(entry.item)) continue;
       const provider = entry.providerResolution.target;
-      if (provider.provider.id !== "direct-meta" || provider.provider.apiVersion === null) continue;
+      const providerId = provider.provider.id;
+      // Direct Meta sends Instagram and Threads; Buffer sends LinkedIn and nothing else (quorum#571).
+      if (!providerMaySend(providerId, entry.item.channel) || providerId !== entry.resolution.target.providerId || provider.provider.apiVersion === null) continue;
       const target: ResolvedPublisherTarget = {
         ...entry.resolution.target,
-        providerId: "direct-meta",
+        providerId,
         apiVersion: provider.provider.apiVersion,
         providerBindingId: provider.binding.id
       };
@@ -219,15 +241,26 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       assertLiveChannel(channel, environment);
     }
     if (eligibleDue.length === 0) {
-      return { status: "draft_only", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, skipped: due.length + malformed };
+      return { status: "draft_only", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, rejected: 0, skipped: due.length + malformed };
     }
     if (options.validateOnly) {
-      return { status: "validated", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, skipped: due.length - eligibleDue.length + malformed };
+      return { status: "validated", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, rejected: 0, skipped: due.length - eligibleDue.length + malformed };
     }
 
-    const adapter = options.adapter ?? createMetaPublishAdapter(environment, options.fetchImpl);
+    const adapters = new Map<PublishProviderId, PublishAdapter>();
+    const adapterFor = (providerId: PublishProviderId): PublishAdapter => {
+      if (options.adapter) return options.adapter;
+      const known = adapters.get(providerId);
+      if (known) return known;
+      const created = providerId === "buffer"
+        ? createBufferPublishAdapter(environment, options.fetchImpl)
+        : createMetaPublishAdapter(environment, options.fetchImpl);
+      adapters.set(providerId, created);
+      return created;
+    };
     let published = 0;
-    let failed = 0;
+    let ambiguous = 0;
+    let rejected = 0;
     let safetyKilled = 0;
     for (const { name, item, target, provider } of eligibleDue) {
       const channel = channels.get(item.channel)!;
@@ -252,9 +285,13 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
         safetyKilled += 1;
         continue;
       }
+      const adapter = adapterFor(target.providerId);
       let remoteId: string | null = null;
       let remoteUrl: string | null = null;
       let errorMessage: string | null = null;
+      // Set only when the provider refused before creating anything: the item fails for owner
+      // review instead of waiting on reconciliation, and still never resends by itself.
+      let rejection: ProviderRejectedError | null = null;
       let verificationAttempts = 0;
       try {
         const existing = await adapter.findByIdempotencyKey?.(channel, key, target);
@@ -272,8 +309,10 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
         }
       } catch (error) {
         errorMessage = redactedConnectorError(error, environment, target);
+        if (remoteId === null && error instanceof ProviderRejectedError) rejection = error;
       }
       const succeeded = remoteId !== null && remoteUrl !== null && errorMessage === null;
+      const deliveryState = succeeded ? "published" as const : rejection ? "failed" as const : "ambiguous" as const;
       const id = receiptId(queued);
       const providerReceipt = createProviderDeliveryReceipt({
         item: queued,
@@ -281,12 +320,16 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
         binding: provider.binding,
         canonicalReceiptId: id,
         idempotencyHash: key,
-        state: succeeded ? "published" : "ambiguous",
+        state: deliveryState,
         remoteId,
         publicUrl: remoteUrl,
         requestedAt: now,
-        respondedAt: succeeded || remoteId !== null ? now : null,
-        status: succeeded ? "Official Meta item verified live." : "Provider outcome is ambiguous and requires reconciliation before any resend.",
+        respondedAt: succeeded || remoteId !== null || rejection ? now : null,
+        status: succeeded
+          ? PROVIDER_LABELS[target.providerId]
+          : rejection
+            ? "Provider refused the request and created nothing; owner review before any new attempt."
+            : "Provider outcome is ambiguous and requires reconciliation before any resend.",
         error: succeeded ? null : (errorMessage ?? "Post did not verify live")
       });
       const providerHealth = createProviderHealthSnapshot({
@@ -295,7 +338,8 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
         generatedAt: now,
         lastSuccessfulOperationAt: succeeded ? now.toISOString() : null,
         lastAttemptedOperationAt: now.toISOString(),
-        incidentRefs: succeeded ? [] : [`state/social/provider-receipts/${providerReceipt.id}.json`]
+        incidentRefs: succeeded ? [] : [`state/social/provider-receipts/${providerReceipt.id}.json`],
+        observedLimit: rejection?.reason === "rate-limited" || rejection?.reason === "plan-limit" ? rejection.reason : null
       });
       const attemptCount = Math.max(1, verificationAttempts) as 1 | 2;
       const receipt = SocialPostReceiptSchema.parse({
@@ -315,7 +359,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
         idempotencyKey: key,
         contentHash: queued.content.contentHash,
         rendererVersion: queued.content.rendererVersion,
-        outcome: succeeded ? "published" : "paused",
+        outcome: succeeded ? "published" : rejection ? "failed" : "paused",
         remoteId,
         remoteUrl,
         verifiedLive: succeeded,
@@ -326,7 +370,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       });
       const updated = CapabilityAwareQueueItemSchema.parse({
         ...queued,
-        status: succeeded ? "published" : "needs_reconciliation",
+        status: succeeded ? "published" : rejection ? "failed" : "needs_reconciliation",
         attempt: { idempotencyKey: key, claimedAt: now.toISOString(), attemptCount, lastError: receipt.error },
         receiptId: id
       });
@@ -338,19 +382,23 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       ]);
       if (succeeded) published += 1;
       else {
-        failed += 1;
+        if (rejection) rejected += 1;
+        else ambiguous += 1;
+        const reason = rejection
+          ? `Post ${queued.id} was refused by its provider: ${receipt.error}`
+          : `Post ${queued.id} has an ambiguous provider outcome: ${receipt.error}`;
         await Promise.all([
           atomicWriteJson(stateRoot, `social/pauses/connections/${target.connection.id}.json`, {
             schemaVersion: "social-connection-pause/1",
             connectionId: target.connection.id,
             profileId: target.profile.id,
-            reason: `Post ${queued.id} has an ambiguous provider outcome: ${receipt.error}`,
+            reason,
             pausedAt: now.toISOString()
           }),
-          pauseVentureSocial({ stateRoot, venture: queued.sourceVentureId as SocialVenture, reason: `Post ${queued.id} has an ambiguous provider outcome: ${receipt.error}`, now })
+          pauseVentureSocial({ stateRoot, venture: queued.sourceVentureId as SocialVenture, reason, now })
         ]);
       }
     }
-    return { status: "complete", queueItems: queueFiles.length, due: due.length, published, ambiguous: failed, skipped: due.length - eligibleDue.length + safetyKilled + malformed };
+    return { status: "complete", queueItems: queueFiles.length, due: due.length, published, ambiguous, rejected, skipped: due.length - eligibleDue.length + safetyKilled + malformed };
   });
 }

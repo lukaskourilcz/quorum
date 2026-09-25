@@ -18,6 +18,7 @@ import {
   resolvePublisherTarget,
   type SocialPublisherRegistry
 } from "../src/social/publisher-targets.js";
+import { loadSocialProviderRegistry, resolveProviderBinding } from "../src/social/providers.js";
 import { loadVentureCapabilityMap, resolveVentureCapabilityInMap } from "../src/ventures/capabilities.js";
 
 const environment = {
@@ -477,11 +478,23 @@ describe("devShark publisher targets", () => {
     }
   });
 
-  it("keeps the LinkedIn connection held after a full activation, because no Buffer adapter exists yet", async () => {
-    const [committed, capabilityMap] = await Promise.all([loadSocialPublisherRegistry(configRoot), loadVentureCapabilityMap(configRoot)]);
+  // quorum#571 built the Buffer adapter, so a fully activated LinkedIn connection now resolves to
+  // Buffer here. What holds it is the provider registry: its binding and Buffer's own verdict stay
+  // held until the owner activates the binding and records the live test.
+  it("resolves a fully activated LinkedIn connection to Buffer, which the provider registry still holds", async () => {
+    const [committed, capabilityMap, providers] = await Promise.all([loadSocialPublisherRegistry(configRoot), loadVentureCapabilityMap(configRoot), loadSocialProviderRegistry(configRoot)]);
     const active = activate(committed, "social-profile-devshark-linkedin", "social-connection-devshark-linkedin");
     const resolution = resolvePublisherTarget({ item: await devSharkItem("linkedin"), registry: active, capabilityMap, environment: devSharkEnvironment });
-    expect(resolution).toMatchObject({ decision: "held", reasons: ["provider-adapter-unavailable"], target: null });
+    expect(resolution).toMatchObject({
+      decision: "eligible",
+      target: { credentialRef: "BUFFER_API_KEY", nativeAccountIdRef: "BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN", providerId: "buffer", apiVersion: "graphql-current" },
+      publishingAuthorized: false
+    });
+    expect(resolveProviderBinding({ registry: providers, publisherRegistry: active, connectionId: "social-connection-devshark-linkedin", environment: devSharkEnvironment })).toMatchObject({
+      decision: "held",
+      reasons: expect.arrayContaining(["provider-held", "binding-held", "provider-owner-authority-missing"]),
+      publishingAuthorized: false
+    });
 
     const instagram = activate(committed, "social-profile-devshark-instagram", "social-connection-devshark-instagram");
     expect(resolvePublisherTarget({ item: await devSharkItem("instagram"), registry: instagram, capabilityMap, environment: devSharkEnvironment })).toMatchObject({

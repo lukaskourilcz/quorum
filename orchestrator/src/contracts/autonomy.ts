@@ -201,7 +201,9 @@ export const SocialPostReceiptSchema = openObject({
   id: z.string().regex(/^social-receipt-[a-f0-9]{16}$/),
   venture: z.enum(["caught-up", "mma-files", "titty-tuesdays"]),
   queueItemId: z.string().trim().min(1).max(160),
-  channel: z.enum(["threads", "instagram"]),
+  // LinkedIn since quorum#571: the Buffer adapter sends it, and a send whose receipt cannot be
+  // written would stay queued and go out again. The venture list stays the publishing ventures.
+  channel: z.enum(["threads", "instagram", "linkedin"]),
   variant: z.enum(["A", "B"]),
   idempotencyKey: Sha256Schema,
   contentHash: Sha256Schema,

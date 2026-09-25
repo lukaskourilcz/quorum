@@ -12,7 +12,7 @@ import type { VentureCapabilityMap } from "../contracts/venture-capability.js";
 import { configRoot as defaultConfigRoot } from "../paths.js";
 import { resolveVentureCapabilityInMap } from "../ventures/capabilities.js";
 import type { AmplifierEligibility } from "./amplifiers.js";
-import type { PublishProviderId } from "./provider-platforms.js";
+import { providerMaySend, type PublishProviderId } from "./provider-platforms.js";
 import {
   CapabilityAwareQueueItemSchema,
   QueueItemSchema,
@@ -273,18 +273,23 @@ export function resolvePublisherTarget(input: {
   if (!connection.credentialRef || !connection.nativeAccountIdRef) return resolution("denied", ["connection-reference-missing"]);
   if (!input.environment[connection.credentialRef]?.trim()) holds.push("credential-unavailable");
   if (!input.environment[connection.nativeAccountIdRef]?.trim()) holds.push("native-account-id-unavailable");
-  // Only Direct Meta has an adapter. A connection on any other transport (Buffer for LinkedIn) is
-  // held here however far its activation has gone, until its adapter exists (quorum#571).
-  if (connection.connector.providerId !== "direct-meta") holds.push("provider-adapter-unavailable");
-  if (holds.length > 0) return resolution("held", holds);
+  // A transport needs an adapter that sends to this platform: Direct Meta for Instagram and
+  // Threads, Buffer for LinkedIn since quorum#571. A connection on anything else is held here
+  // however far its activation has gone. The provider registry holds Buffer again on its own
+  // verdict and binding, which is what keeps LinkedIn held until the owner's live test.
+  const providerId = connection.connector.providerId;
+  if (!providerMaySend(providerId, connection.platform)) holds.push("provider-adapter-unavailable");
+  if (holds.length > 0 || !providerMaySend(providerId, connection.platform)) return resolution("held", holds);
 
   return resolution("eligible", ["independent-runtime-gates-still-required"], {
     profile,
     connection,
     credentialRef: connection.credentialRef,
     nativeAccountIdRef: connection.nativeAccountIdRef,
-    providerId: "direct-meta",
-    apiVersion: registry.data.providerApiVersion
+    providerId,
+    // Direct Meta runs at the registry's pinned Graph version; Buffer's connector names its own,
+    // which the provider registry pins for every binding.
+    apiVersion: providerId === "direct-meta" ? registry.data.providerApiVersion : connection.connector.apiVersion
   });
 }
 

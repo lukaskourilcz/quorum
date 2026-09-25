@@ -32,12 +32,9 @@ export function assertLiveChannel(channel: Channel, environment: NodeJS.ProcessE
   if (parsed.approvedScopes.length === 0) {
     throw new Error(`${parsed.id} has no approved scopes`);
   }
-  // Buffer is the LinkedIn transport and no Buffer adapter exists yet (quorum#571), so a LinkedIn
-  // channel cannot pass as live however it is configured.
-  if (parsed.id === "linkedin") {
-    throw new Error("linkedin has no publishing adapter yet");
-  }
-  if (!environment.META_GRAPH_API_VERSION) {
+  // LinkedIn goes through Buffer (quorum#571), whose GraphQL API has no version to configure; the
+  // Graph version is a Meta setting.
+  if (parsed.id !== "linkedin" && !environment.META_GRAPH_API_VERSION) {
     throw new Error("META_GRAPH_API_VERSION must be explicitly configured");
   }
 }

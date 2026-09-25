@@ -10,7 +10,8 @@ runSocialPublisher({
 })
   .then((result) => {
     console.log(JSON.stringify(result, null, 2));
-    if (result.ambiguous > 0) {
+    // An ambiguous or refused post paused its connection; either way the owner has to look.
+    if (result.ambiguous > 0 || result.rejected > 0) {
       process.exitCode = 2;
     }
   })
