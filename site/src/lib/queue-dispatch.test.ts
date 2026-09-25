@@ -1,6 +1,8 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fakeGitHub, type FakeGitHub } from "@/lib/admin-queue/fake-github";
-import { dispatchSocialPublisher, type QueueDispatchRequest } from "./queue-dispatch";
+import { SOCIAL_PUBLISHER_WORKFLOW, dispatchSocialPublisher, type QueueDispatchRequest } from "./queue-dispatch";
 
 const now = new Date("2026-09-26T08:00:00.000Z");
 const open: QueueDispatchRequest = { persistence: "github", publishWindow: { notBefore: "2026-09-26T08:00:00.000Z", notAfter: "2026-09-26T09:00:00.000Z" }, now };
@@ -71,5 +73,17 @@ describe("the publisher wake-up", () => {
     vi.stubEnv("BOARDLESSAI_GITHUB_TOKEN", "");
     expect(await dispatchSocialPublisher(open)).toMatchObject({ state: "failed", reason: "unconfigured" });
     expect(github.calls).toEqual([]);
+  });
+});
+
+describe("the workflow the wake-up starts", () => {
+  it("declares the one input the Queue sends, and checks out the branch rather than the dispatched commit", async () => {
+    const workflow = await readFile(path.resolve(process.cwd(), "..", ".github/workflows", SOCIAL_PUBLISHER_WORKFLOW), "utf8");
+    expect(workflow).toMatch(/\n {2}workflow_dispatch:\n {4}inputs:\n {6}validate_only:\n(?: {8}.+\n)*? {8}type: boolean\n/u);
+    expect(workflow).toContain('test "$VALIDATE_ONLY" = "true"');
+    // A second approval's run waits behind the first; checking out the commit its dispatch named
+    // would hide what the first run published and send that post again.
+    expect(workflow).toMatch(/uses: actions\/checkout@[0-9a-f]{40}[^\n]*\n {8}with:\n(?: {10}#.*\n)* {10}ref: \$\{\{ github\.ref \}\}\n/u);
+    expect(workflow).toMatch(/concurrency:\n {2}group: social-publisher-\$\{\{ github\.ref \}\}\n {2}cancel-in-progress: false\n/u);
   });
 });

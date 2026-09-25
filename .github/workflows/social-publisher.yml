@@ -28,8 +28,9 @@ concurrency:
 jobs:
   publish:
     name: Validate or publish approved queue
-    # A scheduled firing with the kill switch on never starts a runner. A dispatch always runs,
-    # because someone asking for it by hand wants the validation output either way.
+    # A scheduled firing with the kill switch on never starts a runner. A dispatch always runs:
+    # the owner started it by hand or approved a post in the Admin Queue (#574), and wants the
+    # run's answer either way. The Queue's dispatch is a wake-up; this run decides what sends.
     if: ${{ github.event_name != 'schedule' || vars.SOCIAL_KILL_SWITCH != 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -47,6 +48,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          # The branch as it stands when this run starts, not the commit the dispatch named. Two
+          # approvals a minute apart queue two runs; the second waits for the first and must see
+          # the post the first one published, or it would find it still queued and send it again.
+          ref: ${{ github.ref }}
           fetch-depth: 0
           persist-credentials: true
 
