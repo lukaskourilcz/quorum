@@ -211,10 +211,15 @@ from GitHub, not from the deployment's copy.
 
 - `site/src/lib/admin-queue.test.ts`: the loader. A missing directory, counted malformed files, v1
   mapped, v2 read, supersession, failure reasons, pause holds, and no file names or credential
-  references in the snapshot.
+  references in the snapshot. Also: a legacy v1 draft whose checks pass is scheduled, the newest
+  2,000 files are kept with the rest named, the publisher's holds move an approved item to Held in
+  fixed words, and copy that promises a reward for engagement is named on the card.
 - `site/src/lib/admin-queue/actions.test.ts` and `site/src/app/admin/api/queue/actions/route.test.ts`:
   the hash guard, approval, the supersede chain, event shape, hold and reject, v1 handling, and the
-  write-disabled refusal. The route test also shows a failed wake-up answered as a saved 201.
+  write-disabled refusal, a LinkedIn edit held to 3,000 less its tracked link, and an edit or an
+  approval refused for promising a reward for engagement. The route test also shows a failed wake-up
+  answered as a saved 201. `site/src/lib/admin-queue/linkedin.test.ts` pins the tracked link the
+  orchestrator's test pins for the same fixture.
 - `site/src/lib/admin-queue/rerender.test.ts`: the re-render on the package the room drafts for
   2026-09-26 (the committed `contracts/fixtures/marketingshark-*.valid.json`). Frames and the
   revision are written before the event, the draft and the cancellation; the revision hashes to the
@@ -226,7 +231,8 @@ from GitHub, not from the deployment's copy.
   (`fake-github.ts`, the Contents API and the dispatch endpoint). One dispatch after the approved
   item is written; none on hold, reject, edit, refusal or conflict; a failed wake-up named in the
   response with the item still queued; the retry by approving again; no GitHub call for a local
-  checkout.
+  checkout. An edit that races a publisher claim, or any commit that moves the branch after the
+  Queue checked it, writes nothing: the fake GitHub serves the Git Data API and fast-forwards only.
 - `site/src/lib/queue-dispatch.test.ts`: the request the wake-up sends, each GitHub answer, the
   skipped cases, and the workflow it starts. That test checks the workflow declares
   `validate_only` as a boolean input, checks out `github.ref` and keeps its concurrency group.
