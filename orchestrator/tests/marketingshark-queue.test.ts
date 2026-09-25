@@ -48,7 +48,7 @@ beforeAll(async () => {
   const result = await runBrandDay({
     config, brand, ledger: EMPTY_LEDGER, date: "2026-09-26", cycleId: "test-cycle", root, publicRoot: path.join(root, "public"), dry: true,
     call: async () => {
-      const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-09-26" });
+      const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-09-26", stateRoot: root });
       return { usd: 0, output: fixtureChumOutput({ brand, question: plan.question, ...fixtureHookLines(plan, brand) }) };
     }
   });

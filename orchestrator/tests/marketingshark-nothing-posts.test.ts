@@ -25,7 +25,7 @@ async function draftedPackage(): Promise<{ built: MarketingSharkPackage; root: s
   await runBrandDay({
     config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "c", root, publicRoot: path.join(root, "public"), dry: true,
     call: async () => {
-      const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
+      const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", stateRoot: root });
       return {
         usd: 0,
         output: fixtureChumOutput({

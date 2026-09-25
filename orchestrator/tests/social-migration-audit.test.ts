@@ -46,7 +46,7 @@ describe("Social Distribution compatibility migration audit", () => {
     await runBrandDay({
       config, brand, ledger: EMPTY_LEDGER, date: "2026-09-26", cycleId: "c", root: draftRoot, publicRoot: path.join(draftRoot, "public"), dry: true,
       call: async () => {
-        const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-09-26" });
+        const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-09-26", stateRoot: draftRoot });
         return { usd: 0, output: fixtureChumOutput({ brand, question: plan.question, ...fixtureHookLines(plan, brand) }) };
       }
     });
@@ -63,10 +63,13 @@ describe("Social Distribution compatibility migration audit", () => {
     ]);
     expect(after.counts).toEqual(before.counts);
     expect(after.legacyQueue.filter(({ sourceSchemaVersion }) => sourceSchemaVersion === 1)).toHaveLength(4);
-    expect(after.legacyQueue.filter(({ sourceSchemaVersion }) => sourceSchemaVersion === 2).map(({ id, sourceContentHash, resolvedContentHash, status }) => ({ id, sourceContentHash, resolvedContentHash, status })))
-      // In filename order, which is how the audit reads the directory.
-      .toEqual(drafts.map(({ item }) => ({ id: item.id, sourceContentHash: item.content.contentHash, resolvedContentHash: item.content.contentHash, status: "draft" }))
-        .sort((a, b) => a.id.localeCompare(b.id)));
+    // Whatever v2 items the committed queue already holds, plus these three, each read as itself.
+    const v2 = (audit: typeof after) => audit.legacyQueue.filter(({ sourceSchemaVersion }) => sourceSchemaVersion === 2)
+      .map(({ id, sourceContentHash, resolvedContentHash, status }) => ({ id, sourceContentHash, resolvedContentHash, status }));
+    expect(v2(after)).toHaveLength(v2(before).length + drafts.length);
+    expect(v2(after)).toEqual(expect.arrayContaining(
+      drafts.map(({ item }) => ({ id: item.id, sourceContentHash: item.content.contentHash, resolvedContentHash: item.content.contentHash, status: "draft" }))
+    ));
     expect(Object.values(after.invariants)).not.toContain(false);
     expect(after).toMatchObject({ authorityGranted: false, publishingAuthorized: false });
   });

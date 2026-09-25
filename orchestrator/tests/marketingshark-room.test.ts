@@ -175,7 +175,7 @@ describe("marketingShark room", () => {
     const result = await runBrandDay({
       config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "test-cycle", root, publicRoot: path.join(root, "public"), dry: true,
       call: async () => {
-        const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
+        const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", stateRoot: root });
         return {
           usd: 0,
           output: fixtureChumOutput({
@@ -261,7 +261,7 @@ describe("marketingShark room", () => {
     const result = await runBrandDay({
       config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "test-cycle", root, publicRoot: path.join(root, "public"), dry: true,
       call: async () => {
-        const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
+        const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", stateRoot: root });
         const output = fixtureChumOutput({
           brand, question: plan.question,
           ...fixtureHookLines(plan, brand)
@@ -325,7 +325,7 @@ describe("marketingShark room", () => {
       config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "test-cycle", root, publicRoot: path.join(root, "public"),
       configRoot: held, dry: true,
       call: async () => {
-        const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
+        const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", stateRoot: root });
         return { usd: 0, output: fixtureChumOutput({ brand, question: plan.question, ...fixtureHookLines(plan, brand) }) };
       }
     });
@@ -345,7 +345,7 @@ describe("marketingShark room", () => {
       config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "test-cycle", root, publicRoot: path.join(root, "public"), dry: true,
       call: async (packet, attempt) => {
         packets.push(packet);
-        const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
+        const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", stateRoot: root });
         const output = fixtureChumOutput({
           brand, question: plan.question,
           ...fixtureHookLines(plan, brand)
@@ -369,7 +369,7 @@ describe("marketingShark room", () => {
     const config = await loadMarketingSharkConfig();
     const brand = enabledBrands(config)[0]!;
     const call = async () => {
-      const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
+      const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", stateRoot: root });
       return {
         usd: 0,
         output: fixtureChumOutput({
@@ -399,8 +399,11 @@ describe("marketingShark room", () => {
     // verbatim is not the line the assignment licensed.
     const config = await loadMarketingSharkConfig();
     const brand = await devshark();
+    // A state root of its own: the committed hook channels move forward with every live room, and a
+    // plan dated in the past against them would read a post from its own future.
+    const root = await mkdtemp(path.join(tmpdir(), "ms-plan-"));
 
-    const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
+    const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", stateRoot: root });
     expect(plan.assignment.vertical).toBe("dev");
     expect(plan.assignment.channel).toBe("devshark-carousel");
 
