@@ -118,6 +118,23 @@ the graphic. Approving a post publishes it without another manual step.
 - The direct LinkedIn adapter is documented in `docs/SOCIAL-PROVIDERS.md` as the later path and not
   built.
 
+## What #573 builds
+
+- `/admin/queue`, the Queue workspace, behind one server-only read boundary
+  (`site/src/lib/admin-queue.ts`). It lists every queue item, v1 through the registry mapping and
+  v2 directly, grouped waiting, scheduled, sending, sent, failed and held, with unreadable and
+  dropped counts. No file name, credential reference, token or provider payload reaches the
+  browser. "Queue" is in the navigation with the waiting count as its badge, and the Overview
+  says how many posts wait there.
+- `POST /admin/api/queue/actions`: approve, edit, hold and reject, each bound to the content hash
+  the owner was shown, with 409 on a mismatch. Each action appends one `social-queue-event/1`
+  under `state/social/queue-events/` before it changes the item. An approval reruns the six
+  deterministic checks, records the owner as the evidence for brand, claims, quill, keeper and
+  policy, writes the event id as `approvalRef` and sets `queued`. An edit writes `<id>-r<n>` and
+  cancels the original, so an approved item never changes in place. Re-render waits for #575.
+- The approval stops at `queued`. Dispatching the publisher is #574, and every lock below still
+  decides whether anything sends.
+
 ## What stays held
 
 Building every step of the programme sends nothing. Until this record is countersigned, and
@@ -164,7 +181,7 @@ drafts in queue v1, which the publisher never considered.
 - [ ] B4: LinkedIn through Buffer (#571). The adapter is built and held; this ticks when the owner
   records the live test in `docs/SOCIAL-PROVIDERS.md`
 - [ ] B5: Threads images and Instagram JPEG carousels in the Direct Meta adapter (#572)
-- [ ] B6: the Queue workspace (#573)
+- [x] B6: the Queue workspace (#573)
 - [ ] B7: approval dispatches the publisher (#574)
 - [ ] B8: Design Lab editing and re-render for devShark packages (#575)
 - [ ] B9: more post kinds and the GoVIRAL packet edge (#576)
