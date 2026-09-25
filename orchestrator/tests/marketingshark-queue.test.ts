@@ -176,12 +176,12 @@ describe("marketingShark's queue drafts", () => {
     expect(threads.content.text).toBe(built.descriptions.threads.en);
     expect(new Set(items.map((item) => item.content.text)).size).toBe(3);
 
-    // Instagram takes JPEG only; LinkedIn takes the PNGs; Threads stays text until B5.
+    // Instagram takes JPEG only; LinkedIn and Threads take the reviewed PNGs (Threads since #572).
     const frames = built.render.frames.filter((frame) => frame.locale === "en");
     expect(instagram.content.assetPaths).toEqual(frames.map((frame) => frame.jpeg.path));
     expect(instagram.content.assetPaths.every((asset) => asset.endsWith(".jpg"))).toBe(true);
     expect(linkedin.content.assetPaths).toEqual(frames.map((frame) => frame.png.path));
-    expect(threads.content.assetPaths).toEqual([]);
+    expect(threads.content.assetPaths).toEqual(frames.map((frame) => frame.png.path));
     for (const item of items) {
       expect(item.content.altText).toBe(built.carousels.en.slides.map((slide) => slide.alt).join(" "));
       expect(item.content.factualClaimRefs).toEqual([`marketingshark:question:${built.question.id}`]);

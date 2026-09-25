@@ -34,10 +34,9 @@ const ThreadsSchema = openObject({
   /*
    * None, and that is the point.
    *
-   * The guarded Threads connector is text-only and `assertQueueItemPublishable` throws the whole
-   * publisher run out over a Threads item carrying an asset, so the composer forced
-   * `assetPaths: []` while still rendering, hashing, writing and committing a second full deck
-   * for the channel. A minimum of one frame here was the contract insisting on an artifact
+   * DNESKAi's Threads post is text and a link (the connector was text-only until #572), so the
+   * composer forced `assetPaths: []` while still rendering, hashing, writing and committing a
+   * second full deck for the channel. A minimum of one frame here was the contract insisting on an artifact
    * nothing could ever send. The Lab still renders a Threads cover on request for manual use;
    * the pack no longer pretends the channel takes one.
    */

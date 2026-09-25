@@ -108,10 +108,9 @@ function queueItem(input: {
     content: {
       text: input.channel === "instagram" ? localized.instagram.variants[variant] : localized.threads.variants[variant],
       altText: queueAltText(input.pack, input.locale, input.channel),
-      // Threads carries text and a link; the guarded connector is text-only and
-      // assertQueueItemPublishable rejects a Threads item with any asset, throwing the whole
-      // publisher run out rather than skipping the one item. Frames belong to the carousel,
-      // which is Instagram's.
+      // DNESKAi's Threads post is text and a link, and its frames belong to the carousel, which
+      // is Instagram's. The connector has taken Threads images since #572; DNESKAi renders no
+      // Threads deck to give it.
       //
       // An Instagram draft composed while no channel is enabled carries no image either: its
       // frames were rendered for the manifest and never written under `site/public/social`, so
@@ -283,12 +282,11 @@ export async function composeEditionSocialPack(input: {
     /*
      * Instagram only.
      *
-     * The Threads frames were rendered, hashed, written into `site/public/social` and then
-     * discarded: the queue item forces `assetPaths: []` because the guarded connector is
-     * text-only and `assertQueueItemPublishable` throws the whole publisher run out over a
-     * Threads item carrying an asset. So every edition rasterised a second full deck nothing
-     * could ever send, and committed it. Not rendering it is both cheaper and more honest about
-     * what the channel is; the Lab still renders a Threads cover on request for manual use.
+     * The Threads frames used to be rendered, hashed, written into `site/public/social` and then
+     * discarded: the queue item forces `assetPaths: []`, because DNESKAi's Threads post is text
+     * and a link (and, until #572, the connector was text-only). So every edition rasterised a
+     * second full deck nothing would send, and committed it. Not rendering it is cheaper and
+     * honest about what the channel carries; the Lab still renders a Threads cover on request.
      */
     for (const channel of ["instagram"] as const) {
       const format = "instagram-portrait" as const;

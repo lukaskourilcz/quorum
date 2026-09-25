@@ -235,9 +235,8 @@ describe("a Czech-only edition composes", () => {
 
 describe("every composed queue item survives the publisher's own gate", () => {
   it("does not attach carousel frames to a Threads item", async () => {
-    // assertQueueItemPublishable rejects a Threads item carrying any asset — the guarded
-    // connector is text-only — and it throws rather than skipping, so one bad item would take
-    // the whole publisher run down on the first send. Frames belong to the Instagram carousel.
+    // DNESKAi's Threads post is text and a link; its frames belong to the Instagram carousel. The
+    // connector takes Threads images since #572, but DNESKAi renders no Threads deck to attach.
     const root = await mkdtemp(path.join(os.tmpdir(), "boardless-social-pack-threads-"));
     roots.push(root);
     const result = await composeEditionSocialPack({

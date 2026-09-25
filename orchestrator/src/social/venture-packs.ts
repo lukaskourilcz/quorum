@@ -138,8 +138,8 @@ export async function composeMmaFilesSocialQueue(input: {
         channel,
         destination,
         text: caption[channel],
-        // Text-only on Threads: assertQueueItemPublishable rejects a Threads item carrying
-        // any asset and throws the whole publisher run out, not just the item.
+        // Text on Threads. The connector takes Threads images since #572, but this deck's hashes are
+        // recorded without paths, so the asset gate could never prove a Threads frame and would hold it.
         assetPaths: channel === "threads" ? [] : assetPaths,
         altText: `MMA Files ${variant} carousel: ${input.article.localizations[locale]!.title}`,
         evidenceRefs,
@@ -203,8 +203,8 @@ export async function composeTittyTuesdaysSocialQueue(input: {
         channel,
         destination: baseUrl,
         text: asset.captions[channel][variant],
-        // Text-only on Threads: assertQueueItemPublishable rejects a Threads item carrying
-        // any asset and throws the whole publisher run out, not just the item.
+        // Text on Threads. The connector takes Threads images since #572, but this deck's hashes are
+        // recorded without paths, so the asset gate could never prove a Threads frame and would hold it.
         assetPaths: channel === "threads" ? [] : assetPaths,
         altText: `Titty Tuesdays carousel: ${reference.content.strings["cover-title"] ?? reference.content.strings["poster-line"] ?? "campaign draft"}`,
         evidenceRefs: [input.plan.originMeetingRef],

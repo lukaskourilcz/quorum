@@ -80,21 +80,13 @@ function captionFor(built: MarketingSharkPackage, platform: MarketingSharkPlatfo
 /**
  * The frames a platform's item points at, from the package's own record of them.
  *
- * Instagram takes JPEG only, so it gets the JPEG copies. LinkedIn gets the PNGs. Threads gets none
- * yet: the guarded Direct Meta connector is text-only for Threads and `assertQueueItemPublishable`
- * refuses a Threads item that carries an image, which would stop the whole publisher run. B5
- * (quorum#572) attaches them once the adapter posts Threads images.
+ * Instagram takes JPEG only, so it gets the JPEG copies. LinkedIn and Threads get the PNGs the
+ * gates reviewed: Threads takes JPEG or PNG, and the Direct Meta adapter posts them as a Threads
+ * carousel since quorum#572.
  */
 function assetPathsFor(built: MarketingSharkPackage, platform: MarketingSharkPlatform): string[] {
   const english = built.render.frames.filter((frame) => frame.locale === "en").sort((a, b) => a.slide - b.slide);
-  switch (platform) {
-    case "instagram":
-      return english.map((frame) => frame.jpeg.path);
-    case "linkedin":
-      return english.map((frame) => frame.png.path);
-    case "threads":
-      return [];
-  }
+  return platform === "instagram" ? english.map((frame) => frame.jpeg.path) : english.map((frame) => frame.png.path);
 }
 
 /**
