@@ -249,8 +249,11 @@ describe("social and organization controls", () => {
  * `site/public/social/`, plus MMA SVG variants, while both channels had `enabledByHumanAt: null`
  * and no credentials -- inventory nothing could consume, deterministically re-buildable from the
  * packages committed beside it, and re-rendered on request by the admin decks tab anyway.
+ *
+ * Since quorum#563 this gates hosting the frames, not composing the pack: the captions and draft
+ * queue items are written for every edition, and only the PNGs wait for a channel.
  */
-describe("composing social inventory needs somewhere for it to go", () => {
+describe("hosting social frames needs somewhere for them to go", () => {
   it("is closed while no channel has been enabled by the owner", async () => {
     const channels = JSON.parse(
       await readFile(path.join(repoRoot, "config", "channels.json"), "utf8")

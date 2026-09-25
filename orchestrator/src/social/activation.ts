@@ -107,9 +107,9 @@ export async function socialContentGenerationEnabled(
  * the packages that are already committed, and re-rendered on request by the admin decks tab
  * anyway.
  *
- * This gates composition, not the queue: the queue plumbing, its idempotency and its INBOX items
- * are untouched, so switching a channel on is what starts composition again rather than a code
- * change.
+ * This gates hosting, not composition (quorum#563): the pack, its captions and its draft queue
+ * items are written for every edition, and only the PNG frames wait under `site/public/social/`
+ * for a channel. Switching a channel on is what starts writing them, rather than a code change.
  */
 export async function socialChannelsEnabled(configRoot: string): Promise<boolean> {
   const raw = await readFile(path.join(configRoot, "channels.json"), "utf8").catch(() => null);

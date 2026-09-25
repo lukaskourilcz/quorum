@@ -79,6 +79,7 @@ function queueItem(input: {
   destination: string;
   evidenceRefs: string[];
   now: Date;
+  framesHosted: boolean;
 }): QueueItem {
   const notBefore = input.now.toISOString();
   const notAfter = new Date(input.now.getTime() + 72 * 60 * 60 * 1_000).toISOString();
@@ -111,7 +112,13 @@ function queueItem(input: {
       // assertQueueItemPublishable rejects a Threads item with any asset, throwing the whole
       // publisher run out rather than skipping the one item. Frames belong to the carousel,
       // which is Instagram's.
-      assetPaths: input.channel === "threads" ? [] : platform.frames,
+      //
+      // An Instagram draft composed while no channel is enabled carries no image either: its
+      // frames were rendered for the manifest and never written under `site/public/social`, so
+      // there is nothing hosted to point at. `assertQueueItemPublishable` refuses an Instagram
+      // item without one, exactly as it refuses marketingShark's drafts, so this item can be
+      // reviewed and copied from the admin but never sent.
+      assetPaths: input.channel === "threads" || !input.framesHosted ? [] : platform.frames,
       factualClaimRefs: input.evidenceRefs,
       rendererVersion: COMPOSER_VERSION,
       contentHash: "0".repeat(64)
@@ -154,7 +161,18 @@ export async function composeEditionSocialPack(input: {
   repoRoot: string;
   stateRoot: string;
   now?: Date;
+  /**
+   * Whether the frames are written under `site/public/social` for a channel to fetch.
+   *
+   * Composition and hosting are separate questions (quorum#563). The pack, its captions and the
+   * draft queue items are cheap state and the admin reviews them by re-rendering from `visual`;
+   * the PNGs are 1.4-2.1 MB a day that only an enabled channel can use. So the frames are still
+   * rendered — the canvas check, the hashes and the manifest need them — but written only when a
+   * channel exists to consume them. Defaults to true, the behaviour before the split.
+   */
+  hostFrames?: boolean;
 }): Promise<SocialPackComposition | null> {
+  const hostFrames = input.hostFrames ?? true;
   const editionPackage = input.editionPackage;
   if (editionPackage.status !== "edition") return null;
   if (input.meeting.kind !== "cu-edition" || input.meeting.date !== input.editionPackage.date) {
@@ -289,7 +307,7 @@ export async function composeEditionSocialPack(input: {
         if (validation.width !== expected.width || validation.height !== expected.height) {
           throw new Error(`Social frame ${publicPath} has the wrong canvas`);
         }
-        await atomicWriteBuffer(input.repoRoot, `${relativeDirectory}/${locale}/${channel}/${name}`, slide.png);
+        if (hostFrames) await atomicWriteBuffer(input.repoRoot, `${relativeDirectory}/${locale}/${channel}/${name}`, slide.png);
         framePaths[locale][channel].push(publicPath);
         frameHashes[publicPath] = slide.pngHash;
         const slots = Object.values(reference.content.strings);
@@ -309,7 +327,7 @@ export async function composeEditionSocialPack(input: {
   if (quoteValidation.width !== 1080 || quoteValidation.height !== 1350) {
     throw new Error("Social quote card must be 1080x1350");
   }
-  await atomicWriteBuffer(input.repoRoot, `${relativeDirectory}/quote.png`, quoteBytes);
+  if (hostFrames) await atomicWriteBuffer(input.repoRoot, `${relativeDirectory}/quote.png`, quoteBytes);
   frameHashes[quotePath] = quote!.pngHash;
   altTexts[quotePath] = `Quote from ${bestTurn.agent} in the edition room: ${bestTurn.text}`.slice(0, 300);
 
@@ -384,7 +402,7 @@ export async function composeEditionSocialPack(input: {
     return (["instagram", "threads"] as const).map((channel) => ({
       locale,
       channel,
-      item: queueItem({ pack, locale, channel, destination, evidenceRefs, now })
+      item: queueItem({ pack, locale, channel, destination, evidenceRefs, now, framesHosted: hostFrames })
     }));
   });
   const csVisual = visualRefs.cs ?? visualRefs.en!;
@@ -437,7 +455,9 @@ export async function composeEditionSocialPack(input: {
       inputsHash: inputHash,
       frameHashes,
       formats: ["instagram-portrait", "threads"],
-      format: "png"
+      format: "png",
+      // False when the frames were rendered for their hashes and never written to disk.
+      hosted: hostFrames
     }),
     ...queued.map(({ locale, channel, item }) =>
       atomicWriteJson(input.stateRoot, `social/queue/${input.editionPackage.date}-${locale}-${channel}.json`, item))
@@ -451,8 +471,12 @@ export async function composeEditionSocialPack(input: {
       deckReceipt,
       hookChannelsPath,
       ...queued.map(({ locale, channel }) => `social/queue/${input.editionPackage.date}-${locale}-${channel}.json`),
-      ...Object.values(framePaths).flatMap((channels) => Object.values(channels).flat()).map((frame) => path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", frame.slice(1)))),
-      path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", quotePath.slice(1)))
+      ...(hostFrames
+        ? [
+            ...Object.values(framePaths).flatMap((channels) => Object.values(channels).flat()).map((frame) => path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", frame.slice(1)))),
+            path.relative(input.stateRoot, path.join(input.repoRoot, "site", "public", quotePath.slice(1)))
+          ]
+        : [])
     ]
   };
 }
