@@ -1,5 +1,5 @@
 import { factSheetFor, type Brand } from "./config.js";
-import { LIMITS, violationReport, type GateViolation } from "./gates.js";
+import { violationReport, type GateViolation } from "./gates.js";
 import { POST_KIND_ROLES, WRITER_FIELDS, writerRoles, type CopyField, type PostDeckKind } from "./kinds.js";
 import { captionLimitLines, productFacts, trendSection } from "./packet.js";
 import type { PostDayPlan } from "./post-plan.js";
@@ -90,8 +90,8 @@ export function buildPostPacket(input: {
     if (!slide) return [];
     const owned = (WRITER_FIELDS[plan.kind] as Partial<Record<string, readonly CopyField[]>>)[role] ?? [];
     const parts = [
-      owned.includes("headline") ? null : `headline "${slide.headline}"`,
-      owned.includes("body") || !slide.body ? null : `body "${slide.body.replace(/\n/gu, " / ")}"`
+      owned.includes("headline") ? null : `headline ${JSON.stringify(slide.headline)}`,
+      owned.includes("body") || !slide.body ? null : `body ${JSON.stringify(slide.body.replace(/\n/gu, " / "))}`
     ].filter(Boolean);
     return parts.length > 0 ? [`- slide ${index + 1} (${role}): ${parts.join(", ")}`] : [];
   });
@@ -116,8 +116,7 @@ export function buildPostPacket(input: {
     + `- no number anywhere in the post that the facts above do not contain\n`
     + (plan.kind === "challenge-teaser" ? `- no code on any slide or caption: no backticks, braces, arrows, declarations or method calls, and a call only as the prompt writes it\n` : "")
     + (plan.kind === "this-week" ? `- never the words trending, viral or engagement\n` : "")
-    + `- headlines ≤ ${LIMITS.headlineChars} characters, bodies ≤ ${LIMITS.bodyChars}\n`
-    + captionLimitLines(),
+    + captionLimitLines().trimEnd(),
     `## Return exactly this JSON and nothing else\n${postOutputShape(plan.kind)}`
   ];
   if (input.violations?.length) {
