@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { Channel } from "./channel-registry.js";
+import type { VerifiedSocialAsset } from "./media/assets.js";
 import type { PublishAdapter } from "./publish.js";
 import type { ResolvedPublisherTarget } from "./publisher-targets.js";
 import { assertQueueItemPublishable, type RuntimeQueueItem } from "./queue.js";
@@ -80,6 +81,22 @@ async function postForm(
   return parsed.data.id;
 }
 
+/**
+ * The URLs Meta is told to fetch, one per frame, in the item's order.
+ *
+ * Only a URL `verifySocialAssets` proved in this run qualifies: the commit-pinned jsDelivr URL, or
+ * the site URL when `SOCIAL_ASSET_BASE=site`. The adapter used to build `PUBLIC_SITE_URL` plus the
+ * path itself, which pointed Meta at a site nobody had deployed. A frame without a proof stops the
+ * send before any request is made.
+ */
+function verifiedImageUrls(assetPaths: readonly string[], assets: readonly VerifiedSocialAsset[] | undefined): string[] {
+  return assetPaths.map((assetPath) => {
+    const verified = assets?.find((candidate) => candidate.path === assetPath);
+    if (!verified) throw new Error("Every Instagram frame needs a URL verified before the send");
+    return verified.url;
+  });
+}
+
 export function createMetaPublishAdapter(
   environment: NodeJS.ProcessEnv,
   fetchImpl: FetchLike = fetch
@@ -90,7 +107,8 @@ export function createMetaPublishAdapter(
       channel: Channel,
       item: RuntimeQueueItem,
       idempotencyKey: string,
-      target?: ResolvedPublisherTarget
+      target?: ResolvedPublisherTarget,
+      assets?: readonly VerifiedSocialAsset[]
     ): Promise<{ remoteId: string }> {
       assertQueueItemPublishable(item);
       const content = item.content!;
@@ -131,18 +149,14 @@ export function createMetaPublishAdapter(
       }
 
       if (channel.connector === "meta_instagram" && channel.id === "instagram") {
-        if (content.assetPaths.length < 1 || content.assetPaths.some((asset) => !/\.(?:jpe?g|png|webp)$/iu.test(asset))) {
+        if (content.assetPaths.length < 1 || content.assetPaths.some((asset) => !/\.(?:jpe?g|png)$/iu.test(asset))) {
           throw new Error("The verified Instagram transport requires one to ten image assets");
         }
         const userId = credentials.userId;
         const base = new URL(
           `https://graph.facebook.com/${version}/${encodeURIComponent(userId)}/`
         );
-        const publicSiteUrl = requiredEnvironment(environment, "PUBLIC_SITE_URL");
-        if (!publicSiteUrl.startsWith("https://")) {
-          throw new Error("PUBLIC_SITE_URL must use HTTPS for Instagram media");
-        }
-        const imageUrls = content.assetPaths.map((asset) => new URL(asset, publicSiteUrl).toString());
+        const imageUrls = verifiedImageUrls(content.assetPaths, assets);
         const creationId = imageUrls.length === 1
           ? await postForm(fetchImpl, new URL("media", base), {
               image_url: imageUrls[0]!,

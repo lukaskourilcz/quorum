@@ -1,0 +1,32 @@
+{
+  "note": "HEAD answers recorded from cdn.jsdelivr.net on 2026-09-25 for quorum#570. 'committed' is a PNG committed on main (media/preview-poster.png at 81dced6d); 'missing-path' is a frame path that commit does not carry; 'unpushed-commit' is a commit that exists only in a local checkout. Headers are trimmed to the ones a check reads plus jsDelivr's version pin.",
+  "recordedAt": "2026-09-25T15:51:30.000Z",
+  "answers": {
+    "committed": {
+      "url": "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@81dced6d1d06ab4c82b4b87f5ee66867cc52215a/media/preview-poster.png",
+      "status": 200,
+      "headers": {
+        "content-type": "image/png",
+        "content-length": "234216",
+        "cache-control": "public, max-age=31536000, s-maxage=31536000, immutable",
+        "x-jsd-version": "81dced6d1d06ab4c82b4b87f5ee66867cc52215a",
+        "x-jsd-version-type": "commit"
+      }
+    },
+    "missing-path": {
+      "url": "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@81dced6d1d06ab4c82b4b87f5ee66867cc52215a/site/public/social/devshark/2026-09-26/en/slide-01.jpg",
+      "status": 404,
+      "headers": {
+        "content-type": "text/plain; charset=utf-8",
+        "content-length": "113"
+      }
+    },
+    "unpushed-commit": {
+      "url": "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@bd5e0680411bb59088a6f9cf3b1a35eb0ba02c7d/media/preview-poster.png",
+      "status": 404,
+      "headers": {
+        "content-type": "text/plain; charset=utf-8"
+      }
+    }
+  }
+}

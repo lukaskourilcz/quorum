@@ -43,6 +43,9 @@ jobs:
       # MMA Files and Titty Tuesdays are paused (operations-2026-09b), so their Threads and
       # Instagram credentials no longer reach this job. Resuming either restores its four lines.
       PUBLIC_SITE_URL: ${{ secrets.PUBLIC_SITE_URL }}
+      # Where Instagram and Threads fetch frames from (quorum#570). Unset means jsdelivr: the URL is
+      # pinned to the commit that carries the frame, which this job's full-history checkout names.
+      SOCIAL_ASSET_BASE: ${{ vars.SOCIAL_ASSET_BASE }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

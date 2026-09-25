@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import type { Channel } from "./channel-registry.js";
 import { assertLiveChannel } from "./channel-registry.js";
+import type { VerifiedSocialAsset } from "./media/assets.js";
 import type { ResolvedPublisherTarget } from "./publisher-targets.js";
 import type { RuntimeQueueItem } from "./queue.js";
 import {
@@ -14,7 +15,12 @@ export interface PublishAdapter {
     channel: Channel,
     item: RuntimeQueueItem,
     idempotencyKey: string,
-    target?: ResolvedPublisherTarget
+    target?: ResolvedPublisherTarget,
+    /**
+     * The item's frames, each proved by `verifySocialAssets` for this run: the exact URL that
+     * answered and the bytes it was shown to serve. An adapter uses these URLs and never builds one.
+     */
+    assets?: readonly VerifiedSocialAsset[]
   ): Promise<{ remoteId: string }>;
   verify(
     channel: Channel,

@@ -8,6 +8,8 @@ import { pragueClockParts } from "../meetings/clock.js";
 import { refreshSocialActivation, pauseVentureSocial, isPublishingVenture, type SocialVenture } from "./activation.js";
 import { ChannelRegistrySchema, assertLiveChannel } from "./channel-registry.js";
 import { createMetaPublishAdapter } from "./meta.js";
+import type { SocialAssetCommits } from "./media/assets.js";
+import { gateSocialAssets } from "./media/gate.js";
 import type { PublishAdapter } from "./publish.js";
 import { loadVentureCapabilityMap } from "../ventures/capabilities.js";
 import {
@@ -38,6 +40,10 @@ export interface SocialPublisherOptions {
   environment?: NodeJS.ProcessEnv;
   fetchImpl?: typeof fetch;
   adapter?: PublishAdapter;
+  /** The git reader for committed frames; the runner's own checkout when omitted. */
+  assetCommits?: SocialAssetCommits;
+  /** DNS for the frame check, so a test can answer without the network. */
+  resolveImpl?: (hostname: string) => Promise<string[]>;
   repoRoot?: string;
   stateRoot?: string;
   configRoot?: string;
@@ -50,6 +56,8 @@ export interface SocialPublisherReport {
   published: number;
   ambiguous: number;
   skipped: number;
+  /** Items whose frames could not be proved this run; each has a `social-asset-hold/1` record. */
+  assetHeld: number;
 }
 
 async function exists(filePath: string): Promise<boolean> {
@@ -100,7 +108,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
   const stateRoot = options.stateRoot ?? defaultStateRoot;
   const configRoot = options.configRoot ?? defaultConfigRoot;
   if (await exists(path.join(stateRoot, "PAUSED"))) {
-    return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0 };
+    return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0, assetHeld: 0 };
   }
 
   return withFileLock(stateRoot, ".social-lock", async () => {
@@ -115,7 +123,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       safetyCheckerReady: TT_SAFETY_CHECKER_VERSION === "keeper-tt-1"
     });
     if (environment.SOCIAL_KILL_SWITCH !== "false" || await exists(path.join(stateRoot, "SOCIAL_PAUSED"))) {
-      return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0 };
+      return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0, assetHeld: 0 };
     }
     const channelRegistry = ChannelRegistrySchema.parse(JSON.parse(await readFile(path.join(configRoot, "channels.json"), "utf8")) as unknown);
     const queueDirectory = path.join(stateRoot, "social", "queue");
@@ -218,11 +226,26 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       if (!channel) throw new Error(`No global connector capability exists for ${item.channel}`);
       assertLiveChannel(channel, environment);
     }
+    // Last gate before any provider: every frame must be committed, hash to its record and answer
+    // 200 at the exact URL the platform will fetch. A miss holds the one item and writes why.
+    const assetGate = await gateSocialAssets({
+      entries: eligibleDue,
+      environment,
+      repoRoot,
+      stateRoot,
+      configRoot,
+      now,
+      ...(options.assetCommits ? { commits: options.assetCommits } : {}),
+      ...(options.fetchImpl ? { fetchImpl: options.fetchImpl } : {}),
+      ...(options.resolveImpl ? { resolveImpl: options.resolveImpl } : {})
+    });
+    eligibleDue.splice(0, eligibleDue.length, ...assetGate.ready);
+    const assetHeld = assetGate.held;
     if (eligibleDue.length === 0) {
-      return { status: "draft_only", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, skipped: due.length + malformed };
+      return { status: "draft_only", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, skipped: due.length + malformed, assetHeld };
     }
     if (options.validateOnly) {
-      return { status: "validated", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, skipped: due.length - eligibleDue.length + malformed };
+      return { status: "validated", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, skipped: due.length - eligibleDue.length + malformed, assetHeld };
     }
 
     const adapter = options.adapter ?? createMetaPublishAdapter(environment, options.fetchImpl);
@@ -258,7 +281,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       let verificationAttempts = 0;
       try {
         const existing = await adapter.findByIdempotencyKey?.(channel, key, target);
-        remoteId = existing?.remoteId ?? (await adapter.publish(channel, queued, key, target)).remoteId;
+        remoteId = existing?.remoteId ?? (await adapter.publish(channel, queued, key, target, assetGate.verified.get(name) ?? [])).remoteId;
         for (let attempt = 1; attempt <= 2; attempt += 1) {
           verificationAttempts = attempt;
           try {
@@ -351,6 +374,6 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
         ]);
       }
     }
-    return { status: "complete", queueItems: queueFiles.length, due: due.length, published, ambiguous: failed, skipped: due.length - eligibleDue.length + safetyKilled + malformed };
+    return { status: "complete", queueItems: queueFiles.length, due: due.length, published, ambiguous: failed, skipped: due.length - eligibleDue.length + safetyKilled + malformed, assetHeld };
   });
 }
