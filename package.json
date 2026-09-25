@@ -29,6 +29,7 @@
     "docs:refresh": "pnpm --filter @boardlessai/orchestrator docs:refresh",
     "dev": "pnpm --filter @boardlessai/carousel-studio build && pnpm --filter @boardlessai/site dev",
     "edition:dry": "pnpm --filter @boardlessai/orchestrator edition:dry",
+    "edition:yield": "pnpm --filter @boardlessai/orchestrator edition:yield",
     "fightaiq:backfill": "pnpm --filter @boardlessai/orchestrator fightaiq:backfill",
     "fightaiq:roster-sync": "pnpm --filter @boardlessai/orchestrator fightaiq:roster-sync",
     "ideas:migrate": "pnpm --filter @boardlessai/orchestrator ideas:migrate",

@@ -3,16 +3,22 @@ import { z } from "zod";
 /**
  * The surfaces that own a hook library.
  *
- * A surface is not a brand. devShark and geoShark are two verticals of one surface, because they
- * ask the same shape of question and their hooks are gated on the same facts; DNESKAi and MMA Files
- * are separate surfaces because a briefing item and a magazine article carry different metadata and
- * a quiz gate cannot evaluate against either. See `docs/hooks/05-surfaces.md`.
+ * A surface is not a brand. The quiz surface is defined by the shape of question it gates on, not
+ * by devShark; DNESKAi and MMA Files are separate surfaces because a briefing item and a magazine
+ * article carry different metadata and a quiz gate cannot evaluate against either. See
+ * `docs/hooks/05-surfaces.md`.
  */
 export const SURFACES = ["quiz", "news", "mma"] as const;
 export type Surface = (typeof SURFACES)[number];
 
-/** The two verticals of the quiz surface. Other surfaces have exactly one, named `dev` by default. */
-export const VERTICALS = ["dev", "geo"] as const;
+/**
+ * The verticals a hook carries a line for. Every surface has exactly one, named `dev`.
+ *
+ * The quiz surface had a second, `geo`, for StudyShark's geography brand. It left with StudyShark,
+ * and a vertical that no brand serves is copy nobody reads, so the enum names only what a brand can
+ * still ask for.
+ */
+export const VERTICALS = ["dev"] as const;
 export type Vertical = (typeof VERTICALS)[number];
 
 export const LANGUAGES = ["en", "cs"] as const;
@@ -150,14 +156,12 @@ export const RawHookSchema = z.object({
   cooldownDays: z.number().int().min(1).max(30),
   truthRequires: z.array(z.string().min(1)).min(1),
   /**
-   * Partial, with a floor of one.
+   * One line per vertical, exhaustively, and nothing else.
    *
-   * The quiz surface has two verticals and every quiz hook carries both. News and MMA have one
-   * each, so an exhaustive record would demand a `geo` line for a magazine that has no geo
-   * vertical — and inventing one to satisfy a schema is how dead copy gets written.
+   * A key outside `VERTICALS` fails the load rather than riding along unread, so a `geo` line
+   * copied back from an old library is an error, not dead copy that looks shipped.
    */
-  variants: z.partialRecord(z.enum(VERTICALS), VariantTextSchema)
-    .refine((variants) => Object.keys(variants).length > 0, "A hook needs at least one vertical variant")
+  variants: z.record(z.enum(VERTICALS), VariantTextSchema)
 });
 export type RawHook = z.infer<typeof RawHookSchema>;
 
@@ -197,7 +201,7 @@ export interface Hook {
   readonly truthRequires: readonly Predicate[];
   /** The strings exactly as written in the library, for hashing and the lint's character budget. */
   readonly rawRequires: readonly string[];
-  readonly variants: Partial<Record<Vertical, { readonly en: string; readonly cs: string }>>;
+  readonly variants: Readonly<Record<Vertical, { readonly en: string; readonly cs: string }>>;
   readonly research: HookResearch;
 }
 

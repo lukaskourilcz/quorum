@@ -1,5 +1,6 @@
 import { stateRoot } from "../paths.js";
 import { articleQueue } from "../mma-files/publish.js";
+import { loadVentureRegistry, pausedVentureIds } from "../ventures/registry.js";
 import { surveyRetirableArticles } from "../mma-files/retire.js";
 import { atomicWriteJson, atomicWriteText, readText } from "../state.js";
 import { deployIsBehind, readDeployFreshness, type DeployFreshness, type DeployProbe } from "./deploy-freshness.js";
@@ -57,6 +58,12 @@ export interface VentureQueueHealth {
   stalled: boolean;
   /** Parked packages that no run will ever clear. These, and only these, are the owner's. */
   neverDrains: QueueHealthEntry[];
+  /**
+   * The owner paused this venture (`operations-2026-09b`). Its queue is still listed so nothing
+   * held is forgotten, but a paused magazine's queue is meant to stand still: it raises no owner
+   * item and does not count towards `needsOwner`.
+   */
+  paused?: true;
 }
 
 export interface QueueHealthReport {
@@ -172,11 +179,16 @@ export async function buildQueueHealthReport(input: {
   today: string;
   now?: Date;
   probe?: DeployProbe;
+  /** Ventures the registry marks paused; defaults to reading `config/ventures.json`. */
+  pausedVentures?: ReadonlySet<string>;
 }): Promise<QueueHealthReport> {
   const root = input.root ?? stateRoot;
+  const paused = input.pausedVentures ?? await registryPausedVentures();
+  const mark = (venture: VentureQueueHealth): VentureQueueHealth =>
+    paused.has(venture.venture) ? { ...venture, paused: true } : venture;
   const ventures = [
-    await mmaFilesHealth(root, input.today),
-    await caughtUpHealth(root, input.today)
+    mark(await mmaFilesHealth(root, input.today)),
+    mark(await caughtUpHealth(root, input.today))
   ];
   const deploys = await readDeployFreshness({ root, ...(input.probe ? { probe: input.probe } : {}) });
   return {
@@ -185,8 +197,13 @@ export async function buildQueueHealthReport(input: {
     date: input.today,
     ventures,
     deploys,
-    needsOwner: ventures.some((venture) => venture.stalled) || deploys.some(deployIsBehind)
+    needsOwner: ventures.some((venture) => venture.stalled && !venture.paused)
+      || deploys.some((entry) => deployIsBehind(entry) && !paused.has(entry.venture))
   };
+}
+
+async function registryPausedVentures(): Promise<ReadonlySet<string>> {
+  return pausedVentureIds(await loadVentureRegistry());
 }
 
 /**
@@ -226,10 +243,11 @@ function deployInboxItem(entry: DeployFreshness): string {
   ].join("\n");
 }
 
-async function reconcileDeployInbox(root: string, entry: DeployFreshness, today: string): Promise<boolean> {
+async function reconcileDeployInbox(root: string, entry: DeployFreshness, today: string, paused: boolean): Promise<boolean> {
   const existing = await readText(root, "INBOX.md", "# INBOX\n");
   const open = `- [ ] **DELIVERY-NOT-BUILT-${entry.venture.toUpperCase()}**`;
   if (deployIsBehind(entry)) {
+    if (paused) return false;
     if (existing.includes(open)) return false;
     await atomicWriteText(root, "INBOX.md", `${existing.trimEnd()}\n\n${deployInboxItem(entry)}\n`);
     return true;
@@ -253,6 +271,8 @@ async function reconcileDeployInbox(root: string, entry: DeployFreshness, today:
 async function reconcileInbox(root: string, venture: VentureQueueHealth, today: string): Promise<boolean> {
   const existing = await readText(root, "INBOX.md", "# INBOX\n");
   const open = `- [ ] **DELIVERY-QUEUE-${venture.venture.toUpperCase()}**`;
+  // A paused venture's queue is meant to stand still; an item already open stays for the owner.
+  if (venture.paused) return false;
   if (venture.stalled) {
     if (existing.includes(open)) return false;
     await atomicWriteText(root, "INBOX.md", `${existing.trimEnd()}\n\n${inboxItem(venture)}\n`);
@@ -275,6 +295,7 @@ export async function runQueueHealthCheck(input: {
   today: string;
   now?: Date;
   probe?: DeployProbe;
+  pausedVentures?: ReadonlySet<string>;
 }): Promise<{ report: QueueHealthReport; artifacts: string[] }> {
   const root = input.root ?? stateRoot;
   const report = await buildQueueHealthReport(input);
@@ -284,8 +305,9 @@ export async function runQueueHealthCheck(input: {
   for (const venture of report.ventures) {
     if (await reconcileInbox(root, venture, input.today)) artifacts.push("INBOX.md");
   }
+  const pausedIds = new Set(report.ventures.filter((venture) => venture.paused).map((venture) => venture.venture));
   for (const entry of report.deploys) {
-    if (await reconcileDeployInbox(root, entry, input.today)) artifacts.push("INBOX.md");
+    if (await reconcileDeployInbox(root, entry, input.today, pausedIds.has(entry.venture as QueueVenture))) artifacts.push("INBOX.md");
   }
   return { report, artifacts: [...new Set(artifacts)] };
 }

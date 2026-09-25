@@ -77,8 +77,15 @@ describe("GoVIRAL's magazine intelligence edges", () => {
     // Door Money's edge is `held`, not `allowed`, and a held edge is not a grant.
     await expect(newestTrendSnapshot(root, "2026-08-29", { venture: "door-money", capabilityMap }))
       .resolves.toBeNull();
-    await expect(newestTrendSnapshot(root, "2026-08-29", { venture: "marketingshark", capabilityMap }))
+    // Titty Tuesdays has no GoVIRAL edge at all.
+    await expect(newestTrendSnapshot(root, "2026-08-29", { venture: "titty-tuesdays", capabilityMap }))
       .resolves.toBeNull();
+  });
+
+  it("gives marketingShark the snapshot through its own edge (operations-2026-09b)", async () => {
+    const root = await rootWithSnapshot();
+    await expect(newestTrendSnapshot(root, "2026-08-29", { venture: "marketingshark", capabilityMap: await realMap() }))
+      .resolves.toMatchObject({ date: "2026-08-24" });
   });
 
   it("still reads unrouted for GoVIRAL's own tooling, which is not a cross-venture read", async () => {

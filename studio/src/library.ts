@@ -611,10 +611,10 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
     },
     fonts: { headline: "Petrona", body: "Karla", mono: "IBM Plex Mono" }
   }),
-  // The two shark brands take their palettes from the product's own Deep End ocean-ink tokens
-  // (client/src/styles/astryx-theme.css) and their accents from its subject registry: webdev's
-  // ocean blue and geography's orange, at the bright variants those files pair with a dark surface.
-  // Every token combination the templates use clears 4.5:1, which the studio checks anyway.
+  // devShark takes its palette from the product's own Deep End ocean-ink tokens
+  // (client/src/styles/astryx-theme.css) and its accent from its subject registry: webdev's ocean
+  // blue, at the bright variant those files pair with a dark surface. Every token combination the
+  // templates use clears 4.5:1, which the studio checks anyway.
   devshark: BrandTokensSchema.parse({
     schemaVersion: "carousel-brand/1",
     id: "devshark",
@@ -630,22 +630,6 @@ export const CAROUSEL_BRANDS: Readonly<Record<BrandTokens["id"], BrandTokens>> =
       secondary: "#67e8f9"
     },
     fonts: { headline: "Figtree", body: "Public Sans", mono: "IBM Plex Mono" }
-  }),
-  geoshark: BrandTokensSchema.parse({
-    schemaVersion: "carousel-brand/1",
-    id: "geoshark",
-    name: "geoShark",
-    logoText: "GEOSHARK",
-    colors: {
-      background: "#0b141b",
-      surface: "#101c24",
-      "surface-strong": "#16242d",
-      foreground: "#e8eef0",
-      muted: "#9db3bc",
-      accent: "#fb923c",
-      secondary: "#67e8f9"
-    },
-    fonts: { headline: "Outfit", body: "Public Sans", mono: "IBM Plex Mono" }
   }),
   // Both colour tokens stay on one highlighter-yellow axis: `secondary` is the paler
   // alternate required by existing A/B recipes, not a second political-brand hue.

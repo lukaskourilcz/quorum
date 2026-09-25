@@ -19,10 +19,23 @@ async function registry(): Promise<unknown> {
 describe("the slot table the cron route dispatches from", () => {
   it("reads every scheduled slot out of the venture registry", async () => {
     const slots = await resolveCronSlots(await registry());
-    // One slot per venture and one company meeting, per `operations-2026-08c`. The hours the
-    // consolidation vacated are simply empty; the rooms that lost them still exist and are still
-    // dispatchable by name.
+    // One slot per running venture and one company meeting, per `operations-2026-08c`. A paused
+    // venture holds no slot (`operations-2026-09b`); its rooms stay dispatchable by name.
     expect(slots.map((slot) => `${slot.hour}:${slot.phase}`)).toEqual([
+      "5:cu-day",
+      "6:morning",
+      "7:ms-daily",
+      "13:gv-brief"
+    ]);
+  });
+
+  it("gives a paused venture its slots back the moment it runs again", async () => {
+    const live = (await registry()) as { schemaVersion: string; ventures: Array<Record<string, unknown>> };
+    const everyVentureRunning = {
+      ...live,
+      ventures: live.ventures.map((venture) => venture.status === "paused" ? { ...venture, status: "operating" } : venture)
+    };
+    expect(resolveCronSlots(everyVentureRunning).map((slot) => `${slot.hour}:${slot.phase}`)).toEqual([
       "5:cu-day",
       "6:morning",
       "7:ms-daily",

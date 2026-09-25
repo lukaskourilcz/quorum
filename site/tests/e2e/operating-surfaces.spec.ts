@@ -405,13 +405,12 @@ test("the launch board opens the admin with one row per launching venture", asyn
   await expect(board).toBeVisible();
   await expect(page.locator("[data-adm-launch-verdict]")).toBeVisible();
 
-  // The seven the owner is launching, and no row for the ones deliberately held.
-  for (const ventureId of [
-    "caught-up", "mma-files", "marketingshark", "booksofhistory", "tehdejsi-svet", "kvorum", "personal-growth"
-  ]) {
+  // The two the owner is launching (operations-2026-09b), and no row for shared machinery or for
+  // a paused venture.
+  for (const ventureId of ["caught-up", "marketingshark"]) {
     await expect(board.locator(`[data-adm-launch-row="${ventureId}"]`)).toBeVisible();
   }
-  for (const heldId of ["titty-tuesdays", "door-money", "goviral", "webdev-signal"]) {
+  for (const heldId of ["goviral", "webdev-signal", "mma-files", "booksofhistory", "tehdejsi-svet", "kvorum", "personal-growth"]) {
     await expect(board.locator(`[data-adm-launch-row="${heldId}"]`)).toHaveCount(0);
   }
 
@@ -421,11 +420,21 @@ test("the launch board opens the admin with one row per launching venture", asyn
   await expect(magazine).toContainText(/entity-linked|curated|search|illustration|plate/u);
 });
 
-test("the admin home answers what happened since yesterday for every new venture", async ({ page }) => {
+test("the admin home answers what happened since yesterday for every running new venture", async ({ page }) => {
+  // Read from the registry: a paused venture has no card, and the panel is gone when none runs.
+  const registry = JSON.parse(await readFile(path.join(repositoryRoot, "config/ventures.json"), "utf8")) as {
+    ventures: Array<{ id: string; status: string }>;
+  };
+  const running = ["booksofhistory", "door-money", "tehdejsi-svet", "kvorum"]
+    .filter((id) => registry.ventures.find((venture) => venture.id === id)?.status !== "paused");
   await page.goto("/admin?venture=global", { waitUntil: "networkidle" });
   const panel = page.locator("[data-admin-recent-activity]");
+  if (running.length === 0) {
+    await expect(panel).toHaveCount(0);
+    return;
+  }
   await expect(panel).toBeVisible();
-  for (const ventureId of ["booksofhistory", "door-money", "tehdejsi-svet", "kvorum"]) {
+  for (const ventureId of running) {
     const card = panel.locator(`[data-recent-venture="${ventureId}"]`);
     await expect(card).toBeVisible();
     await expect(card).toContainText("since yesterday");

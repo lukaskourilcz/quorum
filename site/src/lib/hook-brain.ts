@@ -126,7 +126,7 @@ export async function readHookBrain(
     return {
       channel,
       cooling,
-      // The library that could serve this channel: quiz for the shark brands, and the surface's
+      // The library that could serve this channel: quiz for devShark, and the surface's
       // own for anything else. Shown beside the cooling count so occupancy reads as a fraction.
       librarySize: (libraries.find(([surface]) => channel.startsWith(surface) || surface === "quiz")?.[1].hooks.length) ?? 0,
       posts: posts.length,

@@ -282,12 +282,14 @@ export async function runCaughtUpLiveEditionCycle(
     disabledParticipants: [...disabledAgentsForVenture(agentControls, definition.ventureId)],
     now
   });
+  // Composition follows the venture's own switches; hosting follows the channels (quorum#563).
+  // The pack and its draft queue items are written for every edition, so the owner has the day's
+  // captions to review and copy. The PNG frames go under site/public/social/ only when a channel
+  // exists to consume them: composing frames nothing could send filled that directory with
+  // megabytes of committed inventory the admin re-renders from the pack on request anyway.
   const socialContentEnabled = caughtUpSocialProductionEnabled(agentControls) &&
-    await socialContentGenerationEnabled(stateRoot, "caught-up") &&
-    // And somewhere for it to go. Composing frames no channel can consume filled
-    // site/public/social/ with megabytes of committed inventory that the admin decks tab
-    // re-renders on request anyway.
-    await socialChannelsEnabled(configRoot);
+    await socialContentGenerationEnabled(stateRoot, "caught-up");
+  const socialFramesHosted = await socialChannelsEnabled(configRoot);
   const produced = await runLiveEdition({
     cycleId,
     date,
@@ -377,7 +379,8 @@ export async function runCaughtUpLiveEditionCycle(
           destinations,
           repoRoot,
           stateRoot,
-          now
+          now,
+          hostFrames: socialFramesHosted
         });
         if (social) socialArtifacts.push(...social.artifactPaths);
       } catch (error) {

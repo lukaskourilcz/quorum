@@ -85,7 +85,9 @@ describe("how the sync steps are gated", () => {
   });
 
   it("pushes with the same refetch-and-retry pattern as the edition delivery", () => {
+    // The edition delivery, the stream sync and the event sync. The MMA Files delivery that used to
+    // make a fourth left with that magazine (operations-2026-09b).
     const retries = [...workflow.matchAll(/rebase --autostash origin\/main/gu)];
-    expect(retries.length).toBeGreaterThanOrEqual(4);
+    expect(retries.length).toBeGreaterThanOrEqual(3);
   });
 });

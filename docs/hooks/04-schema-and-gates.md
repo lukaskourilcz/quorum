@@ -8,11 +8,14 @@
   "cooldownDays": 10,
   "truthRequires": ["difficultyAtLeast:3"],
   "variants": {
-    "dev": { "en": "…", "cs": "…" },
-    "geo": { "en": "…", "cs": "…" }
+    "dev": { "en": "…", "cs": "…" }
   }
 }
 ```
+
+- `variants` carries exactly one line per vertical, and `dev` is the only vertical. The quiz
+  library's `geo` lines were removed with geoShark when StudyShark was retired; a hook that
+  still carries one fails to load.
 
 - `truthRequires` is a conjunction: **every** predicate must hold for the hook to be
   eligible. The gates exist to *license claims* (see 02) — a hook may only assert what its
@@ -36,11 +39,10 @@
 
 ## Known bug classes (lint for these)
 
-1. **Gate–variant mismatch / unreachable variants.** A gate can make one vertical's
-   variant effectively dead: `hasCode` ⇒ the geo variant almost never renders. Rule: every
-   variant of a gated hook must still be *honest if it ever fires* (the shipped geo line
-   under `hasCode` is self-aware: "There's code on a geography card. Start there."), and a
-   lint should flag variants whose gate makes them unreachable in their vertical.
+1. **Gate–variant mismatch.** A gate can make a line effectively dead for the content it
+   is written for. Rule: a gated line must still be *honest if it ever fires*, and the gate
+   is never rewritten to make the line reachable more often — that renders it where it is
+   untrue.
 2. **Language-blind predicates.** `questionStartsWith:"Why"` matches EN only — Czech
    questions start with "Proč". Current assumption: it evaluates the canonical EN text.
    Fix: make it language-aware (`{en: "Why", cs: "Proč"}`) or document the canonical-EN
@@ -50,8 +52,7 @@
    sentence subject or after a colon in `cs` strings.
 4. **Pool starvation.** Keep ≥5 hooks per relied-on gate; always-pool coverage ≥
    questions/day × cooldown for a typical daily user (see 03).
-5. **Identical-pair budget.** Lint: ≤2 byte-identical dev/geo pairs per library.
-6. **Char budget.** Lint: EN ≤58, CS ≤66, CS ≤ ~1.25× EN.
+5. **Char budget.** Lint: EN ≤58, CS ≤66, CS ≤ ~1.25× EN.
 
 ## Tier B — proposed predicates & tokens (build specs)
 
@@ -75,7 +76,7 @@
 ## Stats honesty rules
 
 - Accuracy is computed and displayed **per vertical**: "{missRate}% of devs…" must be dev
-  players' data; geo copy says "players".
+  players' data.
 - Never render a stat below the sample threshold; never cache a stat across the nightly
   rollup boundary in copy that claims precision.
 - Miss-rate before answering is difficulty signaling, not a spoiler (it points at no

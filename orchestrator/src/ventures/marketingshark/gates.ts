@@ -1,6 +1,7 @@
-import type { NormalizedQuestion } from "./bank.js";
+import { fencedBlocks, type NormalizedQuestion } from "./bank.js";
 import type { Brand } from "./config.js";
 import { SLIDE_ROLES, type ChumOutput } from "./package.js";
+import { correctLetter, fitViolations } from "./render.js";
 
 /**
  * The caps the craft rules state, restated here as numbers a check can apply.
@@ -47,12 +48,7 @@ function numerals(value: string): string[] {
   return [...value.matchAll(/\d+(?:[.,]\d+)?/gu)].map((match) => match[0]);
 }
 
-/** Inner text of every fenced block, without the fence markers or the language tag. */
-export function fencedBlocks(value: string): string[] {
-  return [...value.matchAll(/```[a-z0-9+#-]*\n([\s\S]*?)```/giu)]
-    .map((match) => (match[1] ?? "").replace(/\s+$/u, ""))
-    .filter((block) => block.length > 0);
-}
+export { fencedBlocks } from "./bank.js";
 
 /**
  * Every deterministic check that stands between CHUM's output and a committed package.
@@ -125,6 +121,16 @@ export function runTruthGates(input: {
       }
     }
 
+    // The reveal is the one slide that can be false in a way no length cap sees. Code prints the
+    // correct letter on it; a reveal whose own words name another letter contradicts the slide.
+    const reveal = slides[2]!;
+    const named = [reveal.headline, reveal.body ?? ""]
+      .map((value) => /^\s*([A-D])(?:\s*[.):\u2013\u2014-]|\s*$)/u.exec(value)?.[1])
+      .find(Boolean);
+    if (named && named !== correctLetter(question)) {
+      add("reveal-answer", locale, `the reveal names ${named}, the correct answer is ${correctLetter(question)}`);
+    }
+
     if (words(why!.headline + " " + (why!.body ?? "")) > LIMITS.whyWords) {
       add("why-length", locale, `why slide is ${words(why!.headline + " " + (why!.body ?? ""))} words, cap is ${LIMITS.whyWords}`);
     }
@@ -193,6 +199,36 @@ export function runTruthGates(input: {
   // before either was eligible to be assigned.
 
   return violations;
+}
+
+/**
+ * The canvas check, as violations the retry can act on.
+ *
+ * Runs only on output that cleared the truth gates, because it renders both carousels and a
+ * malformed reply is already going back to the writer for other reasons.
+ */
+export function runFitGate(input: {
+  output: ChumOutput;
+  brand: Brand;
+  question: NormalizedQuestion;
+}): GateViolation[] {
+  const copy = (locale: "cs" | "en") => ({
+    slides: input.output.carousels[locale].slides.map((slide, index) => ({
+      role: SLIDE_ROLES[index]!,
+      templateId: "",
+      headline: slide.headline,
+      ...(slide.body ? { body: slide.body } : {}),
+      alt: slide.alt
+    }))
+  });
+  return fitViolations({ brand: input.brand, question: input.question, copy: { cs: copy("cs"), en: copy("en") } })
+    .map((violation) => ({
+      gate: "slot-fit",
+      locale: violation.locale,
+      detail: violation.field === "code"
+        ? `${violation.role}: the ${violation.slot} slot cannot hold this question's code or options at the smallest size; shorten the headline so the slide has room`
+        : `${violation.role} ${violation.field} does not fit the ${violation.slot} slot: at most ${violation.maxChars} characters on ${violation.maxLines} line${violation.maxLines === 1 ? "" : "s"}`
+    }));
 }
 
 /** One line per violation, in the shape the single retry appends to the packet. */

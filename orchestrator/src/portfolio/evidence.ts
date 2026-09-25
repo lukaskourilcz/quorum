@@ -15,7 +15,7 @@ import { fetchCurrentRosterNames, fetchRecentResults, fetchScheduledCards } from
 import { applyEventResults } from "../fightaiq/results.js";
 import { enrichWikidataProfiles } from "../fightaiq/wikidata.js";
 
-import { fightWeekFocus, loadBoutRecords, loadEventCards, loadFighterRecords } from "../fightaiq/store.js";
+import { loadBoutRecords, loadFighterRecords } from "../fightaiq/store.js";
 import { rebuildDerivedFighterData } from "../fightaiq/derived.js";
 import { reconcilePredictionResults, runConfirmedBoutAnalysis } from "../fightaiq/analysis.js";
 import { enrichWikimediaBackfill } from "../fightaiq/wikimedia-backfill.js";
@@ -27,10 +27,12 @@ import {
   mayRunApify,
   recordActorUsage,
   runMmaApifySources,
+  runningTopicSets,
   type GoViralSourceRegistry
 } from "../sources/apify.js";
 import { runRecipeStep } from "../sources/goviral-scout.js";
 import { resolveVentureCapabilityInMap } from "../ventures/capabilities.js";
+import { loadVentureRegistry, pausedVentureIds } from "../ventures/registry.js";
 import type { VentureCapabilityMap } from "../contracts/venture-capability.js";
 import {
   AI_VOCABULARY,
@@ -526,6 +528,8 @@ export async function refreshGoViralTrends(input: {
   now: Date;
   fetchImpl?: typeof fetch;
   resolveImpl?: (hostname: string) => Promise<string[]>;
+  /** Defaults to the registry's paused ventures. */
+  pausedVentures?: ReadonlySet<string>;
 }): Promise<{
   artifactPaths: string[];
   evidenceRefs: string[];
@@ -534,7 +538,11 @@ export async function refreshGoViralTrends(input: {
   stale: boolean;
   reason: string;
 }> {
-  const registry = await loadGoViralSourceRegistry();
+  // Only the sets whose venture is running (`operations-2026-09b`): the registry is the switch.
+  const registry = runningTopicSets(
+    await loadGoViralSourceRegistry(),
+    input.pausedVentures ?? pausedVentureIds(await loadVentureRegistry())
+  );
   const month = input.date.slice(0, 7);
   const quotaPath = "goviral/source-quota/apify.json";
   const storedQuota = await readJson<unknown>(input.root, quotaPath, {});
@@ -693,13 +701,27 @@ export async function refreshGoViralTrends(input: {
 }
 
 /**
+ * How many scoped free queries a day may send.
+ *
+ * `goviral-trends/1` holds at most 24 provider results. The three Hacker News reads, two Trends
+ * reads and two subreddit ranks take seven, and each scoped query takes two (English and Czech),
+ * so eight fit. A ninth would make the day's trends artifact fail its own schema.
+ */
+const FREE_SCOPED_QUERY_LIMIT = 8;
+
+/**
  * The free signals, added to the same trends artifact GoVIRAL's scout writes.
  *
  * They cost nothing and touch no Apify credit, so they run whether or not `APIFY_TOKEN` exists —
  * which means the magazines get a velocity reading from day one while GoVIRAL's paid scout waits
  * for an account. That is true as of this change and was not before it: the call sat after three
- * early returns, so on a tokenless day — the exact day it exists for — it never ran. The entity dictionaries come from what the system already knows: the AI
- * vocabulary for DNESKAi, and the scheduled cards and roster policy for MMA Files.
+ * early returns, so on a tokenless day — the exact day it exists for — it never ran. The entity
+ * dictionary is the AI vocabulary DNESKAi already uses.
+ *
+ * Every free topic set is treated alike: three rotating keywords a day, each read in English and
+ * Czech. Door Money used to have a branch of its own and MMA Files queried the week's fight cards
+ * from `state/mma/events`; both ventures are paused (`operations-2026-09b`), and a set that
+ * resumes comes back through the same generic path rather than a bespoke one.
  *
  * Provider results are kept separate rather than merged. A single number cannot say whether a
  * quiet reading means nothing is trending or three of four sources were down, and the first is a
@@ -712,42 +734,16 @@ export async function collectFreeTrendingSignals(input: {
   topicSets: GoViralSourceRegistry["topicSets"];
   fetchImpl?: typeof fetch;
   resolveImpl?: (hostname: string) => Promise<string[]>;
-}): Promise<{ results: TrendingProviderResult[]; ai: TrendingSignal[]; mma: TrendingSignal[] }> {
-  const [events, rosterPolicy] = await Promise.all([
-    loadEventCards(path.join(input.root, "mma", "events")),
-    loadRosterPolicy(configRoot).catch(() => null)
-  ]);
-  const focus = fightWeekFocus(events, input.now);
-  // A card carries fighter *refs*, not names: `ufc:jiri-prochazka`. The slug is the name with
-  // hyphens, which is exactly what a news query wants, so it is unhyphenated rather than looked
-  // up — one fewer read, and no chance of querying a name the card does not actually name.
-  const nameFromRef = (ref: string) => ref.split(":").at(-1)?.replaceAll("-", " ") ?? "";
-  const mmaQueries = [
-    ...focus.map((event) => event.name),
-    ...focus.flatMap((event) => event.bouts.flatMap((bout) => [nameFromRef(bout.red), nameFromRef(bout.blue)]))
-  ].filter((name) => name.length > 2).slice(0, 6);
+}): Promise<{ results: TrendingProviderResult[]; ai: TrendingSignal[] }> {
   const freeTopicSets = Object.entries(input.topicSets)
     .filter(([, topicSet]) => topicSet.sourceMode === "free")
     .sort(([left], [right]) => left.localeCompare(right));
-  const configuredQueries = [...new Set(freeTopicSets
-    .filter(([id]) => id === "door-money")
-    .flatMap(([, topicSet]) => topicSet.keywords))];
-  const topicQueries = configuredQueries
-    .map((query) => ({
-      query,
-      order: createHash("sha256").update(`${input.date}:door-money-free:${query}`).digest("hex")
-    }))
-    .sort((left, right) => left.order.localeCompare(right.order) || left.query.localeCompare(right.query))
-    .slice(0, 3)
-    .map(({ query }) => query);
   const collected = await collectTrendingSignals({
     now: input.now,
     aiQueries: ["artificial intelligence", "OpenAI", "Anthropic"],
-    mmaQueries,
-    topicQueries,
-    subreddits: ["MMA", "ufc", "artificial", "LocalLLaMA"],
-    scopedTopicQueries: Object.entries(input.topicSets)
-      .filter(([id, definition]) => id !== "door-money" && definition.sourceMode === "free")
+    mmaQueries: [],
+    subreddits: ["artificial", "LocalLLaMA"],
+    scopedTopicQueries: freeTopicSets
       .flatMap(([topicSet, definition]) => definition.keywords
         .map((query) => ({
           topicSet,
@@ -756,7 +752,8 @@ export async function collectFreeTrendingSignals(input: {
         }))
         .sort((left, right) => left.order.localeCompare(right.order) || left.query.localeCompare(right.query))
         .slice(0, 3)
-        .map(({ query }) => ({ topicSet, query }))),
+        .map(({ query }) => ({ topicSet, query })))
+      .slice(0, FREE_SCOPED_QUERY_LIMIT),
     ...(input.fetchImpl ? { fetchImpl: input.fetchImpl } : {}),
     ...(input.resolveImpl ? { resolveImpl: input.resolveImpl } : {})
   });
@@ -772,17 +769,9 @@ export async function collectFreeTrendingSignals(input: {
         .map(([id]) => id)
     }))
   }));
-  const all = results.flatMap((result) => result.signals);
-  const mmaDictionary = [
-    ...mmaQueries,
-    ...(rosterPolicy ? rosterPolicyIds(rosterPolicy) : []),
-    "UFC",
-    "Oktagon"
-  ];
   return {
     results,
-    ai: matchDictionary(all, [...AI_VOCABULARY]),
-    mma: matchDictionary(all, mmaDictionary)
+    ai: matchDictionary(results.flatMap((result) => result.signals), [...AI_VOCABULARY])
   };
 }
 

@@ -56,7 +56,7 @@ export type NormalizedQuestion = z.infer<typeof NormalizedQuestionSchema>;
 
 export const QuestionBankSnapshotSchema = z.object({
   schemaVersion: z.literal("marketingshark-bank/1"),
-  brandId: z.enum(["devshark", "geoshark"]),
+  brandId: z.literal("devshark"),
   sourceRepo: z.string().min(1),
   sourceCommit: z.string().min(7),
   sourceSubject: z.string().min(1),
@@ -91,6 +91,13 @@ export function contentHashOf(questions: readonly NormalizedQuestion[]): string 
 
 export function hasFencedCode(question: { introduction?: string; question: string }): boolean {
   return FENCED_CODE.test(question.question) || FENCED_CODE.test(question.introduction ?? "");
+}
+
+/** Inner text of every fenced block, without the fence markers or the language tag. */
+export function fencedBlocks(value: string): string[] {
+  return [...value.matchAll(/```[a-z0-9+#-]*\n([\s\S]*?)```/giu)]
+    .map((match) => (match[1] ?? "").replace(/\s+$/u, ""))
+    .filter((block) => block.length > 0);
 }
 
 /**

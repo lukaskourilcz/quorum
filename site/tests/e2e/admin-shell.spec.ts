@@ -4,7 +4,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 interface VentureRegistry {
-  ventures: Array<{ id: string }>;
+  ventures: Array<{ id: string; status?: string }>;
 }
 
 /**
@@ -30,8 +30,9 @@ const adminDestinations = [
   "/admin?view=waiting",
   "/admin/settings",
   "/admin?venture=carousel-studio",
+  // A paused venture leaves the navigation (operations-2026-09b); Settings lists it instead.
   ...registry.ventures
-    .filter(({ id }) => id !== "carousel-studio")
+    .filter(({ id, status }) => id !== "carousel-studio" && status !== "paused")
     .map(({ id }) => `/admin?venture=${id}`)
 ];
 
@@ -74,11 +75,14 @@ test("desktop Admin shell keeps its window, scroll, preferences and real command
     await page.keyboard.press("ControlOrMeta+K");
     return palette.isVisible();
   }, { timeout: 30_000 }).toBe(true);
+  // Kvórum is paused (operations-2026-09b), so the palette no longer offers it.
   await palette.getByRole("searchbox", { name: "Search Admin destinations" }).fill("kvorum");
+  await expect(palette.getByRole("option")).toHaveCount(0);
+  await palette.getByRole("searchbox", { name: "Search Admin destinations" }).fill("marketingshark");
   await expect(palette.getByRole("option")).toHaveCount(1);
   await palette.getByRole("searchbox", { name: "Search Admin destinations" }).press("Enter");
-  await expect(page).toHaveURL(/\/admin\?venture=kvorum$/);
-  await expect(page.getByRole("link", { name: "Kvórum", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page).toHaveURL(/\/admin\?venture=marketingshark$/);
+  await expect(page.getByRole("link", { name: "marketingShark", exact: true })).toHaveAttribute("aria-current", "page");
 });
 
 test("mobile Admin navigation has safe targets and exposes every live destination", async ({ page }) => {
@@ -116,8 +120,11 @@ test("mobile Admin navigation has safe targets and exposes every live destinatio
   await mobileNav.getByRole("button", { name: "Workspaces" }).click();
   const workspaces = page.getByRole("dialog", { name: "Workspaces" });
   await expect(workspaces).toBeVisible();
-  await expect(workspaces.getByRole("link", { name: /Kvórum/ })).toHaveAttribute("href", "/admin?venture=kvorum");
-  await expect(workspaces.getByRole("link", { name: "Lukáš Growth Desk" })).toHaveAttribute("href", "/admin?venture=personal-growth");
+  await expect(workspaces.getByRole("link", { name: "marketingShark" })).toHaveAttribute("href", "/admin?venture=marketingshark");
+  await expect(workspaces.getByRole("link", { name: "GoVIRAL" })).toHaveAttribute("href", "/admin?venture=goviral");
+  // Paused ventures are listed in Settings, not here.
+  await expect(workspaces.getByRole("link", { name: /Kvórum/ })).toHaveCount(0);
+  await expect(workspaces.getByRole("link", { name: "Lukáš Growth Desk" })).toHaveCount(0);
 });
 
 test("new Admin shell chrome and mobile sheet pass the accessibility gate", async ({ page }) => {
@@ -137,4 +144,24 @@ test("new Admin shell chrome and mobile sheet pass the accessibility gate", asyn
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();
   expect(mobile.violations).toEqual([]);
+});
+
+test("Settings lists every paused venture in its own table, and the navigation lists none", async ({ page }) => {
+  // operations-2026-09b: a paused venture leaves the navigation and is listed only here.
+  const paused = registry.ventures
+    .filter(({ status }) => status === "paused")
+    .map(({ id }) => id);
+  await page.goto("/admin/settings", { waitUntil: "networkidle" });
+  const table = page.locator("[data-admin-paused-ventures]");
+  await expect(table.getByRole("heading", { name: "Paused ventures" })).toBeVisible();
+  for (const id of paused) {
+    await expect(table.locator(`[data-paused-venture="${id}"]`), id).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Admin destinations" }).locator(`a[href="/admin?venture=${id}"]`), id)
+      .toHaveCount(0);
+  }
+  if (paused.length > 0) {
+    // The archive stays readable at its own address and says it is paused.
+    await page.goto(`/admin?venture=${paused[0]}`, { waitUntil: "networkidle" });
+    await expect(page.locator(`[data-admin-paused-venture="${paused[0]}"]`)).toBeVisible();
+  }
 });

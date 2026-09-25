@@ -148,10 +148,11 @@
       "why": "$3.40/1k would take most of GoVIRAL's monthly credit. Left documented as a future owner decision, deliberately not pre-built."
     }
   ],
-  "$topicComment": "Paid scouting focuses on DNESKAi, MMA FILES and devShark. Writer is excluded from paid steps; archived free-source settings remain unchanged.",
+  "$topicComment": "Each set names the venture it serves; the scout skips every set whose venture config/ventures.json pauses, for paid and free steps alike, so only DNESKAi, devShark and the owner's own writing run while operations-2026-09b holds. Writer is excluded from paid steps; archived free-source settings remain unchanged.",
   "topicSets": {
     "writer": {
       "label": "The owner's own writing",
+      "ventureId": "owner",
       "keywords": [
         "building in public",
         "AI tools",
@@ -166,6 +167,7 @@
     },
     "dneskai": {
       "label": "DNESKAi (AI and technology)",
+      "ventureId": "caught-up",
       "keywords": [
         "artificial intelligence",
         "OpenAI",
@@ -182,6 +184,7 @@
     },
     "mma": {
       "label": "MMA Files (fighting)",
+      "ventureId": "mma-files",
       "keywords": [
         "UFC",
         "Oktagon MMA",
@@ -195,6 +198,7 @@
     },
     "booksofhistory": {
       "label": "BOOKSOFHISTORY (book stories)",
+      "ventureId": "booksofhistory",
       "sourceMode": "free",
       "keywords": [
         "book history",
@@ -215,6 +219,7 @@
     },
     "door-money": {
       "label": "Door Money (book and music stories)",
+      "ventureId": "door-money",
       "sourceMode": "free",
       "keywords": [
         "BookTok",
@@ -231,6 +236,7 @@
     },
     "tehdejsi-svet": {
       "label": "Tehdejsi svet (Czech and Ukrainian lived memory)",
+      "ventureId": "tehdejsi-svet",
       "sourceMode": "free",
       "keywords": [
         "česká nostalgie",
@@ -251,6 +257,7 @@
     },
     "kvorum": {
       "label": "Kvórum (česká politika a občanské dění)",
+      "ventureId": "kvorum",
       "keywords": [
         "česká politika",
         "Poslanecká sněmovna",
@@ -273,6 +280,7 @@
     },
     "devshark": {
       "label": "devShark (programming and interview practice)",
+      "ventureId": "marketingshark",
       "sourceMode": "apify",
       "keywords": [
         "JavaScript",

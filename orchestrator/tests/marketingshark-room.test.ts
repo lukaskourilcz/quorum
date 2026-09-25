@@ -2,7 +2,7 @@ import { mkdtemp, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { CAROUSEL_BRANDS, liveTemplates, readLibrary, SEED_TEMPLATES } from "@boardlessai/carousel-studio";
+import { CAROUSEL_BRANDS, liveTemplates, SEED_TEMPLATES } from "@boardlessai/carousel-studio";
 import { NormalizedQuestionSchema, type NormalizedQuestion } from "../src/ventures/marketingshark/bank.js";
 import { enabledBrands, loadMarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
 import { EMPTY_LEDGER } from "../src/ventures/marketingshark/ledger.js";
@@ -21,7 +21,8 @@ import {
   hookLinesFor,
   planBrandDay,
   readLedger,
-  runBrandDay
+  runBrandDay,
+  topicLabel
 } from "../src/ventures/marketingshark/run.js";
 import { buildChumPacket } from "../src/ventures/marketingshark/packet.js";
 
@@ -280,49 +281,27 @@ describe("marketingShark room", () => {
     expect((await readLedger(root)).brands.devshark!.served).toHaveLength(1);
   });
 
-  it("produces a second brand from a config flip and no code change", async () => {
-    // Phase 2, proved rather than promised: geoShark enabled in memory, with the devShark bank
-    // standing in for its snapshot, still reaches a plan and a distinct hook assignment.
+  it("plans devShark on the dev vertical and hands CHUM that vertical's line", async () => {
+    // The brand's tone is the vertical the studio serves slide 1 from. The assignment, its
+    // channel and the packet all have to name the same one, or the line CHUM is told to copy
+    // verbatim is not the line the assignment licensed.
     const config = await loadMarketingSharkConfig();
-    const geo = config.brands.find((brand) => brand.id === "geoshark")!;
-    const flipped: Brand = {
-      ...geo,
-      enabled: true,
-      questionBank: { ...geo.questionBank, snapshotPath: "state/marketingshark/question-banks/devshark.json" }
-    };
+    const brand = await devshark();
 
-    expect(enabledBrands({ ...config, brands: [config.brands[0]!, flipped] }).map((brand) => brand.id))
-      .toEqual(["devshark", "geoshark"]);
+    const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
+    expect(plan.assignment.vertical).toBe("dev");
+    expect(plan.assignment.channel).toBe("devshark-carousel");
 
-    const plan = await planBrandDay({ config, brand: flipped, ledger: EMPTY_LEDGER, date: "2026-08-08" });
-    expect(plan.question.id).toBeTruthy();
-    expect(plan.hook?.variants.geo).toBeDefined();
-    expect(plan.assignment.vertical).toBe("geo");
-    expect(plan.assignment.channel).toBe("geoshark-carousel");
-
-    // A second selection AND a second packet, with no code path of its own. The packet has to
-    // carry geoShark's line and geoShark's wording, or "brand-generic" is a claim rather than a
-    // property.
-    const lines = hookLinesFor({ hook: plan.hook, brand: flipped, question: plan.question })!;
+    const lines = hookLinesFor({ hook: plan.hook, brand, question: plan.question })!;
+    const topic = topicLabel(plan.question.category);
+    expect(lines.cs).toBe(plan.hook!.variants.dev.cs.replaceAll("{topic}", topic));
+    expect(lines.en).toBe(plan.hook!.variants.dev.en.replaceAll("{topic}", topic));
     const packet = buildChumPacket({
-      brand: flipped, question: plan.question, hookLines: lines, hookId: plan.assignment.hookId, date: "2026-08-08"
+      brand, question: plan.question, hookLines: lines, hookId: plan.assignment.hookId, date: "2026-08-08"
     });
-    expect(packet).toContain(flipped.slide5.cs);
-    expect(packet).toContain("tone: geo");
+    expect(packet).toContain("tone: dev");
+    expect(packet).toContain(brand.slide5.cs);
     expect(packet).toContain(lines.cs);
-    // The geo line, not the dev one — unless this hook is one of the two intentional identical
-    // pairs, where there is no dev line to tell it apart from.
-    const devLine = plan.hook!.variants.dev!.cs;
-    const geoLine = plan.hook!.variants.geo!.cs;
-    if (devLine !== geoLine) expect(packet).not.toContain(devLine);
-    // Its own ledger node and its own epoch, created on first sight.
-    expect(plan.selection.brandLedger.served).toEqual([]);
-    expect(plan.selection.epoch).toBe(1);
-
-    // And the geo tone is actually reachable: most of the library words itself differently for
-    // geo than for dev, which is what makes tone more than a label.
-    const library = await readLibrary("quiz");
-    const divergent = library.hooks.filter((hook) => hook.variants.geo!.en !== hook.variants.dev!.en);
-    expect(divergent.length).toBeGreaterThan(library.hooks.length / 2);
+    expect(packet).toContain(lines.en);
   });
 });

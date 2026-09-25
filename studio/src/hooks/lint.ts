@@ -1,5 +1,5 @@
 import { loadLibrary, HookLoadError } from "./load.js";
-import { LANGUAGES, VERTICALS, type Hook, type Predicate, type Surface } from "./schema.js";
+import { VERTICALS, type Hook, type Predicate, type Surface } from "./schema.js";
 
 /**
  * The craft caps from `docs/hooks/02-hook-craft-rules.md`, restated as numbers a check applies.
@@ -12,8 +12,6 @@ export const HOOK_LIMITS = {
   csChars: 66,
   /** CS may be longer than its EN sibling — parity of punch, not of word count — but not by much. */
   csRatio: 1.25,
-  /** Identical dev/geo pairs waste the vertical split, so a small budget rather than a ban. */
-  identicalPairs: 2,
   /** Von Restorff at rotation level: no template may become wallpaper. */
   archetypeShare: 0.2,
   /** Pool arithmetic: a gate a selector relies on must not collapse to one or two hooks. */
@@ -68,8 +66,6 @@ function tokenSlotIsSafe(text: string, index: number): boolean {
 function pushCharFindings(findings: Finding[], surface: Surface, hook: Hook): void {
   for (const vertical of VERTICALS) {
     const variant = hook.variants[vertical];
-    if (!variant) continue;
-
     const en = charCount(variant.en);
     const cs = charCount(variant.cs);
 
@@ -88,7 +84,6 @@ function pushCharFindings(findings: Finding[], surface: Surface, hook: Hook): vo
 function pushDeclensionFindings(findings: Finding[], surface: Surface, hook: Hook): void {
   for (const vertical of VERTICALS) {
     const variant = hook.variants[vertical];
-    if (!variant) continue;
     if (DECLENSION_EXCEPTIONS.has(`${hook.id}:${vertical}`)) continue;
 
     for (const match of variant.cs.matchAll(TOKEN)) {
@@ -161,46 +156,6 @@ function pushPoolFindings(findings: Finding[], surface: Surface, hooks: readonly
   }
 }
 
-/**
- * Variants a gate makes effectively unreachable in their own vertical.
- *
- * A warning, not an error, and deliberately so: the three `hasCode` hooks' geo lines are written to
- * be honest on the rare geography card that does carry a snippet ("There's code on a geography
- * card. Start there."), which is the correct handling of an unreachable variant. The lint's job is
- * to make sure the next one is written that way on purpose too.
- */
-function pushReachabilityFindings(findings: Finding[], surface: Surface, hooks: readonly Hook[]): void {
-  if (surface !== "quiz") return;
-  for (const hook of hooks) {
-    if (!hook.truthRequires.some((predicate) => predicate.kind === "hasCode")) continue;
-    if (!hook.variants.geo) continue;
-    findings.push({
-      level: "warning",
-      rule: "unreachable-variant",
-      surface,
-      hookId: hook.id,
-      detail: "geo variant sits behind hasCode; a geography bank rarely carries code, so it will almost never render"
-    });
-  }
-}
-
-function pushIdenticalPairFindings(findings: Finding[], surface: Surface, hooks: readonly Hook[]): void {
-  const identical = hooks.filter((hook) => {
-    const dev = hook.variants.dev;
-    const geo = hook.variants.geo;
-    return dev !== undefined && geo !== undefined
-      && LANGUAGES.every((language) => dev[language] === geo[language]);
-  });
-  if (identical.length > HOOK_LIMITS.identicalPairs) {
-    findings.push({
-      level: "error",
-      rule: "identical-pair-budget",
-      surface,
-      detail: `${identical.length} byte-identical dev/geo pairs (${identical.map((hook) => hook.id).join(", ")}), budget is ${HOOK_LIMITS.identicalPairs}`
-    });
-  }
-}
-
 function pushArchetypeFindings(findings: Finding[], surface: Surface, hooks: readonly Hook[]): void {
   if (hooks.length === 0) return;
   const counts = new Map<string, number>();
@@ -250,10 +205,8 @@ export function lintLibrary(input: LintInput): Finding[] {
     pushCharFindings(findings, input.surface, hook);
     pushDeclensionFindings(findings, input.surface, hook);
   }
-  pushIdenticalPairFindings(findings, input.surface, library.hooks);
   pushArchetypeFindings(findings, input.surface, library.hooks);
   pushPoolFindings(findings, input.surface, library.hooks);
-  pushReachabilityFindings(findings, input.surface, library.hooks);
 
   return findings;
 }

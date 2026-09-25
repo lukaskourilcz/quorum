@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
@@ -223,6 +223,14 @@ describe("declared tabs against stored cards", () => {
         .map((kind) => `${venture.id}/${kind}`);
     });
     expect(orphaned).toEqual([]);
+    // Every tab the registry declares survives the projection. The site keeps its own copy of the
+    // accepted names and filters by it, which once dropped four of WebDev Signal's seven without an
+    // error and left `?tab=decision` pointing at Today.
+    const registry = JSON.parse(await readFile(path.resolve(process.cwd(), "../config/ventures.json"), "utf8")) as {
+      ventures: Array<{ id: string; adminTabs: string[] }>;
+    };
+    expect(Object.fromEntries(portfolio.ventures.map((venture) => [venture.id, venture.tabs])))
+      .toEqual(Object.fromEntries(registry.ventures.map((venture) => [venture.id, venture.adminTabs])));
     expect(portfolio.ventures.find((venture) => venture.id === "personal-growth")).toMatchObject({
       name: "Lukáš Growth Desk",
       visibility: "owner-only",

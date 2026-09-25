@@ -10,7 +10,7 @@ import {
 } from "./admin-qa";
 
 interface VentureRegistry {
-  ventures: Array<{ id: string }>;
+  ventures: Array<{ id: string; status: string }>;
 }
 
 const registry = JSON.parse(
@@ -25,15 +25,19 @@ const registry = JSON.parse(
  * footer; none of them is something the owner has to check, which is the difference between a
  * link and a destination.
  */
+// A paused venture leaves the navigation (operations-2026-09b); Settings lists it instead.
 const canonicalDestinations = [
   "/admin",
   "/admin?view=waiting",
   "/admin/settings",
   "/admin?venture=carousel-studio",
   ...registry.ventures
-    .filter(({ id }) => id !== "carousel-studio")
+    .filter(({ id, status }) => id !== "carousel-studio" && status !== "paused")
     .map(({ id }) => `/admin?venture=${id}`)
 ];
+const pausedDestinations = registry.ventures
+  .filter(({ status }) => status === "paused")
+  .map(({ id }) => `/admin?venture=${id}`);
 
 /**
  * How long an Admin navigation is allowed to take.
@@ -75,6 +79,9 @@ test("expanded and collapsed desktop navigation expose every canonical destinati
 
   await expectCanonicalLinks(links);
   await expect(links).toHaveCount(canonicalDestinations.length);
+  for (const paused of pausedDestinations) {
+    await expect(navigation.locator(`a[href="${paused}"]`), paused).toHaveCount(0);
+  }
 
   await navigation.locator('a[href="/admin?view=waiting"]').click();
   await expect(page).toHaveURL(/\/admin\?view=waiting$/u, { timeout: ADMIN_NAVIGATION_TIMEOUT });
@@ -109,13 +116,16 @@ test("the command palette exposes every destination and opens the active workspa
   const search = palette.getByRole("searchbox", {
     name: "Search Admin destinations"
   });
+  // A paused venture is not a destination any more; its archive is reached from Settings.
   await search.fill("kvorum");
+  await expect(palette.getByRole("option")).toHaveCount(0);
+  await search.fill("marketingshark");
   await expect(palette.getByRole("option")).toHaveCount(1);
   await search.press("Enter");
 
-  await expect(page).toHaveURL(/\/admin\?venture=kvorum$/u, { timeout: ADMIN_NAVIGATION_TIMEOUT });
+  await expect(page).toHaveURL(/\/admin\?venture=marketingshark$/u, { timeout: ADMIN_NAVIGATION_TIMEOUT });
   await expect(
-    page.locator('a[href="/admin?venture=kvorum"][aria-current="page"]')
+    page.locator('a[href="/admin?venture=marketingshark"][aria-current="page"]')
   ).toBeVisible();
   expect(runtime.failures).toEqual([]);
   expect(runtime.mutationAttempts).toEqual([]);
@@ -143,16 +153,17 @@ test("mobile More keeps safe targets and exposes every canonical destination", a
   await mobileNavigation.getByRole("button", { name: "More" }).click();
   const more = page.getByRole("dialog", { name: "More" });
   await expectCanonicalLinks(more.locator('a[href^="/admin"]'));
-  await more.locator('a[href="/admin?venture=tehdejsi-svet"]').click();
+  await expect(more.locator('a[href="/admin?venture=tehdejsi-svet"]')).toHaveCount(0);
+  await more.locator('a[href="/admin?venture=goviral"]').click();
 
-  await expect(page).toHaveURL(/\/admin\?venture=tehdejsi-svet$/u, { timeout: ADMIN_NAVIGATION_TIMEOUT });
+  await expect(page).toHaveURL(/\/admin\?venture=goviral$/u, { timeout: ADMIN_NAVIGATION_TIMEOUT });
   await expect(
     mobileNavigation.getByRole("button", { name: "Workspaces" })
   ).toHaveAttribute("data-active", "true");
   await mobileNavigation.getByRole("button", { name: "More" }).click();
   await expect(
     page.getByRole("dialog", { name: "More" }).locator(
-      'a[href="/admin?venture=tehdejsi-svet"][aria-current="page"]'
+      'a[href="/admin?venture=goviral"][aria-current="page"]'
     )
   ).toBeVisible();
   await expectNoDocumentOverflow(page, "mobile canonical navigation");

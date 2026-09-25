@@ -3,7 +3,7 @@ import type { CategoryLists, QuizSubject } from "./evaluate.js";
 import type { Language, Library, Vertical } from "./schema.js";
 
 /**
- * The category lists the two shark brands declare in `config/marketingshark.json`.
+ * The category lists devShark declares in `config/marketingshark.json`.
  *
  * Duplicated here rather than read from config because the studio is a leaf package with no
  * orchestrator dependency, and because a preview must render the same whatever the config says —
@@ -14,11 +14,6 @@ export const FIXTURE_CATEGORY_LISTS: Readonly<Record<Vertical, CategoryLists>> =
     commonUse: ["javascript", "typescript", "git", "css", "html", "react", "nodejs"],
     interview: ["dsa", "algorithms", "system-design", "databases", "javascript", "typescript"],
     core: ["internet", "git", "security", "databases", "testing"]
-  },
-  geo: {
-    commonUse: ["capitals", "flags", "continents", "earth"],
-    interview: ["capitals", "flags", "political", "geopolitics"],
-    core: ["cartography", "earth", "climate", "landforms"]
   }
 };
 
@@ -33,9 +28,9 @@ export interface FixtureItem {
  * Preview items carrying real quiz metadata.
  *
  * Each one is chosen to land on a different part of the gate space, so the /admin previews show
- * what the gates actually do rather than five renders of the always pool: a four-option d3 core
- * question, a d4 with no category, a commonUse question for the `{topic}` token, and a snippet
- * question that opens the `hasCode` pool.
+ * what the gates actually do rather than three renders of the always pool: a four-option d3 core
+ * question, a d4 snippet question that opens the `hasCode` pool, and a commonUse question for the
+ * `{topic}` token.
  */
 export const FIXTURE_ITEMS: readonly FixtureItem[] = [
   {
@@ -55,18 +50,6 @@ export const FIXTURE_ITEMS: readonly FixtureItem[] = [
     vertical: "dev",
     topic: "JavaScript",
     subject: { difficulty: 2, hasCode: false, category: "javascript", optionCount: 4, canonicalEnglishQuestion: "Why does this coerce to a string?" }
-  },
-  {
-    id: "fixture-geo-core",
-    vertical: "geo",
-    topic: "Cartography",
-    subject: { difficulty: 3, hasCode: false, category: "cartography", optionCount: 4, canonicalEnglishQuestion: "Which projection preserves angle but not area?" }
-  },
-  {
-    id: "fixture-geo-common",
-    vertical: "geo",
-    topic: "Capitals",
-    subject: { difficulty: 2, hasCode: false, category: "capitals", optionCount: 3, canonicalEnglishQuestion: "Which of these is not a capital?" }
   }
 ];
 
@@ -99,8 +82,6 @@ export function fixtureAssignment(library: Library, item: FixtureItem): FixtureA
   if (result.outcome === "no-hook") return { item, assignment: null, line: null };
 
   const variant = result.assignment.hook.variants[item.vertical];
-  if (!variant) return { item, assignment: result.assignment, line: null };
-
   return {
     item,
     assignment: result.assignment,

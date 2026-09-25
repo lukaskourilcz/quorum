@@ -11,7 +11,8 @@ import {
   materializeLicensedPhoto,
   type LicensedPhotoCandidate,
   candidatesNaming,
-  candidateHosted
+  candidateHosted,
+  thumbnailHosted
 } from "../src/images/licensed.js";
 
 const candidate: LicensedPhotoCandidate = {
@@ -205,6 +206,17 @@ describe("the downloader's allowlist is fixed", () => {
     expect(candidateHosted({ downloadUrl: "https://upload.wikimedia.org/x.jpg" })).toBe(true);
     expect(candidateHosted({ downloadUrl: "https://images.example/x.jpg" })).toBe(false);
     expect(candidateHosted({ downloadUrl: "not a url" })).toBe(false);
+  });
+
+  it("lets the gate look at a Wikimedia thumbnail without letting it become the download", () => {
+    // quorum#564: Wikimedia moved `thumburl` to thumb.wikimedia.org, and every curated scene was
+    // skipped as `thumbnail-host-not-allowed` before the gate saw it (image-selections, 2026-09).
+    const thumbnail = "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/CERN_Server_03.jpg/960px-CERN_Server_03.jpg";
+    expect(thumbnailHosted({ thumbnailUrl: thumbnail })).toBe(true);
+    expect(thumbnailHosted({ thumbnailUrl: "https://upload.wikimedia.org/wikipedia/commons/d/d7/CERN_Server_03.jpg" })).toBe(true);
+    expect(thumbnailHosted({ thumbnailUrl: "https://thumb.example/x.jpg" })).toBe(false);
+    // A thumbnail host is not a publishable host: the hero still comes from upload.wikimedia.org.
+    expect(candidateHosted({ downloadUrl: thumbnail })).toBe(false);
   });
 });
 

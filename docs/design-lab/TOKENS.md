@@ -2,7 +2,7 @@
 
 ## Type
 
-The engine serves ten brand skins. Every named face is committed as a static SIL OFL 1.1
+The engine serves nine brand skins. Every named face is committed as a static SIL OFL 1.1
 `.ttf`; `studio/src/fonts.ts` resolves a requested weight to the nearest committed face in the
 same family, and `studio/src/font-metrics.generated.ts` supplies its measured advances. Rendering
 does not depend on a system-font fallback.
@@ -13,7 +13,6 @@ does not depend on a system-font fallback.
 | **MMA Files** `mma-files` | Anton 400 | Archivo 600/700/800/900 | IBM Plex Mono 400/700 |
 | **Titty Tuesdays** `titty-tuesdays` | Petrona 600/700/800/900 | Karla 400/700 | IBM Plex Mono 400/700 |
 | **devShark** `devshark` | Figtree 600/700/800/900 | Public Sans 400/700 | IBM Plex Mono 400/700 |
-| **geoShark** `geoshark` | Outfit 600/700/800/900 | Public Sans 400/700 | IBM Plex Mono 400/700 |
 | **Kvórum** `kvorum` | Barlow Condensed 600/700/800/900 | IBM Plex Sans 400/700 | IBM Plex Mono 400/700 |
 | **BOOKSOFHISTORY** `booksofhistory` | Petrona 600/700/800/900 | Karla 400/700 | IBM Plex Mono 400/700 |
 | **Door Money** `door-money` | Barlow Condensed 600/700/800/900 | Barlow 400/700 | IBM Plex Mono 400/700 |
@@ -23,7 +22,9 @@ does not depend on a system-font fallback.
 Archivo is Caught Up's wide grotesque. Anton preserves MMA Files' compact poster register and
 has one real weight, so every requested headline weight resolves to its committed 400 face.
 Petrona/Karla gives Titty Tuesdays warmth and BOOKSOFHISTORY its first-edition-card voice.
-Figtree and Outfit distinguish the two shark verticals while sharing a Public Sans body.
+devShark and WebDev Signal share Figtree over a Public Sans body. Outfit, geoShark's headline
+face, stays committed and registered, but no brand names it since geoShark was retired with
+StudyShark.
 Barlow Condensed gives Kvórum and Door Money dense display type; their body faces and palettes
 keep the brands separate.
 

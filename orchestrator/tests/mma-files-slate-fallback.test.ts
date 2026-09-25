@@ -14,6 +14,11 @@ import {
   storeArticlePackage
 } from "../src/mma-files/store.js";
 
+// Schedule mechanics are tested on every room, whichever ventures the owner runs today.
+vi.mock("../src/ventures/registry.js", (importOriginal) =>
+  import("./fixtures/all-operating-registry.js").then(({ registryModuleWithEveryVentureRunning }) =>
+    registryModuleWithEveryVentureRunning(importOriginal as never)));
+
 // `runLiveArticleProduction` reads and writes the one module-level `stateRoot`, so the only way
 // to drive it against fixtures is to move that root. repoRoot and configRoot stay real: the
 // evidence packet's source refs are computed relative to repoRoot, the stylebook is read from

@@ -1,7 +1,7 @@
 name: Delivery doctor
 
 # Answers one question in about a minute: can the delivery app do everything a release
-# needs, on both target repositories?
+# needs on the DNESKAi target repository? (The mma-files probe left with MMA Files, operations-2026-09b.)
 #
 # The release verifier needs three GitHub reads per delivery — the commit, its combined
 # status, and its check runs — and those are three separate installation permissions. When
@@ -32,19 +32,9 @@ jobs:
           owner: lukaskourilcz
           repositories: aifirst
 
-      - name: Probe the mma-files installation
-        id: mma-files-token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.0.0
-        with:
-          client-id: ${{ secrets.DELIVERY_APP_ID }}
-          private-key: ${{ secrets.DELIVERY_APP_PRIVATE_KEY }}
-          owner: lukaskourilcz
-          repositories: mma-files
-
       - name: Report what the delivery app may read
         env:
           AIFIRST_TOKEN: ${{ steps.aifirst-token.outputs.token }}
-          MMA_FILES_TOKEN: ${{ steps.mma-files-token.outputs.token }}
         run: |
           set -u
           failures=0
@@ -82,9 +72,6 @@ jobs:
             done
           }
 
-          echo "lukaskourilcz/mma-files"
-          probe "lukaskourilcz/mma-files" "$MMA_FILES_TOKEN"
-          echo ""
           echo "lukaskourilcz/aifirst"
           probe "lukaskourilcz/aifirst" "$AIFIRST_TOKEN"
           echo ""
@@ -96,4 +83,4 @@ jobs:
             echo "the installation -> review the pending permission request."
             exit 1
           fi
-          echo "Every endpoint the release verifier needs is readable on both targets."
+          echo "Every endpoint the release verifier needs is readable on the DNESKAi target."

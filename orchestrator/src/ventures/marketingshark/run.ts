@@ -11,7 +11,7 @@ import type { Stage } from "../../types.js";
 import { atomicWriteJson, readJson } from "../../state.js";
 import { loadQuestionBankSnapshot, truthSubjectOf, type NormalizedQuestion } from "./bank.js";
 import { enabledBrands, loadMarketingSharkConfig, type Brand, type MarketingSharkConfig } from "./config.js";
-import { runTruthGates, type GateViolation } from "./gates.js";
+import { runFitGate, runTruthGates, type GateViolation } from "./gates.js";
 import {
   EMPTY_LEDGER,
   MarketingSharkLedgerSchema,
@@ -25,8 +25,9 @@ import type { HookAssignment } from "../../contracts/hook-assignment.js";
 import type { Hook } from "@boardlessai/carousel-studio";
 import { ChumOutput, MarketingSharkPackage, packagePath, SLIDE_ROLES } from "./package.js";
 import { buildChumPacket, readCraftRules } from "./packet.js";
+import { readBrandTrendLines } from "./trends.js";
 import { buildQueueItems } from "./queue.js";
-import { engineVersion, MARKETINGSHARK_FORMAT, renderCarousel, type RenderedRoleSlide } from "./render.js";
+import { codeOwnedSlotsFit, engineVersion, MARKETINGSHARK_FORMAT, renderCarousel, slotBudget, type RenderedRoleSlide } from "./render.js";
 import { MeetingRecordSchema } from "../../contracts/meeting-record.js";
 
 export const LEDGER_PATH = "marketingshark/ledger.json";
@@ -111,7 +112,9 @@ export async function planBrandDay(input: {
     ledger: input.ledger,
     brandId: input.brand.id,
     date: input.date,
-    questionIds: snapshot.questions.map((entry) => entry.id),
+    // A question whose own options overflow the context slide would fail at render whatever the
+    // writer did; it is skipped here for $0 instead of after a paid call.
+    questionIds: snapshot.questions.filter((entry) => codeOwnedSlotsFit(input.brand, entry)).map((entry) => entry.id),
     contentHash: snapshot.contentHash
   });
   const question = snapshot.questions.find((entry) => entry.id === selection.questionId);
@@ -413,6 +416,8 @@ export async function runBrandDay(input: {
   }
 
   const craft = await readCraftRules(repoRoot);
+  // Read from the real state root in a dry run too: the snapshot is committed data and costs $0.
+  const trendLines = await readBrandTrendLines({ stateRoot, configRoot, brandId: brand.id, date });
   let violations: GateViolation[] = [];
   let output: ChumOutput | null = null;
 
@@ -425,6 +430,7 @@ export async function runBrandDay(input: {
       hookLines: hookLinesFor({ hook: plan.hook, brand, question: plan.question }),
       hookId: plan.assignment.hookId,
       date,
+      trendLines,
       ...(violations.length ? { violations } : {})
     });
     let candidate: ChumOutput;
@@ -455,6 +461,17 @@ export async function runBrandDay(input: {
       question: plan.question,
       hookLines: hookLinesFor({ hook: plan.hook, brand, question: plan.question })
     });
+    if (violations.length === 0) {
+      try {
+        violations = runFitGate({ output: candidate, brand, question: plan.question });
+      } catch (error) {
+        return {
+          outcome: { status: "aborted", brandId: brand.id, reason: "render-failed", detail: message(error), spendUsd },
+          ledger: input.ledger,
+          artifacts: []
+        };
+      }
+    }
     if (violations.length === 0) output = candidate;
   }
 
@@ -563,6 +580,17 @@ function withRole(slide: ChumOutput["carousels"]["cs"]["slides"][number], index:
   };
 }
 
+/** Whole words from the start of a text, within a character count, for the fixture reply. */
+function wordsWithin(text: string, maxChars: number): string {
+  let kept = "";
+  for (const word of text.split(/\s+/u).filter(Boolean)) {
+    const next = kept ? `${kept} ${word}` : word;
+    if (next.length > maxChars) break;
+    kept = next;
+  }
+  return kept;
+}
+
 function message(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
@@ -583,8 +611,8 @@ export function fixtureChumOutput(input: { brand: Brand; question: NormalizedQue
     slides: [
       { role: "hook" as const, headline: locale === "cs" ? input.hookACs : input.hookA, alt: `Slide 1: fixture hook (${locale})` },
       { role: "context" as const, headline: (locale === "cs" && question.cs?.question ? question.cs.question : question.en.question).split("\n")[0]!.slice(0, 110), ...(code ? { body: code } : {}), alt: `Slide 2: fixture question (${locale})` },
-      { role: "reveal" as const, headline: letter, body: answer.slice(0, 110), alt: `Slide 3: fixture reveal (${locale})` },
-      { role: "why" as const, headline: "Fixture", body: question.en.explanation.split(/\s+/u).slice(0, 25).join(" "), alt: `Slide 4: fixture explanation (${locale})` },
+      { role: "reveal" as const, headline: letter, body: wordsWithin(answer, slotBudget("stat-highlight", "stat-label").maxChars - 10), alt: `Slide 3: fixture reveal (${locale})` },
+      { role: "why" as const, headline: "Fixture", body: wordsWithin(question.en.explanation, slotBudget("quote-card", "quote").maxChars - 30), alt: `Slide 4: fixture explanation (${locale})` },
       { role: "footer" as const, headline: brand.slide5[locale], alt: `Slide 5: fixture footer (${locale})` }
     ]
   });

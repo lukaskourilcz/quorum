@@ -9,6 +9,7 @@ import { ROOM_DEGRADATION_ORDER } from "../src/portfolio/schedule.js";
 import { repoRoot } from "../src/paths.js";
 import { PhaseSchema, RunnablePhaseSchema, ScheduledPhaseSchema } from "../src/types.js";
 import { composeMeetingRouteDefinition, loadVentureRegistry, resolveScheduledClock } from "../src/ventures/registry.js";
+import { allOperating } from "./fixtures/all-operating-registry.js";
 
 const PHASES = ["bh-desk", "dm-desk", "dm-growth", "ts-desk", "kv-desk"] as const;
 const VENTURE_BY_PHASE = {
@@ -46,20 +47,25 @@ describe("the five reviewed phase chains", () => {
       expect(RunnablePhaseSchema.parse(phase)).toBe(phase);
       expect(ScheduledPhaseSchema.parse(phase)).toBe(phase);
       expect(composeMeetingRouteDefinition(registry, phase, "dry").ventureId).toBe(VENTURE_BY_PHASE[phase]);
-      expect(dispatch.match(new RegExp(`^ {10}- ${phase}$`, "gmu"))).toHaveLength(1);
+      // A paused venture's phases leave the dispatch options and the cron table
+      // (operations-2026-09b) and come back with its status. The budget gate keeps naming them,
+      // so a resumed room is gated the moment it returns.
+      const paused = registry.ventures.find((venture) => venture.id === VENTURE_BY_PHASE[phase])?.status === "paused";
+      expect(dispatch.match(new RegExp(`^ {10}- ${phase}$`, "gmu")) ?? [], phase).toHaveLength(paused ? 0 : 1);
       expect(budgetGate, `${phase} is outside the workflow budget gate`).toContain(`test "$phase" = "${phase}"`);
       // A room a venture day dispatches has no cron of its own: its day carries the two firings
       // and runs it inside the slot. Door Money's two rooms are the standing example.
       const dispatchedBy = registry.ventures.find((venture) => venture.day?.steps.includes(phase))?.day;
       const cronPhase = dispatchedBy?.kind ?? phase;
-      expect(vercel.crons.filter(({ path: route }) => route === `/api/cron/${cronPhase}`)).toHaveLength(2);
+      expect(vercel.crons.filter(({ path: route }) => route === `/api/cron/${cronPhase}`), phase).toHaveLength(paused ? 0 : 2);
       expect(phaseHasStandingAgenda(policy, phase)).toBe(true);
       expect(slotRecordPath(phase, "2026-08-10")).toBe(`meetings/2026-08-10-${phase}.json`);
     }
   });
 
   it("lets a backstop sweep identify every new phase when its earlier slots are recorded", async () => {
-    const registry = await loadVentureRegistry();
+    // Every room running: this is how a sweep reaches a room, whichever ventures run today.
+    const registry = allOperating(await loadVentureRegistry());
     const clock = resolveScheduledClock(registry);
     for (const phase of PHASES) {
       const root = await mkdtemp(path.join(os.tmpdir(), `review-sweep-${phase}-`));

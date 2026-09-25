@@ -318,8 +318,15 @@ export interface ContractRepair {
   received: string;
   /** What the parser saw instead. Absent when the value was dropped. */
   became?: string;
+  /**
+   * Why a value could not be repaired: the JSON error and the text around the position it names.
+   * Only on `json_string_undecodable`, which is a record rather than a repair — the parse still
+   * rejects the value, and this is what the next person reading the run needs to see why.
+   */
+  detail?: string;
   reason:
     | "json_string_parsed"
+    | "json_string_undecodable"
     | "tag_slugified"
     | "tag_unslugifiable_dropped"
     | "tag_duplicate_dropped"
@@ -374,16 +381,21 @@ interface JsonSchemaNode {
  * to the other container kind, is handed back untouched so the zod parse rejects it
  * with the same message as before.
  */
-function parseContainerString(text: string, kind: string): unknown {
+function parseContainerString(text: string, kind: string): { value: unknown } | { error: string } {
   let parsed: unknown;
   try {
     parsed = JSON.parse(text);
-  } catch {
-    return undefined;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "not JSON";
+    const position = Number(/position (\d+)/u.exec(message)?.[1]);
+    const near = Number.isInteger(position)
+      ? ` near \u00ab${text.slice(Math.max(0, position - 60), position + 60)}\u00bb`
+      : "";
+    return { error: `${message}${near}`.slice(0, 400) };
   }
-  if (kind === "object" && isRecord(parsed)) return parsed;
-  if (kind === "array" && Array.isArray(parsed)) return parsed;
-  return undefined;
+  if (kind === "object" && isRecord(parsed)) return { value: parsed };
+  if (kind === "array" && Array.isArray(parsed)) return { value: parsed };
+  return { error: `decodes to ${Array.isArray(parsed) ? "an array" : typeof parsed}, not ${kind === "array" ? "an array" : "an object"}` };
 }
 
 /**
@@ -403,14 +415,21 @@ function unwrapJsonStrings(
   let current = value;
   if (typeof current === "string" && (schema.type === "object" || schema.type === "array")) {
     const parsed = parseContainerString(current, schema.type);
-    if (parsed === undefined) return current;
+    if ("error" in parsed) {
+      // Left as it arrived, so the zod parse rejects it exactly as before. Recorded so the run
+      // report says what the model sent: through September 2026 six days were lost to list
+      // fields that arrived as strings this parser could not decode, and the report named only
+      // the field (quorum#564).
+      repairs.push({ field: path, received: sample(current), detail: parsed.error, reason: "json_string_undecodable" });
+      return current;
+    }
     repairs.push({
       field: path,
       received: sample(current),
       became: `${schema.type} decoded from that JSON string`,
       reason: "json_string_parsed"
     });
-    current = parsed;
+    current = parsed.value;
   }
   if (schema.type === "object" && schema.properties && isRecord(current)) {
     const repaired: Record<string, unknown> = { ...current };

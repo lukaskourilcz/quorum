@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
 import { ADMIN_THEME_COOKIE } from "../../src/lib/admin-shell-preferences";
 
 interface VentureRegistry {
-  ventures: Array<{ id: string; adminTabs: string[] }>;
+  ventures: Array<{ id: string; adminTabs: string[]; status?: string }>;
 }
 
 const registry = JSON.parse(
@@ -14,6 +14,7 @@ const registry = JSON.parse(
 const registeredTabs = registry.ventures.flatMap((venture) =>
   venture.adminTabs.map((tab) => ({
     venture: venture.id,
+    paused: venture.status === "paused",
     tab,
     route: `/admin?venture=${venture.id}&tab=${tab}`,
   })),
@@ -26,7 +27,11 @@ test("every tab in the live venture registry remains a reachable Admin destinati
     const response = await page.goto(destination.route, { waitUntil: "domcontentloaded" });
     expect(response?.status(), destination.route).toBeLessThan(400);
     await expect(page.locator("[data-admin-content]")).toBeVisible();
-    await expect(page.locator(`a[href="${destination.route}"][aria-current="page"]`)).toBeVisible();
+    // A paused venture's workspace is an archive: reachable by its address and marked as paused,
+    // but no longer in the navigation, so no link is marked current (operations-2026-09b).
+    await expect(destination.paused
+      ? page.locator(`[data-admin-paused-venture="${destination.venture}"]`)
+      : page.locator(`a[href="${destination.route}"][aria-current="page"]`)).toBeVisible();
     await expect(page.getByText("The project desk could not load.", { exact: true })).toHaveCount(0);
   }
 });

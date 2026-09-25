@@ -82,8 +82,9 @@ cmap coverage is tested. It is deliberately not a shared family because the shar
 contract has one passage slot per slide and the bilingual kit must fail if either language is
 missing.
 
-The current engine inventory is ten brand skins (the original five plus Kvórum,
-BOOKSOFHISTORY, Door Money, Tehdejší svět and WebDev Signal), four canvases (square, portrait, story and
+The current engine inventory is nine brand skins (four of the original five, geoShark having
+retired with StudyShark, plus Kvórum, BOOKSOFHISTORY, Door Money, Tehdejší svět and WebDev
+Signal), four canvases (square, portrait, story and
 Threads), and one recorded `carousel-recipe/1` per social set. A recipe chooses a family, A/B,
 accent swap, photo treatment, type scale and phase seed deterministically, while excluding the
 venture's two most recently used families when the pool allows it.

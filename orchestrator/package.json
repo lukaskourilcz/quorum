@@ -19,6 +19,7 @@
     "digest:daily": "tsx src/notify/digest-cli.ts",
     "docs:refresh": "node --import tsx src/docs/ecosystem-cli.ts",
     "edition:dry": "tsx src/edition/dry-run.ts",
+    "edition:yield": "tsx src/edition/yield.ts",
     "fightaiq:backfill": "tsx src/fightaiq/backfill-cli.ts",
     "fightaiq:events": "tsx src/fightaiq/events-cli.ts",
     "fightaiq:roster-sync": "tsx src/fightaiq/roster-sync-cli.ts",

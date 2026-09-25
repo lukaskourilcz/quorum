@@ -40,10 +40,10 @@ beforeEach(() => {
     });
     return new Response(githubStatus === 204 ? null : "rejected", { status: githubStatus });
   });
-  // 08:00 Prague on 4 August 2026 (CEST), the MMA Files day's own hour. It stands in for the
-  // story meeting this case used to name, which is a step of that day now.
+  // 07:00 Prague on 4 August 2026 (CEST), marketingShark's own hour. It stood in for the MMA
+  // Files day until that venture was paused and left the clock (operations-2026-09b).
   vi.useFakeTimers();
-  vi.setSystemTime(new Date("2026-08-04T06:00:00.000Z"));
+  vi.setSystemTime(new Date("2026-08-04T05:00:00.000Z"));
 });
 
 afterEach(() => {
@@ -67,34 +67,34 @@ describe("the cron route refuses anything that is not Vercel's cron", () => {
     ["the secret with something appended", `Bearer ${SECRET}x`],
     ["a lowercased bearer", `bearer ${SECRET}`]
   ])("refuses %s", async (_name, header) => {
-    const response = await call("mma-day", header);
+    const response = await call("ms-daily", header);
     expect(response.status).toBe(401);
     expect(calls).toHaveLength(0);
   });
 
   it("refuses everything when CRON_SECRET is unset, rather than falling open", async () => {
     vi.stubEnv("CRON_SECRET", undefined);
-    expect((await call("mma-day", `Bearer ${SECRET}`)).status).toBe(401);
-    expect((await call("mma-day")).status).toBe(401);
+    expect((await call("ms-daily", `Bearer ${SECRET}`)).status).toBe(401);
+    expect((await call("ms-daily")).status).toBe(401);
     expect(calls).toHaveLength(0);
   });
 
   it("refuses everything when CRON_SECRET is set to an empty string", async () => {
     vi.stubEnv("CRON_SECRET", "");
     // An empty secret would otherwise make "Bearer " a valid credential.
-    expect((await call("mma-day", "Bearer ")).status).toBe(401);
+    expect((await call("ms-daily", "Bearer ")).status).toBe(401);
     expect(calls).toHaveLength(0);
   });
 
   it("is not fooled by Vercel's own user agent without the secret", async () => {
-    const response = await call("mma-day", undefined, { "user-agent": "vercel-cron/1.0" });
+    const response = await call("ms-daily", undefined, { "user-agent": "vercel-cron/1.0" });
     expect(response.status).toBe(401);
     expect(calls).toHaveLength(0);
   });
 
   it("says nothing about which part was wrong", async () => {
-    const missing = await call("mma-day");
-    const wrong = await call("mma-day", "Bearer nope");
+    const missing = await call("ms-daily");
+    const wrong = await call("ms-daily", "Bearer nope");
     expect(await missing.text()).toBe(await wrong.text());
     expect(missing.status).toBe(wrong.status);
   });
@@ -123,9 +123,9 @@ describe("the cron route refuses anything that is not Vercel's cron", () => {
 
 describe("the cron route dispatches the slot it was called for", () => {
   it("dispatches the phase in the path as a scheduled firing", async () => {
-    const response = await call("mma-day", `Bearer ${SECRET}`);
+    const response = await call("ms-daily", `Bearer ${SECRET}`);
     expect(response.status).toBe(202);
-    expect(await response.json()).toEqual({ dispatched: true, phase: "mma-day" });
+    expect(await response.json()).toEqual({ dispatched: true, phase: "ms-daily" });
     expect(calls).toHaveLength(1);
     expect(calls[0]!.url).toBe(
       "https://api.github.com/repos/lukaskourilcz/quorum/actions/workflows/cycle.yml/dispatches"
@@ -135,28 +135,28 @@ describe("the cron route dispatches the slot it was called for", () => {
     // this route cannot ask for a dry run or for the owner's delivery-only mode.
     expect(calls[0]!.body).toEqual({
       ref: "main",
-      inputs: { phase: "mma-day", trigger: "vercel-cron" }
+      inputs: { phase: "ms-daily", trigger: "vercel-cron" }
     });
   });
 
   it("does nothing for the daylight-saving variant that is not in force", async () => {
-    // mma-day is the 08:00 Prague slot, so under CEST its live entry is 06:00 UTC. The 07:00 UTC
+    // ms-daily is the 07:00 Prague slot, so under CEST its live entry is 05:00 UTC. The 06:00 UTC
     // entry exists for winter and fires today too; it must dispatch nothing.
-    vi.setSystemTime(new Date("2026-08-04T07:00:00.000Z"));
-    const response = await call("mma-day", `Bearer ${SECRET}`);
+    vi.setSystemTime(new Date("2026-08-04T06:00:00.000Z"));
+    const response = await call("ms-daily", `Bearer ${SECRET}`);
     expect(response.status).toBe(200);
     expect(await response.json()).toMatchObject({ dispatched: false, reason: "inactive-dst-variant" });
     expect(calls).toHaveLength(0);
   });
 
   it("dispatches from the winter entry once the clocks have gone back", async () => {
-    // Same slot, same two entries; in January it is the 07:00 UTC one that is live.
-    vi.setSystemTime(new Date("2026-01-04T07:00:00.000Z"));
-    expect((await call("mma-day", `Bearer ${SECRET}`)).status).toBe(202);
+    // Same slot, same two entries; in January it is the 06:00 UTC one that is live.
+    vi.setSystemTime(new Date("2026-01-04T06:00:00.000Z"));
+    expect((await call("ms-daily", `Bearer ${SECRET}`)).status).toBe(202);
     expect(calls).toHaveLength(1);
     calls = [];
-    vi.setSystemTime(new Date("2026-01-04T06:00:00.000Z"));
-    expect((await call("mma-day", `Bearer ${SECRET}`)).status).toBe(200);
+    vi.setSystemTime(new Date("2026-01-04T05:00:00.000Z"));
+    expect((await call("ms-daily", `Bearer ${SECRET}`)).status).toBe(200);
     expect(calls).toHaveLength(0);
   });
 
@@ -200,15 +200,25 @@ describe("the cron route dispatches the slot it was called for", () => {
     expect(calls).toHaveLength(0);
   });
 
+  it("refuses a paused venture's phase, which holds no slot on the clock", async () => {
+    // The MMA Files day at its old 08:00 Prague hour. Paused ventures leave the schedule
+    // (operations-2026-09b); a stale cron entry for one must start nothing.
+    vi.setSystemTime(new Date("2026-08-04T06:00:00.000Z"));
+    const response = await call("mma-day", `Bearer ${SECRET}`);
+    expect(response.status).toBe(404);
+    expect(await response.json()).toMatchObject({ dispatched: false, reason: "phase-has-no-slot" });
+    expect(calls).toHaveLength(0);
+  });
+
   it("refuses to fire when the dispatch token is missing", async () => {
     vi.stubEnv("QUORUM_DISPATCH_TOKEN", undefined);
-    expect((await call("mma-day", `Bearer ${SECRET}`)).status).toBe(503);
+    expect((await call("ms-daily", `Bearer ${SECRET}`)).status).toBe(503);
     expect(calls).toHaveLength(0);
   });
 
   it("reports a dispatch GitHub rejected instead of claiming success", async () => {
     githubStatus = 422;
-    const response = await call("mma-day", `Bearer ${SECRET}`);
+    const response = await call("ms-daily", `Bearer ${SECRET}`);
     expect(response.status).toBe(502);
     expect(await response.json()).toMatchObject({ dispatched: false, status: 422 });
   });

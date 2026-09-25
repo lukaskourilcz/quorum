@@ -1,7 +1,7 @@
 import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { parse } from "yaml";
 import { loadRoutingConfig, routeBoardroom } from "../src/boardroom/router.js";
 import { MeetingSkipSchema } from "../src/contracts/meeting-skip.js";
@@ -15,6 +15,11 @@ import {
 import { createOfflineCaughtUpMeeting } from "../src/meetings/record.js";
 import { CRON_HOUR_CARRY, CRON_MINUTE } from "../src/ventures/registry.js";
 import { configRoot, repoRoot } from "../src/paths.js";
+
+// Schedule mechanics are tested on every room, whichever ventures the owner runs today.
+vi.mock("../src/ventures/registry.js", (importOriginal) =>
+  import("./fixtures/all-operating-registry.js").then(({ registryModuleWithEveryVentureRunning }) =>
+    registryModuleWithEveryVentureRunning(importOriginal as never)));
 
 /** A finished Prague day, read at health.yml's cron the next morning: 08:15 UTC, 10:15 Prague. */
 const DATE = "2026-08-02";

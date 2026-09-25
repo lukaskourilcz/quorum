@@ -6,6 +6,10 @@ infrastructure owns the agent registry, budget, source policy, meeting records,
 specialist agendas, calendar, admin, delivery checks and public explanation. Each
 project keeps a narrow output boundary rather than cloning the orchestrator.
 
+Since `operations-2026-09b` (2026-09-25) only DNESKAi, marketingShark, GoVIRAL, the Design Lab
+and WebDev Signal run. Every other workspace below is paused: its code and state remain, it holds
+no slot on the clock, and the admin lists it in Settings rather than in its navigation.
+
 ## Projects
 
 | Project | State | What it does | Hard boundary |

@@ -41,7 +41,7 @@ builds and after a real 22:00 checkpoint. Never hand-edit the generated block.
 <!-- GENERATED:CURRENT-OPERATING-TRUTH:START -->
 ## Current operating truth (generated)
 
-Refreshed from committed state: **2026-09-25T10:05:49.886Z**. This block is generated deterministically; edit the source state, not these lines.
+Refreshed from committed state: **2026-09-25T13:03:54.977Z**. This block is generated deterministically; edit the source state, not these lines.
 
 | Item | Current value |
 | --- | --- |
@@ -211,10 +211,10 @@ again in English, and AUDIT holds the veto seat. MAKO's weekly review is specifi
 instructions are `orchestrator/prompts/marketingshark/strategy.md` — and is not yet wired to a
 room, so no weekly call runs and none is billed.
 
-devShark is the first brand and the only one enabled: its 3,633-question webdev bank is
-consumed read-only as a committed snapshot pinned to a source commit, and nothing is written
-back to that repository. geoShark is present in config and disabled; enabling it is one
-importer run and one `enabled` flag.
+devShark is the only brand: its 3,633-question webdev bank is consumed read-only as a
+committed snapshot pinned to a source commit, and nothing is written back to that repository.
+geoShark, the disabled brand that pointed at StudyShark's geography bank, was removed when
+StudyShark was retired in September 2026, together with its `geo` hook lines.
 
 Everything except one model call per brand per day is deterministic and costs nothing. Which
 question runs comes from a seeded order over the bank, so every question is served once before
@@ -327,8 +327,8 @@ quiz-code-context. The eleventh was added for marketingShark and justified by a 
 rather than a preference: every other live layout's widest monospace slot holds 100
 characters over two lines, which is a source label and not a program, so a quiz question
 carrying a fenced code block had nowhere legible to put it. Brand token sets now cover
-nine brands: DNESKAi, MMA Files, Titty Tuesdays, devShark, geoShark, BOOKSOFHISTORY,
-Door Money, Tehdejší svět and Kvórum. Tehdejší svět uses committed Cyrillic-complete
+nine brands: DNESKAi, MMA Files, Titty Tuesdays, devShark, BOOKSOFHISTORY, Door Money,
+Tehdejší svět, Kvórum and WebDev Signal. Tehdejší svět uses committed Cyrillic-complete
 Literata and Inter cuts plus a Ukrainian glyph-coverage gate.
 MOTIF records cited text observations without crawling or downloading imagery. EASEL
 authors original data-only proposals. Schema, contrast, safe-area, token, overflow,
@@ -340,7 +340,7 @@ one line on slide 1 whose job is to earn the next interaction, and it is gated: 
 declares `truthRequires` predicates and may only render on content whose metadata makes
 them true. Gates license claims — that is the entire honesty model, and it is why the
 engine ports everywhere while the strings do not. The libraries live beside the engine in
-`studio/hooks/`: 50 hooks for devShark and geoShark, 12 for DNESKAi and 16 for MMA Files,
+`studio/hooks/`: 50 hooks for devShark, 12 for DNESKAi and 16 for MMA Files,
 each written against its own surface's confirmed vocabulary. The `no-hook` fallback remains
 the standing behaviour for any pack whose gates all fail — the template's own headline renders
 and the pack is logged rather than blocked.

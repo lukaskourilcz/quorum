@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { CAROUSEL_BRANDS } from "@boardlessai/carousel-studio";
-import { designLabVentureIds, isDesignLabVenture, readDesignLabVenture } from "@/lib/design-lab-ventures";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import {
+  activeDesignLabVentureIds,
+  designLabVentureIds,
+  isDesignLabVenture,
+  readDesignLabSections,
+  readDesignLabVenture
+} from "@/lib/design-lab-ventures";
 
 /**
  * The Design Lab's sections are the renderer's brand registry, and that is the whole point.
@@ -17,11 +26,17 @@ describe("the Design Lab's venture sections", () => {
   });
 
   it("covers every venture the owner named, whether or not it publishes articles", () => {
-    // devShark, geoShark and Titty Tuesdays deliver no articles. They still have a palette and
-    // three typefaces, which is exactly what their section is for.
-    for (const id of ["caught-up", "mma-files", "devshark", "geoshark", "titty-tuesdays", "tehdejsi-svet"]) {
+    // devShark and Titty Tuesdays deliver no articles. They still have a palette and three
+    // typefaces, which is exactly what their section is for.
+    for (const id of ["caught-up", "mma-files", "devshark", "titty-tuesdays", "tehdejsi-svet"]) {
       expect(designLabVentureIds()).toContain(id);
     }
+  });
+
+  it("keeps devShark as the only shark section", () => {
+    // The geography brand retired with StudyShark. A section for it would offer the owner a
+    // palette for a product nothing promotes any more.
+    expect(designLabVentureIds().filter((id) => id.endsWith("shark"))).toEqual(["devshark"]);
   });
 
   it("opens article rails for every summary-producing venture", async () => {
@@ -47,5 +62,37 @@ describe("the Design Lab's venture sections", () => {
       expect(brand.fonts.headline.length).toBeGreaterThan(1);
       expect(brand.fonts.body.length).toBeGreaterThan(1);
     }
+  });
+});
+
+describe("the Design Lab offers running ventures only (operations-2026-09b)", () => {
+  it("lists DNESKAi, devShark and WebDev Signal with today's registry", async () => {
+    expect(await activeDesignLabVentureIds()).toEqual(["caught-up", "devshark", "webdev-signal"]);
+    expect((await readDesignLabSections()).map((section) => section.id)).toEqual(["caught-up", "devshark", "webdev-signal"]);
+  });
+
+  it("drops a paused venture's brand and a disabled marketingShark brand, and keeps both renderable", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "design-lab-active-"));
+    await mkdir(path.join(root, "config"), { recursive: true });
+    await writeFile(path.join(root, "config", "ventures.json"), JSON.stringify({
+      schemaVersion: "venture-registry/1",
+      ventures: [
+        { id: "caught-up", status: "operating" },
+        { id: "mma-files", status: "paused" },
+        { id: "marketingshark", status: "operating" },
+        { id: "titty-tuesdays", status: "operating" }
+      ]
+    }));
+    await writeFile(path.join(root, "config", "marketingshark.json"), JSON.stringify({
+      brands: [{ id: "devshark", enabled: true }, { id: "geoshark", enabled: false }]
+    }));
+    expect(await activeDesignLabVentureIds(root)).toEqual(["caught-up", "titty-tuesdays", "devshark"]);
+    // The renderer's registry is untouched: a paused brand's recorded decks still render.
+    expect(isDesignLabVenture("mma-files")).toBe(true);
+  });
+
+  it("offers every brand rather than none when the registry cannot be read", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "design-lab-missing-"));
+    expect(await activeDesignLabVentureIds(root)).toEqual(designLabVentureIds());
   });
 });
