@@ -4,7 +4,7 @@
 
 `SECOND-HANDOFF-25-9-2026.md` at the repository root designs the Queue workspace, the devShark profiles on LinkedIn, Instagram and Threads, the LinkedIn transport and the approval-to-publish path. The implementation issues are #568 to #576 (label `second-handoff-25-9-2026`); #556, #561 and #562 come first. Building it sends nothing; these are the steps only you can take, in order:
 
-- [ ] **Countersign `state/decisions/2026-09-26-devshark-social-queue.md`** (`devshark-social-2026-09a`, proposed with #569): set its status to `countersigned` in your own commit. [imp:5] [owner:me] [time:20m] [kind:decision]
+- [ ] **Countersign `state/decisions/2026-09-26-devshark-social-queue.md`** once #568 has written it. [imp:5] [owner:me] [time:20m] [kind:decision]
 - [ ] **Create the devShark profiles** — a LinkedIn Company Page (desktop or iOS), an Instagram professional account (Instagram Login, no Facebook Page needed) and its Threads profile; record the URLs here and in devShark's `client/product-catalog.ts`. [imp:5] [owner:me] [time:1h] [kind:setup]
 - [ ] **Buffer Free account** — connect the LinkedIn Page, create the API key, store `BUFFER_API_KEY` and `BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN` as Actions secrets, run one multi-image test post from the API and record the result for #571. [imp:4] [owner:me] [time:45m] [kind:setup]
 - [ ] **Meta developer app** with the Instagram and Threads use cases, the devShark accounts as testers, and the four `DEVSHARK_*` secrets; calendar the 60-day token refresh. [imp:4] [owner:me] [time:45m] [kind:setup]

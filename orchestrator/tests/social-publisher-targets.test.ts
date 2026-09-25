@@ -508,6 +508,27 @@ describe("devShark publisher targets", () => {
       .toMatchObject({ decision: "denied", reasons: ["permanently-isolated-source"] });
   });
 
+  it("migrates a v1 marketingShark item to the devShark profile that owns its channel's connection", async () => {
+    // quorum#568 made marketingShark write queue v2; a v1 item it wrote before that still has to
+    // migrate, and devShark keeps one profile per platform rather than one with two connections.
+    const [legacy, committed, capabilityMap] = await Promise.all([legacyQueueItem(), loadSocialPublisherRegistry(configRoot), loadVentureCapabilityMap(configRoot)]);
+    const legacyBase = QueueItemSchema.parse(legacy);
+    for (const channel of ["threads", "instagram"] as const) {
+      const base = { ...legacyBase, id: `marketingshark-legacy-${channel}`, venture: "marketingshark", channel, utm: { ...legacyBase.utm, source: channel } };
+      const candidate = QueueItemSchema.parse({ ...base, content: { ...base.content, contentHash: queuePayloadHash(base) } });
+      const migrated = migrateLegacyQueueItem(candidate, committed);
+      expect(migrated).toMatchObject({
+        sourceVentureId: "marketingshark",
+        target: { profileId: `social-profile-devshark-${channel}`, connectionBindingRef: `social-connection-devshark-${channel}`, role: "primary" }
+      });
+      expect(resolvePublisherTarget({ item: migrated, registry: committed, capabilityMap, environment: devSharkEnvironment }).decision).not.toBe("eligible");
+    }
+
+    const crossVenture = structuredClone(committed);
+    crossVenture.legacyQueueMappings.find(({ venture }) => venture === "marketingshark")!.connections.threads = "social-connection-caught-up-threads";
+    expect(SocialPublisherRegistrySchema.safeParse(crossVenture).success).toBe(false);
+  });
+
   it("refuses a registry that routes LinkedIn around Buffer or Meta around Direct Meta", async () => {
     const committed = await loadSocialPublisherRegistry(configRoot);
     const reroute = (connectionId: string, providerId: string) => {

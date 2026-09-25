@@ -76,10 +76,11 @@ export async function auditSocialRelease(repoRoot = defaultRepoRoot): Promise<So
   const profileVentures = publisher.profiles.map(({ ventureRef }) => ventureRef).filter((value): value is string => value !== null).sort();
   // Eleven profiles across eight ventures. WebDev Signal holds one per locale edition, because its
   // Czech and English editions share a brand and an evidence brief but keep their own cadence,
-  // metrics and kill state. marketingShark holds devShark's three, one per platform (quorum#569).
+  // metrics and kill state. marketingShark holds devShark's three, one per platform (quorum#569),
+  // and its fourth legacy mapping sends a v1 item to the profile that owns each Meta connection.
   // Every clause with teeth is unchanged — every profile is an owned brand that is not
   // live-eligible, and every connection is held.
-  checks.push(check("owned-profile-topology", publisher.profiles.length === 11 && publisher.connections.length === 9 && publisher.legacyQueueMappings.length === 3
+  checks.push(check("owned-profile-topology", publisher.profiles.length === 11 && publisher.connections.length === 9 && publisher.legacyQueueMappings.length === 4
     && canonicalJson(profileVentures) === canonicalJson(["booksofhistory", "caught-up", "door-money", "marketingshark", "marketingshark", "marketingshark", "mma-files", "tehdejsi-svet", "titty-tuesdays", "webdev-signal", "webdev-signal"])
     && publisher.profiles.every(({ kind, role, liveEligible }) => kind === "owned-brand" && role === "venture-primary" && !liveEligible)
     && publisher.connections.every(({ mode, enabledByHumanAt }) => mode === "held" && enabledByHumanAt === null),

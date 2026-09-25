@@ -74,7 +74,11 @@ export const SocialPublisherRegistrySchema = z.strictObject({
     }
     for (const [platform, connectionId] of Object.entries(mapping.connections)) {
       const connection = registry.connections.find((candidate) => candidate.id === connectionId);
-      if (!connection || connection.profileId !== mapping.profileId || connection.platform !== platform) {
+      // The connection belongs to the venture's own primary profile: the mapped one, or, for a
+      // venture that keeps one profile per platform as devShark does (quorum#568), another primary
+      // profile of the same venture. Never another venture's, and never a non-primary role.
+      const owner = connection ? registry.profiles.find((candidate) => candidate.id === connection.profileId) : undefined;
+      if (!connection || !owner || owner.role !== "venture-primary" || owner.ventureRef !== mapping.venture || connection.platform !== platform) {
         context.addIssue({ code: "custom", message: "Legacy mapping must resolve the matching profile/platform connection", path: ["legacyQueueMappings", index, "connections", platform] });
       }
     }
@@ -137,7 +141,10 @@ export function migrateLegacyQueueItem(
   const registry = SocialPublisherRegistrySchema.parse(registryInput);
   const mapping = registry.legacyQueueMappings.find((candidate) => candidate.venture === legacy.venture);
   if (!mapping) throw new Error(`Legacy queue venture ${legacy.venture} has no explicit migration mapping`);
-  const profile = registry.profiles.find((candidate) => candidate.id === mapping.profileId);
+  // The target is the profile that owns the channel's connection, which the registry has already
+  // proved is one of the venture's own primary profiles.
+  const connection = registry.connections.find((candidate) => candidate.id === mapping.connections[legacy.channel]);
+  const profile = registry.profiles.find((candidate) => candidate.id === connection?.profileId);
   if (!profile) throw new Error("Legacy queue profile mapping is unavailable");
   const sourceContentHash = legacy.content.contentHash;
   const base = {

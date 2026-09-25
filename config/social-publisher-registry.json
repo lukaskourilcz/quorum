@@ -985,6 +985,15 @@
         "instagram": "social-connection-titty-tuesdays-instagram"
       },
       "mappingRef": "GitHub #409"
+    },
+    {
+      "venture": "marketingshark",
+      "profileId": "social-profile-devshark-instagram",
+      "connections": {
+        "threads": "social-connection-devshark-threads",
+        "instagram": "social-connection-devshark-instagram"
+      },
+      "mappingRef": "GitHub #568"
     }
   ]
 }
