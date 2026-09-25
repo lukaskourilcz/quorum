@@ -226,12 +226,24 @@ export const SocialActivationVentureSchema = openObject({
   decisionReference: z.literal("D2-autonomy-build-2026-08-01")
 });
 
+/**
+ * marketingShark's readiness for the devShark connections (quorum#569): packages drafted, at least
+ * three before any live send. Its own decision governs it, and three is a floor the record cannot
+ * be written below.
+ */
+export const MarketingSharkActivationSchema = SocialActivationVentureSchema.extend({
+  required: z.number().int().min(3),
+  decisionReference: z.literal("devshark-social-2026-09a")
+});
+
 export const SocialActivationSchema = openObject({
   schemaVersion: z.literal("social-activation/1"),
   ventures: openObject({
     "caught-up": SocialActivationVentureSchema,
     "mma-files": SocialActivationVentureSchema,
-    "titty-tuesdays": SocialActivationVentureSchema
+    "titty-tuesdays": SocialActivationVentureSchema,
+    // Optional so a file written before quorum#569 still parses; the next refresh adds it.
+    marketingshark: MarketingSharkActivationSchema.optional()
   }),
   updatedAt: DateTimeSchema
 });

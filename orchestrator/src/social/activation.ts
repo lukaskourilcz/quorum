@@ -1,7 +1,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import { z } from "zod";
 import path from "node:path";
-import { SocialActivationSchema, type SocialActivation } from "../contracts/autonomy.js";
+import { MarketingSharkActivationSchema, SocialActivationSchema, type SocialActivation } from "../contracts/autonomy.js";
 import { MarketingPlanSchema } from "../contracts/marketing-plan.js";
 import { ReleaseProofSchema } from "../contracts/autonomy.js";
 import { atomicWriteJson, atomicWriteText, readJson, readText } from "../state.js";
@@ -16,18 +16,25 @@ export type SocialVenture = "caught-up" | "mma-files" | "titty-tuesdays";
 export const SOCIAL_VENTURES: readonly SocialVenture[] = ["caught-up", "mma-files", "titty-tuesdays"];
 
 /**
- * Whether a queue item's venture owns a social account at all.
+ * Whether a queue item's venture may publish at all.
  *
- * Not every venture that writes a queue item publishes from one. marketingShark drafts bilingual
- * carousels for a human to review and has no channel, no credentials and no activation record, so
- * the publisher has to be able to tell "switched off" from "was never a publisher" -- reading
- * `.status` off a missing activation record would have thrown and taken the whole run with it.
+ * Not every venture that writes a queue item publishes from one. marketingShark drafts carousels
+ * for a human to review. Since quorum#569 it has held devShark connections and an activation record
+ * that counts its drafted packages, but it is still not a publishing venture: that changes only in
+ * the commit that records the owner's countersignature of `devshark-social-2026-09a`. The
+ * publisher has to be able to tell "switched off" from "not a publisher", and this is that test.
  */
 export function isPublishingVenture(venture: string): venture is SocialVenture {
   return (SOCIAL_VENTURES as readonly string[]).includes(venture);
 }
 
 export const SOCIAL_DECISION_REFERENCE = "D2-autonomy-build-2026-08-01" as const;
+
+/** The decision that governs marketingShark's devShark connections (quorum#569). */
+export const MARKETINGSHARK_SOCIAL_DECISION_REFERENCE = "devshark-social-2026-09a" as const;
+
+/** Drafted devShark packages before any live send, mirroring the ten-article rule of social-2026-08a. */
+export const MARKETINGSHARK_REQUIRED_PACKAGES = 3;
 
 /**
  * The reason written on a venture the registry has paused (`operations-2026-09b`).
@@ -53,19 +60,26 @@ export function mmaFilesUnlockCounter(events: readonly Exclude<DeliveryHealth, "
   return Math.min(10, count);
 }
 
-export function socialCredentialReferences(venture: SocialVenture, registry: SocialPublisherRegistry): string[] {
-  const mapping = registry.legacyQueueMappings.find((candidate) => candidate.venture === venture);
-  if (!mapping) return [];
-  return Object.values(mapping.connections).flatMap((connectionId) => {
-    const connection = registry.connections.find((candidate) => candidate.id === connectionId);
-    return connection?.credentialRef && connection.nativeAccountIdRef
+/**
+ * The reference names a venture's own primary connections need, in registry order.
+ *
+ * Read from the venture's primary profiles rather than the legacy queue mapping, which exists
+ * only for the three ventures that wrote queue v1 and could never name a LinkedIn connection.
+ * For those three the answer is the same four names in the same order.
+ */
+export function socialCredentialReferences(venture: string, registry: SocialPublisherRegistry): string[] {
+  const profileIds = new Set(registry.profiles
+    .filter((profile) => profile.role === "venture-primary" && profile.ventureRef === venture)
+    .map(({ id }) => id));
+  return [...new Set(registry.connections
+    .filter((connection) => profileIds.has(connection.profileId))
+    .flatMap((connection) => connection.credentialRef && connection.nativeAccountIdRef
       ? [connection.credentialRef, connection.nativeAccountIdRef]
-      : [];
-  });
+      : []))];
 }
 
 export function missingSocialCredentials(
-  venture: SocialVenture,
+  venture: string,
   environment: NodeJS.ProcessEnv,
   registry: SocialPublisherRegistry
 ): string[] {
@@ -174,6 +188,31 @@ async function caughtUpEvents(stateRoot: string): Promise<DeliveryHealth[]> {
   return events.sort((a, b) => a.at.localeCompare(b.at)).map((event) => event.health);
 }
 
+const DraftedDevSharkPackageSchema = z.looseObject({
+  schemaVersion: z.literal("marketingshark-package/1"),
+  brandId: z.literal("devshark"),
+  status: z.literal("draft")
+});
+
+/**
+ * How many devShark packages marketingShark has drafted, counted off disk.
+ *
+ * Only the fields that make a file a drafted devShark package are read, so a package-schema change
+ * elsewhere cannot silently reset the count; an unreadable file is not a draft.
+ */
+export async function draftedDevSharkPackages(stateRoot: string): Promise<number> {
+  let count = 0;
+  for (const file of await jsonFiles(path.join(stateRoot, "ventures", "marketingshark", "packages"))) {
+    if (path.basename(file) !== "package.json" || path.basename(path.dirname(file)) !== "devshark") continue;
+    try {
+      if (DraftedDevSharkPackageSchema.safeParse(JSON.parse(await readFile(file, "utf8"))).success) count += 1;
+    } catch {
+      // Unreadable packages do not count toward the gate.
+    }
+  }
+  return count;
+}
+
 async function launchReadyCampaignCount(stateRoot: string): Promise<number> {
   let count = 0;
   for (const file of await jsonFiles(path.join(stateRoot, "ventures", "titty-tuesdays", "plans"))) {
@@ -203,9 +242,53 @@ function initialActivation(now: Date): SocialActivation {
     ventures: {
       "caught-up": venture(7, "Waiting for seven consecutive verified deliveries."),
       "mma-files": venture(10, "Waiting for ten verified article deliveries with no unresolved failure."),
-      "titty-tuesdays": venture(4, "Waiting for four complete campaigns, credentials and the safety checker.")
+      "titty-tuesdays": venture(4, "Waiting for four complete campaigns, credentials and the safety checker."),
+      marketingshark: {
+        ...venture(MARKETINGSHARK_REQUIRED_PACKAGES, "Waiting for three drafted devShark packages and the devShark connections."),
+        decisionReference: MARKETINGSHARK_SOCIAL_DECISION_REFERENCE
+      }
     },
     updatedAt
+  });
+}
+
+/**
+ * marketingShark's record: drafted devShark packages against the floor of three, and the reference
+ * names of the three devShark connections. "enabled" here is readiness only; the runner still
+ * refuses marketingShark's items until `isPublishingVenture` says otherwise.
+ */
+function marketingSharkActivation(input: {
+  prior: SocialActivation["ventures"]["marketingshark"];
+  drafted: number;
+  missing: readonly string[];
+  paused: boolean;
+  now: Date;
+}): NonNullable<SocialActivation["ventures"]["marketingshark"]> {
+  const updatedAt = input.now.toISOString();
+  const base = {
+    counter: input.drafted,
+    required: MARKETINGSHARK_REQUIRED_PACKAGES,
+    updatedAt,
+    decisionReference: MARKETINGSHARK_SOCIAL_DECISION_REFERENCE
+  };
+  if (input.paused) {
+    return MarketingSharkActivationSchema.parse({ ...base, status: "paused", reason: REGISTRY_PAUSE_REASON, unlockedAt: input.prior?.unlockedAt ?? null });
+  }
+  if (input.prior?.status === "paused" && input.prior.reason !== REGISTRY_PAUSE_REASON) {
+    return MarketingSharkActivationSchema.parse({ ...input.prior, counter: input.drafted, updatedAt });
+  }
+  const ready = input.drafted >= MARKETINGSHARK_REQUIRED_PACKAGES;
+  const enabled = ready && input.missing.length === 0;
+  const reason = enabled
+    ? `Three drafted packages and every devShark reference present under ${MARKETINGSHARK_SOCIAL_DECISION_REFERENCE}; nothing sends before the owner countersigns it.`
+    : ready
+      ? `Drafted ${input.drafted}/${MARKETINGSHARK_REQUIRED_PACKAGES}; missing ${input.missing.join(", ")}.`
+      : `Drafted packages ${input.drafted}/${MARKETINGSHARK_REQUIRED_PACKAGES}.`;
+  return MarketingSharkActivationSchema.parse({
+    ...base,
+    status: enabled ? "enabled" : "locked",
+    reason: reason.slice(0, 500),
+    unlockedAt: enabled ? input.prior?.unlockedAt ?? updatedAt : null
   });
 }
 
@@ -256,10 +339,11 @@ export async function refreshSocialActivation(input: {
   const previousRaw = await readJson<unknown>(input.stateRoot, "social/activation.json", null);
   const previousParsed = SocialActivationSchema.safeParse(previousRaw);
   const previous = previousParsed.success ? previousParsed.data : initialActivation(now);
-  const [caughtEvents, mmaEvents, campaignCount] = await Promise.all([
+  const [caughtEvents, mmaEvents, campaignCount, draftedPackages] = await Promise.all([
     caughtUpEvents(input.stateRoot),
     releaseEvents(input.stateRoot, "mma-files"),
-    launchReadyCampaignCount(input.stateRoot)
+    launchReadyCampaignCount(input.stateRoot),
+    draftedDevSharkPackages(input.stateRoot)
   ]);
   const counters: Record<SocialVenture, number> = {
     "caught-up": caughtUpUnlockCounter(caughtEvents),
@@ -311,13 +395,24 @@ export async function refreshSocialActivation(input: {
       decisionReference: SOCIAL_DECISION_REFERENCE
     }];
   }));
-  const activation = SocialActivationSchema.parse({ schemaVersion: "social-activation/1", ventures, updatedAt: now.toISOString() });
-  for (const venture of Object.keys(activation.ventures) as SocialVenture[]) {
-    if (previous.ventures[venture]!.status !== "enabled" && activation.ventures[venture]!.status === "enabled") {
+  const marketingshark = marketingSharkActivation({
+    prior: previous.ventures.marketingshark,
+    drafted: draftedPackages,
+    missing: registryPaused.has("marketingshark")
+      ? []
+      : publisherRegistry
+        ? missingSocialCredentials("marketingshark", environment, publisherRegistry)
+        : ["SOCIAL_PUBLISHER_REGISTRY_UNAVAILABLE"],
+    paused: registryPaused.has("marketingshark"),
+    now
+  });
+  const activation = SocialActivationSchema.parse({ schemaVersion: "social-activation/1", ventures: { ...ventures, marketingshark }, updatedAt: now.toISOString() });
+  for (const venture of Object.keys(activation.ventures) as Array<SocialVenture | "marketingshark">) {
+    if (previous.ventures[venture]?.status !== "enabled" && activation.ventures[venture]?.status === "enabled") {
       await atomicWriteJson(input.stateRoot, `notify/social-unlocks/${venture}.json`, {
         schemaVersion: "social-unlock-note/1",
         venture,
-        decisionReference: SOCIAL_DECISION_REFERENCE,
+        decisionReference: activation.ventures[venture]!.decisionReference,
         counter: activation.ventures[venture]!.counter,
         unlockedAt: activation.ventures[venture]!.unlockedAt
       });
