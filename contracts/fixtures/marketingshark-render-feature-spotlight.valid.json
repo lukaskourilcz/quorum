@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "marketingshark-render/1",
+  "date": "2026-09-29",
+  "brandId": "devshark",
+  "kind": "feature-spotlight",
+  "locale": "en",
+  "format": "instagram-portrait",
+  "engineVersion": "carousel-studio/223-live",
+  "facts": {
+    "displayName": "devShark",
+    "productUrl": "https://devshark.app"
+  },
+  "slides": [
+    {
+      "role": "hook",
+      "templateId": "minimal-text-poster",
+      "version": "1.0.0",
+      "slideId": "slide-poster",
+      "svgHash": "227ae4959abee3da1b190e7c37eef2f007035865899e68232e1781fd873d3e6f",
+      "truncatedSlots": [],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1080\" height=\"1350\" viewBox=\"0 0 1080 1350\" role=\"img\" aria-labelledby=\"title desc\"><title id=\"title\">Minimal text poster 1</title><desc id=\"desc\">Original devShark carousel layout rendered by the Design Lab.</desc><rect width=\"1080\" height=\"1350\" fill=\"#0b141b\"/><g transform=\"translate(86.4,202.7484) scale(2.43)\" fill=\"#60a5fa\"><path d=\"M3 18 Q6 6 15 3 Q17 11 21 18 Z\"/><path d=\"M15 3 Q17 11 21 18 L16 18 Q14 10 15 3 Z\" fill=\"black\" opacity=\"0.12\"/></g><text x=\"165.132\" y=\"254.07\" fill=\"#60a5fa\" font-family=\"Figtree ExtraBold\" font-size=\"58.32\" font-weight=\"800\" letter-spacing=\"1.75\">DEVSHARK</text><rect x=\"885.6\" y=\"270\" width=\"64.8\" height=\"81\" rx=\"32.4\" fill=\"#60a5fa\"/><text x=\"108\" y=\"549\" text-anchor=\"start\" fill=\"#e8eef0\" font-family=\"Figtree Black\" font-size=\"90\" font-weight=\"900\"><tspan x=\"108\" dy=\"0\">Inside devShark:</tspan><tspan x=\"108\" dy=\"100.80000000000001\">Learn paths</tspan></text><text x=\"108\" y=\"1094.5\" text-anchor=\"start\" fill=\"#9db3bc\" font-family=\"IBM Plex Mono\" font-size=\"28\" font-weight=\"400\"><tspan x=\"108\" dy=\"0\">devShark</tspan></text></svg>"
+    },
+    {
+      "role": "what",
+      "templateId": "quote-card",
+      "version": "1.0.0",
+      "slideId": "slide-quote",
+      "svgHash": "f6a9fe7fa75dd8ed471434b58c015150ed4bd0599b730fb0a22221dee1206a1c",
+      "truncatedSlots": [],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1080\" height=\"1350\" viewBox=\"0 0 1080 1350\" role=\"img\" aria-labelledby=\"title desc\"><title id=\"title\">Quote card 1</title><desc id=\"desc\">Original devShark carousel layout rendered by the Design Lab.</desc><rect width=\"1080\" height=\"1350\" fill=\"#0b141b\"/><g transform=\"translate(86.4,202.7484) scale(2.43)\" fill=\"#60a5fa\"><path d=\"M3 18 Q6 6 15 3 Q17 11 21 18 Z\"/><path d=\"M15 3 Q17 11 21 18 L16 18 Q14 10 15 3 Z\" fill=\"black\" opacity=\"0.12\"/></g><text x=\"165.132\" y=\"254.07\" fill=\"#60a5fa\" font-family=\"Figtree ExtraBold\" font-size=\"58.32\" font-weight=\"800\" letter-spacing=\"1.75\">DEVSHARK</text><text x=\"108\" y=\"411.5\" text-anchor=\"start\" fill=\"#e8eef0\" font-family=\"Figtree ExtraBold\" font-size=\"74\" font-weight=\"800\"><tspan x=\"108\" dy=\"0\">Fixture. Learn paths, as</tspan><tspan x=\"108\" dy=\"82.88000000000001\">the fact sheet names it.</tspan></text><rect x=\"108\" y=\"1012.5\" width=\"194.4\" height=\"8.1\" fill=\"#60a5fa\"/><text x=\"108\" y=\"1110\" text-anchor=\"start\" fill=\"#9db3bc\" font-family=\"Public Sans\" font-size=\"30\" font-weight=\"700\"><tspan x=\"108\" dy=\"0\">Fixture: what it is</tspan></text></svg>"
+    },
+    {
+      "role": "how",
+      "templateId": "story-quote",
+      "version": "1.0.0",
+      "slideId": "slide-story",
+      "svgHash": "53d326c96c4feaf20e9f6719bd4a070a7bbf8f1262d17aa611c62f32d0010ce0",
+      "truncatedSlots": [],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1080\" height=\"1350\" viewBox=\"0 0 1080 1350\" role=\"img\" aria-labelledby=\"title desc\"><title id=\"title\">Story quote 1</title><desc id=\"desc\">Original devShark carousel layout rendered by the Design Lab.</desc><rect width=\"1080\" height=\"1350\" fill=\"#0b141b\"/><g transform=\"translate(86.4,249.9984) scale(2.43)\" fill=\"#60a5fa\"><path d=\"M3 18 Q6 6 15 3 Q17 11 21 18 Z\"/><path d=\"M15 3 Q17 11 21 18 L16 18 Q14 10 15 3 Z\" fill=\"black\" opacity=\"0.12\"/></g><text x=\"165.132\" y=\"301.32\" fill=\"#60a5fa\" font-family=\"Figtree ExtraBold\" font-size=\"58.32\" font-weight=\"800\" letter-spacing=\"1.75\">DEVSHARK</text><text x=\"108\" y=\"479\" text-anchor=\"start\" fill=\"#e8eef0\" font-family=\"Figtree ExtraBold\" font-size=\"74\" font-weight=\"800\"><tspan x=\"108\" dy=\"0\">Fixture. This slide says</tspan><tspan x=\"108\" dy=\"82.88000000000001\">how a visitor uses it,</tspan><tspan x=\"108\" dy=\"82.88000000000001\">from the facts.</tspan></text><rect x=\"108\" y=\"891\" width=\"194.4\" height=\"8.1\" fill=\"#60a5fa\"/><text x=\"108\" y=\"975\" text-anchor=\"start\" fill=\"#9db3bc\" font-family=\"Public Sans\" font-size=\"30\" font-weight=\"700\"><tspan x=\"108\" dy=\"0\">Fixture: how it works</tspan></text></svg>"
+    },
+    {
+      "role": "why",
+      "templateId": "quote-card",
+      "version": "1.0.0",
+      "slideId": "slide-quote",
+      "svgHash": "7792c8fccd35e146547533296f2270fcd5f6c56faadb95649784edec05987989",
+      "truncatedSlots": [],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1080\" height=\"1350\" viewBox=\"0 0 1080 1350\" role=\"img\" aria-labelledby=\"title desc\"><title id=\"title\">Quote card 1</title><desc id=\"desc\">Original devShark carousel layout rendered by the Design Lab.</desc><rect width=\"1080\" height=\"1350\" fill=\"#0b141b\"/><g transform=\"translate(86.4,202.7484) scale(2.43)\" fill=\"#60a5fa\"><path d=\"M3 18 Q6 6 15 3 Q17 11 21 18 Z\"/><path d=\"M15 3 Q17 11 21 18 L16 18 Q14 10 15 3 Z\" fill=\"black\" opacity=\"0.12\"/></g><text x=\"165.132\" y=\"254.07\" fill=\"#60a5fa\" font-family=\"Figtree ExtraBold\" font-size=\"58.32\" font-weight=\"800\" letter-spacing=\"1.75\">DEVSHARK</text><text x=\"108\" y=\"411.5\" text-anchor=\"start\" fill=\"#e8eef0\" font-family=\"Figtree ExtraBold\" font-size=\"74\" font-weight=\"800\"><tspan x=\"108\" dy=\"0\">Fixture. This slide says</tspan><tspan x=\"108\" dy=\"82.88000000000001\">why it helps a</tspan><tspan x=\"108\" dy=\"82.88000000000001\">developer, from the</tspan><tspan x=\"108\" dy=\"82.88000000000001\">facts.</tspan></text><rect x=\"108\" y=\"1012.5\" width=\"194.4\" height=\"8.1\" fill=\"#60a5fa\"/><text x=\"108\" y=\"1110\" text-anchor=\"start\" fill=\"#9db3bc\" font-family=\"Public Sans\" font-size=\"30\" font-weight=\"700\"><tspan x=\"108\" dy=\"0\">Fixture: why it helps</tspan></text></svg>"
+    },
+    {
+      "role": "footer",
+      "templateId": "minimal-text-poster",
+      "version": "1.0.0",
+      "slideId": "slide-poster",
+      "svgHash": "9637aac7720b19fd2ff96112d5d9dc6937c275916290a424df6c9a4717d5043b",
+      "truncatedSlots": [],
+      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1080\" height=\"1350\" viewBox=\"0 0 1080 1350\" role=\"img\" aria-labelledby=\"title desc\"><title id=\"title\">Minimal text poster 1</title><desc id=\"desc\">Original devShark carousel layout rendered by the Design Lab.</desc><rect width=\"1080\" height=\"1350\" fill=\"#101c24\"/><g transform=\"translate(86.4,202.7484) scale(2.43)\" fill=\"#60a5fa\"><path d=\"M3 18 Q6 6 15 3 Q17 11 21 18 Z\"/><path d=\"M15 3 Q17 11 21 18 L16 18 Q14 10 15 3 Z\" fill=\"black\" opacity=\"0.12\"/></g><text x=\"165.132\" y=\"254.07\" fill=\"#60a5fa\" font-family=\"Figtree ExtraBold\" font-size=\"58.32\" font-weight=\"800\" letter-spacing=\"1.75\">DEVSHARK</text><rect x=\"885.6\" y=\"270\" width=\"64.8\" height=\"81\" rx=\"32.4\" fill=\"#60a5fa\"/><text x=\"108\" y=\"535\" text-anchor=\"start\" fill=\"#e8eef0\" font-family=\"Figtree Black\" font-size=\"76\" font-weight=\"900\"><tspan x=\"108\" dy=\"0\">One part of devShark,</tspan><tspan x=\"108\" dy=\"85.12\">the web-development</tspan><tspan x=\"108\" dy=\"85.12\">learning platform.</tspan><tspan x=\"108\" dy=\"85.12\">devshark.app</tspan></text><text x=\"108\" y=\"1094.5\" text-anchor=\"start\" fill=\"#9db3bc\" font-family=\"IBM Plex Mono\" font-size=\"28\" font-weight=\"400\"><tspan x=\"108\" dy=\"0\">devshark.app</tspan></text></svg>"
+    }
+  ]
+}

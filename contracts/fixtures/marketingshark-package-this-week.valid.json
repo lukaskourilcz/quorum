@@ -1,0 +1,245 @@
+{
+  "id": "marketingshark-2026-10-02-devshark",
+  "schemaVersion": "marketingshark-package/2",
+  "kind": "this-week",
+  "date": "2026-10-02",
+  "brandId": "devshark",
+  "locales": [
+    "en"
+  ],
+  "subject": {
+    "ref": "marketingshark:week:2026-09-28",
+    "label": "This week on devShark, week of 2026-09-28"
+  },
+  "hook": {
+    "patternId": "week-on",
+    "en": "This week on devShark"
+  },
+  "carousels": {
+    "en": {
+      "slides": [
+        {
+          "role": "hook",
+          "templateId": "minimal-text-poster",
+          "headline": "This week on devShark",
+          "alt": "Slide 1: This week on devShark"
+        },
+        {
+          "role": "theme",
+          "templateId": "stat-highlight",
+          "headline": "JavaScript",
+          "body": "Fixture. The line under this week's theme.",
+          "alt": "Slide 2: fixture theme"
+        },
+        {
+          "role": "recap",
+          "templateId": "quiz-question-context",
+          "headline": "Monday to Thursday",
+          "body": "Mon · Abbreviations: An API response must carry a small text object that browser code can…\nTue · Inside devShark: Learn paths\nWed · Easy challenge: Count vowels\nThu · Databases: Which aggregate returns the total of the numeric values in a column?",
+          "alt": "Slide 3: Monday to Thursday. Mon · Abbreviations: An API response must carry a small text object that browser code can…; Tue · Inside devShark: Learn paths…"
+        },
+        {
+          "role": "pick",
+          "templateId": "quote-card",
+          "headline": "Fixture: worth a look",
+          "body": "Fixture. Easy challenge: Count vowels",
+          "alt": "Slide 4: fixture pick"
+        },
+        {
+          "role": "footer",
+          "templateId": "minimal-text-poster",
+          "headline": "A week of devShark, one post a day. devshark.app",
+          "alt": "Slide 5: A week of devShark, one post a day. devshark.app"
+        }
+      ]
+    }
+  },
+  "descriptions": {
+    "instagram": {
+      "en": "Fixture. This week on devShark on Instagram. The carousel shows it slide by slide."
+    },
+    "threads": {
+      "en": "Fixture. This week on devShark on Threads."
+    },
+    "linkedin": {
+      "en": "Fixture. This week on devShark, written for LinkedIn.\n\nThe carousel shows it slide by slide.\n\nhttps://devshark.app"
+    }
+  },
+  "hashtags": {
+    "instagram": {
+      "en": [
+        "#webdev",
+        "#programming",
+        "#codingquiz"
+      ]
+    },
+    "threads": {
+      "en": [
+        "webdev"
+      ]
+    },
+    "linkedin": {
+      "en": [
+        "#webdev",
+        "#programming",
+        "#codingquiz"
+      ]
+    }
+  },
+  "week": {
+    "weekOf": "2026-09-28",
+    "items": [
+      {
+        "date": "2026-09-28",
+        "kind": "quiz",
+        "packageRef": "state/ventures/marketingshark/packages/2026-09-28/devshark/package.json",
+        "line": "Mon · Abbreviations: An API response must carry a small text object that browser code can…"
+      },
+      {
+        "date": "2026-09-29",
+        "kind": "feature-spotlight",
+        "packageRef": "state/ventures/marketingshark/packages/2026-09-29/devshark/package.json",
+        "line": "Tue · Inside devShark: Learn paths"
+      },
+      {
+        "date": "2026-09-30",
+        "kind": "challenge-teaser",
+        "packageRef": "state/ventures/marketingshark/packages/2026-09-30/devshark/package.json",
+        "line": "Wed · Easy challenge: Count vowels"
+      },
+      {
+        "date": "2026-10-01",
+        "kind": "quiz",
+        "packageRef": "state/ventures/marketingshark/packages/2026-10-01/devshark/package.json",
+        "line": "Thu · Databases: Which aggregate returns the total of the numeric values in a column?"
+      }
+    ],
+    "theme": {
+      "label": "JavaScript",
+      "category": "javascript",
+      "from": "trend"
+    },
+    "pick": {
+      "date": "2026-09-30",
+      "packageRef": "state/ventures/marketingshark/packages/2026-09-30/devshark/package.json"
+    },
+    "trend": {
+      "packet": {
+        "schemaVersion": "goviral-intelligence-packet/1",
+        "topic": "#javascript",
+        "measuredAt": "2026-09-28T09:00:00.000Z",
+        "expiresAt": "2026-10-13T00:00:00.000Z",
+        "velocity": 50,
+        "evidenceRefs": [
+          "state/goviral/trends/2026-09-28.json"
+        ]
+      },
+      "reason": "GoVIRAL's 2026-09-28 snapshot, expiring 2026-10-13."
+    }
+  },
+  "rotation": {
+    "weekday": "friday",
+    "scheduled": "this-week"
+  },
+  "render": {
+    "engineVersion": "carousel-studio/223-live",
+    "format": "instagram-portrait",
+    "summaryPaths": [
+      "state/ventures/marketingshark/packages/2026-10-02/devshark/render-en.json"
+    ],
+    "frames": [
+      {
+        "locale": "en",
+        "role": "hook",
+        "slide": 1,
+        "svgHash": "202969656a660672ebcf6ef6435863ec9442c83bddd9b4d3ae1204d141477448",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-10-02/en/slide-01.png",
+          "sha256": "62d023e6f0095ae0b78796db8bc916c3ca376a7873fb415db0ba7910333e09d2",
+          "bytes": 32252
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-10-02/en/slide-01.jpg",
+          "sha256": "454fd07ac32952d891b1b25ab49c78a82ecab599cf6dadd2ce48414224a8e0eb",
+          "bytes": 42528
+        }
+      },
+      {
+        "locale": "en",
+        "role": "theme",
+        "slide": 2,
+        "svgHash": "594757c1c748cff229a8b22c3265733c083aac6af4456210a430cba9f64d5c8d",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-10-02/en/slide-02.png",
+          "sha256": "9f21fa39fe8fa3ad23741f230f0bd08fceab2e1ab74d9c752212ef20cbe6354d",
+          "bytes": 41322
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-10-02/en/slide-02.jpg",
+          "sha256": "af7d4ee3b5416b694e93bb572d126f9841acedbc832c664828b194af7a192d79",
+          "bytes": 52796
+        }
+      },
+      {
+        "locale": "en",
+        "role": "recap",
+        "slide": 3,
+        "svgHash": "3664896134981b3adc2e60c47611ae05a3c5c6f3b9f73f2187275ade632c3915",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-10-02/en/slide-03.png",
+          "sha256": "30bfe28361b2bdb08814b7b9cc997818f296d36b322b5ec137a6dfff25b81c19",
+          "bytes": 77194
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-10-02/en/slide-03.jpg",
+          "sha256": "6777e622ba2fe0984f9d8899096ebf3529217e35bd0986498d450010600bc076",
+          "bytes": 103177
+        }
+      },
+      {
+        "locale": "en",
+        "role": "pick",
+        "slide": 4,
+        "svgHash": "c8c39ac416157bd6e5ffd7f2b81cc5e18607345a64b5ff39ade812dd37df5302",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-10-02/en/slide-04.png",
+          "sha256": "112e10cc54974e787120184b57c8146d8c584e5d9c818a03fcec85dc8f940f05",
+          "bytes": 36198
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-10-02/en/slide-04.jpg",
+          "sha256": "24d298c582d6029a73cd88f1cf60d2e255f1fd85bf51bed4aceb51f5ea5e0025",
+          "bytes": 51845
+        }
+      },
+      {
+        "locale": "en",
+        "role": "footer",
+        "slide": 5,
+        "svgHash": "1082daa134c9c6be980165972283338631a8c6edaaece6b4aeb53531ab28dbde",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-10-02/en/slide-05.png",
+          "sha256": "d27ace771382751752c20d010f92502dfe065c075fe21e7e0f9146874ff89b85",
+          "bytes": 49451
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-10-02/en/slide-05.jpg",
+          "sha256": "9a1a9b0865a7ae1f459854741e2a8a58231bf2bc3e639e358e9487f45397824e",
+          "bytes": 66481
+        }
+      }
+    ]
+  },
+  "status": "draft",
+  "spendUsd": 0
+}

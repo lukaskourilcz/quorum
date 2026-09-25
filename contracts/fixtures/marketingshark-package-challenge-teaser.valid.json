@@ -1,0 +1,203 @@
+{
+  "id": "marketingshark-2026-09-30-devshark",
+  "schemaVersion": "marketingshark-package/2",
+  "kind": "challenge-teaser",
+  "date": "2026-09-30",
+  "brandId": "devshark",
+  "locales": [
+    "en"
+  ],
+  "subject": {
+    "ref": "marketingshark:challenge:js-count-vowels",
+    "label": "Count vowels"
+  },
+  "hook": {
+    "patternId": "challenge-label",
+    "en": "Easy challenge: Count vowels"
+  },
+  "carousels": {
+    "en": {
+      "slides": [
+        {
+          "role": "hook",
+          "templateId": "minimal-text-poster",
+          "headline": "Easy challenge: Count vowels",
+          "body": "JavaScript",
+          "alt": "Slide 1: Easy challenge: Count vowels"
+        },
+        {
+          "role": "prompt",
+          "templateId": "quote-card",
+          "headline": "Easy · JavaScript",
+          "body": "Write countVowels(text), returning how many vowels (a, e, i, o, u) the string holds. Uppercase vowels count too; a string with none, or an empty string, gives 0.",
+          "alt": "Slide 2: the challenge. Write countVowels(text), returning how many vowels (a, e, i, o, u) the string holds. Uppercase vowels count too; a string with none, or…"
+        },
+        {
+          "role": "hint",
+          "templateId": "stat-highlight",
+          "headline": "Hint 1",
+          "body": "Loop through lowercase letters and check \"aeiou\".",
+          "alt": "Slide 3: the first hint. Loop through lowercase letters and check \"aeiou\"."
+        },
+        {
+          "role": "try",
+          "templateId": "story-quote",
+          "headline": "Fixture: try it",
+          "body": "Fixture. Solve it in devShark before you open a second hint.",
+          "alt": "Slide 4: fixture try"
+        },
+        {
+          "role": "footer",
+          "templateId": "minimal-text-poster",
+          "headline": "One coding challenge from devShark, solved in the browser. devshark.app",
+          "alt": "Slide 5: One coding challenge from devShark, solved in the browser. devshark.app"
+        }
+      ]
+    }
+  },
+  "descriptions": {
+    "instagram": {
+      "en": "Fixture. Easy challenge: Count vowels on Instagram. The carousel shows it slide by slide."
+    },
+    "threads": {
+      "en": "Fixture. Easy challenge: Count vowels on Threads."
+    },
+    "linkedin": {
+      "en": "Fixture. Easy challenge: Count vowels, written for LinkedIn.\n\nThe carousel shows it slide by slide.\n\nhttps://devshark.app"
+    }
+  },
+  "hashtags": {
+    "instagram": {
+      "en": [
+        "#webdev",
+        "#programming",
+        "#codingquiz"
+      ]
+    },
+    "threads": {
+      "en": [
+        "webdev"
+      ]
+    },
+    "linkedin": {
+      "en": [
+        "#webdev",
+        "#programming",
+        "#codingquiz"
+      ]
+    }
+  },
+  "challenge": {
+    "id": "js-count-vowels",
+    "track": "javascript",
+    "title": "Count vowels",
+    "difficulty": "easy",
+    "snapshotContentHash": "58ad50e344b1b8638993a4847f951a833394983ca2af4adc0660a90a2d96538c",
+    "sourceCommit": "e668c67c520270d968049566934ff80b4de3a4b5"
+  },
+  "rotation": {
+    "weekday": "wednesday",
+    "scheduled": "challenge-teaser"
+  },
+  "render": {
+    "engineVersion": "carousel-studio/223-live",
+    "format": "instagram-portrait",
+    "summaryPaths": [
+      "state/ventures/marketingshark/packages/2026-09-30/devshark/render-en.json"
+    ],
+    "frames": [
+      {
+        "locale": "en",
+        "role": "hook",
+        "slide": 1,
+        "svgHash": "a3cf9ad3f8ddb18aefc0028edb1f3bffe647eee6f65362cafdb1ca09fa65ee95",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-30/en/slide-01.png",
+          "sha256": "7bff93a2de20f4752224bd85bf3a808747d17607f1082e75c7ec7ed95d242f3f",
+          "bytes": 36129
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-30/en/slide-01.jpg",
+          "sha256": "f6e406b2fc609073b7bce0b18aafaced80f788854e320fb238a514936c6a3728",
+          "bytes": 50162
+        }
+      },
+      {
+        "locale": "en",
+        "role": "prompt",
+        "slide": 2,
+        "svgHash": "fe8ce53cb5aee465140cb55d1c9e81826d6f9a95595677a69b3597bb8a428878",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-30/en/slide-02.png",
+          "sha256": "4e018c8f970d375f9b2aaf3387264776c74b828098760ad67b8cecb14e52174c",
+          "bytes": 77538
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-30/en/slide-02.jpg",
+          "sha256": "b315e2da7abf2d3c8b7d1b313d514ff60bed3b158e380b6b19668fe4222401b1",
+          "bytes": 112216
+        }
+      },
+      {
+        "locale": "en",
+        "role": "hint",
+        "slide": 3,
+        "svgHash": "5be829bf03eb6850572260d978048a92ac3b58c275f4c0023f441859ba7a2069",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-30/en/slide-03.png",
+          "sha256": "5d94d556de31dfe0952fc4f96dcaed49d946b1592446fef12cd0c8328e1b3dcf",
+          "bytes": 38416
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-30/en/slide-03.jpg",
+          "sha256": "0ba265e54a739488f798bed4d918e4654dd401d561099864f5558d0cd622a963",
+          "bytes": 46850
+        }
+      },
+      {
+        "locale": "en",
+        "role": "try",
+        "slide": 4,
+        "svgHash": "03916d3a8bd86fd205a4eb527a687fb651ba5a3a8984e8e7741ee8d8974435f4",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-30/en/slide-04.png",
+          "sha256": "958dce08c540fb0a592b5c966776664269c6b84de731f8a09b107ce868aea521",
+          "bytes": 44061
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-30/en/slide-04.jpg",
+          "sha256": "7aec5dcfca0efbe4346a085d42f291349ae94425b2318d72c84b5413c0dadadc",
+          "bytes": 63217
+        }
+      },
+      {
+        "locale": "en",
+        "role": "footer",
+        "slide": 5,
+        "svgHash": "ab7ed2602597a29ebf55597b30cd870248fec519066bed369838a5d7070b5b7a",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-30/en/slide-05.png",
+          "sha256": "8ece6707a9b9443c0212b88b2b0d8a9a7bcade9bd259b7fb253aad48fe4b6632",
+          "bytes": 56979
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-30/en/slide-05.jpg",
+          "sha256": "479172ea38e7668b915823d90a814fcb53bb5ced26f8c7fbd362447a90daf610",
+          "bytes": 77467
+        }
+      }
+    ]
+  },
+  "status": "draft",
+  "spendUsd": 0
+}

@@ -1,0 +1,202 @@
+{
+  "id": "marketingshark-2026-09-29-devshark",
+  "schemaVersion": "marketingshark-package/2",
+  "kind": "feature-spotlight",
+  "date": "2026-09-29",
+  "brandId": "devshark",
+  "locales": [
+    "en"
+  ],
+  "subject": {
+    "ref": "marketingshark:feature:learn-paths",
+    "label": "Learn paths"
+  },
+  "hook": {
+    "patternId": "spotlight-inside",
+    "en": "Inside devShark: Learn paths"
+  },
+  "carousels": {
+    "en": {
+      "slides": [
+        {
+          "role": "hook",
+          "templateId": "minimal-text-poster",
+          "headline": "Inside devShark: Learn paths",
+          "alt": "Slide 1: Inside devShark: Learn paths"
+        },
+        {
+          "role": "what",
+          "templateId": "quote-card",
+          "headline": "Fixture: what it is",
+          "body": "Fixture. Learn paths, as the fact sheet names it.",
+          "alt": "Slide 2: fixture what"
+        },
+        {
+          "role": "how",
+          "templateId": "story-quote",
+          "headline": "Fixture: how it works",
+          "body": "Fixture. This slide says how a visitor uses it, from the facts.",
+          "alt": "Slide 3: fixture how"
+        },
+        {
+          "role": "why",
+          "templateId": "quote-card",
+          "headline": "Fixture: why it helps",
+          "body": "Fixture. This slide says why it helps a developer, from the facts.",
+          "alt": "Slide 4: fixture why"
+        },
+        {
+          "role": "footer",
+          "templateId": "minimal-text-poster",
+          "headline": "One part of devShark, the web-development learning platform. devshark.app",
+          "alt": "Slide 5: One part of devShark, the web-development learning platform. devshark.app"
+        }
+      ]
+    }
+  },
+  "descriptions": {
+    "instagram": {
+      "en": "Fixture. Inside devShark: Learn paths on Instagram. The carousel shows it slide by slide."
+    },
+    "threads": {
+      "en": "Fixture. Inside devShark: Learn paths on Threads."
+    },
+    "linkedin": {
+      "en": "Fixture. Inside devShark: Learn paths, written for LinkedIn.\n\nThe carousel shows it slide by slide.\n\nhttps://devshark.app"
+    }
+  },
+  "hashtags": {
+    "instagram": {
+      "en": [
+        "#webdev",
+        "#programming",
+        "#codingquiz"
+      ]
+    },
+    "threads": {
+      "en": [
+        "webdev"
+      ]
+    },
+    "linkedin": {
+      "en": [
+        "#webdev",
+        "#programming",
+        "#codingquiz"
+      ]
+    }
+  },
+  "spotlight": {
+    "screen": {
+      "id": "learn-paths",
+      "name": "Learn paths",
+      "factTerm": "Learn paths"
+    },
+    "factSheetEffectiveFrom": "2026-09-15"
+  },
+  "rotation": {
+    "weekday": "tuesday",
+    "scheduled": "feature-spotlight"
+  },
+  "render": {
+    "engineVersion": "carousel-studio/223-live",
+    "format": "instagram-portrait",
+    "summaryPaths": [
+      "state/ventures/marketingshark/packages/2026-09-29/devshark/render-en.json"
+    ],
+    "frames": [
+      {
+        "locale": "en",
+        "role": "hook",
+        "slide": 1,
+        "svgHash": "227ae4959abee3da1b190e7c37eef2f007035865899e68232e1781fd873d3e6f",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-29/en/slide-01.png",
+          "sha256": "266487fb4e20e510f5022c54cd23e697be7c675df51dee089cf8b59ee816c017",
+          "bytes": 36105
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-29/en/slide-01.jpg",
+          "sha256": "d46b1da91f91dfb8879d2edce8b7488d24ed8f1109d403ad37f28a3c9dbc89ea",
+          "bytes": 48227
+        }
+      },
+      {
+        "locale": "en",
+        "role": "what",
+        "slide": 2,
+        "svgHash": "f6a9fe7fa75dd8ed471434b58c015150ed4bd0599b730fb0a22221dee1206a1c",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-29/en/slide-02.png",
+          "sha256": "39894d9c8423b23943b8a827c7347f318c26b1fa77083b36fcb0ba6913775c0e",
+          "bytes": 38828
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-29/en/slide-02.jpg",
+          "sha256": "d1771c846253c08650b9f9610bb968c953866d9fc39210f3bf32482056b760c5",
+          "bytes": 55205
+        }
+      },
+      {
+        "locale": "en",
+        "role": "how",
+        "slide": 3,
+        "svgHash": "53d326c96c4feaf20e9f6719bd4a070a7bbf8f1262d17aa611c62f32d0010ce0",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-29/en/slide-03.png",
+          "sha256": "b88a53abe60a33d3e22c74fcd3b11d0aafefad4c0279aa6efb6a2e38f1ca9be7",
+          "bytes": 44865
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-29/en/slide-03.jpg",
+          "sha256": "da231f748281d0c37bc92602bfce87e9cfb8231e7a817f5ad540aaba4fdaebf4",
+          "bytes": 64246
+        }
+      },
+      {
+        "locale": "en",
+        "role": "why",
+        "slide": 4,
+        "svgHash": "7792c8fccd35e146547533296f2270fcd5f6c56faadb95649784edec05987989",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-29/en/slide-04.png",
+          "sha256": "2edcb19b04ad4b9a3bde02660787792d353f5c040c99c006744f7526dfc116f7",
+          "bytes": 47355
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-29/en/slide-04.jpg",
+          "sha256": "690afca11aee2f5f13e80afe543166dcb755b16a0a64f7a4be4e258b13a76ee8",
+          "bytes": 68214
+        }
+      },
+      {
+        "locale": "en",
+        "role": "footer",
+        "slide": 5,
+        "svgHash": "9637aac7720b19fd2ff96112d5d9dc6937c275916290a424df6c9a4717d5043b",
+        "width": 1080,
+        "height": 1350,
+        "png": {
+          "path": "/social/devshark/2026-09-29/en/slide-05.png",
+          "sha256": "1ba45733acf766ab009af66933bd892ffa12828ff0d91175fecbb6d4e081588a",
+          "bytes": 56914
+        },
+        "jpeg": {
+          "path": "/social/devshark/2026-09-29/en/slide-05.jpg",
+          "sha256": "54c00e07029b71306b0a4dc852bf7e59d8a4f8ca6061053b614d0b1e87b743d5",
+          "bytes": 79415
+        }
+      }
+    ]
+  },
+  "status": "draft",
+  "spendUsd": 0
+}
