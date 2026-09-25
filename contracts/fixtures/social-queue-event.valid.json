@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "social-queue-event/1",
+  "id": "social-queue-event-ff9d4f04a61deb866971f2bf",
+  "at": "2026-09-26T08:00:00.000Z",
+  "actor": "owner",
+  "action": "approve",
+  "itemId": "ms-2026-09-26-devshark-en-linkedin",
+  "sourceVentureId": "marketingshark",
+  "channel": "linkedin",
+  "expectedContentHash": "a296b1a987fbf0f6108d91edbf3c966bf339cec98f9c2ff2305d73f5e165511d",
+  "previousStatus": "draft",
+  "nextStatus": "queued",
+  "resultingContentHash": "0c2d1b9bbda007b55e743976c849928de85e0ad50fd3c9f476dd5a138bac2555",
+  "mode": "window",
+  "publishWindow": {
+    "notBefore": "2026-09-26T06:00:00.000Z",
+    "notAfter": "2026-09-26T21:00:00.000Z"
+  },
+  "deterministicChecks": {
+    "schema": "pass",
+    "duplicate": "pass",
+    "accessibility": "pass",
+    "budget": "pass",
+    "capability": "pass",
+    "authority": "pass"
+  },
+  "ownerEvidenceFor": [
+    "brand",
+    "claims",
+    "quill",
+    "keeper",
+    "policy"
+  ],
+  "supersedingItemId": null,
+  "changedFields": [],
+  "reason": null,
+  "tasteNote": null
+}
