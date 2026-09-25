@@ -1681,7 +1681,8 @@ test.describe("the Design Lab workspace", () => {
     await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
     const canvas = page.locator("[data-slide-canvas]").first();
     const portrait = await canvas.evaluate((node) => getComputedStyle(node).aspectRatio);
-    const story = page.getByRole("button", { name: "9:16", exact: true }).first();
+    // Since the 52a0b8b2 redesign each format chip names its platform and its ratio.
+    const story = page.getByRole("button", { name: "Story 9:16", exact: true }).first();
     // A warm development server can paint this client component before hydration attaches the
     // format handler. Retry the visible action until the control itself confirms the transition.
     await expect.poll(async () => {
@@ -1691,8 +1692,14 @@ test.describe("the Design Lab workspace", () => {
     await expect
       .poll(async () => canvas.evaluate((node) => getComputedStyle(node).aspectRatio), { timeout: 30_000 })
       .not.toBe(portrait);
-    // The safe-area overlay is offered only where a platform actually covers the canvas.
-    await page.getByRole("button", { name: "bezpečná zóna" }).first().click();
+    // The safe-area overlay is offered only where a platform actually covers the canvas, and it is
+    // on by default there; its chip turns it off and on again.
+    const safeArea = page.getByRole("button", { name: "Bezpečná zóna", exact: true }).first();
+    await expect(safeArea).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator("[data-safe-area]").first()).toBeAttached();
+    await safeArea.click();
+    await expect(page.locator("[data-safe-area]")).toHaveCount(0);
+    await safeArea.click();
     await expect(page.locator("[data-safe-area]").first()).toBeAttached();
   });
 
@@ -1714,13 +1721,19 @@ test.describe("the Design Lab workspace", () => {
       return wordCount.textContent();
     }, { timeout: 30_000 }).toContain("31/30");
     await expect(save).toBeDisabled();
-    // The engine's own sentence, not a paraphrase of it.
-    await expect(page.getByText(/přes limit 30 slov/u).first()).toBeVisible();
+    // The editor's own instruction, which replaced the engine's sentence in the 52a0b8b2 redesign.
+    await expect(page.getByText("Zkraťte text na 30 slov.").first()).toBeVisible();
+    await expect(editor).toHaveAttribute("aria-invalid", "true");
   });
 
   test("the caption carries its credit and the copy buttons announce", async ({ page }) => {
     await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
-    const copy = page.getByRole("button", { name: /Copy/u }).first();
+    // The caption and its copy buttons sit behind a disclosure since 52a0b8b2. Opened after
+    // hydration: a <details> clicked first puts `open` on an element React is about to reconcile.
+    await expect(page.locator('[data-admin-hydrated="true"]').first()).toBeAttached({ timeout: 30_000 });
+    await page.getByText("Popisek a texty pro sociální sítě").first().click();
+    const copy = page.locator("[data-caption]").first().locator("xpath=..").getByRole("button", { name: /Copy/u }).first();
+    await expect(copy).toBeVisible();
     await expect(copy).toHaveAttribute("aria-live", "polite");
     await expect(page.locator("[data-caption]").first()).toBeVisible();
   });
@@ -1738,9 +1751,15 @@ test("a preset saves, reloads into the picker and applies", async ({ page }) => 
   try {
     await page.goto("/admin?venture=carousel-studio&tab=studio", { waitUntil: "networkidle" });
     const recipeLine = page.locator("[data-recipe-line]").first();
-    // `dossier` is one of the twenty-three the dealer retired, so it lives under `Doladit` with
-    // the rest of the axis surface since #499. Still reachable, and still the family this test
-    // wants: a preset has to round-trip a design nothing deals unprompted.
+    // `dossier` is one of the twenty-three the dealer retired. Since 52a0b8b2 they live under
+    // "Starší vzhledy" on the inspector's "Vzhled" tab, beside the presets. Still reachable, and
+    // still the family this test wants: a preset has to round-trip a design nothing deals unprompted.
+    await expect(page.locator('[data-admin-hydrated="true"]').first()).toBeAttached({ timeout: 30_000 });
+    const lookTab = page.getByRole("button", { name: "Vzhled", exact: true }).first();
+    await expect.poll(async () => {
+      await lookTab.click();
+      return lookTab.getAttribute("aria-pressed");
+    }, { timeout: 30_000 }).toBe("true");
     await page.locator("[data-fine-tune] summary").first().click();
     await expect.poll(async () => {
       await page.locator('[data-family="dossier"]').first().click();
@@ -1748,7 +1767,7 @@ test("a preset saves, reloads into the picker and applies", async ({ page }) => 
     }, { timeout: 30_000 }).toContain("dossier");
     await expect(page.locator("[data-save-state]").first()).toHaveAttribute("data-save-state", "saved", { timeout: 60_000 });
 
-    const presetName = page.getByLabel("Název presetu").first();
+    const presetName = page.getByLabel("Uložit vlastní preset").first();
     const save = page.locator("[data-save-preset]").first();
     await expect.poll(async () => {
       await presetName.fill("E2E tichý záznam");
@@ -1763,8 +1782,14 @@ test("a preset saves, reloads into the picker and applies", async ({ page }) => 
     expect((await presetResponse).ok()).toBe(true);
     await expect(page.locator("[data-save-state]").first()).toHaveAttribute("data-save-state", "saved", { timeout: 60_000 });
 
-    // Reload: the preset is read back out of the file the save created.
+    // Reload: the preset is read back out of the file the save created. The inspector opens on
+    // its text tab again, so the presets are one tab away.
     await page.reload({ waitUntil: "networkidle" });
+    await expect(page.locator('[data-admin-hydrated="true"]').first()).toBeAttached({ timeout: 30_000 });
+    await expect.poll(async () => {
+      await lookTab.click();
+      return lookTab.getAttribute("aria-pressed");
+    }, { timeout: 30_000 }).toBe("true");
     const chip = page.locator("[data-presets] button", { hasText: "E2E tichý záznam" }).first();
     await expect(chip).toBeVisible();
     // Saved as a draft, and it says so — a draft is never drawn from autonomously.

@@ -188,7 +188,8 @@ test("Design Lab renders a manual export workspace and keeps social publishing c
   expect(response?.status()).toBe(200);
   await expect(page.getByRole("heading", { level: 1, name: "Design Lab." }))
     .toBeVisible();
-  await expect(page.getByText("Publikování je zavřené", { exact: false }))
+  // The 52a0b8b2 redesign says it in one sentence under the workspace: nothing is sent from here.
+  await expect(page.getByText("Karusely se odsud nikam neposílají", { exact: false }))
     .toBeVisible();
   await expect(page.locator("[data-article-rail]")).toBeVisible();
   const canvas = page.locator("[data-slide-canvas]");
@@ -201,8 +202,18 @@ test("Design Lab renders a manual export workspace and keeps social publishing c
   await expect(page.getByRole("link", { name: "Stáhnout celý deck" }))
     .toHaveAttribute("download", "");
   await expect(page.locator("[data-save-slide]")).toBeDisabled();
+  // Presets sit on the inspector's "Vzhled" tab since 52a0b8b2; switched after hydration so the
+  // click reaches React rather than a server-painted chip.
+  await waitForAdminShell(page);
+  const lookTab = page.getByRole("button", { name: "Vzhled", exact: true });
+  await expect.poll(async () => {
+    await lookTab.click();
+    return lookTab.getAttribute("aria-pressed");
+  }).toBe("true");
   await expect(page.locator("[data-save-preset]")).toBeDisabled();
-  await expect(page.getByRole("button", { name: /publish|post|send/iu }))
+  // Whole English words: the article rail's buttons carry Czech headlines, and "postavený"
+  // (built) is not a publishing control.
+  await expect(page.getByRole("button", { name: /\b(?:publish(?:ing)?|post(?:ing|s)?|send(?:ing|s)?)\b/iu }))
     .toHaveCount(0);
 
   expect(failures).toEqual([]);
