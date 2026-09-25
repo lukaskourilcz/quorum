@@ -105,6 +105,26 @@ export const QueueItemSchema = z
 
 export type QueueItem = z.infer<typeof QueueItemSchema>;
 
+/**
+ * The platforms a capability-aware item may name.
+ *
+ * LinkedIn is v2 only. A v1 item predates the per-profile target and cannot say which LinkedIn
+ * Page it would go to, so the legacy schema keeps its two Meta channels.
+ */
+export const QueueChannelSchema = z.enum(["threads", "instagram", "linkedin"]);
+export type QueueChannel = z.infer<typeof QueueChannelSchema>;
+
+/** Each platform's own caption limit. Instagram and Threads keep the 2,200 the v1 schema has always applied. */
+export const QUEUE_TEXT_LIMITS: Readonly<Record<QueueChannel, number>> = {
+  instagram: 2_200,
+  threads: 2_200,
+  linkedin: 3_000
+};
+
+const CapabilityAwareQueueContentSchema = QueueContentSchema.extend({
+  text: z.string().min(1).max(QUEUE_TEXT_LIMITS.linkedin)
+});
+
 const QueueTargetSchema = z.strictObject({
   profileId: z.string().regex(/^social-profile-[a-z0-9]+(?:-[a-z0-9]+)*$/u).max(120),
   profileRole: z.enum(["venture-primary", "company-umbrella", "owned-amplifier"]),
@@ -149,17 +169,17 @@ export const CapabilityAwareQueueItemSchema = z.strictObject({
   }).nullable(),
   locale: z.enum(["en", "cs"]).nullable(),
   variant: z.enum(["A", "B"]),
-  channel: z.enum(["threads", "instagram"]),
+  channel: QueueChannelSchema,
   objective: z.enum(["qualified_visit", "value_action", "opt_in", "monetization_intent", "trust"]),
   audience: z.string().trim().min(1).max(500),
   destination: z.url(),
   utm: z.strictObject({
-    source: z.enum(["threads", "instagram"]),
+    source: QueueChannelSchema,
     medium: z.literal("organic_social"),
     campaign: z.string().trim().min(1).max(200),
     content: z.string().trim().min(1).max(200)
   }),
-  content: QueueContentSchema,
+  content: CapabilityAwareQueueContentSchema,
   publishWindow: z.strictObject({
     notBefore: z.string().datetime(),
     notAfter: z.string().datetime()
@@ -198,6 +218,9 @@ export const CapabilityAwareQueueItemSchema = z.strictObject({
   }
   if (item.utm.source !== item.channel) {
     context.addIssue({ code: "custom", message: "UTM source must match the channel", path: ["utm", "source"] });
+  }
+  if (item.content.text.length > QUEUE_TEXT_LIMITS[item.channel]) {
+    context.addIssue({ code: "custom", message: `A ${item.channel} caption holds at most ${QUEUE_TEXT_LIMITS[item.channel]} characters`, path: ["content", "text"] });
   }
   if (item.migration === null && item.sourcePackage === null) {
     context.addIssue({ code: "custom", message: "A new queue item needs an exact approved source package", path: ["sourcePackage"] });
@@ -322,6 +345,13 @@ export function assertQueueItemPublishable(item: RuntimeQueueItem): void {
   }
   if (parsed.channel === "instagram" && !parsed.content.altText) {
     throw new Error("Instagram media requires alt text in the immutable receipt");
+  }
+  // A LinkedIn item can be drafted and reviewed, and nothing can send it: no connection, provider
+  // binding or adapter for LinkedIn exists yet (quorum#569, #571). Refused by name here as well, so
+  // the day a target resolves before its transport does, the item stops rather than reaching a
+  // Meta adapter.
+  if (parsed.channel === "linkedin") {
+    throw new Error("No LinkedIn transport exists yet; a LinkedIn item stays a draft");
   }
   const sourceVenture = parsed.schemaVersion === 2 ? parsed.sourceVentureId : parsed.venture;
   if (sourceVenture === "titty-tuesdays") {
