@@ -17,10 +17,10 @@ function inputs(over: Partial<Parameters<typeof buildLaunchBoard>[0]> = {}) {
 
 describe("launch board", () => {
   it("names the seven ventures the owner is launching, and holds the four he is not", () => {
-    expect(LAUNCH_SET).toHaveLength(7);
-    expect(LAUNCH_SET).toContain("personal-growth");
-    expect(LAUNCH_SET).not.toContain("titty-tuesdays");
-    expect(HELD_VENTURES).toContain("titty-tuesdays");
+    expect(LAUNCH_SET).toEqual(["caught-up", "marketingshark"]);
+    expect(LAUNCH_SET).not.toContain("personal-growth");
+    expect(LAUNCH_SET).not.toContain("mma-files");
+    expect(HELD_VENTURES).toContain("goviral");
     expect(LAUNCH_SET.some((id) => (HELD_VENTURES as readonly string[]).includes(id))).toBe(false);
   });
 

@@ -587,7 +587,7 @@
     {
       "id": "personal-growth",
       "name": "Lukáš Growth Desk",
-      "status": "operating",
+      "status": "paused",
       "visibility": "owner-only",
       "taste": false,
       "ledgerNamespace": "personal-growth",

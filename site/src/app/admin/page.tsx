@@ -551,7 +551,9 @@ export default async function AdminPage({
         ...(kvorum.quota ? [{ at: kvorum.quota.updatedAt, singular: "quota receipt", plural: "quota receipts" }] : [])
       ]
     }
-  ], new Date());
+  ], new Date())
+    // A paused venture's archive stays at its own URL; it is not news on the home page.
+    .filter((row) => portfolio.ventures.find((venture) => venture.id === row.ventureId)?.status !== "paused");
 
   const sections: AdminSection[] = adminSections(
     selectedView && selectedView !== "future" ? "waiting" : null,
@@ -997,7 +999,8 @@ export default async function AdminPage({
             <Panel note="The last three days" title="What shipped">
               <RenderedDeskPanel desk={renderedDesk} />
             </Panel>
-            <Panel note="The four newest ventures" title="Since yesterday">
+            {recentActivity.length > 0 ? (
+            <Panel note="The newest ventures that are running" title="Since yesterday">
             <div className="grid gap-3 md:grid-cols-2" data-admin-recent-activity>
               {recentActivity.map((row) => (
                 <Link
@@ -1020,6 +1023,7 @@ export default async function AdminPage({
               ))}
             </div>
             </Panel>
+            ) : null}
           </section>
 
           {/* The counts come from the same snapshot the rail counts, so the two cannot disagree.
