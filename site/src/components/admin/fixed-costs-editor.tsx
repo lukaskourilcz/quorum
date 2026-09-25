@@ -103,7 +103,7 @@ export function FixedCostsEditor({ initialCosts }: { initialCosts: FixedCostEntr
   }
 
   return (
-    <section aria-labelledby="fixed-costs-heading" className="grid min-w-0 gap-4">
+    <section aria-labelledby="fixed-costs-heading" className="@container grid min-w-0 gap-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-start gap-2">
           <CircleDollarSign aria-hidden className="mt-0.5 size-4 shrink-0 text-[var(--admin-section-accent)]" />
@@ -119,7 +119,10 @@ export function FixedCostsEditor({ initialCosts }: { initialCosts: FixedCostEntr
               {costs.map((cost, index) => (
                 <fieldset className="py-3" key={cost.rowId}>
                   <legend className="px-1 text-[length:var(--admin-type-micro)] font-semibold uppercase tracking-[var(--admin-tracking-label)] text-[var(--admin-foreground-muted)]">Cost {index + 1}</legend>
-                  <div className="grid gap-3 md:grid-cols-[minmax(12rem,1.4fr)_minmax(8rem,0.7fr)_minmax(10rem,0.8fr)_minmax(10rem,0.8fr)_auto] md:items-end">
+                  {/* Sized to the editor, not the window: it sits in a seven-twelfths column of the
+                      Admin's content, so at 768 and 1024px a viewport breakpoint gave the five-column
+                      row about 790px of minimums in a panel under 500px wide, and it ran off the page. */}
+                  <div className="grid gap-3 @lg:grid-cols-2 @4xl:grid-cols-[minmax(12rem,1.4fr)_minmax(8rem,0.7fr)_minmax(10rem,0.8fr)_minmax(10rem,0.8fr)_auto] @4xl:items-end">
                     <div>
                       <AdminLabel htmlFor={`fixed-cost-name-${cost.rowId}`}>Name</AdminLabel>
                       <AdminInput id={`fixed-cost-name-${cost.rowId}`} maxLength={120} onChange={(event) => update(cost.rowId, { name: event.target.value })} required type="text" value={cost.name} />
