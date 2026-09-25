@@ -1,7 +1,41 @@
 {
   "schemaVersion": "owner-attention/1",
   "generatedAt": "2026-09-25T09:07:15.398Z",
-  "approvals": [],
+  "approvals": [
+    {
+      "id": "DEVSHARK-SOCIAL-001",
+      "title": "Connect and activate the three devShark connections; Buffer for LinkedIn; autopublish of owner-approved Queue items only.",
+      "plain": "No devShark post can go out, even one you approve in the Queue, until you allow the three devShark connections to publish owner-approved posts.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#DEVSHARK-SOCIAL-001"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "DEVSHARK-SOCIAL-002",
+      "title": "Set the `linkedin`, `instagram` and `threads` channels in `config/channels.json` to `mode: \"autopublish\"` with `enabledByHumanAt`.",
+      "plain": "The LinkedIn, Instagram and Threads channels stay in draft mode until you allow them to publish, so approved devShark posts wait.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#DEVSHARK-SOCIAL-002"
+      },
+      "since": null,
+      "urgency": "soon"
+    },
+    {
+      "id": "DEVSHARK-SOCIAL-003",
+      "title": "Create the accounts and grants devShark's social queue needs: a Buffer Free account, a Meta developer app with four publish scopes, and Actions write on the Admin's GitHub token.",
+      "plain": "devShark's LinkedIn, Instagram and Threads posts need a free Buffer account, a Meta developer app and Actions write on the Admin's GitHub token before any profile can be connected.",
+      "source": {
+        "kind": "inbox",
+        "ref": "state/INBOX.md#DEVSHARK-SOCIAL-003"
+      },
+      "since": null,
+      "urgency": "soon"
+    }
+  ],
   "manualTasks": [
     {
       "id": "ADMIN_USER",

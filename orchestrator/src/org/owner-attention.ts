@@ -127,6 +127,21 @@ const PLAIN_COPY: Readonly<Record<string, { plain: string; steps?: string[]; urg
     steps: ["Review the editorial constitution in state/INBOX.md", "Countersign KV-EDITORIAL-004; this grants no source, account or publishing authority"],
     urgency: "blocking"
   },
+  "DEVSHARK-SOCIAL-003": {
+    plain: "devShark's LinkedIn, Instagram and Threads posts need a free Buffer account, a Meta developer app and Actions write on the Admin's GitHub token before any profile can be connected.",
+    steps: ["Read the scope in state/INBOX.md and tick DEVSHARK-SOCIAL-003", "Create the Buffer account and the Meta app, then store the keys and ids as NEEDED.md says"],
+    urgency: "soon"
+  },
+  "DEVSHARK-SOCIAL-001": {
+    plain: "No devShark post can go out, even one you approve in the Queue, until you allow the three devShark connections to publish owner-approved posts.",
+    steps: ["Connect the three profiles and wait for three drafted packages", "Tick DEVSHARK-SOCIAL-001 in state/INBOX.md in your own commit"],
+    urgency: "soon"
+  },
+  "DEVSHARK-SOCIAL-002": {
+    plain: "The LinkedIn, Instagram and Threads channels stay in draft mode until you allow them to publish, so approved devShark posts wait.",
+    steps: ["Tick DEVSHARK-SOCIAL-001 first", "Then tick DEVSHARK-SOCIAL-002 in state/INBOX.md in your own commit"],
+    urgency: "soon"
+  },
   ADMIN_USER: {
     plain: "The admin door will not open in production until a username and password are set.",
     steps: ["Open the quorum-site project in Vercel", "Add ADMIN_USER and ADMIN_PASSWORD to Production", "Redeploy"],

@@ -152,7 +152,9 @@ the graphic. Approving a post publishes it without another manual step.
   windowed items is a later decision (`docs/SOCIAL-DAILY-OPERATIONS.md`).
 - The workflow does not hand devShark's six credential references to the job yet. marketingShark
   is not a publishing venture, so those `env:` lines belong to the activation commit, beside the
-  channel flip, as the paused ventures' lines left the job with their pause.
+  channel flip, as the paused ventures' lines left the job with their pause. Activation step 5
+  names them: the three keys and tokens are Actions secrets, the two account ids and the Buffer
+  channel id Actions variables, as DNESKAi's are.
 
 ## What #575 builds
 
@@ -229,15 +231,32 @@ in an unlocked world; that assertion stays, because it is about the code path), 
 
 ## Activation, in order
 
-1. The owner creates the three devShark profiles and connects them: Buffer for the LinkedIn Page,
-   a Meta developer app with Instagram Login and Threads, with the devShark accounts as testers.
-2. Secrets in GitHub Actions under the reference names #569 registers; `SOCIAL_KILL_SWITCH=false`.
-3. `state/INBOX.md`: `HUMAN_APPROVAL DEVSHARK-SOCIAL-001` (connect and activate the three devShark
+1. The owner ticks `HUMAN_APPROVAL DEVSHARK-SOCIAL-003` in `state/INBOX.md` (the Buffer Free
+   account, the Meta app and its four publish scopes, Actions write on `BOARDLESSAI_GITHUB_TOKEN`),
+   then creates the three devShark profiles and connects them: Buffer for the LinkedIn Page, a Meta
+   developer app with Instagram Login and Threads, with the devShark accounts as testers.
+2. The values go into GitHub Actions under the reference names #569 registers: `BUFFER_API_KEY`,
+   `DEVSHARK_INSTAGRAM_ACCESS_TOKEN` and `DEVSHARK_THREADS_ACCESS_TOKEN` as secrets,
+   `BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN`, `DEVSHARK_INSTAGRAM_USER_ID` and
+   `DEVSHARK_THREADS_USER_ID` as variables; then `SOCIAL_KILL_SWITCH=false`.
+3. The owner runs Buffer's live test and records the result; an agent commit flips Buffer's
+   verdict and the four gates that pin it (`docs/NEEDED.md`), and B4 is ticked.
+4. `state/INBOX.md`: `HUMAN_APPROVAL DEVSHARK-SOCIAL-001` (connect and activate the three devShark
    connections; Buffer for LinkedIn; autopublish of owner-approved Queue items only) and
-   `DEVSHARK-SOCIAL-002` (the channels' `mode: "autopublish"`). The owner ticks them in their own
-   commit.
-4. The channels and the registry flip to `autopublish` with `enabledByHumanAt`, and
-   `state/social/activation.json` shows marketingShark enabled after three drafted packages.
+   `DEVSHARK-SOCIAL-002` (the channels' `mode: "autopublish"`). Both are written under Pending with
+   their scope text; the owner ticks them in their own commit.
+5. The activation commit: the channels and the registry flip to `autopublish` with
+   `enabledByHumanAt`; the `publish` job's `env:` in `.github/workflows/social-publisher.yml` gains
+   `DEVSHARK_INSTAGRAM_USER_ID: ${{ vars.DEVSHARK_INSTAGRAM_USER_ID }}`,
+   `DEVSHARK_INSTAGRAM_ACCESS_TOKEN: ${{ secrets.DEVSHARK_INSTAGRAM_ACCESS_TOKEN }}`,
+   `DEVSHARK_THREADS_USER_ID: ${{ vars.DEVSHARK_THREADS_USER_ID }}`,
+   `DEVSHARK_THREADS_ACCESS_TOKEN: ${{ secrets.DEVSHARK_THREADS_ACCESS_TOKEN }}`,
+   `BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}` and
+   `BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN: ${{ vars.BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN }}`;
+   `social-post-receipt/1` lists `marketingshark`, which becomes a publishing venture; the tests
+   named in "What stays held" move with it. Without the env lines every devShark item resolves
+   `credential-unavailable` and nothing sends.
+6. `state/social/activation.json` shows marketingShark enabled after three drafted packages.
 
 ## Rollback
 

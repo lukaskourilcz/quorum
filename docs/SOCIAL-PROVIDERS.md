@@ -236,11 +236,20 @@ owner runs it, after connecting the Page in Buffer:
    `schedulingType: automatic`, `mode: shareNow`, a short caption and two `assets` entries, each
    `{ image: { url, metadata: { altText } } }` pointing at committed devShark PNG frames.
 2. Read the post back with `post(input: { id })` and open its `externalLink`.
-3. Record here: the date, whether LinkedIn shows both images as one multi-image post, and the
-   channel's `type` as the channel query reports it.
-4. Two images shown: set `BUFFER_LINKEDIN_FORMAT` to `multi-image`. One image or an error: keep
-   `single-image`. Either way, set Buffer's `verdict` to `enabled` in `config/social-providers.json`
-   (it serves LinkedIn only) and tick B4 in `state/decisions/2026-09-26-devshark-social-queue.md`.
+3. Record here, under "Result": the date, whether LinkedIn shows both images as one multi-image
+   post, and the channel's `type` as the channel query reports it. That is the owner's whole part.
+4. An agent session then makes one commit from the recorded result (the `[owner:ai]` item in
+   `docs/NEEDED.md`): `BUFFER_LINKEDIN_FORMAT` becomes `multi-image` if both images showed and stays
+   `single-image` otherwise; Buffer's `verdict` in `config/social-providers.json` becomes `enabled`
+   (it serves LinkedIn only); B4 is ticked in `state/decisions/2026-09-26-devshark-social-queue.md`.
+   Four gates pin Buffer as held and move in that same commit, each citing the recorded test:
+   `orchestrator/tests/social-providers.test.ts` (the verdict list), the migration audit's counts
+   and its `optionalProvidersHeld` invariant (`orchestrator/src/social/migration-audit.ts`, pinned in
+   `social-migration-audit.test.ts` as `held: 22` and `heldOptionalProviders: 5`), and the release
+   audit's `provider-and-queue-safety` and `idempotent-migration-rollback` checks
+   (`orchestrator/src/social/release-audit.ts`), which must accept a LinkedIn-only `enabled` Buffer
+   as the transport while every other optional provider stays held. Flipping the verdict alone turns
+   `pnpm test` red, and with it the publisher's pre-publish checks and the cycle's gate.
 
 Result: not yet run.
 

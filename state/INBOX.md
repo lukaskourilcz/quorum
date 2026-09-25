@@ -44,6 +44,70 @@ with its full scope, because the scope text is the approval. -->
   A different article already holds this date and slot in the magazine, so this one was held back. RELAY marked the delivery `needs_reconciliation`; same-slot content must not be overwritten automatically.
   [imp:5] [owner:me] [time:20m] [kind:deploy]
 
+- [ ] HUMAN_APPROVAL DEVSHARK-SOCIAL-003 — Create the accounts and grants devShark's social
+  queue needs: a Buffer Free account, a Meta developer app with four publish scopes, and Actions
+  write on the Admin's GitHub token.
+  What this approves, exactly:
+  - **Buffer:** one Buffer account on the **Free plan**, with the devShark LinkedIn Company Page
+    connected as a channel and one API key created. No card, no paid plan, no auto-renewal. A paid
+    Buffer plan or Zernio (about $6 a month) needs its own approval and a treasury ledger line.
+  - **Meta:** one Meta developer app of the Business type, with the Instagram use case (Instagram
+    Login, no Facebook Page) and the Threads use case. The devShark Instagram and Threads accounts
+    are testers of the owner's own app, so no App Review is requested. Scopes:
+    `instagram_business_basic`, `instagram_business_content_publish`, `threads_basic` and
+    `threads_content_publish`, and nothing that reads or writes comments, replies, messages, likes
+    or follows. Tokens are the 60-day kind and are refreshed through the API.
+  - **GitHub token:** `BOARDLESSAI_GITHUB_TOKEN` gains Actions read and write on
+    `lukaskourilcz/quorum` only, beside its Contents write, so a Queue approval can start
+    `social-publisher.yml` with `validate_only` off. It gets no other permission and no other
+    repository, and a dispatch decides nothing: the run applies every lock.
+  - **Where the values live:** Actions secrets `BUFFER_API_KEY`,
+    `DEVSHARK_INSTAGRAM_ACCESS_TOKEN` and `DEVSHARK_THREADS_ACCESS_TOKEN`; Actions variables
+    `BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN`, `DEVSHARK_INSTAGRAM_USER_ID` and
+    `DEVSHARK_THREADS_USER_ID`. The repository holds the names only.
+  - **What it costs:** $0, now and on renewal.
+  What it does not approve: switching any connection or channel on, `SOCIAL_KILL_SWITCH=false`, or
+  any post. Those are DEVSHARK-SOCIAL-001, DEVSHARK-SOCIAL-002 and the owner's approval of each
+  post in the Queue. Tick it in your own commit before creating the accounts.
+  Decision: `state/decisions/2026-09-26-devshark-social-queue.md` (`devshark-social-2026-09a`).
+
+- [ ] HUMAN_APPROVAL DEVSHARK-SOCIAL-001 — Connect and activate the three devShark connections;
+  Buffer for LinkedIn; autopublish of owner-approved Queue items only.
+  What this approves, exactly:
+  - **The connections:** `social-connection-devshark-linkedin` (through Buffer),
+    `social-connection-devshark-instagram` and `social-connection-devshark-threads` (Direct Meta)
+    move from `held` to `autopublish` with `enabledByHumanAt`, and their provider bindings become
+    active. marketingShark becomes a publishing venture, and sends only while
+    `state/social/activation.json` shows it enabled: three drafted packages and every credential
+    reference present.
+  - **What may be sent:** only a queue item the owner approved in the Admin Queue (status
+    `queued`, its `approvalRef` the owner's `social-queue-event/1`), inside its publish window, on
+    the connection its target names, within that connection's cadence (one post a day, at least 20
+    hours apart). A draft is never sent, and nothing marketingShark drafts sends by itself.
+  - **The transports:** Buffer's free plan for the LinkedIn Page only, Direct Meta for Instagram
+    and Threads, with image URLs pinned to a commit through jsDelivr.
+  - **What stays in force:** `SOCIAL_KILL_SWITCH`, every pause file, the asset gate, the claim the
+    publisher pushes before it sends, the reward-for-engagement rule and the $0 transport posture.
+  What it does not approve: ads or boosts, comments, replies, messages, follows or likes, any paid
+  plan, DNESKAi's connections, or running the publisher on a schedule. Tick it in your own commit
+  when the connections are live and three drafted packages exist.
+  Decision: `state/decisions/2026-09-26-devshark-social-queue.md` (`devshark-social-2026-09a`).
+
+- [ ] HUMAN_APPROVAL DEVSHARK-SOCIAL-002 — Set the `linkedin`, `instagram` and `threads` channels
+  in `config/channels.json` to `mode: "autopublish"` with `enabledByHumanAt`.
+  What this approves, exactly:
+  - **The channel mode:** the global mode the publisher checks beside each connection. Together
+    with DEVSHARK-SOCIAL-001 it lets an owner-approved devShark item send.
+  - **What it touches besides devShark:** the Instagram and Threads channels are shared with
+    DNESKAi. Its connections stay `held` and send nothing until their own activation.
+  - **The tests that move with it:** `orchestrator/tests/ci-policy.test.ts` pins every channel in
+    `draft`; it changes only in the commit that records the decision as countersigned.
+  What it does not approve: any scope beyond posting (the channel scope guard stays), a second post
+  a day on any connection, or the publisher's hourly schedule. Tick it in your own commit after
+  DEVSHARK-SOCIAL-001.
+  Decision: `state/decisions/2026-09-26-devshark-social-queue.md` (`devshark-social-2026-09a`).
+
+
 ## Resolved
 
 - [x] HUMAN_APPROVAL place-devshark-house-banner-on-dneskai — Let devShark fill
