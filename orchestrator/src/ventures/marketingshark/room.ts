@@ -10,6 +10,7 @@ import { loadRuntimeBudgetLimits } from "../../portfolio/limits.js";
 import { atomicWriteJson, readJson } from "../../state.js";
 import type { Stage } from "../../types.js";
 import { enabledBrands, loadMarketingSharkConfig } from "./config.js";
+import { clipToWords } from "./kinds.js";
 import type { BrandOutcome } from "./outcome.js";
 import { ChumOutput, PostWriterOutput } from "./package.js";
 import { planDay, type DayPlan } from "./post-plan.js";
@@ -278,6 +279,10 @@ export function buildMeetingRecord(input: {
       : "Every enabled brand already had today's package; nothing was re-served."
     : `${drafted.length} draft ${drafted.length === 1 ? "package" : "packages"}: ${drafted.map(draftedLine).join("; ")}.${fallbacks.length > 0 ? ` ${fallbacks.join(" ")}` : ""}`;
 
+  // A transcript turn holds 800 characters. The decision keeps the whole summary; the turn keeps
+  // what fits, so a long refusal list can never make the record itself fail to write.
+  const turn = clipToWords(summary, 800);
+
   return MeetingRecordSchema.parse({
     schemaVersion: "meeting-record/2",
     cycleId: input.cycleId,
@@ -322,9 +327,9 @@ export function buildMeetingRecord(input: {
         : "Live bounded room. At most one model call per enabled brand, and the kind, its subject, slide 1, the templates and the closing line were all decided in code before it.",
       turns: [
         { agent: "MAKO", mode: "gavel", sentAt: times[0], text: "The day's post, one carousel per language each enabled brand writes." },
-        { agent: "CHUM", mode: "statement", sentAt: times[1], text: summary },
+        { agent: "CHUM", mode: "statement", sentAt: times[1], text: turn },
         { agent: "AUDIT", mode: "statement", sentAt: times[2], text: "Truth gates ran on every returned draft. Nothing was published, queued or scheduled." },
-        { agent: "MAKO", mode: "close", sentAt: times[3], text: summary }
+        { agent: "MAKO", mode: "close", sentAt: times[3], text: turn }
       ]
     },
     generatedAt: times[3]

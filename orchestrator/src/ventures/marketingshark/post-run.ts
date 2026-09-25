@@ -204,7 +204,7 @@ export async function runPostDay(input: {
     // The owner's words go through every gate once and are never rewritten: a refusal is theirs to fix.
     const result = check(plan.ownerCopy);
     if (!Array.isArray(result)) return aborted("render-failed", `the announcement would clip: ${result.codeClipped.join(", ")}`, 0);
-    if (result.length > 0) return aborted("truth-gate-failed", result.map((violation) => `${violation.gate}: ${violation.detail}`).join("; "), 0);
+    if (result.length > 0) return aborted("truth-gate-failed", clipToWords(result.map((violation) => `${violation.gate}: ${violation.detail}`).join("; "), 600), 0);
     output = plan.ownerCopy;
   } else {
     const craft = craftRulesFor(await readCraftRules(repoRoot), plan.kind);

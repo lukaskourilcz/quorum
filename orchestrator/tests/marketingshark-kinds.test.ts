@@ -14,7 +14,7 @@ import { runPostGates } from "../src/ventures/marketingshark/post-gates.js";
 import { buildPostPacket } from "../src/ventures/marketingshark/post-packet.js";
 import { planDay, type DayPlan, type PostDayPlan } from "../src/ventures/marketingshark/post-plan.js";
 import { fixturePostOutput, runPostDay } from "../src/ventures/marketingshark/post-run.js";
-import { runMarketingSharkCycle } from "../src/ventures/marketingshark/room.js";
+import { buildMeetingRecord, runMarketingSharkCycle } from "../src/ventures/marketingshark/room.js";
 import { fixtureChumOutput, fixtureHookLines, planBrandDay, readLedger, runBrandDay } from "../src/ventures/marketingshark/run.js";
 
 // quorum#576 (B9): the weekday rotation. Monday and Thursday the quiz, Tuesday a feature spotlight,
@@ -176,6 +176,16 @@ describe("the weekday rotation", () => {
     const again = await draft(brand, "2026-09-29", where);
     expect(again.outcome).toMatchObject({ status: "already-served", kind: "feature-spotlight" });
     expect(again.calls).toBe(0);
+  });
+
+  it("writes the meeting record whatever the length of a refusal", () => {
+    const record = buildMeetingRecord({
+      cycleId: "t", date: "2026-10-02", now: new Date("2026-10-02T05:00:00.000Z"), stage: "DISCOVERY", dry: true,
+      outcomes: [{ status: "aborted", brandId: "devshark", kind: "announcement", reason: "truth-gate-failed", detail: "owner-copy: a refusal. ".repeat(120), spendUsd: 0 }],
+      spendUsd: 0, envelopeUsd: 0.1, monthAllInUsd: 0, monthCapUsd: 50
+    });
+    expect(record.decision.summary.length).toBeGreaterThan(800);
+    expect(record.roomTranscript!.turns.every((turn) => turn.text.length <= 800)).toBe(true);
   });
 
   it("opens no room at the weekend and writes nothing", async () => {
