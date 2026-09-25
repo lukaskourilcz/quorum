@@ -487,6 +487,45 @@ describe("automation policy", () => {
     );
   });
 
+  // An ambiguous or refused post exits 2. When that exit failed the publish step, GitHub skipped the
+  // validate and commit steps, so the run's needs_reconciliation status, its receipts and its
+  // pauses died with the runner, and the next approval's dispatch found the post still queued and
+  // sent it again (quorum#574 review). The exit code is recorded, the state is validated and
+  // committed, and only the last step fails the job.
+  it("commits the publisher's state before it fails the job for a post that needs the owner", async () => {
+    const social = await readFile(path.join(workflowRoot, "social-publisher.yml"), "utf8");
+    const stepNames = [...social.matchAll(/^ {6}- name: (.+)$/gmu)].map(([, name]) => name!);
+    const order = [
+      "Run two-phase publisher",
+      "Validate publisher state",
+      "Commit immutable queue state and receipts",
+      "Fail when a post needs the owner"
+    ];
+    const positions = order.map((name) => stepNames.indexOf(name));
+    for (const [index, name] of order.entries()) expect(positions[index], `${name} is missing`).toBeGreaterThan(-1);
+    expect([...positions].sort((a, b) => a - b), "the publisher's steps are out of order").toEqual(positions);
+    expect(positions.at(-1), "failing the job is the last thing the run does").toBe(stepNames.length - 1);
+
+    const step = (name: string): string => {
+      const start = social.indexOf(`      - name: ${name}\n`);
+      const end = social.indexOf("\n      - name: ", start + 1);
+      return social.slice(start, end === -1 ? undefined : end);
+    };
+    const condition = (name: string): string => step(name).match(/^ {8}if: (.*)$/mu)?.[1] ?? "";
+
+    const publish = step("Run two-phase publisher");
+    expect(publish).toContain("|| status=$?");
+    expect(publish).toContain('echo "exit_code=$status" >> "$GITHUB_OUTPUT"');
+    expect(publish).not.toMatch(/^\s+exit /mu);
+    for (const name of ["Validate publisher state", "Commit immutable queue state and receipts"]) {
+      const gate = condition(name);
+      expect(gate, `${name} must run after the publisher reported a post that needs the owner`).toContain("!cancelled()");
+      expect(gate, `${name} would be skipped by the failure it has to record`).not.toMatch(/(?<![!\w])success\(\)/u);
+    }
+    expect(condition("Fail when a post needs the owner")).toContain("steps.publish.outputs.exit_code != '0'");
+    expect(step("Fail when a post needs the owner")).toContain('exit "$PUBLISH_EXIT_CODE"');
+  });
+
   // The 2026-08-04 doubling is reverted, with one correction the owner made when it came due:
   // the edition per-run cap settles at $0.50 rather than the $0.35 it was doubled from. Source
   // bodies made write and rewrite calls $0.10-0.12 each, so curate + write + two configured

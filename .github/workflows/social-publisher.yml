@@ -83,6 +83,7 @@ jobs:
           pnpm --filter @boardlessai/orchestrator test
 
       - name: Run two-phase publisher
+        id: publish
         env:
           EVENT_NAME: ${{ github.event_name }}
           VALIDATE_ONLY: ${{ inputs.validate_only }}
@@ -91,14 +92,22 @@ jobs:
           if test "$EVENT_NAME" = "workflow_dispatch" && test "$VALIDATE_ONLY" = "true"; then
             args+=(--validate-only)
           fi
-          pnpm social:publish -- "${args[@]}"
+          # The exit code is recorded, not raised here. An ambiguous or refused post exits 2, and a
+          # failed step made GitHub skip the two below, so its needs_reconciliation status, receipts
+          # and pauses never reached the branch and the next run sent the post again. The last step
+          # fails the job once they are pushed.
+          status=0
+          pnpm social:publish -- "${args[@]}" || status=$?
+          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
 
       - name: Validate publisher state
+        if: ${{ !cancelled() && steps.publish.outcome == 'success' }}
         run: |
           pnpm --filter @boardlessai/orchestrator test
           git diff --check
 
       - name: Commit immutable queue state and receipts
+        if: ${{ !cancelled() && steps.publish.outcome == 'success' }}
         run: |
           git add state/social state/notify docs/NEEDED.md
           if git diff --cached --quiet; then
@@ -117,3 +126,11 @@ jobs:
           done
           echo "Social state could not be pushed after three rebase-first attempts."
           exit 1
+
+      - name: Fail when a post needs the owner
+        if: ${{ !cancelled() && steps.publish.outputs.exit_code != '' && steps.publish.outputs.exit_code != '0' }}
+        env:
+          PUBLISH_EXIT_CODE: ${{ steps.publish.outputs.exit_code }}
+        run: |
+          echo "::error title=Publisher needs the owner::A post was refused or its outcome is ambiguous (exit $PUBLISH_EXIT_CODE). Its state is committed; see the Queue and state/social/posts."
+          exit "$PUBLISH_EXIT_CODE"
