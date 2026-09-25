@@ -1,5 +1,19 @@
 # NEEDED — what the owner has to do
 
+## Kickoff 2026-09-25 · DNESKAi and devShark only
+
+The owner narrowed the scope again on 2026-09-25: BoardlessAI works for DNESKAi (articles,
+images, social) and produces social content for DNESKAi and devShark; MMA Files, BOOKSOFHISTORY,
+Personal Growth and Tehdejší svět stop; paused ventures leave the clock, the navigation and the
+Design Lab. `KICKOFF-25-9-2026.md` at the repository root is the programme; issues #555–#567 are
+the steps. These are the owner's parts:
+
+- [ ] **Rename the repositories on GitHub** — `react-express-app → devShark`, `aifirst → DNESKAi`, `quorum → boardlessAI`, in that order, only after own-dashboard #75 and #555–#564 are merged; then update the Claude Code environment's repository list, `git remote set-url` on local clones and `NEXT_PUBLIC_GITHUB_REPO` on the DNESKAi Vercel project. #565 does the repository side the same day. [imp:4] [owner:me] [time:30m] [kind:setup]
+- [ ] **Deploy the site after #558** — the Vercel cron table drops the paused ventures' 14 entries only on a deploy (`pnpm deploy:check`, then `pnpm deploy:production`); merging does not deploy. Ten entries remain; if the Hobby plan caps them (#527), decide the plan. [imp:4] [owner:me] [time:20m] [kind:deploy]
+- [ ] **Delete the dead Actions variables and secrets after #559** — `MMA_FILES_LIVE_ENABLED`, `FIGHTAIQ_LIVE_ENABLED`, `FIGHTAIQ_ANALYSIS_ENABLED`, `MMA_FILES_INDEXING_ENABLED`, and the MMA Files and Titty Tuesdays Threads/Instagram variables and secrets in the repository settings. [imp:2] [owner:me] [time:10m] [kind:setup]
+- [ ] **Decide DNESKAi's banner slots** — aifirst #97: devShark creatives (option A, which adds a `HUMAN_APPROVAL` here for the marketingShark banner flag) or empty slots (option B). [imp:2] [owner:me] [time:10m] [kind:decision]
+- [ ] **Countersign the DNESKAi yield proposals** — #564 writes them as `Status: proposed`; nothing in `config/edition-quality.json` changes before you tick them. [imp:3] [owner:me] [time:20m] [kind:decision]
+
 ## Focus and outage · 2026-09-15
 
 The owner set a new scope: DNESKAi, GoVIRAL, the Design Lab, marketingShark, WebDev Signal and
