@@ -10,6 +10,7 @@
 - [ ] **Meta developer app** with the Instagram and Threads use cases, the devShark accounts as testers, and the four `DEVSHARK_*` secrets; calendar the 60-day token refresh. [imp:4] [owner:me] [time:45m] [kind:setup]
 - [ ] **Give `BOARDLESSAI_GITHUB_TOKEN` the `actions: write` permission** so an approval can dispatch the publisher (#574). [imp:4] [owner:me] [time:5m] [kind:setup]
 - [ ] **Tick `HUMAN_APPROVAL DEVSHARK-SOCIAL-001` and `-002` in `state/INBOX.md`** when the connections are live and three drafted packages exist. [imp:5] [owner:me] [time:10m] [kind:decision]
+- [ ] **Time the first live approval** — once a devShark connection is active, approve one post with "Approve and publish now", follow the run link on its card, and record here the minutes from the click to the post's permalink (#574; target under five). [imp:3] [owner:me] [time:10m] [kind:setup]
 - [ ] **Confirm devShark's live facts for `config/marketingshark.json`** (free tier contents, Premium at 3.99 a month, English only) once the devShark handoff ships. [imp:3] [owner:me] [time:15m] [kind:content]
 
 ## Kickoff 2026-09-25 · DNESKAi and devShark only

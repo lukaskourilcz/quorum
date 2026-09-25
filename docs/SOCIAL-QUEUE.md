@@ -2,14 +2,14 @@
 
 Version: 2026-09-26
 
-Authority: GitHub #573 (step B6 of `SECOND-HANDOFF-25-9-2026.md`), under the proposed decision
-`state/decisions/2026-09-26-devshark-social-queue.md` (`devshark-social-2026-09a`).
+Authority: GitHub #573 and #574 (steps B6 and B7 of `SECOND-HANDOFF-25-9-2026.md`), under the
+proposed decision `state/decisions/2026-09-26-devshark-social-queue.md` (`devshark-social-2026-09a`).
 
 `/admin/queue` lists every social post that waits for the owner, and what became of the ones that
 no longer wait. The owner can edit a post's text in place, open its graphic in the Design Lab, and
-approve it. An approval moves the item to `queued`. It does not add a way to send: the publisher
-still applies the kill switch, the channel mode, the held connection, the provider verdict, the
-per-venture activation and the cadence before it touches a platform.
+approve it. An approval moves the item to `queued` and wakes the publisher. It does not add a way
+to send: the publisher still applies the kill switch, the channel mode, the held connection, the
+provider verdict, the per-venture activation and the cadence before it touches a platform.
 
 ## One read boundary
 
@@ -84,12 +84,53 @@ cycle's `runtime_paths` through `state/social`.
 A deployment reads the repository as it stood when it was deployed, like every Admin page. An
 action is saved to GitHub at once and the publisher sees it on its next run, but the list shows it
 only after the next deploy. Until then the item still reads as it did. Approving it again answers
-that the approval is already recorded; any other action on it is refused as a conflict, because the
-version on GitHub has moved on. An edit skips any revision id already written on GitHub.
+that the approval is already recorded and wakes the publisher once more; any other action on it is
+refused as a conflict, because the version on GitHub has moved on. An edit skips any revision id
+already written on GitHub.
+
+## Dispatch on approval
+
+Once an approval is saved on GitHub, `site/src/lib/queue-dispatch.ts` starts the publisher:
+`POST /repos/<repository>/actions/workflows/social-publisher.yml/dispatches` with
+`{ "ref": "<branch>", "inputs": { "validate_only": "false" } }`, authorised by
+`BOARDLESSAI_GITHUB_TOKEN`. The repository and branch are `BOARDLESSAI_GITHUB_REPOSITORY` and
+`BOARDLESSAI_GITHUB_BRANCH`, the same settings the store uses. The token needs the Actions write
+permission as well as Contents write; that is an owner item in `docs/NEEDED.md`.
+
+The dispatch is a wake-up, not authority. It asks only for what the workflow's "Run workflow" form
+offers, and the run applies the kill switch, the channel, the connection, activation, cadence and
+every check. The Admin never decides from its own copy of the repository whether a post may send:
+that copy is as old as the last deploy, and a connection activated since would read as held there.
+A run that finds nothing due sends nothing.
+
+Only `approve` dispatches. Hold, reject and edit never do, and neither does an approval that was
+refused or ran into a conflict. The dispatch comes after the item is written, because the run
+checks out the branch and must find the item there.
+
+| Outcome | When | What the owner reads |
+| --- | --- | --- |
+| `dispatched` | GitHub answers 200 (API version 2026-03-10, with the run's details) or 204 (earlier versions) | "Queued. The publisher runs within a few minutes.", with a link to the run when GitHub names it |
+| `failed` | 401 or 403 (the token lacks Actions write), 404, 422, any other status, or no answer within 10 seconds | "Queued, but the publisher did not start.", with the reason. The approval stands, the answer is still 201 and the item stays `queued` |
+| `skipped` | the approval was saved to a local checkout, or the window has not opened or has closed | why no run was started. A local checkout is never dispatched from, because the publisher reads GitHub |
+
+A failed wake-up is retried by approving the same copy again, which records nothing new, or by
+running "Guarded social publisher" from GitHub Actions with `validate_only` off. Either works while
+the item's window is open. Nothing runs the publisher on a schedule; see
+`docs/SOCIAL-DAILY-OPERATIONS.md`.
+
+Two approvals a minute apart start two runs. The workflow's concurrency group makes the second wait
+for the first, and its checkout names `github.ref`, so the second starts from the branch as the first
+left it. Checking out the commit its own dispatch named would hide the first run's receipts, and
+the second run would send the first post again.
+
+The card shows `sending` and then `sent` once the publisher's commits are in the checkout the Admin
+reads: in a local checkout after a pull, and in production at the next deploy. Until then the owner
+follows the post through the run link. The target is under five minutes from click to permalink.
+The first live run measures it and `docs/NEEDED.md` records the result. Before it publishes, the run
+installs dependencies and runs the orchestrator's typecheck and tests.
 
 ## Not built here
 
-- **Dispatch on approval (#574, B7).** An approved item waits for the next publisher run.
 - **Re-render and per-item Design Lab links (#575, B8).** "Open in Design Lab" opens the brand's
   section. The article-level deep link arrives with B8.
 - **The marketingShark ledger reading taste notes.** Reject events carry them now; the room reads
@@ -102,7 +143,17 @@ version on GitHub has moved on. An edit skips any revision id already written on
   references in the snapshot.
 - `site/src/lib/admin-queue/actions.test.ts` and `site/src/app/admin/api/queue/actions/route.test.ts`:
   the hash guard, approval, the supersede chain, event shape, hold and reject, v1 handling, and the
-  write-disabled refusal.
+  write-disabled refusal. The route test also shows a failed wake-up answered as a saved 201.
+- `site/src/lib/admin-queue/dispatch-on-approve.test.ts`: the deployed path against a fake GitHub
+  (`fake-github.ts`, the Contents API and the dispatch endpoint). One dispatch after the approved
+  item is written; none on hold, reject, edit, refusal or conflict; a failed wake-up named in the
+  response with the item still queued; the retry by approving again; no GitHub call for a local
+  checkout.
+- `site/src/lib/queue-dispatch.test.ts`: the request the wake-up sends, each GitHub answer, the
+  skipped cases, and the workflow it starts. That test checks the workflow declares
+  `validate_only` as a boolean input, checks out `github.ref` and keeps its concurrency group.
+- `site/src/lib/admin-queue/notice.test.ts`: what the card says after an action, and that it links
+  only to a GitHub Actions run.
 - `site/src/components/admin/queue-panel.test.tsx`: the panel's empty, write-disabled, failed,
   reconciliation, filtered, sent and replaced states.
 - `site/tests/e2e/operating-surfaces.spec.ts`, write journey "the Queue edits a draft into a new one,

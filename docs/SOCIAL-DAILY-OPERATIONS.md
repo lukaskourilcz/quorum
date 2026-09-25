@@ -1,8 +1,9 @@
 # Social Distribution daily operations
 
-Version: 2026-08-28
+Version: 2026-09-26
 
-Authority: GitHub #433, consuming #409, #410, #415, #417, #418 and #424.
+Authority: GitHub #433, consuming #409, #410, #415, #417, #418 and #424. "What starts the publisher"
+is #574.
 
 ## Deterministic daily decision
 
@@ -52,6 +53,20 @@ for reconciliation and never silently resent or failed over.
 `persistSocialDailyDecision` serializes each profile/connection/date writer behind a file lock. It
 stores the append-only operation before exposing its matching queue file and repairs a missing
 queue handoff on an exact replay. A conflicting operation or queue payload is rejected.
+
+## What starts the publisher
+
+`.github/workflows/social-publisher.yml` runs only when something dispatches it: the owner from
+GitHub Actions, or an approval in the Admin Queue (#574, `docs/SOCIAL-QUEUE.md`). Either way the run
+takes the queued items whose window is open and applies every gate above. The dispatch decides
+nothing. "Approve and publish now" narrows the item's window to the next hour and dispatches a run
+that finds it due.
+
+The hourly schedule stays commented out, and `orchestrator/tests/ci-policy.test.ts` pins that. An
+item approved for a window that opens later therefore waits until a run is dispatched inside that
+window, by the next approval or by the owner. An hourly run for windowed items is a later decision.
+It would restore the cron with the job-level `if:` that keeps a locked hour from starting a runner,
+and it would change `ci-policy.test.ts` only in the commit that records that decision.
 
 ## Admin Today
 
