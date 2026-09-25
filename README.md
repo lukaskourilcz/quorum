@@ -12,19 +12,28 @@ state, schedule, decisions, ventures, and published work.
 
 ## Ventures
 
-| Venture | What it produces |
+Since `operations-2026-09b` (2026-09-25) five ventures run. `config/ventures.json` is the source
+of truth; a paused venture keeps its code and state, holds no slot on the clock and is listed in
+the admin's Settings rather than its navigation.
+
+| Running | What it produces |
 | --- | --- |
-| **DNESKAi** | One sourced Czech AI edition a day, or `NO_EDITION` with a reason. |
+| **DNESKAi** | One sourced Czech AI edition a day, or `NO_EDITION` with a reason, and its social pack. |
+| **marketingShark** | One native Czech and English `devShark` quiz package a day. |
+| **GoVIRAL** | A measured weekly trend brief for DNESKAi and devShark from bounded paid and free sources; it posts nothing. |
+| **Design Lab** | Deterministic templates, presets, decks, and renders for the running brands. |
+| **WebDev Signal** | A $0 pre-step of the DNESKAi day; its editions are held. |
+
+| Paused | What it produced |
+| --- | --- |
 | **MMA Files** | One sourced Czech MMA article a day when its evidence gates pass. |
 | **FightAIQ** | Source-checked fighter and event records, with gated fight probabilities. |
-| **Design Lab** | Deterministic templates, presets, decks, and renders for supported venture brands. |
-| **marketingShark** | One native Czech and English `devShark` quiz package a day. |
-| **GoVIRAL** | A measured weekly trend brief from bounded paid and free sources; it posts nothing. |
 | **Titty Tuesdays** | Pre-commerce brand, season, and campaign plans; there is no shop or spend path. |
-| **Kvórum** | Up to two sourced Czech political recommendation drafts a day when room and evidence gates pass; the owner posts manually. |
-| **Door Money** | Evidence-linked English recommendation drafts and a Thursday owner action packet; it carries no manuscript and publishes nothing. |
+| **Kvórum** | Up to two sourced Czech political recommendation drafts a day; the owner posts manually. |
+| **Door Money** | Evidence-linked English recommendation drafts and a Thursday owner action packet. |
 | **BOOKSOFHISTORY** | Sourced Czech and English book-story drafts; the owner approves, renders, and posts manually. |
-| **Tehdejší svět** | Bilingual Czech and Ukrainian memory features from a hand-committed, hash-verified facts file; the owner posts manually. |
+| **Tehdejší svět** | Bilingual Czech and Ukrainian memory features from a hash-verified facts file. |
+| **Personal Growth** | The owner-only desk for the book and audiobook promotion. |
 
 ## Stack
 
@@ -32,20 +41,19 @@ This is a pnpm monorepo written in TypeScript. `orchestrator/` runs the council
 and venture rooms. It records decisions in `state/` as plain files in Git.
 `site/` is the Next.js public site and protected admin. `studio/` is the
 deterministic render package: the same input produces the same bytes. GitHub
-Actions runs the cycles. Vercel deploys the site from `main`.
+Actions runs the cycles. Merging to `main` does not deploy the site: `site/vercel.json` turns Git
+deployments off, and a release is `pnpm deploy:check` followed by `pnpm deploy:production`.
 
 The company has a hard **$50 monthly cap** across models, APIs, media, hosting,
 and tools. Personal Growth has a nested $20 cap inside it and remains owner-only.
 
 ## Prague clock
 
-There is one daily window each hour from 05:00 through 22:00 Prague time:
-DNESKAi edition, morning council, marketingShark, MMA intake, FightAIQ
-editorial, MMA article, Titty Tuesdays, BOOKSOFHISTORY, GoVIRAL, afternoon
-council, Door Money desk, Door Money growth, DNESKAi product, Tehdejší svět,
-MMA analysis, FightAIQ desk, Kvórum, and night council. The schedule registry is
-the source of truth. Vercel stores paired UTC entries so the Prague clock keeps
-the same local hours across daylight-saving changes.
+The running rooms: the DNESKAi day at 05:00, the morning council at 06:00, marketingShark at
+07:00, the DNESKAi retry at 09:00 and GoVIRAL at 13:00 (its room meets on Mondays). Three
+backstop sweeps a day catch a slot the cron missed. The registry is the source of truth:
+`site/vercel.json` and the sweeps derive from it, so a paused venture's rooms drop off the clock.
+Vercel stores paired UTC entries so the Prague hours hold across daylight-saving changes.
 
 ## Commands
 
@@ -72,11 +80,13 @@ API key. The site reads committed state.
   and [engineering contract](docs/ENGINEERING.md).
 - Owner-facing context lives in [about-project](about-project.md), [scaling](scaling.md),
   [monetization](monetization.md) and the single [owner action list](docs/NEEDED.md).
-- Venture designs: [BOOKSOFHISTORY](docs/BOOKSOFHISTORY-VENTURE-DESIGN.md),
+- Paused ventures' designs: [BOOKSOFHISTORY](docs/BOOKSOFHISTORY-VENTURE-DESIGN.md),
   [Door Money](docs/DOOR-MONEY-VENTURE-DESIGN.md), [FightAIQ](docs/FIGHTAIQ.md),
   [Kvórum](docs/KVORUM-VENTURE-DESIGN.md), [MMA Files](docs/MMA-FILES.md),
   [Tehdejší svět](docs/TEHDEJSI-SVET-VENTURE-DESIGN.md) and
   [Titty Tuesdays visuals](docs/TITTY-TUESDAYS-VISUAL-LOOP.md).
+- DNESKAi's run history: [yield report](docs/reports/dneskai-yield-2026-09-25.md), rebuilt with
+  `pnpm edition:yield -- --since <date>`.
 - Shared creative systems: [Design Lab](docs/design-lab/README.md),
   [hook knowledge](docs/hooks/README.md) and
   [workspace fixtures](docs/design/workspace-fixtures/README.md).
@@ -84,7 +94,7 @@ API key. The site reads committed state.
   [brand](state/BRAND.md), [experiments](state/EXPERIMENTS.md),
   [finance](state/FINANCE.md), [approvals](state/INBOX.md),
   [opportunities](state/OPPORTUNITIES.md) and [social policy](state/SOCIAL_STRATEGY.md).
-- Venture-local state guides: [BOOKSOFHISTORY](state/ventures/booksofhistory/README.md),
+- Venture-local state guides (most for paused ventures): [BOOKSOFHISTORY](state/ventures/booksofhistory/README.md),
   [Door Money](state/ventures/door-money/README.md),
   [FightAIQ](state/ventures/fightaiq/README.md), [GoVIRAL profile](state/ventures/goviral/profile.md),
   [Kvórum](state/ventures/kvorum/README.md),

@@ -12,9 +12,12 @@ the steps. These are the owner's parts:
 - [ ] **Deploy the site after #558** — the Vercel cron table drops the paused ventures' 14 entries only on a deploy (`pnpm deploy:check`, then `pnpm deploy:production`); merging does not deploy. Ten entries remain; if the Hobby plan caps them (#527), decide the plan. [imp:4] [owner:me] [time:20m] [kind:deploy]
 - [ ] **Delete the dead Actions variables and secrets after #559** — `MMA_FILES_LIVE_ENABLED`, `FIGHTAIQ_LIVE_ENABLED`, `FIGHTAIQ_ANALYSIS_ENABLED`, `MMA_FILES_INDEXING_ENABLED`, and the MMA Files and Titty Tuesdays Threads/Instagram variables and secrets in the repository settings. [imp:2] [owner:me] [time:10m] [kind:setup]
 - [ ] **Decide DNESKAi's banner slots** — aifirst #97: devShark creatives (option A, which adds a `HUMAN_APPROVAL` here for the marketingShark banner flag) or empty slots (option B). [imp:2] [owner:me] [time:10m] [kind:decision]
-- [ ] **Countersign the DNESKAi yield proposals** — #564 writes them as `Status: proposed`; nothing in `config/edition-quality.json` changes before you tick them. [imp:3] [owner:me] [time:20m] [kind:decision]
+- [ ] **Countersign the DNESKAi yield proposals** — `state/decisions/2026-09-25-dneskai-yield-proposals.md` (`edition-2026-09a`, `Status: proposed`) lists five changes, each with its measured effect from `docs/reports/dneskai-yield-2026-09-25.md`; tick the ones you approve. Nothing in `config/edition-quality.json` changes before you do. [imp:3] [owner:me] [time:20m] [kind:decision]
 
 ## Focus and outage · 2026-09-15
+
+Superseded on 2026-09-25 by `operations-2026-09b`: Personal Growth is paused too, and a paused
+venture now leaves the clock. The outage record below stands.
 
 The owner set a new scope: DNESKAi, GoVIRAL, the Design Lab, marketingShark, WebDev Signal and
 Personal Growth run; everything else is paused (`state/decisions/2026-09-15-focus-six-ventures.md`).
@@ -89,11 +92,15 @@ own UI. Never paste a credential into Git, an issue, a meeting record or chat.
 Every task carries the shared marker format:
 `- [ ] **Title** — description. [imp:1-5] [owner:me|ai] [time:30m] [kind:setup|deploy|legal|content|decision]`
 
-Updated: 2026-09-15.
+Updated: 2026-09-25.
 
 ---
 
 ## The launch shortlist — 2026-08-28
+
+Superseded on 2026-09-25 by `operations-2026-09b`: only DNESKAi, marketingShark, GoVIRAL, the
+Design Lab and WebDev Signal run, and every paused venture's own items moved to **On hold —
+paused ventures** at the end of this file. This record is kept for its history.
 
 The owner set the launch set: DNESKAi, MMA Files, marketingShark, BOOKSOFHISTORY, Tehdejší
 svět, Kvórum, plus the owner-only Personal Growth desk. Titty Tuesdays, Door Money, WebDev
@@ -248,14 +255,6 @@ is the single thing standing between a proven path and a working one.
   written summary, which is a complete report rather than a gap.
   [imp:2] [owner:me] [time:5m] [kind:decision]
 
-- [x] **Sign the six Titty Tuesdays image approvals, or decide not to** — signed 2026-08-29. `TT-VISUALS-SPEND-001`
-  through `TT-VISUALS-CONTRACT-006` in `state/INBOX.md`, all-or-nothing. They cover about $0.057 a
-  day (roughly $1.70 a month, ceiling $2.00), the two renderer routes, keeping the images inside
-  `state/` rather than the public site, the doctrine checklist and the delete-on-doctrine rule, the
-  daily two-image shape, and the `design-proposal/1` contract. Nothing renders until all six are
-  ticked and `TT_VISUALS_ENABLED=true` with both `OPENAI_API_KEY` and `FAL_KEY` present.
-  [imp:3] [owner:me] [time:20m] [kind:decision]
-
 - [ ] **Create the free Podcast Index key pair** — register at api.podcastindex.org and add
   `PODCASTINDEX_API_KEY` and `PODCASTINDEX_API_SECRET` to the quorum Actions secrets. It is free
   and it is only used for shows with no workable RSS or YouTube surface, so its absence degrades
@@ -300,51 +299,12 @@ is the single thing standing between a proven path and a working one.
   all-in cap. `state/INBOX.md` carries this as `APIFY-ACCOUNT-001`.
   [imp:4] [owner:me] [time:10m] [kind:setup]
 
-- [x] **Approve the reviewed MMA scope for the same Apify token** — `APIFY-MMA-SOURCES-001` in
-  `state/INBOX.md` authorizes only the terms-reviewed Tapology promotion-page reference step.
-  UFCStats and ESPN remain disabled and Sherdog remains blocked; approval does not turn them on.
-  The current runnable plan is $0 cash and at most $0.20/month of Free-plan credit, beneath a
-  separate $3 hard cap. Without both this approval and `APIFY_TOKEN`, the path is a logged $0
-  no-op. Read the shared-credit warning before approving this alongside GoVIRAL.
-  [imp:4] [owner:me] [time:5m] [kind:decision]
-
-- [x] **Approve Kvórum's one-page Apify scope** — read and countersign `KV-APIFY-001` in
-  `state/INBOX.md`. It covers only the pinned Facebook Posts Scraper build on the logged-out public
-  page `facebook.com/stitdemokracie`, at most once a day and 30 rows, with a fixed-field mapper and
-  30-day raw purge. The `$2.00` monthly venture share sits inside the existing Free-plan credit and
-  still depends on `APIFY-ACCOUNT-001`; current `$0.151` run reservations mean the guard will skip
-  days rather than fund a full month. No login, cookie, second page or plan upgrade is approved.
-  [imp:4] [owner:me] [time:10m] [kind:decision]
-
-- [x] **Approve Kvórum's seven free feed hosts** — `KV-SOURCES-002` in `state/INBOX.md` names the
-  exact iROZHLAS, ČT24, Deník N, Seznam Zprávy, Poslanecká sněmovna, Vláda ČR and Czech Google News
-  endpoints and allowlist hosts. Check those URLs and countersign the registry, or leave it pending;
-  without approval every live feed read fails closed and the committed fixture remains the `$0`
-  source. A new host or endpoint is a new review.
-  [imp:4] [owner:me] [time:15m] [kind:decision]
-
-- [x] **Countersign Kvórum's editorial constitution** — `KV-EDITORIAL-004` in `state/INBOX.md`
-  records the policy already enforced by the gates: Štít is discovery rather than evidence;
-  factual claims are typed and referenced; public figures only; no vote call, endorsement,
-  unsupported crime accusation, voter mockery, paid amplification or alarm register; election
-  claims use the higher source bar; corrections remain linked and the owner reads every final
-  draft. This approval grants no source, account, publishing, budget or treasury authority.
-  [imp:5] [owner:me] [time:15m] [kind:decision]
-
 - [ ] **Fill in `state/ventures/goviral/profile.md`** — the writer half of the weekly brief: your
   niches, your voice, your audiences, and what you never write about. Nothing in it is generated
   and nothing should be; until you fill it in the room leans on the two magazine niches and says so
   plainly in the brief rather than inventing a voice for you. Half-thoughts and bullets are fine;
   it is read as data, never as instructions. Tracked with the Apify credit check in #528.
   [imp:4] [owner:me] [time:20m] [kind:content]
-
-- [ ] **Rate the Titty Tuesdays idea cards in `/admin`** — the marketing room writes concrete
-  campaign ideas every day and nothing has ever rated one, so the taste loop that turns your
-  ratings into written style rules has no input and PALATE has nothing to work from. Nine cards sit
-  unrated under the venture's ideas tab, every one still `proposed`
-  (`state/ideas/titty-tuesdays/ledger.jsonl`); the count grows by roughly one a day until you rate
-  them. Rating them is the whole of what starts the loop.
-  [imp:4] [owner:me] [time:20m] [kind:decision]
 
 - [ ] **Record the fal.ai prepaid credit in the finance state** — the prepayment on 2026-08-08
   is real operating spend under the $50 all-in cap, and only the owner records payments: add the
@@ -384,61 +344,6 @@ Judgement calls. Nothing is blocked on code for any of these.
   2026-09-15, `config/webdev-signal.json` matches. The working name and exact handles are still
   unresolved and belong to the account item above. [imp:4] [owner:me] [time:20m] [kind:decision]
 
-- [x] **Sign or decline `BH-RESEARCH-001`** — decide whether BOOKSOFHISTORY may use
-  web search on the existing Anthropic key. The item in `state/INBOX.md` fixes gather
-  calls at five searches, QUILL checks at one to three, research at no more than
-  `$0.10` per call, `$0.50` per cycle and `$5.00` per month, and requires the ledger,
-  shelf-first reuse and `(bookId, briefHash)` idempotency. It creates no account or
-  credential. Until signed, live research must remain `$0`.
-  [imp:4] [owner:me] [time:10m] [kind:decision]
-
-- [x] **Review and sign or decline `BH-SEED-002`** — inspect the authored 200-book
-  seed library and accept only if its scores and notes read as editorial priors, never
-  facts. The same item keeps every `coverRef` in protected admin context: no cover
-  artwork may be downloaded, rendered or delivered, and only dossier claims may enter
-  feature copy. [imp:3] [owner:me] [time:30m] [kind:content]
-
-- [x] **Clear the two lanes and sign or decline `BH-ACCOUNTS-003`** — record the
-  chosen platforms and cleared handles for separate Czech and English profiles, then
-  approve the Czech and English AI-disclosure bio lines in `state/INBOX.md`. Signing
-  lets only you create or prepare those profiles; agents still cannot create an
-  account, touch a channel or post, and every package remains a draft for manual
-  posting. [imp:3] [owner:me] [time:30m] [kind:legal]
-
-- [x] **Sign or decline `BH-RESULTS-004`** — decide whether the protected admin may
-  accept your manual per-lane post URL and any available views, likes, comments,
-  shares, saves, follows or link taps. This is the only BOOKSOFHISTORY measurement
-  source: D9 and `METRICS_INGESTION_ENABLED=false` stay in force, no platform is read,
-  and absent numbers remain unavailable. [imp:2] [owner:me] [time:5m] [kind:decision]
-
-- [ ] **Countersign or decline Door Money's founding decision** — Kvórum's, BOOKSOFHISTORY's and
-  Tehdejší svět's were signed on 2026-08-29, and Kvórum's capacity reallocation with them, so its
-  desk is open. `state/decisions/2026-08-12-door-money-founding.md` is the one left, and it is not
-  urgent: you paused Door Money in Settings, and a paused venture holds no meetings whether its
-  founding is signed or not. Sign it when you resume the venture.
-  [imp:2] [owner:me] [time:20m] [kind:decision]
-
-- [x] **Review the facts file and sign or decline `TS-SNAPSHOT-001`** — confirm that
-  `state/ventures/tehdejsi-svet/facts.json` contains only facts copied by a
-  human, structurally omits unsafe records and excluded media, and is the only daily
-  read layer. Signing does not authorize a fetch, clone, sync or any connection to the
-  product repository; a hash mismatch keeps the desk closed at `$0`.
-  [imp:5] [owner:me] [time:20m] [kind:content]
-
-- [x] **Sign or decline `TS-MEDIA-002`** — decide whether the nineteen eligible
-  Wikimedia/CC BY-SA city photographs may appear in Tehdejší svět social cards with
-  creator/source/licence attribution on the card and in the caption. Excluded media,
-  incomplete credits, AI-generated historical imagery and destruction comparisons
-  remain blocked. [imp:4] [owner:me] [time:15m] [kind:legal]
-
-- [ ] **Land the production domain and clear the handle** — `TS-ACCOUNTS-003` was signed on
-  2026-08-29; the domain and the handle are what remain. Finish the product's existing `[imp:5]` domain task and
-  absolute OG URLs, then clear `@tehdejsisvet` (or record a fallback), approve the
-  no-flags bilingual bio in `state/INBOX.md`, and personally create the Instagram,
-  Facebook and Threads profiles if approved. `dontwannaknow.vercel.app` must never
-  appear in a bio; no agent receives a credential or channel.
-  [imp:5] [owner:me] [time:40m] [kind:setup]
-
 - [x] **Sign or decline `TS-RESEARCH-004`** — decide whether the existing shared
   provider may research the Ukrainian coverage gap, names and music at no more than
   `$0.30` per brief and `$2.00` per month. Research stays venture-side marketing data;
@@ -450,65 +355,6 @@ Judgement calls. Nothing is blocked on code for any of these.
   measurement. D9 stays in force: no product analytics, platform API, scrape, pixel,
   cookie or automatic comment collection; recollections never become facts.
   [imp:3] [owner:me] [time:10m] [kind:decision]
-
-- [ ] **Approve Tehdejší svět's first 12-feature content bank** — review both language
-  packages, their source coverage, tier labels, licences, send-target questions and
-  Design Lab previews before day 1. Approval of an individual feature still does not
-  create an account or post it; the owner performs every external post by hand.
-  [imp:4] [owner:me] [time:60m] [kind:content]
-
-- [ ] **Decide whether the product should move from Vercel Hobby to the existing Pro
-  team** — this is likely `$0` marginal but remains a product-side owner decision.
-  Tehdejší svět does not move the product, change its plan or infer permission from the
-  BoardlessAI Pro subscription. [imp:2] [owner:me] [time:10m] [kind:decision]
-
-- [ ] **Answer the BOOKSOFHISTORY launch questions** — lane priority (both at once, or
-  English first with Czech two weeks behind), the starting cycle length (3 days or 4),
-  and any must-include books or hard exclusions to append or correct in the authored
-  200-entry seed library before its first live cycle. All three are listed in the
-  design's "Open questions".
-  [imp:2] [owner:me] [time:15m] [kind:decision]
-
-- [ ] **Create Door Money's private source repository** — `BOOK-SOURCE-001` was signed on
-  2026-08-29, so what is left is yours to create rather than to decide: the English manuscript's
-  private Git repository, with the working clone outside this
-  public checkout. Put the manuscript at the gitignored local path or pass it explicitly to the
-  CLI; set `BOOK_PRIVATE_CLONE_PATH` for a local live desk. The optional fine-grained
-  `BOOK_SOURCE_TOKEN` is only for the owner's read-only checkout step: the shipped runtime does not
-  fetch a hosted database or send the token to the site. Check the matching item in
-  `state/INBOX.md` only after accepting the 600-character excerpt cap, the 40 × 280-character
-  exemplar cap and the rule that full text, chunks and embeddings stay private. Also record any
-  English-edition launch date the growth room should plan backwards from.
-  [imp:5] [owner:me] [time:20m] [kind:setup]
-
-- [ ] **Run the bounded ingestion** — `BOOK-INGEST-002` was signed on 2026-08-29 at $3.00 for the
-  program, $0.80 per day and $0.10 per call, all inside the company caps. With the private
-  repository above in place, run
-  `pnpm book:ingest -- --manuscript <ignored-path> --private-root <private-clone>` locally. A stop
-  is resumable for the same manuscript hash; do not copy the source or private output into this
-  repository to make a hosted run convenient.
-  [imp:4] [owner:me] [time:20m] [kind:decision]
-
-- [ ] **Clear the Door Money handle and create its accounts** — `DM-ACCOUNTS-003` was signed on
-  2026-08-29. What is left: the shared handle/collision/trademark screen for "Door Money", whether
-  the account should carry the English book title instead, and which of Instagram, TikTok, X,
-  Threads or YouTube to open. You create and configure it;
-  BoardlessAI remains drafts-only and has no credential, publisher or autopublish permission.
-  [imp:3] [owner:me] [time:20m] [kind:legal]
-
-- [x] **Approve manual Door Money results (`DM-RESULTS-004`)** — signed 2026-08-29, so the admin
-  save is open. It covers whether views, likes,
-  comments, shares, saves, follows and link taps typed from the platform's own screen may become
-  `owner-result-entry/1` evidence. Check the matching item in `state/INBOX.md` to open that admin
-  save; until then it fails closed. This remains inside D9: no analytics account, API, cookie,
-  pixel, scrape or automated ingestion, and missing results remain unavailable rather than zero.
-  [imp:3] [owner:me] [time:5m] [kind:decision]
-
-- [x] **Pick Kvórum's desk hour** — 21:00 Prague, as the design defaulted: a full day is
-  harvested, you review in the evening and posts go out the next morning. Settled by the founding
-  countersignature on 2026-08-29 and on the clock as `kv-desk`. Moving it later is a registry
-  field and a decision record, not a config edit.
-  [imp:2] [owner:me] [time:5m] [kind:decision]
 
 - [ ] **Glance at the launch rotation and veto anything you dislike** — you said five top
   designs, not twenty-three, and that "they are all too basic". Both answered on 2026-08-29
@@ -547,25 +393,6 @@ Judgement calls. Nothing is blocked on code for any of these.
   `orchestrator/src/budget.ts`), so a wrong answer makes the company look cheaper than it is. Do
   not enter example prices. [imp:3] [owner:me] [time:15m] [kind:setup]
 
-- [ ] **Merge `claude/article-image-selection-61rs70` in the mma-files repository** — the two
-  wrong heroes are corrected on this side and cannot reach the magazine until that branch is on
-  its `main`. A delivered article is immutable there by date and slot, which is what stops a
-  published piece being swapped; the branch adds the one narrow exception, an
-  `article-image-correction/1` block whose claim the consumer re-checks itself, and refuses
-  anything where more than the picture differs. Its own `npm test` is green at 27, including two
-  new cases. Once merged, the next two cycles deliver the corrections through the normal outbox
-  and the government official and the firearms range stop being live assets.
-  [imp:4] [owner:me] [time:5m] [kind:deploy]
-
-- [ ] **Replace three curated MMA photographs that no longer exist on Commons** — probed on
-  2026-08-09: `UFC Fight Night Belfast weigh-ins (29923390484).jpg`, `MMA gloves (Unsplash).jpg`
-  and `O2 arena Praha 2019.jpg` all return `missing`. The rotation in
-  `orchestrator/src/images/illustrative.ts` skips them, so nothing breaks and every article that
-  reaches that rung simply loses its first choice; six of the nine still resolve. Finding
-  replacements is the curated-set rule: open a candidate at 640px, check that no face in it is
-  recognisable, write the Czech scene line. The scene-proposal queue below is where candidates
-  now collect. [imp:2] [owner:me] [time:30m] [kind:content]
-
 - [ ] **Review the curated scene proposals both magazines are collecting** — when the vision gate
   approves a licensed-search photograph at fit 8 or better with no vetoes, it is appended as an
   unchecked line to `state/ventures/caught-up/media/scene-proposals.md` or the mma-files file
@@ -575,11 +402,6 @@ Judgement calls. Nothing is blocked on code for any of these.
   the rung with the most predictable covers and currently the smallest. The queue stops at twenty
   open lines, so an unreviewed backlog quietly stops the flywheel rather than growing.
   [imp:2] [owner:me] [time:20m] [kind:content]
-
-- [ ] **Write season 002 for Titty Tuesdays before 2026-10-30** — season 001 expires then and the
-  marketing room works from the current season; with none it has a standing objective and no
-  material. The warning appears in the room's own daily brief as the date approaches.
-  [imp:2] [owner:me] [time:60m] [kind:content]
 
 - [ ] **Decide the two efficiency-review calls.** Both were measured against the ledger and both
   are product decisions rather than engineering ones:
@@ -601,22 +423,9 @@ Judgement calls. Nothing is blocked on code for any of these.
      coverage that tracks the schedule automatically, and leaves a single midday dead-man's entry.
   [imp:3] [owner:me] [time:15m] [kind:decision]
 
-- [ ] **Decide the Titty Tuesdays dock bay** — a bay is where a courier loads, and that venture
-  *collects*: it pulls a feed and nothing is delivered to it. The bay lines up with no courier exit
-  and a dashed lane in its own hue points back at the room, but the old window-and-sill drawing
-  said the asymmetry more plainly. The day performance does not depend on the bay either way.
-  [imp:2] [owner:me] [time:10m] [kind:decision]
-
 - [ ] **Decide Board HQ's roster length** — the opened room lists all 23 roles scoped `global`,
   correct by the registry but a long column beside rooms showing two or three. Restricting it to
   the council is a one-line change. [imp:2] [owner:me] [time:5m] [kind:decision]
-
-- [ ] **MMA Files' room card cannot link its article** — no delivery receipt under
-  `state/ventures/mma-files/deliveries/articles/` records an `articleUrl`, so the card shows a
-  title and a date with no link and no thumbnail; DNESKAi's card is complete because its receipt
-  records one. If the MMA delivery path starts writing `articleUrl` the card fills in with no
-  further work — decide whether that path change is wanted.
-  [imp:2] [owner:me] [time:10m] [kind:decision]
 
 - [ ] **Two workspace controls sit under the 9.5px type floor** — `Jump to date` and `Show the
   delivered article` are at 7.5px and the channel rail at 9.5px after several shrink-on-request
@@ -710,61 +519,18 @@ Judgement calls. Nothing is blocked on code for any of these.
 
 ---
 
-## Personal Growth owner actions
-
-The desk was resumed on 2026-09-15 for the book and audiobook promotion on `lukaskouril93`. It
-plans and measures; it never drafts the book copy and never posts. Manual posting from the
-admin's recommendations is the launch mode.
-
-- [ ] **Give the desk the book and audiobook facts.** The state tree holds no title, retail link,
-  release date, narrator or publisher, so no plan can mention the launch. Put a `finalUrl` or
-  `articleUrl` on the OKRAJ and BBARAK occurrences in the admin Timeline, and send the facts in
-  #530; a dedicated "book launch" action type is a contract change a session can make once they
-  exist. [imp:4] [owner:me] [time:20m] [kind:content]
-
-- [ ] **Configure the separate Personal Growth private clone and ingest owner-selected journals.**
-  Set `PERSONAL_GROWTH_PRIVATE_CLONE_PATH` to a private clone that does not overlap this
-  repository, then run the documented ingestion command separately for the Czech and optional
-  English Rapovej deník sources. Select the files and titles yourself; no agent may infer,
-  translate or move private journal text into Git. [imp:3] [owner:me] [time:30m] [kind:setup]
-
-- [ ] **Review the Personal Growth recurrence anchors in Admin.** Confirm the first OKRAJ and
-  BBARAK dates and adjust them through the protected Timeline controls if the seeded dates no
-  longer match the real publishing rhythm. The owner writes and publishes both artifacts.
-  [imp:2] [owner:me] [time:10m] [kind:decision]
-
-- [ ] **Authorise the owner-only Meta insight connection.** Create or select the Meta app for
-  `lukaskouril93`, grant only the Instagram/Threads read permissions listed in
-  `docs/PERSONAL-GROWTH-PROVIDERS.md`, and place the access token plus Instagram and Threads account
-  ids in the approved server-side secret store. Do not reuse a brand publisher credential or put a
-  token in Git. Leave `instagramInsights`, `threadsInsights`, `threadsSearch`, `providerLive` and
-  `tokenRefresh` false until a reviewed connection test confirms the exact scopes and renewal path.
-  This task grants no posting or Buffer authority. [imp:2] [owner:me] [time:30m] [kind:setup]
-
-- [ ] **Decide whether Personal Growth should ever use Buffer.** The adapter, queue, purchase and
-  publishing authorities are all held. If scheduling becomes useful, approve the exact plan,
-  account and queue scope first; do not enable `bufferQueue` or select the buffer allocation
-  merely because the seam exists. [imp:1] [owner:me] [time:10m] [kind:decision]
-
-- [ ] **Enable Personal Growth provider flags only after the reviewed connection test.** Once the
-  exact read scopes, account ids, token storage and renewal path are verified, countersign the
-  production change that enables only the required insight flags. Keep `publishing` false;
-  Personal Growth has no posting authority. [imp:2] [owner:me] [time:10m] [kind:decision]
-
----
-
 ## Only before social posting
 
 Roughly a month out. Nothing here is needed until a channel actually opens, and opening one is a
 `HUMAN_APPROVAL` in `state/INBOX.md`, not a switch a session may flip.
 
-- [x] **Approve Kvórum's future accounts and AI-disclosure bio** — `KV-ACCOUNTS-003` in
-  `state/INBOX.md` covers an owner-led Instagram, Facebook, Threads or X setup only after the name
-  and handles are cleared, with a bio that says AI assists the drafts and a human approves every
-  post. Countersigning creates nothing and grants no posting automation: until then the workspace
-  stays explicitly drafts-only, and afterward accounts, credentials and channels still require
-  human setup outside Git.
-  [imp:3] [owner:me] [time:15m] [kind:setup]
+- [ ] **Add the Instagram and Threads credentials** (`SOCIAL-PLATFORM-CREDENTIALS`) — each brand needs its
+  account ID and access token as GitHub Actions secrets before any channel can be considered.
+  Missing now — caught-up: CAUGHT_UP_THREADS_ACCESS_TOKEN, CAUGHT_UP_THREADS_USER_ID, CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN, CAUGHT_UP_INSTAGRAM_USER_ID.
+  MMA Files and Titty Tuesdays are paused (`operations-2026-09b`) and their credentials are no
+  longer requested.
+  Until they exist every per-venture gate stays locked and no post is attempted, whatever the
+  readiness counters say. [imp:4] [owner:me] [time:45m] [kind:setup]
 
 - [ ] **Countersign and connect Social Distribution (`SOCIAL-DISTRIBUTION-CONNECTION-001`).**
   Review `docs/SOCIAL-DISTRIBUTION-DESIGN.md`, confirm direct Meta as the core provider (or record a
@@ -787,7 +553,8 @@ Roughly a month out. Nothing here is needed until a channel actually opens, and 
   | MMA Files | `MMA_FILES_THREADS_ACCESS_TOKEN`, `MMA_FILES_INSTAGRAM_ACCESS_TOKEN` | `MMA_FILES_THREADS_USER_ID`, `MMA_FILES_INSTAGRAM_USER_ID` |
   | Titty Tuesdays | `TITTY_TUESDAYS_THREADS_ACCESS_TOKEN`, `TITTY_TUESDAYS_INSTAGRAM_ACCESS_TOKEN` | `TITTY_TUESDAYS_THREADS_USER_ID`, `TITTY_TUESDAYS_INSTAGRAM_USER_ID` |
 
-  BOOKSOFHISTORY, Door Money, Kvórum and Tehdejší svět are intentionally absent from this
+  MMA Files and Titty Tuesdays are paused (`operations-2026-09b`); their rows apply only if one
+  resumes. BOOKSOFHISTORY, Door Money, Kvórum and Tehdejší svět are intentionally absent from this
   credential table. Their owner may create only separately approved profiles, reviews every draft
   and posts by hand; none of those ventures has a platform credential, publisher or autopublish
   path in this repository.
@@ -796,8 +563,9 @@ Roughly a month out. Nothing here is needed until a channel actually opens, and 
   `state/social/activation.json` reads DNESKAi 2/7, MMA Files 3/10 and Titty Tuesdays 0/4 — the
   runtime's own per-venture thresholds, which are not all ten. Keep `SOCIAL_KILL_SWITCH=true`;
   setting it to `false` removes only the owner stop, and each venture's counter, credentials, roles
-  and safety checks still have to pass. Until a channel is enabled the composer no longer renders
-  inventory nothing can consume. [imp:2] [owner:me] [time:45m] [kind:setup]
+  and safety checks still have to pass. Until a channel is enabled the composer writes DNESKAi's
+  pack and draft queue items every edition day but no image files (#563); the admin renders the
+  frames from the pack. [imp:2] [owner:me] [time:45m] [kind:setup]
 
 - [ ] **Re-enable the social publisher's schedule trigger when a channel connects** — its hourly
   cron is commented out in `.github/workflows/social-publisher.yml` because it fired twenty-four
@@ -1212,13 +980,275 @@ The completed DNESKAi redesign, article-image, SI and website-improvement progra
 and their branches removed. The article-image decision remains at
 `state/decisions/2026-08-08-article-image-fit.md`.
 
+## On hold — paused ventures
+
+`operations-2026-09b` paused these ventures on 2026-09-25 (Titty Tuesdays, BOOKSOFHISTORY, Door
+Money, Tehdejší svět and Kvórum were already paused). Their code, state and archives stay; nothing
+runs and nothing here is needed while they are paused. The items moved here verbatim, open and
+finished alike, so resuming a venture starts from its own list. `/admin/settings` lists the paused
+ventures and resumes one.
+
+### MMA Files and FightAIQ
+
 One branch is open in a consumer repository and is waiting on you, not on code:
 `lukaskourilcz/mma-files` `claude/article-image-selection-61rs70`. Merging it is what lets the two
 corrected MMA heroes reach the magazine. The matching aifirst branch was merged into its `main` as
 `4bc270c8` on 2026-08-09 and then removed.
 
-- [ ] **Add the Instagram and Threads credentials** (`SOCIAL-PLATFORM-CREDENTIALS`) — each brand needs its
-  account ID and access token as GitHub Actions secrets before any channel can be considered.
-  Missing now — caught-up: CAUGHT_UP_THREADS_ACCESS_TOKEN, CAUGHT_UP_THREADS_USER_ID, CAUGHT_UP_INSTAGRAM_ACCESS_TOKEN, CAUGHT_UP_INSTAGRAM_USER_ID; mma-files: MMA_FILES_THREADS_ACCESS_TOKEN, MMA_FILES_THREADS_USER_ID, MMA_FILES_INSTAGRAM_ACCESS_TOKEN, MMA_FILES_INSTAGRAM_USER_ID; titty-tuesdays: TITTY_TUESDAYS_THREADS_ACCESS_TOKEN, TITTY_TUESDAYS_THREADS_USER_ID, TITTY_TUESDAYS_INSTAGRAM_ACCESS_TOKEN, TITTY_TUESDAYS_INSTAGRAM_USER_ID.
-  Until they exist every per-venture gate stays locked and no post is attempted, whatever the
-  readiness counters say. [imp:4] [owner:me] [time:45m] [kind:setup]
+- [x] **Approve the reviewed MMA scope for the same Apify token** — `APIFY-MMA-SOURCES-001` in
+  `state/INBOX.md` authorizes only the terms-reviewed Tapology promotion-page reference step.
+  UFCStats and ESPN remain disabled and Sherdog remains blocked; approval does not turn them on.
+  The current runnable plan is $0 cash and at most $0.20/month of Free-plan credit, beneath a
+  separate $3 hard cap. Without both this approval and `APIFY_TOKEN`, the path is a logged $0
+  no-op. Read the shared-credit warning before approving this alongside GoVIRAL.
+  [imp:4] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Merge `claude/article-image-selection-61rs70` in the mma-files repository** — the two
+  wrong heroes are corrected on this side and cannot reach the magazine until that branch is on
+  its `main`. A delivered article is immutable there by date and slot, which is what stops a
+  published piece being swapped; the branch adds the one narrow exception, an
+  `article-image-correction/1` block whose claim the consumer re-checks itself, and refuses
+  anything where more than the picture differs. Its own `npm test` is green at 27, including two
+  new cases. Once merged, the next two cycles deliver the corrections through the normal outbox
+  and the government official and the firearms range stop being live assets.
+  [imp:4] [owner:me] [time:5m] [kind:deploy]
+
+- [ ] **Replace three curated MMA photographs that no longer exist on Commons** — probed on
+  2026-08-09: `UFC Fight Night Belfast weigh-ins (29923390484).jpg`, `MMA gloves (Unsplash).jpg`
+  and `O2 arena Praha 2019.jpg` all return `missing`. The rotation in
+  `orchestrator/src/images/illustrative.ts` skips them, so nothing breaks and every article that
+  reaches that rung simply loses its first choice; six of the nine still resolve. Finding
+  replacements is the curated-set rule: open a candidate at 640px, check that no face in it is
+  recognisable, write the Czech scene line. The scene-proposal queue below is where candidates
+  now collect. [imp:2] [owner:me] [time:30m] [kind:content]
+
+- [ ] **MMA Files' room card cannot link its article** — no delivery receipt under
+  `state/ventures/mma-files/deliveries/articles/` records an `articleUrl`, so the card shows a
+  title and a date with no link and no thumbnail; DNESKAi's card is complete because its receipt
+  records one. If the MMA delivery path starts writing `articleUrl` the card fills in with no
+  further work — decide whether that path change is wanted.
+  [imp:2] [owner:me] [time:10m] [kind:decision]
+
+### Titty Tuesdays
+
+- [x] **Sign the six Titty Tuesdays image approvals, or decide not to** — signed 2026-08-29. `TT-VISUALS-SPEND-001`
+  through `TT-VISUALS-CONTRACT-006` in `state/INBOX.md`, all-or-nothing. They cover about $0.057 a
+  day (roughly $1.70 a month, ceiling $2.00), the two renderer routes, keeping the images inside
+  `state/` rather than the public site, the doctrine checklist and the delete-on-doctrine rule, the
+  daily two-image shape, and the `design-proposal/1` contract. Nothing renders until all six are
+  ticked and `TT_VISUALS_ENABLED=true` with both `OPENAI_API_KEY` and `FAL_KEY` present.
+  [imp:3] [owner:me] [time:20m] [kind:decision]
+
+- [ ] **Rate the Titty Tuesdays idea cards in `/admin`** — the marketing room writes concrete
+  campaign ideas every day and nothing has ever rated one, so the taste loop that turns your
+  ratings into written style rules has no input and PALATE has nothing to work from. Nine cards sit
+  unrated under the venture's ideas tab, every one still `proposed`
+  (`state/ideas/titty-tuesdays/ledger.jsonl`); the count grows by roughly one a day until you rate
+  them. Rating them is the whole of what starts the loop.
+  [imp:4] [owner:me] [time:20m] [kind:decision]
+
+- [ ] **Write season 002 for Titty Tuesdays before 2026-10-30** — season 001 expires then and the
+  marketing room works from the current season; with none it has a standing objective and no
+  material. The warning appears in the room's own daily brief as the date approaches.
+  [imp:2] [owner:me] [time:60m] [kind:content]
+
+- [ ] **Decide the Titty Tuesdays dock bay** — a bay is where a courier loads, and that venture
+  *collects*: it pulls a feed and nothing is delivered to it. The bay lines up with no courier exit
+  and a dashed lane in its own hue points back at the room, but the old window-and-sill drawing
+  said the asymmetry more plainly. The day performance does not depend on the bay either way.
+  [imp:2] [owner:me] [time:10m] [kind:decision]
+
+### BOOKSOFHISTORY
+
+- [x] **Sign or decline `BH-RESEARCH-001`** — decide whether BOOKSOFHISTORY may use
+  web search on the existing Anthropic key. The item in `state/INBOX.md` fixes gather
+  calls at five searches, QUILL checks at one to three, research at no more than
+  `$0.10` per call, `$0.50` per cycle and `$5.00` per month, and requires the ledger,
+  shelf-first reuse and `(bookId, briefHash)` idempotency. It creates no account or
+  credential. Until signed, live research must remain `$0`.
+  [imp:4] [owner:me] [time:10m] [kind:decision]
+
+- [x] **Review and sign or decline `BH-SEED-002`** — inspect the authored 200-book
+  seed library and accept only if its scores and notes read as editorial priors, never
+  facts. The same item keeps every `coverRef` in protected admin context: no cover
+  artwork may be downloaded, rendered or delivered, and only dossier claims may enter
+  feature copy. [imp:3] [owner:me] [time:30m] [kind:content]
+
+- [x] **Clear the two lanes and sign or decline `BH-ACCOUNTS-003`** — record the
+  chosen platforms and cleared handles for separate Czech and English profiles, then
+  approve the Czech and English AI-disclosure bio lines in `state/INBOX.md`. Signing
+  lets only you create or prepare those profiles; agents still cannot create an
+  account, touch a channel or post, and every package remains a draft for manual
+  posting. [imp:3] [owner:me] [time:30m] [kind:legal]
+
+- [x] **Sign or decline `BH-RESULTS-004`** — decide whether the protected admin may
+  accept your manual per-lane post URL and any available views, likes, comments,
+  shares, saves, follows or link taps. This is the only BOOKSOFHISTORY measurement
+  source: D9 and `METRICS_INGESTION_ENABLED=false` stay in force, no platform is read,
+  and absent numbers remain unavailable. [imp:2] [owner:me] [time:5m] [kind:decision]
+
+- [ ] **Answer the BOOKSOFHISTORY launch questions** — lane priority (both at once, or
+  English first with Czech two weeks behind), the starting cycle length (3 days or 4),
+  and any must-include books or hard exclusions to append or correct in the authored
+  200-entry seed library before its first live cycle. All three are listed in the
+  design's "Open questions".
+  [imp:2] [owner:me] [time:15m] [kind:decision]
+
+### Door Money
+
+- [ ] **Countersign or decline Door Money's founding decision** — Kvórum's, BOOKSOFHISTORY's and
+  Tehdejší svět's were signed on 2026-08-29, and Kvórum's capacity reallocation with them, so its
+  desk is open. `state/decisions/2026-08-12-door-money-founding.md` is the one left, and it is not
+  urgent: you paused Door Money in Settings, and a paused venture holds no meetings whether its
+  founding is signed or not. Sign it when you resume the venture.
+  [imp:2] [owner:me] [time:20m] [kind:decision]
+
+- [ ] **Create Door Money's private source repository** — `BOOK-SOURCE-001` was signed on
+  2026-08-29, so what is left is yours to create rather than to decide: the English manuscript's
+  private Git repository, with the working clone outside this
+  public checkout. Put the manuscript at the gitignored local path or pass it explicitly to the
+  CLI; set `BOOK_PRIVATE_CLONE_PATH` for a local live desk. The optional fine-grained
+  `BOOK_SOURCE_TOKEN` is only for the owner's read-only checkout step: the shipped runtime does not
+  fetch a hosted database or send the token to the site. Check the matching item in
+  `state/INBOX.md` only after accepting the 600-character excerpt cap, the 40 × 280-character
+  exemplar cap and the rule that full text, chunks and embeddings stay private. Also record any
+  English-edition launch date the growth room should plan backwards from.
+  [imp:5] [owner:me] [time:20m] [kind:setup]
+
+- [ ] **Run the bounded ingestion** — `BOOK-INGEST-002` was signed on 2026-08-29 at $3.00 for the
+  program, $0.80 per day and $0.10 per call, all inside the company caps. With the private
+  repository above in place, run
+  `pnpm book:ingest -- --manuscript <ignored-path> --private-root <private-clone>` locally. A stop
+  is resumable for the same manuscript hash; do not copy the source or private output into this
+  repository to make a hosted run convenient.
+  [imp:4] [owner:me] [time:20m] [kind:decision]
+
+- [ ] **Clear the Door Money handle and create its accounts** — `DM-ACCOUNTS-003` was signed on
+  2026-08-29. What is left: the shared handle/collision/trademark screen for "Door Money", whether
+  the account should carry the English book title instead, and which of Instagram, TikTok, X,
+  Threads or YouTube to open. You create and configure it;
+  BoardlessAI remains drafts-only and has no credential, publisher or autopublish permission.
+  [imp:3] [owner:me] [time:20m] [kind:legal]
+
+- [x] **Approve manual Door Money results (`DM-RESULTS-004`)** — signed 2026-08-29, so the admin
+  save is open. It covers whether views, likes,
+  comments, shares, saves, follows and link taps typed from the platform's own screen may become
+  `owner-result-entry/1` evidence. Check the matching item in `state/INBOX.md` to open that admin
+  save; until then it fails closed. This remains inside D9: no analytics account, API, cookie,
+  pixel, scrape or automated ingestion, and missing results remain unavailable rather than zero.
+  [imp:3] [owner:me] [time:5m] [kind:decision]
+
+### Tehdejší svět
+
+- [x] **Review the facts file and sign or decline `TS-SNAPSHOT-001`** — confirm that
+  `state/ventures/tehdejsi-svet/facts.json` contains only facts copied by a
+  human, structurally omits unsafe records and excluded media, and is the only daily
+  read layer. Signing does not authorize a fetch, clone, sync or any connection to the
+  product repository; a hash mismatch keeps the desk closed at `$0`.
+  [imp:5] [owner:me] [time:20m] [kind:content]
+
+- [x] **Sign or decline `TS-MEDIA-002`** — decide whether the nineteen eligible
+  Wikimedia/CC BY-SA city photographs may appear in Tehdejší svět social cards with
+  creator/source/licence attribution on the card and in the caption. Excluded media,
+  incomplete credits, AI-generated historical imagery and destruction comparisons
+  remain blocked. [imp:4] [owner:me] [time:15m] [kind:legal]
+
+- [ ] **Land the production domain and clear the handle** — `TS-ACCOUNTS-003` was signed on
+  2026-08-29; the domain and the handle are what remain. Finish the product's existing `[imp:5]` domain task and
+  absolute OG URLs, then clear `@tehdejsisvet` (or record a fallback), approve the
+  no-flags bilingual bio in `state/INBOX.md`, and personally create the Instagram,
+  Facebook and Threads profiles if approved. `dontwannaknow.vercel.app` must never
+  appear in a bio; no agent receives a credential or channel.
+  [imp:5] [owner:me] [time:40m] [kind:setup]
+
+- [ ] **Approve Tehdejší svět's first 12-feature content bank** — review both language
+  packages, their source coverage, tier labels, licences, send-target questions and
+  Design Lab previews before day 1. Approval of an individual feature still does not
+  create an account or post it; the owner performs every external post by hand.
+  [imp:4] [owner:me] [time:60m] [kind:content]
+
+- [ ] **Decide whether the product should move from Vercel Hobby to the existing Pro
+  team** — this is likely `$0` marginal but remains a product-side owner decision.
+  Tehdejší svět does not move the product, change its plan or infer permission from the
+  BoardlessAI Pro subscription. [imp:2] [owner:me] [time:10m] [kind:decision]
+
+### Kvórum
+
+- [x] **Approve Kvórum's one-page Apify scope** — read and countersign `KV-APIFY-001` in
+  `state/INBOX.md`. It covers only the pinned Facebook Posts Scraper build on the logged-out public
+  page `facebook.com/stitdemokracie`, at most once a day and 30 rows, with a fixed-field mapper and
+  30-day raw purge. The `$2.00` monthly venture share sits inside the existing Free-plan credit and
+  still depends on `APIFY-ACCOUNT-001`; current `$0.151` run reservations mean the guard will skip
+  days rather than fund a full month. No login, cookie, second page or plan upgrade is approved.
+  [imp:4] [owner:me] [time:10m] [kind:decision]
+
+- [x] **Approve Kvórum's seven free feed hosts** — `KV-SOURCES-002` in `state/INBOX.md` names the
+  exact iROZHLAS, ČT24, Deník N, Seznam Zprávy, Poslanecká sněmovna, Vláda ČR and Czech Google News
+  endpoints and allowlist hosts. Check those URLs and countersign the registry, or leave it pending;
+  without approval every live feed read fails closed and the committed fixture remains the `$0`
+  source. A new host or endpoint is a new review.
+  [imp:4] [owner:me] [time:15m] [kind:decision]
+
+- [x] **Countersign Kvórum's editorial constitution** — `KV-EDITORIAL-004` in `state/INBOX.md`
+  records the policy already enforced by the gates: Štít is discovery rather than evidence;
+  factual claims are typed and referenced; public figures only; no vote call, endorsement,
+  unsupported crime accusation, voter mockery, paid amplification or alarm register; election
+  claims use the higher source bar; corrections remain linked and the owner reads every final
+  draft. This approval grants no source, account, publishing, budget or treasury authority.
+  [imp:5] [owner:me] [time:15m] [kind:decision]
+
+- [x] **Pick Kvórum's desk hour** — 21:00 Prague, as the design defaulted: a full day is
+  harvested, you review in the evening and posts go out the next morning. Settled by the founding
+  countersignature on 2026-08-29 and on the clock as `kv-desk`. Moving it later is a registry
+  field and a decision record, not a config edit.
+  [imp:2] [owner:me] [time:5m] [kind:decision]
+
+- [x] **Approve Kvórum's future accounts and AI-disclosure bio** — `KV-ACCOUNTS-003` in
+  `state/INBOX.md` covers an owner-led Instagram, Facebook, Threads or X setup only after the name
+  and handles are cleared, with a bio that says AI assists the drafts and a human approves every
+  post. Countersigning creates nothing and grants no posting automation: until then the workspace
+  stays explicitly drafts-only, and afterward accounts, credentials and channels still require
+  human setup outside Git.
+  [imp:3] [owner:me] [time:15m] [kind:setup]
+
+### Personal Growth
+
+
+The desk was resumed on 2026-09-15 for the book and audiobook promotion on `lukaskouril93`. It
+plans and measures; it never drafts the book copy and never posts. Manual posting from the
+admin's recommendations is the launch mode.
+
+- [ ] **Give the desk the book and audiobook facts.** The state tree holds no title, retail link,
+  release date, narrator or publisher, so no plan can mention the launch. Put a `finalUrl` or
+  `articleUrl` on the OKRAJ and BBARAK occurrences in the admin Timeline, and send the facts in
+  #530; a dedicated "book launch" action type is a contract change a session can make once they
+  exist. [imp:4] [owner:me] [time:20m] [kind:content]
+
+- [ ] **Configure the separate Personal Growth private clone and ingest owner-selected journals.**
+  Set `PERSONAL_GROWTH_PRIVATE_CLONE_PATH` to a private clone that does not overlap this
+  repository, then run the documented ingestion command separately for the Czech and optional
+  English Rapovej deník sources. Select the files and titles yourself; no agent may infer,
+  translate or move private journal text into Git. [imp:3] [owner:me] [time:30m] [kind:setup]
+
+- [ ] **Review the Personal Growth recurrence anchors in Admin.** Confirm the first OKRAJ and
+  BBARAK dates and adjust them through the protected Timeline controls if the seeded dates no
+  longer match the real publishing rhythm. The owner writes and publishes both artifacts.
+  [imp:2] [owner:me] [time:10m] [kind:decision]
+
+- [ ] **Authorise the owner-only Meta insight connection.** Create or select the Meta app for
+  `lukaskouril93`, grant only the Instagram/Threads read permissions listed in
+  `docs/PERSONAL-GROWTH-PROVIDERS.md`, and place the access token plus Instagram and Threads account
+  ids in the approved server-side secret store. Do not reuse a brand publisher credential or put a
+  token in Git. Leave `instagramInsights`, `threadsInsights`, `threadsSearch`, `providerLive` and
+  `tokenRefresh` false until a reviewed connection test confirms the exact scopes and renewal path.
+  This task grants no posting or Buffer authority. [imp:2] [owner:me] [time:30m] [kind:setup]
+
+- [ ] **Decide whether Personal Growth should ever use Buffer.** The adapter, queue, purchase and
+  publishing authorities are all held. If scheduling becomes useful, approve the exact plan,
+  account and queue scope first; do not enable `bufferQueue` or select the buffer allocation
+  merely because the seam exists. [imp:1] [owner:me] [time:10m] [kind:decision]
+
+- [ ] **Enable Personal Growth provider flags only after the reviewed connection test.** Once the
+  exact read scopes, account ids, token storage and renewal path are verified, countersign the
+  production change that enables only the required insight flags. Keep `publishing` false;
+  Personal Growth has no posting authority. [imp:2] [owner:me] [time:10m] [kind:decision]

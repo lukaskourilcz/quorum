@@ -158,6 +158,9 @@ founding does not imply market validation or a stage change.
 
 ## Solution and scope
 
+Only the Caught Up, marketingShark, GoVIRAL, Design Lab and WebDev Signal parts below run since
+`operations-2026-09b`. The rest describes paused ventures and applies again only when one resumes.
+
 BoardlessAI runs the shared project list and public calendar. For Caught Up it
 owns source collection, edition and product rooms, guarded production, delivery
 records and governance surfaces. For Titty Tuesdays it owns pre-commerce brand,

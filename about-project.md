@@ -10,6 +10,13 @@ Aktuální stav: **v provozu, bez příjmů, ve fázi ověřování**. Web běž
 FightAIQ, Design Lab, MMA Files, Door Money, Tehdejší svět a Kvórum.
 Magazine Incubator byl uzavřen — nové magazíny se už nevymýšlejí.
 
+**Od 25. září 2026 (`operations-2026-09b`) běží jen DNESKAi, marketingShark (devShark),
+GoVIRAL, Design Lab a WebDev Signal.** BoardlessAI píše články a sociální obsah pro DNESKAi a
+sociální obsah pro devShark. MMA Files, FightAIQ, Titty Tuesdays, BOOKSOFHISTORY, Door Money,
+Tehdejší svět, Kvórum a Personal Growth jsou pozastavené: kód a stav zůstávají, na hodinách
+nemají žádný slot, v navigaci adminu chybí a vypisuje je jen Nastavení v tabulce „Paused
+ventures“. Popis níže platí pro ně jen do obnovení.
+
 **Co už publikuje (k 12. srpnu 2026):** publikují dva projekty — DNESKAi denní vydání a
 MMA Files jeden článkový slot denně. Oba posílají hotový článek zároveň do Carousel
 Studia jako *summary* (titulek, perex a vybrané pasáže), ze kterého se skládají sociální
@@ -96,8 +103,9 @@ modelům ani do podkladů porad.
   pět tapet, které byly ve třech případech tentýž rozmazaný gradient. Písma
   jsou od 9. srpna 2026 v repozitáři: třicet statických řezů pod licencí SIL OFL, takže
   stejný deck vykreslí stejné bajty na jakémkoli stroji. Knihovna drží devět barevných
-  sad: DNESKAi, MMA Files, Titty Tuesdays, devShark, geoShark, BOOKSOFHISTORY, Door
-  Money, Tehdejší svět a Kvórum. Design Lab nemá vlastní sociální účet.
+  sad: DNESKAi, MMA Files, Titty Tuesdays, devShark, BOOKSOFHISTORY, Door Money, Tehdejší
+  svět, Kvórum a WebDev Signal. Design Lab nabízí jen sady běžících projektů. geoShark
+  skončil se StudyShark. Design Lab nemá vlastní sociální účet.
 - **BOOKSOFHISTORY** každý den ve 12:00 naváže na rozepsanou fázi výběru, výzkumu
   nebo tvorby. Z jednoho zdrojovaného dossieru vznikne společný příběhový brief a dva
   samostatně napsané české a anglické sociální koncepty. Nemá veřejný web, stránky
