@@ -54,18 +54,52 @@ connection's exact provider id/version and one active binding.
 
 ## Direct Meta delivery and reconciliation
 
-The retained adapter supports only current verified formats:
+`orchestrator/src/social/meta.ts` sends these formats and nothing else (#572):
 
-- Threads: exact approved text, official publish scopes and live permalink verification;
-- Instagram: one to ten approved JPEG or PNG image assets, caption text, official publish
-  scopes and live permalink verification.
+| Platform | Formats | Host and scopes |
+| --- | --- | --- |
+| Threads | text alone (`TEXT`), one image (`IMAGE`), or a carousel of 2 to 10 frames (`is_carousel_item` children, then one `CAROUSEL` container); JPEG or PNG | `graph.threads.net`, `threads_basic` and `threads_content_publish` |
+| Instagram | one JPEG, or a carousel of 2 to 10 JPEGs; the caption goes on the single image or the carousel container, never on a child | Facebook Login: `graph.facebook.com` with `instagram_basic` and `instagram_content_publish` (DNESKAi's connection). Instagram Login: `graph.instagram.com` with `instagram_business_basic` and `instagram_business_content_publish` (devShark's). The adapter never mixes the two. |
 
-Meta fetches each image from a URL the publisher proved in the same run. `docs/SOCIAL-ASSET-HOSTING.md`
-covers the commit-pinned jsDelivr URLs, the pre-send check, held items and the 90-day retention.
+Every image carries `alt_text`: each frame's own slide text when the approved package pairs frames
+with slides, otherwise the item's alt text for a single image. Meta fetches each image from a URL
+the publisher proved in the same run. The same check holds a frame the platform would refuse:
+Instagram takes JPEG only, aspect 4:5 to 1.91:1, sRGB; both take at most 8 MB and a width of 320
+to 1,440. `docs/SOCIAL-ASSET-HOSTING.md` covers the commit-pinned jsDelivr URLs, the pre-send
+check, held items and the 90-day retention.
+
+A send goes in this order, all on the connection's own host:
+
+1. Threads text is measured the way Threads counts it (500, an emoji as its UTF-8 bytes).
+2. The publishing limit is read: `threads_publishing_limit` or `content_publishing_limit` with
+   `fields=quota_usage,config`. Meta documents 250 Threads posts and 100 Instagram API posts in
+   a rolling 24 hours, and a carousel counts once. When `quota_usage` leaves no room for one more
+   post, or the limit cannot be read, the adapter stops before any write.
+3. The containers are created.
+4. For an image or carousel, the adapter waits for the container: on Threads it waits the
+   30 seconds Meta recommends, then reads `status,error_message` every 30 seconds, five times at
+   most; on Instagram it reads `status_code` at once and then once a minute, for no more than
+   five minutes. `ERROR`, `EXPIRED` or a container still `IN_PROGRESS` stops the send before the
+   publish request, with Meta's `error_message` in the error.
+5. `threads_publish` or `media_publish`, then the live check reads `id,permalink`.
+
+A refusal in steps 1 or 2 is a **publish hold**: the runner writes
+`state/social/publish-holds/<queue-file>.json` (`social-publish-hold/1`, reasons
+`publishing-quota-exhausted`, `publishing-quota-unreadable` and `platform-text-limit`), leaves
+the queue file as it was and pauses nothing. The item stays due and the next run reads the limit
+again; the record goes once the item gets past these checks. The report counts it as
+`publishHeld`.
+
+The tests replay Meta exchanges from `orchestrator/tests/fixtures/social-meta/`. The Threads and
+Instagram flows use the answer shapes Meta documents, because no devShark connection exists to
+record from; the unreadable-limit case replays live answers recorded without a token. The first
+live send after activation is the first real recording.
 
 The runtime looks for an already known idempotency key before publication, sends at most once, and
 may retry the read-only live-verification request twice. A timeout or inconclusive result during
-publication becomes `ambiguous`; the queue item becomes `needs_reconciliation`, the exact
+publication becomes `ambiguous`, and so does a container that fails before the publish request,
+because Meta already holds it: the error then says that nothing was published, so reconciliation
+is a check rather than a search; the queue item becomes `needs_reconciliation`, the exact
 connection and source venture pause, and no subsequent run considers that item due. This prevents
 an uncertain provider acceptance from becoming a duplicate send.
 

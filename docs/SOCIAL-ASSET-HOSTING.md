@@ -32,21 +32,27 @@ A devShark frame runs about 50 KB as PNG and 70 KB as JPEG.
 `gateSocialAssets` in `orchestrator/src/social/media/gate.ts` runs after every other publisher gate
 and before any provider call. For each frame, in this order:
 
-1. A recorded hash must exist. An approved package records each hosted file as `{ path, sha256 }`
+1. The format must be one the item's platform takes: a PNG for Instagram is held here, before git
+   or the network is asked, because Instagram takes JPEG only.
+2. A recorded hash must exist. An approved package records each hosted file as `{ path, sha256 }`
    and counts only while it still hashes to the item's `sourcePackage.packageHash`. DNESKAi's
    composer records `frameHashes` in `state/social/assets/<date>.json`. MMA Files and Titty Tuesdays
    record deck hashes without paths, so their frames are held; both ventures are paused.
-2. For `jsdelivr`: a commit must carry the frame, and the bytes in that commit must match the
+3. For `jsdelivr`: a commit must carry the frame, and the bytes in that commit must match the
    recorded hash. The publisher reads the commit rather than the working tree, because jsDelivr
-   serves the commit.
-3. A `HEAD` to the exact URL, through `safeFetch`: the host must be in `runtimeHosts` of
+   serves the commit. Those bytes must then meet the platform's own image rules
+   (`PLATFORM_IMAGE_RULES` in `orchestrator/src/social/media/validate.ts`, from Meta's references):
+   at most 8 MB and a width of 320 to 1,440 on both; for Instagram JPEG only, aspect 4:5 to
+   1.91:1, sRGB; for Threads JPEG or PNG, aspect up to 10:1.
+4. A `HEAD` to the exact URL, through `safeFetch`: the host must be in `runtimeHosts` of
    `config/network-allowlist.json` (`cdn.jsdelivr.net`), the answer a 200 with no redirect, and the
    content type the one the extension promises (`image/png` or `image/jpeg`).
-4. For `site`, nothing in git proves what a deployed site serves, so the publisher downloads the
-   frame from the configured host and hashes it.
+5. For `site`, nothing in git proves what a deployed site serves, so the publisher downloads the
+   frame from the configured host, hashes it and applies the same image rules.
 
-The adapter receives the URLs that passed and never builds one. `meta.ts` refuses an Instagram frame
-without a proved URL before it makes any request.
+The adapter receives the URLs that passed and never builds one, together with each frame's alt text
+when the approved package pairs frames with slides. `meta.ts` refuses a frame without a proved URL
+before it makes any request.
 
 ## A held item
 
@@ -60,6 +66,7 @@ no venture, and the report counts it as `assetHeld`.
 | --- | --- |
 | `asset-hash-mismatch` | the committed or served bytes differ from the record, or the package changed after the item was drafted |
 | `asset-hash-unrecorded` | no record names the frame's hash |
+| `asset-unsupported` | the approved bytes are not an image the platform takes: a PNG for Instagram, the wrong size, aspect or colour space |
 | `asset-unreachable` | anything else: uncommitted, removed by the newest commit, not on the allowlist, not a 200, the wrong type, or a base that is invalid or not built |
 
 The publisher never tries a second URL for a frame that missed.

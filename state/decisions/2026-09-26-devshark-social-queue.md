@@ -113,7 +113,7 @@ drafts in queue v1, which the publisher never considered.
   `marketingshark` in the registry's `legacyQueueMappings` with those profiles
 - [x] B3: public image URLs through jsDelivr, 90-day retention (#570)
 - [ ] B4: LinkedIn through Buffer (#571)
-- [ ] B5: Threads images and Instagram JPEG carousels in the Direct Meta adapter (#572)
+- [x] B5: Threads images and Instagram JPEG carousels in the Direct Meta adapter (#572)
 - [ ] B6: the Queue workspace (#573)
 - [ ] B7: approval dispatches the publisher (#574)
 - [ ] B8: Design Lab editing and re-render for devShark packages (#575)
