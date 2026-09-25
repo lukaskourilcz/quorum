@@ -127,8 +127,15 @@ const DOWNLOAD_HOSTS = [
  *
  * Same review posture as the other list: a host is added here in a commit somebody reads, never
  * from an API response.
+ *
+ * `thumb.wikimedia.org` is the second such host. By September 2026 Wikimedia's `thumburl` pointed
+ * there rather than at `upload.wikimedia.org`, so every Wikimedia thumbnail — the curated scenes
+ * and the search results alike — was skipped as `thumbnail-host-not-allowed` before the gate saw
+ * it, and the article descended to a drawn plate. It serves the same Commons file, scaled, under
+ * the same licence; the full-size bytes still come from `upload.wikimedia.org`, so the list that
+ * decides what may be published is unchanged.
  */
-export const THUMBNAIL_HOSTS = [...DOWNLOAD_HOSTS, "api.openverse.org"];
+export const THUMBNAIL_HOSTS = [...DOWNLOAD_HOSTS, "api.openverse.org", "thumb.wikimedia.org"];
 
 /** Whether the gate may fetch this candidate's thumbnail at all. */
 export function thumbnailHosted(candidate: { thumbnailUrl: string }): boolean {
