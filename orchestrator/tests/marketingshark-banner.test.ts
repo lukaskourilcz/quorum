@@ -190,9 +190,12 @@ describe("devShark house banner", () => {
     }
   });
 
-  it("keeps magazine placements reserved for reciprocal promotions", async () => {
+  it("holds DNESKAi's placements for devShark by the owner's decision (aifirst #97)", async () => {
+    // Reserved for the MMA FILES reciprocal promotion until MMA FILES was paused; the owner
+    // approved devShark in its place on 2026-09-25 (state/INBOX.md,
+    // place-devshark-house-banner-on-dneskai).
     const config = await loadMarketingSharkConfig();
-    expect(config.brands.map((brand) => brand.banner)).toEqual([false]);
+    expect(config.brands.map((brand) => brand.banner)).toEqual([true]);
     expect(config.brands.find((brand) => brand.id === "devshark")!.enabled).toBe(true);
   });
 });

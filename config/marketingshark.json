@@ -71,7 +71,7 @@
           "cs": "programování"
         }
       },
-      "banner": false,
+      "banner": true,
       "factSheet": {
         "recordedAt": "2026-09-15",
         "source": "The owner's statement of 2026-09-15, devshark.app the same day, and the product repository lukaskourilcz/react-express-app (README, about-project.md, docs/launch-audit-2026-09-15.md).",
