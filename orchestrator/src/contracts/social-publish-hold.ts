@@ -10,11 +10,15 @@ import { DateTimeSchema, VentureIdSchema } from "./common.js";
  * - `publishing-quota-unreadable`: the limit could not be read, so nothing proves there is room.
  * - `platform-text-limit`: the text is longer than the platform accepts (Threads: 500, counting an
  *   emoji as its UTF-8 bytes). Waiting cannot fix it; an edit that supersedes the item can.
+ * - `not-publishable`: the runner's own last check before a send refused the item (a check not
+ *   passing, a content hash that no longer matches, frames without alt text). It costs that item
+ *   alone, never the run, and the detail names the check.
  */
 export const SOCIAL_PUBLISH_HOLD_REASONS = [
   "publishing-quota-exhausted",
   "publishing-quota-unreadable",
-  "platform-text-limit"
+  "platform-text-limit",
+  "not-publishable"
 ] as const;
 export type SocialPublishHoldReason = (typeof SOCIAL_PUBLISH_HOLD_REASONS)[number];
 
@@ -27,7 +31,8 @@ export const PublishingQuotaSchema = z.strictObject({
 export type PublishingQuota = z.infer<typeof PublishingQuotaSchema>;
 
 /**
- * `social-publish-hold/1`: the publisher's record that an adapter refused an item before sending.
+ * `social-publish-hold/1`: the publisher's record that an item was stopped before sending, by its
+ * adapter or by the runner's own publishable check.
  *
  * Written by the social runner alone, one file per queue item under `state/social/publish-holds/`,
  * and removed once the item gets past its adapter's checks. Like an asset hold, the queue item is

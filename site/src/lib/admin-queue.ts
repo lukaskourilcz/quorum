@@ -58,6 +58,15 @@ function lastEvent(events: readonly SocialQueueEventRecord[], itemId: string, ac
   return [...events].reverse().find((event) => event.itemId === itemId && actions.includes(event.action)) ?? null;
 }
 
+/**
+ * A legacy v1 draft whose checks all passed before the Queue existed. The publisher treats it as
+ * approved (its due rule, quorum#573 review): it sends by itself once its connection is live, so it
+ * is scheduled, not waiting for an approval it cannot receive here.
+ */
+function sendsWithoutApproval(item: QueueItem): boolean {
+  return item.schemaVersion === 1 && item.status === "draft" && Object.values(item.checks).every((state) => state === "pass");
+}
+
 function groupOf(item: QueueItem, gatePaused: boolean, now: Date): QueueGroup {
   const closed = Date.parse(item.publishWindow.notAfter) < now.getTime();
   switch (item.status) {
@@ -67,10 +76,22 @@ function groupOf(item: QueueItem, gatePaused: boolean, now: Date): QueueGroup {
     case "needs_reconciliation": return "failed";
     case "cancelled":
     case "expired": return "held";
-    case "draft": return closed ? "held" : "waiting";
+    case "draft":
+      if (closed) return "held";
+      if (!sendsWithoutApproval(item)) return "waiting";
+      return gatePaused ? "held" : "scheduled";
     case "approved":
     case "queued": return closed || gatePaused ? "held" : "scheduled";
   }
+}
+
+/** What stands between an item and the platform, in the owner's words, for a waiting or scheduled card. */
+function gateNote(item: QueueItem, gate: Gate): string | null {
+  if (!sendsWithoutApproval(item)) return gate.setup;
+  const platform = QUEUE_PLATFORM_LABELS[item.channel];
+  return gate.setup
+    ? `This legacy post needs no approval: it sends by itself once its ${platform} connection and channel are live. Hold or reject it to stop it.`
+    : "This legacy post needs no approval and sends on the next publisher run inside its window. Hold or reject it to stop it.";
 }
 
 interface Gate { paused: string | null; setup: string | null }
@@ -186,7 +207,7 @@ function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: Q
     permalink: receipt?.remoteUrl ?? null,
     reason: reasonFor(item, state, gate, group, now),
     nextSafeAction: nextSafeAction(item, supersededBy),
-    gate: group === "waiting" || group === "scheduled" ? gate.setup : null,
+    gate: group === "waiting" || group === "scheduled" ? gateNote(item, gate) : null,
     schemaVersion: item.schemaVersion,
     createdAt: item.createdAt,
     actions: {

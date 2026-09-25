@@ -63,7 +63,7 @@ export interface SocialPublisherReport {
   skipped: number;
   /** Items whose frames could not be proved this run; each has a `social-asset-hold/1` record. */
   assetHeld: number;
-  /** Items an adapter refused before any write (a full publishing limit, say); each has a `social-publish-hold/1` record. */
+  /** Items held before any write (a full publishing limit, a failed publishable check); each has a `social-publish-hold/1` record. */
   publishHeld: number;
 }
 
@@ -184,8 +184,11 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
     // Keyed by string: a queue item may name a platform (LinkedIn) that has no global channel yet,
     // and the lookup below refuses it by name instead of the types pretending it cannot happen.
     const channels = new Map<string, (typeof channelRegistry.channels)[number]>(channelRegistry.channels.map((channel) => [channel.id, channel]));
+    // Due means approved: `queued` (the Queue's approval, quorum#573), or a legacy v1 draft. A v2
+    // draft waits for the owner and is never promoted by the runner itself. A v1 draft (DNESKAi's
+    // pack writes every check `pass`) predates the Queue and sends once its connection is live.
     const due = entries.filter(({ item }) =>
-      ["draft", "queued"].includes(item.status) &&
+      (item.status === "queued" || (item.status === "draft" && item.migration !== null)) &&
       new Date(item.publishWindow.notBefore).getTime() <= now.getTime() &&
       new Date(item.publishWindow.notAfter).getTime() >= now.getTime()
     );
@@ -211,6 +214,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       return { ...entry, resolution, providerResolution };
     });
     const eligibleDue: Array<{ name: string; item: CapabilityAwareQueueItem; target: ResolvedPublisherTarget; provider: ResolvedProviderBinding }> = [];
+    let refusedBeforeSend = 0;
     const cadenceTimes = new Map<string, Date[]>();
     for (const { item } of entries) {
       if (item.status !== "published" || !item.attempt) continue;
@@ -229,6 +233,23 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       const providerId = provider.provider.id;
       // Direct Meta sends Instagram and Threads; Buffer sends LinkedIn and nothing else (quorum#571).
       if (!providerMaySend(providerId, entry.item.channel) || providerId !== entry.resolution.target.providerId || provider.provider.apiVersion === null) continue;
+      // Each of these costs its own item, never the run: a channel still in draft skips it, and an
+      // item that fails the publishable check is held with the reason written down.
+      const channel = channels.get(entry.item.channel);
+      if (!channel) continue;
+      try {
+        assertLiveChannel(channel, environment);
+      } catch {
+        continue;
+      }
+      try {
+        assertQueueItemPublishable(entry.item.status === "draft" ? { ...entry.item, status: "queued" as const } : entry.item);
+      } catch (error) {
+        const detail = error instanceof Error ? error.message : String(error);
+        await recordPublishHold({ stateRoot, queueFileName: entry.name, item: entry.item, providerId, hold: new SocialPublishHoldError("not-publishable", detail), detail, now });
+        refusedBeforeSend += 1;
+        continue;
+      }
       const target: ResolvedPublisherTarget = {
         ...entry.resolution.target,
         providerId,
@@ -245,13 +266,6 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       cadenceTimes.set(target.connection.id, times);
     }
 
-    for (const { item } of eligibleDue) {
-      const queued = item.status === "draft" ? { ...item, status: "queued" as const } : item;
-      assertQueueItemPublishable(queued);
-      const channel = channels.get(item.channel);
-      if (!channel) throw new Error(`No global connector capability exists for ${item.channel}`);
-      assertLiveChannel(channel, environment);
-    }
     // Last gate before any provider: every frame must be committed, hash to its record and answer
     // 200 at the exact URL the platform will fetch. A miss holds the one item and writes why.
     const assetGate = await gateSocialAssets({
@@ -268,10 +282,10 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
     eligibleDue.splice(0, eligibleDue.length, ...assetGate.ready);
     const assetHeld = assetGate.held;
     if (eligibleDue.length === 0) {
-      return { status: "draft_only", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, rejected: 0, skipped: due.length + malformed, assetHeld, publishHeld: 0 };
+      return { status: "draft_only", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, rejected: 0, skipped: due.length + malformed, assetHeld, publishHeld: refusedBeforeSend };
     }
     if (options.validateOnly) {
-      return { status: "validated", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, rejected: 0, skipped: due.length - eligibleDue.length + malformed, assetHeld, publishHeld: 0 };
+      return { status: "validated", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, rejected: 0, skipped: due.length - eligibleDue.length + malformed, assetHeld, publishHeld: refusedBeforeSend };
     }
 
     const adapters = new Map<PublishProviderId, PublishAdapter>();
@@ -289,7 +303,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
     let ambiguous = 0;
     let rejected = 0;
     let safetyKilled = 0;
-    let publishHeld = 0;
+    let publishHeld = refusedBeforeSend;
     for (const { name, item, target, provider } of eligibleDue) {
       const channel = channels.get(item.channel)!;
       const key = idempotencyKey(item);

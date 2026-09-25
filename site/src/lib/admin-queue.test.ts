@@ -1,4 +1,4 @@
-import { copyFile, mkdir, rm, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { readAdminQueue } from "@/lib/admin-queue";
@@ -112,6 +112,19 @@ describe("readAdminQueue", () => {
     });
     expect(legacy.reason).toMatch(/window closed on/u);
     expect(snapshot.counts).toMatchObject({ waiting: 1, held: 1 });
+  });
+
+  it("schedules a legacy v1 draft whose checks all pass, because it sends without an approval", async () => {
+    const base = await root({ draft: false });
+    await mkdir(path.join(base, "state/social/queue"), { recursive: true });
+    const legacy = JSON.parse(await readFile(path.join(repository, "state/social/queue/2026-08-05-cs-threads.json"), "utf8")) as Record<string, unknown>;
+    await writeJson(base, "state/social/queue/2026-08-05-cs-threads.json", { ...legacy, publishWindow: { notBefore: "2026-09-26T06:00:00.000Z", notAfter: "2026-09-26T21:00:00.000Z" } });
+    const snapshot = await readAdminQueue(base, { now });
+    const [item] = snapshot.items;
+    expect(item).toMatchObject({ schemaVersion: 1, status: "draft", group: "scheduled", actions: { approve: false, edit: false, hold: true, reject: true } });
+    expect(item!.gate).toBe("This legacy post needs no approval: it sends by itself once its Threads connection and channel are live. Hold or reject it to stop it.");
+    // It is not waiting for the owner, so neither the badge nor the Overview counts it.
+    expect(snapshot.counts).toMatchObject({ waiting: 0, scheduled: 1 });
   });
 
   it("follows an edit from the replaced item to its successor, and says why a hold stopped one", async () => {

@@ -22,12 +22,17 @@ JSON) and `dropped` (JSON that is not a queue item, event or receipt).
 
 | Group | Items |
 | --- | --- |
-| `waiting` | `draft` with its window still open |
-| `scheduled` | `approved` or `queued`, window open, no pause file on the profile or connection |
+| `waiting` | a queue v2 `draft` with its window still open |
+| `scheduled` | `approved` or `queued`, window open, no pause file on the profile or connection; also a legacy v1 `draft` whose checks all pass, which the publisher sends without an approval |
 | `sending` | `publishing` |
 | `sent` | `published`, with the receipt's permalink |
 | `failed` | `failed` and `needs_reconciliation`, with one sanitised reason and the next safe action |
 | `held` | `cancelled`, `expired`, any draft or approval whose window closed, and approved items behind a pause |
+
+The publisher treats as due only what an approval made `queued`, plus a legacy v1 draft whose
+checks all pass: DNESKAi's pack wrote those before the Queue existed, and they send once their
+connection is live, as they always would have. Their card says so and offers hold and reject. A v2
+draft is never due, so an unapproved sibling cannot hold up the approved post beside it.
 
 A connection that is not activated yet does not move an item out of `waiting` or `scheduled`. The
 card names it instead ("the LinkedIn connection is not activated yet"), so the owner can approve

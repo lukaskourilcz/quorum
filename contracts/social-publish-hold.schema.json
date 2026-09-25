@@ -44,7 +44,8 @@
       "enum": [
         "publishing-quota-exhausted",
         "publishing-quota-unreadable",
-        "platform-text-limit"
+        "platform-text-limit",
+        "not-publishable"
       ]
     },
     "quota": {

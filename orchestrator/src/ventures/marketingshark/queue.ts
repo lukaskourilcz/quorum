@@ -12,8 +12,8 @@ import { isPostPackage, packagePath, type AnyMarketingSharkPackage } from "./pac
 
 /**
  * Stands in `approvalProvenance.approvalRef` until the owner approves an item in the Queue
- * workspace (quorum#573), which replaces it with the approval event's id. Not an approval: every
- * check is still pending and the publisher refuses the item on those alone.
+ * workspace (quorum#573), which replaces it with the approval event's id. Not an approval: the item
+ * stays a draft with every check pending, and the publisher sends neither.
  */
 export const AWAITING_OWNER_APPROVAL = "awaiting-owner-approval";
 
@@ -96,12 +96,16 @@ function assetPathsFor(built: AnyMarketingSharkPackage, platform: MarketingShark
  * `approved-publish-package/1` reference with the package's hash, so an approval binds exactly the
  * copy and the frames that were reviewed. What keeps them off the wire, precisely:
  *
+ *  - they are `draft`, and the runner treats a queue v2 item as due only once it is `queued`, which
+ *    only the owner's approval in the Queue makes;
  *  - every one of the eleven checks is `pending`, and `assertQueueItemPublishable` refuses an item
- *    with any check unpassed;
+ *    with any check unpassed (the runner holds that one item and goes on to the next);
  *  - the devShark connections are `held` (B2) and the channels are `draft` with
  *    `enabledByHumanAt: null`, so `resolvePublisherTarget` never answers `eligible`;
- *  - marketingShark owns no activation record, so the runner does not treat its items as due;
- *  - a LinkedIn item is refused by name until the LinkedIn transport exists (B4).
+ *  - marketingShark is not a publishing venture, and its activation record stays locked until
+ *    three packages are drafted and every credential reference exists;
+ *  - Buffer's provider verdict stays `held` until the owner records the live test (B4), so a
+ *    LinkedIn item has no transport.
  *
  * `SOCIAL_KILL_SWITCH` sits above all of it as the global stop.
  *
