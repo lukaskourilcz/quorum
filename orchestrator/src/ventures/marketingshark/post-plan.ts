@@ -109,7 +109,7 @@ export async function planChallenge(brand: Brand, date: string, repoRoot: string
   const settings = brand.postKinds["challenge-teaser"];
   if (!settings) return "no challenge teaser is configured";
   const snapshot = await loadChallengeSnapshot(settings.challengeBank.snapshotPath, repoRoot);
-  if (!snapshot) return "no challenge snapshot has been imported yet; devShark's difficulty labels (its step D5) come first";
+  if (!snapshot) return "no challenge snapshot has been imported yet: devShark's difficulty labels (its step D5) come first";
   const challenge = selectChallenge({
     snapshot,
     difficulty: settings.challengeBank.difficulty,
@@ -194,7 +194,7 @@ export async function planDay(input: {
     return { kind: "none", weekday, reason: `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)} has no marketingShark room: the rotation drafts Monday to Friday (quorum#576).` };
   }
   if (scheduled === "quiz") return { kind: "quiz", weekday, fallback: null };
-  const fallback = (reason: string): DayPlan => ({ kind: "quiz", weekday, fallback: { scheduled, reason: `The ${scheduled} was scheduled; ${reason}.` } });
+  const fallback = (reason: string): DayPlan => ({ kind: "quiz", weekday, fallback: { scheduled, reason: `The ${scheduled} was scheduled, but ${reason}.` } });
   if (!englishOnly) return fallback(`it is written in English only, and ${brand.displayName} also writes Czech`);
 
   const planned = scheduled === "feature-spotlight"
