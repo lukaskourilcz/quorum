@@ -514,7 +514,7 @@ describe("devShark publisher targets", () => {
     const [legacy, committed, capabilityMap] = await Promise.all([legacyQueueItem(), loadSocialPublisherRegistry(configRoot), loadVentureCapabilityMap(configRoot)]);
     const legacyBase = QueueItemSchema.parse(legacy);
     for (const channel of ["threads", "instagram"] as const) {
-      const base = { ...legacyBase, id: `marketingshark-legacy-${channel}`, venture: "marketingshark", channel, utm: { ...legacyBase.utm, source: channel } };
+      const base = { ...legacyBase, id: `marketingshark-legacy-${channel}`, venture: "marketingshark" as const, channel, utm: { ...legacyBase.utm, source: channel } };
       const candidate = QueueItemSchema.parse({ ...base, content: { ...base.content, contentHash: queuePayloadHash(base) } });
       const migrated = migrateLegacyQueueItem(candidate, committed);
       expect(migrated).toMatchObject({
