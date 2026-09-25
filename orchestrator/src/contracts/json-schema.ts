@@ -62,6 +62,7 @@ import { ArticlePackageSchema, EditorialSlateSchema, SocialVariantPackSchema } f
 import { RatingRecordSchema } from "./rating.js";
 import { SeasonFileSchema } from "./season.js";
 import { SocialPackSchema } from "./social-pack.js";
+import { SocialAssetHoldSchema, SocialAssetRetentionSchema } from "./social-assets.js";
 import { StyleProfileSchema } from "./style-profile.js";
 import { VentureRegistrySchema } from "./venture-registry.js";
 import {
@@ -285,6 +286,8 @@ export const ContractSchemas = {
   "release-proof": ReleaseProofSchema,
   "social-activation": SocialActivationSchema,
   "social-post-receipt": SocialPostReceiptSchema,
+  "social-asset-hold": SocialAssetHoldSchema,
+  "social-asset-retention": SocialAssetRetentionSchema,
   "social-provider": SocialProviderSchema,
   "provider-connection-binding": ProviderConnectionBindingSchema,
   "provider-delivery-receipt": ProviderDeliveryReceiptSchema,

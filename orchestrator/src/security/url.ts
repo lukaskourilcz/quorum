@@ -102,7 +102,11 @@ export async function resolvePublicAddresses(hostname: string): Promise<string[]
 
 export interface SafeFetchOptions {
   allowHosts: readonly string[];
-  method?: "GET" | "POST";
+  /**
+   * HEAD reads status and headers only. It carries no body, and like POST it refuses a redirect
+   * instead of following one: a pinned asset URL that redirects is not the URL that was checked.
+   */
+  method?: "GET" | "POST" | "HEAD";
   headers?: Readonly<Record<string, string>>;
   body?: string;
   maxBytes?: number;
@@ -125,8 +129,8 @@ export async function safeFetch(
   let url = parseSafeHttpsUrl(raw);
   const method = options.method ?? "GET";
 
-  if (method === "GET" && options.body !== undefined) {
-    throw new UnsafeUrlError("GET requests cannot include a body");
+  if ((method === "GET" || method === "HEAD") && options.body !== undefined) {
+    throw new UnsafeUrlError(`${method} requests cannot include a body`);
   }
   for (const name of Object.keys(options.headers ?? {})) {
     if (["cookie", "host", "proxy-authorization", "forwarded"].includes(name.toLowerCase())) {

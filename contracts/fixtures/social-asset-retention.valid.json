@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "social-asset-retention/1",
+  "date": "2026-12-26",
+  "retentionDays": 90,
+  "keepFrom": "2026-09-27",
+  "removed": [
+    {
+      "path": "site/public/social/devshark/2026-09-26/en/slide-01.png",
+      "dated": "2026-09-26",
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "bytes": 51234
+    }
+  ],
+  "keptCount": 450,
+  "unmanagedPaths": ["site/public/social/README.md"],
+  "unmanagedCount": 1
+}

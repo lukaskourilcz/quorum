@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "social-asset-hold/1",
+  "queueItemId": "ms-2026-09-26-devshark-en-instagram",
+  "sourceVentureId": "marketingshark",
+  "channel": "instagram",
+  "base": "jsdelivr",
+  "reason": "asset-unreachable",
+  "assets": [
+    {
+      "path": "/social/devshark/2026-09-26/en/slide-01.jpg",
+      "url": "https://example.invalid/guessed/slide-01.jpg",
+      "commit": null,
+      "recordedSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "outcome": "ready",
+      "detail": null
+    }
+  ],
+  "checkedAt": "2026-09-26T07:00:00.000Z",
+  "publishingAuthorized": true
+}
