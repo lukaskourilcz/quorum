@@ -112,7 +112,10 @@ export async function auditSocialDistributionMigration(input: { repoRoot: string
   const migratedLegacyProfiles = publisher.profiles.filter(({ provenance }) => provenance.source === "migration").length;
   const migratedConnectionReferences = publisher.connections.filter(({ profileId }) => publisher.profiles.some(({ id, provenance }) => id === profileId && provenance.source === "migration")).length;
   const migratedLegacyQueueItems = legacyQueue.filter(({ sourceSchemaVersion }) => sourceSchemaVersion === 1).length;
-  const unchangedActivationRecords = Object.keys(activation.ventures).length;
+  // The activation records of the ventures the migration carried over. A venture that gained its
+  // record after the migration (marketingShark, quorum#569) is not migration evidence.
+  const migratedVentures = new Set(publisher.profiles.filter(({ provenance }) => provenance.source === "migration").map(({ ventureRef }) => ventureRef));
+  const unchangedActivationRecords = Object.keys(activation.ventures).filter((venture) => migratedVentures.has(venture)).length;
   const heldFutureProfiles = publisher.profiles.filter(({ provenance, liveEligible }) => provenance.source !== "migration" && !liveEligible).length;
   const heldProviderBindings = providers.bindings.filter(({ mode }) => mode !== "active").length;
   const heldOptionalProviders = providers.providers.filter(({ id, verdict }) => id !== "direct-meta" && verdict !== "enabled").length;
@@ -146,7 +149,9 @@ export async function auditSocialDistributionMigration(input: { repoRoot: string
       noReclassification: publisher.legacyQueueMappings.every(({ profileId }) => publisher.profiles.find(({ id }) => id === profileId)?.role === "venture-primary"),
       noInventedMetricsOrAuthority: publisher.profiles.every(({ liveEligible }) => liveEligible === false) && publisher.connections.every(({ enabledByHumanAt }) => enabledByHumanAt === null),
       futureProfilesHeld: publisher.profiles.filter(({ provenance }) => provenance.source !== "migration").every(({ liveEligible, lifecycle }) => !liveEligible && lifecycle !== "active"),
-      optionalProvidersHeld: providers.providers.filter(({ id }) => id !== "direct-meta").every(({ verdict }) => verdict !== "enabled") && providers.bindings.every(({ providerId }) => providerId === "direct-meta"),
+      // Buffer holds the LinkedIn connection's binding (quorum#569); held means it can never publish.
+      optionalProvidersHeld: providers.providers.filter(({ id }) => id !== "direct-meta").every(({ verdict }) => verdict !== "enabled")
+        && providers.bindings.filter(({ providerId }) => providerId !== "direct-meta").every(({ mode, publishingAuthorized }) => mode === "held" && !publishingAuthorized),
       sisterTargetsAbsent: !canonicalJson({ profiles: publisher.profiles, mappings: publisher.legacyQueueMappings }).includes('"sister"')
     },
     rollback: { sourceQueueMutated: false, previousReaders: ["QueueItemSchema", "SocialActivationSchema"], compatibilityReader: "resolveCapabilityAwareQueueItem", providerRollbackRef: "docs/SOCIAL-PROVIDERS.md#explicit-provider-migration-and-rollback" },

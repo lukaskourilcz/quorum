@@ -18,7 +18,7 @@ import {
   resolvePublisherTarget,
   type SocialPublisherRegistry
 } from "../src/social/publisher-targets.js";
-import { loadVentureCapabilityMap } from "../src/ventures/capabilities.js";
+import { loadVentureCapabilityMap, resolveVentureCapabilityInMap } from "../src/ventures/capabilities.js";
 
 const environment = {
   CAUGHT_UP_THREADS_ACCESS_TOKEN: "fixture-token",
@@ -72,18 +72,23 @@ describe("capability-aware social publisher targets", () => {
       // Two editions rather than one mixed-language feed: they share a brand and an evidence
       // brief but have their own cadence, metrics and kill state, so they are two profiles.
       "social-profile-webdev-signal-cs",
-      "social-profile-webdev-signal-en"
+      "social-profile-webdev-signal-en",
+      // devShark, one profile per platform, all owned by marketingShark (quorum#569).
+      "social-profile-devshark-linkedin",
+      "social-profile-devshark-instagram",
+      "social-profile-devshark-threads"
     ]);
     expect(registry.profiles.slice(3).every((profile) => profile.lifecycle === "proposed" && !profile.liveEligible)).toBe(true);
-    expect(registry.connections).toHaveLength(6);
+    expect(registry.connections).toHaveLength(9);
     expect(registry.connections.every((connection) =>
       connection.mode === "held"
       && connection.enabledByHumanAt === null
       && connection.credentialRef !== null
       && connection.nativeAccountIdRef !== null
     )).toBe(true);
-    expect(registry.connections.filter((connection) => connection.platform === "threads")).toHaveLength(3);
-    expect(new Set(registry.connections.map((connection) => `${connection.profileId}:${connection.platform}`)).size).toBe(6);
+    expect(registry.connections.filter((connection) => connection.platform === "threads")).toHaveLength(4);
+    expect(registry.connections.filter((connection) => connection.platform === "linkedin")).toHaveLength(1);
+    expect(new Set(registry.connections.map((connection) => `${connection.profileId}:${connection.platform}`)).size).toBe(9);
   });
 
   it("migrates legacy primary items deterministically without reclassifying their history", async () => {
@@ -389,5 +394,129 @@ describe("capability-aware social publisher targets", () => {
     expect(meta).not.toContain("VENTURE_PREFIX");
     expect(meta).not.toMatch(/CAUGHT_UP_|MMA_FILES_|TITTY_TUESDAYS_/u);
     expect(activation).not.toMatch(/CAUGHT_UP_.*ACCESS_TOKEN|MMA_FILES_.*ACCESS_TOKEN|TITTY_TUESDAYS_.*ACCESS_TOKEN/u);
+  });
+});
+
+// quorum#569: devShark's three profiles belong to marketingShark and each has one held connection.
+// Nothing about them is live; these tests pin that every devShark edge resolves to held, and that
+// every edge the registry does not name still fails closed.
+describe("devShark publisher targets", () => {
+  const platforms = ["linkedin", "instagram", "threads"] as const;
+  const devSharkEnvironment = {
+    BUFFER_API_KEY: "fixture-key",
+    BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN: "fixture-channel",
+    DEVSHARK_INSTAGRAM_ACCESS_TOKEN: "fixture-token",
+    DEVSHARK_INSTAGRAM_USER_ID: "fixture-user",
+    DEVSHARK_THREADS_ACCESS_TOKEN: "fixture-token",
+    DEVSHARK_THREADS_USER_ID: "fixture-user"
+  };
+
+  async function devSharkItem(platform: (typeof platforms)[number]): Promise<CapabilityAwareQueueItem> {
+    const [legacy, committed, capabilityMap] = await Promise.all([
+      legacyQueueItem(),
+      loadSocialPublisherRegistry(configRoot),
+      loadVentureCapabilityMap(configRoot)
+    ]);
+    const migrated = migrateLegacyQueueItem(legacy, committed);
+    // The package edge into Social Distribution is quorum#568's to add. The item carries the exact
+    // reference whenever the map grants it, so this stays a test of the registry either way.
+    const edge = resolveVentureCapabilityInMap(capabilityMap, {
+      source: "marketingshark",
+      target: "social-distribution",
+      capability: "approved-publish-package",
+      schemaVersion: "approved-publish-package/1"
+    });
+    const capabilityRef = edge.decision === "allowed" && edge.edge
+      ? {
+          mapVersion: capabilityMap.mapVersion,
+          source: "marketingshark",
+          target: "social-distribution" as const,
+          capability: "approved-publish-package" as const,
+          dataSchemaVersion: "approved-publish-package/1" as const,
+          decisionReference: edge.edge.governingReference
+        }
+      : null;
+    return rehash({
+      ...migrated,
+      id: `2026-09-26-devshark-en-${platform}`,
+      sourceVentureId: "marketingshark",
+      releaseId: "marketingshark-2026-09-26-devshark",
+      campaignId: "marketingshark-2026-09-26-devshark",
+      target: {
+        profileId: `social-profile-devshark-${platform}`,
+        profileRole: "venture-primary",
+        role: "primary",
+        connectionBindingRef: `social-connection-devshark-${platform}`,
+        capabilityRef,
+        amplifierEligibilityRef: null,
+        campaignApprovalRef: null
+      },
+      sourcePackage: {
+        schemaVersion: "approved-publish-package/1",
+        artifactRef: "state/ventures/marketingshark/packages/2026-09-26/devshark/package.json",
+        packageHash: "c".repeat(64)
+      },
+      locale: "en",
+      channel: platform,
+      utm: { ...migrated.utm, source: platform },
+      migration: null,
+      approvalProvenance: { approvalRef: "fixture:approval", selectionRef: "fixture:selection", policyRef: null },
+      selectedBy: "MAKO"
+    });
+  }
+
+  it("answers held for every devShark connection, with or without its reference values", async () => {
+    const [committed, capabilityMap] = await Promise.all([loadSocialPublisherRegistry(configRoot), loadVentureCapabilityMap(configRoot)]);
+    for (const platform of platforms) {
+      const item = await devSharkItem(platform);
+      for (const environment of [{}, devSharkEnvironment]) {
+        const resolution = resolvePublisherTarget({ item, registry: committed, capabilityMap, environment });
+        expect(resolution, platform).toMatchObject({ decision: "held", target: null, authorityGranted: false, publishingAuthorized: false });
+        expect(resolution.reasons, platform).toEqual(expect.arrayContaining(["profile-not-live-eligible", "connection-not-human-activated", "connection-unverified"]));
+      }
+    }
+  });
+
+  it("keeps the LinkedIn connection held after a full activation, because no Buffer adapter exists yet", async () => {
+    const [committed, capabilityMap] = await Promise.all([loadSocialPublisherRegistry(configRoot), loadVentureCapabilityMap(configRoot)]);
+    const active = activate(committed, "social-profile-devshark-linkedin", "social-connection-devshark-linkedin");
+    const resolution = resolvePublisherTarget({ item: await devSharkItem("linkedin"), registry: active, capabilityMap, environment: devSharkEnvironment });
+    expect(resolution).toMatchObject({ decision: "held", reasons: ["provider-adapter-unavailable"], target: null });
+
+    const instagram = activate(committed, "social-profile-devshark-instagram", "social-connection-devshark-instagram");
+    expect(resolvePublisherTarget({ item: await devSharkItem("instagram"), registry: instagram, capabilityMap, environment: devSharkEnvironment })).toMatchObject({
+      decision: "eligible",
+      target: { credentialRef: "DEVSHARK_INSTAGRAM_ACCESS_TOKEN", nativeAccountIdRef: "DEVSHARK_INSTAGRAM_USER_ID", providerId: "direct-meta" },
+      publishingAuthorized: false
+    });
+  });
+
+  it("still fails closed on every edge the registry does not name", async () => {
+    const [committed, capabilityMap] = await Promise.all([loadSocialPublisherRegistry(configRoot), loadVentureCapabilityMap(configRoot)]);
+    const linkedin = await devSharkItem("linkedin");
+    const resolve = (item: CapabilityAwareQueueItem) => resolvePublisherTarget({ item, registry: committed, capabilityMap, environment: devSharkEnvironment });
+
+    expect(resolve(rehash({ ...linkedin, target: { ...linkedin.target, connectionBindingRef: "social-connection-devshark-tiktok" } })))
+      .toMatchObject({ decision: "denied", reasons: ["unknown-profile-or-connection"] });
+    expect(resolve(rehash({ ...linkedin, target: { ...linkedin.target, connectionBindingRef: "social-connection-devshark-instagram" } })))
+      .toMatchObject({ decision: "denied", reasons: ["profile-connection-platform-mismatch"] });
+    expect(resolve(rehash({ ...linkedin, target: { ...linkedin.target, connectionBindingRef: "social-connection-caught-up-threads" } })))
+      .toMatchObject({ decision: "denied", reasons: ["profile-connection-platform-mismatch"] });
+    expect(resolve(rehash({ ...linkedin, sourceVentureId: "caught-up" })))
+      .toMatchObject({ decision: "denied", reasons: ["primary-target-must-belong-to-source"] });
+    expect(resolve(rehash({ ...linkedin, sourceVentureId: "goviral" })))
+      .toMatchObject({ decision: "denied", reasons: ["permanently-isolated-source"] });
+  });
+
+  it("refuses a registry that routes LinkedIn around Buffer or Meta around Direct Meta", async () => {
+    const committed = await loadSocialPublisherRegistry(configRoot);
+    const reroute = (connectionId: string, providerId: string) => {
+      const copy = structuredClone(committed);
+      copy.connections.find(({ id }) => id === connectionId)!.connector.providerId = providerId;
+      return SocialPublisherRegistrySchema.safeParse(copy).success;
+    };
+    expect(reroute("social-connection-devshark-linkedin", "direct-meta")).toBe(false);
+    expect(reroute("social-connection-devshark-instagram", "buffer")).toBe(false);
+    expect(reroute("social-connection-devshark-linkedin", "buffer")).toBe(true);
   });
 });

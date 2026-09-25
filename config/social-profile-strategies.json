@@ -1,7 +1,7 @@
 {
   "schemaVersion": "social-profile-strategy-registry/1",
-  "version": "1.1.0",
-  "updatedAt": "2026-08-30T00:00:00.000Z",
+  "version": "1.2.0",
+  "updatedAt": "2026-09-25T00:00:00.000Z",
   "ownerDecisionRef": "GitHub #418",
   "strategies": [
     {
@@ -1447,6 +1447,541 @@
       "stopConditions": [
         "Stop on a factual correction, a source losing its audited authority, or owner veto.",
         "Stop rather than publish filler when no candidate crosses the threshold."
+      ],
+      "authorityGranted": false,
+      "queueAuthorized": false,
+      "publishingAuthorized": false
+    },
+    {
+      "schemaVersion": "social-profile-strategy/1",
+      "id": "social-profile-strategy-devshark-linkedin",
+      "profileId": "social-profile-devshark-linkedin",
+      "profileRole": "venture-primary",
+      "version": "1.0.0",
+      "purpose": "Publish owner-approved devShark posts that marketingShark drafts to devShark's LinkedIn Company Page, reached through Buffer.",
+      "audience": "People learning web development in English, from their first HTML, CSS and JavaScript to working developers.",
+      "languages": [
+        "en"
+      ],
+      "markets": [
+        "US"
+      ],
+      "allowedCapabilities": [],
+      "contentPillars": [
+        {
+          "id": "devshark-packages",
+          "label": "devShark packages",
+          "description": "marketingShark's devShark packages, drafted once a day and approved by the owner in the Queue: the daily quiz now, a feature spotlight once quorum#576 adds it.",
+          "allowedSourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ]
+        }
+      ],
+      "recurringFormats": [
+        {
+          "id": "devshark-quiz-carousel",
+          "label": "LinkedIn multi-image post, or slide one with the caption and the devShark link when Buffer takes one image",
+          "pillarId": "devshark-packages",
+          "candidateClass": "original",
+          "platforms": [
+            "linkedin"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "The question, its answer and its explanation come from devShark's question bank as the package records them.",
+            "Every rendered frame carries its alt text from the package."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "required-design-lab",
+          "altTextRequired": true,
+          "deterministicBriefTemplate": "Carry the day's approved marketingShark package for devShark; this strategy never drafts copy."
+        },
+        {
+          "id": "devshark-feature-spotlight",
+          "label": "Feature spotlight",
+          "pillarId": "devshark-packages",
+          "candidateClass": "recurring",
+          "platforms": [
+            "linkedin"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Every fact about devShark comes from the dated fact sheet in config/marketingshark.json.",
+            "Arrives with quorum#576; until then nothing is drafted in this format."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "required-design-lab",
+          "altTextRequired": true,
+          "deterministicBriefTemplate": "Carry one approved package that shows one devShark screen; this strategy never drafts copy."
+        },
+        {
+          "id": "no-package-hold",
+          "label": "No-package hold",
+          "pillarId": "devshark-packages",
+          "candidateClass": "reserve",
+          "platforms": [
+            "linkedin"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "A day without an approved package is the only evidence this slot carries."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "On a day with no approved package nothing is prepared. Silence is the record."
+        }
+      ],
+      "prohibited": {
+        "topics": [
+          "another venture's editorial state",
+          "devShark prices, plans or languages the dated fact sheet does not state"
+        ],
+        "claims": [
+          "Coins, discounts, access or any other reward for following, liking, sharing or commenting.",
+          "Any devShark fact that is not in the dated fact sheet in config/marketingshark.json."
+        ],
+        "formats": [
+          "Filler published to keep a daily count.",
+          "One caption copied unchanged to another platform."
+        ]
+      },
+      "cadence": {
+        "minimumPerWeek": 0,
+        "targetPerWeek": 5,
+        "maximumPerWeek": 5,
+        "preferredWindows": [
+          "After the owner approves the day's item in the Queue"
+        ],
+        "prohibitedWindows": [
+          "Before the owner approves the item",
+          "On a day with no drafted package"
+        ]
+      },
+      "policyRefs": {
+        "amplificationPolicyRef": "config/social-amplification-policy.json",
+        "launchRunwayRef": "GitHub #415",
+        "originalSupportRatioRef": "GitHub #415",
+        "sameSourceCooldownRef": "GitHub #415",
+        "supportCapRef": "GitHub #415"
+      },
+      "platformCaps": {
+        "instagram": {
+          "perDay": 0,
+          "perWeek": 0
+        },
+        "threads": {
+          "perDay": 0,
+          "perWeek": 0
+        },
+        "linkedin": {
+          "perDay": 1,
+          "perWeek": 5
+        }
+      },
+      "assets": {
+        "rendererRef": "Design Lab",
+        "allowedKinds": [
+          "none",
+          "image",
+          "carousel"
+        ],
+        "altTextRequiredForVisuals": true
+      },
+      "localeToneGuidance": [
+        {
+          "locale": "en",
+          "guidance": "Plain developer English. Ask the question straight, answer it exactly, and leave out hype, invented urgency and engagement bait."
+        }
+      ],
+      "generationPolicy": {
+        "deterministicFirst": true,
+        "cacheByContentAndStrategyVersion": true,
+        "modelRole": null,
+        "maximumModelCallsPerBuild": 0,
+        "maximumCostUsdPerBuild": 0,
+        "modelFailurePolicy": "preserve-deterministic-inventory"
+      },
+      "ownerControls": {
+        "vetoRefs": [],
+        "correctionRefs": [],
+        "stricterOnlyWithoutNewDecision": true
+      },
+      "reviewDate": "2026-12-31",
+      "stopConditions": [
+        "Stop on a correction to a question, its answer or its explanation, or on an owner veto.",
+        "Stop rather than publish filler when no package was drafted or approved.",
+        "Stop if a caption, slide or hashtag promises anything for following, liking, sharing or commenting."
+      ],
+      "authorityGranted": false,
+      "queueAuthorized": false,
+      "publishingAuthorized": false
+    },
+    {
+      "schemaVersion": "social-profile-strategy/1",
+      "id": "social-profile-strategy-devshark-instagram",
+      "profileId": "social-profile-devshark-instagram",
+      "profileRole": "venture-primary",
+      "version": "1.0.0",
+      "purpose": "Publish owner-approved devShark quiz carousels that marketingShark drafts to devShark's own Instagram professional account.",
+      "audience": "People learning web development in English, from their first HTML, CSS and JavaScript to working developers.",
+      "languages": [
+        "en"
+      ],
+      "markets": [
+        "US"
+      ],
+      "allowedCapabilities": [],
+      "contentPillars": [
+        {
+          "id": "devshark-packages",
+          "label": "devShark packages",
+          "description": "marketingShark's devShark packages, drafted once a day and approved by the owner in the Queue: the daily quiz now, a feature spotlight once quorum#576 adds it.",
+          "allowedSourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ]
+        }
+      ],
+      "recurringFormats": [
+        {
+          "id": "devshark-quiz-carousel",
+          "label": "Instagram carousel of the five JPEG frames",
+          "pillarId": "devshark-packages",
+          "candidateClass": "original",
+          "platforms": [
+            "instagram"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "The question, its answer and its explanation come from devShark's question bank as the package records them.",
+            "Every rendered frame carries its alt text from the package."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "required-design-lab",
+          "altTextRequired": true,
+          "deterministicBriefTemplate": "Carry the day's approved marketingShark package for devShark; this strategy never drafts copy."
+        },
+        {
+          "id": "devshark-feature-spotlight",
+          "label": "Feature spotlight",
+          "pillarId": "devshark-packages",
+          "candidateClass": "recurring",
+          "platforms": [
+            "instagram"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Every fact about devShark comes from the dated fact sheet in config/marketingshark.json.",
+            "Arrives with quorum#576; until then nothing is drafted in this format."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "required-design-lab",
+          "altTextRequired": true,
+          "deterministicBriefTemplate": "Carry one approved package that shows one devShark screen; this strategy never drafts copy."
+        },
+        {
+          "id": "no-package-hold",
+          "label": "No-package hold",
+          "pillarId": "devshark-packages",
+          "candidateClass": "reserve",
+          "platforms": [
+            "instagram"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "A day without an approved package is the only evidence this slot carries."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "On a day with no approved package nothing is prepared. Silence is the record."
+        }
+      ],
+      "prohibited": {
+        "topics": [
+          "another venture's editorial state",
+          "devShark prices, plans or languages the dated fact sheet does not state"
+        ],
+        "claims": [
+          "Coins, discounts, access or any other reward for following, liking, sharing or commenting.",
+          "Any devShark fact that is not in the dated fact sheet in config/marketingshark.json."
+        ],
+        "formats": [
+          "Filler published to keep a daily count.",
+          "One caption copied unchanged to another platform."
+        ]
+      },
+      "cadence": {
+        "minimumPerWeek": 0,
+        "targetPerWeek": 5,
+        "maximumPerWeek": 5,
+        "preferredWindows": [
+          "After the owner approves the day's item in the Queue"
+        ],
+        "prohibitedWindows": [
+          "Before the owner approves the item",
+          "On a day with no drafted package"
+        ]
+      },
+      "policyRefs": {
+        "amplificationPolicyRef": "config/social-amplification-policy.json",
+        "launchRunwayRef": "GitHub #415",
+        "originalSupportRatioRef": "GitHub #415",
+        "sameSourceCooldownRef": "GitHub #415",
+        "supportCapRef": "GitHub #415"
+      },
+      "platformCaps": {
+        "instagram": {
+          "perDay": 1,
+          "perWeek": 5
+        },
+        "threads": {
+          "perDay": 0,
+          "perWeek": 0
+        }
+      },
+      "assets": {
+        "rendererRef": "Design Lab",
+        "allowedKinds": [
+          "none",
+          "image",
+          "carousel"
+        ],
+        "altTextRequiredForVisuals": true
+      },
+      "localeToneGuidance": [
+        {
+          "locale": "en",
+          "guidance": "Plain developer English. Ask the question straight, answer it exactly, and leave out hype, invented urgency and engagement bait."
+        }
+      ],
+      "generationPolicy": {
+        "deterministicFirst": true,
+        "cacheByContentAndStrategyVersion": true,
+        "modelRole": null,
+        "maximumModelCallsPerBuild": 0,
+        "maximumCostUsdPerBuild": 0,
+        "modelFailurePolicy": "preserve-deterministic-inventory"
+      },
+      "ownerControls": {
+        "vetoRefs": [],
+        "correctionRefs": [],
+        "stricterOnlyWithoutNewDecision": true
+      },
+      "reviewDate": "2026-12-31",
+      "stopConditions": [
+        "Stop on a correction to a question, its answer or its explanation, or on an owner veto.",
+        "Stop rather than publish filler when no package was drafted or approved.",
+        "Stop if a caption, slide or hashtag promises anything for following, liking, sharing or commenting."
+      ],
+      "authorityGranted": false,
+      "queueAuthorized": false,
+      "publishingAuthorized": false
+    },
+    {
+      "schemaVersion": "social-profile-strategy/1",
+      "id": "social-profile-strategy-devshark-threads",
+      "profileId": "social-profile-devshark-threads",
+      "profileRole": "venture-primary",
+      "version": "1.0.0",
+      "purpose": "Publish owner-approved devShark posts that marketingShark drafts to devShark's own Threads profile.",
+      "audience": "People learning web development in English, from their first HTML, CSS and JavaScript to working developers.",
+      "languages": [
+        "en"
+      ],
+      "markets": [
+        "US"
+      ],
+      "allowedCapabilities": [],
+      "contentPillars": [
+        {
+          "id": "devshark-packages",
+          "label": "devShark packages",
+          "description": "marketingShark's devShark packages, drafted once a day and approved by the owner in the Queue: the daily quiz now, a feature spotlight once quorum#576 adds it.",
+          "allowedSourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ]
+        }
+      ],
+      "recurringFormats": [
+        {
+          "id": "devshark-quiz-carousel",
+          "label": "Threads post with the caption; images once the adapter carries them (quorum#572)",
+          "pillarId": "devshark-packages",
+          "candidateClass": "original",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "The question, its answer and its explanation come from devShark's question bank as the package records them.",
+            "Every rendered frame carries its alt text from the package."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Carry the day's approved marketingShark package for devShark; this strategy never drafts copy."
+        },
+        {
+          "id": "devshark-feature-spotlight",
+          "label": "Feature spotlight",
+          "pillarId": "devshark-packages",
+          "candidateClass": "recurring",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "Every fact about devShark comes from the dated fact sheet in config/marketingshark.json.",
+            "Arrives with quorum#576; until then nothing is drafted in this format."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "Carry one approved package that shows one devShark screen; this strategy never drafts copy."
+        },
+        {
+          "id": "no-package-hold",
+          "label": "No-package hold",
+          "pillarId": "devshark-packages",
+          "candidateClass": "reserve",
+          "platforms": [
+            "threads"
+          ],
+          "locales": [
+            "en"
+          ],
+          "evidenceRequirements": [
+            "A day without an approved package is the only evidence this slot carries."
+          ],
+          "sourceClasses": [
+            "strategy-owned",
+            "approved-package"
+          ],
+          "assetRequirement": "none",
+          "altTextRequired": false,
+          "deterministicBriefTemplate": "On a day with no approved package nothing is prepared. Silence is the record."
+        }
+      ],
+      "prohibited": {
+        "topics": [
+          "another venture's editorial state",
+          "devShark prices, plans or languages the dated fact sheet does not state"
+        ],
+        "claims": [
+          "Coins, discounts, access or any other reward for following, liking, sharing or commenting.",
+          "Any devShark fact that is not in the dated fact sheet in config/marketingshark.json."
+        ],
+        "formats": [
+          "Filler published to keep a daily count.",
+          "One caption copied unchanged to another platform."
+        ]
+      },
+      "cadence": {
+        "minimumPerWeek": 0,
+        "targetPerWeek": 5,
+        "maximumPerWeek": 5,
+        "preferredWindows": [
+          "After the owner approves the day's item in the Queue"
+        ],
+        "prohibitedWindows": [
+          "Before the owner approves the item",
+          "On a day with no drafted package"
+        ]
+      },
+      "policyRefs": {
+        "amplificationPolicyRef": "config/social-amplification-policy.json",
+        "launchRunwayRef": "GitHub #415",
+        "originalSupportRatioRef": "GitHub #415",
+        "sameSourceCooldownRef": "GitHub #415",
+        "supportCapRef": "GitHub #415"
+      },
+      "platformCaps": {
+        "instagram": {
+          "perDay": 0,
+          "perWeek": 0
+        },
+        "threads": {
+          "perDay": 1,
+          "perWeek": 5
+        }
+      },
+      "assets": {
+        "rendererRef": "Design Lab",
+        "allowedKinds": [
+          "none",
+          "image",
+          "carousel"
+        ],
+        "altTextRequiredForVisuals": true
+      },
+      "localeToneGuidance": [
+        {
+          "locale": "en",
+          "guidance": "Plain developer English. Ask the question straight, answer it exactly, and leave out hype, invented urgency and engagement bait."
+        }
+      ],
+      "generationPolicy": {
+        "deterministicFirst": true,
+        "cacheByContentAndStrategyVersion": true,
+        "modelRole": null,
+        "maximumModelCallsPerBuild": 0,
+        "maximumCostUsdPerBuild": 0,
+        "modelFailurePolicy": "preserve-deterministic-inventory"
+      },
+      "ownerControls": {
+        "vetoRefs": [],
+        "correctionRefs": [],
+        "stricterOnlyWithoutNewDecision": true
+      },
+      "reviewDate": "2026-12-31",
+      "stopConditions": [
+        "Stop on a correction to a question, its answer or its explanation, or on an owner veto.",
+        "Stop rather than publish filler when no package was drafted or approved.",
+        "Stop if a caption, slide or hashtag promises anything for following, liking, sharing or commenting."
       ],
       "authorityGranted": false,
       "queueAuthorized": false,

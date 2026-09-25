@@ -17,10 +17,10 @@ describe("Social Distribution profile strategies", () => {
       loadVentureCapabilityMap(configRoot)
     ]);
     expect(SocialProfileStrategyRegistrySchema.safeParse(strategies).success).toBe(true);
-    // Eight: six brands plus WebDev Signal's two locale editions, which are separate profiles
-    // rather than one mixed-language feed. The coverage check below is the assertion with teeth —
+    // Eleven: six brands, WebDev Signal's two locale editions and devShark's three platforms
+    // (quorum#569), each a separate profile. The coverage check below is the assertion with teeth —
     // every profile has exactly one constitution and no strategy exists without a profile.
-    expect(strategies.strategies).toHaveLength(8);
+    expect(strategies.strategies).toHaveLength(11);
     expect(validateStrategyCoverage({ profiles: publisher.profiles, registry: strategies })).toEqual({
       covered: publisher.profiles.map(({ id }) => id), missing: [], forbidden: []
     });

@@ -50,7 +50,14 @@ export const SocialPublisherRegistrySchema = z.strictObject({
     const key = `${connection.profileId}:${connection.platform}`;
     if (profilePlatforms.has(key)) context.addIssue({ code: "custom", message: "A profile can have at most one binding per platform", path: ["connections", index] });
     profilePlatforms.add(key);
-    if (connection.connector.providerId !== "direct-meta" || connection.connector.apiVersion !== registry.providerApiVersion) {
+    // Instagram and Threads go through Direct Meta at the registry's pinned version. LinkedIn goes
+    // through Buffer, the one LinkedIn transport a decision names (quorum#569); its version is
+    // pinned by the provider registry, which every binding has to match.
+    if (connection.platform === "linkedin") {
+      if (connection.connector.providerId !== "buffer") {
+        context.addIssue({ code: "custom", message: "A LinkedIn connection is reached only through Buffer", path: ["connections", index, "connector"] });
+      }
+    } else if (connection.connector.providerId !== "direct-meta" || connection.connector.apiVersion !== registry.providerApiVersion) {
       context.addIssue({ code: "custom", message: "Core registry accepts only its explicit Direct Meta API version", path: ["connections", index, "connector"] });
     }
     if (connection.credentialRef === null || connection.nativeAccountIdRef === null || connection.nativeAccountId !== null) {
@@ -258,6 +265,9 @@ export function resolvePublisherTarget(input: {
   if (!connection.credentialRef || !connection.nativeAccountIdRef) return resolution("denied", ["connection-reference-missing"]);
   if (!input.environment[connection.credentialRef]?.trim()) holds.push("credential-unavailable");
   if (!input.environment[connection.nativeAccountIdRef]?.trim()) holds.push("native-account-id-unavailable");
+  // Only Direct Meta has an adapter. A connection on any other transport (Buffer for LinkedIn) is
+  // held here however far its activation has gone, until its adapter exists (quorum#571).
+  if (connection.connector.providerId !== "direct-meta") holds.push("provider-adapter-unavailable");
   if (holds.length > 0) return resolution("held", holds);
 
   return resolution("eligible", ["independent-runtime-gates-still-required"], {

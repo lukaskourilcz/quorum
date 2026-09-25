@@ -105,8 +105,20 @@ export function validateProviderRegistryConnections(
   const connections = new Set(publisherRegistry.connections.map(({ id }) => id));
   for (const binding of providerRegistry.bindings) {
     if (!connections.has(binding.connectionId)) throw new Error(`Provider binding ${binding.id} references an unknown social connection`);
+    const connection = publisherRegistry.connections.find(({ id }) => id === binding.connectionId)!;
+    const provider = providerRegistry.providers.find(({ id }) => id === binding.providerId)!;
+    if (!provider.supportedPlatforms.includes(connection.platform)) {
+      throw new Error(`Provider binding ${binding.id} names a platform its provider does not serve`);
+    }
   }
   for (const connection of publisherRegistry.connections) {
+    // Meta has no LinkedIn API, so a LinkedIn connection keeps its retained binding with the provider
+    // its connector names (Buffer) instead. Instagram and Threads keep their Direct Meta core.
+    if (connection.platform === "linkedin") {
+      const own = providerRegistry.bindings.filter((binding) => binding.connectionId === connection.id && binding.providerId === connection.connector.providerId && binding.mode !== "retired");
+      if (own.length !== 1) throw new Error(`Social connection ${connection.id} needs exactly one retained ${connection.connector.providerId} binding`);
+      continue;
+    }
     const direct = providerRegistry.bindings.filter((binding) => binding.connectionId === connection.id && binding.providerId === "direct-meta" && binding.mode !== "retired");
     if (direct.length !== 1) throw new Error(`Social connection ${connection.id} needs exactly one retained Direct Meta binding`);
   }
