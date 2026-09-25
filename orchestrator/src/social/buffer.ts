@@ -2,6 +2,7 @@ import type { Channel } from "./channel-registry.js";
 import {
   BUFFER_API_VERSION,
   BUFFER_VERIFY_READS,
+  BUFFER_VERIFY_WAITS_MS,
   createBufferPost,
   probeBufferLinkedInChannel,
   providerText,
@@ -38,7 +39,6 @@ export type BufferLinkedInFormat = "single-image" | "multi-image";
 export const BUFFER_LINKEDIN_FORMAT: BufferLinkedInFormat = "single-image";
 
 const LINKEDIN_MAX_IMAGES = 20;
-const VERIFY_INTERVAL_MS = 5_000;
 
 export interface BufferAdapterOptions {
   /** How a carousel goes to LinkedIn; the committed rule unless a test says otherwise. */
@@ -205,7 +205,7 @@ export function createBufferPublishAdapter(
         if (post.status === "draft" || post.status === "needs_approval") {
           throw new Error(`Buffer holds the post as ${post.status}, so it was not sent`);
         }
-        if (read < BUFFER_VERIFY_READS) await sleep(VERIFY_INTERVAL_MS);
+        if (read < BUFFER_VERIFY_READS) await sleep(BUFFER_VERIFY_WAITS_MS[read - 1]!);
       }
       throw new Error(`Buffer has not sent the post yet (status ${status})`);
     },

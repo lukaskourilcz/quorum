@@ -36,7 +36,7 @@
       "implementationVersion": "1.0.0",
       "apiVersion": "graphql-current",
       "credentialRequirements": [{ "environmentRef": "BUFFER_API_KEY", "requiredFor": "Owner-created Buffer API key; sends only to the LinkedIn Page channel its binding names" }],
-      "limits": { "accountOrBrandLimit": "Free plan: three channels, one API key, ten scheduled posts per channel at a time. One channel is used: the devShark LinkedIn Page.", "requestOrPostLimit": "Free: 100 requests per 15 min, 250 per 24 h, 3,000 per 30 days (read 2026-09-25). Budgeted to the lower audited 100 per 24 h; one post costs at most 8.", "evidenceRef": "GitHub #571" },
+      "limits": { "accountOrBrandLimit": "Free plan: three channels, one API key, ten scheduled posts per channel at a time. One channel is used: the devShark LinkedIn Page.", "requestOrPostLimit": "Free: 100 requests per 15 min, 250 per 24 h, 3,000 per 30 days (read 2026-09-25). Budgeted to the lower audited 100 per 24 h; one post costs at most 14.", "evidenceRef": "GitHub #571" },
       "idempotency": { "providerKeySupported": false, "remoteLookup": "remote-id-only", "ambiguousResultPolicy": "hold-and-reconcile-before-resend" },
       "evidenceCapabilities": { "deliveryStatus": true, "webhooks": false, "metrics": false },
       "sourceOfTruthRisk": { "retention": "Scheduled-post history is provider evidence and never canonical campaign or learning truth.", "canonicalTruth": "boardlessai-queue-campaign-receipts" },

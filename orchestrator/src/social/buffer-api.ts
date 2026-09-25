@@ -21,8 +21,16 @@ export const BUFFER_API_URL = "https://api.buffer.com";
 export const BUFFER_API_VERSION = "graphql-current";
 
 const REQUEST_TIMEOUT_MS = 20_000;
-/** Read-backs per verify call. The runner verifies at most twice. */
-export const BUFFER_VERIFY_READS = 3;
+/**
+ * The waits between read-backs in one verify call: about 1 minute 45 seconds before the call gives
+ * up, and the runner verifies at most twice. Buffer queues a shareNow post and uploads the image to
+ * LinkedIn before it reports `sent`; 40 seconds of that is ordinary for an image post, and three
+ * reads five seconds apart called it ambiguous, paused the connection and the venture, and left the
+ * owner reconciling a post that had gone out (quorum#571 review).
+ */
+export const BUFFER_VERIFY_WAITS_MS = [5_000, 10_000, 20_000, 30_000, 40_000] as const;
+/** Read-backs per verify call: one before the first wait and one after each. */
+export const BUFFER_VERIFY_READS = BUFFER_VERIFY_WAITS_MS.length + 1;
 /** One channel check, one create and two verify calls' reads: the most a single post can cost. */
 export const BUFFER_REQUESTS_PER_POST = 1 + 1 + 2 * BUFFER_VERIFY_READS;
 

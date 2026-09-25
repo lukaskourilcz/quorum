@@ -151,19 +151,22 @@ own API needs a vetting this company cannot pass today (see the last section).
 The adapter carries an item the queue, the owner and every gate have already settled. It never
 chooses copy, window, profile or experiment. `orchestrator/src/social/buffer-api.ts` holds the
 three GraphQL operations and `orchestrator/src/social/buffer.ts` the adapter. A send makes at
-most eight requests to `https://api.buffer.com`, each with the `BUFFER_API_KEY` bearer token:
+most fourteen requests to `https://api.buffer.com`, each with the `BUFFER_API_KEY` bearer token:
 
 1. **Channel check (read-only).** `channel(input: { id })` must answer a LinkedIn channel of type
    `page` (never a personal profile) that is connected, unlocked and has a running queue. The
-   `RateLimit` header must leave at least eight requests in every window. Any failure here refuses
+   `RateLimit` header must leave at least fourteen requests in every window. Any failure here refuses
    the item before anything exists.
 2. **Create.** `createPost` with `schedulingType: automatic` and `mode: shareNow`. Buffer never
    gets `addToQueue`, which would let it pick the time slot, or `customScheduled`: the queue owns
    the window and the runner calls the adapter only inside it. Images go by public HTTPS URL, each
    with the item's alt text.
-3. **Verify.** `post(input: { id })` up to three times, five seconds apart, per verify call; the
-   runner verifies at most twice. Only status `sent` with an HTTPS `linkedin.com` `externalLink`
-   verifies. The link becomes the receipt's permalink.
+3. **Verify.** `post(input: { id })` up to six times per verify call, waiting 5, 10, 20, 30 and
+   40 seconds between reads (1 minute 45 seconds in all); the runner verifies at most twice. Buffer
+   queues a `shareNow` image post and uploads the image before it reports `sent`, and 40 seconds of
+   that is ordinary; three reads five seconds apart called such a post ambiguous and paused the
+   connection and the venture over a post that had gone out. Only status `sent` with an HTTPS
+   `linkedin.com` `externalLink` verifies. The link becomes the receipt's permalink.
 
 The runner's claim, idempotency key and receipts work as they do for Direct Meta. The adapter
 remembers the post id per idempotency key within a run. Buffer's `createPost` takes no idempotency
@@ -214,7 +217,7 @@ stay reachable; a jsDelivr URL pinned to a commit does.
   One channel is used.
 - **Requests** (developers.buffer.com, read 2026-09-25): 100 per 15 minutes, 250 per 24 hours and
   3,000 per 30 days on Free. The record budgets to the lower audited reading of 100 per 24 hours;
-  one post a day costs at most eight.
+  one post a day costs at most fourteen.
 - **Cost:** $0. No upgrade is authorized. Zernio (about $6 a month) or a paid Buffer plan needs a
   treasury ledger line and the owner's approval first.
 - **Exit:** revoke the API key in Buffer under Settings, API; retire the binding; keep the

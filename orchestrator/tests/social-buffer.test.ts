@@ -2,7 +2,7 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { configRoot, repoRoot } from "../src/paths.js";
-import { BUFFER_API_URL, BUFFER_API_VERSION, BUFFER_REQUESTS_PER_POST } from "../src/social/buffer-api.js";
+import { BUFFER_API_URL, BUFFER_API_VERSION, BUFFER_REQUESTS_PER_POST, BUFFER_VERIFY_READS, BUFFER_VERIFY_WAITS_MS } from "../src/social/buffer-api.js";
 import { BUFFER_LINKEDIN_FORMAT, createBufferPublishAdapter, planBufferLinkedInPost } from "../src/social/buffer.js";
 import { ChannelRegistrySchema, type Channel } from "../src/social/channel-registry.js";
 import { SocialProviderRegistrySchema, loadSocialProviderRegistry } from "../src/social/providers.js";
@@ -194,16 +194,29 @@ describe("Buffer LinkedIn adapter: verify", () => {
     expect(sleep).toHaveBeenCalledTimes(1);
   });
 
+  it("waits longer between reads, so an image post Buffer sends in forty seconds still verifies", async () => {
+    // Four reads still `sending`, over 5 + 10 + 20 + 30 seconds, then `sent` on the fifth.
+    const { fetchImpl, calls } = replayBuffer({ BoardlessBufferPost: ["post-sending", "post-sending", "post-sending", "post-sending", "post-sent"] });
+    const sleep = vi.fn(async (_milliseconds: number) => undefined);
+    const verified = await createBufferPublishAdapter(environment, fetchImpl, { sleep }).verify(await linkedInChannel(), await item(), "fixture-post-0001", await target());
+    expect(verified.remoteUrl).toMatch(/^https:\/\/www\.linkedin\.com\//u);
+    expect(calls).toHaveLength(5);
+    expect(sleep.mock.calls.map(([milliseconds]) => milliseconds)).toEqual([5_000, 10_000, 20_000, 30_000]);
+    // A whole call waits 105 seconds before it gives up, and the runner calls it at most twice.
+    expect(BUFFER_VERIFY_WAITS_MS.reduce((total, wait) => total + wait, 0)).toBe(105_000);
+    expect(BUFFER_REQUESTS_PER_POST).toBe(2 + 2 * BUFFER_VERIFY_READS);
+  });
+
   it("never verifies a failed, unsent or foreign post", async () => {
     const [channel, queued, resolved] = await Promise.all([linkedInChannel(), item(), target()]);
     const sleep = async () => {};
     const failed = replayBuffer({ BoardlessBufferPost: ["post-error"] });
     await expect(createBufferPublishAdapter(environment, failed.fetchImpl, { sleep }).verify(channel, queued, "fixture-post-0001", resolved))
       .rejects.toThrow(/LinkedIn send failed: LinkedIn could not fetch the image/u);
-    const stuck = replayBuffer({ BoardlessBufferPost: ["post-sending", "post-sending", "post-sending"] });
+    const stuck = replayBuffer({ BoardlessBufferPost: Array.from({ length: BUFFER_VERIFY_READS }, () => "post-sending") });
     await expect(createBufferPublishAdapter(environment, stuck.fetchImpl, { sleep }).verify(channel, queued, "fixture-post-0001", resolved))
       .rejects.toThrow(/has not sent the post yet \(status sending\)/u);
-    expect(stuck.calls).toHaveLength(3);
+    expect(stuck.calls).toHaveLength(BUFFER_VERIFY_READS);
     const foreign = replayBuffer({ BoardlessBufferPost: ["post-sent"] });
     await expect(createBufferPublishAdapter(environment, foreign.fetchImpl, { sleep }).verify(channel, queued, "another-post", resolved))
       .rejects.toThrow(/does not match/u);
