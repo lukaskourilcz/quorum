@@ -155,6 +155,29 @@ export function deterministicVaultAdjudicator(input?: { duplicateAtOrAbove?: num
   };
 }
 
+/**
+ * Why a VAULT verdict cannot be recorded against these candidates, or null when it can.
+ *
+ * One definition for both callers. `screenAndRecordIdea` throws on it, because an adjudicator
+ * written in code that breaks it is a bug. The model adapter in `live.ts` treats the same answer
+ * from a model as unusable output and falls back to the deterministic verdict. That call has
+ * already been paid for by then, and on 2026-09-25 the throw took the whole morning with it.
+ */
+export function vaultVerdictProblem(
+  verdict: VaultVerdict,
+  candidates: readonly ScoredIdeaCandidate[]
+): string | null {
+  if (verdict.verdict === "novel") return null;
+  const [kind, predecessorId] = verdict.verdict.split(":") as ["duplicate_of" | "variant_of", string];
+  if (!candidates.some((candidate) => candidate.entry.id === predecessorId)) {
+    return `VAULT referenced non-candidate idea ${predecessorId}`;
+  }
+  if (kind === "variant_of" && !MATERIAL_DIFFERENCE.test(verdict.reason)) {
+    return "VAULT variant reason must state the material difference";
+  }
+  return null;
+}
+
 export interface IdeaScreeningResult {
   entry: IdeaLedgerEntry;
   verdict: "novel" | "duplicate_of" | "variant_of" | "revived";
@@ -535,17 +558,13 @@ export async function screenAndRecordIdea(input: {
     };
   }
 
+  const problem = vaultVerdictProblem(adjudication, candidates);
+  if (problem) throw new Error(problem);
   const [kind, predecessorId] = adjudication.verdict.split(":") as [
     "duplicate_of" | "variant_of",
     string
   ];
-  const candidate = candidates.find((value) => value.entry.id === predecessorId);
-  if (!candidate) {
-    throw new Error(`VAULT referenced non-candidate idea ${predecessorId}`);
-  }
-  if (kind === "variant_of" && !MATERIAL_DIFFERENCE.test(adjudication.reason)) {
-    throw new Error("VAULT variant reason must state the material difference");
-  }
+  const candidate = candidates.find((value) => value.entry.id === predecessorId)!;
 
   if (kind === "duplicate_of") {
     const dead = candidate.entry.status === "vetoed" || candidate.entry.status === "killed";

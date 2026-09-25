@@ -256,6 +256,70 @@ describe("VAULT ledger adjudication", () => {
       .toContainEqual(expect.objectContaining({ id: prior.id, verdict: "variant_of" }));
   });
 
+  /*
+   * The 2026-09-25 04:00 morning. VAULT, a billed model call, answered `variant_of` with a reason
+   * that named no material difference. The ledger threw and the throw ended a run that had
+   * already paid for its council. The rule stands: a variant link still needs a stated
+   * difference. What changes is who breaks it. From a model, it is unusable output, and
+   * the lexical verdict is recorded instead.
+   */
+  describe("a model verdict the ledger would refuse", () => {
+    const prior = entry({
+      id: "idea-2026-08-01-a3f9",
+      title: "A newsletter for developers",
+      summary: "A concise publication for working developers."
+    });
+    const nearby = proposal(
+      "Dev-focused email digest with source notes",
+      "A concise email digest for working devs that adds source notes."
+    );
+    const fromModel = (verdict: { verdict: string; reason: string }): VaultAdjudicator => ({
+      adjudicate: (input) => adjudicateVaultWithFallback(input, async () => verdict as never)
+    });
+
+    it("records the lexical verdict instead of a variant with no stated difference", async () => {
+      const root = await rootWith([prior]);
+      const result = await screenAndRecordIdea({
+        root,
+        proposal: nearby,
+        evidence: [],
+        adjudicator: fromModel({
+          verdict: `variant_of:${prior.id}`,
+          reason: "Similar cue with a slightly broader scope for readers."
+        })
+      });
+      expect(result).toMatchObject({ verdict: "novel", autoRejected: false });
+      expect(result.entry.similarTo).toEqual([]);
+      const current = currentIdeaEntries(await readIdeaLedger(root));
+      expect(current.find((candidate) => candidate.id === prior.id)?.similarTo).toEqual([]);
+    });
+
+    it("records the lexical verdict instead of a link to an idea that was not a candidate", async () => {
+      const root = await rootWith([prior]);
+      const result = await screenAndRecordIdea({
+        root,
+        proposal: nearby,
+        evidence: [],
+        adjudicator: fromModel({ verdict: "duplicate_of:idea-2026-07-01-0000", reason: "Same idea." })
+      });
+      expect(result).toMatchObject({ verdict: "novel", autoRejected: false });
+    });
+
+    it("still refuses the same verdict from an adjudicator written in code", async () => {
+      const root = await rootWith([prior]);
+      await expect(screenAndRecordIdea({
+        root,
+        proposal: nearby,
+        evidence: [],
+        adjudicator: {
+          async adjudicate() {
+            return { verdict: `variant_of:${prior.id}`, reason: "Similar cue with a broader scope." };
+          }
+        }
+      })).rejects.toThrow("VAULT variant reason must state the material difference");
+    });
+  });
+
   it("rejects evidence-free dead-idea revival before the room", async () => {
     const killed = entry({
       id: "idea-2026-08-01-dead",

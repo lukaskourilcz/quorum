@@ -29,7 +29,8 @@ import {
   type VaultAdjudicator,
   type VaultVerdict,
   VaultVerdictSchema,
-  screenAndRecordIdea
+  screenAndRecordIdea,
+  vaultVerdictProblem
 } from "./ledger.js";
 
 const VAULT_CALL_CAP_USD = 0.01;
@@ -161,18 +162,26 @@ export function parseVaultVerdictText(text: string): VaultVerdict {
 }
 
 /**
- * Keep a formatting failure in the optional semantic dedupe call from killing idea capture.
+ * Keep unusable output from the optional semantic dedupe call from killing idea capture.
  *
  * The deterministic adjudicator uses the candidate scores computed by the ledger. It can say
  * novel or duplicate. It does not invent a semantic variant. Provider, budget and transport
  * failures still propagate; only unusable model output takes this fallback.
+ *
+ * Unusable includes a well-formed verdict the ledger would refuse: a variant whose reason names
+ * no material difference, or a link to an idea that was not a candidate. The ledger threw on
+ * both after the call was billed, and the throw ended the run. On 2026-09-25 the 04:00 morning
+ * had paid for its council and its VAULT call and was lost to "VAULT variant reason must state
+ * the material difference". The fallback never returns `variant_of`, so no variant is recorded
+ * without a stated difference.
  */
 export async function adjudicateVaultWithFallback(
   input: Parameters<VaultAdjudicator["adjudicate"]>[0],
   call: () => Promise<VaultVerdict>
 ): Promise<VaultVerdict> {
+  let verdict: VaultVerdict;
   try {
-    return await call();
+    verdict = await call();
   } catch (error) {
     if (
       error instanceof ModelOutputParseError ||
@@ -182,6 +191,10 @@ export async function adjudicateVaultWithFallback(
     }
     throw error;
   }
+  const problem = vaultVerdictProblem(verdict, input.candidates);
+  if (!problem) return verdict;
+  console.warn(JSON.stringify({ event: "vault_verdict_unusable", verdict: verdict.verdict, reason: problem }));
+  return deterministicVaultAdjudicator().adjudicate(input);
 }
 
 export class GuardedVaultAdjudicator implements VaultAdjudicator {
