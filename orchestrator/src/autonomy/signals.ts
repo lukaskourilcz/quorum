@@ -219,8 +219,10 @@ async function studioTemplateFiles(directory: string): Promise<Array<{ status?: 
  *
  * They nest two levels — `packages/<date>/<brand>/package.json` — which `files` does not walk, and
  * a shape check here rather than a zod parse keeps the autonomy snapshot from failing closed on a
- * single malformed day. Complete means what the growth objective claims: both carousels present
- * and a render recorded. A package missing either is not cadence, it is a half-finished morning.
+ * single malformed day. Complete means a carousel for every language the package names and a
+ * render recorded. A package missing either is not cadence, it is a half-finished morning. A
+ * package names its languages since devShark went English-only (quorum#568); one that names none
+ * predates that and was written in Czech and English.
  */
 async function marketingSharkPackages(root: string): Promise<number> {
   const dates = await readdir(root, { withFileTypes: true }).catch(() => []);
@@ -231,9 +233,10 @@ async function marketingSharkPackages(root: string): Promise<number> {
       const parsed = await readFile(path.join(root, date.name, brand.name, "package.json"), "utf8")
         .then((raw) => JSON.parse(raw) as Record<string, unknown>)
         .catch(() => null);
-      const carousels = parsed?.carousels as { cs?: unknown; en?: unknown } | undefined;
+      const carousels = parsed?.carousels as Record<string, unknown> | undefined;
       const render = parsed?.render as { summaryPaths?: unknown } | undefined;
-      if (carousels?.cs && carousels.en && Array.isArray(render?.summaryPaths) && render.summaryPaths.length > 0) {
+      const named = Array.isArray(parsed?.locales) ? parsed.locales.filter((locale): locale is string => typeof locale === "string") : ["cs", "en"];
+      if (named.length > 0 && named.every((locale) => Boolean(carousels?.[locale])) && Array.isArray(render?.summaryPaths) && render.summaryPaths.length > 0) {
         complete += 1;
       }
     }
@@ -341,7 +344,7 @@ export async function computeAutonomySnapshot(input: {
     // accepts it, but nothing implemented it, so the venture resolved to an empty signal
     // list while every other venture reported. Same predicate the quarterly collector uses.
     "live-template-library": [signal("live-template-library", "Live carousel templates", studioTemplates.filter((template) => template.status === "live").length, "count", `${studioTemplates.filter((template) => template.status === "live").length} templates passed every brand and format check.`)],
-    "package-cadence": [signal("package-cadence", "Drafted carousel packages", marketingSharkPackageCount, "count", `${marketingSharkPackageCount} packages carry both carousels and a recorded render.`)],
+    "package-cadence": [signal("package-cadence", "Drafted carousel packages", marketingSharkPackageCount, "count", `${marketingSharkPackageCount} packages carry a carousel for each of their languages and a recorded render.`)],
     // The cycle and dossier contracts arrive later in the founding sequence. Until their files
     // exist there is no denominator to infer, so the registry-visible signal is explicitly null.
     // BH-05/BH-20 feed these same exported evaluators from parsed state; no placeholder zero is

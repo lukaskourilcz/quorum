@@ -143,6 +143,24 @@ describe("zero-model operating signals", () => {
     expect(updated.growth.find((venture) => venture.venture === "door-money")?.signals.find((entry) => entry.id === "package-cadence")?.value).toBe(1);
   });
 
+  it("counts the English-only packages the room writes now, every post kind, as cadence", async () => {
+    // quorum#568 made devShark English-only and #576 added the other kinds. A reader that asked for a
+    // Czech carousel counted none of them, and the board read marketingShark as producing nothing.
+    const stateRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-package-cadence-en-"));
+    const fixtures = ["marketingshark-package", "marketingshark-package-feature-spotlight", "marketingshark-package-challenge-teaser", "marketingshark-package-this-week"];
+    for (const name of fixtures) {
+      const built = JSON.parse(await readFile(path.join(repoRoot, "contracts/fixtures", `${name}.valid.json`), "utf8")) as { date: string; brandId: string };
+      await json(path.join(stateRoot, `ventures/marketingshark/packages/${built.date}/${built.brandId}/package.json`), built);
+    }
+    // A package that names a language it has no carousel for is still not complete.
+    await json(path.join(stateRoot, "ventures/marketingshark/packages/2026-10-05/devshark/package.json"), {
+      locales: ["en", "cs"], carousels: { en: {} }, render: { summaryPaths: ["half.json"] }
+    });
+    const snapshot = await computeAutonomySnapshot({ repoRoot, stateRoot, now: new Date("2026-10-05T04:00:00.000Z") });
+    const cadence = snapshot.growth.find((venture) => venture.venture === "marketingshark")?.signals.find((entry) => entry.id === "package-cadence");
+    expect(cadence?.value).toBe(fixtures.length);
+  });
+
   it("keeps Tehdejsi research and Kvorum approval on their own evidence", async () => {
     const stateRoot = await mkdtemp(path.join(os.tmpdir(), "boardless-new-venture-signals-"));
     const research = path.join(stateRoot, "ventures/tehdejsi-svet/research-ledger.jsonl");

@@ -442,6 +442,34 @@ async function caughtUpVisualCards(root: string, ratings: readonly RatingRecord[
  * the hook that fronted it and the alternate that did not, and carries the recorded render
  * summaries as media rather than rebuilding the slides from the copy.
  */
+/** The words a post kind goes by on the card; the quiz has no `kind` field. */
+const POST_KIND_LABELS: Readonly<Record<string, string>> = {
+  "feature-spotlight": "Feature spotlight",
+  "challenge-teaser": "Challenge teaser",
+  "this-week": "This week on devShark",
+  announcement: "Launch announcement"
+};
+
+/**
+ * One line per package. A quiz names its question and the hook that fronted it and the alternate
+ * that did not; the other kinds (quorum#576) carry a subject and one hook instead, and reading them
+ * as a quiz printed "Question unknown (?). Hook ?, alternate ?." for every valid spotlight.
+ */
+function packageSummary(parsed: Record<string, unknown>): string {
+  const kind = text(parsed.kind, 40);
+  if (kind) {
+    const subject = object(parsed.subject);
+    const hook = object(parsed.hook);
+    const label = POST_KIND_LABELS[kind] ?? kind;
+    return `${label}: ${text(subject?.label, 160) ?? "subject unknown"}. ${text(hook?.en, 200) ?? ""}`.trim();
+  }
+  const question = object(parsed.question);
+  const hooks = object(parsed.hooks);
+  const hookA = object(hooks?.a);
+  const hookB = object(hooks?.b);
+  return `Question ${String(question?.id ?? "unknown")} (${String(question?.category ?? "?")}). Hook ${String(hookA?.patternId ?? "?")}, alternate ${String(hookB?.patternId ?? "?")}. ${String(hookA?.en ?? "")}`.trim();
+}
+
 async function packageCards(root: string, ventureId: string, ratings: readonly RatingRecord[]): Promise<{ cards: AdminCard[]; unreadable: string[] }> {
   if (ventureId !== "marketingshark") return { cards: [], unreadable: [] };
   const packagesRoot = path.join(root, "state", "ventures", "marketingshark", "packages");
@@ -456,10 +484,6 @@ async function packageCards(root: string, ventureId: string, ratings: readonly R
         unreadable.push(relative);
         continue;
       }
-      const question = object(parsed.question);
-      const hooks = object(parsed.hooks);
-      const hookA = object(hooks?.a);
-      const hookB = object(hooks?.b);
       const render = object(parsed.render);
       const id = `marketingshark-${date}-${brand}`;
       cards.push({
@@ -467,7 +491,7 @@ async function packageCards(root: string, ventureId: string, ratings: readonly R
         ventureId,
         kind: "social-variant",
         title: `${brand} · ${date}`,
-        summary: `Question ${String(question?.id ?? "unknown")} (${String(question?.category ?? "?")}). Hook ${String(hookA?.patternId ?? "?")}, alternate ${String(hookB?.patternId ?? "?")}. ${String(hookA?.en ?? "")}`.trim(),
+        summary: packageSummary(parsed),
         detailPath: null,
         status: String(parsed.status ?? "unavailable"),
         originMeetingRef: `meetings/${date}-ms-daily`,

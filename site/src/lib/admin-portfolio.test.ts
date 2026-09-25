@@ -238,3 +238,30 @@ describe("declared tabs against stored cards", () => {
     });
   });
 });
+
+describe("marketingShark package cards", () => {
+  it("summarises the quiz and every other post kind from the committed fixtures", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "boardless-admin-portfolio-packages-"));
+    await mkdir(path.join(root, "config"), { recursive: true });
+    await writeFile(path.join(root, "config", "ventures.json"), JSON.stringify({
+      schemaVersion: "venture-registry/1",
+      ventures: [{ id: "marketingshark", name: "marketingShark", status: "operating", visibility: "public", ledgerNamespace: "marketingshark", adminTabs: ["packages"] }]
+    }));
+    const repository = path.resolve(process.cwd(), "..");
+    for (const name of ["marketingshark-package", "marketingshark-package-feature-spotlight", "marketingshark-package-challenge-teaser", "marketingshark-package-this-week"]) {
+      const built = JSON.parse(await readFile(path.join(repository, "contracts", "fixtures", `${name}.valid.json`), "utf8")) as { date: string; brandId: string };
+      const target = path.join(root, "state", "ventures", "marketingshark", "packages", built.date, built.brandId, "package.json");
+      await mkdir(path.dirname(target), { recursive: true });
+      await writeFile(target, JSON.stringify(built));
+    }
+    const portfolio = await readAdminPortfolio(root);
+    const summaries = Object.fromEntries(portfolio.ventures[0]!.cards.map((card) => [card.createdAt, card.summary]));
+    expect(summaries).toEqual({
+      "2026-09-26": "Question rm-abbr-19 (abbreviations). Hook payoff-explainer, alternate guess-first. Miss it and the explanation still pays off.",
+      "2026-09-29": "Feature spotlight: Learn paths. Inside devShark: Learn paths",
+      "2026-09-30": "Challenge teaser: Count vowels. Easy challenge: Count vowels",
+      "2026-10-02": "This week on devShark: This week on devShark, week of 2026-09-28. This week on devShark"
+    });
+    expect(Object.values(summaries).join(" ")).not.toContain("?");
+  });
+});
