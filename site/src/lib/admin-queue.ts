@@ -5,7 +5,7 @@ import { runDeterministicChecks, type QueueSibling } from "@/lib/admin-queue/che
 import type { SocialQueueEventRecord } from "@/lib/admin-queue/event";
 import type { QueueItem } from "@/lib/admin-queue/item";
 import { queueCaptionLimit } from "@/lib/admin-queue/linkedin";
-import { queueItemTarget, queueRepositoryRoot, readQueueState, type QueueEntry, type QueueState } from "@/lib/admin-queue/state";
+import { queueItemTarget, queueRepositoryRoot, readQueueState, type QueueEntry, type QueueHoldReason, type QueueState } from "@/lib/admin-queue/state";
 import {
   QUEUE_CHECK_LABELS,
   QUEUE_DETERMINISTIC_CHECKS,
@@ -67,7 +67,22 @@ function sendsWithoutApproval(item: QueueItem): boolean {
   return item.schemaVersion === 1 && item.status === "draft" && Object.values(item.checks).every((state) => state === "pass");
 }
 
-function groupOf(item: QueueItem, gatePaused: boolean, now: Date): QueueGroup {
+/**
+ * What the owner reads for a hold record, in fixed words: the record's own detail carries provider
+ * text and never crosses. Each says whether waiting helps or an edit is needed.
+ */
+const HOLD_REASONS: Readonly<Record<QueueHoldReason, string>> = {
+  "asset-hash-mismatch": "Held before sending: a frame's bytes no longer match the approved package. Re-render or edit it.",
+  "asset-hash-unrecorded": "Held before sending: nothing records what its frames should be, so they cannot be proved.",
+  "asset-unsupported": "Held before sending: a frame is not an image the platform takes. Re-render or edit it.",
+  "asset-unreachable": "Held before sending: a frame did not answer at its public URL yet. The next publisher run inside the window checks again.",
+  "publishing-quota-exhausted": "Held before sending: the platform's publishing limit is full. The next publisher run inside the window tries again.",
+  "publishing-quota-unreadable": "Held before sending: the platform's publishing limit could not be read. The next publisher run inside the window tries again.",
+  "platform-text-limit": "Held before sending: the text is longer than the platform accepts. Edit it to send a shorter copy.",
+  "not-publishable": "Held before sending: the publisher's last check refused it. Edit it, or reject it."
+};
+
+function groupOf(item: QueueItem, gatePaused: boolean, now: Date, gateHeld = false): QueueGroup {
   const closed = Date.parse(item.publishWindow.notAfter) < now.getTime();
   switch (item.status) {
     case "published": return "sent";
@@ -79,9 +94,9 @@ function groupOf(item: QueueItem, gatePaused: boolean, now: Date): QueueGroup {
     case "draft":
       if (closed) return "held";
       if (!sendsWithoutApproval(item)) return "waiting";
-      return gatePaused ? "held" : "scheduled";
+      return gatePaused || gateHeld ? "held" : "scheduled";
     case "approved":
-    case "queued": return closed || gatePaused ? "held" : "scheduled";
+    case "queued": return closed || gatePaused || gateHeld ? "held" : "scheduled";
   }
 }
 
@@ -171,7 +186,10 @@ function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: Q
   const sourceVentureId = item.schemaVersion === 2 ? item.sourceVentureId : item.venture;
   const ventureKey = profile?.brandRef ?? sourceVentureId;
   const gate = gateFor(item, state, target);
-  const group = groupOf(item, gate.paused !== null, now);
+  // A hold record describes an item the publisher would otherwise send; once the item has moved on
+  // (sent, failed, cancelled) the record no longer says anything about it.
+  const hold = ["queued", "approved", "draft"].includes(item.status) ? state.holds.get(item.id) ?? null : null;
+  const group = groupOf(item, gate.paused !== null, now, hold !== null);
   const supersededBy = lastEvent(state.events, item.id, ["edit", "rerender"])?.supersedingItemId ?? null;
   const supersedes = state.events.find((event) => event.supersedingItemId === item.id)?.itemId ?? null;
   const open = Date.parse(item.publishWindow.notAfter) > now.getTime() && !supersededBy;
@@ -207,7 +225,11 @@ function itemView(entry: QueueEntry, siblings: readonly QueueSibling[], state: Q
     designLabHref: labLabels.has(ventureKey) ? designLabHref(ventureKey, packageOf(item)) : null,
     permalink: receipt?.remoteUrl ?? null,
     // Copy an approval would refuse is named before the owner tries: no approval waives this rule.
-    reason: review?.copyFailure ? `Not approvable as written: ${review.copyFailure}. Edit it first.` : reasonFor(item, state, gate, group, now),
+    reason: review?.copyFailure
+      ? `Not approvable as written: ${review.copyFailure}. Edit it first.`
+      : hold && group === "held" && gate.paused === null && Date.parse(item.publishWindow.notAfter) >= now.getTime()
+        ? HOLD_REASONS[hold.reason]
+        : reasonFor(item, state, gate, group, now),
     nextSafeAction: nextSafeAction(item, supersededBy),
     gate: group === "waiting" || group === "scheduled" ? gateNote(item, gate) : null,
     schemaVersion: item.schemaVersion,

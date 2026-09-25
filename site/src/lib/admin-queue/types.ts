@@ -172,8 +172,8 @@ export interface AdminQueueSnapshot {
   ventures: AdminQueueVentureOption[];
   /** Files that could not be read as JSON at all. */
   unreadable: number;
-  /** Records that parsed as JSON but not as a queue item, an event or a receipt. */
-  dropped: { items: number; events: number; receipts: number; health: number };
+  /** Records that parsed as JSON but not as a queue item, an event, a receipt, health or a hold. */
+  dropped: { items: number; events: number; receipts: number; health: number; holds: number };
   /** Sources the snapshot could not read, named. An empty list means every source was read. */
   unavailable: string[];
   generatedAt: string;

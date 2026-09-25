@@ -29,6 +29,29 @@ export interface QueueReceipt {
   error: string | null;
 }
 
+/**
+ * Why the publisher stopped an item before sending anything (`social-asset-hold/1`,
+ * `social-publish-hold/1`). Only the reason crosses: the card says it in fixed words, never the
+ * record's detail, which carries provider text.
+ */
+export const QUEUE_HOLD_REASONS = [
+  "asset-hash-mismatch",
+  "asset-hash-unrecorded",
+  "asset-unsupported",
+  "asset-unreachable",
+  "publishing-quota-exhausted",
+  "publishing-quota-unreadable",
+  "platform-text-limit",
+  "not-publishable"
+] as const;
+export type QueueHoldReason = (typeof QUEUE_HOLD_REASONS)[number];
+
+export interface QueueHold {
+  queueItemId: string;
+  reason: QueueHoldReason;
+  checkedAt: string;
+}
+
 export interface QueueLegacyMapping {
   venture: string;
   connections: Readonly<Record<string, string>>;
@@ -38,6 +61,8 @@ export interface QueueState {
   entries: QueueEntry[];
   events: SocialQueueEventRecord[];
   receipts: QueueReceipt[];
+  /** The newest asset or publish hold per queue item id. */
+  holds: Map<string, QueueHold>;
   health: Map<string, ProviderHealthRecord>;
   registry: QueueRegistryContext;
   legacyMappings: QueueLegacyMapping[];
@@ -45,7 +70,7 @@ export interface QueueState {
   ventureNames: Map<string, string>;
   pauses: { global: boolean; profiles: Set<string>; connections: Set<string> };
   unreadable: number;
-  dropped: { items: number; events: number; receipts: number; health: number };
+  dropped: { items: number; events: number; receipts: number; health: number; holds: number };
   unavailable: string[];
 }
 
@@ -113,6 +138,18 @@ function parseReceipt(value: unknown): QueueReceipt | null {
   return { queueItemId: raw.queueItemId, outcome: raw.outcome as QueueReceipt["outcome"], remoteUrl: raw.remoteUrl as string | null, attemptedAt: raw.attemptedAt, error: raw.error as string | null };
 }
 
+function parseHold(value: unknown): QueueHold | null {
+  const raw = rawRecord(value);
+  if (!raw || !["social-asset-hold/1", "social-publish-hold/1"].includes(String(raw.schemaVersion))
+    || typeof raw.queueItemId !== "string" || raw.queueItemId.trim().length === 0 || raw.queueItemId.length > 160
+    || !(QUEUE_HOLD_REASONS as readonly string[]).includes(String(raw.reason))
+    || typeof raw.checkedAt !== "string" || Number.isNaN(Date.parse(raw.checkedAt))
+    || raw.publishingAuthorized !== false) return null;
+  const assetReason = String(raw.reason).startsWith("asset-");
+  if (assetReason !== (raw.schemaVersion === "social-asset-hold/1")) return null;
+  return { queueItemId: raw.queueItemId, reason: raw.reason as QueueHoldReason, checkedAt: raw.checkedAt };
+}
+
 function registryContext(registry: Record<string, unknown> | null, capabilities: Record<string, unknown> | null): { context: QueueRegistryContext; legacyMappings: QueueLegacyMapping[] } {
   const profiles = new Map<string, QueueRegistryContext["profiles"] extends ReadonlyMap<string, infer V> ? V : never>();
   for (const value of Array.isArray(registry?.profiles) ? registry.profiles : []) {
@@ -166,11 +203,13 @@ export async function readQueueEntries(root = queueRepositoryRoot()): Promise<{ 
 export async function readQueueState(root = queueRepositoryRoot()): Promise<QueueState> {
   const unavailable: string[] = [];
   const socialRoot = path.join(root, "state", "social");
-  const [queue, events, receipts, health, registry, capabilities, channels, ventures, globalPause, socialPause, profilePauses, connectionPauses, profileKills, connectionKills] = await Promise.all([
+  const [queue, events, receipts, health, assetHolds, publishHolds, registry, capabilities, channels, ventures, globalPause, socialPause, profilePauses, connectionPauses, profileKills, connectionKills] = await Promise.all([
     readQueueEntries(root),
     jsonFiles(path.join(socialRoot, "queue-events")),
     jsonFiles(path.join(socialRoot, "posts")),
     jsonFiles(path.join(socialRoot, "provider-health")),
+    jsonFiles(path.join(socialRoot, "asset-holds")),
+    jsonFiles(path.join(socialRoot, "publish-holds")),
     jsonConfig(root, "config/social-publisher-registry.json", unavailable),
     jsonConfig(root, "config/venture-capabilities.json", unavailable),
     jsonConfig(root, "config/channels.json", unavailable),
@@ -188,11 +227,15 @@ export async function readQueueState(root = queueRepositoryRoot()): Promise<Queu
     ...excludedNote("state/social/queue", queue.excluded),
     ...excludedNote("state/social/queue-events", events.excluded),
     ...excludedNote("state/social/posts", receipts.excluded),
-    ...excludedNote("state/social/provider-health", health.excluded)
+    ...excludedNote("state/social/provider-health", health.excluded),
+    ...excludedNote("state/social/asset-holds", assetHolds.excluded),
+    ...excludedNote("state/social/publish-holds", publishHolds.excluded)
   );
+  if (assetHolds.state === "unavailable") unavailable.push("state/social/asset-holds could not be listed");
+  if (publishHolds.state === "unavailable") unavailable.push("state/social/publish-holds could not be listed");
 
   const unreadable = queue.unreadable;
-  const dropped = { items: queue.dropped, events: 0, receipts: 0, health: 0 };
+  const dropped = { items: queue.dropped, events: 0, receipts: 0, health: 0, holds: 0 };
   const entries = queue.entries;
   const parsedEvents: SocialQueueEventRecord[] = [];
   for (const { value } of events.files) {
@@ -203,6 +246,13 @@ export async function readQueueState(root = queueRepositoryRoot()): Promise<Queu
   for (const { value } of receipts.files) {
     const receipt = value === undefined ? null : parseReceipt(value);
     if (receipt) parsedReceipts.push(receipt); else dropped.receipts += 1;
+  }
+  const holds = new Map<string, QueueHold>();
+  for (const { value } of [...assetHolds.files, ...publishHolds.files]) {
+    const hold = value === undefined ? null : parseHold(value);
+    if (!hold) { dropped.holds += 1; continue; }
+    const previous = holds.get(hold.queueItemId);
+    if (!previous || previous.checkedAt < hold.checkedAt) holds.set(hold.queueItemId, hold);
   }
   const latestHealth = new Map<string, ProviderHealthRecord>();
   for (const { value } of health.files) {
@@ -228,6 +278,7 @@ export async function readQueueState(root = queueRepositoryRoot()): Promise<Queu
     entries,
     events: parsedEvents.sort((left, right) => left.at.localeCompare(right.at)),
     receipts: parsedReceipts.sort((left, right) => left.attemptedAt.localeCompare(right.attemptedAt)),
+    holds,
     health: latestHealth,
     registry: context,
     legacyMappings,

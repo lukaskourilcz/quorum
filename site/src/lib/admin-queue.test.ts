@@ -103,6 +103,27 @@ describe("readAdminQueue", () => {
     });
   });
 
+  it("moves an approved item the publisher held to Held, and says why in fixed words", async () => {
+    const base = await root({ draft: false });
+    await writeJson(base, `state/social/queue/${DRAFT_FILE}`, await readQueueFixture("social-queue-item-v2-approved.valid.json"));
+    const hold = (schemaVersion: string, reason: string, checkedAt: string) => ({
+      schemaVersion, queueItemId: "ms-2026-09-26-devshark-en-linkedin", reason, checkedAt, publishingAuthorized: false,
+      // Provider text in the record never reaches the card.
+      detail: "Bearer secret-token from graph.threads.net {\"error\":1}"
+    });
+    await writeJson(base, `state/social/asset-holds/${DRAFT_FILE}`, hold("social-asset-hold/1", "asset-unreachable", "2026-09-26T07:30:00.000Z"));
+    await writeJson(base, `state/social/publish-holds/${DRAFT_FILE}`, hold("social-publish-hold/1", "publishing-quota-exhausted", "2026-09-26T07:45:00.000Z"));
+    await writeJson(base, "state/social/publish-holds/garbage.json", hold("social-publish-hold/1", "asset-unreachable", "2026-09-26T07:45:00.000Z"));
+    const snapshot = await readAdminQueue(base, { now });
+    const [item] = snapshot.items;
+    expect(item).toMatchObject({ status: "queued", group: "held", actions: { hold: true, reject: true, edit: true } });
+    // The newer of the two records speaks.
+    expect(item!.reason).toBe("Held before sending: the platform's publishing limit is full. The next publisher run inside the window tries again.");
+    expect(JSON.stringify(snapshot)).not.toContain("secret-token");
+    expect(snapshot.dropped.holds).toBe(1);
+    expect(snapshot.counts).toMatchObject({ scheduled: 0, held: 1 });
+  });
+
   it("names copy that promises a reward for engagement on the card, before the owner tries to approve", async () => {
     const base = await root({ draft: false });
     const quiz = parseQueueItemV2(await readQueueFixture())!;

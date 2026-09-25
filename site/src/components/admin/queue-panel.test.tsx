@@ -57,7 +57,7 @@ function snapshot(items: AdminQueueItemView[], overrides: Partial<AdminQueueSnap
     counts,
     ventures: [...new Map(items.map((entry) => [entry.ventureKey, entry.ventureLabel])).entries()].map(([id, label]) => ({ id, label, count: items.filter((entry) => entry.ventureKey === id).length })),
     unreadable: 0,
-    dropped: { items: 0, events: 0, receipts: 0, health: 0 },
+    dropped: { items: 0, events: 0, receipts: 0, health: 0, holds: 0 },
     unavailable: [],
     generatedAt: "2026-09-26T08:00:00.000Z",
     ...overrides
@@ -124,7 +124,7 @@ describe("the Queue panel", () => {
   });
 
   it("names unreadable queue files and an empty filtered view with a way back", () => {
-    const html = render(snapshot([item()], { unreadable: 1, dropped: { items: 2, events: 0, receipts: 0, health: 0 } }), { group: "waiting", venture: null, platform: "threads" });
+    const html = render(snapshot([item()], { unreadable: 1, dropped: { items: 2, events: 0, receipts: 0, health: 0, holds: 0 } }), { group: "waiting", venture: null, platform: "threads" });
     expect(html).toContain("3 files in the social queue could not be read");
     expect(html).toContain("No waiting posts match these filters.");
     expect(html).toContain("Clear filters");

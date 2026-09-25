@@ -16,12 +16,14 @@ provider verdict, the per-venture activation and the cadence before it touches a
 `site/src/lib/admin-queue.ts` (`readAdminQueue`) is the only reader. It reads
 `state/social/queue/*.json`: queue v2 items as they are, v1 items through the registry's
 `legacyQueueMappings`. Alongside the items it reads the post receipts under `state/social/posts/`,
-provider health, the pause and kill-switch files, and the owner's events under
-`state/social/queue-events/`. It returns bounded view models and two counts: `unreadable` (not
-JSON) and `dropped` (JSON that is not a queue item, event or receipt). It reads at most 2,000 files a
-directory, the last by name: queue items are named by date and events by timestamp, so those are the
-newest. A directory with more says how many it left out under `unavailable`. Nothing prunes closed
-items or events yet; `docs/NEEDED.md` carries that.
+provider health, the pause and kill-switch files, the owner's events under
+`state/social/queue-events/`, and the publisher's hold records under `state/social/asset-holds/`
+(`social-asset-hold/1`) and `state/social/publish-holds/` (`social-publish-hold/1`). It returns
+bounded view models and two counts: `unreadable` (not JSON) and `dropped` (JSON that is not a queue
+item, event, receipt, health record or hold). It reads at most 2,000 files a directory, the last by
+name: queue items are named by date and events by timestamp, so those are the newest. A directory
+with more says how many it left out under `unavailable`. Nothing prunes closed items or events yet;
+`docs/NEEDED.md` carries that.
 
 | Group | Items |
 | --- | --- |
@@ -30,12 +32,18 @@ items or events yet; `docs/NEEDED.md` carries that.
 | `sending` | `publishing` |
 | `sent` | `published`, with the receipt's permalink |
 | `failed` | `failed` and `needs_reconciliation`, with one sanitised reason and the next safe action |
-| `held` | `cancelled`, `expired`, any draft or approval whose window closed, and approved items behind a pause |
+| `held` | `cancelled`, `expired`, any draft or approval whose window closed, approved items behind a pause, and approved items the publisher held before sending, with the hold's reason in fixed words |
 
 The publisher treats as due only what an approval made `queued`, plus a legacy v1 draft whose
 checks all pass: DNESKAi's pack wrote those before the Queue existed, and they send once their
 connection is live, as they always would have. Their card says so and offers hold and reject. A v2
 draft is never due, so an unapproved sibling cannot hold up the approved post beside it.
+
+A hold record is the publisher's own: a frame that did not answer at its public URL, a full
+publishing limit, text longer than the platform takes, or a failed publishable check. Only its reason
+crosses to the card, in the Admin's words, never the record's detail; the newest record for the item
+speaks, a record that does not parse is counted under `dropped.holds`, and once the item is sent,
+failed or cancelled its old record is ignored.
 
 A connection that is not activated yet does not move an item out of `waiting` or `scheduled`. The
 card names it instead ("the LinkedIn connection is not activated yet"), so the owner can approve
