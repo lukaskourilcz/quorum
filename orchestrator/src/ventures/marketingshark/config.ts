@@ -37,6 +37,17 @@ export const FactSheet = z.object({
 export type FactSheet = z.infer<typeof FactSheet>;
 
 /**
+ * The languages a brand's carousel can be written in, in the order the room renders them.
+ *
+ * The room was bilingual from its founding. devShark ships English only since the product dropped
+ * Czech (quorum#568, finding 6 of the second handoff), so the language set is now the brand's to
+ * state rather than the room's to assume. The Czech path stays whole for a brand that names it.
+ */
+export const MARKETINGSHARK_LOCALES = ["cs", "en"] as const;
+export const MarketingSharkLocaleSchema = z.enum(MARKETINGSHARK_LOCALES);
+export type MarketingSharkLocale = z.infer<typeof MarketingSharkLocaleSchema>;
+
+/**
  * devShark is the one brand.
  *
  * A second, disabled brand sat here from the founding, pointed at StudyShark's geography bank.
@@ -51,6 +62,13 @@ export const Brand = z.object({
   productUrl: z.string().url(),
   /** The hook vertical the studio serves this brand's slide-1 lines from. */
   tone: z.literal("dev"),
+  /**
+   * What the writer writes, the renderer draws and the queue carries. English is always one of
+   * them: the LinkedIn caption and every channel's first item are English.
+   */
+  locales: z.array(MarketingSharkLocaleSchema).min(1).max(MARKETINGSHARK_LOCALES.length)
+    .refine((locales) => new Set(locales).size === locales.length, { message: "a language may be named once" })
+    .refine((locales) => locales.includes("en"), { message: "English is always written" }),
   questionBank: z.object({
     snapshotPath: z.string(),
     sourceRepo: z.string(),
@@ -84,6 +102,11 @@ export const MarketingSharkConfig = z.object({
   brands: z.array(Brand).length(1)
 });
 export type MarketingSharkConfig = z.infer<typeof MarketingSharkConfig>;
+
+/** The brand's languages in the room's own order, so every loop over them agrees. */
+export function brandLocales(brand: Pick<Brand, "locales">): MarketingSharkLocale[] {
+  return MARKETINGSHARK_LOCALES.filter((locale) => brand.locales.includes(locale));
+}
 
 export function enabledBrands(config: MarketingSharkConfig): Brand[] {
   return config.brands.filter((brand) => brand.enabled);

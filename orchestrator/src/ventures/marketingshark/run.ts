@@ -10,8 +10,8 @@ import { loadRuntimeBudgetLimits } from "../../portfolio/limits.js";
 import type { Stage } from "../../types.js";
 import { atomicWriteJson, readJson } from "../../state.js";
 import { loadQuestionBankSnapshot, truthSubjectOf, type NormalizedQuestion } from "./bank.js";
-import { enabledBrands, loadMarketingSharkConfig, type Brand, type MarketingSharkConfig } from "./config.js";
-import { runFitGate, runTruthGates, type GateViolation } from "./gates.js";
+import { brandLocales, enabledBrands, loadMarketingSharkConfig, type Brand, type MarketingSharkConfig, type MarketingSharkLocale } from "./config.js";
+import { runFitGate, runTruthGates, type GateViolation, type HookLines } from "./gates.js";
 import {
   EMPTY_LEDGER,
   MarketingSharkLedgerSchema,
@@ -23,7 +23,7 @@ import { assertHookAssignmentValid, assignPackHook, channelRecordFor, hookLineFo
 import { recordPost, writeHookChannels, type HookChannels } from "../../studio/hook-channels.js";
 import type { HookAssignment } from "../../contracts/hook-assignment.js";
 import type { Hook } from "@boardlessai/carousel-studio";
-import { ChumOutput, MarketingSharkPackage, packagePath, SLIDE_ROLES } from "./package.js";
+import { ChumOutput, inLocale, MarketingSharkPackage, packagePath, SLIDE_ROLES } from "./package.js";
 import { buildChumPacket, readCraftRules } from "./packet.js";
 import { readBrandTrendLines } from "./trends.js";
 import { buildQueueItems } from "./queue.js";
@@ -128,7 +128,8 @@ export async function planBrandDay(input: {
     date: input.date,
     itemId: question.id,
     vertical: input.brand.tone,
-    languages: ["en", "cs"],
+    // English first, as the assignment has always recorded it; Czech only for a brand that writes it.
+    languages: (["en", "cs"] as const).filter((language) => input.brand.locales.includes(language)),
     subject: {
       subject: {
         difficulty: subject.difficulty,
@@ -156,19 +157,19 @@ export async function planBrandDay(input: {
 /**
  * The hook line each locale's slide 1 must carry, or null when the pack falls back.
  *
- * Both languages come from the same assignment. There is one eligible set per pack, so slide 1 is
- * the same hook in EN and CS — only the string differs.
+ * Every language comes from the same assignment. There is one eligible set per pack, so slide 1 is
+ * the same hook in EN and CS — only the string differs. Czech only for a brand that writes it.
  */
 export function hookLinesFor(input: {
   hook: Hook | null;
   brand: Brand;
   question: NormalizedQuestion;
-}): { cs: string; en: string } | null {
+}): HookLines | null {
   if (!input.hook) return null;
   const topic = topicLabel(input.question.category);
-  const line = (language: "cs" | "en") =>
+  const line = (language: MarketingSharkLocale) =>
     hookLineFor({ hook: input.hook, vertical: input.brand.tone, language, topic })!;
-  return { cs: line("cs"), en: line("en") };
+  return { en: line("en"), ...(brandLocales(input.brand).includes("cs") ? { cs: line("cs") } : {}) };
 }
 
 /**
@@ -182,6 +183,7 @@ export function fixtureHookLines(plan: Pick<BrandDayPlan, "hook" | "question">, 
   const lines = hookLinesFor({ hook: plan.hook, brand, question: plan.question });
   return {
     hookA: lines?.en ?? plan.question.en.question,
+    // Unused for an English-only brand: fixtureChumOutput writes only the brand's languages.
     hookACs: lines?.cs ?? plan.question.cs?.question ?? plan.question.en.question
   };
 }
@@ -195,7 +197,7 @@ export function assemblePackage(input: {
   hook: Hook | null;
   alternate: Hook | null;
   output: ChumOutput;
-  rendered: { cs: RenderedRoleSlide[]; en: RenderedRoleSlide[] };
+  rendered: RenderedByLocale;
   summaryPaths: string[];
   spendUsd: number;
 }): MarketingSharkPackage {
@@ -206,40 +208,53 @@ export function assemblePackage(input: {
   const lines = hookLinesFor(input);
   const alternateLines = hookLinesFor({ ...input, hook: input.alternate });
 
-  const slides = (locale: "cs" | "en") =>
-    input.output.carousels[locale].slides.map((slide, index) => ({
+  const locales = brandLocales(input.brand);
+  const slides = (locale: MarketingSharkLocale) =>
+    inLocale(input.output.carousels, locale).slides.map((slide, index) => ({
       role: SLIDE_ROLES[index]!,
-      templateId: input.rendered[locale][index]!.templateId,
+      templateId: inLocale(input.rendered, locale)[index]!.templateId,
       // Slide 1 is the library's line, not the model's. The assignment is deterministic $0 code and
       // the copy it assigns is the copy that was linted, length-budgeted and gate-licensed; a
       // paraphrase would be none of those. On the `no-hook` fallback the template's own headline —
       // whatever CHUM wrote for the slide — renders instead.
-      headline: index === 0 && lines ? lines[locale] : slide.headline,
+      headline: index === 0 && lines?.[locale] !== undefined ? lines[locale]! : slide.headline,
       ...(slide.body ? { body: slide.body } : {}),
       alt: slide.alt
     }));
 
+  // Only the brand's languages reach the package. A reply that also wrote Czech for an English-only
+  // brand paid for it; nothing downstream reads it, so nothing keeps it.
+  const pick = <T>(values: { en: T; cs?: T | undefined }) =>
+    Object.fromEntries(locales.map((locale) => [locale, inLocale(values, locale)])) as { en: T; cs?: T };
+  const writesCzech = locales.includes("cs");
   return MarketingSharkPackage.parse({
-    schemaVersion: "marketingshark-package/1",
+    schemaVersion: "marketingshark-package/2",
     date: input.date,
     brandId: input.brand.id,
+    locales,
     question: { id: input.question.id, category: input.question.category, difficulty: input.question.difficulty },
     hooks: {
       a: {
         patternId: input.assignment.hookId ?? "no-hook",
         en: lines?.en ?? input.output.carousels.en.slides[0]!.headline,
-        cs: lines?.cs ?? input.output.carousels.cs.slides[0]!.headline
+        ...(writesCzech ? { cs: lines?.cs ?? inLocale(input.output.carousels, "cs").slides[0]!.headline } : {})
       },
       b: {
         patternId: input.alternate?.id ?? "none",
         en: alternateLines?.en ?? "",
-        cs: alternateLines?.cs ?? ""
+        ...(writesCzech ? { cs: alternateLines?.cs ?? "" } : {})
       }
     },
     hookAssignment: input.assignment,
-    carousels: { cs: { slides: slides("cs") }, en: { slides: slides("en") } },
-    descriptions: input.output.descriptions,
-    hashtags: input.output.hashtags,
+    carousels: Object.fromEntries(locales.map((locale) => [locale, { slides: slides(locale) }])),
+    descriptions: {
+      instagram: pick(input.output.descriptions.instagram),
+      threads: pick(input.output.descriptions.threads)
+    },
+    hashtags: {
+      instagram: pick(input.output.hashtags.instagram),
+      threads: pick(input.output.hashtags.threads)
+    },
     render: { engineVersion: engineVersion(), summaryPaths: input.summaryPaths },
     status: "draft",
     abRecord: {
@@ -261,7 +276,7 @@ export function assemblePackage(input: {
 export function buildRenderSummary(input: {
   date: string;
   brand: Brand;
-  locale: "cs" | "en";
+  locale: MarketingSharkLocale;
   rendered: RenderedRoleSlide[];
 }) {
   return {
@@ -361,12 +376,12 @@ export async function commitBrandDay(input: {
   ];
 }
 
-export function summaryPathsFor(date: string, brandId: string): { cs: string; en: string } {
-  return {
-    cs: `ventures/marketingshark/packages/${date}/${brandId}/render-cs.json`,
-    en: `ventures/marketingshark/packages/${date}/${brandId}/render-en.json`
-  };
+export function summaryPathFor(date: string, brandId: string, locale: MarketingSharkLocale): string {
+  return `ventures/marketingshark/packages/${date}/${brandId}/render-${locale}.json`;
 }
+
+/** One language's five rendered slides, for each language the brand writes. */
+export type RenderedByLocale = { en: RenderedRoleSlide[]; cs?: RenderedRoleSlide[] };
 
 /**
  * One brand's morning, from the already-made plan through the one paid call to the committed
@@ -489,12 +504,13 @@ export async function runBrandDay(input: {
     };
   }
 
-  let rendered: { cs: RenderedRoleSlide[]; en: RenderedRoleSlide[] };
+  const locales = brandLocales(brand);
+  let rendered: RenderedByLocale;
   try {
-    rendered = {
-      cs: renderCarousel({ brand, locale: "cs", copy: { slides: output.carousels.cs.slides.map(withRole) }, question: plan.question }),
-      en: renderCarousel({ brand, locale: "en", copy: { slides: output.carousels.en.slides.map(withRole) }, question: plan.question })
-    };
+    const written = output;
+    const draw = (locale: MarketingSharkLocale) =>
+      renderCarousel({ brand, locale, copy: { slides: inLocale(written.carousels, locale).slides.map(withRole) }, question: plan.question });
+    rendered = { en: draw("en"), ...(locales.includes("cs") ? { cs: draw("cs") } : {}) };
   } catch (error) {
     return {
       outcome: { status: "aborted", brandId: brand.id, reason: "render-failed", detail: message(error), spendUsd },
@@ -507,7 +523,7 @@ export async function runBrandDay(input: {
   // it had to cut and the renderer surfaces it as truncatedSlots; nothing read it, so copy that
   // cleared every truth gate could still ship with its last line replaced by an ellipsis. The
   // gates bound what the model writes; this bounds what the canvas can actually hold.
-  const clipped = [...rendered.cs, ...rendered.en]
+  const clipped = locales.flatMap((locale) => inLocale(rendered, locale))
     .flatMap((slide) => slide.truncatedSlots.map((slot) => `${slide.locale}/${slide.role}:${slot}`));
   if (clipped.length > 0) {
     return {
@@ -523,7 +539,10 @@ export async function runBrandDay(input: {
     };
   }
 
-  const summaryPaths = summaryPathsFor(date, brand.id);
+  const summaries = locales.map((locale) => ({
+    relative: summaryPathFor(date, brand.id, locale),
+    body: buildRenderSummary({ date, brand, locale, rendered: inLocale(rendered, locale) })
+  }));
   const built = assemblePackage({
     date,
     brand,
@@ -533,7 +552,7 @@ export async function runBrandDay(input: {
     alternate: plan.alternate,
     output,
     rendered,
-    summaryPaths: [summaryPaths.cs, summaryPaths.en].map((relative) => `state/${relative}`),
+    summaryPaths: summaries.map((summary) => `state/${summary.relative}`),
     spendUsd
   });
 
@@ -542,10 +561,7 @@ export async function runBrandDay(input: {
     date,
     brand,
     built,
-    summaries: [
-      { relative: summaryPaths.cs, body: buildRenderSummary({ date, brand, locale: "cs", rendered: rendered.cs }) },
-      { relative: summaryPaths.en, body: buildRenderSummary({ date, brand, locale: "en", rendered: rendered.en }) }
-    ],
+    summaries,
     ledger: input.ledger,
     selection: plan.selection,
     assignment: plan.assignment,
@@ -570,7 +586,7 @@ export async function runBrandDay(input: {
   };
 }
 
-function withRole(slide: ChumOutput["carousels"]["cs"]["slides"][number], index: number) {
+function withRole(slide: ChumOutput["carousels"]["en"]["slides"][number], index: number) {
   return {
     role: SLIDE_ROLES[index]!,
     templateId: "",
@@ -607,7 +623,7 @@ export function fixtureChumOutput(input: { brand: Brand; question: NormalizedQue
   const answer = question.en.options[question.correctIndex] ?? "";
   const letter = String.fromCharCode(65 + question.correctIndex);
   const code = (question.en.question.match(/```[a-z0-9+#-]*\n([\s\S]*?)```/iu)?.[1] ?? "").replace(/\s+$/u, "");
-  const slides = (locale: "cs" | "en") => ({
+  const slides = (locale: MarketingSharkLocale) => ({
     slides: [
       { role: "hook" as const, headline: locale === "cs" ? input.hookACs : input.hookA, alt: `Slide 1: fixture hook (${locale})` },
       { role: "context" as const, headline: (locale === "cs" && question.cs?.question ? question.cs.question : question.en.question).split("\n")[0]!.slice(0, 110), ...(code ? { body: code } : {}), alt: `Slide 2: fixture question (${locale})` },
@@ -616,18 +632,20 @@ export function fixtureChumOutput(input: { brand: Brand; question: NormalizedQue
       { role: "footer" as const, headline: brand.slide5[locale], alt: `Slide 5: fixture footer (${locale})` }
     ]
   });
+  // The brand's languages only, as a live reply is asked to write them.
+  const written = <T>(value: (locale: MarketingSharkLocale) => T) =>
+    Object.fromEntries(brandLocales(brand).map((locale) => [locale, value(locale)])) as { en: T; cs?: T };
   return ChumOutput.parse({
-    carousels: { cs: slides("cs"), en: slides("en") },
+    carousels: written(slides),
     descriptions: {
-      instagram: {
-        cs: `Fixture. Otázka dne z ${brand.displayName}. Odpověď je v karuselu.`,
-        en: `Fixture. Question of the day from ${brand.displayName}. The answer is in the carousel.`
-      },
-      threads: { cs: "Fixture. Otázka dne.", en: "Fixture. Question of the day." }
+      instagram: written((locale) => locale === "cs"
+        ? `Fixture. Otázka dne z ${brand.displayName}. Odpověď je v karuselu.`
+        : `Fixture. Question of the day from ${brand.displayName}. The answer is in the carousel.`),
+      threads: written((locale) => locale === "cs" ? "Fixture. Otázka dne." : "Fixture. Question of the day.")
     },
     hashtags: {
-      instagram: { cs: brand.hashtags.instagram.cs, en: brand.hashtags.instagram.en },
-      threads: { cs: [brand.hashtags.threadsTopic.cs], en: [brand.hashtags.threadsTopic.en] }
+      instagram: written((locale) => brand.hashtags.instagram[locale]),
+      threads: written((locale) => [brand.hashtags.threadsTopic[locale]])
     }
   });
 }
@@ -713,7 +731,7 @@ export async function runMarketingSharkCycle(input: {
           agent: "CHUM",
           provider: chum.provider,
           model: chum.model,
-          system: "You are CHUM, the marketingShark bilingual carousel copywriter. Return only the JSON object you were asked for.",
+          system: "You are CHUM, the marketingShark carousel copywriter. Return only the JSON object you were asked for.",
           input: packet,
           maxOutputTokens: chum.maxOutputTokens,
           // The route says whether the cap may be spent thinking. It is the reason the
@@ -826,10 +844,10 @@ export function buildMeetingRecord(input: {
     fixture: input.dry,
     status: input.dry ? "PLAN" : "HELD",
     stage: input.stage,
-    operatingBrief: "Turn one selected question into one Czech and one English five-slide carousel per enabled brand, as a draft behind the approval queue.",
+    operatingBrief: "Turn one selected question into one five-slide carousel per language each enabled brand writes, as a draft behind the approval queue.",
     participantReasons: [
       { agent: "MAKO", reason: "directs the venture and chairs the bounded room", participated: true },
-      { agent: "CHUM", reason: "writes the day's bilingual copy", participated: drafted.length > 0 },
+      { agent: "CHUM", reason: "writes the day's copy in each brand's languages", participated: drafted.length > 0 },
       { agent: "AUDIT", reason: "serves the veto seat", participated: true }
     ],
     ledger: { estimatedCycleUsd: input.envelopeUsd, actualCycleUsd: input.spendUsd, monthAllInUsd: input.monthAllInUsd, monthCapUsd: input.monthCapUsd },
@@ -858,7 +876,7 @@ export function buildMeetingRecord(input: {
         ? "Deterministic dry room. The reply is a labeled fixture and no provider was contacted."
         : "Live bounded room. One model call per enabled brand, and the question, hooks, templates and slide-5 line were all decided in code before it.",
       turns: [
-        { agent: "MAKO", mode: "gavel", sentAt: times[0], text: "One question, one Czech and one English carousel per enabled brand." },
+        { agent: "MAKO", mode: "gavel", sentAt: times[0], text: "One question, one carousel per language each enabled brand writes." },
         { agent: "CHUM", mode: "statement", sentAt: times[1], text: summary },
         { agent: "AUDIT", mode: "statement", sentAt: times[2], text: "Truth gates ran on every returned draft. Nothing was published, queued or scheduled." },
         { agent: "MAKO", mode: "close", sentAt: times[3], text: summary }

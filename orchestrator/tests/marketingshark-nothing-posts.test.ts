@@ -52,7 +52,8 @@ describe("marketingShark cannot post", () => {
     const brand = enabledBrands(config)[0]!;
     const items = buildQueueItems({ built, brand, now: new Date("2026-08-08T07:00:00.000Z") });
 
-    expect(items).toHaveLength(4);
+    // One English item per channel: devShark writes English only (quorum#568).
+    expect(items).toHaveLength(2);
     for (const { item } of items) {
       expect(item.status).toBe("draft");
       expect(item.venture).toBe("marketingshark");
@@ -129,9 +130,9 @@ describe("marketingShark cannot post", () => {
       }) as unknown as typeof fetch
     });
 
-    // Four items on disk, and not one of them due: the venture owns no activation record, so the
+    // Two items on disk, and not one of them due: the venture owns no activation record, so the
     // runner never considers it. Nothing was published and nothing touched the network.
-    expect(report.queueItems).toBe(4);
+    expect(report.queueItems).toBe(2);
     expect(report.published).toBe(0);
     expect(fetched).toBe(0);
   });

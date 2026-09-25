@@ -4,7 +4,7 @@ import { liveTemplateByReference, readLibrary, renderCarouselSlideSvg, type Hook
 import { beforeAll, describe, expect, it } from "vitest";
 import { hookLineFor } from "../src/studio/hook-brain.js";
 import { fencedBlocks, QuestionBankSnapshotSchema, type NormalizedQuestion } from "../src/ventures/marketingshark/bank.js";
-import { loadMarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
+import { brandLocales, loadMarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
 import { runFitGate } from "../src/ventures/marketingshark/gates.js";
 import { ChumOutput, SLIDE_ROLES, type CarouselCopy } from "../src/ventures/marketingshark/package.js";
 import {
@@ -23,19 +23,24 @@ import { repoRoot } from "../src/paths.js";
 // quorum#556, step 4: the regression that would have caught 16 to 24 September 2026, when every
 // devShark package died at render with "slides were clipped to fit". It takes the longest question
 // of every category the room can be handed, fills every slot the writer owns to the limit the
-// packet states, renders both languages through the brand's live template map, and requires that
-// nothing is clipped. A template, font or template-map change that makes the packet's promise false
-// fails here, for $0, instead of in the 07:00 room after a paid call.
+// packet states, renders every language the brand writes through its live template map, and
+// requires that nothing is clipped. A template, font or template-map change that makes the packet's
+// promise false fails here, for $0, instead of in the 07:00 room after a paid call.
+//
+// devShark writes English only since quorum#568. The same checks run for a bilingual devShark as
+// well, because the Czech path stays available to a brand that names it and must keep its promise.
 
 const LOCALES = ["cs", "en"] as const;
 type Locale = (typeof LOCALES)[number];
 
 let brand: Brand;
+let shipped: Brand;
 let questions: NormalizedQuestion[];
 let hooks: readonly Hook[];
 
 beforeAll(async () => {
-  brand = (await loadMarketingSharkConfig()).brands.find((candidate) => candidate.id === "devshark")!;
+  shipped = (await loadMarketingSharkConfig()).brands.find((candidate) => candidate.id === "devshark")!;
+  brand = shipped;
   const snapshot = QuestionBankSnapshotSchema.parse(
     JSON.parse(await readFile(path.join(repoRoot, brand.questionBank.snapshotPath), "utf8"))
   );
@@ -140,7 +145,7 @@ function replyAtTheLimits(question: NormalizedQuestion): ChumOutput {
 
 function copyOf(output: ChumOutput, locale: Locale): CarouselCopy {
   return {
-    slides: output.carousels[locale].slides.map((slide, index) => ({
+    slides: output.carousels[locale]!.slides.map((slide, index) => ({
       role: SLIDE_ROLES[index]!,
       templateId: "",
       headline: slide.headline,
@@ -150,25 +155,32 @@ function copyOf(output: ChumOutput, locale: Locale): CarouselCopy {
   };
 }
 
-/** Every clipped slot of both carousels, named `locale/role:slot` as the room's own record names them. */
+/** Every clipped slot of the brand's carousels, named `locale/role:slot` as the room's own record names them. */
 function clippedSlots(output: ChumOutput, question: NormalizedQuestion): string[] {
-  return LOCALES.flatMap((locale) => renderCarousel({ brand, locale, copy: copyOf(output, locale), question })
+  return brandLocales(brand).flatMap((locale) => renderCarousel({ brand, locale, copy: copyOf(output, locale), question })
     .flatMap((slide) => slide.truncatedSlots.map((slot) => `${locale}/${slide.role}:${slot}`)));
 }
 
-describe("the devShark carousel on the canvas (quorum#556)", () => {
+describe.each([
+  ["English only, as shipped", () => shipped],
+  ["bilingual", () => ({ ...shipped, locales: ["cs", "en"] }) as Brand]
+])("the devShark carousel on the canvas (quorum#556), %s", (_label, variant) => {
+  beforeAll(() => {
+    brand = variant();
+  });
+
   it("keeps a selectable question in every category of the bank", () => {
     const categories = [...new Set(questions.map((question) => question.category))].sort();
     expect([...longestSelectablePerCategory().keys()].sort()).toEqual(categories);
   });
 
-  it("renders the longest selectable question of every category with no clipped slot, at the packet's limits, in both languages", () => {
+  it("renders the longest selectable question of every category with no clipped slot, at the packet's limits, in every language it writes", () => {
     const longest = longestSelectablePerCategory();
     for (const [category, question] of longest) {
       const output = replyAtTheLimits(question);
       // The copy really is at the edge: every writer slot within one word of its limit.
-      for (const locale of LOCALES) {
-        const [, context, reveal, why] = output.carousels[locale].slides;
+      for (const locale of brandLocales(brand)) {
+        const [, context, reveal, why] = output.carousels[locale]!.slides;
         expect(context!.headline.length, `${category} ${locale} question line`).toBeGreaterThan(slotBudget(templateIdFor("context", brand, question), "question-line").maxChars * 0.8);
         expect(reveal!.body!.length, `${category} ${locale} reveal label`).toBeGreaterThan(slotBudget("stat-highlight", "stat-label").maxChars * 0.8);
         expect(why!.body!.length, `${category} ${locale} why quote`).toBeGreaterThan(slotBudget("quote-card", "quote").maxChars * 0.8);
@@ -194,6 +206,12 @@ describe("the devShark carousel on the canvas (quorum#556)", () => {
       });
       expect({ category, id: question.id, clipped: clippedSlots(output, question) }).toEqual({ category, id: question.id, clipped: [] });
     }
+  });
+});
+
+describe("the devShark templates' writer slots", () => {
+  beforeAll(() => {
+    brand = shipped;
   });
 
   it("holds each writer slot's stated budget of the bank's own prose, so the packet's numbers are the canvas's", () => {

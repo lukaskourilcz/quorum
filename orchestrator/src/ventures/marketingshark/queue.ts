@@ -1,6 +1,6 @@
 import { QueueItemSchema, queuePayloadHash, type QueueItem } from "../../social/queue.js";
-import type { Brand } from "./config.js";
-import type { MarketingSharkPackage } from "./package.js";
+import { brandLocales, type Brand } from "./config.js";
+import { inLocale, type MarketingSharkPackage } from "./package.js";
 
 export function queueItemPath(date: string, brandId: string, locale: "cs" | "en", channel: "instagram" | "threads"): string {
   return `social/queue/${date}-${brandId}-${locale}-${channel}.json`;
@@ -38,11 +38,11 @@ export function buildQueueItems(input: {
   const notBefore = new Date(`${built.date}T06:00:00.000Z`).toISOString();
   const notAfter = new Date(`${built.date}T21:00:00.000Z`).toISOString();
 
-  return (["cs", "en"] as const).flatMap((locale) =>
+  return brandLocales(brand).flatMap((locale) =>
     (["instagram", "threads"] as const).map((channel) => {
       const text = channel === "instagram"
-        ? `${built.descriptions.instagram[locale]}\n\n${built.hashtags.instagram[locale].join(" ")}`
-        : built.descriptions.threads[locale];
+        ? `${inLocale(built.descriptions.instagram, locale)}\n\n${inLocale(built.hashtags.instagram, locale).join(" ")}`
+        : inLocale(built.descriptions.threads, locale);
       const draft = {
         schemaVersion: 1 as const,
         id: `ms-${built.date}-${brand.id}-${locale}-${channel}`,
@@ -65,7 +65,7 @@ export function buildQueueItems(input: {
         },
         content: {
           text,
-          altText: built.carousels[locale].slides.map((slide) => slide.alt).join(" "),
+          altText: inLocale(built.carousels, locale).slides.map((slide) => slide.alt).join(" "),
           assetPaths: [],
           factualClaimRefs: [`marketingshark:question:${built.question.id}`],
           rendererVersion: "carousel-studio-1" as const,

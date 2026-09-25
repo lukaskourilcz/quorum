@@ -1,6 +1,6 @@
 import { fencedBlocks, type NormalizedQuestion } from "./bank.js";
-import type { Brand } from "./config.js";
-import { SLIDE_ROLES, type ChumOutput } from "./package.js";
+import { brandLocales, type Brand, type MarketingSharkLocale } from "./config.js";
+import { SLIDE_ROLES, type CarouselCopy, type ChumOutput } from "./package.js";
 import { correctLetter, fitViolations, type FitViolation } from "./render.js";
 
 /**
@@ -35,6 +35,12 @@ export const LIMITS = {
   threadsTotalChars: 500
 } as const;
 
+/** The assigned slide-1 line per language: English always, Czech for a brand that writes it. */
+export interface HookLines {
+  en: string;
+  cs?: string;
+}
+
 export interface GateViolation {
   gate: string;
   locale: "cs" | "en" | "both";
@@ -63,7 +69,7 @@ export function runTruthGates(input: {
   brand: Brand;
   question: NormalizedQuestion;
   /** The assigned hook's line per locale, or null when the pack takes its `no-hook` fallback. */
-  hookLines: { cs: string; en: string } | null;
+  hookLines: HookLines | null;
 }): GateViolation[] {
   const { output, brand, question } = input;
   const violations: GateViolation[] = [];
@@ -81,8 +87,19 @@ export function runTruthGates(input: {
     ...(question.cs?.options ?? [])
   ].join("\n");
 
-  for (const locale of ["cs", "en"] as const) {
-    const slides = output.carousels[locale].slides;
+  for (const locale of brandLocales(brand)) {
+    const carousel = output.carousels[locale];
+    const instagramText = output.descriptions.instagram[locale];
+    const threadsText = output.descriptions.threads[locale];
+    const instagramTags = output.hashtags.instagram[locale];
+    const threadsTags = output.hashtags.threads[locale];
+    if (!carousel || instagramText === undefined || threadsText === undefined || !instagramTags || !threadsTags) {
+      // A language the brand writes and the reply left out. English is always required; Czech only
+      // for a brand that names it.
+      add("locale-missing", locale, `the ${locale} carousel, descriptions and hashtags are all required for ${brand.displayName}`);
+      continue;
+    }
+    const slides = carousel.slides;
 
     if (slides.map((slide) => slide.role).join(",") !== SLIDE_ROLES.join(",")) {
       add("slide-roles", locale, `slides must be ${SLIDE_ROLES.join(", ")} in order`);
@@ -94,7 +111,7 @@ export function runTruthGates(input: {
     // Slide 1 is the library's line, checked the way the brand's slide-5 line is: verbatim or not
     // at all. The char budget is the hook lint's job upstream — by the time a line reaches here it
     // has already cleared EN 58 / CS 66, and re-capping it at 80 here would only hide a mismatch.
-    if (input.hookLines && hook!.headline.trim() !== input.hookLines[locale].trim()) {
+    if (input.hookLines && hook!.headline.trim() !== (input.hookLines[locale] ?? "").trim()) {
       add("hook-verbatim", locale, "slide 1 does not carry the assigned hook line unchanged");
     }
     if (!input.hookLines && hook!.headline.length > LIMITS.hookChars) {
@@ -164,33 +181,32 @@ export function runTruthGates(input: {
       }
     }
 
-    const description = output.descriptions.instagram[locale];
+    const description = instagramText;
     const beforeHashtags = description.split(/(?=#)/u)[0] ?? description;
     if (beforeHashtags.length > LIMITS.instagramBeforeHashtags) {
       add("instagram-length", locale, `${beforeHashtags.length} characters before hashtags, cap is ${LIMITS.instagramBeforeHashtags}`);
     }
-    if (output.descriptions.threads[locale].length > LIMITS.threadsChars) {
-      add("threads-length", locale, `${output.descriptions.threads[locale].length} characters, cap is ${LIMITS.threadsChars}`);
+    if (threadsText.length > LIMITS.threadsChars) {
+      add("threads-length", locale, `${threadsText.length} characters, cap is ${LIMITS.threadsChars}`);
     }
     // The schema caps the stored field, and the stored Instagram field is the description with its
     // hashtags appended -- so the cap has to be measured on that, not on the description alone.
-    const instagramStored = `${description}\n\n${output.hashtags.instagram[locale].join(" ")}`;
+    const instagramStored = `${description}\n\n${instagramTags.join(" ")}`;
     if (instagramStored.length > LIMITS.instagramTotalChars) {
       add("instagram-total", locale, `${instagramStored.length} characters with hashtags, schema cap is ${LIMITS.instagramTotalChars}`);
     }
-    if (output.descriptions.threads[locale].length > LIMITS.threadsTotalChars) {
-      add("threads-total", locale, `${output.descriptions.threads[locale].length} characters, schema cap is ${LIMITS.threadsTotalChars}`);
+    if (threadsText.length > LIMITS.threadsTotalChars) {
+      add("threads-total", locale, `${threadsText.length} characters, schema cap is ${LIMITS.threadsTotalChars}`);
     }
 
-    const instagramTags = output.hashtags.instagram[locale];
     if (instagramTags.length < LIMITS.instagramHashtagsMin || instagramTags.length > LIMITS.instagramHashtagsMax) {
       add("instagram-hashtags", locale, `${instagramTags.length} hashtags, allowed ${LIMITS.instagramHashtagsMin}-${LIMITS.instagramHashtagsMax}`);
     }
     if (instagramTags.some((tag) => !tag.startsWith("#"))) {
       add("instagram-hashtags", locale, "every Instagram hashtag must start with #");
     }
-    if (output.hashtags.threads[locale].length !== 1) {
-      add("threads-topic", locale, `Threads carries one topic tag, received ${output.hashtags.threads[locale].length}`);
+    if (threadsTags.length !== 1) {
+      add("threads-topic", locale, `Threads carries one topic tag, received ${threadsTags.length}`);
     }
   }
 
@@ -212,16 +228,22 @@ export function runFitGate(input: {
   brand: Brand;
   question: NormalizedQuestion;
 }): GateViolation[] {
-  const copy = (locale: "cs" | "en") => ({
-    slides: input.output.carousels[locale].slides.map((slide, index) => ({
-      role: SLIDE_ROLES[index]!,
-      templateId: "",
-      headline: slide.headline,
-      ...(slide.body ? { body: slide.body } : {}),
-      alt: slide.alt
-    }))
-  });
-  return fitViolations({ brand: input.brand, question: input.question, copy: { cs: copy("cs"), en: copy("en") } })
+  const copy: Partial<Record<MarketingSharkLocale, CarouselCopy>> = {};
+  for (const locale of brandLocales(input.brand)) {
+    const carousel = input.output.carousels[locale];
+    // A missing language is the truth gates' violation to report; the canvas has nothing to draw.
+    if (!carousel) continue;
+    copy[locale] = {
+      slides: carousel.slides.map((slide, index) => ({
+        role: SLIDE_ROLES[index]!,
+        templateId: "",
+        headline: slide.headline,
+        ...(slide.body ? { body: slide.body } : {}),
+        alt: slide.alt
+      }))
+    };
+  }
+  return fitViolations({ brand: input.brand, question: input.question, copy })
     .map((violation) => ({
       gate: "slot-fit",
       locale: violation.locale,

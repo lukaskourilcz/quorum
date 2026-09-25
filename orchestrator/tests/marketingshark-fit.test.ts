@@ -65,7 +65,7 @@ function reply(brand: Brand, reveal: { headline: string; body?: string }, why = 
 
 function copyOf(output: ChumOutput, locale: "cs" | "en") {
   return {
-    slides: output.carousels[locale].slides.map((slide, index) => ({
+    slides: output.carousels[locale]!.slides.map((slide, index) => ({
       role: SLIDE_ROLES[index]!,
       templateId: "",
       headline: slide.headline,
@@ -142,7 +142,7 @@ describe("a context slide that carries code", () => {
 
   function withContextBody(output: ChumOutput, body: string): ChumOutput {
     const carousel = (locale: "cs" | "en") => ({
-      slides: output.carousels[locale].slides.map((slide) => (slide.role === "context" ? { ...slide, body } : slide))
+      slides: output.carousels[locale]!.slides.map((slide) => (slide.role === "context" ? { ...slide, body } : slide))
     });
     return ChumOutput.parse({ ...output, carousels: { cs: carousel("cs"), en: carousel("en") } });
   }

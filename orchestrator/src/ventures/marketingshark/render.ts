@@ -8,7 +8,7 @@ import {
   type CarouselTemplate
 } from "@boardlessai/carousel-studio";
 import { fencedBlocks, type NormalizedQuestion } from "./bank.js";
-import type { Brand } from "./config.js";
+import { brandLocales, type Brand, type MarketingSharkLocale } from "./config.js";
 import { SLIDE_ROLES, type CarouselCopy, type SlideRole } from "./package.js";
 
 /** Instagram's portrait canvas: the format a five-slide carousel is actually read in. */
@@ -216,7 +216,7 @@ const CODE_OWNED_SLOTS: ReadonlySet<string> = new Set(["code-block", "options", 
 export function codeOwnedSlotsFit(brand: Brand, question: NormalizedQuestion): boolean {
   const templateId = templateIdFor("context", brand, question);
   // Pure in the brand, the question and the template, so one process answers each question once.
-  const key = `${brand.id}\u0000${templateId}\u0000${question.id}\u0000${question.en.options.join("\u0001")}\u0000${question.cs?.options?.join("\u0001") ?? ""}`;
+  const key = `${brand.id}\u0000${brandLocales(brand).join(",")}\u0000${templateId}\u0000${question.id}\u0000${question.en.options.join("\u0001")}\u0000${question.cs?.options?.join("\u0001") ?? ""}`;
   const known = codeOwnedFit.get(key);
   if (known !== undefined) return known;
   const fits = codeOwnedSlotsFitUncached(brand, question, templateId);
@@ -229,7 +229,9 @@ const codeOwnedFit = new Map<string, boolean>();
 function codeOwnedSlotsFitUncached(brand: Brand, question: NormalizedQuestion, templateId: string): boolean {
   const template = liveTemplateByReference(templateId, liveVersionOf(templateId));
   const code = fencedBlocks(`${question.en.introduction ?? ""}\n${question.en.question}`).join("\n\n");
-  for (const locale of ["cs", "en"] as const) {
+  // Only the languages the brand writes: an overflowing Czech option is no reason to skip a
+  // question for a brand that never renders Czech.
+  for (const locale of brandLocales(brand)) {
     const rendered = renderCarouselSlideSvg({
       template,
       brand: brandTokensFor(brand),
@@ -300,13 +302,15 @@ export interface FitViolation {
 export function fitViolations(input: {
   brand: Brand;
   question: NormalizedQuestion;
-  copy: Record<"cs" | "en", CarouselCopy>;
+  copy: Partial<Record<MarketingSharkLocale, CarouselCopy>>;
 }): FitViolation[] {
   const violations: FitViolation[] = [];
-  for (const locale of ["cs", "en"] as const) {
-    const rendered = renderCarousel({ brand: input.brand, locale, copy: input.copy[locale], question: input.question });
+  for (const locale of brandLocales(input.brand)) {
+    const localeCopy = input.copy[locale];
+    if (!localeCopy) continue;
+    const rendered = renderCarousel({ brand: input.brand, locale, copy: localeCopy, question: input.question });
     for (const slide of rendered) {
-      const copy = input.copy[locale].slides[SLIDE_ROLES.indexOf(slide.role)];
+      const copy = localeCopy.slides[SLIDE_ROLES.indexOf(slide.role)];
       for (const slot of slide.truncatedSlots) {
         violations.push({
           role: slide.role,

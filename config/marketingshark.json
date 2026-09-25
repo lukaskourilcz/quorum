@@ -11,6 +11,9 @@
       "displayName": "devShark",
       "productUrl": "https://devshark.app",
       "tone": "dev",
+      "locales": [
+        "en"
+      ],
       "questionBank": {
         "snapshotPath": "state/marketingshark/question-banks/devshark.json",
         "sourceRepo": "lukaskourilcz/react-express-app",

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { NormalizedQuestionSchema, type NormalizedQuestion } from "../src/ventures/marketingshark/bank.js";
 import { loadMarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
 import { fencedBlocks, runTruthGates, violationReport } from "../src/ventures/marketingshark/gates.js";
-import { buildChumPacket, OUTPUT_SHAPE, readCraftRules } from "../src/ventures/marketingshark/packet.js";
+import { buildChumPacket, outputShape, readCraftRules } from "../src/ventures/marketingshark/packet.js";
 import { ChumOutput } from "../src/ventures/marketingshark/package.js";
 
 const CODE = "const [value, setValue] = useState(initial);";
@@ -31,6 +31,14 @@ async function devshark(): Promise<Brand> {
   return config.brands.find((candidate) => candidate.id === "devshark")!;
 }
 
+/**
+ * devShark writes English only (quorum#568). The Czech path stays for a brand that names it, and
+ * these tests hold it to the same gates by giving devShark both languages.
+ */
+async function bilingual(): Promise<Brand> {
+  return { ...(await devshark()), locales: ["cs", "en"] };
+}
+
 function output(brand: Brand, overrides: Partial<ChumOutput> = {}): ChumOutput {
   const slides = (locale: "cs" | "en") => ({
     slides: [
@@ -57,7 +65,7 @@ function output(brand: Brand, overrides: Partial<ChumOutput> = {}): ChumOutput {
 
 describe("the shape CHUM must return", () => {
   it("requires the five roles in the order the renderer assumes", async () => {
-    const brand = await devshark();
+    const brand = await bilingual();
     const valid = output(brand);
     expect(ChumOutput.safeParse(valid).success).toBe(true);
 
@@ -71,17 +79,33 @@ describe("the shape CHUM must return", () => {
 
     // Same five roles, wrong order: also refused, because position is what the renderer trusts.
     const reordered = structuredClone(valid) as typeof valid;
-    const [first, second] = [reordered.carousels.cs.slides[0]!, reordered.carousels.cs.slides[1]!];
-    reordered.carousels.cs.slides[0] = second;
-    reordered.carousels.cs.slides[1] = first;
+    const [first, second] = [reordered.carousels.cs!.slides[0]!, reordered.carousels.cs!.slides[1]!];
+    reordered.carousels.cs!.slides[0] = second;
+    reordered.carousels.cs!.slides[1] = first;
     expect(ChumOutput.safeParse(reordered).success).toBe(false);
   });
 });
 
 describe("marketingShark truth gates", () => {
   it("passes copy that is inside every cap and true of the question", async () => {
-    const brand = await devshark();
+    const brand = await bilingual();
     expect(runTruthGates({ output: output(brand), brand, question, hookLines: HOOK_LINES })).toEqual([]);
+  });
+
+  it("gates devShark in English only, and a bilingual brand in both languages", async () => {
+    const english = await devshark();
+    expect(english.locales).toEqual(["en"]);
+    const { cs: _carousel, ...carousels } = output(english).carousels;
+    const englishOnly = ChumOutput.parse({
+      carousels,
+      descriptions: { instagram: { en: "Question of the day. The answer is in the carousel." }, threads: { en: "What does useState return?" } },
+      hashtags: { instagram: { en: ["#webdev", "#programming", "#codingquiz"] }, threads: { en: ["webdev"] } }
+    });
+    expect(runTruthGates({ output: englishOnly, brand: english, question, hookLines: { en: HOOK_LINES.en } })).toEqual([]);
+
+    // The same reply for a brand that writes Czech is missing a language, and the retry says so.
+    const violations = runTruthGates({ output: englishOnly, brand: await bilingual(), question, hookLines: HOOK_LINES });
+    expect(violations).toEqual([expect.objectContaining({ gate: "locale-missing", locale: "cs" })]);
   });
 
   it("refuses a footer that edited the brand's line", async () => {
@@ -116,9 +140,9 @@ describe("marketingShark truth gates", () => {
   });
 
   it("refuses an unfilled pattern slot reaching a slide", async () => {
-    const brand = await devshark();
+    const brand = await bilingual();
     const unfilled = output(brand);
-    unfilled.carousels.cs.slides[0]!.headline = "Používáš {topic} každý den.";
+    unfilled.carousels.cs!.slides[0]!.headline = "Používáš {topic} každý den.";
 
     const violations = runTruthGates({ output: unfilled, brand, question, hookLines: HOOK_LINES });
     expect(violations.map((violation) => violation.gate)).toContain("slot-filled");
@@ -164,10 +188,10 @@ describe("marketingShark truth gates", () => {
   });
 
   it("leaves the hook slide to the model only on the no-hook fallback", async () => {
-    const brand = await devshark();
+    const brand = await bilingual();
     const own = output(brand);
     own.carousels.en.slides[0]!.headline = "What does useState actually give you?";
-    own.carousels.cs.slides[0]!.headline = "Co vlastně useState vrací?";
+    own.carousels.cs!.slides[0]!.headline = "Co vlastně useState vrací?";
 
     expect(runTruthGates({ output: own, brand, question, hookLines: null })).toEqual([]);
     expect(runTruthGates({ output: own, brand, question, hookLines: HOOK_LINES })
@@ -189,7 +213,7 @@ describe("marketingShark truth gates", () => {
 
 describe("marketingShark CHUM packet", () => {
   it("hands over the decision already made and never asks the model to make it", async () => {
-    const brand = await devshark();
+    const brand = await bilingual();
     const packet = buildChumPacket({ brand, question, hookLines: HOOK_LINES, hookId: "spot-it", date: "2026-08-08" });
 
     expect(packet).toContain("already selected — do not choose another");
@@ -199,10 +223,23 @@ describe("marketingShark CHUM packet", () => {
     expect(packet).toContain("copy it verbatim");
     expect(packet).toContain(HOOK_LINES.cs);
     expect(packet).toContain(HOOK_LINES.en);
-    expect(packet).toContain(OUTPUT_SHAPE);
+    expect(packet).toContain(outputShape(["cs", "en"]));
     // The Czech the product already has, marked as reference rather than as a target.
     expect(packet).toContain("do not translate this");
     expect(packet).toContain("Co vrací useState?");
+  });
+
+  it("asks devShark's writer for English only, and pays for no Czech input", async () => {
+    const brand = await devshark();
+    const packet = buildChumPacket({ brand, question, hookLines: { en: HOOK_LINES.en }, hookId: "spot-it", date: "2026-09-26" });
+    expect(packet).toContain("languages: en (English only: write no Czech field at all)");
+    expect(packet).toContain(outputShape(["en"]));
+    expect(outputShape(["en"])).not.toContain('"cs"');
+    expect(packet).toContain(brand.slide5.en);
+    expect(packet).not.toContain(brand.slide5.cs);
+    expect(packet).not.toContain("Czech reference");
+    expect(packet).not.toContain("Co vrací useState?");
+    expect(packet).not.toContain("both languages");
   });
 
   it("appends the failed checks on the retry and nothing on the first attempt", async () => {

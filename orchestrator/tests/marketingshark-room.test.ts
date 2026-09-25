@@ -165,27 +165,31 @@ describe("marketingShark room", () => {
     // Nothing here is publishable state. A package leaves this room as a draft or not at all.
     expect(built.status).toBe("draft");
     expect(built.abRecord.measured).toBe(false);
-    expect(built.carousels.cs.slides).toHaveLength(5);
+    // devShark writes English only (quorum#568): one carousel, one render summary, no Czech field.
+    expect(built.locales).toEqual(["en"]);
     expect(built.carousels.en.slides).toHaveLength(5);
-    expect(built.render.summaryPaths).toHaveLength(2);
+    expect(built.carousels.cs).toBeUndefined();
+    expect(built.descriptions.instagram.cs).toBeUndefined();
+    expect(built.render.summaryPaths).toEqual(["state/ventures/marketingshark/packages/2026-08-08/devshark/render-en.json"]);
     expect(built.spendUsd).toBe(0);
 
-    // Package, both render summaries, four draft queue items, the ledger and the channel record
-    // move together or not at all.
+    // Package, its render summary, the draft queue items, the ledger and the channel record move
+    // together or not at all.
     const ledger = await readLedger(root);
     expect(ledger.brands.devshark!.served).toHaveLength(1);
     expect(ledger.brands.devshark!.served[0]!.questionId).toBe(built.question.id);
-    expect(result.artifacts).toHaveLength(9);
-    expect(result.artifacts.filter((artifact) => artifact.startsWith("social/queue/"))).toHaveLength(4);
+    expect(result.artifacts).toHaveLength(6);
+    expect(result.artifacts.filter((artifact) => artifact.startsWith("social/queue/"))).toHaveLength(2);
     expect(result.artifacts).toContain(HOOK_CHANNELS_PATH);
 
-    // Slide 1 is the assigned library line, in both languages, and the assignment that licensed
-    // it travels with the package.
+    // Slide 1 is the assigned library line, and the assignment that licensed it travels with the
+    // package. It was assigned for English alone.
     expect(built.hookAssignment.schemaVersion).toBe("hook-assignment/1");
     expect(built.hookAssignment.hookId).toBe(built.hooks.a.patternId);
     expect(built.hookAssignment.eligibleIds).toContain(built.hookAssignment.hookId);
+    expect(built.hookAssignment.languages).toEqual(["en"]);
     expect(built.carousels.en.slides[0]!.headline).toBe(built.hooks.a.en);
-    expect(built.carousels.cs.slides[0]!.headline).toBe(built.hooks.a.cs);
+    expect(built.hooks.a.cs).toBeUndefined();
 
     // And the channel now carries the post the cooldown will read tomorrow.
     const channels = await readHookChannels(root);
@@ -294,14 +298,20 @@ describe("marketingShark room", () => {
 
     const lines = hookLinesFor({ hook: plan.hook, brand, question: plan.question })!;
     const topic = topicLabel(plan.question.category);
-    expect(lines.cs).toBe(plan.hook!.variants.dev.cs.replaceAll("{topic}", topic));
     expect(lines.en).toBe(plan.hook!.variants.dev.en.replaceAll("{topic}", topic));
+    // English only: no Czech line is resolved, handed over or paid for.
+    expect(lines.cs).toBeUndefined();
     const packet = buildChumPacket({
       brand, question: plan.question, hookLines: lines, hookId: plan.assignment.hookId, date: "2026-08-08"
     });
     expect(packet).toContain("tone: dev");
-    expect(packet).toContain(brand.slide5.cs);
-    expect(packet).toContain(lines.cs);
+    expect(packet).toContain(brand.slide5.en);
+    expect(packet).not.toContain(brand.slide5.cs);
     expect(packet).toContain(lines.en);
+
+    // A brand that writes Czech gets the Czech line from the same assignment.
+    const bilingual = { ...brand, locales: ["cs", "en"] as Array<"cs" | "en"> };
+    expect(hookLinesFor({ hook: plan.hook, brand: bilingual, question: plan.question })!.cs)
+      .toBe(plan.hook!.variants.dev.cs.replaceAll("{topic}", topic));
   });
 });
