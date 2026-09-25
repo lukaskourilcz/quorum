@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { NormalizedQuestionSchema, type NormalizedQuestion } from "../src/ventures/marketingshark/bank.js";
 import { ENGAGEMENT_NEVER_CLAIM, factSheetFor, loadMarketingSharkConfig, MarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
 import { fencedBlocks, LIMITS, promisesEngagementReward, runTruthGates, violationReport } from "../src/ventures/marketingshark/gates.js";
-import { buildChumPacket, outputShape, readCraftRules } from "../src/ventures/marketingshark/packet.js";
+import { buildChumPacket, craftRulesFor, outputShape, readCraftRules } from "../src/ventures/marketingshark/packet.js";
+import { POST_KINDS } from "../src/ventures/marketingshark/kinds.js";
 import { ChumOutput } from "../src/ventures/marketingshark/package.js";
 
 const CODE = "const [value, setValue] = useState(initial);";
@@ -387,7 +388,8 @@ describe("marketingShark CHUM packet", () => {
     expect(craft).toContain("Code blocks are copied exactly, character for character.");
     expect(craft).toContain("**LinkedIn**");
     expect(craft).toContain("No post may promise coins, discounts or access for following, liking, sharing or commenting.");
-    // Sized to stay near 1,600 tokens of paid input; ~3.5 characters a token.
-    expect(craft.length).toBeLessThan(7_000);
+    // Sized to stay near 1,600 tokens of paid input; ~3.5 characters a token. What rides on a call
+    // is the shared rules and the day's kind only (quorum#576), so that is what is measured.
+    for (const kind of POST_KINDS) expect(craftRulesFor(craft, kind).length, kind).toBeLessThan(7_000);
   });
 });

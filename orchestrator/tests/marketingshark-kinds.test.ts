@@ -7,6 +7,8 @@ import { configRoot, repoRoot } from "../src/paths.js";
 import { GoViralTrendsSchema } from "../src/sources/goviral-trends.js";
 import { atomicWriteJson } from "../src/state.js";
 import { enabledBrands, loadMarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
+import { craftRulesFor, readCraftRules } from "../src/ventures/marketingshark/packet.js";
+import { POST_KINDS, type PostKind } from "../src/ventures/marketingshark/kinds.js";
 import { AnyMarketingSharkPackage, isPostPackage, MarketingSharkPackage, PostPackageSchema, type PostWriterOutput } from "../src/ventures/marketingshark/package.js";
 import { runPostGates } from "../src/ventures/marketingshark/post-gates.js";
 import { buildPostPacket } from "../src/ventures/marketingshark/post-packet.js";
@@ -289,5 +291,21 @@ describe("the post kinds' gates", () => {
     expect(packet).not.toContain('"role": "prompt"');
     expect(packet).toContain("no code on any slide or caption");
     expect(packet).toContain("- no slide, caption or hashtag promises coins, discounts, access or any reward for following, liking, sharing or commenting");
+  });
+});
+
+describe("the craft rules per kind", () => {
+  it("has one section per kind and sends only the day's", async () => {
+    const craft = await readCraftRules();
+    for (const kind of POST_KINDS.filter((candidate) => candidate !== "announcement")) {
+      expect(craft.match(new RegExp(`^### .*\`${kind}\``, "gmu")), kind).toHaveLength(1);
+      const rules = craftRulesFor(craft, kind);
+      for (const other of POST_KINDS.filter((candidate) => candidate !== kind)) expect(rules, `${kind} carries ${other}`).not.toContain(`\`${other}\``);
+      // The shared sections ride with every kind.
+      for (const shared of ["## Voice", "## Descriptions", "## Alt text", "## Final sweep before returning"]) expect(rules).toContain(shared);
+    }
+    // The owner writes the announcement: no model section exists for it.
+    expect(craft).not.toContain("`announcement`");
+    expect(craftRulesFor(craft, "quiz" satisfies PostKind)).toContain("Code blocks are copied exactly, character for character.");
   });
 });
