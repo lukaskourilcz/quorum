@@ -1,4 +1,4 @@
-import { readFile, readdir, rm } from "node:fs/promises";
+import { readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { applyQueueAction } from "./actions";
@@ -79,7 +79,8 @@ describe("an approval wakes the publisher", () => {
   ] as const)("does not dispatch on %s", async (action, extra) => {
     const result = await applyQueueAction({ action, itemId: ITEM, expectedContentHash: hash, ...extra }, { root, now });
     expect(result).toMatchObject({ changed: true, persistence: "github", dispatch: null });
-    expect(github.calls.some((call) => call.method === "PUT")).toBe(true);
+    // Hold and reject replace the item; an edit commits its event, successor and original at once.
+    expect(github.calls.some((call) => call.method === "PUT" || (call.method === "PATCH" && call.path.endsWith("/git/refs/heads/main")))).toBe(true);
     expect(github.dispatches()).toEqual([]);
   });
 
@@ -91,6 +92,56 @@ describe("an approval wakes the publisher", () => {
     expect(refused).toBeInstanceOf(QueueActionError);
     expect(refused).toMatchObject({ code: "REFUSED" });
     expect(github.dispatches()).toEqual([]);
+  });
+});
+
+describe("an edit that races a publisher run", () => {
+  const edit = (expectedContentHash: string) => ({ action: "edit", itemId: ITEM, expectedContentHash, edits: { caption: "Which selector wins: .card p or p.note? Count it.", altText: null } });
+
+  async function queued(): Promise<{ approved: Record<string, unknown>; approvedHash: string }> {
+    const approved = await readQueueFixture("social-queue-item-v2-approved.valid.json");
+    await writeFile(path.join(root, "state/social/queue", DRAFT_FILE), `${JSON.stringify(approved, null, 2)}\n`);
+    return { approved, approvedHash: (approved.content as { contentHash: string }).contentHash };
+  }
+
+  async function nothingWritten(expectedStatus: string): Promise<void> {
+    expect(await readdir(path.join(root, "state/social/queue-events")).catch(() => [])).toEqual([]);
+    expect(await readdir(path.join(root, "state/social/queue"))).toEqual([DRAFT_FILE]);
+    expect((await stored()).status).toBe(expectedStatus);
+  }
+
+  it("writes nothing when the publisher's claim lands between the Queue's read and its write", async () => {
+    const { approved, approvedHash } = await queued();
+    let claimed = false;
+    github.afterRead = async (relative) => {
+      if (claimed || relative !== `state/social/queue/${DRAFT_FILE}`) return;
+      claimed = true;
+      const claim = { ...approved, status: "publishing", attempt: { idempotencyKey: "e".repeat(64), claimedAt: now.toISOString(), attemptCount: 1, lastError: null } };
+      await writeFile(path.join(root, "state/social/queue", DRAFT_FILE), `${JSON.stringify(claim, null, 2)}\n`);
+    };
+    const error = await applyQueueAction(edit(approvedHash), { root, now }).catch((caught: unknown) => caught);
+    // Written one file at a time, the event and the -r1 draft landed and only the cancellation
+    // conflicted: the original stayed live and the successor was a second approvable copy.
+    expect(error).toMatchObject({ code: "CONFLICT" });
+    await nothingWritten("publishing");
+  });
+
+  it("writes nothing when anything else moves the branch after the Queue checked it", async () => {
+    const { approvedHash } = await queued();
+    let reads = 0;
+    github.afterRead = async (relative) => {
+      if (relative !== `state/social/queue/${DRAFT_FILE}` || (reads += 1) !== 2) return;
+      // The Queue has checked the files at the head; another commit lands before its ref update.
+      await github.fetch("https://api.github.com/repos/lukaskourilcz/quorum/contents/state/social/queue-events/other.json", {
+        method: "PUT",
+        body: JSON.stringify({ message: "another writer", content: Buffer.from("{}\n").toString("base64"), branch: "main" })
+      });
+    };
+    const error = await applyQueueAction(edit(approvedHash), { root, now }).catch((caught: unknown) => caught);
+    expect(error).toMatchObject({ code: "CONFLICT" });
+    expect(github.calls.find((call) => call.method === "PATCH")).toMatchObject({ body: { force: false } });
+    await rm(path.join(root, "state/social/queue-events/other.json"));
+    await nothingWritten("queued");
   });
 });
 

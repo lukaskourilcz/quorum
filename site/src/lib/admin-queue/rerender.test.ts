@@ -192,14 +192,18 @@ describe("re-rendering a devShark draft from the Design Lab", () => {
     const successor = await queueItem(github, `${LINKEDIN}-r1`);
     expect(successor.content.altText).toContain(WHY.alt);
     const puts = fake.calls.filter((call) => call.method === "PUT").map((call) => call.path.replace("/repos/lukaskourilcz/quorum/contents/", ""));
-    // Frames and the revision before the event, the event before the draft, the draft before the cancellation.
+    // The frames and the revision first, each on its own; nothing points at them yet.
     expect(puts.slice(0, 10).every((file) => /^site\/public\/social\/devshark\/2026-09-26\/en\/[a-f0-9]{12}\/slide-0[1-5]\.(?:png|jpg)$/u.test(file))).toBe(true);
-    expect(puts.slice(10)).toEqual([
-      successor.sourcePackage!.artifactRef,
+    expect(puts.slice(10)).toEqual([successor.sourcePackage!.artifactRef]);
+    // Then the event, the draft and the cancellation as one commit, moved onto the branch last.
+    const tree = fake.calls.find((call) => call.method === "POST" && call.path.endsWith("/git/trees"))!;
+    expect((tree.body!.tree as Array<{ path: string }>).map(({ path: file }) => file)).toEqual([
       expect.stringMatching(/^state\/social\/queue-events\/.+-rerender\.json$/u),
       `state/social/queue/${LINKEDIN}-r1.json`,
       `state/social/queue/${PACKAGE_DATE}-devshark-en-linkedin.json`
     ]);
+    expect(fake.calls.at(-1)).toMatchObject({ method: "PATCH", path: "/repos/lukaskourilcz/quorum/git/refs/heads/main", body: { force: false } });
+    expect((await queueItem(github, LINKEDIN)).status).toBe("cancelled");
     // Nothing was written to the deployment's copy.
     expect(await events(root)).toEqual([]);
   });

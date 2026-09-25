@@ -21,7 +21,7 @@ import type { SocialQueueEventRecord } from "./event";
 import { parseQueueItemV2, queueItemV2Hash, supersedingQueueItem, type QueueItemV2 } from "./item";
 import type { QueueState } from "./state";
 import { QueueActionError, type QueueStore, type StoredQueueFile } from "./store";
-import { freeRevisionId, validated, writeEvent } from "./writes";
+import { freeRevisionId, validated, writeSupersession } from "./writes";
 import type { QueueActionRequest, QueueActionResult } from "./actions";
 
 /**
@@ -31,7 +31,7 @@ import type { QueueActionRequest, QueueActionResult } from "./actions";
  * with the owner's saved slide edits laid over it, and runs the room's caps and the clip gate
  * first. The frames (a PNG and a JPEG per slide) and a package revision that records their hashes
  * are written before anything points at them; then the event, the superseding draft and the
- * cancelled original, in that order, exactly as an edit writes them.
+ * cancelled original in one commit, exactly as an edit writes them.
  *
  * A revision is addressed by its content: the base package's hash and the five slides' words. So
  * re-rendering the LinkedIn, Instagram and Threads drafts of one package writes the frames once
@@ -167,11 +167,7 @@ export async function rerenderQueueItem(input: {
     resultingContentHash: successor.content.contentHash,
     changedFields: ["frames", ...(altText !== current.content.altText ? ["altText" as const] : [])]
   });
-  await writeEvent(store, recorded);
-  if (!await store.create(`state/social/queue/${supersedingId}.json`, successor, `admin(queue): ${supersedingId} re-renders ${current.id}`)) {
-    throw new QueueActionError("CONFLICT", `A queue item named ${supersedingId} already exists; reload and re-render again.`);
-  }
-  await store.replace(input.relative, { ...current, status: "cancelled" }, input.stored.version, `admin(queue): ${current.id} superseded by ${supersedingId}`);
+  await writeSupersession(store, { event: recorded, successor, original: { relative: input.relative, value: current, version: input.stored.version }, message: `admin(queue): ${supersedingId} re-renders ${current.id}` });
   return {
     changed: true,
     itemId: current.id,

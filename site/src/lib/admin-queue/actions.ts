@@ -6,7 +6,7 @@ import { queueItemTarget, queueRepositoryRoot, readQueueState, type QueueState }
 import { queueCaptionLimit } from "./linkedin";
 import { rerenderQueueItem } from "./rerender";
 import { QueueActionError, queueStore } from "./store";
-import { freeRevisionId, validated, writeEvent } from "./writes";
+import { freeRevisionId, validated, writeEvent, writeSupersession } from "./writes";
 import { QUEUE_ALT_TEXT_LIMIT, QUEUE_CAPTION_LIMITS, QUEUE_OWNER_CHECKS, QUEUE_PLATFORM_LABELS, type QueueActionName, type QueueDispatchView, type QueueStatus } from "./types";
 import { dispatchSocialPublisher, type QueueDispatchOutcome } from "@/lib/queue-dispatch";
 
@@ -233,11 +233,7 @@ export async function applyQueueAction(value: unknown, options: { root?: string;
       throw new QueueActionError("CORRUPT", "The edited copy did not validate as a queue v2 item.");
     }
     const record = validated({ ...event, supersedingItemId: supersedingId, resultingContentHash: successor.content.contentHash, changedFields });
-    await writeEvent(store, record);
-    if (!await store.create(`state/social/queue/${supersedingId}.json`, successor, `admin(queue): ${supersedingId} supersedes ${item.id}`)) {
-      throw new QueueActionError("CONFLICT", `A queue item named ${supersedingId} already exists; reload and edit again.`);
-    }
-    await store.replace(relative, { ...current, status: "cancelled" }, stored.version, `admin(queue): ${item.id} superseded by ${supersedingId}`);
+    await writeSupersession(store, { event: record, successor, original: { relative, value: current, version: stored.version }, message: `admin(queue): ${supersedingId} supersedes ${item.id}` });
     return {
       changed: true,
       itemId: item.id,

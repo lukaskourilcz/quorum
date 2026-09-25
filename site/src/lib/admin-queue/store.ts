@@ -36,6 +36,11 @@ export interface StoredQueueFile {
   version: string;
 }
 
+/** One file in an atomic change: a file that must not exist yet, or one replaced against the version read. */
+export type QueueChange =
+  | { kind: "create"; relative: string; value: unknown }
+  | { kind: "replace"; relative: string; value: unknown; version: string };
+
 export interface QueueStore {
   persistence: "github" | "filesystem";
   read(relative: string): Promise<StoredQueueFile | null>;
@@ -46,6 +51,13 @@ export interface QueueStore {
   readBytes(relative: string): Promise<Uint8Array | null>;
   /** Writes a frame that must not exist yet. Answers false when it already does. */
   createBytes(relative: string, bytes: Uint8Array, message: string): Promise<boolean>;
+  /**
+   * Writes every change or none. On GitHub it is one commit through the Git Data API, made on the
+   * branch head whose files it checked and moved there only as a fast-forward; a create whose path
+   * exists, a replace whose version moved, or a head that moved in between is a CONFLICT and writes
+   * nothing. A supersession (event, successor, cancelled original) therefore never lands in part.
+   */
+  commit(changes: readonly QueueChange[], message: string): Promise<void>;
 }
 
 type Access = "read" | "write" | "bytes";
@@ -60,6 +72,10 @@ function json(value: unknown): string {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
 
+function conflictOn(relative: string): QueueActionError {
+  return new QueueActionError("CONFLICT", `${relative.split("/").at(-1)} changed or already exists on the branch; nothing was saved. Reload and decide again.`);
+}
+
 function localStore(root: string): QueueStore {
   const resolve = (relative: string, access: Access = "write") => {
     const target = path.join(root, guard(relative, access));
@@ -68,6 +84,18 @@ function localStore(root: string): QueueStore {
     return target;
   };
   const version = (bytes: string) => createHash("sha256").update(bytes).digest("hex");
+  const replace = async (relative: string, value: unknown, expected: string): Promise<void> => {
+    const target = resolve(relative);
+    const current = await readFile(target, "utf8").catch(() => null);
+    if (current === null || version(current) !== expected) throw new QueueActionError("CONFLICT", "The queue item changed while the action was being saved; reload and decide again.");
+    const temporary = `${target}.${randomUUID()}.tmp`;
+    try {
+      await writeFile(temporary, json(value), { encoding: "utf8" });
+      await rename(temporary, target);
+    } finally {
+      await rm(temporary, { force: true });
+    }
+  };
   return {
     persistence: "filesystem",
     async read(relative) {
@@ -91,20 +119,25 @@ function localStore(root: string): QueueStore {
         throw error;
       }
     },
-    async replace(relative, value, expected) {
-      const target = resolve(relative);
-      const current = await readFile(target, "utf8").catch(() => null);
-      if (current === null || version(current) !== expected) throw new QueueActionError("CONFLICT", "The queue item changed while the action was being saved; reload and decide again.");
-      const temporary = `${target}.${randomUUID()}.tmp`;
-      try {
-        await writeFile(temporary, json(value), { encoding: "utf8" });
-        await rename(temporary, target);
-      } finally {
-        await rm(temporary, { force: true });
-      }
-    },
+    replace,
     async readBytes(relative) {
       return readFile(resolve(relative, "bytes")).then((bytes) => new Uint8Array(bytes), () => null);
+    },
+    async commit(changes) {
+      // A checkout has no transaction, so every precondition is checked before the first write.
+      for (const change of changes) {
+        const current = await readFile(resolve(change.relative), "utf8").catch(() => null);
+        if (change.kind === "create" ? current !== null : current === null || version(current) !== change.version) throw conflictOn(change.relative);
+      }
+      for (const change of changes) {
+        if (change.kind === "create") {
+          const target = resolve(change.relative);
+          await mkdir(path.dirname(target), { recursive: true });
+          await writeFile(target, json(change.value), { encoding: "utf8", flag: "wx" });
+        } else {
+          await replace(change.relative, change.value, change.version);
+        }
+      }
     },
     async createBytes(relative, bytes) {
       const target = resolve(relative, "bytes");
@@ -172,6 +205,38 @@ function githubStore(token: string): QueueStore {
       if (response.ok) return true;
       if (response.status === 422) return false;
       throw refused(response.status, "write");
+    },
+    async commit(changes, message) {
+      const api = `https://api.github.com/repos/${repository}/git`;
+      const call = async <T>(url: string, init?: RequestInit): Promise<T> => {
+        const response = await fetch(url, { ...init, headers: { ...headers, ...(init?.body ? { "Content-Type": "application/json" } : {}) }, cache: "no-store" });
+        if (response.status === 409 || (response.status === 422 && init?.method === "PATCH")) throw new QueueActionError("CONFLICT", "The branch moved while the change was being saved; nothing was saved. Reload and decide again.");
+        if (!response.ok) throw refused(response.status, "write");
+        return await response.json() as T;
+      };
+      const head = await call<{ object?: { sha?: unknown } }>(`${api}/ref/heads/${encodeURIComponent(branch)}`);
+      const parent = typeof head.object?.sha === "string" ? head.object.sha : null;
+      if (!parent) throw new QueueActionError("CORRUPT", "GitHub named no commit for the branch.");
+      // Every precondition is read at that one commit, so the checks and the write see the same tree.
+      for (const change of changes) {
+        const response = await fetch(`${endpoint(change.relative)}?ref=${parent}`, { headers, cache: "no-store" });
+        if (response.status === 404) {
+          if (change.kind === "create") continue;
+          throw conflictOn(change.relative);
+        }
+        if (!response.ok) throw refused(response.status, "read");
+        const found = await response.json() as { sha?: unknown };
+        if (change.kind === "create" || found.sha !== change.version) throw conflictOn(change.relative);
+      }
+      const base = await call<{ tree?: { sha?: unknown } }>(`${api}/commits/${parent}`);
+      if (typeof base.tree?.sha !== "string") throw new QueueActionError("CORRUPT", "GitHub named no tree for the branch head.");
+      const tree = await call<{ sha: string }>(`${api}/trees`, {
+        method: "POST",
+        body: JSON.stringify({ base_tree: base.tree.sha, tree: changes.map((change) => ({ path: guard(change.relative), mode: "100644", type: "blob", content: json(change.value) })) })
+      });
+      const created = await call<{ sha: string }>(`${api}/commits`, { method: "POST", body: JSON.stringify({ message, tree: tree.sha, parents: [parent] }) });
+      // A fast-forward only: if anything landed on the branch since `parent`, GitHub refuses with 422.
+      await call(`${api}/refs/heads/${encodeURIComponent(branch)}`, { method: "PATCH", body: JSON.stringify({ sha: created.sha, force: false }) });
     }
   };
 }

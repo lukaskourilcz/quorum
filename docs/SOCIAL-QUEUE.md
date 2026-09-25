@@ -59,9 +59,11 @@ produces exactly those bytes.
 `POST /admin/api/queue/actions` accepts
 `{ action, itemId, expectedContentHash, reason?, edits?: { caption?, altText? }, mode?: "now" | "window" }`.
 The route is same-origin and owner-only, and caps the body at 20,000 bytes. A hash that no longer
-matches the stored item answers 409. Each accepted action first appends one `social-queue-event/1`
-to `state/social/queue-events/<timestamp>-<itemId>-<action>.json`, then changes the item. The item
-never points at evidence that was not written.
+matches the stored item answers 409. Each accepted action appends one `social-queue-event/1` to
+`state/social/queue-events/<timestamp>-<itemId>-<action>.json` and changes the item. Approve, hold
+and reject write the event first, so the item never points at evidence that was not written. Edit
+and re-render write the event, the superseding item and the cancelled original as one commit, so a
+conflict on any of the three writes none of them.
 
 | Action | Applies to | Effect |
 | --- | --- | --- |
@@ -106,8 +108,17 @@ it read: the blob sha on GitHub, the bytes on disk. The publisher pushes its cla
 (`publishing`, see `docs/SOCIAL-PROVIDERS.md`). An owner action saved before that push makes the
 claim's rebase conflict, and the run stops without sending. One that reads the item after the push
 finds it `publishing`, which no action accepts, and one that read it before the push and saves after
-it no longer matches the blob sha and is answered as a conflict. Both directories sit inside the
-cycle's `runtime_paths` through `state/social`.
+it no longer matches the blob sha and is answered as a conflict.
+
+On GitHub the supersession's one commit goes through the Git Data API: the store reads the branch
+head, checks at that commit that the event and the successor do not exist and that the original's
+blob sha is still the one it read, builds one tree and one commit on that head, and moves the branch
+with `force: false`. A branch that moved in between answers 422, and the owner reads a conflict with
+nothing written. In a local checkout every precondition is checked before the first write. Before
+this, the three were separate Contents API writes, and a publisher claim that moved the original
+between them left the event and the `-r1` draft on the branch beside a live original: the Queue then
+hid the original's actions and offered the successor as a second approvable copy. Both directories
+sit inside the cycle's `runtime_paths` through `state/social`.
 
 A deployment reads the repository as it stood when it was deployed, like every Admin page. An
 action is saved to GitHub at once and the publisher sees it on its next run, but the list shows it
