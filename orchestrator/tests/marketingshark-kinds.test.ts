@@ -178,6 +178,25 @@ describe("the weekday rotation", () => {
     expect(again.calls).toBe(0);
   });
 
+  it("never lets the quiz write over another kind's package for the same day", async () => {
+    const brand = await devshark();
+    const where = await rooms();
+    await draft(brand, "2026-09-29", where);
+    const before = await readFile(path.join(where.state, "ventures/marketingshark/packages/2026-09-29/devshark/package.json"), "utf8");
+    const config = await loadMarketingSharkConfig();
+    let calls = 0;
+    const result = await runBrandDay({
+      config, brand, ledger: await readLedger(where.state), date: "2026-09-29", cycleId: "t", root: where.state, publicRoot: path.join(where.state, "public"), dry: true,
+      call: async () => {
+        calls += 1;
+        throw new Error("no call expected");
+      }
+    });
+    expect(result.outcome).toMatchObject({ status: "already-served", packagePath: "state/ventures/marketingshark/packages/2026-09-29/devshark/package.json" });
+    expect(calls).toBe(0);
+    expect(await readFile(path.join(where.state, "ventures/marketingshark/packages/2026-09-29/devshark/package.json"), "utf8")).toBe(before);
+  });
+
   it("writes the meeting record whatever the length of a refusal", () => {
     const record = buildMeetingRecord({
       cycleId: "t", date: "2026-10-02", now: new Date("2026-10-02T05:00:00.000Z"), stage: "DISCOVERY", dry: true,

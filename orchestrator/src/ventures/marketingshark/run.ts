@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { BudgetError } from "../../budget.js";
 import { guardedJsonCall, ModelOutputParseError, ModelResponseTruncatedError } from "../../llm/call.js";
@@ -445,6 +445,18 @@ export async function runBrandDay(input: {
         questionId: plan.selection.questionId,
         packagePath: plan.selection.alreadyServed.package
       },
+      ledger: input.ledger,
+      artifacts: []
+    };
+  }
+
+  // One package a day, whatever its kind (quorum#576). A day another kind already drafted — the
+  // owner's announcement, say, whose copy file has since been moved — is served, and the quiz must
+  // not write over its package or its frames.
+  const existing = packagePath(date, brand.id);
+  if (await access(path.join(input.root, existing)).then(() => true, () => false)) {
+    return {
+      outcome: { status: "already-served", brandId: brand.id, kind: null, subject: `state/${existing}`, questionId: null, packagePath: `state/${existing}` },
       ledger: input.ledger,
       artifacts: []
     };
