@@ -1,6 +1,6 @@
 {
   "schemaVersion": "delivery-queue-health/1",
-  "checkedAt": "2026-09-25T06:06:21.675Z",
+  "checkedAt": "2026-09-25T07:07:13.271Z",
   "date": "2026-09-25",
   "ventures": [
     {
@@ -29,21 +29,10 @@
     },
     {
       "venture": "caught-up",
-      "waiting": [
-        {
-          "label": "2026-09-24 no_edition",
-          "packageHash": "d6c169d18e76153e51cde88330812a4cb17039c19f4280a15ff4c03ff09cdfac",
-          "date": "2026-09-24"
-        },
-        {
-          "label": "2026-09-25 edition",
-          "packageHash": "6166221acf61c6dbeccc1b78234fd96579fc341cd3ff16d413ad9578a02ff2bb",
-          "date": "2026-09-25"
-        }
-      ],
+      "waiting": [],
       "parked": [],
-      "oldestWaitingDate": "2026-09-24",
-      "stalledDays": 1,
+      "oldestWaitingDate": null,
+      "stalledDays": null,
       "stalled": false,
       "neverDrains": []
     }
@@ -51,8 +40,8 @@
   "deploys": [
     {
       "venture": "caught-up",
-      "url": "https://caughtup-ai.vercel.app/data/board/2026-09-24.json",
-      "expected": "2026-09-24",
+      "url": "https://caughtup-ai.vercel.app/data/board/2026-09-25.json",
+      "expected": "2026-09-25",
       "status": 200,
       "live": true
     },
