@@ -115,6 +115,8 @@ function tabLabel(tab: AdminVentureTab): string {
   if (tab === "social-lab") return "social drafts";
   if (tab === "trend-radar") return "trend radar";
   if (tab === "voice-strategy") return "voice & strategy";
+  if (tab === "edition-cs") return "czech edition";
+  if (tab === "edition-en") return "english edition";
   return tab;
 }
 

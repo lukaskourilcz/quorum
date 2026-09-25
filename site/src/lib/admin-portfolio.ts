@@ -28,7 +28,11 @@ const adminTabs = [
   "packages",
   "shortlist", "dossiers", "features", "recommendations", "actions", "knowledge",
   "library", "signals", "monitor", "claims",
-  "today", "timeline", "threads", "instagram", "reels", "trend-radar", "results", "experiments", "voice-strategy", "budget"
+  "today", "timeline", "threads", "instagram", "reels", "trend-radar", "results", "experiments", "voice-strategy", "budget",
+  // WebDev Signal. The orchestrator's registry schema accepted these four when the venture was
+  // founded and this list did not, so the filter below dropped them without a word: `?tab=decision`
+  // fell through to Today and the Decision panel had no address at all.
+  "decision", "edition-cs", "edition-en", "delivery"
 ] as const;
 
 export type AdminVentureTab = (typeof adminTabs)[number];
