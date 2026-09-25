@@ -20,11 +20,11 @@ export interface AdminNavSection {
   count?: number | null;
 }
 
-export type AdminDestination = "waiting" | "settings" | null;
+export type AdminDestination = "waiting" | "queue" | "settings" | null;
 
 export function adminSections(
   active: AdminDestination,
-  counts: { waiting?: number | null; paused?: number | null } = {}
+  counts: { waiting?: number | null; queue?: number | null; paused?: number | null } = {}
 ): AdminNavSection[] {
   return [
     {
@@ -33,6 +33,17 @@ export function adminSections(
       href: "/admin?view=waiting",
       active: active === "waiting",
       count: counts.waiting ?? null
+    },
+    /*
+     * Every social post that waits for approval (quorum#573). A destination because the owner
+     * acts here daily; its badge is the number of posts waiting, the one count he needs.
+     */
+    {
+      id: "queue",
+      name: "Queue",
+      href: "/admin/queue",
+      active: active === "queue",
+      count: counts.queue ?? null
     },
     {
       id: "settings",
