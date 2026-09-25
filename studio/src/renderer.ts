@@ -3,6 +3,7 @@ import {
   BrandTokensSchema,
   CarouselPayloadSchema,
   CarouselTemplateSchema,
+  carouselCanvas,
   type BrandTokens,
   type CarouselFormat,
   type CarouselLayer,
@@ -252,7 +253,7 @@ function renderSlides(input: CarouselRenderInput, wanted?: number): RenderedSlid
   const checks = validateTemplateForBrand(template, brand, input.format);
   const failed = checks.filter((check) => check.status === "fail");
   if (failed.length) throw new Error(`Template checks failed: ${failed.map((check) => check.detail).join("; ")}`);
-  const canvas = template.formats[input.format];
+  const canvas = template.formats[carouselCanvas(input.format)];
   const build = (slide: CarouselTemplate["slides"][number], index: number): RenderedSlide => {
     const variant = payload.variant ? slide.variants.find((candidate) => candidate.id === payload.variant) : undefined;
     const backgroundToken = variant?.backgroundToken ?? slide.backgroundToken;

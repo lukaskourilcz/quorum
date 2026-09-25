@@ -7,7 +7,9 @@ import { describe, expect, it } from "vitest";
 import {
   articleDeckTemplates,
   CAROUSEL_BRANDS,
+  CarouselFormatSchema,
   CarouselTemplateSchema,
+  carouselCanvas,
   familyDeckTemplates,
   liveTemplates,
   SEED_TEMPLATES,
@@ -136,8 +138,25 @@ describe("carousel-template/1", () => {
       .toContain("instagram-story");
     expect(previewFormats(SEED_TEMPLATES.find((entry) => entry.id === "quote-card")!))
       .not.toContain("instagram-story");
-    // With no template it is every canvas the studio can render, which is the preview route's enum.
+    // With no template it is every canvas a template is composed for. LinkedIn's square is a
+    // format on the Instagram square's canvas, not a fifth canvas.
     expect(previewFormats()).toHaveLength(4);
+    expect(previewFormats()).not.toContain("linkedin-square");
+  });
+
+  it("draws LinkedIn's multi-image square on the Instagram square's canvas (quorum#575)", async () => {
+    expect(CarouselFormatSchema.options).toContain("linkedin-square");
+    expect(carouselCanvas("linkedin-square")).toBe("instagram-square");
+    for (const format of previewFormats()) expect(carouselCanvas(format)).toBe(format);
+    const template = SEED_TEMPLATES.find((entry) => entry.id === "quote-card")!;
+    const input = { template, payload: fixturePayload(template), brand: CAROUSEL_BRANDS.devshark, index: 0 };
+    const linkedin = await renderCarouselSlidePng({ ...input, format: "linkedin-square" });
+    const square = await renderCarouselSlidePng({ ...input, format: "instagram-square" });
+    expect(await sharp(linkedin!.png).metadata()).toMatchObject({ width: 1_080, height: 1_080, format: "png" });
+    // The same composition, byte for byte: nothing about the square changes for its destination.
+    expect(linkedin!.svgHash).toBe(square!.svgHash);
+    expect(linkedin!.pngHash).toBe(square!.pngHash);
+    expect(validateTemplateForBrand(template, CAROUSEL_BRANDS.devshark, "linkedin-square").every((check) => check.status === "pass")).toBe(true);
   });
 
   // Every template a reference can resolve to, not only the ten authored seeds. The deck

@@ -7,7 +7,7 @@ import {
   toRenderablePng,
   type TemplateReference
 } from "@boardlessai/carousel-studio";
-import { articleSlideSlot, recipeTemplateId, recipeVariant } from "@boardlessai/carousel-studio";
+import { articleSlideSlot, carouselCanvas, recipeTemplateId, recipeVariant } from "@boardlessai/carousel-studio";
 import { resolveLiveCarouselTemplate } from "../studio/catalog.js";
 import { writeDeckReceipt } from "./deck-receipt.js";
 import { effectiveRecipe } from "./deck-style.js";
@@ -301,7 +301,7 @@ export async function composeEditionSocialPack(input: {
         const name = `frame-${String(slide.index + 1).padStart(2, "0")}.png`;
         const publicPath = `${publicDirectory}/${locale}/${channel}/${name}`;
         const validation = await validateSocialImage(slide.png);
-        const expected = template.formats[format];
+        const expected = template.formats[carouselCanvas(format)];
         if (validation.width !== expected.width || validation.height !== expected.height) {
           throw new Error(`Social frame ${publicPath} has the wrong canvas`);
         }

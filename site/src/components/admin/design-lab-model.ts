@@ -4,7 +4,8 @@ export const FORMATS = [
   { id: "instagram-portrait", label: "Příspěvek 4:5", ratio: 1080 / 1350, width: 1080, height: 1350 },
   { id: "instagram-square", label: "Čtverec 1:1", ratio: 1, width: 1080, height: 1080 },
   { id: "instagram-story", label: "Story 9:16", ratio: 1080 / 1920, width: 1080, height: 1920 },
-  { id: "threads", label: "Threads", ratio: 1, width: 1080, height: 1080 }
+  { id: "threads", label: "Threads", ratio: 1, width: 1080, height: 1080 },
+  { id: "linkedin-square", label: "LinkedIn 1:1", ratio: 1, width: 1080, height: 1080 }
 ] as const;
 export type FormatId = (typeof FORMATS)[number]["id"];
 

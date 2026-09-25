@@ -1,4 +1,4 @@
-import type { BrandTokens, CarouselFormat, CarouselTemplate } from "./schema.js";
+import { carouselCanvas, type BrandTokens, type CarouselFormat, type CarouselTemplate } from "./schema.js";
 import { charactersPerLine } from "./text.js";
 
 export interface TemplateCheck {
@@ -28,7 +28,7 @@ export function contrastRatio(foreground: string, background: string): number {
  * answer "is this template composed for that canvas" without pretending to validate it.
  */
 export function fitsSafeArea(template: CarouselTemplate, format: CarouselFormat): boolean {
-  const safe = template.formats[format]?.safeArea;
+  const safe = template.formats[carouselCanvas(format)]?.safeArea;
   if (!safe) return false;
   return template.slides.every((slide) => slide.layers.every((layer) => {
     if (layer.type !== "text" && layer.type !== "logo") return true;
@@ -40,7 +40,7 @@ export function fitsSafeArea(template: CarouselTemplate, format: CarouselFormat)
 }
 
 function safeAreaCheck(template: CarouselTemplate, format: CarouselFormat): TemplateCheck {
-  const safe = template.formats[format].safeArea;
+  const safe = template.formats[carouselCanvas(format)].safeArea;
   const failures: string[] = [];
   template.slides.forEach((slide) => slide.layers.forEach((layer) => {
     if (layer.type !== "text" && layer.type !== "logo") return;

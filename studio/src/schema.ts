@@ -4,7 +4,13 @@ export const CarouselFormatSchema = z.enum([
   "instagram-square",
   "instagram-portrait",
   "instagram-story",
-  "threads"
+  "threads",
+  /*
+   * LinkedIn's multi-image post, 1080 × 1080 (quorum#575). A publishing format, not a fifth
+   * composition: it draws on the square canvas, so the four ratios every template is composed and
+   * checked for stay four. See `carouselCanvas`.
+   */
+  "linkedin-square"
 ]);
 
 export const TemplateStatusSchema = z.enum(["draft", "live", "deprecated"]);
@@ -297,6 +303,23 @@ export const TemplateReferenceSchema = z.object({
 });
 
 export type CarouselFormat = z.infer<typeof CarouselFormatSchema>;
+
+/** The four canvases a template is composed for; its `formats` object has exactly these keys. */
+export type CarouselCanvas = "instagram-square" | "instagram-portrait" | "instagram-story" | "threads";
+
+const FORMAT_CANVAS: Readonly<Record<CarouselFormat, CarouselCanvas>> = {
+  "instagram-square": "instagram-square",
+  "instagram-portrait": "instagram-portrait",
+  "instagram-story": "instagram-story",
+  threads: "threads",
+  // Same pixels and the same safe band as the Instagram square; only the destination differs.
+  "linkedin-square": "instagram-square"
+};
+
+/** The canvas a format draws on. Every read of `template.formats` goes through this. */
+export function carouselCanvas(format: CarouselFormat): CarouselCanvas {
+  return FORMAT_CANVAS[format];
+}
 export type CarouselLayer = z.infer<typeof CarouselLayerSchema>;
 /**
  * A layer as an author writes one, before defaults are filled in.

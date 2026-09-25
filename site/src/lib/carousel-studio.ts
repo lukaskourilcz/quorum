@@ -14,6 +14,7 @@ import {
   previewFormats,
   resolveLifecycleStatus,
   validateTemplateForBrand,
+  type CarouselCanvas,
   type CarouselFormat,
   type CarouselPayload,
   type CarouselTemplate
@@ -46,7 +47,7 @@ export interface CarouselInspirationLink {
 export interface CarouselStudioSnapshot {
   templates: CarouselStudioTemplate[];
   brands: Array<{ id: keyof typeof CAROUSEL_BRANDS; name: string }>;
-  formats: CarouselFormat[];
+  formats: CarouselCanvas[];
   inspirationLinks: CarouselInspirationLink[];
 }
 

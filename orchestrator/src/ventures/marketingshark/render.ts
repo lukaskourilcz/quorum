@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import sharp from "sharp";
 import {
   CAROUSEL_BRANDS,
+  carouselCanvas,
   liveTemplateByReference,
   liveTemplates,
   renderCarouselSlidePng,
@@ -465,7 +466,7 @@ export async function rasteriseCarousel(input: {
     if (rendered.truncatedSlots.length > 0) {
       throw new Error(`${input.locale}/${entry.role}: the frame clipped ${rendered.truncatedSlots.join(", ")}`);
     }
-    const expected = entry.template.formats[entry.render.format];
+    const expected = entry.template.formats[carouselCanvas(entry.render.format)];
     const jpegBytes = await sharp(rendered.png)
       .flatten({ background })
       .toColourspace("srgb")

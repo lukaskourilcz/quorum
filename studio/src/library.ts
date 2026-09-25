@@ -2,7 +2,7 @@ import {
   BrandTokensSchema,
   CarouselTemplateSchema,
   type BrandTokens,
-  type CarouselFormat,
+  type CarouselCanvas,
   type CarouselLayerInput,
   type CarouselPayload,
   type CarouselTemplate,
@@ -814,8 +814,11 @@ export function fixturePayload(template: CarouselTemplate, locale: "en" | "cs" =
   };
 }
 
-/** Every canvas the studio can render. The preview route's own enum, and nothing narrower. */
-const ALL_FORMATS: CarouselFormat[] = [
+/**
+ * Every canvas a template is composed for. `linkedin-square` is not listed: it draws on the
+ * Instagram square (`carouselCanvas`), so checking it would check the same pixels twice.
+ */
+const ALL_FORMATS: CarouselCanvas[] = [
   "instagram-square",
   "instagram-portrait",
   "instagram-story",
@@ -837,7 +840,7 @@ const ALL_FORMATS: CarouselFormat[] = [
  * a new canvas quietly retiring the gallery is exactly the kind of break the render contract's
  * consumers are promised against.
  */
-export function previewFormats(template?: CarouselTemplate): CarouselFormat[] {
+export function previewFormats(template?: CarouselTemplate): CarouselCanvas[] {
   if (!template) return [...ALL_FORMATS];
   return ALL_FORMATS.filter((format) => format !== "instagram-story" || fitsSafeArea(template, format));
 }
