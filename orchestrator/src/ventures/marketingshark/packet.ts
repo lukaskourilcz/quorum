@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { repoRoot } from "../../paths.js";
 import type { NormalizedQuestion } from "./bank.js";
-import { brandLocales, type Brand, type FactSheet, type MarketingSharkLocale } from "./config.js";
+import { brandLocales, ENGAGEMENT_NEVER_CLAIM, factSheetFor, type Brand, type FactSheet, type MarketingSharkLocale } from "./config.js";
 import { LIMITS, violationReport, type GateViolation, type HookLines } from "./gates.js";
 import { SLIDE_ROLES } from "./package.js";
 import { writerLimits } from "./render.js";
@@ -32,11 +32,13 @@ ${carousels}
   },
   "descriptions": {
     "instagram": ${pair('"string"')},
-    "threads":   ${pair('"string"')}
+    "threads":   ${pair('"string"')},
+    "linkedin":  { "en": "string" }
   },
   "hashtags": {
     "instagram": ${pair('["#tag", ...]')},
-    "threads":   ${pair('["topic"]')}
+    "threads":   ${pair('["topic"]')},
+    "linkedin":  { "en": ["#tag", ...] }
   }
 }`;
 }
@@ -50,12 +52,14 @@ ${carousels}
  * embellish.
  */
 function productFacts(facts: FactSheet): string {
+  // The engagement rule rides on every block, including one written later without it.
+  const neverClaim = [...new Set([...facts.neverClaim, ENGAGEMENT_NEVER_CLAIM])];
   return `## Product facts (recorded by the owner ${facts.recordedAt}; write nothing beyond them)\n`
     + `maturity: ${facts.maturity}\n`
     + `what a visitor can do today: ${facts.whatVisitorsCanDo}\n`
     + `call to action: ${facts.callToAction}\n`
     + `you may say:\n${facts.allowedClaims.map((claim) => `- ${claim}`).join("\n")}\n`
-    + `never say:\n${facts.neverClaim.map((claim) => `- ${claim}`).join("\n")}`;
+    + `never say:\n${neverClaim.map((claim) => `- ${claim}`).join("\n")}`;
 }
 
 function optionLines(options: readonly string[]): string {
@@ -99,7 +103,7 @@ export function buildChumPacket(input: {
     + `${perLocale((code) => `base Instagram hashtags ${code}`, (locale) => brand.hashtags.instagram[locale].join(" "))}\n`
     + perLocale((code) => `Threads topic tag ${code}`, (locale) => brand.hashtags.threadsTopic[locale]),
 
-    ...(brand.factSheet ? [productFacts(brand.factSheet)] : []),
+    ...(factSheetFor(brand, input.date) ? [productFacts(factSheetFor(brand, input.date)!)] : []),
 
     `## The question (already selected — do not choose another)\n`
     + `id: ${question.id}\n`
@@ -152,8 +156,12 @@ export function buildChumPacket(input: {
     + `- every slide is rendered before anything is kept; text that would be clipped on the canvas fails the check\n`
     + `- Instagram ≤ ${LIMITS.instagramBeforeHashtags} characters before hashtags\n`
     + `- Threads ≤ ${LIMITS.threadsChars} characters\n`
-    + `- alt text ≤ ${LIMITS.altChars} characters per slide\n`
+    + `- LinkedIn (English only) ≤ ${LIMITS.linkedinTotalChars.toLocaleString("en-US")} characters with its hashtags; its first line ≤ ${LIMITS.linkedinFirstLineChars} characters and works alone, because LinkedIn cuts the post there\n`
+    + `- LinkedIn at most ${LIMITS.linkedinHashtagsMax} hashtags, in its hashtag list and none inside the caption\n`
+    + `- three captions, one carousel: the LinkedIn, Instagram and Threads texts differ, and so do their first lines\n`
+    + `- alt text ≤ ${LIMITS.altChars} characters per slide, never empty, all five together ≤ ${LIMITS.altTotalChars.toLocaleString("en-US")}\n`
     + `- Instagram ${LIMITS.instagramHashtagsMin}–${LIMITS.instagramHashtagsMax} hashtags, Threads exactly one topic tag\n`
+    + `- no slide, caption or hashtag promises coins, discounts, access or any reward for following, liking, sharing or commenting\n`
     + `- the footer slide carries the brand's slide-5 line unchanged\n`
     + `- any fenced code block in the question appears on the context slide byte for byte\n`
     + `- no number in a hook that is not in the question or in the pattern's own wording\n`

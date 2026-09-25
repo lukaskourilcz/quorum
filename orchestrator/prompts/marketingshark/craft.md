@@ -17,6 +17,8 @@ change or second-guess them. Return JSON matching the schema you were given, not
   (commit, deploy, code review, streak) stays in English inside Czech copy.
 - Brand tone comes with the input: `dev` = one developer to another, dry humor allowed.
   Insider language is welcome; gatekeeping is not.
+- No post may promise coins, discounts or access for following, liking, sharing or commenting.
+  No giveaways, no "follow for", no reward of any kind for engagement, in any field.
 
 ## The five slides (fixed, per language written)
 
@@ -48,6 +50,15 @@ fabricated stake. At most one slide may use loss framing.
   three to five.
 - **Threads** (per language): ≤ 300 characters, conversational, question-forward, no
   hashtag pile — the single topic tag comes from the input. Link allowed.
+- **LinkedIn** (English only): its own caption. The first line is a hook of ≤ 140
+  characters that works alone, because LinkedIn hides the rest behind "see more". Then a
+  short paragraph a working developer would read: the question's point, one concrete
+  detail, and that the answer is in the carousel. End with a line naming the product and
+  its URL. Aim for 600 to 1,300 characters; the cap is 3,000 with hashtags. At most three
+  hashtags, in the hashtag list, none in the text.
+
+Three captions, one carousel: never copy text unchanged across channels, first lines
+included.
 
 ## Alt text
 
@@ -66,5 +77,5 @@ optimize toward either — write both as well as you can.
 Clarity: a stranger parses each slide in three seconds. So-what: slide 4 answers "why
 should I care". Specificity: names and numbers survived. Truth: nothing claimed beyond
 the question and its explanation. Limits: 80 / 40-word / 500 / 300 / 200 caps hold in
-every language written. Where both are written, parallel meaning across CS and EN
+every language written, and LinkedIn's 140-character first line and 3,000 total. Where both are written, parallel meaning across CS and EN
 without literal translation.

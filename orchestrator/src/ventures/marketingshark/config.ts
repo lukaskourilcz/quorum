@@ -26,6 +26,12 @@ import { configRoot } from "../../paths.js";
  * false premise handed in as config; this is where the premise is kept true.
  */
 export const FactSheet = z.object({
+  /**
+   * The first run date these facts govern. The sheet is a list of dated blocks, so a change to the
+   * product's facts is one new block rather than edits scattered through one: the owner appends the
+   * block, dated the day it becomes true, and the room reads the newest block in effect.
+   */
+  effectiveFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/u),
   recordedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/u),
   source: z.string().min(1).max(240),
   maturity: z.string().min(1).max(240),
@@ -35,6 +41,14 @@ export const FactSheet = z.object({
   neverClaim: z.array(z.string().min(1).max(200)).min(1).max(10)
 });
 export type FactSheet = z.infer<typeof FactSheet>;
+
+/**
+ * The one rule no fact sheet can change: Meta's spam standards forbid "offering to provide anything
+ * of monetary value in exchange for engagement" and LinkedIn forbids artificial engagement (second
+ * handoff, finding 5). The packet states it whatever block is in effect, and a gate enforces it.
+ */
+export const ENGAGEMENT_NEVER_CLAIM =
+  "Coins, discounts, access or any other reward for following, liking, sharing or commenting: no slide, caption or hashtag may promise one.";
 
 /**
  * The languages a brand's carousel can be written in, in the order the room renders them.
@@ -88,8 +102,15 @@ export const Brand = z.object({
     threadsTopic: z.object({ en: z.string(), cs: z.string() })
   }),
   banner: z.boolean(),
-  /** Absent for a brand nobody has described yet; the packet then carries the brand block alone. */
-  factSheet: FactSheet.optional()
+  /**
+   * Absent for a brand nobody has described yet; the packet then carries the brand block alone.
+   * Oldest first, one block per date.
+   */
+  factSheets: z.array(FactSheet).min(1).max(6)
+    .refine((sheets) => sheets.every((sheet, index) => index === 0 || sheets[index - 1]!.effectiveFrom < sheet.effectiveFrom), {
+      message: "fact sheet blocks run oldest first, one per effectiveFrom date"
+    })
+    .optional()
 });
 export type Brand = z.infer<typeof Brand>;
 
@@ -102,6 +123,17 @@ export const MarketingSharkConfig = z.object({
   brands: z.array(Brand).length(1)
 });
 export type MarketingSharkConfig = z.infer<typeof MarketingSharkConfig>;
+
+/**
+ * The facts in effect on a run date: the newest block whose `effectiveFrom` is not after it.
+ *
+ * A date before the first block reads the first block. Those are the oldest facts on record, and
+ * the writer is never handed a described brand with no facts at all.
+ */
+export function factSheetFor(brand: Pick<Brand, "factSheets">, date: string): FactSheet | null {
+  const sheets = brand.factSheets ?? [];
+  return sheets.filter((sheet) => sheet.effectiveFrom <= date).at(-1) ?? sheets[0] ?? null;
+}
 
 /** The brand's languages in the room's own order, so every loop over them agrees. */
 export function brandLocales(brand: Pick<Brand, "locales">): MarketingSharkLocale[] {

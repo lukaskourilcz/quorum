@@ -10,7 +10,8 @@ export const SlideCopy = z.object({
   templateId: z.string(),
   headline: z.string().max(120),
   body: z.string().max(600).optional(),
-  alt: z.string().max(200)
+  /** Required and never empty: every queue item carries it, and Instagram refuses media without it. */
+  alt: z.string().trim().min(1).max(200)
 });
 export type SlideCopy = z.infer<typeof SlideCopy>;
 
@@ -56,11 +57,17 @@ export const MarketingSharkPackage = z.object({
   carousels: perLocale(CarouselCopy),
   descriptions: z.object({
     instagram: perLocale(z.string().max(2200)),
-    threads: perLocale(z.string().max(500))
+    threads: perLocale(z.string().max(500)),
+    /**
+     * LinkedIn's own caption, never another channel's text. English only: the one LinkedIn Page is
+     * devShark's, and devShark writes English. 3,000 is LinkedIn's limit including the hashtags.
+     */
+    linkedin: z.object({ en: z.string().min(1).max(3000) })
   }),
   hashtags: z.object({
     instagram: perLocale(z.array(z.string()).min(3).max(5)),
-    threads: perLocale(z.array(z.string()).length(1))
+    threads: perLocale(z.array(z.string()).length(1)),
+    linkedin: z.object({ en: z.array(z.string()).max(3) })
   }),
   render: z.object({ engineVersion: z.string(), summaryPaths: z.array(z.string()) }),
   status: z.literal("draft"),
@@ -109,11 +116,13 @@ export const ChumOutput = z.object({
   carousels: perLocale(slideDeck()),
   descriptions: z.object({
     instagram: perLocale(z.string()),
-    threads: perLocale(z.string())
+    threads: perLocale(z.string()),
+    linkedin: z.object({ en: z.string() })
   }),
   hashtags: z.object({
     instagram: perLocale(z.array(z.string())),
-    threads: perLocale(z.array(z.string()))
+    threads: perLocale(z.array(z.string())),
+    linkedin: z.object({ en: z.array(z.string()) })
   })
   // `hookB` used to be here: CHUM wrote the alternate hook line as free text. Both hook lines now
   // come from the central library, so there is no field left through which a model can author hook

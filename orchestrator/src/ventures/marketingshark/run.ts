@@ -249,11 +249,13 @@ export function assemblePackage(input: {
     carousels: Object.fromEntries(locales.map((locale) => [locale, { slides: slides(locale) }])),
     descriptions: {
       instagram: pick(input.output.descriptions.instagram),
-      threads: pick(input.output.descriptions.threads)
+      threads: pick(input.output.descriptions.threads),
+      linkedin: { en: input.output.descriptions.linkedin.en }
     },
     hashtags: {
       instagram: pick(input.output.hashtags.instagram),
-      threads: pick(input.output.hashtags.threads)
+      threads: pick(input.output.hashtags.threads),
+      linkedin: { en: input.output.hashtags.linkedin.en }
     },
     render: { engineVersion: engineVersion(), summaryPaths: input.summaryPaths },
     status: "draft",
@@ -641,11 +643,16 @@ export function fixtureChumOutput(input: { brand: Brand; question: NormalizedQue
       instagram: written((locale) => locale === "cs"
         ? `Fixture. Otázka dne z ${brand.displayName}. Odpověď je v karuselu.`
         : `Fixture. Question of the day from ${brand.displayName}. The answer is in the carousel.`),
-      threads: written((locale) => locale === "cs" ? "Fixture. Otázka dne." : "Fixture. Question of the day.")
+      threads: written((locale) => locale === "cs" ? "Fixture. Otázka dne." : "Fixture. Question of the day."),
+      linkedin: {
+        en: `Fixture. One ${brand.displayName} question for working developers, written for LinkedIn.\n\n`
+          + `The carousel walks through the question, the answer and why it holds.\n\n${brand.productUrl}`
+      }
     },
     hashtags: {
       instagram: written((locale) => brand.hashtags.instagram[locale]),
-      threads: written((locale) => [brand.hashtags.threadsTopic[locale]])
+      threads: written((locale) => [brand.hashtags.threadsTopic[locale]]),
+      linkedin: { en: brand.hashtags.instagram.en.slice(0, 3) }
     }
   });
 }

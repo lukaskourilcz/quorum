@@ -32,8 +32,38 @@ export const LIMITS = {
   headlineChars: 120,
   bodyChars: 600,
   instagramTotalChars: 2_200,
-  threadsTotalChars: 500
+  threadsTotalChars: 500,
+  /** LinkedIn's post limit, measured on the caption with its hashtags appended, as it is queued. */
+  linkedinTotalChars: 3_000,
+  /**
+   * LinkedIn cuts a post after roughly the first 140 characters on a phone, behind "…see more", so
+   * the first line has to stand alone within that.
+   */
+  linkedinFirstLineChars: 140,
+  linkedinHashtagsMax: 3,
+  /** The queue item carries one alt text for the whole carousel, and the queue caps it at 1,000. */
+  altTotalChars: 1_000
 } as const;
+
+/** The first non-empty line of a caption, trimmed: what a feed shows before it truncates. */
+export function firstLine(text: string): string {
+  return text.split("\n").map((line) => line.trim()).find(Boolean) ?? "";
+}
+
+const comparable = (text: string): string => text.toLowerCase().replace(/\s+/gu, " ").trim();
+
+/*
+ * Engagement bait, in the one form a check can recognise without flagging ordinary developer copy:
+ * a call to follow, like, share, comment on or tag the brand or the post, in the same sentence as a
+ * reward. "Share this with a friend who still uses var" passes; "Follow us for 50 coins" does not.
+ */
+const ENGAGEMENT_CALL = /\b(?:follow|like|share|comment(?:\s+on)?|repost|tag|subscribe(?:\s+to)?|save)\s+(?:us|this|it|our|devshark|the\s+(?:page|post|carousel|profile)|a\s+friend|below)\b|\bfor\s+(?:following|liking|sharing|commenting|reposting|tagging|subscribing)\b|(?:^|\s)(?:sleduj(?:te)?|lajkni(?:te)?|sdílej(?:te)?|okomentuj(?:te)?)(?=\s|$)/iu;
+const ENGAGEMENT_REWARD = /\b(?:coins?|discounts?|rewards?|giveaways?|prizes?|promo\s+codes?|unlock(?:s|ed)?|premium|free\s+(?:access|months?|trial))\b|\d+\s*%\s*off\b|(?:^|\s)(?:minc\p{L}*|slev\p{L}*|odměn\p{L}*)/iu;
+
+/** Whether any sentence of a text promises a reward for engagement. */
+export function promisesEngagementReward(text: string): boolean {
+  return text.split(/[.!?\n]+/u).some((sentence) => ENGAGEMENT_CALL.test(sentence) && ENGAGEMENT_REWARD.test(sentence));
+}
 
 /** The assigned slide-1 line per language: English always, Czech for a brand that writes it. */
 export interface HookLines {
@@ -171,6 +201,11 @@ export function runTruthGates(input: {
         add("alt-present", locale, `${slide.role} has no alt text`);
       }
     }
+    // The queue carries the five alt texts as one field, joined the way the queue joins them.
+    const altTotal = slides.map((slide) => slide.alt).join(" ").length;
+    if (altTotal > LIMITS.altTotalChars) {
+      add("alt-total", locale, `the five alt texts are ${altTotal} characters together, cap is ${LIMITS.altTotalChars}`);
+    }
 
     // Code reaches the slide byte for byte or it does not reach it. A retyped snippet is a
     // different program.
@@ -208,6 +243,44 @@ export function runTruthGates(input: {
     if (threadsTags.length !== 1) {
       add("threads-topic", locale, `Threads carries one topic tag, received ${threadsTags.length}`);
     }
+
+    const written = [
+      ...slides.flatMap((slide) => [slide.headline, slide.body ?? "", slide.alt]),
+      description,
+      threadsText,
+      ...(locale === "en" ? [output.descriptions.linkedin.en] : [])
+    ];
+    if (written.some(promisesEngagementReward)) {
+      add("engagement-reward", locale, "no slide, caption or hashtag may promise coins, discounts, access or any reward for following, liking, sharing or commenting");
+    }
+  }
+
+  // LinkedIn is English only: one caption, written for LinkedIn, never another channel's text.
+  const linkedin = output.descriptions.linkedin.en;
+  const linkedinTags = output.hashtags.linkedin.en;
+  const linkedinStored = linkedinTags.length > 0 ? `${linkedin}\n\n${linkedinTags.join(" ")}` : linkedin;
+  if (linkedin.trim().length === 0) {
+    add("linkedin-present", "en", "the LinkedIn caption is empty");
+  }
+  if (linkedinStored.length > LIMITS.linkedinTotalChars) {
+    add("linkedin-length", "en", `${linkedinStored.length} characters with hashtags, cap is ${LIMITS.linkedinTotalChars}`);
+  }
+  const opening = firstLine(linkedin);
+  if (opening.length > LIMITS.linkedinFirstLineChars) {
+    add("linkedin-first-line", "en", `the first line is ${opening.length} characters; LinkedIn shows about ${LIMITS.linkedinFirstLineChars} before "see more", so it must stand alone within that`);
+  }
+  if (linkedinTags.length > LIMITS.linkedinHashtagsMax || linkedinTags.some((tag) => !tag.startsWith("#"))) {
+    add("linkedin-hashtags", "en", `LinkedIn carries at most ${LIMITS.linkedinHashtagsMax} hashtags, each starting with #; received ${linkedinTags.length}`);
+  }
+  if (/(?:^|\s)#[\p{L}\p{N}_]+/u.test(linkedin)) {
+    add("linkedin-hashtags", "en", "hashtags go in the LinkedIn hashtag list, not inside the caption");
+  }
+  const instagramEn = output.descriptions.instagram.en;
+  const threadsEn = output.descriptions.threads.en;
+  if ([instagramEn, threadsEn].some((other) => comparable(other) === comparable(linkedin))) {
+    add("linkedin-distinct", "en", "the LinkedIn caption repeats another channel's text; write it for LinkedIn");
+  } else if (opening && [instagramEn, threadsEn].some((other) => comparable(firstLine(other)) === comparable(opening))) {
+    add("linkedin-distinct", "en", "the LinkedIn first line repeats another channel's first line; write its own hook");
   }
 
   // The `ab-record` gate is gone with the field it checked. Both hook lines now come from the

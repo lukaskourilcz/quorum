@@ -54,11 +54,13 @@ function reply(brand: Brand, reveal: { headline: string; body?: string }, why = 
     carousels: { cs: slides("cs"), en: slides("en") },
     descriptions: {
       instagram: { cs: "Otázka dne. Odpověď je v karuselu.", en: "Question of the day. The answer is in the carousel." },
-      threads: { cs: "Co vrací useState?", en: "What does useState return?" }
+      threads: { cs: "Co vrací useState?", en: "What does useState return?" },
+      linkedin: { en: "One React hook, two return values.\n\nThe carousel has the question and the answer.\n\ndevshark.app" }
     },
     hashtags: {
       instagram: { cs: ["#programovani", "#webdev", "#vyvojar"], en: ["#webdev", "#programming", "#codingquiz"] },
-      threads: { cs: ["programování"], en: ["webdev"] }
+      threads: { cs: ["programování"], en: ["webdev"] },
+      linkedin: { en: ["#webdev"] }
     }
   });
 }

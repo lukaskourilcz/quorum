@@ -135,10 +135,15 @@ function replyAtTheLimits(question: NormalizedQuestion): ChumOutput {
   };
   return ChumOutput.parse({
     carousels: { cs: { slides: slides("cs") }, en: { slides: slides("en") } },
-    descriptions: { instagram: { cs: "Otázka dne.", en: "Question of the day." }, threads: { cs: "Otázka dne.", en: "Question of the day." } },
+    descriptions: {
+      instagram: { cs: "Otázka dne.", en: "Question of the day." },
+      threads: { cs: "Otázka dne.", en: "Question of the day." },
+      linkedin: { en: "One question for working developers." }
+    },
     hashtags: {
       instagram: { cs: brand.hashtags.instagram.cs, en: brand.hashtags.instagram.en },
-      threads: { cs: [brand.hashtags.threadsTopic.cs], en: [brand.hashtags.threadsTopic.en] }
+      threads: { cs: [brand.hashtags.threadsTopic.cs], en: [brand.hashtags.threadsTopic.en] },
+      linkedin: { en: [] }
     }
   });
 }

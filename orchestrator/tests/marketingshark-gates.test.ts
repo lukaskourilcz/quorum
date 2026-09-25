@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { NormalizedQuestionSchema, type NormalizedQuestion } from "../src/ventures/marketingshark/bank.js";
-import { loadMarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
-import { fencedBlocks, runTruthGates, violationReport } from "../src/ventures/marketingshark/gates.js";
+import { ENGAGEMENT_NEVER_CLAIM, factSheetFor, loadMarketingSharkConfig, MarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
+import { fencedBlocks, LIMITS, promisesEngagementReward, runTruthGates, violationReport } from "../src/ventures/marketingshark/gates.js";
 import { buildChumPacket, outputShape, readCraftRules } from "../src/ventures/marketingshark/packet.js";
 import { ChumOutput } from "../src/ventures/marketingshark/package.js";
 
@@ -53,15 +53,21 @@ function output(brand: Brand, overrides: Partial<ChumOutput> = {}): ChumOutput {
     carousels: { cs: slides("cs"), en: slides("en") },
     descriptions: {
       instagram: { cs: "Otázka dne. Odpověď je v karuselu.", en: "Question of the day. The answer is in the carousel." },
-      threads: { cs: "Co vrací useState?", en: "What does useState return?" }
+      threads: { cs: "Co vrací useState?", en: "What does useState return?" },
+      linkedin: { en: LINKEDIN }
     },
     hashtags: {
       instagram: { cs: ["#programovani", "#webdev", "#vyvojar"], en: ["#webdev", "#programming", "#codingquiz"] },
-      threads: { cs: ["programování"], en: ["webdev"] }
+      threads: { cs: ["programování"], en: ["webdev"] },
+      linkedin: { en: ["#webdev", "#react"] }
     },
     ...overrides
   });
 }
+
+const LINKEDIN = "One React hook, two return values, and a common interview slip.\n\n"
+  + "useState hands back an array: the value first, then the setter. The carousel shows the question and why the order matters.\n\n"
+  + "devshark.app";
 
 describe("the shape CHUM must return", () => {
   it("requires the five roles in the order the renderer assumes", async () => {
@@ -98,8 +104,8 @@ describe("marketingShark truth gates", () => {
     const { cs: _carousel, ...carousels } = output(english).carousels;
     const englishOnly = ChumOutput.parse({
       carousels,
-      descriptions: { instagram: { en: "Question of the day. The answer is in the carousel." }, threads: { en: "What does useState return?" } },
-      hashtags: { instagram: { en: ["#webdev", "#programming", "#codingquiz"] }, threads: { en: ["webdev"] } }
+      descriptions: { instagram: { en: "Question of the day. The answer is in the carousel." }, threads: { en: "What does useState return?" }, linkedin: { en: LINKEDIN } },
+      hashtags: { instagram: { en: ["#webdev", "#programming", "#codingquiz"] }, threads: { en: ["webdev"] }, linkedin: { en: ["#webdev"] } }
     });
     expect(runTruthGates({ output: englishOnly, brand: english, question, hookLines: { en: HOOK_LINES.en } })).toEqual([]);
 
@@ -165,6 +171,73 @@ describe("marketingShark truth gates", () => {
     for (const gate of ["hook-length", "why-length", "alt-length", "threads-length", "instagram-length", "instagram-hashtags", "threads-topic"]) {
       expect(gates, `${gate} was not caught`).toContain(gate);
     }
+  });
+
+  it("refuses a LinkedIn caption that breaks LinkedIn's limits", async () => {
+    const brand = await devshark();
+    const gates = (edit: (reply: ChumOutput) => void) => {
+      const reply = output(brand);
+      edit(reply);
+      return runTruthGates({ output: reply, brand, question, hookLines: HOOK_LINES }).map((violation) => violation.gate);
+    };
+    expect(gates(() => undefined)).toEqual([]);
+    expect(gates((reply) => { reply.descriptions.linkedin.en = "x".repeat(LIMITS.linkedinTotalChars); })).toContain("linkedin-length");
+    // LinkedIn truncates behind "see more"; the first line has to stand on its own.
+    expect(gates((reply) => { reply.descriptions.linkedin.en = `${"word ".repeat(40)}\n\nmore`; })).toContain("linkedin-first-line");
+    expect(gates((reply) => { reply.hashtags.linkedin.en = ["#a", "#b", "#c", "#d"]; })).toContain("linkedin-hashtags");
+    expect(gates((reply) => { reply.hashtags.linkedin.en = ["react"]; })).toContain("linkedin-hashtags");
+    expect(gates((reply) => { reply.descriptions.linkedin.en = `${LINKEDIN} #react #webdev`; })).toContain("linkedin-hashtags");
+    expect(gates((reply) => { reply.descriptions.linkedin.en = ""; })).toContain("linkedin-present");
+  });
+
+  it("refuses a LinkedIn caption copied from another channel, whole or by its first line", async () => {
+    const brand = await devshark();
+    const copied = output(brand);
+    copied.descriptions.linkedin.en = copied.descriptions.instagram.en;
+    expect(runTruthGates({ output: copied, brand, question, hookLines: HOOK_LINES }).map((violation) => violation.gate)).toContain("linkedin-distinct");
+    const opening = output(brand);
+    opening.descriptions.linkedin.en = `${opening.descriptions.threads.en}\n\nA longer LinkedIn body follows here.`;
+    expect(runTruthGates({ output: opening, brand, question, hookLines: HOOK_LINES }).map((violation) => violation.gate)).toContain("linkedin-distinct");
+  });
+
+  it("refuses a post that promises a reward for engagement, and leaves ordinary calls alone", async () => {
+    // Meta's spam standards forbid value in exchange for engagement; LinkedIn forbids artificial
+    // engagement (second handoff, finding 5).
+    for (const bait of [
+      "Follow us for 50 coins on your first streak.",
+      "Like this post to unlock Premium for a month",
+      "Share this with a friend and get a 20% discount",
+      "Comment below: every answer earns a reward",
+      "Coins for following devShark this week",
+      "Sleduj nás a získej 50 mincí"
+    ]) expect(promisesEngagementReward(bait), bait).toBe(true);
+    for (const fine of [
+      "Share this with a friend who still uses var.",
+      "Save this for your next interview.",
+      "Components that share state reward you with fewer bugs.",
+      "The <details> tag is free to use, and so is the answer in slide 3.",
+      "Follow the setter: it schedules a render."
+    ]) expect(promisesEngagementReward(fine), fine).toBe(false);
+
+    const brand = await devshark();
+    const bait = output(brand);
+    bait.descriptions.linkedin.en = `${LINKEDIN}\n\nFollow us for 50 coins.`;
+    const violations = runTruthGates({ output: bait, brand, question, hookLines: HOOK_LINES });
+    expect(violations.map((violation) => violation.gate)).toContain("engagement-reward");
+    const slide = output(brand);
+    slide.carousels.en.slides[3]!.body = "Like this post to unlock Premium.";
+    expect(runTruthGates({ output: slide, brand, question, hookLines: HOOK_LINES }).map((violation) => violation.gate)).toContain("engagement-reward");
+  });
+
+  it("refuses alt text the queue could not carry: empty, or over its total", async () => {
+    const brand = await devshark();
+    const long = output(brand);
+    for (const slide of long.carousels.en.slides) slide.alt = "y".repeat(LIMITS.altChars);
+    // Five alts at the per-slide cap, joined, are one character per separator over the queue's 1,000.
+    expect(runTruthGates({ output: long, brand, question, hookLines: HOOK_LINES }).map((violation) => violation.gate)).toContain("alt-total");
+    const empty = output(brand);
+    empty.carousels.en.slides[2]!.alt = " ";
+    expect(runTruthGates({ output: empty, brand, question, hookLines: HOOK_LINES }).map((violation) => violation.gate)).toContain("alt-present");
   });
 
   it("refuses slides that are out of role order", async () => {
@@ -260,13 +333,17 @@ describe("marketingShark CHUM packet", () => {
     // devShark is in testing, and the packet is where that premise reaches the writer.
     const brand = await devshark();
     const packet = buildChumPacket({ brand, question, hookLines: HOOK_LINES, hookId: "spot-it", date: "2026-09-16" });
-    expect(brand.factSheet?.maturity).toContain("in testing");
+    const facts = factSheetFor(brand, "2026-09-16")!;
+    expect(facts.maturity).toContain("in testing");
     expect(packet).toContain("## Product facts (recorded by the owner 2026-09-15");
-    expect(packet).toContain(brand.factSheet!.maturity);
+    expect(packet).toContain(facts.maturity);
     expect(packet).toContain("never say:");
-    for (const claim of brand.factSheet!.neverClaim) expect(packet).toContain(`- ${claim}`);
+    for (const claim of facts.neverClaim) expect(packet).toContain(`- ${claim}`);
+    // The engagement rule is on the sheet and stated once.
+    expect(facts.neverClaim).toContain(ENGAGEMENT_NEVER_CLAIM);
+    expect(packet.split(ENGAGEMENT_NEVER_CLAIM)).toHaveLength(2);
     // A brand nobody has described yet carries no facts section rather than an empty one.
-    const { factSheet: _dropped, ...undescribed } = brand;
+    const { factSheets: _dropped, ...undescribed } = brand;
     expect(buildChumPacket({ brand: undescribed, question, hookLines: HOOK_LINES, hookId: "spot-it", date: "2026-09-16" }))
       .not.toContain("## Product facts");
   });
@@ -276,15 +353,40 @@ describe("marketingShark CHUM packet", () => {
     const packet = buildChumPacket({ brand, question, hookLines: null, hookId: null, date: "2026-08-08" });
     // A cap the gate enforces and the packet never mentions is a retry the model cannot learn
     // its way out of.
-    for (const cap of ["≤ 80 characters", "≤ 40 words", "≤ 500 characters", "≤ 300 characters", "≤ 200 characters", "3–5 hashtags"]) {
+    for (const cap of [
+      "≤ 80 characters", "≤ 40 words", "≤ 500 characters", "≤ 300 characters", "≤ 200 characters", "3–5 hashtags",
+      "≤ 3,000 characters with its hashtags", "first line ≤ 140 characters", "at most 3 hashtags", "all five together ≤ 1,000",
+      "texts differ, and so do their first lines", "any reward for following, liking, sharing or commenting"
+    ]) {
       expect(packet, `${cap} is enforced but not stated`).toContain(cap);
     }
+    expect(packet).toContain('"linkedin":  { "en": "string" }');
+  });
+
+  it("reads the fact sheet block in effect on the run date, so a change of facts is one new block", async () => {
+    const brand = await devshark();
+    const current = factSheetFor(brand, "2026-09-26")!;
+    const launched = { ...current, effectiveFrom: "2026-10-01", recordedAt: "2026-09-30", maturity: "Publicly launched." };
+    const later = { ...brand, factSheets: [...brand.factSheets!, launched] };
+    expect(factSheetFor(later, "2026-09-30")!.maturity).toBe(current.maturity);
+    expect(factSheetFor(later, "2026-10-01")!.maturity).toBe("Publicly launched.");
+    expect(buildChumPacket({ brand: later, question, hookLines: null, hookId: null, date: "2026-10-02" })).toContain("maturity: Publicly launched.");
+    // A block written without the engagement rule still carries it into the packet.
+    const forgetful = { ...brand, factSheets: [{ ...current, neverClaim: current.neverClaim.filter((claim) => claim !== ENGAGEMENT_NEVER_CLAIM) }] };
+    expect(buildChumPacket({ brand: forgetful, question, hookLines: null, hookId: null, date: "2026-09-26" })).toContain(`- ${ENGAGEMENT_NEVER_CLAIM}`);
+    // Blocks run oldest first, one per date.
+    const config = await loadMarketingSharkConfig();
+    const shuffled = { ...config, brands: [{ ...brand, factSheets: [launched, current] }] };
+    expect(MarketingSharkConfig.safeParse(shuffled).success).toBe(false);
+    expect(MarketingSharkConfig.safeParse({ ...config, brands: [later] }).success).toBe(true);
   });
 
   it("keeps the craft rules small enough to ride on every daily call", async () => {
     const craft = await readCraftRules();
     expect(craft).toContain("marketingShark craft rules (CHUM)");
     expect(craft).toContain("Code blocks are copied exactly, character for character.");
+    expect(craft).toContain("**LinkedIn**");
+    expect(craft).toContain("No post may promise coins, discounts or access for following, liking, sharing or commenting.");
     // Sized to stay near 1,600 tokens of paid input; ~3.5 characters a token.
     expect(craft.length).toBeLessThan(7_000);
   });
