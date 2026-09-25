@@ -1,4 +1,4 @@
-# devShark social queue: profiles, held connections and the approval path
+# The devShark social queue: marketingShark drafts, the owner approves, nothing else sends
 
 Date: 2026-09-26
 
@@ -6,118 +6,142 @@ Decider: Lukas Kouril, owner
 
 Status: proposed
 
-Signature / explicit approval reference: none yet. The owner countersigns by setting the status
-to `countersigned` in their own commit, after reading sections 3 and 4 of
-`SECOND-HANDOFF-25-9-2026.md`. Until then nothing below is approved beyond what the repository
-already holds: draft records that cannot send.
+Signature / explicit approval reference: none yet. The owner countersigns by setting the status to
+`countersigned` and naming the approval on this line. Until then the record authorizes only the
+draft-only work below, and every lock in "What stays held" holds whatever else changes.
 
 Decision id: `devshark-social-2026-09a`
 
-Supersedes: nothing. `social-distribution-2026-08a`
-(`2026-08-27-social-distribution-operating-decision.md`) stays in force; this record adds one
-venture's connections and one transport under it. `operations-2026-09b` already scopes
-marketingShark to devShark.
-
-Sources: `SECOND-HANDOFF-25-9-2026.md`, issues #568 to #576,
-`state/decisions/2026-08-27-social-distribution-operating-decision.md`,
+Sources: `SECOND-HANDOFF-25-9-2026.md` (sections 1 to 5), GitHub #568 to #576 (label
+`second-handoff-25-9-2026`), #556, #562, `state/decisions/2026-08-27-social-distribution-operating-decision.md`,
 `state/decisions/2026-09-25-focus-dneskai-devshark.md`.
 
-## Decision
+## What the owner asked for
 
-BoardlessAI produces devShark's social posts through marketingShark, the Design Lab and GoVIRAL.
-The owner approves each post in an admin Queue before it is sent.
+Once devShark has profiles on LinkedIn, Instagram and Threads, BoardlessAI produces their posts
+through marketingShark, the Design Lab and GoVIRAL. A Queue workspace in the admin lists every post
+that waits for approval. The owner can edit a post's text, or open it in the Design Lab to change
+the graphic. Approving a post publishes it without another manual step.
 
-1. **Profiles.** Three `venture-primary` profiles for the devShark brand, owned by the
-   marketingShark venture: `social-profile-devshark-linkedin`, `social-profile-devshark-instagram`
-   and `social-profile-devshark-threads`. English only. The owner creates the accounts and picks
-   the handles.
-2. **Connections.** One per profile, `held`, with `enabledByHumanAt: null`. The repository holds
-   reference names only: `BUFFER_API_KEY`, `BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN`,
-   `DEVSHARK_INSTAGRAM_USER_ID`, `DEVSHARK_INSTAGRAM_ACCESS_TOKEN`, `DEVSHARK_THREADS_USER_ID` and
-   `DEVSHARK_THREADS_ACCESS_TOKEN`. The values exist only as GitHub Actions secrets the owner
-   sets.
-3. **Transports.** Instagram (through Instagram Login) and Threads go through Direct Meta, the
-   core connector of `social-distribution-2026-08a`. LinkedIn goes through Buffer's free plan:
-   Buffer moves from "held optional adapter" to the held LinkedIn transport, for this one
-   connection. LinkedIn's own Community Management API needs vetting of a registered
-   organization and weeks to months of review, so the direct adapter is documented and not
-   built. `api.linkedin.com` is reserved in the network allowlist for it.
-4. **Channel.** `config/channels.json` gains a third channel, `linkedin`, in `draft` with
-   `enabledByHumanAt: null`: one organic post a day, at least 20 hours apart.
-5. **Readiness.** `state/social/activation.json` carries a `marketingshark` record that counts
-   drafted devShark packages. At least three must exist before any live send, as the ten-article
-   rule of `social-2026-08a` requires for the magazines.
-6. **Capability edges.** `marketingshark → design-lab` (`bounded-render-summary/1`) and
-   `marketingshark → social-distribution` (`approved-publish-package/1`) are governed by this
-   record (#568 adds them).
-7. **Content rule.** No post, caption or hashtag promises coins, discounts or access for
-   following, liking, sharing or commenting. Meta's spam standards and LinkedIn's professional
-   community policies forbid it, and no API can verify a follow.
-8. **Approval path.** The Queue workspace moves an item from `draft` to `queued` with the owner's
-   approval as its provenance, then dispatches the publisher (#573, #574). It adds no other way to
-   send.
+## Decision proposed
 
-## What this record changes in the repository now
+1. **marketingShark writes queue-ready packages (#568, B1).** One package a day for devShark, in
+   English only: devShark ships English only, so a Czech carousel has nothing to point at. The
+   Czech path stays available to a brand that names it. Each package carries the five reviewed
+   slides as PNG frames and JPEG copies (quality 90, sRGB, 1080 x 1350) under
+   `site/public/social/devshark/<date>/en/`, with every file's hash in the package. It carries
+   three captions for one carousel: Instagram, Threads and a LinkedIn caption written for LinkedIn.
+   Alt text is required on every slide.
+2. **Three queue v2 drafts per package**, one per platform, each bound to devShark's own profile
+   (`social-profile-devshark-linkedin`, `-instagram`, `-threads`, registered by #569) and carrying
+   the package as an `approved-publish-package/1` reference with its hash. Every check starts
+   `pending`, and `selectedBy` is `MAKO`.
+3. **Capability map 1.4.0** gains `marketingshark -> design-lab` (`bounded-render-summary/1`,
+   enforced in `orchestrator/src/studio/render-access.ts`) and `marketingshark ->
+   social-distribution` (`approved-publish-package/1`, enforced in
+   `orchestrator/src/social/publisher-targets.ts`, which now requires an exact, current capability
+   reference on every marketingShark item). The `devshark` node's payload class becomes
+   `internal-marketing-artifact`. GoVIRAL's edge to marketingShark stays the one #562 registered,
+   on `goviral-trends/1`, because that is the snapshot the room reads. A
+   `goviral-intelligence-packet/1` edge waits for B9, which builds the reader it would govern.
+4. **The owner's approval is the evidence** for the checks a model cannot pass for itself (brand,
+   claims, quill, keeper, policy). The Queue workspace (#573) records it as an event whose id
+   becomes `approvalProvenance.approvalRef`, and binds it to the item's content hash. An edit makes
+   a new item that supersedes the old one; it never changes an approved item in place.
+5. **Transport at $0.** Direct Meta for Instagram and Threads (#572), with image URLs pinned to a
+   commit through jsDelivr (#570). Buffer's free plan for the LinkedIn Page (#571); LinkedIn's own
+   Community Management API needs a vetting this company cannot pass today and is documented, not
+   built. Zernio, about $6 a month, is the only paid alternative and needs a ledger line first.
+6. **Frames are committed daily for devShark.** About 250 KB of PNG and 340 KB of JPEG a day.
+   DNESKAi's frames wait for an enabled channel (#563); devShark's are written from the first
+   draft, so an item approved in the Queue already has public URLs. #570 prunes
+   `site/public/social` after 90 days. To reverse it, gate the write on an enabled channel the
+   way #563 gates DNESKAi's.
 
-- `.env.example` names the six references above and `LINKEDIN_API_VERSION`, each with an empty
-  value. `orchestrator/tests/marketingshark-nothing-posts.test.ts` banned the word `DEVSHARK` in
-  that file. It now requires every `DEVSHARK` and `BUFFER` line there to be a bare name with no
-  value.
-- `config/network-allowlist.json` gains `api.buffer.com` (the LinkedIn transport),
-  `cdn.jsdelivr.net` (checking that a public asset URL resolves before a send) and
-  `api.linkedin.com` (reserved for the direct adapter).
+## Rules every post keeps
 
-## What it does not do
+- No slide, caption or hashtag may promise coins, discounts, access or any reward for following,
+  liking, sharing or commenting. Meta's spam standards forbid value in exchange for engagement and
+  LinkedIn forbids artificial engagement. The rule is in the craft rules, in the fact sheet's
+  `neverClaim`, in every CHUM packet, and in the `engagement-reward` gate.
+- Facts come only from the fact sheet block in effect on the run date. No launch date, price or
+  user count until the owner adds a block that states one.
+- Three captions, one carousel: no channel's text or first line is another channel's.
+- One paid call per brand per day inside the $0.10 envelope; `maxOutputTokens` is not raised.
+  Frames, gates and queue items cost nothing.
 
-It creates no account, stores no credential, enables no channel, activates no connection or
-provider binding, uncomments no schedule and spends nothing. `SOCIAL_KILL_SWITCH`, each channel's
-`mode` and `enabledByHumanAt`, the profile and connection activation, the per-venture activation,
-cadence, the immutable content hash and two-phase publishing with reconciliation all stay as they
-are. In code, marketingShark stays a non-publishing venture (`isPublishingVenture`), and a
-LinkedIn connection stays held until the Buffer adapter exists (#571).
+## What #569 registers
 
-## Activation
+- Three `venture-primary` profiles for the devShark brand under the marketingShark venture,
+  `proposed` and not live-eligible, each with one held connection. The repository holds
+  reference names only: `BUFFER_API_KEY` and `BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN` for the
+  LinkedIn Page through Buffer, `DEVSHARK_INSTAGRAM_USER_ID` and `DEVSHARK_INSTAGRAM_ACCESS_TOKEN`
+  through Instagram Login, `DEVSHARK_THREADS_USER_ID` and `DEVSHARK_THREADS_ACCESS_TOKEN`. The
+  values exist only as GitHub Actions secrets the owner sets.
+- Held provider bindings: Direct Meta for Instagram and Threads, Buffer for LinkedIn. A
+  connection on any transport other than Direct Meta resolves `held` with
+  `provider-adapter-unavailable` until #571 builds the Buffer adapter.
+- `linkedin` joins the platform enum, with LinkedIn's organization scopes for a later direct
+  adapter and a `provider-managed` marker for aggregator connections. `config/channels.json`
+  gains a third channel, `linkedin`, in `draft`: one organic post a day, at least 20 hours apart.
+- One held, model-free strategy per devShark profile, because every real profile has exactly one.
+- `state/social/activation.json` gains a `marketingshark` record: drafted devShark packages
+  against a floor of three before any live send, under this decision's id.
+- `marketingshark` in `legacyQueueMappings`, so a v1 item it left behind migrates to the profile
+  that owns its channel's connection.
+- `.env.example` names the six references and `LINKEDIN_API_VERSION`, all with empty values.
+  `marketingshark-nothing-posts.test.ts` banned the word `DEVSHARK` there; it now requires every
+  `DEVSHARK` and `BUFFER` line to be a bare name with no value.
+- `config/network-allowlist.json` gains `api.buffer.com`, `cdn.jsdelivr.net` (checking that an
+  asset URL resolves before a send) and `api.linkedin.com` (reserved; nothing calls it).
+- Stop condition for the new network: stop on a factual correction a package cannot absorb, a
+  platform warning or an owner veto, then roll back as below.
 
-Countersigning this record sends nothing by itself. Activation then goes in this order:
+## What stays held
 
-1. The owner creates the three profiles, connects the LinkedIn Page in Buffer, and connects
-   Instagram and Threads in a Meta developer app as testers of the owner's own app, so no App
-   Review is needed.
-2. The owner stores the six secrets in GitHub Actions and sets `SOCIAL_KILL_SWITCH=false`, both
-   the secret and `vars.SOCIAL_KILL_SWITCH`.
-3. `state/INBOX.md` records `HUMAN_APPROVAL DEVSHARK-SOCIAL-001` (connect and activate the three
-   devShark connections; Buffer for LinkedIn; autopublish of owner-approved Queue items only) and
-   `HUMAN_APPROVAL DEVSHARK-SOCIAL-002` (the channels' `mode: "autopublish"` flip). The owner
-   ticks them in their own commit.
-4. `config/channels.json` and the registry flip to `autopublish` with `enabledByHumanAt`, and
-   `activation.json` shows `marketingshark: enabled` after three drafted packages.
+Building every step of the programme sends nothing. Until this record is countersigned, and
+beyond it until the owner performs each activation step below:
 
-Three tests pin today's posture and change only in the commit that records the countersignature:
-`ci-policy.test.ts` (every channel `draft`, the publisher schedule commented out),
-`marketingshark-nothing-posts.test.ts` (nothing publishes even in an unlocked world) and
-`social-publisher-targets.test.ts` (every connection held).
+- `SOCIAL_KILL_SWITCH` stays the supreme stop.
+- Both Meta channels, and the LinkedIn channel #569 adds, stay `draft` with `enabledByHumanAt: null`.
+- Every devShark connection stays `held`; no credential value exists in the repository, only
+  reference names.
+- marketingShark is not a publishing venture; its items are drafts with every check pending.
+- A LinkedIn item is refused by name at publish time until the LinkedIn transport exists.
 
-## Budget
+These tests pin that posture and change only in the commit that records this decision as
+countersigned: `orchestrator/tests/ci-policy.test.ts` (channels draft, publisher schedule
+commented out), `orchestrator/tests/marketingshark-nothing-posts.test.ts` (nothing publishes even
+in an unlocked world; that assertion stays, because it is about the code path), and
+`orchestrator/tests/social-publisher-targets.test.ts` (held connections).
 
-Transport costs $0: Buffer Free, Direct Meta and jsDelivr. marketingShark stays at about $0.04 a
-day. Nothing new touches `state/treasury/ledger.json`. Zernio, at about $6 a month for three
-accounts, is the only paid alternative and needs a ledger line before it is used.
+## Activation, in order
 
-## Stop condition and rollback
+1. The owner creates the three devShark profiles and connects them: Buffer for the LinkedIn Page,
+   a Meta developer app with Instagram Login and Threads, with the devShark accounts as testers.
+2. Secrets in GitHub Actions under the reference names #569 registers; `SOCIAL_KILL_SWITCH=false`.
+3. `state/INBOX.md`: `HUMAN_APPROVAL DEVSHARK-SOCIAL-001` (connect and activate the three devShark
+   connections; Buffer for LinkedIn; autopublish of owner-approved Queue items only) and
+   `DEVSHARK-SOCIAL-002` (the channels' `mode: "autopublish"`). The owner ticks them in their own
+   commit.
+4. The channels and the registry flip to `autopublish` with `enabledByHumanAt`, and
+   `state/social/activation.json` shows marketingShark enabled after three drafted packages.
 
-Stop on a factual correction the package cannot absorb, a platform warning, or an owner veto.
-Rollback follows `social-distribution-2026-08a`: pause the connection, restore the kill switch,
-revoke the Buffer API key or the Meta tokens, and keep every queue item, receipt and history
-record. No rollback deletes audit history or turns an ambiguous remote outcome into a failure.
+## Rollback
+
+Set the two marketingShark edges to `held`: the publisher then denies every marketingShark item,
+and the room still drafts for review. Reverting the B1 commits returns the room to Czech and English
+drafts in queue v1, which the publisher never considered.
 
 ## Implementation
 
-- [ ] B1: marketingShark writes queue-ready packages; capability edges (#568)
-- [x] B2: devShark profiles, held connections, the LinkedIn channel and platform (#569)
-- [ ] B3: public image URLs for Meta fetches (#570)
-- [ ] B4: LinkedIn transport through Buffer (#571)
-- [ ] B5: Threads images and Instagram JPEG in the Direct Meta adapter (#572)
+- [x] B1: packages, frames, LinkedIn caption, queue v2 drafts, capability edges (#568)
+- [x] B2: devShark profiles, held connections, the LinkedIn platform and channel (#569); register
+  `marketingshark` in the registry's `legacyQueueMappings` with those profiles
+- [ ] B3: public image URLs through jsDelivr, 90-day retention (#570)
+- [ ] B4: LinkedIn through Buffer (#571)
+- [ ] B5: Threads images and Instagram JPEG carousels in the Direct Meta adapter (#572)
 - [ ] B6: the Queue workspace (#573)
 - [ ] B7: approval dispatches the publisher (#574)
-- [ ] B8: Design Lab editing and re-render of a devShark package (#575)
-- [ ] B9: more post kinds and the GoVIRAL edge (#576)
+- [ ] B8: Design Lab editing and re-render for devShark packages (#575)
+- [ ] B9: more post kinds and the GoVIRAL packet edge (#576)
