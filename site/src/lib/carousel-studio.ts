@@ -18,6 +18,7 @@ import {
   type CarouselPayload,
   type CarouselTemplate
 } from "@boardlessai/carousel-studio";
+import { activeDesignLabVentureIds } from "./design-lab-ventures";
 import { parseRatingLedger, type RatingRecord } from "./rating-model";
 
 const repositoryRoot = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..");
@@ -250,9 +251,13 @@ export async function readCarouselStudio(root = repositoryRoot): Promise<Carouse
       };
     })
     .sort((left, right) => left.template.id.localeCompare(right.template.id) || right.template.version.localeCompare(left.template.version));
+  // The gallery offers the brands of running ventures only (operations-2026-09b).
+  const activeBrands = new Set<string>(await activeDesignLabVentureIds(root));
   return {
     templates,
-    brands: Object.values(CAROUSEL_BRANDS).map((brand) => ({ id: brand.id, name: brand.name })),
+    brands: Object.values(CAROUSEL_BRANDS)
+      .filter((brand) => activeBrands.has(brand.id))
+      .map((brand) => ({ id: brand.id, name: brand.name })),
     // The gallery's own picker: every canvas the studio renders. Which of them a given template
     // is offered is per-template and rides on its `checks` above.
     formats: previewFormats(),

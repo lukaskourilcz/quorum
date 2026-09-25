@@ -345,9 +345,12 @@ export default async function AdminPage({
    * to a venture's first. Only the selected section is resolved in full: reading every venture's
    * articles and presets to render one of them is work the page would throw away.
    */
+  // A paused venture's brand is not in the section list (operations-2026-09b) but still opens by
+  // its own address, as an archive, with a notice above it.
   const labVentureId: DesignLabVentureId = isDesignLabVenture(requestedBrand)
     ? requestedBrand
-    : labSections[0]!.id;
+    : labSections[0]?.id ?? "caught-up";
+  const labVentureListed = labSections.some((section) => section.id === labVentureId);
   const labVenture = wantsStudio ? await readDesignLabVenture(labVentureId) : null;
   const brandId = selectedVenture?.id ?? "global";
   const brand = ventureBrand(brandId);
@@ -738,6 +741,15 @@ export default async function AdminPage({
         node: (
           <div className="grid min-w-0 gap-4">
             <DesignLabSectionNav sections={labSections} selected={labVenture.id} />
+            {labVentureListed ? null : (
+              <div data-design-lab-paused={labVenture.id}>
+                <AdminStateMessage
+                  description="Its venture is paused, so the Design Lab no longer lists it. Its tokens and recorded decks are kept, and this page shows them as they were."
+                  state="paused"
+                  title={`${labVenture.name} is not a running brand`}
+                />
+              </div>
+            )}
             <DesignLabVentureSection venture={labVenture} />
           </div>
         ),

@@ -1,4 +1,5 @@
 import "server-only";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { CAROUSEL_BRANDS, CAROUSEL_SUMMARY_VENTURES, type BrandTokens } from "@boardlessai/carousel-studio";
 import { readDesignLab, readDesignLabPresets, type LabArticle, type LabPreset } from "@/lib/design-lab";
@@ -81,10 +82,52 @@ export function isDesignLabVenture(value: string | undefined): value is DesignLa
   return value !== undefined && value in CAROUSEL_BRANDS;
 }
 
-/** The section nav: every venture the studio can draw for, with what each currently holds. */
+/**
+ * The venture a brand belongs to, where the two ids differ.
+ *
+ * marketingShark owns one brand per product it markets. Every other brand is its venture's own.
+ */
+const BRAND_VENTURE: Readonly<Record<string, string>> = {
+  devshark: "marketingshark",
+  geoshark: "marketingshark"
+};
+
+/**
+ * The brands whose sections the Design Lab offers (`operations-2026-09b`).
+ *
+ * The renderer's registry decides what the studio *can* draw; the venture registry decides what
+ * is running. A brand is offered when its venture is not paused and, for a marketingShark brand,
+ * when that brand is enabled. A paused venture's brand keeps its tokens, so its recorded decks
+ * still render at their own address. If either file cannot be read, every brand is offered, as
+ * before this rule existed, rather than an empty studio.
+ */
+export async function activeDesignLabVentureIds(
+  root = process.env.BOARDLESSAI_REPO_ROOT ?? path.resolve(process.cwd(), "..")
+): Promise<DesignLabVentureId[]> {
+  try {
+    const registry = JSON.parse(await readFile(path.join(root, "config", "ventures.json"), "utf8")) as {
+      ventures?: Array<{ id?: unknown; status?: unknown }>;
+    };
+    const marketing = JSON.parse(await readFile(path.join(root, "config", "marketingshark.json"), "utf8")) as {
+      brands?: Array<{ id?: unknown; enabled?: unknown }>;
+    };
+    const status = new Map((registry.ventures ?? []).map((venture) => [String(venture.id), String(venture.status)]));
+    const enabledBrands = new Set((marketing.brands ?? []).filter((brand) => brand.enabled === true).map((brand) => String(brand.id)));
+    return designLabVentureIds().filter((id) => {
+      const venture = BRAND_VENTURE[id] ?? id;
+      const ventureStatus = status.get(venture);
+      if (!ventureStatus || ventureStatus === "paused") return false;
+      return venture !== "marketingshark" || enabledBrands.has(id);
+    });
+  } catch {
+    return designLabVentureIds();
+  }
+}
+
+/** The section nav: every running venture the studio can draw for, with what each currently holds. */
 export async function readDesignLabSections(): Promise<DesignLabSection[]> {
   const sections: DesignLabSection[] = [];
-  for (const id of designLabVentureIds()) {
+  for (const id of await activeDesignLabVentureIds()) {
     const brand = CAROUSEL_BRANDS[id];
     const publishesArticles = PUBLISHES_ARTICLES.has(id);
     const [articles, presets, webDevRenders] = await Promise.all([

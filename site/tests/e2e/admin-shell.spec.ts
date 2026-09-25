@@ -4,7 +4,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 interface VentureRegistry {
-  ventures: Array<{ id: string }>;
+  ventures: Array<{ id: string; status?: string }>;
 }
 
 /**
@@ -30,8 +30,9 @@ const adminDestinations = [
   "/admin?view=waiting",
   "/admin/settings",
   "/admin?venture=carousel-studio",
+  // A paused venture leaves the navigation (operations-2026-09b); Settings lists it instead.
   ...registry.ventures
-    .filter(({ id }) => id !== "carousel-studio")
+    .filter(({ id, status }) => id !== "carousel-studio" && status !== "paused")
     .map(({ id }) => `/admin?venture=${id}`)
 ];
 
@@ -119,8 +120,11 @@ test("mobile Admin navigation has safe targets and exposes every live destinatio
   await mobileNav.getByRole("button", { name: "Workspaces" }).click();
   const workspaces = page.getByRole("dialog", { name: "Workspaces" });
   await expect(workspaces).toBeVisible();
-  await expect(workspaces.getByRole("link", { name: /Kvórum/ })).toHaveAttribute("href", "/admin?venture=kvorum");
-  await expect(workspaces.getByRole("link", { name: "Lukáš Growth Desk" })).toHaveAttribute("href", "/admin?venture=personal-growth");
+  await expect(workspaces.getByRole("link", { name: "marketingShark" })).toHaveAttribute("href", "/admin?venture=marketingshark");
+  await expect(workspaces.getByRole("link", { name: "GoVIRAL" })).toHaveAttribute("href", "/admin?venture=goviral");
+  // Paused ventures are listed in Settings, not here.
+  await expect(workspaces.getByRole("link", { name: /Kvórum/ })).toHaveCount(0);
+  await expect(workspaces.getByRole("link", { name: "Lukáš Growth Desk" })).toHaveCount(0);
 });
 
 test("new Admin shell chrome and mobile sheet pass the accessibility gate", async ({ page }) => {
@@ -144,7 +148,7 @@ test("new Admin shell chrome and mobile sheet pass the accessibility gate", asyn
 
 test("Settings lists every paused venture in its own table, and the navigation lists none", async ({ page }) => {
   // operations-2026-09b: a paused venture leaves the navigation and is listed only here.
-  const paused = (registry.ventures as Array<{ id: string; status?: string }>)
+  const paused = registry.ventures
     .filter(({ status }) => status === "paused")
     .map(({ id }) => id);
   await page.goto("/admin/settings", { waitUntil: "networkidle" });

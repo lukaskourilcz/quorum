@@ -6,13 +6,17 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Callout } from "@/components/ui/callout";
 import { readPublicCarouselStudio } from "@/lib/carousel-studio";
+import { activeDesignLabVentureIds } from "@/lib/design-lab-ventures";
 
 function preview(templateId: string, version: string, brand: string, format: string, slide = 1): string {
   return `/api/carousel-studio/preview/${templateId}/${version}/${brand}/${format}/${slide}`;
 }
 
 export async function CarouselStudioVenturePage() {
-  const snapshot = readPublicCarouselStudio();
+  // A paused venture leaves the public site, and its brand skin leaves this showcase with it.
+  const active = new Set<string>(await activeDesignLabVentureIds());
+  const published = readPublicCarouselStudio();
+  const snapshot = { ...published, brands: published.brands.filter((brand) => active.has(brand.id)) };
   const live = snapshot.templates.filter((entry) => entry.template.status === "live");
   const showcase = live.find((entry) => entry.template.id === "cover-cta") ?? live[0];
   return (
