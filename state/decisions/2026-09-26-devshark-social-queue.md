@@ -97,6 +97,27 @@ the graphic. Approving a post publishes it without another manual step.
 - Stop condition for the new network: stop on a factual correction a package cannot absorb, a
   platform warning or an owner veto, then roll back as below.
 
+## What #571 builds
+
+- `orchestrator/src/social/buffer.ts`, the LinkedIn transport over Buffer's GraphQL API: a
+  read-only channel check (a connected LinkedIn Page, never a personal profile, with requests left
+  for a whole post), `createPost` with `shareNow` inside the item's own window, and a read-back that
+  verifies only a post Buffer reports sent with its LinkedIn link. Buffer never chooses copy,
+  window, profile or experiment.
+- A refusal that proves nothing was created (a 429, a refused key, a typed validation or plan-limit
+  error) fails the item for owner review; a timeout or an unexplained error holds it for
+  reconciliation, as with Direct Meta. Neither resends.
+- Until the live test, a carousel goes to LinkedIn as slide one with the caption and the tracked
+  devShark link. The test decides whether Buffer carries all five slides as one multi-image post.
+- Buffer's provider record: LinkedIn only, the free plan's limits, $0, and the exit (revoke the API
+  key). `orchestrator/src/social/provider-platforms.ts` keeps Direct Meta the only transport for
+  Instagram and Threads.
+- The refusals by name that waited for this transport are gone: the queue item check, the channel
+  check and the target resolver's `provider-adapter-unavailable` hold for Buffer. Buffer's verdict
+  and its held binding hold LinkedIn instead.
+- The direct LinkedIn adapter is documented in `docs/SOCIAL-PROVIDERS.md` as the later path and not
+  built.
+
 ## What stays held
 
 Building every step of the programme sends nothing. Until this record is countersigned, and
@@ -107,7 +128,8 @@ beyond it until the owner performs each activation step below:
 - Every devShark connection stays `held`; no credential value exists in the repository, only
   reference names.
 - marketingShark is not a publishing venture; its items are drafts with every check pending.
-- A LinkedIn item is refused by name at publish time until the LinkedIn transport exists.
+- Buffer's provider verdict stays `held` until the owner records the live test (#571), so the
+  LinkedIn transport cannot send before then, whatever the binding says.
 
 These tests pin that posture and change only in the commit that records this decision as
 countersigned: `orchestrator/tests/ci-policy.test.ts` (channels draft, publisher schedule
@@ -139,7 +161,8 @@ drafts in queue v1, which the publisher never considered.
 - [x] B2: devShark profiles, held connections, the LinkedIn platform and channel (#569); register
   `marketingshark` in the registry's `legacyQueueMappings` with those profiles
 - [ ] B3: public image URLs through jsDelivr, 90-day retention (#570)
-- [ ] B4: LinkedIn through Buffer (#571)
+- [ ] B4: LinkedIn through Buffer (#571). The adapter is built and held; this ticks when the owner
+  records the live test in `docs/SOCIAL-PROVIDERS.md`
 - [ ] B5: Threads images and Instagram JPEG carousels in the Direct Meta adapter (#572)
 - [ ] B6: the Queue workspace (#573)
 - [ ] B7: approval dispatches the publisher (#574)

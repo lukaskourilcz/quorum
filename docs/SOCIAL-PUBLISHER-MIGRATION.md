@@ -79,8 +79,9 @@ authority: all profiles, connections and bindings remain held. Rollback keeps th
 7. active/live profile and separately human-activated healthy connection;
 8. token/App Review expiry, allowlisted credential/native-id reference availability;
 9. profile and connection pause/kill files;
-10. a transport with an adapter: a connection on anything but Direct Meta is held with
-    `provider-adapter-unavailable` (LinkedIn until #571).
+10. a transport with an adapter that sends to the connection's platform: Direct Meta for
+    Instagram and Threads, Buffer for LinkedIn (#571). Anything else is held with
+    `provider-adapter-unavailable`.
 
 The runner then preserves venture release activation, the global kill switch, all immutable content
 checks, Titty Tuesdays safety, per-connection cadence, idempotency, remote verification and durable
