@@ -48,8 +48,20 @@ describe("marketingShark cannot post", () => {
     const environment = await readFile(path.join(repoRoot, ".env.example"), "utf8");
     expect(environment).toMatch(/^SOCIAL_KILL_SWITCH=true$/mu);
     expect(environment).toMatch(/^METRICS_INGESTION_ENABLED=false$/mu);
-    // The venture added no channel, no token and no user id of its own.
-    expect(environment).not.toMatch(/MARKETINGSHARK|DEVSHARK|GEOSHARK/iu);
+    // The venture itself adds no channel, token or user id of its own, and geoShark has none.
+    expect(environment).not.toMatch(/MARKETINGSHARK|GEOSHARK/iu);
+    // devShark's three connections are named here since devshark-social-2026-09a (quorum#569):
+    // reference names only, never values. Every DEVSHARK and Buffer line is a bare name.
+    const references = environment.split("\n").filter((line) => /DEVSHARK|BUFFER/iu.test(line) && !line.startsWith("#"));
+    expect(references.map((line) => line.split("=")[0])).toEqual([
+      "DEVSHARK_INSTAGRAM_USER_ID",
+      "DEVSHARK_INSTAGRAM_ACCESS_TOKEN",
+      "DEVSHARK_THREADS_USER_ID",
+      "DEVSHARK_THREADS_ACCESS_TOKEN",
+      "BUFFER_API_KEY",
+      "BUFFER_CHANNEL_ID_DEVSHARK_LINKEDIN"
+    ]);
+    for (const line of references) expect(line).toMatch(/^[A-Z][A-Z0-9_]*=$/u);
   });
 
   it("writes every queue item as a draft the publisher refuses", async () => {
