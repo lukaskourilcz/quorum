@@ -4,7 +4,8 @@ import { isQueueItemId, parseSocialQueueEvent, socialQueueEventId, socialQueueEv
 import { approveQueueItem, nextRevisionId, parseQueueItem, parseQueueItemV2, queueItemV2Hash, rawObject, supersedingQueueItem, type QueueItem, type QueueItemV2 } from "./item";
 import { queueItemTarget, queueRepositoryRoot, readQueueState, type QueueState } from "./state";
 import { QueueActionError, queueStore } from "./store";
-import { QUEUE_ALT_TEXT_LIMIT, QUEUE_CAPTION_LIMITS, QUEUE_OWNER_CHECKS, QUEUE_PLATFORM_LABELS, type QueueActionName, type QueueStatus } from "./types";
+import { QUEUE_ALT_TEXT_LIMIT, QUEUE_CAPTION_LIMITS, QUEUE_OWNER_CHECKS, QUEUE_PLATFORM_LABELS, type QueueActionName, type QueueDispatchView, type QueueStatus } from "./types";
+import { dispatchSocialPublisher, type QueueDispatchOutcome } from "@/lib/queue-dispatch";
 
 /**
  * The owner's five Queue actions, applied to one item (quorum#573).
@@ -16,7 +17,9 @@ import { QUEUE_ALT_TEXT_LIMIT, QUEUE_CAPTION_LIMITS, QUEUE_OWNER_CHECKS, QUEUE_P
  * conflict when the item has moved on since.
  *
  * Nothing here sends. `approve` makes an item `queued` with every check passing and the owner's
- * approval as provenance; the publisher still applies every lock it applies today.
+ * approval as provenance, then wakes the publisher (quorum#574), which still applies every lock
+ * it applies today. The wake-up comes last: a run started before the item was saved on GitHub
+ * would check out a queue without it.
  */
 export interface QueueActionRequest {
   action: QueueActionName;
@@ -33,6 +36,8 @@ export interface QueueActionResult {
   supersedingItemId: string | null;
   event: { id: string; action: QueueActionName; nextStatus: QueueStatus };
   persistence: "github" | "filesystem";
+  /** The publisher wake-up an approval sends; null for every other action. */
+  dispatch: QueueDispatchView | null;
   message: string;
 }
 
@@ -151,7 +156,19 @@ export async function applyQueueAction(value: unknown, options: { root?: string;
 
   const eventId = socialQueueEventId(item.id, request.action, request.expectedContentHash);
   if (request.action === "approve" && item.schemaVersion === 2 && item.status === "queued" && item.approvalProvenance.approvalRef === eventId) {
-    return { changed: false, itemId: item.id, supersedingItemId: null, event: { id: eventId, action: "approve", nextStatus: "queued" }, persistence: store.persistence, message: "This approval was already recorded." };
+    // A deployed Queue still shows an approved item as waiting until the next deploy, so approving
+    // it again is how the owner retries a wake-up that failed. The run decides; a spare one finds
+    // nothing due.
+    const dispatch = await wakePublisher(store.persistence, item.publishWindow, now);
+    return {
+      changed: false,
+      itemId: item.id,
+      supersedingItemId: null,
+      event: { id: eventId, action: "approve", nextStatus: "queued" },
+      persistence: store.persistence,
+      dispatch: dispatchView(dispatch),
+      message: approvalMessage("This approval was already recorded", dispatch, QUEUE_PLATFORM_LABELS[item.channel])
+    };
   }
   if (item.content.contentHash !== request.expectedContentHash) {
     throw new QueueActionError("CONFLICT", "The post changed since this page loaded. Reload it and decide on the version shown.");
@@ -179,13 +196,15 @@ export async function applyQueueAction(value: unknown, options: { root?: string;
     });
     await writeEvent(store, record);
     await store.replace(relative, approved, stored.version, `admin(queue): approve ${item.id}`);
+    const dispatch = await wakePublisher(store.persistence, publishWindow, now);
     return {
       changed: true,
       itemId: item.id,
       supersedingItemId: null,
       event: { id: record.id, action: "approve", nextStatus: "queued" },
       persistence: store.persistence,
-      message: `Approved and queued ${request.mode === "now" ? "for the next hour" : "for its window"}. The publisher sends it only once its ${QUEUE_PLATFORM_LABELS[item.channel]} connection and channel are live.`
+      dispatch: dispatchView(dispatch),
+      message: approvalMessage(request.mode === "now" ? "Queued" : "Queued for its window", dispatch, QUEUE_PLATFORM_LABELS[item.channel])
     };
   }
 
@@ -228,6 +247,7 @@ export async function applyQueueAction(value: unknown, options: { root?: string;
       supersedingItemId: supersedingId,
       event: { id: record.id, action: "edit", nextStatus: "cancelled" },
       persistence: store.persistence,
+      dispatch: null,
       message: `Saved as a new draft. The earlier version is cancelled; approve the new one when it reads right.`
     };
   }
@@ -250,8 +270,30 @@ export async function applyQueueAction(value: unknown, options: { root?: string;
     supersedingItemId: null,
     event: { id: record.id, action: request.action, nextStatus: "cancelled" },
     persistence: store.persistence,
+    dispatch: null,
     message: request.action === "hold" ? "Held. It will not be sent." : "Rejected. The reason is recorded as a taste note for the venture that drafted it."
   };
+}
+
+/** The approval is saved by now, so nothing about the wake-up may turn it into an error. */
+async function wakePublisher(persistence: "github" | "filesystem", publishWindow: QueueItemV2["publishWindow"], now: Date): Promise<QueueDispatchOutcome> {
+  try {
+    return await dispatchSocialPublisher({ persistence, publishWindow, now });
+  } catch {
+    return { state: "failed", reason: "unreachable", runUrl: null, detail: "The publisher could not be started." };
+  }
+}
+
+function dispatchView(dispatch: QueueDispatchOutcome): QueueDispatchView {
+  return { state: dispatch.state, reason: dispatch.reason, runUrl: dispatch.runUrl };
+}
+
+function approvalMessage(lead: string, dispatch: QueueDispatchOutcome, platform: string): string {
+  if (dispatch.state === "dispatched") return `${lead}. ${dispatch.detail} It sends the post only while its ${platform} connection and channel are live.`;
+  if (dispatch.state === "failed") {
+    return `${lead}, but the publisher did not start. ${dispatch.detail} The post stays queued: the next approval, or a run of the publisher from GitHub Actions, sends it inside its window.`;
+  }
+  return `${lead}. ${dispatch.detail}`;
 }
 
 function entryCampaign(value: unknown): string | null {

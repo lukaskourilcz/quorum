@@ -87,6 +87,31 @@ export const QUEUE_CHECK_LABELS: Readonly<Record<QueueDeterministicCheck, string
 
 export type QueueActionName = "approve" | "edit" | "hold" | "reject" | "rerender";
 
+/**
+ * What became of the publisher wake-up an approval sends (quorum#574), as the action response
+ * carries it. `skipped` is a wake-up that could not help: the approval was saved to a local
+ * checkout the publisher never reads, or its window is not open. `failed` leaves the item
+ * `queued` for the next run. `runUrl` is GitHub's page for the run it started, when it named one.
+ */
+export type QueueDispatchState = "dispatched" | "failed" | "skipped";
+export type QueueDispatchReason =
+  | "started"
+  | "local-checkout"
+  | "window-not-open"
+  | "window-closed"
+  | "unconfigured"
+  | "refused"
+  | "not-found"
+  | "rejected"
+  | "remote"
+  | "unreachable";
+
+export interface QueueDispatchView {
+  state: QueueDispatchState;
+  reason: QueueDispatchReason;
+  runUrl: string | null;
+}
+
 export interface AdminQueueCheckView {
   id: QueueDeterministicCheck;
   label: string;

@@ -25,7 +25,9 @@ function json(value: unknown, status: number): Response {
 /**
  * The owner's Queue actions: approve, edit, hold, reject (and re-render, once quorum#575 builds
  * it). Each accepted action appends one `social-queue-event/1` and updates one item. It moves an
- * item to `queued` at most; it never contacts a platform.
+ * item to `queued` at most and never contacts a platform. An approval then wakes the publisher
+ * workflow (quorum#574); a wake-up that fails is reported in the body of a saved approval, never
+ * as a failed request, because the approval stands either way.
  */
 export async function POST(request: Request): Promise<Response> {
   const authorization = verifyAdminRequest(request);

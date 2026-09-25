@@ -1,6 +1,7 @@
 import { readFile, readdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { fakeGitHub } from "@/lib/admin-queue/fake-github";
 import { DRAFT_FILE, queueFixtureRoot, readQueueFixture } from "@/lib/admin-queue/fixture-root";
 import { ADMIN_SESSION_COOKIE, createAdminSessionToken } from "@/lib/admin-session";
 import { POST } from "./route";
@@ -30,6 +31,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
   vi.unstubAllEnvs();
+  vi.unstubAllGlobals();
   await Promise.all(roots.splice(0).map((entry) => rm(entry, { recursive: true, force: true })));
 });
 
@@ -65,5 +67,20 @@ describe("POST /admin/api/queue/actions", () => {
     const refused = await POST(request({ action: "hold", itemId: "ms-2026-09-26-devshark-en-linkedin", expectedContentHash: hash, reason: "Not this week." }));
     expect(refused.status).toBe(503);
     expect(await refused.json()).toMatchObject({ code: "UNCONFIGURED" });
+  });
+
+  it("keeps a saved approval a success when the publisher wake-up fails, and says so in the body", async () => {
+    const github = fakeGitHub(root);
+    github.dispatchAnswer = { status: 403, body: { message: "Resource not accessible by personal access token" } };
+    vi.stubGlobal("fetch", github.fetch);
+    vi.stubEnv("BOARDLESSAI_GITHUB_TOKEN", "test-token");
+    const response = await POST(request({ action: "approve", itemId: "ms-2026-09-26-devshark-en-linkedin", expectedContentHash: hash, mode: "now" }));
+    expect(response.status).toBe(201);
+    const body = await response.json() as { dispatch: unknown; message: string };
+    expect(body.dispatch).toEqual({ state: "failed", reason: "refused", runUrl: null });
+    expect(body.message).toMatch(/^Queued, but the publisher did not start\./u);
+    expect(JSON.stringify(body)).not.toContain("test-token");
+    expect(github.dispatches()).toHaveLength(1);
+    expect(JSON.parse(await readFile(path.join(root, `state/social/queue/${DRAFT_FILE}`), "utf8"))).toMatchObject({ status: "queued" });
   });
 });
