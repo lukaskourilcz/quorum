@@ -180,6 +180,11 @@ describe("social and organization controls", () => {
 
   it("uses the guarded two-step Threads connector for an approved item", async () => {
     const responses = [
+      // The publishing limit is read before any write (quorum#572).
+      new Response(JSON.stringify({ data: [{ quota_usage: 1, config: { quota_total: 250, quota_duration: 86_400 } }] }), {
+        status: 200,
+        headers: { "content-type": "application/json" }
+      }),
       new Response(JSON.stringify({ id: "container-1" }), {
         status: 200,
         headers: { "content-type": "application/json" }
@@ -238,9 +243,10 @@ describe("social and organization controls", () => {
 
     expect(result.remoteId).toBe("remote-1");
     expect(verified).toEqual({ remoteId: "remote-1", remoteUrl: "https://www.threads.net/@fixture/post/remote-1" });
-    expect(fetchMock).toHaveBeenCalledTimes(3);
-    expect(String(fetchMock.mock.calls[0]?.[0])).toContain("/threads");
-    expect(String(fetchMock.mock.calls[1]?.[0])).toContain("/threads_publish");
+    expect(fetchMock).toHaveBeenCalledTimes(4);
+    expect(String(fetchMock.mock.calls[0]?.[0])).toContain("/threads_publishing_limit");
+    expect(String(fetchMock.mock.calls[1]?.[0])).toContain("/threads");
+    expect(String(fetchMock.mock.calls[2]?.[0])).toContain("/threads_publish");
   });
 });
 

@@ -10,7 +10,8 @@ import { ChannelRegistrySchema, assertLiveChannel } from "./channel-registry.js"
 import { createMetaPublishAdapter } from "./meta.js";
 import type { SocialAssetCommits } from "./media/assets.js";
 import { gateSocialAssets } from "./media/gate.js";
-import type { PublishAdapter } from "./publish.js";
+import { SocialPublishHoldError, type PublishAdapter } from "./publish.js";
+import { clearPublishHold, recordPublishHold } from "./publish-holds.js";
 import { loadVentureCapabilityMap } from "../ventures/capabilities.js";
 import {
   loadSocialPublisherRegistry,
@@ -58,7 +59,10 @@ export interface SocialPublisherReport {
   skipped: number;
   /** Items whose frames could not be proved this run; each has a `social-asset-hold/1` record. */
   assetHeld: number;
+  /** Items an adapter refused before any write (a full publishing limit, say); each has a `social-publish-hold/1` record. */
+  publishHeld: number;
 }
+
 
 async function exists(filePath: string): Promise<boolean> {
   try { await access(filePath); return true; } catch { return false; }
@@ -108,7 +112,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
   const stateRoot = options.stateRoot ?? defaultStateRoot;
   const configRoot = options.configRoot ?? defaultConfigRoot;
   if (await exists(path.join(stateRoot, "PAUSED"))) {
-    return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0, assetHeld: 0 };
+    return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0, assetHeld: 0, publishHeld: 0 };
   }
 
   return withFileLock(stateRoot, ".social-lock", async () => {
@@ -123,7 +127,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       safetyCheckerReady: TT_SAFETY_CHECKER_VERSION === "keeper-tt-1"
     });
     if (environment.SOCIAL_KILL_SWITCH !== "false" || await exists(path.join(stateRoot, "SOCIAL_PAUSED"))) {
-      return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0, assetHeld: 0 };
+      return { status: "paused", queueItems: 0, due: 0, published: 0, ambiguous: 0, skipped: 0, assetHeld: 0, publishHeld: 0 };
     }
     const channelRegistry = ChannelRegistrySchema.parse(JSON.parse(await readFile(path.join(configRoot, "channels.json"), "utf8")) as unknown);
     const queueDirectory = path.join(stateRoot, "social", "queue");
@@ -242,16 +246,17 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
     eligibleDue.splice(0, eligibleDue.length, ...assetGate.ready);
     const assetHeld = assetGate.held;
     if (eligibleDue.length === 0) {
-      return { status: "draft_only", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, skipped: due.length + malformed, assetHeld };
+      return { status: "draft_only", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, skipped: due.length + malformed, assetHeld, publishHeld: 0 };
     }
     if (options.validateOnly) {
-      return { status: "validated", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, skipped: due.length - eligibleDue.length + malformed, assetHeld };
+      return { status: "validated", queueItems: queueFiles.length, due: due.length, published: 0, ambiguous: 0, skipped: due.length - eligibleDue.length + malformed, assetHeld, publishHeld: 0 };
     }
 
     const adapter = options.adapter ?? createMetaPublishAdapter(environment, options.fetchImpl);
     let published = 0;
     let failed = 0;
     let safetyKilled = 0;
+    let publishHeld = 0;
     for (const { name, item, target, provider } of eligibleDue) {
       const channel = channels.get(item.channel)!;
       const key = idempotencyKey(item);
@@ -279,6 +284,7 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
       let remoteUrl: string | null = null;
       let errorMessage: string | null = null;
       let verificationAttempts = 0;
+      let hold: SocialPublishHoldError | null = null;
       try {
         const existing = await adapter.findByIdempotencyKey?.(channel, key, target);
         remoteId = existing?.remoteId ?? (await adapter.publish(channel, queued, key, target, assetGate.verified.get(name) ?? [])).remoteId;
@@ -294,8 +300,17 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
           }
         }
       } catch (error) {
-        errorMessage = redactedConnectorError(error, environment, target);
+        if (error instanceof SocialPublishHoldError) hold = error;
+        else errorMessage = redactedConnectorError(error, environment, target);
       }
+      // Refused before any write: the item stays exactly as it was and stays due, like an asset
+      // hold. No receipt, no pause; the record says why and goes once the item gets past the check.
+      if (hold) {
+        await recordPublishHold({ stateRoot, queueFileName: name, item: queued, providerId: target.providerId, hold, detail: redactedConnectorError(hold, environment, target), now });
+        publishHeld += 1;
+        continue;
+      }
+      await clearPublishHold(stateRoot, name);
       const succeeded = remoteId !== null && remoteUrl !== null && errorMessage === null;
       const id = receiptId(queued);
       const providerReceipt = createProviderDeliveryReceipt({
@@ -374,6 +389,6 @@ export async function runSocialPublisher(options: SocialPublisherOptions): Promi
         ]);
       }
     }
-    return { status: "complete", queueItems: queueFiles.length, due: due.length, published, ambiguous: failed, skipped: due.length - eligibleDue.length + safetyKilled + malformed, assetHeld };
+    return { status: "complete", queueItems: queueFiles.length, due: due.length, published, ambiguous: failed, skipped: due.length - eligibleDue.length + safetyKilled + malformed, assetHeld, publishHeld };
   });
 }

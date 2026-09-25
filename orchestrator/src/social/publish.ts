@@ -3,6 +3,7 @@ import type { Channel } from "./channel-registry.js";
 import { assertLiveChannel } from "./channel-registry.js";
 import type { VerifiedSocialAsset } from "./media/assets.js";
 import type { ResolvedPublisherTarget } from "./publisher-targets.js";
+import type { PublishingQuota, SocialPublishHoldReason } from "../contracts/social-publish-hold.js";
 import type { RuntimeQueueItem } from "./queue.js";
 import {
   assertQueueItemPublishable,
@@ -10,7 +11,29 @@ import {
   reconcileQueueItem
 } from "./queue.js";
 
+/**
+ * An adapter's refusal that is certain to have sent nothing.
+ *
+ * Thrown only before the adapter's first write request, so the runner can record a hold and leave
+ * the item as it was instead of treating the attempt as an ambiguous delivery. Every other error an
+ * adapter throws stays ambiguous, because the runner cannot know how far the request got.
+ */
+export class SocialPublishHoldError extends Error {
+  constructor(
+    readonly reason: SocialPublishHoldReason,
+    detail: string,
+    readonly quota: PublishingQuota | null = null
+  ) {
+    super(detail);
+    this.name = "SocialPublishHoldError";
+  }
+}
+
 export interface PublishAdapter {
+  /**
+   * Send the item. May throw `SocialPublishHoldError` before its first write request (a publishing
+   * limit with no room, text the platform refuses); any error after that point is ambiguous.
+   */
   publish(
     channel: Channel,
     item: RuntimeQueueItem,

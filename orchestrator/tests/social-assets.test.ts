@@ -418,7 +418,7 @@ describe("the Meta adapter fetches only verified URLs", () => {
     enabledByHumanAt: "2026-09-26T06:00:00.000Z"
   };
   const target = {
-    connection: { platform: "instagram", approvedScopes: ["instagram_basic", "instagram_content_publish"] },
+    connection: { platform: "instagram", approvedScopes: ["instagram_basic", "instagram_content_publish"], connector: { loginMode: "instagram-facebook-login" } },
     credentialRef: "FIXTURE_TOKEN",
     nativeAccountIdRef: "FIXTURE_USER",
     providerId: "direct-meta",
@@ -451,7 +451,7 @@ describe("the Meta adapter fetches only verified URLs", () => {
       audience: "Working developers",
       destination: "https://devshark.example",
       utm: { source: "instagram" as const, medium: "organic_social" as const, campaign: "marketingshark-devshark", content: "2026-09-26-en-q1" },
-      content: { ...item().content },
+      content: { ...item().content, assetPaths: [JPEG_FRAME] },
       publishWindow: { notBefore: "2026-09-26T06:00:00.000Z", notAfter: "2026-09-26T21:00:00.000Z" },
       status: "queued" as const,
       checks: Object.fromEntries(["schema", "brand", "claims", "quill", "keeper", "duplicate", "accessibility", "budget", "capability", "authority", "policy"].map((name) => [name, "pass"])) as CapabilityAwareQueueItem["checks"],
@@ -466,12 +466,14 @@ describe("the Meta adapter fetches only verified URLs", () => {
   }
 
   it("hands Meta the commit-pinned URL and nothing else", async () => {
-    const fetchImpl = vi.fn<typeof fetch>(async () => new Response(JSON.stringify({ id: "meta-1" }), { status: 200, headers: { "content-type": "application/json" } }));
+    // The publishing limit is read first (quorum#572), then the container is created from the URL.
+    const answers = [{ data: [{ quota_usage: 0, config: { quota_total: 100, quota_duration: 86_400 } }] }, { id: "meta-1" }, { status_code: "FINISHED", id: "meta-1" }, { id: "meta-2" }];
+    const fetchImpl = vi.fn<typeof fetch>(async () => new Response(JSON.stringify(answers.shift()), { status: 200, headers: { "content-type": "application/json" } }));
     const adapter = createMetaPublishAdapter({ META_GRAPH_API_VERSION: "v26.0", FIXTURE_TOKEN: "token", FIXTURE_USER: "user" }, fetchImpl);
-    const url = jsDelivrAssetUrl(COMMIT, FRAME);
+    const url = jsDelivrAssetUrl(COMMIT, JPEG_FRAME);
 
-    await adapter.publish(instagram, queued(), "1".repeat(64), target, [{ path: FRAME, url, sha256: sha256(FRAME_BYTES), contentType: "image/png", commit: COMMIT, altText: null }]);
-    const body = fetchImpl.mock.calls[0]?.[1]?.body as URLSearchParams;
+    await adapter.publish(instagram, queued(), "1".repeat(64), target, [{ path: JPEG_FRAME, url, sha256: "b".repeat(64), contentType: "image/jpeg", commit: COMMIT, altText: null }]);
+    const body = fetchImpl.mock.calls[1]?.[1]?.body as URLSearchParams;
     expect(body.get("image_url")).toBe(url);
   });
 
@@ -480,6 +482,10 @@ describe("the Meta adapter fetches only verified URLs", () => {
     const adapter = createMetaPublishAdapter({ META_GRAPH_API_VERSION: "v26.0", FIXTURE_TOKEN: "token", FIXTURE_USER: "user", PUBLIC_SITE_URL: "https://boardless.example" }, fetchImpl);
 
     await expect(adapter.publish(instagram, queued(), "1".repeat(64), target)).rejects.toThrow(/verified before the send/u);
+    // A PNG is refused as well, before any request: Instagram takes JPEG only.
+    const png = { ...queued(), content: { ...queued().content, assetPaths: [FRAME] } };
+    await expect(adapter.publish(instagram, CapabilityAwareQueueItemSchema.parse({ ...png, content: { ...png.content, contentHash: capabilityAwareQueuePayloadHash(png) } }), "1".repeat(64), target))
+      .rejects.toThrow(/one to ten JPEG images/u);
     expect(fetchImpl).not.toHaveBeenCalled();
   });
 });

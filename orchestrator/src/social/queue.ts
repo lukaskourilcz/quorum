@@ -337,14 +337,16 @@ export function assertQueueItemPublishable(item: RuntimeQueueItem): void {
   if (payloadHash !== parsed.content.contentHash) {
     throw new Error(`Queue item ${parsed.id} content hash mismatch`);
   }
-  if (parsed.channel === "threads" && parsed.content.assetPaths.length > 0) {
-    throw new Error("The guarded Threads connector currently supports text only");
-  }
+  // Threads takes text alone, one image or a carousel (quorum#572); the schema's ten-frame cap sits
+  // inside Threads' twenty. Frames on either platform carry alt text, as they always had to on Instagram.
   if (parsed.channel === "instagram" && (parsed.content.assetPaths.length < 1 || parsed.content.assetPaths.length > 10)) {
     throw new Error("The guarded Instagram connector requires one to ten hosted images");
   }
   if (parsed.channel === "instagram" && !parsed.content.altText) {
     throw new Error("Instagram media requires alt text in the immutable receipt");
+  }
+  if (parsed.channel === "threads" && parsed.content.assetPaths.length > 0 && !parsed.content.altText) {
+    throw new Error("Threads images require alt text in the immutable receipt");
   }
   // A LinkedIn item can be drafted and reviewed, and nothing can send it: no connection, provider
   // binding or adapter for LinkedIn exists yet (quorum#569, #571). Refused by name here as well, so

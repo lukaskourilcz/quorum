@@ -82,18 +82,21 @@ describe("Social Distribution founding policy", () => {
   });
 
   it("keeps optional providers and engagement endpoints out of the production social runtime", async () => {
-    const [meta, runner, activation, needed] = await Promise.all([
+    const [meta, metaGraph, runner, activation, needed] = await Promise.all([
       text("orchestrator/src/social/meta.ts"),
+      text("orchestrator/src/social/meta-graph.ts"),
       text("orchestrator/src/social/runner.ts"),
       text("orchestrator/src/social/activation.ts"),
       text("docs/NEEDED.md")
     ]);
-    const runtime = `${meta}\n${runner}\n${activation}`;
+    const runtime = `${meta}\n${metaGraph}\n${runner}\n${activation}`;
 
     expect(meta).toContain("graph.threads.net");
     expect(meta).toContain("graph.facebook.com");
+    // Instagram Login (devShark's connection) publishes on its own host, never mixed with Facebook Login's.
+    expect(meta).toContain("graph.instagram.com");
     expect(runtime).not.toMatch(/api\.buffer\.com|metricool\.com|api\.ayrshare\.com|hook\.us\d+\.make\.com/iu);
-    expect(meta).not.toMatch(/keyword_search|threads_manage_replies|instagram_manage_comments|\/messages/iu);
+    expect(`${meta}\n${metaGraph}`).not.toMatch(/keyword_search|threads_manage_replies|instagram_manage_comments|\/messages/iu);
     expect(runtime).not.toMatch(/PERSONAL_GROWTH_(?:THREADS|INSTAGRAM)|KVORUM_(?:THREADS|INSTAGRAM)/u);
     expect(needed.match(/SOCIAL-DISTRIBUTION-CONNECTION-001/gu)).toHaveLength(1);
   });

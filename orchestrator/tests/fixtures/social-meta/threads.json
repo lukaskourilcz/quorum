@@ -1,0 +1,537 @@
+{
+  "note": "Direct Meta exchanges for Threads, replayed in order by orchestrator/tests/fixtures/social-meta/replay.ts. Not a live recording: no devShark Threads connection exists yet, so every answer body is the shape Meta documents (docs/threads/posts, docs/threads/troubleshooting, docs/threads/reference/publishing, read 2026-09-25) with fixture ids. The request side is exact: method, URL without query, and every parameter except access_token, which the replay checks separately and never stores. {commit} stands for the commit the frames were committed in.",
+  "provenance": "documented",
+  "readAt": "2026-09-25",
+  "sources": [
+    "https://developers.facebook.com/docs/threads/posts",
+    "https://developers.facebook.com/docs/threads/troubleshooting",
+    "https://developers.facebook.com/docs/threads/reference/publishing"
+  ],
+  "account": {
+    "version": "v26.0",
+    "userId": "fixture-threads-user"
+  },
+  "text": "One question a day for working web developers. Today: flexbox gap.",
+  "altTexts": [
+    "Slide 1 of 5: the question, What does the CSS property gap do in a flex container?",
+    "Slide 2 of 5: four answer options labelled A to D.",
+    "Slide 3 of 5: the answer is B, it sets the space between flex items.",
+    "Slide 4 of 5: why, gap adds space between items without margins on the outer edges.",
+    "Slide 5 of 5: devShark, one real web question a day."
+  ],
+  "scenarios": {
+    "text": [
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads_publishing_limit",
+          "params": {
+            "fields": "quota_usage,config"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "data": [
+              {
+                "quota_usage": 3,
+                "config": {
+                  "quota_total": 250,
+                  "quota_duration": 86400
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads",
+          "params": {
+            "media_type": "TEXT",
+            "text": "One question a day for working web developers. Today: flexbox gap."
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "17890000000000001"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads_publish",
+          "params": {
+            "creation_id": "17890000000000001"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "18090000000000001"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/18090000000000001",
+          "params": {
+            "fields": "id,permalink"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "18090000000000001",
+            "permalink": "https://www.threads.com/@fixture/post/18090000000000001"
+          }
+        }
+      }
+    ],
+    "image": [
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads_publishing_limit",
+          "params": {
+            "fields": "quota_usage,config"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "data": [
+              {
+                "quota_usage": 4,
+                "config": {
+                  "quota_total": 250,
+                  "quota_duration": 86400
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads",
+          "params": {
+            "media_type": "IMAGE",
+            "image_url": "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@{commit}/site/public/social/devshark/2026-09-26/en/slide-01.png",
+            "text": "One question a day for working web developers. Today: flexbox gap.",
+            "alt_text": "Slide 1 of 5: the question, What does the CSS property gap do in a flex container?"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "17890000000000011"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/17890000000000011",
+          "params": {
+            "fields": "status,error_message"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "status": "FINISHED",
+            "id": "17890000000000011"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads_publish",
+          "params": {
+            "creation_id": "17890000000000011"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "18090000000000011"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/18090000000000011",
+          "params": {
+            "fields": "id,permalink"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "18090000000000011",
+            "permalink": "https://www.threads.com/@fixture/post/18090000000000011"
+          }
+        }
+      }
+    ],
+    "carousel": [
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads_publishing_limit",
+          "params": {
+            "fields": "quota_usage,config"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "data": [
+              {
+                "quota_usage": 5,
+                "config": {
+                  "quota_total": 250,
+                  "quota_duration": 86400
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads",
+          "params": {
+            "media_type": "IMAGE",
+            "image_url": "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@{commit}/site/public/social/devshark/2026-09-26/en/slide-01.png",
+            "is_carousel_item": "true",
+            "alt_text": "Slide 1 of 5: the question, What does the CSS property gap do in a flex container?"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "17890000000000021"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads",
+          "params": {
+            "media_type": "IMAGE",
+            "image_url": "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@{commit}/site/public/social/devshark/2026-09-26/en/slide-02.png",
+            "is_carousel_item": "true",
+            "alt_text": "Slide 2 of 5: four answer options labelled A to D."
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "17890000000000022"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads",
+          "params": {
+            "media_type": "IMAGE",
+            "image_url": "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@{commit}/site/public/social/devshark/2026-09-26/en/slide-03.png",
+            "is_carousel_item": "true",
+            "alt_text": "Slide 3 of 5: the answer is B, it sets the space between flex items."
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "17890000000000023"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads",
+          "params": {
+            "media_type": "IMAGE",
+            "image_url": "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@{commit}/site/public/social/devshark/2026-09-26/en/slide-04.png",
+            "is_carousel_item": "true",
+            "alt_text": "Slide 4 of 5: why, gap adds space between items without margins on the outer edges."
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "17890000000000024"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads",
+          "params": {
+            "media_type": "IMAGE",
+            "image_url": "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@{commit}/site/public/social/devshark/2026-09-26/en/slide-05.png",
+            "is_carousel_item": "true",
+            "alt_text": "Slide 5 of 5: devShark, one real web question a day."
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "17890000000000025"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads",
+          "params": {
+            "media_type": "CAROUSEL",
+            "children": "17890000000000021,17890000000000022,17890000000000023,17890000000000024,17890000000000025",
+            "text": "One question a day for working web developers. Today: flexbox gap."
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "17890000000000020"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/17890000000000020",
+          "params": {
+            "fields": "status,error_message"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "status": "IN_PROGRESS",
+            "id": "17890000000000020"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/17890000000000020",
+          "params": {
+            "fields": "status,error_message"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "status": "FINISHED",
+            "id": "17890000000000020"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads_publish",
+          "params": {
+            "creation_id": "17890000000000020"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "18090000000000020"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/18090000000000020",
+          "params": {
+            "fields": "id,permalink"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "18090000000000020",
+            "permalink": "https://www.threads.com/@fixture/post/18090000000000020"
+          }
+        }
+      }
+    ],
+    "quota-exhausted": [
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads_publishing_limit",
+          "params": {
+            "fields": "quota_usage,config"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "data": [
+              {
+                "quota_usage": 250,
+                "config": {
+                  "quota_total": 250,
+                  "quota_duration": 86400
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "container-error": [
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads_publishing_limit",
+          "params": {
+            "fields": "quota_usage,config"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "data": [
+              {
+                "quota_usage": 6,
+                "config": {
+                  "quota_total": 250,
+                  "quota_duration": 86400
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads",
+          "params": {
+            "media_type": "IMAGE",
+            "image_url": "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@{commit}/site/public/social/devshark/2026-09-26/en/slide-01.png",
+            "text": "One question a day for working web developers. Today: flexbox gap.",
+            "alt_text": "Slide 1 of 5: the question, What does the CSS property gap do in a flex container?"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "17890000000000031"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/17890000000000031",
+          "params": {
+            "fields": "status,error_message"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "status": "ERROR",
+            "id": "17890000000000031",
+            "error_message": "UNKNOWN"
+          }
+        }
+      }
+    ],
+    "publish-timeout": [
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads_publishing_limit",
+          "params": {
+            "fields": "quota_usage,config"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "data": [
+              {
+                "quota_usage": 7,
+                "config": {
+                  "quota_total": 250,
+                  "quota_duration": 86400
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads",
+          "params": {
+            "media_type": "IMAGE",
+            "image_url": "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@{commit}/site/public/social/devshark/2026-09-26/en/slide-01.png",
+            "text": "One question a day for working web developers. Today: flexbox gap.",
+            "alt_text": "Slide 1 of 5: the question, What does the CSS property gap do in a flex container?"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "id": "17890000000000041"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "url": "https://graph.threads.net/v26.0/17890000000000041",
+          "params": {
+            "fields": "status,error_message"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "status": "FINISHED",
+            "id": "17890000000000041"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "url": "https://graph.threads.net/v26.0/fixture-threads-user/threads_publish",
+          "params": {
+            "creation_id": "17890000000000041"
+          }
+        },
+        "response": {
+          "networkError": "The operation was aborted due to timeout"
+        }
+      }
+    ]
+  }
+}

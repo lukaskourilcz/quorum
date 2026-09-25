@@ -1,0 +1,40 @@
+{
+  "note": "Live answers recorded 2026-09-25T16:25Z from Meta's publishing-limit endpoints with no access token, for quorum#572. They are what an expired or missing token looks like to the adapter: HTTP 400 with an OAuthException (Threads) or IGApiException (Instagram Login), code 190. The request carried no credential and wrote nothing. Headers are trimmed to the content type.",
+  "provenance": "live",
+  "recordedAt": "2026-09-25T16:25:17.000Z",
+  "answers": {
+    "threads-publishing-limit": {
+      "url": "https://graph.threads.net/v26.0/me/threads_publishing_limit?fields=quota_usage,config",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=UTF-8",
+        "www-authenticate": "OAuth \"Facebook Platform\" \"invalid_token\" \"Invalid OAuth 2.0 Access Token\""
+      },
+      "body": {
+        "error": {
+          "message": "Invalid OAuth 2.0 Access Token",
+          "type": "OAuthException",
+          "code": 190,
+          "fbtrace_id": "ATn8mgTGd_S3L9TxwZ59l6m"
+        }
+      }
+    },
+    "instagram-content-publishing-limit": {
+      "url": "https://graph.instagram.com/v26.0/me/content_publishing_limit?fields=quota_usage,config",
+      "status": 400,
+      "headers": {
+        "content-type": "application/json; charset=UTF-8",
+        "www-authenticate": "OAuth \"Facebook Platform\" \"invalid_request\" \"Invalid OAuth 2.0 Access Token\""
+      },
+      "body": {
+        "error": {
+          "message": "Invalid OAuth 2.0 Access Token",
+          "type": "IGApiException",
+          "code": 190,
+          "error_data": {},
+          "fbtrace_id": "AVvUiZF3c4duF9mmkW7JcmS"
+        }
+      }
+    }
+  }
+}
