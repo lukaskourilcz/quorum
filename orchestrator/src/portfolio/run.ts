@@ -30,6 +30,7 @@ import type { FoundingAgent, Stage } from "../types.js";
 import {
   composeMeetingRouteDefinition,
   getVentureMeetingDefinition,
+  pausedVentureIds,
   loadVentureRegistry,
   parseCadenceHour
 } from "../ventures/registry.js";
@@ -171,7 +172,7 @@ export function portfolioIdeaInstruction(phase: PortfolioPhase, focus = ""): str
     return `This scheduled room has a standing agenda: generate marketing ideas for the future Titty Tuesdays eshop. PULSE and ANGLE must each set idea exactly to {"title":"one title, at most 80 characters","summary":"one standalone description, at most 280 characters"}; use no other idea keys, and repeat the concept from summary inside idea rather than leaving idea null. Each idea must fit the current crop-top season and target adults. Keep it pre-commerce: do not claim stock, price, availability or a purchase path; do not propose paid ads, publishing, human imagery, anatomy-led art or sexual supporting copy. AUDIT sets idea:null and reviews the concepts. The weekday specialist may add one idea in the same shape when its role supports the concept. Propose nothing whose title or summary restates an idea already in the index you were shown.${focus}`;
   }
   if (phase === "gv-brief") {
-    return `This room has a standing agenda: read the week's trend data and turn it into things to write. PULSE, SCOUT and ANGLE must each set idea exactly to {"title":"one title, at most 80 characters","summary":"one standalone description, at most 280 characters"}; use no other idea keys. A magazine-marketing idea names its venture in the title — "DNESKAi: ..." or "MMA Files: ..." — so the owner can see at a glance which desk it belongs to; an idea for the owner's own writing names neither. Every idea that claims a trend is rising must carry the number from the packet that shows it. AUDIT sets idea:null and reviews the picks for brand safety, adult-audience fit and anything that reads as a posting instruction. Propose nothing whose title or summary restates an idea already in the index you were shown.${focus}`;
+    return `This room has a standing agenda: read the week's trend data and turn it into things to write. PULSE, SCOUT and ANGLE must each set idea exactly to {"title":"one title, at most 80 characters","summary":"one standalone description, at most 280 characters"}; use no other idea keys. A marketing idea names its product in the title — "DNESKAi: ..." or "devShark: ..." — so the owner can see at a glance which desk it belongs to; an idea for the owner's own writing names neither. Propose nothing for a paused venture. Every idea that claims a trend is rising must carry the number from the packet that shows it. AUDIT sets idea:null and reviews the picks for brand safety, adult-audience fit and anything that reads as a posting instruction. Propose nothing whose title or summary restates an idea already in the index you were shown.${focus}`;
   }
   return "Set idea to {\"title\":\"<=80 chars\",\"summary\":\"<=280 chars\"} when this room surfaced a concrete idea worth keeping for later, otherwise null. It is recorded verbatim and must stand alone without the transcript.";
 }
@@ -1747,8 +1748,15 @@ export async function runPortfolioCycle(input: {
     // dropped phase has no room to consume anything. An agenda queued for one would sit until
     // its three-day TTL expired while the requesting room's record claimed it had handed work
     // onward. Refusing keeps that visible instead of burying it in an expiring queue entry.
+    // A paused venture's room holds no slot on the clock (`operations-2026-09b`), so an agenda
+    // handed to it would expire unread for the same reason.
+    const followUpVenture = followUp
+      ? registry.ventures.find(({ meetings }) => meetings.some(({ kind }) => kind === followUp.phase))?.id ?? null
+      : null;
     if (followUp && !phaseEnabled(schedule, followUp.phase)) {
       console.warn(`Follow-up meeting request was not queued: ${followUp.phase} is not in the effective budget shape, so no room could consume it`);
+    } else if (followUp && followUpVenture && pausedVentureIds(registry).has(followUpVenture)) {
+      console.warn(`Follow-up meeting request was not queued: ${followUp.phase} belongs to ${followUpVenture}, which the registry pauses`);
     } else if (followUp && mayRequestMeeting(meetingPolicy, input.phase, followUp.phase)) {
       const target = getVentureMeetingDefinition(registry, followUp.phase);
       const currentHour = pragueClockParts(input.now).hour;

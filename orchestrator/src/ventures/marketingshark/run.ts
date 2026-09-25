@@ -25,6 +25,7 @@ import type { HookAssignment } from "../../contracts/hook-assignment.js";
 import type { Hook } from "@boardlessai/carousel-studio";
 import { ChumOutput, MarketingSharkPackage, packagePath, SLIDE_ROLES } from "./package.js";
 import { buildChumPacket, readCraftRules } from "./packet.js";
+import { readBrandTrendLines } from "./trends.js";
 import { buildQueueItems } from "./queue.js";
 import { codeOwnedSlotsFit, engineVersion, MARKETINGSHARK_FORMAT, renderCarousel, slotBudget, type RenderedRoleSlide } from "./render.js";
 import { MeetingRecordSchema } from "../../contracts/meeting-record.js";
@@ -415,6 +416,8 @@ export async function runBrandDay(input: {
   }
 
   const craft = await readCraftRules(repoRoot);
+  // Read from the real state root in a dry run too: the snapshot is committed data and costs $0.
+  const trendLines = await readBrandTrendLines({ stateRoot, configRoot, brandId: brand.id, date });
   let violations: GateViolation[] = [];
   let output: ChumOutput | null = null;
 
@@ -427,6 +430,7 @@ export async function runBrandDay(input: {
       hookLines: hookLinesFor({ hook: plan.hook, brand, question: plan.question }),
       hookId: plan.assignment.hookId,
       date,
+      trendLines,
       ...(violations.length ? { violations } : {})
     });
     let candidate: ChumOutput;

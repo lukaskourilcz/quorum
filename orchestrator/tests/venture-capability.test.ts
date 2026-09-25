@@ -48,7 +48,7 @@ describe("venture capability map", () => {
     for (const venture of registry.ventures) expect(nodeIds.has(venture.id)).toBe(true);
     expect(nodeIds.has("webdev-signal")).toBe(true);
     expect(map.defaultVentureContentPosture).toBe("deny");
-    expect(map.mapVersion).toBe("1.3.0");
+    expect(map.mapVersion).toBe("1.4.0");
     expect(map.nodes.find((node) => node.id === "design-lab")).toMatchObject({
       classification: "rendering-service",
       canonicalOwner: "carousel-studio",
@@ -79,6 +79,20 @@ describe("venture capability map", () => {
     for (const probe of probes) expect(resolveVentureCapabilityInMap(map, probe).decision).toBe("denied");
     const absent = await mkdtemp(path.join(os.tmpdir(), "boardless-capability-absent-"));
     await expect(resolveVentureCapability(probes[4]!, { configRoot: absent })).resolves.toMatchObject({ decision: "denied", edge: null });
+  });
+
+  it("lets marketingShark read GoVIRAL's trend snapshot and nothing broader (operations-2026-09b)", async () => {
+    const map = await loadVentureCapabilityMap(configRoot);
+    expect(request(map, "goviral", "marketingshark", "intelligence-read", "goviral-trends/1")).toMatchObject({
+      decision: "allowed",
+      authorityGranted: false,
+      publishingAuthorized: false,
+      spendAuthorized: false
+    });
+    // The edge is exact: another schema, another capability or the reverse direction stays closed.
+    expect(request(map, "goviral", "marketingshark", "intelligence-read", "goviral-intelligence-packet/1").decision).toBe("denied");
+    expect(request(map, "goviral", "marketingshark", "approved-publish-package", "approved-publish-package/1").decision).toBe("denied");
+    expect(request(map, "marketingshark", "goviral", "intelligence-read", "goviral-trends/1").decision).toBe("denied");
   });
 
   it("keeps BOOKSOFHISTORY and Tehdejší svět mutually isolated", async () => {

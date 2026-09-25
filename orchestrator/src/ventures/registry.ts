@@ -121,6 +121,11 @@ export function scheduledVentures(registry: VentureRegistry): VentureRegistry["v
   return registry.ventures.filter((venture) => venture.status !== "paused");
 }
 
+/** The ids the registry pauses: the one switch every paused-aware reader consults. */
+export function pausedVentureIds(registry: VentureRegistry): ReadonlySet<string> {
+  return new Set(registry.ventures.filter((venture) => venture.status === "paused").map((venture) => venture.id));
+}
+
 /** Every room a venture day dispatches, which therefore holds no hour of its own. */
 export function dayDispatchedKinds(registry: VentureRegistry): ReadonlySet<string> {
   return new Set(registry.ventures.flatMap((venture) => venture.day?.steps ?? []));

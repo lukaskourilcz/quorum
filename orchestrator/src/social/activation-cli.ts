@@ -1,7 +1,7 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { configRoot, repoRoot, stateRoot } from "../paths.js";
-import { loadVentureRegistry } from "../ventures/registry.js";
+import { loadVentureRegistry, pausedVentureIds } from "../ventures/registry.js";
 import { refreshSocialActivation, SOCIAL_VENTURES } from "./activation.js";
 import { TT_SAFETY_CHECKER_VERSION } from "./tt-safety.js";
 
@@ -31,7 +31,7 @@ async function main(): Promise<void> {
     stateRoot,
     configRoot,
     safetyCheckerReady: TT_SAFETY_CHECKER_VERSION === "keeper-tt-1",
-    pausedVentures: new Set(registry.ventures.filter((venture) => venture.status === "paused").map((venture) => venture.id))
+    pausedVentures: pausedVentureIds(registry)
   });
   for (const venture of SOCIAL_VENTURES) {
     const entry = activation.ventures[venture];

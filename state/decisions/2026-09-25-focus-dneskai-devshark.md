@@ -72,4 +72,4 @@ site is deployed; the cron test fails until that is done. MMA Files and FightAIQ
 - [x] Workflows: MMA Files delivery block and paused switches removed (#559)
 - [x] Admin: workspace nav and Settings "Paused ventures" table (#560)
 - [x] Design Lab: operating ventures only (#561)
-- [ ] GoVIRAL: DNESKAi and devShark only (#562)
+- [x] GoVIRAL: DNESKAi and devShark only (#562)

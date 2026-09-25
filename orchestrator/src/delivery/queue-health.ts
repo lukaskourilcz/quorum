@@ -1,6 +1,6 @@
 import { stateRoot } from "../paths.js";
 import { articleQueue } from "../mma-files/publish.js";
-import { loadVentureRegistry } from "../ventures/registry.js";
+import { loadVentureRegistry, pausedVentureIds } from "../ventures/registry.js";
 import { surveyRetirableArticles } from "../mma-files/retire.js";
 import { atomicWriteJson, atomicWriteText, readText } from "../state.js";
 import { deployIsBehind, readDeployFreshness, type DeployFreshness, type DeployProbe } from "./deploy-freshness.js";
@@ -203,8 +203,7 @@ export async function buildQueueHealthReport(input: {
 }
 
 async function registryPausedVentures(): Promise<ReadonlySet<string>> {
-  const registry = await loadVentureRegistry();
-  return new Set(registry.ventures.filter((venture) => venture.status === "paused").map((venture) => venture.id));
+  return pausedVentureIds(await loadVentureRegistry());
 }
 
 /**
