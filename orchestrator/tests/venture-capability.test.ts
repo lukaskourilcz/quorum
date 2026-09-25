@@ -95,6 +95,30 @@ describe("venture capability map", () => {
     expect(request(map, "marketingshark", "goviral", "intelligence-read", "goviral-trends/1").decision).toBe("denied");
   });
 
+  it("lets marketingShark hand devShark packages to the Design Lab and Social Distribution, exactly (#568)", async () => {
+    const map = await loadVentureCapabilityMap(configRoot);
+    for (const [target, capability, schemaVersion] of [
+      ["design-lab", "bounded-render-summary", "bounded-render-summary/1"],
+      ["social-distribution", "approved-publish-package", "approved-publish-package/1"]
+    ] as const) {
+      expect(request(map, "marketingshark", target, capability, schemaVersion)).toMatchObject({
+        decision: "allowed",
+        authorityGranted: false,
+        publishingAuthorized: false,
+        spendAuthorized: false,
+        edge: { governingReference: "state/decisions/2026-09-26-devshark-social-queue.md" }
+      });
+    }
+    // Exact edges: another schema, capability, target or source stays closed.
+    expect(request(map, "marketingshark", "social-distribution", "approved-publish-package", "contest-promotion-candidate/1").decision).toBe("denied");
+    expect(request(map, "marketingshark", "social-distribution", "bounded-render-summary", "bounded-render-summary/1").decision).toBe("denied");
+    expect(request(map, "marketingshark", "caught-up", "approved-publish-package", "approved-publish-package/1").decision).toBe("denied");
+    expect(request(map, "marketingshark", "personal-growth", "approved-publish-package", "approved-publish-package/1").decision).toBe("denied");
+    expect(request(map, "devshark", "social-distribution", "approved-publish-package", "approved-publish-package/1").decision).toBe("denied");
+    expect(request(map, "goviral", "social-distribution", "approved-publish-package", "approved-publish-package/1").decision).toBe("denied");
+    expect(map.nodes.find((node) => node.id === "devshark")?.maximumPayloadClass).toBe("internal-marketing-artifact");
+  });
+
   it("keeps BOOKSOFHISTORY and Tehdejší svět mutually isolated", async () => {
     const map = await loadVentureCapabilityMap(configRoot);
     for (const [source, target] of [["booksofhistory", "tehdejsi-svet"], ["tehdejsi-svet", "booksofhistory"]]) {

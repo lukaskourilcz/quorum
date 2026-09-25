@@ -38,6 +38,7 @@ import {
   type RenderedRoleSlide
 } from "./render.js";
 import { MeetingRecordSchema } from "../../contracts/meeting-record.js";
+import { mayRenderDeck, resolveDeckRender } from "../../studio/render-access.js";
 
 export const LEDGER_PATH = "marketingshark/ledger.json";
 export const MS_DAILY_PHASE = "ms-daily";
@@ -430,6 +431,8 @@ export async function runBrandDay(input: {
    * forgetting to say where.
    */
   publicRoot: string;
+  /** Where the capability map is read from; the repository's config unless a test says otherwise. */
+  configRoot?: string;
   dry: boolean;
   now?: Date;
   call: (packet: string, attempt: number) => Promise<{ output: ChumOutput; usd: number }>;
@@ -459,6 +462,24 @@ export async function runBrandDay(input: {
         brandId: brand.id,
         questionId: plan.selection.questionId,
         packagePath: plan.selection.alreadyServed.package
+      },
+      ledger: input.ledger,
+      artifacts: []
+    };
+  }
+
+  // The Design Lab renders this venture's slides only under its own edge in the capability map
+  // (quorum#568). Asked before the paid call: a closed edge is a $0 abort, not a draft paid for and
+  // then refused at render.
+  const renderAccess = await resolveDeckRender("marketingshark", { configRoot: input.configRoot ?? configRoot });
+  if (!mayRenderDeck(renderAccess)) {
+    return {
+      outcome: {
+        status: "aborted",
+        brandId: brand.id,
+        reason: "render-failed",
+        detail: `the marketingshark -> design-lab render edge is ${renderAccess.decision}: ${renderAccess.reason}`,
+        spendUsd: 0
       },
       ledger: input.ledger,
       artifacts: []

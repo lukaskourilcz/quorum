@@ -21,7 +21,10 @@ async function realMap() {
   );
 }
 
-/** Every venture that writes into `state/ventures/carousel-studio/summaries/`. */
+/**
+ * Every venture that writes into `state/ventures/carousel-studio/summaries/`, and marketingShark,
+ * whose devShark slides the Design Lab renders into queue frames (quorum#568).
+ */
 const RENDERING_VENTURES = [
   "caught-up",
   "mma-files",
@@ -29,7 +32,8 @@ const RENDERING_VENTURES = [
   "tehdejsi-svet",
   "kvorum",
   "door-money",
-  "webdev-signal"
+  "webdev-signal",
+  "marketingshark"
 ] as const;
 
 describe("who may have a bounded summary rendered", () => {
@@ -44,7 +48,8 @@ describe("who may have a bounded summary rendered", () => {
 
   it("refuses a venture with no edge, which is the posture the map is for", async () => {
     const map = await realMap();
-    for (const venture of ["marketingshark", "goviral", "personal-growth", "fightaiq"]) {
+    // devShark itself has no edge: marketingShark renders its carousels, the product never asks.
+    for (const venture of ["goviral", "personal-growth", "fightaiq", "devshark"]) {
       const resolution = resolveDeckRenderInMap(venture, map);
       expect(resolution.decision, venture).not.toBe("allowed");
       expect(mayRenderDeck(resolution), venture).toBe(false);
@@ -75,7 +80,8 @@ describe("who may have a bounded summary rendered", () => {
 
   it("reads the same answer off disk as it does from a map in hand", async () => {
     await expect(resolveDeckRender("mma-files")).resolves.toMatchObject({ decision: "allowed" });
-    await expect(resolveDeckRender("marketingshark")).resolves.toMatchObject({ decision: "denied" });
+    await expect(resolveDeckRender("marketingshark")).resolves.toMatchObject({ decision: "allowed" });
+    await expect(resolveDeckRender("goviral")).resolves.toMatchObject({ decision: "denied" });
   });
 
   it("keeps the two history ventures isolated from each other", async () => {

@@ -1,10 +1,11 @@
 import { createHash } from "node:crypto";
-import { mkdtemp, readdir, readFile } from "node:fs/promises";
+import { cp, mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import { CAROUSEL_BRANDS, liveTemplates, SEED_TEMPLATES } from "@boardlessai/carousel-studio";
+import { configRoot } from "../src/paths.js";
 import { NormalizedQuestionSchema, type NormalizedQuestion } from "../src/ventures/marketingshark/bank.js";
 import { enabledBrands, loadMarketingSharkConfig, type Brand } from "../src/ventures/marketingshark/config.js";
 import { EMPTY_LEDGER } from "../src/ventures/marketingshark/ledger.js";
@@ -278,6 +279,31 @@ describe("marketingShark room", () => {
     expect(ledger.brands.devshark).toBeUndefined();
     await expect(readFile(path.join(root, "ventures/marketingshark/packages/2026-08-08/devshark/package.json"), "utf8"))
       .rejects.toThrow();
+  });
+
+  it("asks the capability map before the paid call, and a closed render edge costs nothing", async () => {
+    const root = await mkdtemp(path.join(tmpdir(), "ms-edge-"));
+    const held = await mkdtemp(path.join(tmpdir(), "ms-edge-config-"));
+    await cp(configRoot, held, { recursive: true });
+    const map = JSON.parse(await readFile(path.join(held, "venture-capabilities.json"), "utf8")) as { edges: Array<Record<string, string>> };
+    for (const edge of map.edges) {
+      if (edge.source === "marketingshark" && edge.target === "design-lab") edge.decision = "held";
+    }
+    await writeFile(path.join(held, "venture-capabilities.json"), JSON.stringify(map), "utf8");
+    const config = await loadMarketingSharkConfig();
+    const brand = enabledBrands(config)[0]!;
+    let calls = 0;
+
+    const result = await runBrandDay({
+      config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "test-cycle", root, publicRoot: path.join(root, "public"),
+      configRoot: held, dry: true,
+      call: async () => { calls += 1; throw new Error("the room called the model behind a closed edge"); }
+    });
+
+    expect(calls).toBe(0);
+    expect(result.outcome).toMatchObject({ status: "aborted", reason: "render-failed", spendUsd: 0 });
+    expect(result.outcome.status === "aborted" && result.outcome.detail).toContain("marketingshark -> design-lab render edge is held");
+    expect(result.artifacts).toEqual([]);
   });
 
   it("retries once with the failed checks, and stops at two calls", async () => {

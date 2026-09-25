@@ -1,7 +1,7 @@
 {
   "schemaVersion": "venture-capability-map/1",
   "mapVersion": "1.4.0",
-  "effectiveDate": "2026-09-25",
+  "effectiveDate": "2026-09-26",
   "defaultVentureContentPosture": "deny",
   "decisionReference": "state/decisions/2026-08-26-autonomy-first-capabilities.md",
   "nodes": [
@@ -263,9 +263,10 @@
       ],
       "authorityRequirement": "decision-and-runtime-gates",
       "privacyClassification": "internal",
-      "maximumPayloadClass": "none",
+      "maximumPayloadClass": "internal-marketing-artifact",
       "evidenceReferences": [
-        "GitHub #424"
+        "GitHub #424",
+        "state/decisions/2026-09-26-devshark-social-queue.md"
       ],
       "reviewAt": null
     },
@@ -594,6 +595,32 @@
       "reason": "marketingShark may read devShark's measured hashtags from the weekly trend snapshot while drafting a carousel. Bounded expiring intelligence only: at most five tags with a direction word, never copy, captions, handles or figures.",
       "governingReference": "GitHub #562",
       "runtimeEnforcementPoint": "orchestrator/src/ventures/marketingshark/trends.ts",
+      "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "marketingshark",
+      "target": "design-lab",
+      "capability": "bounded-render-summary",
+      "dataSchemaVersion": "bounded-render-summary/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "The Design Lab may render marketingShark's devShark carousels: the reviewed slides, their PNG frames and JPEG copies. Rendering only, at $0: no strategy, no hook choice, no publishing and no read of any other venture's work.",
+      "governingReference": "state/decisions/2026-09-26-devshark-social-queue.md",
+      "runtimeEnforcementPoint": "orchestrator/src/studio/render-access.ts",
+      "testProbeReference": "orchestrator/tests/render-summary-edges.test.ts"
+    },
+    {
+      "schemaVersion": "venture-capability-edge/1",
+      "source": "marketingshark",
+      "target": "social-distribution",
+      "capability": "approved-publish-package",
+      "dataSchemaVersion": "approved-publish-package/1",
+      "direction": "source-to-target",
+      "decision": "allowed",
+      "reason": "marketingShark may hand Social Distribution one devShark package a day as draft queue items bound to devShark's own profiles, each with the package hash. Nothing sends until the owner approves an item and the held connections, channels and kill switch are opened separately.",
+      "governingReference": "state/decisions/2026-09-26-devshark-social-queue.md",
+      "runtimeEnforcementPoint": "orchestrator/src/social/publisher-targets.ts",
       "testProbeReference": "orchestrator/tests/venture-capability.test.ts"
     },
     {
@@ -1089,6 +1116,12 @@
       "effectiveAt": "2026-09-25T00:00:00.000Z",
       "decisionReference": "state/decisions/2026-09-25-focus-dneskai-devshark.md",
       "note": "GoVIRAL to marketingShark intelligence-read added, so the room that markets devShark can read the devShark signals GoVIRAL already collects."
+    },
+    {
+      "mapVersion": "1.4.0",
+      "effectiveAt": "2026-09-26T00:00:00.000Z",
+      "decisionReference": "state/decisions/2026-09-26-devshark-social-queue.md",
+      "note": "Completes 1.4.0 as #568 specifies it: marketingShark to the Design Lab (render) and to Social Distribution (draft devShark queue items). The devShark node's payload class becomes internal-marketing-artifact."
     }
   ]
 }

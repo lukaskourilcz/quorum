@@ -229,7 +229,9 @@ export function resolvePublisherTarget(input: {
     || (queue.sourceVentureId === "tehdejsi-svet" && profile.ventureRef === "booksofhistory")) {
     return resolution("denied", ["history-venture-isolation"]);
   }
-  const capabilityRequired = queue.target.role !== "primary" || ["door-money", "webdev-signal"].includes(queue.sourceVentureId);
+  // marketingShark drafts for devShark under its own edge (quorum#568), so even its primary targets
+  // need the exact, current capability reference the edge governs.
+  const capabilityRequired = queue.target.role !== "primary" || ["door-money", "webdev-signal", "marketingshark"].includes(queue.sourceVentureId);
   if (capabilityRequired && !exactCapabilityAllowed(queue, input.capabilityMap)) return resolution("denied", ["missing-stale-held-or-denied-capability"]);
   if (queue.sourceVentureId === "door-money" && queue.sourcePackage?.schemaVersion !== "approved-publish-package/1") {
     return resolution("denied", ["door-money-private-payload-forbidden"]);

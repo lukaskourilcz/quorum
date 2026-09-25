@@ -86,10 +86,10 @@ export async function auditSocialRelease(repoRoot = defaultRepoRoot): Promise<So
 
   const socialAllowed = capabilities.edges.filter(({ target, decision, capability }) => target === "social-distribution" && decision === "allowed" && capability === "approved-publish-package").map(({ source }) => source).sort();
   const isolationIds = new Set(capabilities.isolationRules.map(({ id }) => id));
-  checks.push(check("exact-capability-and-isolation", canonicalJson(socialAllowed) === canonicalJson(["door-money", "webdev-signal"])
+  checks.push(check("exact-capability-and-isolation", canonicalJson(socialAllowed) === canonicalJson(["door-money", "marketingshark", "webdev-signal"])
     && isolationIds.has("booksofhistory-to-tehdejsi") && isolationIds.has("tehdejsi-to-booksofhistory") && isolationIds.has("personal-growth-no-portfolio") && isolationIds.has("kvorum-outbound-isolation")
     && targetSource.includes('["personal-growth", "kvorum", "goviral"]') && targetSource.includes("door-money-private-payload-forbidden"),
-  "Only exact #424 Door Money/WebDev Signal packages can cross into Social Distribution; Personal Growth, Kvórum, GoVIRAL and both history cross-targets remain denied.", ["config/venture-capabilities.json", "orchestrator/src/social/publisher-targets.ts"]));
+  "Only exact Door Money and WebDev Signal packages (#424) and marketingShark's devShark drafts (#568) can cross into Social Distribution; Personal Growth, Kvórum, GoVIRAL and both history cross-targets remain denied.", ["config/venture-capabilities.json", "orchestrator/src/social/publisher-targets.ts"]));
 
   checks.push(check("provider-and-queue-safety", providers.providers.filter(({ id, verdict }) => id === "direct-meta" && verdict === "enabled").length === 1
     && providers.providers.filter(({ id }) => id !== "direct-meta").every(({ verdict }) => verdict !== "enabled")

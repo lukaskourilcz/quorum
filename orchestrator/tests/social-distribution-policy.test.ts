@@ -64,7 +64,9 @@ describe("Social Distribution founding policy", () => {
       .filter((edge) => edge.target === "social-distribution" && edge.capability === "approved-publish-package" && edge.decision === "allowed")
       .map((edge) => [edge.source, edge.dataSchemaVersion]);
 
+    // marketingShark joined in map 1.4.0 for devShark's drafts (quorum#568); still exact, still one schema.
     expect(allowedInputs).toEqual([
+      ["marketingshark", "approved-publish-package/1"],
       ["door-money", "approved-publish-package/1"],
       ["webdev-signal", "approved-publish-package/1"]
     ]);
