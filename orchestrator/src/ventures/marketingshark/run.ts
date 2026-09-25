@@ -26,7 +26,8 @@ import type { Hook } from "@boardlessai/carousel-studio";
 import { ChumOutput, inLocale, MarketingSharkPackage, packageId, packagePath, SLIDE_ROLES } from "./package.js";
 import { buildChumPacket, readCraftRules } from "./packet.js";
 import { readBrandTrendLines } from "./trends.js";
-import { buildQueueItems } from "./queue.js";
+import { buildQueueItems, marketingSharkCapabilityRef } from "./queue.js";
+import { loadVentureCapabilityMap } from "../capabilities.js";
 import {
   codeOwnedSlotsFit,
   engineVersion,
@@ -633,6 +634,11 @@ export async function runBrandDay(input: {
     spendUsd
   });
 
+  // The queue drafts cross into Social Distribution, so they exist only under that exact edge. A map
+  // that does not allow it still gets the package, for review in the admin, and no queue item.
+  const capabilityRef = await loadVentureCapabilityMap(input.configRoot ?? configRoot)
+    .then(marketingSharkCapabilityRef, () => null);
+
   const artifacts = await commitBrandDay({
     root: input.root,
     publicRoot: input.publicRoot,
@@ -649,7 +655,7 @@ export async function runBrandDay(input: {
     assignment: plan.assignment,
     hook: plan.hook,
     channels: plan.channels,
-    queueItems: buildQueueItems({ built, brand, now })
+    queueItems: capabilityRef ? buildQueueItems({ built, brand, now, capabilityRef }) : []
   });
 
   return {

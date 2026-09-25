@@ -5,13 +5,18 @@ import { describe, expect, it } from "vitest";
 import { isPublishingVenture, SOCIAL_VENTURES } from "../src/social/activation.js";
 import { runSocialPublisher } from "../src/social/runner.js";
 import { configRoot } from "../src/paths.js";
-import { assertQueueItemPublishable, QueueItemSchema } from "../src/social/queue.js";
+import { assertQueueItemPublishable, CapabilityAwareQueueItemSchema } from "../src/social/queue.js";
+import { loadVentureCapabilityMap } from "../src/ventures/capabilities.js";
 import { enabledBrands, loadMarketingSharkConfig } from "../src/ventures/marketingshark/config.js";
 import { EMPTY_LEDGER } from "../src/ventures/marketingshark/ledger.js";
 import { MarketingSharkPackage } from "../src/ventures/marketingshark/package.js";
-import { buildQueueItems } from "../src/ventures/marketingshark/queue.js";
+import { buildQueueItems, marketingSharkCapabilityRef } from "../src/ventures/marketingshark/queue.js";
 import { fixtureChumOutput, fixtureHookLines, planBrandDay, runBrandDay } from "../src/ventures/marketingshark/run.js";
 import { repoRoot } from "../src/paths.js";
+
+async function capabilityRef() {
+  return marketingSharkCapabilityRef(await loadVentureCapabilityMap(configRoot))!;
+}
 
 async function draftedPackage(): Promise<{ built: MarketingSharkPackage; root: string }> {
   const root = await mkdtemp(path.join(tmpdir(), "ms-post-"));
@@ -50,16 +55,16 @@ describe("marketingShark cannot post", () => {
     const { built } = await draftedPackage();
     const config = await loadMarketingSharkConfig();
     const brand = enabledBrands(config)[0]!;
-    const items = buildQueueItems({ built, brand, now: new Date("2026-08-08T07:00:00.000Z") });
+    const items = buildQueueItems({ built, brand, now: new Date("2026-08-08T07:00:00.000Z"), capabilityRef: await capabilityRef() });
 
-    // One English item per channel: devShark writes English only (quorum#568).
-    expect(items).toHaveLength(2);
+    // One English queue v2 item per platform: LinkedIn, Instagram, Threads (quorum#568).
+    expect(items.map(({ item }) => item.channel)).toEqual(["linkedin", "instagram", "threads"]);
     for (const { item } of items) {
       expect(item.status).toBe("draft");
-      expect(item.venture).toBe("marketingshark");
+      expect(item.sourceVentureId).toBe("marketingshark");
       expect(Object.values(item.checks).every((status) => status === "pending")).toBe(true);
       // Only queued or publishing reaches the publisher, and every check must pass. A draft with
-      // eight pending checks fails both tests at once.
+      // eleven pending checks fails both tests at once.
       expect(() => assertQueueItemPublishable(item)).toThrow(/not queued for publishing/u);
     }
   });
@@ -68,11 +73,11 @@ describe("marketingShark cannot post", () => {
     const { built } = await draftedPackage();
     const config = await loadMarketingSharkConfig();
     const brand = enabledBrands(config)[0]!;
-    const item = buildQueueItems({ built, brand, now: new Date("2026-08-08T07:00:00.000Z") })[0]!.item;
-
-    const forced = QueueItemSchema.parse({ ...item, status: "queued" });
-    // The approval checks are the second lock and they are all still pending.
-    expect(() => assertQueueItemPublishable(forced)).toThrow(/incomplete approval checks/u);
+    for (const { item } of buildQueueItems({ built, brand, now: new Date("2026-08-08T07:00:00.000Z"), capabilityRef: await capabilityRef() })) {
+      const forced = CapabilityAwareQueueItemSchema.parse({ ...item, status: "queued" });
+      // The approval checks are the second lock and they are all still pending.
+      expect(() => assertQueueItemPublishable(forced), item.channel).toThrow(/incomplete approval checks/u);
+    }
   });
 
   it("is not a publishing venture, so the runner never reaches its items", () => {
@@ -94,7 +99,7 @@ describe("marketingShark cannot post", () => {
     const root = await mkdtemp(path.join(tmpdir(), "ms-publish-"));
 
     await mkdir(path.join(root, "social", "queue"), { recursive: true });
-    for (const { relative, item } of buildQueueItems({ built, brand, now: new Date("2026-08-08T07:00:00.000Z") })) {
+    for (const { relative, item } of buildQueueItems({ built, brand, now: new Date("2026-08-08T07:00:00.000Z"), capabilityRef: await capabilityRef() })) {
       await writeFile(path.join(root, relative), JSON.stringify(item), "utf8");
     }
     // updatedAt has to fall on the same Prague day as `now`, or the runner discards this file and
@@ -107,8 +112,10 @@ describe("marketingShark cannot post", () => {
       schemaVersion: "social-activation/1",
       updatedAt: now.toISOString(),
       // marketingShark is in this file deliberately. Without it the runner filters the items out
-      // for want of an activation record and the test passes even with the guard deleted -- it
-      // would prove nothing. Here it is the guard, and only the guard, standing in the way.
+      // for want of an activation record and the test passes even with the other locks deleted --
+      // it would prove nothing. Here the locks on the items themselves stand in the way: devShark's
+      // targets resolve to no eligible connection, every check is pending, and marketingShark is
+      // not a publishing venture.
       ventures: Object.fromEntries([...SOCIAL_VENTURES, "marketingshark"].map((venture) => [venture, {
         status: "enabled", counter: 99, required: 1, reason: "test",
         updatedAt: now.toISOString(), unlockedAt: now.toISOString(),
@@ -130,9 +137,10 @@ describe("marketingShark cannot post", () => {
       }) as unknown as typeof fetch
     });
 
-    // Two items on disk, and not one of them due: the venture owns no activation record, so the
-    // runner never considers it. Nothing was published and nothing touched the network.
-    expect(report.queueItems).toBe(2);
+    // Three items on disk, and not one of them sent: every check is pending, devShark's profiles
+    // are unknown or held, and LinkedIn has no transport. Nothing was published and nothing touched
+    // the network.
+    expect(report.queueItems).toBe(3);
     expect(report.published).toBe(0);
     expect(fetched).toBe(0);
   });

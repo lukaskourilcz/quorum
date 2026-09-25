@@ -206,9 +206,12 @@ describe("marketingShark room", () => {
     const ledger = await readLedger(root);
     expect(ledger.brands.devshark!.served).toHaveLength(1);
     expect(ledger.brands.devshark!.served[0]!.questionId).toBe(built.question.id);
-    expect(result.artifacts.filter((artifact) => artifact.startsWith("social/queue/"))).toHaveLength(2);
-    // Six state artifacts and ten frame files: a PNG and its JPEG copy for each of the five slides.
-    expect(result.artifacts).toHaveLength(16);
+    // One queue v2 draft per platform, English only.
+    expect(result.artifacts.filter((artifact) => artifact.startsWith("social/queue/")).sort()).toEqual(
+      ["instagram", "linkedin", "threads"].map((channel) => `social/queue/2026-08-08-devshark-en-${channel}.json`)
+    );
+    // Seven state artifacts and ten frame files: a PNG and its JPEG copy for each of the five slides.
+    expect(result.artifacts).toHaveLength(17);
     expect(result.artifacts.filter((artifact) => artifact.startsWith("public/social/devshark/2026-08-08/en/")).sort()).toEqual(
       [1, 2, 3, 4, 5].flatMap((slide) => [`slide-0${slide}.jpg`, `slide-0${slide}.png`]).map((name) => `public/social/devshark/2026-08-08/en/${name}`).sort()
     );
@@ -304,6 +307,32 @@ describe("marketingShark room", () => {
     expect(result.outcome).toMatchObject({ status: "aborted", reason: "render-failed", spendUsd: 0 });
     expect(result.outcome.status === "aborted" && result.outcome.detail).toContain("marketingshark -> design-lab render edge is held");
     expect(result.artifacts).toEqual([]);
+  });
+
+  it("drafts the package but hands nothing to Social Distribution when that edge is closed", async () => {
+    const root = await mkdtemp(path.join(tmpdir(), "ms-publish-edge-"));
+    const held = await mkdtemp(path.join(tmpdir(), "ms-publish-edge-config-"));
+    await cp(configRoot, held, { recursive: true });
+    const map = JSON.parse(await readFile(path.join(held, "venture-capabilities.json"), "utf8")) as { edges: Array<Record<string, string>> };
+    for (const edge of map.edges) {
+      if (edge.source === "marketingshark" && edge.target === "social-distribution") edge.decision = "held";
+    }
+    await writeFile(path.join(held, "venture-capabilities.json"), JSON.stringify(map), "utf8");
+    const config = await loadMarketingSharkConfig();
+    const brand = enabledBrands(config)[0]!;
+
+    const result = await runBrandDay({
+      config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08", cycleId: "test-cycle", root, publicRoot: path.join(root, "public"),
+      configRoot: held, dry: true,
+      call: async () => {
+        const plan = await planBrandDay({ config, brand, ledger: EMPTY_LEDGER, date: "2026-08-08" });
+        return { usd: 0, output: fixtureChumOutput({ brand, question: plan.question, ...fixtureHookLines(plan, brand) }) };
+      }
+    });
+
+    expect(result.outcome.status).toBe("drafted");
+    expect(result.artifacts.filter((artifact) => artifact.startsWith("social/queue/"))).toEqual([]);
+    await expect(readdir(path.join(root, "social", "queue"))).rejects.toThrow();
   });
 
   it("retries once with the failed checks, and stops at two calls", async () => {
