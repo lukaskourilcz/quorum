@@ -227,7 +227,7 @@ export function QueueCard({ item }: { item: AdminQueueItemView }) {
       ) : null}
 
       {mode === "view" ? (
-        <footer className="flex flex-wrap items-center gap-2 border-t border-[var(--admin-border)] pt-3" aria-label="Actions">
+        <div aria-label="Post actions" className="flex flex-wrap items-center gap-2 border-t border-[var(--admin-border)] pt-3" role="group">
           {item.actions.approve ? (
             <>
               <AdminButton disabled={busy} onClick={() => send("approve", { mode: "now" })} variant="primary">{pending === "approve" ? "Approving…" : "Approve and publish now"}</AdminButton>
@@ -247,7 +247,7 @@ export function QueueCard({ item }: { item: AdminQueueItemView }) {
           {item.schemaVersion === 1 && (item.group === "waiting" || item.group === "scheduled") ? (
             <p className="m-0 basis-full text-[length:var(--admin-type-label)] text-[var(--admin-foreground-muted)]">A legacy v1 item can be held or rejected here; approving and editing need a queue v2 item.</p>
           ) : null}
-        </footer>
+        </div>
       ) : null}
 
       {/* Rendered empty from the start: a live region that appears with its message is often not announced. */}
