@@ -1,0 +1,15 @@
+{
+  "source": "https://developers.buffer.com/guides/character-limits.md, read 2026-09-25",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json"
+  },
+  "body": {
+    "data": {
+      "createPost": {
+        "__typename": "InvalidInputError",
+        "message": "LinkedIn posts cannot exceed 3000 characters."
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "source": "https://developers.buffer.com/guides/api-limits.md, read 2026-09-25",
+  "status": 429,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "retry-after": "753",
+    "ratelimit": "\"100-in-15min\"; r=0; t=753",
+    "ratelimit-policy": "\"100-in-15min\"; q=100; w=900; pk=:ZjJjZjVmNzM5M2Zm:"
+  },
+  "body": {
+    "errors": [
+      {
+        "message": "Too many requests from this client. Please try again later.",
+        "extensions": {
+          "code": "RATE_LIMIT_EXCEEDED",
+          "window": "15m"
+        }
+      }
+    ]
+  }
+}

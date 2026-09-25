@@ -1,0 +1,18 @@
+{
+  "source": "https://developers.buffer.com/guides/error-handling.md, read 2026-09-25",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json"
+  },
+  "body": {
+    "data": null,
+    "errors": [
+      {
+        "message": "Not authorized",
+        "extensions": {
+          "code": "UNAUTHORIZED"
+        }
+      }
+    ]
+  }
+}

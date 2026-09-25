@@ -346,12 +346,13 @@ export function assertQueueItemPublishable(item: RuntimeQueueItem): void {
   if (parsed.channel === "instagram" && !parsed.content.altText) {
     throw new Error("Instagram media requires alt text in the immutable receipt");
   }
-  // A LinkedIn item can be drafted and reviewed, and nothing can send it: no connection, provider
-  // binding or adapter for LinkedIn exists yet (quorum#569, #571). Refused by name here as well, so
-  // the day a target resolves before its transport does, the item stops rather than reaching a
-  // Meta adapter.
-  if (parsed.channel === "linkedin") {
-    throw new Error("No LinkedIn transport exists yet; a LinkedIn item stays a draft");
+  // LinkedIn goes through Buffer (quorum#571), which fetches each image by public URL: JPEG or PNG,
+  // and alt text whenever there is one, as for Instagram.
+  if (parsed.channel === "linkedin" && parsed.content.assetPaths.some((asset) => !/\.(?:jpe?g|png)$/iu.test(asset))) {
+    throw new Error("The guarded LinkedIn connector accepts JPEG or PNG images only");
+  }
+  if (parsed.channel === "linkedin" && parsed.content.assetPaths.length > 0 && !parsed.content.altText) {
+    throw new Error("LinkedIn media requires alt text in the immutable receipt");
   }
   const sourceVenture = parsed.schemaVersion === 2 ? parsed.sourceVentureId : parsed.venture;
   if (sourceVenture === "titty-tuesdays") {

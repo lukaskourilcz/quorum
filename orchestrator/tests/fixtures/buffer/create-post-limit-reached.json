@@ -1,0 +1,15 @@
+{
+  "source": "https://developers.buffer.com/guides/your-first-post.md and /examples/create-image-post.md, read 2026-09-25; the Free plan holds ten scheduled posts per channel",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json"
+  },
+  "body": {
+    "data": {
+      "createPost": {
+        "__typename": "LimitReachedError",
+        "message": "Queue limit reached"
+      }
+    }
+  }
+}

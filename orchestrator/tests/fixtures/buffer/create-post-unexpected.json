@@ -1,0 +1,15 @@
+{
+  "source": "https://developers.buffer.com/reference.md (Channel, Post, PostStatus, PostActionPayload), read 2026-09-25 (UnexpectedError)",
+  "status": 200,
+  "headers": {
+    "content-type": "application/json"
+  },
+  "body": {
+    "data": {
+      "createPost": {
+        "__typename": "UnexpectedError",
+        "message": "Something went wrong"
+      }
+    }
+  }
+}
