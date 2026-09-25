@@ -203,7 +203,14 @@ export async function applyQueueAction(value: unknown, options: { root?: string;
       ...(altText !== current.content.altText ? ["altText" as const] : [])
     ];
     if (changedFields.length === 0) throw new QueueActionError("INVALID", "The edit changes nothing.");
-    const supersedingId = nextRevisionId(current.id, state.entries.map(({ item: known }) => known.id));
+    // The Queue names its own revisions `<id>-r<n>.json`, so a revision written since this
+    // snapshot was taken (on GitHub, after the last deploy) is found by its file and skipped.
+    const known = state.entries.map(({ item: entry }) => entry.id);
+    let supersedingId = nextRevisionId(current.id, known);
+    for (let probe = 0; probe < 10 && await store.read(`state/social/queue/${supersedingId}.json`) !== null; probe += 1) {
+      known.push(supersedingId);
+      supersedingId = nextRevisionId(current.id, known);
+    }
     if (supersedingId.length > 160) throw new QueueActionError("REFUSED", "This item has been revised too often to take another revision id.");
     const successor = supersedingQueueItem(current, { id: supersedingId, text: caption, altText, now });
     if (!parseQueueItemV2(JSON.parse(JSON.stringify(successor)) as unknown) || queueItemV2Hash(successor) !== successor.content.contentHash) {

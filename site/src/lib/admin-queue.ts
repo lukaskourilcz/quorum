@@ -195,7 +195,8 @@ export function buildAdminQueueSnapshot(state: QueueState, now: Date): AdminQueu
   const items = state.entries
     .map((entry) => itemView(entry, siblings, state, labLabels, now))
     .sort((left, right) => {
-      const rank = ventureRank(left.ventureKey) - ventureRank(right.ventureKey) || left.ventureLabel.localeCompare(right.ventureLabel);
+      const rank = ventureRank(left.ventureKey) - ventureRank(right.ventureKey) || left.ventureLabel.localeCompare(right.ventureLabel)
+        || QUEUE_GROUPS.indexOf(left.group) - QUEUE_GROUPS.indexOf(right.group);
       if (rank !== 0) return rank;
       const ascending = left.group === "waiting" || left.group === "scheduled" || left.group === "sending";
       const order = left.publishWindow.notBefore.localeCompare(right.publishWindow.notBefore) || left.id.localeCompare(right.id);
