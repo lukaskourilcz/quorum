@@ -43,12 +43,32 @@ export interface BufferAdapterOptions {
   /** How a carousel goes to LinkedIn; the committed rule unless a test says otherwise. */
   linkedInFormat?: BufferLinkedInFormat;
   /**
-   * Turns a queue asset path (`/social/...`) into the public, stable HTTPS URL Buffer fetches when
-   * the post goes out. The default joins it to `PUBLIC_SITE_URL`, as the Meta adapter does; the
-   * commit-pinned jsDelivr resolver of quorum#570 replaces it where it is wired.
+   * Turns a queue asset path (`/social/...`) into the public HTTPS URL Buffer fetches, for a caller
+   * that hands the adapter no verified frames. The default joins it to `PUBLIC_SITE_URL`, as the
+   * Meta adapter does on this branch. Frames the runner has already proved (quorum#570) always win.
    */
   resolveAssetUrl?: (assetPath: string, environment: NodeJS.ProcessEnv) => string;
   sleep?: (milliseconds: number) => Promise<void>;
+}
+
+/**
+ * A frame the runner proved for this run: the exact URL that answered for the asset path. The shape
+ * is the part of #570's `VerifiedSocialAsset` the adapter reads.
+ */
+export interface BufferVerifiedFrame {
+  path: string;
+  url: string;
+}
+
+/** The Buffer adapter also takes the frames the runner proved for the item it is sending. */
+export interface BufferPublishAdapter extends PublishAdapter {
+  publish(
+    channel: Channel,
+    item: RuntimeQueueItem,
+    idempotencyKey: string,
+    target?: ResolvedPublisherTarget,
+    frames?: readonly BufferVerifiedFrame[]
+  ): Promise<{ remoteId: string }>;
 }
 
 export interface BufferPostPlan {
@@ -86,6 +106,13 @@ function bufferCredentials(
     apiKey: requiredEnvironment(environment, target.credentialRef),
     channelId: requiredEnvironment(environment, target.nativeAccountIdRef)
   };
+}
+
+/** Only the URL proved for this exact path; a frame without one stops the send before any request. */
+function verifiedFrameUrl(frames: readonly BufferVerifiedFrame[], assetPath: string): string {
+  const frame = frames.find((candidate) => candidate.path === assetPath);
+  if (!frame) throw new ProviderRejectedError("invalid-input", "Every LinkedIn frame needs a URL verified before the send");
+  return frame.url;
 }
 
 function defaultAssetUrl(assetPath: string, environment: NodeJS.ProcessEnv): string {
@@ -163,18 +190,18 @@ export function createBufferPublishAdapter(
   environment: NodeJS.ProcessEnv,
   fetchImpl: FetchLike = fetch,
   options: BufferAdapterOptions = {}
-): PublishAdapter {
+): BufferPublishAdapter {
   const format = options.linkedInFormat ?? BUFFER_LINKEDIN_FORMAT;
   const resolveAssetUrl = options.resolveAssetUrl ?? defaultAssetUrl;
   const sleep = options.sleep ?? ((milliseconds: number) => new Promise<void>((resolve) => setTimeout(resolve, milliseconds)));
   const publishedByKey = new Map<string, string>();
   return {
-    async publish(channel, item, idempotencyKey, target): Promise<{ remoteId: string }> {
+    async publish(channel, item, idempotencyKey, target, frames): Promise<{ remoteId: string }> {
       assertQueueItemPublishable(item);
       const { apiKey, channelId } = bufferCredentials(environment, target, channel);
       const existing = publishedByKey.get(idempotencyKey);
       if (existing) return { remoteId: existing };
-      const plan = planBufferLinkedInPost(item, format, (asset) => resolveAssetUrl(asset, environment));
+      const plan = planBufferLinkedInPost(item, format, (asset) => frames ? verifiedFrameUrl(frames, asset) : resolveAssetUrl(asset, environment));
       const probe = await probeBufferLinkedInChannel({ apiKey, channelId, fetchImpl });
       if (probe.state !== "healthy") {
         throw new ProviderRejectedError(probe.state === "rate-limited" ? "rate-limited" : "channel-unavailable", `${probe.reason}; nothing was created`);

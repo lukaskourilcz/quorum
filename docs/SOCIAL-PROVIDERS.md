@@ -139,10 +139,11 @@ UTM fields. After the live test confirms that Buffer hands LinkedIn several imag
 the constant becomes `multi-image`: every slide (LinkedIn allows two to twenty) with the caption as
 approved. A text over 3,000 characters is refused before any request. Images must be JPEG or PNG.
 
-Asset URLs default to `PUBLIC_SITE_URL` + the asset path, as in the Meta adapter. #570's
-commit-pinned jsDelivr resolver replaces that through the adapter's `resolveAssetUrl` option. Buffer
-fetches an image when the post goes out, so a URL must stay reachable; a jsDelivr URL pinned to a
-commit does.
+Image URLs come from the frames the runner proved for the run (#570 hands them to `publish` as its
+fifth argument): the adapter uses exactly those URLs and refuses, before any request, a frame the
+runner did not prove. A caller that hands it no frames falls back to `PUBLIC_SITE_URL` plus the
+asset path, which is what the Meta adapter did before #570. Buffer fetches an image when the post
+goes out, so a URL must stay reachable; a jsDelivr URL pinned to a commit does.
 
 ### Limits, cost and exit
 

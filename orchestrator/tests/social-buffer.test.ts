@@ -107,6 +107,19 @@ describe("Buffer LinkedIn adapter: create", () => {
     expect(JSON.stringify(calls[1]!.variables)).not.toMatch(/addToQueue|customScheduled|dueAt/u);
   });
 
+  it("uses the frame URLs the runner proved, and refuses a frame it did not prove", async () => {
+    const [channel, queued, resolved] = await Promise.all([linkedInChannel(), item(), target()]);
+    const proved = [{ path: slides[0]!, url: "https://cdn.jsdelivr.net/gh/lukaskourilcz/quorum@0123456789abcdef0123456789abcdef01234567/site/public/social/devshark/2026-09-26/en/1.png" }];
+    const { fetchImpl, calls } = replayBuffer({ BoardlessBufferChannel: ["channel-linkedin-page"], BoardlessBufferCreatePost: ["create-post-success"] });
+    await createBufferPublishAdapter({ ...environment, PUBLIC_SITE_URL: "" }, fetchImpl).publish(channel, queued, "9".repeat(64), resolved, proved);
+    expect(calls[1]!.variables).toMatchObject({ input: { assets: [{ image: { url: proved[0]!.url } }] } });
+
+    const unproved = replayBuffer({});
+    const error = await rejection(createBufferPublishAdapter(environment, unproved.fetchImpl).publish(channel, queued, "8".repeat(64), resolved, []));
+    expect(error.message).toMatch(/verified before the send/u);
+    expect(unproved.calls).toHaveLength(0);
+  });
+
   it("keeps the committed format at single-image until the owner's live test is recorded", () => {
     expect(BUFFER_LINKEDIN_FORMAT).toBe("single-image");
   });

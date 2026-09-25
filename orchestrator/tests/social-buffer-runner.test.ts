@@ -100,7 +100,8 @@ async function linkedInRoot(bindingMode: "held" | "active"): Promise<string> {
     channel: "linkedin" as const,
     utm: { ...migrated.utm, source: "linkedin" as const },
     target: { ...migrated.target, connectionBindingRef: "social-connection-caught-up-linkedin" },
-    content: { ...migrated.content, assetPaths: ["/social/caught-up/2026-09-26/cs/1.png"] },
+    // Text only: frames are the adapter tests' concern, and #570's runner gate proves them first.
+    content: { ...migrated.content, assetPaths: [] },
     publishWindow: { notBefore: "2026-09-26T08:00:00.000Z", notAfter: "2026-09-26T12:00:00.000Z" }
   };
   await writeJson(path.join(root, "state/social/queue/item.json"), CapabilityAwareQueueItemSchema.parse({
