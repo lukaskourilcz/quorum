@@ -534,11 +534,16 @@ describe("automation policy", () => {
       await readFile(path.join(repoRoot, "config", "channels.json"), "utf8")
     ) as {
       channels: Array<{
+        id: string;
         mode: string;
         approvedScopes: string[];
         enabledByHumanAt: string | null;
       }>;
     };
+
+    // Both Meta channels and, since quorum#569, the LinkedIn channel. Each is named so that
+    // removing a channel cannot make the draft assertion below pass vacuously.
+    expect(channels.channels.map(({ id }) => id).sort()).toEqual(["instagram", "linkedin", "threads"]);
 
     // The scope guard holds in every mode: a stored scope must never reach beyond
     // posting, whatever the channel is currently allowed to do.

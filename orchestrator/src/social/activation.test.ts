@@ -199,7 +199,8 @@ describe("per-venture social activation", () => {
     await mkdir(configRoot, { recursive: true });
     await writeFile(path.join(configRoot, "channels.json"), JSON.stringify({ schemaVersion: 1, channels: [
       { id: "threads", specialist: "THREADS", mode: "autopublish", connector: "meta_threads", credentialRef: "unused", approvedScopes: ["threads_basic", "threads_content_publish"], nativeFormats: ["text"], maxOrganicPostsPerDay: 2, minHoursBetweenPosts: 6, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" },
-      { id: "instagram", specialist: "INSTAGRAM", mode: "autopublish", connector: "meta_instagram", credentialRef: "unused", approvedScopes: ["instagram_basic", "instagram_content_publish"], nativeFormats: ["image"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 12, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" }
+      { id: "instagram", specialist: "INSTAGRAM", mode: "autopublish", connector: "meta_instagram", credentialRef: "unused", approvedScopes: ["instagram_basic", "instagram_content_publish"], nativeFormats: ["image"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 12, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" },
+      { id: "linkedin", specialist: null, mode: "draft", connector: "buffer_linkedin", credentialRef: "unused", approvedScopes: ["provider-managed"], nativeFormats: ["text"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 20, timezone: "Europe/Prague", enabledByHumanAt: null }
     ] }));
     await writeActivePublisherConfig(configRoot);
     for (let index = 1; index <= 7; index += 1) await atomicWriteJson(stateRoot, `release-proofs/caught-up/${index}.json`, proof(index));
@@ -222,7 +223,8 @@ describe("per-venture social activation", () => {
     await mkdir(configRoot, { recursive: true });
     await writeFile(path.join(configRoot, "channels.json"), JSON.stringify({ schemaVersion: 1, channels: [
       { id: "threads", specialist: "THREADS", mode: "autopublish", connector: "meta_threads", credentialRef: "unused", approvedScopes: ["threads_basic", "threads_content_publish"], nativeFormats: ["text"], maxOrganicPostsPerDay: 2, minHoursBetweenPosts: 6, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" },
-      { id: "instagram", specialist: "INSTAGRAM", mode: "autopublish", connector: "meta_instagram", credentialRef: "unused", approvedScopes: ["instagram_basic", "instagram_content_publish"], nativeFormats: ["image"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 12, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" }
+      { id: "instagram", specialist: "INSTAGRAM", mode: "autopublish", connector: "meta_instagram", credentialRef: "unused", approvedScopes: ["instagram_basic", "instagram_content_publish"], nativeFormats: ["image"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 12, timezone: "Europe/Prague", enabledByHumanAt: "2026-08-01T00:00:00.000Z" },
+      { id: "linkedin", specialist: null, mode: "draft", connector: "buffer_linkedin", credentialRef: "unused", approvedScopes: ["provider-managed"], nativeFormats: ["text"], maxOrganicPostsPerDay: 1, minHoursBetweenPosts: 20, timezone: "Europe/Prague", enabledByHumanAt: null }
     ] }));
     await writeActivePublisherConfig(configRoot);
     for (let index = 1; index <= 7; index += 1) await atomicWriteJson(stateRoot, `release-proofs/caught-up/${index}.json`, proof(index));
