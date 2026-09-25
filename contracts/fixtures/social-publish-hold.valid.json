@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "social-publish-hold/1",
+  "queueItemId": "ms-2026-09-26-devshark-en-threads",
+  "sourceVentureId": "marketingshark",
+  "channel": "threads",
+  "profileId": "social-profile-devshark-threads",
+  "connectionId": "social-connection-devshark-threads",
+  "providerId": "direct-meta",
+  "reason": "publishing-quota-exhausted",
+  "quota": {
+    "usage": 250,
+    "total": 250,
+    "durationSeconds": 86400
+  },
+  "detail": "250 of 250 posts are used in the last 86400 seconds",
+  "checkedAt": "2026-09-26T08:00:00.000Z",
+  "publishingAuthorized": false
+}

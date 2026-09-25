@@ -25,6 +25,8 @@ export const SocialAssetPathSchema = z.string().max(400).regex(/^\/social\/[a-zA
  *
  * `ready` is the only outcome that lets an item through. Every other outcome is a hold, and none of
  * them falls back to another URL: the platform fetches exactly the URL that was checked or nothing.
+ * `platform-unsupported` means the proved bytes are not an image the item's platform accepts: a PNG
+ * for Instagram, a frame wider than 1,440 pixels, an aspect Instagram crops away, over 8 MB.
  */
 export const SOCIAL_ASSET_OUTCOMES = [
   "ready",
@@ -34,6 +36,7 @@ export const SOCIAL_ASSET_OUTCOMES = [
   "uncommitted",
   "not-at-commit",
   "hash-mismatch",
+  "platform-unsupported",
   "host-not-allowlisted",
   "unreachable",
   "wrong-type"
@@ -44,10 +47,11 @@ export type SocialAssetOutcome = (typeof SOCIAL_ASSET_OUTCOMES)[number];
  * The reason a whole item is held.
  *
  * `asset-hash-mismatch` wins over the others because it is the one that says the bytes are not the
- * bytes that were approved; `asset-hash-unrecorded` means nothing recorded what they should be.
- * Everything else, from an uncommitted frame to a 404, is `asset-unreachable`.
+ * bytes that were approved; `asset-hash-unrecorded` means nothing recorded what they should be;
+ * `asset-unsupported` means the approved bytes are not an image the platform takes, which no retry
+ * changes. Everything else, from an uncommitted frame to a 404, is `asset-unreachable`.
  */
-export const SOCIAL_ASSET_HOLD_REASONS = ["asset-hash-mismatch", "asset-hash-unrecorded", "asset-unreachable"] as const;
+export const SOCIAL_ASSET_HOLD_REASONS = ["asset-hash-mismatch", "asset-hash-unrecorded", "asset-unsupported", "asset-unreachable"] as const;
 export type SocialAssetHoldReason = (typeof SOCIAL_ASSET_HOLD_REASONS)[number];
 
 const CommitSchema = z.string().regex(/^[a-f0-9]{40}$/u);
