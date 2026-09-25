@@ -275,6 +275,24 @@ Reverting B1 is not a rollback path. B8 and B9 build on its package `/2` and qui
 queue v1 marketingShark item would break the pinned `migratedLegacyQueueItems: 4` and `migrated: 13`
 in the migration and release audits. Any change to the edges needs a new capability map version.
 
+## What the review of the programme changed
+
+The review of B1 to B9 found defects that would have sent or lost posts once activation came. The
+fixes, all at $0 and none of them opening a lock:
+
+- The publisher pushes its claim (`publishing`) to the branch before it calls any provider, and the
+  send acts only on claims the branch still carries. The workflow commits the run's statuses,
+  receipts and pauses before it fails the job for a refused or ambiguous post.
+- Only an approved (`queued`) item is due, plus a legacy v1 draft whose checks all pass. A failed
+  publishable check holds one item and never the run.
+- marketingShark's activation count reads the current package version.
+- LinkedIn captions are budgeted for the tracked link Buffer appends; an over-long post is a hold,
+  not a refusal that pauses the venture. Buffer's read-back waits up to 1 minute 45 seconds per
+  call. Each LinkedIn image carries its own slide's alt text.
+- The Queue refuses an edit, an approval, a Design Lab slide save or a re-render whose copy promises
+  a reward for engagement, through the room's own function; writes an edit's or re-render's
+  supersession as one commit; reads the newest 2,000 files; and shows the publisher's holds.
+
 ## Implementation
 
 - [x] B1: packages, frames, LinkedIn caption, queue v2 drafts, capability edges (#568)
