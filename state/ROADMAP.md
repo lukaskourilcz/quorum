@@ -24,6 +24,11 @@ the founding gate remains unpassed and live founding cycles stay disabled.
   three-day expiry and visible `$0` `not-needed` calendar records.
 - [x] Deduplicate the Prague schedule into paired UTC wake-ups that preserve all
   18 local hourly duties and the edition retry across summer and winter time.
+- [x] Meet once a day: the 06:00 room also runs the day checkpoint, and the 14:00 and
+  22:00 checkpoints leave the clock (`operations-2026-08c`, 2026-08-29).
+- [x] Run only DNESKAi, marketingShark, GoVIRAL, the Design Lab and WebDev Signal; paused
+  ventures leave the clock, the admin navigation and the Design Lab (`operations-2026-09b`,
+  2026-09-25).
 Earlier spectator-season and Three.js preview ideas are archived, not active
 work. They require a fresh owner scope before implementation.
 

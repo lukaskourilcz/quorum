@@ -16,13 +16,14 @@ new pre-signed content-project template now permits tightly fenced founding:
 - Recognized revenue is measured at $0 until a real revenue event is accepted.
 - Only the human owner may accept money or execute a payment.
 
-The registry holds fourteen ventures, and since `operations-2026-09b` (2026-09-25) four of
+The registry holds fourteen ventures, and since `operations-2026-09b` (2026-09-25) five of
 them run. Caught Up (DNESKAi) is the Czech AI magazine: one article, its image and its social
 pack a day. marketingShark drafts devShark carousels. GoVIRAL and the Design Lab are shared
 machinery behind both. WebDev Signal runs as a $0 pre-step of the DNESKAi day with its editions
 held. MMA Files, FightAIQ, Titty Tuesdays, BOOKSOFHISTORY, Door Money, Tehdejší svět, Kvórum and
 Personal Growth are paused: they keep their code, state and archives, run nothing and hold no
-slot on the clock. Contest Radar is an unfounded exploration. No venture may create an account,
+slot on the clock. Contest Radar's founding (`contest-radar-2026-08a`) is countersigned, but the
+registry keeps it as an `exploration` with no room and no spend. No venture may create an account,
 publish, contact a channel or infer authority from its registry status.
 
 ## Owner and roles
@@ -40,7 +41,7 @@ Effective countersigned all-in hard cap: $50 USD.
 - API daily cap: $1.00
 - Venture standup cap: $0.20 per cycle
 - Caught Up meeting cap: $0.08 per meeting
-- Edition production cap: $0.35 per article run
+- Edition production cap: $0.50 per article run (`config/edition-quality.json`)
 - Media monthly cap: $2, with deterministic media costing $0 by default
 
 The owner countersigned `budget-2026-08f` on 2026-08-26. It sets one $50 limit,
@@ -48,9 +49,8 @@ keeps the $25 model share and $1.00 daily pace across the portfolio, and places
 Personal Growth under a nested $20 all-in limit. Project-specific live switches
 and evidence gates still decide whether a meeting may run.
 
-`config/fixed-costs.json` currently records `confirmedNoFixedCosts: true` and an empty
-list, so fixed subscriptions evaluate to `$0` rather than unavailable. The owner must
-remove that flag and enter any real subscription. The fal.ai prepayment is known to
+`config/fixed-costs.json` records one subscription, Apify Starter at $19 a month since
+2026-09-15, assumed from the owner's note until #528 confirms the plan. The fal.ai prepayment is known to
 exist but its amount has not yet been entered in treasury state, so the recorded all-in
 total is incomplete. API cost remains sourced only from the budget ledger.
 

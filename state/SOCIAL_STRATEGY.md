@@ -5,8 +5,7 @@
 - People evaluating agent governance and practical AI operations.
 - DNESKAi readers reviewing Czech AI news and its decision trail.
 - Adults evaluating Titty Tuesdays concept work; no audience under 18.
-- Developers who want one real question a day, through devShark's carousels; geography
-  readers later, if and when geoShark is enabled.
+- Developers who want one real question a day, through devShark's carousels.
 - Future magazine audiences only after an evidenced proposal and owner decision.
 
 ## Content pillars
@@ -37,14 +36,15 @@ Measured, declarative and evidence-backed. Cadence is a cap, not a quota. Use
 Each project that can post has its own health gate. Caught Up needs seven consecutive
 passed delivery proofs; MMA Files needs ten passed article proofs without an unresolved
 failure; Titty Tuesdays needs four complete approved campaigns, credentials and its
-safety checker. The global kill switch can stop all posting immediately.
+safety checker. The global kill switch can stop all posting immediately. MMA Files and Titty
+Tuesdays are paused (`operations-2026-09b`); their gates matter again only if they resume.
 
-marketingShark is not one of them. It has no social account, no credentials and no
-activation record, and the publisher tells the difference between a project that is
-switched off and one that was never a publisher — an absent activation record is refused
-by name rather than read as `undefined`. Its carousels are written as drafts with every
-approval check pending, for a person to review. Shark-brand accounts, if they are ever
-opened, are an owner decision that arrives through `state/INBOX.md` like any other.
+marketingShark drafts one devShark post each weekday and puts three drafts in the Admin
+Queue, one each for LinkedIn, Instagram and Threads (`docs/SOCIAL-QUEUE.md`). Its publishing
+path is registered and held by `state/decisions/2026-09-26-devshark-social-queue.md`, which
+is still `proposed`. Nothing sends until the owner countersigns it, ticks
+`DEVSHARK-SOCIAL-001` to `-003` in `state/INBOX.md`, creates and connects the devShark
+profiles and approves the post. Until then every item stays a draft.
 
 Each post uses an idempotency key, records `carousel-studio-1` as its renderer and has
 a live-post proof. A/B variants rotate without measurement. Phase 3 remains closed;
