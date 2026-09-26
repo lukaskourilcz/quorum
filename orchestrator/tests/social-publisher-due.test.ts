@@ -5,7 +5,7 @@ import { SocialPublishHoldSchema } from "../src/contracts/social-publish-hold.js
 import { repoRoot } from "../src/paths.js";
 import { CapabilityAwareQueueItemSchema, type CapabilityAwareQueueItem } from "../src/social/queue.js";
 import { runSocialPublisher } from "../src/social/runner.js";
-import { pendingDraft, readJsonFile, runnerOptions, stubAdapter, unlockedRunnerRoot, writeJsonFile } from "./fixtures/social-runner-root.js";
+import { hashedQueueItem, pendingDraft, readJsonFile, runnerOptions, stubAdapter, unlockedRunnerRoot, writeJsonFile } from "./fixtures/social-runner-root.js";
 
 /**
  * Only the owner's approval makes a queue v2 item due (quorum#573 review). A draft with pending
@@ -45,6 +45,33 @@ describe("only an approved item is due", () => {
 
     expect(report).toMatchObject({ due: 1, published: 1 });
     expect(adapter.publish.mock.calls[0]![1]).toMatchObject({ id: "caught-up-2026-08-05-cs-threads", migration: { sourceSchemaVersion: 1 } });
+  });
+
+  it("leaves DNESKAi's pack draft to the owner, and sends it once the Queue approves it (#583)", async () => {
+    const { root, approved } = await unlockedRunnerRoot(roots);
+    await rm(path.join(root, "state/social/queue/b-approved.json"));
+    // The Threads draft DNESKAi's pack composes, moved into this run's window.
+    const composed = CapabilityAwareQueueItemSchema.parse(await readJsonFile(path.join(repoRoot, "contracts/fixtures/caught-up-queue-threads.valid.json")));
+    const draft = hashedQueueItem({ ...composed, publishWindow: approved.publishWindow });
+    const file = path.join(root, "state/social/queue/2026-08-27-cs-threads.json");
+    await writeJsonFile(file, draft);
+    const before = await readFile(file, "utf8");
+
+    const waiting = stubAdapter();
+    expect(await runSocialPublisher(runnerOptions(root, waiting))).toMatchObject({ due: 0, published: 0, publishHeld: 0 });
+    expect(waiting.publish).not.toHaveBeenCalled();
+    expect(await readFile(file, "utf8")).toBe(before);
+
+    // What the Queue's approval writes: every check passed, its event as the provenance, a new hash.
+    await writeJsonFile(file, hashedQueueItem({
+      ...draft,
+      status: "queued",
+      checks: Object.fromEntries(Object.keys(draft.checks).map((name) => [name, "pass"])) as CapabilityAwareQueueItem["checks"],
+      approvalProvenance: { ...draft.approvalProvenance, approvalRef: "social-queue-event-0123456789abcdef01234567" }
+    }));
+    const adapter = stubAdapter();
+    expect(await runSocialPublisher(runnerOptions(root, adapter))).toMatchObject({ status: "complete", due: 1, published: 1 });
+    expect(adapter.publish.mock.calls[0]![1]).toMatchObject({ id: "caught-up-2026-08-04-cs-threads", sourceVentureId: "caught-up", migration: null });
   });
 
   it("holds a queued item that fails its publishable check by itself, and still sends the next one", async () => {
