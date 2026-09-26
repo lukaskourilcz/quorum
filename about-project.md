@@ -25,6 +25,44 @@ pozastavené. marketingShark zatím nepublikuje: jeho příspěvky pro devShark 
 koncepty ve frontě a rozhoduje o nich majitel. Na co který projekt čeká, je v
 `docs/NEEDED.md`.
 
+## Tech stack
+
+- **TypeScript, Node.js 22 a pnpm** — jeden workspace se třemi balíčky: `orchestrator`, `site`
+  a `studio`
+- **orchestrator (tsx, zod)** — řízení porad, rozpis, limity nákladů a kontrola zdrojů; spouští
+  ho GitHub Actions nebo příkazová řádka
+- **Next.js 16, React 19 a Tailwind CSS 4** — veřejný web a chráněná správa v `site/`
+- **@boardlessai/carousel-studio** — deterministické vykreslování karuselů v `studio/` přes resvg
+  a sharp, s písmy uloženými v repozitáři
+- **`state/` v Gitu** — záznamy porad, rozhodnutí, fronty a účtenky; databázi projekt nemá
+- **GitHub Actions** — porady podle rozpisu (`cycle.yml`), tři záložní běhy a CI
+- **Vitest, Playwright a axe-core** — jednotkové, prohlížečové a přístupnostní testy
+
+## Third-party libraries
+
+- **Anthropic a OpenAI** — jazykové modely rolí; kterou roli obsluhuje který model, určuje
+  `config/models.json`
+- **Vercel** — hosting webu (Pro) a spouštěč slotů v `site/vercel.json`; nasazuje se jen ručně
+  přes `pnpm deploy:production`
+- **GitHub** — repozitář se stavem a GitHub App, která doručuje vydání DNESKAi do
+  `lukaskourilcz/aifirst`
+- **Apify** — zdroje trendů pro GoVIRAL, hlídané kvótou
+- **Firecrawl a Jina Reader** — převod zdrojových stránek na text; bez klíče Firecrawl je čte
+  Jina Reader
+- **Stack Exchange API** — jeden z registrovaných zdrojů v `config/sources.json`
+- **Wikidata, Wikimedia Commons, Openverse, Pexels a Pixabay** — fotografie osob a licencované
+  vyhledávání obrázků k článkům
+- **fal.ai** — generovaná ilustrace; běží jen s `FAL_KEY` a `ARTICLE_ILLUSTRATION_ENABLED`
+- **Podcast Index** — bezplatný klíč pro podcasty bez použitelného RSS nebo YouTube
+- **Resend** — volitelný denní souhrn e-mailem
+- **Buffer a Meta Graph API (Instagram, Threads)** — publikování na sociální sítě; cesta je
+  připravená a držená, dokud ji majitel neotevře
+- **zod, rss-parser, cheerio a yaml** — kontrakty, čtení RSS a HTML zdrojů, konfigurace
+- **sharp, @resvg/resvg-js a fflate** — zpracování obrázků, vykreslení SVG a ZIP export karuselů
+  z Design Labu
+- **lucide-react, clsx, tailwind-merge a class-variance-authority** — ikony a skládání tříd v
+  rozhraní
+
 ## Jak je systém poskládaný
 
 ```text
